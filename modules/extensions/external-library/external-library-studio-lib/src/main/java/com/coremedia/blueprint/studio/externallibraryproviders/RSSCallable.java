@@ -3,17 +3,17 @@ package com.coremedia.blueprint.studio.externallibraryproviders;
 import com.coremedia.blueprint.studio.rest.ExternalLibraryDataItemRepresentation;
 import com.coremedia.blueprint.studio.rest.ExternalLibraryItemRepresentation;
 import com.google.common.annotations.VisibleForTesting;
-import com.sun.syndication.feed.synd.SyndContent;
-import com.sun.syndication.feed.synd.SyndEnclosure;
-import com.sun.syndication.feed.synd.SyndEntry;
-import com.sun.syndication.feed.synd.SyndFeed;
-import com.sun.syndication.io.FeedException;
-import com.sun.syndication.io.SyndFeedInput;
-import com.sun.syndication.io.XmlReader;
+import com.rometools.rome.feed.synd.SyndContent;
+import com.rometools.rome.feed.synd.SyndEnclosure;
+import com.rometools.rome.feed.synd.SyndEntry;
+import com.rometools.rome.feed.synd.SyndFeed;
+import com.rometools.rome.io.FeedException;
+import com.rometools.rome.io.SyndFeedInput;
+import com.rometools.rome.io.XmlReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -65,8 +65,8 @@ public class RSSCallable implements Callable<List<ExternalLibraryItemRepresentat
     }
   }
 
-  @Nonnull
-  private static SyndFeed readFeed(@Nonnull URL source) throws IOException, FeedException {
+  @NonNull
+  private static SyndFeed readFeed(@NonNull URL source) throws IOException, FeedException {
     XmlReader.setDefaultEncoding("utf8");
 
     try (XmlReader reader = new XmlReader(source)) {
@@ -75,8 +75,8 @@ public class RSSCallable implements Callable<List<ExternalLibraryItemRepresentat
     }
   }
 
-  @Nonnull
-  private List<ExternalLibraryItemRepresentation> buildThirdPartyRepresentations(@Nonnull Iterable<SyndEntry> entries) {
+  @NonNull
+  private List<ExternalLibraryItemRepresentation> buildThirdPartyRepresentations(@NonNull Iterable<SyndEntry> entries) {
     List<ExternalLibraryItemRepresentation> representations = new ArrayList<>();
 
     for (SyndEntry entry : entries) {
@@ -95,8 +95,8 @@ public class RSSCallable implements Callable<List<ExternalLibraryItemRepresentat
    * @param syndEntry The rome SyndEntry that contains RSS data.
    * @return The common third party data item that contains the RSS data.
    */
-  @Nonnull
-  private ExternalLibraryItemRepresentation buildThirdPartyRepresentation(@Nonnull SyndEntry syndEntry) {
+  @NonNull
+  private ExternalLibraryItemRepresentation buildThirdPartyRepresentation(@NonNull SyndEntry syndEntry) {
     ExternalLibraryItemRepresentation item = new ExternalLibraryItemRepresentation();
 
     item.setDataUrl(rssUrl);
@@ -130,22 +130,22 @@ public class RSSCallable implements Callable<List<ExternalLibraryItemRepresentat
     return item;
   }
 
-  @Nonnull
-  private static String getDescription(@Nonnull SyndEntry syndEntry) {
+  @NonNull
+  private static String getDescription(@NonNull SyndEntry syndEntry) {
     SyndContent descriptionContent = syndEntry.getDescription();
     return descriptionContent != null ? descriptionContent.getValue() : "";
   }
 
-  @Nonnull
-  private static String getTitle(@Nonnull SyndEntry syndEntry) {
+  @NonNull
+  private static String getTitle(@NonNull SyndEntry syndEntry) {
     String title = firstNonNull(syndEntry.getTitle(), "");
     title = replaceUnicodeLineSeparator(title);
     return title;
   }
 
-  @Nonnull
+  @NonNull
   @VisibleForTesting
-  static String replaceUnicodeLineSeparator(@Nonnull String s) {
+  static String replaceUnicodeLineSeparator(@NonNull String s) {
     // a character with ASCII code 8232 was passed by bild.de
     while (s.indexOf(UCS_CHARACTER_LINE_SEPARATOR) != -1) {
       char unicodeLineSeparator = UCS_CHARACTER_LINE_SEPARATOR;
@@ -157,8 +157,8 @@ public class RSSCallable implements Callable<List<ExternalLibraryItemRepresentat
     return s;
   }
 
-  @Nonnull
-  private static List<ExternalLibraryDataItemRepresentation> buildContentDataItems(@Nonnull Iterable contents) {
+  @NonNull
+  private static List<ExternalLibraryDataItemRepresentation> buildContentDataItems(@NonNull Iterable contents) {
     List<ExternalLibraryDataItemRepresentation> contentDataItems = new ArrayList<>();
     for (Object c : contents) {
       SyndContent content = (SyndContent) c;
@@ -168,8 +168,8 @@ public class RSSCallable implements Callable<List<ExternalLibraryItemRepresentat
     return contentDataItems;
   }
 
-  @Nonnull
-  private static List<ExternalLibraryDataItemRepresentation> buildEnclosureDataItems(@Nonnull Iterable enclosures) {
+  @NonNull
+  private static List<ExternalLibraryDataItemRepresentation> buildEnclosureDataItems(@NonNull Iterable enclosures) {
     List<ExternalLibraryDataItemRepresentation> enclosureDataItems = new ArrayList<>();
     for (Object c : enclosures) {
       SyndEnclosure content = (SyndEnclosure) c;
@@ -179,8 +179,8 @@ public class RSSCallable implements Callable<List<ExternalLibraryItemRepresentat
     return enclosureDataItems;
   }
 
-  @Nonnull
-  private static ExternalLibraryDataItemRepresentation buildContentDataItem(@Nonnull SyndContent content) {
+  @NonNull
+  private static ExternalLibraryDataItemRepresentation buildContentDataItem(@NonNull SyndContent content) {
     ExternalLibraryDataItemRepresentation item = new ExternalLibraryDataItemRepresentation(DATA_TYPE_CONTENTS);
 
     item.setType(content.getType());
@@ -190,8 +190,8 @@ public class RSSCallable implements Callable<List<ExternalLibraryItemRepresentat
     return item;
   }
 
-  @Nonnull
-  private static ExternalLibraryDataItemRepresentation buildEnclosureDataItem(@Nonnull SyndEnclosure content) {
+  @NonNull
+  private static ExternalLibraryDataItemRepresentation buildEnclosureDataItem(@NonNull SyndEnclosure content) {
     ExternalLibraryDataItemRepresentation item = new ExternalLibraryDataItemRepresentation(DATA_TYPE_ENCLOSURES);
 
     item.setType(content.getType());

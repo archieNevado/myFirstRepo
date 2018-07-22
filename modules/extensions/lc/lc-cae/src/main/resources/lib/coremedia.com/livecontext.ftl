@@ -12,42 +12,6 @@
  ------------------------------------------------------------------------------------------------------------------- -->
 
 
-<#-- BUTTON -->
-<#macro addToCartButton product alwaysShow=false alwaysClickable=false enableShopNow=true withLink="" attr={}>
-  <#local numberOfVariants=(product.variants?size)!0 />
-  <#local hasSingleSKU=(numberOfVariants == 1) />
-  <#local isProductAvailable=(product.isAvailable())!false />
-
-  <#-- variant 1) unavailable -->
-  <#local buttonLabel=bp.getMessage("cart_unavailable") />
-  <#local buttonData={} />
-  <#local buttonClasses=[] />
-  <#local iconClass="" />
-
-  <#-- variant 2) available -->
-  <#if (alwaysShow || isProductAvailable)>
-    <#local buttonLabel=bp.getMessage("cart_view_variants") />
-    <#local buttonClasses=buttonClasses + ["cm-button--primary"] />
-
-  <#-- variant 3) available with one sku -->
-    <#if (enableShopNow && (alwaysClickable || hasSingleSKU))>
-      <#local cart=bp.substitute("cart", product)!cm.UNDEFINED />
-      <#local buttonLabel=bp.getMessage("cart_add_item") />
-      <#local externalTechId=hasSingleSKU?then(product.variants[0].externalTechId, product.externalTechId)/>
-      <#local buttonData={"data-cm-cart-add-item": '{"id": "${externalTechId!""}", "link": "${cm.getLink(cart, "ajax")}", "cart": ".cm-cart" }'} />
-      <#local iconClass="icon-none" />
-    </#if>
-  </#if>
-
-  <#local attr=bp._extendSequenceInMap(attr, "classes", buttonClasses) />
-
-  <#local link="" />
-  <#if (withLink?has_content && ((!alwaysClickable && !hasSingleSKU) || !enableShopNow))>
-    <#local link=withLink>
-  </#if>
-  <@bp.button text=buttonLabel href=link baseClass="cm-button" iconClass=iconClass attr=(attr + buttonData) />
-</#macro>
-
 <#-- FORMAT PRICE -->
 <#function formatPrice amount currency locale>
   <#return liveContextFreemarkerFacade.formatPrice(amount, currency, locale)>
@@ -91,6 +55,41 @@
 
 <#-- --- DEPRECATED, UNUSED ---------------------------------------------------------------------------------------- -->
 
+<#-- DEPRECATED, see Frontend Developer Guide -->
+<#macro addToCartButton product alwaysShow=false alwaysClickable=false enableShopNow=true withLink="" attr={}>
+  <#local numberOfVariants=(product.variants?size)!0 />
+  <#local hasSingleSKU=(numberOfVariants == 1) />
+  <#local isProductAvailable=(product.isAvailable())!false />
+
+  <#-- variant 1) unavailable -->
+  <#local buttonLabel=bp.getMessage("cart_unavailable") />
+  <#local buttonData={} />
+  <#local buttonClasses=[] />
+  <#local iconClass="" />
+
+  <#-- variant 2) available -->
+  <#if (alwaysShow || isProductAvailable)>
+    <#local buttonLabel=bp.getMessage("cart_view_variants") />
+    <#local buttonClasses=buttonClasses + ["cm-button--primary"] />
+
+  <#-- variant 3) available with one sku -->
+    <#if (enableShopNow && (alwaysClickable || hasSingleSKU))>
+      <#local cart=cm.substitute("cart", product) />
+      <#local buttonLabel=bp.getMessage("cart_add_item") />
+      <#local externalTechId=hasSingleSKU?then(product.variants[0].externalTechId, product.externalTechId)/>
+      <#local buttonData={"data-cm-cart-add-item": '{"id": "${externalTechId!""}", "link": "${cm.getLink(cart, "ajax")}", "cart": ".cm-cart" }'} />
+      <#local iconClass="icon-none" />
+    </#if>
+  </#if>
+
+  <#local attr=bp._extendSequenceInMap(attr, "classes", buttonClasses) />
+
+  <#local link="" />
+  <#if (withLink?has_content && ((!alwaysClickable && !hasSingleSKU) || !enableShopNow))>
+    <#local link=withLink>
+  </#if>
+  <@bp.button text=buttonLabel href=link baseClass="cm-button" iconClass=iconClass attr=(attr + buttonData) />
+</#macro>
 
 <#-- DEPRECATED, use bp.getPlacementHighlightingMetaData instead -->
 <#function fragmentHighlightingMetaData placement>

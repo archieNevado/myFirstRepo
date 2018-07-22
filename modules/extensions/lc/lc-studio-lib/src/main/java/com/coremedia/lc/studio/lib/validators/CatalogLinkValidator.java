@@ -20,6 +20,7 @@ import com.coremedia.livecontext.ecommerce.common.NotFoundException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.ecommerce.workspace.Workspace;
+import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceService;
 import com.coremedia.rest.cap.validation.ContentTypeValidatorBase;
 import com.coremedia.rest.validation.Issues;
@@ -28,11 +29,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.WORKSPACE_ID_NONE;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper.format;
 import static com.coremedia.rest.validation.Severity.ERROR;
 import static com.coremedia.rest.validation.Severity.WARN;
@@ -75,7 +77,7 @@ public class CatalogLinkValidator extends ContentTypeValidatorBase {
     issues.addIssue(severity, getPropertyName(), getContentType() + '_' + code, arguments);
   }
 
-  protected void emptyPropertyValue(@Nonnull Content content, @Nonnull Issues issues) {
+  protected void emptyPropertyValue(@NonNull Content content, @NonNull Issues issues) {
     addIssue(issues, ERROR, CODE_ISSUE_ID_EMPTY);
   }
 
@@ -195,25 +197,25 @@ public class CatalogLinkValidator extends ContentTypeValidatorBase {
     }
   }
 
-  @Nonnull
-  private CommerceConnection getCommerceConnection(@Nonnull Site site) {
+  @NonNull
+  private CommerceConnection getCommerceConnection(@NonNull Site site) {
     return commerceConnectionInitializer.findConnectionForSite(site)
             .orElseThrow(() -> new NoCommerceConnectionAvailable(
                     String.format("No commerce connection available for site '%s'.", site.getName())));
   }
 
-  @Nonnull
-  private static StoreContext cloneStoreContext(@Nonnull CommerceConnection commerceConnection,
-                                                @Nonnull StoreContext source) {
+  @NonNull
+  private static StoreContext cloneStoreContext(@NonNull CommerceConnection commerceConnection,
+                                                @NonNull StoreContext source) {
     StoreContextProvider storeContextProvider = commerceConnection.getStoreContextProvider();
-    return storeContextProvider.cloneContext(source);
+    return storeContextProvider.buildContext(source).build();
   }
 
   /**
    * Return the first workspace for which a commerce bean exists.
    */
   @Nullable
-  private static Workspace findWorkspaceWithExistingCommerceBean(@Nonnull CommerceConnection commerceConnection,
+  private static Workspace findWorkspaceWithExistingCommerceBean(@NonNull CommerceConnection commerceConnection,
                                                                  StoreContext storeContext,
                                                                  CommerceBeanFactory commerceBeanFactory,
                                                                  CommerceId commerceId) {
@@ -224,7 +226,8 @@ public class CatalogLinkValidator extends ContentTypeValidatorBase {
     List<Workspace> allWorkspaces = getWorkspaces(commerceConnection, storeContextClone);
 
     for (Workspace workspace : allWorkspaces) {
-      String workspaceId = workspace.getExternalTechId();
+      String workspaceIdStr = workspace.getExternalTechId();
+      WorkspaceId workspaceId = workspaceIdStr != null ? WorkspaceId.of(workspaceIdStr) : WORKSPACE_ID_NONE;
       storeContextClone.setWorkspaceId(workspaceId);
 
       boolean commerceBeanWithWorkspaceExists = hasCommerceBean(commerceBeanFactory, commerceId, storeContextClone);
@@ -236,9 +239,9 @@ public class CatalogLinkValidator extends ContentTypeValidatorBase {
     return null;
   }
 
-  @Nonnull
-  private static List<Workspace> getWorkspaces(@Nonnull CommerceConnection commerceConnection,
-                                               @Nonnull StoreContext storeContextClone) {
+  @NonNull
+  private static List<Workspace> getWorkspaces(@NonNull CommerceConnection commerceConnection,
+                                               @NonNull StoreContext storeContextClone) {
     WorkspaceService workspaceService = commerceConnection.getWorkspaceService();
 
     if (workspaceService == null) {
@@ -249,14 +252,14 @@ public class CatalogLinkValidator extends ContentTypeValidatorBase {
   }
 
   @Nullable
-  protected Site getSite(@Nonnull Content content) {
+  protected Site getSite(@NonNull Content content) {
     ContentSiteAspect contentSiteAspect = sitesService.getContentSiteAspect(content);
     return contentSiteAspect.getSite();
   }
 
-  private static boolean hasCommerceBean(@Nonnull CommerceBeanFactory commerceBeanFactory,
-                                         @Nonnull CommerceId commerceId,
-                                         @Nonnull StoreContext storeContext) {
+  private static boolean hasCommerceBean(@NonNull CommerceBeanFactory commerceBeanFactory,
+                                         @NonNull CommerceId commerceId,
+                                         @NonNull StoreContext storeContext) {
     try {
       CommerceBean commerceBean = commerceBeanFactory.loadBeanFor(commerceId, storeContext);
       return commerceBean != null;
@@ -283,6 +286,7 @@ public class CatalogLinkValidator extends ContentTypeValidatorBase {
 
   /**
    * Set to true if the validation is only be done if a link is set.
+   *
    * @param optional flag
    */
   public void setOptional(boolean optional) {

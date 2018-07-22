@@ -19,8 +19,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -51,7 +51,7 @@ public class SpinnerAssetInvalidationWriteInterceptor extends ContentWriteInterc
   private ContentRepository contentRepository;
 
   @Override
-  public void intercept(@Nonnull ContentWriteRequest request) {
+  public void intercept(@NonNull ContentWriteRequest request) {
     if (!checkPreconditions(request)) {
       return;
     }
@@ -76,8 +76,8 @@ public class SpinnerAssetInvalidationWriteInterceptor extends ContentWriteInterc
   }
 
   @VisibleForTesting
-  boolean assignedCommerceReferencesChanged(@Nonnull Map<String, Object> oldProperties,
-                                            @Nonnull Map<String, Object> newProperties) {
+  boolean assignedCommerceReferencesChanged(@NonNull Map<String, Object> oldProperties,
+                                            @NonNull Map<String, Object> newProperties) {
     if (!assetReadSettingsHelper.hasCommerceStruct(newProperties)) {
       // If those properties do not exist it means that there are no
       // changes in the struct, so no changes in the inherited field.
@@ -103,13 +103,13 @@ public class SpinnerAssetInvalidationWriteInterceptor extends ContentWriteInterc
   }
 
   @VisibleForTesting
-  boolean sequencePropertyChanged(@Nonnull ContentWriteRequest request) {
+  boolean sequencePropertyChanged(@NonNull ContentWriteRequest request) {
     Map<String, Object> properties = request.getProperties();
     return properties.containsKey(SEQUENCE_SPINNER_PROPERTY);
   }
 
   @VisibleForTesting
-  boolean checkPreconditions(@Nonnull ContentWriteRequest request) {
+  boolean checkPreconditions(@NonNull ContentWriteRequest request) {
     Content content = request.getEntity();
     Map<String, Object> properties = request.getProperties();
 
@@ -138,8 +138,8 @@ public class SpinnerAssetInvalidationWriteInterceptor extends ContentWriteInterc
   }
 
   @VisibleForTesting
-  void invalidateExternalReferences(@Nonnull Content content, @Nonnull Map<String, Object> oldProperties,
-                                    @Nonnull Map<String, Object> newProperties) {
+  void invalidateExternalReferences(@NonNull Content content, @NonNull Map<String, Object> oldProperties,
+                                    @NonNull Map<String, Object> newProperties) {
     // Get all external IDs which may have changed in Studio due to the
     // change of the sequence property.
     Set<String> allReferences = new HashSet<>();
@@ -162,10 +162,10 @@ public class SpinnerAssetInvalidationWriteInterceptor extends ContentWriteInterc
     commerceCacheInvalidationSource.invalidateReferences(newHashSet(allReferences));
   }
 
-  @Nonnull
+  @NonNull
   @SuppressWarnings("unchecked")
-  Set<Content> resolveAllSpinnerPictures(@Nonnull Map<String, Object> oldProperties,
-                                         @Nonnull Map<String, Object> newProperties) {
+  Set<Content> resolveAllSpinnerPictures(@NonNull Map<String, Object> oldProperties,
+                                         @NonNull Map<String, Object> newProperties) {
     // First show if the sequence property has changed, if it changed
     // use its pictures.
     if (newProperties.containsKey(SEQUENCE_SPINNER_PROPERTY)) {
@@ -183,8 +183,8 @@ public class SpinnerAssetInvalidationWriteInterceptor extends ContentWriteInterc
     return emptySet();
   }
 
-  private void rewriteOriginalExternalReferences(@Nonnull Map<String, Object> oldProperties,
-                                                 @Nonnull Map<String, Object> newProperties) {
+  private void rewriteOriginalExternalReferences(@NonNull Map<String, Object> oldProperties,
+                                                 @NonNull Map<String, Object> newProperties) {
     Set<Content> allPictures = resolveAllSpinnerPictures(oldProperties, newProperties);
     Set<String> allReferences = buildOriginalCommerceReferenceList(allPictures);
 
@@ -192,9 +192,9 @@ public class SpinnerAssetInvalidationWriteInterceptor extends ContentWriteInterc
     writeNewStruct(newProperties, allReferences, localSettings);
   }
 
-  @Nonnull
-  Struct evaluateNewSettingsFoundation(@Nonnull Map<String, Object> oldProperties,
-                                       @Nonnull Map<String, Object> newProperties) {
+  @NonNull
+  Struct evaluateNewSettingsFoundation(@NonNull Map<String, Object> oldProperties,
+                                       @NonNull Map<String, Object> newProperties) {
     Object newLocalSettings = newProperties.get(NAME_LOCAL_SETTINGS);
     Object oldLocalSettings = oldProperties.get(NAME_LOCAL_SETTINGS);
 
@@ -209,8 +209,8 @@ public class SpinnerAssetInvalidationWriteInterceptor extends ContentWriteInterc
     return emptyStruct();
   }
 
-  private void writeNewStruct(@Nonnull Map<String, Object> newProperties, @Nonnull Set<String> allReferences,
-                              @Nonnull Struct localSettings) {
+  private void writeNewStruct(@NonNull Map<String, Object> newProperties, @NonNull Set<String> allReferences,
+                              @NonNull Struct localSettings) {
     boolean isInherited = assetReadSettingsHelper.readInheritedField(localSettingsToMap(localSettings));
 
     Struct newLocalSettingsStruct = assetWriteSettingsHelper.createNewSettingsStructWithReferences(
@@ -219,15 +219,15 @@ public class SpinnerAssetInvalidationWriteInterceptor extends ContentWriteInterc
     newProperties.put(NAME_LOCAL_SETTINGS, newLocalSettingsStruct);
   }
 
-  @Nonnull
-  private static Map<String, Object> localSettingsToMap(@Nonnull Struct localSettings) {
+  @NonNull
+  private static Map<String, Object> localSettingsToMap(@NonNull Struct localSettings) {
     Map<String, Object> stringObjectHashMap = new HashMap<>();
     stringObjectHashMap.put(NAME_LOCAL_SETTINGS, localSettings);
     return stringObjectHashMap;
   }
 
-  @Nonnull
-  private static Set<String> buildOriginalCommerceReferenceList(@Nonnull Set<Content> pictures) {
+  @NonNull
+  private static Set<String> buildOriginalCommerceReferenceList(@NonNull Set<Content> pictures) {
     return FluentIterable.from(pictures)
             .transformAndConcat(new Function<Content, Iterable<String>>() {
               @Nullable
@@ -239,7 +239,7 @@ public class SpinnerAssetInvalidationWriteInterceptor extends ContentWriteInterc
             .toSet();
   }
 
-  @Nonnull
+  @NonNull
   private Struct emptyStruct() {
     return contentRepository.getConnection().getStructService().createStructBuilder().build();
   }

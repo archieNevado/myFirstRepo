@@ -7,7 +7,7 @@ import com.coremedia.livecontext.handler.LoginStatusHandler;
 import com.coremedia.objectserver.util.RequestServices;
 import com.coremedia.objectserver.web.links.LinkFormatter;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -47,7 +47,7 @@ public class LiveContextLoginFreemarkerFacade {
     return getLiveContextLoginUrlsProvider().buildLogoutUrl(request);
   }
 
-  @Nonnull
+  @NonNull
   private LiveContextLoginUrlsProvider getLiveContextLoginUrlsProvider() {
     CommerceConnection connection = CurrentCommerceConnection.get();
     return connection.getServiceForVendor(LiveContextLoginUrlsProvider.class)

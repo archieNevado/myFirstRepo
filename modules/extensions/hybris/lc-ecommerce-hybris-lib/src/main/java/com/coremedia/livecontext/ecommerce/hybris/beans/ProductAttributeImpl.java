@@ -3,8 +3,8 @@ package com.coremedia.livecontext.ecommerce.hybris.beans;
 import com.coremedia.livecontext.ecommerce.catalog.ProductAttribute;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.VariantAttributeDocument;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
@@ -77,7 +77,7 @@ public class ProductAttributeImpl implements ProductAttribute {
     return value;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<Object> getValues() {
     Object value = getValue();

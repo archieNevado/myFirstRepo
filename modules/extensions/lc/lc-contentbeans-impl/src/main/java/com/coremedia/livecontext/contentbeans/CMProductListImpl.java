@@ -26,8 +26,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import java.util.Collection;
 import java.util.Collections;
@@ -214,7 +214,7 @@ public class CMProductListImpl extends CMQueryListImpl implements CMProductList 
     return result;
   }
 
-  @Nonnull
+  @NonNull
   private Map<String, String> getSearchParams(@Nullable Category category, @Nullable CatalogAlias catalogAlias,
                                               String orderBy, int limit, int offset, String facet) {
     Map<String, String> params = new HashMap<>();

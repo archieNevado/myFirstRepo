@@ -12,8 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -54,10 +54,10 @@ public abstract class AbstractHybrisService {
    * @return {@link CommerceBean}
    */
   @Nullable
-  protected <T extends CommerceBean> T createBeanFor(@Nonnull AbstractHybrisDocument delegate,
-                                                     @Nonnull StoreContext storeContext,
-                                                     @Nonnull CommerceBeanType beanType,
-                                                     @Nonnull Class<T> aClass) {
+  protected <T extends CommerceBean> T createBeanFor(@NonNull AbstractHybrisDocument delegate,
+                                                     @NonNull StoreContext storeContext,
+                                                     @NonNull CommerceBeanType beanType,
+                                                     @NonNull Class<T> aClass) {
     CommerceId commerceId = HybrisCommerceIdProvider
             .commerceId(beanType)
             .withExternalId(delegate.getCode())
@@ -79,11 +79,11 @@ public abstract class AbstractHybrisService {
    * @param <T>       type of the target {@link CommerceBean} class
    * @return {@link CommerceBean}
    */
-  @Nonnull
-  protected <T extends CommerceBean> List<T> createBeansFor(@Nonnull List<? extends AbstractHybrisDocument> delegates,
-                                                            @Nonnull StoreContext storeContext,
-                                                            @Nonnull CommerceBeanType beanType,
-                                                            @Nonnull Class<T> aClass) {
+  @NonNull
+  protected <T extends CommerceBean> List<T> createBeansFor(@NonNull List<? extends AbstractHybrisDocument> delegates,
+                                                            @NonNull StoreContext storeContext,
+                                                            @NonNull CommerceBeanType beanType,
+                                                            @NonNull Class<T> aClass) {
     if (delegates.isEmpty()) {
       return Collections.emptyList();
     }

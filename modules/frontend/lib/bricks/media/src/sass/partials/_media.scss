@@ -1,0 +1,25 @@
+//default styles
+.#{$cm-media-prefix} {
+
+  // responsive image, use width of outer container
+  &--responsive {
+    vertical-align: middle;
+    width: 100%;
+    @include stretch-absolute();
+  }
+
+  // lazy loading, show spinner
+  &--loading {
+    background-color: $cm-media-loading-background-color;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url("../../img/loader_big.gif");
+    color: transparent; // hide alt text
+  }
+
+  // alternative image
+  &--missing {
+    background-color: $cm-media-missing-background-color;
+    background-size: 50%;
+  }
+}

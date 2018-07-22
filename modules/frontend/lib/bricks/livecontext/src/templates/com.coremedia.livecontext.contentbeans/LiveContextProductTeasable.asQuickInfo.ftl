@@ -8,6 +8,10 @@
 <#-- @ftlvariable name="quickInfoGroup" type="java.lang.String" -->
 <#-- @ftlvariable name="overlay" type="java.util.Map" -->
 
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/components.ftl" as components />
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/utils.ftl" as utils />
+<#import "../../freemarkerLibs/livecontext.ftl" as livecontext />
+
 <#-- if overlay configuration is not set explicitly assert false for each key not set -->
 <#assign overlay={
   "displayTitle": false,
@@ -33,12 +37,12 @@
       <a href="${cm.getLink(self.productInSite!(cm.UNDEFINED))}" class="cm-quickinfo__picture-link">
         <#assign pictureParams={
           "classBox": "cm-quickinfo__picture-box",
-          "classImage": "cm-quickinfo__picture"
+          "classMedia": "cm-quickinfo__picture"
         } />
         <#if self.picture?has_content>
-          <@cm.include self=self.picture!cm.UNDEFINED params=pictureParams + {"metadata": ["properties.pictures"]} />
+          <@cm.include self=self.picture!cm.UNDEFINED view="media" params=pictureParams + {"metadata": ["properties.pictures"]} />
         <#else>
-          <@cm.include self=(self.product.catalogPicture)!cm.UNDEFINED params=pictureParams />
+          <@cm.include self=(self.product.catalogPicture)!cm.UNDEFINED view="media" params=pictureParams />
         </#if>
       </a>
     </div>
@@ -54,7 +58,7 @@
           <h5 class="cm-quickinfo__title cm-heading5"<@preview.metadata "properties.teaserTitle" />>${self.teaserTitle}</h5>
         </#if>
         <#-- close button -->
-        <@bp.button baseClass="" iconClass="cm-icon__symbol icon-close" iconText=bp.getMessage("button_close") attr={"class": "cm-quickinfo__close cm-icon"}/>
+        <@components.button baseClass="" iconClass="cm-icon__symbol icon-close" iconText=bp.getMessage("button_close") attr={"class": "cm-quickinfo__close cm-icon"}/>
       </div>
 
       <#-- price -->
@@ -67,7 +71,7 @@
       <#if showTeaserText>
         <div class="cm-quickinfo__text"<@preview.metadata "properties.teaserText" />>
           <#-- strip wrong <p/> tags from ecommerce, happens in hybris -->
-          <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", 175)?replace("&lt;p&gt;", "")?replace("&lt;/p&gt;", "") />
+          <@utils.renderWithLineBreaks text=bp.truncateText(self.teaserText!"", 175)?replace("&lt;p&gt;", "")?replace("&lt;/p&gt;", "") />
         </div>
       <#else>
         <div class="cm-quickinfo__text"></div>
@@ -76,7 +80,10 @@
       <#if (self.product?has_content && self.product.isAvailable()) || overlay.displayOutOfStockLink>
           <#-- add-to-cart button -->
           <div class="cm-quickinfo__controls cm-button-group cm-button-group--linked-large">
-            <@lc.addToCartButton product=self.product!cm.UNDEFINED withLink=cm.getLink(self.productInSite!(cm.UNDEFINED)) enableShopNow=self.isShopNowEnabled(cmpage.context) attr={"classes": ["cm-button-group__button", "cm-button--linked-large", (lc.getVendorName() == 'SAP Hybris')?then('btn btn-default', '')]} />
+            <@livecontext.addToCartButton product=self.product!cm.UNDEFINED
+                                          withLink=cm.getLink(self.productInSite!(cm.UNDEFINED))
+                                          enableShopNow=self.isShopNowEnabled(cmpage.context)
+                                          attr={"classes": ["cm-button-group__button", "cm-button--linked-large", (lc.getVendorName() == 'SAP Hybris')?then('btn btn-default', '')]} />
           </div>
       </#if>
     </div>
@@ -84,8 +91,8 @@
   <#-- next/previous buttons -->
   <#if (quickInfoNextId?? && quickInfoPreviousId??)>
     <#if (quickInfoNextId?length > 0 && quickInfoPreviousId?length > 0)>
-      <@bp.button baseClass="" iconClass="cm-icon__symbol icon-next" iconText=bp.getMessage("button_next") attr={"class": "cm-quickinfo__switch cm-quickinfo__switch--next", "data-cm-target": quickInfoNextId}/>
-      <@bp.button baseClass="" iconClass="cm-icon__symbol icon-prev" iconText=bp.getMessage("button_prev") attr={"class": "cm-quickinfo__switch cm-quickinfo__switch--prev", "data-cm-target": quickInfoPreviousId}/>
+      <@components.button baseClass="" iconClass="cm-icon__symbol icon-next" iconText=bp.getMessage("button_next") attr={"class": "cm-quickinfo__switch cm-quickinfo__switch--next", "data-cm-target": quickInfoNextId}/>
+      <@components.button baseClass="" iconClass="cm-icon__symbol icon-prev" iconText=bp.getMessage("button_prev") attr={"class": "cm-quickinfo__switch cm-quickinfo__switch--prev", "data-cm-target": quickInfoPreviousId}/>
     </#if>
   </#if>
 </div>

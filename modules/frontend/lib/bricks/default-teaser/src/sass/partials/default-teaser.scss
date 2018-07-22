@@ -1,16 +1,7 @@
 //Default sass file for all *.teaser.ftl.
 
 .#{$cm-teasable-prefix} {
-  padding: 0 $cm-teasable-padding-base-horizontal $cm-teasable-padding-base-horizontal 0;
   margin: 0;
-
-  @include breakpoint(sm-and-up) {
-    padding: 0 $cm-teasable-padding-large-vertical $cm-teasable-padding-large-vertical 0;
-
-    &.is-last {
-      padding: 0 $cm-teasable-padding-large-vertical $cm-teasable-padding-large-horizontal 0;
-    }
-  }
 
   &__wrapper {
     position: relative;
@@ -72,7 +63,6 @@
   &__headline {
     color: $cm-teasable-headline-color;
     margin: 0;
-    padding-bottom: $cm-teasable-padding-large-vertical;
   }
   &--video &__text {
     // no space for the text with play-button
@@ -80,21 +70,19 @@
   }
 
   &__headline {
-    & > span {
-      display: inline-block;
-      @include flickeringFix(true);
+    display: inline-block;
+    @include flickeringFix(true);
 
-      &:after {
-        content: '';
-        position: relative;
-        display: block;
-        bottom: -5px;
-        margin: auto;
-        width: 0;
-        opacity: 0;
-        height: 1px;
-        background-color: $cm-teasable-headline-color;
-      }
+    &:after {
+      content: '';
+      position: relative;
+      display: block;
+      bottom: -5px;
+      margin: auto;
+      width: 0;
+      opacity: 0;
+      height: 1px;
+      background-color: $cm-teasable-headline-color;
     }
   }
 
@@ -106,5 +94,13 @@
   &__play {
     @include center-absolute;
     z-index: 1; // move over dimmer and text
+  }
+
+
+  // Don't optimize styling rule, the intention is to hide the shop-now functionality as long as it is within the
+  // teaser. As soon as it is moved away (DOM-wise) the selector should no longer match. That's why it needs both
+  // the context to the .#{$cm-teasable-prefix} and an additional descendend selector for the shop-now element
+  .#{$cm-teasable-prefix}__shop-now {
+    display: none;
   }
 }

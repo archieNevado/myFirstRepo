@@ -7,8 +7,8 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.hybris.common.StoreContextHelper;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 public class AssetUrlProviderImpl implements AssetUrlProvider {
 
@@ -18,7 +18,7 @@ public class AssetUrlProviderImpl implements AssetUrlProvider {
 
   @Nullable
   @Override
-  public String getImageUrl(@Nonnull String imageSegment) {
+  public String getImageUrl(@NonNull String imageSegment) {
     if (imageSegment.startsWith("http") || imageSegment.startsWith("//")) {
       return imageSegment;
     }
@@ -30,11 +30,11 @@ public class AssetUrlProviderImpl implements AssetUrlProvider {
 
   @Nullable
   @Override
-  public String getImageUrl(@Nonnull String imageSegment, boolean prependCatalogPath) {
+  public String getImageUrl(@NonNull String imageSegment, boolean prependCatalogPath) {
     return null;
   }
 
-  @Nonnull
+  @NonNull
   private String getCaeUrlPrefix() {
     return StoreContextHelper.findCurrentContext()
             .map(StoreContext::getSiteId)
@@ -45,7 +45,7 @@ public class AssetUrlProviderImpl implements AssetUrlProvider {
 
   @Override
   @Required
-  public void setCommercePreviewUrl(@Nonnull String commercePreviewUrl) {
+  public void setCommercePreviewUrl(@NonNull String commercePreviewUrl) {
     if (commercePreviewUrl.endsWith("/")){
       this.commercePreviewUrl = commercePreviewUrl.substring(0, commercePreviewUrl.length()-1);
     }
@@ -56,7 +56,7 @@ public class AssetUrlProviderImpl implements AssetUrlProvider {
 
   @Override
   @Required
-  public void setCommerceProductionUrl(@Nonnull String commerceProductionHost) {
+  public void setCommerceProductionUrl(@NonNull String commerceProductionHost) {
 
   }
 

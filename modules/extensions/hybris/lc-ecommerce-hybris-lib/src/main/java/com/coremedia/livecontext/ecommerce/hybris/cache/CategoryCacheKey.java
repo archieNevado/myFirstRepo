@@ -8,7 +8,7 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.CategoryDocument;
 import com.coremedia.livecontext.ecommerce.hybris.rest.resources.CatalogResource;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CATEGORY;
 
@@ -16,12 +16,11 @@ public class CategoryCacheKey extends AbstractHybrisDocumentCacheKey<CategoryDoc
 
   private CatalogResource resource;
 
-  public CategoryCacheKey(@Nonnull CommerceId id,
-                          StoreContext storeContext,
-                          CatalogResource resource,
+  public CategoryCacheKey(@NonNull CommerceId id, StoreContext storeContext, CatalogResource resource,
                           CommerceCache commerceCache) {
     super(id, storeContext, CONFIG_KEY_CATEGORY, commerceCache);
     this.resource = resource;
+
     if (!CATEGORY.equals(id.getCommerceBeanType())) {
       throw new InvalidIdException(id + " is not a category id.");
     }
@@ -32,5 +31,4 @@ public class CategoryCacheKey extends AbstractHybrisDocumentCacheKey<CategoryDoc
     String externalId = getExternalIdOrTechId();
     return resource.getCategoryById(externalId, storeContext);
   }
-
 }

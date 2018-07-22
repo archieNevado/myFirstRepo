@@ -13,7 +13,7 @@ coremedia_proxy_webapp 'candy-sap-hybris-commerce-shop-preview' do
   preview true
   headers [%q(
   SetEnvIf Remote_Addr "(.*)" devaddr=$1
-  RequestHeader set X-FragmentHostDevelopment http://%{devaddr}e:40980/blueprint/servlet/service/fragment/
+  RequestHeader set X-FragmentHostDevelopment http://%{devaddr}e:40980/blueprint/servlet/
 )]
   ssl_proxy_verify false
 end

@@ -1,8 +1,6 @@
 package com.coremedia.ecommerce.studio.model {
 import com.coremedia.ecommerce.studio.CatalogModel;
 import com.coremedia.ui.data.RemoteBean;
-import com.coremedia.ui.data.ValueExpression;
-import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.impl.RemoteServiceMethod;
 import com.coremedia.ui.data.impl.RemoteServiceMethodResponse;
 import com.coremedia.ui.util.AsyncComputation;
@@ -40,6 +38,10 @@ public class StoreImpl extends CatalogObjectImpl implements Store {
     return get("marketing");
   }
 
+  public function isMarketingEnabled():Boolean {
+    return get("marketingEnabled");
+  }
+
   public function getSegments():Segments {
     return get(CatalogObjectPropertyNames.SEGMENTS);
   }
@@ -55,7 +57,6 @@ public class StoreImpl extends CatalogObjectImpl implements Store {
   public function getCatalogs():Array{
     return get(CatalogObjectPropertyNames.CATALOGS);
   }
-
 
   public function getDefaultCatalog():Catalog {
     return get(CatalogObjectPropertyNames.DEFAULT_CATALOG)

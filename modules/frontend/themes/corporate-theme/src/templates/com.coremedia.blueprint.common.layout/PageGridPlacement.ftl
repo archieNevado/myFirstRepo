@@ -23,7 +23,7 @@
     <#else>
       <#-- all others -->
       <#-- check setting (linklist) on page, if this placement should display the first element as header (gap) -->
-      <#assign stringlist=bp.setting(cmpage, "placementsWithFirstItemAsHeader", []) />
+      <#assign stringlist=bp.setting(self, "placementsWithFirstItemAsHeader", []) />
       <#assign withGap=stringlist?seq_contains(placementName) />
 
       <#-- display first element as Gap -->

@@ -8,8 +8,8 @@ import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.navigation.ProductInSiteImpl;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -22,8 +22,8 @@ class ProductTransformer implements ContributionTargetTransformer<Product, Produ
   private SitesService sitesService;
 
   @Override
-  @Nonnull
-  public ProductInSite transform(@Nonnull Product target) {
+  @NonNull
+  public ProductInSite transform(@NonNull Product target) {
     StoreContext context = target.getContext();
 
     String siteId = requireNonNull(context.getSiteId(), "Site ID must be set on store context.");
@@ -35,13 +35,13 @@ class ProductTransformer implements ContributionTargetTransformer<Product, Produ
 
   @Override
   @Nullable
-  public Site getSite(@Nonnull Product target) {
+  public Site getSite(@NonNull Product target) {
     String siteId = target.getContext().getSiteId();
     return sitesService.findSite(siteId).orElse(null);
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public Class<Product> getType() {
     return Product.class;
   }

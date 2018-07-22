@@ -6,7 +6,7 @@ import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.content.Content;
 import com.coremedia.xml.Markup;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -78,7 +78,7 @@ public abstract class CMAbstractCodeBase extends CMLocalizedImpl implements CMAb
    * @return a list of {@link CMAbstractCode} objects
    */
   @Override
-  @Nonnull
+  @NonNull
   public List<? extends CMAbstractCode> getInclude() {
     List<Content> contents = getContent().getLinks(INCLUDE);
     return createBeansFor(contents, CMAbstractCode.class);

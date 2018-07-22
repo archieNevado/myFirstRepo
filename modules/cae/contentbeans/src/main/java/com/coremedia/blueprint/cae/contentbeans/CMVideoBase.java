@@ -2,6 +2,7 @@ package com.coremedia.blueprint.cae.contentbeans;
 
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.blueprint.common.contentbeans.CMVideo;
+import com.coremedia.blueprint.common.player.PlayerSettings;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.content.Content;
@@ -97,5 +98,12 @@ public abstract class CMVideoBase extends CMVisualImpl implements CMVideo {
       }
     }
     return sequenceList;
+  }
+
+  @Override
+  public PlayerSettings getPlayerSettings() {
+    Map<String, Object> mapping = getSettingsService().settingAsMap(CMVideo.PLAYER_SETTINGS, String.class, Object.class, this);
+
+    return getSettingsService().createProxy(PlayerSettings.class, mapping);
   }
 }

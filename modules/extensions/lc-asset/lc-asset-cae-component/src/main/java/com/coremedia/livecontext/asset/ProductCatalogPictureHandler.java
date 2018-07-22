@@ -3,6 +3,7 @@ package com.coremedia.livecontext.asset;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
@@ -71,7 +72,7 @@ public class ProductCatalogPictureHandler extends CatalogPictureHandlerBase {
     StoreContext storeContext = requireNonNull(connection.getStoreContext(), "store context not available");
     CommerceIdProvider idProvider = connection.getIdProvider();
 
-    CatalogAlias catalogAlias = resolveCatalogAliasFromId(catalogId, storeContext);
+    CatalogAlias catalogAlias = resolveCatalogAliasFromId(CatalogId.of(catalogId), storeContext);
     CommerceId productId = idProvider.formatProductId(catalogAlias, partNumber);
 
     //Try to load product or product variant

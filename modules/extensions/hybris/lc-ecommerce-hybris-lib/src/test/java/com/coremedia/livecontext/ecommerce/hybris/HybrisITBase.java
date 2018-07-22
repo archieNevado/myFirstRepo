@@ -8,7 +8,7 @@ import com.coremedia.livecontext.ecommerce.hybris.rest.HybrisRestConnector;
 import org.junit.Before;
 import org.junit.Rule;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.inject.Inject;
 import java.util.Locale;
 
@@ -28,7 +28,7 @@ public class HybrisITBase {
             CatalogId.of("apparelProductCatalog"), Locale.ENGLISH, "USD", "Staged");
   }
 
-  protected <T> T performGetWithStoreContext(@Nonnull String resourcePath, @Nonnull Class<T> responseType) {
+  protected <T> T performGetWithStoreContext(@NonNull String resourcePath, @NonNull Class<T> responseType) {
     return connector.performGet(resourcePath, storeContext, responseType);
   }
 }

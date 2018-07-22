@@ -32,8 +32,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -67,7 +67,7 @@ public class CatalogServiceImpl extends AbstractHybrisService implements Catalog
 
   @Nullable
   @Override
-  public Product findProductById(@Nonnull CommerceId id, @Nonnull StoreContext storeContext) {
+  public Product findProductById(@NonNull CommerceId id, @NonNull StoreContext storeContext) {
     CommerceCache cache = getCommerceCache();
 
     ProductCacheKey cacheKey = new ProductCacheKey(id, storeContext, catalogResource, cache);
@@ -78,7 +78,7 @@ public class CatalogServiceImpl extends AbstractHybrisService implements Catalog
   }
 
   @Nullable
-  private Product createProductBean(@Nonnull ProductDocument productDocument, @Nonnull StoreContext storeContext) {
+  private Product createProductBean(@NonNull ProductDocument productDocument, @NonNull StoreContext storeContext) {
     if (productDocument.getBaseProduct() == null) {
       return createBeanFor(productDocument, storeContext, PRODUCT, Product.class);
     } else {
@@ -88,13 +88,13 @@ public class CatalogServiceImpl extends AbstractHybrisService implements Catalog
 
   @Nullable
   @Override
-  public Product findProductBySeoSegment(@Nonnull String seoSegment, @Nonnull StoreContext storeContext) {
+  public Product findProductBySeoSegment(@NonNull String seoSegment, @NonNull StoreContext storeContext) {
     throw new UnsupportedOperationException("Hybris webservice does not support to find products by seo segments.");
   }
 
   @Nullable
   @Override
-  public ProductVariant findProductVariantById(@Nonnull CommerceId id, @Nonnull StoreContext storeContext) {
+  public ProductVariant findProductVariantById(@NonNull CommerceId id, @NonNull StoreContext storeContext) {
     CommerceCache cache = getCommerceCache();
 
     ProductCacheKey cacheKey = new ProductCacheKey(id, storeContext, catalogResource, cache);
@@ -104,9 +104,9 @@ public class CatalogServiceImpl extends AbstractHybrisService implements Catalog
             .orElse(null);
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Product> findProductsByCategory(@Nonnull Category category) {
+  public List<Product> findProductsByCategory(@NonNull Category category) {
     CategoryImpl categoryImpl = (CategoryImpl) category;
     CategoryDocument categoryDocument = categoryImpl.getDelegate();
     List<ProductRefDocument> productRefs = categoryDocument.getProducts();
@@ -116,9 +116,9 @@ public class CatalogServiceImpl extends AbstractHybrisService implements Catalog
     return resolveProductRefs(productRefDocuments, category.getContext());
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Category> findTopCategories(@Nonnull CatalogAlias catalogAlias, @Nonnull StoreContext storeContext) {
+  public List<Category> findTopCategories(@NonNull CatalogAlias catalogAlias, @NonNull StoreContext storeContext) {
     // to be implemented with CMS-9516 (multi catalog support for hybris)
     String catalogId = storeContext.getCatalogId();
     CommerceCache cache = getCommerceCache();
@@ -148,9 +148,9 @@ public class CatalogServiceImpl extends AbstractHybrisService implements Catalog
     return topCategories;
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Category> findSubCategories(@Nonnull Category parentCategory) {
+  public List<Category> findSubCategories(@NonNull Category parentCategory) {
     if (parentCategory.isRoot()) {
       CatalogAlias catalogAlias = parentCategory.getId().getCatalogAlias();
       return findTopCategories(catalogAlias, parentCategory.getContext());
@@ -177,7 +177,7 @@ public class CatalogServiceImpl extends AbstractHybrisService implements Catalog
 
   @Nullable
   @Override
-  public Category findCategoryById(@Nonnull CommerceId id, @Nonnull StoreContext storeContext) {
+  public Category findCategoryById(@NonNull CommerceId id, @NonNull StoreContext storeContext) {
     if (CategoryImpl.isRootCategoryId(id)) {
       return findRootCategory(id.getCatalogAlias(), storeContext);
     }
@@ -193,15 +193,15 @@ public class CatalogServiceImpl extends AbstractHybrisService implements Catalog
 
   @Nullable
   @Override
-  public Category findCategoryBySeoSegment(@Nonnull String seoSegment, @Nonnull StoreContext storeContext) {
+  public Category findCategoryBySeoSegment(@NonNull String seoSegment, @NonNull StoreContext storeContext) {
     return null;
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public SearchResult<Product> searchProducts(@Nonnull String searchTerm,
-                                              @Nonnull Map<String, String> searchParams,
-                                              @Nonnull StoreContext storeContext) {
+  public SearchResult<Product> searchProducts(@NonNull String searchTerm,
+                                              @NonNull Map<String, String> searchParams,
+                                              @NonNull StoreContext storeContext) {
     SearchResult<Product> result = new SearchResult<>();
     // catalogAlias processing to be implemented with CMS-9516 (multi catalog support for hybris)
 
@@ -222,10 +222,10 @@ public class CatalogServiceImpl extends AbstractHybrisService implements Catalog
     return result;
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public Map<String, List<SearchFacet>> getFacetsForProductSearch(@Nonnull Category category,
-                                                                  @Nonnull StoreContext storeContext) {
+  public Map<String, List<SearchFacet>> getFacetsForProductSearch(@NonNull Category category,
+                                                                  @NonNull StoreContext storeContext) {
     String categoryId = category.getExternalTechId();
     Map<String, String> searchParams = ImmutableMap.of(
             CatalogService.SEARCH_PARAM_CATEGORYID, categoryId,
@@ -240,11 +240,11 @@ public class CatalogServiceImpl extends AbstractHybrisService implements Catalog
             .collect(toMap(SearchFacet::getLabel, SearchFacet::getChildFacets));
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public SearchResult<ProductVariant> searchProductVariants(@Nonnull String searchTerm,
-                                                            @Nonnull Map<String, String> searchParams,
-                                                            @Nonnull StoreContext storeContext) {
+  public SearchResult<ProductVariant> searchProductVariants(@NonNull String searchTerm,
+                                                            @NonNull Map<String, String> searchParams,
+                                                            @NonNull StoreContext storeContext) {
     SearchResult<ProductVariant> result = new SearchResult<>();
     // catalogAlias processing to be implemented with CMS-9516 (multi catalog support for hybris)
 
@@ -269,40 +269,40 @@ public class CatalogServiceImpl extends AbstractHybrisService implements Catalog
     return result;
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Catalog> getCatalogs(@Nonnull StoreContext storeContext) {
+  public List<Catalog> getCatalogs(@NonNull StoreContext storeContext) {
     // to be implemented with CMS-9516 (multi catalog support for hybris)
     return Collections.emptyList();
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public Optional<Catalog> getCatalog(@Nonnull CatalogId catalogId, @Nonnull StoreContext storeContext) {
+  public Optional<Catalog> getCatalog(@NonNull CatalogId catalogId, @NonNull StoreContext storeContext) {
     // to be implemented with CMS-9516 (multi catalog support for hybris)
     return Optional.empty();
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public Optional<Catalog> getCatalog(@Nonnull CatalogAlias alias, @Nonnull StoreContext storeContext) {
+  public Optional<Catalog> getCatalog(@NonNull CatalogAlias alias, @NonNull StoreContext storeContext) {
     // to be implemented with CMS-9516 (multi catalog support for hybris)
     return Optional.empty();
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public Optional<Catalog> getDefaultCatalog(@Nonnull StoreContext storeContext) {
+  public Optional<Catalog> getDefaultCatalog(@NonNull StoreContext storeContext) {
     // to be implemented with CMS-9516 (multi catalog support for hybris)
     return Optional.empty();
   }
 
-  @Nonnull
+  @NonNull
   @SuppressWarnings("unchecked")
-  private <T> SearchResult<T> searchProductsPaginated(@Nonnull String searchTerm,
-                                                      @Nonnull Map<String, String> searchParams,
-                                                      @Nonnull StoreContext storeContext,
-                                                      @Nonnull Class<T> returnType) {
+  private <T> SearchResult<T> searchProductsPaginated(@NonNull String searchTerm,
+                                                      @NonNull Map<String, String> searchParams,
+                                                      @NonNull StoreContext storeContext,
+                                                      @NonNull Class<T> returnType) {
     Set<T> resultSet = new LinkedHashSet<>();
     Map<String, String> params = new HashMap<>(searchParams);
 
@@ -380,9 +380,9 @@ public class CatalogServiceImpl extends AbstractHybrisService implements Catalog
   /**
    * Resolve a list of products and variant refs and turn it into a list of products and variants.
    */
-  @Nonnull
-  private List<Product> resolveProductRefs(@Nonnull List<ProductRefDocument> productRefDocuments,
-                                           @Nonnull StoreContext context) {
+  @NonNull
+  private List<Product> resolveProductRefs(@NonNull List<ProductRefDocument> productRefDocuments,
+                                           @NonNull StoreContext context) {
     return productRefDocuments.stream()
             .filter(Objects::nonNull)
             .map(productRefDocument -> resolveProductRef(productRefDocument, context))
@@ -393,9 +393,9 @@ public class CatalogServiceImpl extends AbstractHybrisService implements Catalog
   /**
    * Resolve a product or variant ref and turn it into a product or variant bean.
    */
-  @Nonnull
-  private Optional<Product> resolveProductRef(@Nonnull ProductRefDocument productRefDocument,
-                                              @Nonnull StoreContext context) {
+  @NonNull
+  private Optional<Product> resolveProductRef(@NonNull ProductRefDocument productRefDocument,
+                                              @NonNull StoreContext context) {
     String externalId = productRefDocument.getCode();
     CommerceId commerceId = commerceId(PRODUCT).withExternalId(externalId).build();
 
@@ -412,8 +412,8 @@ public class CatalogServiceImpl extends AbstractHybrisService implements Catalog
   /**
    * Filters product refs in a list of product and variant refs.
    */
-  @Nonnull
-  private static List<ProductRefDocument> filterProductRefs(@Nonnull List<ProductRefDocument> productRefs) {
+  @NonNull
+  private static List<ProductRefDocument> filterProductRefs(@NonNull List<ProductRefDocument> productRefs) {
     Set<ProductRefDocument> uniqueProductRefsWithoutType = productRefs.stream()
             .filter(productRef -> productRef.getType() == null)
             // Use `LinkedHashSet` to keep order of products. Order might be irrelevant, though.
@@ -426,8 +426,8 @@ public class CatalogServiceImpl extends AbstractHybrisService implements Catalog
    * Filters products from a list with variants and products.
    * Variants will be additionally converted to products.
    */
-  @Nonnull
-  private static List<Product> convertToProducts(@Nonnull List<Product> products) {
+  @NonNull
+  private static List<Product> convertToProducts(@NonNull List<Product> products) {
     Set<Product> result = products.stream()
             .map(CatalogServiceImpl::convertToProduct)
             .flatMap(Streams::stream)
@@ -437,8 +437,8 @@ public class CatalogServiceImpl extends AbstractHybrisService implements Catalog
     return ImmutableList.copyOf(result);
   }
 
-  @Nonnull
-  private static Optional<Product> convertToProduct(@Nonnull Product product) {
+  @NonNull
+  private static Optional<Product> convertToProduct(@NonNull Product product) {
     if (!product.isVariant()) {
       return Optional.of(product);
     }
@@ -456,9 +456,9 @@ public class CatalogServiceImpl extends AbstractHybrisService implements Catalog
     return Optional.empty();
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public Category findRootCategory(@Nonnull CatalogAlias catalogAlias, @Nonnull StoreContext storeContext) {
+  public Category findRootCategory(@NonNull CatalogAlias catalogAlias, @NonNull StoreContext storeContext) {
     CommerceId commerceId = commerceId(CATEGORY)
             .withExternalId(CategoryImpl.ROOT_CATEGORY_ROLE_ID)
             .withCatalogAlias(catalogAlias)

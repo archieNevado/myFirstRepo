@@ -21,8 +21,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.ws.rs.POST;
@@ -77,10 +77,10 @@ public class StoreResource extends AbstractCatalogResource<Store> {
   @POST
   @Path("urlService")
   @Nullable
-  public Object handlePost(@Nonnull Map<String, Object> rawJson) {
+  public Object handlePost(@NonNull Map<String, Object> rawJson) {
     String shopUrlStr = (String) rawJson.get(SHOP_URL_PBE_PARAM);
     Object resolved = null;
-    if (shopUrlStr != null){
+    if (shopUrlStr != null) {
       resolved = findFirstPbeShopUrlTargetResolver(shopUrlStr).orElse(null);
     }
 
@@ -93,8 +93,8 @@ public class StoreResource extends AbstractCatalogResource<Store> {
     return resolved;
   }
 
-  @Nonnull
-  private Optional<Object> findFirstPbeShopUrlTargetResolver(@Nonnull String shopUrlStr) {
+  @NonNull
+  private Optional<Object> findFirstPbeShopUrlTargetResolver(@NonNull String shopUrlStr) {
     String siteId = getSiteId();
 
     return pbeShopUrlTargetResolvers.stream()
@@ -107,7 +107,7 @@ public class StoreResource extends AbstractCatalogResource<Store> {
   @Path("augment")
   @ResourceFilters(value = {LocationHeaderResourceFilter.class})
   @Nullable
-  public Content augment(@Nonnull Map<String, Object> rawJson) {
+  public Content augment(@NonNull Map<String, Object> rawJson) {
     Object catalogObject = LinkResolverUtil.resolveJson(rawJson, linkResolver);
 
     if (catalogObject instanceof Category) {
@@ -127,7 +127,7 @@ public class StoreResource extends AbstractCatalogResource<Store> {
     return storeRepresentation;
   }
 
-  private void fillRepresentation(@Nonnull StoreRepresentation representation) {
+  private void fillRepresentation(@NonNull StoreRepresentation representation) {
     Store entity = getEntity();
 
     if (entity == null) {
@@ -162,21 +162,24 @@ public class StoreResource extends AbstractCatalogResource<Store> {
     }
   }
 
-  private static boolean hasMarketingSpots(@Nonnull CommerceConnection connection, @Nonnull StoreContext context) {
+  private static boolean hasMarketingSpots(@NonNull CommerceConnection connection, @NonNull StoreContext context) {
     MarketingSpotService marketingSpotService = connection.getMarketingSpotService();
     return marketingSpotService != null && !marketingSpotService.findMarketingSpots(context).isEmpty();
   }
 
-  @Nonnull
-  private String rootCategoryUri(@Nonnull CommerceConnection connection) {
+  @NonNull
+  private String rootCategoryUri(@NonNull CommerceConnection connection) {
     StoreContext storeContext = connection.getStoreContext();
 
     String siteId = getSiteId();
-    String workspaceId = getWorkspaceId();
-    String catalogAlias = storeContext.getCatalogAlias().value();
+    String workspaceIdStr = getWorkspaceId();
+    String catalogAliasStr = storeContext.getCatalogAlias().value();
 
     //TODO Refactor
-    return "livecontext/category/" + siteId + "/" + catalogAlias + "/" + workspaceId + "/" + CategoryResource.ROOT_CATEGORY_ROLE_ID;
+    return "livecontext/category/" + siteId
+            + "/" + catalogAliasStr
+            + "/" + workspaceIdStr
+            + "/" + CategoryResource.ROOT_CATEGORY_ROLE_ID;
   }
 
   @Override
@@ -185,11 +188,11 @@ public class StoreResource extends AbstractCatalogResource<Store> {
   }
 
   @Override
-  public void setEntity(@Nonnull Store store) {
+  public void setEntity(@NonNull Store store) {
     StoreContext storeContext = store.getContext();
 
     setSiteId(storeContext.getSiteId());
-    setWorkspaceId(storeContext.getWorkspaceId());
+    setWorkspaceId(storeContext.getWorkspaceId().orElse(null));
   }
 
   @Autowired(required = false)

@@ -52,6 +52,7 @@
     <StringProperty Name="locale" Length="64"/>
     <LinkListProperty Name="master" Max="1" LinkType="CMLocalized" extensions:weakLink="true"/>
     <IntProperty Name="masterVersion"/>
+    <IntProperty Name="ignoreUpdates"/>
   </DocType>
 
 

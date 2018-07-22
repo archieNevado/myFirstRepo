@@ -9,8 +9,8 @@ import com.coremedia.livecontext.ecommerce.hybris.rest.resources.CatalogResource
 import com.coremedia.livecontext.ecommerce.p13n.Segment;
 import com.coremedia.livecontext.ecommerce.p13n.SegmentService;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
@@ -23,9 +23,9 @@ public class SegmentServiceImpl extends AbstractHybrisService implements Segment
   @Inject
   private CatalogResource resource;
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Segment> findAllSegments(@Nonnull StoreContext storeContext) {
+  public List<Segment> findAllSegments(@NonNull StoreContext storeContext) {
     List<UserGroupRefDocument> allUserGroupRefs = resource.getAllUserGroups(storeContext);
 
     if (allUserGroupRefs == null) {
@@ -37,7 +37,7 @@ public class SegmentServiceImpl extends AbstractHybrisService implements Segment
 
   @Nullable
   @Override
-  public Segment findSegmentById(@Nonnull CommerceId commerceId, @Nonnull StoreContext storeContext) {
+  public Segment findSegmentById(@NonNull CommerceId commerceId, @NonNull StoreContext storeContext) {
     Optional<String> externalId = commerceId.getExternalId();
     if (!externalId.isPresent()) {
       return null;
@@ -52,9 +52,9 @@ public class SegmentServiceImpl extends AbstractHybrisService implements Segment
     return createBeanFor(userGroup, storeContext, SEGMENT, Segment.class);
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Segment> findSegmentsForCurrentUser(@Nonnull StoreContext storeContext) {
+  public List<Segment> findSegmentsForCurrentUser(@NonNull StoreContext storeContext) {
     return emptyList();
   }
 

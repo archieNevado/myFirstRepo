@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.SocketUtils;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
@@ -52,8 +52,8 @@ public class BetamaxTestHelper {
     return System.getProperties();
   }
 
-  @Nonnull
-  private static Properties loadPropertiesFromFile(@Nonnull String filename) {
+  @NonNull
+  private static Properties loadPropertiesFromFile(@NonNull String filename) {
     Properties properties = new Properties();
 
     InputStream inputStream = BetamaxTestHelper.class.getResourceAsStream(filename);
@@ -70,7 +70,7 @@ public class BetamaxTestHelper {
     return properties;
   }
 
-  private static void mergeIntoSystemProperties(@Nonnull Properties properties) {
+  private static void mergeIntoSystemProperties(@NonNull Properties properties) {
     for (Map.Entry<Object, Object> entry : properties.entrySet()) {
       System.setProperty((String) entry.getKey(), (String) entry.getValue());
     }

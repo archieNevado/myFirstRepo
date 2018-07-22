@@ -14,16 +14,14 @@ public class CatalogCacheKey extends AbstractHybrisDocumentCacheKey<CatalogDocum
 
   private CatalogResource resource;
 
-  public CatalogCacheKey(CommerceId id,
-                         StoreContext storeContext,
-                         CatalogResource resource,
+  public CatalogCacheKey(CommerceId id, StoreContext storeContext, CatalogResource resource,
                          CommerceCache commerceCache) {
     super(id, storeContext, CONFIG_KEY_CATEGORY, commerceCache);
     this.resource = resource;
+
     if (!CATALOG.equals(id.getCommerceBeanType())) {
       throw new InvalidIdException(id + " is not a catalog id.");
     }
-
   }
 
   @Override

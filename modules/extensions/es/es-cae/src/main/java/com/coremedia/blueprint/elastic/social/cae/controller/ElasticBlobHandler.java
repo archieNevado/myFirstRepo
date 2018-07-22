@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
@@ -149,7 +149,7 @@ public class ElasticBlobHandler extends HandlerBase {
             .build();
   }
 
-  private static String getSiteId(@Nonnull HttpServletRequest request) {
+  private static String getSiteId(@NonNull HttpServletRequest request) {
     String absentSiteId = "-";
 
     Site siteFromRequest = SiteHelper.getSiteFromRequest(request);

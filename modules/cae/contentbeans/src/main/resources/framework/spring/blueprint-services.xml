@@ -29,7 +29,6 @@
 
   <bean id="validityPeriodValidator"
         class="com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator">
-    <property name="cache" ref="cache"/>
     <property name="preview" value="${cae.is.preview}"/>
   </bean>
 
@@ -50,5 +49,6 @@
     <property name="contentBackedPageGridService" ref="contentBackedPageGridService"/>
     <property name="validationService" ref="validationService"/>
     <property name="viewtypeService" ref="viewtypeService"/>
+    <property name="visibilityValidator" ref="validityPeriodValidator"/>
   </bean>
 </beans>

@@ -3,7 +3,7 @@ package com.coremedia.livecontext.fragment;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,8 +32,8 @@ public class FragmentParametersFactory {
    * @param requestUrl The normalized request path.
    * @return an object containing the parameters extracted from the matrix parameters from the given url
    */
-  @Nonnull
-  public static FragmentParameters create(@Nonnull String requestUrl) {
+  @NonNull
+  public static FragmentParameters create(@NonNull String requestUrl) {
     //manual parsing matrix paramters, e.g.: http://localhost:40081/blueprint/servlet/service/fragment/10851/en-US/params;placement=header
     if (!requestUrl.contains(";")) {
       throw new IllegalArgumentException("Cannot extract matrix parameters from URL " + requestUrl);

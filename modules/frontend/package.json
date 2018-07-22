@@ -13,6 +13,7 @@
   },
   "workspaces": [
     "lib/bricks/*",
+    "lib/ftl/*",
     "lib/js/*",
     "lib/sass/*",
     "lib/tools/*",
@@ -27,6 +28,6 @@
   },
   "coremedia": {
     "type": "workspace",
-    "version": "1804.3"
+    "version": "1807.1"
   }
 }

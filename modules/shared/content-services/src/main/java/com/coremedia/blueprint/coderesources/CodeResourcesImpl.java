@@ -6,8 +6,8 @@ import com.coremedia.cap.user.User;
 import com.coremedia.xml.Markup;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -159,7 +159,7 @@ class CodeResourcesImpl implements CodeResources {
 
   // --- internal ---------------------------------------------------
 
-  @Nonnull
+  @NonNull
   private List<Content> getCssIncludingThemes() {
     List<Content> result = new ArrayList<>();
 
@@ -177,7 +177,7 @@ class CodeResourcesImpl implements CodeResources {
     return result;
   }
 
-  @Nonnull
+  @NonNull
   private List<Content> getJavaScriptIncludingThemes() {
     List<Content> result = new ArrayList<>();
 
@@ -196,7 +196,7 @@ class CodeResourcesImpl implements CodeResources {
     return result;
   }
 
-  @Nonnull
+  @NonNull
   private List<Content> getCodeResourcsFromContext() {
     return CMNAVIGATION_CSS.equals(codePropertyName)
             ? getCssIncludingThemes()
@@ -215,7 +215,7 @@ class CodeResourcesImpl implements CodeResources {
    *
    * @param devSubstitutedCodes already devSubstituted codes
    */
-  private void transitiveClosure(@Nonnull Collection<Content> devSubstitutedCodes, MessageDigest digest, Collection<Content> visited) {
+  private void transitiveClosure(@NonNull Collection<Content> devSubstitutedCodes, MessageDigest digest, Collection<Content> visited) {
     for (Content code : devSubstitutedCodes) {
       //only traverse code if not already traversed.
       if (!visited.contains(code)) {

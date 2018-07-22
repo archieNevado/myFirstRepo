@@ -7,8 +7,8 @@ import com.coremedia.cap.struct.StructService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -53,7 +53,7 @@ public class LocalResourcesBundleResolver implements BundleResolver {
    */
   @Nullable
   @Override
-  public Struct resolveBundle(@Nonnull Content bundle) {
+  public Struct resolveBundle(@NonNull Content bundle) {
     File bundleFile = localFileFor(bundle);
     if (bundleFile != null) {
       try {

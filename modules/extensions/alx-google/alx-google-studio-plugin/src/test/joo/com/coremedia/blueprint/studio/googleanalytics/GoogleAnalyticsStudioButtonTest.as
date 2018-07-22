@@ -42,7 +42,7 @@ public class GoogleAnalyticsStudioButtonTest extends AbstractRemoteTest {
             viewPort.down(createComponentSelector()._xtype(GoogleAnalyticsReportPreviewButton.xtype).build()) as GoogleAnalyticsReportPreviewButton;
     button.setContent(Content({
       getNumericId : function():int {return 42;},
-      get: function(prop:String):* {
+      "get": function(prop:String):* {
         if (prop === "type") {
           return {name: 'typeWithPreview'};
         }

@@ -4,8 +4,8 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.common.util.Predicate;
 import com.coremedia.livecontext.fragment.FragmentParameters;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 /**
  * Interface to be implemented by beans that can resolve a {@link LinkableAndNavigation} from an
@@ -41,5 +41,5 @@ public interface ExternalReferenceResolver extends Predicate<FragmentParameters>
    * @return the resolved {@link LinkableAndNavigation} or null if not found
    */
   @Nullable
-  LinkableAndNavigation resolveExternalRef(@Nonnull FragmentParameters fragmentParameters, @Nonnull Site site);
+  LinkableAndNavigation resolveExternalRef(@NonNull FragmentParameters fragmentParameters, @NonNull Site site);
 }

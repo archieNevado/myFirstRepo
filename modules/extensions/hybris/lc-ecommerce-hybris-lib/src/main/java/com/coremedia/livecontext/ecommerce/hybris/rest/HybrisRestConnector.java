@@ -26,8 +26,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.URI;
@@ -79,23 +79,24 @@ public class HybrisRestConnector {
   private int connectionRequestTimeoutMillis = -1;
   private int connectionTimeoutMillis = -1;
   private int socketTimeoutMillis = -1;
+  private int networkAddressCacheTtlInMillis = -1;
 
   private Map<String, HttpHeaders> authenticationHeaderMap = new HashMap<>();
 
   @Nullable
-  public <T> T performGet(String resourcePath, @Nonnull StoreContext storeContext, Class<T> responseType) {
+  public <T> T performGet(String resourcePath, @NonNull StoreContext storeContext, Class<T> responseType) {
     List<String> templateParameters = new ArrayList<>();
     return performGet(resourcePath, storeContext, responseType, templateParameters, null, false);
   }
 
   @Nullable
-  public <T> T performGet(String resourcePath, @Nonnull StoreContext storeContext, Class<T> responseType,
+  public <T> T performGet(String resourcePath, @NonNull StoreContext storeContext, Class<T> responseType,
                           @Nullable List<String> uriTemplateParameters) {
     return performGet(resourcePath, storeContext, responseType, uriTemplateParameters, null, false);
   }
 
   @Nullable
-  public <T> T performGet(String resourcePath, @Nonnull StoreContext storeContext, Class<T> responseType,
+  public <T> T performGet(String resourcePath, @NonNull StoreContext storeContext, Class<T> responseType,
                           @Nullable List<String> uriTemplateParameters,
                           @Nullable MultiValueMap<String, String> queryParams, boolean isSecure) {
     // Log if current code is executed in context of a stored DataView evaluation
@@ -195,7 +196,7 @@ public class HybrisRestConnector {
     }
   }
 
-  @Nonnull
+  @NonNull
   public String getServiceEndpointId() {
     return UriComponentsBuilder.newInstance()
             .scheme(getProtocol())
@@ -205,7 +206,7 @@ public class HybrisRestConnector {
             .toUriString();
   }
 
-  @Nonnull
+  @NonNull
   private UriComponentsBuilder getBaseUri(String resourcePath, @Nullable MultiValueMap queryParams, boolean isSecure) {
     UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.newInstance()
             .scheme(isSecure ? getProtocolSecure() : getProtocol())
@@ -223,13 +224,13 @@ public class HybrisRestConnector {
     return uriComponentsBuilder;
   }
 
-  private static boolean isAuthenticationError(@Nonnull Exception ex, int statusCode) {
+  private static boolean isAuthenticationError(@NonNull Exception ex, int statusCode) {
     return statusCode == HttpStatus.UNAUTHORIZED.value()
             || ex instanceof HttpClientErrorException
             && hasMessageThatContains(ex, HttpStatus.UNAUTHORIZED.getReasonPhrase());
   }
 
-  private static boolean hasMessageThatContains(@Nonnull Exception ex, @Nonnull CharSequence messageSubstring) {
+  private static boolean hasMessageThatContains(@NonNull Exception ex, @NonNull CharSequence messageSubstring) {
     String message = ex.getMessage();
     return message != null && message.contains(messageSubstring);
   }
@@ -248,7 +249,7 @@ public class HybrisRestConnector {
     return mapper.writeValueAsString(model);
   }
 
-  private void generateAuthenticationHeader(@Nonnull StoreContext storeContext) {
+  private void generateAuthenticationHeader(@NonNull StoreContext storeContext) {
     String storeId = storeContext.getStoreId();
 
     HttpHeaders httpHeadersForCurrentStore = authenticationHeaderMap.get(storeId);
@@ -335,10 +336,11 @@ public class HybrisRestConnector {
     return body.replaceAll("\"", "");
   }
 
-  @Nonnull
+  @NonNull
   private HttpClient getHttpClient() {
     if (httpClient == null) {
-      httpClient = HttpClientFactory.createHttpClient(true, false, HttpStatus.OK.value(), socketTimeoutMillis, connectionTimeoutMillis, connectionRequestTimeoutMillis);
+      httpClient = HttpClientFactory.createHttpClient(true, false, HttpStatus.OK.value(),
+              socketTimeoutMillis, connectionTimeoutMillis, connectionRequestTimeoutMillis, networkAddressCacheTtlInMillis);
     }
 
     return httpClient;
@@ -450,5 +452,10 @@ public class HybrisRestConnector {
   @Value("${livecontext.hybris.rest.connector.socketTimeoutMillis:60000}")
   public void setSocketTimeoutMillis(int socketTimeoutMillis) {
     this.socketTimeoutMillis = socketTimeoutMillis;
+  }
+
+  @Value("${livecontext.hybris.rest.connector.networkAddressCacheTtlInMillis:30000}")
+  public void setNetworkAddressCacheTtlInMillis(int networkAddressCacheTtlInMillis) {
+    this.networkAddressCacheTtlInMillis = networkAddressCacheTtlInMillis;
   }
 }

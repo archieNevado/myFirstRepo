@@ -16,6 +16,7 @@ import com.coremedia.elastic.social.api.reviews.ReviewService;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.rest.linking.AbstractLinkingResource;
 import com.coremedia.xml.Markup;
+import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +54,9 @@ public class CuratedTransferResource extends AbstractLinkingResource {
   private static final String CONTENT_PROPERTY_TO_COPY_TO = "detailText";
   private static final String CONTENT_PROPERTY_TITLE = "title";
   private static final String COMMENTS_SEPARATOR_REGEX = ";";
+
+  /** name of comment model property which holds the list of curated contents created from it */
+  static final String COMMENT_PROPERTY_CURATED_CONTENTS = "curatedContents";
 
   private static final String COMMENT_DATE_FORMAT_STRING = "dd.MM.yyyy | HH:mm";
   private static final ThreadLocal<SimpleDateFormat> COMMENT_DATE_FORMAT = new ThreadLocal<SimpleDateFormat>() {
@@ -150,11 +154,31 @@ public class CuratedTransferResource extends AbstractLinkingResource {
       @SuppressWarnings("PersonalData")
       String formattedContent = formatComment(comment);
       bbCodeBuilder.append(formattedContent);
+
+      linkCuratedContentAtComment(comment, contentToCopyTo);
     }
 
     if (bbCodeBuilder.length() > 0) {
       writeCommentsAsCoremediaRichtextTo(contentToCopyTo, bbCodeBuilder);
     }
+  }
+
+  /**
+   * Adds the given curated content created for the given comment to the comment's list property
+   * {@link #COMMENT_PROPERTY_CURATED_CONTENTS}.
+   *
+   * @param comment comment
+   * @param content curated content created from comment
+   */
+  private static void linkCuratedContentAtComment(Comment comment, Content content) {
+    // the list of created curated contents from a comment is not personal data
+    @SuppressWarnings("PersonalData")
+    List<?> existingCurated = comment.getProperty(COMMENT_PROPERTY_CURATED_CONTENTS, List.class);
+    List<Object> curated = existingCurated == null
+                                   ? ImmutableList.of(content)
+                                   : ImmutableList.builder().addAll(existingCurated).add(content).build();
+    comment.setProperty(COMMENT_PROPERTY_CURATED_CONTENTS, curated);
+    comment.save();
   }
 
   private void copyImagesOfCommentsTo(Content imageGallery, final List<Comment> comments) {

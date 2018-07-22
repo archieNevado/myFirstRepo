@@ -1,7 +1,7 @@
 package com.coremedia.ecommerce.studio.rest;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 /**
  * Strategy interface to resolve content for a given commerce shop url
@@ -9,6 +9,6 @@ import javax.annotation.Nullable;
 public interface PbeShopUrlTargetResolver {
 
   @Nullable
-  Object resolveUrl(@Nonnull String urlStr, @Nullable String siteId);
+  Object resolveUrl(@NonNull String urlStr, @Nullable String siteId);
 
 }

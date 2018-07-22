@@ -23,8 +23,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
@@ -222,7 +222,7 @@ public class ElasticGoogleAnalyticsServiceProvider implements AnalyticsServicePr
    * @return List of results as returned by Google Analytics.
    */
   @Nullable
-  private GaData call(@Nonnull Analytics analytics, @Nonnull GoogleAnalyticsQuery googleAnalyticsQuery) {
+  private GaData call(@NonNull Analytics analytics, @NonNull GoogleAnalyticsQuery googleAnalyticsQuery) {
     try {
       final Analytics.Data.Ga.Get query = googleAnalyticsQuery.getDataQuery(analytics);
       LOGGER.debug("Firing Google Data Export API query: '{}'", query);

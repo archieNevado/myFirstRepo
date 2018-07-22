@@ -131,7 +131,7 @@ public class LiveContextNavigationFactoryTest {
     StoreContext storeContext = mock(StoreContext.class);
     Category category = mock(Category.class);
 
-    when(storeContextProvider.findContextByContent(content)).thenReturn(storeContext);
+    when(storeContextProvider.findContextByContent(content)).thenReturn(Optional.of(storeContext));
     when(catalogService.findCategoryBySeoSegment(existingSeoSegment, storeContext)).thenReturn(category);
 
     LiveContextNavigation actual = testling.createNavigationBySeoSegment(content, existingSeoSegment);
@@ -146,7 +146,7 @@ public class LiveContextNavigationFactoryTest {
     Content content = mock(Content.class);
     String existingSeoSegment = "existingSeoSegment";
 
-    when(storeContextProvider.findContextByContent(content)).thenReturn(null);
+    when(storeContextProvider.findContextByContent(content)).thenReturn(Optional.empty());
 
     testling.createNavigationBySeoSegment(content, existingSeoSegment);
   }
@@ -157,7 +157,7 @@ public class LiveContextNavigationFactoryTest {
     String notExistingSeoSegment = "notExistingSeoSegment";
     StoreContext storeContext = mock(StoreContext.class);
 
-    when(storeContextProvider.findContextByContent(content)).thenReturn(storeContext);
+    when(storeContextProvider.findContextByContent(content)).thenReturn(Optional.of(storeContext));
     when(catalogService.findCategoryBySeoSegment(notExistingSeoSegment, storeContext)).thenReturn(null);
 
     testling.createNavigationBySeoSegment(content, notExistingSeoSegment);
@@ -177,7 +177,7 @@ public class LiveContextNavigationFactoryTest {
     String anySeoSegment = "anySeoSegment";
     StoreContext storeContext = mock(StoreContext.class);
 
-    when(storeContextProvider.findContextByContent(content)).thenReturn(storeContext);
+    when(storeContextProvider.findContextByContent(content)).thenReturn(Optional.of(storeContext));
     when(catalogService.findCategoryBySeoSegment(anySeoSegment, storeContext)).thenThrow(CommerceException.class);
 
     testling.createNavigationBySeoSegment(content, anySeoSegment);

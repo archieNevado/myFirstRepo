@@ -12,7 +12,6 @@ import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.hybris.HybrisTestConfig;
 import com.coremedia.livecontext.ecommerce.hybris.common.HybrisCommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -20,6 +19,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,28 +58,22 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
     super.testFindProductByIdNotFound();
   }
 
-  @Betamax(tape = "hy_testFindProductByIdWithSlash", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
-  @Ignore
   public void testFindProductByIdWithSlash() {
-    super.testFindProductByIdWithSlash();
+    // no slashes in hybris test content
   }
 
   @Betamax(tape = "hy_testFindProductBySeoSegment", match = {MatchRule.path, MatchRule.query})
-  @Test
   @Override
-  @Ignore("seo segments not supported")
-  public void testFindProductBySeoSegment() throws Exception {
-    super.testFindProductBySeoSegment();
+  public void testFindProductBySeoSegment() {
+    // seo segment not supported
   }
 
   @Betamax(tape = "hy_testFindProductBySeoSegmentIsNull", match = {MatchRule.path, MatchRule.query})
-  @Test
   @Override
-  @Ignore("seo segments not supported")
-  public void testFindProductBySeoSegmentIsNull() throws Exception {
-    super.testFindProductBySeoSegmentIsNull();
+  public void testFindProductBySeoSegmentIsNull() {
+    // seo segment not supported
   }
 
   @Betamax(tape = "hy_testFindProductVariantById", match = {MatchRule.path, MatchRule.query})
@@ -111,12 +105,10 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
     assertThat(variantAxisNames).isNotEmpty();
   }
 
-  @Betamax(tape = "hy_testFindProductVariantByIdWithSlash", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
-  @Ignore
-  public void testFindProductVariantByIdWithSlash() throws Exception {
-    super.testFindProductVariantByIdWithSlash();
+  public void testFindProductVariantByIdWithSlash() {
+    // no slashes in hybris test content
   }
 
   @Betamax(tape = "hy_testFindProductsByCategory", match = {MatchRule.path, MatchRule.query})
@@ -128,7 +120,7 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
 
   @Betamax(tape = "hy_testFindProductsByCategoryCheckProductsOnly", match = {MatchRule.path, MatchRule.query})
   @Test
-  public void testFindProductsByCategoryCheckProductsOnly() throws Exception {
+  public void testFindProductsByCategoryCheckProductsOnly() {
     CommerceId productId = getIdProvider().formatProductId(null, PRODUCT_CODE);
     Product product = testling.findProductById(productId, getStoreContext());
     assertThat(product).isNotNull();
@@ -182,12 +174,9 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
     super.testFindSubCategoriesIsEmpty();
   }
 
-  @Betamax(tape = "hy_testFindCategoryByIdWithSlash", match = {MatchRule.path, MatchRule.query})
-  @Test
   @Override
-  @Ignore
   public void testFindCategoryByIdWithSlash() {
-    super.testFindCategoryByIdWithSlash();
+    // no slashes in hybris test content
   }
 
   @Betamax(tape = "hy_testFindCategoryByIdIsNull", match = {MatchRule.path, MatchRule.query})
@@ -197,32 +186,54 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
     super.testFindCategoryByIdIsNull();
   }
 
-  @Betamax(tape = "hy_testFindCategoryBySeoSegment", match = {MatchRule.path, MatchRule.query})
-  @Test
   @Override
-  @Ignore("seo not supported")
-  public void testFindCategoryBySeoSegment() throws Exception {
-    super.testFindCategoryBySeoSegment();
+  public void testFindCategoryBySeoSegment() {
+    // not implemented in hybris
   }
 
-  @Betamax(tape = "hy_testFindGermanCategoryBySeoSegment", match = {MatchRule.path, MatchRule.query})
-  @Test
   @Override
-  @Ignore("no seo support")
-  public void testFindGermanCategoryBySeoSegment() throws Exception {
-    super.testFindGermanCategoryBySeoSegment();
+  public void testFindGermanCategoryBySeoSegment() {
+    // not implemented in hybris
   }
 
-  @Betamax(tape = "hy_testFindCategoryBySeoSegmentIsNull", match = {MatchRule.path, MatchRule.query})
-  @Test
   @Override
-  public void testFindCategoryBySeoSegmentIsNull() throws Exception {
-    super.testFindCategoryBySeoSegmentIsNull();
+  public void testFindCategoryBySeoSegmentIsNull() {
+    // not implemented in hybris
+  }
+
+  @Override
+  public void testFindB2BProductFromMultiCatalogs() {
+    // no multi catalog implementation for hybris
+  }
+
+  @Override
+  public void testFindB2BCategoryFromMultiCatalogs() {
+    // no multi catalog implementation for hybris
+  }
+
+  @Override
+  public void testSortedSearchProducts() {
+    // no multi catalog implementation for hybris
+  }
+
+  @Override
+  public void testGetDefaultCatalog() {
+    // no multi catalog implementation for hybris
+  }
+
+  @Override
+  public void testGetCatalogs() {
+    // no multi catalog implementation for hybris
+  }
+
+  @Override
+  public boolean checkIfClassIsContained(Collection<?> items, String containedClassType) {
+    return super.checkIfClassIsContained(items, containedClassType);
   }
 
   @Test
   @Override
-  public void testSearchProducts() throws Exception {
+  public void testSearchProducts() {
     if (useBetamaxTapes()) {
       return;
     }
@@ -273,7 +284,7 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
   }
 
   @Test
-  public void testSortedSearchProductsByNameAsc() throws Exception {
+  public void testSortedSearchProductsByNameAsc() {
     if (useBetamaxTapes()) {
       return;
     }
@@ -303,7 +314,7 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
   }
 
   @Test
-  public void testSortedSearchProductsByNameDesc() throws Exception {
+  public void testSortedSearchProductsByNameDesc() {
     if (useBetamaxTapes()) {
       return;
     }
@@ -330,7 +341,7 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
   }
 
   @Test
-  public void testSortedSearchProductsByPriceAsc() throws Exception {
+  public void testSortedSearchProductsByPriceAsc() {
     if (useBetamaxTapes()) {
       return;
     }
@@ -386,7 +397,7 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
   }
 
   @Test
-  public void testSearchProductsWithOffset() throws Exception {
+  public void testSearchProductsWithOffset() {
     if (useBetamaxTapes()) {
       return;
     }
@@ -432,7 +443,7 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
   }
 
   @Test
-  public void testSearchProductsWithFacet() throws Exception {
+  public void testSearchProductsWithFacet() {
     if (useBetamaxTapes()) {
       return;
     }
@@ -470,7 +481,7 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
       return;
     }
 
-    HashMap<String,String> searchParams = new HashMap<>();
+    HashMap<String, String> searchParams = new HashMap<>();
     searchParams.put("fields", "DEFAULT,facets");
 
     super.testSearchFacetsProducts(SEARCH_TERM_1, searchParams);

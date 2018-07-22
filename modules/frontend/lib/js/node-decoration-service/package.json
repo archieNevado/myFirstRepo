@@ -16,6 +16,7 @@
   },
   "main": "src/index.js",
   "coremedia": {
-    "type": "lib"
+    "type": "lib",
+    "init": "src/init.js"
   }
 }

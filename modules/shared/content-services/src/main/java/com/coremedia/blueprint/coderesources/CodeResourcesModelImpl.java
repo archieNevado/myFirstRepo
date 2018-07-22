@@ -3,7 +3,7 @@ package com.coremedia.blueprint.coderesources;
 import com.coremedia.cap.content.Content;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -60,7 +60,7 @@ class CodeResourcesModelImpl implements CodeResourcesModel {
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public List<?> getLinkTargetList() {
     // Take care for the appropriate order:
     List<Object> result = new ArrayList<>();

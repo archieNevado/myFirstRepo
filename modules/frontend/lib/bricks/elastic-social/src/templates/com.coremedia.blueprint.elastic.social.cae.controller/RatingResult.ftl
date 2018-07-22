@@ -1,6 +1,9 @@
 <@cm.responseHeader name="Content-Type" value="text/html; charset=UTF-8"/><#-- could be used as fragment -->
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.elastic.social.cae.controller.RatingResult" -->
 
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/components.ftl" as components />
+<#import "../../freemarkerLibs/elastic-social.ftl" as elasticSocial />
+
 <#if self.isEnabled()>
   <#assign ratingsId=bp.generateId("cm-ratings-") />
   <div class="cm-ratings" id="${ratingsId}" data-cm-refreshable-fragment='{"url": "${cm.getLink(self)}"}'>
@@ -25,14 +28,14 @@
             </#list>
           </span>
           <span class="cm-ratings-average__text" itemprop="rating" itemscope="itemscope" itemtype="http://data-vocabulary.org/Rating">
-            <@bp.message es.messageKeys.RATINGS_AVERAGE_SYMBOL /> <span itemprop="average">${averageRating?string("0.##")}</span> <@bp.message es.messageKeys.RATINGS_AVERAGE_OUT_OF /> <span itemprop="best">${es.getMaxRating()}</span>
+            <@bp.message key="ratings_average_symbol" /> <span itemprop="average">${averageRating?string("0.##")}</span> <@bp.message key="ratings_average_out_of" /> <span itemprop="best">${es.getMaxRating()}</span>
           </span>
           <span class="cm-ratings-average__votes">
             <#assign ratingsLabel="" />
             <#if (numberOfRatings == 1)>
-              <#assign ratingsLabel=bp.getMessage(es.messageKeys.RATING_NUMBER_OF_RATINGS_SINGULAR) />
+              <#assign ratingsLabel=bp.getMessage("rating_number_of_ratings_singular") />
             <#else>
-              <#assign ratingsLabel=bp.getMessage(es.messageKeys.RATING_NUMBER_OF_RATINGS) />
+              <#assign ratingsLabel=bp.getMessage("rating_number_of_ratings") />
             </#if>
             (<span itemprop="votes">${numberOfRatings}</span> ${ratingsLabel})
           </span>
@@ -44,13 +47,13 @@
           <#assign numberOfRatings=self.getNumberOfRatings()!0 />
           <#switch numberOfRatings>
             <#case 0>
-              <@bp.message es.messageKeys.RATINGS_NO_RATINGS />
+              <@bp.message key="ratings_no_ratings" />
               <#break>
             <#case 1>
-              <@bp.message es.messageKeys.RATINGS_HEADLINE_SINGULAR />
+              <@bp.message key="ratings_headline_singular" />
               <#break>
             <#default>
-              <@bp.message key=es.messageKeys.RATINGS_HEADLINE args=[numberOfRatings] />
+              <@bp.message key="ratings_headline" args=[numberOfRatings] />
           </#switch>
         </h3>
       </#if>
@@ -59,20 +62,20 @@
     <#-- write a rating -->
     <#if self.isWritingContributionsAllowed()>
       <#-- output of dynamic, non-rating specific information -->
-      <@bp.notification type="inactive" text="" dismissable=false additionalClasses=["cm-ratings__notification"] attr={"data-cm-notification": '{"path": ""}'} />
+      <@elasticSocial.notification type="inactive" text="" additionalClasses=["cm-ratings__notification"] attr={"data-cm-notification": '{"path": ""}'} />
       <#if (es.hasUserRated(self.getTarget()))!false>
         <div class="cm-ratings__toolbar cm-toolbar cm-toolbar--ratings">
-          <@bp.button text=bp.getMessage(es.messageKeys.RATINGS_WRITE) attr={"class": "cm-button cm-button--small cm-button--rating cm-button--disabled"} />
+          <@components.button text=bp.getMessage("ratings_write") attr={"class": "cm-button cm-button--small cm-button--rating cm-button--disabled"} />
         </div>
-        <@bp.notification type="info" text=bp.getMessage(es.messageKeys.RATING_FORM_ALREADY_RATINGED) dismissable=false additionalClasses=["cm-ratings__notification"] attr={"data-cm-ratings-notification-type": "ALREADY_RATED"} />
+        <@elasticSocial.notification type="info" text=bp.getMessage("reviewForm_already_rated") additionalClasses=["cm-ratings__notification"] attr={"data-cm-ratings-notification-type": "ALREADY_RATED"} />
       <#else>
         <div class="cm-ratings__toolbar cm-toolbar cm-toolbar--ratings">
-          <@bp.button text=bp.getMessage(es.messageKeys.RATINGS_WRITE) attr={"class": "cm-button cm-button--small cm-button--rating", "data-cm-button--rating": ''} />
+          <@components.button text=bp.getMessage("ratings_write") attr={"class": "cm-button cm-button--small cm-button--rating", "data-cm-button--rating": ''} />
         </div>
         <@cm.include self=self view="ratingForm" />
       </#if>
     <#elseif self.isWritingContributionsEnabled() && es.isAnonymousUser()>
-      <@bp.notification type="info" text=bp.getMessage(es.messageKeys.RATING_FORM_NOT_LOGGED_IN) dismissable=false additionalClasses=["cm-ratings__notification"] attr={"data-cm-ratings-notification-type": "LOGIN_REQUIRED"} />
+      <@elasticSocial.notification type="info" text=bp.getMessage("ratingForm_not_logged_in") additionalClasses=["cm-ratings__notification"] attr={"data-cm-ratings-notification-type": "LOGIN_REQUIRED"} />
       <div class="cm-ratings__toolbar cm-toolbar cm-toolbar--ratings">
         <@cm.include self=es.getLogin()!cm.UNDEFINED view="asButton" />
       </div>

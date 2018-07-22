@@ -9,8 +9,8 @@ import com.coremedia.livecontext.ecommerce.hybris.rest.documents.ProductDocument
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.VariantAttributeDocument;
 import com.coremedia.livecontext.ecommerce.inventory.AvailabilityInfo;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ public class ProductVariantImpl extends ProductImpl implements ProductVariant {
     return super.getDelegate();
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<ProductAttribute> getDefiningAttributes() {
     List<ProductAttribute> productAttributes = new ArrayList<>();
@@ -65,7 +65,7 @@ public class ProductVariantImpl extends ProductImpl implements ProductVariant {
     return productAttributes;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<ProductAttribute> getDescribingAttributes() {
     List<ProductAttribute> productAttributes = new ArrayList<>();
@@ -87,7 +87,7 @@ public class ProductVariantImpl extends ProductImpl implements ProductVariant {
 
   @Nullable
   @Override
-  public Object getAttributeValue(@Nonnull String s) {
+  public Object getAttributeValue(@NonNull String s) {
     for (ProductAttribute productAttribute : getDefiningAttributes()) {
       if (productAttribute.getDisplayName().equals(s)) {
         return productAttribute.getValue();
@@ -104,6 +104,7 @@ public class ProductVariantImpl extends ProductImpl implements ProductVariant {
     return null;
   }
 
+  @Nullable
   @Override
   public BigDecimal getListPrice() {
     BigDecimal price = super.getListPrice();
@@ -118,6 +119,7 @@ public class ProductVariantImpl extends ProductImpl implements ProductVariant {
     return price;
   }
 
+  @Nullable
   @Override
   public BigDecimal getOfferPrice() {
     BigDecimal price = super.getOfferPrice();

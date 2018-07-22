@@ -9,7 +9,6 @@ import com.coremedia.livecontext.ecommerce.asset.AssetService;
 import com.coremedia.livecontext.ecommerce.asset.AssetUrlProvider;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.ecommerce.inventory.AvailabilityService;
 import com.coremedia.livecontext.ecommerce.order.CartService;
@@ -24,6 +23,7 @@ import com.coremedia.livecontext.ecommerce.workspace.WorkspaceService;
 import org.mockito.Mock;
 
 import java.util.Currency;
+import java.util.Optional;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 import static org.mockito.ArgumentMatchers.any;
@@ -88,7 +88,7 @@ public class MockCommerceEnvBuilder {
 
   public BaseCommerceConnection setupEnv(String vendor) {
     initMocks(this);
-    StoreContext storeContext = newStoreContext();
+    StoreContextImpl storeContext = newStoreContext();
 
     storeContext.put(StoreContextImpl.STORE_ID, "10001");
     storeContext.put(StoreContextImpl.STORE_NAME, "aurora");
@@ -96,9 +96,8 @@ public class MockCommerceEnvBuilder {
     storeContext.put(StoreContextImpl.LOCALE, LocaleHelper.getLocaleFromString("en_US"));
     storeContext.put(StoreContextImpl.CURRENCY, Currency.getInstance("USD"));
 
-    when(storeContextProvider.findContextBySite(any())).thenReturn(storeContext);
+    when(storeContextProvider.findContextBySite(any())).thenReturn(Optional.of(storeContext));
     when(storeContextProvider.buildContext(any())).thenReturn(StoreContextBuilderImpl.from(storeContext));
-    when(storeContextProvider.cloneContext(any())).thenReturn(storeContext.getClone());
 
     UserContext userContext = UserContext.builder().build();
     when(userContextProvider.getCurrentContext()).thenReturn(userContext);

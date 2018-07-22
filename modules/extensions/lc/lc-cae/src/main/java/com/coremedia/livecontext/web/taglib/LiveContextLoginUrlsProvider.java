@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.web.taglib;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -14,8 +14,8 @@ public interface LiveContextLoginUrlsProvider {
    * @return login form URL
    * @param request the current request
    */
-  @Nonnull
-  String buildLoginFormUrl(@Nonnull HttpServletRequest request);
+  @NonNull
+  String buildLoginFormUrl(@NonNull HttpServletRequest request);
 
   /**
    * Returns the URL to log out of the Commerce system.
@@ -23,8 +23,8 @@ public interface LiveContextLoginUrlsProvider {
    * @return logout URL
    * @param request the current request
    */
-  @Nonnull
-  String buildLogoutUrl(@Nonnull HttpServletRequest request);
+  @NonNull
+  String buildLogoutUrl(@NonNull HttpServletRequest request);
 
   /**
    *  Transforms the given URL of the {@link com.coremedia.livecontext.handler.LoginStatusHandler}
@@ -36,7 +36,7 @@ public interface LiveContextLoginUrlsProvider {
    * @param request the current request
    * @return transformed URL
    */
-  @Nonnull
-  String transformLoginStatusUrl(@Nonnull String url, @Nonnull HttpServletRequest request);
+  @NonNull
+  String transformLoginStatusUrl(@NonNull String url, @NonNull HttpServletRequest request);
 
 }

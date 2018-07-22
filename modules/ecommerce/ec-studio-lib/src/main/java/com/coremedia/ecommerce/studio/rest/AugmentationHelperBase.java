@@ -24,8 +24,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -53,10 +53,10 @@ abstract class AugmentationHelperBase<T> {
   protected ContentType contentType;
 
   @Nullable
-  abstract Content augment(@Nonnull T type);
+  abstract Content augment(@NonNull T type);
 
   @Nullable
-  protected Content createContent(@Nonnull Content parent, @Nonnull String name, @Nonnull Map<String, Object> properties) {
+  protected Content createContent(@NonNull Content parent, @NonNull String name, @NonNull Map<String, Object> properties) {
     // Create content (taking possible interceptors into consideration)
     ContentWriteRequest writeRequest = null;
     if (interceptService != null) {
@@ -93,7 +93,7 @@ abstract class AugmentationHelperBase<T> {
   }
 
   @Nullable
-  protected String computeFolderPath(@Nonnull CommerceBean commerceBean) {
+  protected String computeFolderPath(@NonNull CommerceBean commerceBean) {
     Category category = getCategoryForCommerceBean(commerceBean);
 
     Site site = sitesService.getSite(category.getContext().getSiteId());
@@ -122,17 +122,17 @@ abstract class AugmentationHelperBase<T> {
     return subPathsToJoin.stream().collect(joining("/"));
   }
 
-  @Nonnull
-  protected static String getEscapedDisplayName(@Nonnull Category category) {
+  @NonNull
+  protected static String getEscapedDisplayName(@NonNull Category category) {
     // External ids of category can contain '/'. See CMS-5075
     return category.getDisplayName().replace('/', '_');
   }
 
   @Nullable
-  abstract Content getCategoryContent(@Nonnull Category category);
+  abstract Content getCategoryContent(@NonNull Category category);
 
-  @Nonnull
-  protected Category getRootCategory(@Nonnull CommerceBean commerceBean) {
+  @NonNull
+  protected Category getRootCategory(@NonNull CommerceBean commerceBean) {
     Category currentCategory = getCategoryForCommerceBean(commerceBean);
 
     while (!currentCategory.isRoot()) {
@@ -148,8 +148,8 @@ abstract class AugmentationHelperBase<T> {
     return currentCategory;
   }
 
-  @Nonnull
-  private static Category getCategoryForCommerceBean(@Nonnull CommerceBean commerceBean) {
+  @NonNull
+  private static Category getCategoryForCommerceBean(@NonNull CommerceBean commerceBean) {
     if (commerceBean instanceof Category) {
       return (Category) commerceBean;
     } else if (commerceBean instanceof Product) {
@@ -160,7 +160,7 @@ abstract class AugmentationHelperBase<T> {
   }
 
   @Nullable
-  protected static Content getLayoutSettings(@Nonnull Content content, @Nonnull String pageGridName) {
+  protected static Content getLayoutSettings(@NonNull Content content, @NonNull String pageGridName) {
     Struct placementStruct = CapStructHelper.getStruct(content, pageGridName);
     if (placementStruct == null) {
       return null;

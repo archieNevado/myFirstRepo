@@ -52,15 +52,22 @@
   <bean class="com.coremedia.objectserver.web.MappedInterceptor" id="mappedFragmentCommerceContextInterceptor">
     <property name="pathMatcher" ref="handlerPathMatcher"/>
     <property name="interceptor" ref="fragmentCommerceContextInterceptor"/>
-    <property name="includePatterns">
+    <property name="includePatterns" ref="fragmentCommerceInterceptorIncludePatterns"/>
+  </bean>
+
+  <bean id="fragmentCommerceInterceptorIncludePatterns" class="org.springframework.beans.factory.config.ListFactoryBean">
+    <description>
+      List of fragmentCommerceInterceptor include patterns. Can be extended by other paths.
+    </description>
+    <property name="sourceList">
       <list>
         <util:constant static-field="com.coremedia.livecontext.fragment.FragmentPageHandler.FRAGMENT_INTERCEPTOR_PATTERN"/>
       </list>
     </property>
   </bean>
 
-  <!-- add commerce context interceptors to the beginning -->
-  <customize:prepend id="appendLivecontextCommerceInterceptors" bean="handlerInterceptors" order="9999999">
+  <!-- add commerce context interceptors to the beginning, at least it must be run before the WebCommerceContextInterceptor -->
+  <customize:prepend id="appendLivecontextCommerceInterceptors" bean="handlerInterceptors" order="10000100">
     <list>
       <ref bean="mappedRestStoreContextProviderInterceptor"/>
       <ref bean="mappedFragmentCommerceContextInterceptor"/>

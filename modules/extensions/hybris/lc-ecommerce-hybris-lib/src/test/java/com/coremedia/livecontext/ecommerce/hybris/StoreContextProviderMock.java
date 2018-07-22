@@ -8,12 +8,12 @@ import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Currency;
+import java.util.Optional;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CURRENCY;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.LOCALE;
@@ -22,42 +22,44 @@ import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreCon
 
 public class StoreContextProviderMock implements StoreContextProvider {
 
-  @Nullable
+  @NonNull
   @Override
-  public StoreContext findContextBySiteId(@Nonnull String siteId) {
+  public Optional<StoreContext> findContextBySiteId(@NonNull String siteId) {
     if (!"Helios".equals(siteId)) {
       throw new InvalidContextException("Could not find context for " + siteId);
     }
 
-    return createContext();
+    return Optional.of(createContext());
   }
 
+  @NonNull
   @Override
-  @Nullable
-  public StoreContext findContextBySite(Site site) {
+  public Optional<StoreContext> findContextBySite(@NonNull Site site) {
     if (!"Helios".equals(site.getName())) {
       throw new InvalidContextException("Could not find context for " + site.getName());
     }
 
-    return createContext();
+    return Optional.of(createContext());
   }
 
+  @NonNull
   @Override
-  @Nullable
-  public StoreContext findContextByContent(@Nonnull Content content) {
-    return createContext();
+  public Optional<StoreContext> findContextByContent(@NonNull Content content) {
+    return Optional.of(createContext());
   }
 
-  @Nullable
+  @NonNull
   @Override
-  public StoreContext createContext(@Nonnull Site site) {
-    return createContext();
+  public Optional<StoreContext> createContext(@NonNull Site site) {
+    return Optional.of(createContext());
   }
 
+  @NonNull
   private StoreContext createContext() {
     return createContext("10001", "aurora", "10001", "en_US", "USD");
   }
 
+  @NonNull
   private StoreContext createContext(String storeId, String storeName, String catalogId, String locale,
                                      String currency) {
     StoreContext context = StoreContextImpl.newStoreContext();
@@ -97,15 +99,9 @@ public class StoreContextProviderMock implements StoreContextProvider {
     return context;
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public StoreContextBuilder buildContext(@Nonnull StoreContext source) {
-    return StoreContextBuilderImpl.from(source);
-  }
-
-  @Nonnull
-  @Override
-  public StoreContext cloneContext(@Nonnull StoreContext source) {
-    return source.getClone();
+  public StoreContextBuilder buildContext(@NonNull StoreContext source) {
+    return StoreContextBuilderImpl.from((StoreContextImpl) source);
   }
 }

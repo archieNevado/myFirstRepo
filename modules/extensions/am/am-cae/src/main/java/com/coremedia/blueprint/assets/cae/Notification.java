@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.assets.cae;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +16,7 @@ public class Notification {
   private String key;
   private List<?> params;
 
-  public Notification(@Nonnull NotificationType type, @Nonnull String key, @Nullable List<?> params) {
+  public Notification(@NonNull NotificationType type, @NonNull String key, @Nullable List<?> params) {
     this.type = type;
     this.key = key;
     this.params = params == null ? Collections.emptyList() : new ArrayList<>(params);
@@ -25,7 +25,7 @@ public class Notification {
   /**
    * @cm.template.api
    */
-  @Nonnull
+  @NonNull
   public NotificationType getType() {
     return type;
   }
@@ -33,7 +33,7 @@ public class Notification {
   /**
    * @cm.template.api
    */
-  @Nonnull
+  @NonNull
   public String getKey() {
     return key;
   }

@@ -1,6 +1,7 @@
 package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.ecommerce.studio.rest.model.Marketing;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.p13n.MarketingSpotService;
 
 import javax.ws.rs.Path;
@@ -44,7 +45,9 @@ public class MarketingResource extends AbstractCatalogResource<Marketing> {
 
   @Override
   public void setEntity(Marketing marketing) {
-    setSiteId(marketing.getContext().getSiteId());
-    setWorkspaceId(marketing.getContext().getWorkspaceId());
+    StoreContext storeContext = marketing.getContext();
+
+    setSiteId(storeContext.getSiteId());
+    setWorkspaceId(storeContext.getWorkspaceId().orElse(null));
   }
 }

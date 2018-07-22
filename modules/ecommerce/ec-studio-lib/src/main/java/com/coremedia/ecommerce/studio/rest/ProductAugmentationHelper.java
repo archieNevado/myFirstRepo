@@ -13,8 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Named;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +36,7 @@ public class ProductAugmentationHelper extends AugmentationHelperBase<Product> {
 
   @Override
   @Nullable
-  Content augment(@Nonnull Product product) {
+  Content augment(@NonNull Product product) {
     Category parentCategory = product.getCategory();
 
     // create folder hierarchy for category
@@ -82,22 +82,22 @@ public class ProductAugmentationHelper extends AugmentationHelperBase<Product> {
 
 
   @Override
-  Content getCategoryContent(@Nonnull Category category) {
+  Content getCategoryContent(@NonNull Category category) {
     return categoryAugmentationService.getContent(category);
   }
 
   /**
    * Builds properties for an <code>CMExternalProduct</code> document.
    */
-  private Map<String, Object> buildProductContentDocumentProperties(@Nonnull Product product) {
+  private Map<String, Object> buildProductContentDocumentProperties(@NonNull Product product) {
     Map<String, Object> properties = new HashMap<>();
     properties.put(EXTERNAL_ID, format(product.getId()));
 
     return properties;
   }
 
-  @Nonnull
-  private static String getEscapedDisplayName(@Nonnull Product product) {
+  @NonNull
+  private static String getEscapedDisplayName(@NonNull Product product) {
     // External ids of products can contain '/'. See CMS-5075
     return product.getName().replace('/', '_');
   }

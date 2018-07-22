@@ -6,8 +6,8 @@ import com.coremedia.cap.common.CapBlobRef;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.objectserver.dataviews.AssumesIdentity;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Collections;
 import java.util.Map;
 
@@ -23,18 +23,18 @@ public class AMAssetRenditionImpl implements AMAssetRendition, AssumesIdentity {
     // only used for dataview caching
   }
 
-  public AMAssetRenditionImpl(@Nonnull String renditionName, @Nonnull AMAsset asset) {
+  public AMAssetRenditionImpl(@NonNull String renditionName, @NonNull AMAsset asset) {
     this.asset = asset;
     this.renditionName = renditionName;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public AMAsset getAsset() {
     return asset;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public String getName() {
     return renditionName;
@@ -65,7 +65,7 @@ public class AMAssetRenditionImpl implements AMAssetRendition, AssumesIdentity {
     return Boolean.TRUE.equals(oShow);
   }
 
-  @Nonnull
+  @NonNull
   private Map<String, Object> getRenditionMetadata() {
     Struct struct = asset.getContent().getStruct(AMAsset.METADATA);
     if (null != struct) {

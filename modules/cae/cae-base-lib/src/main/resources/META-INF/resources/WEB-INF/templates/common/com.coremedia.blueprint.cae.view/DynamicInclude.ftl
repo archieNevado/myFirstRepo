@@ -15,8 +15,11 @@
   "webflow": isWebflowRequest
 })/>
 
-<#if (cm.getRequestHeader("Surrogate-Capability")?seq_contains("ESI/1.0"))!false>
-  <#-- include ESI fragment -->
+<#--
+    don't use ESI include fragment if the fragment link is to be processed on the server side and
+    therefore not a valid ESI include link, e.g. "<!--CM ...".
+-->
+<#if ((!fragmentLink?starts_with("<!--")) && (cm.getRequestHeader("Surrogate-Capability")?contains("ESI/1.0"))!false)>
   <${'esi'}:include src="${fragmentLink}" onerror="continue"/>
 <#else>
   <#-- include AHAH fragment, see also brick "dynamic-include" for a deeper integration based on jQuery -->

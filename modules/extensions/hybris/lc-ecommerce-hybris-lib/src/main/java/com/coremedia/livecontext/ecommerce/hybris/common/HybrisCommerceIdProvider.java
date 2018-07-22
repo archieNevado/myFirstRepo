@@ -6,7 +6,7 @@ import com.coremedia.livecontext.ecommerce.common.CommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.Vendor;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 public class HybrisCommerceIdProvider extends BaseCommerceIdProvider {
 
@@ -16,12 +16,12 @@ public class HybrisCommerceIdProvider extends BaseCommerceIdProvider {
     super(HYBRIS);
   }
 
-  public static boolean isHybrisId(@Nonnull CommerceId commerceId) {
+  public static boolean isHybrisId(@NonNull CommerceId commerceId) {
     return HYBRIS.equals(commerceId.getVendor());
   }
 
-  @Nonnull
-  public static CommerceIdBuilder commerceId(@Nonnull CommerceBeanType beanType) {
+  @NonNull
+  public static CommerceIdBuilder commerceId(@NonNull CommerceBeanType beanType) {
     return BaseCommerceIdProvider.commerceId(HYBRIS, beanType);
   }
 }

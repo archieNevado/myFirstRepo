@@ -3,8 +3,8 @@ package com.coremedia.blueprint.elastic.social.cae.view;
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
 import com.coremedia.blueprint.elastic.social.cae.controller.RatingResult;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Named;
 import java.util.List;
 
@@ -16,18 +16,18 @@ import java.util.List;
 public class RatingViewHookEventListener extends AbstractESViewHookEventListener {
 
   @Override
-  protected boolean isEnabled(@Nonnull ElasticSocialConfiguration elasticSocialConfiguration) {
+  protected boolean isEnabled(@NonNull ElasticSocialConfiguration elasticSocialConfiguration) {
     return elasticSocialConfiguration.isRatingEnabled();
   }
 
   @Nullable
   @Override
-  protected List<String> getWhitelistTypes(@Nonnull ElasticSocialConfiguration elasticSocialConfiguration) {
+  protected List<String> getWhitelistTypes(@NonNull ElasticSocialConfiguration elasticSocialConfiguration) {
     return elasticSocialConfiguration.getRatingDocumentTypes();
   }
 
   @Override
-  protected RatingResult getContribution(@Nonnull Object target) {
+  protected RatingResult getContribution(@NonNull Object target) {
     return new RatingResult(target);
   }
 

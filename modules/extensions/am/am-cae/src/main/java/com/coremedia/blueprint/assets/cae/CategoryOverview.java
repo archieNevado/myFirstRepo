@@ -2,8 +2,8 @@ package com.coremedia.blueprint.assets.cae;
 
 import com.coremedia.blueprint.assets.contentbeans.AMTaxonomy;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class CategoryOverview implements DownloadPortalContext {
    * @param category      the selected category or {@code null} for the root category
    * @param subcategories all subcategories of the selected category
    */
-  public CategoryOverview(@Nullable AMTaxonomy category, @Nonnull List<Subcategory> subcategories) {
+  public CategoryOverview(@Nullable AMTaxonomy category, @NonNull List<Subcategory> subcategories) {
     this.category = category;
     this.subcategories = Collections.unmodifiableList(subcategories);
   }
@@ -45,7 +45,7 @@ public class CategoryOverview implements DownloadPortalContext {
    * @return a list of all subcategories that contain assets.
    * @cm.template.api
    */
-  @Nonnull
+  @NonNull
   public List<Subcategory> getSubcategories() {
     return subcategories;
   }

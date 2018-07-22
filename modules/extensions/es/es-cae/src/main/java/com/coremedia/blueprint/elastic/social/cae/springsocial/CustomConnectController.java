@@ -14,7 +14,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.util.UriUtils;
 import org.springframework.web.util.UrlPathHelper;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -68,7 +68,7 @@ public class CustomConnectController extends ConnectController {
     return new RedirectView(path, true);
   }
 
-  private boolean prependServletPath(@Nonnull HttpServletRequest request) {
+  private boolean prependServletPath(@NonNull HttpServletRequest request) {
     return !urlPathHelper.getPathWithinServletMapping(request).equals("");
   }
 
@@ -77,13 +77,13 @@ public class CustomConnectController extends ConnectController {
    * Returns the extension, including the period at the beginning, or an empty string if there is no extension.
    * This makes it possible to append the returned value to a path even if there is no extension.
    */
-  @Nonnull
-  private static String getPathExtension(@Nonnull HttpServletRequest request) {
-    return nullToEmpty(UriUtils.extractFileExtension(request.getRequestURI()));
+  @NonNull
+  private static String getPathExtension(@NonNull HttpServletRequest request) {
+    return nullToEmpty(UriUtils.extractFileExtension(request.getRequestURI())); // NOSONAR - Workaround for spotbugs/spotbugs#621, see CMS-12169
   }
 
-  @Nonnull
-  private RedirectView createRedirectView(@Nonnull NativeWebRequest request) {
+  @NonNull
+  private RedirectView createRedirectView(@NonNull NativeWebRequest request) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Principal principal = (Principal) authentication.getPrincipal();
 

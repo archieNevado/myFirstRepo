@@ -3,6 +3,7 @@ package com.coremedia.livecontext.asset;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
@@ -60,7 +61,7 @@ public class CategoryCatalogPictureHandler extends CatalogPictureHandlerBase {
     CommerceIdProvider idProvider = requireNonNull(connection.getIdProvider(), "id provider not available");
     StoreContext storeContext = requireNonNull(connection.getStoreContext(), "store context not available");
 
-    CatalogAlias catalogAlias = resolveCatalogAliasFromId(catalogId, storeContext);
+    CatalogAlias catalogAlias = resolveCatalogAliasFromId(CatalogId.of(catalogId), storeContext);
     CommerceId id = idProvider.formatCategoryId(catalogAlias, partNumber);
 
     return handleRequestWidthHeight(storeId, locale, formatName, id, extension, request);

@@ -5,7 +5,7 @@ import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.inventory.AvailabilityInfo;
 import com.coremedia.objectserver.view.RenderNode;
 
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 /**
  * Predicate to determine if a node to render is an instance of {@link AvailabilityInfo}.

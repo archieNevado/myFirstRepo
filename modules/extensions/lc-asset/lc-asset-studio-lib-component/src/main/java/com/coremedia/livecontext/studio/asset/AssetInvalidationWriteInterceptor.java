@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.inject.Inject;
 import java.util.Collection;
 import java.util.List;
@@ -53,7 +53,7 @@ public class AssetInvalidationWriteInterceptor extends ContentWriteInterceptorBa
     }
   }
 
-  private void invalidate(@Nonnull Content content, @Nonnull Map<String, Object> properties) {
+  private void invalidate(@NonNull Content content, @NonNull Map<String, Object> properties) {
     if (!properties.containsKey(STRUCT_PROPERTY_NAME)) {
       return;
     }
@@ -74,7 +74,7 @@ public class AssetInvalidationWriteInterceptor extends ContentWriteInterceptorBa
     commerceCacheInvalidationSource.invalidateReferences(references);
   }
 
-  @Nonnull
+  @NonNull
   private static Set<String> getInvalidReferences(Content content, Struct localSettings) {
     //the list of references to the catalog objects might have been changed
     //let's calculate the diff between the old and new lists

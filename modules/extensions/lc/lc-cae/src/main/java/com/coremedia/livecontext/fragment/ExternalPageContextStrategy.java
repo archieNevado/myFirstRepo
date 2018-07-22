@@ -14,8 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -40,13 +40,13 @@ public class ExternalPageContextStrategy implements ContextStrategy<String, Navi
   }
 
   @Override
-  public List<Navigation> findContextsFor(@Nonnull String pageId) {
+  public List<Navigation> findContextsFor(@NonNull String pageId) {
     LOG.warn("method findContextsFor(pageId) is not supported, use findContextFor(pageId, navigation) instead");
     return Collections.emptyList();
   }
 
   @Override
-  public List<Navigation> findContextsFor(@Nonnull final String pageId, @Nullable final Navigation rootChannel) {
+  public List<Navigation> findContextsFor(@NonNull final String pageId, @Nullable final Navigation rootChannel) {
     List<Navigation> result = new ArrayList<>();
     if (rootChannel instanceof CMObject) {
       Site site = sitesService.getContentSiteAspect(((CMObject) rootChannel).getContent()).getSite();

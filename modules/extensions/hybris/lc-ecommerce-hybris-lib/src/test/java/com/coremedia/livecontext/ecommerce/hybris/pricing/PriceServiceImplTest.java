@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.List;
+import java.util.Optional;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,17 +36,17 @@ public class PriceServiceImplTest extends AbstractServiceTest {
     when(priceDocument2.isGiveAwayPrice()).thenReturn(Boolean.FALSE);
 
     List<PriceDocument> priceDocuments = newArrayList(priceDocument1, priceDocument2);
-    PriceDocument priceDocument = testling.filterGiveAwayPrice(priceDocuments, Boolean.TRUE);
+    Optional<PriceDocument> priceDocument = testling.filterGiveAwayPrice(priceDocuments, Boolean.TRUE);
 
-    assertThat(priceDocument).isNull();
+    assertThat(priceDocument).isNotPresent();
   }
 
   @Test
   public void filterGiveAwayPrice_EmptyList() {
     List<PriceDocument> priceDocuments = newArrayList();
-    PriceDocument priceDocument = testling.filterGiveAwayPrice(priceDocuments, Boolean.TRUE);
+    Optional<PriceDocument> priceDocument = testling.filterGiveAwayPrice(priceDocuments, Boolean.TRUE);
 
-    assertThat(priceDocument).isNull();
+    assertThat(priceDocument).isNotPresent();
   }
 
   @Test
@@ -57,13 +58,13 @@ public class PriceServiceImplTest extends AbstractServiceTest {
     when(priceDocument2.isGiveAwayPrice()).thenReturn(Boolean.TRUE);
 
     List<PriceDocument> priceDocuments = newArrayList(priceDocument1, priceDocument2);
-    PriceDocument priceDocument;
+    Optional<PriceDocument> priceDocument;
 
     priceDocument = testling.filterGiveAwayPrice(priceDocuments, Boolean.TRUE);
-    assertThat(priceDocument).as("Second price is net price").isEqualTo(priceDocument2);
+    assertThat(priceDocument).as("Second price is net price").contains(priceDocument2);
 
     priceDocument = testling.filterGiveAwayPrice(priceDocuments, Boolean.FALSE);
-    assertThat(priceDocument).as("First price is not a net price").isEqualTo(priceDocument1);
+    assertThat(priceDocument).as("First price is not a net price").contains(priceDocument1);
   }
 
   @Test
@@ -132,9 +133,9 @@ public class PriceServiceImplTest extends AbstractServiceTest {
     when(priceDocument3.getPrice()).thenReturn("188.88");
 
     List<PriceDocument> priceDocuments = newArrayList(priceDocument1, priceDocument2, priceDocument3);
-    BigDecimal price = testling.findListPriceForPrices(priceDocuments);
+    Optional<BigDecimal> price = testling.findListPriceForPrices(priceDocuments);
 
-    assertThat(price.toString()).isEqualTo(priceDocument1.getPrice());
+    assertThat(price).map(BigDecimal::toString).contains(priceDocument1.getPrice());
   }
 
   @Test
@@ -155,9 +156,9 @@ public class PriceServiceImplTest extends AbstractServiceTest {
     when(priceDocument3.getPrice()).thenReturn("188.88");
 
     List<PriceDocument> priceDocuments = newArrayList(priceDocument1, priceDocument2, priceDocument3);
-    BigDecimal price = testling.findListPriceForPrices(priceDocuments);
+    Optional<BigDecimal> price = testling.findListPriceForPrices(priceDocuments);
 
-    assertThat(price).isNull();
+    assertThat(price).isNotPresent();
   }
 
   @Test
@@ -178,9 +179,9 @@ public class PriceServiceImplTest extends AbstractServiceTest {
     when(priceDocument3.getPrice()).thenReturn("188.88");
 
     List<PriceDocument> priceDocuments = newArrayList(priceDocument1, priceDocument2, priceDocument3);
-    BigDecimal price = testling.findOfferPriceForPrices(priceDocuments);
+    Optional<BigDecimal> price = testling.findOfferPriceForPrices(priceDocuments);
 
-    assertThat(price.toString()).isEqualTo(priceDocument1.getPrice());
+    assertThat(price).map(BigDecimal::toString).contains(priceDocument1.getPrice());
   }
 
   @Test
@@ -201,8 +202,8 @@ public class PriceServiceImplTest extends AbstractServiceTest {
     when(priceDocument3.getPrice()).thenReturn("188.88");
 
     List<PriceDocument> priceDocuments = newArrayList(priceDocument1, priceDocument2, priceDocument3);
-    BigDecimal price = testling.findOfferPriceForPrices(priceDocuments);
+    Optional<BigDecimal> price = testling.findOfferPriceForPrices(priceDocuments);
 
-    assertThat(price).isNull();
+    assertThat(price).isNotPresent();
   }
 }

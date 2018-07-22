@@ -12,6 +12,8 @@ public interface Store extends CatalogObject {
 
   function getMarketing():Marketing;
 
+  function isMarketingEnabled():Boolean;
+
   function getRootCategory():Category;
 
   function getSegments():Segments;

@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.annotation.PostConstruct;
 
 /**
@@ -53,6 +53,8 @@ public class OAuthConnector {
   private RestTemplate restTemplate = new RestTemplate();
   private AccessToken accessToken;
   private HttpClient httpClient;
+
+  private int networkAddressCacheTtlInMillis = -1;
 
   /**
    * Example:
@@ -183,10 +185,16 @@ public class OAuthConnector {
     this.password = password;
   }
 
+  @Value("${livecontext.hybris.oauth.networkAddressCacheTtlInMillis:30000}")
+  public void setNetworkAddressCacheTtlInMillis(int networkAddressCacheTtlInMillis) {
+    this.networkAddressCacheTtlInMillis = networkAddressCacheTtlInMillis;
+  }
+
   private HttpClient getHttpClient() {
     if (httpClient == null) {
       int timeout = -1;
-      httpClient = HttpClientFactory.createHttpClient(true, false, HttpStatus.OK.value(), timeout, timeout, timeout);
+      httpClient = HttpClientFactory.createHttpClient(true, false, HttpStatus.OK.value(),
+              timeout, timeout, timeout, networkAddressCacheTtlInMillis);
     }
 
     return httpClient;

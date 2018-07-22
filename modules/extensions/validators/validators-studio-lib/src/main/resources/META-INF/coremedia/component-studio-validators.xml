@@ -335,13 +335,6 @@
     </property>
   </bean>
 
-  <bean id="teasablePicturesValidator" class="com.coremedia.blueprint.base.rest.validators.TeasablePicturesValidator">
-    <property name="predicate" ref="teasablePicturesPredicate"/>
-    <property name="connection" ref="connection"/>
-    <property name="type" value="CMTeasable"/>
-  </bean>
-
-
   <bean id="cmTimelineValidator" class="com.coremedia.blueprint.base.rest.validators.TimelineValidator">
     <property name="connection" ref="connection"/>
     <property name="contentType" value="CMVideo"/>

@@ -6,7 +6,7 @@
 
     This template delegates a placeholder to another view/layout or substitution.
     a) layout: a placeholder with layout "foo" will delegate to the template CMPlaceholder.[foo].ftl
-    b) id: if no layout is given, the placeholder tries to substitute the template by the id
+    b) id: if no layout is given, the placeholder tries to substitute the object by the id
 -->
 
 <#assign recursiveInclude=cm.localParameter("recursiveInclude", false) />
@@ -18,6 +18,6 @@
 
 <#-- use id and substitute, if no layout is set -->
 <#elseif self.id?has_content>
-  <#assign substitution=bp.substitute(self.id!"", self)!cm.UNDEFINED />
+  <#assign substitution=cm.substitute(self.id!"", self) />
   <@cm.include self=substitution />
 </#if>

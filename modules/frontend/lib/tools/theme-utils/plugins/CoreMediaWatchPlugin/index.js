@@ -1,5 +1,6 @@
 "use strict";
 
+const fs = require("fs");
 const md5File = require("md5-file");
 const path = require("path");
 const cmLogger = require("@coremedia/cm-logger");
@@ -59,10 +60,26 @@ class CoreMediaWatchPlugin {
     return this._cache[file];
   }
 
+  _getAllCacheEntries() {
+    return Object.keys(this._cache);
+  }
+
   _updateCache(file) {
     const newMd5Hash = md5File.sync(file);
     this._cache[file] = newMd5Hash;
     return newMd5Hash;
+  }
+
+  _removeFromCache(file) {
+    delete this._cache[file];
+  }
+
+  _wasRemoved(changedFiles = []) {
+    const removedFiles = this._getAllCacheEntries()
+      .filter(file => !changedFiles.includes(file))
+      .filter(file => !fs.existsSync(file));
+    removedFiles.forEach(this._removeFromCache, this);
+    return removedFiles;
   }
 
   _hasChanged(file) {
@@ -72,14 +89,14 @@ class CoreMediaWatchPlugin {
     return oldMd5Hash !== newMd5Hash;
   }
 
-  _mapTemplatesToArchive(file) {
+  _mapTemplatesToArchive(file, fallback) {
     if (file.includes(this.options.themeConfig.themeTemplatesTargetPath)) {
       return this.options.themeConfig.themeTemplatesJarTargetPath;
     }
     if (file.includes(this.options.themeConfig.brickTemplatesTargetPath)) {
       return this.options.themeConfig.brickTemplatesJarTargetPath;
     }
-    return file;
+    return fallback;
   }
 
   _relativeToThemeFolder(filename) {
@@ -102,13 +119,13 @@ class CoreMediaWatchPlugin {
       debug: logger.debug,
       info: logger.info,
       error: logger.error,
-      finalInfo: msg => {
-        logger.info(msg);
+      finalInfo: (...args) => {
+        logger.info(...args);
         logger.info();
         logger.info("Watching...");
       },
-      finalError: msg => {
-        logger.error(msg);
+      finalError: (...args) => {
+        logger.error(...args);
         logger.info();
         logger.info("Watching...");
       },
@@ -179,39 +196,96 @@ class CoreMediaWatchPlugin {
           }
         }
 
-        const changedFiles = [
+        // determine all files that have really changed
+        const changedFiles = emittedFiles.filter(emittedFile =>
+          this._hasChanged(emittedFile)
+        );
+
+        // determine all files that have been removed
+        const removedFiles = this._wasRemoved(changedFiles);
+
+        // split up files that need to be deleted via the theme importer and those which deletion actually causes an
+        // update of the template archives (which then is updated instead)
+        // noinspection JSUnusedLocalSymbols
+        const [
+          filesToDelete,
+          changedTemplateArchivesFromDeletions,
+        ] = removedFiles.reduce(
+          (aggregation, next) => {
+            const mapping = this._mapTemplatesToArchive(next, null);
+            if (mapping) {
+              aggregation[1].push(mapping);
+            } else {
+              aggregation[0].push(next);
+            }
+            return aggregation;
+          },
+          [[], []]
+        );
+
+        const filesToUpdate = [
+          // make sure that every file is only listed once
           ...new Set(
-            emittedFiles
-              .filter(this._hasChanged, this)
-              .map(this._mapTemplatesToArchive, this)
+            // map all template files to their template jars but keep other files as they are
+            changedFiles
+              .map(changedFile =>
+                this._mapTemplatesToArchive(changedFile, changedFile)
+              )
+              // mix in all template archives in which a template has been removed
+              .concat(changedTemplateArchivesFromDeletions)
           ),
         ];
 
-        if (changedFiles.length > 0) {
+        if (filesToUpdate.length > 0) {
+          const changedFilesForOutput = filesToUpdate.map(
+            this._relativeToThemeFolder,
+            this
+          );
           if (this._isRemoteWorkflow()) {
-            this._log.info(
-              "Preparing to upload: ",
-              changedFiles.map(this._relativeToThemeFolder, this)
-            );
-            uploadFiles(this.options.themeConfig, changedFiles, logLevel)
+            this._log.info("Preparing to upload: ", changedFilesForOutput);
+            uploadFiles(this.options.themeConfig, filesToUpdate, logLevel)
               .then(count => {
                 this._log.finalInfo(
                   `Uploaded ${count} file(s) to remote server.`
                 );
-                livereload.trigger(changedFiles);
+                livereload.trigger(filesToUpdate);
               })
               .catch(e => {
                 this._log.error("Error during upload of changed files: ", e);
               });
           } else {
-            this._log.finalInfo("Changed files processed: ", changedFiles);
-            livereload.trigger(changedFiles);
+            this._log.finalInfo(
+              "Added/Changed files processed: ",
+              changedFilesForOutput
+            );
+            livereload.trigger(filesToUpdate);
           }
         } else if (init === false) {
           this._log.finalInfo(
             "File changes didn´t affected already processed result, skipping upload."
           );
         }
+
+        /*
+        deletion code does not work yet because of 2 reasons:
+        1) non-templates will not be deleted yet (and these will be part of filesToChange as they are uploaded via jar)
+        2) when testing the code a 500 status code was triggered, maybe the REST API is no longer present?
+
+        if (filesToDelete.length > 0 && this._isRemoteWorkflow()) {
+          filesToDelete.forEach(removedFile =>
+            // deleteFile needs to be imported again from "@coremedia/theme-importer"
+            deleteFile(this.options.themeConfig, removedFile).then(
+              ({ type, file, error }) => {
+                if (type === "ERROR") {
+                  this._log.error("Error during file deletion: ", error);
+                } else {
+                  this._log.info(`Removed ${file} from remote server.`);
+                }
+              }
+            )
+          );
+        }
+        */
       }
     });
   }

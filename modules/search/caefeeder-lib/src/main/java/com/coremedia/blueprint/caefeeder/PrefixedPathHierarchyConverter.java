@@ -6,7 +6,7 @@ import com.coremedia.cap.feeder.bean.PropertyConverter;
 import com.coremedia.objectserver.beans.ContentBean;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -76,8 +76,8 @@ public class PrefixedPathHierarchyConverter implements PropertyConverter {
                      .collect(Collectors.toList());
     }
 
-  @Nonnull
-  private static Stream<String> createDepthPrefixedPathSegments(@Nonnull List<NamedTaxonomy> path) {
+  @NonNull
+  private static Stream<String> createDepthPrefixedPathSegments(@NonNull List<NamedTaxonomy> path) {
     DepthPrefixer prefixer = new DepthPrefixer();
     return path.stream()
                .map(NamedTaxonomy::getContent)
@@ -94,7 +94,7 @@ public class PrefixedPathHierarchyConverter implements PropertyConverter {
     private final StringBuilder sb = new StringBuilder();
     private int depth;
 
-  @Nonnull
+  @NonNull
     private String prefix(int id) {
       sb.append(PATH_SEPARATOR_CHAR).append(id);
       String result = String.valueOf(depth) + sb;

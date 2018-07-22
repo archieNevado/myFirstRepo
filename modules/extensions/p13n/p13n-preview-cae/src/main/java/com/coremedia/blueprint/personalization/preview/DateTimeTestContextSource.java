@@ -3,11 +3,13 @@
  */
 package com.coremedia.blueprint.personalization.preview;
 
+import com.coremedia.blueprint.common.preview.PreviewDateFormatter;
 import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.context.PropertyProvider;
 import com.coremedia.personalization.context.collector.AbstractContextSource;
 import com.coremedia.personalization.context.collector.SystemDateTimeContext;
-import org.apache.commons.lang3.StringUtils;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -15,11 +17,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
+import java.util.GregorianCalendar;
+import java.util.Optional;
 
 /**
  * Overrides the current date and time by getting a test-date-and-time from the following "sources":
@@ -52,21 +52,33 @@ public class DateTimeTestContextSource extends AbstractContextSource {
   public void preHandle(HttpServletRequest request, HttpServletResponse response, ContextCollection contextCollection) {
     ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 
+    Calendar now = getNow(attributes, contextCollection);
+
+    SystemDateTimeContext context = new SystemDateTimeContext(now);
+
+    if (contextCollection != null) {
+      contextCollection.setContext(contextName, context);
+    }
+  }
+
+  @NonNull
+  private Calendar getNow(@Nullable ServletRequestAttributes attributes,
+                          @Nullable ContextCollection contextCollection) {
     Calendar now = null;
 
     // first try to get preview date and time from a set timetravel URL parameter
     if (attributes != null) {
-      now = getPreviewDateFromRequestParameter(attributes.getRequest());
+      now = getPreviewDateFromRequestParameter(attributes.getRequest()).orElse(null);
     }
 
     // if not set as timetravel, try to get preview dateandtime from
     // already parsed p13n (test) context - concrete: from a persona
     if (now == null && contextCollection != null) {
-      @SuppressWarnings("PersonalData") // the system context is not personal data
+      @SuppressWarnings("PersonalData" /* The system context is not personal data. */)
       Object o = contextCollection.getContext(contextName);
       if (o instanceof PropertyProvider) {
         PropertyProvider systemContext = (PropertyProvider) o;
-        @SuppressWarnings("PersonalData") // This is not personal data.
+        @SuppressWarnings("PersonalData" /* This is not personal data. */)
         Calendar dateandtime = (Calendar) systemContext.getProperty("dateandtime");
         now = dateandtime;
       }
@@ -76,11 +88,7 @@ public class DateTimeTestContextSource extends AbstractContextSource {
       now = Calendar.getInstance();
     }
 
-    SystemDateTimeContext context = new SystemDateTimeContext(now);
-
-    if (contextCollection != null) {
-      contextCollection.setContext(contextName, context);
-    }
+    return now;
   }
 
   /**
@@ -94,27 +102,12 @@ public class DateTimeTestContextSource extends AbstractContextSource {
 
   /**
    * @param request the given request
-   * @return null if no preview date is set
+   * @return preview date, or nothing if no preview date is set
    */
-  private Calendar getPreviewDateFromRequestParameter(HttpServletRequest request) {
-    Calendar calendar = null;
-
-    if (StringUtils.isNotEmpty(request.getParameter(REQUEST_PARAMETER_PREVIEW_DATE))) {
-      String dateAsString = request.getParameter(REQUEST_PARAMETER_PREVIEW_DATE);
-      if (dateAsString != null && !dateAsString.isEmpty()) {
-        SimpleDateFormat sdb = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-        sdb.setTimeZone(TimeZone.getTimeZone(dateAsString.substring(dateAsString.lastIndexOf(' ') + 1)));
-
-        try {
-          Date date = sdb.parse(dateAsString.substring(0, dateAsString.lastIndexOf(' ')));
-          calendar = Calendar.getInstance();
-          calendar.setTime(date);
-        } catch (ParseException e) {
-          LOGGER.warn("error parsing previewDate " + dateAsString, e);
-        }
-      }
-    }
-
-    return calendar;
+  @NonNull
+  private static Optional<Calendar> getPreviewDateFromRequestParameter(@NonNull HttpServletRequest request) {
+    return Optional.ofNullable(request.getParameter(REQUEST_PARAMETER_PREVIEW_DATE))
+            .flatMap(PreviewDateFormatter::parse)
+            .map(GregorianCalendar::from);
   }
 }

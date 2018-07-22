@@ -5,11 +5,16 @@ import "./jquery.coremedia.equalheight";
 import {
   findAndSelf,
   findRelativeOrAbsolute,
+  ajax,
 } from "@coremedia/js-jquery-utils";
 import { debounce } from "@coremedia/js-utils";
 import * as logger from "@coremedia/js-logger";
 import * as deviceDetector from "@coremedia/js-device-detector";
-import * as basic from "@coremedia/js-basic";
+import { EVENT_LAYOUT_CHANGED } from "@coremedia/js-basic";
+import {
+  EVENT_NODE_APPENDED,
+  refreshFragment,
+} from "@coremedia/brick-dynamic-include";
 import * as nodeDecorationService from "@coremedia/js-node-decoration-service";
 import * as quickInfo from "@coremedia/brick-quick-info";
 import {
@@ -21,10 +26,10 @@ import {
   DEVICE_DESKTOP,
   DEVICE_TABLET,
   PDP_ASSET_READY_EVENT,
-  setMarketingSpotItemsHeight,
   setMegaMenuItemsWidth,
   updateCartControl,
 } from "./livecontext";
+import * as popup from "./popup";
 
 // --- DOCUMENT READY --------------------------------------------------------------------------------------------------
 $(function() {
@@ -204,20 +209,6 @@ $(function() {
     }
   );
 
-  // assign accordion-item functionality
-  nodeDecorationService.addNodeDecorator(function($target) {
-    const selector = ".cm-accordion-item";
-    findAndSelf($target, selector).each(function() {
-      const $item = $(this);
-      const $accordion = $item.closest(".cm-collection--accordion");
-      const $itemHeader = $item.find(".cm-accordion-item__header").first();
-
-      $itemHeader.on("click", function() {
-        basic.accordion.change($accordion, $item);
-      });
-    });
-  });
-
   // init slideshows
   nodeDecorationService.addNodeDecorator(function($target) {
     const identifier = "cm-slideshow";
@@ -367,16 +358,16 @@ $(function() {
         $slidesContainer.on("cycle-initialized", function() {
           hideAllQuickinfos();
           showQuickinfosInActiveSlide();
-          $document.trigger(basic.EVENT_LAYOUT_CHANGED);
+          $document.trigger(EVENT_LAYOUT_CHANGED);
         });
         $slidesContainer.on("cycle-before", function() {
           hideAllQuickinfos();
-          $document.trigger(basic.EVENT_LAYOUT_CHANGED);
+          $document.trigger(EVENT_LAYOUT_CHANGED);
         });
         $slidesContainer.on("cycle-after", function() {
           showQuickinfosInActiveSlide();
           // on tablet slideshow varies in height if imagemap is attached
-          $document.trigger(basic.EVENT_LAYOUT_CHANGED);
+          $document.trigger(EVENT_LAYOUT_CHANGED);
         });
         // always show arrows on touch enabled devices
         if (deviceDetector.getLastDevice().isTouch) {
@@ -428,7 +419,7 @@ $(function() {
               // close immediately if it should not be opened only effects webkit and IE < 11
               magnificPopupApi.close();
             }
-            $(document).trigger(basic.EVENT_LAYOUT_CHANGED);
+            $(document).trigger(EVENT_LAYOUT_CHANGED);
 
             // overwrite close method to prevent closing by dragging outside from lightbox view
             if ($target.attr("data-stopopening")) {
@@ -448,12 +439,12 @@ $(function() {
             }
           },
           resize: function() {
-            $(document).trigger(basic.EVENT_LAYOUT_CHANGED);
+            $(document).trigger(EVENT_LAYOUT_CHANGED);
           },
           // magnific popup adds a class to hide the inlined element, remove it again on close
           close: function() {
             $target.find(".cm-spinner__canvas").removeClass("mfp-hide");
-            $(document).trigger(basic.EVENT_LAYOUT_CHANGED);
+            $(document).trigger(EVENT_LAYOUT_CHANGED);
           },
         },
       });
@@ -479,7 +470,7 @@ $(function() {
 
       // trigger "layoutChanged" event after assets carousel has been fully initialized
       $.when(slideshowDeferrer, carouselDeferrer).done(function() {
-        $(document).trigger(basic.EVENT_LAYOUT_CHANGED);
+        $(document).trigger(EVENT_LAYOUT_CHANGED);
         $slideshow.trigger(PDP_ASSET_READY_EVENT);
       });
 
@@ -644,7 +635,7 @@ $(function() {
         const $popup = $this.find(config.popup);
 
         // bind button state to popup state
-        $popup.on(basic.popup.EVENT_POPUP_CHANGED, function(event, opened) {
+        $popup.on(popup.EVENT_POPUP_CHANGED, function(event, opened) {
           if (opened) {
             $button.addClass(classButtonActive);
           } else {
@@ -655,7 +646,7 @@ $(function() {
           // check if popup control is not disabled
           if (!$.extend({ disabled: false }, $this.data(identifier)).disabled) {
             // Toggle popup state
-            basic.popup.toggle($popup);
+            popup.toggle($popup);
             return false;
           }
         });
@@ -671,13 +662,13 @@ $(function() {
     //outside
     $body.on("click", function(event) {
       if ($(event.target).closest(identifierPopup).length === 0) {
-        basic.popup.close($body.find(identifierPopup));
+        popup.close($body.find(identifierPopup));
       }
     });
     // ESC
     $body.on("keydown", function(event) {
       if (event.keyCode === 27) {
-        basic.popup.close($body.find(identifierPopup));
+        popup.close($body.find(identifierPopup));
       }
     });
   });
@@ -734,22 +725,20 @@ $(function() {
 
           if (!$button.hasClass(identifier + "--disabled")) {
             const url = buttonConfig.link;
-            basic
-              .ajax({
-                type: "POST",
-                url: url,
-                data: {
-                  orderItemId: buttonConfig.id,
-                  action: "removeOrderItem",
-                  _CSRFToken: cartConfig.token,
-                },
-                dataType: "text",
-              })
-              .done(function() {
-                $(".cm-icon--cart").each(function() {
-                  basic.refreshFragment($(this));
-                });
+            ajax({
+              type: "POST",
+              url: url,
+              data: {
+                orderItemId: buttonConfig.id,
+                action: "removeOrderItem",
+                _CSRFToken: cartConfig.token,
+              },
+              dataType: "text",
+            }).done(function() {
+              $(".cm-icon--cart").each(function() {
+                refreshFragment($(this));
               });
+            });
           }
         });
       }
@@ -787,17 +776,16 @@ $(function() {
             $icon.removeClass("icon-checkmark").removeClass("icon-warning");
 
             // send add-to-cart call
-            basic
-              .ajax({
-                type: "POST",
-                url: url,
-                data: {
-                  externalTechId: buttonConfig.id,
-                  action: "addOrderItem",
-                  _CSRFToken: cartConfig.token,
-                },
-                dataType: "text",
-              })
+            ajax({
+              type: "POST",
+              url: url,
+              data: {
+                externalTechId: buttonConfig.id,
+                action: "addOrderItem",
+                _CSRFToken: cartConfig.token,
+              },
+              dataType: "text",
+            })
               .done(function() {
                 //show success icon
                 $icon.addClass("icon-checkmark");
@@ -808,7 +796,7 @@ $(function() {
                 }, 1500);
                 //refresh cart
                 $(".cm-icon--cart").each(function() {
-                  basic.refreshFragment($(this));
+                  refreshFragment($(this));
                 });
               })
               .fail(function() {
@@ -842,7 +830,7 @@ $(function() {
       $search.find(".search_input").bind("input", function() {
         const $input = $(this);
         const value = $input.val();
-        basic.popup.close($popupSuggestions);
+        popup.close($popupSuggestions);
         // only show suggestions if the search text has the minimum length
         if (value.length >= config.minLength) {
           // clear suggestions
@@ -850,46 +838,44 @@ $(function() {
           $listSuggestions.html("");
           // save last query
           lastQuery = value;
-          basic
-            .ajax({
-              url: config.urlSuggestions,
-              dataType: "json",
-              data: {
-                type: "json",
-                query: value,
-              },
-            })
-            .done(function(data) {
-              // in case ajax calls earlier ajax calls receive their result later, only show most recent results
-              if (lastQuery == value) {
-                const classNonEmpty = "cm-search-suggestions--non-empty";
-                $listSuggestions.removeClass(classNonEmpty);
-                // transform search suggestions into dom elements
-                $.map(data, function(item) {
-                  $listSuggestions.addClass(classNonEmpty);
-                  const $suggestion = $prototypeSuggestion.clone();
-                  $listSuggestions.append($suggestion);
-                  $suggestion.html(
-                    "<b>" + value + "</b>" + item.label.substr(value.length)
-                  );
-                  // attribute must exist, otherwise selector will not match
-                  $suggestion.attr("data-cm-search-suggestion", "");
-                  // set attribute for jquery (not visible in dom)
-                  $suggestion.data("cm-search-suggestion", {
-                    form: ".cm-search-form",
-                    target: ".search_input",
-                    value: item.value,
-                    popup: ".cm-popup--search-suggestions",
-                  });
-                  nodeDecorationService.decorateNode($suggestion);
+          ajax({
+            url: config.urlSuggestions,
+            dataType: "json",
+            data: {
+              type: "json",
+              query: value,
+            },
+          }).done(function(data) {
+            // in case ajax calls earlier ajax calls receive their result later, only show most recent results
+            if (lastQuery == value) {
+              const classNonEmpty = "cm-search-suggestions--non-empty";
+              $listSuggestions.removeClass(classNonEmpty);
+              // transform search suggestions into dom elements
+              $.map(data, function(item) {
+                $listSuggestions.addClass(classNonEmpty);
+                const $suggestion = $prototypeSuggestion.clone();
+                $listSuggestions.append($suggestion);
+                $suggestion.html(
+                  "<b>" + value + "</b>" + item.label.substr(value.length)
+                );
+                // attribute must exist, otherwise selector will not match
+                $suggestion.attr("data-cm-search-suggestion", "");
+                // set attribute for jquery (not visible in dom)
+                $suggestion.data("cm-search-suggestion", {
+                  form: ".cm-search-form",
+                  target: ".search_input",
+                  value: item.value,
+                  popup: ".cm-popup--search-suggestions",
                 });
-                // show search suggestions
-                basic.popup.open($popupSuggestions);
-                // set focus back to input element
-                $input.focus();
-                $document.trigger(basic.EVENT_NODE_APPENDED, [$suggestion]);
-              }
-            });
+                nodeDecorationService.decorateNode($suggestion);
+              });
+              // show search suggestions
+              popup.open($popupSuggestions);
+              // set focus back to input element
+              $input.focus();
+              $document.trigger(EVENT_NODE_APPENDED, [$suggestion]);
+            }
+          });
         }
       });
     });
@@ -900,7 +886,7 @@ $(function() {
     $target
   ) {
     $target.on("click", function() {
-      $document.trigger(basic.EVENT_LAYOUT_CHANGED);
+      $document.trigger(EVENT_LAYOUT_CHANGED);
     });
   });
 
@@ -922,25 +908,10 @@ $(function() {
       const $popup = $(config.popup);
       // when clicking search suggestions form should be filled with the suggestion and be submitted
       $suggestion.bind("click", function() {
-        basic.popup.close($popup);
+        popup.close($popup);
         $(config.target).val(config.value);
         $(config.form).submit();
       });
-    });
-  });
-
-  // adjust layout if richtext images (which currently are not adaptive) are loaded
-  let updateTimer = 0;
-  nodeDecorationService.addNodeDecoratorBySelector(".cm-richtext img", function(
-    $target
-  ) {
-    $target.on("load", function() {
-      if (updateTimer !== 0) {
-        clearTimeout(updateTimer);
-      }
-      updateTimer = setTimeout(function() {
-        $document.trigger(basic.EVENT_LAYOUT_CHANGED);
-      }, 100);
     });
   });
 
@@ -967,17 +938,10 @@ $(function() {
     if (deviceDetector.getLastDevice().type == DEVICE_DESKTOP) {
       setMegaMenuItemsWidth();
     }
-    // on desktop and tablet
-    if (
-      deviceDetector.getLastDevice().type == DEVICE_DESKTOP ||
-      deviceDetector.getLastDevice().type == DEVICE_TABLET
-    ) {
-      setMarketingSpotItemsHeight();
-    }
     isLayoutInProgress = false;
   }
 
-  $document.on(basic.EVENT_LAYOUT_CHANGED, function() {
+  $document.on(EVENT_LAYOUT_CHANGED, function() {
     if (!isLayoutInProgress) {
       setTimeout(layout, 500);
     }

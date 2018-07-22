@@ -2,10 +2,9 @@ package com.coremedia.blueprint.assets.validation;
 
 import com.coremedia.blueprint.assets.contentbeans.AMAsset;
 import com.coremedia.blueprint.common.services.validation.AbstractValidator;
-import com.google.common.base.Predicate;
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.annotation.Nullable;
+import java.util.function.Predicate;
 
 /**
  * Checks if an {@link AMAsset} is valid.
@@ -21,14 +20,9 @@ public class HasPublishedRenditionsValidator extends AbstractValidator<AMAsset> 
   }
 
   @Override
-  protected Predicate createPredicate() {
-    return new Predicate<AMAsset>() {
-      @Override
-      public boolean apply(@Nullable AMAsset input) {
-        return null != input &&
-                (preview ? !input.getRenditions().isEmpty() : !input.getPublishedRenditions().isEmpty());
-      }
-    };
+  protected Predicate<AMAsset> createPredicate() {
+    return asset -> asset != null
+            && (preview ? !asset.getRenditions().isEmpty() : !asset.getPublishedRenditions().isEmpty());
   }
 
   @Override

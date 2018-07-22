@@ -2,8 +2,8 @@ package com.coremedia.blueprint.assets.cae;
 
 import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 /**
  * This model provides an overview of assets linked with the given {@link CMTaxonomy}.
@@ -19,7 +19,7 @@ public class TaxonomyOverview implements DownloadPortalContext {
    *
    * @param taxonomy the selected {@link CMTaxonomy}
    */
-  public TaxonomyOverview(@Nonnull CMTaxonomy taxonomy) {
+  public TaxonomyOverview(@NonNull CMTaxonomy taxonomy) {
     this.taxonomy = taxonomy;
   }
 

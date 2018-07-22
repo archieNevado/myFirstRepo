@@ -583,13 +583,10 @@ export function gaps() {
  * @see http://getbootstrap.com/javascript/#affix
  */
 export function affix() {
-  let compareMain = true;
   // desktop = set sticky
   if (window.innerWidth > 1024) {
     const $mainContainer = $("#cm-main");
-    if ($mainContainer.length) {
-      compareMain = true;
-    }
+    const compareMain = !!$mainContainer.length;
 
     $(".cm-sticky").each(function() {
       const $this = $(this);
@@ -638,20 +635,6 @@ $(function() {
   const $document = $(document);
 
   logger.log("Corporate DOM RDY");
-
-  // remove the spinner and event listener, when images are loaded
-  $(".cm-image--loading").each(function() {
-    const $image = $(this);
-    const callback = function() {
-      logger.log("Responsive Image loaded, remove spinner");
-      $image.removeClass("cm-image--loading");
-    };
-    if (typeof $.fn.imagesLoaded === typeof callback) {
-      $image.imagesLoaded().done(callback);
-    } else {
-      $image.on("load", callback);
-    }
-  });
 
   // fallack for svgs in old browsers, used for play overlay icon
   try {

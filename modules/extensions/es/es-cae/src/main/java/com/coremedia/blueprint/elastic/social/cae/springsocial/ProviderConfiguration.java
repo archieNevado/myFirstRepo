@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
@@ -96,14 +96,14 @@ public class ProviderConfiguration {
             .orElse(null);
   }
 
-  @Nonnull
+  @NonNull
   private static Optional<String> getRequestURI() {
     return getRequestAttributes()
             .map(ServletRequestAttributes::getRequest)
             .map(HttpServletRequest::getRequestURI);
   }
 
-  @Nonnull
+  @NonNull
   private static Optional<ServletRequestAttributes> getRequestAttributes() {
     ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
     return Optional.ofNullable(attributes);

@@ -4,7 +4,7 @@ import com.coremedia.blueprint.cae.view.DynamicIncludePredicate;
 import com.coremedia.livecontext.ecommerce.order.Cart;
 import com.coremedia.objectserver.view.RenderNode;
 
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 /**
  * Dynamically include {@link Cart} beans if they are displayed as Header items.

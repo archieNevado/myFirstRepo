@@ -6,8 +6,8 @@ import com.coremedia.livecontext.ecommerce.asset.AssetService;
 import com.coremedia.livecontext.ecommerce.asset.CatalogPicture;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 
 import static java.util.Collections.emptyList;
@@ -16,39 +16,39 @@ import static org.mockito.Mockito.mock;
 
 public class AssetServiceMock implements AssetService {
 
-  @Nonnull
+  @NonNull
   @Override
-  public CatalogPicture getCatalogPicture(@Nonnull String url, @Nonnull CommerceId commerceId) {
+  public CatalogPicture getCatalogPicture(@NonNull String url, @NonNull CommerceId commerceId) {
     return mock(CatalogPicture.class);
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Content> findPictures(@Nonnull CommerceId id) {
+  public List<Content> findPictures(@NonNull CommerceId id) {
     Content content = mock(Content.class);
     return singletonList(content);
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Content> findPictures(@Nonnull CommerceId id, boolean withDefault) {
+  public List<Content> findPictures(@NonNull CommerceId id, boolean withDefault) {
     Content content = mock(Content.class);
     return singletonList(content);
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Content> findVisuals(@Nonnull CommerceId id, boolean withDefault) {
+  public List<Content> findVisuals(@NonNull CommerceId id, boolean withDefault) {
     return emptyList();
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Content> findVisuals(@Nonnull CommerceId id) {
+  public List<Content> findVisuals(@NonNull CommerceId id) {
     return emptyList();
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<Content> findDownloads(@Nullable CommerceId id) {
     return emptyList();
@@ -56,7 +56,7 @@ public class AssetServiceMock implements AssetService {
 
   @Nullable
   @Override
-  public Content getDefaultPicture(@Nonnull Site site) {
+  public Content getDefaultPicture(@NonNull Site site) {
     return null;
   }
 

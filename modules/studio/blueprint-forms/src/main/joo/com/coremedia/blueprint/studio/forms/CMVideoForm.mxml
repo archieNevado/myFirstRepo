@@ -11,6 +11,7 @@
     [ResourceBundle('com.coremedia.blueprint.studio.CustomLabels')]
   </fx:Metadata>
   <fx:Script><![CDATA[
+
     public static const xtype:String = "com.coremedia.blueprint.studio.config.cmVideoForm";
 
     public static const COPYRIGHT_FORM_ITEM_ID:String = "copyrightFormItemId";
@@ -30,33 +31,15 @@
             itemId="{CONTENT_TAB_ITEM_ID}">
       <editor:items>
         <bpforms:DetailsDocumentForm/>
-        <!-- same as bpforms:teaserDocumentForm without bpforms:callToActionConfigurationForm -->
-        <editor:PropertyFieldGroup
-                title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Teaser_label')}"
-                itemId="teaserDocumentForm"
-                propertyNames="{['teaserTitle','teaserText']}"
-                expandOnValues="teaserTitle,teaserText.data"
-                collapsed="true">
-          <editor:items>
-            <editor:StringPropertyField propertyName="teaserTitle">
-              <editor:plugins exml:mode="append">
-                <editor:StringPropertyFieldDelegatePlugin delegatePropertyName="title"/>
-              </editor:plugins>
-            </editor:StringPropertyField>
-            <editor:TextAreaPropertyField propertyName="teaserText"
-                                          itemId="teaserText"
-                                          changeBuffer="1000">
-              <editor:plugins exml:mode="append">
-                <editor:TextAreaPropertyFieldDelegatePlugin delegatePropertyName="detailText"/>
-              </editor:plugins>
-            </editor:TextAreaPropertyField>
-          </editor:items>
-        </editor:PropertyFieldGroup>
+        <bpforms:TeaserDocumentForm/>
         <bpforms:DataDocumentForm
                 title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMVideo_data_text')}"
                 helpText="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMVideo_data_helpText')}"/>
-        <bpforms:PictureDocumentForm collapsed="true"
-                                     maxCardinality="1"/>
+        <bpforms:PlayerSettingsPropertyGroup itemId="mediaOptionsPropertyFieldGroup"
+                                             columns="2"
+                                             title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_VideoProperties_label')}"/>
+        <bpforms:MediaDocumentForm collapsed="true"
+                                   maxCardinality="1"/>
         <bpforms:RelatedDocumentForm collapsed="false"/>
         <bpforms:ViewTypeSelectorForm/>
         <bpforms:ValidityDocumentForm/>

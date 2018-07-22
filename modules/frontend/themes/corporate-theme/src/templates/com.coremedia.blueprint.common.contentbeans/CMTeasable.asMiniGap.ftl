@@ -4,11 +4,11 @@
   <div class="cm-gap--mini__wrapper">
     <#-- picture -->
     <#if self.picture?has_content>
-      <@cm.include self=self.picture params={
-      "limitAspectRatios": ["landscape_ratio4x1","landscape_ratio5x2","landscape_ratio16x9"],
-      "classBox": "cm-gap--mini__picture-box",
-      "classImage": "cm-gap--mini__picture",
-      "metadata": ["properties.pictures"]
+      <@cm.include self=self.picture view="media" params={
+        "limitAspectRatios": ["landscape_ratio4x1","landscape_ratio5x2","landscape_ratio16x9"],
+        "classBox": "cm-gap--mini__picture-box",
+        "classMedia": "cm-gap--mini__picture",
+        "metadata": ["properties.pictures"]
       }/>
       <div class="cm-gap--mini__dimmer"></div>
     <#else>

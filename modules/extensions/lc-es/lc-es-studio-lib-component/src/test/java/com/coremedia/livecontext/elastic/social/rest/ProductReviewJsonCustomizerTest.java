@@ -67,7 +67,7 @@ public class ProductReviewJsonCustomizerTest {
     Map<String, Object> serializedObject = new HashMap<>();
 
     when(comment.getTarget()).thenReturn(product);
-    when(product.getName()).thenThrow(Exception.class);
+    when(product.getName()).thenThrow(NullPointerException.class);
 
     assertEquals(false, serializedObject.keySet().contains(JsonProperties.SUBJECT));
     assertEquals(false, serializedObject.keySet().contains(JsonProperties.PREVIEW_URL));

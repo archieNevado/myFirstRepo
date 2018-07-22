@@ -4,7 +4,7 @@ import com.coremedia.blueprint.cae.view.DynamicIncludePredicate;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.objectserver.view.RenderNode;
 
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 /**
  * Predicate to determine if a node to render is dynamic include of product assets.

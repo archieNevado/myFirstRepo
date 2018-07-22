@@ -2,8 +2,8 @@ package com.coremedia.livecontext.handler;
 
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -17,5 +17,5 @@ public interface CommerceSearchRedirectUrlProvider {
    * @param storeContext the current store context
    * @return a commerce search URL
    */
-  Object provideRedirectUrl(@Nullable String term, @Nonnull HttpServletRequest request, @Nonnull StoreContext storeContext);
+  Object provideRedirectUrl(@Nullable String term, @NonNull HttpServletRequest request, @NonNull StoreContext storeContext);
 }

@@ -7,9 +7,13 @@
     "@coremedia/sass-utils": "^1.0.0",
     "@coremedia/js-node-decoration-service": "^1.0.0",
     "@coremedia/js-basic": "^1.0.0",
-    "@coremedia/brick-video": "^1.0.0",
+    "@coremedia/brick-360-spinner": "^1.0.0",
+    "@coremedia/brick-default-teaser": "^1.0.0",
+    "@coremedia/brick-dynamic-include": "^1.0.0",
     "@coremedia/brick-generic-templates": "^1.0.0",
-    "@coremedia/brick-livecontext": "^1.0.0"
+    "@coremedia/brick-livecontext": "^1.0.0",
+    "@coremedia/brick-media": "^1.0.0",
+    "@coremedia/brick-video": "^1.0.0"
   },
   "devDependencies": {
     "jsdoc-to-markdown": "3.0.0",
@@ -21,6 +25,13 @@
   },
   "coremedia": {
     "type": "brick",
-    "init": "src/js/init.js"
+    "init": "src/js/init.js",
+    "shim": {
+      "./src/vendor/jquery.elevatezoom": {
+        "imports": {
+          "jQuery": "jquery"
+        }
+      }
+    }
   }
 }

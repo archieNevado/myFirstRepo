@@ -4,43 +4,54 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImp
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextBuilder;
+import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import java.time.ZonedDateTime;
 import java.util.Currency;
+import java.util.List;
 import java.util.Locale;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CATALOG_ID;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CATALOG_VERSION;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CURRENCY;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.LOCALE;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.PREVIEW_DATE;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.STORE_ID;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.STORE_NAME;
 
+@DefaultAnnotation(NonNull.class)
 public class HybrisStoreContextBuilder implements StoreContextBuilder {
 
   private final String siteId;
 
+  @Nullable
   private String storeId;
+  @Nullable
   private String storeName;
+  @Nullable
   private CatalogId catalogId;
+  @Nullable
   private String catalogVersion;
+  @Nullable
   private Currency currency;
+  @Nullable
   private Locale locale;
-  private String previewDate;
+  @Nullable
+  private ZonedDateTime previewDate;
+  @Nullable
+  private String userSegments;
 
-  private HybrisStoreContextBuilder(@Nonnull String siteId) {
+  private HybrisStoreContextBuilder(String siteId) {
     this.siteId = siteId;
   }
 
-  @Nonnull
-  public static HybrisStoreContextBuilder from(@Nonnull String siteId) {
+  public static HybrisStoreContextBuilder from(String siteId) {
     return new HybrisStoreContextBuilder(siteId);
   }
 
-  @Nonnull
-  public static HybrisStoreContextBuilder from(@Nonnull StoreContext storeContext) {
+  public static HybrisStoreContextBuilder from(StoreContext storeContext) {
     return from(storeContext.getSiteId())
             .withStoreId(storeContext.getStoreId())
             .withStoreName(storeContext.getStoreName())
@@ -48,72 +59,83 @@ public class HybrisStoreContextBuilder implements StoreContextBuilder {
             .withCatalogVersion(storeContext.getCatalogVersion())
             .withCurrency(storeContext.getCurrency())
             .withLocale(storeContext.getLocale())
-            .withPreviewDate(storeContext.getPreviewDate());
+            .withPreviewDate(storeContext.getPreviewDate().orElse(null))
+            .withUserSegments(storeContext.getUserSegments());
   }
 
-  @Nonnull
-  public HybrisStoreContextBuilder withStoreId(@Nonnull String storeId) {
+  public HybrisStoreContextBuilder withStoreId(String storeId) {
     this.storeId = storeId;
     return this;
   }
 
-  @Nonnull
-  public HybrisStoreContextBuilder withStoreName(@Nonnull String storeName) {
+  public HybrisStoreContextBuilder withStoreName(String storeName) {
     this.storeName = storeName;
     return this;
   }
 
-  @Nonnull
-  public HybrisStoreContextBuilder withCatalogId(@Nonnull CatalogId catalogId) {
+  public HybrisStoreContextBuilder withCatalogId(CatalogId catalogId) {
     this.catalogId = catalogId;
     return this;
   }
 
-  @Nonnull
-  public HybrisStoreContextBuilder withCatalogVersion(@Nonnull String catalogVersion) {
+  public HybrisStoreContextBuilder withCatalogVersion(String catalogVersion) {
     this.catalogVersion = catalogVersion;
     return this;
   }
 
-  @Nonnull
-  public HybrisStoreContextBuilder withCurrency(@Nonnull Currency currency) {
+  public HybrisStoreContextBuilder withCurrency(Currency currency) {
     this.currency = currency;
     return this;
   }
 
-  @Nonnull
-  public HybrisStoreContextBuilder withLocale(@Nonnull Locale locale) {
+  public HybrisStoreContextBuilder withLocale(Locale locale) {
     this.locale = locale;
     return this;
   }
 
-  @Nonnull
   @Override
-  public HybrisStoreContextBuilder withPreviewDate(@Nullable String previewDate) {
+  public HybrisStoreContextBuilder withPreviewDate(@Nullable ZonedDateTime previewDate) {
     this.previewDate = previewDate;
     return this;
   }
 
-  @Nonnull
   @Override
-  public HybrisStoreContextBuilder withWorkspaceId(String workspaceId) {
+  public HybrisStoreContextBuilder withWorkspaceId(@Nullable WorkspaceId workspaceId) {
     // Don't care about the workspace ID.
     return this;
   }
 
-  @Nonnull
+  @Override
+  public HybrisStoreContextBuilder withUserSegments(@Nullable String userSegments) {
+    this.userSegments = userSegments;
+    return this;
+  }
+
+  @Override
+  public StoreContextBuilder withContractIds(List<String> contractIds) {
+    // Don't care about contract IDs.
+    return this;
+  }
+
+  @Override
+  public StoreContextBuilder withContractIdsForPreview(List<String> contractIds) {
+    // Don't care about contract IDs.
+    return this;
+  }
+
   @Override
   public StoreContext build() {
-    StoreContext storeContext = StoreContextImpl.newStoreContext();
+    StoreContext storeContext = StoreContextImpl.builder(siteId)
+            .withPreviewDate(previewDate)
+            .withUserSegments(userSegments)
+            .build();
 
-    storeContext.setSiteId(siteId);
     storeContext.put(STORE_ID, storeId);
     storeContext.put(STORE_NAME, storeName);
     storeContext.put(CATALOG_ID, catalogId != null ? catalogId.value() : null);
     storeContext.put(CATALOG_VERSION, catalogVersion);
     storeContext.put(CURRENCY, currency);
     storeContext.put(LOCALE, locale);
-    storeContext.put(PREVIEW_DATE, previewDate);
 
     return storeContext;
   }

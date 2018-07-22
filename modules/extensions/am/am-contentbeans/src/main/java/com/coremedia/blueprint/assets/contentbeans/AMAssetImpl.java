@@ -6,7 +6,7 @@ import com.coremedia.cap.struct.Struct;
 import com.coremedia.cms.assets.AssetConstants;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,7 +28,7 @@ public class AMAssetImpl extends com.coremedia.blueprint.assets.contentbeans.AMA
   }
 
 
-  @Nonnull
+  @NonNull
   @Override
   public List<AMAssetRendition> getRenditions() {
     List<AMAssetRendition> result = new ArrayList<>();
@@ -36,7 +36,7 @@ public class AMAssetImpl extends com.coremedia.blueprint.assets.contentbeans.AMA
     return result;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<AMAssetRendition> getPublishedRenditions() {
     List<AMAssetRendition> allRenditions = getRenditions();
@@ -68,7 +68,7 @@ public class AMAssetImpl extends com.coremedia.blueprint.assets.contentbeans.AMA
     return new AMAssetRenditionImpl(renditionName, this);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<CMTaxonomy> getAllSubjects() {
     List<CMTaxonomy> directlyLinkedSubjects = getSubjectTaxonomy();

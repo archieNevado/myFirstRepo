@@ -37,8 +37,8 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -62,7 +62,7 @@ public class ProductAssetsHandler extends PageHandlerBase {
 
   private static final Logger LOG = LoggerFactory.getLogger(ProductAssetsHandler.class);
 
-  private static final String URI_PREFIX = "productassets";
+  public static final String URI_PREFIX = "productassets";
 
   private static final String SEGMENT_SITE = "site";
   private static final String SEGMENT_VIEW = "view";
@@ -191,8 +191,8 @@ public class ProductAssetsHandler extends PageHandlerBase {
     return result.buildAndExpand(paramMap);
   }
 
-  @Nonnull
-  private static Optional<String> findAttribute(@Nonnull HttpServletRequest request, @Nonnull String name) {
+  @NonNull
+  private static Optional<String> findAttribute(@NonNull HttpServletRequest request, @NonNull String name) {
     Object attribute = request.getAttribute(name);
 
     return Optional.ofNullable(attribute)
@@ -200,7 +200,7 @@ public class ProductAssetsHandler extends PageHandlerBase {
             .map(String.class::cast);
   }
 
-  private static String getCategoryExternalTechId(@Nonnull Product product) {
+  private static String getCategoryExternalTechId(@NonNull Product product) {
     Category category = product.getCategory();
 
     if (category == null) {
@@ -211,7 +211,7 @@ public class ProductAssetsHandler extends PageHandlerBase {
   }
 
   @Nullable
-  private Site getSiteByName(@Nonnull String siteName) {
+  private Site getSiteByName(@NonNull String siteName) {
     Set<Site> sites = getSitesService().getSites();
 
     for (Site site : sites) {
@@ -232,8 +232,8 @@ public class ProductAssetsHandler extends PageHandlerBase {
     return null;
   }
 
-  @Nonnull
-  public static List<VariantFilter> parseAttributesToFilters(@Nonnull String attributes) {
+  @NonNull
+  public static List<VariantFilter> parseAttributesToFilters(@NonNull String attributes) {
     // we support two different formats: semicolon separated list of alternating keys and values (eg. a;2;b;3;c;4)
     List<VariantFilter> result = parseAttributesFromSSL(attributes);
 
@@ -241,8 +241,8 @@ public class ProductAssetsHandler extends PageHandlerBase {
     return !result.isEmpty() ? result : parseAttributesFromCSL(attributes);
   }
 
-  @Nonnull
-  public static List<VariantFilter> parseAttributesFromCSL(@Nonnull String attributes) {
+  @NonNull
+  public static List<VariantFilter> parseAttributesFromCSL(@NonNull String attributes) {
     List<VariantFilter> result = new ArrayList<>();
 
     String[] kvPairs = attributes.split(",");
@@ -260,8 +260,8 @@ public class ProductAssetsHandler extends PageHandlerBase {
     return result;
   }
 
-  @Nonnull
-  public static List<VariantFilter> parseAttributesFromSSL(@Nonnull String attributes) {
+  @NonNull
+  public static List<VariantFilter> parseAttributesFromSSL(@NonNull String attributes) {
     List<VariantFilter> result = new ArrayList<>();
 
     String[] tokens = attributes.split(";");
@@ -280,7 +280,7 @@ public class ProductAssetsHandler extends PageHandlerBase {
 
   @Nullable
   private Product findProduct(String productId, @Nullable String skuId, @Nullable CatalogAlias catalogAlias, @Nullable String attributes,
-                              @Nonnull StoreContext storeContext) {
+                              @NonNull StoreContext storeContext) {
     if (catalogAlias == null){
       catalogAlias = storeContext.getCatalogAlias();
     }
@@ -293,8 +293,8 @@ public class ProductAssetsHandler extends PageHandlerBase {
   }
 
   @Nullable
-  private Product findProductWithoutAttributes(@Nonnull CatalogAlias catalogAlias, String productId,
-                                               @Nullable String skuId, @Nonnull StoreContext storeContext) {
+  private Product findProductWithoutAttributes(@NonNull CatalogAlias catalogAlias, String productId,
+                                               @Nullable String skuId, @NonNull StoreContext storeContext) {
     // in general an existing skuId parameter is more current than a productId param
     // in case a skuId was passed we hope it is a real SKU and we can close case
     if (StringUtils.isNotBlank(skuId)) {
@@ -323,8 +323,8 @@ public class ProductAssetsHandler extends PageHandlerBase {
   }
 
   @Nullable
-  private Product findProductWithAttributes(@Nonnull CatalogAlias catalogAlias, String productId,
-                                            @Nonnull String attributes, @Nonnull StoreContext storeContext) {
+  private Product findProductWithAttributes(@NonNull CatalogAlias catalogAlias, String productId,
+                                            @NonNull String attributes, @NonNull StoreContext storeContext) {
     // attention: in case the attributes are set we do not trust the skuId or productId parameter
     // we always try to determine the base product and retrieve the SKU from given attributes
     Product product = loadProduct(catalogAlias, productId, storeContext);
@@ -378,27 +378,27 @@ public class ProductAssetsHandler extends PageHandlerBase {
     return CurrentCommerceConnection.get().getIdProvider();
   }
 
-  @Nonnull
+  @NonNull
   private static Optional<StoreContext> findStoreContext() {
     return CurrentCommerceConnection.find().map(CommerceConnection::getStoreContext);
   }
 
   @Nullable
-  private Product loadProduct(@Nonnull CatalogAlias catalogAlias, String externalId,
-                              @Nonnull StoreContext storeContext) {
+  private Product loadProduct(@NonNull CatalogAlias catalogAlias, String externalId,
+                              @NonNull StoreContext storeContext) {
     CommerceId productId = formatProductId(catalogAlias, externalId);
     return loadCommerceBean(productId, storeContext);
   }
 
   @Nullable
-  private ProductVariant loadProductVariant(@Nonnull CatalogAlias catalogAlias, String externalId,
-                                            @Nonnull StoreContext storeContext) {
+  private ProductVariant loadProductVariant(@NonNull CatalogAlias catalogAlias, String externalId,
+                                            @NonNull StoreContext storeContext) {
     CommerceId productVariantId = formatProductVariantId(catalogAlias, externalId);
     return loadCommerceBean(productVariantId, storeContext);
   }
 
   @Nullable
-  private static <T extends CommerceBean> T loadCommerceBean(@Nonnull CommerceId commerceId, @Nonnull StoreContext storeContext) {
+  private static <T extends CommerceBean> T loadCommerceBean(@NonNull CommerceId commerceId, @NonNull StoreContext storeContext) {
     return (T) getCommerceBeanFactory().loadBeanFor(commerceId, storeContext);
   }
 

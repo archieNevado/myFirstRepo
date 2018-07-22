@@ -18,7 +18,7 @@
     "@coremedia/module-creator": "^1.0.0",
     "@coremedia/theme-importer": "^1.0.0",
     "@coremedia/tool-utils": "^1.0.0",
-    "inquirer": "5.0.0",
+    "inquirer": "6.0.0",
     "yargs": "10.0.3"
   },
   "devDependencies": {

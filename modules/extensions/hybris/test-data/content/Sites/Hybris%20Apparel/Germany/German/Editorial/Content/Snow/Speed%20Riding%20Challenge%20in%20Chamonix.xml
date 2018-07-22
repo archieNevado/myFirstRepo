@@ -9,7 +9,7 @@
 <localSettings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <BooleanProperty Name="callToActionDisabled">false</BooleanProperty>
-<StringProperty Name="callToActionCustomText">Learn more</StringProperty>
+<StringProperty Name="callToActionCustomText">Mehr lesen</StringProperty>
 </Struct>
 </localSettings>
 <linkedSettings>

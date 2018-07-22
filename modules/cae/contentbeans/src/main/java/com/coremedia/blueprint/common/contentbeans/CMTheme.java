@@ -5,7 +5,7 @@ import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.xml.Markup;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.List;
 import java.util.Map;
 
@@ -108,7 +108,7 @@ public interface CMTheme extends CMLocalized {
    * @return a list of {@link com.coremedia.blueprint.common.contentbeans.CMJavaScript} objects
    * @cm.template.api
    */
-  @Nonnull
+  @NonNull
   List<CMJavaScript> getJavaScriptLibraries();
 
   /**
@@ -117,7 +117,7 @@ public interface CMTheme extends CMLocalized {
    * @return a list of {@link com.coremedia.blueprint.common.contentbeans.CMJavaScript} objects
    * @cm.template.api
    */
-  @Nonnull
+  @NonNull
   List<CMJavaScript> getJavaScripts();
 
   /**
@@ -126,7 +126,7 @@ public interface CMTheme extends CMLocalized {
    * @return a list of {@link com.coremedia.blueprint.common.contentbeans.CMCSS} objects
    * @cm.template.api
    */
-  @Nonnull
+  @NonNull
   List<CMCSS> getCss();
 
   /**
@@ -134,7 +134,7 @@ public interface CMTheme extends CMLocalized {
    *
    * @return a list of {@link com.coremedia.blueprint.common.contentbeans.CMResourceBundle} objects
    */
-  @Nonnull
+  @NonNull
   List<CMResourceBundle> getResourceBundles();
 
   String getViewRepositoryName();

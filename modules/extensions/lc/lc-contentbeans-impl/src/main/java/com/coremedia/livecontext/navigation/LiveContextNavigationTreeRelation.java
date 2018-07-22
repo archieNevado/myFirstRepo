@@ -18,8 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -44,7 +44,7 @@ public class LiveContextNavigationTreeRelation implements TreeRelation<Linkable>
   private LiveContextNavigationFactory navigationFactory;
 
   @Override
-  @Nonnull
+  @NonNull
   public Collection<Linkable> getChildrenOf(Linkable parent) {
     Collection<Linkable> navigationList = new ArrayList<>();
     Site site = getSite(parent);

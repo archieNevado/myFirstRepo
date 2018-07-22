@@ -10,16 +10,16 @@ import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.hybris.rest.resources.StoreConfigResource;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 public class HybrisStoreContextProvider extends AbstractStoreContextProvider {
 
@@ -31,23 +31,24 @@ public class HybrisStoreContextProvider extends AbstractStoreContextProvider {
   private String previewDefaultCatalogVersion;
   private String liveDefaultCatalogVersion;
 
-  @Nullable
+  @NonNull
   @Override
-  protected StoreContext internalCreateContext(@Nonnull Site site) {
+  protected Optional<StoreContext> internalCreateContext(@NonNull Site site) {
     // Only create store context if settings are found for current site.
     Struct repositoryStoreConfig = getSettingsService()
-            .setting(CONFIG_KEY_STORE_CONFIG, Struct.class, site.getSiteRootDocument());
+            .getSetting(CONFIG_KEY_STORE_CONFIG, Struct.class, site.getSiteRootDocument())
+            .orElse(null);
     if (repositoryStoreConfig == null) {
-      return null;
+      return Optional.empty();
     }
 
     StoreContextValuesHolder valuesHolder = new StoreContextValuesHolder();
     Map<String, Object> targetConfig = new HashMap<>();
 
     try {
-      String configId = StructUtil.getString(repositoryStoreConfig, CONFIG_KEY_CONFIG_ID);
+      StructUtil.findString(repositoryStoreConfig, CONFIG_KEY_CONFIG_ID)
+              .ifPresent(configId -> readStoreConfigFromSpring(configId, targetConfig));
 
-      readStoreConfigFromSpring(configId, targetConfig);
       updateStoreConfigFromRepository(repositoryStoreConfig, targetConfig, site);
 
       valuesHolder.siteId = site.getId();
@@ -57,19 +58,21 @@ public class HybrisStoreContextProvider extends AbstractStoreContextProvider {
       valuesHolder.catalogId = catalogIdStr != null ? CatalogId.of(catalogIdStr) : null;
       valuesHolder.catalogVersion = getCatalogVersion(site);
       valuesHolder.locale = site.getLocale();
-      valuesHolder.currency = (String) targetConfig.get(CONFIG_KEY_CURRENCY);
+      String currencyStr = (String) targetConfig.get(CONFIG_KEY_CURRENCY);
+      valuesHolder.currency = currencyStr != null ? parseCurrency(currencyStr) : null;
 
-      return createStoreContext(valuesHolder);
+      StoreContext storeContext = createStoreContext(valuesHolder);
+      return Optional.of(storeContext);
     } catch (NoSuchPropertyDescriptorException e) {
       throw new InvalidContextException("Missing properties in store configuration. ", e);
     }
   }
 
-  private String getCatalogVersion(@Nonnull Site site) {
+  private String getCatalogVersion(@NonNull Site site) {
     return isPreviewContentRepository(site) ? previewDefaultCatalogVersion : liveDefaultCatalogVersion;
   }
 
-  private static boolean isPreviewContentRepository(@Nonnull Site site) {
+  private static boolean isPreviewContentRepository(@NonNull Site site) {
     return site.getSiteRootDocument().getRepository().isContentManagementServer();
   }
 
@@ -81,15 +84,15 @@ public class HybrisStoreContextProvider extends AbstractStoreContextProvider {
    * @return the new built store context
    * @throws com.coremedia.livecontext.ecommerce.common.InvalidContextException if locale or currency has wrong format
    */
-  @Nonnull
-  private static StoreContext createStoreContext(@Nonnull StoreContextValuesHolder valuesHolder) {
+  @NonNull
+  private static StoreContext createStoreContext(@NonNull StoreContextValuesHolder valuesHolder) {
     String siteId = valuesHolder.siteId;
     String storeId = valuesHolder.storeId;
     String storeName = valuesHolder.storeName;
     CatalogId catalogId = valuesHolder.catalogId;
     String catalogVersion = valuesHolder.catalogVersion;
     Locale locale = valuesHolder.locale;
-    String currency = valuesHolder.currency;
+    Currency currency = valuesHolder.currency;
 
     HybrisStoreContextBuilder builder = HybrisStoreContextBuilder.from(siteId);
 
@@ -110,11 +113,6 @@ public class HybrisStoreContextProvider extends AbstractStoreContextProvider {
     }
 
     if (catalogId != null) {
-      String catalogIdStr = catalogId.value();
-      if (StringUtils.isBlank(catalogIdStr)) {
-        throw new InvalidContextException("catalogId has wrong format: \"" + catalogIdStr + "\"");
-      }
-
       builder.withCatalogId(catalogId);
     }
 
@@ -127,11 +125,7 @@ public class HybrisStoreContextProvider extends AbstractStoreContextProvider {
     }
 
     if (currency != null) {
-      try {
-        builder.withCurrency(Currency.getInstance(currency));
-      } catch (IllegalArgumentException e) {
-        throw new InvalidContextException(e);
-      }
+      builder.withCurrency(currency);
     }
 
     if (locale != null) {
@@ -139,6 +133,15 @@ public class HybrisStoreContextProvider extends AbstractStoreContextProvider {
     }
 
     return builder.build();
+  }
+
+  @NonNull
+  private static Currency parseCurrency(@NonNull String currencyCode) {
+    try {
+      return Currency.getInstance(currencyCode);
+    } catch (IllegalArgumentException e) {
+      throw new InvalidContextException(e);
+    }
   }
 
   private static class StoreContextValuesHolder {
@@ -149,20 +152,13 @@ public class HybrisStoreContextProvider extends AbstractStoreContextProvider {
     private CatalogId catalogId;
     private String catalogVersion;
     private Locale locale;
-    private String currency;
+    private Currency currency;
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public StoreContextBuilder buildContext(@Nonnull StoreContext source) {
+  public StoreContextBuilder buildContext(@NonNull StoreContext source) {
     return HybrisStoreContextBuilder.from(source);
-  }
-
-  @Nonnull
-  @Override
-  public StoreContext cloneContext(@Nonnull StoreContext source) {
-    return buildContext(source)
-            .build();
   }
 
   public StoreConfigResource getStoreConfigResource() {

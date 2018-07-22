@@ -65,7 +65,7 @@ public class CatalogResourceIT extends AbstractServiceTest {
   }
 
   @Test
-  @Ignore
+  @Ignore("CMS-11883 - Bearer Authentication for hybris not workin ")
   public void testFetchAuthToken() {
     String token = catalogResource.getConnector().fetchAuthToken();
 

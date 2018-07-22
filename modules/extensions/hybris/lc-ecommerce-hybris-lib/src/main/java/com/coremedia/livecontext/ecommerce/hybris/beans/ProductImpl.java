@@ -22,8 +22,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -112,11 +112,13 @@ public class ProductImpl extends AbstractHybrisCommerceBean implements Product {
     return null;
   }
 
+  @Nullable
   @Override
   public BigDecimal getListPrice() {
     return priceService.findListPriceForProduct(this);
   }
 
+  @Nullable
   @Override
   public BigDecimal getOfferPrice() {
     return priceService.findOfferPriceForProduct(this);
@@ -142,7 +144,7 @@ public class ProductImpl extends AbstractHybrisCommerceBean implements Product {
     return getCatalogService().findCategoryById(commerceId, getContext());
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<Category> getCategories() {
     // to be implemented with CMS-9516 (multi catalog support for hybris)
@@ -161,9 +163,10 @@ public class ProductImpl extends AbstractHybrisCommerceBean implements Product {
     List<Content> pictures = getPictures();
 
     if (!pictures.isEmpty()) {
+      StoreContext storeContext = StoreContextHelper.getCurrentContextOrThrow();
       return getAssetUrlProvider().getImageUrl("/catalogimage/product/" +
-              StoreContextHelper.getStoreId() + "/" +
-              StoreContextHelper.getLocale() + "/full/" + getExternalId() + ".jpg");
+              StoreContextHelper.getStoreId(storeContext) + "/" +
+              StoreContextHelper.getLocale(storeContext) + "/full/" + getExternalId() + ".jpg");
     }
 
     return getAssetUrlProvider().getImageUrl(getDelegate().getPictureDownloadUrl());
@@ -175,15 +178,16 @@ public class ProductImpl extends AbstractHybrisCommerceBean implements Product {
     List<Content> pictures = getPictures();
 
     if (!pictures.isEmpty()) {
+      StoreContext storeContext = StoreContextHelper.getCurrentContextOrThrow();
       return getAssetUrlProvider().getImageUrl("/catalogimage/product/" +
-              StoreContextHelper.getStoreId() + "/" +
-              StoreContextHelper.getLocale() + "/thumbnail/" + getExternalId() + ".jpg");
+              StoreContextHelper.getStoreId(storeContext) + "/" +
+              StoreContextHelper.getLocale(storeContext) + "/thumbnail/" + getExternalId() + ".jpg");
     }
 
     return getAssetUrlProvider().getImageUrl(getDelegate().getThumbnailDownloadUrl());
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<ProductAttribute> getDefiningAttributes() {
     if (definingAttributes == null) {
@@ -193,7 +197,7 @@ public class ProductImpl extends AbstractHybrisCommerceBean implements Product {
     return definingAttributes;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<ProductAttribute> getDescribingAttributes() {
     if (describingAttributes == null) {
@@ -221,7 +225,7 @@ public class ProductImpl extends AbstractHybrisCommerceBean implements Product {
     }
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<String> getVariantAxisNames() {
     if (variantAxis == null) {
@@ -240,9 +244,9 @@ public class ProductImpl extends AbstractHybrisCommerceBean implements Product {
     return variantAxis;
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Object> getVariantAxisValues(@Nonnull String axisName, @Nonnull List<VariantFilter> filters) {
+  public List<Object> getVariantAxisValues(@NonNull String axisName, @NonNull List<VariantFilter> filters) {
     List<Object> result = new ArrayList<>();
 
     List<ProductVariant> availableProducts = getVariants(filters);
@@ -256,9 +260,9 @@ public class ProductImpl extends AbstractHybrisCommerceBean implements Product {
     return result;
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Object> getVariantAxisValues(@Nonnull String axisName, @Nullable VariantFilter filter) {
+  public List<Object> getVariantAxisValues(@NonNull String axisName, @Nullable VariantFilter filter) {
     if (filter == null) {
       return getVariantAxisValues(axisName, emptyList());
     }
@@ -268,18 +272,18 @@ public class ProductImpl extends AbstractHybrisCommerceBean implements Product {
     return getVariantAxisValues(axisName, filters);
   }
 
-  @Nonnull
+  @NonNull
   private Optional<ProductVariant> findFirstSku() {
     return getVariants().stream().filter(variant -> variant.getVariants().isEmpty()).findFirst();
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Object> getAttributeValues(@Nonnull String attributeId) {
+  public List<Object> getAttributeValues(@NonNull String attributeId) {
     return emptyList();
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<ProductVariant> getVariants() {
     List<ProductVariantRefDocument> variantRefDocuments = getDelegate().getVariantRefDocuments();
@@ -305,9 +309,9 @@ public class ProductImpl extends AbstractHybrisCommerceBean implements Product {
     return variants;
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<ProductVariant> getVariants(@Nonnull List<VariantFilter> filters) {
+  public List<ProductVariant> getVariants(@NonNull List<VariantFilter> filters) {
     List<ProductVariant> allVariants = getVariants();
 
     if (filters.isEmpty()) {
@@ -320,11 +324,11 @@ public class ProductImpl extends AbstractHybrisCommerceBean implements Product {
   }
 
   private static boolean isProductVariantIncludedinAllFilters(ProductVariant productVariant,
-                                                              @Nonnull Collection<VariantFilter> filters) {
+                                                              @NonNull Collection<VariantFilter> filters) {
     return filters.stream().allMatch(filter -> filter.matches(productVariant));
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<ProductVariant> getVariants(@Nullable VariantFilter filter) {
     if (filter == null) {
@@ -334,7 +338,7 @@ public class ProductImpl extends AbstractHybrisCommerceBean implements Product {
     return getVariants(singletonList(filter));
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public Map<ProductVariant, AvailabilityInfo> getAvailabilityMap() {
     return emptyMap();
@@ -355,7 +359,7 @@ public class ProductImpl extends AbstractHybrisCommerceBean implements Product {
     return getDelegate().getBaseProduct() != null;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public CatalogPicture getCatalogPicture() {
     return findAssetService()
@@ -387,7 +391,7 @@ public class ProductImpl extends AbstractHybrisCommerceBean implements Product {
     return null;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<Content> getPictures() {
     return findAssetService()
@@ -395,7 +399,7 @@ public class ProductImpl extends AbstractHybrisCommerceBean implements Product {
             .orElseGet(Collections::emptyList);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<Content> getVisuals() {
     return findAssetService()
@@ -403,7 +407,7 @@ public class ProductImpl extends AbstractHybrisCommerceBean implements Product {
             .orElseGet(Collections::emptyList);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<Content> getDownloads() {
     return findAssetService()

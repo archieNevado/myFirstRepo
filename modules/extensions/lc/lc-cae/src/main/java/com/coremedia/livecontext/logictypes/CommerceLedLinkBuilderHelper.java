@@ -7,6 +7,9 @@ import com.coremedia.livecontext.contentbeans.CMExternalChannel;
 import com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.SeoSegmentBuilder;
 import org.springframework.beans.factory.annotation.Required;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
+import java.util.Optional;
+
 /**
  * Link Builder helper for CMChannels that are supposed to link to the commerce system.
  */
@@ -32,10 +35,15 @@ public class CommerceLedLinkBuilderHelper {
    * @param channel given channel
    * @return true if the given channel link shall be rendered as Commerce link.
    */
-  private boolean isCommerceLed(CMChannel channel) {
+  private boolean isCommerceLed(@NonNull CMChannel channel) {
     //noinspection ConstantConditions
-    return settingsService.settingWithDefault(LIVECONTEXT_POLICY_COMMERCE_PAGE_LINKS, Boolean.class, false, channel)
-            || settingsService.settingWithDefault(LIVECONTEXT_POLICY_COMMERCE_MICROSITE_LINKS, Boolean.class, false, channel);
+    return getBooleanSetting(LIVECONTEXT_POLICY_COMMERCE_PAGE_LINKS, channel).orElse(false)
+            || getBooleanSetting(LIVECONTEXT_POLICY_COMMERCE_MICROSITE_LINKS, channel).orElse(false);
+  }
+
+  @NonNull
+  private Optional<Boolean> getBooleanSetting(@NonNull String name, @NonNull Object bean) {
+    return settingsService.getSetting(name, Boolean.class, bean);
   }
 
   public String getSeoSegmentForChannel(CMChannel channel) {

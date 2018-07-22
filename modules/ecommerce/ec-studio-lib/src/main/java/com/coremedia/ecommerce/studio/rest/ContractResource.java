@@ -8,10 +8,10 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.contract.Contract;
 import com.coremedia.livecontext.ecommerce.contract.ContractService;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.Collection;
 
 /**
  * A catalog {@link Contract} object as a RESTful resource.
@@ -54,17 +54,20 @@ public class ContractResource extends AbstractCatalogResource<Contract> {
     // Therefor we make use of the eligible call since it does consider
     // the store ID.
     StoreContext storeContext = getStoreContext();
-    if (storeContext != null) {
-      Collection<Contract> contracts = contractService.findContractIdsForServiceUser(storeContext);
-      for (Contract contract : contracts) {
-        String externalId = contract.getExternalId();
-        if (externalId != null && externalId.equals(id)) {
-          return contractService.findContractById(contract.getId(), storeContext);
-        }
-      }
+    if (storeContext == null) {
+      return null;
     }
 
-    return null;
+    return contractService.findContractIdsForServiceUser(storeContext).stream()
+            .filter(contract -> externalIdMatches(contract, id))
+            .findFirst()
+            .map(contract -> contractService.findContractById(contract.getId(), storeContext))
+            .orElse(null);
+  }
+
+  private static boolean externalIdMatches(@NonNull Contract contract, String id) {
+    String externalId = contract.getExternalId();
+    return externalId != null && externalId.equals(id);
   }
 
   @Override
@@ -75,7 +78,7 @@ public class ContractResource extends AbstractCatalogResource<Contract> {
 
     StoreContext context = contract.getContext();
     setSiteId(context.getSiteId());
-    setWorkspaceId(context.getWorkspaceId());
+    setWorkspaceId(context.getWorkspaceId().orElse(null));
   }
 
   public ContractService getContractService() {

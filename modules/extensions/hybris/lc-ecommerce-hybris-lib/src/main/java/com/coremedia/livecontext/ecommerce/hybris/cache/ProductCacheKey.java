@@ -9,7 +9,7 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.ProductDocument;
 import com.coremedia.livecontext.ecommerce.hybris.rest.resources.CatalogResource;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.SKU;
@@ -18,12 +18,11 @@ public class ProductCacheKey extends AbstractHybrisDocumentCacheKey<ProductDocum
 
   private CatalogResource resource;
 
-  public ProductCacheKey(@Nonnull CommerceId id,
-                         StoreContext storeContext,
-                         CatalogResource resource,
+  public ProductCacheKey(@NonNull CommerceId id, StoreContext storeContext, CatalogResource resource,
                          CommerceCache commerceCache) {
     super(id, storeContext, CONFIG_KEY_PRODUCT, commerceCache);
     this.resource = resource;
+
     CommerceBeanType commerceBeanType = id.getCommerceBeanType();
     if (!PRODUCT.equals(commerceBeanType) && !SKU.equals(commerceBeanType)) {
       throw new InvalidIdException(id + " is neither a product nor sku id.");
@@ -35,5 +34,4 @@ public class ProductCacheKey extends AbstractHybrisDocumentCacheKey<ProductDocum
     String externalId = getExternalIdOrTechId();
     return resource.getProductById(externalId, storeContext);
   }
-
 }

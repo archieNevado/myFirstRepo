@@ -7,7 +7,7 @@ import com.coremedia.livecontext.ecommerce.hybris.common.AbstractHybrisService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -34,8 +34,8 @@ public class InvalidationServiceImpl extends AbstractHybrisService implements In
   private InvalidationResource invalidationResource;
 
   @Override
-  @Nonnull
-  public List<InvalidationEvent> getInvalidations(long lastExecutionTimeStamp, @Nonnull StoreContext storeContext) {
+  @NonNull
+  public List<InvalidationEvent> getInvalidations(long lastExecutionTimeStamp, @NonNull StoreContext storeContext) {
     InvalidationsDocument invalidationsDocument = invalidationResource.getInvalidations(lastExecutionTimeStamp, maxWaitInMilliseconds, chunkSize);
     if (invalidationsDocument == null) {
       return emptyList();
@@ -94,9 +94,9 @@ public class InvalidationServiceImpl extends AbstractHybrisService implements In
     return null;
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public String getServiceEndpointId(@Nonnull StoreContext storeContext) {
+  public String getServiceEndpointId(@NonNull StoreContext storeContext) {
     String serviceEndpointId = null;
     if (invalidationResource.getConnector() != null) {
       serviceEndpointId = invalidationResource.getConnector().getServiceEndpointId();

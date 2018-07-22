@@ -6,7 +6,7 @@ import com.coremedia.blueprint.common.contentbeans.CMAction;
 import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Map;
 
 /**
@@ -26,7 +26,7 @@ public class AuthenticationState extends WebflowActionState {
    */
   public AuthenticationState(CMAction action, Map<String, Object> model,
                              String flowId, String flowView,
-                             @Nonnull SettingsService settingsService) {
+                             @NonNull SettingsService settingsService) {
     super(action, model, flowId, flowView);
     this.settingsService = settingsService;
   }

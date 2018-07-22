@@ -595,6 +595,7 @@ svg:not(:root) {
     position: absolute;
     top: 60px;
     left: 100px;
+    right: 100px;
   }
 
   .cm-hero__button {

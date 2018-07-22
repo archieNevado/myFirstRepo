@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.common.contentbeans;
 
+import com.coremedia.blueprint.common.player.PlayerSettings;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.struct.Struct;
@@ -28,6 +29,11 @@ public interface CMVideo extends CMVisual {
    * Name of the document property 'timeLine'.
    */
   String TIMELINE = "timeLine";
+
+  /**
+   * Name of the player settings struct.
+   */
+  String PLAYER_SETTINGS = "playerSettings";
 
   /**
    * Returns the value of the document property {@link #MASTER}.
@@ -71,4 +77,9 @@ public interface CMVideo extends CMVisual {
    * @cm.template.api
    */
   List getTimeLineSequences();
+
+  /**
+   * @cm.template.api
+   */
+  PlayerSettings getPlayerSettings();
 }

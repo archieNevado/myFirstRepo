@@ -10,7 +10,7 @@
  ------------------------------------------------------------------------------------------------------------------- -->
 
 
-<#-- NOTIFICATION -->
+<#-- DEPRECATED, see Frontend Developer Guide -->
 <#macro notification type baseClass="cm-notification" additionalClasses=[] title="" text="" dismissable=false iconClass="" attr={}>
   <#local classes=[baseClass, baseClass + "--" + type] + additionalClasses />
   <#local attr=util._extendSequenceInMap(attr, "classes", classes) />
@@ -25,22 +25,19 @@
     <#if text?has_content>${text}</#if>
     <#nested />
     </span>
-    <#if dismissable?is_boolean && dismissable>
-      <div class="${baseClass}__dismiss"></div>
-    </#if>
   </div>
 </#macro>
 
-<#-- SPRING FORM NOTIFICATION -->
+<#-- DEPRECATED, see Frontend Developer Guide -->
 <#outputformat "plainText">
-  <#macro notificationFromSpring path dismissable=false baseClass="cm-notification" additionalClasses=[] ignoreIfEmpty=true type="error" title="" bindPath=true attr={}>
+  <#macro notificationFromSpring path baseClass="cm-notification" additionalClasses=[] ignoreIfEmpty=true type="error" title="" bindPath=true attr={}>
     <#if bindPath><@spring.bind path=path /></#if>
     <#local text="" />
     <#if spring.status.error>
       <#local text=spring.status.getErrorMessagesAsString("\n") />
     </#if>
     <#if !ignoreIfEmpty?is_boolean || !ignoreIfEmpty || text?has_content>
-      <@notification type=type dismissable=dismissable baseClass=baseClass additionalClasses=additionalClasses title=title attr=attr>${text?replace("\n", "<br>")}<#nested /></@notification>
+      <@notification type=type baseClass=baseClass additionalClasses=additionalClasses title=title attr=attr>${text?replace("\n", "<br>")}<#nested /></@notification>
     </#if>
   </#macro>
 </#outputformat>

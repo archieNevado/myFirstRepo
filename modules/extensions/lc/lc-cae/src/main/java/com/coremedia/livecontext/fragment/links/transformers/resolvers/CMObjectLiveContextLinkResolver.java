@@ -20,10 +20,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
+import static com.coremedia.livecontext.fragment.links.transformers.resolvers.Urls.getQueryString;
 import static java.util.Collections.emptyMap;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
@@ -42,6 +44,8 @@ public class CMObjectLiveContextLinkResolver extends AbstractLiveContextLinkReso
 
   private static final String KEY_RENDER_TYPE = "renderType";
   private static final String RENDER_TYPE_URL = "url";
+
+  private static final String KEY_QUERY_STRING = "queryString";
 
   //additional parameter values to be read from the corresponding JSP
   private static final String EXTERNAL_SEOSEGMENT_PARAMETER_NAME = "externalSeoSegment";
@@ -77,12 +81,8 @@ public class CMObjectLiveContextLinkResolver extends AbstractLiveContextLinkReso
 
   @Override
   public boolean isApplicable(Object bean) {
-    return bean instanceof CMObject ||
-            bean instanceof ProductInSite ||
-            bean instanceof Product ||
-            bean instanceof CategoryInSite ||
-            bean instanceof Category ||
-            bean instanceof LiveContextNavigation;
+    // LiveContextLinkTransformer checks if the bean can be handled
+    return true;
   }
 
   /**
@@ -104,14 +104,23 @@ public class CMObjectLiveContextLinkResolver extends AbstractLiveContextLinkReso
    * @throws JSONException if something JSON-related goes wrong
    */
   @Override
-  protected JSONObject resolveUrlInternal(String source, Object bean, String variant, CMNavigation navigation,
+  @NonNull
+  protected JSONObject resolveUrlInternal(@NonNull String source, Object bean, String variant, CMNavigation navigation,
                                           HttpServletRequest request) {
     JSONObject out = new JSONObject();
     out.put(KEY_RENDER_TYPE, RENDER_TYPE_URL);
 
+    getQueryString(source).ifPresent(queryString -> out.put(KEY_QUERY_STRING, queryString));
+
     try {
+      // ajax include
+      if (source.contains("/" + PREFIX_DYNAMIC + "/") && source.contains("/p13n/")) {
+        out.put(KEY_OBJECT_TYPE, "ajax");
+        out.put(KEY_RENDER_TYPE, "url");
+        out.put("url", deabsolutizeLink(source));
+      }
       // Product
-      if (bean instanceof CMProductTeaser
+      else if (bean instanceof CMProductTeaser
               || bean instanceof LiveContextExternalProduct
               || bean instanceof ProductInSite
               || bean instanceof Product) {
@@ -139,10 +148,6 @@ public class CMObjectLiveContextLinkResolver extends AbstractLiveContextLinkReso
           ProductInSite productInSite = (ProductInSite) bean;
 
           product = productInSite.getProduct();
-
-          if (product == null) {
-            throw new IllegalArgumentException("Product cannot be retrieved (in site: " + productInSite.getSite() + ")");
-          }
         } else {
           product = (Product) bean;
         }
@@ -197,7 +202,7 @@ public class CMObjectLiveContextLinkResolver extends AbstractLiveContextLinkReso
     return out;
   }
 
-  private static void processCategory(@Nonnull Category category, @Nonnull JSONObject out) {
+  private static void processCategory(@NonNull Category category, @NonNull JSONObject out) {
     List<Category> breadcrumbPath = category.getBreadcrumb();
 
     int level = breadcrumbPath.size();
@@ -221,8 +226,8 @@ public class CMObjectLiveContextLinkResolver extends AbstractLiveContextLinkReso
     }
   }
 
-  private void processExternalPage(@Nonnull CMExternalPage externalChannel, HttpServletRequest request,
-                                   @Nonnull JSONObject out) {
+  private void processExternalPage(@NonNull CMExternalPage externalChannel, HttpServletRequest request,
+                                   @NonNull JSONObject out) {
     out.put(KEY_OBJECT_TYPE, OBJECT_TYPE_LC_PAGE);
 
     if (isNotEmpty(externalChannel.getExternalUriPath())) {
@@ -234,7 +239,7 @@ public class CMObjectLiveContextLinkResolver extends AbstractLiveContextLinkReso
     }
   }
 
-  private void processContent(@Nonnull CMObject contentBean, @Nonnull CMNavigation navigation, @Nonnull JSONObject out) {
+  private void processContent(@NonNull CMObject contentBean, @NonNull CMNavigation navigation, @NonNull JSONObject out) {
     String contentId = ExternalReferenceResolver.CONTENT_ID_FRAGMENT_PREFIX + navigation.getContentId()
             + "-" + contentBean.getContentId();
 

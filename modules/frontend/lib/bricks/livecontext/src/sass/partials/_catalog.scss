@@ -1,0 +1,6 @@
+.cm-uncropped-catalog-picture {
+  object-fit: cover;
+  // for object fit, the video actually needs a specified width/height (top, left, right and bottom is not sufficient).
+  width: 100%;
+  height: 100%;
+}

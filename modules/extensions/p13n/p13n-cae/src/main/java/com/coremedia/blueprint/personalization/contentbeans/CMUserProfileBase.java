@@ -25,7 +25,7 @@ public abstract class CMUserProfileBase extends CMLocalizedImpl implements CMUse
    */
   @Override
   public Blob getProfileSettings() {
-    return getContent().getBlobRef("profileSettings");
+    return getContent().getBlobRef(PROFILE_SETTINGS);
   }
 
   /**
@@ -35,7 +35,7 @@ public abstract class CMUserProfileBase extends CMLocalizedImpl implements CMUse
    */
   @Override
   public Map<String, Object> getProfileExtensions() {
-    return getContentBeanFactory().createBeanMapFor(getContent().getStruct("profileExtensions"));
+    return getContentBeanFactory().createBeanMapFor(getContent().getStruct(PROFILE_EXTENSIONS));
   }
 
   /**

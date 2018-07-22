@@ -1,13 +1,13 @@
 package com.coremedia.livecontext.fragment;
 
+import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -32,26 +32,26 @@ public class FragmentParameters {
   private static final String VIEW = "view";
   private static final String PLACEMENT = "placement";
   private static final String EXTERNAL_REFERENCE = "externalRef";
-  public static final String PARAMETER = "parameter";
+  private static final String PARAMETER = "parameter";
   private static final String ENVIRONMENT = "environment";
 
-  private String storeId;
-  private Locale locale;
+  private final String storeId;
+  private final Locale locale;
 
   private String metaDataKeywords = "";
   private String metaDataTitle = "";
   private String metaDataDescription = "";
 
-  private Map<String, String> matrixParams = new HashMap<>();
+  private final Map<String, String> matrixParams;
 
   /**
    * @param storeId    The storeId of the store to work on.
    * @param locale     The locale of the store to work on.
    * @param matrixVars The matrix parameters passed by the fragment request.
    */
-  protected FragmentParameters(@Nonnull String storeId,
-                               @Nonnull Locale locale,
-                               @Nonnull Map<String, String> matrixVars) {
+  protected FragmentParameters(@NonNull String storeId,
+                               @NonNull Locale locale,
+                               @NonNull Map<String, String> matrixVars) {
     this.storeId = storeId;
     this.locale = locale;
     this.matrixParams = matrixVars;
@@ -88,9 +88,9 @@ public class FragmentParameters {
     return getParameter(PAGE_ID);
   }
 
-  public Optional<String> getCatalogId() {
-    String catalogId = getParameter(CATALOG_ID);
-    return Optional.ofNullable(catalogId);
+  public Optional<CatalogId> getCatalogId() {
+    return Optional.ofNullable(getParameter(CATALOG_ID))
+            .map(CatalogId::of);
   }
 
   public String getCategoryId() {
@@ -125,15 +125,8 @@ public class FragmentParameters {
     matrixParams.put(PLACEMENT, placement);
   }
 
-  public Map<String, String> getMatrixParams() {
-    return matrixParams;
-  }
-
   public String getEnvironment() {
-    if (matrixParams.containsKey(ENVIRONMENT)) {
-      return matrixParams.get(ENVIRONMENT);
-    }
-    return null;
+    return matrixParams.get(ENVIRONMENT);
   }
 
   @Override
@@ -150,19 +143,34 @@ public class FragmentParameters {
     return builder.toString();
   }
 
+  @NonNull
+  public String toQueryParam() {
+    // "/10851/en-US/params;view=..."
+    StringBuilder builder = new StringBuilder();
+    builder.append("/").append(storeId).append("/").append(getLocale().toLanguageTag()).append("/params");
+    for (Map.Entry<String, String> entry : matrixParams.entrySet()) {
+      builder.append(";");
+      builder.append(entry.getKey());
+      builder.append("=");
+      builder.append(entry.getValue());
+    }
+    return builder.toString();
+  }
+
   /**
    * Returns the value for the given key from the map of matrix parameters.
    */
   @Nullable
-  public String getParameter(@Nonnull String key) {
-    if (matrixParams.containsKey(key)) {
-      return matrixParams.get(key);
-    }
-    return null;
+  public String getParameter(@NonNull String key) {
+    return matrixParams.get(key);
+  }
+
+  public void setParameter(@NonNull String parameter) {
+    matrixParams.put(PARAMETER, parameter);
   }
 
   @Nullable
-  public String getDecodedValue(@Nonnull String key) {
+  public String getDecodedValue(@NonNull String key) {
     String value = getParameter(key);
     try {
       //The parameter is 2x encoded, otherwise the path param would not work properly

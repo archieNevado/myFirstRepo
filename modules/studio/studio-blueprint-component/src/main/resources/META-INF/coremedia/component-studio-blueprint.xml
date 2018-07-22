@@ -35,13 +35,4 @@
     </list>
   </customize:append>
 
-  <beans profile="controlroom-memory">
-    <customize:append id="uapiMemoryCapListConnector" bean="connectionParameters" order="42">
-      <map>
-        <entry key="usecaplist" value="true"/>
-        <entry key="caplist" value="com.coremedia.cotopaxi.list.memory.MemoryCapListConnectorFactory"/>
-      </map>
-    </customize:append>
-  </beans>
-
 </beans>

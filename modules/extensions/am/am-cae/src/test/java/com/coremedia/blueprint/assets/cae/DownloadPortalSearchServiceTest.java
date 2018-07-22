@@ -23,7 +23,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -253,7 +253,7 @@ public class DownloadPortalSearchServiceTest {
     checkForFilter(conditionArgumentCaptor.getAllValues(), DownloadPortalSearchService.ASSETTAXONOMY_SOLR_FIELD, SolrQueryBuilder.FIELD_SET_ANY_VALUE);
   }
 
-  private void checkForFilter(List<Condition> conditionList, @Nonnull String field, String valuePart) {
+  private void checkForFilter(List<Condition> conditionList, @NonNull String field, String valuePart) {
     boolean found = false;
 
     for (Condition condition: conditionList) {

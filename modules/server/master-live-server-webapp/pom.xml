@@ -12,7 +12,7 @@
   <packaging>war</packaging>
 
   <description>
-    To start the master-live-server-webapp run: mvn tomcat7:run-war
+    To start the master-live-server-webapp run: mvn tomcat7:run
   </description>
 
   <properties>
@@ -59,7 +59,7 @@
       </plugin>
 
       <!--
-         invoke "mvn tomcat7:run-war" for running this webapp locally but make sure that you run mvn:package first
+         invoke "mvn tomcat7:run" for running this webapp locally but make sure that you run mvn:package first
       -->
       <plugin>
         <groupId>org.apache.tomcat.maven</groupId>

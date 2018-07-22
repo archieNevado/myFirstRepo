@@ -2,7 +2,6 @@ package com.coremedia.blueprint.cae.web.taglib;
 
 import com.coremedia.blueprint.base.cae.web.taglib.CssClassFor;
 import com.coremedia.blueprint.base.cae.web.taglib.ImageFunctions;
-import com.coremedia.blueprint.base.cae.web.taglib.SettingsFunction;
 import com.coremedia.blueprint.base.cae.web.taglib.UniqueIdGenerator;
 import com.coremedia.blueprint.base.cae.web.taglib.ViewHookEventNamesFreemarker;
 import com.coremedia.blueprint.base.links.UriConstants;
@@ -10,42 +9,49 @@ import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.action.webflow.BlueprintFlowUrlHandler;
 import com.coremedia.blueprint.cae.web.FreemarkerEnvironment;
 import com.coremedia.blueprint.cae.web.links.ThemeResourceLinkBuilder;
+import com.coremedia.blueprint.coderesources.ThemeService;
 import com.coremedia.blueprint.common.contentbeans.AbstractPage;
 import com.coremedia.blueprint.common.contentbeans.CMCollection;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CMImageMap;
+import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMLocalized;
+import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
+import com.coremedia.blueprint.common.contentbeans.CMTeasable;
+import com.coremedia.blueprint.common.contentbeans.CMTheme;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.layout.Container;
+import com.coremedia.blueprint.common.layout.DynamicContainerStrategy;
+import com.coremedia.blueprint.common.layout.DynamizableCMTeasableContainer;
 import com.coremedia.blueprint.common.layout.PageGrid;
 import com.coremedia.blueprint.common.layout.PageGridPlacement;
-import com.coremedia.blueprint.common.navigation.HasViewTypeName;
+import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.blueprint.common.util.ContainerFlattener;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.transform.TransformImageService;
 import com.coremedia.cap.transform.Transformation;
+import com.coremedia.common.util.WordAbbreviator;
 import com.coremedia.image.ImageDimensionsExtractor;
 import com.coremedia.mimetype.MimeTypeService;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
+import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.taglib.MetadataTagSupport;
-import com.coremedia.common.util.WordAbbreviator;
 import com.coremedia.xml.Markup;
 import com.coremedia.xml.MarkupUtil;
-import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import org.apache.commons.lang3.StringUtils;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.PropertyAccessor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.activation.MimeType;
-import javax.annotation.Nonnull;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -73,12 +79,6 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
 
   public static final String DEFAULT_DIRECTION = "ltr";
   public static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
-  /**
-   * @deprecated Use {@link #DEFAULT_LOCALE} and {@code getLanguage()} instead.
-   */
-  @SuppressWarnings("unused")
-  @Deprecated
-  public static final String DEFAULT_LANGUAGE = DEFAULT_LOCALE.getLanguage();
 
   private static final int DISPLAYABLE_IMAGE_MAX_SIZE = 10485760; // 10 MB
   private static final int DISPLAYABLE_VIDEO_MAX_SIZE = 1073741824; // 1 GB
@@ -92,7 +92,6 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
 
   static final String HAS_ITEMS = "hasItems";
   static final String PLACEMENT_NAME = "placementName";
-  private static final String STORE_REF = "storeRef";
   static final String IS_IN_LAYOUT = "isInLayout";
 
   private ContentBeanFactory contentBeanFactory;
@@ -103,6 +102,9 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
   private TransformImageService transformImageService;
   private WordAbbreviator abbreviator;
   private MimeTypeService mimeTypeService;
+  private ThemeService themeService;
+  private ContextHelper contextHelper;
+  private DynamicContainerStrategy dynamicContainerStrategy;
 
   private final ViewHookEventNamesFreemarker viewHookEventNames = new ViewHookEventNamesFreemarker();
 
@@ -148,6 +150,21 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
     this.themeResourceLinkBuilder = themeResourceLinkBuilder;
   }
 
+  @Autowired
+  public void setThemeService(ThemeService themeService) {
+    this.themeService = themeService;
+  }
+
+  @Autowired
+  public void setContextHelper(ContextHelper contextHelper) {
+    this.contextHelper = contextHelper;
+  }
+
+  @Autowired(required = false)
+  public void setDynamicContainerStrategy(DynamicContainerStrategy dynamicContainerStrategy) {
+    this.dynamicContainerStrategy = dynamicContainerStrategy;
+  }
+
   // --- functionality -------------------------------------------------------------------------------------------------
 
   public ContentBean createBeanFor(Content content) {
@@ -167,7 +184,19 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
   }
 
   public Object setting(Object self, String key, Object defaultValue) {
-    return SettingsFunction.setting(settingsService, self, key, defaultValue);
+    return setting(self, key, defaultValue, null);
+  }
+
+  public Object setting(Object self, String key, Object defaultValue, Page defaultPage) {
+    CMNavigation context = retrieveContextFor(self);
+    CMTheme theme = null;
+    if (context == null && defaultPage != null) {
+      context = defaultPage.getContext();
+    }
+    if (context != null) {
+      theme = findThemeFor(context);
+    }
+    return settingsService.settingWithDefault(key, Object.class, defaultValue, self, context, theme);
   }
 
   public Boolean isActiveNavigation(Object navigation, List<Object> navigationPathList) {
@@ -340,7 +369,7 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
                                              FreemarkerEnvironment.getCurrentResponse());
   }
 
-  public CMContext getPageContext(Page page) throws IOException {
+  public CMContext getPageContext(Page page) {
     return page.getContext();
   }
 
@@ -396,6 +425,34 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
    */
   public Container getContainer(Container baseContainer, List<Object> items) {
     return new ContainerWithViewTypeName(baseContainer, items);
+  }
+
+  /**
+   * Utility function to allow rendering of a dynamizable container.
+   * Such container must be persistent. That means the container can be recreated and the items list
+   * can be reestablished.
+   *
+   * @param object the object that can be used to call the getter
+   * @param propertyPath the propertyPath for retrieving the container's items. Must adhere to the contract of {@link PropertyAccessor#getPropertyValue(java.lang.String)}
+   * @return a new container
+   * @see PropertyAccessor#getPropertyValue(java.lang.String)
+   */
+  public Container getDynamizableContainer(@NonNull Object object, @NonNull String propertyPath) {
+    if (!(object instanceof CMTeasable)) {
+      throw new IllegalArgumentException("Only CMTeasable type supported");
+    }
+
+    return getDynamizableContainer((CMTeasable) object, propertyPath);
+  }
+
+  @NonNull
+  private Container getDynamizableContainer(@NonNull CMTeasable teasable, @NonNull String propertyPath) {
+    return new DynamizableCMTeasableContainer(teasable, propertyPath) {
+      @Override
+      public boolean isDynamic() {
+        return dynamicContainerStrategy != null && dynamicContainerStrategy.isEnabled(teasable) && dynamicContainerStrategy.isDynamic(getItems());
+      }
+    };
   }
 
   public boolean isWebflowRequest() {
@@ -482,8 +539,6 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
       } else if (text instanceof String) {
         toTruncate = (String) text;
       } else {
-        // should not happen
-        LOG.error("Could not abbreviate text since it's type was not supported: {} instead of Markup or String. Input was: {}" + text.getClass().getName(), text);
         throw new UnsupportedOperationException("Cannot abbreviate value " + text + " of Type" + text.getClass().getName());
       }
     }
@@ -585,7 +640,7 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
     return getLocale(object).toLanguageTag();
   }
 
-  @Nonnull
+  @NonNull
   private static Locale getLocale(Object object) {
     Locale locale = DEFAULT_LOCALE;
     if (object instanceof AbstractPage) {
@@ -621,8 +676,8 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
    * @return a map containing informations for placement highlighting
    * @throws IOException
    */
-  @Nonnull
-  public Map<String, Object> getPlacementHighlightingMetaData(@Nonnull Object placementObject) throws IOException {
+  @NonNull
+  public Map<String, Object> getPlacementHighlightingMetaData(@NonNull Object placementObject) throws IOException {
     if (placementObject instanceof ContainerWithViewTypeName) {
       return getPlacementHighlightingMetaData(((ContainerWithViewTypeName) placementObject).getBaseContainer());
     }
@@ -651,7 +706,7 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
     builder.put(PLACEMENT_NAME, placementName);
     metaDataList.add(builder.build());
 
-    return Collections.<String, Object>singletonMap("placementRequest", metaDataList);
+    return Collections.singletonMap("placementRequest", metaDataList);
   }
 
   private static PageGridPlacement asPageGridPlacement(Object object) {
@@ -674,90 +729,25 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
 
   //====================================================================================================================
 
-  private static class RelatedByTypePredicate implements Predicate<String> {
-
-    private List<String> types;
-
-    public RelatedByTypePredicate(List<String> types) {
-      this.types = types;
+  private CMTheme findThemeFor(CMNavigation self) {
+    CMTheme result = null;
+    Content themeOrNull = themeService.theme(self.getContent(), UserVariantHelper.getUser(FreemarkerEnvironment.getCurrentRequest()));
+    if (themeOrNull != null) {
+      result = (CMTheme) contentBeanFactory.createBeanFor(themeOrNull);
     }
-
-    @Override
-    public boolean apply(String type) {
-      return types.contains(type);
-    }
+    return result;
   }
 
-  /**
-   * Represents custom container having elements and a viewtype name based on the given base container.
-   */
-  private class ContainerWithViewTypeName implements Container<Object>, HasViewTypeName {
-
-    private Container baseContainer;
-    private List<Object> items;
-
-    public ContainerWithViewTypeName(Container baseContainer, List<Object> items) {
-      this.baseContainer = baseContainer;
-      this.items = items;
+  private CMNavigation retrieveContextFor(Object self) {
+    CMNavigation context = null;
+    if (self instanceof Page) {
+      context = ((Page) self).getContext();
+    } else if (self instanceof CMNavigation) {
+      context = (CMNavigation) self;
+    } else if (self instanceof CMLinkable) {
+      context = contextHelper.contextFor((CMLinkable) self);
     }
-
-    public Container getBaseContainer() {
-      return baseContainer;
-    }
-
-    @Override
-    public String getViewTypeName() {
-      if (baseContainer instanceof HasViewTypeName) {
-        return ((HasViewTypeName) baseContainer).getViewTypeName();
-      }
-      return null;
-    }
-
-    @Override
-    public List<Object> getItems() {
-      return items;
-    }
-
-    @Override
-    public List<Object> getFlattenedItems() {
-      return ContainerFlattener.flatten(this, Object.class);
-    }
+    return context;
   }
 
-  /**
-   * Combines the information about the transformation with the given "name" in a simple bean that can be easily
-   * serialized into a JSON object. This resulting JSON object is processed by the JavaScript that handles the
-   * responsive image handling (see "jquery.coremedia.responsiveimages.js").
-   * Consequently every change to this data structure is likely to require changes to the JavaScript.
-   */
-  private static final class TransformationLinks {
-    private String name = StringUtils.EMPTY;
-    private Integer ratioWidth = 1;
-    private Integer ratioHeight = 1;
-    private Map<Integer, String> linksForWidth = Collections.emptyMap();
-
-    public TransformationLinks(String name, Integer ratioWidth, Integer ratioHeight, Map<Integer, String> linksForWidth) {
-      this.name = name;
-      this.ratioWidth = ratioWidth;
-      this.ratioHeight = ratioHeight;
-      this.linksForWidth = linksForWidth;
-    }
-
-    public String getName() {
-      return name;
-    }
-
-    public Integer getRatioWidth() {
-      return ratioWidth;
-    }
-
-    public Integer getRatioHeight() {
-      return ratioHeight;
-    }
-
-    public Map<Integer, String> getLinksForWidth() {
-      return linksForWidth;
-    }
-
-  }
 }

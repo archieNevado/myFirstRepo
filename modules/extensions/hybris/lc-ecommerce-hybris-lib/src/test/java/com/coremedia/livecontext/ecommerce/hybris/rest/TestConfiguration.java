@@ -29,7 +29,7 @@ public class TestConfiguration {
   @Profile("oauthconnector")
   public OAuthConnector oAuthConnector() {
     OAuthConnector connector = new OAuthConnector();
-    connector.setHttpClient(HttpClientFactory.createHttpClient(true, true, 10, -1, -1, -1));
+    connector.setHttpClient(HttpClientFactory.createHttpClient(true, true, 10, -1, -1, -1, -1));
     return connector;
   }
 }

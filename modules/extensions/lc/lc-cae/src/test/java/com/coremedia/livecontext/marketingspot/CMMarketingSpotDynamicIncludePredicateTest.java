@@ -5,6 +5,9 @@ import com.coremedia.livecontext.contentbeans.CMMarketingSpot;
 import com.coremedia.objectserver.view.RenderNode;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -18,6 +21,7 @@ public class CMMarketingSpotDynamicIncludePredicateTest {
   @Before
   public void setUp() throws Exception {
     testling = new CMMarketingSpotDynamicIncludePredicate();
+    RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(new MockHttpServletRequest()));
   }
 
   @Test

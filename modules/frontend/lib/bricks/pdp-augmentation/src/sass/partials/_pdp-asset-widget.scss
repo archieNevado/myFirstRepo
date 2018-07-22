@@ -18,14 +18,18 @@
       background-color: #CA4200;
     }
 
+    .cm-uncropped-catalog-picture {
+      object-fit: contain;
+    }
+
     .cm-teasable {
       cursor: pointer;
       &__picture-box {
         @include aspect-ratio-box(1, 1);
       }
-      a {
-        // disable any inner links or other functionality, otherwise the slideshow will not work
-        pointer-events: none;
+      // hide the teaser caption as there is not enough space for this
+      &__caption {
+        display: none;
       }
     }
   }
@@ -35,31 +39,23 @@
   &__picture-box {
     @include aspect-ratio-box(1, 1);
   }
-  &__picture, &__video {
+  &__picture, &__video, &__audio {
     @include stretch-absolute()
-  }
-
-  // fix CMS-10614
-  .cm-non-adaptive-content {
-    margin-top: 0 !important;
-    width: 100%;
   }
 }
 
 .cm-lightbox {
   &--portrait {
-    .cm-product-assets {
-      &__picture-box {
-        @include aspect-ratio-box(3, 4);
-      }
+    .#{$cm-spinner-prefix}__canvas,
+    .cm-product-assets__picture-box {
+      @include aspect-ratio-box(3, 4);
     }
   }
 
   &--landscape {
-    .cm-product-assets {
-      &__picture-box {
-        @include aspect-ratio-box(4, 3);
-      }
+    .#{$cm-spinner-prefix}__canvas,
+    .cm-product-assets__picture-box {
+      @include aspect-ratio-box(4, 3);
     }
   }
 }

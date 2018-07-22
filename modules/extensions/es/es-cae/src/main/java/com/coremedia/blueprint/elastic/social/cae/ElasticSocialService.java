@@ -1,9 +1,9 @@
 package com.coremedia.blueprint.elastic.social.cae;
 
-import com.coremedia.blueprint.common.contentbeans.CMNavigation;
-import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.base.elastic.common.CategoryExtractor;
 import com.coremedia.blueprint.base.elastic.social.common.ContributionTargetHelper;
+import com.coremedia.blueprint.common.contentbeans.CMNavigation;
+import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.elastic.core.api.blobs.Blob;
@@ -29,8 +29,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.ArrayList;
@@ -100,8 +100,8 @@ public class ElasticSocialService {
    * @param author the {@link CommunityUser} of unapproved {@link Comment}s to include in the result
    * @return a list of online {@link Comment}s and those waiting for approval written by the given {@link CommunityUser}
    */
-  @Nonnull
-  public List<Comment> getOnlineOrOwnComments(@Nonnull Object target, @Nullable CommunityUser author) {
+  @NonNull
+  public List<Comment> getOnlineOrOwnComments(@NonNull Object target, @Nullable CommunityUser author) {
     Object realTarget = contributionTargetHelper.getTarget(target);
     List<Comment> onlineComments = commentService.getOnlineComments(contributionTargetHelper.getTarget(target), null, ASCENDING, COMMENT_FETCH_LIMIT);
     if (author != null) {
@@ -114,7 +114,7 @@ public class ElasticSocialService {
     return onlineComments.size() > COMMENT_FETCH_LIMIT ? onlineComments.subList(0, COMMENT_FETCH_LIMIT) : onlineComments;
   }
 
-  public List<Review> getOnlineOrOwnReviews(@Nonnull Object target, @Nullable CommunityUser author) {
+  public List<Review> getOnlineOrOwnReviews(@NonNull Object target, @Nullable CommunityUser author) {
     Object realTarget = contributionTargetHelper.getTarget(target);
 
     List<Review> onlineReviews = reviewService.getOnlineReviews(contributionTargetHelper.getTarget(target), null, ASCENDING, REVIEW_FETCH_LIMIT);
@@ -137,8 +137,8 @@ public class ElasticSocialService {
    * @param commentTarget the target for the comments
    * @return a list of online {@link Comment}s
    */
-  @Nonnull
-  public List<Comment> getNotIgnoredComments(@Nonnull Object commentTarget) {
+  @NonNull
+  public List<Comment> getNotIgnoredComments(@NonNull Object commentTarget) {
     Object target = contributionTargetHelper.getTarget(commentTarget);
     List<Comment> comments = commentService.getCommentsForPreview(target, ASCENDING, COMMENT_FETCH_LIMIT);
     commentService.sortThreadedDiscussion(comments, ASCENDING);
@@ -163,7 +163,7 @@ public class ElasticSocialService {
     return comments;
   }
 
-  public List<Review> getReviews(@Nonnull Object target, CommunityUser user) {
+  public List<Review> getReviews(@NonNull Object target, CommunityUser user) {
     Object realTarget = contributionTargetHelper.getTarget(target);
     List<Review> reviews;
     if (isPreview()) {
@@ -176,7 +176,7 @@ public class ElasticSocialService {
     return reviews;
   }
 
-  public Review getReview(@Nullable CommunityUser user, @Nonnull Object target) {
+  public Review getReview(@Nullable CommunityUser user, @NonNull Object target) {
     if (user == null) {
       return null;
     }
@@ -189,7 +189,8 @@ public class ElasticSocialService {
    * the <tt>target</tt> as the bean the comment relates to and the given <tt>comment</tt> text.
    *
    * @param author           the author of the comment
-   * @param authorName       the anonymous name of the author of the comment
+   * @param authorName       the anonymous name of the author of the comment; might be {@code null}
+   *                         for non-anonymous users
    * @param target           the bean this comment is about
    * @param navigation       the navigation on which the target is shown
    * @param text             the actual content as an XHTML 1.0 fragment (typically a list of {@literal <p>} elements)
@@ -199,8 +200,8 @@ public class ElasticSocialService {
    * @return the newly created {@link Comment}
    */
   public Comment createComment(CommunityUser author,  // NOSONAR Method has too many parameters
-                               String authorName,
-                               @Nonnull Object target,
+                               @Nullable String authorName,
+                               @NonNull Object target,
                                Navigation navigation,
                                String text,
                                ModerationType moderationType,
@@ -235,7 +236,7 @@ public class ElasticSocialService {
    * @throws DuplicateReviewException if the given user has already written a review
    */
   public Review createReview(CommunityUser author,
-                             @Nonnull Object target,
+                             @NonNull Object target,
                              String text,
                              String title,
                              int rating,
@@ -264,7 +265,7 @@ public class ElasticSocialService {
   }
 
   private Comment createComment(CommunityUser author,
-                                String authorName,
+                                @Nullable String authorName,
                                 String text,
                                 Object target,
                                 Object realTarget,
@@ -286,7 +287,7 @@ public class ElasticSocialService {
     }
   }
 
-  private Locale getLocale(@Nonnull Object target) {
+  private Locale getLocale(@NonNull Object target) {
     Site siteForPage = contributionTargetHelper.getSite(target);
     return siteForPage == null ? Locale.ROOT : siteForPage.getLocale();
   }
@@ -302,7 +303,7 @@ public class ElasticSocialService {
    * @param target the target
    * @return the average value over all user ratings issued the given target
    */
-  public double getAverageRating(@Nonnull Object target) {
+  public double getAverageRating(@NonNull Object target) {
     return ratingService.getAverageRating(contributionTargetHelper.getTarget(target));
   }
 
@@ -312,7 +313,7 @@ public class ElasticSocialService {
    * @param target the target
    * @return the average value over all user ratings issued the given target
    */
-  public double getAverageReviewRating(@Nonnull Object target) {
+  public double getAverageReviewRating(@NonNull Object target) {
     return reviewService.getAverageRating(contributionTargetHelper.getTarget(target));
   }
 
@@ -323,7 +324,7 @@ public class ElasticSocialService {
    * @param target the rated {@link com.coremedia.blueprint.common.contentbeans.CMTeasable}
    * @return the rating state
    */
-  public int getRating(CommunityUser user, @Nonnull Object target) {
+  public int getRating(CommunityUser user, @NonNull Object target) {
     Rating rating = ratingService.getRatingForUser(user, contributionTargetHelper.getTarget(target));
     return rating != null ? rating.getValue() : 0;
   }
@@ -334,7 +335,7 @@ public class ElasticSocialService {
    * @param target the target bean
    * @return the number of ratings issued for the given bean by all users
    */
-  public long getNumberOfRatings(@Nonnull Object target) {
+  public long getNumberOfRatings(@NonNull Object target) {
     return ratingService.getNumberOfRatings(contributionTargetHelper.getTarget(target));
   }
 
@@ -344,11 +345,11 @@ public class ElasticSocialService {
    * @param target the target bean
    * @return the number of online comments issued for the given bean by all users
    */
-  public long getNumberOfComments(@Nonnull Object target) {
+  public long getNumberOfComments(@NonNull Object target) {
     return commentService.getNumberOfComments(contributionTargetHelper.getTarget(target));
   }
 
-  public long getNumberOfReviews(@Nonnull Object target) {
+  public long getNumberOfReviews(@NonNull Object target) {
     return reviewService.getNumberOfReviews(contributionTargetHelper.getTarget(target));
   }
 
@@ -361,7 +362,7 @@ public class ElasticSocialService {
    * @param rating     the rating value
    * @return true if the rating was created, false otherwise
    */
-  public boolean updateRating(CommunityUser author, @Nonnull Object target, CMNavigation navigation, int rating) {
+  public boolean updateRating(CommunityUser author, @NonNull Object target, CMNavigation navigation, int rating) {
     Object realTarget = contributionTargetHelper.getTarget(target);
     return ratingService.updateRating(author, realTarget, getCategories(realTarget, navigation.getContent()), rating);
   }
@@ -372,7 +373,7 @@ public class ElasticSocialService {
    * @param target the target bean
    * @return the number of likes issued for the given target by all users
    */
-  public long getNumberOfLikes(@Nonnull Object target) {
+  public long getNumberOfLikes(@NonNull Object target) {
     return likeService.getNumberOfLikes(contributionTargetHelper.getTarget(target));
   }
 
@@ -383,7 +384,7 @@ public class ElasticSocialService {
    * @param target the liked target bean
    * @return true, if the {@link CommunityUser} likes the target bean
    */
-  public boolean hasLiked(@Nullable CommunityUser author, @Nonnull Object target) {
+  public boolean hasLiked(@Nullable CommunityUser author, @NonNull Object target) {
     if (author == null) {
       return false;
     }
@@ -401,7 +402,7 @@ public class ElasticSocialService {
    * @param like       true, if the given {@link CommunityUser} likes the given target
    * @return true if the like was created, false otherwise
    */
-  public boolean updateLike(@Nonnull CommunityUser author, @Nonnull Object target, CMNavigation navigation, boolean like) {
+  public boolean updateLike(@NonNull CommunityUser author, @NonNull Object target, CMNavigation navigation, boolean like) {
     try {
       Object realTarget = contributionTargetHelper.getTarget(target);
       return likeService.updateLike(author, realTarget, getCategories(realTarget, navigation.getContent()), like);
@@ -435,7 +436,7 @@ public class ElasticSocialService {
    * @param target the target of the complaint
    * @return true, if the {@link CommunityUser} complained about the {@link Comment}
    */
-  public boolean hasComplaint(CommunityUser author, @Nonnull Object target) {
+  public boolean hasComplaint(CommunityUser author, @NonNull Object target) {
     if (target instanceof Model) {
       Model model = (Model) target;
       return hasComplaint(author, model.getId(), model.getCollection());

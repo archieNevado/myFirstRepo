@@ -3,6 +3,7 @@ package com.coremedia.lc.studio.lib.validators;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
@@ -16,11 +17,13 @@ import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.ecommerce.workspace.Workspace;
+import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceService;
 import com.coremedia.rest.cap.validation.CapTypeValidator;
 import com.coremedia.rest.cap.validation.impl.ApplicationContextCapTypeValidators;
 import com.coremedia.rest.validation.impl.Issue;
 import com.coremedia.rest.validation.impl.IssuesImpl;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.hamcrest.CustomTypeSafeMatcher;
 import org.hamcrest.MatcherAssert;
 import org.junit.After;
@@ -41,13 +44,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.Properties;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptySet;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
@@ -63,8 +64,9 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public class LcStudioValidatorsXmlRepoTest {
 
   private static final String PROPERTY_NAME = "externalId";
-  private static final String WORKSPACE_1 = "workspace1";
-  private static final String WORKSPACE_2 = "workspace2";
+
+  private static final WorkspaceId WORKSPACE_1 = WorkspaceId.of("workspace1");
+  private static final WorkspaceId WORKSPACE_2 = WorkspaceId.of("workspace2");
 
   @Inject
   private ContentRepository contentRepository;
@@ -115,11 +117,10 @@ public class LcStudioValidatorsXmlRepoTest {
 
     commerceConnection = new BaseCommerceConnection();
 
-    StoreContext storeContext = newStoreContext();
-    storeContext.put(StoreContextImpl.SITE, siteId);
+    StoreContextImpl storeContext = (StoreContextImpl) StoreContextImpl.builder(siteId).build();
     commerceConnection.setStoreContext(storeContext);
 
-    when(storeContextProvider.cloneContext(any())).thenReturn(storeContext.getClone());
+    when(storeContextProvider.buildContext(any())).thenReturn(StoreContextBuilderImpl.from(storeContext));
 
     commerceConnection.setCommerceBeanFactory(commerceBeanFactory);
     commerceConnection.setStoreContextProvider(storeContextProvider);
@@ -249,10 +250,10 @@ public class LcStudioValidatorsXmlRepoTest {
 
     Workspace workspace1 = mock(Workspace.class);
     Workspace workspace2 = mock(Workspace.class);
-    when(workspace1.getName()).thenReturn(WORKSPACE_1);
-    when(workspace1.getExternalTechId()).thenReturn(WORKSPACE_1);
-    when(workspace2.getName()).thenReturn(WORKSPACE_2);
-    when(workspace2.getExternalTechId()).thenReturn(WORKSPACE_2);
+    when(workspace1.getName()).thenReturn(WORKSPACE_1.value());
+    when(workspace1.getExternalTechId()).thenReturn(WORKSPACE_1.value());
+    when(workspace2.getName()).thenReturn(WORKSPACE_2.value());
+    when(workspace2.getExternalTechId()).thenReturn(WORKSPACE_2.value());
     when(commerceConnection.getWorkspaceService().findAllWorkspaces(any(StoreContext.class))).thenReturn(asList(workspace1, workspace2));
 
     StoreContext storeContext = commerceConnection.getStoreContext();
@@ -262,7 +263,8 @@ public class LcStudioValidatorsXmlRepoTest {
 
     when(commerceConnection.getCommerceBeanFactory().loadBeanFor(any(), any(StoreContext.class)))
             .then((Answer<CommerceBean>) invocationOnMock -> {
-              if (WORKSPACE_1.equals(((StoreContext) invocationOnMock.getArguments()[1]).getWorkspaceId())) {
+              StoreContext context = (StoreContext) invocationOnMock.getArguments()[1];
+              if (WORKSPACE_1.equals(context.getWorkspaceId().orElse(null))) {
                 return mock(CommerceBean.class);
               }
 

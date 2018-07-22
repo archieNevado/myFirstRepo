@@ -11,7 +11,7 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.rest.linking.RemoteBeanLink;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -171,7 +171,7 @@ public class StoreRepresentation extends AbstractCatalogRepresentation {
     return rootCategory;
   }
 
-  @Nonnull
+  @NonNull
   public List<Catalog> getCatalogs() {
     return (catalogs != null) ? catalogs : emptyList();
   }

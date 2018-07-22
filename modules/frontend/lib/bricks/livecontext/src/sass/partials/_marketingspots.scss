@@ -4,9 +4,22 @@
   text-align: center;
   color: #ffffff;
 
+  > .row {
+    display: flex;
+    flex-direction: column;
+  }
+
+  @include breakpoint(sm-and-up) {
+    > .row {
+      flex-direction: row;
+    }
+  }
+
   .cm-teasable {
     display: inline-block;
     width: 100%;
+    height: 100%;
+    border: none;
     background-color: #80A3BF;
     color: #ffffff;
     font-size: 1.1rem;

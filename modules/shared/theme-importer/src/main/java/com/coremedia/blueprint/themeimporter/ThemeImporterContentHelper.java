@@ -14,7 +14,7 @@ import com.google.common.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -233,7 +233,7 @@ class ThemeImporterContentHelper {
     }
   }
 
-  private static String normalize(@Nonnull String folder) {
+  private static String normalize(@NonNull String folder) {
     return folder.endsWith("/") ? folder : folder + "/";
   }
 

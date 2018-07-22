@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
@@ -62,7 +62,7 @@ public class CommerceCacheInvalidationSource extends SimpleInvalidationSource im
   }
 
   @Override
-  public void invalidate(@Nonnull List<InvalidationEvent> invalidations) {
+  public void invalidate(@NonNull List<InvalidationEvent> invalidations) {
     Optional<InvalidationEvent> clearAll = invalidations.stream()
             .filter(e -> InvalidationEvent.CLEAR_ALL_EVENT.equals(e.getContentType()))
             .findFirst();
@@ -81,16 +81,16 @@ public class CommerceCacheInvalidationSource extends SimpleInvalidationSource im
     addInvalidations(toBeInvalidated);
   }
 
-  @Nonnull
-  private Stream<String> addUriToInvalidate(@Nonnull InvalidationEvent invalidation) {
+  @NonNull
+  private Stream<String> addUriToInvalidate(@NonNull InvalidationEvent invalidation) {
     Optional<String> contentType = Optional.ofNullable(invalidation.getContentType());
     return contentType.flatMap(InvalidationEventTypeMapping::get)
             .map(this::link)
             .orElse(empty());
   }
 
-  @Nonnull
-  private Stream<String> link(@Nonnull Class<? extends CommerceBean> aClass) {
+  @NonNull
+  private Stream<String> link(@NonNull Class<? extends CommerceBean> aClass) {
     String entityLink = createLink(aClass);
 
     if (MarketingSpot.class.equals(aClass)) {
@@ -103,19 +103,19 @@ public class CommerceCacheInvalidationSource extends SimpleInvalidationSource im
     return of(entityLink);
   }
 
-  @Nonnull
-  private String createLink(@Nonnull Class<? extends CommerceBean> aClass) {
+  @NonNull
+  private String createLink(@NonNull Class<? extends CommerceBean> aClass) {
     Object commerceBeanProxy = settingsService.createProxy(aClass, CommerceBeanDelegateProvider.get());
     return CommerceBeanDelegateProvider.postProcess(createLink(commerceBeanProxy));
   }
 
-  @Nonnull
-  private String createLink(@Nonnull Object resourceObject) {
+  @NonNull
+  private String createLink(@NonNull Object resourceObject) {
     return urlDecode(linker.link(resourceObject));
   }
 
-  @Nonnull
-  private static String urlDecode(@Nonnull URI commerceBeanUri) {
+  @NonNull
+  private static String urlDecode(@NonNull URI commerceBeanUri) {
     try {
       return URLDecoder.decode(commerceBeanUri.toString(), StandardCharsets.UTF_8.toString());
     } catch (UnsupportedEncodingException e) {
@@ -123,7 +123,7 @@ public class CommerceCacheInvalidationSource extends SimpleInvalidationSource im
     }
   }
 
-  public void invalidateReferences(@Nonnull Collection<String> references) {
+  public void invalidateReferences(@NonNull Collection<String> references) {
     Set<String> changes = references.stream()
             // convert to commerce id and retrieve external id
             .map(this::buildLinkFromReference)
@@ -133,8 +133,8 @@ public class CommerceCacheInvalidationSource extends SimpleInvalidationSource im
     triggerDelayedInvalidation(changes);
   }
 
-  @Nonnull
-  private Optional<String> buildLinkFromReference(@Nonnull String commerceId) {
+  @NonNull
+  private Optional<String> buildLinkFromReference(@NonNull String commerceId) {
     return parseCommerceId(commerceId).flatMap(this::toCommerceBeanUri);
   }
 
@@ -142,8 +142,8 @@ public class CommerceCacheInvalidationSource extends SimpleInvalidationSource im
    * Creates the entity resource URI with matching ID if commerce id contains a part number (external id). Otherwise,
    * all entities of the commerce id's bean type are invalidated.
    */
-  @Nonnull
-  public Optional<String> toCommerceBeanUri(@Nonnull CommerceId commerceId) {
+  @NonNull
+  public Optional<String> toCommerceBeanUri(@NonNull CommerceId commerceId) {
     String commerceBeanTypeString = commerceId.getCommerceBeanType().type();
     Optional<Class<? extends CommerceBean>> beanTypeOptional = InvalidationEventTypeMapping.get(commerceBeanTypeString);
     return beanTypeOptional
@@ -156,7 +156,7 @@ public class CommerceCacheInvalidationSource extends SimpleInvalidationSource im
    * Example: The computation of the catalog picture by the cae might not has been finished, when the invalidation is triggered.
    * Studio might show an outdated product picture.
    */
-  private void triggerDelayedInvalidation(@Nonnull final Set<String> invalidations) {
+  private void triggerDelayedInvalidation(@NonNull final Set<String> invalidations) {
     if (invalidations.isEmpty()) {
       // Do not schedule a task if there is nothing to invalidate.
       return;

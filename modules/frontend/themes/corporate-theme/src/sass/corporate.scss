@@ -11,7 +11,7 @@
 @import "variables/variables";
 @import "variables/detail";
 @import "variables/grid";
-@import "variables/images";
+@import "variables/media";
 @import "variables/hero";
 @import "variables/elastic-social";
 @import "variables/quickinfo";
@@ -37,7 +37,7 @@
 @import "partials/container";
 @import "partials/cta"; // load before buttons, so button classes can be used to override colors in content...
 @import "partials/buttons";
-@import "partials/images";
+@import "partials/media";
 @import "partials/fonts";
 @import "partials/header";
 @import "partials/logo";

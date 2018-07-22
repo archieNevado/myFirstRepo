@@ -9,8 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -67,10 +67,10 @@ public abstract class TaxonomyPropertyConverter implements PropertyConverter, In
   }
 
   @Nullable
-  protected abstract String convertNamedTaxonomy(@Nonnull NamedTaxonomy namedTaxonomy);
+  protected abstract String convertNamedTaxonomy(@NonNull NamedTaxonomy namedTaxonomy);
 
   @Nullable
-  protected abstract String convertTaxonomy(@Nonnull CMTaxonomy taxonomy);
+  protected abstract String convertTaxonomy(@NonNull CMTaxonomy taxonomy);
 
   @Override
   public Class<?> convertType(Class<?> type) {

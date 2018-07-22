@@ -7,6 +7,7 @@ import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.hybris.cache.CategoryCacheKey;
 import com.coremedia.livecontext.ecommerce.hybris.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.CategoryDocument;
@@ -15,8 +16,8 @@ import com.coremedia.livecontext.ecommerce.hybris.rest.documents.MediaDocument;
 import com.coremedia.xml.Markup;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -69,9 +70,10 @@ public class CategoryImpl extends AbstractHybrisCommerceBean implements Category
     List<Content> pictures = getPictures();
 
     if (!pictures.isEmpty()) {
+      StoreContext storeContext = StoreContextHelper.getCurrentContextOrThrow();
       return getAssetUrlProvider().getImageUrl("/catalogimage/category/" +
-              StoreContextHelper.getStoreId() + "/" +
-              StoreContextHelper.getLocale() + "/thumbnail/" + getExternalId() + ".jpg");
+              StoreContextHelper.getStoreId(storeContext) + "/" +
+              StoreContextHelper.getLocale(storeContext) + "/thumbnail/" + getExternalId() + ".jpg");
     }
 
     MediaDocument doc = getDelegate().getThumbnail();
@@ -83,16 +85,17 @@ public class CategoryImpl extends AbstractHybrisCommerceBean implements Category
     List<Content> pictures = getPictures();
 
     if (!pictures.isEmpty()) {
+      StoreContext storeContext = StoreContextHelper.getCurrentContextOrThrow();
       return getAssetUrlProvider().getImageUrl("/catalogimage/category/" +
-              StoreContextHelper.getStoreId() + "/" +
-              StoreContextHelper.getLocale() + "/full/" + getExternalId() + ".jpg");
+              StoreContextHelper.getStoreId(storeContext) + "/" +
+              StoreContextHelper.getLocale(storeContext) + "/full/" + getExternalId() + ".jpg");
     }
 
     MediaDocument doc = getDelegate().getPicture();
     return doc != null ? getAssetUrlProvider().getImageUrl(doc.getDownloadUrl()) : null;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<Category> getChildren() {
     if (children == null) {
@@ -118,7 +121,7 @@ public class CategoryImpl extends AbstractHybrisCommerceBean implements Category
     return children;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<Product> getProducts() {
     if (products == null) {
@@ -146,7 +149,7 @@ public class CategoryImpl extends AbstractHybrisCommerceBean implements Category
     return catalogService.findCategoryById(commerceId, getContext());
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<Category> getBreadcrumb() {
     List<Category> result = new ArrayList<>();
@@ -184,7 +187,7 @@ public class CategoryImpl extends AbstractHybrisCommerceBean implements Category
     return getName();
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public String getDisplayName() {
     return getName();
@@ -202,7 +205,7 @@ public class CategoryImpl extends AbstractHybrisCommerceBean implements Category
     return null;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<Content> getPictures() {
     return findAssetService()
@@ -210,13 +213,13 @@ public class CategoryImpl extends AbstractHybrisCommerceBean implements Category
             .orElseGet(Collections::emptyList);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<Content> getVisuals() {
     return Collections.emptyList();
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<Content> getDownloads() {
     return Collections.emptyList();
@@ -227,7 +230,7 @@ public class CategoryImpl extends AbstractHybrisCommerceBean implements Category
     return isRootCategoryId(getId());
   }
 
-  public static boolean isRootCategoryId(@Nonnull CommerceId id) {
+  public static boolean isRootCategoryId(@NonNull CommerceId id) {
     return id.getExternalId().map(ROOT_CATEGORY_ROLE_ID::equals).orElse(false);
   }
 }

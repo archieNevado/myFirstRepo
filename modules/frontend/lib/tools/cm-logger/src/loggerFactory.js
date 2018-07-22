@@ -47,9 +47,10 @@ const buildPrefix = (level, options) => {
 
 const loggerFactory = options => {
   const opts = Object.assign({}, DEFAULTS, options);
-  opts.level = Object.keys(LEVELS).includes(opts.level.toUpperCase())
-    ? opts.level
-    : DEFAULTS.level;
+  opts.level =
+    opts.level && Object.keys(LEVELS).includes(opts.level.toUpperCase())
+      ? opts.level
+      : DEFAULTS.level;
   const { [opts.level.toUpperCase()]: level } = LEVELS;
 
   const print = (level, args) => {

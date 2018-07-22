@@ -26,7 +26,7 @@ public interface Validator<S> {
    * @param source The objects to be filtered
    * @return the filtered objects or null
    */
-  List<? extends S> filterList(List<? extends S> source);
+  <R extends S> List<R> filterList(List<R> source);
 
   /**
    * @param source A single object to be tested

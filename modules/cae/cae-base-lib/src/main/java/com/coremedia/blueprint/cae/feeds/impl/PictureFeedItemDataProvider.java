@@ -29,9 +29,4 @@ public class PictureFeedItemDataProvider extends TeasableFeedItemDataProvider {
     }
     return textPlain;
   }
-
-  @Override
-  protected List<CMTeasable> getRelatedMediaContents(CMTeasable teasable) {
-    return Collections.singletonList(teasable);
-  }
 }

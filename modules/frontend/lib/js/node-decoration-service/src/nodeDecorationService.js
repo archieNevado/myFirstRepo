@@ -26,7 +26,8 @@ function getDataFunction(baseConfig, identifier, handler) {
     const selector = "[data-" + identifier + "]";
     findAndSelf($target, selector).each(function() {
       const $this = $(this);
-      const config = $.extend({}, baseConfig, $this.data(identifier));
+      const data = $this.data(identifier);
+      const config = baseConfig ? $.extend({}, baseConfig, data) : data;
       const state = $.extend({}, $this.data(identifier + "-state"));
       handler($this, config, state);
       if (!$.isEmptyObject(state)) {

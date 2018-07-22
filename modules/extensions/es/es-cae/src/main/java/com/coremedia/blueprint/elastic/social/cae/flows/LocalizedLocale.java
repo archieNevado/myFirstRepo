@@ -2,7 +2,7 @@ package com.coremedia.blueprint.elastic.social.cae.flows;
 
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.Serializable;
 import java.util.Locale;
 
@@ -67,7 +67,7 @@ public class LocalizedLocale implements Serializable {
     return locale;
   }
 
-  private static void appendNonBlank(@Nonnull StringBuilder builder, @Nonnull String... values) {
+  private static void appendNonBlank(@NonNull StringBuilder builder, @NonNull String... values) {
     for (String value: values) {
       if (StringUtils.isNotBlank(value)) {
         builder.append("_").append(value);

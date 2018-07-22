@@ -4,8 +4,8 @@ import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -17,16 +17,16 @@ import static java.util.Objects.requireNonNull;
  */
 public class NamedTaxonomy {
 
-  @Nonnull
+  @NonNull
   private final Content content;
   private final String name;
 
-  public NamedTaxonomy(@Nonnull Content content) {
+  public NamedTaxonomy(@NonNull Content content) {
     this.content = requireNonNull(content);
     this.name = content.getString(CMTaxonomy.VALUE);
   }
 
-  @Nonnull
+  @NonNull
   public Content getContent() {
     return content;
   }

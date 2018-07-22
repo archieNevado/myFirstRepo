@@ -24,6 +24,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper.parseCommerceIdOrThrow;
@@ -72,7 +73,7 @@ public class AssetResolvingStrategyImplTest {
   @Before
   public void setUp() throws Exception {
     storeContext = newStoreContext();
-    when(storeContextProvider.findContextBySite(any())).thenReturn(storeContext);
+    when(storeContextProvider.findContextBySite(any())).thenReturn(Optional.of(storeContext));
 
     commerceConnection = new BaseCommerceConnection();
     commerceConnection.setStoreContextProvider(storeContextProvider);

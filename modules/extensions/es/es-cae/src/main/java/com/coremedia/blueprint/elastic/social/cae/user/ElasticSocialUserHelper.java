@@ -11,8 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -31,7 +31,7 @@ public class ElasticSocialUserHelper {
     this.communityUserService = communityUserService;
   }
 
-  @Nonnull
+  @NonNull
   public CommunityUser getCurrentOrAnonymousUser() {
     CommunityUser user = getCurrentUser();
     if (null == user) {
@@ -40,7 +40,7 @@ public class ElasticSocialUserHelper {
     return user;
   }
 
-  @Nonnull
+  @NonNull
   public CommunityUser getAnonymousUser() {
     CommunityUser user;
     final String userId = userIdOrNull();
@@ -79,7 +79,7 @@ public class ElasticSocialUserHelper {
   }
 
   @SuppressWarnings("PersonalData") // safe use of personal data: user name compared with constant
-  private static boolean isAnonymousUser(@Nonnull Authentication authentication) {
+  private static boolean isAnonymousUser(@NonNull Authentication authentication) {
     return "anonymousUser".equals(authentication.getName());
   }
 

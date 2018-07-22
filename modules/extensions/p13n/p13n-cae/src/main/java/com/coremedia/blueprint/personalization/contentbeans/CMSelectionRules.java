@@ -3,6 +3,7 @@ package com.coremedia.blueprint.personalization.contentbeans;
 import com.coremedia.blueprint.common.contentbeans.CMDynamicList;
 
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
+import com.coremedia.blueprint.common.util.Flatless;
 import com.coremedia.xml.Markup;
 
 import java.util.List;

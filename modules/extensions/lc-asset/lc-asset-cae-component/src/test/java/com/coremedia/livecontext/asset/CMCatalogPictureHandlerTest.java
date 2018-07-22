@@ -16,6 +16,7 @@ import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.HttpError;
 import com.coremedia.transform.TransformedBlob;
+import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,19 +26,14 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService.DEFAULT_CATALOG_ALIAS;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static com.google.common.collect.Lists.newArrayList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -47,36 +43,46 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CMCatalogPictureHandlerTest {
+
   @InjectMocks
   private ProductCatalogPictureHandler testling = new ProductCatalogPictureHandler();
 
   @Mock
   private LiveContextSiteResolver siteResolver;
+
   @Mock
   private Site site;
+
   @Mock
   private ContentBeanFactory contentBeanFactory;
+
   @Mock
   private AssetService assetService;
+
   @Mock
   private TransformImageService transformImageService;
+
   @Mock
   private CMPicture picture;
+
   @Mock
   private Content pictureContent;
+
   @Mock
   private TransformedBlob blob;
+
   @Mock
   private CatalogAliasTranslationService catalogAliasTranslationService;
 
-  private static final CommerceId PRODUCT_REFERENCE = CommerceIdParserHelper.parseCommerceIdOrThrow("vendor:///catalog/product/PC_SUMMER_DRESS");
-
+  private static final CommerceId PRODUCT_REFERENCE = CommerceIdParserHelper
+          .parseCommerceIdOrThrow("vendor:///catalog/product/PC_SUMMER_DRESS");
 
   @Before
   public void setUp() throws Exception {
-    Map<String, String> pictureFormats = new HashMap<>();
-    pictureFormats.put("thumbnail", "portrait_ratio20x31/200/310");
-    pictureFormats.put("full", "portrait_ratio20x31/646/1000");
+    Map<String, String> pictureFormats = ImmutableMap.<String, String>builder()
+            .put("thumbnail", "portrait_ratio20x31/200/310")
+            .put("full", "portrait_ratio20x31/646/1000")
+            .build();
     testling.setPictureFormats(pictureFormats);
 
     when(contentBeanFactory.createBeanFor(pictureContent, CMPicture.class)).thenReturn(picture);
@@ -87,7 +93,6 @@ public class CMCatalogPictureHandlerTest {
     testling.setCatalogAliasTranslationService(catalogAliasTranslationService);
   }
 
-
   @Test
   public void testHandleRequestWithSiteNull() throws Exception {
     when(siteResolver.findSiteFor(anyString(), any(Locale.class))).thenReturn(null);
@@ -95,17 +100,19 @@ public class CMCatalogPictureHandlerTest {
     ModelAndView result = testling.handleRequestWidthHeight(
             "10201", "en_US", "full", PRODUCT_REFERENCE, "jpg", mock(WebRequest.class)
     );
+
     assert404(result);
   }
 
   @Test
   public void testHandleRequestWithPictureFormatsEmpty() throws Exception {
     when(siteResolver.findSiteFor(anyString(), any(Locale.class))).thenReturn(site);
-    testling.setPictureFormats(Collections.<String, String>emptyMap());
+    testling.setPictureFormats(Collections.emptyMap());
 
     ModelAndView result = testling.handleRequestWidthHeight(
             "10201", "en_US", "full", PRODUCT_REFERENCE, "jpg", mock(WebRequest.class)
     );
+
     assert404(result);
   }
 
@@ -116,6 +123,7 @@ public class CMCatalogPictureHandlerTest {
     ModelAndView result = testling.handleRequestWidthHeight(
             "10201", "en_US", "full", PRODUCT_REFERENCE, "jpg", mock(WebRequest.class)
     );
+
     assert404(result);
   }
 
@@ -126,6 +134,7 @@ public class CMCatalogPictureHandlerTest {
     ModelAndView result = testling.handleRequestWidthHeight(
             "10201", "en_US", "full", PRODUCT_REFERENCE, "jpg", mock(WebRequest.class)
     );
+
     assert200(result);
   }
 
@@ -139,6 +148,7 @@ public class CMCatalogPictureHandlerTest {
     ModelAndView result = testling.handleRequestWidthHeight(
             "10201", "en_US", "full", PRODUCT_REFERENCE, "jpg", request
     );
+
     assert304(result);
   }
 
@@ -147,37 +157,39 @@ public class CMCatalogPictureHandlerTest {
     StoreContext storeContext = mock(StoreContext.class);
     when(storeContext.getSiteId()).thenReturn("siteId");
     when(storeContext.getCatalogAlias()).thenReturn(DEFAULT_CATALOG_ALIAS);
-    when(catalogAliasTranslationService.getCatalogAliasForId(CatalogId.of("catalogId"), "siteId")).thenReturn(Optional.of(CatalogAlias.of("catalogAlias")));
+    when(catalogAliasTranslationService.getCatalogAliasForId(CatalogId.of("catalogId"), "siteId"))
+            .thenReturn(Optional.of(CatalogAlias.of("catalogAlias")));
 
-    CatalogAlias catalogAlias = testling.resolveCatalogAliasFromId("catalogId", storeContext);
-    assertEquals(CatalogAlias.of("catalogAlias"), catalogAlias);
+    CatalogAlias catalogAlias = testling.resolveCatalogAliasFromId(CatalogId.of("catalogId"), storeContext);
+    assertThat(catalogAlias).isEqualTo(CatalogAlias.of("catalogAlias"));
 
-    CatalogAlias catalogAliasNotFound = testling.resolveCatalogAliasFromId("unknownId", storeContext);
-    assertEquals(DEFAULT_CATALOG_ALIAS, catalogAliasNotFound);
+    CatalogAlias catalogAliasNotFound = testling.resolveCatalogAliasFromId(CatalogId.of("unknownId"), storeContext);
+    assertThat(catalogAliasNotFound).isEqualTo(DEFAULT_CATALOG_ALIAS);
   }
 
   private void prepareSuccessRequest() {
     when(siteResolver.findSiteFor(anyString(), any(Locale.class))).thenReturn(site);
-    List<Content> cmPictures = new ArrayList<>();
-    cmPictures.add(pictureContent);
-    when(assetService.findPictures(PRODUCT_REFERENCE, true)).thenReturn(cmPictures);
-    when(transformImageService.transformWithDimensions(any(Content.class), nullable(Blob.class), any(TransformedBlob.class), anyString(), anyString(), anyInt(), anyInt()))
+    when(assetService.findPictures(PRODUCT_REFERENCE, true)).thenReturn(newArrayList(pictureContent));
+    when(transformImageService
+            .transformWithDimensions(any(Content.class), nullable(Blob.class), any(TransformedBlob.class), anyString(),
+                    anyString(), anyInt(), anyInt()))
             .thenReturn(mock(Blob.class));
   }
 
   private void assert404(ModelAndView result) {
-    assertNotNull(result.getModel().get("self"));
-    assertTrue(result.getModel().get("self") instanceof HttpError);
-    HttpError error = (HttpError) result.getModel().get("self");
-    assertEquals(404, error.getErrorCode());
+    Object self = result.getModel().get("self");
+    assertThat(self).isInstanceOf(HttpError.class);
+
+    HttpError error = (HttpError) self;
+    assertThat(error.getErrorCode()).isEqualTo(404);
   }
 
   private void assert304(ModelAndView result) {
-    assertNull(result);
+    assertThat(result).isNull();
   }
 
   private void assert200(ModelAndView result) {
-    assertNotNull(result.getModel().get("self"));
-    assertTrue(result.getModel().get("self") instanceof Blob);
+    Object self = result.getModel().get("self");
+    assertThat(self).isInstanceOf(Blob.class);
   }
 }

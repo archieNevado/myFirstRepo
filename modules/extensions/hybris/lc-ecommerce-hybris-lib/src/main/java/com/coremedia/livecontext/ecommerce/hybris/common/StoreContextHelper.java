@@ -5,7 +5,7 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -20,7 +20,7 @@ public class StoreContextHelper {
    *
    * @return the current store context, or nothing
    */
-  @Nonnull
+  @NonNull
   public static Optional<StoreContext> findCurrentContext() {
     return CurrentCommerceConnection.find().map(CommerceConnection::getStoreContext);
   }
@@ -31,13 +31,13 @@ public class StoreContextHelper {
    *
    * @return the current store context
    */
-  @Nonnull
+  @NonNull
   public static StoreContext getCurrentContextOrThrow() {
     return findCurrentContext().orElseThrow(() -> new InvalidContextException("Current store context not available"));
   }
 
-  @Nonnull
-  public static String getStoreId(@Nonnull StoreContext context) {
+  @NonNull
+  public static String getStoreId(@NonNull StoreContext context) {
     String storeId = context.getStoreId();
 
     if (storeId == null) {
@@ -47,13 +47,8 @@ public class StoreContextHelper {
     return storeId;
   }
 
-  @Nonnull
-  public static String getStoreId() {
-    return getStoreId(getCurrentContextOrThrow());
-  }
-
-  @Nonnull
-  public static Locale getLocale(@Nonnull StoreContext context) {
+  @NonNull
+  public static Locale getLocale(@NonNull StoreContext context) {
     Locale locale = context.getLocale();
 
     if (locale == null) {
@@ -61,10 +56,5 @@ public class StoreContextHelper {
     }
 
     return locale;
-  }
-
-  @Nonnull
-  public static Locale getLocale() {
-    return getLocale(getCurrentContextOrThrow());
   }
 }

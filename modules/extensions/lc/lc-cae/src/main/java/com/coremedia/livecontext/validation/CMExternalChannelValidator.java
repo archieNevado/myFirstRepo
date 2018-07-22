@@ -4,13 +4,13 @@ import com.coremedia.blueprint.common.services.validation.AbstractValidator;
 import com.coremedia.livecontext.contentbeans.CMExternalChannel;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
-import com.google.common.base.Predicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
+import java.util.function.Predicate;
 
 /**
  * {@link com.coremedia.livecontext.contentbeans.CMExternalChannel} may link to categories that
@@ -20,10 +20,11 @@ import javax.annotation.Nullable;
  * those objects silently, so that the layout of a web page containing such a collection will not be broken.
  */
 public class CMExternalChannelValidator extends AbstractValidator<CMExternalChannel> {
+
   private static final Logger LOG = LoggerFactory.getLogger(ExternalReferencePredicate.class);
 
   @Override
-  protected Predicate createPredicate() {
+  protected Predicate<CMExternalChannel> createPredicate() {
     return new ExternalReferencePredicate();
   }
 
@@ -34,7 +35,7 @@ public class CMExternalChannelValidator extends AbstractValidator<CMExternalChan
 
   private class ExternalReferencePredicate implements Predicate<CMExternalChannel> {
     @Override
-    public boolean apply(@Nullable CMExternalChannel externalChannel) {
+    public boolean test(@Nullable CMExternalChannel externalChannel) {
       if (!(externalChannel == null || externalChannel.isCatalogRoot())) {
         String externalId = externalChannel.getExternalId();
         if (!StringUtils.hasText(externalId)) {
@@ -47,7 +48,7 @@ public class CMExternalChannelValidator extends AbstractValidator<CMExternalChan
     }
   }
 
-  private boolean hasValidReference(@Nonnull CMExternalChannel cmExternalChannel) {
+  private static boolean hasValidReference(@NonNull CMExternalChannel cmExternalChannel) {
     String externalId = cmExternalChannel.getExternalId();
     try {
       Category category = cmExternalChannel.getCategory();
@@ -58,5 +59,4 @@ public class CMExternalChannelValidator extends AbstractValidator<CMExternalChan
       return false;
     }
   }
-
 }

@@ -11,12 +11,12 @@ import responsiveImages from "@coremedia/js-responsive-images";
  * @example
  * ###### Usage
  * ```javascript
- * $(".cm-image--responsive").responsiveImage();
+ * $("[data-cm-responsive-media]").responsiveImage();
  * ```
  *
  * ###### HTML
  * ```html
- * <img src="image3x1.jpg" class="cm-image--responsive" data-cm-responsive-image="[
+ * <img src="image3x1.jpg" data-cm-responsive-media="[
  *  {
  *    "name" : "3x1",
  *    "ratioWidth" : 3,
@@ -33,7 +33,7 @@ import responsiveImages from "@coremedia/js-responsive-images";
  *
  * Deprecated legacy format:
  * ```html
- * <img src="image3x1.jpg" class="cm-image--responsive" data-cm-responsive-image="{
+ * <img src="image3x1.jpg" data-cm-responsive-media="{
  *    "3x1" : {"320": "image3x1_small.jpg", "640": "image_medium.jpg", "1024": "image_large.jpg"},
  *    "2x1" : {"200": "image2x1_small.jpg", "400": "image2x1_other.jpg"}}" >
  * ```

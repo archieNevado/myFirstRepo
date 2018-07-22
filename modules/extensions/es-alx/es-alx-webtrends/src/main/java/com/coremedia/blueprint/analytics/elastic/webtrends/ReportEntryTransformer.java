@@ -2,7 +2,7 @@ package com.coremedia.blueprint.analytics.elastic.webtrends;
 
 import com.google.common.base.Function;
 
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 class ReportEntryTransformer implements Function<ReportEntry, String> {
   @Nullable

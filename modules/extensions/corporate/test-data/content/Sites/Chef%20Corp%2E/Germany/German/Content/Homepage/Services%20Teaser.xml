@@ -43,7 +43,7 @@
 <Struct>
 <LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/Professionals/Service/Delivery%20Article.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Professionals/Service/Delivery%20Article"/>
 <BooleanProperty Name="callToActionEnabled">true</BooleanProperty>
-<StringProperty Name="callToActionCustomText">Delivery</StringProperty>
+<StringProperty Name="callToActionCustomText">Lieferung</StringProperty>
 </Struct>
 </StructListProperty>
 </Struct>

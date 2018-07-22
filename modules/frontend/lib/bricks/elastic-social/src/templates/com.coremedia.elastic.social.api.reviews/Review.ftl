@@ -2,6 +2,9 @@
 <#-- @ftlvariable name="reviewView" type="java.lang.String" -->
 <#-- @ftlvariable name="reviewingAllowed" type="java.lang.Boolean" -->
 
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/components.ftl" as components />
+<#import "../../freemarkerLibs/elastic-social.ftl" as elasticSocial />
+
 <#assign reviewView=es.getReviewView(self) />
 <#assign title=self.title!"" />
 <#assign rating=self.rating!"" />
@@ -58,21 +61,21 @@
         ${self.textAsHtml?no_esc}
       </div>
       <div class="cm-readmore__buttonbar">
-        <@bp.button baseClass="" text=bp.getMessage("review_more") attr={"class": "cm-readmore__button-more"} />
-        <@bp.button baseClass="" text=bp.getMessage("review_less") attr={"class": "cm-readmore__button-less"} />
+        <@components.button baseClass="" text=bp.getMessage("review_more") attr={"class": "cm-readmore__button-more"} />
+        <@components.button baseClass="" text=bp.getMessage("review_less") attr={"class": "cm-readmore__button-less"} />
       </div>
     </div>
   </#if>
 
   <#-- At least one dynamic notification is rendered -->
   <#if ["undecided"]?seq_contains(reviewView)>
-    <@bp.notification type="info" text=bp.getMessage("review_approval_undecided") additionalClasses=["cm-review__notification"] attr={"data-cm-notification": '{"path": ""}', "data-cm-contribution-notification-type": "UNDECIDED"} />
+    <@elasticSocial.notification type="info" text=bp.getMessage("review_approval_undecided") additionalClasses=["cm-review__notification"] attr={"data-cm-notification": '{"path": ""}', "data-cm-contribution-notification-type": "UNDECIDED"} />
   <#elseif ["rejected"]?seq_contains(reviewView)>
-    <@bp.notification type="warning" text=bp.getMessage("review_approval_rejected") additionalClasses=["cm-review__notification"] attr={"data-cm-notification": '{"path": ""}', "data-cm-contribution-notification-type": "REJECTED"} />
+    <@elasticSocial.notification type="warning" text=bp.getMessage("review_approval_rejected") additionalClasses=["cm-review__notification"] attr={"data-cm-notification": '{"path": ""}', "data-cm-contribution-notification-type": "REJECTED"} />
   <#elseif ["deleted"]?seq_contains(reviewView)>
   <#-- not in use -->
-    <@bp.notification type="info" text=bp.getMessage("review_deleted") additionalClasses=["cm-review__notification"] attr={"data-cm-notification": '{"path": ""}'} />
+    <@elasticSocial.notification type="info" text=bp.getMessage("review_deleted") additionalClasses=["cm-review__notification"] attr={"data-cm-notification": '{"path": ""}'} />
   <#else>
-    <@bp.notification type="inactive" additionalClasses=["cm-review__notification"] attr={"data-cm-notification": '{"path": ""}'} />
+    <@elasticSocial.notification type="inactive" additionalClasses=["cm-review__notification"] attr={"data-cm-notification": '{"path": ""}'} />
   </#if>
 </div>

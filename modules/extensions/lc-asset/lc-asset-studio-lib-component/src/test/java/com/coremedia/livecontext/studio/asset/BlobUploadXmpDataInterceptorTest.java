@@ -113,7 +113,7 @@ public class BlobUploadXmpDataInterceptorTest {
     mockStatic(ProductIdExtractor.class);
     testling.intercept(contentWriteRequest);
 
-    PowerMockito.verifyStatic(times(0));
+    PowerMockito.verifyStatic(ProductIdExtractor.class, times(0));
     ProductIdExtractor.extractProductIds(blob);
 
     assertThat(properties).doesNotContainKey("localSettings");

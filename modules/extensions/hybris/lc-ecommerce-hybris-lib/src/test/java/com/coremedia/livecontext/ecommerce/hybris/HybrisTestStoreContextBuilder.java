@@ -4,7 +4,7 @@ import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.hybris.common.HybrisStoreContextBuilder;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Currency;
 import java.util.Locale;
 
@@ -13,14 +13,14 @@ class HybrisTestStoreContextBuilder {
   private HybrisTestStoreContextBuilder() {
   }
 
-  @Nonnull
+  @NonNull
   static StoreContext build(
-          @Nonnull String storeId,
-          @Nonnull String storeName,
-          @Nonnull CatalogId catalogId,
-          @Nonnull Locale locale,
-          @Nonnull String currency,
-          @Nonnull String catalogVersion) {
+          @NonNull String storeId,
+          @NonNull String storeName,
+          @NonNull CatalogId catalogId,
+          @NonNull Locale locale,
+          @NonNull String currency,
+          @NonNull String catalogVersion) {
     return HybrisStoreContextBuilder
             .from("theSiteId")
             .withStoreId(storeId)

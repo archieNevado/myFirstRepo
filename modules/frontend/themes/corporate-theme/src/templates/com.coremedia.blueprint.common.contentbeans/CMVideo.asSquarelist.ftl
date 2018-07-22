@@ -1,19 +1,20 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.CMVideo" -->
 <#-- @ftlvariable name="additionalClass" type="java.lang.String" -->
 
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/utils.ftl" as utils />
+
 <#assign hasPicture=self.picture?has_content />
 <#assign additionalClasses=hasPicture?then("cm-squarelist--dimmer", '') />
-<#assign videoLink = bp.getVideoLink(self) />
 
 <div class="cm-squarelist ${additionalClasses}"<@preview.metadata self.content />>
-  <@bp.optionalLink href="${videoLink}" attr={"data-cm-popup": ""}>
+  <@utils.optionalLink href="${cm.getLink(self.target)}">
     <#-- picture -->
     <#if hasPicture>
-      <@cm.include self=self.picture params={
-        "limitAspectRatios": [ "portrait_ratio1x1" ],
-        "classBox": "cm-squarelist__picture-box",
-        "classImage": "cm-squarelist__picture",
-        "metadata": ["properties.pictures"]
+      <@cm.include self=self.picture view="media" params={
+          "limitAspectRatios": [ "portrait_ratio1x1" ],
+          "classBox": "cm-squarelist__picture-box",
+          "classMedia": "cm-squarelist__picture",
+          "metadata": ["properties.pictures"]
       }/>
     <#else>
       <div class="cm-squarelist__picture-box"<@preview.metadata "properties.pictures" />>
@@ -22,7 +23,7 @@
     </#if>
 
     <#-- play overlay icon-->
-    <@cm.include self=self view="_playButton" params={"blockClass": "cm-squarelist"}/>
+    <@cm.include self=self view="_playButton" params={"blockClass": "cm-squarelist", "openAsPopup": true}/>
 
     <#-- headline -->
     <#if self.teaserTitle?has_content>
@@ -30,5 +31,5 @@
     </#if>
 
     <@cm.hook id=bp.viewHookEventNames.VIEW_HOOK_TEASER />
-  </@bp.optionalLink>
+  </@utils.optionalLink>
 </div>

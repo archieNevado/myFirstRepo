@@ -1,6 +1,11 @@
 // Transformations are not part of the brick.
 .#{$cm-teasable-prefix} {
 
+  &__text,
+  &__headline {
+    padding-bottom: $padding-large-vertical;
+  }
+
   &__dimmer,
   &__text,
   &__headline,
@@ -9,10 +14,8 @@
   }
 
   &__headline {
-    & > span {
-      &:after {
-        transition: all $transition-duration ease(in-out-quad);
-      }
+    &:after {
+      transition: all $transition-duration ease(in-out-quad);
     }
   }
 
@@ -24,11 +27,9 @@
     &__headline {
       transform: translate3d(0, 5px, 0);
 
-      & > span {
-        &:after {
-          opacity: 1;
-          width: 100%;
-        }
+      &:after {
+        opacity: 1;
+        width: 100%;
       }
     }
 
@@ -54,15 +55,17 @@
   &--video.is-text:hover .#{$cm-teasable-prefix} {
     &__headline {
       transform: none;
-      & > span {
-        &:after {
-          display: none;
-        }
+      &:after {
+        display: none;
       }
     }
 
     &__cta {
       transform: none;
     }
+  }
+
+  &--video &__caption {
+      bottom: 20%;
   }
 }

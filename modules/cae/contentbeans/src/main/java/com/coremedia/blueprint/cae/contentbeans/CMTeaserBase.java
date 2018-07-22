@@ -21,10 +21,8 @@ import static com.coremedia.cap.common.CapStructHelper.isEmpty;
 @SuppressWarnings("FieldCanBeLocal")
 public abstract class CMTeaserBase extends CMTeasableImpl implements CMTeaser {
 
-  private static final String LEGACY_STRUCT_CTA_DISABLED_PROPERTY_NAME = "callToActionDisabled";
-
-  private static final String ANNOTATED_LINK_STRUCT_CTA_ENABLED_PROPERTY_NAME = "callToActionEnabled";
-  private static final String ANNOTATED_LINK_STRUCT_CTA_CUSTOM_TEXT_PROPERTY_NAME = "callToActionCustomText";
+  static final String ANNOTATED_LINK_STRUCT_CTA_ENABLED_PROPERTY_NAME = "callToActionEnabled";
+  static final String ANNOTATED_LINK_STRUCT_CTA_CUSTOM_TEXT_PROPERTY_NAME = "callToActionCustomText";
 
   /**
    * Returns the value of the document property {@link #MASTER}.
@@ -86,7 +84,7 @@ public abstract class CMTeaserBase extends CMTeasableImpl implements CMTeaser {
       if (!isEmpty(localSettings)) {
         Boolean ctaDisabled = getBoolean_(localSettings, LEGACY_STRUCT_CTA_DISABLED_PROPERTY_NAME);
         ctaEnabled = ctaDisabled != null && !ctaDisabled;
-        ctaCustomText = getString(localSettings, ANNOTATED_LINK_STRUCT_CTA_CUSTOM_TEXT_PROPERTY_NAME);
+        ctaCustomText = getString(localSettings, LEGACY_STRUCT_CTA_CUSTOM_TEXT_PROPERTY_NAME);
       }
       if (ctaEnabled) {
         targetStructMap.put(ANNOTATED_LINK_STRUCT_CTA_ENABLED_PROPERTY_NAME, true);

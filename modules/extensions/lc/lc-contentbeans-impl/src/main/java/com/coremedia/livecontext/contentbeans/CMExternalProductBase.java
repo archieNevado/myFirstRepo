@@ -4,7 +4,7 @@ import com.coremedia.blueprint.cae.contentbeans.CMTeasableImpl;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.struct.Struct;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -44,7 +44,7 @@ public abstract class CMExternalProductBase extends CMTeasableImpl implements CM
 
   // --- Content property getters -----------------------------------
 
-  @Nonnull
+  @NonNull
   @Override
   public String getExternalId() {
     String externalId = getContent().getString(EXTERNAL_ID);

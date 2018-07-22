@@ -1,4 +1,7 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.ecommerce.contentbeans.CMProduct" -->
+
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/utils.ftl" as utils />
+
 <#assign blockClass=cm.localParameters().blockClass!"cm-details" />
 <#assign relatedView=cm.localParameters().relatedView!"related" />
 <#assign carouselParams=cm.localParameters().carouselParams!{} />
@@ -47,7 +50,9 @@
   <#-- date -->
   <#if renderDate && self.externallyDisplayedDate?has_content>
     <div class="${blockClass}__date"<@preview.metadata "properties.externallyDisplayedDate"/>>
-      <@bp.renderDate self.externallyDisplayedDate.time "${blockClass}__time" />
+      <@utils.renderDate date=self.externallyDisplayedDate.time
+                         cssClass="${blockClass}__time"
+                         metadata=["properties.externallyDisplayedDate"] />
     </div>
   </#if>
 

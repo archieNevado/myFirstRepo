@@ -17,7 +17,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -65,7 +65,7 @@ class AssetChanges implements RemovalListener<Content, String>, InitializingBean
             .build();
   }
 
-  public void update(@Nonnull Content content) {
+  public void update(@NonNull Content content) {
     w.lock();
     try {
       //reset the map for the given content for all sites
@@ -132,10 +132,10 @@ class AssetChanges implements RemovalListener<Content, String>, InitializingBean
       Multimap<Content, String> multimap = entry.getValue();
       Multimap<String, Content> inverseMultimap = siteToInverseMultimap.get(site);
       if (!multimap.containsKey(content)) {
-        multimap.put(content, null);
+        multimap.put(content, null); // NOSONAR - Workaround for spotbugs/spotbugs#621, see CMS-12169
       }
       if (!inverseMultimap.containsValue(content)) {
-        inverseMultimap.put(null, content);
+        inverseMultimap.put(null, content); // NOSONAR - Workaround for spotbugs/spotbugs#621, see CMS-12169
       }
     }
   }
@@ -145,7 +145,7 @@ class AssetChanges implements RemovalListener<Content, String>, InitializingBean
     return CommerceReferenceHelper.getExternalIds(content);
   }
 
-  @Nonnull
+  @NonNull
   public Collection<Content> get(String externalId, Site site) {
     if (site == null) {
       return emptyList();

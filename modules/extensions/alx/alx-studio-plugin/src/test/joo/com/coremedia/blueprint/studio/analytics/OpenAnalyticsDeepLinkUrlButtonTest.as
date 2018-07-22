@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.studio.analytics {
 import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.EditorContextImpl;
-import com.coremedia.cms.editor.sdk.context.ComponentContextManager;
+import com.coremedia.ui.context.ComponentContextManager;
 import com.coremedia.ui.data.test.AbstractRemoteTest;
 
 import ext.Ext;
@@ -54,7 +54,7 @@ public class OpenAnalyticsDeepLinkUrlButtonTest extends AbstractRemoteTest {
       getNumericId: function ():int {
         return MY_ID;
       },
-      get: function(prop:String):* {
+      "get": function(prop:String):* {
         if (prop === "type") {
           return {name: 'typeWithPreview'};
         }

@@ -30,7 +30,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -275,7 +275,7 @@ public class SearchTermExternalReferenceResolverTest {
 
   // ---------------------------------------------------------------------- helper methods
 
-  private void assertResolve(@Nonnull SearchTermExternalReferenceResolver resolver, @Nonnull Content expectedLinkable) {
+  private void assertResolve(@NonNull SearchTermExternalReferenceResolver resolver, @NonNull Content expectedLinkable) {
     FragmentParameters params = parametersFor(site, PREFIX + SEARCH_TERM);
     assertTrue(resolver.include(params));
     LinkableAndNavigation linkableAndNavigation = resolver.resolveExternalRef(params, site);
@@ -291,7 +291,7 @@ public class SearchTermExternalReferenceResolverTest {
     return params;
   }
 
-  private void verifyQueryBelowNavigationPath(@Nonnull String navigationPath) {
+  private void verifyQueryBelowNavigationPath(@NonNull String navigationPath) {
     ArgumentCaptor<SearchQueryBean> queryCaptor = ArgumentCaptor.forClass(SearchQueryBean.class);
     verify(searchResultFactory).createSearchResultUncached(queryCaptor.capture());
     SearchQueryBean query = queryCaptor.getValue();

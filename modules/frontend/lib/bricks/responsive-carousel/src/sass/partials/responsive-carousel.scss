@@ -26,7 +26,7 @@
       }
     }
 
-    a:hover .cm-teasable__headline > span {
+    a:hover .cm-teasable__headline {
       text-decoration: underline;
     }
 
@@ -54,11 +54,5 @@
     .cm-teasable__cta {
       display: none;
     }
-
-    // hide shop now quickinfo
-    .cm-quickinfo--shop-now {
-      display: none;
-    }
-
   }
 }

@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.fragment.links.context;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,13 +12,15 @@ public final class ContextBuilder {
 
   public static final String CONTEXT_KEY_PREFIX = "wc.";
 
-  private MapContext context = new MapContext();
+  private final MapContext context = new MapContext();
 
-  private ContextBuilder() {}
+  private ContextBuilder() {
+  }
 
   /**
    * Creates a new builder instance
    */
+  @NonNull
   public static ContextBuilder create() {
     return new ContextBuilder();
   }
@@ -25,7 +28,8 @@ public final class ContextBuilder {
   /**
    * Adds a single  value to the context
    */
-  public ContextBuilder withValue(String key, Object value) {
+  @NonNull
+  public ContextBuilder withValue(@NonNull String key, Object value) {
     this.context.put(key, value);
     return this;
   }
@@ -33,13 +37,13 @@ public final class ContextBuilder {
   /**
    * @return Provides the (final) context instance
    */
+  @NonNull
   public Context build() {
     return context;
   }
 
-  // =========
-
   private static class MapContext implements Context {
+
     private Map<String, Object> context = new HashMap<>();
 
     @Override
@@ -51,7 +55,7 @@ public final class ContextBuilder {
     public Object get(String name) {
       name = name != null ? name.toLowerCase() : null;
 
-      if (name != null && !name.startsWith(CONTEXT_KEY_PREFIX)){
+      if (name != null && !name.startsWith(CONTEXT_KEY_PREFIX)) {
         return context.get(CONTEXT_KEY_PREFIX + name);
       } else {
         return context.get(name);
@@ -62,7 +66,7 @@ public final class ContextBuilder {
     public void put(String name, Object value) {
       name = name != null ? name.toLowerCase() : null;
 
-      if (name != null && !name.startsWith(CONTEXT_KEY_PREFIX)){
+      if (name != null && !name.startsWith(CONTEXT_KEY_PREFIX)) {
         context.put(CONTEXT_KEY_PREFIX + name, value);
       } else {
         context.put(name, value);
@@ -80,7 +84,7 @@ public final class ContextBuilder {
 
     @Override
     public String toString() {
-      return "Context["+context+"]";
+      return "Context[" + context + "]";
     }
   }
 }

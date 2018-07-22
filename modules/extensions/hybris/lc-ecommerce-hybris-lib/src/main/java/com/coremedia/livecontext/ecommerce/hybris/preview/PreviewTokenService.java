@@ -17,8 +17,8 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
@@ -70,7 +70,7 @@ public class PreviewTokenService extends AbstractHybrisService {
   }
 
   @Nullable
-  private PreviewTokenDocument requestPreviewToken(@Nonnull AccessToken accessToken) {
+  private PreviewTokenDocument requestPreviewToken(@NonNull AccessToken accessToken) {
     StoreContext storeContext = StoreContextHelper.findCurrentContext()
             .orElseThrow(() -> new NoStoreContextAvailable("requesting preview token"));
 
@@ -81,8 +81,8 @@ public class PreviewTokenService extends AbstractHybrisService {
     return getPreviewToken().getTicketId();
   }
 
-  @Nonnull
-  private Map<String, Object> preparePreviewTokenParams(@Nonnull StoreContext storeContext) {
+  @NonNull
+  private Map<String, Object> preparePreviewTokenParams(@NonNull StoreContext storeContext) {
     /*{
       "catalog" : "apparel-ukContentCatalog",
             "catalogVersion" : "Staged",

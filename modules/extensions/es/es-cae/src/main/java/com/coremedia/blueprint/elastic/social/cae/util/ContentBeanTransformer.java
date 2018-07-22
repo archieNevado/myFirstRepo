@@ -8,8 +8,8 @@ import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.elastic.core.cms.ContentWithSite;
 import com.coremedia.objectserver.beans.ContentBean;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -18,31 +18,31 @@ class ContentBeanTransformer implements ContributionTargetTransformer<ContentBea
   @Inject
   private SitesService sitesService;
 
-  @Nonnull
-  private Content getContent(@Nonnull ContentBean target) {
+  @NonNull
+  private Content getContent(@NonNull ContentBean target) {
     return target.getContent();
   }
 
   @Nullable
-  private Site getSiteForContent(@Nonnull Content content) {
+  private Site getSiteForContent(@NonNull Content content) {
     return sitesService.getContentSiteAspect(content).getSite();
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public ContentWithSite transform(@Nonnull ContentBean target) {
+  public ContentWithSite transform(@NonNull ContentBean target) {
     final Content content = getContent(target);
     return new ContentWithSite(content, getSiteForContent(content));
   }
 
   @Nullable
   @Override
-  public Site getSite(@Nonnull ContentBean target) {
+  public Site getSite(@NonNull ContentBean target) {
     return getSiteForContent(target.getContent());
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public Class<ContentBean> getType() {
     return ContentBean.class;
   }

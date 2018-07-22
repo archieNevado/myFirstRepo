@@ -1,17 +1,16 @@
 package com.coremedia.blueprint.common.services.validation;
 
-import com.google.common.base.Predicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 public abstract class AbstractValidator<T> implements Validator<T> {
-  
-  private static final Logger LOG = LoggerFactory.getLogger(AbstractValidator.class);
 
+  private static final Logger LOG = LoggerFactory.getLogger(AbstractValidator.class);
 
   // --- Validator --------------------------------------------------
 
@@ -20,8 +19,8 @@ public abstract class AbstractValidator<T> implements Validator<T> {
    * @return the filtered objects
    */
   @Override
-  public List<? extends T> filterList(List<? extends T> source) {
-    List<? extends T> linkables = internallyFilterList(source);
+  public <R extends T> List<R> filterList(List<R> source) {
+    List<R> linkables = internallyFilterList(source);
     return new ArrayList<>(linkables);
   }
 
@@ -35,15 +34,13 @@ public abstract class AbstractValidator<T> implements Validator<T> {
     return !results.isEmpty();
   }
 
-
   // --- abstract ---------------------------------------------------
 
-  protected abstract Predicate createPredicate();
+  protected abstract Predicate<T> createPredicate();
 
   protected void addCustomDependencies(List<? extends T> result) {
     LOG.debug("The default implementation is not adding any dependencies");
   }
-
 
   // --- internal ---------------------------------------------------
 
@@ -53,16 +50,16 @@ public abstract class AbstractValidator<T> implements Validator<T> {
    * @param allItems the items to be filtered
    * @return the filtered objects or null
    */
-  private List<T> internallyFilterList(List<? extends T> allItems) {
+  private <R extends T> List<R> internallyFilterList(List<R> allItems) {
     //fist collect all valid items
     LOG.debug("Before selecting the list contained {} items ({})", allItems.size(), allItems);
-    
-    List<T> validItems = new ArrayList<>();
-    Predicate predicate = createPredicate();
-    for (T item : allItems) {
+
+    List<R> validItems = new ArrayList<>();
+    Predicate<T> predicate = createPredicate();
+    for (R item : allItems) {
       if (supports(item.getClass())) {
         try {
-          if (predicate.apply(item)) {
+          if (predicate.test(item)) {
             validItems.add(item);
           }
         } catch (Exception e) {

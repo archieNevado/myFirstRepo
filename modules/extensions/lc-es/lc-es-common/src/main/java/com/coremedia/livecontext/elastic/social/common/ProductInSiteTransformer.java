@@ -4,26 +4,26 @@ import com.coremedia.blueprint.base.elastic.social.common.ContributionTargetTran
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Named;
 
 @Named
 public class ProductInSiteTransformer implements ContributionTargetTransformer<ProductInSite,ProductInSite> {
 
-  @Nonnull
+  @NonNull
   @Override
-  public ProductInSite transform(@Nonnull ProductInSite target) {
+  public ProductInSite transform(@NonNull ProductInSite target) {
     return target;
   }
 
   @Nullable
   @Override
-  public Site getSite(@Nonnull ProductInSite target) {
+  public Site getSite(@NonNull ProductInSite target) {
     return target.getSite();
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public Class<ProductInSite> getType() {
     return ProductInSite.class;

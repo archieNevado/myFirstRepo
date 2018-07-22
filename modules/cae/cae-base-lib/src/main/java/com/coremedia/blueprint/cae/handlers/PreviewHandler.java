@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -74,7 +74,7 @@ public class PreviewHandler extends IdRedirectHandlerBase {
     this.linkFormatter = linkFormatter;
   }
 
-  public static boolean isStudioPreviewRequest(@Nonnull HttpServletRequest request) {
+  public static boolean isStudioPreviewRequest(@NonNull HttpServletRequest request) {
     Object attributeValue = request.getAttribute(PreviewHandler.REQUEST_ATTR_IS_STUDIO_PREVIEW);
 
     if (attributeValue == null) {
@@ -96,8 +96,8 @@ public class PreviewHandler extends IdRedirectHandlerBase {
    *
    * @param siteId The id of the site
    */
-  private static void storeSite(@Nonnull HttpServletRequest request, @Nullable String siteId) {
-    String attributeValue = emptyToNull(siteId);
+  private static void storeSite(@NonNull HttpServletRequest request, @Nullable String siteId) {
+    String attributeValue = emptyToNull(siteId); // NOSONAR - Workaround for spotbugs/spotbugs#621, see CMS-12169
     setSessionAttribute(request, RequestAttributeConstants.ATTR_NAME_PAGE_SITE, attributeValue);
   }
 
@@ -107,14 +107,14 @@ public class PreviewHandler extends IdRedirectHandlerBase {
    *
    * @param taxonomyId The numeric content id of the taxonomy node.
    */
-  private static void storeTaxonomy(@Nonnull HttpServletRequest request, @Nullable String taxonomyId) {
-    if (!isNullOrEmpty(taxonomyId)) {
+  private static void storeTaxonomy(@NonNull HttpServletRequest request, @Nullable String taxonomyId) {
+    if (!isNullOrEmpty(taxonomyId)) { // NOSONAR - Workaround for spotbugs/spotbugs#621, see CMS-12169
       String id = IdHelper.formatContentId(taxonomyId);
       setSessionAttribute(request, RequestAttributeConstants.ATTR_NAME_PAGE_MODEL, id);
     }
   }
 
-  private static void setSessionAttribute(@Nonnull HttpServletRequest request, @Nonnull String name,
+  private static void setSessionAttribute(@NonNull HttpServletRequest request, @NonNull String name,
                                           @Nullable String value) {
     HttpSession session = request.getSession(true);
     session.setAttribute(name, value);

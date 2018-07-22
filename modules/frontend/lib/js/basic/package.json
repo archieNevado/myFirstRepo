@@ -4,23 +4,16 @@
   "private": true,
   "dependencies": {
     "jquery": "3.2.1",
-    "@coremedia/js-jquery-utils": "^1.0.0",
+    "object-fit-images": "3.2.3",
+    "object-fit-videos": "1.0.4",
     "@coremedia/js-logger": "^1.0.0",
-    "@coremedia/js-node-decoration-service": "^1.0.0",
     "@coremedia/js-utils": "^1.0.0"
   },
   "devDependencies": {
-    "babel-core": "6.26.0",
-    "babel-preset-env": "1.6.0",
-    "babel-jest": "~22.0.4",
-    "jest": "22.0.4",
-    "jsdoc-to-markdown": "3.0.0",
-    "prettier": "1.11.1"
+    "jsdoc-to-markdown": "3.0.0"
   },
   "scripts": {
-    "apidoc": "jsdoc2md src/*.js > API.md",
-    "prettier": "prettier \"**/*\" --write",
-    "test": "jest"
+    "apidoc": "jsdoc2md src/*.js > API.md"
   },
   "main": "src/index.js",
   "coremedia": {

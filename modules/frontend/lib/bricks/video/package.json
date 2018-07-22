@@ -4,14 +4,16 @@
   "private": true,
   "dependencies": {
     "jquery": "3.2.1",
-    "mediaelement": "4.2.8",
+    "mediaelement": "4.2.9",
+    "magnific-popup": "1.1.0",
+    "@coremedia/ftl-utils": "^1.0.0",
+    "@coremedia/js-magnific-popup": "^1.0.0",
     "@coremedia/js-jquery-utils": "^1.0.0",
     "@coremedia/js-logger": "^1.0.0",
     "@coremedia/js-node-decoration-service": "^1.0.0",
     "@coremedia/js-basic": "^1.0.0",
     "@coremedia/sass-utils": "^1.0.0",
-    "@coremedia/brick-responsive-images": "^1.0.0",
-    "@coremedia/brick-generic-templates": "^1.0.0"
+    "@coremedia/brick-media": "^1.0.0"
   },
   "devDependencies": {
     "jsdoc-to-markdown": "3.0.0",

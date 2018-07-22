@@ -14,8 +14,8 @@ import com.coremedia.livecontext.contentbeans.CMExternalChannel;
 import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -37,9 +37,9 @@ public class LiveContextCategoryNavigation implements LiveContextNavigation {
 
   // --- Construction -----------------------------------------------
 
-  public LiveContextCategoryNavigation(@Nonnull Category category,
-                                       @Nonnull Site site,
-                                       @Nonnull LiveContextNavigationTreeRelation treeRelation) {
+  public LiveContextCategoryNavigation(@NonNull Category category,
+                                       @NonNull Site site,
+                                       @NonNull LiveContextNavigationTreeRelation treeRelation) {
     notNull(category);
     notNull(site);
     notNull(treeRelation);
@@ -52,13 +52,13 @@ public class LiveContextCategoryNavigation implements LiveContextNavigation {
 
   // --- LiveContextNavigation --------------------------------------
 
-  @Nonnull
+  @NonNull
   @Override
   public Category getCategory() {
     return category;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public Site getSite() {
     return site;

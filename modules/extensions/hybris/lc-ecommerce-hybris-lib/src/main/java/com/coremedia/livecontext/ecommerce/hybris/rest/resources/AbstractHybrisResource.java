@@ -4,8 +4,8 @@ package com.coremedia.livecontext.ecommerce.hybris.rest.resources;
 import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
 import com.coremedia.livecontext.ecommerce.hybris.rest.HybrisRestConnector;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.List;
@@ -38,7 +38,7 @@ abstract class AbstractHybrisResource {
   }
 
   @SafeVarargs
-  @Nonnull
+  @NonNull
   static <E> List<E> newUriTemplateParameters(@Nullable Object source, E... elements) {
     for (Object o : elements) {
       if (o == null) {

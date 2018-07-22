@@ -24,12 +24,14 @@ import com.coremedia.cap.user.User;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+
+import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 
 /**
  * Generated extension class for immutable beans of document type "CMChannel".
@@ -228,11 +230,12 @@ public class CMChannelImpl extends CMChannelBase {
   }
 
   @Override
-  public CMPicture getPicture() {
-    return grabSomePicture(new HashSet<CMChannelImpl>());
+  public List<CMMedia> getMedia() {
+    List<CMMedia> media = super.getMedia();
+    return isNotEmpty(media) ? media : grabSomeMedia(new HashSet<>());
   }
 
-  private CMPicture grabSomePicture(Collection<CMChannelImpl> visited) {
+  private List<CMMedia> grabSomeMedia(Collection<CMChannelImpl> visited) {
     // Cycle detection for crisscross pagegridded channels
     if (visited.contains(this)) {
       return null;
@@ -240,9 +243,9 @@ public class CMChannelImpl extends CMChannelBase {
     visited.add(this);
 
     // Regular lookup
-    CMPicture picture = super.getPicture();
-    if (picture!=null) {
-      return picture;
+    List<CMMedia> media = super.getMedia();
+    if (isNotEmpty(media)) {
+      return media;
     }
 
     // Desperate fallback
@@ -250,20 +253,19 @@ public class CMChannelImpl extends CMChannelBase {
     for (Object mainItem : getPageGrid().getMainItems()) {
       CMTeasable teasable = asTeasable(mainItem);
       if (teasable!=null) {
-        CMPicture itemPicture;
         if (teasable instanceof CMChannelImpl) {
-          itemPicture = ((CMChannelImpl)teasable).grabSomePicture(visited);
+          media = ((CMChannelImpl)teasable).grabSomeMedia(visited);
         } else {
-          itemPicture = teasable.getPicture();
+          media = teasable.getMedia();
         }
-        if (itemPicture!=null) {
-          return itemPicture;
+        if (isNotEmpty(media)) {
+          return media;
         }
       }
     }
 
     // Surrender
-    return null;
+    return Lists.newArrayList();
   }
 
   private CMTeasable asTeasable(Object obj) {

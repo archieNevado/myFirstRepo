@@ -13,15 +13,16 @@ import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.context.PropertyProfile;
 import com.coremedia.personalization.preview.TestContextExtractor;
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.InvalidPropertyException;
+import org.springframework.beans.PropertyAccessException;
+import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -36,7 +37,7 @@ public class CommerceSegmentTestContextExtractor implements TestContextExtractor
   static String COMMERCE_CONTEXT = "commerce";
   static String USER_SEGMENTS_PROPERTY = "usersegments";
 
-  private static String SEGMENTS_PROPERTY_PATH = PROPERTIES_PREFIX + "." + COMMERCE_CONTEXT + "." + USER_SEGMENTS_PROPERTY;
+  private static String SEGMENTS_PROPERTY_PATH = CMUserProfile.PROFILE_EXTENSIONS + "[" + PROPERTIES_PREFIX + "][" + COMMERCE_CONTEXT + "][" + USER_SEGMENTS_PROPERTY + "]";
 
   @Override
   public void extractTestContextsFromContent(Content content, ContextCollection contextCollection) {
@@ -51,8 +52,7 @@ public class CommerceSegmentTestContextExtractor implements TestContextExtractor
       return;
     }
 
-    Map<String, Object> profileExtensions = ((CMUserProfile) cmUserProfileBean).getProfileExtensions();
-    Object userSegments = getProperty(profileExtensions, SEGMENTS_PROPERTY_PATH);
+    Object userSegments = getProperty((CMUserProfile) cmUserProfileBean, SEGMENTS_PROPERTY_PATH);
 
     if (userSegments != null && userSegments instanceof List) {
       List userSegmentList = (List) userSegments;
@@ -85,13 +85,12 @@ public class CommerceSegmentTestContextExtractor implements TestContextExtractor
     storeContext.setUserSegments(StringUtils.join(segmentIds, ","));
   }
 
-  private Object getProperty(Map<String, Object> profileExtensions, String propertyPath) {
+  private Object getProperty(CMUserProfile userProfile, String propertyPath) {
     try {
-      return PropertyUtils.getNestedProperty(profileExtensions, propertyPath);
-    } catch (Exception e) { // NOSONAR
-      // it is ok
+      return PropertyAccessorFactory.forBeanPropertyAccess(userProfile).getPropertyValue(propertyPath);
+    } catch (InvalidPropertyException | PropertyAccessException ex) {
+      return null;
     }
-    return null;
   }
 
   @Required

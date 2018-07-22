@@ -1,43 +1,47 @@
 package com.coremedia.livecontext.fragment.links.transformers;
 
-import com.coremedia.blueprint.base.links.UriConstants;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.base.settings.SettingsService;
+import com.coremedia.blueprint.cae.layout.ContentBeanBackedPageGridPlacement;
 import com.coremedia.blueprint.cae.web.taglib.FindNavigationContext;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
+import com.coremedia.blueprint.common.contentbeans.CMDownload;
 import com.coremedia.blueprint.common.contentbeans.CMExternalLink;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.Page;
+import com.coremedia.blueprint.common.layout.DynamizableContainer;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.common.services.context.CurrentContextService;
 import com.coremedia.cap.multisite.Site;
-import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.commercebeans.CategoryInSite;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.fragment.FragmentContext;
 import com.coremedia.livecontext.fragment.FragmentContextProvider;
 import com.coremedia.livecontext.fragment.links.transformers.resolvers.LiveContextLinkResolver;
 import com.coremedia.objectserver.view.ViewUtils;
 import com.coremedia.objectserver.web.links.LinkTransformer;
 import com.google.common.collect.ImmutableList;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Objects;
 
-import static java.util.Objects.requireNonNull;
+import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
+import static com.coremedia.livecontext.fragment.links.transformers.LiveContextLinkTransformerOrderChecker.validateOrder;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.left;
 import static org.apache.commons.lang3.StringUtils.remove;
@@ -48,46 +52,32 @@ import static org.apache.commons.lang3.StringUtils.remove;
  * - removing jsessionid
  * - passing ShopController-Redirect Requests
  */
-public class LiveContextLinkTransformer implements LinkTransformer {
+public class LiveContextLinkTransformer implements LinkTransformer, ApplicationListener<ContextRefreshedEvent> {
 
   protected static final Logger LOG = LoggerFactory.getLogger(LiveContextLinkTransformer.class);
 
   private static final String VARIANT_PARAM = "variant";
   private static final String LIVECONTEXT_CONTENT_LED = "livecontext.contentLed";
+  private static final String DYNAMIC_LINK_INDICATOR =  "/" + PREFIX_DYNAMIC + "/";
+  private static final String P13N_LINK_INDICATOR = "/p13n/";
 
   private List<LiveContextLinkResolver> liveContextLinkResolverList;
   private boolean isRemoveJSession = true;
   private CurrentContextService currentContextService;
   private SettingsService settingsService;
-  private SitesService sitesService;
 
   @Override
-  public String transform(String cmsLink, Object bean, String view, HttpServletRequest request,
-                          HttpServletResponse response, boolean forRedirect) {
-    // Only transform links for Fragment Requests
-    if (!isFragmentRequest(request)) {
-      return cmsLink;
-    }
+  public void onApplicationEvent(@NonNull ContextRefreshedEvent contextRefreshedEvent) {
+    validateOrder(contextRefreshedEvent);
+  }
 
-    Site site = getSite();
+  @Override
+  public String transform(@NonNull String cmsLink, @NonNull Object bean, String view,
+                          @NonNull HttpServletRequest request,
+                          @NonNull HttpServletResponse response,
+                          boolean forRedirect) {
 
-    boolean isContentLed = settingsService.settingWithDefault(LIVECONTEXT_CONTENT_LED, Boolean.class, false, site);
-    if (isContentLed) {
-      return cmsLink;
-    }
-
-    // do not post-process external links
-    if (bean instanceof CMExternalLink) {
-      return cmsLink;
-    }
-
-    boolean isLinkable = isLinkable(bean);
-    boolean isPage = bean instanceof Page;
-    if (!isLinkable && !isPage) {
-      return cmsLink;
-    }
-
-    if (cmsLink != null && cmsLink.contains("/" + UriConstants.Segments.PREFIX_DYNAMIC + "/")) {
+    if (!canHandle(cmsLink, bean, request)) {
       return cmsLink;
     }
 
@@ -106,36 +96,83 @@ public class LiveContextLinkTransformer implements LinkTransformer {
     return transform(modifiableSource, content, variant, navigation, request);
   }
 
-  private static boolean isFragmentRequest(@Nonnull HttpServletRequest request) {
+  /**
+   * Check prerequisites of live context link transformers
+   */
+  private boolean canHandle(@NonNull String cmsLink, @NonNull Object bean, @NonNull HttpServletRequest request) {
+    if (!CurrentCommerceConnection.find().isPresent()) {
+      // not a commerce request at all
+      return false;
+    }
+
+    Site site = SiteHelper.getSiteFromRequest(request);
+    if (site == null) {
+      return false;
+    }
+
+    boolean isContentLed = settingsService.getSetting(LIVECONTEXT_CONTENT_LED, Boolean.class, site).orElse(false);
+    if (isContentLed) {
+      // do not transform links in content-led scenario
+      return false;
+    }
+
+    // Only transform links for Fragment Requests or dynamic Ajax Requests in case of fragment scenario
+    if (!(isFragmentRequest(request) || isDynamicRequest(request))) {
+      return false;
+    }
+
+    // only transform dynamic links if they are p13n links
+    if (cmsLink.contains(DYNAMIC_LINK_INDICATOR) && !(cmsLink.contains(P13N_LINK_INDICATOR))) {
+      return false;
+    }
+
+    // do not post-process external links
+    if (bean instanceof CMExternalLink) {
+      return false;
+    }
+
+    // do not post-process Download links since directly delivered by the CAE
+    // see also link building in CapBlobHandler
+    if (bean instanceof CMDownload) {
+      return false;
+    }
+
+    return isShopUrlSource(bean);
+  }
+
+  private static boolean isDynamicRequest(@NonNull HttpServletRequest request) {
+    try {
+      return request.getRequestURI().contains("/" + PREFIX_DYNAMIC + "/");
+    } catch (UnsupportedOperationException ignored) {
+      // we may end up here in case of elastic social registration which uses dummy requests internally :(
+      return false;
+    }
+  }
+
+  private static boolean isFragmentRequest(@NonNull HttpServletRequest request) {
     return FragmentContextProvider.findFragmentContext(request)
             .map(FragmentContext::isFragmentRequest)
             .orElse(false);
   }
 
-  @Nonnull
-  private Site getSite() {
-    StoreContext storeContext = CurrentCommerceConnection.get().getStoreContext();
-
-    String siteId = requireNonNull(storeContext.getSiteId(), "Site ID must be set on store context.");
-
-    return sitesService.findSite(siteId)
-            .orElseThrow(() -> new IllegalStateException(
-                    String.format("Could not find a site for store id '%s' and locale '%s'.",
-                            storeContext.getStoreId(), storeContext.getLocale())));
-  }
-
-  private static boolean isLinkable(@Nullable Object bean) {
+  /**
+   * Check if the bean may be the source of a shop URL
+   */
+  private static boolean isShopUrlSource(@Nullable Object bean) {
     return bean instanceof CMLinkable
             || bean instanceof LiveContextNavigation
             || bean instanceof Product
             || bean instanceof ProductInSite
             || bean instanceof Category
-            || bean instanceof CategoryInSite;
+            || bean instanceof CategoryInSite
+            || bean instanceof Page
+            || bean instanceof ContentBeanBackedPageGridPlacement
+            || bean instanceof DynamizableContainer;
   }
 
-  @Nonnull
+  @NonNull
   private String transform(String source, Object content, Object variant, CMNavigation navigation,
-                           @Nonnull HttpServletRequest request) {
+                           @NonNull HttpServletRequest request) {
     String lcUrl = resolveUrl(source, content, variant, navigation, request);
 
     if (isNotBlank(lcUrl)) {
@@ -150,6 +187,10 @@ public class LiveContextLinkTransformer implements LinkTransformer {
   @Nullable
   private String resolveUrl(String source, Object content, @Nullable Object variant, CMNavigation navigation,
                             HttpServletRequest request) {
+    if (source == null) {
+      return null;
+    }
+
     return liveContextLinkResolverList.stream()
             .filter(resolver -> resolver.isApplicable(content))
             .map(resolver -> resolver.resolveUrl(source, content, variant != null ? variant + "" : null, navigation,
@@ -160,7 +201,7 @@ public class LiveContextLinkTransformer implements LinkTransformer {
   }
 
   @Nullable
-  private static String removeBaseUri(@Nullable String source, @Nonnull HttpServletRequest request) {
+  private static String removeBaseUri(@Nullable String source, @NonNull HttpServletRequest request) {
     String baseUri = ViewUtils.getBaseUri(request);
 
     if (source != null && source.startsWith(baseUri)) {
@@ -208,6 +249,10 @@ public class LiveContextLinkTransformer implements LinkTransformer {
       }
     }
 
+    if (bean instanceof ContentBeanBackedPageGridPlacement) {
+      return ((ContentBeanBackedPageGridPlacement) bean).getNavigation();
+    }
+
     CMNavigation navigation = currentContextService.getContext();
     if (navigation != null) {
       return navigation;
@@ -219,7 +264,7 @@ public class LiveContextLinkTransformer implements LinkTransformer {
   /**
    * Return true if this is content of a different site
    */
-  protected boolean isContentOfDifferentSite(@Nonnull CMNavigation navigation, @Nonnull HttpServletRequest request) {
+  protected boolean isContentOfDifferentSite(@NonNull CMNavigation navigation, @NonNull HttpServletRequest request) {
     try {
       CMNavigation targetRootNavigation = navigation.getRootNavigation();
       Navigation currentNavigation = FindNavigationContext.getNavigation(request);
@@ -249,8 +294,4 @@ public class LiveContextLinkTransformer implements LinkTransformer {
     this.settingsService = settingsService;
   }
 
-  @Required
-  public void setSitesService(SitesService sitesService) {
-    this.sitesService = sitesService;
-  }
 }

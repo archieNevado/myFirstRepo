@@ -7,7 +7,7 @@ import com.google.common.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 /**
  * Generates external seo segment name for a given navigation and linkable for use in commerce links.
@@ -21,7 +21,7 @@ public class LegacyExternalSeoSegmentBuilder implements SeoSegmentBuilder {
   public static final String SEO_ID_PREFIX = "--";
   public static final String SEO_ID_SEPARATOR = "-";
 
-  @Nonnull
+  @NonNull
   public String asSeoSegment(CMNavigation navigation, CMObject contentBean) {
     if (navigation == null || contentBean == null) {
       return "";

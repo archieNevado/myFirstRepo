@@ -9,23 +9,22 @@ import com.coremedia.livecontext.ecommerce.common.InvalidIdException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.hybris.common.HybrisCommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.AbstractHybrisDocument;
-import com.google.common.base.Joiner;
 
-import javax.annotation.Nonnull;
-
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 public abstract class AbstractHybrisDocumentCacheKey<T extends AbstractHybrisDocument> extends AbstractCommerceCacheKey<T> {
-  private final static Joiner JOINER = Joiner.on(":").useForNull("undefined");
 
   private final CommerceId commerceId;
 
-  AbstractHybrisDocumentCacheKey(@Nonnull CommerceId id,
+  AbstractHybrisDocumentCacheKey(@NonNull CommerceId id,
                                  StoreContext storeContext,
                                  String configKey, CommerceCache commerceCache) {
     super(CommerceIdFormatterHelper.format(id), storeContext, configKey, commerceCache);
+
     if (!HybrisCommerceIdProvider.isHybrisId(id)) {
       throw new InvalidIdException(id + " is not a hybris id.");
     }
+
     this.commerceId = id;
   }
 
@@ -37,7 +36,7 @@ public abstract class AbstractHybrisDocumentCacheKey<T extends AbstractHybrisDoc
     }
   }
 
-  @Nonnull
+  @NonNull
   protected String getExternalIdOrTechId() {
     return commerceId.getExternalId()
             .orElseGet(() -> commerceId.getTechId()
@@ -46,17 +45,13 @@ public abstract class AbstractHybrisDocumentCacheKey<T extends AbstractHybrisDoc
 
   @Override
   protected String getCacheIdentifier() {
-    return JOINER.join(getCacheIdArgs());
-  }
-
-  protected Object[] getCacheIdArgs() {
-    return new Object[]{
+    return assembleCacheIdentifier(
             id,
             configKey,
             storeContext.getSiteId(),
             storeContext.getStoreId(),
             storeContext.getLocale(),
             storeContext.getCurrency()
-    };
+    );
   }
 }

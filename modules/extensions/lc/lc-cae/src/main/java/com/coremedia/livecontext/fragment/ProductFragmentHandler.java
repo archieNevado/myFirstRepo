@@ -37,12 +37,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Locale;
 
+import static com.coremedia.blueprint.cae.view.DynamicIncludeHelper.createDynamicIncludeRootDelegateModelAndView;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.util.Objects.requireNonNull;
 
@@ -76,7 +77,7 @@ public class ProductFragmentHandler extends FragmentHandler {
    */
   @Nullable
   @Override
-  public ModelAndView createModelAndView(@Nonnull FragmentParameters params, @Nonnull HttpServletRequest request) {
+  public ModelAndView createModelAndView(@NonNull FragmentParameters params, @NonNull HttpServletRequest request) {
     Site site = SiteHelper.getSiteFromRequest(request);
 
     if (site == null) {
@@ -108,10 +109,10 @@ public class ProductFragmentHandler extends FragmentHandler {
       return createModelAndViewForProductPage(navigation, externalTechId, view, orientation, types, developer);
     }
 
-    return createModelAndViewForProductPage(navigation, externalTechId, view, null, null, developer);
+    return createModelAndViewForProductPage(navigation, externalTechId, view, null, null, developer); // NOSONAR - Workaround for spotbugs/spotbugs#621, see CMS-12169
   }
 
-  private LiveContextNavigation getLiveContextNavigation(@Nonnull FragmentParameters params, Site site, String externalTechId, String categoryTechId) {
+  private LiveContextNavigation getLiveContextNavigation(@NonNull FragmentParameters params, Site site, String externalTechId, String categoryTechId) {
     CommerceConnection currentConnection = CurrentCommerceConnection.get();
     StoreContext storeContext = currentConnection.getStoreContext();
 
@@ -141,7 +142,7 @@ public class ProductFragmentHandler extends FragmentHandler {
     return navigation;
   }
 
-  private static IllegalStateException buildExceptionForMissingNavigation(@Nonnull FragmentParameters params) {
+  private static IllegalStateException buildExceptionForMissingNavigation(@NonNull FragmentParameters params) {
     String storeId = params.getStoreId();
     Locale locale = params.getLocale();
     String categoryId = params.getCategoryId();
@@ -151,12 +152,12 @@ public class ProductFragmentHandler extends FragmentHandler {
             storeId, locale, categoryId));
   }
 
-  @Nonnull
-  protected ModelAndView createFragmentModelAndViewForPlacementAndView(@Nonnull Navigation navigation,
-                                                                       @Nonnull String productId,
-                                                                       @Nonnull String placement,
+  @NonNull
+  protected ModelAndView createFragmentModelAndViewForPlacementAndView(@NonNull Navigation navigation,
+                                                                       @NonNull String productId,
+                                                                       @NonNull String placement,
                                                                        @Nullable String view,
-                                                                       @Nonnull CMChannel rootChannel,
+                                                                       @NonNull CMChannel rootChannel,
                                                                        @Nullable User developer) {
     Product product = getProductFromId(productId);
     Content externalProductContent = getAugmentedProductContent(product);
@@ -173,7 +174,8 @@ public class ProductFragmentHandler extends FragmentHandler {
     }
 
     Page page = asPage(navigation, externalProduct, developer);
-    ModelAndView resultMV = HandlerHelper.createModelWithView(pageGridPlacement, view);
+    // We need to wrap the placement into a DynamicInclude object to bypass the loop protection in DynamicIncludeRenderNodeDecoratorProvider.
+    ModelAndView resultMV = createDynamicIncludeRootDelegateModelAndView(pageGridPlacement, view);
     RequestAttributeConstants.setPage(resultMV, page);
     NavigationLinkSupport.setNavigation(resultMV, navigation);
 
@@ -208,7 +210,7 @@ public class ProductFragmentHandler extends FragmentHandler {
     return productAugmentationService.getContent(parentProduct);
   }
 
-  @Nonnull
+  @NonNull
   protected ModelAndView createModelAndViewForProductPage(Navigation navigation, String productId, String view,
                                                           String orientation, String types, @Nullable User developer) {
     Product product = getProductFromId(productId);
@@ -231,7 +233,7 @@ public class ProductFragmentHandler extends FragmentHandler {
 
   @Nullable
   private Product getProductFromId(@Nullable String productId) {
-    if (isNullOrEmpty(productId)) {
+    if (isNullOrEmpty(productId)) { // NOSONAR - Workaround for spotbugs/spotbugs#621, see CMS-12169
       return null;
     }
 
@@ -275,8 +277,8 @@ public class ProductFragmentHandler extends FragmentHandler {
   }
 
   @Nullable
-  private static String extractParameterValue(@Nullable String parameters, @Nonnull String parameterName) {
-    if (isNullOrEmpty(parameters)) {
+  private static String extractParameterValue(@Nullable String parameters, @NonNull String parameterName) {
+    if (isNullOrEmpty(parameters)) { // NOSONAR - Workaround for spotbugs/spotbugs#621, see CMS-12169
       return parameters;
     }
 
@@ -293,7 +295,7 @@ public class ProductFragmentHandler extends FragmentHandler {
   }
 
   @Override
-  public boolean include(@Nonnull FragmentParameters params) {
+  public boolean include(@NonNull FragmentParameters params) {
     return !isNullOrEmpty(params.getProductId())
             && (isNullOrEmpty(params.getExternalRef()) || !params.getExternalRef().startsWith("cm-"));
   }

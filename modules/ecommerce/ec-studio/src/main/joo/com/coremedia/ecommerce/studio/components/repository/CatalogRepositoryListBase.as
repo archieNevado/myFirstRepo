@@ -1,9 +1,9 @@
 package com.coremedia.ecommerce.studio.components.repository {
 import com.coremedia.cms.editor.sdk.collectionview.CollectionView;
-import com.coremedia.cms.editor.sdk.context.ComponentContextManager;
 import com.coremedia.ecommerce.studio.components.AbstractCatalogList;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.model.Marketing;
+import com.coremedia.ui.context.ComponentContextManager;
 import com.coremedia.ui.data.RemoteBean;
 import com.coremedia.ui.data.RemoteBeanUtil;
 import com.coremedia.ui.data.ValueExpression;

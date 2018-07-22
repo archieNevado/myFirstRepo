@@ -32,7 +32,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.security.auth.login.CredentialExpiredException;
@@ -156,7 +156,7 @@ public class LoginStatusHandlerTest {
     when(userSessionService.isLoggedIn()).then(invocation -> isCurrentConnection(connection));
   }
 
-  private static boolean isCurrentConnection(@Nonnull CommerceConnection connection) {
+  private static boolean isCurrentConnection(@NonNull CommerceConnection connection) {
     return CurrentCommerceConnection.find().map(connection::equals).orElse(false);
   }
 

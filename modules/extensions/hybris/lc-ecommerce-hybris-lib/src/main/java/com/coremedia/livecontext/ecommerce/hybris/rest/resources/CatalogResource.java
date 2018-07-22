@@ -16,8 +16,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +33,7 @@ public class CatalogResource extends AbstractHybrisResource {
   private static final String FIELDS_PARAM = "fields";
 
   @Nullable
-  public CatalogDocument getCatalog(@Nonnull StoreContext storeContext) {
+  public CatalogDocument getCatalog(@NonNull StoreContext storeContext) {
     String catalogId = getCatalogId();
     String catalogVersion = getCatalogVersion();
 
@@ -42,21 +42,21 @@ public class CatalogResource extends AbstractHybrisResource {
     return getConnector().performGet(CATALOG_PATH, storeContext, CatalogDocument.class, uriTemplateParameters);
   }
 
-  public List<UserGroupRefDocument> getAllUserGroups(@Nonnull StoreContext storeContext) {
+  public List<UserGroupRefDocument> getAllUserGroups(@NonNull StoreContext storeContext) {
     UserGroupsDocument userGroupDocuments = getConnector().performGet(USER_GROUPS_PATH, storeContext,
             UserGroupsDocument.class);
     return userGroupDocuments.getUserGroups();
   }
 
   @Nullable
-  public UserGroupDocument getUserGroup(String userGroupId, @Nonnull StoreContext storeContext) {
+  public UserGroupDocument getUserGroup(String userGroupId, @NonNull StoreContext storeContext) {
     List<String> uriTemplateParameters = newUriTemplateParameters("userGroupId", userGroupId);
 
     return getConnector().performGet(USER_GROUP_BY_ID_PATH, storeContext, UserGroupDocument.class, uriTemplateParameters);
   }
 
   @Nullable
-  public CategoryDocument getCategoryById(@Nonnull String categoryId, @Nonnull StoreContext storeContext) {
+  public CategoryDocument getCategoryById(@NonNull String categoryId, @NonNull StoreContext storeContext) {
     String catalogId = storeContext.getCatalogId();
     String catalogVersion = storeContext.getCatalogVersion();
 
@@ -66,7 +66,7 @@ public class CatalogResource extends AbstractHybrisResource {
   }
 
   @Nullable
-  public ProductDocument getProductById(String productId, @Nonnull StoreContext storeContext) {
+  public ProductDocument getProductById(String productId, @NonNull StoreContext storeContext) {
     String catalogId = getCatalogId();
     String catalogVersion = getCatalogVersion();
 
@@ -76,16 +76,17 @@ public class CatalogResource extends AbstractHybrisResource {
   }
 
   @Nullable
-  public PriceDocument getPriceDocumentById(String priceId, @Nonnull StoreContext storeContext) {
+  public PriceDocument getPriceDocumentById(String priceId, @NonNull StoreContext storeContext) {
     List<String> uriTemplateParameters = newUriTemplateParameters("priceId", priceId);
 
     return getConnector().performGet(PRICES_PATH, storeContext, PriceDocument.class, uriTemplateParameters);
   }
 
   @Nullable
-  public ProductSearchDocument searchProducts(@Nonnull String searchTerm, @Nonnull Map<String, String> searchParams,
-                                              @Nonnull StoreContext storeContext) {
-    List<String> pathParams = newUriTemplateParameters(storeContext, StoreContextHelper.getStoreId());
+  public ProductSearchDocument searchProducts(@NonNull String searchTerm, @NonNull Map<String, String> searchParams,
+                                              @NonNull StoreContext storeContext) {
+    String storeId = StoreContextHelper.getStoreId(storeContext);
+    List<String> pathParams = newUriTemplateParameters(storeContext, storeId);
 
     MultiValueMap<String, String> queryParams = prepareQueryParams(searchTerm, searchParams);
 
@@ -93,9 +94,9 @@ public class CatalogResource extends AbstractHybrisResource {
             queryParams, true);
   }
 
-  @Nonnull
-  private static MultiValueMap<String, String> prepareQueryParams(@Nonnull String searchTerm,
-                                                                  @Nonnull Map<String, String> searchParams) {
+  @NonNull
+  private static MultiValueMap<String, String> prepareQueryParams(@NonNull String searchTerm,
+                                                                  @NonNull Map<String, String> searchParams) {
     MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
 
     String sortParam = "sort";

@@ -5,8 +5,8 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.fragment.FragmentParameters;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 /**
  * External Content resolver for 'externalRef' values that contain a content id.
@@ -20,15 +20,15 @@ public class ContentCapIdExternalReferenceResolver extends ExternalReferenceReso
   // --- interface --------------------------------------------------
 
   @Override
-  protected boolean include(@Nonnull FragmentParameters fragmentParameters, @Nonnull String referenceInfo) {
+  protected boolean include(@NonNull FragmentParameters fragmentParameters, @NonNull String referenceInfo) {
     return IdHelper.isContentObjectId(referenceInfo);
   }
 
   @Nullable
   @Override
-  protected LinkableAndNavigation resolveExternalRef(@Nonnull FragmentParameters fragmentParameters,
-                                                     @Nonnull String referenceInfo,
-                                                     @Nonnull Site site) {
+  protected LinkableAndNavigation resolveExternalRef(@NonNull FragmentParameters fragmentParameters,
+                                                     @NonNull String referenceInfo,
+                                                     @NonNull Site site) {
     Content linkable = contentRepository.getContent(referenceInfo);
     Content navigation = null;
     if (linkable != null) {

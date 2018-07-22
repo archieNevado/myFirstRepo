@@ -5,8 +5,8 @@ import com.coremedia.livecontext.ecommerce.hybris.rest.documents.PreviewTokenDoc
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +15,7 @@ public class PreviewTokenResource extends AbstractHybrisResource {
   private static final String PREVIEW_TOKEN_PATH = "/preview/";
 
   @Nullable
-  public PreviewTokenDocument getPreviewToken(@Nullable Map bodyData, @Nonnull AccessToken accessToken) {
+  public PreviewTokenDocument getPreviewToken(@Nullable Map bodyData, @NonNull AccessToken accessToken) {
     List<String> uriTemplateParameters = newUriTemplateParameters("accessToken", accessToken.getToken());
 
     MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();

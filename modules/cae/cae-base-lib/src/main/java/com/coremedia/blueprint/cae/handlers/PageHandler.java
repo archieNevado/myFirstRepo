@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
@@ -68,9 +68,9 @@ public class PageHandler extends DefaultPageHandler {
   @Link(type = CMTaxonomy.class)
   @Nullable
   public UriComponentsBuilder buildLinkForTaxonomy(
-          @Nonnull CMTaxonomy taxonomy,
+          @NonNull CMTaxonomy taxonomy,
           @Nullable String viewName,
-          @Nonnull Map<String, Object> linkParameters) {
+          @NonNull Map<String, Object> linkParameters) {
     return buildLinkForTaxonomyInternal(taxonomy, viewName, linkParameters);
   }
 
@@ -78,9 +78,9 @@ public class PageHandler extends DefaultPageHandler {
   @Link(type = CMLinkable.class)
   @Nullable
   public UriComponentsBuilder buildLinkForLinkable(
-          @Nonnull CMLinkable linkable,
+          @NonNull CMLinkable linkable,
           @Nullable String viewName,
-          @Nonnull Map<String, Object> linkParameters) {
+          @NonNull Map<String, Object> linkParameters) {
     return buildLinkForLinkableInternal(linkable, viewName, linkParameters);
   }
 }

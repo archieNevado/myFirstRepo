@@ -25,9 +25,9 @@
       <property name="contentBeanFactory" ref="contentBeanFactory"/>
       <property name="propertyToContextMap">
         <map>
-          <entry key="properties.subjectTaxonomies" value="subjectTaxonomies"/>
-          <entry key="properties.locationTaxonomies" value="locationTaxonomies"/>
-          <entry key="properties.explicit" value="explicit"/>
+          <entry key="[properties][subjectTaxonomies]" value="subjectTaxonomies"/>
+          <entry key="[properties][locationTaxonomies]" value="locationTaxonomies"/>
+          <entry key="[properties][explicit]" value="explicit"/>
         </map>
       </property>
     </bean>

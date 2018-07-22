@@ -3,7 +3,7 @@ package com.coremedia.livecontext.ecommerce.hybris.rest.documents;
 import com.coremedia.livecontext.ecommerce.search.SearchFacet;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class ProductSearchDocument extends AbstractHybrisDocument {
     return products;
   }
 
-  @Nonnull
+  @NonNull
   public List<SearchFacet> getFacets() {
     return Collections.unmodifiableList(facets == null ? Collections.emptyList() : facets);
   }

@@ -10,10 +10,10 @@
       <#-- use catalog image if no visuals assigned -->
       <#if self.catalogPicture.picture?has_content>
         <#-- managed asset found -->
-        <@cm.include self=self.catalogPicture!cm.UNDEFINED params={"overflow":false, "classBox": "cm-product-assets__picture-box"}/>
+        <@cm.include self=self.catalogPicture!cm.UNDEFINED view="media" params={"classBox": "cm-product-assets__picture-box"}/>
       <#else>
         <#-- use original image url from catalog-->
-        <@cm.include self=self.catalogPicture!cm.UNDEFINED params={"overflow":false}/>
+        <@cm.include self=self.catalogPicture!cm.UNDEFINED view="media" />
       </#if>
     <#else>
       <#if orientation?has_content && visuals?has_content>
@@ -48,6 +48,7 @@
                       "renderTeaserTitle": false,
                       "renderTeaserText": false,
                       "renderDimmer": false,
+                      "renderLink": false,
                       "renderType": "plain",
                       "limitAspectRatios": ["portrait_ratio1x1"]
                     } />

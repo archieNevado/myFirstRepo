@@ -1,38 +1,9 @@
 import $ from "jquery";
 import { findAndSelf } from "@coremedia/js-jquery-utils";
-import * as basic from "@coremedia/js-basic";
+import { EVENT_LAYOUT_CHANGED } from "@coremedia/js-basic";
+import { EVENT_NODE_APPENDED } from "@coremedia/brick-dynamic-include";
 import * as deviceDetector from "@coremedia/js-device-detector";
 import * as livecontext from "./livecontext";
-
-function applyDropdown($target) {
-  findAndSelf(
-    $target,
-    ".cm-placement-header .cm-navigation.cm-dropdown > li > .cm-dropdown-button--open"
-  ).removeClass("icon-menu-next");
-  findAndSelf(
-    $target,
-    ".cm-placement-header .cm-navigation.cm-dropdown > li > .cm-dropdown-button--close"
-  ).removeClass("icon-menu-back");
-  findAndSelf(
-    $target,
-    ".cm-placement-header .cm-navigation.cm-dropdown > li > .cm-dropdown-button"
-  ).addClass("icon-menu");
-}
-
-function removeDropdown($target) {
-  findAndSelf(
-    $target,
-    ".cm-placement-header .cm-navigation.cm-dropdown > li > .cm-dropdown-button"
-  ).removeClass("icon-menu");
-  findAndSelf(
-    $target,
-    ".cm-placement-header .cm-navigation.cm-dropdown > li > .cm-dropdown-button--open"
-  ).addClass("icon-menu-next");
-  findAndSelf(
-    $target,
-    ".cm-placement-header .cm-navigation.cm-dropdown > li > .cm-dropdown-button--close"
-  ).addClass("icon-menu-back");
-}
 
 function applyDisablePopupCart($target) {
   findAndSelf($target, ".cm-icon--cart[data-cm-popup-control]").each(
@@ -95,14 +66,12 @@ function removeDisableImageMap($target) {
 const devices = {
   mobile: {
     applySettings: function($target) {
-      applyDropdown($target);
       applyDisableImageMap($target);
       applyDisablePopupCart($target);
     },
     removeSettings: function($target) {
       removeDisablePopupCart($target);
       removeDisableImageMap($target);
-      removeDropdown($target);
     },
     portrait: {
       applySettings: function($target) {
@@ -122,19 +91,8 @@ const devices = {
     },
   },
   tablet: {
-    applySettings: function($target) {
-      // footer navigation does not act as dropdown menu
-      findAndSelf($target, ".cm-navigation--footer").removeClass("cm-dropdown");
-      applyDropdown($target);
-      // change height of marketing spot items
-      livecontext.setMarketingSpotItemsHeight();
-    },
-    removeSettings: function($target) {
-      // remove height of marketing spot items
-      livecontext.unsetMarketingSpotItemsHeight();
-      removeDropdown($target);
-      findAndSelf($target, ".cm-navigation--footer").addClass("cm-dropdown");
-    },
+    applySettings: function($target) {},
+    removeSettings: function($target) {},
     portrait: {
       applySettings: function(/*$target*/) {},
       removeSettings: function(/*$target*/) {},
@@ -157,9 +115,6 @@ const devices = {
         "cm-visuallyhidden"
       );
 
-      // all dropdown functionality is removed from navigations
-      findAndSelf($target, ".cm-navigation").removeClass("cm-dropdown");
-
       // find header icon for main navigation
       const $headerNavigationIcon = findAndSelf(
         $target,
@@ -175,8 +130,6 @@ const devices = {
       $headerNavigation.addClass("mega-menu");
       // change width of mega-menu items
       livecontext.setMegaMenuItemsWidth();
-      // change height of marketing spot items
-      livecontext.setMarketingSpotItemsHeight();
 
       // find header icon for search
       const $headerSearchIcon = findAndSelf(
@@ -212,8 +165,6 @@ const devices = {
         .addClass("icon-arrow-right");
       $headerSearchIcon.addClass("cm-icon");
 
-      // remove height of marketing spot items
-      livecontext.unsetMarketingSpotItemsHeight();
       // remove width of mega-menu items
       livecontext.unsetMegaMenuItemsWidth();
 
@@ -228,8 +179,6 @@ const devices = {
       $headerNavigation.removeClass("mega-menu");
       $headerNavigation.addClass("cm-icon__symbol");
       $headerNavigationIcon.addClass("cm-icon");
-
-      findAndSelf($target, ".cm-navigation").addClass("cm-dropdown");
 
       findAndSelf($target, ".cm-icon--button-top .cm-icon__info").addClass(
         "cm-visuallyhidden"
@@ -299,11 +248,11 @@ $(function() {
       applySettings(newDevice.type, undefined, $document);
     }
     applySettings(newDevice.type, newDevice.orientation, $document);
-    $document.trigger(basic.EVENT_LAYOUT_CHANGED);
+    $document.trigger(EVENT_LAYOUT_CHANGED);
   });
 
   // device settings need to be reapplied if DOM changes
-  $document.on(basic.EVENT_NODE_APPENDED, function(event, $node) {
+  $document.on(EVENT_NODE_APPENDED, function(event, $node) {
     const device = deviceDetector.getLastDevice();
     applySettings(device.type, device.orientation, $node);
   });

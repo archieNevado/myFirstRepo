@@ -15,8 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.concurrent.TimeUnit;
 
 public class LiveContextResolveContextStrategy implements ResolveContextStrategy {
@@ -29,7 +29,7 @@ public class LiveContextResolveContextStrategy implements ResolveContextStrategy
   private Cache cache;
 
   @Nullable
-  protected Category findNearestCategoryFor(@Nonnull CommerceBean commerceBean) {
+  protected Category findNearestCategoryFor(@NonNull CommerceBean commerceBean) {
     if (commerceBean instanceof Product){
       return ((Product) commerceBean).getCategory();
     } else if (commerceBean instanceof Category){
@@ -51,7 +51,7 @@ public class LiveContextResolveContextStrategy implements ResolveContextStrategy
     return getCommerceConnection().getStoreContextProvider();
   }
 
-  @Nonnull
+  @NonNull
   protected CommerceConnection getCommerceConnection() {
     return CurrentCommerceConnection.get();
   }
@@ -67,7 +67,7 @@ public class LiveContextResolveContextStrategy implements ResolveContextStrategy
 
   @Nullable
   @Override
-  public LiveContextNavigation resolveContext(@Nonnull Site site, @Nonnull CommerceBean commerceBean) {
+  public LiveContextNavigation resolveContext(@NonNull Site site, @NonNull CommerceBean commerceBean) {
     // cache is required for performance concerns in production use,
     // functionally it also works without. Maybe useful for testing.
     return cache!=null ? cache.get(new CommerceContextProviderCacheKey(site, commerceBean)) : resolveContextUncached(site, commerceBean);
@@ -93,7 +93,7 @@ public class LiveContextResolveContextStrategy implements ResolveContextStrategy
     private final CommerceBean commerceBean;
     private final Site site;
 
-    CommerceContextProviderCacheKey(@Nonnull Site site, @Nonnull CommerceBean commerceBean) {
+    CommerceContextProviderCacheKey(@NonNull Site site, @NonNull CommerceBean commerceBean) {
       this.site = site;
       this.commerceBean = commerceBean;
     }

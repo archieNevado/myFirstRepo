@@ -4,7 +4,7 @@ import com.coremedia.livecontext.ecommerce.search.SearchFacet;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +28,7 @@ public class SearchFacetDocument extends AbstractHybrisDocument implements Searc
 
   private String value;
 
-  @Nonnull
+  @NonNull
   public List<SearchFacet> getValues() {
     return Collections.unmodifiableList(values);
   }
@@ -47,7 +47,7 @@ public class SearchFacetDocument extends AbstractHybrisDocument implements Searc
     return count;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public String getLabel() {
     return name;
@@ -58,7 +58,7 @@ public class SearchFacetDocument extends AbstractHybrisDocument implements Searc
     return selected;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public String getQuery() {
     return value;
@@ -69,13 +69,13 @@ public class SearchFacetDocument extends AbstractHybrisDocument implements Searc
     return url;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public Map<String, Object> getExtendedData() {
     return unmapped();
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<SearchFacet> getChildFacets() {
     return values != null ? getValues() : Collections.emptyList();

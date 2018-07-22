@@ -28,8 +28,8 @@ import com.coremedia.objectserver.web.links.Link;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
@@ -199,8 +199,8 @@ public class HybrisPreviewLinkScheme {
 
   @Link(type = CMChannel.class, order = 2)
   @Nullable
-  public Object buildPreviewLinkForMicrosite(@Nonnull CMChannel channel, @Nullable String viewName,
-                                             @Nonnull Map<String, Object> linkParameters, HttpServletRequest request,
+  public Object buildPreviewLinkForMicrosite(@NonNull CMChannel channel, @Nullable String viewName,
+                                             @NonNull Map<String, Object> linkParameters, HttpServletRequest request,
                                              HttpServletResponse response) {
     if (!isApplicable(request)) {
       return null;
@@ -218,7 +218,7 @@ public class HybrisPreviewLinkScheme {
   }
 
   @Link(type = CMHasContexts.class, order = 3)
-  public Object buildLinkForStudioTeaserTargets(@Nonnull CMHasContexts cmHasContexts, @Nonnull HttpServletRequest request) {
+  public Object buildLinkForStudioTeaserTargets(@NonNull CMHasContexts cmHasContexts, @NonNull HttpServletRequest request) {
     //exit if not hybris
     if (!isHybris()
             //or if the current request is the initial /preview studio request
@@ -246,11 +246,11 @@ public class HybrisPreviewLinkScheme {
             .isPresent();
   }
 
-  private static boolean isStudioPreviewRequest(@Nonnull HttpServletRequest request) {
+  private static boolean isStudioPreviewRequest(@NonNull HttpServletRequest request) {
     return PreviewHandler.isStudioPreviewRequest(request) || "true".equals(request.getParameter(P13N_URI_PARAMETER));
   }
 
-  private static boolean isApplicable(@Nonnull HttpServletRequest request) {
+  private static boolean isApplicable(@NonNull HttpServletRequest request) {
     return isHybris() && isStudioPreviewRequest(request);
   }
 

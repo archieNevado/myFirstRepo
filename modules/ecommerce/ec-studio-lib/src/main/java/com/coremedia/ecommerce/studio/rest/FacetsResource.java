@@ -71,7 +71,7 @@ public class FacetsResource extends AbstractCatalogResource<Facets> {
     setId(facets.getId());
     setSiteId(context.getSiteId());
     setCatalogAlias(context.getCatalogAlias().value());
-    setWorkspaceId(context.getWorkspaceId());
+    setWorkspaceId(context.getWorkspaceId().orElse(null));
   }
 
   private Map<String, List<Facet>> simplifySearchFacets(Map<String, List<SearchFacet>> searchFacetMap) {

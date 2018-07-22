@@ -15,7 +15,7 @@ import com.google.common.collect.ImmutableSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.SmartLifecycle;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -58,7 +58,7 @@ class AssetInvalidationRepositoryListener extends ContentRepositoryListenerBase 
   private ContentRepository repository;
 
   @Override
-  protected void handleContentEvent(@Nonnull ContentEvent event) {
+  protected void handleContentEvent(@NonNull ContentEvent event) {
     if (!EVENT_WHITELIST.contains(event.getType())) {
       return;
     }
@@ -71,8 +71,8 @@ class AssetInvalidationRepositoryListener extends ContentRepositoryListenerBase 
     commerceCacheInvalidationSource.invalidateReferences(getReferences(event, content));
   }
 
-  @Nonnull
-  private Collection<String> getReferences(@Nonnull ContentEvent event, @Nonnull Content content) {
+  @NonNull
+  private Collection<String> getReferences(@NonNull ContentEvent event, @NonNull Content content) {
     if (event.getType().equals(ContentEvent.CONTENT_REVERTED)) {
       //when a content ist reverted we don't know the old external references.
       // So we have to invalidate all relevant catalog types
@@ -130,7 +130,7 @@ class AssetInvalidationRepositoryListener extends ContentRepositoryListenerBase 
    * @param content
    * @return true if the content is a picture, video or a download or one of their subtypes.
    */
-  private static boolean isRelevantType(@Nonnull Content content) {
+  private static boolean isRelevantType(@NonNull Content content) {
     ContentType contentType = content.getType();
 
     return contentType.isSubtypeOf(CMPicture.NAME) ||

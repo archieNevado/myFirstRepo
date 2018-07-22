@@ -15,8 +15,8 @@ import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.google.common.collect.ImmutableList;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -104,7 +104,7 @@ public class DownloadPortalFactory {
    * @see AMAsset#getPrimaryCategory()
    */
   @Nullable
-  public AssetDetails createAssetDetails(@Nonnull CMChannel navigation, @Nonnull AMAsset asset, @Nullable AMTaxonomy category) {
+  public AssetDetails createAssetDetails(@NonNull CMChannel navigation, @NonNull AMAsset asset, @Nullable AMTaxonomy category) {
     // double check if the given category is really linked to the given asset to prevent URL manipulation
     // category may be null (required for preview)
     if(category != null && !category.getContent().isInProduction()) {
@@ -156,7 +156,7 @@ public class DownloadPortalFactory {
    * @param asset      the asset
    * @return the metadata to be shown
    */
-  private Map<String, String> getVisibleAssetMetadata(@Nonnull CMChannel navigation, @Nonnull AMAsset asset) {
+  private Map<String, String> getVisibleAssetMetadata(@NonNull CMChannel navigation, @NonNull AMAsset asset) {
     Struct metadata = asset.getMetadata();
     if (metadata != null && !metadata.getProperties().isEmpty()) {
       Map<String, Object> assetMetadata = metadata.getProperties();
@@ -187,7 +187,7 @@ public class DownloadPortalFactory {
    * @return the settings struct for the given navigation or null
    */
   @Nullable
-  private List<String> getMetadataWhiteList(@Nonnull CMChannel navigation) {
+  private List<String> getMetadataWhiteList(@NonNull CMChannel navigation) {
     ImmutableList<String> metadataHierarchy = ImmutableList.of(AMSettingKeys.ASSET_MANAGEMENT,
             AMSettingKeys.ASSET_MANAGEMENT_DOWNLOAD_PORTAL,
             AMSettingKeys.ASSET_MANAGEMENT_DOWNLOAD_PORTAL_METADATA_PROPERTIES);
@@ -202,8 +202,8 @@ public class DownloadPortalFactory {
    * @param navigation the navigation linking to the settings struct
    * @return the number of assets per page
    */
-  @Nonnull
-  private Integer getAssetsPerPage(@Nonnull CMChannel navigation) {
+  @NonNull
+  private Integer getAssetsPerPage(@NonNull CMChannel navigation) {
     ImmutableList<String> assetsPerPageInSettings = ImmutableList.of(AMSettingKeys.ASSET_MANAGEMENT,
             AMSettingKeys.ASSET_MANAGEMENT_DOWNLOAD_PORTAL,
             AMSettingKeys.ASSET_MANAGEMENT_DOWNLOAD_PORTAL_ASSETS_PER_PAGE);
@@ -227,7 +227,7 @@ public class DownloadPortalFactory {
    * @param category the category
    * @return the {@link CategoryOverview} bean for the given category.
    */
-  @Nonnull
+  @NonNull
   public CategoryOverview createCategoryOverview(@Nullable AMTaxonomy category) {
     return new CategoryOverview(category, downloadPortalSearchService.getSubCategories(category));
   }
@@ -249,7 +249,7 @@ public class DownloadPortalFactory {
   }
 
 
-  public SearchOverview createSearchOverview(@Nonnull String query) {
+  public SearchOverview createSearchOverview(@NonNull String query) {
     return new SearchOverview(query);
   }
 
@@ -269,8 +269,8 @@ public class DownloadPortalFactory {
    * @param pageNo     the requested page number
    * @return the {@link PaginatedAssets} that represents the requested category assets.
    */
-  @Nonnull
-  public PaginatedAssets createPaginatedCategoryAssets(@Nullable AMTaxonomy category, @Nonnull CMChannel navigation, int pageNo) {
+  @NonNull
+  public PaginatedAssets createPaginatedCategoryAssets(@Nullable AMTaxonomy category, @NonNull CMChannel navigation, int pageNo) {
     if (category == null || !category.getContent().isInProduction()) {
       return new PaginatedAssets();
     }
@@ -290,9 +290,9 @@ public class DownloadPortalFactory {
    * @param pageNo     the requested page number
    * @return the {@link PaginatedAssets} that represents the requested category assets.
    */
-  @Nonnull
+  @NonNull
   public PaginatedAssets createPaginatedSubjectAssets(@Nullable CMTaxonomy subject,
-                                                      @Nonnull CMChannel navigation,
+                                                      @NonNull CMChannel navigation,
                                                       int pageNo) {
     if (subject == null || !subject.getContent().isInProduction()) {
       return new PaginatedAssets();
@@ -313,9 +313,9 @@ public class DownloadPortalFactory {
    * @param pageNo     the requested page number
    * @return the {@link PaginatedAssets} that represents the requested category assets.
    */
-  @Nonnull
-  public PaginatedAssets createPaginatedSearchAssets(@Nonnull String query,
-                                                     @Nonnull CMChannel navigation,
+  @NonNull
+  public PaginatedAssets createPaginatedSearchAssets(@NonNull String query,
+                                                     @NonNull CMChannel navigation,
                                                      int pageNo) {
     int assetsPerPage = getAssetsPerPage(navigation);
     SearchResultBean searchResultBean = downloadPortalSearchService.searchForAssets(query, assetsPerPage, pageNo);
@@ -326,8 +326,8 @@ public class DownloadPortalFactory {
     return new PaginatedAssets();
   }
 
-  @Nonnull
-  private List<AMAsset> createAssetsFromHits(@Nonnull List<?> hits) {
+  @NonNull
+  private List<AMAsset> createAssetsFromHits(@NonNull List<?> hits) {
     List<AMAsset> assets = new ArrayList<>(hits.size());
     for (Object o : hits) {
       if (o instanceof AMAsset) {
