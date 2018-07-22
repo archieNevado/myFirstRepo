@@ -2,7 +2,7 @@ package com.coremedia.blueprint.elastic.social.cae.springsocial;
 
 import org.springframework.web.context.request.NativeWebRequest;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -19,8 +19,8 @@ class Requests {
    * @return the underlying servlet request, never null
    * @throws IllegalStateException if there is no underlying servlet request
    */
-  @Nonnull
-  static HttpServletRequest getServletRequest(@Nonnull NativeWebRequest nativeWebRequest) {
+  @NonNull
+  static HttpServletRequest getServletRequest(@NonNull NativeWebRequest nativeWebRequest) {
     HttpServletRequest servletRequest = nativeWebRequest.getNativeRequest(HttpServletRequest.class);
 
     if (servletRequest == null) {

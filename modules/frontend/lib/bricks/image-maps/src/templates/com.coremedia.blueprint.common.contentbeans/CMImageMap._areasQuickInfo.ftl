@@ -15,20 +15,34 @@
 
 <#--imagemap with areas -->
 <#if imageMapAreas?has_content>
+
+  <#assign quickInfoWithOverlayIdList = [] />
+  <#list imageMapAreas![] as imageMapArea>
+    <#if !imageMapArea.displayAsInlineOverlay!false>
+      <#assign quickInfoWithOverlayIdList = quickInfoWithOverlayIdList + [quickInfoIdList[imageMapArea?index]]/>
+    </#if>
+  </#list>
+
+  <#assign quickInfoIndex = -1/>
   <#list imageMapAreas![] as imageMapArea>
     <#if imageMapArea?has_content>
 
-      <#assign index=imageMapArea?index/>
-      <#assign quickInfoId=quickInfoIdList[index]/>
+      <#if !imageMapArea.displayAsInlineOverlay!false>
+        <#assign quickInfoIndex = quickInfoIndex + 1/>
+        <#assign quickInfoId=quickInfoWithOverlayIdList[quickInfoIndex]/>
+      <#else>
+        <#assign index = imageMapArea?index/>
+        <#assign quickInfoId = quickInfoIdList[index]/>
+      </#if>
 
       <#-- ids for next/previous button -->
-      <#assign quickInfoNextId=quickInfoIdList[index + 1]!""/>
-      <#assign quickInfoPreviousId=quickInfoIdList[index - 1]!""/>
-      <#if (quickInfoIdList?size > 1 ) >
-        <#if (index == 0)>
-          <#assign quickInfoPreviousId=quickInfoIdList?last />
-        <#elseif (index == (imageMapAreas?size - 1))>
-          <#assign quickInfoNextId=quickInfoIdList?first />
+      <#assign quickInfoNextId=quickInfoWithOverlayIdList[quickInfoIndex + 1]!""/>
+      <#assign quickInfoPreviousId=quickInfoWithOverlayIdList[quickInfoIndex - 1]!""/>
+      <#if (quickInfoWithOverlayIdList?size > 1 ) >
+        <#if (quickInfoIndex == 0)>
+          <#assign quickInfoPreviousId=quickInfoWithOverlayIdList?last />
+        <#elseif (quickInfoIndex == (quickInfoWithOverlayIdList?size - 1))>
+          <#assign quickInfoNextId=quickInfoWithOverlayIdList?first />
         </#if>
       </#if>
 

@@ -2,18 +2,19 @@
 <#-- @ftlvariable name="cssClass" type="java.lang.String" -->
 <#-- @ftlvariable name="islast" type="java.lang.Boolean" -->
 
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/utils.ftl" as utils />
+
 <#assign cssClasses = cm.localParameter("cssClass", "") + cm.localParameter("islast", false)?then(" is-last", "") />
-<#assign videoLink = bp.getVideoLink(self) />
 
 <div class="cm-claim cm-claim--video thumbnail ${cssClasses}"<@preview.metadata self.content />>
-  <@bp.optionalLink href="${videoLink}" attr={"data-cm-popup": "", "class":"cm-claim__popup-opener"}>
+  <@utils.optionalLink href="${cm.getLink(self.target)}" attr={ "class": "cm-claim__link" }>
     <#-- picture -->
     <#if self.picture?has_content>
-      <@cm.include self=self.picture params={
-      "limitAspectRatios": [ "portrait_ratio1x1" ],
-      "classBox": "cm-claim__picture-box",
-      "classImage": "cm-claim__picture",
-      "metadata": ["properties.pictures"]
+      <@cm.include self=self.picture view="media" params={
+        "limitAspectRatios": [ "portrait_ratio1x1" ],
+        "classBox": "cm-claim__picture-box",
+        "classMedia": "cm-claim__picture",
+        "metadata": ["properties.pictures"]
       }/>
     <#else>
       <div class="cm-claim__picture-box">
@@ -22,8 +23,8 @@
     </#if>
 
     <#-- play overlay icon-->
-    <@cm.include self=self view="_playButton" params={"blockClass": "cm-claim"}/>
-  </@bp.optionalLink>
+    <@cm.include self=self view="_playButton" params={"blockClass": "cm-claim", "openAsPopup": true}/>
+  </@utils.optionalLink>
 
   <div class="caption">
     <#-- headline -->
@@ -34,7 +35,7 @@
     </h3>
     <#-- teaser text, 3 lines ~ 120 chars -->
     <p class="cm-claim__text"<@preview.metadata "properties.teaserText" />>
-      <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", bp.setting(cmpage, "claim.max.length", 115)) />
+      <@utils.renderWithLineBreaks text=bp.truncateText(self.teaserText!"", bp.setting(self, "claim.max.length", 115)) />
     </p>
   </div>
 </div>

@@ -2,6 +2,8 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.elastic.social.cae.action.AuthenticationState" -->
 <#-- @ftlvariable name="fragmentParameter" type="com.coremedia.livecontext.fragment.FragmentParameters" -->
 
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/components.ftl" as components />
+
 <#assign nextUrl="" />
 <#if fragmentParameter?has_content>
   <#assign nextUrl=fragmentParameter.getParameter()!"" />
@@ -13,9 +15,9 @@
 <#else>
   <div class="cm-button-group cm-button-group--default">
     <#assign registrationAction=self.registrationAction!cm.UNDEFINED />
-    <#assign registrationFlow=bp.substitute(registrationAction.id!"", registrationAction)!cm.UNDEFINED />
+    <#assign registrationFlow=cm.substitute(registrationAction.id!"", registrationAction) />
     <#assign urlEncodedRedirect=nextUrl?url("utf-8")?url("utf-8") />
     <#assign link=cm.getLink(registrationFlow, cm.UNDEFINED, {"externalRedirect": "", "nextUrl": urlEncodedRedirect}) />
-    <@bp.button text=bp.getMessage("login_sign_up_button") href=link attr={"type": "submit", "classes": ["cm-button-group__button"]} />
+    <@components.button text=bp.getMessage("login_sign_up_button") href=link attr={"type": "submit", "classes": ["cm-button-group__button"]} />
   </div>
 </#if>

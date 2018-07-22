@@ -3,7 +3,7 @@ package com.coremedia.blueprint.cae.view;
 import com.coremedia.objectserver.view.RenderNode;
 import com.coremedia.objectserver.view.RenderNodeDecorator;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.List;
 
 /**
@@ -17,7 +17,7 @@ public class DynamicIncludeRenderNodeDecorator implements RenderNodeDecorator {
     this.predicates = predicates;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public RenderNode decorateRenderNode(Object self, String viewName) {
     RenderNode renderNode = new RenderNode(self, viewName);

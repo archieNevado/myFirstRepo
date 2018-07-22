@@ -49,6 +49,18 @@
       </editor:plugins>
     </editor:ExtensionsMenuToolbar>
 
+    <bpforms:CMTaxonomyForm>
+      <bpforms:plugins exml:mode="append">
+        <taxonomy:TaxonomyChangePlugin />
+      </bpforms:plugins>
+    </bpforms:CMTaxonomyForm>
+
+    <bpforms:CMLocTaxonomyForm>
+      <bpforms:plugins exml:mode="append">
+        <taxonomy:TaxonomyChangePlugin />
+      </bpforms:plugins>
+    </bpforms:CMLocTaxonomyForm>
+
     <bpforms:CategoryDocumentForm>
       <bpforms:plugins>
         <ui:AddItemsPlugin>

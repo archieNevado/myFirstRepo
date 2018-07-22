@@ -2,7 +2,7 @@ package com.coremedia.blueprint.coderesources;
 
 import com.coremedia.cap.content.Content;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.List;
 
 /**
@@ -77,6 +77,6 @@ public interface CodeResourcesModel {
    *
    * @return a list of resources.
    */
-  @Nonnull
+  @NonNull
   List<?> getLinkTargetList();
 }

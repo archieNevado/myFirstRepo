@@ -25,14 +25,6 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>commons-beanutils</groupId>
-      <artifactId>commons-beanutils</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-    </dependency>
-    <dependency>
       <!-- we use spring bean customizers -->
       <groupId>com.coremedia.cms</groupId>
       <artifactId>coremedia-spring</artifactId>
@@ -45,6 +37,11 @@
     <dependency>
       <groupId>com.coremedia.personalization</groupId>
       <artifactId>cap-personalization</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.github.spotbugs</groupId>
+      <artifactId>spotbugs-annotations</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>

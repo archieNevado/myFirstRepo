@@ -1,5 +1,7 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.layout.PageGridPlacement" -->
 
+<#import "*/node_modules/@coremedia/brick-bootstrap/src/freemarkerLibs/bootstrap.ftl" as bootstrap />
+
 <#-- This placement is used for the footer section -->
 <footer id="cm-${self.name!""}" class="cm-footer"<@preview.metadata data=[bp.getPlacementPropertyName(self)!"",bp.getPlacementHighlightingMetaData(self)!""]/>>
   <#-- links -->
@@ -8,9 +10,9 @@
   <ul class="cm-footer__links row">
     <#list self.items![] as item>
       <#-- tablet: 3 rows -->
-      <#assign offsetSm=bp.getOffsetClass(item_index, numberOfItems, 3, " col-sm-") />
+      <#assign offsetSm=bootstrap.getOffsetClass(item_index, numberOfItems, 3, " col-sm-") />
       <#-- desktop: 6 rows -->
-      <#assign offsetMd=bp.getOffsetClass(item_index, numberOfItems, 6, " col-md-", true) />
+      <#assign offsetMd=bootstrap.getOffsetClass(item_index, numberOfItems, 6, " col-md-", true) />
 
       <li class="col-xs-12 col-sm-4 col-md-2${offsetSm}${offsetMd}">
         <@cm.include self=item view="asLink" />

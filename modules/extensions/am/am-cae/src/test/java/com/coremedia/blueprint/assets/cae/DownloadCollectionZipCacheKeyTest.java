@@ -19,7 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.activation.MimeType;
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -228,12 +228,12 @@ public class DownloadCollectionZipCacheKeyTest {
   }
 
   private DownloadCollectionZipCacheKey newDownloadCollectionZipCacheKeyWithRenditions(
-          @Nonnull List<AMAssetRendition> renditions) {
+          @NonNull List<AMAssetRendition> renditions) {
     return new DownloadCollectionZipCacheKey(renditions, contentRepository, mimeTypeService);
   }
 
   private DownloadCollectionZipCacheKey newDownloadCollectionZipCacheKeyWithContentRepository(
-          @Nonnull ContentRepository contentRepository) {
+          @NonNull ContentRepository contentRepository) {
     return new DownloadCollectionZipCacheKey(renditions, contentRepository, mimeTypeService);
   }
 

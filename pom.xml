@@ -103,10 +103,6 @@
     <module>deployment</module>
   </modules>
 
-  <prerequisites>
-    <maven>3.1</maven>
-  </prerequisites>
-
   <scm>
     <connection>scm:git:git@github.com:CoreMedia/cms.git</connection>
     <developerConnection>scm:git:git@github.com:CoreMedia/cms.git</developerConnection>
@@ -144,6 +140,26 @@
         <artifactId>coremedia-application-maven-plugin</artifactId>
         <version>2.7.10</version>
         <extensions>true</extensions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>3.0.0-M1</version>
+        <executions>
+          <execution>
+            <id>enforce-maven</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireMavenVersion>
+                  <version>3.3</version>
+                </requireMavenVersion>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

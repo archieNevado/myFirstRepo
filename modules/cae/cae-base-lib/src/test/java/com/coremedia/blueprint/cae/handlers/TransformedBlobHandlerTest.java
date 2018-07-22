@@ -28,7 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -217,7 +217,7 @@ public class TransformedBlobHandlerTest {
     return mockMvc.perform(req).andReturn().getModelAndView();
   }
 
-  private void assertNotFound(@Nonnull String message, ModelAndView modelAndView) {
+  private void assertNotFound(@NonNull String message, ModelAndView modelAndView) {
     assertThat(modelAndView)
             .as(message)
             .extracting(HandlerHelper::getRootModel)

@@ -10,6 +10,7 @@
   <component class="com.coremedia.blueprint.studio.taxonomy.action.PasteKeywordAction"/>
   <component class="com.coremedia.blueprint.studio.taxonomy.action.RemoveTaxonomyAction"/>
   <component class="com.coremedia.blueprint.studio.taxonomy.forms.CMQueryListForm"/>
+  <component class="com.coremedia.blueprint.studio.taxonomy.forms.TaxonomyChangePlugin"/>
   <component class="com.coremedia.blueprint.studio.taxonomy.administration.TaxonomyEditor"/>
   <component class="com.coremedia.blueprint.studio.taxonomy.administration.TaxonomyExplorerColumn"/>
   <component class="com.coremedia.blueprint.studio.taxonomy.administration.TaxonomyExplorerPanel"/>

@@ -2,6 +2,15 @@
 
 This file is used to list changes made in each version of the windows cookbook.
 
+## 4.3.4 (2018-07-18)
+
+- Fix error message typo in windows_feature_powershell
+- Use win32-certstore 0.1.7 for bugfixes
+
+## 4.3.3 (2018-07-05)
+
+- Fix failures on PS 3.0 in windows_feature_powershell
+
 ## 4.3.2 (2018-06-13)
 
 - Don't error in windows_feature_dism when providing a source

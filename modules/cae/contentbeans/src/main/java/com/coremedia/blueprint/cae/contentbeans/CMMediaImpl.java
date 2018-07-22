@@ -1,7 +1,13 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
+import com.coremedia.blueprint.common.contentbeans.CMMedia;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.transform.NamedTransformBeanBlobTransformer;
+import com.google.common.collect.Lists;
+
+import java.util.List;
+
+import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 
 /**
  * Generated extension class for immutable beans of document type " CMMedia".
@@ -40,5 +46,12 @@ public abstract class CMMediaImpl extends CMMediaBase {
   @Override
   public boolean getDisableCropping() {
     return false;
+  }
+
+
+  @Override
+  public List<CMMedia> getMedia() {
+    List<CMMedia> media = super.getMedia();
+    return isNotEmpty(media) ? media : Lists.newArrayList(this);
   }
 }

@@ -8,6 +8,10 @@ const {
   dependencies: { getFlattenedDependencies, NodeModule },
   workspace: { isBrickModule, getThemeConfig },
 } = require("@coremedia/tool-utils");
+const {
+  ViewRepositoryMapping,
+  ViewRepositoryPlugin,
+} = require("../plugins/ViewRepositoryPlugin");
 const JoinWebpackPlugin = require("../plugins/JoinWebpackPlugin");
 const { ZipperWebpackPlugin } = require("../plugins/ZipperWebpackPlugin");
 
@@ -23,45 +27,6 @@ const imageEmbedThreshold =
   buildConfig["imageEmbedThreshold"] !== undefined
     ? buildConfig["imageEmbedThreshold"]
     : 10000;
-
-/**
- * Creates a CopyWebpackPlugin instance for the given node modules that will copy the templates to the target
- * folder.
- *
- * Important: We cannot use a single instance as the order the templates are copied is not guaranteed in that case as
- * all patterns are executed simultaneously.
- *
- * @param relativeTemplatesSrc the relative source folder of the templates (must be the same for all node modules)
- * @param relativeTemplatesTarget the relative target folder for the templates
- * @param nodeModules the node modules
- * @return {Array<CopyWebpackPlugin>} an plugin instance for every node module
- */
-function configureCopyWebpackPluginsForTemplates(
-  relativeTemplatesSrc,
-  relativeTemplatesTarget,
-  nodeModules
-) {
-  const patterns = nodeModules
-    // build path
-    .map(nodeModule =>
-      path.resolve(path.dirname(nodeModule.getPkgPath()), relativeTemplatesSrc)
-    )
-
-    // check for existence (otherwise the CopyWebpackPlugin will fail)
-    .filter(templatePath => fs.existsSync(templatePath))
-
-    // transform into configuration
-    .map(templatePath =>
-      // templates
-      ({
-        from: templatePath,
-        to: relativeTemplatesTarget,
-        force: true,
-        cache: true,
-      })
-    );
-  return patterns.map(pattern => new CopyWebpackPlugin([pattern]));
-}
 
 /**
  * Creates a single JoinWebpackPlugin instance for the given node modules to join the resource bundles into a
@@ -153,24 +118,6 @@ module.exports = () => config => {
     isBrickModule
   );
 
-  const copyWebpackPluginsForTemplates = [].concat(
-    configureCopyWebpackPluginsForTemplates(
-      path.join("src", "templates"),
-      path.relative(
-        themeConfig.themeTargetPath,
-        themeConfig.brickTemplatesTargetPath
-      ),
-      brickDependencies
-    ),
-    configureCopyWebpackPluginsForTemplates(
-      path.join("src", "templates"),
-      path.relative(
-        themeConfig.themeTargetPath,
-        themeConfig.themeTemplatesTargetPath
-      ),
-      [themeModule]
-    )
-  );
   const joinWebpackPlugin = configureJoinWebpackPluginForResourceBundles(
     "Bricks",
     path.join("src", "l10n"),
@@ -178,7 +125,25 @@ module.exports = () => config => {
     brickDependencies
   );
 
+  const viewRepositoryPlugin = new ViewRepositoryPlugin({
+    templateGlobPattern: "**/*.+(ftl|fm|ftlh|ftlx)",
+    targetPath: themeConfig.templatesTargetPath,
+    mappings: [
+      new ViewRepositoryMapping(
+        themeConfig.name,
+        (resource, packageJsonPath) => {
+          return (require(packageJsonPath).coremedia || {}).type === "theme";
+        }
+      ),
+      // everything else
+      new ViewRepositoryMapping("bricks"),
+    ],
+  });
+
   return deepMerge(config, {
+    entry: {
+      [themeConfig.name]: [viewRepositoryPlugin.getEntry()],
+    },
     module: {
       rules: [
         // let svgParamLoader process the svg files to inject parameters if needed
@@ -209,6 +174,16 @@ module.exports = () => config => {
             outputPath: "fonts/",
           },
         },
+        // templates
+        {
+          test: /.(ftl|fm|ftlh|ftlx)$/,
+          use: [
+            viewRepositoryPlugin.getLoaderConfig(),
+            {
+              loader: require.resolve("../loaders/TransformFreemarkerLoader/"),
+            },
+          ],
+        },
         {
           test: /\.swf$/,
           loader: "file-loader",
@@ -224,7 +199,7 @@ module.exports = () => config => {
       ],
     },
     plugins: [
-      ...copyWebpackPluginsForTemplates,
+      viewRepositoryPlugin,
       joinWebpackPlugin,
       // configure for themes
       new CopyWebpackPlugin([
@@ -253,6 +228,19 @@ module.exports = () => config => {
             source: path.relative(
               themeConfig.resourcesTargetPath,
               themeConfig.themeTemplatesTargetPath
+            ),
+            prefix: path.normalize("META-INF/resources/"),
+            context: path.relative(
+              themeConfig.themeTargetPath,
+              themeConfig.resourcesTargetPath
+            ),
+          },
+          // also zip the freemarkerLibs into the theme again otherwise the Frontend Developer Workflow will not be able
+          // to properly handle importing from a theme template to a brick freemarker lib
+          {
+            source: path.relative(
+              themeConfig.resourcesTargetPath,
+              path.join(themeConfig.brickTemplatesTargetPath, "freemarkerLibs")
             ),
             prefix: path.normalize("META-INF/resources/"),
             context: path.relative(

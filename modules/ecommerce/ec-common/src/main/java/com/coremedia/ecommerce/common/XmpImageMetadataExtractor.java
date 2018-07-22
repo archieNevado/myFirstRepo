@@ -9,17 +9,18 @@ import com.coremedia.common.util.Predicates;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.xmp.XmpDirectory;
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Optional;
 import com.google.common.collect.Iterators;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.function.Function;
+
+import static java.util.Optional.ofNullable;
 
 /**
  * <p>
@@ -137,7 +138,7 @@ public class XmpImageMetadataExtractor implements Function<Metadata, Map<String,
    *
    * @return converter function
    */
-  @Nonnull
+  @NonNull
   private Function<XMPPropertyInfo, String> getConvertFunction() {
     return convertFunction != null ? convertFunction : DEFAULT_CONVERT_FUNCTION;
   }
@@ -148,9 +149,9 @@ public class XmpImageMetadataExtractor implements Function<Metadata, Map<String,
    *
    * @return filter predicate
    */
-  @Nonnull
+  @NonNull
   private Predicate<XMPPropertyInfo> getFilterPredicate() {
-    return Optional.fromNullable(filterPredicate).or(Predicates.<XMPPropertyInfo>alwaysTrue());
+    return ofNullable(filterPredicate).orElse(Predicates.alwaysTrue());
   }
 
   /**
@@ -161,7 +162,7 @@ public class XmpImageMetadataExtractor implements Function<Metadata, Map<String,
    * @return map from property path to property value of extracted metadata
    */
   @Override
-  @Nonnull
+  @NonNull
   public Map<String, String> apply(@Nullable Metadata metadata) {
     if (metadata == null) {
       return Collections.emptyMap();
@@ -215,7 +216,7 @@ public class XmpImageMetadataExtractor implements Function<Metadata, Map<String,
    *
    * @return builder
    */
-  @Nonnull
+  @NonNull
   public static Builder builder() {
     return new BuilderImpl();
   }
@@ -229,7 +230,7 @@ public class XmpImageMetadataExtractor implements Function<Metadata, Map<String,
      *
      * @return self-reference
      */
-    @Nonnull
+    @NonNull
     Builder atNameSpace(@Nullable String schemaNS);
 
     /**
@@ -237,7 +238,7 @@ public class XmpImageMetadataExtractor implements Function<Metadata, Map<String,
      *
      * @return self-reference
      */
-    @Nonnull
+    @NonNull
     Builder atProperty(@Nullable String propertyName);
 
     /**
@@ -246,7 +247,7 @@ public class XmpImageMetadataExtractor implements Function<Metadata, Map<String,
      *
      * @return self-reference
      */
-    @Nonnull
+    @NonNull
     Builder filteredBy(@Nullable Predicate<XMPPropertyInfo> filterPredicate);
 
     /**
@@ -254,7 +255,7 @@ public class XmpImageMetadataExtractor implements Function<Metadata, Map<String,
      *
      * @return self-reference
      */
-    @Nonnull
+    @NonNull
     Builder convertValueBy(@Nullable Function<XMPPropertyInfo, String> convertFunction);
 
     /**
@@ -262,7 +263,7 @@ public class XmpImageMetadataExtractor implements Function<Metadata, Map<String,
      *
      * @return metadata extractor
      */
-    @Nonnull
+    @NonNull
     XmpImageMetadataExtractor build();
   }
 
@@ -277,35 +278,35 @@ public class XmpImageMetadataExtractor implements Function<Metadata, Map<String,
     private Function<XMPPropertyInfo, String> convertFunction;
 
     @Override
-    @Nonnull
+    @NonNull
     public Builder atNameSpace(@Nullable String schemaNS) {
       this.schemaNS = schemaNS;
       return this;
     }
 
     @Override
-    @Nonnull
+    @NonNull
     public Builder atProperty(@Nullable String propertyName) {
       this.propertyName = propertyName;
       return this;
     }
 
     @Override
-    @Nonnull
+    @NonNull
     public Builder filteredBy(@Nullable Predicate<XMPPropertyInfo> filterPredicate) {
       this.filterPredicate = filterPredicate;
       return this;
     }
 
     @Override
-    @Nonnull
+    @NonNull
     public Builder convertValueBy(@Nullable Function<XMPPropertyInfo, String> convertFunction) {
       this.convertFunction = convertFunction;
       return this;
     }
 
     @Override
-    @Nonnull
+    @NonNull
     public XmpImageMetadataExtractor build() {
       return new XmpImageMetadataExtractor(schemaNS, propertyName, filterPredicate, convertFunction);
     }

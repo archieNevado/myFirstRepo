@@ -1,11 +1,11 @@
 package com.coremedia.blueprint.assets.contentbeans;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AMDocumentAssetImpl extends AMDocumentAssetBase {
-  @Nonnull
+  @NonNull
   @Override
   public List<AMAssetRendition> getRenditions() {
     List<AMAssetRendition> result = new ArrayList<>();

@@ -12,7 +12,7 @@
 // }
 //
 
-@function calculatePaddingTop($x, $y, $includeGutter) {
+@function calculatePaddingTop($x, $y, $includeGutter: false) {
   $percentage: percentage($y/$x);
 
   @if $includeGutter {

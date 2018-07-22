@@ -13,7 +13,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import javax.activation.MimeTypeParseException;
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -73,7 +73,7 @@ class ImportData {
    *
    * @param zipFile the zipped theme to import
    */
-  void collectFilesToImport(@Nonnull InputStream zipFile) throws IOException, MimeTypeParseException, ParserConfigurationException, SAXException {
+  void collectFilesToImport(@NonNull InputStream zipFile) throws IOException, MimeTypeParseException, ParserConfigurationException, SAXException {
     try (ZipInputStream zipStream = new ZipInputStream(zipFile)) {
       for (ZipEntry entry=zipStream.getNextEntry(); entry!=null; entry=zipStream.getNextEntry()) {
         if (!entry.isDirectory()) {

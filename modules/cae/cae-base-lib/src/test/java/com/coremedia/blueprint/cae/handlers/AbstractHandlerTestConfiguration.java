@@ -9,7 +9,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collection;
 
 @ImportResource(
@@ -31,7 +31,7 @@ abstract class AbstractHandlerTestConfiguration {
   static BeanPostProcessor converterCustomizer(ApplicationContext applicationContext) {
     return new BeanPostProcessor() {
       @Override
-      public Object postProcessAfterInitialization(@Nonnull Object bean, @Nonnull String beanName) throws BeansException {
+      public Object postProcessAfterInitialization(@NonNull Object bean, @NonNull String beanName) throws BeansException {
         if ("bindingConverters".equals(beanName) && bean instanceof Collection) {
           //noinspection unchecked
           ((Collection)bean).add(applicationContext.getBean("idGenericContentBeanConverter"));

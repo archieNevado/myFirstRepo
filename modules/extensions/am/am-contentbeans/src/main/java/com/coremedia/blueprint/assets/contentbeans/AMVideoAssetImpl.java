@@ -1,6 +1,6 @@
 package com.coremedia.blueprint.assets.contentbeans;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class AMVideoAssetImpl extends AMVideoAssetBase {
 
-  @Nonnull
+  @NonNull
   @Override
   public List<AMAssetRendition> getRenditions() {
     List<AMAssetRendition> result = new ArrayList<>();

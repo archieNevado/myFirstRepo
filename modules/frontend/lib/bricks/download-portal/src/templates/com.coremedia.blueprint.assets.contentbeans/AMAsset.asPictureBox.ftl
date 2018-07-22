@@ -18,23 +18,14 @@
 <div class="am-picture-box ${emptyModifierClass} ${scaleModifierClass} ${classBox}"<@preview.metadata data=metadata + ["properties.thumbnail"] />>
   <#if self.thumbnail?has_content>
     <#assign imageSrc=cm.getLink(self.thumbnail)!"" />
-    <img src="${imageSrc}"
-         alt="${(self.title)!""}"
-         class="am-picture-box__picture ${classImage}"
-         <#if scalePicture>
-           <@cm.dataAttribute name="data-cm-non-adaptive-content" data={"overflow": false} />
-         </#if>
-         >
+    <img src="${imageSrc}" alt="${(self.title)!""}" class="am-picture-box__picture ${classImage}">
   <#else>
     <div class="am-picture-box__picture ${classImage}"></div>
   </#if>
   <#if showBadge>
     <#-- document asset icon is default -->
-    <#assign badgeIconModifier="am-icon--am-document-asset" />
-    <#assign assetTypeAsCSSClass=bp.asCSSClassName(self.content.type.name!"") />
-    <#if assetTypeAsCSSClass?has_content>
-      <#assign badgeIconModifier="am-icon--" + assetTypeAsCSSClass />
-    </#if>
+    <#assign assetTypeName=(self.content.type.name)!"AMDocumentAsset" />
+    <#assign badgeIconModifier="am-icon--" + assetTypeName />
     <div class="am-picture-box__badge">
       <#if showQuickSelectButton>
         <div class="am-picture-box__badge-icon-left am-icon am-icon--picture-overlay" <@cm.dataAttribute name="data-am-picture-box__badge-icon-left" data={"assetId" : "${self.contentId}"}/>></div>

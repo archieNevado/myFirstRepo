@@ -1,7 +1,8 @@
 
 package com.coremedia.blueprint.cae.feeds;
 
-import com.sun.syndication.feed.synd.SyndEntry;
+
+import com.rometools.rome.feed.synd.SyndEntry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

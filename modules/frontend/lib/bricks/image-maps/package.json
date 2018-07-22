@@ -4,13 +4,14 @@
   "private": true,
   "dependencies": {
     "jquery": "3.2.1",
+    "@coremedia/ftl-utils": "^1.0.0",
     "@coremedia/js-jquery-utils": "^1.0.0",
     "@coremedia/js-node-decoration-service": "^1.0.0",
     "@coremedia/js-basic": "^1.0.0",
     "@coremedia/sass-utils": "^1.0.0",
     "@coremedia/brick-bootstrap": "^1.0.0",
     "@coremedia/brick-cta": "^1.0.0",
-    "@coremedia/brick-responsive-images": "^1.0.0",
+    "@coremedia/brick-media": "^1.0.0",
     "@coremedia/brick-quick-info": "^1.0.0"
   },
   "devDependencies": {

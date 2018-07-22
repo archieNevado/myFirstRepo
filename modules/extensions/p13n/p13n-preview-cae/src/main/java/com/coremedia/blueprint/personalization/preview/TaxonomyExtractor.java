@@ -8,9 +8,11 @@ import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.context.PropertyProfile;
 import com.coremedia.personalization.preview.TestContextExtractor;
-import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.InvalidPropertyException;
+import org.springframework.beans.PropertyAccessException;
+import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import java.util.Collections;
@@ -67,15 +69,14 @@ public final class TaxonomyExtractor implements TestContextExtractor {
       return;
     }
 
-    final Map<String, Object> profileExtensions = ((CMUserProfile) cmUserProfileBean).getProfileExtensions();
     for(Map.Entry<String,String> entry : propertyToContextMap.entrySet()) {
-      extractTestContexts(entry.getKey(), entry.getValue(), profileExtensions, contextCollection);
+      extractTestContexts(entry.getKey(), entry.getValue(), (CMUserProfile) cmUserProfileBean, contextCollection);
     }
   }
 
-  private void extractTestContexts(String propertyPath, String contextName, Map<String,Object> profileExtensions, ContextCollection contextCollection) {
-    final List<CMTaxonomy> linkedTaxonomies = getLinkedTaxonomies(profileExtensions, propertyPath);
-    final List<Integer> countsForTaxonomies = getCountsForTaxonomies(profileExtensions, propertyPath);
+  private void extractTestContexts(String propertyPath, String contextName, CMUserProfile userProfile, ContextCollection contextCollection) {
+    final List<CMTaxonomy> linkedTaxonomies = getLinkedTaxonomies(userProfile, propertyPath);
+    final List<Integer> countsForTaxonomies = getCountsForTaxonomies(userProfile, propertyPath);
     final PropertyProfile propertyProfile = createContext(linkedTaxonomies, countsForTaxonomies);
     if (LOGGER.isDebugEnabled()) {
       @SuppressWarnings("PersonalData") // A test context is not @PersonalData
@@ -86,10 +87,10 @@ public final class TaxonomyExtractor implements TestContextExtractor {
     contextCollection.setContext(contextName, propertyProfile);
   }
 
-  private List<Integer> getCountsForTaxonomies(Map<String, Object> profileExtensions, String propertyPath) {
+  private List<Integer> getCountsForTaxonomies(CMUserProfile userProfile, String propertyPath) {
     final Object o;
     try {
-      o = getProperty(profileExtensions, propertyPath + "_count");
+      o = getProperty(userProfile, propertyPath + "_count");
       if(o instanceof List) {
         //noinspection unchecked
         return (List<Integer>) o;
@@ -115,8 +116,8 @@ public final class TaxonomyExtractor implements TestContextExtractor {
     return propertyProfile;
   }
 
-  private List<CMTaxonomy> getLinkedTaxonomies(Map<String, Object> profileExtensions, String propertyPath) {
-    final Object o = getProperty(profileExtensions, propertyPath);
+  private List<CMTaxonomy> getLinkedTaxonomies(CMUserProfile userProfile, String propertyPath) {
+    final Object o = getProperty(userProfile, CMUserProfile.PROFILE_EXTENSIONS + propertyPath);
     if(o instanceof List) {
       //noinspection unchecked
       return (List<CMTaxonomy>) o;
@@ -125,13 +126,12 @@ public final class TaxonomyExtractor implements TestContextExtractor {
     return Collections.emptyList();
   }
 
-  private Object getProperty(Map<String, Object> profileExtensions, String propertyPath) {
+  private Object getProperty(CMUserProfile userProfile, String propertyPath) {
     try {
-      return PropertyUtils.getNestedProperty(profileExtensions, propertyPath);
-    } catch (Exception e) { // NOSONAR
-      // it is ok
+      return PropertyAccessorFactory.forBeanPropertyAccess(userProfile).getPropertyValue(propertyPath);
+    } catch (InvalidPropertyException | PropertyAccessException ex) {
+      return null;
     }
-    return null;
   }
 
   /**

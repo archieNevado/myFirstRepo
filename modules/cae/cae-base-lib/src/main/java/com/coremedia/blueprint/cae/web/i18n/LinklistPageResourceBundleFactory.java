@@ -17,8 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -179,7 +179,7 @@ public class LinklistPageResourceBundleFactory implements PageResourceBundleFact
   // --- caching ----------------------------------------------------
 
   private class NavigationCacheKey extends PairCacheKey<Navigation, User, ResourceBundle> {
-    NavigationCacheKey(@Nonnull Navigation navigation, User user) {
+    NavigationCacheKey(@NonNull Navigation navigation, User user) {
       super(navigation, user);
     }
 

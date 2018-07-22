@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.studio.analytics {
 import com.coremedia.cms.editor.sdk.EditorContextImpl;
-import com.coremedia.cms.editor.sdk.context.ComponentContextManager;
 import com.coremedia.ui.components.IconButton;
+import com.coremedia.ui.context.ComponentContextManager;
 import com.coremedia.ui.data.test.AbstractRemoteTest;
 
 import ext.button.Button;

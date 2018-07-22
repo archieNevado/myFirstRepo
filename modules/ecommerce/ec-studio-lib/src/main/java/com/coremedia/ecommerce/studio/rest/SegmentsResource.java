@@ -1,6 +1,7 @@
 package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.ecommerce.studio.rest.model.Segments;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.p13n.SegmentService;
 
 import javax.ws.rs.Path;
@@ -43,7 +44,9 @@ public class SegmentsResource extends AbstractCatalogResource<Segments> {
 
   @Override
   public void setEntity(Segments segments) {
-    setSiteId(segments.getContext().getSiteId());
-    setWorkspaceId(segments.getContext().getWorkspaceId());
+    StoreContext storeContext = segments.getContext();
+
+    setSiteId(storeContext.getSiteId());
+    setWorkspaceId(storeContext.getWorkspaceId().orElse(null));
   }
 }

@@ -19,7 +19,7 @@ import com.coremedia.objectserver.web.UserVariantHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 
 import static com.coremedia.common.logging.BaseMarker.UNCLASSIFIED_PERSONAL_DATA;

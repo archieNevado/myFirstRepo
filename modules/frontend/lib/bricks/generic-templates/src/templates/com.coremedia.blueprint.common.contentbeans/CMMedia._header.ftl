@@ -3,11 +3,10 @@
 <#assign renderText=cm.localParameters().renderText!true />
 
 <@cm.include self=self view="_richMedia" params={
-"limitAspectRatios": ["landscape_ratio16x9", "landscape_ratio5x2"],
-"classBox": "cm-details__media-box",
-"classImage": "cm-details__media",
-"classPrefix": "cm-details",
-"classSuffix": "media"
+  "classBox": "cm-details__media-box",
+  "classMedia": "cm-details__media",
+  "classPrefix": "cm-details",
+  "classSuffix": "media"
 }/>
 
 <#if renderTitle || renderText>

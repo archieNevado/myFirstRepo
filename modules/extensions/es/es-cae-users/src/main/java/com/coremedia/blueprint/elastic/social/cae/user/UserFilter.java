@@ -10,8 +10,8 @@ import com.coremedia.elastic.social.springsecurity.UserPrincipal;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -63,7 +63,7 @@ public class UserFilter implements Filter {
     }
   }
 
-  private boolean isFeedbackEnabled(@Nonnull ServletRequest request) {
+  private boolean isFeedbackEnabled(@NonNull ServletRequest request) {
     return SiteHelper.findSite(request)
             .map(elasticSocialPlugin::getElasticSocialConfiguration)
             .map(ElasticSocialConfiguration::isFeedbackEnabled)

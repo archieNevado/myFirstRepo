@@ -18,6 +18,7 @@ public class DynamicIncludeRenderNodeDecoratorProvider implements RenderNodeDeco
   private RenderNodeDecorator decorator;
   private List<DynamicIncludePredicate> predicates;
 
+  @Required
   public void setPredicates(List<DynamicIncludePredicate> predicates) {
     this.predicates = predicates;
   }
@@ -34,7 +35,10 @@ public class DynamicIncludeRenderNodeDecoratorProvider implements RenderNodeDeco
     RenderNode renderNode = new RenderNode(self,viewName);
 
     for (DynamicIncludePredicate predicate : predicates) {
-      //do not make dynamic includes for root beans
+      // Do not make dynamic includes for root beans. This needs to be done to avoid recursions.
+      // Otherwise the same fragment could be loaded via ajax over and over again.
+      // This check ensures that the upcoming dynamic render node is at least one level below the current render node
+      // in the render node hierarchy.
       if (predicate.apply(renderNode)) {
         return null;
       }

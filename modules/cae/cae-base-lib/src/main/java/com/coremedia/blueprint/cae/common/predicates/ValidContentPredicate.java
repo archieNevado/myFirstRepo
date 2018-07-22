@@ -1,18 +1,15 @@
 package com.coremedia.blueprint.cae.common.predicates;
 
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
-import com.coremedia.blueprint.common.datevalidation.DateValidationPredicate;
-
+import com.coremedia.blueprint.common.datevalidation.ValidationPeriodPredicate;
 import com.coremedia.cap.content.Content;
-import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.common.util.Predicate;
-
+import com.coremedia.objectserver.beans.ContentBeanFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import java.util.Calendar;
-import java.util.Map;
 
 /**
  * This predicate checks if the given object is a content bean and if this content bean is valid.
@@ -33,10 +30,8 @@ public class ValidContentPredicate implements Predicate<Content> {
 
     LOG.debug("Found content of type CMLinkable. Verify that content is valid.");
     CMLinkable linkableBean = contentBeanFactory.createBeanFor(content, CMLinkable.class);
-    Calendar validFrom = linkableBean.getValidFrom();
-    Calendar validTo = linkableBean.getValidTo();
-    Map<String,Calendar> validityDates = DateValidationPredicate.createValidityDates(validFrom, validTo);
-    boolean result = new DateValidationPredicate(Calendar.getInstance()).apply(validityDates);
+
+    boolean result = linkableBean != null && new ValidationPeriodPredicate(Calendar.getInstance()).test(linkableBean);
     if (!result) {
       LOG.debug("Content '{}' is currently not valid. Skipping.", content.getId());
     }

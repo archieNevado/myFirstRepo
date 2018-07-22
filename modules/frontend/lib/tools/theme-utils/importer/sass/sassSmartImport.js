@@ -73,6 +73,26 @@ module.exports = function(url, prev, done) {
       flattenedDirectDependencies = flattenedDirectDependencies.reverse();
     }
 
+    // filter partials (=> css generating code) that would be included twice.
+    // we always assume that the variant is loaded in addition to the default.
+    if (
+      varsOrPartials === "partials" &&
+      variant &&
+      variant !== DEFAULT_VARIANT
+    ) {
+      this._whiteList = getFlattenedDependencies(
+        pkgJson,
+        getIsSmartImportModuleFor(variant)
+      ).map(dependency => dependency.getName());
+    }
+
+    // filter by white list (only applies for partials inside a variant)
+    if (this._whiteList) {
+      flattenedDirectDependencies = flattenedDirectDependencies.filter(
+        dependency => this._whiteList.includes(dependency.getName())
+      );
+    }
+
     // Get scss paths of the dependent bricks
     const sassPaths = flattenedDirectDependencies.map(dependency => {
       const existingFile = getSmartImportPath(

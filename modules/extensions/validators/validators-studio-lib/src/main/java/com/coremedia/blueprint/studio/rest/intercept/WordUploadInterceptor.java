@@ -17,6 +17,7 @@ import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.usermodel.Picture;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFPictureData;
+import org.apache.tika.config.TikaConfig;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.io.IOUtils;
 import org.apache.tika.metadata.Metadata;
@@ -39,6 +40,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * This is a prototype implementation of a MS Word to CMArticle converter, implemented as
@@ -64,7 +67,22 @@ public class WordUploadInterceptor extends ContentWriteInterceptorBase {
   private static final String PICTURE_CONTENT_TYPE = "CMPicture";
   private static final String PICTURE_BLOB_PROPETY_NAME = "data";
 
+  private static final String TIKA_CONFIG =
+          "<properties><service-loader initializableProblemHandler=\"ignore\"/></properties>";
+
+  private final TikaConfig tikaConfig;
   private ContentRepository repository;
+
+  public WordUploadInterceptor() {
+    TikaConfig config;
+    try (InputStream is = new ByteArrayInputStream(TIKA_CONFIG.getBytes(UTF_8))) {
+      config = new TikaConfig(is);
+    } catch (SAXException | IOException | TikaException e) {
+      LOG.warn("Error creating TikaConfig from: " + TIKA_CONFIG, e);
+      config = TikaConfig.getDefaultConfig();
+    }
+    this.tikaConfig = config;
+  }
 
   @Required
   public void setRepository(ContentRepository repository) {
@@ -158,7 +176,7 @@ public class WordUploadInterceptor extends ContentWriteInterceptorBase {
   }
 
   private void extractFromContentHandler(byte[] bytes, ContentHandlerDecorator resolver) throws IOException, SAXException, TikaException {
-    org.apache.tika.parser.Parser parser = new AutoDetectParser();
+    org.apache.tika.parser.Parser parser = new AutoDetectParser(tikaConfig);
     Metadata metadata = new Metadata();
     XHTMLContentHandler handler = new XHTMLContentHandler(resolver, metadata);
     ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);

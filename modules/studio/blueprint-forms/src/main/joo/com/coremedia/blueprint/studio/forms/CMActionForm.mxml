@@ -30,7 +30,7 @@
             <editor:StringPropertyField propertyName="type"/>
           </editor:items>
         </editor:PropertyFieldGroup>
-        <bpforms:PictureDocumentForm/>
+        <bpforms:MediaDocumentForm/>
         <bpforms:ValidityDocumentForm/>
       </editor:items>
     </editor:DocumentForm>

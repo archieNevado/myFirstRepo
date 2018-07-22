@@ -7,7 +7,7 @@ import com.coremedia.cap.multisite.SitesService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +25,7 @@ public class RobotsBean {
   private SitesService sitesService;
   private List<RobotsEntry> robotsEntries = new ArrayList<>();
 
-  public RobotsBean(@Nonnull CMNavigation rootChannel, @Nonnull SettingsService settingsService, @Nonnull SitesService sitesService) {
+  public RobotsBean(@NonNull CMNavigation rootChannel, @NonNull SettingsService settingsService, @NonNull SitesService sitesService) {
     this.rootChannel = rootChannel;
     this.settingsService = settingsService;
     this.sitesService = sitesService;

@@ -6,7 +6,7 @@ const deepMerge = require("./utils/deepMerge");
 // the mapping is: moduleName => globalVariableName
 const modulesToExpose = {
   jquery: "coremedia.blueprint.$",
-  "@coremedia/js-basic": "coremedia.blueprint.basic",
+  "@coremedia/brick-dynamic-include": "coremedia.blueprint.basic",
 };
 
 const themeConfig = getThemeConfig();

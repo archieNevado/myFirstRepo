@@ -7,7 +7,7 @@ import com.coremedia.livecontext.ecommerce.asset.CatalogPicture;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -93,7 +93,7 @@ public interface CMProduct extends CMTeasable {
    * Returns the product pictures.
    * @cm.template.api
    */
-  @Nonnull
+  @NonNull
   List<CatalogPicture> getProductPictures();
 
   /**

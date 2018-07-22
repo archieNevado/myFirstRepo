@@ -2,7 +2,7 @@ package com.coremedia.blueprint.assets.cae;
 
 import com.coremedia.blueprint.assets.contentbeans.AMTaxonomy;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 /**
  * This class represents a single subcategory of an {@link CategoryOverview}. It is basically a means
@@ -23,7 +23,7 @@ public class Subcategory {
    * @param category the {@link AMTaxonomy} that represents the subcategory
    * @param assetsInCategory the number of assets within or below the category (val > 0)
    */
-  public Subcategory(@Nonnull AMTaxonomy category, long assetsInCategory) {
+  public Subcategory(@NonNull AMTaxonomy category, long assetsInCategory) {
     this.category = category;
     if (assetsInCategory > 0) {
       this.assetsInCategory = assetsInCategory;
@@ -34,7 +34,7 @@ public class Subcategory {
    * Returns the {@link AMTaxonomy contentbean} that represents the subcategory
    * @return the {@link AMTaxonomy contentbean} that represents the subcategory
    */
-  @Nonnull
+  @NonNull
   public AMTaxonomy getCategory() {
     return category;
   }

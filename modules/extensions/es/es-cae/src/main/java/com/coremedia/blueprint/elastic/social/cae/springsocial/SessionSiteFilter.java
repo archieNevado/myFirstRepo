@@ -3,7 +3,7 @@ package com.coremedia.blueprint.elastic.social.cae.springsocial;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.cap.multisite.Site;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.inject.Named;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -40,8 +40,8 @@ public class SessionSiteFilter implements Filter {
     chain.doFilter(request, response);
   }
 
-  @Nonnull
-  private static Optional<HttpSession> getSession(@Nonnull HttpServletRequest request) {
+  @NonNull
+  private static Optional<HttpSession> getSession(@NonNull HttpServletRequest request) {
     HttpSession session = request.getSession(false);
     return Optional.ofNullable(session);
   }

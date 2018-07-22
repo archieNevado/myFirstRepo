@@ -1,7 +1,9 @@
 package com.coremedia.blueprint.personalization.preview;
 
+import com.coremedia.blueprint.cae.layout.ContentBeanBackedPageGridPlacement;
 import com.coremedia.blueprint.common.contentbeans.CMExternalLink;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
+import com.coremedia.blueprint.common.layout.DynamizableContainer;
 import com.coremedia.objectserver.web.links.LinkTransformer;
 import com.coremedia.objectserver.web.links.ParameterAppendingLinkTransformer;
 import com.coremedia.personalization.preview.PreviewPersonalizationHandlerInterceptor;
@@ -35,10 +37,12 @@ public class PersonaParameterAppendingLinkTransformer implements LinkTransformer
 
   @Override
   public String transform(String source, Object bean, String view, HttpServletRequest request, HttpServletResponse response, boolean forRedirect) {
-    if(bean instanceof CMLinkable && !(bean instanceof CMExternalLink)) {
+    if((bean instanceof CMLinkable || bean instanceof ContentBeanBackedPageGridPlacement
+            || bean instanceof DynamizableContainer) && !(bean instanceof CMExternalLink)) {
       String transformed = testContextAppender.transform(source, bean, view, request, response, forRedirect);
       return testContextIdAppender.transform(transformed, bean, view, request, response, forRedirect);
     }
     return source;
   }
+
 }

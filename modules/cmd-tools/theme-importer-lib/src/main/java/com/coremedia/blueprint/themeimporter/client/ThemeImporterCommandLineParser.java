@@ -5,7 +5,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 class ThemeImporterCommandLineParser extends CommandLineClient {
   private static final String FOLDER_PARAMETER = "f";
@@ -38,7 +38,7 @@ class ThemeImporterCommandLineParser extends CommandLineClient {
   }
 
   @Override
-  @Nonnull
+  @NonNull
   protected String getUsage() {
     return "cm import-themes -u <user> [other options] [-f <folder>] [-c] [-dm] <theme.zip> ...";
   }

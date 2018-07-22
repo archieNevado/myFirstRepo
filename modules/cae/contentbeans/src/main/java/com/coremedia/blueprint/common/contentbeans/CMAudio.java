@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.common.contentbeans;
 
+import com.coremedia.blueprint.common.player.PlayerSettings;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.common.Blob;
 
@@ -24,6 +25,11 @@ import java.util.Map;
 public interface CMAudio extends CMMedia {
 
   String NAME = "CMAudio";
+
+  /**
+   * Name of the player settings struct.
+   */
+  String PLAYER_SETTINGS = "playerSettings";
 
   /**
    * Returns the value of the document property {@link #MASTER}.
@@ -65,4 +71,9 @@ public interface CMAudio extends CMMedia {
    * @cm.template.api
    */
   String getDataUrl();
+
+  /**
+   * @cm.template.api
+   */
+  PlayerSettings getPlayerSettings();
 }

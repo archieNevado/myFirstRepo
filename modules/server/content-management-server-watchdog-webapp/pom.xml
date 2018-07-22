@@ -12,7 +12,7 @@
   <packaging>war</packaging>
 
   <description>
-    To start the content-management-server-watchdog-webapp run: mvn tomcat7:run-war
+    To start the content-management-server-watchdog-webapp run: mvn tomcat7:run
   </description>
 
   <properties>
@@ -58,7 +58,7 @@
       </plugin>
 
       <!--
-         invoke "mvn tomcat7:run-war" for running this webapp locally
+         invoke "mvn tomcat7:run" for running this webapp locally
       -->
       <plugin>
         <groupId>org.apache.tomcat.maven</groupId>

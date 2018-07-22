@@ -6,8 +6,8 @@ import com.coremedia.cap.user.User;
 import com.coremedia.cap.util.DeveloperPaths;
 import com.google.common.collect.Lists;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 
 /**
@@ -29,7 +29,7 @@ public class ThemeService {
 
   // --- Construct and configure ------------------------------------
 
-  public ThemeService(@Nonnull TreeRelation<Content> treeRelation) {
+  public ThemeService(@NonNull TreeRelation<Content> treeRelation) {
     this.treeRelation = treeRelation;
   }
 
@@ -46,7 +46,7 @@ public class ThemeService {
    * @param developer Use the developer's variant rather than the production theme.
    */
   @Nullable
-  public Content theme(@Nonnull Content content, @Nullable User developer) {
+  public Content theme(@NonNull Content content, @Nullable User developer) {
     // Technically this would work even if content was no CMNavigation,
     // but for other types the result would depend on the content being in
     // the tree relation, which would not make sense.
@@ -72,7 +72,7 @@ public class ThemeService {
    * @param developer Use the developer's variant rather than the production theme.
    */
   @Nullable
-  public Content directTheme(@Nonnull List<Content> contents, @Nullable User developer) {
+  public Content directTheme(@NonNull List<Content> contents, @Nullable User developer) {
     for (Content content : contents) {
       if (content!=null && content.getType().isSubtypeOf(CM_NAVIGATION)) {
         Content theme = content.getLink(CM_NAVIGATION_THEME);
@@ -90,7 +90,7 @@ public class ThemeService {
    * @param theme the theme
    * @param developer Use the developer's variants rather than the theme's original templates.
    */
-  public List<Content> templateSets(@Nonnull Content theme, @Nullable User developer) {
+  public List<Content> templateSets(@NonNull Content theme, @Nullable User developer) {
     checkIsA(theme, CM_THEME);
     if (developer==null) {
       return theme.getLinks(CM_THEME_TEMPLATESETS);
@@ -111,7 +111,7 @@ public class ThemeService {
    * @deprecated Enhance your theme with templates and use {@link #templateSets(Content, User)}
    */
   @Deprecated
-  public String viewRepositoryName(@Nonnull Content theme, @Nullable User developer) {
+  public String viewRepositoryName(@NonNull Content theme, @Nullable User developer) {
     checkIsA(theme, CM_THEME);
     if (developer!=null) {
       theme = new DeveloperPaths(developer).substitute(theme);
@@ -124,8 +124,8 @@ public class ThemeService {
    * <p>
    * Or the original content if there is no development variant.
    */
-  @Nonnull
-  public Content developerVariant(@Nonnull Content content, @Nullable User developer) {
+  @NonNull
+  public Content developerVariant(@NonNull Content content, @Nullable User developer) {
     return developer==null ? content : new DeveloperPaths(developer).substitute(content);
   }
 
@@ -136,7 +136,7 @@ public class ThemeService {
    * is null if the computed path would not be a development path.
    */
   @Nullable
-  public String developerPath(@Nonnull String originalPath, @Nullable User developer) {
+  public String developerPath(@NonNull String originalPath, @Nullable User developer) {
     return developer==null ? originalPath : new DeveloperPaths(developer).substitutePath(originalPath);
   }
 

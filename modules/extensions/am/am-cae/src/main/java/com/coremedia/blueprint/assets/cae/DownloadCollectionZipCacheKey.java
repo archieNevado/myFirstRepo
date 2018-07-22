@@ -14,7 +14,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -44,9 +44,9 @@ final class DownloadCollectionZipCacheKey extends CacheKey<File> {
   private TempFileService tempFileService;
   private MimeTypeService mimeTypeService;
 
-  public DownloadCollectionZipCacheKey(@Nonnull List<AMAssetRendition> renditions,
-                                       @Nonnull ContentRepository contentRepository,
-                                       @Nonnull MimeTypeService mimeTypeService) {
+  public DownloadCollectionZipCacheKey(@NonNull List<AMAssetRendition> renditions,
+                                       @NonNull ContentRepository contentRepository,
+                                       @NonNull MimeTypeService mimeTypeService) {
     this.renditions = renditions;
     this.contentRepository = contentRepository;
     tempFileService = contentRepository.getConnection().getTempFileService();
@@ -109,7 +109,7 @@ final class DownloadCollectionZipCacheKey extends CacheKey<File> {
     }
   }
 
-  private void createDownloadCollectionZip(@Nonnull OutputStream outputStream) throws IOException {
+  private void createDownloadCollectionZip(@NonNull OutputStream outputStream) throws IOException {
 
     try (
             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
@@ -125,8 +125,8 @@ final class DownloadCollectionZipCacheKey extends CacheKey<File> {
     }
   }
 
-  private void addBlobToZipFile(@Nonnull ZipOutputStream zipOutputStream,
-                                @Nonnull AMAssetRendition rendition) throws IOException {
+  private void addBlobToZipFile(@NonNull ZipOutputStream zipOutputStream,
+                                @NonNull AMAssetRendition rendition) throws IOException {
     Blob blob = rendition.getBlob();
     Content assetContent = rendition.getAsset().getContent();
     if (blob == null) {

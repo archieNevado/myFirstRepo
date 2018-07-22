@@ -11,8 +11,8 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.rest.cap.content.ContentRepositoryResource;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import java.net.URLEncoder;
 
@@ -31,7 +31,7 @@ public abstract class CommerceBeanResource<Entity extends CommerceBean> extends 
   @Inject
   private ContentRepositoryResource contentRepositoryResource;
 
-  protected void fillRepresentation(@Nonnull CommerceBeanRepresentation representation) {
+  protected void fillRepresentation(@NonNull CommerceBeanRepresentation representation) {
     CommerceBean entity = getEntity();
 
     if (entity == null) {
@@ -50,7 +50,7 @@ public abstract class CommerceBeanResource<Entity extends CommerceBean> extends 
     setVisuals(representation, entity);
   }
 
-  @Nonnull
+  @NonNull
   String computePreviewUrl() {
     String previewControllerUriPattern = getContentRepositoryResource().getPreviewControllerUrlPattern();
     String encodedEntityId = URLEncoder.encode(CommerceIdFormatterHelper.format(getEntity().getId()));
@@ -58,8 +58,8 @@ public abstract class CommerceBeanResource<Entity extends CommerceBean> extends 
     return formatPreviewUrl(previewControllerUriPattern, encodedEntityId, getSiteId());
   }
 
-  @Nonnull
-  public static String formatPreviewUrl(@Nonnull String previewControllerUriPattern, String id, String siteId) {
+  @NonNull
+  public static String formatPreviewUrl(@NonNull String previewControllerUriPattern, String id, String siteId) {
     // position 0 is reserved for formatted IDs, position 1 is reserved for numeric content IDs
     // the site param is appended to the formatted ID
     String idAndSiteParam = format(ID_AND_SITE_PARAM, id, siteId);
@@ -86,7 +86,7 @@ public abstract class CommerceBeanResource<Entity extends CommerceBean> extends 
     StoreContext context = entity.getContext();
 
     setSiteId(context.getSiteId());
-    setWorkspaceId(context.getWorkspaceId());
+    setWorkspaceId(context.getWorkspaceId().orElse(null));
   }
 
   /**

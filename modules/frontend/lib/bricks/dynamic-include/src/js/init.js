@@ -1,7 +1,9 @@
 import * as logger from "@coremedia/js-logger";
 import $ from "jquery";
-import * as nodeDecorationService from "@coremedia/js-node-decoration-service";
+import {addNodeDecorator, addNodeDecoratorByData, undecorateNode, decorateNode ,} from "@coremedia/js-node-decoration-service";
+import {ajax} from "@coremedia/js-jquery-utils";
 
+import { EVENT_NODE_APPENDED, renderFragmentHrefs } from "./fragment";
 import {
   default as Handler,
   BASE_CONFIG as HANDLER_BASE_CONFIG,
@@ -17,8 +19,27 @@ import {
 
 // --- DOCUMENT READY --------------------------------------------------------------------------------------------------
 $(function() {
+  const $document = $(document);
+
+  // this will substitute all data-hrefs rendered by ESI
+  addNodeDecorator(renderFragmentHrefs);
+
+  // load all dynamic fragments. The special header X-Requested-With is needed by the CAE to identify
+  // the request as an Ajax request
+  addNodeDecoratorByData(undefined, "cm-fragment", function($fragment, url) {
+    ajax({
+      url: url,
+      dataType: "text",
+    }).done(function(html) {
+      const $html = $(html);
+      undecorateNode($fragment);
+      $fragment.replaceWith($html);
+      decorateNode($html);
+      $document.trigger(EVENT_NODE_APPENDED, [$html]);
+    });
+  });
   // handle hashBasedFragmentHandler
-  nodeDecorationService.addNodeDecoratorByData(
+  addNodeDecoratorByData(
     HANDLER_BASE_CONFIG,
     "hash-based-fragment-handler",
     // decorate
@@ -36,20 +57,18 @@ $(function() {
   );
 
   // handle hashBasedFragmentLinks
-  nodeDecorationService.addNodeDecoratorByData(
-    LINK_BASE_CONFIG,
-    "hash-based-fragment-link",
-    function($link, linkConfig) {
-      new Link($link, linkConfig);
-    }
-  );
+  addNodeDecoratorByData(LINK_BASE_CONFIG, "hash-based-fragment-link", function(
+    $link,
+    linkConfig
+  ) {
+    new Link($link, linkConfig);
+  });
 
   // handle hashBasedFragmentForms
-  nodeDecorationService.addNodeDecoratorByData(
-    FORM_BASE_CONFIG,
-    "hash-based-fragment-form",
-    function($form, formConfig) {
-      new Form($form, formConfig);
-    }
-  );
+  addNodeDecoratorByData(FORM_BASE_CONFIG, "hash-based-fragment-form", function(
+    $form,
+    formConfig
+  ) {
+    new Form($form, formConfig);
+  });
 });

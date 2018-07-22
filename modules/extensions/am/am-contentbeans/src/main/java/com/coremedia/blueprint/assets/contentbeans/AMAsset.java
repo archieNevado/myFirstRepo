@@ -7,8 +7,8 @@ import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.objectserver.beans.ContentBean;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 
 /**
@@ -120,7 +120,7 @@ public interface AMAsset extends ContentBean, ValidityPeriod {
    * @return the list of all subjects directly and indirectly linked to this asset.
    * @cm.template.api
    */
-  @Nonnull
+  @NonNull
   List<CMTaxonomy> getAllSubjects();
 
   /**
@@ -137,7 +137,7 @@ public interface AMAsset extends ContentBean, ValidityPeriod {
    * @return all published and non-published asset renditions or an empty list
    * @cm.template.api
    */
-  @Nonnull
+  @NonNull
   List<AMAssetRendition> getRenditions();
 
   /**
@@ -146,6 +146,6 @@ public interface AMAsset extends ContentBean, ValidityPeriod {
    * @return the list of all published renditions or an empty list
    * @cm.template.api
    */
-  @Nonnull
+  @NonNull
   List<AMAssetRendition> getPublishedRenditions();
 }

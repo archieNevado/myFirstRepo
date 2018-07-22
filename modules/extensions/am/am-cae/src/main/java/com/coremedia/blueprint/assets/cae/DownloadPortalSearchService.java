@@ -20,8 +20,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -114,12 +114,12 @@ public class DownloadPortalSearchService implements InitializingBean {
     return createSubcategoriesFromFacets(searchResult.getFacets().get(ASSETHIERARCHY_SOLR_FIELD), prefixedTaxonomyPath);
   }
 
-  public SearchResultBean getAssetsForCategory(@Nonnull AMTaxonomy category, int assetsPerPage, int page) {
+  public SearchResultBean getAssetsForCategory(@NonNull AMTaxonomy category, int assetsPerPage, int page) {
     Condition taxFilter = Condition.is(ASSETTAXONOMY_SOLR_FIELD, Value.exactly(String.valueOf(category.getContentId())));
     return createSearchResult(page, assetsPerPage, taxFilter, null);
   }
 
-  public SearchResultBean getAssetsForSubject(@Nonnull CMTaxonomy subject, int assetsPerPage, int page) {
+  public SearchResultBean getAssetsForSubject(@NonNull CMTaxonomy subject, int assetsPerPage, int page) {
     Condition taxFilter = Condition.is(SearchConstants.FIELDS.SUBJECT_TAXONOMY, Value.exactly(String.valueOf(subject.getContentId())));
     return createSearchResult(page, assetsPerPage, taxFilter, null);
   }
@@ -134,8 +134,8 @@ public class DownloadPortalSearchService implements InitializingBean {
    * @param pageNo     the requested page number
    * @return the {@link PaginatedAssets} that represents the requested category assets.
    */
-  @Nonnull
-  public SearchResultBean searchForAssets(@Nonnull String query,
+  @NonNull
+  public SearchResultBean searchForAssets(@NonNull String query,
                                                      int assetsPerPage,
                                                      int pageNo) {
     return createSearchResult(pageNo, assetsPerPage, null, query);
@@ -144,8 +144,8 @@ public class DownloadPortalSearchService implements InitializingBean {
 
   /*************************    private methods    *************************/
 
-  @Nonnull
-  private List<Subcategory> createSubcategoriesFromFacets(@Nonnull List<ValueAndCount> facets, @Nonnull String pathPrefix) {
+  @NonNull
+  private List<Subcategory> createSubcategoriesFromFacets(@NonNull List<ValueAndCount> facets, @NonNull String pathPrefix) {
     List<Subcategory> subcategories = new ArrayList<>();
     for (ValueAndCount facet : facets) {
       String pathFromFacet = facet.getName();
@@ -184,7 +184,7 @@ public class DownloadPortalSearchService implements InitializingBean {
     return subcategories;
   }
 
-  @Nonnull
+  @NonNull
   private SearchResultBean querySearchEngine(SearchQueryBean queryBean) {
     SearchResultBean searchResult;
     if (isPreview) {
@@ -195,7 +195,7 @@ public class DownloadPortalSearchService implements InitializingBean {
     return searchResult;
   }
 
-  @Nonnull
+  @NonNull
   private SearchQueryBean createAssetQueryBean(@Nullable String fulltextQuery) {
     SearchQueryBean assetQueryBean = createSearchQueryBean();
 
@@ -221,7 +221,7 @@ public class DownloadPortalSearchService implements InitializingBean {
     return new SearchQueryBean();
   }
 
-  @Nonnull
+  @NonNull
   static String getPrefixedCategoryPath(@Nullable AMTaxonomy category) {
     if (category == null) {
       return CATEGORY_ROOT_PREFIX;
@@ -241,7 +241,7 @@ public class DownloadPortalSearchService implements InitializingBean {
     return prefixedCategoryPath.toString();
   }
 
-  @Nonnull
+  @NonNull
   private SearchResultBean createSearchResult(int pageNo,
                                               int hitsPerPage,
                                               @Nullable Condition taxFilter,

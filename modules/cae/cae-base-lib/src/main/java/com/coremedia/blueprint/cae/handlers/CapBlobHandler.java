@@ -26,8 +26,8 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriUtils;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
@@ -203,7 +203,7 @@ public class CapBlobHandler extends HandlerBase {
 
   @Link(type = CMDownload.class)
   @SuppressWarnings("unused")
-  public String buildLinkForDownload(@Nonnull CMDownload download, @Nullable String viewName) {
+  public String buildLinkForDownload(@NonNull CMDownload download, @Nullable String viewName) {
     if (FRAGMENT_PREVIEW.equals(viewName)) {
       // Do not build the download link for the fragment preview. Let other handlers build the link instead.
       return null;

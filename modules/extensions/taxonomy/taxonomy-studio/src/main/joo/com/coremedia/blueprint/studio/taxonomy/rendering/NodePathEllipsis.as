@@ -2,9 +2,9 @@ package com.coremedia.blueprint.studio.taxonomy.rendering {
 import ext.Component;
 import ext.Ext;
 
-import js.Collection;
 import js.Event;
 import js.HTMLElement;
+import js.NodeList;
 
 public class NodePathEllipsis {
   private var wrapperId:String;
@@ -215,7 +215,7 @@ public class NodePathEllipsis {
   function leafMouseOver():void {
     var componentWidth:Number = getComponentWidth();
     var spanElement:HTMLElement = HTMLElement(window.document.getElementById(wrapperId));
-    var nodeElements:Collection = spanElement.childNodes;
+    var nodeElements:NodeList = spanElement.childNodes;
     var actualTotalWidth:Number = 0;
     //calculate current with...
     for (var i:uint = 0; i < nodeElements.length; i++) {

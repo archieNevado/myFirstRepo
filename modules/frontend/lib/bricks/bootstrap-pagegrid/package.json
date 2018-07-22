@@ -1,0 +1,23 @@
+{
+  "name": "@coremedia/brick-bootstrap-pagegrid",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "bootstrap-sass": "3.3.7",
+    "jquery": "3.2.1",
+    "@coremedia/brick-bootstrap": "^1.0.0",
+    "@coremedia/brick-generic-templates": "^1.0.0"
+  },
+  "devDependencies": {
+    "jsdoc-to-markdown": "3.0.0",
+    "prettier": "1.11.1"
+  },
+  "scripts": {
+    "apidoc": "jsdoc2md src/js/*.js > API.md",
+    "prettier": "prettier \"**/*\" --write"
+  },
+  "coremedia": {
+    "type": "brick",
+    "init": "src/js/init.js"
+  }
+}

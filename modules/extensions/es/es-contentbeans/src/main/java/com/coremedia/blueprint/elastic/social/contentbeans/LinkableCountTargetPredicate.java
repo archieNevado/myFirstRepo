@@ -4,8 +4,8 @@ import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.objectserver.beans.ContentBean;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 
 final class LinkableCountTargetPredicate implements CountTargetPredicate<Linkable> {
@@ -26,7 +26,7 @@ final class LinkableCountTargetPredicate implements CountTargetPredicate<Linkabl
     return null != input && inProduction && validationService.validate(input);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public Class<Linkable> getType() {
     return Linkable.class;

@@ -70,7 +70,10 @@ public class MarketingSpotResource extends AbstractCatalogResource<MarketingSpot
     String extId = commerceId.getExternalId()
             .orElse(spot.getExternalId());
     setId(extId);
-    setSiteId(spot.getContext().getSiteId());
-    setWorkspaceId(spot.getContext().getWorkspaceId());
+
+    StoreContext storeContext = spot.getContext();
+
+    setSiteId(storeContext.getSiteId());
+    setWorkspaceId(storeContext.getWorkspaceId().orElse(null));
   }
 }

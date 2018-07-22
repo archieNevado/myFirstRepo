@@ -1,5 +1,7 @@
 package com.coremedia.blueprint.common.layout;
 
+import com.coremedia.cap.content.Content;
+
 import java.util.List;
 
 /**
@@ -35,4 +37,10 @@ public interface PageGrid {
    * @param name The name of the placement.
    */
   PageGridPlacement getPlacementForName(String name);
+
+  /**
+   * Returns the layout settings document that defines the structure of the page grid
+   */
+  Content getLayout();
+
 }

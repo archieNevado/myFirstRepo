@@ -47,8 +47,8 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
@@ -492,8 +492,8 @@ public class DownloadPortalHandler {
     return getUriComponentsBuilder(uriTemplate, navigation).build();
   }
 
-  private ModelAndView getModelAndViewWithNavigation(@Nonnull Object bean,
-                                                     @Nonnull Navigation navigation,
+  private ModelAndView getModelAndViewWithNavigation(@NonNull Object bean,
+                                                     @NonNull Navigation navigation,
                                                      @Nullable String view) {
     ModelAndView modelAndView = HandlerHelper.createModelWithView(bean, StringUtils.defaultString(view, ViewUtils.DEFAULT_VIEW));
     // adding the navigation to the ModelAndView is a Blueprint prerequisite for rendering
@@ -548,11 +548,11 @@ public class DownloadPortalHandler {
     return getModelAndViewWithNavigation(paginatedAssets, navigation, null);
   }
 
-  private static boolean isSearchQueryTooShort(@Nonnull String query) {
+  private static boolean isSearchQueryTooShort(@NonNull String query) {
     return query.trim().length() < 3;
   }
 
-  private void addSearchNotification(@Nonnull PaginatedAssets paginatedAssets, @Nonnull String query) {
+  private void addSearchNotification(@NonNull PaginatedAssets paginatedAssets, @NonNull String query) {
 
     Notification notification;
     if (paginatedAssets.getTotalCount() == 0) {
@@ -601,9 +601,9 @@ public class DownloadPortalHandler {
     return renditionsToDownload;
   }
 
-  private void getValidRenditionsForDownload(@Nonnull List<AMAssetRendition> renditionsToDownload,
-                                             @Nonnull List<String> renditionNames,
-                                             @Nonnull Content assetContent) {
+  private void getValidRenditionsForDownload(@NonNull List<AMAssetRendition> renditionsToDownload,
+                                             @NonNull List<String> renditionNames,
+                                             @NonNull Content assetContent) {
     if (isAssetValid(assetContent)) {
       AMAsset amAsset = (AMAsset) contentBeanFactory.createBeanFor(assetContent);
       if (amAsset != null) {
@@ -614,9 +614,9 @@ public class DownloadPortalHandler {
     }
   }
 
-  private static void addValidRenditions(@Nonnull List<AMAssetRendition> renditionsToDownload,
-                                  @Nonnull List<String> renditionNames,
-                                  @Nonnull AMAsset amAsset) {
+  private static void addValidRenditions(@NonNull List<AMAssetRendition> renditionsToDownload,
+                                  @NonNull List<String> renditionNames,
+                                  @NonNull AMAsset amAsset) {
     List<AMAssetRendition> publishedRenditions = amAsset.getPublishedRenditions();
 
     for (String renditionName : renditionNames) {
@@ -630,7 +630,7 @@ public class DownloadPortalHandler {
     }
   }
 
-  private static boolean isAssetValid(@Nonnull Content assetContent) {
+  private static boolean isAssetValid(@NonNull Content assetContent) {
     if (assetContent.getType() == null || !assetContent.getType().isSubtypeOf(AMAsset.NAME)) {
       LOG.info("Download Request for Rendition Collection => No Asset for id: " + assetContent.getId());
       return false;

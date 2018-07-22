@@ -13,8 +13,8 @@ import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -63,9 +63,9 @@ public class LocalizationService {
 
   // --- construct and configure ------------------------------------
 
-  public LocalizationService(@Nonnull StructService structService,
-                             @Nonnull SitesService sitesService,
-                             @Nonnull BundleResolver bundleResolver) {
+  public LocalizationService(@NonNull StructService structService,
+                             @NonNull SitesService sitesService,
+                             @NonNull BundleResolver bundleResolver) {
     this.structService = structService;
     this.sitesService = sitesService;
     this.bundleResolver = bundleResolver;
@@ -83,8 +83,8 @@ public class LocalizationService {
    * same bundle (like myBundle_de and myBundle_de_DE) in the bundles
    * collection are considered as duplicate.
    */
-  @Nonnull
-  public Struct resources(@Nonnull Collection<Content> bundles, @Nullable Locale locale) {
+  @NonNull
+  public Struct resources(@NonNull Collection<Content> bundles, @Nullable Locale locale) {
     checkAreBundles(bundles);
     List<Struct> localizations = new ArrayList<>();
     List<Content> fallback = localizationFallback(locale!=null ? locale : GLOBAL, variantsMaps(bundles));
@@ -102,8 +102,8 @@ public class LocalizationService {
    * Convenience variant of {@link #resources(Collection, Locale)} for a single
    * bundle.
    */
-  @Nonnull
-  public final Struct resources(@Nonnull Content bundle, @Nullable Locale locale) {
+  @NonNull
+  public final Struct resources(@NonNull Content bundle, @Nullable Locale locale) {
     return resources(Collections.singletonList(bundle), locale);
   }
 
@@ -341,8 +341,8 @@ public class LocalizationService {
    * @return the contents that have been checked out in this method (a subset of the incoming contents)
    * @throws IllegalStateException if a content neither is nor can be checked out by the current user
    */
-  @Nonnull
-  private static Collection<Content> checkOut(@Nonnull Collection<Content> contents) {
+  @NonNull
+  private static Collection<Content> checkOut(@NonNull Collection<Content> contents) {
     Collection<Content> toBeCheckedIn = new HashSet<>();
     for (Content content : contents) {
       if (content.isCheckedIn()) {

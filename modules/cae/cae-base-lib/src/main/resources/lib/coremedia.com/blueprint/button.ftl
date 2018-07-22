@@ -10,7 +10,7 @@
  ------------------------------------------------------------------------------------------------------------------- -->
 
 
-<#-- BUTTON -->
+<#-- DEPRECATED, see Frontend Developer Guide -->
 <#macro button text="" href="" baseClass="cm-button" iconClass="" iconText="" textClass="" attr={}>
   <#if href?has_content>
     <#if iconClass?has_content && text?has_content>

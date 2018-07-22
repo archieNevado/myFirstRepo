@@ -336,7 +336,7 @@ export function init($imagemap) {
   const $image = $imagemap.find(".cm-imagemap__picture");
 
   // Handle responsive and non-responsive images
-  if ($image.data("cm-responsive-image-state") !== undefined) {
+  if ($image.data("cm-responsive-media-state") !== undefined) {
     $image.on("srcChanging", function() {
       // hide hotzones if src is changing
       $imagemap.find(".cm-imagemap__hotzone").css("display", "none");
@@ -347,9 +347,8 @@ export function init($imagemap) {
       update($imagemap, event.ratio);
     });
   } else {
-    // determine image ratio (if attached) and set "uncropped" as fallback
-    const ratio = $image.data("cm-image-ratio") || "uncropped";
-    update($imagemap, ratio);
+    // set "uncropped"
+    update($imagemap, "uncropped");
   }
 
   // imagemap plugin doesn't rely on quickinfos being elements of the imagemap

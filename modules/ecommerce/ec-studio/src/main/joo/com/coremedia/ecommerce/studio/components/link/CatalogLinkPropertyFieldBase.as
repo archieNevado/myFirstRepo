@@ -10,6 +10,7 @@ import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ecommerce.studio.model.CatalogObjectPropertyNames;
 import com.coremedia.ui.data.Bean;
 import com.coremedia.ui.data.ValueExpression;
+import com.coremedia.ui.util.ThumbnailImage;
 
 public class CatalogLinkPropertyFieldBase extends LinkListGridPanel {
 
@@ -97,7 +98,7 @@ public class CatalogLinkPropertyFieldBase extends LinkListGridPanel {
     var extId:String = catalogObject.getExternalId();
     if (extId) {
       return extId;
-    } else if (extId == null) {
+    } else if (extId === null) {
       return CatalogHelper.getInstance().getExternalIdFromId(catalogObject.getUri());
     }
     return undefined;
@@ -131,7 +132,7 @@ public class CatalogLinkPropertyFieldBase extends LinkListGridPanel {
     return undefined;
   }
 
-  public static function convertThumbnail(model:Object):String {
+  public static function convertThumbnail(model:Object):ThumbnailImage {
     return ImageLinkListRenderer.convertThumbnailFor(model, "CatalogObject");
   }
 }

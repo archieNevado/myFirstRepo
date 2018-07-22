@@ -1,11 +1,10 @@
 package com.coremedia.ecommerce.studio.components {
-import com.coremedia.cms.editor.sdk.context.ComponentContextManager;
 import com.coremedia.cms.editor.sdk.premular.Premular;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ecommerce.studio.model.Store;
 import com.coremedia.ui.components.LocalComboBox;
-import com.coremedia.ui.components.StatefulComboBox;
+import com.coremedia.ui.context.ComponentContextManager;
 import com.coremedia.ui.data.RemoteBeanUtil;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;

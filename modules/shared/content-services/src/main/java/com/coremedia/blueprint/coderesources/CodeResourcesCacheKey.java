@@ -8,7 +8,7 @@ import com.coremedia.cap.user.User;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 import java.util.Objects;
 

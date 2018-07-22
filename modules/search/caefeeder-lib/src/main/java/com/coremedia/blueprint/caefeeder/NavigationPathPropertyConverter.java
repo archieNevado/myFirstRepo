@@ -6,7 +6,7 @@ import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.feeder.bean.PropertyConverter;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -28,7 +28,7 @@ public class NavigationPathPropertyConverter implements PropertyConverter {
 
   private TreePathKeyFactory<Content> navigationPathKeyFactory;
 
-  public void setNavigationPathKeyFactory(@Nonnull TreePathKeyFactory<Content> navigationPathKeyFactory) {
+  public void setNavigationPathKeyFactory(@NonNull TreePathKeyFactory<Content> navigationPathKeyFactory) {
     this.navigationPathKeyFactory = requireNonNull(navigationPathKeyFactory);
   }
 
@@ -72,8 +72,8 @@ public class NavigationPathPropertyConverter implements PropertyConverter {
     return List.class;
   }
 
-  @Nonnull
-  private static String idPath(@Nonnull List<Content> path) {
+  @NonNull
+  private static String idPath(@NonNull List<Content> path) {
     StringBuilder sb = new StringBuilder();
     for (Content content : path) {
       sb.append('/');

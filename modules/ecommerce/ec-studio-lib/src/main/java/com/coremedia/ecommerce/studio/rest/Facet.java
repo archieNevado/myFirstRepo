@@ -2,14 +2,14 @@ package com.coremedia.ecommerce.studio.rest;
 
 import com.google.common.base.MoreObjects;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 public class Facet {
 
   private final String id;
   private final String value;
 
-  Facet(@Nonnull String id, @Nonnull String value) {
+  Facet(@NonNull String id, @NonNull String value) {
     this.id = id;
     this.value = value;
   }

@@ -12,9 +12,9 @@
 <#if self.picture?has_content>
   <div class="cm-imagemap__wrapper">
     <#-- include image -->
-    <@cm.include self=self.picture params={
+    <@cm.include self=self.picture view="media" params={
       "classBox": "${blockClass}__picture-box cm-imagemap__picture-box",
-      "classImage":  "${blockClass}__picture cm-imagemap__picture",
+      "classMedia":  "${blockClass}__picture cm-imagemap__picture",
       "metadata": ["properties.pictures"],
       "additionalAttr": {"useMap": "#" + imageMapId!"", "unselectable": "on"}
     }/>

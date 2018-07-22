@@ -67,6 +67,11 @@ public interface PageGridPlacement extends HasViewTypeName, Container<Linkable> 
   int getNumCols();
 
   /**
+   * Returns if the Placement is editable.
+   */
+  boolean isEditable();
+
+  /**
    * Returns additional properties stored in the pagegrid config
    */
   Map<String, Object> getAdditionalProperties();

@@ -42,23 +42,6 @@
   </bean>
 
 
-  <bean id="teasablePicturesPredicate" class="com.coremedia.rest.cap.validation.ContentTypePredicate">
-    <property name="contentRepository" ref="contentRepository"/>
-    <property name="excludeTypes" ref="teasablePicturesPredicateExcludeTypes"/>
-    <property name="excludeSubtypes" ref="teasablePicturesPredicateExcludeSubtypes"/>
-    <property name="includeTypes" ref="teasablePicturesPredicateIncludeTypes"/>
-    <property name="includeSubtypes" ref="teasablePicturesPredicateIncludeSubtypes"/>
-  </bean>
-
-  <util:list id="teasablePicturesPredicateExcludeTypes"/>
-  <util:list id="teasablePicturesPredicateExcludeSubtypes">
-    <value>CMArticle</value>
-  </util:list>
-  <util:list id="teasablePicturesPredicateIncludeTypes"/>
-  <util:list id="teasablePicturesPredicateIncludeSubtypes">
-    <value>CMTeasable</value>
-  </util:list>
-
   <bean id="imageVariantsPropertiesInferrer"
         class="com.coremedia.rest.cap.content.imagevariants.ImageVariantsPropertiesInferrer">
     <property name="transformImageService" ref="transformImageService"/>

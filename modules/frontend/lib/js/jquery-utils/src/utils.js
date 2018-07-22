@@ -1,4 +1,5 @@
 import * as bem from "./utils.bem";
+import $ from "jquery";
 
 export { bem };
 
@@ -27,4 +28,45 @@ export function findRelativeOrAbsolute($self, selector) {
     return $self.find(selector);
   }
   return $self.constructor(selector);
+}
+
+/**
+ * Extend jQuery Ajax Function
+ *
+ * @param {Object} options
+ * @returns $.ajax()
+ */
+export function ajax(options) {
+  /* always set xhr headers for CORS */
+  const cmOptions = {
+    headers: { "X-Requested-With": "XMLHttpRequest" },
+    xhrFields: { withCredentials: true },
+    global: false,
+    url: undefined,
+  };
+
+  options = $.extend({}, cmOptions, options);
+
+  // IE9 does not support CORS w/ credentials, so make sure the host matches the current host
+  const isIE9 = /MSIE (9.\d+);/.test(navigator.userAgent);
+  if (isIE9 && options.url !== undefined) {
+    options.url = options.url.replace(
+      /\/\/([^/]+)\/(.+)/,
+      "//" + window.location.host + "/$2"
+    );
+    // set Origin header if not present and url is absolute
+    const isAbsolute = new RegExp("^([a-z]+://|//)");
+    if (
+      options.headers["Origin"] === undefined &&
+      isAbsolute.test(options.url)
+    ) {
+      options.headers["Origin"] =
+        window.location.protocol +
+        "//" +
+        window.location.hostname +
+        (window.location.port ? ":" + window.location.port : "");
+    }
+  }
+
+  return $.ajax(options);
 }

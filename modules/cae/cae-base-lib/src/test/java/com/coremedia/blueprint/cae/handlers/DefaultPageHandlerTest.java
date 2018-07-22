@@ -1,10 +1,10 @@
 package com.coremedia.blueprint.cae.handlers;
 
 import com.coremedia.blueprint.base.links.ContentLinkBuilder;
+import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
 import com.coremedia.blueprint.base.links.VanityUrlMapper;
 import com.coremedia.blueprint.base.navigation.context.finder.TopicpageContextFinder;
 import com.coremedia.blueprint.cae.contentbeans.PageImpl;
-import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.Content;
@@ -16,7 +16,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.BeanFactory;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -182,10 +181,11 @@ public class DefaultPageHandlerTest extends PageHandlerBaseTest<DefaultPageHandl
   public void defaultSetup() {
     super.defaultSetup();
 
-    navigationResolver = spy(new NavigationResolver());
+    NavigationResolver navigationResolver = spy(new NavigationResolver());
     navigationResolver.setContextHelper(contextHelper);
     navigationResolver.setNavigationSegmentsUriHelper(navigationSegmentsUriHelper);
     navigationResolver.setTopicPageContextFinder(topicpageContextFinder);
+    navigationResolver.setUrlPathFormattingHelper(urlPathFormattingHelper);
     doNothing().when(navigationResolver).setPageModelToRequestConstants(defaultTaxonomy);
 
     testling.setBeanFactory(beanFactory);
@@ -193,6 +193,7 @@ public class DefaultPageHandlerTest extends PageHandlerBaseTest<DefaultPageHandl
     testling.setTopicPageContextFinder(topicpageContextFinder);
     testling.setContentLinkBuilder(contentLinkBuilder);
     testling.setNavigationResolver(navigationResolver);
+    testling.setUrlPathFormattingHelper(urlPathFormattingHelper);
 
     UriComponentsBuilder defaultUriComponentsBuilder = UriComponentsBuilder.newInstance();
 
@@ -206,7 +207,7 @@ public class DefaultPageHandlerTest extends PageHandlerBaseTest<DefaultPageHandl
     when(contextHelper.findAndSelectContextFor(defaultNavigation, defaultTaxonomy)).thenReturn(defaultNavigation);
     when(defaultNavigation.getRootNavigation()).thenReturn(defaultNavigation);
     when(topicpageContextFinder.findDefaultTopicpageChannelFor(defaultTaxonomyContent, defaultNavigationContent)).thenReturn(defaultNavigationContent);
-    when(defaultNavigationContent.getString(CMLinkable.SEGMENT)).thenReturn(DEFAULT_CONTEXT);
+    when(urlPathFormattingHelper.getVanityName(defaultNavigationContent)).thenReturn(DEFAULT_CONTEXT);
     when(defaultTaxonomy.getSegment()).thenReturn(DEFAULT_VANITY_NAME);
     when(contentBeanIdConverter.convert(defaultTaxonomy)).thenReturn(Integer.toString(DEFAULT_CONTENT_ID));
     when(contentLinkBuilder.buildLinkForPage(defaultActionContent, defaultNavigationContent)).thenReturn(defaultUriComponentsBuilder);
@@ -234,10 +235,8 @@ public class DefaultPageHandlerTest extends PageHandlerBaseTest<DefaultPageHandl
   @Mock
   private HttpServletRequest servletRequest;
 
-  private NavigationResolver navigationResolver;
-
   @Mock
-  private ServletRequestAttributes servletRequestAttributes;
+  private UrlPathFormattingHelper urlPathFormattingHelper;
 
   private static final List<String> DEFAULT_NAVIGATION_PATH = asList(DEFAULT_CONTEXT);
   private static final String DEFAULT_VANITY_NAME = DEFAULT_ACTION;

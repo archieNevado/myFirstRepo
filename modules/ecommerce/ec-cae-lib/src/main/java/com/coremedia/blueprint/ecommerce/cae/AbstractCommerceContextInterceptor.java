@@ -6,6 +6,7 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerce
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.base.multisite.SiteResolver;
 import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
+import com.coremedia.blueprint.common.preview.PreviewDateFormatter;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
@@ -13,17 +14,19 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
+import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 import com.google.common.annotations.VisibleForTesting;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 
 /**
@@ -96,7 +99,7 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
     return true;
   }
 
-  private void prepareCommerceConnection(@Nonnull Site site, @Nonnull HttpServletRequest request) {
+  private void prepareCommerceConnection(@NonNull Site site, @NonNull HttpServletRequest request) {
     try {
       Optional<CommerceConnection> commerceConnection = getCommerceConnectionWithConfiguredStoreContext(site, request);
 
@@ -149,9 +152,9 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
 
   // --- basics, suitable for most extending classes ----------------
 
-  @Nonnull
+  @NonNull
   protected Optional<CommerceConnection> getCommerceConnectionWithConfiguredStoreContext(
-          @Nonnull Site site, @Nonnull HttpServletRequest request) {
+          @NonNull Site site, @NonNull HttpServletRequest request) {
     Optional<CommerceConnection> connection = commerceConnectionInitializer.findConnectionForSite(site);
 
     // The commerce connection is supposed to be prototype-scoped (i.e.
@@ -165,41 +168,57 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
     }
 
     if (preview) {
-      StoreContext originalStoreContext = connection.get().getStoreContext();
-      StoreContextProvider storeContextProvider = connection.get().getStoreContextProvider();
-
-      StoreContextBuilder storeContextBuilder = storeContextProvider.buildContext(originalStoreContext);
-
-      StoreContext clonedStoreContext = prepareStoreContextForPreview(request, storeContextBuilder)
-              .build();
-
-      connection.get().setStoreContext(clonedStoreContext);
+      updateStoreContextForPreview(request, connection.get());
     }
 
     return connection;
   }
 
-  @Nonnull
+  private static void updateStoreContextForPreview(@NonNull HttpServletRequest request,
+                                                   @NonNull CommerceConnection connection) {
+    StoreContextProvider storeContextProvider = connection.getStoreContextProvider();
+    StoreContext originalStoreContext = connection.getStoreContext();
+
+    StoreContextBuilder storeContextBuilder = storeContextProvider.buildContext(originalStoreContext);
+
+    StoreContext clonedStoreContext = prepareStoreContextForPreview(request, storeContextBuilder)
+            .build();
+
+    connection.setStoreContext(clonedStoreContext);
+  }
+
+  @NonNull
   @SuppressWarnings("AssignmentToMethodParameter")
-  private static StoreContextBuilder prepareStoreContextForPreview(@Nonnull HttpServletRequest request,
-                                                                   @Nonnull StoreContextBuilder storeContextBuilder) {
-    // search for an existing workspace param and put it in the store context
-    String workspaceId = request.getParameter(QUERY_PARAMETER_WORKSPACE_ID);
+  private static StoreContextBuilder prepareStoreContextForPreview(@NonNull HttpServletRequest request,
+                                                                   @NonNull StoreContextBuilder storeContextBuilder) {
+    WorkspaceId workspaceId = findWorkspaceId(request).orElse(null);
     storeContextBuilder = storeContextBuilder.withWorkspaceId(workspaceId);
 
-    String previewDate = request.getParameter(ValidityPeriodValidator.REQUEST_PARAMETER_PREVIEW_DATE);
-    if (previewDate != null) {
-      storeContextBuilder = storeContextBuilder.withPreviewDate(previewDate);
-    }
+    ZonedDateTime previewDate = findPreviewDate(request).orElse(null);
+    storeContextBuilder = storeContextBuilder.withPreviewDate(previewDate);
 
     return storeContextBuilder;
+  }
+
+  @NonNull
+  private static Optional<WorkspaceId> findWorkspaceId(@NonNull HttpServletRequest request) {
+    String workspaceIdStr = request.getParameter(QUERY_PARAMETER_WORKSPACE_ID);
+    return Optional.ofNullable(workspaceIdStr)
+            .map(WorkspaceId::of);
+  }
+
+  @NonNull
+  private static Optional<ZonedDateTime> findPreviewDate(@NonNull HttpServletRequest request) {
+    String previewDateText = request.getParameter(ValidityPeriodValidator.REQUEST_PARAMETER_PREVIEW_DATE);
+    return Optional.ofNullable(previewDateText)
+            .flatMap(PreviewDateFormatter::parse);
   }
 
   /**
    * Sets the user context to the user context provider.
    * You will need this if you want to do a call for a user.
    */
-  protected void initUserContext(@Nonnull CommerceConnection commerceConnection, @Nonnull HttpServletRequest request) {
+  protected void initUserContext(@NonNull CommerceConnection commerceConnection, @NonNull HttpServletRequest request) {
     try {
       UserContext userContext = commerceConnection.getUserContextProvider().createContext(request);
       commerceConnection.setUserContext(userContext);

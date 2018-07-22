@@ -3,8 +3,8 @@ package com.coremedia.blueprint.localization;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.struct.Struct;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 public class ContentBundleResolver implements BundleResolver {
   private static final String LOCALIZATIONS = "localizations";
@@ -16,7 +16,7 @@ public class ContentBundleResolver implements BundleResolver {
    */
   @Override
   @Nullable
-  public Struct resolveBundle(@Nonnull Content bundle) {
+  public Struct resolveBundle(@NonNull Content bundle) {
     return bundle.getStruct(LOCALIZATIONS);
   }
 }

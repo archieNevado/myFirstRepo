@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
@@ -72,7 +72,7 @@ public class SitemapGenerationController {
   /**
    * This default implementation returns the injected configuration.
    */
-  @Nonnull
+  @NonNull
   private SitemapSetup selectConfiguration(Site site) {
     return sitemapSetupFactory.createSitemapSetup(site);
   }
@@ -102,7 +102,7 @@ public class SitemapGenerationController {
 
   // --- utilities --------------------------------------------------
 
-  @Nonnull
+  @NonNull
   protected final Site siteByRequest(HttpServletRequest request) {
     Site site = siteResolver.findSiteByPath(request.getPathInfo());
     if (site==null) {

@@ -8,8 +8,8 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceObject;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -37,27 +37,27 @@ public class Store implements CommerceObject {
   /**
    * @return Returns the web URL of the commerce system's management tool
    */
-  @Nonnull
+  @NonNull
   public Optional<String> getVendorUrl() {
     return getConnectionAttribute(CommerceConnection::getVendorUrl);
   }
 
-  @Nonnull
+  @NonNull
   public Optional<String> getVendorVersion() {
     return getConnectionAttribute(CommerceConnection::getVendorVersion);
   }
 
-  @Nonnull
+  @NonNull
   public Optional<String> getVendorName() {
     return getConnectionAttribute(CommerceConnection::getVendorName);
   }
 
-  @Nonnull
+  @NonNull
   private static Optional<String> getConnectionAttribute(Function<CommerceConnection, String> getter) {
     return CurrentCommerceConnection.find().map(getter);
   }
 
-  @Nonnull
+  @NonNull
   public Optional<Catalog> getDefaultCatalog() {
     CatalogService catalogService = getCatalogService();
 
@@ -68,7 +68,7 @@ public class Store implements CommerceObject {
     return catalogService.getDefaultCatalog(context);
   }
 
-  @Nonnull
+  @NonNull
   public List<Catalog> getCatalogs() {
     CatalogService catalogService = getCatalogService();
 
@@ -79,7 +79,7 @@ public class Store implements CommerceObject {
     return catalogService.getCatalogs(context);
   }
 
-  @Nonnull
+  @NonNull
   public List<Category> getRootCategories() {
     CatalogService catalogService = getCatalogService();
 

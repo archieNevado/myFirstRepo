@@ -14,8 +14,8 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -85,7 +85,7 @@ public class CMProductImpl extends CMTeasableImpl implements CMProduct {
     return productPictures.isEmpty() ? null : productPictures.get(0);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<CatalogPicture> getProductPictures() {
     List<? extends CMPicture> pictures = getPictures();
