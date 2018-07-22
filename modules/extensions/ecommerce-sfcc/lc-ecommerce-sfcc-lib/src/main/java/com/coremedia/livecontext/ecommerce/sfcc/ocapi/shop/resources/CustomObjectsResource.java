@@ -3,7 +3,7 @@ package com.coremedia.livecontext.ecommerce.sfcc.ocapi.shop.resources;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.shop.documents.CustomObjectDocument;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 /*
  * Serves as generic resource to get any data type via shop API for

@@ -20,6 +20,7 @@
 <StructProperty Name="commerce">
 <Struct>
 <StringListProperty Name="usersegments">
+<String>sfcc:///catalog/segment/Men</String>
 </StringListProperty>
 </Struct>
 </StructProperty>

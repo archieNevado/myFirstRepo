@@ -1,6 +1,7 @@
 package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.base.livecontext.util.LocaleHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
@@ -8,12 +9,13 @@ import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Currency;
 import java.util.Locale;
+import java.util.Optional;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CURRENCY;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.LOCALE;
@@ -23,42 +25,44 @@ import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreCon
 
 public class StoreContextProviderMock implements StoreContextProvider {
 
-  @Nullable
+  @NonNull
   @Override
-  public StoreContext findContextBySiteId(@Nonnull String siteId) {
+  public Optional<StoreContext> findContextBySiteId(@NonNull String siteId) {
     if (siteId.equals("Helios")) {
-      return createContext();
+      return Optional.of(createContext());
     } else {
       throw new InvalidContextException("Could not find context for " + siteId);
     }
   }
 
+  @NonNull
   @Override
-  @Nullable
-  public StoreContext findContextBySite(Site site) {
+  public Optional<StoreContext> findContextBySite(@NonNull Site site) {
     if ("Helios".equals(site.getName())) {
-      return createContext();
+      return Optional.of(createContext());
     } else {
       throw new InvalidContextException("Could not find context for " + site.getName());
     }
   }
 
+  @NonNull
   @Override
-  @Nullable
-  public StoreContext findContextByContent(@Nonnull Content content) {
-    return createContext();
+  public Optional<StoreContext> findContextByContent(@NonNull Content content) {
+    return Optional.of(createContext());
   }
 
-  @Nullable
+  @NonNull
   @Override
-  public StoreContext createContext(@Nonnull Site site) {
-    return createContext();
+  public Optional<StoreContext> createContext(@NonNull Site site) {
+    return Optional.of(createContext());
   }
 
+  @NonNull
   private StoreContext createContext() {
     return createContext("10001", "aurora", "10001", "en_US", "USD");
   }
 
+  @NonNull
   private StoreContext createContext(@Nullable String storeId, @Nullable String storeName, String catalogId,
                                      @Nullable String localeStr, @Nullable String currency) {
     StoreContext context = newStoreContext();
@@ -82,8 +86,8 @@ public class StoreContextProviderMock implements StoreContextProvider {
     return context;
   }
 
-  @Nonnull
-  private static String parseString(@Nonnull String str, @Nonnull String description) {
+  @NonNull
+  private static String parseString(@NonNull String str, @NonNull String description) {
     if (StringUtils.isBlank(str)) {
       throw new InvalidContextException("'" + description + "' has wrong format: \"" + str + "\"");
     }
@@ -91,14 +95,14 @@ public class StoreContextProviderMock implements StoreContextProvider {
     return str;
   }
 
-  @Nonnull
-  private static Locale parseLocale(@Nonnull String localeStr) {
+  @NonNull
+  private static Locale parseLocale(@NonNull String localeStr) {
     return LocaleHelper.parseLocaleFromString(localeStr)
             .orElseThrow(() -> new InvalidContextException("Locale '" + localeStr + "' is not valid."));
   }
 
-  @Nonnull
-  private static Currency parseCurrency(@Nonnull String currencyStr) {
+  @NonNull
+  private static Currency parseCurrency(@NonNull String currencyStr) {
     try {
       return Currency.getInstance(currencyStr);
     } catch (IllegalArgumentException e) {
@@ -106,15 +110,9 @@ public class StoreContextProviderMock implements StoreContextProvider {
     }
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public StoreContextBuilder buildContext(@Nonnull StoreContext source) {
-    return StoreContextBuilderImpl.from(source);
-  }
-
-  @Nonnull
-  @Override
-  public StoreContext cloneContext(@Nonnull StoreContext source) {
-    return source.getClone();
+  public StoreContextBuilder buildContext(@NonNull StoreContext source) {
+    return StoreContextBuilderImpl.from((StoreContextImpl) source);
   }
 }

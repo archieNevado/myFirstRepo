@@ -39,6 +39,13 @@
         </version>
       </document>
 
+      <!-- another channel w/ visibility settings -->
+      <document id="888" type="CMChannel" name="PagegriddedChannel">
+        <version number="1">
+          <markupProperty name="placement" url="888placement.xml" grammar="coremedia-struct-2008"/>
+        </version>
+      </document>
+
       <!-- a channel with a broken pagegrid -->
       <document id="668" type="CMChannel" name="PagegriddedChannel">
         <version number="1">
@@ -63,8 +70,17 @@
       <!-- asset for placements -->
       <document id="40" type="CMArticle" name="article1">
         <version number="1">
-          <stringProperty name="teaserTitle" value="article1"/>
+          <stringProperty name="teaserTitle" value="Article 1"/>
           <markupProperty name="detailText" url="40detailText.xml" grammar="coremedia-richtext-1.0"/>
+        </version>
+      </document>
+
+      <document id="42" type="CMArticle" name="article2">
+        <version number="1">
+          <stringProperty name="teaserTitle" value="Article 2"/>
+          <markupProperty name="detailText" url="40detailText.xml" grammar="coremedia-richtext-1.0"/>
+          <dateProperty name="validFrom" value="1974-06-09T06:20:00+01:00"/>
+          <dateProperty name="validTo" value="2008-03-22T03:11:00+01:00"/>
         </version>
       </document>
 

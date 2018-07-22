@@ -179,14 +179,12 @@
     <property name="linkFormatter" ref="linkFormatter"/>
   </bean>
   <bean id="pictureFeedItemDataProvider" class="com.coremedia.blueprint.cae.feeds.impl.PictureFeedItemDataProvider" parent="teasableFeedItemDataProvider"/>
-  <bean id="videoFeedItemDataProvider" class="com.coremedia.blueprint.cae.feeds.impl.VideoFeedItemDataProvider" parent="teasableFeedItemDataProvider"/>
 
   <bean id="feedItemDataProviders" class="java.util.ArrayList">
     <constructor-arg>
       <list>
         <!-- order: from special to generic -->
         <ref bean="pictureFeedItemDataProvider"/>
-        <ref bean="videoFeedItemDataProvider"/>
         <ref bean="teasableFeedItemDataProvider"/>
       </list>
     </constructor-arg>

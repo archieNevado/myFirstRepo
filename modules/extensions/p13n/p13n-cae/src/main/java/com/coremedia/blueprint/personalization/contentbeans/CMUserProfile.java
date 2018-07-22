@@ -26,6 +26,16 @@ public interface CMUserProfile extends CMLocalized {
   String CONTENTTYPE_CMUSERPROFILE = "CMUserProfile";
 
   /**
+   * Name of the document property 'profileExtensions'
+   */
+  String PROFILE_EXTENSIONS = "profileExtensions";
+
+  /**
+   * Name of the document property 'profileSettings'
+   */
+  String PROFILE_SETTINGS = "profileSettings";
+
+  /**
    * Returns the value of the document property "profileSettings"
    * @return the value
    */

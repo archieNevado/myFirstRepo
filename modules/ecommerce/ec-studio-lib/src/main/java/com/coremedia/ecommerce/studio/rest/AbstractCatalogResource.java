@@ -2,24 +2,26 @@ package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceObject;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
+import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 import com.coremedia.rest.linking.EntityResource;
 import com.google.common.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.ws.rs.GET;
 import javax.ws.rs.PathParam;
 import java.util.Optional;
+
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.WORKSPACE_ID_NONE;
 
 /**
  * An abstract catalog object as a RESTful resource.
@@ -38,7 +40,7 @@ public abstract class AbstractCatalogResource<Entity extends CommerceObject> imp
   private String id;
   private String siteId;
   protected CatalogAlias catalogAlias;
-  private String workspaceId = StoreContextImpl.NO_WS_MARKER;
+  private WorkspaceId workspaceId = WORKSPACE_ID_NONE;
 
   @Nullable
   @Override
@@ -68,9 +70,9 @@ public abstract class AbstractCatalogResource<Entity extends CommerceObject> imp
     this.id = id;
   }
 
-  @Nonnull
+  @NonNull
   @VisibleForTesting
-  static String decodeId(@Nonnull String id) {
+  static String decodeId(@NonNull String id) {
     // At least, encoded `+` chars (`%2B`) must be decoded because
     // some program logic double escapes it in order to avoid `+`
     // characters being unescaped to SPACE characters.
@@ -96,12 +98,16 @@ public abstract class AbstractCatalogResource<Entity extends CommerceObject> imp
   }
 
   public String getWorkspaceId() {
-    return workspaceId;
+    return workspaceId.value();
   }
 
   @PathParam(WORKSPACE_ID)
   public void setWorkspaceId(@Nullable String workspaceId) {
-    this.workspaceId = workspaceId == null ? StoreContextImpl.NO_WS_MARKER : workspaceId;
+    setWorkspaceId(workspaceId != null ? WorkspaceId.of(workspaceId) : null);
+  }
+
+  public void setWorkspaceId(@Nullable WorkspaceId workspaceId) {
+    this.workspaceId = workspaceId != null ? workspaceId : WORKSPACE_ID_NONE;
   }
 
   @Nullable
@@ -114,7 +120,7 @@ public abstract class AbstractCatalogResource<Entity extends CommerceObject> imp
     StoreContextProvider storeContextProvider = commerceConnection.getStoreContextProvider();
     StoreContext originalContext = commerceConnection.getStoreContext();
 
-    StoreContext clonedContext = storeContextProvider.cloneContext(originalContext);
+    StoreContext clonedContext = storeContextProvider.buildContext(originalContext).build();
 
     clonedContext.setWorkspaceId(workspaceId);
     if (catalogAlias != null && catalogAliasTranslationService != null) {
@@ -126,7 +132,7 @@ public abstract class AbstractCatalogResource<Entity extends CommerceObject> imp
     return clonedContext;
   }
 
-  @Nonnull
+  @NonNull
   protected CommerceConnection getConnection() {
     return CurrentCommerceConnection.get();
   }

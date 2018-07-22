@@ -11,7 +11,7 @@
     import com.coremedia.blueprint.assets.studio.AssetCollectionViewExtension;
     import com.coremedia.cms.editor.sdk.collectionview.CollectionView;
     import com.coremedia.cms.editor.sdk.collectionview.CollectionViewConstants;
-    import com.coremedia.cms.editor.sdk.context.ComponentContextManager;
+    import com.coremedia.ui.context.ComponentContextManager;
     import com.coremedia.ui.data.ValueExpression;
 
     public static const xtype:String = "com.coremedia.blueprint.assets.studio.config.assetSearchListContainer";

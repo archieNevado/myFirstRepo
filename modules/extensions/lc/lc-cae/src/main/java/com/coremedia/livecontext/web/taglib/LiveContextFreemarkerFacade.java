@@ -15,6 +15,7 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.common.StringValueObject;
 import com.coremedia.livecontext.fragment.FragmentContext;
 import com.coremedia.livecontext.fragment.FragmentContextProvider;
 import com.coremedia.livecontext.fragment.FragmentParameters;
@@ -23,13 +24,14 @@ import com.coremedia.objectserver.web.taglib.MetadataTagSupport;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Currency;
 import java.util.Locale;
 import java.util.Map;
 
+import static com.google.common.base.Strings.nullToEmpty;
 import static java.util.Objects.requireNonNull;
 import static org.springframework.util.StringUtils.isEmpty;
 
@@ -99,7 +101,7 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
    * @return a map containing informations for preview of fragments
    * @throws IOException
    */
-  @Nonnull
+  @NonNull
   public Map<String, Object> getPreviewMetadata() throws IOException {
     if (!isMetadataEnabled()) {
       return Collections.emptyMap();
@@ -114,7 +116,10 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
     StoreContext storeContext = requireNonNull(connection.getStoreContext(), "store context not available");
 
     ImmutableMap.Builder<String, Object> builder = ImmutableMap.builder();
-    builder.put(CATALOG_ID, parameters.getCatalogId().orElse(storeContext.getCatalogId()))
+    builder
+            .put(CATALOG_ID, parameters.getCatalogId()
+                    .map(StringValueObject::value)
+                    .orElseGet(storeContext::getCatalogId))
             .put(LANG_ID, "" + storeContext.getLocale())
             .put(SITE_ID, storeContext.getSiteId())
             .put(STORE_ID, parameters.getStoreId());
@@ -122,7 +127,7 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
     boolean isAugmentedPage = isAugmentedPage(parameters);
 
     if (isAugmentedPage) {
-      builder.put(PAGE_ID, parameters.getPageId())
+      builder.put(PAGE_ID, nullToEmpty(parameters.getPageId()))
               .put(STORE_REF, storeContext);
     }
 
@@ -183,7 +188,7 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
   }
 
   @Required
-  public void setLiveContextNavigationFactory(@Nonnull LiveContextNavigationFactory liveContextNavigationFactory) {
+  public void setLiveContextNavigationFactory(@NonNull LiveContextNavigationFactory liveContextNavigationFactory) {
     this.liveContextNavigationFactory = liveContextNavigationFactory;
   }
 
@@ -195,7 +200,7 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
     return CurrentCommerceConnection.find().map(CommerceConnection::getVendorName).orElse(null);
   }
 
-  @Nonnull
+  @NonNull
   private static CommerceConnection getCommerceConnection() {
     return CurrentCommerceConnection.get();
   }

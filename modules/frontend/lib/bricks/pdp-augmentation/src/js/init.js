@@ -1,7 +1,7 @@
 import $ from "jquery";
-require("imports-loader?jQuery=jquery!../vendor/jquery.elevatezoom");
+import "../vendor/jquery.elevatezoom";
 import { addNodeDecoratorBySelector } from "@coremedia/js-node-decoration-service";
-import { refreshFragment } from "@coremedia/js-basic";
+import { refreshFragment } from "@coremedia/brick-dynamic-include";
 
 function getChangeImagesFn($productAssets, productDisplayJS) {
   return function(catEntryId, productId) {

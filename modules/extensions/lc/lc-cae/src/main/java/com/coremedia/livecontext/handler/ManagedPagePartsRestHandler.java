@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.handler;
 
 import com.coremedia.blueprint.base.settings.SettingsService;
+import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
 import org.slf4j.Logger;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Locale;
 
 import static java.util.Objects.requireNonNull;
@@ -54,8 +55,8 @@ public class ManagedPagePartsRestHandler {
   private LiveContextSiteResolver siteResolver;
   private SettingsService settingsService;
 
-  public ManagedPagePartsRestHandler(@Nonnull LiveContextSiteResolver siteResolver,
-                                     @Nonnull SettingsService settingsService) {
+  public ManagedPagePartsRestHandler(@NonNull LiveContextSiteResolver siteResolver,
+                                     @NonNull SettingsService settingsService) {
     requireNonNull(siteResolver);
     requireNonNull(settingsService);
 
@@ -76,24 +77,22 @@ public class ManagedPagePartsRestHandler {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    Boolean managedNavigation = settingsService.setting(MANAGED_NAVIGATION_KEY,
-                                                        Boolean.class,
-                                                        site.getSiteRootDocument());
-    Boolean managedHeader = settingsService.setting(MANAGED_HEADER_KEY,
-                                                    Boolean.class,
-                                                    site.getSiteRootDocument());
-    Boolean managedFooter = settingsService.setting(MANAGED_FOOTER_KEY,
-                                                    Boolean.class,
-                                                    site.getSiteRootDocument());
-    Boolean managedFooterNavigation = settingsService.setting(MANAGED_FOOTER_NAVIGATION_KEY,
-                                                              Boolean.class,
-                                                              site.getSiteRootDocument());
+    Content siteRootDocument = site.getSiteRootDocument();
+
+    boolean managedNavigation = getBooleanSetting(MANAGED_NAVIGATION_KEY, siteRootDocument);
+    boolean managedHeader = getBooleanSetting(MANAGED_HEADER_KEY, siteRootDocument);
+    boolean managedFooter = getBooleanSetting(MANAGED_FOOTER_KEY, siteRootDocument);
+    boolean managedFooterNavigation = getBooleanSetting(MANAGED_FOOTER_NAVIGATION_KEY, siteRootDocument);
 
     ManagedPagePartsSettings settings = new ManagedPagePartsSettings();
-    settings.setManagedFooter(managedFooter != null ? managedFooter : DEFAULT_VALUE);
-    settings.setManagedHeader(managedHeader != null ? managedHeader : DEFAULT_VALUE);
-    settings.setManagedNavigation(managedNavigation != null ? managedNavigation : DEFAULT_VALUE);
-    settings.setManagedFooterNavigation(managedFooterNavigation != null ? managedFooterNavigation : DEFAULT_VALUE);
+    settings.setManagedFooter(managedFooter);
+    settings.setManagedHeader(managedHeader);
+    settings.setManagedNavigation(managedNavigation);
+    settings.setManagedFooterNavigation(managedFooterNavigation);
     return new ResponseEntity<>(settings, HttpStatus.OK);
+  }
+
+  private boolean getBooleanSetting(@NonNull String name, @NonNull Content siteRootDocument) {
+    return settingsService.getSetting(name, Boolean.class, siteRootDocument).orElse(DEFAULT_VALUE);
   }
 }

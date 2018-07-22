@@ -10,8 +10,8 @@ import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.VariationAt
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Named;
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +25,7 @@ import static java.util.stream.Collectors.toList;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ProductVariantImpl extends ProductImpl implements ProductVariant {
 
-  public ProductVariantImpl(@Nonnull SfccConfigurationProperties sfccConfigurationProperties) {
+  public ProductVariantImpl(@NonNull SfccConfigurationProperties sfccConfigurationProperties) {
     super(sfccConfigurationProperties);
   }
 
@@ -44,7 +44,7 @@ public class ProductVariantImpl extends ProductImpl implements ProductVariant {
 
   @Nullable
   @Override
-  public Object getAttributeValue(@Nonnull String s) {
+  public Object getAttributeValue(@NonNull String s) {
     Optional<ProductAttribute> match = getDefiningAttributes().stream()
             .filter(attribute -> attribute.getId().equals(s))
             .findFirst();
@@ -56,7 +56,7 @@ public class ProductVariantImpl extends ProductImpl implements ProductVariant {
   }
 
 
-  @Nonnull
+  @NonNull
   @Override
   public List<ProductAttribute> getDefiningAttributes() {
     if (definingAttributes == null) {

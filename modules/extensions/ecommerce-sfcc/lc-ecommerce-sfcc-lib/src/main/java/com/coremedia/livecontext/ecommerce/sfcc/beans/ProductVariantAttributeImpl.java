@@ -3,7 +3,7 @@ package com.coremedia.livecontext.ecommerce.sfcc.beans;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.VariationAttributeDocument;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.VariationAttributeValueDocument;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -50,7 +50,7 @@ public class ProductVariantAttributeImpl extends ProductAttributeImpl {
    * @param technicalValue
    * @return human readable value or original technical as fallback
    */
-  private String getDisplayValueForValue(@Nonnull String technicalValue) {
+  private String getDisplayValueForValue(@NonNull String technicalValue) {
     Optional<VariationAttributeValueDocument> valueDocument = getDelegate().getValues().stream()
             .filter(value -> technicalValue.equals(value.getValue()))
             .findFirst();

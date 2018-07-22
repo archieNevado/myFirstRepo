@@ -2,6 +2,7 @@ package com.coremedia.livecontext.asset.impl;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
@@ -23,7 +24,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Optional;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper.parseCommerceIdOrThrow;
 import static com.google.common.collect.ImmutableList.of;
 import static org.junit.Assert.assertEquals;
@@ -88,8 +88,7 @@ public class AssetServiceImplTest {
 
   @Before
   public void setUp() throws Exception {
-    StoreContext storeContext = newStoreContext();
-    storeContext.setSiteId("site-1");
+    StoreContext storeContext = StoreContextImpl.builder("site-1").build();
 
     commerceConnection = new BaseCommerceConnection();
     commerceConnection.setIdProvider(TestVendors.getIdProvider("vendor"));
@@ -178,7 +177,8 @@ public class AssetServiceImplTest {
   public void testDefaultPicture() throws Exception {
     Content defaultPicture = mock(Content.class);
 
-    when(settingsService.setting(anyString(), eq(Content.class), nullable(Content.class))).thenReturn(defaultPicture);
+    when(settingsService.getSetting(anyString(), eq(Content.class), nullable(Content.class)))
+            .thenReturn(Optional.of(defaultPicture));
     when(sitesService.findSite(anyString())).thenReturn(Optional.of(site1));
 
     assertEquals(defaultPicture, testling.findPictures(COMMERCE_ID).iterator().next());

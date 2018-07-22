@@ -1,7 +1,10 @@
+const autoprefixer = require("autoprefixer");
+const postcssObjectFitImages = require("postcss-object-fit-images");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const fs = require("fs");
 const nodeSass = require("node-sass");
 const path = require("path");
+
 const { getThemeConfig } = require("@coremedia/tool-utils/workspace");
 const {
   getDependencyCheckNodeSassImporter,
@@ -51,6 +54,11 @@ if (fs.existsSync(previewScssPath)) {
   entry["preview"] = [previewScssPath];
 }
 
+const extractTextPluginForCss = new ExtractTextPlugin({
+  filename: path.join(CSS_PATH, "[name].css"),
+  allChunks: true, // prevents second compilation of sass (doubles build speed)
+});
+
 module.exports = () => config =>
   deepMerge(config, {
     entry: entry,
@@ -59,7 +67,7 @@ module.exports = () => config =>
         // CSS
         {
           test: /\.scss$/,
-          use: ExtractTextPlugin.extract({
+          use: extractTextPluginForCss.extract({
             use: [
               {
                 loader: "css-loader",
@@ -73,10 +81,11 @@ module.exports = () => config =>
                 options: {
                   sourceMap: process.env.NODE_ENV !== "production",
                   plugins: [
-                    require("autoprefixer")({
+                    autoprefixer({
                       // enable css-grid for IE
                       grid: true,
                     }),
+                    postcssObjectFitImages,
                   ],
                 },
               },
@@ -117,10 +126,5 @@ module.exports = () => config =>
         },
       ],
     },
-    plugins: [
-      new ExtractTextPlugin({
-        filename: path.join(CSS_PATH, "[name].css"),
-        allChunks: true, // prevents second compilation of sass (doubles build speed)
-      }),
-    ],
+    plugins: [extractTextPluginForCss],
   });

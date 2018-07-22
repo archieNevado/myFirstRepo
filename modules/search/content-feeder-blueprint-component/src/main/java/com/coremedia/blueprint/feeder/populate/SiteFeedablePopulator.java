@@ -11,8 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Map;
 import java.util.Optional;
 
@@ -49,7 +49,7 @@ public class SiteFeedablePopulator implements FeedablePopulator<Content> {
   }
 
   @Nullable
-  private String getSiteName(@Nonnull Content content) {
+  private String getSiteName(@NonNull Content content) {
     Optional<Site> site = sitesService.getContentSiteAspect(content).findSite();
     String siteName = site.map(Site::getName).orElse(null);
     LOG.debug("Site for {}: {}", content, siteName);

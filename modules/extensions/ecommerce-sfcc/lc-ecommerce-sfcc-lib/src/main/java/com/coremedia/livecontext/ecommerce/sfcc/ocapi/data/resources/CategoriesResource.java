@@ -6,7 +6,7 @@ import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.CategoryDoc
 import com.google.common.collect.ImmutableMap;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Optional;
 
 /**
@@ -27,8 +27,8 @@ public class CategoriesResource extends AbstractDataResource {
    * @param storeContext the effective store context
    * @return the category document, or nothing if it does not exist
    */
-  @Nonnull
-  public Optional<CategoryDocument> getCategoryById(@Nonnull String categoryId, @Nonnull StoreContext storeContext) {
+  @NonNull
+  public Optional<CategoryDocument> getCategoryById(@NonNull String categoryId, @NonNull StoreContext storeContext) {
     ImmutableMap<String, String> pathParameters = ImmutableMap.<String, String>builder()
             .put(CATALOG_ID_PARAM, storeContext.getCatalogId())
             .put(CATEGORY_ID_PARAM,

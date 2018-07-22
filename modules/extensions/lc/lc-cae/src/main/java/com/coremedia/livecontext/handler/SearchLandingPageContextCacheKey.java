@@ -5,14 +5,14 @@ import com.coremedia.cache.CacheKey;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Objects;
 
 class SearchLandingPageContextCacheKey extends CacheKey<Content> {
   private final SearchLandingPagesLinkBuilderHelper searchLandingPagesLinkBuilderHelper;
   private final Site site;
 
-  SearchLandingPageContextCacheKey(@Nonnull SearchLandingPagesLinkBuilderHelper searchLandingPagesLinkBuilderHelper, @Nonnull Site site) {
+  SearchLandingPageContextCacheKey(@NonNull SearchLandingPagesLinkBuilderHelper searchLandingPagesLinkBuilderHelper, @NonNull Site site) {
     this.searchLandingPagesLinkBuilderHelper = searchLandingPagesLinkBuilderHelper;
     this.site = site;
   }

@@ -5,7 +5,10 @@ import com.coremedia.livecontext.fragment.links.context.LiveContextContextHelper
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 /**
  * Provide access to LiveContext
@@ -25,22 +28,19 @@ public class LiveContextContextAccessor {
    *
    * @return the context
    */
-  public Context openAccessToContext(HttpServletRequest request) {
-    if (request == null) {
-      return null;
-    }
-
+  @Nullable
+  public Context openAccessToContext(@NonNull HttpServletRequest request) {
     try {
-      Context context = LiveContextContextHelper.fetchContext(request);
-      if (context == null) {
-        context = contextResolver.resolveContext(request);
-
-        // store the context and make it available to LiveContextContextHelper
-        if (context != null) {
-          LiveContextContextHelper.setContext(request, context);
-        }
+      Optional<Context> contextFromAttribute = LiveContextContextHelper.findContext(request);
+      if (contextFromAttribute.isPresent()) {
+        return contextFromAttribute.get();
       }
-      return context;
+
+      Context contextFromHeaders = contextResolver.resolveContext(request);
+
+      // Store the context and make it available to LiveContextContextHelper.
+      LiveContextContextHelper.setContext(request, contextFromHeaders);
+      return contextFromHeaders;
     } catch (Exception e) {
       LOG.error("Error retrieving LiveContext context", e);
       return null;

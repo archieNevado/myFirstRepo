@@ -5,10 +5,6 @@ Video
 Contains styling definitions for videos.
 */
 
-video {
-  max-width: 100%; // restrict video to fit in grid
-}
-
 .#{$prefix}superhero--video {
   .#{$prefix}superhero__picture-box {
     // hide on desktop, only if video exist

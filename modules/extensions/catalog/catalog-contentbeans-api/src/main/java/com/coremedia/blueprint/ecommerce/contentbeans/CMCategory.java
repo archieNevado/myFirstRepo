@@ -4,7 +4,7 @@ package com.coremedia.blueprint.ecommerce.contentbeans;
 import com.coremedia.blueprint.ecommerce.common.contentbeans.CMAbstractCategory;
 import com.coremedia.cae.aspect.Aspect;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -45,7 +45,7 @@ public interface CMCategory extends CMAbstractCategory {
    * @return immutable list of subcategories
    * @cm.template.api
    */
-  @Nonnull
+  @NonNull
   List<CMCategory> getSubcategories();
 
   /**
@@ -54,7 +54,7 @@ public interface CMCategory extends CMAbstractCategory {
    * @return immutable list of products
    * @cm.template.api
    */
-  @Nonnull
+  @NonNull
   List<CMProduct> getProducts();
 
 }

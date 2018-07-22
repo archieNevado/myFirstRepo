@@ -58,7 +58,7 @@ public class SegmentResource extends AbstractCatalogResource<Segment> {
 
     StoreContext context = segment.getContext();
     setSiteId(context.getSiteId());
-    setWorkspaceId(context.getWorkspaceId());
+    setWorkspaceId(context.getWorkspaceId().orElse(null));
   }
 
   public SegmentService getSegmentService() {

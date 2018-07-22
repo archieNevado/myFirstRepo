@@ -3,10 +3,6 @@
     text-align: center;
   }
 
-  &__media-box {
-    @include aspect-ratio-box(16, 9);
-  }
-
   &__text {
     p {
       font-size: 17px;
@@ -17,47 +13,21 @@
       margin: 15px auto 20px auto;
       width: 70%;
     }
-    .cm-image-box {
-      width: 80%;
-      .cm-aspect-ratio-box {
-        @include aspect-ratio-box(16, 9);
-      }
-    }
-
     & > blockquote {
       border: none;
 
-      .cm-image-box--embedded {
+      .cm-richtext-embedded--image {
         width: 100%;
         margin: 1em 0;
       }
     }
   }
 
-  .cm-image-box--embedded,
-  .cm-teasable--embedded {
+  .cm-richtext-embedded {
     width: 80%;
 
     //Fix for CMS-4977: Do not split embedded links or pictures
     break-inside: avoid;
-    .cm-aspect-ratio-box {
-      @include aspect-ratio-box(16, 9);
-    }
-  }
-
-  .cm-image-box--embedded {
-    /* default image with 100% width and some margin top/bottom */
-    font-size: 1rem;
-
-    //Fix for CMS-4976: For multi-column-buggy webkit
-    .cm-image {
-      transform: translateZ(0);
-    }
-
-    /* set aspect ratio to 4x3 for embedded images */
-    .cm-aspect-ratio-box {
-      @include aspect-ratio-box(4, 3);
-    }
 
     /* centered image with 50% width */
     &.float--none {
@@ -75,6 +45,17 @@
     &.float--right {
       margin: 0 0 0 1.26667rem;
       width: 50%;
+    }
+
+    /* set aspect ratio to 4x3 for embedded images */
+    &__picture-box {
+      @include aspect-ratio-box(4, 3);
+    }
+
+    //Fix for CMS-4976: For multi-column-buggy webkit
+    &__picture {
+      @include stretch-absolute();
+      transform: translateZ(0);
     }
   }
 }

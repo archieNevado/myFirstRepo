@@ -3,7 +3,7 @@
 <#-- @ftlvariable name="classBox" type="java.lang.String" -->
 <#-- @ftlvariable name="zoomBoxId" type="java.lang.String" -->
 <#-- @ftlvariable name="fullImageLink" type="java.lang.String" -->
-<#-- @ftlvariable name="classImage type="java.lang.String" -->
+<#-- @ftlvariable name="classMedia type="java.lang.String" -->
 <#-- @ftlvariable name="additionalAttr type="java.lang.Object -->
 <#-- get uncropped image as fullImage -->
 <#if limitAspectRatios?size == 1>

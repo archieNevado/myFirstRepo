@@ -2,8 +2,8 @@ package com.coremedia.livecontext.ecommerce.sfcc.asset;
 
 import com.coremedia.livecontext.ecommerce.asset.AssetUrlProvider;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 /**
  * {@link AssetUrlProvider} for Salesforce Commerce Cloud Digital assets.
@@ -12,23 +12,23 @@ public class AssetUrlProviderImpl implements AssetUrlProvider {
 
   @Nullable
   @Override
-  public String getImageUrl(@Nonnull String imageSegment) {
+  public String getImageUrl(@NonNull String imageSegment) {
     return imageSegment;
   }
 
   @Nullable
   @Override
-  public String getImageUrl(@Nonnull String imageSegment, boolean prependCatalogPath) {
+  public String getImageUrl(@NonNull String imageSegment, boolean prependCatalogPath) {
     return getImageUrl(imageSegment);
   }
 
   @Override
-  public void setCommercePreviewUrl(@Nonnull String commercePreviewHost) {
+  public void setCommercePreviewUrl(@NonNull String commercePreviewHost) {
     // unused
   }
 
   @Override
-  public void setCommerceProductionUrl(@Nonnull String commerceProductionHost) {
+  public void setCommerceProductionUrl(@NonNull String commerceProductionHost) {
     // unused
   }
 

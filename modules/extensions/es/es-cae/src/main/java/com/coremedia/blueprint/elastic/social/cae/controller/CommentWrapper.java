@@ -2,8 +2,8 @@ package com.coremedia.blueprint.elastic.social.cae.controller;
 
 import com.coremedia.elastic.social.api.comments.Comment;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 
 /**
@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class CommentWrapper extends ContributionWrapper<Comment, CommentWrapper> {
 
-  public CommentWrapper(@Nonnull Comment comment, @Nullable List<CommentWrapper> subComments) {
+  public CommentWrapper(@NonNull Comment comment, @Nullable List<CommentWrapper> subComments) {
     super(comment, subComments);
   }
 

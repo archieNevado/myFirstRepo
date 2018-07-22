@@ -1,5 +1,8 @@
 <#-- @ftlvariable name="self" type="com.coremedia.livecontext.commercebeans.ProductInSite" -->
 
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/utils.ftl" as utils />
+<#import "../../freemarkerLibs/livecontext.ftl" as livecontext />
+
 <#assign limitAspectRatios=bp.setting(cmpage.navigation, "default_aspect_ratios_for_teaser", [])/>
 
 <#if self.product?has_content && (cmpage.navigation.rootNavigation)?has_content>
@@ -7,11 +10,11 @@
     <#assign listPriceFormatted=lc.formatPrice(self.product.listPrice, self.product.currency, self.product.locale)/>
   </#if>
   <div class="cm-category-item">
-    <@bp.optionalLink href="${cm.getLink(self)}">
-      <@cm.include self=self.product.catalogPicture!cm.UNDEFINED params={
+    <@utils.optionalLink href="${cm.getLink(self)}">
+      <@cm.include self=self.product.catalogPicture!cm.UNDEFINED view="media" params={
         "limitAspectRatios": limitAspectRatios,
-        "classBox": "cm-category-item__image cm-aspect-ratio-box",
-        "classImage": "cm-aspect-ratio-box__content"
+        "classBox": "cm-category-item__image cm-teasable__picture-box",
+        "classMedia": "cm-teasable__picture"
       } />
 
       <div class="cm-category-item__info">
@@ -27,10 +30,11 @@
         <#-- add to cart button -->
         <div class="cm-category-item__cart">
           <div class="cm-button-group cm-button-group--linked">
-            <@lc.addToCartButton product=self.product attr={"classes": ["cm-button-group__button", "cm-button--linked"]} />
+            <@livecontext.addToCartButton product=self.product
+                                          attr={"classes": ["cm-button-group__button", "cm-button--linked"]} />
           </div>
         </div>
       </div>
-    </@bp.optionalLink>
+    </@utils.optionalLink>
   </div>
 </#if>

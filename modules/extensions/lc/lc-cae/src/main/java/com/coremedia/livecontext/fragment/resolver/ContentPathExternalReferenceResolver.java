@@ -9,8 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 /**
  * Resolves the relative or absolute path to identify a content.
@@ -27,7 +27,7 @@ public class ContentPathExternalReferenceResolver extends ExternalReferenceResol
   // --- interface --------------------------------------------------
 
   @Override
-  protected boolean include(@Nonnull FragmentParameters fragmentParameters, @Nonnull String referenceInfo) {
+  protected boolean include(@NonNull FragmentParameters fragmentParameters, @NonNull String referenceInfo) {
     // Directory up path is not allowed
     if (referenceInfo.contains("..")) {
       return false;
@@ -45,9 +45,9 @@ public class ContentPathExternalReferenceResolver extends ExternalReferenceResol
 
   @Nullable
   @Override
-  protected LinkableAndNavigation resolveExternalRef(@Nonnull FragmentParameters fragmentParameters,
-                                                     @Nonnull String referenceInfo,
-                                                     @Nonnull Site site) {
+  protected LinkableAndNavigation resolveExternalRef(@NonNull FragmentParameters fragmentParameters,
+                                                     @NonNull String referenceInfo,
+                                                     @NonNull Site site) {
     Content linkable = resolveLinkable(referenceInfo, site);
     Content navigation = null;
     if (linkable != null) {

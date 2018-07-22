@@ -27,6 +27,7 @@
     <module>lc-studio</module>
     <module>lc-studio-test-helper</module>
     <module>lc-studio-lib</module>
+    <module>lc-workflow</module>
     <module>lc-ecommerce-api-tests</module>
   </modules>
 </project>

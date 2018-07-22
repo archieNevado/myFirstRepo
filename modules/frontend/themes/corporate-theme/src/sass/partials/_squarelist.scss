@@ -42,12 +42,8 @@ Contains styling definitions for all content types as cm-squarelist.
 
   &--dimmer {
     .#{$prefix}squarelist__picture-box:after {
+      @include stretch-absolute();
       content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
       opacity: 0;
       background-color: palette(black);
       transition: opacity $transition-duration ease(in-out-quad);

@@ -1,7 +1,7 @@
 import $ from "jquery";
 import * as downloadCollection from "./downloadCollection";
 import * as nodeDecorationService from "@coremedia/js-node-decoration-service";
-import * as basic from "@coremedia/js-basic";
+import { updateTargetWithAjaxResponse } from "@coremedia/brick-dynamic-include";
 
 $(function() {
   const $window = $(window);
@@ -412,7 +412,7 @@ $(function() {
           params: requestParams,
           method: "POST",
         };
-        basic.updateTargetWithAjaxResponse(
+        updateTargetWithAjaxResponse(
           $collectionOverview,
           requestConfig,
           false,

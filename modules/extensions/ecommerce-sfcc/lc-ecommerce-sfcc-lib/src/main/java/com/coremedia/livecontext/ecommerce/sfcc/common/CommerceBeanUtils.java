@@ -10,8 +10,8 @@ import com.coremedia.livecontext.ecommerce.sfcc.ocapi.AbstractOCDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,11 +36,11 @@ public class CommerceBeanUtils {
    * @return {@link CommerceBean}
    */
   @Nullable
-  public static <T extends CommerceBean> T createBeanFor(@Nonnull CommerceBeanFactory commerceBeanFactory,
-                                                         @Nonnull AbstractOCDocument delegate,
-                                                         @Nonnull StoreContext storeContext,
-                                                         @Nonnull CommerceBeanType beanType,
-                                                         @Nonnull Class<T> aClass) {
+  public static <T extends CommerceBean> T createBeanFor(@NonNull CommerceBeanFactory commerceBeanFactory,
+                                                         @NonNull AbstractOCDocument delegate,
+                                                         @NonNull StoreContext storeContext,
+                                                         @NonNull CommerceBeanType beanType,
+                                                         @NonNull Class<T> aClass) {
     return doCreateBeanFor(commerceBeanFactory, delegate, storeContext, beanType, aClass, false);
   }
 
@@ -54,19 +54,19 @@ public class CommerceBeanUtils {
    * @param <T>       type of the target {@link CommerceBean} class
    * @return
    */
-  public static <T extends CommerceBean> List<T> createLightweightBeansFor(@Nonnull CommerceBeanFactory commerceBeanFactory,
-                                                                    @Nonnull List<? extends AbstractOCDocument> delegates,
-                                                                    @Nonnull StoreContext storeContext,
-                                                                    @Nonnull CommerceBeanType beanType,
-                                                                    @Nonnull Class<T> aClass) {
+  public static <T extends CommerceBean> List<T> createLightweightBeansFor(@NonNull CommerceBeanFactory commerceBeanFactory,
+                                                                    @NonNull List<? extends AbstractOCDocument> delegates,
+                                                                    @NonNull StoreContext storeContext,
+                                                                    @NonNull CommerceBeanType beanType,
+                                                                    @NonNull Class<T> aClass) {
     return doCreateLightWeightBeans(commerceBeanFactory, delegates, aClass, storeContext, beanType);
   }
 
-  private static <T extends CommerceBean> T doCreateBeanFor(@Nonnull CommerceBeanFactory commerceBeanFactory,
-                                                            @Nonnull AbstractOCDocument delegate,
-                                                            @Nonnull StoreContext storeContext,
-                                                            @Nonnull CommerceBeanType beanType,
-                                                            @Nonnull Class<T> aClass,
+  private static <T extends CommerceBean> T doCreateBeanFor(@NonNull CommerceBeanFactory commerceBeanFactory,
+                                                            @NonNull AbstractOCDocument delegate,
+                                                            @NonNull StoreContext storeContext,
+                                                            @NonNull CommerceBeanType beanType,
+                                                            @NonNull Class<T> aClass,
                                                             boolean isLightWeight) {
     CommerceId commerceId = SfccCommerceIdProvider.commerceId(beanType).withExternalId(delegate.getId()).build();
     AbstractSfccCommerceBean bean = (AbstractSfccCommerceBean) commerceBeanFactory.createBeanFor(commerceId, storeContext);
@@ -77,11 +77,11 @@ public class CommerceBeanUtils {
     return aClass.cast(bean);
   }
 
-  private static <T extends CommerceBean> List<T> doCreateLightWeightBeans(@Nonnull CommerceBeanFactory commerceBeanFactory,
-                                                                           @Nonnull List<? extends AbstractOCDocument> delegates,
-                                                                           @Nonnull Class<T> aClass,
-                                                                           @Nonnull StoreContext storeContext,
-                                                                           @Nonnull CommerceBeanType beanType) {
+  private static <T extends CommerceBean> List<T> doCreateLightWeightBeans(@NonNull CommerceBeanFactory commerceBeanFactory,
+                                                                           @NonNull List<? extends AbstractOCDocument> delegates,
+                                                                           @NonNull Class<T> aClass,
+                                                                           @NonNull StoreContext storeContext,
+                                                                           @NonNull CommerceBeanType beanType) {
     if (delegates.isEmpty()) {
       return emptyList();
     }

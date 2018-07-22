@@ -25,6 +25,11 @@ Contains styling definitions for all content types as cm-claim.
 
   @include spacer($brand-primary);
 
+  &__link {
+    position: relative;
+    display: block;
+  }
+
   &__picture-box {
     margin-left: auto;
     margin-right: auto;
@@ -74,7 +79,7 @@ Contains styling definitions for all content types as cm-claim.
     bottom: -1px;
   }
 
-  &__popup-opener {
+  &__link {
     display: block;
     position: relative;
   }

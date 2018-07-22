@@ -2,7 +2,7 @@ package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.rest.cap.exception.ParameterizedException;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.ws.rs.core.Response;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -32,7 +32,7 @@ public class CatalogRestException extends ParameterizedException {
     return errorNames.computeIfAbsent(errorCode, k -> fetchErrorName(errorCode));
   }
 
-  private static String fetchErrorName(@Nonnull String errorCode) {
+  private static String fetchErrorName(@NonNull String errorCode) {
     for (Field f : CatalogRestErrorCodes.class.getDeclaredFields()) {
       try {
         if (f.getType() == String.class && Modifier.isStatic(f.getModifiers()) && errorCode.equals(f.get(null))) {

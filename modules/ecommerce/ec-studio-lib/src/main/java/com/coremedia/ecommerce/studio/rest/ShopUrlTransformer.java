@@ -2,7 +2,7 @@ package com.coremedia.ecommerce.studio.rest;
 
 import com.google.common.base.Function;
 
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 class ShopUrlTransformer implements Function<PbeShopUrlTargetResolver, Object> {
   private final String shopUrlStr;

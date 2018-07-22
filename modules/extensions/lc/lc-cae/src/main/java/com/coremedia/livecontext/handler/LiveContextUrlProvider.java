@@ -6,8 +6,8 @@ import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
@@ -24,9 +24,9 @@ public interface LiveContextUrlProvider {
    * @return a URI components builder for the link to the commerce system
    */
   @Nullable
-  UriComponentsBuilder buildCategoryLink(@Nonnull Category category,
-                                         @Nonnull Map<String, Object> queryParams,
-                                         @Nonnull HttpServletRequest request);
+  UriComponentsBuilder buildCategoryLink(@NonNull Category category,
+                                         @NonNull Map<String, Object> queryParams,
+                                         @NonNull HttpServletRequest request);
 
   /**
    * Build a link for the given product in the commerce system.
@@ -36,9 +36,9 @@ public interface LiveContextUrlProvider {
    * @return a URI components builder for the link to the commerce system
    */
   @Nullable
-  UriComponentsBuilder buildProductLink(@Nonnull Product product,
-                                        @Nonnull Map<String, Object> queryParams,
-                                        @Nonnull HttpServletRequest request);
+  UriComponentsBuilder buildProductLink(@NonNull Product product,
+                                        @NonNull Map<String, Object> queryParams,
+                                        @NonNull HttpServletRequest request);
 
   /**
    * Build a link for the given external navigation page in the commerce system.
@@ -48,10 +48,10 @@ public interface LiveContextUrlProvider {
    * @return a URI components builder for the link to the commerce system
    */
   @Nullable
-  UriComponentsBuilder buildPageLink(@Nonnull CMExternalPage navigation,
-                                     @Nonnull Map<String, Object> queryParams,
-                                     @Nonnull HttpServletRequest request,
-                                     @Nonnull StoreContext storeContext);
+  UriComponentsBuilder buildPageLink(@NonNull CMExternalPage navigation,
+                                     @NonNull Map<String, Object> queryParams,
+                                     @NonNull HttpServletRequest request,
+                                     @NonNull StoreContext storeContext);
 
   /**
    * Build a SEO link for the commerce system.
@@ -61,8 +61,8 @@ public interface LiveContextUrlProvider {
    * @return a URI components builder for the link to the commerce system
    */
   @Nullable
-  UriComponentsBuilder buildShopLink(@Nonnull String seoSegments,
-                                     @Nonnull Map<String, Object> queryParams,
-                                     @Nonnull HttpServletRequest request,
-                                     @Nonnull StoreContext storeContext);
+  UriComponentsBuilder buildShopLink(@NonNull String seoSegments,
+                                     @NonNull Map<String, Object> queryParams,
+                                     @NonNull HttpServletRequest request,
+                                     @NonNull StoreContext storeContext);
 }

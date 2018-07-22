@@ -12,19 +12,20 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.sfcc.configuration.SfccStoreContextProperties;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.CatalogsResource;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.LocaleUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -50,56 +51,52 @@ public class SfccStoreContextProvider extends AbstractStoreContextProvider {
 
   private Map<String, SfccStoreContextProperties> storeContextConfigurationsByName;
 
-  @Nullable
+  @NonNull
   @Override
-  protected StoreContext internalCreateContext(@Nonnull Site site) {
-    // only create catalog context if settings were found for current site
-    Struct repositoryStoreConfig = getSettingsService().setting(CONFIG_KEY_STORE_CONFIG, Struct.class,
-            site.getSiteRootDocument());
-
+  protected Optional<StoreContext> internalCreateContext(@NonNull Site site) {
+    // Only create store context if settings are found for current site.
+    Struct repositoryStoreConfig = getSettingsService()
+            .getSetting(CONFIG_KEY_STORE_CONFIG, Struct.class, site.getSiteRootDocument())
+            .orElse(null);
     if (repositoryStoreConfig == null) {
-      return null;
+      return Optional.empty();
     }
 
     try {
       Map<String, Object> targetConfig = new HashMap<>();
 
-      String configId = StructUtil.getString(repositoryStoreConfig, CONFIG_KEY_CONFIG_ID);
-
       // Read store context configuration from spring and property files
-      readStoreConfigFromSpring(configId, targetConfig);
+      StructUtil.findString(repositoryStoreConfig, CONFIG_KEY_CONFIG_ID)
+              .ifPresent(configId -> readStoreConfigFromSpring(configId, targetConfig));
 
       // Update store context configuration from LiveContext settings
       updateStoreConfigFromRepository(repositoryStoreConfig, targetConfig, site);
 
-      return createContext(site, targetConfig);
+      StoreContext storeContext = createContext(site, targetConfig);
+      return Optional.of(storeContext);
     } catch (NoSuchPropertyDescriptorException e) {
       throw new InvalidContextException("Missing properties in store configuration.", e);
     }
   }
 
   @Override
-  protected void readStoreConfigFromSpring(@Nullable String configId, @Nonnull Map<String, Object> targetStoreConfig) {
-    if (configId == null) {
-      return;
-    }
-
+  protected void readStoreConfigFromSpring(@NonNull String configId, @NonNull Map<String, Object> targetStoreConfig) {
     SfccStoreContextProperties sfccStoreContextProperties = storeContextConfigurationsByName.get(configId);
     if (sfccStoreContextProperties != null) {
       updateTargetConfig(sfccStoreContextProperties, targetStoreConfig);
     }
   }
 
-  private static void updateTargetConfig(@Nonnull SfccStoreContextProperties config,
-                                         @Nonnull Map<String, Object> targetStoreConfig) {
+  private static void updateTargetConfig(@NonNull SfccStoreContextProperties config,
+                                         @NonNull Map<String, Object> targetStoreConfig) {
     putValueIfNotNull(CONFIG_KEY_STORE_ID, config.getStoreId(), targetStoreConfig);
     putValueIfNotNull(CONFIG_KEY_STORE_NAME, config.getStoreName(), targetStoreConfig);
     putValueIfNotNull(CONFIG_KEY_CATALOG_ID, config.getCatalogId(), targetStoreConfig);
     putValueIfNotNull(CONFIG_KEY_CURRENCY, config.getCurrency(), targetStoreConfig);
   }
 
-  @Nonnull
-  private StoreContext createContext(@Nonnull Site site, @Nonnull Map<String, Object> storeConfig) {
+  @NonNull
+  private StoreContext createContext(@NonNull Site site, @NonNull Map<String, Object> storeConfig) {
     storeConfig.put(SITE, site.getId());
     storeConfig.put(LOCALE, site.getLocale());
 
@@ -133,9 +130,9 @@ public class SfccStoreContextProvider extends AbstractStoreContextProvider {
     return createStoreContext(valuesHolder, storeContextReplacements);
   }
 
-  private static void handleConfigStringValueEntry(@Nonnull String configEntryKey, @Nonnull String configValueString,
-                                                   @Nonnull StoreContextValuesHolder valuesHolder,
-                                                   @Nonnull Map<String, String> storeContextReplacements) {
+  private static void handleConfigStringValueEntry(@NonNull String configEntryKey, @NonNull String configValueString,
+                                                   @NonNull StoreContextValuesHolder valuesHolder,
+                                                   @NonNull Map<String, String> storeContextReplacements) {
     if (isBlank(configValueString)) {
       LOG.warn("Skipping invalid value for store config with key '{}'", configEntryKey);
       return;
@@ -182,9 +179,9 @@ public class SfccStoreContextProvider extends AbstractStoreContextProvider {
     }
   }
 
-  private static void handleConfigNonStringValueEntry(@Nonnull String configEntryKey, @Nonnull Object configEntryValue,
-                                                      @Nonnull StoreContextValuesHolder valuesHolder,
-                                                      @Nonnull Map<String, String> storeContextReplacements) {
+  private static void handleConfigNonStringValueEntry(@NonNull String configEntryKey, @NonNull Object configEntryValue,
+                                                      @NonNull StoreContextValuesHolder valuesHolder,
+                                                      @NonNull Map<String, String> storeContextReplacements) {
     switch (configEntryKey) {
       case CURRENCY:
         if (configEntryValue instanceof Currency) {
@@ -212,7 +209,7 @@ public class SfccStoreContextProvider extends AbstractStoreContextProvider {
     }
   }
 
-  @Nonnull
+  @NonNull
   private CatalogId getCatalogIdForStoreId(@Nullable String storeId) {
     SiteToCatalogCacheKey cacheKey = new SiteToCatalogCacheKey("SiteToCatalogCacheKey", catalogsResource,
             SITE_TO_CATALOG_CACHE_TIME);
@@ -225,9 +222,9 @@ public class SfccStoreContextProvider extends AbstractStoreContextProvider {
     return CatalogId.of(catalogId);
   }
 
-  @Nonnull
-  private static StoreContext createStoreContext(@Nonnull StoreContextValuesHolder valuesHolder,
-                                                 @Nonnull Map<String, String> replacements) {
+  @NonNull
+  private static StoreContext createStoreContext(@NonNull StoreContextValuesHolder valuesHolder,
+                                                 @NonNull Map<String, String> replacements) {
     return SfccStoreContextBuilder
             .from(
                     replacements,
@@ -253,17 +250,10 @@ public class SfccStoreContextProvider extends AbstractStoreContextProvider {
     private Locale locale;
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public StoreContextBuilder buildContext(@Nonnull StoreContext source) {
+  public StoreContextBuilder buildContext(@NonNull StoreContext source) {
     return SfccStoreContextBuilder.from(source);
-  }
-
-  @Nonnull
-  @Override
-  public StoreContext cloneContext(@Nonnull StoreContext source) {
-    return buildContext(source)
-            .build();
   }
 
   @Autowired

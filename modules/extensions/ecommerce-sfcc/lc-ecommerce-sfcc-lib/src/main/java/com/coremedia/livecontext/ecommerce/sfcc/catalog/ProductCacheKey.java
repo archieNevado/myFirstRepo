@@ -4,6 +4,7 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
 import com.coremedia.cache.Cache;
 import com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType;
+import com.coremedia.livecontext.ecommerce.common.CommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.InvalidIdException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -12,27 +13,25 @@ import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.ProductsRes
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 public class ProductCacheKey extends AbstractSfccDocumentCacheKey<ProductDocument> {
 
-  private final static Logger LOG = LoggerFactory.getLogger(ProductCacheKey.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ProductCacheKey.class);
 
   private ProductsResource resource;
 
-  public ProductCacheKey(CommerceId commerceId,
-                         @Nonnull StoreContext storeContext,
-                         ProductsResource resource,
+  public ProductCacheKey(CommerceId commerceId, @NonNull StoreContext storeContext, ProductsResource resource,
                          CommerceCache commerceCache) {
     super(commerceId, storeContext, CONFIG_KEY_PRODUCT, commerceCache);
     this.resource = resource;
-    if (!commerceId.getCommerceBeanType().equals(BaseCommerceBeanType.PRODUCT)
-            && !commerceId.getCommerceBeanType().equals(BaseCommerceBeanType.SKU)) {
+
+    CommerceBeanType commerceBeanType = commerceId.getCommerceBeanType();
+    if (!commerceBeanType.equals(BaseCommerceBeanType.PRODUCT) && !commerceBeanType.equals(BaseCommerceBeanType.SKU)) {
       String msg = commerceId + " (is neither a product nor sku id).";
       LOG.warn(msg);
       throw new InvalidIdException(msg);
     }
-
   }
 
   @Override
@@ -47,8 +46,13 @@ public class ProductCacheKey extends AbstractSfccDocumentCacheKey<ProductDocumen
 
   @Override
   protected String getCacheIdentifier() {
-    return id + ":" + configKey + ":" + storeContext.getSiteId() + ":" +
-            storeContext.getStoreId() + ":" + storeContext.getLocale() + ":" + storeContext.getCurrency();
+    return assembleCacheIdentifier(
+            id,
+            configKey,
+            storeContext.getSiteId(),
+            storeContext.getStoreId(),
+            storeContext.getLocale(),
+            storeContext.getCurrency()
+    );
   }
-
 }

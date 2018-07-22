@@ -43,7 +43,7 @@
  *
  * DEPRECATED
  -->
-<#macro responsiveImage self classPrefix view="" limitAspectRatios=[]  metadata=["properties.pictures"], displayEmptyImage=true, displayDimmer=true, background=false, additionalAttr={} classSuffix="picture">
+<#macro responsiveImage self classPrefix view="media" limitAspectRatios=[]  metadata=["properties.pictures"], displayEmptyImage=true, displayDimmer=true, background=false, additionalAttr={} classSuffix="picture">
   <#local cssClassBox>${classPrefix}__${classSuffix}-box</#local>
   <#local cssClassImage>${classPrefix}__${classSuffix}</#local>
   <#local cssClassDimmer>${classPrefix}__dimmer</#local>
@@ -51,7 +51,7 @@
     <@cm.include self=self view=view params={
     "limitAspectRatios": limitAspectRatios,
     "classBox": cssClassBox,
-    "classImage": cssClassImage,
+    "classMedia": cssClassImage,
     "metadata": metadata,
     "additionalAttr": additionalAttr,
     "background": background
@@ -61,7 +61,7 @@
     </#if>
   <#elseif displayEmptyImage>
   <div class="${cssClassBox}" <@preview.metadata "properties.pictures" />>
-    <div class="${cssClassImage} cm-image--missing"></div>
+    <div class="${cssClassImage} cm-media--missing"></div>
   </div>
   </#if>
 </#macro>

@@ -1,5 +1,7 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.CMGallery" -->
 
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/utils.ftl" as utils />
+
 <#assign blockClass=cm.localParameter("blockClass", "cm-details") />
 <#assign itemsClass=cm.localParameter("itemsClass", "") />
 <#assign relatedView=cm.localParameters().relatedView!"related" />
@@ -29,7 +31,9 @@
   <#-- date -->
   <#if renderDate && self.externallyDisplayedDate?has_content>
     <div class="${blockClass}__date"<@preview.metadata "properties.externallyDisplayedDate"/>>
-      <@bp.renderDate self.externallyDisplayedDate.time "${blockClass}__time" />
+      <@utils.renderDate date=self.externallyDisplayedDate.time
+                         cssClass="${blockClass}__time"
+                         metadata=["properties.externallyDisplayedDate"] />
     </div>
   </#if>
 

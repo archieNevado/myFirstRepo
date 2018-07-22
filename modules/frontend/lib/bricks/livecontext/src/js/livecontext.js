@@ -11,12 +11,6 @@ let lastNavWidth = 0;
 const megaMenuSelector = ".mega-menu > li > ul";
 
 /**
- * @type {string} specifies the selector for marketing spot items for equalization of heights
- */
-const marketingSpotItemSelector =
-  ".cm-collection--marketingspot .cm-teasable--text";
-
-/**
  * @type {string} defines the internal name for the mobile device
  */
 export const DEVICE_MOBILE = "mobile";
@@ -82,44 +76,6 @@ export function unsetMegaMenuItemsWidth() {
 
   // reset lastNavWidth so setMegaMenuItemsWidth recalculates if used again
   lastNavWidth = 0;
-}
-
-/**
- * equalize height of each item in marketing spot
- */
-export function setMarketingSpotItemsHeight() {
-  // first unset all heights, otherwise the height can only decrease
-  unsetMarketingSpotItemsHeight();
-  const $marketingSpotItems = $(marketingSpotItemSelector);
-
-  // calculate biggest height by iterating over all marketing spot items
-  let biggest = 0;
-  $marketingSpotItems.each(function() {
-    const current = $(this).height();
-    if (current > biggest) {
-      biggest = current;
-    }
-  });
-
-  // calculate new height based on biggest height for each element
-  $marketingSpotItems.each(function() {
-    const diff = biggest - $(this).height();
-    $(this).css({
-      height: biggest + "px",
-      "padding-top": diff / 2 + "px",
-    });
-  });
-}
-
-/**
- * unset height of each item in the marketing spot
- */
-export function unsetMarketingSpotItemsHeight() {
-  const $marketingSpotItems = $(marketingSpotItemSelector);
-  $marketingSpotItems.css({
-    height: "",
-    "padding-top": "",
-  });
 }
 
 /**

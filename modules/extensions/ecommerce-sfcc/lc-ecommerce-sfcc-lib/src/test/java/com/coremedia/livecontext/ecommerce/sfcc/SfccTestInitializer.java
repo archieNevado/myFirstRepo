@@ -10,8 +10,8 @@ import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourcePropertySource;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.io.IOException;
 
 import static org.springframework.core.env.StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME;
@@ -47,7 +47,7 @@ public class SfccTestInitializer implements ApplicationContextInitializer<Config
    * @param name        some unique name to identify it later on
    * @param location    location to add (any property inside will be resolved); if {@code null} it won't be added
    */
-  protected static void addAfterSystemEnvironmentIfFound(@Nonnull ConfigurableEnvironment environment, String name, @Nullable String location) {
+  protected static void addAfterSystemEnvironmentIfFound(@NonNull ConfigurableEnvironment environment, String name, @Nullable String location) {
     if (location == null) {
       return;
     }

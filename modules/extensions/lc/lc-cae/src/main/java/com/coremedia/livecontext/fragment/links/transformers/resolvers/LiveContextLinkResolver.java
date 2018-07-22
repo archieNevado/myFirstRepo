@@ -2,7 +2,8 @@ package com.coremedia.livecontext.fragment.links.transformers.resolvers;
 
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 
 public interface LiveContextLinkResolver {
@@ -27,5 +28,5 @@ public interface LiveContextLinkResolver {
    * @return the static URL part of the LiveContext URL
    */
   @Nullable
-  String resolveUrl(String source, Object bean, String variant, CMNavigation navigation, HttpServletRequest request);
+  String resolveUrl(@NonNull String source, Object bean, String variant, CMNavigation navigation, HttpServletRequest request);
 }

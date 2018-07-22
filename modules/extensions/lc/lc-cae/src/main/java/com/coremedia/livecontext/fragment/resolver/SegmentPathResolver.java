@@ -14,8 +14,8 @@ import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,7 +41,7 @@ public class SegmentPathResolver extends ExternalReferenceResolverBase {
   }
 
   @Required
-  public void setSegmentResolver(@Nonnull SegmentResolver segmentResolver) {
+  public void setSegmentResolver(@NonNull SegmentResolver segmentResolver) {
     Objects.requireNonNull(segmentResolver);
     this.segmentResolver = segmentResolver;
   }
@@ -50,9 +50,9 @@ public class SegmentPathResolver extends ExternalReferenceResolverBase {
 
   @Nullable
   @Override
-  protected LinkableAndNavigation resolveExternalRef(@Nonnull FragmentParameters fragmentParameters,
-                                                     @Nonnull String referenceInfo,
-                                                     @Nonnull Site site) {
+  protected LinkableAndNavigation resolveExternalRef(@NonNull FragmentParameters fragmentParameters,
+                                                     @NonNull String referenceInfo,
+                                                     @NonNull Site site) {
     if (!StringUtils.startsWith(referenceInfo, "!")) {
       return null;
     }
@@ -67,7 +67,7 @@ public class SegmentPathResolver extends ExternalReferenceResolverBase {
     return ImmutableList.copyOf(splittedSegment);
   }
 
-  private LinkableAndNavigation findContentBySegment(@Nonnull List<String> segments) {
+  private LinkableAndNavigation findContentBySegment(@NonNull List<String> segments) {
     if (segments.isEmpty()) {
       // No match for an empty path.
       return null;

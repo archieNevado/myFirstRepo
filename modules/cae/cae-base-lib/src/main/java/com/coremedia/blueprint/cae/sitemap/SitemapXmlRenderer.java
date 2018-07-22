@@ -3,8 +3,8 @@ package com.coremedia.blueprint.cae.sitemap;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.io.IOError;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
@@ -39,7 +39,7 @@ class SitemapXmlRenderer extends AbstractSitemapRenderer {
    *
    * @param absoluteUrlPrefix format like in the site prefix mappings
    */
-  SitemapXmlRenderer(@Nonnull String absoluteUrlPrefix) {
+  SitemapXmlRenderer(@NonNull String absoluteUrlPrefix) {
     urlHostForSite = getHostFromUrlString(absoluteUrlPrefix);
   }
 
@@ -84,7 +84,7 @@ class SitemapXmlRenderer extends AbstractSitemapRenderer {
     availableSize -= itemSize;
   }
 
-  private void validateUrlHost(@Nonnull String url) {
+  private void validateUrlHost(@NonNull String url) {
     String urlHost = getHostFromUrlString(url);
     if (!Objects.equals(urlHost, urlHostForSite)) {
       throw new IllegalArgumentException("URL \"" + url + "\" does not belong to the target domain " + urlHostForSite + ".");
@@ -92,7 +92,7 @@ class SitemapXmlRenderer extends AbstractSitemapRenderer {
   }
 
   @Nullable
-  private static String getHostFromUrlString(@Nonnull String url) {
+  private static String getHostFromUrlString(@NonNull String url) {
     return UriComponentsBuilder.fromUriString(url).build().getHost();
   }
 

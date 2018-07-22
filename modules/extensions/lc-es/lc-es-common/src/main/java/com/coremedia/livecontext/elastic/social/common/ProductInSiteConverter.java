@@ -17,8 +17,8 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.navigation.ProductInSiteImpl;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Map;
@@ -56,15 +56,15 @@ public class ProductInSiteConverter extends AbstractTypeConverter<ProductInSite>
     serializedObject.put(SITE_ID, site.getId());
   }
 
-  private CommerceId getNormalizeProductId(@Nonnull Product product, @Nonnull Site site){
+  private CommerceId getNormalizeProductId(@NonNull Product product, @NonNull Site site){
     CatalogAlias catalogAlias = product.getId().getCatalogAlias();
     String externalId = product.getExternalId();
     return getCommerceConnectionForSerialization(site, product.getExternalId()).getIdProvider()
             .formatProductId(catalogAlias, externalId);
   }
 
-  @Nonnull
-  private CommerceConnection getCommerceConnectionForSerialization(@Nonnull Site site, String externalProductId) {
+  @NonNull
+  private CommerceConnection getCommerceConnectionForSerialization(@NonNull Site site, String externalProductId) {
     return connectionInitializer.findConnectionForSite(site)
             .orElseThrow(() -> new NoCommerceConnectionAvailable(String.format(
                     "No commerce connection available for site '%s'; not serializing product with external id '%s'.",
@@ -73,7 +73,7 @@ public class ProductInSiteConverter extends AbstractTypeConverter<ProductInSite>
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public ProductInSite deserialize(Map<String, Object> serializedObject) {
     String productId = (String) serializedObject.get(ID);
     String siteId = (String) serializedObject.get(SITE_ID);
@@ -97,7 +97,7 @@ public class ProductInSiteConverter extends AbstractTypeConverter<ProductInSite>
   }
 
   @Nullable
-  private Product findProduct(@Nonnull Site site, @Nonnull String productId) {
+  private Product findProduct(@NonNull Site site, @NonNull String productId) {
     Product product = null;
 
     // `CommerceConnectionFilter` does not recognize Elastic Social
@@ -122,8 +122,8 @@ public class ProductInSiteConverter extends AbstractTypeConverter<ProductInSite>
     return product;
   }
 
-  @Nonnull
-  private CommerceConnection getCommerceConnectionForDeserialization(@Nonnull Site site, String productId) {
+  @NonNull
+  private CommerceConnection getCommerceConnectionForDeserialization(@NonNull Site site, String productId) {
     return connectionInitializer.findConnectionForSite(site)
             .orElseThrow(() -> new UnresolvableReferenceException(String.format(
                     "Cannot resolve product with ID '%s' and site '%s' (commerce connection unavailable for that site).",
@@ -131,7 +131,7 @@ public class ProductInSiteConverter extends AbstractTypeConverter<ProductInSite>
   }
 
   @Nullable
-  private static Product findProduct(@Nonnull CommerceConnection connection, @Nonnull String productId) {
+  private static Product findProduct(@NonNull CommerceConnection connection, @NonNull String productId) {
     CatalogService catalogService = connection.getCatalogService();
 
     if (catalogService == null) {

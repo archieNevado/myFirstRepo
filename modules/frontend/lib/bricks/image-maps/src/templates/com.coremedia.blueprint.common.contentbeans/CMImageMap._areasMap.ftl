@@ -4,6 +4,9 @@
 <#-- @ftlvariable name="quickInfoMainId" type="java.lang.String" -->
 <#-- @ftlvariable name="quickInfoIdList" type="java.lang.String" -->
 
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/components.ftl" as components />
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/utils.ftl" as utils />
+
 <#-- if imageMapId is not given, generate new id -->
 <#assign imageMapId=imageMapId!(bp.generateId("cm-map-")) />
 <#assign quickInfoMainId=quickInfoMainId!(imageMapId + "-quickinfo--main") />
@@ -18,7 +21,7 @@
 </#if>
 
 <#--imagemap with areas -->
-<map <@bp.renderAttr { "name": imageMapId, "classes": ["cm-imagemap__areas"] } /> <@cm.dataAttribute name="data-cm-areas" data={"quickInfoMainId": quickInfoMainId} />>
+<map <@utils.renderAttr attr={ "name": imageMapId, "classes": ["cm-imagemap__areas"] } /> <@cm.dataAttribute name="data-cm-areas" data={"quickInfoMainId": quickInfoMainId} />>
   <#list imageMapAreas![] as imageMapArea>
     <#if imageMapArea?has_content>
       <#assign index=imageMapArea?index/>
@@ -64,7 +67,7 @@
           <#if useQuickinfo>
             <#assign parameters+={"data-cm-button--quickinfo": '{"target": "${quickInfoId!""}"}'}/>
           </#if>
-          <@bp.button baseClass="" href="${link}" iconText=(linkedContent.teaserTitle!bp.getMessage("button_quickinfo")) attr=parameters />
+          <@components.button baseClass="" href="${link}" iconText=(linkedContent.teaserTitle!bp.getMessage("button_quickinfo")) attr=parameters />
         </#if>
       </#if>
     </#if>

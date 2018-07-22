@@ -10,8 +10,8 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -29,9 +29,9 @@ public class DefaultPageActionHandler extends WebflowHandlerBase {
 
   @Nullable
   protected UriComponents buildLinkInternal(
-          @Nonnull CMAction action,
-          @Nonnull UriTemplate uriPattern,
-          @Nonnull Map<String, Object> linkParameters) {
+          @NonNull CMAction action,
+          @NonNull UriTemplate uriPattern,
+          @NonNull Map<String, Object> linkParameters) {
 
     Objects.requireNonNull(action, "No action provided for building a link.");
 

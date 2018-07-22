@@ -26,10 +26,6 @@
   &__hotzone--icon > i {
     display: block;
   }
-
-  &__image.cm-aspect-ratio-box {
-    @include aspect-ratio-box(8, 3);
-  }
 }
 
 /*---OVERLAYs--*/

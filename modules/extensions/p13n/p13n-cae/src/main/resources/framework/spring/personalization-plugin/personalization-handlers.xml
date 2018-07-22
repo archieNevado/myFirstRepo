@@ -14,4 +14,14 @@
       </list>
     </property>
   </bean>
+
+  <bean id="p13nContainerHandler" class="com.coremedia.blueprint.personalization.include.P13NContainerHandler" parent="pageHandlerBase" >
+    <property name="contentRepository" ref="contentRepository"/>
+    <property name="permittedLinkParameterNames">
+      <list>
+        <value>targetView</value>
+      </list>
+    </property>
+  </bean>
+
 </beans>

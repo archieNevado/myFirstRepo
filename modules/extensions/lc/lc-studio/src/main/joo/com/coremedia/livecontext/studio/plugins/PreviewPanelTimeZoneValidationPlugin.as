@@ -18,6 +18,8 @@ import ext.Component;
 import ext.StringUtil;
 import ext.plugin.AbstractPlugin;
 
+import js.Event;
+
 import mx.resources.ResourceManager;
 
 [ResourceBundle('com.coremedia.livecontext.studio.LivecontextStudioPlugin')]
@@ -34,27 +36,37 @@ public class PreviewPanelTimeZoneValidationPlugin extends AbstractPlugin {
 
   private var timeZoneIdValueExpression:ValueExpression;
 
+  private var validationStateMixin:ValidationStateMixin;
+
+  private var warningValueExpression:ValueExpression;
+
   public function PreviewPanelTimeZoneValidationPlugin(config:PreviewPanelTimeZoneValidationPlugin = null) {
     super(config);
+    this.model = config.model;
+    model.addPropertyChangeListener("timeZone", fillWarningValueExpression);
+
+    previewPanel.addListener("beforedestroy", function ():void {
+      model.removePropertyChangeListener("timeZone", fillWarningValueExpression);
+      getWarningValueExpression().removeChangeListener(applyWarning);
+    });
   }
 
   override public function init(host:Component):void {
     super.init(host);
-    var validationStateMixin:ValidationStateMixin = host as ValidationStateMixin;
+    validationStateMixin = host as ValidationStateMixin;
     if (validationStateMixin) {
-      var warningValueExpression:ValueExpression = getWarningValueExpression(this);
-      warningValueExpression.addChangeListener(function (validationStateValueExpression:ValueExpression):void {
-        applyWarning(validationStateMixin, warningValueExpression);
-      });
-      applyWarning(validationStateMixin, warningValueExpression);
+      getWarningValueExpression().addChangeListener(applyWarning);
     }
+    fillWarningValueExpression()
   }
 
-  private function getTimeZoneIdValueExpression(config:PreviewPanelTimeZoneValidationPlugin):ValueExpression {
+
+
+  private function getTimeZoneIdValueExpression():ValueExpression {
     if (!timeZoneIdValueExpression) {
       timeZoneIdValueExpression = ValueExpressionFactory.createFromFunction(function ():String {
         var text:String;
-        var entityExpression:ValueExpression = config.previewPanel.getCurrentPreviewContentValueExpression();
+        var entityExpression:ValueExpression = previewPanel.getCurrentPreviewContentValueExpression();
         var storeExpression:ValueExpression;
         if (entityExpression.getValue() is Content) {
           storeExpression = CatalogHelper.getInstance().getStoreForContentExpression(WorkArea.ACTIVE_CONTENT_VALUE_EXPRESSION);
@@ -75,24 +87,30 @@ public class PreviewPanelTimeZoneValidationPlugin extends AbstractPlugin {
     return timeZoneIdValueExpression;
   }
 
-  internal function getWarningValueExpression(config:PreviewPanelTimeZoneValidationPlugin):ValueExpression {
-    return ValueExpressionFactory.createFromFunction(function ():Boolean {
-      var commerceTimeZoneId:String = getTimeZoneIdValueExpression(config).getValue();
-      if (!commerceTimeZoneId) {
-        return undefined;
-      }
-      var dateTimeModel:Bean = config.model;
-      var timeZoneId:String = dateTimeModel.get("timeZone");
-      if (timeZoneId !== commerceTimeZoneId) {
-        return StringUtil.format(ResourceManager.getInstance().getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Preview_Wcs_Timezone_Divergation_Warning_Message'),
-                ContentLocalizationUtilInternal.localizeTimeZoneID(commerceTimeZoneId));
-      }
-      return null;
-    });
+  private function getWarningValueExpression():ValueExpression{
+    if(!warningValueExpression){
+      warningValueExpression = ValueExpressionFactory.createFromValue("");
+    }
+    return warningValueExpression;
   }
 
-  private static function applyWarning(validationStateMixin:ValidationStateMixin, valueExpression:ValueExpression):void {
-    var warningMessage:String = valueExpression.getValue();
+  internal function fillWarningValueExpression():void {
+      var commerceTimeZoneId:String = getTimeZoneIdValueExpression().getValue();
+      if (commerceTimeZoneId) {
+        var timeZoneId:String = model.get("timeZone");
+        if (timeZoneId !== commerceTimeZoneId) {
+          getWarningValueExpression().setValue(StringUtil.format(ResourceManager.getInstance().getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Preview_Wcs_Timezone_Divergation_Warning_Message'),
+            ContentLocalizationUtilInternal.localizeTimeZoneID(commerceTimeZoneId)));
+        } else {
+          getWarningValueExpression().setValue(null);
+        }
+
+      }
+
+  }
+
+  private function applyWarning():void {
+    var warningMessage:String = warningValueExpression.getValue();
     if (warningMessage) {
       validationStateMixin.validationState = ValidationState.WARNING;
       validationStateMixin.validationMessage = warningMessage;

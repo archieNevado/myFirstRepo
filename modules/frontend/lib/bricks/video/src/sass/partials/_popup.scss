@@ -1,0 +1,23 @@
+.#{$cm-popup-prefix} {
+  position: relative;
+  max-width: $cm-popup-screen-max;
+  max-height: 90vh;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+  @include aspect-ratio-box(16, 9);
+
+  // avoid flickering
+  &__video {
+    @include stretch-absolute();
+  }
+
+  .mfp-close {
+    color: #333333;
+  }
+}
+
+.mfp-content .#{$cm-popup-prefix} {
+  visibility: visible;
+  position: relative;
+}

@@ -4,6 +4,9 @@
 <#-- @ftlvariable name="flowExecutionKey" type="java.lang.String" -->
 <#-- @ftlvariable name="_CSRFToken" type="java.lang.String" -->
 
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/components.ftl" as components />
+<#import "../../freemarkerLibs/elastic-social.ftl" as elasticSocial />
+
 <#assign elasticSocialConfiguration=es.getElasticSocialConfiguration(cmpage) />
 
 <div class="container">
@@ -39,23 +42,23 @@
 
           <#-- username -->
           <div class="form-group">
-            <@bp.labelFromSpring path="userDetails.username" text='${bp.getMessage("userDetails_username")}'/>
+            <@elasticSocial.labelFromSpring path="userDetails.username" text='${bp.getMessage("userDetails_username")}'/>
             <@spring.formInput path="userDetails.username" attributes='class="form-control" disabled="disabled"'/>
           </div>
 
           <#if userDetails.viewOwnProfile || userDetails.preview>
             <div class="form-group">
-              <@bp.labelFromSpring path="userDetails.givenname" text='${bp.getMessage("userDetails_givenname")}'/>
+              <@elasticSocial.labelFromSpring path="userDetails.givenname" text='${bp.getMessage("userDetails_givenname")}'/>
             <@spring.formInput path="userDetails.givenname" attributes='class="form-control" disabled="disabled"'/>
             </div>
 
             <div class="form-group">
-              <@bp.labelFromSpring path="userDetails.surname" text='${bp.getMessage("userDetails_surname")}'/>
+              <@elasticSocial.labelFromSpring path="userDetails.surname" text='${bp.getMessage("userDetails_surname")}'/>
             <@spring.formInput path="userDetails.surname" attributes='class="form-control" disabled="disabled"'/>
             </div>
 
             <div class="form-group">
-              <@bp.labelFromSpring path="userDetails.emailAddress" text='${bp.getMessage("userDetails_emailAddress")}'/>
+              <@elasticSocial.labelFromSpring path="userDetails.emailAddress" text='${bp.getMessage("userDetails_emailAddress")}'/>
             <@spring.formInput path="userDetails.emailAddress" attributes='class="form-control" disabled="disabled"' fieldType="email"/>
             </div>
           </#if>
@@ -67,7 +70,7 @@
               <input type="hidden" name="_eventId_editUser">
 
               <div class="form-group text-right">
-                <@bp.button text=bp.getMessage("userDetails_editProfile") attr={"type": "submit", "id": "saveUser", "classes": ["btn","btn-primary"]} />
+                <@components.button text=bp.getMessage("userDetails_editProfile") attr={"type": "submit", "id": "saveUser", "classes": ["btn","btn-primary"]} />
               </div>
 
             </form>
@@ -93,13 +96,13 @@
           <div class="cm-form">
 
             <#assign loginAction=self.loginAction!cm.UNDEFINED />
-            <#assign loginFlow=bp.substitute(loginAction.id!"", loginAction)!cm.UNDEFINED />
+            <#assign loginFlow=cm.substitute(loginAction.id!"", loginAction) />
             <#assign loginUrl=cm.getLink(loginFlow, {
             "absolute": true
             }) />
 
             <#assign registrationAction=self.registrationAction!cm.UNDEFINED />
-            <#assign registrationFlow=bp.substitute(registrationAction.id!"", registrationAction)!cm.UNDEFINED />
+            <#assign registrationFlow=cm.substitute(registrationAction.id!"", registrationAction) />
             <#assign registerUrl=cm.getLink(registrationFlow, {
             "absolute": true
             }) />
@@ -114,7 +117,7 @@
                   <input type="hidden" name="scope" value="email">
                   <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}">
                   <input type="hidden" name="forceRegister" value="false">
-                  <@bp.button text=bp.getMessage("login_with_facebook") attr={"type": "submit", "id": "facebookConnect","classes": ["btn", "btn-default"]} />
+                  <@components.button text=bp.getMessage("login_with_facebook") attr={"type": "submit", "id": "facebookConnect","classes": ["btn", "btn-default"]} />
                 </form>
               </#if>
 
@@ -126,7 +129,7 @@
                   <input type="hidden" name="loginUrl" value="${loginUrl!""}">
                   <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}">
                   <input type="hidden" name="forceRegister" value="false">
-                  <@bp.button text=bp.getMessage("login_with_twitter") attr={"type": "submit", "id": "twitterConnect","classes": ["btn", "btn-default"]} />
+                  <@components.button text=bp.getMessage("login_with_twitter") attr={"type": "submit", "id": "twitterConnect","classes": ["btn", "btn-default"]} />
                 </form>
               </#if>
             </div>
@@ -187,7 +190,7 @@
 
       </div>
       <#else>
-        <@bp.notification type="error" text=bp.getMessage("userDetails_noUserFound") additionalClasses=["alert alert-danger"] />
+        <@elasticSocial.notification type="error" text=bp.getMessage("userDetails_noUserFound") additionalClasses=["alert alert-danger"] />
       </#if>
     </div>
   </div>

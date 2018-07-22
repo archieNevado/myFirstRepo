@@ -16,8 +16,8 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -37,16 +37,16 @@ public class AssetServiceImpl implements AssetService {
   private SettingsService settingsService;
   private AssetResolvingStrategy assetResolvingStrategy;
 
-  @Nonnull
+  @NonNull
   public CatalogPicture getCatalogPicture(String url) {
     return computeReferenceIdFromUrl(url)
             .map(referenceIdFromUrl -> getCatalogPicture(url, referenceIdFromUrl))
             .orElseGet(() -> new CatalogPicture(url, null));
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public CatalogPicture getCatalogPicture(@Nonnull String url, @Nonnull CommerceId commerceId) {
+  public CatalogPicture getCatalogPicture(@NonNull String url, @NonNull CommerceId commerceId) {
 
     CommerceConnection connection = getCommerceConnection();
     AssetUrlProvider assetUrlProvider = connection.getAssetUrlProvider();
@@ -63,15 +63,15 @@ public class AssetServiceImpl implements AssetService {
     return new CatalogPicture(imageUrl, picture);
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Content> findPictures(@Nonnull CommerceId commerceId) {
+  public List<Content> findPictures(@NonNull CommerceId commerceId) {
     return findPictures(commerceId, true);
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Content> findPictures(@Nonnull CommerceId commerceId, boolean withDefault) {
+  public List<Content> findPictures(@NonNull CommerceId commerceId, boolean withDefault) {
     Site site = findSite().orElse(null);
     if (site == null) {
       return emptyList();
@@ -92,15 +92,15 @@ public class AssetServiceImpl implements AssetService {
     return emptyList();
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Content> findVisuals(@Nonnull CommerceId id) {
+  public List<Content> findVisuals(@NonNull CommerceId id) {
     return findVisuals(id, true);
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Content> findVisuals(@Nonnull CommerceId commerceId, boolean withDefault) {
+  public List<Content> findVisuals(@NonNull CommerceId commerceId, boolean withDefault) {
     Site site = findSite().orElse(null);
     if (site == null) {
       return emptyList();
@@ -118,37 +118,37 @@ public class AssetServiceImpl implements AssetService {
     return filterSpinners(visuals);
   }
 
-  @Nonnull
-  private static List<Content> filterSpinners(@Nonnull List<Content> allVisuals) {
+  @NonNull
+  private static List<Content> filterSpinners(@NonNull List<Content> allVisuals) {
     Set<Content> picturesInSpinners = extractPicturesInSpinners(allVisuals);
     return removePicturesInSpinners(allVisuals, picturesInSpinners);
   }
 
-  @Nonnull
-  private static List<Content> removePicturesInSpinners(@Nonnull List<Content> allVisuals,
-                                                        @Nonnull Set<Content> picturesInSpinners) {
+  @NonNull
+  private static List<Content> removePicturesInSpinners(@NonNull List<Content> allVisuals,
+                                                        @NonNull Set<Content> picturesInSpinners) {
     return allVisuals.stream()
             .filter(visual -> !picturesInSpinners.contains(visual))
             .collect(toList());
   }
 
-  @Nonnull
-  private static Set<Content> extractPicturesInSpinners(@Nonnull List<Content> allVisuals) {
+  @NonNull
+  private static Set<Content> extractPicturesInSpinners(@NonNull List<Content> allVisuals) {
     return allVisuals.stream()
             .filter(visual -> visual.getType().isSubtypeOf("CMSpinner"))
             .flatMap(spinner -> ((List<Content>) spinner.getList("sequence")).stream())
             .collect(toSet());
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Content> findDownloads(@Nonnull CommerceId commerceId) {
+  public List<Content> findDownloads(@NonNull CommerceId commerceId) {
     return findSite()
             .map(site -> assetResolvingStrategy.findAssets("CMDownload", commerceId, site))
             .orElseGet(Collections::emptyList);
   }
 
-  @Nonnull
+  @NonNull
   private Optional<Site> findSite() {
     return findCommerceConnection()
             .map(CommerceConnection::getStoreContext)
@@ -158,11 +158,12 @@ public class AssetServiceImpl implements AssetService {
 
   @Nullable
   @Override
-  public Content getDefaultPicture(@Nonnull Site site) {
-    return settingsService.setting(CONFIG_KEY_DEFAULT_PICTURE, Content.class, site.getSiteRootDocument());
+  public Content getDefaultPicture(@NonNull Site site) {
+    return settingsService.getSetting(CONFIG_KEY_DEFAULT_PICTURE, Content.class, site.getSiteRootDocument())
+            .orElse(null);
   }
 
-  @Nonnull
+  @NonNull
   private static Optional<CommerceId> computeReferenceIdFromUrl(@Nullable String url) {
     if (StringUtils.isBlank(url)) {
       return Optional.empty();
@@ -193,8 +194,8 @@ public class AssetServiceImpl implements AssetService {
     return Optional.empty();
   }
 
-  @Nonnull
-  private static Optional<String> parsePartNumberFromUrl(@Nonnull String urlStr) {
+  @NonNull
+  private static Optional<String> parsePartNumberFromUrl(@NonNull String urlStr) {
     int index = urlStr.lastIndexOf('.');
     if (index < 0) {
       return Optional.empty();
@@ -230,12 +231,12 @@ public class AssetServiceImpl implements AssetService {
     return getCommerceConnection().getAssetUrlProvider();
   }
 
-  @Nonnull
+  @NonNull
   private static Optional<CommerceConnection> findCommerceConnection() {
     return CurrentCommerceConnection.find();
   }
 
-  @Nonnull
+  @NonNull
   private static CommerceConnection getCommerceConnection() {
     return CurrentCommerceConnection.get();
   }

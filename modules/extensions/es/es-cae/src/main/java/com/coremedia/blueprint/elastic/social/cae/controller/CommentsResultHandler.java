@@ -26,7 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriTemplate;
 
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -133,11 +133,16 @@ public class CommentsResultHandler extends ElasticContentHandler<CommentsResult>
     if (result.isSuccess()) {
       ModerationType moderation = elasticSocialConfiguration.getCommentModerationType();
       try {
+        String adjustedAuthorName = authorName;
         if (author == null) {
           author = getElasticSocialUserHelper().getAnonymousUser();
+        } else if (!author.isAnonymous()) {
+          // For non-anonymous users we do not need and do not want to store the authorname directly within the
+          // comment. This is especially important for data deletion requests.
+          adjustedAuthorName = null;
         }
         List<Blob> blobs = extractBlobs(request, result, beans, maxFileSize, maxNumberOfAttachments);
-        Comment comment = getElasticSocialService().createComment(author, authorName, contributionTarget,
+        Comment comment = getElasticSocialService().createComment(author, adjustedAuthorName, contributionTarget,
                 navigation, text, moderation, replyToId, blobs);
         result.setModel(comment);
         if (moderation.equals(ModerationType.PRE_MODERATION)) {

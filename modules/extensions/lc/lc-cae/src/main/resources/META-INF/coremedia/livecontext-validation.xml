@@ -21,7 +21,6 @@
   <bean id="cmExternalChannelValidator" class="com.coremedia.livecontext.validation.CMExternalChannelValidator"/>
 
   <bean id="invalidTeaserTargetValidator" class="com.coremedia.livecontext.validation.InvalidTeaserTargetValidator">
-    <property name="validationService" ref="validationService"/>
     <property name="settingsService" ref="settingsService"/>
   </bean>
 

@@ -120,7 +120,7 @@
 </#outputformat>
 </#macro>
 
-<#-- add messageKeys for elastic social to global variables -->
+<#-- DEPRECATED, access the resource bundle keys directly in your template -->
 <#assign messageKeys=elasticSocialFreemarkerFacade.getElasticSocialMessageKeys()/>
 
 

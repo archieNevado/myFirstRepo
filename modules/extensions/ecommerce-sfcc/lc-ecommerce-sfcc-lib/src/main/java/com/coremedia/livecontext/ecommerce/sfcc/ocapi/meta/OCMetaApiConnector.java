@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 /**
  * Connector for Salesforce Commerce Cloud Open Commerce Metadata API.
@@ -20,12 +20,12 @@ public class OCMetaApiConnector extends AbstractOCAPIConnector {
 
   private OAuthConnector oAuthConnector;
 
-  OCMetaApiConnector(@Nonnull SfccOcapiConfigurationProperties properties) {
+  OCMetaApiConnector(@NonNull SfccOcapiConfigurationProperties properties) {
     // META API does not use api version
     super(properties, properties.getMetaBasePath(), null);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   protected HttpHeaders buildHttpHeaders() {
     HttpHeaders headers = super.buildHttpHeaders();

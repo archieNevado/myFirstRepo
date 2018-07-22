@@ -41,6 +41,8 @@
 
   <bean id="cleanInTranslation" class="com.coremedia.translate.workflow.impl.CleanInTranslation"/>
 
+  <bean id="allMergeablePropertiesPredicateFactory" class="com.coremedia.translate.workflow.AllMergeablePropertiesPredicateFactory"/>
+
   <task:scheduler id="cleanInTranslationScheduler"/>
 
   <task:scheduled-tasks scheduler="cleanInTranslationScheduler">

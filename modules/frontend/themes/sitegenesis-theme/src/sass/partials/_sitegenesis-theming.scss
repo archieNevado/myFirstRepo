@@ -64,17 +64,6 @@ div#main {
   }
 }
 
-.cm-product-assets {
-  .cm-non-adaptive-content-wrapper {
-    .cm-non-adaptive-content {
-      margin-top: 0 !important;
-      margin-left: inherit !important;
-      width: 100%;
-      height: auto;
-    }
-  }
-}
-
 .pdp-main {
   .product-primary-image, .product-thumbnails {
     display: none;
@@ -141,7 +130,7 @@ ul {
 
 /* Make embedded teaser smaller */
 @media screen and (min-width: 768px) {
-  .cm-teasable--embedded {
+  .cm-richtext-embedded--teasable {
     width: 50%;
   }
 }

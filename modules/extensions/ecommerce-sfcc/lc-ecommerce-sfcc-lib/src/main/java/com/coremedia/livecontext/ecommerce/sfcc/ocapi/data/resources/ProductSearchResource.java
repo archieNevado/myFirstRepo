@@ -14,7 +14,7 @@ import com.google.common.collect.ListMultimap;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -46,11 +46,11 @@ public class ProductSearchResource extends AbstractDataResource {
    * @param storeContext the effective store context
    * @return the list of product documents or an empty list if no product is found
    */
-  @Nonnull
-  public Optional<ProductSearchResultDocument> searchProducts(@Nonnull String query,
-                                                              @Nonnull Map<String, String> params,
-                                                              @Nonnull Set<String> categoryIds,
-                                                              @Nonnull StoreContext storeContext) {
+  @NonNull
+  public Optional<ProductSearchResultDocument> searchProducts(@NonNull String query,
+                                                              @NonNull Map<String, String> params,
+                                                              @NonNull Set<String> categoryIds,
+                                                              @NonNull StoreContext storeContext) {
     ListMultimap<String, String> queryParams = ImmutableListMultimap
             .of("site_id", storeContext.getStoreId());
     String searchPhrase = StringUtils.isBlank(query) ? "*" : query;
@@ -100,8 +100,8 @@ public class ProductSearchResource extends AbstractDataResource {
             ProductSearchResultDocument.class);
   }
 
-  @Nonnull
-  public List<ProductDocument> getProductsById(@Nonnull List<String> productIds, @Nonnull StoreContext storeContext) {
+  @NonNull
+  public List<ProductDocument> getProductsById(@NonNull List<String> productIds, @NonNull StoreContext storeContext) {
     ListMultimap<String, String> queryParams = ImmutableListMultimap
             .of("site_id", storeContext.getStoreId());
 

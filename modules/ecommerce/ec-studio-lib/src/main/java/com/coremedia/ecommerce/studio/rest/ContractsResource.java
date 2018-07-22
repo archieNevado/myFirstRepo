@@ -1,6 +1,7 @@
 package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.ecommerce.studio.rest.model.Contracts;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.contract.Contract;
 import com.coremedia.livecontext.ecommerce.contract.ContractService;
 
@@ -54,7 +55,9 @@ public class ContractsResource extends AbstractCatalogResource<Contracts> {
 
   @Override
   public void setEntity(Contracts contracts) {
-    setSiteId(contracts.getContext().getSiteId());
-    setWorkspaceId(contracts.getContext().getWorkspaceId());
+    StoreContext storeContext = contracts.getContext();
+
+    setSiteId(storeContext.getSiteId());
+    setWorkspaceId(storeContext.getWorkspaceId().orElse(null));
   }
 }

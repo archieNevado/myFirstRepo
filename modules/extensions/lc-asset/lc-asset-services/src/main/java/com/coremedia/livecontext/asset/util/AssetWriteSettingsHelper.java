@@ -5,7 +5,7 @@ import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.struct.StructBuilder;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.List;
 import java.util.Map;
 
@@ -19,8 +19,8 @@ public class AssetWriteSettingsHelper {
   private ContentRepository contentRepository;
   private AssetReadSettingsHelper assetReadSettingsHelper;
 
-  @Nonnull
-  public Struct createNewSettingsStructWithReferences(@Nonnull Map<String, Object> localSettings,
+  @NonNull
+  public Struct createNewSettingsStructWithReferences(@NonNull Map<String, Object> localSettings,
                                                       List<String> commerceReferences, boolean inheritedActive) {
     StructBuilder structBuilder = ((Struct) localSettings.get(NAME_LOCAL_SETTINGS)).builder();
     ensureCommerceStructIsAvailable(structBuilder, localSettings);
@@ -29,26 +29,26 @@ public class AssetWriteSettingsHelper {
     return structBuilder.build();
   }
 
-  private void ensureCommerceStructIsAvailable(@Nonnull StructBuilder settingsBuilder,
-                                               @Nonnull Map<String, Object> localSettings) {
+  private void ensureCommerceStructIsAvailable(@NonNull StructBuilder settingsBuilder,
+                                               @NonNull Map<String, Object> localSettings) {
     if (!assetReadSettingsHelper.hasCommerceStruct(localSettings)) {
       Struct emptyStruct = contentRepository.getConnection().getStructService().emptyStruct();
       settingsBuilder.declareStruct(NAME_COMMERCE, emptyStruct);
     }
   }
 
-  private void rewriteReferencesField(@Nonnull StructBuilder structBuilder, List<String> commerceReferences,
+  private void rewriteReferencesField(@NonNull StructBuilder structBuilder, List<String> commerceReferences,
                                       boolean inheritedActive) {
     if (inheritedActive) {
       rewriteCommerceStructField(structBuilder, commerceReferences, NAME_REFERENCES);
     }
   }
 
-  private void rewriteOriginalReferencesField(@Nonnull StructBuilder structBuilder, List<String> commerceReferences) {
+  private void rewriteOriginalReferencesField(@NonNull StructBuilder structBuilder, List<String> commerceReferences) {
     rewriteCommerceStructField(structBuilder, commerceReferences, NAME_ORIGIN_REFERENCES);
   }
 
-  private void rewriteCommerceStructField(@Nonnull StructBuilder structBuilder, List<String> commerceReferences,
+  private void rewriteCommerceStructField(@NonNull StructBuilder structBuilder, List<String> commerceReferences,
                                           String property) {
     structBuilder.enter(NAME_COMMERCE);
     if (structBuilder.currentStruct().get(property) != null) {

@@ -32,8 +32,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Named;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
@@ -64,7 +64,7 @@ public class ProductImpl extends AbstractSfccCommerceBean implements Product {
 
   protected List<ProductAttribute> definingAttributes;
 
-  public ProductImpl(@Nonnull SfccConfigurationProperties sfccConfigurationProperties) {
+  public ProductImpl(@NonNull SfccConfigurationProperties sfccConfigurationProperties) {
     super(sfccConfigurationProperties);
   }
 
@@ -127,6 +127,7 @@ public class ProductImpl extends AbstractSfccCommerceBean implements Product {
     return getLocalizedValue(getDelegate().getPageKeywords());
   }
 
+  @Nullable
   @Override
   public BigDecimal getListPrice() {
     if (priceService == null){
@@ -142,6 +143,7 @@ public class ProductImpl extends AbstractSfccCommerceBean implements Product {
             .orElse(null);
   }
 
+  @Nullable
   @Override
   public BigDecimal getOfferPrice() {
     if (priceService == null){
@@ -157,6 +159,7 @@ public class ProductImpl extends AbstractSfccCommerceBean implements Product {
             .orElse(null);
   }
 
+  @Nullable
   @Override
   public String getSeoSegment() {
     try {
@@ -166,6 +169,7 @@ public class ProductImpl extends AbstractSfccCommerceBean implements Product {
     }
   }
 
+  @Nullable
   @Override
   public Category getCategory() {
     String categoryId = getDelegate().getPrimaryCategoryId();
@@ -195,18 +199,20 @@ public class ProductImpl extends AbstractSfccCommerceBean implements Product {
     return (Category) getCommerceBeanFactory().createBeanFor(commerceId, getContext());
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<Category> getCategories() {
     return emptyList();
   }
 
+  @Nullable
   @Override
   public String getDefaultImageAlt() {
     MediaFileDocument image = getDelegate().getImage();
     return image != null ? getLocalizedValue(image.getAlt()) : null;
   }
 
+  @Nullable
   @Override
   public String getDefaultImageUrl() {
     MediaFileDocument image = getDelegate().getImage();
@@ -219,12 +225,13 @@ public class ProductImpl extends AbstractSfccCommerceBean implements Product {
     return image != null ? image.getAbsUrl() : null;
   }
 
+  @Nullable
   @Override
   public String getThumbnailUrl() {
     return getDefaultImageUrl();
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<ProductAttribute> getDefiningAttributes() {
     if (definingAttributes == null) {
@@ -245,13 +252,13 @@ public class ProductImpl extends AbstractSfccCommerceBean implements Product {
     return definingAttributes;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<ProductAttribute> getDescribingAttributes() {
     return emptyList();
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<String> getVariantAxisNames() {
     List<ProductAttribute> definingAttributes = getDefiningAttributes();
@@ -261,9 +268,9 @@ public class ProductImpl extends AbstractSfccCommerceBean implements Product {
             .collect(toList());
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Object> getVariantAxisValues(@Nonnull String axisName, @Nonnull List<VariantFilter> filters) {
+  public List<Object> getVariantAxisValues(@NonNull String axisName, @NonNull List<VariantFilter> filters) {
     List<Object> result = new ArrayList<>();
 
     List<ProductVariant> availableProducts = getVariants(filters);
@@ -277,9 +284,9 @@ public class ProductImpl extends AbstractSfccCommerceBean implements Product {
     return result;
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Object> getVariantAxisValues(@Nonnull String axisName, @Nullable VariantFilter filter) {
+  public List<Object> getVariantAxisValues(@NonNull String axisName, @Nullable VariantFilter filter) {
     if (filter == null) {
       return getVariantAxisValues(axisName, emptyList());
     }
@@ -289,13 +296,13 @@ public class ProductImpl extends AbstractSfccCommerceBean implements Product {
     return getVariantAxisValues(axisName, filters);
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Object> getAttributeValues(@Nonnull String s) {
+  public List<Object> getAttributeValues(@NonNull String s) {
     return getVariantAxisValues(s, emptyList());
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<ProductVariant> getVariants() {
     if (variants == null) {
@@ -324,9 +331,9 @@ public class ProductImpl extends AbstractSfccCommerceBean implements Product {
     return result;
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<ProductVariant> getVariants(@Nonnull List<VariantFilter> filters) {
+  public List<ProductVariant> getVariants(@NonNull List<VariantFilter> filters) {
     List<ProductVariant> allVariants = getVariants();
 
     if (filters.isEmpty()) {
@@ -338,11 +345,11 @@ public class ProductImpl extends AbstractSfccCommerceBean implements Product {
             .collect(toList());
   }
 
-  private static boolean isVariantIncludedinAllFilters(ProductVariant productVariant, @Nonnull Collection<VariantFilter> filters) {
+  private static boolean isVariantIncludedinAllFilters(ProductVariant productVariant, @NonNull Collection<VariantFilter> filters) {
     return filters.stream().allMatch(filter -> filter.matches(productVariant));
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<ProductVariant> getVariants(@Nullable VariantFilter filter) {
     if (filter == null) {
@@ -352,7 +359,7 @@ public class ProductImpl extends AbstractSfccCommerceBean implements Product {
     return getVariants(singletonList(filter));
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public Map<ProductVariant, AvailabilityInfo> getAvailabilityMap() {
     return emptyMap();
@@ -373,7 +380,7 @@ public class ProductImpl extends AbstractSfccCommerceBean implements Product {
     return getDelegate().getType().isVariant();
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public CatalogPicture getCatalogPicture() {
     return findAssetService()
@@ -387,7 +394,7 @@ public class ProductImpl extends AbstractSfccCommerceBean implements Product {
     return getPictures().stream().findFirst().orElse(null);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<Content> getPictures() {
     return findAssetService()
@@ -395,7 +402,7 @@ public class ProductImpl extends AbstractSfccCommerceBean implements Product {
             .orElseGet(Collections::emptyList);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<Content> getVisuals() {
     return findAssetService()
@@ -403,7 +410,7 @@ public class ProductImpl extends AbstractSfccCommerceBean implements Product {
             .orElseGet(Collections::emptyList);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<Content> getDownloads() {
     return findAssetService()

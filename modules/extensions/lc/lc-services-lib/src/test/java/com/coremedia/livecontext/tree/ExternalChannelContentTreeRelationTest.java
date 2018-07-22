@@ -198,6 +198,7 @@ public class ExternalChannelContentTreeRelationTest {
     ContentSiteAspect contentSiteAspect = mock(ContentSiteAspect.class);
     when(sitesService.getContentSiteAspect(any(Content.class))).thenReturn(contentSiteAspect);
     when(contentSiteAspect.getSite()).thenReturn(site);
+    when(contentSiteAspect.findSite()).thenReturn(Optional.of(site));
 
     // siteRootChannel
     ContentType typeAugmentedPage = mock(ContentType.class);

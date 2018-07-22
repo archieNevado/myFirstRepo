@@ -2,9 +2,11 @@
 <#-- @ftlvariable name="highlightingMap" type="java.util.Map" -->
 <#-- @ftlvariable name="isLast" type="java.lang.Boolean" -->
 
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/utils.ftl" as utils />
+
 <#assign cssClasses=cm.localParameters().islast!false?then(" is-last", "") />
 <#assign highlightedItem=(highlightingMap.get(self))!{} />
-<#assign teaserLength=bp.setting(cmpage, "teaser.max.length", 200)/>
+<#assign teaserLength=bp.setting(self, "teaser.max.length", 200)/>
 <#assign htmlDescription=bp.truncateHighlightedText((highlightedItem["htmlDescription"][0])!self.htmlDescription!"", teaserLength) />
 <#assign teaserText=bp.truncateHighlightedText((highlightedItem["teaserText"][0])!self.teaserText!"", teaserLength) />
 <#assign target=(self.target?has_content && self.target.openInNewTab)?then('target="_blank"', "") />
@@ -14,10 +16,10 @@
   <a href="${cm.getLink(self.target!cm.UNDEFINED)}" ${target?no_esc} ${rel?no_esc}>
     <#-- image -->
     <#if self.picture?has_content>
-      <@cm.include self=self.picture params={
+      <@cm.include self=self.picture view="media" params={
         "limitAspectRatios": ["landscape_ratio4x3"],
         "classBox": "cm-search__picture-box",
-        "classImage": "cm-search__picture",
+        "classMedia": "cm-search__picture",
         "metadata": ["properties.pictures"]
       }/>
     </#if>
@@ -29,11 +31,11 @@
       <#-- htmlDescription or teaserText -->
       <#if htmlDescription?has_content>
         <p<@preview.metadata "properties.htmlDescription" />>
-          <@bp.renderWithLineBreaks htmlDescription />
+          <@utils.renderWithLineBreaks text=htmlDescription />
         </p>
       <#elseif teaserText?has_content>
         <p<@preview.metadata "properties.teaserText" />>
-          <@bp.renderWithLineBreaks teaserText />
+          <@utils.renderWithLineBreaks text=teaserText />
         </p>
       </#if>
     </div>

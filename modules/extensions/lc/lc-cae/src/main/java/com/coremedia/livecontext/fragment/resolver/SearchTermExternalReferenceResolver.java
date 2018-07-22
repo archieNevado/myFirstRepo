@@ -30,8 +30,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -87,7 +87,7 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
    * @param cache cache
    */
   @Required
-  public void setCache(@Nonnull Cache cache) {
+  public void setCache(@NonNull Cache cache) {
     Objects.requireNonNull(cache);
     this.cache = cache;
   }
@@ -99,7 +99,7 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
    * @param navigationTreeRelation navigation tree relation
    */
   @Required
-  public void setNavigationTreeRelation(@Nonnull TreeRelation<Content> navigationTreeRelation) {
+  public void setNavigationTreeRelation(@NonNull TreeRelation<Content> navigationTreeRelation) {
     Objects.requireNonNull(navigationTreeRelation);
     this.navigationTreeRelation = navigationTreeRelation;
   }
@@ -110,7 +110,7 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
    * @param searchResultFactory the {@link com.coremedia.blueprint.cae.search.SearchResultFactory}
    */
   @Required
-  public void setSearchResultFactory(@Nonnull SearchResultFactory searchResultFactory) {
+  public void setSearchResultFactory(@NonNull SearchResultFactory searchResultFactory) {
     Objects.requireNonNull(searchResultFactory);
     this.searchResultFactory = searchResultFactory;
   }
@@ -130,7 +130,7 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
    * @param segmentPath segment path relative to site root folder
    * @throws java.lang.IllegalArgumentException if the path starts with a slash
    */
-  public void setSegmentPath(@Nonnull String segmentPath) {
+  public void setSegmentPath(@NonNull String segmentPath) {
     Objects.requireNonNull(segmentPath);
     Preconditions.checkArgument(!segmentPath.startsWith("/"),
             "Segment path must be relative and not start with a slash: " + segmentPath);
@@ -146,7 +146,7 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
    * @param contentType content type name
    */
   @Required
-  public void setContentType(@Nonnull String contentType) {
+  public void setContentType(@NonNull String contentType) {
     Objects.requireNonNull(contentType);
     this.contentType = contentType;
   }
@@ -159,7 +159,7 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
    * @param field field to search in
    */
   @Required
-  public void setField(@Nonnull String field) {
+  public void setField(@NonNull String field) {
     Objects.requireNonNull(field);
     this.field = field;
   }
@@ -193,9 +193,9 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
 
   @Nullable
   @Override
-  protected LinkableAndNavigation resolveExternalRef(@Nonnull FragmentParameters fragmentParameters,
-                                                     @Nonnull String referenceInfo,
-                                                     @Nonnull Site site) {
+  protected LinkableAndNavigation resolveExternalRef(@NonNull FragmentParameters fragmentParameters,
+                                                     @NonNull String referenceInfo,
+                                                     @NonNull Site site) {
     Preconditions.checkState(escapedContentTypes != null, "#afterPropertiesSet has not been called");
     Content linkable = resolveLinkable(referenceInfo, site);
 
@@ -213,7 +213,7 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
   // --- internal ---------------------------------------------------
 
   @Nullable
-  private Content resolveLinkable(@Nonnull String referenceInfo, @Nonnull Site site) {
+  private Content resolveLinkable(@NonNull String referenceInfo, @NonNull Site site) {
     String searchTerm = referenceInfo.trim();
     return cacheForSeconds > 0
             ? cache.get(new ResolveLinkableKey(this, searchTerm, site, cacheForSeconds))
@@ -221,7 +221,7 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
   }
 
   @Nullable
-  private Content resolveLinkableUncached(@Nonnull String searchTerm, @Nonnull Site site) {
+  private Content resolveLinkableUncached(@NonNull String searchTerm, @NonNull Site site) {
     Content context = getNavigationContext(site);
     if (context == null) {
       LOG.warn("Cannot find navigation with configured segment path '{}' for site {}", segmentPath, site.getName());
@@ -253,7 +253,7 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
    * @return navigation, null if not found
    */
   @Nullable
-  private Content getNavigationContext(@Nonnull Site site) {
+  private Content getNavigationContext(@NonNull Site site) {
     Content context = site.getSiteRootDocument();
     if (context == null) {
       return null;
@@ -292,8 +292,8 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
    * @param context the navigation context
    * @return search condition
    */
-  @Nonnull
-  private Condition createContextSearchCondition(@Nonnull Content context) {
+  @NonNull
+  private Condition createContextSearchCondition(@NonNull Content context) {
     List<Content> contents = navigationTreeRelation.pathToRoot(context);
     StringBuilder sb = new StringBuilder();
     for (Content content : contents) {
@@ -303,8 +303,8 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
     return Condition.is(SearchConstants.FIELDS.NAVIGATION_PATHS, Value.exactly(sb.toString()));
   }
 
-  @Nonnull
-  private static String escapeLiteralForSearch(@Nonnull String literal) {
+  @NonNull
+  private static String escapeLiteralForSearch(@NonNull String literal) {
     return '"' + CharMatcher.is('"').replaceFrom(literal, "\\\"") + '"';
   }
 
@@ -315,9 +315,9 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
     private final Site site;
     private final int cacheForSeconds;
 
-    public ResolveLinkableKey(@Nonnull SearchTermExternalReferenceResolver resolver,
-                              @Nonnull String searchTerm,
-                              @Nonnull Site site,
+    public ResolveLinkableKey(@NonNull SearchTermExternalReferenceResolver resolver,
+                              @NonNull String searchTerm,
+                              @NonNull Site site,
                               int cacheForSeconds) {
       Preconditions.checkArgument(cacheForSeconds > 0);
       this.resolver = resolver;

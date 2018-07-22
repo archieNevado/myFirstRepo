@@ -7,17 +7,15 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.ProductDocument;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.CategoryProductAssignmentSearchResource;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.List;
 
 public class ProductsByCategoryCacheKey extends AbstractSfccDocumentCacheKey<List<ProductDocument>> {
 
   private CategoryProductAssignmentSearchResource resource;
 
-  public ProductsByCategoryCacheKey(CommerceId commerceId,
-                                    @Nonnull StoreContext storeContext,
-                                    CategoryProductAssignmentSearchResource resource,
-                                    CommerceCache commerceCache) {
+  public ProductsByCategoryCacheKey(CommerceId commerceId, @NonNull StoreContext storeContext,
+                                    CategoryProductAssignmentSearchResource resource, CommerceCache commerceCache) {
     super(commerceId, storeContext, CONFIG_KEY_PRODUCTS_BY_CATEGORY, commerceCache);
     this.resource = resource;
   }
@@ -34,8 +32,13 @@ public class ProductsByCategoryCacheKey extends AbstractSfccDocumentCacheKey<Lis
 
   @Override
   protected String getCacheIdentifier() {
-    return id + ":" + configKey + ":" + storeContext.getSiteId() + ":" +
-            storeContext.getStoreId() + ":" + storeContext.getLocale() + ":" + storeContext.getCurrency();
+    return assembleCacheIdentifier(
+            id,
+            configKey,
+            storeContext.getSiteId(),
+            storeContext.getStoreId(),
+            storeContext.getLocale(),
+            storeContext.getCurrency()
+    );
   }
-
 }

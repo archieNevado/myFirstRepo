@@ -6,10 +6,11 @@ import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.context.ContextCollectionImpl;
 import com.coremedia.personalization.context.MapPropertyMaintainer;
-import org.apache.commons.beanutils.PropertyUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
@@ -58,10 +59,11 @@ public class P13nAlxInterceptorTest {
 
     interceptor.postHandle(request, response, null, modelAndView);
 
-    final String[] segmentIds = (String[]) PropertyUtils.getNestedProperty(modelAndView, "model.p13nAlxProperties.segmentIds");
+    BeanWrapper modelViewWrapper = PropertyAccessorFactory.forBeanPropertyAccess(modelAndView);
+    final String[] segmentIds = (String[]) modelViewWrapper.getPropertyValue("model[p13nAlxProperties][segmentIds]");
     Assert.assertEquals(new HashSet(Arrays.asList("122","234")), new HashSet(Arrays.asList(segmentIds)));
 
-    final String[] segmentNames = (String[]) PropertyUtils.getNestedProperty(modelAndView, "model.p13nAlxProperties.segmentNames");
+    final String[] segmentNames = (String[]) modelViewWrapper.getPropertyValue("model[p13nAlxProperties][segmentNames]");
     Assert.assertEquals(new HashSet(Arrays.asList(SEGMENT_CONTENT_PREFIX + 122, SEGMENT_CONTENT_PREFIX + 234)),
             new HashSet(Arrays.asList(segmentNames)));
   }
@@ -84,7 +86,9 @@ public class P13nAlxInterceptorTest {
     final ModelAndView modelAndView = new ModelAndView();
 
     interceptor.postHandle(request, response, null, modelAndView);
-    final String[] segmentIds = (String[]) PropertyUtils.getNestedProperty(modelAndView, "model.p13nAlxProperties.segmentIds");
+    BeanWrapper modelViewWrapper = PropertyAccessorFactory.forBeanPropertyAccess(modelAndView);
+    modelViewWrapper.setAutoGrowNestedPaths(true);
+    final String[] segmentIds = (String[]) modelViewWrapper.getPropertyValue("model[p13nAlxProperties][segmentIds]");
     Assert.assertNotNull(segmentIds);
     Assert.assertEquals(0, segmentIds.length);
   }

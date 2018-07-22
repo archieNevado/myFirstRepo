@@ -8,8 +8,8 @@ import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.transform.VariantsStructResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Named;
 import java.util.Optional;
 
@@ -35,7 +35,7 @@ public class VariantsStructResolverImpl implements VariantsStructResolver {
 
   @Nullable
   @Override
-  public Struct getVariantsForSite(@Nonnull Site site) {
+  public Struct getVariantsForSite(@NonNull Site site) {
     Struct setting = settingsService.setting(VARIANTS_STRUCT_NAME, Struct.class, site);
 
     if (setting == null) {
@@ -45,7 +45,7 @@ public class VariantsStructResolverImpl implements VariantsStructResolver {
     return setting;
   }
 
-  @Nonnull
+  @NonNull
   private Optional<Struct> getGlobalVariants() {
     Content settings = contentRepository.getChild(globalVariantsSettings);
 
@@ -56,8 +56,8 @@ public class VariantsStructResolverImpl implements VariantsStructResolver {
     return getStruct(settings);
   }
 
-  @Nonnull
-  private static Optional<Struct> getStruct(@Nonnull Content setting) {
+  @NonNull
+  private static Optional<Struct> getStruct(@NonNull Content setting) {
     if (setting.getType().isSubtypeOf(SETTINGS_DOCTYPE)) {
       Struct subStruct = setting.getStruct(SETTINGS_PROPERTY);
 

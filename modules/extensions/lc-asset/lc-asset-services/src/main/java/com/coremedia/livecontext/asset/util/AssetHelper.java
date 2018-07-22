@@ -6,8 +6,8 @@ import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.struct.StructBuilder;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -57,7 +57,7 @@ public class AssetHelper {
    * @param newCommerceReferences the list of catalog object ids that are to be assigned
    * @return the struct property that contains the updated commerce struct
    */
-  public Struct updateCMPictureForExternalIds(@Nullable Content content, @Nonnull List<String> newCommerceReferences) {
+  public Struct updateCMPictureForExternalIds(@Nullable Content content, @NonNull List<String> newCommerceReferences) {
     // load/create localSettins struct
     Struct struct = content == null ? null : content.getStruct(NAME_LOCAL_SETTINGS);
 
@@ -94,9 +94,9 @@ public class AssetHelper {
             newCommerceReferences);
   }
 
-  private Struct rewriteCommerceStruct(@Nonnull Struct struct, boolean inherit, List<String> oldCommerceReferences,
+  private Struct rewriteCommerceStruct(@NonNull Struct struct, boolean inherit, List<String> oldCommerceReferences,
                                        List<String> oldOriginCommerceReferences,
-                                       @Nonnull List<String> newCommerceReferences) {
+                                       @NonNull List<String> newCommerceReferences) {
     // case 7-8 --> inherit = TRUE
     if (inherit) {
       if (newCommerceReferences.isEmpty()) {
@@ -133,7 +133,7 @@ public class AssetHelper {
     return updateStruct(struct, DO_NOT_INHERIT, newCommerceReferences, oldCommerceReferences);
   }
 
-  private Struct updateStruct(@Nonnull Struct struct, @Nonnull InheritFlag inheritFlag, List<String> newOriginReferences,
+  private Struct updateStruct(@NonNull Struct struct, @NonNull InheritFlag inheritFlag, List<String> newOriginReferences,
                               List<String> newReferences) {
     StructBuilder builder = struct.builder().mode(LOOSE);
     builder.set(NAME_COMMERCE, getEmptyStruct());
@@ -153,7 +153,7 @@ public class AssetHelper {
    * @param struct the local settings struct
    * @return A struct with no commerce substruct
    */
-  public static Struct removeCommerceSubstruct(@Nonnull Struct struct) {
+  public static Struct removeCommerceSubstruct(@NonNull Struct struct) {
     StructBuilder structBuilder = struct.builder().remove(NAME_COMMERCE);
     return structBuilder.build();
   }

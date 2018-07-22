@@ -6,7 +6,7 @@ import com.coremedia.blueprint.cae.view.DynamicIncludeProvider;
 import com.coremedia.blueprint.cae.view.HashBasedFragmentHandler;
 import com.coremedia.objectserver.view.RenderNode;
 
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Arrays;
 import java.util.List;
 

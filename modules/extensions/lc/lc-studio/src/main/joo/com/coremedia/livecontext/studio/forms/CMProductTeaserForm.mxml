@@ -62,7 +62,7 @@
                                                 hideLabel="true"/>
           </editor:items>
         </editor:PropertyFieldGroup>
-        <bpforms:PictureDocumentForm/>
+        <bpforms:MediaDocumentForm/>
         <bpforms:ViewTypeSelectorForm/>
         <bpforms:ValidityDocumentForm/>
       </editor:items>

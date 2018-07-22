@@ -3,7 +3,7 @@ package com.coremedia.blueprint.ecommerce.segments;
 import com.coremedia.blueprint.segments.CMLinkableSegmentStrategy;
 import com.coremedia.cap.content.Content;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 /**
  * ContentSegmentStrategy for CMProduct
@@ -14,9 +14,9 @@ public class CMProductSegmentStrategy extends CMLinkableSegmentStrategy {
   /**
    * Use segment, productName, title or id as segment.
    */
-  @Nonnull
+  @NonNull
   @Override
-  public String segment(@Nonnull Content content) {
+  public String segment(@NonNull Content content) {
     return getSomeString(content, true, SEGMENT, PRODUCT_NAME, TITLE);
   }
 }

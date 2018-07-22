@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.Optional;
@@ -80,7 +80,7 @@ public class PriceServiceImplIT extends ShopApiResourceTestBase {
   public static class LocalConfig {
 
     @Bean
-    PriceServiceImpl sfccPriceService(@Nonnull ProductsResource productsResource) {
+    PriceServiceImpl sfccPriceService(@NonNull ProductsResource productsResource) {
       return new PriceServiceImpl(productsResource);
     }
 

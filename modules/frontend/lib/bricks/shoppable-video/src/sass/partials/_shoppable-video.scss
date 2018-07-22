@@ -19,19 +19,13 @@
     height: 100%;
   }
 
-  &__content {
-    &.cm-aspect-ratio-box {
-      @include aspect-ratio-box(16, 9);
-    }
+  &__content,
+  &__player {
+    @include aspect-ratio-box(16, 9);
   }
 
-  &__player {
-    &.cm-aspect-ratio-box {
-      @include aspect-ratio-box(16, 9);
-    }
-    .cm-aspect-ratio-box__content {
-      @include center-absolute();
-    }
+  &__video-element {
+    @include stretch-absolute();
   }
 
   @include breakpoint(md) {

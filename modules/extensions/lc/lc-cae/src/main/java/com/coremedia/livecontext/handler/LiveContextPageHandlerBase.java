@@ -15,13 +15,14 @@ import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
 import com.coremedia.objectserver.web.links.UriComponentsHelper;
 import com.google.common.annotations.VisibleForTesting;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.util.UriComponents;
 
-import javax.annotation.Nonnull;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -31,7 +32,9 @@ import static com.coremedia.blueprint.base.links.UriConstants.Links.ABSOLUTE_URI
 import static com.coremedia.blueprint.base.links.UriConstants.Links.SCHEME_KEY;
 
 public class LiveContextPageHandlerBase extends PageHandlerBase {
+
   protected static final String SHOP_NAME_VARIABLE = "shop";
+
   public static final String URL_PROVIDER_URL_TEMPLATE = "urlTemplate";
   public static final String URL_PROVIDER_QUERY_PARAMS = "queryParams";
   public static final String URL_PROVIDER_SEO_SEGMENT = "seoSegment";
@@ -39,6 +42,7 @@ public class LiveContextPageHandlerBase extends PageHandlerBase {
   public static final String URL_PROVIDER_IS_INITIAL_STUDIO_REQUEST = "isInitialStudioRequest";
   public static final String HAS_PREVIEW_TOKEN = "hasPreviewToken";
   public static final String URL_PROVIDER_SEARCH_TERM = "searchTerm";
+  private static final String REQUEST_PARAMETER_PREVIEW = "preview";
   public static final String P13N_URI_PARAMETER = "p13n_test";
 
   private ResolveContextStrategy resolveContextStrategy;
@@ -86,7 +90,8 @@ public class LiveContextPageHandlerBase extends PageHandlerBase {
     return settingsService;
   }
 
-  protected LiveContextNavigation getNavigationContext(@Nonnull Site site, @Nonnull CommerceBean commerceBean) {
+  @Nullable
+  protected LiveContextNavigation getNavigationContext(@NonNull Site site, @NonNull CommerceBean commerceBean) {
     try {
       return resolveContextStrategy.resolveContext(site, commerceBean);
     } catch (Exception ignored) {
@@ -103,30 +108,32 @@ public class LiveContextPageHandlerBase extends PageHandlerBase {
     return siteResolver;
   }
 
-  protected UriComponents absoluteUri(UriComponents originalUri, Object bean, Site site, Map<String,Object> linkParameters, ServletRequest request) {
+  protected UriComponents absoluteUri(UriComponents originalUri, Object bean, @NonNull Site site,
+                                      Map<String, Object> linkParameters, @NonNull ServletRequest request) {
     if (!isAbsoluteUrlRequested(request)) {
       return originalUri;
     }
+
     String siteId = site.getId();
     String absoluteUrlPrefix = urlPrefixResolver.getUrlPrefix(siteId, bean, null);
     if (absoluteUrlPrefix == null) {
       throw new IllegalStateException("Cannot calculate an absolute URL for " + bean);
-    } else if(!StringUtils.isBlank(absoluteUrlPrefix)) {
+    } else if (!StringUtils.isBlank(absoluteUrlPrefix)) {
       //explicitly set scheme if it is set in link parameters
       String scheme = null;
-      if(linkParameters != null) {
+      if (linkParameters != null) {
         Object schemeAttribute = linkParameters.get(SCHEME_KEY);
-        if(schemeAttribute != null) {
+        if (schemeAttribute != null) {
           scheme = (String) schemeAttribute;
         }
       }
-      return UriComponentsHelper.prefixUri(absoluteUrlPrefix, scheme , originalUri);
+      return UriComponentsHelper.prefixUri(absoluteUrlPrefix, scheme, originalUri);
     }
 
     return UriComponentsHelper.prefixUri(absoluteUrlPrefix, null, originalUri);
   }
 
-  @Nonnull
+  @NonNull
   protected Optional<LiveContextUrlProvider> findCommercePropertyProvider() {
     return CurrentCommerceConnection.find()
             .flatMap(c -> c.getQualifiedServiceForVendor(LiveContextUrlProvider.class, "pageHandlerUrlProvider"));
@@ -139,10 +146,10 @@ public class LiveContextPageHandlerBase extends PageHandlerBase {
    * If it's a request triggered by a studio action an author want's to have a cleared session (no logged in user or
    * p13n context). If he tests in studio the preview the author want to stay logged in and use the same p13n context.
    *
-   * @return true if the request was triggered by a studio action.
    * @param request the current request
+   * @return true if the request was triggered by a studio action.
    */
-  public static boolean isInitialStudioRequest(@Nonnull HttpServletRequest request) {
+  public static boolean isInitialStudioRequest(@NonNull HttpServletRequest request) {
     return PreviewHandler.isStudioPreviewRequest(request);
   }
 
@@ -150,7 +157,9 @@ public class LiveContextPageHandlerBase extends PageHandlerBase {
    * Builds complete, absolute WCS links with query parameters.
    * Do not postprocess.
    */
-  protected Object buildCommerceLinkFor(@Nonnull Product product, @Nonnull Map<String, Object> queryParams, @Nonnull HttpServletRequest request) {
+  @Nullable
+  protected Object buildCommerceLinkFor(@NonNull Product product, @NonNull Map<String, Object> queryParams,
+                                        @NonNull HttpServletRequest request) {
     return findCommercePropertyProvider()
             .map(p -> p.buildProductLink(product, queryParams, request))
             .orElse(null);
@@ -160,17 +169,19 @@ public class LiveContextPageHandlerBase extends PageHandlerBase {
     return contentRepository.isContentManagementServer();
   }
 
-  public static boolean isStudioPreviewRequest(@Nonnull HttpServletRequest request) {
+  public static boolean isStudioPreviewRequest(@NonNull HttpServletRequest request) {
     return isInitialStudioRequest(request)
-           || isTrue(request.getAttribute(HAS_PREVIEW_TOKEN))
-           || isTrue(request.getParameter(P13N_URI_PARAMETER));
+            || isTrue(request.getAttribute(HAS_PREVIEW_TOKEN))
+            || isTrue(request.getParameter(REQUEST_PARAMETER_PREVIEW))
+            || isTrue(request.getParameter(P13N_URI_PARAMETER));
   }
 
   private static boolean isTrue(Object attribute) {
     return Boolean.valueOf(attribute + "");
   }
 
-  protected String getSiteSegment(Site site) {
+  @NonNull
+  protected String getSiteSegment(@NonNull Site site) {
     return getContentLinkBuilder().getVanityName(site.getSiteRootDocument());
   }
 
@@ -181,11 +192,8 @@ public class LiveContextPageHandlerBase extends PageHandlerBase {
     return SecurityContextHolder.getContext();
   }
 
-  //====================================================================================================================
-
-  private static boolean isAbsoluteUrlRequested(ServletRequest request) {
+  private static boolean isAbsoluteUrlRequested(@NonNull ServletRequest request) {
     Object absolute = request.getAttribute(ABSOLUTE_URI_KEY);
     return "true".equals(absolute) || Boolean.TRUE.equals(absolute);
   }
-
 }

@@ -6,7 +6,7 @@ import com.coremedia.livecontext.ecommerce.sfcc.ocapi.meta.documents.ApiVersionD
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.meta.documents.ApiVersionsListDocument;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +24,7 @@ public class MetaDataResource {
 
   private final OCMetaApiConnector connector;
 
-  MetaDataResource(@Nonnull OCMetaApiConnector connector) {
+  MetaDataResource(@NonNull OCMetaApiConnector connector) {
     this.connector = connector;
   }
 
@@ -33,7 +33,7 @@ public class MetaDataResource {
    *
    * @return
    */
-  @Nonnull
+  @NonNull
   public Map<String, String> getAvailableApis() {
     List<ApiDocument> apiDocs = connector.getResource(REST_PATH, emptyMap(), ApiListDocument.class)
             .map(ApiListDocument::getApis)
@@ -52,7 +52,7 @@ public class MetaDataResource {
    * @param apiName
    * @return
    */
-  @Nonnull
+  @NonNull
   public List<ApiVersionDocument> getAvailableApiVersions(String apiName) {
     Map<String, String> pathParameters = singletonMap(API_NAME_PARAM, apiName);
 

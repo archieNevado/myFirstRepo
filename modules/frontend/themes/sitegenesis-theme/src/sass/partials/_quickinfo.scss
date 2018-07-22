@@ -130,17 +130,6 @@
       text-align: right;
     }
 
-    &__image {
-      overflow: hidden;
-
-      &.cm-aspect-ratio-box {
-        @include aspect-ratio-box(4, 3);
-      }
-      .cm-aspect-ratio-box__content {
-        @include stretch-absolute();
-      }
-    }
-
     //Title and text
     &__text {
       margin: 0.5rem;

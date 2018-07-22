@@ -17,8 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Named;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -32,7 +32,7 @@ public class CategoryImpl extends AbstractSfccCommerceBean implements Category {
 
   private CategoriesResource resource;
 
-  public CategoryImpl(@Nonnull SfccConfigurationProperties sfccConfigurationProperties) {
+  public CategoryImpl(@NonNull SfccConfigurationProperties sfccConfigurationProperties) {
     super(sfccConfigurationProperties);
   }
 
@@ -89,7 +89,7 @@ public class CategoryImpl extends AbstractSfccCommerceBean implements Category {
     return getDelegate().getImage();
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<Category> getChildren() {
     if (this.isLightweight()){
@@ -98,7 +98,7 @@ public class CategoryImpl extends AbstractSfccCommerceBean implements Category {
     return CommerceBeanUtils.createLightweightBeansFor(getCommerceBeanFactory(), getDelegate().getCategories(), getContext(), BaseCommerceBeanType.CATEGORY, Category.class);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<Product> getProducts() {
     return getCatalogService().findProductsByCategory(this);
@@ -124,7 +124,7 @@ public class CategoryImpl extends AbstractSfccCommerceBean implements Category {
             .isPresent();
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<Category> getBreadcrumb() {
     List<Category> result = new ArrayList<>();
@@ -142,7 +142,7 @@ public class CategoryImpl extends AbstractSfccCommerceBean implements Category {
 
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public String getSeoSegment() {
     try {
@@ -167,7 +167,7 @@ public class CategoryImpl extends AbstractSfccCommerceBean implements Category {
     return getLocalizedValue(getDelegate().getPageTitle());
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public String getDisplayName() {
     String name = getName();

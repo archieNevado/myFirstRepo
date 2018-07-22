@@ -3,7 +3,7 @@ package com.coremedia.livecontext.ecommerce.sfcc.pricing;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.shop.documents.ProductDocument;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.shop.resources.ProductsResource;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Currency;
@@ -19,25 +19,25 @@ public class PriceServiceImpl {
 
   private final ProductsResource productsResource;
 
-  public PriceServiceImpl(@Nonnull ProductsResource productsResource) {
+  public PriceServiceImpl(@NonNull ProductsResource productsResource) {
     this.productsResource = productsResource;
   }
 
-  @Nonnull
-  public Optional<BigDecimal> findListPriceForProduct(@Nonnull String productId, @Nonnull String storeId,
-                                                      @Nonnull Currency currency) {
+  @NonNull
+  public Optional<BigDecimal> findListPriceForProduct(@NonNull String productId, @NonNull String storeId,
+                                                      @NonNull Currency currency) {
     return getPriceInternal(productId, storeId, currency, LIST_PRICES_SUFFIX);
   }
 
-  @Nonnull
-  public Optional<BigDecimal> findOfferPriceForProduct(@Nonnull String productId, @Nonnull String storeId,
-                                                       @Nonnull Currency currency) {
+  @NonNull
+  public Optional<BigDecimal> findOfferPriceForProduct(@NonNull String productId, @NonNull String storeId,
+                                                       @NonNull Currency currency) {
     return getPriceInternal(productId, storeId, currency, OFFER_PRICES_SUFFIX);
   }
 
-  @Nonnull
-  private Optional<BigDecimal> getPriceInternal(@Nonnull String productId, @Nonnull String storeId,
-                                                @Nonnull Currency currency, @Nonnull String listSuffix) {
+  @NonNull
+  private Optional<BigDecimal> getPriceInternal(@NonNull String productId, @NonNull String storeId,
+                                                @NonNull Currency currency, @NonNull String listSuffix) {
     Optional<ProductDocument> doc = productsResource.getProductById(productId, storeId, null, currency);
 
     return doc

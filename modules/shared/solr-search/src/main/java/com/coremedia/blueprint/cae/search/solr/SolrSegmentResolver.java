@@ -9,8 +9,8 @@ import com.google.common.base.Optional;
 import com.google.common.collect.FluentIterable;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Objects;
 
 import static com.coremedia.blueprint.cae.search.SearchConstants.FIELDS.CONTEXTS;
@@ -33,7 +33,7 @@ public class SolrSegmentResolver implements SegmentResolver {
    * @param searchResultFactory the {@link com.coremedia.blueprint.cae.search.SearchResultFactory}
    */
   @Required
-  public void setSearchResultFactory(@Nonnull SearchResultFactory searchResultFactory) {
+  public void setSearchResultFactory(@NonNull SearchResultFactory searchResultFactory) {
     Objects.requireNonNull(searchResultFactory);
     this.searchResultFactory = searchResultFactory;
   }
@@ -51,7 +51,7 @@ public class SolrSegmentResolver implements SegmentResolver {
 
   @Override
   @Nullable
-  public <T> T resolveSegment(int contextId, @Nonnull String segment, @Nonnull Class<T> resultClass) {
+  public <T> T resolveSegment(int contextId, @NonNull String segment, @NonNull Class<T> resultClass) {
     SearchQueryBean queryBean = new SearchQueryBean();
     queryBean.setSearchHandler(SearchQueryBean.SEARCH_HANDLER.DYNAMICCONTENT);
     queryBean.setNotSearchableFlagIgnored(true);

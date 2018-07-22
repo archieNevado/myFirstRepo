@@ -12,20 +12,19 @@ import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.CategoriesR
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 public class CategoryCacheKey extends AbstractSfccDocumentCacheKey<CategoryDocument> {
 
-  private final static Logger LOG = LoggerFactory.getLogger(CategoryCacheKey.class);
+  private static final Logger LOG = LoggerFactory.getLogger(CategoryCacheKey.class);
 
   private CategoriesResource resource;
 
-  public CategoryCacheKey(CommerceId id,
-                          @Nonnull StoreContext storeContext,
-                          CategoriesResource resource,
+  public CategoryCacheKey(CommerceId id, @NonNull StoreContext storeContext, CategoriesResource resource,
                           CommerceCache commerceCache) {
     super(id, storeContext, CONFIG_KEY_CATEGORY, commerceCache);
     this.resource = resource;
+
     if (!id.getCommerceBeanType().equals(BaseCommerceBeanType.CATEGORY)) {
       String msg = id + " (is not a category id)";
       LOG.warn(msg);
@@ -40,14 +39,20 @@ public class CategoryCacheKey extends AbstractSfccDocumentCacheKey<CategoryDocum
 
   @Override
   public void addExplicitDependency(CategoryDocument document) {
-    if (document != null){
+    if (document != null) {
       Cache.dependencyOn(CommerceIdFormatterHelper.format(commerceId));
     }
   }
 
   @Override
   protected String getCacheIdentifier() {
-    return id + ":" + configKey + ":" + storeContext.getSiteId() + ":" +
-            storeContext.getStoreId() + ":" + storeContext.getLocale() + ":" + storeContext.getCurrency();
+    return assembleCacheIdentifier(
+            id,
+            configKey,
+            storeContext.getSiteId(),
+            storeContext.getStoreId(),
+            storeContext.getLocale(),
+            storeContext.getCurrency()
+    );
   }
 }

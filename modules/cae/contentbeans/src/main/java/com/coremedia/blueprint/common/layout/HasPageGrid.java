@@ -3,7 +3,7 @@ package com.coremedia.blueprint.common.layout;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.objectserver.beans.ContentBean;
 
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 /**
  * ContentBeans containing a PageGrid-Property need to implement this IF.

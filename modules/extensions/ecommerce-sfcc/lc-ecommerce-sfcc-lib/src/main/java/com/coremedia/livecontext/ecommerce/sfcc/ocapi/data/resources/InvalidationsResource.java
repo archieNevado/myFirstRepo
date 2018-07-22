@@ -2,7 +2,7 @@ package com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources;
 
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collections;
 import java.util.Map;
 
@@ -14,7 +14,7 @@ public class InvalidationsResource extends AbstractDataResource {
 
   private static final String CHANGE_EVENTS_PATH = "/change_events?timestamp=";
 
-  @Nonnull
+  @NonNull
   public Map<String, Object> getInvalidations(long timestamp) {
     String path = CHANGE_EVENTS_PATH + timestamp;
 

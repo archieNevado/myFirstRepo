@@ -5,11 +5,14 @@
 <#-- @ftlvariable name="registrationFlow" type="com.coremedia.blueprint.elastic.social.cae.flows.Registration" -->
 <#-- @ftlvariable name="_CSRFToken" type="java.lang.String" -->
 
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/components.ftl" as components />
+<#import "../../freemarkerLibs/elastic-social.ftl" as elasticSocial />
+
 <#assign elasticSocialConfiguration=es.getElasticSocialConfiguration(cmpage)/>
-<#assign termsOfUseLink=cm.getLink(bp.setting(cmpage, "linkTermsOfUse"))/>
-<#assign privacyPolicyLink=cm.getLink(bp.setting(cmpage, "linkTermsOfUse"))/>
+<#assign termsOfUseLink=cm.getLink(bp.setting(self, "linkTermsOfUse"))/>
+<#assign privacyPolicyLink=cm.getLink(bp.setting(self, "linkTermsOfUse"))/>
 <#assign registrationAction=self.registrationAction!cm.UNDEFINED />
-<#assign registrationFlow=bp.substitute(registrationAction.id!"", registrationAction)!cm.UNDEFINED />
+<#assign registrationFlow=cm.substitute(registrationAction.id!"", registrationAction) />
 
 <div class="container">
   <div class="row">
@@ -24,12 +27,12 @@
         <input type="hidden" name="timeZoneId" id="timezone" value="${spring.stringStatusValue}">
 
         <#-- notification-->
-        <@bp.notificationFromSpring path="bpRegistration" additionalClasses=["alert alert-danger"] />
+        <@elasticSocial.notificationFromSpring path="bpRegistration" additionalClasses=["alert alert-danger"] />
 
         <#-- username -->
         <@spring.bind path="bpRegistration.username"/>
         <div class="form-group<#if spring.status.error> has-error</#if>">
-          <@bp.labelFromSpring path="bpRegistration.username" text='${bp.getMessage("registration_username_label")}'/>
+          <@elasticSocial.labelFromSpring path="bpRegistration.username" text='${bp.getMessage("registration_username_label")}'/>
           <@spring.formInput path="bpRegistration.username" attributes='class="form-control" placeholder="${bp.getMessage("registration_username_label")}" required'/>
           <#if spring.status.error><span class="help-block">${spring.status.getErrorMessagesAsString("\n")}</span></#if>
         </div>
@@ -37,7 +40,7 @@
         <#-- given name -->
         <@spring.bind path="bpRegistration.givenname"/>
         <div class="form-group<#if spring.status.error> has-error</#if>">
-          <@bp.labelFromSpring path="bpRegistration.givenname" text='${bp.getMessage("registration_givenname_label")}'/>
+          <@elasticSocial.labelFromSpring path="bpRegistration.givenname" text='${bp.getMessage("registration_givenname_label")}'/>
           <@spring.formInput path="bpRegistration.givenname" attributes='class="form-control" placeholder="${bp.getMessage("registration_givenname_label")}" required'/>
           <#if spring.status.error><span class="help-block">${spring.status.getErrorMessagesAsString("\n")}</span></#if>
         </div>
@@ -45,7 +48,7 @@
         <#-- surname -->
         <@spring.bind path="bpRegistration.surname"/>
         <div class="form-group<#if spring.status.error> has-error</#if>">
-          <@bp.labelFromSpring path="bpRegistration.surname" text='${bp.getMessage("registration_surname_label")}'/>
+          <@elasticSocial.labelFromSpring path="bpRegistration.surname" text='${bp.getMessage("registration_surname_label")}'/>
           <@spring.formInput path="bpRegistration.surname" attributes='class="form-control" placeholder="${bp.getMessage("registration_surname_label")}" required'/>
           <#if spring.status.error><span class="help-block">${spring.status.getErrorMessagesAsString("\n")}</span></#if>
         </div>
@@ -53,7 +56,7 @@
         <#-- email -->
         <@spring.bind path="bpRegistration.emailAddress"/>
         <div class="form-group<#if spring.status.error> has-error</#if>">
-          <@bp.labelFromSpring path="bpRegistration.emailAddress" text='${bp.getMessage("registration_emailAddress_label")}'/>
+          <@elasticSocial.labelFromSpring path="bpRegistration.emailAddress" text='${bp.getMessage("registration_emailAddress_label")}'/>
           <@spring.formInput path="bpRegistration.emailAddress" attributes='class="form-control" placeholder="${bp.getMessage("registration_emailAddress_label")}" required' fieldType="email"/>
           <#if spring.status.error><span class="help-block">${spring.status.getErrorMessagesAsString("\n")}</span></#if>
         </div>
@@ -62,14 +65,14 @@
         <#if !(registrationFlow.registeringWithProvider!false)>
           <@spring.bind path="bpRegistration.password"/>
           <div class="form-group<#if spring.status.error> has-error</#if>">
-            <@bp.labelFromSpring path="bpRegistration.password" text='${bp.getMessage("registration_password_label")}'/>
+            <@elasticSocial.labelFromSpring path="bpRegistration.password" text='${bp.getMessage("registration_password_label")}'/>
             <@spring.formInput path="bpRegistration.password" attributes='class="form-control" placeholder="${bp.getMessage("registration_password_label")}" required' fieldType="password"/>
             <#if spring.status.error><span class="help-block">${spring.status.getErrorMessagesAsString("\n")}</span></#if>
           </div>
 
           <@spring.bind path="bpRegistration.confirmPassword"/>
           <div class="form-group<#if spring.status.error> has-error</#if>">
-            <@bp.labelFromSpring path="bpRegistration.confirmPassword" text='${bp.getMessage("registration_confirmPassword_label")}'/>
+            <@elasticSocial.labelFromSpring path="bpRegistration.confirmPassword" text='${bp.getMessage("registration_confirmPassword_label")}'/>
             <@spring.formInput path="bpRegistration.confirmPassword" attributes='class="form-control" placeholder="${bp.getMessage("registration_confirmPassword_label")}" required' fieldType="password"/>
             <#if spring.status.error><span class="help-block">${spring.status.getErrorMessagesAsString("\n")}</span></#if>
           </div>
@@ -132,7 +135,7 @@
 
         <#-- button-->
         <div class="form-group text-right">
-          <@bp.button text=bp.getMessage("registration_title") attr={"type": "submit", "classes": ["btn","btn-primary"]} />
+          <@components.button text=bp.getMessage("registration_title") attr={"type": "submit", "classes": ["btn","btn-primary"]} />
         </div>
       </form>
     </div>

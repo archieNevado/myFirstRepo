@@ -15,8 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -46,9 +46,9 @@ public class SeoSegmentExternalReferenceResolver extends ExternalReferenceResolv
 
   @Nullable
   @Override
-  protected LinkableAndNavigation resolveExternalRef(@Nonnull FragmentParameters fragmentParameters,
-                                                     @Nonnull String referenceInfo,
-                                                     @Nonnull Site site) {
+  protected LinkableAndNavigation resolveExternalRef(@NonNull FragmentParameters fragmentParameters,
+                                                     @NonNull String referenceInfo,
+                                                     @NonNull Site site) {
 
     Content siteRootDocument = site.getSiteRootDocument();
     if (siteRootDocument == null) {
@@ -98,7 +98,7 @@ public class SeoSegmentExternalReferenceResolver extends ExternalReferenceResolv
    * @return a valid content
    */
   @Nullable
-  private Content getContentById(@Nonnull String decodedSegmentPath, int indexOfDelimiter) {
+  private Content getContentById(@NonNull String decodedSegmentPath, int indexOfDelimiter) {
     String potentialContentIdStr = decodedSegmentPath.substring(indexOfDelimiter + 1);
     if (!StringUtils.isNumeric(potentialContentIdStr)) {
       return null;
@@ -120,13 +120,13 @@ public class SeoSegmentExternalReferenceResolver extends ExternalReferenceResolv
    * @param content
    * @return
    */
-  private boolean isInvalidLinkable(@Nonnull Content content) {
+  private boolean isInvalidLinkable(@NonNull Content content) {
     ContentType type = content.getType();
     return !type.isSubtypeOf(CMLinkable.NAME) || type.isSubtypeOf(CMContext.NAME);
   }
 
-  @Nonnull
-  private List<String> toSegmentList(@Nonnull String rootSegment, String decodedSegmentPath) {
+  @NonNull
+  private List<String> toSegmentList(@NonNull String rootSegment, String decodedSegmentPath) {
     List<String> segmentList = new ArrayList<>();
     segmentList.add(rootSegment);
     if (StringUtils.isNotBlank(decodedSegmentPath)) {
@@ -139,8 +139,8 @@ public class SeoSegmentExternalReferenceResolver extends ExternalReferenceResolv
    * Resolve linkable and navigation ignoring potential content ID in last segment
    * @return linkable and navigation where linkable is null if #hasIdDelimiter is true and last segment didn't resolve to a navigation content
    */
-  @Nonnull
-  private LinkableAndNavigation resolveNavigation(@Nonnull List<String> segmentList, boolean hasIdDelimiter) {
+  @NonNull
+  private LinkableAndNavigation resolveNavigation(@NonNull List<String> segmentList, boolean hasIdDelimiter) {
     Content navigation = resolveNavigation(segmentList);
     if (navigation == null && hasIdDelimiter) {
       // last segment path might be a Linkable with concrete content ID
@@ -164,8 +164,8 @@ public class SeoSegmentExternalReferenceResolver extends ExternalReferenceResolv
     return null;
   }
 
-  @Nonnull
-  private static String decode(@Nonnull String str) {
+  @NonNull
+  private static String decode(@NonNull String str) {
     try {
       return URLDecoder.decode(str, "UTF-8");
     } catch (UnsupportedEncodingException e) {

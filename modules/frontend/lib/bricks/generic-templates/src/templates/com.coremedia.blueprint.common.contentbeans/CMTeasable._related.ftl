@@ -6,6 +6,6 @@
     <#-- headline -->
     <h3 class="cm-related__title"><@bp.message key="related_label"/></h3>
     <#--items -->
-    <@cm.include self=bp.getContainer(self.related) view=relatedView />
+    <@cm.include self=bp.getDynamizableContainer(self "related") view=relatedView />
   </div>
 </#if>

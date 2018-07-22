@@ -17,11 +17,19 @@
     </list>
   </customize:prepend>
 
-  <!-- disable fragment include for p13n content as long as tracking pages is not implemented yet
-  <customize:append id="addP13NIncludePredicate" bean="dynamicIncludePredicates">
+   <!--disable fragment include for p13n content as long as tracking pages is not implemented yet-->
+  <customize:append id="addP13NIncludePredicates" bean="dynamicIncludePredicates">
     <list>
+      <bean id="p13NContainerPredicate" class="com.coremedia.blueprint.personalization.include.P13NContainerPredicate"/>
+<!--
       <bean id="p13NIncludePredicate" class="com.coremedia.blueprint.personalization.include.P13NIncludePredicate"/>
+-->
     </list>
   </customize:append>
-  -->
+
+  <bean id="dynamicContainerStrategy" class="com.coremedia.blueprint.personalization.include.P13NDynamicContainerStrategy">
+    <property name="sitesService" ref="sitesService"/>
+    <property name="settingsService" ref="settingsService"/>
+  </bean>
+
 </beans>

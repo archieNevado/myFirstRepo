@@ -50,6 +50,7 @@ public class CuratedUtil {
     var content:Content = ContentUtil.getContent(id);
     content.invalidate(function ():void {
       editorContext.getContentTabManager().openDocument(content);
+      ModerationImpl.getInstance().getArchiveContributionAdministration().invalidateDisplayed();
     });
   }
 

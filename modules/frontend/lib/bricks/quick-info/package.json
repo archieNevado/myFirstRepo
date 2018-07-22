@@ -5,9 +5,10 @@
   "dependencies": {
     "jquery": "3.2.1",
     "magnific-popup": "1.1.0",
+    "@coremedia/ftl-utils": "^1.0.0",
     "@coremedia/js-node-decoration-service": "^1.0.0",
     "@coremedia/js-magnific-popup": "^1.0.0",
-    "@coremedia/brick-responsive-images": "^1.0.0"
+    "@coremedia/brick-media": "^1.0.0"
   },
   "devDependencies": {
     "jsdoc-to-markdown": "3.0.0",

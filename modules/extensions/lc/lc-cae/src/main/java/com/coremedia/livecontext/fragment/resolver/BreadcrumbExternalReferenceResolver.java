@@ -9,8 +9,8 @@ import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.livecontext.fragment.resolver.ContentSeoSegmentExternalReferenceResolver.Ids;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 /**
  * Resolves the breadcrumb for full page layouts in the commerce led scenario.
@@ -37,15 +37,15 @@ public class BreadcrumbExternalReferenceResolver extends ExternalReferenceResolv
 
   // --- interface --------------------------------------------------
   @Override
-  protected boolean include(@Nonnull FragmentParameters fragmentParameters, @Nonnull String referenceInfo) {
+  protected boolean include(@NonNull FragmentParameters fragmentParameters, @NonNull String referenceInfo) {
     return true;
   }
 
   @Nullable
   @Override
-  protected LinkableAndNavigation resolveExternalRef(@Nonnull FragmentParameters fragmentParameters,
-                                                     @Nonnull String referenceInfo,
-                                                     @Nonnull Site site) {
+  protected LinkableAndNavigation resolveExternalRef(@NonNull FragmentParameters fragmentParameters,
+                                                     @NonNull String referenceInfo,
+                                                     @NonNull Site site) {
     //no SEO segment passed, so we only render the root channel which results in an empty breadcrumb
     if(fragmentParameters.getParameter() == null) {
       Content channel = site.getSiteRootDocument();
@@ -75,7 +75,7 @@ public class BreadcrumbExternalReferenceResolver extends ExternalReferenceResolv
       storeName = storeName.toLowerCase(fragmentParameters.getLocale());
     }
     String homepageUrl = storefrontUrl + fragmentParameters.getLocale().getLanguage() + "/" + storeName;
-    fragmentParameters.getMatrixParams().put(FragmentParameters.PARAMETER, homepageUrl);
+    fragmentParameters.setParameter(homepageUrl);
 
     return new LinkableAndNavigation(linkable, channel);
   }

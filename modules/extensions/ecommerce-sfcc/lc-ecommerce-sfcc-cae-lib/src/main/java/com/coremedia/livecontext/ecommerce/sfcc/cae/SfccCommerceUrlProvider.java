@@ -5,8 +5,8 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.objectserver.web.links.TokenResolverHelper;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Map;
 
 /**
@@ -16,12 +16,12 @@ class SfccCommerceUrlProvider {
 
   private final String storeFrontBaseUrl;
 
-  SfccCommerceUrlProvider(@Nonnull String storeFrontBaseUrl) {
+  SfccCommerceUrlProvider(@NonNull String storeFrontBaseUrl) {
     this.storeFrontBaseUrl = storeFrontBaseUrl;
   }
 
-  @Nonnull
-  UriComponentsBuilder provideValue(@Nonnull String urlTemplate, @Nonnull Map<String, Object> parameters, @Nullable StoreContext storeContext) {
+  @NonNull
+  UriComponentsBuilder provideValue(@NonNull String urlTemplate, @NonNull Map<String, Object> parameters, @Nullable StoreContext storeContext) {
     String resultUrl = storeFrontBaseUrl + urlTemplate;
 
     // Apply StoreContext values

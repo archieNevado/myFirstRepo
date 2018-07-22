@@ -4,8 +4,8 @@ import com.coremedia.blueprint.base.settings.SettingsService;
 import com.google.common.collect.ImmutableList;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +31,7 @@ public class AssetReadSettingsHelper {
    * @param contentProperties the struct where to read the commerce references from
    * @return commerceReferences the commerce references from the given property
    */
-  @Nonnull
+  @NonNull
   public List<String> getCommerceReferences(@Nullable Map<String, Object> contentProperties) {
     AssetReferences assetReferences = readAssetReferences(contentProperties);
 
@@ -55,7 +55,7 @@ public class AssetReadSettingsHelper {
    *                          localSettings struct
    * @return originReferences the originReferences
    */
-  @Nonnull
+  @NonNull
   public List<String> getOriginCommerceReferences(@Nullable Map<String, Object> contentProperties) {
     AssetReferences assetReferences = readAssetReferences(contentProperties);
 

@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.themeimporter.descriptors;
 
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.xml.bind.annotation.XmlElement;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,7 +11,7 @@ public class StyleSheets {
   private List<Css> css = new ArrayList<>();
 
   @XmlElement
-  @Nonnull
+  @NonNull
   public List<Css> getCss() {
     return css!=null ? css : Collections.emptyList();
   }

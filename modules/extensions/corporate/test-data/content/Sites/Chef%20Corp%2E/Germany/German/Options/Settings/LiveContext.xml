@@ -8,6 +8,7 @@
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StringProperty Name="livecontext.store.name">Unternehmenskatalog</StringProperty>
 <StringProperty Name="livecontext.connectionId">cms1</StringProperty>
+<BooleanProperty Name="livecontext.contentLed">true</BooleanProperty>
 <LinkProperty Name="livecontext.rootCategory" LinkType="coremedia:///cap/contenttype/CMCategory" xlink:href="coremedia:///cap/resources/../../Products/Corporate%20%5BCatalog%5D.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Products/Corporate%20%5BCatalog%5D"/>
 </Struct>
 </settings>

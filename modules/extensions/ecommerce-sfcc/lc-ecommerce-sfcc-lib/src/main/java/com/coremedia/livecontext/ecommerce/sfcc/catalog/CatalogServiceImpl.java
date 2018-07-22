@@ -26,8 +26,8 @@ import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.ProductsRes
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -58,11 +58,11 @@ public class CatalogServiceImpl implements CatalogService {
   private final CommerceCache commerceCache;
   private final CommerceBeanFactory commerceBeanFactory;
 
-  public CatalogServiceImpl(@Nonnull ProductsResource productsResource,
-                            @Nonnull CategoryProductAssignmentSearchResource categoryProductAssignmentSearchResource,
-                            @Nonnull ProductSearchResource productSearchResource,
-                            @Nonnull CommerceCache commerceCache,
-                            @Nonnull CommerceBeanFactory commerceBeanFactory) {
+  public CatalogServiceImpl(@NonNull ProductsResource productsResource,
+                            @NonNull CategoryProductAssignmentSearchResource categoryProductAssignmentSearchResource,
+                            @NonNull ProductSearchResource productSearchResource,
+                            @NonNull CommerceCache commerceCache,
+                            @NonNull CommerceBeanFactory commerceBeanFactory) {
     this.productsResource = productsResource;
     this.categoryProductAssignmentSearchResource = categoryProductAssignmentSearchResource;
     this.productSearchResource = productSearchResource;
@@ -72,7 +72,7 @@ public class CatalogServiceImpl implements CatalogService {
 
   @Override
   @Nullable
-  public Product findProductById(@Nonnull CommerceId commerceId, @Nonnull StoreContext storeContext) {
+  public Product findProductById(@NonNull CommerceId commerceId, @NonNull StoreContext storeContext) {
     ProductCacheKey cacheKey = new ProductCacheKey(commerceId, storeContext, productsResource, commerceCache);
     ProductDocument delegate = commerceCache.get(cacheKey);
     if (delegate == null) {
@@ -88,13 +88,13 @@ public class CatalogServiceImpl implements CatalogService {
 
   @Nullable
   @Override
-  public Product findProductBySeoSegment(@Nonnull String seoSegment, @Nonnull StoreContext storeContext) {
+  public Product findProductBySeoSegment(@NonNull String seoSegment, @NonNull StoreContext storeContext) {
     return null;
   }
 
   @Nullable
   @Override
-  public ProductVariant findProductVariantById(@Nonnull CommerceId commerceId, @Nonnull StoreContext storeContext) {
+  public ProductVariant findProductVariantById(@NonNull CommerceId commerceId, @NonNull StoreContext storeContext) {
     ProductCacheKey cacheKey = new ProductCacheKey(commerceId, storeContext, productsResource, commerceCache);
 
     return commerceCache.find(cacheKey)
@@ -103,9 +103,9 @@ public class CatalogServiceImpl implements CatalogService {
             .orElse(null);
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Product> findProductsByCategory(@Nonnull Category category) {
+  public List<Product> findProductsByCategory(@NonNull Category category) {
     CommerceId categoryId = category.getId();
     StoreContext storeContext = category.getContext();
 
@@ -121,9 +121,9 @@ public class CatalogServiceImpl implements CatalogService {
             BaseCommerceBeanType.PRODUCT, Product.class);
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public Category findRootCategory(@Nonnull CatalogAlias catalogAlias, @Nonnull StoreContext storeContext) {
+  public Category findRootCategory(@NonNull CatalogAlias catalogAlias, @NonNull StoreContext storeContext) {
     CommerceId commerceId = SfccCommerceIdProvider
             .commerceId(BaseCommerceBeanType.CATEGORY)
             .withExternalId(ROOT_CATEGORY_ID)
@@ -132,28 +132,28 @@ public class CatalogServiceImpl implements CatalogService {
     return findCategoryById(commerceId, storeContext);
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Category> findTopCategories(@Nonnull CatalogAlias catalogAlias, @Nonnull StoreContext storeContext) {
+  public List<Category> findTopCategories(@NonNull CatalogAlias catalogAlias, @NonNull StoreContext storeContext) {
     Category rootCategory = findRootCategory(catalogAlias, storeContext);
     return rootCategory.getChildren();
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Category> findSubCategories(@Nonnull Category parentCategory) {
+  public List<Category> findSubCategories(@NonNull Category parentCategory) {
     return parentCategory.getChildren();
   }
 
   @Nullable
   @Override
-  public Category findCategoryById(@Nonnull CommerceId id, @Nonnull StoreContext storeContext) {
+  public Category findCategoryById(@NonNull CommerceId id, @NonNull StoreContext storeContext) {
     return (Category) commerceBeanFactory.loadBeanFor(id, storeContext);
   }
 
   @Nullable
   @Override
-  public Category findCategoryBySeoSegment(@Nonnull String seoSegment, @Nonnull StoreContext storeContext) {
+  public Category findCategoryBySeoSegment(@NonNull String seoSegment, @NonNull StoreContext storeContext) {
     CommerceId commerceId = SfccCommerceIdProvider
             .commerceId(BaseCommerceBeanType.CATEGORY)
             .withSeo(seoSegment)
@@ -162,11 +162,11 @@ public class CatalogServiceImpl implements CatalogService {
     return findCategoryById(commerceId, storeContext);
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public SearchResult<Product> searchProducts(@Nonnull String searchTerm,
-                                              @Nonnull Map<String, String> searchParams,
-                                              @Nonnull StoreContext storeContext) {
+  public SearchResult<Product> searchProducts(@NonNull String searchTerm,
+                                              @NonNull Map<String, String> searchParams,
+                                              @NonNull StoreContext storeContext) {
     Set<String> categoryIdsForSearch = emptySet();
     if (searchParams.containsKey(SEARCH_PARAM_CATEGORYID)) {
       //Epand with all subcategories, since SFCC OC Data Api connot search recursively below a category.
@@ -195,10 +195,10 @@ public class CatalogServiceImpl implements CatalogService {
     return result;
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public Map<String, List<SearchFacet>> getFacetsForProductSearch(@Nonnull Category category,
-                                                                  @Nonnull StoreContext storeContext) {
+  public Map<String, List<SearchFacet>> getFacetsForProductSearch(@NonNull Category category,
+                                                                  @NonNull StoreContext storeContext) {
     return emptyMap();
   }
 
@@ -211,11 +211,11 @@ public class CatalogServiceImpl implements CatalogService {
    * 2) search for products with the given searchTerm and iterate them, collect and return its variants.
    * Do so as long as the result size does not exceed 500.
    */
-  @Nonnull
+  @NonNull
   @Override
-  public SearchResult<ProductVariant> searchProductVariants(@Nonnull String searchTerm,
-                                                            @Nonnull Map<String, String> searchParams,
-                                                            @Nonnull StoreContext storeContext) {
+  public SearchResult<ProductVariant> searchProductVariants(@NonNull String searchTerm,
+                                                            @NonNull Map<String, String> searchParams,
+                                                            @NonNull StoreContext storeContext) {
     SearchResult<ProductVariant> result = new SearchResult<>();
 
     // Lookup product variants via product id first.
@@ -247,8 +247,8 @@ public class CatalogServiceImpl implements CatalogService {
     return result;
   }
 
-  @Nonnull
-  private Set<String> prepareCategoryIdsForSearch(@Nonnull StoreContext storeContext, String categoryId) {
+  @NonNull
+  private Set<String> prepareCategoryIdsForSearch(@NonNull StoreContext storeContext, String categoryId) {
     Set<String> setOfSearchCategoryIds = new HashSet<>();
     setOfSearchCategoryIds.add(categoryId);
 
@@ -271,8 +271,8 @@ public class CatalogServiceImpl implements CatalogService {
     return setOfSearchCategoryIds;
   }
 
-  @Nonnull
-  private static Set<Category> getSubCategoriesRecursively(@Nonnull Category category) {
+  @NonNull
+  private static Set<Category> getSubCategoriesRecursively(@NonNull Category category) {
     Set<Category> allChildren = new HashSet<>();
     List<Category> children = category.getChildren();
     allChildren.addAll(children);
@@ -282,27 +282,27 @@ public class CatalogServiceImpl implements CatalogService {
     return allChildren;
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Catalog> getCatalogs(@Nonnull StoreContext storeContext) {
+  public List<Catalog> getCatalogs(@NonNull StoreContext storeContext) {
     return emptyList();
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public Optional<Catalog> getCatalog(@Nonnull CatalogId catalogId, @Nonnull StoreContext storeContext) {
+  public Optional<Catalog> getCatalog(@NonNull CatalogId catalogId, @NonNull StoreContext storeContext) {
     return Optional.empty();
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public Optional<Catalog> getCatalog(@Nonnull CatalogAlias alias, @Nonnull StoreContext storeContext) {
+  public Optional<Catalog> getCatalog(@NonNull CatalogAlias alias, @NonNull StoreContext storeContext) {
     return Optional.empty();
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public Optional<Catalog> getDefaultCatalog(@Nonnull StoreContext storeContext) {
+  public Optional<Catalog> getDefaultCatalog(@NonNull StoreContext storeContext) {
     return Optional.empty();
   }
 

@@ -6,7 +6,7 @@ import com.coremedia.livecontext.ecommerce.common.CommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.Vendor;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 public class SfccCommerceIdProvider extends BaseCommerceIdProvider {
 
@@ -16,12 +16,12 @@ public class SfccCommerceIdProvider extends BaseCommerceIdProvider {
     super(SFCC);
   }
 
-  public static boolean isSfccId(@Nonnull CommerceId commerceId) {
+  public static boolean isSfccId(@NonNull CommerceId commerceId) {
     return SFCC.equals(commerceId.getVendor());
   }
 
-  @Nonnull
-  public static CommerceIdBuilder commerceId(@Nonnull CommerceBeanType beanType) {
+  @NonNull
+  public static CommerceIdBuilder commerceId(@NonNull CommerceBeanType beanType) {
     return BaseCommerceIdProvider.commerceId(SFCC, beanType);
   }
 }

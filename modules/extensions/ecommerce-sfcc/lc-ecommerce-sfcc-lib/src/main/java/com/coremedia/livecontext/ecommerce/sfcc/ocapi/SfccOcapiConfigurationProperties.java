@@ -19,6 +19,7 @@ public class SfccOcapiConfigurationProperties {
   private int connectionRequestTimeoutMs = 60_000;
   private int connectionTimeoutMs = 60_000;
   private int socketTimeoutMs = 60_000;
+  private int networkAddressCacheTtlMs = 30000;
 
   /**
    * URI path variant of {@link SfccConfigurationProperties#SFCC_VENDOR_VERSION}
@@ -100,4 +101,12 @@ public class SfccOcapiConfigurationProperties {
   public int getSocketTimeoutMs() { return socketTimeoutMs; }
 
   public void setSocketTimeoutMs(int socketTimeoutMs) { this.socketTimeoutMs = socketTimeoutMs; }
+
+  public int getNetworkAddressCacheTtlMs() {
+    return networkAddressCacheTtlMs;
+  }
+
+  public void setNetworkAddressCacheTtlMs(int networkAddressCacheTtlMs) {
+    this.networkAddressCacheTtlMs = networkAddressCacheTtlMs;
+  }
 }

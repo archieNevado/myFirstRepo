@@ -7,10 +7,6 @@
     text-align: center;
   }
 
-  &__media-box {
-    @include aspect-ratio-box(16, 9);
-  }
-
   &__text {
     p {
       font-size: 17px;
@@ -19,11 +15,9 @@
       margin: 0 auto 30px auto;
       width: 70%;
     }
-    .cm-image-box,
-    .cm-teaser--embedded {
+    .cm-richtext-embedded {
       width: 80%;
-      .cm-aspect-ratio-box,
-      .cm-teasable__picture-box {
+      &__picture-box {
         @include aspect-ratio-box(16, 9);
       }
     }

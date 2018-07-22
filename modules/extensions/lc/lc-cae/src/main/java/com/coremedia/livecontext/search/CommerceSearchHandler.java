@@ -34,7 +34,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -167,9 +167,9 @@ public class CommerceSearchHandler extends PageHandlerBase {
     return commerceConnectionSupplier.findConnectionForContent(content);
   }
 
-  @Nonnull
+  @NonNull
   @VisibleForTesting
-  String getRedirectUrl(String term, @Nonnull HttpServletRequest request, HttpServletResponse response, @Nonnull UriComponentsBuilder uriComponentsBuilder) {
+  String getRedirectUrl(String term, @NonNull HttpServletRequest request, HttpServletResponse response, @NonNull UriComponentsBuilder uriComponentsBuilder) {
     UriComponents redirectUrl = uriComponentsBuilder.scheme(request.getScheme()).build();
     String urlStr = redirectUrl.toString();
     List<LinkTransformer> transformers = linkFormatter.getTransformers();

@@ -12,7 +12,7 @@ import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.MarkupTextD
 import com.coremedia.xml.Markup;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Locale;
 import java.util.Map;
 
@@ -32,7 +32,7 @@ public abstract class AbstractSfccCommerceBean extends AbstractCommerceBean {
    */
   private boolean lightweight;
 
-  protected AbstractSfccCommerceBean(@Nonnull SfccConfigurationProperties sfccConfigurationProperties) {
+  protected AbstractSfccCommerceBean(@NonNull SfccConfigurationProperties sfccConfigurationProperties) {
     setDefaultLocale(sfccConfigurationProperties.getDefaultLocale());
   }
 
@@ -103,7 +103,7 @@ public abstract class AbstractSfccCommerceBean extends AbstractCommerceBean {
     this.lightweight = lightweight;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public Map<String, Object> getCustomAttributes() {
     AbstractOCDocument delegate = getDelegate();

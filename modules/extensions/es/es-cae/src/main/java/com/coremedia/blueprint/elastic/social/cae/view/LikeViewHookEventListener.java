@@ -4,8 +4,8 @@ import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialCo
 import com.coremedia.blueprint.elastic.social.cae.controller.ContributionResult;
 import com.coremedia.blueprint.elastic.social.cae.controller.LikeResult;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Named;
 import java.util.List;
 
@@ -17,19 +17,19 @@ import java.util.List;
 public class LikeViewHookEventListener extends AbstractESViewHookEventListener {
 
   @Override
-  protected boolean isEnabled(@Nonnull ElasticSocialConfiguration elasticSocialConfiguration) {
+  protected boolean isEnabled(@NonNull ElasticSocialConfiguration elasticSocialConfiguration) {
     return elasticSocialConfiguration.isLikeEnabled();
   }
 
   @Nullable
   @Override
-  protected List<String> getWhitelistTypes(@Nonnull ElasticSocialConfiguration elasticSocialConfiguration) {
+  protected List<String> getWhitelistTypes(@NonNull ElasticSocialConfiguration elasticSocialConfiguration) {
     return elasticSocialConfiguration.getLikeDocumentTypes();
   }
 
   @Nullable
   @Override
-  protected ContributionResult getContribution(@Nonnull Object target) {
+  protected ContributionResult getContribution(@NonNull Object target) {
     return new LikeResult(target);
   }
 

@@ -20,6 +20,10 @@
     <security:logout success-handler-ref="logoutSuccessHandler"/>
 
     <security:csrf disabled="true"/><!-- using csrf protection from coremedia-security -->
+    <!--
+      Do not tamper with the response headers in extensions, otherwise the
+      application loses control.  S. SecurityHeadersFilter for header handling.
+    -->
     <security:headers defaults-disabled="true">
       <security:cache-control />
     </security:headers>

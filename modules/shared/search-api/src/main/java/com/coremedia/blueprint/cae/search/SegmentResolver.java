@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.cae.search;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 /**
  * Service to find an indexed document by context ID and segment.
@@ -27,6 +27,6 @@ public interface SegmentResolver {
    * @return result or null if none found
    */
   @Nullable
-  <T> T resolveSegment(int contextId, @Nonnull String segment, @Nonnull Class<T> resultClass);
+  <T> T resolveSegment(int contextId, @NonNull String segment, @NonNull Class<T> resultClass);
 
 }

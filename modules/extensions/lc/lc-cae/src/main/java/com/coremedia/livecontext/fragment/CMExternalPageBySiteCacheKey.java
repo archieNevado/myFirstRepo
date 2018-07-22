@@ -10,7 +10,7 @@ import com.coremedia.livecontext.contentbeans.CMExternalPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +27,7 @@ class CMExternalPageBySiteCacheKey extends CacheKey<Map<String,Content>> {
 
   private final Site site;
 
-  CMExternalPageBySiteCacheKey(@Nonnull Site site) {
+  CMExternalPageBySiteCacheKey(@NonNull Site site) {
     this.site = site;
   }
 

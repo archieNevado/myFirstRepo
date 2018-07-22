@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -29,9 +29,9 @@ public class StudioAssetSearchService implements AssetSearchService {
   private Cache cache;
   private long cacheForInSeconds = 300;
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Content> searchAssets(@Nonnull String contentType, @Nonnull String externalId, @Nonnull Site site) {
+  public List<Content> searchAssets(@NonNull String contentType, @NonNull String externalId, @NonNull Site site) {
     return cache.get(new SolrQueryCacheKey(contentType, externalId, site, cacheForInSeconds));
   }
 
@@ -44,8 +44,8 @@ public class StudioAssetSearchService implements AssetSearchService {
     }
   }
 
-  @Nonnull
-  private List<Content> doSearch(@Nonnull String contentType, @Nonnull String externalId, @Nonnull Site site) {
+  @NonNull
+  private List<Content> doSearch(@NonNull String contentType, @NonNull String externalId, @NonNull Site site) {
 
     ImmutableList<String> none = ImmutableList.of();
 
@@ -62,8 +62,8 @@ public class StudioAssetSearchService implements AssetSearchService {
     return result.getHits();
   }
 
-  @Nonnull
-  private ImmutableList<ContentType> contentTypes(@Nonnull String contentType) {
+  @NonNull
+  private ImmutableList<ContentType> contentTypes(@NonNull String contentType) {
     ImmutableList<ContentType> contentTypes = ImmutableList.of();
     ContentType ct = contentRepository.getContentType(contentType);
     if (ct != null) {
@@ -102,8 +102,6 @@ public class StudioAssetSearchService implements AssetSearchService {
 
     // redundant, only for efficiency
     private final String myEqualsValue;
-
-    private final Object uncacheableDependency = new Object();
 
     SolrQueryCacheKey(String contentType, String externalId, Site site, long cacheForInSeconds) {
       this.contentType = contentType;
@@ -150,8 +148,7 @@ public class StudioAssetSearchService implements AssetSearchService {
         Cache.cacheFor(cacheForInSeconds, TimeUnit.SECONDS);
       } else {
         LOG.warn("Asset query has unreasonable cache time: {} and will not be cached", cacheForInSeconds);
-        Cache.dependencyOn(uncacheableDependency);
-        cache.invalidate(uncacheableDependency);
+        Cache.uncacheable();
       }
       return result;
     }

@@ -6,7 +6,7 @@ import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ListMultimap;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +30,7 @@ public class CatalogsResource extends AbstractDataResource {
    *
    * @return the list of catalogs or en empty list of no catalogs exist
    */
-  @Nonnull
+  @NonNull
   public List<CatalogDocument> getCatalogs() {
     ListMultimap<String, String> queryParams = ImmutableListMultimap
             .of("select", "(**)");
@@ -47,8 +47,8 @@ public class CatalogsResource extends AbstractDataResource {
    * @param catalogId the id of the catalog
    * @return the catalog document, or nothing if it does not exist
    */
-  @Nonnull
-  public Optional<CatalogDocument> getCatalogById(@Nonnull String catalogId) {
+  @NonNull
+  public Optional<CatalogDocument> getCatalogById(@NonNull String catalogId) {
     Map<String, String> pathParameters = singletonMap(CATALOG_ID_PARAM, catalogId);
 
     return getConnector().getResource(CATALOG_PATH, pathParameters, CatalogDocument.class);

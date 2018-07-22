@@ -8,8 +8,10 @@ const {
   workspace: {
     DEFAULT_VARIANT,
     getInitJs,
+    getShims,
     getThemeConfig,
     getIsSmartImportModuleFor,
+    isBrickModule,
   },
   dependencies: { getFlattenedDependencies },
 } = require("@coremedia/tool-utils");
@@ -67,6 +69,40 @@ function buildEntryPoint(name, variant, path) {
   return entry;
 }
 
+function getLoaderParams(obj) {
+  return Object.keys(obj)
+    .map(key => {
+      const value = obj[key];
+      if (key) {
+        return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+      }
+      return encodeURIComponent(value);
+    })
+    .join("&");
+}
+
+function getShimLoaderConfig() {
+  return getFlattenedDependencies(themeConfig.pkgPath, isBrickModule)
+    .map(getShims)
+    .reduce((aggregator, next) => aggregator.concat(next), [])
+    .map(shim => {
+      const loaders = [];
+      const imports = shim.getImports();
+      const exports = shim.getExports();
+      if (Object.keys(imports).length) {
+        loaders.push("imports-loader?" + getLoaderParams(imports));
+      }
+      if (Object.keys(exports).length) {
+        loaders.push("exports-loader?" + getLoaderParams(exports));
+      }
+      return {
+        test: require.resolve(shim.getTarget()),
+        use: loaders,
+      };
+    })
+    .reduce((aggregator, next) => aggregator.concat(next), []);
+}
+
 const mainJsPath = getMainJs(".");
 const previewJsPath = mainJsPath
   ? path.resolve(path.dirname(mainJsPath), "preview.js")
@@ -108,6 +144,7 @@ module.exports = () => config =>
           ],
           exclude: exclude,
         },
+        ...getShimLoaderConfig(),
       ],
     },
     plugins: [

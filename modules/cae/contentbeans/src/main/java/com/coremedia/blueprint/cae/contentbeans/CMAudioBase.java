@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
 import com.coremedia.blueprint.common.contentbeans.CMAudio;
+import com.coremedia.blueprint.common.player.PlayerSettings;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.common.Blob;
 
@@ -57,5 +58,12 @@ public abstract class CMAudioBase extends CMMediaImpl implements CMAudio {
   @Override
   public String getDataUrl() {
     return getContent().getString(DATA_URL);
+  }
+
+  @Override
+  public PlayerSettings getPlayerSettings() {
+    Map<String, Object> mapping = getSettingsService().settingAsMap(CMAudio.PLAYER_SETTINGS, String.class, Object.class, this);
+
+    return getSettingsService().createProxy(PlayerSettings.class, mapping);
   }
 }

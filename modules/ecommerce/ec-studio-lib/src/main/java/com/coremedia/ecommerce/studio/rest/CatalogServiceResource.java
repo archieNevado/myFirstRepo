@@ -8,13 +8,13 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.p13n.MarketingSpotService;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
-import com.coremedia.rest.cap.common.represent.SuggestionRepresentation;
+import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 import com.coremedia.rest.cap.common.represent.SuggestionResultRepresentation;
 import com.coremedia.rest.cap.content.SearchParameterNames;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService.DEFAULT_CATALOG_ALIAS;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.WORKSPACE_ID_NONE;
 import static java.util.Collections.emptyList;
 
 /**
@@ -76,12 +77,12 @@ public class CatalogServiceResource {
     // should have picked it up so the `CommerceConnectionFilter`
     // provides a commerce connection based on the site ID.
 
-    StoreContext newStoreContextForSite = getStoreContext(workspaceId);
+    StoreContext newStoreContextForSite = getStoreContext();
     if (newStoreContextForSite == null) {
       return null;
     }
 
-    newStoreContextForSite.setWorkspaceId(workspaceId);
+    newStoreContextForSite.setWorkspaceId(workspaceId != null ? WorkspaceId.of(workspaceId) : WORKSPACE_ID_NONE);
 
     Map<String, String> params = getParams(category, catalogAlias, newStoreContextForSite, limit);
     SearchResult<? extends CommerceBean> searchResult = search(query, searchType, newStoreContextForSite, params);
@@ -89,7 +90,7 @@ public class CatalogServiceResource {
     return new CatalogSearchResultRepresentation(searchResult.getSearchResult(), searchResult.getTotalCount());
   }
 
-  @Nonnull
+  @NonNull
   private Map<String, String> getParams(String category, String catalogAlias, StoreContext storeContext, int limit) {
     Map<String, String> params = new HashMap<>();
 
@@ -108,7 +109,7 @@ public class CatalogServiceResource {
     return params;
   }
 
-  private boolean isRootCategory(@Nonnull String categoryParam, StoreContext storeContext) {
+  private boolean isRootCategory(@NonNull String categoryParam, StoreContext storeContext) {
     // check if it is our symbolic URL segment for the root category
     // (independent of the particular commerce system)
     if (CategoryResource.ROOT_CATEGORY_ROLE_ID.equals(categoryParam)) {
@@ -122,8 +123,8 @@ public class CatalogServiceResource {
   }
 
   private SearchResult<? extends CommerceBean> search(String query, String searchType,
-                                                      @Nonnull StoreContext newStoreContextForSite,
-                                                      @Nonnull Map<String, String> params) {
+                                                      @NonNull StoreContext newStoreContextForSite,
+                                                      @NonNull Map<String, String> params) {
     if (searchType != null && searchType.equals(SEARCH_TYPE_PRODUCT_VARIANT)) {
       return getCatalogService().searchProductVariants(query, params, newStoreContextForSite);
     } else if (searchType != null && searchType.equals(SEARCH_TYPE_MARKETING_SPOTS)) {
@@ -142,7 +143,7 @@ public class CatalogServiceResource {
 
   @GET
   @Path("suggestions")
-  @Nonnull
+  @NonNull
   public SuggestionResultRepresentation searchSuggestions(@QueryParam(SearchParameterNames.QUERY) String query,
                                                           @QueryParam(SearchParameterNames.LIMIT) @DefaultValue(DEFAULT_SUGGESTIONS_LIMIT) int limit,
                                                           @QueryParam(SEARCH_PARAM_SEARCH_TYPE) String searchType,
@@ -150,20 +151,13 @@ public class CatalogServiceResource {
                                                           @QueryParam(SEARCH_PARAM_CATEGORY) String category,
                                                           @QueryParam(SEARCH_PARAM_WORKSPACE_ID) String workspaceId) {
     //TODO not supported yet
-    return new SuggestionResultRepresentation(new ArrayList<SuggestionRepresentation>());
+    return new SuggestionResultRepresentation(new ArrayList<>());
   }
 
   @Nullable
-  protected StoreContext getStoreContext(String workspaceId) {
-    StoreContext storeContext = CurrentCommerceConnection.find()
+  protected StoreContext getStoreContext() {
+    return CurrentCommerceConnection.find()
             .map(CommerceConnection::getStoreContext)
             .orElse(null);
-
-    if (storeContext == null) {
-      return null;
-    }
-
-    storeContext.setWorkspaceId(workspaceId);
-    return storeContext;
   }
 }

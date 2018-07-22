@@ -13,22 +13,30 @@
   <artifactId>frontend</artifactId>
   <packaging>pom</packaging>
 
-  <!-- dependencies needed for code-completion in IDEs only -->
-  <dependencies>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>cae-extension-dependencies</artifactId>
-      <version>${project.version}</version>
-      <type>pom</type>
-      <scope>provided</scope>
-    </dependency>
-  </dependencies>
-
   <properties>
     <yarnCacheFolder/>
   </properties>
 
   <profiles>
+    <profile>
+      <id>code-completion</id>
+      <activation>
+        <property>
+          <name>!skipFrontendCodeCompletion</name>
+          <value>!true</value>
+        </property>
+      </activation>
+      <!-- dependencies needed for code-completion in IDEs only -->
+      <dependencies>
+        <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>cae-extension-dependencies</artifactId>
+          <version>${project.version}</version>
+          <type>pom</type>
+          <scope>provided</scope>
+        </dependency>
+      </dependencies>
+    </profile>
     <!-- use -DskipThemes to ignore frontend generation -->
     <profile>
       <id>development-themes</id>

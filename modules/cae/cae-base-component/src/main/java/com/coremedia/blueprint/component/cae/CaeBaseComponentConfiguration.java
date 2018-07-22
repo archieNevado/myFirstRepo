@@ -1,9 +1,11 @@
 package com.coremedia.blueprint.component.cae;
 
 import com.coremedia.blueprint.base.multisite.SiteResolver;
+import com.coremedia.blueprint.cae.filter.SecurityHeadersFilter;
 import com.coremedia.blueprint.cae.filter.SiteFilter;
 import com.coremedia.blueprint.cae.filter.UnknownMimetypeCharacterEncodingFilter;
 import com.coremedia.springframework.web.RegistrationBeanBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -59,6 +61,11 @@ public class CaeBaseComponentConfiguration {
             .urlPatterns("/servlet/*")
             .order(ORDER_SITE_FILTER)
             .build();
+  }
+
+  @Bean
+  public Filter securityHeadersFilter(@Value("${cae.is.preview:false}") boolean caeIsPreview) {
+    return new SecurityHeadersFilter(caeIsPreview);
   }
 
 }

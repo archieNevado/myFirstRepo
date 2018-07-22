@@ -11,7 +11,7 @@ import com.google.common.collect.ImmutableList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.inject.Inject;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -91,7 +91,7 @@ public class UserGenerator {
     }
   }
 
-  @Nonnull
+  @NonNull
   public synchronized CommunityUser getRandomUser() {
     CommunityUser user;
     if(users.size() == 0) {
@@ -175,7 +175,7 @@ public class UserGenerator {
     return blob == null ? null : blobService.put(getInputStream(blob), blob.getContentType(), blob.getFileName());
   }
 
-  @Nonnull
+  @NonNull
   public CommunityUser createAnonymousUser() {
     CommunityUser user = communityUserService.createAnonymousUser();
     user.save();

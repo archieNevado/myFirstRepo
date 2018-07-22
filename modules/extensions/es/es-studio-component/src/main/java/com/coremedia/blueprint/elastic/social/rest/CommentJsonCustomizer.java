@@ -14,6 +14,7 @@ import org.springframework.core.annotation.Order;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.List;
 import java.util.Map;
 
 import static com.coremedia.elastic.social.rest.api.JsonProperties.PREVIEW_URL;
@@ -24,6 +25,8 @@ import static java.text.MessageFormat.format;
 @Order(0)
 public class CommentJsonCustomizer implements JsonCustomizer<Comment> {
   private static final Logger LOG = LoggerFactory.getLogger(CommentJsonCustomizer.class);
+
+  private static final String CURATED_CONTENTS = "curatedContents";
 
   @Inject
   ContentRepositoryResource contentRepositoryResource;
@@ -41,6 +44,7 @@ public class CommentJsonCustomizer implements JsonCustomizer<Comment> {
       } else {
         LOG.debug("cannot customize target '{}'", target);
       }
+      addCuratedContents(comment, serializedObject);
     } catch (IllegalArgumentException e) {
       LOG.warn("An exception '{}' occurred resolving the target reference for the comment with id {}", e, comment.getId());
     } catch (UnresolvableReferenceException e) {
@@ -56,10 +60,18 @@ public class CommentJsonCustomizer implements JsonCustomizer<Comment> {
     serializedObject.put(PREVIEW_URL, url);
   }
 
-  private void addTitle(@PersonalData Map<String, Object> serializedObject, Content content) {
+  private static void addTitle(@PersonalData Map<String, Object> serializedObject, Content content) {
     String title = content.getString("title");
     if (StringUtils.isNotBlank(title)) {
       serializedObject.put(SUBJECT, title);
+    }
+  }
+
+  private static void addCuratedContents(Comment comment, @PersonalData Map<String, Object> serializedObject) {
+    @SuppressWarnings("PersonalData") // the list of created curated contents from a comment is not personal data
+    List<?> curatedContents = comment.getProperty(CuratedTransferResource.COMMENT_PROPERTY_CURATED_CONTENTS, List.class);
+    if (curatedContents != null && !curatedContents.isEmpty()) {
+      serializedObject.put(CURATED_CONTENTS, curatedContents);
     }
   }
 }

@@ -129,25 +129,19 @@
   -->
   <customize:append id="livecontextLinkTransformerCustomizer" bean="linkTransformers" order="100000000">
     <list>
+      <ref bean="fragmentParamsAppendingLinkTransformer"/>
       <ref bean="lcLinkTransformer"/>
     </list>
   </customize:append>
-  <bean id="lcLinkTransformerOrderChecker"
-        class="com.coremedia.livecontext.fragment.links.transformers.LiveContextLinkTransformerOrderChecker">
-    <property name="linkTransformers" ref="linkTransformers"/>
-    <property name="liveContextLinkTransformer" ref="lcLinkTransformer"/>
-  </bean>
+
+  <bean id="fragmentParamsAppendingLinkTransformer" class="com.coremedia.livecontext.fragment.links.transformers.FragmentParamsAppendingLinkTransformer"/>
 
   <bean id="lcLinkTransformer" class="com.coremedia.livecontext.fragment.links.transformers.LiveContextLinkTransformer">
     <property name="removeJSession" value="true"/>
-    <property name="sitesService" ref="sitesService" />
     <property name="liveContextLinkResolverList" ref="liveContextLinkResolvers"/>
     <property name="currentContextService" ref="currentContextService"/>
     <property name="settingsService" ref="settingsService"/>
   </bean>
-
-  <bean id="abstractLinkResolver" abstract="true"
-        class="com.coremedia.livecontext.fragment.links.transformers.resolvers.AbstractLiveContextLinkResolver"/>
 
   <bean id="legacyExternalSeoSegmentBuilder" class="com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.LegacyExternalSeoSegmentBuilder"/>
 
@@ -157,7 +151,7 @@
     <property name="cache" ref="cache"/>
   </bean>
 
-  <bean id="lcCMObjectLinkResolver" parent="abstractLinkResolver" class="com.coremedia.livecontext.fragment.links.transformers.resolvers.CMObjectLiveContextLinkResolver">
+  <bean id="lcCMObjectLinkResolver" class="com.coremedia.livecontext.fragment.links.transformers.resolvers.CMObjectLiveContextLinkResolver">
     <property name="commerceLedLinkBuilderHelper" ref="commerceLedLinkBuilderHelper"/>
     <!--Use legacyExternalSeoSegmentBuilder for the legacy format-->
     <property name="seoSegmentBuilder" ref="externalSeoSegmentBuilder" />

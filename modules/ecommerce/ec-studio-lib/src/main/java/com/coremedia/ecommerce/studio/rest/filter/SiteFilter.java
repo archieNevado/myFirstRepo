@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -50,15 +50,15 @@ public class SiteFilter implements Filter {
     chain.doFilter(request, response);
   }
 
-  @Nonnull
-  private Optional<Site> findSite(@Nonnull ServletRequest request) {
+  @NonNull
+  private Optional<Site> findSite(@NonNull ServletRequest request) {
     return findPathInfo(request)
             .flatMap(SiteFilter::extractSiteId)
             .flatMap(this::findSiteById);
   }
 
-  @Nonnull
-  private static Optional<String> findPathInfo(@Nonnull ServletRequest request) {
+  @NonNull
+  private static Optional<String> findPathInfo(@NonNull ServletRequest request) {
     if (!(request instanceof HttpServletRequest)) {
       return Optional.empty();
     }
@@ -73,9 +73,9 @@ public class SiteFilter implements Filter {
     return Optional.ofNullable(pathInfo);
   }
 
-  @Nonnull
+  @NonNull
   @VisibleForTesting
-  static Optional<String> extractSiteId(@Nonnull CharSequence pathInfo) {
+  static Optional<String> extractSiteId(@NonNull CharSequence pathInfo) {
     Matcher matcher = SITE_ID_URL_PATTERN.matcher(pathInfo);
 
     if (!matcher.matches()) {
@@ -91,8 +91,8 @@ public class SiteFilter implements Filter {
     return Optional.ofNullable(siteId);
   }
 
-  @Nonnull
-  private Optional<Site> findSiteById(@Nonnull String siteId) {
+  @NonNull
+  private Optional<Site> findSiteById(@NonNull String siteId) {
     Optional<Site> site = sitesService.findSite(siteId);
 
     if (!site.isPresent()) {

@@ -3,7 +3,7 @@ package com.coremedia.blueprint.analytics.elastic.tasks;
 import com.coremedia.blueprint.analytics.elastic.retrieval.AnalyticsServiceProvider;
 import com.coremedia.cap.content.Content;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Map;
@@ -23,7 +23,7 @@ public class FetchPageViewHistoryTask extends AbstractRootContentProcessingTask 
   }
 
   @Override
-  void processRootNavigation(@Nonnull Content rootNavigation, @Nonnull Map<String, Object> serviceSettings, @Nonnull AnalyticsServiceProvider analyticsServiceProvider) {
+  void processRootNavigation(@NonNull Content rootNavigation, @NonNull Map<String, Object> serviceSettings, @NonNull AnalyticsServiceProvider analyticsServiceProvider) {
     fetchPageViewHistoryRootContentProcessor.processRootContent(rootNavigation, serviceSettings, analyticsServiceProvider);
   }
 }

@@ -8,26 +8,27 @@ import com.coremedia.livecontext.ecommerce.common.InvalidIdException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.sfcc.common.SfccCommerceIdProvider;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
-public abstract class AbstractSfccDocumentCacheKey <T> extends AbstractCommerceCacheKey<T> {
+public abstract class AbstractSfccDocumentCacheKey<T> extends AbstractCommerceCacheKey<T> {
 
   protected final CommerceId commerceId;
 
-  AbstractSfccDocumentCacheKey(@Nonnull CommerceId id, @Nonnull StoreContext storeContext, String configKey,
+  AbstractSfccDocumentCacheKey(@NonNull CommerceId id, @NonNull StoreContext storeContext, String configKey,
                                CommerceCache commerceCache) {
     super(CommerceIdFormatterHelper.format(id), storeContext, configKey, commerceCache);
+
     if (!SfccCommerceIdProvider.isSfccId(id)) {
       throw new InvalidIdException(id + " is not a SFCC id.");
     }
+
     this.commerceId = id;
   }
 
-  @Nonnull
+  @NonNull
   protected String getExternalIdOrTechId() {
     return commerceId.getExternalId()
             .orElseGet(() -> commerceId.getTechId()
                     .orElseThrow(() -> new InvalidIdException("Neither external id nor external tech id is set: " + id + '.')));
   }
-
 }

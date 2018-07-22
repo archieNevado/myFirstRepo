@@ -7,8 +7,8 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.fragment.FragmentParameters;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 /**
  * External Content resolver for 'externalRef' values that contain numeric content ids for linkable and navigation.
@@ -22,7 +22,7 @@ public class ContentNumericIdWithChannelIdExternalReferenceResolver extends Exte
   // --- interface --------------------------------------------------
 
   @Override
-  protected boolean include(@Nonnull FragmentParameters fragmentParameters, @Nonnull String referenceInfo) {
+  protected boolean include(@NonNull FragmentParameters fragmentParameters, @NonNull String referenceInfo) {
     try {
       if (referenceInfo.contains("-")) {
         String[] numbers = referenceInfo.split("-");
@@ -42,9 +42,9 @@ public class ContentNumericIdWithChannelIdExternalReferenceResolver extends Exte
 
   @Nullable
   @Override
-  protected LinkableAndNavigation resolveExternalRef(@Nonnull FragmentParameters fragmentParameters,
-                                                     @Nonnull String referenceInfo,
-                                                     @Nonnull Site site) {
+  protected LinkableAndNavigation resolveExternalRef(@NonNull FragmentParameters fragmentParameters,
+                                                     @NonNull String referenceInfo,
+                                                     @NonNull Site site) {
     String[] numbers = referenceInfo.split("-");
     if (numbers.length == 2) {
       Content navigation = getContentById(fragmentParameters, numbers[0]);

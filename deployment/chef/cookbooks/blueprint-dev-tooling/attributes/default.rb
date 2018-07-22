@@ -7,7 +7,7 @@ default['blueprint']['dev']['content']['mode'] = 'default'
 #<> Extra arguments to be set on the serverimport call.
 default['blueprint']['dev']['content']['serverimport_extra_args'] = []
 #<> An array of builtin workflow names to be uploaded during content import.
-default['blueprint']['dev']['content']['workflow_definitions']['builtin'] = %w(studio-simple-publication.xml immediate-publication.xml studio-two-step-publication.xml three-step-publication.xml global-search-replace.xml /com/coremedia/translate/workflow/derive-site.xml)
+default['blueprint']['dev']['content']['workflow_definitions']['builtin'] = %w(studio-simple-publication.xml immediate-publication.xml studio-two-step-publication.xml three-step-publication.xml global-search-replace.xml /com/coremedia/translate/workflow/derive-site.xml /com/coremedia/translate/workflow/synchronization.xml)
 #<> An array of custom workflow definitions paths(absolute or classpath) to be uploaded during content import.
 default['blueprint']['dev']['content']['workflow_definitions']['custom'] = ['/opt/coremedia/workflow-server-tools/properties/corem/workflows/translation.xml']
 #<> The contentquery for the publishall content action.

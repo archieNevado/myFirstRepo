@@ -4,7 +4,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.elastic.social.rest.api.CategoryKeyAndDisplay;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.inject.Named;
 
 @Named
@@ -14,7 +14,7 @@ public class CMTaxonomyCategoryResolver implements CategoryResolver {
   public static final String CMTAXONOMY_DOCTYPE = "CMTaxonomy";
 
   @Override
-  public CategoryKeyAndDisplay resolve(@Nonnull Content content) {
+  public CategoryKeyAndDisplay resolve(@NonNull Content content) {
     if (handlesType(content.getType())) {
       String value = content.getString(CMTAXONOMY_VALUE);
       return new CategoryKeyAndDisplay(value, value);

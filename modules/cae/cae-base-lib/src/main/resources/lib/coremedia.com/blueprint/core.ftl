@@ -20,7 +20,7 @@
 
 <#-- SETTINGS -->
 <#function setting self key default=cm.UNDEFINED>
-  <#return blueprintFreemarkerFacade.setting(self, key, default)>
+  <#return blueprintFreemarkerFacade.setting(self, key, default, cmpage)>
 </#function>
 
 <#-- GENERATE UNIQUE ID -->
@@ -41,20 +41,6 @@
 <#-- GET FRAGMENTS FOR PREVIEW -->
 <#function previewTypes page self defaultFragmentViews=[]>
   <#return blueprintFreemarkerFacade.getPreviewViews(self, page, defaultFragmentViews)>
-</#function>
-
-<#-- BUILD VIDEO LINK -->
-<#function getVideoLink video>
-  <#assign videoLink=video.dataUrl!"" />
-  <#if !videoLink?has_content && video.data?has_content>
-    <#assign videoLink=cm.getLink(video.data)!"" />
-  </#if>
-  <#return videoLink />
-</#function>
-
-<#-- SUBSTITUTE BEAN -->
-<#function substitute id original>
-  <#return cmFacade.substitute(id, original)>
 </#function>
 
 <#-- STACK TRACE EXCEPTION -->
@@ -95,6 +81,19 @@
 
 <#-- --- DEPRECATED/UNUSED ----------------------------------------------------------------------------------------- -->
 
+<#-- DEPRECATED, see Frontend Developer Guide -->
+<#function getVideoLink video>
+  <#local videoLink=video.dataUrl!"" />
+  <#if !videoLink?has_content && video.data?has_content>
+    <#local videoLink=cm.getLink(video.data)!"" />
+  </#if>
+  <#return videoLink />
+</#function>
+
+<#-- DEPRECATED, use cm.substitute instead -->
+<#function substitute id original>
+  <#return cmFacade.substitute(id, original)>
+</#function>
 
 <#-- DEPRECATED, UNUSED -->
 <#function transformations self>

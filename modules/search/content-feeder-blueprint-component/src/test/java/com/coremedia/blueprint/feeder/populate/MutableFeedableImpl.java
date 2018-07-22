@@ -6,8 +6,8 @@ import com.coremedia.cap.feeder.FeedableElement;
 import com.coremedia.cap.feeder.MutableFeedable;
 import com.coremedia.xml.Markup;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
@@ -74,7 +74,7 @@ class MutableFeedableImpl implements MutableFeedable {
   }
 
   @Override
-  public void setUpdatedAspects(@Nonnull Iterable<? extends FeedableAspect> aspects) {
+  public void setUpdatedAspects(@NonNull Iterable<? extends FeedableAspect> aspects) {
   }
 
   @Override
@@ -82,7 +82,7 @@ class MutableFeedableImpl implements MutableFeedable {
   }
 
   @Override
-  public void setTriggers(@Nonnull Iterable<?> triggers) {
+  public void setTriggers(@NonNull Iterable<?> triggers) {
   }
 
   @Override
@@ -99,7 +99,7 @@ class MutableFeedableImpl implements MutableFeedable {
     return false;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public Set<FeedableAspect> getUpdatedAspects() {
     return Collections.emptySet();
@@ -125,7 +125,7 @@ class MutableFeedableImpl implements MutableFeedable {
     return Collections.emptySet();
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public Collection<Object> getTriggers() {
     return Collections.emptySet();

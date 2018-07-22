@@ -19,7 +19,6 @@
   <properties>
     <failOnWarning>true</failOnWarning>
     <coremedia.enforcer.fail>true</coremedia.enforcer.fail>
-    <enforcer.enforce-test>true</enforcer.enforce-test>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <compile.source.jdk>1.8</compile.source.jdk>
@@ -31,15 +30,14 @@
 
     <customer>Blueprint</customer>
 
-    <blueprint-base.version>1804.3</blueprint-base.version>
-    <cms.version>1804.3</cms.version>
-    <personalization.version>1804.3</personalization.version>
-    <elastic.version>1804.3</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
-    <studio.version>1804.3</studio.version>
-    <caetoolbox.version>1804.3</caetoolbox.version>
-    <livecontext.version>1804.3</livecontext.version>
-    <jangaroo.version>4.0.56</jangaroo.version>
-    <jangaroo.libs.version>4.0.39</jangaroo.libs.version>
+    <blueprint-base.version>1807.1</blueprint-base.version>
+    <cms.version>1807.1</cms.version>
+    <personalization.version>1807.1</personalization.version>
+    <elastic.version>1807.1</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
+    <studio.version>1807.1</studio.version>
+    <caetoolbox.version>1807.1</caetoolbox.version>
+    <livecontext.version>1807.1</livecontext.version>
+    <jangaroo.version>4.0.58</jangaroo.version>
 
     <atlassian.crowd.version>2.5.1</atlassian.crowd.version>
     <!--
@@ -96,8 +94,8 @@
     <theme-importer.argument.runner>com.coremedia.blueprint.themeimporter.client.ThemeImporterRunner</theme-importer.argument.runner>
     <jooProxyPathSpec>/rest/*</jooProxyPathSpec>
 
-    <junit.platform.version>1.1.0</junit.platform.version>
-    <junit.jupiter.version>5.1.0</junit.jupiter.version>
+    <junit.platform.version>1.2.0</junit.platform.version>
+    <junit.jupiter.version>5.2.0</junit.jupiter.version>
     <junit.vintage.version>${junit.jupiter.version}</junit.vintage.version>
 
     <skip-joo-unit-tests>${skipTests}</skip-joo-unit-tests>
@@ -234,10 +232,6 @@
     </profile>
   </profiles>
 
-  <prerequisites>
-    <maven>3.1</maven>
-  </prerequisites>
-
   <scm>
     <connection>scm:git:git@github.com:CoreMedia/cms.git</connection>
     <developerConnection>scm:git:git@github.com:CoreMedia/cms.git</developerConnection>
@@ -321,18 +315,6 @@
         <version>${livecontext.version}</version>
         <type>pom</type>
         <scope>import</scope>
-      </dependency>
-
-      <dependency>
-        <groupId>commons-httpclient</groupId>
-        <artifactId>commons-httpclient</artifactId>
-        <version>3.1</version>
-        <exclusions>
-          <exclusion>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-          </exclusion>
-        </exclusions>
       </dependency>
 
       <dependency>
@@ -505,7 +487,7 @@
           <version>1.6</version>
           <configuration>
             <nodeVersion>v8.9.4</nodeVersion><!-- LTS -->
-            <yarnVersion>v1.3.2</yarnVersion>
+            <yarnVersion>v1.6.0</yarnVersion>
           </configuration>
         </plugin>
         <plugin>
@@ -516,12 +498,12 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>
-          <version>1.4.1</version>
+          <version>3.0.0-M1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-failsafe-plugin</artifactId>
-          <version>2.19.1</version>
+          <version>2.22.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -592,7 +574,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.19.1</version>
+          <version>2.22.0</version>
           <configuration>
             <redirectTestOutputToFile>true</redirectTestOutputToFile>
             <systemPropertyVariables>
@@ -600,7 +582,6 @@
             </systemPropertyVariables>
             <skipTests>${skip-unit-tests}</skipTests>
           </configuration>
-          <!-- Workaround for SUREFIRE-1330; expected to be fixed in version 3.0.0+ -->
           <dependencies>
             <dependency>
               <groupId>org.junit.platform</groupId>
@@ -622,7 +603,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-report-plugin</artifactId>
-          <version>2.19.1</version>
+          <version>2.22.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -980,8 +961,11 @@
                     <!-- too old -->
                     <exclude>jmock:jmock</exclude>
                     <exclude>jmock:jmock-cglib</exclude>
-                    <!-- exclude, and include only with scope "provided" -->
+                    <!-- use com.github.spotbugs:spotbugs-annotations instead -->
                     <exclude>com.google.code.findbugs:jsr305</exclude>
+
+                    <!-- exclude, and include only with scope "provided" -->
+                    <exclude>com.github.spotbugs:spotbugs-annotations</exclude>
                     <exclude>javax.servlet:javax.servlet-api</exclude>
                     <!-- junit:junit vs. junit:junit-dep: Since JUnit 4.11 junit-dep just relocates to
                          junit and files a warning when used. Thus excluding it here. -->
@@ -1000,7 +984,7 @@
                       Do not even allow scope "test", since it overrides a transitive "provided".
                       S. http://www.sonatype.com/books/mvnref-book/reference/pom-relationships-sect-project-dependencies.html#pom-relationships-sect-transitive
                     -->
-                    <include>com.google.code.findbugs:jsr305:*:*:provided</include>
+                    <include>com.github.spotbugs:spotbugs-annotations:*:*:provided</include>
                     <include>javax.servlet:javax.servlet-api:*:*:provided</include>
                   </includes>
                 </bannedDependencies>
@@ -1058,7 +1042,19 @@
                   <searchTransitive>true</searchTransitive>
                 </bannedDependencies>
               </rules>
-              <fail>${enforcer.enforce-test}</fail>
+            </configuration>
+          </execution>
+          <execution>
+            <id>enforce-maven</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireMavenVersion>
+                  <version>3.3</version>
+                </requireMavenVersion>
+              </rules>
             </configuration>
           </execution>
         </executions>

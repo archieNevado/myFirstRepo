@@ -8,6 +8,7 @@ import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
+import com.coremedia.livecontext.ecommerce.p13n.SegmentService;
 import com.coremedia.livecontext.ecommerce.sfcc.asset.AssetUrlProviderImpl;
 import com.coremedia.livecontext.ecommerce.sfcc.beans.AbstractSfccCommerceBean;
 import com.coremedia.livecontext.ecommerce.sfcc.catalog.CatalogServiceImpl;
@@ -16,7 +17,9 @@ import com.coremedia.livecontext.ecommerce.sfcc.common.SfccCommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.sfcc.common.SfccStoreContextProvider;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.AbstractOCAPIConnector;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.CategoryProductAssignmentSearchResource;
+import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.CustomerGroupsResource;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.ProductSearchResource;
+import com.coremedia.livecontext.ecommerce.sfcc.p13n.SegmentServiceImpl;
 import com.coremedia.livecontext.ecommerce.sfcc.user.UserContextProviderImpl;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -27,7 +30,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Scope;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 @Configuration
 @ImportResource(reader = ResourceAwareXmlBeanDefinitionReader.class,
@@ -44,11 +47,11 @@ import javax.annotation.Nonnull;
 class LcEcommerce_SFCC_Configuration {
 
   @Bean
-  CatalogServiceImpl sfccCatalogService(@Nonnull com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.ProductsResource productsResource,
-                                        @Nonnull CategoryProductAssignmentSearchResource categoryProductAssignmentSearchResource,
-                                        @Nonnull ProductSearchResource productSearchResource,
-                                        @Nonnull CommerceCache commerceCache,
-                                        @Nonnull CommerceBeanFactory sfccCommerceBeanFactory) {
+  CatalogServiceImpl sfccCatalogService(@NonNull com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.ProductsResource productsResource,
+                                        @NonNull CategoryProductAssignmentSearchResource categoryProductAssignmentSearchResource,
+                                        @NonNull ProductSearchResource productSearchResource,
+                                        @NonNull CommerceCache commerceCache,
+                                        @NonNull CommerceBeanFactory sfccCommerceBeanFactory) {
     return new CatalogServiceImpl(productsResource, categoryProductAssignmentSearchResource, productSearchResource, commerceCache, sfccCommerceBeanFactory);
   }
 
@@ -68,9 +71,9 @@ class LcEcommerce_SFCC_Configuration {
   }
 
   @Bean
-  SfccStoreContextProvider sfccStoreContextProvider(@Nonnull SettingsService settingsService,
-                                                    @Nonnull SitesService sitesService,
-                                                    @Nonnull Cache cache) {
+  SfccStoreContextProvider sfccStoreContextProvider(@NonNull SettingsService settingsService,
+                                                    @NonNull SitesService sitesService,
+                                                    @NonNull Cache cache) {
     SfccStoreContextProvider storeContextProvider = new SfccStoreContextProvider();
     storeContextProvider.setSettingsService(settingsService);
     storeContextProvider.setSitesService(sitesService);
@@ -79,7 +82,14 @@ class LcEcommerce_SFCC_Configuration {
   }
 
   @Bean
-  CommerceBeanFactory sfccCommerceBeanFactory(@Nonnull StoreContextProvider sfccStoreContextProvider) {
+  SegmentServiceImpl sfccSegmentService(@NonNull CustomerGroupsResource customerGroupsResource,
+                                        @NonNull CommerceBeanFactory sfccCommerceBeanFactory,
+                                        @NonNull CommerceCache commerceCache) {
+    return new SegmentServiceImpl(customerGroupsResource, sfccCommerceBeanFactory, commerceCache);
+  }
+
+  @Bean
+  CommerceBeanFactory sfccCommerceBeanFactory(@NonNull StoreContextProvider sfccStoreContextProvider) {
     SpringCommerceBeanFactory springCommerceBeanFactory = new SpringCommerceBeanFactory();
     springCommerceBeanFactory.setStoreContextProvider(sfccStoreContextProvider);
     return springCommerceBeanFactory;
@@ -87,13 +97,14 @@ class LcEcommerce_SFCC_Configuration {
 
   @Bean("commerce:sfcc1")
   @Scope(ConfigurableListableBeanFactory.SCOPE_PROTOTYPE)
-  SfccCommerceConnection sfccCommerceConnection(@Nonnull AssetUrlProviderImpl sfccAssetUrlProvider,
-                                                @Nonnull SfccStoreContextProvider sfccStoreContextProvider,
-                                                @Nonnull UserContextProviderImpl sfccUserContextProvider,
-                                                @Nonnull CatalogService sfccCatalogService,
-                                                @Nonnull SfccCommerceIdProvider sfccCommerceIdProvider,
-                                                @Nonnull CommerceBeanFactory sfccCommerceBeanFactory,
-                                                @Nonnull SfccConfigurationProperties sfccConfigurationProperties) {
+  SfccCommerceConnection sfccCommerceConnection(@NonNull AssetUrlProviderImpl sfccAssetUrlProvider,
+                                                @NonNull SfccStoreContextProvider sfccStoreContextProvider,
+                                                @NonNull UserContextProviderImpl sfccUserContextProvider,
+                                                @NonNull CatalogService sfccCatalogService,
+                                                @NonNull SfccCommerceIdProvider sfccCommerceIdProvider,
+                                                @NonNull CommerceBeanFactory sfccCommerceBeanFactory,
+                                                @NonNull SegmentService sfccSegmentService,
+                                                @NonNull SfccConfigurationProperties sfccConfigurationProperties) {
     SfccCommerceConnection connection = new SfccCommerceConnection(sfccConfigurationProperties);
     connection.setAssetUrlProvider(sfccAssetUrlProvider);
     connection.setStoreContextProvider(sfccStoreContextProvider);
@@ -101,6 +112,7 @@ class LcEcommerce_SFCC_Configuration {
     connection.setCatalogService(sfccCatalogService);
     connection.setIdProvider(sfccCommerceIdProvider);
     connection.setCommerceBeanFactory(sfccCommerceBeanFactory);
+    connection.setSegmentService(sfccSegmentService);
     return connection;
   }
 

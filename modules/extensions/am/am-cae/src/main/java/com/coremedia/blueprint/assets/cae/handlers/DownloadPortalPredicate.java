@@ -7,7 +7,7 @@ import com.coremedia.blueprint.cae.view.HashBasedFragmentHandler;
 import com.coremedia.objectserver.view.RenderNode;
 import com.google.common.collect.Lists;
 
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 
 public class DownloadPortalPredicate implements DynamicIncludePredicate, DynamicIncludeProvider {

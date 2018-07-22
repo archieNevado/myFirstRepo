@@ -17,8 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -36,17 +36,17 @@ public class ContentAugmentedProductPageGridServiceImpl extends ContentBackedPag
   private ContentAugmentedPageGridServiceImpl augmentedCategoryPageGridService;
   private CommerceConnectionInitializer commerceConnectionInitializer;
 
-  @Nonnull
+  @NonNull
   @Override
-  public ContentBackedPageGrid getContentBackedPageGrid(@Nonnull Content content, @Nonnull String pageGridName) {
+  public ContentBackedPageGrid getContentBackedPageGrid(@NonNull Content content, @NonNull String pageGridName) {
     return super.getContentBackedPageGrid(content, pageGridName);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   protected Map<String, ContentBackedPageGridPlacement> getMergedPageGridPlacements(
-          @Nonnull Content content, @Nonnull String pageGridName,
-          @Nonnull Collection<? extends Content> layoutSections) {
+          @NonNull Content content, @NonNull String pageGridName,
+          @NonNull Collection<? extends Content> layoutSections) {
     if (content.getType().isSubtypeOf(ContentAugmentedPageGridServiceImpl.CM_EXTERNAL_CHANNEL)) {
       return augmentedCategoryPageGridService.getMergedHierarchicalPageGridPlacements(content, pageGridName,
               layoutSections);
@@ -77,7 +77,7 @@ public class ContentAugmentedProductPageGridServiceImpl extends ContentBackedPag
 
   @Nullable
   @Override
-  public Content getLayout(@Nonnull Content content, @Nonnull String pageGridName) {
+  public Content getLayout(@NonNull Content content, @NonNull String pageGridName) {
     Content style = styleSettingsDocument(content, pageGridName);
 
     if (style == null) {
@@ -89,7 +89,7 @@ public class ContentAugmentedProductPageGridServiceImpl extends ContentBackedPag
   }
 
   @Nullable
-  private Content getParentExternalChannelContent(@Nonnull Content content) {
+  private Content getParentExternalChannelContent(@NonNull Content content) {
     Site site = getSitesService().getContentSiteAspect(content).getSite();
     if (site == null) {
       LOG.warn("Content '{}' has no site, cannot determine parent content.", content.getPath());

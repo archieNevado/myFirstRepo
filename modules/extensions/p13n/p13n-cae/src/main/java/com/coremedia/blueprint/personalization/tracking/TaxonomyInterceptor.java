@@ -7,16 +7,17 @@ import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.scoring.ScoringContext;
-import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.InvalidPropertyException;
+import org.springframework.beans.PropertyAccessException;
+import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -93,8 +94,8 @@ public class TaxonomyInterceptor extends HandlerInterceptorAdapter {
   private List<String> extractTaxonomies(final Object self, String taxonomyPropertyName) {
     // extracts the list of taxonomies
     try {
-      if (self instanceof Page && ((Page)self).getContent() instanceof CMLinkable) { //todo ugly cast
-        final Object taxonomyProp = PropertyUtils.getNestedProperty(self, "content." + taxonomyPropertyName);
+      if (self instanceof Page && ((Page)self).getContent() instanceof CMLinkable) {
+        final Object taxonomyProp = PropertyAccessorFactory.forBeanPropertyAccess(self).getPropertyValue("content." + taxonomyPropertyName);
         if (taxonomyProp instanceof List) {
           @SuppressWarnings("unchecked") List<CMTaxonomy> taxonomies = (List<CMTaxonomy>) taxonomyProp;
           final List<String> result = new ArrayList<>(taxonomies.size());
@@ -107,13 +108,7 @@ public class TaxonomyInterceptor extends HandlerInterceptorAdapter {
         }
       }
       return Collections.emptyList();
-    } catch (final NoSuchMethodException ex) {
-      LOG.debug("could not access the bean property containing the taxonomies to be processed");
-      return Collections.emptyList();
-    } catch (final IllegalAccessException ex) {
-      LOG.debug("could not access the bean property containing the taxonomies to be processed");
-      return Collections.emptyList();
-    } catch (final InvocationTargetException ex) {
+    } catch (InvalidPropertyException | PropertyAccessException ex) {
       LOG.debug("could not access the bean property containing the taxonomies to be processed");
       return Collections.emptyList();
     }

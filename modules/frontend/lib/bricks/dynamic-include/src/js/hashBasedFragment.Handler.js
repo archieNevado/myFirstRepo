@@ -1,7 +1,8 @@
-import * as hashBasedFragment from "./hashBasedFragment";
-import * as logger from "@coremedia/js-logger";
 import $ from "jquery";
-import * as basic from "@coremedia/js-basic";
+import * as logger from "@coremedia/js-logger";
+
+import * as hashBasedFragment from "./hashBasedFragment";
+import { updateTargetWithAjaxResponse } from "./fragment";
 
 const $window = $(window);
 
@@ -109,7 +110,7 @@ export default class {
       params: requestParams,
     };
     const that = this;
-    basic.updateTargetWithAjaxResponse(
+    updateTargetWithAjaxResponse(
       $fragmentContainer,
       requestConfig,
       false,

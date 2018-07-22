@@ -29,8 +29,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriUtils;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -55,7 +55,7 @@ public abstract class AbstractOCAPIConnector implements OCAPIConnector {
   private final String basePath;
   private final RestTemplate restTemplate;
 
-  protected AbstractOCAPIConnector(@Nonnull SfccOcapiConfigurationProperties properties, @Nonnull String basePath, @Nullable String apiVersion) {
+  protected AbstractOCAPIConnector(@NonNull SfccOcapiConfigurationProperties properties, @NonNull String basePath, @Nullable String apiVersion) {
     this.protocol = properties.getProtocol();
     this.host = properties.getHost();
 
@@ -65,7 +65,8 @@ public abstract class AbstractOCAPIConnector implements OCAPIConnector {
     HttpClient client = HttpClientFactory.createHttpClient(true, false, HttpStatus.OK.value(),
             properties.getSocketTimeoutMs(),
             properties.getConnectionTimeoutMs(),
-            properties.getConnectionRequestTimeoutMs());
+            properties.getConnectionRequestTimeoutMs(),
+            properties.getNetworkAddressCacheTtlMs());
 
     HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(client);
     restTemplate = new RestTemplate(requestFactory);
@@ -73,23 +74,23 @@ public abstract class AbstractOCAPIConnector implements OCAPIConnector {
 
   // --- GET ---
 
-  @Nonnull
+  @NonNull
   @Override
-  public <T> Optional<T> getResource(@Nonnull String resourcePath, @Nonnull Class<T> responseType) {
+  public <T> Optional<T> getResource(@NonNull String resourcePath, @NonNull Class<T> responseType) {
     return getResource(resourcePath, emptyMap(), ImmutableListMultimap.of(), responseType);
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public <T> Optional<T> getResource(@Nonnull String resourcePath, @Nonnull Map<String, String> pathParams,
-                                     @Nonnull Class<T> responseType) {
+  public <T> Optional<T> getResource(@NonNull String resourcePath, @NonNull Map<String, String> pathParams,
+                                     @NonNull Class<T> responseType) {
     return getResource(resourcePath, pathParams, ImmutableListMultimap.of(), responseType);
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public <T> Optional<T> getResource(@Nonnull String resourcePath, @Nonnull Map<String, String> pathParams,
-                                     @Nonnull ListMultimap<String, String> queryParams, @Nonnull Class<T> responseType) {
+  public <T> Optional<T> getResource(@NonNull String resourcePath, @NonNull Map<String, String> pathParams,
+                                     @NonNull ListMultimap<String, String> queryParams, @NonNull Class<T> responseType) {
     requireNonEmptyResourcePath(resourcePath);
 
     String url = buildRequestUrl(resourcePath, pathParams, queryParams);
@@ -100,18 +101,18 @@ public abstract class AbstractOCAPIConnector implements OCAPIConnector {
 
   // --- POST ---
 
-  @Nonnull
+  @NonNull
   @Override
-  public <T> Optional<T> postResource(@Nonnull String resourcePath, @Nonnull Map<String, String> pathParams,
-                                      String requestBody, @Nonnull Class<T> responseType) {
+  public <T> Optional<T> postResource(@NonNull String resourcePath, @NonNull Map<String, String> pathParams,
+                                      String requestBody, @NonNull Class<T> responseType) {
     return postResource(resourcePath, pathParams, ImmutableListMultimap.of(), requestBody, responseType);
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public <T> Optional<T> postResource(@Nonnull String resourcePath, @Nonnull Map<String, String> pathParams,
-                                      @Nonnull ListMultimap<String, String> queryParams, String requestBody,
-                                      @Nonnull Class<T> responseType) {
+  public <T> Optional<T> postResource(@NonNull String resourcePath, @NonNull Map<String, String> pathParams,
+                                      @NonNull ListMultimap<String, String> queryParams, String requestBody,
+                                      @NonNull Class<T> responseType) {
     requireNonEmptyResourcePath(resourcePath);
 
     String url = buildRequestUrl(resourcePath, pathParams, queryParams);
@@ -120,14 +121,14 @@ public abstract class AbstractOCAPIConnector implements OCAPIConnector {
     return performRequest(HttpMethod.POST, url, requestEntity, responseType);
   }
 
-  private static void requireNonEmptyResourcePath(@Nonnull String resourcePath) {
+  private static void requireNonEmptyResourcePath(@NonNull String resourcePath) {
     checkArgument(StringUtils.isNotBlank(resourcePath), "Cannot request empty resource path.");
   }
 
-  @Nonnull
+  @NonNull
   @VisibleForTesting
-  String buildRequestUrl(@Nonnull String resourcePath, @Nonnull Map<String, String> pathParameters,
-                         @Nonnull ListMultimap<String, String> queryParams) {
+  String buildRequestUrl(@NonNull String resourcePath, @NonNull Map<String, String> pathParameters,
+                         @NonNull ListMultimap<String, String> queryParams) {
     UriComponentsBuilder uriBuilder = UriComponentsBuilder.newInstance()
             .scheme(protocol)
             .host(host)
@@ -151,8 +152,8 @@ public abstract class AbstractOCAPIConnector implements OCAPIConnector {
     return uriBuilder.buildAndExpand(mergedPathParams).toString();
   }
 
-  @Nonnull
-  private static Map<String, String> buildPathParams(@Nonnull Map<String, String> pathParameters) {
+  @NonNull
+  private static Map<String, String> buildPathParams(@NonNull Map<String, String> pathParameters) {
     Map<String, String> mergedPathParams = new HashMap<>();
     mergedPathParams.putAll(CurrentCommerceConnection.find()
             .map(CommerceConnection::getStoreContext)
@@ -169,8 +170,8 @@ public abstract class AbstractOCAPIConnector implements OCAPIConnector {
   /**
    * Builds a map containing all query parameters by concatenating the provided and default parameters.
    */
-  @Nonnull
-  private MultiValueMap<String, String> buildQueryParams(@Nonnull ListMultimap<String, String> queryParams) {
+  @NonNull
+  private MultiValueMap<String, String> buildQueryParams(@NonNull ListMultimap<String, String> queryParams) {
     ImmutableListMultimap.Builder<String, String> builder = ImmutableListMultimap.builder();
 
     builder.putAll(getDefaultQueryParams());
@@ -185,12 +186,12 @@ public abstract class AbstractOCAPIConnector implements OCAPIConnector {
     return toMultiValueMap(params);
   }
 
-  @Nonnull
-  private static String encodeParam(@Nonnull String param) {
+  @NonNull
+  private static String encodeParam(@NonNull String param) {
     return UriUtils.encode(param, StandardCharsets.UTF_8);
   }
 
-  private static <K, V> MultiValueMap<K, V> toMultiValueMap(@Nonnull ListMultimap<K, V> multimap) {
+  private static <K, V> MultiValueMap<K, V> toMultiValueMap(@NonNull ListMultimap<K, V> multimap) {
     MultiValueMap<K, V> multiValueMap = new LinkedMultiValueMap<>();
 
     multiValueMap.putAll(Multimaps.asMap(multimap));
@@ -198,19 +199,19 @@ public abstract class AbstractOCAPIConnector implements OCAPIConnector {
     return multiValueMap;
   }
 
-  @Nonnull
+  @NonNull
   private HttpEntity<String> buildRequestEntity() {
     return new HttpEntity<>(buildHttpHeaders());
   }
 
-  @Nonnull
+  @NonNull
   private HttpEntity<String> buildRequestEntity(String body) {
     return new HttpEntity<>(nullToEmpty(body), buildHttpHeaders());
   }
 
-  @Nonnull
-  private <T> Optional<T> performRequest(@Nonnull HttpMethod httpMethod, @Nonnull String url,
-                                         @Nonnull HttpEntity<String> requestEntity, @Nonnull Class<T> responseType) {
+  @NonNull
+  private <T> Optional<T> performRequest(@NonNull HttpMethod httpMethod, @NonNull String url,
+                                         @NonNull HttpEntity<String> requestEntity, @NonNull Class<T> responseType) {
     Stopwatch stopwatch = null;
     try {
       if (LOG.isInfoEnabled()) {
@@ -248,14 +249,14 @@ public abstract class AbstractOCAPIConnector implements OCAPIConnector {
     }
   }
 
-  @Nonnull
+  @NonNull
   protected HttpHeaders buildHttpHeaders() {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
     return headers;
   }
 
-  @Nonnull
+  @NonNull
   protected ListMultimap<String, String> getDefaultQueryParams() {
     return ImmutableListMultimap.of();
   }

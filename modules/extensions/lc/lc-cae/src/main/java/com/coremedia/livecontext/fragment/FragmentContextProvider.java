@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.fragment;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -9,6 +9,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.Optional;
 
 /**
@@ -17,6 +18,8 @@ import java.util.Optional;
  * </p>
  */
 public class FragmentContextProvider implements Filter {
+
+  public static final String FRAGMENT_CONTEXT_PARAMETER = "fragmentContext";
 
   protected static final String FRAGMENT_CONTEXT_ATTRIBUTE = "CM_FRAGMENT_CONTEXT";
 
@@ -32,11 +35,21 @@ public class FragmentContextProvider implements Filter {
     if (servletRequest instanceof HttpServletRequest) {
       HttpServletRequest request = (HttpServletRequest) servletRequest;
       String url = request.getRequestURL().toString();
-      fragmentContext.setFragmentRequest(url.contains("/params;"));
+      String requestParameter = request.getParameter(FRAGMENT_CONTEXT_PARAMETER);
+
+      boolean hasRequestParam = requestParameter != null;
+      boolean isFragmentRequest = hasRequestParam || url.contains("/params;");
+      fragmentContext.setFragmentRequest(isFragmentRequest);
 
       //apply the fragment parameters to the request since they are using other interceptors too.
-      if(fragmentContext.isFragmentRequest()) {
-        FragmentParameters params = FragmentParametersFactory.create(url);
+      if(isFragmentRequest) {
+        FragmentParameters params;
+        if (hasRequestParam) {
+          requestParameter = URLDecoder.decode(requestParameter, "UTF-8");
+          params = FragmentParametersFactory.create(requestParameter);
+        } else {
+          params = FragmentParametersFactory.create(url);
+        }
         fragmentContext.setParameters(params);
       }
     }
@@ -56,8 +69,8 @@ public class FragmentContextProvider implements Filter {
    * @return FragmentContext
    * @throws IllegalStateException if {@link #doFilter} was not called for the given request
    */
-  @Nonnull
-  public static FragmentContext getFragmentContext(@Nonnull ServletRequest request) {
+  @NonNull
+  public static FragmentContext getFragmentContext(@NonNull ServletRequest request) {
     return findFragmentContext(request).orElseThrow(
             () -> new IllegalStateException("FragmentContext not set. FragmentContextProvider#doFilter not invoked?"));
   }
@@ -69,8 +82,8 @@ public class FragmentContextProvider implements Filter {
    * @return Optional with FragmentContext, or empty Optional if no FragmentContext is available.
    * @see #getFragmentContext(ServletRequest)
    */
-  @Nonnull
-  public static Optional<FragmentContext> findFragmentContext(@Nonnull ServletRequest request) {
+  @NonNull
+  public static Optional<FragmentContext> findFragmentContext(@NonNull ServletRequest request) {
     Object attribute = request.getAttribute(FRAGMENT_CONTEXT_ATTRIBUTE);
     return attribute instanceof FragmentContext
             ? Optional.of((FragmentContext) attribute)

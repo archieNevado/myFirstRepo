@@ -3,15 +3,15 @@ package com.coremedia.livecontext.ecommerce.sfcc.user;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.livecontext.ecommerce.user.UserContextProvider;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 
 public class UserContextProviderImpl implements UserContextProvider {
 
   private UserContext userContext;
 
-  @Nonnull
+  @NonNull
   @Override
   public UserContext getCurrentContext() {
     return userContext;
@@ -22,9 +22,9 @@ public class UserContextProviderImpl implements UserContextProvider {
     this.userContext = userContext;
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public UserContext createContext(@Nonnull HttpServletRequest request) {
+  public UserContext createContext(@NonNull HttpServletRequest request) {
     return UserContext.builder().build();
   }
 

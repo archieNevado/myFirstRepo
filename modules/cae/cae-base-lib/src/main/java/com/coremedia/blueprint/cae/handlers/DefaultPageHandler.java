@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,11 +57,11 @@ public class DefaultPageHandler extends PageHandlerBase {
   /**
    * Handles URIs like /media/travel/europe/england/knowing-all-about-london-1234
    */
-  @Nonnull
+  @NonNull
   protected ModelAndView handleRequestInternal(@Nullable CMLinkable linkable,
                                                String segmentId,
                                                @Nullable List<String> navigationPath,
-                                               @Nonnull String vanity,
+                                               @NonNull String vanity,
                                                @Nullable String view,
                                                HttpServletRequest servletRequest) {
     if (navigationPath == null) {
@@ -98,7 +98,7 @@ public class DefaultPageHandler extends PageHandlerBase {
   /**
    * Handles a request for a vanity URL containing a root segment and two additional segment, e.g. /sports/football/results/recent
    */
-  @Nonnull
+  @NonNull
   protected ModelAndView handleRequestInternal(@Nullable List<String> navigationPath,
                                                @Nullable String view,
                                                HttpServletRequest servletRequest) {
@@ -154,9 +154,9 @@ public class DefaultPageHandler extends PageHandlerBase {
 
   @Nullable
   protected UriComponentsBuilder buildLinkForTaxonomyInternal(
-          @Nonnull CMTaxonomy taxonomy,
+          @NonNull CMTaxonomy taxonomy,
           @Nullable String viewName,
-          @Nonnull Map<String, Object> linkParameters) {
+          @NonNull Map<String, Object> linkParameters) {
     CMNavigation topicPageChannel = getContextHelper().contextFor(taxonomy);
     if (topicPageChannel == null) {
       LOG.error("Found no context for taxonomy " + taxonomy);
@@ -179,9 +179,9 @@ public class DefaultPageHandler extends PageHandlerBase {
 
   @Nullable
   protected UriComponentsBuilder buildLinkForLinkableInternal(
-          @Nonnull CMLinkable linkable,
+          @NonNull CMLinkable linkable,
           @Nullable String viewName,
-          @Nonnull Map<String, Object> linkParameters) {
+          @NonNull Map<String, Object> linkParameters) {
     Navigation context = getNavigation(linkable);
     if (context == null) {
       LOG.warn("Linkable {} has no navigation context, cannot build link.", linkable);
@@ -192,10 +192,10 @@ public class DefaultPageHandler extends PageHandlerBase {
 
   @Nullable
   private UriComponentsBuilder buildLink(
-          @Nonnull CMLinkable linkable,
-          @Nonnull Navigation navigationContext,
+          @NonNull CMLinkable linkable,
+          @NonNull Navigation navigationContext,
           @Nullable String viewName,
-          @Nonnull Map<String, Object> linkParameters) {
+          @NonNull Map<String, Object> linkParameters) {
     Content targetContent = linkable.getContent();
     Content navigationContent = ((CMNavigation) navigationContext).getContent();
     UriComponentsBuilder uriComponentsBuilder = getContentLinkBuilder().buildLinkForPage(targetContent, navigationContent);
@@ -240,7 +240,7 @@ public class DefaultPageHandler extends PageHandlerBase {
       return null;
     }
     Content defaultTopicPageChannel = topicPageContextFinder.findDefaultTopicpageChannelFor(taxonomy.getContent(), ((CMNavigation) siteContext).getContent());
-    return defaultTopicPageChannel == null ? null : defaultTopicPageChannel.getString(CMLinkable.SEGMENT);
+    return defaultTopicPageChannel == null ? null : urlPathFormattingHelper.getVanityName(defaultTopicPageChannel);
   }
 
   private UriComponentsBuilder buildUri(List<String> navigationPath, String viewName, Map<String, Object> linkParameters) {

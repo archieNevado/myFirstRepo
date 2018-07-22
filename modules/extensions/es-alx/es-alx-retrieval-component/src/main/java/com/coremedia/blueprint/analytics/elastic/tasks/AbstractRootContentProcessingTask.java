@@ -3,7 +3,7 @@ package com.coremedia.blueprint.analytics.elastic.tasks;
 import com.coremedia.blueprint.analytics.elastic.retrieval.AnalyticsServiceProvider;
 import com.coremedia.cap.content.Content;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -32,7 +32,7 @@ public abstract class AbstractRootContentProcessingTask implements Runnable {
    * @param serviceSettings the provider-specific settings (sub-map) of the rootNavigation's settings
    * @param analyticsServiceProvider the {@link AnalyticsServiceProvider} instance to fetch data for
    */
-  abstract void processRootNavigation(@Nonnull Content rootNavigation, @Nonnull Map<String, Object> serviceSettings, @Nonnull AnalyticsServiceProvider analyticsServiceProvider);
+  abstract void processRootNavigation(@NonNull Content rootNavigation, @NonNull Map<String, Object> serviceSettings, @NonNull AnalyticsServiceProvider analyticsServiceProvider);
 
   /**
    * When running, the task delegates to {@link RootContentProcessingTaskHelper#collectRootNavigationsForTask(AbstractRootContentProcessingTask)}

@@ -9,6 +9,8 @@
 <#-- @ftlvariable name="addRows" type="java.lang.Boolean" -->
 <#-- @ftlvariable name="showHeadline" type="java.lang.Boolean" -->
 
+<#import "../../freemarkerLibs/bootstrap.ftl" as bootstrap />
+
 <#assign viewItems=cm.localParameter("viewItems", "asTeaser") />
 <#assign items=self.flattenedItems![] />
 <#assign numberOfItems=items?size />
@@ -30,11 +32,11 @@
       <#list items as item>
         <#if addRows>
           <#-- add new row -->
-          <@bp.renderNewRow index=item_index itemsPerRow=itemsPerRow additionalClass="row-grid "/>
+          <@bootstrap.renderNewRow index=item_index itemsPerRow=itemsPerRow additionalClass="row-grid "/>
         </#if>
         <#assign offsetClassTablet=""/>
         <#if center>
-          <#assign offsetClassTablet=bp.getOffsetClass(item_index, numberOfItems, itemsPerRow, " col-sm-") />
+          <#assign offsetClassTablet=bootstrap.getOffsetClass(item_index, numberOfItems, itemsPerRow, " col-sm-") />
         </#if>
         <#assign columnClasses="${columnCssClass} col-xs-${12/itemsPerMobileRow} col-sm-${12/itemsPerRow}${offsetClassTablet}" />
           <div class="${columnClasses}">

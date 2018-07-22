@@ -10,7 +10,7 @@ import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.context.MapPropertyMaintainer;
 import com.coremedia.personalization.context.collector.AbstractContextSource;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
@@ -58,7 +58,7 @@ public class CommerceSegmentSource extends AbstractContextSource {
 
     String userSegments = storeContext.getUserSegments();
 
-    if (isNullOrEmpty(userSegments) && isEmpty(userContext)) {
+    if (isNullOrEmpty(userSegments) && isEmpty(userContext)) { // NOSONAR - Workaround for spotbugs/spotbugs#621, see CMS-12169
       return;
     }
 
@@ -87,7 +87,7 @@ public class CommerceSegmentSource extends AbstractContextSource {
     }
   }
 
-  private static boolean isEmpty(@Nonnull UserContext userContext) {
+  private static boolean isEmpty(@NonNull UserContext userContext) {
     return Stream.of(userContext.getUserId(), userContext.getUserName(), userContext.getCookieHeader())
             .allMatch(Objects::isNull);
   }

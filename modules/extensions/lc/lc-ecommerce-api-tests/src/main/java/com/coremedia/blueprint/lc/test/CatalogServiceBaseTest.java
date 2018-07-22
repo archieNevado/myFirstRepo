@@ -17,8 +17,8 @@ import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -546,9 +546,9 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
   }
 
   @SuppressWarnings("ConstantConditions")
-  @Nonnull
-  protected Category findAndAssertCategory(@Nonnull String name, @Nullable Category parent,
-                                           @Nonnull StoreContext storeContext) {
+  @NonNull
+  protected Category findAndAssertCategory(@NonNull String name, @Nullable Category parent,
+                                           @NonNull StoreContext storeContext) {
     List<Category> topCategories = parent == null
             ? testling.findTopCategories(DEFAULT_CATALOG_ALIAS, storeContext)
             : testling.findSubCategories(parent);

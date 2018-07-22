@@ -94,7 +94,7 @@
             </ui:RemoveItemsPlugin>
           </bpforms:plugins>
         </bpforms:TeaserDocumentForm>
-        <bpforms:PictureDocumentForm/>
+        <bpforms:MediaDocumentForm/>
         <bpforms:ViewTypeSelectorForm/>
         <bpforms:ValidityDocumentForm/>
       </editor:items>

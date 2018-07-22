@@ -95,6 +95,10 @@ public class CatalogTreeModel implements CompoundChildTreeModel {
     return computeIconCls(nodeId, undefined);
   }
 
+  public function getTextCls(nodeId:String):String {
+    return "";
+  }
+
   public function getChildren(nodeId:String):NodeChildren {
     if (!getStore()) {
       return undefined

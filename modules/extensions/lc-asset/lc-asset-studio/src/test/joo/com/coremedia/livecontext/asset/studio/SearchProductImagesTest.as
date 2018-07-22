@@ -8,6 +8,7 @@ import com.coremedia.cms.editor.sdk.collectionview.CollectionViewManagerInternal
 import com.coremedia.cms.editor.sdk.collectionview.CollectionViewModel;
 import com.coremedia.cms.editor.sdk.collectionview.tree.LibraryTree;
 import com.coremedia.cms.editor.sdk.desktop.ComponentBasedEntityWorkAreaTabType;
+import com.coremedia.cms.editor.sdk.desktop.sidepanel.SidePanelManagerImpl;
 import com.coremedia.cms.editor.sdk.desktop.sidepanel.SidePanelStudioPlugin;
 import com.coremedia.cms.editor.sdk.desktop.sidepanel.sidePanelManager;
 import com.coremedia.cms.editor.sdk.editorContext;
@@ -93,7 +94,7 @@ public class SearchProductImagesTest extends AbstractCatalogAssetTest {
     viewport = new SearchProductImagesTestView();
 
     var cvContainer:CollectionViewContainer = viewport.getComponent(CollectionViewContainer.ID) as CollectionViewContainer;
-    sidePanelManager['items$1'][CollectionViewContainer.ID] = cvContainer;
+    SidePanelManagerImpl(sidePanelManager).registerItem(cvContainer);
     testling = cvContainer.getComponent(CollectionView.COLLECTION_VIEW_ID) as CollectionView;
 
     new LivecontextCollectionViewActionsPlugin();

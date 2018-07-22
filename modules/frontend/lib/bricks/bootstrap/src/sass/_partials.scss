@@ -1,4 +1,6 @@
+// first, load 3rd party dependencies
 @import "partials/bootstrap-sass";
+// load internal dependencies
 @import "?smart-import-partials";
+// last, load partials of this brick
 @import "partials/carousel";
-@import "partials/page";

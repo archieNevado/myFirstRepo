@@ -14,8 +14,8 @@ import com.coremedia.objectserver.web.UserVariantHelper;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
@@ -32,7 +32,7 @@ public class ExternalPageFragmentHandler extends FragmentHandler {
 
   @Nullable
   @Override
-  ModelAndView createModelAndView(@Nonnull FragmentParameters params, @Nonnull HttpServletRequest request) {
+  ModelAndView createModelAndView(@NonNull FragmentParameters params, @NonNull HttpServletRequest request) {
     String pageId = params.getPageId();
 
     Site site = SiteHelper.getSiteFromRequest(request);
@@ -90,19 +90,16 @@ public class ExternalPageFragmentHandler extends FragmentHandler {
     }
   }
 
-  private boolean isNavigationManaged(Site site) {
+  private boolean isNavigationManaged(@NonNull Site site) {
     if (settingsService == null) {
       return false;
     }
 
-    // This won't return `null` as the default value (`false`) is non-`null`,
-    // so no `NullPointerException` should happen during unboxing.
-    //noinspection ConstantConditions
-    return settingsService.settingWithDefault(LIVECONTEXT_MANAGE_NAVIGATION, Boolean.class, false, site);
+    return settingsService.getSetting(LIVECONTEXT_MANAGE_NAVIGATION, Boolean.class, site).orElse(false);
   }
 
   @Override
-  public boolean include(@Nonnull FragmentParameters params) {
+  public boolean include(@NonNull FragmentParameters params) {
     boolean isNotCatalogPage = params.getPageId() != null &&
             isNullOrEmpty(params.getProductId()) &&
             isNullOrEmpty(params.getCategoryId());

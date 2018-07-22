@@ -9,7 +9,7 @@ import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.Site;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class AMUtils {
     // hide default constructor of utility classes
   }
 
-  public static Content getDownloadPortalRootDocument(@Nonnull SettingsService settingsService, @Nonnull Site site) {
+  public static Content getDownloadPortalRootDocument(@NonNull SettingsService settingsService, @NonNull Site site) {
     Content rootDocument = site.getSiteRootDocument();
     List<String> pathToRootPage = Arrays.asList(
             AMSettingKeys.ASSET_MANAGEMENT,
@@ -44,7 +44,7 @@ public class AMUtils {
    * @return a new Map with values as Strings
    * or an empty Map if no value could be cast to String
    */
-  public static Map<String, String> getPropertiesAsString(@Nonnull Map<String, Object> properties) {
+  public static Map<String, String> getPropertiesAsString(@NonNull Map<String, Object> properties) {
     Map<String, String> metadata = new LinkedHashMap<>();
     if (!properties.isEmpty()) {
       DateFormat formatter = new SimpleDateFormat(DATE_PATTERN);

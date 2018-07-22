@@ -12,7 +12,7 @@ import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.ProductsRes
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.List;
 
 public class ProductVariantsCacheKey extends AbstractSfccDocumentCacheKey<List<VariantDocument>> {
@@ -21,10 +21,9 @@ public class ProductVariantsCacheKey extends AbstractSfccDocumentCacheKey<List<V
 
   private ProductsResource resource;
 
-  public ProductVariantsCacheKey(CommerceId commerceId, @Nonnull StoreContext storeContext, ProductsResource resource,
+  public ProductVariantsCacheKey(CommerceId commerceId, @NonNull StoreContext storeContext, ProductsResource resource,
                                  CommerceCache commerceCache) {
     super(commerceId, storeContext, CONFIG_KEY_PRODUCT, commerceCache);
-
     this.resource = resource;
 
     if (!commerceId.getCommerceBeanType().equals(BaseCommerceBeanType.PRODUCT)
@@ -49,7 +48,13 @@ public class ProductVariantsCacheKey extends AbstractSfccDocumentCacheKey<List<V
 
   @Override
   protected String getCacheIdentifier() {
-    return id + ":" + configKey + "#variants:" + storeContext.getSiteId() + ":" +
-            storeContext.getStoreId() + ":" + storeContext.getLocale() + ":" + storeContext.getCurrency();
+    return assembleCacheIdentifier(
+            id,
+            configKey + "#variants",
+            storeContext.getSiteId(),
+            storeContext.getStoreId(),
+            storeContext.getLocale(),
+            storeContext.getCurrency()
+    );
   }
 }

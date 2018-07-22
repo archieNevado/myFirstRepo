@@ -4,6 +4,7 @@ import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGrid;
 import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGridPlacement;
 import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGridService;
 import com.coremedia.blueprint.base.pagegrid.PageGridConstants;
+import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
 import com.coremedia.blueprint.common.layout.HasPageGrid;
 import com.coremedia.blueprint.common.layout.PageGrid;
 import com.coremedia.blueprint.common.layout.PageGridPlacement;
@@ -12,6 +13,7 @@ import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.blueprint.viewtype.ViewtypeService;
 import com.coremedia.cap.common.IdHelper;
+import com.coremedia.cap.content.Content;
 import com.coremedia.objectserver.dataviews.AssumesIdentity;
 
 import java.util.ArrayList;
@@ -21,19 +23,23 @@ import java.util.List;
 public class PageGridImpl implements PageGrid, AssumesIdentity {
 
   private ValidationService<Linkable> validationService;
+  private ValidityPeriodValidator visibilityValidator;
   private ContentBackedPageGridService contentBackedPageGridService;
   private ViewtypeService viewtypeService;
   private HasPageGrid bean;
 
   // --- construction -----------------------------------------------
 
+  @SuppressWarnings("WeakerAccess")
   public PageGridImpl(HasPageGrid bean,
                       ContentBackedPageGridService contentBackedPageGridService,
                       ValidationService<Linkable> validationService,
+                      ValidityPeriodValidator visibilityValidator,
                       ViewtypeService viewtypeService) {
     this.bean = bean;
     this.contentBackedPageGridService = contentBackedPageGridService;
     this.validationService = validationService;
+    this.visibilityValidator = visibilityValidator;
     this.viewtypeService = viewtypeService;
   }
 
@@ -51,7 +57,7 @@ public class PageGridImpl implements PageGrid, AssumesIdentity {
     List<PageGridRow> result = new ArrayList<>();
     int numRows = getContentBackedPageGrid().getStyleGrid().getNumRows();
     for (int row = 0; row < numRows; ++row) {
-      result.add(new PageGridRowImpl(bean, row, contentBackedPageGridService, validationService, viewtypeService));
+      result.add(new PageGridRowImpl(bean, row, contentBackedPageGridService, validationService, visibilityValidator, viewtypeService));
     }
     return result;
   }
@@ -95,6 +101,13 @@ public class PageGridImpl implements PageGrid, AssumesIdentity {
   }
 
   @Override
+  public Content getLayout() {
+    Content content = bean.getContent();
+    String structPropertyName = contentBackedPageGridService.getStructPropertyName();
+    return contentBackedPageGridService.getLayout(content, structPropertyName);
+  }
+
+  @Override
   public String toString() {
     String id = bean !=null ? String.valueOf(IdHelper.parseContentId(bean.getContent().getId())) : "-";
     return "PageGridImpl{" + "navigation=" + id + '}';
@@ -132,6 +145,7 @@ public class PageGridImpl implements PageGrid, AssumesIdentity {
     validationService = other.validationService;
     contentBackedPageGridService = other.contentBackedPageGridService;
     viewtypeService = other.viewtypeService;
+    visibilityValidator = other.visibilityValidator;
     this.bean = other.bean;
   }
 

@@ -11,7 +11,7 @@ import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.TextQueryDo
 import com.google.common.collect.ImmutableMap;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -29,8 +29,8 @@ public class CategoryProductAssignmentSearchResource extends AbstractDataResourc
   private static final String CATEGORY_ID_PARAM = "categoryId";
   private static final String CATEGORY_PRODUCT_ASSIGNMENT_SEARCH_PATH = "/catalogs/{" + CATALOG_ID_PARAM + "}/categories/{" + CATEGORY_ID_PARAM + "}/category_product_assignment_search";
 
-  @Nonnull
-  public List<ProductDocument> getProductsByCategory(@Nonnull String categoryId, @Nonnull StoreContext storeContext) {
+  @NonNull
+  public List<ProductDocument> getProductsByCategory(@NonNull String categoryId, @NonNull StoreContext storeContext) {
     SearchRequestDocument searchRequest = new SearchRequestDocument();
     searchRequest.setExpand("product_base");
     searchRequest.setQuery(new TextQueryDocument("product_id", "*"));
@@ -55,8 +55,8 @@ public class CategoryProductAssignmentSearchResource extends AbstractDataResourc
             .orElseGet(Collections::emptyList);
   }
 
-  @Nonnull
-  private static List<ProductDocument> getProductsFromHits(@Nonnull List<CategoryProductAssignmentDocument> hits) {
+  @NonNull
+  private static List<ProductDocument> getProductsFromHits(@NonNull List<CategoryProductAssignmentDocument> hits) {
     return hits.stream()
             .map(CategoryProductAssignmentDocument::getProduct)
             .collect(toList());

@@ -14,7 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 @Configuration
 @ImportResource(reader = ResourceAwareXmlBeanDefinitionReader.class,
@@ -27,25 +27,25 @@ import javax.annotation.Nonnull;
 public class SfccCaeConfiguration {
 
   @Bean
-  PriceServiceImpl sfccPriceService(@Nonnull ProductsResource productsResource) {
+  PriceServiceImpl sfccPriceService(@NonNull ProductsResource productsResource) {
     return new PriceServiceImpl(productsResource);
   }
 
   @Bean
-  SfccLinkScheme sfccLinkScheme(@Nonnull SfccCommerceUrlProvider urlProvider,
-                                @Nonnull CommerceConnectionSupplier commerceConnectionSupplier,
-                                @Nonnull CommerceLedLinkBuilderHelper commerceLedPageExtension,
-                                @Nonnull SettingsService settingsService) {
+  SfccLinkScheme sfccLinkScheme(@NonNull SfccCommerceUrlProvider urlProvider,
+                                @NonNull CommerceConnectionSupplier commerceConnectionSupplier,
+                                @NonNull CommerceLedLinkBuilderHelper commerceLedPageExtension,
+                                @NonNull SettingsService settingsService) {
     return new SfccLinkScheme(urlProvider, commerceConnectionSupplier, commerceLedPageExtension, settingsService);
   }
 
   @Bean
-  SfccLinkResolver sfccLinkResolver(@Nonnull ExternalSeoSegmentBuilder seoSegmentBuilder) {
+  SfccLinkResolver sfccLinkResolver(@NonNull ExternalSeoSegmentBuilder seoSegmentBuilder) {
     return new SfccLinkResolver(seoSegmentBuilder);
   }
 
   @Bean
-  SfccCommerceUrlProvider sfccPageHandlerUrlProvider(@Nonnull @Value("${livecontext.sfcc.storefront.url:https://${livecontext.sfcc.host}/on/demandware.store}") String storefrontUrl) {
+  SfccCommerceUrlProvider sfccPageHandlerUrlProvider(@NonNull @Value("${livecontext.sfcc.storefront.url:https://${livecontext.sfcc.host}/on/demandware.store}") String storefrontUrl) {
     return new SfccCommerceUrlProvider(storefrontUrl);
   }
 }

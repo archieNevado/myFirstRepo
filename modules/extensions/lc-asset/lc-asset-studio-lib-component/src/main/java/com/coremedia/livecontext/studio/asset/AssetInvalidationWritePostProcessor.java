@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.inject.Inject;
 import java.util.Map;
 import java.util.Optional;
@@ -51,7 +51,7 @@ public class AssetInvalidationWritePostProcessor extends ContentWritePostprocess
     }
   }
 
-  private void invalidate(@Nonnull Content content) {
+  private void invalidate(@NonNull Content content) {
     Struct localSettings = (Struct) content.get(STRUCT_PROPERTY_NAME);
 
     Set<String> productReferences = newHashSet(CommerceReferenceHelper.getExternalReferences(localSettings));

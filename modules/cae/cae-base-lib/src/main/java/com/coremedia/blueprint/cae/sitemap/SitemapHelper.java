@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.servlet.ServletContext;
 import java.util.Map;
 
@@ -65,7 +65,7 @@ public class SitemapHelper implements ServletContextAware {
 
   // --- features ---------------------------------------------------
 
-  @Nonnull
+  @NonNull
   SitemapSetup selectConfiguration(Site site) {
     String configKey = settingsService.setting(SitemapHelper.SITEMAP_ORG_CONFIGURATION_KEY, String.class, site);
     if (configKey==null) {

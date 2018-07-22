@@ -30,5 +30,7 @@
   "renderTeaserText": false,
   "renderDimmer": false
   }/>
-  <@bp.notification type="error" text="This is a shoppable video without timeline entries." />
+  <#if preview.isPreviewCae()>
+    <p>This is a shoppable video without timeline entries.</p>
+  </#if>
 </#if>

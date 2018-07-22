@@ -23,8 +23,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +53,7 @@ public class BlobUploadXmpDataInterceptor extends ContentWriteInterceptorBase {
   }
 
   @Override
-  public void intercept(@Nonnull ContentWriteRequest request) {
+  public void intercept(@NonNull ContentWriteRequest request) {
     Map<String, Object> properties = request.getProperties();
 
     if (!properties.containsKey(blobProperty)) {
@@ -64,7 +64,7 @@ public class BlobUploadXmpDataInterceptor extends ContentWriteInterceptorBase {
     updateCMPicture(request, properties);
   }
 
-  private void updateCMPicture(@Nonnull ContentWriteRequest request, @Nonnull Map<String, Object> properties) {
+  private void updateCMPicture(@NonNull ContentWriteRequest request, @NonNull Map<String, Object> properties) {
     Object value = properties.get(blobProperty);
     if (value instanceof Blob) {
       Blob blob = (Blob) value;
@@ -108,8 +108,8 @@ public class BlobUploadXmpDataInterceptor extends ContentWriteInterceptorBase {
     }
   }
 
-  @Nonnull
-  private Optional<CommerceConnection> findCommerceConnection(@Nonnull ContentWriteRequest request) {
+  @NonNull
+  private Optional<CommerceConnection> findCommerceConnection(@NonNull ContentWriteRequest request) {
     Content content = request.getEntity();
 
     if (content == null) {
@@ -122,9 +122,9 @@ public class BlobUploadXmpDataInterceptor extends ContentWriteInterceptorBase {
     return commerceConnectionSupplier.findConnectionForContent(content);
   }
 
-  @Nonnull
-  private List<String> getProductIds(@Nonnull CommerceConnection commerceConnection,
-                                     @Nonnull ContentWriteRequest request, @Nonnull Blob blob) {
+  @NonNull
+  private List<String> getProductIds(@NonNull CommerceConnection commerceConnection,
+                                     @NonNull ContentWriteRequest request, @NonNull Blob blob) {
 
     List<String> productIds = new ArrayList<>();
 
@@ -141,8 +141,8 @@ public class BlobUploadXmpDataInterceptor extends ContentWriteInterceptorBase {
     return productIds;
   }
 
-  @Nonnull
-  private static Iterable<String> getXmpIds(@Nonnull ContentWriteRequest request, @Nonnull Blob blob) {
+  @NonNull
+  private static Iterable<String> getXmpIds(@NonNull ContentWriteRequest request, @NonNull Blob blob) {
     Object assetProductIds = request.getAttribute(ASSET_PRODUCT_IDS_ATTRIBUTE_NAME);
 
     if (assetProductIds != null) {
@@ -154,7 +154,7 @@ public class BlobUploadXmpDataInterceptor extends ContentWriteInterceptorBase {
 
   @Nullable
   @VisibleForTesting
-  Product retrieveProductOrVariant(String externalId, @Nonnull CommerceConnection commerceConnection) {
+  Product retrieveProductOrVariant(String externalId, @NonNull CommerceConnection commerceConnection) {
     CommerceIdProvider idProvider = commerceConnection.getIdProvider();
     CatalogService catalogService = commerceConnection.getCatalogService();
     StoreContext storeContext = commerceConnection.getStoreContext();

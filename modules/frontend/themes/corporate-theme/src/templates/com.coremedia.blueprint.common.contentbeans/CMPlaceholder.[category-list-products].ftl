@@ -2,6 +2,8 @@
 <#-- @ftlvariable name="cmpage.content" type="com.coremedia.blueprint.ecommerce.contentbeans.CMCategory" -->
 <#-- @ftlvariable name="product" type="com.coremedia.blueprint.ecommerce.contentbeans.CMProduct" -->
 
+<#import "*/node_modules/@coremedia/brick-bootstrap/src/freemarkerLibs/bootstrap.ftl" as bootstrap />
+
 <#assign products=cmpage.content.products![]/>
 <#assign numberOfItems=products?size />
 <#assign itemsPerRow=4 />
@@ -14,7 +16,7 @@
   <div class="row">
     <#list products as item>
       <#-- add new row -->
-      <@bp.renderNewRow item_index itemsPerRow />
+      <@bootstrap.renderNewRow item_index itemsPerRow />
       <#-- render the items as claim teaser -->
       <div class="col-xs-6 col-sm-3">
         <@cm.include self=item view="asSquarelist" />

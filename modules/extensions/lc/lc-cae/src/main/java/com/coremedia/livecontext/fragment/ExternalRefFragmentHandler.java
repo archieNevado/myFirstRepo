@@ -26,8 +26,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -49,9 +49,9 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
     return !Strings.isNullOrEmpty(params.getExternalRef());
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public ModelAndView createModelAndView(@Nonnull FragmentParameters parameters, @Nonnull HttpServletRequest request) {
+  public ModelAndView createModelAndView(@NonNull FragmentParameters parameters, @NonNull HttpServletRequest request) {
     String externalRef = parameters.getExternalRef();
 
     ExternalReferenceResolver resolver = findReferenceResolver(parameters);
@@ -121,7 +121,7 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
    * reflect work in progress.
    */
   @Nullable
-  protected ModelAndView doCreateModelAndView(@Nonnull FragmentParameters parameters, Content navigation,
+  protected ModelAndView doCreateModelAndView(@NonNull FragmentParameters parameters, Content navigation,
                                               Content linkable, @Nullable User developer) {
     String placement = parameters.getPlacement();
     String view = parameters.getView();
@@ -152,8 +152,8 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
   // --- internal ---------------------------------------------------
 
   @VisibleForTesting
-  @Nonnull
-  protected ModelAndView createModelAndViewForLinkable(@Nonnull Content channel, @Nonnull Content child, String view,
+  @NonNull
+  protected ModelAndView createModelAndViewForLinkable(@NonNull Content channel, @NonNull Content child, String view,
                                                        @Nullable User developer) {
     // The default view is used only for placement requests, that do not request a certain view. For
     // any other requests, the default view is null (as usual).
@@ -182,7 +182,7 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
     return modelAndView;
   }
 
-  @Nonnull
+  @NonNull
   private ModelAndView createModelAndViewForPage(Content navigation, Content linkable, String view,
                                                  @Nullable User developer) {
     ContentBeanFactory contentBeanFactory = getContentBeanFactory();
@@ -198,7 +198,7 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
     return createModelAndView(page, view);
   }
 
-  @Nonnull
+  @NonNull
   private ModelAndView createModelAndViewForPlacement(Content navigation, String view, String placement,
                                                       @Nullable User developer) {
     CMChannel channelBean = getContentBeanFactory().createBeanFor(navigation, CMChannel.class);

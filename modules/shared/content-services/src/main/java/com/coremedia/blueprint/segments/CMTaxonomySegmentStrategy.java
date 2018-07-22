@@ -3,7 +3,7 @@ package com.coremedia.blueprint.segments;
 import com.coremedia.blueprint.base.links.ContentSegmentStrategy;
 import com.coremedia.cap.content.Content;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 /**
  * ContentSegmentStrategy for CMTaxonomy
@@ -15,8 +15,8 @@ public class CMTaxonomySegmentStrategy implements ContentSegmentStrategy {
    * Returns the taxonomy's value.
    */
   @Override
-  @Nonnull
-  public String segment(@Nonnull Content content) {
+  @NonNull
+  public String segment(@NonNull Content content) {
     return content.getString(VALUE);
   }
 }

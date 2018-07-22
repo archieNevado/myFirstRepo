@@ -70,4 +70,11 @@
       max-width: 25%; // make sure there is space for headline
     }
   }
+
+  // Don't optimize styling rule, the intention is to hide the shop-now functionality as long as it is within the
+  // teaser. As soon as it is moved away (DOM-wise) the selector should no longer match. That's why it needs both
+  // the context to the .#{$cm-hero-prefix} and an additional descendend selector for the shop-now element
+  .#{$cm-hero-prefix}__shop-now {
+    display: none;
+  }
 }

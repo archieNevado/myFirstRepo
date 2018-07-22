@@ -10,8 +10,8 @@ import com.coremedia.objectserver.view.RenderNode;
 import com.coremedia.objectserver.view.events.ViewHookEvent;
 import com.coremedia.objectserver.view.events.ViewHookEventListener;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import java.util.Collections;
 import java.util.List;
@@ -65,7 +65,7 @@ public abstract class AbstractESViewHookEventListener implements ViewHookEventLi
    * @return a list of concrete document types or <code>null</code> if all types defined by this listener are supported.
    */
   @Nullable
-  protected List<String> getWhitelistTypes(@Nonnull ElasticSocialConfiguration elasticSocialConfiguration) {
+  protected List<String> getWhitelistTypes(@NonNull ElasticSocialConfiguration elasticSocialConfiguration) {
     return null;
   }
 
@@ -73,7 +73,7 @@ public abstract class AbstractESViewHookEventListener implements ViewHookEventLi
    * Returns a list of supported ViewHookEvent identifiers.
    * @return a list of supported ViewHookEvent identifiers.
    */
-  @Nonnull
+  @NonNull
   protected List<String> getSupportedViewHookEventIds() {
     return Collections.singletonList(VIEW_HOOK_END);
   }
@@ -83,7 +83,7 @@ public abstract class AbstractESViewHookEventListener implements ViewHookEventLi
    * @param elasticSocialConfiguration the configuration bean of ES
    * @return <code>true</code> if this view hook is enabled otherwise <code>false</code>
    */
-  protected abstract boolean isEnabled(@Nonnull ElasticSocialConfiguration elasticSocialConfiguration);
+  protected abstract boolean isEnabled(@NonNull ElasticSocialConfiguration elasticSocialConfiguration);
 
   /**
    * Returns the contribution that belongs to the view hook's target content.
@@ -91,7 +91,7 @@ public abstract class AbstractESViewHookEventListener implements ViewHookEventLi
    * @return the contribution or <code>null</code> to skip ˝this view hook
    */
   @Nullable
-  protected abstract ContributionResult getContribution(@Nonnull Object target);
+  protected abstract ContributionResult getContribution(@NonNull Object target);
 
   /**
    * Returns the view name that the contribution result will be rendered with. The default value is <code>null</code>.

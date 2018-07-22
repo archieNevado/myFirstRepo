@@ -95,7 +95,7 @@ class SfccLinkResolverResolveUrlTest {
                     "<!--VTL $include.url('Product-Show','pid','external-product-id-2') VTL-->"
             ),
             Arguments.of(
-                    null,
+                    "",
                     productTeaserWithoutProduct,
                     null
             ),
@@ -130,21 +130,21 @@ class SfccLinkResolverResolveUrlTest {
                     "<!--VTL $include.url('Search-Show','cgid','external-category-id-2','foo','bar','bla','blub') VTL-->"
             ),
             Arguments.of(
-                    null,
+                    "",
                     // Navigation is `null` for now, but test case should
                     // be extended by using an actual navigation object.
                     cmNavigation,
                     "<!--VTL $include.url('CM-Content','pageid','') VTL-->"
             ),
             Arguments.of(
-                    null,
+                    "",
                     // Navigation is `null` for now, but test case should
                     // be extended by using an actual navigation object.
                     cmLinkable,
                     "<!--VTL $include.url('CM-Content','pageid','') VTL-->"
             ),
             Arguments.of(
-                    null,
+                    "",
                     new Object(), // unrecognized object
                     null
             )
@@ -156,7 +156,7 @@ class SfccLinkResolverResolveUrlTest {
     Product product = buildProduct("external-product-id");
     HttpServletRequest request = buildRequest(true, false, false);
 
-    String actual = sfccLinkResolver.resolveUrl(null, product, variant, navigation, request);
+    String actual = sfccLinkResolver.resolveUrl("", product, variant, navigation, request);
 
     assertThat(actual)
             .isEqualTo("<!--VTL $include.url('Product-Show','pid','external-product-id','preview','true') VTL-->");

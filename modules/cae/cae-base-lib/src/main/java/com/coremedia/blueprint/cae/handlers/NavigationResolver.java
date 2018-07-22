@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.cae.handlers;
 
+import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
 import com.coremedia.blueprint.cae.constants.RequestAttributeConstants;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
@@ -17,7 +18,9 @@ import java.util.List;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 public class NavigationResolver {
+
   private NavigationSegmentsUriHelper navigationSegmentsUriHelper;
+  private UrlPathFormattingHelper urlPathFormattingHelper;
   private ContextHelper contextHelper;
   private TopicpageContextFinder topicPageContextFinder;
 
@@ -39,6 +42,10 @@ public class NavigationResolver {
     this.topicPageContextFinder = topicPageContextFinder;
   }
 
+  @Required
+  public void setUrlPathFormattingHelper(UrlPathFormattingHelper urlPathFormattingHelper) {
+    this.urlPathFormattingHelper = urlPathFormattingHelper;
+  }
 
   // --- features ---------------------------------------------------
 
@@ -102,7 +109,8 @@ public class NavigationResolver {
       return null;
     }
     Content defaultTopicPageChannel = topicPageContextFinder.findDefaultTopicpageChannelFor(taxonomy.getContent(), ((CMNavigation) siteContext).getContent());
-    return defaultTopicPageChannel == null ? null : defaultTopicPageChannel.getString(CMLinkable.SEGMENT);
+    return defaultTopicPageChannel == null ? null : urlPathFormattingHelper.getVanityName(defaultTopicPageChannel);
   }
+
 
 }

@@ -10,7 +10,7 @@ import com.google.common.collect.ListMultimap;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 /**
  * Connector for Salesforce Commerce Cloud Open Commerce Shop API.
@@ -23,7 +23,7 @@ public class OCShopApiConnector extends AbstractOCAPIConnector {
 
   private String clientId;
 
-  OCShopApiConnector(@Nonnull SfccOcapiConfigurationProperties properties) {
+  OCShopApiConnector(@NonNull SfccOcapiConfigurationProperties properties) {
     super(properties, properties.getShopBasePath(), properties.getVersion());
   }
 
@@ -42,7 +42,7 @@ public class OCShopApiConnector extends AbstractOCAPIConnector {
     this.clientId = clientId;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   protected ListMultimap<String, String> getDefaultQueryParams() {
     return ImmutableListMultimap.of(CLIENT_ID_PARAM, getClientId());

@@ -1,9 +1,9 @@
 <@cm.responseHeader name="Content-Type" value="text/html; charset=UTF-8"/>
 <#-- @ftlvariable name="self" type="java.lang.Object" -->
-<#assign sliderMetadata=(cmpage?has_content)?then(bp.setting(cmpage, "sliderMetaData", ""), '')/>
+<#assign sliderMetadata=(cmpage?has_content)?then(bp.setting(self, "sliderMetaData", ""), '')/>
 
 <!DOCTYPE html>
-<html class="no-js" lang="${bp.getPageLanguageTag(cmpage!self)}" dir="${bp.getPageDirection(cmpage!self)!'ltr'}">
+<html lang="${bp.getPageLanguageTag(cmpage!self)}" dir="${bp.getPageDirection(cmpage!self)!'ltr'}">
 
 <#if cmpage?has_content>
   <@cm.include self=cmpage view="_head"/>

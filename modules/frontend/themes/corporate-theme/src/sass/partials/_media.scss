@@ -1,0 +1,51 @@
+.#{$cm-media-prefix} {
+  /* alternative image */
+  &--missing {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url("../../img/logo.svg");
+  }
+
+  // alternative background color without logo image
+  &--blank {
+    background-color: $brand-primary;
+    background-size: 50%;
+  }
+}
+
+/* images in richtext */
+.cm-richtext-embedded {
+  &--image {
+    position: relative;
+    width: 100%;
+    margin: ($line-height-computed / 2) 0;
+
+    @include breakpoint(sm-and-up) {
+
+      /* centered */
+      &.float--none {
+        width: 50%;
+        margin: ($line-height-computed / 2) auto;
+      }
+
+      &.float--left {
+        width: 50%;
+        margin-right: ($line-height-computed / 2);
+      }
+
+      &.float--right {
+        width: 50%;
+        margin-left: ($line-height-computed / 2);
+      }
+    }
+  }
+
+  // set default aspect ratio box to 16:9 for all richtext images
+  &__picture-box {
+    @include aspect-ratio-box(16, 9);
+  }
+
+  &__picture {
+    @include stretch-absolute();
+  }
+}

@@ -89,6 +89,30 @@
         <collab:DefaultStartTranslationWorkflowPanel/>
       </collab:startPanel>
     </collab:AddTranslationWorkflowPlugin>
+    <collab:AddTranslationWorkflowPlugin processDefinitionName="Synchronization"
+                                         listToolbarButtons="{WorkflowUtils.getTranslationToolbarButtons()}">
+      <collab:inboxPanel>
+        <collab:DefaultTranslationWorkflowDetailForm>
+          <collab:workflowStateTransitions>
+            <collab:WorkflowStateTransition task="Synchronize"
+                                            nextSteps="{['finishSynchronization']}"
+                                            defaultStep="finishSynchronization"/>
+          </collab:workflowStateTransitions>
+        </collab:DefaultTranslationWorkflowDetailForm>
+      </collab:inboxPanel>
+
+      <collab:pendingPanel>
+        <collab:DefaultTranslationWorkflowInfoForm showTranslationStatus="true"/>
+      </collab:pendingPanel>
+
+      <collab:finishedPanel>
+        <collab:DefaultTranslationWorkflowInfoForm/>
+      </collab:finishedPanel>
+
+      <collab:startPanel>
+        <collab:DefaultStartSynchronizationWorkflowPanel/>
+      </collab:startPanel>
+    </collab:AddTranslationWorkflowPlugin>
 
     <editor:CopyResourceBundleProperties
             destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.ProcessDefinitions')}"

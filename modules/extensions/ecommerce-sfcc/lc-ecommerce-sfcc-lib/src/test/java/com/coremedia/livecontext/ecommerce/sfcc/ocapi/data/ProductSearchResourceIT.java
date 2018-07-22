@@ -7,7 +7,7 @@ import com.google.common.collect.ImmutableSet;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -57,8 +57,8 @@ public class ProductSearchResourceIT extends DataApiResourceTestBase {
     assertThat(countHitsMens + countHitsWomens).isEqualTo(countHitsCombined);
   }
 
-  private int getSearchProductsCount(@Nonnull String query, @Nonnull Map<String, String> params,
-                                     @Nonnull Set<String> categoryIds) {
+  private int getSearchProductsCount(@NonNull String query, @NonNull Map<String, String> params,
+                                     @NonNull Set<String> categoryIds) {
     Optional<ProductSearchResultDocument> resultDocument = resource
             .searchProducts(query, params, categoryIds, getCurrentStoreContext());
     assertThat(resultDocument).isPresent();

@@ -13,7 +13,7 @@
   <#if (self.sequence![])?size gt 2>
     <div class="cm-teaser cm-teaser--spinner cm-spinner">
       <a href="#${spinnerId}" title="${self.title!""}">
-        <@cm.include self=self view="_spinner" params={"id": spinnerId, "imagesCssClass": "cm-product-assets", "spinnerCssClass": "cm-spinner__images cm-product-assets__picture-box", "limitAspectRatios": limitAspectRatios}/>
+        <@cm.include self=self view="_spinner" params={"id": spinnerId, "imagesCssClass": "cm-product-assets", "limitAspectRatios": limitAspectRatios}/>
       </a>
     </div>
   </#if>

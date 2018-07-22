@@ -16,8 +16,8 @@ import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Collections;
@@ -69,9 +69,9 @@ public class FetchReportsTask extends AbstractRootContentProcessingTask {
   }
 
   @Override
-  void processRootNavigation(@Nonnull Content rootNavigation,
-                             @Nonnull Map<String, Object> serviceSettings,
-                             @Nonnull AnalyticsServiceProvider analyticsServiceProvider) {
+  void processRootNavigation(@NonNull Content rootNavigation,
+                             @NonNull Map<String, Object> serviceSettings,
+                             @NonNull AnalyticsServiceProvider analyticsServiceProvider) {
 
     final String currentTenant = tenantService.getCurrent();
     final List<Content> cmalxBaseLists = cmalxBaseListService.getCMALXBaseLists(rootNavigation, currentTenant);
@@ -138,7 +138,7 @@ public class FetchReportsTask extends AbstractRootContentProcessingTask {
     return true;
   }
 
-  private static boolean settingsHaveChanged(@Nonnull Map<String, Object> effectiveSettings, ReportModel reportModel) {
+  private static boolean settingsHaveChanged(@NonNull Map<String, Object> effectiveSettings, ReportModel reportModel) {
     return !effectiveSettings.equals(reportModel.getSettings());
   }
 

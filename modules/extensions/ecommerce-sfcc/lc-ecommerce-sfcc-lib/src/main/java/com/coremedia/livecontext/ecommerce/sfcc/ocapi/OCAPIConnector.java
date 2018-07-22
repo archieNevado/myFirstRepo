@@ -2,7 +2,7 @@ package com.coremedia.livecontext.ecommerce.sfcc.ocapi;
 
 import com.google.common.collect.ListMultimap;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Map;
 import java.util.Optional;
 
@@ -19,8 +19,8 @@ public interface OCAPIConnector {
    * @param responseType desired response type
    * @return
    */
-  @Nonnull
-  <T> Optional<T> getResource(@Nonnull String resourcePath, @Nonnull Class<T> responseType);
+  @NonNull
+  <T> Optional<T> getResource(@NonNull String resourcePath, @NonNull Class<T> responseType);
 
   /**
    * Performs a GET request for the given resource path.
@@ -31,9 +31,9 @@ public interface OCAPIConnector {
    * @param responseType desired response type
    * @return
    */
-  @Nonnull
-  <T> Optional<T> getResource(@Nonnull String resourcePath, @Nonnull Map<String, String> pathParams,
-                              @Nonnull Class<T> responseType);
+  @NonNull
+  <T> Optional<T> getResource(@NonNull String resourcePath, @NonNull Map<String, String> pathParams,
+                              @NonNull Class<T> responseType);
 
   /**
    * Performs a GET request for the given resource path with the given query parameters.
@@ -45,16 +45,16 @@ public interface OCAPIConnector {
    * @param responseType desired response type
    * @return
    */
-  @Nonnull
-  <T> Optional<T> getResource(@Nonnull String resourcePath, @Nonnull Map<String, String> pathParams,
-                              @Nonnull ListMultimap<String, String> queryParams, @Nonnull Class<T> responseType);
+  @NonNull
+  <T> Optional<T> getResource(@NonNull String resourcePath, @NonNull Map<String, String> pathParams,
+                              @NonNull ListMultimap<String, String> queryParams, @NonNull Class<T> responseType);
 
-  @Nonnull
-  <T> Optional<T> postResource(@Nonnull String resourcePath, @Nonnull Map<String, String> pathParams,
-                               String requestBody, @Nonnull Class<T> responseType);
+  @NonNull
+  <T> Optional<T> postResource(@NonNull String resourcePath, @NonNull Map<String, String> pathParams,
+                               String requestBody, @NonNull Class<T> responseType);
 
-  @Nonnull
-  <T> Optional<T> postResource(@Nonnull String resourcePath, @Nonnull Map<String, String> pathParams,
-                               @Nonnull ListMultimap<String, String> queryParams, String requestBody,
-                               @Nonnull Class<T> responseType);
+  @NonNull
+  <T> Optional<T> postResource(@NonNull String resourcePath, @NonNull Map<String, String> pathParams,
+                               @NonNull ListMultimap<String, String> queryParams, String requestBody,
+                               @NonNull Class<T> responseType);
 }

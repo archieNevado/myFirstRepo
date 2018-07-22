@@ -16,8 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Named;
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +46,7 @@ class CategoryAugmentationHelper extends AugmentationHelperBase<Category> {
 
   @Override
   @Nullable
-  Content augment(@Nonnull Category category) {
+  Content augment(@NonNull Category category) {
     // create folder hierarchy for category
     Content categoryFolder = contentRepository.createSubfolders(computeFolderPath(category));
 
@@ -64,7 +64,7 @@ class CategoryAugmentationHelper extends AugmentationHelperBase<Category> {
   }
 
   @VisibleForTesting
-  void initializeLayoutSettings(@Nonnull Category category, @Nonnull Map<String, Object> properties) {
+  void initializeLayoutSettings(@NonNull Category category, @NonNull Map<String, Object> properties) {
     Category rootCategory = getRootCategory(category);
     Content rootCategoryContent = getCategoryContent(rootCategory);
 
@@ -88,7 +88,7 @@ class CategoryAugmentationHelper extends AugmentationHelperBase<Category> {
   }
 
   @VisibleForTesting
-  void initializeRootCategoryContent(@Nonnull Category category, @Nonnull Map<String, Object> properties) {
+  void initializeRootCategoryContent(@NonNull Category category, @NonNull Map<String, Object> properties) {
     Optional<Content> otherAugmentedRootCategory = lookupAugmentedRootCategoryInOtherCatalogs(category);
     if (otherAugmentedRootCategory.isPresent()) {
       initializeCategoryLayout(otherAugmentedRootCategory.get(), category, category, properties);
@@ -98,7 +98,7 @@ class CategoryAugmentationHelper extends AugmentationHelperBase<Category> {
     }
   }
 
-  private void initializeLayoutSettingsWithSiteRoot(@Nonnull Category category, @Nonnull Map<String, Object> properties) {
+  private void initializeLayoutSettingsWithSiteRoot(@NonNull Category category, @NonNull Map<String, Object> properties) {
     Site site = sitesService.getSite(category.getContext().getSiteId());
     Content siteRootDocument = site.getSiteRootDocument();
     if (siteRootDocument != null) {
@@ -112,7 +112,7 @@ class CategoryAugmentationHelper extends AugmentationHelperBase<Category> {
 
   @Nullable
   @VisibleForTesting
-  Optional<Content> lookupAugmentedRootCategoryInOtherCatalogs(@Nonnull Category category) {
+  Optional<Content> lookupAugmentedRootCategoryInOtherCatalogs(@NonNull Category category) {
     //lookup in other catalogs
     LOGGER.debug("Root category of '{}' is not augmented. " +
             "Trying to find augmented root category in neigbour catalogs", category.getId());
@@ -128,8 +128,8 @@ class CategoryAugmentationHelper extends AugmentationHelperBase<Category> {
             .findFirst();
   }
 
-  private void initializeCategoryLayout(@Nonnull Content rootCategoryContent, @Nonnull Category rootCategory,
-                                        @Nonnull CommerceBean commerceBean, @Nonnull Map<String, Object> properties) {
+  private void initializeCategoryLayout(@NonNull Content rootCategoryContent, @NonNull Category rootCategory,
+                                        @NonNull CommerceBean commerceBean, @NonNull Map<String, Object> properties) {
     Content defaultCategoryLayoutSettings = getLayoutSettings(rootCategoryContent, CATEGORY_PAGEGRID_STRUCT_PROPERTY);
 
     if (defaultCategoryLayoutSettings == null) {
@@ -143,8 +143,8 @@ class CategoryAugmentationHelper extends AugmentationHelperBase<Category> {
     properties.put(CATEGORY_PAGEGRID_STRUCT_PROPERTY, structWithLayoutLink);
   }
 
-  private void initializeProductLayout(@Nonnull Content rootCategoryContent, @Nonnull Category rootCategory,
-                                       @Nonnull CommerceBean commerceBean, @Nonnull Map<String, Object> properties) {
+  private void initializeProductLayout(@NonNull Content rootCategoryContent, @NonNull Category rootCategory,
+                                       @NonNull CommerceBean commerceBean, @NonNull Map<String, Object> properties) {
     Content defaultProductLayoutSettings = getLayoutSettings(rootCategoryContent, CATEGORY_PRODUCT_PAGEGRID_STRUCT_PROPERTY);
 
     if (defaultProductLayoutSettings == null) {
@@ -159,14 +159,14 @@ class CategoryAugmentationHelper extends AugmentationHelperBase<Category> {
   }
 
   @Override
-  protected Content getCategoryContent(@Nonnull Category category) {
+  protected Content getCategoryContent(@NonNull Category category) {
     return augmentationService.getContent(category);
   }
 
   /**
    * Builds properties for an <code>CMExternalChannel</code> document.
    */
-  private Map<String, Object> buildCategoryContentDocumentProperties(@Nonnull Category category) {
+  private Map<String, Object> buildCategoryContentDocumentProperties(@NonNull Category category) {
     Map<String, Object> properties = new HashMap<>();
 
     properties.put(EXTERNAL_ID, format(category.getId()));

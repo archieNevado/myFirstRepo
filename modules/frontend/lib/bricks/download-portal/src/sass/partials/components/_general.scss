@@ -109,15 +109,16 @@
   background-repeat: no-repeat;
 }
 
-.am-icon--am-picture-asset {
-  background-image: url("../../../img/asset-type-picture.png");
-}
 
-.am-icon--am-document-asset {
+.am-icon--AMDocumentAsset {
   background-image: url("../../../img/asset-type-document.png");
 }
 
-.am-icon--am-video-asset {
+.am-icon--AMPictureAsset {
+  background-image: url("../../../img/asset-type-picture.png");
+}
+
+.am-icon--AMVideoAsset {
   background-image: url("../../../img/asset-type-video.png");
 }
 
@@ -568,7 +569,10 @@
 
   &--scale {
     .am-picture-box__picture {
-      max-width: none;
+      object-fit: contain;
+      // for object fit, the img actually needs a specified width/height (top, left, right and bottom is not sufficient).
+      width: 100%;
+      height: 100%;
     }
   }
 
@@ -616,21 +620,5 @@
     @include large-device {
       width: 25%;
     }
-  }
-}
-
-// Non Responsive Content
-.cm-non-adaptive-content {
-  width: 100%;
-  height: auto;
-  vertical-align: middle;
-
-  &-wrapper {
-    overflow: hidden;
-  }
-
-  &--fit-height {
-    height: 100%;
-    width: auto;
   }
 }

@@ -6,7 +6,7 @@ import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ListMultimap;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
@@ -30,8 +30,8 @@ public class ProductsResource extends AbstractDataResource {
    * @param storeContext the effective store context
    * @return the category document, or nothing if it does not exist
    */
-  @Nonnull
-  public Optional<ProductDocument> getProductById(@Nonnull String productId, @Nonnull StoreContext storeContext) {
+  @NonNull
+  public Optional<ProductDocument> getProductById(@NonNull String productId, @NonNull StoreContext storeContext) {
     Map<String, String> pathParameters = Collections.singletonMap(PRODUCT_ID_PARAM, productId);
 
     ListMultimap<String, String> queryParams = ImmutableListMultimap.<String, String>builder()

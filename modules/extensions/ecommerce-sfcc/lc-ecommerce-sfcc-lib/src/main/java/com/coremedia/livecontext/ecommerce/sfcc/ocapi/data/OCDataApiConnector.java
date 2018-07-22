@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 /**
  * Connector for Salesforce Commerce Cloud Open Commerce Data API.
@@ -20,11 +20,11 @@ public class OCDataApiConnector extends AbstractOCAPIConnector {
 
   private OAuthConnector oAuthConnector;
 
-  OCDataApiConnector(@Nonnull SfccOcapiConfigurationProperties properties) {
+  OCDataApiConnector(@NonNull SfccOcapiConfigurationProperties properties) {
     super(properties, properties.getDataBasePath(), properties.getVersion());
   }
 
-  @Nonnull
+  @NonNull
   @Override
   protected HttpHeaders buildHttpHeaders() {
     HttpHeaders headers = super.buildHttpHeaders();

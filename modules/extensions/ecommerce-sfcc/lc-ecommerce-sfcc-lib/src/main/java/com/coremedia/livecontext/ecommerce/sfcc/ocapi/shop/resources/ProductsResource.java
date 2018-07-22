@@ -6,8 +6,8 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ListMultimap;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Currency;
 import java.util.Locale;
 import java.util.Map;
@@ -29,7 +29,7 @@ public class ProductsResource extends AbstractShopResource {
    * @param productId product id
    * @return
    */
-  public Optional<ProductDocument> getProductById(@Nonnull String productId, @Nonnull String storeId) {
+  public Optional<ProductDocument> getProductById(@NonNull String productId, @NonNull String storeId) {
     return getProductById(productId, storeId, null, null);
   }
 
@@ -41,7 +41,7 @@ public class ProductsResource extends AbstractShopResource {
    * @param currency  currency to use for prices
    * @return
    */
-  public Optional<ProductDocument> getProductById(@Nonnull String productId, @Nonnull String storeId, Locale locale,
+  public Optional<ProductDocument> getProductById(@NonNull String productId, @NonNull String storeId, Locale locale,
                                                   Currency currency) {
     Map<String, String> pathParameters = ImmutableMap.of(STORE_ID_PARAM, storeId, PRODUCT_ID_PARAM, productId);
 
@@ -50,7 +50,7 @@ public class ProductsResource extends AbstractShopResource {
     return getConnector().getResource(PRODUCTS_ID_PATH, pathParameters, queryParams, ProductDocument.class);
   }
 
-  @Nonnull
+  @NonNull
   private static ListMultimap<String, String> buildQueryParams(@Nullable Locale locale, @Nullable Currency currency) {
     ImmutableListMultimap.Builder<String, String> builder = ImmutableListMultimap.builder();
 

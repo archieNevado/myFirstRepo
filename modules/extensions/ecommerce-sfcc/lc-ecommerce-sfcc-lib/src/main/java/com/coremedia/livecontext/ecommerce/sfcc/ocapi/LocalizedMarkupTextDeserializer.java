@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -31,8 +31,8 @@ public class LocalizedMarkupTextDeserializer extends JsonDeserializer<LocalizedP
     return result;
   }
 
-  @Nonnull
-  private MarkupTextDocument parseNode(@Nonnull JsonNode node) {
+  @NonNull
+  private MarkupTextDocument parseNode(@NonNull JsonNode node) {
     MarkupTextDocument result = new MarkupTextDocument();
 
     try {

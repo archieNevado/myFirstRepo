@@ -33,7 +33,7 @@
             <editor:StringPropertyField propertyName="filename"/>
           </editor:items>
         </editor:PropertyFieldGroup>
-        <bpforms:PictureDocumentForm collapsed="true"
+        <bpforms:MediaDocumentForm collapsed="true"
                                      expandOnValues="pictures"/>
         <bpforms:RelatedDocumentForm collapsed="true"
                                      expandOnValues="related"/>

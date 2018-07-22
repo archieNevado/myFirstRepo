@@ -13,7 +13,7 @@ import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.google.common.collect.ImmutableList;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -62,7 +62,7 @@ public class CMCategoryImpl extends CMAbstractCategoryImpl implements CMCategory
     return (List<? extends Aspect<? extends CMCategory>>) super.getAspects();
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<CMCategory> getSubcategories() {
     CmsCategory category = getCategory();
@@ -79,7 +79,7 @@ public class CMCategoryImpl extends CMAbstractCategoryImpl implements CMCategory
     return createBeansFor(builder.build(), CMCategory.class);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<CMProduct> getProducts() {
     CmsCategory category = getCategory();

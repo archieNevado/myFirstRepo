@@ -4,7 +4,7 @@ import com.coremedia.blueprint.common.contentbeans.CMJavaScript;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.content.Content;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -55,7 +55,7 @@ public abstract class CMJavaScriptBase extends CMAbstractCodeImpl implements CMJ
    * @return a list of {@link CMJavaScript} objects
    */
   @Override
-  @Nonnull
+  @NonNull
   public List<? extends CMJavaScript> getInclude() {
     List<Content> contents = getContent().getLinks(INCLUDE);
     return createBeansFor(contents, CMJavaScript.class);

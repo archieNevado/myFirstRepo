@@ -17,8 +17,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.nio.charset.Charset;
 import java.util.Optional;
 
@@ -43,7 +43,7 @@ public class OAuthConnector {
 
   private volatile AccessToken accessToken;
 
-  OAuthConnector(@Nonnull SfccOAuthConfigurationProperties properties) {
+  OAuthConnector(@NonNull SfccOAuthConfigurationProperties properties) {
     protocol = properties.getProtocol();
     host = properties.getHost();
     path = properties.getPath();
@@ -81,7 +81,7 @@ public class OAuthConnector {
     }
   }
 
-  @Nonnull
+  @NonNull
   private String buildRequestUrl() {
     return UriComponentsBuilder.newInstance()
             .scheme(protocol)
@@ -90,8 +90,8 @@ public class OAuthConnector {
             .build().toString();
   }
 
-  @Nonnull
-  private static HttpEntity<String> buildRequestEntity(@Nonnull String clientId, @Nonnull String password) {
+  @NonNull
+  private static HttpEntity<String> buildRequestEntity(@NonNull String clientId, @NonNull String password) {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
@@ -100,8 +100,8 @@ public class OAuthConnector {
     return new HttpEntity<>("grant_type=client_credentials", headers);
   }
 
-  @Nonnull
-  private static String createAuthorizationHeaderValue(@Nonnull String clientId, @Nonnull String password) {
+  @NonNull
+  private static String createAuthorizationHeaderValue(@NonNull String clientId, @NonNull String password) {
     // Create basic auth header
     String auth = clientId + ":" + password;
 
@@ -110,7 +110,7 @@ public class OAuthConnector {
     return "Basic " + new String(encodedAuth);
   }
 
-  @Nonnull
+  @NonNull
   public Optional<AccessToken> getOrRequestAccessToken() {
     if (accessToken == null || accessToken.isExpired()) {
       accessToken = requestAccessToken();

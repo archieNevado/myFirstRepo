@@ -68,6 +68,9 @@
                     renderer="{ViewtypeRenderer.renderer}"/>
         <editor:StatusColumn/>
       </bppm:columns>
+      <bppm:placementRowWidgetItems>
+        <bpforms:VisibilityConfigurationForm/>
+      </bppm:placementRowWidgetItems>
     </bppm:PageGridPropertyField>
   </editor:items>
 

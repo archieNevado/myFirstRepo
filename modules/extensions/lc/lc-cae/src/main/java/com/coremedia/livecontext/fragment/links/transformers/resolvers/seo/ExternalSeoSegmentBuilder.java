@@ -14,8 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
@@ -39,7 +39,7 @@ public class ExternalSeoSegmentBuilder implements SeoSegmentBuilder {
   private Cache cache;
   private SettingsService settingsService;
 
-  @Nonnull
+  @NonNull
   public String asSeoSegment(CMNavigation navigation, CMObject target) {
     if (navigation == null || target == null) {
       return "";

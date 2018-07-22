@@ -4,7 +4,7 @@ import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.elastic.core.api.serializer.TypeConverter;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.inject.Named;
 import java.util.Map;
 
@@ -27,14 +27,14 @@ public class SerializedProductConverter implements TypeConverter<SerializedProdu
   }
 
   @Override
-  public void serialize(@PersonalData @Nonnull SerializedProductInSite product, @PersonalData @Nonnull Map<String, Object> serializedObject) {
+  public void serialize(@PersonalData @NonNull SerializedProductInSite product, @PersonalData @NonNull Map<String, Object> serializedObject) {
     serializedObject.put(PRODUCT_ID, product.getProductId());
     serializedObject.put(SITE_ID, product.getSiteId());
   }
 
   @Override
-  @Nonnull
-  public SerializedProductInSite deserialize(@Nonnull Map<String, Object> serializedObject) {
+  @NonNull
+  public SerializedProductInSite deserialize(@NonNull Map<String, Object> serializedObject) {
     String productId = (String) serializedObject.get(PRODUCT_ID);
     String siteId = (String) serializedObject.get(SITE_ID);
     return new SerializedProductInSite(productId, siteId);

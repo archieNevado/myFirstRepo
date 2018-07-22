@@ -11,8 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +53,7 @@ public class BlueprintViewRepositoryNameProvider implements ViewRepositoryNamePr
 
   // --- ViewRepositoryNameProvider ---------------------------------
 
-  @Nonnull
+  @NonNull
   @Override
   public List<String> getViewRepositoryNames(String viewName, Map model, Locale locale, HttpServletRequest request) {
     @SuppressWarnings("unchecked")
@@ -78,8 +78,8 @@ public class BlueprintViewRepositoryNameProvider implements ViewRepositoryNamePr
    * @param developer Refer to the developer's work in progress templates
    * @return a list of view repositories ordered by decreasing priority
    */
-  @Nonnull
-  private List<String> doGetViewRepositoryNames(@Nonnull Map model, @Nullable User developer) {
+  @NonNull
+  private List<String> doGetViewRepositoryNames(@NonNull Map model, @Nullable User developer) {
     List<String> result = new ArrayList<>();
 
     // 1. From current request: get the view repositories configured on the current context

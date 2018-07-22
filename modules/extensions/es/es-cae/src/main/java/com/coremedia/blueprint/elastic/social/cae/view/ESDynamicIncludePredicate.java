@@ -4,7 +4,7 @@ import com.coremedia.blueprint.cae.view.DynamicIncludePredicate;
 import com.coremedia.blueprint.elastic.social.cae.action.AuthenticationState;
 import com.coremedia.objectserver.view.RenderNode;
 
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Arrays;
 import java.util.List;
 

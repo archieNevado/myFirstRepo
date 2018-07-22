@@ -7,8 +7,6 @@
         <!-- Global group, no corporate specific rules here! -->
         <members>
           <group id="global-site-manager-sf" name="global-site-manager-sf" contentgroup="true" livegroup="false" administrative="false">
-            <rule content="/Sites/SiteGenesis" type="CMObject" rights="RMDAPS"/>
-            <rule content="/Sites/SiteGenesis" type="Folder_" rights="RMDAPS"/>
             <rule content="/Sites/SiteGenesis Global" type="CMObject" rights="RMDAPS"/>
             <rule content="/Sites/SiteGenesis Global" type="Folder_" rights="RMDAPS"/>
             <!-- in order to define topic pages, global site managers need write access to taxonomies. -->
@@ -24,27 +22,16 @@
         <members>
           <group id="local-site-manager-sf" name="local-site-manager-sf" contentgroup="true" livegroup="false" administrative="false">
             <!-- all local site managers can read the global master site. -->
-            <rule content="/Sites/SiteGenesis/United States/English" type="CMObject" rights="R"/>
-            <rule content="/Sites/SiteGenesis/United States/English" type="Folder_" rights="R"/>
             <rule content="/Sites/SiteGenesis Global/United Kingdom/English" type="CMObject" rights="R"/>
             <rule content="/Sites/SiteGenesis Global/United Kingdom/English" type="Folder_" rights="R"/>
             <!-- in order to define topic pages, local site managers need write access to taxonomies. -->
             <rule content="/Settings/Taxonomies" type="CMTaxonomy" rights="RMDAP"/>
             <members>
-              <group name="manager-sf-en-US" contentgroup="true" livegroup="false" administrative="false">
-                <rule content="/Sites/SiteGenesis/United States/English" type="CMObject" rights="RMDAP"/>
-                <rule content="/Sites/SiteGenesis/United States/English" type="Folder_" rights="RMDAP"/>
-                <members>
-                  <user id="petersf" name="Peter SF" home="/Home/Peter SF"/>
-                  <!-- Rick must be member of the master site group as translation workflow role. -->
-                  <userref id="sally"/>
-                </members>
-              </group>
-              <group name="manager-sf-en-UK" contentgroup="true" livegroup="false" administrative="false">
+              <group name="manager-sf-en-GB" contentgroup="true" livegroup="false" administrative="false">
                 <rule content="/Sites/SiteGenesis Global/United Kingdom/English" type="CMObject" rights="RMDAP"/>
                 <rule content="/Sites/SiteGenesis Global/United Kingdom/English" type="Folder_" rights="RMDAP"/>
                 <members>
-                  <userref id="petersf"/>
+                  <user id="petersf" name="Peter SF" home="/Home/Peter SF"/>
                   <!-- Sally must be member of the master site group as translation workflow role. -->
                   <userref id="sally"/>
                 </members>
@@ -91,11 +78,6 @@
         <!-- Global group, no corporate specific rules here! -->
         <members>
           <group name="online-editor-sf-en-US" contentgroup="true" livegroup="false" administrative="false">
-            <rule content="/Sites/SiteGenesis/United States/English" type="CMObject" rights="R"/>
-            <rule content="/Sites/SiteGenesis/United States/English" type="Folder_" rights="R"/>
-            <rule content="/Sites/SiteGenesis/United States/English/Editorial/Content" type="CMObject" rights="RMD"/>
-            <rule content="/Sites/SiteGenesis/United States/English/Editorial/Content" type="Folder_" rights="RMD"/>
-
             <rule content="/Sites/SiteGenesis Global/United Kingdom/English" type="CMObject" rights="R"/>
             <rule content="/Sites/SiteGenesis Global/United Kingdom/English" type="Folder_" rights="R"/>
             <rule content="/Sites/SiteGenesis Global/United Kingdom/English/Editorial/Content" type="CMObject" rights="RMD"/>
@@ -110,8 +92,6 @@
         <!-- Global group, no corporate specific rules here! -->
         <members>
           <group name="media-editor-sf-en-US" contentgroup="true" livegroup="false" administrative="false">
-            <rule content="/Sites/SiteGenesis/United States/English" type="CMObject" rights="R"/>
-            <rule content="/Sites/SiteGenesis/United States/English" type="Folder_" rights="R"/>
             <members>
               <user id="marksf" name="Mark SF" home="/Home/Mark SF"/>
               <user id="amy" name="Amy" home="/Home/Amy"/>

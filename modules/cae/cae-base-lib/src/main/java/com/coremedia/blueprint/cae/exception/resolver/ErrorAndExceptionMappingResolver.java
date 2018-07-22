@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -24,10 +24,10 @@ public class ErrorAndExceptionMappingResolver extends SimpleMappingExceptionReso
   private List<ErrorAndExceptionHandler> errorAndExceptionHandler;
 
   @Override
-  public ModelAndView resolveException(@Nonnull HttpServletRequest request,
-                                       @Nonnull HttpServletResponse response,
+  public ModelAndView resolveException(@NonNull HttpServletRequest request,
+                                       @NonNull HttpServletResponse response,
                                        Object handler,
-                                       @Nonnull Exception ex) {
+                                       @NonNull Exception ex) {
 
     String matchingViewName = determineViewName(ex, request);
 
@@ -36,7 +36,7 @@ public class ErrorAndExceptionMappingResolver extends SimpleMappingExceptionReso
   }
 
   @Override
-  protected String determineViewName(@Nonnull Exception ex, HttpServletRequest request) {
+  protected String determineViewName(@NonNull Exception ex, HttpServletRequest request) {
     if (ex instanceof ExceptionRenderDynamicViewDecorator) {
       ExceptionRenderDynamicViewDecorator exDec = (ExceptionRenderDynamicViewDecorator) ex;
       if (exDec.getView() != null) {

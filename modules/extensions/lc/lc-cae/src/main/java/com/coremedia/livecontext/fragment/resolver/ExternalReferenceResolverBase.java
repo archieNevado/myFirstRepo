@@ -13,8 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Objects;
 
 /**
@@ -36,7 +36,7 @@ public abstract class ExternalReferenceResolverBase implements ExternalReference
    * @param supportedReferencePrefix the prefix of supported external reference values or the empty string to support
    *                                 values independently from their prefix
    */
-  protected ExternalReferenceResolverBase(@Nonnull String supportedReferencePrefix) {
+  protected ExternalReferenceResolverBase(@NonNull String supportedReferencePrefix) {
     this.supportedReferencePrefix = supportedReferencePrefix;
   }
 
@@ -65,7 +65,7 @@ public abstract class ExternalReferenceResolverBase implements ExternalReference
   }
 
   @Required
-  public void setContentRepository(@Nonnull ContentRepository contentRepository) {
+  public void setContentRepository(@NonNull ContentRepository contentRepository) {
     Objects.requireNonNull(contentRepository);
     this.contentRepository = contentRepository;
   }
@@ -82,13 +82,13 @@ public abstract class ExternalReferenceResolverBase implements ExternalReference
    *                      external reference} with prefix of this resolver removed
    * @return true if this resolver is responsible to resolve the given external reference
    */
-  protected boolean include(@Nonnull FragmentParameters fragmentParameters, @Nonnull String referenceInfo) {
+  protected boolean include(@NonNull FragmentParameters fragmentParameters, @NonNull String referenceInfo) {
     return true;
   }
 
   @Override
   @Nullable
-  public LinkableAndNavigation resolveExternalRef(@Nonnull FragmentParameters fragmentParameters, @Nonnull Site site) {
+  public LinkableAndNavigation resolveExternalRef(@NonNull FragmentParameters fragmentParameters, @NonNull Site site) {
     if (!include(fragmentParameters)) {
       return null;
     }
@@ -108,11 +108,11 @@ public abstract class ExternalReferenceResolverBase implements ExternalReference
    * @return the resolved {@link LinkableAndNavigation} or null if not found
    */
   @Nullable
-  protected abstract LinkableAndNavigation resolveExternalRef(@Nonnull FragmentParameters fragmentParameters,
-                                                              @Nonnull String referenceInfo,
-                                                              @Nonnull Site site);
+  protected abstract LinkableAndNavigation resolveExternalRef(@NonNull FragmentParameters fragmentParameters,
+                                                              @NonNull String referenceInfo,
+                                                              @NonNull Site site);
 
-  private String stripPrefixFromExternalReference(@Nonnull FragmentParameters fragmentParameters) {
+  private String stripPrefixFromExternalReference(@NonNull FragmentParameters fragmentParameters) {
     String externalRef = fragmentParameters.getExternalRef();
     return externalRef != null && externalRef.startsWith(supportedReferencePrefix)
             ? externalRef.substring(supportedReferencePrefix.length())

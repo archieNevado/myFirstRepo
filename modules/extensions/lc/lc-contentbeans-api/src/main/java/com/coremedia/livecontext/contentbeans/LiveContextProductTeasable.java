@@ -6,8 +6,8 @@ import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 /**
  * Common Interface for {@link com.coremedia.livecontext.contentbeans.CMProductTeaser} and
@@ -59,6 +59,6 @@ public interface LiveContextProductTeasable extends CMTeasable {
    * @return the formatted commerce id
    * @cm.template.api
    */
-  @Nonnull
+  @NonNull
   String getExternalId();
 }

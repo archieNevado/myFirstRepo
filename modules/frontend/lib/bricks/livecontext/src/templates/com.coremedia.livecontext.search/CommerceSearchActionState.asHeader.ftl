@@ -1,5 +1,7 @@
 <#-- @ftlvariable name="self" type="com.coremedia.livecontext.search.CommerceSearchActionState" -->
 
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/components.ftl" as components />
+
 <#assign formMethod=cm.localParameter("formMethod", "GET") />
 <#assign renderAsPopup=cm.localParameter("renderAsPopup", true) />
 <#assign additionalFormClass="" />
@@ -23,7 +25,7 @@
       <#-- id and class is used by wcs -->
       <input id="SimpleSearchForm_SearchTerm" type="search" class="search_input" placeholder="${self.action.title!""}" name="query" value=""<@preview.metadata "properties.title" />>
     </div>
-    <@bp.button baseClass="" iconClass="icon-arrow-right" attr={"type": "submit", "id": "cm-search-form__button", "class": "cm-search-form__button", "title":  self.action.title!"", "metadata": "properties.title"} />
+    <@components.button baseClass="" iconClass="icon-arrow-right" attr={"type": "submit", "id": "cm-search-form__button", "class": "cm-search-form__button", "title":  self.action.title!"", "metadata": "properties.title"} />
   </fieldset>
   <div class="cm-popup cm-popup--search-suggestions">
     <ul class="cm-search-suggestions">

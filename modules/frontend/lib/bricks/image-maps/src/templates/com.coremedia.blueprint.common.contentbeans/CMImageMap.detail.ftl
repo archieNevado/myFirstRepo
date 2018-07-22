@@ -1,10 +1,7 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.CMImageMap" -->
 
-<#--
-    Template Description:
-
-    This template extends the brick generic-templates" for the detail view.
--->
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/utils.ftl" as utils />
+<#import "../../freemarkerLibs/image-map.ftl" as imageMap />
 
 <#assign blockClass=cm.localParameters().blockClass!"cm-details" />
 <#assign relatedView=cm.localParameters().relatedView!"related" />
@@ -13,7 +10,7 @@
 <#assign renderRelated=cm.localParameter("renderRelated", false) />
 <#assign useQuickinfo=cm.localParameter("imagemap_use_quickinfo", true)/>
 
-<#assign imageMapParams=bp.initializeImageMap()/>
+<#assign imageMapParams=imageMap.generateIds(self)/>
 <#assign link=cm.getLink(self.target!cm.UNDEFINED) />
 
 <article class="${blockClass} ${blockClass}--imagemap"<@preview.metadata self.content />>
@@ -21,8 +18,7 @@
   <#-- title -->
   <h1 class="${blockClass}__headline"<@preview.metadata "properties.teaserTitle"/>>${self.teaserTitle!""}</h1>
 
-  <div class="cm-imagemap"
-       data-cm-imagemap='{"coordsBaseWidth": "${bp.IMAGE_TRANSFORMATION_BASE_WIDTH}", "defaultLink": "${link}"}'>
+  <div class="cm-imagemap" data-cm-imagemap='{"coordsBaseWidth": "${bp.IMAGE_TRANSFORMATION_BASE_WIDTH}", "defaultLink": "${link}"}'>
 
     <#-- picture + hot zones -->
     <@cm.include self=self view="_picture" params={
@@ -49,7 +45,9 @@
   <#-- date -->
   <#if renderDate && self.externallyDisplayedDate?has_content>
     <div class="${blockClass}__date"<@preview.metadata "properties.externallyDisplayedDate"/>>
-      <@bp.renderDate self.externallyDisplayedDate.time "${blockClass}__time" />
+      <@utils.renderDate date=self.externallyDisplayedDate.time
+                         cssClass="${blockClass}__time"
+                         metadata=["properties.externallyDisplayedDate"] />
     </div>
   </#if>
 

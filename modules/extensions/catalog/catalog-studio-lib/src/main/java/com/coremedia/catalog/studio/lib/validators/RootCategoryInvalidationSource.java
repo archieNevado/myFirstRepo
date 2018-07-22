@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
@@ -91,8 +91,8 @@ class RootCategoryInvalidationSource extends SimpleInvalidationSource implements
               .collect(toList());
     }
 
-    @Nonnull
-    private Optional<Category> findRootCategory(@Nonnull Site site) {
+    @NonNull
+    private Optional<Category> findRootCategory(@NonNull Site site) {
       try {
         return connectionInitializer.findConnectionForSite(site)
                 .filter(connection -> "cms".equals(connection.getVendor().value()))

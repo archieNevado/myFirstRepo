@@ -46,8 +46,8 @@ function responsiveImage(image) {
 
   const imagesLoadedPluginExists = typeof $.fn.imagesLoaded === "function";
 
-  if ($image.data("cm-responsive-image-state") === undefined) {
-    $image.data("cm-responsive-image-state", "initialized");
+  if ($image.data("cm-responsive-media-state") === undefined) {
+    $image.data("cm-responsive-media-state", "initialized");
     // check if imagesLoaded plugin exists
     if (imagesLoadedPluginExists) {
       if ($image.src && $image.src.length > 0) {
@@ -58,7 +58,7 @@ function responsiveImage(image) {
     }
   }
 
-  const responsiveImages = $image.data("cm-responsive-image");
+  const responsiveImages = $image.data("cm-responsive-media");
 
   // only run if there is at least one aspect ratio defined
   if (typeof responsiveImages !== "undefined") {
@@ -66,14 +66,14 @@ function responsiveImage(image) {
     let containerWidth = $imageContainer.width();
     let containerHeight = $imageContainer.height();
     if (!containerWidth || !containerHeight) {
-      logger.log("Could not load hidden Responsive Image.", $imageContainer);
+      logger.log("Could not load hidden Responsive Media.", $imageContainer);
       return; // image is not visible, do not touch
     }
 
     // CMS-2905: use retina images, if enabled
     const deviceRatio = window.devicePixelRatio;
     let retinaImagesEnabled = false;
-    if (deviceRatio > 1 && $image.data("cm-retina-image")) {
+    if (deviceRatio > 1 && $image.data("cm-retina")) {
       retinaImagesEnabled = true;
       containerHeight *= deviceRatio;
       containerWidth *= deviceRatio;

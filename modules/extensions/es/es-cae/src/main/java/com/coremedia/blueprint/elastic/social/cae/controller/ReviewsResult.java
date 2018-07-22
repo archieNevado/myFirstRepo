@@ -8,7 +8,7 @@ import com.coremedia.elastic.social.api.comments.Comment;
 import com.coremedia.elastic.social.api.reviews.Review;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,7 +89,7 @@ public class ReviewsResult extends ListContributionResult<Review> {
     return numberOfOnlineReviews;
   }
 
-  private Map<Integer, Integer> createStatistics(@Nonnull List<Review> reviews) {
+  private Map<Integer, Integer> createStatistics(@NonNull List<Review> reviews) {
     statistics = new HashMap<>();
     for (Review review : reviews) {
       if (showInStatistics(review)) {
@@ -105,7 +105,7 @@ public class ReviewsResult extends ListContributionResult<Review> {
     return statistics;
   }
 
-  private boolean showInStatistics(@Nonnull Review review) {
+  private boolean showInStatistics(@NonNull Review review) {
     return Comment.State.NEW_ONLINE.equals(review.getState())
             || Comment.State.APPROVED.equals(review.getState())
             || Comment.State.IGNORED.equals(review.getState());
