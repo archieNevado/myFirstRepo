@@ -1,4 +1,5 @@
 import $ from "jquery";
+import { ajax } from "@coremedia/js-jquery-utils";
 import * as logger from "@coremedia/js-logger";
 import * as deviceDetector from "@coremedia/js-device-detector";
 
@@ -60,12 +61,9 @@ function handleLogin() {
   const $logoutBtn = $("#cm-logout");
 
   if (loginStatusURL) {
-    $.ajax({
+    ajax({
       url: loginStatusURL,
       dataType: "json",
-      headers: { "X-Requested-With": "XMLHttpRequest" },
-      xhrFields: { withCredentials: true },
-      global: false,
     })
       .done(function(data) {
         if (data.loggedIn) {

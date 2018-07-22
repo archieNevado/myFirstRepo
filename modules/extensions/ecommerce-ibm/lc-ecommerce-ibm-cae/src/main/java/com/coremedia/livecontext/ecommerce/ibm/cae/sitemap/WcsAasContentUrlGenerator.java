@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -97,7 +97,7 @@ public class WcsAasContentUrlGenerator extends ContentUrlGenerator {
     }
   }
 
-  private String createLinkForIndexer(@Nonnull Content content, boolean secure) {
+  private String createLinkForIndexer(@NonNull Content content, boolean secure) {
     //noinspection ConstantConditions
     checkArgument(content != null, "A content to built the link for must be given");
     checkState(externalSeoSegmentBuilder != null, "An external seo segment builder must be given.");
@@ -122,7 +122,7 @@ public class WcsAasContentUrlGenerator extends ContentUrlGenerator {
 
     String language = site.getLocale().getLanguage();
     CommerceConnection connection = CurrentCommerceConnection.get();
-    StoreContext storeContext = connection.getStoreContextProvider().findContextBySite(site);
+    StoreContext storeContext = connection.getStoreContextProvider().findContextBySite(site).orElse(null);
     if (storeContext == null) {
       LOG.warn("No store context found for site {}. Will not create an index url. Return null.", site.getName());
       return null;

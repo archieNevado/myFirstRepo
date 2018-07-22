@@ -16,8 +16,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.util.List;
@@ -42,8 +42,7 @@ public class WcRestConnectorUnauthorizedTest extends AbstractWrapperServiceTestC
     connection = commerce.findConnection("wcs1")
             .orElseThrow(() -> new IllegalStateException("Could not obtain commerce connection."));
 
-    String wcsVersion = storeInfoService.getWcsVersion();
-    testConfig.setWcsVersion(wcsVersion);
+    storeInfoService.getWcsVersion().ifPresent(testConfig::setWcsVersion);
     connection.setStoreContext(testConfig.getStoreContext());
     CurrentCommerceConnection.set(connection);
   }
@@ -75,8 +74,8 @@ public class WcRestConnectorUnauthorizedTest extends AbstractWrapperServiceTestC
             userContext);
   }
 
-  @Nonnull
-  private HttpClient mockHttpClient(@Nonnull HttpResponse response) throws IOException {
+  @NonNull
+  private HttpClient mockHttpClient(@NonNull HttpResponse response) throws IOException {
     HttpClient httpClient = mock(HttpClient.class);
 
     when(httpClient.execute(any(HttpUriRequest.class))).thenReturn(response);
@@ -84,7 +83,7 @@ public class WcRestConnectorUnauthorizedTest extends AbstractWrapperServiceTestC
     return httpClient;
   }
 
-  @Nonnull
+  @NonNull
   private HttpResponse createHttpResponse(int statusCode, @Nullable String reasonPhrase) {
     StatusLine statusLine = new BasicStatusLine(HTTP_1_1, statusCode, reasonPhrase);
 
@@ -100,7 +99,7 @@ public class WcRestConnectorUnauthorizedTest extends AbstractWrapperServiceTestC
     }
 
     @Override
-    @Nonnull
+    @NonNull
     protected HttpClient getHttpClient() {
       return httpClient;
     }

@@ -6,18 +6,19 @@ import com.coremedia.livecontext.ecommerce.common.InvalidLoginException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractWcWrapperService;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
-import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestServiceMethod;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.google.common.annotations.VisibleForTesting;
 import org.springframework.http.HttpMethod;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getStoreId;
-import static java.util.Arrays.asList;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonList;
 import static org.springframework.util.StringUtils.hasText;
@@ -26,22 +27,36 @@ public class WcLoginWrapperService extends AbstractWcWrapperService {
 
   public static final String ERROR_KEY_AUTHENTICATION_ERROR = "_ERR_AUTHENTICATION_ERROR";
 
-  private static final WcRestServiceMethod<WcSession, WcLoginParam>
-          LOGIN_IDENTITY = WcRestConnector.createServiceMethod(HttpMethod.POST, "store/{storeId}/loginidentity", true, false, false, WcLoginParam.class, WcSession.class);
+  private static final WcRestServiceMethod<WcSession, WcLoginParam> LOGIN_IDENTITY = WcRestServiceMethod
+          .builder(HttpMethod.POST, "store/{storeId}/loginidentity", WcLoginParam.class, WcSession.class)
+          .secure(true)
+          .build();
 
-  private static final WcRestServiceMethod<Void, Void>
-          LOGOUT_IDENTITY = WcRestConnector.createServiceMethod(HttpMethod.DELETE, "store/{storeId}/loginidentity/@self", true, true, false, null, Void.class);
+  private static final WcRestServiceMethod<Void, Void> LOGOUT_IDENTITY = WcRestServiceMethod
+          .builder(HttpMethod.DELETE, "store/{storeId}/loginidentity/@self", (Class<Void>) null, Void.class)
+          .secure(true)
+          .requiresAuthentication(true)
+          .build();
 
-  private static final WcRestServiceMethod<WcPreviewToken, WcPreviewTokenParam>
-          PREVIEW_TOKEN = WcRestConnector.createServiceMethod(HttpMethod.POST, "store/{storeId}/previewToken", true, true, false, WcPreviewTokenParam.class, WcPreviewToken.class);
+  private static final WcRestServiceMethod<WcPreviewToken, WcPreviewTokenParam> PREVIEW_TOKEN = WcRestServiceMethod
+          .builder(HttpMethod.POST, "store/{storeId}/previewToken", WcPreviewTokenParam.class, WcPreviewToken.class)
+          .secure(true)
+          .requiresAuthentication(true)
+          .build();
 
-  private static final WcRestServiceMethod<HashMap, Void>
-          USER_CONTEXT_DATA = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/usercontext/@self/contextdata", false, false, false, true, null, HashMap.class);
+  private static final WcRestServiceMethod<HashMap, Void> USER_CONTEXT_DATA = WcRestServiceMethod
+          .builder(HttpMethod.GET, "store/{storeId}/usercontext/@self/contextdata", (Class<Void>) null, HashMap.class)
+          .userCookiesSupport(true)
+          .build();
 
-  public WcSession login(String logonId, String password, StoreContext storeContext) {
+  @NonNull
+  public Optional<WcSession> login(String logonId, String password, StoreContext storeContext) {
     try {
-      return getRestConnector().callServiceInternal(
-              LOGIN_IDENTITY, asList(getStoreId(storeContext)), emptyMap(), new WcLoginParam(logonId, password), storeContext, null);
+      List<String> variableValues = singletonList(getStoreId(storeContext));
+      WcLoginParam wcLoginParam = new WcLoginParam(logonId, password);
+
+      return getRestConnector().callServiceInternal(LOGIN_IDENTITY, variableValues, emptyMap(), wcLoginParam,
+              storeContext, null);
 
       //if login not successfully a RemoteException is thrown
     } catch (CommerceRemoteException e) {
@@ -65,17 +80,19 @@ public class WcLoginWrapperService extends AbstractWcWrapperService {
               .withLanguageId(storeContext)
               .build();
 
-      Map userContextData = getRestConnector().callServiceInternal(USER_CONTEXT_DATA, asList(getStoreId(storeContext)),
-              parameters, null, storeContext, userContext);
+      List<String> variableValues = singletonList(getStoreId(storeContext));
+
+      Map userContextData = getRestConnector().callServiceInternal(USER_CONTEXT_DATA, variableValues, parameters, null,
+              storeContext, userContext).orElse(null);
 
       if (userContextData != null && hasText(logonId)) {
-        Double value = DataMapHelper.getValueForPath(userContextData, "basicInfo.callerId", Double.class);
-        if(value != null) {
+        Double value = (Double) DataMapHelper.findValue(userContextData, "basicInfo.callerId", Double.class)
+                .orElse(null);
+        if (value != null) {
           return equalsWithTypeConversion(logonId, value);
         }
       }
       return false;
-
     } catch (CommerceException e) {
       throw e;
     } catch (Exception e) {
@@ -91,22 +108,24 @@ public class WcLoginWrapperService extends AbstractWcWrapperService {
   }
 
   public boolean logout(String storeId) {
-    getRestConnector().callServiceInternal(LOGOUT_IDENTITY, asList(storeId), emptyMap(), null, null, null);
+    List<String> variableValues = singletonList(storeId);
+
+    getRestConnector().callServiceInternal(LOGOUT_IDENTITY, variableValues, emptyMap(), null, null, null);
+
     // Todo: if no exception is thrown we assume that the user was logged out successfully. is that correct?
     return true;
   }
 
-  public WcPreviewToken getPreviewToken(WcPreviewTokenParam bodyData, StoreContext storeContext) {
+  @NonNull
+  public Optional<WcPreviewToken> getPreviewToken(WcPreviewTokenParam bodyData, StoreContext storeContext) {
     try {
-      return getRestConnector().callService(
-              PREVIEW_TOKEN, singletonList(getStoreId(storeContext)),
-              emptyMap(), bodyData, storeContext, null);
+      List<String> variableValues = singletonList(getStoreId(storeContext));
 
+      return getRestConnector().callService(PREVIEW_TOKEN, variableValues, emptyMap(), bodyData, storeContext, null);
     } catch (CommerceException e) {
       throw e;
     } catch (Exception e) {
       throw new CommerceException(e);
     }
   }
-
 }

@@ -1,19 +1,21 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.CMTeasable" -->
 
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/utils.ftl" as utils />
+
 <#assign link=cm.getLink(self.target!cm.UNDEFINED) />
 <#assign target=(self.target?has_content && self.target.openInNewTab)?then("_blank", "") />
 <#assign rel=(self.target?has_content && self.target.openInNewTab)?then("noopener", "") />
 
 <div class="cm-gap" data-cm-module="gap"<@preview.metadata self.content />>
   <#-- picture -->
-  <@bp.optionalLink href="${link}" attr={"target":target,"rel":rel}>
+  <@utils.optionalLink href="${link}" attr={"target":target,"rel":rel}>
     <#if self.picture?has_content>
       <div class="cm-gap__embed">
         <div class="cm-gap__embed-item">
-          <@cm.include self=self.picture params={
+          <@cm.include self=self.picture view="media" params={
             "limitAspectRatios": [],
             "classBox": "cm-gap__picture-box",
-            "classImage": "cm-gap__picture",
+            "classMedia": "cm-gap__picture",
             "metadata": ["properties.pictures"]
           }/>
         </div>  
@@ -21,7 +23,7 @@
     <#else>
       <div class="cm-gap__embed-item">
         <div class="cm-gap__picture-box" <@preview.metadata "properties.pictures" />>
-          <div class="cm-gap__picture cm-image--missing"></div>
+          <#-- just reserve space, gaps should not have an empty picture -->
         </div>
       </div>
     </#if>
@@ -38,10 +40,10 @@
           </h2>
           <#-- teaser text -->
           <p class="cm-gap__text"<@preview.metadata "properties.teaserText" />>
-            <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", bp.setting(cmpage, "gap.max.length", 140)) />
+            <@utils.renderWithLineBreaks text=bp.truncateText(self.teaserText!"", bp.setting(self, "gap.max.length", 140)) />
           </p>
         </div>
       </div>
     </#if>
-  </@bp.optionalLink>
+  </@utils.optionalLink>
 </div>

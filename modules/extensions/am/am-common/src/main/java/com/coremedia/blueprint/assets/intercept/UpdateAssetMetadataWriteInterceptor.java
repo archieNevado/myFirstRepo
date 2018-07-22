@@ -16,7 +16,7 @@ import com.google.common.base.MoreObjects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.List;
 import java.util.Map;
 
@@ -81,8 +81,8 @@ public class UpdateAssetMetadataWriteInterceptor extends ContentWriteInterceptor
     }
   }
 
-  private void updateMetadata(@Nonnull CapObject entity,
-                              @Nonnull Map<String, Object> properties) {
+  private void updateMetadata(@NonNull CapObject entity,
+                              @NonNull Map<String, Object> properties) {
     if (properties.keySet().contains(metadataSourceProperty)) {
       Blob original = (Blob) properties.get(metadataSourceProperty);
       if (original == null) {

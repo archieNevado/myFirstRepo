@@ -99,6 +99,12 @@ public class ElasticSocialFreemarkerFacade {
     return elasticSocialPlugin.getElasticSocialConfiguration(page);
   }
 
+  /**
+   * Returns constants to access localization for elastic social.
+   * @return Returns constants to access localization for elastic social.
+   * @deprecated will be removed with the next AEP, access the resource bundle keys directly in your template.
+   */
+  @Deprecated
   public ElasticSocialMessageKeysFreemarker getElasticSocialMessageKeys() {
     return elasticSocialMessageKeys;
   }

@@ -25,8 +25,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.util.UriComponents;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -70,7 +70,7 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
   // ----- methods that use WCS storefront services -----------------------------
 
   @Override
-  public boolean ensureGuestIdentity(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response) {
+  public boolean ensureGuestIdentity(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response) {
     if (isKnownUser(request)) {
       return true;
     }
@@ -87,8 +87,8 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
       UserContext userContext = UserContextHelper.getCurrentContext();
       String mergedCookies = addCookiesToCookieHeader(userContext.getCookieHeader(), storeFrontResponse.getCookies());
 
-      StoreContext currentContext = StoreContextHelper.getCurrentContext();
-      if (null != currentContext && WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(currentContext))) {
+      StoreContext currentContext = StoreContextHelper.findCurrentContext().orElse(null);
+      if (currentContext != null && WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(currentContext))) {
         //bugfix CMS-4132: call guest login url twice because guest session was broken when called only once
         Map<String, String> cookies = storeFrontResponse.getCookies();
         HttpServletRequest requestWrapper = createRequestWrapper(request, cookies);
@@ -125,7 +125,7 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
   }
 
   @Override
-  public void pingCommerce(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response) {
+  public void pingCommerce(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response) {
     try {
       StoreContext currentContext = CurrentCommerceConnection.get().getStoreContext();
       String baseUrl = getWcsStorefrontUrl(currentContext);
@@ -153,12 +153,12 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
   }
 
   @Nullable
-  private String resolveUserId(@Nonnull StoreFrontResponse response, String currentStoreId, boolean ignoreAnonymous) {
+  private String resolveUserId(@NonNull StoreFrontResponse response, String currentStoreId, boolean ignoreAnonymous) {
     return resolveUserIdFromApacheCookies(response.getCookies(), currentStoreId, ignoreAnonymous);
   }
 
   @Nullable
-  private String resolveUserIdFromJavaxCookies(@Nonnull List<Cookie> javaxCookies, String currentStoreId,
+  private String resolveUserIdFromJavaxCookies(@NonNull List<Cookie> javaxCookies, String currentStoreId,
                                                boolean ignoreAnonymous) {
     for (Cookie cookie : javaxCookies) {
       String name = cookie.getName();
@@ -177,7 +177,7 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
   }
 
   @Nullable
-  private String resolveUserIdFromApacheCookies(@Nonnull Map<String, String> cookies, String currentStoreId,
+  private String resolveUserIdFromApacheCookies(@NonNull Map<String, String> cookies, String currentStoreId,
                                                 boolean ignoreAnonymous) {
     for (Map.Entry<String, String> cookie : cookies.entrySet()) {
       String name = cookie.getKey();
@@ -197,7 +197,7 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
 
   @Nullable
   @VisibleForTesting
-  String resolveUserIdFromCookieData(@Nonnull String cookieName, @Nonnull String cookieValue, String currentStoreId,
+  String resolveUserIdFromCookieData(@NonNull String cookieName, @NonNull String cookieValue, String currentStoreId,
                                      boolean ignoreAnonymous) {
     boolean isWcUserActivityCookie = cookieName.startsWith(IBM_WC_USERACTIVITY_COOKIE_NAME);
     boolean isPreviewWcUserActivityCookie = cookieName.startsWith(IBM_WCP_USERACTIVITY_COOKIE_NAME);
@@ -214,8 +214,8 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
     return null;
   }
 
-  @Nonnull
-  private static String[] splitCookie(@Nonnull String cookieValue, boolean ignoreAnonymous) {
+  @NonNull
+  private static String[] splitCookie(@NonNull String cookieValue, boolean ignoreAnonymous) {
     String[] values = cookieValue.split(",");
     if (values.length > 1) {
       try {
@@ -233,7 +233,7 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
   }
 
   @Override
-  public boolean loginUser(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response, String username,
+  public boolean loginUser(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, String username,
                            String password) {
     String storeId = resolveStoreId();
     if (storeId == null) {
@@ -284,9 +284,10 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
     String userId = userContext.getUserId();
 
     try {
-      CommerceUserIsLoggedInCacheKey cacheKey = new CommerceUserIsLoggedInCacheKey(userId,
-              StoreContextHelper.getCurrentContext(), UserContextHelper.getCurrentContext(), loginWrapperService,
-              commerceCache);
+      StoreContext storeContext = StoreContextHelper.findCurrentContext().orElse(null);
+
+      CommerceUserIsLoggedInCacheKey cacheKey = new CommerceUserIsLoggedInCacheKey(userId, storeContext, userContext,
+              loginWrapperService, commerceCache);
 
       return commerceCache.get(cacheKey);
     } catch (Exception e) {
@@ -327,7 +328,7 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
   }
 
   @Override
-  public void clearCommerceSession(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response) {
+  public void clearCommerceSession(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response) {
     String storeId = StoreContextHelper.findCurrentContext().map(StoreContext::getStoreId).orElse(null);
 
     if (storeId == null) {
@@ -349,7 +350,7 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
     }
   }
 
-  private void refreshUserContext(@Nonnull StoreFrontResponse storeFrontResponse) {
+  private void refreshUserContext(@NonNull StoreFrontResponse storeFrontResponse) {
     UserContext userContext = UserContextHelper.getCurrentContext();
 
     String newUserId = resolveUserId(storeFrontResponse, resolveStoreId(), false);
@@ -358,7 +359,7 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
     updateUserContext(userContext, newUserId, newCookieHeader);
   }
 
-  private static void updateUserContext(@Nonnull UserContext userContext, @Nullable String userId,
+  private static void updateUserContext(@NonNull UserContext userContext, @Nullable String userId,
                                         @Nullable String cookieHeader) {
     UserContext updatedUserContext = UserContext.buildCopyOf(userContext)
             .withUserId(userId)
@@ -368,7 +369,7 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
     CurrentCommerceConnection.get().setUserContext(updatedUserContext);
   }
 
-  private static boolean isAnonymousUser(@Nonnull UserContext userContext) {
+  private static boolean isAnonymousUser(@NonNull UserContext userContext) {
     return Optional.ofNullable(userContext.getUserId())
             .map(Ints::tryParse)
             .map(userId -> userId < 0)
@@ -384,7 +385,7 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
    */
   @Nullable
   @VisibleForTesting
-  String addCookiesToCookieHeader(@Nullable String cookieHeader, @Nonnull Map<String, String> cookies) {
+  String addCookiesToCookieHeader(@Nullable String cookieHeader, @NonNull Map<String, String> cookies) {
     if (cookies.isEmpty()) {
       return cookieHeader;
     }
@@ -425,7 +426,7 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
   }
 
   @Nullable
-  private static String decodeCookieValue(@Nonnull String encodedValue) {
+  private static String decodeCookieValue(@NonNull String encodedValue) {
     try {
       return URLDecoder.decode(encodedValue, StandardCharsets.UTF_8.name());
     } catch (UnsupportedEncodingException e) {

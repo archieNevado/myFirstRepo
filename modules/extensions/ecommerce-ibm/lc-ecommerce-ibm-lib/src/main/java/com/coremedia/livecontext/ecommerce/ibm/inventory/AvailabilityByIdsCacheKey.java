@@ -11,9 +11,7 @@ public class AvailabilityByIdsCacheKey extends AbstractCommerceCacheKey<Map<Stri
 
   private WcAvailabilityWrapperService wrapperService;
 
-  public AvailabilityByIdsCacheKey(String id,
-                                   StoreContext storeContext,
-                                   WcAvailabilityWrapperService wrapperService,
+  public AvailabilityByIdsCacheKey(String id, StoreContext storeContext, WcAvailabilityWrapperService wrapperService,
                                    CommerceCache commerceCache) {
     super(id, storeContext, CONFIG_KEY_AVAILABILITY, commerceCache);
     this.wrapperService = wrapperService;
@@ -33,5 +31,4 @@ public class AvailabilityByIdsCacheKey extends AbstractCommerceCacheKey<Map<Stri
       }
     }
   }
-
 }

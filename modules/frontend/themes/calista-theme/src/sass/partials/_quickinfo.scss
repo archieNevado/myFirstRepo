@@ -88,8 +88,3 @@
     }
   }
 }
-
-// disables quickinfo on product teaser - not supported yet
-.cm-hero--product .#{$cm-quickinfo-prefix} {
-  display: none;
-}

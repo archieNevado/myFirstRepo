@@ -7,8 +7,8 @@ import org.springframework.context.NoSuchMessageException;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.text.MessageFormat;
 import java.util.Locale;
@@ -123,8 +123,8 @@ public class RequestMessageSource implements HierarchicalMessageSource {
   }
 
   @Nullable
-  private static String getMessageOrNull(@Nullable MessageSource source, @Nonnull String code, @Nullable Object[] args,
-                                         @Nonnull Locale locale) {
+  private static String getMessageOrNull(@Nullable MessageSource source, @NonNull String code, @Nullable Object[] args,
+                                         @NonNull Locale locale) {
     if (source == null) {
       return null;
     }
@@ -137,8 +137,8 @@ public class RequestMessageSource implements HierarchicalMessageSource {
   }
 
   @Nullable
-  private static String getMessageOrNull(@Nullable MessageSource source, @Nonnull MessageSourceResolvable resolvable,
-                                         @Nonnull Locale locale) {
+  private static String getMessageOrNull(@Nullable MessageSource source, @NonNull MessageSourceResolvable resolvable,
+                                         @NonNull Locale locale) {
     if (source == null) {
       return null;
     }
@@ -151,7 +151,7 @@ public class RequestMessageSource implements HierarchicalMessageSource {
   }
 
   @Nullable
-  private static String getFirstCode(@Nonnull MessageSourceResolvable resolvable) {
+  private static String getFirstCode(@NonNull MessageSourceResolvable resolvable) {
     String[] codes = resolvable.getCodes();
 
     if (codes == null || codes.length == 0) {

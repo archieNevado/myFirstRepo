@@ -103,6 +103,7 @@
     <property name="topicPageContextFinder" ref="uapiTopicpageContextFinder"/>
     <property name="navigationSegmentsUriHelper" ref="navigationSegmentsUriHelper"/>
     <property name="contextHelper" ref="contextHelper"/>
+    <property name="urlPathFormattingHelper" ref="urlPathFormattingHelper"/>
   </bean>
 
   <bean id="defaultPageHandler" class="com.coremedia.blueprint.cae.handlers.DefaultPageHandler" abstract="true" parent="pageHandlerBase">

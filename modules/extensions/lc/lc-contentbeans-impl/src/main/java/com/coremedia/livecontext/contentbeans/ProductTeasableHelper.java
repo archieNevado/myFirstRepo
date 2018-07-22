@@ -18,8 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Optional;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper.parseCommerceId;
@@ -47,24 +47,24 @@ public class ProductTeasableHelper {
    * @return a ProductInSite or null if product or site cannot be determined.
    */
   @Nullable
-  ProductInSite getProductInSite(@Nonnull LiveContextProductTeasable contentBean) {
-    Site site = sitesService.getContentSiteAspect(contentBean.getContent()).getSite();
+  ProductInSite getProductInSite(@NonNull LiveContextProductTeasable contentBean) {
     Product product = contentBean.getProduct();
+    Optional<Site> site = findSite(contentBean);
 
-    if (product == null || site == null) {
+    if (product == null || !site.isPresent()) {
       return null;
     }
 
-    return liveContextNavigationFactory.createProductInSite(product, site.getId());
+    return liveContextNavigationFactory.createProductInSite(product, site.get().getId());
   }
 
-  boolean isShopNowEnabled(@Nonnull LiveContextProductTeasable contentBean, @Nonnull CMContext context) {
+  boolean isShopNowEnabled(@NonNull LiveContextProductTeasable contentBean, @NonNull CMContext context) {
     Object navigation = context;
     try {
       Product product = contentBean.getProduct();
-      Site site = sitesService.getContentSiteAspect(contentBean.getContent()).getSite();
-      if (product != null && site != null) {
-        navigation = liveContextNavigationFactory.createNavigation(product.getCategory(), site);
+      Optional<Site> site = findSite(contentBean);
+      if (product != null && site.isPresent()) {
+        navigation = liveContextNavigationFactory.createNavigation(product.getCategory(), site.get());
       }
     } catch (Exception e) {
       LOG.debug("Unable to get product category for content bean {}.", this, e);
@@ -100,7 +100,7 @@ public class ProductTeasableHelper {
     }
   }
 
-  Markup getTeaserTextInternal(@Nonnull LiveContextProductTeasable contentBean, Markup teaserTextFromContent) {
+  Markup getTeaserTextInternal(@NonNull LiveContextProductTeasable contentBean, Markup teaserTextFromContent) {
     Markup tt = teaserTextFromContent;
 
     //fetch the product short description for the teaser text in case of empty teaser text
@@ -118,7 +118,7 @@ public class ProductTeasableHelper {
     return tt;
   }
 
-  String getTeaserTitleInternal(@Nonnull LiveContextProductTeasable contentBean, String teaserTitleFromContent) {
+  String getTeaserTitleInternal(@NonNull LiveContextProductTeasable contentBean, String teaserTitleFromContent) {
     String tt = teaserTitleFromContent;
 
     //fetch the product name for the teaser title in case of empty teaser title
@@ -134,6 +134,11 @@ public class ProductTeasableHelper {
     }
 
     return tt;
+  }
+
+  @NonNull
+  private Optional<Site> findSite(@NonNull LiveContextProductTeasable contentBean) {
+    return sitesService.getContentSiteAspect(contentBean.getContent()).findSite();
   }
 
   static boolean isNullOrBlank(@Nullable String s) {

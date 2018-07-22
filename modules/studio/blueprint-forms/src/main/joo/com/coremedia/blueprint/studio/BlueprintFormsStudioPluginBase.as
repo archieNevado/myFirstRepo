@@ -14,6 +14,7 @@ import com.coremedia.cms.editor.sdk.util.ThumbnailResolverFactory;
 import com.coremedia.ui.data.dependencies.DependencyTracker;
 import com.coremedia.ui.data.validation.Issue;
 import com.coremedia.ui.data.validation.Issues;
+import com.coremedia.ui.plugins.BindPropertyPlugin;
 
 import ext.Ext;
 import ext.button.Button;
@@ -42,6 +43,12 @@ public class BlueprintFormsStudioPluginBase extends StudioPlugin {
 
     //Enable advanced tabs
     TabExpandPlugin.ADVANCED_TABS_ENABLED = true;
+
+    /**
+     * Globally turns off strict consistency checks for all BindPropertyPlugins where the config option
+     * 'disableStrictConsistency' is not set explicitly.
+     */
+    BindPropertyPlugin.DISABLE_STRICT_CONSISTENCY = true;
 
     SiteAwareFeatureUtil.preLoadConfiguration();
 

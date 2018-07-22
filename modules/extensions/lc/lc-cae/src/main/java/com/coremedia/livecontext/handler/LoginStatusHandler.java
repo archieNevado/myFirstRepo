@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.security.auth.login.CredentialExpiredException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
@@ -45,9 +45,9 @@ public class LoginStatusHandler {
   private final CommerceConnectionInitializer commerceConnectionInitializer;
 
   @SuppressWarnings("WeakerAccess") // used in Spring XML
-  public LoginStatusHandler(@Nonnull UserSessionService userSessionService,
-                            @Nonnull LiveContextSiteResolver liveContextSiteResolver,
-                            @Nonnull CommerceConnectionInitializer commerceConnectionInitializer) {
+  public LoginStatusHandler(@NonNull UserSessionService userSessionService,
+                            @NonNull LiveContextSiteResolver liveContextSiteResolver,
+                            @NonNull CommerceConnectionInitializer commerceConnectionInitializer) {
     this.userSessionService = requireNonNull(userSessionService);
     this.liveContextSiteResolver = requireNonNull(liveContextSiteResolver);
     this.commerceConnectionInitializer = requireNonNull(commerceConnectionInitializer);
@@ -56,7 +56,7 @@ public class LoginStatusHandler {
   @GetMapping(value = STATUS, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Map<String, Object>> handleStatus(@RequestParam String storeId,
                                                           @RequestParam Locale locale,
-                                                          @Nonnull HttpServletRequest request) {
+                                                          @NonNull HttpServletRequest request) {
     return withConnection(storeId, locale, request, () -> new ResponseEntity<>(status(), HttpStatus.OK));
   }
 
@@ -85,7 +85,7 @@ public class LoginStatusHandler {
    */
   private <T> ResponseEntity<T> withConnection(String storeId,
                                                Locale locale,
-                                               @Nonnull HttpServletRequest request,
+                                               @NonNull HttpServletRequest request,
                                                Supplier<ResponseEntity<T>> handler) {
     Optional<CommerceConnection> connection = findConnection(storeId, locale);
     if (!connection.isPresent()) {
@@ -104,7 +104,7 @@ public class LoginStatusHandler {
     }
   }
 
-  private void initUserContext(@Nonnull CommerceConnection commerceConnection, @Nonnull HttpServletRequest request) {
+  private void initUserContext(@NonNull CommerceConnection commerceConnection, @NonNull HttpServletRequest request) {
     try {
       UserContext userContext = commerceConnection.getUserContextProvider().createContext(request);
       commerceConnection.setUserContext(userContext);

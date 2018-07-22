@@ -10,7 +10,7 @@ import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.xml.Markup;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.List;
 import java.util.Map;
 
@@ -45,25 +45,25 @@ public abstract class CMThemeBase extends CMLocalizedImpl implements CMTheme {
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public List<CMJavaScript> getJavaScriptLibraries() {
     return createBeansFor(getContent().getLinks(JAVA_SCRIPT_LIBS), CMJavaScript.class);
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public List<CMJavaScript> getJavaScripts() {
     return createBeansFor(getContent().getLinks(JAVA_SCRIPTS), CMJavaScript.class);
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public List<CMCSS> getCss() {
     return createBeansFor(getContent().getLinks(CSS), CMCSS.class);
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public List<CMResourceBundle> getResourceBundles() {
     return createBeansFor(getContent().getLinks(RESOURCE_BUNDLES), CMResourceBundle.class);
   }

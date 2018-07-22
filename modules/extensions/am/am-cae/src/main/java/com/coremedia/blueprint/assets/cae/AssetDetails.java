@@ -3,8 +3,8 @@ package com.coremedia.blueprint.assets.cae;
 import com.coremedia.blueprint.assets.contentbeans.AMAsset;
 import com.coremedia.blueprint.assets.contentbeans.AMTaxonomy;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Map;
 
 /**
@@ -20,7 +20,7 @@ public class AssetDetails implements DownloadPortalContext {
 
   private Map<String, String> metadataProperties;
 
-  public AssetDetails(@Nonnull AMAsset asset, @Nullable AMTaxonomy category) {
+  public AssetDetails(@NonNull AMAsset asset, @Nullable AMTaxonomy category) {
     this.asset = asset;
     this.category = category;
   }
@@ -28,7 +28,7 @@ public class AssetDetails implements DownloadPortalContext {
   /**
    * @cm.template.api
    */
-  @Nonnull
+  @NonNull
   public AMAsset getAsset() {
     return asset;
   }

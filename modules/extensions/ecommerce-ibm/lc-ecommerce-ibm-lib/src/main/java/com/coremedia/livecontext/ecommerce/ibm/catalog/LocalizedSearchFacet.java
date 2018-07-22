@@ -2,7 +2,7 @@ package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
 import com.coremedia.livecontext.ecommerce.search.SearchFacet;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.List;
 import java.util.Map;
 
@@ -15,13 +15,13 @@ class LocalizedSearchFacet implements SearchFacet {
   private final List<SearchFacet> childFacets;
   private String label;
 
-  LocalizedSearchFacet(@Nonnull SearchFacet searchFacet, @Nonnull String label, @Nonnull List<SearchFacet> childFacets) {
+  LocalizedSearchFacet(@NonNull SearchFacet searchFacet, @NonNull String label, @NonNull List<SearchFacet> childFacets) {
     this.delegate = searchFacet;
     this.label = label;
     this.childFacets = childFacets;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public String getLabel() {
     return label;
@@ -38,7 +38,7 @@ class LocalizedSearchFacet implements SearchFacet {
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public String getQuery() {
     return delegate.getQuery();
   }
@@ -49,13 +49,13 @@ class LocalizedSearchFacet implements SearchFacet {
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public Map<String, Object> getExtendedData() {
     return delegate.getExtendedData();
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public List<SearchFacet> getChildFacets() {
     return childFacets;
   }

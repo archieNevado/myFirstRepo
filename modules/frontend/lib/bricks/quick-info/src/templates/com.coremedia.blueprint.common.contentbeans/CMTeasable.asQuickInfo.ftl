@@ -8,6 +8,9 @@
 <#-- @ftlvariable name="quickInfoGroup" type="java.lang.String" -->
 <#-- @ftlvariable name="overlay" type="java.util.Map" -->
 
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/components.ftl" as components />
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/utils.ftl" as utils />
+
 <#-- if overlay configuration is not set explicitly assert false for each key not set -->
 <#assign overlay={
   "displayTitle": false,
@@ -30,9 +33,9 @@
       <#assign target=(self.target?has_content && self.target.openInNewTab)?then('target="_blank"', "") />
       <#assign rel=(self.target?has_content && self.target.openInNewTab)?then('rel="noopener"', "") />
       <a href="${cm.getLink(self.target!cm.UNDEFINED)}" ${target?no_esc} ${rel?no_esc} class="cm-quickinfo__picture-link">
-        <@cm.include self=self.picture!cm.UNDEFINED params={
+        <@cm.include self=self.picture!cm.UNDEFINED view="media" params={
           "classBox": "cm-quickinfo__picture-box",
-          "classImage": "cm-quickinfo__picture",
+          "classMedia": "cm-quickinfo__picture",
           "metadata": ["properties.pictures"]
         }/>
       </a>
@@ -49,24 +52,24 @@
         <#if showTitle>
           <h5 class="cm-quickinfo__title cm-heading5"<@preview.metadata "properties.teaserTitle" />>${self.teaserTitle}</h5>
         </#if>
-        <@bp.button baseClass="" iconClass="cm-icon__symbol icon-close" iconText=bp.getMessage("button_close") attr={"class": "cm-quickinfo__close cm-icon"}/>
+        <@components.button baseClass="" iconClass="cm-icon__symbol icon-close" iconText=bp.getMessage("button_close") attr={"class": "cm-quickinfo__close cm-icon"}/>
       </div>
 
       <#-- teaserText -->
       <#if showTeaserText>
-        <div class="cm-quickinfo__text"<@preview.metadata "properties.teaserText" />><@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", 265) /></div>
+        <div class="cm-quickinfo__text"<@preview.metadata "properties.teaserText" />><@utils.renderWithLineBreaks text=bp.truncateText(self.teaserText!"", 265) /></div>
       <#else>
         <div class="cm-quickinfo__text"></div>
       </#if>
 
-      <@bp.button text=bp.getMessage("button_read_more") href=cm.getLink(self.target!cm.UNDEFINED) attr={"classes": ["cm-quickinfo__controls", "cm-button-group__button", "cm-button--linked-large"]} />
+      <@components.button text=bp.getMessage("button_read_more") href=cm.getLink(self.target!cm.UNDEFINED) attr={"classes": ["cm-quickinfo__controls", "cm-button-group__button", "cm-button--linked-large"]} />
     </div>
   </div>
   <#-- next/previous buttons -->
   <#if (quickInfoNextId?? && quickInfoPreviousId??)>
     <#if (quickInfoNextId?length > 0 && quickInfoPreviousId?length > 0)>
-      <@bp.button baseClass="" iconClass="cm-icon__symbol icon-next" iconText=bp.getMessage("button_next") attr={"class": "cm-quickinfo__switch cm-quickinfo__switch--next", "data-cm-target": quickInfoNextId}/>
-      <@bp.button baseClass="" iconClass="cm-icon__symbol icon-prev" iconText=bp.getMessage("button_prev") attr={"class": "cm-quickinfo__switch cm-quickinfo__switch--prev", "data-cm-target": quickInfoPreviousId}/>
+      <@components.button baseClass="" iconClass="cm-icon__symbol icon-next" iconText=bp.getMessage("button_next") attr={"class": "cm-quickinfo__switch cm-quickinfo__switch--next", "data-cm-target": quickInfoNextId}/>
+      <@components.button baseClass="" iconClass="cm-icon__symbol icon-prev" iconText=bp.getMessage("button_prev") attr={"class": "cm-quickinfo__switch cm-quickinfo__switch--prev", "data-cm-target": quickInfoPreviousId}/>
     </#if>
   </#if>
 </div>

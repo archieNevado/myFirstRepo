@@ -12,8 +12,9 @@ import {
   clearNotifications,
   formSubmitStart,
 } from "./es";
-import * as basic from "@coremedia/js-basic";
-import { findAndSelf } from "@coremedia/js-jquery-utils";
+import { EVENT_LAYOUT_CHANGED } from "@coremedia/js-basic";
+import { refreshFragment } from "@coremedia/brick-dynamic-include";
+import { findAndSelf, ajax } from "@coremedia/js-jquery-utils";
 
 const ES_AJAX_FORM_IDENTIFIER = "cm-es-ajax-form";
 const COMMENTS_IDENTIFIER = "cm-comments";
@@ -53,13 +54,12 @@ nodeDecorationService.addNodeDecoratorByData(
       if (formSubmitStart($form)) {
         clearNotifications($form);
         $form.trigger(EVENT_FORM_SUBMIT);
-        $.ajax({
+        ajax({
           type: $form.attr("method"),
           url: $form.attr("action"),
           data: $form.serialize(),
-          headers: { "X-Requested-With": "XMLHttpRequest" },
-          xhrFields: { withCredentials: true },
           dataType: "json",
+          global: true, // keep default value after using common ajax function, not sure if this is important
         })
           .done(function(result) {
             result = $.extend(
@@ -76,7 +76,7 @@ nodeDecorationService.addNodeDecoratorByData(
                 grecaptcha.reset();
               }
             }
-            $document.trigger(basic.EVENT_LAYOUT_CHANGED);
+            $document.trigger(EVENT_LAYOUT_CHANGED);
           })
           .fail(function() {
             addNotifications($form, [
@@ -89,7 +89,7 @@ nodeDecorationService.addNodeDecoratorByData(
           .always(function() {
             formSubmitEnd($form);
           });
-        $document.trigger(basic.EVENT_LAYOUT_CHANGED);
+        $document.trigger(EVENT_LAYOUT_CHANGED);
       }
     });
   }
@@ -158,7 +158,7 @@ nodeDecorationService.addNodeDecoratorByData(
         $commentField.val($commentField.val());
       }
       commentField.scrollTop = commentField.scrollHeight;
-      $document.trigger(basic.EVENT_LAYOUT_CHANGED);
+      $document.trigger(EVENT_LAYOUT_CHANGED);
     });
   }
 );
@@ -178,11 +178,11 @@ nodeDecorationService.addNodeDecoratorBySelector(
       );
       $newCommentForm.on(EVENT_FORM_SUBMIT, function() {
         clearNotifications($commentsWidget);
-        $document.trigger(basic.EVENT_LAYOUT_CHANGED);
+        $document.trigger(EVENT_LAYOUT_CHANGED);
       });
       $newCommentForm.on(EVENT_MODEL_INFO, function(event, handlerInfo) {
         if (handlerInfo.success) {
-          basic.refreshFragment($commentsWidget, function(
+          refreshFragment($commentsWidget, function(
             _,
             $commentsWidgetRefreshed
           ) {
@@ -201,7 +201,7 @@ nodeDecorationService.addNodeDecoratorBySelector(
               // fallback if no id is provided
               addNotifications($commentsWidgetRefreshed, handlerInfo.messages);
             }
-            $document.trigger(basic.EVENT_LAYOUT_CHANGED);
+            $document.trigger(EVENT_LAYOUT_CHANGED);
           });
         }
       });
@@ -214,7 +214,7 @@ nodeDecorationService.addNodeDecoratorBySelector(
         .closest("." + COMMENTS_IDENTIFIER)
         .find(".cm-toolbar--comments")
         .removeClass("cm-toolbar--inactive");
-      $document.trigger(basic.EVENT_LAYOUT_CHANGED);
+      $document.trigger(EVENT_LAYOUT_CHANGED);
     });
   }
 );
@@ -249,7 +249,7 @@ nodeDecorationService.addNodeDecoratorByData(
 
         $toolbar.after($container);
         $reviewField.focus();
-        $document.trigger(basic.EVENT_LAYOUT_CHANGED);
+        $document.trigger(EVENT_LAYOUT_CHANGED);
       });
     }
   }
@@ -268,14 +268,11 @@ nodeDecorationService.addNodeDecoratorBySelector(
       const $reviewsWidget = $newReviewForm.closest("." + REVIEWS_IDENTIFIER);
       $newReviewForm.on(EVENT_FORM_SUBMIT, function() {
         clearNotifications($reviewsWidget);
-        $document.trigger(basic.EVENT_LAYOUT_CHANGED);
+        $document.trigger(EVENT_LAYOUT_CHANGED);
       });
       $newReviewForm.on(EVENT_MODEL_INFO, function(event, modelInfo) {
         if (modelInfo.success) {
-          basic.refreshFragment($reviewsWidget, function(
-            _,
-            $reviewsWidgetRefreshed
-          ) {
+          refreshFragment($reviewsWidget, function(_, $reviewsWidgetRefreshed) {
             if (modelInfo.id !== undefined) {
               const $review = $reviewsWidgetRefreshed.find(
                 "[data-cm-review-id='" + modelInfo.id + "']"
@@ -291,7 +288,7 @@ nodeDecorationService.addNodeDecoratorBySelector(
               // fallback if no id is provided
               addNotifications($reviewsWidgetRefreshed, modelInfo.messages);
             }
-            $document.trigger(basic.EVENT_LAYOUT_CHANGED);
+            $document.trigger(EVENT_LAYOUT_CHANGED);
           });
         }
       });
@@ -303,7 +300,7 @@ nodeDecorationService.addNodeDecoratorBySelector(
         .closest("." + REVIEWS_IDENTIFIER)
         .find(".cm-toolbar--reviews")
         .removeClass("cm-toolbar--inactive");
-      $document.trigger(basic.EVENT_LAYOUT_CHANGED);
+      $document.trigger(EVENT_LAYOUT_CHANGED);
     });
   }
 );
@@ -315,5 +312,64 @@ nodeDecorationService.addNodeDecoratorBySelector(
     $target.on(EVENT_TOGGLE_AVERAGE_RATING, function() {
       $target.toggleClass("cm-ratings-average--active");
     });
+  }
+);
+
+// add readmore functionality if text is too long
+nodeDecorationService.addNodeDecoratorByData(
+  { lines: undefined },
+  "cm-readmore",
+  function($target, config) {
+    const blockReadMore = "cm-readmore";
+    // read the line height for the given target
+    let lineHeight = $target.css("line-height");
+    // only proceed if config is valid and lineHeight could be retrieved
+    if (config.lines !== undefined && lineHeight !== undefined) {
+      const $wrapper = $target.find("." + blockReadMore + "__wrapper");
+      const $buttonbar = $target.find("." + blockReadMore + "__buttonbar");
+      const $buttonMore = $buttonbar.find(
+        "." + blockReadMore + "__button-more"
+      );
+      const $buttonLess = $buttonbar.find(
+        "." + blockReadMore + "__button-less"
+      );
+
+      // calculate line height in px
+      if (lineHeight.indexOf("px") > -1) {
+        // line height is already in px, just remove the unit
+        lineHeight = lineHeight.replace("px", "");
+      } else {
+        // line height is relative to font-size, calculate line height by multiplying its value with font-size
+        lineHeight = lineHeight * $target.css("font-size").replace("px", "");
+      }
+      const maxHeight = Math.floor(lineHeight * config.lines);
+      // enable readmore functionality if text without the readmore button exceeds the maximum height
+      // it would make no sense to add a readmore button if it would take more space as rendering the full text
+      if ($wrapper.height() - 2 * $buttonbar.height() > maxHeight) {
+        $target.addClass(blockReadMore + "--enabled");
+        // default without any action by the user ist the non expanded (less) version
+        $target.addClass(blockReadMore + "--less");
+        $wrapper.css("max-height", maxHeight);
+        $buttonMore.on("click", function() {
+          $target.removeClass(blockReadMore + "--less");
+          $target.addClass(blockReadMore + "--more");
+          $wrapper.css("max-height", "");
+          $document.trigger(EVENT_LAYOUT_CHANGED);
+        });
+        $buttonLess.on("click", function() {
+          $target.removeClass(blockReadMore + "--more");
+          $target.addClass(blockReadMore + "--less");
+          $wrapper.css("max-height", maxHeight);
+          $document.trigger(EVENT_LAYOUT_CHANGED);
+        });
+        $buttonLess.on("click", function() {
+          $target.removeClass(blockReadMore + "--more");
+          $target.addClass(blockReadMore + "--less");
+          $wrapper.css("max-height", maxHeight);
+          $document.trigger(EVENT_LAYOUT_CHANGED);
+        });
+        $document.trigger(EVENT_LAYOUT_CHANGED);
+      }
+    }
   }
 );

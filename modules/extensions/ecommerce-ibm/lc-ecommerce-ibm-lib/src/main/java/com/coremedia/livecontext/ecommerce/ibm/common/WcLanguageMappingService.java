@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -24,8 +24,9 @@ class WcLanguageMappingService {
   //default is english
   private static final String DEFAULT_LANGUAGE_ID = "-1";
 
-  private static final WcRestServiceMethod<Map, Void>
-          GET_LANGUAGE_MAPPING = WcRestConnector.createServiceMethod(HttpMethod.GET, "coremedia/languagemap", false, false, false, Map.class);
+  private static final WcRestServiceMethod<Map, Void> GET_LANGUAGE_MAPPING = WcRestServiceMethod
+          .builder(HttpMethod.GET, "coremedia/languagemap", Void.class, Map.class)
+          .build();
 
   private WcRestConnector restConnector;
   private Cache cache;
@@ -43,7 +44,8 @@ class WcLanguageMappingService {
 
   Map<String, String> getLanguageMappingUncached() {
     //noinspection unchecked
-    return restConnector.callServiceInternal(GET_LANGUAGE_MAPPING, emptyList(), emptyMap(), null, null, null);
+    return restConnector.callServiceInternal(GET_LANGUAGE_MAPPING, emptyList(), emptyMap(), null, null, null)
+            .orElse(null);
   }
 
   /**
@@ -52,12 +54,12 @@ class WcLanguageMappingService {
    *
    * @param locale e.g. "en_US" "en" "de"
    */
-  @Nonnull
+  @NonNull
   String getLanguageId(@Nullable Locale locale) {
     return findLanguageId(locale).orElse(DEFAULT_LANGUAGE_ID);
   }
 
-  @Nonnull
+  @NonNull
   private Optional<String> findLanguageId(@Nullable Locale locale) {
     if (locale == null) {
       return Optional.empty();

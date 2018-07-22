@@ -11,8 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
@@ -50,8 +50,8 @@ public class LiveContextChannelLinkBuilder extends LiveContextPageHandlerBase {
 
   @Link(type = CMChannel.class)
   @Nullable
-  public Object buildLinkForChannel(@Nonnull CMChannel channel,
-                                    @Nonnull HttpServletRequest request) {
+  public Object buildLinkForChannel(@NonNull CMChannel channel,
+                                    @NonNull HttpServletRequest request) {
     Optional<Site> siteOptional = findSite(channel);
     CommerceConnection commerceConnection = siteOptional
             .flatMap(commerceConnectionInitializer::findConnectionForSite).orElse(null);
@@ -76,15 +76,15 @@ public class LiveContextChannelLinkBuilder extends LiveContextPageHandlerBase {
     return null;
   }
 
-  @Nonnull
-  private Optional<Site> findSite(@Nonnull CMChannel channel) {
+  @NonNull
+  private Optional<Site> findSite(@NonNull CMChannel channel) {
     return getSitesService().getContentSiteAspect(channel.getContent()).findSite();
   }
 
   /**
    * Create a link to the Channel, as used by the Studio preview.
    */
-  private Object createLinkForChannelInShop(@Nonnull CMChannel channel, @Nonnull StoreContext storeContext, @Nonnull HttpServletRequest request) {
+  private Object createLinkForChannelInShop(@NonNull CMChannel channel, @NonNull StoreContext storeContext, @NonNull HttpServletRequest request) {
     String seoSegment = commerceLedLinkBuilderHelper.getSeoSegmentForChannel(channel);
     if (StringUtils.isNotEmpty(seoSegment)) {
       seoSegment = seoSegment.replaceAll("--", "/");

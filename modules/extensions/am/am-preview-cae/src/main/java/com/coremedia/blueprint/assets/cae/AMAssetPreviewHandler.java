@@ -25,8 +25,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 
 @Link
@@ -90,7 +90,7 @@ public class AMAssetPreviewHandler extends PageHandlerBase {
 
   @Nullable
   private Page resolveAssetContextForPreferredSite(@Nullable String preferredSiteId,
-                                                   @Nonnull HttpServletRequest request) {
+                                                   @NonNull HttpServletRequest request) {
     if (preferredSiteId == null) {
       return null;
     }

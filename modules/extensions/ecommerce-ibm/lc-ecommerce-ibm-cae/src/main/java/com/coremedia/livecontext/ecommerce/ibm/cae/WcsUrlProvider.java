@@ -19,14 +19,15 @@ import com.coremedia.livecontext.handler.LiveContextPageHandlerBase;
 import com.coremedia.livecontext.handler.LiveContextProductSeoLinkBuilderHelper;
 import com.coremedia.livecontext.handler.LiveContextUrlProvider;
 import com.coremedia.objectserver.web.links.TokenResolverHelper;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -77,23 +78,23 @@ public class WcsUrlProvider implements LiveContextUrlProvider {
   private String categoryNonSeoUrl;
   private LiveContextProductSeoLinkBuilderHelper liveContextProductSeoLinkBuilderHelper;
 
-  private static boolean isStudioPreview(@Nonnull Map<String, Object> parameters) {
+  private static boolean isStudioPreview(@NonNull Map<String, Object> parameters) {
     return parameters.containsKey(IS_STUDIO_PREVIEW) && (boolean) parameters.get(IS_STUDIO_PREVIEW);
   }
 
-  private static boolean isInitialStudioRequest(@Nonnull Map<String, Object> parameters) {
+  private static boolean isInitialStudioRequest(@NonNull Map<String, Object> parameters) {
     return parameters.containsKey(IS_INITIAL_STUDIO_REQUEST) && (boolean) parameters.get(IS_INITIAL_STUDIO_REQUEST);
   }
 
-  private static boolean isNonDefaultCatalog(@Nonnull Map<String, Object> parameters) {
+  private static boolean isNonDefaultCatalog(@NonNull Map<String, Object> parameters) {
     return parameters.containsKey(CATALOG_ID) && null != parameters.get(CATALOG_ID);
   }
 
   private static boolean isContractPreview(@Nullable StoreContext storeContext, boolean isStudioPreview) {
-    return storeContext != null && isStudioPreview && storeContext.getContractIdsForPreview() != null;
+    return storeContext != null && isStudioPreview && !storeContext.getContractIdsForPreview().isEmpty();
   }
 
-  protected void configureParametersForUrlReplacements(@Nonnull Map<String, Object> parameters, @Nonnull StoreContext storeContext) {
+  protected void configureParametersForUrlReplacements(@NonNull Map<String, Object> parameters, @NonNull StoreContext storeContext) {
     parameters.put(PARAM_STORE_NAME, StringUtils.lowerCase(storeContext.getStoreName()));
     parameters.put(PARAM_LANGUAGE, storeContext.getLocale().getLanguage());
 
@@ -196,12 +197,12 @@ public class WcsUrlProvider implements LiveContextUrlProvider {
    * @param storeContext
    */
   @Nullable
-  public Object provideValue(@Nonnull Map<String, Object> parameters, @Nonnull HttpServletRequest request, @Nullable StoreContext storeContext) {
+  public Object provideValue(@NonNull Map<String, Object> parameters, @NonNull HttpServletRequest request, @Nullable StoreContext storeContext) {
     UriComponentsBuilder uriComponentsBuilder = buildLink(parameters, request, storeContext);
     return uriComponentsBuilder != null ? uriComponentsBuilder.build() : null;
   }
 
-  private UriComponentsBuilder buildLink(@Nonnull Map<String, Object> parameters, HttpServletRequest request, @Nullable StoreContext storeContext) {
+  private UriComponentsBuilder buildLink(@NonNull Map<String, Object> parameters, HttpServletRequest request, @Nullable StoreContext storeContext) {
     String resultUrl = getUrlPattern();
     boolean isStudioPreview = isStudioPreview(parameters);
 
@@ -221,7 +222,10 @@ public class WcsUrlProvider implements LiveContextUrlProvider {
         parameters.put(REDIRECT_URL, redirectUrl);
         resultUrl = applyParameters(shoppingFlowUrlForContractPreview, parameters, storeContext);
         //add contractIds
-        resultUrl = UriComponentsBuilder.fromUriString(resultUrl).queryParam(PARAM_CONTRACT_ID_FOR_PREVIEW, storeContext.getContractIdsForPreview()).build().toUriString();
+        resultUrl = UriComponentsBuilder.fromUriString(resultUrl)
+                .queryParam(PARAM_CONTRACT_ID_FOR_PREVIEW, toArray(storeContext.getContractIdsForPreview()))
+                .build()
+                .toUriString();
       } else {
         resultUrl = applyParameters(resultUrl, parameters, storeContext);
       }
@@ -244,8 +248,8 @@ public class WcsUrlProvider implements LiveContextUrlProvider {
 
   @Nullable
   @Override
-  public UriComponentsBuilder buildCategoryLink(@Nonnull Category category, @Nonnull Map<String, Object> queryParams,
-                                                @Nonnull HttpServletRequest request) {
+  public UriComponentsBuilder buildCategoryLink(@NonNull Category category, @NonNull Map<String, Object> queryParams,
+                                                @NonNull HttpServletRequest request) {
 
     Map<String, Object> newQueryParams = new HashMap<>(queryParams);
     newQueryParams.put(CATEGORY_ID, category.getExternalTechId());
@@ -263,7 +267,7 @@ public class WcsUrlProvider implements LiveContextUrlProvider {
 
   @Nullable
   @Override
-  public UriComponentsBuilder buildProductLink(@Nonnull Product product, @Nonnull Map<String, Object> queryParams, @Nonnull HttpServletRequest request) {
+  public UriComponentsBuilder buildProductLink(@NonNull Product product, @NonNull Map<String, Object> queryParams, @NonNull HttpServletRequest request) {
     String seoSegments = liveContextProductSeoLinkBuilderHelper.buildSeoSegmentsFor(product);
 
     Map<String, Object> newQueryParams = new HashMap<>(queryParams);
@@ -286,10 +290,10 @@ public class WcsUrlProvider implements LiveContextUrlProvider {
 
   @Nullable
   @Override
-  public UriComponentsBuilder buildPageLink(@Nonnull CMExternalPage navigation,
-                                            @Nonnull Map<String, Object> queryParams,
-                                            @Nonnull HttpServletRequest request,
-                                            @Nonnull StoreContext storeContext) {
+  public UriComponentsBuilder buildPageLink(@NonNull CMExternalPage navigation,
+                                            @NonNull Map<String, Object> queryParams,
+                                            @NonNull HttpServletRequest request,
+                                            @NonNull StoreContext storeContext) {
 
     String urlTemplate = navigation.getExternalUriPath();
     if (isEmpty(urlTemplate)){
@@ -304,14 +308,14 @@ public class WcsUrlProvider implements LiveContextUrlProvider {
 
   @Nullable
   @Override
-  public UriComponentsBuilder buildShopLink(@Nonnull String seoSegments, @Nonnull Map<String, Object> queryParams, @Nonnull HttpServletRequest request, @Nonnull StoreContext storeContext) {
+  public UriComponentsBuilder buildShopLink(@NonNull String seoSegments, @NonNull Map<String, Object> queryParams, @NonNull HttpServletRequest request, @NonNull StoreContext storeContext) {
     Map<String,Object> params = toSingleParam(queryParams, request);
     params.put(URL_PROVIDER_SEO_SEGMENT, seoSegments);
 
     return buildLink(params, request, storeContext);
   }
 
-  private Map<String, Object> toSingleParam(@Nonnull Map<String, Object> queryParams, @Nonnull HttpServletRequest request) {
+  private Map<String, Object> toSingleParam(@NonNull Map<String, Object> queryParams, @NonNull HttpServletRequest request) {
     Map<String,Object> params = new HashMap<>();
     params.put(URL_PROVIDER_QUERY_PARAMS, queryParams);
     params.put(URL_PROVIDER_IS_STUDIO_PREVIEW, LiveContextPageHandlerBase.isStudioPreviewRequest(request));
@@ -320,7 +324,7 @@ public class WcsUrlProvider implements LiveContextUrlProvider {
     return params;
   }
 
-  private String ensureNewSessionForNewStudioTabs(@Nonnull Map<String, Object> parameters, String resultUrl) {
+  private String ensureNewSessionForNewStudioTabs(@NonNull Map<String, Object> parameters, String resultUrl) {
     boolean isInitialStudioRequest = isInitialStudioRequest(parameters);
     if (isInitialStudioRequest) {
       resultUrl = UriComponentsBuilder.fromUriString(resultUrl).queryParam(NEW_PREVIEW_SESSION_VARIABLE, Boolean.TRUE.toString()).build().toUriString();
@@ -329,7 +333,7 @@ public class WcsUrlProvider implements LiveContextUrlProvider {
   }
 
   @Nullable
-  private String evaluateUrlTemplate(@Nonnull Map<String, Object> parameters) {
+  private String evaluateUrlTemplate(@NonNull Map<String, Object> parameters) {
     String urlTemplate = (String) parameters.get(URL_TEMPLATE);
 
     if (urlTemplate != null) {
@@ -351,7 +355,7 @@ public class WcsUrlProvider implements LiveContextUrlProvider {
     return null;
   }
 
-  private String applyParameters(@Nullable String url, @Nonnull Map<String, Object> parameters, StoreContext storeContext) {
+  private String applyParameters(@Nullable String url, @NonNull Map<String, Object> parameters, StoreContext storeContext) {
     Map<String, Object> configuredParams = new HashMap<>();
 
     //optional seo segment
@@ -378,7 +382,7 @@ public class WcsUrlProvider implements LiveContextUrlProvider {
     return TokenResolverHelper.replaceTokens(commerceTokensReplacedUrl, configuredParams, false, false);
   }
 
-  private String makeShopUrlAbsolute(@Nonnull String url, boolean isStudioPreview) {
+  private String makeShopUrlAbsolute(@NonNull String url, boolean isStudioPreview) {
     if (url.startsWith("http") || url.startsWith("//")) {
       return url;
     }
@@ -404,5 +408,11 @@ public class WcsUrlProvider implements LiveContextUrlProvider {
     return CurrentCommerceConnection.find()
             .map(CommerceConnection::getCatalogService)
             .orElse(null);
+  }
+
+  private static String[] toArray(@NonNull List<String> items) {
+    // `toArray(new T[0])` as per https://shipilev.net/blog/2016/arrays-wisdom-ancients/
+    //noinspection ToArrayCallWithZeroLengthArrayArgument
+    return items.toArray(new String[0]);
   }
 }

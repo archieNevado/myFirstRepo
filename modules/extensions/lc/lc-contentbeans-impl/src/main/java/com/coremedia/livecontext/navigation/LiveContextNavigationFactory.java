@@ -20,8 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 import static org.springframework.util.Assert.notNull;
 
@@ -43,8 +43,8 @@ public class LiveContextNavigationFactory {
    *
    * @param category The category the navigation should be build for.
    */
-  @Nonnull
-  public LiveContextNavigation createNavigation(@Nonnull Category category, @Nonnull Site site) {
+  @NonNull
+  public LiveContextNavigation createNavigation(@NonNull Category category, @NonNull Site site) {
     if (augmentationService != null) {
       Content externalChannelContent = augmentationService.getContent(category);
       LiveContextNavigation externalChannel = (LiveContextNavigation) contentBeanFactory.createBeanFor(externalChannelContent);
@@ -63,10 +63,10 @@ public class LiveContextNavigationFactory {
    * @param seoSegment the seo segment of the category which should be wrapped in a LiveContextNavigation
    * @return category the category found for given seo segment
    */
-  @Nonnull
-  public LiveContextNavigation createNavigationBySeoSegment(@Nonnull Content parentChannel, @Nonnull String seoSegment) {
-    StoreContext storeContext = getStoreContextProvider().findContextByContent(parentChannel);
-    notNull(storeContext, "No StoreContext found for " + parentChannel.getName());
+  @NonNull
+  public LiveContextNavigation createNavigationBySeoSegment(@NonNull Content parentChannel, @NonNull String seoSegment) {
+    StoreContext storeContext = getStoreContextProvider().findContextByContent(parentChannel)
+            .orElseThrow(() -> new IllegalArgumentException("No store context found for " + parentChannel.getName()));
 
     Category category = getCatalogService().findCategoryBySeoSegment(seoSegment, storeContext);
     notNull(category, "No category found for seo segment: " + seoSegment);
@@ -78,26 +78,26 @@ public class LiveContextNavigationFactory {
   }
 
   @Nullable
-  public CategoryInSite createCategoryInSite(@Nonnull Category category, @Nonnull String siteId) {
+  public CategoryInSite createCategoryInSite(@NonNull Category category, @NonNull String siteId) {
     return sitesService.findSite(siteId)
             .map(site -> createCategoryInSite(category, site))
             .orElse(null);
   }
 
   @Nullable
-  public ProductInSite createProductInSite(@Nonnull Product product, @Nonnull String siteId) {
+  public ProductInSite createProductInSite(@NonNull Product product, @NonNull String siteId) {
     return sitesService.findSite(siteId)
             .map(site -> createProductInSite(product, site))
             .orElse(null);
   }
 
-  @Nonnull
-  public CategoryInSite createCategoryInSite(@Nonnull Category category, @Nonnull Site site) {
+  @NonNull
+  public CategoryInSite createCategoryInSite(@NonNull Category category, @NonNull Site site) {
     return new CategoryInSiteImpl(category, site);
   }
 
-  @Nonnull
-  public ProductInSite createProductInSite(@Nonnull Product product, @Nonnull Site site) {
+  @NonNull
+  public ProductInSite createProductInSite(@NonNull Product product, @NonNull Site site) {
     return new ProductInSiteImpl(product, site);
   }
 

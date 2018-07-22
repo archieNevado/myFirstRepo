@@ -4,6 +4,8 @@ import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
+
 /**
  * @cm.template.api
  */
@@ -22,5 +24,6 @@ public interface LiveContextNavigation extends Navigation {
    *
    * @return the site.
    */
+  @NonNull
   Site getSite();
 }

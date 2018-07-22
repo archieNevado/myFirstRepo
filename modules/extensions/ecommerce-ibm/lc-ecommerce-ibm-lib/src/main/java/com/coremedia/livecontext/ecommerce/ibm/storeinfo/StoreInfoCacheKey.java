@@ -1,8 +1,8 @@
 package com.coremedia.livecontext.ecommerce.ibm.storeinfo;
 
-import com.coremedia.cache.Cache;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceCacheKey;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
+import com.coremedia.cache.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 public class StoreInfoCacheKey extends AbstractCommerceCacheKey<Map<String, Object>> {
 
   private static final Logger LOG = LoggerFactory.getLogger(StoreInfoCacheKey.class);
+
   private final int delayOnError;
 
   private WcStoreInfoWrapperService wrapperService;
@@ -45,7 +46,6 @@ public class StoreInfoCacheKey extends AbstractCommerceCacheKey<Map<String, Obje
 
   @Override
   protected String getCacheIdentifier() {
-    return id + ":" + configKey;
+    return assembleCacheIdentifier(id, configKey);
   }
-
 }

@@ -4,7 +4,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.List;
 
 /**
@@ -20,8 +20,8 @@ public interface AssetResolvingStrategy {
    * @param site       The site to search in
    * @return a list of contents of the given content type linking to the external content (e.g. product)
    */
-  @Nonnull
-  List<Content> findAssets(@Nonnull String contentType,
-                           @Nonnull CommerceId id,
-                           @Nonnull Site site);
+  @NonNull
+  List<Content> findAssets(@NonNull String contentType,
+                           @NonNull CommerceId id,
+                           @NonNull Site site);
 }

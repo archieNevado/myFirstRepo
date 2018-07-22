@@ -36,8 +36,8 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
@@ -62,11 +62,12 @@ public class ProductReviewsResultHandler extends AbstractReviewsResultHandler {
   /**
    * URI pattern, for URIs like "/dynamic/fragment/product-reviews/{segment}/{contextId}?productId={productId}"
    */
-  public static final String DYNAMIC_PATTERN_PRODUCT_REVIEWS = "/" + PREFIX_DYNAMIC +
-          "/" + SEGMENTS_FRAGMENT +
-          "/" + PRODUCT_REVIEWS_PREFIX +
-          "/{" + ROOT_SEGMENT + "}" +
-          "/{" + CONTEXT_ID + "}" ;
+  public static final String DYNAMIC_PATTERN_PRODUCT_REVIEWS
+          = "/" + PREFIX_DYNAMIC
+          + "/" + SEGMENTS_FRAGMENT
+          + "/" + PRODUCT_REVIEWS_PREFIX
+          + "/{" + ROOT_SEGMENT + "}"
+          + "/{" + CONTEXT_ID + "}";
 
   @Inject
   @Named("resolveLivecontextContextStrategy")
@@ -95,53 +96,57 @@ public class ProductReviewsResultHandler extends AbstractReviewsResultHandler {
   // ---------------------- building links ---------------------------------------------------------------------
 
   @Link(type = ProductReviewsResult.class, uri = DYNAMIC_PATTERN_PRODUCT_REVIEWS)
-  public UriComponents buildLink(ReviewsResult reviewsResult,
-                                         UriTemplate uriTemplate,
-                                         Map<String, Object> linkParameters,
-                                         HttpServletRequest request) {
+  public UriComponents buildLink(ReviewsResult reviewsResult, UriTemplate uriTemplate,
+                                 Map<String, Object> linkParameters, HttpServletRequest request) {
     Product product = (Product) reviewsResult.getTarget();
     linkParameters.put(PRODUCT_ID, CommerceIdFormatterHelper.format(product.getReference()));
     return buildFragmentUri(SiteHelper.getSiteFromRequest(request), reviewsResult, uriTemplate, linkParameters);
   }
 
   // ---------------------- private helper methods ---------------------------------------------------------------------
+
   @Override
   protected UriComponentsBuilder getUriComponentsBuilder(Site site, ReviewsResult result, UriTemplate uriTemplate) {
-
     Product product = (Product) result.getTarget();
     Navigation navigation = getContextHelper().currentSiteContext();
 
     if (site != null && contextStrategy != null) {
       navigation = contextStrategy.resolveContext(site, product);
     }
+
     return getUriComponentsBuilder(uriTemplate, navigation, product.getId());
   }
 
   @Substitution(PLACEHOLDER_ID)
   @SuppressWarnings("unused")
-  public ProductReviewsResult getReviews(@Nullable CMPlaceholder placeholder, @Nonnull HttpServletRequest request) {
+  public ProductReviewsResult getReviews(@Nullable CMPlaceholder placeholder, @NonNull HttpServletRequest request) {
     ProductReviewsResult result = null;
+
     if (placeholder != null) {
       FragmentParameters params = FragmentContextProvider.getFragmentContext(request).getParameters();
       if (params != null) {
         String productId = params.getProductId();
-        Optional<String> catalogId = params.getCatalogId();
+        Optional<CatalogId> catalogId = params.getCatalogId();
         if (StringUtils.isNotBlank(productId)) {
           Site site = SiteHelper.getSiteFromRequest(request);
           if (site != null) {
             Product product = getProduct(productId, site, catalogId.orElse(null));
             if (product == null) {
               LOG.warn("Product with ID '{}' for Site '{}' could not be resolved", productId, site);
-              throw new NotFoundException("Product with ID " + productId + " for Site with ID " + site.getId() + " could not be resolved");
+              throw new NotFoundException(
+                      "Product with ID " + productId + " for Site with ID " + site.getId() + " could not be resolved");
             }
+
             result = getReviewsResult(product);
           }
         }
       }
     }
+
     if (result == null) {
       LOG.info("unable to find product reviews for page {} and request {}", placeholder, request.getRequestURI());
     }
+
     return result;
   }
 
@@ -149,48 +154,56 @@ public class ProductReviewsResultHandler extends AbstractReviewsResultHandler {
   protected Object getContributionTarget(String productId, Site site) {
     CommerceId commerceId = parseCommerceIdOrThrow(productId);
     CommerceConnection connection = CurrentCommerceConnection.get();
+
     Product product = getCatalogService(connection).findProductById(commerceId, connection.getStoreContext());
     if (product == null) {
       LOG.warn("Product with ID '{}' for Site '{}' could not be resolved", productId, site);
-      throw new NotFoundException("Product with ID " + productId + " for Site with ID " + site.getId() + " + could not be resolved");
+      throw new NotFoundException(
+              "Product with ID " + productId + " for Site with ID " + site.getId() + " + could not be resolved");
     }
+
     return product;
   }
 
-  private Product getProduct(@Nonnull String productTechId, @Nonnull Site site, @Nullable String catalogId) {
+  private Product getProduct(@NonNull String productTechId, @NonNull Site site, @Nullable CatalogId catalogId) {
     CommerceConnection connection = CurrentCommerceConnection.get();
-    CatalogAlias catalogAlias = DEFAULT_CATALOG_ALIAS;
-    if (catalogId != null){
-      Optional<CatalogAlias> catalogAliasForId = catalogAliasTranslationService.getCatalogAliasForId(CatalogId.of(catalogId), site.getId());
-      catalogAlias = catalogAliasForId.orElse(DEFAULT_CATALOG_ALIAS);
-    }
+
+    CatalogAlias catalogAlias = Optional.ofNullable(catalogId)
+            .flatMap(id -> catalogAliasTranslationService.getCatalogAliasForId(id, site.getId()))
+            .orElse(DEFAULT_CATALOG_ALIAS);
 
     CommerceId techId = connection.getIdProvider().formatProductTechId(catalogAlias, productTechId);
     Product product = getCatalogService(connection).findProductById(techId, connection.getStoreContext());
+
     if (product instanceof ProductVariant) {
       // we only use products as targets for reviews, no product variants (SKUs)
       // e.g. only store the review for PC_TSHIRT and not for PC_TSHIRT_BLUE_XXL
-      product = ((ProductVariant)product).getParent();
+      product = ((ProductVariant) product).getParent();
+
       if (product != null && LOG.isDebugEnabled()) {
         LOG.debug("productId {} is a ProductVariant using parent product {} instead", productTechId, product);
       }
     }
+
     return product;
   }
 
-  @Nonnull
-  private static CatalogService getCatalogService(@Nonnull CommerceConnection connection) {
+  @NonNull
+  private static CatalogService getCatalogService(@NonNull CommerceConnection connection) {
     return requireNonNull(connection.getCatalogService(), "no catalog service available");
   }
 
   private ProductReviewsResult getReviewsResult(Object target) {
-    return  new ProductReviewsResult(target);
+    return new ProductReviewsResult(target);
   }
 
   @Override
-  protected ProductReviewsResult getReviewsResult(Object target, boolean feedbackEnabled, ContributionType contributionType, ElasticSocialConfiguration elasticSocialConfiguration) {
+  protected ProductReviewsResult getReviewsResult(Object target, boolean feedbackEnabled,
+                                                  ContributionType contributionType,
+                                                  ElasticSocialConfiguration elasticSocialConfiguration) {
     CommunityUser user = getElasticSocialUserHelper().getCurrentUser();
-    return  new ProductReviewsResult(target, user, getElasticSocialService(), feedbackEnabled, contributionType, elasticSocialConfiguration);
+    return new ProductReviewsResult(target, user, getElasticSocialService(), feedbackEnabled, contributionType,
+            elasticSocialConfiguration);
   }
 
   @Autowired

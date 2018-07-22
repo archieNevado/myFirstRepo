@@ -4,8 +4,8 @@ import com.google.common.collect.ImmutableMap;
 import com.rits.cloning.Cloner;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -37,7 +37,7 @@ public class DataMapTransformationHelper {
    * @param bodResponseMap The BOD handler based format.
    * @return The search handler based format.
    */
-  public static Map<String, Object> transformProductBodMap(Map<String, Object> bodResponseMap) {
+  public static Map<String, Object> transformProductBodMap(@NonNull Map<String, Object> bodResponseMap) {
     Map<String, Object> mapToUnify = deepCloneMap(bodResponseMap);
     transformKeysStartLowerCase(mapToUnify);
     unifyProductWrapperKeys(mapToUnify);
@@ -50,7 +50,7 @@ public class DataMapTransformationHelper {
    * @param bodResponseMap The BOD handler based format.
    * @return The search handler based format.
    */
-  public static Map<String, Object> transformCategoryBodMap(Map<String, Object> bodResponseMap) {
+  public static Map<String, Object> transformCategoryBodMap(@NonNull Map<String, Object> bodResponseMap) {
     Map<String, Object> mapToUnify = deepCloneMap(bodResponseMap);
     transformKeysStartLowerCase(mapToUnify);
     unifyCategoryWrapperKeys(mapToUnify);
@@ -63,7 +63,8 @@ public class DataMapTransformationHelper {
    * @param productsMap A product map.
    * @return A deep copy of the given product map.
    */
-  private static Map<String, Object> deepCloneMap(Map<String, Object> productsMap) {
+  @NonNull
+  private static Map<String, Object> deepCloneMap(@NonNull Map<String, Object> productsMap) {
     Cloner cloner = new Cloner();
     return cloner.deepClone(productsMap);
   }
@@ -73,7 +74,7 @@ public class DataMapTransformationHelper {
    *
    * @param map The orignial map which will be modified.
    */
-  private static void transformKeysStartLowerCase(Map<String, Object> map) {
+  private static void transformKeysStartLowerCase(@NonNull Map<String, Object> map) {
     // clone in order to read from the clone and modify the original
     Map<String, Object> mapToRead = deepCloneMap(map);
     for (Map.Entry<String, Object> mapEntry : mapToRead.entrySet()) {
@@ -97,7 +98,7 @@ public class DataMapTransformationHelper {
     }
   }
 
-  private static void transformKeysStartLowerCase(Collection<?> collection) {
+  private static void transformKeysStartLowerCase(@NonNull Collection<?> collection) {
     for (Object collectionEntry : collection) {
       if (collectionEntry instanceof Map) {
         transformKeysStartLowerCase((Map) collectionEntry);
@@ -110,7 +111,7 @@ public class DataMapTransformationHelper {
    *
    * @param mapList List of catalog entry or catalog group data.
    */
-  private static void replaceKeys(List<Map<String, Object>> mapList) {
+  private static void replaceKeys(@NonNull List<Map<String, Object>> mapList) {
     for (Map<String, Object> entryMap : mapList) {
       for (Map.Entry<String, String> entry : bodKeyMappings.entrySet()) {
         if (entryMap.containsKey(entry.getKey())) {
@@ -126,9 +127,9 @@ public class DataMapTransformationHelper {
    *
    * @param productWrapper The catalog entry wrapper retrieved by the wrapper service.
    */
-  private static void unifyProductWrapperKeys(Map<String, Object> productWrapper) {
+  private static void unifyProductWrapperKeys(@NonNull Map<String, Object> productWrapper) {
     //noinspection unchecked
-    List<Map<String, Object>> catalogEntryView = DataMapHelper.getValueForKey(productWrapper, "catalogEntryView", List.class);
+    List<Map<String, Object>> catalogEntryView = DataMapHelper.getListValue(productWrapper, "catalogEntryView");
     replaceKeys(catalogEntryView);
     replaceProductAttributeKeys(catalogEntryView);
     replaceSkus(catalogEntryView);
@@ -139,15 +140,15 @@ public class DataMapTransformationHelper {
    *
    * @param categoryWrapper The catalog group wrapper retrieved by the wrapper service.
    */
-  private static void unifyCategoryWrapperKeys(Map<String, Object> categoryWrapper) {
+  private static void unifyCategoryWrapperKeys(@NonNull Map<String, Object> categoryWrapper) {
     //noinspection unchecked
-    List<Map<String, Object>> catalogGroupView = DataMapHelper.getValueForKey(categoryWrapper, "catalogGroupView", List.class);
+    List<Map<String, Object>> catalogGroupView = DataMapHelper.getListValue(categoryWrapper, "catalogGroupView");
     replaceKeys(catalogGroupView);
   }
 
-  @Nonnull
-  public static List<String> getParentCatGroupIdForSingleWrapper(@Nonnull Map<String, Object> delegate,
-                                                                 @Nonnull String currentCatalogId) {
+  @NonNull
+  public static List<String> getParentCatGroupIdForSingleWrapper(@NonNull Map<String, Object> delegate,
+                                                                 @NonNull String currentCatalogId) {
     Object origParentCategoryIds = DataMapHelper.getValueForPath(delegate, "parentCatalogGroupID");
     List<String> parentCategoryIdList = new ArrayList<>();
     if (origParentCategoryIds instanceof List) {
@@ -169,7 +170,7 @@ public class DataMapTransformationHelper {
   }
 
   @Nullable
-  private static String filterByCatalogId(@Nonnull String catalogId, @Nonnull String catalogIdAndCategoryId) {
+  private static String filterByCatalogId(@NonNull String catalogId, @NonNull String catalogIdAndCategoryId) {
     if (catalogIdAndCategoryId.matches(".+_.+")) {
       String[] catalogAndCategoryIdSplit = catalogIdAndCategoryId.split("_");
       if (catalogAndCategoryIdSplit.length > 0 && catalogId.equals(catalogAndCategoryIdSplit[0])) {
@@ -186,14 +187,12 @@ public class DataMapTransformationHelper {
    *
    * @param mapList The list containing the catalog entry or catalog group data.
    */
-  private static void replaceSkus(List<Map<String, Object>> mapList) {
+  private static void replaceSkus(@NonNull List<Map<String, Object>> mapList) {
     for (Map<String, Object> listEntry : mapList) {
-      List<Map<String, Object>> sKUs = (List<Map<String, Object>>) DataMapHelper.getValueForKey(listEntry, "sKUs", List.class);
-      if (sKUs != null) {
-        for (Map<String, Object> sKU : sKUs) {
-          if (sKU.containsKey("sKUUniqueID")) {
-            sKU.put("uniqueID", sKU.remove("sKUUniqueID"));
-          }
+      List<Map<String, Object>> sKUs = (List<Map<String, Object>>) DataMapHelper.getListValue(listEntry, "sKUs");
+      for (Map<String, Object> sKU : sKUs) {
+        if (sKU.containsKey("sKUUniqueID")) {
+          sKU.put("uniqueID", sKU.remove("sKUUniqueID"));
         }
       }
     }
@@ -204,19 +203,15 @@ public class DataMapTransformationHelper {
    *
    * @param mapList The map containing the catalog entry data.
    */
-  private static void replaceProductAttributeKeys(List<Map<String, Object>> mapList) {
+  private static void replaceProductAttributeKeys(@NonNull List<Map<String, Object>> mapList) {
     for (Map<String, Object> listEntry : mapList) {
-      List<Map<String, Object>> attributes = (List<Map<String, Object>>) DataMapHelper.getValueForKey(listEntry, "attributes", List.class);
-      if (attributes != null) {
-        for (Map<String, Object> attribute : attributes) {
-          //rename inner values only
-          List<Map<String, Object>> values = DataMapHelper.getValueForKey(attribute, "values", List.class);
-          if (values != null && values.size() > 0) {
-            for (Map<String, Object> value : values) {
-              if (value.containsKey("values")) {
-                value.put("value", value.remove("values"));
-              }
-            }
+      List<Map<String, Object>> attributes = (List<Map<String, Object>>) DataMapHelper.getListValue(listEntry, "attributes");
+      for (Map<String, Object> attribute : attributes) {
+        //rename inner values only
+        List<Map<String, Object>> values = DataMapHelper.getListValue(attribute, "values");
+        for (Map<String, Object> value : values) {
+          if (value.containsKey("values")) {
+            value.put("value", value.remove("values"));
           }
         }
       }

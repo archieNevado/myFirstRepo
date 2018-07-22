@@ -31,7 +31,9 @@ $screen-md-max:              ($screen-lg-min - 1);
 $grid-gutter-width:         20px;
 // Navbar collapse
 //** Point at which the navbar becomes uncollapsed.
-$grid-float-breakpoint:     9999px;
+$grid-float-breakpoint: $screen-md-min;
+//** Point at which the navbar begins collapsing.
+$grid-float-breakpoint-max: ($grid-float-breakpoint - 1);
 
 //== Breadcrumbs
 //
@@ -39,3 +41,8 @@ $grid-float-breakpoint:     9999px;
 
 //** Breadcrumb background color
 $breadcrumb-bg:                 transparent !default;
+$navbar-margin-bottom:             0;
+$navbar-padding-horizontal:        0;
+$navbar-padding-vertical:          0;
+$dropdown-link-hover-bg: "transparent";
+$nav-link-hover-bg:  "transparent";

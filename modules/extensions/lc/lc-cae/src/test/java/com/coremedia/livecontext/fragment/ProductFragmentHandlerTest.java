@@ -120,7 +120,7 @@ public class ProductFragmentHandlerTest extends FragmentHandlerTestBase<ProductF
 
     ModelAndView result = getTestling().createModelAndView(fragmentParameters4Product, request);
     assertDefaultPlacement(result);
-    assertThat(result.getModel().get("self")).isEqualTo(productPlacement);
+    assertThat(unwrapDynamicIncludeModel(result)).isEqualTo(productPlacement);
     verifyDefault();
   }
 
@@ -134,7 +134,7 @@ public class ProductFragmentHandlerTest extends FragmentHandlerTestBase<ProductF
 
     ModelAndView result = getTestling().createModelAndView(fragmentParameters4Product, request);
     assertDefaultPlacement(result);
-    assertThat(result.getModel().get("self")).isEqualTo(productPlacement);
+    assertThat(unwrapDynamicIncludeModel(result)).isEqualTo(productPlacement);
     verifyDefault();
   }
 
@@ -147,7 +147,7 @@ public class ProductFragmentHandlerTest extends FragmentHandlerTestBase<ProductF
 
     ModelAndView result = getTestling().createModelAndView(fragmentParameters4Product, request);
     assertDefaultPlacement(result);
-    assertThat(result.getModel().get("self")).isEqualTo(placement);
+    assertThat(unwrapDynamicIncludeModel(result)).isEqualTo(placement);
     verifyDefault();
   }
 

@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.common.datevalidation;
 
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Calendar;
 
 /**
@@ -15,6 +16,7 @@ public interface ValidityPeriod {
    *
    * @return the valid from date or {@code null} if there is no such constraint
    */
+  @Nullable
   Calendar getValidFrom();
 
   /**
@@ -22,6 +24,6 @@ public interface ValidityPeriod {
    *
    * @return the valid to date or {@code null} if there is no such constraint
    */
+  @Nullable
   Calendar getValidTo();
-
 }

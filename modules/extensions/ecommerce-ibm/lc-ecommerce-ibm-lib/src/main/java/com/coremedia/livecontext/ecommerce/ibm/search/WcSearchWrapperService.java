@@ -3,18 +3,17 @@ package com.coremedia.livecontext.ecommerce.ibm.search;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractWcWrapperService;
-import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestServiceMethod;
 import org.springframework.http.HttpMethod;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getStoreId;
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
@@ -22,10 +21,14 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
  */
 public class WcSearchWrapperService extends AbstractWcWrapperService {
 
-  private static final WcRestServiceMethod<WcSuggestionViews, Void>
-          GET_KEYWORD_SUGGESTIONS = WcRestConnector.createSearchServiceMethod(HttpMethod.GET, "store/{storeId}/sitecontent/keywordSuggestionsByTerm/{term}", false, false, true, WcSuggestionViews.class);
+  private static final WcRestServiceMethod<WcSuggestionViews, Void> GET_KEYWORD_SUGGESTIONS = WcRestServiceMethod
+          .builderForSearch(HttpMethod.GET, "store/{storeId}/sitecontent/keywordSuggestionsByTerm/{term}",
+                  WcSuggestionViews.class)
+          .previewSupport(true)
+          .build();
 
-  public List<WcSuggestion> getKeywordSuggestionsByTerm(String term, @Nonnull StoreContext storeContext) {
+  @NonNull
+  public List<WcSuggestion> getKeywordSuggestionsByTerm(String term, @NonNull StoreContext storeContext) {
     try {
       String storeId = getStoreId(storeContext);
 
@@ -41,21 +44,24 @@ public class WcSearchWrapperService extends AbstractWcWrapperService {
         parametersMap.put("catalogId", new String[]{catalogId});
       }
 
-      WcSuggestionViews suggestionViews = getRestConnector().callService(GET_KEYWORD_SUGGESTIONS, variableValues,
-              parametersMap, null, storeContext, null);
+      Optional<WcSuggestionViews> suggestionViews = getRestConnector()
+              .callService(GET_KEYWORD_SUGGESTIONS, variableValues, parametersMap, null, storeContext, null);
 
-      if (suggestionViews == null) {
-        return emptyList();
-      }
-
-      return suggestionViews.getSuggestionView().stream()
-              .findFirst()
-              .map(WcSuggestionView::getEntry)
+      return suggestionViews
+              .map(WcSuggestionViews::getSuggestionView)
+              .flatMap(WcSearchWrapperService::getSuggestions)
               .orElseGet(Collections::emptyList);
     } catch (CommerceException e) {
       throw e;
     } catch (Exception e) {
       throw new CommerceException(e);
     }
+  }
+
+  @NonNull
+  private static Optional<List<WcSuggestion>> getSuggestions(List<WcSuggestionView> suggestionViews) {
+    return suggestionViews.stream()
+            .findFirst()
+            .map(WcSuggestionView::getEntry);
   }
 }

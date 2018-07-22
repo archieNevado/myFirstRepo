@@ -355,12 +355,14 @@ public class SolrSearchResultFactory implements SearchResultFactory, Initializin
     private static final String CACHE_CLASS = "com.coremedia.blueprint.cae.search.solr.SolrQueryCacheKey";
     private final SolrQuery solrQuery;
     private final long cacheForInSeconds;
-    private final Object uncacheableDependency = new Object();
 
     // redundant, only for efficiency
     private final String myEqualsValue;
 
     SolrQueryCacheKey(SolrQuery query, long cacheForInSeconds) {
+      if (cacheForInSeconds <= 0) {
+        throw new IllegalArgumentException("Query has unreasonable cache time: " + cacheForInSeconds);
+      }
       this.cacheForInSeconds = cacheForInSeconds;
       this.solrQuery = query;
       myEqualsValue = solrQuery.toQueryString();
@@ -400,15 +402,8 @@ public class SolrSearchResultFactory implements SearchResultFactory, Initializin
       } finally {
         Cache.enableDependencies();
       }
-
-      if (cacheForInSeconds > 0) {
-        LOG.debug("Caching for {} s", cacheForInSeconds);
-        Cache.cacheFor(cacheForInSeconds, TimeUnit.SECONDS);
-      } else {
-        LOG.warn("Query has unreasonable cache time: {} and will not be cached", cacheForInSeconds);
-        Cache.dependencyOn(uncacheableDependency);
-        Cache.currentCache().invalidate(uncacheableDependency);
-      }
+      LOG.debug("Caching for {} s", cacheForInSeconds);
+      Cache.cacheFor(cacheForInSeconds, TimeUnit.SECONDS);
       return queryResponse;
     }
   }

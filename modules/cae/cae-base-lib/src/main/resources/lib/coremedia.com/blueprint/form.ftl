@@ -9,13 +9,6 @@
  *
  ------------------------------------------------------------------------------------------------------------------- -->
 
-<#-- LABEL -->
-<#macro labelFromSpring path text="" bindPath=true attr={}>
-  <#if bindPath><@spring.bind path=path /></#if>
-  <label for="${_getIdFromExpression(spring.status.expression)}" <@util.renderAttr attr />>${text}</label>
-</#macro>
-
-
 <#-- --- PRIVATE --------------------------------------------------------------------------------------------------- -->
 
 
@@ -27,6 +20,11 @@
 
 <#-- --- DEPRECATED ------------------------------------------------------------------------------------------------ -->
 
+<#-- DEPRECATED, see Frontend Developer Guide -->
+<#macro labelFromSpring path text="" bindPath=true attr={}>
+  <#if bindPath><@spring.bind path=path /></#if>
+  <label for="${_getIdFromExpression(spring.status.expression)}" <@util.renderAttr attr />>${text}</label>
+</#macro>
 
 <#--
  * Renders an input field associated to spring forms
@@ -45,7 +43,7 @@
   <#local classes=[] />
 
   <#if bindPath><@spring.bind path=path /></#if>
-  <#assign hasErrors=spring.status.error />
+  <#local hasErrors=spring.status.error />
 
   <#local attr={"type": type, "id": spring.status.expression, "name": spring.status.expression} + attr />
 

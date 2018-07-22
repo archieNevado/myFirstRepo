@@ -10,10 +10,6 @@
 
   <artifactId>p13n-test-content</artifactId>
 
-  <properties>
-    <enforcer.enforce-test>false</enforcer.enforce-test>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
@@ -21,5 +17,23 @@
       <scope>runtime</scope>
     </dependency>
   </dependencies>
-
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>enforce-test</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <!-- disable enforce test as this is a test module -->
+            <!-- borrowed from https://stackoverflow.com/questions/17440418/is-it-possible-to-override-executions-in-maven-pluginmanagement -->
+            <phase>none</phase>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>

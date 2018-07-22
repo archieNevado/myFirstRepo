@@ -7,8 +7,8 @@ import com.coremedia.livecontext.ecommerce.ibm.catalog.CatalogServiceImpl;
 import com.coremedia.xml.Markup;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Locale;
 
 public abstract class AbstractIbmCommerceBean extends AbstractCommerceBean {
@@ -32,7 +32,7 @@ public abstract class AbstractIbmCommerceBean extends AbstractCommerceBean {
     return commerceIdProvider;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   protected CatalogServiceImpl getCatalogService() {
     return (CatalogServiceImpl) super.getCatalogService();

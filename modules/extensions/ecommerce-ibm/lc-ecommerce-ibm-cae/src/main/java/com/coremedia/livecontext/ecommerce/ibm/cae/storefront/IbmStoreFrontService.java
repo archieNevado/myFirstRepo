@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
@@ -74,16 +74,16 @@ public abstract class IbmStoreFrontService extends StoreFrontService {
    */
   @Override
   public StoreFrontResponse handleStorefrontCall(
-          @Nonnull String uri,
-          @Nonnull Map<String, String> uriTemplateParameters,
-          @Nonnull HttpServletRequest sourceRequest,
-          @Nonnull HttpServletResponse sourceResponse) throws GeneralSecurityException {
+          @NonNull String uri,
+          @NonNull Map<String, String> uriTemplateParameters,
+          @NonNull HttpServletRequest sourceRequest,
+          @NonNull HttpServletResponse sourceResponse) throws GeneralSecurityException {
     String fullQualifiedUrl = prepareStoreFrontUrl(uri, sourceRequest);
     return super.handleStorefrontCall(fullQualifiedUrl, uriTemplateParameters, sourceRequest, sourceResponse);
   }
 
-  @Nonnull
-  private String prepareStoreFrontUrl(@Nonnull String uri, @Nonnull HttpServletRequest sourceRequest){
+  @NonNull
+  private String prepareStoreFrontUrl(@NonNull String uri, @NonNull HttpServletRequest sourceRequest){
     String fullQualifiedUrl = makeAbsolute(uri, !isEmpty(sourceRequest.getParameter(PREVIEW_TOKEN)), sourceRequest);
     UriComponentsBuilder ucb = UriComponentsBuilder.fromUriString(fullQualifiedUrl);
     if(sourceRequest.getParameterMap().containsKey(PREVIEW_TOKEN)){
@@ -92,7 +92,7 @@ public abstract class IbmStoreFrontService extends StoreFrontService {
     return ucb.build().toUriString();
   }
 
-  private String makeAbsolute(@Nonnull String url, boolean isPreview, HttpServletRequest request) {
+  private String makeAbsolute(@NonNull String url, boolean isPreview, HttpServletRequest request) {
     if (isAbsolute(url)) {
       return url;
     }
@@ -113,7 +113,7 @@ public abstract class IbmStoreFrontService extends StoreFrontService {
     return fullQualifiedUrl;
   }
 
-  private static boolean isAbsolute(@Nonnull String uri) {
+  private static boolean isAbsolute(@NonNull String uri) {
     try {
       return new URI(uri).isAbsolute();
     } catch (URISyntaxException e) {
@@ -122,7 +122,7 @@ public abstract class IbmStoreFrontService extends StoreFrontService {
     }
   }
 
-  private static boolean isProtocolRelative(@Nonnull String uri) {
+  private static boolean isProtocolRelative(@NonNull String uri) {
     return uri.startsWith("//");
   }
 
@@ -138,7 +138,7 @@ public abstract class IbmStoreFrontService extends StoreFrontService {
    *                           that was returned from the store front with a set of cookies.
    * @return <code>true</code> if the cookies represent a logged in user <code>false</code> otherwise.
    */
-  protected boolean isKnownUser(@Nonnull StoreFrontResponse storeFrontResponse) {
+  protected boolean isKnownUser(@NonNull StoreFrontResponse storeFrontResponse) {
     boolean isGuestOrRegistered = false;
     boolean isAnonymous = false;
 
@@ -168,7 +168,7 @@ public abstract class IbmStoreFrontService extends StoreFrontService {
    * @param request the request, which holds the cookies
    * @return <code>true</code> if the cookies represent a logged in user <code>false</code> otherwise.
    */
-  public boolean isKnownUser(@Nonnull HttpServletRequest request) {
+  public boolean isKnownUser(@NonNull HttpServletRequest request) {
     boolean isGuestOrRegistered = false;
     boolean isAnonymous = false;
 
@@ -202,7 +202,7 @@ public abstract class IbmStoreFrontService extends StoreFrontService {
     return CurrentCommerceConnection.get().getStoreContext();
   }
 
-  private static boolean isAnonymousUser(@Nonnull String cookieName, @Nullable String cookieValue) {
+  private static boolean isAnonymousUser(@NonNull String cookieName, @Nullable String cookieValue) {
     return cookieName.startsWith(IBM_GENERIC_ACTIVITY_COOKIE_NAME) && isValid(cookieValue, null);
   }
 

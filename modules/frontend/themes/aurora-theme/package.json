@@ -10,12 +10,13 @@
     "prettier": "prettier \"**/*\" --write"
   },
   "dependencies": {
+    "@coremedia/ftl-utils": "^1.0.0",
     "@coremedia/sass-utils": "^1.0.0",
     "@coremedia/brick-bootstrap": "^1.0.0",
     "@coremedia/brick-cta": "^1.0.0",
     "@coremedia/brick-dynamic-include": "^1.0.0",
     "@coremedia/brick-fragment-scenario": "^1.0.0",
-    "@coremedia/brick-responsive-images": "^1.0.0",
+    "@coremedia/brick-media": "^1.0.0",
     "@coremedia/brick-default-teaser": "^1.0.0",
     "@coremedia/brick-hero-teaser": "^1.0.0",
     "@coremedia/brick-generic-templates": "^1.0.0",
@@ -23,6 +24,7 @@
     "@coremedia/brick-image-maps": "^1.0.0",
     "@coremedia/brick-video": "^1.0.0",
     "@coremedia/brick-shoppable-video": "^1.0.0",
+    "@coremedia/brick-navigation": "^1.0.0",
     "@coremedia/brick-elastic-social": "^1.0.0",
     "@coremedia/brick-responsive-carousel": "^1.0.0",
     "@coremedia/brick-livecontext": "^1.0.0",

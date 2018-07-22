@@ -41,7 +41,7 @@ import org.springframework.webflow.core.collection.SharedAttributeMap;
 import org.springframework.webflow.execution.RequestContext;
 import org.springframework.webflow.execution.RequestContextHolder;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -264,7 +264,7 @@ public class RegistrationHelper {
     return register(registration, context, file, new HashMap<String, Object>()) != null;
   }
 
-  private boolean isAutomaticActivationEnabled(@Nonnull RequestContext context) {
+  private boolean isAutomaticActivationEnabled(@NonNull RequestContext context) {
     RequestAttributes requestAttributes = getRequestAttributes(context);
     List<String> scopeAttributeNames = Arrays.asList(requestAttributes.getAttributeNames(SCOPE_REQUEST));
 
@@ -276,8 +276,8 @@ public class RegistrationHelper {
     return automaticActivationEnabled;
   }
 
-  private void saveProfileImage(@Nonnull RequestContext context, CommonsMultipartFile file,
-                                @Nonnull CommunityUser user) {
+  private void saveProfileImage(@NonNull RequestContext context, CommonsMultipartFile file,
+                                @NonNull CommunityUser user) {
     if (file != null && file.getSize() > 0) {
       ElasticSocialConfiguration elasticSocialConfiguration = getElasticSocialConfiguration(context);
 
@@ -306,7 +306,7 @@ public class RegistrationHelper {
    * @param context       the executing flow's {@link RequestContext}
    * @return true if the activation succeeded, false otherwise
    */
-  public boolean activate(@PersonalData String activationKey, @Nonnull RequestContext context) {
+  public boolean activate(@PersonalData String activationKey, @NonNull RequestContext context) {
     try {
       CommunityUser user = registrationService.getUserByToken(activationKey);
 
@@ -340,19 +340,19 @@ public class RegistrationHelper {
    *
    * @param context the executing flow's {@link RequestContext}
    */
-  public void redirectLoggedInUserToHomePage(@Nonnull RequestContext context) {
+  public void redirectLoggedInUserToHomePage(@NonNull RequestContext context) {
     if (UserContext.getUser() != null) {
       context.getExternalContext().requestExternalRedirect("contextRelative:");
     }
   }
 
-  @Nonnull
-  public static RequestAttributes getRequestAttributes(@Nonnull RequestContext context) {
+  @NonNull
+  public static RequestAttributes getRequestAttributes(@NonNull RequestContext context) {
     HttpServletRequest servletRequest = getServletRequest(context);
     return new ServletRequestAttributes(servletRequest);
   }
 
-  public void postProcessProviderRegistration(@Nonnull RequestContext context) {
+  public void postProcessProviderRegistration(@NonNull RequestContext context) {
     if (context.getRequestParameters().contains("error")) {
       addErrorMessage(context, WebflowMessageKeys.REGISTRATION_PROVIDER_ERROR);
     }
@@ -364,14 +364,14 @@ public class RegistrationHelper {
     }
   }
 
-  @Nonnull
-  private ElasticSocialConfiguration getElasticSocialConfiguration(@Nonnull RequestContext context) {
+  @NonNull
+  private ElasticSocialConfiguration getElasticSocialConfiguration(@NonNull RequestContext context) {
     HttpServletRequest servletRequest = getServletRequest(context);
     Page page = RequestAttributeConstants.getPage(servletRequest);
     return elasticSocialPlugin.getElasticSocialConfiguration(page);
   }
 
-  private static HttpServletRequest getServletRequest(@Nonnull RequestContext context) {
+  private static HttpServletRequest getServletRequest(@NonNull RequestContext context) {
     return (HttpServletRequest) context.getExternalContext().getNativeRequest();
   }
 }

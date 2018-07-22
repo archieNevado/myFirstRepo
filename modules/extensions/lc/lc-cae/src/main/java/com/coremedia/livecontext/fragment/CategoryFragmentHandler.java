@@ -21,8 +21,8 @@ import com.coremedia.objectserver.web.UserVariantHelper;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
@@ -51,7 +51,7 @@ public class CategoryFragmentHandler extends FragmentHandler {
    */
   @Nullable
   @Override
-  public ModelAndView createModelAndView(@Nonnull FragmentParameters parameters, @Nonnull HttpServletRequest request) {
+  public ModelAndView createModelAndView(@NonNull FragmentParameters parameters, @NonNull HttpServletRequest request) {
     Site site = SiteHelper.getSiteFromRequest(request);
     if (site == null) {
       return HandlerHelper.notFound(getClass().getName() + " cannot derive a site from request "
@@ -90,11 +90,11 @@ public class CategoryFragmentHandler extends FragmentHandler {
     return modelAndView;
   }
 
-  @Nonnull
-  private ModelAndView createBasicModelAndView(@Nonnull Navigation navigation, @Nullable String placement,
-                                               @Nullable String view, @Nonnull CMChannel rootChannel,
+  @NonNull
+  private ModelAndView createBasicModelAndView(@NonNull Navigation navigation, @Nullable String placement,
+                                               @Nullable String view, @NonNull CMChannel rootChannel,
                                                @Nullable User developer) {
-    if (isNullOrEmpty(placement)) {
+    if (isNullOrEmpty(placement)) { // NOSONAR - Workaround for spotbugs/spotbugs#621, see CMS-12169
       if (useOriginalNavigationContext) {
         return createModelAndView(navigation, view, developer);
       } else {
@@ -106,7 +106,7 @@ public class CategoryFragmentHandler extends FragmentHandler {
   }
 
   @Override
-  public boolean include(@Nonnull FragmentParameters params) {
+  public boolean include(@NonNull FragmentParameters params) {
     String categoryId = params.getCategoryId();
     String externalRef = params.getExternalRef();
 
@@ -115,7 +115,7 @@ public class CategoryFragmentHandler extends FragmentHandler {
 
   // --- internal ---------------------------------------------------
 
-  private void enhanceModelAndView(@Nonnull ModelAndView modelAndView, @Nonnull Navigation navigation) {
+  private void enhanceModelAndView(@NonNull ModelAndView modelAndView, @NonNull Navigation navigation) {
     if (navigation instanceof LiveContextCategoryNavigation) {
       modelAndView.addObject("lcNavigation", navigation);
     }

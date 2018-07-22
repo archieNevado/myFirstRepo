@@ -1,8 +1,10 @@
 package com.coremedia.livecontext.commercebeans;
 
-import com.coremedia.livecontext.ecommerce.common.CommerceObject;
-import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.livecontext.ecommerce.catalog.Product;
+import com.coremedia.livecontext.ecommerce.common.CommerceObject;
+
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 /**
  * A product can occur in several sites.
@@ -17,6 +19,7 @@ public interface ProductInSite extends CommerceObject {
    * @return the product
    * @cm.template.api
    */
+  @NonNull
   Product getProduct();
 
   /**
@@ -24,5 +27,6 @@ public interface ProductInSite extends CommerceObject {
    *
    * @return the site.
    */
+  @NonNull
   Site getSite();
 }

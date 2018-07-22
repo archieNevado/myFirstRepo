@@ -3,17 +3,15 @@
 <#-- @ftlvariable name="additionalButtonClass" type="java.lang.String" -->
 <#-- @ftlvariable name="metadata" type="java.util.List" -->
 
+<#-- DEPRECATED: use cta.render provided by ftl-utils instead -->
+
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/cta.ftl" as cta />
+
 <#assign additionalClass=cm.localParameter("additionalClass", "") />
 <#assign additionalButtonClass=cm.localParameter("additionalButtonClass", "") />
 <#assign metadata=cm.localParameter("metadata", []) />
 
-<#assign disabled=bp.setting(self, "callToActionDisabled", false) />
-<#assign text=bp.setting(self, "callToActionCustomText", "") />
-
-<div class="cm-cta ${additionalClass}"<@preview.metadata data=metadata+["properties.localSettings"]/>>
-  <@cm.include self=self.target!cm.UNDEFINED view="_callToActionButton" params={
-    "additionalClass": "cm-cta__button ${additionalButtonClass}",
-    "enabled": !disabled,
-    "text": text
-  } />
-</div>
+<@cta.render buttons=self.callToActionSettings
+             additionalClass=additionalClass
+             additionalButtonClass=additionalButtonClass
+             metadata=metadata />

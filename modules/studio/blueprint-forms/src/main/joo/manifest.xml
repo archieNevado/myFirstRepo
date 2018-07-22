@@ -54,6 +54,7 @@
   <component class="com.coremedia.blueprint.studio.forms.containers.LinkedSettingsForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.LocalSettingsForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.MediaDocumentForm"/>
+  <component class="com.coremedia.blueprint.studio.forms.containers.PlayerSettingsPropertyGroup"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.MetaDataInformationForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.MetaDataWithoutSearchableForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.MetaDataWithoutSettingsForm"/>
@@ -71,5 +72,6 @@
   <component class="com.coremedia.blueprint.studio.forms.containers.ThemeSelectorForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.ValidityDocumentForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.ViewTypeSelectorForm"/>
+  <component class="com.coremedia.blueprint.studio.forms.containers.VisibilityConfigurationForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.VisibilityDocumentForm"/>
 </componentPackage>

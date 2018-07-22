@@ -7,11 +7,13 @@ import com.coremedia.blueprint.cae.search.SearchResultBean;
 import com.coremedia.blueprint.cae.search.Value;
 import com.coremedia.blueprint.cae.search.solr.SolrQueryBuilder;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
+import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMMedia;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
 import com.coremedia.blueprint.common.contentbeans.CMSettings;
 import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
+import com.coremedia.blueprint.common.cta.CallToActionButtonSettings;
 import com.coremedia.blueprint.common.teaserOverlay.TeaserOverlaySettings;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.teaserOverlay.TeaserOverlayStyle;
@@ -19,6 +21,8 @@ import com.coremedia.blueprint.common.util.ContentBeanSolrSearchFormatHelper;
 import com.coremedia.blueprint.common.util.ParagraphHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.xml.Markup;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
@@ -39,6 +43,9 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 public class CMTeasableImpl extends CMTeasableBase {
   private static final int LIMIT = 20;
   private static final int CACHE_FOR_IN_SECONDS = 300;
+
+  static final String LEGACY_STRUCT_CTA_DISABLED_PROPERTY_NAME = "callToActionDisabled";
+  static final String LEGACY_STRUCT_CTA_CUSTOM_TEXT_PROPERTY_NAME = "callToActionCustomText";
 
   @Override
   public Markup getTeaserText() {
@@ -63,7 +70,7 @@ public class CMTeasableImpl extends CMTeasableBase {
 
   @Override
   public List<CMPicture> getPictures() {
-    return filterByType(filterItems2(getPicturesUnfiltered()), CMPicture.class);
+    return filterByType(getMedia(), CMPicture.class);
   }
 
   @Override
@@ -111,6 +118,12 @@ public class CMTeasableImpl extends CMTeasableBase {
     List<? extends CMPicture> pictures = getPictures();
     return isNotEmpty(pictures) ? pictures.get(0) : null;
  }
+
+  @Override
+  public CMMedia getFirstMedia() {
+    List<? extends CMMedia> media = getMedia();
+    return isNotEmpty(media) ? media.get(0) : null;
+  }
 
   @Override
   @SuppressWarnings("unchecked")
@@ -225,6 +238,28 @@ public class CMTeasableImpl extends CMTeasableBase {
       mapping = new HashMap<>();
     }
     return getSettingsService().createProxy(TeaserOverlayStyle.class, mapping);
+  }
+
+  @Override
+  public List<CallToActionButtonSettings> getCallToActionSettings() {
+    return getCallToActionSettingsLegacy();
+  }
+
+  List<CallToActionButtonSettings> getCallToActionSettingsLegacy() {
+    CMLinkable target = getTarget();
+    //noinspection ConstantConditions
+    boolean enabled = !getSettingsService().settingWithDefault(LEGACY_STRUCT_CTA_DISABLED_PROPERTY_NAME, boolean.class, false, this);
+    if (target != null && enabled) {
+      ImmutableMap.Builder<String, Object> mapBuilder = ImmutableMap.builder();
+      mapBuilder.put("target", target);
+      //noinspection ConstantConditions
+      mapBuilder.put("text", getSettingsService().settingWithDefault(LEGACY_STRUCT_CTA_CUSTOM_TEXT_PROPERTY_NAME, String.class, "", this));
+      //noinspection ConstantConditions
+      mapBuilder.put("openInNewTab", target.isOpenInNewTab());
+      mapBuilder.put("metadata", ImmutableList.of("properties.localSettings"));
+      return ImmutableList.of(getSettingsService().createProxy(CallToActionButtonSettings.class, mapBuilder.build()));
+    }
+    return ImmutableList.of();
   }
 
   // --- internal ---------------------------------------------------

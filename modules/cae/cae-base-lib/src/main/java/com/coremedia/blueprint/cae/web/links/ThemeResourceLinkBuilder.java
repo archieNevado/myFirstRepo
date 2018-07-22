@@ -17,8 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -123,14 +123,14 @@ public class ThemeResourceLinkBuilder {
   }
 
   @VisibleForTesting
-  @Nonnull
+  @NonNull
   String getLocalResourcePath(HttpServletRequest request, String themeName, String path) {
     return request.getContextPath() + "/themes/" + themeName + path;
   }
 
   @VisibleForTesting
   @Nullable
-  Content getThemeFolder(@Nonnull CMTheme theme) {
+  Content getThemeFolder(@NonNull CMTheme theme) {
     // the folder of the theme document is the only content that still contains the original name of the theme
     Content themeContent = theme.getContent();
     Content themeFolder = themeContent.getParent();
@@ -143,7 +143,7 @@ public class ThemeResourceLinkBuilder {
 
   @VisibleForTesting
   @Nullable
-  CMTheme getThemeFromCurrentContext(@Nonnull HttpServletRequest request) {
+  CMTheme getThemeFromCurrentContext(@NonNull HttpServletRequest request) {
     CMContext context = contextService.getContext();
     if (context == null) {
       LOG.error("Cannot create link to theme resource without a navigation context. Returning empty link.");
@@ -160,7 +160,7 @@ public class ThemeResourceLinkBuilder {
 
   @VisibleForTesting
   @Nullable
-  ContentBean getThemeResourceAt(@Nonnull String pathToThemeResource) {
+  ContentBean getThemeResourceAt(@NonNull String pathToThemeResource) {
     Content themeResourceContent = repository.getChild(pathToThemeResource);
     if (themeResourceContent != null) {
       ContentBean themeResourceBean = contentBeanFactory.createBeanFor(themeResourceContent);
@@ -172,15 +172,15 @@ public class ThemeResourceLinkBuilder {
 
   @VisibleForTesting
   @Nullable
-  User getDeveloperUser(@Nonnull HttpServletRequest request) {
+  User getDeveloperUser(@NonNull HttpServletRequest request) {
     return UserVariantHelper.getUser(request);
   }
 
   /**
    * Derives the theme name from the location of the theme document in the content repository.
    */
-  @Nonnull
-  private String getThemeName(@Nonnull Content themeFolder) {
+  @NonNull
+  private String getThemeName(@NonNull Content themeFolder) {
     // the folder of the theme document is the only content that still contains the original name of the theme
     return themeFolder.getName();
   }

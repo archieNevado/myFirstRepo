@@ -1,6 +1,8 @@
 <#-- @ftlvariable name="self" type="com.coremedia.livecontext.ecommerce.order.Cart" -->
 <#-- @ftlvariable name="_CSRFToken" type="java.lang.String" -->
 
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/components.ftl" as components />
+
 <div class="cm-cart" data-cm-cart='{"token": "${_CSRFToken!""}", "itemCount": ${self.totalQuantity}}'>
   <div class="cm-cart__arrow"></div>
   <div class="cm-cart__header cm-button-group cm-button-group--equal">
@@ -29,11 +31,9 @@
 
           <#-- product image -->
           <#if item.product.defaultImageUrl?has_content>
-              <div class="cm-cart-item__image cm-aspect-ratio-box">
+              <div class="cm-cart-item__image-box">
                   <a href="${cm.getLink(productInSite)}">
-                      <img class="cm-aspect-ratio-box__content"
-                        <@cm.dataAttribute name="data-cm-non-adaptive-content" data={"overflow": true} />
-                           src="${item.product.defaultImageUrl}" alt="${item.product.defaultImageAlt!""}">
+                      <img class="cm-cart-item__image cm-uncropped-catalog-picture" src="${item.product.defaultImageUrl}" alt="${item.product.defaultImageAlt!""}">
                   </a>
               </div>
           </#if>
@@ -85,8 +85,8 @@
 </#if>
 
     <div class="cm-cart__footer cm-button-group cm-button-group--equal">
-    <@bp.button href=cm.getLink(self)
-                text=bp.getMessage("cart_go_to_cart")
-                attr={"classes": ["cm-button-group__button cm-button--primary"]} />
+    <@components.button href=cm.getLink(self)
+                        text=bp.getMessage("cart_go_to_cart")
+                        attr={"classes": ["cm-button-group__button cm-button--primary"]} />
     </div>
 </div>

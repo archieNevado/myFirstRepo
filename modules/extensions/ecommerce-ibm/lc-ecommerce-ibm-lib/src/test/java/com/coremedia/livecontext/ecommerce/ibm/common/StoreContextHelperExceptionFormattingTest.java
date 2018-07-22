@@ -20,7 +20,7 @@ public class StoreContextHelperExceptionFormattingTest extends StoreContextHelpe
             + "catalogId: 0815, "
             + "locale: stringInsteadOfLocaleInstance, "
             + "currency: USD, "
-            + "workspaceId: null)");
+            + "workspaceId: Optional.empty)");
 
     StoreContext context = createContext();
     context.put("locale", "stringInsteadOfLocaleInstance");

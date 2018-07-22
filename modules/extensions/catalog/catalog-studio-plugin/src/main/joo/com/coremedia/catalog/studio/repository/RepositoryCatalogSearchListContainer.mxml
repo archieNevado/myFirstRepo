@@ -10,7 +10,7 @@
   <fx:Script><![CDATA[
     import com.coremedia.cms.editor.sdk.collectionview.CollectionView;
     import com.coremedia.cms.editor.sdk.collectionview.CollectionViewConstants;
-    import com.coremedia.cms.editor.sdk.context.ComponentContextManager;
+    import com.coremedia.ui.context.ComponentContextManager;
     import com.coremedia.ui.data.ValueExpression;
 
     public static const xtype:String = "com.coremedia.blueprint.studio.config.catalog.repositoryCatalogSearchListContainer";

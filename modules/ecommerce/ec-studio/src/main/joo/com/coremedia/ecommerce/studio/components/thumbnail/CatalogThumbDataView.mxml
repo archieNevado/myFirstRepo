@@ -9,17 +9,21 @@
         dragDDGroup="ContentDD"
         editable="false">
   <fx:Script><![CDATA[
-    import com.coremedia.cms.editor.sdk.editorContext;
     import com.coremedia.ecommerce.studio.dragdrop.CatalogDragDropVisualFeedback;
     import com.coremedia.ecommerce.studio.helper.AugmentationUtil;
     import com.coremedia.ecommerce.studio.helper.CatalogHelper;
     import com.coremedia.ecommerce.studio.model.CatalogObject;
+    import com.coremedia.ui.util.ThumbnailImage;
 
     public static const xtype:String = "com.coremedia.ecommerce.studio.config.catalogThumbDataView";
 
     private var config:CatalogThumbDataView;
 
     public native function CatalogThumbDataView(config:CatalogThumbDataView = null);
+
+    private function computeCatalogThumbnailImage(v:String, catalogObject:CatalogObject):ThumbnailImage {
+      return computeThumbnailImage(catalogObject, CatalogHelper.getInstance().getType(catalogObject))
+    }
     ]]></fx:Script>
   <local:fields>
     <ui:DataField name="type"
@@ -33,11 +37,11 @@
     <ui:DataField name="id"
                   mapping="externalId"/>
     <ui:DataField name="name"/>
-    <data_AutoField
-            name="imageUri"
-            mapping="name"
-            convert_="{function(v:String, catalogObject:CatalogObject):String {
-                          return editorContext.getThumbnailUri(catalogObject, null, CatalogHelper.getInstance().getType(catalogObject))}}"/>
+    <ui:DataField  name="thumbnailImage"
+                   mapping=""
+                   convert_="{computeCatalogThumbnailImage}"
+                   ifUnreadable="{null}"
+                   allowNull="true"/>
     <data_AutoField
             name="shortName"
             mapping="name"

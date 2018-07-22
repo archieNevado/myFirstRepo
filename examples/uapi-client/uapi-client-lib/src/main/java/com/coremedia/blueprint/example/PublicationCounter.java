@@ -9,7 +9,7 @@ import com.coremedia.cap.content.query.QueryService;
 import com.coremedia.cmdline.AbstractUAPIClient;
 import org.apache.commons.cli.*;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.*;
 
 /**
@@ -48,7 +48,7 @@ public class PublicationCounter extends AbstractUAPIClient {
 
   }
 
-  @Nonnull
+  @NonNull
   @Override
   protected String getUsage() {
     return "cm count-publications -u <user> [other options] --" + CONTENT_TYPE_PARAMETER_LONG

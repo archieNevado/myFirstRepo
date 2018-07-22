@@ -73,7 +73,7 @@ public class CartServiceImplIT extends IbmServiceTestBase {
 
     testLoginUser();
 
-    StoreContext context = StoreContextHelper.getCurrentContext();
+    StoreContext context = StoreContextHelper.getCurrentContextOrThrow();
     Cart cart = testling.getCart(context);
     assertNotNull(cart);
     assertEquals("1.0", cart.getOrderItems().get(0).getQuantity().toPlainString());
@@ -152,7 +152,7 @@ public class CartServiceImplIT extends IbmServiceTestBase {
   private void prefillCart() throws Exception {
     testLoginUser();
 
-    StoreContext context = StoreContextHelper.getCurrentContext();
+    StoreContext context = StoreContextHelper.getCurrentContextOrThrow();
     Cart cart = testling.getCart(context);
     assertNotNull(cart);
 

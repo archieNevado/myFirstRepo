@@ -30,7 +30,7 @@
           </editor:items>
         </editor:PropertyFieldGroup>
         <bpforms:TeaserDocumentForm/>
-        <bpforms:PictureDocumentForm collapsed="true"
+        <bpforms:MediaDocumentForm collapsed="true"
                                      expandOnValues="pictures"/>
         <bpforms:ViewTypeSelectorForm/>
         <bpforms:ValidityDocumentForm/>

@@ -1,6 +1,8 @@
 package com.coremedia.livecontext.ecommerce.ibm.cae;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.lc.test.TestConfig;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
@@ -9,6 +11,7 @@ import com.coremedia.livecontext.ecommerce.ibm.catalog.CatalogServiceImpl;
 import com.coremedia.livecontext.ecommerce.ibm.common.IbmTestConfig;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.objectserver.web.links.TokenResolverHelper;
+import com.google.common.collect.ImmutableList;
 import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
@@ -138,10 +141,13 @@ public class WcsUrlProviderTest {
   public void testShoppingFlowUrl(){
     Map<String, Object> params = new HashMap<>();
     params.put(WcsUrlProvider.URL_TEMPLATE, "{language}/{storeName}/{seoSegment}");
-    StoreContext storeContext = testConfig.getStoreContext();
-    storeContext.setContractIdsForPreview(new String[]{"4711", "0815"});
     params.put(WcsUrlProvider.SEO_SEGMENT, SEO_SEGMENT);
     params.put(WcsUrlProvider.IS_STUDIO_PREVIEW, true);
+
+    StoreContext storeContext = StoreContextBuilderImpl
+            .from((StoreContextImpl) testConfig.getStoreContext())
+            .withContractIdsForPreview(ImmutableList.of("4711", "0815"))
+            .build();
 
     String providedUrl = testling.provideValue(params, request, storeContext).toString();
     assertTrue(providedUrl.contains("en/auroraesite/seo"));

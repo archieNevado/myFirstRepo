@@ -68,17 +68,20 @@
   <bean id="pdpPageGridService" class="com.coremedia.blueprint.cae.layout.PageGridServiceImpl">
     <property name="contentBackedPageGridService" ref="pdpContentBackedPageGridService"/>
     <property name="validationService" ref="validationService"/>
+    <property name="visibilityValidator" ref="validityPeriodValidator"/>
     <property name="viewtypeService" ref="viewtypeService"/>
   </bean>
 
   <bean id="extCategoryPageGridService" class="com.coremedia.blueprint.cae.layout.PageGridServiceImpl">
     <property name="contentBackedPageGridService" ref="extCategoryContentBackedPageGridService"/>
     <property name="validationService" ref="validationService"/>
+    <property name="visibilityValidator" ref="validityPeriodValidator"/>
     <property name="viewtypeService" ref="viewtypeService"/>
   </bean>
 
   <bean id="productPageGridService" class="com.coremedia.blueprint.cae.layout.PageGridServiceImpl">
     <property name="contentBackedPageGridService" ref="productContentBackedPageGridService"/>
+    <property name="visibilityValidator" ref="validityPeriodValidator"/>
     <property name="validationService" ref="validationService"/>
     <property name="viewtypeService" ref="viewtypeService"/>
   </bean>

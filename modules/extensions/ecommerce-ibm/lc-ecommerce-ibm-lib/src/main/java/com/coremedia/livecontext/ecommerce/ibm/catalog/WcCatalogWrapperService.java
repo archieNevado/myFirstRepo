@@ -12,7 +12,6 @@ import com.coremedia.livecontext.ecommerce.ibm.common.AbstractWcWrapperService;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapTransformationHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
-import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestServiceMethod;
 import com.coremedia.livecontext.ecommerce.ibm.pricing.WcPrice;
 import com.coremedia.livecontext.ecommerce.ibm.pricing.WcPriceParam;
@@ -24,11 +23,12 @@ import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -38,11 +38,10 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.TreeMap;
 
-import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.findContractIds;
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getCurrency;
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getLocale;
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getStoreId;
-import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getStoreNameInLowerCase;
+import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getStoreName;
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_6;
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_7;
 import static com.google.common.base.Preconditions.checkArgument;
@@ -107,51 +106,173 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
           SEARCH_QUERY_PARAM_METADATA,
           SEARCH_QUERY_PARAM_SEARCHSOURCE).build();
 
-  private static final WcRestServiceMethod<Map, Void>
-          FIND_PRODUCT_BY_EXTERNAL_ID = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/productview/{id}", false, false, true, true, null, Map.class),
-          FIND_PRODUCT_BY_EXTERNAL_ID_SEARCH = WcRestConnector.createSearchServiceMethod(HttpMethod.GET, "store/{storeId}/productview/%20?partNumber={id}&profileName={profilePrefix}_findProductByPartNumber_Details", false, false, true, true, true, Map.class),
-          FIND_PRODUCT_BY_EXTERNAL_TECH_ID = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/productview/byId/{id}", false, false, true, true, null, Map.class),
-          FIND_PRODUCT_BY_EXTERNAL_TECH_ID_SEARCH = WcRestConnector.createSearchServiceMethod(HttpMethod.GET, "store/{storeId}/productview/byId/{id}?profileName={profilePrefix}_findProductByIds_Details", false, false, true, true, true, Map.class),
-          FIND_PRODUCTS_BY_CATEGORY = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/productview/byCategory/{id}", false, false, true, true, null, Map.class),
-          FIND_PRODUCTS_BY_CATEGORY_SEARCH = WcRestConnector.createSearchServiceMethod(HttpMethod.GET, "store/{storeId}/productview/byCategory/{id}?profileName={profilePrefix}_findProductsByCategory", false, false, true, true, true, Map.class),
-          FIND_PRODUCT_BY_SEO_SEGMENT = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/productview/bySeo/{language}/{storeName}/{seoSegment}", false, false, true, true, null, Map.class),
-          FIND_PRODUCT_BY_SEO_SEGMENT_SEARCH = WcRestConnector.createSearchServiceMethod(HttpMethod.GET, "store/{storeId}/productview/bySearchTerm/{term}?profileName={profilePrefix}_findProductsBySeoSegment", false, false, true, true, true, Map.class),
-          SEARCH_PRODUCTS = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/productview/bySearchTerm/{term}", false, false, Map.class),
-          SEARCH_PRODUCTS_SEARCH = WcRestConnector.createSearchServiceMethod(HttpMethod.GET, "store/{storeId}/productview/bySearchTerm/{term}?profileName={profilePrefix}_findProductsBySearchTerm", false, false, Map.class);
+  private static final WcRestServiceMethod<Map, Void> FIND_PRODUCT_BY_EXTERNAL_ID = WcRestServiceMethod
+          .builder(HttpMethod.GET, "store/{storeId}/productview/{id}", (Class<Void>) null, Map.class)
+          .previewSupport(true)
+          .userCookiesSupport(true)
+          .build();
 
-  private static final WcRestServiceMethod<Map, Void>
-          FIND_PERSONALIZED_PRODUCT_PRICE_BY_EXTERNAL_TECH_ID = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/price?q=byPartNumbers&partNumber={partNumber}", false, true, true, true, true, Void.class, Map.class);
+  private static final WcRestServiceMethod<Map, Void> FIND_PRODUCT_BY_EXTERNAL_ID_SEARCH = WcRestServiceMethod
+          .builderForSearch(HttpMethod.GET, "store/{storeId}/productview/%20?partNumber={id}&profileName={profilePrefix}_findProductByPartNumber_Details", Map.class)
+          .previewSupport(true)
+          .userCookiesSupport(true)
+          .contractsSupport(true)
+          .build();
 
-  private static final WcRestServiceMethod<Map, WcPriceParam>
-          FIND_PERSONALIZED_PRODUCT_PRICE_BY_EXTERNAL_TECH_ID_V7_7 = WcRestConnector.createServiceMethod(HttpMethod.POST, "store/{storeId}/price", false, true, true, true, true, WcPriceParam.class, Map.class);
+  private static final WcRestServiceMethod<Map, Void> FIND_PRODUCT_BY_EXTERNAL_TECH_ID = WcRestServiceMethod
+          .builder(HttpMethod.GET, "store/{storeId}/productview/byId/{id}", (Class<Void>) null, Map.class)
+          .previewSupport(true)
+          .userCookiesSupport(true)
+          .build();
 
-  private static final WcRestServiceMethod<Map, Void>
-          FIND_PERSONALIZED_PRODUCT_PRICE_BY_EXTERNAL_TECH_ID_V7_6 = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/productview/dynamic/{partNumber}?profile=CMPrice", false, true, true, true, Void.class, Map.class);
+  private static final WcRestServiceMethod<Map, Void> FIND_PRODUCT_BY_EXTERNAL_TECH_ID_SEARCH = WcRestServiceMethod
+          .builderForSearch(HttpMethod.GET, "store/{storeId}/productview/byId/{id}?profileName={profilePrefix}_findProductByIds_Details", Map.class)
+          .previewSupport(true)
+          .userCookiesSupport(true)
+          .contractsSupport(true)
+          .build();
 
-  private static final WcRestServiceMethod<Map, Void>
-          FIND_STATIC_PRODUCT_PRICES_BY_EXTERNAL_TECH_ID = WcRestConnector.createSearchServiceMethod(HttpMethod.GET, "store/{storeId}/productview/{id}?profileName=IBM_findProductByPartNumber_Summary", false, false, true, false, true, Map.class);
+  private static final WcRestServiceMethod<Map, Void> FIND_PRODUCTS_BY_CATEGORY = WcRestServiceMethod
+          .builder(HttpMethod.GET, "store/{storeId}/productview/byCategory/{id}", (Class<Void>) null, Map.class)
+          .previewSupport(true)
+          .userCookiesSupport(true)
+          .build();
 
-  private static final WcRestServiceMethod<Map, Void>
-          FIND_STATIC_PRODUCT_PRICES_BY_EXTERNAL_TECH_ID_V7_6 = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/productview/{partNumber}", false, false, Map.class);
+  private static final WcRestServiceMethod<Map, Void> FIND_PRODUCTS_BY_CATEGORY_SEARCH = WcRestServiceMethod
+          .builderForSearch(HttpMethod.GET, "store/{storeId}/productview/byCategory/{id}?profileName={profilePrefix}_findProductsByCategory", Map.class)
+          .previewSupport(true)
+          .userCookiesSupport(true)
+          .contractsSupport(true)
+          .build();
 
-  private static final WcRestServiceMethod<Map, Void>
-          FIND_CATEGORY_BY_EXTERNAL_TECH_ID = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/categoryview/byId/{id}", false, false, true, true, null, Map.class),
-          FIND_CATEGORY_BY_EXTERNAL_TECH_ID_SEARCH = WcRestConnector.createSearchServiceMethod(HttpMethod.GET, "store/{storeId}/categoryview/byId/{id}?profileName={profilePrefix}_findCategoryByUniqueIds", false, false, true, true, true, Map.class),
-          FIND_CATEGORY_BY_SEO_SEGMENT = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/categoryview/bySeo/{language}/{storeName}/{seoSegment}", false, false, true, true, null, Map.class),
-          FIND_CATEGORY_BY_SEO_SEGMENT_SEARCH = WcRestConnector.createSearchServiceMethod(HttpMethod.GET, "store/{storeId}/categoryview/{seoSegment}?profileName={profilePrefix}_findCategoryBySeoSegment" + "&locale={locale}", false, false, true, true, true, Map.class),
-          FIND_TOP_CATEGORIES = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/categoryview/@top", false, false, true, true, null, Map.class),
-          FIND_TOP_CATEGORIES_SEARCH = WcRestConnector.createSearchServiceMethod(HttpMethod.GET, "store/{storeId}/categoryview/@top?profileName={profilePrefix}_findSubCategories", false, false, true, true, true, Map.class),
-          FIND_SUB_CATEGORIES = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/categoryview/byParentCategory/{parentCategoryId}", false, false, true, true, null, Map.class),
-          FIND_SUB_CATEGORIES_SEARCH = WcRestConnector.createSearchServiceMethod(HttpMethod.GET, "store/{storeId}/categoryview/byParentCategory/{parentCategoryId}?profileName={profilePrefix}_findSubCategories", false, false, true, true, true, Map.class);
+  private static final WcRestServiceMethod<Map, Void> FIND_PRODUCT_BY_SEO_SEGMENT = WcRestServiceMethod
+          .builder(HttpMethod.GET, "store/{storeId}/productview/bySeo/{language}/{storeName}/{seoSegment}", (Class<Void>) null, Map.class)
+          .previewSupport(true)
+          .userCookiesSupport(true)
+          .build();
 
-  private static final WcRestServiceMethod<Map, Void>
-          FIND_CATALOGS_BY_STORE = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/catalog", false, true, false, false, Void.class, Map.class);
+  private static final WcRestServiceMethod<Map, Void> FIND_PRODUCT_BY_SEO_SEGMENT_SEARCH = WcRestServiceMethod
+          .builderForSearch(HttpMethod.GET, "store/{storeId}/productview/bySearchTerm/{term}?profileName={profilePrefix}_findProductsBySeoSegment", Map.class)
+          .previewSupport(true)
+          .userCookiesSupport(true)
+          .contractsSupport(true)
+          .build();
+
+  private static final WcRestServiceMethod<Map, Void> SEARCH_PRODUCTS = WcRestServiceMethod
+          .builder(HttpMethod.GET, "store/{storeId}/productview/bySearchTerm/{term}", Void.class, Map.class)
+          .previewSupport(true)
+          .build();
+
+  private static final WcRestServiceMethod<Map, Void> SEARCH_PRODUCTS_SEARCH = WcRestServiceMethod
+          .builderForSearch(HttpMethod.GET, "store/{storeId}/productview/bySearchTerm/{term}?profileName={profilePrefix}_findProductsBySearchTerm", Map.class)
+          .previewSupport(true)
+          .build();
+
+  private static final WcRestServiceMethod<Map, Void> FIND_PERSONALIZED_PRODUCT_PRICE_BY_EXTERNAL_TECH_ID = WcRestServiceMethod
+          .builder(HttpMethod.GET, "store/{storeId}/price?q=byPartNumbers&partNumber={partNumber}", Void.class, Map.class)
+          .requiresAuthentication(true)
+          .previewSupport(true)
+          .userCookiesSupport(true)
+          .contractsSupport(true)
+          .build();
+
+  private static final WcRestServiceMethod<Map, WcPriceParam> FIND_PERSONALIZED_PRODUCT_PRICE_BY_EXTERNAL_TECH_ID_V7_7 = WcRestServiceMethod
+          .builder(HttpMethod.POST, "store/{storeId}/price", WcPriceParam.class, Map.class)
+          .requiresAuthentication(true)
+          .previewSupport(true)
+          .userCookiesSupport(true)
+          .contractsSupport(true)
+          .build();
+
+  private static final WcRestServiceMethod<Map, Void> FIND_PERSONALIZED_PRODUCT_PRICE_BY_EXTERNAL_TECH_ID_V7_6 = WcRestServiceMethod
+          .builder(HttpMethod.GET, "store/{storeId}/productview/dynamic/{partNumber}?profile=CMPrice", Void.class, Map.class)
+          .requiresAuthentication(true)
+          .previewSupport(true)
+          .userCookiesSupport(true)
+          .build();
+
+  private static final WcRestServiceMethod<Map, Void> FIND_STATIC_PRODUCT_PRICES_BY_EXTERNAL_TECH_ID = WcRestServiceMethod
+          .builderForSearch(HttpMethod.GET, "store/{storeId}/productview/{id}?profileName=IBM_findProductByPartNumber_Summary", Map.class)
+          .previewSupport(true)
+          .contractsSupport(true)
+          .build();
+
+  private static final WcRestServiceMethod<Map, Void> FIND_STATIC_PRODUCT_PRICES_BY_EXTERNAL_TECH_ID_V7_6 = WcRestServiceMethod
+          .builder(HttpMethod.GET, "store/{storeId}/productview/{partNumber}", Void.class, Map.class)
+          .previewSupport(true)
+          .build();
+
+  private static final WcRestServiceMethod<Map, Void> FIND_CATEGORY_BY_EXTERNAL_TECH_ID = WcRestServiceMethod
+          .builder(HttpMethod.GET, "store/{storeId}/categoryview/byId/{id}", (Class<Void>) null, Map.class)
+          .previewSupport(true)
+          .userCookiesSupport(true)
+          .build();
+
+  private static final WcRestServiceMethod<Map, Void> FIND_CATEGORY_BY_EXTERNAL_TECH_ID_SEARCH = WcRestServiceMethod
+          .builderForSearch(HttpMethod.GET, "store/{storeId}/categoryview/byId/{id}?profileName={profilePrefix}_findCategoryByUniqueIds", Map.class)
+          .previewSupport(true)
+          .userCookiesSupport(true)
+          .contractsSupport(true)
+          .build();
+
+  private static final WcRestServiceMethod<Map, Void> FIND_CATEGORY_BY_SEO_SEGMENT = WcRestServiceMethod
+          .builder(HttpMethod.GET, "store/{storeId}/categoryview/bySeo/{language}/{storeName}/{seoSegment}", (Class<Void>) null, Map.class)
+          .previewSupport(true)
+          .userCookiesSupport(true)
+          .build();
+
+  private static final WcRestServiceMethod<Map, Void> FIND_CATEGORY_BY_SEO_SEGMENT_SEARCH = WcRestServiceMethod
+          .builderForSearch(HttpMethod.GET, "store/{storeId}/categoryview/{seoSegment}?profileName={profilePrefix}_findCategoryBySeoSegment" + "&locale={locale}", Map.class)
+          .previewSupport(true)
+          .userCookiesSupport(true)
+          .contractsSupport(true)
+          .build();
+
+  private static final WcRestServiceMethod<Map, Void> FIND_TOP_CATEGORIES = WcRestServiceMethod
+          .builder(HttpMethod.GET, "store/{storeId}/categoryview/@top", (Class<Void>) null, Map.class)
+          .previewSupport(true)
+          .userCookiesSupport(true)
+          .build();
+
+  private static final WcRestServiceMethod<Map, Void> FIND_TOP_CATEGORIES_SEARCH = WcRestServiceMethod
+          .builderForSearch(HttpMethod.GET, "store/{storeId}/categoryview/@top?profileName={profilePrefix}_findSubCategories", Map.class)
+          .previewSupport(true)
+          .userCookiesSupport(true)
+          .contractsSupport(true)
+          .build();
+
+  private static final WcRestServiceMethod<Map, Void> FIND_SUB_CATEGORIES = WcRestServiceMethod
+          .builder(HttpMethod.GET, "store/{storeId}/categoryview/byParentCategory/{parentCategoryId}", (Class<Void>) null, Map.class)
+          .previewSupport(true)
+          .userCookiesSupport(true)
+          .build();
+
+  private static final WcRestServiceMethod<Map, Void> FIND_SUB_CATEGORIES_SEARCH = WcRestServiceMethod
+          .builderForSearch(HttpMethod.GET, "store/{storeId}/categoryview/byParentCategory/{parentCategoryId}?profileName={profilePrefix}_findSubCategories", Map.class)
+          .previewSupport(true)
+          .userCookiesSupport(true)
+          .contractsSupport(true)
+          .build();
+
+  private static final WcRestServiceMethod<Map, Void> FIND_CATALOGS_BY_STORE = WcRestServiceMethod
+          .builder(HttpMethod.GET, "store/{storeId}/catalog", Void.class, Map.class)
+          .requiresAuthentication(true)
+          .build();
 
   @VisibleForTesting
-  static final WcRestServiceMethod<Map, Void> FIND_CATEGORY_BY_EXTERNAL_ID_SEARCH = WcRestConnector.createSearchServiceMethod(HttpMethod.GET, "store/{storeId}/categoryview/%20?categoryIdentifier={id}&profileName={profilePrefix}_findCategoryByIdentifier", false, false, true, true, true, Map.class);
+  static final WcRestServiceMethod<Map, Void> FIND_CATEGORY_BY_EXTERNAL_ID_SEARCH = WcRestServiceMethod
+          .builderForSearch(HttpMethod.GET, "store/{storeId}/categoryview/%20?categoryIdentifier={id}&profileName={profilePrefix}_findCategoryByIdentifier", Map.class)
+          .previewSupport(true)
+          .userCookiesSupport(true)
+          .contractsSupport(true)
+          .build();
 
   @VisibleForTesting
-  static final WcRestServiceMethod<Map, Void> FIND_CATEGORY_BY_EXTERNAL_ID = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/categoryview/{id}", false, false, true, true, null, Map.class);
+  static final WcRestServiceMethod<Map, Void> FIND_CATEGORY_BY_EXTERNAL_ID = WcRestServiceMethod
+          .builder(HttpMethod.GET, "store/{storeId}/categoryview/{id}", (Class<Void>) null, Map.class)
+          .previewSupport(true)
+          .userCookiesSupport(true)
+          .build();
 
   private boolean useSearchRestHandlerProductIfAvailable = true;
   private boolean useSearchRestHandlerCategoryIfAvailable = true;
@@ -167,7 +288,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
    * @throws com.coremedia.livecontext.ecommerce.common.InvalidIdException if the id is in a wrong format
    */
   @Nullable
-  public Map<String, Object> findProductById(@Nonnull CommerceId id, @Nonnull StoreContext storeContext,
+  public Map<String, Object> findProductById(@NonNull CommerceId id, @NonNull StoreContext storeContext,
                                              UserContext userContext) {
     CatalogAlias catalog = id.getCatalogAlias();
 
@@ -194,12 +315,12 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
    */
   @Nullable
   public Map<String, Object> findProductByExternalId(String externalId, CatalogAlias catalog,
-                                                     @Nonnull StoreContext storeContext, UserContext userContext) {
+                                                     @NonNull StoreContext storeContext, UserContext userContext) {
     try {
       WcParameterMapBuilder builder = buildParameterMap(catalog, storeContext)
               .withCurrency(storeContext)
               .withLanguageId(storeContext);
-      findContractIds(storeContext).ifPresent(builder::withContractIds);
+      addContractIdsIfAvailable(builder, storeContext);
 
       boolean useSearchRestHandlerProduct = useSearchRestHandlerProduct(storeContext);
 
@@ -243,7 +364,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
    */
   @Nullable
   public Map<String, Object> findProductByExternalTechId(String externalTechId, CatalogAlias catalog,
-                                                         @Nonnull StoreContext storeContext, UserContext userContext) {
+                                                         @NonNull StoreContext storeContext, UserContext userContext) {
     try {
       boolean useSearchRestHandlerProduct = useSearchRestHandlerProduct(storeContext);
 
@@ -259,7 +380,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
       WcParameterMapBuilder builder = buildParameterMap(catalog, storeContext)
               .withCurrency(storeContext)
               .withLanguageId(storeContext);
-      findContractIds(storeContext).ifPresent(builder::withContractIds);
+      addContractIdsIfAvailable(builder, storeContext);
       Map<String, String[]> parameters = builder.build();
 
       return callRestService(serviceMethod, variableValues, parameters, storeContext, userContext)
@@ -284,7 +405,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
    */
   @Nullable
   @SuppressWarnings("unchecked")
-  public WcPrice findDynamicProductPriceByExternalId(String externalId, @Nonnull StoreContext storeContext,
+  public WcPrice findDynamicProductPriceByExternalId(String externalId, @NonNull StoreContext storeContext,
                                                      UserContext userContext) {
     try {
       if (WCS_VERSION_7_6 == StoreContextHelper.getWcsVersion(storeContext)) {
@@ -301,7 +422,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
       String userName = UserContextHelper.getForUserName(userContext);
       if (forUserId != null && forUserId > 0) {
         wcParameterMapBuilder = wcParameterMapBuilder.withUserId(forUserId);
-      } else if (userName != null){
+      } else if (userName != null) {
         wcParameterMapBuilder = wcParameterMapBuilder.withUserName(userName);
       }
       Map<String, String[]> parameters = wcParameterMapBuilder.build();
@@ -309,7 +430,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
       Optional<Map<String, Object>> data;
       if (StoreContextHelper.getWcsVersion(storeContext) == WCS_VERSION_7_7) {
         String currencyCode = getCurrency(storeContext).getCurrencyCode();
-        String[] contractIds = findContractIds(storeContext).orElse(null);
+        List<String> contractIds = storeContext.getContractIds();
 
         List<String> variableValues = singletonList(storeId);
         WcPriceParam priceParam = new WcPriceParam(externalId, currencyCode, contractIds);
@@ -337,10 +458,10 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
     }
   }
 
-  @Nonnull
+  @NonNull
   @SuppressWarnings("unchecked")
   private Optional<WcPrice> findDynamicProductPriceByExternalIdV76(String externalId,
-                                                                   @Nonnull StoreContext storeContext,
+                                                                   @NonNull StoreContext storeContext,
                                                                    UserContext userContext) {
     String storeId = getStoreId(storeContext);
     List<String> variableValues = asList(storeId, externalId);
@@ -363,7 +484,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
   @Nullable
   @SuppressWarnings("unchecked")
   public WcPrices findStaticProductPricesByExternalId(String externalId, CatalogAlias catalog,
-                                                      @Nonnull StoreContext storeContext, UserContext userContext) {
+                                                      @NonNull StoreContext storeContext, UserContext userContext) {
     try {
       String storeId = getStoreId(storeContext);
       List<String> variableValues = asList(storeId, externalId);
@@ -381,7 +502,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
         WcParameterMapBuilder builder = buildParameterMap(catalog, storeContext)
                 .withCurrency(storeContext)
                 .withLanguageId(storeContext);
-        findContractIds(storeContext).ifPresent(builder::withContractIds);
+        addContractIdsIfAvailable(builder, storeContext);
         Map<String, String[]> parameters = builder.build();
 
         data = callRestService(FIND_STATIC_PRODUCT_PRICES_BY_EXTERNAL_TECH_ID, variableValues, parameters, storeContext,
@@ -426,9 +547,9 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
    * @param userContext  the current user context   @return the product map or null if no product was found
    * @throws com.coremedia.livecontext.ecommerce.common.CommerceException if something is wrong with the catalog connection
    */
-  @Nonnull
+  @NonNull
   Optional<Map<String, Object>> findProductBySeoSegment(String seoSegment, CatalogAlias catalog,
-                                                        @Nonnull StoreContext storeContext, UserContext userContext) {
+                                                        @NonNull StoreContext storeContext, UserContext userContext) {
     try {
       return getProductBySeoSegmentMap(seoSegment, catalog, storeContext);
     } catch (CommerceException e) {
@@ -438,10 +559,10 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
     }
   }
 
-  @Nonnull
+  @NonNull
   @SuppressWarnings("unchecked")
   private Optional<Map<String, Object>> getProductBySeoSegmentMap(String seoSegment, CatalogAlias catalog,
-                                                                  @Nonnull StoreContext storeContext) {
+                                                                  @NonNull StoreContext storeContext) {
     boolean useSearchRestHandlerProduct = useSearchRestHandlerProduct(storeContext);
 
     WcRestServiceMethod<Map, Void> serviceMethod = useSearchRestHandlerProduct
@@ -456,7 +577,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
 
     WcParameterMapBuilder builder = buildParameterMap(catalog, storeContext)
             .withCurrency(storeContext);
-    findContractIds(storeContext).ifPresent(builder::withContractIds);
+    addContractIdsIfAvailable(builder, storeContext);
     Map<String, String[]> parameters = builder.build();
 
     return callRestService(serviceMethod, variableValues, parameters, storeContext, null)
@@ -472,9 +593,9 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
    * @param userContext  the current user context   @return list of product maps or empty list if no product was found
    * @throws com.coremedia.livecontext.ecommerce.common.CommerceException if something is wrong with the catalog connection
    */
-  @Nonnull
+  @NonNull
   public List<Map<String, Object>> findProductsByCategoryId(String categoryId, CatalogAlias catalog,
-                                                            @Nonnull StoreContext storeContext, UserContext userContext) {
+                                                            @NonNull StoreContext storeContext, UserContext userContext) {
     try {
       boolean useSearchRestHandlerProduct = useSearchRestHandlerProduct(storeContext);
 
@@ -490,7 +611,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
       WcParameterMapBuilder builder = buildParameterMap(catalog, storeContext)
               .withCurrency(storeContext)
               .withLanguageId(storeContext);
-      findContractIds(storeContext).ifPresent(builder::withContractIds);
+      addContractIdsIfAvailable(builder, storeContext);
       Map<String, String[]> parameters = builder.build();
 
       return callRestService(serviceMethod, variableValues, parameters, storeContext, userContext)
@@ -520,7 +641,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
    */
   @Nullable
   public Map<String, Object> findCategoryByExternalTechId(String externalTechId, CatalogAlias catalog,
-                                                          @Nonnull StoreContext storeContext, UserContext userContext) {
+                                                          @NonNull StoreContext storeContext, UserContext userContext) {
     try {
       boolean useSearchRestHandlerCategory = useSearchRestHandlerCategory(storeContext);
 
@@ -535,7 +656,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
 
       WcParameterMapBuilder builder = buildParameterMap(catalog, storeContext)
               .withLanguageId(storeContext);
-      findContractIds(storeContext).ifPresent(builder::withContractIds);
+      addContractIdsIfAvailable(builder, storeContext);
       Map<String, String[]> parameters = builder.build();
 
       return callRestService(serviceMethod, variableValues, parameters, storeContext, userContext)
@@ -559,7 +680,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
    * @throws com.coremedia.livecontext.ecommerce.common.InvalidIdException if the id is in a wrong format
    */
   @Nullable
-  public Map<String, Object> findCategoryById(@Nonnull CommerceId id, @Nonnull StoreContext storeContext,
+  public Map<String, Object> findCategoryById(@NonNull CommerceId id, @NonNull StoreContext storeContext,
                                               UserContext userContext) {
     CatalogAlias catalog = id.getCatalogAlias();
 
@@ -587,7 +708,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
    */
   @Nullable
   public Map<String, Object> findCategoryByExternalId(String externalId, CatalogAlias catalog,
-                                                      @Nonnull StoreContext storeContext, UserContext userContext) {
+                                                      @NonNull StoreContext storeContext, UserContext userContext) {
     try {
       boolean useSearchRestHandlerCategory = useSearchRestHandlerCategory(storeContext);
 
@@ -602,7 +723,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
 
       WcParameterMapBuilder builder = buildParameterMap(catalog, storeContext)
               .withLanguageId(storeContext);
-      findContractIds(storeContext).ifPresent(builder::withContractIds);
+      addContractIdsIfAvailable(builder, storeContext);
       Map<String, String[]> parameters = builder.build();
 
       return callRestService(serviceMethod, variableValues, parameters, storeContext, userContext)
@@ -634,7 +755,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
    */
   @Nullable
   public Map<String, Object> findCategoryBySeoSegment(String seoSegment, CatalogAlias catalog,
-                                                      @Nonnull StoreContext storeContext, UserContext userContext) {
+                                                      @NonNull StoreContext storeContext, UserContext userContext) {
     try {
       boolean useSearchRestHandlerCategory = useSearchRestHandlerCategory(storeContext);
 
@@ -668,8 +789,8 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
    * @return the list of category maps or empty list if no category was found
    * @throws com.coremedia.livecontext.ecommerce.common.CommerceException if something is wrong with the catalog connection
    */
-  @Nonnull
-  public List<Map<String, Object>> findTopCategories(CatalogAlias catalog, @Nonnull StoreContext storeContext,
+  @NonNull
+  public List<Map<String, Object>> findTopCategories(CatalogAlias catalog, @NonNull StoreContext storeContext,
                                                      UserContext userContext) {
     try {
       boolean useSearchRestHandlerCategory = useSearchRestHandlerCategory(storeContext);
@@ -685,7 +806,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
 
       WcParameterMapBuilder builder = buildParameterMap(catalog, storeContext)
               .withLanguageId(storeContext);
-      findContractIds(storeContext).ifPresent(builder::withContractIds);
+      addContractIdsIfAvailable(builder, storeContext);
       Map<String, String[]> parameters = builder.build();
 
       return callRestService(serviceMethod, variableValues, parameters, storeContext, userContext)
@@ -707,9 +828,9 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
    * @param userContext      the current user context   @return the list of category maps or empty list if no category was found
    * @throws com.coremedia.livecontext.ecommerce.common.CommerceException if something is wrong with the catalog connection
    */
-  @Nonnull
+  @NonNull
   public List<Map<String, Object>> findSubCategories(String parentCategoryId, CatalogAlias catalog,
-                                                     @Nonnull StoreContext storeContext, UserContext userContext) {
+                                                     @NonNull StoreContext storeContext, UserContext userContext) {
     try {
       boolean useSearchRestHandlerCategory = useSearchRestHandlerCategory(storeContext);
 
@@ -724,7 +845,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
 
       WcParameterMapBuilder builder = buildParameterMap(catalog, storeContext)
               .withLanguageId(storeContext);
-      findContractIds(storeContext).ifPresent(builder::withContractIds);
+      addContractIdsIfAvailable(builder, storeContext);
       Map<String, String[]> parameters = builder.build();
 
       if (useSearchRestHandlerCategory) {
@@ -750,9 +871,9 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
     }
   }
 
-  @Nonnull
-  SearchResult<Map<String, Object>> searchProducts(@Nonnull String searchTerm, @Nonnull Map<String, String> searchParams,
-                                                   @Nonnull StoreContext storeContext, @Nonnull SearchType searchType,
+  @NonNull
+  SearchResult<Map<String, Object>> searchProducts(@NonNull String searchTerm, @NonNull Map<String, String> searchParams,
+                                                   @NonNull StoreContext storeContext, @NonNull SearchType searchType,
                                                    UserContext userContext) {
     checkArgument(!searchTerm.isEmpty(), "Search term must not be empty.");
 
@@ -764,7 +885,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
     WcParameterMapBuilder builder = buildParameterMap(catalogAlias, storeContext)
             .withCurrency(storeContext)
             .withLanguageId(storeContext);
-    findContractIds(storeContext).ifPresent(builder::withContractIds);
+    addContractIdsIfAvailable(builder, storeContext);
     Map<String, String[]> parametersMap = builder.build();
     params.putAll(parametersMap);
 
@@ -777,9 +898,9 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
     }
   }
 
-  @Nonnull
+  @NonNull
   @SuppressWarnings("unchecked")
-  private SearchResult<Map<String, Object>> getMapSearchResult(String searchTerm, @Nonnull StoreContext storeContext,
+  private SearchResult<Map<String, Object>> getMapSearchResult(String searchTerm, @NonNull StoreContext storeContext,
                                                                Map<String, String[]> params, UserContext userContext) {
     boolean useSearchRestHandlerProduct = useSearchRestHandlerProduct(storeContext);
 
@@ -811,8 +932,8 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
     return result;
   }
 
-  @Nonnull
-  protected Optional<Map<String, Object>> getFirstProductWrapper(@Nonnull Map<String, Object> productsMap) {
+  @NonNull
+  protected Optional<Map<String, Object>> getFirstProductWrapper(@NonNull Map<String, Object> productsMap) {
     if (productsMap.isEmpty()) {
       return Optional.empty();
     }
@@ -827,9 +948,9 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
     return products.stream().findFirst();
   }
 
-  @Nonnull
-  protected List<Map<String, Object>> getProductWrapperList(@Nonnull Map<String, Object> productsMap,
-                                                            @Nonnull StoreContext storeContext) {
+  @NonNull
+  protected List<Map<String, Object>> getProductWrapperList(@NonNull Map<String, Object> productsMap,
+                                                            @NonNull StoreContext storeContext) {
     if (productsMap.isEmpty()) {
       return emptyList();
     }
@@ -844,8 +965,8 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
     return unmodifiableList(products);
   }
 
-  @Nonnull
-  protected static List<SearchFacet> createSearchFacetsForSearchResult(@Nonnull Map<String, Object> searchResultMap) {
+  @NonNull
+  protected static List<SearchFacet> createSearchFacetsForSearchResult(@NonNull Map<String, Object> searchResultMap) {
     if (searchResultMap.isEmpty()) {
       return emptyList();
     }
@@ -857,9 +978,9 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
             .collect(collectingAndThen(toList(), Collections::unmodifiableList));
   }
 
-  @Nonnull
-  protected Optional<Map<String, Object>> getFirstCategoryWrapper(@Nonnull Map<String, Object> categoriesMap,
-                                                                  @Nonnull StoreContext storeContext) {
+  @NonNull
+  protected Optional<Map<String, Object>> getFirstCategoryWrapper(@NonNull Map<String, Object> categoriesMap,
+                                                                  @NonNull StoreContext storeContext) {
     Map<String, Object> resultMap = categoriesMap;
     if (!useSearchRestHandlerCategory(storeContext)) {
       resultMap = DataMapTransformationHelper.transformCategoryBodMap(resultMap);
@@ -876,8 +997,8 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
    * @param productsMap The product map retrieved by the commerce server.
    * @return The sub map containing the catalog entry view section or null if not available.
    */
-  @Nonnull
-  private static List getCatalogEntryView(@Nonnull Map<String, Object> productsMap) {
+  @NonNull
+  private static List getCatalogEntryView(@NonNull Map<String, Object> productsMap) {
     return DataMapHelper.getListValue(productsMap, "catalogEntryView");
   }
 
@@ -887,13 +1008,13 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
    * @param categoriesWrapper The categories map retrieved by the commerce server.
    * @return The sub map containing the catalog group view section or null if not available.
    */
-  @Nonnull
-  private static List getCatalogGroupView(@Nonnull Map<String, Object> categoriesWrapper) {
+  @NonNull
+  private static List getCatalogGroupView(@NonNull Map<String, Object> categoriesWrapper) {
     return DataMapHelper.getListValue(categoriesWrapper, "catalogGroupView");
   }
 
-  @Nonnull
-  private List<Map<String, Object>> getCategoryWrapperList(@Nonnull Map<String, Object> categoriesMap) {
+  @NonNull
+  private List<Map<String, Object>> getCategoryWrapperList(@NonNull Map<String, Object> categoriesMap) {
     Map<String, Object> resultMap = categoriesMap;
     if (!useSearchRestHandlerCategory(StoreContextHelper.getCurrentContextOrThrow())) {
       resultMap = DataMapTransformationHelper.transformCategoryBodMap(resultMap);
@@ -912,13 +1033,14 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
    * @param parentCategoryId The parent category's ID.
    * @return The sub map containing the catalog group view section or null if not available.
    */
-  @Nonnull
+  @NonNull
   protected List<Map<String, Object>> getCategoryWrapperListForSubCategories(
-          @Nonnull Map<String, Object> categoriesMap, String parentCategoryId) {
+          @NonNull Map<String, Object> categoriesMap, String parentCategoryId) {
     String jsonCategoryId = DataMapHelper.findStringValue(categoriesMap, "catalogGroupView[0].uniqueID").orElse(null);
     if (jsonCategoryId != null && Objects.equals(jsonCategoryId, parentCategoryId)) {
       //JSON handling for fix pack IFJR55049
-      Map<String, Object> resultMap = DataMapHelper.getValueForPath(categoriesMap, "catalogGroupView[0]", Map.class);
+      Map<String, Object> resultMap = DataMapHelper.findValue(categoriesMap, "catalogGroupView[0]", Map.class)
+              .orElse(null);
       if (resultMap == null) {
         return emptyList();
       }
@@ -942,9 +1064,9 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
   /**
    * Converts a search parameters map into a IBM-specific search parameters map.
    */
-  @Nonnull
-  private Map<String, String[]> createSearchParametersMap(@Nonnull Map<String, String> searchParams,
-                                                          @Nonnull SearchType searchType) {
+  @NonNull
+  private Map<String, String[]> createSearchParametersMap(@NonNull Map<String, String> searchParams,
+                                                          @NonNull SearchType searchType) {
     Map<String, String[]> parameters = new TreeMap<>();
 
     parameters.put(SEARCH_QUERY_PARAM_SEARCHTYPE, new String[]{searchType.getValue()});
@@ -982,8 +1104,8 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
     return parameters;
   }
 
-  @Nonnull
-  private static Optional<String> findValueInMap(@Nonnull Map<String, String> map, @Nonnull String key) {
+  @NonNull
+  private static Optional<String> findValueInMap(@NonNull Map<String, String> map, @NonNull String key) {
     if (!map.containsKey(key)) {
       return Optional.empty();
     }
@@ -992,7 +1114,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
     return Optional.of(value);
   }
 
-  private static void computeAndSetPagingParameter(int offset, int total, @Nonnull Map<String, String[]> params) {
+  private static void computeAndSetPagingParameter(int offset, int total, @NonNull Map<String, String[]> params) {
     int pageNumber = 1;
     int pageSize = offset + total;
     if (total > 0 && offset > total) {
@@ -1012,7 +1134,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
     this.useSearchRestHandlerProductIfAvailable = useSearchRestHandlerProductIfAvailable;
   }
 
-  boolean useSearchRestHandlerProduct(@Nonnull StoreContext storeContext) {
+  boolean useSearchRestHandlerProduct(@NonNull StoreContext storeContext) {
     return WCS_VERSION_7_6.lessThan(StoreContextHelper.getWcsVersion(storeContext))
             && useSearchRestHandlerProductIfAvailable;
   }
@@ -1021,7 +1143,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
     this.useSearchRestHandlerCategoryIfAvailable = useSearchRestHandlerCategoryIfAvailable;
   }
 
-  private boolean useSearchRestHandlerCategory(@Nonnull StoreContext storeContext) {
+  private boolean useSearchRestHandlerCategory(@NonNull StoreContext storeContext) {
     return WCS_VERSION_7_6.lessThan(StoreContextHelper.getWcsVersion(storeContext))
             && useSearchRestHandlerCategoryIfAvailable;
   }
@@ -1035,9 +1157,21 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
     return wcsSearchProfilePrefix;
   }
 
-  @Nonnull
+  /**
+   * Gets the store name from the given store context - in the form used for SEO-related handler, i.e. in lower-case.
+   *
+   * @param context the store context
+   * @return the store name in lower-case
+   * @throws com.coremedia.livecontext.ecommerce.common.InvalidContextException if the store id is invalid (missing or of wrong type)
+   */
+  @NonNull
+  private static String getStoreNameInLowerCase(@NonNull StoreContext context) {
+    return StringUtils.lowerCase(getStoreName(context));
+  }
+
+  @NonNull
   private WcParameterMapBuilder buildParameterMap(@Nullable CatalogAlias catalogAlias,
-                                                  @Nonnull StoreContext storeContext) {
+                                                  @NonNull StoreContext storeContext) {
     WcParameterMapBuilder builder = buildParameterMap();
 
     if (catalogAlias != null) {
@@ -1048,25 +1182,34 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
     return builder;
   }
 
-  @Nonnull
-  private Optional<Map<String, Object>> callRestService(@Nonnull WcRestServiceMethod<Map, Void> serviceMethod,
-                                                        @Nonnull List<String> variableValues,
-                                                        @Nonnull Map<String, String[]> optionalParameters,
+  private static void addContractIdsIfAvailable(@NonNull WcParameterMapBuilder builder,
+                                                @NonNull StoreContext storeContext) {
+    List<String> contractIds = storeContext.getContractIds();
+    if (!contractIds.isEmpty()) {
+      builder.withContractIds(contractIds);
+    }
+  }
+
+  @NonNull
+  private Optional<Map<String, Object>> callRestService(@NonNull WcRestServiceMethod<Map, Void> serviceMethod,
+                                                        @NonNull List<String> variableValues,
+                                                        @NonNull Map<String, String[]> optionalParameters,
                                                         @Nullable StoreContext storeContext,
                                                         @Nullable UserContext userContext) {
     return callRestService(serviceMethod, variableValues, optionalParameters, null, storeContext, userContext);
   }
 
-  @Nonnull
-  private <P> Optional<Map<String, Object>> callRestService(@Nonnull WcRestServiceMethod<Map, P> serviceMethod,
-                                                            @Nonnull List<String> variableValues,
-                                                            @Nonnull Map<String, String[]> optionalParameters,
+  @NonNull
+  private <P> Optional<Map<String, Object>> callRestService(@NonNull WcRestServiceMethod<Map, P> serviceMethod,
+                                                            @NonNull List<String> variableValues,
+                                                            @NonNull Map<String, String[]> optionalParameters,
                                                             @Nullable P bodyData,
                                                             @Nullable StoreContext storeContext,
                                                             @Nullable UserContext userContext) {
     //noinspection unchecked
     Map<String, Object> response = getRestConnector().callService(serviceMethod, variableValues, optionalParameters,
-            bodyData, storeContext, userContext);
+            bodyData, storeContext, userContext)
+            .orElse(null);
     return Optional.ofNullable(response);
   }
 }

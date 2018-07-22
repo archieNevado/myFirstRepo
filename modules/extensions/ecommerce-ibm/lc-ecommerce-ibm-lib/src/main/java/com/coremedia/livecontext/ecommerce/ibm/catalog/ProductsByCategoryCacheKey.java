@@ -7,8 +7,8 @@ import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
+import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -16,11 +16,8 @@ public class ProductsByCategoryCacheKey extends AbstractCommerceCacheKey<List<Ma
 
   private WcCatalogWrapperService wrapperService;
 
-  public ProductsByCategoryCacheKey(String id,
-                                    CatalogAlias catalog, StoreContext storeContext,
-                                    UserContext userContext,
-                                    WcCatalogWrapperService wrapperService,
-                                    CommerceCache commerceCache) {
+  public ProductsByCategoryCacheKey(String id, CatalogAlias catalog, StoreContext storeContext, UserContext userContext,
+                                    WcCatalogWrapperService wrapperService, CommerceCache commerceCache) {
     super(id, catalog, storeContext, userContext, CONFIG_KEY_PRODUCTS_BY_CATEGORY, commerceCache);
     this.wrapperService = wrapperService;
   }
@@ -44,9 +41,17 @@ public class ProductsByCategoryCacheKey extends AbstractCommerceCacheKey<List<Ma
 
   @Override
   protected String getCacheIdentifier() {
-    return id + ":" + catalogAlias + ":" + configKey + ":" + storeContext.getSiteId() + ":" +
-            storeContext.getStoreId() + ":" + storeContext.getLocale() + ":" + storeContext.getCurrency() + ":" +
-            storeContext.getWorkspaceId() + ":" + Arrays.toString(storeContext.getContractIds()) + ":" +
-            Arrays.toString(storeContext.getContractIdsForPreview());
+    return assembleCacheIdentifier(
+            id,
+            catalogAlias,
+            configKey,
+            storeContext.getSiteId(),
+            storeContext.getStoreId(),
+            storeContext.getLocale(),
+            storeContext.getCurrency(),
+            storeContext.getWorkspaceId().map(WorkspaceId::value).orElse(null),
+            toString(storeContext.getContractIds()),
+            toString(storeContext.getContractIdsForPreview())
+    );
   }
 }

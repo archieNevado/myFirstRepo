@@ -10,7 +10,7 @@ coremedia_proxy_webapp 'candy-ibm-wcs-commerce-shop-preview' do
   proxy_template 'proxy/shop-candy.erb'
   proxy_template_cookbook 'blueprint-lc3-ibm-wcs'
   site_server_name node['blueprint']['proxy']['virtual_host']['preview']['server_name']
-  headers ['SetEnvIf Remote_Addr "(.*)" devaddr=$1', 'RequestHeader set X-FragmentHostDevelopment http://%{devaddr}e:40980/blueprint/servlet/service/fragment/']
+  headers ['SetEnvIf Remote_Addr "(.*)" devaddr=$1', 'RequestHeader set X-FragmentHostDevelopment http://%{devaddr}e:40980/blueprint/servlet/']
   ssl_proxy_verify false
 end
 

@@ -65,7 +65,7 @@
     <ui:DataField name="status"
                   mapping=""
                   convert_="{convertLifecycleStatus}"/>
-    <ui:DataField name="thumbnailUrl"
+    <ui:DataField name="thumbnailImage"
                   mapping=""
                   ifUnreadable=""
                   convert_="{convertThumbnail}" />

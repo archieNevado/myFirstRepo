@@ -14,9 +14,11 @@
   @if $vertical {
     top: 0;
     bottom: 0;
+    height: 100%;
   }
   @if $horizontal {
     left: 0;
     right: 0;
+    width: 100%;
   }
 }

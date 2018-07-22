@@ -721,6 +721,11 @@
 <StructProperty Name="CMExternalPage">
 <Struct>
 <BooleanProperty Name="content-4306">false</BooleanProperty>
+<BooleanProperty Name="content-1500">false</BooleanProperty>
+<BooleanProperty Name="content-1498">false</BooleanProperty>
+<BooleanProperty Name="content-1492">false</BooleanProperty>
+<BooleanProperty Name="content-1496">false</BooleanProperty>
+<BooleanProperty Name="content-16194">false</BooleanProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="CMChannel">
@@ -770,6 +775,30 @@
 </Struct>
 </StructProperty>
 <BooleanProperty Name="publicationWorkflowRemoveEditedContents">true</BooleanProperty>
+<StructProperty Name="ckeditor">
+<Struct>
+<StructProperty Name="internalLinkDialog">
+<Struct>
+<StringProperty Name="targetType">embed</StringProperty>
+</Struct>
+</StructProperty>
+</Struct>
+</StructProperty>
+<StructProperty Name="workarea">
+<Struct>
+<StructListProperty Name="tabs">
+<Struct>
+<StringProperty Name="typeId">com.coremedia.cms.editor.sdk.config.premular</StringProperty>
+<StructProperty Name="state">
+<Struct>
+<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Navigation/Aurora%20Augmentation.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/Aurora%20Augmentation"/>
+</Struct>
+</StructProperty>
+</Struct>
+</StructListProperty>
+<IntProperty Name="activeTabIndex">0</IntProperty>
+</Struct>
+</StructProperty>
 <StructListProperty Name="bookmarks">
 <Struct>
 <StringProperty Name="name">Women</StringProperty>
@@ -799,31 +828,11 @@
 <StringProperty Name="name">Hermitage Catty Sunglasses</StringProperty>
 <LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Editorial/Products/Hermitage%20Catty%20Sunglasses.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Products/Hermitage%20Catty%20Sunglasses"/>
 </Struct>
-</StructListProperty>
-<StructProperty Name="ckeditor">
 <Struct>
-<StructProperty Name="internalLinkDialog">
-<Struct>
-<StringProperty Name="targetType">embed</StringProperty>
-</Struct>
-</StructProperty>
-</Struct>
-</StructProperty>
-<StructProperty Name="workarea">
-<Struct>
-<StructListProperty Name="tabs">
-<Struct>
-<StringProperty Name="typeId">com.coremedia.cms.editor.sdk.config.premular</StringProperty>
-<StructProperty Name="state">
-<Struct>
-<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Navigation/Aurora%20Augmentation.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/Aurora%20Augmentation"/>
-</Struct>
-</StructProperty>
+<StringProperty Name="name">Black is the new Black Dresses</StringProperty>
+<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Fashion%20Week/Black%20is%20the%20new%20Black%20Dresses.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Fashion%20Week/Black%20is%20the%20new%20Black%20Dresses"/>
 </Struct>
 </StructListProperty>
-<IntProperty Name="activeTabIndex">0</IntProperty>
-</Struct>
-</StructProperty>
 </Struct>
 </data>
 </EditorPreferences>

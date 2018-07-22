@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -79,7 +79,7 @@ public class LiveContextExternalChannelImpl extends CMExternalChannelBase implem
             content, externalId);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public Site getSite() {
     if (site == null) {
@@ -93,7 +93,7 @@ public class LiveContextExternalChannelImpl extends CMExternalChannelBase implem
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public String getExternalId() {
     String externalId = getContent().getString(EXTERNAL_ID);
     return externalId == null ? "" : externalId.trim();
@@ -123,8 +123,8 @@ public class LiveContextExternalChannelImpl extends CMExternalChannelBase implem
     return new ArrayList<>(treeRelation.getChildrenOf(this));
   }
 
-  @Nonnull
-  private static CatalogService getCatalogService(@Nonnull CommerceConnection connection) {
+  @NonNull
+  private static CatalogService getCatalogService(@NonNull CommerceConnection connection) {
     CatalogService catalogService = requireNonNull(connection.getCatalogService(),
             "No catalog service available.");
 

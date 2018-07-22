@@ -34,8 +34,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.annotation.PostConstruct;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -118,7 +118,7 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
     this.wcsAssetsUrl = wcsAssetsUrl;
   }
 
-  public String getWcsAssetsUrl(@Nonnull StoreContext storeContext) {
+  public String getWcsAssetsUrl(@NonNull StoreContext storeContext) {
     return CommercePropertyHelper.replaceTokens(wcsAssetsUrl, storeContext);
   }
 
@@ -160,7 +160,7 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
 
   @Override
   @Nullable
-  public Product findProductById(@Nonnull CommerceId id, @Nonnull StoreContext storeContext) {
+  public Product findProductById(@NonNull CommerceId id, @NonNull StoreContext storeContext) {
     UserContext userContext = getUserContext();
 
     Map wcProductMap = commerceCache.get(
@@ -171,7 +171,7 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
   }
 
   @Nullable
-  public Product findProductByExternalTechId(@Nonnull String externalTechId) {
+  public Product findProductByExternalTechId(@NonNull String externalTechId) {
     StoreContext storeContext = getCurrentContextOrThrow();
     CatalogAlias catalogAlias = storeContext.getCatalogAlias();
     CommerceId commerceId = commerceId(PRODUCT).withCatalogAlias(catalogAlias).withTechId(externalTechId).build();
@@ -180,7 +180,7 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
 
   @Override
   @Nullable
-  public Product findProductBySeoSegment(@Nonnull String seoSegment, @Nonnull StoreContext storeContext) {
+  public Product findProductBySeoSegment(@NonNull String seoSegment, @NonNull StoreContext storeContext) {
     CatalogAlias catalogAlias = storeContext.getCatalogAlias();
     CommerceId commerceId = commerceId(PRODUCT).withCatalogAlias(catalogAlias).withSeo(seoSegment).build();
     return findProductById(commerceId, storeContext);
@@ -188,13 +188,13 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
 
   @Override
   @Nullable
-  public ProductVariant findProductVariantById(@Nonnull CommerceId productId, @Nonnull StoreContext storeContext) {
+  public ProductVariant findProductVariantById(@NonNull CommerceId productId, @NonNull StoreContext storeContext) {
     return (ProductVariant) findProductById(productId, storeContext);
   }
 
   @Override
-  @Nonnull
-  public List<Product> findProductsByCategory(@Nonnull Category category) {
+  @NonNull
+  public List<Product> findProductsByCategory(@NonNull Category category) {
     if (category.isRoot()) {
       // the wcs has no root category thus asking would lead to an error
       return emptyList();
@@ -214,7 +214,7 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
 
   @Override
   @Nullable
-  public Category findCategoryById(@Nonnull CommerceId commerceId, @Nonnull StoreContext storeContext) {
+  public Category findCategoryById(@NonNull CommerceId commerceId, @NonNull StoreContext storeContext) {
     UserContext userContext = getUserContext();
 
     if (CategoryImpl.isRootCategoryId(commerceId)) {
@@ -230,25 +230,30 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
 
   @Override
   @Nullable
-  public Category findCategoryBySeoSegment(@Nonnull String seoSegment, @Nonnull StoreContext storeContext) {
+  public Category findCategoryBySeoSegment(@NonNull String seoSegment, @NonNull StoreContext storeContext) {
     CatalogAlias catalogAlias = storeContext.getCatalogAlias();
     CommerceId commerceId = commerceId(CATEGORY).withCatalogAlias(catalogAlias).withSeo(seoSegment).build();
     return findCategoryById(commerceId, storeContext);
   }
 
   @Override
-  @Nonnull
-  public Category findRootCategory(@Nonnull CatalogAlias catalogAlias, @Nonnull StoreContext storeContext) {
-    CommerceId commerceId = commerceId(CATEGORY).withCatalogAlias(catalogAlias).withExternalId(CategoryImpl.ROOT_CATEGORY_ROLE_ID).build();
+  @NonNull
+  public Category findRootCategory(@NonNull CatalogAlias catalogAlias, @NonNull StoreContext storeContext) {
+    CommerceId commerceId = commerceId(CATEGORY)
+            .withCatalogAlias(catalogAlias)
+            .withExternalId(CategoryImpl.ROOT_CATEGORY_ROLE_ID)
+            .build();
+
     Category categoryById = findCategoryById(commerceId, storeContext);
     if (categoryById == null) {
       throw new NotFoundException("Cannot find root category for catalog " + catalogAlias + ".");
     }
+
     return categoryById;
   }
 
-  @Nonnull
-  public List<Category> findTopCategories(@Nonnull CatalogAlias catalogAlias, @Nonnull StoreContext storeContext) {
+  @NonNull
+  public List<Category> findTopCategories(@NonNull CatalogAlias catalogAlias, @NonNull StoreContext storeContext) {
     UserContext userContext = getUserContext();
 
     List<Map<String, Object>> wcCategories = commerceCache.get(
@@ -258,8 +263,8 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
   }
 
   @Override
-  @Nonnull
-  public List<Category> findSubCategories(@Nonnull Category parentCategory) {
+  @NonNull
+  public List<Category> findSubCategories(@NonNull Category parentCategory) {
     StoreContext storeContext = parentCategory.getContext();
     CatalogAlias catalogAlias = parentCategory.getId().getCatalogAlias();
 
@@ -298,10 +303,10 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
    * @throws CommerceException
    */
   @Override
-  @Nonnull
-  public SearchResult<Product> searchProducts(@Nonnull String searchTerm,
-                                              @Nonnull Map<String, String> searchParams,
-                                              @Nonnull StoreContext storeContext) {
+  @NonNull
+  public SearchResult<Product> searchProducts(@NonNull String searchTerm,
+                                              @NonNull Map<String, String> searchParams,
+                                              @NonNull StoreContext storeContext) {
     UserContext userContext = getUserContext();
 
     SearchResult<Map<String, Object>> wcSearchResult = getCatalogWrapperService().searchProducts(
@@ -322,10 +327,10 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
     return result;
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public Map<String, List<SearchFacet>> getFacetsForProductSearch(@Nonnull Category category,
-                                                                  @Nonnull StoreContext storeContext) {
+  public Map<String, List<SearchFacet>> getFacetsForProductSearch(@NonNull Category category,
+                                                                  @NonNull StoreContext storeContext) {
     String categoryId = category.getExternalTechId();
     Map<String, String> searchParams = ImmutableMap.of(
             CatalogService.SEARCH_PARAM_CATEGORYID, categoryId,
@@ -342,7 +347,7 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
   }
 
   @Nullable
-  private static List<Map<String, Object>> processOffset(@Nonnull Map<String, String> searchParams,
+  private static List<Map<String, Object>> processOffset(@NonNull Map<String, String> searchParams,
                                                          @Nullable List<Map<String, Object>> searchResult,
                                                          int startNumber) {
     if (searchResult == null) {
@@ -388,10 +393,10 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
    * @throws CommerceException
    */
   @Override
-  @Nonnull
-  public SearchResult<ProductVariant> searchProductVariants(@Nonnull String searchTerm,
-                                                            @Nonnull Map<String, String> searchParams,
-                                                            @Nonnull StoreContext storeContext) {
+  @NonNull
+  public SearchResult<ProductVariant> searchProductVariants(@NonNull String searchTerm,
+                                                            @NonNull Map<String, String> searchParams,
+                                                            @NonNull StoreContext storeContext) {
     UserContext userContext = getUserContext();
 
     String catalogAliasStr = searchParams.get(CatalogService.SEARCH_PARAM_CATALOG_ALIAS);
@@ -399,12 +404,14 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
 
     List<ProductVariant> searchResultList = Collections.emptyList();
 
-    Map<String, Object> wcProductMap = getCatalogWrapperService().findProductByExternalId(searchTerm, catalogAlias, storeContext, userContext);
+    Map<String, Object> wcProductMap = getCatalogWrapperService().findProductByExternalId(searchTerm, catalogAlias,
+            storeContext, userContext);
+
     if (wcProductMap != null) {
       Product product = createProductBeanFor(wcProductMap, catalogAlias, storeContext, false);
       if (product != null) {
         if (product.isVariant()) {
-          searchResultList = Collections.singletonList((ProductVariant)product);
+          searchResultList = Collections.singletonList((ProductVariant) product);
         } else {
           searchResultList = product.getVariants();
         }
@@ -433,29 +440,31 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
     return result;
   }
 
-  @Nonnull
+  @NonNull
   public String getLanguageId(@Nullable Locale locale) {
     return StoreContextHelper.findCurrentContext()
-            .map(StoreContextHelper::getLangId)
+            .map(context -> context.getReplacements().get("lang.id"))
             .orElseGet(() -> getCatalogWrapperService().getLanguageId(locale));
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Catalog> getCatalogs(@Nonnull StoreContext storeContext) {
+  public List<Catalog> getCatalogs(@NonNull StoreContext storeContext) {
     WcsVersion wcsVersion = StoreContextHelper.getWcsVersion(storeContext);
+
     Map<String, Object> responseMap;
     if (WCS_VERSION_7_8.lessThan(wcsVersion)) {
       responseMap = commerceCache.get(new CatalogsForStoreCacheKey(storeContext, catalogWrapperService, commerceCache));
     } else {
       responseMap = storeInfoService.getStoreInfos();
     }
+
     return createCatalogBeansFor(responseMap, storeContext);
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public Optional<Catalog> getDefaultCatalog(@Nonnull StoreContext storeContext) {
+  public Optional<Catalog> getDefaultCatalog(@NonNull StoreContext storeContext) {
     List<Catalog> catalogs = getCatalogs(storeContext);
     return catalogs.stream()
             .filter(Catalog::isDefaultCatalog)
@@ -463,18 +472,19 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
   }
 
   @Override
-  @Nonnull
-  public Optional<Catalog> getCatalog(@Nonnull CatalogId catalogId, @Nonnull StoreContext storeContext) {
+  @NonNull
+  public Optional<Catalog> getCatalog(@NonNull CatalogId catalogId, @NonNull StoreContext storeContext) {
     List<Catalog> catalogs = getCatalogs(storeContext);
     return catalogs.stream()
             .filter(catalog -> catalog.getId().getExternalId().map(catalogId.value()::equals).orElse(false))
             .findFirst();
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public Optional<Catalog> getCatalog(@Nonnull CatalogAlias alias, @Nonnull StoreContext storeContext) {
-    CatalogName catalogName = catalogAliasTranslationService.getCatalogNameForAlias(alias, storeContext.getSiteId()).orElse(null);
+  public Optional<Catalog> getCatalog(@NonNull CatalogAlias alias, @NonNull StoreContext storeContext) {
+    CatalogName catalogName = catalogAliasTranslationService.getCatalogNameForAlias(alias, storeContext.getSiteId())
+            .orElse(null);
 
     if (catalogName == null) {
       return Optional.empty();
@@ -495,7 +505,7 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
   @Nullable
   protected <T extends Product> T createProductBeanFor(@Nullable Map<String, Object> productWrapper,
                                                        @Nullable CatalogAlias catalogAlias,
-                                                       @Nonnull StoreContext context, boolean reloadById) {
+                                                       @NonNull StoreContext context, boolean reloadById) {
     if (productWrapper == null) {
       return null;
     }
@@ -529,10 +539,10 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
     return (T) product;
   }
 
-  @Nonnull
+  @NonNull
   protected <T extends Product> List<T> createProductBeansFor(@Nullable List<Map<String, Object>> productWrappers,
                                                               @Nullable CatalogAlias catalogAlias,
-                                                              @Nonnull StoreContext context) {
+                                                              @NonNull StoreContext context) {
     if (productWrappers == null || productWrappers.isEmpty()) {
       return emptyList();
     }
@@ -546,7 +556,7 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
 
   @Nullable
   protected Category createCategoryBeanFor(@Nullable Map<String, Object> categoryWrapper,
-                                           @Nullable CatalogAlias catalogAlias, @Nonnull StoreContext context,
+                                           @Nullable CatalogAlias catalogAlias, @NonNull StoreContext context,
                                            boolean reloadById) {
     if (categoryWrapper == null) {
       return null;
@@ -573,16 +583,24 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
   }
 
   @Nullable
-  protected Catalog createCatalogBeanFor(@Nullable Map<String, Object> catalogWrapper, @Nonnull StoreContext context) {
+  protected Catalog createCatalogBeanFor(@Nullable Map<String, Object> catalogWrapper, @NonNull StoreContext context) {
     if (catalogWrapper == null) {
       return null;
     }
 
     String catalogId = getStringValueForKey(catalogWrapper, "catalogId");
+
     //use catalogIdentifier to resolve matching catalog alias, in order to avoid recursion while creating catalog beans
     String catalogIdentifier = getStringValueForKey(catalogWrapper, "catalogIdentifier");
-    CatalogAlias catalogAliasForName = catalogAliasTranslationService.getCatalogAliasForName(CatalogName.of(catalogIdentifier), context.getSiteId());
-    CommerceId commerceId = commerceId(CATALOG).withExternalId(catalogId).withCatalogAlias(catalogAliasForName).build();
+    CatalogName catalogName = CatalogName.of(catalogIdentifier);
+    CatalogAlias catalogAliasForName = catalogAliasTranslationService.getCatalogAliasForName(catalogName,
+            context.getSiteId());
+
+    CommerceId commerceId = commerceId(CATALOG)
+            .withExternalId(catalogId)
+            .withCatalogAlias(catalogAliasForName)
+            .build();
+
     CatalogImpl catalog = (CatalogImpl) commerceBeanFactory.createBeanFor(commerceId, context);
     catalog.setDelegate(catalogWrapper);
     return catalog;
@@ -598,9 +616,9 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
     return LazyMap.decorate(newHashMap(map), transformer);
   }
 
-  @Nonnull
+  @NonNull
   protected List<Category> createCategoryBeansFor(@Nullable List<Map<String, Object>> categoryWrappers,
-                                                  @Nullable CatalogAlias catalogAlias, @Nonnull StoreContext context) {
+                                                  @Nullable CatalogAlias catalogAlias, @NonNull StoreContext context) {
     if (categoryWrappers == null || categoryWrappers.isEmpty()) {
       return emptyList();
     }
@@ -612,30 +630,38 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
     return unmodifiableList(result);
   }
 
-  @Nonnull
+  @NonNull
   protected List<Catalog> createCatalogBeansFor(Map<String, Object> jsonResult, StoreContext context) {
     if (jsonResult == null || jsonResult.isEmpty()) {
       return emptyList();
     }
 
-    List<Map<String, Object>> catalogs = new ArrayList<>();;
+    List<Map<String, Object>> catalogs = new ArrayList<>();
+    ;
 
     WcsVersion wcsVersion = StoreContextHelper.getWcsVersion(context);
     if (WCS_VERSION_7_8.lessThan(wcsVersion)) {
       catalogs = (List<Map<String, Object>>) DataMapHelper.getValueForPath(jsonResult, "resultList");
     } else {
-      Map<String, Object> catalogsMap = (Map<String, Object>) DataMapHelper.getValueForPath(jsonResult, "stores." + context.getStoreName() + ".catalogs");
-      String defaultCatalog = (String) DataMapHelper.getValueForPath(jsonResult, "stores." + context.getStoreName() + ".defaultCatalog");
-      for (Map.Entry<String, Object> entry : catalogsMap.entrySet())
-      {
+      Map<String, Object> catalogsMap = (Map<String, Object>) DataMapHelper.getValueForPath(jsonResult,
+              "stores." + context.getStoreName() + ".catalogs");
+
+      String defaultCatalog = (String) DataMapHelper.getValueForPath(jsonResult,
+              "stores." + context.getStoreName() + ".defaultCatalog");
+
+      for (Map.Entry<String, Object> entry : catalogsMap.entrySet()) {
         Map<String, Object> catalogEntry = new HashMap<>();
+
         String catalogName = entry.getKey();
         catalogEntry.put("catalogIdentifier", catalogName);
+
         String catalogId = (String) entry.getValue();
         catalogEntry.put("catalogId", catalogId);
+
         if (catalogName.equals(defaultCatalog)) {
           catalogEntry.put("default", true);
         }
+
         catalogs.add(catalogEntry);
       }
     }
@@ -652,7 +678,7 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
   }
 
   @Nullable
-  private static String getStringValueForKey(@Nonnull Map<String, Object> map, @Nonnull String key) {
+  private static String getStringValueForKey(@NonNull Map<String, Object> map, @NonNull String key) {
     return DataMapHelper.findStringValue(map, key).orElse(null);
   }
 }

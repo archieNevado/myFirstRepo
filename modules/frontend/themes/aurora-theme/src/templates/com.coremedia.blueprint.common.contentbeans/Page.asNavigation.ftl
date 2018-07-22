@@ -1,18 +1,20 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.Page" -->
-<#assign additionalCssClass=cm.localParameter("additionalCssClass","hidden")/>
-
+<#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.Page" -->
 <#assign rootNode=self.navigation.rootNavigation/>
+<div class="cm-header navbar">
+<#-- mobile hamburger menu -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle collapsed pull-left" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+  </div>
 
-<#assign uniqueId="drop_down_"+bp.generateId()/>
-
-<div dojoType="wc.widget.RefreshArea" widgetId="${uniqueId}" controllerId="departmentSubMenu_Controller" aria-labelledby="departmentsButton" <@preview.metadata self.navigation.content />>
-  <ul id="departmentsMenu" role="menu" data-parent="header" aria-labelledby="departmentsButton"<@preview.metadata "properties.children" />>
-    <#list rootNode.visibleChildren as item>
-      <#if item?is_last>
-        <@cm.include self=item view="asTopNavigation" params={"additionalCssClass":"active"}/>
-      <#else>
-        <@cm.include self=item view="asTopNavigation" params={"additionalCssClass":additionalCssClass}/>
-      </#if>
-    </#list>
-  </ul>
+  <div id="navbar" class="cm-header-navbar collapse navbar-collapse navbar-right">
+    <ul class="nav navbar-nav">
+        <@cm.include self=self view="navigation"/>
+    </ul>
+  </div>
 </div>

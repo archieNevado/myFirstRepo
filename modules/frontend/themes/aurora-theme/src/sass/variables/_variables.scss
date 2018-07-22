@@ -5,8 +5,11 @@ $main-color: #5192C3;
 $main-color-light: #5791C7;
 $main-color-hover: #50a3e1;
 
+$main-color-grey-light: #c9cece;
 $main-color-grey: #A1A1A1;
 $main-color-grey-dark: #767676;
+
+$mobile-nav-dropdown-bg: rgba(255, 255, 255, 0.2);
 
 $white: #ffffff;
 
@@ -23,6 +26,7 @@ $breakpoints: (
         "sm": "screen and (min-width: #{$screen-sm-min}) and (max-width: #{$screen-sm-max})",
         "sm-and-up": "screen and (min-width: #{$screen-sm-min})",
         "md": "screen and (min-width: #{$screen-md-min})",
+        "sm-and-down": "screen and (max-width: #{$screen-sm-max})",
         "lg": "screen and (min-width: #{$screen-lg-min})",
         "pt": "print"
 ) !default;

@@ -1,22 +1,17 @@
 package com.coremedia.livecontext.ecommerce.ibm.login;
 
-import com.coremedia.cache.Cache;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceCacheKey;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
+import com.coremedia.cache.Cache;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 
-
 public class CommerceUserIsLoggedInCacheKey extends AbstractCommerceCacheKey<Boolean> {
 
-  WcLoginWrapperService wrapperService;
+  private WcLoginWrapperService wrapperService;
 
-  public CommerceUserIsLoggedInCacheKey(
-          String id,
-          StoreContext storeContext,
-          UserContext userContext,
-          WcLoginWrapperService wrapperService,
-          CommerceCache commerceCache) {
+  public CommerceUserIsLoggedInCacheKey(String id, StoreContext storeContext, UserContext userContext,
+                                        WcLoginWrapperService wrapperService, CommerceCache commerceCache) {
     super(id, storeContext, userContext, CONFIG_KEY_IS_CURRENT_USER_LOGGED_IN, commerceCache);
     this.wrapperService = wrapperService;
   }
@@ -32,8 +27,13 @@ public class CommerceUserIsLoggedInCacheKey extends AbstractCommerceCacheKey<Boo
 
   @Override
   protected String getCacheIdentifier() {
-    return id + ":" + configKey + ":" + storeContext.getSiteId() + ":" + user + ":" +
-            storeContext.getStoreId() + ":" + storeContext.getLocale();
+    return assembleCacheIdentifier(
+            id,
+            configKey,
+            storeContext.getSiteId(),
+            user,
+            storeContext.getStoreId(),
+            storeContext.getLocale()
+    );
   }
-
 }

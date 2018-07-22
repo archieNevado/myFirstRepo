@@ -13,6 +13,7 @@ import java.util.List;
  * A template action used in the example translation workflow.
  * By default, this action does nothing.
  */
+@SuppressWarnings("unused")
 public class SendToTranslationServiceAction extends LongActionBase {
   private static final long serialVersionUID = -8884595235161300715L;
 
@@ -82,8 +83,8 @@ public class SendToTranslationServiceAction extends LongActionBase {
   }
 
   private static final class Parameters {
-    public final Collection<Content> derivedContents;
-    public final Collection<ContentObject> masterContentObjects;
+    final Collection<Content> derivedContents;
+    final Collection<ContentObject> masterContentObjects;
 
     public Parameters(final Collection<Content> derivedContents,
                       final Collection<ContentObject> masterContentObjects) {

@@ -3,13 +3,11 @@ package com.coremedia.livecontext.ecommerce.ibm.event;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractWcWrapperService;
-import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestServiceMethod;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import java.util.List;
 import java.util.Map;
 
 import static java.util.Arrays.asList;
@@ -19,24 +17,25 @@ import static java.util.Collections.emptyMap;
  * A service that uses the getRestConnector() to poll invalidation events.
  */
 class WcInvalidationWrapperService extends AbstractWcWrapperService {
-  private static final Logger LOG = LoggerFactory.getLogger(WcInvalidationWrapperService.class);
 
-  private static final WcRestServiceMethod<Map, Void>
-          GET_CACHE_INVALIDATION = WcRestConnector.createServiceMethod(HttpMethod.GET, "coremedia/cacheinvalidation/{startTimestamp}?maxWait={maxWait}&chunkSize={chunkSize}", false, false, Map.class);
+  private static final WcRestServiceMethod<Map, Void> GET_CACHE_INVALIDATION = WcRestServiceMethod
+          .builder(HttpMethod.GET, "coremedia/cacheinvalidation/{startTimestamp}?maxWait={maxWait}&chunkSize={chunkSize}", Void.class, Map.class)
+          .previewSupport(true)
+          .build();
 
-  @Nonnull
+  @NonNull
   Map<String, Object> getCacheInvalidations(long lastExecutionTimeStamp,
                                             long maxWaitInMilliseconds,
                                             long chunkSize,
-                                            @Nonnull StoreContext storeContext) {
+                                            @NonNull StoreContext storeContext) {
+    List<String> variableValues = asList(
+            String.valueOf(lastExecutionTimeStamp),
+            String.valueOf(maxWaitInMilliseconds),
+            String.valueOf(chunkSize));
+
     //noinspection unchecked
-    Map<String, Object> wcCommerceCacheInvalidations = getRestConnector().callService(
-            GET_CACHE_INVALIDATION, asList(String.valueOf(lastExecutionTimeStamp), String.valueOf(maxWaitInMilliseconds), String.valueOf(chunkSize)),
-            emptyMap(), null, storeContext, null);
-    if (wcCommerceCacheInvalidations == null) {
-      LOG.warn("Could not poll cache invalidations from commerce system");
-      throw new CommerceException("Could not poll cache invalidations from commerce system");
-    }
-    return wcCommerceCacheInvalidations;
+    return (Map<String, Object>) getRestConnector()
+            .callService(GET_CACHE_INVALIDATION, variableValues, emptyMap(), null, storeContext, null)
+            .orElseThrow(() -> new CommerceException("Could not poll cache invalidations from commerce system"));
   }
 }

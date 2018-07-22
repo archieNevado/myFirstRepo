@@ -82,7 +82,7 @@ public abstract class IbmServiceTestBase extends AbstractServiceTest {
   @Before
   public void setup() {
     doAnswer(invocationOnMock -> Optional.of(CurrentCommerceConnection.get())).when(commerceConnectionInitializer).findConnectionForSite(any(Site.class));
-    testConfig.setWcsVersion(storeInfoService.getWcsVersion());
+    storeInfoService.getWcsVersion().ifPresent(testConfig::setWcsVersion);
     super.setup();
     loginService.clearIdentityCache();
   }

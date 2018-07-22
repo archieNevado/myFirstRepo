@@ -3,7 +3,7 @@ package com.coremedia.livecontext.ecommerce.ibm.catalog;
 import com.coremedia.livecontext.ecommerce.search.SearchFacet;
 import com.google.common.annotations.VisibleForTesting;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,8 +24,8 @@ class OfferPriceFormattingHelper {
   private OfferPriceFormattingHelper() {
   }
 
-  @Nonnull
-  static List<SearchFacet> formatOfferPrices(@Nonnull List<SearchFacet> searchFacets, @Nonnull String currency) {
+  @NonNull
+  static List<SearchFacet> formatOfferPrices(@NonNull List<SearchFacet> searchFacets, @NonNull String currency) {
     return searchFacets.stream().map(
             searchFacet -> {
               String value = searchFacet.getLabel();
@@ -35,8 +35,8 @@ class OfferPriceFormattingHelper {
   }
 
   @VisibleForTesting
-  @Nonnull
-  static String formatOfferPrice(@Nonnull String currency, @Nonnull String value) {
+  @NonNull
+  static String formatOfferPrice(@NonNull String currency, @NonNull String value) {
     if (value.matches(REGEX_OFFERPRICE_MIDDLE)) {
       value = value.substring(value.indexOf("{") + 1, value.indexOf("}")).replace(" ", ",01 - ") + ",00" + " " + currency;
     } else if (value.matches(REGEX_OFFERPRICE_START)) {
@@ -47,8 +47,8 @@ class OfferPriceFormattingHelper {
     return value;
   }
 
-  @Nonnull
-  static SearchFacet tryFormatOfferPrice(@Nonnull SearchFacet searchFacet) {
+  @NonNull
+  static SearchFacet tryFormatOfferPrice(@NonNull SearchFacet searchFacet) {
     String label = searchFacet.getLabel();
     String currency = localizeCurrency(label);
     if (!isOfferPriceFacet(label)) {
@@ -58,12 +58,12 @@ class OfferPriceFormattingHelper {
     return new LocalizedSearchFacet(searchFacet, currency, childFacets);
   }
 
-  @Nonnull
-  private static String localizeCurrency(@Nonnull String label) {
+  @NonNull
+  private static String localizeCurrency(@NonNull String label) {
     return label.substring(label.indexOf("_") + 1);
   }
 
-  private static boolean isOfferPriceFacet(@Nonnull String label) {
+  private static boolean isOfferPriceFacet(@NonNull String label) {
     return label.contains("OfferPrice_");
   }
 }

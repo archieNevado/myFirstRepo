@@ -1,10 +1,11 @@
 package com.coremedia.livecontext.ecommerce.ibm.p13n;
 
-import com.coremedia.cache.Cache;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceCacheKey;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
+import com.coremedia.cache.Cache;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
+import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 
 import java.util.Map;
 
@@ -14,9 +15,7 @@ public class SegmentsCacheKey extends AbstractCommerceCacheKey<Map<String, Objec
 
   private WcSegmentWrapperService wrapperService;
 
-  public SegmentsCacheKey(StoreContext storeContext,
-                          UserContext userContext,
-                          WcSegmentWrapperService wrapperService,
+  public SegmentsCacheKey(StoreContext storeContext, UserContext userContext, WcSegmentWrapperService wrapperService,
                           CommerceCache commerceCache) {
     super("segments", storeContext, userContext, CONFIG_KEY_SEGMENTS, commerceCache);
     this.wrapperService = wrapperService;
@@ -34,9 +33,13 @@ public class SegmentsCacheKey extends AbstractCommerceCacheKey<Map<String, Objec
 
   @Override
   protected String getCacheIdentifier() {
-    return id + ":" + configKey + ":" + storeContext.getSiteId() + ":" + user +":" +
-            storeContext.getStoreId() + ":" + storeContext.getLocale() + ":" +
-            storeContext.getWorkspaceId();
+    return assembleCacheIdentifier(
+            id,
+            configKey,
+            storeContext.getSiteId(),
+            user + ":" + storeContext.getStoreId(),
+            storeContext.getLocale(),
+            storeContext.getWorkspaceId().map(WorkspaceId::value).orElse(null)
+    );
   }
-
 }

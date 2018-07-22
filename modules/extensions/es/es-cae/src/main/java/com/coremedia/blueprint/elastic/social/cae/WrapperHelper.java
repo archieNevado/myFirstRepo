@@ -5,8 +5,8 @@ import com.coremedia.elastic.core.api.SortOrder;
 import com.coremedia.elastic.social.api.comments.Comment;
 import com.coremedia.elastic.social.api.comments.SortHelper;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,7 +18,7 @@ public class WrapperHelper {
   private WrapperHelper() {
   }
 
-  @Nonnull
+  @NonNull
   public static List<CommentWrapper> getCommentWrappers(@Nullable List<Comment> comments) {
     if (comments == null || comments.isEmpty()) {
       return Collections.emptyList();

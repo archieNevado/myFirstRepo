@@ -6,4 +6,6 @@
 
   <import resource="livecontext-p13n-handler-interceptors.xml"/>
   <import resource="livecontext-personalization.xml"/>
+  <import resource="livecontext-p13n-handlers.xml"/>
+  <import resource="livecontext-p13n-views.xml"/>
 </beans>

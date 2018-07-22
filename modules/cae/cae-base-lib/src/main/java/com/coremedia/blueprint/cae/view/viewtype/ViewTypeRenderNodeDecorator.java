@@ -7,7 +7,7 @@ import com.coremedia.objectserver.view.RenderNode;
 import com.coremedia.objectserver.view.RenderNodeDecorator;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 /**
  * A {@link RenderNodeDecorator} implementation that takes optional "view types" into account. Usually the view
@@ -27,7 +27,7 @@ public class ViewTypeRenderNodeDecorator implements RenderNodeDecorator {
     return translateViewName(self, viewName);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public RenderNode decorateRenderNode(Object self, String viewName) {
     //no bean decoration at the moment

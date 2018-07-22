@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
-import com.coremedia.blueprint.common.contentbeans.CMPicture;
 import com.coremedia.cap.common.NoSuchPropertyDescriptorException;
 import com.coremedia.cap.transform.TransformImageService;
 import com.coremedia.cap.transform.Transformation;
@@ -27,19 +26,6 @@ public class CMPictureImpl extends CMPictureBase {
   @Required
   public void setTransformImageService(TransformImageService transformImageService) {
     this.transformImageService = transformImageService;
-  }
-
-  /**
-   * Overrides the CMTeasable feature for convenience:
-   * If this CMPicture document has no delegate teaser picture, it is
-   * considered to be its own teaser picture.
-   *
-   * @return the teasable image or "this" as fallback.
-   */
-  @Override
-  public CMPicture getPicture() {
-    CMPicture picture = super.getPicture();
-    return picture==null ? this : picture;
   }
 
   /**

@@ -20,53 +20,6 @@
 <#assign IMAGE_TRANSFORMATION_BASE_WIDTH=blueprintFreemarkerFacade.imageTransformationBaseWidth />
 
 <#--
- * initializes a map of image map parameters
- *
- * @param quickInfoModal (optional) Boolean
- * @param quickInfoGroup (optional) String
- * @param imageMapIdPrefix (optional) String
- * @param quickInfoMainIdSuffix (optional) String
- * @param quickInfoIdPrefix (optional) String
- * PRIVATE
--->
-<#function initializeImageMap quickInfoModal=false quickInfoGroup="" imageMapIdPrefix="cm-map-" quickInfoMainIdSuffix="-quickinfo--main" quickInfoIdPrefix="cm-quickinfo-">
-  <#-- generate unique id for imagemap -->
-  <#assign imageMapId=bp.generateId(imageMapIdPrefix)/>
-
-  <#-- generate quick info id for main teaser -->
-  <#assign quickInfoMainId=imageMapId + quickInfoMainIdSuffix />
-
-  <#-- generate quick info ids list and forward the list to the templates areas map and areas quickinfo-->
-  <#assign quickInfoData={} />
-  <#if quickInfoModal?has_content && quickInfoModal?is_boolean>
-    <#assign quickInfoData=quickInfoData + {"modal": quickInfoModal!false} />
-  </#if>
-  <#if quickInfoGroup?has_content>
-    <#assign quickInfoData=quickInfoData + {"group": quickInfoGroup!""} />
-  </#if>
-
-  <#-- generate quick info ids list and forward the list to the templates areas map and areas quickinfo-->
-  <#assign imageMapAreas=bp.responsiveImageMapAreas(self) />
-  <#assign quickInfoIdList = [] />
-  <#if imageMapAreas?has_content>
-    <#list imageMapAreas![] as imageMapArea>
-      <#if imageMapArea?has_content>
-        <#assign quickInfoIdList = quickInfoIdList + [bp.generateId(quickInfoIdPrefix)]/>
-      </#if>
-    </#list>
-  </#if>
-  <#assign quickInfoIdList = quickInfoIdList?join(",") />
-
-  <#assign imageMapParams={
-  "imageMapId": imageMapId,
-  "quickInfoMainId": quickInfoMainId,
-  "quickInfoIdList": quickInfoIdList
-  }/>
-
-  <#return imageMapParams/>
-</#function>
-
-<#--
  * Return list of area configurations with the 'coords' attribute being transformed according to the image map's
  * picture transformations. If cropping is disabled, an empty list is returned.
  *

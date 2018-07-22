@@ -1,40 +1,25 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.CMTeasable" -->
 
-<#assign blockClass=cm.localParameters().blockClass!"cm-hero" />
-<#assign link=cm.getLink(self.target!cm.UNDEFINED) />
-<#assign target=(self.target?has_content && self.target.openInNewTab)?then("_blank", "") />
-<#assign rel=(self.target?has_content && self.target.openInNewTab)?then("noopener", "") />
+<#import "../../freemarkerLibs/heroTeaser.ftl" as heroTeaser />
 
-<#assign renderTeaserText=cm.localParameter("renderTeaserText", true) />
-<#assign renderDimmer=cm.localParameter("renderDimmer", true) />
-<#assign renderEmptyImage=cm.localParameter("renderEmptyImage", true) />
+<#assign blockClass=cm.localParameters().blockClass!"cm-hero" />
+<#assign renderTeaserText=cm.localParameters().renderTeaserText!true />
+<#assign renderDimmer=cm.localParameters().renderDimmer!true />
+<#assign renderEmptyImage=cm.localParameters().renderEmptyImage!true />
 
 <div class="${blockClass}"<@preview.metadata self.content />>
-  <@bp.optionalLink href="${link}" attr={"target":target,"rel":rel}>
-    <#-- picture -->
-    <@bp.responsiveImage self=self.picture!cm.UNDEFINED classPrefix=blockClass displayDimmer=renderDimmer displayEmptyImage=renderEmptyImage limitAspectRatios=bp.setting(cmpage.navigation, "default_aspect_ratios_for_hero_teaser", [])/>
-  </@bp.optionalLink>
+
+  <@cm.include self=self view="heroMedia" params={
+    "heroBlockClass": blockClass,
+    "renderDimmer": renderDimmer,
+    "renderEmptyImage": renderEmptyImage
+  } />
   <#if !self.teaserOverlaySettings.enabled>
-    <#-- with caption -->
-    <div class="${blockClass}__caption">
-      <#-- headline -->
-      <#if self.teaserTitle?has_content>
-        <@bp.optionalLink href="${link}" attr={"target":target,"rel":rel}>
-          <h1 class="${blockClass}__headline"<@preview.metadata "properties.teaserTitle" />>${self.teaserTitle!""}</h1>
-        </@bp.optionalLink>
-      </#if>
-      <#-- teaser text -->
-      <#if renderTeaserText && self.teaserText?has_content>
-        <p class="${blockClass}__text"<@preview.metadata "properties.teaserText" />>
-          <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", bp.setting(cmpage, blockClass+"-max-length", 140)) />
-        </p>
-      </#if>
-      <#-- custom call-to-action button -->
-      <@cm.include self=self view="_callToAction" params={
-        "additionalClass": "${blockClass}__cta"
-      }/>
-    </div>
+    <@cm.include self=self view="heroCaption" params={
+      "heroBlockClass": blockClass,
+      "renderTeaserText": renderTeaserText
+    } />
   <#else>
-    <@cm.include self=self view="_teaserOverlay" />
+    <@cm.include self=self view="heroOverlay" />
   </#if>
 </div>

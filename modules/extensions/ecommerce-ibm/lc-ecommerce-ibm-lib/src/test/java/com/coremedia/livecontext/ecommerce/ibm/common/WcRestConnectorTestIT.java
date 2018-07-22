@@ -6,6 +6,7 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractStoreCo
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.login.LoginService;
@@ -14,6 +15,7 @@ import com.coremedia.livecontext.ecommerce.ibm.login.WcSession;
 import com.coremedia.livecontext.ecommerce.ibm.order.WcCart;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
+import com.google.common.collect.ImmutableList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +31,7 @@ import java.util.TreeMap;
 
 import static com.coremedia.blueprint.lc.test.BetamaxTestHelper.useBetamaxTapes;
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getCurrency;
-import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getCurrentContext;
+import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getCurrentContextOrThrow;
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getLocale;
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getStoreId;
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_8;
@@ -50,21 +52,40 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
   private static final String PARAM_CURRENCY = "currency";
   private static final String PARAM_FOR_USER = "forUser";
 
-  private static final WcRestServiceMethod<Map, Map>
-          FIND_PERSON_BY_SELF = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/person/@self", true, true, Map.class, Map.class);
+  private static final WcRestServiceMethod<Map, Map> FIND_PERSON_BY_SELF = WcRestServiceMethod
+          .builder(HttpMethod.GET, "store/{storeId}/person/@self", Map.class, Map.class)
+          .secure(true)
+          .requiresAuthentication(true)
+          .previewSupport(true)
+          .build();
 
-  private static final WcRestServiceMethod<WcCart, Void>
-          GET_CART = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/cart/@self", true, true, false, true, null, WcCart.class);
+  private static final WcRestServiceMethod<WcCart, Void> GET_CART = WcRestServiceMethod
+          .builder(HttpMethod.GET, "store/{storeId}/cart/@self", (Class<Void>) null, WcCart.class)
+          .secure(true)
+          .requiresAuthentication(true)
+          .userCookiesSupport(true)
+          .build();
 
-  private static final WcRestServiceMethod<Map, Void>
-          FIND_SUB_CATEGORIES_SEARCH = WcRestConnector.createSearchServiceMethod(HttpMethod.GET, "store/{storeId}/categoryview/byParentCategory/{parentCategoryId}?profileName=CoreMedia_findSubCategories", false, false, true, true, true, Map.class);
+  private static final WcRestServiceMethod<Map, Void> FIND_SUB_CATEGORIES_SEARCH = WcRestServiceMethod
+          .builderForSearch(HttpMethod.GET, "store/{storeId}/categoryview/byParentCategory/{parentCategoryId}?profileName=CoreMedia_findSubCategories", Map.class)
+          .previewSupport(true)
+          .userCookiesSupport(true)
+          .contractsSupport(true)
+          .build();
+
+  private static final String SITE_ID = "awesome-site";
+  private static final CatalogId CATALOG_ID = CatalogId.of("catalogId");
+  private static final Currency CURRENCY_EUR = Currency.getInstance("EUR");
 
   @Inject
   protected WcRestConnector testling;
+
   @Inject
   protected LoginService loginService;
+
   @Inject
   protected Commerce commerce;
+
   protected CommerceConnection connection;
 
   @Before
@@ -72,8 +93,7 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
     connection = commerce.findConnection("wcs1")
             .orElseThrow(() -> new IllegalStateException("Could not obtain commerce connection."));
 
-    String wcsVersion = storeInfoService.getWcsVersion();
-    testConfig.setWcsVersion(wcsVersion);
+    storeInfoService.getWcsVersion().ifPresent(testConfig::setWcsVersion);
     connection.setStoreContext(testConfig.getStoreContext());
     CurrentCommerceConnection.set(connection);
   }
@@ -131,7 +151,8 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
   public void testGetRequestCookieHeader() throws Exception {
     String cookieHeader = "myCookieHeader";
 
-    StoreContext storeContext = StoreContextHelper.createContext("storeId", "storeName", "catalogId", "de", "EUR");
+    StoreContext storeContext = StoreContextHelper.createContext(SITE_ID, "storeId", "storeName", CATALOG_ID, "de",
+            CURRENCY_EUR);
     storeContext.put(AbstractStoreContextProvider.CONFIG_KEY_WCS_VERSION, testConfig.getWcsVersion());
     UserContext userContext = mock(UserContext.class);
     when(userContext.getCookieHeader()).thenReturn(cookieHeader);
@@ -163,8 +184,9 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
     BaseCommerceConnection commerceConnection = new BaseCommerceConnection();
     CurrentCommerceConnection.set(commerceConnection);
 
-    StoreContext storeContext = StoreContextHelper.createContext("storeId", "storeName", "catalogId", "de", "EUR");
-    storeContext.setContractIds(new String[]{"contractA", "contractB"});
+    StoreContext storeContext = StoreContextHelper.createContext(SITE_ID, "storeId", "storeName", CATALOG_ID, "de",
+            CURRENCY_EUR);
+    storeContext.setContractIds(ImmutableList.of("contractA", "contractB"));
     StoreContextHelper.setWcsVersion(storeContext, "7.8");
     commerceConnection.setStoreContext(storeContext);
 
@@ -203,7 +225,7 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
     Map<String, String[]> parametersMap = createParametersMap(locale, currency, userName);
 
     URI requestUri = wcRestConnector.buildRequestUri("store/{param1}/person/{param2}@self?q={param3}", true, false,
-            variableValues, parametersMap, getCurrentContext());
+            variableValues, parametersMap, getCurrentContextOrThrow());
     String serviceEndpoint = System.getProperty("livecontext.ibm.wcs.secureUrl", "https://shop-ref.ecommerce.coremedia.com");
     assertEquals(serviceEndpoint + "/wcs/resources/store/param1value/person/param%20&%202%20%7Bvalue%7D@self?q=param3value&currency=EUR&forUser=mu%26rk%7Be%7Dl&langId=-1",
             requestUri.toString());

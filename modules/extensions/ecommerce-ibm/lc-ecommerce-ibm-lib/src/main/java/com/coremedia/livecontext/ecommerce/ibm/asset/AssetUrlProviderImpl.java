@@ -10,7 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -35,16 +36,17 @@ public class AssetUrlProviderImpl implements AssetUrlProvider {
   private String storefrontAssetPathPrefix;
 
   @Override
-  public String getImageUrl(@Nonnull String imageSegment) {
+  public String getImageUrl(@NonNull String imageSegment) {
     return buildUrl(imageSegment, false);
   }
 
   @Override
-  public String getImageUrl(@Nonnull String imageSegment, boolean prependCatalogPath) {
+  public String getImageUrl(@NonNull String imageSegment, boolean prependCatalogPath) {
     return buildUrl(imageSegment, prependCatalogPath);
   }
 
-  private String buildUrl(String segment, boolean prependCatalogPath) {
+  @Nullable
+  private String buildUrl(@NonNull String segment, boolean prependCatalogPath) {
     checkState(isNotBlank(commercePreviewUrl), "Wrong configuration of the commerce preview host of the asset url provider: " + commercePreviewUrl);
     checkState(isNotBlank(commerceProductionUrl), "Wrong configuration of the commerce production host of the asset url provider: " + commerceProductionUrl);
     if (isNullOrEmpty(segment)) {
@@ -76,13 +78,17 @@ public class AssetUrlProviderImpl implements AssetUrlProvider {
       else {
         uri = new URI(removeTrailingSlash(commerceProductionUrl) + segmentWithLeadingSlash);
       }
-      return CommercePropertyHelper.replaceTokens(uri.toString(), StoreContextHelper.getCurrentContext());
+
+      StoreContext storeContext = StoreContextHelper.findCurrentContext().orElse(null);
+
+      return CommercePropertyHelper.replaceTokens(uri.toString(), storeContext);
     } catch (URISyntaxException e) {
       LOG.warn("could not build url for image segment " + segmentWithLeadingSlash, e.getMessage());
     }
     return null;
   }
 
+  @NonNull
   private String resolveUrlFromWCS(String url) {
     checkState(isNotBlank(cmsHost), "Wrong configuration of the cms host of the asset url provider: " + cmsHost);
 
@@ -115,49 +121,56 @@ public class AssetUrlProviderImpl implements AssetUrlProvider {
     return resolvedUrl;
   }
 
-  private String removeTrailingSlash(String url) {
+  @NonNull
+  private static String removeTrailingSlash(@NonNull String url) {
     char lastCharacter = url.charAt(url.length() - 1);
     if (lastCharacter == '/') {
       return url.substring(0, url.lastIndexOf("/"));
     }
+
     return url;
   }
 
-  private String ensureLeadingSlash(String url) {
+  @NonNull
+  private static String ensureLeadingSlash(@NonNull String url) {
     if (url.startsWith("/")) {
       return url;
     }
+
     return "/" + url;
   }
 
-  private String prependStorefrontCatalog(String url) {
+  @NonNull
+  private String prependStorefrontCatalog(@NonNull String url) {
     if (url.startsWith("http") || url.startsWith("/")) {
       // with search based REST handler active, WCS sends server-relative URLs already containing the
       // catalog asset store. Unfortunately, also different in normal and preview mode
       return url;
     }
+
     String leadingSlashPath = ensureLeadingSlash(url);
     String storefrontAssetPathPrefix = removeTrailingSlash(this.storefrontAssetPathPrefix);
     if (leadingSlashPath.contains(storefrontAssetPathPrefix)) {
       return leadingSlashPath;
     }
+
     return storefrontAssetPathPrefix.concat(leadingSlashPath);
   }
 
   @Override
   @Required
-  public void setCommercePreviewUrl(@Nonnull String commercePreviewUrl) {
+  public void setCommercePreviewUrl(@NonNull String commercePreviewUrl) {
     this.commercePreviewUrl = commercePreviewUrl;
   }
 
   @Override
   @Required
-  public void setCommerceProductionUrl(@Nonnull String commerceProductionUrl) {
+  public void setCommerceProductionUrl(@NonNull String commerceProductionUrl) {
     this.commerceProductionUrl = commerceProductionUrl;
   }
 
   @Required
-  public void setCmsHost(@Nonnull String cmsHost) {
+  public void setCmsHost(@NonNull String cmsHost) {
     this.cmsHost = cmsHost;
   }
 

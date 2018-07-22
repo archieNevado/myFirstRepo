@@ -4,8 +4,8 @@ import com.google.common.base.Splitter;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.support.DefaultConversionService;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +30,7 @@ public class DataMapHelper {
 
   @Nullable
   @SuppressWarnings("unchecked")
-  public static Object getValueForPath(@Nonnull Map<String, Object> map, @Nonnull String path) {
+  public static Object getValueForPath(@NonNull Map<String, Object> map, @NonNull String path) {
     Object value = null;
 
     Map<String, Object> myMap = map;
@@ -52,8 +52,8 @@ public class DataMapHelper {
           String keyWithoutIndex = matcher.group(1);
           int index = Integer.parseInt(matcher.group(2));
 
-          List tmpList = getValueForKey(myMap, keyWithoutIndex, List.class);
-          if (tmpList != null && tmpList.size() > index) {
+          List tmpList = getListValue(myMap, keyWithoutIndex);
+          if (tmpList.size() > index) {
             value = tmpList.get(index);
             if (value instanceof Map) {
               myMap = (Map<String, Object>) value;
@@ -71,20 +71,23 @@ public class DataMapHelper {
     return value;
   }
 
-  @Nonnull
-  private static Matcher matchIndexPattern(@Nonnull CharSequence key) {
+  @NonNull
+  private static Matcher matchIndexPattern(@NonNull CharSequence key) {
     return KEY_INDEX_PATTERN.matcher(key);
   }
 
+  /**
+   * @deprecated Use {@link #findValue(Map, String, Class)} instead.
+   */
+  @Deprecated
   @Nullable
-  public static <T> T getValueForPath(@Nonnull Map<String, Object> map, @Nonnull String path, @Nonnull Class<T> type) {
-    Object valueForPath = getValueForPath(map, path);
-    return convertWithFallback(valueForPath, type);
+  public static <T> T getValueForPath(@NonNull Map<String, Object> map, @NonNull String path, @NonNull Class<T> type) {
+    return findValue(map, path, type).orElse(null);
   }
 
   @Nullable
   @SuppressWarnings("unchecked")
-  public static Object getValueForKey(@Nonnull Map<String, Object> map, @Nonnull String key) {
+  public static Object getValueForKey(@NonNull Map<String, Object> map, @NonNull String key) {
     Object value = map.get(key);
 
     if (value instanceof List) {
@@ -97,43 +100,36 @@ public class DataMapHelper {
     return value;
   }
 
+  @NonNull
+  public static <T> Optional<T> findValue(@NonNull Map<String, Object> map, @NonNull String key,
+                                          @NonNull Class<T> type) {
+    Object value = getValueForPath(map, key);
+    T convertedValue = convertWithFallback(value, type);
+    return Optional.ofNullable(convertedValue);
+  }
+
   /**
    * @deprecated Use {@link #findValue(Map, String, Class)} instead.
    */
   @Deprecated
-  @Nonnull
-  public static <T> Optional<T> findValueForKey(@Nonnull Map<String, Object> map, @Nonnull String key,
-                                                @Nonnull Class<T> type) {
-    return findValue(map, key, type);
-  }
-
-  @Nonnull
-  public static <T> Optional<T> findValue(@Nonnull Map<String, Object> map, @Nonnull String key,
-                                          @Nonnull Class<T> type) {
-    Object valueForKey = getValueForPath(map, key);
-    T value = convertWithFallback(valueForKey, type);
-    return Optional.ofNullable(value);
-  }
-
   @Nullable
-  public static <T> T getValueForKey(@Nonnull Map<String, Object> map, @Nonnull String key, @Nonnull Class<T> type) {
-    Object valueForKey = getValueForPath(map, key);
-    return convertWithFallback(valueForKey, type);
+  public static <T> T getValueForKey(@NonNull Map<String, Object> map, @NonNull String key, @NonNull Class<T> type) {
+    return findValue(map, key, type).orElse(null);
   }
 
-  @Nonnull
-  public static Optional<String> findStringValue(@Nonnull Map<String, Object> map, @Nonnull String key) {
+  @NonNull
+  public static Optional<String> findStringValue(@NonNull Map<String, Object> map, @NonNull String key) {
     return findValue(map, key, String.class);
   }
 
-  @Nonnull
-  public static List getListValue(@Nonnull Map<String, Object> map, @Nonnull String key) {
+  @NonNull
+  public static List getListValue(@NonNull Map<String, Object> map, @NonNull String key) {
     return findValue(map, key, List.class)
             .orElseGet(Collections::emptyList);
   }
 
   @Nullable
-  private static <T> T convertWithFallback(@Nullable Object source, @Nonnull Class<T> targetType) {
+  private static <T> T convertWithFallback(@Nullable Object source, @NonNull Class<T> targetType) {
     if (source != null) {
       return convert(source, targetType);
     }
@@ -152,7 +148,7 @@ public class DataMapHelper {
   }
 
   @Nullable
-  private static <T> T convert(@Nonnull Object source, @Nonnull Class<T> targetType) {
+  private static <T> T convert(@NonNull Object source, @NonNull Class<T> targetType) {
     return DEFAULT_CONVERSION_SERVICE.convert(source, targetType);
   }
 }

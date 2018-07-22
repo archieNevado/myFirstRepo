@@ -26,6 +26,8 @@ import org.springframework.util.ReflectionUtils;
 
 import javax.inject.Inject;
 import java.lang.reflect.Field;
+import java.util.Currency;
+import java.util.Optional;
 
 import static com.coremedia.livecontext.ecommerce.ibm.catalog.WcCatalogWrapperService.FIND_CATEGORY_BY_EXTERNAL_ID;
 import static com.coremedia.livecontext.ecommerce.ibm.catalog.WcCatalogWrapperService.FIND_CATEGORY_BY_EXTERNAL_ID_SEARCH;
@@ -45,11 +47,16 @@ public class WcCatalogWrapperServiceIT extends AbstractWrapperServiceTestCase {
 
   private static final String PRODUCT_EXTERNAL_ID = System.getProperty("lc.test.product.externalId", "CLA022_2203");
 
+  private static final Currency CURRENCY_EUR = Currency.getInstance("EUR");
+
   @Inject
   private WcCatalogWrapperService testling;
+
   @Inject
   protected Commerce commerce;
+
   protected CommerceConnection connection;
+
   @Inject
   protected StoreInfoService storeInfoService;
 
@@ -58,7 +65,7 @@ public class WcCatalogWrapperServiceIT extends AbstractWrapperServiceTestCase {
     connection = commerce.findConnection("wcs1")
             .orElseThrow(() -> new IllegalStateException("Could not obtain commerce connection."));
 
-    testConfig.setWcsVersion(storeInfoService.getWcsVersion());
+    storeInfoService.getWcsVersion().ifPresent(testConfig::setWcsVersion);
     connection.setStoreContext(testConfig.getStoreContext());
     CurrentCommerceConnection.set(connection);
   }
@@ -82,7 +89,8 @@ public class WcCatalogWrapperServiceIT extends AbstractWrapperServiceTestCase {
     assertEquals(testConfig.getStoreContext().getCurrency().getCurrencyCode(), productPrice.getCurrency());
 
     // test with different currency (CMS-9402)
-    productPrice = testling.findDynamicProductPriceByExternalId(PRODUCT_EXTERNAL_ID, testConfig.getStoreContext("EUR"), null);
+    productPrice = testling.findDynamicProductPriceByExternalId(PRODUCT_EXTERNAL_ID,
+            testConfig.getStoreContext(CURRENCY_EUR), null);
     assertNotNull(productPrice.getPriceValue());
     assertEquals("EUR", productPrice.getCurrency());
   }
@@ -135,7 +143,7 @@ public class WcCatalogWrapperServiceIT extends AbstractWrapperServiceTestCase {
     WcRestConnector restConnectorSpy = Mockito.spy(restConnector);
 
     // mock call for product in order to verify endpoint called
-    doReturn(null).when(restConnectorSpy).callService(
+    doReturn(Optional.empty()).when(restConnectorSpy).callService(
             Mockito.any(WcRestServiceMethod.class),
             Mockito.anyList(),
             Mockito.anyMap(),
@@ -179,7 +187,7 @@ public class WcCatalogWrapperServiceIT extends AbstractWrapperServiceTestCase {
     WcRestConnector restConnectorSpy = Mockito.spy(restConnector);
 
     // mock call for product in order to verify endpoint called
-    doReturn(null).when(restConnectorSpy).callService(
+    doReturn(Optional.empty()).when(restConnectorSpy).callService(
             Mockito.any(WcRestServiceMethod.class),
             Mockito.anyList(),
             Mockito.anyMap(),

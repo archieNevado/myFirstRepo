@@ -9,7 +9,7 @@
 <#assign viewItems=cm.localParameters().viewItems!"teaser" />
 <#assign items=self.flattenedItems![] />
 <#-- load optional configuration from content for the number of slides, first check the collection itself, than for a default on the page -->
-<#assign carouselConfig=bp.setting(self, "responsiveCarousel", bp.setting(cmpage, "responsiveCarousel", "")) />
+<#assign carouselConfig=bp.setting(self, "responsiveCarousel", bp.setting(self, "responsiveCarousel", "")) />
 <#if carouselConfig?has_content>
   <#assign config='{"slidesToShowDesktop": ${carouselConfig.slidesToShowDesktop!""}, "slidesToShowMobile": ${carouselConfig.slidesToShowMobile!""}}' />
 </#if>

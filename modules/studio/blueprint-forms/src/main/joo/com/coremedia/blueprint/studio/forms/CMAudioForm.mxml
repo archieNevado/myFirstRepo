@@ -4,14 +4,17 @@
         xmlns:exml="http://www.jangaroo.net/exml/0.8"
         xmlns="exml:ext.config"
         xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
-        xmlns:bpforms="exml:com.coremedia.blueprint.studio.config"
-        xmlns:media="com.coremedia.blueprint.studio.forms.media.*">
+        xmlns:bpforms="exml:com.coremedia.blueprint.studio.config">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.blueprint.studio.BlueprintDocumentTypes')]
     [ResourceBundle('com.coremedia.blueprint.studio.BlueprintTabs')]
   </fx:Metadata>
   <fx:Script><![CDATA[
+
     public static const xtype:String = "com.coremedia.blueprint.studio.config.cmAudioForm";
+
+    private static const LOCAL_SETTINGS:String = "localSettings";
+    private static const PLAYER_SETTINGS:String = "playerSettings";
 
     private var config:CMAudioForm;
 
@@ -27,7 +30,12 @@
         <bpforms:DataDocumentForm
                 title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMAudio_data_text')}"
                 helpText="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMAudio_data_helpText')}"/>
-        <bpforms:PictureDocumentForm collapsed="true"
+        <bpforms:PlayerSettingsPropertyGroup itemId="mediaOptionsPropertyFieldGroup"
+                                             columns="2"
+                                             hideHideControlsCheckbox="true"
+                                             hideMuteCheckbox="true"
+                                             title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_AudioProperties_label')}"/>
+        <bpforms:MediaDocumentForm collapsed="true"
                                      expandOnValues="pictures"/>
         <bpforms:ViewTypeSelectorForm/>
         <bpforms:ValidityDocumentForm/>

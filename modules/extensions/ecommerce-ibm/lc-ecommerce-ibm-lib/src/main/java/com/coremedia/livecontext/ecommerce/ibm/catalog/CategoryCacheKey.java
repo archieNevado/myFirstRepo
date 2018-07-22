@@ -9,22 +9,20 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmDocumentCacheKey;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
+import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
-import javax.annotation.Nonnull;
-import java.util.Arrays;
 import java.util.Map;
 
 class CategoryCacheKey extends AbstractIbmDocumentCacheKey<Map<String, Object>> {
 
   private WcCatalogWrapperService wrapperService;
 
-  CategoryCacheKey(@Nonnull CommerceId id,
-                   StoreContext storeContext,
-                   UserContext userContext,
-                   WcCatalogWrapperService wrapperService,
-                   CommerceCache commerceCache) {
+  CategoryCacheKey(@NonNull CommerceId id, StoreContext storeContext, UserContext userContext,
+                   WcCatalogWrapperService wrapperService, CommerceCache commerceCache) {
     super(id, storeContext, userContext, CONFIG_KEY_CATEGORY, commerceCache);
     this.wrapperService = wrapperService;
+
     if (!BaseCommerceBeanType.CATEGORY.equals(id.getCommerceBeanType())) {
       throw new InvalidIdException(id + " is not a category id.");
     }
@@ -37,16 +35,22 @@ class CategoryCacheKey extends AbstractIbmDocumentCacheKey<Map<String, Object>> 
 
   @Override
   public void addExplicitDependency(Map<String, Object> wcCategory) {
-    if (wcCategory != null){
+    if (wcCategory != null) {
       Cache.dependencyOn(DataMapHelper.findStringValue(wcCategory, "uniqueID").orElse(null));
     }
   }
 
   @Override
   protected String getCacheIdentifier() {
-    return id + ":" + configKey + ":" + storeContext.getSiteId() + ":" +
-            storeContext.getStoreId() + ":" + storeContext.getLocale() + ":" +
-            storeContext.getWorkspaceId() + ":" + Arrays.toString(storeContext.getContractIds()) + ":" +
-            Arrays.toString(storeContext.getContractIdsForPreview());
+    return assembleCacheIdentifier(
+            id,
+            configKey,
+            storeContext.getSiteId(),
+            storeContext.getStoreId(),
+            storeContext.getLocale(),
+            storeContext.getWorkspaceId().map(WorkspaceId::value).orElse(null),
+            toString(storeContext.getContractIds()),
+            toString(storeContext.getContractIdsForPreview())
+    );
   }
 }

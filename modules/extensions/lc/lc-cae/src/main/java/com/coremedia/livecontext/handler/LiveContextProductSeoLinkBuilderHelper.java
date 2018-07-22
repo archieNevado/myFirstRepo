@@ -5,7 +5,7 @@ import com.coremedia.livecontext.ecommerce.catalog.Product;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.List;
 
 public class LiveContextProductSeoLinkBuilderHelper {
@@ -16,7 +16,7 @@ public class LiveContextProductSeoLinkBuilderHelper {
   /**
    * Return the SEO URL for the given commerce bean.
    */
-  public String buildSeoSegmentsFor(@Nonnull Product pro) {
+  public String buildSeoSegmentsFor(@NonNull Product pro) {
     StringBuilder segments = new StringBuilder();
     String seoSegment = pro.getSeoSegment();
     Category category = pro.getCategory();
@@ -33,7 +33,7 @@ public class LiveContextProductSeoLinkBuilderHelper {
    * with the whole category path of the current category starting with the top level category and ending with the
    * current category + '/'.
    */
-  private String buildSeoBreadCrumbs(@Nonnull Category category) {
+  private String buildSeoBreadCrumbs(@NonNull Category category) {
     StringBuilder segments = new StringBuilder();
     List<Category> breadcrumb = category.getBreadcrumb();
     if (breadcrumb.size() > wcsStorefrontMaxUrlSegments) {

@@ -6,8 +6,8 @@ import com.coremedia.cache.Cache;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
+import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -15,12 +15,8 @@ public class SubCategoriesCacheKey extends AbstractCommerceCacheKey<List<Map<Str
 
   private WcCatalogWrapperService wrapperService;
 
-  public SubCategoriesCacheKey(String id,
-                               CatalogAlias catalog,
-                               StoreContext storeContext,
-                               UserContext userContext,
-                               WcCatalogWrapperService wrapperService,
-                               CommerceCache commerceCache) {
+  public SubCategoriesCacheKey(String id, CatalogAlias catalog, StoreContext storeContext, UserContext userContext,
+                               WcCatalogWrapperService wrapperService, CommerceCache commerceCache) {
     super(id, catalog, storeContext, userContext, CONFIG_KEY_SUB_CATEGORIES, commerceCache);
     this.wrapperService = wrapperService;
   }
@@ -37,9 +33,16 @@ public class SubCategoriesCacheKey extends AbstractCommerceCacheKey<List<Map<Str
 
   @Override
   protected String getCacheIdentifier() {
-    return id + ":" + catalogAlias + ":" + configKey + ":" + storeContext.getSiteId() + ":" +
-            storeContext.getStoreId() + ":" + storeContext.getLocale() + ":" +
-            storeContext.getWorkspaceId() + ":" + Arrays.toString(storeContext.getContractIds()) + ":" +
-            Arrays.toString(storeContext.getContractIdsForPreview());
+    return assembleCacheIdentifier(
+            id,
+            catalogAlias,
+            configKey,
+            storeContext.getSiteId(),
+            storeContext.getStoreId(),
+            storeContext.getLocale(),
+            storeContext.getWorkspaceId().map(WorkspaceId::value).orElse(null),
+            toString(storeContext.getContractIds()),
+            toString(storeContext.getContractIdsForPreview())
+    );
   }
 }

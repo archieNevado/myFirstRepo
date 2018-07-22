@@ -2,8 +2,8 @@ package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import org.springframework.http.HttpMethod;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 public class WcRestServiceMethod<T, P> {
 
@@ -29,7 +29,7 @@ public class WcRestServiceMethod<T, P> {
   private final Class<P> parameterType;
   private final Class<T> returnType;
 
-  private WcRestServiceMethod(@Nonnull Builder<T, P> builder) {
+  private WcRestServiceMethod(@NonNull Builder<T, P> builder) {
     method = builder.method;
     uriTemplate = builder.uriTemplate;
     secure = !insecure && builder.secure;
@@ -42,15 +42,15 @@ public class WcRestServiceMethod<T, P> {
     returnType = builder.returnType;
   }
 
-  @Nonnull
-  public static <T, P> Builder<T, P> builder(@Nonnull HttpMethod method, @Nonnull String uriTemplate,
-                                             @Nullable Class<P> parameterType, @Nonnull Class<T> returnType) {
+  @NonNull
+  public static <T, P> Builder<T, P> builder(@NonNull HttpMethod method, @NonNull String uriTemplate,
+                                             @Nullable Class<P> parameterType, @NonNull Class<T> returnType) {
     return new Builder<>(method, uriTemplate, false, parameterType, returnType);
   }
 
-  @Nonnull
-  public static <T> Builder<T, Void> builderForSearch(@Nonnull HttpMethod method, @Nonnull String uriTemplate,
-                                                      @Nonnull Class<T> returnType) {
+  @NonNull
+  public static <T> Builder<T, Void> builderForSearch(@NonNull HttpMethod method, @NonNull String uriTemplate,
+                                                      @NonNull Class<T> returnType) {
     return new Builder<>(method, uriTemplate, true, Void.class, returnType);
   }
 
@@ -67,8 +67,8 @@ public class WcRestServiceMethod<T, P> {
     private final Class<P> parameterType;
     private final Class<T> returnType;
 
-    public Builder(@Nonnull HttpMethod method, @Nonnull String uriTemplate, boolean search,
-                   @Nullable Class<P> parameterType, @Nonnull Class<T> returnType) {
+    public Builder(@NonNull HttpMethod method, @NonNull String uriTemplate, boolean search,
+                   @Nullable Class<P> parameterType, @NonNull Class<T> returnType) {
       this.method = method;
       this.uriTemplate = uriTemplate;
       this.search = search;
@@ -76,43 +76,43 @@ public class WcRestServiceMethod<T, P> {
       this.returnType = returnType;
     }
 
-    @Nonnull
+    @NonNull
     public Builder<T, P> secure(boolean secure) {
       this.secure = secure;
       return this;
     }
 
-    @Nonnull
+    @NonNull
     public Builder<T, P> requiresAuthentication(boolean requiresAuthentication) {
       this.requiresAuthentication = requiresAuthentication;
       return this;
     }
 
-    @Nonnull
+    @NonNull
     public Builder<T, P> previewSupport(boolean previewSupport) {
       this.previewSupport = previewSupport;
       return this;
     }
 
-    @Nonnull
+    @NonNull
     public Builder<T, P> userCookiesSupport(boolean userCookiesSupport) {
       this.userCookiesSupport = userCookiesSupport;
       return this;
     }
 
-    @Nonnull
+    @NonNull
     public Builder<T, P> contractsSupport(boolean contractsSupport) {
       this.contractsSupport = contractsSupport;
       return this;
     }
 
-    @Nonnull
+    @NonNull
     public WcRestServiceMethod<T, P> build() {
       return new WcRestServiceMethod<>(this);
     }
   }
 
-  @Nonnull
+  @NonNull
   public HttpMethod getMethod() {
     return method;
   }
@@ -125,7 +125,7 @@ public class WcRestServiceMethod<T, P> {
     return previewSupport;
   }
 
-  @Nonnull
+  @NonNull
   public String getUriTemplate() {
     return uriTemplate;
   }
@@ -151,7 +151,7 @@ public class WcRestServiceMethod<T, P> {
     return parameterType;
   }
 
-  @Nonnull
+  @NonNull
   public Class<T> getReturnType() {
     return returnType;
   }

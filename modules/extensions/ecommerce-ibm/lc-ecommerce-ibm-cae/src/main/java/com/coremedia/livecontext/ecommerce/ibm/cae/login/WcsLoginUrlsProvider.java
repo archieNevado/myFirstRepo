@@ -22,7 +22,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.UriUtils;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
@@ -48,47 +48,47 @@ public class WcsLoginUrlsProvider implements LiveContextLoginUrlsProvider {
   private String loginFormUrlTemplate;
   private String logoutUrlTemplate;
 
-  public WcsLoginUrlsProvider(@Nonnull LoginService loginService,
-                              @Nonnull LinkFormatter linkFormatter) {
+  public WcsLoginUrlsProvider(@NonNull LoginService loginService,
+                              @NonNull LinkFormatter linkFormatter) {
     this.loginService = loginService;
     this.linkFormatter = linkFormatter;
   }
 
   @Required
-  public void setDefaultStoreFrontUrl(@Nonnull String defaultStoreFrontUrl) {
+  public void setDefaultStoreFrontUrl(@NonNull String defaultStoreFrontUrl) {
     this.defaultStoreFrontUrl = requireNonNull(defaultStoreFrontUrl);
   }
 
   @Required
-  public void setPreviewStoreFrontUrl(@Nonnull String previewStoreFrontUrl) {
+  public void setPreviewStoreFrontUrl(@NonNull String previewStoreFrontUrl) {
     this.previewStoreFrontUrl = requireNonNull(previewStoreFrontUrl);
   }
 
   @Required
-  public void setLoginFormUrlTemplate(@Nonnull String loginFormUrlTemplate) {
+  public void setLoginFormUrlTemplate(@NonNull String loginFormUrlTemplate) {
     this.loginFormUrlTemplate = requireNonNull(loginFormUrlTemplate);
   }
 
   @Required
-  public void setLogoutUrlTemplate(@Nonnull String logoutUrlTemplate) {
+  public void setLogoutUrlTemplate(@NonNull String logoutUrlTemplate) {
     this.logoutUrlTemplate = requireNonNull(logoutUrlTemplate);
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public String buildLoginFormUrl(@Nonnull HttpServletRequest request) {
+  public String buildLoginFormUrl(@NonNull HttpServletRequest request) {
     return buildUrl(loginFormUrlTemplate, request);
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public String buildLogoutUrl(@Nonnull HttpServletRequest request) {
+  public String buildLogoutUrl(@NonNull HttpServletRequest request) {
     return buildUrl(logoutUrlTemplate, request);
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public String transformLoginStatusUrl(@Nonnull String url, @Nonnull HttpServletRequest request) {
+  public String transformLoginStatusUrl(@NonNull String url, @NonNull HttpServletRequest request) {
     if (!isStudioPreviewRequest(request)) {
       return url;
     }
@@ -117,7 +117,7 @@ public class WcsLoginUrlsProvider implements LiveContextLoginUrlsProvider {
     return studioPreviewRequest ? appendPreviewToken(result) : result;
   }
 
-  @Nonnull
+  @NonNull
   private String buildNextUrl() {
     ServletRequestAttributes requestAttributes = requestAttributes();
     HttpServletRequest request = requestAttributes.getRequest();
@@ -132,8 +132,8 @@ public class WcsLoginUrlsProvider implements LiveContextLoginUrlsProvider {
     return (ServletRequestAttributes) requestAttributes;
   }
 
-  @Nonnull
-  private String appendPreviewToken(@Nonnull String url) {
+  @NonNull
+  private String appendPreviewToken(@NonNull String url) {
     StoreContext storeContext = StoreContextHelper.getCurrentContextOrThrow();
 
     String previewToken = Optional.ofNullable(loginService.getPreviewToken(storeContext))

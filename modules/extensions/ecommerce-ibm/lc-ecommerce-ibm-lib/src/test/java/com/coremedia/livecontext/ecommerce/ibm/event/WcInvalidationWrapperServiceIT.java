@@ -86,7 +86,8 @@ public class WcInvalidationWrapperServiceIT extends IbmServiceTestBase {
   @Betamax(tape = "cache_testGetCacheInvalidationsError404", match = {MatchRule.path, MatchRule.query})
   @Test(expected = CommerceException.class)
   public void testGetCacheInvalidationsError404() throws Exception {
-    testling.getRestConnector().setServiceEndpoint(testling.getRestConnector().getServiceEndpoint(StoreContextHelper.getCurrentContext()) + "/blub");
-    testling.getCacheInvalidations(TIME_STAMP, 20000, 500, storeContext);
+    StoreContext storeContext = StoreContextHelper.getCurrentContextOrThrow();
+    testling.getRestConnector().setServiceEndpoint(testling.getRestConnector().getServiceEndpoint(storeContext) + "/blub");
+    testling.getCacheInvalidations(TIME_STAMP, 20000, 500, this.storeContext);
   }
 }

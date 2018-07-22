@@ -5,15 +5,14 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractWcWrapperService;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
-import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestServiceMethod;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
 
-import javax.annotation.Nonnull;
-import java.util.HashMap;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -26,11 +25,18 @@ public class WcContractWrapperService extends AbstractWcWrapperService {
 
   private static final Logger LOG = LoggerFactory.getLogger(WcContractWrapperService.class);
 
-  private static final WcRestServiceMethod<HashMap, Void>
-          FIND_CONTRACT_BY_ID = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/contract/{id}?profileName=IBM_Contract_Usage", true, true, HashMap.class);
+  private static final WcRestServiceMethod<Map, Void> FIND_CONTRACT_BY_ID = WcRestServiceMethod
+          .builder(HttpMethod.GET, "store/{storeId}/contract/{id}?profileName=IBM_Contract_Usage", Void.class, Map.class)
+          .secure(true)
+          .requiresAuthentication(true)
+          .previewSupport(true)
+          .build();
 
-  private static final WcRestServiceMethod<Map, Void>
-          FIND_CONTRACTS_FOR_USER = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/contract?q=eligible", false, true, false, true, Void.class, Map.class);
+  private static final WcRestServiceMethod<Map, Void> FIND_CONTRACTS_FOR_USER = WcRestServiceMethod
+          .builder(HttpMethod.GET, "store/{storeId}/contract?q=eligible", Void.class, Map.class)
+          .requiresAuthentication(true)
+          .userCookiesSupport(true)
+          .build();
 
   /**
    * Finds the contracts the current user is eligible to.
@@ -39,7 +45,7 @@ public class WcContractWrapperService extends AbstractWcWrapperService {
    * @return the list of contracts for the current user
    * @throws com.coremedia.livecontext.ecommerce.common.CommerceException if something is wrong with the catalog connection
    */
-  public Map<String, Object> findContractsForUser(UserContext userContext, @Nonnull StoreContext storeContext) {
+  public Map<String, Object> findContractsForUser(UserContext userContext, @NonNull StoreContext storeContext) {
     try {
       if (StoreContextHelper.getWcsVersion(storeContext).lessThan(WCS_VERSION_7_8)) {
         return emptyMap();
@@ -55,7 +61,8 @@ public class WcContractWrapperService extends AbstractWcWrapperService {
 
       //noinspection unchecked
       return getRestConnector().callService(FIND_CONTRACTS_FOR_USER, variableValues, parameters, null, storeContext,
-              userContext);
+              userContext)
+              .orElse(null);
     } catch (CommerceException e) {
       throw e;
     } catch (Exception e) {
@@ -86,15 +93,16 @@ public class WcContractWrapperService extends AbstractWcWrapperService {
               .withLanguageId(storeContext)
               .build();
 
-      Map<String, Object> data = getRestConnector().callService(FIND_CONTRACT_BY_ID, variableValues, parameters, null,
-              storeContext, userContext);
+      Map<String, Object> data = getRestConnector().callService(FIND_CONTRACT_BY_ID, variableValues,
+              parameters, null, storeContext, userContext)
+              .orElseGet(Collections::emptyMap);
 
-      if (data == null) {
+      if (data.isEmpty()) {
         return null;
       }
 
-      List<Map<String, Object>> resultList = DataMapHelper.getValueForPath(data, "resultList", List.class);
-      if (resultList == null || resultList.isEmpty()) {
+      List<Map<String, Object>> resultList = DataMapHelper.getListValue(data, "resultList");
+      if (resultList.isEmpty()) {
         return null;
       }
 

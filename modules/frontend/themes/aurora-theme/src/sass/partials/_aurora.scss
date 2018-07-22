@@ -29,10 +29,6 @@
 // --- desktop
 @include breakpoint(md) {
 
-  .cm-frame--teaser > :not(:last-child) {
-    margin-bottom: 20px;
-  }
-
   .cm-heading2--boxed {
     padding: 0.433333rem 0.93333rem 0.566667rem 0.93333rem;
   }

@@ -28,7 +28,7 @@
                 helpText="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMInteractive_data_helpText')}"/>
         <bpforms:CollapsibleStringPropertyForm propertyName="copyright"
                                                title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMMedia_copyright_text')}"/>
-        <bpforms:PictureDocumentForm/>
+        <bpforms:MediaDocumentForm/>
         <bpforms:RelatedDocumentForm collapsed="true"/>
         <bpforms:ViewTypeSelectorForm collapsed="true"/>
         <bpforms:ValidityDocumentForm/>

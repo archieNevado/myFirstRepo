@@ -15,7 +15,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.annotation.Resource;
 import javax.inject.Inject;
 import java.io.File;
@@ -192,8 +192,8 @@ public abstract class AbstractThemeImporterClient implements CommandLineRunner, 
     export.doExport();
   }
 
-  @Nonnull
-  private <T> Optional<T> getProperty(@Nonnull String key, @Nonnull Class<T> targetType) {
+  @NonNull
+  private <T> Optional<T> getProperty(@NonNull String key, @NonNull Class<T> targetType) {
     T property = env.getProperty(key, targetType);
     return Optional.ofNullable(property);
   }

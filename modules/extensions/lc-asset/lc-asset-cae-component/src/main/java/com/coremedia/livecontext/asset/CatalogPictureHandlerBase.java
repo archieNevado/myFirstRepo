@@ -24,13 +24,11 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.io.IOException;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 
 public class CatalogPictureHandlerBase extends HandlerBase {
 
@@ -62,12 +60,12 @@ public class CatalogPictureHandlerBase extends HandlerBase {
    * @param request the request
    */
   @Nullable
-  protected ModelAndView handleRequestWidthHeight(String storeId,
-                                                  String locale,
-                                                  String formatName,
-                                                  CommerceId commerceId,
+  protected ModelAndView handleRequestWidthHeight(@NonNull String storeId,
+                                                  @NonNull String locale,
+                                                  @NonNull String formatName,
+                                                  @NonNull CommerceId commerceId,
                                                   String extension,
-                                                  WebRequest request) throws IOException {
+                                                  @NonNull WebRequest request) {
     Locale localeObj = LocaleHelper.parseLocaleFromString(locale).orElse(null);
     Site site = siteResolver.findSiteFor(storeId, localeObj);
     if (site == null) {
@@ -91,14 +89,15 @@ public class CatalogPictureHandlerBase extends HandlerBase {
     //picture format value consists of <transformation segment>/<width>/<height>
     String[] split = pictureFormat.split("/");
     String transformationName = split[0];
-    String width = split[1];
-    String height = split[2];
+    Integer width = Integer.parseInt(split[1]);
+    Integer height = Integer.parseInt(split[2]);
 
     CMPicture catalogPicture = contentBeanFactory.createBeanFor(catalogPictureObject, CMPicture.class);
+    TransformedBlob operationsForTransformation = (TransformedBlob) catalogPicture
+            .getTransformedData(transformationName);
 
     Blob transformedBlob = transformImageService.transformWithDimensions(catalogPictureObject, catalogPicture.getData(),
-        (TransformedBlob) catalogPicture.getTransformedData(transformationName), transformationName,
-        extension, Integer.parseInt(width), Integer.parseInt(height));
+            operationsForTransformation, transformationName, extension, width, height);
 
     if (transformedBlob == null) {
       return HandlerHelper.notFound();
@@ -112,12 +111,10 @@ public class CatalogPictureHandlerBase extends HandlerBase {
     return HandlerHelper.createModel(transformedBlob);
   }
 
-  protected CatalogAlias resolveCatalogAliasFromId(@Nullable String catalogId, @Nonnull StoreContext storeContext) {
-    if (catalogId == null) {
-      return storeContext.getCatalogAlias();
-    }
-    Optional<CatalogAlias> catalogAliasForId = catalogAliasTranslationService.getCatalogAliasForId(CatalogId.of(catalogId), storeContext.getSiteId());
-    return catalogAliasForId.orElse(storeContext.getCatalogAlias());
+  @Nullable
+  protected CatalogAlias resolveCatalogAliasFromId(@NonNull CatalogId catalogId, @NonNull StoreContext storeContext) {
+    return catalogAliasTranslationService.getCatalogAliasForId(catalogId, storeContext.getSiteId())
+            .orElseGet(storeContext::getCatalogAlias);
   }
 
   /**
@@ -126,17 +123,20 @@ public class CatalogPictureHandlerBase extends HandlerBase {
    * @param site the given site
    * @return the found catalog picture document
    */
-  private Content findCatalogPictureFor(@Nonnull CommerceId id, @Nonnull Site site) {
-    if(null != assetService) {
-      List<Content> pictureList = assetService.findPictures(id, true);
-      if (pictureList.size() > 1) {
-        LOG.debug("More than one CMPicture found for the catalog object with the id " + id + " in the site " + site.getName());
-      }
-      if(!pictureList.isEmpty()) {
-        return pictureList.get(0);
-      }
+  @Nullable
+  private Content findCatalogPictureFor(@NonNull CommerceId id, @NonNull Site site) {
+    if (assetService == null) {
+      return null;
     }
-    return null;
+
+    List<Content> pictures = assetService.findPictures(id, true);
+
+    if (pictures.size() > 1) {
+      LOG.debug("More than one CMPicture found for the catalog object with the id {} in the site {}", id,
+              site.getName());
+    }
+
+    return pictures.stream().findFirst().orElse(null);
   }
 
   @Required

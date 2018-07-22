@@ -2,6 +2,9 @@
 <#-- @ftlvariable name="index" type="java.lang.Integer" -->
 <#-- @ftlvariable name="additionalClass" type="java.lang.String" -->
 
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/cta.ftl" as cta />
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/utils.ftl" as utils />
+
 <#assign index=cm.localParameters().index!0 />
 <#assign link=cm.getLink(self.target!cm.UNDEFINED) />
 <#assign target=(self.target?has_content && self.target.openInNewTab)?then("_blank", "") />
@@ -16,22 +19,22 @@
     <div class="cm-superhero__caption row">
       <div class="col-xs-10 col-xs-push-1 col-md-8 col-md-push-2">
         <#-- headline -->
-        <@bp.optionalLink href="${link}" attr={"target":target,"rel":rel}>
+        <@utils.optionalLink href="${link}" attr={"target":target,"rel":rel}>
           <h1 class="cm-superhero__headline"<@preview.metadata "properties.teaserTitle" />>${self.teaserTitle!""}</h1>
-        </@bp.optionalLink>
+        </@utils.optionalLink>
         <#-- teaser text -->
         <p class="cm-superhero__text"<@preview.metadata "properties.teaserText" />>
-          <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", bp.setting(cmpage, "superhero.max.length", 140)) />
+          <@utils.renderWithLineBreaks text=bp.truncateText(self.teaserText!"", bp.setting(self, "superhero.max.length", 140)) />
         </p>
-        <#-- custom call-to-action button -->
-        <@cm.include self=self view="_callToAction" params={
-          "additionalButtonClass": "cm-superhero__cta
-        "}/>
+        <#-- cta -->
+        <@cta.render buttons=self.callToActionSettings
+                     additionalButtonClass="cm-superhero__cta" />
       </div>
     </div>
   <#-- button without caption -->
   <#elseif link?has_content>
-    <#-- custom call-to-action button -->
-      <@cm.include self=self view="_callToAction" params={"additionalCLass": "cm-superhero__cta"}/>
+    <#-- cta -->
+    <@cta.render buttons=self.callToActionSettings
+                 additionalButtonClass="cm-superhero__cta" />
   </#if>
 </div>

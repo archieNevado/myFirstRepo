@@ -120,7 +120,15 @@
 
     <pm:PlacementLinkListPropertyField>
       <pm:plugins>
-        <bpb-components:AddQuickCreateLinklistMenuPlugin/>
+        <ui:NestedRulesPlugin>
+          <ui:rules>
+            <editor:LinkListPropertyField>
+              <editor:plugins>
+                <bpb-components:AddQuickCreateLinklistMenuPlugin/>
+              </editor:plugins>
+            </editor:LinkListPropertyField>
+          </ui:rules>
+        </ui:NestedRulesPlugin>
       </pm:plugins>
     </pm:PlacementLinkListPropertyField>
 
@@ -315,8 +323,7 @@
       </editor:types>
     </editor:ConfigureDashboardPlugin>
 
-    <!--Un-comment to enable Reusable Studio Tabs-->
-    <!--<editor:ReusableDocumentFormTabsPlugin defaultLimit="2"/>-->
+    <editor:ReusableDocumentFormTabsPlugin defaultLimit="2"/>
   </local:configuration>
 
 

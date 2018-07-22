@@ -29,8 +29,8 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import javax.activation.MimeTypeParseException;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -106,9 +106,9 @@ public class ThemeImporterImpl implements ThemeImporter {
 
   // --- construct and configure ------------------------------------
 
-  public ThemeImporterImpl(@Nonnull CapConnection capConnection,
-                           @Nonnull MimeTypeService mimeTypeService,
-                           @Nonnull LocalizationService localizationService) {
+  public ThemeImporterImpl(@NonNull CapConnection capConnection,
+                           @NonNull MimeTypeService mimeTypeService,
+                           @NonNull LocalizationService localizationService) {
     this.mimeTypeService = mimeTypeService;
     this.capConnection = capConnection;
     this.localizationService = localizationService;
@@ -118,7 +118,7 @@ public class ThemeImporterImpl implements ThemeImporter {
   // --- features ---------------------------------------------------
 
   @Override
-  public ThemeImporterResult importThemes(@Nonnull String targetFolder, Collection<InputStream> zips, boolean checkInAfterImport, boolean cleanBeforeImport) {
+  public ThemeImporterResult importThemes(@NonNull String targetFolder, Collection<InputStream> zips, boolean checkInAfterImport, boolean cleanBeforeImport) {
     ImportData importData;
     try {
       importData = extractImportDataFromStreams(zips);
@@ -129,7 +129,7 @@ public class ThemeImporterImpl implements ThemeImporter {
   }
 
   @Override
-  public ThemeImporterResult importCodeResource(@Nonnull String targetFolder, @Nonnull String path, InputStream inputStream, boolean checkInAfterImport) {
+  public ThemeImporterResult importCodeResource(@NonNull String targetFolder, @NonNull String path, InputStream inputStream, boolean checkInAfterImport) {
     ImportData importData;
     try {
       importData = new ImportData(mimeTypeService, capConnection);
@@ -171,14 +171,14 @@ public class ThemeImporterImpl implements ThemeImporter {
     return importData;
   }
 
-  private ThemeImporterResult fail(@Nonnull String targetFolder, Exception e) {
+  private ThemeImporterResult fail(@NonNull String targetFolder, Exception e) {
     LOGGER.error("Theme import failed, no changes in content repository", e);
     ThemeImporterResultImpl failedResult = new ThemeImporterResultImpl();
     failedResult.addFailure(targetFolder);
     return failedResult;
   }
 
-  private ThemeImporterResult importAndCleanUp(@Nonnull String targetFolderPath, ImportData importData, boolean checkInAfterImport, boolean cleanBeforeImport) {
+  private ThemeImporterResult importAndCleanUp(@NonNull String targetFolderPath, ImportData importData, boolean checkInAfterImport, boolean cleanBeforeImport) {
     ThemeImporterResultImpl result = new ThemeImporterResultImpl();
     ThemeImporterContentHelper contentHelper = new ThemeImporterContentHelper(capConnection, result);
     String normalizedTargetFolder = normalize(targetFolderPath);
@@ -390,7 +390,7 @@ public class ThemeImporterImpl implements ThemeImporter {
    *
    * @return the contents that correspond to the resources
    */
-  private List<Content> enhanceCsss(@Nonnull List<Css> resources,
+  private List<Content> enhanceCsss(@NonNull List<Css> resources,
                                     String baseFolder,
                                     String themeName,
                                     ThemeImporterContentHelper contentHelper) {
@@ -399,7 +399,7 @@ public class ThemeImporterImpl implements ThemeImporter {
             .filter(o -> o!=null).collect(Collectors.toList());
   }
 
-  private List<Content> enhanceJavaScripts(@Nonnull List<JavaScript> resources,
+  private List<Content> enhanceJavaScripts(@NonNull List<JavaScript> resources,
                                            String baseFolder,
                                            String themeName,
                                            ThemeImporterContentHelper contentHelper,
@@ -686,7 +686,7 @@ public class ThemeImporterImpl implements ThemeImporter {
    * Convert a String into a valid CMS document name.
    */
   @VisibleForTesting
-  static String stringToDocumentName(@Nonnull String str) {
+  static String stringToDocumentName(@NonNull String str) {
     String hashStr = hashForUniqueDocumentName(str);
 
     String name = str.trim();
@@ -735,7 +735,7 @@ public class ThemeImporterImpl implements ThemeImporter {
     return name + "." + extension(uri);
   }
 
-  private static String normalize(@Nonnull String folder) {
+  private static String normalize(@NonNull String folder) {
     return PathUtil.normalizePath("/" + folder + "/");
   }
 

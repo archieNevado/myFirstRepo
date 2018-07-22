@@ -18,7 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -45,8 +45,8 @@ public class AssetResolvingStrategyImpl implements AssetResolvingStrategy {
    * @param site        the given site
    * @return the found assets
    */
-  @Nonnull
-  public List<Content> findAssets(@Nonnull String contentType, @Nonnull CommerceId id, @Nonnull Site site) {
+  @NonNull
+  public List<Content> findAssets(@NonNull String contentType, @NonNull CommerceId id, @NonNull Site site) {
     if (assetSearchService == null) {
       LOG.error("assetSearchService is not set, cannot find assets for {} in site {}", id, site.getName());
       return emptyList();
@@ -73,9 +73,9 @@ public class AssetResolvingStrategyImpl implements AssetResolvingStrategy {
     return validAssets;
   }
 
-  @Nonnull
-  private Set<Content> resolveCachedAndIndexedAssets(@Nonnull String contentType, @Nonnull String externalId,
-                                                     @Nonnull Site site) {
+  @NonNull
+  private Set<Content> resolveCachedAndIndexedAssets(@NonNull String contentType, @NonNull String externalId,
+                                                     @NonNull Site site) {
     Collection<Content> cachedAssets = assetChanges.get(externalId, site);
     List<Content> indexedAssets = assetSearchService.searchAssets(contentType, externalId, site);
 
@@ -86,8 +86,8 @@ public class AssetResolvingStrategyImpl implements AssetResolvingStrategy {
     return assets;
   }
 
-  @Nonnull
-  private static List<Content> filterCachedAssets(@Nonnull String contentType, @Nonnull Collection<Content> cachedAssets) {
+  @NonNull
+  private static List<Content> filterCachedAssets(@NonNull String contentType, @NonNull Collection<Content> cachedAssets) {
     List<Content> filteredCachedAssets = new ArrayList<>();
     for (Content cachedAsset : cachedAssets) {
       if (!cachedAsset.isDestroyed() && cachedAsset.getType().isSubtypeOf(contentType)) {
@@ -97,8 +97,8 @@ public class AssetResolvingStrategyImpl implements AssetResolvingStrategy {
     return filteredCachedAssets;
   }
 
-  @Nonnull
-  private List<Content> selectUpToDate(@Nonnull String id, @Nonnull Site site, @Nonnull Collection<Content> assets) {
+  @NonNull
+  private List<Content> selectUpToDate(@NonNull String id, @NonNull Site site, @NonNull Collection<Content> assets) {
     List<Content> upToDate = new ArrayList<>();
     for (Content asset : assets) {
       if (assetChanges.isUpToDate(asset, id, site)) {
@@ -108,8 +108,8 @@ public class AssetResolvingStrategyImpl implements AssetResolvingStrategy {
     return upToDate;
   }
 
-  @Nonnull
-  private List<Content> selectReferencedContent(@Nonnull String id, @Nonnull List<Content> upToDate) {
+  @NonNull
+  private List<Content> selectReferencedContent(@NonNull String id, @NonNull List<Content> upToDate) {
     List<Content> referencedInContent = new ArrayList<>();
     for (Content asset : upToDate) {
       List<String> externalIds = getExternalIds(asset);
@@ -120,15 +120,15 @@ public class AssetResolvingStrategyImpl implements AssetResolvingStrategy {
     return referencedInContent;
   }
 
-  @Nonnull
-  private List<Content> filterWithAssetValidationService(@Nonnull List<Content> assets) {
+  @NonNull
+  private List<Content> filterWithAssetValidationService(@NonNull List<Content> assets) {
     if (assetValidationService == null) {
       return assets;
     }
     return assetValidationService.filterAssets(assets);
   }
 
-  private static void sortByContentName(@Nonnull List<Content> validAssets) {
+  private static void sortByContentName(@NonNull List<Content> validAssets) {
     Collections.sort(validAssets, (content1, content2) -> content1.getName().compareToIgnoreCase(content2.getName()));
   }
 
@@ -140,14 +140,14 @@ public class AssetResolvingStrategyImpl implements AssetResolvingStrategy {
    * @param contentType the given content type
    * @return the found assets
    */
-  @Nonnull
-  private List<Content> findFallbackForProductVariant(@Nonnull CommerceId id,
-                                                      @Nonnull Site site,
-                                                      @Nonnull String contentType) {
+  @NonNull
+  private List<Content> findFallbackForProductVariant(@NonNull CommerceId id,
+                                                      @NonNull Site site,
+                                                      @NonNull String contentType) {
     CommerceConnection commerceConnection = getCommerceConnection();
 
     StoreContextProvider storeContextProvider = commerceConnection.getStoreContextProvider();
-    StoreContext storeContextForSite = storeContextProvider.findContextBySite(site);
+    StoreContext storeContextForSite = storeContextProvider.findContextBySite(site).orElse(null);
     if (storeContextForSite == null) {
       return emptyList();
     }
@@ -171,13 +171,13 @@ public class AssetResolvingStrategyImpl implements AssetResolvingStrategy {
     return getCommerceConnection().getCatalogService();
   }
 
-  @Nonnull
+  @NonNull
   private static CommerceConnection getCommerceConnection() {
     return CurrentCommerceConnection.get();
   }
 
   @VisibleForTesting
-  boolean isSkuId(@Nonnull CommerceId id) {
+  boolean isSkuId(@NonNull CommerceId id) {
     return SKU.equals(id.getCommerceBeanType());
   }
 

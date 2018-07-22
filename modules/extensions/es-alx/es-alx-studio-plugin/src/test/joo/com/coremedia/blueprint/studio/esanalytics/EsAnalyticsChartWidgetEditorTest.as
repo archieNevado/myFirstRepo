@@ -83,7 +83,7 @@ public class EsAnalyticsChartWidgetEditorTest extends TestCase {
 
   private static const MOCK_CONTENT_PROTOTYPE:Object = {
     addPropertyChangeListener: Ext.emptyFn,
-    get: function(prop:String):* {
+    "get": function(prop:String):* {
       return this[prop];
     },
     getUriPath: function():String {

@@ -16,8 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -42,7 +42,7 @@ public class ContractServiceImpl implements ContractService {
   @Nullable
   @Override
   @SuppressWarnings("unchecked")
-  public Contract findContractById(@Nonnull CommerceId id, @Nonnull StoreContext storeContext) {
+  public Contract findContractById(@NonNull CommerceId id, @NonNull StoreContext storeContext) {
     UserContext userContext = UserContextHelper.getCurrentContext();
 
     ContractCacheKey contractCacheKey = new ContractCacheKey(id, storeContext, userContext,
@@ -56,15 +56,15 @@ public class ContractServiceImpl implements ContractService {
     return createContractBeanFor(contract);
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public Collection<Contract> findContractIdsForUser(@Nonnull UserContext userContext, @Nonnull StoreContext storeContext) {
+  public Collection<Contract> findContractIdsForUser(@NonNull UserContext userContext, @NonNull StoreContext storeContext) {
     return findContractIdsForUser(userContext, storeContext, null);
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public Collection<Contract> findContractIdsForUser(@Nonnull UserContext userContext, @Nonnull StoreContext storeContext,
+  public Collection<Contract> findContractIdsForUser(@NonNull UserContext userContext, @NonNull StoreContext storeContext,
                                                      @Nullable String organizationId) {
 
     ContractsByUserCacheKey contractsByUserCacheKey = new ContractsByUserCacheKey(userContext, storeContext,
@@ -77,7 +77,7 @@ public class ContractServiceImpl implements ContractService {
     return contracts.orElseGet(Collections::emptyList);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public Collection<Contract> findContractIdsForServiceUser(StoreContext storeContext) {
     if (contractPreviewServiceUserName == null) {
@@ -90,7 +90,7 @@ public class ContractServiceImpl implements ContractService {
   }
 
   @Nullable
-  private Contract createContractBeanFor(@Nonnull Map<String, Object> contractMap) {
+  private Contract createContractBeanFor(@NonNull Map<String, Object> contractMap) {
     if (contractMap.isEmpty()) {
       return null;
     }
@@ -104,13 +104,14 @@ public class ContractServiceImpl implements ContractService {
     return contract;
   }
 
-  static CommerceId toContractId(String externalId) {
+  @NonNull
+  static CommerceId toContractId(@NonNull String externalId) {
     return commerceId(CONTRACT).withExternalId(externalId).build();
   }
 
-  @Nonnull
+  @NonNull
   @SuppressWarnings("unchecked")
-  private List<Contract> createContractBeansFor(@Nonnull Map<String, Object> contractsMap) {
+  private List<Contract> createContractBeansFor(@NonNull Map<String, Object> contractsMap) {
     if (contractsMap.isEmpty()) {
       return emptyList();
     }

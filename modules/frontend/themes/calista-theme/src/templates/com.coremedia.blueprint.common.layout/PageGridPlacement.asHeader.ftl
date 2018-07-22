@@ -2,8 +2,8 @@
 
 <#assign numberOfItems=self.items?size />
 <#assign localizations=cmpage.content.localizations![] />
-<#assign cartAction=bp.setting(cmpage.context,"cartAction", {})/>
-<#assign searchAction=bp.setting(cmpage.context,"searchAction", {})/>
+<#assign cartAction=bp.setting(self,"cartAction", {})/>
+<#assign searchAction=bp.setting(self,"searchAction", {})/>
 
 <div class="container">
   <header id="cm-${self.name!""}" class="cm-header navbar">
@@ -38,7 +38,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <#assign substitution=bp.substitute(searchAction.id!"", searchAction)!cm.UNDEFINED />
+        <#assign substitution=cm.substitute(searchAction.id!"", searchAction) />
         <@cm.include self=substitution view="asHeader" params={
         "formMethod": "POST",
         "renderAsPopup": false

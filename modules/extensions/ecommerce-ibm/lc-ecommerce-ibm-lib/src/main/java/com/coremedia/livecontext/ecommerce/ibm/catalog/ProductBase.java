@@ -27,18 +27,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * Base class for product and product variant implementation.
@@ -138,6 +138,7 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
     return getStringValue(getDelegate(), "metaKeyword");
   }
 
+  @Nullable
   @Override
   public BigDecimal getListPrice() {
     WcPrices priceInfo = getPriceInfo();
@@ -158,6 +159,7 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
     return convertStringToBigDecimal(listPrice.getPriceValue());
   }
 
+  @Nullable
   @Override
   public BigDecimal getOfferPrice() {
     UserContext userContext = UserContextHelper.getCurrentContext();
@@ -215,28 +217,35 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
           return seoSegment.substring(storeId.length() + 1);
         }
       }
-      return localizedSeoSegmentList.get(0).substring(cmLocalizedSeoSegment.indexOf("_") + 1);
+
+      return localizedSeoSegmentList.get(0).substring(cmLocalizedSeoSegment.indexOf('_') + 1);
     } else {
-      return cmLocalizedSeoSegment.substring(cmLocalizedSeoSegment.indexOf("_") + 1);
+      return cmLocalizedSeoSegment.substring(cmLocalizedSeoSegment.indexOf('_') + 1);
     }
   }
 
   private String processCmLocalizedSeoSegment(String cmLocalizedSeoSegment) {
-    if (isBlank(cmLocalizedSeoSegment)) {
-      if (getDefaultLocale() == null) {
-        LOG.warn("Default locale does not set for commerce beans.");
-      }
-      if (!getLocale().equals(getDefaultLocale())) {
-        LOG.debug("Product {} does not have a cm seo segment for the current locale {}. Return the cm seo segment for the default locale {}.",
-                getName(), getLocale(), getDefaultLocale());
-        StoreContext newStoreContext = StoreContextHelper.getCurrentContextFor(getDefaultLocale());
-        CommerceId commerceId = getCommerceIdProvider().formatProductId(getCatalogAlias(), getExternalId());
-        ProductBase master = (ProductBase) getCatalogService().findProductById(commerceId, newStoreContext);
-        if (master != null && !equals(master)) {
-          cmLocalizedSeoSegment = master.getCmSeoSegment();
-        }
+    if (isNotBlank(cmLocalizedSeoSegment)) {
+      return cmLocalizedSeoSegment;
+    }
+
+    Locale defaultLocale = getDefaultLocale();
+    if (defaultLocale == null) {
+      LOG.warn("Default locale is not set for commerce beans.");
+    }
+
+    Locale locale = getLocale();
+    if (!locale.equals(defaultLocale)) {
+      LOG.debug("Product {} does not have a CM SEO segment for the current locale {}. Return the CM SEO segment for the default locale {}.",
+              getName(), locale, defaultLocale);
+      StoreContext newStoreContext = StoreContextHelper.getCurrentContextFor(defaultLocale);
+      CommerceId commerceId = getCommerceIdProvider().formatProductId(getCatalogAlias(), getExternalId());
+      ProductBase master = (ProductBase) getCatalogService().findProductById(commerceId, newStoreContext);
+      if (master != null && !equals(master)) {
+        cmLocalizedSeoSegment = master.getCmSeoSegment();
       }
     }
+
     return cmLocalizedSeoSegment;
   }
 
@@ -244,18 +253,20 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
   @Override
   public String getSeoSegment() {
     String localizedSeoSegment = getCmSeoSegment();
-    if (isBlank(localizedSeoSegment)) {
-      localizedSeoSegment = getStringValue(getDelegate(), "seo_token_ntk");
-      localizedSeoSegment = processLocalizedSeoSegment(localizedSeoSegment);
+    if (isNotBlank(localizedSeoSegment)) {
+      return localizedSeoSegment;
+    }
 
-      if (localizedSeoSegment == null) {
-        localizedSeoSegment = "";
-      } else {
-        String[] localizedSeoSegments = localizedSeoSegment.split(";");
-        List<String> localizedSeoSegmentList = Arrays.asList(localizedSeoSegments);
-        if (localizedSeoSegmentList.size() > 1) {
-          localizedSeoSegment = localizedSeoSegmentList.get(0);
-        }
+    localizedSeoSegment = getStringValue(getDelegate(), "seo_token_ntk");
+    localizedSeoSegment = processLocalizedSeoSegment(localizedSeoSegment);
+
+    if (localizedSeoSegment == null) {
+      localizedSeoSegment = "";
+    } else {
+      String[] localizedSeoSegments = localizedSeoSegment.split(";");
+      List<String> localizedSeoSegmentList = Arrays.asList(localizedSeoSegments);
+      if (localizedSeoSegmentList.size() > 1) {
+        localizedSeoSegment = localizedSeoSegmentList.get(0);
       }
     }
 
@@ -263,22 +274,28 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
   }
 
   private String processLocalizedSeoSegment(String localizedSeoSegment) {
-    if (isBlank(localizedSeoSegment)) {
-      if (getDefaultLocale() == null) {
-        LOG.warn("Default locale does not set for commerce beans.");
-      }
-      if (!getLocale().equals(getDefaultLocale())) {
-        LOG.debug("Product {} does not have a seo segment for the current locale {}. Return the seo segment for the default locale {}.",
-                getName(), getLocale(), getDefaultLocale());
-        StoreContext newStoreContext = StoreContextHelper.getCurrentContextFor(getDefaultLocale());
+    if (isNotBlank(localizedSeoSegment)) {
+      return localizedSeoSegment;
+    }
 
-        CommerceId commerceId = getCommerceIdProvider().formatProductId(getCatalogAlias(), getExternalId());
-        Product master = getCatalogService().findProductById(commerceId, newStoreContext);
-        if (master != null && !equals(master)) {
-          localizedSeoSegment = master.getSeoSegment();
-        }
+    Locale defaultLocale = getDefaultLocale();
+    if (defaultLocale == null) {
+      LOG.warn("Default locale is not set for commerce beans.");
+    }
+
+    Locale locale = getLocale();
+    if (!locale.equals(defaultLocale)) {
+      LOG.debug("Product {} does not have a SEO segment for the current locale {}. Return the SEO segment for the default locale {}.",
+              getName(), locale, defaultLocale);
+      StoreContext newStoreContext = StoreContextHelper.getCurrentContextFor(defaultLocale);
+
+      CommerceId commerceId = getCommerceIdProvider().formatProductId(getCatalogAlias(), getExternalId());
+      Product master = getCatalogService().findProductById(commerceId, newStoreContext);
+      if (master != null && !equals(master)) {
+        localizedSeoSegment = master.getSeoSegment();
       }
     }
+
     return localizedSeoSegment;
   }
 
@@ -304,7 +321,7 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
             .orElse(null);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public CatalogPicture getCatalogPicture() {
     return findAssetService()
@@ -318,7 +335,7 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
     return getPictures().stream().findFirst().orElse(null);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<Content> getPictures() {
     return findAssetService()
@@ -326,7 +343,7 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
             .orElseGet(Collections::emptyList);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<Content> getVisuals() {
     return findAssetService()
@@ -334,7 +351,7 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
             .orElseGet(Collections::emptyList);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<Content> getDownloads() {
     return findAssetService()
@@ -348,11 +365,11 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
     return doGetCategory();
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<Category> getCategories() {
     Category category = doGetCategory();
-    return category == null ? Collections.emptyList() : Collections.singletonList(category);
+    return Collections.singletonList(category);
   }
 
   @Override
@@ -366,7 +383,7 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
             .isPresent();
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<ProductAttribute> getDefiningAttributes() {
     if (definingAttributes == null) {
@@ -375,7 +392,7 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
     return definingAttributes;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<ProductAttribute> getDescribingAttributes() {
     if (describingAttributes == null) {
@@ -385,9 +402,8 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
   }
 
   @Override
-  @Nonnull
-  public List<Object> getAttributeValues(@Nonnull String attributeId) {
-
+  @NonNull
+  public List<Object> getAttributeValues(@NonNull String attributeId) {
     List<Object> values = new ArrayList<>();
 
     List<ProductAttribute> describingAttributes = getDescribingAttributes();
@@ -422,16 +438,13 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
     definingAttributes = new ArrayList<>();
     describingAttributes = new ArrayList<>();
 
-    List<Map<String, Object>> wcAttributes = DataMapHelper.findValue(getDelegate(), "attributes", List.class)
-            .orElse(null);
-    if (wcAttributes != null && !wcAttributes.isEmpty()) {
-      for (Map<String, Object> wcAttribute : wcAttributes) {
-        ProductAttribute pa = new ProductAttributeImpl(wcAttribute);
-        if (USAGE_DEFINING.equals(getStringValue(wcAttribute, "usage"))) {
-          definingAttributes.add(pa);
-        } else {
-          describingAttributes.add(pa);
-        }
+    List<Map<String, Object>> wcAttributes = DataMapHelper.getListValue(getDelegate(), "attributes");
+    for (Map<String, Object> wcAttribute : wcAttributes) {
+      ProductAttribute pa = new ProductAttributeImpl(wcAttribute);
+      if (USAGE_DEFINING.equals(getStringValue(wcAttribute, "usage"))) {
+        definingAttributes.add(pa);
+      } else {
+        describingAttributes.add(pa);
       }
     }
   }
@@ -447,30 +460,23 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
 
   // --- internal ---------------------------------------------------
 
-  @Nullable
+  @NonNull
   private Category doGetCategory() {
-    Optional<Catalog> catalog = getCatalog();
-    if (!catalog.isPresent()) {
-      throw new IllegalStateException("Product '" + this + "' does not have a catalog category.");
-    }
+    Catalog catalog = getCatalog()
+            .orElseThrow(() -> new IllegalStateException("Product '" + this + "' does not have a catalog."));
 
-    String catalogId = catalog.get().getExternalId();
-    List<String> parentCategoryIds = DataMapTransformationHelper.getParentCatGroupIdForSingleWrapper(getDelegate(), catalogId);
-    if (parentCategoryIds.isEmpty()) {
-      throw new IllegalStateException("Product '" + this + "' does not have have a parent category.");
-    }
+    List<String> parentCategoryIds = DataMapTransformationHelper.getParentCatGroupIdForSingleWrapper(getDelegate(),
+            catalog.getExternalId());
 
-    String parentCategoryID = parentCategoryIds.get(0);
-    if (parentCategoryID == null) {
-      return null;
-    }
+    String parentCategoryID = parentCategoryIds.stream().findFirst()
+            .orElseThrow(() -> new IllegalStateException("Product '" + this + "' does not have a parent category."));
 
     CommerceId commerceId = getCommerceIdProvider().formatCategoryTechId(getCatalogAlias(), parentCategoryID);
     return (Category) getCommerceBeanFactory().createBeanFor(commerceId, getContext());
   }
 
   @Nullable
-  private static String getStringValue(@Nonnull Map<String, Object> map, @Nonnull String key) {
+  private static String getStringValue(@NonNull Map<String, Object> map, @NonNull String key) {
     return DataMapHelper.findStringValue(map, key).orElse(null);
   }
 }

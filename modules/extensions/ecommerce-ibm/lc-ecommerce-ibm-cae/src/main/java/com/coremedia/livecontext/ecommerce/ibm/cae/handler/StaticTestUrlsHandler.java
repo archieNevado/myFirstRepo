@@ -17,8 +17,8 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
@@ -64,7 +64,7 @@ public class StaticTestUrlsHandler {
           + '/' + TESTURLS;
 
   @RequestMapping(URI_PATTERN)
-  public ModelAndView handleRequest(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response) {
+  public ModelAndView handleRequest(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response) {
     try {
       Site site = siteByRequest(request);
 
@@ -90,8 +90,8 @@ public class StaticTestUrlsHandler {
 
   // --- features ---------------------------------------------------
 
-  @Nonnull
-  private String createUrls(@Nonnull Site site) {
+  @NonNull
+  private String createUrls(@NonNull Site site) {
     StringBuilder testUrlsBuilder = new StringBuilder();
 
     Optional<CommerceConnection> commerceConnection = commerceConnectionInitializer.findConnectionForSite(site);
@@ -115,8 +115,8 @@ public class StaticTestUrlsHandler {
 
   // --- utilities --------------------------------------------------
 
-  @Nonnull
-  private static String replaceTokens(@Nonnull String url, @Nonnull StoreContext storeContext) {
+  @NonNull
+  private static String replaceTokens(@NonNull String url, @NonNull StoreContext storeContext) {
     Locale locale = storeContext.getLocale();
 
     Map<String, String> parameterMap = new HashMap<>();
@@ -130,8 +130,8 @@ public class StaticTestUrlsHandler {
     return TokenResolverHelper.replaceTokens(url, parameterMap, false, false);
   }
 
-  @Nonnull
-  private Site siteByRequest(@Nonnull HttpServletRequest request) {
+  @NonNull
+  private Site siteByRequest(@NonNull HttpServletRequest request) {
     String pathInfo = request.getPathInfo();
 
     Site site = siteResolver.findSiteByPath(pathInfo);
@@ -143,8 +143,8 @@ public class StaticTestUrlsHandler {
     return site;
   }
 
-  @Nonnull
-  private String getSiteVanityName(@Nonnull Site site) {
+  @NonNull
+  private String getSiteVanityName(@NonNull Site site) {
     Content rootChannel = site.getSiteRootDocument();
     if (rootChannel != null) {
       return urlPathFormattingHelper.getVanityName(rootChannel);
@@ -155,7 +155,7 @@ public class StaticTestUrlsHandler {
 
   // --- internal ---------------------------------------------------
 
-  private static void handleError(@Nonnull HttpServletResponse response, String msg, @Nullable Exception e,
+  private static void handleError(@NonNull HttpServletResponse response, String msg, @Nullable Exception e,
                                   int httpErrorCode) {
     if (e != null) {
       LOG.error(msg, e);
@@ -178,7 +178,7 @@ public class StaticTestUrlsHandler {
    * @param gzipCompression compression flag
    * @throws IOException in case of an io error
    */
-  private static void writeResultToResponse(@Nonnull String result, @Nonnull HttpServletResponse response,
+  private static void writeResultToResponse(@NonNull String result, @NonNull HttpServletResponse response,
                                             boolean gzipCompression) throws IOException {
     OutputStream out = createOutputStream(response, gzipCompression);
 
@@ -196,7 +196,7 @@ public class StaticTestUrlsHandler {
    * @param param   The name of the parameter
    * @return A boolean param from the request
    */
-  private static boolean getBooleanParameter(@Nonnull HttpServletRequest request, @Nonnull String param) {
+  private static boolean getBooleanParameter(@NonNull HttpServletRequest request, @NonNull String param) {
     String value = request.getParameter(param);
     return value != null && Boolean.parseBoolean(value);
   }
@@ -209,8 +209,8 @@ public class StaticTestUrlsHandler {
    * @return The OutputStream
    * @throws IOException in case of io error
    */
-  @Nonnull
-  private static OutputStream createOutputStream(@Nonnull HttpServletResponse response, boolean gzipCompression)
+  @NonNull
+  private static OutputStream createOutputStream(@NonNull HttpServletResponse response, boolean gzipCompression)
           throws IOException {
     if (gzipCompression) {
       response.setHeader("Content-Encoding", "gzip");

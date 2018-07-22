@@ -2,7 +2,9 @@
 <#-- @ftlvariable name="index" type="java.lang.Integer" -->
 <#-- @ftlvariable name="additionalClass" type="java.lang.String" -->
 
-<#-- todo: simplify variables with ?then() -->
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/utils.ftl" as utils />
+<#import "*/node_modules/@coremedia/brick-media/src/freemarkerLibs/media.ftl" as media />
+
 <#assign index=cm.localParameters().index!0 />
 <#assign hasImage=self.picture?has_content />
 <#assign hasEvenIndex=(index % 2 == 0) />
@@ -11,7 +13,8 @@
 <#assign additionalNoImageCssClass="" />
 <#assign additionalImgCssClass=""/>
 <#assign additionalTextCssClass=""/>
-<#assign videoLink = bp.getVideoLink(self) />
+<#assign videoLink=media.getLink(self) />
+<#assign link = cm.getLink(self.target) />
 
 <#if !hasEvenIndex>
   <#assign additionalVariantCssClass="cm-teasable--alternative" />
@@ -33,18 +36,17 @@
 <div class="cm-teasable cm-teasable--video ${additionalVariantCssClass} ${additionalNoImageCssClass} row ${additionalClass!""}"<@preview.metadata self.content />>
 <#if hasImage>
   <div class="col-xs-12 ${additionalImgCssClass}">
-    <@bp.optionalLink href="${videoLink}" attr={"data-cm-popup": "", "class":"cm-teasable__popup-opener"}>
+  <@utils.optionalLink href="${link}">
       <#-- picture -->
-      <@cm.include self=self.picture params={
+      <@cm.include self=self.picture view="media" params={
         "limitAspectRatios": [ "portrait_ratio1x1", "landscape_ratio16x9" ],
         "classBox": "cm-teasable__picture-box",
-        "classImage": "cm-teasable__picture",
+        "classMedia": "cm-teasable__picture",
         "metadata": ["properties.pictures"]
       }/>
-
       <#-- play overlay icon-->
       <@cm.include self=self view="_playButton"/>
-    </@bp.optionalLink>
+    </@utils.optionalLink>
   </div>
 </#if>
 
@@ -53,10 +55,8 @@
       <div class="cm-teasable__text-content">
         <#-- add overlay play icon here, if no image is set -->
         <#if !hasImage>
-          <@bp.optionalLink href="${videoLink}" attr={"data-cm-popup": "", "class":"cm-teasable__popup-opener"}>
           <#-- play overlay icon-->
-          <@cm.include self=self view="_playButton"/>
-          </@bp.optionalLink>
+          <@cm.include self=self view="_playButton" params={"openAsPopup": true} />
         </#if>
 
         <#-- headline -->
@@ -64,10 +64,10 @@
           <span>${self.teaserTitle!""}</span>
         </h3>
         <#-- teaser text -->
-        <#assign truncatedTeaserText=bp.truncateText(self.teaserText!"", bp.setting(cmpage, "teaser.max.length", 140)) />
+        <#assign truncatedTeaserText=bp.truncateText(self.teaserText!"", bp.setting(self, "teaser.max.length", 140)) />
         <#if truncatedTeaserText?has_content>
           <p class="cm-teasable__text"<@preview.metadata "properties.teaserText" />>
-            <@bp.renderWithLineBreaks truncatedTeaserText />
+            <@utils.renderWithLineBreaks text=truncatedTeaserText />
           </p>
         </#if>
       </div>

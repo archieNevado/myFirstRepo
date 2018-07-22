@@ -50,7 +50,7 @@ public class CatalogServiceImplUnknownHostIT extends CatalogServiceBaseTest {
   @Override
   public void setup() {
     super.setup();
-    testConfig.setWcsVersion(storeInfoService.getWcsVersion());
+    storeInfoService.getWcsVersion().ifPresent(testConfig::setWcsVersion);
     storeContext = testConfig.getStoreContext();
     StoreContextHelper.setCurrentContext(storeContext);
   }

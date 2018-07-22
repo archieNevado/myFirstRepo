@@ -8,16 +8,16 @@
   <div class="cm-teasable cm-teasable--video" data-cm-teasable--video='{"preview": ".cm-teasable__content", "player": ".cm-teasable--video__video", "play": ".cm-play-button"}'>
     <#if self.picture?has_content>
       <#assign ownPictureCssClass="cm-hidden" />
-      <@cm.include self=self.picture params={
-      "limitAspectRatios": limitAspectRatios,
-      "classBox": "cm-teasable__content cm-product-assets__picture-box",
-      "classImage": "cm-product-assets__picture",
-      "metadata": ["properties.pictures"]
+      <@cm.include self=self.picture view="media" params={
+        "classBox": "cm-teasable__content cm-product-assets__picture-box",
+        "classMedia": "cm-product-assets__picture",
+        "metadata": ["properties.pictures"]
       }/>
     </#if>
     <@cm.include self=self view="_playButton"/>
-    <div class="cm-teasable--video__video cm-product-assets__picture-box ${ownPictureCssClass}">
-      <@cm.include self=self view="video" params={"classVideo": "cm-aspect-ratio-box__content cm-product-assets__video", "adaptive": true} />
-    </div>
+    <@cm.include self=self view="media" params={
+      "classBox": "cm-teasable--video__video cm-product-assets__picture-box ${ownPictureCssClass}",
+      "classMedia": "cm-product-assets__video"
+    } />
   </div>
 </div>

@@ -3,6 +3,7 @@ package com.coremedia.blueprint.cae.layout;
 import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGridService;
 import com.coremedia.blueprint.base.pagegrid.PageGridConstants;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
+import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
 import com.coremedia.blueprint.common.layout.PageGrid;
 import com.coremedia.blueprint.common.layout.PageGridPlacement;
 import com.coremedia.blueprint.common.layout.PageGridRow;
@@ -18,6 +19,8 @@ import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
+
+import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,21 +30,59 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
+import static com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes={PageGridImplTest.LocalConfig.class, XmlRepoConfiguration.class})
 public class PageGridImplTest {
 
+  private static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_DATE_TIME;
+
+  private static final List<String> PREVIEW_DATES = ImmutableList.of(
+                  "1963-01-01T01:00:00+01:00", // 0
+                  "1963-11-19T06:00:00+01:00", // 1
+                  "1974-07-01T03:00:00+01:00", // 2
+                  "2005-12-31T06:00:00+01:00", // 3
+                  "2007-12-31T06:00:01+01:00", // 4
+                  "2015-01-01T03:00:00+01:00", // 5
+                  "2025-01-01T03:00:00+01:00"  // 6
+          );
+
+  private static final List<Integer> EXPECTED_ITEM_COUNTS = ImmutableList.of(
+          0,
+          0,
+          3,
+          2,
+          3,
+          0,
+          0
+  );
+
   @Inject
   private ContentBackedPageGridService contentBackedPageGridService;
   @Inject
   private ValidationService<Linkable> validationService;
+  @Inject
+  private ValidityPeriodValidator visibilityValidator;
   @Inject
   private ContentBeanFactory contentBeanFactory;
   @Inject
@@ -51,13 +92,14 @@ public class PageGridImplTest {
 
   private PageGridImpl pageGrid;
 
+
   // --- setup ------------------------------------------------------
 
   @Before
   public void setUp() throws Exception {
     Content content = contentRepository.getContent(IdHelper.formatContentId(222));
     CMChannel channel = (CMChannel) contentBeanFactory.createBeanFor(content);
-    pageGrid = new PageGridImpl(channel, contentBackedPageGridService, validationService, viewtypeService);
+    pageGrid = new PageGridImpl(channel, contentBackedPageGridService, validationService, visibilityValidator, viewtypeService);
   }
 
 
@@ -121,10 +163,48 @@ public class PageGridImplTest {
   public void testBrokenPageGrid() {
     Content content = contentRepository.getContent(IdHelper.formatContentId(668));
     CMChannel brokenChannel = (CMChannel) contentBeanFactory.createBeanFor(content);
-    PageGrid brokenGrid = new PageGridImpl(brokenChannel, contentBackedPageGridService, validationService, viewtypeService);
+    PageGrid brokenGrid = new PageGridImpl(brokenChannel, contentBackedPageGridService, validationService, visibilityValidator, viewtypeService);
 
     //Exception will be thrown when trying to access a placement.
     PageGridPlacement pageGridPlacement = brokenGrid.getPlacementForName("wrongName");
+  }
+
+  @Test
+  public void testVisibilityInPageGrid() {
+    Content content = contentRepository.getContent(IdHelper.formatContentId(888));
+    CMChannel channel = (CMChannel) contentBeanFactory.createBeanFor(content);
+    Map<String, Integer> expected = IntStream.range(0, PREVIEW_DATES.size())
+            .boxed()
+            .collect(Collectors.toMap(
+                    index -> PREVIEW_DATES.get(index),
+                    index -> EXPECTED_ITEM_COUNTS.get(index)));
+    Map<String, Integer> actual = PREVIEW_DATES.stream()
+            .map(DATE_TIME_FORMATTER::parse)
+            .map(ZonedDateTime::from)
+            .collect(Collectors.toMap(
+                    DATE_TIME_FORMATTER::format,
+                    time -> countItems(time, channel)));
+
+    assertEquals("wrong number of placements", expected, actual);
+  }
+
+  private Integer countItems(ZonedDateTime time, CMChannel channel) {
+    String date = DATE_TIME_FORMATTER.format(time);
+
+    setPreviewDate(GregorianCalendar.from(time));
+    PageGrid pageGrid = new PageGridImpl(channel, contentBackedPageGridService, validationService, visibilityValidator, viewtypeService);
+    PageGridPlacement pageGridPlacement = pageGrid.getRows().get(0).getPlacements().get(0);
+
+    assertEquals("wrong name", "west", pageGridPlacement.getName());
+    List<? extends Linkable> items = pageGridPlacement.getItems();
+    return items.size();
+  }
+
+  private void setPreviewDate(Calendar calendar) {
+    HttpServletRequest request = mock(HttpServletRequest.class);
+    ServletRequestAttributes attrs = new ServletRequestAttributes(request);
+    RequestContextHolder.setRequestAttributes(attrs);
+    when(request.getAttribute(REQUEST_ATTRIBUTE_PREVIEW_DATE)).thenReturn(calendar);
   }
 
   @Test

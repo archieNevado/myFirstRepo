@@ -39,7 +39,8 @@ public class ContractServiceImplIT extends IbmServiceTestBase {
     UserContext userContext = UserContext.builder().withUserName(testConfig.getUser2Name()).build();
     UserContextHelper.setCurrentContext(userContext);
 
-    Collection<Contract> contractIdsForUser = testling.findContractIdsForUser(UserContextHelper.getCurrentContext(), StoreContextHelper.getCurrentContext());
+    Collection<Contract> contractIdsForUser = testling.findContractIdsForUser(UserContextHelper.getCurrentContext(),
+            StoreContextHelper.getCurrentContextOrThrow());
     assertNotNull(contractIdsForUser);
 
     if (WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(testConfig.getB2BStoreContext()))) {
@@ -56,7 +57,8 @@ public class ContractServiceImplIT extends IbmServiceTestBase {
     UserContext userContext = UserContext.builder().withUserName(testConfig.getPreviewUserName()).build();
     UserContextHelper.setCurrentContext(userContext);
 
-    Collection<Contract> contracts = testling.findContractIdsForUser(UserContextHelper.getCurrentContext(), StoreContextHelper.getCurrentContext());
+    Collection<Contract> contracts = testling.findContractIdsForUser(UserContextHelper.getCurrentContext(),
+            StoreContextHelper.getCurrentContextOrThrow());
     assertNotNull(contracts);
 
     if (WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(testConfig.getB2BStoreContext()))) {
@@ -78,7 +80,8 @@ public class ContractServiceImplIT extends IbmServiceTestBase {
     String contractPreviewServiceUserName = testling.getContractPreviewServiceUserName();
     try {
       testling.setContractPreviewServiceUserName(null);
-      Collection<Contract> contracts = testling.findContractIdsForServiceUser(StoreContextHelper.getCurrentContext());
+      Collection<Contract> contracts = testling.findContractIdsForServiceUser(
+              StoreContextHelper.getCurrentContextOrThrow());
       assertNotNull(contracts);
       assertTrue(contracts.isEmpty());
     } finally {
@@ -93,7 +96,8 @@ public class ContractServiceImplIT extends IbmServiceTestBase {
     UserContext userContext = UserContext.builder().withUserName(testConfig.getPreviewUserName()).build();
     UserContextHelper.setCurrentContext(userContext);
 
-    Collection<Contract> contracts = testling.findContractIdsForUser(UserContextHelper.getCurrentContext(), StoreContextHelper.getCurrentContext());
+    Collection<Contract> contracts = testling.findContractIdsForUser(UserContextHelper.getCurrentContext(),
+            StoreContextHelper.getCurrentContextOrThrow());
     assertNotNull(contracts);
 
     if (WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(testConfig.getB2BStoreContext()))) {

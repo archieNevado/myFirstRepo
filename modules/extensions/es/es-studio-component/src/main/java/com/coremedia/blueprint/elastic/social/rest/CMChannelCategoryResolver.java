@@ -6,7 +6,7 @@ import com.coremedia.cap.content.ContentType;
 import com.coremedia.elastic.social.rest.api.CategoryKeyAndDisplay;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.inject.Named;
 
 @Named
@@ -19,7 +19,7 @@ public class CMChannelCategoryResolver implements CategoryResolver {
   private static final String KEY_PREFIX = "key_";
 
   @Override
-  public CategoryKeyAndDisplay resolve(@Nonnull Content content) {
+  public CategoryKeyAndDisplay resolve(@NonNull Content content) {
     if(handlesType(content.getType()) ) {
       String key = content.getString(CMCHANNEL_SEGMENT);
       //segment may be empty for category channels

@@ -109,8 +109,8 @@ public class AbstractCommerceContextInterceptorTest {
             .map(CommerceConnection::getStoreContext)
             .hasValueSatisfying(
                     context -> {
-                      assertThat(context.getPreviewDate()).isNotNull();
-                      assertThat(context.getWorkspaceId()).isNotNull();
+                      assertThat(context.getPreviewDate()).isPresent();
+                      assertThat(context.getWorkspaceId()).isPresent();
                     }
             );
   }

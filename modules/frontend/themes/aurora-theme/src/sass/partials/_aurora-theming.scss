@@ -200,71 +200,19 @@
   border-radius: 0;
 }
 
+
+#departmentsButton {
+  display: none !important;
+}
+
+
 @include breakpoint(sm-and-up) {
 
-  .departmentButton {
-    border-radius: 0;
-    background: inherit;
-    border: none;
-    transition: color 150ms ease-out;
-    text-decoration: none;
-    overflow: hidden;
-    font-size: 14px;
-    padding: 0 20px;
-    line-height: 50px;
-    margin-bottom: 0;
-
-    &:hover, &.selected {
-      color: $main-color-light;
-      background: inherit;
-      text-decoration: none;
-      &:after {
-        bottom: 0;
-      }
-    }
-
-    &.selected {
-      color: $main-color-light;
-    }
-
-    &:after {
-      content: "";
-      position: absolute;
-      background-color: $main-color-light;
-      height: 5px;
-      bottom: -5px;
-      left: 15px;
-      right: 15px;
-      overflow: hidden;
-      transition: bottom 100ms ease-in;
-      @media (-webkit-device-pixel-ratio: 2){
-        background-image: inherit;
-      }
-    }
-
-    > span {
-      display: inherit;
-      max-width: inherit;
-      height: inherit;
-      padding: 0;
-      border: none;
-      border-radius: 0;
-      line-height: inherit;
-    }
-
-    .arrow_button_icon {
-      display: none;
-    }
-  }
-
   #page {
-    #headerWrapper, #footerWrapper, div.header_wrapper_position, div.footer_wrapper_position {
-      background-color: inherit;
-    }
-
     .max-width, #contentWrapper {
       max-width: $screen-lg-min;
       margin: 0 auto;
+      position: relative;
     }
 
     #headerRow2 .max-width {
@@ -274,7 +222,8 @@
 
       #searchBar {
         float: right;
-        position: relative;
+        position: absolute;
+        z-index: 1;
       }
     }
   }
@@ -282,53 +231,6 @@
   #Header_GlobalLogin_loggedInDropdown.menuDropdown {
     top: 8px;
     right: -1px;
-  }
-
-  .departmentMenu {
-
-    width: auto;
-    min-width: 100%;
-
-    > .header > .link {
-      margin: 0;
-      text-align: center;
-    }
-
-    border-top: 1px solid $main-color-light;
-    border-bottom: 3px solid $main-color-light;
-    border-radius: 0;
-    left: 0;
-
-    &.max-width {
-      box-sizing: border-box;
-      padding-left: calc((100% - #{$screen-lg-min}) / 2);
-      padding-right: calc((100% - #{$screen-lg-min}) / 2);
-    }
-    &.active > .categoryList {
-      display: flex;
-      padding: 8px;
-      li {
-        width: 100%;
-        max-width: 200px;
-      }
-    }
-
-    > li, > .header {
-      border-bottom: 1px solid $main-color-light;
-    }
-
-    .categoryList > li > a:last-child {
-      font-weight: bold;
-      text-transform: uppercase;
-    }
-
-  }
-
-  #departmentsMenu {
-    position: inherit;
-    > li {
-      position: inherit;
-    }
   }
 
   .cm-search > .cm-popup-button {
@@ -410,16 +312,6 @@
   }
 }
 
-@include breakpoint(xs) {
-  #departmentsMenu.active {
-    border-top: 3px solid $main-color-light;
-  }
-
-  .departmentMenu > .header {
-    border-bottom: 1px solid $main-color-light;
-  }
-}
-
 .cm-breadcrumb {
   // items
   &__item {
@@ -433,4 +325,11 @@
 
 div#widget_breadcrumb > ul li a {
   color: $main-color-light;
+}
+
+// the wcs storefront sets "display: none" for all iframes
+.cm-mediaelementwrapper {
+  > iframe {
+    display: initial;
+  }
 }

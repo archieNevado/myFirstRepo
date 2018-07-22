@@ -16,7 +16,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.CharMatcher;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -28,9 +28,9 @@ public class CaeAssetSearchService implements AssetSearchService {
   private int resultLimit = 500;
   private long cacheForSeconds = 300;
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Content> searchAssets(@Nonnull String contentType, @Nonnull String externalId, @Nonnull Site site) {
+  public List<Content> searchAssets(@NonNull String contentType, @NonNull String externalId, @NonNull Site site) {
     List<ContentBean> contentBeans = poseSolrQuery(contentType, site, externalId);
     List<Content> contents = new ArrayList<>(contentBeans.size());
     for (ContentBean contentBean : contentBeans) {
@@ -39,7 +39,7 @@ public class CaeAssetSearchService implements AssetSearchService {
     return contents;
   }
 
-  private List<ContentBean> poseSolrQuery(@Nonnull String contentType, Site site, String externalId) {
+  private List<ContentBean> poseSolrQuery(@NonNull String contentType, Site site, String externalId) {
     SearchQueryBean query = createQueryBean();
     query.setSearchHandler(SearchQueryBean.SEARCH_HANDLER.DYNAMICCONTENT);
     query.setLimit(resultLimit);
@@ -79,8 +79,8 @@ public class CaeAssetSearchService implements AssetSearchService {
     return escapedContentTypes;
   }
 
-  @Nonnull
-  private String escapeLiteralForSearch(@Nonnull String literal) {
+  @NonNull
+  private String escapeLiteralForSearch(@NonNull String literal) {
     return '"' + CharMatcher.is('"').replaceFrom(literal, "\\\"") + '"';
   }
 

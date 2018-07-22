@@ -20,6 +20,7 @@ import static org.junit.Assert.assertFalse;
 @ContextConfiguration(classes = IbmServiceTestBase.LocalConfig.class)
 @ActiveProfiles(IbmServiceTestBase.LocalConfig.PROFILE)
 public class SearchServiceImplIT extends IbmServiceTestBase {
+
   @Inject
   SearchServiceImpl testling;
 
@@ -33,10 +34,11 @@ public class SearchServiceImplIT extends IbmServiceTestBase {
   @Test
   @Betamax(tape = "ssi_testGetAutocompleteSuggestions", match = {MatchRule.path, MatchRule.query})
   public void testGetAutocompleteSuggestions() {
-    StoreContext currentContext = StoreContextHelper.getCurrentContext();
+    StoreContext currentContext = StoreContextHelper.getCurrentContextOrThrow();
     if (StoreContextHelper.getWcsVersion(currentContext).lessThan(WCS_VERSION_7_7)) {
       return;
     }
+
     List<SuggestionResult> suggestions = testling.getAutocompleteSuggestions("dres", currentContext);
     assertFalse(suggestions.isEmpty());
   }

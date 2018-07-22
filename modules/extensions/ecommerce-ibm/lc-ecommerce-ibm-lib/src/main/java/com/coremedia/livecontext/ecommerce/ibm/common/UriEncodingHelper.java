@@ -4,7 +4,7 @@ import com.google.common.annotations.VisibleForTesting;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -15,9 +15,9 @@ class UriEncodingHelper {
   private UriEncodingHelper() {
   }
 
-  @Nonnull
+  @NonNull
   @VisibleForTesting
-  static UriComponents fixPlusEncoding(@Nonnull UriComponents encodedUriComponents) {
+  static UriComponents fixPlusEncoding(@NonNull UriComponents encodedUriComponents) {
     UriComponentsBuilder builder = UriComponentsBuilder.newInstance().uriComponents(encodedUriComponents);
 
     encodedUriComponents.getQueryParams().forEach((key, value) -> replaceEncodedQueryParam(builder, key, value));

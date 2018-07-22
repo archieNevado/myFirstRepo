@@ -5,20 +5,18 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.cache.Cache;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
+import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.Map;
 
 public class ContractsByUserCacheKey extends AbstractCommerceCacheKey<Map<String, Object>> {
 
   private WcContractWrapperService wrapperService;
 
-  public ContractsByUserCacheKey(@Nonnull UserContext userContext,
-                                 StoreContext storeContext,
-                                 @Nullable String organizationId,
-                                 WcContractWrapperService wrapperService,
+  public ContractsByUserCacheKey(@NonNull UserContext userContext, StoreContext storeContext,
+                                 @Nullable String organizationId, WcContractWrapperService wrapperService,
                                  CommerceCache commerceCache) {
     super(
             userContext.getUserId()
@@ -40,13 +38,15 @@ public class ContractsByUserCacheKey extends AbstractCommerceCacheKey<Map<String
 
   @Override
   protected String getCacheIdentifier() {
-    return id
-            + ":" + configKey
-            + ":" + storeContext.getSiteId()
-            + ":" + storeContext.getStoreId()
-            + ":" + storeContext.getLocale()
-            + ":" + storeContext.getCurrency()
-            + ":" + storeContext.getWorkspaceId()
-            + ":" + Arrays.toString(storeContext.getContractIds());
+    return assembleCacheIdentifier(
+            id,
+            configKey,
+            storeContext.getSiteId(),
+            storeContext.getStoreId(),
+            storeContext.getLocale(),
+            storeContext.getCurrency(),
+            storeContext.getWorkspaceId().map(WorkspaceId::value).orElse(null),
+            toString(storeContext.getContractIds())
+    );
   }
 }

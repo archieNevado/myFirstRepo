@@ -6,7 +6,7 @@
     "jquery": "3.2.1",
     "@coremedia/js-device-detector": "^1.0.0",
     "@coremedia/sass-utils": "^1.0.0",
-    "@coremedia/brick-responsive-images": "^1.0.0",
+    "@coremedia/brick-media": "^1.0.0",
     "@coremedia/brick-bootstrap": "^1.0.0"
   },
   "devDependencies": {

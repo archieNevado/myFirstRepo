@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.Optional;
@@ -51,7 +53,7 @@ public class LiveContextExternalChannelPreviewHandler extends LiveContextPageHan
                                     @PathVariable(SEGMENT_NAME) String vanityName,
                                     @PathVariable(SHOP_NAME_VARIABLE) String siteSegment,
                                     @RequestParam(value = VIEW_PARAMETER, required = false) final String view,
-                                    HttpServletRequest request) {
+                                    @NonNull HttpServletRequest request) {
     Navigation navigation = getNavigation(siteSegment);
     if (navigation == null || !vanityName.equals(getVanityName(liveContextExternalChannel))) {
       return HandlerHelper.notFound();
@@ -63,7 +65,8 @@ public class LiveContextExternalChannelPreviewHandler extends LiveContextPageHan
 
   @SuppressWarnings("unused")
   @Link(type = LiveContextExternalChannelImpl.class)
-  public Object buildLinkForExternalChannel(LiveContextExternalChannelImpl navigation, String viewName,
+  @Nullable
+  public Object buildLinkForExternalChannel(@NonNull LiveContextExternalChannelImpl navigation, String viewName,
                                             Map<String, Object> linkParameters, HttpServletRequest request) {
     Optional<StoreContext> storeContext = CurrentCommerceConnection.find().map(CommerceConnection::getStoreContext);
     if (!storeContext.isPresent()) {
@@ -91,7 +94,7 @@ public class LiveContextExternalChannelPreviewHandler extends LiveContextPageHan
     }
   }
 
-  private boolean useCommerceCategoryLinks(Site site) {
+  private boolean useCommerceCategoryLinks(@NonNull Site site) {
     return externalNavigationHandler.useCommerceCategoryLinks(site);
   }
 

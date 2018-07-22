@@ -2,8 +2,8 @@ package com.coremedia.livecontext.ecommerce.ibm.login;
 
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 /**
  * Service interface to logon to the catalog.
@@ -17,7 +17,7 @@ public interface LoginService {
    * @return The users credentials if the login was valid
    * @throws com.coremedia.livecontext.ecommerce.common.InvalidLoginException if logon was not successful.
    */
-  WcCredentials loginIdentity(String username, String password, @Nonnull StoreContext context);
+  WcCredentials loginIdentity(String username, String password, @NonNull StoreContext context);
 
   /**
    * Login a service user for a current store context.
@@ -27,7 +27,7 @@ public interface LoginService {
    * @return The service credentials if the login was valid
    * @throws com.coremedia.livecontext.ecommerce.common.InvalidLoginException if logon was not successful.
    */
-  WcCredentials loginServiceIdentity(@Nonnull StoreContext context);
+  WcCredentials loginServiceIdentity(@NonNull StoreContext context);
 
   /**
    * Logout a service user for a current store context.
@@ -36,7 +36,7 @@ public interface LoginService {
    * @return true if the the logout was successful
    * @throws com.coremedia.livecontext.ecommerce.common.CommerceException
    */
-  boolean logoutServiceIdentity(@Nonnull StoreContext context);
+  boolean logoutServiceIdentity(@NonNull StoreContext context);
 
   /**
    * Renew a service user login for a current store context.
@@ -46,7 +46,7 @@ public interface LoginService {
    * @return The service credentials if the login was valid
    * @throws com.coremedia.livecontext.ecommerce.common.InvalidLoginException if logon was not successful.
    */
-  WcCredentials renewServiceIdentityLogin(@Nonnull StoreContext context);
+  WcCredentials renewServiceIdentityLogin(@NonNull StoreContext context);
 
   /**
    * Gets a preview token for the current store context.
@@ -60,7 +60,7 @@ public interface LoginService {
    * @throws com.coremedia.livecontext.ecommerce.common.InvalidLoginException if logon was not successful.
    */
   @Nullable
-  WcPreviewToken getPreviewToken(@Nonnull StoreContext context);
+  WcPreviewToken getPreviewToken(@NonNull StoreContext context);
 
   /**
    * Internal routine to clear all service credentials from cache.

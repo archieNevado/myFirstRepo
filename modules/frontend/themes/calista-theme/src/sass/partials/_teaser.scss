@@ -2,21 +2,10 @@
 .#{$cm-teasable-prefix} {
 
   font-family: $font-family-serif;
-  padding: 0;
   margin-bottom: 48px;
 
   &__picture-box {
     @include aspect-ratio-box(2.35, 1);
-
-    .cm-teasable__picture.cm-non-adaptive-content {
-      width: 100%;
-    }
-  }
-
-  &.teaser-overlay-enabled {
-    .cm-teasable__picture-box {
-      @include aspect-ratio-box(1, 1);
-    }
   }
 
   &__headline {
@@ -66,7 +55,7 @@
     line-height: 24px;
   }
 
-  & a:hover &__headline > span {
+  & a:hover &__headline {
     text-decoration: underline;
   }
 
@@ -83,21 +72,46 @@
     }
   }
 
-  // only show shop-now buttons on hover
-  .cm-button-group--shopnow {
-    display: none;
-    position: absolute;
-    text-align: center;
-    left: 0;
-    right: 0;
-    margin: auto;
-    top: 50%;
-    transform: translate(0, -50%);
+  // when the teaser caption, the position of the play button needs to be adjusted
+  // sadly, cannot use & in :not()
+  &__play {
+    transform: translate(50%, -50%);
   }
 
-  // make sure shop-now button is centered on the picture
-  .picture-wrapper {
-    position: relative;
+  // only show shop-now buttons on hover
+  .cm-button-group--shopnow {
+    @include aspect-ratio-box(2.35, 1);
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    pointer-events: none;
+    &:hover {
+      display: block;
+    }
+    .cm-button-group__button {
+      @include center-absolute();
+      pointer-events: initial;
+      min-width: 105px;
+    }
+  }
+
+  &--overlay-enabled {
+    .#{$cm-teasable-prefix}__picture-box {
+      @include aspect-ratio-box(1, 1);
+    }
+
+    // center absolute again
+    .#{$cm-teasable-prefix}__play {
+      @include center-absolute();
+    }
+
+    .cm-button-group--shopnow {
+      &:before {
+        padding-top: calculatePaddingTop(1, 1);
+      }
+    }
   }
 }
 
@@ -114,6 +128,12 @@
 
     &__picture-box {
       @include aspect-ratio-box(20, 31);
+    }
+
+    .cm-button-group--shopnow {
+      &:before {
+        padding-top: calculatePaddingTop(20, 31);
+      }
     }
   }
 

@@ -24,10 +24,9 @@
     <property name="localeProperty" value="locale"/>
     <property name="masterProperty" value="master"/>
     <property name="masterVersionProperty" value="masterVersion"/>
+    <property name="ignoreUpdatesProperty" value="ignoreUpdates"/>
     <property name="rootProperty" value="root"/>
     <property name="uriSegmentProperty" value="segment"/>
-    <property name="siteIndicatorNamePattern" value="{0} [Site]"/>
-    <property name="siteRootDocumentNamePattern" value="{0}"/>
     <property name="siteManagerGroupProperty" value="siteManagerGroup"/>
     <property name="translationManagerRole" value="translation-manager-role"/>
     <property name="uriSegmentPattern" value="{0}-{4}"/>
@@ -37,6 +36,16 @@
     <property name="rootFolderPathDefaultCountry" value="NO_COUNTRY"/>
     <property name="nameProperty" value="name"/>
     <property name="translationWorkflowRobotUser" value="translation-workflow-robot"/>
+  </bean>
+
+  <bean id="renameSiteIndicatorPostProcessor" class="com.coremedia.cap.multisite.RenameSiteIndicatorPostProcessor">
+    <property name="siteIndicatorNamePattern" value="{0} [Site]"/>
+  </bean>
+
+  <bean id="renameRootChannelPostProcessor" class="com.coremedia.blueprint.base.multisite.BlueprintRenameRootChannelPostProcessor">
+    <property name="siteRootDocumentNamePattern" value="{0}"/>
+    <property name="rootProperty" value="root"/>
+    <property name="uriSegmentProperty" value="${sitemodel.uriSegmentProperty}"/>
   </bean>
 
   <bean id="testConfig" class="com.coremedia.livecontext.ecommerce.ibm.common.IbmTestConfig"/>

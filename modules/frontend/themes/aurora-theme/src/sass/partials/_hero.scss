@@ -69,6 +69,13 @@
     bottom: 10px;
   }
 
+  &--product {
+    // hide cta
+    .#{$cm-hero-prefix}__cta {
+      display: none;
+    }
+  }
+
   @include breakpoint(md) {
     &:hover .cm-button-group--shopnow {
       display: block;

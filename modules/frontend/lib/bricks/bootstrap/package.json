@@ -1,10 +1,11 @@
 {
   "name": "@coremedia/brick-bootstrap",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "dependencies": {
     "bootstrap-sass": "3.3.7",
     "jquery": "3.2.1",
+    "@coremedia/js-node-decoration-service": "^1.0.0",
     "@coremedia/js-responsive-images": "^1.0.0",
     "@coremedia/sass-utils": "^1.0.0"
   },
@@ -16,8 +17,27 @@
     "apidoc": "jsdoc2md src/js/*.js > API.md",
     "prettier": "prettier \"**/*\" --write"
   },
+  "main": "src/js/index.js",
   "coremedia": {
     "type": "brick",
-    "init": "src/js/init.js"
+    "init": "src/js/init.js",
+    "shim": {
+      "bootstrap-sass": {
+        "imports": {
+          "jQuery": "jquery"
+        },
+        "exports": {
+          "": "jQuery"
+        }
+      },
+      "./src/vendor/jquery.bcSwipe": {
+        "imports": {
+          "jQuery": "jquery"
+        },
+        "exports": {
+          "": "jQuery"
+        }
+      }
+    }
   }
 }

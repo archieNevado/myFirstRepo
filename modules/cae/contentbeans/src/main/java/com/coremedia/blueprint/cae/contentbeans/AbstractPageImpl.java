@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -54,7 +54,7 @@ public abstract class AbstractPageImpl implements AbstractPage, AssumesIdentity 
   }
 
   @SuppressWarnings("ConstantConditions")
-  protected AbstractPageImpl(boolean developerMode, @Nonnull SitesService sitesService, @Nonnull Cache cache) {
+  protected AbstractPageImpl(boolean developerMode, @NonNull SitesService sitesService, @NonNull Cache cache) {
     checkArgument(sitesService != null, "siteService is null");
     this.developerMode = developerMode;
     this.sitesService = sitesService;
@@ -63,11 +63,11 @@ public abstract class AbstractPageImpl implements AbstractPage, AssumesIdentity 
 
   @SuppressWarnings("ConstantConditions")
   protected AbstractPageImpl(
-          @Nonnull Navigation navigation,
-          @Nonnull Object content,
+          @NonNull Navigation navigation,
+          @NonNull Object content,
           boolean developerMode,
-          @Nonnull SitesService sitesService,
-          @Nonnull Cache cache) {
+          @NonNull SitesService sitesService,
+          @NonNull Cache cache) {
     this(developerMode, sitesService, cache);
     setNavigation(navigation);
     setContent(content);

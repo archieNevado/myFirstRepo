@@ -11,8 +11,8 @@ import com.coremedia.livecontext.ecommerce.workspace.Workspace;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceService;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -28,9 +28,9 @@ public class WorkspaceServiceImpl implements WorkspaceService {
   private CommerceBeanFactory commerceBeanFactory;
   private CommerceCache commerceCache;
 
-  @Nonnull
+  @NonNull
   @Override
-  public List<Workspace> findAllWorkspaces(@Nonnull StoreContext storeContext) {
+  public List<Workspace> findAllWorkspaces(@NonNull StoreContext storeContext) {
     UserContext userContext = UserContextHelper.getCurrentContext();
 
     WorkspacesCacheKey cacheKey = new WorkspacesCacheKey(storeContext, userContext, workspaceWrapperService,
@@ -49,8 +49,8 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     return createWorkspaceBeansFor((List<Map>) workspacesObj, storeContext);
   }
 
-  @Nonnull
-  private List<Workspace> createWorkspaceBeansFor(@Nonnull List<Map> list, @Nonnull StoreContext context) {
+  @NonNull
+  private List<Workspace> createWorkspaceBeansFor(@NonNull List<Map> list, @NonNull StoreContext context) {
     return list.stream()
             .filter(Objects::nonNull)
             .map(workspaceMap -> createWorkspaceBeanFor(workspaceMap, context))
@@ -59,7 +59,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
   }
 
   @Nullable
-  private Workspace createWorkspaceBeanFor(@Nonnull Map map, @Nonnull StoreContext context) {
+  private Workspace createWorkspaceBeanFor(@NonNull Map map, @NonNull StoreContext context) {
     CommerceId commerceId = commerceId(WORKSPACE).withExternalId((String) map.get("id")).build();
     Workspace workspace = (Workspace) commerceBeanFactory.createBeanFor(commerceId, context);
     ((AbstractIbmCommerceBean) workspace).setDelegate(map);

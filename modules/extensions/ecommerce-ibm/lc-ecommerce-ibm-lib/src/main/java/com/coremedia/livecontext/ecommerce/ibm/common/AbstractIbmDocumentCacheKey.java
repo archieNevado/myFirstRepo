@@ -6,7 +6,7 @@ import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper.format;
 
@@ -14,11 +14,8 @@ public abstract class AbstractIbmDocumentCacheKey<T> extends AbstractCommerceCac
 
   private final CommerceId commerceId;
 
-  public AbstractIbmDocumentCacheKey(@Nonnull CommerceId id,
-                                     StoreContext storeContext,
-                                     UserContext userContext,
-                                     String configKey,
-                                     CommerceCache commerceCache) {
+  public AbstractIbmDocumentCacheKey(@NonNull CommerceId id, StoreContext storeContext, UserContext userContext,
+                                     String configKey, CommerceCache commerceCache) {
     super(format(id), storeContext, userContext, configKey, commerceCache);
     commerceId = id;
   }

@@ -2,5 +2,5 @@
 <#assign blockClass=cm.localParameters().blockClass!"cm-teasable" />
 
 <div class="${blockClass}__picture-box">
-    <img class="${blockClass}__picture" <@cm.dataAttribute name="data-cm-non-adaptive-content" data={"overflow": true} /> src="${(self.thumbnailUrl)!""}" alt="${(self.name)!""}">
+  <img class="${blockClass}__picture cm-uncropped-catalog-picture" src="${(self.thumbnailUrl)!""}" alt="${(self.name)!""}">
 </div>

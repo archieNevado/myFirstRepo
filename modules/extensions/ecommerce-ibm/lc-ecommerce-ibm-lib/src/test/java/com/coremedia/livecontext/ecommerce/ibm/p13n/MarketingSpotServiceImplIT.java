@@ -15,13 +15,14 @@ import com.coremedia.livecontext.ecommerce.p13n.MarketingSpot;
 import com.coremedia.livecontext.ecommerce.p13n.MarketingText;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
+import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 import com.google.common.annotations.VisibleForTesting;
 import org.junit.Test;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import java.util.List;
 
@@ -45,7 +46,8 @@ public class MarketingSpotServiceImplIT extends IbmServiceTestBase {
   private static final String MARKETING_SPOT_EXTERNAL_ID2 = "BoysRow4_CatEntries";
   private static final String MARKETING_SPOT_EXTERNAL_ID3 = "PC_Homepage_Offer";
   private static final String MARKETING_SPOT_WS_EXTERNAL_ID = "PC_Anniversary_Offer_Products";
-  private static final String WORKSPACE_ID = "10001";
+
+  private static final WorkspaceId WORKSPACE_ID = WorkspaceId.of("10001");
 
   @Inject
   MarketingSpotServiceImpl testling;
@@ -61,7 +63,7 @@ public class MarketingSpotServiceImplIT extends IbmServiceTestBase {
     UserContext userContext = UserContext.builder().build();
     UserContextHelper.setCurrentContext(userContext);
 
-    List<MarketingSpot> marketingSpots = testling.findMarketingSpots(StoreContextHelper.getCurrentContext());
+    List<MarketingSpot> marketingSpots = testling.findMarketingSpots(StoreContextHelper.getCurrentContextOrThrow());
     assertTrue(marketingSpots.size() > 100);
 
     MarketingSpot spot = marketingSpots.get(0);
@@ -250,16 +252,16 @@ public class MarketingSpotServiceImplIT extends IbmServiceTestBase {
 
   @Nullable
   @VisibleForTesting
-  MarketingSpot findMarketingSpotByExternalTechId(@Nonnull String externalTechId) {
+  MarketingSpot findMarketingSpotByExternalTechId(@NonNull String externalTechId) {
     CommerceId marketingSpotTechId = toMarketingSpotTechId(externalTechId);
-    return testling.findMarketingSpotById(marketingSpotTechId, StoreContextHelper.getCurrentContext());
+    return testling.findMarketingSpotById(marketingSpotTechId, StoreContextHelper.getCurrentContextOrThrow());
   }
 
   @Nullable
   @VisibleForTesting
-  MarketingSpot findMarketingSpotByExternalId(@Nonnull String externalId) {
+  MarketingSpot findMarketingSpotByExternalId(@NonNull String externalId) {
     CommerceId marketingSpotId = toMarketingSpotId(externalId);
-    return testling.findMarketingSpotById(marketingSpotId, StoreContextHelper.getCurrentContext());
+    return testling.findMarketingSpotById(marketingSpotId, StoreContextHelper.getCurrentContextOrThrow());
   }
 
   @Betamax(tape = "csi_testFindMarketingSpotByExternalIdForStudio", match = {MatchRule.path, MatchRule.query})

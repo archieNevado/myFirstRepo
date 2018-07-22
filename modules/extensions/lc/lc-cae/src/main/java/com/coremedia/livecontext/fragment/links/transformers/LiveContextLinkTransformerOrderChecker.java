@@ -1,38 +1,35 @@
 package com.coremedia.livecontext.fragment.links.transformers;
 
-import com.coremedia.objectserver.web.links.LinkTransformer;
-import org.springframework.beans.factory.annotation.Required;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.ContextRefreshedEvent;
 
 import java.util.List;
+import java.util.Optional;
+
+import static com.google.common.collect.Streams.findLast;
 
 /**
  * Checks if the {@link com.coremedia.livecontext.fragment.links.transformers.resolvers.LiveContextLinkResolver}
- * is the last element in the linkTransformers List Bean.
+ * is the last element in the 'linkTransformers' list bean.
  */
-public class LiveContextLinkTransformerOrderChecker implements ApplicationListener<ContextRefreshedEvent> {
+class LiveContextLinkTransformerOrderChecker {
 
-  private List<LinkTransformer> linkTransformers;
-  private LiveContextLinkTransformer liveContextLinkTransformer;
+  private static final String LINK_TRANSFORMERS = "linkTransformers";
 
-  @Override
-  public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-    //check if the LiveContextLinkResolver is the last in the linkTransformers list
-    if (linkTransformers != null && linkTransformers.contains(liveContextLinkTransformer)) {
-      if (linkTransformers.indexOf(liveContextLinkTransformer) != linkTransformers.size() - 1) {
-        throw new IllegalStateException(LiveContextLinkTransformer.class + " must be last in the linkTransformers List Bean");
-      }
+  private LiveContextLinkTransformerOrderChecker() {
+  }
+
+  static void validateOrder(ContextRefreshedEvent contextRefreshedEvent) {
+    ApplicationContext applicationContext = contextRefreshedEvent.getApplicationContext();
+    List<?> linkTransformers = applicationContext.getBean(LINK_TRANSFORMERS, List.class);
+
+    // check if the LiveContextLinkResolver is the last in the linkTransformers list
+    Optional<?> linkTransformer = findLast(linkTransformers.stream())
+            .filter(LiveContextLinkTransformer.class::isInstance);
+
+    if (!linkTransformer.isPresent()) {
+      throw new IllegalStateException("Last link transformer not of type " + LiveContextLinkTransformer.class + ": " + linkTransformers);
     }
   }
 
-  @Required
-  public void setLinkTransformers(List<LinkTransformer> linkTransformers) {
-    this.linkTransformers = linkTransformers;
-  }
-
-  @Required
-  public void setLiveContextLinkTransformer(LiveContextLinkTransformer liveContextLinkTransformer) {
-    this.liveContextLinkTransformer = liveContextLinkTransformer;
-  }
 }

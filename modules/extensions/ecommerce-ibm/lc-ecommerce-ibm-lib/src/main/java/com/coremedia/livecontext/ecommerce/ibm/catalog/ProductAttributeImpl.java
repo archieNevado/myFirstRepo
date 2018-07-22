@@ -3,8 +3,8 @@ package com.coremedia.livecontext.ecommerce.ibm.catalog;
 import com.coremedia.livecontext.ecommerce.catalog.ProductAttribute;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -61,7 +61,7 @@ class ProductAttributeImpl implements ProductAttribute {
             .orElse(null);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<Object> getValues() {
     //noinspection unchecked
@@ -102,7 +102,7 @@ class ProductAttributeImpl implements ProductAttribute {
   }
 
   @Nullable
-  private static String getStringValue(@Nonnull Map<String, Object> map, @Nonnull String key) {
+  private static String getStringValue(@NonNull Map<String, Object> map, @NonNull String key) {
     return DataMapHelper.findStringValue(map, key).orElse(null);
   }
 }

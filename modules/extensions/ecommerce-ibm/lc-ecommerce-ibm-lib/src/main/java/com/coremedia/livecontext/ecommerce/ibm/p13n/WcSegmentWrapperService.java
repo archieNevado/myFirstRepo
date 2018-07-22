@@ -7,7 +7,6 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractWcWrapperService;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
-import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestServiceMethod;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
@@ -15,9 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.HashMap;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 
@@ -34,34 +32,48 @@ public class WcSegmentWrapperService extends AbstractWcWrapperService {
 
   private static final Logger LOG = LoggerFactory.getLogger(WcSegmentWrapperService.class);
 
-  private static final WcRestServiceMethod<HashMap, Void>
-    FIND_ALL_SEGMENTS = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/segment", true, true, HashMap.class);
+  private static final WcRestServiceMethod<Map, Void> FIND_ALL_SEGMENTS = WcRestServiceMethod
+          .builder(HttpMethod.GET, "store/{storeId}/segment", Void.class, Map.class)
+          .secure(true)
+          .requiresAuthentication(true)
+          .previewSupport(true)
+          .build();
 
-  private static final WcRestServiceMethod<HashMap, Void>
-    FIND_SEGMENT_BY_ID = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/segment/{id}", true, true, HashMap.class);
+  private static final WcRestServiceMethod<Map, Void> FIND_SEGMENT_BY_ID = WcRestServiceMethod
+          .builder(HttpMethod.GET, "store/{storeId}/segment/{id}", Void.class, Map.class)
+          .secure(true)
+          .requiresAuthentication(true)
+          .previewSupport(true)
+          .build();
 
-  private static final WcRestServiceMethod<HashMap, Void>
-    FIND_SEGMENTS_BY_USER = WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/segment?q=byUserId&qUserId={id}", true, true, HashMap.class);
+  private static final WcRestServiceMethod<Map, Void> FIND_SEGMENTS_BY_USER = WcRestServiceMethod
+          .builder(HttpMethod.GET, "store/{storeId}/segment?q=byUserId&qUserId={id}", Void.class, Map.class)
+          .secure(true)
+          .requiresAuthentication(true)
+          .previewSupport(true)
+          .build();
 
   /**
    * Gets a list of all customer segments.
    *
    * @param storeContext the current store context
-   * @param userContext the current user context
+   * @param userContext  the current user context
    * @return A map which contains the JSON response data retrieved from the commerce server
    */
   @Nullable
   @SuppressWarnings("unchecked")
-  public Map<String, Object> findAllSegments(@Nonnull StoreContext storeContext, UserContext userContext) {
+  public Map<String, Object> findAllSegments(@NonNull StoreContext storeContext, UserContext userContext) {
     try {
       if (StoreContextHelper.getWcsVersion(storeContext).lessThan(WCS_VERSION_7_7)) {
         return emptyMap();
       }
 
+      List<String> variableValues = singletonList(getStoreId(storeContext));
       Map<String, String[]> parameters = getOptionalParameters(storeContext);
 
-      return getRestConnector().callService(
-              FIND_ALL_SEGMENTS, singletonList(getStoreId(storeContext)), parameters, null, storeContext, userContext);
+      return getRestConnector().callService(FIND_ALL_SEGMENTS, variableValues, parameters, null, storeContext,
+              userContext)
+              .orElse(null);
     } catch (CommerceException e) {
       throw e;
     } catch (Exception e) {
@@ -74,27 +86,29 @@ public class WcSegmentWrapperService extends AbstractWcWrapperService {
    *
    * @param externalId   the external id
    * @param storeContext the store context
-   * @param userContext the current user context
+   * @param userContext  the current user context
    * @return the segment map which contains the JSON response data retrieved from the commerce server or null if no spot was found
    * @throws com.coremedia.livecontext.ecommerce.common.CommerceException if something is wrong with the catalog connection
    */
   @Nullable
   @SuppressWarnings("unchecked")
-  public Map<String, Object> findSegmentByTechId(String externalId, @Nonnull StoreContext storeContext,
+  public Map<String, Object> findSegmentByTechId(String externalId, @NonNull StoreContext storeContext,
                                                  UserContext userContext) {
     try {
       if (StoreContextHelper.getWcsVersion(storeContext).lessThan(WCS_VERSION_7_7)) {
         return null;
       }
 
+      List<String> variableValues = asList(getStoreId(storeContext), externalId);
       Map<String, String[]> parameters = getOptionalParameters(storeContext);
 
-      Map<String, Object> data = getRestConnector().callService(
-              FIND_SEGMENT_BY_ID, asList(getStoreId(storeContext), externalId), parameters, null, storeContext, userContext);
+      Map<String, Object> data = getRestConnector().callService(FIND_SEGMENT_BY_ID, variableValues, parameters, null,
+              storeContext, userContext)
+              .orElse(null);
 
       if (data != null) {
-        List<Map<String, Object>> memberGroups = DataMapHelper.getValueForPath(data, "MemberGroup", List.class);
-        if (memberGroups != null && !memberGroups.isEmpty()) {
+        List<Map<String, Object>> memberGroups = DataMapHelper.getListValue(data, "MemberGroup");
+        if (!memberGroups.isEmpty()) {
           Map<String, Object> firstSegment = memberGroups.get(0);
           String segmentId = DataMapHelper.findStringValue(firstSegment, "id").orElse("");
           if (!segmentId.isEmpty()) {
@@ -118,14 +132,14 @@ public class WcSegmentWrapperService extends AbstractWcWrapperService {
    *
    * @param id           the coremedia internal id
    * @param storeContext the store context
-   * @param userContext the current user context
+   * @param userContext  the current user context
    * @return the segment map which contains the JSON response data retrieved from the commerce server or null if no segment was found
-   * @throws com.coremedia.livecontext.ecommerce.common.CommerceException if something is wrong with the catalog connection
+   * @throws com.coremedia.livecontext.ecommerce.common.CommerceException  if something is wrong with the catalog connection
    * @throws com.coremedia.livecontext.ecommerce.common.InvalidIdException if the id is in a wrong format
    */
   @Nullable
   @SuppressWarnings("unused")
-  public Map<String, Object> findSegmentById(@Nonnull CommerceId id, @Nonnull StoreContext storeContext,
+  public Map<String, Object> findSegmentById(@NonNull CommerceId id, @NonNull StoreContext storeContext,
                                              UserContext userContext) {
     try {
       String externalId = CommerceIdHelper.getExternalIdOrThrow(id);
@@ -141,12 +155,12 @@ public class WcSegmentWrapperService extends AbstractWcWrapperService {
    * Gets a map of customer segments that is associated to the current context user.
    *
    * @param storeContext the current store context
-   * @param userContext the current user context
+   * @param userContext  the current user context
    * @return A map which contains the JSON response data retrieved from the commerce server.
    */
   @Nullable
   @SuppressWarnings("unchecked")
-  public Map<String, Object> findSegmentsByUser(@Nonnull StoreContext storeContext, UserContext userContext) {
+  public Map<String, Object> findSegmentsByUser(@NonNull StoreContext storeContext, UserContext userContext) {
     try {
       if (StoreContextHelper.getWcsVersion(storeContext).lessThan(WCS_VERSION_7_7)) {
         return emptyMap();
@@ -157,17 +171,12 @@ public class WcSegmentWrapperService extends AbstractWcWrapperService {
         return emptyMap();
       }
 
+      List<String> variableValues = asList(getStoreId(storeContext), forUserId + "");
       Map<String, String[]> parameters = getOptionalParameters(storeContext);
 
-      Map<String, Object> data = getRestConnector().callService(
-              FIND_SEGMENTS_BY_USER, asList(getStoreId(storeContext), forUserId + ""), parameters, null, storeContext,
-              userContext);
-
-      if (data != null) {
-        return data;
-      }
-
-      return null;
+      return getRestConnector()
+              .callService(FIND_SEGMENTS_BY_USER, variableValues, parameters, null, storeContext, userContext)
+              .orElse(emptyMap());
     } catch (CommerceException e) {
       // Commerce returns 403 when the user being queried does not belong to any member groups
       if (e.getResultCode() == 403) {
@@ -179,8 +188,8 @@ public class WcSegmentWrapperService extends AbstractWcWrapperService {
     }
   }
 
-  @Nonnull
-  private Map<String, String[]> getOptionalParameters(@Nonnull StoreContext storeContext) {
+  @NonNull
+  private Map<String, String[]> getOptionalParameters(@NonNull StoreContext storeContext) {
     return buildParameterMap()
             .withCurrency(storeContext)
             .withLanguageId(storeContext)

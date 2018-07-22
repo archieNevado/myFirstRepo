@@ -6,11 +6,11 @@ import com.coremedia.livecontext.contentbeans.CMProductTeaser;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.google.common.base.Predicate;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nullable;
+import java.util.function.Predicate;
 
 /**
  * {@link com.coremedia.livecontext.contentbeans.CMProductTeaser Product teaser} may link to products that
@@ -32,7 +32,7 @@ public class EmptyProductValidator extends AbstractValidator<CMProductTeaser> {
   }
 
   @Override
-  protected Predicate createPredicate() {
+  protected Predicate<CMProductTeaser> createPredicate() {
     return new EmptyProductPredicate();
   }
 
@@ -43,7 +43,7 @@ public class EmptyProductValidator extends AbstractValidator<CMProductTeaser> {
 
   private class EmptyProductPredicate implements Predicate<CMProductTeaser> {
     @Override
-    public boolean apply(@Nullable CMProductTeaser productTeaser) {
+    public boolean test(@Nullable CMProductTeaser productTeaser) {
       try {
         return (isPreview && !isInContextOfContracts()) || (productTeaser != null && productTeaser.getProduct() != null);
       } catch (NotFoundException e) {
@@ -54,10 +54,10 @@ public class EmptyProductValidator extends AbstractValidator<CMProductTeaser> {
     }
   }
 
-  private boolean isInContextOfContracts() {
+  private static boolean isInContextOfContracts() {
     StoreContext storeContext = CurrentCommerceConnection.find().map(CommerceConnection::getStoreContext).orElse(null);
 
     return storeContext != null
-            && (storeContext.getContractIds() != null || storeContext.getContractIdsForPreview() != null);
+            && (!storeContext.getContractIds().isEmpty() || !storeContext.getContractIdsForPreview().isEmpty());
   }
 }

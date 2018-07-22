@@ -55,16 +55,6 @@
     <property name="urlPattern" value="${livecontext.ibm.wcs.search-result-redirect.url}"/>
   </bean>
 
-  <bean id="wcsPageHandlerUrlProvider" class="com.coremedia.livecontext.ecommerce.ibm.cae.WcsUrlProvider">
-    <qualifier value="pageHandlerUrlProvider"/>
-    <property name="defaultStoreFrontUrl" value="${livecontext.ibm.wcs.storefront.url}"/>
-    <property name="previewStoreFrontUrl" value="${livecontext.ibm.wcs.storefront.preview.url}"/>
-    <property name="urlPattern" value="{language}/{storeName}/{seoSegment}"/>
-    <property name="shoppingFlowUrlForContractPreview" value="${livecontext.ibm.contract.preview.url}"/>
-    <property name="productNonSeoUrl" value="${livecontext.ibm.product.non-seo.url}"/>
-    <property name="categoryNonSeoUrl" value="${livecontext.ibm.category.non-seo.url}"/>
-  </bean>
-
   <bean id="wcsCommerceSearchResultRedirectUrlProvider" class="com.coremedia.livecontext.ecommerce.ibm.cae.WcsCommerceSearchRedirectUrlProvider">
     <constructor-arg ref="wcsSearchResultRedirectUrlProvider"/>
   </bean>

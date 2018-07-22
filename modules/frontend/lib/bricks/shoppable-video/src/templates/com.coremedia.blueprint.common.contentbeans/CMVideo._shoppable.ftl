@@ -9,6 +9,8 @@
 <#-- @ftlvariable name="entry.link" type="com.coremedia.blueprint.common.contentbeans.CMVideo" -->
 <#-- @ftlvariable name="entry.startTimeMillis" type="java.lang.Integer" -->
 
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/utils.ftl" as utils />
+
 <#assign cssClasses = self.teaserText?has_content?then(" is-text", "") + cm.localParameter("islast", false)?then(" is-last", "") />
 
 <div class="cm-shoppable cm-container">
@@ -18,10 +20,9 @@
       <#assign ownPictureCssClass="" />
       <#if self.picture?has_content>
         <#assign ownPictureCssClass="cm-hidden" />
-        <@cm.include self=self.picture params={
+        <@cm.include self=self.picture view="media" params={
         "limitAspectRatios": [ "portrait_ratio1x1", "landscape_ratio16x9" ],
-        "classBox": "cm-teaser__content cm-shoppable__content cm-aspect-ratio-box",
-        "classImage": "cm-aspect-ratio-box__content",
+        "classBox": "cm-teaser__content cm-shoppable__content",
         "metadata": ["properties.pictures"]
         }/>
       </#if>
@@ -39,14 +40,16 @@
       <#-- teaser text -->
         <#if renderTeaserText && self.teaserText?has_content>
           <p class="${blockClass}__text" <@preview.metadata "properties.teaserText" />>
-            <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", bp.setting(cmpage, "square.max.length", 115)) />
+            <@utils.renderWithLineBreaks text=bp.truncateText(self.teaserText!"", bp.setting(self, "teaser.max.length", 200)) />
           </p>
         </#if>
       </div>
 
-      <div class="${blockClass}--video__video cm-shoppable__player cm-aspect-ratio-box ${ownPictureCssClass}">
-        <@cm.include self=self view="video" params={"classVideo": "cm-aspect-ratio-box__content", "hideControls": false, "shoppableVideo": true} />
-      </div>
+      <@cm.include self=self view="media" params={
+        "classBox": "${blockClass}--video__video cm-shoppable__player ${ownPictureCssClass}",
+        "classMedia": "cm-shoppable__video-element",
+        "hideControls": false,
+        "preload": true} />
     </div>
   </div>
 <#-- teaser on the right -->

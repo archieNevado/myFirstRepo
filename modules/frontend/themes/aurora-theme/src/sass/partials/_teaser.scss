@@ -57,12 +57,6 @@
   }
 }
 
-// attach border to teasers and change base color of fonts
-.cm-teasable,
-.cm-teaser {
-  border: 1px solid #CCCBCB;
-}
-
 .cm-teaser__content ~ .cm-teaser__title {
   top: auto;
   right: 0;
@@ -117,9 +111,12 @@
 
     &__offerprice {
       position: absolute;
-      top: -2rem;
+      top: -2.1rem;
+      @include breakpoint(md) {
+        top: -2.37rem;
+      }
       left: 0;
-      background-color: #f8f8f8;
+      background-color: rgba(248, 248, 248, 0.75);
     }
   }
 }
@@ -197,7 +194,7 @@
       right: 0;
       bottom: 0;
       position: absolute;
-      background-color: #f8f8f8;
+      background-color: rgba(248, 248, 248, 0.75);
       color: #010F1C;
       font-weight: normal;
     }
@@ -208,7 +205,7 @@
       right: 0;
       text-align: left;
       position: absolute;
-      background-color: #f8f8f8;
+      background-color: rgba(248, 248, 248, 0.75);
       color: #010F1C;
       font-weight: normal;
 
@@ -233,6 +230,12 @@
     }
   }
 
+  &__cta {
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+  }
+
   // override default-teaser styles
   &--video &__caption {
     @include breakpoint(sm) {
@@ -243,10 +246,15 @@
     }
   }
 
-  &__cta {
-    position: absolute;
-    right: 4px;
-    bottom: 4px;
+  &--product {
+    // hide headline as the product name is already shown in the product info
+    .#{$cm-teasable-prefix}__headline {
+      display: none;
+    }
+    // hide CTA
+    .#{$cm-teasable-prefix}__cta {
+      display: none;
+    }
   }
 
   @include breakpoint(md) {

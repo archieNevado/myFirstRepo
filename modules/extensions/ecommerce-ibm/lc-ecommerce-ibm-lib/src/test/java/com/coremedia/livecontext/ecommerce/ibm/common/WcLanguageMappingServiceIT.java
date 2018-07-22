@@ -60,7 +60,7 @@ public class WcLanguageMappingServiceIT extends AbstractWrapperServiceTestCase {
     connection = commerce.findConnection("wcs1")
             .orElseThrow(() -> new IllegalStateException("Could not obtain commerce connection."));
 
-    testConfig.setWcsVersion(storeInfoService.getWcsVersion());
+    storeInfoService.getWcsVersion().ifPresent(testConfig::setWcsVersion);
     connection.setStoreContext(testConfig.getStoreContext());
     CurrentCommerceConnection.set(connection);
   }

@@ -2,57 +2,37 @@
 
 <#assign blockClass=cm.localParameters().blockClass!"cm-teasable" />
 <#assign additionalClass=cm.localParameters().additionalClass!"" />
-<#assign cssClasses=self.teaserText?has_content?then(" is-text", "") + cm.localParameter("islast", false)?then(" is-last", "") />
-<#assign link=cm.getLink(self.target!cm.UNDEFINED) />
+<#assign renderLink=cm.localParameters().renderLink!true />
+<#assign renderTeaserTitle=cm.localParameters().renderTeaserTitle!true />
+<#assign renderTeaserText=cm.localParameters().renderTeaserText!true />
+<#assign renderDimmer=cm.localParameters().renderDimmer!true />
+<#assign renderEmptyImage=cm.localParameters().renderEmptyImage!true />
+<#assign limitAspectRatiosKey="default_aspect_ratios_for_" + cm.localParameters().limitAspectRatiosKey!"teaser" />
+<#assign limitAspectRatios=cm.localParameters().limitAspectRatios!bp.setting(self, limitAspectRatiosKey, []) />
+
+<#assign cssClasses=self.teaserText?has_content?then(" is-text", "") + (cm.localParameters().islast!false)?then(" is-last", "") />
+<#assign link=renderLink?then(cm.getLink(self.target!cm.UNDEFINED), "") />
 <#assign target=(self.target?has_content && self.target.openInNewTab)?then("_blank", "_self") />
 <#assign rel=(self.target?has_content && self.target.openInNewTab)?then("noopener", "") />
 
-<#assign renderTeaserTitle=cm.localParameter("renderTeaserTitle", true) />
-<#assign renderTeaserText=cm.localParameter("renderTeaserText", true) />
-<#assign renderDimmer=cm.localParameter("renderDimmer", true) />
-<#assign renderEmptyImage=cm.localParameter("renderEmptyImage", true) />
-<#assign limitAspectRatiosKey="default_aspect_ratios_for_" + cm.localParameter("limitAspectRatiosKey", "teaser") />
-<#assign limitAspectRatios=cm.localParameter("limitAspectRatios", bp.setting(cmpage.navigation, limitAspectRatiosKey, [])) />
-
-<#-- prevent collapsing teaser with no picture and text-on-image enabled -->
-<#if self.teaserOverlaySettings.enabled && !renderEmptyImage  && !self.picture?has_content>
-  <#assign cssClasses=cssClasses + " has-no-image" />
-</#if>
-
 <div class="${blockClass} ${cssClasses} ${additionalClass}"<@preview.metadata self.content />>
   <div class="${blockClass}__wrapper">
-    <@bp.optionalLink href="${link}" attr={"target":target,"rel":rel}>
-    <#-- picture -->
-      <@bp.responsiveImage self=self.picture!cm.UNDEFINED classPrefix=blockClass displayEmptyImage=renderEmptyImage displayDimmer=renderDimmer limitAspectRatios=limitAspectRatios/>
-    </@bp.optionalLink>
+    <@cm.include self=self view="teaserMedia" params={
+      "teaserBlockClass": blockClass,
+      "limitAspectRatios": limitAspectRatios,
+      "renderLink": renderLink,
+      "renderDimmer": renderDimmer,
+      "renderEmptyImage": renderEmptyImage
+    } />
     <#if !self.teaserOverlaySettings.enabled>
-      <#if renderTeaserTitle || renderTeaserText>
-        <div class="${blockClass}__caption">
-
-          <#-- teaser title -->
-          <#if self.teaserTitle?has_content>
-            <@bp.optionalLink href="${link}" attr={"target":target,"rel":rel}>
-              <h3 class="${blockClass}__headline" <@preview.metadata "properties.teaserTitle" />>
-                <span>${self.teaserTitle!""}</span>
-              </h3>
-            </@bp.optionalLink>
-          </#if>
-
-          <#-- teaser text -->
-          <#if renderTeaserText &&  self.teaserText?has_content>
-            <p class="${blockClass}__text" <@preview.metadata "properties.teaserText" />>
-              <@bp.renderWithLineBreaks bp.truncateText(self.teaserText!"", bp.setting(cmpage, "square.max.length", 115)) />
-            </p>
-          </#if>
-
-         <#-- custom call-to-action button -->
-         <@cm.include self=self view="_callToAction" params={
-           "additionalClass": "${blockClass}__cta"
-         }/>
-        </div>
-      </#if>
+      <@cm.include self=self view="teaserCaption" params={
+        "teaserBlockClass": blockClass,
+        "renderLink": renderLink,
+        "renderTeaserTitle": renderTeaserTitle,
+        "renderTeaserText": renderTeaserText
+      } />
     <#else>
-      <@cm.include self=self view="_teaserOverlay"/>
+      <@cm.include self=self view="teaserOverlay"/>
     </#if>
   </div>
 

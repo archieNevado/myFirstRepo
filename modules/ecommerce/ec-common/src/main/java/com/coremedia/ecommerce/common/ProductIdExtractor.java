@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.activation.MimeType;
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,8 +55,8 @@ public class ProductIdExtractor {
    * @param blob the blob
    * @return the extracted product ids or an empty collection, if no product ids could be extracted
    */
-  @Nonnull
-  public static List<String> extractProductIds(@Nonnull Blob blob) {
+  @NonNull
+  public static List<String> extractProductIds(@NonNull Blob blob) {
     MimeType contentType = blob.getContentType();
 
     if (!"image".equals(contentType.getPrimaryType())) {
@@ -79,7 +79,7 @@ public class ProductIdExtractor {
    * @param inputStream the input stream
    * @return the extracted product ids or an empty collection, if no product ids could be extracted
    */
-  @Nonnull
+  @NonNull
   @VisibleForTesting
   static List<String> extractProductIds(InputStream inputStream) {
     Metadata metadata;

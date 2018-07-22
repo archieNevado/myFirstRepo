@@ -7,8 +7,8 @@ import com.coremedia.livecontext.ecommerce.user.UserContextProvider;
 import com.coremedia.livecontext.ecommerce.user.UserSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
@@ -23,7 +23,7 @@ public class UserContextProviderImpl implements UserContextProvider {
   private UserSessionService userSessionService;
 
   @Override
-  @Nonnull
+  @NonNull
   public UserContext getCurrentContext() {
     return UserContextHelper.getCurrentContext();
   }
@@ -34,8 +34,8 @@ public class UserContextProviderImpl implements UserContextProvider {
   }
 
   @Override
-  @Nonnull
-  public UserContext createContext(@Nonnull HttpServletRequest request) {
+  @NonNull
+  public UserContext createContext(@NonNull HttpServletRequest request) {
     UserContext.Builder builder = UserContext.builder();
 
     findUserId(request).ifPresent(builder::withUserId);
@@ -48,20 +48,21 @@ public class UserContextProviderImpl implements UserContextProvider {
   public void clearCurrentContext() {
   }
 
-  @Nonnull
-  private Optional<String> findUserId(@Nonnull HttpServletRequest request) {
+  @NonNull
+  private Optional<String> findUserId(@NonNull HttpServletRequest request) {
     if (userSessionService == null) {
       return Optional.empty();
     }
-    StoreContext storeContext = StoreContextHelper.getCurrentContext();
+
+    StoreContext storeContext = StoreContextHelper.getCurrentContextOrThrow();
     StoreContextHelper.validateContext(storeContext);
 
     String userId = userSessionService.resolveUserId(request, storeContext.getStoreId(), false);
     return Optional.ofNullable(userId);
   }
 
-  @Nonnull
-  private static Optional<String> findCookieHeader(@Nonnull HttpServletRequest request) {
+  @NonNull
+  private static Optional<String> findCookieHeader(@NonNull HttpServletRequest request) {
     if (isStudioPreviewRequest(request)) {
       return Optional.empty();
     }
@@ -71,7 +72,7 @@ public class UserContextProviderImpl implements UserContextProvider {
     return Optional.ofNullable(rewrittenHeader);
   }
 
-  private static boolean isStudioPreviewRequest(@Nonnull HttpServletRequest request) {
+  private static boolean isStudioPreviewRequest(@NonNull HttpServletRequest request) {
     return "true".equals(request.getParameter(STUDIO_PREVIEW_TEST_PARAM));
   }
 

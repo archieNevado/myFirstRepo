@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@coremedia/ftl-utils": "^1.0.0",
     "@coremedia/brick-bootstrap": "^1.0.0"
   },
   "devDependencies": {

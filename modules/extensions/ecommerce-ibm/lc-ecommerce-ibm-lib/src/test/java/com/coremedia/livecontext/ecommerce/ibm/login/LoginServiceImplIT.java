@@ -22,8 +22,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class LoginServiceImplIT extends IbmServiceTestBase {
 
   @Inject
-  private
-  LoginServiceImpl testling;
+  private LoginServiceImpl testling;
+
   private String origServiceUser;
   private String origServicePassword;
 
@@ -46,7 +46,7 @@ public class LoginServiceImplIT extends IbmServiceTestBase {
   @Test
   @Betamax(tape = "lsi_testLoginSuccess", match = {MatchRule.path, MatchRule.query})
   public void testLoginSuccess() throws Exception {
-    WcCredentials credentials = testling.loginServiceIdentity(StoreContextHelper.getCurrentContext());
+    WcCredentials credentials = testling.loginServiceIdentity(StoreContextHelper.getCurrentContextOrThrow());
     assertThat(credentials).isNotNull();
     assertThat(credentials.getSession()).isNotNull();
   }
@@ -65,6 +65,7 @@ public class LoginServiceImplIT extends IbmServiceTestBase {
     if (useBetamaxTapes()) {
       return;
     }
+
     StoreContext storeContext = testConfig.getStoreContextWithWorkspace();
     StoreContextHelper.setCurrentContext(storeContext);
     WcCredentials credentials = testling.loginServiceIdentity(storeContext);
@@ -76,15 +77,15 @@ public class LoginServiceImplIT extends IbmServiceTestBase {
   @Betamax(tape = "lsi_testLoginFailure", match = {MatchRule.path, MatchRule.query, MatchRule.body})
   public void testLoginFailure() throws Exception {
     testling.setServicePassword("wrong password");
-    testling.loginServiceIdentity(StoreContextHelper.getCurrentContext());
+    testling.loginServiceIdentity(StoreContextHelper.getCurrentContextOrThrow());
   }
 
   @Test
   @Betamax(tape = "lsi_testLogout", match = {MatchRule.path, MatchRule.query})
   public void testLogout() throws Exception {
-    WcCredentials credentials = testling.loginServiceIdentity(StoreContextHelper.getCurrentContext());
+    WcCredentials credentials = testling.loginServiceIdentity(StoreContextHelper.getCurrentContextOrThrow());
     assertThat(credentials).isNotNull();
-    boolean success = testling.logoutServiceIdentity(StoreContextHelper.getCurrentContext());
+    boolean success = testling.logoutServiceIdentity(StoreContextHelper.getCurrentContextOrThrow());
     assertThat(success).isTrue();
   }
 
@@ -93,7 +94,8 @@ public class LoginServiceImplIT extends IbmServiceTestBase {
     if (useBetamaxTapes()) {
       return;
     }
-    WcPreviewToken previewToken = testling.getPreviewToken(StoreContextHelper.getCurrentContext());
+
+    WcPreviewToken previewToken = testling.getPreviewToken(StoreContextHelper.getCurrentContextOrThrow());
     assertThat(previewToken).isNotNull();
     assertThat(previewToken.getPreviewToken()).isNotEmpty();
   }

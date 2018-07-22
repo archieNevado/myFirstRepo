@@ -10,18 +10,18 @@ import com.coremedia.cap.common.Blob;
 import com.coremedia.objectserver.view.ViewUtils;
 import com.coremedia.objectserver.web.links.LinkFormatter;
 import com.coremedia.xml.MarkupUtil;
-import com.sun.syndication.feed.module.mediarss.MediaEntryModule;
-import com.sun.syndication.feed.module.mediarss.MediaEntryModuleImpl;
-import com.sun.syndication.feed.module.mediarss.types.MediaContent;
-import com.sun.syndication.feed.module.mediarss.types.Metadata;
-import com.sun.syndication.feed.module.mediarss.types.Thumbnail;
-import com.sun.syndication.feed.module.mediarss.types.UrlReference;
-import com.sun.syndication.feed.synd.SyndContent;
-import com.sun.syndication.feed.synd.SyndContentImpl;
-import com.sun.syndication.feed.synd.SyndEntry;
-import com.sun.syndication.feed.synd.SyndEntryImpl;
-import com.sun.syndication.feed.synd.SyndPerson;
-import com.sun.syndication.feed.synd.SyndPersonImpl;
+import com.rometools.modules.mediarss.MediaEntryModule;
+import com.rometools.modules.mediarss.MediaEntryModuleImpl;
+import com.rometools.modules.mediarss.types.MediaContent;
+import com.rometools.modules.mediarss.types.Metadata;
+import com.rometools.modules.mediarss.types.Thumbnail;
+import com.rometools.modules.mediarss.types.UrlReference;
+import com.rometools.rome.feed.synd.SyndContent;
+import com.rometools.rome.feed.synd.SyndContentImpl;
+import com.rometools.rome.feed.synd.SyndEntry;
+import com.rometools.rome.feed.synd.SyndEntryImpl;
+import com.rometools.rome.feed.synd.SyndPerson;
+import com.rometools.rome.feed.synd.SyndPersonImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,7 +86,7 @@ public class TeasableFeedItemDataProvider implements FeedItemDataProvider {
     entry.setAuthor(AUTHOR_NAME);
     entry.setAuthors(Collections.singletonList(syndPerson));
     entry.getModules().add(createMediaEntryModule(request, response, teasable)); //NOSONAR
-    entry.setCategories(Collections.<String>emptyList());
+    entry.setCategories(Collections.emptyList());
     entry.setTitle(getTitle(request, response, teasable));
     entry.setPublishedDate(teasable.getContent().getCreationDate().getTime());
     entry.setUpdatedDate(teasable.getContent().getModificationDate().getTime());
@@ -114,7 +114,7 @@ public class TeasableFeedItemDataProvider implements FeedItemDataProvider {
 
   protected List<CMTeasable> getRelatedMediaContents(CMTeasable teasable) {
     List<CMTeasable> related = new ArrayList<>();
-    related.addAll(teasable.getPictures());
+    related.addAll(teasable.getMedia());
     related.addAll(teasable.getRelated());
     return related;
   }
@@ -177,13 +177,12 @@ public class TeasableFeedItemDataProvider implements FeedItemDataProvider {
     Blob videoBlob = mediaItem.getData();
     if (videoBlob!=null) {
       String url = getLinkFormatter().formatLink(videoBlob, null, request, response, false);
-      if (url!=null) {
-        MimeType mimeType = mediaItem.getData().getContentType();
-        MediaContent mediaContent = createMediaContent(request, response, url, mediaItem, mimeType, videoBlob);
-        mediaContent.setHeight(mediaItem.getHeight());
-        mediaContent.setWidth(mediaItem.getWidth());
-        return mediaContent;
-      }
+      MimeType mimeType = mediaItem.getData().getContentType();
+
+      MediaContent mediaContent = createMediaContent(request, response, url, mediaItem, mimeType, videoBlob);
+      mediaContent.setHeight(mediaItem.getHeight());
+      mediaContent.setWidth(mediaItem.getWidth());
+      return mediaContent;
     }
     return null;
   }

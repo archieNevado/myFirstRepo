@@ -9,6 +9,7 @@ import com.coremedia.cms.editor.sdk.collectionview.CollectionViewModel;
 import com.coremedia.cms.editor.sdk.collectionview.SearchState;
 import com.coremedia.cms.editor.sdk.collectionview.search.SearchArea;
 import com.coremedia.cms.editor.sdk.desktop.ComponentBasedEntityWorkAreaTabType;
+import com.coremedia.cms.editor.sdk.desktop.sidepanel.SidePanelManagerImpl;
 import com.coremedia.cms.editor.sdk.desktop.sidepanel.SidePanelStudioPlugin;
 import com.coremedia.cms.editor.sdk.desktop.sidepanel.sidePanelManager;
 import com.coremedia.cms.editor.sdk.editorContext;
@@ -180,7 +181,7 @@ public class CatalogCollectionViewTest extends AbstractLiveContextStudioTest {
     super.tearDown();
     editorContext.getSitesService().getPreferredSiteId = getPreferredSite;
     //we have to reset the items of the side panel manager so that it creates CollectionViewContainer anew.
-    sidePanelManager['items$1'] = [];
+    SidePanelManagerImpl(sidePanelManager).resetItems();
     myViewPort.destroy();
   }
 

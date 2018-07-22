@@ -12,8 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +36,7 @@ public class AssetPublishInterceptor extends PublishInterceptorBase {
    * @param assetMetadataProperty property to use
    */
   @Required
-  public void setAssetMetadataProperty(@Nonnull final String assetMetadataProperty) {
+  public void setAssetMetadataProperty(@NonNull final String assetMetadataProperty) {
     this.assetMetadataProperty = requireNonNull(assetMetadataProperty, "assetMetadataProperty must not be null.");
   }
 
@@ -64,7 +64,7 @@ public class AssetPublishInterceptor extends PublishInterceptorBase {
   }
 
   @Override
-  public void intercept(@Nonnull final PublishRequest request) {
+  public void intercept(@NonNull final PublishRequest request) {
     final Version version = request.getVersion();
 
     final Map<String, Object> properties = request.getProperties();

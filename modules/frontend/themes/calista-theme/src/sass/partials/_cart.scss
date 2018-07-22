@@ -125,19 +125,17 @@
       border-bottom: 1px solid #EEE;
       margin-bottom: 10px;
 
-      &__image {
+      &__image-box {
         vertical-align:top;
         display:inline-block;
         width: $_cart-item__image-width;
 
         @include aspect-ratio-box(20,31);
+      }
 
-        & img {
-          width: 100%;
-          position: absolute;
-          top: 0;
-          left: 0;
-        }
+
+      &__image {
+        @include stretch-absolute();
       }
 
       &__properties {

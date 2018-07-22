@@ -13,7 +13,7 @@ import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.livecontext.ecommerce.user.UserService;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Map;
 
 import static com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvider.commerceId;
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
 
   // ----- Helper -----------------------------
 
-  protected User createUserBeanFor(Map<String, Object> personWrapper, @Nonnull StoreContext storeContext) {
+  protected User createUserBeanFor(Map<String, Object> personWrapper, @NonNull StoreContext storeContext) {
     if (personWrapper == null) {
       return null;
     }

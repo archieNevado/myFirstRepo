@@ -3,6 +3,8 @@ package com.coremedia.livecontext.fragment;
 import com.coremedia.blueprint.cae.constants.RequestAttributeConstants;
 import com.coremedia.blueprint.cae.handlers.PageHandlerBase;
 import com.coremedia.blueprint.cae.layout.ContentBeanBackedPageGridPlacement;
+import com.coremedia.blueprint.cae.view.DynamicInclude;
+import com.coremedia.blueprint.cae.view.DynamicIncludeHelper;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
@@ -21,10 +23,11 @@ import com.coremedia.objectserver.web.HandlerHelper;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 
+import static com.coremedia.blueprint.cae.view.DynamicIncludeHelper.createDynamicIncludeRootDelegateModelAndView;
 import static com.coremedia.objectserver.web.HandlerHelper.notFound;
 import static javax.servlet.http.HttpServletResponse.SC_NO_CONTENT;
 
@@ -54,17 +57,17 @@ public abstract class FragmentHandler extends PageHandlerBase implements Predica
    * @return The ModelAndView to create for the given parameters.
    */
   @Nullable
-  abstract ModelAndView createModelAndView(@Nonnull FragmentParameters params, @Nonnull HttpServletRequest request);
+  abstract ModelAndView createModelAndView(@NonNull FragmentParameters params, @NonNull HttpServletRequest request);
 
-  @Nonnull
-  protected ModelAndView createModelAndView(@Nonnull Navigation navigation, @Nullable String view,
+  @NonNull
+  protected ModelAndView createModelAndView(@NonNull Navigation navigation, @Nullable String view,
                                             @Nullable User developer) {
     return createModelAndView(asPage(navigation, navigation, developer), view);
   }
 
-  @Nonnull
-  protected ModelAndView createFragmentModelAndView(@Nonnull Navigation navigation, @Nullable String view,
-                                                    @Nonnull CMChannel rootChannel, @Nullable User developer) {
+  @NonNull
+  protected ModelAndView createFragmentModelAndView(@NonNull Navigation navigation, @Nullable String view,
+                                                    @NonNull CMChannel rootChannel, @Nullable User developer) {
     CMContext context = navigation.getContext();
 
     if (view == null) {
@@ -83,11 +86,11 @@ public abstract class FragmentHandler extends PageHandlerBase implements Predica
     return createModelAndView(page, view);
   }
 
-  @Nonnull
-  protected ModelAndView createFragmentModelAndViewForPlacementAndView(@Nonnull Navigation navigation,
-                                                                       @Nonnull String placement,
+  @NonNull
+  protected ModelAndView createFragmentModelAndViewForPlacementAndView(@NonNull Navigation navigation,
+                                                                       @NonNull String placement,
                                                                        @Nullable String view,
-                                                                       @Nonnull CMChannel rootChannel,
+                                                                       @NonNull CMChannel rootChannel,
                                                                        @Nullable User developer) {
     CMContext context = navigation.getContext();
     if (!(context instanceof CMChannel)) {
@@ -100,9 +103,9 @@ public abstract class FragmentHandler extends PageHandlerBase implements Predica
     return createModelAndViewForPlacementAndView((CMChannel) context, placement, view, developer);
   }
 
-  @Nonnull
-  protected ModelAndView createModelAndViewForPlacementAndView(@Nonnull CMChannel channel,
-                                                               @Nonnull String placementName, @Nullable String view,
+  @NonNull
+  protected ModelAndView createModelAndViewForPlacementAndView(@NonNull CMChannel channel,
+                                                               @NonNull String placementName, @Nullable String view,
                                                                @Nullable User developer) {
     //noinspection unchecked
     if (!validationService.validate(channel)) {
@@ -127,15 +130,17 @@ public abstract class FragmentHandler extends PageHandlerBase implements Predica
     }
 
     Page page = asPage(context, context, developer);
-    ModelAndView modelAndView = HandlerHelper.createModelWithView(placement, view);
+    // In case the placement contains a p13n content and dynamic include feature is enabled,
+    // we need to wrap the placement into a DynamicInclude object to bypass the loop protection in DynamicIncludeRenderNodeDecoratorProvider.
+    ModelAndView modelAndView = createDynamicIncludeRootDelegateModelAndView(placement, view);
     RequestAttributeConstants.setPage(modelAndView, page);
     NavigationLinkSupport.setNavigation(modelAndView, channel);
 
     return modelAndView;
   }
 
-  @Nonnull
-   static ModelAndView createPlacementUnresolvableError(@Nonnull CMLinkable cmLinkable, @Nonnull String placementName) {
+  @NonNull
+   static ModelAndView createPlacementUnresolvableError(@NonNull CMLinkable cmLinkable, @NonNull String placementName) {
     LOG.error("No placement named {} found for {}.", placementName, cmLinkable.getContent().getPath());
 
     ModelAndView modelAndView = notFound("No placement found for name '" + placementName + "'");
@@ -147,22 +152,23 @@ public abstract class FragmentHandler extends PageHandlerBase implements Predica
     return modelAndView;
   }
 
-  @Nonnull
-  protected ModelAndView handleInvalidLinkable(@Nonnull Linkable linkable) {
+  @NonNull
+  protected ModelAndView handleInvalidLinkable(@NonNull Linkable linkable) {
     String segment = linkable.getSegment();
     LOG.debug("Trying to render invalid content, returning {} ({}).", SC_NO_CONTENT, segment);
     return notFound("invalid content: " + segment);
   }
 
-  // if the target is a channel and no placement and/or view is given we use a well-known "pagegrid" view that
-  // results in a full page grid rendering (but without complete html head and body)
-  protected String normalizedPageFragmentView(@Nonnull Content linkable, @Nullable String placement,
-                                              @Nullable String view) {
+  /**
+   * If the target is a channel and no placement and/or view is given we use a well-known "pagegrid" view that
+   * results in a full page grid rendering (but without complete html head and body)
+   */
+  public static String normalizedPageFragmentView(@NonNull Content linkable, @Nullable String placement,
+                                                  @Nullable String view) {
     // A channel without a given placement or view is always rendered as full pagegrid (view "pagegrid")
     if (linkable.getType().isSubtypeOf(CMChannel.NAME) && placement == null && view == null) {
       return DEFAULT_PAGEGRID_VIEW;
     }
-
     return view;
   }
 

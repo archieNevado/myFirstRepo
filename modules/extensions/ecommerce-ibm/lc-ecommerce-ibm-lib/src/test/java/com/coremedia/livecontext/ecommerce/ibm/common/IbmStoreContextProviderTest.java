@@ -20,8 +20,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Currency;
@@ -79,28 +79,28 @@ public class IbmStoreContextProviderTest {
     StoreContext context = storeContextOptional.get();
     assertEquals("PerfectChefESite", StoreContextHelper.getStoreName(context));
     assertEquals("10202", StoreContextHelper.getStoreId(context));
-    assertEquals("10051", StoreContextHelper.getCatalogId(context));
+    assertEquals("10051", context.getCatalogId());
     assertEquals(new Locale("en"), StoreContextHelper.getLocale(context));
     assertEquals(Currency.getInstance("USD"), StoreContextHelper.getCurrency(context));
   }
 
-  @Nonnull
+  @NonNull
   private Optional<StoreContext> getStoreContextBySiteName(String siteName) {
     return sitesService.getSites()
             .stream()
             .filter(site -> siteName.equals(site.getName()))
             .findFirst()
-            .map(testling::findContextBySite);
+            .flatMap(testling::findContextBySite);
   }
 
   @Test
   public void testFindContextBySite() {
     Site currentSite = getSite("Helios");
-    StoreContext context = testling.findContextBySite(currentSite);
+    StoreContext context = testling.findContextBySite(currentSite).orElse(null);
     assertNotNull(context);
     assertEquals("PerfectChefESite", StoreContextHelper.getStoreName(context));
     assertEquals("10202", StoreContextHelper.getStoreId(context));
-    assertEquals("10051", StoreContextHelper.getCatalogId(context));
+    assertEquals("10051", context.getCatalogId());
     assertEquals(new Locale("en"), StoreContextHelper.getLocale(context));
     assertEquals(Currency.getInstance("USD"), StoreContextHelper.getCurrency(context));
   }
@@ -108,11 +108,11 @@ public class IbmStoreContextProviderTest {
   @Test
   public void testFindContextBySiteAlternatively() {
     Site currentSite = getSite("Alternative");
-    StoreContext context = testling.findContextBySite(currentSite);
+    StoreContext context = testling.findContextBySite(currentSite).orElse(null);
     assertNotNull(context);
     assertEquals("springsite", StoreContextHelper.getStoreName(context));
     assertEquals("12345", StoreContextHelper.getStoreId(context));
-    assertEquals("67890", StoreContextHelper.getCatalogId(context));
+    assertEquals("67890", context.getCatalogId());
     assertEquals(new Locale("de"), StoreContextHelper.getLocale(context));
     assertEquals(Currency.getInstance("EUR"), StoreContextHelper.getCurrency(context));
     assertEquals("spring.only.setting", context.getReplacements().get("spring.only.setting"));
@@ -123,7 +123,7 @@ public class IbmStoreContextProviderTest {
     Site currentSite = getSite("Media");
     assertNotNull("Expected site Media in test content was not found.", currentSite);
 
-    StoreContext context = testling.findContextBySite(currentSite);
+    StoreContext context = testling.findContextBySite(currentSite).orElse(null);
     assertNull(context);
   }
 
@@ -138,7 +138,7 @@ public class IbmStoreContextProviderTest {
     Site currentSite = getSite("Helios-incomplete");
     assertNotNull("Expected site Helios-incomplete in test content was not found.", currentSite);
 
-    StoreContext contextBySite = testling.findContextBySite(currentSite);// should throw an InvalidContextException
+    StoreContext contextBySite = testling.findContextBySite(currentSite).orElse(null); // should throw InvalidContextException
     assertNotNull(contextBySite);
 
     StoreContextHelper.validateContext(contextBySite);
@@ -147,7 +147,7 @@ public class IbmStoreContextProviderTest {
   @Test
   public void testParseReplacementsFromStruct() {
     Site currentSite = getSite("Helios");
-    StoreContext context = testling.findContextBySite(currentSite);
+    StoreContext context = testling.findContextBySite(currentSite).orElse(null);
 
     Map<String, String> replacements = context.getReplacements();
     assertEquals("shop-ref.ecommerce.coremedia.com", replacements.get("livecontext.ibm.wcs.host"));

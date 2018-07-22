@@ -7,12 +7,13 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.google.common.annotations.VisibleForTesting;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Currency;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -62,7 +63,7 @@ public abstract class AbstractWcWrapperService {
     return wcLanguageMappingService.getLanguageMapping();
   }
 
-  @Nonnull
+  @NonNull
   protected WcParameterMapBuilder buildParameterMap() {
     return new WcParameterMapBuilder();
   }
@@ -76,49 +77,49 @@ public abstract class AbstractWcWrapperService {
       parameters = new TreeMap<>();
     }
 
-    @Nonnull
-    public WcParameterMapBuilder withCatalogId(@Nonnull CatalogId catalogId) {
+    @NonNull
+    public WcParameterMapBuilder withCatalogId(@NonNull CatalogId catalogId) {
       parameters.put(PARAM_CATALOG_ID, new String[]{catalogId.value()});
       return this;
     }
 
-    @Nonnull
-    public WcParameterMapBuilder withContractIds(@Nonnull String[] contractIds) {
-      parameters.put(PARAM_CONTRACT_ID, contractIds);
+    @NonNull
+    public WcParameterMapBuilder withContractIds(@NonNull List<String> contractIds) {
+      parameters.put(PARAM_CONTRACT_ID, toArray(contractIds));
       return this;
     }
 
-    @Nonnull
-    public WcParameterMapBuilder withCurrency(@Nonnull StoreContext storeContext) {
+    @NonNull
+    public WcParameterMapBuilder withCurrency(@NonNull StoreContext storeContext) {
       Currency currency = StoreContextHelper.getCurrency(storeContext);
       return withCurrency(currency);
     }
 
-    @Nonnull
-    public WcParameterMapBuilder withCurrency(@Nonnull Currency currency) {
+    @NonNull
+    public WcParameterMapBuilder withCurrency(@NonNull Currency currency) {
       parameters.put(PARAM_CURRENCY, new String[]{currency.toString()});
       return this;
     }
 
-    @Nonnull
-    public WcParameterMapBuilder withLanguageId(@Nonnull StoreContext storeContext) {
+    @NonNull
+    public WcParameterMapBuilder withLanguageId(@NonNull StoreContext storeContext) {
       Locale locale = StoreContextHelper.getLocale(storeContext);
       return withLanguageId(locale);
     }
 
-    @Nonnull
-    public WcParameterMapBuilder withLanguageId(@Nonnull Locale locale) {
+    @NonNull
+    public WcParameterMapBuilder withLanguageId(@NonNull Locale locale) {
       String languageId = getLanguageId(locale);
       return withLanguageId(languageId);
     }
 
-    @Nonnull
-    public WcParameterMapBuilder withLanguageId(@Nonnull String languageId) {
+    @NonNull
+    public WcParameterMapBuilder withLanguageId(@NonNull String languageId) {
       parameters.put(PARAM_LANG_ID, new String[]{languageId});
       return this;
     }
 
-    @Nonnull
+    @NonNull
     public WcParameterMapBuilder withUserIdOrName(@Nullable UserContext userContext) {
       Integer userId = UserContextHelper.getForUserId(userContext);
       String userName = UserContextHelper.getForUserName(userContext);
@@ -132,19 +133,19 @@ public abstract class AbstractWcWrapperService {
       }
     }
 
-    @Nonnull
-    public WcParameterMapBuilder withUserId(@Nonnull Integer userId) {
+    @NonNull
+    public WcParameterMapBuilder withUserId(@NonNull Integer userId) {
       parameters.put(PARAM_FOR_USER_ID, new String[]{String.valueOf(userId)});
       return this;
     }
 
-    @Nonnull
-    public WcParameterMapBuilder withUserName(@Nonnull String userName) {
+    @NonNull
+    public WcParameterMapBuilder withUserName(@NonNull String userName) {
       parameters.put(PARAM_FOR_USER, new String[]{userName});
       return this;
     }
 
-    @Nonnull
+    @NonNull
     public Map<String, String[]> build() {
       // Do not return an unmodifiable map here (at least for now) as some
       // services add parameters on their own (and that makes sense to do).
@@ -159,15 +160,22 @@ public abstract class AbstractWcWrapperService {
    *
    * @param locale e.g. "en_US" "en" "de"
    */
-  @Nonnull
+  @NonNull
   public String getLanguageId(@Nullable Locale locale) {
     return getWcLanguageMappingService().getLanguageId(locale);
   }
 
-  @Nonnull
+  @NonNull
   @VisibleForTesting
-  protected Optional<CatalogId> findCatalogId(@Nonnull CatalogAlias catalogAlias, @Nonnull StoreContext storeContext) {
+  protected Optional<CatalogId> findCatalogId(@NonNull CatalogAlias catalogAlias, @NonNull StoreContext storeContext) {
     String siteId = storeContext.getSiteId();
     return catalogAliasTranslationService.getCatalogIdForAlias(catalogAlias, siteId);
+  }
+
+  @NonNull
+  private static String[] toArray(@NonNull List<String> items) {
+    // `toArray(new T[0])` as per https://shipilev.net/blog/2016/arrays-wisdom-ancients/
+    //noinspection ToArrayCallWithZeroLengthArrayArgument
+    return items.toArray(new String[0]);
   }
 }

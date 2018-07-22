@@ -30,8 +30,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
@@ -178,7 +178,7 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
     return getSettingsService().settingWithDefault(LIVECONTEXT_POLICY_COMMERCE_PRODUCT_LINKS, Boolean.class, true, site);
   }
 
-  private ModelAndView createLiveContextPage(@Nonnull Site site, @Nonnull String seoSegment, String view, @Nullable User developer) {
+  private ModelAndView createLiveContextPage(@NonNull Site site, @NonNull String seoSegment, String view, @Nullable User developer) {
     CommerceConnection currentConnection = CurrentCommerceConnection.get();
 
     CatalogService catalogService = requireNonNull(currentConnection.getCatalogService(), "no catalog service configured for seo segment \"" + seoSegment + '"');

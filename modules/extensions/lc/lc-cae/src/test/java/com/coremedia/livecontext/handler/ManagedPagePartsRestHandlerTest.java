@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Locale;
+import java.util.Optional;
 
 import static com.coremedia.livecontext.handler.ManagedPagePartsRestHandler.MANAGED_FOOTER_KEY;
 import static com.coremedia.livecontext.handler.ManagedPagePartsRestHandler.MANAGED_FOOTER_NAVIGATION_KEY;
@@ -44,10 +45,10 @@ public class ManagedPagePartsRestHandlerTest {
   public void managedPagePartsHandler() throws Exception {
     Content siteRootDocument = mockSiteRootDocument(ANY_VALID_STOREID, VALID_LOCALE);
 
-    when(settingsService.setting(MANAGED_FOOTER_KEY, Boolean.class, siteRootDocument)).thenReturn(true);
-    when(settingsService.setting(MANAGED_HEADER_KEY, Boolean.class, siteRootDocument)).thenReturn(true);
-    when(settingsService.setting(MANAGED_NAVIGATION_KEY, Boolean.class, siteRootDocument)).thenReturn(true);
-    when(settingsService.setting(MANAGED_FOOTER_NAVIGATION_KEY, Boolean.class, siteRootDocument)).thenReturn(true);
+    when(settingsService.getSetting(MANAGED_FOOTER_KEY, Boolean.class, siteRootDocument)).thenReturn(Optional.of(true));
+    when(settingsService.getSetting(MANAGED_HEADER_KEY, Boolean.class, siteRootDocument)).thenReturn(Optional.of(true));
+    when(settingsService.getSetting(MANAGED_NAVIGATION_KEY, Boolean.class, siteRootDocument)).thenReturn(Optional.of(true));
+    when(settingsService.getSetting(MANAGED_FOOTER_NAVIGATION_KEY, Boolean.class, siteRootDocument)).thenReturn(Optional.of(true));
 
     ResponseEntity<ManagedPagePartsSettings> actual = testling.managedPagePartsHandler(ANY_VALID_STOREID, VALID_LOCALE);
 
@@ -70,10 +71,10 @@ public class ManagedPagePartsRestHandlerTest {
   @Test
   public void managedPagePartsHandlerHandleNullFromSettingsService() throws Exception {
     Content siteRootDocument = mockSiteRootDocument(ANY_VALID_STOREID, VALID_LOCALE);
-    when(settingsService.setting(MANAGED_FOOTER_KEY, Boolean.class, siteRootDocument)).thenReturn(null);
-    when(settingsService.setting(MANAGED_HEADER_KEY, Boolean.class, siteRootDocument)).thenReturn(null);
-    when(settingsService.setting(MANAGED_NAVIGATION_KEY, Boolean.class, siteRootDocument)).thenReturn(null);
-    when(settingsService.setting(MANAGED_FOOTER_NAVIGATION_KEY, Boolean.class, siteRootDocument)).thenReturn(null);
+    when(settingsService.getSetting(MANAGED_FOOTER_KEY, Boolean.class, siteRootDocument)).thenReturn(Optional.empty());
+    when(settingsService.getSetting(MANAGED_HEADER_KEY, Boolean.class, siteRootDocument)).thenReturn(Optional.empty());
+    when(settingsService.getSetting(MANAGED_NAVIGATION_KEY, Boolean.class, siteRootDocument)).thenReturn(Optional.empty());
+    when(settingsService.getSetting(MANAGED_FOOTER_NAVIGATION_KEY, Boolean.class, siteRootDocument)).thenReturn(Optional.empty());
 
     ResponseEntity<ManagedPagePartsSettings> actual = testling.managedPagePartsHandler(ANY_VALID_STOREID, VALID_LOCALE);
 

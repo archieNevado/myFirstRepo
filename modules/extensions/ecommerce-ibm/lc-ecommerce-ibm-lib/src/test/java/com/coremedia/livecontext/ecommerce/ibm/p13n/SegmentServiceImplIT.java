@@ -10,85 +10,88 @@ import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.p13n.Segment;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
+import com.coremedia.livecontext.ecommerce.workspace.Workspace;
+import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
+import com.coremedia.livecontext.ecommerce.workspace.WorkspaceService;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.Assumptions;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 import javax.inject.Inject;
 import java.util.List;
 
+import static com.coremedia.blueprint.lc.test.BetamaxTestHelper.useBetamaxTapes;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.SEGMENT;
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_7;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ContextConfiguration(classes = IbmServiceTestBase.LocalConfig.class)
 @ActiveProfiles(IbmServiceTestBase.LocalConfig.PROFILE)
 public class SegmentServiceImplIT extends IbmServiceTestBase {
 
+  private static final String REGISTERED_CUSTOMERS = "Registered Customers";
+
   @Inject
-  SegmentServiceImpl testling;
+  private SegmentServiceImpl testling;
+
+  @Inject
+  private WorkspaceService workspaceService;
+
+  @Before
+  @Override
+  public void setup() {
+    super.setup();
+
+    boolean olderThan_7_7 = StoreContextHelper.getWcsVersion(getStoreContext()).lessThan(WCS_VERSION_7_7);
+    Assumptions.assumeFalse(olderThan_7_7);
+
+    UserContextHelper.setCurrentContext(UserContext.builder().build());
+  }
 
   @Betamax(tape = "ssi_testFindAllSegments", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testFindAllSegments() throws Exception {
-    StoreContext storeContext = testConfig.getStoreContext();
-    if (StoreContextHelper.getWcsVersion(storeContext).lessThan(WCS_VERSION_7_7)) {
-      return;
-    }
-
-    StoreContextHelper.setCurrentContext(storeContext);
-    UserContext userContext = UserContext.builder().build();
-    UserContextHelper.setCurrentContext(userContext);
-
-    List<Segment> segments = testling.findAllSegments(storeContext);
-    assertNotNull(segments);
-    assertFalse(segments.isEmpty());
-
-    Segment lastSegment = segments.get(segments.size() - 1);
-    CommerceId commerceId = lastSegment.getId();
-    assertEquals("segment id has wrong format: " + commerceId, SEGMENT, commerceId.getCommerceBeanType());
-    assertEquals("Repeat Customers", lastSegment.getName());
+    List<Segment> segments = testling.findAllSegments(getStoreContext());
+    assertThat(segments)
+            .isNotEmpty()
+            .last()
+            .satisfies(s -> {
+              assertThat(s).hasFieldOrPropertyWithValue("name", "Repeat Customers");
+              assertThat(s).extracting(repeatCustomer -> repeatCustomer.getId().getCommerceBeanType())
+                      .containsExactly(SEGMENT);
+            });
   }
 
   @Betamax(tape = "ssi_testFindSegmentById", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testFindSegmentById() throws Exception {
-    StoreContext storeContext = testConfig.getStoreContext();
-    if (StoreContextHelper.getWcsVersion(storeContext).lessThan(WCS_VERSION_7_7)) {
-      return;
-    }
+    Segment registeredCustomers = testling.findAllSegments(getStoreContext())
+            .stream()
+            .filter(s -> REGISTERED_CUSTOMERS.equals(s.getName()))
+            .findFirst()
+            .orElse(null);
 
-    StoreContextHelper.setCurrentContext(storeContext);
-    UserContext userContext = UserContext.builder().build();
-    UserContextHelper.setCurrentContext(userContext);
+    assertThat(registeredCustomers).isNotNull();
+    String externalTechId = registeredCustomers.getExternalTechId();
+    assertThat(externalTechId).isNotBlank();
 
-    List<Segment> segments = testling.findAllSegments(storeContext);
-    assertNotNull(segments);
-
-    Segment segment = findSegmentByName(segments, "Registered Customers");
-    assertNotNull(segment);
-    assertNotNull(segment.getExternalTechId());
-
-    Segment segment2 = testling.findSegmentById(CommerceIdParserHelper.parseCommerceIdOrThrow("ibm:///x/segment/" + segment.getExternalTechId()), getStoreContext());
-    assertNotNull(segment2);
+    CommerceId registeredCustomersId = CommerceIdParserHelper.parseCommerceIdOrThrow("ibm:///x/segment/" + externalTechId);
+    Segment segment2 = testling.findSegmentById(registeredCustomersId, getStoreContext());
+    assertThat(segment2).isNotNull();
 
     CommerceId commerceId = segment2.getId();
-    assertEquals("segment2 id has wrong format: " + commerceId, SEGMENT, commerceId.getCommerceBeanType());
-
-    assertEquals("both segment names should be equal", segment.getName(), segment2.getName());
-    assertEquals("both segments should be equal", segment, segment2);
+    assertThat(commerceId.getCommerceBeanType()).isEqualTo(SEGMENT);
+    assertThat(segment2.getName()).isEqualTo(REGISTERED_CUSTOMERS);
+    assertThat(segment2).isEqualTo(registeredCustomers);
   }
 
   @Betamax(tape = "ssi_testFindSegmentsByUser", match = {MatchRule.path, MatchRule.query})
   @Test
+  @org.junit.Ignore("TW-356")
   public void testFindSegmentsByUser() throws Exception {
-    if (StoreContextHelper.getWcsVersion(testConfig.getStoreContext()).lessThan(WCS_VERSION_7_7)) {
-      return;
-    }
-
-    StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
     UserContext userContext = UserContext.builder()
             .withUserId(System.getProperty("lc.test.user2.id", "4"))
             .withUserName(testConfig.getUser2Name())
@@ -96,26 +99,37 @@ public class SegmentServiceImplIT extends IbmServiceTestBase {
     UserContextHelper.setCurrentContext(userContext);
 
     List<Segment> segments = testling.findSegmentsForCurrentUser(getStoreContext());
-    assertNotNull(segments);
-    assertEquals(System.getProperty("lc.segments.user2.count", "3"), "" + segments.size());
-
-    Segment segment = findSegmentByName(segments, "Registered Customers");
-    assertNotNull("\"Registered Customers\" segment should be there", segment);
-
-    segment = findSegmentByName(segments, "Male Customers");
-    assertNotNull("\"Male Customers\" segment should be there", segment);
-
-    segment = findSegmentByName(segments, "Frequent Buyer");
-    assertNotNull("\"Frequent Buyer\" segment should be there", segment);
+    assertThat(segments).isNotEmpty()
+            .extracting("name")
+            .containsExactly(REGISTERED_CUSTOMERS, "Male Customers", "Frequent Buyer");
   }
 
-  private Segment findSegmentByName(List<Segment> segments, String segmentName) {
-    Segment segment = null;
-    for (Segment s : segments) {
-      if (s.getName().contains(segmentName)) {
-        segment = s;
-      }
+  @Test
+  public void testFindSegmentsByUserInWS() throws Exception {
+    if (useBetamaxTapes()) {
+      return;
     }
-    return segment;
+
+    UserContext userContext = UserContext.builder()
+            .withUserId(System.getProperty("lc.test.user2.id", "4"))
+            .withUserName(testConfig.getUser2Name())
+            .build();
+    UserContextHelper.setCurrentContext(userContext);
+
+    StoreContext storeContext = getStoreContext();
+    Workspace workspace = findAnniversaryWorkspace(storeContext);
+    storeContext.setWorkspaceId(WorkspaceId.of(workspace.getExternalTechId()));
+
+    List<Segment> segments = testling.findSegmentsForCurrentUser(storeContext);
+    assertThat(segments).isNotEmpty()
+            .extracting("name")
+            .containsExactly("Loyal, early Perfect Chef Customer", "Frequent Buyer", "Male Customers", REGISTERED_CUSTOMERS);
+  }
+
+  @NonNull
+  private Workspace findAnniversaryWorkspace(@NonNull StoreContext storeContext) {
+    return workspaceService.findAllWorkspaces(storeContext).stream()
+            .filter(w -> w.getName().startsWith("Anniversary"))
+            .findFirst().orElseThrow(IllegalStateException::new);
   }
 }

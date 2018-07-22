@@ -80,6 +80,68 @@ class CoreMediaEntry {
      * @member {Array} indicates in which variants the smart import mechanism will apply
      */
     this.smartImport = applyFrom.smartImport || [DEFAULT_VARIANT];
+    /**
+     * @member {Object} indicates a mapping for modules to be shimmed
+     */
+    this.shim = applyFrom.shim || {};
+  }
+}
+
+/**
+ * Represents a module to shim.
+ */
+class Shim {
+  /**
+   * Creates a new Shim
+   * @param {String} target module path
+   */
+  constructor(target) {
+    this._target = target;
+    this._imports = {};
+    this._exports = {};
+  }
+
+  /**
+   * The target module for the shim.
+   * @returns {String} the target module for the shim.
+   */
+  getTarget() {
+    return this._target;
+  }
+
+  /** Add a new import to the shim
+   * @param variableName variable name to be imported from
+   * @param moduleName module name to import from
+   */
+  addImport(variableName, moduleName) {
+    this._imports[variableName] = moduleName;
+  }
+
+  /**
+   * Mapping of all imported variable names to a module path
+   * @returns {Object}
+   */
+  getImports() {
+    // immutable
+    return { ...this._imports };
+  }
+
+  /**
+   * Add a new export to the shim
+   * @param variableName variable name to be exported into
+   * @param targetVariableName variable name of the target module
+   */
+  addExport(variableName, targetVariableName) {
+    this._exports[variableName] = targetVariableName;
+  }
+
+  /**
+   * Mapping of all exports variable names to a variable names of the target module
+   * @returns {Object}
+   */
+  getExports() {
+    // immutable
+    return { ...this._exports };
   }
 }
 
@@ -209,14 +271,15 @@ function getThemeConfig() {
       themeConfigFromPackageJson.name
     );
 
-    const brickTemplatesTargetPath = path.join(
+    const templatesTargetPath = path.join(
       resourcesTargetPath,
-      "WEB-INF/templates/bricks"
+      "WEB-INF/templates"
     );
 
+    const brickTemplatesTargetPath = path.join(templatesTargetPath, "bricks");
+
     const themeTemplatesTargetPath = path.join(
-      resourcesTargetPath,
-      "WEB-INF/templates",
+      templatesTargetPath,
       themeConfigFromPackageJson.name
     );
 
@@ -248,6 +311,7 @@ function getThemeConfig() {
 
     themeConfig = {
       name: themeConfigFromPackageJson.name,
+      packageName: packageJson.name,
       version: themeConfigFromPackageJson.version,
       buildConfig: themeConfigFromPackageJson.buildConfig || {},
       path: cwd,
@@ -257,6 +321,7 @@ function getThemeConfig() {
       resourcesTargetPath,
       descriptorTargetPath,
       themeTargetPath,
+      templatesTargetPath,
       brickTemplatesTargetPath,
       themeTemplatesTargetPath,
       themeTemplatesJarTargetPath,
@@ -310,6 +375,53 @@ function getInitJs(nodeModule) {
   const pkgPath = nodeModule.getPkgPath();
   const pkgDir = path.dirname(pkgPath);
   return path.resolve(pkgDir, init);
+}
+
+function absoluteRequire(require, context) {
+  // check if relative path is provided
+  if (require.length > 0 && require[0] === ".") {
+    return path.join(context, require);
+  }
+  // otherwise just return the require statement as module requires are already absolute
+  return require;
+}
+
+/**
+ * Parses a {@link Shim} from a given config {@link Object}.
+ * @param {String} target the target
+ * @param {Object} config the config to parse from
+ * @param context the context to resolved from
+ */
+function parseShim(target, config, context) {
+  const shim = new Shim(absoluteRequire(target, context));
+
+  Object.keys(config.imports || {}).forEach(name => {
+    const module = config.imports[name];
+    shim.addImport(name, absoluteRequire(module, context));
+  });
+
+  Object.keys(config.exports || {}).forEach(name => {
+    shim.addExport(name, config.exports[name]);
+  });
+
+  return shim;
+}
+
+/**
+ * Returns the defined shims of a given module.
+ *
+ * @param {NodeModule} nodeModule The module
+ * @returns {Array<Shim>} the defined shims
+ */
+function getShims(nodeModule) {
+  const shimConfigByTarget = getCoreMediaEntry(nodeModule).shim;
+  return Object.keys(shimConfigByTarget).map(target =>
+    parseShim(
+      target,
+      shimConfigByTarget[target],
+      path.dirname(nodeModule.getPkgPath())
+    )
+  );
 }
 
 /**
@@ -378,38 +490,36 @@ function getInstallationPath(moduleName, relativeFrom) {
  */
 function getAvailableBricks() {
   const wsPatterns = require(wsConfig.pkgPath).workspaces || [];
-  const wsDirectories = wsPatterns.map(
-          wsPattern => glob.sync(wsPattern, {
-            cwd: wsConfig.path
-          })
-  ).reduce((all, newValue) => all.concat(newValue), []);
+  const wsDirectories = wsPatterns
+    .map(wsPattern =>
+      glob.sync(wsPattern, {
+        cwd: wsConfig.path,
+      })
+    )
+    .reduce((all, newValue) => all.concat(newValue), []);
 
   const packageJsonPaths = wsDirectories
-          .map(
-                  directory => path.join(wsConfig.path, directory, "package.json")
-          )
-          .filter(
-                  fs.existsSync
-          )
-          .filter(
-                  packageJsonPath => {
-                    const packageJson = require(packageJsonPath);
-                    return packageJson.coremedia && packageJson.coremedia.type === "brick";
-                  }
-          );
+    .map(directory => path.join(wsConfig.path, directory, "package.json"))
+    .filter(fs.existsSync)
+    .filter(packageJsonPath => {
+      const packageJson = require(packageJsonPath);
+      return packageJson.coremedia && packageJson.coremedia.type === "brick";
+    });
 
   return packageJsonPaths
-          .map(
-                  packageJsonPath => {
-                    const packageJson = require(packageJsonPath);
-                    return {
-                      [packageJson.name]: `^${packageJson.version}`
-                    }
-                  }
-          ).reduce((aggregator, newValue) => ({
-            ...aggregator,
-            ...newValue
-          }), {});
+    .map(packageJsonPath => {
+      const packageJson = require(packageJsonPath);
+      return {
+        [packageJson.name]: `^${packageJson.version}`,
+      };
+    })
+    .reduce(
+      (aggregator, newValue) => ({
+        ...aggregator,
+        ...newValue,
+      }),
+      {}
+    );
 }
 
 /**
@@ -673,6 +783,7 @@ module.exports = {
   getThemeConfig,
   isBrickModule,
   getInitJs,
+  getShims,
   getIsSmartImportModuleFor,
   getInstallationPath,
   getAvailableBricks,

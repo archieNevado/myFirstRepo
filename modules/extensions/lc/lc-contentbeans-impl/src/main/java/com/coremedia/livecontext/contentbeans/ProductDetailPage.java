@@ -2,12 +2,14 @@ package com.coremedia.livecontext.contentbeans;
 
 import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.blueprint.cae.contentbeans.PageImpl;
+import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.layout.PageGrid;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.context.LiveContextNavigation;
+import com.coremedia.livecontext.navigation.LiveContextCategoryNavigation;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.google.common.annotations.VisibleForTesting;
@@ -45,15 +47,25 @@ public class ProductDetailPage extends PageImpl {
 
   @Override
   public PageGrid getPageGrid() {
-    LiveContextExternalChannelImpl externalChannel = getExternalChannel();
-    if (externalChannel==null) {
-      throw new IllegalStateException("Must set an external channel before accessing the pagegrid.");
+    Object content = getContent();
+    if (content instanceof LiveContextExternalProduct) {
+      // The product is augmented.
+      return ((LiveContextExternalProduct)content).getPageGrid();
     }
-    return externalChannel.getPdpPagegrid();
+    // If the product is not augmented ask the category for the PDP pagegrid.
+    Navigation navigation = getNavigation();
+    if (navigation instanceof LiveContextExternalChannel) {
+      // The category is augmented.
+      return ((LiveContextExternalChannel)navigation).getPdpPagegrid();
+    }
+    if (navigation instanceof LiveContextCategoryNavigation) {
+      // The category is not augmented.
+      CMContext context = navigation.getContext();
+      if (context instanceof LiveContextExternalChannel) {
+        return ((LiveContextExternalChannel) context).getPdpPagegrid();
+      }
+    }
+    throw new IllegalStateException("No pagegrid found for " + content);
   }
 
-  protected LiveContextExternalChannelImpl getExternalChannel() {
-    // We ensured the type in the setter.  No need to check here.
-    return (LiveContextExternalChannelImpl)getNavigation();
-  }
 }

@@ -13,8 +13,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.Iterator;
@@ -28,7 +28,7 @@ class SearchLandingPagesLinkBuilderHelper {
   private TreeRelation<Content> navigationTreeRelation;
   private Cache cache;
 
-  boolean isSearchLandingPage(@Nonnull CMChannel channel, @Nonnull Site site) {
+  boolean isSearchLandingPage(@NonNull CMChannel channel, @NonNull Site site) {
     Content content = channel.getContent();
 
     Content context = getNavigationContextCached(site);
@@ -41,8 +41,8 @@ class SearchLandingPagesLinkBuilderHelper {
    * parameters that a read from a content property of the channel.
    */
   @Nullable
-  Object createSearchLandingPageURLFor(@Nonnull CMChannel channel, CommerceConnection commerceConnection,
-                                       @Nonnull HttpServletRequest request, @Nonnull StoreContext storeContext) {
+  Object createSearchLandingPageURLFor(@NonNull CMChannel channel, CommerceConnection commerceConnection,
+                                       @NonNull HttpServletRequest request, @NonNull StoreContext storeContext) {
     String term = channel.getContent().getString(keywordsProperty);
 
     return commerceConnection.getServiceForVendor(CommerceSearchRedirectUrlProvider.class)
@@ -60,7 +60,7 @@ class SearchLandingPagesLinkBuilderHelper {
    * @return navigation, null if not found
    */
   @Nullable
-  Content getNavigationContext(@Nonnull Site site) {
+  Content getNavigationContext(@NonNull Site site) {
     Preconditions.checkArgument(!segmentPath.startsWith("/"),
             "Segment path must be relative and not start with a slash: " + segmentPath);
     Iterable<String> segments = Splitter.on('/').omitEmptyStrings().split(segmentPath);
@@ -81,7 +81,7 @@ class SearchLandingPagesLinkBuilderHelper {
   }
 
   // fixes CMS-12190
-  private Content getNavigationContextCached(@Nonnull Site site) {
+  private Content getNavigationContextCached(@NonNull Site site) {
     return cache.get(new SearchLandingPageContextCacheKey(this, site));
   }
 

@@ -9,9 +9,9 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmDocumentCacheKey;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
+import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
-import javax.annotation.Nonnull;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 
@@ -20,17 +20,15 @@ import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.SK
 
 class ProductCacheKey extends AbstractIbmDocumentCacheKey<Map<String, Object>> {
 
-  private  static final String UNIQUE_ID = "uniqueID";
+  private static final String UNIQUE_ID = "uniqueID";
 
   private WcCatalogWrapperService wrapperService;
 
-  ProductCacheKey(@Nonnull CommerceId id,
-                  StoreContext storeContext,
-                  UserContext userContext,
-                  WcCatalogWrapperService wrapperService,
-                  CommerceCache commerceCache) {
+  ProductCacheKey(@NonNull CommerceId id, StoreContext storeContext, UserContext userContext,
+                  WcCatalogWrapperService wrapperService, CommerceCache commerceCache) {
     super(id, storeContext, userContext, CONFIG_KEY_PRODUCT, commerceCache);
     this.wrapperService = wrapperService;
+
     CommerceBeanType commerceBeanType = id.getCommerceBeanType();
     if (!PRODUCT.equals(commerceBeanType) && !SKU.equals(commerceBeanType)) {
       throw new InvalidIdException(id + " is neither a product nor sku id.");
@@ -42,12 +40,15 @@ class ProductCacheKey extends AbstractIbmDocumentCacheKey<Map<String, Object>> {
     if (this == o) {
       return true;
     }
+
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
+
     if (!super.equals(o)) {
       return false;
     }
+
     ProductCacheKey that = (ProductCacheKey) o;
     return Objects.equals(wrapperService, that.wrapperService);
   }
@@ -71,9 +72,16 @@ class ProductCacheKey extends AbstractIbmDocumentCacheKey<Map<String, Object>> {
 
   @Override
   protected String getCacheIdentifier() {
-    return id + ":" + configKey + ":" + storeContext.getSiteId() + ":" +
-            storeContext.getStoreId() + ":" + storeContext.getLocale() + ":" + storeContext.getCurrency() + ":" +
-            storeContext.getWorkspaceId() + ":" + Arrays.toString(storeContext.getContractIds()) + ":" + Arrays.toString(storeContext.getContractIdsForPreview());
+    return assembleCacheIdentifier(
+            id,
+            configKey,
+            storeContext.getSiteId(),
+            storeContext.getStoreId(),
+            storeContext.getLocale(),
+            storeContext.getCurrency(),
+            storeContext.getWorkspaceId().map(WorkspaceId::value).orElse(null),
+            toString(storeContext.getContractIds()),
+            toString(storeContext.getContractIdsForPreview())
+    );
   }
-
 }

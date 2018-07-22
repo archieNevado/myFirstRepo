@@ -9,28 +9,34 @@ import com.coremedia.blueprint.base.pagegrid.PageGridConstants;
 import com.coremedia.blueprint.base.pagegrid.PageGridContentKeywords;
 import com.coremedia.blueprint.base.pagegrid.TableLayoutData;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
+import com.coremedia.blueprint.common.datevalidation.ValidityPeriod;
+import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
 import com.coremedia.blueprint.common.layout.HasPageGrid;
 import com.coremedia.blueprint.common.layout.PageGridPlacement;
 import com.coremedia.blueprint.common.navigation.Linkable;
-import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.blueprint.common.util.ContainerFlattener;
-import com.coremedia.blueprint.common.util.IsInProductionPredicate;
 import com.coremedia.blueprint.viewtype.ViewtypeService;
+import com.coremedia.cap.common.CapStructHelper;
 import com.coremedia.cap.content.Content;
-import com.coremedia.objectserver.beans.ContentBean;
+import com.coremedia.cap.struct.Struct;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.AssumesIdentity;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 
-import java.util.ArrayList;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
+
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ContentBeanBackedPageGridPlacement implements PageGridPlacement, AssumesIdentity {
+
   private static final String CONTENT_PROPERTIES_PROPERTY = "properties";
+
   private ValidationService<Linkable> validationService;
+  private ValidityPeriodValidator visiblityValidator;
   private ContentBackedPageGridService contentBackedPageGridService;
   private ViewtypeService viewtypeService;
 
@@ -52,6 +58,7 @@ public class ContentBeanBackedPageGridPlacement implements PageGridPlacement, As
                                             int row, int columns, int colIndex,
                                             ContentBackedPageGridService contentBackedPageGridService,
                                             ValidationService<Linkable> validationService,
+                                            ValidityPeriodValidator visibilityValidator,
                                             ViewtypeService viewtypeService) {
     this.bean = bean;
     this.row = row;
@@ -59,6 +66,7 @@ public class ContentBeanBackedPageGridPlacement implements PageGridPlacement, As
     this.colIndex = colIndex;
     this.contentBackedPageGridService = contentBackedPageGridService;
     this.validationService = validationService;
+    this.visiblityValidator = visibilityValidator;
     this.viewtypeService = viewtypeService;
   }
 
@@ -86,6 +94,11 @@ public class ContentBeanBackedPageGridPlacement implements PageGridPlacement, As
   }
 
   @Override
+  public boolean isEditable() {
+    return getLayout().isEditable();
+  }
+
+  @Override
   public String getViewTypeName() {
     Content viewType = getDelegate().getViewtype();
     return viewType==null ? null : viewtypeService.getLayout(viewType);
@@ -93,11 +106,15 @@ public class ContentBeanBackedPageGridPlacement implements PageGridPlacement, As
 
   @Override
   public List<? extends Linkable> getItems() {
-    List<? extends Linkable> filteredList = getItemsUnfiltered();
-    if (validationService != null) {
-      filteredList = validationService.filterList(filteredList);
+    List<AnnotatedLinkWrapper> unfiltered = getItemsUnfiltered();
+    List<Linkable> filtered = unfiltered.stream()
+            .filter(visiblityValidator::validate)
+            .map(AnnotatedLinkWrapper::getTargetBean)
+            .collect(Collectors.toList());
+    if (validationService == null) {
+      return filtered;
     }
-    return filteredList;
+    return validationService.filterList(filtered);
   }
 
   @Override
@@ -117,6 +134,10 @@ public class ContentBeanBackedPageGridPlacement implements PageGridPlacement, As
             CONTENT_PROPERTIES_PROPERTY,
             PageGridContentKeywords.PAGE_GRID_STRUCT_PROPERTY,
             getName());
+  }
+
+  public String getStructPropertyName() {
+    return contentBackedPageGridService.getStructPropertyName();
   }
 
   @Override
@@ -193,6 +214,7 @@ public class ContentBeanBackedPageGridPlacement implements PageGridPlacement, As
     validationService = other.validationService;
     contentBackedPageGridService = other.contentBackedPageGridService;
     viewtypeService = other.viewtypeService;
+    visiblityValidator = other.visiblityValidator;
     this.bean = other.bean;
     row = other.row;
     colIndex = other.colIndex;
@@ -204,22 +226,12 @@ public class ContentBeanBackedPageGridPlacement implements PageGridPlacement, As
    * Public only for Dataviews.
    * Retrieves the items of this PageGridPlacement
    */
-  public List<Linkable> getItemsUnfiltered() {
-    List<Content> unfiltered = getDelegate().getItems();
-    Iterable<Content> filteredList = Iterables.filter(unfiltered, new IsInProductionPredicate());
-    List<ContentBean> contentBeans = createContentBeansFor(filteredList);
-    return Lists.newArrayList(Iterables.filter(contentBeans, Linkable.class));
-  }
-
-
-  // --- internal ---------------------------------------------------
-
-  private List<ContentBean> createContentBeansFor(Iterable<Content> items) {
-    List<ContentBean> withContentBeans = new ArrayList<>();
-    for (Content object : items) {
-      withContentBeans.add(getContentBeanFactory().createBeanFor(object));
-    }
-    return withContentBeans;
+  public List<AnnotatedLinkWrapper> getItemsUnfiltered() {
+    return getDelegate().getExtendedItems().stream()
+            .map(AnnotatedLinkWrapper::new)
+            .filter(al -> al.getTarget() != null)
+            .filter(al -> al.getTarget().isInProduction())
+            .collect(Collectors.toList());
   }
 
   private ContentBackedPageGridPlacement getDelegate() {
@@ -247,6 +259,50 @@ public class ContentBeanBackedPageGridPlacement implements PageGridPlacement, As
       return bean.getContentBeanFactory();
     } else {
       throw new IllegalStateException("cannot determine content bean factory");
+    }
+  }
+
+  private class AnnotatedLinkWrapper implements ValidityPeriod {
+
+    @Nullable
+    private Content target;
+
+    @Nullable
+    private Linkable targetBean;
+
+    @Nullable
+    private final Calendar visibleFrom;
+
+    @Nullable
+    private final Calendar visibleTo;
+
+    AnnotatedLinkWrapper(@NonNull Struct annotatedLink) {
+      target = CapStructHelper.getLink(annotatedLink, PageGridContentKeywords.ANNOTATED_LINK_LIST_TARGET_PROPERTY_NAME);
+      targetBean = getContentBeanFactory().createBeanFor(target, Linkable.class);
+      visibleFrom = CapStructHelper.getDate(annotatedLink, PageGridContentKeywords.ANNOTATED_LINK_LIST_VISIBLE_FROM_PROPERTY_NAME);
+      visibleTo = CapStructHelper.getDate(annotatedLink, PageGridContentKeywords.ANNOTATED_LINK_LIST_VISIBLE_TO_PROPERTY_NAME);
+    }
+
+    @Nullable
+    Content getTarget() {
+      return target;
+    }
+
+    @Nullable
+    Linkable getTargetBean() {
+      return targetBean;
+    }
+
+    @Nullable
+    @Override
+    public Calendar getValidFrom() {
+      return visibleFrom;
+    }
+
+    @Nullable
+    @Override
+    public Calendar getValidTo() {
+      return visibleTo;
     }
   }
 }

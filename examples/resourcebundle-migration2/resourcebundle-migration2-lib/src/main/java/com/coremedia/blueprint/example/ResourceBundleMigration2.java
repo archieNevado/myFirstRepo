@@ -13,7 +13,7 @@ import org.apache.commons.cli.Options;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -42,7 +42,7 @@ public class ResourceBundleMigration2 extends AbstractUAPIClient {
             .create(SIMULATE_PARAMETER_SHORT));
   }
 
-  @Nonnull
+  @NonNull
   @Override
   protected String getUsage() {
     return "usage: cm resourcebundle-migration2 -u admin -p admin [--simulate]";

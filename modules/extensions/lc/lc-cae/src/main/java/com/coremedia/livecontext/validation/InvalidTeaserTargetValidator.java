@@ -2,37 +2,36 @@ package com.coremedia.livecontext.validation;
 
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.contentbeans.CMLinkableImpl;
-import com.coremedia.blueprint.cae.services.validation.ValidationServiceImpl;
-import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMTeaser;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.services.validation.AbstractValidator;
 import com.coremedia.cap.struct.Struct;
-import com.google.common.base.Predicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * validates {@link CMTeaser} objects by validating the {@link com.coremedia.blueprint.common.contentbeans.CMTeaser#getTarget()}
  * candidate if the {@link #INHERIT_VALIDITY_SETTING_NAME} setting of the {@link CMTeaser} is <code>true</code>
  * by using the injected {@link com.coremedia.blueprint.common.services.validation.ValidationService}.
- * If the passed in object is q {@link Page}, its {@link com.coremedia.blueprint.common.contentbeans.Page#getContent()}
+ * If the passed in object is a {@link Page}, its {@link com.coremedia.blueprint.common.contentbeans.Page#getContent()}
  * is tested instead.
  */
 public class InvalidTeaserTargetValidator extends AbstractValidator<Object> {
-  
+
   private static final Logger LOG = LoggerFactory.getLogger(InvalidTeaserTargetPredicate.class);
+
   private static final String INHERIT_VALIDITY_SETTING_NAME = "useTeaserTargetValidity";
-  private ValidationServiceImpl<CMLinkable> validationService;
+
   private SettingsService settingsService;
 
   @Override
-  protected Predicate createPredicate() {
+  protected Predicate<Object> createPredicate() {
     return new InvalidTeaserTargetPredicate();
   }
 
@@ -42,29 +41,28 @@ public class InvalidTeaserTargetValidator extends AbstractValidator<Object> {
   }
 
   @Required
-  public void setValidationService(ValidationServiceImpl<CMLinkable> validationService) {
-    this.validationService = validationService;
-  }
-
-  @Required
   public void setSettingsService(SettingsService settingsService) {
     this.settingsService = settingsService;
   }
 
   private class InvalidTeaserTargetPredicate implements Predicate<Object> {
     @Override
-    public boolean apply(@Nullable Object candidate) {
-      if (candidate != null && candidate instanceof Page) {
+    public boolean test(@Nullable Object candidate) {
+      if (candidate instanceof Page) {
         candidate = ((Page) candidate).getContent();
       }
-      if (candidate == null || !(candidate instanceof CMTeaser)) {
+
+      if (!(candidate instanceof CMTeaser)) {
         return true;
       }
+
       CMTeaser teaser = (CMTeaser) candidate;
-      Boolean inheritValidity = settingsService.settingWithDefault(INHERIT_VALIDITY_SETTING_NAME, Boolean.class, false, teaser);
+      Boolean inheritValidity = settingsService.getSetting(INHERIT_VALIDITY_SETTING_NAME, Boolean.class, teaser)
+              .orElse(false);
       if (!inheritValidity) {
         return true;
       }
+
       LOG.debug("{} settings is enabled, checking validity of teaser target...", INHERIT_VALIDITY_SETTING_NAME);
 
       // Get the raw targets from the content property

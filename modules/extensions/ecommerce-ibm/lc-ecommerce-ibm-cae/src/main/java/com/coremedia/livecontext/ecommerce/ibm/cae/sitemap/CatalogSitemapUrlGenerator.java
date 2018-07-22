@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -68,7 +69,7 @@ public class CatalogSitemapUrlGenerator implements SitemapUrlGenerator {
       throw new IllegalArgumentException("Cannot derive a site from " + request.getPathInfo());
     }
     try {
-      StoreContext storeContext = getStoreContextProvider().findContextBySite(site);
+      StoreContext storeContext = getStoreContextProvider().findContextBySite(site).orElse(null);
       if (storeContext != null) {
         // Deep links have a different domain and must thus not be included
         // in sitemaps.org sitemaps.
@@ -93,15 +94,20 @@ public class CatalogSitemapUrlGenerator implements SitemapUrlGenerator {
 
   // --- internal ---------------------------------------------------
 
-  private boolean useCommerceProductLinks(Site site) {
-    return settingsService.settingWithDefault(ProductPageHandler.LIVECONTEXT_POLICY_COMMERCE_PRODUCT_LINKS, Boolean.class, true, site);
+  private boolean useCommerceProductLinks(@NonNull Site site) {
+    return settingsService
+            .getSetting(ProductPageHandler.LIVECONTEXT_POLICY_COMMERCE_PRODUCT_LINKS, Boolean.class, site)
+            .orElse(true);
   }
 
-  private boolean useCommerceCategoryLinks(Site site) {
-    return settingsService.settingWithDefault(ExternalNavigationHandler.LIVECONTEXT_POLICY_COMMERCE_CATEGORY_LINKS, Boolean.class, false, site);
+  private boolean useCommerceCategoryLinks(@NonNull Site site) {
+    return settingsService
+            .getSetting(ExternalNavigationHandler.LIVECONTEXT_POLICY_COMMERCE_CATEGORY_LINKS, Boolean.class, site)
+            .orElse(false);
   }
 
-  private void generateUrls(List<Category> categories, Site site, HttpServletRequest request, HttpServletResponse response, String protocol, UrlCollector urlCollector) {
+  private void generateUrls(List<Category> categories, @NonNull Site site, HttpServletRequest request,
+                            HttpServletResponse response, String protocol, UrlCollector urlCollector) {
     // Must not include deep links in sitemap
     if (!useCommerceProductLinks(site)) {
       for (Category category : categories) {
@@ -126,14 +132,13 @@ public class CatalogSitemapUrlGenerator implements SitemapUrlGenerator {
   private void generateUrl(Object ecommerceItem, HttpServletRequest request, HttpServletResponse response, String protocol, UrlCollector urlCollector) {
     try {
       String link = linkFormatter.formatLink(ecommerceItem, null, request, response, false);
-      // Must null-check, because there may be unlinkable ecommerce items.
-      if (link!=null) {
-        // Make absolutely absolute
-        if (link.startsWith("//")) {
-          link = protocol + ":" + link;
-        }
-        urlCollector.appendUrl(link);
+
+      // Make absolutely absolute
+      if (link.startsWith("//")) {
+        link = protocol + ":" + link;
       }
+
+      urlCollector.appendUrl(link);
     } catch (Exception e) {
       LOG.warn("cannot create link for " + ecommerceItem, e);
     }

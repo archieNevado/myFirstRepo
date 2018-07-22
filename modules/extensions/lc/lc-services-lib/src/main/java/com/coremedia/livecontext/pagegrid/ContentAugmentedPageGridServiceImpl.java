@@ -1,10 +1,12 @@
 package com.coremedia.livecontext.pagegrid;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoStoreContextAvailable;
 import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGridPlacement;
 import com.coremedia.blueprint.base.pagegrid.impl.ContentBackedPageGridServiceImpl;
 import com.coremedia.cap.content.Content;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
@@ -14,8 +16,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Collection;
 import java.util.Map;
 
@@ -30,11 +32,11 @@ public class ContentAugmentedPageGridServiceImpl extends ContentBackedPageGridSe
 
   private AugmentationService augmentationService;
 
-  @Nonnull
+  @NonNull
   @Override
   protected Map<String, ContentBackedPageGridPlacement> getMergedPageGridPlacements(
-          @Nonnull Content navigation, @Nonnull String pageGridName,
-          @Nonnull Collection<? extends Content> layoutSections) {
+          @NonNull Content navigation, @NonNull String pageGridName,
+          @NonNull Collection<? extends Content> layoutSections) {
     return getMergedHierarchicalPageGridPlacements(navigation, pageGridName, layoutSections);
   }
 
@@ -42,10 +44,10 @@ public class ContentAugmentedPageGridServiceImpl extends ContentBackedPageGridSe
    * Make #getMergedHierarchicalPageGridPlacements available for
    * {@link ContentAugmentedProductPageGridServiceImpl#getMergedPageGridPlacements}
    */
-  @Nonnull
+  @NonNull
   Map<String, ContentBackedPageGridPlacement> getMergedHierarchicalPageGridPlacements(
-          @Nonnull Content navigation, @Nonnull String pageGridName,
-          @Nonnull Collection<? extends Content> layoutSections) {
+          @NonNull Content navigation, @NonNull String pageGridName,
+          @NonNull Collection<? extends Content> layoutSections) {
     return super.getMergedPageGridPlacements(navigation, pageGridName, layoutSections);
   }
 
@@ -61,7 +63,7 @@ public class ContentAugmentedPageGridServiceImpl extends ContentBackedPageGridSe
 
   @Nullable
   @Override
-  public Content getLayout(@Nonnull Content content, @Nonnull String pageGridName) {
+  public Content getLayout(@NonNull Content content, @NonNull String pageGridName) {
     Content style = styleSettingsDocument(content, pageGridName);
     if (style == null) {
       Content rootCategoryContent = getRootCategoryContent(content);
@@ -74,17 +76,39 @@ public class ContentAugmentedPageGridServiceImpl extends ContentBackedPageGridSe
   }
 
   @Nullable
-  private Content getRootCategoryContent(@Nonnull Content content) {
+  private Content getRootCategoryContent(@NonNull Content content) {
     try {
       CommerceConnection commerceConnection = CurrentCommerceConnection.get();
 
-      StoreContext storeContext = commerceConnection.getStoreContextProvider().findContextByContent(content);
-      Category rootCategory = commerceConnection.getCatalogService().findRootCategory(storeContext.getCatalogAlias(), storeContext);
+      CatalogService catalogService = getCatalogService(commerceConnection);
+      StoreContext storeContext = getStoreContextForContent(content, commerceConnection);
+
+      Category rootCategory = catalogService.findRootCategory(storeContext.getCatalogAlias(), storeContext);
       return augmentationService.getContent(rootCategory);
     } catch (CommerceException e) {
       LOG.warn("Could not retrieve root category for Content {}.", content, e);
       return null;
     }
+  }
+
+  @NonNull
+  private CatalogService getCatalogService(@NonNull CommerceConnection commerceConnection) {
+    CatalogService catalogService = commerceConnection.getCatalogService();
+
+    if (catalogService == null) {
+      throw new IllegalStateException("Catalog service is not available on commerce connection.");
+    }
+
+    return catalogService;
+  }
+
+  @NonNull
+  private StoreContext getStoreContextForContent(@NonNull Content content,
+                                                 @NonNull CommerceConnection commerceConnection) {
+    return commerceConnection.getStoreContextProvider()
+            .findContextByContent(content)
+            .orElseThrow(() -> new NoStoreContextAvailable(
+                    "Store context could not be obtained for content with ID '" + content.getId() + "'."));
   }
 
   @Autowired

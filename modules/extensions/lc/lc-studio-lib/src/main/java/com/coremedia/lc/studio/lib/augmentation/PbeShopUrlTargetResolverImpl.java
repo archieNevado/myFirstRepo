@@ -14,8 +14,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.net.MalformedURLException;
@@ -43,7 +43,7 @@ class PbeShopUrlTargetResolverImpl implements PbeShopUrlTargetResolver {
   private AugmentationService externalPageAugmentationService;
 
   @Nullable
-  public Object resolveUrl(@Nonnull String urlStr, @Nullable String siteId) {
+  public Object resolveUrl(@NonNull String urlStr, @Nullable String siteId) {
     URL shopUrl = getUrlFromString(urlStr);
     if (shopUrl == null) {
       return null;
@@ -56,7 +56,7 @@ class PbeShopUrlTargetResolverImpl implements PbeShopUrlTargetResolver {
 
     // get potential partNumber from urlStr
     List<String> pathSegments = Arrays.asList(shopUrl.getPath().split("/"));
-    String externalId = Iterables.getLast(pathSegments, null);
+    String externalId = Iterables.getLast(pathSegments, null); // NOSONAR - Workaround for spotbugs/spotbugs#621, see CMS-12169
 
     if (isSeoUrl(shopUrl) && !StringUtils.isBlank(externalId)) {
       // try to load category from partNumber
@@ -78,13 +78,13 @@ class PbeShopUrlTargetResolverImpl implements PbeShopUrlTargetResolver {
     return getExternalPage(externalId, siteId);
   }
 
-  private boolean isSeoUrl(@Nonnull URL url) {
+  private boolean isSeoUrl(@NonNull URL url) {
     String query = url.getQuery();
     return !(query != null && (query.contains(CATALOG_ID_QUERY_PARAM) || query.contains(STORE_ID_QUERY_PARAM) || query.contains(LANG_ID_QUERY_PARAM)));
   }
 
   @Nullable
-  private URL getUrlFromString(@Nonnull String urlStr) {
+  private URL getUrlFromString(@NonNull String urlStr) {
     try {
       return new URL(urlStr);
     } catch (MalformedURLException e) {
@@ -94,7 +94,7 @@ class PbeShopUrlTargetResolverImpl implements PbeShopUrlTargetResolver {
   }
 
   @Nullable
-  private Category getCategory(@Nonnull CommerceConnection connection, @Nonnull String externalId) {
+  private Category getCategory(@NonNull CommerceConnection connection, @NonNull String externalId) {
     try {
       return connection.getCatalogService().findCategoryBySeoSegment(externalId, connection.getStoreContext());
     } catch (CommerceException e) {

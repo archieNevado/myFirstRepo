@@ -10,7 +10,7 @@ import com.coremedia.livecontext.ecommerce.p13n.MarketingSpot;
 import com.coremedia.livecontext.ecommerce.p13n.Segment;
 import com.google.common.collect.ImmutableMap;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Map;
 import java.util.Optional;
 
@@ -29,8 +29,8 @@ class InvalidationEventTypeMapping {
           .put(InvalidationEvent.SEGMENT_EVENT, Segment.class)
           .build();
 
-  @Nonnull
-  static Optional<Class<? extends CommerceBean>> get(@Nonnull String key) {
+  @NonNull
+  static Optional<Class<? extends CommerceBean>> get(@NonNull String key) {
     return Optional.ofNullable(MAPPING.get(key));
   }
 }

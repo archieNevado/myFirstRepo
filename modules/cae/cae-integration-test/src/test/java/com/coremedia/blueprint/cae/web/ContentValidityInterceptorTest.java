@@ -24,19 +24,20 @@ import java.util.Collections;
 
 import static org.mockito.Mockito.when;
 
+@SuppressWarnings("SameParameterValue")
 public class ContentValidityInterceptorTest extends ContentBeanTestBase {
   private ContentValidityInterceptor interceptor;
 
   @SuppressWarnings("SpringJavaAutowiringInspection")
   @Inject
-  private ValidationServiceImpl<Object> validationService;
+  private ValidationServiceImpl validationService;
 
   @Inject
   private ValidityPeriodValidator validityPeriodValidator;
 
+  @SuppressWarnings("unchecked")
   @Before
-  public void setUp() throws Exception {
-    //noinspection unchecked
+  public void setUp() {
     validationService.setValidators(Collections.singletonList(validityPeriodValidator));
     interceptor = new ContentValidityInterceptor();
     interceptor.setValidationService(validationService);
@@ -49,7 +50,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
    */
 
   @Test(expected = InvalidContentException.class)
-  public void testValidity1() throws Exception {
+  public void testValidity1() {
     MockHttpServletRequest request = new MockHttpServletRequest();
     setupNow(request, 2010, 10, 10);
     MockHttpServletResponse response = new MockHttpServletResponse();
@@ -70,7 +71,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
    */
 
   @Test(expected = InvalidContentException.class)
-  public void testValidity2() throws Exception {
+  public void testValidity2() {
     MockHttpServletRequest request = new MockHttpServletRequest();
     setupNow(request, 2010, 10, 10);
     MockHttpServletResponse response = new MockHttpServletResponse();
@@ -94,7 +95,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
    */
 
   @Test(expected = InvalidContentException.class)
-  public void testValidity3() throws Exception {
+  public void testValidity3() {
     MockHttpServletRequest request = new MockHttpServletRequest();
     setupNow(request, 2010, 10, 10);
     MockHttpServletResponse response = new MockHttpServletResponse();
@@ -118,7 +119,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
    */
 
   @Test(expected = InvalidContentException.class)
-  public void testValidity4() throws Exception {
+  public void testValidity4() {
     MockHttpServletRequest request = new MockHttpServletRequest();
     setupNow(request, 2009, 10, 10);
     MockHttpServletResponse response = new MockHttpServletResponse();
@@ -140,7 +141,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
    */
 
   @Test(expected = InvalidContentException.class)
-  public void testValidity7() throws Exception {
+  public void testValidity7() {
     MockHttpServletRequest request = new MockHttpServletRequest();
     setupNow(request, 2009, 10, 10);
     MockHttpServletResponse response = new MockHttpServletResponse();
@@ -160,7 +161,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
    */
 
   @Test(expected = InvalidContentException.class)
-  public void testValidity8() throws Exception {
+  public void testValidity8() {
     MockHttpServletRequest request = new MockHttpServletRequest();
     setupNow(request, 2009, 10, 10);
     MockHttpServletResponse response = new MockHttpServletResponse();
@@ -180,7 +181,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
    */
 
   @Test(expected = InvalidContentException.class)
-  public void testValidity5() throws Exception {
+  public void testValidity5() {
     MockHttpServletRequest request = new MockHttpServletRequest();
     setupNow(request, 2009, 10, 10);
     MockHttpServletResponse response = new MockHttpServletResponse();
@@ -204,7 +205,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
    */
 
   @Test(expected = InvalidContentException.class)
-  public void testValidity6() throws Exception {
+  public void testValidity6() {
     MockHttpServletRequest request = new MockHttpServletRequest();
     setupNow(request, 2009, 10, 10);
     MockHttpServletResponse response = new MockHttpServletResponse();
@@ -227,7 +228,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
    */
 
   @Test(expected = InvalidContentException.class)
-  public void testValidity9() throws Exception {
+  public void testValidity9() {
     MockHttpServletRequest request = new MockHttpServletRequest();
     setupNow(request, 2009, 10, 10);
     MockHttpServletResponse response = new MockHttpServletResponse();
@@ -249,7 +250,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
    */
 
   @Test
-  public void testValidity10() throws Exception {
+  public void testValidity10() {
     MockHttpServletRequest request = new MockHttpServletRequest();
     setupNow(request, 2009, 10, 10);
     MockHttpServletResponse response = new MockHttpServletResponse();
@@ -267,7 +268,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
    */
 
   @Test
-  public void testValidity11() throws Exception {
+  public void testValidity11() {
     MockHttpServletRequest request = new MockHttpServletRequest();
     setupNow(request, 2010, 10, 10);
     MockHttpServletResponse response = new MockHttpServletResponse();
@@ -288,7 +289,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
    */
 
   @Test
-  public void testValidity12() throws Exception {
+  public void testValidity12() {
     MockHttpServletRequest request = new MockHttpServletRequest();
     setupNow(request, 2010, 10, 10);
     MockHttpServletResponse response = new MockHttpServletResponse();
@@ -308,7 +309,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
    */
 
   @Test
-  public void testValidity13() throws Exception {
+  public void testValidity13() {
     MockHttpServletRequest request = new MockHttpServletRequest();
     setupNow(request, 2010, 10, 10);
     MockHttpServletResponse response = new MockHttpServletResponse();
@@ -329,7 +330,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
    */
 
   @Test
-  public void testValidity14() throws Exception {
+  public void testValidity14() {
     MockHttpServletRequest request = new MockHttpServletRequest();
     setupNow(request, 2010, 10, 10);
     MockHttpServletResponse response = new MockHttpServletResponse();
@@ -349,7 +350,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
    */
 
   @Test
-  public void testValidity15() throws Exception {
+  public void testValidity15() {
     MockHttpServletRequest request = new MockHttpServletRequest();
     setupNow(request, 2010, 10, 10);
     MockHttpServletResponse response = new MockHttpServletResponse();
@@ -370,7 +371,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
    */
 
   @Test
-  public void testValidity16() throws Exception {
+  public void testValidity16() {
     MockHttpServletRequest request = new MockHttpServletRequest();
     setupNow(request, 2010, 10, 10);
     MockHttpServletResponse response = new MockHttpServletResponse();
@@ -390,7 +391,7 @@ public class ContentValidityInterceptorTest extends ContentBeanTestBase {
    */
 
   @Test
-  public void testValidity17() throws Exception {
+  public void testValidity17() {
     MockHttpServletRequest request = new MockHttpServletRequest();
     setupNow(request, 2010, 10, 10);
     MockHttpServletResponse response = new MockHttpServletResponse();

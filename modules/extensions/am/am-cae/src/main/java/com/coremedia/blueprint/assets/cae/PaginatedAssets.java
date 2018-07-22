@@ -2,8 +2,8 @@ package com.coremedia.blueprint.assets.cae;
 
 import com.coremedia.blueprint.assets.contentbeans.AMAsset;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +45,7 @@ public class PaginatedAssets {
    * @param pageCount   the total number of available pages
    * @param totalCount  the total number of assets
    */
-  public PaginatedAssets(@Nonnull List<AMAsset> assets, int currentPage, int pageCount, long totalCount) {
+  public PaginatedAssets(@NonNull List<AMAsset> assets, int currentPage, int pageCount, long totalCount) {
     this.assets = Collections.unmodifiableList(assets);
     if (pageCount > 0) {
       this.pageCount = pageCount;
@@ -62,7 +62,7 @@ public class PaginatedAssets {
    * @return the assets within the current page
    * @cm.template.api
    */
-  @Nonnull
+  @NonNull
   public List<AMAsset> getAssets() {
     return assets;
   }

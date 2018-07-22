@@ -116,6 +116,17 @@ const handler = argv => {
           name: "previewUrl",
           message: "Preview URL:",
           default: args.previewUrl,
+          // Entering "-" should lead to an empty previewUrl, so not even the default is taken
+          // TODO:
+          // As soon as https://github.com/SBoudrias/Inquirer.js/issues/590 is integrated, replace filter by new
+          // initialValue feature which is the args.previewUrl, so the user can just clear the input instead of typing
+          // "-".
+          filter: input => {
+            if (input === "-") {
+              return "";
+            }
+            return input;
+          },
           validate: input => !input || isValidURL(input),
         },
         {

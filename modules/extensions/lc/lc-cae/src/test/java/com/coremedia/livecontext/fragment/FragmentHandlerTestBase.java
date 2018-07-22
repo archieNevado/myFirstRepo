@@ -3,6 +3,7 @@ package com.coremedia.livecontext.fragment;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.cae.contentbeans.PageImpl;
+import com.coremedia.blueprint.cae.view.DynamicInclude;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
@@ -43,9 +44,11 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
@@ -221,7 +224,7 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
     when(fragmentParameters.getView()).thenReturn(VIEW);
     when(fragmentParameters.getParameter()).thenReturn(PLACEMENT);
 
-    when(storeContextProvider.findContextBySite(site)).thenReturn(storeContext);
+    when(storeContextProvider.findContextBySite(site)).thenReturn(Optional.of(storeContext));
     when(storeContext.getStoreId()).thenReturn(STORE_ID);
 
     when(resolveContextStrategy.resolveContext(any(Site.class), any(Product.class))).thenReturn(navigation);
@@ -305,7 +308,14 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
     assertNotNull(result.getModel());
     Object self = result.getModel().get("self");
     assertNotNull(self);
-    assertTrue(self instanceof PageGridPlacement);
+    assertTrue(self instanceof DynamicInclude);
+    DynamicInclude dynamicInclude  = (DynamicInclude) self;
+    assertTrue(dynamicInclude.getDelegate() instanceof PageGridPlacement);
+  }
+
+  protected Object unwrapDynamicIncludeModel(@NonNull ModelAndView modelAndView){
+    DynamicInclude dynamicInclude = (DynamicInclude) modelAndView.getModel().get("self");
+    return dynamicInclude.getDelegate();
   }
 
   protected void assertErrorPage(ModelAndView result, int expectedErrorCode) {

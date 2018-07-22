@@ -2,10 +2,11 @@ package com.coremedia.livecontext.ecommerce.ibm.inventory;
 
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractWcWrapperService;
-import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestServiceMethod;
 import org.springframework.http.HttpMethod;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -18,10 +19,13 @@ import static java.util.Collections.emptyMap;
  */
 public class WcAvailabilityWrapperService extends AbstractWcWrapperService {
 
-  private static final WcRestServiceMethod<Map, Void> GET_AVAILABILITY_FOR_PRODUCT_VARIANTS =
-          WcRestConnector.createServiceMethod(HttpMethod.GET,
-                  "store/{storeId}/inventoryavailability/{productVariantList}", false, true, Map.class);
+  private static final WcRestServiceMethod<Map, Void> GET_AVAILABILITY_FOR_PRODUCT_VARIANTS = WcRestServiceMethod
+          .builder(HttpMethod.GET, "store/{storeId}/inventoryavailability/{productVariantList}", Void.class, Map.class)
+          .requiresAuthentication(true)
+          .previewSupport(true)
+          .build();
 
+  @NonNull
   public Map<String, Object> getInventoryAvailability(String skuIds, StoreContext storeContext) {
     if (skuIds == null || skuIds.isEmpty()) {
       return emptyMap();
@@ -33,13 +37,9 @@ public class WcAvailabilityWrapperService extends AbstractWcWrapperService {
             .withLanguageId(storeContext)
             .build();
 
-    Map<String, Object> wcInventoryAvailabilityList = getRestConnector().callService(
-            GET_AVAILABILITY_FOR_PRODUCT_VARIANTS, variableValues, optionalParameters, null, storeContext, null);
-
-    if (wcInventoryAvailabilityList == null) {
-      return emptyMap();
-    }
-
-    return wcInventoryAvailabilityList;
+    return (Map<String, Object>) getRestConnector()
+            .callService(GET_AVAILABILITY_FOR_PRODUCT_VARIANTS, variableValues, optionalParameters, null, storeContext,
+                    null)
+            .orElseGet(Collections::emptyMap);
   }
 }

@@ -5,7 +5,7 @@ import com.coremedia.blueprint.common.contentbeans.CMCSS;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.content.Content;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -67,7 +67,7 @@ public abstract class CMCSSBase extends CMAbstractCodeImpl implements CMCSS {
    * @return a list of {@link CMCSS} objects
    */
   @Override
-  @Nonnull
+  @NonNull
   public List<? extends CMCSS> getInclude() {
     List<Content> contents = getContent().getLinks(INCLUDE);
     return createBeansFor(contents, CMCSS.class);

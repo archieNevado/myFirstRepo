@@ -1,22 +1,18 @@
 package com.coremedia.livecontext.ecommerce.ibm.pricing;
 
-import com.coremedia.cache.Cache;
-import com.coremedia.livecontext.ecommerce.ibm.catalog.WcCatalogWrapperService;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceCacheKey;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
+import com.coremedia.cache.Cache;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.ibm.catalog.WcCatalogWrapperService;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
-
 
 public class PersonalizedPriceByExternalIdCacheKey extends AbstractCommerceCacheKey<WcPrice> {
 
   private WcCatalogWrapperService wrapperService;
 
-  public PersonalizedPriceByExternalIdCacheKey(String id,
-                                               StoreContext storeContext,
-                                               UserContext userContext,
-                                               WcCatalogWrapperService wrapperService,
-                                               CommerceCache commerceCache) {
+  public PersonalizedPriceByExternalIdCacheKey(String id, StoreContext storeContext, UserContext userContext,
+                                               WcCatalogWrapperService wrapperService, CommerceCache commerceCache) {
     super(id, storeContext, userContext, CONFIG_KEY_DYNAMIC_PRICE, commerceCache);
     this.wrapperService = wrapperService;
   }
@@ -28,8 +24,5 @@ public class PersonalizedPriceByExternalIdCacheKey extends AbstractCommerceCache
 
   @Override
   public void addExplicitDependency(WcPrice wcProductPrice) {
-    //TODO
   }
-
-
 }

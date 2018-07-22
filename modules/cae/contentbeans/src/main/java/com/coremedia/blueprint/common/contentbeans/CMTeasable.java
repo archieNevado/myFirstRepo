@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.common.contentbeans;
 
+import com.coremedia.blueprint.common.cta.CallToActionButtonSettings;
 import com.coremedia.blueprint.common.teaserOverlay.TeaserOverlaySettings;
 import com.coremedia.blueprint.common.teaserOverlay.TeaserOverlayStyle;
 import com.coremedia.cae.aspect.Aspect;
@@ -115,12 +116,20 @@ public interface CMTeasable extends CMHasContexts {
   List<CMMedia> getMedia();
 
   /**
+   * Returns the first CMPicture stored in the document property {@link #PICTURES}.
+   *
+   * @return the first CMPicture stored in the document property {@link #PICTURES}
+   * @cm.template.api
+   */
+  CMPicture getPicture();
+
+  /**
    * Returns the first element of document property {@link #PICTURES}.
    *
    * @return the first element of the document property {@link #PICTURES}
    * @cm.template.api
    */
-  CMPicture getPicture();
+  CMMedia getFirstMedia();
 
   /**
    * Returns this. Overridden by standalone teasers.
@@ -239,4 +248,12 @@ public interface CMTeasable extends CMHasContexts {
    * @cm.template.api
    */
   TeaserOverlayStyle getTeaserOverlayStyle();
+
+  /**
+   * Returns the settings for all Call-To-Action buttons.
+   *
+   * @return the settings for all Call-To-Action buttons.
+   * @cm.template.api
+   */
+  List<CallToActionButtonSettings> getCallToActionSettings();
 }

@@ -2,6 +2,8 @@ package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.lc.test.CatalogServiceBaseTest;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.catalog.AxisFilter;
@@ -21,6 +23,7 @@ import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.storeinfo.StoreInfoService;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -28,7 +31,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.math.BigDecimal;
@@ -40,6 +42,7 @@ import java.util.Optional;
 import static com.coremedia.blueprint.lc.test.BetamaxTestHelper.useBetamaxTapes;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_8;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -90,7 +93,7 @@ public abstract class IbmCatalogServiceBaseTest extends CatalogServiceBaseTest {
   @Override
   public void setup() {
     doAnswer(invocationOnMock -> Optional.of(CurrentCommerceConnection.get())).when(commerceConnectionInitializer).findConnectionForSite(any(Site.class));
-    testConfig.setWcsVersion(storeInfoService.getWcsVersion());
+    storeInfoService.getWcsVersion().ifPresent(testConfig::setWcsVersion);
     super.setup();
   }
 
@@ -212,7 +215,7 @@ public abstract class IbmCatalogServiceBaseTest extends CatalogServiceBaseTest {
     assertNull(category);
   }
 
-  private StoreContext prepareContextsForContractBasedPreview(@Nonnull StoreContext storeContext) {
+  private StoreContext prepareContextsForContractBasedPreview(@NonNull StoreContext storeContext) {
     UserContext userContext = UserContext.builder().withUserName(testConfig.getPreviewUserName()).build();
     UserContextHelper.setCurrentContext(userContext);
 
@@ -231,9 +234,11 @@ public abstract class IbmCatalogServiceBaseTest extends CatalogServiceBaseTest {
     }
     assertNotNull(contract);
 
-    storeContext.setContractIdsForPreview(new String[]{contract.getExternalTechId()});
-
-    return storeContext;
+    List<String> contractIdsForPreview = singletonList(contract.getExternalTechId());
+    return StoreContextBuilderImpl
+            .from((StoreContextImpl) storeContext)
+            .withContractIdsForPreview(contractIdsForPreview)
+            .build();
   }
 
   @Override

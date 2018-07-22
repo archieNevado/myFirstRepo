@@ -1,4 +1,4 @@
-.cm-quickinfo--shop-now {
+.#{$cm-quickinfo-prefix}--shop-now {
   width: 514px;
 
   margin: 0 auto;
@@ -10,7 +10,7 @@
     display: none;
   }
 
-  .cm-quickinfo__price {
+  .#{$cm-quickinfo-prefix}__price {
     flex-direction: row;
     width: 254px; // 50% does not work
   }

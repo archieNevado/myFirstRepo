@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -31,13 +31,13 @@ public enum WcsVersion {
    * @param wcsVersion a version String, e.g., 7.6
    * @return the optional wcversion enum instance
    */
-  @Nonnull
-  public static Optional<WcsVersion> fromVersionString(@Nonnull String wcsVersion) {
+  @NonNull
+  public static Optional<WcsVersion> fromVersionString(@NonNull String wcsVersion) {
     return tryParseFloat(wcsVersion).flatMap(WcsVersion::findWcsVersion);
   }
 
-  @Nonnull
-  private static Optional<Float> tryParseFloat(@Nonnull String wcsVersion) {
+  @NonNull
+  private static Optional<Float> tryParseFloat(@NonNull String wcsVersion) {
     try {
       float parsed = Float.parseFloat(wcsVersion);
       return of(parsed);
@@ -46,12 +46,12 @@ public enum WcsVersion {
     }
   }
 
-  @Nonnull
-  private static Optional<WcsVersion> findWcsVersion(@Nonnull Float value) {
+  @NonNull
+  private static Optional<WcsVersion> findWcsVersion(@NonNull Float value) {
     return Stream.of(values()).filter(version1 -> value.compareTo(version1.version) == 0).findFirst();
   }
 
-  @Nonnull
+  @NonNull
   public String toVersionString() {
     return Float.toString(version);
   }
@@ -62,7 +62,7 @@ public enum WcsVersion {
    * @param wcsVersion another WCS version
    * @return true if this WCS version is less than the given WCS version
    */
-  public boolean lessThan(@Nonnull WcsVersion wcsVersion) {
+  public boolean lessThan(@NonNull WcsVersion wcsVersion) {
     return ordinal() < wcsVersion.ordinal();
   }
 }

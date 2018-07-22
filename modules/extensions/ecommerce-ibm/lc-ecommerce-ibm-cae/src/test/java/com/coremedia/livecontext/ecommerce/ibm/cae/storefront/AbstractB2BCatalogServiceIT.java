@@ -3,6 +3,7 @@ package com.coremedia.livecontext.ecommerce.ibm.cae.storefront;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.contract.Contract;
 import com.coremedia.livecontext.ecommerce.ibm.catalog.IbmCatalogServiceBaseTest;
@@ -10,7 +11,6 @@ import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.livecontext.ecommerce.user.UserSessionService;
-import com.google.common.collect.Iterables;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Collection;
 import java.util.List;
 
+import static com.coremedia.blueprint.lc.test.BetamaxTestHelper.useBetamaxTapes;
+import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_8;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -32,7 +34,7 @@ abstract class AbstractB2BCatalogServiceIT extends IbmCatalogServiceBaseTest {
   @Inject
   private UserSessionService userSessionService;
 
-  private String[] getContractIdsForUser(String user, String password) {
+  private List<String> getContractIdsForUser(String user, String password) {
     HttpServletRequest request = new MockHttpServletRequest();
     HttpServletResponse response = new MockHttpServletResponse();
 
@@ -42,24 +44,25 @@ abstract class AbstractB2BCatalogServiceIT extends IbmCatalogServiceBaseTest {
     boolean loginSuccess = userSessionService.loginUser(request, response, user, password);
     assertTrue(loginSuccess);
 
-    UserContext userContextAfterLogin = CurrentCommerceConnection.get().getUserContext();
+    CommerceConnection commerceConnection = CurrentCommerceConnection.get();
+
+    UserContext userContextAfterLogin = commerceConnection.getUserContext();
     assertNotNull(userContextAfterLogin.getCookieHeader());
 
     Collection<Contract> contractIdsForUser = contractService.findContractIdsForUser(userContextAfterLogin,
-            CurrentCommerceConnection.get().getStoreContext());
-    Iterable<String> contractIdsList = contractIdsForUser.stream()
+            commerceConnection.getStoreContext());
+    return contractIdsForUser.stream()
             .map(contract -> {
               assert contract != null;
               return contract.getExternalTechId();
             })
             .collect(toList());
-    return Iterables.toArray(contractIdsList, String.class);
   }
 
   protected void testFindSubCategoriesWithContract() throws Exception {
-    /*if (useBetamaxTapes() || StoreContextHelper.getWcsVersion(testConfig.getStoreContext()).lessThan(WCS_VERSION_7_8)) {
+    if (useBetamaxTapes() || StoreContextHelper.getWcsVersion(testConfig.getStoreContext()).lessThan(WCS_VERSION_7_8)) {
       return;
-    }*/
+    }
 
     StoreContext storeContext = testConfig.getB2BStoreContext();
     StoreContextHelper.setCurrentContext(storeContext);
@@ -74,7 +77,7 @@ abstract class AbstractB2BCatalogServiceIT extends IbmCatalogServiceBaseTest {
     assertTrue(subCategoriesNoContract.size() >= 3);
 
     //test b2b categories with contract
-    String[] contractIds = getContractIdsForUser("bmiller", "passw0rd");
+    List<String> contractIds = getContractIdsForUser("bmiller", "passw0rd");
 
     storeContext.setContractIds(contractIds);
     category = findAndAssertCategory("Fasteners", null, storeContext);

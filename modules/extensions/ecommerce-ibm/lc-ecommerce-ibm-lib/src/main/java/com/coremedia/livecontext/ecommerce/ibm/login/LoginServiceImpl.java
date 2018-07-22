@@ -2,13 +2,15 @@ package com.coremedia.livecontext.ecommerce.ibm.login;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommerceRemoteException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.UnauthorizedException;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
+import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 import com.coremedia.security.encryption.util.EncryptionServiceUtil;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
@@ -18,19 +20,20 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
+
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.WORKSPACE_ID_NONE;
 
 /**
  * Service interface to logon to the IBM WCS catalog.
@@ -39,7 +42,7 @@ public class LoginServiceImpl implements LoginService, InitializingBean, Disposa
 
   private static final Logger LOG = LoggerFactory.getLogger(LoginServiceImpl.class);
 
-  private static final String REQUEST_ATTRIB_PREVIEW_TOKEN = LoginServiceImpl.class.getName()+"#previewToken";
+  private static final String REQUEST_ATTRIB_PREVIEW_TOKEN = LoginServiceImpl.class.getName() + "#previewToken";
   private static final String ERROR_CODE_NOT_AUTHORIZED = "2110";
 
   private String serviceUser;
@@ -73,6 +76,7 @@ public class LoginServiceImpl implements LoginService, InitializingBean, Disposa
    * {@link #afterPropertiesSet} ensures that {@link #previewTokenLifeTimeInSeconds} is at least twice as long as
    * {@link PreviewTokenCacheKey#CONFIG_KEY_PREVIEW_TOKEN} cache setting in {@link CommerceCache#setCacheTimesInSeconds(Map)}
    * to avoid outdated previewToken in cache.
+   *
    * @param previewTokenLifeTimeInSeconds (default is 3 hours, might be increased by higher cache duration times)
    */
   public void setPreviewTokenLifeTimeInSeconds(long previewTokenLifeTimeInSeconds) {
@@ -103,11 +107,12 @@ public class LoginServiceImpl implements LoginService, InitializingBean, Disposa
     //uapi cache key shall always expire before commerce previewToken expires
     if (previewTokenLifeTimeInSeconds < (cacheDurationInSeconds * 2)) {
       previewTokenLifeTimeInSeconds = cacheDurationInSeconds * 2;
-      LOG.info("increasing previewTokenLifeTimeInSeconds to (cacheDurationInSeconds * 2) = "+previewTokenLifeTimeInSeconds);
+      LOG.info("Increasing previewTokenLifeTimeInSeconds to (cacheDurationInSeconds * 2) = {}",
+              previewTokenLifeTimeInSeconds);
     }
   }
 
-  private static void checkRequiredPropertyNotNull(String propertyName, Object propertyValue) {
+  private static void checkRequiredPropertyNotNull(@NonNull String propertyName, Object propertyValue) {
     Objects.requireNonNull(propertyValue, "Required property not set: " + propertyName);
   }
 
@@ -120,15 +125,15 @@ public class LoginServiceImpl implements LoginService, InitializingBean, Disposa
     credentialsByStore.clear();
   }
 
+  @Nullable
   @Override
-  public WcCredentials loginIdentity(String username, String password, @Nonnull StoreContext context) {
+  public WcCredentials loginIdentity(String username, String password, @NonNull StoreContext context) {
     try {
-      WcSession session = loginWrapperService.login(username, password, context);
+      WcSession session = loginWrapperService.login(username, password, context).orElse(null);
       if (session != null) {
         return new SimpleCommerceCredentials(StoreContextHelper.getStoreId(context), session);
       }
-    }
-    catch (CommerceRemoteException e) {
+    } catch (CommerceRemoteException e) {
       // with fep7 a CommerceRemoteException occurs when the user cannot be authorized
       // to have it uniformly we map it to an UnauthorizedException
       if (ERROR_CODE_NOT_AUTHORIZED.equals(e.getErrorCode())) {
@@ -139,22 +144,23 @@ public class LoginServiceImpl implements LoginService, InitializingBean, Disposa
     return null;
   }
 
+  @Nullable
   @Override
-  public synchronized WcCredentials loginServiceIdentity(@Nonnull StoreContext context) {
+  public synchronized WcCredentials loginServiceIdentity(@NonNull StoreContext context) {
     String storeId = StoreContextHelper.getStoreId(context);
     WcCredentials result = credentialsByStore.get(storeId);
     if (result == null) {
       result = loginIdentity(
               CommercePropertyHelper.replaceTokens(serviceUser, context),
               CommercePropertyHelper.replaceTokens(servicePassword, context), context);
-        credentialsByStore.put(storeId, result);
-      }
+      credentialsByStore.put(storeId, result);
+    }
     return result;
   }
 
-  @Override
   @Nullable
-  public WcPreviewToken getPreviewToken(@Nonnull StoreContext context) {
+  @Override
+  public WcPreviewToken getPreviewToken(@NonNull StoreContext context) {
     WcPreviewToken result = null;
 
     HttpServletRequest request = getRequest();
@@ -167,30 +173,25 @@ public class LoginServiceImpl implements LoginService, InitializingBean, Disposa
     }
 
     try {
-      String workspaceId = StoreContextHelper.getWorkspaceId(context);
-      workspaceId = StoreContextImpl.NO_WS_MARKER.equals(workspaceId) ? null : workspaceId;
-      String cmFormattedPreviewDate = StoreContextHelper.getPreviewDate(context);
-      String ibmFormmattedPreviewDate = null;
-      String timezone = null;
-      if (cmFormattedPreviewDate != null) {
-        Calendar cal = parsePreviewDateIntoCalendar(cmFormattedPreviewDate);
-        if (cal != null) {
-          TimeZone tz = cal.getTimeZone();
-          if (tz != null) {
-            timezone = tz.getID();
-          }
-          SimpleDateFormat ibmPreviewDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-          ibmFormmattedPreviewDate = ibmPreviewDateFormat.format(cal.getTime());
-        }
-      }
-      boolean isTimeFixed = context.getPreviewDate() != null;
+      String workspaceIdStr = context.getWorkspaceId()
+              .filter(workspaceId -> !workspaceId.equals(WORKSPACE_ID_NONE))
+              .map(WorkspaceId::value)
+              .orElse(null);
+      Optional<ZonedDateTime> cmPreviewDate = context.getPreviewDate();
+      String ibmFormattedPreviewDate = cmPreviewDate
+              .map(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")::format)
+              .orElse(null);
+      String timezone = cmPreviewDate
+              .map(date -> TimeZone.getTimeZone(date.getZone()).getID())
+              .orElse(null);
+      boolean isTimeFixed = cmPreviewDate.isPresent();
 
       WcPreviewTokenParam previewTokenParam = new WcPreviewTokenParam(
-              workspaceId,
-              ibmFormmattedPreviewDate,
+              workspaceIdStr,
+              ibmFormattedPreviewDate,
               timezone,
               isTimeFixed ? "true" : "false",
-              StoreContextHelper.getUserSegments(context),
+              context.getUserSegments(),
               String.valueOf(Math.max(1, previewTokenLifeTimeInSeconds / 60))
       );
 
@@ -208,12 +209,12 @@ public class LoginServiceImpl implements LoginService, InitializingBean, Disposa
   }
 
   @Override
-  public boolean logoutServiceIdentity(@Nonnull StoreContext context) {
+  public boolean logoutServiceIdentity(@NonNull StoreContext context) {
     return invalidateCredentialsForStore(context);
   }
 
   @Override
-  public WcCredentials renewServiceIdentityLogin(@Nonnull StoreContext context) {
+  public WcCredentials renewServiceIdentityLogin(@NonNull StoreContext context) {
     logoutServiceIdentity(context);
     StoreContextHelper.setCredentials(context, null);
     return loginServiceIdentity(context);
@@ -224,28 +225,29 @@ public class LoginServiceImpl implements LoginService, InitializingBean, Disposa
     credentialsByStore.clear();
   }
 
-  private synchronized boolean invalidateCredentialsForStore(StoreContext storeContext) {
-    WcCredentials credentials = credentialsByStore.remove(StoreContextHelper.getStoreId(storeContext));
-    boolean result = false;
-    if (credentials != null) {
-      result = logout(StoreContextHelper.getStoreId(storeContext));
-    }
-    return result;
+  private synchronized boolean invalidateCredentialsForStore(@NonNull StoreContext storeContext) {
+    String storeId = StoreContextHelper.getStoreId(storeContext);
+
+    WcCredentials credentials = credentialsByStore.remove(storeId);
+    return credentials != null && logout(storeId);
   }
 
   private boolean logout(String storeId) {
     try {
       return loginWrapperService.logout(storeId);
     } catch (Exception e) {
+      StoreContext storeContext = StoreContextHelper.findCurrentContext().orElse(null);
+
       // NOSONAR
       LOG.warn("Ignoring error while closing REST session for user '{}', store {} ({})",
-              CommercePropertyHelper.replaceTokens(serviceUser, StoreContextHelper.getCurrentContext()),
+              CommercePropertyHelper.replaceTokens(serviceUser, storeContext),
               storeId, e.getMessage());
     }
     return false;
   }
 
-  private HttpServletRequest getRequest() {
+  @Nullable
+  private static HttpServletRequest getRequest() {
     RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
     if (requestAttributes instanceof ServletRequestAttributes) {
       return ((ServletRequestAttributes) requestAttributes).getRequest();
@@ -253,22 +255,13 @@ public class LoginServiceImpl implements LoginService, InitializingBean, Disposa
     return null;
   }
 
-  private static Calendar parsePreviewDateIntoCalendar(String previewDate) {
-    Calendar calendar = null;
-    if (previewDate != null && !previewDate.isEmpty()) {
-      try {
-        calendar = Calendar.getInstance();
-        TimeZone timeZone = TimeZone.getTimeZone(previewDate.substring(previewDate.lastIndexOf(' ') + 1));
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-        //sdf.setTimeZone(timeZone);
-        Date parsedDate = sdf.parse(previewDate.substring(0, previewDate.lastIndexOf(' ')));
-        calendar.setTime(parsedDate);
-        calendar.setTimeZone(timeZone);
-        calendar.getTime();
-      } catch (ParseException e) {
-        LOG.warn("error parsing previewDate " + previewDate, e);
-      }
-    }
+  @NonNull
+  private static Calendar createCalendar(@NonNull Date date, @NonNull TimeZone timeZone) {
+    Calendar calendar = Calendar.getInstance();
+
+    calendar.setTime(date);
+    calendar.setTimeZone(timeZone);
+
     return calendar;
   }
 }

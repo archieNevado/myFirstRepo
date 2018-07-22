@@ -4,7 +4,7 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 /**
  * Immutable instances of ProductInSite.
@@ -13,18 +13,18 @@ public class ProductInSiteImpl implements ProductInSite {
   private final Product product;
   private final Site site;
 
-  public ProductInSiteImpl(@Nonnull Product product, @Nonnull Site site) {
+  public ProductInSiteImpl(@NonNull Product product, @NonNull Site site) {
     this.product = product;
     this.site = site;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public Product getProduct() {
     return product;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public Site getSite() {
     return site;

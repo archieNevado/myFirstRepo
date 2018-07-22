@@ -20,8 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -138,7 +138,7 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public List<Category> getChildren() {
     if (isRoot()) {
       CatalogAlias catalogAlias = getId().getCatalogAlias();
@@ -148,7 +148,7 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public List<Product> getProducts() {
     return getCatalogService().findProductsByCategory(this);
   }
@@ -180,7 +180,7 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public List<Category> getBreadcrumb() {
     List<Category> result = new ArrayList<>();
 
@@ -317,7 +317,7 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
     return getStringValueFromDelegate("title");
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public String getDisplayName() {
     if (!isRoot()) {
@@ -330,8 +330,8 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
     return withDefaultCatalogName(catalogName.orElseGet(this::getExternalId));
   }
 
-  @Nonnull
-  private String withDefaultCatalogName(@Nonnull String catalogName) {
+  @NonNull
+  private String withDefaultCatalogName(@NonNull String catalogName) {
     return DEFAULT_CATALOG_ALIAS.equals(getCatalogAlias()) ? catalogName + " (Default)" : catalogName;
   }
 
@@ -349,7 +349,7 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
     return getPictures().stream().findFirst().orElse(null);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<Content> getPictures() {
     return findAssetService()
@@ -357,7 +357,7 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
             .orElseGet(Collections::emptyList);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<Content> getVisuals() {
     return findAssetService()
@@ -365,7 +365,7 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
             .orElseGet(Collections::emptyList);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<Content> getDownloads() {
     return findAssetService()
@@ -377,12 +377,12 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
     return isRootCategoryId(getId());
   }
 
-  static boolean isRootCategoryId(@Nonnull CommerceId id) {
+  static boolean isRootCategoryId(@NonNull CommerceId id) {
     return id.getExternalId().map(ROOT_CATEGORY_ROLE_ID::equals).orElse(false);
   }
 
   @Nullable
-  private String getStringValueFromDelegate(@Nonnull String key) {
+  private String getStringValueFromDelegate(@NonNull String key) {
     return findStringValue(getDelegate(), key).orElse(null);
   }
 }

@@ -6,12 +6,10 @@ import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.xml.Markup;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -21,8 +19,6 @@ import static com.coremedia.livecontext.contentbeans.ProductTeasableHelper.isNul
 import static com.coremedia.xml.MarkupUtil.isEmptyRichtext;
 
 public class CMProductTeaserImpl extends CMTeasableImpl implements CMProductTeaser {
-
-  private static final Logger LOG = LoggerFactory.getLogger(CMProductTeaserImpl.class);
 
   private ProductTeasableHelper productTeasableHelper;
 
@@ -92,13 +88,14 @@ public class CMProductTeaserImpl extends CMTeasableImpl implements CMProductTeas
     return tt;
   }
 
-  @Override
   @Nullable
+  @Override
   public ProductInSite getProductInSite() {
     return productTeasableHelper.getProductInSite(this);
   }
 
-  @Nonnull
+  @NonNull
+  @Override
   public String getExternalId() {
     String externalId = getContent().getString(EXTERNAL_ID);
     return externalId == null ? "" : externalId.trim();

@@ -11,7 +11,7 @@ import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -55,7 +55,7 @@ public class XmpImageMetadataExtractorTest {
     assertThat(apply.entrySet(), Matchers.<Map.Entry<String, String>>empty());
   }
 
-  @Nonnull
+  @NonNull
   private Map<String, String> getMetadataMap(URL resource) throws ImageProcessingException, IOException, URISyntaxException {
     Objects.requireNonNull(resource, "Unable to find resource.");
     Metadata metadata = ImageMetadataReader.readMetadata(new File(resource.toURI()));

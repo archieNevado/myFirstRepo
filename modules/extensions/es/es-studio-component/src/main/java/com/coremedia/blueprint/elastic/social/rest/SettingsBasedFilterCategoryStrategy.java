@@ -9,7 +9,7 @@ import com.coremedia.elastic.social.rest.api.FilterCategoryStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.ArrayList;
@@ -75,7 +75,7 @@ public class SettingsBasedFilterCategoryStrategy implements FilterCategoryStrate
     }
   }
 
-  private void addCategory(List<CategoryKeyAndDisplay> categories, @Nonnull CategoryKeyAndDisplay category) {
+  private void addCategory(List<CategoryKeyAndDisplay> categories, @NonNull CategoryKeyAndDisplay category) {
     if (!categories.contains(category)) {
       categories.add(category);
     }

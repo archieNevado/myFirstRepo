@@ -14,8 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
@@ -38,7 +38,7 @@ public class LiveContextSiteResolverImpl implements LiveContextSiteResolver {
 
   @Nullable
   @Override
-  public Site findSiteFor(@Nonnull FragmentParameters fragmentParameters) {
+  public Site findSiteFor(@NonNull FragmentParameters fragmentParameters) {
     Site site = findSiteForEnvironment(fragmentParameters.getLocale(), fragmentParameters.getEnvironment());
     if (site != null) {
       return site;
@@ -49,7 +49,7 @@ public class LiveContextSiteResolverImpl implements LiveContextSiteResolver {
 
   @Nullable
   @Override
-  public Site findSiteFor(@Nonnull String storeId, @Nonnull Locale locale) {
+  public Site findSiteFor(@NonNull String storeId, @NonNull Locale locale) {
     Set<Site> matchingSites = sitesService.getSites().stream()
             .filter(site -> localeMatchesSite(site, locale))
             .filter(site -> siteHasStore(site, storeId))
@@ -73,7 +73,7 @@ public class LiveContextSiteResolverImpl implements LiveContextSiteResolver {
 
   // --- internal ---------------------------------------------------
 
-  private boolean siteHasStore(@Nonnull Site site, @Nonnull String storeId) {
+  private boolean siteHasStore(@NonNull Site site, @NonNull String storeId) {
     StoreContext storeContext;
 
     try {
@@ -93,7 +93,7 @@ public class LiveContextSiteResolverImpl implements LiveContextSiteResolver {
     return storeId.equalsIgnoreCase(String.valueOf(storeContext.getStoreId()));
   }
 
-  private static boolean localeMatchesSite(@Nonnull Site site, @Nonnull Locale locale) {
+  private static boolean localeMatchesSite(@NonNull Site site, @NonNull Locale locale) {
     Locale siteLocale = site.getLocale();
     return locale.equals(siteLocale) ||
             (isNullOrEmpty(siteLocale.getCountry()) && locale.getLanguage().equals(siteLocale.getLanguage()));
@@ -107,8 +107,11 @@ public class LiveContextSiteResolverImpl implements LiveContextSiteResolver {
    * @return The site that was resolved by the environment (name matching by default).
    */
   @Nullable
-  private Site findSiteForEnvironment(@Nonnull Locale locale, @Nullable String environment) {
-    @SuppressWarnings({"squid:S2259"})
+  private Site findSiteForEnvironment(@NonNull Locale locale, @Nullable String environment) {
+    if (environment == null) {
+      return null;
+    }
+
     String siteName = extractSiteNameFromEnvironment(environment);
     if (siteName == null) {
       return null;
@@ -132,12 +135,8 @@ public class LiveContextSiteResolverImpl implements LiveContextSiteResolver {
   }
 
   @Nullable
-  private static String extractSiteNameFromEnvironment(@Nullable String environment) {
-    if (isNullOrEmpty(environment)) {
-      return null;
-    }
-
-    if (!environment.startsWith("site:")) { // NOSONAR (squid:S2259)
+  private static String extractSiteNameFromEnvironment(@NonNull String environment) {
+    if (isNullOrEmpty(environment) || !environment.startsWith("site:")) { // NOSONAR - Workaround for spotbugs/spotbugs#621, see CMS-12169
       return null;
     }
 

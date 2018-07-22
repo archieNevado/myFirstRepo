@@ -12,8 +12,8 @@ import com.coremedia.livecontext.ecommerce.inventory.AvailabilityInfo;
 import com.coremedia.livecontext.ecommerce.inventory.AvailabilityService;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,7 +59,7 @@ public class ProductImpl extends ProductBase {
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public List<String> getVariantAxisNames() {
     if (variantAxis == null) {
       List<String> newVariantAxis = new ArrayList<>();
@@ -75,7 +75,7 @@ public class ProductImpl extends ProductBase {
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public List<ProductVariant> getVariants() {
     if (variants == null) {
       List<ProductVariant> newVariants = new ArrayList<>();
@@ -113,7 +113,7 @@ public class ProductImpl extends ProductBase {
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public List<ProductVariant> getVariants(@Nullable List<VariantFilter> filters) {
     List<ProductVariant> result = new ArrayList<>();
     List<ProductVariant> allVariants = getVariants();
@@ -136,7 +136,7 @@ public class ProductImpl extends ProductBase {
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public List<ProductVariant> getVariants(VariantFilter filter) {
     if (filter == null) {
       return getVariants(emptyList());
@@ -146,7 +146,7 @@ public class ProductImpl extends ProductBase {
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public Map<ProductVariant, AvailabilityInfo> getAvailabilityMap() {
     return availabilityService.getAvailabilityInfo(this.getVariants());
   }
@@ -175,8 +175,8 @@ public class ProductImpl extends ProductBase {
   }
 
   @Override
-  @Nonnull
-  public List<Object> getVariantAxisValues(@Nonnull String axisName, @Nonnull List<VariantFilter> filters) {
+  @NonNull
+  public List<Object> getVariantAxisValues(@NonNull String axisName, @NonNull List<VariantFilter> filters) {
     List<Object> result = new ArrayList<>();
 
     List<ProductVariant> availableProducts = getVariants(filters);
@@ -190,8 +190,8 @@ public class ProductImpl extends ProductBase {
   }
 
   @Override
-  @Nonnull
-  public List<Object> getVariantAxisValues(@Nonnull String axisName, @Nullable VariantFilter filter) {
+  @NonNull
+  public List<Object> getVariantAxisValues(@NonNull String axisName, @Nullable VariantFilter filter) {
     if (filter == null) {
       return getVariantAxisValues(axisName, emptyList());
     }

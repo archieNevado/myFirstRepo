@@ -2,6 +2,8 @@
 <#-- @ftlvariable name="claimModifier" type="java.lang.String" -->
 <#-- @ftlvariable name="isInSidebar" type="java.lang.Boolean" -->
 
+<#import "*/node_modules/@coremedia/brick-bootstrap/src/freemarkerLibs/bootstrap.ftl" as bootstrap />
+
 <#assign claimModifier=cm.localParameter("claimModifier", "") />
 <#assign isInSidebar=cm.localParameter("isInSidebar", false) />
 <#assign items=self.flattenedItems![] />
@@ -13,9 +15,9 @@
     <div class="row">
       <#list items as item>
         <#-- add new row -->
-        <@bp.renderNewRow item_index itemsPerRow />
+        <@bootstrap.renderNewRow item_index itemsPerRow />
         <#-- render the items as claim teaser -->
-        <#assign offsetClassTablet=bp.getOffsetClass(item_index, numberOfItems, itemsPerRow, " col-sm-") />
+        <#assign offsetClassTablet=bootstrap.getOffsetClass(item_index, numberOfItems, itemsPerRow, " col-sm-") />
         <#assign columnClasses="col-xs-12 col-sm-4 ${offsetClassTablet}" />
         <#if isInSidebar>
           <#assign columnClasses=columnClasses + " col-md-12 col-md-offset-0" />

@@ -2,8 +2,8 @@ package com.coremedia.blueprint.assets.contentbeans;
 
 import com.coremedia.cap.common.CapBlobRef;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 /**
  * Represents a single rendition defined in an {@link AMAsset} bean.
@@ -18,7 +18,7 @@ public interface AMAssetRendition {
    * @return the asset the rendition is stored in.
    * @cm.template.api
    */
-  @Nonnull
+  @NonNull
   AMAsset getAsset();
 
   /**
@@ -28,7 +28,7 @@ public interface AMAssetRendition {
    * @return name of the rendition which is also the name of the document type property
    * @cm.template.api
    */
-  @Nonnull
+  @NonNull
   String getName();
 
   /**

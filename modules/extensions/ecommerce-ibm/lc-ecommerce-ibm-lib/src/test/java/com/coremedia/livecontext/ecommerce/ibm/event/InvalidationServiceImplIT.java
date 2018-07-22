@@ -71,7 +71,7 @@ public class InvalidationServiceImplIT extends IbmServiceTestBase {
 
   @Test(expected = CommerceException.class)
   public void testPollCacheInvalidationsError() throws Exception {
-    String origServiceEndpoint = restConnector.getServiceEndpoint(StoreContextHelper.getCurrentContext());
+    String origServiceEndpoint = restConnector.getServiceEndpoint(StoreContextHelper.getCurrentContextOrThrow());
     try {
       restConnector.setServiceEndpoint("http://does.not.exists/blub");
       invalidationService.getInvalidations(0, getStoreContext());

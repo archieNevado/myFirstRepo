@@ -7,8 +7,8 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.fragment.FragmentParameters;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 /**
  * External Content resolver for 'externalRef' values "cm-seosegment:<optionalstring>--<optionalcontextid>-<contentid>"
@@ -26,7 +26,7 @@ public class ContentSeoSegmentExternalReferenceResolver extends ExternalReferenc
   // --- interface --------------------------------------------------
 
   @Override
-  protected boolean include(@Nonnull FragmentParameters fragmentParameters, @Nonnull String referenceInfo) {
+  protected boolean include(@NonNull FragmentParameters fragmentParameters, @NonNull String referenceInfo) {
     Ids ids = parseExternalReferenceInfo(referenceInfo);
     return ids != null
             && IdHelper.isDocument(ids.contentId)
@@ -35,9 +35,9 @@ public class ContentSeoSegmentExternalReferenceResolver extends ExternalReferenc
 
   @Nullable
   @Override
-  protected LinkableAndNavigation resolveExternalRef(@Nonnull FragmentParameters fragmentParameters,
-                                                     @Nonnull String referenceInfo,
-                                                     @Nonnull Site site) {
+  protected LinkableAndNavigation resolveExternalRef(@NonNull FragmentParameters fragmentParameters,
+                                                     @NonNull String referenceInfo,
+                                                     @NonNull Site site) {
     Ids ids = parseExternalReferenceInfo(referenceInfo);
     if (ids == null) {
       return null;
@@ -49,12 +49,12 @@ public class ContentSeoSegmentExternalReferenceResolver extends ExternalReferenc
 
 // --- internal ---------------------------------------------------
 
-  private Content resolveLinkable(@Nonnull Ids ids) {
+  private Content resolveLinkable(@NonNull Ids ids) {
     String capId = IdHelper.formatContentId(ids.contentId);
     return contentRepository.getContent(capId);
   }
 
-  private Content resolveNavigation(@Nonnull Ids ids) {
+  private Content resolveNavigation(@NonNull Ids ids) {
     if (ids.contextId == null) {
       return null;
     }
@@ -64,7 +64,7 @@ public class ContentSeoSegmentExternalReferenceResolver extends ExternalReferenc
   }
 
 
-  public static Ids parseExternalReferenceInfo(@Nonnull String externalRef) {
+  public static Ids parseExternalReferenceInfo(@NonNull String externalRef) {
     try {
       if (!externalRef.contains(SEO_SEGMENT_ID_DELIMITER_INFIX)) {
         return null;

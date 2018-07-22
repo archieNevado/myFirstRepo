@@ -13,12 +13,8 @@ public class FindCommercePersonCacheKey extends AbstractCommerceCacheKey<Map<Str
 
   private WcPersonWrapperService wrapperService;
 
-  public FindCommercePersonCacheKey(
-          String id,
-          StoreContext storeContext,
-          UserContext userContext,
-          WcPersonWrapperService wrapperService,
-          CommerceCache commerceCache) {
+  public FindCommercePersonCacheKey(String id, StoreContext storeContext, UserContext userContext,
+                                    WcPersonWrapperService wrapperService, CommerceCache commerceCache) {
     super(id, storeContext, userContext, CONFIG_KEY_FIND_CURRENT_USER, commerceCache);
     this.wrapperService = wrapperService;
   }
@@ -38,7 +34,13 @@ public class FindCommercePersonCacheKey extends AbstractCommerceCacheKey<Map<Str
 
   @Override
   protected String getCacheIdentifier() {
-    return id + ":" + configKey + ":" + storeContext.getSiteId() + ":" + user + ":" +
-            storeContext.getStoreId() + ":" + storeContext.getLocale();
+    return assembleCacheIdentifier(
+            id,
+            configKey,
+            storeContext.getSiteId(),
+            user,
+            storeContext.getStoreId(),
+            storeContext.getLocale()
+    );
   }
 }

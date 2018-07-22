@@ -2,13 +2,16 @@ package com.coremedia.livecontext.ecommerce.ibm.storeinfo;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceCacheKey;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogName;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.annotation.PostConstruct;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TimeZone;
 
 public class StoreInfoService {
@@ -18,40 +21,48 @@ public class StoreInfoService {
   private int delayOnError;
   private StoreInfoCacheKey storeInfoCacheKey;
 
-  public String getStoreId(String storeName) {
+  @NonNull
+  public Optional<String> getStoreId(String storeName) {
     Map<String, Object> storeInfos = commerceCache.get(storeInfoCacheKey);
-    return DataMapHelper.findStringValue(storeInfos, "stores." + storeName + ".storeId").orElse(null);
+    return DataMapHelper.findStringValue(storeInfos, "stores." + storeName + ".storeId");
   }
 
-  public String getDefaultCatalogId(String storeName) {
+  @NonNull
+  public Optional<CatalogId> getDefaultCatalogId(String storeName) {
     Map<String, Object> storeInfos = commerceCache.get(storeInfoCacheKey);
-    return DataMapHelper.findStringValue(storeInfos, "stores." + storeName + ".defaultCatalogId").orElse(null);
+    return DataMapHelper.findStringValue(storeInfos, "stores." + storeName + ".defaultCatalogId")
+            .map(CatalogId::of);
   }
 
-  public String getDefaultCatalogName(String storeName) {
+  @NonNull
+  public Optional<CatalogName> getDefaultCatalogName(String storeName) {
     Map<String, Object> storeInfos = commerceCache.get(storeInfoCacheKey);
-    return DataMapHelper.findStringValue(storeInfos, "stores." + storeName + ".defaultCatalog").orElse(null);
+    return DataMapHelper.findStringValue(storeInfos, "stores." + storeName + ".defaultCatalog")
+            .map(CatalogName::of);
   }
 
-  public String getCatalogId(String storeName, String catalogName) {
+  @NonNull
+  public Optional<CatalogId> getCatalogId(String storeName, String catalogName) {
     Map<String, Object> storeInfos = commerceCache.get(storeInfoCacheKey);
-    return DataMapHelper.findStringValue(storeInfos, "stores." + storeName + ".catalogs." + catalogName).orElse(null);
+    return DataMapHelper.findStringValue(storeInfos, "stores." + storeName + ".catalogs." + catalogName)
+            .map(CatalogId::of);
   }
 
   public Map<String, Object> getStoreInfos() {
     return commerceCache.get(storeInfoCacheKey);
   }
 
-  @Nonnull
+  @NonNull
   public TimeZone getTimeZone() {
     Map<String, Object> storeInfos = commerceCache.get(storeInfoCacheKey);
     String sTimeZoneId = DataMapHelper.findStringValue(storeInfos, "serverTimezoneId").orElse(null);
     return TimeZone.getTimeZone(sTimeZoneId);
   }
 
-  public String getWcsVersion() {
+  @NonNull
+  public Optional<String> getWcsVersion() {
     Map<String, Object> storeInfos = commerceCache.get(storeInfoCacheKey);
-    return DataMapHelper.findStringValue(storeInfos, "wcsVersion").orElse(null);
+    return DataMapHelper.findStringValue(storeInfos, "wcsVersion");
   }
 
   public boolean isAvailable() {
@@ -84,6 +95,7 @@ public class StoreInfoService {
 
   @PostConstruct
   void initialize() {
-    storeInfoCacheKey = new StoreInfoCacheKey(AbstractCommerceCacheKey.CONFIG_KEY_STORE_INFO, wrapperService, commerceCache, delayOnError);
+    storeInfoCacheKey = new StoreInfoCacheKey(AbstractCommerceCacheKey.CONFIG_KEY_STORE_INFO, wrapperService,
+            commerceCache, delayOnError);
   }
 }

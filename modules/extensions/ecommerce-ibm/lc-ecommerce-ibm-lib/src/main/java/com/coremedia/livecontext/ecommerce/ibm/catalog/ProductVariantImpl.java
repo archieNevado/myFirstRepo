@@ -13,8 +13,8 @@ import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.inventory.AvailabilityInfoImpl;
 import com.coremedia.livecontext.ecommerce.inventory.AvailabilityInfo;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -82,7 +82,7 @@ public class ProductVariantImpl extends ProductBase implements ProductVariant {
 
   @Override
   @Nullable
-  public Object getAttributeValue(@Nonnull String attributeId) {
+  public Object getAttributeValue(@NonNull String attributeId) {
     notNull(attributeId);
 
     List<ProductAttribute> attributes = getDefiningAttributes();
@@ -103,7 +103,7 @@ public class ProductVariantImpl extends ProductBase implements ProductVariant {
   // Methods that are directed to the parent product (for sake of convenience)
   //...
 
-  @Nonnull
+  @NonNull
   @Override
   public List<String> getVariantAxisNames() {
     Product parent = getParent();
@@ -111,42 +111,42 @@ public class ProductVariantImpl extends ProductBase implements ProductVariant {
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public List<ProductVariant> getVariants() {
     Product parent = getParent();
     return parent != null ? parent.getVariants() : Collections.emptyList();
   }
 
   @Override
-  @Nonnull
-  public List<ProductVariant> getVariants(@Nonnull List<VariantFilter> filters) {
+  @NonNull
+  public List<ProductVariant> getVariants(@NonNull List<VariantFilter> filters) {
     Product parent = getParent();
     return parent != null ? parent.getVariants(filters) : Collections.emptyList();
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public List<ProductVariant> getVariants(@Nullable VariantFilter filter) {
     Product parent = getParent();
     return parent != null ? parent.getVariants(filter) : Collections.emptyList();
   }
 
   @Override
-  @Nonnull
-  public List<Object> getVariantAxisValues(@Nonnull String axisName, @Nonnull List<VariantFilter> filters) {
+  @NonNull
+  public List<Object> getVariantAxisValues(@NonNull String axisName, @NonNull List<VariantFilter> filters) {
     Product parent = getParent();
     return parent != null ? parent.getVariantAxisValues(axisName, filters) : Collections.emptyList();
   }
 
   @Override
-  @Nonnull
-  public List<Object> getVariantAxisValues(@Nonnull String axisName, @Nullable VariantFilter filter) {
+  @NonNull
+  public List<Object> getVariantAxisValues(@NonNull String axisName, @Nullable VariantFilter filter) {
     Product parent = getParent();
     return parent != null ? parent.getVariantAxisValues(axisName, filter) : Collections.emptyList();
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public Map<ProductVariant, AvailabilityInfo> getAvailabilityMap() {
     Product parent = getParent();
     return parent != null ? parent.getAvailabilityMap() : Collections.emptyMap();
@@ -179,7 +179,7 @@ public class ProductVariantImpl extends ProductBase implements ProductVariant {
     }
   }
 
-  private void mergeParentAttributes(@Nonnull Product parent) {
+  private void mergeParentAttributes(@NonNull Product parent) {
     List<ProductAttribute> myDescribingAttributes = getDescribingAttributes();
     List<ProductAttribute> parentDescribingAttributes = parent.getDescribingAttributes();
     if (myDescribingAttributes.isEmpty()) {

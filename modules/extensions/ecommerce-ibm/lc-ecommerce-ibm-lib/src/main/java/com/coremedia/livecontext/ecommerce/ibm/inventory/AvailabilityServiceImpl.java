@@ -12,8 +12,8 @@ import com.coremedia.livecontext.ecommerce.inventory.AvailabilityInfo;
 import com.coremedia.livecontext.ecommerce.inventory.AvailabilityService;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,7 +28,7 @@ public class AvailabilityServiceImpl extends AbstractIbmService implements Avail
 
     @Override
     @Nullable
-    public AvailabilityInfo getAvailabilityInfo(@Nonnull ProductVariant productVariant) {
+    public AvailabilityInfo getAvailabilityInfo(@NonNull ProductVariant productVariant) {
         Map<String, Object> inventoryAvailability = commerceCache.get(
                 new AvailabilityByIdsCacheKey(productVariant.getExternalTechId(), productVariant.getContext(), availabilityWrapperService, commerceCache));
 
@@ -37,8 +37,8 @@ public class AvailabilityServiceImpl extends AbstractIbmService implements Avail
     }
 
     @Override
-    @Nonnull
-    public Map<ProductVariant, AvailabilityInfo> getAvailabilityInfo(@Nonnull List<ProductVariant> productVariants) {
+    @NonNull
+    public Map<ProductVariant, AvailabilityInfo> getAvailabilityInfo(@NonNull List<ProductVariant> productVariants) {
         if (productVariants.isEmpty()){
             return Collections.emptyMap();
         }

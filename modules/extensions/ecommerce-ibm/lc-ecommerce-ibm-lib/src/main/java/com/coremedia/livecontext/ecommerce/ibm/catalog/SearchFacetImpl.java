@@ -3,7 +3,7 @@ package com.coremedia.livecontext.ecommerce.ibm.catalog;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.search.SearchFacet;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +14,7 @@ public class SearchFacetImpl implements SearchFacet {
 
   protected Map<String, Object> delegate;
 
-  public SearchFacetImpl(@Nonnull Map<String, Object> delegate) {
+  public SearchFacetImpl(@NonNull Map<String, Object> delegate) {
     this.delegate = delegate;
   }
 
@@ -23,7 +23,7 @@ public class SearchFacetImpl implements SearchFacet {
     return DataMapHelper.findValue(delegate, "count", Integer.class).orElse(0);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public String getLabel() {
     return DataMapHelper.findStringValue(delegate, "label")
@@ -35,7 +35,7 @@ public class SearchFacetImpl implements SearchFacet {
     return DataMapHelper.findValue(delegate, "selected", Boolean.class).orElse(false);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public String getQuery() {
     return DataMapHelper.findStringValue(delegate, "value").orElse(null);
@@ -46,14 +46,14 @@ public class SearchFacetImpl implements SearchFacet {
     return null;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public Map<String, Object> getExtendedData() {
     return DataMapHelper.findValue(delegate, "extendedData", Map.class)
             .orElseGet(Collections::emptyMap);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public List<SearchFacet> getChildFacets() {
     List<Map<String, Object>> entry = DataMapHelper.getListValue(delegate, "entry");

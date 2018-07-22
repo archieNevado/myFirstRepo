@@ -5,8 +5,8 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.handler.CommerceSearchRedirectUrlProvider;
 import com.coremedia.livecontext.handler.LiveContextPageHandlerBase;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +21,7 @@ public class WcsCommerceSearchRedirectUrlProvider implements CommerceSearchRedir
   }
 
   @Override
-  public Object provideRedirectUrl(@Nullable String term, @Nonnull HttpServletRequest request, @Nonnull StoreContext storeContext) {
+  public Object provideRedirectUrl(@Nullable String term, @NonNull HttpServletRequest request, @NonNull StoreContext storeContext) {
     Map<String, Object> params = new HashMap<>();
     boolean studioPreviewRequest = LiveContextPageHandlerBase.isStudioPreviewRequest(request);
     params.put(LiveContextPageHandlerBase.URL_PROVIDER_IS_STUDIO_PREVIEW, studioPreviewRequest);

@@ -11,8 +11,7 @@ public class CatalogsForStoreCacheKey extends AbstractCommerceCacheKey<Map<Strin
 
   private WcCatalogWrapperService wrapperService;
 
-  CatalogsForStoreCacheKey(StoreContext storeContext,
-                           WcCatalogWrapperService wrapperService,
+  CatalogsForStoreCacheKey(StoreContext storeContext, WcCatalogWrapperService wrapperService,
                            CommerceCache commerceCache) {
     super("availableCatalogs", storeContext, null, CONFIG_KEY_CATALOGS_FOR_STORE, commerceCache);
     this.wrapperService = wrapperService;
@@ -30,6 +29,10 @@ public class CatalogsForStoreCacheKey extends AbstractCommerceCacheKey<Map<Strin
 
   @Override
   protected String getCacheIdentifier() {
-    return id + ":" + configKey + ":" + storeContext.getStoreId();
+    return assembleCacheIdentifier(
+            id,
+            configKey,
+            storeContext.getStoreId()
+    );
   }
 }

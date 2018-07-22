@@ -36,8 +36,8 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
@@ -130,7 +130,7 @@ public class CartHandler extends LiveContextPageHandlerBase {
     return new RedirectView(redirectUrl);
   }
 
-  private String applyLinkTransformers(@Nonnull String source, @Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response) {
+  private String applyLinkTransformers(@NonNull String source, @NonNull HttpServletRequest request, @NonNull HttpServletResponse response) {
     String result = source;
     List<LinkTransformer> transformers = linkFormatter.getTransformers();
     for (LinkTransformer transformer : transformers) {
@@ -174,8 +174,8 @@ public class CartHandler extends LiveContextPageHandlerBase {
     }
   }
 
-  @Nonnull
-  private Object handleRemoveOrderItem(@Nonnull HttpServletRequest request) {
+  @NonNull
+  private Object handleRemoveOrderItem(@NonNull HttpServletRequest request) {
     Cart cart = resolveCart();
     if (cart == null) {
       return emptyMap();
@@ -192,8 +192,8 @@ public class CartHandler extends LiveContextPageHandlerBase {
     return emptyMap();
   }
 
-  @Nonnull
-  private Object handleAddOrderItem(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response) {
+  @NonNull
+  private Object handleAddOrderItem(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response) {
     UserSessionService userSessionService = getUserSessionService();
 
     if (userSessionService == null || !userSessionService.ensureGuestIdentity(request, response)) {
@@ -219,7 +219,7 @@ public class CartHandler extends LiveContextPageHandlerBase {
     getCartService().addToCart(orderItems, CurrentCommerceConnection.get().getStoreContext());
   }
 
-  private static boolean orderItemExist(@Nonnull Cart cart, @Nullable String orderItemId) {
+  private static boolean orderItemExist(@NonNull Cart cart, @Nullable String orderItemId) {
     return orderItemId != null && cart.findOrderItemById(orderItemId) != null;
   }
 
@@ -228,7 +228,7 @@ public class CartHandler extends LiveContextPageHandlerBase {
     return findCommerceConnection().map(CommerceConnection::getUserSessionService).orElse(null);
   }
 
-  @Nonnull
+  @NonNull
   private Optional<CommerceConnection> findCommerceConnection() {
     return CurrentCommerceConnection.find();
   }
@@ -253,28 +253,28 @@ public class CartHandler extends LiveContextPageHandlerBase {
    */
   @SuppressWarnings({"TypeMayBeWeakened", "UnusedParameters"})
   @Link(type = Cart.class, uri = URI_PATTERN)
-  @Nonnull
+  @NonNull
   public UriComponents buildLink(Cart cart, UriTemplate uriPattern, Map<String, Object> linkParameters,
                                  HttpServletRequest request) {
     return buildLinkInternal(uriPattern, linkParameters);
   }
 
   @Link(type = Cart.class, view = VIEW_FRAGMENT, uri = DYNAMIC_URI_PATTERN)
-  @Nonnull
+  @NonNull
   public UriComponents buildFragmentLink(Cart cart, UriTemplate uriPattern, Map<String, Object> linkParameters,
                                          HttpServletRequest request) {
     return buildLinkInternal(uriPattern, linkParameters);
   }
 
   @Link(type = Cart.class, view = "ajax", uri = DYNAMIC_URI_PATTERN)
-  @Nonnull
+  @NonNull
   public UriComponents buildDeleteCartOderItemLink(Cart cart, UriTemplate uriPattern,
                                                    Map<String, Object> linkParameters, HttpServletRequest request) {
     return buildLinkInternal(uriPattern, linkParameters);
   }
 
-  @Nonnull
-  private UriComponents buildLinkInternal(@Nonnull UriTemplate uriPattern, @Nonnull Map<String, Object> linkParameters) {
+  @NonNull
+  private UriComponents buildLinkInternal(@NonNull UriTemplate uriPattern, @NonNull Map<String, Object> linkParameters) {
     Navigation context = getContextHelper().currentSiteContext();
     String firstNavigationPathSegment = getPathSegments(context).get(0);
 
@@ -301,7 +301,7 @@ public class CartHandler extends LiveContextPageHandlerBase {
   }
 
   @VisibleForTesting
-  boolean isStudioPreview(@Nonnull HttpServletRequest request) {
+  boolean isStudioPreview(@NonNull HttpServletRequest request) {
     return isStudioPreviewRequest(request);
   }
 
@@ -323,13 +323,13 @@ public class CartHandler extends LiveContextPageHandlerBase {
     }
 
     @Override
-    @Nonnull
+    @NonNull
     public CommerceId getId() {
       return getDelegate().getId();
     }
 
     @Override
-    @Nonnull
+    @NonNull
     public CommerceId getReference() {
       return getId();
     }
@@ -369,7 +369,7 @@ public class CartHandler extends LiveContextPageHandlerBase {
       return getDelegate().getExternalTechId();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Map<String, Object> getCustomAttributes() {
       return getDelegate().getCustomAttributes();
@@ -377,7 +377,7 @@ public class CartHandler extends LiveContextPageHandlerBase {
 
     @Nullable
     @Override
-    public <T> T getCustomAttribute(@Nonnull String key, @Nonnull Class<T> expectedType) {
+    public <T> T getCustomAttribute(@NonNull String key, @NonNull Class<T> expectedType) {
       return getDelegate().getCustomAttribute(key, expectedType);
     }
 
@@ -387,7 +387,7 @@ public class CartHandler extends LiveContextPageHandlerBase {
     }
 
     @Override
-    @Nonnull
+    @NonNull
     public Optional<Catalog> getCatalog() {
       return delegate.getCatalog();
     }

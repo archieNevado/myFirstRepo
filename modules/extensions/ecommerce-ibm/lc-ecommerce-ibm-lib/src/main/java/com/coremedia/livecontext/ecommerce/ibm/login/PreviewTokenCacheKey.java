@@ -1,8 +1,8 @@
 package com.coremedia.livecontext.ecommerce.ibm.login;
 
-import com.coremedia.cache.Cache;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceCacheKey;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
+import com.coremedia.cache.Cache;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 
 /**
@@ -13,10 +13,8 @@ public class PreviewTokenCacheKey extends AbstractCommerceCacheKey<WcPreviewToke
   private WcPreviewTokenParam previewTokenParam;
   private WcLoginWrapperService wrapperService;
 
-  public PreviewTokenCacheKey(WcPreviewTokenParam previewTokenParam,
-                              StoreContext storeContext,
-                              WcLoginWrapperService wrapperService,
-                              CommerceCache commerceCache) {
+  public PreviewTokenCacheKey(WcPreviewTokenParam previewTokenParam, StoreContext storeContext,
+                              WcLoginWrapperService wrapperService, CommerceCache commerceCache) {
     super("previewToken", storeContext, null, CONFIG_KEY_PREVIEW_TOKEN, commerceCache);
     this.wrapperService = wrapperService;
     this.previewTokenParam = previewTokenParam;
@@ -24,14 +22,11 @@ public class PreviewTokenCacheKey extends AbstractCommerceCacheKey<WcPreviewToke
 
   @Override
   public WcPreviewToken computeValue(Cache cache) {
-    return wrapperService.getPreviewToken(
-            previewTokenParam,
-            storeContext
-    );
+    return wrapperService.getPreviewToken(previewTokenParam, storeContext)
+            .orElse(null);
   }
 
   @Override
   public void addExplicitDependency(WcPreviewToken wcPreviewToken) {
   }
-
 }

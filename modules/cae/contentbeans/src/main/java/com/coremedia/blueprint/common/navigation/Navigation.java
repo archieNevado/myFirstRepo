@@ -8,7 +8,7 @@ import com.coremedia.cae.aspect.provider.AspectsProvider;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.user.User;
 
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 
 /**

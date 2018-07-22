@@ -1,7 +1,7 @@
 !tape
 name: csi_testFindTopCategories
 interactions:
-- recorded: 2017-09-06T11:20:52.486Z
+- recorded: 2018-06-05T09:23:15.222Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
@@ -10,27 +10,30 @@ interactions:
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_144)
+      User-Agent: Apache-HttpClient/4.5.5 (Java/1.8.0_152)
   response:
     status: 200
     headers:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Wed, 06 Sep 2017 11:20:54 GMT
+      Date: Tue, 05 Jun 2018 09:23:15 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000RmGp1-P4flUmVMVNTG00hu9:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
+      Set-Cookie: JSESSIONID=0000yA3hUnvRbhay6hkp6gghVVy:-1; HTTPOnly; Path=/; Domain=.toko-ci-02-wrea-new-cms.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
-      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
-    body: '{"serverTimezoneId":"Europe\/Berlin","wcsVersion":"8.0","stores":{"AuroraB2BESite":{"defaultCatalog":"Extended Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites
-      Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838085","defaultCatalogId":"3074457345616676718"},"AuroraB2BStorefrontAssetStore":{"defaultCatalog":"Extended Sites Catalog
-      Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838034","defaultCatalogId":"3074457345616676668"},"AuroraStorefrontAssetStore":{"defaultCatalog":"Extended
-      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837984","defaultCatalogId":"3074457345616676668"},"Extended
-      Sites Hub":{"defaultCatalog":"","catalogs":{},"storeId":"715837884","defaultCatalogId":null},"Extended Sites Catalog Asset Store":{"defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended
-      Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837934","defaultCatalogId":"3074457345616676668"},"AuroraESite":{"defaultCatalog":"Extended Sites Catalog Asset Store
-      Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838084","defaultCatalogId":"3074457345616676719"}}}'
-- recorded: 2017-09-06T11:20:52.748Z
+    body: '{"serverTimezoneId":"Europe\/Paris","wcsVersion":"8.0","stores":{"AuroraB2BESite":{"defaultCatalog":"Extended Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Calista Spring Fashions":"3074457345616676768","Extended
+      Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838085","defaultCatalogId":"3074457345616676718"},"CalistaESite":{"defaultCatalog":"Calista Spring Fashions","catalogs":{"Extended
+      Sites Catalog Asset Store B2B Direct":"3074457345616676718","Calista Spring Fashions":"3074457345616676768","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838086","defaultCatalogId":"3074457345616676768"},"AuroraB2BStorefrontAssetStore":{"defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Calista Spring Fashions":"3074457345616676768","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog
+      Asset Store":"3074457345616676668"},"storeId":"715838034","defaultCatalogId":"3074457345616676668"},"AuroraStorefrontAssetStore":{"defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Calista
+      Spring Fashions":"3074457345616676768","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837984","defaultCatalogId":"3074457345616676668"},"Extended Sites
+      Hub":{"defaultCatalog":"","catalogs":{},"storeId":"715837884","defaultCatalogId":null},"Extended Sites Catalog Asset Store":{"defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Calista
+      Spring Fashions":"3074457345616676768","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837934","defaultCatalogId":"3074457345616676668"},"AuroraESite":{"defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Calista Spring Fashions":"3074457345616676768","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended
+      Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838084","defaultCatalogId":"3074457345616676719"},"CMStorefrontAssetStore":{"defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Calista
+      Spring Fashions":"3074457345616676768","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838584","defaultCatalogId":"3074457345616676668"}}}'
+- recorded: 2018-06-05T09:23:15.284Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/catalog
@@ -40,24 +43,23 @@ interactions:
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_144)
+      User-Agent: Apache-HttpClient/4.5.5 (Java/1.8.0_152)
   response:
     status: 200
     headers:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Wed, 06 Sep 2017 11:20:55 GMT
+      Date: Tue, 05 Jun 2018 09:23:15 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000dY2_oso7ZvYsXGt_2EZddfz:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
+      Set-Cookie: JSESSIONID=00006T0-UfZlqs5mkNhQN2vaEV8:-1; HTTPOnly; Path=/; Domain=.toko-ci-02-wrea-new-cms.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
-      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
-    body: '{"recordSetTotal":3,"resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/catalog","recordSetCount":3,"recordSetComplete":true,"recordSetStartNumber":0,"resultList":[{"catalogIdentifier":"Extended
-      Sites Catalog Asset Store","description":[{"name":"Extended Sites Catalog Asset Store"}],"primary":true,"catalogId":"3074457345616676668"},{"catalogIdentifier":"Extended Sites Catalog Asset Store B2B Direct","description":[{"shortDescription":"Aurora B2B
-      direct sample data","name":"Aurora B2B direct sample data"}],"primary":false,"catalogId":"3074457345616676718"},{"default":true,"catalogIdentifier":"Extended Sites Catalog Asset Store Consumer Direct","description":[{"shortDescription":"Aurora Consumer
-      Direct sample data","name":"Aurora consumer direct sample data"}],"primary":false,"catalogId":"3074457345616676719"}],"resourceName":"catalog"}'
-- recorded: 2017-09-06T11:20:52.812Z
+    body: '{"recordSetTotal":4,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/catalog","recordSetCount":4,"recordSetComplete":true,"recordSetStartNumber":0,"resultList":[{"catalogIdentifier":"Extended Sites Catalog
+      Asset Store","description":[{"name":"Extended Sites Catalog Asset Store"}],"primary":true,"catalogId":"3074457345616676668"},{"catalogIdentifier":"Extended Sites Catalog Asset Store B2B Direct","description":[{"shortDescription":"Aurora B2B direct sample
+      data","name":"Aurora B2B direct sample data"}],"primary":false,"catalogId":"3074457345616676718"},{"default":true,"catalogIdentifier":"Extended Sites Catalog Asset Store Consumer Direct","description":[{"shortDescription":"Aurora Consumer Direct sample
+      data","name":"Aurora consumer direct sample data"}],"primary":false,"catalogId":"3074457345616676719"},{"catalogIdentifier":"Calista Spring Fashions","description":[{"shortDescription":"Spring Fashions","name":"Spring Fashions"}],"primary":false,"catalogId":"3074457345616676768"}],"resourceName":"catalog"}'
+- recorded: 2018-06-05T09:23:15.299Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
@@ -66,21 +68,20 @@ interactions:
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_144)
+      User-Agent: Apache-HttpClient/4.5.5 (Java/1.8.0_152)
   response:
     status: 200
     headers:
       Cache-Control: no-cache="set-cookie, set-cookie2"
       Content-Language: en-US
       Content-Type: application/json
-      Date: Wed, 06 Sep 2017 11:20:55 GMT
+      Date: Tue, 05 Jun 2018 09:23:15 GMT
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=00005wRAeTVlUlljjF-7jBh0k57:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
+      Set-Cookie: JSESSIONID=0000zn2__AHMybc4kvlbJJQPbHV:-1; HTTPOnly; Path=/; Domain=.toko-ci-02-wrea-new-cms.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
-      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"ro":"-21","zh":"-8","pt_BR":"-6","pl_PL":"-22","en_US":"-1","ja_JP":"-10","ru_RU":"-20","zh_CN":"-7","ro_RO":"-21","de":"-3","zh_TW":"-8","fr":"-2","es_ES":"-5","it":"-4","ko_KR":"-9","ko":"-9","it_IT":"-4","de_DE":"-3","ar":"-23","ar_EG":"-23","fr_FR":"-2","pl":"-22","pt":"-6","en":"-1","ru":"-20","es":"-5","ja":"-10"}'
-- recorded: 2017-09-06T11:20:52.845Z
+- recorded: 2018-06-05T09:23:15.364Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/categoryview/@top?catalogId=3074457345616676719&langId=-1
@@ -89,45 +90,42 @@ interactions:
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_144)
+      User-Agent: Apache-HttpClient/4.5.5 (Java/1.8.0_152)
   response:
     status: 200
     headers:
       Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
       Content-Language: en-US
       Content-Type: application/json
-      Date: Wed, 06 Sep 2017 11:20:55 GMT
-      Expires: Wed, 06 Sep 2017 12:20:55 GMT
-      Set-Cookie: JSESSIONID=0000SpChJfMnguUqTjq51ItcYDz:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
+      Date: Tue, 05 Jun 2018 09:23:15 GMT
+      Expires: Tue, 05 Jun 2018 10:23:15 GMT
+      Set-Cookie: JSESSIONID=0000gAnTR2ML9a2YyZJTBRUbCZU:-1; HTTPOnly; Path=/; Domain=.toko-ci-02-wrea-new-cms.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
-      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
-    body: '{"recordSetTotal":"10","CatalogGroupView":[{"metaDescription":"On The Table","uniqueID":"3074457345616676768","xcatgroup_seoSegment":"pc-on-the-table","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_OnTheTable.jpg","resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676768","title":"On
-      The Table | AuroraESite","productsURL":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676768","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_OnTheTable.jpg","shortDescription":"On
-      The Table","name":"On The Table","longDescription":"Find everything to make your table special and unforgettable.","metaKeyword":"on the table, tableware","fullImageAltDescription":"Image for On The Table from AuroraESite","identifier":"PC_OnTheTable"},{"metaDescription":"In
-      The Kitchen","uniqueID":"3074457345616676769","xcatgroup_seoSegment":"pc-in-the-kitchen","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_InTheKitchen.jpg","resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676769","title":"In
-      The Kitchen | AuroraESite","productsURL":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676769","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_InTheKitchen.jpg","shortDescription":"In
-      The Kitchen","name":"In The Kitchen","longDescription":"Find the best kitchen tools and gadgets to prepare special meals.","metaKeyword":"in the kitchen, cooking","fullImageAltDescription":"Image for In The Kitchen from AuroraESite","identifier":"PC_InTheKitchen"},{"metaDescription":"For
-      The Cook","uniqueID":"3074457345616676770","xcatgroup_seoSegment":"pc-for-the-cook","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_ForTheCook.jpg","resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676770","title":"For
-      The Cook | AuroraESite","productsURL":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676770","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_ForTheCook.jpg","shortDescription":"For
-      The Cook","name":"For The Cook","longDescription":"From fashionwear to cooking magazines - everything a perfect chef needs","metaKeyword":"for the cook, him, her","fullImageAltDescription":"Image for For The Cook from AuroraESite","identifier":"PC_ForTheCook"},{"metaDescription":"Deli","uniqueID":"3074457345616676771","xcatgroup_seoSegment":"pc-deli","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_Deli.jpg","resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676771","title":"Deli
-      | AuroraESite","productsURL":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676771","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Deli.jpg","shortDescription":"Deli","name":"Deli","longDescription":"Explore
-      exotic tastes by sampling our selection of exciting ingredients.","metaKeyword":"deli, groceries","fullImageAltDescription":"Image for Deli from AuroraESite","identifier":"PC_Deli"},{"resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676668","title":"Apparel
-      | AuroraESite","thumbnail":"images\/catalog\/apparel\/women\/category\/catr_wcl_pants.png","productsURL":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676668","shortDescription":"The
-      latest styles for the entire family.","name":"Apparel","metaDescription":"The latest styles for the entire family.","uniqueID":"3074457345616676668","metaKeyword":"family apparel, cloths, shirt, pants, tops, bottoms, dresses, dress","fullImageAltDescription":"Image
-      for Apparel from AuroraESite","xcatgroup_seoSegment":"apparel","identifier":"Apparel","fullImage":"images\/catalog\/apparel\/women\/category\/catr_wcl_pants.png"},{"resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676694","title":"Electronics
-      | AuroraESite","thumbnail":"images\/catalog\/electronics\/category\/catr_cta_tablets.png","productsURL":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676694","shortDescription":"Electronics","name":"Electronics","metaDescription":"Electronics","uniqueID":"3074457345616676694","metaKeyword":"Electronics","fullImageAltDescription":"Image
-      for Electronics from AuroraESite","xcatgroup_seoSegment":"electronics","identifier":"Electronics","fullImage":"images\/catalog\/electronics\/category\/catr_cta_tablets.png"},{"resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676700","title":"Grocery
-      | AuroraESite","thumbnail":"images\/catalog\/grocery\/category\/catr_gda_dairy.png","productsURL":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676700","shortDescription":"Grocery","name":"Grocery","metaDescription":"Grocery","uniqueID":"3074457345616676700","metaKeyword":"Grocery","fullImageAltDescription":"Image
-      for Grocery from AuroraESite","xcatgroup_seoSegment":"grocery","identifier":"Grocery","fullImage":"images\/catalog\/grocery\/category\/catr_gda_dairy.png"},{"resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676705","title":"Health
-      | AuroraESite","thumbnail":"images\/catalog\/health\/category\/catr_hme_medicine.png","productsURL":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676705","shortDescription":"Health","name":"Health","metaDescription":"Health","uniqueID":"3074457345616676705","metaKeyword":"Health","fullImageAltDescription":"Image
-      for Health from AuroraESite","xcatgroup_seoSegment":"health","identifier":"Health","fullImage":"images\/catalog\/health\/category\/catr_hme_medicine.png"},{"resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676708","title":"Home
-      & Furnishing | AuroraESite","thumbnail":"images\/catalog\/homefurnishings\/category\/catr_hap_appliances.png","productsURL":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676708","shortDescription":"Home
-      & Furnishing","name":"Home & Furnishing","metaDescription":"Home & Furnishing","uniqueID":"3074457345616676708","metaKeyword":"Home & Furnishing","fullImageAltDescription":"Image for Home & Furnishing from AuroraESite","xcatgroup_seoSegment":"home---furnishing","identifier":"Home
-      Furnishings","fullImage":"images\/catalog\/homefurnishings\/category\/catr_hap_appliances.png"},{"resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676715","title":"Newsletters
-      & Magazines | AuroraESite","thumbnail":"images\/catalog\/newslettersmagazines\/category\/catr_nma_magazines.png","productsURL":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676715","shortDescription":"Newsletters
-      & Magazines","name":"Newsletters & Magazines","metaDescription":"Newsletters & Magazines","uniqueID":"3074457345616676715","metaKeyword":"Newsletters & Magazines","fullImageAltDescription":"Image for Newsletters & Magazines from AuroraESite","xcatgroup_seoSegment":"newsletters---magazines","identifier":"NewslettersAndMagazines","fullImage":"images\/catalog\/newslettersmagazines\/category\/catr_nma_magazines.png"}],"resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/@top?catalogId=3074457345616676719&langId=-1","recordSetCount":"10","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","recordSetStartNumber":"0","resourceName":"categoryview"}'
-- recorded: 2017-09-06T11:20:53.166Z
+    body: '{"recordSetTotal":"10","CatalogGroupView":[{"title":"On The Table | AuroraESite","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676768","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_OnTheTable.jpg","productsURL":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/productview\/byCategory\/3074457345616676768","shortDescription":"On
+      The Table","name":"On The Table","longDescription":"Find everything to make your table special and unforgettable.","metaDescription":"On The Table","uniqueID":"3074457345616676768","xcatgroup_cmSeoSegment":"715837934_pc-on-the-table","metaKeyword":"on
+      the table, tableware","fullImageAltDescription":"Image for On The Table from AuroraESite","identifier":"PC_OnTheTable","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_OnTheTable.jpg"},{"title":"In The Kitchen | AuroraESite","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676769","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_InTheKitchen.jpg","productsURL":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/productview\/byCategory\/3074457345616676769","shortDescription":"In
+      The Kitchen","name":"In The Kitchen","longDescription":"Find the best kitchen tools and gadgets to prepare special meals.","metaDescription":"In The Kitchen","uniqueID":"3074457345616676769","xcatgroup_cmSeoSegment":"715837934_pc-in-the-kitchen","metaKeyword":"in
+      the kitchen, cooking","fullImageAltDescription":"Image for In The Kitchen from AuroraESite","identifier":"PC_InTheKitchen","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_InTheKitchen.jpg"},{"title":"For The Cook | AuroraESite","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676770","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_ForTheCook.jpg","productsURL":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/productview\/byCategory\/3074457345616676770","shortDescription":"For
+      The Cook","name":"For The Cook","longDescription":"From fashionwear to cooking magazines - everything a perfect chef needs","metaDescription":"For The Cook","uniqueID":"3074457345616676770","xcatgroup_cmSeoSegment":"715837934_pc-for-the-cook","metaKeyword":"for
+      the cook, him, her","fullImageAltDescription":"Image for For The Cook from AuroraESite","identifier":"PC_ForTheCook","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_ForTheCook.jpg"},{"title":"Deli | AuroraESite","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676771","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Deli.jpg","productsURL":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/productview\/byCategory\/3074457345616676771","shortDescription":"Deli","name":"Deli","longDescription":"Explore
+      exotic tastes by sampling our selection of exciting ingredients.","metaDescription":"Deli","uniqueID":"3074457345616676771","xcatgroup_cmSeoSegment":"715837934_pc-deli","metaKeyword":"deli, groceries","fullImageAltDescription":"Image for Deli from AuroraESite","identifier":"PC_Deli","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_Deli.jpg"},{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676668","title":"Apparel
+      | AuroraESite","thumbnail":"images\/catalog\/apparel\/women\/category\/catr_wcl_pants.png","productsURL":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/productview\/byCategory\/3074457345616676668","shortDescription":"The
+      latest styles for the entire family.","name":"Apparel","metaDescription":"The latest styles for the entire family.","uniqueID":"3074457345616676668","xcatgroup_cmSeoSegment":"715837934_apparel","metaKeyword":"family apparel, cloths, shirt, pants, tops,
+      bottoms, dresses, dress","fullImageAltDescription":"Image for Apparel from AuroraESite","identifier":"Apparel","fullImage":"images\/catalog\/apparel\/women\/category\/catr_wcl_pants.png"},{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676694","title":"Electronics
+      | AuroraESite","thumbnail":"images\/catalog\/electronics\/category\/catr_cta_tablets.png","productsURL":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/productview\/byCategory\/3074457345616676694","shortDescription":"Electronics","name":"Electronics","metaDescription":"Electronics","uniqueID":"3074457345616676694","xcatgroup_cmSeoSegment":"715837934_electronics","metaKeyword":"Electronics","fullImageAltDescription":"Image
+      for Electronics from AuroraESite","identifier":"Electronics","fullImage":"images\/catalog\/electronics\/category\/catr_cta_tablets.png"},{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676700","title":"Grocery
+      | AuroraESite","thumbnail":"images\/catalog\/grocery\/category\/catr_gda_dairy.png","productsURL":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/productview\/byCategory\/3074457345616676700","shortDescription":"Grocery","name":"Grocery","metaDescription":"Grocery","uniqueID":"3074457345616676700","xcatgroup_cmSeoSegment":"715837934_grocery","metaKeyword":"Grocery","fullImageAltDescription":"Image
+      for Grocery from AuroraESite","identifier":"Grocery","fullImage":"images\/catalog\/grocery\/category\/catr_gda_dairy.png"},{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676705","title":"Health
+      | AuroraESite","thumbnail":"images\/catalog\/health\/category\/catr_hme_medicine.png","productsURL":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/productview\/byCategory\/3074457345616676705","shortDescription":"Health","name":"Health","metaDescription":"Health","uniqueID":"3074457345616676705","xcatgroup_cmSeoSegment":"715837934_health","metaKeyword":"Health","fullImageAltDescription":"Image
+      for Health from AuroraESite","identifier":"Health","fullImage":"images\/catalog\/health\/category\/catr_hme_medicine.png"},{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676708","title":"Home
+      & Furnishing | AuroraESite","thumbnail":"images\/catalog\/homefurnishings\/category\/catr_hap_appliances.png","productsURL":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/productview\/byCategory\/3074457345616676708","shortDescription":"Home
+      & Furnishing","name":"Home & Furnishing","metaDescription":"Home & Furnishing","uniqueID":"3074457345616676708","xcatgroup_cmSeoSegment":"715837934_home-furnishing","metaKeyword":"Home & Furnishing","fullImageAltDescription":"Image for Home & Furnishing
+      from AuroraESite","identifier":"Home Furnishings","fullImage":"images\/catalog\/homefurnishings\/category\/catr_hap_appliances.png"},{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676715","title":"Newsletters
+      & Magazines | AuroraESite","thumbnail":"images\/catalog\/newslettersmagazines\/category\/catr_nma_magazines.png","productsURL":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/productview\/byCategory\/3074457345616676715","shortDescription":"Newsletters
+      & Magazines","name":"Newsletters & Magazines","metaDescription":"Newsletters & Magazines","uniqueID":"3074457345616676715","xcatgroup_cmSeoSegment":"715837934_newsletters-magazines","metaKeyword":"Newsletters & Magazines","fullImageAltDescription":"Image
+      for Newsletters & Magazines from AuroraESite","identifier":"NewslettersAndMagazines","fullImage":"images\/catalog\/newslettersmagazines\/category\/catr_nma_magazines.png"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/categoryview\/@top?catalogId=3074457345616676719&langId=-1","recordSetCount":"10","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","recordSetStartNumber":"0","resourceName":"categoryview"}'
+- recorded: 2018-06-05T09:23:15.519Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/categoryview/byId/3074457345616676768?catalogId=3074457345616676719&langId=-1
@@ -136,50 +134,22 @@ interactions:
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_144)
+      User-Agent: Apache-HttpClient/4.5.5 (Java/1.8.0_152)
   response:
     status: 200
     headers:
       Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
       Content-Language: en-US
       Content-Type: application/json
-      Date: Wed, 06 Sep 2017 11:20:55 GMT
-      Expires: Wed, 06 Sep 2017 12:20:55 GMT
-      Set-Cookie: JSESSIONID=0000c7eiv0NbTh76GA-lb3ntluv:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
+      Date: Tue, 05 Jun 2018 09:23:15 GMT
+      Expires: Tue, 05 Jun 2018 10:23:15 GMT
+      Set-Cookie: JSESSIONID=0000APm8mdP5xSCftW7veGpjeOY:-1; HTTPOnly; Path=/; Domain=.toko-ci-02-wrea-new-cms.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
-      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
-    body: '{"recordSetTotal":"1","CatalogGroupView":[{"metaDescription":"On The Table","uniqueID":"3074457345616676768","xcatgroup_seoSegment":"pc-on-the-table","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_OnTheTable.jpg","resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676768","title":"On
-      The Table | AuroraESite","productsURL":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676768","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_OnTheTable.jpg","shortDescription":"On
-      The Table","name":"On The Table","longDescription":"Find everything to make your table special and unforgettable.","metaKeyword":"on the table, tableware","fullImageAltDescription":"Image for On The Table from AuroraESite","identifier":"PC_OnTheTable"}],"resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676768?catalogId=3074457345616676719&langId=-1","recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","recordSetStartNumber":"0","resourceName":"categoryview"}'
-- recorded: 2017-09-06T11:20:52.748Z
-  request:
-    method: GET
-    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/catalog
-    headers:
-      Accept-Encoding: text/plain
-      Authorization: Basic Y21hZG1pbjpWVEpqeW8wQVlTblhGSEkyMDF5bw==
-      Content-Type: application/json
-      Host: shop-ref.ecommerce.coremedia.com
-      Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_144)
-  response:
-    status: 200
-    headers:
-      Cache-Control: no-cache="set-cookie, set-cookie2"
-      Content-Language: en-US
-      Content-Type: application/json
-      Date: Wed, 06 Sep 2017 11:20:55 GMT
-      Expires: Thu, 01 Dec 1994 16:00:00 GMT
-      Set-Cookie: JSESSIONID=0000dY2_oso7ZvYsXGt_2EZddfz:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
-      Vary: Accept,Accept-Encoding,User-Agent
-      X-Betamax: PLAY
-      X-Powered-By: Servlet/3.0
-    body: '{"recordSetTotal":3,"resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/catalog","recordSetCount":3,"recordSetComplete":true,"recordSetStartNumber":0,"resultList":[{"catalogIdentifier":"Extended
-      Sites Catalog Asset Store","description":[{"name":"Extended Sites Catalog Asset Store"}],"primary":true,"catalogId":"3074457345616676668"},{"catalogIdentifier":"Extended Sites Catalog Asset Store B2B Direct","description":[{"shortDescription":"Aurora B2B
-      direct sample data","name":"Aurora B2B direct sample data"}],"primary":false,"catalogId":"3074457345616676718"},{"default":true,"catalogIdentifier":"Extended Sites Catalog Asset Store Consumer Direct","description":[{"shortDescription":"Aurora Consumer
-      Direct sample data","name":"Aurora consumer direct sample data"}],"primary":false,"catalogId":"3074457345616676719"}],"resourceName":"catalog"}'
-- recorded: 2017-09-06T14:29:41.727Z
+    body: '{"recordSetTotal":"1","CatalogGroupView":[{"title":"On The Table | AuroraESite","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676768","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_OnTheTable.jpg","productsURL":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/productview\/byCategory\/3074457345616676768","shortDescription":"On
+      The Table","name":"On The Table","longDescription":"Find everything to make your table special and unforgettable.","metaDescription":"On The Table","uniqueID":"3074457345616676768","xcatgroup_cmSeoSegment":"715837934_pc-on-the-table","metaKeyword":"on
+      the table, tableware","fullImageAltDescription":"Image for On The Table from AuroraESite","identifier":"PC_OnTheTable","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_OnTheTable.jpg"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676768?catalogId=3074457345616676719&langId=-1","recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","recordSetStartNumber":"0","resourceName":"categoryview"}'
+- recorded: 2018-06-05T09:23:15.586Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/categoryview/byParentCategory/3074457345616676768?catalogId=3074457345616676719&langId=-1
@@ -188,23 +158,23 @@ interactions:
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_144)
+      User-Agent: Apache-HttpClient/4.5.5 (Java/1.8.0_152)
   response:
     status: 200
     headers:
       Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
       Content-Language: en-US
       Content-Type: application/json
-      Date: Wed, 06 Sep 2017 14:29:42 GMT
-      Expires: Wed, 06 Sep 2017 15:29:42 GMT
-      Set-Cookie: JSESSIONID=0000KKkrd-dlA0M0GtyIc6MyCAE:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
+      Date: Tue, 05 Jun 2018 09:23:15 GMT
+      Expires: Tue, 05 Jun 2018 10:23:15 GMT
+      Set-Cookie: JSESSIONID=000055bT9VIwYKG1oW1qfPu24KY:-1; HTTPOnly; Path=/; Domain=.toko-ci-02-wrea-new-cms.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
-    body: '{"recordSetTotal":"5","CatalogGroupView":[{"resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676772","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Glasses.jpg","productsURL":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676772","shortDescription":"Glasses","parentCatalogGroupID":["3074457345616676768"],"name":"Glasses","uniqueID":"3074457345616676772","xcatgroup_seoSegment":"pc-glasses","identifier":"PC_Glasses"},{"resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676773","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Cutlery.jpg","productsURL":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676773","shortDescription":"Cutlery","parentCatalogGroupID":["3074457345616676768"],"name":"Cutlery","uniqueID":"3074457345616676773","xcatgroup_seoSegment":"pc-cutlery","identifier":"PC_Cutlery"},{"resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676774","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Tableware.jpg","productsURL":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676774","shortDescription":"Plates
-      and Tableware","parentCatalogGroupID":["3074457345616676768"],"name":"Tableware","uniqueID":"3074457345616676774","xcatgroup_seoSegment":"pc-tableware","identifier":"PC_Tableware"},{"resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676775","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Decoration.jpg","productsURL":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676775","shortDescription":"Decoration
-      and Trinkets","parentCatalogGroupID":["3074457345616676768"],"name":"Decoration","uniqueID":"3074457345616676775","xcatgroup_seoSegment":"pc-decoration","identifier":"PC_Decoration"},{"resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676776","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Outdoor.jpg","productsURL":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676776","shortDescription":"Outdoor
-      Dining","parentCatalogGroupID":["3074457345616676768"],"name":"Outdoor Dining","uniqueID":"3074457345616676776","xcatgroup_seoSegment":"pc-outdoor-dining","identifier":"PC_Outdoor"}],"resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byParentCategory\/3074457345616676768?catalogId=3074457345616676719&langId=-1","recordSetCount":"5","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","recordSetStartNumber":"0","resourceName":"categoryview"}'
-- recorded: 2017-09-06T14:29:41.840Z
+    body: '{"recordSetTotal":"5","CatalogGroupView":[{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676772","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Glasses.jpg","productsURL":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/productview\/byCategory\/3074457345616676772","shortDescription":"Glasses","parentCatalogGroupID":["3074457345616676768"],"name":"Glasses","uniqueID":"3074457345616676772","xcatgroup_cmSeoSegment":"715837934_pc-glasses","identifier":"PC_Glasses"},{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676773","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Cutlery.jpg","productsURL":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/productview\/byCategory\/3074457345616676773","shortDescription":"Cutlery","parentCatalogGroupID":["3074457345616676768"],"name":"Cutlery","uniqueID":"3074457345616676773","xcatgroup_cmSeoSegment":"715837934_pc-cutlery","identifier":"PC_Cutlery"},{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676774","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Tableware.jpg","productsURL":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/productview\/byCategory\/3074457345616676774","shortDescription":"Plates
+      and Tableware","parentCatalogGroupID":["3074457345616676768"],"name":"Tableware","uniqueID":"3074457345616676774","xcatgroup_cmSeoSegment":"715837934_pc-tableware","identifier":"PC_Tableware"},{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676775","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Decoration.jpg","productsURL":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/productview\/byCategory\/3074457345616676775","shortDescription":"Decoration
+      and Trinkets","parentCatalogGroupID":["3074457345616676768"],"name":"Decoration","uniqueID":"3074457345616676775","xcatgroup_cmSeoSegment":"715837934_pc-decoration","identifier":"PC_Decoration"},{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676776","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Outdoor.jpg","productsURL":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/productview\/byCategory\/3074457345616676776","shortDescription":"Outdoor
+      Dining","parentCatalogGroupID":["3074457345616676768"],"name":"Outdoor Dining","uniqueID":"3074457345616676776","xcatgroup_cmSeoSegment":"715837934_pc-outdoor-dining","identifier":"PC_Outdoor"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/categoryview\/byParentCategory\/3074457345616676768?catalogId=3074457345616676719&langId=-1","recordSetCount":"5","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","recordSetStartNumber":"0","resourceName":"categoryview"}'
+- recorded: 2018-06-05T09:23:15.695Z
   request:
     method: GET
     uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/productview/byCategory/3074457345616676768?catalogId=3074457345616676719&currency=USD&langId=-1
@@ -213,26 +183,23 @@ interactions:
       Content-Type: application/json
       Host: shop-ref.ecommerce.coremedia.com
       Proxy-Connection: Keep-Alive
-      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_144)
+      User-Agent: Apache-HttpClient/4.5.5 (Java/1.8.0_152)
   response:
     status: 200
     headers:
       Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
       Content-Language: en-US
       Content-Type: application/json
-      Date: Wed, 06 Sep 2017 14:29:42 GMT
-      Expires: Wed, 06 Sep 2017 15:29:42 GMT
-      Set-Cookie: JSESSIONID=0000Qam12JOlqYDDNeTzUx3aGhb:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
+      Date: Tue, 05 Jun 2018 09:23:15 GMT
+      Expires: Tue, 05 Jun 2018 10:23:15 GMT
+      Set-Cookie: JSESSIONID=0000li2Wl3YqdRXg_iv5AYB9Xre:-1; HTTPOnly; Path=/; Domain=.toko-ci-02-wrea-new-cms.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
       X-Powered-By: Servlet/3.0
-    body: '{"recordSetTotal":"4","resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676768?catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":"4","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","CatalogEntryView":[{"uniqueID":"3074457345616680693","parentCategoryID":"3074457345616676768","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/full\/PC_PEPPER_MILL.jpg","productType":"ProductBean","resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616680693","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/thumbnail\/PC_PEPPER_MILL.jpg","shortDescription":"Large
-      Pepper Mill","name":"Pepper Mill","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"29.99"}],"buyable":"true","longDescription":"This hand-crafted traditional pepper mill will season your dishes perfectly for years to come.","xcatentry_seoSegment":"pc-pepper-mill","storeID":"715837934","partNumber":"PC_PEPPER_MILL"},{"uniqueID":"3074457345616680701","parentCategoryID":"3074457345616676768","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/full\/PC_TEA_POT.jpg","productType":"ProductBean","resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616680701","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/thumbnail\/PC_TEA_POT.jpg","shortDescription":"Glass
-      Tea Pot","name":"Tea Pot","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"29.99"}],"buyable":"true","longDescription":"A must-have for any lover of tea and herbal infusions, this clear glass designer tea pot lets you fully enjoy the
-      art of brewing the most delicious-tasting tea. Watch the beautiful unfurling of your favorite loose tea leaves as the hot water coaxes them to release their maximum flavor. The perfect marriage of function and form, this tea pot\u2019s clever design satisfies
-      both aesthetics and taste buds. 20 oz. pot brews 4 cups. Dimensions: 5.75in x 3.25in. 3.25in.","xcatentry_seoSegment":"pc-tea-pot","storeID":"715837934","partNumber":"PC_TEA_POT"},{"uniqueID":"3074457345616680729","parentCategoryID":"3074457345616676768","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/full\/PC_TEA_PRESS.jpg","productType":"ProductBean","resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616680729","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/thumbnail\/PC_TEA_PRESS.jpg","shortDescription":"A
-      French Press for Tea","name":"Perfect Tea Press","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"23.99"}],"buyable":"true","longDescription":"Steep your favorite teas and infusions in this French press to enjoy the fullest flavor.","xcatentry_seoSegment":"pc-tea-press","storeID":"715837934","partNumber":"PC_TEA_PRESS"},{"uniqueID":"3074457345616680731","parentCategoryID":"3074457345616676768","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/full\/PC_FRENCH_PRESS.jpg","productType":"ProductBean","resourceId":"http:\/\/shop-tools.toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616680731","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/thumbnail\/PC_FRENCH_PRESS.jpg","shortDescription":"A
-      French Press for Coffee","name":"Perfect French Press","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"23.99"}],"buyable":"true","longDescription":"Brew fresh artisanal coffee and bring out its richness naturally with our French Press.
-      For best results, brew freshly ground brew in 90-degree hot water for about 3 minutes, and savor each sip.","xcatentry_seoSegment":"pc-french-press","storeID":"715837934","partNumber":"PC_FRENCH_PRESS"}],"recordSetStartNumber":"0","FacetView":[{"Entry":[{"count":"4","label":"({*
-      100} 100)","entryValue":"price_USD%3A%28%7B*+100%7D+100%29"},{"count":"0","label":"({100 200} 200)","entryValue":"price_USD%3A%28%7B100+200%7D+200%29"},{"count":"0","label":"({200 300} 300)","entryValue":"price_USD%3A%28%7B200+300%7D+300%29"},{"count":"0","label":"({300
-      400} 400)","entryValue":"price_USD%3A%28%7B300+400%7D+400%29"},{"count":"0","label":"({400 500} 500)","entryValue":"price_USD%3A%28%7B400+500%7D+500%29"},{"count":"0","label":"({500 *})","entryValue":"price_USD%3A%28%7B500+*%7D%29"}],"name":"OfferPrice_USD","value":"price_USD"}],"BreadCrumbTrailEntryView":[{"value":"3074457345616676768","label":"On
-      The Table","type":"FACET_ENTRY_CATEGORY"}],"resourceName":"productview"}'
+    body: '{"recordSetTotal":"4","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/productview\/byCategory\/3074457345616676768?catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":"4","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","CatalogEntryView":[{"uniqueID":"3074457345616680693","parentCategoryID":"3074457345616676768","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/full\/PC_PEPPER_MILL.jpg","productType":"ProductBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/productview\/byId\/3074457345616680693","xcatentry_cmSeoSegment":"715837934_pc-pepper-mill","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/thumbnail\/PC_PEPPER_MILL.jpg","shortDescription":"Large
+      Pepper Mill","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"29.99"}],"name":"Pepper Mill","longDescription":"This hand-crafted traditional pepper mill will season your dishes perfectly for years to come.","buyable":"true","storeID":"715837934","partNumber":"PC_PEPPER_MILL"},{"uniqueID":"3074457345616680701","parentCategoryID":"3074457345616676768","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/full\/PC_TEA_POT.jpg","productType":"ProductBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/productview\/byId\/3074457345616680701","xcatentry_cmSeoSegment":"715837934_pc-tea-pot","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/thumbnail\/PC_TEA_POT.jpg","shortDescription":"Glass
+      Tea Pot","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"29.99"}],"name":"Tea Pot","longDescription":"A must-have for any lover of tea and herbal infusions, this clear glass designer tea pot lets you fully enjoy the art of brewing the
+      most delicious-tasting tea. Watch the beautiful unfurling of your favorite loose tea leaves as the hot water coaxes them to release their maximum flavor. The perfect marriage of function and form, this tea pot\u2019s clever design satisfies both aesthetics
+      and taste buds. 20 oz. pot brews 4 cups. Dimensions: 5.75in x 3.25in. 3.25in.","buyable":"true","storeID":"715837934","partNumber":"PC_TEA_POT"},{"uniqueID":"3074457345616680729","parentCategoryID":"3074457345616676768","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/full\/PC_TEA_PRESS.jpg","productType":"ProductBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/productview\/byId\/3074457345616680729","xcatentry_cmSeoSegment":"715837934_pc-tea-press","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/thumbnail\/PC_TEA_PRESS.jpg","shortDescription":"A
+      French Press for Tea","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"23.99"}],"name":"Perfect Tea Press","longDescription":"Steep your favorite teas and infusions in this French press to enjoy the fullest flavor.","buyable":"true","storeID":"715837934","partNumber":"PC_TEA_PRESS"},{"uniqueID":"3074457345616680731","parentCategoryID":"3074457345616676768","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/full\/PC_FRENCH_PRESS.jpg","productType":"ProductBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:80\/wcs\/resources\/store\/715838084\/productview\/byId\/3074457345616680731","xcatentry_cmSeoSegment":"715837934_pc-french-press","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/thumbnail\/PC_FRENCH_PRESS.jpg","shortDescription":"A
+      French Press for Coffee","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"23.99"}],"name":"Perfect French Press","longDescription":"Brew fresh artisanal coffee and bring out its richness naturally with our French Press. For best results,
+      brew freshly ground brew in 90-degree hot water for about 3 minutes, and savor each sip.","buyable":"true","storeID":"715837934","partNumber":"PC_FRENCH_PRESS"}],"recordSetStartNumber":"0","resourceName":"productview"}'

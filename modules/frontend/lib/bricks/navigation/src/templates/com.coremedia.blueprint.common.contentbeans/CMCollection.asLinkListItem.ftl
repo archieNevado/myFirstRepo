@@ -8,8 +8,7 @@
 <#assign isTopLevel=cm.localParameters().isTopLevel!false/>
 <#assign showNavigationLabel=cm.localParameters().showNavigationLabel!false/>
 <#assign showPicturesInNavigation=cm.localParameters().showPicturesInNavigation!true/>
-<#assign depth=cm.localParameters().depth+1!1/>
-
+<#assign depth=(cm.localParameters().depth!0)+1/>
 <#if depth <= 2>
 <#-- single item collection are only rendered single navigation items  -->
   <#assign items=self.items![]>

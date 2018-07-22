@@ -38,10 +38,4 @@
     <property name="contentType" value="CMCategory"/>
     <property name="duplicateReferrerCode" value="duplicate_category_parent"/>
   </bean>
-
-  <customize:append bean="teasablePicturesPredicateExcludeSubtypes" id="cmproductMediaEnabler">
-    <list>
-      <value>CMProduct</value>
-    </list>
-  </customize:append>
 </beans>

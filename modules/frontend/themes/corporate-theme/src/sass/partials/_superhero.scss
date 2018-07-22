@@ -55,7 +55,7 @@ Contains styling definitions for all content types as cm-superhero.
     @include stretch-absolute();
 
     // hide icon on superheroes
-    &.cm-image--missing {
+    &.cm-media--missing {
       background: $brand-primary none;
     }
   }

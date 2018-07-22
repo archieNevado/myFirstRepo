@@ -6,8 +6,8 @@ import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmCommerceBean;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Map;
 
 public class CatalogImpl extends AbstractIbmCommerceBean implements Catalog {
@@ -54,7 +54,7 @@ public class CatalogImpl extends AbstractIbmCommerceBean implements Catalog {
     return DataMapHelper.findValue(getDelegate(), "primary", Boolean.class).orElse(false);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public Category getRootCategory() {
     return getCatalogService().findRootCategory(getCatalogAlias(), getContext());

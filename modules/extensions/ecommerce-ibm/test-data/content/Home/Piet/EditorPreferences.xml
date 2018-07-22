@@ -423,6 +423,10 @@
 <StringProperty Name="name">Women's Dresses Image Map</StringProperty>
 <LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/Germany/German/Editorial/Content/Fashion/Women%27s%20Dresses%20Image%20Map.xml" cmexport:path="/Sites/Aurora%20Augmentation/Germany/German/Editorial/Content/Fashion/Women%27s%20Dresses%20Image%20Map"/>
 </Struct>
+<Struct>
+<StringProperty Name="name">Black is the new Black Dresses</StringProperty>
+<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Aurora%20Augmentation/Germany/German/Editorial/Content/Fashion%20Week/Black%20is%20the%20new%20Black%20Dresses.xml" cmexport:path="/Sites/Aurora%20Augmentation/Germany/German/Editorial/Content/Fashion%20Week/Black%20is%20the%20new%20Black%20Dresses"/>
+</Struct>
 </StructListProperty>
 <BooleanProperty Name="translationWorkflowRemoveEditedContents">false</BooleanProperty>
 <StructProperty Name="forms">

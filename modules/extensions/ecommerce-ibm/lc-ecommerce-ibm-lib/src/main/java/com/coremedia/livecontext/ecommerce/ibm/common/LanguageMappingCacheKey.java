@@ -3,15 +3,15 @@ package com.coremedia.livecontext.ecommerce.ibm.common;
 import com.coremedia.cache.Cache;
 import com.coremedia.cache.CacheKey;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Map;
 
 class LanguageMappingCacheKey extends CacheKey<Map<String, String>> {
 
-  @Nonnull
+  @NonNull
   private WcLanguageMappingService wcLanguageMappingService;
 
-  LanguageMappingCacheKey(@Nonnull WcLanguageMappingService wcLanguageMappingService) {
+  LanguageMappingCacheKey(@NonNull WcLanguageMappingService wcLanguageMappingService) {
     this.wcLanguageMappingService = wcLanguageMappingService;
   }
 

@@ -15,7 +15,7 @@ import com.google.common.annotations.VisibleForTesting;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.regex.Pattern;
@@ -100,12 +100,12 @@ public class PreviewTokenAppendingLinkTransformer implements LinkTransformer {
   }
 
   @VisibleForTesting
-  boolean isInitialStudioRequest(@Nonnull HttpServletRequest request) {
+  boolean isInitialStudioRequest(@NonNull HttpServletRequest request) {
     return LiveContextPageHandlerBase.isInitialStudioRequest(request);
   }
 
   @VisibleForTesting
-  boolean isStudioPreviewRequest(@Nonnull HttpServletRequest request) {
+  boolean isStudioPreviewRequest(@NonNull HttpServletRequest request) {
     return LiveContextPageHandlerBase.isStudioPreviewRequest(request);
   }
 
@@ -124,7 +124,7 @@ public class PreviewTokenAppendingLinkTransformer implements LinkTransformer {
     return source;
   }
 
-  @Nonnull
+  @NonNull
   private static ParameterAppendingLinkTransformer createParameterAppenderForPreviewToken() {
     ParameterAppendingLinkTransformer parameterAppendingLinkTransformer = new ParameterAppendingLinkTransformer();
     parameterAppendingLinkTransformer.setParameterName(QUERY_PARAMETER_PREVIEW_TOKEN);

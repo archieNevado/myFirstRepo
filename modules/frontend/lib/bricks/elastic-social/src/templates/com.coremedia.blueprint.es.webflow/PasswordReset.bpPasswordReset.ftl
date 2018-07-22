@@ -3,6 +3,9 @@
 <#-- @ftlvariable name="flowExecutionKey" type="java.lang.String" -->
 <#-- @ftlvariable name="nextUrl" type="java.lang.String" -->
 
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/components.ftl" as components />
+<#import "../../freemarkerLibs/elastic-social.ftl" as elasticSocial />
+
 <div class="container">
   <div class="row">
     <div class="cm-form cm-form--reset well col-xs-12 col-md-6 col-md-push-3"<@preview.metadata data=[self.action.content!"", "properties.id"]/>>
@@ -14,16 +17,16 @@
         <input type="hidden" name="_eventId_submit">
 
         <#-- notification -->
-        <@bp.notificationFromSpring path="bpPasswordReset" additionalClasses=["alert alert-danger"] />
+        <@elasticSocial.notificationFromSpring path="bpPasswordReset" additionalClasses=["alert alert-danger"] />
 
         <#-- email -->
         <div class="form-group">
-          <@bp.labelFromSpring path="bpPasswordReset.emailAddress" text='${bp.getMessage("passwordReset_email_label")}'/>
+          <@elasticSocial.labelFromSpring path="bpPasswordReset.emailAddress" text='${bp.getMessage("passwordReset_email_label")}'/>
           <@spring.formInput path="bpPasswordReset.emailAddress" attributes='class="form-control" placeholder="${bp.getMessage("passwordReset_email_label")}" required' fieldType="text"/>
         </div>
 
         <div class="form-group text-right">
-          <@bp.button text=bp.getMessage("passwordReset_button") attr={"type": "submit", "classes": ["btn","btn-primary"]} />
+          <@components.button text=bp.getMessage("passwordReset_button") attr={"type": "submit", "classes": ["btn","btn-primary"]} />
         </div>
       </form>
     </div>

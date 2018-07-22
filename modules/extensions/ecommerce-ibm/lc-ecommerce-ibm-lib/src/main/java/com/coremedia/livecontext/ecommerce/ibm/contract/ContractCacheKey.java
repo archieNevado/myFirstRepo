@@ -9,8 +9,9 @@ import com.coremedia.livecontext.ecommerce.common.InvalidIdException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmDocumentCacheKey;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
+import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Map;
 
 public class ContractCacheKey extends AbstractIbmDocumentCacheKey<Map<String, Object>> {
@@ -19,11 +20,8 @@ public class ContractCacheKey extends AbstractIbmDocumentCacheKey<Map<String, Ob
 
   private WcContractWrapperService wrapperService;
 
-  public ContractCacheKey(@Nonnull CommerceId id,
-                          StoreContext storeContext,
-                          UserContext userContext,
-                          WcContractWrapperService wrapperService,
-                          CommerceCache commerceCache) {
+  public ContractCacheKey(@NonNull CommerceId id, StoreContext storeContext, UserContext userContext,
+                          WcContractWrapperService wrapperService, CommerceCache commerceCache) {
     super(id, storeContext, userContext, CONFIG_KEY_CONTRACT, commerceCache);
     this.wrapperService = wrapperService;
     if (!BaseCommerceBeanType.CONTRACT.equals(id.getCommerceBeanType())) {
@@ -44,9 +42,14 @@ public class ContractCacheKey extends AbstractIbmDocumentCacheKey<Map<String, Ob
 
   @Override
   protected String getCacheIdentifier() {
-    return id + ":" + configKey + ":" + storeContext.getSiteId() + ":" + user +":" +
-            storeContext.getStoreId() + ":" + storeContext.getLocale() + ":" +
-            storeContext.getWorkspaceId();
+    return assembleCacheIdentifier(
+            id,
+            configKey,
+            storeContext.getSiteId(),
+            user,
+            storeContext.getStoreId(),
+            storeContext.getLocale(),
+            storeContext.getWorkspaceId().map(WorkspaceId::value).orElse(null)
+    );
   }
-
 }

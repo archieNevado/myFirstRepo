@@ -3,7 +3,7 @@ package com.coremedia.blueprint.elastic.social.cae.controller;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.elastic.core.api.models.Model;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -42,7 +42,7 @@ public class HandlerInfo {
     this.errors = errors;
   }
 
-  public void addMessage(@Nonnull String type, String path, @Nonnull String text) {
+  public void addMessage(@NonNull String type, String path, @NonNull String text) {
     messages.add(new Message(path, text, type));
   }
 

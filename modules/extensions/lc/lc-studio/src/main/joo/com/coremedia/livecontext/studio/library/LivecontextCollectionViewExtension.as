@@ -2,6 +2,7 @@ package com.coremedia.livecontext.studio.library {
 import com.coremedia.cap.content.ContentTypeNames;
 import com.coremedia.cms.editor.sdk.ContentTreeRelation;
 import com.coremedia.ecommerce.studio.CatalogModel;
+import com.coremedia.ecommerce.studio.catalogHelper;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.library.ECommerceCollectionViewExtension;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
@@ -54,7 +55,10 @@ public class LivecontextCollectionViewExtension extends ECommerceCollectionViewE
       }
       var availableSearchTypes:Array = [DEFAULT_TYPE_PRODUCT_RECORD, PRODUCT_VARIANT_TYPE_RECORD];
       if (folder is Store) {
-        availableSearchTypes.push(MARKETING_SPOT_TYPE_RECORD);
+        var store:Store = catalogHelper.getActiveStoreExpression().getValue();
+        if (store.isMarketingEnabled()){
+          availableSearchTypes.push(MARKETING_SPOT_TYPE_RECORD);
+        }
       }
       return availableSearchTypes;
     }

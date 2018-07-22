@@ -3,14 +3,13 @@ package com.coremedia.livecontext.ecommerce.ibm.order;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractWcWrapperService;
-import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestServiceMethod;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import org.springframework.http.HttpMethod;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 
@@ -22,23 +21,28 @@ import static java.util.Collections.singletonList;
  */
 public class WcCartWrapperService extends AbstractWcWrapperService {
 
-  private static final WcRestServiceMethod<WcCart, Void> GET_CART =
-          WcRestConnector.createServiceMethod(HttpMethod.GET, "store/{storeId}/cart/@self", false, false, false, true,
-                  null, WcCart.class);
+  private static final WcRestServiceMethod<WcCart, Void> GET_CART = WcRestServiceMethod
+          .builder(HttpMethod.GET, "store/{storeId}/cart/@self", (Class<Void>) null, WcCart.class)
+          .userCookiesSupport(true)
+          .build();
 
-  private static final WcRestServiceMethod<Void, WcUpdateCartParam> UPDATE_CART =
-          WcRestConnector.createServiceMethod(HttpMethod.PUT, "store/{storeId}/cart/@self", false, false, false, true,
-                  WcUpdateCartParam.class, Void.class);
+  private static final WcRestServiceMethod<Void, WcUpdateCartParam> UPDATE_CART = WcRestServiceMethod
+          .builder(HttpMethod.PUT, "store/{storeId}/cart/@self", WcUpdateCartParam.class, Void.class)
+          .userCookiesSupport(true)
+          .build();
 
-  private static final WcRestServiceMethod<Void, Void> CANCEL_CART =
-          WcRestConnector.createServiceMethod(HttpMethod.DELETE, "store/{storeId}/cart/@self", false, false, false,
-                  true, null, Void.class);
+  private static final WcRestServiceMethod<Void, Void> CANCEL_CART = WcRestServiceMethod
+          .builder(HttpMethod.DELETE, "store/{storeId}/cart/@self", (Class<Void>) null, Void.class)
+          .userCookiesSupport(true)
+          .build();
 
-  private static final WcRestServiceMethod<Void, WcAddToCartParam> ADD_TO_CART =
-          WcRestConnector.createServiceMethod(HttpMethod.POST, "store/{storeId}/cart", false, false, false, true,
-                  WcAddToCartParam.class, Void.class);
+  private static final WcRestServiceMethod<Void, WcAddToCartParam> ADD_TO_CART = WcRestServiceMethod
+          .builder(HttpMethod.POST, "store/{storeId}/cart", WcAddToCartParam.class, Void.class)
+          .userCookiesSupport(true)
+          .build();
 
-  public WcCart getCart(UserContext userContext, @Nonnull StoreContext storeContext) {
+  @Nullable
+  public WcCart getCart(UserContext userContext, @NonNull StoreContext storeContext) {
     try {
       Integer userId = UserContextHelper.getForUserId(userContext);
 
@@ -51,7 +55,8 @@ public class WcCartWrapperService extends AbstractWcWrapperService {
       Map<String, String[]> optionalParameters = getOptionalParameters(storeContext, userContext);
 
       return getRestConnector().callService(GET_CART, variableValues, optionalParameters, null, storeContext,
-              userContext);
+              userContext)
+              .orElse(null);
     } catch (CommerceException e) {
       throw e;
     } catch (Exception e) {
@@ -59,7 +64,7 @@ public class WcCartWrapperService extends AbstractWcWrapperService {
     }
   }
 
-  public void updateCart(UserContext userContext, @Nonnull StoreContext storeContext, WcUpdateCartParam updateCartParam) {
+  public void updateCart(UserContext userContext, @NonNull StoreContext storeContext, WcUpdateCartParam updateCartParam) {
     try {
       List<String> variableValues = singletonList(getStoreId(storeContext));
 
@@ -74,7 +79,7 @@ public class WcCartWrapperService extends AbstractWcWrapperService {
     }
   }
 
-  public void addToCart(UserContext userContext, @Nonnull StoreContext storeContext, WcAddToCartParam addToCartParam) {
+  public void addToCart(UserContext userContext, @NonNull StoreContext storeContext, WcAddToCartParam addToCartParam) {
     try {
       List<String> variableValues = singletonList(getStoreId(storeContext));
 
@@ -89,7 +94,7 @@ public class WcCartWrapperService extends AbstractWcWrapperService {
     }
   }
 
-  public void cancelCart(UserContext userContext, @Nonnull StoreContext storeContext) {
+  public void cancelCart(UserContext userContext, @NonNull StoreContext storeContext) {
     try {
       List<String> variableValues = singletonList(getStoreId(storeContext));
 
@@ -103,8 +108,8 @@ public class WcCartWrapperService extends AbstractWcWrapperService {
     }
   }
 
-  @Nonnull
-  private Map<String, String[]> getOptionalParameters(@Nonnull StoreContext storeContext,
+  @NonNull
+  private Map<String, String[]> getOptionalParameters(@NonNull StoreContext storeContext,
                                                       @Nullable UserContext userContext) {
     return buildParameterMap()
             .withCurrency(storeContext)

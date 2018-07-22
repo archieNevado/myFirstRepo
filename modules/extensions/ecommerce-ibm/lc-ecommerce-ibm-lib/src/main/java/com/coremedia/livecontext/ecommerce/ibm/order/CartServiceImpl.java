@@ -9,7 +9,7 @@ import com.coremedia.livecontext.ecommerce.order.Cart;
 import com.coremedia.livecontext.ecommerce.order.CartService;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,23 +25,23 @@ public class CartServiceImpl implements CartService {
 
 
   @Override
-  public Cart getCart(@Nonnull StoreContext context) {
+  public Cart getCart(@NonNull StoreContext context) {
     WcCart wcCart = cartWrapperService.getCart(UserContextHelper.getCurrentContext(), context);
     return createCartBeanFor(wcCart, context);
   }
 
   @Override
-  public void deleteCartOrderItem(String orderItemId, @Nonnull StoreContext context) {
+  public void deleteCartOrderItem(String orderItemId, @NonNull StoreContext context) {
     updateCartOrderItem(orderItemId, BigDecimal.ZERO, context);
   }
 
   @Override
-  public void updateCartOrderItem(String orderItemId, BigDecimal newQuantity, @Nonnull StoreContext context) {
+  public void updateCartOrderItem(String orderItemId, BigDecimal newQuantity, @NonNull StoreContext context) {
     updateCart(Collections.singletonList(new OrderItemParam(orderItemId, newQuantity)), context);
   }
 
   @Override
-  public void updateCart(Iterable<OrderItemParam> orderItems, @Nonnull StoreContext context) {
+  public void updateCart(Iterable<OrderItemParam> orderItems, @NonNull StoreContext context) {
     WcUpdateCartParam wcUpdateCartParam = new WcUpdateCartParam();
     List<WcUpdateCartParam.OrderItem> wcUpdateOrderItems = new ArrayList<>();
     for (OrderItemParam orderItemToUpdate :orderItems) {
@@ -52,7 +52,7 @@ public class CartServiceImpl implements CartService {
   }
 
   @Override
-  public void addToCart(Iterable<OrderItemParam> orderItems, @Nonnull StoreContext context) {
+  public void addToCart(Iterable<OrderItemParam> orderItems, @NonNull StoreContext context) {
     WcAddToCartParam wcAddToCartParam = new WcAddToCartParam();
     List<WcAddToCartParam.OrderItem> wcAddToOrderItems = new ArrayList<>();
     for (OrderItemParam orderItem :orderItems) {
@@ -63,7 +63,7 @@ public class CartServiceImpl implements CartService {
   }
 
   @Override
-  public void cancelCart(@Nonnull StoreContext context) {
+  public void cancelCart(@NonNull StoreContext context) {
     cartWrapperService.cancelCart(UserContextHelper.getCurrentContext(), context);
   }
 

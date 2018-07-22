@@ -8,7 +8,7 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.cotopaxi.common.CacheUtil;
 import com.coremedia.livecontext.contentbeans.CMExternalPage;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +22,7 @@ class CMExternalPageCacheKey extends CacheKey<Content> {
   private final String pageId;
   private final TreeRelation<Content> treeRelation;
 
-  CMExternalPageCacheKey(@Nonnull String pageId, @Nonnull Site site, TreeRelation<Content> treeRelation) {
+  CMExternalPageCacheKey(@NonNull String pageId, @NonNull Site site, TreeRelation<Content> treeRelation) {
     this.pageId = pageId;
     this.site = site;
     this.treeRelation = treeRelation;

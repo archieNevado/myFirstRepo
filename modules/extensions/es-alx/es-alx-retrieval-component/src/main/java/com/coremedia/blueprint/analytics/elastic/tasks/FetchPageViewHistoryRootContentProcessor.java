@@ -13,7 +13,7 @@ import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Collection;
@@ -49,9 +49,9 @@ class FetchPageViewHistoryRootContentProcessor {
     this.resultItemValidatorService = resultItemValidatorService;
   }
 
-  void processRootContent(@Nonnull Content root,
-                          @Nonnull Map<String, Object> serviceProviderSettings,
-                          @Nonnull AnalyticsServiceProvider analyticsServiceProvider) {
+  void processRootContent(@NonNull Content root,
+                          @NonNull Map<String, Object> serviceProviderSettings,
+                          @NonNull AnalyticsServiceProvider analyticsServiceProvider) {
     final String serviceKey = analyticsServiceProvider.getServiceKey();
     LOG.trace("Processing analytics provider {} for root navigation content {}", serviceKey, root);
     int interval = RetrievalUtil.getInterval(serviceProviderSettings, INTERVAL);
@@ -104,7 +104,7 @@ class FetchPageViewHistoryRootContentProcessor {
     private final String serviceKey;
     private final Date now;
 
-    public ReportModelUpdater(@Nonnull Date now, @Nonnull String serviceKey) {
+    public ReportModelUpdater(@NonNull Date now, @NonNull String serviceKey) {
       this.now = now;
       this.serviceKey = serviceKey;
     }

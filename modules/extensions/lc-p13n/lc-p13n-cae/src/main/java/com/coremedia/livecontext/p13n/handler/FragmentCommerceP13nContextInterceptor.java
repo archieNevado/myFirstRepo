@@ -12,8 +12,8 @@ import com.coremedia.personalization.preview.PreviewPersonalizationHandlerInterc
 import com.coremedia.personalization.preview.TestContextSource;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
@@ -31,12 +31,12 @@ public class FragmentCommerceP13nContextInterceptor extends AbstractCommerceCont
   }
 
   @Override
-  @Nonnull
+  @NonNull
   protected Optional<CommerceConnection> getCommerceConnectionWithConfiguredStoreContext(
-          @Nonnull Site site, @Nonnull HttpServletRequest request) {
+          @NonNull Site site, @NonNull HttpServletRequest request) {
     Optional<CommerceConnection> connection = super.getCommerceConnectionWithConfiguredStoreContext(site, request);
 
-    Context context = LiveContextContextHelper.fetchContext(request);
+    Context context = LiveContextContextHelper.findContext(request).orElse(null);
     if (context != null && isPreview()) {
       String testContextFlag = (String) context.get(PreviewPersonalizationHandlerInterceptor.QUERY_PARAMETER_TESTCONTEXT);
       String testContextId = (String) context.get(TestContextSource.QUERY_PARAMETER_TESTCONTEXTID);

@@ -1,6 +1,9 @@
 <@cm.responseHeader name="Content-Type" value="text/html; charset=UTF-8"/><#-- could be used as fragment -->
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.elastic.social.cae.controller.CommentsResult" -->
 
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/components.ftl" as components />
+<#import "../../freemarkerLibs/elastic-social.ftl" as elasticSocial />
+
 <#if self.isEnabled()>
   <#assign commentsId=bp.generateId("cm-comments-") />
 <div class="cm-comments" id="${commentsId}" data-cm-refreshable-fragment='{"url": "${cm.getLink(self)}"}'>
@@ -9,26 +12,26 @@
       <h3 class="cm-comments__title cm-heading3">
         <#switch numberOfContributions>
           <#case 0>
-          <@bp.message es.messageKeys.COMMENTS_NO_COMMENTS />
+          <@bp.message key="comments_no_comments" />
           <#break>
           <#case 1>
-            <@bp.message es.messageKeys.COMMENTS_HEADLINE_SINGULAR />
+            <@bp.message key="comments_headline_singular" />
             <#break>
           <#default>
-            <@bp.message key=es.messageKeys.COMMENTS_HEADLINE args=[numberOfContributions] />
+            <@bp.message key="comments_headline" args=[numberOfContributions] />
         </#switch>
       </h3>
   </#if>
 
   <#if self.isWritingContributionsAllowed()>
   <#-- output of dynamic, non-comment specific information -->
-    <@bp.notification type="inactive" text="" dismissable=false additionalClasses=["cm-comments__notification"] attr={"data-cm-notification": '{"path": ""}'} />
+    <@elasticSocial.notification type="inactive" text="" additionalClasses=["cm-comments__notification"] attr={"data-cm-notification": '{"path": ""}'} />
 
       <div class="cm-comments__toolbar cm-toolbar cm-toolbar--comments">
-        <@bp.button text=bp.getMessage(es.messageKeys.COMMENTS_WRITE) attr={"data-cm-button--comment": '{"replyTo": ""}'} />
+        <@components.button text=bp.getMessage("comments_write") attr={"data-cm-button--comment": '{"replyTo": ""}'} />
       </div>
   <#elseif self.isWritingContributionsEnabled() && es.isAnonymousUser()>
-    <@bp.notification type="info" text=bp.getMessage(es.messageKeys.COMMENT_FORM_NOT_LOGGED_IN) dismissable=false additionalClasses=["cm-comments__notification"] attr={"data-cm-comments-notification-type": "LOGIN_REQUIRED"} />
+    <@elasticSocial.notification type="info" text=bp.getMessage("commentForm_not_logged_in") additionalClasses=["cm-comments__notification"] attr={"data-cm-comments-notification-type": "LOGIN_REQUIRED"} />
       <div class="cm-comments__toolbar cm-toolbar cm-toolbar--comments">
         <@cm.include self=es.getLogin()!cm.UNDEFINED view="asButtonGroup" />
       </div>

@@ -252,7 +252,7 @@ const authenticateCognito = (poolData, username, password) => {
       onFailure: error => {
         reject(error);
       },
-      newPasswordRequired: (userAttributes, requiredAttributes) => {
+      newPasswordRequired: (/*userAttributes, requiredAttributes*/) => {
         reject("Please log into the Cloud Manager once.");
       },
     };

@@ -5,7 +5,8 @@
 <#assign spinnerCssClass=cm.localParameter("spinnerCssClass", "cm-spinner__images") />
 <#assign limitAspectRatios=cm.localParameters().limitAspectRatios![] />
 
-<#if (self.sequence![])?size gt 2>
+<#-- spinner (with at least 2 images) -->
+<#if (self.sequence![])?size gte 2>
   <div id="${spinnerId!""}" class="cm-spinner__canvas">
     <ol class="${spinnerCssClass}"<@preview.metadata "properties.sequence"/>>
     <#list self.sequence as image>

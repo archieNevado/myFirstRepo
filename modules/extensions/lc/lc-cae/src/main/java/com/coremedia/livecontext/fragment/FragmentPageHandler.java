@@ -1,6 +1,5 @@
 package com.coremedia.livecontext.fragment;
 
-
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
@@ -23,7 +22,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -38,12 +38,12 @@ import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFI
  */
 @RequestMapping
 public class FragmentPageHandler extends PageHandlerBase {
+
   private static final Logger LOG = LoggerFactory.getLogger(FragmentPageHandler.class);
 
   private static final String SEGMENT_STOREID = "storeId";
   private static final String SEGMENT_LOCALE = "locale";
   private static final String SEGMENT_MATRIX_PARAMS = "params";
-  private CatalogAliasTranslationService catalogAliasTranslationService;
 
   //parameter name used for putting the value of the matrix-parameter "parameter" into the request
   private static final String ATTR_NAME_FRAGMENT_PARAMETER = "fragmentParameter";
@@ -54,6 +54,8 @@ public class FragmentPageHandler extends PageHandlerBase {
           "/{" + SEGMENT_STOREID + '}' +
           "/{" + SEGMENT_LOCALE + '}' +
           "/{" + SEGMENT_MATRIX_PARAMS + ":.*}";
+
+  private CatalogAliasTranslationService catalogAliasTranslationService;
 
   private boolean isPreview = false;
   private List<FragmentHandler> fragmentHandlers;
@@ -70,16 +72,17 @@ public class FragmentPageHandler extends PageHandlerBase {
    * @param request The actual request, needed to put the optional "parameter" into the request.
    */
   @RequestMapping(value = URI_PATTERN, produces = CONTENT_TYPE_HTML)
-  public ModelAndView handleFragment(@PathVariable(SEGMENT_STOREID) String storeId,
-                                     @PathVariable(SEGMENT_LOCALE) Locale locale,
-                                     HttpServletRequest request,
-                                     HttpServletResponse response) {
+  public ModelAndView handleFragment(@NonNull @PathVariable(SEGMENT_STOREID) String storeId,
+                                     @NonNull @PathVariable(SEGMENT_LOCALE) Locale locale,
+                                     @NonNull HttpServletRequest request,
+                                     @NonNull HttpServletResponse response) {
     StoreContext storeContext = CurrentCommerceConnection.find().map(CommerceConnection::getStoreContext).orElse(null);
     if (storeContext == null) {
       return HandlerHelper.badRequest("Store context not initialized for fragment call " + request.getRequestURI());
     }
 
     response.setContentType(CONTENT_TYPE_HTML);
+
     FragmentParameters fragmentParameters = FragmentContextProvider.getFragmentContext(request).getParameters();
 
     //resolve the site first
@@ -90,7 +93,8 @@ public class FragmentPageHandler extends PageHandlerBase {
     SiteHelper.setSiteToRequest(site, request);
 
     //update store context with fragment parameters
-    CaeStoreContextUtil.updateStoreContextWithFragmentParameters(catalogAliasTranslationService, storeContext, fragmentParameters, site);
+    CaeStoreContextUtil.updateStoreContextWithFragmentParameters(catalogAliasTranslationService, storeContext,
+            fragmentParameters, site);
 
     ModelAndView modelAndView;
     FragmentHandler handler = selectHandler(fragmentParameters);
@@ -112,7 +116,7 @@ public class FragmentPageHandler extends PageHandlerBase {
   //-------------- Config --------------------
 
   @Required
-  public void setFragmentHandlers(List<FragmentHandler> fragmentHandlers) {
+  public void setFragmentHandlers(@NonNull List<FragmentHandler> fragmentHandlers) {
     this.fragmentHandlers = ImmutableList.copyOf(fragmentHandlers);
   }
 
@@ -131,7 +135,8 @@ public class FragmentPageHandler extends PageHandlerBase {
    * search for a FragmentHandler that feels responsible for the request,
    * depending on the parameters.
    */
-  private FragmentHandler selectHandler(FragmentParameters fragmentParameters) {
+  @Nullable
+  private FragmentHandler selectHandler(@NonNull FragmentParameters fragmentParameters) {
     return fragmentHandlers.stream()
             .filter(handler -> handler.include(fragmentParameters))
             .findFirst()
@@ -142,24 +147,33 @@ public class FragmentPageHandler extends PageHandlerBase {
    * If no handler has been applied we assume the default behaviour.
    * This usually happens if only the view param is passed.
    */
-  private ModelAndView createDefaultModelAndView(FragmentParameters fragmentParameters, Site site, @Nullable User developer) {
+  @NonNull
+  private ModelAndView createDefaultModelAndView(@NonNull FragmentParameters fragmentParameters, @NonNull Site site,
+                                                 @Nullable User developer) {
     Content rootChannel = site.getSiteRootDocument();
     CMChannel channel = getContentBeanFactory().createBeanFor(rootChannel, CMChannel.class);
     Page page = asPage(channel, channel, developer);
     return createModelAndView(page, fragmentParameters.getView());
   }
 
-  private ModelAndView createNoSiteModelAndView(FragmentParameters fragmentParameters, String storeId, Locale locale) {
+  @Nullable
+  private ModelAndView createNoSiteModelAndView(@NonNull FragmentParameters fragmentParameters, @NonNull String storeId,
+                                                @NonNull Locale locale) {
     if (isPreview) {
       return HandlerHelper.badRequest("Could not find a site for store " + fragmentParameters);
     }
+
     LOG.warn("Received an invalid fragment request. No site found for store '{}' with locale '{}'. " +
             "Will return an empty response with return code 200 to not break the whole WCS page.", storeId, locale);
     return null;
   }
 
-  private ModelAndView createErrorModelAndView(FragmentParameters fragmentParameters, FragmentHandler handler) {
-    LOG.warn("Fragment handler '" + handler + "' did not return any ModelAndView for " + fragmentParameters);
-    return HandlerHelper.notFound("Fragment handler '" + handler + "' did not return any ModelAndView for " + fragmentParameters);
+  @NonNull
+  private static ModelAndView createErrorModelAndView(@NonNull FragmentParameters fragmentParameters,
+                                                      @NonNull FragmentHandler handler) {
+    LOG.warn("Fragment handler '{}' did not return any ModelAndView for {}", handler, fragmentParameters);
+
+    return HandlerHelper.notFound(
+            "Fragment handler '" + handler + "' did not return any ModelAndView for " + fragmentParameters);
   }
 }

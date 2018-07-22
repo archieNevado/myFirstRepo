@@ -12,8 +12,8 @@ import com.coremedia.livecontext.ecommerce.p13n.SegmentService;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -44,10 +44,10 @@ public class SegmentServiceImpl implements SegmentService {
     this.commerceCache = commerceCache;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   @SuppressWarnings("unchecked")
-  public List<Segment> findAllSegments(@Nonnull StoreContext storeContext) {
+  public List<Segment> findAllSegments(@NonNull StoreContext storeContext) {
     UserContext userContext = UserContextHelper.getCurrentContext();
     Map<String, Object> segments = commerceCache.get(
             new SegmentsCacheKey(storeContext, userContext, segmentWrapperService, commerceCache));
@@ -58,7 +58,7 @@ public class SegmentServiceImpl implements SegmentService {
   @Nullable
   @Override
   @SuppressWarnings("unchecked")
-  public Segment findSegmentById(@Nonnull CommerceId id, @Nonnull StoreContext storeContext) {
+  public Segment findSegmentById(@NonNull CommerceId id, @NonNull StoreContext storeContext) {
     UserContext userContext = UserContextHelper.getCurrentContext();
     Map<String, Object> segment = commerceCache.get(
             new SegmentCacheKey(id, storeContext, userContext, segmentWrapperService, commerceCache));
@@ -66,10 +66,10 @@ public class SegmentServiceImpl implements SegmentService {
     return createSegmentBeanFor(segment, storeContext);
   }
 
-  @Nonnull
+  @NonNull
   @Override
   @SuppressWarnings("unchecked")
-  public List<Segment> findSegmentsForCurrentUser(@Nonnull StoreContext storeContext) {
+  public List<Segment> findSegmentsForCurrentUser(@NonNull StoreContext storeContext) {
     UserContext userContext = UserContextHelper.getCurrentContext();
     Map<String, Object> segments = commerceCache.get(
             new SegmentsByUserCacheKey(storeContext, userContext, segmentWrapperService, commerceCache));

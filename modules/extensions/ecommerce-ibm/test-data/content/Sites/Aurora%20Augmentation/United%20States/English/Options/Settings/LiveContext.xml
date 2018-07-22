@@ -6,12 +6,77 @@
 <masterVersion>0</masterVersion>
 <settings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StructProperty Name="livecontext-fragments">
+<Struct>
+<StructProperty Name="prefetchedViews">
+<Struct>
+<StringListProperty Name="defaults">
+<String>metadata</String>
+<String>externalHead</String>
+<String>externalFooter</String>
+<String>asNavigation</String>
+</StringListProperty>
+<StructListProperty Name="contentTypes">
+<Struct>
+<StringProperty Name="type">CMLinkable</StringProperty>
+<StringListProperty Name="prefetchedViews">
+<String>metadata</String>
+<String>asBreadcrumbFragment</String>
+<String>externalHead</String>
+<String>externalFooter</String>
+<String>asNavigation</String>
+</StringListProperty>
+</Struct>
+</StructListProperty>
+</Struct>
+</StructProperty>
+<StructProperty Name="placementViews">
+<Struct>
+<StructListProperty Name="defaults">
+<Struct>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/Pagegrid/Placements/header.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/header"/>
+<StringProperty Name="view">asDefaultFragment</StringProperty>
+</Struct>
+<Struct>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/Pagegrid/Placements/banner.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/banner"/>
+<StringProperty Name="view">asTeaserHero</StringProperty>
+</Struct>
+<Struct>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/Pagegrid/Placements/footer.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/footer"/>
+<StringProperty Name="view">asDefaultFragment</StringProperty>
+</Struct>
+<Struct>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/Pagegrid/Placements/main.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/main"/>
+<StringProperty Name="view">asDefaultFragment</StringProperty>
+</Struct>
+<Struct>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/Pagegrid/Placements/sidebar.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/sidebar"/>
+<StringProperty Name="view">asTeaser</StringProperty>
+</Struct>
+<Struct>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/Pagegrid/Placements/product-detail.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/product-detail"/>
+<StringProperty Name="view">asDefaultFragment</StringProperty>
+</Struct>
+<Struct>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/Pagegrid/Placements/tab.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/tab"/>
+<StringProperty Name="view">asDefaultFragment</StringProperty>
+</Struct>
+<Struct>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/Pagegrid/Placements/additional.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Options/Settings/Pagegrid/Placements/additional"/>
+<StringProperty Name="view">default</StringProperty>
+</Struct>
+</StructListProperty>
+</Struct>
+</StructProperty>
+</Struct>
+</StructProperty>
 <BooleanProperty Name="livecontext.manageNavigation">true</BooleanProperty>
 <IntProperty Name="livecontext.navigation.depth">2</IntProperty>
 <BooleanProperty Name="livecontext.displayAvailability">true</BooleanProperty>
 <BooleanProperty Name="livecontext.policy.commerce-product-links">true</BooleanProperty>
 <BooleanProperty Name="livecontext.policy.commerce-category-links">true</BooleanProperty>
 <BooleanProperty Name="livecontext.policy.commerce-page-links">true</BooleanProperty>
+<BooleanProperty Name="p13n-dynamic-includes-enabled">false</BooleanProperty>
 <StringProperty Name="livecontext.connectionId">wcs1</StringProperty>
 <StructProperty Name="livecontext.store.config">
 <Struct>

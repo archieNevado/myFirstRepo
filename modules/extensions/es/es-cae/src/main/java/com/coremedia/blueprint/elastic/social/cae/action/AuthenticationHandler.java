@@ -24,7 +24,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
@@ -174,7 +174,7 @@ public class AuthenticationHandler extends WebflowHandlerBase {
     return result;
   }
 
-  private ModelAndView forceNewPassword(@Nonnull CMAction loginAction, @Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response) {
+  private ModelAndView forceNewPassword(@NonNull CMAction loginAction, @NonNull HttpServletRequest request, @NonNull HttpServletResponse response) {
     response.setContentType("text/plain");
     try (PrintWriter writer = response.getWriter()) {
       // Set standard HTTP/1.1 no-cache headers.
@@ -193,7 +193,7 @@ public class AuthenticationHandler extends WebflowHandlerBase {
     return null;
   }
 
-  private String createForceNewPasswordUrl(@Nonnull CMAction loginAction, @Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response) {
+  private String createForceNewPasswordUrl(@NonNull CMAction loginAction, @NonNull HttpServletRequest request, @NonNull HttpServletResponse response) {
     CMAction passwordExpiredAction = settingsService.setting(EXPIRED_PASSWORD_SETTING_ID, CMAction.class, loginAction);
     AuthenticationState passwordExpiredState = createLoginActionStateBean(passwordExpiredAction);
 

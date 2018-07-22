@@ -13,8 +13,8 @@ import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -52,7 +52,7 @@ class InvalidationServiceImpl extends AbstractIbmService implements Invalidation
 
   private long chunkSize;
 
-  InvalidationServiceImpl(@Nonnull WcInvalidationWrapperService wcInvalidationWrapperService,
+  InvalidationServiceImpl(@NonNull WcInvalidationWrapperService wcInvalidationWrapperService,
                           long maxWaitInMilliseconds, long chunkSize) {
     this.wcInvalidationWrapperService = wcInvalidationWrapperService;
     this.maxWaitInMilliseconds = maxWaitInMilliseconds;
@@ -60,8 +60,8 @@ class InvalidationServiceImpl extends AbstractIbmService implements Invalidation
   }
 
   @Override
-  @Nonnull
-  public List<InvalidationEvent> getInvalidations(long timestamp, @Nonnull StoreContext storeContext) {
+  @NonNull
+  public List<InvalidationEvent> getInvalidations(long timestamp, @NonNull StoreContext storeContext) {
     // the invalidation thread would never be healthy again if a network error had occurred previously
     StoreContextHelper.setCommerceSystemIsUnavailable(storeContext, false);
 
@@ -87,15 +87,17 @@ class InvalidationServiceImpl extends AbstractIbmService implements Invalidation
             .collect(toList());
   }
 
-  @Nonnull
-  private static StoreContext restoreStoreContext(@Nonnull StoreContext storeContext) {
+  @NonNull
+  private static StoreContext restoreStoreContext(@NonNull StoreContext storeContext) {
     String siteId = storeContext.getSiteId();
     LOG.debug("Invalid store context found for site: {}, trying to restore...", siteId);
     try {
       CommerceConnection commerceConnection = CurrentCommerceConnection.find().orElse(null);
       if (commerceConnection != null) {
         StoreContextProvider storeContextProvider = commerceConnection.getStoreContextProvider();
-        StoreContext storeContextNew = storeContextProvider.findContextBySiteId(siteId);
+        StoreContext storeContextNew = storeContextProvider.findContextBySiteId(siteId)
+                .orElseThrow(() -> new InvalidContextException("No store context found for site ID '" + siteId + "'."));
+
         StoreContextHelper.setCurrentContext(storeContextNew);
         LOG.debug("Store context restored: {}", storeContextNew);
 
@@ -112,16 +114,16 @@ class InvalidationServiceImpl extends AbstractIbmService implements Invalidation
     return storeContext;
   }
 
-  @Nonnull
+  @NonNull
   @Override
-  public String getServiceEndpointId(@Nonnull StoreContext storeContext) {
+  public String getServiceEndpointId(@NonNull StoreContext storeContext) {
     return Optional.ofNullable(wcInvalidationWrapperService.getRestConnector())
             .map(restConnector -> restConnector.getServiceEndpoint(storeContext))
             .orElse("unknown");
   }
 
-  @Nonnull
-  InvalidationEvent convertEvent(@Nonnull Map<String, Object> event, long lastTimestamp) {
+  @NonNull
+  InvalidationEvent convertEvent(@NonNull Map<String, Object> event, long lastTimestamp) {
     long timestamp = findStringValue(event, "timestamp")
             .map(Long::parseLong)
             .orElse(lastTimestamp);
@@ -147,7 +149,7 @@ class InvalidationServiceImpl extends AbstractIbmService implements Invalidation
   }
 
   @Nullable
-  private static String getStringValueForKey(@Nonnull Map<String, Object> map, @Nonnull String key) {
+  private static String getStringValueForKey(@NonNull Map<String, Object> map, @NonNull String key) {
     return findStringValue(map, key).orElse(null);
   }
 }

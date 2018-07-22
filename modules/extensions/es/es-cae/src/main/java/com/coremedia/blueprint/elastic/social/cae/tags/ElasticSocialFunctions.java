@@ -29,7 +29,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.util.concurrent.ExecutionException;
@@ -46,7 +46,7 @@ public final class ElasticSocialFunctions {
           .newBuilder()
           .build(new CacheLoader<Class, Object>() {
             @Override
-            public Object load(@Nonnull Class clazz) throws Exception {
+            public Object load(@NonNull Class clazz) throws Exception {
               HttpServletRequest request = getServletRequestAttributes().getRequest();
               ServletContext servletContext = request.getServletContext();
 
@@ -56,7 +56,7 @@ public final class ElasticSocialFunctions {
               return webAppContext.getBean(clazz);
             }
 
-            @Nonnull
+            @NonNull
             private ServletRequestAttributes getServletRequestAttributes() {
               ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder
                       .getRequestAttributes();
@@ -72,7 +72,7 @@ public final class ElasticSocialFunctions {
   private ElasticSocialFunctions() {
   }
 
-  private static <T> T getBeanOfType(@Nonnull Class<T> type) {
+  private static <T> T getBeanOfType(@NonNull Class<T> type) {
     try {
       return type.cast(CACHE.get(type));
     } catch (ExecutionException e) {
@@ -85,7 +85,7 @@ public final class ElasticSocialFunctions {
    *
    * @return <code>true</code> if the current user is not logged in otherwise <code>false</code>
    */
-  @Nonnull
+  @NonNull
   public static Boolean isAnonymousUser() {
     return getUser() == null;
   }
@@ -97,26 +97,26 @@ public final class ElasticSocialFunctions {
    * @param user the user to be checked
    * @return <code>true</code> if the user wants to remain anonymous otherwise <code>false</code>
    */
-  @Nonnull
-  public static Boolean isAnonymous(@Nonnull CommunityUser user) {
+  @NonNull
+  public static Boolean isAnonymous(@NonNull CommunityUser user) {
     return user.isAnonymous();
   }
 
-  @Nonnull
-  public static Boolean isActivated(@Nonnull CommunityUser user) {
+  @NonNull
+  public static Boolean isActivated(@NonNull CommunityUser user) {
     return user.isActivated() || user.isActivatedAndRequiresModeration();
   }
 
-  public static Boolean isNotAuthor(@Nonnull CommunityUser user) {
+  public static Boolean isNotAuthor(@NonNull CommunityUser user) {
     return !user.equals(getUser());
   }
 
-  public static double getAverageRating(@Nonnull CMTeasable target) {
+  public static double getAverageRating(@NonNull CMTeasable target) {
     ContentWithSite contentWithSite = getContentWithSite(target);
     return getBeanOfType(RatingService.class).getAverageRating(contentWithSite);
   }
 
-  public static Integer getRatingForCurrentUser(@Nonnull CMTeasable target) {
+  public static Integer getRatingForCurrentUser(@NonNull CMTeasable target) {
     CommunityUser user = getCurrentOrAnonymousUser();
     Rating ratingForUser = getBeanOfType(RatingService.class).getRatingForUser(user, getContentWithSite(target));
     return ratingForUser != null ? ratingForUser.getValue() : 0;
@@ -142,7 +142,7 @@ public final class ElasticSocialFunctions {
     return false;
   }
 
-  @Nonnull
+  @NonNull
   public static CommunityUser getCurrentOrAnonymousUser() {
     return getBeanOfType(ElasticSocialUserHelper.class).getCurrentOrAnonymousUser();
   }
@@ -155,7 +155,7 @@ public final class ElasticSocialFunctions {
     return getBeanOfType(CommentService.class).getNumberOfComments(getContentWithSite(target));
   }
 
-  public static long getNumberOfLikes(@Nonnull CMTeasable target) {
+  public static long getNumberOfLikes(@NonNull CMTeasable target) {
     return getBeanOfType(LikeService.class).getNumberOfLikes(getContentWithSite(target));
   }
 

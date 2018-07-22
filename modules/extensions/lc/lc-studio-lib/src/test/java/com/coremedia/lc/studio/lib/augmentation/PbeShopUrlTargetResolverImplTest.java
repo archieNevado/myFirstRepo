@@ -18,7 +18,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -53,8 +52,7 @@ public class PbeShopUrlTargetResolverImplTest {
     commerceConnection = new BaseCommerceConnection();
     CurrentCommerceConnection.set(commerceConnection);
 
-    storeContext = newStoreContext();
-    storeContext.put(StoreContextImpl.SITE, "theSiteId");
+    storeContext = StoreContextImpl.builder("theSiteId").build();
     storeContext.put(StoreContextImpl.STORE_NAME, "storeName");
     commerceConnection.setStoreContext(storeContext);
 

@@ -124,7 +124,7 @@ action_class do
   # @raise [RuntimeError] Raise if powershell is < 3.0
   def raise_on_old_powershell
     # be super defensive about the powershell lang plugin not being there
-    return if node['languages'] && node['languages']['powershell'] && node['languages']['powershell']['version'].to_i > 3
+    return if node['languages'] && node['languages']['powershell'] && node['languages']['powershell']['version'].to_i >= 3
     raise 'The windows_feature_powershell resource requires PowerShell 3.0 or later. Please install PowerShell 3.0+ before running this resource.' if powershell_version < 3
   end
 
@@ -234,6 +234,6 @@ action_class do
 
   # Fail unless we're on windows 8+ / 2012+ where deleting a feature is supported
   def raise_if_delete_unsupported
-    raise Chef::Exceptions::UnsupportedAction, "#{self} :delete action not support on Windows releases before Windows 8/2012. Cannot continue!" if older_than_2012_or_8?
+    raise Chef::Exceptions::UnsupportedAction, "#{self} :delete action not supported on Windows releases before Windows 8/2012. Cannot continue!" if older_than_2012_or_8?
   end
 end

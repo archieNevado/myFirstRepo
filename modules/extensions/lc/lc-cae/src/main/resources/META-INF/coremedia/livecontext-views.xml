@@ -39,4 +39,21 @@
   <bean id="liveContextLoginFreemarkerFacade" class="com.coremedia.livecontext.web.taglib.LiveContextLoginFreemarkerFacade">
   </bean>
 
+
+  <bean class="com.coremedia.livecontext.view.PrefetchFragmentsView" id="prefetchFragmentsView">
+    <description>
+      Programmed view to prefetch fragments in one call in the commerce-led fragment scenario.
+    </description>
+  </bean>
+
+  <bean class="com.coremedia.livecontext.view.PrefetchFragmentsConfigReader" id="prefetchFragmentsConfigReader"/>
+
+  <customize:append id="liveContextProgrammedViewsCustomizer" bean="blueprintProgrammedViews">
+    <map>
+      <entry key="com.coremedia.blueprint.common.contentbeans.Page#prefetchFragments" value-ref="prefetchFragmentsView"/>
+      <entry key="com.coremedia.livecontext.ecommerce.catalog.Product#prefetchFragments" value-ref="prefetchFragmentsView"/>
+      <entry key="com.coremedia.blueprint.common.contentbeans.CMLinkable#prefetchFragments" value-ref="prefetchFragmentsView"/>
+    </map>
+  </customize:append>
+
 </beans>

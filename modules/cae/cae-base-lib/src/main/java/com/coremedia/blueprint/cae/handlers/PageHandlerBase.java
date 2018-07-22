@@ -27,8 +27,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
@@ -244,7 +244,7 @@ public abstract class PageHandlerBase extends HandlerBase implements BeanFactory
    * using {@link com.coremedia.blueprint.common.services.context.ContextHelper#findAndSelectContextFor}.
    */
   @Nullable
-  protected CMContext getContext(@Nonnull CMContext current, @Nonnull CMLinkable target) {
+  protected CMContext getContext(@NonNull CMContext current, @NonNull CMLinkable target) {
     return contextHelper.findAndSelectContextFor(current, target);
   }
 
@@ -258,10 +258,10 @@ public abstract class PageHandlerBase extends HandlerBase implements BeanFactory
   /**
    * Provides a (vanity) name for a linkable to be used inside a link
    */
-  protected String getVanityName(CMLinkable bean) {
+  @NonNull
+  protected String getVanityName(@NonNull CMLinkable bean) {
     return getContentLinkBuilder().getVanityName(bean.getContent());
   }
-
 
   protected void addViewAndParameters(UriComponentsBuilder uriBuilder, String viewName, Map<String, Object> linkParameters) {
     // add optional view query parameter

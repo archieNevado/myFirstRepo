@@ -3,14 +3,17 @@
 <#-- @ftlvariable name="nextUrl" type="java.lang.String" -->
 <#-- @ftlvariable name="_CSRFToken" type="java.lang.String" -->
 
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/components.ftl" as components />
+<#import "../../freemarkerLibs/elastic-social.ftl" as elasticSocial />
+
 <#assign elasticSocialConfiguration=es.getElasticSocialConfiguration(cmpage) />
 <#assign loginAction=self.loginAction!cm.UNDEFINED />
-<#assign loginFlow=bp.substitute(loginAction.id!"", loginAction)!cm.UNDEFINED />
+<#assign loginFlow=cm.substitute(loginAction.id!"", loginAction) />
 <#assign classContainer=cm.localParameters().classContainer!"" />
 <#assign forgotPasswordAction=self.passwordResetAction!cm.UNDEFINED />
 <#assign forgotPasswordUrl=cm.getLink(forgotPasswordAction, {"next": nextUrl})/>
 <#assign registrationAction=self.registrationAction!cm.UNDEFINED />
-<#assign registrationFlow=bp.substitute(registrationAction.id!"", registrationAction)!cm.UNDEFINED />
+<#assign registrationFlow=cm.substitute(registrationAction.id!"", registrationAction) />
 <#assign registerLink=cm.getLink(registrationFlow, {"next": nextUrl, "absolute": true, "scheme": "https"})/>
 
 <#if elasticSocialConfiguration?has_content>
@@ -26,17 +29,17 @@
         <input type="hidden" name="_eventId_submit">
 
         <#-- notification -->
-        <@bp.notificationFromSpring path="bpLoginForm" additionalClasses=["alert alert-danger"] />
+        <@elasticSocial.notificationFromSpring path="bpLoginForm" additionalClasses=["alert alert-danger"] />
 
         <#-- Login Name -->
         <div class="form-group">
-          <@bp.labelFromSpring path="bpLoginForm.name" text='${bp.getMessage("login_name_label")}'/>
+          <@elasticSocial.labelFromSpring path="bpLoginForm.name" text='${bp.getMessage("login_name_label")}'/>
           <@spring.formInput path="bpLoginForm.name" attributes='class="form-control" placeholder="${bp.getMessage("login_name_label")}" required'/>
         </div>
 
         <#-- Password -->
         <div class="form-group">
-          <@bp.labelFromSpring path="bpLoginForm.password" text='${bp.getMessage("login_password_label")}'/>
+          <@elasticSocial.labelFromSpring path="bpLoginForm.password" text='${bp.getMessage("login_password_label")}'/>
           <@spring.formInput path="bpLoginForm.password" fieldType="password" attributes='class="form-control" placeholder="${bp.getMessage("login_password_label")}" required'/>
         </div>
 
@@ -50,7 +53,7 @@
 
         <#-- Send Button -->
         <div class="form-group">
-          <@bp.button text=bp.getMessage("login_sign_in") attr={"type": "submit", "classes": ["btn","btn-primary"]} />
+          <@components.button text=bp.getMessage("login_sign_in") attr={"type": "submit", "classes": ["btn","btn-primary"]} />
         </div>
       </form>
 
@@ -74,7 +77,7 @@
               <input type="hidden" name="scope" value="email">
               <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}">
               <input type="hidden" name="forceRegister" value="false">
-              <@bp.button text=bp.getMessage("login_with_facebook") attr={"type": "submit", "id": "facebookConnect","classes": ["btn", "btn-default", "cm-button-group__button"]} />
+              <@components.button text=bp.getMessage("login_with_facebook") attr={"type": "submit", "id": "facebookConnect","classes": ["btn", "btn-default", "cm-button-group__button"]} />
             </form>
           </#if>
 
@@ -86,7 +89,7 @@
               <input type="hidden" name="loginUrl" value="${loginUrl!""}">
               <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}">
               <input type="hidden" name="forceRegister" value="false">
-              <@bp.button text=bp.getMessage("login_with_twitter") attr={"type": "submit", "id": "twitterConnect","classes": ["btn", "btn-default", "cm-button-group__button"]} />
+              <@components.button text=bp.getMessage("login_with_twitter") attr={"type": "submit", "id": "twitterConnect","classes": ["btn", "btn-default", "cm-button-group__button"]} />
             </form>
           </#if>
         </div>

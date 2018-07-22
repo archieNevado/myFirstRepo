@@ -8,7 +8,6 @@ import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -204,13 +203,6 @@ public class CatalogServiceImplBodBasedIT extends IbmCatalogServiceBaseTest {
     super.testFindProductVariantByExternalIdWithContractSupport();
   }
 
-  @Test
-  @Override
-  @Ignore("BOD cannot handle slash in product code")
-  public void testFindProductByIdWithSlash() {
-    super.testFindProductByIdWithSlash();
-  }
-
   @Betamax(tape = "csi_testFindProductMultiSEOByExternalTechId", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
@@ -218,25 +210,11 @@ public class CatalogServiceImplBodBasedIT extends IbmCatalogServiceBaseTest {
     super.testFindProductMultiSEOByExternalTechId();
   }
 
-  @Test
-  @Override
-  @Ignore("BOD cannot handle slash in sku code")
-  public void testFindProductVariantByIdWithSlash() throws Exception {
-    super.testFindProductVariantByIdWithSlash();
-  }
-
   @Betamax(tape = "csi_testFindRootCategory", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
   public void testFindRootCategory() throws Exception {
     super.testFindRootCategory();
-  }
-
-  @Test
-  @Override
-  @Ignore("No Contract Support for BOD Handler")
-  public void testFindTopCategoriesWithContractSupport() throws Exception {
-    super.testFindTopCategoriesWithContractSupport();
   }
 
   @Betamax(tape = "csi_testFindCategoryMultiSEOByExternalTechId", match = {MatchRule.path, MatchRule.query})
@@ -256,12 +234,5 @@ public class CatalogServiceImplBodBasedIT extends IbmCatalogServiceBaseTest {
   @Override
   public void testFindGermanCategoryBySeoSegment() throws Exception {
     super.testFindGermanCategoryBySeoSegment();
-  }
-
-  @Test
-  @Override
-  @Ignore("BOD cannot handle slash in category code")
-  public void testFindCategoryByIdWithSlash() {
-    super.testFindCategoryByIdWithSlash();
   }
 }

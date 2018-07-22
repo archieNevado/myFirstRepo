@@ -3,7 +3,13 @@ package com.coremedia.blueprint.elastic.social.cae.tags;
 import com.coremedia.blueprint.elastic.social.cae.controller.ContributionMessageKeys;
 import com.coremedia.blueprint.elastic.social.cae.flows.WebflowMessageKeys;
 
+/**
+ * Constants to access localization for elastic social.
+ *
+ * @deprecated will be removed with the next AEP, access the resource bundle keys directly in your template.
+ */
 @SuppressWarnings({"InstanceMethodNamingConvention", "UnusedDeclaration", "OverlyComplexClass"})
+@Deprecated
 public class ElasticSocialMessageKeysFreemarker {
 
   public String getACTIVATE_REGISTRATION_FAILURE_TITLE() {

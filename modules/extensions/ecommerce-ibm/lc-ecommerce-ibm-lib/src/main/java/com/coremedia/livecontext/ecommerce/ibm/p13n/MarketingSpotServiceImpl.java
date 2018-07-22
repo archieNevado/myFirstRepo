@@ -14,8 +14,8 @@ import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.collections.Transformer;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -34,8 +34,8 @@ public class MarketingSpotServiceImpl implements MarketingSpotService {
   private boolean useExternalIdForBeanCreation;
 
   @Override
-  @Nonnull
-  public List<MarketingSpot> findMarketingSpots(@Nonnull StoreContext storeContext) {
+  @NonNull
+  public List<MarketingSpot> findMarketingSpots(@NonNull StoreContext storeContext) {
     Map<String, Object> wcMarketingSpot = commerceCache.get(
             new MarketingSpotsCacheKey(storeContext, UserContextHelper.getCurrentContext(),
                     marketingSpotWrapperService, commerceCache));
@@ -45,7 +45,7 @@ public class MarketingSpotServiceImpl implements MarketingSpotService {
 
   @Nullable
   @Override
-  public MarketingSpot findMarketingSpotById(@Nonnull CommerceId id, @Nonnull StoreContext storeContext) {
+  public MarketingSpot findMarketingSpotById(@NonNull CommerceId id, @NonNull StoreContext storeContext) {
     UserContext userContext = UserContextHelper.getCurrentContext();
     Map<String, Object> wcMarketingSpot = commerceCache.get(
             new MarketingSpotCacheKey(id, storeContext, userContext, marketingSpotWrapperService, commerceCache));
@@ -64,10 +64,10 @@ public class MarketingSpotServiceImpl implements MarketingSpotService {
   }
 
   @Override
-  @Nonnull
-  public SearchResult<MarketingSpot> searchMarketingSpots(@Nonnull String searchTerm,
+  @NonNull
+  public SearchResult<MarketingSpot> searchMarketingSpots(@NonNull String searchTerm,
                                                           @Nullable Map<String, String> searchParams,
-                                                          @Nonnull StoreContext storeContext) {
+                                                          @NonNull StoreContext storeContext) {
     Map<String, Object> wcMarketingSpots = marketingSpotWrapperService.searchMarketingSpots(searchTerm, searchParams,
             storeContext, UserContextHelper.getCurrentContext());
 
@@ -83,7 +83,7 @@ public class MarketingSpotServiceImpl implements MarketingSpotService {
 
   @Nullable
   protected MarketingSpot createMarketingSpotBeanFor(@Nullable Map<String, Object> marketingSpotWrapper, boolean reloadById,
-                                                     @Nonnull StoreContext storeContext) {
+                                                     @NonNull StoreContext storeContext) {
     if (marketingSpotWrapper == null) {
       return null;
     }
@@ -120,7 +120,7 @@ public class MarketingSpotServiceImpl implements MarketingSpotService {
   }
 
   protected List<MarketingSpot> createMarketingSpotBeansFor(Map<String, Object> marketingSpotWrappers,
-                                                            @Nonnull StoreContext storeContext) {
+                                                            @NonNull StoreContext storeContext) {
     if (marketingSpotWrappers == null || marketingSpotWrappers.isEmpty()) {
       return Collections.emptyList();
     }
@@ -155,12 +155,12 @@ public class MarketingSpotServiceImpl implements MarketingSpotService {
   }
 
   @Nullable
-  private static List getListValueForKey(@Nonnull Map<String, Object> map, @Nonnull String key) {
+  private static List getListValueForKey(@NonNull Map<String, Object> map, @NonNull String key) {
     return DataMapHelper.findValue(map, key, List.class).orElse(null);
   }
 
   @Nullable
-  private static String getStringValueForKey(@Nonnull Map<String, Object> map, @Nonnull String key) {
+  private static String getStringValueForKey(@NonNull Map<String, Object> map, @NonNull String key) {
     return DataMapHelper.findStringValue(map, key).orElse(null);
   }
 

@@ -4,8 +4,8 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerce
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 /**
  * Helper class to build an "IBM WCS conform" user context.
@@ -34,7 +34,7 @@ public class UserContextHelper {
    *
    * @return the UserContext
    */
-  @Nonnull
+  @NonNull
   public static UserContext getCurrentContext() {
     return CurrentCommerceConnection.find()
             .map(CommerceConnection::getUserContext)
