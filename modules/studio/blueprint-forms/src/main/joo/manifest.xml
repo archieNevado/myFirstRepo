@@ -70,6 +70,7 @@
   <component class="com.coremedia.blueprint.studio.forms.containers.TeaserDocumentForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.TeaserWithPictureDocumentForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.ThemeSelectorForm"/>
+  <component class="com.coremedia.blueprint.studio.forms.containers.TimelineForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.ValidityDocumentForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.ViewTypeSelectorForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.VisibilityConfigurationForm"/>

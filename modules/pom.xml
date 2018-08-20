@@ -34,6 +34,7 @@
       <activation>
         <property>
           <name>!dev-extensions</name>
+          <value>!true</value>
         </property>
       </activation>
       <modules>
@@ -41,14 +42,13 @@
       </modules>
     </profile>
 
-    <!--
-      Use an alternative set of extensions, for development purposes.
-    -->
+    <!-- Use Ddev-extensions=true as an alternative set of extensions, for development purposes. -->
     <profile>
       <id>dev-extensions</id>
       <activation>
         <property>
           <name>dev-extensions</name>
+          <value>true</value>
         </property>
       </activation>
       <modules>

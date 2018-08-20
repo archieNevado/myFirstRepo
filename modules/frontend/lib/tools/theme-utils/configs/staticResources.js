@@ -238,15 +238,12 @@ module.exports = () => config => {
           // also zip the freemarkerLibs into the theme again otherwise the Frontend Developer Workflow will not be able
           // to properly handle importing from a theme template to a brick freemarker lib
           {
-            source: path.relative(
-              themeConfig.resourcesTargetPath,
-              path.join(themeConfig.brickTemplatesTargetPath, "freemarkerLibs")
-            ),
-            prefix: path.normalize("META-INF/resources/"),
+            source: "bricks/freemarkerLibs",
+            prefix: path.join("META-INF/resources/WEB-INF/templates", themeConfig.name),
             context: path.relative(
-              themeConfig.themeTargetPath,
-              themeConfig.resourcesTargetPath
-            ),
+                    themeConfig.themeTargetPath,
+                    themeConfig.templatesTargetPath
+            )
           },
         ],
         {

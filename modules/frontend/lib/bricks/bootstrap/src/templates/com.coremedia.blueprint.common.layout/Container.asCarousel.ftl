@@ -16,6 +16,7 @@
 <#assign additionalClass=cm.localParameters().additionalClass!"" />
 <#assign viewItemCssClass=cm.localParameters().viewItemCssClass!"" />
 <#assign carouselItemParams=cm.localParameters().carouselItemParams!{} />
+<#assign carouselInterval=cm.localParameters().carouselInterval!bp.setting(cmpage, "carousel_interval",'6000') />
 <#-- this variable seems not to be used -->
 <#assign metadataItemsName=cm.localParameters().metadataItemsName!'items' />
 <#assign viewItems=cm.localParameters().viewItems!"asTeaser" />
@@ -32,7 +33,7 @@
     <#assign clsModifier="cm-carousel__control--${modifier}" />
   </#if>
 
-<div id="${carouselId}" class="cm-carousel carousel slide ${additionalClass}" data-cm-carousel='{"interval":"6000"}'<@preview.metadata data=[bp.getContainerMetadata(self),bp.getPlacementHighlightingMetaData(self)!""] />>
+<div id="${carouselId}" class="cm-carousel carousel slide ${additionalClass}" data-cm-carousel='{"interval":"${carouselInterval}"}'<@preview.metadata data=[bp.getContainerMetadata(self),bp.getPlacementHighlightingMetaData(self)!""] />>
 <#-- Indicators -->
   <#if displayIndicators && (items?size > 1) >
       <ol class="cm-carousel-indicators carousel-indicators">

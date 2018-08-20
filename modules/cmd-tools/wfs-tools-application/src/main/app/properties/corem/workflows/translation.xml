@@ -36,6 +36,7 @@
     <!-- list of contents that were changed both in the derived and in the master site at conflicting places -->
     <AggregationVariable name="autoMergeConflicts" type="Resource"/>
 
+
     <InitialAssignment>
       <Writes variable="subject"/>
       <Writes variable="comment"/>

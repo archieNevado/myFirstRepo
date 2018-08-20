@@ -62,6 +62,44 @@ let themeConfig;
 const cachedPackageJsonsByName = {};
 
 /**
+ * Represents configuration options and their defaults for enviroment specific settings.
+ * @class Env
+ */
+class Env {
+  constructor(applyFrom = {}) {
+    /**
+     * @member {String|undefined} the studio (api) url
+     */
+    this.studioUrl = applyFrom.studioUrl || undefined;
+
+    /**
+     * @member {String|undefined} the proxy url
+     */
+    this.proxyUrl = applyFrom.proxyUrl || undefined;
+
+    /**
+     * @member {String|undefined} the studio client url
+     */
+    this.studioClientUrl = applyFrom.studioClientUrl || undefined;
+
+    /**
+     * @member {boolean} indicates of a browser should be opened when starting the monitor
+     */
+    this.openBrowser = applyFrom.openBrowser !== false;
+
+    /**
+     * @member {String|undefined} the url to use for the preview
+     */
+    this.previewUrl = applyFrom.previewUrl || undefined;
+
+    /**
+     * @member {Object|undefined} custom monitor settings
+     */
+    this.monitor = applyFrom.monitor || undefined;
+  }
+}
+
+/**
  * Represents a "coremedia"-Entry in the package.json
  * @class CoreMediaEntry
  */
@@ -147,28 +185,24 @@ class Shim {
 
 /**
  * Returns the root of the CoreMedia Frontend Workspace
- * @return {[type]} [description]
+ * @param {String} from where to start from
+ * @return {String|null} the path to the CoreMedia Frontend Workspace or null if not found
  */
-const getWSPackageJson = () => {
-  let cwd = process.cwd();
+const getWSPackageJson = from => {
+  let cwd = from;
 
   const check = () => {
     const packageJsonPath = closestPackage.sync(cwd);
 
-    // closestPackage.sync(cwd) returns null, if no frontend package.json has been foundby searchng upwards from current directory.
+    // closestPackage.sync(cwd) returns null, if no frontend package.json has been found by searching upwards from current directory.
     if (!packageJsonPath) {
-      throw new Error(`No CoreMedia Frontend Workspace found!`);
+      return null;
     }
 
-    const packageJson = require(packageJsonPath);
-    if (
-      packageJson.coremedia &&
-      packageJson.coremedia.type &&
-      packageJson.coremedia.type === "workspace"
-    ) {
-      return packageJsonPath;
-    }
-    return next();
+    return getCoreMediaEntryFromPackageJson(packageJsonPath).type ===
+      "workspace"
+      ? packageJsonPath
+      : next();
   };
 
   const next = () => {
@@ -186,7 +220,22 @@ const getWSPackageJson = () => {
  */
 const getWorkspaceConfig = () => {
   if (!wsConfig) {
-    const packageJsonPath = getWSPackageJson();
+    // search for closest workspace
+    const from = process.cwd();
+    let packageJsonPath = getWSPackageJson(from);
+    // if no workspace is found, check if build was triggered from a theme and use the theme as workspace instead
+    if (!packageJsonPath) {
+      const fallbackPackageJsonPath = closestPackage.sync(from);
+      const coremediaEntry = getCoreMediaEntryFromPackageJson(
+        fallbackPackageJsonPath
+      );
+      if (coremediaEntry.type === "theme") {
+        packageJsonPath = fallbackPackageJsonPath;
+      }
+    }
+    if (!packageJsonPath) {
+      throw new Error(`No CoreMedia Frontend Workspace or Theme found!`);
+    }
     const wsPath = path.dirname(packageJsonPath);
     const configPath = path.join(wsPath, DEFAULT_CONFIG_PATH);
     const envFile = path.join(configPath, "env.json");
@@ -334,8 +383,12 @@ function getThemeConfig() {
   return themeConfig;
 }
 
-function getCoreMediaEntryFromPackageJson(nodeModule) {
-  const packageJson = require(nodeModule.getPkgPath());
+/**
+ * @param {String} packageJsonPath
+ * @returns {CoreMediaEntry}
+ */
+function getCoreMediaEntryFromPackageJson(packageJsonPath) {
+  const packageJson = require(packageJsonPath);
   return new CoreMediaEntry(packageJson.coremedia);
 }
 
@@ -347,7 +400,7 @@ function getCoreMediaEntry(nodeModule) {
   const moduleName = nodeModule.getName();
   if (!(moduleName in cachedPackageJsonsByName)) {
     cachedPackageJsonsByName[moduleName] = getCoreMediaEntryFromPackageJson(
-      nodeModule
+      nodeModule.getPkgPath()
     );
   }
   return cachedPackageJsonsByName[moduleName];
@@ -489,6 +542,7 @@ function getInstallationPath(moduleName, relativeFrom) {
  * @returns {Object} an object containing the name of the package as key and the version as value
  */
 function getAvailableBricks() {
+  const wsConfig = getWorkspaceConfig();
   const wsPatterns = require(wsConfig.pkgPath).workspaces || [];
   const wsDirectories = wsPatterns
     .map(wsPattern =>
@@ -641,8 +695,8 @@ const createEnvFile = vars => {
 };
 
 /**
- * Returns content of env.json parsed as JSON
- * @return {Object}
+ * Returns the current enviroment configuration
+ * @return {Env} the current enviroment configuration
  */
 const getEnv = () => {
   const wsConfig = getWorkspaceConfig();
@@ -650,10 +704,18 @@ const getEnv = () => {
     throw new ConfigFileError("No environment file found. Please login.");
   }
   try {
-    return JSON.parse(fs.readFileSync(wsConfig.envFile, "utf8"));
+    return new Env(JSON.parse(fs.readFileSync(wsConfig.envFile, "utf8")));
   } catch (e) {
     throw new ConfigFileError("The environment file couldn´t be read.");
   }
+};
+
+/**
+ * Sets the enviroment configuration
+ * @param {Env} env the enviroment configuration
+ */
+const setEnv = env => {
+  createEnvFile(env);
 };
 
 /**
@@ -788,8 +850,9 @@ module.exports = {
   getInstallationPath,
   getAvailableBricks,
   getMonitorConfig,
-  createEnvFile,
+  Env,
   getEnv,
+  setEnv,
   getCert,
   createApiKeyFile,
   removeApiKeyFile,

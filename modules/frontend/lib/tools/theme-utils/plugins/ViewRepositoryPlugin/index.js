@@ -3,6 +3,8 @@ const fs = require("fs");
 const glob = require("glob");
 const path = require("path");
 
+const RELATIVE_TEMPLATES_PATH = path.join("src", "templates");
+
 class ViewRepositoryMapping {
   constructor(name, acceptResource) {
     this.name = name;
@@ -26,10 +28,14 @@ class ViewRepositoryPlugin {
 
   getEntry() {
     return (
-      require.resolve("./loader") + `?pattern=${this._templateGlobPattern}!`
+      require.resolve("../../loaders/DirectoryLoader") +
+      `?directory=${encodeURIComponent(
+        RELATIVE_TEMPLATES_PATH
+      )}&pattern=${encodeURIComponent(this._templateGlobPattern)}!`
     );
   }
 
+  // cleanup templates (webpack does not support deletion in watch mode)
   apply(compiler) {
     this._outputPath = compiler.options.output.path;
     compiler.plugin("emit", (compilation, callback) => {
@@ -37,14 +43,31 @@ class ViewRepositoryPlugin {
       const newlyCreatedAssets = Object.keys(assets).map(
         key => assets[key].existsAt
       );
+      const viewRepositoryTargetPaths = this._mappings.map(mapping =>
+        path.join(this._targetPath, mapping.name)
+      );
 
       glob
-        .sync("**/*.*", {
+        .sync(this._templateGlobPattern, {
           cwd: this._targetPath,
           nodir: true,
         })
-        .map(globResult => path.join(this._targetPath, globResult))
-        .filter(path => !newlyCreatedAssets.includes(path))
+        // make absolute path
+        .map(relativeFilePath => path.join(this._targetPath, relativeFilePath))
+        // filter out newly created assets
+        .filter(
+          absoluteFilePath => !newlyCreatedAssets.includes(absoluteFilePath)
+        )
+        // only consider deleting files that are part of a registered view repository (other theme builds might
+        // share the targetPath)
+        .filter(absoluteFilePath =>
+          viewRepositoryTargetPaths.some(
+            viewRepositoryTargetPath =>
+              !path
+                .relative(viewRepositoryTargetPath, absoluteFilePath)
+                .startsWith(".")
+          )
+        )
         .forEach(fs.unlinkSync);
       callback();
     });
@@ -69,25 +92,22 @@ class ViewRepositoryPlugin {
               `No view repository found for template "${resourcePath}.`
             );
           }
-          // freemarker lib or not
-          let middleSegment;
           const relativePathFromPackage = path.relative(
             path.dirname(packageJsonPath),
             resourcePath
           );
-          const relativeTemplatesPath = path.join("src", "templates");
-          if (relativePathFromPackage.indexOf(relativeTemplatesPath) === 0) {
-            middleSegment = relativePathFromPackage.substr(
-              relativeTemplatesPath.length
-            );
-          } else {
+          let middleSegment = path.relative(
+            RELATIVE_TEMPLATES_PATH,
+            relativePathFromPackage
+          );
+          // if the middle segment loads to a path outside the templates path, put it into freemarkerLibs
+          if (middleSegment.startsWith("..")) {
             middleSegment = path.join(
               "freemarkerLibs",
               packageJson.name,
               path.basename(relativePathFromPackage)
             );
           }
-
           return path.join(mapping.name, middleSegment);
         },
         outputPath: url =>

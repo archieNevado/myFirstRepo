@@ -9,7 +9,7 @@
 <#assign isTopLevel=cm.localParameters().isTopLevel!false/>
 <#assign showNavigationLabel=cm.localParameters().showNavigationLabel!false/>
 <#assign contentData=self.content!{}/>
-<#assign depth=cm.localParameters().depth+1!1/>
+<#assign depth=(cm.localParameters().depth!0)+1/>
 <#assign showPicturesInNavigation=cm.localParameters().showPicturesInNavigation!true/>
 
 <#if isRoot || (!((self.hidden)!false))>
@@ -23,7 +23,7 @@
 
     <li class="${cssClass} cm-navigation-item dropdown cm-navigation-item-depth-${depth} dropdown" <@preview.metadata ["properties.children", contentData]/>>
       <#--link to this item in navigation and render children in dropdown list -->
-      <@cm.include self=self view="asLink"/>
+      <@cm.include self=self view="asLink" params={"cssClass" : "cm-navigation-item__title"}/>
       <#if isTopLevel>
         <a href="#" class="cm-navigation-item-depth-${depth}__dropdown cm-navigation-item__dropdown dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></a>
       </#if>
@@ -43,8 +43,13 @@
     </#if>
 
     <li class="${cssClass} cm-navigation-item cm-navigation-item-depth-${depth}" <@preview.metadata ["properties.children", contentData]/>>
-      <#-- link to this item in navigation -->
-      <@cm.include self=self view="asLink"/>
+      <@cm.include self=self view="asLink" params={"cssClass" : "cm-navigation-item__title"}/>
+
+      <#if showPicturesInNavigation && depth == 2 && self.picture?has_content>
+        <a class="cm-navigation-item__picture-link" href="${cm.getLink(self.target!cm.UNDEFINED)}">
+          <@bp.responsiveImage self=self.picture!cm.UNDEFINED classPrefix="cm-navigation"/>
+        </a>
+      </#if>
     </li>
   </#if>
 </#if>

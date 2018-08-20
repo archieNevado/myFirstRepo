@@ -22,7 +22,7 @@
   <#if self.visibleChildren?has_content>
   <li class="${cssClass} cm-navigation-item dropdown cm-navigation-item-depth-${depth} dropdown" <@preview.metadata data=["properties.children", contentData]/>>
   <#--link to this item in navigation and render children in dropdown list -->
-    <@cm.include self=self view="asLink"/>
+    <@cm.include self=self view="asLink" params={"cssClass" : "cm-navigation-item__title"}/>
     <#if isTopLevel>
       <a href="#" class="cm-navigation-item-depth-${depth}__dropdown cm-navigation-item__dropdown dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></a>
     </#if>
@@ -37,7 +37,7 @@
   <#else>
   <li class="${cssClass} cm-navigation-item cm-navigation-item-depth-${depth}" <@preview.metadata data=["properties.children", contentData]/>>
   <#-- link to this item in navigation -->
-    <@cm.include self=self view="asLink"/>
+    <@cm.include self=self view="asLink" params={"cssClass" : "cm-navigation-item__title"}/>
     <#if showPicturesInNavigation && depth == 2>
       <#if self.category.picture?has_content>
         <#assign picture=bp.createBeanFor(self.category.picture)/>

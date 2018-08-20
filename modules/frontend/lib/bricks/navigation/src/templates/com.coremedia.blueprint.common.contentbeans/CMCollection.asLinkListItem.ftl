@@ -48,6 +48,7 @@
           "maxDepth": maxDepth!0,
           "isTopLevel": isTopLevel,
           "depth" : depth,
+          "showNavigationLabel" : showNavigationLabel,
           "showPicturesInNavigation": showPicturesInNavigation,
           "collectionProperty":["properties.items"]
           } />
