@@ -2,6 +2,47 @@
 
 This file is used to list changes made in each version of the openssl cookbook.
 
+## 8.5.2 (2018-08-14)
+
+- Back out mode change in ec_private_key
+
+## 8.5.1 (2018-08-14)
+
+- Add license headers to the resources
+- Remove default_action setup from the resources since this is done automatically in custom resources now
+- Make sure to use the path name_property when creating the ec public key file
+- Make sure we're using openssl and not Chef's Openssl class
+- Simplify how we handle user/group properties
+
+## 8.5.0 (2018-08-02)
+
+- Use the system provided owner/group defaults in resources
+- Added new openssl_x509_crl resource
+- Fix openssl_ec_public_key with documentation & tests
+- Few corrections in the documentation
+- Fix backward compatibility with chef client 12
+
+## 8.4.0 (2018-07-30)
+
+This release is brought to you by Institut National de l'Audiovisuel, which contributed the following changes:
+
+- openssl_x509 is renamed to openssl_x509_certificate with backwards compatibility for the old name
+- openssl_x509_certificate can now generate a signed certificate with a provided CA cert & key
+- openssl_x509_certificate now support x509 extensions
+- openssl_x509_certificate now support x509 csr
+- openssl_x509_certificate now generate a random serial for the certificate
+- openssl_x509_certificate expires has now a default value : 365
+- country field is now mandatory in x509_request
+- the private key file is not rewrited in x509_request if it already exist
+
+## 8.3.0 (2018-07-25)
+
+- Add resource x509_request
+
+## 8.2.0 (2018-07-23)
+
+- Add ec_private_key & ec_public_key resources
+
 ## 8.1.2 (2018-02-09)
 
 - Fix typo in resources that caused failures on Windows.

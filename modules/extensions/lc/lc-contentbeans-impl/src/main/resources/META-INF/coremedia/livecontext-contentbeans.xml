@@ -25,8 +25,6 @@
 
   <bean name="contentBeanFactory:CMProductList" parent="abstractTeasable-blueprint-doctypes"
         class="com.coremedia.livecontext.contentbeans.CMProductListImpl" scope="prototype">
-    <property name="treeRelation" ref="liveContextNavigationTreeRelation"/>
-    <property name="contentRepository" ref="contentRepository"/>
   </bean>
 
   <bean name="contentBeanFactory:CMProductTeaser" parent="abstractTeasable-blueprint-doctypes"

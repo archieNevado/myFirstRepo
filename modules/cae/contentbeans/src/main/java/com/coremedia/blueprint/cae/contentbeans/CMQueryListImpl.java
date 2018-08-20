@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
-import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.blueprint.cae.search.Condition;
 import com.coremedia.blueprint.cae.search.SearchConstants;
 import com.coremedia.blueprint.cae.search.SearchQueryBean;
@@ -11,9 +10,6 @@ import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.util.ContentBeanSolrSearchFormatHelper;
 import com.coremedia.blueprint.common.util.SettingsStructToSearchQueryConverter;
-import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentRepository;
-import org.springframework.beans.factory.annotation.Required;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -27,19 +23,6 @@ import java.util.stream.Collectors;
 public class CMQueryListImpl extends CMQueryListBase {
   @SuppressWarnings("WeakerAccess")
   public static final String ANNOTATED_LINK_STRUCT_INDEX_PROPERTY_NAME = "index";
-
-  private TreeRelation<Content> treeRelation;
-  private ContentRepository contentRepository;
-
-  @Required
-  public void setTreeRelation(TreeRelation<Content> treeRelation) {
-    this.treeRelation = treeRelation;
-  }
-
-  @Required
-  public void setContentRepository(ContentRepository contentRepository) {
-    this.contentRepository = contentRepository;
-  }
 
   @Override
   public List<Linkable> getItems() {
@@ -64,12 +47,11 @@ public class CMQueryListImpl extends CMQueryListBase {
   @SuppressWarnings("WeakerAccess")
   public SearchQueryBean getSearchQuery() {
     SettingsStructToSearchQueryConverter converter = new SettingsStructToSearchQueryConverter(
-        this,
-        getCurrentContextService(),
-        treeRelation,
-        getSettingsService(),
-        contentRepository,
-        getContentBeanFactory());
+      this,
+      getSitesService(),
+      getSettingsService(),
+      getContent().getRepository(),
+      getContentBeanFactory());
     return converter.convert();
   }
 

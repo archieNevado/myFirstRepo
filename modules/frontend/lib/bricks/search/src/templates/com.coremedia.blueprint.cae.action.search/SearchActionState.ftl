@@ -28,7 +28,7 @@
     <div class="cm-search__results">
       <#list searchResultHits as hit>
         <@cm.include self=hit view="asSearchResult" params={
-          "highlightingMap": self.result.highlightingResults,
+          "highlightingItem": self.result.getHighlightingResultsItem(hit)!{},
           "isLast": hit?is_last
         } />
       </#list>

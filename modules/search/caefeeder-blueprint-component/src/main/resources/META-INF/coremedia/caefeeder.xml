@@ -129,6 +129,11 @@
             <bean class="com.coremedia.blueprint.caefeeder.ValidToPropertyConverter"/>
           </property>
         </bean>
+        <bean class="com.coremedia.cap.feeder.bean.BeanPropertyFeedableElementMapping">
+          <property name="beanProperty" value="externallyDisplayedDate"/>
+          <property name="feedableElement" value="externallydisplayeddate"/>
+          <property name="textBody" value="false"/>
+        </bean>
       </list>
     </property>
   </bean>

@@ -394,7 +394,7 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
 
     String joinedCookies = cookieJoiner.withKeyValueSeparator('=').join(cookies);
 
-    if (isNullOrEmpty(cookieHeader)) {
+    if (isNullOrEmpty(cookieHeader)) { // NOSONAR squid:S4449 false positive caused by SONARJAVA-2776
       return joinedCookies;
     } else {
       return cookieJoiner.join(cookieHeader, joinedCookies);

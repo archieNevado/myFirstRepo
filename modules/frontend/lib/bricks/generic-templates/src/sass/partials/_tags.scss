@@ -25,7 +25,7 @@ Contains styling definitions for all content types as cm-tag.
     padding: $cm-tag-padding-small-vertical $cm-tag-padding-base-vertical;
     background: $cm-tag-item-background-color;
     margin: 0 $cm-tag-padding-small-vertical $cm-tag-padding-small-vertical $cm-tag-padding-small-vertical;
-    border-color: $cm-tag-item-border-color;
+    border: $cm-tag-item-border-width $cm-tag-item-border-style $cm-tag-item-border-color;
     border-radius: 5px;
     color: $cm-tag-item-color;
 

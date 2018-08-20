@@ -1,4 +1,19 @@
 .#{$cm-responsive-carousel-prefix} {
+
+  // make the carousel behave like abootstrap grid
+  @include breakpoint(md) {
+    width: 970px;
+  }
+
+  @include breakpoint(lg) {
+    width: 1170px;
+  }
+
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+
   margin-bottom: 48px;
 
   .cm-teasable__headline {
@@ -43,4 +58,11 @@
       margin-right: 96px - $cm-responsive-carousel-item-margin;
     }
   }
+}
+
+// make the carousel behave like abootstrap grid
+.container > .#{$cm-responsive-carousel-prefix} {
+  width: 100%;
+  padding-left: 0;
+  padding-right: 0;
 }

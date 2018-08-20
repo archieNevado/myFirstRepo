@@ -204,6 +204,6 @@ public class TransformedBlobHandler extends HandlerBase {
       String contentName = ((Content) o.getCapObject()).getName();
       return removeSpecialCharacters(contentName);
     }
-    return null;
+    throw new IllegalArgumentException("Not a Content Blob: " + o);
   }
 }

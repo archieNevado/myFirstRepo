@@ -5,10 +5,10 @@
 <#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/utils.ftl" as utils />
 
 <#assign cssClasses=cm.localParameters().islast!false?then(" is-last", "") />
-<#assign highlightedItem=(highlightingMap.get(self))!{} />
+<#assign highlightingItem=cm.localParameters().highlightingItem!{} />
 <#assign teaserLength=bp.setting(self, "teaser.max.length", 200)/>
-<#assign htmlDescription=bp.truncateHighlightedText((highlightedItem["htmlDescription"][0])!self.htmlDescription!"", teaserLength) />
-<#assign teaserText=bp.truncateHighlightedText((highlightedItem["teaserText"][0])!self.teaserText!"", teaserLength) />
+<#assign htmlDescription=bp.truncateHighlightedText((highlightingItem["htmlDescription"][0])!self.teaserTitle!"", teaserLength) />
+<#assign teaserText=bp.truncateHighlightedText((highlightingItem["teaserText"][0])!"", teaserLength) />
 <#assign target=(self.target?has_content && self.target.openInNewTab)?then('target="_blank"', "") />
 <#assign rel=(self.target?has_content && self.target.openInNewTab)?then('rel="noopener"', "") />
 
@@ -26,16 +26,16 @@
     <div class="cm-search__caption">
       <#-- teaserTitle -->
       <h3<@preview.metadata "properties.teaserTitle" />>
-        ${(highlightedItem["teaserTitle"][0])!self.teaserTitle}
+        ${(highlightingItem["teaserTitle"][0]?no_esc)!self.teaserTitle}
       </h3>
-      <#-- htmlDescription or teaserText -->
-      <#if htmlDescription?has_content>
-        <p<@preview.metadata "properties.htmlDescription" />>
-          <@utils.renderWithLineBreaks text=htmlDescription />
-        </p>
-      <#elseif teaserText?has_content>
+      <#-- teaserText or htmlDescription as fallback -->
+      <#if teaserText?has_content>
         <p<@preview.metadata "properties.teaserText" />>
           <@utils.renderWithLineBreaks text=teaserText />
+        </p>
+      <#elseif htmlDescription?has_content>
+        <p<@preview.metadata "properties.htmlDescription" />>
+          <@utils.renderWithLineBreaks text=htmlDescription />
         </p>
       </#if>
     </div>

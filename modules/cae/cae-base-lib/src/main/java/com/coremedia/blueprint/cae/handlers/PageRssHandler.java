@@ -117,7 +117,10 @@ public class PageRssHandler extends PageHandlerBase {
     if (isSuitableFeedSource(feedSource)) {
       CMLinkable source = (CMLinkable) feedSource;
       CMNavigation context = (CMNavigation) getNavigation(source);
-      return ImmutableMap.of(SEGMENT_ID, getId(context), SEGMENT_ROOT, getRootSegment(context));
+      String rootSegment = getRootSegment(context);
+      if (rootSegment != null) {
+        return ImmutableMap.of(SEGMENT_ID, getId(context), SEGMENT_ROOT, rootSegment);
+      }
     }
     return null;
   }
@@ -129,7 +132,10 @@ public class PageRssHandler extends PageHandlerBase {
   public Map<String, ?> buildTaxonomyLink(CMTaxonomy taxonomy, HttpServletRequest request) {
     CMNavigation context = (CMNavigation) getNavigation(taxonomy);
     if (isSuitableFeedSource(context)) {
-      return ImmutableMap.of(SEGMENT_ID, getId(context), SEGMENT_ROOT, getRootSegment(context), SEGMENT_TAXONOMY_ID, getId(taxonomy));
+      String rootSegment = getRootSegment(context);
+      if (rootSegment != null) {
+        return ImmutableMap.of(SEGMENT_ID, getId(context), SEGMENT_ROOT, rootSegment, SEGMENT_TAXONOMY_ID, getId(taxonomy));
+      }
     }
     LOG.error("Content has no navigation context, cannot build link for {}", taxonomy);
     return null;
