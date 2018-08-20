@@ -25,7 +25,7 @@
   <ul class="${cssClass} cm-navigation-item-depth-${depth}__list cm-navigation-item__list" <#if isRoot><@preview.metadata self.content/></#if>>
     <#if showNavigationLabel>
       <li class="cm-navigation-list-depth-${depth}__label cm-navigation-list__label">
-        <@cm.include self=self view="asLink" params={"cssClass": "cm-navigation-item-label"}/>
+        <@cm.include self=self view="asLink" params={"cssClass": "cm-navigation-item__title cm-navigation-item-label"}/>
       </li>
     </#if>
     <#list self.visibleChildren![] as child>

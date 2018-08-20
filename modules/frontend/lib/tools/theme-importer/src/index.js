@@ -4,7 +4,6 @@ const path = require("path");
 const fs = require("fs");
 const cmLogger = require("@coremedia/cm-logger");
 const {
-  createEnvFile,
   getEnv,
   createApiKeyFile,
   removeApiKeyFile,
@@ -71,13 +70,10 @@ const login = (studioUrl, previewUrl, proxyUrl, username, password) => {
           previewUrl,
           user.id
         );
-        const checkedProxyUrl = proxyUrl ? proxyUrl : undefined;
-        createEnvFile({
-          studioUrl: finalStudioUrl,
+        resolve({
+          studioApiUrl: finalStudioUrl,
           previewUrl: previewUrlDevMode,
-          proxyUrl: checkedProxyUrl,
         });
-        resolve("API key has successfully been generated.");
       })
       .catch(e => {
         reject(e);

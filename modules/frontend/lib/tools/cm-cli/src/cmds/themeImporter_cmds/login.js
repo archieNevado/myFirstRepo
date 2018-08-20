@@ -3,7 +3,7 @@
 const inquirer = require("inquirer");
 const cmLogger = require("@coremedia/cm-logger");
 const themeImporter = require("@coremedia/theme-importer");
-const { getEnv } = require("@coremedia/tool-utils/workspace");
+const { Env, getEnv, setEnv } = require("@coremedia/tool-utils/workspace");
 
 const { isValidURL, isValidStringValue } = require("../../lib/validators");
 const args = require("../../lib/args");
@@ -27,6 +27,12 @@ const builder = yargs => {
         default: defaults.studioUrl,
         describe: "Studio URL",
         type: "string",
+      },
+      openBrowser: {
+        demandOption: false,
+        default: defaults.openBrowser,
+        describe: "Open Browser",
+        type: "boolean",
       },
       previewUrl: {
         demandOption: false,
@@ -59,6 +65,10 @@ const builder = yargs => {
           key: "Studio URL",
           value:
             typeof argv.studioUrl === "undefined" || isValidURL(argv.studioUrl),
+        },
+        {
+          key: "Open Browser",
+          value: ["undefined", "boolean"].includes(typeof argv.openBrowser),
         },
         {
           key: "Preview URL",
@@ -111,23 +121,22 @@ const handler = argv => {
           default: args.studioUrl,
           validate: input => isValidURL(input),
         },
+        // Ask if browser should be opened after the theme was build
+        // As soon as https://github.com/SBoudrias/Inquirer.js/issues/590 is integrated, we can discuss if it makes
+        // sense to replace this explicit confirmation with an editable default of the "previewUrl" config.
+        {
+          type: "confirm",
+          name: "openBrowser",
+          message: "Open browser after initial build?",
+          default: args.openBrowser,
+        },
         {
           type: "input",
           name: "previewUrl",
           message: "Preview URL:",
           default: args.previewUrl,
-          // Entering "-" should lead to an empty previewUrl, so not even the default is taken
-          // TODO:
-          // As soon as https://github.com/SBoudrias/Inquirer.js/issues/590 is integrated, replace filter by new
-          // initialValue feature which is the args.previewUrl, so the user can just clear the input instead of typing
-          // "-".
-          filter: input => {
-            if (input === "-") {
-              return "";
-            }
-            return input;
-          },
           validate: input => !input || isValidURL(input),
+          when: ({ openBrowser }) => !!openBrowser,
         },
         {
           type: "input",
@@ -159,9 +168,14 @@ const handler = argv => {
             args.username,
             args.password
           )
-          .then(msg => {
-            log.success(msg);
-          })
+          .then(
+            getSuccessfulLoginHandler(
+              log,
+              args.openBrowser,
+              args.studioUrl,
+              args.proxyUrl
+            )
+          )
           .catch(e => {
             log.error(e.message);
             process.exit(1);
@@ -176,14 +190,38 @@ const handler = argv => {
         args.username,
         args.password
       )
-      .then(msg => {
-        log.success(msg);
-      })
+      .then(
+        getSuccessfulLoginHandler(
+          log,
+          args.openBrowser,
+          args.studioUrl,
+          args.proxyUrl
+        )
+      )
       .catch(e => {
         log.error(e.message);
         process.exit(1);
       });
   }
+};
+
+const getSuccessfulLoginHandler = (
+  log,
+  openBrowser,
+  studioClientUrl,
+  proxyUrl
+) => ({ studioApiUrl, previewUrl }) => {
+  setEnv(
+    new Env({
+      openBrowser,
+      studioClientUrl,
+      studioUrl: studioApiUrl,
+      previewUrl,
+      proxyUrl,
+    })
+  );
+
+  log.success("API key has successfully been generated.");
 };
 
 module.exports = {

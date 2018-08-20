@@ -144,6 +144,11 @@
   <field name="locationtaxonomy" type="text_comma_tokenizer_lc" indexed="true" stored="true"/>
   <field name="validfrom" type="tdate" indexed="true" stored="true"/>
   <field name="validto" type="tdate" indexed="true" stored="true"/>
+  <!--
+    CMLinkable#externallyDisplayedDate: Either the last modification/publication date
+    or the explicitly set date.
+  -->
+  <field name="externallydisplayeddate" type="tdate" indexed="true" stored="true"/>
 
   <!-- Additional Fields for highlighting -->
   <field name="teaserTitle" type="text_general" indexed="true" stored="true"/>

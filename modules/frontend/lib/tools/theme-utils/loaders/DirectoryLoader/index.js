@@ -7,12 +7,7 @@ const {
   dependencies: { getDependencies, getDependentsFirstLoadOrder },
   workspace: { isBrickModule },
 } = require("@coremedia/tool-utils");
-
-function moduleLoadedCallback(err) {
-  if (err) {
-    throw new Error("Could not load module: " + err);
-  }
-}
+const { loadModules } = require("../utils");
 
 const importedViews = [];
 let dependenciesToLoadByPackageName = {};
@@ -26,13 +21,17 @@ module.exports = function() {
 
   // parse query params
   const queryParams = loaderUtils.getOptions(this) || {};
+  const directory = queryParams.directory;
   const pattern = queryParams.pattern || "**/*.*";
-  const directory =
-    queryParams.directory || path.join(process.cwd(), "src", "templates");
-  const subtask = queryParams.subtask === true;
+  const subtask = !!queryParams.pkgPath;
+  const pkgPath = queryParams.pkgPath || closestPackage.sync(process.cwd());
 
-  const pkgPath = closestPackage.sync(directory);
+  if (directory === null || directory === undefined) {
+    throw new Error("Directory Loader was used without providing a directory");
+  }
+
   const packageName = require(pkgPath).name;
+  const modulesToLoad = [];
 
   if (!subtask) {
     // clear array of imported views as new run was started
@@ -45,21 +44,22 @@ module.exports = function() {
     );
   }
 
-  if (directory && fs.existsSync(directory)) {
+  const resolvedDirectory = path.resolve(path.dirname(pkgPath), directory);
+  if (resolvedDirectory && fs.existsSync(resolvedDirectory)) {
     // track context dependency of directly registered template folders
-    this.addContextDependency(directory);
-    const foundSubdirectories = glob.sync("**/*/", { cwd: directory });
+    this.addContextDependency(resolvedDirectory);
+    const foundSubdirectories = glob.sync("**/*/", { cwd: resolvedDirectory });
     // track all sub folders
     foundSubdirectories.forEach(foundSubdirectory =>
       this.addContextDependency(
-        path.join(directory, path.basename(foundSubdirectory))
+        path.join(resolvedDirectory, path.basename(foundSubdirectory))
       )
     );
 
     // find all views
     const globResult = glob
       .sync(pattern, {
-        cwd: directory,
+        cwd: resolvedDirectory,
         nodir: true,
       })
       .filter(file => !importedViews.includes(file));
@@ -70,43 +70,28 @@ module.exports = function() {
     }
 
     const foundModules = globResult
-      .map(file => fs.realpathSync(path.join(directory, file)))
+      .map(file => fs.realpathSync(path.join(resolvedDirectory, file)))
       .map(file =>
         loaderUtils.urlToRequest(
           path.relative(process.cwd(), file),
           this.context
         )
       );
-
-    foundModules.forEach(module =>
-      this.loadModule(module, moduleLoadedCallback)
-    );
+    modulesToLoad.push(...foundModules);
   }
 
   // modules need to be loaded synchronously, so wait until a module is fully loaded
-  const modulesToLoad = dependenciesToLoadByPackageName[packageName] || [];
-  const load = () => {
-    if (modulesToLoad.length === 0) {
-      callback(null, "");
-    } else {
-      // trigger next module:
-      const nextModule = modulesToLoad.shift();
-      const modulePath = path.join(
-        path.dirname(nextModule.getPkgPath()),
-        "src",
-        "templates"
-      );
-      this.loadModule(
-        `${__filename}?pattern=${encodeURIComponent(
-          pattern
-        )}&subtask=true&directory=${encodeURIComponent(modulePath)}!`,
-        err => {
-          moduleLoadedCallback(err);
-          load();
-        }
-      );
-    }
-  };
-
-  load();
+  modulesToLoad.push(
+    ...(dependenciesToLoadByPackageName[packageName] || []).map(
+      dependency =>
+        `${__filename}?directory=${encodeURIComponent(
+          directory
+        )}&pattern=${encodeURIComponent(pattern)}&pkgPath=${encodeURIComponent(
+          dependency.getPkgPath()
+        )}!`
+    )
+  );
+  loadModules(this, modulesToLoad, () => {
+    callback(null, "");
+  });
 };

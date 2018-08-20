@@ -4,7 +4,8 @@
 
   // hide overflow
   overflow: hidden;
-  // CMS-9386: limit width and height to 100%
+  // limit width and height to 100%
+  box-sizing: border-box;
   max-width: 100%;
   max-height: 100%;
   // disable any pointer events, so e.g. when the overlay is placed over a link, the link can be clicked

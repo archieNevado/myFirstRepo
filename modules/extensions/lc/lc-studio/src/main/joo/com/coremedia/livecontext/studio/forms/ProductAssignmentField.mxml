@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <editor:PropertyFieldGroup
         xmlns:fx="http://ns.adobe.com/mxml/2009"
-        xmlns:bpb-components="exml:com.coremedia.blueprint.base.components.config"
         xmlns:ui="exml:com.coremedia.ui.config"
         xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
-        xmlns="exml:ext.config"
+        xmlns="exml:ext.config" xmlns:bpforms="exml:com.coremedia.blueprint.studio.config"
         title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'CMVideo_productAssignments_title')}"
         collapsed="false"
         padding="6 6 6 0">
@@ -12,11 +11,8 @@
     [ResourceBundle('com.coremedia.livecontext.studio.LivecontextStudioPlugin')]
   </fx:Metadata>
   <fx:Script><![CDATA[
-    import com.coremedia.blueprint.base.components.timeline.Sequence;
-    import com.coremedia.blueprint.base.components.timeline.TimelineEditorBase;
     import com.coremedia.cap.content.Content;
     import com.coremedia.cap.content.ContentPropertyNames;
-    import com.coremedia.cap.content.ContentType;
     import com.coremedia.ui.data.ValueExpression;
     import com.coremedia.ui.data.ValueExpressionFactory;
 
@@ -54,10 +50,6 @@
         return false;
       });
     }
-
-    private static function openCollectionViewHandler(linkListTargetType:ContentType):void {
-      TimelineEditorBase.openSearch("CMProductTeaser");
-    }
     ]]></fx:Script>
   <editor:plugins>
     <ui:BindVisibilityPlugin bindTo="{getVisibleForViewTypeValueExpression(config.bindTo, 'shoppable')}"/>
@@ -66,8 +58,7 @@
     <editor:LinkListPropertyField linkType="{'CMTeasable'}"
                                   itemId="default"
                                   showThumbnails="true"
-                                  openCollectionViewHandler="{openCollectionViewHandler}"
-                                  propertyName="{'timeLine.' + Sequence.DEFAULT_TARGET_PROPERTY_NAME}"
+                                  propertyName="timeLine.defaultTarget"
                                   bindTo="{config.bindTo}"
                                   maxCardinality="1">
       <editor:linkSuggester>
@@ -75,7 +66,6 @@
                                            linkTypeName="CMProductTeaser"/>
       </editor:linkSuggester>
     </editor:LinkListPropertyField>
-    <bpb-components:TimelineEditor propertyName="timeLine"
-                                   searchType="CMProductTeaser"/>
+    <bpforms:TimelineForm/>
   </editor:items>
 </editor:PropertyFieldGroup>

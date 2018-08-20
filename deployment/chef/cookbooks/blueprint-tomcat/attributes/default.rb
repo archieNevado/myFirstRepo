@@ -1,9 +1,9 @@
 #<> The download url to the tomcat zip, make sure the version attribute matches. Set to nil to use the default url based on the version attribute.
-default['blueprint']['tomcat']['source'] = 'http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.82/bin/apache-tomcat-7.0.82.zip'
+default['blueprint']['tomcat']['source'] = 'http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.90/bin/apache-tomcat-7.0.90.zip'
 #<> The SHA-256 checksum of the tomcat installation zip
-default['blueprint']['tomcat']['source_checksum'] = 'db399beb82d19e08285e628f4c728cf1756bcfda4df74c25faff5ba0668a2281'
+default['blueprint']['tomcat']['source_checksum'] = '7cd3ed9191a8fde4097259ef18985339a4b9873f25d5c937505424d5ae0c3149'
 #<> The version of tomcat to install
-default['blueprint']['tomcat']['version'] = '7.0.82'
+default['blueprint']['tomcat']['version'] = '7.0.90'
 #<> The path to the java home for the tomcat services
 default['blueprint']['tomcat']['java_home'] = '/usr/lib/jvm/java'
 #<> Global jvm agent opts. Use this to instrument the jvm for monitoring
@@ -25,9 +25,9 @@ end
 #<> A flag to enable/disable the jmx remote connector
 default['blueprint']['tomcat']['jmx_remote'] = true
 #<> The download url to the jar, make sure the version attribute matches. Set to nil to use the default url based on the version attribute.
-default['blueprint']['tomcat']['jmx_remote_jar_source'] = 'http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.82/bin/extras/catalina-jmx-remote.jar'
+default['blueprint']['tomcat']['jmx_remote_jar_source'] = 'http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.90/bin/extras/catalina-jmx-remote.jar'
 #<> The SHA-256 checksum of the catalina-jmx-remote.jar
-default['blueprint']['tomcat']['jmx_remote_jar_source_checksum'] = '684c3f7ab4a21cfccbbf760b4576554a0219898d289fe1345a0e746d5f82b425'
+default['blueprint']['tomcat']['jmx_remote_jar_source_checksum'] = '1ef16e86e5c990b020bb1af29bc66e5d465f0e8d66f99f957a5adb1032db97df'
 #<> A flag to enable/disable remote jmx authentication
 default['blueprint']['tomcat']['jmx_remote_authenticate'] = true
 #<> The server name under which the rmi server is registered. Set it to localhost and create a ssh tunnel(recommended) or set it to the actual hostname and open the ports and configure security and ssl.

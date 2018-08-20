@@ -30,13 +30,13 @@
 
     <customer>Blueprint</customer>
 
-    <blueprint-base.version>1807.1</blueprint-base.version>
-    <cms.version>1807.1</cms.version>
-    <personalization.version>1807.1</personalization.version>
-    <elastic.version>1807.1</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
-    <studio.version>1807.1</studio.version>
-    <caetoolbox.version>1807.1</caetoolbox.version>
-    <livecontext.version>1807.1</livecontext.version>
+    <blueprint-base.version>1807.2</blueprint-base.version>
+    <cms.version>1807.2</cms.version>
+    <personalization.version>1807.2</personalization.version>
+    <elastic.version>1807.2</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
+    <studio.version>1807.2</studio.version>
+    <caetoolbox.version>1807.2</caetoolbox.version>
+    <livecontext.version>1807.2</livecontext.version>
     <jangaroo.version>4.0.58</jangaroo.version>
 
     <atlassian.crowd.version>2.5.1</atlassian.crowd.version>
@@ -44,9 +44,9 @@
      | Version for WAR based deployment. Tomcat 7 and 8 are supported. Don't forget to set the Chef attributes in the
      | Chef blueprint-tomcat cookbook accordingly
     -->
-    <tomcat.version>7.0.82</tomcat.version>
+    <tomcat.version>7.0.90</tomcat.version>
     <!-- Version for Maven tomcat7 plugin. Only Tomcat 7 is supported -->
-    <tomcat.maven.version>7.0.82</tomcat.maven.version>
+    <tomcat.maven.version>7.0.90</tomcat.maven.version>
     <spring.boot.version>1.5.4.RELEASE</spring.boot.version>
     <application-plugin.version>2.7.10</application-plugin.version>
 
@@ -83,7 +83,7 @@
      | The base directory to persist transformed blobs, when starting CAE or Studio during development using the tomcat7-maven-plugin.
      | The path defined here will be suffixed with the artifactId of the module starting the tomcat plugin to prevent cache conflicts
      | between two processes when this property is set to a common value for all modules. With the default set to
-     | project.build.directory, the transformed blobs will be available until the next mvn clean is called. 
+     | project.build.directory, the transformed blobs will be available until the next mvn clean is called.
      | Set this property to a path outside the workspace to keep the transformed blobs permanently.
      -->
     <development.blobCache.basePath>${project.build.directory}/blobcache</development.blobCache.basePath>
@@ -961,11 +961,10 @@
                     <!-- too old -->
                     <exclude>jmock:jmock</exclude>
                     <exclude>jmock:jmock-cglib</exclude>
-                    <!-- use com.github.spotbugs:spotbugs-annotations instead -->
-                    <exclude>com.google.code.findbugs:jsr305</exclude>
 
                     <!-- exclude, and include only with scope "provided" -->
                     <exclude>com.github.spotbugs:spotbugs-annotations</exclude>
+                    <exclude>com.google.code.findbugs:jsr305</exclude>
                     <exclude>javax.servlet:javax.servlet-api</exclude>
                     <!-- junit:junit vs. junit:junit-dep: Since JUnit 4.11 junit-dep just relocates to
                          junit and files a warning when used. Thus excluding it here. -->
@@ -985,6 +984,7 @@
                       S. http://www.sonatype.com/books/mvnref-book/reference/pom-relationships-sect-project-dependencies.html#pom-relationships-sect-transitive
                     -->
                     <include>com.github.spotbugs:spotbugs-annotations:*:*:provided</include>
+                    <include>com.google.code.findbugs:jsr305:*:*:provided</include>
                     <include>javax.servlet:javax.servlet-api:*:*:provided</include>
                   </includes>
                 </bannedDependencies>
