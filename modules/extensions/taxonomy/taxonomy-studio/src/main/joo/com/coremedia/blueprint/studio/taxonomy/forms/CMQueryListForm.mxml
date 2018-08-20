@@ -97,7 +97,7 @@
             title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
       <editor:items>
         <bpforms:TeaserDocumentForm/>
-        <bpforms:FixedIndexItemsForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMQueryList_extendedItems_title')}"/>
+        <bpforms:FixedIndexItemsForm/>
         <bpforms:ContainerViewTypeSelectorForm collapsed="false"/>
         <bpforms:ValidityDocumentForm/>
       </editor:items>

@@ -56,14 +56,6 @@ div#main {
   }
 }
 
-@include breakpoint(sm-and-up) {
-  .primary-content {
-    .cm-quickinfo {
-      width: 280px;
-    }
-  }
-}
-
 .pdp-main {
   .product-primary-image, .product-thumbnails {
     display: none;

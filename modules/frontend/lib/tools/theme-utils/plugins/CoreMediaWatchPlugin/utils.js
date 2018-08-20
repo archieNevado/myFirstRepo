@@ -47,8 +47,11 @@ const printInfo = () => {
 
 const openBrowser = () => {
   try {
-    const { previewUrl } = getEnv();
-    previewUrl && opn(previewUrl).catch(() => {}); // Prevent `unhandledRejection` error.
+    const { studioClientUrl, previewUrl, openBrowser } = getEnv();
+    if (openBrowser) {
+      const url = previewUrl || studioClientUrl;
+      opn(url).catch(() => {}); // Prevent `unhandledRejection` error.
+    }
   } catch (err) {
     // do nothing
   }

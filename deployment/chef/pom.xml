@@ -9,15 +9,13 @@
   </parent>
 
   <artifactId>chef</artifactId>
-
   <packaging>pom</packaging>
 
+  <!--
+   | The following list of package dependencies is listed here only to allow building the workspace concurrently and
+   | secure that this module is build at the end when all packages have been built
+   -->
   <dependencies>
-    <!--
-     | The following list of package dependencies is listed here only to allow building the workspace concurrently and
-     | secure that this module is build at the end when all packages have been built
-     -->
-
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>content-management-server-webapp</artifactId>
@@ -90,12 +88,6 @@
       <version>${project.version}</version>
       <type>war</type>
     </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>studio-webapp</artifactId>
-      <version>${project.version}</version>
-      <type>war</type>
-    </dependency>
 
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -103,21 +95,18 @@
       <version>${project.version}</version>
       <type>zip</type>
     </dependency>
-
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>wfs-tools-application</artifactId>
       <version>${project.version}</version>
       <type>zip</type>
     </dependency>
-
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>mls-tools-application</artifactId>
       <version>${project.version}</version>
       <type>zip</type>
     </dependency>
-
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>rls-tools-application</artifactId>
@@ -130,21 +119,18 @@
       <version>${project.version}</version>
       <type>zip</type>
     </dependency>
-
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>theme-importer-application</artifactId>
       <version>${project.version}</version>
       <type>zip</type>
     </dependency>
-
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>solr-config</artifactId>
       <version>${project.version}</version>
       <type>zip</type>
     </dependency>
-
 
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -159,6 +145,27 @@
       <type>pom</type>
     </dependency>
   </dependencies>
+
+  <!-- Use -DwithoutJangarooApp=true to exclude jangaroo apps. -->
+  <profiles>
+    <profile>
+      <id>with-jangaroo-app</id>
+      <activation>
+        <property>
+          <name>!withoutJangarooApp</name>
+          <value>!true</value>
+        </property>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>studio-webapp</artifactId>
+          <version>${project.version}</version>
+          <type>war</type>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
 
   <build>
     <finalName>deployment-archive</finalName>

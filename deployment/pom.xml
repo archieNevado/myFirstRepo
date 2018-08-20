@@ -10,11 +10,21 @@
   </parent>
 
   <artifactId>deployment</artifactId>
-
   <packaging>pom</packaging>
 
-  <modules>
-    <module>chef</module>
-  </modules>
-
+  <!-- Use -DwithoutChef=true to exclude chef-deployment. -->
+  <profiles>
+    <profile>
+      <id>with-deployment</id>
+      <activation>
+        <property>
+          <name>!withoutChef</name>
+          <value>!true</value>
+        </property>
+      </activation>
+      <modules>
+        <module>chef</module>
+      </modules>
+    </profile>
+  </profiles>
 </project>

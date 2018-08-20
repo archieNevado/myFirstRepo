@@ -107,7 +107,7 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
       return Collections.emptyMap();
     }
 
-    if (fragmentContext() == null || !fragmentContext().isFragmentRequest()) {
+    if (!fragmentContext().isFragmentRequest()) {
       return Collections.emptyMap();
     }
 
@@ -178,6 +178,7 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
     return content != null;
   }
 
+  @NonNull
   public FragmentContext fragmentContext() {
     return FragmentContextProvider.getFragmentContext(FreemarkerEnvironment.getCurrentRequest());
   }

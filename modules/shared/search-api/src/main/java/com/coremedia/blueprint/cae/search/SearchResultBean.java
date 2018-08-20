@@ -118,7 +118,6 @@ public class SearchResultBean {
    *
    * @return a map where the key is the id of the result item and the value is a map where the key is a field
    * in the result item and the value is a list of Strings with highlighting embedded.
-   * @cm.template.api
    */
   public Map<Object, Map<String, List<String>>> getHighlightingResults() {
     return highlightingResults;
@@ -131,6 +130,17 @@ public class SearchResultBean {
    */
   public void setHighlightingResults(Map<Object, Map<String, List<String>>> highlightingResults) {
     this.highlightingResults = highlightingResults;
+  }
+
+  /**
+   * Returns a single highlighted item as map from highlightingResults
+   *
+   * @param key the object as key for the highlightingResults map
+   * @return a map with the highlighted results for the given object
+   * @cm.template.api
+   */
+  public Map<String, List<String>> getHighlightingResultsItem(Object key) {
+    return this.highlightingResults.get(key);
   }
 
   /**

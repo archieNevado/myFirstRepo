@@ -2,6 +2,7 @@ const closestPackage = require("closest-package");
 const fs = require("fs");
 const glob = require("glob");
 const path = require("path");
+const { loadModules } = require("../utils");
 
 const FTL_REFERENCE_PATTERN = /<#(import|include)\s+"([^"]+)"([^>]*)>/g;
 
@@ -25,9 +26,12 @@ function resolveFreemarkerGlob(pattern, baseDir) {
 module.exports = function loader(content) {
   // cannot be cached because a plugin configuration in clean.js clears the templates that have not been provided by the last build
   this.cacheable(false);
+  const callback = this.async();
   const sourcePath = this.resourcePath;
   const sourceDirectory = path.dirname(sourcePath);
-  return content.replace(
+
+  const modulesToLoad = [];
+  const result = content.replace(
     FTL_REFERENCE_PATTERN,
     (wholeExpression, directive, ftlPath, tail) => {
       // freemarker imports/includes may contain a single asterisk to indicate that any folder
@@ -40,13 +44,7 @@ module.exports = function loader(content) {
           `Could not resolve file reference in include/import directive: "${ftlPath}" in source file "${sourcePath}". Searched in "${resolvedPathToLib}"`
         );
       }
-      this.loadModule(resolvedPathToLib, err => {
-        if (err) {
-          throw new Error(
-            `Could not import freemarker library: "${resolvedPathToLib}" in source file "${sourcePath}".\n\n${err}`
-          );
-        }
-      });
+      modulesToLoad.push(resolvedPathToLib);
 
       // TODO: should be independent of workspace knowledge...
       // this could be achieved by evaluating the result of the prior loadModule call
@@ -62,4 +60,9 @@ module.exports = function loader(content) {
       return `<#${directive} ${JSON.stringify(transformedPath)}${tail}>`;
     }
   );
+
+  // modules need to be loaded synchronously, so wait until a module is fully loaded
+  loadModules(this, modulesToLoad, () => {
+    callback(null, result);
+  });
 };

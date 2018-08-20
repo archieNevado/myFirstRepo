@@ -175,8 +175,6 @@
         class="com.coremedia.blueprint.cae.contentbeans.CMChannelImpl" scope="prototype"/>
   <bean name="contentBeanFactory:CMQueryList" parent="abstractTeasable-blueprint-doctypes"
         class="com.coremedia.blueprint.cae.contentbeans.CMQueryListImpl" scope="prototype">
-    <property name="treeRelation" ref="navigationTreeRelation"/>
-    <property name="contentRepository" ref="contentRepository"/>
   </bean>
   <bean name="contentBeanFactory:CMAction" parent="abstractTeasable-blueprint-doctypes"
         class="com.coremedia.blueprint.cae.contentbeans.CMActionImpl" scope="prototype"/>
