@@ -17,7 +17,7 @@
 </LinkListProperty>
 </Struct>
 </StructProperty>
-<StringProperty Name="order">freshness ascending</StringProperty>
+<StringProperty Name="order">freshness desc</StringProperty>
 </Struct>
 </localSettings>
 <linkedSettings>

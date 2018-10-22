@@ -17,6 +17,7 @@ import com.coremedia.blueprint.common.contentbeans.CMImageMap;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMLocalized;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
+import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.blueprint.common.contentbeans.CMTheme;
@@ -36,7 +37,6 @@ import com.coremedia.cap.transform.Transformation;
 import com.coremedia.common.util.WordAbbreviator;
 import com.coremedia.image.ImageDimensionsExtractor;
 import com.coremedia.mimetype.MimeTypeService;
-import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.objectserver.web.UserVariantHelper;
@@ -167,8 +167,8 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
 
   // --- functionality -------------------------------------------------------------------------------------------------
 
-  public ContentBean createBeanFor(Content content) {
-    return dataViewFactory.loadCached(contentBeanFactory.createBeanFor(content), null);
+  public CMObject createBeanFor(Content content) {
+    return dataViewFactory.loadCached(contentBeanFactory.createBeanFor(content, CMObject.class), null);
   }
 
   public List<Transformation> getTransformations(Content content) {
@@ -338,7 +338,7 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
    * @param defaultFragmentViews a Map defining defaults
    * @return a List of maps of Strings defining which views should be rendered
    */
-  public List<Map<String, Object>> getPreviewViews(ContentBean self, Page page, List<Map<String, Object>> defaultFragmentViews) {
+  public List<Map<String, Object>> getPreviewViews(CMObject self, Page page, List<Map<String, Object>> defaultFragmentViews) {
     ContentType contentType = self.getContent().getType();
     List<Map<String, Object>> result = defaultFragmentViews;
     while (contentType != null) {
@@ -733,7 +733,7 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
     CMTheme result = null;
     Content themeOrNull = themeService.theme(self.getContent(), UserVariantHelper.getUser(FreemarkerEnvironment.getCurrentRequest()));
     if (themeOrNull != null) {
-      result = (CMTheme) contentBeanFactory.createBeanFor(themeOrNull);
+      result = contentBeanFactory.createBeanFor(themeOrNull, CMTheme.class);
     }
     return result;
   }

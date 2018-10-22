@@ -5,13 +5,19 @@ This recipe installs and configures postgresql and creates schemas for CoreMedia
 =end
 require 'chef/version_constraint'
 
-node.default['postgresql']['version'] = '9.3'
-node.default['postgresql']['server']['service_name'] = 'postgresql-9.3'
+node.default['yum']['pgdg']['version'] = '9.6'
+node.default['yum']['pgdg']['repositoryid'] = 'pgdg-9.6'
+node.default['yum']['pgdg']['description'] = 'PostgreSQL 9.6'
+node.default['yum']['pgdg']['gpgkey'] = 'http://yum.postgresql.org/RPM-GPG-KEY-PGDG'
+node.default['yum']['pgdg']['gpgcheck'] = true
+node.default['yum']['pgdg']['enabled'] = true
+node.default['yum']['pgdg']['baseurl'] = 'http://yum.pgrpms.org/9.6/redhat/rhel-$releasever-$basearch'
+
+node.default['postgresql']['version'] = '9.6'
+node.default['postgresql']['server']['service_name'] = 'postgresql-9.6'
 node.default['postgresql']['enable_pgdg_yum'] = false
-node.default['yum']['pgdg']['version'] = node['postgresql']['version']
-node.default['postgresql']['server']['service_name'] = 'postgresql-9.3'
-node.default['postgresql']['server']['packages'] = ['postgresql93-server']
-node.default['postgresql']['client']['packages'] = ['postgresql93-devel']
+node.default['postgresql']['server']['packages'] = ['postgresql96-server']
+node.default['postgresql']['client']['packages'] = ['postgresql96-devel']
 node.default['postgresql']['dir'] = '/var/lib/pgsql/data'
 node.default['postgresql']['password']['postgres'] = 'coremedia'
 node.default['postgresql']['config']['listen_addresses'] = '*'
@@ -27,7 +33,7 @@ node.default['postgresql']['pg_hba'] = [{ 'type' => 'local', 'db' => 'all', 'use
 
 # only for systemd
 if Chef::VersionConstraint.new('>= 7.0.0').include?(node['platform_version'])
-  node.default['postgresql']['setup_script'] = '/usr/pgsql-9.3/bin/postgresql93-setup'
+  node.default['postgresql']['setup_script'] = '/usr/pgsql-9.6/bin/postgresql96-setup'
 end
 
 include_recipe 'blueprint-base::default'

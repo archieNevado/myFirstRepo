@@ -1,7 +1,14 @@
 package com.coremedia.blueprint.cae.search;
 
+import com.coremedia.blueprint.cae.search.facet.FacetFilterBuilder;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * The SearchQueryBean is a search engine independent representation of a search query. It provides the set of all
@@ -44,10 +51,11 @@ public class SearchQueryBean {
   private List<String> sortFields = new ArrayList<>();
 
   // faceting support
-  private List<String> facetFields = new ArrayList<>();
+  private ImmutableMap<String, String> facetFields = ImmutableMap.of();
   private String facetPrefix = "";
   private int facetMinCount = -1;
   private int facetLimit = DEFAULT_FACET_LIMIT;
+  private String facetFilters;
 
   // spellcheck/didyoumean support
   private boolean spellcheckSuggest = false;
@@ -194,19 +202,48 @@ public class SearchQueryBean {
   /**
    * Returns the list of field names for which facets should be returned.
    *
-   * @return the list of field names for which facets should be returned.
+   * <p>This method returns the values of the map returned by {@link #getFacetFieldsMap()}.
+   *
+   * @return immutable list of field names for which facets should be returned.
    */
   public List<String> getFacetFields() {
-    return facetFields;
+    return ImmutableList.copyOf(facetFields.values());
   }
 
   /**
    * Sets the field names for which facets should be returned.
    *
+   * <p>This is a convenience method, which calls {@link #setFacetFieldsMap(Map)} with a map of identical keys and
+   * values, i.e. where symbolic facet names and field names are identical.
+   *
    * @param facetFields the field names for which facets should be returned.
    */
   public void setFacetFields(List<String> facetFields) {
-    this.facetFields = new ArrayList<>(facetFields);
+    LinkedHashMap<String, String> map = facetFields.stream()
+      .collect(Collectors.toMap(facetField -> facetField, facetField -> facetField, (a, b) -> b, LinkedHashMap::new));
+    setFacetFieldsMap(map);
+  }
+
+  /**
+   * Sets a map from symbolic names of requested search facets to their index field names.
+   *
+   * <p>The given map's iteration order defines the order of facet results in {@link SearchResultBean#getFacetResult()}.
+   *
+   * @param facetFields map from symbolic names to index field names, empty to not request facets
+   * @since 1810
+   */
+  public void setFacetFieldsMap(Map<String, String> facetFields) {
+    this.facetFields = ImmutableMap.copyOf(facetFields);
+  }
+
+  /**
+   * Returns the map from symbolic names of requested search facets to their index field names.
+   *
+   * @return map from symbolic names to index field names, empty to not request facets
+   * @since 1810
+   */
+  public Map<String, String> getFacetFieldsMap() {
+    return facetFields;
   }
 
   /**
@@ -264,6 +301,26 @@ public class SearchQueryBean {
    */
   public void setFacetPrefix(String facetPrefix) {
     this.facetPrefix = facetPrefix;
+  }
+
+  /**
+   * Sets the search filters for selected facet values.
+   *
+   * @param facetFilters search filters in the format of {@link FacetFilterBuilder#build()}
+   * @since 1810
+   */
+  public void setFacetFilters(String facetFilters) {
+    this.facetFilters = facetFilters;
+  }
+
+  /**
+   * Returns the search filters for selected facet values.
+   *
+   * @return search filters in the format of {@link FacetFilterBuilder#build()}
+   * @since 1810
+   */
+  public String getFacetFilters() {
+    return facetFilters;
   }
 
   /**

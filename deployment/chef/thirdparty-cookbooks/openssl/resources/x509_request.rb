@@ -13,6 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
+chef_version_for_provides '< 14.4' if respond_to?(:chef_version_for_provides)
+resource_name :openssl_x509_request
+
 include OpenSSLCookbook::Helpers
 
 property :path,             String, name_property: true
@@ -67,7 +71,7 @@ action_class do
 
   def key
     @key ||= if priv_key_file_valid?(generate_key_file, new_resource.key_pass)
-               OpenSSL::PKey.read ::File.read(generate_key_file), new_resource.key_pass
+               ::OpenSSL::PKey.read ::File.read(generate_key_file), new_resource.key_pass
              elsif new_resource.key_type == 'rsa'
                gen_rsa_priv_key(new_resource.key_length)
              else
@@ -77,7 +81,7 @@ action_class do
   end
 
   def subject
-    csr_subject = OpenSSL::X509::Name.new()
+    csr_subject = ::OpenSSL::X509::Name.new()
     csr_subject.add_entry('C', new_resource.country) unless new_resource.country.nil?
     csr_subject.add_entry('ST', new_resource.state) unless new_resource.state.nil?
     csr_subject.add_entry('L', new_resource.city) unless new_resource.city.nil?

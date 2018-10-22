@@ -9,16 +9,12 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.apache.commons.lang3.LocaleUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Currency;
+import java.util.Locale;
 import java.util.Optional;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CURRENCY;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.LOCALE;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.STORE_ID;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.STORE_NAME;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 
 public class StoreContextProviderMock implements StoreContextProvider {
 
@@ -56,47 +52,12 @@ public class StoreContextProviderMock implements StoreContextProvider {
 
   @NonNull
   private StoreContext createContext() {
-    return createContext("10001", "aurora", "10001", "en_US", "USD");
-  }
-
-  @NonNull
-  private StoreContext createContext(String storeId, String storeName, String catalogId, String locale,
-                                     String currency) {
-    StoreContext context = StoreContextImpl.newStoreContext();
-
-    if (storeId != null) {
-      if (StringUtils.isBlank(storeId)) {
-        throw new InvalidContextException("storeId has wrong format: \"" + storeId + "\"");
-      }
-
-      context.put(STORE_ID, storeId);
-    }
-
-    if (storeName != null) {
-      if (StringUtils.isBlank(storeName)) {
-        throw new InvalidContextException("storeName has wrong format: \"" + storeId + "\"");
-      }
-
-      context.put(STORE_NAME, storeName);
-    }
-
-    if (locale != null) {
-      try {
-        context.put(LOCALE, LocaleUtils.toLocale(locale));
-      } catch (IllegalArgumentException e) {
-        throw new InvalidContextException(e);
-      }
-    }
-
-    if (currency != null) {
-      try {
-        context.put(CURRENCY, Currency.getInstance(currency));
-      } catch (IllegalArgumentException e) {
-        throw new InvalidContextException(e);
-      }
-    }
-
-    return context;
+    return StoreContextBuilderImpl.from(newStoreContext())
+            .withStoreId("10001")
+            .withStoreName("aurora")
+            .withCurrency(Currency.getInstance("USD"))
+            .withLocale(Locale.US)
+            .build();
   }
 
   @NonNull

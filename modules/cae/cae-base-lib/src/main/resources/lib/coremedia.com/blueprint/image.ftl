@@ -37,7 +37,7 @@
  * @param classPrefix Set the classPrefix.
  * @param metadata (optional) if metadata shall be rendered it contains the value of param data for preview.metadata, default to ["properties.pictures"]
  * @param displayEmptyImage (optional) if set to true, a special div is rendered as a placeholder for a non existing image
- * @param displayDimmer (optional) render a dimmer on top of the image
+ * @param displayDimmer (optional) render a dimmer on top of the image. Deprecated: use SCSS mixin "dimmer" instead.
  * @param background (optional) renders the image as a background attribute of a div instead of a standard img tag
  * @param additionalAttr (optional) additional attributes to be handed over to the responsive image renderer
  *

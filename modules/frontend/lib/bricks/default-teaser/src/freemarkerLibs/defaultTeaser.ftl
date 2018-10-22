@@ -4,6 +4,24 @@
 
 <#assign defaultBlockClass="cm-teasable" />
 
+<#--
+  Renders the media of a teaser.
+
+  @param media a CMMedia contentbean to retrieve data from
+  @param teaserBlockClass the teaser block class to use
+  @param additionalClass an additional class to attach to the root element
+  @param link if specified wraps the media into a link tag with the given link as href
+  @param openInNewTab specifies if the given link shall be opened in a new tab
+  @param limitAspectRatios limits the responsive image urls to be rendered to the given aspect ratio names
+  @param metadata preview metadata to attach to the root element
+  @param renderDimmer specifies if a dimmer element should be rendered, deprecated: use SCSS mixin "dimmer" instead
+  @param renderEmptyMedia specifies if an image placeholder should be rendered if the given media is empty
+
+  Example:
+  <@renderMedia media=self.picture
+                additionalClass="some-picture"
+                limitAspectRatios=["portrait_ratio1x1"] />
+-->
 <#macro renderMedia media
                     teaserBlockClass=defaultBlockClass
                     additionalClass=""
@@ -58,6 +76,23 @@
   </@utils.optionalLink>
 </#macro>
 
+<#--
+  Renders the caption of a teaser.
+
+  @param title if specified a title element is inserted into the caption with the given content
+  @param text if specified a text element is inserted into the caption with the given content
+  @param link if specified adds a link to the title element of the caption
+  @param openInNewTab specifies if the given link shall be opened in a new tab
+  @param ctaButtons a list of CallToActionButtonSettings to use
+  @param teaserBlockClass the teaser block class to use
+  @param metadataTitle preview metadata to attach to the title element
+  @param metadataText preview metadata to attach to the text element
+
+  Example:
+  <@renderMedia media=self.picture
+                additionalClass="some-picture"
+                limitAspectRatios=["portrait_ratio1x1"] />
+-->
 <#macro renderCaption title=""
                       text=""
                       link=""

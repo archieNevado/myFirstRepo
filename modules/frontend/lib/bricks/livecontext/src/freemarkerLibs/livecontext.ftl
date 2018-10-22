@@ -1,3 +1,6 @@
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/components.ftl" as components />
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/utils.ftl" as utils />
+
 <#--
   Renders an addToCart button in different variations depending on the given product. If product has only
   one product variant the button includes an add to cart functionality, otherwise its just a link to the product
@@ -15,16 +18,38 @@
   <@addToCartButton product=self.product
                     withLink=cm.getLink(self.productInSite)
                     attr={"classes":["my-button-group__button", "my-button--linked"]} />
-
-  Note:
-  For now uses the deprecated function to avoid code duplication as we cannot depend from "lc-cae" to
-  the frontend workspace.
 -->
 <#macro addToCartButton product alwaysShow=false alwaysClickable=false enableShopNow=true withLink="" attr={}>
-  <@lc.addToCartButton product=product
-                       alwaysShow=alwaysShow
-                       alwaysClickable=alwaysClickable
-                       enableShopNow=enableShopNow
-                       withLink=withLink
-                       attr=attr />
+  <#local numberOfVariants=(product.variants?size)!0 />
+  <#local hasSingleSKU=(numberOfVariants == 1) />
+  <#local isProductAvailable=(product.isAvailable())!false />
+
+  <#-- variant 1) unavailable -->
+  <#local buttonLabel=bp.getMessage("cart_unavailable") />
+  <#local buttonData={} />
+  <#local buttonClasses=[] />
+  <#local iconClass="" />
+
+  <#-- variant 2) available -->
+  <#if (alwaysShow || isProductAvailable)>
+    <#local buttonLabel=bp.getMessage("cart_view_variants") />
+    <#local buttonClasses=buttonClasses + ["cm-button--primary"] />
+
+  <#-- variant 3) available with one sku -->
+    <#if (enableShopNow && (alwaysClickable || hasSingleSKU))>
+      <#local cart=cm.substitute("cart", product) />
+      <#local buttonLabel=bp.getMessage("cart_add_item") />
+      <#local externalTechId=hasSingleSKU?then(product.variants[0].externalTechId, product.externalTechId)/>
+      <#local buttonData={"data-cm-cart-add-item": '{"id": "${externalTechId!""}", "link": "${cm.getLink(cart, "ajax")}", "cart": ".cm-cart" }'} />
+      <#local iconClass="icon-none" />
+    </#if>
+  </#if>
+
+  <#local attr=utils.extendSequenceInMap(attr, "classes", buttonClasses) />
+
+  <#local link="" />
+  <#if (withLink?has_content && ((!alwaysClickable && !hasSingleSKU) || !enableShopNow))>
+    <#local link=withLink>
+  </#if>
+  <@components.button text=buttonLabel href=link baseClass="cm-button" iconClass=iconClass attr=(attr + buttonData) />
 </#macro>

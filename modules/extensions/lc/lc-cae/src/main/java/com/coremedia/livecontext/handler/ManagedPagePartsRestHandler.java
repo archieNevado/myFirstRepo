@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Locale;
+import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
 
@@ -70,14 +71,14 @@ public class ManagedPagePartsRestHandler {
     requireNonNull(storeId);
     requireNonNull(locale);
 
-    Site site = siteResolver.findSiteFor(storeId, locale);
+    Optional<Site> site = siteResolver.findSiteFor(storeId, locale);
 
-    if (site == null) {
-      LOG.info("No Site found for storeId \"{0}\" and locale \"{1}\"", storeId, locale);
+    if (!site.isPresent()) {
+      LOG.info("No site found for storeId '{}' and locale '{}'.", storeId, locale);
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    Content siteRootDocument = site.getSiteRootDocument();
+    Content siteRootDocument = site.get().getSiteRootDocument();
 
     boolean managedNavigation = getBooleanSetting(MANAGED_NAVIGATION_KEY, siteRootDocument);
     boolean managedHeader = getBooleanSetting(MANAGED_HEADER_KEY, siteRootDocument);

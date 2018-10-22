@@ -21,6 +21,10 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
+      <artifactId>bpbase-cae-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-es-common</artifactId>
     </dependency>
     <dependency>
@@ -47,6 +51,11 @@
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>contentbeans</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>link-services</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
@@ -90,6 +99,10 @@
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>coremedia-spring</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>coremedia-spring-boot</artifactId>
     </dependency>
     <dependency>
       <groupId>com.coremedia.elastic.core</groupId>

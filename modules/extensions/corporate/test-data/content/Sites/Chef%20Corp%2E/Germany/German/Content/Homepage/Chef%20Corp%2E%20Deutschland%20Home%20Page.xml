@@ -21,7 +21,7 @@
 <link href="../../Options/Settings/Preview.xml" path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/Preview"/>
 <link href="../../Options/Settings/Google%20Analytics%20Settings.xml" path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/Google%20Analytics%20Settings"/>
 <link href="../../Options/Settings/LiveContext.xml" path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/LiveContext"/>
-<link href="../../Options/Settings/SearchConfiguration.xml" path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/SearchConfiguration"/>
+<link href="../../Options/Settings/Search%20Configuration.xml" path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/Search%20Configuration"/>
 <link href="../../Options/Settings/Elastic%20Social.xml" path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/Elastic%20Social"/>
 <link href="../../../../../../Settings/Options/Settings/Elastic%20Social%20Credentials.xml" path="/Settings/Options/Settings/Elastic%20Social%20Credentials"/>
 </linkedSettings>
@@ -81,64 +81,121 @@
 </StructProperty>
 <StructListProperty Name="placements">
 <Struct>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../../Options/Settings/Actions/Login.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/Actions/Login"/>
-<Link xlink:href="coremedia:///cap/resources/../Site-Wide/Header/Language%20Chooser.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/Header/Language%20Chooser"/>
-<Link xlink:href="coremedia:///cap/resources/../Site-Wide/External%20Links/Blog%20External%20Link.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/External%20Links/Blog%20External%20Link"/>
-<Link xlink:href="coremedia:///cap/resources/../Site-Wide/Integration/External%20Embedding/Embed%20-%20Beginning%20of%20Page%25db3b5d8.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/Integration/External%20Embedding/Embed%20-%20Beginning%20of%20Page%20HTML%20Fragment"/>
-<Link xlink:href="coremedia:///cap/resources/../Site-Wide/External%20HTML%20Fragments/Optimizely%20JS%20%20HTML%20Fragment.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/External%20HTML%20Fragments/Optimizely%20JS%20%20HTML%20Fragment"/>
-</LinkListProperty>
+<StructListProperty Name="extendedItems">
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../../Options/Settings/Actions/Login.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/Actions/Login"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Site-Wide/Header/Language%20Chooser.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/Header/Language%20Chooser"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Site-Wide/External%20Links/Blog%20External%20Link.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/External%20Links/Blog%20External%20Link"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Site-Wide/Integration/External%20Embedding/Embed%20-%20Beginning%20of%20Page%25db3b5d8.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/Integration/External%20Embedding/Embed%20-%20Beginning%20of%20Page%20HTML%20Fragment"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Site-Wide/External%20HTML%20Fragments/Optimizely%20JS%20%20HTML%20Fragment.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/External%20HTML%20Fragments/Optimizely%20JS%20%20HTML%20Fragment"/>
+</Struct>
+</StructListProperty>
 <BooleanProperty Name="locked">false</BooleanProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../Options/Settings/Pagegrid/Placements/header.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/Pagegrid/Placements/header"/>
 </Struct>
 <Struct>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../Site-Wide/Footer/Imprint%20Article.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/Footer/Imprint%20Article"/>
-<Link xlink:href="coremedia:///cap/resources/../Site-Wide/Footer/Contact%20Us/Contact%20Us%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/Footer/Contact%20Us/Contact%20Us%20Page"/>
-<Link xlink:href="coremedia:///cap/resources/../Site-Wide/Footer/Privacy%20Policy.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/Footer/Privacy%20Policy"/>
-<Link xlink:href="coremedia:///cap/resources/../Site-Wide/Footer/Terms%20of%20Use.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/Footer/Terms%20of%20Use"/>
-<Link xlink:href="coremedia:///cap/resources/../Site-Wide/Footer/Cookies.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/Footer/Cookies"/>
-<Link xlink:href="coremedia:///cap/resources/../Site-Wide/Footer/Sitemap/Sitemap%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/Footer/Sitemap/Sitemap%20Page"/>
-<Link xlink:href="coremedia:///cap/resources/../Site-Wide/Integration/External%20Embedding/Embed%20-%20End%20of%20Page%20HTML%24aa2eae.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/Integration/External%20Embedding/Embed%20-%20End%20of%20Page%20HTML%20Fragment"/>
-</LinkListProperty>
+<StructListProperty Name="extendedItems">
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Site-Wide/Footer/Imprint%20Article.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/Footer/Imprint%20Article"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Site-Wide/Footer/Contact%20Us/Contact%20Us%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/Footer/Contact%20Us/Contact%20Us%20Page"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Site-Wide/Footer/Privacy%20Policy.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/Footer/Privacy%20Policy"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Site-Wide/Footer/Terms%20of%20Use.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/Footer/Terms%20of%20Use"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Site-Wide/Footer/Cookies.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/Footer/Cookies"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Site-Wide/Footer/Sitemap/Sitemap%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/Footer/Sitemap/Sitemap%20Page"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Site-Wide/Integration/External%20Embedding/Embed%20-%20End%20of%20Page%20HTML%24aa2eae.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/Integration/External%20Embedding/Embed%20-%20End%20of%20Page%20HTML%20Fragment"/>
+</Struct>
+</StructListProperty>
 <BooleanProperty Name="locked">false</BooleanProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../Options/Settings/Pagegrid/Placements/footer.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/Pagegrid/Placements/footer"/>
 </Struct>
 <Struct>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../../Assets/Videos/Hero%20Videos/Smiling%20Chef%20in%20the%20Kitchen%20Video.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Assets/Videos/Hero%20Videos/Smiling%20Chef%20in%20the%20Kitchen%20Video"/>
-</LinkListProperty>
+<StructListProperty Name="extendedItems">
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../../Assets/Videos/Hero%20Videos/Smiling%20Chef%20in%20the%20Kitchen%20Video.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Assets/Videos/Hero%20Videos/Smiling%20Chef%20in%20the%20Kitchen%20Video"/>
+</Struct>
+</StructListProperty>
 <LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../../Options/Viewtypes/CMChannel/superhero.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Options/Viewtypes/CMChannel/superhero"/>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../Options/Settings/Pagegrid/Placements/hero.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/Pagegrid/Placements/hero"/>
 </Struct>
 <Struct>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/Claim%201%20-%20Kitchens%20Teaser.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Claim%201%20-%20Kitchens%20Teaser"/>
-<Link xlink:href="coremedia:///cap/resources/Claim%202%20-%20Commerce%20and%20Retail%20Teaser.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Claim%202%20-%20Commerce%20and%20Retail%20Teaser"/>
-<Link xlink:href="coremedia:///cap/resources/Claim%203%20-%20Service%20Teaser.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Claim%203%20-%20Service%20Teaser"/>
-</LinkListProperty>
+<StructListProperty Name="extendedItems">
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/Claim%201%20-%20Kitchens%20Teaser.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Claim%201%20-%20Kitchens%20Teaser"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/Claim%202%20-%20Commerce%20and%20Retail%20Teaser.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Claim%202%20-%20Commerce%20and%20Retail%20Teaser"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/Claim%203%20-%20Service%20Teaser.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Claim%203%20-%20Service%20Teaser"/>
+</Struct>
+</StructListProperty>
 <LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../../Options/Viewtypes/CMChannel/claim-circle.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Options/Viewtypes/CMChannel/claim-circle"/>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../Options/Settings/Pagegrid/Placements/placement1.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/Pagegrid/Placements/placement1"/>
 </Struct>
 <Struct>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../Site-Wide/Personalization/Personalized%20Teaser.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/Personalization/Personalized%20Teaser"/>
-<Link xlink:href="coremedia:///cap/resources/Professionals/Product%20Overview/Products%20Overview%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Professionals/Product%20Overview/Products%20Overview%20Page"/>
-<Link xlink:href="coremedia:///cap/resources/Product%20Highlights%20Collection.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Product%20Highlights%20Collection"/>
-<Link xlink:href="coremedia:///cap/resources/Services%20Teaser.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Services%20Teaser"/>
-</LinkListProperty>
+<StructListProperty Name="extendedItems">
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Site-Wide/Personalization/Personalized%20Teaser.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/Personalization/Personalized%20Teaser"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/Professionals/Product%20Overview/Products%20Overview%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Professionals/Product%20Overview/Products%20Overview%20Page"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/Product%20Highlights%20Collection.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Product%20Highlights%20Collection"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/Services%20Teaser.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Services%20Teaser"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Assets/Videos/Hero%20Videos/Restaurant%20Kitchen%20Video.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Assets/Videos/Hero%20Videos/Restaurant%20Kitchen%20Video"/>
+</Struct>
+</StructListProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../Options/Settings/Pagegrid/Placements/placement2.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/Pagegrid/Placements/placement2"/>
 </Struct>
 <Struct>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/For%20Consumers%20Collection.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/For%20Consumers%20Collection"/>
-<Link xlink:href="coremedia:///cap/resources/News%20Collection.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/News%20Collection"/>
-<Link xlink:href="coremedia:///cap/resources/News%20Query%20List.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/News%20Query%20List"/>
-<Link xlink:href="coremedia:///cap/resources/Company%20Collection.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Company%20Collection"/>
-<Link xlink:href="coremedia:///cap/resources/Events%20Collection.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Events%20Collection"/>
-<Link xlink:href="coremedia:///cap/resources/Events%20Query%20List.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Events%20Query%20List"/>
-<Link xlink:href="coremedia:///cap/resources/../Site-Wide/External%20HTML%20Fragments/AddThis%20Social%20Sharing%20HTML%20Fragment.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/External%20HTML%20Fragments/AddThis%20Social%20Sharing%20HTML%20Fragment"/>
-</LinkListProperty>
+<StructListProperty Name="extendedItems">
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/For%20Consumers%20Collection.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/For%20Consumers%20Collection"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/News%20Collection.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/News%20Collection"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/News%20Query%20List.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/News%20Query%20List"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/Company%20Collection.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Company%20Collection"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/Events%20Collection.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Events%20Collection"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/Events%20Query%20List.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Homepage/Events%20Query%20List"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Site-Wide/External%20HTML%20Fragments/AddThis%20Social%20Sharing%20HTML%20Fragment.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Content/Site-Wide/External%20HTML%20Fragments/AddThis%20Social%20Sharing%20HTML%20Fragment"/>
+</Struct>
+</StructListProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../Options/Settings/Pagegrid/Placements/placement3.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/Pagegrid/Placements/placement3"/>
 </Struct>
 </StructListProperty>

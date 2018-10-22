@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.lc.test;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.livecontext.ecommerce.catalog.AxisFilter;
 import com.coremedia.livecontext.ecommerce.catalog.Catalog;
@@ -14,11 +15,11 @@ import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.search.SearchFacet;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
-import org.junit.Assert;
-import org.springframework.beans.factory.annotation.Value;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.test.context.TestPropertySource;
+
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -29,10 +30,10 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService.DEFAULT_CATALOG_ALIAS;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.LOCALE;
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@TestPropertySource(properties = "livecontext.sfcc.ocapi.shopBasePath=/s/{storeId}/dw/shop/")
 public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
 
   @Inject
@@ -122,7 +123,7 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
     CommerceId productId = getIdProvider().formatProductId(catalogAlias, PRODUCT_CODE_B2B);
 
     StoreContext storeContext = getStoreContext();
-    initStoreContext(storeContext);
+    CurrentCommerceConnection.get().setStoreContext(storeContext);
 
     Product product = testling.findProductById(productId, storeContext);
     assertThat(product).isNotNull();
@@ -224,8 +225,8 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
     assertThat(products).isEmpty();
   }
 
-  protected void testFindProductsByCategoryIsRoot() throws Exception {
-    CommerceId commerceId = getIdProvider().formatCategoryId(null, "ROOT");
+  protected void testFindProductsByCategoryIsRoot(String rootCategoryId) throws Exception {
+    CommerceId commerceId = getIdProvider().formatCategoryId(null, rootCategoryId);
 
     Category rootCategory = testling.findCategoryById(commerceId, getStoreContext());
     List<Product> products = testling.findProductsByCategory(rootCategory);
@@ -246,8 +247,8 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
     assertThat(categoryParent.isRoot()).isTrue();
   }
 
-  protected void testFindRootCategory() throws Exception {
-    CommerceId commerceId = getIdProvider().formatCategoryId(null, "ROOT");
+  protected void testFindRootCategory(String rootCategoryId) throws Exception {
+    CommerceId commerceId = getIdProvider().formatCategoryId(null, rootCategoryId);
     Category rootCategory = testling.findCategoryById(commerceId, getStoreContext());
 
     assertThat(rootCategory).isNotNull();
@@ -286,7 +287,7 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
   protected void testFindB2BCategoryFromMultiCatalogs() throws Exception {
     CatalogAlias catalogAlias = CatalogAlias.of("b2b");
     StoreContext storeContext = getStoreContext();
-    initStoreContext(storeContext);
+    CurrentCommerceConnection.get().setStoreContext(storeContext);
 
     CommerceId commerceId = getIdProvider().formatCategoryId(catalogAlias, CATEGORY_CODE_B2B);
 
@@ -307,14 +308,6 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
     commerceId = getIdProvider().formatCategoryId(null, CATEGORY_CODE_B2B);
     category = testling.findCategoryById(commerceId, storeContext);
     assertThat(category).isNull();
-  }
-
-  /**
-   * initialize store context for {@link com.coremedia.livecontext.ecommerce.ibm.CommerceConnectionInitializerReplacer}
-   * access
-   */
-  protected void initStoreContext(StoreContext storeContext) {
-    CurrentCommerceConnection.get().setStoreContext(storeContext);
   }
 
   protected void testFindCategoryByIdWithSlash() {
@@ -338,9 +331,10 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
   }
 
   protected void testFindGermanCategoryBySeoSegment() throws Exception {
-    StoreContext germanStoreContext = testConfig.getStoreContext();
-    Locale germanLocale = new Locale("de", "DE");
-    germanStoreContext.put(LOCALE, germanLocale);
+    Locale germanLocale = Locale.GERMANY;
+    StoreContext germanStoreContext = StoreContextBuilderImpl.from((StoreContextImpl) testConfig.getStoreContext())
+            .withLocale(germanLocale)
+            .build();
 
     Category category = testling.findCategoryBySeoSegment("kleider", germanStoreContext);
 
@@ -507,7 +501,7 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
     category = testling.findCategoryById(categoryId, getStoreContext());
     facetProducts = testling.getFacetsForProductSearch(category, getStoreContext());
     assertThat(facetProducts).isNotNull();
-    assertThat(facetProducts.size()).isLessThan(total);
+    assertThat(facetProducts.size()).isGreaterThan(0);
   }
 
   protected void testSearchProductsWithFacet() throws Exception {
@@ -598,14 +592,14 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
     assertThat(!checkIfClassIsContained(searchResult2ProductVariants, "ProductImpl")).isTrue();
   }
 
-  protected void testGetDefaultCatalog(){
+  protected void testGetDefaultCatalog() {
     Optional<Catalog> defaultCatalog = testling.getDefaultCatalog(getStoreContext());
     assertThat(defaultCatalog.isPresent()).isTrue();
     assertThat(defaultCatalog.get().getName().value()).containsIgnoringCase("Extended Sites Catalog Asset Store Consumer Direct");
     assertThat(defaultCatalog.get().isDefaultCatalog()).isTrue();
   }
 
-  protected void testGetCatalogs(){
+  protected void testGetCatalogs() {
     List<Catalog> catalogs = testling.getCatalogs(getStoreContext());
     assertThat(catalogs).isNotEmpty();
     assertThat(catalogs.get(0).getName().value()).containsIgnoringCase("Extended Sites Catalog Asset Store");

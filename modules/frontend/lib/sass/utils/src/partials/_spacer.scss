@@ -24,7 +24,8 @@
     }
 
     //hide last one
-    &.is-last::after {
+    &.is-last:after,
+    &:last-child:after {
       display: none;
     }
   }

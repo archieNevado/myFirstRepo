@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.ecommerce.hybris.rest.resources;
 
+import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.hybris.catalog.CatalogServiceImpl;
@@ -12,12 +13,12 @@ import com.coremedia.livecontext.ecommerce.hybris.rest.documents.ProductSearchDo
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.UserGroupDocument;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.UserGroupRefDocument;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.UserGroupsDocument;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +35,7 @@ public class CatalogResource extends AbstractHybrisResource {
 
   @Nullable
   public CatalogDocument getCatalog(@NonNull StoreContext storeContext) {
-    String catalogId = getCatalogId();
+    String catalogId = getCatalogId().value();
     String catalogVersion = getCatalogVersion();
 
     List<String> uriTemplateParameters = newUriTemplateParameters(storeContext, catalogId, catalogVersion);
@@ -57,7 +58,7 @@ public class CatalogResource extends AbstractHybrisResource {
 
   @Nullable
   public CategoryDocument getCategoryById(@NonNull String categoryId, @NonNull StoreContext storeContext) {
-    String catalogId = storeContext.getCatalogId();
+    String catalogId = storeContext.getCatalogId().map(CatalogId::value).orElse(null);
     String catalogVersion = storeContext.getCatalogVersion();
 
     List<String> uriTemplateParameters = newUriTemplateParameters(storeContext, catalogId, catalogVersion, categoryId);
@@ -67,7 +68,7 @@ public class CatalogResource extends AbstractHybrisResource {
 
   @Nullable
   public ProductDocument getProductById(String productId, @NonNull StoreContext storeContext) {
-    String catalogId = getCatalogId();
+    String catalogId = getCatalogId().value();
     String catalogVersion = getCatalogVersion();
 
     List<String> uriTemplateParameters = newUriTemplateParameters(storeContext, catalogId, catalogVersion, productId);
@@ -161,8 +162,9 @@ public class CatalogResource extends AbstractHybrisResource {
     }
   }
 
-  private static String getCatalogId() {
-    return getStoreContext().getCatalogId();
+  @NonNull
+  private static CatalogId getCatalogId() {
+    return getStoreContext().getCatalogId().get();
   }
 
   private static String getCatalogVersion() {

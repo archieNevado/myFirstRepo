@@ -22,6 +22,10 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
+      <artifactId>bpbase-cae-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-settings-api</artifactId>
     </dependency>
     <dependency>

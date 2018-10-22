@@ -1,3 +1,5 @@
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/utils.ftl" as utils />
+
 <#--
   Renders a label associated to Spring forms.
 
@@ -8,13 +10,10 @@
 
   Example:
   <@labelFromSpring path="bpLoginForm.name" text=bp.getMessage("login_name_label") />
-
-  Note:
-  For now uses the deprecated function to avoid code duplication as we cannot depend from "cae-base-lib" to
-  the frontend workspace.
 -->
 <#macro labelFromSpring path text="" bindPath=true attr={}>
-  <@bp.labelFromSpring path=path text=text bindPath=bindPath attr=attr />
+  <#if bindPath><@spring.bind path=path /></#if>
+  <label for="${_getIdFromExpression(spring.status.expression)}" <@utils.renderAttr attr />>${text}</label>
 </#macro>
 
 <#--
@@ -35,20 +34,22 @@
                  dismissable=false
                  additionalClasses=["cm-comment__notification"]
                  attr={"data-cm-notification": '{"path": ""}'}/>
-
-  Note:
-  For now uses the deprecated function to avoid code duplication as we cannot depend from "cae-base-lib" to
-  the frontend workspace.
 -->
 <#macro notification type baseClass="cm-notification" additionalClasses=[] title="" text="" dismissable=false iconClass="" attr={}>
-  <@bp.notification type=type
-                    baseClass=baseClass
-                    additionalClasses=additionalClasses
-                    title=title
-                    text=text
-                    dismissable=dismissable
-                    iconClass=iconClass
-                    attr=attr />
+  <#local classes=[baseClass, baseClass + "--" + type] + additionalClasses />
+  <#local attr=utils.extendSequenceInMap(attr, "classes", classes) />
+  <div<@utils.renderAttr attr=attr />>
+    <#if iconClass?has_content>
+      <i class="${iconClass}" aria-hidden="true"></i>
+    </#if>
+    <#if title?has_content>
+      <span class="${baseClass}__headline">${title}</span>
+    </#if>
+    <span class="${baseClass}__text">
+    <#if text?has_content>${text}</#if>
+    <#nested />
+    </span>
+  </div>
 </#macro>
 
 <#--
@@ -65,18 +66,21 @@
 
   Example:
   <@notificationFromSpring path="bpLoginForm" additionalClasses=["alert alert-danger"]/>
-
-  Note:
-  For now uses the deprecated function to avoid code duplication as we cannot depend from "cae-base-lib" to
-  the frontend workspace.
 -->
-<#macro notificationFromSpring path baseClass="cm-notification" additionalClasses=[] ignoreIfEmpty=true type="error" title="" bindPath=true attr={}>
-  <@bp.notificationFromSpring path=path
-                              baseClass=baseClass
-                              additionalClasses=additionalClasses
-                              ignoreIfEmpty=ignoreIfEmpty
-                              type=type
-                              title=title
-                              bindPath=bindPath
-                              attr=attr />
-</#macro>
+<#outputformat "plainText">
+  <#macro notificationFromSpring path baseClass="cm-notification" additionalClasses=[] ignoreIfEmpty=true type="error" title="" bindPath=true attr={}>
+    <#if bindPath><@spring.bind path=path /></#if>
+    <#local text="" />
+    <#if spring.status.error>
+      <#local text=spring.status.getErrorMessagesAsString("\n") />
+    </#if>
+    <#if !ignoreIfEmpty?is_boolean || !ignoreIfEmpty || text?has_content>
+      <@notification type=type baseClass=baseClass additionalClasses=additionalClasses title=title attr=attr>${text?replace("\n", "<br>")}<#nested /></@notification>
+    </#if>
+  </#macro>
+</#outputformat>
+
+<#-- PRIVATE -->
+<#function _getIdFromExpression expression>
+  <#return expression?replace("[", "")?replace("]", "") />
+</#function>

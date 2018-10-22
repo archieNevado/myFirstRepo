@@ -1,12 +1,14 @@
 package com.coremedia.livecontext.p13n.preview;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdProvider;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.personalization.contentbeans.CMUserProfile;
 import com.coremedia.cap.content.Content;
 import com.coremedia.ecommerce.test.TestVendors;
-import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.context.ContextCollectionImpl;
@@ -45,23 +47,27 @@ public class CommerceSegmentTestContextExtractorTest {
   @Mock
   private ContentBeanFactory contentBeanFactory;
 
-  private StoreContext storeContext;
+  private BaseCommerceConnection commerceConnection;
 
   @Mock
-  CommerceConnection commerceConnection;
+  private StoreContextProvider storeContextProvider;
 
   @Before
   public void setUp() throws Exception {
     testling = new CommerceSegmentTestContextExtractor();
     testling.setContentBeanFactory(contentBeanFactory);
-    storeContext = newStoreContext();
     contextCollection = new ContextCollectionImpl();
 
-    CurrentCommerceConnection.set(commerceConnection);
-
-    when(commerceConnection.getStoreContext()).thenReturn(storeContext);
     BaseCommerceIdProvider idProvider = TestVendors.getIdProvider("vendor");
-    when(commerceConnection.getIdProvider()).thenReturn(idProvider);
+    StoreContextImpl storeContext = newStoreContext();
+    when(storeContextProvider.buildContext(storeContext)).thenReturn(StoreContextBuilderImpl.from(storeContext));
+
+    commerceConnection = new BaseCommerceConnection();
+    commerceConnection.setIdProvider(idProvider);
+    commerceConnection.setStoreContext(storeContext);
+    commerceConnection.setStoreContextProvider(storeContextProvider);
+
+    CurrentCommerceConnection.set(commerceConnection);
   }
 
   @After
@@ -83,7 +89,7 @@ public class CommerceSegmentTestContextExtractorTest {
     testling.extractTestContextsFromContent(content, contextCollection);
 
     //assert the user segments in the store context
-    assertEquals(userSegmentIds, storeContext.getUserSegments());
+    assertEquals(userSegmentIds, commerceConnection.getStoreContext().getUserSegments().orElse(null));
 
     //assert the user segments in the context collection
     PropertyProfile commerceProperty = (PropertyProfile) contextCollection.getContext(

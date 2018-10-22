@@ -18,6 +18,7 @@
   <component class="com.coremedia.blueprint.studio.forms.CMInteractiveForm"/>
   <component class="com.coremedia.blueprint.studio.forms.CMJavaScriptForm"/>
   <component class="com.coremedia.blueprint.studio.forms.CMLocTaxonomyForm"/>
+  <component class="com.coremedia.blueprint.studio.forms.CMPersonForm"/>
   <component class="com.coremedia.blueprint.studio.forms.CMPictureForm"/>
   <component class="com.coremedia.blueprint.studio.forms.CMPlaceholderForm"/>
   <component class="com.coremedia.blueprint.studio.forms.CMResourceBundleForm"/>
@@ -38,6 +39,8 @@
   <component class="com.coremedia.blueprint.studio.forms.components.CMArticleMetaDataTab"/>
   <component class="com.coremedia.blueprint.studio.forms.components.CMArticleSystemForm"/>
   <component class="com.coremedia.blueprint.studio.forms.components.CMDownloadSystemForm"/>
+  <component class="com.coremedia.blueprint.studio.forms.components.CMPersonMetaDataTab"/>
+  <component class="com.coremedia.blueprint.studio.forms.containers.AuthorLinkListDocumentForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.CallToActionConfigurationForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.CategoryDocumentForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.ChannelMetaDataInformationForm"/>
@@ -54,6 +57,8 @@
   <component class="com.coremedia.blueprint.studio.forms.containers.LinkedSettingsForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.LocalSettingsForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.MediaDocumentForm"/>
+  <component class="com.coremedia.blueprint.studio.forms.containers.MiscSettingsForm"/>
+  <component class="com.coremedia.blueprint.studio.forms.containers.PersonDetailsDocumentForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.PlayerSettingsPropertyGroup"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.MetaDataInformationForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.MetaDataWithoutSearchableForm"/>
@@ -61,6 +66,7 @@
   <component class="com.coremedia.blueprint.studio.forms.containers.ModificationDocumentForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.MultiLangWithBundlesDocumentForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.MultiLanguageDocumentForm"/>
+  <component class="com.coremedia.blueprint.studio.forms.containers.PersonSEOForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.PictureDocumentForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.RelatedDocumentForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.SEOForm"/>

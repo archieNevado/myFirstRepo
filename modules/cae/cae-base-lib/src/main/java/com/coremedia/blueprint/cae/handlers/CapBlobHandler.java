@@ -16,6 +16,8 @@ import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.google.common.collect.ImmutableMap;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,12 +26,9 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
-import org.springframework.web.util.UriUtils;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -46,7 +45,9 @@ import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_P
 import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_RESOURCE;
 import static com.coremedia.objectserver.web.HandlerHelper.createModel;
 import static com.coremedia.objectserver.web.HandlerHelper.notFound;
-import static com.coremedia.objectserver.web.HandlerHelper.redirectTo;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.springframework.web.util.UriUtils.decode;
+import static org.springframework.web.util.UriUtils.encode;
 
 /**
  * Handler and LinkScheme for {@link com.coremedia.cap.common.CapBlobRef blobs}.
@@ -114,11 +115,12 @@ public class CapBlobHandler extends HandlerBase {
 
   @RequestMapping(value = CODERESOURCEBLOB_URI_PATTERN)
   public ModelAndView handleCodeResourceBlobRequest(@PathVariable(SEGMENT_ID) ContentBean contentBean,
-                                    @PathVariable(SEGMENT_ETAG) String eTag,
-                                    @PathVariable(SEGMENT_PROPERTY) String propertyName,
-                                    @PathVariable(SEGMENT_EXTENSION) String extension,
-                                    WebRequest webRequest,
-                                    HttpServletRequest request) {
+                                                    @PathVariable(SEGMENT_ETAG) String eTag,
+                                                    @PathVariable(SEGMENT_PROPERTY) String propertyName,
+                                                    @PathVariable(SEGMENT_EXTENSION) String extension,
+                                                    WebRequest webRequest,
+                                                    HttpServletRequest request,
+                                                    HttpServletResponse response) {
     // Check for a developer variant first.
     // This can succeed on content management servers only.
     // Live servers do not support developer variants.
@@ -134,24 +136,25 @@ public class CapBlobHandler extends HandlerBase {
 
     // No developer variant found, return the standard result.
     // This is the standard case, esp. in production environments.
-    return handleRequest(contentBean, eTag, propertyName, extension, webRequest);
+    return handleRequest(contentBean, eTag, propertyName, extension, webRequest, response);
   }
 
   @RequestMapping(value = URI_PATTERN)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ID) ContentBean contentBean,
                                     @PathVariable(SEGMENT_ETAG) String eTag,
                                     WebRequest webRequest,
-                                    HttpServletRequest request) {
+                                    HttpServletRequest request,
+                                    HttpServletResponse response) {
     // we have to extract the filename ourselves because the injected path variable has problems with some special characters (e.g. ';')
     StringBuffer requestURL = request.getRequestURL();
     int lastSlashIndex = requestURL.lastIndexOf("/");
     String encodedFilename = requestURL.substring(lastSlashIndex + 1);
-    String filename = uriDecode(encodedFilename);
+    String filename = decode(encodedFilename, UTF_8);
 
     if (contentBean instanceof CMDownload) {
       String storedFilename = ((CMDownload) contentBean).getFilename();
       if (!StringUtils.isEmpty(storedFilename) && storedFilename.equals(filename)) {
-        return handleRequest(contentBean, eTag, CMDownload.DATA, null, webRequest);
+        return handleRequest(contentBean, eTag, CMDownload.DATA, null, webRequest, response);
       }
     }
 
@@ -160,13 +163,18 @@ public class CapBlobHandler extends HandlerBase {
       String propertyName = matcher.group(SEGMENT_PROPERTY);
       String extension = matcher.group(SEGMENT_EXTENSION);
 
-      return handleRequest(contentBean, eTag, propertyName, extension, webRequest);
+      return handleRequest(contentBean, eTag, propertyName, extension, webRequest, response);
     }
 
     return notFound();
   }
 
-  public ModelAndView handleRequest(ContentBean contentBean, String eTag, String propertyName, String extension, WebRequest webRequest) {
+  public ModelAndView handleRequest(ContentBean contentBean,
+                                    String eTag,
+                                    String propertyName,
+                                    String extension,
+                                    WebRequest webRequest,
+                                    HttpServletResponse response) {
     if (contentBean == null || !validationService.validate(contentBean)) {
       return notFound();
     }
@@ -177,21 +185,18 @@ public class CapBlobHandler extends HandlerBase {
       return notFound();
     }
 
+    if (webRequest.checkNotModified(blob.getETag())) {
+      // shortcut exit - no further processing necessary
+      return null;
+    }
+
     if (extension != null && !validateBlobExtension(extension, blob)) {
       return notFound();
     }
 
     // URL validation: redirect to "correct" blob URL, if etag does not match.
     // The client may just have an old version of the URL.
-    if (eTagMatches(blob, eTag)) {
-      if (webRequest.checkNotModified(blob.getETag())) {
-        // shortcut exit - no further processing necessary
-        return null;
-      }
-      return createModel(blob);
-    } else {
-      return redirectTo(blob);
-    }
+    return doCreateModelWithView(eTagMatches(blob, eTag), blob, null, null, response);
   }
 
   // --- LinkSchemes ---------------------------------------------------------------------------------------------------
@@ -227,7 +232,7 @@ public class CapBlobHandler extends HandlerBase {
       String extension = getExtension(bean.getContentType(), BlobHelper.BLOB_DEFAULT_EXTENSION);
       effectiveFilename = name + "-" + propertyName + "." + extension;
     } else {
-      effectiveFilename = uriEncode(filename);
+      effectiveFilename = encode(filename, UTF_8.name());
     }
 
     return UriComponentsBuilder.newInstance()
@@ -269,7 +274,7 @@ public class CapBlobHandler extends HandlerBase {
     Content original = contentBean.getContent();
     Content developerVariant = themeService.developerVariant(original, developer);
     if (!original.equals(developerVariant)) {
-      ContentBean developerVariantBean = contentBeanFactory.createBeanFor(developerVariant);
+      ContentBean developerVariantBean = contentBeanFactory.createBeanFor(developerVariant, ContentBean.class);
       if (developerVariantBean != null && validationService.validate(developerVariantBean)) {
         CapBlobRef blobRef = resolveBlob(developerVariantBean, propertyName);
         if (validateBlobExtension(extension, blobRef)) {
@@ -310,22 +315,6 @@ public class CapBlobHandler extends HandlerBase {
       return removeSpecialCharacters(contentName);
     }
     throw new IllegalArgumentException("Not a Content Blob: " + o);
-  }
-
-  private String uriEncode(String s) {
-    try {
-      return UriUtils.encode(s, "UTF-8");
-    } catch (UnsupportedEncodingException e) {
-      throw new IllegalStateException("Unsupported Encoding", e);
-    }
-  }
-
-  private String uriDecode(String s) {
-    try {
-      return UriUtils.decode(s, "UTF-8");
-    } catch (UnsupportedEncodingException e) {
-      throw new IllegalStateException("Unsupported Encoding", e);
-    }
   }
 
   /**

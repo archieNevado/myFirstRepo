@@ -21,7 +21,7 @@
 
     <Variable name="translationAction" type="String"/>
     <Variable name="targetSiteId" type="String"/>
-    <Variable name="targetSiteManagerGroup" type="Group"/>
+    <AggregationVariable name="targetSiteManagerGroup" type="Group"/>
     <Variable name="performer" type="User"/>
 
     <!-- list of contents or versions to be translated -->

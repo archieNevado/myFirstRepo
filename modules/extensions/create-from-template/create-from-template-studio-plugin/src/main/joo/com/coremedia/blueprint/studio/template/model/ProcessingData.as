@@ -51,6 +51,10 @@ public class ProcessingData extends BeanImpl {
     return content;
   }
 
+  public function getExtendedPath(content:Content):String {
+    return getName() ? content.getPath() + "/" + getName() : content.getPath();
+  }
+
 
   override public function toString():String {
     var value:String = 'Processing Data: ' + content + ', skipInitializers:' + doSkipInitializers()

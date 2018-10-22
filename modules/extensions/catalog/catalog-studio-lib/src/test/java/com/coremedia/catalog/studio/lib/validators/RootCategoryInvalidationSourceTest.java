@@ -1,8 +1,6 @@
 package com.coremedia.catalog.studio.lib.validators;
 
 import com.coremedia.blueprint.base.ecommerce.catalog.CmsCategory;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.Content;
@@ -80,8 +78,6 @@ public class RootCategoryInvalidationSourceTest {
     envBuilder = MockCommerceEnvBuilder.create();
     envBuilder.setupEnv();
 
-    CurrentCommerceConnection.get().getStoreContext().put(StoreContextImpl.SITE, "theSiteId");
-
     cmCategory = contentRepository.getContentType("CMCategory");
     site = sitesService.findSite("theSiteId")
             .orElseThrow(() -> new IllegalStateException("Site with ID 'theSiteId' is missing."));
@@ -92,7 +88,7 @@ public class RootCategoryInvalidationSourceTest {
   private void configureLinker() {
     doAnswer(invocationOnMock -> {
       Object entity = invocationOnMock.getArguments()[0];
-      if(entity instanceof Category) {
+      if (entity instanceof Category) {
         Category category = (Category) entity;
         String format = CommerceIdFormatterHelper.format(category.getId());
         return new URI(format);
@@ -121,7 +117,7 @@ public class RootCategoryInvalidationSourceTest {
     siteRootDocument.setProperties(initialRootDocumentVersion.getProperties());
     siteRootDocument.checkIn();
 
-    if(!rootCategory.isDestroyed()) {
+    if (!rootCategory.isDestroyed()) {
       rootCategory.destroy();
     }
     envBuilder.tearDownEnv();
@@ -169,7 +165,7 @@ public class RootCategoryInvalidationSourceTest {
 
   @Test
   public void configureNewRootCategory() throws InterruptedException {
-    assertEquals(rootCategory, ((CmsCategory)getSiteRootCategory()).getContent());
+    assertEquals(rootCategory, ((CmsCategory) getSiteRootCategory()).getContent());
 
     // reconfiguring the root category should raise invalidations
     Content newRootCategory = createAndConfigureRootCategory(RandomStringUtils.randomAlphanumeric(10));
@@ -205,7 +201,5 @@ public class RootCategoryInvalidationSourceTest {
       rootCategoryInvalidationSource.setCapacity(3);
       return rootCategoryInvalidationSource;
     }
-
   }
-
 }

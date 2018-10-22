@@ -6,7 +6,7 @@ import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.elastic.social.cae.ElasticSocialService;
 import com.coremedia.blueprint.elastic.social.cae.controller.CommentsResult;
 import com.coremedia.blueprint.elastic.social.cae.controller.ReviewsResult;
-import com.coremedia.blueprint.elastic.social.cae.guid.GuidFilter;
+import com.coremedia.blueprint.elastic.social.cae.guid.GuidCookieHandler;
 import com.coremedia.blueprint.elastic.social.cae.user.ElasticSocialUserHelper;
 import com.coremedia.elastic.core.api.tenant.TenantService;
 import com.coremedia.elastic.social.api.reviews.Review;
@@ -32,8 +32,6 @@ public class ElasticSocialFreemarkerFacade {
 
   @Inject
   private ElasticSocialPlugin elasticSocialPlugin;
-
-  private ElasticSocialMessageKeysFreemarker elasticSocialMessageKeys = new ElasticSocialMessageKeysFreemarker();
 
   public boolean isLoginAction(Object bean) {
     return ElasticSocialFunctions.isLoginAction(bean);
@@ -66,7 +64,7 @@ public class ElasticSocialFreemarkerFacade {
   }
 
   public String getCurrentGuid() {
-    return GuidFilter.getCurrentGuid();
+    return GuidCookieHandler.getCurrentGuid();
   }
 
   public CommentsResult getCommentsResult(Object target) {
@@ -97,15 +95,5 @@ public class ElasticSocialFreemarkerFacade {
 
   public ElasticSocialConfiguration getElasticSocialConfiguration(Page page) {
     return elasticSocialPlugin.getElasticSocialConfiguration(page);
-  }
-
-  /**
-   * Returns constants to access localization for elastic social.
-   * @return Returns constants to access localization for elastic social.
-   * @deprecated will be removed with the next AEP, access the resource bundle keys directly in your template.
-   */
-  @Deprecated
-  public ElasticSocialMessageKeysFreemarker getElasticSocialMessageKeys() {
-    return elasticSocialMessageKeys;
   }
 }

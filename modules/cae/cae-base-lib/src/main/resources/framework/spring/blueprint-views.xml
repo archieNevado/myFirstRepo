@@ -28,6 +28,7 @@
   <import resource="classpath:/framework/spring/blueprint-handlers.xml"/>
   <import resource="classpath:/framework/spring/blueprint-sitemap.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml"/>
+  <import resource="classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-cae-services.xml"/>
 
   <!-- *************************************
     Programmed Views
@@ -229,12 +230,6 @@
     </list>
   </customize:prepend>
 
-  <customize:prepend id="addBricksRepositoryName" bean="viewRepositories" enabled="#{ !'${cae.use.local.resources:false}' }">
-    <list>
-      <value>bricks</value>
-    </list>
-  </customize:prepend>
-
   <customize:append id="addCommonPreviewCss" bean="previewResourcesCssList">
     <list>
       <value>/com/coremedia/cae/css/coremedia.preview.basic.css</value>
@@ -312,14 +307,14 @@
 
   <customize:append id="addViewLookupTypeTriggers" bean="viewLookupTypeTriggers">
     <description>
-      Add types that trigger the clearing of the viewcache if they are modified / created / deleted 
+      Add types that trigger the clearing of the viewcache if they are modified / created / deleted
     </description>
     <list>
       <value>CMTemplateSet</value>
       <value>CMTheme</value>
     </list>
   </customize:append>
-  
+
   <customize:replace id="customizeTemplateLocationPatterns" bean="templateLocationPatterns" order="0">
     <description>Register the template location patterns of this module.</description>
     <list>
@@ -335,7 +330,6 @@
     </description>
     <list>
       <value>jar:id:contentproperty:/Themes/%1$s/templates/%1$s-templates.jar/archive!/META-INF/resources/WEB-INF/templates/%1$s</value>
-      <value>jar:id:contentproperty:/Themes/%1$s/templates/%1$s-templates.jar/archive!/META-INF/resources/WEB-INF/templates/bricks</value>
     </list>
   </customize:prepend>
 

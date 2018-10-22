@@ -50,7 +50,7 @@ public class AssetRenditionBlobHandlerTest {
 
   @Before
   public void setUp() {
-    when(capBlobHandler.handleRequest(any(ContentBean.class), nullable(String.class), anyString(), nullable(String.class), nullable(WebRequest.class))).thenReturn(modelAndView);
+    when(capBlobHandler.handleRequest(any(ContentBean.class), nullable(String.class), anyString(), nullable(String.class), nullable(WebRequest.class), any())).thenReturn(modelAndView);
   }
 
 

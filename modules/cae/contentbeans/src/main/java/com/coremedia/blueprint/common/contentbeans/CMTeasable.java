@@ -5,6 +5,7 @@ import com.coremedia.blueprint.common.teaserOverlay.TeaserOverlaySettings;
 import com.coremedia.blueprint.common.teaserOverlay.TeaserOverlayStyle;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.xml.Markup;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import java.util.Collection;
 import java.util.List;
@@ -30,6 +31,11 @@ public interface CMTeasable extends CMHasContexts {
    * {@link com.coremedia.cap.content.ContentType#getName() Name of the ContentType} 'CMTeasable'.
    */
   String NAME = "CMTeasable";
+
+  /**
+   * Name of the document property 'authors'.
+   */
+  String AUTHORS = "authors";
 
   /**
    * Returns the value of the document property {@link #MASTER}.
@@ -113,6 +119,7 @@ public interface CMTeasable extends CMHasContexts {
    *
    * @cm.template.api
    */
+  @NonNull
   List<CMMedia> getMedia();
 
   /**
@@ -256,4 +263,14 @@ public interface CMTeasable extends CMHasContexts {
    * @cm.template.api
    */
   List<CallToActionButtonSettings> getCallToActionSettings();
+
+  /**
+   * <p>
+   * Returns the value of the document property {@link #AUTHORS}.
+   * </p>
+   *
+   * @return the value of the document property {@link #AUTHORS}
+   * @cm.template.api
+   */
+  List<CMPerson> getAuthors();
 }

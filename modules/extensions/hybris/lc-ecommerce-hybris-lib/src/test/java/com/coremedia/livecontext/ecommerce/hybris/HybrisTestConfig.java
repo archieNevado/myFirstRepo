@@ -4,6 +4,7 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTra
 import com.coremedia.blueprint.lc.test.TestConfig;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.hybris.common.HybrisStoreContextBuilder;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 
+import java.util.Currency;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -38,18 +40,28 @@ public class HybrisTestConfig implements TestConfig {
 
   @Override
   public StoreContext getStoreContext() {
-    StoreContext context = HybrisTestStoreContextBuilder.build("apparel-uk", "Apparel-Catalog", CATALOG_ID,
-            Locale.ENGLISH, "GBP", "Staged");
-    context.setSiteId("theSiteId");
-    return context;
+    return HybrisStoreContextBuilder
+            .from("theSiteId")
+            .withStoreId("apparel-uk")
+            .withStoreName("Apparel-Catalog")
+            .withCatalogId(CATALOG_ID)
+            .withCatalogVersion("Staged")
+            .withCurrency(Currency.getInstance("GBP"))
+            .withLocale(Locale.ENGLISH)
+            .build();
   }
 
   @Override
   public StoreContext getGermanStoreContext() {
-    StoreContext context = HybrisTestStoreContextBuilder.build("apparel-de", "Apparel-Catalog", CATALOG_ID,
-            Locale.GERMAN, "EUR", "Staged");
-    context.setSiteId("theSiteId");
-    return context;
+    return HybrisStoreContextBuilder
+            .from("theSiteId")
+            .withStoreId("apparel-de")
+            .withStoreName("Apparel-Catalog")
+            .withCatalogId(CATALOG_ID)
+            .withCatalogVersion("Staged")
+            .withCurrency(Currency.getInstance("EUR"))
+            .withLocale(Locale.GERMAN)
+            .build();
   }
 
   @Override

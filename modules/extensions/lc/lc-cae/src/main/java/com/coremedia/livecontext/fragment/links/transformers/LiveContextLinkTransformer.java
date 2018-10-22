@@ -26,6 +26,7 @@ import com.coremedia.livecontext.fragment.links.transformers.resolvers.LiveConte
 import com.coremedia.objectserver.view.ViewUtils;
 import com.coremedia.objectserver.web.links.LinkTransformer;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Streams;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
@@ -38,7 +39,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
 import static com.coremedia.livecontext.fragment.links.transformers.LiveContextLinkTransformerOrderChecker.validateOrder;
@@ -58,7 +59,7 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
 
   private static final String VARIANT_PARAM = "variant";
   private static final String LIVECONTEXT_CONTENT_LED = "livecontext.contentLed";
-  private static final String DYNAMIC_LINK_INDICATOR =  "/" + PREFIX_DYNAMIC + "/";
+  private static final String DYNAMIC_LINK_INDICATOR = "/" + PREFIX_DYNAMIC + "/";
   private static final String P13N_LINK_INDICATOR = "/p13n/";
 
   private List<LiveContextLinkResolver> liveContextLinkResolverList;
@@ -173,31 +174,33 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
   @NonNull
   private String transform(String source, Object content, Object variant, CMNavigation navigation,
                            @NonNull HttpServletRequest request) {
-    String lcUrl = resolveUrl(source, content, variant, navigation, request);
+    Optional<String> nonBlankLcUrl = resolveUrl(source, content, variant, navigation, request)
+            .filter(StringUtils::isNotBlank);
+    if (nonBlankLcUrl.isPresent()) {
+      return nonBlankLcUrl.get();
+    }
 
-    if (isNotBlank(lcUrl)) {
-      return lcUrl;
-    } else if (isNotBlank(source)) {
+    if (isNotBlank(source)) {
       return source;
     }
 
     return "#";
   }
 
-  @Nullable
-  private String resolveUrl(String source, Object content, @Nullable Object variant, CMNavigation navigation,
-                            HttpServletRequest request) {
+  @NonNull
+  private Optional<String> resolveUrl(String source, Object content, @Nullable Object variant, CMNavigation navigation,
+                                      HttpServletRequest request) {
     if (source == null) {
-      return null;
+      return Optional.empty();
     }
+
+    String variantStr = variant != null ? variant + "" : null;
 
     return liveContextLinkResolverList.stream()
             .filter(resolver -> resolver.isApplicable(content))
-            .map(resolver -> resolver.resolveUrl(source, content, variant != null ? variant + "" : null, navigation,
-                    request))
-            .filter(Objects::nonNull)
-            .findFirst()
-            .orElse(null);
+            .map(resolver -> resolver.resolveUrl(source, content, variantStr, navigation, request))
+            .flatMap(Streams::stream)
+            .findFirst();
   }
 
   @Nullable
@@ -293,5 +296,4 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
   public void setSettingsService(SettingsService settingsService) {
     this.settingsService = settingsService;
   }
-
 }

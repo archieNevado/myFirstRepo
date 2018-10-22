@@ -5,6 +5,7 @@
 
   <import resource="classpath:/com/coremedia/cap/multisite/multisite-services.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml"/>
+  <import resource="classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-cae-services.xml"/>
   <import resource="classpath:/framework/spring/lc-ecommerce-connection.xml"/>
 
   <bean id="liveContextSiteResolver" class="com.coremedia.livecontext.handler.util.LiveContextSiteResolverImpl">

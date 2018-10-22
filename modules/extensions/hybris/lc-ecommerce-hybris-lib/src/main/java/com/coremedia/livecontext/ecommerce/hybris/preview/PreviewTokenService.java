@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.ecommerce.hybris.preview;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoStoreContextAvailable;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.UnauthorizedException;
 import com.coremedia.livecontext.ecommerce.hybris.common.AbstractHybrisService;
@@ -96,7 +97,7 @@ public class PreviewTokenService extends AbstractHybrisService {
 
     // fetch catalogId from specific bean for CMS-9516 (multi catalog support for hybris)
 
-    result.put("catalog", storeContext.getCatalogId());
+    result.put("catalog", storeContext.getCatalogId().map(CatalogId::value).orElse(null));
     result.put("catalogVersion", storeContext.getCatalogVersion());
     result.put("language", storeContext.getLocale().getLanguage());
     result.put("resourcePath", previewStoreFrontUrl + "?site=" + storeContext.getStoreId());

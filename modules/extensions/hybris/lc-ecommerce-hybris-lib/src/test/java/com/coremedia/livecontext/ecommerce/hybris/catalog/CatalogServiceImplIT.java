@@ -34,6 +34,8 @@ import static org.junit.Assert.assertEquals;
 @ContextConfiguration(classes = {XmlRepoConfiguration.class, HybrisTestConfig.class})
 public class CatalogServiceImplIT extends CatalogServiceBaseTest {
 
+  private static final String ROOT_CATEGORY_ID = "ROOT";
+
   @Inject
   private CatalogServiceImpl testling;
 
@@ -141,9 +143,8 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
 
   @Betamax(tape = "hy_testFindProductsByCategoryIsRoot", match = {MatchRule.path, MatchRule.query})
   @Test
-  @Override
   public void testFindProductsByCategoryIsRoot() throws Exception {
-    super.testFindProductsByCategoryIsRoot();
+    testFindProductsByCategoryIsRoot(ROOT_CATEGORY_ID);
   }
 
   @Betamax(tape = "hy_testFindTopCategories", match = {MatchRule.path, MatchRule.query})
@@ -155,9 +156,8 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
 
   @Betamax(tape = "hy_testFindRootCategory", match = {MatchRule.path, MatchRule.query})
   @Test
-  @Override
   public void testFindRootCategory() throws Exception {
-    super.testFindRootCategory();
+    testFindRootCategory(ROOT_CATEGORY_ID);
   }
 
   @Betamax(tape = "hy_testFindSubCategories", match = {MatchRule.path, MatchRule.query})

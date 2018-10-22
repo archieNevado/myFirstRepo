@@ -28,7 +28,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Required;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
@@ -38,7 +37,6 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
-import org.springframework.web.util.UriUtils;
 
 import javax.activation.MimeTypeParseException;
 import javax.servlet.http.HttpServletRequest;
@@ -46,7 +44,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -66,6 +63,8 @@ import static com.coremedia.objectserver.web.HandlerHelper.createModel;
 import static com.coremedia.objectserver.web.HandlerHelper.createModelWithView;
 import static com.coremedia.objectserver.web.HandlerHelper.notFound;
 import static com.coremedia.objectserver.web.HandlerHelper.redirectTo;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.springframework.web.util.UriUtils.encodePathSegment;
 
 /**
  * Handler and LinkScheme for all CSS and JavaScript to the requested navigation object
@@ -76,15 +75,8 @@ import static com.coremedia.objectserver.web.HandlerHelper.redirectTo;
 public class CodeResourceHandler extends HandlerBase implements ApplicationContextAware, InitializingBean {
   private static final Logger LOG = LoggerFactory.getLogger(CodeResourceHandler.class);
 
-  // --- spring configured properties ---
-  private CapConnection capConnection;
-  private ApplicationContext applicationContext;
-  private Cache cache;
-  private ContentBeanFactory contentBeanFactory;
-  private SitesService sitesService;
-
-  // --- various constants ---
-  @VisibleForTesting static final String MARKUP_PROGRAMMED_VIEW_NAME = "script";
+  @VisibleForTesting
+  static final String MARKUP_PROGRAMMED_VIEW_NAME = "script";
   private static final String DEFAULT_EXTENSION = "css";
 
   // --- path segments ---
@@ -93,10 +85,6 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
   private static final String SEGMENT_PATH = "path";
   private static final String SEGMENT_HASH = "hash";
   private static final String SEGMENT_MODE = "mode";
-
-  // --- settings for minification, merging and local resources ---
-  private boolean localResourcesEnabled = false;
-  private boolean developerModeEnabled = false;
 
   private static final String PREFIX_CSS = '/' + PREFIX_RESOURCE + '/' + TYPE_CSS;
   private static final String PREFIX_JS = '/' + PREFIX_RESOURCE + '/' + TYPE_JS;
@@ -152,17 +140,21 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
           "/{" + SEGMENT_NAME + "}" +
           ".{" + SEGMENT_EXTENSION + ":" + PATTERN_EXTENSION + "}";
 
+  // --- spring configured properties ---
+  private CapConnection capConnection;
+  private Cache cache;
+  private ContentBeanFactory contentBeanFactory;
+  private SitesService sitesService;
+
+  // --- settings for minification, merging and local resources ---
+  private boolean localResourcesEnabled = false;
+  private boolean developerModeEnabled = false;
 
   // --- spring config -------------------------------------------------------------------------------------------------
 
   @Required
   public void setCapConnection(CapConnection capConnection) {
     this.capConnection = capConnection;
-  }
-
-  @Override
-  public void setApplicationContext(ApplicationContext applicationContext) {
-    this.applicationContext = applicationContext;
   }
 
   /**
@@ -208,7 +200,6 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
     }
   }
 
-
   // --- Handlers ------------------------------------------------------------------------------------------------------
 
   /**
@@ -227,6 +218,7 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
                                     @PathVariable(SEGMENT_HASH) String hash,
                                     @PathVariable(SEGMENT_MODE) String mode,
                                     HttpServletRequest servletRequest,
+                                    HttpServletResponse servletResponse,
                                     WebRequest webRequest) {
     Content cwtContent = channelWithTheme==null ? null : channelWithTheme.getContent();
     Content cwcContent = channelWithCode==null ? null : channelWithCode.getContent();
@@ -241,18 +233,18 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
     CodeResourcesCacheKey cacheKey = new CodeResourcesCacheKey(cwtContent, cwcContent, codePropertyName(extension), developerModeEnabled, developer);
     CodeResourcesModel codeResourcesModel = cache.get(cacheKey).getModel(mode);
     MergeableResources mergeableResources = new MergeableResourcesImpl(codeResourcesModel, contentBeanFactory, getDataViewFactory());
-    //check scripthash
+
     String eTag = codeResourcesModel.getETag();
-    if (!hash.equals(eTag)) {
-      // eTag does not match any longer, i.e. code resources have changed
-      return HandlerHelper.redirectTo(mergeableResources, extension, HttpStatus.SEE_OTHER);
-    }
     if (webRequest.checkNotModified(eTag)) {
       // shortcut exit - no further processing necessary
       return null;
     }
-    //everything is in order, return correct MAV
-    return HandlerHelper.createModelWithView(mergeableResources, extension);
+
+    // check scripthash - the client may use an outdated resource link
+    boolean isUpToDate = hash.equals(eTag);
+    // if eTag does not match URL hash any longer, i.e. code resources have changed
+    // else return correct MAV
+    return doCreateModelWithView(isUpToDate, mergeableResources, extension, HttpStatus.SEE_OTHER, servletResponse);
   }
 
   /**
@@ -357,24 +349,33 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
   // creates a Markup/script model
   private ModelAndView contentResource(String extension, CMAbstractCode cmAbstractCode, String name,
                                        int version, HttpServletResponse response, WebRequest webRequest) {
-    // URL validation: check that extension is OK and name matches expectation
-    if (isExtensionValid(extension, cmAbstractCode) && isNameSegmentValid(name, cmAbstractCode)) {
-      // URL validation: if the version is valid (positive and even) but old, redirect to the "correct" URL
-      int latestVersion = getLatestVersion(cmAbstractCode.getContent());
-      if (version == latestVersion) {
-        if (webRequest.checkNotModified(cmAbstractCode.getContent().getModificationDate().getTimeInMillis())) {
-          // shortcut exit - no further processing necessary
-          return null;
-        }
-        Markup markup = cmAbstractCode.getCode();
-        if (markup != null) {
-          response.setContentType(cmAbstractCode.getContentType());
-          return createModelWithView(markup, MARKUP_PROGRAMMED_VIEW_NAME);
-        }
-      } else if (version > 0 && version < latestVersion) {
-        return redirectTo(cmAbstractCode);
-      }
+
+    if (webRequest.checkNotModified(cmAbstractCode.getContent().getModificationDate().getTimeInMillis())) {
+      // shortcut exit - no further processing necessary
+      return null;
     }
+
+    // URL validation: check that extension is OK and name matches expectation
+    if (!isExtensionValid(extension, cmAbstractCode) || !isNameSegmentValid(name, cmAbstractCode)) {
+      return notFound();
+    }
+
+    Markup markup = cmAbstractCode.getCode();
+    if (markup == null) {
+      return notFound();
+    }
+
+    int latestVersion = getLatestVersion(cmAbstractCode.getContent());
+    boolean isUpToDate = version == latestVersion;
+    if (isUpToDate  || !isSingleNode()) {
+      response.setContentType(cmAbstractCode.getContentType());
+      return createModelWithView(markup, MARKUP_PROGRAMMED_VIEW_NAME);
+    } else if (version > 0 && version < latestVersion) {
+      // let's redirect in single node mode
+      return redirectTo(cmAbstractCode);
+    }
+
+    // the requested resource is known not to exist in single node mode
     return notFound();
   }
 
@@ -382,8 +383,8 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
   private ModelAndView localResource(List<String> path, String baseName, String extension, WebRequest webRequest) throws IOException, MimeTypeParseException {
     String name = baseName + '.' + extension;
     String resourcePath = '/' + joinPath(path) + '/' + name;
-    Resource resource = applicationContext.getResource(resourcePath);
-    if (resource != null && resource.isReadable()) {
+    Resource resource = obtainApplicationContext().getResource(resourcePath);
+    if (resource.isReadable()) {
       if (webRequest.checkNotModified(resource.lastModified())) {
         // shortcut exit - no further processing necessary
         return null;
@@ -450,7 +451,7 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
   }
 
   private String uriEncode(String name) {
-    return UriUtils.encodePathSegment(name, StandardCharsets.UTF_8);
+    return encodePathSegment(name, UTF_8);
   }
 
   /**

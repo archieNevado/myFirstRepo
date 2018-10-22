@@ -17,7 +17,7 @@ import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.blueprint.elastic.social.cae.ElasticSocialService;
 import com.coremedia.blueprint.elastic.social.cae.controller.ContributionMessageKeys;
 import com.coremedia.blueprint.elastic.social.cae.controller.HandlerInfo;
-import com.coremedia.blueprint.elastic.social.cae.guid.GuidFilter;
+import com.coremedia.blueprint.elastic.social.cae.guid.GuidCookieHandler;
 import com.coremedia.blueprint.elastic.social.cae.user.ElasticSocialUserHelper;
 import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
 import com.coremedia.cap.common.IdHelper;
@@ -172,7 +172,7 @@ public class ProductReviewsResultHandlerTest {
     fragmentContext.setFragmentRequest(true);
     when(request.getAttribute("CM_FRAGMENT_CONTEXT")).thenReturn(fragmentContext);
 
-    GuidFilter.setCurrentGuid("1234+5678");
+    GuidCookieHandler.setCurrentGuid("1234+5678");
     when(communityUserService.getUserById("1234")).thenReturn(user);
 
     when(contentRepository.getContent(IdHelper.formatContentId(contextId))).thenReturn(navigationContent);

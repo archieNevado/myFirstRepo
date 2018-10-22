@@ -89,7 +89,7 @@ describe("loggerFactory()", () => {
         prefix: {
           level: opts => `[${opts.level}]`,
           name: opts => opts.name,
-          template: `[{{time}}] {{level}} ｢{{name}}｣ `,
+          template: `[{{time}}] {{level}} `,
           time: () => {
             const date = new Date("2018-01-17T18:00:00");
             return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
@@ -101,8 +101,8 @@ describe("loggerFactory()", () => {
     it("returns the prefix string corresponding to the given configuration with unresolved placeholders", () => {
       const { buildPrefix } = loggerFactory;
 
-      const value = buildPrefix("info", {
-        level: "info",
+      const value = buildPrefix("warn", {
+        level: "warn",
         name: "LoggerName",
         prefix: {
           level: opts => `[${opts.level}]`,

@@ -5,6 +5,20 @@
   &__headline {
     padding-bottom: $padding-large-vertical;
   }
+  &__headline {
+    // this creates the line under the headline when its being hovered
+    &:after {
+      content: '';
+      position: relative;
+      display: block;
+      bottom: -5px;
+      margin: auto;
+      width: 0;
+      opacity: 0;
+      height: 1px;
+      background-color: $cm-teasable-headline-color;
+    }
+  }
 
   &__dimmer,
   &__text,

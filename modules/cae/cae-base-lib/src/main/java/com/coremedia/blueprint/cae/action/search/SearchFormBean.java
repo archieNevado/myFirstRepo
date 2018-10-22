@@ -1,5 +1,7 @@
 package com.coremedia.blueprint.cae.action.search;
 
+import com.coremedia.blueprint.cae.search.facet.FacetFilterBuilder;
+
 import java.util.regex.Pattern;
 
 /**
@@ -12,7 +14,9 @@ public class SearchFormBean {
   private String query;
   private String channelId;
   private String docType;
+  private String facetFilters;
   private int pageNum = 0;
+  private boolean sortByDate;
 
   // written with spaces just to make it readable
   private static final String CHARACTERS_TO_ESCAPE = "+ - ! ( ) { } [ ] ^ \" ~ * ? : \\".replaceAll(" ", "");
@@ -37,6 +41,9 @@ public class SearchFormBean {
     this.query = query;
   }
 
+  /**
+   * @cm.template.api
+   */
   public String getChannelId() {
     return channelId;
   }
@@ -60,6 +67,29 @@ public class SearchFormBean {
     this.docType = docType;
   }
 
+  /**
+   * Sets the search filters for selected facet values.
+   *
+   * @param facetFilters search filters in the format of {@link FacetFilterBuilder#build()}
+   * @since 1810
+   */
+  public void setFacetFilters(String facetFilters) {
+    this.facetFilters = facetFilters;
+  }
+
+  /**
+   * Returns the search filters for selected facet values.
+   *
+   * @return search filters in the format of {@link FacetFilterBuilder#build()}
+   * @since 1810
+   */
+  public String getFacetFilters() {
+    return facetFilters;
+  }
+
+  /**
+   * @cm.template.api
+   */
   public int getPageNum() {
     return pageNum;
   }
@@ -73,5 +103,16 @@ public class SearchFormBean {
       return PATTERN.matcher(query).replaceAll(REPLACEMENT);
     }
     return null;
+  }
+
+  public void setSortByDate(boolean sortByDate) {
+    this.sortByDate = sortByDate;
+  }
+
+  /**
+   * @cm.template.api
+   */
+  public boolean isSortByDate() {
+    return sortByDate;
   }
 }

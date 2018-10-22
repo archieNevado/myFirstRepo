@@ -3,17 +3,12 @@ package com.coremedia.livecontext.marketingspot;
 import com.coremedia.blueprint.cae.handlers.PageHandlerBase;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.Page;
-import com.coremedia.cap.common.IdHelper;
-import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.contentbeans.CMMarketingSpot;
-import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.google.common.collect.ImmutableMap;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -55,41 +50,24 @@ public class CMMarketingSpotHandler extends PageHandlerBase {
           "/{" + SHOP_NAME_VARIABLE + "}" +
           "/{" + MARKETING_SPOT_ID_VARIABLE + ":" + PATTERN_NUMBER + "}";
 
-  private ContentRepository contentRepository;
-
-  @Required
-  public void setContentRepository(ContentRepository contentRepository) {
-    this.contentRepository = contentRepository;
-  }
-
   @RequestMapping(value = DYNAMIC_URI_PATTERN, produces = CONTENT_TYPE_HTML, method = RequestMethod.GET)
-  public ModelAndView handleFragmentRequest(@PathVariable(MARKETING_SPOT_ID_VARIABLE) int marketingSpotId,
+  public ModelAndView handleFragmentRequest(@PathVariable(MARKETING_SPOT_ID_VARIABLE) CMMarketingSpot cmMarketingSpot,
                                             @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,
                                             HttpServletRequest request,
                                             HttpServletResponse response) {
-    CMMarketingSpot cmMarketingSpot = resolveMarketingSpot(marketingSpotId);
+    //strange, the "produces" annotation value does not work, so we set the response mime type manually
+    response.setContentType(CONTENT_TYPE_HTML);
+    CMNavigation cmNavigation = getContextHelper().contextFor(cmMarketingSpot);
+    ModelAndView modelWithView = HandlerHelper.createModelWithView(cmMarketingSpot, view);
 
-    if (cmMarketingSpot != null) {
-      //strange, the "produces" annotation value does not work, so we set the response mime type manually
-      response.setContentType(CONTENT_TYPE_HTML);
-      CMNavigation cmNavigation = getContextHelper().contextFor(cmMarketingSpot);
-      ModelAndView modelWithView = HandlerHelper.createModelWithView(cmMarketingSpot, view);
-
-      Page page = asPage(cmNavigation, cmNavigation, UserVariantHelper.getUser(request));
-      addPageModel(modelWithView, page);
-      return modelWithView;
-    }
-    return HandlerHelper.notFound();
+    Page page = asPage(cmNavigation, cmNavigation, UserVariantHelper.getUser(request));
+    addPageModel(modelWithView, page);
+    return modelWithView;
   }
 
   @Link(type = CMMarketingSpot.class, uri = DYNAMIC_URI_PATTERN, view = VIEW_FRAGMENT)
   public UriComponents buildFragmentLink(CMMarketingSpot marketingSpot, UriTemplate uriPattern, Map<String, Object> linkParameters) {
     return buildLinkInternal(marketingSpot, uriPattern, linkParameters);
-  }
-
-  private CMMarketingSpot resolveMarketingSpot(int marketingSpotId) {
-
-    return asContentBean(marketingSpotId, CMMarketingSpot.class);
   }
 
   private UriComponents buildLinkInternal(CMMarketingSpot marketingSpot, UriTemplate uriPattern, Map<String, Object> linkParameters) {
@@ -105,17 +83,4 @@ public class CMMarketingSpotHandler extends PageHandlerBase {
     return null;
   }
 
-  private <T> T asContentBean(final int contentId, final Class<T> type) {
-    return asContentBean(contentRepository.getContent(IdHelper.formatContentId(contentId)), type);
-  }
-
-  private <T> T asContentBean(final Content content, final Class<T> type) {
-    if (content != null) {
-      ContentBean contentBean = getContentBeanFactory().createBeanFor(content);
-      if (type.isAssignableFrom(contentBean.getClass())) {
-        return type.cast(contentBean);
-      }
-    }
-    return null;
-  }
 }

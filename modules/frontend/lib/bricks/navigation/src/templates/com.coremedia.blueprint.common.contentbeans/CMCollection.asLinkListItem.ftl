@@ -26,7 +26,7 @@
   <#elseif (items?size > 1)>
     <#-- add css class active, if this item is part of the active navigation -->
     <#if (items?seq_contains(cmpage.content))>
-      <#assign cssClass= cssClass + ' active'/>
+      <#assign cssClass= cssClass + " cm-navigation-item--active"/>
     </#if>
 
     <li class="${cssClass} cm-navigation-item cm-navigation-item-depth-${depth} dropdown" <@preview.metadata (collectionProperty!["properties.children"]) + [self.content]/>>

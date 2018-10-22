@@ -1,34 +1,31 @@
 package com.coremedia.blueprint.common.util;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import java.util.Optional;
 
-public class ContextAttributesTest {
-  @Test
-  public void testTypedNull() {
-    assertNull(ContextAttributes.typed(null, Object.class));
-  }
+import static org.assertj.core.api.Assertions.assertThat;
+
+class ContextAttributesTest {
 
   @Test
-  public void testTypedSame() {
+  void testTypedSame() {
     String expected = "foo";
-    String actual = ContextAttributes.typed(expected, String.class);
-    assertEquals(expected, actual);
+    Optional<String> actual = ContextAttributes.typed(expected, String.class);
+    assertThat(actual).contains(expected);
   }
 
   @Test
-  public void testTypedSuper() {
+  void testTypedSuper() {
     String expected = "foo";
-    Object actual = ContextAttributes.typed(expected, Object.class);
-    assertEquals(expected, actual);
+    Optional<Object> actual = ContextAttributes.typed(expected, Object.class);
+    assertThat(actual).contains(expected);
   }
 
   @Test
-  public void testTypedMismatch() {
+  void testTypedMismatch() {
     String unexpected = "foo";
-    Integer actual = ContextAttributes.typed(unexpected, Integer.class);
-    assertNull(actual);
+    Optional<Integer> actual = ContextAttributes.typed(unexpected, Integer.class);
+    assertThat(actual).isNotPresent();
   }
 }

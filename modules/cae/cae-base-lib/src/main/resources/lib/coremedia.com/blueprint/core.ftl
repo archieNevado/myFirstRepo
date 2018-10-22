@@ -81,25 +81,6 @@
 
 <#-- --- DEPRECATED/UNUSED ----------------------------------------------------------------------------------------- -->
 
-<#-- DEPRECATED, see Frontend Developer Guide -->
-<#function getVideoLink video>
-  <#local videoLink=video.dataUrl!"" />
-  <#if !videoLink?has_content && video.data?has_content>
-    <#local videoLink=cm.getLink(video.data)!"" />
-  </#if>
-  <#return videoLink />
-</#function>
-
-<#-- DEPRECATED, use cm.substitute instead -->
-<#function substitute id original>
-  <#return cmFacade.substitute(id, original)>
-</#function>
-
-<#-- DEPRECATED, UNUSED -->
-<#function transformations self>
-  <#return blueprintFreemarkerFacade.getTransformations(self)>
-</#function>
-
 <#-- DEPRECATED -->
 <#function createBeanFor content>
   <#return blueprintFreemarkerFacade.createBeanFor(content)>

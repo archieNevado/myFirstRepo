@@ -1,11 +1,9 @@
 package com.coremedia.livecontext.ecommerce.hybris.common;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractStoreContextProvider;
-import com.coremedia.blueprint.base.util.StructUtil;
-import com.coremedia.cap.common.NoSuchPropertyDescriptorException;
 import com.coremedia.cap.multisite.Site;
-import com.coremedia.cap.struct.Struct;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
+import com.coremedia.livecontext.ecommerce.common.CommerceConfigKeys;
 import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextBuilder;
@@ -35,37 +33,42 @@ public class HybrisStoreContextProvider extends AbstractStoreContextProvider {
   @Override
   protected Optional<StoreContext> internalCreateContext(@NonNull Site site) {
     // Only create store context if settings are found for current site.
-    Struct repositoryStoreConfig = getSettingsService()
-            .getSetting(CONFIG_KEY_STORE_CONFIG, Struct.class, site.getSiteRootDocument())
-            .orElse(null);
-    if (repositoryStoreConfig == null) {
-      return Optional.empty();
-    }
+    return Optional.of(findRepositoryStoreConfig(site))
+            .filter(config -> !config.isEmpty())
+            .map(config -> buildContextFromRepositoryStoreConfig(site, config));
+  }
 
-    StoreContextValuesHolder valuesHolder = new StoreContextValuesHolder();
+  @NonNull
+  private StoreContext buildContextFromRepositoryStoreConfig(@NonNull Site site,
+                                                             @NonNull Map<String, Object> repositoryStoreConfig) {
     Map<String, Object> targetConfig = new HashMap<>();
 
-    try {
-      StructUtil.findString(repositoryStoreConfig, CONFIG_KEY_CONFIG_ID)
-              .ifPresent(configId -> readStoreConfigFromSpring(configId, targetConfig));
+    findConfigId(repositoryStoreConfig)
+            .map(this::readStoreConfigFromSpring)
+            .ifPresent(targetConfig::putAll);
 
-      updateStoreConfigFromRepository(repositoryStoreConfig, targetConfig, site);
+    updateStoreConfigFromRepository(repositoryStoreConfig, targetConfig);
 
-      valuesHolder.siteId = site.getId();
-      valuesHolder.storeId = (String) targetConfig.get(CONFIG_KEY_STORE_ID);
-      valuesHolder.storeName = (String) targetConfig.get(CONFIG_KEY_STORE_NAME);
-      String catalogIdStr = (String) targetConfig.get(CONFIG_KEY_CATALOG_ID);
-      valuesHolder.catalogId = catalogIdStr != null ? CatalogId.of(catalogIdStr) : null;
-      valuesHolder.catalogVersion = getCatalogVersion(site);
-      valuesHolder.locale = site.getLocale();
-      String currencyStr = (String) targetConfig.get(CONFIG_KEY_CURRENCY);
-      valuesHolder.currency = currencyStr != null ? parseCurrency(currencyStr) : null;
+    StoreContextValuesHolder valuesHolder = populateValuesHolder(targetConfig, site);
 
-      StoreContext storeContext = createStoreContext(valuesHolder);
-      return Optional.of(storeContext);
-    } catch (NoSuchPropertyDescriptorException e) {
-      throw new InvalidContextException("Missing properties in store configuration. ", e);
-    }
+    return createStoreContext(valuesHolder);
+  }
+
+  @NonNull
+  private StoreContextValuesHolder populateValuesHolder(@NonNull Map<String, Object> config, @NonNull Site site) {
+    StoreContextValuesHolder valuesHolder = new StoreContextValuesHolder();
+
+    valuesHolder.siteId = site.getId();
+    valuesHolder.storeId = (String) config.get(CommerceConfigKeys.STORE_ID);
+    valuesHolder.storeName = (String) config.get(CommerceConfigKeys.STORE_NAME);
+    String catalogIdStr = (String) config.get(CommerceConfigKeys.CATALOG_ID);
+    valuesHolder.catalogId = catalogIdStr != null ? CatalogId.of(catalogIdStr) : null;
+    valuesHolder.catalogVersion = getCatalogVersion(site);
+    String currencyStr = (String) config.get(CommerceConfigKeys.CURRENCY);
+    valuesHolder.currency = currencyStr != null ? parseCurrency(currencyStr) : null;
+    valuesHolder.locale = site.getLocale();
+
+    return valuesHolder;
   }
 
   private String getCatalogVersion(@NonNull Site site) {
@@ -151,8 +154,8 @@ public class HybrisStoreContextProvider extends AbstractStoreContextProvider {
     private String storeName;
     private CatalogId catalogId;
     private String catalogVersion;
-    private Locale locale;
     private Currency currency;
+    private Locale locale;
   }
 
   @NonNull

@@ -87,10 +87,11 @@ public class LiveContextExternalChannelPreviewHandler extends LiveContextPageHan
 
     if (useCommerceCategoryLinks(navigation.getSite())) {
       return findCommercePropertyProvider()
-              .map(p -> p.buildCategoryLink(category, linkParameters, request))
+              .flatMap(p -> p.buildCategoryLink(category, linkParameters, request))
               .orElse(null);
     } else {
-      return externalNavigationHandler.buildCaeLinkForCategory(navigation, viewName, linkParameters);
+      return externalNavigationHandler.buildCaeLinkForCategory(navigation, viewName, linkParameters)
+              .orElse(null);
     }
   }
 

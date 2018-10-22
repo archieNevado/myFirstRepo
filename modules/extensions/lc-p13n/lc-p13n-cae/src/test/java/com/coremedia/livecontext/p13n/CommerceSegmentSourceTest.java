@@ -2,6 +2,7 @@ package com.coremedia.livecontext.p13n;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.ecommerce.test.TestVendors;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.p13n.Segment;
@@ -55,7 +56,6 @@ public class CommerceSegmentSourceTest {
     testling = new CommerceSegmentSource();
     testling.setContextName("commerce");
 
-    StoreContext storeContext = newStoreContext();
     UserContext userContext = UserContext.builder()
             .withUserId(USER1_ID)
             .withUserName(USER1_NAME)
@@ -64,7 +64,6 @@ public class CommerceSegmentSourceTest {
     commerceConnection = new BaseCommerceConnection();
     commerceConnection.setIdProvider(TestVendors.getIdProvider("vendor"));
     commerceConnection.setSegmentService(segmentService);
-    commerceConnection.setStoreContext(storeContext);
     commerceConnection.setUserContext(userContext);
     CurrentCommerceConnection.set(commerceConnection);
 
@@ -86,6 +85,9 @@ public class CommerceSegmentSourceTest {
     List<Segment> segmentList = newArrayList(seg1, seg2);
     when(segmentService.findSegmentsForCurrentUser(any(StoreContext.class))).thenReturn(segmentList);
 
+    StoreContext storeContext = newStoreContext();
+    commerceConnection.setStoreContext(storeContext);
+
     testling.preHandle(request, response, contextCollection);
 
     verifyThatProfileContainsSegments();
@@ -93,8 +95,11 @@ public class CommerceSegmentSourceTest {
 
   @Test
   public void testPreHandleFromUserContext() {
-    StoreContext storeContext = commerceConnection.getStoreContext();
-    storeContext.setUserSegments("id1,id2");
+    StoreContext storeContext = StoreContextBuilderImpl
+            .from(newStoreContext())
+            .withUserSegments("id1,id2")
+            .build();
+    commerceConnection.setStoreContext(storeContext);
 
     testling.preHandle(request, response, contextCollection);
 

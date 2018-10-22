@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,7 +60,7 @@ public class ManagedPagePartsRestHandlerTest {
 
   @Test
   public void managedPagePartsHandlerNoSiteFound() throws Exception {
-    when(siteResolver.findSiteFor(ANY_NON_EXISTENT, VALID_LOCALE)).thenReturn(null);
+    when(siteResolver.findSiteFor(ANY_NON_EXISTENT, VALID_LOCALE)).thenReturn(Optional.empty());
 
     ResponseEntity<ManagedPagePartsSettings> actual = testling.managedPagePartsHandler(ANY_NON_EXISTENT, VALID_LOCALE);
 
@@ -89,7 +88,7 @@ public class ManagedPagePartsRestHandlerTest {
     Site site = mockSite();
     Content siteRootDocument = mock(Content.class);
     when(site.getSiteRootDocument()).thenReturn(siteRootDocument);
-    when(siteResolver.findSiteFor(storeId, locale)).thenReturn(site);
+    when(siteResolver.findSiteFor(storeId, locale)).thenReturn(Optional.of(site));
     return siteRootDocument;
   }
 

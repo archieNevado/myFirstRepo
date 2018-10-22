@@ -14,6 +14,7 @@ import com.coremedia.livecontext.contentbeans.LiveContextExternalChannel;
 import com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl;
 import com.coremedia.livecontext.contentbeans.LiveContextExternalProduct;
 import com.coremedia.livecontext.contentbeans.LiveContextExternalProductImpl;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType;
@@ -25,11 +26,10 @@ import com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.SeoSe
 import com.coremedia.livecontext.logictypes.CommerceLedLinkBuilderHelper;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
-import org.springframework.beans.factory.annotation.Required;
-import org.springframework.util.StringUtils;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Required;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
@@ -259,35 +259,32 @@ public class HybrisPreviewLinkScheme {
             ? hybrisPreviewServiceUrl.substring(1)
             : hybrisPreviewServiceUrl;
 
+    StoreContext storeContext = getCurrentContextOrThrow();
+
     return previewStoreFrontUrl
-            + replaceTokens(adjustedHybrisPreviewServiceUrl, id, type)
+            + replaceTokens(adjustedHybrisPreviewServiceUrl, storeContext, id, type)
             + "&ticketId=" + previewTicketId
-            + addUserSegmentParamIfAvailable();
+            + addUserSegmentParamIfAvailable(storeContext);
   }
 
-  private String replaceTokens(String pattern, String id, String type) {
-    String result = pattern.replace("{storeId}", getCurrentStoreContext().getStoreId() + "");
-    result = result.replace("{siteId}", getCurrentStoreContext().getSiteId() + "");
+  private String replaceTokens(String pattern, @NonNull StoreContext storeContext, String id, String type) {
+    String result = pattern.replace("{storeId}", storeContext.getStoreId() + "");
+    result = result.replace("{siteId}", storeContext.getSiteId() + "");
     //TODO fetch catalogId from id parameter for multi catalog support
-    result = result.replace("{catalogId}", getCurrentStoreContext().getCatalogId() + "");
-    result = result.replace("{language}", getCurrentStoreContext().getLocale().getLanguage() + "");
+    result = result.replace("{catalogId}", storeContext.getCatalogId().map(CatalogId::value).orElse(null) + "");
+    result = result.replace("{language}", storeContext.getLocale().getLanguage() + "");
     result = result.replace("{id}", id + "");
     result = result.replace("{type}", type + "");
     return result;
   }
 
-  private String addUserSegmentParamIfAvailable() {
-    String userSegments = getCurrentContextOrThrow().getUserSegments();
-
-    if (StringUtils.isEmpty(userSegments)) {
-      return "";
-    }
-
-    return "&userGroup=" + userSegments;
-  }
-
-  private StoreContext getCurrentStoreContext() {
-    return CurrentCommerceConnection.get().getStoreContext();
+  @NonNull
+  private String addUserSegmentParamIfAvailable(@NonNull StoreContext storeContext) {
+    return storeContext
+            .getUserSegments()
+            .filter(userSegments -> !userSegments.isEmpty())
+            .map(userSegments -> "&userGroup=" + userSegments)
+            .orElse("");
   }
 
   @Required

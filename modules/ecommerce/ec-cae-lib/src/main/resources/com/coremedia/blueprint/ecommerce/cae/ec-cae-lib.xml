@@ -9,6 +9,7 @@
                http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
   <import resource="classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml"/>
+  <import resource="classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-cae-services.xml"/>
   <import resource="classpath:/com/coremedia/cap/common/uapi-services.xml"/>
   <import resource="classpath:/framework/spring/lc-ecommerce-connection.xml"/>
 

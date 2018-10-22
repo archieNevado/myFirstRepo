@@ -45,16 +45,12 @@ DEPENDENCIES
     path: coremedia-cookbooks/coremedia_tomcat
   fpm-tng
     path: thirdparty-cookbooks/fpm-tng
-  gpg
-    path: thirdparty-cookbooks/gpg
   mingw
     path: thirdparty-cookbooks/mingw
   mongodb3
     path: thirdparty-cookbooks/mongodb3
   mysql
     path: thirdparty-cookbooks/mysql
-  nginx
-    path: thirdparty-cookbooks/nginx
   ohai
     path: thirdparty-cookbooks/ohai
   openssl
@@ -63,12 +59,6 @@ DEPENDENCIES
     path: thirdparty-cookbooks/packagecloud
   postgresql
     path: thirdparty-cookbooks/postgresql
-  repository
-    path: thirdparty-cookbooks/repository
-  reprepro
-    path: thirdparty-cookbooks/reprepro
-  ruby_installer
-    path: thirdparty-cookbooks/ruby_installer
   runit
     path: thirdparty-cookbooks/runit
   seven_zip
@@ -85,16 +75,12 @@ DEPENDENCIES
     path: thirdparty-cookbooks/yum
   yum-centos
     path: thirdparty-cookbooks/yum-centos
-  yum-epel
-    path: thirdparty-cookbooks/yum-epel
   yum-pgdg
     path: thirdparty-cookbooks/yum-pgdg
-  zypper
-    path: thirdparty-cookbooks/zypper
 
 GRAPH
   apache2 (5.0.1)
-  apt (7.0.0)
+  apt (7.1.1)
   blueprint (1.0.0)
   blueprint-base (1.0.0)
     chef_handler (~> 1.2.0)
@@ -150,7 +136,7 @@ GRAPH
   blueprint-yum (1.0.0)
     yum (~> 4.2)
     yum-centos (~> 2.3.0)
-  build-essential (8.1.1)
+  build-essential (8.2.1)
     mingw (>= 1.1)
     seven_zip (>= 0.0.0)
   chef-sugar (3.6.0)
@@ -176,13 +162,13 @@ GRAPH
     user (>= 0.0.0)
     yum (>= 0.0.0)
   mysql (8.3.1)
-  nginx (8.1.5)
+  nginx (8.1.6)
     build-essential (>= 5.0)
     ohai (>= 4.1.0)
     yum-epel (>= 0.0.0)
     zypper (>= 0.0.0)
-  ohai (5.2.3)
-  openssl (8.5.2)
+  ohai (5.2.5)
+  openssl (8.5.5)
   packagecloud (1.0.0)
   postgresql (6.1.1)
     build-essential (>= 2.0.0)
@@ -207,11 +193,11 @@ GRAPH
     ohai (>= 0.0.0)
   ulimit (0.3.3)
   user (0.7.0)
-  windows (5.0.0)
+  windows (5.1.3)
   yum (4.2.0)
   yum-centos (2.3.0)
     compat_resource (>= 12.16.3)
-  yum-epel (3.2.0)
+  yum-epel (3.3.0)
   yum-pgdg (2.0.1)
     compat_resource (>= 12.16.3)
   zypper (0.4.0)

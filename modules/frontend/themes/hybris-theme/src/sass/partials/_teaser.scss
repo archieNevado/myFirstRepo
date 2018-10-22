@@ -2,19 +2,10 @@
 .#{$cm-teasable-prefix} {
   padding: 0 0 2rem 0;
 
-  &__picture-box {
-    @include aspect-ratio-box(16, 9);
-  }
-
-  &__dimmer {
-    display: none;
-  }
-
   &__caption {
     position: relative;
     top: 0;
     transform: none;
-    padding: 0;
     border-top: 1px solid #ccc;
     margin: 1.5rem 0 0;
   }
@@ -23,10 +14,6 @@
     padding: 1rem 0 0.3rem 0;
     color: $hybris-text;
     font-size: 2rem;
-
-    & ~ .cm-product-info .cm-product-info__title {
-      display: none;
-    }
   }
 
   &__cta {
@@ -37,12 +24,7 @@
     display: block;
 
     &__title {
-      padding: 1rem 0 0.3rem 0;
-      .cm-heading4 {
-        font-size: 2rem;
-        color: $hybris-text;
-        text-align: center;
-      }
+      display: none;
     }
 
     &__pricing {

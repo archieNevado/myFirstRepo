@@ -103,7 +103,6 @@ Contains styling definitions for all content types as cm-gap.
     & > span {
       position: relative;
       display: inline-block;
-      @include flickeringFix();
 
       &:before,
       &:after {

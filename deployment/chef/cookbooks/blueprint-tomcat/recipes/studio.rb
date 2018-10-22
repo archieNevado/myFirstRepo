@@ -33,6 +33,9 @@ node.default_unless['blueprint']['webapps'][service_name]['application.propertie
 node.default_unless['blueprint']['webapps'][service_name]['application.properties']['themeImporter.themeDeveloperGroups'] = 'developer'
 node.default_unless['blueprint']['webapps'][service_name]['application.properties']['themeImporter.apiKeyStore.basePath'] = api_key_store_dir
 
+node.default_unless['blueprint']['webapps'][service_name]['application.properties']['studio.dynamicpackages.rest.url'] = "https://studio.#{node['blueprint']['hostname']}/studio/api/dynamicpackages/remote"
+node.default_unless['blueprint']['webapps'][service_name]['application.properties']['studio.dynamicpackages.remote.urls.whitelist'] = "*//localhost:*,*.coremedia.vm*,*.coremedia.com*"
+
 # The path where the transformed blobs should be saved persistently. If not set, then the feature is deactivated,
 # and all transformed blobs are saved in memory
 node.default_unless['blueprint']['webapps'][service_name]['application.properties']['com.coremedia.transform.blobCache.basePath'] = "#{cache_dir}/persistent-transformed-blobcache"

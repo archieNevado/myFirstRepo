@@ -28,12 +28,12 @@ import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Streams;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -120,7 +120,7 @@ public class CatalogServiceImpl extends AbstractHybrisService implements Catalog
   @Override
   public List<Category> findTopCategories(@NonNull CatalogAlias catalogAlias, @NonNull StoreContext storeContext) {
     // to be implemented with CMS-9516 (multi catalog support for hybris)
-    String catalogId = storeContext.getCatalogId();
+    String catalogId = storeContext.getCatalogId().map(CatalogId::value).orElse(null);
     CommerceCache cache = getCommerceCache();
 
     CommerceId catalogCommerceId = commerceId(CATALOG).withExternalId(catalogId).build();

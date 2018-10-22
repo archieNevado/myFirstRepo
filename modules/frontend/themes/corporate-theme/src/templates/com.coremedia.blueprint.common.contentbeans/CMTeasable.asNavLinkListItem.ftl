@@ -9,7 +9,7 @@
 <#if isRoot || (!((self.hidden)!false))>
 
   <#if (bp.isActiveNavigation(self, navPathList![]))>
-    <#assign cssClass= cssClass + ' active'/>
+    <#assign cssClass= cssClass + " cm-navigation-item--active"/>
   </#if>
 
 <li class="${cssClass}">

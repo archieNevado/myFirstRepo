@@ -117,7 +117,7 @@ public class LcStudioValidatorsXmlRepoTest {
 
     commerceConnection = new BaseCommerceConnection();
 
-    StoreContextImpl storeContext = (StoreContextImpl) StoreContextImpl.builder(siteId).build();
+    StoreContextImpl storeContext = StoreContextImpl.builder(siteId).build();
     commerceConnection.setStoreContext(storeContext);
 
     when(storeContextProvider.buildContext(any())).thenReturn(StoreContextBuilderImpl.from(storeContext));
@@ -257,9 +257,11 @@ public class LcStudioValidatorsXmlRepoTest {
     when(commerceConnection.getWorkspaceService().findAllWorkspaces(any(StoreContext.class))).thenReturn(asList(workspace1, workspace2));
 
     StoreContext storeContext = commerceConnection.getStoreContext();
-    storeContext.put("configId", "myConfigId");
-    storeContext.put("catalogId", "10001");
-    storeContext.setWorkspaceId(WORKSPACE_1);
+    storeContext = StoreContextBuilderImpl
+            .from((StoreContextImpl) storeContext)
+            .withWorkspaceId(WORKSPACE_1)
+            .build();
+    commerceConnection.setStoreContext(storeContext);
 
     when(commerceConnection.getCommerceBeanFactory().loadBeanFor(any(), any(StoreContext.class)))
             .then((Answer<CommerceBean>) invocationOnMock -> {

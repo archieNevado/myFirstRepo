@@ -85,6 +85,9 @@
                 </goals>
                 <configuration>
                   <!--
+                    1) run "install"
+
+                    2) pass parameters to lerna:
                     - do not print out any non errors as the maven-frontend-plugin does not distinct error levels
                     - do not animate progress to avoid polluting the maven log
                   -->
@@ -99,8 +102,9 @@
                 <phase>install</phase>
                 <configuration>
                   <!--
-                    - set node environment to production
-                    - run build script
+                    1) run the "build" script in production environment
+
+                    2) pass parameters to lerna:
                     - do not print out any non errors as the maven-frontend-plugin does not distinct error levels
                     - make sure that the npm-client is set to yarn
                   -->
@@ -108,14 +112,16 @@
                 </configuration>
               </execution>
               <execution>
-                <id>run-tests</id>
+                <id>run-unit-tests</id>
                 <goals>
                   <goal>yarn</goal>
                 </goals>
                 <phase>test</phase>
                 <configuration>
                   <!--
-                    - run test script
+                    1) run the "test" script
+
+                    2) pass parameters to lerna:
                     - do not print out any non errors as the maven-frontend-plugin does not distinct error levels
                     - make sure that the npm-client is set to yarn
                   -->

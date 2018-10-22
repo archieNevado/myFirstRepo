@@ -33,8 +33,6 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
-
 
 @RunWith(MockitoJUnitRunner.class)
 public class ProductListSubstitutionServiceTest {
@@ -88,7 +86,7 @@ public class ProductListSubstitutionServiceTest {
 
     when(page.getNavigation()).thenReturn(liveContextNavigation);
     when(liveContextNavigation.getCategory()).thenReturn(tablets);
-    when(liveContextNavigation.getChildren()).thenReturn(null);
+    when(liveContextNavigation.getChildren()).thenReturn(Collections.emptyList());
     when(liveContextNavigation.getSite()).thenReturn(site);
     when(connection.getCatalogService().findProductsByCategory(tablets)).thenReturn(listOfTablets);
   }

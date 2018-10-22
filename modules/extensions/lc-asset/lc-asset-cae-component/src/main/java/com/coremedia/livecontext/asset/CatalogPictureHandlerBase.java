@@ -17,6 +17,8 @@ import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.transform.TransformedBlob;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +26,10 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 public class CatalogPictureHandlerBase extends HandlerBase {
 
@@ -67,14 +68,12 @@ public class CatalogPictureHandlerBase extends HandlerBase {
                                                   String extension,
                                                   @NonNull WebRequest request) {
     Locale localeObj = LocaleHelper.parseLocaleFromString(locale).orElse(null);
-    Site site = siteResolver.findSiteFor(storeId, localeObj);
-    if (site == null) {
-      //Site not found
+    Optional<Site> site = siteResolver.findSiteFor(storeId, localeObj);
+    if (!site.isPresent()) {
       return HandlerHelper.notFound();
     }
 
-    Content catalogPictureObject = findCatalogPictureFor(commerceId, site);
-
+    Content catalogPictureObject = findCatalogPictureFor(commerceId, site.get()).orElse(null);
     if (catalogPictureObject == null) {
       //Picture not found
       return HandlerHelper.notFound();
@@ -111,7 +110,7 @@ public class CatalogPictureHandlerBase extends HandlerBase {
     return HandlerHelper.createModel(transformedBlob);
   }
 
-  @Nullable
+  @NonNull
   protected CatalogAlias resolveCatalogAliasFromId(@NonNull CatalogId catalogId, @NonNull StoreContext storeContext) {
     return catalogAliasTranslationService.getCatalogAliasForId(catalogId, storeContext.getSiteId())
             .orElseGet(storeContext::getCatalogAlias);
@@ -123,10 +122,10 @@ public class CatalogPictureHandlerBase extends HandlerBase {
    * @param site the given site
    * @return the found catalog picture document
    */
-  @Nullable
-  private Content findCatalogPictureFor(@NonNull CommerceId id, @NonNull Site site) {
+  @NonNull
+  private Optional<Content> findCatalogPictureFor(@NonNull CommerceId id, @NonNull Site site) {
     if (assetService == null) {
-      return null;
+      return Optional.empty();
     }
 
     List<Content> pictures = assetService.findPictures(id, true);
@@ -136,7 +135,7 @@ public class CatalogPictureHandlerBase extends HandlerBase {
               site.getName());
     }
 
-    return pictures.stream().findFirst().orElse(null);
+    return pictures.stream().findFirst();
   }
 
   @Required

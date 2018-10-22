@@ -18,12 +18,3 @@
 <#function hasDownloadPortal>
   <#return amFreemarkerFacade.hasDownloadPortal() />
 </#function>
-
-
-<#-- --- DEPRECATED ------------------------------------------------------------------------------------------------ -->
-
-
-<#-- DEPRECATED, UNUSED -->
-<#function getAssetType asset>
-  <#return (asset.content.type.name)!"" />
-</#function>

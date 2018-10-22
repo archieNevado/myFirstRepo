@@ -2,7 +2,6 @@
 # Recipe:: default
 #
 # Copyright (c) 2016-2018 Coremedia, All Rights Reserved.
-
 # -----------------------------------------------------------------------
 
 # https://supermarket.chef.io/cookbooks/mongodb3#readme
@@ -13,12 +12,15 @@ end
 require 'chef/rewind'
 
 include_recipe 'ulimit::default'
-include_recipe 'blueprint-mongodb::disable-thp'
 include_recipe 'mongodb3'
 
-# remove original service / cookbook_file
-unwind 'service[disable-transparent-hugepages]'
-unwind 'cookbook_file[/etc/init.d/disable-transparent-hugepages]'
+# explizit execute the disable-transparent-hugepages script
+execute 'disable-transparent-hugepages' do
+  command '/etc/init.d/disable-transparent-hugepages start'
+  only_if {
+    node['mongodb3']['mongod']['disable-transparent-hugepages']
+  }
+end
 
 # remove original service
 unwind 'service[mongod]'
@@ -46,7 +48,9 @@ service 'mongod' do
       provider Chef::Provider::Service::Upstart
     end
   end
-  supports start: true, stop: true, restart: true, status: true
+  supports :start => true, :stop => true, :restart => true, :status => true
   action :enable
+  notifies :run, "execute[disable-transparent-hugepages]", :before
   subscribes :restart, "template[cm_#{node['mongodb3']['mongod']['config_file']}]", :immediately
+  subscribes :restart, "template[#{node['mongodb3']['config']['mongod']['security']['keyFile']}", :immediately
 end

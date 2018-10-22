@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_NUMBER;
+import static com.coremedia.blueprint.base.links.UriConstants.RequestParameters.VIEW_PARAMETER;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ID;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ROOT;
 import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_SERVICE;
@@ -47,14 +48,14 @@ import static java.util.Arrays.asList;
 @Link
 public class PageSearchActionHandler extends PageHandlerBase {
 
-  protected static final String ACTION_NAME = "search";
-  protected static final String ACTION_ID = "search";
-  protected static final String PARAMETER_ROOT_NAVIGATION_ID = "rootNavigationId";
-  protected static final String PARAMETER_QUERY = "query";
-  protected static final String CONTENT_TYPE_JSON = "application/json";
+  static final String ACTION_NAME = "search";
+  static final String ACTION_ID = "search";
+  static final String PARAMETER_ROOT_NAVIGATION_ID = "rootNavigationId";
+  static final String PARAMETER_QUERY = "query";
+  static final String CONTENT_TYPE_JSON = "application/json";
 
   //used for filtering doctypes when search is executed
-  static final String DOCTYPE_SELECT = "search.doctypeselect";
+  static final String DOCTYPE_SELECT = "searchDoctypeSelect";
   static final String TOPICS_DOCTYPE_SELECT = "search.topicsdoctypeselect";
   /**
    * setting with list of index field names with IDs of taxonomy documents of types in {@link #TOPICS_DOCTYPE_SELECT}
@@ -73,7 +74,6 @@ public class PageSearchActionHandler extends PageHandlerBase {
                   "/{" + SEGMENT_ID + ":" + PATTERN_NUMBER + "}";
   private static final String SEARCH_CHANNEL_SETTING = "searchChannel";
 
-
   private SearchService searchService;
   private SettingsService settingsService;
   private int minimalSearchQueryLength = DEFAULT_MINIMAL_SEARCH_QUERY_LENGTH;
@@ -91,18 +91,19 @@ public class PageSearchActionHandler extends PageHandlerBase {
   @Substitution(ACTION_ID)
   @SuppressWarnings("unused")
   public SearchActionState createActionState(CMAction representative, HttpServletRequest request) {
-    return new SearchActionState(representative);
+    return new SearchActionState(representative, minimalSearchQueryLength);
   }
 
   /**
    * Performs site search
    *
-   * @see "SearchActionState.jsp"
+   * @see "SearchActionState.ftl"
    */
   @RequestMapping(value = URI_PATTERN, method = RequestMethod.GET)
   public ModelAndView handleSearchAction(@PathVariable(SEGMENT_ID) CMAction action,
                                    @PathVariable(SEGMENT_ROOT) String context,
                                    @ModelAttribute() SearchFormBean searchForm,
+                                   @RequestParam(value = VIEW_PARAMETER, required = false) String view,
                                    HttpServletRequest request) {
     Navigation navigation = getValidNavigation(action, context, ACTION_NAME);
     if (navigation != null) {
@@ -118,6 +119,10 @@ public class PageSearchActionHandler extends PageHandlerBase {
       if (searchForm.getQuery() != null && searchForm.getQuery().length() >= minimalSearchQueryLength) {
         //regular search result filtered by doctypes given in the Search Settings document
         Collection<String> docTypes = settingsService.settingAsList(DOCTYPE_SELECT, String.class, navigation);
+        // fallback to old setting "search.doctypeselect"
+        if(docTypes.isEmpty()) {
+          docTypes = settingsService.settingAsList("search.doctypeselect", String.class, navigation);
+        }
         SearchResultBean searchResult = searchService.search(searchResultsPage, searchForm, docTypes);
 
         //topics search result filtered by topics doctypes given in the Search Settings document
@@ -125,16 +130,21 @@ public class PageSearchActionHandler extends PageHandlerBase {
         Collection<String> topicIndexFields = settingsService.settingAsList(TOPICS_INDEX_FIELDS, String.class, navigation);
         SearchResultBean searchResultTopics = searchService.searchTopics(navigation, searchForm, topicDocTypes, topicIndexFields);
 
-        actionBean = new SearchActionState(action, searchForm, searchResult, searchResultTopics);
+        actionBean = new SearchActionState(action, searchForm, minimalSearchQueryLength, searchResult, searchResultTopics);
       } else if (searchForm.getQuery() == null) {
-        actionBean = new SearchActionState(action, searchForm, null, null);
+        actionBean = new SearchActionState(action, searchForm, minimalSearchQueryLength, null, null);
       } else {
         // if no search was executed, write error into SearchActionState.
-        actionBean = new SearchActionState(action, searchForm, SearchActionState.ERROR_QUERY_TOO_SHORT);
+        actionBean = new SearchActionState(action, searchForm, minimalSearchQueryLength, SearchActionState.ERROR_QUERY_TOO_SHORT);
       }
-      // build model
-      result = HandlerHelper.createModel(searchResultsPage);
-      SubstitutionRegistry.register(ACTION_ID, actionBean, result);
+
+      // build model with view for results, otherwise the whole search result page
+      if (view != null && !view.isEmpty()) {
+        result = HandlerHelper.createModelWithView(actionBean, view);
+      } else {
+        result = HandlerHelper.createModel(searchResultsPage);
+        SubstitutionRegistry.register(ACTION_ID, actionBean, result);
+      }
 
       addPageModel(result, searchResultsPage);
       return result;
@@ -146,8 +156,6 @@ public class PageSearchActionHandler extends PageHandlerBase {
   /**
    * Performs suggestion search and provides a JSON object containing the suggestions.
    *
-   * @see "SearchActionState.asHeaderItem.jsp"
-   * @see "SearchActionState.asTeaser.jsp"
    */
   @ResponseBody
   @RequestMapping(value = URI_PATTERN, params = {PARAMETER_ROOT_NAVIGATION_ID, PARAMETER_QUERY}, method = RequestMethod.GET, produces = CONTENT_TYPE_JSON)
@@ -157,7 +165,12 @@ public class PageSearchActionHandler extends PageHandlerBase {
                                                @RequestParam(value = PARAMETER_QUERY) String term) {
     Navigation navigation = getValidNavigation(action, context, ACTION_NAME);
      if (navigation != null) {
+       //regular search result filtered by doctypes given in the Search Settings document
        Collection<String> docTypes = settingsService.settingAsList(DOCTYPE_SELECT, String.class, navigation);
+       // fallback to old setting "search.doctypeselect"
+       if(docTypes.isEmpty()) {
+         docTypes = settingsService.settingAsList("search.doctypeselect", String.class, navigation);
+       }
        Suggestions suggestions = searchService.getAutocompleteSuggestions(rootNavigationId, term, docTypes);
 
       return suggestions.delegate();

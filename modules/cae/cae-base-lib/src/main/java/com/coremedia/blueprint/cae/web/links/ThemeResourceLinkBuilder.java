@@ -1,24 +1,24 @@
 package com.coremedia.blueprint.cae.web.links;
 
 import com.coremedia.blueprint.common.contentbeans.CMContext;
+import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.blueprint.common.contentbeans.CMTheme;
 import com.coremedia.blueprint.common.services.context.CurrentContextService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.user.User;
-import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.LinkFormatter;
 import com.google.common.annotations.VisibleForTesting;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -112,7 +112,7 @@ public class ThemeResourceLinkBuilder {
     }
 
     pathToThemeResource = themeFolder.getPath() + normalizedPath;
-    ContentBean themeResource = getThemeResourceAt(pathToThemeResource);
+    CMObject themeResource = getThemeResourceAt(pathToThemeResource);
     if (themeResource == null) {
       return StringUtils.EMPTY;
     }
@@ -160,10 +160,10 @@ public class ThemeResourceLinkBuilder {
 
   @VisibleForTesting
   @Nullable
-  ContentBean getThemeResourceAt(@NonNull String pathToThemeResource) {
+  CMObject getThemeResourceAt(@NonNull String pathToThemeResource) {
     Content themeResourceContent = repository.getChild(pathToThemeResource);
     if (themeResourceContent != null) {
-      ContentBean themeResourceBean = contentBeanFactory.createBeanFor(themeResourceContent);
+      CMObject themeResourceBean = contentBeanFactory.createBeanFor(themeResourceContent, CMObject.class);
       return dataViewFactory.loadCached(themeResourceBean, null);
     }
     LOG.error("Could not find theme resource at \"{}\". Neither the theme document nor other resource in the content repository may be moved to a different location.", pathToThemeResource);

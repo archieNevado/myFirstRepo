@@ -147,6 +147,17 @@
     <property name="validatingSubtypes" value="true"/>
   </bean>
 
+  <bean id="cmVisibilityValidator" class="com.coremedia.blueprint.base.pagegrid.rest.VisibilityValidator">
+    <property name="connection" ref="connection"/>
+    <property name="contentType" value="CMChannel"/>
+    <property name="validatingSubtypes" value="true"/>
+    <property name="pageGridService" ref="contentBackedPageGridService"/>
+    <property name="propertyValidFrom" value="validFrom"/>
+    <property name="propertyValidTo" value="validTo"/>
+    <property name="propertyVisibleFrom" value="visibleFrom"/>
+    <property name="propertyVisibleTo" value="visibleTo"/>
+  </bean>
+
   <bean id="cmChannelNavigationValidator"
         class="com.coremedia.blueprint.base.rest.validators.ChannelNavigationValidator">
     <property name="connection" ref="connection"/>
@@ -190,6 +201,24 @@
         </bean>
         <bean class="com.coremedia.blueprint.base.rest.validators.NotEmptyMarkupValidator">
           <property name="property" value="detailText"/>
+        </bean>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="cmPersonValidator" parent="contentTypeValidator">
+    <property name="contentType" value="CMPerson"/>
+    <property name="validatingSubtypes" value="true"/>
+    <property name="validators">
+      <list>
+        <bean class="com.coremedia.rest.validators.NotEmptyValidator">
+          <property name="property" value="firstName"/>
+        </bean>
+        <bean class="com.coremedia.rest.validators.NotEmptyValidator">
+          <property name="property" value="lastName"/>
+        </bean>
+        <bean class="com.coremedia.rest.validators.EmailValidator">
+          <property name="property" value="eMail"/>
         </bean>
       </list>
     </property>

@@ -4,9 +4,9 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceCon
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
-import com.coremedia.blueprint.base.livecontext.util.LocaleHelper;
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
 import com.coremedia.livecontext.ecommerce.asset.AssetUrlProvider;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
@@ -23,6 +23,7 @@ import com.coremedia.livecontext.ecommerce.workspace.WorkspaceService;
 import org.mockito.Mock;
 
 import java.util.Currency;
+import java.util.Locale;
 import java.util.Optional;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
@@ -88,16 +89,16 @@ public class MockCommerceEnvBuilder {
 
   public BaseCommerceConnection setupEnv(String vendor) {
     initMocks(this);
-    StoreContextImpl storeContext = newStoreContext();
-
-    storeContext.put(StoreContextImpl.STORE_ID, "10001");
-    storeContext.put(StoreContextImpl.STORE_NAME, "aurora");
-    storeContext.put(StoreContextImpl.CATALOG_ID, "catalog");
-    storeContext.put(StoreContextImpl.LOCALE, LocaleHelper.getLocaleFromString("en_US"));
-    storeContext.put(StoreContextImpl.CURRENCY, Currency.getInstance("USD"));
+    StoreContextBuilderImpl storeContextBuilder = StoreContextBuilderImpl.from(newStoreContext())
+            .withStoreId("10001")
+            .withStoreName("aurora")
+            .withCatalogId(CatalogId.of("catalog"))
+            .withCurrency(Currency.getInstance("USD"))
+            .withLocale(Locale.US);
+    StoreContextImpl storeContext = storeContextBuilder.build();
 
     when(storeContextProvider.findContextBySite(any())).thenReturn(Optional.of(storeContext));
-    when(storeContextProvider.buildContext(any())).thenReturn(StoreContextBuilderImpl.from(storeContext));
+    when(storeContextProvider.buildContext(any())).thenReturn(storeContextBuilder);
 
     UserContext userContext = UserContext.builder().build();
     when(userContextProvider.getCurrentContext()).thenReturn(userContext);

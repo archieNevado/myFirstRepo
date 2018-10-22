@@ -4,12 +4,14 @@ import co.freeside.betamax.Recorder;
 import com.coremedia.blueprint.lc.test.BetamaxTestHelper;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.hybris.common.HybrisStoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.hybris.rest.HybrisRestConnector;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.junit.Before;
 import org.junit.Rule;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.inject.Inject;
+import java.util.Currency;
 import java.util.Locale;
 
 public class HybrisITBase {
@@ -24,8 +26,15 @@ public class HybrisITBase {
 
   @Before
   public void setup() {
-    storeContext = HybrisTestStoreContextBuilder.build("apparel-uk", "Apparel-Catalog",
-            CatalogId.of("apparelProductCatalog"), Locale.ENGLISH, "USD", "Staged");
+    storeContext = HybrisStoreContextBuilder
+            .from("theSiteId")
+            .withStoreId("apparel-uk")
+            .withStoreName("Apparel-Catalog")
+            .withCatalogId(CatalogId.of("apparelProductCatalog"))
+            .withCatalogVersion("Staged")
+            .withCurrency(Currency.getInstance("USD"))
+            .withLocale(Locale.ENGLISH)
+            .build();
   }
 
   protected <T> T performGetWithStoreContext(@NonNull String resourcePath, @NonNull Class<T> responseType) {

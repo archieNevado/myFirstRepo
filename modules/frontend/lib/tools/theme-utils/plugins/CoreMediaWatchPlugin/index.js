@@ -141,7 +141,7 @@ class CoreMediaWatchPlugin {
     // invalidations
     compiler.plugin("invalid", () => {
       if (init === false) {
-        this._log.info("Detected file changes...");
+        this._log.info("Detected file changes.");
       }
     });
 
@@ -242,11 +242,11 @@ class CoreMediaWatchPlugin {
             this
           );
           if (this._isRemoteWorkflow()) {
-            this._log.info("Preparing to upload: ", changedFilesForOutput);
+            this._log.info("Preparing: ", changedFilesForOutput);
             uploadFiles(this.options.themeConfig, filesToUpdate, logLevel)
               .then(count => {
                 this._log.finalInfo(
-                  `Uploaded ${count} file(s) to remote server.`
+                  `Uploaded ${count} file(s) to server.`
                 );
                 livereload.trigger(filesToUpdate);
               })
@@ -262,7 +262,7 @@ class CoreMediaWatchPlugin {
           }
         } else if (init === false) {
           this._log.finalInfo(
-            "File changes didn´t affected already processed result, skipping upload."
+            "No changes, skipping upload."
           );
         }
 

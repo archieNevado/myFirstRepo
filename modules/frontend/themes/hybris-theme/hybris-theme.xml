@@ -24,7 +24,6 @@
 
   <templateSets>
     <templateSet>templates/hybris-templates.jar</templateSet>
-    <templateSet>templates/bricks-templates.jar</templateSet>
   </templateSets>
 
   <resourceBundles>

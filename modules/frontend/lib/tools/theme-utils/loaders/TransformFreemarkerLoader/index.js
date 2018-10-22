@@ -1,6 +1,7 @@
 const closestPackage = require("closest-package");
 const fs = require("fs");
 const glob = require("glob");
+const loaderUtils = require("loader-utils");
 const path = require("path");
 const { loadModules } = require("../utils");
 
@@ -30,6 +31,12 @@ module.exports = function loader(content) {
   const sourcePath = this.resourcePath;
   const sourceDirectory = path.dirname(sourcePath);
 
+  const options = loaderUtils.getOptions(this) || {};
+  const viewRepositoryName = options.viewRepositoryName;
+  if (!viewRepositoryName) {
+    throw new Error(`No view repository name provided.`);
+  }
+
   const modulesToLoad = [];
   const result = content.replace(
     FTL_REFERENCE_PATTERN,
@@ -46,14 +53,10 @@ module.exports = function loader(content) {
       }
       modulesToLoad.push(resolvedPathToLib);
 
-      // TODO: should be independent of workspace knowledge...
       // this could be achieved by evaluating the result of the prior loadModule call
       const packageJsonPath = closestPackage.sync(resolvedPathToLib);
       const packageJson = require(packageJsonPath);
-      const coremediaConfig = packageJson.coremedia || {};
-      const partOfTheme = coremediaConfig.type === "theme";
-      const middleSegment = partOfTheme ? coremediaConfig.name : "bricks";
-      const transformedPath = `*/${middleSegment}/freemarkerLibs/${
+      const transformedPath = `*/${viewRepositoryName}/freemarkerLibs/${
         packageJson.name
       }/${path.basename(resolvedPathToLib)}`;
 

@@ -28,6 +28,10 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>coremedia-personal-data</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.coremedia.ui</groupId>
       <artifactId>cap-rest-service</artifactId>
     </dependency>

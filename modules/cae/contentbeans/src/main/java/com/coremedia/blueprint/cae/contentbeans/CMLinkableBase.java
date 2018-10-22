@@ -15,16 +15,17 @@ import com.coremedia.blueprint.common.contentbeans.CMViewtype;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cae.aspect.Aspect;
+import com.coremedia.cap.common.CapStructHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.struct.Struct;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
@@ -32,6 +33,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Generated base class for immutable beans of document type CMLinkable.
@@ -272,11 +276,10 @@ public abstract class CMLinkableBase extends CMLocalizedImpl implements CMLinkab
 
   /**
    * Provide a value for a legacy link property which has been replaced by an annotated link list property.
-   * If the legacy property still holds a value, a corresponding CMLinkable content bean is returned, or null if this
-   * bean is invalid according to the configured validation service.
    *
-   * <p>Otherwise, the first valid target of the annotated link list property is returned, or null if no such target
-   * exists.
+   * If the annotated link list property holds a value, the first valid target is returned.
+   * Otherwise, if the legacy property still holds a value, a corresponding CMLinkable content bean is returned, or null if this
+   * bean is invalid according to the configured validation service.
    *
    * @param annotatedLinkListPropertyName the name of the new annotated link list property (e.g. "targets")
    * @param legacyLinkPropertyName the name of the legacy property name (e.g. "target")
@@ -284,65 +287,73 @@ public abstract class CMLinkableBase extends CMLocalizedImpl implements CMLinkab
    */
   @Nullable
   protected CMLinkable getLegacyAnnotatedLink(String annotatedLinkListPropertyName, String legacyLinkPropertyName) {
-    Content targetValue = getContent().getLink(legacyLinkPropertyName);
-    if (targetValue == null) {
-      return getFirstValidTarget(annotatedLinkListPropertyName);
-    }
-    CMLinkable bean = createBeanFor(targetValue, CMLinkable.class);
-    return bean != null && getValidationService().validate(bean) ? bean : null;
+    return getLegacyAnnotatedLinks(annotatedLinkListPropertyName, legacyLinkPropertyName).stream()
+      .findFirst()
+      .orElse(null);
   }
 
   /**
-   * Provide values for a legacy link list property which has been replaced by an annotated link list property.
-   * If the legacy property still holds a value, corresponding CMLinkable content beans are returned. The returned list
-   * is filtered by the configured {@link #setValidationService(ValidationService) validation service}.
+   * Provide a value for a legacy link which has been replaced by an annotated link list property.
    *
-   * <p>Otherwise, a list of valid targets of the new annotated link list property is returned, or the empty list if
-   * no such targets exist.
+   * If the annotated link list holds a value, the first valid target is returned.
+   * Otherwise, if the legacy link list still holds a value, a corresponding CMLinkable content bean is returned, or null if this
+   * bean is invalid according to the configured validation service.
    *
-   * @param annotatedLinkListPropertyName the name of the new annotated link list property
-   * @param legacyLinkPropertyName the name of the legacy property name
-   * @return a list of valid CMLinkable beans, or the empty list if there are none
+   * @param annotatedLinkList the value of the new annotated link list (e.g. "targets")
+   * @param linkList the value of the legacy property (e.g. "target")
+   * @return a valid CMLinkable bean, or null
    */
   @Nullable
-  protected List<CMLinkable> getLegacyAnnotatedLinks(String annotatedLinkListPropertyName, String legacyLinkPropertyName) {
-    if (getContent().get(legacyLinkPropertyName) == null) {
-      return getValidTargets(annotatedLinkListPropertyName);
-    }
+  protected CMLinkable getLegacyAnnotatedLink(@Nullable Map<String, List<Map<String, Object>>> annotatedLinkList, @Nullable List<CMLinkable> linkList) {
+    return getLegacyAnnotatedLinks(annotatedLinkList, linkList).stream()
+      .findFirst()
+      .orElse(null);
+  }
+
+  /**
+   * Provide a value for a legacy link list property which has been replaced by an annotated link list property.
+   *
+   * If the annotated link list property holds a value, the first valid target is returned.
+   * Otherwise, if the legacy property still holds a value, a corresponding CMLinkable content bean is returned, or null if this
+   * bean is invalid according to the configured validation service.
+   *
+   * @param annotatedLinkListPropertyName the name of the new annotated link list property (e.g. "targets")
+   * @param legacyLinkListPropertyName the name of the legacy property name (e.g. "target")
+   * @return a valid CMLinkable bean, or null
+   */
+  @NonNull
+  protected List<CMLinkable> getLegacyAnnotatedLinks(@Nullable String annotatedLinkListPropertyName, @Nullable String legacyLinkListPropertyName) {
+    Map<String, List<Map<String, Object>>> filteredAnnotatedLinkList = getAnnotatedLinkList(annotatedLinkListPropertyName, legacyLinkListPropertyName);
+    return getAnnotatedLinkListTargets(filteredAnnotatedLinkList);
+  }
+
+  /**
+   * Provide a value for a legacy link list which has been replaced by an annotated link list property.
+   *
+   * If the annotated link list holds a value, the first valid target is returned.
+   * Otherwise, if the legacy link list still holds a value, a corresponding CMLinkable content bean is returned, or null if this
+   * bean is invalid according to the configured validation service.
+   *
+   * @param annotatedLinkList the value of the new annotated link list (e.g. "targets")
+   * @param linkList the value of the legacy property (e.g. "target")
+   * @return a valid CMLinkable bean, or null
+   */
+  @NonNull
+  protected List<CMLinkable> getLegacyAnnotatedLinks(@Nullable Map<String, List<Map<String, Object>>> annotatedLinkList, @Nullable List<CMLinkable> linkList) {
+    Map<String, List<Map<String, Object>>> filteredAnnotatedLinkList = getAnnotatedLinkList(annotatedLinkList, linkList, null);
+    return getAnnotatedLinkListTargets(filteredAnnotatedLinkList);
+  }
+
+  /**
+   * Get links from a link list without applying any filter.
+   *
+   * @param linkListPropertyName the property name of the link list or link
+   * @return the links of a link list
+   */
+  @NonNull
+  protected List<CMLinkable> getLegacyLinkListUnfiltered(@NonNull String linkListPropertyName) {
     //noinspection unchecked
-    return getValidationService().filterList(createBeansFor(getContent().getLinks(legacyLinkPropertyName)));
-  }
-
-  private CMLinkable getFirstValidTarget(String annotatedLinkListPropertyName) {
-    Struct targetsValue = getContent().getStruct(annotatedLinkListPropertyName);
-    if (targetsValue != null) {
-      List<Struct> structs = targetsValue.getStructs(ANNOTATED_LINKS_STRUCT_ROOT_PROPERTY_NAME);
-      for (Struct targetStruct :structs) {
-        Content content = targetStruct.getLink(ANNOTATED_LINK_STRUCT_TARGET_PROPERTY_NAME);
-        CMLinkable bean = createBeanFor(content, CMLinkable.class);
-        if (bean != null && getValidationService().validate(bean)) {
-          return bean;
-        }
-      }
-    }
-    return null;
-  }
-
-  private List<CMLinkable> getValidTargets(String annotatedLinkListPropertyName) {
-    Struct targetsValue = getContent().getStruct(annotatedLinkListPropertyName);
-    if (targetsValue == null) {
-      return Collections.emptyList();
-    }
-    List<Struct> structs = targetsValue.getStructs(ANNOTATED_LINKS_STRUCT_ROOT_PROPERTY_NAME);
-    List<CMLinkable> result = new ArrayList<>(structs.size());
-    for (Struct targetStruct : structs) {
-      Content content = targetStruct.getLink(ANNOTATED_LINK_STRUCT_TARGET_PROPERTY_NAME);
-      CMLinkable bean = createBeanFor(content, CMLinkable.class);
-      if (bean != null && getValidationService().validate(bean)) {
-        result.add(bean);
-      }
-    }
-    return result;
+    return createBeansFor(CapStructHelper.getLinks(getContent(), linkListPropertyName));
   }
 
   /**
@@ -376,65 +387,98 @@ public abstract class CMLinkableBase extends CMLocalizedImpl implements CMLinkab
    *
    * <p>Subclasses may override the {@link #convertLinkListToAnnotatedLinkList} method to populate the converted
    * structure with additional properties beside the target property. Otherwise, each target structure will
-   * contain just the target property. See the implementation of
-   * {@link CMTeaserBase#convertLinkListToAnnotatedLinkList} for an example.
+   * contain just the target property.
    *
    * @param annotatedLinkListPropertyName the name of the annotated link list struct property
    * @param legacyLinkListPropertyName the name of the plain old link list property, or null.
    *
    * @return a nested map/list object tree according to the structure above
    */
-  protected Map<String, List<Map<String, Object>>> getAnnotatedLinkList(String annotatedLinkListPropertyName, @Nullable String legacyLinkListPropertyName) {
-    Struct targetsValue = getContent().getStruct(annotatedLinkListPropertyName);
-    List<Map<String, Object>> linksAsBeans = null;
-    if (targetsValue == null) {
-      if (legacyLinkListPropertyName != null) {
-        linksAsBeans = convertLinkListToAnnotatedLinkList(legacyLinkListPropertyName);
-      }
-    } else {
-      List<Struct> links = targetsValue.getStructs(ANNOTATED_LINKS_STRUCT_ROOT_PROPERTY_NAME);
-      linksAsBeans = new ArrayList<>(links.size());
-      for (Struct targetStruct : links) {
-        // the validation service needs a content bean, so extract the target content and create a bean for it
-        CMLinkable bean = createBeanFor(targetStruct.getLink(ANNOTATED_LINK_STRUCT_TARGET_PROPERTY_NAME), CMLinkable.class);
-        if (bean != null && getValidationService().validate(bean)) {
-          linksAsBeans.add(createBeanMapFor(targetStruct));
-        }
+  @NonNull
+  protected Map<String, List<Map<String, Object>>> getAnnotatedLinkList(@Nullable String annotatedLinkListPropertyName, @Nullable String legacyLinkListPropertyName) {
+    if (annotatedLinkListPropertyName != null) {
+      Map<String, List<Map<String, Object>>> annotatedLinkListUnfiltered = getAnnotatedLinkListUnfiltered(annotatedLinkListPropertyName);
+      if (!annotatedLinkListUnfiltered.isEmpty()) {
+        return filterAnnotatedLinkList(annotatedLinkListUnfiltered);
       }
     }
-    return createLinksStructMap(linksAsBeans);
+
+    if (legacyLinkListPropertyName != null) {
+      List<CMLinkable> legacyLinkListUnfiltered = getLegacyLinkListUnfiltered(legacyLinkListPropertyName);
+      List<CMLinkable> legacyLinkList = filterLinkList(legacyLinkListUnfiltered);
+      List<Map<String, Object>> converted = convertLinkListToAnnotatedLinkList(legacyLinkList, legacyLinkListPropertyName);
+      return createLinksStructMap(converted);
+    }
+
+    return Collections.emptyMap();
   }
 
   /**
-   * Convert a plain link list property into the nested structure of an annotated link list.
+   * Returns the filtered annotated link list according to the configured validation service.
    *
-   * @param linkListPropertyName the name of the link list property
-   * @return a list of maps, each map containing a {@link #ANNOTATED_LINK_STRUCT_TARGET_PROPERTY_NAME}
-   * property pointing to a CMLinkable bean. The list is filtered to hold only valid content beans
-   * according to the configured {@link #setValidationService(ValidationService) validation service}.
+   * <p>If the annotatedLinkList holds a value, the filtered annotatedLinkList is returned.
+   *
+   * <p>Otherwise, if the legacyLinkList holds a value, the filtered legacyLinkList is returned.
+   *
+   * <p>For the structure of the annotated link list, see documentation of {@link #getAnnotatedLinkList(String, String)} for details.
+   *
+   * <p>Subclasses may override the {@link #convertLinkListToAnnotatedLinkList(List, String)} method to populate the converted
+   * structure with additional properties beside the target property. Otherwise, each target structure will
+   * contain just the target property. See the implementation of
+   * {@link CMTeaserBase#convertLinkListToAnnotatedLinkList} for an example.
+   *
+   * @param annotatedLinkList the annotatedLinkList
+   * @param legacyLinkList the legacy linkList
+   * @return the filtered annotated linkList
    */
-  protected List<Map<String, Object>> convertLinkListToAnnotatedLinkList(String linkListPropertyName) {
-    List<Content> targets = getContent().getLinks(linkListPropertyName);
-    if (targets.isEmpty()) {
-      return Collections.emptyList();
+  @NonNull
+  protected Map<String, List<Map<String, Object>>> getAnnotatedLinkList(@Nullable Map<String, List<Map<String, Object>>> annotatedLinkList, @Nullable List<CMLinkable> legacyLinkList, @Nullable String legacyLinkListPropertyName) {
+    if (annotatedLinkList != null && !annotatedLinkList.isEmpty()) {
+      return filterAnnotatedLinkList(annotatedLinkList);
     }
-    List<Map<String, Object>> linksAsBeans = new ArrayList<>(targets.size());
-    for (int i = 0; i < targets.size(); i++) {
-      Content target = targets.get(i);
-      CMLinkable bean = createBeanFor(target, CMLinkable.class);
-      if (bean != null && getValidationService().validate(bean)) {
-        Map<String, Object> linkStructMap = createAnnotatedLinkStructMap(bean, i + 1);
-        linksAsBeans.add(linkStructMap);
-      }
+
+    if (legacyLinkList != null) {
+      List<CMLinkable> filteredLinkList = filterLinkList(legacyLinkList);
+      List<Map<String, Object>> converted = convertLinkListToAnnotatedLinkList(filteredLinkList, legacyLinkListPropertyName);
+      return createLinksStructMap(converted);
     }
-    return linksAsBeans;
+
+    return Collections.emptyMap();
   }
 
-  private static Map<String, List<Map<String, Object>>> createLinksStructMap(List<Map<String, Object>> targetStructMaps) {
-    if (targetStructMaps == null) {
-      return null;
+  /**
+   * Get an annotatedLinkList from an annotatedLinkListPropertyName if available, or else an empty map.
+   *
+   * @param annotatedLinkListPropertyName the name of the annotatedLinkList property
+   *
+   * @return the annotatedLinkList or an empty map
+   */
+  @NonNull
+  protected Map<String, List<Map<String, Object>>> getAnnotatedLinkListUnfiltered(@NonNull String annotatedLinkListPropertyName) {
+    List<Map<String, Object>> linksAsBeans = getAnnotatedLinkListItems(annotatedLinkListPropertyName);
+    if (!linksAsBeans.isEmpty()) {
+      return createLinksStructMap(linksAsBeans);
     }
-    return Collections.singletonMap(ANNOTATED_LINKS_STRUCT_ROOT_PROPERTY_NAME, targetStructMaps);
+    return Collections.emptyMap();
+  }
+
+  /**
+   * Convert a given link list into the nested structure of an annotated link list without applying any filter.
+   *
+   * Method can be overridden to add additional functionality.
+   *
+   * @param linkList the link list
+   * @return a list of maps, each map containing a {@link #ANNOTATED_LINK_STRUCT_TARGET_PROPERTY_NAME}
+   * property pointing to a CMLinkable bean.
+   */
+  @NonNull
+  protected List<Map<String, Object>> convertLinkListToAnnotatedLinkList(@NonNull List<CMLinkable> linkList, @Nullable String linkListPropertyName) {
+    if (linkList.isEmpty()) {
+      return Collections.emptyList();
+    }
+    return IntStream.range(0, linkList.size())
+        .mapToObj(i -> createAnnotatedLinkStructMap(linkList.get(i), i + 1, linkListPropertyName))
+        .collect(Collectors.toList());
   }
 
   /**
@@ -443,10 +487,102 @@ public abstract class CMLinkableBase extends CMLocalizedImpl implements CMLinkab
    * @param index the index of the target
    * @return annotated link struct map
    */
-  protected Map<String, Object> createAnnotatedLinkStructMap(CMLinkable target, int index) {
+  @NonNull
+  protected Map<String, Object> createAnnotatedLinkStructMap(@NonNull CMLinkable target, int index, @Nullable String linkListPropertyName) {
     Map<String, Object> targetStructMap = new LinkedHashMap<>(3);
     targetStructMap.put(ANNOTATED_LINK_STRUCT_TARGET_PROPERTY_NAME, target);
     return targetStructMap;
+  }
+
+  /**
+   * Get the items of an annotated link list property.
+   * @param annotatedLinkListPropertyName the name of the annotatedLinkList property
+   * @return the annotated linkList items
+   */
+  @NonNull
+  private List<Map<String, Object>> getAnnotatedLinkListItems(@NonNull String annotatedLinkListPropertyName) {
+    Struct targetsValue = CapStructHelper.getStruct(getContent(), annotatedLinkListPropertyName);
+    if (targetsValue == null) {
+      return Collections.emptyList();
+    }
+    List<Struct> links = CapStructHelper.getStructs(targetsValue, ANNOTATED_LINKS_STRUCT_ROOT_PROPERTY_NAME);
+    return links.stream()
+      .map(this::createBeanMapFor)
+      .filter(map -> map.get(ANNOTATED_LINK_STRUCT_TARGET_PROPERTY_NAME) != null)
+      .collect(Collectors.toList());
+  }
+
+  /**
+   * Get links from an annotated link list without applying any filter.
+   *
+   * @param annotatedLinkList the property name of the annotated link list
+   * @return the links of an annotated link list
+   */
+  @NonNull
+  private List<CMLinkable> getAnnotatedLinkListTargets(@NonNull Map<String, List<Map<String, Object>>> annotatedLinkList) {
+    List<Map<String, Object>> annotatedLinkListItems = getAnnotatedLinkListItems(annotatedLinkList);
+    return getLinksFromAnnotatedLinkListItems(annotatedLinkListItems);
+  }
+
+  /**
+   * Get list of target links from a list of Maps containing the annotated linkList entries
+   * @param annotatedLinkListItems the annotated linkList items
+   * @return list of target links
+   */
+  @NonNull
+  private List<CMLinkable> getLinksFromAnnotatedLinkListItems(@NonNull List<Map<String, Object>> annotatedLinkListItems) {
+    return annotatedLinkListItems.stream()
+      .map(entry -> (CMLinkable) entry.get(ANNOTATED_LINK_STRUCT_TARGET_PROPERTY_NAME))
+      .collect(Collectors.toList());
+  }
+
+  /**
+   * Filter the annotated LinkList according to the configured validation service.
+   * @param annotatedLinkList the annotated linkList
+   * @return the filtered annotated linkList
+   */
+  @NonNull
+  private Map<String, List<Map<String, Object>>> filterAnnotatedLinkList(@NonNull Map<String, List<Map<String, Object>>> annotatedLinkList) {
+    List<Map<String, Object>> annotatedLinkListItems = getAnnotatedLinkListItems(annotatedLinkList);
+    List<Map<String, Object>> filtered = annotatedLinkListItems.stream()
+      .filter(targetMap -> {
+        CMLinkable bean = (CMLinkable) targetMap.get(ANNOTATED_LINK_STRUCT_TARGET_PROPERTY_NAME);
+        return getValidationService().validate(bean);
+      })
+      .collect(Collectors.toList());
+
+    return createLinksStructMap(filtered);
+  }
+
+  /**
+   * Filter the linkList according to the configured validation service.
+   * @param linkList the linkList
+   * @return the filtered linkList
+   */
+  @NonNull
+  private  List<CMLinkable> filterLinkList(@NonNull List<CMLinkable> linkList) {
+    return linkList.stream()
+      .filter(bean -> getValidationService().validate(bean))
+      .collect(Collectors.toList());
+  }
+
+  /**
+   * Get the struct items of an annotated linkList as list.
+   * @param annotatedLinkList the annotated linkList
+   * @return the struct items of an annotated linkList as list
+   */
+  private List<Map<String, Object>> getAnnotatedLinkListItems(@NonNull Map<String, List<Map<String, Object>>> annotatedLinkList) {
+    return annotatedLinkList.get(CMLinkableBase.ANNOTATED_LINKS_STRUCT_ROOT_PROPERTY_NAME);
+  }
+
+  /**
+   * Create a "links" struct map (annotated linkList) from the given targetStructMaps
+   * @param targetStructMaps the targetStructMaps
+   * @return the annotated linkList
+   */
+  @NonNull
+  private static Map<String, List<Map<String, Object>>> createLinksStructMap(@NonNull List<Map<String, Object>> targetStructMaps) {
+    return Collections.singletonMap(ANNOTATED_LINKS_STRUCT_ROOT_PROPERTY_NAME, targetStructMaps);
   }
 }
   

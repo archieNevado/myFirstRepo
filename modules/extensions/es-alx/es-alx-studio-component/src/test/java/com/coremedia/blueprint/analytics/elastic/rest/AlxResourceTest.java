@@ -5,13 +5,10 @@ import com.coremedia.blueprint.base.analytics.elastic.PageViewResult;
 import com.coremedia.blueprint.base.analytics.elastic.PublicationReportModelService;
 import com.coremedia.blueprint.base.analytics.elastic.ReportModel;
 import com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil;
-import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
-import com.coremedia.blueprint.base.multisite.SiteResolver;
 import com.coremedia.blueprint.base.navigation.context.ContextStrategy;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
-import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
@@ -94,15 +91,6 @@ public class AlxResourceTest {
   @SuppressWarnings("SpringJavaAutowiringInspection")
   @Inject
   private ContentRepository contentRepository;
-  @SuppressWarnings("SpringJavaAutowiringInspection")
-  @Inject
-  private SitesService sitesService;
-  @SuppressWarnings("SpringJavaAutowiringInspection")
-  @Inject
-  private SiteResolver siteResolver;
-  @SuppressWarnings("SpringJavaAutowiringInspection")
-  @Inject
-  private UrlPathFormattingHelper urlPathFormattingHelper;
 
   @Before
   public void setup() {
@@ -112,10 +100,6 @@ public class AlxResourceTest {
     inject(alxResource, publicationReportModelService);
     inject(alxResource, pageViewReportModelService);
     inject(alxResource, settingsService);
-
-    inject(siteResolver, contentRepository);
-    inject(siteResolver, sitesService);
-    inject(siteResolver, urlPathFormattingHelper);
 
     when(settingsService.setting(eq(RetrievalUtil.DOCUMENT_PROPERTY_ANALYTICS_PROVIDER), eq(String.class), anyObject())).thenReturn("");
 

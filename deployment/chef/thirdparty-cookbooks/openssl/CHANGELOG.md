@@ -2,6 +2,23 @@
 
 This file is used to list changes made in each version of the openssl cookbook.
 
+## 8.5.5 (2018-09-04)
+
+All resources in this cookbook are now built into Chef 14.4+. When Chef 15.4 is released (April 2019) the resources will be removed from this cookbook as all users should be running Chef 14.4 or later at that point.
+
+## 8.5.4 (2018-08-29)
+
+- Add missing email documentation for the request property
+- Fix x509_crl to work on non-Linux platforms
+- Attribute -> Property in the readme
+- revokation -> revocation in the readme
+- Update group/owner documentation
+- Avoid deprecation warnings on Chef 14.3+
+
+## 8.5.3 (2018-08-15)
+
+- Call ::OpenSSL not OpenSSL to be more defensive in the helpers
+
 ## 8.5.2 (2018-08-14)
 
 - Back out mode change in ec_private_key

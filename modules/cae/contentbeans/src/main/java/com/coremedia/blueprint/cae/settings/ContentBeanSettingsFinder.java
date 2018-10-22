@@ -2,6 +2,7 @@ package com.coremedia.blueprint.cae.settings;
 
 import com.coremedia.blueprint.base.settings.SettingsFinder;
 import com.coremedia.blueprint.base.settings.SettingsService;
+import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.objectserver.beans.ContentBean;
@@ -65,7 +66,7 @@ public class ContentBeanSettingsFinder implements SettingsFinder {
    */
   private Object toContentBeans(Object value) {
     if (value instanceof Content) {
-      return contentBeanFactory.createBeanFor((Content) value);
+      return contentBeanFactory.createBeanFor((Content) value, CMObject.class);
     }
     if (value instanceof Struct) {
       return contentBeanFactory.createBeanMapFor((Struct)value);

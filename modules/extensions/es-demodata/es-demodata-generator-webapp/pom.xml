@@ -16,7 +16,7 @@
   <properties>
     <development-properties.dir>${project.basedir}/../../../../workspace-configuration/development-properties/default</development-properties.dir>
     <logging-properties.dir>${project.basedir}/../../../../workspace-configuration/logging</logging-properties.dir>
-    <tomcat.embed.version>8.5.23</tomcat.embed.version>
+    <tomcat.embed.version>8.5.31</tomcat.embed.version>
   </properties>
 
   <dependencyManagement>
@@ -39,7 +39,7 @@
       <dependency>
         <groupId>io.rest-assured</groupId>
         <artifactId>rest-assured</artifactId>
-        <version>3.0.0</version>
+        <version>3.1.0</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -166,10 +166,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>coremedia-spring</artifactId>
-    </dependency>
-    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>test-util</artifactId>
       <version>${project.version}</version>
@@ -243,9 +239,6 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-failsafe-plugin</artifactId>
-            <configuration>
-              <forkCount>0</forkCount>
-            </configuration>
             <executions>
               <execution>
                 <goals>

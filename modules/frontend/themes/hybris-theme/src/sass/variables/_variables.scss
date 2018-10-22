@@ -12,6 +12,7 @@ $grid-gutter-width: 0;
 // Breakpoints
 $breakpoints: (
         "xs": "only screen and (max-width: 599px)",
+        "xs-and-up": "screen and (min-width: 0)",
         "sm": "only screen and (min-width: 600px) and (max-width: 1023px)",
         "sm-and-up": "only screen and (min-width: 600px)",
         "md": "only screen and (min-width: 1024px)",

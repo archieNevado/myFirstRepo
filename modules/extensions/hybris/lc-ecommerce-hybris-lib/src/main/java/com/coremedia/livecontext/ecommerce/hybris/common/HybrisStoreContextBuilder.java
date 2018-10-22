@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.ecommerce.hybris.common;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextBuilder;
@@ -9,23 +10,16 @@ import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CATALOG_ID;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CATALOG_VERSION;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CURRENCY;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.LOCALE;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.STORE_ID;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.STORE_NAME;
-
 @DefaultAnnotation(NonNull.class)
 public class HybrisStoreContextBuilder implements StoreContextBuilder {
 
-  private final String siteId;
-
+  private String siteId;
   @Nullable
   private String storeId;
   @Nullable
@@ -38,6 +32,8 @@ public class HybrisStoreContextBuilder implements StoreContextBuilder {
   private Currency currency;
   @Nullable
   private Locale locale;
+  @Nullable
+  private ZoneId timeZoneId;
   @Nullable
   private ZonedDateTime previewDate;
   @Nullable
@@ -55,26 +51,42 @@ public class HybrisStoreContextBuilder implements StoreContextBuilder {
     return from(storeContext.getSiteId())
             .withStoreId(storeContext.getStoreId())
             .withStoreName(storeContext.getStoreName())
-            .withCatalogId(CatalogId.of(storeContext.getCatalogId()))
+            .withCatalogId(storeContext.getCatalogId().get())
             .withCatalogVersion(storeContext.getCatalogVersion())
             .withCurrency(storeContext.getCurrency())
             .withLocale(storeContext.getLocale())
+            .withTimeZoneId(storeContext.getTimeZoneId().orElse(null))
             .withPreviewDate(storeContext.getPreviewDate().orElse(null))
-            .withUserSegments(storeContext.getUserSegments());
+            .withUserSegments(storeContext.getUserSegments().orElse(null));
   }
 
+  @Override
+  public HybrisStoreContextBuilder withSiteId(String siteId) {
+    this.siteId = siteId;
+    return this;
+  }
+
+  @Override
   public HybrisStoreContextBuilder withStoreId(String storeId) {
     this.storeId = storeId;
     return this;
   }
 
+  @Override
   public HybrisStoreContextBuilder withStoreName(String storeName) {
     this.storeName = storeName;
     return this;
   }
 
-  public HybrisStoreContextBuilder withCatalogId(CatalogId catalogId) {
+  @Override
+  public HybrisStoreContextBuilder withCatalogId(@Nullable CatalogId catalogId) {
     this.catalogId = catalogId;
+    return this;
+  }
+
+  @Override
+  public HybrisStoreContextBuilder withCatalogAlias(CatalogAlias catalogAlias) {
+    // Don't care about catalog alias.
     return this;
   }
 
@@ -83,13 +95,21 @@ public class HybrisStoreContextBuilder implements StoreContextBuilder {
     return this;
   }
 
+  @Override
   public HybrisStoreContextBuilder withCurrency(Currency currency) {
     this.currency = currency;
     return this;
   }
 
+  @Override
   public HybrisStoreContextBuilder withLocale(Locale locale) {
     this.locale = locale;
+    return this;
+  }
+
+  @Override
+  public HybrisStoreContextBuilder withTimeZoneId(@Nullable ZoneId timeZoneId) {
+    this.timeZoneId = timeZoneId;
     return this;
   }
 
@@ -112,30 +132,32 @@ public class HybrisStoreContextBuilder implements StoreContextBuilder {
   }
 
   @Override
-  public StoreContextBuilder withContractIds(List<String> contractIds) {
+  public HybrisStoreContextBuilder withContractIds(List<String> contractIds) {
     // Don't care about contract IDs.
     return this;
   }
 
   @Override
-  public StoreContextBuilder withContractIdsForPreview(List<String> contractIds) {
+  public HybrisStoreContextBuilder withContractIdsForPreview(List<String> contractIdsForPreview) {
     // Don't care about contract IDs.
     return this;
   }
 
   @Override
   public StoreContext build() {
-    StoreContext storeContext = StoreContextImpl.builder(siteId)
+    StoreContextImpl storeContext = StoreContextImpl
+            .builder(siteId)
+            .withStoreId(storeId)
+            .withStoreName(storeName)
+            .withCatalogId(catalogId)
+            .withCurrency(currency)
+            .withLocale(locale)
+            .withTimeZoneId(timeZoneId)
             .withPreviewDate(previewDate)
             .withUserSegments(userSegments)
             .build();
 
-    storeContext.put(STORE_ID, storeId);
-    storeContext.put(STORE_NAME, storeName);
-    storeContext.put(CATALOG_ID, catalogId != null ? catalogId.value() : null);
-    storeContext.put(CATALOG_VERSION, catalogVersion);
-    storeContext.put(CURRENCY, currency);
-    storeContext.put(LOCALE, locale);
+    storeContext.put(StoreContextImpl.CATALOG_VERSION, catalogVersion);
 
     return storeContext;
   }

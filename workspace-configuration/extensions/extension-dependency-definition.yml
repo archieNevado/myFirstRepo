@@ -12,8 +12,9 @@ server: {}
 studio: {
   type: swc
 }
-studio-lib: {}
-user-changes: {
-  type: pom
+studio-dynamic: {
+  type: swc
 }
+studio-lib: {}
+user-changes: {}
 workflow-server: {}

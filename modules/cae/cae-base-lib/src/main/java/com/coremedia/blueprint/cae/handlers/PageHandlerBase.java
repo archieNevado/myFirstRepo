@@ -20,6 +20,8 @@ import com.coremedia.cap.user.User;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.objectserver.web.HandlerHelper;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.annotation.Required;
@@ -27,8 +29,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
@@ -116,6 +116,7 @@ public abstract class PageHandlerBase extends HandlerBase implements BeanFactory
    * <p>
    * Consider the developer's work in progress for particular features.
    */
+  @NonNull
   protected Page asPage(Navigation context, Linkable content, @Nullable User developer) {
     return asPage(context, content, null, developer);
   }
@@ -125,6 +126,7 @@ public abstract class PageHandlerBase extends HandlerBase implements BeanFactory
    * <p>
    * Consider the developer's work in progress for particular features.
    */
+  @NonNull
   protected Page asPage(Navigation context,
                         Linkable content,
                         @Nullable TreeRelation<Content> treeRelation,
@@ -133,7 +135,7 @@ public abstract class PageHandlerBase extends HandlerBase implements BeanFactory
     page.setTitle(content.getTitle());
     page.setDescription(page.getTitle());
     page.setKeywords(content.getKeywords());
-    if (treeRelation!=null) {
+    if (treeRelation != null) {
       page.setContentTreeRelation(treeRelation);
     }
     if (content instanceof CMLinkable) {
@@ -149,6 +151,7 @@ public abstract class PageHandlerBase extends HandlerBase implements BeanFactory
     if (dataViewFactory != null) {
       page = dataViewFactory.loadCached(page, null);
     }
+
     return page;
   }
 
@@ -157,6 +160,7 @@ public abstract class PageHandlerBase extends HandlerBase implements BeanFactory
    * <p>
    * Consider the developer's work in progress for particular features.
    */
+  @NonNull
   protected PageImpl createPageImpl(Object content, Navigation context, User developer) {
     PageImpl page = beanFactory.getBean(CMPAGE_PROTOTYPE_BEAN_NAME, PageImpl.class);
     page.setContent(content);
@@ -165,30 +169,33 @@ public abstract class PageHandlerBase extends HandlerBase implements BeanFactory
     return page;
   }
 
+  @NonNull
   protected ModelAndView createModelAndView(Page page, String view) {
     ModelAndView result = HandlerHelper.createModelWithView(page, view);
     addPageModel(result, page);
     return result;
   }
 
+  @NonNull
   protected ModelAndView createModelAndView(Page page, String view, String orientation) {
     ModelAndView result = createModelAndView(page, view);
+
     if (!StringUtils.isEmpty(orientation)) {
       result.addObject("orientation", orientation);
     }
+
     return result;
   }
+
   /**
    * Adds a page to the model and view as additional model
    *
    * @param modelAndView The target model and view
    * @param page         The page to add as model
    */
-  protected void addPageModel(ModelAndView modelAndView, Page page) {
-
+  protected void addPageModel(@NonNull ModelAndView modelAndView, Page page) {
     RequestAttributeConstants.setPage(modelAndView, page);
     NavigationLinkSupport.setNavigation(modelAndView, page.getNavigation());
-
   }
 
   /**
@@ -220,6 +227,7 @@ public abstract class PageHandlerBase extends HandlerBase implements BeanFactory
   /**
    * Provides a {@link CMNavigation} from a sequence of segments
    */
+  @Nullable
   protected Navigation getNavigation(String navigationPathElement) {
     return getNavigation(Collections.singletonList(navigationPathElement));
   }
@@ -227,6 +235,7 @@ public abstract class PageHandlerBase extends HandlerBase implements BeanFactory
   /**
    * Provides a {@link CMNavigation} from a sequence of segments
    */
+  @Nullable
   protected Navigation getNavigation(List<String> navigationPath) {
     return navigationSegmentsUriHelper.parsePath(navigationPath);
   }
@@ -265,7 +274,7 @@ public abstract class PageHandlerBase extends HandlerBase implements BeanFactory
 
   protected void addViewAndParameters(UriComponentsBuilder uriBuilder, String viewName, Map<String, Object> linkParameters) {
     // add optional view query parameter
-    if( viewName != null ) {
+    if (viewName != null) {
       uriBuilder.queryParam(VIEW_PARAMETER, viewName);
     }
     // add additional query parameters

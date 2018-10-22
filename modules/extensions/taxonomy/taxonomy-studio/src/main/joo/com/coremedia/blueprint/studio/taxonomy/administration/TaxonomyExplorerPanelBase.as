@@ -405,7 +405,7 @@ public class TaxonomyExplorerPanelBase extends Panel {
   private function ensureExpandState(dfd:Container, content:Content):void {
     EventUtil.invokeLater(function ():void {
       var collapsable:Panel = dfd.query(createComponentSelector()._xtype(PropertyFieldGroup.xtype).build())[0] as Panel;
-      if (collapsable.collapsed) {
+      if (collapsable && collapsable.collapsed) {
         collapsable.expand(false);
       }
 

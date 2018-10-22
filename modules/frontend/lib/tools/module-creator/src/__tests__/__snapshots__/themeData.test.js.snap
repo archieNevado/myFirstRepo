@@ -150,8 +150,6 @@ exports[`initThemedescriptorXml() returns data for theme descriptor 1`] = `
 </styleSheets>
 <templateSets>
   <templateSet>templates/test-templates.jar</templateSet>
-  <!-- aggregated templates of all bricks, activate this if you are using bricks -->
-  <!-- <templateSet>templates/bricks-templates.jar</templateSet> -->
 </templateSets>
 <resourceBundles>
   <!-- add theme resource bundles here -->

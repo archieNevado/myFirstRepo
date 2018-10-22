@@ -4,7 +4,7 @@ import com.coremedia.blueprint.base.links.UriConstants;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
-import com.coremedia.blueprint.base.multisite.SiteResolver;
+import com.coremedia.blueprint.base.multisite.cae.SiteResolver;
 import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
 import com.coremedia.blueprint.common.preview.PreviewDateFormatter;
 import com.coremedia.cap.multisite.Site;
@@ -78,7 +78,7 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
     String normalizedPath = normalizePath(request.getPathInfo());
-    Site site = getSite(request, normalizedPath);
+    Site site = findSite(request, normalizedPath).orElse(null);
 
     // If site is null, we cannot help it here.  Silently do nothing.
     // It is up to the request handler to return 404.
@@ -131,14 +131,13 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
 
   /**
    * Calculate a site from the request.
-   * <p/>
    *
    * @param request        the request
    * @param normalizedPath is the URL path w/o a dynamic fragment prefix
-   * @return a Site or null
+   * @return a site, or nothing
    */
-  @Nullable
-  protected abstract Site getSite(HttpServletRequest request, String normalizedPath);
+  @NonNull
+  protected abstract Optional<Site> findSite(HttpServletRequest request, String normalizedPath);
 
   // --- hook points and utils for extending classes ----------------
 

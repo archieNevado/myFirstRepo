@@ -34,7 +34,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {XmlRepoConfiguration.class, PrefetchFragmentsConfigReaderTest.LocalConfig.class})
+@ContextConfiguration(classes = {XmlRepoConfiguration.class, PrefetchFragmentsConfigReaderTest.LocalConfig.class, PrefetchFragmentsConfigReader.class})
 public class PrefetchFragmentsConfigReaderTest {
 
   private static final String CONTENT_REPOSITORY_URL = "classpath:/com/coremedia/livecontext/fragment/resolver/fragment-prefetch-test-content.xml";
@@ -159,11 +159,6 @@ public class PrefetchFragmentsConfigReaderTest {
     @Bean
     public XmlUapiConfig xmlUapiConfig() {
       return new XmlUapiConfig(PrefetchFragmentsConfigReaderTest.CONTENT_REPOSITORY_URL);
-    }
-
-    @Bean
-    public PrefetchFragmentsConfigReader testling() {
-      return new PrefetchFragmentsConfigReader();
     }
 
   }

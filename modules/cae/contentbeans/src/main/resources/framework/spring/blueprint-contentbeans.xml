@@ -165,6 +165,8 @@
         class="com.coremedia.blueprint.cae.contentbeans.CMSpinnerImpl" scope="prototype"/>
   <bean name="contentBeanFactory:CMArticle" parent="abstractTeasable-blueprint-doctypes"
         class="com.coremedia.blueprint.cae.contentbeans.CMArticleImpl" scope="prototype"/>
+  <bean name="contentBeanFactory:CMPerson" parent="abstractTeasable-blueprint-doctypes"
+        class="com.coremedia.blueprint.cae.contentbeans.CMPersonImpl" scope="prototype"/>
   <bean name="contentBeanFactory:CMExternalLink" parent="abstractTeasable-blueprint-doctypes"
         class="com.coremedia.blueprint.cae.contentbeans.CMExternalLinkImpl" scope="prototype"/>
   <bean name="contentBeanFactory:CMDownload" parent="abstractTeasable-blueprint-doctypes"
@@ -174,8 +176,7 @@
   <bean name="contentBeanFactory:CMChannel" parent="abstractChannel-blueprint-doctypes"
         class="com.coremedia.blueprint.cae.contentbeans.CMChannelImpl" scope="prototype"/>
   <bean name="contentBeanFactory:CMQueryList" parent="abstractTeasable-blueprint-doctypes"
-        class="com.coremedia.blueprint.cae.contentbeans.CMQueryListImpl" scope="prototype">
-  </bean>
+        class="com.coremedia.blueprint.cae.contentbeans.CMQueryListImpl" scope="prototype"/>
   <bean name="contentBeanFactory:CMAction" parent="abstractTeasable-blueprint-doctypes"
         class="com.coremedia.blueprint.cae.contentbeans.CMActionImpl" scope="prototype"/>
   <bean name="contentBeanFactory:CMPlaceholder" parent="abstractTeasable-blueprint-doctypes"

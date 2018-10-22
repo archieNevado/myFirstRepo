@@ -30,7 +30,7 @@ const init = (logLevel = "warn") => {
 
     const HOST = `${config.host}:${config.port}`;
 
-    log.debug(`Initializing LiveReload server on ${HOST}...`);
+    log.debug(`Initializing LiveReload server on ${HOST}.`);
 
     if (servers[HOST]) {
       server = servers[HOST];
@@ -70,7 +70,7 @@ const trigger = (files = [""]) => {
     log.error(`LiveReload server has not been started.`);
     return;
   }
-  log.debug(`Live reloading ${files.join(", ")}...`);
+  log.debug(`Live reloading ${files.join(", ")}.`);
   server.changed({ body: { files: files } });
 };
 

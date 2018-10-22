@@ -44,6 +44,14 @@
     <property name="navigationViewName" value="asNavigation"/>
   </bean>
 
+
+  <bean id="cmSearchFragmentHandler" class="com.coremedia.livecontext.fragment.CMSearchFragmentHandler"
+        parent="fragmentHandler">
+    <property name="settingsService" ref="settingsService"/>
+    <property name="searchService" ref="searchActionService"/>
+    <property name="minimalSearchQueryLength" value="3"/>
+  </bean>
+
   <bean id="productFragmentHandler" class="com.coremedia.livecontext.fragment.ProductFragmentHandler"
         parent="fragmentHandler">
     <property name="contextStrategy" ref="resolveLivecontextContextStrategy"/>
@@ -65,6 +73,7 @@
 
   <util:list id="fragmentHandlers" value-type="com.coremedia.livecontext.fragment.FragmentHandler">
     <description>This list contains all handlers that are used for fragment calls.</description>
+    <ref bean="cmSearchFragmentHandler" />
     <ref bean="externalRefFragmentHandler" />
     <ref bean="externalPageFragmentHandler" />
     <ref bean="productFragmentHandler" />

@@ -219,6 +219,9 @@ public class CMProductListImpl extends CMQueryListImpl implements CMProductList 
                                               String orderBy, int limit, int offset, String facet) {
     Map<String, String> params = new HashMap<>();
 
+    //if necessary use the api which supports the facet search
+    params.put(CatalogService.SEARCH_PARAM_FACET_SUPPORT, "true");
+
     if (!StringUtils.isEmpty(overrideCategoryId)) {
       params.put(CatalogService.SEARCH_PARAM_CATEGORYID, overrideCategoryId);
     } else if (category != null && !category.isRoot()) {

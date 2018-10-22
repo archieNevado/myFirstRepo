@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.handler.util;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
-import com.coremedia.blueprint.base.multisite.SiteResolver;
+import com.coremedia.blueprint.base.multisite.cae.SiteResolver;
 import com.coremedia.cap.common.CapObjectDestroyedException;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SiteDestroyedException;
@@ -10,12 +10,12 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.fragment.FragmentParameters;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
@@ -36,20 +36,20 @@ public class LiveContextSiteResolverImpl implements LiveContextSiteResolver {
   private SitesService sitesService;
   private CommerceConnectionInitializer commerceConnectionInitializer;
 
-  @Nullable
+  @NonNull
   @Override
-  public Site findSiteFor(@NonNull FragmentParameters fragmentParameters) {
-    Site site = findSiteForEnvironment(fragmentParameters.getLocale(), fragmentParameters.getEnvironment());
-    if (site != null) {
+  public Optional<Site> findSiteFor(@NonNull FragmentParameters fragmentParameters) {
+    Optional<Site> site = findSiteForEnvironment(fragmentParameters.getLocale(), fragmentParameters.getEnvironment());
+    if (site.isPresent()) {
       return site;
     }
 
     return findSiteFor(fragmentParameters.getStoreId(), fragmentParameters.getLocale());
   }
 
-  @Nullable
+  @NonNull
   @Override
-  public Site findSiteFor(@NonNull String storeId, @NonNull Locale locale) {
+  public Optional<Site> findSiteFor(@NonNull String storeId, @NonNull Locale locale) {
     Set<Site> matchingSites = sitesService.getSites().stream()
             .filter(site -> localeMatchesSite(site, locale))
             .filter(site -> siteHasStore(site, storeId))
@@ -63,12 +63,12 @@ public class LiveContextSiteResolverImpl implements LiveContextSiteResolver {
 
     if (matchingSitesCount == 0) {
       LOG.warn("No site found with store.id={} and locale={}", storeId, locale);
-      return null;
+      return Optional.empty();
     }
 
     Site site = matchingSites.iterator().next();
     LOG.debug("Found site {}({}) for store.id={} and locale={}", site.getName(), site.getLocale(), storeId, locale);
-    return site;
+    return Optional.of(site);
   }
 
   // --- internal ---------------------------------------------------
@@ -106,21 +106,20 @@ public class LiveContextSiteResolverImpl implements LiveContextSiteResolver {
    * @param environment The name of the environment which contains the site name to use.
    * @return The site that was resolved by the environment (name matching by default).
    */
-  @Nullable
-  private Site findSiteForEnvironment(@NonNull Locale locale, @Nullable String environment) {
+  @NonNull
+  private Optional<Site> findSiteForEnvironment(@NonNull Locale locale, @Nullable String environment) {
     if (environment == null) {
-      return null;
+      return Optional.empty();
     }
 
     String siteName = extractSiteNameFromEnvironment(environment);
     if (siteName == null) {
-      return null;
+      return Optional.empty();
     }
 
     return sitesService.getSites().stream()
             .filter(matchesNameAndLocale(siteName, locale))
-            .findFirst()
-            .orElse(null);
+            .findFirst();
   }
 
   private static Predicate<Site> matchesNameAndLocale(String siteName, Locale locale) {
