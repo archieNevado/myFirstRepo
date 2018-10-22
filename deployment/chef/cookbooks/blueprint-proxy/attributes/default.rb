@@ -21,8 +21,8 @@ default['blueprint']['proxy']['virtual_host']['sitemanager']['host'] = node['blu
 default['blueprint']['proxy']['virtual_host']['sitemanager']['port'] = '41380'
 default['blueprint']['proxy']['virtual_host']['sitemanager']['context'] = 'editor-webstart'
 default['blueprint']['proxy']['virtual_host']['sitemanager']['server_name'] = "sitemanager.#{node['blueprint']['hostname']}"
-default['blueprint']['proxy']['virtual_host']['sitemanager']['cms_ior_url'] = "http://#{node['blueprint']['proxy']['cms_host']}:41080/coremedia/ior"
-default['blueprint']['proxy']['virtual_host']['sitemanager']['wfs_ior_url'] = "http://#{node['blueprint']['proxy']['cms_host']}:43080/workflow/ior"
+default['blueprint']['proxy']['virtual_host']['sitemanager']['cms_ior_url'] = "http://#{node['blueprint']['proxy']['cms_host']}:40180/coremedia/ior"
+default['blueprint']['proxy']['virtual_host']['sitemanager']['wfs_ior_url'] = "http://#{node['blueprint']['proxy']['cms_host']}:40380/workflow/ior"
 default['blueprint']['proxy']['virtual_host']['sitemanager']['rewrite_log_level'] = 'trace1'
 
 #<> cors is now handled by the application, no more apache related config needed

@@ -8,7 +8,7 @@
 
 <#-- add css class active, if this item is the actual page -->
 <#if (self == cmpage.content)>
-  <#assign cssClass= cssClass + ' active'/>
+  <#assign cssClass= cssClass + " cm-navigation-item--active"/>
 </#if>
 
 <li class="${cssClass} cm-navigation-item cm-navigation-item-depth-${depth}" <@preview.metadata collectionProperty!["properties.children"]/>>

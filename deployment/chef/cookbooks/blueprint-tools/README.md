@@ -45,12 +45,12 @@ the `coremedia-application-maven-plugin` based on the `application-runtime` arti
 * `node['blueprint']['tools']['workflow-server']['dir']` -  Defaults to `#{node['blueprint']['base_dir']}/workflow-server-tools`.
 * `node['blueprint']['tools']['workflow-server']['property_files']['capclient.properties']` -  Defaults to `node['blueprint']['tools']['content-management-server']['property_files']['capclient.properties']`.
 * `node['blueprint']['tools']['caefeeder-preview']['dir']` -  Defaults to `#{node['blueprint']['base_dir']}/caefeeder-preview-tools`.
-* `node['blueprint']['tools']['caefeeder-preview']['property_files']['resetcaefeeder.properties']['jdbc.driver']` -  Defaults to `com.mysql.jdbc.Driver`.
+* `node['blueprint']['tools']['caefeeder-preview']['property_files']['resetcaefeeder.properties']['jdbc.driver']` -  Defaults to `com.mysql.cj.jdbc.Driver`.
 * `node['blueprint']['tools']['caefeeder-preview']['property_files']['resetcaefeeder.properties']['jdbc.url']` -  Defaults to `jdbc:mysql://localhost:3306/cm_mcaefeeder`.
 * `node['blueprint']['tools']['caefeeder-preview']['property_files']['resetcaefeeder.properties']['jdbc.user']` -  Defaults to `cm_mcaefeeder`.
 * `node['blueprint']['tools']['caefeeder-preview']['property_files']['resetcaefeeder.properties']['jdbc.password']` -  Defaults to `cm_mcaefeeder`.
 * `node['blueprint']['tools']['caefeeder-live']['dir']` -  Defaults to `#{node['blueprint']['base_dir']}/caefeeder-live-tools`.
-* `node['blueprint']['tools']['caefeeder-live']['property_files']['resetcaefeeder.properties']['jdbc.driver']` -  Defaults to `com.mysql.jdbc.Driver`.
+* `node['blueprint']['tools']['caefeeder-live']['property_files']['resetcaefeeder.properties']['jdbc.driver']` -  Defaults to `com.mysql.cj.jdbc.Driver`.
 * `node['blueprint']['tools']['caefeeder-live']['property_files']['resetcaefeeder.properties']['jdbc.url']` -  Defaults to `jdbc:mysql://localhost:3306/cm_caefeeder`.
 * `node['blueprint']['tools']['caefeeder-live']['property_files']['resetcaefeeder.properties']['jdbc.user']` -  Defaults to `cm_caefeeder`.
 * `node['blueprint']['tools']['caefeeder-live']['property_files']['resetcaefeeder.properties']['jdbc.password']` -  Defaults to `cm_caefeeder`.

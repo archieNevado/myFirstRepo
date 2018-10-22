@@ -11,10 +11,6 @@
 
   <description>The Analytics Plugin for the CoreMedia Studio</description>
 
-  <properties>
-    <coremedia.project.extension.for>studio</coremedia.project.extension.for>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>com.coremedia.ui.toolkit</groupId>

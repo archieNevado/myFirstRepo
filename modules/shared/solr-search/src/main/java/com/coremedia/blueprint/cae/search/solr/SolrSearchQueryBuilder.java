@@ -5,13 +5,19 @@ import com.coremedia.blueprint.cae.search.SearchConstants;
 import com.coremedia.blueprint.cae.search.SearchFilterProvider;
 import com.coremedia.blueprint.cae.search.SearchQueryBean;
 import com.coremedia.blueprint.cae.search.Value;
+import com.coremedia.blueprint.cae.search.facet.FacetFilters;
+import com.google.common.collect.ImmutableMap;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.util.ClientUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.solr.client.solrj.SolrQuery;
 import org.springframework.util.StringUtils;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * The default {@link SolrQueryBuilder} implementation.
@@ -128,17 +134,26 @@ public class SolrSearchQueryBuilder implements SolrQueryBuilder {
 
   protected static void setSortFields(SolrQuery solrQuery, List<String> sortFields) {
     for (String sortField : sortFields) {
-      String[] s = sortField.trim().split(" ");
-      if (s.length == 1 || s.length == 2) {
-        SolrQuery.ORDER order = SolrQuery.ORDER.desc;
-        if (s.length == 2 && s[1].equalsIgnoreCase(SORT_ORDER_ASC)) {
-          order = SolrQuery.ORDER.asc;
-        }
-        solrQuery.addSort(new SolrQuery.SortClause(s[0], order));
-      } else {
-        LOG.warn("Unexpected sort field value " + sortField);
-      }
+      solrQuery.addSort(newSortClause(sortField));
     }
+  }
+
+  private static SolrQuery.SortClause newSortClause(String sortSpec) {
+    sortSpec = sortSpec.trim();
+
+    if (sortSpec.length() > SORT_ORDER_ASC.length() + 1 &&
+        sortSpec.substring(sortSpec.length() - SORT_ORDER_ASC.length() - 1).equalsIgnoreCase(' ' + SORT_ORDER_ASC)) {
+      String sort = sortSpec.substring(0, sortSpec.length() - SORT_ORDER_ASC.length() - 1).trim();
+      return new SolrQuery.SortClause(sort, SolrQuery.ORDER.asc);
+    }
+    if (sortSpec.length() > SORT_ORDER_DESC.length() + 1 &&
+        sortSpec.substring(sortSpec.length() - SORT_ORDER_DESC.length() - 1).equalsIgnoreCase(' ' + SORT_ORDER_DESC)) {
+      String sort = sortSpec.substring(0, sortSpec.length() - SORT_ORDER_DESC.length() - 1).trim();
+      return new SolrQuery.SortClause(sort, SolrQuery.ORDER.desc);
+    }
+
+    // default order is descending
+    return new SolrQuery.SortClause(sortSpec, SolrQuery.ORDER.desc);
   }
 
   protected static void setQuery(SolrQuery solrQuery, String query) {
@@ -146,15 +161,43 @@ public class SolrSearchQueryBuilder implements SolrQueryBuilder {
   }
 
   protected static void setFacets(SearchQueryBean input, SolrQuery q) {
-    if (input.getFacetFields().size() > 0) {
+    Map<String, String> facetFields = input.getFacetFieldsMap();
+    if (!facetFields.isEmpty()) {
       q.setFacet(true);
-      // add fields
-      for (String facet : input.getFacetFields()) {
-        q.addFacetField(facet);
+
+      Map<String, List<String>> filterValuesByFacetKey = FacetFilters.parse(input.getFacetFilters());
+
+      // Request faceting on fields. On the fly, add currently enabled filters for facet values
+      int tagId = 0;
+      for (Map.Entry<String, String> facet : facetFields.entrySet()) {
+        String facetKey = facet.getKey();
+        String facetField = facet.getValue();
+        Map<String, String> facetFieldLocalParams = new HashMap<>();
+
+        // Set active filters and exclude them from faceting, facet results are returned as if the filter wasn't set
+        List<String> filterValues = filterValuesByFacetKey.get(facetKey);
+        if (filterValues != null && !filterValues.isEmpty()) {
+          String filter = filterValues.stream()
+            .map(ClientUtils::escapeQueryChars)
+            .collect(Collectors.joining(SolrQueryBuilder.OR, "(", ")"));
+
+          String tag = "f" + tagId++;
+          String filterLocalParams = SolrSearchFormatHelper.formatLocalParameters(ImmutableMap.of("tag", tag));
+          String fq = String.format("%s%s:%s", filterLocalParams, ClientUtils.escapeQueryChars(facetField), filter);
+          q.addFilterQuery(fq);
+          facetFieldLocalParams.put("ex", tag);
+        }
+
+        if (!facetKey.equals(facetField)) {
+          facetFieldLocalParams.put("key", facetKey);
+        }
+        q.addFacetField(SolrSearchFormatHelper.formatLocalParameters(facetFieldLocalParams) + facetField);
       }
+
       // add prefix
-      if (input.getFacetPrefix() != null) {
-        q.setFacetPrefix(input.getFacetPrefix());
+      String facetPrefix = input.getFacetPrefix();
+      if (facetPrefix != null && !facetPrefix.isEmpty()) {
+        q.setFacetPrefix(facetPrefix);
       }
       if (input.getFacetMinCount() > 0) {
         q.setFacetMinCount(input.getFacetMinCount());

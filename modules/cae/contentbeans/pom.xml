@@ -37,6 +37,11 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
+      <artifactId>bpbase-links-impl</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-uapi-util</artifactId>
     </dependency>
     <dependency>
@@ -118,6 +123,10 @@
       <scope>runtime</scope>
     </dependency>
 
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>coremedia-personal-data</artifactId>
+    </dependency>
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>coremedia-spring</artifactId>
@@ -239,11 +248,6 @@
       <artifactId>commons-lang3</artifactId>
     </dependency>
     <dependency>
-      <groupId>commons-collections</groupId>
-      <artifactId>commons-collections</artifactId>
-    </dependency>
-
-    <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>coremedia-xml</artifactId>
     </dependency>
@@ -264,23 +268,5 @@
       <artifactId>spring-web</artifactId>
     </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <!--
-        The dependency-plugin does not detect used dependencies if only constant fields are used.
-        So define the used dependencies explicitly.
-      -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <configuration>
-          <usedDependencies>
-            <usedDependency>com.coremedia.blueprint.base:bpbase-cae-api</usedDependency>
-          </usedDependencies>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 
 </project>

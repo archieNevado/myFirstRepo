@@ -6,7 +6,7 @@
 <@cm.include self=self view="_additionalHead" />
 
 <#-- add preview metadata -->
-<#if cm.isPreviewCae()>
+<#if preview.isPreviewCae()>
   <#assign sliderMetadata=bp.setting(cmpage, "sliderMetaData", "")/>
   <#assign previewMetadata = previewFacade.metadata(lc.previewMetaData())>
   <#assign sliderMetadata = previewFacade.metadata(sliderMetadata)>

@@ -1,10 +1,10 @@
 package com.coremedia.blueprint.cae.sitemap;
 
+import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.common.util.Predicate;
-import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.links.LinkFormatter;
 import org.apache.commons.lang3.StringUtils;
@@ -179,7 +179,7 @@ public class ContentUrlGenerator implements SitemapUrlGenerator {
    */
   protected String createLink(Content content, HttpServletRequest request, HttpServletResponse response, boolean absoluteUrls) {
     try {
-      ContentBean bean = contentBeanFactory.createBeanFor(content);
+      CMObject bean = contentBeanFactory.createBeanFor(content, CMObject.class);
       if (validationService.validate(bean)) {
         request.setAttribute(ABSOLUTE_URI_KEY, absoluteUrls);
         return linkFormatter.formatLink(bean, null, request, response, false);

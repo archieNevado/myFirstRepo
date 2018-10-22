@@ -1,8 +1,10 @@
 package com.coremedia.blueprint.elastic.social.contentbeans;
 
-import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.base.elastic.common.AggregationType;
+import com.coremedia.blueprint.common.contentbeans.CMChannel;
+import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.cap.common.NoSuchPropertyDescriptorException;
+import com.coremedia.cap.content.Content;
 import com.coremedia.elastic.core.api.counters.AverageCounter;
 import com.coremedia.elastic.core.api.counters.Counter;
 import com.coremedia.elastic.core.api.counters.Interval;
@@ -12,17 +14,14 @@ import com.coremedia.elastic.social.api.ratings.LikeService;
 import com.coremedia.elastic.social.api.ratings.RatingService;
 import com.coremedia.elastic.social.api.ratings.ShareService;
 import com.coremedia.elastic.social.api.reviews.ReviewService;
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static com.coremedia.blueprint.base.elastic.common.AggregationType.MOST_COMMENTED;
 import static com.coremedia.blueprint.base.elastic.common.AggregationType.MOST_LIKED;
@@ -32,8 +31,6 @@ import static com.coremedia.blueprint.base.elastic.common.AggregationType.MOST_S
 import static com.coremedia.blueprint.base.elastic.common.AggregationType.TOP_RATED;
 import static com.coremedia.blueprint.base.elastic.common.AggregationType.TOP_REVIEWED;
 import static com.coremedia.elastic.core.api.counters.Interval.INFINITY;
-import static com.google.common.collect.ImmutableList.copyOf;
-import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.emptyList;
 
 /**
@@ -115,23 +112,20 @@ public class ESDynamicListImpl extends ESDynamicListBase {
 
   @Override
   protected List<Count> filterItems(List<Count> itemsUnfiltered) {
-    final ArrayList<Count> filtered = newArrayList(Iterables.filter(itemsUnfiltered, new Predicate<Count>() {
-      @Override
-      public boolean apply(@Nullable Count input) {
-        if (input != null) {
-          final Object target = input.getTarget();
-          for (CountTargetPredicate countTargetPredicate : countTargetPredicates) {
-            if (countTargetPredicate.getType().isInstance(target)) {
-              //noinspection unchecked
-              if (!countTargetPredicate.apply(target)) {
-                return false;
-              }
+    List<Count> filtered = itemsUnfiltered.stream().filter(input -> {
+      if (input != null) {
+        final Object target = input.getTarget();
+        for (CountTargetPredicate countTargetPredicate : countTargetPredicates) {
+          if (countTargetPredicate.getType().isInstance(target)) {
+            //noinspection unchecked
+            if (!countTargetPredicate.apply(target)) {
+              return false;
             }
           }
         }
-        return true;
       }
-    }));
+      return true;
+    }).collect(Collectors.toList());
     LOG.debug("filtered count items {}: {}", itemsUnfiltered, filtered);
     return filtered;
   }
@@ -192,21 +186,17 @@ public class ESDynamicListImpl extends ESDynamicListBase {
 
   private List<Count> transformTargets(List<Count> itemsUntransformed) {
     // transform targets if necessary and make sure there are no null values
-    return copyOf(Iterables.filter(Lists.transform(itemsUntransformed, new Function<Count, Count>() {
-      @Nullable
-      @Override
-      public Count apply(@Nullable Count count) {
-        if (null != count) {
-          Object target = count.getTarget();
-          // we need to have ContentBeans not ContentWithSite, transform it
-          // this manual transformation in this class is not elegant and should change in the future
-          if (target instanceof ContentWithSite) {
-            target = getContentBeanFactory().createBeanFor(((ContentWithSite) target).getContent());
-          }
-          return new Count(count, target);
+    return itemsUntransformed.stream()
+      .filter(Objects::nonNull)
+      .map(count -> {
+        Object target = count.getTarget();
+        // we need to have ContentBeans not ContentWithSite, transform it
+        // this manual transformation in this class is not elegant and should change in the future
+        if (target instanceof ContentWithSite) {
+          Content content = ((ContentWithSite) target).getContent();
+          target = getContentBeanFactory().createBeanFor(content, CMObject.class);
         }
-        return null;
-      }
-    }), Predicates.<Count>notNull()));
+        return new Count(count, target);
+      }).collect(ImmutableList.toImmutableList());
   }
 }

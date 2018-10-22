@@ -9,5 +9,6 @@ service_name = 'workflow-server'
 # use default_unless to allow configuration in recipes run prior to this one
 node.default_unless['blueprint']['webapps'][service_name]['application.properties']['cap.client.server.ior.url'] = "#{cm_webapp_url('content-management-server')}/ior"
 node.default_unless['blueprint']['webapps'][service_name]['application.properties']['workflow.server.ORBServerHost'] = node['blueprint']['hostname']
+node.default_unless['blueprint']['webapps'][service_name]['application.properties']['workflow.server.ORBServerPort'] = "#{node['blueprint']['tomcat'][service_name]['port_prefix']}83"
 
 blueprint_tomcat_service service_name

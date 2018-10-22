@@ -116,10 +116,10 @@ public class ValidityPeriodValidator extends AbstractValidator<ValidityPeriod> i
   @NonNull
   private static Calendar getPreviewDate() {
     //is previewDate stored in the request attributes?
-    Calendar previewDateFromReqAttr = ContextAttributes
-            .getRequestAttribute(REQUEST_ATTRIBUTE_PREVIEW_DATE, Calendar.class);
-    if (previewDateFromReqAttr != null) {
-      return previewDateFromReqAttr;
+    Optional<Calendar> previewDateFromReqAttr = ContextAttributes
+            .findRequestAttribute(REQUEST_ATTRIBUTE_PREVIEW_DATE, Calendar.class);
+    if (previewDateFromReqAttr.isPresent()) {
+      return previewDateFromReqAttr.get();
     }
 
     //if not stored in the request attributes
@@ -134,7 +134,7 @@ public class ValidityPeriodValidator extends AbstractValidator<ValidityPeriod> i
 
   @NonNull
   private static Calendar getPreviewDateFromRequestParameter() {
-    String previewDateText = ContextAttributes.getRequestParameter(REQUEST_PARAMETER_PREVIEW_DATE);
+    String previewDateText = ContextAttributes.findRequestParameter(REQUEST_PARAMETER_PREVIEW_DATE).orElse(null);
     return parsePreviewDateFromRequestParameter(previewDateText)
             .orElseGet(Calendar::getInstance);
   }

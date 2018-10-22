@@ -9,10 +9,9 @@
                                     title="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'text')}"
                                     id_="createFromTemplate"
                                     resizable="true"
-                                    stateId="createFromTemplateDialogState"
                                     stateful="true"
+                                    stateId="createFromTemplateDialogState"
                                     resizeHandles="e"
-                                    minHeight="600"
                                     minWidth="401"
                                     width="401"
                                     x="113"
@@ -28,6 +27,7 @@
     import com.coremedia.blueprint.studio.template.model.ProcessingData;
     import com.coremedia.ui.data.ValueExpressionFactory;
     import com.coremedia.ui.skins.ButtonSkin;
+    import com.coremedia.ui.skins.LabelableSkin;
     import com.coremedia.ui.skins.WindowSkin;
 
     public static const xtype:String = "com.coremedia.blueprint.studio.template.config.createFromTemplateDialog";
@@ -41,27 +41,47 @@
     <Panel itemId="{EDITOR_CONTAINER_ITEM_ID}"
            scrollable="y">
       <items>
-        <ui:StatefulTextField name="{ProcessingData.NAME_PROPERTY}"
-                              itemId="{NAME_FIELD_ID}"
-                              emptyText="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'name_empty_text')}"
-                              fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'name_label')}"
-                              checkChangeBuffer="500">
-          <ui:plugins>
-            <ui:BindPropertyPlugin bidirectional="true">
-              <ui:bindTo>
-                <ui:ValueExpression context="{getModel()}"
-                                    expression="{ProcessingData.NAME_PROPERTY}"/>
-              </ui:bindTo>
-            </ui:BindPropertyPlugin>
-            <ui:BlockEnterPlugin/>
-          </ui:plugins>
-        </ui:StatefulTextField>
-        <bpb-components:NavigationLinkFieldWrapper label="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'parent_label')}"
-                                                   doctype="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'doctype')}"
-                                                   model="{getModel()}"
-                                                   labelAlign="top"
-                                                   itemId="{PARENT_PAGE_FIELD_ID}"
-                                                   propertyName="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'parent_property')}"/>
+        <FieldContainer fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'name_label')}">
+          <items>
+            <ui:AdvancedFieldContainer ui="{LabelableSkin.PLAIN_LABEL.getSkin()}" anchor="100%"
+                                       labelAlign="top"
+                                       labelSeparator=""
+                                       fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'name_text')}"
+                                       hideLabel="false">
+              <ui:items>
+                <ui:StatefulTextField name="{ProcessingData.NAME_PROPERTY}" anchor="100%"
+                                      itemId="{NAME_FIELD_ID}"
+                                      allowBlank="false"
+                                      emptyText="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'name_empty_text')}"
+                                      checkChangeBuffer="500">
+                  <ui:plugins>
+                    <ui:BindPropertyPlugin bidirectional="true">
+                      <ui:bindTo>
+                        <ui:ValueExpression context="{getModel()}"
+                                            expression="{ProcessingData.NAME_PROPERTY}"/>
+                      </ui:bindTo>
+                    </ui:BindPropertyPlugin>
+                    <ui:BlockEnterPlugin/>
+                  </ui:plugins>
+                </ui:StatefulTextField>
+              </ui:items>
+              <ui:layout>
+                <layout_Anchor/>
+              </ui:layout>
+            </ui:AdvancedFieldContainer>
+          </items>
+          <layout>
+            <layout_Anchor/>
+          </layout>
+        </FieldContainer>
+
+        <bpb-components:NavigationLinkFieldWrapper
+                label="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'parent_label')}"
+                doctype="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'doctype')}"
+                model="{getModel()}"
+                labelAlign="top"
+                itemId="{PARENT_PAGE_FIELD_ID}"
+                propertyName="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'parent_property')}"/>
 
         <FieldContainer
                 fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'choose_template_text')}">
@@ -76,19 +96,26 @@
             <layout_Anchor/>
           </layout>
         </FieldContainer>
-
-        <editor:FolderCombo labelSeparator=""
-                            bindTo="{ValueExpressionFactory.create(ProcessingData.FOLDER_PROPERTY, getModel())}"
-                            itemId="{PAGE_FOLDER_COMBO_ID}"
-                            fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'channel_folder_text')}"
-                            contentType="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'doctype')}"
-                            folderPathsExpression="{ValueExpressionFactory.createFromFunction(getNavigationFolders)}"/>
-        <editor:FolderCombo labelSeparator=""
-                            bindTo="{ValueExpressionFactory.create(resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'editorial_folder_property'), getModel())}"
-                            itemId="{EDITORIAL_FOLDER_COMBO_ID}"
-                            fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'editorial_folder_text')}"
-                            contentType="CMArticle"
-                            folderPathsExpression="{ValueExpressionFactory.createFromFunction(getEditorialFolders)}"/>
+        <FieldContainer>
+          <items>
+            <editor:FolderChooserListView
+                    bindTo="{getFolderValueExpression()}"
+                    title="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'channel_folder_text')}"
+                    itemId="{BASE_FOLDER_CHOOSER_ID}"
+                    contentTypeToCreate="{getContentType(resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'doctype'))}"
+                    folderPathsExpression="{ValueExpressionFactory.createFromFunction(getNavigationFolders)}"/>
+          </items>
+        </FieldContainer>
+        <FieldContainer>
+          <items>
+            <editor:FolderChooserListView
+                    title="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'editorial_folder_text')}"
+                    bindTo="{getEditorialFolderValueExpression()}"
+                    itemId="{CONTENT_BASE_FOLDER_CHOOSER_ID}"
+                    contentTypeToCreate="{getContentType('CMArticle')}"
+                    folderPathsExpression="{ValueExpressionFactory.createFromFunction(getEditorialFolders)}"/>
+          </items>
+        </FieldContainer>
       </items>
       <layout>
         <layout_VBox align="stretch"/>
@@ -113,7 +140,7 @@
             handler="{handleSubmit}">
       <plugins>
         <ui:BindPropertyPlugin componentProperty="disabled"
-                               bindTo="{getDisabledExpression()}"/>
+                               bindTo="{getDisabledValueExpression()}"/>
       </plugins>
     </Button>
     <Button itemId="cancelBtn"

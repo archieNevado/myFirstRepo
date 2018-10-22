@@ -5,7 +5,7 @@
 <#import "../../freemarkerLibs/heroTeaser.ftl" as heroTeaser />
 
 <#assign renderTeaserText=cm.localParameters().renderTeaserText!true />
-<#assign heroBlockClass=cm.localParameters().heroBlockClass!"cm-teasable" />
+<#assign heroBlockClass=cm.localParameters().heroBlockClass!"cm-hero" />
 
 <#assign link=(cm.localParameters().renderLink!true)?then(cm.getLink(self.productInSite!cm.UNDEFINED), "") />
 

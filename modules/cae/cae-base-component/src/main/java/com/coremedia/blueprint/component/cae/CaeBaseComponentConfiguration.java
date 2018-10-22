@@ -1,16 +1,15 @@
 package com.coremedia.blueprint.component.cae;
 
-import com.coremedia.blueprint.base.multisite.SiteResolver;
+import com.coremedia.blueprint.base.multisite.cae.SiteResolver;
 import com.coremedia.blueprint.cae.filter.SecurityHeadersFilter;
 import com.coremedia.blueprint.cae.filter.SiteFilter;
 import com.coremedia.blueprint.cae.filter.UnknownMimetypeCharacterEncodingFilter;
-import com.coremedia.springframework.web.RegistrationBeanBuilder;
+import com.coremedia.springframework.boot.web.servlet.RegistrationBeanBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
-import org.springframework.mobile.device.DeviceResolverRequestFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import javax.servlet.Filter;
@@ -33,18 +32,6 @@ public class CaeBaseComponentConfiguration {
   public FilterRegistrationBean characterEncodingFilterRegistration(Filter characterEncodingFilter) {
     return RegistrationBeanBuilder.forFilter(characterEncodingFilter)
             .order(Ordered.HIGHEST_PRECEDENCE)
-            .build();
-  }
-
-  @Bean
-  public Filter deviceResolverRequestFilter() {
-    return new DeviceResolverRequestFilter();
-  }
-
-  @Bean
-  public FilterRegistrationBean deviceResolverRequestFilterRegistration(Filter deviceResolverRequestFilter) {
-    return RegistrationBeanBuilder.forFilter(deviceResolverRequestFilter)
-            .order(Ordered.HIGHEST_PRECEDENCE + 10)
             .build();
   }
 

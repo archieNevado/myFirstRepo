@@ -334,6 +334,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
       "request": { "uri": "livecontext/category/HeliosSiteId/catalog/NO_WS/ROOT", "method": "GET"},
       "response": { "body": {
         "id": "ibm:///catalog/category/ROOT",
+        "externalId": "ROOT",
         "store": {"$Ref": "livecontext/store/HeliosSiteId/NO_WS"},
         "storeId": "10851",
         "children": [

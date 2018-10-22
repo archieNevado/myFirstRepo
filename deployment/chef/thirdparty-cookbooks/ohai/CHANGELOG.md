@@ -2,6 +2,14 @@
 
 This file is used to list changes made in each version of the ohai cookbook.
 
+## 5.2.5 (2018-09-04)
+
+- Add note that ohai_hint will be removed April 2019 when Chef 13 goes EOL as this resource now ships in Chef 14+
+
+## 5.2.4 (2018-08-28)
+
+- Avoid deprecation warnings in Chef 14.3+ by not loading resources already in Chef
+
 ## 5.2.3 (2018-06-08)
 
 - Make sure we properly compare a provided plugin path to the path on disk by stripping trailing slashes from the provided directory

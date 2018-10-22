@@ -19,6 +19,11 @@ public class CatalogRepositoryListBase extends AbstractCatalogList {
   private var selectedNodeExpression:ValueExpression;
   private var sortInfo:Object = {};
 
+  /**
+   * When a user opens a context menu on a TablePanel, an object with the properties rowIndex, columnIndex,
+   * record and columnDateIndex about the clicked table cell is written to the value expression.
+   */
+  private var lastClickedCellVE:ValueExpression;
 
   public function CatalogRepositoryListBase(config:CatalogRepositoryList = null) {
     super(config);
@@ -103,5 +108,11 @@ public class CatalogRepositoryListBase extends AbstractCatalogList {
     });
   }
 
+  internal function getLastClickedCellVE():ValueExpression {
+    if(!lastClickedCellVE){
+      lastClickedCellVE = ValueExpressionFactory.createFromValue();
+    }
+    return lastClickedCellVE;
+  }
 }
 }

@@ -18,7 +18,7 @@
   <#if children?has_content>
     <#-- add css class active, if this item is part of the active navigation -->
     <#if (bp.isActiveNavigation(self, (cmpage.navigation.navigationPathList)![]) || (children?seq_contains(cmpage.content)))>
-      <#assign cssClass= cssClass + ' active'/>
+      <#assign cssClass= cssClass + " cm-navigation-item--active"/>
     </#if>
 
     <li class="${cssClass} cm-navigation-item dropdown cm-navigation-item-depth-${depth} dropdown" <@preview.metadata ["properties.children", contentData]/>>
@@ -39,7 +39,7 @@
   <#else>
     <#-- add css class active, if this item is part of the active navigation -->
     <#if (bp.isActiveNavigation(self, (cmpage.navigation.navigationPathList)![]))>
-      <#assign cssClass= cssClass + ' active'/>
+      <#assign cssClass= cssClass + " cm-navigation-item--active"/>
     </#if>
 
     <li class="${cssClass} cm-navigation-item cm-navigation-item-depth-${depth}" <@preview.metadata ["properties.children", contentData]/>>

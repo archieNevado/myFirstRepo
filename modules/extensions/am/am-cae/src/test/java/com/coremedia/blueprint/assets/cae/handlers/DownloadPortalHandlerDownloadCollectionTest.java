@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.assets.cae.handlers;
 
 import com.coremedia.blueprint.assets.cae.DownloadPortalFactory;
+import com.coremedia.blueprint.assets.contentbeans.AMAsset;
 import com.coremedia.blueprint.assets.contentbeans.AMAssetImpl;
 import com.coremedia.blueprint.assets.contentbeans.AMAssetRendition;
 import com.coremedia.cap.content.Content;
@@ -43,7 +44,7 @@ public class DownloadPortalHandlerDownloadCollectionTest {
   public static final int ASSET_CONTENT_ID_DESTROYED = 60004;
 
   @InjectMocks
-  private DownloadPortalHandler handler = new DownloadPortalHandler();
+  private DownloadPortalHandler handler;
 
   private MockHttpServletResponse response;
 
@@ -103,7 +104,7 @@ public class DownloadPortalHandlerDownloadCollectionTest {
 
     renditions = new ArrayList<>();
     renditions.add(rendition);
-    when(contentBeanFactory.createBeanFor(eq(assetContent))).thenReturn(asset);
+    when(contentBeanFactory.createBeanFor(assetContent, AMAsset.class)).thenReturn(asset);
     when(asset.getPublishedRenditions()).thenReturn(renditions);
   }
 

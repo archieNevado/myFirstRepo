@@ -30,12 +30,14 @@ if node.deep_fetch('blueprint', 'jaas', 'crowd', 'enabled')
   crowd_config = node['blueprint']['webapps'][service_name]['application.properties']['cap.server.ldap.1.properties']
   jaas_conf = { crowd: { config_file: crowd_config, domain: 'crowd' } }
 elsif node.deep_fetch('blueprint', 'jaas', 'ldap', 'enabled')
-  node.override['blueprint']['webapps'][service_name]['application.properties']['cap.server.ldap.1.class'] = ''
-  node.override['blueprint']['webapps'][service_name]['application.properties']['cap.server.ldap.1.properties'] = ''
+  # if ldap, set defaults if none are set. To override the following two properties in your node.json file
+  node.default_unless['blueprint']['webapps'][service_name]['application.properties']['cap.server.ldap.1.class'] = 'com.coremedia.ldap.ad.ActiveDirectoryUserProvider'
+  node.default_unless['blueprint']['webapps'][service_name]['application.properties']['cap.server.ldap.1.properties'] = "#{service_dir}/jndi-ad.properties"
   jaas_conf = { ldap: { host: node['blueprint']['jaas']['ldap']['host'], port: node['blueprint']['jaas']['ldap']['port'], domain: node['blueprint']['jaas']['ldap']['domain'] } }
 elsif node.deep_fetch('blueprint', 'jaas', 'cas', 'enabled')
-  node.override['blueprint']['webapps'][service_name]['application.properties']['cap.server.ldap.1.class'] = ''
-  node.override['blueprint']['webapps'][service_name]['application.properties']['cap.server.ldap.1.properties'] = ''
+  # if cas, override the following two properties in your node.json file
+  node.default_unless['blueprint']['webapps'][service_name]['application.properties']['cap.server.ldap.1.class'] = ''
+  node.default_unless['blueprint']['webapps'][service_name]['application.properties']['cap.server.ldap.1.properties'] = ''
   jaas_conf = { cas: { validator_url: node['blueprint']['jaas']['cas']['validator_url'], cap_service_url: node['blueprint']['jaas']['cas']['cap_service_url'] } }
 else
   # disable any of the above

@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -140,19 +141,30 @@ public class DefaultPageHandlerTest extends PageHandlerBaseTest<DefaultPageHandl
   @Test
   public void buildLinkForTaxonomyNoTopicPageChannelFound() {
     when(contextHelper.contextFor(defaultTaxonomy)).thenReturn(null);
-    assertNull(testling.buildLinkForTaxonomyInternal(defaultTaxonomy, null, Collections.<String, Object>emptyMap()));
+
+    UriComponentsBuilder result = testling.buildLinkForTaxonomyInternal(defaultTaxonomy, null, emptyMap())
+            .orElse(null);
+
+    assertNull(result);
   }
 
   @Test
   public void buildLinkForTaxonomyNoTopicPageSegment() {
-    when(topicpageContextFinder.findDefaultTopicpageChannelFor(defaultTaxonomyContent, defaultNavigationContent)).thenReturn(null);
-    assertNull(testling.buildLinkForTaxonomyInternal(defaultTaxonomy, null, Collections.<String, Object>emptyMap()));
+    when(topicpageContextFinder.findDefaultTopicpageChannelFor(defaultTaxonomyContent, defaultNavigationContent))
+            .thenReturn(null);
+
+    UriComponentsBuilder result = testling.buildLinkForTaxonomyInternal(defaultTaxonomy, null, emptyMap())
+            .orElse(null);
+
+    assertNull(result);
   }
 
   @Test
   public void buildLinkForTaxonomy() {
     when(contentLinkBuilder.getVanityName(defaultTaxonomyContent)).thenReturn(DEFAULT_VANITY_NAME);
-    UriComponentsBuilder result = testling.buildLinkForTaxonomyInternal(defaultTaxonomy, null, Collections.<String, Object>emptyMap());
+
+    UriComponentsBuilder result = testling.buildLinkForTaxonomyInternal(defaultTaxonomy, null, emptyMap())
+            .orElse(null);
 
     assertNotNull(result);
     assertEquals("/" + DEFAULT_CONTEXT + "/" + DEFAULT_ACTION + "-" + DEFAULT_CONTENT_ID, result.build().toUriString());
@@ -162,13 +174,20 @@ public class DefaultPageHandlerTest extends PageHandlerBaseTest<DefaultPageHandl
   public void buildLinkForLinkableNoNavigationFound() {
     when(contextHelper.contextFor(defaultActionBean)).thenReturn(null);
 
-    assertNull(testling.buildLinkForLinkableInternal(defaultActionBean, null, Collections.<String, Object>emptyMap()));
+    UriComponentsBuilder result = testling
+            .buildLinkForLinkableInternal(defaultActionBean, null, emptyMap())
+            .orElse(null);
+
+    assertNull(result);
   }
 
   @SuppressWarnings("ConstantConditions")
   @Test
   public void buildLinkForLinkable() {
-    UriComponentsBuilder result = testling.buildLinkForLinkableInternal(defaultActionBean, null, Collections.<String, Object>emptyMap());
+    UriComponentsBuilder result = testling
+            .buildLinkForLinkableInternal(defaultActionBean, null, emptyMap())
+            .orElse(null);
+
     assertEquals("", result.build().toUriString());
   }
 

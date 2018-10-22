@@ -5,7 +5,7 @@
 <div class="cm-placement-${self.name!""}" <@preview.metadata data=[bp.getPlacementPropertyName(self)!"",lc.fragmentHighlightingMetaData(self)!""] />>
   <#if self.items?has_content>
       <#list self.items![] as item>
-        <@cm.include self=item view="asTeaserHero" />
+        <@cm.include self=item view="asHero" />
       </#list>
   </#if>
 </div>

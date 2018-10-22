@@ -147,6 +147,9 @@
         <value>channelId</value>
         <value>docType</value>
         <value>key</value>
+        <value>view</value>
+        <value>sortByDate</value>
+        <value>facetFilters</value>
       </list>
     </property>
   </bean>
@@ -272,7 +275,6 @@
     </description>
     <set>
       <ref bean="idGenericContentBeanConverter"/>
-      <ref bean="languageTagToLocaleConverter"/>
     </set>
   </customize:append>
 

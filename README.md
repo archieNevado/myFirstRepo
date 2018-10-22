@@ -44,3 +44,24 @@ In some cases GitHub won't generate the patch (e.g. `error: too big or took too 
 Use ``git format-patch -1 <commit>`` on the command-line as a workaround (<http://git-scm.com/docs/git-format-patch>).
 
 Please contact [support@coremedia.com](mailto:support@coremedia.com) if you need further assistance!
+
+### Docker Setup
+
+If you plan to use this workspace in conjunction with the CoreMedia Docker setup, you have to make sure,
+that you also check out the other two workspaces using the matching version tags. The tags on those repos are
+named `cms-XXXX.Y`.
+
+In order to use the docker setup make sure to build the blueprints product workspace first, then the applications repo and
+finally the docker repo.
+
+It is recommended that you check out the workspaces with the following file structure. The default content import, for example, expects the test data below the blueprint folder:
+
+<root dir>
+      |- blueprint (CoreMedia Blueprints Workspace)
+      |- applications (CoreMedia Spring Boot Applications Workspace)
+      `- deployment (CoreMedia Docker Deployment Workspace)
+
+For more detailed information read the README.md files in the corresponding repositories.
+
+* [CoreMedia Spring Boot Applications Workspace](https://github.com/coremedia-contributions/coremedia-spring-boot-applications)
+* [CoreMedia Docker Deployment Workspace](https://github.com/coremedia-contributions/coremedia-deployment-docker)

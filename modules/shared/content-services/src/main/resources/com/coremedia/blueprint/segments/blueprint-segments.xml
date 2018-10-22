@@ -15,11 +15,13 @@
 
   <bean id="cmlinkableSegmentStrategy" class="com.coremedia.blueprint.segments.CMLinkableSegmentStrategy"/>
   <bean id="cmtaxonomySegmentStrategy" class="com.coremedia.blueprint.segments.CMTaxonomySegmentStrategy"/>
+  <bean id="cmpersonSegmentStrategy" class="com.coremedia.blueprint.segments.CMPersonSegmentStrategy"/>
 
   <customize:append id="contentSegmentStrategies" bean="contentSegmentStrategyMap">
     <map>
       <entry key="CMLinkable" value-ref="cmlinkableSegmentStrategy"/>
       <entry key="CMTaxonomy" value-ref="cmtaxonomySegmentStrategy"/>
+      <entry key="CMPerson" value-ref="cmpersonSegmentStrategy"/>
     </map>
   </customize:append>
 

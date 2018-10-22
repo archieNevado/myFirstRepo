@@ -29,5 +29,4 @@
       </ui:items>
     </ui:RemoveItemsPlugin>
   </edtior:plugins>
-
 </edtior:CollectionRepositoryContextMenu>

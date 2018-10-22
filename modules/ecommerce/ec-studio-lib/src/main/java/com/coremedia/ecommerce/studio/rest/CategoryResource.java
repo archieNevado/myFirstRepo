@@ -30,10 +30,6 @@ import java.util.Map;
 @Path(CategoryResource.URI_PATH)
 public class CategoryResource extends CommerceBeanResource<Category> {
 
-  /**
-   * The Studio internal logical ID of the root category.
-   */
-  static final String ROOT_CATEGORY_ROLE_ID = "ROOT";
   public static final String URI_PATH
           = "livecontext/category/{siteId:[^/]+}/{catalogAlias:[^/]+}/{workspaceId:[^/]+}/{id:.+}";
 
@@ -71,12 +67,7 @@ public class CategoryResource extends CommerceBeanResource<Category> {
     for (CommerceBean child : children) {
       ChildRepresentation childRepresentation = new ChildRepresentation();
       childRepresentation.setChild(child);
-      if (child instanceof Category) {
-        childRepresentation.setDisplayName(((Category) child).getDisplayName());
-      } else {
-        childRepresentation.setDisplayName(child.getExternalId());
-      }
-
+      childRepresentation.setDisplayName(child.getExternalId());
       result.put(CommerceIdFormatterHelper.format(child.getId()), childRepresentation);
     }
     representation.setChildrenByName(result);
@@ -102,7 +93,7 @@ public class CategoryResource extends CommerceBeanResource<Category> {
   @Override
   public void setEntity(Category category) {
     super.setEntity(category);
-    setId(category.isRoot() ? ROOT_CATEGORY_ROLE_ID : category.getExternalId());
+    setId(category.getExternalId());
   }
 
   @Override

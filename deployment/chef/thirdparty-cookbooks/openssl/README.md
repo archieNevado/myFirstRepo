@@ -15,6 +15,8 @@ This cookbook provides tools for working with the Ruby OpenSSL library. It inclu
 - A resource for generating dhparam.pem files.
 - An attribute-driven recipe for upgrading OpenSSL packages.
 
+NOTE: All resources in this cookbook are now built-into Chef 14.4 and later so this cookbook is no longer necessary to use those resources. When Chef 15.4 is released (Aug 2019) the resources will be removed from this cookbook as all users should be running Chef 14.4 or later.
+
 ## Platforms
 
 - Debian / Ubuntu derivatives
@@ -104,18 +106,18 @@ Name               | Type                         | Description
 `expire`           | Integer (Optional)           | Value representing the number of days from _now_ through which the issued certificate cert will remain valid. The certificate will expire after this period. _Default: 365
 `extensions`       | Hash (Optional)              | Hash of X509 Extensions entries, in format `{ 'keyUsage' => { 'values' => %w( keyEncipherment digitalSignature), 'critical' => true } }` _Default: empty_
 `subject_alt_name` | Array (Optional)             | Array of _Subject Alternative Name_ entries, in format `DNS:example.com` or `IP:1.2.3.4` _Default: empty_
-`key_file`         | String (Optional)            | The path to a certificate key file on the filesystem. If the `key_file` attribute is specified, the resource will attempt to source a key from this location. If no key file is found, the resource will generate a new key file at this location. If the `key_file` attribute is not specified, the resource will generate a key file in the same directory as the generated certificate, with the same name as the generated certificate.
+`key_file`         | String (Optional)            | The path to a certificate key file on the filesystem. If the `key_file` property is specified, the resource will attempt to source a key from this location. If no key file is found, the resource will generate a new key file at this location. If the `key_file` property is not specified, the resource will generate a key file in the same directory as the generated certificate, with the same name as the generated certificate.
 `key_pass`         | String (Optional)            | The passphrase for an existing key's passphrase
 `key_type`         | String (Optional)            | The desired type of the generated key (rsa or ec). _Default: rsa_
 `key_length`       | Integer (Optional)           | The desired Bit Length of the generated key (if key_type is equal to 'rsa'). _Default: 2048_
 `key_curve`        | String (Optional)            | The desired curve of the generated key (if key_type is equal to 'ec'). Run `openssl ecparam -list_curves` to see available options. _Default: prime256v1_
-`csr_file`         | String (Optional)            | The path to a X509 Certificate Request (CSR) on the filesystem. If the `csr_file` attribute is specified, the resource will attempt to source a CSR from this location. If no CSR file is found, the resource will generate a Self-Signed Certificate and the certificate fields must be specified (common_name at last).
-`ca_cert_file`     | String (Optional)            | The path to the CA X509 Certificate on the filesystem. If the `ca_cert_file` attribute is specified, the `ca_key_file` attribute must also be specified, the certificate will be signed with them.
-`ca_key_file`      | String (Optional)            | The path to the CA private key on the filesystem. If the `ca_key_file` attribute is specified, the `ca_cert_file' attribute must also be specified, the certificate will be signed with them.
+`csr_file`         | String (Optional)            | The path to a X509 Certificate Request (CSR) on the filesystem. If the `csr_file` property is specified, the resource will attempt to source a CSR from this location. If no CSR file is found, the resource will generate a Self-Signed Certificate and the certificate fields must be specified (common_name at last).
+`ca_cert_file`     | String (Optional)            | The path to the CA X509 Certificate on the filesystem. If the `ca_cert_file` property is specified, the `ca_key_file` property must also be specified, the certificate will be signed with them.
+`ca_key_file`      | String (Optional)            | The path to the CA private key on the filesystem. If the `ca_key_file` property is specified, the `ca_cert_file' property must also be specified, the certificate will be signed with them.
 `ca_key_pass`      | String (Optional)            | The passphrase for CA private key's passphrase
-`owner`            | String (optional)            | The owner of all files created by the resource. _Default: "root"_
-`group`            | String (optional)            | The group of all files created by the resource. _Default: "root"_
-`mode`             | String or Integer (Optional) | The permission mode of all files created by the resource. _Default: "0644"_
+`owner`            | String (optional)            | The owner of all files created by the resource.
+`group`            | String (optional)            | The group of all files created by the resource.
+`mode`             | String or Integer (Optional) | The permission mode of all files created by the resource.
 
 #### Example Usage
 
@@ -174,15 +176,15 @@ Name                  | Type                                              | Desc
 `city`             | String (Optional)            | Value for the `L` certificate field.
 `state`            | String (Optional)            | Value for the `ST` certificate field.
 `country`          | String (Optional)            | Value for the `C` ssl field.
-`key_file`         | String (Optional)            | The path to a certificate key file on the filesystem. If the `key_file` attribute is specified, the resource will attempt to source a key from this location. If no key file is found, the resource will generate a new key file at this location. If the `key_file` attribute is not specified, the resource will generate a key file in the same directory as the generated certificate, with the same name as the generated certificate.
+`email`            | String (Optional)            | Value for the `email` ssl field.
+`key_file`         | String (Optional)            | The path to a certificate key file on the filesystem. If the `key_file` property is specified, the resource will attempt to source a key from this location. If no key file is found, the resource will generate a new key file at this location. If the `key_file` property is not specified, the resource will generate a key file in the same directory as the generated certificate, with the same name as the generated certificate.
 `key_pass`         | String (Optional)            | The passphrase for an existing key's passphrase
 `key_type`         | String (Optional)            | The desired type of the generated key (rsa or ec). _Default: ec_
 `key_length`       | Integer (Optional)           | The desired Bit Length of the generated key (if key_type is equal to 'rsa'). _Default: 2048_
 `key_curve`        | String (Optional)            | The desired curve of the generated key (if key_type is equal to 'ec'). Run `openssl ecparam -list_curves` to see available options. _Default: prime256v1
-`owner`            | String (optional)            | The owner of all files created by the resource. _Default: "root"_
-`group`            | String (optional)            | The group of all files created by the resource. _Default: "root"_
-`mode`             | String or Integer (Optional) | The permission mode of all files created by the resource. _Default: "0644"_
-
+`owner`            | String (optional)            | The owner of all files created by the resource.
+`group`            | String (optional)            | The group of all files created by the resource.
+`mode`             | String or Integer (Optional) | The permission mode of all files created by the resource.
 
 #### Example Usage
 
@@ -209,15 +211,15 @@ Name                  | Type                                              | Desc
 --------------------- | ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------
 `path`               | String (Optional)            | Optional path to write the file to if you'd like to specify it here instead of in the resource name
 `serial_to_revoke`   | String or Integer(Optional)  | Serial of the X509 Certificate to revoke
-`revokation_reason`  | String or Integer(Optional)  | [Reason of the revokation]((https://en.wikipedia.org/wiki/Certificate_revocation_list#Reasons_for_revocation)) _Default: 0_
+`revocation_reason`  | String or Integer(Optional)  | [Reason of the revocation]((https://en.wikipedia.org/wiki/Certificate_revocation_list#Reasons_for_revocation)) _Default: 0_
 `expire`             | Integer (Optional)           | Value representing the number of days from _now_ through which the issued CRL will remain valid. The CRL will expire after this period. _Default: 8_
 `renewal_threshold`  | Integer (Optional)           | Number of days before the expiration. It this threshold is reached, the CRL will be renewed _Default: 1_
-`ca_cert_file`       | String (Required)            | The path to the CA X509 Certificate on the filesystem. If the `ca_cert_file` attribute is specified, the `ca_key_file` attribute must also be specified, the CRL will be signed with them.
-`ca_key_file`        | String (Required)            | The path to the CA private key on the filesystem. If the `ca_key_file` attribute is specified, the `ca_cert_file' attribute must also be specified, the CRL will be signed with them.
+`ca_cert_file`       | String (Required)            | The path to the CA X509 Certificate on the filesystem. If the `ca_cert_file` property is specified, the `ca_key_file` property must also be specified, the CRL will be signed with them.
+`ca_key_file`        | String (Required)            | The path to the CA private key on the filesystem. If the `ca_key_file` property is specified, the `ca_cert_file' property must also be specified, the CRL will be signed with them.
 `ca_key_pass`        | String (Optional)            | The passphrase for CA private key's passphrase
-`owner`              | String (optional)            | The owner of all files created by the resource. _Default: "root"_
-`group`              | String (optional)            | The group of all files created by the resource. _Default: "root"_
-`mode`               | String or Integer (Optional) | The permission mode of all files created by the resource. _Default: "0644"_
+`owner`              | String (optional)            | The owner of all files created by the resource.
+`group`              | String (optional)            | The group of all files created by the resource.
+`mode`               | String or Integer (Optional) | The permission mode of all files created by the resource.
 
 
 #### Example Usage
@@ -254,8 +256,8 @@ Name         | Type                         | Description
 `path`       | String (Optional)            | Optional path to write the file to if you'd like to specify it here instead of in the resource name
 `key_length` | Integer (Optional)           | The desired Bit Length of the generated key. _Default: 2048_
 `generator`  | Integer (Optional)           | The desired Diffie-Hellmann generator. Can be _2_ or _5_.
-`owner`      | String (optional)            | The owner of all files created by the resource. _Default: "root"_
-`group`      | String (optional)            | The group of all files created by the resource. _Default: "root"_
+`owner`      | String (optional)            | The owner of all files created by the resource.
+`group`      | String (optional)            | The group of all files created by the resource.
 `mode`       | String or Integer (Optional) | The permission mode of all files created by the resource. _Default: "0640"_
 
 #### Example Usage
@@ -285,8 +287,8 @@ Name         | Type                         | Description
 `key_length` | Integer (Optional)           | The desired Bit Length of the generated key. _Default: 2048_
 `key_cipher` | String (Optional)            | The designed cipher to use when generating your key. Run `openssl list-cipher-algorithms` to see available options. _Default: des3_
 `key_pass`   | String (Optional)            | The desired passphrase for the key.
-`owner`      | String (optional)            | The owner of all files created by the resource. _Default: "root"_
-`group`      | String (optional)            | The group of all files created by the resource. _Default: "root or wheel depending on platform"_
+`owner`      | String (optional)            | The owner of all files created by the resource.
+`group`      | String (optional)            | The group of all files created by the resource.
 `mode`       | String or Integer (Optional) | The permission mode of all files created by the resource. _Default: "0640"_
 `force`      | true/false (Optional)        | Force creating the key even if the existing key exists. _Default: false_
 
@@ -314,8 +316,8 @@ Name                  | Type                                              | Desc
 `private_key_path`    | String (Required unless private_key_content used) | The path to the private key to generate the public key from
 `private_key_content` | String (Required unless private_key_path used)    | The content of the private key including new lines. Used if you don't want to write a private key to disk and use `private_key_path`.
 `private_key_pass`    | String (Optional)                                 | The passphrase of the provided private key
-`owner`               | String (optional)                                 | The owner of all files created by the resource. _Default: "root"_
-`group`               | String (optional)                                 | The group of all files created by the resource. _Default: "root or wheel depending on platform"_
+`owner`               | String (optional)                                 | The owner of all files created by the resource.
+`group`               | String (optional)                                 | The group of all files created by the resource.
 `mode`                | String or Integer (Optional)                      | The permission mode of all files created by the resource. _Default: "0640"_
 
 **Note**: To use `private_key_content` the private key string must be properly formatted including new lines. The easiest way to get the right string is to run the following from irb (/opt/chefdk/embedded/bin/irb from ChefDK)
@@ -344,8 +346,8 @@ Name         | Type                         | Description
 `key_curve`  | String (Optional)            | The desired curve of the generated key. Run `openssl ecparam -list_curves` to see available options. _Default: prime256v1
 `key_cipher` | String (Optional)            | The designed cipher to use when generating your key. Run `openssl list-cipher-algorithms` to see available options. _Default: des3_
 `key_pass`   | String (Optional)            | The desired passphrase for the key.
-`owner`      | String (optional)            | The owner of all files created by the resource. _Default: "root"_
-`group`      | String (optional)            | The group of all files created by the resource. _Default: "root or wheel depending on platform"_
+`owner`      | String (optional)            | The owner of all files created by the resource.
+`group`      | String (optional)            | The group of all files created by the resource.
 `mode`       | String or Integer (Optional) | The permission mode of all files created by the resource. _Default: "0640"_
 `force`      | true/false (Optional)        | Force creating the key even if the existing key exists. _Default: false_
 
@@ -397,7 +399,7 @@ This cookbook is maintained by Chef's Community Cookbook Engineering team. Our g
 
 ## License
 
-**Copyright:** 2009-2017, Chef Software, Inc.
+**Copyright:** 2009-2018, Chef Software, Inc.
 
 ```
 Licensed under the Apache License, Version 2.0 (the "License");

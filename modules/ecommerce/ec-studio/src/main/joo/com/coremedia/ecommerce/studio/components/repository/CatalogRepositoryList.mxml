@@ -7,7 +7,7 @@
         xmlns:u="exml:untyped"
         xmlns:ui="exml:com.coremedia.ui.config"
         xmlns:ec="exml:com.coremedia.ecommerce.studio.config"
-        xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+        xmlns:editor="exml:com.coremedia.cms.editor.sdk.config" xmlns:plugins="com.coremedia.ui.plugins.*"
         emptyText="{resourceManager.getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'CatalogView_empty_text')}"
         selectedItemsValueExpression="{createSelectedItemsValueExpression()}"
         header="{false}"
@@ -27,6 +27,11 @@
 
     private var config:CatalogRepositoryList;
     private var catalogHelper:CatalogHelper;
+
+    /**
+     * The itemId of the copy to system clipboard menu item.
+     */
+    public static const COPY_COLUMN_CONTENT_TO_SYSTEM_CLIPBOARD:String = "copyCellContentToSystemClipboard";
 
     /**
      * value expression for the selected items, either in the list view, or - if the selection there is empty - the
@@ -63,10 +68,22 @@
                           return RichTextPlainTextTransformer.convertToPlainText(catalogObject.getShortDescription());}}"/>
       </ui:fields>
     </ui:BindListPlugin>
-    <ui:ContextMenuPlugin>
+    <ui:ContextMenuPlugin lastClickedCellVE="{getLastClickedCellVE()}">
       <ui:contextMenu>
         <ec:CatalogRepositoryContextMenu selectedItemsValueExpression="{config.mySelectedItemsValueExpression}"
-                                         selectedFolderValueExpression="{getSelectedNodeExpression()}"/>
+                                         selectedFolderValueExpression="{getSelectedNodeExpression()}">
+          <ec:plugins exml:mode="append">
+            <plugins:AddItemsPlugin>
+              <plugins:items>
+                <MenuItem itemId="{COPY_COLUMN_CONTENT_TO_SYSTEM_CLIPBOARD}">
+                  <baseAction>
+                    <editor:CopyCellContentToSystemClipboardAction lastClickedCellVE="{getLastClickedCellVE()}" selectedItemsValueExpression="{config.mySelectedItemsValueExpression}"></editor:CopyCellContentToSystemClipboardAction>
+                  </baseAction>
+                </MenuItem>
+              </plugins:items>
+            </plugins:AddItemsPlugin>
+          </ec:plugins>
+        </ec:CatalogRepositoryContextMenu>
       </ui:contextMenu>
     </ui:ContextMenuPlugin>
   </local:plugins>

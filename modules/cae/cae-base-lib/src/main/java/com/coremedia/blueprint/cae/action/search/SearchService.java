@@ -8,9 +8,11 @@ import com.coremedia.blueprint.cae.search.SearchResultBean;
 import com.coremedia.blueprint.cae.search.SearchResultFactory;
 import com.coremedia.blueprint.cae.search.Value;
 import com.coremedia.blueprint.cae.search.ValueAndCount;
+import com.coremedia.blueprint.cae.search.facet.FacetValue;
 import com.coremedia.blueprint.cae.search.solr.SolrSearchParams;
 import com.coremedia.blueprint.cae.searchsuggestion.Suggestion;
 import com.coremedia.blueprint.cae.searchsuggestion.Suggestions;
+import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.Page;
@@ -49,6 +51,11 @@ public class SearchService {
   private static final Logger LOG = LoggerFactory.getLogger(SearchService.class);
 
   private static final int HITS_PER_PAGE_DEFAULT = 10;
+
+  /** The content setting that configures the map from names of requested search facets to index fields */
+  public static final String SETTING_FACETS = "searchFacets";
+  /** The content setting that configures the number of values to request for a facet */
+  public  static final String SETTING_FACET_LIMIT = "searchFacetLimit";
 
   private SearchResultFactory resultFactory;
   private boolean highlightingEnabled = false;
@@ -93,9 +100,16 @@ public class SearchService {
     if (StringUtils.isEmpty(searchForm.getQuery())) {
       return null;
     }
+    CMContext context = page.getContext();
 
     // get max hits settings
-    int hitsPerPage = settingsService.settingWithDefault("search.result.hitsPerPage", Integer.class, HITS_PER_PAGE_DEFAULT, page.getContext());
+    int hitsPerPage = settingsService.settingWithDefault("searchResultHitsPerPage", Integer.class, 0, context);
+
+    // fallback to old setting or HITS_PER_PAGE_DEFAULT
+    if (hitsPerPage == 0) {
+      hitsPerPage = settingsService.settingWithDefault("search.result.hitsPerPage", Integer.class, HITS_PER_PAGE_DEFAULT, context);
+    }
+
     // build query
     SearchQueryBean searchQuery = new SearchQueryBean();
     searchQuery.setSearchHandler(SearchQueryBean.SEARCH_HANDLER.FULLTEXT);
@@ -139,15 +153,39 @@ public class SearchService {
     }
 
     // add facets
-    searchQuery.setFacetFields(Collections.singletonList(SearchConstants.FIELDS.DOCUMENTTYPE.toString()));
-    searchQuery.setFacetMinCount(SolrSearchParams.FACET_MIN_COUNT);
+    addFacetQuery(searchQuery, context);
+
+    // add filter queries for selected facet values
+    searchQuery.setFacetFilters(searchForm.getFacetFilters());
+
     // add limit/offset
     searchQuery.setLimit(hitsPerPage);
     searchQuery.setOffset(searchForm.getPageNum() * hitsPerPage);
+    // set sort criteria
+    if (searchForm.isSortByDate()) {
+      searchQuery.setSortFields(Collections.singletonList(SearchConstants.FIELDS.EXTERNALLY_DISPLAYED_DATE.toString()));
+    }
     // run query
     return resultFactory.createSearchResultUncached(searchQuery);
   }
 
+  /**
+   * Adapts the given {@link SearchQueryBean} to request faceting results if content settings for the given
+   * context configure faceting with settings key {@link #SETTING_FACETS}.
+   *
+   * @param searchQuery {@link SearchQueryBean}
+   * @param context context to look up settings
+   * @since 1810
+   */
+  private void addFacetQuery(SearchQueryBean searchQuery, CMContext context) {
+    Map<String, String> facets = settingsService.settingAsMap(SETTING_FACETS, String.class, String.class, context);
+    searchQuery.setFacetFieldsMap(facets);
+
+    settingsService.getSetting(SETTING_FACET_LIMIT, Integer.class, context)
+      .ifPresent(searchQuery::setFacetLimit);
+
+    searchQuery.setFacetMinCount(SolrSearchParams.FACET_MIN_COUNT);
+  }
 
   /**
    * The search query executed to find topic pages for the given search term
@@ -207,11 +245,13 @@ public class SearchService {
     }).join(orJoiner));
 
     // perform a faceted search and get the actually used taxonomies of the candidate taxonomies
-    Map<String, List<ValueAndCount>> facets = resultFactory.createSearchResultUncached(query).getFacets();
+    SearchResultBean searchResult = resultFactory.createSearchResultUncached(query);
+    Map<String, Collection<FacetValue>> facets = searchResult.getFacetResult().getFacets();
     List<CMLinkable> resultTaxonomies = new ArrayList<>();
     for (String indexField : indexFields) {
-      for (ValueAndCount valueAndCount : facets.get(indexField)) {
-        CMLinkable cmLinkable = candidateTaxonomiesByNumericId.get(valueAndCount.getName());
+      Collection<FacetValue> facetValues = facets.getOrDefault(indexField, Collections.emptyList());
+      for (ValueAndCount valueAndCount : facetValues) {
+        CMLinkable cmLinkable = candidateTaxonomiesByNumericId.get(valueAndCount.getValue());
         if (cmLinkable != null) {
           resultTaxonomies.add(cmLinkable);
         }
@@ -281,7 +321,7 @@ public class SearchService {
 
       List<Suggestion> suggestionList = new ArrayList<>();
       for (ValueAndCount vc : suggestionValues) {
-        suggestionList.add(new Suggestion(vc.getName(), vc.getName(), vc.getCount()));
+        suggestionList.add(new Suggestion(vc.getValue(), vc.getValue(), vc.getCount()));
       }
 
       // sort suggestions by count and enforce limit

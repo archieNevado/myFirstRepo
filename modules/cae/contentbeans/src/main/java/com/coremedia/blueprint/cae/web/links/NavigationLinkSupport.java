@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.cae.web.links;
 
 import com.coremedia.blueprint.common.navigation.Navigation;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
@@ -26,7 +27,7 @@ public final class NavigationLinkSupport {
    * @param navigation   navigation to register in the request
    */
   @SuppressWarnings({"unchecked"})
-  public static void setNavigation(ModelAndView modelAndView, Navigation navigation) {
+  public static void setNavigation(@NonNull ModelAndView modelAndView, Navigation navigation) {
     if (navigation != null) {
       modelAndView.addObject(ATTR_NAME_CMNAVIGATION, navigation);
     }

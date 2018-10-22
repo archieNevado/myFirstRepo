@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='ISO-8859-1'?>
 
-<Context sessionCookieName="CM_SESSIONID">
+<Context sessionCookieName="CM_SESSIONID" allowLinking="true">
 <!--
 value for Resources#extraResourcePaths MUST NOT contain any separating character other than a "," and MUST be ended after the
 last character by a " directly !!!
@@ -11,7 +11,7 @@ this will NOT work: extraResourcePaths="/=a, /=b"
 
 -->
   <Resources className="org.apache.naming.resources.VirtualDirContext"
-             extraResourcePaths="/=${sencha.workspace.root}"/>
+             extraResourcePaths="/=../studio-app/target/classes/META-INF/resources,/=../studio-base-app/target/app"/>
 
   <Valve className="org.apache.catalina.valves.RemoteIpValve" protocolHeader="x-forwarded-proto"/>
 </Context>

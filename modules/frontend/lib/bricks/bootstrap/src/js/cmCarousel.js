@@ -75,6 +75,15 @@ export function cmCarousel($carousel) {
       e.preventDefault();
     }
   });
+
+  // Stop carousel on touch enabled devices with pointer devices on hover
+  if ('ontouchstart' in document.documentElement) {
+    $carousel.hover(function () {
+      $(this).carousel('pause')
+    }, function () {
+      $(this).carousel('cycle')
+    })
+  }
 }
 
 /**

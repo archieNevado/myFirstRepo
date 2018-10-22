@@ -17,13 +17,24 @@
       <#assign offsetClassTablet=getOffsetClass(item_index, numberOfItems, itemsPerRow, " col-sm-")/>
     </#if>
   </#list>
-
-  Note:
-  For now uses the deprecated function to avoid code duplication as we cannot depend from "cae-base-lib" to
-  the frontend workspace.
 -->
 <#function getOffsetClass index numberOfItems itemsPerRow  prefix="" force=false>
-  <#return bp.getOffsetClass(index, numberOfItems, itemsPerRow, prefix, force) />
+  <#-- bootstrap default grid = 12 rows -->
+  <#local width=12/itemsPerRow />
+  <#local isFirstItemOfRow=(index % itemsPerRow == 0) />
+  <#local isLastRow=(numberOfItems - numberOfItems % itemsPerRow - index) <= 0 />
+  <#-- define offset class to align items in rows containing less than 3 items centered -->
+  <#local offsetClass="" />
+  <#-- offset only applies to first element of last row -->
+  <#if (isLastRow && isFirstItemOfRow)>
+    <#-- offset depends on the number of items in the last row -->
+    <#local offsetValue=(12-((numberOfItems % itemsPerRow)*width))/2 />
+    <#local offsetClass="${prefix}offset-${offsetValue}" />
+  <#elseif (force)>
+    <#local offsetClass="${prefix}offset-0" />
+  </#if>
+
+  <#return offsetClass>
 </#function>
 
 <#--
@@ -39,14 +50,17 @@
 
   <#list items as item>
     <#if addRows>
-      <@bp.renderNewRow index=item_index itemsPerRow=itemsPerRow additionalClass="row-grid "/>
+      <@renderNewRow index=item_index itemsPerRow=itemsPerRow additionalClass="row-grid "/>
     </#if>
   </#list>
-
-  Note:
-  For now uses the deprecated function to avoid code duplication as we cannot depend from "cae-base-lib" to
-  the frontend workspace.
 -->
 <#macro renderNewRow index itemsPerRow additionalClass="">
-  <@bp.renderNewRow index=index itemsPerRow=itemsPerRow additionalClass=additionalClass />
+  <#-- bootstrap default grid = 12 rows -->
+  <#local width=12/itemsPerRow />
+  <#local isFirstItemOfRow=(index % itemsPerRow == 0) />
+  <#-- offset only applies to first element of last row -->
+  <#if (isFirstItemOfRow && index != 0)>
+    </div>
+    <div class="${additionalClass}row">
+  </#if>
 </#macro>

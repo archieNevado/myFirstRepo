@@ -1,6 +1,6 @@
 package com.coremedia.blueprint.cae.sitemap;
 
-import com.coremedia.blueprint.base.multisite.SiteResolver;
+import com.coremedia.blueprint.base.multisite.cae.SiteResolver;
 import com.coremedia.blueprint.cae.web.IllegalRequestException;
 import com.coremedia.cap.multisite.Site;
 import org.apache.commons.io.IOUtils;

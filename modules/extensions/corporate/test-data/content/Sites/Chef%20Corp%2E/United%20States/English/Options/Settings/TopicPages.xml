@@ -9,6 +9,7 @@
 <StringListProperty Name="administrationGroups">
 <String>manager-c-en-US</String>
 <String>global-site-manager-c</String>
+<String>developer</String>
 </StringListProperty>
 <StringProperty Name="folder">Content/Topic Pages</StringProperty>
 </Struct>

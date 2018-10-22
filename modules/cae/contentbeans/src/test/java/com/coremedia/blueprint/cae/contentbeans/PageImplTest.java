@@ -165,11 +165,11 @@ public class PageImplTest {
   public void testGetLocale() throws Exception {
     PageImpl page = new PageImpl(parentChannel, article, true, sitesService, null, null, null, null);
 
-    assertEquals(new Locale("de"), page.getLocale());
+    assertEquals(Locale.GERMAN, page.getLocale());
 
     page = new PageImpl(parentChannel, parentChannel, true, sitesService, null, null, null, null);
 
-    assertEquals(new Locale("de"), page.getLocale());
+    assertEquals(Locale.GERMAN, page.getLocale());
   }
 
   @Test

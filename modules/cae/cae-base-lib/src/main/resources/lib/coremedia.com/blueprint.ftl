@@ -13,9 +13,6 @@
 <#include "blueprint/grid.ftl" />
 <#include "blueprint/image.ftl" />
 <#include "blueprint/util.ftl" />
-<#include "blueprint/button.ftl" />
-<#include "blueprint/notification.ftl" />
-<#include "blueprint/form.ftl" />
 
 <#-- PRIVATE -->
 <#include "blueprint/imagemap.ftl" />

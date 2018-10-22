@@ -1,64 +1,192 @@
-/*
-Search
-========================================================================================================================
-
-Contains styling definitions for search including search field and resultpage.
-- cm-search
-- cm-search--form
-- cm-search--results
-*/
-
-.#{$prefix}search {
+.#{$cm-search-prefix} {
 
   /* resultpage */
   &--results {
     padding: 0 $padding-base-vertical;
+    min-height: 70vh;
   }
 
   &__headline {
     margin-top: 0;
   }
 
-  &__item {
-    padding-bottom: $padding-large-vertical;
-    margin-bottom: $padding-large-vertical;
-    @include clearfix();
-    @include spacer($brand-primary);
-
-    @include breakpoint(sm-and-up) {
-      padding-bottom: 0;
-    }
+  &__status span {
+    font-weight: bold;
   }
 
-  &__picture-box {
-    display: none;
+  &__form {
 
-    @include breakpoint(sm-and-up) {
-      display: block;
-      float: left;
-      width: percentage(1/4);
-      margin-right: $padding-base-horizontal;
-      @include aspect-ratio-box(4, 3);
-    }
-  }
-
-  &__picture {
-    @include stretch-absolute();
-  }
-
-  &__caption {
-    h3 {
-      color: $brand-primary;
-      margin: 0;
-      font-weight: 400;
-
-      &:hover {
-        text-decoration: underline;
+    & form {
+      @include breakpoint("xs") {
+        position: relative;
       }
     }
 
-    p {
-      margin: $padding-base-vertical 0 $padding-small-vertical 0;
+    &-input {
+      padding: 4px 30px 3px 10px;
+
+      @include breakpoint("xs") {
+        width: 100%;
+      }
+
+      @include breakpoint("md") {
+        width: 350px;
+      }
+    }
+
+    &-button {
+      @extend .glyphicon;
+      @extend .glyphicon-search;
+
+      position: absolute;
+      background-color: #fff;
+      border: none;
+      right: 4px;
+      top: 7px;
+      color: palette(grey);
+      transition: unset;
+
+      & span {
+        display: none;
+      }
+    }
+  }
+
+  &__status {
+    @include breakpoint("sm-and-up") {
+      height: 24px;
+    }
+  }
+
+  &__sort {
+    height: 55px;
+  }
+
+  /* filter */
+  &__filter {
+
+    &-title {
+      // smaller font on tablet
+      @include breakpoint("sm") {
+        font-size: font-format(h3, mobile);
+      }
+
+      &-icon {
+        @extend .glyphicon;
+        transform: rotate(180deg);
+        transition: all 0.2s ease;
+      }
+
+      &--list-collapsed &-icon {
+        transform: rotate(0deg);
+        transition: all 0.2s ease;
+      }
+    }
+
+    &-switch {
+      &-button {
+        @extend .cm-button;
+        @extend .cm-cta-button;
+      }
+
+      &-icon {
+        @extend .glyphicon;
+        @extend .glyphicon-filter;
+        float: right;
+        margin: 3px 0 0 5px;
+      }
+    }
+
+    &-all-icon {
+      @extend .glyphicon;
+      // set explicit glyphicon-arrow-left
+      &:before {
+        content: "\E091";
+      }
+    }
+
+    &-popup {
+      &-close {
+        border: none;
+        background: #fff;
+
+        i {
+          @extend .glyphicon;
+          @extend .glyphicon-remove;
+        }
+
+        span {
+          display: none;
+        }
+      }
+
+      &--active {
+        @include breakpoint("xs") {
+          margin-top: -30px;
+          border-bottom: 3px solid #000;
+        }
+      }
+    }
+
+    &-list {
+
+      &-link {
+        font-weight: normal;
+        margin-bottom: 0;
+
+        &--checked {
+          cursor: pointer;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+
+      &-checkbox {
+        display: none;
+
+        &-icon {
+          @extend .glyphicon;
+          @extend .glyphicon-unchecked;
+          font-size: 90%;
+          color: $text-color;
+
+          &--checked:before {
+            content: "\E067";
+          }
+        }
+      }
+    }
+  }
+
+  /* search results */
+  &-result {
+    &__item {
+      padding-bottom: $padding-large-vertical;
+      margin-bottom: $padding-large-vertical;
+      @include clearfix();
+      @include spacer($brand-primary);
+
+      @include breakpoint(sm-and-up) {
+        padding-bottom: 0;
+      }
+    }
+
+    &__caption {
+      h3 a {
+        color: $brand-primary;
+        margin: 0;
+        font-weight: 400;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      p {
+        margin: $padding-base-vertical 0 $padding-small-vertical 0;
+      }
     }
   }
 
@@ -77,7 +205,9 @@ Contains styling definitions for search including search field and resultpage.
     border: none;
     border-bottom: 1px solid palette(grey);
     border-radius: 1px;
+    font-style: italic;
     color: palette(grey);
+    opacity: 1;
 
     &:focus {
       border-bottom: 2px solid palette(grey);
@@ -98,7 +228,7 @@ Contains styling definitions for search including search field and resultpage.
       .#{$prefix}header--open &,
       &:focus,
       &.focus {
-        width: $search-width;
+        width: $cm-search-input-width;
         background-color: rgba(255, 255, 255, 0.8);
         border-bottom: 0;
       }
@@ -118,7 +248,7 @@ Contains styling definitions for search including search field and resultpage.
       .#{$prefix}header--open &,
       &:focus,
       &.focus {
-        width: $search-small-width;
+        width: $cm-search-input-width * 5 / 6;
       }
     }
 
@@ -140,8 +270,43 @@ Contains styling definitions for search including search field and resultpage.
     padding: 0;
     color: palette(grey, light);
 
-    & > i {
+    &-icon {
+      @extend .glyphicon;
+      @extend .glyphicon-search;
       top: 2px;
+    }
+
+    &-label {
+      display: none;
+    }
+  }
+
+  /* load more results button */
+  &__more {
+    @extend .cm-button;
+    @extend .cm-cta-button;
+    display: block;
+    margin: $padding-large-vertical auto;
+  }
+
+  &__loading {
+    height: 48px; //same height as button to avoid jumping of page
+    margin: $padding-large-vertical auto;
+  }
+
+  /* pagination */
+  &__pagination {
+
+    &-first,
+    &-prev,
+    &-next,
+    &-last {
+      @extend .cm-button;
+      @extend .cm-cta-button;
+    }
+
+    &-index {
+      border: 1px solid #fff;
     }
   }
 }

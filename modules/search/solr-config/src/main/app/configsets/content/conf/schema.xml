@@ -99,6 +99,10 @@
     The Content Feeder feeds this field
     if feeder.indexPath is set to true in feeder.properties.
     Default is false to avoid reindexing after folder renames.
+
+    DEPRECATED: This field is deprecated and will be removed from the default schema.xml in a future release.
+                The content's own path is already indexed always in field 'path'. You may of course keep the
+                field if needed, and implement feeding with a custom FeedablePopulator in the Content Feeder.
   -->
   <field name="folder" type="string" indexed="true" stored="true"/>
 
@@ -109,6 +113,11 @@
     This field is required for the Content Feeder.
   -->
   <field name="folderpath" type="content" indexed="true" stored="true" multiValued="true" useDocValuesAsStored="false"/>
+
+  <!--
+    The path of the CoreMedia content including the name.
+  -->
+  <field name="path" type="text_general" indexed="true" stored="true"/>
 
   <!--
     The type of the content.

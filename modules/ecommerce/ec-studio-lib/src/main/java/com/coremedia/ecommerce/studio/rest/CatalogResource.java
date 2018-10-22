@@ -8,10 +8,13 @@ import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-
+import com.coremedia.livecontext.ecommerce.common.StoreContextBuilder;
+import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import edu.umd.cs.findbugs.annotations.Nullable;
+
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -67,16 +70,27 @@ public class CatalogResource extends AbstractCatalogResource<Catalog> {
       return null;
     }
 
+    CommerceConnection commerceConnection = CurrentCommerceConnection.get();
+    StoreContextProvider storeContextProvider = commerceConnection.getStoreContextProvider();
+
+    StoreContextBuilder clonedContextBuilder = storeContextProvider.buildContext(storeContext);
+
     CatalogAliasTranslationService catalogAliasTranslationService = getCatalogAliasTranslationService();
     if (catalogAlias != null) {
-      storeContext.setCatalog(catalogAlias, getCatalogId());
+      clonedContextBuilder = clonedContextBuilder
+              .withCatalogId(getCatalogId())
+              .withCatalogAlias(catalogAlias);
     } else {
       CatalogId catalogId = getCatalogId();
-      Optional<CatalogAlias> catalogAliasForId = catalogAliasTranslationService.getCatalogAliasForId(catalogId, getSiteId());
-      storeContext.setCatalog(catalogAliasForId.orElse(null), catalogId);
+      Optional<CatalogAlias> catalogAliasForId = catalogAliasTranslationService
+              .getCatalogAliasForId(catalogId, getSiteId());
+
+      clonedContextBuilder = clonedContextBuilder
+              .withCatalogId(catalogId)
+              .withCatalogAlias(catalogAliasForId.orElse(null));
     }
 
-    return storeContext;
+    return clonedContextBuilder.build();
   }
 
   @Override

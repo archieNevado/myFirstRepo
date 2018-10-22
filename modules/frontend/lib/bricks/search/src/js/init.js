@@ -1,0 +1,160 @@
+import $ from "jquery";
+import { log } from "@coremedia/js-logger";
+import { addNodeDecoratorBySelector } from "@coremedia/js-node-decoration-service";
+import { loadSearchResultPage, loadSearchResults } from "./search";
+
+/**
+ * Add click handler to "load more" button inside a search results container
+ */
+let searchResultsContainerId = "cm-search-results";
+function loadSearchResultsClickHandler() {
+  let $searchResultsContainer = $("#" + searchResultsContainerId);
+  log("Initialize loadSearchResultsClickHandler", $searchResultsContainer);
+  $searchResultsContainer.on(
+    "click touch",
+    "[data-" + searchResultsContainerId + "]",
+    function() {
+      loadSearchResults(this, searchResultsContainerId);
+    }
+  );
+}
+addNodeDecoratorBySelector(
+  "#" + searchResultsContainerId,
+  loadSearchResultsClickHandler
+);
+
+/**
+ * Add click handler to all links inside the search page to reload the search via ajax
+ */
+let searchResultPageContainerId = "cm-search-result-page";
+function loadSearchResultPageClickHandler($target) {
+  log(
+    "Initialize loadSearchResultPageClickHandler",
+    $target
+  );
+  /* on links like filters */
+  $target.on(
+    "click touch",
+    "[data-cm-search-link]",
+    function(event) {
+      // avoid 2nd click on label for input field
+      event.preventDefault();
+      let $this = $(this);
+      let link = $this.data("cm-search-link");
+      // update search query input field, if suggestion is available
+      if ($this.data("cm-search-suggestion")) {
+        $("[name=query]").val($this.data("cm-search-suggestion"));
+      }
+      // browser history is enabled by default
+      loadSearchResultPage(
+        link,
+        searchResultPageContainerId,
+        !$("body").data("cm-search-disable-browser-history")
+      );
+    }
+  );
+  /* on dropdown */
+  $target.on(
+    "change",
+    "[data-cm-search-dropdown]",
+    function() {
+      let link = $(this.selectedOptions).data("cm-search-sort-link");
+      loadSearchResultPage(
+        link,
+        searchResultPageContainerId,
+        !$("body").data("cm-search-disable-browser-history")
+      );
+    }
+  );
+  /* on search submit */
+  $target.on(
+    "submit",
+    "[data-cm-search-form-submit]",
+    function(event) {
+      event.preventDefault();
+      let query = $("[data-cm-search-form-input]").val();
+      // update search query input field, if suggestion is available
+      $("[name=query]").val(query);
+      // replace query string in search link with new qquery
+      let link = $(this).data("cm-search-form-submit");
+      let re = new RegExp("([?&])query=.*?(&|$)", "i");
+      if (link.match(re)) {
+        link = link.replace(
+          re,
+          "$1" + "query=" + query + "$2"
+        );
+      }
+      loadSearchResultPage(
+        link,
+        searchResultPageContainerId,
+        !$("body").data("cm-search-disable-browser-history")
+      );
+    }
+  );
+}
+addNodeDecoratorBySelector(
+  "#" + searchResultPageContainerId,
+  loadSearchResultPageClickHandler
+);
+
+/**
+ * Show or hide filter popup on mobile
+ */
+function toggleFilterMobilePopupClickHandler($target) {
+  log("Initialize toggleFilterMobilePopupClickHandler");
+  $target.on("click touch", function() {
+    $("[data-cm-search-filter-popup]").toggleClass(
+      "cm-search__filter-popup--active"
+    );
+  });
+}
+addNodeDecoratorBySelector(
+  "[data-cm-search-filter-popup-toggle]",
+  toggleFilterMobilePopupClickHandler
+);
+
+/**
+ * Show or hide filter list items
+ */
+function toggleSearchFilterClickHandler($target) {
+  log("Initialize toggleSearchFilterClickHandler", $target);
+  $target.on("click touch", "[data-cm-search-filter-toggle]", function() {
+    $(this).toggleClass("cm-search__filter-title--list-collapsed");
+    $(this)
+      .next("[data-cm-search-filter-links]")
+      .toggle();
+  });
+}
+addNodeDecoratorBySelector(
+  "[data-cm-search-filter]",
+  toggleSearchFilterClickHandler
+);
+
+/* --- browser history --- */
+if (!$("body").data("cm-search-disable-browser-history")) {
+  /**
+   * Add event handler for back button to redo the last search from the browser history.
+   */
+  window.addEventListener(
+    "popstate",
+    function() {
+      if (history.state && history.state.id === "search") {
+        loadSearchResultPage(
+          history.state.link,
+          searchResultPageContainerId,
+          false
+        );
+      }
+    },
+    false
+  );
+
+  /**
+   *  Push default history state for browser back button.
+   */
+  window.history.replaceState(
+    { id: "search", link: window.location + "&view=asSearchResultPage" },
+    "",
+    window.location
+  );
+}

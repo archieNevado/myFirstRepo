@@ -10,7 +10,12 @@ const sharedData = require("./sharedData");
  * @param  {Object} bricksToCommentOut
  * @return {string}
  */
-const initPackageJson = (themeName, mainJSFile, bricksToActivate, bricksToCommentOut) => {
+const initPackageJson = (
+  themeName,
+  mainJSFile,
+  bricksToActivate,
+  bricksToCommentOut
+) => {
   const content = {
     name: `@coremedia/${themeName}-theme`,
     version: "1.0.0",
@@ -18,8 +23,8 @@ const initPackageJson = (themeName, mainJSFile, bricksToActivate, bricksToCommen
     scripts: {
       build: "webpack",
       start: "cm monitor",
-      "prettier": "prettier \"**/*\" --write",
-      "theme-importer": "cm theme-importer",
+      prettier: 'prettier "**/*" --write',
+      "theme-importer": "cm theme-importer"
     },
     __comment__dependencies__: {
       __comment__:
@@ -27,28 +32,28 @@ const initPackageJson = (themeName, mainJSFile, bricksToActivate, bricksToCommen
       ...bricksToCommentOut,
       "@coremedia/js-logger": "^1.0.0",
       "@coremedia/sass-utils": "^1.0.0",
-      jquery: "3.2.1",
+      jquery: "3.2.1"
     },
     dependencies: {
       ...bricksToActivate,
       "@coremedia/cm-cli": "^2.0.0",
       "@coremedia/theme-utils": "^3.0.0",
-      webpack: "3.10.0",
+      webpack: "3.10.0"
     },
     devDependencies: {
-      "prettier": "1.11.1"
+      prettier: "1.11.1"
     },
     main: mainJSFile,
     coremedia: {
       type: "theme",
-      name: themeName,
+      name: themeName
     },
     browserslist: [
       "last 1 Chrome version",
       "last 1 Firefox version",
       "last 1 Edge version",
-      "Explorer >= 11",
-    ],
+      "Explorer >= 11"
+    ]
   };
   return JSON.stringify(content, null, 2);
 };
@@ -67,7 +72,10 @@ module.exports = webpackTheme;
  * @param  {boolean} usingBricks
  * @return {string}
  */
-const initThemedescriptorXml = (themeName, usingBricks) => `<?xml version="1.0" encoding="UTF-8"?>
+const initThemedescriptorXml = (
+  themeName,
+  usingBricks
+) => `<?xml version="1.0" encoding="UTF-8"?>
 <themeDefinition modelVersion="1">
 <name>${themeName}</name>
 <!-- <description>a short description</description> -->
@@ -86,14 +94,20 @@ const initThemedescriptorXml = (themeName, usingBricks) => `<?xml version="1.0" 
 </styleSheets>
 <templateSets>
   <templateSet>templates/${themeName}-templates.jar</templateSet>
-  <!-- aggregated templates of all bricks${!usingBricks ? ", activate this if you are using bricks" : ""} -->
-  ${!usingBricks ? "<!-- " : ""}<templateSet>templates/bricks-templates.jar</templateSet>${!usingBricks ? " -->" : ""}
 </templateSets>
 <resourceBundles>
   <!-- add theme resource bundles here -->
-  <resourceBundle>l10n/${sharedData.titleCase(themeName)}_en.properties</resourceBundle>
-  <!-- merged resource bundles of all bricks${!usingBricks ? ", activate this if you are using bricks" : ""} -->
-  ${!usingBricks ? "<!-- " : ""}<resourceBundle>l10n/Bricks_en.properties</resourceBundle>${!usingBricks ? " -->" : ""}
+  <resourceBundle>l10n/${sharedData.titleCase(
+    themeName
+  )}_en.properties</resourceBundle>
+  <!-- merged resource bundles of all bricks${
+    !usingBricks ? ", activate this if you are using bricks" : ""
+  } -->
+  ${
+    !usingBricks ? "<!-- " : ""
+  }<resourceBundle>l10n/Bricks_en.properties</resourceBundle>${
+  !usingBricks ? " -->" : ""
+}
 </resourceBundles>
 </themeDefinition>
 `;
@@ -213,5 +227,5 @@ module.exports = {
   initPreviewSass,
   initThemeIndexJs,
   initThemeJs,
-  initPreviewJs,
+  initPreviewJs
 };

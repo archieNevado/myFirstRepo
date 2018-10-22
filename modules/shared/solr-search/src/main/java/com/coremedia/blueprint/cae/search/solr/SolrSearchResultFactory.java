@@ -5,11 +5,16 @@ import com.coremedia.blueprint.cae.search.SearchQueryBean;
 import com.coremedia.blueprint.cae.search.SearchResultBean;
 import com.coremedia.blueprint.cae.search.SearchResultFactory;
 import com.coremedia.blueprint.cae.search.ValueAndCount;
+import com.coremedia.blueprint.cae.search.facet.FacetFilters;
+import com.coremedia.blueprint.cae.search.facet.FacetResult;
+import com.coremedia.blueprint.cae.search.facet.FacetValue;
 import com.coremedia.blueprint.id.Representation;
 import com.coremedia.cache.Cache;
 import com.coremedia.cache.CacheKey;
 import com.coremedia.cache.EvaluationException;
 import com.coremedia.cap.content.ContentRepository;
+import com.google.common.collect.ImmutableMap;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -30,7 +35,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -47,6 +55,7 @@ public class SolrSearchResultFactory implements SearchResultFactory, Initializin
   private Representation<Object> representationMapper;
   private SolrClient solrClient;
   private String collection;
+  private Map<String, Function<String, String>> facetFieldLabelFunctions = Collections.emptyMap();
 
   @Override
   public SearchResultBean createSearchResult(SearchQueryBean searchInput, long cacheForInSeconds) {
@@ -79,6 +88,7 @@ public class SolrSearchResultFactory implements SearchResultFactory, Initializin
   protected SearchResultBean createEmptyResultBean(SearchQueryBean searchInput) {
     SearchResultBean searchResultBean = new SearchResultBean();
     searchResultBean.setSearchQuery(searchInput);
+    searchResultBean.setHitsPerPage(searchInput.getLimit());
     return searchResultBean;
   }
 
@@ -89,9 +99,10 @@ public class SolrSearchResultFactory implements SearchResultFactory, Initializin
     // translate highlighted results
     searchResultBean.setHighlightingResults(translateHighlightResults(q));
     searchResultBean.setNumHits(q.getResults().getNumFound());
-    if (!searchInput.getFacetFields().isEmpty()) {
+    Map<String, String> facetFieldsMap = searchInput.getFacetFieldsMap();
+    if (!facetFieldsMap.isEmpty()) {
       // translate facets (if applicable)
-      searchResultBean.setFacets(translateFacets(q));
+      searchResultBean.setFacetResult(translateFacets(searchInput, q));
     }
     if (searchInput.isSpellcheckSuggest()) {
       // translate search suggestion (if applicable)
@@ -116,19 +127,41 @@ public class SolrSearchResultFactory implements SearchResultFactory, Initializin
     return hits;
   }
 
-  protected Map<String, List<ValueAndCount>> translateFacets(QueryResponse q) {
-    Map<String, List<ValueAndCount>> facets = new HashMap<>();
-    List<FacetField> facetFields = q.getFacetFields();
-    for (FacetField facetField : facetFields) {
-      List<ValueAndCount> values = new ArrayList<>();
+  protected FacetResult translateFacets(SearchQueryBean searchInput,
+                                        QueryResponse response) {
+    ImmutableMap.Builder<String, Collection<FacetValue>> builder = ImmutableMap.builder();
+    for (FacetField facetField : response.getFacetFields()) {
+      String facet = facetField.getName();
       if (facetField.getValues() != null) {
-        for (org.apache.solr.client.solrj.response.FacetField.Count count : facetField.getValues()) {
-          values.add(new ValueAndCount(count.getName(), count.getCount()));
-        }
+        List<FacetValue> values = facetField.getValues().stream()
+          .map(count -> createFacetValue(searchInput, facet, count))
+          .filter(Objects::nonNull)
+          .collect(Collectors.toList());
+        builder.put(facet, values);
       }
-      facets.put(facetField.getName(), values);
     }
-    return facets;
+    return new FacetResult(builder.build());
+  }
+
+  @Nullable
+  private FacetValue createFacetValue(SearchQueryBean searchInput, String facet, FacetField.Count count) {
+    String value = count.getName();
+    if (value == null) {
+      return null;
+    }
+    String fieldName = searchInput.getFacetFieldsMap().get(facet);
+    String label = createFacetLabel(fieldName, value);
+    if (label == null) {
+      return null;
+    }
+    Map<String, List<String>> filters = FacetFilters.parse(searchInput.getFacetFilters());
+    boolean enabled = filters.getOrDefault(facet, Collections.emptyList()).contains(value);
+    return new FacetValue(facet, value, count.getCount(), label, enabled);
+  }
+
+  private String createFacetLabel(String fieldName, String value) {
+    Function<String, String> labelFunction = facetFieldLabelFunctions.get(fieldName);
+    return labelFunction == null ? value : labelFunction.apply(value);
   }
 
   protected String translateSpellSuggestion(QueryResponse q) {
@@ -411,5 +444,23 @@ public class SolrSearchResultFactory implements SearchResultFactory, Initializin
   @Required
   public void setRepresentationMapper(Representation<Object> representationMapper) {
     this.representationMapper = representationMapper;
+  }
+
+  /**
+   * Sets a map from facet name to {@link Function} to compute {@link FacetValue#getLabel() labels}
+   * for {@link FacetValue}s from their indexed value.
+   *
+   * <p>Functions can return {@code null} for a invalid values, for which no label can be computed.
+   * Such invalid values will be omitted from the results.
+
+   * <p>Functions can return empty strings to indicate that no label could be provided for a valid value.
+   *
+   * <p>If no function is registered for a facet, indexed values will be used as labels.
+   *
+   * @param facetFieldLabelFunctions map from facet name to function
+   * @since 1810
+   */
+  public void setFacetFieldLabelFunctions(Map<String, Function<String, String>> facetFieldLabelFunctions) {
+    this.facetFieldLabelFunctions = facetFieldLabelFunctions;
   }
 }

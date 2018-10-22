@@ -126,11 +126,9 @@ Contains styling definitions for all content types as cm-teasable.
   &__headline {
     transition: all $transition-duration ease(in-out-quad);
     position: relative;
-    @include flickeringFix();
 
     & > span {
       display: inline-block;
-      @include flickeringFix(true);
 
       &:after {
         content: '';

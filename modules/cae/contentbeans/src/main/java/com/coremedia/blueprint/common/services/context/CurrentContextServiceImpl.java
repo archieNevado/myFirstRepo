@@ -22,15 +22,21 @@ public class CurrentContextServiceImpl implements CurrentContextService {
   @Override
   public CMContext getContext() {
     Cache.uncacheable(); // ensure that this method is not cached
-    Navigation navigation = ContextAttributes.getRequestAttribute(NavigationLinkSupport.ATTR_NAME_CMNAVIGATION, Navigation.class);
+
+    Navigation navigation = ContextAttributes
+            .findRequestAttribute(NavigationLinkSupport.ATTR_NAME_CMNAVIGATION, Navigation.class)
+            .orElse(null);
+
     if (navigation == null) {
       LOG.debug("Navigation context not found in request");
       return null;
     }
+
     CMContext context = navigation.getContext();
     if (context == null) {
       LOG.warn("navigation.getContext() returned null, navigation is: {}", navigation);
     }
+
     return context;
   }
 }

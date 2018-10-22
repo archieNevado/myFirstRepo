@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "jquery": "3.2.1",
+    "@coremedia/js-node-decoration-service": "^1.0.0",
     "@coremedia/js-device-detector": "^1.0.0",
     "@coremedia/sass-utils": "^1.0.0",
     "@coremedia/brick-media": "^1.0.0",

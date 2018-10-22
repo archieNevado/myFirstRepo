@@ -65,15 +65,12 @@
           </namespaces>
         </configuration>
       </plugin>
-      <!--//TODO wrong execution phase, too late -->
       <!-- this converts absolute (http://) URLs in the OSM libraries to schema-less ones -->
       <plugin>
         <groupId>com.google.code.maven-replacer-plugin</groupId>
         <artifactId>replacer</artifactId>
         <executions>
           <execution>
-            <!--//TODO change me-->
-            <phase>package</phase>
             <goals>
               <goal>replace</goal>
             </goals>

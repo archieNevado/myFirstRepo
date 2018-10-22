@@ -31,6 +31,8 @@ import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -47,8 +49,6 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
@@ -87,7 +87,7 @@ public class DownloadPortalHandler {
   private static final String DOWNLOAD_COLLECTION_OVERVIEW = "download-collection-overview";
 
   private static final String DC_PREPARE = "prepare";
-  
+
   private static final String DC_DOWNLOAD = "download";
 
   private static final String DOWNLOAD_COLLECTION_DATA = "download-collection-data";
@@ -270,7 +270,7 @@ public class DownloadPortalHandler {
    */
   @RequestMapping(value = DYNAMIC_PATTERN_PORTAL, method = RequestMethod.GET, params = DOWNLOAD_COLLECTION_REQUEST_PARAMETER_NAME)
   public ModelAndView handleDownloadCollectionOverviewRequest(@PathVariable(CONTEXT_ID) CMChannel navigation) {
-    DownloadCollectionOverview downloadCollectionOverview = downloadPortalFactory.createDownloadCollectionOverview(Collections.<AMAssetRendition>emptyList());
+    DownloadCollectionOverview downloadCollectionOverview = downloadPortalFactory.createDownloadCollectionOverview(Collections.emptyList());
     return getModelAndViewWithNavigation(downloadCollectionOverview, navigation, null);
   }
 
@@ -605,7 +605,7 @@ public class DownloadPortalHandler {
                                              @NonNull List<String> renditionNames,
                                              @NonNull Content assetContent) {
     if (isAssetValid(assetContent)) {
-      AMAsset amAsset = (AMAsset) contentBeanFactory.createBeanFor(assetContent);
+      AMAsset amAsset = contentBeanFactory.createBeanFor(assetContent, AMAsset.class);
       if (amAsset != null) {
         addValidRenditions(renditionsToDownload, renditionNames, amAsset);
       } else {

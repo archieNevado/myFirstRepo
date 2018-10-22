@@ -1,11 +1,12 @@
 package com.coremedia.blueprint.common.services.context;
 
-import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.base.navigation.context.ContextStrategy;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
+import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Required;
 
 /**
@@ -32,6 +33,7 @@ public class ContextHelper {
       // convention: navigation's context is the navigation itself
       return (CMNavigation) target;
     }
+
     // linkable's context can be determined by ContextStrategy
     CMContext currentContext = currentContextService.getContext();
     return findAndSelectContextFor(currentContext, target);
@@ -47,11 +49,11 @@ public class ContextHelper {
    * <p>
    * Must not be cached, since it depends on the request.
    */
+  @Nullable
   public Navigation currentSiteContext() {
     CMContext currentContext = currentContextService.getContext();
-    return currentContext==null ? null : currentContext.getRootNavigation();
+    return currentContext == null ? null : currentContext.getRootNavigation();
   }
-
 
   // --- configuration ----------------------------------------------
 
@@ -69,5 +71,4 @@ public class ContextHelper {
   public void setCurrentContextService(CurrentContextService currentContextService) {
     this.currentContextService = currentContextService;
   }
-
 }

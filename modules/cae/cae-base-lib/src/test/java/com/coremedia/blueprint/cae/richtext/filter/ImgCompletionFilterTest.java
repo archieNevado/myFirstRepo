@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.cae.richtext.filter;
 
+import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
@@ -8,6 +9,7 @@ import com.coremedia.objectserver.beans.ContentBeanFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.xml.sax.Attributes;
@@ -25,30 +27,26 @@ public class ImgCompletionFilterTest {
   private static final String BLOB_ID = "coremedia:///cap/resources/2982/data";
 
   @Mock
-  ContentBeanFactory contentBeanFactory;
+  private ContentBeanFactory contentBeanFactory;
 
   @Mock
-  IdProvider idProvider;
+  private IdProvider idProvider;
 
   @Mock
-  Content blobContent;
+  private Content blobContent;
 
   @Mock
-  CMPicture picBean;
+  private CMPicture picBean;
 
+  @InjectMocks
   private ImgCompletionFilter testling;
-
 
   // --- setup ------------------------------------------------------
 
   @Before
   public void setup() {
-    testling = new ImgCompletionFilter();
-    testling.setIdProvider(idProvider);
-    testling.setContentBeanFactory(contentBeanFactory);
-
     when(idProvider.parseId(IdHelper.parseContentIdFromBlobId(BLOB_ID))).thenReturn(blobContent);
-    when(contentBeanFactory.createBeanFor(blobContent)).thenReturn(picBean);
+    when(contentBeanFactory.createBeanFor(blobContent, CMObject.class)).thenReturn(picBean);
     when(picBean.getAlt()).thenReturn("foo");
   }
 

@@ -15,6 +15,8 @@ import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.google.common.collect.Iterables;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -22,12 +24,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.coremedia.blueprint.base.links.UriConstants.RequestParameters.VIEW_PARAMETER;
 import static com.google.common.collect.Lists.newArrayList;
@@ -39,6 +40,7 @@ import static com.google.common.collect.Lists.newArrayList;
 @Link
 @RequestMapping
 public class DefaultPageHandler extends PageHandlerBase {
+
   private static final Logger LOG = LoggerFactory.getLogger(DefaultPageHandler.class);
 
   /**
@@ -96,7 +98,8 @@ public class DefaultPageHandler extends PageHandlerBase {
   }
 
   /**
-   * Handles a request for a vanity URL containing a root segment and two additional segment, e.g. /sports/football/results/recent
+   * Handles a request for a vanity URL containing a root segment and two additional segment,
+   * e.g. /sports/football/results/recent
    */
   @NonNull
   protected ModelAndView handleRequestInternal(@Nullable List<String> navigationPath,
@@ -110,8 +113,8 @@ public class DefaultPageHandler extends PageHandlerBase {
    * Create the ModelAndView
    *
    * @param navigationPath the URL path
-   * @param view the view
-   * @param developer Consider the developer's work in progress for particular features
+   * @param view           the view
+   * @param developer      Consider the developer's work in progress for particular features
    * @return the ModelAndView
    */
   @Nullable
@@ -121,10 +124,12 @@ public class DefaultPageHandler extends PageHandlerBase {
     if (navigationPath == null || navigationPath.isEmpty()) {
       return null;
     }
+
     CMChannel rootChannel = (CMChannel) getNavigation(navigationPath.get(0));
     if (rootChannel == null) {
       return null;
     }
+
     if (navigationPath.size() == 1) {
       // The URL references the root channel
       return createModelAndView(asPage(rootChannel, rootChannel, developer), view);
@@ -152,15 +157,14 @@ public class DefaultPageHandler extends PageHandlerBase {
     return null;
   }
 
-  @Nullable
-  protected UriComponentsBuilder buildLinkForTaxonomyInternal(
-          @NonNull CMTaxonomy taxonomy,
-          @Nullable String viewName,
-          @NonNull Map<String, Object> linkParameters) {
+  @NonNull
+  protected Optional<UriComponentsBuilder> buildLinkForTaxonomyInternal(@NonNull CMTaxonomy taxonomy,
+                                                                        @Nullable String viewName,
+                                                                        @NonNull Map<String, Object> linkParameters) {
     CMNavigation topicPageChannel = getContextHelper().contextFor(taxonomy);
     if (topicPageChannel == null) {
-      LOG.error("Found no context for taxonomy " + taxonomy);
-      return null;
+      LOG.error("Found no context for taxonomy {}", taxonomy);
+      return Optional.empty();
     }
 
     // build link: /root/taxonomychannel/taxonomy/id
@@ -169,38 +173,45 @@ public class DefaultPageHandler extends PageHandlerBase {
     navigationPath.add(rootNavigation.getSegment());
     String segment = getDefaultTopicpageSegment(rootNavigation, taxonomy);
     if (segment == null) {
-      LOG.error("Actually responsible for this link, but could not determine the segment of the default topic page channel for " + taxonomy + " / " + rootNavigation);
-      return null;
+      LOG.error("Actually responsible for this link, but could not determine the segment of the default " +
+                      "topic page channel for {} / {}",
+              taxonomy, rootNavigation);
+      return Optional.empty();
     }
+
     navigationPath.add(segment);
     appendNameAndId(taxonomy, navigationPath);
-    return buildUri(navigationPath, viewName, linkParameters);
+
+    UriComponentsBuilder uriComponentsBuilder = buildUri(navigationPath, viewName, linkParameters);
+    return Optional.of(uriComponentsBuilder);
   }
 
-  @Nullable
-  protected UriComponentsBuilder buildLinkForLinkableInternal(
-          @NonNull CMLinkable linkable,
-          @Nullable String viewName,
-          @NonNull Map<String, Object> linkParameters) {
+  @NonNull
+  protected Optional<UriComponentsBuilder> buildLinkForLinkableInternal(@NonNull CMLinkable linkable,
+                                                                        @Nullable String viewName,
+                                                                        @NonNull Map<String, Object> linkParameters) {
     Navigation context = getNavigation(linkable);
+
     if (context == null) {
       LOG.warn("Linkable {} has no navigation context, cannot build link.", linkable);
-      return null;
+      return Optional.empty();
     }
+
     return buildLink(linkable, context, viewName, linkParameters);
   }
 
-  @Nullable
-  private UriComponentsBuilder buildLink(
-          @NonNull CMLinkable linkable,
-          @NonNull Navigation navigationContext,
-          @Nullable String viewName,
-          @NonNull Map<String, Object> linkParameters) {
+  @NonNull
+  private Optional<UriComponentsBuilder> buildLink(@NonNull CMLinkable linkable,
+                                                   @NonNull Navigation navigationContext,
+                                                   @Nullable String viewName,
+                                                   @NonNull Map<String, Object> linkParameters) {
     Content targetContent = linkable.getContent();
     Content navigationContent = ((CMNavigation) navigationContext).getContent();
-    UriComponentsBuilder uriComponentsBuilder = getContentLinkBuilder().buildLinkForPage(targetContent, navigationContent);
+
+    UriComponentsBuilder uriComponentsBuilder = getContentLinkBuilder()
+            .buildLinkForPage(targetContent, navigationContent);
     if (uriComponentsBuilder == null) {
-      return null;
+      return Optional.empty();
     }
 
     // add optional view query parameter
@@ -210,7 +221,8 @@ public class DefaultPageHandler extends PageHandlerBase {
 
     // add additional query parameters
     addLinkParametersAsQueryParameters(uriComponentsBuilder, linkParameters);
-    return uriComponentsBuilder;
+
+    return Optional.of(uriComponentsBuilder);
   }
 
   // --- PageHandlerBase --------------------------------------------
@@ -221,33 +233,43 @@ public class DefaultPageHandler extends PageHandlerBase {
    * The view specific interface is taken from the viewToBean Map
    * and instatiated with a settings proxy.
    */
+  @NonNull
   @Override
   protected ModelAndView createModelAndView(Page page, String view) {
     ModelAndView modelAndView = super.createModelAndView(page, view);
     Class viewBeanClass = viewToBean.get(view);
+
     if (viewBeanClass != null) {
       Object viewBeanProxy = settingsService.createProxy(viewBeanClass, page);
       modelAndView.addObject(VIEW_BEAN, viewBeanProxy);
     }
+
     return modelAndView;
   }
 
-
   // --- internal ---------------------------------------------------
 
+  @Nullable
   private String getDefaultTopicpageSegment(Navigation siteContext, CMTaxonomy taxonomy) {
     if (!(siteContext instanceof CMNavigation)) {
       return null;
     }
-    Content defaultTopicPageChannel = topicPageContextFinder.findDefaultTopicpageChannelFor(taxonomy.getContent(), ((CMNavigation) siteContext).getContent());
+
+    Content defaultTopicPageChannel = topicPageContextFinder.findDefaultTopicpageChannelFor(taxonomy.getContent(),
+            ((CMNavigation) siteContext).getContent());
+
     return defaultTopicPageChannel == null ? null : urlPathFormattingHelper.getVanityName(defaultTopicPageChannel);
   }
 
-  private UriComponentsBuilder buildUri(List<String> navigationPath, String viewName, Map<String, Object> linkParameters) {
+  @NonNull
+  private UriComponentsBuilder buildUri(List<String> navigationPath, String viewName,
+                                        Map<String, Object> linkParameters) {
     UriComponentsBuilder uriBuilder = UriComponentsBuilder
             .newInstance()
             .pathSegment(Iterables.toArray(navigationPath, String.class));
+
     addViewAndParameters(uriBuilder, viewName, linkParameters);
+
     return uriBuilder;
   }
 
@@ -270,7 +292,6 @@ public class DefaultPageHandler extends PageHandlerBase {
   private boolean isContextBean(CMLinkable linkable) {
     return linkable instanceof CMTaxonomy;
   }
-
 
   // --- configuration ----------------------------------------------
 
