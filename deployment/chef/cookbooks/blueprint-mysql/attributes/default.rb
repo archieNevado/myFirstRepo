@@ -9,6 +9,8 @@ default['blueprint']['mysql']['log_dir'] = '/var/log/mysql'
 default['blueprint']['mysql']['slow_query_log'] = false
 #<> Toggle to activate general logging of all queries
 default['blueprint']['mysql']['general_log'] = false
+#<> The default timezone
+default['blueprint']['mysql']['timezone'] = '+00:00'
 
 #<> mysql version to use
 default['blueprint']['mysql']['version'] = '5.7'
@@ -36,7 +38,7 @@ if node['yum']['mysql57-community']
 end
 
 #<> mysql yum repo gpgkey
-default['blueprint']['mysql']['gpgkey'] = 'https://raw.githubusercontent.com/chef-cookbooks/yum-mysql-community/master/files/mysql_pubkey.asc'
+default['blueprint']['mysql']['gpgkey'] = 'https://repo.mysql.com/RPM-GPG-KEY-mysql'
 
 #<> mysql yum repo failovermethod
 default['blueprint']['mysql']['failovermethod'] = 'priority'

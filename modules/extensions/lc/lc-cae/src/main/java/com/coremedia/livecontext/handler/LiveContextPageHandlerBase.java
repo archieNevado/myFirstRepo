@@ -16,12 +16,12 @@ import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
 import com.coremedia.objectserver.web.links.UriComponentsHelper;
 import com.google.common.annotations.VisibleForTesting;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
@@ -90,13 +90,14 @@ public class LiveContextPageHandlerBase extends PageHandlerBase {
     return settingsService;
   }
 
-  @Nullable
-  protected LiveContextNavigation getNavigationContext(@NonNull Site site, @NonNull CommerceBean commerceBean) {
+  @NonNull
+  protected Optional<LiveContextNavigation> getNavigationContext(@NonNull Site site,
+                                                                 @NonNull CommerceBean commerceBean) {
     try {
       return resolveContextStrategy.resolveContext(site, commerceBean);
     } catch (Exception ignored) {
       // Do not log, means actually just "not found", does not indicate a problem.
-      return null;
+      return Optional.empty();
     }
   }
 
@@ -157,12 +158,12 @@ public class LiveContextPageHandlerBase extends PageHandlerBase {
    * Builds complete, absolute WCS links with query parameters.
    * Do not postprocess.
    */
-  @Nullable
-  protected Object buildCommerceLinkFor(@NonNull Product product, @NonNull Map<String, Object> queryParams,
-                                        @NonNull HttpServletRequest request) {
+  @NonNull
+  protected Optional<UriComponentsBuilder> buildCommerceLinkFor(@NonNull Product product,
+                                                                @NonNull Map<String, Object> queryParams,
+                                                                @NonNull HttpServletRequest request) {
     return findCommercePropertyProvider()
-            .map(p -> p.buildProductLink(product, queryParams, request))
-            .orElse(null);
+            .flatMap(p -> p.buildProductLink(product, queryParams, request));
   }
 
   protected boolean isPreview() {

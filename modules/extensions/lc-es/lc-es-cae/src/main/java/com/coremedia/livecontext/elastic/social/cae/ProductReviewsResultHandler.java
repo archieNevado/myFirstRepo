@@ -111,7 +111,7 @@ public class ProductReviewsResultHandler extends AbstractReviewsResultHandler {
     Navigation navigation = getContextHelper().currentSiteContext();
 
     if (site != null && contextStrategy != null) {
-      navigation = contextStrategy.resolveContext(site, product);
+      navigation = contextStrategy.resolveContext(site, product).orElse(null);
     }
 
     return getUriComponentsBuilder(uriTemplate, navigation, product.getId());

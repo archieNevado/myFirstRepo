@@ -28,6 +28,7 @@
         <bpforms:ViewTypeSelectorForm bindTo="{config.bindTo}"/>
         <bpforms:ExternallyVisibleDateForm bindTo="{config.bindTo}"/>
         <bpforms:ValidityDocumentForm bindTo="{config.bindTo}"/>
+        <bpforms:AuthorLinkListDocumentForm bindTo="{config.bindTo}"/>
       </editor:items>
     </editor:DocumentForm>
     <bpforms:DefaultExtraDataForm/>

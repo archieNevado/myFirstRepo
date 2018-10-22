@@ -128,16 +128,7 @@ module.exports = () => config => {
   const viewRepositoryPlugin = new ViewRepositoryPlugin({
     templateGlobPattern: "**/*.+(ftl|fm|ftlh|ftlx)",
     targetPath: themeConfig.templatesTargetPath,
-    mappings: [
-      new ViewRepositoryMapping(
-        themeConfig.name,
-        (resource, packageJsonPath) => {
-          return (require(packageJsonPath).coremedia || {}).type === "theme";
-        }
-      ),
-      // everything else
-      new ViewRepositoryMapping("bricks"),
-    ],
+    mappings: [new ViewRepositoryMapping(themeConfig.name)],
   });
 
   return deepMerge(config, {
@@ -181,6 +172,9 @@ module.exports = () => config => {
             viewRepositoryPlugin.getLoaderConfig(),
             {
               loader: require.resolve("../loaders/TransformFreemarkerLoader/"),
+              options: {
+                viewRepositoryName: themeConfig.name,
+              },
             },
           ],
         },
@@ -239,11 +233,14 @@ module.exports = () => config => {
           // to properly handle importing from a theme template to a brick freemarker lib
           {
             source: "bricks/freemarkerLibs",
-            prefix: path.join("META-INF/resources/WEB-INF/templates", themeConfig.name),
+            prefix: path.join(
+              "META-INF/resources/WEB-INF/templates",
+              themeConfig.name
+            ),
             context: path.relative(
-                    themeConfig.themeTargetPath,
-                    themeConfig.templatesTargetPath
-            )
+              themeConfig.themeTargetPath,
+              themeConfig.templatesTargetPath
+            ),
           },
         ],
         {

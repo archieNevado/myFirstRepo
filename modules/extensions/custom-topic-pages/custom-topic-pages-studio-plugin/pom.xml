@@ -13,7 +13,7 @@
   <description>Topic Pages Administration Plugin for the CoreMedia Studio</description>
 
   <properties>
-    <coremedia.project.extension.for>studio</coremedia.project.extension.for>
+    <coremedia.project.extension.for>studio-dynamic</coremedia.project.extension.for>
   </properties>
 
   <dependencies>

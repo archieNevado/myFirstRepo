@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.fragment;
 
 import com.coremedia.blueprint.common.layout.PageGridPlacement;
+import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.Site;
@@ -21,6 +22,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Optional;
 
 import static com.coremedia.livecontext.fragment.FragmentHandler.UNRESOLVABLE_PLACEMENT_VIEW_NAME;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -62,7 +65,7 @@ public class ProductFragmentHandlerTest extends FragmentHandlerTestBase<ProductF
 
   @Test(expected = IllegalStateException.class)
   public void handleProductViewFragmentNoLiveContextNavigationFound() {
-    when(getResolveContextStrategy().resolveContext(any(Site.class), any(Product.class))).thenReturn(null);
+    when(getResolveContextStrategy().resolveContext(any(Site.class), any(Product.class))).thenReturn(Optional.empty());
     FragmentParameters params = getFragmentParameters4Product();
     params.setView(VIEW);
     getTestling().createModelAndView(params, request);
@@ -70,7 +73,7 @@ public class ProductFragmentHandlerTest extends FragmentHandlerTestBase<ProductF
 
   @Test(expected = IllegalStateException.class)
   public void handleProductViewFragmentWithCategoryNoLiveContextNavigationFound() {
-    when(getResolveContextStrategy().resolveContext(any(Site.class), any(Category.class))).thenReturn(null);
+    when(getResolveContextStrategy().resolveContext(any(Site.class), any(Category.class))).thenReturn(Optional.empty());
     FragmentParameters params = getFragmentParameters4Product();
     params.setView(VIEW);
     params.setCategoryId("categoryId");
@@ -86,7 +89,7 @@ public class ProductFragmentHandlerTest extends FragmentHandlerTestBase<ProductF
 
   @Test
   public void handleProductViewFragmentWithCategory() {
-    when(categoryContextStrategy.resolveContext(site, category)).thenReturn(navigation);
+    when(categoryContextStrategy.resolveContext(site, category)).thenReturn(Optional.of(navigation));
     FragmentParameters params = getFragmentParameters4Product();
     params.setCategoryId("categoryId");
     ModelAndView result = getTestling().createModelAndView(params, request);
@@ -96,7 +99,7 @@ public class ProductFragmentHandlerTest extends FragmentHandlerTestBase<ProductF
 
   @Test(expected = IllegalStateException.class)
   public void handleProductPlacementFragmentNoLiveContextNavigationFound() {
-    when(getResolveContextStrategy().resolveContext(getSite(), product)).thenReturn(null);
+    when(getResolveContextStrategy().resolveContext(getSite(), product)).thenReturn(Optional.empty());
     FragmentParameters params = getFragmentParameters4Product();
     params.setPlacement(PLACEMENT);
     getTestling().createModelAndView(params, request);
@@ -129,7 +132,7 @@ public class ProductFragmentHandlerTest extends FragmentHandlerTestBase<ProductF
     FragmentParameters fragmentParameters4Product = getFragmentParameters4Product();
     fragmentParameters4Product.setPlacement(PLACEMENT);
     fragmentParameters4Product.setCategoryId("categoryId");
-    when(categoryContextStrategy.resolveContext(any(Site.class), any(Product.class))).thenReturn(navigation);
+    when(categoryContextStrategy.resolveContext(any(Site.class), any(Product.class))).thenReturn(Optional.of(navigation));
     when(pageGridPlacementResolver.resolvePageGridPlacement(augmentedProductBean, PLACEMENT)).thenReturn(productPlacement);
 
     ModelAndView result = getTestling().createModelAndView(fragmentParameters4Product, request);
@@ -139,7 +142,7 @@ public class ProductFragmentHandlerTest extends FragmentHandlerTestBase<ProductF
   }
 
   @Test
-  public void handleProductPlacementFragmentFoundInParentChannel(){
+  public void handleProductPlacementFragmentFoundInParentChannel() {
     FragmentParameters fragmentParameters4Product = getFragmentParameters4Product();
     fragmentParameters4Product.setPlacement(PLACEMENT);
 
@@ -152,7 +155,7 @@ public class ProductFragmentHandlerTest extends FragmentHandlerTestBase<ProductF
   }
 
   @Test
-  public void handleProductPlacementFragmentNotFound(){
+  public void handleProductPlacementFragmentNotFound() {
     FragmentParameters fragmentParameters4Product = getFragmentParameters4Product();
     fragmentParameters4Product.setPlacement(PLACEMENT);
 
@@ -164,7 +167,7 @@ public class ProductFragmentHandlerTest extends FragmentHandlerTestBase<ProductF
   }
 
   @Test
-  public void handleProductAssetFragment(){
+  public void handleProductAssetFragment() {
     FragmentParameters fragmentParameters4Product = getFragmentParameters4ProductAssets();
     when(connection.getCatalogService().findCategoryById(any(CommerceId.class), any(StoreContext.class))).thenReturn(category);
     when(connection.getCatalogService().findProductById(any(CommerceId.class), any(StoreContext.class))).thenReturn(product);
@@ -197,7 +200,7 @@ public class ProductFragmentHandlerTest extends FragmentHandlerTestBase<ProductF
     when(product.getExternalId()).thenReturn("productId");
     when(productAugmentationService.getContent(product)).thenReturn(augmentedProductContent);
     when(contentBeanFactory.createBeanFor(augmentedProductContent, LiveContextExternalProduct.class)).thenReturn(augmentedProductBean);
-    when(contentBeanFactory.createBeanFor(augmentedProductContent)).thenReturn(augmentedProductBean);
+    when(contentBeanFactory.createBeanFor(augmentedProductContent, Linkable.class)).thenReturn(augmentedProductBean);
     when(augmentedProductBean.getContent()).thenReturn(augmentedProductContent);
     when(augmentedProductContent.getType()).thenReturn(cmExternalProductContentType);
     when(cmExternalProductContentType.getName()).thenReturn(CMExternalProduct.NAME);

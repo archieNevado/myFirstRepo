@@ -148,6 +148,11 @@
     <property name="viewtype" associationType="aggregation"/>
   </dataview>
 
+  <dataview appliesTo="com.coremedia.blueprint.cae.contentbeans.CMPersonImpl">
+    <property name="contexts" associationType="static"/>
+    <property name="viewtype" associationType="aggregation"/>
+  </dataview>
+
   <dataview appliesTo="com.coremedia.blueprint.cae.contentbeans.CMSpinnerImpl">
     <property name="aspectByName" associationType="composition"/>
     <property name="localSettings"/>

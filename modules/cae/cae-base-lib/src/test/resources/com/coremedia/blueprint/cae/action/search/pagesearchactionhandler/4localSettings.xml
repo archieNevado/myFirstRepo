@@ -3,7 +3,7 @@
   <LinkProperty Name="searchChannel"
                   LinkType="coremedia:///cap/contenttype/CMChannel"
                   xlink:href="coremedia:///cap/resources/24"/>
-  <StringListProperty Name="search.doctypeselect">
+  <StringListProperty Name="searchDoctypeSelect">
     <String>CMArticle</String>
   </StringListProperty>
 </Struct>

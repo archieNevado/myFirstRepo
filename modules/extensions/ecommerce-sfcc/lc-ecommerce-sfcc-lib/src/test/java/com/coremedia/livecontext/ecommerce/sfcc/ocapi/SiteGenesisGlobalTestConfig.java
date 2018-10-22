@@ -4,6 +4,7 @@ import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 
 import java.util.Currency;
+import java.util.Locale;
 
 public class SiteGenesisGlobalTestConfig extends SfccTestConfig {
 
@@ -11,11 +12,8 @@ public class SiteGenesisGlobalTestConfig extends SfccTestConfig {
   public StoreContext getStoreContext() {
     return SfccTestConfigBuilder.build(
             "SiteGenesis",
-            CatalogId.of("storefront-catalog-non-en"),
-            "SiteGenesisGlobal",
-            "SiteGenesisGlobal",
-            "en_US",
-            Currency.getInstance("USD")
+            "SiteGenesisGlobal", "SiteGenesisGlobal", CatalogId.of("storefront-catalog-non-en"),
+            Currency.getInstance("EUR"), Locale.UK
     );
   }
 
@@ -23,12 +21,8 @@ public class SiteGenesisGlobalTestConfig extends SfccTestConfig {
   public StoreContext getGermanStoreContext() {
     return SfccTestConfigBuilder.build(
             "SiteGenesis",
-            CatalogId.of("storefront-catalog-non-en"),
-            "SiteGenesisGlobal",
-            "SiteGenesisGlobal",
-            "de",
-            Currency.getInstance("EUR")
+            "SiteGenesisGlobal", "SiteGenesisGlobal", CatalogId.of("storefront-catalog-non-en"),
+            Currency.getInstance("EUR"), Locale.GERMAN
     );
   }
-
 }

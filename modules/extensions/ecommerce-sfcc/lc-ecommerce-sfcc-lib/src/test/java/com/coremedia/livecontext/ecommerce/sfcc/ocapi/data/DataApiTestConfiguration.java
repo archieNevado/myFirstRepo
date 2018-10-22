@@ -4,7 +4,7 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.livecontext.ecommerce.sfcc.configuration.SfccStoreContextProperties;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.SfccTestConfig;
-import com.coremedia.livecontext.ecommerce.sfcc.ocapi.SiteGenesisTestConfig;
+import com.coremedia.livecontext.ecommerce.sfcc.ocapi.SiteGenesisGlobalTestConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +24,7 @@ public class DataApiTestConfiguration {
 
     @Bean
     public SfccTestConfig testConfig() {
-      return new SiteGenesisTestConfig();
+      return new SiteGenesisGlobalTestConfig();
     }
   }
 }

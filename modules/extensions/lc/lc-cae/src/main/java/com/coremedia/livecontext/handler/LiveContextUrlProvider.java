@@ -4,65 +4,67 @@ import com.coremedia.livecontext.contentbeans.CMExternalPage;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * LC Url Provider to help with formatted not encoded commerce URLs.
  */
+@DefaultAnnotation(NonNull.class)
 public interface LiveContextUrlProvider {
 
   /**
    * Build a link for the given category in the commerce system.
-   * @param category the category
+   *
+   * @param category    the category
    * @param queryParams additional link parameters
-   * @param request the current request
+   * @param request     the current request
    * @return a URI components builder for the link to the commerce system
    */
-  @Nullable
-  UriComponentsBuilder buildCategoryLink(@NonNull Category category,
-                                         @NonNull Map<String, Object> queryParams,
-                                         @NonNull HttpServletRequest request);
+  Optional<UriComponentsBuilder> buildCategoryLink(Category category,
+                                                   Map<String, Object> queryParams,
+                                                   HttpServletRequest request);
 
   /**
    * Build a link for the given product in the commerce system.
-   * @param product the product
+   *
+   * @param product     the product
    * @param queryParams additional link parameters
-   * @param request the current request
+   * @param request     the current request
    * @return a URI components builder for the link to the commerce system
    */
-  @Nullable
-  UriComponentsBuilder buildProductLink(@NonNull Product product,
-                                        @NonNull Map<String, Object> queryParams,
-                                        @NonNull HttpServletRequest request);
+  Optional<UriComponentsBuilder> buildProductLink(Product product,
+                                                  Map<String, Object> queryParams,
+                                                  HttpServletRequest request);
 
   /**
    * Build a link for the given external navigation page in the commerce system.
-   * @param navigation the exernal page document
+   *
+   * @param navigation  the exernal page document
    * @param queryParams additional link parameters
-   * @param request the current request
+   * @param request     the current request
    * @return a URI components builder for the link to the commerce system
    */
-  @Nullable
-  UriComponentsBuilder buildPageLink(@NonNull CMExternalPage navigation,
-                                     @NonNull Map<String, Object> queryParams,
-                                     @NonNull HttpServletRequest request,
-                                     @NonNull StoreContext storeContext);
+  Optional<UriComponentsBuilder> buildPageLink(CMExternalPage navigation,
+                                               Map<String, Object> queryParams,
+                                               HttpServletRequest request,
+                                               StoreContext storeContext);
 
   /**
    * Build a SEO link for the commerce system.
+   *
    * @param seoSegments the SEO segments String
    * @param queryParams additional link parameters
-   * @param request the current request
+   * @param request     the current request
    * @return a URI components builder for the link to the commerce system
    */
-  @Nullable
-  UriComponentsBuilder buildShopLink(@NonNull String seoSegments,
-                                     @NonNull Map<String, Object> queryParams,
-                                     @NonNull HttpServletRequest request,
-                                     @NonNull StoreContext storeContext);
+  Optional<UriComponentsBuilder> buildShopLink(String seoSegments,
+                                               Map<String, Object> queryParams,
+                                               HttpServletRequest request,
+                                               StoreContext storeContext);
 }

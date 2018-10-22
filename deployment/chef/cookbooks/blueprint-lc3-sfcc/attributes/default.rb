@@ -19,6 +19,11 @@ default['blueprint']['lc3-sfcc']['virtual_host']['delivery']['sites']['sitegenes
 #<> The id property of the CMSite content associated with this site
 default['blueprint']['lc3-sfcc']['virtual_host']['delivery']['sites']['sitegenesis']['site_id'] = 'SFCC-sitegenesis-UK-Site-ID'
 
+default['blueprint']['lc3-sfcc']['cms_public_host'] = 'localhost'
+default['blueprint']['proxy']['virtual_host']['preview']['server_aliases']['lc3-sfcc'] = "preview-#{node['blueprint']['lc3-sfcc']['cms_public_host']}"
+default['blueprint']['lc3-sfcc']['virtual_host']['preview']['server_aliases']['lc3-sfcc'] = "preview-#{node['blueprint']['lc3-sfcc']['cms_public_host']}"
+default['blueprint']['lc3-sfcc']['virtual_host']['delivery']['sites']['sitegenesis']['server_aliases'] = ["#{node['blueprint']['lc3-sfcc']['cms_public_host']}"]
+
 default['blueprint']['lc3-sfcc']['virtual_host']['shop-preview']['server_name'] = "shop-preview-sitegenesis.#{node['blueprint']['hostname']}"
 default['blueprint']['lc3-sfcc']['virtual_host']['shop-preview']['time_travel_alias'] = "shop-preview-sitegenesis.#{node['blueprint']['hostname']}"
 default['blueprint']['lc3-sfcc']['virtual_host']['shop-preview']['server_aliases'] = []

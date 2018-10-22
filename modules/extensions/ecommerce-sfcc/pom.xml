@@ -18,6 +18,7 @@
     <module>lc-ecommerce-sfcc-cae-component</module>
     <module>lc-ecommerce-sfcc-cae-lib</module>
     <module>lc-ecommerce-sfcc-lib</module>
+    <module>lc-ecommerce-sfcc-preview-cae</module>
     <module>test-data</module>
   </modules>
 </project>

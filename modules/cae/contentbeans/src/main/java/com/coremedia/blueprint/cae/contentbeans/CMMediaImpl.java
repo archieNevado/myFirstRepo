@@ -7,8 +7,6 @@ import com.google.common.collect.Lists;
 
 import java.util.List;
 
-import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
-
 /**
  * Generated extension class for immutable beans of document type " CMMedia".
  */

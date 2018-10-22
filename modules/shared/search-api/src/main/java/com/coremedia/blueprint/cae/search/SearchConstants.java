@@ -25,7 +25,8 @@ public class SearchConstants {
     SEGMENT("segment"),
     COMMERCE_ITEMS("commerceitems"),
     CONTEXTS("contexts"),
-    HTML_DESCRIPTION("htmlDescription");
+    HTML_DESCRIPTION("htmlDescription"),
+    EXTERNALLY_DISPLAYED_DATE("externallydisplayeddate");
 
     private String name;
 

@@ -10,7 +10,9 @@ import com.coremedia.livecontext.ecommerce.common.NotFoundException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.handler.LiveContextPageHandlerBase;
 import com.coremedia.objectserver.web.links.Link;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -22,10 +24,12 @@ import static com.coremedia.livecontext.product.ProductPageHandler.LIVECONTEXT_P
 @RequestMapping
 public class LiveContextExternalProductPreviewHandler extends LiveContextPageHandlerBase {
 
+  @Nullable
   @SuppressWarnings("unused")
   @Link(type = LiveContextExternalProduct.class)
-  public Object buildLinkForExternalProduct(LiveContextExternalProduct externalProduct, String viewName,
-                                            Map<String, Object> linkParameters, HttpServletRequest request) {
+  public UriComponentsBuilder buildLinkForExternalProduct(LiveContextExternalProduct externalProduct, String viewName,
+                                                          Map<String, Object> linkParameters,
+                                                          HttpServletRequest request) {
     Optional<StoreContext> storeContext = CurrentCommerceConnection.find().map(CommerceConnection::getStoreContext);
     if (!storeContext.isPresent()) {
       // not responsible
@@ -45,7 +49,7 @@ public class LiveContextExternalProductPreviewHandler extends LiveContextPageHan
       return null;
     }
 
-    return buildCommerceLinkFor(product, linkParameters, request);
+    return buildCommerceLinkFor(product, linkParameters, request).orElse(null);
   }
 
   private boolean useCommerceProductLinks(Site site) {

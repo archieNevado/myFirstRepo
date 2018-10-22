@@ -151,4 +151,10 @@ public class ProductSearchHitDocument extends AbstractOCDocument {
   public void setImage(ImageDocument image) {
     this.image = image;
   }
+
+  @Override
+  public String getId() {
+    //the product id of the product search hit document is the id as required by AbstractOCDocument
+    return productId;
+  }
 }

@@ -109,8 +109,10 @@ public class ProductCatalogPictureHandler extends CatalogPictureHandlerBase {
     CommerceConnection connection = CurrentCommerceConnection.get();
     StoreContext storeContext = requireNonNull(connection.getStoreContext(), "store context not available");
 
-    return handleRequestWidthHeightForProductWithCatalog(storeId, locale, formatName, partNumber, extension,
-            storeContext.getCatalogId(), request, response);
+    String catalogId = storeContext.getCatalogId().map(CatalogId::value).orElse(null);
+
+    return handleRequestWidthHeightForProductWithCatalog(storeId, locale, formatName, partNumber, extension, catalogId,
+            request, response);
   }
 
   private Optional<Product> loadProductOrVariant(CatalogAlias catalogAlias, String partNumber, StoreContext storeContext){

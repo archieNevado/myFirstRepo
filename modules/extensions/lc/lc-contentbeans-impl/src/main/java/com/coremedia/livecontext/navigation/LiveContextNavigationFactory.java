@@ -16,12 +16,11 @@ import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Required;
-
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 
 import static org.springframework.util.Assert.notNull;
 
@@ -47,7 +46,7 @@ public class LiveContextNavigationFactory {
   public LiveContextNavigation createNavigation(@NonNull Category category, @NonNull Site site) {
     if (augmentationService != null) {
       Content externalChannelContent = augmentationService.getContent(category);
-      LiveContextNavigation externalChannel = (LiveContextNavigation) contentBeanFactory.createBeanFor(externalChannelContent);
+      LiveContextNavigation externalChannel = contentBeanFactory.createBeanFor(externalChannelContent, LiveContextNavigation.class);
       if (null != externalChannel && validationService.validate(externalChannel)) {
         return externalChannel;
       }

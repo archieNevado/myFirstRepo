@@ -24,6 +24,7 @@ import com.coremedia.objectserver.web.links.LinkTransformer;
 import com.coremedia.objectserver.web.links.UriComponentsHelper;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableMap;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +35,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -152,10 +152,12 @@ public class CommerceSearchHandler extends PageHandlerBase {
 
     StoreContext storeContext = commerceConnection.getStoreContext();
 
-    UriComponents baseUrl = (UriComponents) searchResultRedirectUrlProvider
-            .provideRedirectUrl(null, request, storeContext);
-    UriComponentsBuilder uriComponentsBuilder = UriComponentsHelper.fromUriComponents(baseUrl);
-    String urlStr = getRedirectUrl(term, request, response, uriComponentsBuilder);
+    UriComponentsBuilder baseUrlUriComponentsBuilder = searchResultRedirectUrlProvider
+            .provideRedirectUrl(null, request, storeContext)
+            .map(UriComponentsHelper::fromUriComponents)
+            .orElseGet(UriComponentsBuilder::newInstance);
+
+    String urlStr = getRedirectUrl(term, request, response, baseUrlUriComponentsBuilder);
     response.sendRedirect(urlStr);
     response.flushBuffer();
 

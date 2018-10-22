@@ -19,16 +19,17 @@ import com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.Exter
 import com.coremedia.objectserver.beans.ContentBean;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.MoreObjects;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static com.coremedia.livecontext.fragment.links.transformers.resolvers.AbstractLiveContextLinkResolver.deabsolutizeLink;
 import static com.coremedia.livecontext.handler.LiveContextPageHandlerBase.P13N_URI_PARAMETER;
@@ -46,57 +47,70 @@ public class SfccLinkResolver implements LiveContextLinkResolver {
     this.seoSegmentBuilder = seoSegmentBuilder;
   }
 
-  @Nullable
+  @NonNull
   @Override
-  public String resolveUrl(@NonNull String source, Object bean, String variant, CMNavigation navigation,
-                           HttpServletRequest request) {
+  public Optional<String> resolveUrl(@NonNull String source, Object bean, String variant, CMNavigation navigation,
+                                     HttpServletRequest request) {
     try {
-      if (bean instanceof CMProductTeaser) {
-        CMProductTeaser productTeaser = (CMProductTeaser) bean;
-        Product product = productTeaser.getProduct();
-        if (product != null) {
-          return buildLink(source, request, "Product-Show", "pid", product.getExternalId());
-        } else {
-          LOG.debug("Cannot generate link for product teaser '{}', product not set", productTeaser.getContentId());
-        }
-      } else if (bean instanceof ProductInSite) {
-        ProductInSite productInSite = (ProductInSite) bean;
-        return buildLink(source, request, "Product-Show", "pid", productInSite.getProduct().getExternalId());
-      } else if (bean instanceof Product) {
-        Product product = (Product) bean;
-        return buildLink(source, request, "Product-Show", "pid", product.getExternalId());
-      } else if (bean instanceof CMExternalPage) {
-        CMExternalPage externalPage = (CMExternalPage) bean;
-        if (externalPage.isRoot()) {
-          return buildLink(source, request, "Home-Show");
-        }
-        String externalUriPath = externalPage.getExternalUriPath();
-        if (StringUtils.isNotBlank(externalUriPath)) {
-          return buildLink(source, request, "Page-Show", "cid", externalPage.getExternalId(), "cpath", externalUriPath);
-        }
-        return buildLink(source, request, "Page-Show", "cid", externalPage.getExternalId());
-      } else if (bean instanceof LiveContextNavigation) {
-        LiveContextNavigation liveContextNavigation = (LiveContextNavigation) bean;
-        return buildLink(source, request, "Search-Show", "cgid", liveContextNavigation.getCategory().getExternalId());
-      } else if (bean instanceof Category) {
-        Category category = (Category) bean;
-        return buildLink(source, request, "Search-Show", "cgid", category.getExternalId());
-      } else if (bean instanceof CMNavigation) {
-        CMNavigation cmNavigation = (CMNavigation) bean;
-        return buildLink(source, request, "CM-Content", "pageid", seoSegmentBuilder.asSeoSegment(navigation, cmNavigation));
-      } else if (bean instanceof CMLinkable) {
-        CMLinkable cmLinkable = (CMLinkable) bean;
-        return buildLink(source, request, "CM-Content", "pageid", seoSegmentBuilder.asSeoSegment(navigation, cmLinkable));
-      } else if (bean instanceof ContentBeanBackedPageGridPlacement || bean instanceof DynamizableContainer) {
-        return buildLink(source, request, "CM-Dynamic", "url", deabsolutizeLink(source));
-      }
+      String link = buildLink(source, bean, navigation, request);
+      return Optional.ofNullable(link);
     } catch (Exception e) {
-      LOG.error("Error creating salesforce intermediate link representation for '" + debug(bean) + "'", e);
+      LOG.error("Error creating salesforce intermediate link representation for '{}'", debug(bean), e);
+      return Optional.empty();
     }
-
-    return null;
   }
 
+  @Nullable
+  @SuppressWarnings({"IfStatementWithTooManyBranches", "OverlyComplexMethod"})
+  private String buildLink(@NonNull String source, Object bean, CMNavigation navigation, HttpServletRequest request) {
+    if (bean instanceof CMProductTeaser) {
+      CMProductTeaser productTeaser = (CMProductTeaser) bean;
+      Product product = productTeaser.getProduct();
+
+      if (product == null) {
+        LOG.debug("Cannot generate link for product teaser '{}', product not set", productTeaser.getContentId());
+        return null;
+      }
+
+      return buildLink(source, request, "Product-Show", "pid", product.getExternalId());
+    } else if (bean instanceof ProductInSite) {
+      ProductInSite productInSite = (ProductInSite) bean;
+      return buildLink(source, request, "Product-Show", "pid", productInSite.getProduct().getExternalId());
+    } else if (bean instanceof Product) {
+      Product product = (Product) bean;
+      return buildLink(source, request, "Product-Show", "pid", product.getExternalId());
+    } else if (bean instanceof CMExternalPage) {
+      CMExternalPage externalPage = (CMExternalPage) bean;
+      if (externalPage.isRoot()) {
+        return buildLink(source, request, "Home-Show");
+      }
+
+      String externalUriPath = externalPage.getExternalUriPath();
+      if (StringUtils.isNotBlank(externalUriPath)) {
+        return buildLink(source, request, "Page-Show", "cid", externalPage.getExternalId(), "cpath", externalUriPath);
+      }
+
+      return buildLink(source, request, "Page-Show", "cid", externalPage.getExternalId());
+    } else if (bean instanceof LiveContextNavigation) {
+      LiveContextNavigation liveContextNavigation = (LiveContextNavigation) bean;
+      return buildLink(source, request, "Search-Show", "cgid", liveContextNavigation.getCategory().getExternalId());
+    } else if (bean instanceof Category) {
+      Category category = (Category) bean;
+      return buildLink(source, request, "Search-Show", "cgid", category.getExternalId());
+    } else if (bean instanceof CMNavigation) {
+      CMNavigation cmNavigation = (CMNavigation) bean;
+      return buildLink(source, request, "CM-Content", "pageid", seoSegmentBuilder.asSeoSegment(navigation, cmNavigation));
+    } else if (bean instanceof CMLinkable) {
+      CMLinkable cmLinkable = (CMLinkable) bean;
+      return buildLink(source, request, "CM-Content", "pageid", seoSegmentBuilder.asSeoSegment(navigation, cmLinkable));
+    } else if (bean instanceof ContentBeanBackedPageGridPlacement || bean instanceof DynamizableContainer) {
+      return buildLink(source, request, "CM-Dynamic", "url", deabsolutizeLink(source));
+    } else {
+      return null;
+    }
+  }
+
+  @NonNull
   private static String buildLink(@NonNull String source, @NonNull HttpServletRequest request, String... params) {
     List<String> paramsList = newArrayList(params);
 
@@ -152,15 +166,16 @@ public class SfccLinkResolver implements LiveContextLinkResolver {
     List<QueryParam> queryParams = Urls.getQueryString(s)
             .map(SfccLinkResolver::splitQueryString)
             .orElseGet(Collections::emptyList);
+
     if (queryParams.size() == 1 && queryParams.get(0).value == null) {
       return Collections.emptyList();
     }
+
     return queryParams;
   }
 
   @NonNull
   private static List<QueryParam> splitQueryString(@NonNull String queryString) {
-
     return Arrays.stream(queryString.split("&"))
             .map(SfccLinkResolver::splitQueryParam)
             .collect(toList());

@@ -11,7 +11,6 @@ import com.coremedia.blueprint.common.contentbeans.CMJavaScript;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMMedia;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
-import com.coremedia.blueprint.common.contentbeans.CMPicture;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.blueprint.common.contentbeans.CMTheme;
 import com.coremedia.blueprint.common.layout.PageGrid;
@@ -22,16 +21,17 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.user.User;
 import com.google.common.collect.Lists;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
+import static java.util.Collections.emptyList;
 
 /**
  * Generated extension class for immutable beans of document type "CMChannel".
@@ -95,7 +95,7 @@ public class CMChannelImpl extends CMChannelBase {
       return css;
     }
     CMChannel parent = getParentChannel();
-    return parent==null ? Collections.emptyList() : parent.getCss();
+    return parent==null ? emptyList() : parent.getCss();
   }
 
   /**
@@ -110,7 +110,7 @@ public class CMChannelImpl extends CMChannelBase {
       return js;
     }
     CMChannel parent = getParentChannel();
-    return parent==null ? Collections.emptyList() : parent.getJavaScript();
+    return parent==null ? emptyList() : parent.getJavaScript();
   }
 
   /**
@@ -165,6 +165,7 @@ public class CMChannelImpl extends CMChannelBase {
   }
 
   @Override
+  @NonNull
   public PageGrid getPageGrid() {
     return pageGridService.getContentBackedPageGrid(this);
   }
@@ -230,15 +231,17 @@ public class CMChannelImpl extends CMChannelBase {
   }
 
   @Override
+  @NonNull
   public List<CMMedia> getMedia() {
     List<CMMedia> media = super.getMedia();
     return isNotEmpty(media) ? media : grabSomeMedia(new HashSet<>());
   }
 
+  @NonNull
   private List<CMMedia> grabSomeMedia(Collection<CMChannelImpl> visited) {
     // Cycle detection for crisscross pagegridded channels
     if (visited.contains(this)) {
-      return null;
+      return emptyList();
     }
     visited.add(this);
 
@@ -265,7 +268,7 @@ public class CMChannelImpl extends CMChannelBase {
     }
 
     // Surrender
-    return Lists.newArrayList();
+    return emptyList();
   }
 
   private CMTeasable asTeasable(Object obj) {

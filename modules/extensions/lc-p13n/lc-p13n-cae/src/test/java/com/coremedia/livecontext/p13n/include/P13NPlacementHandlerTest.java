@@ -15,7 +15,6 @@ import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.contentbeans.CMExternalChannel;
@@ -42,12 +41,11 @@ import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DY
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_PLACEMENT;
 import static com.coremedia.livecontext.p13n.include.P13NPlacementHandler.DYNAMIC_PLACEMENT_URI_PATTERN;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class P13NPlacementHandlerTest {
 
   private P13NPlacementHandler testling;
@@ -57,9 +55,6 @@ public class P13NPlacementHandlerTest {
 
   @Mock
   private ContentBeanFactory contentBeanFactory;
-
-  @Mock
-  private ContentRepository contentRepository;
 
   @Mock
   private ContextHelper contextHelper;
@@ -91,12 +86,14 @@ public class P13NPlacementHandlerTest {
   @Mock
   private CMNavigation navigation;
 
+  @Mock
+  private CMChannel channel;
+
   @Before
   public void setUp() throws Exception {
     testling = new P13NPlacementHandler();
     testling.setBeanFactory(beanFactory);
     testling.setContentBeanFactory(contentBeanFactory);
-    testling.setContentRepository(contentRepository);
     testling.setSitesService(sitesService);
     testling.setValidationService(validationService);
     testling.setNavigationSegmentsUriHelper(navigationSegmentsUriHelper);
@@ -125,25 +122,14 @@ public class P13NPlacementHandlerTest {
 
   @Test
   public void testHandleChannelRequest() {
-
-    Content cmContent = mock(Content.class);
-    ContentType cmContentType = mock(ContentType.class);
-    CMChannel cmContentBean = mock(CMChannel.class);
-
-    when(contentRepository.getContent(anyString())).thenReturn(cmContent);
-    when(contentBeanFactory.createBeanFor(cmContent)).thenReturn(cmContentBean);
-    when(validationService.validate(cmContentBean)).thenReturn(true);
-
-    when(cmContentBean.getContent()).thenReturn(cmContent);
-    when(cmContent.getType()).thenReturn(cmContentType);
-    when(cmContentType.getName()).thenReturn(CMChannel.NAME);
-    when(cmContentBean.getPageGrid()).thenReturn(pageGrid);
+    when(validationService.validate(channel)).thenReturn(true);
+    when(channel.getPageGrid()).thenReturn(pageGrid);
 
     configureContext("helios", navigation);
 
     MockHttpServletRequest mockRequest = new MockHttpServletRequest();
 
-    ModelAndView modelAndView = testling.handleRequest("helios", 4711, "pagegrid", "header", "myView", mockRequest);
+    ModelAndView modelAndView = testling.handleRequest("helios", channel, "pagegrid", "header", "myView", mockRequest);
 
     assertThat(modelAndView.getViewName()).isEqualTo("myView");
     assertThat(modelAndView.getModel().get("self")).isInstanceOf(ContentBeanBackedPageGridPlacement.class);
@@ -153,25 +139,17 @@ public class P13NPlacementHandlerTest {
 
   @Test
   public void testHandlePdpRequest() {
-
-    Content cmContent = mock(Content.class);
-    ContentType cmContentType = mock(ContentType.class);
     CMExternalChannel cmContentBean = mock(CMExternalChannel.class);
 
-    when(contentRepository.getContent(anyString())).thenReturn(cmContent);
-    when(contentBeanFactory.createBeanFor(cmContent)).thenReturn(cmContentBean);
     when(validationService.validate(cmContentBean)).thenReturn(true);
 
-    when(cmContentBean.getContent()).thenReturn(cmContent);
-    when(cmContent.getType()).thenReturn(cmContentType);
-    when(cmContentType.getName()).thenReturn(CMExternalChannel.NAME);
     when(cmContentBean.getPdpPagegrid()).thenReturn(pdpPageGrid);
 
     configureContext("helios", navigation);
 
     MockHttpServletRequest mockRequest = new MockHttpServletRequest();
 
-    ModelAndView modelAndView = testling.handleRequest("helios", 4711, "pdpPagegrid", "additional", "myView", mockRequest);
+    ModelAndView modelAndView = testling.handleRequest("helios", cmContentBean, "pdpPagegrid", "additional", "myView", mockRequest);
 
     assertThat(modelAndView.getViewName()).isEqualTo("myView");
     assertThat(modelAndView.getModel().get("self")).isInstanceOf(ContentBeanBackedPageGridPlacement.class);
@@ -181,12 +159,9 @@ public class P13NPlacementHandlerTest {
 
   @Test
   public void testHandleFragmentRequestWrongContent() {
-    Content wrongContent = mock(Content.class);
-    when(contentRepository.getContent(anyString())).thenReturn(wrongContent);
     CMArticle cmArticle = mock(CMArticle.class);
-    when(contentBeanFactory.createBeanFor(wrongContent)).thenReturn(cmArticle);
 
-    ModelAndView modelAndView = testling.handleRequest("helios", 4711, "pagegrid", "header", "myView", new MockHttpServletRequest());
+    ModelAndView modelAndView = testling.handleRequest("helios", cmArticle, "pagegrid", "header", "myView", new MockHttpServletRequest());
     assertThat(modelAndView.getModel()).isEqualTo(HandlerHelper.notFound().getModel());
   }
 

@@ -13,7 +13,6 @@ import com.coremedia.livecontext.ecommerce.p13n.MarketingSpotService;
 import com.coremedia.rest.linking.LinkResolver;
 import com.coremedia.rest.linking.LinkResolverUtil;
 import com.coremedia.rest.linking.LocationHeaderResourceFilter;
-import com.coremedia.rest.linking.RemoteBeanLink;
 import com.google.common.collect.Ordering;
 import com.sun.jersey.spi.container.ResourceFilters;
 import org.slf4j.Logger;
@@ -147,14 +146,15 @@ public class StoreResource extends AbstractCatalogResource<Store> {
       representation.setVendorUrl(entity.getVendorUrl().orElse(null));
       representation.setVendorName(entity.getVendorName().orElse(null));
       representation.setVendorVersion(entity.getVendorVersion().orElse(null));
-      representation.setContext(getStoreContext());
+      representation.setContext(context);
       representation.setMultiCatalog(configuredCatalogs.size() > 1);
       representation.setDefaultCatalog(entity.getDefaultCatalog().orElse(null));
       representation.setCatalogs(configuredCatalogs);
       representation.setRootCategories(configuredCatalogs.stream()
               .map(Catalog::getRootCategory)
               .collect(toList()));
-      representation.setRootCategory(RemoteBeanLink.create(rootCategoryUri(connection)));
+      representation.setRootCategory(connection.getCatalogService()
+              .findRootCategory(context.getCatalogAlias(), context));
       representation.setTimeZoneId(context.getTimeZoneId().map(ZoneId::getId).orElse(null));
     } catch (CommerceException e) {
       LOG.warn("Error loading store bean: {} (site: {})", e.getMessage(), siteId);
@@ -165,21 +165,6 @@ public class StoreResource extends AbstractCatalogResource<Store> {
   private static boolean hasMarketingSpots(@NonNull CommerceConnection connection, @NonNull StoreContext context) {
     MarketingSpotService marketingSpotService = connection.getMarketingSpotService();
     return marketingSpotService != null && !marketingSpotService.findMarketingSpots(context).isEmpty();
-  }
-
-  @NonNull
-  private String rootCategoryUri(@NonNull CommerceConnection connection) {
-    StoreContext storeContext = connection.getStoreContext();
-
-    String siteId = getSiteId();
-    String workspaceIdStr = getWorkspaceId();
-    String catalogAliasStr = storeContext.getCatalogAlias().value();
-
-    //TODO Refactor
-    return "livecontext/category/" + siteId
-            + "/" + catalogAliasStr
-            + "/" + workspaceIdStr
-            + "/" + CategoryResource.ROOT_CATEGORY_ROLE_ID;
   }
 
   @Override

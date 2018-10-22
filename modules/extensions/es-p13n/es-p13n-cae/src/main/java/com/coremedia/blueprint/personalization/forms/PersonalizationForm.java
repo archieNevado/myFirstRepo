@@ -1,7 +1,9 @@
 package com.coremedia.blueprint.personalization.forms;
 
-import org.apache.commons.collections.FactoryUtils;
-import org.apache.commons.collections.ListUtils;
+
+
+import org.apache.commons.collections4.FactoryUtils;
+import org.apache.commons.collections4.ListUtils;
 
 import java.util.ArrayList;
 import java.util.List;

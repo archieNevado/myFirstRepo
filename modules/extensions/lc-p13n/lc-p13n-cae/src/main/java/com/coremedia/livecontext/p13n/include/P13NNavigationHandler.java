@@ -3,21 +3,17 @@ package com.coremedia.livecontext.p13n.include;
 import com.coremedia.blueprint.cae.constants.RequestAttributeConstants;
 import com.coremedia.blueprint.cae.handlers.PageHandlerBase;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
+import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.navigation.Navigation;
-import com.coremedia.cap.common.IdHelper;
-import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.user.User;
-import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +25,7 @@ import org.springframework.web.util.UriTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Links.ABSOLUTE_URI_KEY;
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_NUMBER;
@@ -57,26 +54,21 @@ public class P13NNavigationHandler extends PageHandlerBase {
           "/{" + SEGMENT_ROOT + '}' +
           "/{" + ID_VARIABLE + ":" + PATTERN_NUMBER + "}";
 
-  private ContentRepository contentRepository;
-
   @RequestMapping(value = DYNAMIC_NAVIGATION_URI_PATTERN, method = RequestMethod.GET)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ROOT) String context,
-                                    @PathVariable(ID_VARIABLE) int contentId,
+                                    @PathVariable(ID_VARIABLE) CMLinkable linkable,
                                     @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,
                                     HttpServletRequest request) {
 
-    Navigation navigation = getNavigation(context);
-    Content content = contentRepository.getContent(IdHelper.formatContentId(contentId));
-    ContentBean contentBean = getContentBeanFactory().createBeanFor(content);
-    Linkable linkable = contentBean instanceof Linkable ? ((Linkable) contentBean) : null;
-    User developer = UserVariantHelper.getUser(request);
-
-    if (navigation == null) {
+    Optional<Navigation> navigation = findNavigation(context, linkable);
+    if (!navigation.isPresent()){
       return HandlerHelper.notFound();
     }
 
+    User developer = UserVariantHelper.getUser(request);
+
     request.setAttribute(ABSOLUTE_URI_KEY, true);
-    return createModelAndView(navigation, linkable != null ? linkable : navigation, view, developer);
+    return createModelAndView(navigation.get(), linkable != null ? linkable : navigation.get(), view, developer);
   }
 
   @Link(type = {Page.class}, view = VIEW_FRAGMENT, uri = DYNAMIC_NAVIGATION_URI_PATTERN)
@@ -105,8 +97,16 @@ public class P13NNavigationHandler extends PageHandlerBase {
     return modelAndView;
   }
 
-  @Required
-  public void setContentRepository(ContentRepository contentRepository) {
-    this.contentRepository = contentRepository;
+  Optional<Navigation> findNavigation(String pathSegment, CMLinkable linkable) {
+    Navigation navigation = getNavigation(pathSegment);
+    if (navigation == null) {
+      return Optional.empty();
+    }
+
+    if (linkable != null) {
+      navigation = getContextHelper().findAndSelectContextFor(navigation.getContext(), linkable);
+    }
+    return Optional.of(navigation);
   }
+
 }

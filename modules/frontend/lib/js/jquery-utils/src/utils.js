@@ -13,7 +13,10 @@ export { bem };
  * @return {jQuery} the search result as jQuery result
  */
 export function findAndSelf($self, selector) {
-  return $self.filter(selector).add($self.find(selector));
+  if($self instanceof $ && typeof selector === typeof "string") {
+    return $self.filter(selector).add($self.find(selector));
+  }
+  return $();
 }
 
 /**
@@ -24,10 +27,13 @@ export function findAndSelf($self, selector) {
  * @returns {jQuery} the search result of the given selector
  */
 export function findRelativeOrAbsolute($self, selector) {
-  if (typeof selector === typeof "string" && /^\s*[>|+~]/.test(selector)) {
-    return $self.find(selector);
+  if($self instanceof $) {
+    if (typeof selector === typeof "string" && /^\s*[>|+~]/.test(selector)) {
+      return $self.find(selector);
+    }
+    return $self.constructor(selector);
   }
-  return $self.constructor(selector);
+  return $();
 }
 
 /**

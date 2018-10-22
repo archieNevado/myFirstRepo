@@ -145,6 +145,10 @@
   <field name="validfrom" type="tdate" indexed="true" stored="true"/>
   <field name="validto" type="tdate" indexed="true" stored="true"/>
   <!--
+    Contains the authors of a CMTeasable bean as content IDs.
+  -->
+  <field name="authors" type="int" indexed="true" stored="true" multiValued="true" useDocValuesAsStored="false"/>
+  <!--
     CMLinkable#externallyDisplayedDate: Either the last modification/publication date
     or the explicitly set date.
   -->

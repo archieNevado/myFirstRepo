@@ -14,18 +14,19 @@ import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newLinkedList;
+import static java.util.Collections.emptyList;
 
 /**
  * Tree relation implementation of the live context.
@@ -73,7 +74,7 @@ public class LiveContextNavigationTreeRelation implements TreeRelation<Linkable>
         }
       }
       final Site site = navigation.getSite();
-      return (Linkable) contentBeanFactory.createBeanFor(site.getSiteRootDocument());
+      return contentBeanFactory.createBeanFor(site.getSiteRootDocument(), Linkable.class);
     }
     return null;
   }
@@ -82,7 +83,7 @@ public class LiveContextNavigationTreeRelation implements TreeRelation<Linkable>
     if (category != null && site != null) {
       Content nearestExternalChannelForCategory = delegate.getNearestContentForCategory(category, site);
       return nearestExternalChannelForCategory != null ?
-              (CMExternalChannel) contentBeanFactory.createBeanFor(nearestExternalChannelForCategory) : null;
+        contentBeanFactory.createBeanFor(nearestExternalChannelForCategory, CMExternalChannel.class) : null;
     }
     return null;
   }
@@ -97,18 +98,19 @@ public class LiveContextNavigationTreeRelation implements TreeRelation<Linkable>
   }
 
   @Override
+  @NonNull
   public List<Linkable> pathToRoot(final Linkable child) {
     if (child instanceof LiveContextNavigation) {
       LinkedList<Linkable> result = newLinkedList();
 
       LiveContextNavigation navigation = (LiveContextNavigation) child;
       final Site site = navigation.getSite();
-      result.add((Linkable) contentBeanFactory.createBeanFor(site.getSiteRootDocument()));
+      result.add(contentBeanFactory.createBeanFor(site.getSiteRootDocument(), Linkable.class));
 
       Category category = navigation.getCategory();
       if (category == null) {
         LOGGER.debug("Category for navigation {} is null", navigation);
-        return null;
+        return emptyList();
       }
 
       List<Category> breadcrumb = category.getBreadcrumb();
@@ -116,7 +118,7 @@ public class LiveContextNavigationTreeRelation implements TreeRelation<Linkable>
       LOGGER.trace("path to root for {}: {}", child, result);
       return result;
     }
-    return null;
+    return emptyList();
   }
 
   @Override

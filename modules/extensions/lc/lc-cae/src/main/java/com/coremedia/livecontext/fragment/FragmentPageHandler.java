@@ -9,12 +9,14 @@ import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.user.User;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.handler.util.CaeStoreContextUtil;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.google.common.collect.ImmutableList;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -22,12 +24,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import static com.coremedia.blueprint.base.links.UriConstants.ContentTypes.CONTENT_TYPE_HTML;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
@@ -76,7 +77,12 @@ public class FragmentPageHandler extends PageHandlerBase {
                                      @NonNull @PathVariable(SEGMENT_LOCALE) Locale locale,
                                      @NonNull HttpServletRequest request,
                                      @NonNull HttpServletResponse response) {
-    StoreContext storeContext = CurrentCommerceConnection.find().map(CommerceConnection::getStoreContext).orElse(null);
+    CommerceConnection commerceConnection = CurrentCommerceConnection.find().orElse(null);
+    if (commerceConnection == null) {
+      return HandlerHelper.badRequest("Commerce connection not available for fragment call " + request.getRequestURI());
+    }
+
+    StoreContext storeContext = commerceConnection.getStoreContext();
     if (storeContext == null) {
       return HandlerHelper.badRequest("Store context not initialized for fragment call " + request.getRequestURI());
     }
@@ -92,12 +98,23 @@ public class FragmentPageHandler extends PageHandlerBase {
     }
     SiteHelper.setSiteToRequest(site, request);
 
-    //update store context with fragment parameters
-    CaeStoreContextUtil.updateStoreContextWithFragmentParameters(catalogAliasTranslationService, storeContext,
-            fragmentParameters, site);
+    // Update store context with fragment parameters.
+    fragmentParameters.getCatalogId().ifPresent(catalogId -> {
+      Optional<CatalogAlias> catalogAlias = catalogAliasTranslationService
+              .getCatalogAliasForId(catalogId, site.getId());
+
+      StoreContext updatedStoreContext = commerceConnection
+              .getStoreContextProvider()
+              .buildContext(storeContext)
+              .withCatalogId(catalogId)
+              .withCatalogAlias(catalogAlias.orElse(null))
+              .build();
+
+      commerceConnection.setStoreContext(updatedStoreContext);
+    });
 
     ModelAndView modelAndView;
-    FragmentHandler handler = selectHandler(fragmentParameters);
+    FragmentHandler handler = selectFragmentHandler(fragmentParameters);
     if (handler != null) {
       modelAndView = handler.createModelAndView(fragmentParameters, request);
       if (modelAndView == null) {
@@ -136,7 +153,7 @@ public class FragmentPageHandler extends PageHandlerBase {
    * depending on the parameters.
    */
   @Nullable
-  private FragmentHandler selectHandler(@NonNull FragmentParameters fragmentParameters) {
+  private FragmentHandler selectFragmentHandler(@NonNull FragmentParameters fragmentParameters) {
     return fragmentHandlers.stream()
             .filter(handler -> handler.include(fragmentParameters))
             .findFirst()

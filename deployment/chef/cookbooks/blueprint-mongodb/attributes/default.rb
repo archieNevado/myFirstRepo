@@ -9,10 +9,7 @@ default['ulimit'] = {
 }
 
 #<> Disable Transparent Huge Pages (THP)
-default['mongodb3']['mongod']['disable-transparent-hugepages'] = false
-
-default['mongodb']['yum']['mirrorlist'] = nil
-default['mongodb']['yum']['baseurl'] = 'https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.6/x86_64'
+default['mongodb3']['mongod']['disable-transparent-hugepages'] = true
 
 #<> fixed version
 default['mongodb3']['version'] = '3.6.4'

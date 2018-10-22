@@ -3,14 +3,14 @@ package com.coremedia.blueprint.cae.handlers;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
 import com.coremedia.objectserver.web.links.Link;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +31,7 @@ public class PageHandler extends DefaultPageHandler {
    * e.g. /media/travel/europe/england/knowing-all-about-london-1234
    */
   public static final String SEO_FRIENDLY_URI_PATTERN =
-                  "/{" + SEGMENTS_NAVIGATION + ":" + PATTERN_SEGMENTS + "}" +
+          "/{" + SEGMENTS_NAVIGATION + ":" + PATTERN_SEGMENTS + "}" +
                   "/{" + SEGMENT_NAME + "}" +
                   "-{" + SEGMENT_ID + ":" + PATTERN_NUMBER + "}";
 
@@ -41,8 +41,7 @@ public class PageHandler extends DefaultPageHandler {
    * e.g. /media/sports
    */
   public static final String URI_PATTERN_VANITY =
-                  "/{" + SEGMENTS_NAVIGATION + ":" + PATTERN_SEGMENTS + "}";
-
+          "/{" + SEGMENTS_NAVIGATION + ":" + PATTERN_SEGMENTS + "}";
 
   @RequestMapping(SEO_FRIENDLY_URI_PATTERN)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ID) CMLinkable linkable,
@@ -71,7 +70,7 @@ public class PageHandler extends DefaultPageHandler {
           @NonNull CMTaxonomy taxonomy,
           @Nullable String viewName,
           @NonNull Map<String, Object> linkParameters) {
-    return buildLinkForTaxonomyInternal(taxonomy, viewName, linkParameters);
+    return buildLinkForTaxonomyInternal(taxonomy, viewName, linkParameters).orElse(null);
   }
 
   @SuppressWarnings("unused")
@@ -81,6 +80,6 @@ public class PageHandler extends DefaultPageHandler {
           @NonNull CMLinkable linkable,
           @Nullable String viewName,
           @NonNull Map<String, Object> linkParameters) {
-    return buildLinkForLinkableInternal(linkable, viewName, linkParameters);
+    return buildLinkForLinkableInternal(linkable, viewName, linkParameters).orElse(null);
   }
 }

@@ -10,6 +10,7 @@ import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Currency;
 import java.util.List;
@@ -20,13 +21,14 @@ import java.util.Map;
 public class SfccStoreContextBuilder implements StoreContextBuilder {
 
   private final ImmutableMap<String, String> replacements;
-  private final String siteId;
-  private final String storeId;
-  private final String storeName;
-  private final CatalogId catalogId;
-  private final CatalogAlias catalogAlias;
-  private final Currency currency;
-  private final Locale locale;
+  private String siteId;
+  private String storeId;
+  private String storeName;
+  @Nullable
+  private CatalogId catalogId;
+  private CatalogAlias catalogAlias;
+  private Currency currency;
+  private Locale locale;
 
   @Nullable
   private ZonedDateTime previewDate;
@@ -81,13 +83,61 @@ public class SfccStoreContextBuilder implements StoreContextBuilder {
             storeContext.getSiteId(),
             storeContext.getStoreId(),
             storeContext.getStoreName(),
-            CatalogId.of(storeContext.getCatalogId()),
+            storeContext.getCatalogId().get(),
             storeContext.getCatalogAlias(),
             storeContext.getCurrency(),
             storeContext.getLocale()
     )
             .withPreviewDate(storeContext.getPreviewDate().orElse(null))
-            .withUserSegments(storeContext.getUserSegments());
+            .withUserSegments(storeContext.getUserSegments().orElse(null));
+  }
+
+  @Override
+  public SfccStoreContextBuilder withSiteId(String siteId) {
+    this.siteId = siteId;
+    return this;
+  }
+
+  @Override
+  public SfccStoreContextBuilder withStoreId(String storeId) {
+    this.storeId = storeId;
+    return this;
+  }
+
+  @Override
+  public SfccStoreContextBuilder withStoreName(String storeName) {
+    this.storeName = storeName;
+    return this;
+  }
+
+  @Override
+  public SfccStoreContextBuilder withCatalogId(@Nullable CatalogId catalogId) {
+    this.catalogId = catalogId;
+    return this;
+  }
+
+  @Override
+  public SfccStoreContextBuilder withCatalogAlias(CatalogAlias catalogAlias) {
+    this.catalogAlias = catalogAlias;
+    return this;
+  }
+
+  @Override
+  public SfccStoreContextBuilder withCurrency(Currency currency) {
+    this.currency = currency;
+    return this;
+  }
+
+  @Override
+  public SfccStoreContextBuilder withLocale(Locale locale) {
+    this.locale = locale;
+    return this;
+  }
+
+  @Override
+  public SfccStoreContextBuilder withTimeZoneId(@Nullable ZoneId timeZoneId) {
+    // currently not used
+    return this;
   }
 
   @Override
@@ -109,13 +159,13 @@ public class SfccStoreContextBuilder implements StoreContextBuilder {
   }
 
   @Override
-  public StoreContextBuilder withContractIds(List<String> contractIds) {
+  public SfccStoreContextBuilder withContractIds(List<String> contractIds) {
     // Don't care about contract IDs.
     return this;
   }
 
   @Override
-  public StoreContextBuilder withContractIdsForPreview(List<String> contractIds) {
+  public SfccStoreContextBuilder withContractIdsForPreview(List<String> contractIdsForPreview) {
     // Don't care about contract IDs.
     return this;
   }

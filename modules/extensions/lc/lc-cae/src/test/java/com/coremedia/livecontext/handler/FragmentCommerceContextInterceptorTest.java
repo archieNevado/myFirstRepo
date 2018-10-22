@@ -173,11 +173,9 @@ public class FragmentCommerceContextInterceptorTest {
 
     configureFragmentContext(fragmentContext);
 
-    StoreContext storeContext = getStoreContext();
-
     testling.initUserContext(commerceConnection, request);
 
-    assertThat(storeContext.getContractIds()).containsExactlyInAnyOrder("contract1", "contract2");
+    assertThat(getStoreContext().getContractIds()).containsExactlyInAnyOrder("contract1", "contract2");
   }
 
   @Test
@@ -217,7 +215,7 @@ public class FragmentCommerceContextInterceptorTest {
 
     StoreContext storeContext = getStoreContext();
 
-    assertThat(storeContext.getUserSegments()).isEqualTo("memberGroup1, memberGroup2");
+    assertThat(storeContext.getUserSegments()).contains("memberGroup1, memberGroup2");
     assertThat(storeContext.getWorkspaceId()).contains(WorkspaceId.of("4711"));
 
     Optional<ZonedDateTime> previewDate = storeContext.getPreviewDate();
@@ -274,7 +272,7 @@ public class FragmentCommerceContextInterceptorTest {
 
     StoreContext storeContext = getStoreContext();
 
-    assertThat(storeContext.getUserSegments()).isEqualTo("memberGroup1, memberGroup2");
+    assertThat(storeContext.getUserSegments()).contains("memberGroup1, memberGroup2");
     assertThat(storeContext.getWorkspaceId()).contains(WorkspaceId.of("4711"));
 
     Optional<ZonedDateTime> previewDate = storeContext.getPreviewDate();
@@ -298,7 +296,7 @@ public class FragmentCommerceContextInterceptorTest {
 
     StoreContext storeContext = getStoreContext();
 
-    assertThat(storeContext.getUserSegments()).isNull();
+    assertThat(storeContext.getUserSegments()).isNotPresent();
     assertThat(storeContext.getPreviewDate()).isNotPresent();
     assertThat(storeContext.getWorkspaceId()).isNotPresent();
     assertThat(request.getAttribute(ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE)).isNull();

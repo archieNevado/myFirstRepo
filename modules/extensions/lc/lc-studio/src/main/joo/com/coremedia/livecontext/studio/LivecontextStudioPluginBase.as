@@ -362,7 +362,7 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
   }
 
   internal static function mayCreateProductList(selection:Content):Boolean {
-    return mayCreate(selection, VENDOR_CM, false) && mayCreate(selection, VENDOR_SFCC, false);
+    return mayCreate(selection, VENDOR_CM, false);
   }
 
   internal static function mayCreateProductTeaser(selection:Content):Boolean {

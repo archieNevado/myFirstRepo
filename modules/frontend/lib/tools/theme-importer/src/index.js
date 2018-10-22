@@ -156,7 +156,7 @@ const uploadTheme = themeConfig => {
         );
       } else {
         log.info(`Using ${studioUrl}`);
-        log.info("Uploading theme to remote server...");
+        log.info("Uploading theme to remote server.");
 
         api
           .upload(
@@ -197,7 +197,7 @@ const uploadFiles = (themeConfig, fileList, logLevel = "info") => {
         name: PKG_NAME,
         level: logLevel,
       });
-      _log.info("Uploading files to remote server...");
+      _log.info("Uploading files to server.");
 
       if (!utils.validateFileList(fileList)) {
         throw new Error(`[${PKG_NAME}] No files were provided.`);
@@ -220,7 +220,7 @@ const uploadFiles = (themeConfig, fileList, logLevel = "info") => {
         logLevel,
       })
         .then(count => {
-          _log.info(`Using ${studioUrl}`);
+          //_log.info(`Using ${studioUrl}`);
           _log.debug(
             `Uploading file ${path.basename(
               themeConfig.themeUpdateArchiveTargetPath
@@ -265,7 +265,7 @@ const uploadFiles = (themeConfig, fileList, logLevel = "info") => {
 const deleteFile = (themeConfig, file) => {
   return new Promise(resolve => {
     try {
-      log.info(`Deleting file ${file} on remote server...`);
+      log.info(`Deleting file ${file} on server.`);
 
       if (!utils.validateFile(file)) {
         throw new Error(`[${PKG_NAME}] No file was provided.`);
@@ -278,7 +278,7 @@ const deleteFile = (themeConfig, file) => {
         ""
       );
 
-      log.info(`Using ${studioUrl}`);
+      //log.info(`Using ${studioUrl}`);
 
       api
         .deleteFile(studioUrl, proxyUrl, apiKey, FILE_PATH)

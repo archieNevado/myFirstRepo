@@ -34,9 +34,10 @@ export function renderFragmentHrefs($target) {
 
 /**
  * Changes a given target
- * @param $target The target the update is to be applied to
- * @param $update The update to add to DOM
- * @param replaceTarget if TRUE target will be replaced with the given target, otherwise only inner nodes will be removed
+ *
+ * @param {jQuery} $target The target the update is to be applied to
+ * @param {jQuery} $update The update to add to DOM
+ * @param {boolean} replaceTarget if TRUE target will be replaced with the given target, otherwise only inner nodes will be removed
  */
 export function updateTarget($target, $update, replaceTarget) {
   if (replaceTarget) {

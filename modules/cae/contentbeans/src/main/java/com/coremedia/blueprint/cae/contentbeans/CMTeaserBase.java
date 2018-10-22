@@ -4,6 +4,8 @@ import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMTeaser;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.struct.Struct;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -65,17 +67,18 @@ public abstract class CMTeaserBase extends CMTeasableImpl implements CMTeaser {
    */
   @Override
   public CMLinkable getTarget() {
-    return getLegacyAnnotatedLink(TARGETS, TARGET);
+    return getLegacyAnnotatedLink(getTargetsUnfiltered(), getTargetUnfiltered());
   }
 
   @Override
   public Map<String, List<Map<String, Object>>> getTargets() {
-    return getAnnotatedLinkList(TARGETS, TARGET);
+    return getAnnotatedLinkList(getTargetsUnfiltered(), getTargetUnfiltered(), TARGET);
   }
 
   @Override
-  protected List<Map<String, Object>> convertLinkListToAnnotatedLinkList(String linkListPropertyName) {
-    List<Map<String, Object>> annotatedLinkList = super.convertLinkListToAnnotatedLinkList(linkListPropertyName);
+  @NonNull
+  protected List<Map<String, Object>> convertLinkListToAnnotatedLinkList(@NonNull List<CMLinkable> linkList, @Nullable String linkListPropertyName) {
+    List<Map<String, Object>> annotatedLinkList = super.convertLinkListToAnnotatedLinkList(linkList, linkListPropertyName);
     if (CMTeaser.TARGET.equals(linkListPropertyName) && !annotatedLinkList.isEmpty()) {
       Map<String, Object> targetStructMap = annotatedLinkList.get(0);
       boolean ctaEnabled = false;
@@ -96,5 +99,13 @@ public abstract class CMTeaserBase extends CMTeasableImpl implements CMTeaser {
     return annotatedLinkList;
   }
 
+  @NonNull
+  public Map<String, List<Map<String, Object>>> getTargetsUnfiltered() {
+    return super.getAnnotatedLinkListUnfiltered(TARGETS);
+  }
+
+  @NonNull
+  public List<CMLinkable> getTargetUnfiltered() {
+    return super.getLegacyLinkListUnfiltered(TARGET);
+  }
 }
-  

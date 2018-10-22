@@ -8,6 +8,8 @@ import com.coremedia.blueprint.cae.search.SearchResultBean;
 import com.coremedia.blueprint.cae.search.SearchResultFactory;
 import com.coremedia.blueprint.cae.search.Value;
 import com.coremedia.blueprint.cae.search.ValueAndCount;
+import com.coremedia.blueprint.cae.search.facet.FacetResult;
+import com.coremedia.blueprint.cae.search.facet.FacetValue;
 import com.coremedia.blueprint.cae.searchsuggestion.Suggestions;
 import com.coremedia.blueprint.common.contentbeans.CMArticle;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
@@ -179,10 +181,10 @@ public class SearchServiceTest {
           assertEquals(ImmutableSet.of("subjecttaxonomy", "locationtaxonomy"), ImmutableSet.copyOf(searchInput.getFacetFields()));
           assertEquals(1, searchInput.getFacetMinCount());
           assertEquals(0, searchInput.getLimit());
-          result.setFacets(ImmutableMap.<String, List<ValueAndCount>>of(
-                  "subjecttaxonomy", ImmutableList.of(new ValueAndCount("130", 3), new ValueAndCount("134", 1)),
-                  "locationtaxonomy", ImmutableList.of(new ValueAndCount("136", 1))
-          ));
+          result.setFacetResult(new FacetResult(ImmutableMap.of(
+                  "subjecttaxonomy", ImmutableList.of(new FacetValue("subjecttaxonomy", "130", 3), new FacetValue("subjecttaxonomy", "134", 1)),
+                  "locationtaxonomy", ImmutableList.of(new FacetValue("locationtaxonomy", "136", 1))
+          )));
         } else {
           fail("unexpected query");
         }
@@ -278,8 +280,8 @@ public class SearchServiceTest {
       this.validator = validator;
 
       searchResultBean = new SearchResultBean();
-      searchResultBean.setFacets(ImmutableMap.of(SearchConstants.FIELDS.TEXTBODY.toString(),
-              singletonList(new ValueAndCount(TERM_NAME, TERM_COUNT))));
+      searchResultBean.setFacetResult(new FacetResult(ImmutableMap.of(SearchConstants.FIELDS.TEXTBODY.toString(),
+        singletonList(new FacetValue(SearchConstants.FIELDS.TEXTBODY.toString(), TERM_NAME, TERM_COUNT)))));
       searchResultBean.setAutocompleteSuggestions(singletonList(new ValueAndCount(TERM_NAME, TERM_COUNT)));
     }
 

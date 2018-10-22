@@ -3,10 +3,13 @@ package com.coremedia.livecontext.ecommerce.sfcc.catalog;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.blueprint.lc.test.CatalogServiceBaseTest;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductAttribute;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
+import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import com.coremedia.livecontext.ecommerce.sfcc.SfccTestInitializer;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +20,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static com.coremedia.blueprint.lc.test.BetamaxTestHelper.useBetamaxTapes;
@@ -28,6 +33,8 @@ import static org.mockito.Mockito.when;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = ServiceTestBaseConfiguration.class, initializers = SfccTestInitializer.class)
 public class CatalogServiceImplIT extends CatalogServiceBaseTest {
+
+  private static final String ROOT_CATEGORY_ID = "root";
 
   @MockBean
   private CatalogAliasTranslationService catalogAliasTranslationService;
@@ -177,7 +184,7 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
       return;
     }
 
-    super.testFindProductsByCategoryIsRoot();
+    testFindProductsByCategoryIsRoot(ROOT_CATEGORY_ID);
   }
 
   @Test
@@ -195,7 +202,7 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
       return;
     }
 
-    super.testFindRootCategory();
+    testFindRootCategory(ROOT_CATEGORY_ID);
   }
 
   @Test
@@ -241,6 +248,40 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
     }
 
     super.testSearchProducts();
+  }
+
+  @Test
+  public void testGetFacetSearchProducts() throws Exception {
+    if (useBetamaxTapes()) {
+      return;
+    }
+    super.testGetFacetSearchProducts();
+  }
+
+  @Test
+  public void testSearchProductsWithFacet() throws Exception {
+    if (useBetamaxTapes()) {
+      return;
+    }
+
+    CommerceId categoryId = getIdProvider().formatCategoryId(null, LEAF_CATEGORY_CODE);
+    Category category = testling.findCategoryById(categoryId, getStoreContext());
+    Map<String, String> searchParams = new HashMap<>();
+
+    searchParams.put(CatalogService.SEARCH_PARAM_FACET_SUPPORT, "true");
+    //test the price facet
+    searchParams.put(CatalogService.SEARCH_PARAM_TOTAL, "200");
+    searchParams.put(CatalogService.SEARCH_PARAM_FACET, "price=(20..50)");
+    searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, category.getExternalTechId());
+    SearchResult<Product> searchProducts = testling.searchProducts("", searchParams, getStoreContext());
+    assertThat(searchProducts).isNotNull();
+    assertThat(searchProducts.getTotalCount()).isEqualTo(70);
+
+    //test the color facet
+    searchParams.put(CatalogService.SEARCH_PARAM_FACET, "c_refinementColor=Blue");
+    searchProducts = testling.searchProducts("", searchParams, getStoreContext());
+    assertThat(searchProducts).isNotNull();
+    assertThat(searchProducts.getTotalCount()).isEqualTo(27);
   }
 
   @Test

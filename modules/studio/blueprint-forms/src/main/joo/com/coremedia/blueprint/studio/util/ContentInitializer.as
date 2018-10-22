@@ -46,7 +46,12 @@ public class ContentInitializer {
     editorContext.registerContentInitializer("CMViewtype", initViewType);
     editorContext.registerContentInitializer("CMVideo", initVideo);
     editorContext.registerContentInitializer("CMSpinner", initSpinner);
+    editorContext.registerContentInitializer("CMFolderProperties", initFolderProperties);
     editorContext.registerContentInitializer("CMTheme", Ext.emptyFn);
+  }
+
+  private static function initFolderProperties(content:Content):void {
+    content.rename("_folderProperties");
   }
 
   private static function initSpinner(content:Content):void {

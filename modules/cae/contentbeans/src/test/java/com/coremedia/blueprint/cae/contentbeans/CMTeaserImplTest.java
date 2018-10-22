@@ -139,6 +139,17 @@ public class CMTeaserImplTest extends ContentBeanTestBase {
     assertEquals(targetMap.get("target"), links.get(0));
   }
 
+  @Test
+  public void testGetLegacyAnnotatedLinkFromTarget() {
+    teaser = getContentBean(164);
+    Map<String, Object> targetMap = createTargetStructMap(getContentBean(144), null, null);
+
+    CMLinkable link = ((CMTeaserBase) teaser).getLegacyAnnotatedLink("targets", "target");
+
+    assertNotNull(link);
+    assertEquals(targetMap.get("target"), link);
+  }
+
   private Map<String, Object> createTargetStructMap(CMLinkable target) {
     return createTargetStructMap(target, false, null);
   }

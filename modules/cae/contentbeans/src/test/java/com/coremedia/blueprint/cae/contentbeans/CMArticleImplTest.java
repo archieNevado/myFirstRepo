@@ -13,7 +13,6 @@ import com.coremedia.blueprint.common.contentbeans.CMVideo;
 import com.coremedia.blueprint.common.services.context.CurrentContextService;
 import com.coremedia.blueprint.testing.ContentBeanTestBase;
 import com.coremedia.xml.MarkupUtil;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -28,6 +27,9 @@ import java.util.Map;
 
 import static com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 public class CMArticleImplTest extends ContentBeanTestBase {
@@ -48,10 +50,10 @@ public class CMArticleImplTest extends ContentBeanTestBase {
     Map<Locale, ? extends CMArticle> result = article_de.getVariantsByLocale();
     // the article_de is filtered by validation date
     assertEquals(1, result.size());
-    Assert.assertTrue(result.containsKey(new Locale("en")));
-    Assert.assertFalse(result.containsKey(new Locale("de")));
-    assertEquals(article_en, result.get(new Locale("en")));
-    assertEquals(null, result.get(new Locale("de")));
+    assertTrue(result.containsKey(Locale.ENGLISH));
+    assertFalse(result.containsKey(Locale.GERMAN));
+    assertEquals(article_en, result.get(Locale.ENGLISH));
+    assertEquals(null, result.get(Locale.GERMAN));
   }
 
   @Test
@@ -76,11 +78,11 @@ public class CMArticleImplTest extends ContentBeanTestBase {
 
   @Test
   public void testIsSearchable() throws Exception {
-    Assert.assertTrue(article_en.isNotSearchable());
+    assertTrue(article_en.isNotSearchable());
     CMArticle isSearchable = getContentBean(4);
-    Assert.assertFalse(isSearchable.isNotSearchable());
+    assertFalse(isSearchable.isNotSearchable());
     CMArticle searchAbleNotSet = getContentBean(6);
-    Assert.assertFalse(searchAbleNotSet.isNotSearchable());
+    assertFalse(searchAbleNotSet.isNotSearchable());
   }
 
   @Test
@@ -88,22 +90,21 @@ public class CMArticleImplTest extends ContentBeanTestBase {
 
     CMArticleImpl settingsTest1 = getContentBean(4);
     CMChannel context = getContentBean(14);
-    Assert.assertTrue(settingsService.setting("booleanProperty", Boolean.class, settingsTest1));
+    assertTrue(settingsService.setting("booleanProperty", Boolean.class, settingsTest1));
     assertEquals("testString", settingsService.setting("stringProperty", String.class, settingsTest1));
     assertEquals(42, settingsService.setting("integerProperty", Integer.class, settingsTest1).intValue());
     assertEquals("2010-01-01T10:00:23-10:00", settingsService.setting("dateProperty", String.class, settingsTest1));
     List<CMTeasable> links = settingsService.settingAsList("linkProperty", CMTeasable.class, settingsTest1);
     assertEquals(6, links.get(0).getContentId());
-    Assert.assertTrue(settingsService.setting("kid", Boolean.class, settingsTest1, context));
-    Assert.assertTrue(settingsService.setting("father", Boolean.class, settingsTest1, context));
-    Assert.assertTrue(settingsService.setting("grandfather", Boolean.class, settingsTest1, context));
+    assertTrue(settingsService.setting("kid", Boolean.class, settingsTest1, context));
+    assertTrue(settingsService.setting("father", Boolean.class, settingsTest1, context));
+    assertTrue(settingsService.setting("grandfather", Boolean.class, settingsTest1, context));
 
     CMArticle merged = getContentBean(6);
-    Assert.assertTrue(settingsService.setting("setIndirectly", Boolean.class, merged));
-    Assert.assertTrue(settingsService.setting("setDirectly", Boolean.class, merged));
-    Assert.assertFalse(settingsService.setting("willBeOverridden", Boolean.class, merged));
+    assertTrue(settingsService.setting("setIndirectly", Boolean.class, merged));
+    assertTrue(settingsService.setting("setDirectly", Boolean.class, merged));
+    assertFalse(settingsService.setting("willBeOverridden", Boolean.class, merged));
   }
-
 
   @Test
   public void testGetAspectByName() throws Exception {
@@ -126,8 +127,8 @@ public class CMArticleImplTest extends ContentBeanTestBase {
     Collection<? extends CMArticle> localizations = article_en.getLocalizations();
     // the article_de is filtered by validation date
     assertEquals(1, localizations.size());
-    Assert.assertTrue(localizations.contains(article_en));
-    Assert.assertFalse(localizations.contains(article_de));
+    assertTrue(localizations.contains(article_en));
+    assertFalse(localizations.contains(article_de));
   }
 
   @Test
@@ -163,7 +164,7 @@ public class CMArticleImplTest extends ContentBeanTestBase {
     assertEquals(1, article_de.getRelatedImplicitly().size());
     Map<String, List<CMTeasable>> relatedImplicitlyByType = article_de.getRelatedImplicitlyByType();
     assertEquals(1, relatedImplicitlyByType.size());
-    Assert.assertNotNull(relatedImplicitlyByType.get("CMVideo"));
+    assertNotNull(relatedImplicitlyByType.get("CMVideo"));
   }
 
   private CurrentContextService mockCurrentContextTo14() {
@@ -190,5 +191,4 @@ public class CMArticleImplTest extends ContentBeanTestBase {
     assertEquals("Date should be: 2009-06-01T20:59:42.000+01:00", 1243886382000L, article_en.getExternallyDisplayedDate().getTimeInMillis());
     assertEquals("Date should be: 2010-01-01T06:00:00+01:00", 1262322000000L, article_de.getExternallyDisplayedDate().getTimeInMillis());
   }
-
 }

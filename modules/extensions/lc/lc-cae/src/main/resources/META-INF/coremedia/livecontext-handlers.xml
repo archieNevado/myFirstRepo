@@ -93,7 +93,6 @@
         <value>targetView</value>
       </list>
     </property>
-    <property name="contentRepository" ref="contentRepository"/>
   </bean>
 
   <bean id="commerceLedLinkBuilderHelper" class="com.coremedia.livecontext.logictypes.CommerceLedLinkBuilderHelper">

@@ -1,16 +1,15 @@
 package com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents;
 
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.JSONRepresentation;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Document representing a search request for retrieving items within the Data API.

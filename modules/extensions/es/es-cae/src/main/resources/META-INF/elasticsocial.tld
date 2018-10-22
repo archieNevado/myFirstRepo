@@ -89,7 +89,7 @@
       Returns the GUID for the current request.
     </description>
     <name>getCurrentGuid</name>
-    <function-class>com.coremedia.blueprint.elastic.social.cae.guid.GuidFilter</function-class>
+    <function-class>com.coremedia.blueprint.elastic.social.cae.guid.GuidCookieHandler</function-class>
     <function-signature>java.lang.String getCurrentGuid()</function-signature>
   </function>
 

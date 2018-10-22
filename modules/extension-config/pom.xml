@@ -26,6 +26,7 @@
     <module>cae-extension-dependencies</module>
     <module>caefeeder-extension-dependencies</module>
     <module>studio-extension-dependencies</module>
+    <module>studio-dynamic-extension-dependencies</module>
     <module>studio-lib-extension-dependencies</module>
     <module>editor-lib-extension-dependencies</module>
     <module>preview-cae-extension-dependencies</module>

@@ -41,7 +41,7 @@
 
 <#-- GET COMMENT -->
 <#function getCommentView comment>
-  <#local isPreview=cm.isPreviewCae() />
+  <#local isPreview=preview.isPreviewCae() />
   <#local currentUser=getCurrentUser() />
 
   <#local view="default" />
@@ -119,9 +119,6 @@
 </script>
 </#outputformat>
 </#macro>
-
-<#-- DEPRECATED, access the resource bundle keys directly in your template -->
-<#assign messageKeys=elasticSocialFreemarkerFacade.getElasticSocialMessageKeys()/>
 
 
 <#-- --- INTERNAL/PRIVATE ------------------------------------------------------------------------------------------ -->

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:customize="http://www.coremedia.com/2007/coremedia-spring-beans-customization"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.coremedia.com/2007/coremedia-spring-beans-customization
+                           http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd">
+
+  <customize:append id="siteDateLinkTransformerCustomizer" bean="linkTransformers">
+    <list>
+      <ref bean="siteDateAppendingLinkTransformer"/>
+    </list>
+  </customize:append>
+
+  <bean id="siteDateAppendingLinkTransformer" class="com.coremedia.livecontext.ecommerce.sfcc.cae.preview.SiteDateAppendingLinkTransformer">
+    <description>
+      Creates a CAE LinkTransformer that rewrites all generated links
+      and adds the request parameter for the site  date
+    </description>
+  </bean>
+
+  <bean class="com.coremedia.livecontext.ecommerce.sfcc.cae.preview.SiteDateFilter"/>
+
+
+  <bean id="userSegmentLinkTransformer" class="com.coremedia.livecontext.ecommerce.sfcc.cae.preview.UserSegmentAppendingLinkTransformer">
+    <description>
+      Creates a CAE LinkTransformer that rewrites all generated links
+      and adds the request parameter for the Customer Segment
+    </description>
+  </bean>
+
+
+</beans>

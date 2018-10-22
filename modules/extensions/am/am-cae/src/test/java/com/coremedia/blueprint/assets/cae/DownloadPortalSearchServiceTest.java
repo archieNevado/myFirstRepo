@@ -7,7 +7,8 @@ import com.coremedia.blueprint.cae.search.SearchConstants;
 import com.coremedia.blueprint.cae.search.SearchQueryBean;
 import com.coremedia.blueprint.cae.search.SearchResultBean;
 import com.coremedia.blueprint.cae.search.SearchResultFactory;
-import com.coremedia.blueprint.cae.search.ValueAndCount;
+import com.coremedia.blueprint.cae.search.facet.FacetResult;
+import com.coremedia.blueprint.cae.search.facet.FacetValue;
 import com.coremedia.blueprint.cae.search.solr.SolrQueryBuilder;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
@@ -25,6 +26,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -64,9 +66,9 @@ public class DownloadPortalSearchServiceTest {
   @Mock
   private SearchQueryBean queryBean;
   @Mock
-  private ValueAndCount facet;
+  private FacetValue facet;
   @Mock
-  private ValueAndCount facet2;
+  private FacetValue facet2;
 
   @Mock
   private SearchResultBean resultBean;
@@ -100,9 +102,9 @@ public class DownloadPortalSearchServiceTest {
     searchService.setPreview(false);
 
     when(facet.getCount()).thenReturn(2l);
-    when(facet.getName()).thenReturn("0/111");
+    when(facet.getValue()).thenReturn("0/111");
     when(facet2.getCount()).thenReturn(2l);
-    when(facet2.getName()).thenReturn("0/112");
+    when(facet2.getValue()).thenReturn("0/112");
     when(contentRepository.getContent("111")).thenReturn(content);
     when(contentRepository.getContent("112")).thenReturn(content2);
 
@@ -141,10 +143,11 @@ public class DownloadPortalSearchServiceTest {
 
   @Test
   public void testGetSubCategoriesForRoot() {
-    Map<String, List<ValueAndCount>> searchResult = new HashMap<>();
-    List<ValueAndCount> facets = ImmutableList.of(facet, facet2);
+    Map<String, Collection<FacetValue>> searchResult = new HashMap<>();
+    List<FacetValue> facets = ImmutableList.of(facet, facet2);
     searchResult.put(DownloadPortalSearchService.ASSETHIERARCHY_SOLR_FIELD, facets);
-    when(resultBean.getFacets()).thenReturn(searchResult);
+    FacetResult facetResult = new FacetResult(searchResult);
+    when(resultBean.getFacetResult()).thenReturn(facetResult);
 
     List<Subcategory> subCategories = searchService.getSubCategories(null);
 
@@ -160,10 +163,11 @@ public class DownloadPortalSearchServiceTest {
 
   @Test
   public void testGetSubCategoriesForCategory() {
-    Map<String, List<ValueAndCount>> searchResult = new HashMap<>();
-    List<ValueAndCount> facets = ImmutableList.of(facet, facet2);
+    Map<String, Collection<FacetValue>> searchResult = new HashMap<>();
+    List<FacetValue> facets = ImmutableList.of(facet, facet2);
     searchResult.put(DownloadPortalSearchService.ASSETHIERARCHY_SOLR_FIELD, facets);
-    when(resultBean.getFacets()).thenReturn(searchResult);
+    FacetResult facetResult = new FacetResult(searchResult);
+    when(resultBean.getFacetResult()).thenReturn(facetResult);
 
     List<Subcategory> subCategories = searchService.getSubCategories(category);
 

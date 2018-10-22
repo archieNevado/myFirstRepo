@@ -119,9 +119,7 @@ public class CategoryImpl extends AbstractSfccCommerceBean implements Category {
 
   @Override
   public boolean isRoot() {
-    return getId().getExternalId()
-            .filter("root"::equalsIgnoreCase)
-            .isPresent();
+    return equals(getCatalogService().findRootCategory(getCatalogAlias(), getContext()));
   }
 
   @NonNull

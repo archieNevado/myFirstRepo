@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.elastic.social.cae.view;
 
 import com.coremedia.blueprint.elastic.social.cae.controller.HandlerInfo;
-import com.coremedia.blueprint.elastic.social.cae.guid.GuidFilter;
+import com.coremedia.blueprint.elastic.social.cae.guid.GuidCookieHandler;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,7 +36,7 @@ public class HandlerInfoJsonViewTest extends AbstractJsonViewTest {
 
   @Before
   public void setup() {
-    GuidFilter.setCurrentGuid("123");
+    GuidCookieHandler.setCurrentGuid("123");
   }
 
   @Test

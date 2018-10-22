@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents;
 
-import org.apache.commons.collections.CollectionUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.collections4.CollectionUtils;
 import org.json.JSONObject;
 
 import java.util.Arrays;

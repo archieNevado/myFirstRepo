@@ -1,11 +1,11 @@
 package com.coremedia.blueprint.cae.richtext.filter;
 
 import com.coremedia.blueprint.common.contentbeans.CMMedia;
+import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.id.IdProvider;
 import com.coremedia.id.IdScheme;
-import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.xml.Filter;
 import com.coremedia.xml.Xlink;
@@ -28,7 +28,7 @@ public class ImgCompletionFilter extends Filter implements FilterFactory {
   private IdProvider idProvider;
   private ContentBeanFactory contentBeanFactory;
 
-  
+
   // --- configuration ----------------------------------------------
 
   @Required
@@ -114,7 +114,7 @@ public class ImgCompletionFilter extends Filter implements FilterFactory {
       // Clean code would throw a runtime exception here, we rather keep robust, though.
       return null;
     }
-    ContentBean contentBean = contentBeanFactory.createBeanFor((Content)content);
+    CMObject contentBean = contentBeanFactory.createBeanFor((Content)content, CMObject.class);
     if (contentBean instanceof CMMedia) {
       return ((CMMedia)contentBean).getAlt();
     }

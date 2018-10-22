@@ -7,19 +7,19 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.elastic.core.api.blobs.Blob;
 import com.coremedia.elastic.core.api.blobs.BlobService;
-import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.coremedia.transform.BlobTransformer;
 import com.google.common.collect.ImmutableMap;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 
@@ -31,7 +31,6 @@ import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_N
 import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_RESOURCE;
 import static com.coremedia.objectserver.web.HandlerHelper.createModel;
 import static com.coremedia.objectserver.web.HandlerHelper.notFound;
-import static com.coremedia.objectserver.web.HandlerHelper.redirectTo;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /**
@@ -219,7 +218,8 @@ public class ElasticBlobHandler extends HandlerBase {
                                     @PathVariable(SEGMENT_ID) String imageId,
                                     @PathVariable(SEGMENT_ETAG) String eTag,
                                     @PathVariable(SECHASH_SEGMENT) String secHash,
-                                    @PathVariable(SEGMENT_NAME) String name) {
+                                    @PathVariable(SEGMENT_NAME) String name,
+                                    HttpServletResponse response) {
 
     ModelAndView result = notFound();
 
@@ -234,11 +234,8 @@ public class ElasticBlobHandler extends HandlerBase {
       return result;
     }
 
-    if (eTagMatches(blob, eTag)) {
-      result = createModel(blob);
-    } else {
-      result = redirectTo(blob);
-    }
+    boolean isUpToDate = eTagMatches(blob, eTag);
+    result = doCreateModelWithView(isUpToDate, blob, null, null, response);
 
     // URL validation: segment must match and hash value must be correct
     String mediaSegment = removeSpecialCharacters(blob.getFileName());
@@ -253,7 +250,7 @@ public class ElasticBlobHandler extends HandlerBase {
 
       if (isValid(parameters, secHash)) {
         com.coremedia.cap.common.Blob resultBlob = new BlobAdapter(blob);
-        return HandlerHelper.createModel(resultBlob);
+        return createModel(resultBlob);
       }
     }
 
@@ -268,7 +265,8 @@ public class ElasticBlobHandler extends HandlerBase {
                                     @PathVariable(WIDTH_SEGMENT) Integer width,
                                     @PathVariable(HEIGHT_SEGMENT) Integer height,
                                     @PathVariable(SECHASH_SEGMENT) String secHash,
-                                    @PathVariable(SEGMENT_NAME) String name) {
+                                    @PathVariable(SEGMENT_NAME) String name,
+                                    HttpServletResponse response) {
 
     ModelAndView result = notFound();
 
@@ -283,11 +281,8 @@ public class ElasticBlobHandler extends HandlerBase {
       return result;
     }
 
-    if (eTagMatches(blob, eTag)) {
-      result = createModel(blob);
-    } else {
-      result = redirectTo(blob);
-    }
+    boolean isUpToDate = eTagMatches(blob, eTag);
+    result = doCreateModelWithView(isUpToDate, blob, null, null, response);
 
     // URL validation: segment must match and hash value must be correct
     String mediaSegment = removeSpecialCharacters(blob.getFileName());
@@ -309,7 +304,7 @@ public class ElasticBlobHandler extends HandlerBase {
         resultBlob = getTransformedBlob(resultBlob, width, height);
 
         if (resultBlob != null) {
-          return HandlerHelper.createModel(resultBlob);
+          return createModel(resultBlob);
         }
       }
     }

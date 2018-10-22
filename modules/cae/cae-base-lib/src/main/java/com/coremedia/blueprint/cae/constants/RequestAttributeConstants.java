@@ -3,6 +3,7 @@ package com.coremedia.blueprint.cae.constants;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.objectserver.beans.ContentBean;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -23,7 +24,7 @@ public final class RequestAttributeConstants {
   private RequestAttributeConstants() {
   }
 
-  public static void setPage(ModelAndView modelAndView, Page page) {
+  public static void setPage(@NonNull ModelAndView modelAndView, Page page) {
     modelAndView.addObject(ATTR_NAME_PAGE, page);
   }
 
@@ -37,11 +38,11 @@ public final class RequestAttributeConstants {
     requestAttributes.setAttribute(ATTR_NAME_PAGE_MODEL, bean, RequestAttributes.SCOPE_REQUEST);
   }
 
-  public static Page getPage(HttpServletRequest request) {
+  public static Page getPage(@NonNull HttpServletRequest request) {
     return (Page) request.getAttribute(ATTR_NAME_PAGE);
   }
 
-  public static Page getPage(ModelAndView modelAndView) {
+  public static Page getPage(@NonNull ModelAndView modelAndView) {
     return (Page) modelAndView.getModel().get(ATTR_NAME_PAGE);
   }
 }

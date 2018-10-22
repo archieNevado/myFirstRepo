@@ -11,6 +11,7 @@ import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
+import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.search.SearchFacet;
@@ -18,16 +19,23 @@ import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import com.coremedia.livecontext.ecommerce.sfcc.common.CommerceBeanUtils;
 import com.coremedia.livecontext.ecommerce.sfcc.common.SfccCommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.AbstractOCSearchResultDocument;
+import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.CatalogDocument;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.ProductDocument;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.ProductSearchResultDocument;
+import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.CatalogsResource;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.CategoryProductAssignmentSearchResource;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.ProductSearchResource;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.ProductsResource;
+import com.coremedia.livecontext.ecommerce.sfcc.ocapi.shop.documents.ProductSearchHitDocument;
+import com.coremedia.livecontext.ecommerce.sfcc.ocapi.shop.documents.ProductSearchRefinementDocument;
+import com.coremedia.livecontext.ecommerce.sfcc.ocapi.shop.documents.ShopProductSearchResultDocument;
+import com.coremedia.livecontext.ecommerce.sfcc.ocapi.shop.resources.ShopProductSearchResource;
+import com.google.common.collect.ImmutableMap;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -36,10 +44,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.emptySet;
+import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 
 /**
@@ -49,23 +59,27 @@ public class CatalogServiceImpl implements CatalogService {
 
   private static final Logger LOG = LoggerFactory.getLogger(CatalogServiceImpl.class);
 
-  public static final String ROOT_CATEGORY_ID = "root";
-
+  private final CatalogsResource catalogsResource;
   private final ProductsResource productsResource;
   private final CategoryProductAssignmentSearchResource categoryProductAssignmentSearchResource;
   private final ProductSearchResource productSearchResource;
+  private final ShopProductSearchResource shopProductSearchResource;
 
   private final CommerceCache commerceCache;
   private final CommerceBeanFactory commerceBeanFactory;
 
-  public CatalogServiceImpl(@NonNull ProductsResource productsResource,
+  public CatalogServiceImpl(@NonNull CatalogsResource catalogsResource,
+                            @NonNull ProductsResource productsResource,
                             @NonNull CategoryProductAssignmentSearchResource categoryProductAssignmentSearchResource,
                             @NonNull ProductSearchResource productSearchResource,
+                            @NonNull ShopProductSearchResource shopProductSearchResource,
                             @NonNull CommerceCache commerceCache,
                             @NonNull CommerceBeanFactory commerceBeanFactory) {
+    this.catalogsResource = catalogsResource;
     this.productsResource = productsResource;
     this.categoryProductAssignmentSearchResource = categoryProductAssignmentSearchResource;
     this.productSearchResource = productSearchResource;
+    this.shopProductSearchResource = shopProductSearchResource;
     this.commerceCache = commerceCache;
     this.commerceBeanFactory = commerceBeanFactory;
   }
@@ -124,12 +138,38 @@ public class CatalogServiceImpl implements CatalogService {
   @NonNull
   @Override
   public Category findRootCategory(@NonNull CatalogAlias catalogAlias, @NonNull StoreContext storeContext) {
-    CommerceId commerceId = SfccCommerceIdProvider
+
+    Optional<CatalogDocument> catalogDocumentOptional = getCatalogDocument(storeContext);
+    if (!catalogDocumentOptional.isPresent()){
+      throw new CommerceException("Could not find root category for context " + storeContext);
+    }
+
+    CommerceId categoryCommerceId = SfccCommerceIdProvider
             .commerceId(BaseCommerceBeanType.CATEGORY)
-            .withExternalId(ROOT_CATEGORY_ID)
+            .withExternalId(catalogDocumentOptional.get().getRootCategoryId())
             .build();
 
-    return findCategoryById(commerceId, storeContext);
+    Category rootCategory = findCategoryById(categoryCommerceId, storeContext);
+    if (rootCategory == null) {
+      throw new CommerceException("Could not find root category in context " + storeContext);
+    }
+
+    return rootCategory;
+  }
+
+  @NonNull
+  private Optional<CatalogDocument> getCatalogDocument(@NonNull StoreContext storeContext) {
+    CatalogId catalogId = storeContext.getCatalogId()
+            .orElseThrow(() -> new CommerceException("Could not find root category. The catalog id is missing in context "
+                    + storeContext));
+
+    CommerceId catalogCommerceId = SfccCommerceIdProvider
+            .commerceId(BaseCommerceBeanType.CATALOG)
+            .withExternalId(catalogId.value())
+            .build();
+
+    return Optional.ofNullable(
+            commerceCache.get(new CatalogCacheKey(catalogCommerceId, storeContext, catalogsResource, commerceCache)));
   }
 
   @NonNull
@@ -167,6 +207,18 @@ public class CatalogServiceImpl implements CatalogService {
   public SearchResult<Product> searchProducts(@NonNull String searchTerm,
                                               @NonNull Map<String, String> searchParams,
                                               @NonNull StoreContext storeContext) {
+    //when the facet support is specified use the shop product search
+    if (searchParams.containsKey(SEARCH_PARAM_FACET_SUPPORT)) {
+      return getProductSearchResultByShopApi(searchTerm, searchParams, storeContext);
+    } else {
+      return getProductSearchResultByDataApi(searchTerm, searchParams, storeContext);
+    }
+  }
+
+  @NonNull
+  private SearchResult<Product> getProductSearchResultByDataApi(@NonNull String searchTerm,
+                                                                @NonNull Map<String, String> searchParams,
+                                                                @NonNull StoreContext storeContext) {
     Set<String> categoryIdsForSearch = emptySet();
     if (searchParams.containsKey(SEARCH_PARAM_CATEGORYID)) {
       //Epand with all subcategories, since SFCC OC Data Api connot search recursively below a category.
@@ -196,10 +248,57 @@ public class CatalogServiceImpl implements CatalogService {
   }
 
   @NonNull
+  private SearchResult<Product> getProductSearchResultByShopApi(@NonNull String searchTerm,
+                                                                @NonNull Map<String, String> searchParams,
+                                                                @NonNull StoreContext storeContext) {
+    Optional<ShopProductSearchResultDocument>
+      productSearchResultDocument = shopProductSearchResource.searchProducts(searchTerm, searchParams, storeContext);
+
+    List<Product> products = productSearchResultDocument
+      .map(ShopProductSearchResultDocument::getHits)
+      .map(productSearchHitDocuments -> shopProductsToProductBeans(productSearchHitDocuments, storeContext))
+      .orElseGet(Collections::emptyList);
+
+    int totalCount = productSearchResultDocument
+      .map(ShopProductSearchResultDocument::getTotal)
+      .orElse(0);
+
+    SearchResult<Product> result = new SearchResult<>();
+    result.setSearchResult(products);
+    result.setTotalCount(totalCount);
+    return result;
+  }
+
+  @NonNull
+  private List<Product> shopProductsToProductBeans(List<ProductSearchHitDocument> productSearchHitDocuments,
+                                                   @NonNull StoreContext storeContext) {
+    return productSearchHitDocuments.stream()
+      .map(productSearchHitDocument -> CommerceBeanUtils.createLightweightBeanFor(
+        commerceBeanFactory, productSearchHitDocument, storeContext, BaseCommerceBeanType.PRODUCT, Product.class))
+      .collect(Collectors.toList());
+  }
+
+  @NonNull
   @Override
   public Map<String, List<SearchFacet>> getFacetsForProductSearch(@NonNull Category category,
                                                                   @NonNull StoreContext storeContext) {
-    return emptyMap();
+    String categoryId = category.getExternalTechId();
+    Map<String, String> searchParams = ImmutableMap.of(
+      SEARCH_PARAM_CATEGORYID, categoryId,
+      //the price facets are given with the specified currency only if specified expand parameter value contains prices.
+      "expand", "prices");
+
+    Optional<ShopProductSearchResultDocument>
+      searchResultDocument = shopProductSearchResource.searchProducts("", searchParams, storeContext);
+
+    Optional<List<ProductSearchRefinementDocument>> productSearchRefinementDocuments = searchResultDocument
+      .map(ShopProductSearchResultDocument::getRefinements);
+    if (!productSearchRefinementDocuments.isPresent()) {
+      return emptyMap();
+    }
+
+    return productSearchRefinementDocuments.get().stream()
+      .collect(toMap(SearchFacet::getLabel, SearchFacet::getChildFacets));
   }
 
   /**

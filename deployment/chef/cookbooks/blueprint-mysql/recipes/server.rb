@@ -24,7 +24,8 @@ end
 
 mysql_config 'mysql-config' do
   source 'my_conf.erb'
-  variables(innodb_buffer_pool_size_mb: node['blueprint']['mysql']['innodb_buffer_pool_size_mb'],
+  variables(timezone: node['blueprint']['mysql']['timezone'],
+            innodb_buffer_pool_size_mb: node['blueprint']['mysql']['innodb_buffer_pool_size_mb'],
             log_dir: node['blueprint']['mysql']['log_dir'],
             slow_query_log: node['blueprint']['mysql']['slow_query_log'],
             general_query_log: node['blueprint']['mysql']['general_log']

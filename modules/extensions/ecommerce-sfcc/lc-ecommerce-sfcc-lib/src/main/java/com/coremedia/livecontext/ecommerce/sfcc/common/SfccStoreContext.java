@@ -4,6 +4,7 @@ import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -32,20 +33,22 @@ public class SfccStoreContext implements StoreContext {
   private final CatalogAlias catalogAlias;
   private final Currency currency;
   private final Locale locale;
-  private ZonedDateTime previewDate;
-  private String userSegments;
+  private final ZonedDateTime previewDate;
+  private final String userSegments;
 
+  @SuppressWarnings("squid:S00107")  /* "Methods should not have too many parameters" */
   SfccStoreContext(
           @NonNull Map<String, String> replacements,
           @NonNull String siteId,
           @NonNull String storeId,
           @NonNull String storeName,
-          @NonNull CatalogId catalogId,
+          @Nullable CatalogId catalogId,
           @NonNull CatalogAlias catalogAlias,
           @NonNull Currency currency,
           @NonNull Locale locale,
           @Nullable ZonedDateTime previewDate,
-          @Nullable String userSegments) {
+          @Nullable String userSegments
+  ) {
     this.replacements = ImmutableMap.copyOf(replacements);
     this.siteId = siteId;
     this.storeId = storeId;
@@ -64,11 +67,7 @@ public class SfccStoreContext implements StoreContext {
     return null;
   }
 
-  @Override
-  public void put(@NonNull String name, Object value) {
-    // Nothing to do, instance is immutable.
-  }
-
+  @NonNull
   @Override
   @SuppressWarnings("ReturnOfCollectionOrArrayField")
   public Map<String, String> getReplacements() {
@@ -81,11 +80,6 @@ public class SfccStoreContext implements StoreContext {
   }
 
   @Override
-  public void setSiteId(String siteId) {
-    // Nothing to do, instance is immutable.
-  }
-
-  @Override
   public String getStoreId() {
     return storeId;
   }
@@ -95,19 +89,16 @@ public class SfccStoreContext implements StoreContext {
     return storeName;
   }
 
+  @NonNull
   @Override
-  public String getCatalogId() {
-    return catalogId.value();
+  public Optional<CatalogId> getCatalogId() {
+    return Optional.ofNullable(catalogId);
   }
 
+  @NonNull
   @Override
   public CatalogAlias getCatalogAlias() {
     return catalogAlias;
-  }
-
-  @Override
-  public void setCatalog(@Nullable CatalogAlias catalogAlias, @Nullable CatalogId catalogId) {
-    // Nothing to do, instance is immutable.
   }
 
   @Override
@@ -131,9 +122,10 @@ public class SfccStoreContext implements StoreContext {
     return Optional.empty();
   }
 
+  @NonNull
   @Override
-  public boolean hasPreviewContext() {
-    return false;
+  public Optional<ZonedDateTime> getPreviewDate() {
+    return Optional.ofNullable(previewDate);
   }
 
   @NonNull
@@ -142,47 +134,16 @@ public class SfccStoreContext implements StoreContext {
     return Optional.empty();
   }
 
-  @Override
-  public void setWorkspaceId(@Nullable WorkspaceId workspaceId) {
-    // Nothing to do, instance is immutable.
-  }
-
   @NonNull
   @Override
-  public Optional<ZonedDateTime> getPreviewDate() {
-    return Optional.empty();
-  }
-
-  @Override
-  public void setPreviewDate(@Nullable ZonedDateTime previewDate) {
-    // For now, accept modification of the context for legacy reasons. Shall be changed soon.
-    this.previewDate = previewDate;
-  }
-
-  @Override
-  public String getUserSegments() {
-    return userSegments;
-  }
-
-  @Override
-  public void setUserSegments(String userSegments) {
-    // Nothing to do, instance is immutable.
-  }
-
-  @Override
-  public String getConnectionId() {
-    return null;
+  public Optional<String> getUserSegments() {
+    return Optional.ofNullable(userSegments);
   }
 
   @NonNull
   @Override
   public List<String> getContractIds() {
     return emptyList();
-  }
-
-  @Override
-  public void setContractIds(@NonNull List<String> contractIds) {
-    // Nothing to do, instance is immutable.
   }
 
   @NonNull
@@ -192,11 +153,12 @@ public class SfccStoreContext implements StoreContext {
   }
 
   @Override
-  public void setContractIdsForPreview(@NonNull List<String> contractIds) {
-    // Nothing to do, instance is immutable.
+  public boolean hasPreviewContext() {
+    return false;
   }
 
   @Override
+  @SuppressWarnings({"OverlyComplexMethod", "squid:S1067"})  /* "Expressions should not be too complex" */
   public boolean equals(Object o) {
     if (this == o) {
       return true;
@@ -207,21 +169,36 @@ public class SfccStoreContext implements StoreContext {
     }
 
     SfccStoreContext that = (SfccStoreContext) o;
-    return Objects.equals(replacements, that.replacements) &&
-            Objects.equals(siteId, that.siteId) &&
-            Objects.equals(storeId, that.storeId) &&
-            Objects.equals(storeName, that.storeName) &&
-            Objects.equals(catalogId, that.catalogId) &&
-            Objects.equals(catalogAlias, that.catalogAlias) &&
-            Objects.equals(currency, that.currency) &&
-            Objects.equals(locale, that.locale) &&
-            Objects.equals(previewDate, that.previewDate) &&
-            Objects.equals(userSegments, that.userSegments);
+    return Objects.equals(replacements, that.replacements)
+            && Objects.equals(siteId, that.siteId)
+            && Objects.equals(storeId, that.storeId)
+            && Objects.equals(storeName, that.storeName)
+            && Objects.equals(catalogId, that.catalogId)
+            && Objects.equals(catalogAlias, that.catalogAlias)
+            && Objects.equals(currency, that.currency)
+            && Objects.equals(locale, that.locale)
+            && Objects.equals(previewDate, that.previewDate)
+            && Objects.equals(userSegments, that.userSegments);
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(replacements, siteId, storeId, storeName, catalogId, catalogAlias, currency, locale,
             previewDate, userSegments);
+  }
+
+  @Override
+  public String toString() {
+    return MoreObjects.toStringHelper(this)
+            .add("siteId", siteId)
+            .add("storeId", storeId)
+            .add("storeName", storeName)
+            .add("catalogId", catalogId)
+            .add("catalogAlias", catalogAlias)
+            .add("currency", currency)
+            .add("locale", locale)
+            .add("previewDate", previewDate)
+            .add("userSegments", userSegments)
+            .toString();
   }
 }

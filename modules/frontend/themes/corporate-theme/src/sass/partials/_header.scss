@@ -29,7 +29,7 @@ Contains styling definitions for all content types as cm-header.
     position: absolute;
     top: $logo-size-mobile;
     width: 100%;
-    height: $search-height;
+    height: $cm-search-input-vertical-spacing;
     padding: $padding-base-horizontal $padding-base-horizontal 0 $padding-base-horizontal;
     background-color: palette(white);
 
@@ -153,7 +153,7 @@ Contains styling definitions for all content types as cm-header.
   /* items fixed top right next to button */
   &__items {
     position: absolute;
-    top: $logo-size-mobile + $search-height; // + height of searchbar
+    top: $logo-size-mobile + $cm-search-input-vertical-spacing; // + height of searchbar
     left: 0;
     right: 0;
     margin: 0;
@@ -181,7 +181,7 @@ Contains styling definitions for all content types as cm-header.
     @include breakpoint(sm-and-up) {
       top: 0;
       left: auto;
-      right: $padding-base-horizontal + $search-width + $padding-base-horizontal + $padding-base-horizontal; //paddings + search + navbutton
+      right: $padding-base-horizontal + $cm-search-input-width + $padding-base-horizontal + $padding-base-horizontal; //paddings + search + navbutton
       line-height: $logo-size;
       background-color: transparent;
       color: palette(white);
@@ -196,7 +196,7 @@ Contains styling definitions for all content types as cm-header.
     }
 
     @include breakpoint(sm) {
-      right: $padding-base-horizontal + $search-small-width + $padding-base-horizontal + $padding-base-horizontal; //override for narrow tablet view, since login/registration links where added
+      right: $padding-base-horizontal + $cm-search-input-small-width + $padding-base-horizontal + $padding-base-horizontal; //override for narrow tablet view, since login/registration links where added
     }
   }
 

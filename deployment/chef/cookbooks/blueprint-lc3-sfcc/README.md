@@ -35,6 +35,10 @@ Livecontext for Salesforce Commerce Cloud.
 * `node['blueprint']['lc3-sfcc']['virtual_host']['delivery']['sites']['sitegenesis']['server_name']` -  Defaults to `sitegenesis.#{node['blueprint']['hostname']}`.
 * `node['blueprint']['lc3-sfcc']['virtual_host']['delivery']['sites']['sitegenesis']['default_site']` -  Defaults to `sitegenesishomepage`.
 * `node['blueprint']['lc3-sfcc']['virtual_host']['delivery']['sites']['sitegenesis']['site_id']` - The id property of the CMSite content associated with this site. Defaults to `SFCC-sitegenesis-UK-Site-ID`.
+* `node['blueprint']['lc3-sfcc']['cms_public_host']` -  Defaults to `localhost`.
+* `node['blueprint']['proxy']['virtual_host']['preview']['server_aliases']['lc3-sfcc']` -  Defaults to `preview-#{node['blueprint']['lc3-sfcc']['cms_public_host']}`.
+* `node['blueprint']['lc3-sfcc']['virtual_host']['preview']['server_aliases']['lc3-sfcc']` -  Defaults to `preview-#{node['blueprint']['lc3-sfcc']['cms_public_host']}`.
+* `node['blueprint']['lc3-sfcc']['virtual_host']['delivery']['sites']['sitegenesis']['server_aliases']` -  Defaults to `[ ... ]`.
 * `node['blueprint']['lc3-sfcc']['virtual_host']['shop-preview']['server_name']` -  Defaults to `shop-preview-sitegenesis.#{node['blueprint']['hostname']}`.
 * `node['blueprint']['lc3-sfcc']['virtual_host']['shop-preview']['time_travel_alias']` -  Defaults to `shop-preview-sitegenesis.#{node['blueprint']['hostname']}`.
 * `node['blueprint']['lc3-sfcc']['virtual_host']['shop-preview']['server_aliases']` -  Defaults to `[ ... ]`.

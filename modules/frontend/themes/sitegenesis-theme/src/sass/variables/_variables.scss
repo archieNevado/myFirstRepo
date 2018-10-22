@@ -6,6 +6,9 @@ $transition-duration: 0.35s;
 // Buttons
 $button-border: 2px;
 
+// Default text color
+$base-font-color: #373737;
+
 // Breakpoints
 // =====================================================================================================================
 //
@@ -15,6 +18,7 @@ $button-border: 2px;
 //
 $breakpoints: (
         "xs": "screen and (max-width: #{$screen-xs-max})",
+        "xs-and-up": "screen and (min-width: 0)",
         "sm": "screen and (min-width: #{$screen-sm-min}) and (max-width: #{$screen-sm-max})",
         "sm-and-up": "screen and (min-width: #{$screen-sm-min})",
         "md": "screen and (min-width: #{$screen-md-min})",

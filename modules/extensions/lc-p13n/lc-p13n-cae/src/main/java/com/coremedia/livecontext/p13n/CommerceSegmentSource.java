@@ -56,7 +56,7 @@ public class CommerceSegmentSource extends AbstractContextSource {
       return;
     }
 
-    String userSegments = storeContext.getUserSegments();
+    String userSegments = storeContext.getUserSegments().orElse(null);
 
     if (isNullOrEmpty(userSegments) && isEmpty(userContext)) { // NOSONAR - Workaround for spotbugs/spotbugs#621, see CMS-12169
       return;

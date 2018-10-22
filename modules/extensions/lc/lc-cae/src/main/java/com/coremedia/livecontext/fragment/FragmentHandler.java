@@ -3,8 +3,6 @@ package com.coremedia.livecontext.fragment;
 import com.coremedia.blueprint.cae.constants.RequestAttributeConstants;
 import com.coremedia.blueprint.cae.handlers.PageHandlerBase;
 import com.coremedia.blueprint.cae.layout.ContentBeanBackedPageGridPlacement;
-import com.coremedia.blueprint.cae.view.DynamicInclude;
-import com.coremedia.blueprint.cae.view.DynamicIncludeHelper;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
@@ -20,11 +18,11 @@ import com.coremedia.cap.user.User;
 import com.coremedia.common.util.Predicate;
 import com.coremedia.livecontext.fragment.pagegrid.PageGridPlacementResolver;
 import com.coremedia.objectserver.web.HandlerHelper;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 
 import static com.coremedia.blueprint.cae.view.DynamicIncludeHelper.createDynamicIncludeRootDelegateModelAndView;

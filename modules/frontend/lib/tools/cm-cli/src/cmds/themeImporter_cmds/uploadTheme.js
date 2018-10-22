@@ -35,7 +35,7 @@ const handler = () => {
   try {
     const themeConfig = getThemeConfig();
 
-    log.info("Creating a fresh build of the current theme...");
+    log.info("Creating a fresh build of the current theme.");
     const result = spawnSync(PACKAGE_MANAGER_EXECUTABLE, ["run", "build"], {
       cwd: process.cwd(),
       env: Object.assign(process.env, { NODE_ENV: "development" }),

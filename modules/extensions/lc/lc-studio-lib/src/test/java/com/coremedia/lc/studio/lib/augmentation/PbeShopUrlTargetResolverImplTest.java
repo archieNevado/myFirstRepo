@@ -45,15 +45,16 @@ public class PbeShopUrlTargetResolverImplTest {
   @Mock
   private Site site;
 
-  private StoreContext storeContext;
+  private StoreContextImpl storeContext;
 
   @Before
   public void setup() {
     commerceConnection = new BaseCommerceConnection();
     CurrentCommerceConnection.set(commerceConnection);
 
-    storeContext = StoreContextImpl.builder("theSiteId").build();
-    storeContext.put(StoreContextImpl.STORE_NAME, "storeName");
+    storeContext = StoreContextImpl.builder("theSiteId")
+            .withStoreName("storeName")
+            .build();
     commerceConnection.setStoreContext(storeContext);
 
     when(sitesService.getSite("theSiteId")).thenReturn(site);

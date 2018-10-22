@@ -1,17 +1,21 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.cae.action.search.SearchActionState" -->
 
-<#assign searchLink=cm.getLink(self!cm.UNDEFINED, {"page": cmpage})/>
-<#assign searchQuery=self.form.query!""/>
-<#assign cssClass=""/>
-<#if searchQuery?has_content>
-  <#assign cssClass=" focus"/>
-</#if>
+<#--
+    Template Description:
 
-<form class="cm-search cm-search--form" action="${searchLink}" role="search">
-  <label for="searchterm" class="cm-search__label sr-only">${bp.getMessage("search_label")}</label>
-  <input id="searchterm" type="search" class="cm-search__input${cssClass}" name="query" value="${searchQuery}" placeholder="${bp.getMessage("search_placeholder")}" minlength="3">
+    Displays a simple search form including a label, an input field and a submit button with an optional icon and label.
+    The input field uses the new html5 type "search", minlength and required.
+-->
+
+<#assign searchQuery=self.form.query!""/>
+<#assign searchLink=cm.getLink(self!cm.UNDEFINED, {"page": cmpage})/>
+<#assign additionalCssClass=searchQuery?has_content?then(" focus", "")/>
+
+<form id="cm-search-form" class="cm-search cm-search--form" action="${searchLink}" role="search">
+  <label for="cm-search-query" class="cm-search__label">${bp.getMessage("search_label")}</label>
+  <input id="cm-search-query" type="search" class="cm-search__input${additionalCssClass}" name="query" value="${searchQuery}" placeholder="${bp.getMessage("search_placeholder")}" minlength="${self.minimalSearchQueryLength!3}" required>
   <button class="cm-search__button">
-    <i class="glyphicon glyphicon-search"></i>
-    <span class="cm-icon__info sr-only">${self.action.title!""}</span>
+    <i class="cm-search__button-icon"></i>
+    <span class="cm-search__button-label">${self.action.title!""}</span>
   </button>
 </form>

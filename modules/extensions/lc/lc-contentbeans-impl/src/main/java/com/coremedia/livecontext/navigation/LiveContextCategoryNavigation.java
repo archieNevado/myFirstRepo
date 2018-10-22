@@ -13,14 +13,13 @@ import com.coremedia.cap.user.User;
 import com.coremedia.livecontext.contentbeans.CMExternalChannel;
 import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
-import static org.apache.commons.collections.CollectionUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.springframework.util.Assert.isInstanceOf;
 import static org.springframework.util.Assert.notNull;
@@ -87,7 +86,7 @@ public class LiveContextCategoryNavigation implements LiveContextNavigation {
   @Override
   public CMNavigation getRootNavigation() {
     List<Linkable> navigationPath = treeRelation.pathToRoot(this);
-    if (isEmpty(navigationPath)) {
+    if (navigationPath.isEmpty()) {
       return null;
     }
 
@@ -109,13 +108,14 @@ public class LiveContextCategoryNavigation implements LiveContextNavigation {
       return (CMContext) pathToRoot.get(1);
     }
     // after no catalog root page is found take the site root node
-    if (pathToRoot.size() > 0 && pathToRoot.get(0) instanceof CMContext) {
+    if (!pathToRoot.isEmpty() && pathToRoot.get(0) instanceof CMContext) {
       return (CMContext) pathToRoot.get(0);
     }
     return null;
   }
 
   @Override
+  @NonNull
   public List<? extends Linkable> getNavigationPathList() {
     return treeRelation.pathToRoot(this);
   }

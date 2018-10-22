@@ -10,6 +10,8 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Optional;
+
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -20,7 +22,7 @@ public class CategoryFragmentHandlerTest extends FragmentHandlerTestBase<Categor
 
   @Test
   public void handleCategoryViewFragmentNoLiveContextNavigationFound() {
-    when(getResolveContextStrategy().resolveContext(getSite(), category)).thenReturn(null);
+    when(getResolveContextStrategy().resolveContext(getSite(), category)).thenReturn(Optional.empty());
     ModelAndView result = getTestling().createModelAndView(getFragmentParameters4ProductWithCategory(), request);
     assertNotNull(result);
     assertTrue(HandlerHelper.isNotFound(result));
@@ -43,7 +45,7 @@ public class CategoryFragmentHandlerTest extends FragmentHandlerTestBase<Categor
   public void defaultSetup() {
     super.defaultSetup();
     getTestling().setContextStrategy(resolveContextStrategy);
-    when(resolveContextStrategy.resolveContext(site, category)).thenReturn(navigation);
+    when(resolveContextStrategy.resolveContext(site, category)).thenReturn(Optional.of(navigation));
   }
 
   @After

@@ -1,6 +1,6 @@
 package com.coremedia.blueprint.cae.sitemap;
 
-import com.coremedia.blueprint.base.multisite.SiteResolver;
+import com.coremedia.blueprint.base.multisite.cae.SiteResolver;
 import com.coremedia.blueprint.cae.common.predicates.ValidContentPredicate;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
@@ -33,6 +33,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.inject.Inject;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
@@ -72,6 +73,7 @@ public class SitemapGenerationControllerTest {
                   CACHE,
                   "classpath:/framework/spring/blueprint-contentbeans.xml",
                   "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
+                  "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-cae-services.xml",
           },
           reader = ResourceAwareXmlBeanDefinitionReader.class
   )
@@ -328,6 +330,16 @@ public class SitemapGenerationControllerTest {
 
     public byte[] toByteArray() {
       return out.toByteArray();
+    }
+
+    @Override
+    public boolean isReady() {
+      return false;
+    }
+
+    @Override
+    public void setWriteListener(WriteListener writeListener) {
+
     }
   }
 

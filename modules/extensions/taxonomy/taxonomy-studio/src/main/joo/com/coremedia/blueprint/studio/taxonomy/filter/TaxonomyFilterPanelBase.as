@@ -221,6 +221,9 @@ public class TaxonomyFilterPanelBase extends FilterPanel {
    * @inheritDoc
    */
   override public function getFilterId():String {
+    if(!filterId) {
+      throw new Error("filterId has not been set for taxonomy filter");
+    }
     return filterId;
   }
 }

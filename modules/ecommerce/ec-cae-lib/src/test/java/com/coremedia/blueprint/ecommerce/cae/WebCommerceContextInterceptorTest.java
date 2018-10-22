@@ -4,7 +4,7 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceCon
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
-import com.coremedia.blueprint.base.multisite.SiteResolver;
+import com.coremedia.blueprint.base.multisite.cae.SiteResolver;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import org.junit.Before;
@@ -13,12 +13,15 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -26,7 +29,7 @@ import static org.mockito.Mockito.when;
 public class WebCommerceContextInterceptorTest {
 
   @Mock
-  private SiteResolver siteLinkHelper;
+  private SiteResolver siteResolver;
 
   @Mock
   private Site site;
@@ -35,6 +38,10 @@ public class WebCommerceContextInterceptorTest {
   private CommerceConnectionInitializer commerceConnectionInitializer;
 
   private BaseCommerceConnection connection;
+
+  private MockHttpServletRequest request;
+  private HttpServletResponse response;
+  private Object handler;
 
   private WebCommerceContextInterceptor testling;
 
@@ -49,22 +56,24 @@ public class WebCommerceContextInterceptorTest {
 
     when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(this.connection));
 
-    testling.setSiteResolver(siteLinkHelper);
+    testling.setSiteResolver(siteResolver);
     testling.setInitUserContext(false);
     testling.setCommerceConnectionInitializer(commerceConnectionInitializer);
     testling.setPreview(false);
-  }
 
-  // --- test base class features -----------------------------------
+    request = new MockHttpServletRequest();
+    response = new MockHttpServletResponse();
+    handler = new Object();
+  }
 
   @Test
   public void testPreHandle() {
     String path = "/helios";
-    MockHttpServletRequest request = new MockHttpServletRequest();
     request.setPathInfo(path);
-    when(testling.getSite(request, path)).thenReturn(site);
 
-    testling.preHandle(request, null, null);
+    when(siteResolver.findSiteByPath(path)).thenReturn(site);
+
+    testling.preHandle(request, response, handler);
 
     verify(commerceConnectionInitializer).findConnectionForSite(any(Site.class));
     assertThat(SiteHelper.findSite(request)).isPresent();
@@ -73,13 +82,13 @@ public class WebCommerceContextInterceptorTest {
   @Test
   public void testNoopPreHandle() {
     String path = "/nosite";
-    MockHttpServletRequest request = new MockHttpServletRequest();
     request.setPathInfo(path);
-    when(testling.getSite(request, path)).thenReturn(null);
+
     StoreContext storeContextBefore = connection.getStoreContext();
 
-    testling.preHandle(request, null, null);
+    testling.preHandle(request, response, handler);
 
+    verify(commerceConnectionInitializer, never()).findConnectionForSite(any(Site.class));
     assertThat(connection.getStoreContext()).isSameAs(storeContextBefore);
     assertThat(SiteHelper.findSite(request)).isNotPresent();
   }

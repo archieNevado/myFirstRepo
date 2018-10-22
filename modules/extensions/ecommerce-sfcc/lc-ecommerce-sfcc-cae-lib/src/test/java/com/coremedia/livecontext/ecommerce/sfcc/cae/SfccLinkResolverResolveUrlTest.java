@@ -18,6 +18,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,10 +47,11 @@ class SfccLinkResolverResolveUrlTest {
 
   @ParameterizedTest
   @MethodSource("provideResolveUrlArgs")
-  void resolveUrl(String source, Object bean, String expected) {
+  @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+  void resolveUrl(String source, Object bean, Optional<String> expected) {
     HttpServletRequest request = buildRequest(false, false, false);
 
-    String actual = sfccLinkResolver.resolveUrl(source, bean, variant, navigation, request);
+    Optional<String> actual = sfccLinkResolver.resolveUrl(source, bean, variant, navigation, request);
 
     assertThat(actual).isEqualTo(expected);
   }
@@ -84,69 +86,69 @@ class SfccLinkResolverResolveUrlTest {
     CMLinkable cmLinkable = mock(CMLinkable.class);
 
     return Stream.of(
-            Arguments .of(
+            Arguments.of(
                     "/a/b/c/4711?foo=bar&bla=blub",
                     product,
-                    "<!--VTL $include.url('Product-Show','pid','external-product-id-1','foo','bar','bla','blub') VTL-->"
+                    Optional.of("<!--VTL $include.url('Product-Show','pid','external-product-id-1','foo','bar','bla','blub') VTL-->")
             ),
             Arguments.of(
                     "/a/b/c/4711",
                     productInSite,
-                    "<!--VTL $include.url('Product-Show','pid','external-product-id-2') VTL-->"
+                    Optional.of("<!--VTL $include.url('Product-Show','pid','external-product-id-2') VTL-->")
             ),
             Arguments.of(
                     "",
                     productTeaserWithoutProduct,
-                    null
+                    Optional.empty()
             ),
             Arguments.of(
                     "/a/b/c/4711?",
                     productTeaserWithProduct,
-                    "<!--VTL $include.url('Product-Show','pid','external-product-id-3') VTL-->"
+                    Optional.of("<!--VTL $include.url('Product-Show','pid','external-product-id-3') VTL-->")
             ),
             Arguments.of(
                     "/a/b/c/4711?f",
                     externalRootPage,
-                    "<!--VTL $include.url('Home-Show') VTL-->"
+                    Optional.of("<!--VTL $include.url('Home-Show') VTL-->")
             ),
             Arguments.of(
                     "/?foo=bar&bla=blub",
                     externalPageWithoutExternalUriPath,
-                    "<!--VTL $include.url('Page-Show','cid','external-page-id-1','foo','bar','bla','blub') VTL-->"
+                    Optional.of("<!--VTL $include.url('Page-Show','cid','external-page-id-1','foo','bar','bla','blub') VTL-->")
             ),
             Arguments.of(
                     "?foo=bar&bla=blub",
                     externalPageWithExternalUriPath,
-                    "<!--VTL $include.url('Page-Show','cid','external-page-id-2','cpath','some-uri-path','foo','bar','bla','blub') VTL-->"
+                    Optional.of("<!--VTL $include.url('Page-Show','cid','external-page-id-2','cpath','some-uri-path','foo','bar','bla','blub') VTL-->")
             ),
             Arguments.of(
                     "/a/b/c/4711?foo=bar?bla=blub",
                     category,
-                    "<!--VTL $include.url('Search-Show','cgid','external-category-id-1','foo','bar?bla=blub') VTL-->"
+                    Optional.of("<!--VTL $include.url('Search-Show','cgid','external-category-id-1','foo','bar?bla=blub') VTL-->")
             ),
             Arguments.of(
                     "a?foo=bar&bla=blub",
                     lcNavigation,
-                    "<!--VTL $include.url('Search-Show','cgid','external-category-id-2','foo','bar','bla','blub') VTL-->"
+                    Optional.of("<!--VTL $include.url('Search-Show','cgid','external-category-id-2','foo','bar','bla','blub') VTL-->")
             ),
             Arguments.of(
                     "",
                     // Navigation is `null` for now, but test case should
                     // be extended by using an actual navigation object.
                     cmNavigation,
-                    "<!--VTL $include.url('CM-Content','pageid','') VTL-->"
+                    Optional.of("<!--VTL $include.url('CM-Content','pageid','') VTL-->")
             ),
             Arguments.of(
                     "",
                     // Navigation is `null` for now, but test case should
                     // be extended by using an actual navigation object.
                     cmLinkable,
-                    "<!--VTL $include.url('CM-Content','pageid','') VTL-->"
+                    Optional.of("<!--VTL $include.url('CM-Content','pageid','') VTL-->")
             ),
             Arguments.of(
                     "",
                     new Object(), // unrecognized object
-                    null
+                    Optional.empty()
             )
     );
   }
@@ -156,10 +158,10 @@ class SfccLinkResolverResolveUrlTest {
     Product product = buildProduct("external-product-id");
     HttpServletRequest request = buildRequest(true, false, false);
 
-    String actual = sfccLinkResolver.resolveUrl("", product, variant, navigation, request);
+    Optional<String> actual = sfccLinkResolver.resolveUrl("", product, variant, navigation, request);
 
     assertThat(actual)
-            .isEqualTo("<!--VTL $include.url('Product-Show','pid','external-product-id','preview','true') VTL-->");
+            .contains("<!--VTL $include.url('Product-Show','pid','external-product-id','preview','true') VTL-->");
   }
 
   private static CMExternalPage buildExternalPage(boolean isRoot, String externalId, String externalUriPath) {

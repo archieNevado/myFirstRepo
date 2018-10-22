@@ -1,9 +1,9 @@
 package com.coremedia.blueprint.cae.richtext.filter;
 
+import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
-import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.objectserver.view.ViewUtils;
@@ -72,7 +72,7 @@ public class ImageFilter extends Filter implements FilterFactory {
     if (handle(qName)) {
       String contentId = atts.getValue(Xlink.NAMESPACE_URI, Xlink.HREF);
       Content content = contentRepository.getContent(IdHelper.parseContentIdFromBlobId(contentId));
-      ContentBean picture = contentBeanFactory.createBeanFor(content);
+      CMObject picture = contentBeanFactory.createBeanFor(content, CMObject.class);
       picture = dataViewFactory.loadCached(picture, null);
 
       // Transfer attributes to request

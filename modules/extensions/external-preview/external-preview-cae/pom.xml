@@ -58,18 +58,4 @@
     </dependency>
   </dependencies>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <configuration>
-          <usedDependencies>
-            <!-- Using constants from -->
-            <usedDependency>${project.groupId}:link-services</usedDependency>
-          </usedDependencies>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 </project>

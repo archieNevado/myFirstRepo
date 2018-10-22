@@ -8,9 +8,9 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.user.UserContextProvider;
 import com.coremedia.livecontext.ecommerce.user.UserSessionService;
 import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
-import com.coremedia.objectserver.web.binding.IETFBCP47LanguageTagToLocaleConverter;
 import com.coremedia.objectserver.web.links.LinkFormatter;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,8 +32,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.security.auth.login.CredentialExpiredException;
 import javax.servlet.http.HttpServletRequest;
@@ -140,7 +138,7 @@ public class LoginStatusHandlerTest {
 
   private Site mockSite(String storeId, String locale) {
     Site site = mock(Site.class);
-    when(liveContextSiteResolver.findSiteFor(storeId, Locale.forLanguageTag(locale))).thenReturn(site);
+    when(liveContextSiteResolver.findSiteFor(storeId, Locale.forLanguageTag(locale))).thenReturn(Optional.of(site));
     return site;
   }
 
@@ -197,11 +195,5 @@ public class LoginStatusHandlerTest {
       return mock(CommerceConnectionInitializer.class);
     }
 
-    @PostConstruct
-    void registerLocaleConverter() {
-      // our Blueprint uses a custom converter for Locale objects, which uses language tags as string representation,
-      // for example it uses "en-US" instead of "en_US" for Locale.US
-      conversionService.addConverter(new IETFBCP47LanguageTagToLocaleConverter());
-    }
   }
 }

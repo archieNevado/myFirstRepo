@@ -1,7 +1,7 @@
 package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
@@ -11,10 +11,10 @@ import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 import com.coremedia.rest.cap.common.represent.SuggestionResultRepresentation;
 import com.coremedia.rest.cap.content.SearchParameterNames;
-import org.apache.commons.lang3.StringUtils;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.apache.commons.lang3.StringUtils;
+
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -77,12 +77,21 @@ public class CatalogServiceResource {
     // should have picked it up so the `CommerceConnectionFilter`
     // provides a commerce connection based on the site ID.
 
-    StoreContext newStoreContextForSite = getStoreContext();
-    if (newStoreContextForSite == null) {
+    CommerceConnection commerceConnection = CurrentCommerceConnection.find().orElse(null);
+    if (commerceConnection == null) {
       return null;
     }
 
-    newStoreContextForSite.setWorkspaceId(workspaceId != null ? WorkspaceId.of(workspaceId) : WORKSPACE_ID_NONE);
+    StoreContext currentStoreContext = commerceConnection.getStoreContext();
+    if (currentStoreContext == null) {
+      return null;
+    }
+
+    StoreContext newStoreContextForSite = commerceConnection
+            .getStoreContextProvider()
+            .buildContext(currentStoreContext)
+            .withWorkspaceId(workspaceId != null ? WorkspaceId.of(workspaceId) : WORKSPACE_ID_NONE)
+            .build();
 
     Map<String, String> params = getParams(category, catalogAlias, newStoreContextForSite, limit);
     SearchResult<? extends CommerceBean> searchResult = search(query, searchType, newStoreContextForSite, params);
@@ -91,10 +100,11 @@ public class CatalogServiceResource {
   }
 
   @NonNull
-  private Map<String, String> getParams(String category, String catalogAlias, StoreContext storeContext, int limit) {
+  private Map<String, String> getParams(String category, String catalogAlias, @NonNull StoreContext storeContext,
+                                        int limit) {
     Map<String, String> params = new HashMap<>();
 
-    if (!StringUtils.isEmpty(category) && !isRootCategory(category, storeContext)) {
+    if (!StringUtils.isEmpty(category) && !isRootCategory(category, catalogAlias, storeContext)) {
       params.put(CatalogService.SEARCH_PARAM_CATEGORYID, category);
     }
 
@@ -109,16 +119,11 @@ public class CatalogServiceResource {
     return params;
   }
 
-  private boolean isRootCategory(@NonNull String categoryParam, StoreContext storeContext) {
-    // check if it is our symbolic URL segment for the root category
-    // (independent of the particular commerce system)
-    if (CategoryResource.ROOT_CATEGORY_ROLE_ID.equals(categoryParam)) {
-      return true;
-    }
-
+  private boolean isRootCategory(@NonNull String categoryParam, String catalogAlias, @NonNull StoreContext storeContext) {
     // check if it is the actual id of the root category
     // (depends on the commerce implementation)
-    String rootCategoryId = CommerceIdFormatterHelper.format(getCatalogService().findRootCategory(DEFAULT_CATALOG_ALIAS, storeContext).getId());
+    CatalogAlias myAlias = StringUtils.isEmpty(catalogAlias) ? DEFAULT_CATALOG_ALIAS : CatalogAlias.of(catalogAlias);
+    String rootCategoryId = getCatalogService().findRootCategory(myAlias, storeContext).getExternalId();
     return categoryParam.equals(rootCategoryId);
   }
 
@@ -152,12 +157,5 @@ public class CatalogServiceResource {
                                                           @QueryParam(SEARCH_PARAM_WORKSPACE_ID) String workspaceId) {
     //TODO not supported yet
     return new SuggestionResultRepresentation(new ArrayList<>());
-  }
-
-  @Nullable
-  protected StoreContext getStoreContext() {
-    return CurrentCommerceConnection.find()
-            .map(CommerceConnection::getStoreContext)
-            .orElse(null);
   }
 }

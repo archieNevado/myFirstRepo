@@ -45,6 +45,25 @@ public class CommerceBeanUtils {
   }
 
   /**
+   * Creates a {@link CommerceBean} for the given delegate and target class.
+   * This method marks the created bean as lightweight. "Lightweight" means that not all properties have been loaded yet.
+   *
+   * @param delegate delegate {@link AbstractOCDocument}
+   * @param beanType type of the commerce bean
+   * @param aClass   target class
+   * @param <T>      type of the target {@link CommerceBean} class
+   * @return {@link CommerceBean}
+   */
+  @Nullable
+  public static <T extends CommerceBean> T createLightweightBeanFor(@NonNull CommerceBeanFactory commerceBeanFactory,
+                                                         @NonNull AbstractOCDocument delegate,
+                                                         @NonNull StoreContext storeContext,
+                                                         @NonNull CommerceBeanType beanType,
+                                                         @NonNull Class<T> aClass) {
+    return doCreateBeanFor(commerceBeanFactory, delegate, storeContext, beanType, aClass, true);
+  }
+
+  /**
    * Creates a list of {@link CommerceBean}s for the given delegates with the given target class.
    * This method marks the created beans as lightweight. "Lightweight" means that not all properties have been loaded yet.
    *
@@ -70,7 +89,9 @@ public class CommerceBeanUtils {
                                                             boolean isLightWeight) {
     CommerceId commerceId = SfccCommerceIdProvider.commerceId(beanType).withExternalId(delegate.getId()).build();
     AbstractSfccCommerceBean bean = (AbstractSfccCommerceBean) commerceBeanFactory.createBeanFor(commerceId, storeContext);
-    bean.setDelegate(delegate);
+    if (!isLightWeight) {
+      bean.setDelegate(delegate);
+    }
     bean.setLightweight(isLightWeight);
     LOG.debug("Created commerce bean for '{}' (lightweight={})", commerceId, isLightWeight);
 

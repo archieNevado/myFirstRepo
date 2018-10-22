@@ -62,7 +62,6 @@ public class ProductInSiteConverterTest {
     when(commerceConnection.getIdProvider()).thenReturn(idProvider);
     when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(commerceConnection));
 
-    commerceConnection.getStoreContext().put("site", siteId);
     when(commerceConnection.getCatalogService().findProductById(any(), any(StoreContext.class))).thenReturn(product);
 
     when(product.getExternalId()).thenReturn(productId);

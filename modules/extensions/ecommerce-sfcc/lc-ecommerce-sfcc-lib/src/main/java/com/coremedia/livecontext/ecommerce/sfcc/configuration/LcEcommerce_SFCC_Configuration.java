@@ -16,9 +16,12 @@ import com.coremedia.livecontext.ecommerce.sfcc.common.SfccCommerceConnection;
 import com.coremedia.livecontext.ecommerce.sfcc.common.SfccCommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.sfcc.common.SfccStoreContextProvider;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.AbstractOCAPIConnector;
+import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.CatalogsResource;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.CategoryProductAssignmentSearchResource;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.CustomerGroupsResource;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.ProductSearchResource;
+import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.ProductsResource;
+import com.coremedia.livecontext.ecommerce.sfcc.ocapi.shop.resources.ShopProductSearchResource;
 import com.coremedia.livecontext.ecommerce.sfcc.p13n.SegmentServiceImpl;
 import com.coremedia.livecontext.ecommerce.sfcc.user.UserContextProviderImpl;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
@@ -47,12 +50,15 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 class LcEcommerce_SFCC_Configuration {
 
   @Bean
-  CatalogServiceImpl sfccCatalogService(@NonNull com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.ProductsResource productsResource,
+  CatalogServiceImpl sfccCatalogService(@NonNull CatalogsResource catalogsResource,
+                                        @NonNull ProductsResource productsResource,
                                         @NonNull CategoryProductAssignmentSearchResource categoryProductAssignmentSearchResource,
                                         @NonNull ProductSearchResource productSearchResource,
+                                        @NonNull ShopProductSearchResource shopProductSearchResource,
                                         @NonNull CommerceCache commerceCache,
                                         @NonNull CommerceBeanFactory sfccCommerceBeanFactory) {
-    return new CatalogServiceImpl(productsResource, categoryProductAssignmentSearchResource, productSearchResource, commerceCache, sfccCommerceBeanFactory);
+    return new CatalogServiceImpl(catalogsResource, productsResource, categoryProductAssignmentSearchResource,
+      productSearchResource, shopProductSearchResource, commerceCache, sfccCommerceBeanFactory);
   }
 
   @Bean

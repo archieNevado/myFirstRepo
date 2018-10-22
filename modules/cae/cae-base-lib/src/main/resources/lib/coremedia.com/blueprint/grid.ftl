@@ -71,45 +71,7 @@
 
 <#-- --- DEPRECATED ------------------------------------------------------------------------------------------------ -->
 
-
-<#-- DEPRECATED, see Frontend Developer Guide -->
-<#function getOffsetClass index numberOfItems itemsPerRow  prefix="" force=false>
-  <#-- bootstrap default grid = 12 rows -->
-  <#local width=12/itemsPerRow />
-  <#local isFirstItemOfRow=(index % itemsPerRow == 0) />
-  <#local isLastRow=(numberOfItems - numberOfItems % itemsPerRow - index) <= 0 />
-  <#-- define offset class to align items in rows containing less than 3 items centered -->
-  <#local offsetClass="" />
-  <#-- offset only applies to first element of last row -->
-  <#if (isLastRow && isFirstItemOfRow)>
-    <#-- offset depends on the number of items in the last row -->
-    <#local offsetValue=(12-((numberOfItems % itemsPerRow)*width))/2 />
-    <#local offsetClass="${prefix}offset-${offsetValue}" />
-  <#elseif (force)>
-    <#local offsetClass="${prefix}offset-0" />
-  </#if>
-
-  <#return offsetClass>
-</#function>
-
-<#-- DEPRECATED, see Frontend Developer Guide -->
-<#macro renderNewRow index itemsPerRow additionalClass="">
-  <#-- bootstrap default grid = 12 rows -->
-  <#local width=12/itemsPerRow />
-  <#local isFirstItemOfRow=(index % itemsPerRow == 0) />
-  <#-- offset only applies to first element of last row -->
-  <#if (isFirstItemOfRow && index != 0)>
-    </div>
-    <div class="${additionalClass}row">
-  </#if>
-</#macro>
-
 <#-- DEPRECATED -->
 <#function getPlacementByName name pagegrid>
   <#return blueprintFreemarkerFacade.getPlacementByName(name, pagegrid) />
-</#function>
-
-<#-- DEPRECATED, use bp.getLanguageTag instead -->
-<#function getPageLanguage object>
-  <#return blueprintFreemarkerFacade.getLanguage(object) />
 </#function>

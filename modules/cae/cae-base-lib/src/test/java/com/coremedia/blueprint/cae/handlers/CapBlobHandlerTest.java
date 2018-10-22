@@ -14,7 +14,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -32,6 +34,7 @@ import static com.coremedia.blueprint.cae.web.links.NavigationLinkSupport.ATTR_N
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_CLASS;
 
 /**
  * Test for {@link CapBlobHandler}
@@ -39,6 +42,8 @@ import static org.mockito.Mockito.when;
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = CapBlobHandlerTestConfiguration.class)
+@DirtiesContext(classMode = AFTER_CLASS)
+@TestPropertySource(properties = "cae.single-node=true")
 public class CapBlobHandlerTest {
 
   private static final String URI_JPG = "/resource/blob/16/ad343795d54b19c1b2e3a5b44513cee1/nae-me-jpg-data.jpg";

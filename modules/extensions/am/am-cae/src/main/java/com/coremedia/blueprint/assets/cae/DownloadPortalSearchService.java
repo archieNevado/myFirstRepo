@@ -8,6 +8,8 @@ import com.coremedia.blueprint.cae.search.SearchResultBean;
 import com.coremedia.blueprint.cae.search.SearchResultFactory;
 import com.coremedia.blueprint.cae.search.Value;
 import com.coremedia.blueprint.cae.search.ValueAndCount;
+import com.coremedia.blueprint.cae.search.facet.FacetResult;
+import com.coremedia.blueprint.cae.search.facet.FacetValue;
 import com.coremedia.blueprint.cae.search.solr.SolrQueryBuilder;
 import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
 import com.coremedia.cap.content.Content;
@@ -24,6 +26,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -111,7 +114,9 @@ public class DownloadPortalSearchService implements InitializingBean {
     SearchResultBean searchResult = querySearchEngine(assetQueryBean);
 
     // create the list of subcategories from the results of the facet query
-    return createSubcategoriesFromFacets(searchResult.getFacets().get(ASSETHIERARCHY_SOLR_FIELD), prefixedTaxonomyPath);
+    FacetResult facetResult = searchResult.getFacetResult();
+    Collection<FacetValue> facets = facetResult.getFacets().getOrDefault(ASSETHIERARCHY_SOLR_FIELD, Collections.emptyList());
+    return createSubcategoriesFromFacets(facets, prefixedTaxonomyPath);
   }
 
   public SearchResultBean getAssetsForCategory(@NonNull AMTaxonomy category, int assetsPerPage, int page) {
@@ -145,10 +150,11 @@ public class DownloadPortalSearchService implements InitializingBean {
   /*************************    private methods    *************************/
 
   @NonNull
-  private List<Subcategory> createSubcategoriesFromFacets(@NonNull List<ValueAndCount> facets, @NonNull String pathPrefix) {
+  private List<Subcategory> createSubcategoriesFromFacets(@NonNull Collection<? extends ValueAndCount> facets,
+                                                          @NonNull String pathPrefix) {
     List<Subcategory> subcategories = new ArrayList<>();
     for (ValueAndCount facet : facets) {
-      String pathFromFacet = facet.getName();
+      String pathFromFacet = facet.getValue();
 
       // double checking if the #setFacetPrefix did actually work - it is basically always true
       if (pathFromFacet.startsWith(pathPrefix)) {

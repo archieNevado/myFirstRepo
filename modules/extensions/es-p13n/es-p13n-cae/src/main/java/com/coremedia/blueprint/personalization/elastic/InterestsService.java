@@ -13,7 +13,6 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.common.logging.PersonalDataLogger;
 import com.coremedia.common.personaldata.PersonalData;
-import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.objectserver.view.substitution.Substitution;
@@ -214,7 +213,7 @@ public class InterestsService {
         if (IdHelper.isContentId(key)) {
           final Content content = contentRepository.getContent(key);
           if(isTaxonomy(content)) {
-            final ContentBean contentBean = contentBeanFactory.createBeanFor(content);
+            CMObject contentBean = contentBeanFactory.createBeanFor(content, CMObject.class);
 
             // we might deal with ids referring to content from a different repository, therefore the id might belong to a type other than CMTaxonomy
             if (contentBean instanceof CMTaxonomy) {
@@ -223,7 +222,7 @@ public class InterestsService {
               Double value = (Double) context.getProperty(key);
               result.put(taxonomy, value);
             } else {
-              LOG.warn("Got unexpected content bean {} for content of type {} (expecting {})", new Object[]{contentBean, content.getType(), CMTaxonomy.class});
+              LOG.warn("Got unexpected content bean {} for content of type {} (expecting {})", contentBean, content.getType(), CMTaxonomy.class);
             }
           } else {
             LOG.info("Could not parse taxonomy from ID {}: not a taxonomy (might originate from different repository", key);

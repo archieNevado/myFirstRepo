@@ -9,14 +9,14 @@
 
   Example:
   <#assign link = bp.getLink(self) />
-
-  Note:
-  For now uses the deprecated function to avoid code duplication as we cannot depend from "cae-base-lib" to
-  the frontend workspace.
 -->
 <#function getLink media>
   <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.CMMedia" -->
-  <#return bp.getVideoLink(media) />
+  <#local videoLink=media.dataUrl!"" />
+  <#if !videoLink?has_content && media.data?has_content>
+    <#local videoLink=cm.getLink(media.data)!"" />
+  </#if>
+  <#return videoLink />
 </#function>
 
 <#macro renderPicture blockClass=defaultBlockClass

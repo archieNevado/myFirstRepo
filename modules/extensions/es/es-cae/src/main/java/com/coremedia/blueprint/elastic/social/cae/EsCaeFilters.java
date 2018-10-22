@@ -1,6 +1,6 @@
 package com.coremedia.blueprint.elastic.social.cae;
 
-import com.coremedia.springframework.web.RegistrationBeanBuilder;
+import com.coremedia.springframework.boot.web.servlet.RegistrationBeanBuilder;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,15 +22,6 @@ public class EsCaeFilters {
     return RegistrationBeanBuilder
             .forFilter(springSecurityFilterChain)
             .order(Ordered.HIGHEST_PRECEDENCE)
-            .build();
-  }
-
-  @Bean
-  public FilterRegistrationBean guidFilterRegistration(Filter guidFilter) {
-    return RegistrationBeanBuilder
-            .forFilter(guidFilter)
-            .urlPatterns(SERVLET_DYNAMIC)
-            .order(10)
             .build();
   }
 

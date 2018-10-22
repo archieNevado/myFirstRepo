@@ -1,7 +1,6 @@
 package com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources;
 
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.sfcc.catalog.CatalogServiceImpl;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.AbstractOCSearchResultDocument;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.CategoryProductAssignmentDocument;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.CategoryProductAssignmentSearchResultDocument;
@@ -9,14 +8,13 @@ import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.ProductDocu
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.SearchRequestDocument;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.TextQueryDocument;
 import com.google.common.collect.ImmutableMap;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.CategoriesResource.CATEGORY_ROOT_ID;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -36,13 +34,9 @@ public class CategoryProductAssignmentSearchResource extends AbstractDataResourc
     searchRequest.setQuery(new TextQueryDocument("product_id", "*"));
     String requestBody = searchRequest.toJSONString();
 
-    String categoryIdParamValue = CatalogServiceImpl.ROOT_CATEGORY_ID.equalsIgnoreCase(categoryId)
-            ? CATEGORY_ROOT_ID
-            : categoryId;
-
     ImmutableMap<String, String> pathParameters = ImmutableMap.<String, String>builder()
-            .put(CATALOG_ID_PARAM, storeContext.getCatalogId())
-            .put(CATEGORY_ID_PARAM, categoryIdParamValue)
+            .put(CATALOG_ID_PARAM, storeContext.getCatalogId().get().value())
+            .put(CATEGORY_ID_PARAM, categoryId)
             .build();
 
     Optional<CategoryProductAssignmentSearchResultDocument> doc = getConnector().postResource(

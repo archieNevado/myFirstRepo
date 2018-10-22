@@ -95,6 +95,7 @@
       <util:constant static-field="com.coremedia.blueprint.ecommerce.common.contentbeans.CMAbstractCategory.PDP_PAGEGRID"/>
     </property>
     <property name="treeRelation" ref="externalChannelContentTreeRelation"/>
+    <property name="fallbackStructPropertyName" value="placement"/>
   </bean>
 
   <bean id="productContentBackedPageGridService"
@@ -104,6 +105,7 @@
       <util:constant static-field="com.coremedia.livecontext.contentbeans.CMExternalProduct.PAGEGRID"/>
     </property>
     <property name="treeRelation" ref="externalChannelContentTreeRelation"/>
+    <property name="fallbackStructPropertyName" value="placement"/>
   </bean>
 
 </beans>

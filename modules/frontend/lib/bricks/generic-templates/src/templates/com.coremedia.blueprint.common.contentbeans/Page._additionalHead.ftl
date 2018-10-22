@@ -48,3 +48,4 @@
 
 <#-- hook for extensions in head (for e.g. css or javascripts) -->
 <@cm.hook id=bp.viewHookEventNames.VIEW_HOOK_HEAD />
+

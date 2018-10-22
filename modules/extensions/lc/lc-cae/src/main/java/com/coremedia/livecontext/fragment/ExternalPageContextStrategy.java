@@ -8,14 +8,13 @@ import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
-import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -53,7 +52,7 @@ public class ExternalPageContextStrategy implements ContextStrategy<String, Navi
       if (site != null) {
         Content externalChannel = cache.get(new CMExternalPageCacheKey(pageId, site, treeRelation));
         if (externalChannel != null) {
-          ContentBean externalChannelBean = contentBeanFactory.createBeanFor(externalChannel);
+          CMObject externalChannelBean = contentBeanFactory.createBeanFor(externalChannel, CMObject.class);
           if (externalChannelBean instanceof Navigation) {
             result.add((Navigation) externalChannelBean);
           }
