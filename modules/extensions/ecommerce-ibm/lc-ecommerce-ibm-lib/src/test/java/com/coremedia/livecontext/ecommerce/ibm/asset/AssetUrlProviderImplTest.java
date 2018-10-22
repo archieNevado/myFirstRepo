@@ -3,8 +3,10 @@ package com.coremedia.livecontext.ecommerce.ibm.asset;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreContextBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,9 +35,11 @@ public class AssetUrlProviderImplTest {
     CommerceConnection commerceConnection = new BaseCommerceConnection();
     CurrentCommerceConnection.set(commerceConnection);
 
-    StoreContext storeContext = newStoreContext();
-    storeContext.put(StoreContextImpl.STORE_ID, "10001");
-    storeContext.put(StoreContextImpl.CATALOG_ID, "catalog");
+    StoreContextImpl storeContext = IbmStoreContextBuilder
+            .from(newStoreContext())
+            .withStoreId("10001")
+            .withCatalogId(CatalogId.of("catalog"))
+            .build();
     commerceConnection.setStoreContext(storeContext);
 
     testling.setCmsHost("localhost");
@@ -165,7 +169,7 @@ public class AssetUrlProviderImplTest {
 
     StoreContext storeContext = CurrentCommerceConnection.get().getStoreContext();
     String storeId = storeContext.getStoreId();
-    String catalogId = storeContext.getCatalogId();
+    String catalogId = storeContext.getCatalogId().get().value();
 
     assertEquals("//localhost/" + storeId + "/" + catalogId, testling.getImageUrl("//[cmsHost]/[storeId]/[catalogId]", true));
   }

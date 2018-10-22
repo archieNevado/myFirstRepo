@@ -36,6 +36,7 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>link-services</artifactId>
       <version>${project.version}</version>
+      <scope>runtime</scope>
     </dependency>
 
     <dependency>
@@ -46,6 +47,10 @@
       <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-es-common</artifactId>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint.base</groupId>
+      <artifactId>bpbase-links-api</artifactId>
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
@@ -179,19 +184,4 @@
       <artifactId>commons-lang3</artifactId>
     </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <configuration>
-          <usedDependencies>
-            <!-- Using constants from -->
-            <usedDependency>${project.groupId}:link-services</usedDependency>
-          </usedDependencies>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 </project>

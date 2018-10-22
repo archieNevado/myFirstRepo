@@ -16,7 +16,6 @@
 
   <templateSets>
     <templateSet>templates/calista-templates.jar</templateSet>
-    <templateSet>templates/bricks-templates.jar</templateSet>
   </templateSets>
 
   <resourceBundles>

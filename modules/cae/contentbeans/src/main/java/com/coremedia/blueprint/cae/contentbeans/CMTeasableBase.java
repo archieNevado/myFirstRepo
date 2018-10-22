@@ -4,6 +4,7 @@ package com.coremedia.blueprint.cae.contentbeans;
 import com.coremedia.blueprint.cae.search.SearchResultFactory;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMMedia;
+import com.coremedia.blueprint.common.contentbeans.CMPerson;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.content.Content;
@@ -101,5 +102,11 @@ public abstract class CMTeasableBase extends CMHasContextsImpl implements CMTeas
   public List<? extends CMTeasable> getRelated() {
     List<Content> contents = getContent().getLinks(RELATED);
     return createBeansFor(contents, CMTeasable.class);
+  }
+
+  @Override
+  public List<CMPerson> getAuthors() {
+    List<Content> contents = getContent().getLinks(AUTHORS);
+    return createBeansFor(contents, CMPerson.class);
   }
 }

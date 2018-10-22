@@ -4,7 +4,7 @@
 <master>
 </master>
 <viewtype>
-<link href="../../Options/Viewtypes/CMChannel/carousel.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Viewtypes/CMChannel/carousel"/>
+<link href="../../Options/Viewtypes/CMChannel/hero.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Viewtypes/CMChannel/hero"/>
 </viewtype>
 <linkedSettings>
 </linkedSettings>

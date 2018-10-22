@@ -95,7 +95,7 @@ public class CMCatalogPictureHandlerTest {
 
   @Test
   public void testHandleRequestWithSiteNull() throws Exception {
-    when(siteResolver.findSiteFor(anyString(), any(Locale.class))).thenReturn(null);
+    when(siteResolver.findSiteFor(anyString(), any(Locale.class))).thenReturn(Optional.empty());
 
     ModelAndView result = testling.handleRequestWidthHeight(
             "10201", "en_US", "full", PRODUCT_REFERENCE, "jpg", mock(WebRequest.class)
@@ -106,7 +106,7 @@ public class CMCatalogPictureHandlerTest {
 
   @Test
   public void testHandleRequestWithPictureFormatsEmpty() throws Exception {
-    when(siteResolver.findSiteFor(anyString(), any(Locale.class))).thenReturn(site);
+    when(siteResolver.findSiteFor(anyString(), any(Locale.class))).thenReturn(Optional.of(site));
     testling.setPictureFormats(Collections.emptyMap());
 
     ModelAndView result = testling.handleRequestWidthHeight(
@@ -118,7 +118,7 @@ public class CMCatalogPictureHandlerTest {
 
   @Test
   public void testHandleRequestNoPictureFound() throws Exception {
-    when(siteResolver.findSiteFor(anyString(), any(Locale.class))).thenReturn(site);
+    when(siteResolver.findSiteFor(anyString(), any(Locale.class))).thenReturn(Optional.of(site));
 
     ModelAndView result = testling.handleRequestWidthHeight(
             "10201", "en_US", "full", PRODUCT_REFERENCE, "jpg", mock(WebRequest.class)
@@ -168,7 +168,7 @@ public class CMCatalogPictureHandlerTest {
   }
 
   private void prepareSuccessRequest() {
-    when(siteResolver.findSiteFor(anyString(), any(Locale.class))).thenReturn(site);
+    when(siteResolver.findSiteFor(anyString(), any(Locale.class))).thenReturn(Optional.of(site));
     when(assetService.findPictures(PRODUCT_REFERENCE, true)).thenReturn(newArrayList(pictureContent));
     when(transformImageService
             .transformWithDimensions(any(Content.class), nullable(Blob.class), any(TransformedBlob.class), anyString(),

@@ -23,13 +23,13 @@ default['blueprint']['tools']['workflow-server']['dir'] = "#{node['blueprint']['
 default['blueprint']['tools']['workflow-server']['property_files']['capclient.properties'] = node['blueprint']['tools']['content-management-server']['property_files']['capclient.properties']
 
 default['blueprint']['tools']['caefeeder-preview']['dir'] = "#{node['blueprint']['base_dir']}/caefeeder-preview-tools"
-default['blueprint']['tools']['caefeeder-preview']['property_files']['resetcaefeeder.properties']['jdbc.driver'] = 'com.mysql.jdbc.Driver'
+default['blueprint']['tools']['caefeeder-preview']['property_files']['resetcaefeeder.properties']['jdbc.driver'] = 'com.mysql.cj.jdbc.Driver'
 default['blueprint']['tools']['caefeeder-preview']['property_files']['resetcaefeeder.properties']['jdbc.url'] = 'jdbc:mysql://localhost:3306/cm_mcaefeeder'
 default['blueprint']['tools']['caefeeder-preview']['property_files']['resetcaefeeder.properties']['jdbc.user'] = 'cm_mcaefeeder'
 default['blueprint']['tools']['caefeeder-preview']['property_files']['resetcaefeeder.properties']['jdbc.password'] = 'cm_mcaefeeder'
 
 default['blueprint']['tools']['caefeeder-live']['dir'] = "#{node['blueprint']['base_dir']}/caefeeder-live-tools"
-default['blueprint']['tools']['caefeeder-live']['property_files']['resetcaefeeder.properties']['jdbc.driver'] = 'com.mysql.jdbc.Driver'
+default['blueprint']['tools']['caefeeder-live']['property_files']['resetcaefeeder.properties']['jdbc.driver'] = 'com.mysql.cj.jdbc.Driver'
 default['blueprint']['tools']['caefeeder-live']['property_files']['resetcaefeeder.properties']['jdbc.url'] = 'jdbc:mysql://localhost:3306/cm_caefeeder'
 default['blueprint']['tools']['caefeeder-live']['property_files']['resetcaefeeder.properties']['jdbc.user'] = 'cm_caefeeder'
 default['blueprint']['tools']['caefeeder-live']['property_files']['resetcaefeeder.properties']['jdbc.password'] = 'cm_caefeeder'

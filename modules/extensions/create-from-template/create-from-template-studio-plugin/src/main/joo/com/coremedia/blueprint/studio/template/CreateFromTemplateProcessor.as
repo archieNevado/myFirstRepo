@@ -185,7 +185,8 @@ public class CreateFromTemplateProcessor {
   private static function copyTemplateFiles(callback:Function):void {
     var initializer:PageTemplate = data.get(ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'template_property'));
     //resolve the target folder for the template files
-    var folderName:String = data.get(ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'editorial_folder_property'));
+    var folder:Content = data.get(ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'editorial_folder_property'))[0];
+    var folderName:String = data.getExtendedPath(folder);
     //create the target folder...
     trace('INFO', 'Copying template files to new editorial folder "' + folderName + '"');
     SESSION.getConnection().getContentRepository().getChild(folderName, function (folder:Content):void {

@@ -2,6 +2,7 @@ import $ from "jquery";
 import { ajax } from "@coremedia/js-jquery-utils";
 import * as logger from "@coremedia/js-logger";
 import * as deviceDetector from "@coremedia/js-device-detector";
+import { EVENT_LAYOUT_CHANGED } from "@coremedia/js-basic";
 
 const EVENT_PREFIX = "coremedia.blueprint.calista.";
 const EVENT_CHECK_LOGIN_STATUS = EVENT_PREFIX + "loginStatusChecked";
@@ -120,4 +121,17 @@ $(function() {
 
   /* --- Login --- */
   handleLogin();
+
+  /* --- Search --- */
+  $(".cm-wcs-tabs__tab a").on("click touch", function() {
+    // trigger layout changed for responsive images, if search results are hidden
+    if ($("#cmsSearchResultTab").is(":hidden")) {
+      logger.log("open content search");
+      setTimeout(function() {
+        $(document).trigger(EVENT_LAYOUT_CHANGED);
+      }, 100);
+    }
+    // disable browser history in search
+    $("body").data("cm-search-disable-browser-history", "true");
+  });
 });

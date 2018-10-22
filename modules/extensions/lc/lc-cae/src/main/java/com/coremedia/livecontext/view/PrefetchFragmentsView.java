@@ -8,7 +8,6 @@ import com.coremedia.blueprint.common.layout.PageGridPlacement;
 import com.coremedia.blueprint.common.layout.PageGridRow;
 import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.livecontext.fragment.FragmentContextProvider;
-import com.coremedia.livecontext.fragment.FragmentHandler;
 import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.objectserver.view.TextView;
 import com.coremedia.objectserver.view.ViewException;
@@ -66,14 +65,8 @@ public class PrefetchFragmentsView implements TextView {
 
       renderPredefinedViews(bean, page, request, response, fragmentsJson);
 
-      // Content pages need the whole pagegrid instead of the placements.
-      if (bean instanceof CMLinkable) {
-        String myView = FragmentHandler.normalizedPageFragmentView(((CMLinkable) bean).getContent(), null, null);
-        Optional<JsonObject> jsonObject = renderView(bean, nullToEmpty(myView), request, response);
-        jsonObject.ifPresent(fragmentsJson::add);
-      } else {
-        renderPlacements(page, request, response, fragmentsJson);
-      }
+      renderPlacements(page, request, response, fragmentsJson);
+
       writeResponse(view, out, request, response, page, fragmentsJson);
     } catch (RuntimeException e) {
       try {
@@ -244,7 +237,7 @@ public class PrefetchFragmentsView implements TextView {
     String placement = bean instanceof PageGridPlacement ? ((PageGridPlacement) bean).getName() : "";
     return createPageKey(request) + MATRIX_SEPERATOR +
             "view=" + view + MATRIX_SEPERATOR +
-            "placement=" + placement;
+            "placement=" + nullToEmpty(placement).trim();
   }
 
   @NonNull

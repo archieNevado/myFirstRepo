@@ -12,17 +12,17 @@ import com.coremedia.livecontext.ecommerce.p13n.MarketingSpotService;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.google.common.annotations.VisibleForTesting;
-import org.apache.commons.collections.Transformer;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.apache.commons.collections4.Transformer;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.MARTETING_SPOT;
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.MARKETING_SPOT;
 import static com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvider.commerceId;
 import static java.util.Arrays.asList;
 
@@ -55,12 +55,12 @@ public class MarketingSpotServiceImpl implements MarketingSpotService {
 
   @VisibleForTesting
   static CommerceId toMarketingSpotId(String externalId) {
-    return commerceId(MARTETING_SPOT).withExternalId(externalId).build();
+    return commerceId(MARKETING_SPOT).withExternalId(externalId).build();
   }
 
   @VisibleForTesting
   static CommerceId toMarketingSpotTechId(String externalTechId) {
-    return commerceId(MARTETING_SPOT).withTechId(externalTechId).build();
+    return commerceId(MARKETING_SPOT).withTechId(externalTechId).build();
   }
 
   @Override

@@ -20,6 +20,8 @@ import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.coremedia.objectserver.web.links.LinkPostProcessor;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,8 +32,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
@@ -46,6 +46,7 @@ import static java.util.Objects.requireNonNull;
 @RequestMapping
 @LinkPostProcessor
 public class ProductPageHandler extends LiveContextPageHandlerBase {
+
   public static final String LIVECONTEXT_POLICY_COMMERCE_PRODUCT_LINKS = "livecontext.policy.commerce-product-links";
 
   private static final String SEGMENT_PRODUCT = "product";
@@ -56,23 +57,24 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
   private static final String QUICKINFO_VIEW = "asQuickinfo";
   private static final String PDP_PAGE_ID = "pdpPage";
 
-  public static final String URI_PATTERN =
-          "/" + SEGMENT_PRODUCT +
-                  "/{" + SHOP_NAME_VARIABLE + "}" +
-                  "/{" + PRODUCT_PATH_VARIABLE + ":" + PATTERN_SEGMENTS + "}";
+  public static final String URI_PATTERN
+          = "/" + SEGMENT_PRODUCT
+          + "/{" + SHOP_NAME_VARIABLE + "}"
+          + "/{" + PRODUCT_PATH_VARIABLE + ":" + PATTERN_SEGMENTS + "}";
 
-  public static final String REST_URI_PATTERN = '/' + PREFIX_SERVICE +
-          '/' + SEGMENT_REST +
-          "/{" + SITE_CHANNEL_ID +
-          "}/" + PRODUCT_QUICKINFO_SEGMENT +
-          "/{" + PRODUCT_SEO_SEGMENT + "}";
+  public static final String REST_URI_PATTERN
+          = '/' + PREFIX_SERVICE
+          + '/' + SEGMENT_REST
+          + "/{" + SITE_CHANNEL_ID
+          + "}/" + PRODUCT_QUICKINFO_SEGMENT
+          + "/{" + PRODUCT_SEO_SEGMENT + "}";
 
   private boolean useContentPagegrid = false;
 
   /**
    * Determines whether to use the page grid for content pages or for
    * product detail pages.
-   *
+   * <p>
    * Default is false, which means the pdp pagegrid is used.
    */
   public void setUseContentPagegrid(boolean useContentPagegrid) {
@@ -92,12 +94,15 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
     // multi catalog support only for commerce-led implemented by now.
 
     Site site = getSiteResolver().findSiteBySegment(shopSegment);
+
     if (useCommerceProductLinks(site)) {
       return HandlerHelper.notFound("Unsupported link format");
     }
+
     if (StringUtils.isEmpty(seoSegment)) {
       return HandlerHelper.notFound("No product path found");
     }
+
     return createLiveContextPage(site, seoSegment, view, UserVariantHelper.getUser(request));
   }
 
@@ -107,7 +112,8 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
                                   @PathVariable(PRODUCT_SEO_SEGMENT) String productId,
                                   HttpServletRequest request) {
     CommerceConnection currentConnection = CurrentCommerceConnection.get();
-    Product product = requireNonNull(currentConnection.getCatalogService(), "No Catalog Service configured for product " + productId)
+    Product product = requireNonNull(currentConnection.getCatalogService(),
+            "No Catalog Service configured for product " + productId)
             .findProductBySeoSegment(productId, currentConnection.getStoreContext());
 
     Site site = getSitesService().getContentSiteAspect(context.getContent()).findSite()
@@ -132,38 +138,52 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
    * In !wcsProductLinks mode buildLinkFor builds CAE links
    * which are handled by {@link #handleRequest(String, String, String, HttpServletRequest)}.
    */
+  @Nullable
   @Link(type = ProductInSite.class)
-  public Object buildLinkFor(ProductInSite productInSite, String viewName, Map<String, Object> linkParameters, HttpServletRequest request) {
+  public UriComponents buildLinkFor(ProductInSite productInSite, String viewName, Map<String, Object> linkParameters,
+                                    HttpServletRequest request) {
     Site site = productInSite.getSite();
     Product product = productInSite.getProduct();
-    return useCommerceProductLinks(site) ? buildCommerceLinkFor(product, linkParameters, request) : buildCaeLinkFor(productInSite, viewName, linkParameters);
+    return useCommerceProductLinks(site)
+            ? buildCommerceLinkFor(product, linkParameters, request).map(UriComponentsBuilder::build).orElse(null)
+            : buildCaeLinkFor(productInSite, viewName, linkParameters);
   }
 
   /**
    * This link is built when the product teaser is inside a rich text.
    * We use the ProductInPage link building logic here.
    */
+  @Nullable
   @Link(type = CMProductTeaser.class, view = HandlerHelper.VIEWNAME_DEFAULT)
-  public Object buildLinkFor(CMProductTeaser productTeaser, String viewName, Map<String, Object> linkParameters, HttpServletRequest request) {
+  public UriComponents buildLinkFor(CMProductTeaser productTeaser, String viewName, Map<String, Object> linkParameters,
+                                    HttpServletRequest request) {
     ProductInSite productInSite = productTeaser.getProductInSite();
-    if (productInSite != null) {
-      return buildLinkFor(productInSite, viewName, linkParameters, request);
+    if (productInSite == null) {
+      return null;
     }
-    return null;
+
+    return buildLinkFor(productInSite, viewName, linkParameters, request);
   }
 
   @LinkPostProcessor(type = ProductInSite.class, order = PostProcessorPrecendences.MAKE_ABSOLUTE)
-  public Object makeAbsoluteUri(UriComponents originalUri, ProductInSite product, Map<String,Object> linkParameters, HttpServletRequest request) {
+  public UriComponents makeAbsoluteUri(UriComponents originalUri, ProductInSite product,
+                                       Map<String, Object> linkParameters, HttpServletRequest request) {
     // Native product links are absolute anyway, nothing more to do here.
     Site site = product.getSite();
-    return useCommerceProductLinks(site) ? originalUri : absoluteUri(originalUri, product, product.getSite(), linkParameters, request);
+    return useCommerceProductLinks(site)
+            ? originalUri
+            : absoluteUri(originalUri, product, product.getSite(), linkParameters, request);
   }
 
+  @NonNull
   @Override
   protected PageImpl createPageImpl(Object content, Navigation context, @Nullable User developer) {
-    return useContentPagegrid ? super.createPageImpl(content, context, developer): createProductDetailPage(content, context, developer);
+    return useContentPagegrid
+            ? super.createPageImpl(content, context, developer)
+            : createProductDetailPage(content, context, developer);
   }
 
+  @NonNull
   private ProductDetailPage createProductDetailPage(Object content, Navigation context, User developer) {
     ProductDetailPage page = getBeanFactory().getBean(PDP_PAGE_ID, ProductDetailPage.class);
     page.setContent(content);
@@ -175,33 +195,46 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
   // --- internal ---------------------------------------------------
 
   private boolean useCommerceProductLinks(Site site) {
-    return getSettingsService().settingWithDefault(LIVECONTEXT_POLICY_COMMERCE_PRODUCT_LINKS, Boolean.class, true, site);
+    return getSettingsService()
+            .settingWithDefault(LIVECONTEXT_POLICY_COMMERCE_PRODUCT_LINKS, Boolean.class, true, site);
   }
 
-  private ModelAndView createLiveContextPage(@NonNull Site site, @NonNull String seoSegment, String view, @Nullable User developer) {
+  private ModelAndView createLiveContextPage(@NonNull Site site, @NonNull String seoSegment, String view,
+                                             @Nullable User developer) {
     CommerceConnection currentConnection = CurrentCommerceConnection.get();
 
-    CatalogService catalogService = requireNonNull(currentConnection.getCatalogService(), "no catalog service configured for seo segment \"" + seoSegment + '"');
-    Product product = requireNonNull(catalogService.findProductBySeoSegment(seoSegment, currentConnection.getStoreContext()), "No product found for seo segment '" + seoSegment + "'.");
-    Navigation context = getNavigationContext(site, product);
+    CatalogService catalogService = requireNonNull(currentConnection.getCatalogService(),
+            "no catalog service configured for seo segment \"" + seoSegment + '"');
+
+    Product product = requireNonNull(
+            catalogService.findProductBySeoSegment(seoSegment, currentConnection.getStoreContext()),
+            "No product found for seo segment '" + seoSegment + "'.");
+
+    Navigation context = getNavigationContext(site, product).orElse(null);
     ProductInSite productInSite = getLiveContextNavigationFactory().createProductInSite(product, site.getId());
+
     PageImpl page = createPageImpl(productInSite, context, developer);
     page.setTitle(product.getTitle());
     page.setDescription(product.getTitle());
     page.setKeywords(product.getMetaKeywords());
+
     return createModelAndView(page, view);
   }
 
-  private UriComponents buildCaeLinkFor(ProductInSite productInSite, String viewName, Map<String, Object> linkParameters) {
+  @NonNull
+  private UriComponents buildCaeLinkFor(ProductInSite productInSite, String viewName,
+                                        Map<String, Object> linkParameters) {
     String siteSegment = getSiteSegment(productInSite.getSite());
     String productSegment = productInSite.getProduct().getSeoSegment();
+
     UriComponentsBuilder uriBuilder = UriComponentsBuilder
             .newInstance()
             .pathSegment(SEGMENT_PRODUCT)
             .pathSegment(siteSegment)
             .pathSegment(productSegment);
+
     addViewAndParameters(uriBuilder, viewName, linkParameters);
+
     return uriBuilder.build();
   }
-
 }

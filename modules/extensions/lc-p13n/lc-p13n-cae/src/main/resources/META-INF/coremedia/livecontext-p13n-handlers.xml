@@ -13,7 +13,6 @@
   <import resource="classpath:/META-INF/coremedia/livecontext-handler-interceptors.xml"/>
 
   <bean id="p13nPlacementHandler" class="com.coremedia.livecontext.p13n.include.P13NPlacementHandler" parent="pageHandlerBase" >
-    <property name="contentRepository" ref="contentRepository"/>
     <property name="validationService" ref="validationService"/>
     <property name="permittedLinkParameterNames">
       <list>
@@ -23,7 +22,6 @@
   </bean>
 
   <bean id="p13nNavigationHandler" class="com.coremedia.livecontext.p13n.include.P13NNavigationHandler" parent="pageHandlerBase" >
-    <property name="contentRepository" ref="contentRepository"/>
     <property name="permittedLinkParameterNames">
       <list>
         <value>targetView</value>

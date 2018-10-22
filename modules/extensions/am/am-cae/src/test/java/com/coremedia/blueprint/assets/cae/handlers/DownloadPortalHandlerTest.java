@@ -65,7 +65,7 @@ public class DownloadPortalHandlerTest {
   private static final int CATEGORY_CONTENT_ID_2 = 10002;
 
   @InjectMocks
-  private DownloadPortalHandler handler = new DownloadPortalHandler();
+  private DownloadPortalHandler handler;
 
   @Mock
   private DownloadPortalFactory factory;
@@ -158,7 +158,7 @@ public class DownloadPortalHandlerTest {
     when(assetContent.getType()).thenReturn(assetContentType);
     when(assetContentType.isSubtypeOf(AMAsset.NAME)).thenReturn(true);
     when(contentRepository.getContent(eq(ASSET_CONTENT_ID + ""))).thenReturn(assetContent);
-    when(contentBeanFactory.createBeanFor(eq(assetContent))).thenReturn(asset);
+    when(contentBeanFactory.createBeanFor(assetContent, AMAsset.class)).thenReturn(asset);
 
     when(factory.createCategoryOverview(null)).thenReturn(categoryOverview);
     when(factory.createCategoryOverview(taxonomy)).thenReturn(categoryOverview);
@@ -342,7 +342,7 @@ public class DownloadPortalHandlerTest {
     ModelAndView modelAndView = handler.handleSubjectAssetsRequest(navigation, null);
     verifyErrorModelExists(modelAndView);
   }
-  
+
   @Test
   public void buildDownloadCollectionPrepareLink() {
     when(navigation.getContext()).thenReturn(cmContext);

@@ -2,11 +2,13 @@ package com.coremedia.livecontext.ecommerce.ibm.p13n;
 
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceObject;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
+import com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.ibm.common.IbmTestConfig;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
@@ -17,12 +19,12 @@ import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 import com.google.common.annotations.VisibleForTesting;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.junit.Test;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import java.util.List;
 
@@ -77,6 +79,7 @@ public class MarketingSpotServiceImplIT extends IbmServiceTestBase {
     if (useBetamaxTapes()) {
       return;
     }
+
     StoreContext storeContext = testConfig.getStoreContext();
     StoreContextHelper.setCurrentContext(storeContext);
 
@@ -86,8 +89,9 @@ public class MarketingSpotServiceImplIT extends IbmServiceTestBase {
     List<MarketingSpot> marketingSpotsWithoutWorkspace = testling.findMarketingSpots(storeContext);
     assertTrue(marketingSpotsWithoutWorkspace.size() > 100);
 
-    storeContext.setWorkspaceId(WORKSPACE_ID);
-    List<MarketingSpot> marketingSpotsWithWorkspace = testling.findMarketingSpots(storeContext);
+    StoreContext storeContextWithWorkspaceId = setWorkspaceId((StoreContextImpl) storeContext, WORKSPACE_ID);
+
+    List<MarketingSpot> marketingSpotsWithWorkspace = testling.findMarketingSpots(storeContextWithWorkspaceId);
     assertEquals(marketingSpotsWithWorkspace.size(), marketingSpotsWithoutWorkspace.size() + 2);
   }
 
@@ -96,8 +100,8 @@ public class MarketingSpotServiceImplIT extends IbmServiceTestBase {
     if (useBetamaxTapes()) {
       return;
     }
-    StoreContext storeContext = testConfig.getStoreContext();
-    storeContext.setWorkspaceId(WORKSPACE_ID);
+
+    StoreContext storeContext = setWorkspaceId((StoreContextImpl) testConfig.getStoreContext(), WORKSPACE_ID);
     StoreContextHelper.setCurrentContext(storeContext);
 
     UserContext userContext = UserContext.builder().build();
@@ -214,9 +218,12 @@ public class MarketingSpotServiceImplIT extends IbmServiceTestBase {
       return;
     }
 
-    StoreContext storeContext = testConfig.getStoreContext();
     String userSegments = testConfig.getUserSegment1Id().concat("," + testConfig.getUserSegment2Id());
-    storeContext.setUserSegments(userSegments);
+
+    StoreContext storeContext = IbmStoreContextBuilder
+            .from(testConfig.getStoreContext())
+            .withUserSegments(userSegments)
+            .build();
     StoreContextHelper.setCurrentContext(storeContext);
 
     MarketingSpot spot = findMarketingSpotByExternalId(MARKETING_SPOT_EXTERNAL_ID3);
@@ -296,5 +303,13 @@ public class MarketingSpotServiceImplIT extends IbmServiceTestBase {
 
     SearchResult<MarketingSpot> marketingSpots = testling.searchMarketingSpots("Shirts", null, storeContext);
     assertFalse(marketingSpots.getSearchResult().isEmpty());
+  }
+
+  @NonNull
+  private static StoreContext setWorkspaceId(@NonNull StoreContextImpl storeContext, @Nullable WorkspaceId workspaceId) {
+    return IbmStoreContextBuilder
+            .from(storeContext)
+            .withWorkspaceId(workspaceId)
+            .build();
   }
 }

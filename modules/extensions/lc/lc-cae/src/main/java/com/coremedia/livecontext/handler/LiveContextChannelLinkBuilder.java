@@ -7,12 +7,14 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.logictypes.CommerceLedLinkBuilderHelper;
 import com.coremedia.objectserver.web.links.Link;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
@@ -50,11 +52,13 @@ public class LiveContextChannelLinkBuilder extends LiveContextPageHandlerBase {
 
   @Link(type = CMChannel.class)
   @Nullable
-  public Object buildLinkForChannel(@NonNull CMChannel channel,
-                                    @NonNull HttpServletRequest request) {
+  public UriComponents buildLinkForChannel(@NonNull CMChannel channel,
+                                           @NonNull HttpServletRequest request) {
     Optional<Site> siteOptional = findSite(channel);
+
     CommerceConnection commerceConnection = siteOptional
-            .flatMap(commerceConnectionInitializer::findConnectionForSite).orElse(null);
+            .flatMap(commerceConnectionInitializer::findConnectionForSite)
+            .orElse(null);
     if (commerceConnection == null) {
       return null;
     }
@@ -63,14 +67,18 @@ public class LiveContextChannelLinkBuilder extends LiveContextPageHandlerBase {
 
     // Channel case
     if (commerceLedLinkBuilderHelper.isCommerceLedChannel(channel)) {
-      return createLinkForChannelInShop(channel, storeContext, request);
+      return createLinkForChannelInShop(channel, storeContext, request)
+              .map(UriComponentsBuilder::build)
+              .orElse(null);
     }
 
     //noinspection ConstantConditions site must have been present to find the commerce connection
     Site site = siteOptional.get();
     // Search Landing Page case
     if (searchLandingPagesLinkBuilderHelper.isSearchLandingPage(channel, site)) {
-      return searchLandingPagesLinkBuilderHelper.createSearchLandingPageURLFor(channel, commerceConnection, request, storeContext);
+      return searchLandingPagesLinkBuilderHelper
+              .createSearchLandingPageURLFor(channel, commerceConnection, request, storeContext)
+              .orElse(null);
     }
 
     return null;
@@ -84,7 +92,10 @@ public class LiveContextChannelLinkBuilder extends LiveContextPageHandlerBase {
   /**
    * Create a link to the Channel, as used by the Studio preview.
    */
-  private Object createLinkForChannelInShop(@NonNull CMChannel channel, @NonNull StoreContext storeContext, @NonNull HttpServletRequest request) {
+  @NonNull
+  private Optional<UriComponentsBuilder> createLinkForChannelInShop(@NonNull CMChannel channel,
+                                                                    @NonNull StoreContext storeContext,
+                                                                    @NonNull HttpServletRequest request) {
     String seoSegment = commerceLedLinkBuilderHelper.getSeoSegmentForChannel(channel);
     if (StringUtils.isNotEmpty(seoSegment)) {
       seoSegment = seoSegment.replaceAll("--", "/");
@@ -93,7 +104,6 @@ public class LiveContextChannelLinkBuilder extends LiveContextPageHandlerBase {
     String seoSegments = commerceLedLinkBuilderHelper.getContentURLKeyword() + "/" + seoSegment;
 
     return findCommercePropertyProvider()
-            .map(urlProvider -> urlProvider.buildShopLink(seoSegments, emptyMap(), request, storeContext))
-            .orElse(null);
+            .flatMap(urlProvider -> urlProvider.buildShopLink(seoSegments, emptyMap(), request, storeContext));
   }
 }

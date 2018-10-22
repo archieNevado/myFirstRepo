@@ -4,11 +4,13 @@ import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.UnknownUserException;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractWrapperServiceTestCase;
+import com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestServiceMethod;
@@ -31,6 +33,7 @@ import java.util.Optional;
 
 import static com.coremedia.livecontext.ecommerce.ibm.catalog.WcCatalogWrapperService.FIND_CATEGORY_BY_EXTERNAL_ID;
 import static com.coremedia.livecontext.ecommerce.ibm.catalog.WcCatalogWrapperService.FIND_CATEGORY_BY_EXTERNAL_ID_SEARCH;
+import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_6;
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_7;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -120,14 +123,17 @@ public class WcCatalogWrapperServiceIT extends AbstractWrapperServiceTestCase {
 
   @Test
   public void testUseSearchRestHandler() {
-    StoreContext storeContext = testConfig.getStoreContext();
+    StoreContextImpl storeContext = testConfig.getStoreContext();
     assertFalse(testling.useSearchRestHandlerProduct(storeContext));
 
     testling.setUseSearchRestHandlerProductIfAvailable(true);
     assertTrue(testling.useSearchRestHandlerProduct(storeContext));
 
-    StoreContextHelper.setWcsVersion(storeContext, "7.6");
-    assertFalse(testling.useSearchRestHandlerProduct(storeContext));
+    StoreContextImpl storeContextWcs76 = IbmStoreContextBuilder
+            .from(storeContext)
+            .withWcsVersion(WCS_VERSION_7_6)
+            .build();
+    assertFalse(testling.useSearchRestHandlerProduct(storeContextWcs76));
   }
 
   @Test

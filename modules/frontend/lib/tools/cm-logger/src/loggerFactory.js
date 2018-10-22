@@ -35,6 +35,11 @@ const DEFAULTS = {
 const buildPrefix = (level, options) => {
   const prefix = Object.assign({}, DEFAULTS.prefix, options.prefix);
 
+  // use short template, if just info level (like in theme-importer)
+  if (level === "info") {
+    prefix.template = `[{{time}}] {{level}} `;
+  }
+
   return prefix.template.replace(/{{([^{}]*)}}/g, (match, prop) => {
     const fn = prefix[prop];
     if (fn) {

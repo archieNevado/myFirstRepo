@@ -3,6 +3,7 @@ package com.coremedia.livecontext.ecommerce.ibm.cae.storefront;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontConnector;
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontResponse;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.ibm.cae.WcsUrlProvider;
 import com.google.common.collect.ImmutableMap;
@@ -21,6 +22,7 @@ import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -36,7 +38,7 @@ import static org.mockito.Mockito.when;
 public class IbmStoreFrontServiceTest {
 
   private static final String STORE_ID = "Sirius Cybernetics Corporation";
-  private static final String CATALOG_ID = "Total Perspective Vortex";
+  private static final CatalogId CATALOG_ID = CatalogId.of("Total Perspective Vortex");
   private static final String STOREFRONT_REQUEST_URL = "crash";
   private static final Map<String, String> PARAMETERS = new HashMap<>();
   private static final String GUEST_OR_LOGGEDIN_USER_ID = "38009";
@@ -313,7 +315,7 @@ public class IbmStoreFrontServiceTest {
     //noinspection unchecked
     when(storeFrontConnector.executeGet(any(String.class), any(Map.class), any(HttpServletRequest.class))).thenReturn(storeFrontResponse);
     when(commerceConnection.getStoreContext().getStoreId()).thenReturn(STORE_ID);
-    when(commerceConnection.getStoreContext().getCatalogId()).thenReturn(CATALOG_ID);
+    when(commerceConnection.getStoreContext().getCatalogId()).thenReturn(Optional.of(CATALOG_ID));
     CurrentCommerceConnection.set(commerceConnection);
 
     when(storeFrontResponse.getCookies()).thenReturn(Collections.emptyMap());

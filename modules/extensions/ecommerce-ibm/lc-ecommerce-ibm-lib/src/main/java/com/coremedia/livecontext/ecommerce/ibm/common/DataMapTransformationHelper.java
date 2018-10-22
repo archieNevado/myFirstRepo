@@ -1,22 +1,24 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import com.google.common.collect.ImmutableMap;
-import com.rits.cloning.Cloner;
-import org.apache.commons.lang3.StringUtils;
-
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * This class encapsulates convenience methods to transform data maps
  * retrieved by the good old BOD handlers for categories and products
  * to the new leading search handler format.
  */
+@DefaultAnnotation(NonNull.class)
 public class DataMapTransformationHelper {
   private static final Map<String, String> bodKeyMappings = ImmutableMap.<String, String>builder()
           .put("productType", "catalogEntryTypeCode")
@@ -37,11 +39,10 @@ public class DataMapTransformationHelper {
    * @param bodResponseMap The BOD handler based format.
    * @return The search handler based format.
    */
-  public static Map<String, Object> transformProductBodMap(@NonNull Map<String, Object> bodResponseMap) {
-    Map<String, Object> mapToUnify = deepCloneMap(bodResponseMap);
-    transformKeysStartLowerCase(mapToUnify);
-    unifyProductWrapperKeys(mapToUnify);
-    return mapToUnify;
+  public static Map<String, Object> transformProductBodMap(Map<String, Object> bodResponseMap) {
+    Map<String, Object> lowerCasedMap = transformKeysStartLowerCase(bodResponseMap);
+    unifyProductWrapperKeys(lowerCasedMap);
+    return lowerCasedMap;
   }
 
   /**
@@ -50,60 +51,54 @@ public class DataMapTransformationHelper {
    * @param bodResponseMap The BOD handler based format.
    * @return The search handler based format.
    */
-  public static Map<String, Object> transformCategoryBodMap(@NonNull Map<String, Object> bodResponseMap) {
-    Map<String, Object> mapToUnify = deepCloneMap(bodResponseMap);
-    transformKeysStartLowerCase(mapToUnify);
-    unifyCategoryWrapperKeys(mapToUnify);
-    return mapToUnify;
-  }
-
-  /**
-   * Returns a deep copy of a map.
-   *
-   * @param productsMap A product map.
-   * @return A deep copy of the given product map.
-   */
-  @NonNull
-  private static Map<String, Object> deepCloneMap(@NonNull Map<String, Object> productsMap) {
-    Cloner cloner = new Cloner();
-    return cloner.deepClone(productsMap);
+  public static Map<String, Object> transformCategoryBodMap(Map<String, Object> bodResponseMap) {
+    Map<String, Object> lowerCasedMap = transformKeysStartLowerCase(bodResponseMap);
+    unifyCategoryWrapperKeys(lowerCasedMap);
+    return lowerCasedMap;
   }
 
   /**
    * Brings all map keys to lower case.
-   *
-   * @param map The orignial map which will be modified.
    */
-  private static void transformKeysStartLowerCase(@NonNull Map<String, Object> map) {
-    // clone in order to read from the clone and modify the original
-    Map<String, Object> mapToRead = deepCloneMap(map);
-    for (Map.Entry<String, Object> mapEntry : mapToRead.entrySet()) {
-      String currentKey = mapEntry.getKey();
-      if (Character.isUpperCase(currentKey.charAt(0))) {
-        // replace first character of map key with the one in lower case
-        // append the remaining key untouched
-        currentKey = Character.toLowerCase(currentKey.charAt(0)) +
-                StringUtils.right(currentKey, currentKey.length() - 1);
-        // rename, i.e. replace in map under new key
-        map.put(currentKey, map.remove(mapEntry.getKey()));
-      }
-      // need to operate on the original value of the map
-      // in order to proceed
-      Object value = map.get(currentKey);
-      if (value instanceof Collection) {
-        transformKeysStartLowerCase((Collection) value);
-      } else if (value instanceof Map) {
-        transformKeysStartLowerCase((Map) value);
-      }
-    }
+  private static Map<String, Object> transformKeysStartLowerCase(Map<String, Object> map) {
+    return map.entrySet().stream()
+            // Collectors.map returns a mutable map (HashMap)
+            .collect(Collectors.toMap(
+                    e -> decapitalize(e.getKey()),
+                    e -> transformKeysStartLowerCase(e.getValue())
+            ));
   }
 
-  private static void transformKeysStartLowerCase(@NonNull Collection<?> collection) {
-    for (Object collectionEntry : collection) {
-      if (collectionEntry instanceof Map) {
-        transformKeysStartLowerCase((Map) collectionEntry);
-      } // else it is a primitive value which does not have a key, i.e. nothing to do
+  /**
+   * Inspect map value and recursively transform, if value is a collection or a map itself.
+   */
+  private static Object transformKeysStartLowerCase(Object value) {
+    if (value instanceof Collection) {
+      return ((Collection<?>) value).stream()
+              .map(o -> {
+                if (o instanceof Map) {
+                  //noinspection unchecked
+                  return transformKeysStartLowerCase((Map<String, Object>) o);
+                }
+                return o;
+              })
+              .collect(Collectors.toList());
+    } else if (value instanceof Map) {
+      //noinspection unchecked
+      return transformKeysStartLowerCase((Map<String, Object>) value);
     }
+    // else it is a primitive value which does not have a key, i.e. nothing to do
+    return value;
+  }
+
+  private static String decapitalize(String key) {
+    char firstChar = key.charAt(0);
+    if (Character.isUpperCase(firstChar)) {
+      // replace first character of map key with the one in lower case
+      // append the remaining key untouched
+      return Character.toLowerCase(firstChar) + StringUtils.right(key, key.length() - 1);
+    }
+    return key;
   }
 
   /**
@@ -111,7 +106,7 @@ public class DataMapTransformationHelper {
    *
    * @param mapList List of catalog entry or catalog group data.
    */
-  private static void replaceKeys(@NonNull List<Map<String, Object>> mapList) {
+  private static void replaceKeys(List<Map<String, Object>> mapList) {
     for (Map<String, Object> entryMap : mapList) {
       for (Map.Entry<String, String> entry : bodKeyMappings.entrySet()) {
         if (entryMap.containsKey(entry.getKey())) {
@@ -127,7 +122,7 @@ public class DataMapTransformationHelper {
    *
    * @param productWrapper The catalog entry wrapper retrieved by the wrapper service.
    */
-  private static void unifyProductWrapperKeys(@NonNull Map<String, Object> productWrapper) {
+  private static void unifyProductWrapperKeys(Map<String, Object> productWrapper) {
     //noinspection unchecked
     List<Map<String, Object>> catalogEntryView = DataMapHelper.getListValue(productWrapper, "catalogEntryView");
     replaceKeys(catalogEntryView);
@@ -140,15 +135,14 @@ public class DataMapTransformationHelper {
    *
    * @param categoryWrapper The catalog group wrapper retrieved by the wrapper service.
    */
-  private static void unifyCategoryWrapperKeys(@NonNull Map<String, Object> categoryWrapper) {
+  private static void unifyCategoryWrapperKeys(Map<String, Object> categoryWrapper) {
     //noinspection unchecked
     List<Map<String, Object>> catalogGroupView = DataMapHelper.getListValue(categoryWrapper, "catalogGroupView");
     replaceKeys(catalogGroupView);
   }
 
-  @NonNull
-  public static List<String> getParentCatGroupIdForSingleWrapper(@NonNull Map<String, Object> delegate,
-                                                                 @NonNull String currentCatalogId) {
+  public static List<String> getParentCatGroupIdForSingleWrapper(Map<String, Object> delegate,
+                                                                 String currentCatalogId) {
     Object origParentCategoryIds = DataMapHelper.getValueForPath(delegate, "parentCatalogGroupID");
     List<String> parentCategoryIdList = new ArrayList<>();
     if (origParentCategoryIds instanceof List) {
@@ -170,7 +164,7 @@ public class DataMapTransformationHelper {
   }
 
   @Nullable
-  private static String filterByCatalogId(@NonNull String catalogId, @NonNull String catalogIdAndCategoryId) {
+  private static String filterByCatalogId(String catalogId, String catalogIdAndCategoryId) {
     if (catalogIdAndCategoryId.matches(".+_.+")) {
       String[] catalogAndCategoryIdSplit = catalogIdAndCategoryId.split("_");
       if (catalogAndCategoryIdSplit.length > 0 && catalogId.equals(catalogAndCategoryIdSplit[0])) {
@@ -187,7 +181,7 @@ public class DataMapTransformationHelper {
    *
    * @param mapList The list containing the catalog entry or catalog group data.
    */
-  private static void replaceSkus(@NonNull List<Map<String, Object>> mapList) {
+  private static void replaceSkus(List<Map<String, Object>> mapList) {
     for (Map<String, Object> listEntry : mapList) {
       List<Map<String, Object>> sKUs = (List<Map<String, Object>>) DataMapHelper.getListValue(listEntry, "sKUs");
       for (Map<String, Object> sKU : sKUs) {
@@ -203,7 +197,7 @@ public class DataMapTransformationHelper {
    *
    * @param mapList The map containing the catalog entry data.
    */
-  private static void replaceProductAttributeKeys(@NonNull List<Map<String, Object>> mapList) {
+  private static void replaceProductAttributeKeys(List<Map<String, Object>> mapList) {
     for (Map<String, Object> listEntry : mapList) {
       List<Map<String, Object>> attributes = (List<Map<String, Object>>) DataMapHelper.getListValue(listEntry, "attributes");
       for (Map<String, Object> attribute : attributes) {

@@ -2,7 +2,8 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:customize="http://www.coremedia.com/2007/coremedia-spring-beans-customization"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.coremedia.com/2007/coremedia-spring-beans-customization http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.coremedia.com/2007/coremedia-spring-beans-customization http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
   <description>
     View registration.
@@ -11,6 +12,8 @@
   <import resource="classpath:/com/coremedia/cae/view-freemarker-services.xml"/>
   <import resource="classpath:/framework/spring/blueprint-views.xml"/>
   <import resource="classpath:/META-INF/coremedia/lc-services.xml"/>
+
+  <context:component-scan base-package="com.coremedia.livecontext.view"/>
 
   <customize:append id="addDynamicPredicates" bean="dynamicIncludePredicates">
     <list>
@@ -45,8 +48,6 @@
       Programmed view to prefetch fragments in one call in the commerce-led fragment scenario.
     </description>
   </bean>
-
-  <bean class="com.coremedia.livecontext.view.PrefetchFragmentsConfigReader" id="prefetchFragmentsConfigReader"/>
 
   <customize:append id="liveContextProgrammedViewsCustomizer" bean="blueprintProgrammedViews">
     <map>

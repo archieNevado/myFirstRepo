@@ -1,16 +1,16 @@
 package com.coremedia.blueprint.common.util;
 
 import com.google.common.annotations.VisibleForTesting;
-import org.springframework.web.context.request.RequestAttributes;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.Objects;
+import java.util.Optional;
 
 /**
- * Attributes abstraction from the servlet api.
+ * Attributes abstraction from the servlet API.
  * <p>
  * If the methods are invoked from outside a request scope, they return null.
  * <p>
@@ -18,65 +18,61 @@ import java.util.Objects;
  * <p>
  * Calculations which (transitively) invoke this class MUST NOT be cached!
  * Usage of the current request makes your feature unpredictable, unstable
- * and hard to test
+ * and hard to test.
  */
+@DefaultAnnotation(NonNull.class)
 public class ContextAttributes {
-  // static utility class
-  private ContextAttributes() {}
+
+  private ContextAttributes() {
+  }
 
   /**
    * Get the request bound to the current thread.
    */
-  public static HttpServletRequest getRequest() {
-    RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-    if (requestAttributes instanceof ServletRequestAttributes) {
-      return ((ServletRequestAttributes) requestAttributes).getRequest();
-    }
-    return null;
+  public static Optional<HttpServletRequest> findRequest() {
+    return Optional.ofNullable(RequestContextHolder.getRequestAttributes())
+            .filter(ServletRequestAttributes.class::isInstance)
+            .map(ServletRequestAttributes.class::cast)
+            .map(ServletRequestAttributes::getRequest);
   }
 
   /**
    * Get a request attribute of the request bound to the current thread.
    */
-  public static <T> T getRequestAttribute(String name, Class<T> expectedType) {
-    Objects.requireNonNull(name);
-    Objects.requireNonNull(expectedType);
-    HttpServletRequest request = getRequest();
-    return typed(request==null ? null : request.getAttribute(name), expectedType);
+  public static <T> Optional<T> findRequestAttribute(String name, Class<T> expectedType) {
+    return findRequest()
+            .map(request -> request.getAttribute(name))
+            .flatMap(value -> typed(value, expectedType));
   }
 
   /**
    * Get a session attribute of the request bound to the current thread.
    */
-  public static <T> T getSessionAttribute(String name, Class<T> expectedType) {
-    Objects.requireNonNull(name);
-    Objects.requireNonNull(expectedType);
-    HttpServletRequest request = getRequest();
-    HttpSession session = request==null ? null : request.getSession(false);
-    return typed(session==null ? null : session.getAttribute(name), expectedType);
+  public static <T> Optional<T> findSessionAttribute(String name, Class<T> expectedType) {
+    return findRequest()
+            .map(request -> request.getSession(false))
+            .map(session -> session.getAttribute(name))
+            .flatMap(value -> typed(value, expectedType));
   }
 
   /**
    * Get a request parameter of the request bound to the current thread.
    */
-  public static String getRequestParameter(String name) {
-    Objects.requireNonNull(name);
-    HttpServletRequest request = getRequest();
-    return request==null ? null : request.getParameter(name);
+  public static Optional<String> findRequestParameter(String name) {
+    return findRequest()
+            .map(request -> request.getParameter(name));
   }
-
 
   // --- internal ---------------------------------------------------
 
   @VisibleForTesting
-  static <T> T typed(Object value, Class<T> expectedType) {
-    if (value==null) {
-      return null;
-    }
+  static <T> Optional<T> typed(Object value, Class<T> expectedType) {
     Class<?> actualType = value.getClass();
     if (expectedType.isAssignableFrom(actualType)) {
-      return expectedType.cast(value);
+      T castedValue = expectedType.cast(value);
+      return Optional.ofNullable(castedValue);
     }
-    return null;
+
+    return Optional.empty();
   }
 }

@@ -1,14 +1,12 @@
 package com.coremedia.livecontext.site;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.livecontext.fragment.FragmentParametersFactory;
 import com.coremedia.livecontext.handler.util.LiveContextSiteResolverImpl;
 import com.google.common.collect.ImmutableSet;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Locale;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -60,7 +59,7 @@ public class LiveContextSiteResolverTest {
 
     String url = "http://localhost:40081/blueprint/servlet/service/fragment/10001/en-US/params;placement=header;environment=site:site2";
     FragmentParameters params = FragmentParametersFactory.create(url);
-    Site siteFor = testling.findSiteFor(params);
-    assertThat(siteFor).isEqualTo(site2);
+    Optional<Site> siteFor = testling.findSiteFor(params);
+    assertThat(siteFor).contains(site2);
   }
 }

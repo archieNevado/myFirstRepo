@@ -5,11 +5,12 @@ import com.coremedia.blueprint.cae.search.SearchConstants;
 import com.coremedia.blueprint.cae.search.SearchQueryBean;
 import com.coremedia.blueprint.cae.search.SearchResultBean;
 import com.coremedia.blueprint.cae.search.Value;
-import com.coremedia.blueprint.common.contentbeans.CMCollection;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.util.ContentBeanSolrSearchFormatHelper;
 import com.coremedia.blueprint.common.util.SettingsStructToSearchQueryConverter;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -63,7 +64,7 @@ public class CMQueryListImpl extends CMQueryListBase {
   @SuppressWarnings("WeakerAccess")
   protected List<Map<String, Object>> getFixedItemsStructList() {
     // get valid fixed items from super class
-    Map<String, List<Map<String, Object>>> fixedItemsMap = super.getAnnotatedLinkList(CMCollection.EXTENDED_ITEMS, CMCollection.ITEMS);
+    Map<String, List<Map<String, Object>>> fixedItemsMap = super.getAnnotatedLinkList(getExtendedItems(), getLegacyItems(), ITEMS);
     List<Map<String, Object>> fixedItems = fixedItemsMap.get(CMLinkableBase.ANNOTATED_LINKS_STRUCT_ROOT_PROPERTY_NAME);
 
     fixedItems = filterDuplicates(fixedItems);
@@ -182,9 +183,22 @@ public class CMQueryListImpl extends CMQueryListBase {
   }
 
   @Override
-  protected Map<String, Object> createAnnotatedLinkStructMap(CMLinkable target, int index) {
-    Map<String, Object> targetStructMap = super.createAnnotatedLinkStructMap(target, index);
-    targetStructMap.put(ANNOTATED_LINK_STRUCT_INDEX_PROPERTY_NAME, index);
+  @NonNull
+  protected Map<String, Object> createAnnotatedLinkStructMap(@NonNull CMLinkable target, int index, @Nullable String linkListPropertyName) {
+    Map<String, Object> targetStructMap = super.createAnnotatedLinkStructMap(target, index, linkListPropertyName);
+    if (ITEMS.equals(linkListPropertyName)) {
+      targetStructMap.put(ANNOTATED_LINK_STRUCT_INDEX_PROPERTY_NAME, index);
+    }
     return targetStructMap;
+  }
+
+  @NonNull
+  public Map<String, List<Map<String, Object>>> getExtendedItems() {
+    return super.getAnnotatedLinkListUnfiltered(EXTENDED_ITEMS);
+  }
+
+  @NonNull
+  public List<CMLinkable> getLegacyItems() {
+    return super.getLegacyLinkListUnfiltered(ITEMS);
   }
 }

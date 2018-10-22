@@ -23,12 +23,12 @@
 <teaserTitle></teaserTitle>
 <pictures>
 </pictures>
+<notSearchable>1</notSearchable>
 <related>
 </related>
 <children>
 </children>
 <hidden>1</hidden>
-<hiddenInSitemap>1</hiddenInSitemap>
 <javaScript>
 </javaScript>
 <css>

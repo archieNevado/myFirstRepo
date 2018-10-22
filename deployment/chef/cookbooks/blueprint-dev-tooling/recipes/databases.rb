@@ -54,18 +54,18 @@ when 'postgresql'
   include_recipe 'blueprint-postgresql::schemas' if node['blueprint']['dev']['db']['host'] == 'localhost'
 when 'mysql'
   %w(content-management-server workflow-server master-live-server replication-live-server).each do |webapp|
-    node.force_default['blueprint']['webapps'][webapp]['application.properties']['sql.store.driver'] = 'com.mysql.jdbc.Driver'
+    node.force_default['blueprint']['webapps'][webapp]['application.properties']['sql.store.driver'] = 'com.mysql.cj.jdbc.Driver'
     node.force_default['blueprint']['webapps'][webapp]['application.properties']['sql.store.url'] = "jdbc:mysql://#{node['blueprint']['dev']['db']['host']}:3306/#{db_schemas[webapp]}"
     node.force_default['blueprint']['webapps'][webapp]['application.properties']['sql.store.dbProperties'] = 'corem/mysql'
     node.force_default['blueprint']['webapps'][webapp]['application.properties']['sql.store.user'] = db_schemas[webapp]
     node.force_default['blueprint']['webapps'][webapp]['application.properties']['sql.store.password'] = db_schemas[webapp]
   end
   %w(caefeeder-preview caefeeder-live).each do |webapp|
-    node.force_default['blueprint']['webapps'][webapp]['application.properties']['jdbc.driver'] = 'com.mysql.jdbc.Driver'
+    node.force_default['blueprint']['webapps'][webapp]['application.properties']['jdbc.driver'] = 'com.mysql.cj.jdbc.Driver'
     node.force_default['blueprint']['webapps'][webapp]['application.properties']['jdbc.url'] = "jdbc:mysql://#{node['blueprint']['dev']['db']['host']}:3306/#{db_schemas[webapp]}"
     node.force_default['blueprint']['webapps'][webapp]['application.properties']['jdbc.user'] = db_schemas[webapp]
     node.force_default['blueprint']['webapps'][webapp]['application.properties']['jdbc.password'] = db_schemas[webapp]
-    node.force_default['blueprint']['tools'][webapp]['property_files']['resetcaefeeder.properties']['jdbc.driver'] = 'com.mysql.jdbc.Driver'
+    node.force_default['blueprint']['tools'][webapp]['property_files']['resetcaefeeder.properties']['jdbc.driver'] = 'com.mysql.cj.jdbc.Driver'
     node.force_default['blueprint']['tools'][webapp]['property_files']['resetcaefeeder.properties']['jdbc.url'] = "jdbc:mysql://#{node['blueprint']['dev']['db']['host']}:3306/#{db_schemas[webapp]}"
     node.force_default['blueprint']['tools'][webapp]['property_files']['resetcaefeeder.properties']['jdbc.user'] = db_schemas[webapp]
     node.force_default['blueprint']['tools'][webapp]['property_files']['resetcaefeeder.properties']['jdbc.password'] = db_schemas[webapp]

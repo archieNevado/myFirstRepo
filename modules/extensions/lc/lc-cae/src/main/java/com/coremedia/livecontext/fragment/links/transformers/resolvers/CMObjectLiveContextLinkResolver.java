@@ -15,12 +15,12 @@ import com.coremedia.livecontext.fragment.resolver.ExternalReferenceResolver;
 import com.coremedia.livecontext.handler.ExternalNavigationHandler;
 import com.coremedia.livecontext.logictypes.CommerceLedLinkBuilderHelper;
 import com.google.common.collect.Lists;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -232,8 +232,10 @@ public class CMObjectLiveContextLinkResolver extends AbstractLiveContextLinkReso
 
     if (isNotEmpty(externalChannel.getExternalUriPath())) {
       // Pass fully qualified URL to shop system.
-      out.put(EXTERNAL_URI_PATH_PARAMETER_NAME,
-              externalNavigationHandler.buildLinkForExternalPage(externalChannel, emptyMap(), request));
+      String linkForExternalPage = externalNavigationHandler
+              .buildLinkForExternalPage(externalChannel, emptyMap(), request)
+              .toUriString();
+      out.put(EXTERNAL_URI_PATH_PARAMETER_NAME, linkForExternalPage);
     } else {
       out.put(EXTERNAL_SEOSEGMENT_PARAMETER_NAME, externalChannel.getExternalId());
     }

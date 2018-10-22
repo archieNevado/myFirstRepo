@@ -68,7 +68,9 @@ public abstract class AbstractWcWrapperService {
     return new WcParameterMapBuilder();
   }
 
-  protected final class WcParameterMapBuilder {
+  // Deliberately not `final` so that it can be subclassed for
+  // extension/customization purposes.
+  protected class WcParameterMapBuilder {
 
     private final Map<String, String[]> parameters;
 

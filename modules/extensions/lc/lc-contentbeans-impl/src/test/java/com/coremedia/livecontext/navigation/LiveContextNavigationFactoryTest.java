@@ -20,8 +20,10 @@ import com.coremedia.objectserver.beans.ContentBeanFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Optional;
 
@@ -29,8 +31,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class LiveContextNavigationFactoryTest {
 
+  @InjectMocks
   private LiveContextNavigationFactory testling;
 
   @Mock
@@ -71,24 +75,15 @@ public class LiveContextNavigationFactoryTest {
 
   @Before
   public void setUp() throws Exception {
-    MockitoAnnotations.initMocks(this);
-
     CurrentCommerceConnection.set(connection);
 
     when(connection.getStoreContextProvider()).thenReturn(storeContextProvider);
     when(connection.getCatalogService()).thenReturn(catalogService);
 
-    testling = new LiveContextNavigationFactory();
-    testling.setTreeRelation(treeRelation);
-    testling.setSitesService(sitesService);
-    testling.setAugmentationService(augmentationService);
-    testling.setContentBeanFactory(contentBeanFactory);
-    testling.setValidationService(validationService);
-    when(site.getId()).thenReturn("deadbeef");
     when(sitesService.getContentSiteAspect(content)).thenReturn(contentSiteAspect);
     when(contentSiteAspect.findSite()).thenReturn(Optional.ofNullable(site));
 
-    when(contentBeanFactory.createBeanFor(content)).thenReturn(externalChannel);
+    when(contentBeanFactory.createBeanFor(content, LiveContextNavigation.class)).thenReturn(externalChannel);
     when(validationService.validate(externalChannel)).thenReturn(true);
   }
 

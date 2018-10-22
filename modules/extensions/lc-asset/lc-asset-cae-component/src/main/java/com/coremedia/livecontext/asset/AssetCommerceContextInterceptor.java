@@ -4,11 +4,13 @@ import com.coremedia.blueprint.base.livecontext.util.LocaleHelper;
 import com.coremedia.blueprint.ecommerce.cae.AbstractCommerceContextInterceptor;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
+import java.util.Optional;
 
 /**
  * Initialize Context for asset urls (e.g. {@link ProductCatalogPictureHandler#IMAGE_URI_PATTERN}
@@ -18,26 +20,26 @@ public class AssetCommerceContextInterceptor extends AbstractCommerceContextInte
 
   LiveContextSiteResolver liveContextSiteResolver;
 
-  @Nullable
+  @NonNull
   @Override
-  protected Site getSite(HttpServletRequest request, String normalizedPath) {
+  protected Optional<Site> findSite(HttpServletRequest request, String normalizedPath) {
     String storeId = extractStoreId(normalizedPath);
     Locale locale = extractLocale(normalizedPath);
 
     return liveContextSiteResolver.findSiteFor(storeId, locale);
   }
 
-  private static String extractStoreId(String path) {
+  private static String extractStoreId(@NonNull String path) {
     return extractToken(path, 3);
   }
 
   @Nullable
-  private static Locale extractLocale(String path) {
+  private static Locale extractLocale(@NonNull String path) {
     String localeToken = extractToken(path, 4);
     return LocaleHelper.parseLocaleFromString(localeToken).orElse(null);
   }
 
-  private static String extractToken(String path, int index) {
+  private static String extractToken(@NonNull String path, int index) {
     String[] split = path.split("/");
     //length == 7 no catalogId
     //length == 8 with catalogId

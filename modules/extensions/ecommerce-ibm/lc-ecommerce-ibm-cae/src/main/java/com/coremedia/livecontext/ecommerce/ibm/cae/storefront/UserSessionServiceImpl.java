@@ -16,24 +16,19 @@ import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.livecontext.ecommerce.user.UserService;
 import com.coremedia.livecontext.ecommerce.user.UserSessionService;
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.primitives.Ints;
-import org.apache.http.client.protocol.HttpClientContext;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.util.UriComponents;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.Collections;
@@ -43,7 +38,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_7;
-import static com.google.common.base.Strings.isNullOrEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
@@ -78,14 +72,15 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
     try {
       Map<String, String> uriTemplateParameters = ImmutableMap.of(
               STORE_ID_URL_VAR, resolveStoreId(),
-              CATALOG_ID_URL_VAR, resolveCatalogId());
+              CATALOG_ID_URL_VAR, resolveCatalogId().value());
       StoreFrontResponse storeFrontResponse = handleStorefrontCall(GUEST_LOGIN_URL, uriTemplateParameters, request, response);
 
       //apply user id update on the user context, other user context values remain untouched: not relevant
       String newUserId = resolveUserId(storeFrontResponse, resolveStoreId(), true);
 
       UserContext userContext = UserContextHelper.getCurrentContext();
-      String mergedCookies = addCookiesToCookieHeader(userContext.getCookieHeader(), storeFrontResponse.getCookies());
+      String mergedCookies = Cookies.addCookiesToHeaderValue(userContext.getCookieHeader(),
+              storeFrontResponse.getCookies());
 
       StoreContext currentContext = StoreContextHelper.findCurrentContext().orElse(null);
       if (currentContext != null && WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(currentContext))) {
@@ -93,7 +88,7 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
         Map<String, String> cookies = storeFrontResponse.getCookies();
         HttpServletRequest requestWrapper = createRequestWrapper(request, cookies);
         StoreFrontResponse storeFrontResponse2 = handleStorefrontCall(GUEST_LOGIN_URL_2, uriTemplateParameters, requestWrapper, response);
-        mergedCookies = addCookiesToCookieHeader(mergedCookies, storeFrontResponse2.getCookies());
+        mergedCookies = Cookies.addCookiesToHeaderValue(mergedCookies, storeFrontResponse2.getCookies());
       }
 
       String newCookieHeader = WcCookieHelper.rewritePreviewCookies(mergedCookies);
@@ -133,8 +128,11 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
       Map<String, Object> params = new HashMap<>();
       params.put(WcsUrlProvider.URL_TEMPLATE, baseUrl);
 
-      UriComponents pingUrl = (UriComponents) getUrlProvider().provideValue(params, request, currentContext);
-      handleStorefrontCall(pingUrl.toUriString(), Collections.emptyMap(), request, response);
+      String pingUrl = getUrlProvider().provideValue(params, request, currentContext)
+              .map(UriComponents::toUriString)
+              .orElseThrow(() -> new IllegalStateException("Could not obtain ping URL."));
+
+      handleStorefrontCall(pingUrl, Collections.emptyMap(), request, response);
     } catch (GeneralSecurityException e) {
       LOG.warn("Security exception occurred.", e);
     }
@@ -163,7 +161,7 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
     for (Cookie cookie : javaxCookies) {
       String name = cookie.getName();
       String value = cookie.getValue();
-      value = decodeCookieValue(value);
+      value = Cookies.decodeValue(value);
       if (value == null) {
         continue;
       }
@@ -182,7 +180,7 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
     for (Map.Entry<String, String> cookie : cookies.entrySet()) {
       String name = cookie.getKey();
       String value = cookie.getValue();
-      value = decodeCookieValue(value);
+      value = Cookies.decodeValue(value);
       if (value == null) {
         continue;
       }
@@ -199,12 +197,7 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
   @VisibleForTesting
   String resolveUserIdFromCookieData(@NonNull String cookieName, @NonNull String cookieValue, String currentStoreId,
                                      boolean ignoreAnonymous) {
-    boolean isWcUserActivityCookie = cookieName.startsWith(IBM_WC_USERACTIVITY_COOKIE_NAME);
-    boolean isPreviewWcUserActivityCookie = cookieName.startsWith(IBM_WCP_USERACTIVITY_COOKIE_NAME);
-    boolean isNotDeleted = !cookieValue.contains("DEL");
-    boolean isUserContainingCookie = (isWcUserActivityCookie || isPreviewWcUserActivityCookie) && isNotDeleted;
-
-    if (isUserContainingCookie) {
+    if (isUserContainingCookie(cookieName, cookieValue)) {
       String[] tokens = splitCookie(cookieValue, ignoreAnonymous);
       if (tokens.length > 0 && tokens[1].equals(currentStoreId)) {
         return tokens[0];
@@ -212,6 +205,14 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
     }
 
     return null;
+  }
+
+  private boolean isUserContainingCookie(@NonNull String cookieName, @NonNull String cookieValue) {
+    boolean isWcUserActivityCookie = cookieName.startsWith(IBM_WC_USERACTIVITY_COOKIE_NAME);
+    boolean isPreviewWcUserActivityCookie = cookieName.startsWith(IBM_WCP_USERACTIVITY_COOKIE_NAME);
+    boolean isNotDeleted = !cookieValue.contains("DEL");
+
+    return (isWcUserActivityCookie || isPreviewWcUserActivityCookie) && isNotDeleted;
   }
 
   @NonNull
@@ -243,7 +244,7 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
     try {
       Map<String, String> uriTemplateParameters = ImmutableMap.of(
               STORE_ID_URL_VAR, storeId,
-              CATALOG_ID_URL_VAR, resolveCatalogId(),
+              CATALOG_ID_URL_VAR, resolveCatalogId().value(),
               LOGON_ID_URL_VAR, username,
               LOGON_PASSWORD_URL_VAR, password);
 
@@ -322,7 +323,10 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
       return true;
     }
 
-    Map<String, String> uriTemplateParameters = ImmutableMap.of(STORE_ID_URL_VAR, storeId, CATALOG_ID_URL_VAR, resolveCatalogId());
+    Map<String, String> uriTemplateParameters = ImmutableMap.of(
+            STORE_ID_URL_VAR, storeId,
+            CATALOG_ID_URL_VAR, resolveCatalogId().value()
+    );
     StoreFrontResponse storeFrontResponse = handleStorefrontCall(LOGOUT_URL, uriTemplateParameters, request, response);
     return !isKnownUser(storeFrontResponse);
   }
@@ -339,8 +343,11 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
     Cookie[] cookies = request.getCookies();
     if (cookies != null) {
       for (Cookie cookie : cookies) {
-        if ((cookie.getName().startsWith(IBM_WC_USERACTIVITY_COOKIE_NAME) || cookie.getName().startsWith(IBM_WCP_USERACTIVITY_COOKIE_NAME)) &&
-                cookie.getValue() != null && cookie.getValue().contains("%2c" + storeId)) {
+        String name = cookie.getName();
+        String value = cookie.getValue();
+
+        if ((name.startsWith(IBM_WC_USERACTIVITY_COOKIE_NAME) || name.startsWith(IBM_WCP_USERACTIVITY_COOKIE_NAME))
+                && value != null && value.contains("%2c" + storeId)) {
           cookie.setValue(null);
           cookie.setMaxAge(0);
           cookie.setPath("/");
@@ -354,7 +361,8 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
     UserContext userContext = UserContextHelper.getCurrentContext();
 
     String newUserId = resolveUserId(storeFrontResponse, resolveStoreId(), false);
-    String newCookieHeader = addCookiesToCookieHeader(userContext.getCookieHeader(), storeFrontResponse.getCookies());
+    String newCookieHeader = Cookies.addCookiesToHeaderValue(userContext.getCookieHeader(),
+            storeFrontResponse.getCookies());
 
     updateUserContext(userContext, newUserId, newCookieHeader);
   }
@@ -374,31 +382,6 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
             .map(Ints::tryParse)
             .map(userId -> userId < 0)
             .orElse(true);
-  }
-
-  /**
-   * Add cookies from {@link HttpClientContext} to cookieHeader String.
-   *
-   * @param cookieHeader cookie header String. Value of "Set-Cookie" header.
-   * @param cookies      cookies names and their values
-   * @return the augmented cookie header String
-   */
-  @Nullable
-  @VisibleForTesting
-  String addCookiesToCookieHeader(@Nullable String cookieHeader, @NonNull Map<String, String> cookies) {
-    if (cookies.isEmpty()) {
-      return cookieHeader;
-    }
-
-    Joiner cookieJoiner = Joiner.on("; ");
-
-    String joinedCookies = cookieJoiner.withKeyValueSeparator('=').join(cookies);
-
-    if (isNullOrEmpty(cookieHeader)) { // NOSONAR squid:S4449 false positive caused by SONARJAVA-2776
-      return joinedCookies;
-    } else {
-      return cookieJoiner.join(cookieHeader, joinedCookies);
-    }
   }
 
   @Required
@@ -423,20 +406,5 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
   @Required
   public void setUserService(UserService userService) {
     this.userService = userService;
-  }
-
-  @Nullable
-  private static String decodeCookieValue(@NonNull String encodedValue) {
-    try {
-      return URLDecoder.decode(encodedValue, StandardCharsets.UTF_8.name());
-    } catch (UnsupportedEncodingException e) {
-      String msg = "UTF-8 is not supported, must not happen, use an approved JVM.";
-      LOG.error(msg, e);
-      throw new InternalError(msg);
-    } catch (IllegalArgumentException iae) {
-      LOG.warn("Cookie '{}' can not be URL-decoded.", encodedValue);
-      LOG.trace("For debugging purpose...", iae);
-      return null;
-    }
   }
 }

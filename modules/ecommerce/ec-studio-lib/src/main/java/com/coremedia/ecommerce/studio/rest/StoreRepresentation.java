@@ -38,7 +38,7 @@ public class StoreRepresentation extends AbstractCatalogRepresentation {
   private boolean marketingEnabled = false;
   private String timeZoneId;
 
-  private RemoteBeanLink rootCategory;
+  private Category rootCategory;
 
   public void setContext(StoreContext context) {
     this.context = context;
@@ -163,11 +163,11 @@ public class StoreRepresentation extends AbstractCatalogRepresentation {
     this.timeZoneId = timeZoneId;
   }
 
-  public void setRootCategory(RemoteBeanLink rootCategory) {
+  public void setRootCategory(Category rootCategory) {
     this.rootCategory = rootCategory;
   }
 
-  public RemoteBeanLink getRootCategory() {
+  public Category getRootCategory() {
     return rootCategory;
   }
 

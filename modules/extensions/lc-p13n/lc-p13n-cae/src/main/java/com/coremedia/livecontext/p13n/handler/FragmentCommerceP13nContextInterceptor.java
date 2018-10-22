@@ -10,10 +10,9 @@ import com.coremedia.livecontext.fragment.links.context.LiveContextContextHelper
 import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
 import com.coremedia.personalization.preview.PreviewPersonalizationHandlerInterceptor;
 import com.coremedia.personalization.preview.TestContextSource;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
@@ -50,10 +49,10 @@ public class FragmentCommerceP13nContextInterceptor extends AbstractCommerceCont
     return connection;
   }
 
+  @NonNull
   @Override
-  @Nullable
-  protected Site getSite(HttpServletRequest request, String normalizedPath) {
+  protected Optional<Site> findSite(HttpServletRequest request, String normalizedPath) {
     FragmentParameters parameters = FragmentContextProvider.getFragmentContext(request).getParameters();
-    return parameters != null ? liveContextSiteResolver.findSiteFor(parameters) : null;
+    return Optional.ofNullable(parameters).flatMap(liveContextSiteResolver::findSiteFor);
   }
 }

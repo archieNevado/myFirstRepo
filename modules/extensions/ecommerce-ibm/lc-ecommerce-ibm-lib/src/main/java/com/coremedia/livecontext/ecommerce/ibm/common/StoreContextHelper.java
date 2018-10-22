@@ -3,32 +3,23 @@ package com.coremedia.livecontext.ecommerce.ibm.common;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractStoreContextProvider;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
-import com.coremedia.blueprint.base.livecontext.util.LocaleHelper;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.login.WcCredentials;
 import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import org.apache.commons.lang3.StringUtils;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.Currency;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CATALOG_ALIAS;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CATALOG_ID;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.COMMERCE_SYSTEM_IS_UNAVAILABLE;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.CURRENCY;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.LOCALE;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.REPLACEMENTS;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.STORE_ID;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.STORE_NAME;
 
 /**
  * Helper class to build an "IBM WCS conform" store context.
@@ -38,7 +29,6 @@ import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreCon
 public class StoreContextHelper {
 
   private static final String CREDENTIALS = "credentials";
-  private static final String MISSING_TPL = "missing %s (%s)";
 
   private StoreContextHelper() {
   }
@@ -92,20 +82,18 @@ public class StoreContextHelper {
       return currentStoreContext;
     }
 
-    StoreContext result = createContext(
+    return buildContext(
             currentStoreContext.getSiteId(),
             currentStoreContext.getStoreId(),
             currentStoreContext.getStoreName(),
-            currentStoreContext.getCatalogId() != null ? CatalogId.of(currentStoreContext.getCatalogId()) : null,
-            locale.toString(),
+            currentStoreContext.getCatalogId().orElse(null),
+            locale,
             currentStoreContext.getCurrency()
-    );
-
-    result.put(CATALOG_ALIAS, currentStoreContext.getCatalogAlias());
-    result.setWorkspaceId(currentStoreContext.getWorkspaceId().orElse(null));
-    result.put(AbstractStoreContextProvider.CONFIG_KEY_WCS_VERSION, getWcsVersion(currentStoreContext));
-
-    return result;
+    )
+            .withCatalogAlias(currentStoreContext.getCatalogAlias())
+            .withWorkspaceId(currentStoreContext.getWorkspaceId().orElse(null))
+            .withWcsVersion(getWcsVersion(currentStoreContext))
+            .build();
   }
 
   /**
@@ -116,48 +104,52 @@ public class StoreContextHelper {
    * @param storeId   the store id or null
    * @param storeName the store name or null
    * @param catalogId the catalog id or null
-   * @param localeStr the locale id or null
+   * @param locale    the locale or null
    * @param currency  the currency or null
    * @return the new built store context
-   * @throws com.coremedia.livecontext.ecommerce.common.InvalidContextException if locale or currency has wrong format
+   * @throws com.coremedia.livecontext.ecommerce.common.InvalidContextException if currency or locale has wrong format
    */
   @NonNull
-  public static StoreContext createContext(@NonNull String siteId, @Nullable String storeId, @Nullable String storeName,
-                                           @Nullable CatalogId catalogId, @Nullable String localeStr,
-                                           @Nullable Currency currency) {
-    StoreContext context = StoreContextImpl.builder(siteId).build();
-
-    addContextParameterIfNotBlank(context, STORE_ID, storeId);
-    addContextParameterIfNotBlank(context, STORE_NAME, storeName);
-
-    if (catalogId != null) {
-      context.put(CATALOG_ID, catalogId.value());
-    }
-
-    if (localeStr != null) {
-      Locale locale = LocaleHelper.parseLocaleFromString(localeStr)
-              .orElseThrow(() -> new InvalidContextException("Locale '" + localeStr + "' is not valid."));
-      setLocale(context, locale);
-    }
-
-    if (currency != null) {
-      context.put(CURRENCY, currency);
-    }
-
-    return context;
+  public static StoreContextImpl createContext(@NonNull String siteId, @Nullable String storeId,
+                                               @Nullable String storeName, @Nullable CatalogId catalogId,
+                                               @NonNull Locale locale, @Nullable Currency currency) {
+    return buildContext(siteId, storeId, storeName, catalogId, locale, currency)
+            .build();
   }
 
-  private static void addContextParameterIfNotBlank(@NonNull StoreContext context, @NonNull String key,
-                                                    @Nullable String value) {
-    if (value == null) {
-      return;
+  @NonNull
+  public static IbmStoreContextBuilder buildContext(@NonNull String siteId, @Nullable String storeId,
+                                                    @Nullable String storeName, @Nullable CatalogId catalogId,
+                                                    @NonNull Locale locale, @Nullable Currency currency) {
+    IbmStoreContextBuilder builder = IbmStoreContextBuilder.from(StoreContextImpl.builder(siteId));
+
+    if (storeId != null) {
+      if (StringUtils.isBlank(storeId)) {
+        throw new InvalidContextException("Store ID must not be blank.");
+      }
+
+      builder.withStoreId(storeId);
     }
 
-    if (StringUtils.isBlank(value)) {
-      throw new InvalidContextException("Value for key '" + key + "' must not be blank.");
+    if (storeName != null) {
+      if (StringUtils.isBlank(storeName)) {
+        throw new InvalidContextException("Store name must not be blank.");
+      }
+
+      builder.withStoreName(storeName);
     }
 
-    context.put(key, value);
+    if (catalogId != null) {
+      builder.withCatalogId(catalogId);
+    }
+
+    builder.withLocale(locale);
+
+    if (currency != null) {
+      builder.withCurrency(currency);
+    }
+
+    return builder;
   }
 
   /**
@@ -169,13 +161,13 @@ public class StoreContextHelper {
    */
   @NonNull
   public static String getStoreId(@NonNull StoreContext context) {
-    Object value = context.get(STORE_ID);
+    String storeId = context.getStoreId();
 
-    if (!(value instanceof String)) {
-      throw new InvalidContextException(String.format(MISSING_TPL, STORE_ID, formatContext(context)));
+    if (storeId == null) {
+      throw new InvalidContextException("Store ID missing in store context (" + formatContext(context) + ")");
     }
 
-    return (String) value;
+    return storeId;
   }
 
   /**
@@ -187,13 +179,13 @@ public class StoreContextHelper {
    */
   @NonNull
   public static String getStoreName(@NonNull StoreContext context) {
-    Object value = context.get(STORE_NAME);
+    String storeName = context.getStoreName();
 
-    if (!(value instanceof String)) {
-      throw new InvalidContextException(String.format(MISSING_TPL, STORE_NAME, formatContext(context)));
+    if (storeName == null) {
+      throw new InvalidContextException("Store name missing in store context (" + formatContext(context) + ")");
     }
 
-    return (String) value;
+    return storeName;
   }
 
   /**
@@ -205,20 +197,13 @@ public class StoreContextHelper {
    */
   @NonNull
   public static Locale getLocale(@NonNull StoreContext context) {
-    Object value = context.get(LOCALE);
+    Locale locale = context.getLocale();
 
-    if (!(value instanceof Locale)) {
-      throw new InvalidContextException(String.format(MISSING_TPL, LOCALE, formatContext(context)));
+    if (locale == null) {
+      throw new InvalidContextException("Locale missing in store context (" + formatContext(context) + ")");
     }
 
-    return (Locale) value;
-  }
-
-  /**
-   * Sets locale to storeContext
-   */
-  public static void setLocale(@NonNull StoreContext context, @NonNull Locale locale) {
-    context.put(LOCALE, locale);
+    return locale;
   }
 
   /**
@@ -230,13 +215,13 @@ public class StoreContextHelper {
    */
   @NonNull
   public static Currency getCurrency(@NonNull StoreContext context) {
-    Object value = context.get(CURRENCY);
+    Currency currency = context.getCurrency();
 
-    if (!(value instanceof Currency)) {
-      throw new InvalidContextException(String.format(MISSING_TPL, CURRENCY, formatContext(context)));
+    if (currency == null) {
+      throw new InvalidContextException("Currency missing in store context (" + formatContext(context) + ")");
     }
 
-    return (Currency) value;
+    return currency;
   }
 
   /**
@@ -247,48 +232,27 @@ public class StoreContextHelper {
    */
   @NonNull
   public static WcsVersion getWcsVersion(@NonNull StoreContext context) {
-    WcsVersion version = (WcsVersion) context.get(AbstractStoreContextProvider.CONFIG_KEY_WCS_VERSION);
+    WcsVersion version = (WcsVersion) ((StoreContextImpl) context)
+            .get(AbstractStoreContextProvider.CONFIG_KEY_WCS_VERSION);
 
     if (version == null) {
-      throw new InvalidContextException(String.format(MISSING_TPL, AbstractStoreContextProvider.CONFIG_KEY_WCS_VERSION,
-              formatContext(context)));
+      throw new InvalidContextException("WCS version missing in store context (" + formatContext(context) + ")");
     }
 
     return version;
   }
 
-  /**
-   * Set the version to the given store context.
-   *
-   * @param context    the store context
-   * @param wcsVersion the version as String
-   */
-  public static void setWcsVersion(@NonNull StoreContext context, @NonNull String wcsVersion) {
-    WcsVersion.fromVersionString(wcsVersion)
-            .ifPresent(version -> context.put(AbstractStoreContextProvider.CONFIG_KEY_WCS_VERSION, version));
-  }
-
   public static boolean isCommerceSystemUnavailable(@NonNull StoreContext context) {
-    Object value = context.get(COMMERCE_SYSTEM_IS_UNAVAILABLE);
+    Object value = ((StoreContextImpl) context).get(COMMERCE_SYSTEM_IS_UNAVAILABLE);
     return value instanceof Boolean && (Boolean) value;
   }
 
   public static void setCommerceSystemIsUnavailable(@NonNull StoreContext context, boolean isUnavailable) {
-    context.put(COMMERCE_SYSTEM_IS_UNAVAILABLE, isUnavailable);
+    ((StoreContextImpl) context).put(COMMERCE_SYSTEM_IS_UNAVAILABLE, isUnavailable);
   }
 
   public static void setCredentials(@NonNull StoreContext context, WcCredentials credentials) {
-    context.put(CREDENTIALS, credentials);
-  }
-
-  /**
-   * Set the replacement map into the given store context.
-   *
-   * @param context      the store context
-   * @param replacements the replacement map
-   */
-  public static void setReplacements(@NonNull StoreContext context, Map<String, String> replacements) {
-    context.put(REPLACEMENTS, replacements);
+    ((StoreContextImpl) context).put(CREDENTIALS, credentials);
   }
 
   /**
@@ -299,7 +263,8 @@ public class StoreContextHelper {
    * @return true if enabled
    */
   public static boolean isDynamicPricingEnabled(@NonNull StoreContext context) {
-    Boolean value = (Boolean) context.get(AbstractStoreContextProvider.CONFIG_KEY_DYNAMIC_PRICING_ENABLED);
+    Boolean value = (Boolean) ((StoreContextImpl) context)
+            .get(AbstractStoreContextProvider.CONFIG_KEY_DYNAMIC_PRICING_ENABLED);
     return value != null ? value : false;
   }
 
@@ -328,14 +293,14 @@ public class StoreContextHelper {
 
   @NonNull
   private static String formatContext(@NonNull StoreContext context) {
-    ImmutableMap.Builder<String, Object> mapBuilder = ImmutableMap.builder();
-
-    ImmutableList.of(STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY)
-            .forEach(key -> mapBuilder.put(key, String.valueOf(context.get(key))));
-
-    mapBuilder.put("workspaceId", context.getWorkspaceId());
-
-    Map<String, Object> keyValuePairs = mapBuilder.build();
+    Map<String, Object> keyValuePairs = ImmutableMap.<String, Object>builder()
+            .put("storeId", String.valueOf(context.getStoreId()))
+            .put("storeName", String.valueOf(context.getStoreName()))
+            .put("catalogId", String.valueOf(context.getCatalogId().map(CatalogId::value).orElse(null)))
+            .put("currency", String.valueOf(context.getCurrency()))
+            .put("locale", String.valueOf(context.getLocale()))
+            .put("workspaceId", context.getWorkspaceId())
+            .build();
 
     return Joiner.on(", ")
             .withKeyValueSeparator(": ")

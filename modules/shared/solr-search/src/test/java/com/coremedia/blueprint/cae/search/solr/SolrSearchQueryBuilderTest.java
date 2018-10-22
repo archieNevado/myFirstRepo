@@ -130,4 +130,21 @@ public class SolrSearchQueryBuilderTest {
     SolrQuery solrQuery = solrQueryBuilder.buildQuery(input);
     assertEquals(expected, solrQuery.getQuery());
   }
+
+  @Test
+  public void testSort() {
+    SolrSearchQueryBuilder solrQueryBuilder = createBuilder();
+    SearchQueryBean input = new SearchQueryBean();
+    input.setQuery("hello");
+    input.setSortFields(Arrays.asList("a", "b asc", "c dEsc", "termfreq(folderpath, \" + folderId + \") desc"));
+
+    SolrQuery solrQuery = solrQueryBuilder.buildQuery(input);
+    assertEquals("hello", solrQuery.getQuery());
+    assertEquals(Arrays.asList(
+            new SolrQuery.SortClause("a", SolrQuery.ORDER.desc),
+            new SolrQuery.SortClause("b", SolrQuery.ORDER.asc),
+            new SolrQuery.SortClause("c", SolrQuery.ORDER.desc),
+            new SolrQuery.SortClause("termfreq(folderpath, \" + folderId + \")", SolrQuery.ORDER.desc)),
+                 solrQuery.getSorts());
+  }
 }

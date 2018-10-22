@@ -250,7 +250,7 @@ const createBrickFiles = (brickPath, brickName, log) => {
  * @param  {cmLogger} log cm-logger instance
  */
 const createTheme = (wsConfig, themePath, themeName, bricksToActivate, bricksToCommentOut, log) => {
-  log.debug(`Creating theme "${path.basename(themePath)}"...`);
+  log.debug(`Creating theme "${path.basename(themePath)}".`);
   createThemeFolderStructure(wsConfig, themePath, log);
   createThemeFiles(themePath, themeName, bricksToActivate, bricksToCommentOut, log);
 };
@@ -263,7 +263,7 @@ const createTheme = (wsConfig, themePath, themeName, bricksToActivate, bricksToC
  * @param  {cmLogger} log cm-logger instance
  */
 const createBrick = (wsConfig, brickPath, brickName, log) => {
-  log.debug(`Creating brick "${path.basename(brickPath)}"...`);
+  log.debug(`Creating brick "${path.basename(brickPath)}".`);
   createBrickFolderStructure(wsConfig, brickPath, log);
   createBrickFiles(brickPath, brickName, log);
 };

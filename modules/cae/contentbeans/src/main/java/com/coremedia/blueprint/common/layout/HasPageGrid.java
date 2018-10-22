@@ -2,7 +2,7 @@ package com.coremedia.blueprint.common.layout;
 
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.objectserver.beans.ContentBean;
-
+import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
 /**
@@ -13,9 +13,9 @@ public interface HasPageGrid extends ContentBean {
   /**
    * Returns the merged PageGrid coming from the current bean and regarding inheritance along
    * its navigation path.
-   * @return the merged PageGrid or null if not defined
+   * @return the merged PageGrid
    */
-  @Nullable
+  @NonNull
   PageGrid getPageGrid();
 
 

@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.livecontext.ecommerce.filter;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
-import com.coremedia.springframework.web.RegistrationBeanBuilder;
+import com.coremedia.springframework.boot.web.servlet.RegistrationBeanBuilder;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

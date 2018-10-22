@@ -11,12 +11,13 @@ import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 public class LiveContextResolveContextStrategy implements ResolveContextStrategy {
@@ -30,9 +31,9 @@ public class LiveContextResolveContextStrategy implements ResolveContextStrategy
 
   @Nullable
   protected Category findNearestCategoryFor(@NonNull CommerceBean commerceBean) {
-    if (commerceBean instanceof Product){
+    if (commerceBean instanceof Product) {
       return ((Product) commerceBean).getCategory();
-    } else if (commerceBean instanceof Category){
+    } else if (commerceBean instanceof Category) {
       return (Category) commerceBean;
     }
     return null;
@@ -65,12 +66,16 @@ public class LiveContextResolveContextStrategy implements ResolveContextStrategy
     this.cachedInSeconds = cachedInSeconds;
   }
 
-  @Nullable
+  @NonNull
   @Override
-  public LiveContextNavigation resolveContext(@NonNull Site site, @NonNull CommerceBean commerceBean) {
+  public Optional<LiveContextNavigation> resolveContext(@NonNull Site site, @NonNull CommerceBean commerceBean) {
     // cache is required for performance concerns in production use,
     // functionally it also works without. Maybe useful for testing.
-    return cache!=null ? cache.get(new CommerceContextProviderCacheKey(site, commerceBean)) : resolveContextUncached(site, commerceBean);
+    LiveContextNavigation navigation = cache != null
+            ? cache.get(new CommerceContextProviderCacheKey(site, commerceBean))
+            : resolveContextUncached(site, commerceBean);
+
+    return Optional.ofNullable(navigation);
   }
 
   @Nullable
@@ -85,7 +90,6 @@ public class LiveContextResolveContextStrategy implements ResolveContextStrategy
 
     return liveContextNavigationFactory.createNavigation(category, site);
   }
-
 
   // --- inner classes ----------------------------------------------
 

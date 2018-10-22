@@ -56,11 +56,17 @@ public class MarketingSpotResource extends AbstractCatalogResource<MarketingSpot
     if (marketingSpotService == null) {
       return null;
     }
+
     CommerceIdProvider idProvider = connection.getIdProvider();
     if (!(idProvider instanceof BaseCommerceIdProvider)) {
       return null;
     }
-    CommerceId commerceId = ((BaseCommerceIdProvider) idProvider).builder(BaseCommerceBeanType.MARTETING_SPOT).withExternalId(getId()).build();
+
+    CommerceId commerceId = ((BaseCommerceIdProvider) idProvider)
+            .builder(BaseCommerceBeanType.MARKETING_SPOT)
+            .withExternalId(getId())
+            .build();
+
     return marketingSpotService.findMarketingSpotById(commerceId, storeContext);
   }
 

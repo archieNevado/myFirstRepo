@@ -26,7 +26,6 @@
 
   <templateSets>
     <templateSet>templates/aurora-templates.jar</templateSet>
-    <templateSet>templates/bricks-templates.jar</templateSet>
   </templateSets>
 
   <resourceBundles>

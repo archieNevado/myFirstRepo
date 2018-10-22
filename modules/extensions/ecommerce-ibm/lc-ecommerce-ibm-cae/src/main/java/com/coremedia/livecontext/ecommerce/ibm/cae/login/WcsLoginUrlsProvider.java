@@ -16,21 +16,21 @@ import com.coremedia.livecontext.web.taglib.LiveContextLoginUrlsProvider;
 import com.coremedia.objectserver.web.links.LinkFormatter;
 import com.coremedia.objectserver.web.links.TokenResolverHelper;
 import com.google.common.collect.ImmutableMap;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.util.UriUtils;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.Optional;
 
 import static com.coremedia.livecontext.handler.LiveContextPageHandlerBase.isStudioPreviewRequest;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Objects.requireNonNull;
+import static org.springframework.web.util.UriUtils.encodeQueryParam;
 
 /**
  * Provides URLs to WCS Login Form and logout handlers.
@@ -105,7 +105,7 @@ public class WcsLoginUrlsProvider implements LiveContextLoginUrlsProvider {
     Map<String, ?> parametersMap = ImmutableMap.of(
             "langId", catalogService.getLanguageId(storeContext.getLocale()),
             "storeId", storeContext.getStoreId(),
-            "catalogId", storeContext.getCatalogId(),
+            "catalogId", storeContext.getCatalogId().get().value(),
             "nexturl", nexturl
     );
     String relativeUrl = TokenResolverHelper.replaceTokens(commerceTokensReplacedUrl, parametersMap, false, false);
@@ -151,12 +151,9 @@ public class WcsLoginUrlsProvider implements LiveContextLoginUrlsProvider {
       // no parameter available yet
       sb.append('?');
     }
-    try {
-      sb.append(QUERY_PARAMETER_PREVIEW_TOKEN);
-      sb.append('=');
-      sb.append(UriUtils.encodeQueryParam(previewToken, "UTF-8"));
-    } catch (UnsupportedEncodingException e) { //NOSONAR - ignore this exception.
-    }
+    sb.append(QUERY_PARAMETER_PREVIEW_TOKEN);
+    sb.append('=');
+    sb.append(encodeQueryParam(previewToken, UTF_8));
     return sb.toString();
   }
 

@@ -28,8 +28,7 @@ import com.coremedia.livecontext.ecommerce.search.SearchFacet;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.google.common.collect.ImmutableMap;
-import org.apache.commons.collections.Transformer;
-import org.apache.commons.collections.map.LazyMap;
+import org.apache.commons.collections4.Transformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -58,6 +57,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
+import static org.apache.commons.collections4.map.LazyMap.*;
 
 public class CatalogServiceImpl extends AbstractIbmService implements CatalogService {
 
@@ -613,7 +613,7 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
     }
 
     //noinspection unchecked
-    return LazyMap.decorate(newHashMap(map), transformer);
+    return lazyMap(newHashMap(map), transformer);
   }
 
   @NonNull

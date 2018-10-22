@@ -8,12 +8,17 @@
   Example:
   <#assign attr={"style": "display: none;", "id": "exampleId"}/>
   <div class="example"<@utils.optionalAttributes attr/>></div>
-
-  Note:
-  For now uses the deprecated function to avoid code duplication as we cannot depend from "cae-viewservices-impl" to
-  the frontend workspace.
 -->
-<#macro optionalAttributes attr><@cm.optionalAttributes nameValues=attr /></#macro>
+<#macro optionalAttributes attr>
+  ${""?left_pad(1)}<@compress single_line=true>
+  <#list attr?keys as name>
+    <#local value=(attr[name]!"")?string />
+    <#if value?has_content && value != cm.UNDEFINED>
+      ${name}="${value}"
+    </#if>
+  </#list>
+  </@compress>
+</#macro>
 
 <#--
   Renders a given mapping of attributes and their values to be used in a html-tag.
@@ -29,13 +34,17 @@
   <#assign imageLink=bp.uncroppedImageLink(self)/>
   <#assign attributes += {"alt": alt, "src": imageLink}/>
   <img src="#" class="cm-image" <@renderAttr attributes/>>
-
-  Note:
-  For now uses the deprecated function to avoid code duplication as we cannot depend from "cae-base-lib" to
-  the frontend workspace.
 -->
 <#macro renderAttr attr={} ignore=[]>
-  <@bp.renderAttr attr=attr ignore=ignore />
+  <#if attr?keys?seq_contains("classes") && !ignore?seq_contains("classes")>
+    <#local classes=attr["classes"] />
+    <#if attr?keys?seq_contains("class")>
+      <#local classes=classes + attr["class"]?replace("  ", " ")?split(" ") />
+    </#if>
+    <#local attr=attr + {"class": classes?join(" ")} />
+  </#if>
+  <#local ignore=ignore + ["classes"] />
+  <#list attr?keys as key><#if !ignore?seq_contains(key)><#local value=attr[key]/><#if key=="metadata"><@preview.metadata data=value /><#elseif key?contains("data-")><@cm.dataAttribute name=key data=value/><#elseif value?has_content> ${key}="${value}"</#if></#if></#list>
 </#macro>
 
 <#--
@@ -47,9 +56,9 @@
   @param attr contains a mapping of attribute names to their corresponding values which are attached to the tag.
 
   Example:
-  <@utils.optionalTag condition=calculateIfNeeded() tagName="div" attr={ "class": "wrapper" }>
+  <@optionalTag condition=calculateIfNeeded() tagName="div" attr={ "class": "wrapper" }>
     <img src="hello.jpg"/>
-  </@utils.optionalTag>
+  </@optionalTag>
 -->
 <#macro optionalTag condition tagName="div" attr={}>
   <#if condition><${tagName} <@renderAttr attr />></#if>
@@ -93,13 +102,11 @@
   <@renderDate date=self.externallyDisplayedDate.time
                cssClass="cm-detail__time"
                metadata=["properties.externallyDisplayedDate"] />
-
-  Note:
-  For now uses the deprecated function to avoid code duplication as we cannot depend from "cae-base-lib" to
-  the frontend workspace.
 -->
 <#macro renderDate date cssClass="" metadata=[]>
-  <@bp.renderDate contentDate=date cssClass=cssClass metadata=metadata />
+  <#if date?has_content>
+    <time class="${cssClass}" datetime="${date?datetime?string.iso}"<@preview.metadata data=metadata />>${date?date?string.medium}</time>
+  </#if>
 </#macro>
 
 
@@ -111,10 +118,28 @@
   Example:
   <#if teaserText?has_content>
     <p>
-      <@bp.renderWithLineBreaks teaserText/>
+      <@renderWithLineBreaks teaserText/>
     </p>
   </#if>
 -->
 <#macro renderWithLineBreaks text>
-  <@bp.renderWithLineBreaks text=text />
+  <#noautoesc>
+    ${text?trim?replace("\n\n", "<br>")?replace("\n", "<br>")}
+  </#noautoesc>
 </#macro>
+
+<#--
+  Extends a sequence entry of a given map by the provided items.
+
+  @param map the map that contains a sequence located under a given key
+  @param key the key the sequence is located in the given map
+  @param extendBy the items to add to the sequence located in the given map
+  @return a new map containing all old values and the extended sequence
+-->
+<#function extendSequenceInMap map={} key="" extendBy=[]>
+  <#local newSequence=extendBy />
+  <#if map?keys?seq_contains(key) && map[key]?is_sequence>
+    <#local newSequence=map[key] + extendBy />
+  </#if>
+  <#return map + {key: newSequence} />
+</#function>

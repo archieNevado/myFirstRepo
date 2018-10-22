@@ -16,13 +16,12 @@ import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.tree.ExternalChannelContentTreeRelation;
 import com.coremedia.xml.Markup;
 import com.google.common.base.MoreObjects;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Optional;
 
 import static com.coremedia.livecontext.contentbeans.ProductTeasableHelper.isNullOrBlank;
@@ -32,13 +31,13 @@ import static com.coremedia.xml.MarkupUtil.isEmptyRichtext;
  * A LiveContext product which is backed by a CMExternalProduct content in the CMS repository.
  */
 public class LiveContextExternalProductImpl extends CMExternalProductBase implements LiveContextExternalProduct {
-  private static final Logger LOG = LoggerFactory.getLogger(LiveContextExternalProductImpl.class);
 
   private PageGridService pageGridService;
   private ExternalChannelContentTreeRelation externalChannelContentTreeRelation;
   private ProductTeasableHelper productTeasableHelper;
   private CommerceConnectionSupplier commerceConnectionSupplier;
 
+  @NonNull
   @Override
   public PageGrid getPageGrid() {
     return pageGridService.getContentBackedPageGrid(this);
@@ -65,7 +64,7 @@ public class LiveContextExternalProductImpl extends CMExternalProductBase implem
   @Override
   public LiveContextExternalChannel getChannel() {
     Content nearestContentForCategory = externalChannelContentTreeRelation.getNearestContentForCategory(getCategory(), getSite());
-    return (LiveContextExternalChannel) getContentBeanFactory().createBeanFor(nearestContentForCategory);
+    return getContentBeanFactory().createBeanFor(nearestContentForCategory, LiveContextExternalChannel.class);
   }
 
   @Override

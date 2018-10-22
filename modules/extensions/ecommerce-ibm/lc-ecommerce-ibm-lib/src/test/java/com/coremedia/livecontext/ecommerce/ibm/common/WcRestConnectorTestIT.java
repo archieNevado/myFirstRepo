@@ -2,10 +2,10 @@ package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractStoreContextProvider;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -30,10 +30,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import static com.coremedia.blueprint.lc.test.BetamaxTestHelper.useBetamaxTapes;
-import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getCurrency;
-import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getCurrentContextOrThrow;
-import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getLocale;
-import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getStoreId;
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_8;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.junit.Assert.assertEquals;
@@ -76,6 +72,7 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
   private static final String SITE_ID = "awesome-site";
   private static final CatalogId CATALOG_ID = CatalogId.of("catalogId");
   private static final Currency CURRENCY_EUR = Currency.getInstance("EUR");
+  private static final Locale LOCALE_DE = Locale.GERMAN;
 
   @Inject
   protected WcRestConnector testling;
@@ -126,11 +123,11 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
 
     WcRestConnector spiedTestling = spy(testling);
 
-    Locale locale = getLocale(testConfig.getStoreContext());
-    Currency currency = getCurrency(storeContext);
+    Locale locale = storeContext.getLocale();
+    Currency currency = storeContext.getCurrency();
     String userName = UserContextHelper.getForUserName(userContext);
 
-    List<String> variableValues = newArrayList(getStoreId(storeContext));
+    List<String> variableValues = newArrayList(storeContext.getStoreId());
     Map<String, String[]> parametersMap = createParametersMap(locale, currency, userName);
     Map bodyData = null;
 
@@ -151,9 +148,11 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
   public void testGetRequestCookieHeader() throws Exception {
     String cookieHeader = "myCookieHeader";
 
-    StoreContext storeContext = StoreContextHelper.createContext(SITE_ID, "storeId", "storeName", CATALOG_ID, "de",
-            CURRENCY_EUR);
-    storeContext.put(AbstractStoreContextProvider.CONFIG_KEY_WCS_VERSION, testConfig.getWcsVersion());
+    StoreContext storeContext = StoreContextHelper
+            .buildContext(SITE_ID, "storeId", "storeName", CATALOG_ID, LOCALE_DE, CURRENCY_EUR)
+            .withWcsVersion(testConfig.getWcsVersion())
+            .build();
+
     UserContext userContext = mock(UserContext.class);
     when(userContext.getCookieHeader()).thenReturn(cookieHeader);
     LoginService loginServiceMock = mock(LoginService.class);
@@ -181,13 +180,14 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
   public void testGetRequestCookieHeaderForContracts() throws Exception {
     String cookieHeader = "myCookieHeader";
 
-    BaseCommerceConnection commerceConnection = new BaseCommerceConnection();
+    CommerceConnection commerceConnection = new BaseCommerceConnection();
     CurrentCommerceConnection.set(commerceConnection);
 
-    StoreContext storeContext = StoreContextHelper.createContext(SITE_ID, "storeId", "storeName", CATALOG_ID, "de",
-            CURRENCY_EUR);
-    storeContext.setContractIds(ImmutableList.of("contractA", "contractB"));
-    StoreContextHelper.setWcsVersion(storeContext, "7.8");
+    StoreContextImpl storeContext = StoreContextHelper
+            .buildContext(SITE_ID, "storeId", "storeName", CATALOG_ID, LOCALE_DE, CURRENCY_EUR)
+            .withContractIds(ImmutableList.of("contractA", "contractB"))
+            .withWcsVersion(WCS_VERSION_7_8)
+            .build();
     commerceConnection.setStoreContext(storeContext);
 
     UserContext userContext = mock(UserContext.class);
@@ -217,7 +217,9 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
 
   @Test
   public void testGetRequestUri() throws Exception {
-    Locale locale = getLocale(testConfig.getStoreContext());
+    StoreContext storeContext = testConfig.getStoreContext();
+
+    Locale locale = storeContext.getLocale();
     Currency currency = Currency.getInstance(Locale.GERMANY);
     String userName = "mu&rk{e}l";
 
@@ -225,7 +227,7 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
     Map<String, String[]> parametersMap = createParametersMap(locale, currency, userName);
 
     URI requestUri = wcRestConnector.buildRequestUri("store/{param1}/person/{param2}@self?q={param3}", true, false,
-            variableValues, parametersMap, getCurrentContextOrThrow());
+            variableValues, parametersMap, storeContext);
     String serviceEndpoint = System.getProperty("livecontext.ibm.wcs.secureUrl", "https://shop-ref.ecommerce.coremedia.com");
     assertEquals(serviceEndpoint + "/wcs/resources/store/param1value/person/param%20&%202%20%7Bvalue%7D@self?q=param3value&currency=EUR&forUser=mu%26rk%7Be%7Dl&langId=-1",
             requestUri.toString());

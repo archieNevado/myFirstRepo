@@ -1,6 +1,6 @@
 package com.coremedia.blueprint.elastic.social.cae.user;
 
-import com.coremedia.blueprint.elastic.social.cae.guid.GuidFilter;
+import com.coremedia.blueprint.elastic.social.cae.guid.GuidCookieHandler;
 import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.elastic.social.api.users.CommunityUserService;
@@ -16,7 +16,7 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import static com.coremedia.blueprint.elastic.social.cae.guid.GuidFilter.extractUuidFromGuid;
+import static com.coremedia.blueprint.elastic.social.cae.guid.GuidCookieHandler.extractUuidFromGuid;
 import static com.coremedia.common.logging.BaseMarker.PERSONAL_DATA;
 
 @Named
@@ -69,7 +69,7 @@ public class ElasticSocialUserHelper {
 
   @Nullable
   private static String userIdOrNull() {
-    final String currentGuid = GuidFilter.getCurrentGuid();
+    final String currentGuid = GuidCookieHandler.getCurrentGuid();
     return Strings.isNullOrEmpty(currentGuid) ? null : extractUuidFromGuid(currentGuid);
   }
 

@@ -22,7 +22,7 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.cms</groupId>
-      <artifactId>coremedia-spring</artifactId>
+      <artifactId>coremedia-spring-boot</artifactId>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>

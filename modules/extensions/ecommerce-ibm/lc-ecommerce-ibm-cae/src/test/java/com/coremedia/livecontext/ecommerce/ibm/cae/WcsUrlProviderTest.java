@@ -1,17 +1,18 @@
 package com.coremedia.livecontext.ecommerce.ibm.cae;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.lc.test.TestConfig;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.catalog.CatalogServiceImpl;
+import com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.ibm.common.IbmTestConfig;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.objectserver.web.links.TokenResolverHelper;
 import com.google.common.collect.ImmutableList;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
@@ -26,8 +27,10 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyMap;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -59,7 +62,7 @@ public class WcsUrlProviderTest {
   private HttpServletRequest request;
 
   @Before
-  public void setup(){
+  public void setup() {
     testling = new WcsUrlProvider();
     testling.setDefaultStoreFrontUrl(DEFAULT_STOREFRONT);
     testling.setPreviewStoreFrontUrl(PREVIEW_STOREFRONT);
@@ -91,8 +94,7 @@ public class WcsUrlProviderTest {
     params.put(WcsUrlProvider.SEO_SEGMENT, SEO_SEGMENT);
     params.put(WcsUrlProvider.SEARCH_TERM, SEARCH_TERM_WITH_UMLAUTS);
 
-    UriComponents url = (UriComponents) testling.provideValue(params, request, context);
-    String formattedUrl = url.toString();
+    String formattedUrl = toUriString(testling.provideValue(params, request, context));
     assertNotNull(formattedUrl);
     assertThat("URL Tokens got replaced and umlauts are correctly added to the URL.",
             formattedUrl,
@@ -108,48 +110,52 @@ public class WcsUrlProviderTest {
     params.put(WcsUrlProvider.IS_STUDIO_PREVIEW, true);
     StoreContext context = testConfig.getStoreContext();
 
-    UriComponents url = (UriComponents) testling.provideValue(params, request, context);
-    assertTrue(url.toString().startsWith(PREVIEW_STOREFRONT));
+    String url;
+
+    url = toUriString(testling.provideValue(params, request, context));
+    assertTrue(url.startsWith(PREVIEW_STOREFRONT));
 
     params.put(WcsUrlProvider.IS_STUDIO_PREVIEW, false);
-    url = (UriComponents) testling.provideValue(params, request, context);
-    assertTrue(url.toString().startsWith(DEFAULT_STOREFRONT));
+
+    url = toUriString(testling.provideValue(params, request, context));
+    assertTrue(url.startsWith(DEFAULT_STOREFRONT));
 
     params.remove(WcsUrlProvider.IS_STUDIO_PREVIEW);
-    url = (UriComponents) testling.provideValue(params, request, context);
-    assertTrue(url.toString().startsWith(DEFAULT_STOREFRONT));
+
+    url = toUriString(testling.provideValue(params, request, context));
+    assertTrue(url.startsWith(DEFAULT_STOREFRONT));
   }
 
   @Test
   public void testUrlEmptyParameterMap() throws UnsupportedEncodingException {
     assertEquals(UriComponentsBuilder.fromUriString(DEFAULT_STOREFRONT + URL_TEMPLATE).build().toString(),
-            testling.provideValue(new HashMap<String, Object>(), request, null).toString());
+            toUriString(testling.provideValue(emptyMap(), request, null)));
   }
 
   @Test
-  public void testUrlTemplateIsEmpty(){
+  public void testUrlTemplateIsEmpty() {
     Map<String, Object> params = new HashMap<>();
     params.put(WcsUrlProvider.URL_TEMPLATE, "");
-    assertNull(testling.provideValue(params, request, null));
+    assertNull(toUriString(testling.provideValue(params, request, null)));
 
     params.put(WcsUrlProvider.URL_TEMPLATE, null);
     assertEquals(UriComponentsBuilder.fromUriString(DEFAULT_STOREFRONT + URL_TEMPLATE).build().toString(),
-            testling.provideValue(params, request, null).toString());
+            toUriString(testling.provideValue(params, request, null)));
   }
 
   @Test
-  public void testShoppingFlowUrl(){
+  public void testShoppingFlowUrl() {
     Map<String, Object> params = new HashMap<>();
     params.put(WcsUrlProvider.URL_TEMPLATE, "{language}/{storeName}/{seoSegment}");
     params.put(WcsUrlProvider.SEO_SEGMENT, SEO_SEGMENT);
     params.put(WcsUrlProvider.IS_STUDIO_PREVIEW, true);
 
-    StoreContext storeContext = StoreContextBuilderImpl
+    StoreContext storeContext = IbmStoreContextBuilder
             .from((StoreContextImpl) testConfig.getStoreContext())
             .withContractIdsForPreview(ImmutableList.of("4711", "0815"))
             .build();
 
-    String providedUrl = testling.provideValue(params, request, storeContext).toString();
+    String providedUrl = toUriString(testling.provideValue(params, request, storeContext));
     assertTrue(providedUrl.contains("en/auroraesite/seo"));
     assertTrue(providedUrl.startsWith(PREVIEW_STOREFRONT + "/Logon?"));
     assertTrue(providedUrl.contains("contractId=4711"));
@@ -162,7 +168,7 @@ public class WcsUrlProviderTest {
     params.put(WcsUrlProvider.URL_TEMPLATE, "{language}/{storeName}/{seoSegment}");
     params.put(WcsUrlProvider.SEO_SEGMENT, "simsalabim");
 
-    String providedUrl = testling.provideValue(params, request, null).toString();
+    String providedUrl = toUriString(testling.provideValue(params, request, null));
     assertThat("Remaining tokens in the URL are kept.",
             providedUrl,
             Matchers.allOf(
@@ -181,17 +187,15 @@ public class WcsUrlProviderTest {
     queryParams.put(WcsUrlProvider.PRODUCT_ID, PRODUCT_ID);
     params.put(WcsUrlProvider.QUERY_PARAMS, queryParams);
     StoreContext storeContext = testConfig.getStoreContext();
-    String providedUrl = testling.provideValue(params, request, storeContext).toString();
+    String providedUrl = toUriString(testling.provideValue(params, request, storeContext));
     String expectedUrl = UriComponentsBuilder.fromUriString(DEFAULT_STOREFRONT + "/" + PRODUCT_NON_SEO_URL).build().toString();
 
     Map<String, Object> parametersMap = new HashMap<>();
     parametersMap.put(WcsUrlProvider.PRODUCT_ID, PRODUCT_ID);
     Locale locale = StoreContextHelper.getLocale(storeContext);
-    if (locale != null) {
-      CatalogService catalogService = CurrentCommerceConnection.get().getCatalogService();
-      String languageId = ((CatalogServiceImpl) catalogService).getLanguageId(locale);
-      parametersMap.put(WcsUrlProvider.PARAM_LANG_ID, languageId);
-    }
+    CatalogService catalogService = CurrentCommerceConnection.get().getCatalogService();
+    String languageId = ((CatalogServiceImpl) catalogService).getLanguageId(locale);
+    parametersMap.put(WcsUrlProvider.PARAM_LANG_ID, languageId);
     parametersMap.put(WcsUrlProvider.PARAM_STORE_ID, storeContext.getStoreId());
 
     expectedUrl = TokenResolverHelper.replaceTokens(expectedUrl, parametersMap, false, false);
@@ -207,17 +211,16 @@ public class WcsUrlProviderTest {
     queryParams.put(WcsUrlProvider.CATEGORY_ID, CATEGORY_ID);
     params.put(WcsUrlProvider.QUERY_PARAMS, queryParams);
     StoreContext storeContext = testConfig.getStoreContext();
-    String providedUrl = testling.provideValue(params, request, storeContext).toString();
+
+    String providedUrl = toUriString(testling.provideValue(params, request, storeContext));
     String expectedUrl = UriComponentsBuilder.fromUriString(DEFAULT_STOREFRONT + "/" + CATEGORY_NON_SEO_URL).build().toString();
 
     Map<String, Object> parametersMap = new HashMap<>();
     parametersMap.put(WcsUrlProvider.CATEGORY_ID, CATEGORY_ID);
     Locale locale = StoreContextHelper.getLocale(storeContext);
-    if (locale != null) {
-      CatalogService catalogService = CurrentCommerceConnection.get().getCatalogService();
-      String languageId = ((CatalogServiceImpl) catalogService).getLanguageId(locale);
-      parametersMap.put(WcsUrlProvider.PARAM_LANG_ID, languageId);
-    }
+    CatalogService catalogService = CurrentCommerceConnection.get().getCatalogService();
+    String languageId = ((CatalogServiceImpl) catalogService).getLanguageId(locale);
+    parametersMap.put(WcsUrlProvider.PARAM_LANG_ID, languageId);
     parametersMap.put(WcsUrlProvider.PARAM_STORE_ID, storeContext.getStoreId());
 
     expectedUrl = TokenResolverHelper.replaceTokens(expectedUrl, parametersMap, false, false);
@@ -225,20 +228,29 @@ public class WcsUrlProviderTest {
   }
 
   @Test
-  public void testWithCatalogId(){
+  public void testWithCatalogId() {
     Map<String, Object> params = new HashMap<>();
     params.put(WcsUrlProvider.URL_TEMPLATE, "{language}/{storeName}/{seoSegment}");
     StoreContext storeContext = testConfig.getStoreContext();
     params.put(WcsUrlProvider.SEO_SEGMENT, "simsalabim");
     params.put(WcsUrlProvider.SEO_SEGMENT, SEO_SEGMENT);
 
-    String providedUrlNoCatalogId = testling.provideValue(params, request, storeContext).toString();
+    String providedUrlNoCatalogId = toUriString(testling.provideValue(params, request, storeContext));
     assertThat("catalogId param not contained",
             providedUrlNoCatalogId, Matchers.not(Matchers.containsString("catalogId=" + CATALOG_ID)));
 
     params.put(WcsUrlProvider.CATALOG_ID, CATALOG_ID);
-    String providedUrlWithCatalogId = testling.provideValue(params, request, storeContext).toString();
+
+    String providedUrlWithCatalogId = toUriString(testling.provideValue(params, request, storeContext));
     assertThat("catalogId param must be appended.",
             providedUrlWithCatalogId, Matchers.containsString("catalogId=" + CATALOG_ID));
+  }
+
+  @Nullable
+  private String toUriString(
+          @SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<UriComponents> uriComponents) {
+    return uriComponents
+            .map(UriComponents::toUriString)
+            .orElse(null);
   }
 }

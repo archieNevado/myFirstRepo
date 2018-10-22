@@ -12,56 +12,7 @@
   <dependencies>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>alx-google-studio-plugin</artifactId>
-      <version>1-SNAPSHOT</version>
-      <type>swc</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>alx-studio-plugin</artifactId>
-      <version>1-SNAPSHOT</version>
-      <type>swc</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>alx-webtrends-studio-plugin</artifactId>
-      <version>1-SNAPSHOT</version>
-      <type>swc</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>am-studio</artifactId>
-      <version>1-SNAPSHOT</version>
-      <type>swc</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>catalog-studio-plugin</artifactId>
-      <version>1-SNAPSHOT</version>
-      <type>swc</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
       <artifactId>create-from-template-studio-plugin</artifactId>
-      <version>1-SNAPSHOT</version>
-      <type>swc</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>custom-topic-pages-studio-plugin</artifactId>
-      <version>1-SNAPSHOT</version>
-      <type>swc</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>es-alx-studio-plugin</artifactId>
       <version>1-SNAPSHOT</version>
       <type>swc</type>
       <scope>runtime</scope>
@@ -75,63 +26,7 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>external-library-studio</artifactId>
-      <version>1-SNAPSHOT</version>
-      <type>swc</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>external-preview-studio</artifactId>
-      <version>1-SNAPSHOT</version>
-      <type>swc</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>lc-asset-studio</artifactId>
-      <version>1-SNAPSHOT</version>
-      <type>swc</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>lc-ecommerce-ibm-studio</artifactId>
-      <version>1-SNAPSHOT</version>
-      <type>swc</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>lc-es-studio</artifactId>
-      <version>1-SNAPSHOT</version>
-      <type>swc</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
       <artifactId>lc-p13n-studio</artifactId>
-      <version>1-SNAPSHOT</version>
-      <type>swc</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>lc-studio</artifactId>
-      <version>1-SNAPSHOT</version>
-      <type>swc</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>nuggad-studio</artifactId>
-      <version>1-SNAPSHOT</version>
-      <type>swc</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>optimizely-studio</artifactId>
       <version>1-SNAPSHOT</version>
       <type>swc</type>
       <scope>runtime</scope>
@@ -153,13 +48,6 @@
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
       <artifactId>taxonomy-studio</artifactId>
-      <version>1-SNAPSHOT</version>
-      <type>swc</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>validators-studio</artifactId>
       <version>1-SNAPSHOT</version>
       <type>swc</type>
       <scope>runtime</scope>

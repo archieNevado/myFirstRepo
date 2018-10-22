@@ -4,6 +4,7 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceCon
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
+import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.blueprint.personalization.contentbeans.CMUserProfile;
 import com.coremedia.cap.content.Content;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -14,6 +15,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -28,6 +30,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class CommerceContractIdTestContextExtractorTest {
 
+  @InjectMocks
   private CommerceContractIdTestContextExtractor testling;
 
   @Mock
@@ -50,9 +53,6 @@ public class CommerceContractIdTestContextExtractorTest {
 
   @Before
   public void setUp() throws Exception {
-    testling = new CommerceContractIdTestContextExtractor();
-    testling.setContentBeanFactory(contentBeanFactory);
-
     StoreContextImpl storeContext = newStoreContext();
 
     when(storeContextProvider.buildContext(storeContext)).thenReturn(StoreContextBuilderImpl.from(storeContext));
@@ -74,7 +74,7 @@ public class CommerceContractIdTestContextExtractorTest {
             "vendor:///catalog/contract/contract1",
             "vendor:///catalog/contract/contract2");
 
-    when(contentBeanFactory.createBeanFor(content)).thenReturn(cmUserProfile);
+    when(contentBeanFactory.createBeanFor(content, CMObject.class)).thenReturn(cmUserProfile);
     when(cmUserProfile.getProfileExtensions()).thenReturn(profileExtensions);
     when(profileExtensions.get(CommerceContractIdTestContextExtractor.PROPERTIES_PREFIX)).thenReturn(properties);
     when(properties.get(CommerceContractIdTestContextExtractor.COMMERCE_CONTEXT)).thenReturn(commerce);

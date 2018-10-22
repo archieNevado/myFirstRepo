@@ -2,11 +2,7 @@
   position: relative;
 
   &__picture-box {
-    @include aspect-ratio-box(4, 3);
-
-    @include breakpoint(sm-and-up) {
-      @include aspect-ratio-box(16, 9);
-    }
+    @include aspect-ratio-box-by-breakpoint($cm-hero-media-aspect-ratio-by-breakpoint);
   }
 
   &__picture {

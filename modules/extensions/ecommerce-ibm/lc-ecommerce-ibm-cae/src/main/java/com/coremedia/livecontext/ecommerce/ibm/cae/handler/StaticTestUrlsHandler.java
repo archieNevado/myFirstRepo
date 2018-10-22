@@ -2,11 +2,12 @@ package com.coremedia.livecontext.ecommerce.ibm.cae.handler;
 
 import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
-import com.coremedia.blueprint.base.multisite.SiteResolver;
+import com.coremedia.blueprint.base.multisite.cae.SiteResolver;
 import com.coremedia.blueprint.cae.sitemap.SitemapRequestParams;
 import com.coremedia.blueprint.cae.web.IllegalRequestException;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.objectserver.web.links.TokenResolverHelper;
@@ -122,7 +123,7 @@ public class StaticTestUrlsHandler {
     Map<String, String> parameterMap = new HashMap<>();
     parameterMap.put("storeId", storeContext.getStoreId());
     parameterMap.put("storeName", storeContext.getStoreName());
-    parameterMap.put("catalogId", storeContext.getCatalogId());
+    parameterMap.put("catalogId", storeContext.getCatalogId().map(CatalogId::value).orElse(null));
     parameterMap.put("siteId", storeContext.getSiteId());
     parameterMap.put("locale", locale != null ? locale.toLanguageTag() : null);
     parameterMap.put("language", locale != null ? locale.getLanguage() : null);

@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
-import org.apache.commons.collections.Transformer;
+
+import org.apache.commons.collections4.Transformer;
 
 import java.util.Map;
 

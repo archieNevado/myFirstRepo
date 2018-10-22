@@ -9,7 +9,9 @@ import org.junit.Test;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -44,7 +46,7 @@ public class PreviewCommerceContextInterceptorTest {
     String id = "123";
     params.put("id", new String[]{id});
 
-    interceptor.getSite(request, "path");
+    interceptor.findSite(request, "path");
 
     verify(sitesResolver).findSiteForContentId(Integer.parseInt(id));
   }
@@ -54,8 +56,8 @@ public class PreviewCommerceContextInterceptorTest {
     String siteId = "abc";
     params.put("site", new String[]{siteId});
 
-    Site site = interceptor.getSite(request, "path");
-    assert site.equals(abcSite);
+    Optional<Site> site = interceptor.findSite(request, "path");
+    assertThat(site).contains(abcSite);
   }
 
   @Test
@@ -63,9 +65,8 @@ public class PreviewCommerceContextInterceptorTest {
     String id = "es:comment:539ae297e4b0971a9a345115";
     params.put("id", new String[]{id});
 
-    interceptor.getSite(request, "path");
+    interceptor.findSite(request, "path");
 
     verify(sitesResolver, never()).findSiteForContentId(anyInt());
   }
-
 }

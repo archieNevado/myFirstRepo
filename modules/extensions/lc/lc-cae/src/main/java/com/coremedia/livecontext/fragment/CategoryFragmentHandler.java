@@ -71,7 +71,7 @@ public class CategoryFragmentHandler extends FragmentHandler {
             : idProvider.formatCategoryTechId(catalogAlias, categoryExtId);
     Category categoryById = catalogService.findCategoryById(formatCategoryId, storeContext);
 
-    Navigation navigation = contextStrategy.resolveContext(site, categoryById);
+    Navigation navigation = contextStrategy.resolveContext(site, categoryById).orElse(null);
     if (navigation == null) {
       return HandlerHelper.notFound(getClass().getName() + " did not find a navigation for storeId \""
               + parameters.getStoreId() + "\", locale \"" + parameters.getLocale() + "\", category id \""

@@ -7,14 +7,6 @@
 .#{$cm-hero-prefix} {
   font-family: $font-family-serif;
 
-  &__picture-box {
-    @include aspect-ratio-box(1, 1);
-
-    @include breakpoint(sm-and-up) {
-      @include aspect-ratio-box(2.35, 1);
-    }
-  }
-
   &__caption {
     margin: 0;
 
@@ -32,6 +24,10 @@
   &__text {
     line-height: $cm-hero-default-size;
     padding-bottom: $cm-hero-default-size;
+  }
+
+  .cm-cta-button {
+    border: none;
   }
 
   &__dimmer {

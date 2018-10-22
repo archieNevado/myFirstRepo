@@ -3,6 +3,7 @@ package com.coremedia.livecontext.ecommerce.ibm.asset;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.livecontext.ecommerce.asset.AssetUrlProvider;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
@@ -115,7 +116,7 @@ public class AssetUrlProviderImpl implements AssetUrlProvider {
       //replace [storeId]
       resolvedUrl = resolvedUrl.replace(STORE_ID_PLACEHOLDER, storeContext.getStoreId());
       //replace [catalogId]
-      resolvedUrl = resolvedUrl.replace(CATALOG_ID_PLACEHOLDER, storeContext.getCatalogId());
+      resolvedUrl = resolvedUrl.replace(CATALOG_ID_PLACEHOLDER, storeContext.getCatalogId().get().value());
     }
 
     return resolvedUrl;

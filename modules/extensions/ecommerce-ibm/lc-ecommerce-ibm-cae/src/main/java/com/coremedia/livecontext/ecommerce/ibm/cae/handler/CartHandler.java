@@ -21,6 +21,8 @@ import com.coremedia.objectserver.web.links.LinkFormatter;
 import com.coremedia.objectserver.web.links.LinkTransformer;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableMap;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,8 +38,6 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
@@ -116,11 +116,14 @@ public class CartHandler extends LiveContextPageHandlerBase {
     Map<String, Object> params = new HashMap<>();
     params.put(URL_PROVIDER_IS_STUDIO_PREVIEW, isStudioPreview(request));
 
-    UriComponents checkoutUrl = (UriComponents) checkoutRedirectUrlProvider.provideValue(params, request, storeContext);
+    String checkoutUrl = checkoutRedirectUrlProvider.provideValue(params, request, storeContext)
+            .map(UriComponents::toString)
+            .orElse(null);
     if (checkoutUrl == null) {
       return null;
     }
-    String redirectUrl = applyLinkTransformers(checkoutUrl.toString(), request, response);
+
+    String redirectUrl = applyLinkTransformers(checkoutUrl, request, response);
 
     if (redirectUrl.startsWith("//")) {
       String scheme = request.getScheme();

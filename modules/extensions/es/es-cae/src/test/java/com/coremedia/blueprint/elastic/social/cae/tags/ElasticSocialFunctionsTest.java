@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.elastic.social.cae.tags;
 
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
-import com.coremedia.blueprint.elastic.social.cae.guid.GuidFilter;
+import com.coremedia.blueprint.elastic.social.cae.guid.GuidCookieHandler;
 import com.coremedia.cap.content.Content;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import org.junit.Test;
@@ -51,8 +51,8 @@ public class ElasticSocialFunctionsTest {
 
   @Test
   public void getCurrentGuid() {
-    GuidFilter.setCurrentGuid("1234+5");
-    String guid = GuidFilter.getCurrentGuid();
+    GuidCookieHandler.setCurrentGuid("1234+5");
+    String guid = GuidCookieHandler.getCurrentGuid();
     assertEquals("1234+5", guid);
   }
 

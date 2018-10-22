@@ -7,7 +7,6 @@ import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.ContentSiteAspect;
 import com.coremedia.cap.multisite.Site;
@@ -33,7 +32,6 @@ import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DY
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -48,9 +46,6 @@ public class CMMarketingSpotHandlerTest {
   private BeanFactory beanFactory;
 
   @Mock
-  private ContentRepository contentRepository;
-
-  @Mock
   private ContentBeanFactory contentBeanFactory;
 
   @Mock
@@ -62,13 +57,14 @@ public class CMMarketingSpotHandlerTest {
   @Mock
   private ContentLinkBuilder contentLinkBuilder;
 
+  @Mock
+  private CMMarketingSpot cmMarketingSpot;
 
   @Before
   public void setUp() throws Exception {
     testling = new CMMarketingSpotHandler();
     testling.setBeanFactory(beanFactory);
     testling.setContentBeanFactory(contentBeanFactory);
-    testling.setContentRepository(contentRepository);
     testling.setSitesService(sitesService);
     testling.setContextHelper(contextHelper);
     testling.setContentLinkBuilder(contentLinkBuilder);
@@ -105,13 +101,9 @@ public class CMMarketingSpotHandlerTest {
 
   @Test
   public void testHandleDynamicRequestCMMarketingSpot() throws Exception {
-    Content marketingSpotContent = mock(Content.class);
     Content cmNavigationContent = mock(Content.class);
     ContentType cmNavigationContentType = mock(ContentType.class);
-    CMMarketingSpot cmMarketingSpot = mock(CMMarketingSpot.class);
     CMNavigation cmNavigation = mock(CMNavigation.class);
-    when(contentRepository.getContent(anyString())).thenReturn(marketingSpotContent);
-    when(contentBeanFactory.createBeanFor(marketingSpotContent)).thenReturn(cmMarketingSpot);
     when(contextHelper.contextFor(cmMarketingSpot)).thenReturn(cmNavigation);
     when(cmNavigation.getContent()).thenReturn(cmNavigationContent);
     when(cmNavigationContent.getType()).thenReturn(cmNavigationContentType);
@@ -119,7 +111,7 @@ public class CMMarketingSpotHandlerTest {
 
     MockHttpServletRequest request = new MockHttpServletRequest();
     MockHttpServletResponse response = new MockHttpServletResponse();
-    ModelAndView modelAndView = testling.handleFragmentRequest(4711, "fragment", request, response);
+    ModelAndView modelAndView = testling.handleFragmentRequest(cmMarketingSpot, "fragment", request, response);
     assertEquals("fragment", modelAndView.getViewName());
     assertTrue(modelAndView.getModel().get("self") instanceof CMMarketingSpot);
     assertTrue(modelAndView.getModel().get(NavigationLinkSupport.ATTR_NAME_CMNAVIGATION) instanceof CMNavigation);

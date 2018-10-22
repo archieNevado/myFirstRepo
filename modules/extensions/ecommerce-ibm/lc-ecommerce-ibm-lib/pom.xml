@@ -27,14 +27,6 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-uapi-util</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-settings-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-multisite-impl</artifactId>
       <scope>runtime</scope>
     </dependency>
@@ -107,11 +99,11 @@
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
+      <artifactId>commons-collections4</artifactId>
     </dependency>
     <dependency>
-      <groupId>commons-collections</groupId>
-      <artifactId>commons-collections</artifactId>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
     </dependency>
     <dependency>
       <groupId>org.codehaus.jackson</groupId>
@@ -146,11 +138,6 @@
       <artifactId>spotbugs-annotations</artifactId>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>uk.com.robust-it</groupId>
-      <artifactId>cloning</artifactId>
-    </dependency>
-
     <!-- test dependencies -->
     <dependency>
       <groupId>junit</groupId>
@@ -191,11 +178,6 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

@@ -58,8 +58,8 @@
   }
 
   @include breakpoint("sm-and-down") {
-    &.active,
-    &.active:hover {
+    &.cm-navigation-item--active,
+    &.cm-navigation-item--active:hover {
       background-color: $mobile-nav-dropdown-bg;
       a {
         background-color: transparent;
@@ -137,7 +137,7 @@
     }
 
     @include breakpoint(md) {
-      .cm-navigation-item.active > a {
+      .cm-navigation-item.cm-navigation-item--active > a {
         color: $text-color;
         text-decoration: $link-hover-decoration;
         background-color: transparent;
@@ -178,7 +178,7 @@
       padding: 20px 20px 16px 20px;
       text-decoration: none !important;
     }
-    &.active {
+    &.cm-navigation-item--active {
       border-color: $border-color-default;
       transition: none;
     }
@@ -202,13 +202,13 @@
     border-bottom: 1px solid $border-color-default;
 
     &--hovered {
-      .cm-navigation-item.active {
+      .cm-navigation-item.cm-navigation-item--active {
         border-color: transparent;
         transition: none;
       }
     }
     &-item__list:not(&--hovered) {
-      .cm-navigation-item.active {
+      .cm-navigation-item.cm-navigation-item--active {
         border-bottom-width: 4px !important;
         transition: border-bottom-width $cm-navigation-delay step-end !important;
       }

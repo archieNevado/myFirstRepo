@@ -143,6 +143,7 @@
     <LinkListProperty Name="pictures" LinkType="CMMedia"/>
     <IntProperty Name="notSearchable"/>
     <LinkListProperty Name="related" LinkType="CMTeasable"/>
+    <LinkListProperty Name="authors" LinkType="CMPerson"/>
   </DocType>
 
   <!--
@@ -303,7 +304,7 @@
     <StringProperty Name="name" Length="64"/>
     <LinkListProperty Name="master" Max="1" LinkType="CMSite" Override="true" extensions:weakLink="true"/>
     <LinkListProperty Name="root" LinkType="CMNavigation" Max="1"/>
-    <StringProperty Name="siteManagerGroup" Length="64"/>
+    <StringProperty Name="siteManagerGroup" Length="256"/>
     <!-- localSettings/linkedSettings: same as in CMLinkable -->
     <XmlProperty Name="localSettings" Grammar="coremedia-struct-2008"/>
     <LinkListProperty Name="linkedSettings" LinkType="CMSettings"/>
@@ -522,6 +523,20 @@
   <DocType Name="CMTemplateSet">
     <StringProperty Name="description" Length="512" extensions:translatable="true"/>
     <BlobProperty Name="archive" MimeType="application/java-archive"/>
+  </DocType>
+
+  <!--
+    Person
+  -->
+  <DocType Name="CMPerson" Parent="CMTeasable">
+    <LinkListProperty Name="master" Max="1" LinkType="CMPerson" Override="true" extensions:weakLink="true"/>
+    <StringProperty Name="firstName" Length="128"/>
+    <StringProperty Name="lastName" Length="128"/>
+    <StringProperty Name="displayName" Length="512"/>
+    <StringProperty Name="eMail" Length="128"/>
+    <StringProperty Name="organization" Length="128"/>
+    <StringProperty Name="jobTitle" Length="128"/>
+    <XmlProperty Name="misc" Grammar="coremedia-struct-2008"/>
   </DocType>
 
 </DocumentTypeModel>

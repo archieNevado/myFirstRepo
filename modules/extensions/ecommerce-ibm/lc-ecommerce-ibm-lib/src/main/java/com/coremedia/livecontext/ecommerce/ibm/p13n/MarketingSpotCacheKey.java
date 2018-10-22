@@ -23,7 +23,7 @@ public class MarketingSpotCacheKey extends AbstractIbmDocumentCacheKey<Map<Strin
     super(id, storeContext, userContext, CONFIG_KEY_MARKETING_SPOT, commerceCache);
     this.wrapperService = wrapperService;
 
-    if (!BaseCommerceBeanType.MARTETING_SPOT.equals(id.getCommerceBeanType())) {
+    if (!BaseCommerceBeanType.MARKETING_SPOT.equals(id.getCommerceBeanType())) {
       throw new InvalidIdException(id + " is not a marketing spot id.");
     }
   }

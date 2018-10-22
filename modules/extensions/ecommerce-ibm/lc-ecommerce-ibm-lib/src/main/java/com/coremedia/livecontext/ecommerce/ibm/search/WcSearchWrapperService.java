@@ -4,9 +4,9 @@ import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractWcWrapperService;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestServiceMethod;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.http.HttpMethod;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +14,6 @@ import java.util.Optional;
 
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getStoreId;
 import static java.util.Arrays.asList;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * Wrapper query and result format of the IBM rest search service.
@@ -39,10 +38,8 @@ public class WcSearchWrapperService extends AbstractWcWrapperService {
               .withLanguageId(storeContext)
               .build();
 
-      String catalogId = storeContext.getCatalogId();
-      if (isNotBlank(catalogId)) {
-        parametersMap.put("catalogId", new String[]{catalogId});
-      }
+      storeContext.getCatalogId()
+              .ifPresent(catalogId -> parametersMap.put("catalogId", new String[]{catalogId.value()}));
 
       Optional<WcSuggestionViews> suggestionViews = getRestConnector()
               .callService(GET_KEYWORD_SUGGESTIONS, variableValues, parametersMap, null, storeContext, null);

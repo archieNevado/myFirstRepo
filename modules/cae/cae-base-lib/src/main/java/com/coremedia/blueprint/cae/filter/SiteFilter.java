@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.cae.filter;
 
 import com.coremedia.blueprint.base.multisite.SiteHelper;
-import com.coremedia.blueprint.base.multisite.SiteResolver;
+import com.coremedia.blueprint.base.multisite.cae.SiteResolver;
 import com.coremedia.cap.multisite.Site;
 import com.google.common.base.Strings;
 import org.slf4j.Logger;

@@ -31,21 +31,6 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-links-api</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-multisite-api</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-multisite-impl</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-navigation-impl</artifactId>
       <scope>runtime</scope>
     </dependency>
@@ -74,10 +59,6 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>cap-multisite</artifactId>
     </dependency>
     <dependency>
       <groupId>com.coremedia.cms</groupId>

@@ -1,12 +1,13 @@
 package com.coremedia.livecontext.ecommerce.ibm.cae.storefront;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.contract.Contract;
 import com.coremedia.livecontext.ecommerce.ibm.catalog.IbmCatalogServiceBaseTest;
+import com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
@@ -31,6 +32,7 @@ import static org.junit.Assert.assertTrue;
  * Tests for BOD REST interface.
  */
 abstract class AbstractB2BCatalogServiceIT extends IbmCatalogServiceBaseTest {
+
   @Inject
   private UserSessionService userSessionService;
 
@@ -64,7 +66,7 @@ abstract class AbstractB2BCatalogServiceIT extends IbmCatalogServiceBaseTest {
       return;
     }
 
-    StoreContext storeContext = testConfig.getB2BStoreContext();
+    StoreContextImpl storeContext = testConfig.getB2BStoreContext();
     StoreContextHelper.setCurrentContext(storeContext);
 
     Category category = findAndAssertCategory("Lighting", null, storeContext);
@@ -76,10 +78,13 @@ abstract class AbstractB2BCatalogServiceIT extends IbmCatalogServiceBaseTest {
     List<Category> subCategoriesNoContract = testling.findSubCategories(category);
     assertTrue(subCategoriesNoContract.size() >= 3);
 
-    //test b2b categories with contract
+    // Test b2b categories with contract.
     List<String> contractIds = getContractIdsForUser("bmiller", "passw0rd");
+    storeContext = IbmStoreContextBuilder
+            .from(storeContext)
+            .withContractIds(contractIds)
+            .build();
 
-    storeContext.setContractIds(contractIds);
     category = findAndAssertCategory("Fasteners", null, storeContext);
 
     List<Category> subCategoriesWithContract = testling.findSubCategories(category);
@@ -88,5 +93,4 @@ abstract class AbstractB2BCatalogServiceIT extends IbmCatalogServiceBaseTest {
     assertEquals("Bolts", subCategoriesWithContract.get(0).getName());
     assertEquals("Screws", subCategoriesWithContract.get(1).getName());
   }
-
 }

@@ -37,6 +37,10 @@
     <property name="contentType" value="CMExternalChannel"/>
   </bean>
 
+  <bean id="externalProductExternalIdValidator" parent="catalogLinkValidator" class="com.coremedia.lc.studio.lib.validators.ExternalProductValidator">
+    <property name="contentType" value="CMExternalProduct"/>
+  </bean>
+
   <bean id="externalPageExternalIdValidator" parent="catalogLinkValidator" class="com.coremedia.lc.studio.lib.validators.ExternalPageValidator">
     <property name="contentType" value="CMExternalPage"/>
   </bean>

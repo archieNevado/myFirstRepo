@@ -6,19 +6,18 @@ import com.coremedia.blueprint.cae.layout.ContentBeanBackedPageGridPlacement;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
+import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.layout.PageGrid;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
-import com.coremedia.cap.common.IdHelper;
-import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.livecontext.contentbeans.CMExternalChannel;
 import com.coremedia.livecontext.contentbeans.LiveContextExternalProduct;
-import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.google.common.collect.ImmutableMap;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,8 +28,6 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
@@ -70,23 +67,20 @@ public class P13NPlacementHandler extends PageHandlerBase {
           "/{" + PAGEGRID_VARIABLE + '}' +
           "/{" + PLACEMENT_VARIABLE + '}';
 
-  private ContentRepository contentRepository;
   private ValidationService validationService;
 
   @RequestMapping(value = DYNAMIC_PLACEMENT_URI_PATTERN, method = RequestMethod.GET)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ROOT) String context,
-                                    @PathVariable(ID_VARIABLE) int contentId,
+                                    @PathVariable(ID_VARIABLE) CMObject cmObject,
                                     @PathVariable(PAGEGRID_VARIABLE) String pageGridName,
                                     @PathVariable(PLACEMENT_VARIABLE) String placementName,
                                     @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,
                                     HttpServletRequest request) {
-    Content content = contentRepository.getContent(IdHelper.formatContentId(contentId));
-    ContentBean contentBean = getContentBeanFactory().createBeanFor(content);
     Navigation navigation = getNavigation(context);
 
-    if (contentBean instanceof CMChannel && navigation != null) {
+    if (cmObject instanceof CMChannel && navigation != null) {
       request.setAttribute(ABSOLUTE_URI_KEY, true);
-      return createModelAndViewForPlacementAndView((CMChannel) contentBean, pageGridName, placementName, view);
+      return createModelAndViewForPlacementAndView((CMChannel) cmObject, pageGridName, placementName, view);
     }
     return HandlerHelper.notFound();
   }
@@ -103,11 +97,6 @@ public class P13NPlacementHandler extends PageHandlerBase {
                     PAGEGRID_VARIABLE, placement.getStructPropertyName(),
                     PLACEMENT_VARIABLE, placement.getName()
             ));
-  }
-
-  @Required
-  public void setContentRepository(ContentRepository contentRepository) {
-    this.contentRepository = contentRepository;
   }
 
   @Required
@@ -134,16 +123,12 @@ public class P13NPlacementHandler extends PageHandlerBase {
     } else if (channel instanceof LiveContextExternalProduct && pageGridName.contains("pdp")) {
       LiveContextExternalProduct augmentedProduct = (LiveContextExternalProduct) channel;
       PageGrid pageGrid = augmentedProduct.getPageGrid();
-      if (pageGrid != null) {
-        placement = (ContentBeanBackedPageGridPlacement) pageGrid.getPlacementForName(placementName);
-      }
+      placement = (ContentBeanBackedPageGridPlacement) pageGrid.getPlacementForName(placementName);
     }
 
     if (placement == null) {
       PageGrid pageGrid = channel.getPageGrid();
-      if (pageGrid != null) {
-        placement = (ContentBeanBackedPageGridPlacement) pageGrid.getPlacementForName(placementName);
-      }
+      placement = (ContentBeanBackedPageGridPlacement) pageGrid.getPlacementForName(placementName);
     }
 
     if (placement == null) {
@@ -165,7 +150,7 @@ public class P13NPlacementHandler extends PageHandlerBase {
     LOG.error("No placement named {} found for {}.", placementName, cmChannel.getContent().getPath());
     ModelAndView modelAndView = notFound("No placement found for name '" + placementName + "'");
     modelAndView.setViewName(UNRESOLVABLE_PLACEMENT_VIEW_NAME);
-    NavigationLinkSupport.setNavigation(modelAndView, (Navigation) cmChannel);
+    NavigationLinkSupport.setNavigation(modelAndView, cmChannel);
     modelAndView.addObject(PLACEMENT_NAME_MAV_KEY, placementName);
     return modelAndView;
   }

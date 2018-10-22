@@ -23,6 +23,9 @@ import static org.junit.Assert.assertNotNull;
  */
 @ContextConfiguration(classes = {IbmServiceTestBase.LocalConfig.class, CatalogServiceImplBodBasedIT.LocalConfig.class})
 public class CatalogServiceImplBodBasedIT extends IbmCatalogServiceBaseTest {
+
+  private static final String ROOT_CATEGORY_ID = "ROOT";
+
   @Configuration
   @ImportResource(
           value = {
@@ -107,9 +110,8 @@ public class CatalogServiceImplBodBasedIT extends IbmCatalogServiceBaseTest {
 
   @Betamax(tape = "csi_testFindProductsByCategoryIsRoot", match = {MatchRule.path, MatchRule.query})
   @Test
-  @Override
   public void testFindProductsByCategoryIsRoot() throws Exception {
-    super.testFindProductsByCategoryIsRoot();
+    testFindProductsByCategoryIsRoot(ROOT_CATEGORY_ID);
   }
 
   @Betamax(tape = "csi_testSearchProducts", match = {MatchRule.path, MatchRule.query})
@@ -212,9 +214,8 @@ public class CatalogServiceImplBodBasedIT extends IbmCatalogServiceBaseTest {
 
   @Betamax(tape = "csi_testFindRootCategory", match = {MatchRule.path, MatchRule.query})
   @Test
-  @Override
   public void testFindRootCategory() throws Exception {
-    super.testFindRootCategory();
+    testFindRootCategory(ROOT_CATEGORY_ID);
   }
 
   @Betamax(tape = "csi_testFindCategoryMultiSEOByExternalTechId", match = {MatchRule.path, MatchRule.query})

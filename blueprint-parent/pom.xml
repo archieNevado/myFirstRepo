@@ -30,14 +30,14 @@
 
     <customer>Blueprint</customer>
 
-    <blueprint-base.version>1807.2</blueprint-base.version>
-    <cms.version>1807.2</cms.version>
-    <personalization.version>1807.2</personalization.version>
-    <elastic.version>1807.2</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
-    <studio.version>1807.2</studio.version>
-    <caetoolbox.version>1807.2</caetoolbox.version>
-    <livecontext.version>1807.2</livecontext.version>
-    <jangaroo.version>4.0.58</jangaroo.version>
+    <blueprint-base.version>1810.1</blueprint-base.version>
+    <cms.version>1810.1</cms.version>
+    <personalization.version>1810.1</personalization.version>
+    <elastic.version>1810.1</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
+    <studio.version>1810.1</studio.version>
+    <caetoolbox.version>1810.1</caetoolbox.version>
+    <livecontext.version>1810.1</livecontext.version>
+    <jangaroo.version>4.0.60</jangaroo.version>
 
     <atlassian.crowd.version>2.5.1</atlassian.crowd.version>
     <!--
@@ -47,7 +47,7 @@
     <tomcat.version>7.0.90</tomcat.version>
     <!-- Version for Maven tomcat7 plugin. Only Tomcat 7 is supported -->
     <tomcat.maven.version>7.0.90</tomcat.maven.version>
-    <spring.boot.version>1.5.4.RELEASE</spring.boot.version>
+    <spring.boot.version>2.0.3.RELEASE</spring.boot.version>
     <application-plugin.version>2.7.10</application-plugin.version>
 
     <!--
@@ -208,6 +208,7 @@
                     <!-- Add <arg>-Awarns</arg> to not let the build fail but just show warnings -->
                     <arg>-AcheckPersonalData=true</arg>
                     <arg>-AprintErrorStack</arg>
+                    <arg>-Anocheckjdk</arg>
                   </compilerArgs>
                 </configuration>
               </execution>
@@ -405,18 +406,6 @@
       </dependency>
 
       <dependency>
-        <groupId>uk.com.robust-it</groupId>
-        <artifactId>cloning</artifactId>
-        <version>1.9.1</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.springframework.mobile</groupId>
-        <artifactId>spring-mobile-device</artifactId>
-        <version>1.0.1.RELEASE</version>
-      </dependency>
-
-      <dependency>
         <groupId>co.freeside</groupId>
         <artifactId>betamax</artifactId>
         <version>1.1.2</version>
@@ -443,12 +432,12 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-assembly-plugin</artifactId>
-          <version>3.0.0</version>
+          <version>3.1.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-clean-plugin</artifactId>
-          <version>3.0.0</version>
+          <version>3.1.0</version>
           <configuration>
             <filesets>
               <fileset>
@@ -468,7 +457,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.6.0</version>
+          <version>3.8.0</version>
           <configuration>
             <source>${compile.source.jdk}</source>
             <target>${compile.target.jdk}</target>
@@ -479,15 +468,15 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-dependency-plugin</artifactId>
-          <version>3.0.0</version>
+          <version>3.1.1</version>
         </plugin>
         <plugin>
           <groupId>com.github.eirslett</groupId>
           <artifactId>frontend-maven-plugin</artifactId>
           <version>1.6</version>
           <configuration>
-            <nodeVersion>v8.9.4</nodeVersion><!-- LTS -->
-            <yarnVersion>v1.6.0</yarnVersion>
+            <nodeVersion>v8.11.4</nodeVersion><!-- LTS -->
+            <yarnVersion>v1.9.4</yarnVersion>
           </configuration>
         </plugin>
         <plugin>
@@ -498,7 +487,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>
-          <version>3.0.0-M1</version>
+          <version>3.0.0-M2</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -513,7 +502,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>3.0.2</version>
+          <version>3.1.0</version>
           <configuration>
             <archive>
               <addMavenDescriptor>true</addMavenDescriptor>
@@ -540,6 +529,7 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>2.10.4</version>
+          <!-- TODO: <version>3.0.1</version>-->
           <configuration>
             <additionalparam>-Xdoclint:none</additionalparam>
           </configuration>
@@ -547,7 +537,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-resources-plugin</artifactId>
-          <version>3.0.2</version>
+          <version>3.1.0</version>
           <configuration>
             <includeEmptyDirs>true</includeEmptyDirs>
           </configuration>
@@ -556,6 +546,7 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
           <version>3.4</version>
+          <!-- TODO: <version>3.7.1</version>-->
           <configuration>
             <!--
              | ===== BE CAREFULL ======
@@ -608,7 +599,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-war-plugin</artifactId>
-          <version>3.0.0</version>
+          <version>3.2.2</version>
           <configuration>
             <archive>
               <addMavenDescriptor>false</addMavenDescriptor>
@@ -631,13 +622,13 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>properties-maven-plugin</artifactId>
-          <version>1.0-alpha-2</version>
+          <version>1.0.0</version>
         </plugin>
 
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>exec-maven-plugin</artifactId>
-          <version>1.5.0</version>
+          <version>1.6.0</version>
         </plugin>
 
         <plugin>
@@ -784,12 +775,12 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>build-helper-maven-plugin</artifactId>
-          <version>1.12</version>
+          <version>3.0.0</version>
         </plugin>
         <plugin>
           <groupId>com.lazerycode.jmeter</groupId>
           <artifactId>jmeter-maven-plugin</artifactId>
-          <version>2.0.3</version>
+          <version>2.7.0</version>
         </plugin>
         <plugin>
           <groupId>com.lazerycode.jmeter</groupId>
@@ -843,17 +834,17 @@
         <plugin>
           <groupId>org.primefaces.extensions</groupId>
           <artifactId>resources-optimizer-maven-plugin</artifactId>
-          <version>2.2.0</version>
+          <version>2.3.2</version>
         </plugin>
         <plugin>
           <groupId>org.sonarsource.scanner.maven</groupId>
           <artifactId>sonar-maven-plugin</artifactId>
-          <version>3.2</version>
+          <version>3.4.1.1168</version>
         </plugin>
         <plugin>
           <groupId>org.owasp</groupId>
           <artifactId>dependency-check-maven</artifactId>
-          <version>2.1.0</version>
+          <version>3.3.1</version>
         </plugin>
       </plugins>
 
@@ -884,7 +875,7 @@
                 <!--ignore analyzing swc-->
                 <ignoredUnusedDeclaredDependency>::swc</ignoredUnusedDeclaredDependency>
                 <!--process configuration properties classes-->
-                <ignoredDependency>org.springframework.boot:spring-boot-configuration-processor</ignoredDependency>
+                <ignoredUnusedDeclaredDependency>org.springframework.boot:spring-boot-configuration-processor</ignoredUnusedDeclaredDependency>
               </ignoredUnusedDeclaredDependencies>
             </configuration>
           </execution>
@@ -898,7 +889,7 @@
           <dependency>
             <groupId>com.coremedia.maven</groupId>
             <artifactId>coremedia-enforcer-rules</artifactId>
-            <version>1.1.2</version>
+            <version>1.1.3</version>
           </dependency>
         </dependencies>
         <executions>

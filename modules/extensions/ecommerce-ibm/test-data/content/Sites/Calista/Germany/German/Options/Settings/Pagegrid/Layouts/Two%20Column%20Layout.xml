@@ -15,7 +15,7 @@
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Placements/header.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Settings/Pagegrid/Placements/header"/>
 <IntProperty Name="row">1</IntProperty>
 <IntProperty Name="col">1</IntProperty>
-<IntProperty Name="height">20</IntProperty>
+<IntProperty Name="height">10</IntProperty>
 <IntProperty Name="width">100</IntProperty>
 <IntProperty Name="colspan">12</IntProperty>
 </Struct>
@@ -23,7 +23,7 @@
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Placements/main.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Settings/Pagegrid/Placements/main"/>
 <IntProperty Name="row">2</IntProperty>
 <IntProperty Name="col">5</IntProperty>
-<IntProperty Name="height">60</IntProperty>
+<IntProperty Name="height">70</IntProperty>
 <IntProperty Name="width">67</IntProperty>
 <IntProperty Name="colspan">8</IntProperty>
 </Struct>
@@ -31,7 +31,7 @@
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Placements/sidebar.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Settings/Pagegrid/Placements/sidebar"/>
 <IntProperty Name="row">2</IntProperty>
 <IntProperty Name="col">1</IntProperty>
-<IntProperty Name="height">60</IntProperty>
+<IntProperty Name="height">70</IntProperty>
 <IntProperty Name="width">33</IntProperty>
 <IntProperty Name="colspan">4</IntProperty>
 </Struct>

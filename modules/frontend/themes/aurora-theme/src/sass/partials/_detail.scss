@@ -15,12 +15,3 @@
   margin: 0 auto;
   width: 70%;
 }
-
-.cm-related {
-  .#{$cm-teasable-prefix} {
-    // hide CTA for normal teasers in related view
-    &__cta {
-      display: none;
-    }
-  }
-}

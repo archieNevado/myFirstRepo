@@ -2,7 +2,6 @@ package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.lc.test.CatalogServiceBaseTest;
 import com.coremedia.cap.multisite.Site;
@@ -18,6 +17,7 @@ import com.coremedia.livecontext.ecommerce.contract.Contract;
 import com.coremedia.livecontext.ecommerce.contract.ContractService;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvider;
+import com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.ibm.common.IbmTestConfig;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.storeinfo.StoreInfoService;
@@ -102,8 +102,8 @@ public abstract class IbmCatalogServiceBaseTest extends CatalogServiceBaseTest {
       return;
     }
 
-    StoreContext storeContext = testConfig.getB2BStoreContext();
-    initStoreContext(storeContext);
+    StoreContextImpl storeContext = testConfig.getB2BStoreContext();
+    CurrentCommerceConnection.get().setStoreContext(storeContext);
     CommerceId commerceId = ibmCommerceIdProvider.formatProductVariantId(storeContext.getCatalogAlias(),
             PRODUCT_VARIANT_CODE_B2B);
 
@@ -169,7 +169,7 @@ public abstract class IbmCatalogServiceBaseTest extends CatalogServiceBaseTest {
       return;
     }
 
-    StoreContext storeContext = testConfig.getB2BStoreContext();
+    StoreContextImpl storeContext = testConfig.getB2BStoreContext();
     StoreContextHelper.setCurrentContext(storeContext);
 
     CatalogAlias catalogAlias = storeContext.getCatalogAlias();
@@ -215,7 +215,7 @@ public abstract class IbmCatalogServiceBaseTest extends CatalogServiceBaseTest {
     assertNull(category);
   }
 
-  private StoreContext prepareContextsForContractBasedPreview(@NonNull StoreContext storeContext) {
+  private StoreContextImpl prepareContextsForContractBasedPreview(@NonNull StoreContextImpl storeContext) {
     UserContext userContext = UserContext.builder().withUserName(testConfig.getPreviewUserName()).build();
     UserContextHelper.setCurrentContext(userContext);
 
@@ -235,8 +235,8 @@ public abstract class IbmCatalogServiceBaseTest extends CatalogServiceBaseTest {
     assertNotNull(contract);
 
     List<String> contractIdsForPreview = singletonList(contract.getExternalTechId());
-    return StoreContextBuilderImpl
-            .from((StoreContextImpl) storeContext)
+    return IbmStoreContextBuilder
+            .from(storeContext)
             .withContractIdsForPreview(contractIdsForPreview)
             .build();
   }

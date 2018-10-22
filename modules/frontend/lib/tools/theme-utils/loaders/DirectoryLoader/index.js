@@ -64,10 +64,7 @@ module.exports = function() {
       })
       .filter(file => !importedViews.includes(file));
 
-    // only track imported views for subtasks = bricks
-    if (subtask) {
-      importedViews.push(...globResult);
-    }
+    importedViews.push(...globResult);
 
     const foundModules = globResult
       .map(file => fs.realpathSync(path.join(resolvedDirectory, file)))

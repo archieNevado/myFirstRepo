@@ -225,6 +225,34 @@
       <str name="dir">${solr.core.ulogDir:}</str>
       <int name="numVersionBuckets">${solr.ulog.numVersionBuckets:65536}</int>
     </updateLog>
+
+    <!-- AutoCommit
+
+         Perform a hard commit automatically under certain conditions.
+
+         CoreMedia Feeder application normally trigger commits themselves.
+         This configuration is a safeguard to avoid a growing translation log
+         in case of errors (CMS-12174).
+
+         maxDocs - Maximum number of documents to add since the last
+                   commit before automatically triggering a new commit.
+
+         maxTime - Maximum amount of time in ms that is allowed to pass
+                   since a document was added before automatically
+                   triggering a new commit.
+         openSearcher - if false, the commit causes recent index changes
+           to be flushed to stable storage, but does not cause a new
+           searcher to be opened to make those changes visible.
+
+         If the updateLog is enabled, then it's highly recommended to
+         have some sort of hard autoCommit to limit the log size.
+      -->
+    <autoCommit>
+      <maxDocs>${solr.autoCommit.maxDocs:50000}</maxDocs>
+      <maxTime>${solr.autoCommit.maxTime:600000}</maxTime>
+      <openSearcher>false</openSearcher>
+    </autoCommit>
+
   </updateHandler>
 
   <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -577,6 +605,21 @@
       <str>suggest</str>
       <str>spellcheck</str>
     </arr>
+  </requestHandler>
+
+  <!--
+   A search request handler to find content by path, for example used by Studio's folder chooser.
+  -->
+  <requestHandler name="/path" class="solr.SearchHandler">
+    <lst name="defaults">
+      <str name="defType">cmdismax</str>
+      <str name="echoParams">none</str>
+      <float name="tie">0.1</float>
+      <str name="qf">path name_tokenized^4</str>
+      <str name="pf">path name_tokenized^4</str>
+      <str name="mm">100%</str>
+      <str name="q.alt">*:*</str>
+    </lst>
   </requestHandler>
 
   <!-- Solr Replication

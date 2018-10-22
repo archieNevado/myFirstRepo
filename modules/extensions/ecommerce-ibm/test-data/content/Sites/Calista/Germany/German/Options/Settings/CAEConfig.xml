@@ -9,7 +9,6 @@
 <IntProperty Name="teaser.max.length">140</IntProperty>
 <BooleanProperty Name="breadcrumbHideLastElement">true</BooleanProperty>
 <StringProperty Name="sitemapOrgConfiguration">livecontext</StringProperty>
-<LinkProperty Name="searchAction" LinkType="coremedia:///cap/contenttype/CMAction" xlink:href="coremedia:///cap/resources/Actions/SearchAction.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Settings/Actions/SearchAction"/>
 </Struct>
 </settings>
 <identifier></identifier>

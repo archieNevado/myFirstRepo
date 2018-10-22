@@ -12,32 +12,30 @@ import com.coremedia.blueprint.common.contentbeans.CMAction;
  */
 public class SearchActionState implements CMActionState {
 
-  public static final String ERROR_QUERY_TOO_SHORT = "queryTooShort";
+  static final String ERROR_QUERY_TOO_SHORT = "queryTooShort";
 
   private final CMAction action;
   private final SearchFormBean form;
   private final SearchResultBean result;
   private final SearchResultBean topicsResult;
+  private final int minimalSearchQueryLength;
   private String errorCode = null;
 
-  public SearchActionState(CMAction action, SearchFormBean form, SearchResultBean result, SearchResultBean topicsResult) {
+  public SearchActionState(CMAction action, SearchFormBean form, int minimalSearchQueryLength, SearchResultBean result, SearchResultBean topicsResult) {
     this.action = action;
     this.form = form;
     this.result = result;
     this.topicsResult = topicsResult;
+    this.minimalSearchQueryLength = minimalSearchQueryLength;
   }
 
-  public SearchActionState(CMAction action, SearchFormBean form, SearchResultBean result) {
-    this(action, form, result, null);
-  }
-
-  public SearchActionState(CMAction action, SearchFormBean form, String errorCode) {
-    this(action, form, null, null);
+  public SearchActionState(CMAction action, SearchFormBean form, int minimalSearchQueryLength, String errorCode) {
+    this(action, form, minimalSearchQueryLength, null, null);
     this.errorCode = errorCode;
   }
 
-  public SearchActionState(CMAction action) {
-    this(action, new SearchFormBean(), null, null);
+  public SearchActionState(CMAction action, int minimalSearchQueryLength) {
+    this(action, new SearchFormBean(), minimalSearchQueryLength, null, null);
   }
 
   @Override
@@ -68,6 +66,13 @@ public class SearchActionState implements CMActionState {
    */
   public boolean isQueryTooShort() {
     return ERROR_QUERY_TOO_SHORT.equals(errorCode);
+  }
+
+  /**
+   * @cm.template.api
+   */
+  public int getMinimalSearchQueryLength() {
+    return minimalSearchQueryLength;
   }
 
   @Override

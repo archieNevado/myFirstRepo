@@ -76,12 +76,12 @@ const handler = argv => {
   };
 
   if (monitorConfig.target === "remote") {
-    log.info("Starting monitor using remote CAE...");
+    log.info("Starting monitor using remote CAE.");
     themeImporter
       .whoami()
       .then(user => {
         log.info(`You are logged in as user '${user.name}' (id=${user.id}).`);
-        log.info(`Creating initial theme build...`);
+        log.info(`Creating initial theme build.`);
         startWebpackWatchMode();
       })
       .catch(e => {
@@ -90,8 +90,8 @@ const handler = argv => {
         startWebpackWatchMode();
       });
   } else {
-    log.info("Starting monitor using local CAE...");
-    log.info(`Creating initial theme build...`);
+    log.info("Starting monitor using local CAE.");
+    log.info(`Creating initial theme build.`);
     startWebpackWatchMode();
   }
 };

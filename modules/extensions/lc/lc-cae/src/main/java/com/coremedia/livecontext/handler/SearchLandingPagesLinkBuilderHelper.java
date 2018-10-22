@@ -11,13 +11,15 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.fragment.resolver.SearchTermExternalReferenceResolver;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
-import org.springframework.beans.factory.annotation.Required;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.web.util.UriComponents;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Optional;
 
 /**
  * Extension that create custom links on CMChannel documents.
@@ -40,14 +42,15 @@ class SearchLandingPagesLinkBuilderHelper {
    * Creates a search URL that points to the commerce system, including the search
    * parameters that a read from a content property of the channel.
    */
-  @Nullable
-  Object createSearchLandingPageURLFor(@NonNull CMChannel channel, CommerceConnection commerceConnection,
-                                       @NonNull HttpServletRequest request, @NonNull StoreContext storeContext) {
+  @NonNull
+  Optional<UriComponents> createSearchLandingPageURLFor(@NonNull CMChannel channel,
+                                                        @NonNull CommerceConnection commerceConnection,
+                                                        @NonNull HttpServletRequest request,
+                                                        @NonNull StoreContext storeContext) {
     String term = channel.getContent().getString(keywordsProperty);
 
     return commerceConnection.getServiceForVendor(CommerceSearchRedirectUrlProvider.class)
-            .map(provider -> provider.provideRedirectUrl(term, request, storeContext))
-            .orElse(null);
+            .flatMap(provider -> provider.provideRedirectUrl(term, request, storeContext));
   }
 
   // ----------------- Helper -------------------------------

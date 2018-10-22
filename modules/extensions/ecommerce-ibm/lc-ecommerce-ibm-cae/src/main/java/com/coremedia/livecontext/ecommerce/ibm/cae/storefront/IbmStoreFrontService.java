@@ -4,16 +4,17 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerce
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontConnector;
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontResponse;
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontService;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.cae.WcsUrlProvider;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
@@ -98,11 +99,13 @@ public abstract class IbmStoreFrontService extends StoreFrontService {
     }
 
     String fullQualifiedUrl = url;
+
     Map<String, Object> params = new HashMap<>();
     params.put(WcsUrlProvider.URL_TEMPLATE, url);
     params.put(WcsUrlProvider.IS_STUDIO_PREVIEW, isPreview);
     params.put(WcsUrlProvider.IS_INITIAL_STUDIO_REQUEST, false);
-    UriComponents uc = (UriComponents) urlProvider.provideValue(params, request, getStoreContext());
+
+    UriComponents uc = urlProvider.provideValue(params, request, getStoreContext()).orElse(null);
     if (uc != null) {
       fullQualifiedUrl = uc.toUriString();
     }
@@ -193,8 +196,9 @@ public abstract class IbmStoreFrontService extends StoreFrontService {
     return getStoreContext().getStoreId();
   }
 
-  protected String resolveCatalogId() {
-    return getStoreContext().getCatalogId();
+  @NonNull
+  protected CatalogId resolveCatalogId() {
+    return getStoreContext().getCatalogId().get();
   }
 
   @Nullable

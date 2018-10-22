@@ -103,10 +103,10 @@
                         conditionName="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'con_number_of_explicit_interests')}"
                         propertyName="explicit.numberOfExplicitInterests"
                         operator="greater than"/>
-                <perso:BooleanPropertiesCondition
-                        conditionName="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'con_social_background')}"
-                        propertyPrefix="es_check"
-                        properties="{[['userLoggedIn', resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'con_social_background_login')]]}"/>
+                <perso:BooleanCondition
+                        conditionName="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'con_social_background_login')}"
+                        propertyName="es_check.userLoggedIn"
+                        checkedByDefault="true"/>
               </perso:conditionItems>
             </perso:ConditionsField>
           </editor:items>

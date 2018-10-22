@@ -26,6 +26,8 @@ import static org.junit.Assert.assertTrue;
  */
 public class CatalogServiceImplSearchBasedIT extends IbmCatalogServiceBaseTest {
 
+  private static final String ROOT_CATEGORY_ID = "ROOT";
+
   @Betamax(tape = "csi_testFindProductById_search", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
@@ -154,9 +156,8 @@ public class CatalogServiceImplSearchBasedIT extends IbmCatalogServiceBaseTest {
 
   @Betamax(tape = "csi_testFindProductsByCategoryIsRoot_search", match = {MatchRule.path, MatchRule.query})
   @Test
-  @Override
   public void testFindProductsByCategoryIsRoot() throws Exception {
-    super.testFindProductsByCategoryIsRoot();
+    testFindProductsByCategoryIsRoot(ROOT_CATEGORY_ID);
   }
 
   @Betamax(tape = "csi_testSearchProducts_search", match = {MatchRule.path, MatchRule.query})
@@ -332,9 +333,8 @@ public class CatalogServiceImplSearchBasedIT extends IbmCatalogServiceBaseTest {
 
   @Test
   @Betamax(tape = "csi_testFindRootCategory_search", match = {MatchRule.path, MatchRule.query})
-  @Override
   public void testFindRootCategory() throws Exception {
-    super.testFindRootCategory();
+    testFindRootCategory(ROOT_CATEGORY_ID);
   }
 
   @Betamax(tape = "csi_testFindCategoryByPartNumberWithSlash_search", match = {MatchRule.path, MatchRule.query})

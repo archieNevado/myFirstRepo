@@ -10,12 +10,12 @@
   "use strict";
 
   $.fn.bcSwipe = function(settings) {
-    var config = { threshold: 50 };
+    let config = { threshold: 50 };
     if (settings) {
       $.extend(config, settings);
     }
 
-    var supportsTouch = false;
+    let supportsTouch = false;
 
     if ('ontouchstart' in window) // iOS & android
       supportsTouch = true;
@@ -25,8 +25,8 @@
       supportsTouch = true;
 
     this.each(function() {
-      var stillMoving = false;
-      var start;
+      let stillMoving = false;
+      let start;
 
       if (supportsTouch){
         this.addEventListener('touchstart', onTouchStart, false);
@@ -42,10 +42,10 @@
 
       function onTouchMove(e) {
         if (stillMoving) {
-          var x = e.touches[0].pageX;
-          var difference = start - x;
+          let x = e.touches[0].pageX;
+          let difference = start - x;
           if (Math.abs(difference) >= config.threshold) {
-            cancelTouch();
+            cancelTouch($(this));
             if (difference > 0) {
               $(this).carousel('next');
             }
@@ -56,8 +56,8 @@
         }
       }
 
-      function cancelTouch() {
-        this.removeEventListener('touchmove', onTouchMove);
+      function cancelTouch($this) {
+        $this.off('touchmove');
         start = null;
         stillMoving = false;
       }

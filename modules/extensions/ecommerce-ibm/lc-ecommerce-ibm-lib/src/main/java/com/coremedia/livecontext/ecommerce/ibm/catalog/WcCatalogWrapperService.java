@@ -336,7 +336,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
       Map<String, String[]> parameters = builder.build();
 
       return callRestService(serviceMethod, variableValues, parameters, storeContext, userContext)
-              .flatMap(this::getFirstProductWrapper)
+              .flatMap(productsMap -> getFirstProductWrapper(productsMap, storeContext))
               .orElse(null);
     } catch (CommerceRemoteException e) {
       // it's really bad, but the wcs sends a 500 when the product is not visible due to contract restrictions
@@ -384,7 +384,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
       Map<String, String[]> parameters = builder.build();
 
       return callRestService(serviceMethod, variableValues, parameters, storeContext, userContext)
-              .flatMap(this::getFirstProductWrapper)
+              .flatMap(productsMap -> getFirstProductWrapper(productsMap, storeContext))
               .orElse(null);
     } catch (CommerceException e) {
       throw e;
@@ -581,7 +581,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
     Map<String, String[]> parameters = builder.build();
 
     return callRestService(serviceMethod, variableValues, parameters, storeContext, null)
-            .flatMap(this::getFirstProductWrapper);
+      .flatMap(productsMap -> getFirstProductWrapper(productsMap, storeContext));
   }
 
   /**
@@ -933,13 +933,14 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
   }
 
   @NonNull
-  protected Optional<Map<String, Object>> getFirstProductWrapper(@NonNull Map<String, Object> productsMap) {
+  protected Optional<Map<String, Object>> getFirstProductWrapper(@NonNull Map<String, Object> productsMap,
+                                                                 @NonNull StoreContext storeContext) {
     if (productsMap.isEmpty()) {
       return Optional.empty();
     }
 
     Map<String, Object> resultMap = productsMap;
-    if (!useSearchRestHandlerProduct(StoreContextHelper.getCurrentContextOrThrow())) {
+    if (!useSearchRestHandlerProduct(storeContext)) {
       resultMap = DataMapTransformationHelper.transformProductBodMap(resultMap);
     }
 

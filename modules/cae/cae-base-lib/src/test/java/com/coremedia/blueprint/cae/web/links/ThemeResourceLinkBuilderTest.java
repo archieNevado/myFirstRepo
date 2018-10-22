@@ -2,6 +2,7 @@ package com.coremedia.blueprint.cae.web.links;
 
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CMImage;
+import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.blueprint.common.contentbeans.CMTheme;
 import com.coremedia.blueprint.common.services.context.CurrentContextService;
 import com.coremedia.cap.content.Content;
@@ -75,7 +76,7 @@ public class ThemeResourceLinkBuilderTest {
     Content imageContent = mock(Content.class);
 
     when(contentRepository.getChild("/test")).thenReturn(imageContent);
-    when(contentBeanFactory.createBeanFor(imageContent)).thenReturn(imageBean);
+    when(contentBeanFactory.createBeanFor(imageContent, CMObject.class)).thenReturn(imageBean);
     when(dataViewFactory.loadCached(imageBean, null)).thenReturn(imageDV);
 
     ContentBean result = linkBuilder.getThemeResourceAt("/test");

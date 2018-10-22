@@ -14,17 +14,16 @@
 <String>metadata</String>
 <String>externalHead</String>
 <String>externalFooter</String>
-<String>asNavigation</String>
 </StringListProperty>
 <StructListProperty Name="contentTypes">
 <Struct>
 <StringProperty Name="type">CMLinkable</StringProperty>
 <StringListProperty Name="prefetchedViews">
 <String>metadata</String>
+<String>asFragment</String>
 <String>asBreadcrumbFragment</String>
 <String>externalHead</String>
 <String>externalFooter</String>
-<String>asNavigation</String>
 </StringListProperty>
 </Struct>
 </StructListProperty>
@@ -76,7 +75,7 @@
 <BooleanProperty Name="livecontext.policy.commerce-product-links">true</BooleanProperty>
 <BooleanProperty Name="livecontext.policy.commerce-category-links">true</BooleanProperty>
 <BooleanProperty Name="livecontext.policy.commerce-page-links">true</BooleanProperty>
-<BooleanProperty Name="p13n-dynamic-includes-enabled">false</BooleanProperty>
+<BooleanProperty Name="p13n-dynamic-includes-enabled">true</BooleanProperty>
 <StringProperty Name="livecontext.connectionId">wcs1</StringProperty>
 <StructProperty Name="livecontext.store.config">
 <Struct>

@@ -8,11 +8,15 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.context.PropertyProfile;
 import com.coremedia.personalization.preview.TestContextExtractor;
+import com.google.common.collect.Streams;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +25,10 @@ import org.springframework.beans.PropertyAccessException;
 import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.stream.Collectors.joining;
 
 /**
  * Extracts commerce usersegments from cmUserProfile and enriches the p13n ContextCollection and the StoreContext.
@@ -66,23 +71,44 @@ public class CommerceSegmentTestContextExtractor implements TestContextExtractor
     }
   }
 
-  private void addUserSegmentsToStoreContext(List<String> userSegmentList){
+  private void addUserSegmentsToStoreContext(@NonNull List<String> userSegmentList) {
     CommerceConnection currentConnection = CurrentCommerceConnection.find().orElse(null);
 
-    StoreContext storeContext = currentConnection != null ? currentConnection.getStoreContext() : null;
-    CommerceIdProvider commerceIdProvider = currentConnection != null ? currentConnection.getIdProvider() : null;
+    if (currentConnection == null) {
+      LOG.debug("Current commerce connection not found; cannot add user segments to store context.");
+      return;
+    }
+
+    StoreContext storeContext = currentConnection.getStoreContext();
+    CommerceIdProvider commerceIdProvider = currentConnection.getIdProvider();
+    StoreContextProvider storeContextProvider = currentConnection.getStoreContextProvider();
 
     if (storeContext == null || commerceIdProvider == null) {
       LOG.debug("at least one of storeContext {} or commerceIdProvider {} is null", storeContext, commerceIdProvider);
       return;
     }
 
-    List<String> segmentIds = new ArrayList<>();
-    for (String userSegment : userSegmentList) {
-      Optional<CommerceId> commerceId = CommerceIdParserHelper.parseCommerceId(userSegment);
-      commerceId.flatMap(CommerceId::getExternalId).ifPresent(segmentIds::add);
-    }
-    storeContext.setUserSegments(StringUtils.join(segmentIds, ","));
+    String segmentIdsStr = assembleSegmentIdsString(userSegmentList);
+
+    StoreContext updatedStoreContext = storeContextProvider.buildContext(storeContext)
+            .withUserSegments(segmentIdsStr)
+            .build();
+
+    currentConnection.setStoreContext(updatedStoreContext);
+  }
+
+  @NonNull
+  private String assembleSegmentIdsString(@NonNull List<String> userSegmentList) {
+    return userSegmentList.stream()
+            .map(this::parseSegmentId)
+            .flatMap(Streams::stream)
+            .collect(joining(","));
+  }
+
+  @NonNull
+  private Optional<String> parseSegmentId(@Nullable String userSegment) {
+    return CommerceIdParserHelper.parseCommerceId(userSegment)
+            .flatMap(CommerceId::getExternalId);
   }
 
   private Object getProperty(CMUserProfile userProfile, String propertyPath) {
@@ -97,5 +123,4 @@ public class CommerceSegmentTestContextExtractor implements TestContextExtractor
   public void setContentBeanFactory(ContentBeanFactory contentBeanFactory) {
     this.contentBeanFactory = contentBeanFactory;
   }
-
 }

@@ -8,18 +8,19 @@ import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvider;
+import com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.livecontext.ecommerce.workspace.Workspace;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceService;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.junit.Test;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import java.util.Collection;
 import java.util.List;
@@ -61,8 +62,10 @@ public class WorkspacesIT extends IbmServiceTestBase {
 
     Workspace workspace = findWorkspace("Anniversary");
 
-    StoreContext storeContext = testConfig.getStoreContext();
-    storeContext.setWorkspaceId(WorkspaceId.of(workspace.getExternalTechId()));
+    StoreContext storeContext = IbmStoreContextBuilder
+            .from(testConfig.getStoreContext())
+            .withWorkspaceId(WorkspaceId.of(workspace.getExternalTechId()))
+            .build();
     StoreContextHelper.setCurrentContext(storeContext);
 
     CommerceId categoryId = ibmCommerceIdProvider.formatCategoryId(storeContext.getCatalogAlias(), "PC_ForTheCook");

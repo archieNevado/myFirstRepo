@@ -31,14 +31,14 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.google.common.base.Splitter;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Locale;
@@ -134,12 +134,8 @@ public class ProductFragmentHandler extends FragmentHandler {
     }
 
     //noinspection ConstantConditions
-    LiveContextNavigation navigation = contextStrategy.resolveContext(site, commerceBean);
-
-    if (navigation == null) {
-      throw buildExceptionForMissingNavigation(params);
-    }
-    return navigation;
+    return contextStrategy.resolveContext(site, commerceBean)
+            .orElseThrow(() -> buildExceptionForMissingNavigation(params));
   }
 
   private static IllegalStateException buildExceptionForMissingNavigation(@NonNull FragmentParameters params) {
@@ -224,7 +220,7 @@ public class ProductFragmentHandler extends FragmentHandler {
       modelAndView.addObject("types", types);
     }
 
-    Linkable linkable = augmentedProductContent != null ? (Linkable) getContentBeanFactory().createBeanFor(augmentedProductContent) : navigation;
+    Linkable linkable = augmentedProductContent != null ? getContentBeanFactory().createBeanFor(augmentedProductContent, Linkable.class) : navigation;
     Page page = createProductDetailPage(linkable, navigation, developer);
     addPageModel(modelAndView, page);
 
@@ -261,6 +257,7 @@ public class ProductFragmentHandler extends FragmentHandler {
     return product;
   }
 
+  @NonNull
   @Override
   protected PageImpl createPageImpl(Object content, Navigation context, @Nullable User developer) {
     return useContentPagegrid
@@ -268,6 +265,7 @@ public class ProductFragmentHandler extends FragmentHandler {
             : createProductDetailPage(content, context, developer);
   }
 
+  @NonNull
   private ProductDetailPage createProductDetailPage(Object content, Navigation context, User developer) {
     ProductDetailPage page = getBeanFactory().getBean(PDP_PAGE_ID, ProductDetailPage.class);
     page.setContent(content);

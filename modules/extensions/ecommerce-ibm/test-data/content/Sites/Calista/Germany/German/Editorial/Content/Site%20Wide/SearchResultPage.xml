@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMChannel folder="/Sites/Calista/Germany/German/Editorial/Content/Site Wide" name="SearchResultPage" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
+<locale>de-DE</locale>
+<master>
+<link href="../../../../../United%20States/English/Editorial/Content/Site%20Wide/SearchResultPage.xml" path="/Sites/Calista/United%20States/English/Editorial/Content/Site%20Wide/SearchResultPage"/>
+</master>
+<viewtype>
+</viewtype>
+<linkedSettings>
+</linkedSettings>
+<resourceBundles2>
+</resourceBundles2>
+<segment></segment>
+<title>Suchergebnisse</title>
+<htmlTitle></htmlTitle>
+<keywords></keywords>
+<htmlDescription></htmlDescription>
+<subjectTaxonomy>
+</subjectTaxonomy>
+<locationTaxonomy>
+</locationTaxonomy>
+<contexts>
+</contexts>
+<teaserTitle></teaserTitle>
+<pictures>
+</pictures>
+<related>
+</related>
+<children>
+</children>
+<hidden>1</hidden>
+<javaScript>
+</javaScript>
+<css>
+</css>
+<theme>
+</theme>
+<placement>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StructProperty Name="placements_2">
+<Struct>
+<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_"/>
+<StructProperty Name="placements">
+<Struct>
+</Struct>
+</StructProperty>
+</Struct>
+</StructProperty>
+<StructListProperty Name="placements">
+<Struct>
+<StructListProperty Name="extendedItems">
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Actions/SearchAction.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Settings/Actions/SearchAction"/>
+</Struct>
+</StructListProperty>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/main.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Settings/Pagegrid/Placements/main"/>
+</Struct>
+<Struct>
+<StructListProperty Name="extendedItems">
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../../Navigation/Fragments/Augmented%20Pages/Header/Wishlist%20Page.xml" cmexport:path="/Sites/Calista/Germany/German/Navigation/Fragments/Augmented%20Pages/Header/Wishlist%20Page"/>
+</Struct>
+</StructListProperty>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/header.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Settings/Pagegrid/Placements/header"/>
+</Struct>
+<Struct>
+<StructListProperty Name="extendedItems">
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/Footer%20Navigation/Women.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Site%20Wide/Footer%20Navigation/Women"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/Footer%20Navigation/Men.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Site%20Wide/Footer%20Navigation/Men"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/Footer%20Navigation/Accessories.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Site%20Wide/Footer%20Navigation/Accessories"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/Footer%20Navigation/Contact.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Site%20Wide/Footer%20Navigation/Contact"/>
+</Struct>
+</StructListProperty>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/footer-navigation.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Settings/Pagegrid/Placements/footer-navigation"/>
+</Struct>
+<Struct>
+<StructListProperty Name="extendedItems">
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/Footer/Imprint%20Article.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Site%20Wide/Footer/Imprint%20Article"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/Footer/Contact%20Us/Contact%20Us%20Page.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Site%20Wide/Footer/Contact%20Us/Contact%20Us%20Page"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/Footer/Terms%20of%20Use.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Site%20Wide/Footer/Terms%20of%20Use"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/Footer/Privacy%20Policy.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Site%20Wide/Footer/Privacy%20Policy"/>
+</Struct>
+</StructListProperty>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/footer.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Settings/Pagegrid/Placements/footer"/>
+</Struct>
+</StructListProperty>
+</Struct>
+</placement>
+<header>
+</header>
+<footer>
+</footer>
+</CMChannel>

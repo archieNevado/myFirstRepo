@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.fragment;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.cae.contentbeans.PageImpl;
@@ -38,13 +39,13 @@ import com.coremedia.livecontext.handler.util.LiveContextSiteResolverImpl;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.HttpError;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.mockito.Answers;
 import org.mockito.Mock;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.Locale;
@@ -227,8 +228,8 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
     when(storeContextProvider.findContextBySite(site)).thenReturn(Optional.of(storeContext));
     when(storeContext.getStoreId()).thenReturn(STORE_ID);
 
-    when(resolveContextStrategy.resolveContext(any(Site.class), any(Product.class))).thenReturn(navigation);
-    when(resolveContextStrategy.resolveContext(any(Site.class), any(Category.class))).thenReturn(navigation);
+    when(resolveContextStrategy.resolveContext(any(Site.class), any(Product.class))).thenReturn(Optional.of(navigation));
+    when(resolveContextStrategy.resolveContext(any(Site.class), any(Category.class))).thenReturn(Optional.of(navigation));
     when(navigation.getContext()).thenReturn(cmContext);
 
     when(cmContext.getTitle()).thenReturn(TITLE);
@@ -267,7 +268,10 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
 
     envBuilder = MockCommerceEnvBuilder.create();
     connection = envBuilder.setupEnv();
-    connection.getStoreContext().put(StoreContextImpl.SITE, SITE_ID);
+    connection.setStoreContext(StoreContextBuilderImpl
+            .from((StoreContextImpl) connection.getStoreContext())
+            .withSiteId(SITE_ID)
+            .build());
   }
 
   protected void defaultTeardown() {
@@ -283,21 +287,21 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
 
   protected FragmentParameters getFragmentParameters4Product() {
     String url = "http://localhost:40081/blueprint/servlet/service/fragment/" + STORE_ID + "/" + LOCALE_STRING + "/params;";
-    FragmentParameters  params = FragmentParametersFactory.create(url);
+    FragmentParameters params = FragmentParametersFactory.create(url);
     params.setProductId(EXTERNAL_TECH_ID);
     params.setExternalReference(EXTERNAL_REF);
     return params;
   }
 
   protected FragmentParameters getFragmentParameters4ProductWithCategory() {
-    FragmentParameters  params = getFragmentParameters4Product();
+    FragmentParameters params = getFragmentParameters4Product();
     params.setCategoryId(CATEGORY_ID);
     return params;
   }
 
   protected FragmentParameters getFragmentParameters4ProductAssets() {
     String url = "http://localhost:40081/blueprint/servlet/service/fragment/" + STORE_ID + "/" + LOCALE_STRING + "/params;view=asAssets;parameter=orientation%253Dportrait%252Ctypes%253Dall;";
-    FragmentParameters  params = FragmentParametersFactory.create(url);
+    FragmentParameters params = FragmentParametersFactory.create(url);
     params.setProductId(EXTERNAL_TECH_ID);
     params.setExternalReference(EXTERNAL_REF);
     return params;
@@ -309,17 +313,17 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
     Object self = result.getModel().get("self");
     assertNotNull(self);
     assertTrue(self instanceof DynamicInclude);
-    DynamicInclude dynamicInclude  = (DynamicInclude) self;
+    DynamicInclude dynamicInclude = (DynamicInclude) self;
     assertTrue(dynamicInclude.getDelegate() instanceof PageGridPlacement);
   }
 
-  protected Object unwrapDynamicIncludeModel(@NonNull ModelAndView modelAndView){
+  protected Object unwrapDynamicIncludeModel(@NonNull ModelAndView modelAndView) {
     DynamicInclude dynamicInclude = (DynamicInclude) modelAndView.getModel().get("self");
     return dynamicInclude.getDelegate();
   }
 
   protected void assertErrorPage(ModelAndView result, int expectedErrorCode) {
-    HttpError error = (HttpError)result.getModel().get(HandlerHelper.MODEL_ROOT);
+    HttpError error = (HttpError) result.getModel().get(HandlerHelper.MODEL_ROOT);
     assertEquals(expectedErrorCode, error.getErrorCode());
   }
 
@@ -356,5 +360,4 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
   }
 
   protected abstract T createTestling();
-
 }

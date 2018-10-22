@@ -2,7 +2,6 @@ package com.coremedia.livecontext.handler;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
-import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -10,6 +9,7 @@ import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.livecontext.ecommerce.user.UserSessionService;
 import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
 import com.coremedia.objectserver.web.links.Link;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -21,16 +21,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.security.auth.login.CredentialExpiredException;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
+import static java.util.Collections.singletonMap;
 import static java.util.Objects.requireNonNull;
 
 @Link
@@ -60,8 +59,9 @@ public class LoginStatusHandler {
     return withConnection(storeId, locale, request, () -> new ResponseEntity<>(status(), HttpStatus.OK));
   }
 
+  @NonNull
   private Map<String, Object> status() {
-    return Collections.singletonMap("loggedIn", isLoggedIn());
+    return singletonMap("loggedIn", isLoggedIn());
   }
 
   private boolean isLoggedIn() {
@@ -91,6 +91,7 @@ public class LoginStatusHandler {
     if (!connection.isPresent()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
     Optional<CommerceConnection> oldConnection = CurrentCommerceConnection.find();
     try {
       CurrentCommerceConnection.set(connection.get());
@@ -104,7 +105,8 @@ public class LoginStatusHandler {
     }
   }
 
-  private void initUserContext(@NonNull CommerceConnection commerceConnection, @NonNull HttpServletRequest request) {
+  private static void initUserContext(@NonNull CommerceConnection commerceConnection,
+                                      @NonNull HttpServletRequest request) {
     try {
       UserContext userContext = commerceConnection.getUserContextProvider().createContext(request);
       commerceConnection.setUserContext(userContext);
@@ -113,11 +115,10 @@ public class LoginStatusHandler {
     }
   }
 
-  private Optional<CommerceConnection> findConnection(String storeId, Locale locale) {
-    Site site = liveContextSiteResolver.findSiteFor(storeId, locale);
-    return site == null
-            ? Optional.empty()
-            : commerceConnectionInitializer.findConnectionForSite(site);
+  @NonNull
+  private Optional<CommerceConnection> findConnection(@NonNull String storeId, @NonNull Locale locale) {
+    return liveContextSiteResolver.findSiteFor(storeId, locale)
+            .flatMap(commerceConnectionInitializer::findConnectionForSite);
   }
 
   // --- Link building ----------------------------------------------------------------------

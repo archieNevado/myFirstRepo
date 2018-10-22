@@ -5,6 +5,15 @@ $prefix: "cm-";
 $cm-navigation-header-height: 51px;
 $mobile-nav-dropdown-bg: rgba(255, 255, 255, 0.2);
 
+// Search
+$cm-search-result-highlight-color: $text-color;
+$cm-search-link-color: $text-color ;
+$cm-search-link-color-hover: $text-color ;
+$cm-search-filter-open: "\e113";
+$cm-search-filter-close: "\e113";
+$cm-search-link-decoration: underline;
+$cm-search-link-decoration-hover: none;
+
 //
 // Breakpoints
 // =====================================================================================================================
@@ -16,6 +25,7 @@ $mobile-nav-dropdown-bg: rgba(255, 255, 255, 0.2);
 
 $breakpoints: (
         "xs": "screen and (max-width: #{$screen-xs-max})",
+        "xs-and-up": "screen and (min-width: 0)",
         "sm": "screen and (min-width: #{$screen-sm-min}) and (max-width: #{$screen-sm-max})",
         "sm-and-up": "screen and (min-width: #{$screen-sm-min})",
         "sm-and-down": "screen and (max-width: #{$screen-sm-max})",

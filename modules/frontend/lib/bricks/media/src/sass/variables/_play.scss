@@ -9,3 +9,17 @@ $cm-play-button-hover-fill: #FFFFFF !default;
 $cm-play-button-focus-color: rgba(0,0,0,0.6) !default;
 $cm-play-button-focus-fill: #FFFFFF !default;
 $cm-play-button-transition-duration: 0.35s !default;
+
+// fallback for play button on breakpoint "md"
+@if not global_variable_exists(breakpoints) {
+  @debug "No Breakpoints defined. Adding a default value for 'md'.";
+  $breakpoints: (
+    "md": "screen and (min-width: 1024px)"
+  ) !default !global;
+} @else {
+  $md: map-get($breakpoints, "md");
+  @if not $md {
+    @debug "Adding a default value for breakpoint 'md'.";
+    $breakpoints: map-merge($breakpoints, ("md": "screen and (min-width: 1024px)"));
+  }
+}

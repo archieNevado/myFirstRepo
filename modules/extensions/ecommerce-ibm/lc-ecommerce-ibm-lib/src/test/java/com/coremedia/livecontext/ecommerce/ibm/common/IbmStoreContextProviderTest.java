@@ -4,9 +4,12 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.context.annotation.Bean;
@@ -20,8 +23,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Currency;
@@ -42,6 +43,9 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
 @ActiveProfiles(PROFILE)
 @TestPropertySource(properties = "livecontext.cache.invalidation.enabled:false")
 public class IbmStoreContextProviderTest {
+
+  private static final Currency CURRENCY_EUR = Currency.getInstance("EUR");
+  private static final Currency CURRENCY_USD = Currency.getInstance("USD");
 
   @Configuration
   @ImportResource(
@@ -77,11 +81,11 @@ public class IbmStoreContextProviderTest {
     Optional<StoreContext> storeContextOptional = getStoreContextBySiteName(siteName);
     assertTrue(storeContextOptional.isPresent());
     StoreContext context = storeContextOptional.get();
-    assertEquals("PerfectChefESite", StoreContextHelper.getStoreName(context));
-    assertEquals("10202", StoreContextHelper.getStoreId(context));
-    assertEquals("10051", context.getCatalogId());
-    assertEquals(new Locale("en"), StoreContextHelper.getLocale(context));
-    assertEquals(Currency.getInstance("USD"), StoreContextHelper.getCurrency(context));
+    assertEquals("PerfectChefESite", context.getStoreName());
+    assertEquals("10202", context.getStoreId());
+    assertEquals(Optional.of(CatalogId.of("10051")), context.getCatalogId());
+    assertEquals(Locale.ENGLISH, context.getLocale());
+    assertEquals(CURRENCY_USD, context.getCurrency());
   }
 
   @NonNull
@@ -98,11 +102,11 @@ public class IbmStoreContextProviderTest {
     Site currentSite = getSite("Helios");
     StoreContext context = testling.findContextBySite(currentSite).orElse(null);
     assertNotNull(context);
-    assertEquals("PerfectChefESite", StoreContextHelper.getStoreName(context));
-    assertEquals("10202", StoreContextHelper.getStoreId(context));
-    assertEquals("10051", context.getCatalogId());
-    assertEquals(new Locale("en"), StoreContextHelper.getLocale(context));
-    assertEquals(Currency.getInstance("USD"), StoreContextHelper.getCurrency(context));
+    assertEquals("PerfectChefESite", context.getStoreName());
+    assertEquals("10202", context.getStoreId());
+    assertEquals(Optional.of(CatalogId.of("10051")), context.getCatalogId());
+    assertEquals(Locale.ENGLISH, context.getLocale());
+    assertEquals(CURRENCY_USD, context.getCurrency());
   }
 
   @Test
@@ -110,11 +114,11 @@ public class IbmStoreContextProviderTest {
     Site currentSite = getSite("Alternative");
     StoreContext context = testling.findContextBySite(currentSite).orElse(null);
     assertNotNull(context);
-    assertEquals("springsite", StoreContextHelper.getStoreName(context));
-    assertEquals("12345", StoreContextHelper.getStoreId(context));
-    assertEquals("67890", context.getCatalogId());
-    assertEquals(new Locale("de"), StoreContextHelper.getLocale(context));
-    assertEquals(Currency.getInstance("EUR"), StoreContextHelper.getCurrency(context));
+    assertEquals("springsite", context.getStoreName());
+    assertEquals("12345", context.getStoreId());
+    assertEquals(Optional.of(CatalogId.of("67890")), context.getCatalogId());
+    assertEquals(Locale.GERMAN, context.getLocale());
+    assertEquals(CURRENCY_EUR, context.getCurrency());
     assertEquals("spring.only.setting", context.getReplacements().get("spring.only.setting"));
   }
 

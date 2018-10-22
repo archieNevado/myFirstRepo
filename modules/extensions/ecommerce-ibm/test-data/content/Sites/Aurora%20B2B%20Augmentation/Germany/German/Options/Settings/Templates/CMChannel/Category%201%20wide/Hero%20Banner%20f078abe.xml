@@ -5,7 +5,7 @@
 <link href="../../../../../../../United%20States/English/Options/Settings/Templates/CMChannel/Category%201%20wide/Hero%2012be9c55.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/Templates/CMChannel/Category%201%20wide/Hero%20Banner%20Collection"/>
 </master>
 <viewtype>
-<link href="../../../../Viewtypes/CMChannel/carousel.xml" path="/Sites/Aurora%20B2B%20Augmentation/Germany/German/Options/Viewtypes/CMChannel/carousel"/>
+<link href="../../../../Viewtypes/CMChannel/hero.xml" path="/Sites/Aurora%20B2B%20Augmentation/Germany/German/Options/Viewtypes/CMChannel/hero"/>
 </viewtype>
 <linkedSettings>
 </linkedSettings>

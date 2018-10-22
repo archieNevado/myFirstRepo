@@ -15,12 +15,15 @@
 # limitations under the License.
 #
 
+chef_version_for_provides '< 14.4' if respond_to?(:chef_version_for_provides)
+resource_name :openssl_ec_private_key
+
 include OpenSSLCookbook::Helpers
 
 property :path,        String, name_property: true
 property :key_curve,   equal_to: %w(secp384r1 secp521r1 prime256v1 secp224r1 secp256k1), default: 'prime256v1'
 property :key_pass,    String
-property :key_cipher,  String, default: 'des3', equal_to: OpenSSL::Cipher.ciphers
+property :key_cipher,  String, default: 'des3', equal_to: ::OpenSSL::Cipher.ciphers
 property :owner,       String
 property :group,       String
 property :mode,        [Integer, String], default: '0640'

@@ -16,7 +16,7 @@
 
   <#-- add css class active, if this item is part of the active navigation -->
   <#if (bp.isActiveNavigation(self, (cmpage.navigation.navigationPathList)![]))>
-    <#assign cssClass=cssClass + ' active'/>
+    <#assign cssClass=cssClass + " cm-navigation-item--active"/>
   </#if>
 
   <li class="${cssClass}">

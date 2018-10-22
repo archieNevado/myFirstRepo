@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 import static org.junit.Assert.assertEquals;
@@ -90,7 +91,7 @@ public class CartHandlerTest {
   public void testHandleRequestNoContextFound() {
     UriComponentsBuilder testUrlBuilder = UriComponentsBuilder.fromUriString("checkoutUrl");
     UriComponents testUrl = testUrlBuilder.build();
-    when(checkoutRedirectPropertyProvider.provideValue(any(Map.class), any(), any())).thenReturn(testUrl);
+    when(checkoutRedirectPropertyProvider.provideValue(any(Map.class), any(), any())).thenReturn(Optional.of(testUrl));
 
     View modelAndView = testling.handleRequest(CONTEXT_NAME, mock(HttpServletRequest.class),
             mock(HttpServletResponse.class));

@@ -2,27 +2,23 @@ package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractStoreContextProvider;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.SiteToStoreContextCacheKeyWithTimeout;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
-import com.coremedia.blueprint.base.util.StructUtil;
-import com.coremedia.cap.common.NoSuchPropertyDescriptorException;
 import com.coremedia.cap.multisite.Site;
-import com.coremedia.cap.struct.Struct;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogName;
+import com.coremedia.livecontext.ecommerce.common.CommerceConfigKeys;
 import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.storeinfo.StoreInfoService;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.time.ZoneId;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.TimeZone;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.WORKSPACE_ID_NONE;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -44,42 +40,47 @@ public class IbmStoreContextProvider extends AbstractStoreContextProvider {
   @Override
   protected Optional<StoreContext> internalCreateContext(@NonNull Site site) {
     // Only create store context if settings are found for current site.
-    Struct repositoryStoreConfig = getSettingsService()
-            .getSetting(CONFIG_KEY_STORE_CONFIG, Struct.class, site.getSiteRootDocument())
-            .orElse(null);
-    if (repositoryStoreConfig == null) {
-      return Optional.empty();
-    }
+    return Optional.of(findRepositoryStoreConfig(site))
+            .filter(config -> !config.isEmpty())
+            .map(config -> buildContextFromRepositoryStoreConfig(site, config));
+  }
 
-    try {
-      StoreContextValuesHolder valuesHolder = new StoreContextValuesHolder();
-      Map<String, Object> targetConfig = new HashMap<>();
+  @NonNull
+  private StoreContext buildContextFromRepositoryStoreConfig(@NonNull Site site,
+                                                             @NonNull Map<String, Object> repositoryStoreConfig) {
+    Map<String, Object> targetConfig = new HashMap<>();
 
-      StructUtil.findString(repositoryStoreConfig, CONFIG_KEY_CONFIG_ID)
-              .ifPresent(configId -> readStoreConfigFromSpring(configId, targetConfig));
+    findConfigId(repositoryStoreConfig)
+            .map(this::readStoreConfigFromSpring)
+            .ifPresent(targetConfig::putAll);
 
-      updateStoreConfigFromRepository(repositoryStoreConfig, targetConfig, site);
+    updateStoreConfigFromRepository(repositoryStoreConfig, targetConfig);
 
-      valuesHolder.storeId = (String) targetConfig.get(CONFIG_KEY_STORE_ID);
-      valuesHolder.storeName = (String) targetConfig.get(CONFIG_KEY_STORE_NAME);
-      String catalogIdStr = (String) targetConfig.get(CONFIG_KEY_CATALOG_ID);
-      valuesHolder.catalogId = catalogIdStr != null ? CatalogId.of(catalogIdStr) : null;
-      String catalogNameStr = (String) targetConfig.get(CONFIG_KEY_CATALOG_NAME);
-      valuesHolder.catalogName = catalogNameStr != null ? CatalogName.of(catalogNameStr) : null;
-      String currencyStr = (String) targetConfig.get(CONFIG_KEY_CURRENCY);
-      valuesHolder.currency = currencyStr != null ? parseCurrency(currencyStr) : null;
-      String workspaceIdStr = (String) targetConfig.get(CONFIG_KEY_WORKSPACE_ID);
-      valuesHolder.workspaceId = workspaceIdStr != null ? WorkspaceId.of(workspaceIdStr) : WORKSPACE_ID_NONE;
-      valuesHolder.wcsVersion = (String) targetConfig.get(CONFIG_KEY_WCS_VERSION);
-      valuesHolder.replacements = (Map<String, String>) targetConfig.get(CONFIG_KEY_REPLACEMENTS);
+    StoreContextValuesHolder valuesHolder = populateValuesHolder(targetConfig);
 
-      updateStoreConfigFromDynamicStoreInfo(site.getName(), valuesHolder);
+    updateStoreConfigFromDynamicStoreInfo(site.getName(), valuesHolder);
 
-      StoreContext storeContext = createStoreContext(valuesHolder, site);
-      return Optional.of(storeContext);
-    } catch (NoSuchPropertyDescriptorException e) {
-      throw new InvalidContextException("Missing properties in store configuration. ", e);
-    }
+    return createStoreContext(valuesHolder, site);
+  }
+
+  @NonNull
+  private static StoreContextValuesHolder populateValuesHolder(@NonNull Map<String, Object> config) {
+    StoreContextValuesHolder valuesHolder = new StoreContextValuesHolder();
+
+    valuesHolder.storeId = (String) config.get(CommerceConfigKeys.STORE_ID);
+    valuesHolder.storeName = (String) config.get(CommerceConfigKeys.STORE_NAME);
+    String catalogIdStr = (String) config.get(CommerceConfigKeys.CATALOG_ID);
+    valuesHolder.catalogId = catalogIdStr != null ? CatalogId.of(catalogIdStr) : null;
+    String catalogNameStr = (String) config.get(CommerceConfigKeys.CATALOG_NAME);
+    valuesHolder.catalogName = catalogNameStr != null ? CatalogName.of(catalogNameStr) : null;
+    String currencyStr = (String) config.get(CommerceConfigKeys.CURRENCY);
+    valuesHolder.currency = currencyStr != null ? parseCurrency(currencyStr) : null;
+    String workspaceIdStr = (String) config.get(CommerceConfigKeys.WORKSPACE_ID);
+    valuesHolder.workspaceId = workspaceIdStr != null ? WorkspaceId.of(workspaceIdStr) : WORKSPACE_ID_NONE;
+    valuesHolder.wcsVersion = (String) config.get(CONFIG_KEY_WCS_VERSION);
+    valuesHolder.replacements = (Map<String, String>) config.get(CommerceConfigKeys.REPLACEMENTS);
+
+    return valuesHolder;
   }
 
   protected void updateStoreConfigFromDynamicStoreInfo(@NonNull String siteName,
@@ -90,10 +91,10 @@ public class IbmStoreContextProvider extends AbstractStoreContextProvider {
 
     String storeName = getStoreName(valuesHolder, siteName);
 
-    updateStoreId(valuesHolder, storeName, siteName);
-    updateCatalogId(valuesHolder, storeName, siteName);
-    updateTimeZoneId(valuesHolder);
-    updateWcsVersion(valuesHolder);
+    getStoreId(valuesHolder, storeName, siteName).ifPresent(storeId -> valuesHolder.storeId = storeId);
+    getCatalogId(valuesHolder, storeName, siteName).ifPresent(catalogId -> valuesHolder.catalogId = catalogId);
+    valuesHolder.timeZoneId = storeInfoService.getTimeZone().toZoneId();
+    getWcsVersion(valuesHolder).ifPresent(wcsVersion -> valuesHolder.wcsVersion = wcsVersion);
   }
 
   @NonNull
@@ -123,12 +124,6 @@ public class IbmStoreContextProvider extends AbstractStoreContextProvider {
     }
 
     return storeId;
-  }
-
-  private void updateStoreId(@NonNull StoreContextValuesHolder valuesHolder, @NonNull String storeName,
-                             @NonNull String siteName) {
-    getStoreId(valuesHolder, storeName, siteName)
-            .ifPresent(storeId -> valuesHolder.storeId = storeId);
   }
 
   @NonNull
@@ -161,22 +156,6 @@ public class IbmStoreContextProvider extends AbstractStoreContextProvider {
     return catalogId;
   }
 
-  private void updateCatalogId(@NonNull StoreContextValuesHolder valuesHolder, @NonNull String storeName,
-                               @NonNull String siteName) {
-    getCatalogId(valuesHolder, storeName, siteName)
-            .ifPresent(catalogId -> valuesHolder.catalogId = catalogId);
-  }
-
-  @NonNull
-  private ZoneId getTimeZoneId() {
-    TimeZone timeZone = storeInfoService.getTimeZone();
-    return timeZone.toZoneId();
-  }
-
-  private void updateTimeZoneId(@NonNull StoreContextValuesHolder valuesHolder) {
-    valuesHolder.timeZoneId = getTimeZoneId();
-  }
-
   @NonNull
   private static Currency parseCurrency(@NonNull String currencyCode) {
     try {
@@ -199,38 +178,35 @@ public class IbmStoreContextProvider extends AbstractStoreContextProvider {
 
     if (isNotBlank(configWcsVersion) && !storeInfoWcsVersion.get().equals(configWcsVersion)) {
       LOG.info("The configured WCS version '{}' is different from the version reading from the WCS system '{}'. " +
-              "Delete the configuration for \"livecontext.ibm.wcs.version\" to avoid this message. " +
-              "In the following we go with the version coming from the WCS system.",
+                      "Delete the configuration for \"livecontext.ibm.wcs.version\" to avoid this message. " +
+                      "In the following we go with the version coming from the WCS system.",
               configWcsVersion, storeInfoWcsVersion);
     }
 
     return storeInfoWcsVersion;
   }
 
-  private void updateWcsVersion(@NonNull StoreContextValuesHolder valuesHolder) {
-    getWcsVersion(valuesHolder)
-            .ifPresent(wcsVersion -> valuesHolder.wcsVersion = wcsVersion);
-  }
-
   @NonNull
   private static StoreContext createStoreContext(@NonNull StoreContextValuesHolder valuesHolder, @NonNull Site site) {
-    StoreContext context = StoreContextHelper.createContext(
-            site.getId(),
-            valuesHolder.storeId,
-            valuesHolder.storeName,
-            valuesHolder.catalogId,
-            site.getLocale().toString(),
-            valuesHolder.currency
-    );
+    IbmStoreContextBuilder builder = StoreContextHelper
+            .buildContext(
+                    site.getId(),
+                    valuesHolder.storeId,
+                    valuesHolder.storeName,
+                    valuesHolder.catalogId,
+                    site.getLocale(),
+                    valuesHolder.currency
+            )
+            .withTimeZoneId(valuesHolder.timeZoneId)
+            .withWorkspaceId(valuesHolder.workspaceId)
+            .withReplacements(valuesHolder.replacements);
 
-    ((StoreContextImpl) context).setTimeZoneId(valuesHolder.timeZoneId);
-    context.setWorkspaceId(valuesHolder.workspaceId);
     if (valuesHolder.wcsVersion != null) {
-      StoreContextHelper.setWcsVersion(context, valuesHolder.wcsVersion);
+      WcsVersion.fromVersionString(valuesHolder.wcsVersion)
+              .ifPresent(builder::withWcsVersion);
     }
-    StoreContextHelper.setReplacements(context, valuesHolder.replacements);
 
-    return context;
+    return builder.build();
   }
 
   private static class StoreContextValuesHolder {

@@ -14,8 +14,8 @@ import com.coremedia.blueprint.common.contentbeans.CMSettings;
 import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.blueprint.common.cta.CallToActionButtonSettings;
-import com.coremedia.blueprint.common.teaserOverlay.TeaserOverlaySettings;
 import com.coremedia.blueprint.common.navigation.Linkable;
+import com.coremedia.blueprint.common.teaserOverlay.TeaserOverlaySettings;
 import com.coremedia.blueprint.common.teaserOverlay.TeaserOverlayStyle;
 import com.coremedia.blueprint.common.util.ContentBeanSolrSearchFormatHelper;
 import com.coremedia.blueprint.common.util.ParagraphHelper;
@@ -24,6 +24,7 @@ import com.coremedia.xml.Markup;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,7 +35,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.coremedia.xml.MarkupUtil.isEmptyRichtext;
-import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
+import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /**
@@ -223,7 +224,7 @@ public class CMTeasableImpl extends CMTeasableBase {
   @Override
   public TeaserOverlaySettings getTeaserOverlaySettings() {
     Map<String, Object> mapping = getSettingsService().settingAsMap(CMTeasable.TEASER_OVERLAY_SETTINGS_STRUCT_NAME, String.class, Object.class, this);
-    
+
     return getSettingsService().createProxy(TeaserOverlaySettings.class, mapping);
   }
 
@@ -275,12 +276,13 @@ public class CMTeasableImpl extends CMTeasableBase {
   }
 
   private static <T> List<T> filterByType(List<?> items, Class<T> type) {
-    List<T> result = new ArrayList<>();
-    for (Object item : items) {
-      if (type.isAssignableFrom(item.getClass())) {
-        result.add(type.cast(item));
-      }
-    }
-    return result;
+    return items.stream()
+      .filter(type::isInstance)
+      .map(type::cast)
+      .collect(toList());
+  }
+
+  static boolean isNotEmpty(@NonNull Collection<?> collection) {
+    return !collection.isEmpty();
   }
 }

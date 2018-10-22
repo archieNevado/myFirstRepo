@@ -23,11 +23,13 @@
 <teaserTitle></teaserTitle>
 <pictures>
 </pictures>
+<notSearchable>1</notSearchable>
 <related>
 </related>
 <children>
 <link href="Augmented%20Pages/Header/Wishlist%20Page.xml" path="/Sites/Calista/United%20States/English/Navigation/Fragments/Augmented%20Pages/Header/Wishlist%20Page"/>
 <link href="Augmented%20Pages/Footer/Store%20Locator%20Page.xml" path="/Sites/Calista/United%20States/English/Navigation/Fragments/Augmented%20Pages/Footer/Store%20Locator%20Page"/>
+<link href="Augmented%20Pages/Search%20Results%20Page.xml" path="/Sites/Calista/United%20States/English/Navigation/Fragments/Augmented%20Pages/Search%20Results%20Page"/>
 </children>
 <hidden>1</hidden>
 <javaScript>

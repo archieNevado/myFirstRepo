@@ -25,12 +25,12 @@ import com.coremedia.livecontext.ecommerce.workspace.WorkspaceService;
 import com.coremedia.rest.cap.validation.ContentTypeValidatorBase;
 import com.coremedia.rest.validation.Issues;
 import com.coremedia.rest.validation.Severity;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 
@@ -149,9 +149,12 @@ public class CatalogLinkValidator extends ContentTypeValidatorBase {
     try {
       CommerceBeanFactory commerceBeanFactory = commerceConnection.getCommerceBeanFactory();
 
-      // clear the workspace id before validating
-      StoreContext storeContextWithoutWorkspaceId = cloneStoreContext(commerceConnection, storeContext);
-      storeContextWithoutWorkspaceId.setWorkspaceId(null);
+      // Clear workspace ID before validating.
+      StoreContext storeContextWithoutWorkspaceId = commerceConnection
+              .getStoreContextProvider()
+              .buildContext(storeContext)
+              .withWorkspaceId(null)
+              .build();
 
       boolean commerceBeanWithoutWorkspaceExists = hasCommerceBean(commerceBeanFactory, commerceId,
               storeContextWithoutWorkspaceId);
@@ -204,13 +207,6 @@ public class CatalogLinkValidator extends ContentTypeValidatorBase {
                     String.format("No commerce connection available for site '%s'.", site.getName())));
   }
 
-  @NonNull
-  private static StoreContext cloneStoreContext(@NonNull CommerceConnection commerceConnection,
-                                                @NonNull StoreContext source) {
-    StoreContextProvider storeContextProvider = commerceConnection.getStoreContextProvider();
-    return storeContextProvider.buildContext(source).build();
-  }
-
   /**
    * Return the first workspace for which a commerce bean exists.
    */
@@ -219,18 +215,20 @@ public class CatalogLinkValidator extends ContentTypeValidatorBase {
                                                                  StoreContext storeContext,
                                                                  CommerceBeanFactory commerceBeanFactory,
                                                                  CommerceId commerceId) {
-    // This will be modified throughout the loop (to avoid potentially
-    // costly context recreation). Drop afterwards/don't keep it around.
-    StoreContext storeContextClone = cloneStoreContext(commerceConnection, storeContext);
+    StoreContextProvider storeContextProvider = commerceConnection.getStoreContextProvider();
 
-    List<Workspace> allWorkspaces = getWorkspaces(commerceConnection, storeContextClone);
+    StoreContext storeContextToObtainAllWorkspacesFrom = storeContextProvider.buildContext(storeContext).build();
+    List<Workspace> allWorkspaces = getWorkspaces(commerceConnection, storeContextToObtainAllWorkspacesFrom);
 
     for (Workspace workspace : allWorkspaces) {
-      String workspaceIdStr = workspace.getExternalTechId();
-      WorkspaceId workspaceId = workspaceIdStr != null ? WorkspaceId.of(workspaceIdStr) : WORKSPACE_ID_NONE;
-      storeContextClone.setWorkspaceId(workspaceId);
+      WorkspaceId workspaceId = getWorkspaceId(workspace);
+      StoreContext storeContextWithWorkspaceId = storeContextProvider
+              .buildContext(storeContextToObtainAllWorkspacesFrom)
+              .withWorkspaceId(workspaceId)
+              .build();
 
-      boolean commerceBeanWithWorkspaceExists = hasCommerceBean(commerceBeanFactory, commerceId, storeContextClone);
+      boolean commerceBeanWithWorkspaceExists = hasCommerceBean(commerceBeanFactory, commerceId,
+              storeContextWithWorkspaceId);
       if (commerceBeanWithWorkspaceExists) {
         return workspace;
       }
@@ -249,6 +247,13 @@ public class CatalogLinkValidator extends ContentTypeValidatorBase {
     }
 
     return workspaceService.findAllWorkspaces(storeContextClone);
+  }
+
+  @NonNull
+  private static WorkspaceId getWorkspaceId(@NonNull Workspace workspace) {
+    return Optional.ofNullable(workspace.getExternalTechId())
+            .map(WorkspaceId::of)
+            .orElse(WORKSPACE_ID_NONE);
   }
 
   @Nullable

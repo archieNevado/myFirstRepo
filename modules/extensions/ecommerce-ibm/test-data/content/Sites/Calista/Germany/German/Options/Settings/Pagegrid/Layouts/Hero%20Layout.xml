@@ -7,12 +7,12 @@
 <settings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <IntProperty Name="colCount">12</IntProperty>
-<IntProperty Name="rowCount">6</IntProperty>
+<IntProperty Name="rowCount">7</IntProperty>
 <StructListProperty Name="items">
 <Struct>
 <IntProperty Name="row">1</IntProperty>
 <IntProperty Name="col">1</IntProperty>
-<IntProperty Name="width">50</IntProperty>
+<IntProperty Name="width">100</IntProperty>
 <IntProperty Name="height">10</IntProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../Placements/header.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Settings/Pagegrid/Placements/header"/>
 <IntProperty Name="colspan">12</IntProperty>
@@ -21,7 +21,7 @@
 <IntProperty Name="row">2</IntProperty>
 <IntProperty Name="col">1</IntProperty>
 <IntProperty Name="width">100</IntProperty>
-<IntProperty Name="height">22</IntProperty>
+<IntProperty Name="height">25</IntProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../Placements/hero.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Settings/Pagegrid/Placements/hero"/>
 <IntProperty Name="colspan">12</IntProperty>
 </Struct>
@@ -29,7 +29,7 @@
 <IntProperty Name="row">3</IntProperty>
 <IntProperty Name="col">1</IntProperty>
 <IntProperty Name="width">100</IntProperty>
-<IntProperty Name="height">18</IntProperty>
+<IntProperty Name="height">15</IntProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../Placements/placement1.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Settings/Pagegrid/Placements/placement1"/>
 <IntProperty Name="colspan">12</IntProperty>
 </Struct>
@@ -37,7 +37,7 @@
 <IntProperty Name="row">4</IntProperty>
 <IntProperty Name="col">1</IntProperty>
 <IntProperty Name="width">100</IntProperty>
-<IntProperty Name="height">18</IntProperty>
+<IntProperty Name="height">15</IntProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../Placements/placement2.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Settings/Pagegrid/Placements/placement2"/>
 <IntProperty Name="colspan">12</IntProperty>
 </Struct>
@@ -45,7 +45,7 @@
 <IntProperty Name="row">5</IntProperty>
 <IntProperty Name="col">1</IntProperty>
 <IntProperty Name="width">100</IntProperty>
-<IntProperty Name="height">12</IntProperty>
+<IntProperty Name="height">15</IntProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../Placements/placement3.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Settings/Pagegrid/Placements/placement3"/>
 <IntProperty Name="colspan">12</IntProperty>
 </Struct>

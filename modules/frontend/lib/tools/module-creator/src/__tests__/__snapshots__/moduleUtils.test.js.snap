@@ -265,8 +265,6 @@ Object {
 </styleSheets>
 <templateSets>
   <templateSet>templates/newest-templates.jar</templateSet>
-  <!-- aggregated templates of all bricks, activate this if you are using bricks -->
-  <!-- <templateSet>templates/bricks-templates.jar</templateSet> -->
 </templateSets>
 <resourceBundles>
   <!-- add theme resource bundles here -->
@@ -423,8 +421,6 @@ Object {
 </styleSheets>
 <templateSets>
   <templateSet>templates/newest-templates.jar</templateSet>
-  <!-- aggregated templates of all bricks -->
-  <templateSet>templates/bricks-templates.jar</templateSet>
 </templateSets>
 <resourceBundles>
   <!-- add theme resource bundles here -->

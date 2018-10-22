@@ -144,7 +144,7 @@
 
     <editor:EditorMainView>
       <editor:plugins exml:mode="append">
-        <editor:AddDefaultFolderComboEntry lookup="{calculateQuickCreateFolder}"/>
+        <editor:AddDefaultFolderChooserEntry lookup="{calculateQuickCreateFolder}"/>
       </editor:plugins>
     </editor:EditorMainView>
 
@@ -169,6 +169,7 @@
             <bpforms:CMImageForm itemId="CMImage"/>
             <bpforms:CMImageMapForm itemId="CMImageMap"/>
             <bpforms:CMLocTaxonomyForm itemId="CMLocTaxonomy"/>
+            <bpforms:CMPersonForm itemId="CMPerson"/>
             <bpforms:CMPictureForm itemId="CMPicture"/>
             <bpforms:CMPlaceholderForm itemId="CMPlaceholder"/>
             <bpforms:CMResourceBundleForm itemId="CMResourceBundle"/>

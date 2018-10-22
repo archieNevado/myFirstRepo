@@ -11,12 +11,14 @@ import com.coremedia.dispatch.Type;
 import com.coremedia.dispatch.Types;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.google.common.collect.Streams;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -25,8 +27,10 @@ import java.util.stream.Stream;
 
 import static java.util.Collections.emptyList;
 import static java.util.Optional.empty;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
+@DefaultAnnotation(NonNull.class)
+@Named
 public class PrefetchFragmentsConfigReader {
 
   private static final Logger LOG = LoggerFactory.getLogger(PrefetchFragmentsConfigReader.class);
@@ -44,14 +48,16 @@ public class PrefetchFragmentsConfigReader {
 
   private final NoArgDispatcher dispatcher = new PrefetchConfigContentTypeDispatcher(this);
 
-  @Inject
-  private SettingsService settingsService;
+  private final SettingsService settingsService;
 
-  @Inject
-  private Cache cache;
+  private final Cache cache;
 
-  @NonNull
-  Optional<String> getPlacementView(@NonNull Page page, @NonNull String placementName) {
+  public PrefetchFragmentsConfigReader(SettingsService settingsService, Cache cache) {
+    this.settingsService = settingsService;
+    this.cache = cache;
+  }
+
+  Optional<String> getPlacementView(Page page, String placementName) {
     Optional<String> placementViewForLayout = getPlacementViewForLayout(page, placementName);
     if (placementViewForLayout.isPresent()) {
       return placementViewForLayout;
@@ -60,8 +66,7 @@ public class PrefetchFragmentsConfigReader {
     return getPlacementDefaultView(page, placementName);
   }
 
-  @NonNull
-  Optional<String> getPlacementDefaultView(@NonNull Page page, @NonNull String placementName) {
+  Optional<String> getPlacementDefaultView(Page page, String placementName) {
     Map<String, Object> livecontextFragmentsConfig = settingsService.settingAsMap(LIVECONTEXT_FRAGMENTS,
             String.class, Object.class, getPageContextContent(page).orElse(null));
 
@@ -88,8 +93,7 @@ public class PrefetchFragmentsConfigReader {
             .findFirst();
   }
 
-  @NonNull
-  private Optional<Content> getPageContextContent(@NonNull Page page) {
+  private Optional<Content> getPageContextContent(Page page) {
     CMContext context = page.getContext();
     if (context == null) {
       LOG.warn("Could not read Prefetch-Config, since page \"{}\" has no context", page.getTitle());
@@ -103,8 +107,7 @@ public class PrefetchFragmentsConfigReader {
     return Optional.of(content);
   }
 
-  @NonNull
-  Optional<String> getPlacementViewForLayout(@NonNull Page page, @NonNull String placementName) {
+  Optional<String> getPlacementViewForLayout(Page page, String placementName) {
     PageGrid pageGrid = page.getPageGrid();
     if (pageGrid == null) {
       return empty();
@@ -143,8 +146,7 @@ public class PrefetchFragmentsConfigReader {
             .findFirst();
   }
 
-  @NonNull
-  private static Stream<?> getMatchingPlacementViewsForLayout(@NonNull Map<?, ?> map, @NonNull Content layout) {
+  private static Stream<?> getMatchingPlacementViewsForLayout(Map<?, ?> map, Content layout) {
     if (!isLayoutConfigMatching(map, layout)) {
       return Stream.empty();
     }
@@ -158,8 +160,7 @@ public class PrefetchFragmentsConfigReader {
     return ((List) list).stream();
   }
 
-  @NonNull
-  private static Optional<String> getMatchingViewForPlacementName(@NonNull Map<?, ?> map, @NonNull String placementName, @NonNull String configMapLookupPath) {
+  private static Optional<String> getMatchingViewForPlacementName(Map<?, ?> map, String placementName, String configMapLookupPath) {
     if (!isSectionConfigMatching(map, placementName)) {
       return empty();
     }
@@ -173,7 +174,7 @@ public class PrefetchFragmentsConfigReader {
     return Optional.of((String) result);
   }
 
-  private static boolean isSectionConfigMatching(@NonNull Map map, @NonNull String placementName) {
+  private static boolean isSectionConfigMatching(Map<?, ?> map, String placementName) {
     Object section = map.get(SECTION_KEY);
     if (section instanceof Content) {
       return ((Content) section).getName().equals(placementName);
@@ -181,8 +182,7 @@ public class PrefetchFragmentsConfigReader {
     return false;
   }
 
-  @NonNull
-  List<String> getPredefinedViews(@Nullable Object bean, @NonNull Page page) {
+  List<String> getPredefinedViews(@Nullable Object bean, Page page) {
     if (bean instanceof ContentBean) {
       Content content = ((ContentBean) bean).getContent();
       List<String> predefinedViewsForContent = getPredefinedViewsForContent(content, page);
@@ -199,8 +199,7 @@ public class PrefetchFragmentsConfigReader {
     return getPredefinedDefaultViews(page);
   }
 
-  @NonNull
-  List<String> getPredefinedDefaultViews(@NonNull Page page) {
+  List<String> getPredefinedDefaultViews(Page page) {
     Map<String, Object> livecontextFragmentsConfig = settingsService.settingAsMap(LIVECONTEXT_FRAGMENTS, String.class, Object.class,
             getPageContextContent(page).orElse(null));
 
@@ -221,8 +220,7 @@ public class PrefetchFragmentsConfigReader {
     return (List<String>) defaults;
   }
 
-  @NonNull
-  List<String> getPredefinedViewsForContent(@NonNull Content content, @NonNull Page page) {
+  List<String> getPredefinedViewsForContent(Content content, Page page) {
     Type t = Types.getTypeOf(content);
     String lookup = (String) dispatcher.lookup(t);
     if (lookup == null) {
@@ -242,8 +240,7 @@ public class PrefetchFragmentsConfigReader {
             .orElseGet(Collections::emptyList);
   }
 
-  @NonNull
-  List<String> getPredefinedViewsForLayout(@NonNull Page page) {
+  List<String> getPredefinedViewsForLayout(Page page) {
     Content layoutContent = page.getPageGrid().getLayout();
     if (layoutContent == null) {
       return emptyList();
@@ -261,24 +258,22 @@ public class PrefetchFragmentsConfigReader {
             .orElseGet(Collections::emptyList);
   }
 
-  private static boolean isLayoutConfigMatching(@NonNull Map configMap, @NonNull Content lookupLayout) {
+  private static boolean isLayoutConfigMatching(Map<?, ?> configMap, Content lookupLayout) {
     Object layout = configMap.get(LAYOUT_KEY);
     return layout instanceof Content && layout.equals(lookupLayout);
   }
 
-  @NonNull
-  List<String> getConfiguredContentTypes(@NonNull Page page) {
+  Collection<String> getConfiguredContentTypes(Page page) {
     List<Map<String, String>> viewsForContentPagesConfigMap = getViewsConfigMapFor(page, CONTENT_TYPES);
 
     return viewsForContentPagesConfigMap.stream()
             .map(map -> map.get(TYPE))
             .filter(String.class::isInstance)
             .map(String.class::cast)
-            .collect(toList());
+            .collect(toSet());
   }
 
-  @NonNull
-  private List<Map<String, String>> getViewsConfigMapFor(@NonNull Page page, @NonNull String lookupKey) {
+  private List<Map<String, String>> getViewsConfigMapFor(Page page, String lookupKey) {
     Map<String, Object> livecontextFragmentsConfig = settingsService.settingAsMap(LIVECONTEXT_FRAGMENTS, String.class, Object.class,
             getPageContextContent(page).orElse(null));
 
@@ -301,4 +296,5 @@ public class PrefetchFragmentsConfigReader {
   Cache getCache() {
     return cache;
   }
+
 }

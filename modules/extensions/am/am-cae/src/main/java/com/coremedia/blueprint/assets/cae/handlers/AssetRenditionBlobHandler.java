@@ -89,7 +89,7 @@ public class AssetRenditionBlobHandler {
       if (assetRendition.getName().equals(cleanPropertyName)) {
         // Set content disposition header to prevent opening of new tab for download
         response.addHeader("Content-Disposition", "attachment");
-        return capBlobHandler.handleRequest(asset, eTag, cleanPropertyName, extension, webRequest);
+        return capBlobHandler.handleRequest(asset, eTag, cleanPropertyName, extension, webRequest, response);
       }
     }
     return notFound();

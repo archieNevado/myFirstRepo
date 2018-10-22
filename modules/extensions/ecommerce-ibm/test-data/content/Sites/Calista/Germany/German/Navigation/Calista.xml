@@ -17,6 +17,7 @@
 <link href="../Options/Settings/Responsive%20Image%20Settings.xml" path="/Sites/Calista/Germany/German/Options/Settings/Responsive%20Image%20Settings"/>
 <link href="../Options/Settings/Robots%2Etxt.xml" path="/Sites/Calista/Germany/German/Options/Settings/Robots%2Etxt"/>
 <link href="../Options/Settings/Preview.xml" path="/Sites/Calista/Germany/German/Options/Settings/Preview"/>
+<link href="../Options/Settings/Search%20Configuration.xml" path="/Sites/Calista/Germany/German/Options/Settings/Search%20Configuration"/>
 </linkedSettings>
 <resourceBundles2>
 </resourceBundles2>
@@ -46,6 +47,7 @@
 <link href="Microsites/Microsite%20Root%20Page.xml" path="/Sites/Calista/Germany/German/Navigation/Microsites/Microsite%20Root%20Page"/>
 <link href="../Editorial/Content/Site%20Wide/Footer/Contact%20Us/Contact%20Us%20Page.xml" path="/Sites/Calista/Germany/German/Editorial/Content/Site%20Wide/Footer/Contact%20Us/Contact%20Us%20Page"/>
 <link href="../Augmentation/%5BDEFAULT%5D%20Calista%20Spring%20Fashions.xml" path="/Sites/Calista/Germany/German/Augmentation/%5BDEFAULT%5D%20Calista%20Spring%20Fashions"/>
+<link href="../Editorial/Content/Site%20Wide/SearchResultPage.xml" path="/Sites/Calista/Germany/German/Editorial/Content/Site%20Wide/SearchResultPage"/>
 </children>
 <javaScript>
 </javaScript>
@@ -68,61 +70,93 @@
 </StructProperty>
 <StructListProperty Name="placements">
 <Struct>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/Fragments/Augmented%20Pages/Header/Wishlist%20Page.xml" cmexport:path="/Sites/Calista/Germany/German/Navigation/Fragments/Augmented%20Pages/Header/Wishlist%20Page"/>
-</LinkListProperty>
+<StructListProperty Name="extendedItems">
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/Fragments/Augmented%20Pages/Header/Wishlist%20Page.xml" cmexport:path="/Sites/Calista/Germany/German/Navigation/Fragments/Augmented%20Pages/Header/Wishlist%20Page"/>
+</Struct>
+</StructListProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/header.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Settings/Pagegrid/Placements/header"/>
 </Struct>
 <Struct>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Site%20Wide/Footer/Imprint%20Article.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Site%20Wide/Footer/Imprint%20Article"/>
-<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Site%20Wide/Footer/Contact%20Us/Contact%20Us%20Page.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Site%20Wide/Footer/Contact%20Us/Contact%20Us%20Page"/>
-<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Site%20Wide/Footer/Terms%20of%20Use.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Site%20Wide/Footer/Terms%20of%20Use"/>
-<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Site%20Wide/Footer/Privacy%20Policy.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Site%20Wide/Footer/Privacy%20Policy"/>
-</LinkListProperty>
+<StructListProperty Name="extendedItems">
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Editorial/Content/Site%20Wide/Footer/Imprint%20Article.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Site%20Wide/Footer/Imprint%20Article"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Editorial/Content/Site%20Wide/Footer/Contact%20Us/Contact%20Us%20Page.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Site%20Wide/Footer/Contact%20Us/Contact%20Us%20Page"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Editorial/Content/Site%20Wide/Footer/Terms%20of%20Use.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Site%20Wide/Footer/Terms%20of%20Use"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Editorial/Content/Site%20Wide/Footer/Privacy%20Policy.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Site%20Wide/Footer/Privacy%20Policy"/>
+</Struct>
+</StructListProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/footer.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Settings/Pagegrid/Placements/footer"/>
 </Struct>
 <Struct>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Gender%20Specific%20Teaser.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Startpage/Gender%20Specific%20Teaser"/>
-<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Fashion/The%20difference%20between%20style%20and%20fashion%20Image%20Map.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Fashion/The%20difference%20between%20style%20and%20fashion%20Image%20Map"/>
-<Link xlink:href="coremedia:///cap/resources/../Videos/Summer%20Dresses%20Video.xml" cmexport:path="/Sites/Calista/Germany/German/Videos/Summer%20Dresses%20Video"/>
-<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Men%20and%20Women%20Teaser.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Men%20and%20Women%20Teaser"/>
-</LinkListProperty>
+<StructListProperty Name="extendedItems">
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Gender%20Specific%20Teaser.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Startpage/Gender%20Specific%20Teaser"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Editorial/Content/Fashion/The%20difference%20between%20style%20and%20fashion%20Image%20Map.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Fashion/The%20difference%20between%20style%20and%20fashion%20Image%20Map"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Editorial/Content/Men%20and%20Women%20Teaser.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Men%20and%20Women%20Teaser"/>
+</Struct>
+</StructListProperty>
 <LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../Options/Viewtypes/CMChannel/hero.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Viewtypes/CMChannel/hero"/>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/hero.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Settings/Pagegrid/Placements/hero"/>
 </Struct>
 <Struct>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Women%27s%20Category.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Startpage/Women%27s%20Category"/>
-<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Women%20Shoes%20Teaser.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Startpage/Women%20Shoes%20Teaser"/>
-<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Men%27s%20Category.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Startpage/Men%27s%20Category"/>
-</LinkListProperty>
+<StructListProperty Name="extendedItems">
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Women%27s%20Category.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Startpage/Women%27s%20Category"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Women%20Shoes%20Teaser.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Startpage/Women%20Shoes%20Teaser"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Men%27s%20Category.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Startpage/Men%27s%20Category"/>
+</Struct>
+</StructListProperty>
 <LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../Options/Viewtypes/CMChannel/landscape.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Viewtypes/CMChannel/landscape"/>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/placement1.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Settings/Pagegrid/Placements/placement1"/>
 </Struct>
 <Struct>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Women%20Accessories.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Startpage/Women%20Accessories"/>
-<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Women%20Handbags.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Startpage/Women%20Handbags"/>
-</LinkListProperty>
-<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../Options/Viewtypes/CMChannel/landscape.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Viewtypes/CMChannel/landscape"/>
+<StructListProperty Name="extendedItems">
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../Videos/Summer%20Dresses%20Video.xml" cmexport:path="/Sites/Calista/Germany/German/Videos/Summer%20Dresses%20Video"/>
+</Struct>
+</StructListProperty>
+<LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../Options/Viewtypes/CMChannel/hero.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Viewtypes/CMChannel/hero"/>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/placement2.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Settings/Pagegrid/Placements/placement2"/>
 </Struct>
 <Struct>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/The%20Black%20and%20White%20Collection.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Startpage/The%20Black%20and%20White%20Collection"/>
-</LinkListProperty>
+<StructListProperty Name="extendedItems">
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/The%20Black%20and%20White%20Collection.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Startpage/The%20Black%20and%20White%20Collection"/>
+</Struct>
+</StructListProperty>
 <LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../Options/Viewtypes/CMChannel/portrait.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Viewtypes/CMChannel/portrait"/>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/placement3.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Settings/Pagegrid/Placements/placement3"/>
 </Struct>
 <Struct>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Site%20Wide/Footer%20Navigation/Women.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Site%20Wide/Footer%20Navigation/Women"/>
-<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Site%20Wide/Footer%20Navigation/Men.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Site%20Wide/Footer%20Navigation/Men"/>
-<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Site%20Wide/Footer%20Navigation/Accessories.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Site%20Wide/Footer%20Navigation/Accessories"/>
-<Link xlink:href="coremedia:///cap/resources/../Editorial/Content/Site%20Wide/Footer%20Navigation/Contact.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Site%20Wide/Footer%20Navigation/Contact"/>
-</LinkListProperty>
+<StructListProperty Name="extendedItems">
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Editorial/Content/Site%20Wide/Footer%20Navigation/Women.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Site%20Wide/Footer%20Navigation/Women"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Editorial/Content/Site%20Wide/Footer%20Navigation/Men.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Site%20Wide/Footer%20Navigation/Men"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Editorial/Content/Site%20Wide/Footer%20Navigation/Accessories.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Site%20Wide/Footer%20Navigation/Accessories"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Editorial/Content/Site%20Wide/Footer%20Navigation/Contact.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Site%20Wide/Footer%20Navigation/Contact"/>
+</Struct>
+</StructListProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Options/Settings/Pagegrid/Placements/footer-navigation.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Settings/Pagegrid/Placements/footer-navigation"/>
 </Struct>
 </StructListProperty>

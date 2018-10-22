@@ -191,7 +191,7 @@ public class LoginServiceImpl implements LoginService, InitializingBean, Disposa
               ibmFormattedPreviewDate,
               timezone,
               isTimeFixed ? "true" : "false",
-              context.getUserSegments(),
+              context.getUserSegments().orElse(null),
               String.valueOf(Math.max(1, previewTokenLifeTimeInSeconds / 60))
       );
 

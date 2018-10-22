@@ -1,8 +1,10 @@
 package com.coremedia.blueprint.cae.search.solr;
 
-import java.time.Instant;
+import org.apache.solr.common.params.MapSolrParams;
+
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Provides access to search engine specific String formatting
@@ -34,6 +36,13 @@ public final class SolrSearchFormatHelper {
 
   public static String dateToString(Date date) {
     return date.toInstant().toString();
+  }
+
+  /**
+   * Formats the given Map as Solr local params query fragment.
+   */
+  public static String formatLocalParameters(Map<String, String> map) {
+    return map.isEmpty() ? "" : new MapSolrParams(map).toLocalParamsString();
   }
 
 }

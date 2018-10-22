@@ -1,5 +1,7 @@
 [#ftl]
 [#-- @implicitly included --]
+[#-- user defined directives --]
+[#macro compress single_line][/#macro]
 [#-- @ftlvariable name="cmpage" type="com.coremedia.blueprint.common.contentbeans.Page" --]
 [#import "/lib/coremedia.com/cae.ftl" as cm]
 [#import "/lib/coremedia.com/preview.ftl" as preview]

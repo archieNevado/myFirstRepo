@@ -7,16 +7,17 @@ import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceObject;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.common.StoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 import com.coremedia.rest.linking.EntityResource;
 import com.google.common.annotations.VisibleForTesting;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.ws.rs.GET;
 import javax.ws.rs.PathParam;
 import java.util.Optional;
@@ -120,16 +121,19 @@ public abstract class AbstractCatalogResource<Entity extends CommerceObject> imp
     StoreContextProvider storeContextProvider = commerceConnection.getStoreContextProvider();
     StoreContext originalContext = commerceConnection.getStoreContext();
 
-    StoreContext clonedContext = storeContextProvider.buildContext(originalContext).build();
+    StoreContextBuilder clonedContextBuilder = storeContextProvider
+            .buildContext(originalContext)
+            .withSiteId(siteId)
+            .withWorkspaceId(workspaceId);
 
-    clonedContext.setWorkspaceId(workspaceId);
     if (catalogAlias != null && catalogAliasTranslationService != null) {
       Optional<CatalogId> catalogId = catalogAliasTranslationService.getCatalogIdForAlias(catalogAlias, siteId);
-      clonedContext.setCatalog(catalogAlias, catalogId.orElse(null));
+      clonedContextBuilder = clonedContextBuilder
+              .withCatalogId(catalogId.orElse(null))
+              .withCatalogAlias(catalogAlias);
     }
-    clonedContext.setSiteId(siteId);
 
-    return clonedContext;
+    return clonedContextBuilder.build();
   }
 
   @NonNull

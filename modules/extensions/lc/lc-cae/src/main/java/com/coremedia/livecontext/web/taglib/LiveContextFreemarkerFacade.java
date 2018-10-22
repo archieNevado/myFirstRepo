@@ -15,16 +15,15 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.common.StringValueObject;
 import com.coremedia.livecontext.fragment.FragmentContext;
 import com.coremedia.livecontext.fragment.FragmentContextProvider;
 import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
 import com.coremedia.objectserver.web.taglib.MetadataTagSupport;
 import com.google.common.collect.ImmutableMap;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Currency;
@@ -118,8 +117,8 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
     ImmutableMap.Builder<String, Object> builder = ImmutableMap.builder();
     builder
             .put(CATALOG_ID, parameters.getCatalogId()
-                    .map(StringValueObject::value)
-                    .orElseGet(storeContext::getCatalogId))
+                    .orElseGet(() -> storeContext.getCatalogId().get())
+                    .value())
             .put(LANG_ID, "" + storeContext.getLocale())
             .put(SITE_ID, storeContext.getSiteId())
             .put(STORE_ID, parameters.getStoreId());
@@ -136,6 +135,7 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
 
   /**
    * Checks if the current fragment request targets an Augmented Page (NO Category Page, NO Product Page)
+   *
    * @param parameters fragment parameters
    * @return true if request targets an Augmented Page
    */
@@ -179,7 +179,7 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
   }
 
   @NonNull
-  public FragmentContext fragmentContext() {
+  private FragmentContext fragmentContext() {
     return FragmentContextProvider.getFragmentContext(FreemarkerEnvironment.getCurrentRequest());
   }
 

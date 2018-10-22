@@ -33,7 +33,7 @@
   </DocType>
 
   <!--
-      Represents a user-segment definition.
+      Represents a customer-segment definition.
   -->
   <DocType Name="CMSegment" Parent="CMLocalized">
     <XmlProperty Name="description" Grammar="coremedia-richtext-1.0"/>

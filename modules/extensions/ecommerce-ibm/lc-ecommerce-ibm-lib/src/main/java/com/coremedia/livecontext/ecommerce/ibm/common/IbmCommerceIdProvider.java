@@ -4,9 +4,10 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdP
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdBuilder;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.Vendor;
-
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
+@DefaultAnnotation(NonNull.class)
 public class IbmCommerceIdProvider extends BaseCommerceIdProvider {
 
   static final Vendor IBM = Vendor.of("ibm");
@@ -15,8 +16,7 @@ public class IbmCommerceIdProvider extends BaseCommerceIdProvider {
     super(IBM);
   }
 
-  @NonNull
-  public static CommerceIdBuilder commerceId(@NonNull CommerceBeanType beanType) {
+  public static CommerceIdBuilder commerceId(CommerceBeanType beanType) {
     return BaseCommerceIdProvider.commerceId(IBM, beanType);
   }
 }

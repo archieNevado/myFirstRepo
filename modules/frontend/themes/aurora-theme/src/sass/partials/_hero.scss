@@ -1,11 +1,14 @@
 // Hero Teaser
 // =====================================================================================================================
 
+/* hero teaser container */
+.cm-container--hero {
+  margin-bottom: $cm-hero-default-size*2;
+}
+
 //Customize the _hero.scss with additional styles
 .#{$cm-hero-prefix} {
   &__picture-box {
-    @include aspect-ratio-box(5, 2);
-
     @include breakpoint(xs, portrait) {
       @include aspect-ratio-box(3, 4);
     }
@@ -20,59 +23,41 @@
   }
 
   &__caption {
-    top: 0;
-    bottom: 0;
-  }
+    display: flex; // do not let whitespaces between tags cause additional spacing between elements
+    flex-direction: column;
+    margin: 0;
 
-  &__cta,
-  &__headline,
-  &__text {
-    margin-bottom: 0;
-  }
-
-  &__info {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    width: auto;
-    background-color: rgba(255,255,255,0.8);
+    a:hover {
+      text-decoration: none;
+    }
   }
 
   &__headline {
-    position: absolute;
-    top: 0;
-    left: 0;
-    color: #4d4d4d;
-    background-color: rgba(255, 255, 255, 0.8);
-    text-align: left;
-    text-shadow: none;
-    padding: .433333rem .93333rem .566667rem .93333rem;
-    font-size: 1.2rem;
-    line-height: 1.4rem;
+    font-size: 20px;
+    text-transform: uppercase;
+    padding-bottom: $cm-hero-default-size/2;
+  }
 
-    @include breakpoint(sm) {
-      padding: .36rem .54em;
-      font-size: 1.46rem;
-      line-height: 1.8rem;
-    }
-
-    @include breakpoint(xs) {
-      padding: .3rem .45rem;
-      font-size: 1.2rem;
-      line-height: 1.46rem;
-    }
+  &__text {
+    line-height: $cm-hero-default-size;
+    font-size: 14px;
   }
 
   &__cta {
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
+    margin-top: $cm-hero-default-size/2;
   }
 
-  &--product {
-    // hide cta
-    .#{$cm-hero-prefix}__cta {
+  &__dimmer {
+    background: linear-gradient(to bottom, rgba(238, 238, 238, 0) 50%, rgba(51, 51, 51, 0.65) 100%);
+  }
+
+  .cm-product-info {
+    &__title {
       display: none;
+    }
+
+    .cm-price {
+      color: #fff;
     }
   }
 

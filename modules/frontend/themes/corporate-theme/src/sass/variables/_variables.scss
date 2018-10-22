@@ -23,15 +23,21 @@ $carousel-height: 40px;
 // Animations
 $transition-duration: 0.35s;
 
-//Search
-$search-height: 50px;
-$search-width: 300px;
-$search-small-width: 250px;
-
 $dimmer-opacity: 0.7;
 
 //Responsive Carousel
 $cm-responsive-carousel-item-font-size: 18px;
+
+//Search
+$cm-search-result-highlight-color: inherit;
+$cm-search-input-vertical-spacing: 50px;
+$cm-search-input-width: 300px;
+$cm-search-input-small-width: 250px;
+$cm-search-link-color: $brand-primary;
+$cm-search-link-color-hover: $brand-primary;
+$cm-search-result-date-color: palette(grey);
+$cm-search-filter-open: "\e113";
+$cm-search-filter-close: "\e113";
 
 //
 // Breakpoints
@@ -43,6 +49,7 @@ $cm-responsive-carousel-item-font-size: 18px;
 //
 $breakpoints: (
         "xs": "screen and (max-width: #{$screen-xs-max})",
+        "xs-and-up": "screen and (min-width: 0)",
         "sm": "screen and (min-width: #{$screen-sm-min}) and (max-width: #{$screen-sm-max})",
         "sm-and-up": "screen and (min-width: #{$screen-sm-min})",
         "md": "screen and (min-width: #{$screen-md-min})",

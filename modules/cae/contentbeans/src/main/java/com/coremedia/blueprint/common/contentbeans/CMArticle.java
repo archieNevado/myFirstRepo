@@ -9,14 +9,7 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * <p>
- * Currently CMArticle has no additional features compared to CMTeasable.
- * However, we decided to keep the abstract CMTeasable and the concrete CMArticle
- * in order to facilitate future changes.
- * </p>
- * <p>
  * Represents the document type {@link #NAME CMArticle}.
- * </p>
  *
  * @cm.template.api
  */
@@ -26,7 +19,6 @@ public interface CMArticle extends CMTeasable {
    * {@link com.coremedia.cap.content.ContentType#getName() Name of the ContentType} 'CMArticle'.
    */
   String NAME = "CMArticle";
-
 
   /**
    * Returns the value of the document property {@link #MASTER}.
