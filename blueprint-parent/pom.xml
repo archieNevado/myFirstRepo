@@ -37,7 +37,7 @@
     <studio.version>1810.1</studio.version>
     <caetoolbox.version>1810.1</caetoolbox.version>
     <livecontext.version>1810.1</livecontext.version>
-    <jangaroo.version>4.0.60</jangaroo.version>
+    <jangaroo.version>4.0.62</jangaroo.version>
 
     <atlassian.crowd.version>2.5.1</atlassian.crowd.version>
     <!--
