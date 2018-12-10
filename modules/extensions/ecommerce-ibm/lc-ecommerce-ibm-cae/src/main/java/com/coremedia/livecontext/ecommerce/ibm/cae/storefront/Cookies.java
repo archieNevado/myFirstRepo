@@ -37,7 +37,7 @@ class Cookies {
 
     String joinedCookies = COOKIE_JOINER.withKeyValueSeparator('=').join(cookies);
 
-    if (isNullOrEmpty(headerValue)) { // NOSONAR squid:S4449 false positive caused by SONARJAVA-2776
+    if (isNullOrEmpty(headerValue)) {
       return joinedCookies;
     } else {
       return COOKIE_JOINER.join(headerValue, joinedCookies);

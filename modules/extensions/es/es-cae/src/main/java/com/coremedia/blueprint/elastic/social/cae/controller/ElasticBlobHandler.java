@@ -12,6 +12,7 @@ import com.coremedia.transform.BlobTransformer;
 import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -213,7 +214,7 @@ public class ElasticBlobHandler extends HandlerBase {
 
   // --- Handlers ------------------------------------------------------------------------------------------------------
 
-  @RequestMapping(value = SIMPLE_URI_PATTERN)
+  @GetMapping(value = SIMPLE_URI_PATTERN)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_SITE) String rootSegment,
                                     @PathVariable(SEGMENT_ID) String imageId,
                                     @PathVariable(SEGMENT_ETAG) String eTag,
@@ -258,7 +259,7 @@ public class ElasticBlobHandler extends HandlerBase {
   }
 
 
-  @RequestMapping(value = URI_PATTERN)
+  @GetMapping(value = URI_PATTERN)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_SITE) String siteId,
                                     @PathVariable(SEGMENT_ID) String imageId,
                                     @PathVariable(SEGMENT_ETAG) String eTag,

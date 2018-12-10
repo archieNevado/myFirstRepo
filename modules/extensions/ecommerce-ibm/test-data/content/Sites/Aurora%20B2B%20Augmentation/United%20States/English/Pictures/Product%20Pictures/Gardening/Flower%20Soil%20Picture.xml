@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <CMPicture folder="/Sites/Aurora B2B Augmentation/United States/English/Pictures/Product Pictures/Gardening" name="Flower Soil Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
-<locale>fr-FR</locale>
+<locale>en-US</locale>
 <master>
 </master>
 <viewtype>
@@ -17,13 +17,13 @@
 </StructProperty>
 <StructProperty Name="transforms">
 <Struct>
-<StringProperty Name="portrait_ratio20x31">b;a=0;c=1/crop;x=614;y=0;width=696;height=1080</StringProperty>
-<StringProperty Name="portrait_ratio3x4">b;a=0;c=1/crop;x=556;y=0;width=808;height=1080</StringProperty>
-<StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=421;y=0;width=1078;height=1080</StringProperty>
-<StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=242;y=0;width=1436;height=1080</StringProperty>
-<StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=5;y=0;width=1915;height=1080</StringProperty>
-<StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=0;y=155;width=1920;height=770</StringProperty>
-<StringProperty Name="landscape_ratio4x1">b;a=0;c=1/crop;x=0;y=300;width=1920;height=479</StringProperty>
+<StringProperty Name="portrait_ratio20x31">b;a=0;c=1/crop;x=613;y=0;width=697;height=1080</StringProperty>
+<StringProperty Name="portrait_ratio3x4">b;a=0;c=1/crop;x=555;y=0;width=810;height=1080</StringProperty>
+<StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=419;y=0;width=1080;height=1080</StringProperty>
+<StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=242;y=0;width=1440;height=1080</StringProperty>
+<StringProperty Name="landscape_ratio16x9">b;a=0;c=1</StringProperty>
+<StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=0;y=157;width=1920;height=768</StringProperty>
+<StringProperty Name="landscape_ratio4x1">b;a=0;c=1/crop;x=0;y=300;width=1920;height=480</StringProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="relative">
@@ -96,6 +96,8 @@
 </pictures>
 <related>
 </related>
+<authors>
+</authors>
 <alt>Flower Magic 02</alt>
 <copyright></copyright>
 <dataUrl></dataUrl>

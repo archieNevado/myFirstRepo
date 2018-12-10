@@ -14,7 +14,6 @@
   border-radius: 0;
 
   &:hover {
-    // important is needed to show the underline on shop-now buttons
     text-decoration: underline;
     background-color: rgba(255, 255, 255, 1);
   }
@@ -58,4 +57,19 @@
     padding: 14px;
   }
 
+}
+
+
+// shop-now buttons (hidden on mobile)
+.cm-button-group--shopnow {
+  display: none;
+  .cm-button-group__button {
+    min-width: 105px;
+  }
+
+  @include breakpoint(md){
+    :hover > & {
+      display: block;
+    }
+  }
 }

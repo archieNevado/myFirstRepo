@@ -26,6 +26,17 @@ This is the development cookbook for the CoreMedia Blueprint. It contains recipe
 * blueprint-tools
 * fpm-tng (~> 0.1.7)
 * chef-sugar (~> 3.0)
+* repository (= 0.1.8)
+* reprepro (= 1.0.0)
+* ruby_installer (= 0.1.3)
+* gpg (= 0.3.0)
+* nginx (= 8.1.2)
+* zypper (= 0.4.0)
+* build-essential (= 8.1.1)
+* yum-epel (= 3.1.0)
+* ohai (= 5.2.2)
+* apt (= 7.0.0)
+* apache2 (= 5.0.1)
 
 # Attributes
 

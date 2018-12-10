@@ -67,7 +67,8 @@
                                            propertyName="{AUTOPLAY_PROPERTY_NAME}"
                                            labelProperty="boxLabel"/>
             <ui:BindPropertyPlugin bidirectional="true"
-                                   bindTo="{config.bindTo.extendBy(ContentPropertyNames.PROPERTIES, AUTOPLAY_PROPERTY_NAME)}"/>
+                                   bindTo="{config.bindTo.extendBy(ContentPropertyNames.PROPERTIES, AUTOPLAY_PROPERTY_NAME)}"
+                                   ifUndefined="{false}"/>
             <editor:ShowIssuesPlugin bindTo="{config.bindTo}"
                                      hideIssues="false"
                                      ifUndefined="false"
@@ -84,6 +85,7 @@
                                            propertyName="{MUTE_PROPERTY_NAME}"
                                            labelProperty="boxLabel"/>
             <ui:BindPropertyPlugin bidirectional="true"
+                                   ifUndefined="{false}"
                                    bindTo="{config.bindTo.extendBy(ContentPropertyNames.PROPERTIES, MUTE_PROPERTY_NAME)}"/>
             <editor:ShowIssuesPlugin bindTo="{config.bindTo}"
                                      ifUndefined="false"
@@ -101,6 +103,7 @@
                                            propertyName="{LOOP_PROPERTY_NAME}"
                                            labelProperty="boxLabel"/>
             <ui:BindPropertyPlugin bidirectional="true"
+                                   ifUndefined="{false}"
                                    bindTo="{config.bindTo.extendBy(ContentPropertyNames.PROPERTIES, LOOP_PROPERTY_NAME)}"/>
             <editor:ShowIssuesPlugin bindTo="{config.bindTo}"
                                      ifUndefined="false"
@@ -118,6 +121,7 @@
                                            propertyName="{HIDE_CONTROLS_PROPERTY_NAME}"
                                            labelProperty="boxLabel"/>
             <ui:BindPropertyPlugin bidirectional="true"
+                                   ifUndefined="{false}"
                                    bindTo="{config.bindTo.extendBy(ContentPropertyNames.PROPERTIES, HIDE_CONTROLS_PROPERTY_NAME)}"/>
             <editor:ShowIssuesPlugin bindTo="{config.bindTo}"
                                      hideIssues="false"

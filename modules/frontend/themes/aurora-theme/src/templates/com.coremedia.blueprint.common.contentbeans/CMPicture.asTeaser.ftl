@@ -5,4 +5,5 @@
   "isLast": isLast,
   "renderDimmer": false,
   "renderLink": false
-}/>
+} + cm.localParameters() />
+

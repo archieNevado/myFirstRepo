@@ -4,6 +4,7 @@ import com.coremedia.blueprint.common.contentbeans.CMTheme;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.google.common.collect.ImmutableMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,7 +37,7 @@ public class ThemeHandler extends HandlerBase {
 
   // --- Handlers ------------------------------------------------------------------------------------------------------
 
-  @RequestMapping(value = URI_PATTERN)
+  @GetMapping(value = URI_PATTERN)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ID) CMTheme theme,
                                     @RequestParam(value = VIEW_PARAMETER, required = false) String view) {
 

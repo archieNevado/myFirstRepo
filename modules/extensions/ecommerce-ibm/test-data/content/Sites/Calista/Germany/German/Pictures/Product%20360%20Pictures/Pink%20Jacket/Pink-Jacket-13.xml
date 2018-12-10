@@ -10,14 +10,14 @@
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="commerce">
 <Struct>
-<BooleanProperty Name="inherit">true</BooleanProperty>
+<BooleanProperty Name="inherit">false</BooleanProperty>
 <StringListProperty Name="originReferences">
-<String>ibm:///catalog/sku/PC_PINK_JACKET_SKU</String>
-<String>ibm:///catalog/product/PC_PINK_JACKET</String>
+<String>ibm:///catalog/sku/WCL001_010703</String>
+<String>ibm:///catalog/product/WCL001_0107</String>
 </StringListProperty>
 <StringListProperty Name="references">
-<String>ibm:///catalog/sku/PC_PINK_JACKET_SKU</String>
-<String>ibm:///catalog/product/PC_PINK_JACKET</String>
+<String>ibm:///catalog/sku/WCL001_010703</String>
+<String>ibm:///catalog/product/WCL001_0107</String>
 </StringListProperty>
 </Struct>
 </StructProperty>
@@ -109,6 +109,8 @@
 </pictures>
 <related>
 </related>
+<authors>
+</authors>
 <alt>Rosa-Jacke-13</alt>
 <copyright>CoreMedia AG und PackShotCreator</copyright>
 <dataUrl></dataUrl>

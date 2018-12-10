@@ -27,6 +27,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriTemplate;
@@ -129,7 +130,7 @@ public class P13NPlacementHandlerTest {
 
     MockHttpServletRequest mockRequest = new MockHttpServletRequest();
 
-    ModelAndView modelAndView = testling.handleRequest("helios", channel, "pagegrid", "header", "myView", mockRequest);
+    ModelAndView modelAndView = testling.handleRequest("helios", channel, "pagegrid", "header", "myView", mockRequest, new MockHttpServletResponse());
 
     assertThat(modelAndView.getViewName()).isEqualTo("myView");
     assertThat(modelAndView.getModel().get("self")).isInstanceOf(ContentBeanBackedPageGridPlacement.class);
@@ -149,7 +150,7 @@ public class P13NPlacementHandlerTest {
 
     MockHttpServletRequest mockRequest = new MockHttpServletRequest();
 
-    ModelAndView modelAndView = testling.handleRequest("helios", cmContentBean, "pdpPagegrid", "additional", "myView", mockRequest);
+    ModelAndView modelAndView = testling.handleRequest("helios", cmContentBean, "pdpPagegrid", "additional", "myView", mockRequest, new MockHttpServletResponse());
 
     assertThat(modelAndView.getViewName()).isEqualTo("myView");
     assertThat(modelAndView.getModel().get("self")).isInstanceOf(ContentBeanBackedPageGridPlacement.class);
@@ -161,7 +162,7 @@ public class P13NPlacementHandlerTest {
   public void testHandleFragmentRequestWrongContent() {
     CMArticle cmArticle = mock(CMArticle.class);
 
-    ModelAndView modelAndView = testling.handleRequest("helios", cmArticle, "pagegrid", "header", "myView", new MockHttpServletRequest());
+    ModelAndView modelAndView = testling.handleRequest("helios", cmArticle, "pagegrid", "header", "myView", new MockHttpServletRequest(), new MockHttpServletResponse());
     assertThat(modelAndView.getModel()).isEqualTo(HandlerHelper.notFound().getModel());
   }
 

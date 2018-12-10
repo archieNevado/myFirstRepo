@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <CMFolderProperties folder="/Sites/Aurora B2B Augmentation/Germany/German/Editorial/Products" name="_folderProperties" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
-<locale></locale>
+<locale>de-DE</locale>
 <master>
 <link href="../../../../United%20States/English/Editorial/Products/_folderProperties.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Products/_folderProperties"/>
 </master>

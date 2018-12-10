@@ -15,7 +15,6 @@ import com.coremedia.livecontext.ecommerce.ibm.login.WcPreviewToken;
 import com.coremedia.livecontext.ecommerce.ibm.login.WcSession;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.objectserver.dataviews.DataViewHelper;
-import com.coremedia.security.encryption.util.EncryptionServiceUtil;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableList;
@@ -28,6 +27,8 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
@@ -52,8 +53,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,7 +63,6 @@ import java.lang.reflect.Type;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -75,6 +73,8 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper.decodeEntryTransparently;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper.replaceTokensAndDecrypt;
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_6;
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_7;
 import static java.util.Collections.emptyList;
@@ -539,7 +539,7 @@ public class WcRestConnector {
       if (mustBeAuthenticated && WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(storeContext))) {
         //use basic authentication for wcs >= 7.8
         String user = CommercePropertyHelper.replaceTokens(serviceUser, storeContext);
-        String pass = CommercePropertyHelper.replaceTokens(servicePassword, storeContext);
+        String pass = getServicePassword(storeContext);
         String credentials = Base64.getEncoder().encodeToString((user + ":" + pass).getBytes(StandardCharsets.UTF_8));
         headers.put("Authorization", "Basic " + credentials);
       } else if (mustBeAuthenticated && !WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(storeContext))) {
@@ -554,7 +554,7 @@ public class WcRestConnector {
   @Nullable
   private WcCredentials getPreviewCredentials(@Nullable StoreContext storeContext) {
     String user = CommercePropertyHelper.replaceTokens(contractPreviewUserName, storeContext);
-    String password = CommercePropertyHelper.replaceTokens(contractPreviewUserPassword, storeContext);
+    String password = getContractPreviewUserPassword(storeContext);
 
     PreviewUserCacheKey cacheKey = new PreviewUserCacheKey(user, password, storeContext, commerceCache, loginService);
 
@@ -800,7 +800,12 @@ public class WcRestConnector {
 
   @Required
   public void setContractPreviewUserPassword(String contractPreviewUserPassword) {
-    this.contractPreviewUserPassword = EncryptionServiceUtil.decodeEntryTransparently(contractPreviewUserPassword);
+    this.contractPreviewUserPassword = decodeEntryTransparently(contractPreviewUserPassword);
+  }
+
+  @NonNull
+  private String getContractPreviewUserPassword(@Nullable StoreContext storeContext) {
+    return replaceTokensAndDecrypt(contractPreviewUserPassword, storeContext);
   }
 
   @Required
@@ -810,7 +815,12 @@ public class WcRestConnector {
 
   @Required
   public void setServicePassword(String servicePassword) {
-    this.servicePassword = EncryptionServiceUtil.decodeEntryTransparently(servicePassword);
+    this.servicePassword = decodeEntryTransparently(servicePassword);
+  }
+
+  @NonNull
+  public String getServicePassword(@NonNull StoreContext storeContext) {
+    return replaceTokensAndDecrypt(servicePassword, storeContext);
   }
 
   @Required

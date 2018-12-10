@@ -15,3 +15,6 @@ depends 'compat_resource', '~> 12.19.0'
 # to automatically install java_se extract the `java_se.tgz` downloaded from https://supermarket.chef.io/cookbooks/java_se
 # to the `thirdparty-cookbooks` directory and add `java_se::default` at the beginning of your runlist.
 suggests 'java_se', '~> 8.0'
+
+# fix transitive dependencies
+depends 'ohai', '= 5.2.2'

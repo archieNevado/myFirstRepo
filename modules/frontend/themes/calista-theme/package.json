@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "build": "webpack",
+    "deploy": "cm theme-importer deploy-theme",
     "start": "cm monitor",
     "theme-importer": "cm theme-importer",
     "prettier": "prettier \"**/*\" --write"

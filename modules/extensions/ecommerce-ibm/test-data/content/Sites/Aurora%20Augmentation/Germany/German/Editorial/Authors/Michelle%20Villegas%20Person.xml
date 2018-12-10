@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMPerson folder="/Sites/Aurora Augmentation/Germany/German/Editorial/Authors" name="Michelle Villegas Person" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
+<locale>de-DE</locale>
+<master>
+<link href="../../../../United%20States/English/Editorial/Authors/Michelle%20Villegas%20Person.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Authors/Michelle%20Villegas%20Person"/>
+</master>
+<viewtype>
+</viewtype>
+<linkedSettings>
+</linkedSettings>
+<resourceBundles2>
+</resourceBundles2>
+<segment></segment>
+<title></title>
+<htmlTitle></htmlTitle>
+<keywords></keywords>
+<htmlDescription></htmlDescription>
+<subjectTaxonomy>
+</subjectTaxonomy>
+<locationTaxonomy>
+</locationTaxonomy>
+<contexts>
+</contexts>
+<teaserTitle></teaserTitle>
+<teaserText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p>Ich glaube an großartige Haare und bunte Mode. Ich schreibe für Calista. Wein.</p><p/></div></teaserText>
+<detailText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p>Michelle ist ursprünglich aus Maryland und studierte in New York an der Parsons Designschule. Sie hat bereits für viele große Mode- und Designmagazine aus Europa und Nordamerika geschrieben.</p><p>Sie organisiert die jährliche "Empire State" Modenschau in New York.</p></div></detailText>
+<pictures>
+<link href="../../Pictures/Authors/Michelle%20Villegas%20Picture.xml" path="/Sites/Aurora%20Augmentation/Germany/German/Pictures/Authors/Michelle%20Villegas%20Picture"/>
+</pictures>
+<related>
+</related>
+<authors>
+</authors>
+<firstName>Michelle</firstName>
+<lastName>Villegas</lastName>
+<displayName></displayName>
+<eMail></eMail>
+<organization>Aurora</organization>
+<jobTitle>Modechefredakteurin</jobTitle>
+<misc>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StringProperty Name="instagram">https://instagram.com/coremediacloud/</StringProperty>
+<StringProperty Name="twitter">https://twitter.com/coremedia</StringProperty>
+</Struct>
+</misc>
+</CMPerson>

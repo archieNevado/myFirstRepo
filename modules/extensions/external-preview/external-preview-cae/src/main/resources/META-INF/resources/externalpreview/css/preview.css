@@ -2,8 +2,6 @@
 
 /**
   * coremedia blueprint modules external-preview
-  *
-  * @copyright CoreMedia
   */
 
 body {
@@ -16,7 +14,7 @@ body {
   box-sizing: border-box;
   padding: 5px 10%;
   width: 100%;
-  background-color: #2771C5;
+  background-color: #006CAE;
 }
 .preview-name {
   float: left;
@@ -30,6 +28,9 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.preview-name label {
+  line-height: 22px;
 }
 .preview-url {
   float: left;
@@ -46,7 +47,7 @@ body {
   padding: 2px 3px;
   width: 100%;
   height: 16px;
-  border: 1px solid #2771C5;
+  border: 1px solid #006CAE;
   border-right: none;
   -webkit-border-radius: 2px 0 0 2px;
   -moz-border-radius: 2px 0 0 2px;
@@ -65,16 +66,16 @@ body {
   position: absolute;
   width: 26px;
   height: 22px;
-  border: 1px solid #2771C5;
+  border: 1px solid #006CAE;
   -webkit-border-radius: 0 2px 2px 0;
   -moz-border-radius: 0 2px 2px 0;
   border-radius: 0 2px 2px 0;
   border-left: none;
-  background: #FFF url(../images/url-reload-trigger-btn.png) no-repeat right 0;
+  background: #FFFFFF url(../images/url-reload-trigger-btn.png) no-repeat right 2px;
   cursor: pointer;
 }
 .preview-button button:active {
-  background: #FFF url(../images/url-reload-trigger-btn.png) no-repeat right 1px;
+  background: #FFFFFF url(../images/url-reload-trigger-btn.png) no-repeat right 3px;
 }
 .preview-button button span {
   display: none;

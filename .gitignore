@@ -1,35 +1,58 @@
+# IntelliJ Idea:
 *.iml
 *.ipr
 *.iws
 .idea/
-# maven:
+
+# Maven:
 target/
 overlays/
-# eclipse:
+.m2/
+.mvn/timing.properties
+
+# Eclipse:
 .classpath
 .project
 .settings/
-# Logs:
-*.log
-*.out
-# git:
-*.orig
-# OS X
-.DS_Store
-# Emacs
-*~
-# Grunt/NPM:
-node/
-node_modules/
-**/*-theme/node
-# Logs:
-*.log
-*.out
-.npm-debug.log
+
 # Sass:
 .sass-cache/
 *.css.map
-# chef deployment
+
+# NPM:
+/**/node/
+/**/node_modules/
+
+# Logs:
+*.log
+*.out
+.npm-debug.log*
+*.pid
+
+# Git:
+*.orig
+*.rej
+
+# OS X:
+.DS_Store
+
+# Emacs
+*~
+
+# Jenkins
+.repository
+
+# TeX
+*.aux
+*.lof
+*.toc
+
+# Sencha Cmd
+.sencha/.cvsignore
+.sencha/.gitignore
+.remote-packages/
+
+# Chef
 .kitchen
 .kitchen.local.yml
 .rakeTasks

@@ -4,9 +4,10 @@ import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialCo
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.elastic.social.api.ContributionType;
 import com.coremedia.objectserver.web.links.Link;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
@@ -36,7 +37,7 @@ public class ReviewsResultHandler extends AbstractReviewsResultHandler {
           "/{" + CONTEXT_ID + "}" +
           "/{" + ID + "}";
 
-  @RequestMapping(value = DYNAMIC_PATTERN_REVIEWS, method = RequestMethod.GET)
+  @GetMapping(value = DYNAMIC_PATTERN_REVIEWS)
   public ModelAndView getReviews(@PathVariable(CONTEXT_ID) String contextId,
                                  @PathVariable(ID) String targetId,
                                  @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,
@@ -44,7 +45,7 @@ public class ReviewsResultHandler extends AbstractReviewsResultHandler {
     return handleGetReviews(SiteHelper.getSiteFromRequest(request), contextId, targetId, view);
   }
 
-  @RequestMapping(value = DYNAMIC_PATTERN_REVIEWS, method = RequestMethod.POST)
+  @PostMapping(value = DYNAMIC_PATTERN_REVIEWS)
   public ModelAndView createReview(@PathVariable(CONTEXT_ID) String contextId,
                                    @PathVariable(ID) String targetId,
                                    @RequestParam(value = "text", required = false) String text,

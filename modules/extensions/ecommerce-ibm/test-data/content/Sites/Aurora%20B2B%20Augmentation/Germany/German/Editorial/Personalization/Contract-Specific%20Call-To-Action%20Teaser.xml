@@ -26,6 +26,8 @@
 </pictures>
 <related>
 </related>
+<authors>
+</authors>
 <items>
 </items>
 <rules grammarName="coremedia-selectionrules-1.0"><rules version="1.0" xmlns="http://www.coremedia.com/2010/selectionrules" xmlns:xlink="http://www.w3.org/1999/xlink">select <content xlink:href="coremedia:///cap/resources/Contract-Specific%20Call-To-Action/Anna%20Frank80c98149.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/Germany/German/Editorial/Personalization/Contract-Specific%20Call-To-Action/Anna%20Franklin%20Contact%20Person%20Teaser"/> if commerce.usersegments#"ibm:///catalog/segment/8500000000000323453" or commerce.usersegments#"ibm:///catalog/segment/8500000000000323452"; select <content xlink:href="coremedia:///cap/resources/Contract-Specific%20Call-To-Action/Interior%20Aeaa40417.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/Germany/German/Editorial/Personalization/Contract-Specific%20Call-To-Action/Interior%20Architects%20Contact%20Person%20Teaser"/> if commerce.usersegments#"ibm:///catalog/segment/8500000000000323451"</rules></rules>

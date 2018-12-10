@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <CMPicture folder="/Sites/Aurora B2B Augmentation/Germany/German/Pictures/Product Category Pictures/Decorating/Lighting" name="Lighting Category Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
-<locale></locale>
+<locale>de-DE</locale>
 <master>
 <link href="../../../../../../United%20States/English/Pictures/Product%20Category%20Pictures/Decorating/Lighting/Lightc0dc71ba.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Pictures/Product%20Category%20Pictures/Decorating/Lighting/Lighting%20Category%20Picture"/>
 </master>
@@ -23,7 +23,7 @@
 <StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=532;y=479;width=1451;height=1453</StringProperty>
 <StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=471;y=611;width=1566;height=1175</StringProperty>
 <StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=255;y=626;width=2006;height=1128</StringProperty>
-<StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=0;y=696;width=2500;height=1005</StringProperty>
+<StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=0;y=693;width=2500;height=1000</StringProperty>
 <StringProperty Name="landscape_ratio4x1">b;a=0;c=1/crop;x=131;y=1198;width=2191;height=549</StringProperty>
 </Struct>
 </StructProperty>
@@ -96,6 +96,8 @@
 </pictures>
 <related>
 </related>
+<authors>
+</authors>
 <alt></alt>
 <copyright>caimacanul / Shutterstock 251386747</copyright>
 <dataUrl></dataUrl>

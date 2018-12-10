@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.ecommerce.ibm.cae.sitemap;
 
 import com.coremedia.blueprint.cae.sitemap.SitemapGenerationController;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -19,7 +20,7 @@ public class WcsCalistaSitemapGenerationHandler extends SitemapGenerationControl
           "/{" + SEGMENT_ROOT + '}' +
           '/' + WCS_CALISTA;
 
-  @RequestMapping(URI_PATTERN)
+  @GetMapping(URI_PATTERN)
   public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) {
     return handleRequestInternal(request, response);
   }

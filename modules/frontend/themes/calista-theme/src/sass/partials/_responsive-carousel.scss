@@ -30,17 +30,8 @@
   // shop now button
   .cm-teasable {
     .cm-button-group--shopnow {
-      display: none;
       font-size: $cm-responsive-carousel-item-font-size;
       padding-top: calculatePaddingTop(1, 1 / 2);
-    }
-
-    @include breakpoint(sm-and-up) {
-      &:hover {
-        .cm-button-group--shopnow {
-          display: block;
-        }
-      }
     }
   }
 

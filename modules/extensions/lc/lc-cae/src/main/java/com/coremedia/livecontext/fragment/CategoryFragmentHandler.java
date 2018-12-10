@@ -18,12 +18,13 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.navigation.LiveContextCategoryNavigation;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.util.Objects.requireNonNull;
@@ -58,18 +59,14 @@ public class CategoryFragmentHandler extends FragmentHandler {
               + request.getRequestURI());
     }
 
-    CommerceConnection currentConnection = CurrentCommerceConnection.get();
-    StoreContext storeContext = currentConnection.getStoreContext();
-    CatalogService catalogService = requireNonNull(currentConnection.getCatalogService(), "No catalog service configured for commerce connection '" + currentConnection + "'.");
-    CommerceIdProvider idProvider = requireNonNull(currentConnection.getIdProvider(), "id provider not available");
+    String categoryExtId = parameters.getCategoryId();
 
-    CatalogAlias catalogAlias = storeContext.getCatalogAlias();
-
-    String categoryExtId= parameters.getCategoryId();
-    CommerceId formatCategoryId = useStableIds
-            ? idProvider.formatCategoryId(catalogAlias, categoryExtId)
-            : idProvider.formatCategoryTechId(catalogAlias, categoryExtId);
-    Category categoryById = catalogService.findCategoryById(formatCategoryId, storeContext);
+    Category categoryById = findCategory(categoryExtId).orElse(null);
+    if (categoryById == null) {
+      return HandlerHelper.notFound(getClass().getName() + " did not find category for storeId \""
+              + parameters.getStoreId() + "\", locale \"" + parameters.getLocale() + "\", category id \""
+              + categoryExtId + "\"");
+    }
 
     Navigation navigation = contextStrategy.resolveContext(site, categoryById).orElse(null);
     if (navigation == null) {
@@ -88,6 +85,23 @@ public class CategoryFragmentHandler extends FragmentHandler {
     enhanceModelAndView(modelAndView, navigation);
 
     return modelAndView;
+  }
+
+  @NonNull
+  private Optional<Category> findCategory(@NonNull String categoryExtId) {
+    CommerceConnection currentConnection = CurrentCommerceConnection.get();
+    CatalogService catalogService = requireNonNull(currentConnection.getCatalogService(),
+            "No catalog service configured for commerce connection '" + currentConnection + "'.");
+    CommerceIdProvider idProvider = requireNonNull(currentConnection.getIdProvider(), "Id provider not available.");
+    StoreContext storeContext = currentConnection.getStoreContext();
+
+    CatalogAlias catalogAlias = storeContext.getCatalogAlias();
+    CommerceId formatCategoryId = useStableIds
+            ? idProvider.formatCategoryId(catalogAlias, categoryExtId)
+            : idProvider.formatCategoryTechId(catalogAlias, categoryExtId);
+
+    Category category = catalogService.findCategoryById(formatCategoryId, storeContext);
+    return Optional.ofNullable(category);
   }
 
   @NonNull

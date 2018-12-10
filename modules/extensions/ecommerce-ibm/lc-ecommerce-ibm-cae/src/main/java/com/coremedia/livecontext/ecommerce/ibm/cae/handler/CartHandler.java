@@ -25,9 +25,10 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -103,7 +104,7 @@ public class CartHandler extends LiveContextPageHandlerBase {
 
   // --- Handlers ------------------------------------------------------------------------------------------------------
 
-  @RequestMapping(value = URI_PATTERN, method = RequestMethod.GET)
+  @GetMapping(value = URI_PATTERN)
   public View handleRequest(@PathVariable(SEGMENT_ROOT) String context, HttpServletRequest request,
                             HttpServletResponse response) {
     CommerceConnection currentConnection = findCommerceConnection().orElse(null);
@@ -142,7 +143,7 @@ public class CartHandler extends LiveContextPageHandlerBase {
     return result;
   }
 
-  @RequestMapping(value = DYNAMIC_URI_PATTERN, method = RequestMethod.GET)
+  @GetMapping(value = DYNAMIC_URI_PATTERN)
   public ModelAndView handleFragmentRequest(@PathVariable(SEGMENT_ROOT) String context,
                                             @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view) {
     // If no context is available: return "not found".
@@ -163,7 +164,7 @@ public class CartHandler extends LiveContextPageHandlerBase {
     return modelWithView;
   }
 
-  @RequestMapping(value = DYNAMIC_URI_PATTERN, method = RequestMethod.POST, produces = {CONTENT_TYPE_JSON})
+  @PostMapping(value = DYNAMIC_URI_PATTERN, produces = {CONTENT_TYPE_JSON})
   @ResponseBody
   public Object handleAjaxRequest(@RequestParam(value = PARAM_ACTION, required = true) String action,
                                   HttpServletRequest request, HttpServletResponse response) {

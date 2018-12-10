@@ -12,16 +12,41 @@
 </head>
 
 <body>
-<div class="cm-icon"></div>
-<div class="content-container">
-  <div>
-    <div class="title">External Preview</div>
-  </div>
-  <div class="content">
-    <label for="previewToken">Key</label>
-    <input type="tel" id="previewToken" name="token" maxlength="4" autocomplete="on" autofocus placeholder="1234"/>
-    <button type="button" id="loginButton">Start<span id="loginError" class="error-text">The key you have entered is invalid.<br/><span class="optional-text">You can find the correct key in the Studio. Please try again.</span></span></button>
-  </div>
+<div class="cm-external-preview fade-in">
+  <header class="cm-external-preview__icon"></header>
+  <form class="cm-external-preview__form">
+    <fieldset>
+      <legend class="cm-external-preview__title">External Preview</legend>
+      <div class="cm-external-preview__animation-wrapper">
+        <input class="cm-external-preview__input"
+               type="tel"
+               id="previewToken"
+               name="token"
+               maxlength="4"
+               autocomplete="on"
+               pattern="[0-9]{4}"
+               autofocus
+               required
+               onkeyup="this.setAttribute('value', this.value)"
+               value=""/>
+        <label class="cm-external-preview__label"
+               for="previewToken">
+          Key
+        </label>
+      </div>
+      <button class="cm-external-preview__login-button"
+              aria-label="Start"
+              type="button"
+              id="loginButton">
+        START
+        <span id="loginError"
+              class="cm-external-preview__error-text">
+          The key you have entered is invalid.<br/>
+          <span class="cm-external-preview__optional-text">You can find the correct key in the Studio. Please try again.</span>
+        </span>
+      </button>
+    </fieldset>
+  </form>
 </div>
 </body>
 </html>

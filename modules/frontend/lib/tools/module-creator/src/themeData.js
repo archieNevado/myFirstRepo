@@ -22,6 +22,7 @@ const initPackageJson = (
     private: true,
     scripts: {
       build: "webpack",
+      deploy: "cm theme-importer deploy-theme",
       start: "cm monitor",
       prettier: 'prettier "**/*" --write',
       "theme-importer": "cm theme-importer"

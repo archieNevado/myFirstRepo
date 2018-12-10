@@ -20,6 +20,7 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -31,8 +32,10 @@ import java.util.Locale;
 import java.util.Optional;
 
 import static com.coremedia.blueprint.base.links.UriConstants.ContentTypes.CONTENT_TYPE_HTML;
+import static com.coremedia.blueprint.base.links.UriConstants.ContentTypes.CONTENT_TYPE_JSON;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
 import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_SERVICE;
+import static com.coremedia.livecontext.view.PrefetchFragmentsView.PREFETCH_FRAGMENT_VIEW;
 
 /**
  * This handler serves all fragment requests, called by the lc:include tag of commerce.
@@ -72,7 +75,7 @@ public class FragmentPageHandler extends PageHandlerBase {
    * @param locale  The locale to identify the store.
    * @param request The actual request, needed to put the optional "parameter" into the request.
    */
-  @RequestMapping(value = URI_PATTERN, produces = CONTENT_TYPE_HTML)
+  @GetMapping(value = URI_PATTERN, produces = CONTENT_TYPE_HTML)
   public ModelAndView handleFragment(@NonNull @PathVariable(SEGMENT_STOREID) String storeId,
                                      @NonNull @PathVariable(SEGMENT_LOCALE) Locale locale,
                                      @NonNull HttpServletRequest request,
@@ -87,8 +90,6 @@ public class FragmentPageHandler extends PageHandlerBase {
       return HandlerHelper.badRequest("Store context not initialized for fragment call " + request.getRequestURI());
     }
 
-    response.setContentType(CONTENT_TYPE_HTML);
-
     FragmentParameters fragmentParameters = FragmentContextProvider.getFragmentContext(request).getParameters();
 
     //resolve the site first
@@ -97,6 +98,16 @@ public class FragmentPageHandler extends PageHandlerBase {
       return createNoSiteModelAndView(fragmentParameters, storeId, locale);
     }
     SiteHelper.setSiteToRequest(site, request);
+
+    // yet another special bell, but when we are in the well known view "prefetchFragments" for which
+    // a programmed view will later generate a json output, and then it is too late to set the content-type
+    // plus character encoding, sorry.
+    if (PREFETCH_FRAGMENT_VIEW.equals(fragmentParameters.getView())) {
+      response.setContentType(CONTENT_TYPE_JSON);
+      response.setCharacterEncoding("UTF-8");
+    } else {
+      response.setContentType(CONTENT_TYPE_HTML);
+    }
 
     // Update store context with fragment parameters.
     fragmentParameters.getCatalogId().ifPresent(catalogId -> {

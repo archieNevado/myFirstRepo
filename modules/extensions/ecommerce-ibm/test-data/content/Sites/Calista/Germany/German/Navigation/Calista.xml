@@ -37,6 +37,8 @@
 </pictures>
 <related>
 </related>
+<authors>
+</authors>
 <children>
 <link href="../Augmentation/Apparel/Women/Women.xml" path="/Sites/Calista/Germany/German/Augmentation/Apparel/Women/Women"/>
 <link href="../Augmentation/Apparel/Men/Men.xml" path="/Sites/Calista/Germany/German/Augmentation/Apparel/Men/Men"/>
@@ -48,6 +50,7 @@
 <link href="../Editorial/Content/Site%20Wide/Footer/Contact%20Us/Contact%20Us%20Page.xml" path="/Sites/Calista/Germany/German/Editorial/Content/Site%20Wide/Footer/Contact%20Us/Contact%20Us%20Page"/>
 <link href="../Augmentation/%5BDEFAULT%5D%20Calista%20Spring%20Fashions.xml" path="/Sites/Calista/Germany/German/Augmentation/%5BDEFAULT%5D%20Calista%20Spring%20Fashions"/>
 <link href="../Editorial/Content/Site%20Wide/SearchResultPage.xml" path="/Sites/Calista/Germany/German/Editorial/Content/Site%20Wide/SearchResultPage"/>
+<link href="Topic%20Pages/Topicpage.xml" path="/Sites/Calista/Germany/German/Navigation/Topic%20Pages/Topicpage"/>
 </children>
 <javaScript>
 </javaScript>

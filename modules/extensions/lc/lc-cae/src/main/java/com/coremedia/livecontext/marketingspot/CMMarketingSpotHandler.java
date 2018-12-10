@@ -9,9 +9,9 @@ import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.google.common.collect.ImmutableMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
@@ -50,7 +50,7 @@ public class CMMarketingSpotHandler extends PageHandlerBase {
           "/{" + SHOP_NAME_VARIABLE + "}" +
           "/{" + MARKETING_SPOT_ID_VARIABLE + ":" + PATTERN_NUMBER + "}";
 
-  @RequestMapping(value = DYNAMIC_URI_PATTERN, produces = CONTENT_TYPE_HTML, method = RequestMethod.GET)
+  @GetMapping(value = DYNAMIC_URI_PATTERN, produces = CONTENT_TYPE_HTML)
   public ModelAndView handleFragmentRequest(@PathVariable(MARKETING_SPOT_ID_VARIABLE) CMMarketingSpot cmMarketingSpot,
                                             @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,
                                             HttpServletRequest request,

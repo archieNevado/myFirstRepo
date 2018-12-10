@@ -8,7 +8,6 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.UnauthorizedException;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
-import com.coremedia.security.encryption.util.EncryptionServiceUtil;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
@@ -33,6 +32,8 @@ import java.util.Optional;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper.decodeEntryTransparently;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper.replaceTokens;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.WORKSPACE_ID_NONE;
 
 /**
@@ -56,13 +57,13 @@ public class LoginServiceImpl implements LoginService, InitializingBean, Disposa
   private Map<String, WcCredentials> credentialsByStore = Collections.synchronizedMap(new HashMap<String, WcCredentials>());
 
   @Required
-  public void setServiceUser(String serviceUser) {
+  public void setServiceUser(@NonNull String serviceUser) {
     this.serviceUser = serviceUser;
   }
 
   @Required
-  public void setServicePassword(String servicePassword) {
-    this.servicePassword = EncryptionServiceUtil.decodeEntryTransparently(servicePassword);
+  public void setServicePassword(@NonNull String servicePassword) {
+    this.servicePassword = decodeEntryTransparently(servicePassword);
   }
 
   @Required
@@ -88,12 +89,14 @@ public class LoginServiceImpl implements LoginService, InitializingBean, Disposa
     this.commerceCache = commerceCache;
   }
 
-  public String getServiceUser() {
+  @NonNull
+  String getServiceUser() {
     return serviceUser;
   }
 
-  public String getServicePassword() {
-    return servicePassword;
+  @NonNull
+  String getServicePassword(@NonNull StoreContext storeContext) {
+    return CommercePropertyHelper.replaceTokensAndDecrypt(servicePassword, storeContext);
   }
 
   @Override
@@ -150,9 +153,10 @@ public class LoginServiceImpl implements LoginService, InitializingBean, Disposa
     String storeId = StoreContextHelper.getStoreId(context);
     WcCredentials result = credentialsByStore.get(storeId);
     if (result == null) {
-      result = loginIdentity(
-              CommercePropertyHelper.replaceTokens(serviceUser, context),
-              CommercePropertyHelper.replaceTokens(servicePassword, context), context);
+      String username = replaceTokens(serviceUser, context);
+      String password = getServicePassword(context);
+      result = loginIdentity(username, password, context);
+
       credentialsByStore.put(storeId, result);
     }
     return result;
@@ -240,7 +244,7 @@ public class LoginServiceImpl implements LoginService, InitializingBean, Disposa
 
       // NOSONAR
       LOG.warn("Ignoring error while closing REST session for user '{}', store {} ({})",
-              CommercePropertyHelper.replaceTokens(serviceUser, storeContext),
+              replaceTokens(serviceUser, storeContext),
               storeId, e.getMessage());
     }
     return false;

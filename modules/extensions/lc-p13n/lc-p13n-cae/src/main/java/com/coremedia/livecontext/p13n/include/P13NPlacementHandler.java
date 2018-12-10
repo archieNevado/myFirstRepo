@@ -19,9 +19,9 @@ import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
@@ -29,6 +29,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Links.ABSOLUTE_URI_KEY;
@@ -69,18 +70,21 @@ public class P13NPlacementHandler extends PageHandlerBase {
 
   private ValidationService validationService;
 
-  @RequestMapping(value = DYNAMIC_PLACEMENT_URI_PATTERN, method = RequestMethod.GET)
+  @GetMapping(value = DYNAMIC_PLACEMENT_URI_PATTERN)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ROOT) String context,
                                     @PathVariable(ID_VARIABLE) CMObject cmObject,
                                     @PathVariable(PAGEGRID_VARIABLE) String pageGridName,
                                     @PathVariable(PLACEMENT_VARIABLE) String placementName,
                                     @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,
-                                    HttpServletRequest request) {
+                                    HttpServletRequest request,
+                                    HttpServletResponse response) {
     Navigation navigation = getNavigation(context);
 
     if (cmObject instanceof CMChannel && navigation != null) {
       request.setAttribute(ABSOLUTE_URI_KEY, true);
-      return createModelAndViewForPlacementAndView((CMChannel) cmObject, pageGridName, placementName, view);
+      ModelAndView modelAndView = createModelAndViewForPlacementAndView((CMChannel) cmObject, pageGridName, placementName, view);
+      response.setContentType("text/html; charset=UTF-8");
+      return modelAndView;
     }
     return HandlerHelper.notFound();
   }

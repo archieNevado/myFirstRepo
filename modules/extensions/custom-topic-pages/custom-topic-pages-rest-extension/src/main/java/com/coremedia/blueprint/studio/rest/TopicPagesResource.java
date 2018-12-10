@@ -138,10 +138,10 @@ public class TopicPagesResource {
     }
 
     String folder = getFolderFromStruct(config.getLocalStructs());
-    if (Strings.isNullOrEmpty(folder)) { // NOSONAR squid:S4449 false positive caused by SONARJAVA-2776
+    if (Strings.isNullOrEmpty(folder)) {
       folder = getFolderFromStruct(config.getGlobalStructs());
     }
-    if (Strings.isNullOrEmpty(folder)) { // NOSONAR squid:S4449 false positive caused by SONARJAVA-2776
+    if (Strings.isNullOrEmpty(folder)) {
       LOG.debug("No default topic page folder found in local or global TopicPage settings. Use default path: {}", DEFAULT_SITESPECIFIC_CUSTOM_TOPIC_PAGES_FOLDER);
       folder = DEFAULT_SITESPECIFIC_CUSTOM_TOPIC_PAGES_FOLDER;
     }

@@ -15,6 +15,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -64,7 +65,7 @@ public class StaticTestUrlsHandler {
           + "/{" + SEGMENT_ROOT + '}'
           + '/' + TESTURLS;
 
-  @RequestMapping(URI_PATTERN)
+  @GetMapping(URI_PATTERN)
   public ModelAndView handleRequest(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response) {
     try {
       Site site = siteByRequest(request);

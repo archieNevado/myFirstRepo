@@ -187,6 +187,19 @@
       transition: none;
     }
   }
+
+  &.dropdown:after {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border: 1px solid $border-color-default;
+    border-width: 0 1px 1px 0;
+    transform: rotateZ(45deg);
+    position: relative;
+    top: -3px;
+    left: -10px;
+  }
 }
 
 .#{$cm-navigation-prefix}-item-depth-2 {
@@ -199,7 +212,6 @@
   @include breakpoint(md) {
     font-size: 12px;
     text-align: center;
-    border-bottom: 1px solid $border-color-default;
 
     &--hovered {
       .cm-navigation-item.cm-navigation-item--active {

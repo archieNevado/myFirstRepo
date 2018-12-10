@@ -6,6 +6,7 @@ import com.coremedia.blueprint.cae.filter.SiteFilter;
 import com.coremedia.blueprint.cae.filter.UnknownMimetypeCharacterEncodingFilter;
 import com.coremedia.springframework.boot.web.servlet.RegistrationBeanBuilder;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,16 +22,12 @@ public class CaeBaseComponentConfiguration {
   public static final int ORDER_SITE_FILTER = 100;
 
   @Bean
-  public Filter characterEncodingFilter() {
+  @ConditionalOnProperty(value="cae.set-unknown-mime-type")
+  public FilterRegistrationBean characterEncodingFilterRegistration() {
     CharacterEncodingFilter filter = new UnknownMimetypeCharacterEncodingFilter();
     filter.setEncoding(StandardCharsets.UTF_8.toString());
     filter.setForceEncoding(true);
-    return filter;
-  }
-
-  @Bean
-  public FilterRegistrationBean characterEncodingFilterRegistration(Filter characterEncodingFilter) {
-    return RegistrationBeanBuilder.forFilter(characterEncodingFilter)
+    return RegistrationBeanBuilder.forFilter(filter)
             .order(Ordered.HIGHEST_PRECEDENCE)
             .build();
   }

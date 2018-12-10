@@ -34,6 +34,11 @@
     background: linear-gradient(to bottom, rgba(238, 238, 238, 0) 50%, rgba(51, 51, 51, 0.65) 100%);
   }
 
+
+  &__shop-now-button {
+    @include center-absolute();
+  }
+
   .cm-product-info {
     width: 100%;
     padding-bottom: 24px;

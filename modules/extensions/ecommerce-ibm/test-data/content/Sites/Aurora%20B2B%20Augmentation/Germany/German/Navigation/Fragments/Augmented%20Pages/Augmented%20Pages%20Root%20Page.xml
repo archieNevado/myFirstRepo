@@ -24,8 +24,11 @@
 <teaserTitle></teaserTitle>
 <pictures>
 </pictures>
+<notSearchable>1</notSearchable>
 <related>
 </related>
+<authors>
+</authors>
 <children>
 <link href="Header/Saved%20Orders%20Page.xml" path="/Sites/Aurora%20B2B%20Augmentation/Germany/German/Navigation/Fragments/Augmented%20Pages/Header/Saved%20Orders%20Page"/>
 <link href="Footer/Customer%20Service/Quick%20d902b764.xml" path="/Sites/Aurora%20B2B%20Augmentation/Germany/German/Navigation/Fragments/Augmented%20Pages/Footer/Customer%20Service/Quick%20Order%20Page"/>

@@ -91,7 +91,7 @@ const logout = () => {
       const { studioUrl, proxyUrl } = getEnv();
       const apiKey = getApiKey();
 
-      log.info(`Using ${studioUrl}`);
+      log.debug(`Using ${studioUrl}`);
 
       api
         .logout(studioUrl, proxyUrl, apiKey)
@@ -118,7 +118,7 @@ const whoami = () => {
       const { studioUrl, proxyUrl } = getEnv();
       const apiKey = getApiKey();
 
-      log.info(`Using ${studioUrl}`);
+      log.debug(`Using ${studioUrl}`);
 
       api
         .whoami(studioUrl, proxyUrl, apiKey)
@@ -155,7 +155,7 @@ const uploadTheme = themeConfig => {
           )
         );
       } else {
-        log.info(`Using ${studioUrl}`);
+        log.debug(`Using ${studioUrl}`);
         log.info("Uploading theme to remote server.");
 
         api
@@ -181,6 +181,51 @@ const uploadTheme = themeConfig => {
     }
   });
 };
+
+/**
+ * Returns a Promise for requesting a theme upload.
+ * @param {Object} themeConfig
+ * @returns {Promise}
+ */
+const deployTheme = themeConfig => {
+  return new Promise((resolve, reject) => {
+    try {
+      const { studioUrl, proxyUrl } = getEnv();
+      const apiKey = getApiKey();
+
+      if (!fs.existsSync(themeConfig.themeArchiveTargetPath)) {
+        reject(
+          new Error(
+            `[${PKG_NAME}] ${themeConfig.themeArchiveTargetPath} doesn´t exist.`
+          )
+        );
+      } else {
+        log.debug(`Using ${studioUrl}`);
+        log.info("Uploading and deploying theme to remote server.");
+
+        api
+          .deploy(
+            studioUrl,
+            proxyUrl,
+            apiKey,
+            themeConfig.themeArchiveTargetPath,
+          )
+          .then(() => {
+            resolve(themeConfig.themeArchiveTargetPath);
+          })
+          .catch(e => {
+            if (e.code === "EUNAUTHORIZED") {
+              removeApiKeyFile();
+            }
+            reject(e);
+          });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 
 /**
  * Returns a Promise for requesting an upload of changed files.
@@ -220,7 +265,7 @@ const uploadFiles = (themeConfig, fileList, logLevel = "info") => {
         logLevel,
       })
         .then(count => {
-          //_log.info(`Using ${studioUrl}`);
+          //_log.debug(`Using ${studioUrl}`);
           _log.debug(
             `Uploading file ${path.basename(
               themeConfig.themeUpdateArchiveTargetPath
@@ -278,7 +323,7 @@ const deleteFile = (themeConfig, file) => {
         ""
       );
 
-      //log.info(`Using ${studioUrl}`);
+      log.debug(`Using ${studioUrl}`);
 
       api
         .deleteFile(studioUrl, proxyUrl, apiKey, FILE_PATH)
@@ -317,6 +362,7 @@ module.exports = {
   logout,
   whoami,
   uploadTheme,
+  deployTheme,
   uploadFiles,
   deleteFile,
 };

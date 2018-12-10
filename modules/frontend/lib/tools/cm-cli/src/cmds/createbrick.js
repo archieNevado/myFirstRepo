@@ -61,9 +61,9 @@ const handler = argv => {
       log.success(`Done.`);
     } catch (e) {
       log.error(
-              `An error occured while trying to create brick "${brickName}": ${
-                      e.message
-                      }`
+        `An error occured while trying to create brick "${brickName}": ${
+          e.message
+        }`
       );
     }
   }

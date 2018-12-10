@@ -37,7 +37,7 @@
       </#if>
 
       <ul class="${cssClass} cm-navigation-item__list cm-navigation-item-depth-${depth}__list dropdown-menu">
-        <#if showNavigationLabel>
+        <#if (showNavigationLabel && depth < 2)>
           <li class="cm-navigation-list-depth-${depth}__label cm-navigation-list__label">
             <span class="cm-navigation-item-label cm-navigation-item__title" <@preview.metadata ["properties.teaserTitle"] />>${self.teaserTitle!""}</span>
           </li>

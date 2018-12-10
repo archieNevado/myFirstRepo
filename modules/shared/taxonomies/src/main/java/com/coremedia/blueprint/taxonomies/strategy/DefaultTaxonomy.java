@@ -250,6 +250,13 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
       targetChildren.add(nodeContent);
       targetContent.set(CHILDREN, targetChildren);
     }
+    else {
+      List<Content> rootNodesFromSettings = getRootNodesFromSettings();
+      if(rootNodesFromSettings != null) {
+        rootNodesFromSettings.add(nodeContent);
+        updateRootNodeSettings(rootNodesFromSettings);
+      }
+    }
 
 
     //finally update the lifecycle status

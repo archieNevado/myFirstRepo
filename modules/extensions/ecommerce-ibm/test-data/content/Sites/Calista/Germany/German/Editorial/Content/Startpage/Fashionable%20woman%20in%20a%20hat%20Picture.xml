@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMPicture folder="/Sites/Calista/Germany/German/Editorial/Content/Startpage" name="Fashionable woman in a hat Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="not-localized-yet">
+<CMPicture folder="/Sites/Calista/Germany/German/Editorial/Content/Startpage" name="Fashionable woman in a hat Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../../United%20States/English/Editorial/Content/Startpage/Fashionable%20woman%20in%20a%20hat%20Picture.xml" path="/Sites/Calista/United%20States/English/Editorial/Content/Startpage/Fashionable%20woman%20in%20a%20hat%20Picture"/>
@@ -73,6 +73,8 @@
 </pictures>
 <related>
 </related>
+<authors>
+</authors>
 <alt>Fashionable woman in a hat, dress and long grey sweater, accessories, high heels, posing in studio. Fashion autumn photo</alt>
 <copyright>HighKey/Shutterstock 327014693</copyright>
 <dataUrl></dataUrl>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <CMPicture folder="/Sites/Aurora Augmentation/United States/English/Pictures/Product Pictures/Women/Dresses" name="Versatil Empire Waist Sundress 2" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
-<locale></locale>
+<locale>en-US</locale>
 <master>
 </master>
 <viewtype>
@@ -9,7 +9,7 @@
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="transforms">
 <Struct>
-<StringProperty Name="portrait_ratio20x31">b;a=0;c=1/crop;x=40;y=0;width=2581;height=4000</StringProperty>
+<StringProperty Name="portrait_ratio20x31">b;a=0;c=1/crop;x=38;y=0;width=2581;height=4000</StringProperty>
 <StringProperty Name="portrait_ratio3x4">b;a=0;c=1/crop;x=0;y=0;width=2661;height=3548</StringProperty>
 <StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=0;y=0;width=2661;height=2661</StringProperty>
 <StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=0;y=0;width=2661;height=1996</StringProperty>
@@ -67,6 +67,8 @@
 </pictures>
 <related>
 </related>
+<authors>
+</authors>
 <alt></alt>
 <copyright>Crystalphoto/shutterstock_72962470</copyright>
 <dataUrl></dataUrl>

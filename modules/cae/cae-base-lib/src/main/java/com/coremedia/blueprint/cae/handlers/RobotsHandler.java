@@ -6,6 +6,7 @@ import com.coremedia.blueprint.common.robots.RobotsBean;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.objectserver.web.HandlerHelper;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -58,7 +59,7 @@ public class RobotsHandler extends HandlerBase {
   /**
    * Handles a request for the robots.txt to this web presence
    */
-  @RequestMapping(value = URI_PATTERN)
+  @GetMapping(value = URI_PATTERN)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ROOT) String segment) {
     CMNavigation rootNavigation = navigationSegmentsUriHelper.lookupRootSegment(segment);
     if (rootNavigation == null) {

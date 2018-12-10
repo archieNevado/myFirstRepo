@@ -8,4 +8,4 @@
   "renderEmptyImage": false,
   "renderDimmer": false,
   "renderLink": false
-}/>
+} + cm.localParameters() />

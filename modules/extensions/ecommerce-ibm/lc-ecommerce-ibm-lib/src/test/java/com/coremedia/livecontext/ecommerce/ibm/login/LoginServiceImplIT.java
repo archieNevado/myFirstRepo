@@ -32,7 +32,7 @@ public class LoginServiceImplIT extends IbmServiceTestBase {
   public void setup() {
     super.setup();
     origServiceUser = testling.getServiceUser();
-    origServicePassword = testling.getServicePassword();
+    origServicePassword = testling.getServicePassword(getStoreContext());
     StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
   }
 

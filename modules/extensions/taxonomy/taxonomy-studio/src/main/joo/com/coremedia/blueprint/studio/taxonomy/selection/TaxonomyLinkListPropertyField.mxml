@@ -45,7 +45,8 @@
     <editor:LinkListPasteAction text="{ResourceManager.getInstance().getString('com.coremedia.cms.editor.sdk.actions.Actions', 'Action_pasteFromClipboard_text')}"
                                 tooltip="{ResourceManager.getInstance().getString('com.coremedia.cms.editor.sdk.actions.Actions', 'Action_pasteFromClipboard_tooltip')}"
                                 linkListWrapper="{getLinkListWrapper(config)}"
-                                selectedValuesExpression="{getSelectedValuesVE()}"/>
+                                selectedValuesExpression="{getSelectedValuesVE()}"
+                                selectedPositionsExpression="{getSelectedPositionsVE()}"/>
     <editor:LinkListRemoveAction text="{ResourceManager.getInstance().getString('com.coremedia.cms.editor.sdk.actions.Actions', 'Action_deleteSelectedLinks_text')}"
                                  tooltip="{ResourceManager.getInstance().getString('com.coremedia.cms.editor.sdk.actions.Actions', 'Action_deleteSelectedLinks_tooltip')}"
                                  linkListWrapper="{getLinkListWrapper(config)}"

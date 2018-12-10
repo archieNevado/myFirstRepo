@@ -27,6 +27,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriTemplate;
@@ -122,7 +123,7 @@ public class P13NContainerHandlerTest {
 
     MockHttpServletRequest mockRequest = new MockHttpServletRequest();
 
-    ModelAndView modelAndView = testling.handleRequest("helios", 4711, "related", "myView", mockRequest);
+    ModelAndView modelAndView = testling.handleRequest("helios", 4711, "related", "myView", mockRequest, new MockHttpServletResponse());
 
     assertEquals("myView", modelAndView.getViewName());
     assertTrue(modelAndView.getModel().get("self") instanceof DynamizableCMTeasableContainer);
@@ -137,7 +138,7 @@ public class P13NContainerHandlerTest {
     CMArticle cmArticle = mock(CMArticle.class);
     when(contentBeanFactory.createBeanFor(wrongContent)).thenReturn(cmArticle);
 
-    ModelAndView modelAndView = testling.handleRequest("helios", 4711, "related", "myView", new MockHttpServletRequest());
+    ModelAndView modelAndView = testling.handleRequest("helios", 4711, "related", "myView", new MockHttpServletRequest(), new MockHttpServletResponse());
     assertEquals(HandlerHelper.notFound().getModel(), modelAndView.getModel());
   }
 

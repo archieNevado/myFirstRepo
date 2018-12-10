@@ -15,10 +15,12 @@ import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
@@ -26,7 +28,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriTemplate;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -67,7 +68,7 @@ public class CommentsResultHandler extends ElasticContentHandler<CommentsResult>
     "/{" + ID + "}";
 
 
-  @RequestMapping(value = DYNAMIC_PATTERN_COMMENTS, method = RequestMethod.GET)
+  @GetMapping(value = DYNAMIC_PATTERN_COMMENTS)
   public ModelAndView getComments(@PathVariable("contextId") String contextId,
                                   @PathVariable("id") String targetId,
                                   @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,
@@ -103,7 +104,7 @@ public class CommentsResultHandler extends ElasticContentHandler<CommentsResult>
    * @param replyToId   if the comment is the reply to another comment
    * @return the newly created comment
    */
-  @RequestMapping(value= DYNAMIC_PATTERN_COMMENTS, method = RequestMethod.POST)
+  @PostMapping(value= DYNAMIC_PATTERN_COMMENTS)
   public ModelAndView createComment(@PathVariable("contextId") String contextId,
                                     @PathVariable("id") String targetId,
                                     @RequestParam(value = "comment", required = false) String text,

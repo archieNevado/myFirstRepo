@@ -8,8 +8,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
@@ -65,7 +65,7 @@ public class SubscriptionHandler {
   /**
    * Handles subscription request
    */
-  @RequestMapping(value=SUBSCRIBE_URI, method= RequestMethod.POST)
+  @PostMapping(value=SUBSCRIBE_URI)
   public RedirectView handleSubscription(@RequestParam(value=RETURN_PARAMETER, required=true) String redirectUri,
                                          @ModelAttribute(FORM_MODELATTRIBUTE) @Valid SubscriptionForm form, BindingResult binding,
                                          HttpSession session,
@@ -94,7 +94,7 @@ public class SubscriptionHandler {
   /**
    * Handles unsubscription request
    */
-  @RequestMapping(value=UNSUBSCRIBE_URI, method= RequestMethod.POST)
+  @PostMapping(value=UNSUBSCRIBE_URI)
   public RedirectView handleUnsubscription(@RequestParam(value=RETURN_PARAMETER, required=true) String redirectUri,
                                          HttpSession session, RedirectAttributes redirectAttributes) throws IOException  {
     doUnsubscribe(session);

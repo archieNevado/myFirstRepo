@@ -8,6 +8,7 @@ import com.coremedia.cap.common.CapBlobRef;
 import com.coremedia.objectserver.web.links.Link;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.WebRequest;
@@ -69,7 +70,7 @@ public class AssetRenditionBlobHandler {
     this.isPreview = preview;
   }
 
-  @RequestMapping(value = ASSET_URI_PATTERN)
+  @GetMapping(value = ASSET_URI_PATTERN)
   public ModelAndView handleAssetRenditionRequest(@PathVariable(SEGMENT_ID) AMAsset asset,
                                                   @PathVariable(SEGMENT_ETAG) String eTag,
                                                   @PathVariable(SEGMENT_PROPERTY) String propertyName,

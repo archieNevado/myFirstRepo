@@ -27,6 +27,8 @@
 </pictures>
 <related>
 </related>
+<authors>
+</authors>
 <items>
 </items>
 <rules grammarName="coremedia-selectionrules-1.0"><rules version="1.0" xmlns="http://www.coremedia.com/2010/selectionrules" xmlns:xlink="http://www.w3.org/1999/xlink">select <content xlink:href="coremedia:///cap/resources/../../Videos/Ciglio%20LED%20Lights%20Local%20Video.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/Germany/German/Videos/Ciglio%20LED%20Lights%20Local%20Video"/> if commerce.usersegments#"ibm:///catalog/segment/8500000000000323451"; select <content xlink:href="coremedia:///cap/resources/../../Videos/Architectural%20Lighting%20Local%20Video.xml" cmexport:path="/Sites/Aurora%20B2B%20Augmentation/Germany/German/Videos/Architectural%20Lighting%20Local%20Video"/> if commerce.usersegments#"ibm:///catalog/segment/8500000000000323452"</rules></rules>

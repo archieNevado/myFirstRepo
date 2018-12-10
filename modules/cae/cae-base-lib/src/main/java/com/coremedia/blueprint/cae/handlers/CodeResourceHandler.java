@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.WebRequest;
@@ -211,7 +212,7 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
    * @param webRequest   The web request
    * @return             The ModelAndView or 404 (not found).
    */
-  @RequestMapping(value = {JS_PATTERN_BULK,CSS_PATTERN_BULK})
+  @GetMapping(value = {JS_PATTERN_BULK,CSS_PATTERN_BULK})
   public ModelAndView handleRequest(@PathVariable(SEGMENT_CHANNEL_WITH_THEME) CMContext channelWithTheme,
                                     @PathVariable(SEGMENT_CHANNEL_WITH_CODE) CMContext channelWithCode,
                                     @PathVariable(SEGMENT_EXTENSION) String extension,
@@ -254,7 +255,7 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
    * @param extension       The extension of the requested resource.
    * @return                The ModelAndView or 404 (not found).
    */
-  @RequestMapping(value = URI_PATTERN_SINGLE_CSS_LINK)
+  @GetMapping(value = URI_PATTERN_SINGLE_CSS_LINK)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_PATH) List<String> path,
                                     @PathVariable(SEGMENT_NAME) String baseName,
                                     @PathVariable(SEGMENT_EXTENSION) String extension,
@@ -266,7 +267,7 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
     }
   }
 
-  @RequestMapping(value = URI_PATTERN_SINGLE)
+  @GetMapping(value = URI_PATTERN_SINGLE)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_PATH) List<String> path,
                                     @PathVariable(SEGMENT_ID) CMAbstractCode cmAbstractCode,
                                     @PathVariable(SEGMENT_ETAG) int version,

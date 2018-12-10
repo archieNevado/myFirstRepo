@@ -26,6 +26,8 @@
 </pictures>
 <related>
 </related>
+<authors>
+</authors>
 <items>
 </items>
 <rules grammarName="coremedia-selectionrules-1.0"><rules version="1.0" xmlns="http://www.coremedia.com/2010/selectionrules" xmlns:xlink="http://www.w3.org/1999/xlink">select <content xlink:href="coremedia:///cap/resources/Men%20Black%20%26%20White%20Teaser.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Startpage/Men%20Black%20%26%20White%20Teaser"/> if commerce.usersegments#"ibm:///catalog/segment/8407790678950000655"</rules></rules>

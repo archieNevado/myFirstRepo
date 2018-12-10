@@ -12,6 +12,9 @@ This is the wrapper cookbook to install mongodb3.
 
 * ulimit (~> 0.3.0)
 * mongodb3 (~> 5.3.0)
+* packagecloud (= 1.0.0)
+* user (= 0.7.0)
+* apt (= 7.0.0)
 
 # Attributes
 

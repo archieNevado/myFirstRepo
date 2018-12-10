@@ -405,7 +405,7 @@ public class ThemeImporterImpl implements ThemeImporter {
                                            ThemeImporterContentHelper contentHelper,
                                            ImportData importData) {
     return resources.stream().map(
-            javaScript -> enhaceJavaScript(baseFolder, javaScript, themeName, contentHelper, importData))
+            javaScript -> enhanceJavaScript(baseFolder, javaScript, themeName, contentHelper, importData))
             .filter(Objects::nonNull).collect(Collectors.toList());
   }
 
@@ -428,11 +428,11 @@ public class ThemeImporterImpl implements ThemeImporter {
     return enhancedCodeToContent(code, baseFolder, CM_CSS_DOCTYPE, codeProperties, contentHelper);
   }
 
-  private Content enhaceJavaScript(String baseFolder,
-                                   JavaScript code,
-                                   String themeName,
-                                   ThemeImporterContentHelper contentHelper,
-                                   ImportData importData) {
+  private Content enhanceJavaScript(String baseFolder,
+                                    JavaScript code,
+                                    String themeName,
+                                    ThemeImporterContentHelper contentHelper,
+                                    ImportData importData) {
     Map<String, Object> codeProperties = extractJavaScriptProperties(code);
 
     // Adjust non-appropriate properties

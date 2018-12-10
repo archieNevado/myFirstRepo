@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMArticle folder="/Sites/Aurora Augmentation/Germany/German/Editorial/Content/Eveningwear" name="Things you can do wrong with your Evening Dresses" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
+<locale>de-DE</locale>
+<master>
+<link href="../../../../../United%20States/English/Editorial/Content/Eveningwear/Things%20you%20can%20do%20wrong%20with%27f2fbf0a.xml" path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Eveningwear/Things%20you%20can%20do%20wrong%20with%20your%20Evening%20Dresses"/>
+</master>
+<viewtype>
+</viewtype>
+<localSettings>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StructProperty Name="teaserOverlay">
+<Struct>
+<BooleanProperty Name="enabled">true</BooleanProperty>
+<LinkProperty Name="style" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Teaser%20Styles/Dark%20on%20Light.xml" cmexport:path="/Sites/Aurora%20Augmentation/Germany/German/Options/Settings/Teaser%20Styles/Dark%20on%20Light"/>
+<IntProperty Name="positionY">30</IntProperty>
+</Struct>
+</StructProperty>
+</Struct>
+</localSettings>
+<linkedSettings>
+</linkedSettings>
+<resourceBundles2>
+</resourceBundles2>
+<segment></segment>
+<title>Dinge, die du mit deinem Abendkleid falsch machen kannst</title>
+<htmlTitle></htmlTitle>
+<keywords></keywords>
+<htmlDescription></htmlDescription>
+<subjectTaxonomy>
+<link href="../../../../../../../Settings/Taxonomies/Subject/Eveningwear.xml" path="/Settings/Taxonomies/Subject/Eveningwear"/>
+</subjectTaxonomy>
+<locationTaxonomy>
+</locationTaxonomy>
+<contexts>
+</contexts>
+<teaserTitle></teaserTitle>
+<teaserText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p class="p--heading-2 align--center">Am Ende ist es nicht schwer, Fehler zu vermeiden.</p></div></teaserText>
+<detailText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p>Ich erinnere mich, dass ich eines Tages mit dem Hund spazieren ging, ich sah ein Auto voller Mädchen im Teenageralter, und eines von ihnen rollte das Fenster herunter und schrie: "Marc Jacobs!" mit französischem Akzent. Ich entwerfe aus dem Bauch heraus. Es ist der einzige Weg, wie ich zu leben weiß. Was sich gut anfühlt. Was sich richtig anfühlt. Was wir brauchen. Gib mir ein Problem und ich werde es kreativ angehen, aus meinem Bauch heraus. Einen Schritt voraus zu sein vor einem Modetrend ist mir nicht so wichtig. Es kommt darauf an, immer weiter voranzukommen. Ich kann mich nicht in dieses Prominenten-Ding hineinziehen lassen, weil ich denke, dass es einfach nur krass ist. Es geht mir nicht mehr um Sensation und Innovation, sondern um die Perfektion meines Stils.</p><p><a xlink:show="embed" xlink:type="simple" xlink:href="coremedia:///cap/resources/../../Products/Aurora/Hermitage%20Knit%20Cocktail%20Dress%20Product%20Teaser.xml" cmexport:path="/Sites/Aurora%20Augmentation/Germany/German/Editorial/Products/Aurora/Hermitage%20Knit%20Cocktail%20Dress%20Product%20Teaser">Evening Gown Red Product Teaser</a></p><p>Mode ist für mich sehr wegwerfbar geworden; ich wollte zurück zum Handwerk, zu Kleidung, die lange halten kann. Meine Aufgabe ist es, den Menschen das zu vermitteln, was sie selbst nicht wagen würden. Das ist der Schlüssel zu dieser Sammlung, du selbst zu sein. Seien Sie nicht auf Trends aus. Mache keine Mode zu deinem Eigentum, aber du entscheidest, was du bist, was du ausdrücken willst, indem du dich so kleidest und wie du lebst. Luxus muss bequem sein, sonst ist es kein Luxus. Ich bin eine Komplizin, die Frauen hilft, das zu bekommen, was sie wollen.</p><p>Alter ist nur etwas in deinem Kopf oder ein Stereotyp. Alter bedeutet nichts, wenn man für etwas leidenschaftlich ist. Man kann nicht einfach Dinge für das Label kaufen - es ist lächerlich. Meine Kleider sind sehr preiswert, für Kleider, die am Körper geschnitten sind. Ich schaue mir nie die Arbeit anderer Leute an. Mein Verstand muss sich ganz auf meine eigenen Illusionen konzentrieren. Meine Kunden sind erfolgreiche berufstätige Frauen.</p><p>Luxus wird immer da sein, egal was in der Welt passiert. Ich weiß nicht wirklich, wie man Freizeitkleidung macht. Die Mode verblasst, nur der Stil bleibt gleich. Sogar Michelangelo wurde für das Bauen der Sixtinischen Kapelle bezahlt. Zu den Künstlern, die sagen, dass sie es aus Liebe zur Kunst tun, sage ich: Werde realistisch. Mode kann diese mysteriöse Sache sein, die man nicht erklären kann.</p></div></detailText>
+<pictures>
+<link href="Blue%20Strapless%20Dress%20%28shutterstock_109609103%29.xml" path="/Sites/Aurora%20Augmentation/Germany/German/Editorial/Content/Eveningwear/Blue%20Strapless%20Dress%20%28shutterstock_109609103%29"/>
+</pictures>
+<related>
+</related>
+<authors>
+<link href="../../Authors/David%20Fuller%20Person.xml" path="/Sites/Aurora%20Augmentation/Germany/German/Editorial/Authors/David%20Fuller%20Person"/>
+</authors>
+</CMArticle>

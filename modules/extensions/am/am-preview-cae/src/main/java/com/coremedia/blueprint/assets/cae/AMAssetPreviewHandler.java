@@ -17,9 +17,9 @@ import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
@@ -75,7 +75,7 @@ public class AMAssetPreviewHandler extends PageHandlerBase {
     return uriBuilder.buildAndExpand(asset.getContentId());
   }
 
-  @RequestMapping(value = URI_PATTERN, method = RequestMethod.GET)
+  @GetMapping(value = URI_PATTERN)
   public ModelAndView handleAssetRequest(@PathVariable(ID_VARIABLE) AMAsset asset,
                                          @RequestParam(value = RequestParameters.VIEW_PARAMETER, required = false) String view,
                                          @RequestParam(value = STUDIO_PREFERRED_SITE_PARAMETER, required = false) String studioPreferredSiteId,

@@ -27,9 +27,15 @@ const desc = `Watch file changes and update theme on ${
 } CAE.`;
 const builder = yargs =>
   yargs
+    .option("local", {
+      describe: "Set developer mode to local CAE.",
+    })
+    .option("remote", {
+      describe: "Set developer mode to remote CAE (default).",
+    })
     .option("verbose", {
       default: false,
-      describe: "Enable verbose mode for more information output.",
+      describe: "Enable verbose mode.",
       type: "boolean",
     })
     .epilogue(args.docs);
@@ -74,6 +80,13 @@ const handler = argv => {
       process.exit(1);
     }
   };
+
+  // overwrite target in config with given parameter
+  if(!!argv.local) {
+    monitorConfig.target = "local";
+  } else if(!!argv.remote) {
+    monitorConfig.target = "remote";
+  }
 
   if (monitorConfig.target === "remote") {
     log.info("Starting monitor using remote CAE.");
