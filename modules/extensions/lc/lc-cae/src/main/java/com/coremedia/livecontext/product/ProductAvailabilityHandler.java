@@ -22,6 +22,7 @@ import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -72,7 +73,7 @@ public class ProductAvailabilityHandler extends PageHandlerBase {
     ));
   }
 
-  @RequestMapping(value = URI_PATTERN)
+  @GetMapping(value = URI_PATTERN)
   public ModelAndView handleDynamicFragmentRequest(@PathVariable(PATH_VARIABLE_NAME_SHOP_NAME) String shopName,
                                                    @PathVariable(PATH_VARIABLE_NAME_PRODUCT_TYPE) String productType,
                                                    @PathVariable(PATH_VARIABLE_NAME_EXTERNAL_ID) String productId,

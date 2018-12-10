@@ -48,7 +48,7 @@
 </StringListProperty>
 </Struct>
 <Struct>
-<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/CMSettings" xlink:href="coremedia:///cap/resources/Pagegrid/Layouts/HomepageLayout.xml" cmexport:path="/Sites/SiteGenesis%20Global/France/French/Options/Settings/Pagegrid/Layouts/Fragment%20PDP"/>
+<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/CMSettings" xlink:href="coremedia:///cap/resources/Pagegrid/Layouts/HomepageLayout.xml" cmexport:path="/Sites/SiteGenesis%20Global/France/French/Options/Settings/Pagegrid/Layouts/HomepageLayout"/>
 <StringListProperty Name="prefetchedViews">
 <String>metadata</String>
 <String>externalHead</String>

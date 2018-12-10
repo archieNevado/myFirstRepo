@@ -15,6 +15,7 @@ import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.UriComponents;
@@ -57,13 +58,7 @@ public class GuidCookieHandler {
   /**
    * Public/private key pair used to generate GUID cookie
    */
-  private RSAKeyPair rsaKeyPair;
-
-  @Inject
-  public GuidCookieHandler(Settings settings) throws NoSuchAlgorithmException {
-    this.rsaKeyPair = RSAKeyPair.createFrom(settings);
-  }
-
+  private final RSAKeyPair rsaKeyPair;
 
   private static final ThreadLocal<String> GUID_THREAD_LOCAL = new ThreadLocal<>();
 
@@ -85,6 +80,11 @@ public class GuidCookieHandler {
 
   private ContentBeanIdConverter contentBeanIdConverter;
 
+  @Inject
+  public GuidCookieHandler(Settings settings) throws NoSuchAlgorithmException {
+    this.rsaKeyPair = RSAKeyPair.createFrom(settings);
+  }
+
   /**
    * Resolves links containing "/guid/" segment and sets "guid" cookie for elastic social, if ES is activated in
    * the settings of the root channel.
@@ -93,7 +93,7 @@ public class GuidCookieHandler {
    * @param request     httpServletRequest
    * @param response    httpServletReqponse
    */
-  @RequestMapping(URI_PATTERN)
+  @GetMapping(URI_PATTERN)
   public void handleRequest(@PathVariable(SEGMENT_ID) CMNavigation channel,
                                     HttpServletRequest request,
                                     HttpServletResponse response) {
@@ -151,7 +151,6 @@ public class GuidCookieHandler {
     return contentBeanIdConverter.convert(source);
   }
 
-
   boolean validateGuid(String guid) {
     if (Strings.isNullOrEmpty(guid)) {
       return false;
@@ -180,7 +179,6 @@ public class GuidCookieHandler {
     return false;
   }
 
-
   private String extractGuid(HttpServletRequest request) {
     Cookie[] cookies = request.getCookies();
     if (cookies != null) {
@@ -192,7 +190,6 @@ public class GuidCookieHandler {
     }
     return null;
   }
-
 
   String createGuid() {
     String uuid = UUID.randomUUID().toString();
@@ -228,7 +225,6 @@ public class GuidCookieHandler {
     }
     return guid.substring(0, index);
   }
-
 
   private static String extractSignatureFromGuid(String guid) {
     int index = guid.indexOf('+');

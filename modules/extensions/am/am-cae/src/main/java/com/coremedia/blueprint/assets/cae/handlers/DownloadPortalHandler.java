@@ -40,9 +40,10 @@ import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
@@ -199,7 +200,7 @@ public class DownloadPortalHandler {
    * @param assetId    the id of {@link AMAsset} that represents the given asset
    * @return the ModelAndView
    */
-  @RequestMapping(value = DYNAMIC_PATTERN_PORTAL, method = RequestMethod.GET)
+  @GetMapping(value = DYNAMIC_PATTERN_PORTAL)
   public ModelAndView handleDownloadPortalRequest(@PathVariable(CONTEXT_ID) CMChannel navigation,
                                                   @RequestParam(value = CATEGORY_REQUEST_PARAMETER_NAME, required = false) AMTaxonomy categoryBean,
                                                   @RequestParam(value = CATEGORY_REQUEST_PARAMETER_NAME, required = false) String categoryId,
@@ -236,7 +237,7 @@ public class DownloadPortalHandler {
    * @param subjectBean the {@link CMTaxonomy} that represents the subject
    * @return the ModelAndView
    */
-  @RequestMapping(value = DYNAMIC_PATTERN_PORTAL, method = RequestMethod.GET, params = SUBJECT_REQUEST_PARAMETER_NAME)
+  @GetMapping(value = DYNAMIC_PATTERN_PORTAL, params = SUBJECT_REQUEST_PARAMETER_NAME)
   public ModelAndView handleSubjectAssetsRequest(@PathVariable(CONTEXT_ID) CMChannel navigation,
                                                  @RequestParam(value = SUBJECT_REQUEST_PARAMETER_NAME) CMTaxonomy subjectBean) {
     if (null != subjectBean && subjectBean.getContent().isInProduction()) {
@@ -254,7 +255,7 @@ public class DownloadPortalHandler {
    * @param query the query string to use
    * @return the ModelAndView
    */
-  @RequestMapping(value = DYNAMIC_PATTERN_PORTAL, method = RequestMethod.GET, params = SEARCH_REQUEST_PARAMETER_NAME)
+  @GetMapping(value = DYNAMIC_PATTERN_PORTAL, params = SEARCH_REQUEST_PARAMETER_NAME)
   public ModelAndView handleSearchRequest(@PathVariable(CONTEXT_ID) CMChannel navigation,
                                           @RequestParam(value = SEARCH_REQUEST_PARAMETER_NAME) String query) {
     // query is a required request param, so it cannot be null
@@ -268,7 +269,7 @@ public class DownloadPortalHandler {
    * @param navigation  the navigation context of the download portal
    * @return the ModelAndView
    */
-  @RequestMapping(value = DYNAMIC_PATTERN_PORTAL, method = RequestMethod.GET, params = DOWNLOAD_COLLECTION_REQUEST_PARAMETER_NAME)
+  @GetMapping(value = DYNAMIC_PATTERN_PORTAL, params = DOWNLOAD_COLLECTION_REQUEST_PARAMETER_NAME)
   public ModelAndView handleDownloadCollectionOverviewRequest(@PathVariable(CONTEXT_ID) CMChannel navigation) {
     DownloadCollectionOverview downloadCollectionOverview = downloadPortalFactory.createDownloadCollectionOverview(Collections.emptyList());
     return getModelAndViewWithNavigation(downloadCollectionOverview, navigation, null);
@@ -283,7 +284,7 @@ public class DownloadPortalHandler {
    * @param response     the servlet response
    * @return the ModelAndView
    */
-  @RequestMapping(value = DYNAMIC_PATTERN_PAGINATED_ASSETS, method = RequestMethod.GET)
+  @GetMapping(value = DYNAMIC_PATTERN_PAGINATED_ASSETS)
   public ModelAndView handlePaginatedCategoryAssetsRequest(@PathVariable(CONTEXT_ID) CMChannel navigation,
                                                            @RequestParam(value = CATEGORY_REQUEST_PARAMETER_NAME, required = false) AMTaxonomy categoryBean,
                                                            @RequestParam(value = PAGE_REQUEST_PARAMETER_NAME, defaultValue = "1") Integer page,
@@ -306,7 +307,7 @@ public class DownloadPortalHandler {
    * @param response    the servlet response
    * @return the ModelAndView
    */
-  @RequestMapping(value = DYNAMIC_PATTERN_PAGINATED_ASSETS, method = RequestMethod.GET, params = SUBJECT_REQUEST_PARAMETER_NAME)
+  @GetMapping(value = DYNAMIC_PATTERN_PAGINATED_ASSETS, params = SUBJECT_REQUEST_PARAMETER_NAME)
   public ModelAndView handlePaginatedSubjectAssetsRequest(@PathVariable(CONTEXT_ID) CMChannel navigation,
                                                           @RequestParam(value = SUBJECT_REQUEST_PARAMETER_NAME) CMTaxonomy subjectBean,
                                                           @RequestParam(value = PAGE_REQUEST_PARAMETER_NAME, defaultValue = "1") Integer page,
@@ -327,7 +328,7 @@ public class DownloadPortalHandler {
    * @param response    the servlet response
    * @return the ModelAndView
    */
-  @RequestMapping(value = DYNAMIC_PATTERN_PAGINATED_ASSETS, method = RequestMethod.GET, params = SEARCH_REQUEST_PARAMETER_NAME)
+  @GetMapping(value = DYNAMIC_PATTERN_PAGINATED_ASSETS, params = SEARCH_REQUEST_PARAMETER_NAME)
   public ModelAndView handlePaginatedSearchAssetsRequest(@PathVariable(CONTEXT_ID) CMChannel navigation,
                                                          @RequestParam(value = SEARCH_REQUEST_PARAMETER_NAME) String query,
                                                          @RequestParam(value = PAGE_REQUEST_PARAMETER_NAME, defaultValue = "1") Integer page,
@@ -358,7 +359,7 @@ public class DownloadPortalHandler {
    * @param response                  the servlet response
    * @throws IOException
    */
-  @RequestMapping(value = PATTERN_DOWNLOAD_COLLECTION_PREPARE, method = RequestMethod.POST)
+  @PostMapping(value = PATTERN_DOWNLOAD_COLLECTION_PREPARE)
   public void prepareDownloadingCollection(@RequestParam(value = DOWNLOAD_COLLECTION_DATA, required = true) String downloadCollectionRawData,
                                            HttpServletResponse response) throws IOException {
 
@@ -390,7 +391,7 @@ public class DownloadPortalHandler {
    * @param response               the Servlet response
    * @throws IOException
    */
-  @RequestMapping(value = PATTERN_DOWNLOAD_COLLECTION_DOWNLOAD, method = RequestMethod.POST)
+  @PostMapping(value = PATTERN_DOWNLOAD_COLLECTION_DOWNLOAD)
   public void downloadRenditionCollection(@RequestParam(value = DOWNLOAD_COLLECTION_DATA, required = true) String downloadCollectionRawData,
                                           HttpServletResponse response) throws IOException {
 
@@ -423,7 +424,7 @@ public class DownloadPortalHandler {
     }
   }
 
-  @RequestMapping(value = PATTERN_DOWNLOAD_COLLECTION_OVERVIEW, method = RequestMethod.POST)
+  @PostMapping(value = PATTERN_DOWNLOAD_COLLECTION_OVERVIEW)
   public ModelAndView getDownloadCollectionOverview(@RequestParam(value = DOWNLOAD_COLLECTION_DATA, required = true) String downloadCollectionRawData,
                                                     @PathVariable(CONTEXT_ID) CMChannel navigation) throws IOException {
 

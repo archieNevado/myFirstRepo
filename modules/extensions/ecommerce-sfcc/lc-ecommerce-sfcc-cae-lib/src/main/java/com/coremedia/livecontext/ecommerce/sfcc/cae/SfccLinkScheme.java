@@ -48,6 +48,8 @@ public class SfccLinkScheme {
   private final CommerceLedLinkBuilderHelper commerceLedPageExtension;
   private final SettingsService settingsService;
 
+  private final String REDIRECT_SERVICE_URL_TEMPLATE_PREFIX = "/Sites-{storeId}-Site/{locale}/CM-RedirectUrl?link=";
+
   SfccLinkScheme(@NonNull SfccCommerceUrlProvider urlProvider,
                  @NonNull CommerceConnectionSupplier commerceConnectionSupplier,
                  @NonNull CommerceLedLinkBuilderHelper commerceLedPageExtension,
@@ -135,15 +137,10 @@ public class SfccLinkScheme {
     if (page.getExternalId() == null || page.getExternalId().isEmpty()){
       return buildLinkForCMChannel(page, viewName, linkParameters, request, response);
     }
-
     Map<String, Object> params = singletonMap("pageId", page.getExternalId());
-    String urlTemplate = "/Sites-{storeId}-Site/{locale}/Page-Show?cid={pageId}";
 
-    UriComponentsBuilder uriBuilder = urlProvider.provideValue(urlTemplate, params, storeContext);
-    if (isStudioPreviewRequest(request)) {
-      uriBuilder.queryParam("preview", "true");
-    }
-    return uriBuilder.build();
+    return buildUriFromTemplate(REDIRECT_SERVICE_URL_TEMPLATE_PREFIX +"Page-Show,cid,{pageId}",
+            params, storeContext, request);
   }
 
   @Link(type = CMChannel.class, order = 2)
@@ -161,18 +158,13 @@ public class SfccLinkScheme {
     String urlTemplate;
     if (channel.isRoot()) {
       // Special link building for root channel.
-      urlTemplate = "/Sites-{storeId}-Site/{locale}/Home-Show";
+      urlTemplate = REDIRECT_SERVICE_URL_TEMPLATE_PREFIX+"Home-Show";
     } else {
       String pageId = channel.getSegment() + "--" + channel.getContentId();
       params = singletonMap("pageId", pageId);
-      urlTemplate = "/Sites-{storeId}-Site/{locale}/CM-Content?pageid={pageId}&view=asMicroSite";
+      urlTemplate = REDIRECT_SERVICE_URL_TEMPLATE_PREFIX+"CM-Content,pageid,{pageId},view,asMicroSite";
     }
-
-    UriComponentsBuilder uriBuilder = urlProvider.provideValue(urlTemplate, params, storeContext);
-    if (isStudioPreviewRequest(request)) {
-      uriBuilder.queryParam("preview", "true");
-    }
-    return uriBuilder.build();
+    return buildUriFromTemplate(urlTemplate, params, storeContext, request);
   }
 
   @Link(type = LiveContextCategoryNavigation.class, order = 2)
@@ -210,17 +202,9 @@ public class SfccLinkScheme {
     if (!isSfcc(category)) {
       return null;
     }
-
-    StoreContext storeContext = category.getContext();
-
     Map<String, Object> params = singletonMap("categoryId", category.getExternalId());
-    String urlTemplate = "/Sites-{storeId}-Site/{locale}/Search-Show?cgid={categoryId}";
-
-    UriComponentsBuilder uriBuilder = urlProvider.provideValue(urlTemplate, params, storeContext);
-    if (isStudioPreviewRequest(request)) {
-      uriBuilder.queryParam("preview", "true");
-    }
-    return uriBuilder.build();
+    return buildUriFromTemplate(REDIRECT_SERVICE_URL_TEMPLATE_PREFIX+"Search-Show,cgid,{categoryId}",
+            params, category.getContext(), request);
   }
 
   /**
@@ -235,16 +219,16 @@ public class SfccLinkScheme {
     if (!isSfcc(product)) {
       return null;
     }
-
-    StoreContext storeContext = product.getContext();
-
     Map<String, Object> params = singletonMap("productId", product.getExternalId());
-    String urlTemplate = "/Sites-{storeId}-Site/{locale}/Product-Show?pid={productId}";
+    return buildUriFromTemplate(REDIRECT_SERVICE_URL_TEMPLATE_PREFIX+"Product-Show,pid,{productId}",
+            params, product.getContext(), request);
+  }
 
-    UriComponentsBuilder uriBuilder = urlProvider.provideValue(urlTemplate, params, storeContext);
+  private UriComponents buildUriFromTemplate(@NonNull String urlTemplate, @NonNull Map<String, Object> params, @NonNull StoreContext storeContext, @NonNull HttpServletRequest request) {
     if (isStudioPreviewRequest(request)) {
-      uriBuilder.queryParam("preview", "true");
+      urlTemplate += ",preview,true";
     }
+    UriComponentsBuilder uriBuilder = urlProvider.provideValue(urlTemplate, params, storeContext);
     return uriBuilder.build();
   }
 

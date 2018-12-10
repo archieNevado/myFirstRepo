@@ -1,8 +1,10 @@
 package com.coremedia.livecontext.ecommerce.sfcc.ocapi;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,10 +19,12 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.nio.charset.Charset;
 import java.util.Optional;
+
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper.decodeEntryTransparently;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper.replaceTokens;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper.replaceTokensAndDecrypt;
 
 /**
  * Salesforce Commerce Cloud Open Commerce API OAuth connector.
@@ -48,7 +52,7 @@ public class OAuthConnector {
     host = properties.getHost();
     path = properties.getPath();
     clientId = properties.getClientId();
-    password = properties.getClientPassword();
+    password = decodeEntryTransparently(properties.getClientPassword());
   }
 
   /**
@@ -119,13 +123,15 @@ public class OAuthConnector {
     return Optional.ofNullable(accessToken);
   }
 
+  @NonNull
   private String getClientId() {
-    return CommercePropertyHelper.replaceTokens(clientId,
-            CurrentCommerceConnection.find().map(CommerceConnection::getStoreContext).orElse(null));
+    StoreContext storeContext = CurrentCommerceConnection.find().map(CommerceConnection::getStoreContext).orElse(null);
+    return replaceTokens(clientId, storeContext);
   }
 
+  @NonNull
   private String getPassword() {
-    return CommercePropertyHelper.replaceTokens(password,
-            CurrentCommerceConnection.find().map(CommerceConnection::getStoreContext).orElse(null));
+    StoreContext storeContext = CurrentCommerceConnection.find().map(CommerceConnection::getStoreContext).orElse(null);
+    return replaceTokensAndDecrypt(password, storeContext);
   }
 }

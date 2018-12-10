@@ -30,7 +30,7 @@
           </thead>
           <tbody>
           <tr>
-            <td>Salesforce Commerce Cloud</td>
+            <td>Salesforce Commerce Cloud (directly)</td>
             <td>
               <a href="https://<%= sfcc_host %>/s/SiteGenesisGlobal/home?preview=true" target="_blank">English</a>,
               <a href="https://<%= sfcc_host %>/s/SiteGenesisGlobal/home?preview=true&lang=fr_FR" target="_blank">French</a>
@@ -41,12 +41,14 @@
             </td>
           </tr>
           <tr>
-            <td>Salesforce Commerce Cloud (Redirect)</td>
+            <td>Salesforce Commerce Cloud (over Apache)</td>
             <td>
-              <a href="https://shop-preview-sitegenesis.<%= host %>" target="_blank">English</a>
+              <a href="https://shop-preview-sitegenesis.<%= host %>" target="_blank">English</a>,
+              <a href="https://shop-preview-sitegenesis.<%= host %>/s/SiteGenesisGlobal/home?preview=true&lang=fr_FR" target="_blank">French</a>
             </td>
             <td>
-              <a href="https://shop-sitegenesis.<%= host %>" target="_blank">English</a>
+              <a href="https://shop-sitegenesis.<%= host %>" target="_blank">English</a>,
+              <a href="https://shop-sitegenesis.<%= host %>/s/SiteGenesisGlobal/home?preview=true&lang=fr_FR" target="_blank">French</a>
             </td>
           </tr>
           <tr>

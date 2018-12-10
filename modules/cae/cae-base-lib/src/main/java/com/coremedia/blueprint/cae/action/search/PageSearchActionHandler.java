@@ -18,10 +18,10 @@ import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -99,7 +99,7 @@ public class PageSearchActionHandler extends PageHandlerBase {
    *
    * @see "SearchActionState.ftl"
    */
-  @RequestMapping(value = URI_PATTERN, method = RequestMethod.GET)
+  @GetMapping(value = URI_PATTERN)
   public ModelAndView handleSearchAction(@PathVariable(SEGMENT_ID) CMAction action,
                                    @PathVariable(SEGMENT_ROOT) String context,
                                    @ModelAttribute() SearchFormBean searchForm,
@@ -158,7 +158,7 @@ public class PageSearchActionHandler extends PageHandlerBase {
    *
    */
   @ResponseBody
-  @RequestMapping(value = URI_PATTERN, params = {PARAMETER_ROOT_NAVIGATION_ID, PARAMETER_QUERY}, method = RequestMethod.GET, produces = CONTENT_TYPE_JSON)
+  @GetMapping(value = URI_PATTERN, params = {PARAMETER_ROOT_NAVIGATION_ID, PARAMETER_QUERY}, produces = CONTENT_TYPE_JSON)
   public List<Suggestion> handleSearchSuggestionAction(@PathVariable(SEGMENT_ID) CMAction action,
                                                @PathVariable(SEGMENT_ROOT) String context,
                                                @RequestParam(value = PARAMETER_ROOT_NAVIGATION_ID) String rootNavigationId,

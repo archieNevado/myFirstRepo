@@ -5,6 +5,7 @@ import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
 import com.coremedia.objectserver.web.links.Link;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,7 +44,7 @@ public class PageHandler extends DefaultPageHandler {
   public static final String URI_PATTERN_VANITY =
           "/{" + SEGMENTS_NAVIGATION + ":" + PATTERN_SEGMENTS + "}";
 
-  @RequestMapping(SEO_FRIENDLY_URI_PATTERN)
+  @GetMapping(SEO_FRIENDLY_URI_PATTERN)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ID) CMLinkable linkable,
                                     @PathVariable(SEGMENT_ID) String segmentId,
                                     @PathVariable(SEGMENTS_NAVIGATION) List<String> navigationPath,
@@ -56,7 +57,7 @@ public class PageHandler extends DefaultPageHandler {
   /**
    * Handles a request for a vanity URL containing a root segment and two additional segment, e.g. /sports/football/results/recent
    */
-  @RequestMapping({URI_PATTERN_VANITY, URI_PATTERN_VANITY + '/'})
+  @GetMapping({URI_PATTERN_VANITY, URI_PATTERN_VANITY + '/'})
   public ModelAndView handleRequest(@PathVariable(SEGMENTS_NAVIGATION) List<String> navigationPath,
                                     @RequestParam(value = VIEW_PARAMETER, required = false) String view,
                                     HttpServletRequest servletRequest) {

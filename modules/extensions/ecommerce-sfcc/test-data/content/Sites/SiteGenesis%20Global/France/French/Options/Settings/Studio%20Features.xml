@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <CMSettings folder="/Sites/SiteGenesis Global/France/French/Options/Settings" name="Studio Features" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
-<locale>en-US</locale>
+<locale>fr-FR</locale>
 <master>
 <link href="../../../../United%20Kingdom/English/Options/Settings/Studio%20Features.xml" path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Options/Settings/Studio%20Features"/>
 </master>

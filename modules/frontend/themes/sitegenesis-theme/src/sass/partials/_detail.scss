@@ -17,7 +17,7 @@
     }
     .cm-richtext-embedded {
       width: 80%;
-      &__picture-box {
+      &__picture-box, .#{$cm-teasable-prefix}__picture-box {
         @include aspect-ratio-box(16, 9);
       }
     }

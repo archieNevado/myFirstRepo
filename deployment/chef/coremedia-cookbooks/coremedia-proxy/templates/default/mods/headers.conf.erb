@@ -41,5 +41,5 @@
 # Remove `-gzip` or `-deflate` suffix from incoming ETag values because
 # Apache 2.4 mod_deflate adds this suffix but that breaks Studio Tomcat
 <IfModule mod_headers.c>
-  RequestHeader edit ETag -(gzip|deflate)\"$ \"
+  Header edit ETag -(gzip|deflate)\"$ \"
 </IfModule>

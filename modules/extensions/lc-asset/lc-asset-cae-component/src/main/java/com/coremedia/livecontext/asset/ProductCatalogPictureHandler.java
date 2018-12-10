@@ -12,6 +12,7 @@ import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.objectserver.web.HandlerHelper;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.WebRequest;
@@ -57,7 +58,7 @@ public class ProductCatalogPictureHandler extends CatalogPictureHandlerBase {
                   ".{" + SEGMENT_EXTENSION + ":" + PATTERN_EXTENSION + "}";
 
 
-  @RequestMapping(value = IMAGE_URI_PATTERN_FOR_CATALOG)
+  @GetMapping(value = IMAGE_URI_PATTERN_FOR_CATALOG)
   public ModelAndView handleRequestWidthHeightForProductWithCatalog(@PathVariable(STORE_ID) String storeId,
                                                                     @PathVariable(LOCALE) String locale,
                                                                     @PathVariable(FORMAT_NAME) String formatName,
@@ -97,7 +98,7 @@ public class ProductCatalogPictureHandler extends CatalogPictureHandlerBase {
   }
 
 
-  @RequestMapping(value = IMAGE_URI_PATTERN)
+  @GetMapping(value = IMAGE_URI_PATTERN)
   public ModelAndView handleRequestWidthHeightForProduct(@PathVariable(STORE_ID) String storeId,
                                                          @PathVariable(LOCALE) String locale,
                                                          @PathVariable(FORMAT_NAME) String formatName,

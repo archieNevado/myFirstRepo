@@ -4,4 +4,4 @@
      otherwise CMGallery will be automatically flattened -->
 
 <#-- render teaser with default settings -->
-<@cm.include self=self view="teaser" params={"additionalClass": "cm-teasable--gallery"} />
+<@cm.include self=self view="teaser" params={"additionalClass": "cm-teasable--gallery"} + cm.localParameters() />

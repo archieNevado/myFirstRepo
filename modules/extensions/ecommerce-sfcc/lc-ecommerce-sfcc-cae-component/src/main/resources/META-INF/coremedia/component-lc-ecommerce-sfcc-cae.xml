@@ -16,7 +16,7 @@
   <!-- List of all the origins that are allowed to receive cross origin AJAX requests. -->
   <!-- Entries must have the form http://my.host.something and be comma separated -->
   <customize:append id="liveContextSfccCaeCorsConfiguration" bean="caeCorsConfiguration" property="allowedOrigins"
-                    custom-value="http://${livecontext.sfcc.host},https://${livecontext.sfcc.host}"/>
+                    custom-value="http://${livecontext.apache.sfcc.host},https://${livecontext.apache.sfcc.host},http://${livecontext.sfcc.host},https://${livecontext.sfcc.host}"/>
 
   <customize:prepend id="sfccLinkResolverCustomizer" bean="liveContextLinkResolvers">
     <list>

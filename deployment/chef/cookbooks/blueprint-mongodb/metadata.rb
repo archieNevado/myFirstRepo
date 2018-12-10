@@ -8,3 +8,8 @@ version '1.0.0'
 
 depends 'ulimit', '~> 0.3.0'
 depends 'mongodb3', '~> 5.3.0'
+
+# fix transitive dependencies
+depends 'packagecloud', '= 1.0.0'
+depends 'user', '= 0.7.0'
+depends 'apt', '= 7.0.0'

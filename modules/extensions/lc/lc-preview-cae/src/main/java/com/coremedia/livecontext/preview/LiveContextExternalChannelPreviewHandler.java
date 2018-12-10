@@ -16,6 +16,7 @@ import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,7 +49,7 @@ public class LiveContextExternalChannelPreviewHandler extends LiveContextPageHan
   private ExternalNavigationHandler externalNavigationHandler;
   private TreeRelation<Content> treeRelation;
 
-  @RequestMapping({PREVIEW_URI_PATTERN})
+  @GetMapping({PREVIEW_URI_PATTERN})
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ID) LiveContextExternalChannelImpl liveContextExternalChannel,
                                     @PathVariable(SEGMENT_NAME) String vanityName,
                                     @PathVariable(SHOP_NAME_VARIABLE) String siteSegment,

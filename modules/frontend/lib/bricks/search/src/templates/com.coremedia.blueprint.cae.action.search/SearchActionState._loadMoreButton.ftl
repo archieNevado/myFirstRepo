@@ -13,7 +13,7 @@
 <#assign searchResultPerPage=searchResult.hitsPerPage!10 />
 
 <#if ((pageNumber * searchResultPerPage) < searchResult.numHits)>
-  <button class="cm-search__more" data-cm-search-results="${search.getLink(self, {"view": "asResultList", "pageNum": pageNumber})}">
+  <button disabled class="cm-search__more" data-cm-search-results="${search.getLink(self, {"view": "asResultList", "pageNum": pageNumber})}">
     ${bp.getMessage("search_load_more")}
   </button>
   <div class="cm-search__loading" data-cm-search-loading></div>

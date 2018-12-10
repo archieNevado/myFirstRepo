@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
@@ -140,7 +141,7 @@ public class AuthenticationHandler extends WebflowHandlerBase {
     ));
   }
 
-  @RequestMapping(value = URI_PATTERN)
+  @RequestMapping(value = URI_PATTERN, method = {RequestMethod.GET, RequestMethod.POST})
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ID) CMAction action,
                                     @PathVariable(SEGMENTS_NAVIGATION) List<String> navigationPath,
                                     @PathVariable(SEGMENTS_FRAGMENT) String fragment,

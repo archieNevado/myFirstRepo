@@ -18,9 +18,9 @@ import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
@@ -28,6 +28,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Links.ABSOLUTE_URI_KEY;
@@ -65,12 +66,13 @@ public class P13NContainerHandler extends PageHandlerBase {
 
   private ContentRepository contentRepository;
 
-  @RequestMapping(value = DYNAMIC_CONTAINER_URI_PATTERN, method = RequestMethod.GET)
+  @GetMapping(value = DYNAMIC_CONTAINER_URI_PATTERN)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ROOT) String context,
-                                            @PathVariable(ID_VARIABLE) int contentId,
-                                            @PathVariable(PROPERTY_PATH_VARIABLE) String propertyPath,
-                                            @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,
-                                            HttpServletRequest request) {
+                                    @PathVariable(ID_VARIABLE) int contentId,
+                                    @PathVariable(PROPERTY_PATH_VARIABLE) String propertyPath,
+                                    @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,
+                                    HttpServletRequest request,
+                                    HttpServletResponse response) {
     Content content = contentRepository.getContent(IdHelper.formatContentId(contentId));
     ContentBean contentBean = getContentBeanFactory().createBeanFor(content);
     Navigation navigation = getNavigation(context);
@@ -83,6 +85,7 @@ public class P13NContainerHandler extends PageHandlerBase {
     Page page = asPage(navigation, navigation, UserVariantHelper.getUser(request));
     ModelAndView modelAndView = createModelAndView((CMTeasable) contentBean, propertyPath, navigation, view);
     RequestAttributeConstants.setPage(modelAndView, page);
+    response.setContentType("text/html; charset=UTF-8");
     return modelAndView;
   }
 

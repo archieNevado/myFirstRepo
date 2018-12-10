@@ -193,6 +193,7 @@ class ThemeImporterContentHelper {
       if (!content.getType().getName().equals(contentType)) {
         //Set to null, because the type is different
         LOGGER.warn("Cannot update document {} since it is of type {} even though it should be of type {}", absolutePath, content.getType().getName(), contentType);
+        result.addFailure(absolutePath);
         content = null;
       } else if (content.isCheckedOut() && !content.isCheckedOutByCurrentSession()) {
         // Maybe the document would need no update anyway, so we could return
@@ -200,6 +201,7 @@ class ThemeImporterContentHelper {
         // do not control this document, state and effects are unpredictable,
         // even if we do not touch it, so better warn early.
         LOGGER.warn("Cannot update document {} since it has been checkout out by somebody else.", absolutePath);
+        result.addFailure(absolutePath);
         content = null;
       }
     } else {
@@ -209,6 +211,7 @@ class ThemeImporterContentHelper {
         toBeCheckedIn.add(content);
       } else {
         LOGGER.warn("Cannot create document {} since there is no content type {}", absolutePath, contentType);
+        result.addFailure(absolutePath);
       }
     }
     return content;

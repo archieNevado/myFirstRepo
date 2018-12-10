@@ -84,7 +84,7 @@
   </local:plugins>
   <local:store>
     <store_Json autoDestroy="true"
-                proxy="{getSearchSuggestionsDataProxy(config.taxonomyId)}"
+                proxy="{getSearchSuggestionsDataProxy(config.taxonomyId, config.siteSelectionExpression)}"
                 autoLoad="{true}">
       <fields>
         <data_AutoField name="{TaxonomyNode.PROPERTY_NAME}"/>

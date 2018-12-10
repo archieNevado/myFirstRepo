@@ -21,5 +21,5 @@ end
 %w(preview studio-preview).each do |candy_setup|
   node.force_default['blueprint']['proxy']['candy_properties'][candy_setup]['blueprint.site.mapping.sitegenesis'] = "https://candy-preview.#{node['blueprint']['hostname']}"
   node.force_default['blueprint']['proxy']['candy_properties'][candy_setup]['livecontext.apache.sfcc.host'] = "candy-shop-preview-sitegenesis.#{node['blueprint']['hostname']}"
-  node.force_default['blueprint']['proxy']['candy_properties'][candy_setup]['livecontext.sfcc.storeFrontUrl'] = "https://candy-shop-preview-sitegenesis.#{node['blueprint']['hostname']}/s/SiteGenesisGlobal/home?preview=true"
+  node.force_default['blueprint']['proxy']['candy_properties'][candy_setup]['livecontext.sfcc.storefront.url'] = "https://candy-shop-preview-sitegenesis.#{node['blueprint']['hostname']}/on/demandware.store"
 end

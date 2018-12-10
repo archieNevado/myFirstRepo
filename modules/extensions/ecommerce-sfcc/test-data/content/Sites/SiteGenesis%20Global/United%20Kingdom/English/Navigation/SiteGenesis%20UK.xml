@@ -40,14 +40,16 @@
 </pictures>
 <related>
 </related>
+<authors>
+</authors>
 <children>
 <link href="../Augmentation/Storefront%20Catalog%20-%20EN.xml" path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Augmentation/Storefront%20Catalog%20-%20EN"/>
 <link href="Sample%20Site.xml" path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Navigation/Sample%20Site"/>
 <link href="Microsites/Microsite%20Root%20Page.xml" path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Navigation/Microsites/Microsite%20Root%20Page"/>
 <link href="Newsletter/Fashion%20Newsletter.xml" path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Navigation/Newsletter/Fashion%20Newsletter"/>
 <link href="Summer%20Promotion/Summer%20Promotion.xml" path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Navigation/Summer%20Promotion/Summer%20Promotion"/>
-<link href="../Options/Settings/Templates/CMChannel/Newsletter%20%28Campaign%29/Campaign-Newsletter%20Template.xml" path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Options/Settings/Templates/CMChannel/Newsletter%20%28Campaign%29/Campaign-Newsletter%20Template"/>
-<link href="../Options/Settings/Templates/CMChannel/Newsletter%20%28Coupon%29/Coupon-Newsletter%20Template.xml" path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Options/Settings/Templates/CMChannel/Newsletter%20%28Coupon%29/Coupon-Newsletter%20Template"/>
+<link href="../Options/Settings/Templates/CMChannel/Newsletter%20%28Campaign%29/Campa9eb0f547.xml" path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Options/Settings/Templates/CMChannel/Newsletter%20%28Campaign%29/Campaign-Newsletter%20Template"/>
+<link href="../Options/Settings/Templates/CMChannel/Newsletter%20%28Coupon%29/Coupon-7b6f3c44.xml" path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Options/Settings/Templates/CMChannel/Newsletter%20%28Coupon%29/Coupon-Newsletter%20Template"/>
 <link href="Subscriber%20Confirmation%20Code/Subscriber%20Confirmation%20Code.xml" path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Navigation/Subscriber%20Confirmation%20Code/Subscriber%20Confirmation%20Code"/>
 <link href="Fragments/LiveContext%20Fragments%20Hidden%20Page.xml" path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Navigation/Fragments/LiveContext%20Fragments%20Hidden%20Page"/>
 </children>

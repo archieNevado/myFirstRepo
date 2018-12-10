@@ -23,9 +23,9 @@ import com.coremedia.objectserver.web.links.LinkPostProcessor;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -83,7 +83,7 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
 
   // --- Handler ----------------------------------------------------
 
-  @RequestMapping({URI_PATTERN})
+  @GetMapping({URI_PATTERN})
   public ModelAndView handleRequest(@PathVariable(SHOP_NAME_VARIABLE) String shopSegment,
                                     @PathVariable(PRODUCT_PATH_VARIABLE) String seoSegment,
                                     @RequestParam(value = VIEW_PARAMETER, required = false) String view,
@@ -106,7 +106,7 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
     return createLiveContextPage(site, seoSegment, view, UserVariantHelper.getUser(request));
   }
 
-  @RequestMapping(value = REST_URI_PATTERN, produces = CONTENT_TYPE_HTML, method = RequestMethod.GET)
+  @GetMapping(value = REST_URI_PATTERN, produces = CONTENT_TYPE_HTML)
   @ResponseBody
   public ModelAndView getProducts(@PathVariable(SITE_CHANNEL_ID) CMNavigation context,
                                   @PathVariable(PRODUCT_SEO_SEGMENT) String productId,

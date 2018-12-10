@@ -45,7 +45,12 @@
 <link href="../../../Pictures/Stylish%20Women%20with%20Sunglasses.xml" path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Pictures/Stylish%20Women%20with%20Sunglasses"/>
 </pictures>
 <related>
-<link href="../../Personalization/Personalized%20Hero%20Banner.xml" path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Editorial/Personalization/Personalized%20Hero%20Banner"/><link href="Fashions%20fade%2C%20style%20is%20eternal.xml" path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Editorial/Content/Articles/Fashions%20fade%2C%20style%20is%20eternal"/><link href="Fashion%20should%20be%20Fun.xml" path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Editorial/Content/Articles/Fashion%20should%20be%20Fun"/>
+<link href="../../Personalization/Personalized%20Hero%20Banner.xml" path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Editorial/Personalization/Personalized%20Hero%20Banner"/>
+<link href="Fashions%20fade%2C%20style%20is%20eternal.xml" path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Editorial/Content/Articles/Fashions%20fade%2C%20style%20is%20eternal"/>
+<link href="Fashion%20should%20be%20Fun.xml" path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Editorial/Content/Articles/Fashion%20should%20be%20Fun"/>
 <link href="Fashions%20fade%2C%20style%20is%20eternal.xml" path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Editorial/Content/Articles/Fashions%20fade%2C%20style%20is%20eternal"/>
 </related>
+<authors>
+<link href="../../Authors/Elle%20Quinn%20Person.xml" path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Editorial/Authors/Elle%20Quinn%20Person"/>
+</authors>
 </CMArticle>

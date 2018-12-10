@@ -18,6 +18,7 @@ import com.google.common.collect.ImmutableMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.WebRequest;
@@ -88,7 +89,7 @@ public class TransformedBlobHandler extends HandlerBase {
 
   // --- Handlers ------------------------------------------------------------------------------------------------------
 
-  @RequestMapping(value = URI_PATTERN)
+  @GetMapping(value = URI_PATTERN)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ID) ContentBean contentBean,
                                     @PathVariable(TRANSFORMATION_SEGMENT) String transformationName,
                                     @PathVariable(WIDTH_SEGMENT) Integer width,

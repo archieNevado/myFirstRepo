@@ -14,9 +14,9 @@ import com.coremedia.objectserver.web.links.Link;
 import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
@@ -24,6 +24,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 import java.util.Optional;
 
@@ -54,11 +55,12 @@ public class P13NNavigationHandler extends PageHandlerBase {
           "/{" + SEGMENT_ROOT + '}' +
           "/{" + ID_VARIABLE + ":" + PATTERN_NUMBER + "}";
 
-  @RequestMapping(value = DYNAMIC_NAVIGATION_URI_PATTERN, method = RequestMethod.GET)
+  @GetMapping(value = DYNAMIC_NAVIGATION_URI_PATTERN)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ROOT) String context,
                                     @PathVariable(ID_VARIABLE) CMLinkable linkable,
                                     @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,
-                                    HttpServletRequest request) {
+                                    HttpServletRequest request,
+                                    HttpServletResponse response) {
 
     Optional<Navigation> navigation = findNavigation(context, linkable);
     if (!navigation.isPresent()){
@@ -68,7 +70,9 @@ public class P13NNavigationHandler extends PageHandlerBase {
     User developer = UserVariantHelper.getUser(request);
 
     request.setAttribute(ABSOLUTE_URI_KEY, true);
-    return createModelAndView(navigation.get(), linkable != null ? linkable : navigation.get(), view, developer);
+    ModelAndView modelAndView = createModelAndView(navigation.get(), linkable != null ? linkable : navigation.get(), view, developer);
+    response.setContentType("text/html; charset=UTF-8");
+    return modelAndView;
   }
 
   @Link(type = {Page.class}, view = VIEW_FRAGMENT, uri = DYNAMIC_NAVIGATION_URI_PATTERN)

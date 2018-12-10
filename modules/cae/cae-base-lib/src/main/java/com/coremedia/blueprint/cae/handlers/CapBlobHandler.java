@@ -20,6 +20,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.WebRequest;
@@ -113,7 +114,7 @@ public class CapBlobHandler extends HandlerBase {
 
   // --- Handlers ------------------------------------------------------------------------------------------------------
 
-  @RequestMapping(value = CODERESOURCEBLOB_URI_PATTERN)
+  @GetMapping(value = CODERESOURCEBLOB_URI_PATTERN)
   public ModelAndView handleCodeResourceBlobRequest(@PathVariable(SEGMENT_ID) ContentBean contentBean,
                                                     @PathVariable(SEGMENT_ETAG) String eTag,
                                                     @PathVariable(SEGMENT_PROPERTY) String propertyName,
@@ -139,7 +140,7 @@ public class CapBlobHandler extends HandlerBase {
     return handleRequest(contentBean, eTag, propertyName, extension, webRequest, response);
   }
 
-  @RequestMapping(value = URI_PATTERN)
+  @GetMapping(value = URI_PATTERN)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ID) ContentBean contentBean,
                                     @PathVariable(SEGMENT_ETAG) String eTag,
                                     WebRequest webRequest,
