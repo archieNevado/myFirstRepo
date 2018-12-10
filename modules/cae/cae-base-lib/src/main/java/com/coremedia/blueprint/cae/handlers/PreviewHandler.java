@@ -8,6 +8,7 @@ import com.coremedia.objectserver.web.links.LinkFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -43,7 +44,7 @@ public class PreviewHandler extends IdRedirectHandlerBase {
 
   // --- Handler ----------------------------------------------------
 
-  @RequestMapping(value = URI_PATTERN)
+  @GetMapping(value = URI_PATTERN)
   public ModelAndView handleId(@RequestParam(value = "id", required = true) String id,
                                @RequestParam(value = "view", required = false) String view,
                                @RequestParam(value = "site", required = false) String siteId,

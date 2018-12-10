@@ -129,6 +129,7 @@ const handler = argv => {
           name: "openBrowser",
           message: "Open browser after initial build?",
           default: args.openBrowser,
+          when: () => !args.deploy,
         },
         {
           type: "input",

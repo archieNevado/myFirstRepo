@@ -2,6 +2,10 @@ coremedia-proxy Cookbook CHANGELOG
 ======================
 This file is used to list changes made in each version of the coremedia-proxy cookbook.
 
+1.0.1
+-----
+- fix gzip removal for etags in header.
+
 1.0.0
 -----
 - update `apache2` cookbook dependency to `~> 5.0.1`, this removes support for:

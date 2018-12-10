@@ -25,6 +25,8 @@
 </pictures>
 <related>
 </related>
+<authors>
+</authors>
 <value>Gender</value>
 <children>
 <link href="Male.xml" path="/Settings/Taxonomies/Subject/Male"/>

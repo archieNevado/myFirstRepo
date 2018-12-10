@@ -89,8 +89,9 @@ public class TaxonomySearchFieldBase extends StatefulComboBox {
     });
   }
 
-  internal function getSearchSuggestionsDataProxy(taxId:String):AjaxProxy {
+  internal function getSearchSuggestionsDataProxy(taxId:String, siteSelectionExpression:ValueExpression):AjaxProxy {
     if(!httpProxy) {
+      this.siteSelectionExpression = siteSelectionExpression;
       var reader:JsonReader = JsonReader({});
       reader.rootProperty = NODES;
 

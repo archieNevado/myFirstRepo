@@ -46,36 +46,36 @@ public class LiveContextChannelLinkBuilder extends LiveContextPageHandlerBase {
     this.commerceConnectionInitializer = commerceConnectionInitializer;
   }
 
-  // There is no request mapping, since micro site requests are handled by the commerce system
+  // There is no request mapping because micro site requests are handled by the commerce system.
 
   // --- LinkSchemes ---------------------------------------------------------------------------------------------------
 
   @Link(type = CMChannel.class)
   @Nullable
-  public UriComponents buildLinkForChannel(@NonNull CMChannel channel,
-                                           @NonNull HttpServletRequest request) {
-    Optional<Site> siteOptional = findSite(channel);
-
-    CommerceConnection commerceConnection = siteOptional
-            .flatMap(commerceConnectionInitializer::findConnectionForSite)
-            .orElse(null);
-    if (commerceConnection == null) {
+  public UriComponents buildLinkForChannel(@NonNull CMChannel channel, @NonNull HttpServletRequest request) {
+    Site site = findSite(channel).orElse(null);
+    if (site == null) {
       return null;
     }
 
-    StoreContext storeContext = commerceConnection.getStoreContext();
-
     // Channel case
     if (commerceLedLinkBuilderHelper.isCommerceLedChannel(channel)) {
-      return createLinkForChannelInShop(channel, storeContext, request)
+      return commerceConnectionInitializer.findConnectionForSite(site)
+              .map(CommerceConnection::getStoreContext)
+              .flatMap(storeContext -> createLinkForChannelInShop(channel, storeContext, request))
               .map(UriComponentsBuilder::build)
               .orElse(null);
     }
 
-    //noinspection ConstantConditions site must have been present to find the commerce connection
-    Site site = siteOptional.get();
     // Search Landing Page case
     if (searchLandingPagesLinkBuilderHelper.isSearchLandingPage(channel, site)) {
+      CommerceConnection commerceConnection = commerceConnectionInitializer.findConnectionForSite(site).orElse(null);
+      if (commerceConnection == null) {
+        return null;
+      }
+
+      StoreContext storeContext = commerceConnection.getStoreContext();
+
       return searchLandingPagesLinkBuilderHelper
               .createSearchLandingPageURLFor(channel, commerceConnection, request, storeContext)
               .orElse(null);

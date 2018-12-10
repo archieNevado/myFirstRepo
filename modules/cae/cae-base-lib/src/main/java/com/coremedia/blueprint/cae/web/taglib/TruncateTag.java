@@ -67,7 +67,7 @@ public class TruncateTag extends TagSupport {
   }
 
   private String abbreviateMarkup(Markup markup) {
-    return abbreviateString(MarkupUtil.asPlainText(markup));
+    return abbreviateString(MarkupUtil.asPlainText(markup).trim());
   }
 
   private String abbreviateString(String value) {

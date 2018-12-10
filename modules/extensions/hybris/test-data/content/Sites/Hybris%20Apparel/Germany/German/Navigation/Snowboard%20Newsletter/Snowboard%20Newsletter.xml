@@ -44,12 +44,15 @@
 <pictures>
 <link href="../../Pictures/CM%20Action%20Goggles%2006.xml" path="/Sites/Hybris%20Apparel/Germany/German/Pictures/CM%20Action%20Goggles%2006"/>
 </pictures>
+<notSearchable>1</notSearchable>
 <related>
 </related>
+<authors>
+</authors>
 <children>
 </children>
 <hidden>1</hidden>
-<hiddenInSitemap>1</hiddenInSitemap>
+<hiddenInSitemap>0</hiddenInSitemap>
 <javaScript>
 </javaScript>
 <css>

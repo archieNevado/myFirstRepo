@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.handler;
 
 import com.coremedia.objectserver.web.links.Link;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -34,7 +35,7 @@ public class NextURLRedirectHandler {
                                             "/nexturl/"
                                             + "{" + NEXT_URL + ":.*}";
 
-  @RequestMapping({URI_PATTERN})
+  @GetMapping({URI_PATTERN})
   public String handleRequest(@PathVariable(NEXT_URL) String nexturl) throws UnsupportedEncodingException {
     String decode = URLDecoder.decode(nexturl, "UTF-8");
     return "redirect:" + decode;

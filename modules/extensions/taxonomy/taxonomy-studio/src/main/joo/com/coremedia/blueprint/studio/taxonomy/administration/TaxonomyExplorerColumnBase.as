@@ -281,6 +281,11 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
 
     if (record.data.root) {
       if (record.data.siteId) {
+        var i18nName:String = resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', name);
+        if(i18nName) {
+          name = i18nName;
+        }
+
         var siteName:String = editorContext.getSitesService().getSite(record.data.siteId).getName();
         name += ' (' + siteName + ')';
       }

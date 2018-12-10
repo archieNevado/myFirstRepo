@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <CMPicture folder="/Sites/Hybris Apparel/United Kingdom/English/Editorial/Content/Twitter" name="groomie37 - Picture" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
-<locale></locale>
+<locale>en-GB</locale>
 <master>
 </master>
 <viewtype>
@@ -17,15 +17,16 @@
 </StructProperty>
 <StructProperty Name="transforms">
 <Struct>
-<StringProperty Name="portrait_ratio20x31">b;a=0;c=1/crop;x=294;y=0;width=438;height=680</StringProperty>
-<StringProperty Name="portrait_ratio3x4">b;a=0;c=1/crop;x=258;y=0;width=511;height=680</StringProperty>
-<StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=173;y=0;width=681;height=680</StringProperty>
-<StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=59;y=0;width=908;height=680</StringProperty>
-<StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=0;y=54;width=1024;height=574</StringProperty>
+<StringProperty Name="portrait_ratio20x31">b;a=0;c=1/crop;x=292;y=0;width=439;height=680</StringProperty>
+<StringProperty Name="portrait_ratio3x4">b;a=0;c=1/crop;x=258;y=0;width=510;height=680</StringProperty>
+<StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;x=172;y=0;width=680;height=680</StringProperty>
+<StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;x=58;y=0;width=907;height=680</StringProperty>
+<StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;x=0;y=51;width=1024;height=576</StringProperty>
 <StringProperty Name="landscape_ratio2x1">b;a=0;c=1/crop;x=0;y=85;width=1024;height=513</StringProperty>
-<StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=0;y=137;width=1024;height=410</StringProperty>
+<StringProperty Name="landscape_ratio5x2">b;a=0;c=1/crop;x=0;y=135;width=1024;height=410</StringProperty>
 <StringProperty Name="landscape_ratio8x3">b;a=0;c=1/crop;x=0;y=149;width=1024;height=384</StringProperty>
-<StringProperty Name="landscape_ratio4x1">b;a=0;c=1/crop;x=0;y=214;width=1024;height=255</StringProperty>
+<StringProperty Name="landscape_ratio4x1">b;a=0;c=1/crop;x=0;y=212;width=1024;height=256</StringProperty>
+<StringProperty Name="landscape_ratio3x1">b;a=0;c=1/crop;x=0;y=169;width=1024;height=341</StringProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="relative">
@@ -94,6 +95,8 @@
 </pictures>
 <related>
 </related>
+<authors>
+</authors>
 <alt></alt>
 <copyright></copyright>
 <dataUrl></dataUrl>

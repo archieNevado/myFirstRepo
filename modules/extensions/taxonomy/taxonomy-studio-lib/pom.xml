@@ -55,9 +55,7 @@
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>cap-unified-api</artifactId>
-      <scope>test</scope>
     </dependency>
-
 
     <dependency>
       <groupId>org.springframework</groupId>

@@ -83,10 +83,11 @@ public class TaxonomyResourceTest {
     }
 
     @Bean
-    TaxonomyResource taxonomyResource(TaxonomyResolver taxonomyResolver) {
+    TaxonomyResource taxonomyResource(TaxonomyResolver taxonomyResolver, ContentRepository contentRepository) {
       final TaxonomyResource taxonomyResource = new TaxonomyResource();
       taxonomyResource.setSemanticStrategies(new ArrayList<SemanticStrategy>());
       taxonomyResource.setStrategyResolver(taxonomyResolver);
+      taxonomyResource.setContentRepository(contentRepository);
       taxonomyResource.afterPropertiesSet();
       return taxonomyResource;
     }

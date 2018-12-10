@@ -4,7 +4,7 @@
   <#return {
     "target": base.target!cm.UNDEFINED,
     "text": base.text!"",
-    "openInTab": base.openInTab!false,
+    "openInNewTab": base.openInNewTab!false,
     "metadata": base.metadata![]
   } />
 </#function>

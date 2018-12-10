@@ -39,13 +39,6 @@ directory extract_path do
   action :create
 end
 
-directory node['blueprint']['solr']['pid_dir'] do
-  owner node['blueprint']['solr']['user']
-  group node['blueprint']['solr']['group']
-  recursive true
-  action :create
-end
-
 directory node['blueprint']['solr']['log_dir'] do
   owner node['blueprint']['solr']['user']
   group node['blueprint']['solr']['group']
@@ -102,8 +95,12 @@ link node['blueprint']['solr']['dir'] do
   to extract_path
 end
 
-link '/etc/init.d/solr' do
-  to "#{extract_path}/bin/init.d/solr"
+# Workaround for SOLR-12737: custom init script that creates SOLR_PID_DIR
+cookbook_file '/etc/init.d/solr' do
+  source 'init.d/solr'
+  owner 'root'
+  group 'root'
+  mode '0755'
 end
 
 directory node['blueprint']['solr']['solr_home'] do

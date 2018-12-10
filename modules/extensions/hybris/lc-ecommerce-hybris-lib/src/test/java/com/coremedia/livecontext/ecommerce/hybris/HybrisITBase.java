@@ -37,6 +37,10 @@ public class HybrisITBase {
             .build();
   }
 
+  protected StoreContext getStoreContext(){
+    return storeContext;
+  }
+
   protected <T> T performGetWithStoreContext(@NonNull String resourcePath, @NonNull Class<T> responseType) {
     return connector.performGet(resourcePath, storeContext, responseType);
   }

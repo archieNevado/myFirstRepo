@@ -36,6 +36,11 @@
     <!-- list of contents that were changed both in the derived and in the master site at conflicting places -->
     <AggregationVariable name="autoMergeConflicts" type="Resource"/>
 
+    <!-- map that groups each derived content by its locale-->
+    <Variable name="translationTreeData" type="Blob"/>
+    <!-- map that groups each masterVersion by its derived content-->
+    <Variable name="premularConfigData" type="Blob"/>
+
 
     <InitialAssignment>
       <Writes variable="subject"/>
@@ -87,10 +92,19 @@
       <Else successor="GetTargetSiteManagerGroup"/>
     </If>
 
-    <AutomatedTask name="GetTargetSiteManagerGroup" successor="CheckIfSelfAssigned">
+    <AutomatedTask name="GetTargetSiteManagerGroup" successor="CreateTranslationTreeData">
       <Action class="com.coremedia.translate.workflow.GetSiteManagerGroupAction"
               siteVariable="targetSiteId"
               siteManagerGroupVariable="targetSiteManagerGroup"/>
+    </AutomatedTask>
+
+    <AutomatedTask name="CreateTranslationTreeData" successor="CheckIfSelfAssigned">
+      <Action class="com.coremedia.translate.workflow.CreateTranslationTreeDataAction"
+              masterContentObjectsVariable="masterContentObjects"
+              derivedContentsVariable="derivedContents"
+              translationTreeDataVariable="translationTreeData"
+              premularConfigDataVariable="premularConfigData"
+          />
     </AutomatedTask>
 
     <If name="CheckIfSelfAssigned">

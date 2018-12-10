@@ -11,7 +11,7 @@ const { PKG_NAME } = require("../../lib/constants");
 const { PACKAGE_MANAGER_EXECUTABLE } = require("../../lib/paths");
 
 const command = "upload-theme";
-const desc = "Upload theme to remote Studio";
+const desc = "Upload theme to remote server";
 const builder = yargs => yargs.epilogue(args.docs);
 
 const handler = () => {
@@ -62,7 +62,8 @@ const handler = () => {
             );
           })
           .catch(e => {
-            log.error(e);
+            log.error(e.message);
+            process.exit(1);
           });
       })
       .catch(e => {
@@ -78,7 +79,8 @@ const handler = () => {
             );
           })
           .catch(e => {
-            log.error(e);
+            log.error(e.message);
+            process.exit(1);
           });
       });
   } catch (e) {

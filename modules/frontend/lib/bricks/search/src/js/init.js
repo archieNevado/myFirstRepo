@@ -1,96 +1,70 @@
 import $ from "jquery";
 import { log } from "@coremedia/js-logger";
-import { addNodeDecoratorBySelector } from "@coremedia/js-node-decoration-service";
+import {
+  addNodeDecoratorByData,
+  addNodeDecoratorBySelector,
+} from "@coremedia/js-node-decoration-service";
 import { loadSearchResultPage, loadSearchResults } from "./search";
 
-/**
- * Add click handler to "load more" button inside a search results container
- */
-let searchResultsContainerId = "cm-search-results";
-function loadSearchResultsClickHandler() {
-  let $searchResultsContainer = $("#" + searchResultsContainerId);
-  log("Initialize loadSearchResultsClickHandler", $searchResultsContainer);
-  $searchResultsContainer.on(
-    "click touch",
-    "[data-" + searchResultsContainerId + "]",
-    function() {
-      loadSearchResults(this, searchResultsContainerId);
-    }
-  );
-}
-addNodeDecoratorBySelector(
-  "#" + searchResultsContainerId,
-  loadSearchResultsClickHandler
-);
+addNodeDecoratorByData(undefined, "cm-search-results", ($button, url) => {
+  log("Initialize loadSearchResultsClickHandler", $button, url);
+  $button.on("click touch", () => {
+    loadSearchResults(url, $button);
+  });
+  // enable button as soon as functionality is attached
+  $button.removeAttr("disabled");
+});
 
 /**
  * Add click handler to all links inside the search page to reload the search via ajax
  */
-let searchResultPageContainerId = "cm-search-result-page";
+const searchResultPageContainerId = "cm-search-result-page";
 function loadSearchResultPageClickHandler($target) {
-  log(
-    "Initialize loadSearchResultPageClickHandler",
-    $target
-  );
+  log("Initialize loadSearchResultPageClickHandler", $target);
   /* on links like filters */
-  $target.on(
-    "click touch",
-    "[data-cm-search-link]",
-    function(event) {
-      // avoid 2nd click on label for input field
-      event.preventDefault();
-      let $this = $(this);
-      let link = $this.data("cm-search-link");
-      // update search query input field, if suggestion is available
-      if ($this.data("cm-search-suggestion")) {
-        $("[name=query]").val($this.data("cm-search-suggestion"));
-      }
-      // browser history is enabled by default
-      loadSearchResultPage(
-        link,
-        searchResultPageContainerId,
-        !$("body").data("cm-search-disable-browser-history")
-      );
+  $target.on("click touch", "[data-cm-search-link]", function(event) {
+    // avoid 2nd click on label for input field
+    event.preventDefault();
+    let $this = $(this);
+    let link = $this.data("cm-search-link");
+    // update search query input field, if suggestion is available
+    if ($this.data("cm-search-suggestion")) {
+      $("[name=query]").val($this.data("cm-search-suggestion"));
     }
-  );
+    // browser history is enabled by default
+    loadSearchResultPage(
+      link,
+      searchResultPageContainerId,
+      !$("body").data("cm-search-disable-browser-history")
+    );
+  });
   /* on dropdown */
-  $target.on(
-    "change",
-    "[data-cm-search-dropdown]",
-    function() {
-      let link = $(this.selectedOptions).data("cm-search-sort-link");
-      loadSearchResultPage(
-        link,
-        searchResultPageContainerId,
-        !$("body").data("cm-search-disable-browser-history")
-      );
-    }
-  );
+  $target.on("change", "[data-cm-search-dropdown]", function() {
+    let link = $(this.selectedOptions).data("cm-search-sort-link");
+    loadSearchResultPage(
+      link,
+      searchResultPageContainerId,
+      !$("body").data("cm-search-disable-browser-history")
+    );
+  });
   /* on search submit */
-  $target.on(
-    "submit",
-    "[data-cm-search-form-submit]",
-    function(event) {
-      event.preventDefault();
-      let query = $("[data-cm-search-form-input]").val();
-      // update search query input field, if suggestion is available
-      $("[name=query]").val(query);
-      // replace query string in search link with new qquery
-      let link = $(this).data("cm-search-form-submit");
-      let re = new RegExp("([?&])query=.*?(&|$)", "i");
-      if (link.match(re)) {
-        link = link.replace(
-          re,
-          "$1" + "query=" + query + "$2"
-        );
-      }
-      loadSearchResultPage(
-        link,
-        searchResultPageContainerId,
-        !$("body").data("cm-search-disable-browser-history")
-      );
+  $target.on("submit", "[data-cm-search-form-submit]", function(event) {
+    event.preventDefault();
+    let query = $("[data-cm-search-form-input]").val();
+    // update search query input field, if suggestion is available
+    $("[name=query]").val(query);
+    // replace query string in search link with new qquery
+    let link = $(this).data("cm-search-form-submit");
+    let re = new RegExp("([?&])query=.*?(&|$)", "i");
+    if (link.match(re)) {
+      link = link.replace(re, "$1" + "query=" + query + "$2");
     }
-  );
+    loadSearchResultPage(
+      link,
+      searchResultPageContainerId,
+      !$("body").data("cm-search-disable-browser-history")
+    );
+  });
 }
 addNodeDecoratorBySelector(
   "#" + searchResultPageContainerId,

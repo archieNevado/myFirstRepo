@@ -30,6 +30,8 @@
 </pictures>
 <related>
 </related>
+<authors>
+</authors>
 <items>
 </items>
 <rules grammarName="coremedia-selectionrules-1.0"><rules version="1.0" xmlns="http://www.coremedia.com/2010/selectionrules" xmlns:xlink="http://www.w3.org/1999/xlink">select <content xlink:href="coremedia:///cap/resources/Skier%20Interest%20Collection.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Content/Perso/Skier%20Interest%20Collection"/> if commerce.usersegments#"hybris:///catalog/segment/CMSkiCustomerGroup"; select <content xlink:href="coremedia:///cap/resources/Snowboard%20Interest%20Collection.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Content/Perso/Snowboard%20Interest%20Collection"/> if commerce.usersegments#"hybris:///catalog/segment/CMSnowboardCustomerGroup"</rules></rules>

@@ -26,9 +26,10 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -87,7 +88,7 @@ public class CommerceSearchHandler extends PageHandlerBase {
    * @param term the search term to search in commerce
    */
   @ResponseBody
-  @RequestMapping(value = URI_PATTERN, params = {PARAMETER_TYPE, PARAMETER_QUERY}, method = RequestMethod.GET, produces = CONTENT_TYPE_JSON)
+  @GetMapping(value = URI_PATTERN, params = {PARAMETER_TYPE, PARAMETER_QUERY}, produces = CONTENT_TYPE_JSON)
   public List<Suggestion> handleAjaxKeywordSuggestion(
           @PathVariable(SEGMENT_ROOT) String context,
           @RequestParam(value = PARAMETER_QUERY) String term) {
@@ -128,7 +129,7 @@ public class CommerceSearchHandler extends PageHandlerBase {
    * @param context a path segment to find resolve navigation context
    * @param term the search term to search in commerce
    */
-  @RequestMapping(value = URI_PATTERN, params = {PARAMETER_QUERY}, method = RequestMethod.POST, produces = CONTENT_TYPE_JSON)
+  @PostMapping(value = URI_PATTERN, params = {PARAMETER_QUERY}, produces = CONTENT_TYPE_JSON)
   public ModelAndView handleSearchRequest(
           @PathVariable(SEGMENT_ROOT) String context,
           @RequestParam(value = PARAMETER_QUERY) String term, HttpServletRequest request, HttpServletResponse response) throws IOException {

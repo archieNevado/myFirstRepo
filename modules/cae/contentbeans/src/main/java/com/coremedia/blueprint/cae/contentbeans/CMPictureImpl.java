@@ -1,10 +1,12 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
+import com.coremedia.blueprint.common.cta.CallToActionButtonSettings;
 import com.coremedia.cap.common.NoSuchPropertyDescriptorException;
 import com.coremedia.cap.transform.TransformImageService;
 import com.coremedia.cap.transform.Transformation;
 import org.springframework.beans.factory.annotation.Required;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,5 +65,10 @@ public class CMPictureImpl extends CMPictureBase {
   @Override
   public Transformation getTransformation(String name) {
     return transformImageService.getTransformation(this.getContent(), name);
+  }
+
+  @Override
+  public List<CallToActionButtonSettings> getCallToActionSettings() {
+    return Collections.emptyList();
   }
 }

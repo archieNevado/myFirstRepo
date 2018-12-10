@@ -24,8 +24,11 @@
 <teaserTitle></teaserTitle>
 <pictures>
 </pictures>
+<notSearchable>1</notSearchable>
 <related>
 </related>
+<authors>
+</authors>
 <children>
 <link href="Empty/Empty%20Page.xml" path="/Sites/Hybris%20Apparel/Germany/German/Options/Settings/Templates/CMChannel/Empty/Empty%20Page"/>
 <link href="Landing%20Page/Landing%20Page.xml" path="/Sites/Hybris%20Apparel/Germany/German/Options/Settings/Templates/CMChannel/Landing%20Page/Landing%20Page"/>

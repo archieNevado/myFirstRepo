@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMPerson folder="/Sites/Hybris Apparel/Germany/German/Editorial/Authors" name="Elle Quinn Person" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
+<locale>de-DE</locale>
+<master>
+<link href="../../../../United%20Kingdom/English/Editorial/Authors/Elle%20Quinn%20Person.xml" path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Editorial/Authors/Elle%20Quinn%20Person"/>
+</master>
+<viewtype>
+</viewtype>
+<linkedSettings>
+</linkedSettings>
+<resourceBundles2>
+</resourceBundles2>
+<segment></segment>
+<title></title>
+<htmlTitle></htmlTitle>
+<keywords></keywords>
+<htmlDescription></htmlDescription>
+<subjectTaxonomy>
+</subjectTaxonomy>
+<locationTaxonomy>
+</locationTaxonomy>
+<contexts>
+</contexts>
+<teaserTitle></teaserTitle>
+<teaserText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p>Modejournalistin für Calista am Tag, Trend-Jägerin bei Nacht.</p><p/></div></teaserText>
+<detailText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p>Elle – geboren 1989 – hat Philosophie and der Universität von Chicago studiert und schon immer ein starkes Interesse an allem gehabt, was Mode betrifft. Nach einem Praktikum bei Vogue US war sie sich sicher, dass Mode das Zentrum ihrer Karriere wird.</p><p>Mittlerweile inspiriert Elle tausende Follower mit ihrem Instagram Profil.</p></div></detailText>
+<pictures>
+<link href="../../Pictures/Authors/Elle%20Quinn%20Picture.xml" path="/Sites/Hybris%20Apparel/Germany/German/Pictures/Authors/Elle%20Quinn%20Picture"/>
+</pictures>
+<related>
+</related>
+<authors>
+</authors>
+<firstName>Elle</firstName>
+<lastName>Quinn</lastName>
+<displayName></displayName>
+<eMail>info@coremedia.com</eMail>
+<organization>Apparel</organization>
+<jobTitle>Social Media Managerin</jobTitle>
+<misc>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StringProperty Name="instagram">https://www.instagram.com/coremediacloud/</StringProperty>
+</Struct>
+</misc>
+</CMPerson>

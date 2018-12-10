@@ -16,6 +16,9 @@ This is the wrapper cookbook to install postgresql.
 * blueprint-yum
 * yum-pgdg (~> 2.0.1)
 * postgresql (= 6.1.1)
+* build-essential (= 8.1.1)
+* openssl (= 8.1.2)
+* seven_zip (= 3.0.0)
 
 # Attributes
 

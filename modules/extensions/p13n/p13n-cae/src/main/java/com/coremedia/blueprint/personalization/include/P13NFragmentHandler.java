@@ -17,9 +17,9 @@ import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
@@ -59,7 +59,7 @@ public class P13NFragmentHandler extends PageHandlerBase {
   private ContentRepository contentRepository;
 
 
-  @RequestMapping(value = DYNAMIC_URI_PATTERN, method = RequestMethod.GET)
+  @GetMapping(value = DYNAMIC_URI_PATTERN)
   public ModelAndView handleFragmentRequest(@PathVariable(SEGMENT_ROOT) String context,
                                             @PathVariable(ID_VARIABLE) int contentId,
                                             @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,

@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.cae.sitemap;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -17,7 +18,7 @@ public class SitemapGenerationHandler extends SitemapGenerationController {
           "/{" + SEGMENT_ROOT + '}' +
           '/' + SitemapHelper.SITEMAP_ORG;
 
-  @RequestMapping(URI_PATTERN)
+  @GetMapping(URI_PATTERN)
   public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) {
     return handleRequestInternal(request, response);
   }

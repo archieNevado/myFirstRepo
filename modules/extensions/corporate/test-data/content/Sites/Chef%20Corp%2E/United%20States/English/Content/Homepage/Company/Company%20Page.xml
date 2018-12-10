@@ -27,6 +27,8 @@
 </pictures>
 <related>
 </related>
+<authors>
+</authors>
 <children>
 <link href="About/About%20Page.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Company/About/About%20Page"/>
 <link href="Corporate%20Video/Corporate%20Video%20Page.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Company/Corporate%20Video/Corporate%20Video%20Page"/>
@@ -54,34 +56,52 @@
 </StructProperty>
 <StructListProperty Name="placements">
 <Struct>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/About/About%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Company/About/About%20Page"/>
-<Link xlink:href="coremedia:///cap/resources/Corporate%20Video/Corporate%20Video%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Company/Corporate%20Video/Corporate%20Video%20Page"/>
-<Link xlink:href="coremedia:///cap/resources/Careers/Careers%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Company/Careers/Careers%20Page"/>
-<Link xlink:href="coremedia:///cap/resources/Press/Press%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Company/Press/Press%20Page"/>
-<Link xlink:href="coremedia:///cap/resources/Investor%20Relations/Investor%20Relations%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Company/Investor%20Relations/Investor%20Relations%20Page"/>
-<Link xlink:href="coremedia:///cap/resources/Asset%20Download%20Portal/Asset%20Download%20Portal%fd172a12.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Company/Asset%20Download%20Portal/Asset%20Download%20Portal%20Root%20Page"/>
-</LinkListProperty>
+<StructListProperty Name="extendedItems">
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/About/About%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Company/About/About%20Page"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/Corporate%20Video/Corporate%20Video%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Company/Corporate%20Video/Corporate%20Video%20Page"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/Careers/Careers%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Company/Careers/Careers%20Page"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/Press/Press%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Company/Press/Press%20Page"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/Investor%20Relations/Investor%20Relations%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Company/Investor%20Relations/Investor%20Relations%20Page"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/Asset%20Download%20Portal/Asset%20Download%20Portal%fd172a12.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Company/Asset%20Download%20Portal/Asset%20Download%20Portal%20Root%20Page"/>
+</Struct>
+</StructListProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/main.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/Pagegrid/Placements/main"/>
 </Struct>
 <Struct>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/Company%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Company/Company%20Page"/>
-</LinkListProperty>
+<StructListProperty Name="extendedItems">
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/Company%20Teaser.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Company/Company%20Teaser"/>
+</Struct>
+</StructListProperty>
 <LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../../../Options/Viewtypes/CMChannel/hero.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Viewtypes/CMChannel/hero"/>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/hero.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/Pagegrid/Placements/hero"/>
 </Struct>
 <Struct>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/About/Company%20Article.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Company/About/Company%20Article"/>
-</LinkListProperty>
+<StructListProperty Name="extendedItems">
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/About/Company%20Article.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Company/About/Company%20Article"/>
+</Struct>
+</StructListProperty>
 <LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../../../Options/Viewtypes/CMChannel/full-details.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Viewtypes/CMChannel/full-details"/>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/above.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/Pagegrid/Placements/above"/>
 </Struct>
 <Struct>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../../Site-Wide/External%20HTML%20Fragments/AddThis%20Social%20Sharing%20HTafde1194.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Site-Wide/External%20HTML%20Fragments/AddThis%20Social%20Sharing%20HTML%20Fragment"/>
-</LinkListProperty>
+<StructListProperty Name="extendedItems">
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../../Site-Wide/External%20HTML%20Fragments/AddThis%20Social%20Sharing%20HTafde1194.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Site-Wide/External%20HTML%20Fragments/AddThis%20Social%20Sharing%20HTML%20Fragment"/>
+</Struct>
+</StructListProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/below.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/Pagegrid/Placements/below"/>
 </Struct>
 </StructListProperty>

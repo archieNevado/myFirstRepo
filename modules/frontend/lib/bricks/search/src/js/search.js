@@ -1,43 +1,38 @@
 import $ from "jquery";
 import { error, log } from "@coremedia/js-logger";
-import { EVENT_LAYOUT_CHANGED } from "@coremedia/js-basic";
 import { updateTarget } from "@coremedia/brick-dynamic-include";
 
 /**
  * Loads more search results (next page) via ajax below the search results.
+ * The given button will be replaced by the search results.
  *
- * @param {string} button
- * @param {string} searchResultsContainerId
+ * @param {string} url
+ * @param {*} button
  */
-export function loadSearchResults(
-  button,
-  searchResultsContainerId = "cm-search-results"
-) {
-  let $button = $(button);
-  let $searchResultsContainer = $("#" + searchResultsContainerId);
-  log("Load more search results via ajax.", $button, $searchResultsContainer);
-  //hide button
+export function loadSearchResults(url, button) {
+  const $button = $(button);
+  const $spinner = $button.next();
+
+  log("Load more search results via ajax.", $button, url);
   $button.hide();
-  //show spinner
-  $button.next().show();
+  $spinner.show();
+
   // load more results
-  log("ajaxUrl", $button.data(searchResultsContainerId));
+  log("ajaxUrl", url);
   $.ajax({
-    url: $button.data(searchResultsContainerId),
+    url: url,
   })
-    .done(function(nextSearchResults) {
+    .done(nextSearchResults => {
       log("Loaded search results successfully.");
-      // append the new results to the the search result page
-      $searchResultsContainer.append(nextSearchResults);
-      // trigger event for layout changes to load responsive images
-      $(document).trigger(EVENT_LAYOUT_CHANGED);
-      //hide spinner
-      $button.next().hide();
+      // delete the old spinner (the result has a new one)
+      $spinner.remove();
+      // replace the button with the result (the result has a new one)
+      updateTarget($button, $(nextSearchResults), true);
     })
-    .fail(function() {
+    .fail(() => {
       error("Could not load more search results.");
-      // show button again for retry
-      $button.next().hide();
+      // restore button and spinner again for retry
+      $spinner.hide();
       $button.show();
     });
 }
@@ -45,9 +40,9 @@ export function loadSearchResults(
 /**
  * Loads search results via ajax with the given URL.
  *
- * @param link string
- * @param searchResultPageId {string}
- * @param enableBrowserHistory {boolean}, default is true
+ * @param {string} link
+ * @param {string} searchResultPageId
+ * @param {boolean} enableBrowserHistory default is true
  */
 export function loadSearchResultPage(
   link,
@@ -67,7 +62,6 @@ export function loadSearchResultPage(
         log("Loaded search result page successfully.");
         // append the new results to the the search result page
         updateTarget($searchResultPageId, $(nextSearchResults), true);
-        $(document).trigger(EVENT_LAYOUT_CHANGED);
         //set new page url to browser history
         addToBrowserHistory(link, enableBrowserHistory);
       })
@@ -119,8 +113,8 @@ function removeURLParameter(url, parameter) {
 /**
  * Helper function to add a state to the browser history, if enabled
  *
- * @param link {string} the CAE URL of the search
- * @param enableBrowserHistory {boolean}
+ * @param {string} link the CAE URL of the search
+ * @param {boolean} enableBrowserHistory
  */
 function addToBrowserHistory(link, enableBrowserHistory) {
   if (enableBrowserHistory) {

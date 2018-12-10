@@ -26,6 +26,8 @@
 <notSearchable>0</notSearchable>
 <related>
 </related>
+<authors>
+</authors>
 <id>com.coremedia.blueprint.es.webflow.ActivateRegistration</id>
 <type>webflow</type>
 </CMAction>

@@ -46,6 +46,14 @@ const request = options => {
                 response.statusMessage
               }: The server has not found anything matching the Request-URI. Please check the specified Studio URL.`
             );
+          } else if (response.statusCode === 409) {
+            let errors = JSON.parse(body);
+            httpError = new HttpError(
+              "ECONFLICT",
+              `${response.statusCode}: Could not upload theme because of problems with following files: 
+                  ${errors.failedPaths}
+                  Please check the status of the files in Studio.`
+            );
           } else if (response.statusCode < 200 || response.statusCode > 399) {
             let cause;
             try {
@@ -348,6 +356,35 @@ const upload = (url, proxy, apiKey, file, clean = "false") => {
 };
 
 /**
+ * Returns a Promise for requesting a theme upload for deployment.
+ * @param {string} url
+ * @param {string} proxy
+ * @param {string} apiKey
+ * @param {string} file
+ * @returns {Promise}
+ */
+const deploy = (url, proxy, apiKey, file) => {
+  return new Promise((resolve, reject) => {
+    const options = getOptions(`${url}/api/themeImporter/deploy`, {
+      proxy,
+      apiKey,
+      formData: {
+        path: "/Themes",
+        file: fs.createReadStream(file),
+      },
+    });
+
+    request(options)
+      .then(() => {
+        resolve();
+      })
+      .catch(e => {
+        reject(e);
+      });
+  });
+};
+
+/**
  * Returns a Promise for requesting a file delete.
  * @param {string} url
  * @param {string} proxy
@@ -385,5 +422,6 @@ module.exports = {
   logout,
   whoami,
   upload,
+  deploy,
   deleteFile,
 };

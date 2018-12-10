@@ -1,6 +1,9 @@
 package com.coremedia.livecontext.ecommerce.hybris.rest;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.HttpClientFactory;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.http.client.HttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +21,10 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.annotation.PostConstruct;
+
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper.decodeEntryTransparently;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper.replaceTokensAndDecrypt;
 
 /**
  * Open Commerce API OAuth connector.
@@ -37,7 +42,7 @@ public class OAuthConnector {
   private static final String DEFAULT_OAUTH_TOKEN_PATH = "/authorizationserver/oauth/token";
 
   // --- HTTP Header constants ---
-  private static final String GRANT_TYPE = "password";//"client_credentials";
+  private static final String GRANT_TYPE = "password";
 
   private String protocol = DEFAULT_PROTOCOL;
   private String host = DEFAULT_OAUTH_HOST;
@@ -46,7 +51,7 @@ public class OAuthConnector {
   private String clientId = DEFAULT_CLIENT_ID;
   private String clientSecret = DEFAULT_CLIENT_ID;
 
-  //TODO seems to be duplicate information, but hybris seems to need this (for further investigation see also GRANT_TYPE)
+  // seems to be duplicate information, but hybris seems to need this (for further investigation see also GRANT_TYPE)
   private String user;
   private String password;
 
@@ -59,9 +64,10 @@ public class OAuthConnector {
   /**
    * Example:
    * https://localhost:9002/authorizationserver/oauth/token?grant_type=password&username=admin&password=nimda&client_id=coremedia_preview&client_secret=secret
+   * @param storeContext
    */
   @Nullable
-  private AccessToken requestAccessToken() {
+  private AccessToken requestAccessToken(@NonNull StoreContext storeContext) {
     UriComponents uriComponents = UriComponentsBuilder.newInstance()
             .scheme(protocol)
             .host(host)
@@ -71,7 +77,7 @@ public class OAuthConnector {
             .queryParam("client_id", clientId)
             .queryParam("client_secret", clientSecret)
             .queryParam("username", user)
-            .queryParam("password", password)
+            .queryParam("password", getPassword(storeContext))
             .build();
 
     HttpHeaders headers = new HttpHeaders();
@@ -101,16 +107,16 @@ public class OAuthConnector {
   }
 
   @Nullable
-  public AccessToken getOrRequestAccessToken() {
+  public AccessToken getOrRequestAccessToken(@NonNull StoreContext storeContext) {
     if (accessToken == null || accessToken.isExpired()) {
-      accessToken = requestAccessToken();
+      accessToken = requestAccessToken(storeContext);
     }
     return accessToken;
   }
 
   @Nullable
-  public AccessToken renewAccessToken() {
-    accessToken = requestAccessToken();
+  public AccessToken renewAccessToken(@NonNull StoreContext storeContext) {
+    accessToken = requestAccessToken(storeContext);
     return accessToken;
   }
 
@@ -141,6 +147,11 @@ public class OAuthConnector {
 
   public String getPath() {
     return path;
+  }
+
+  @NonNull
+  public String getPassword(@NonNull StoreContext storeContext) {
+    return replaceTokensAndDecrypt(password, storeContext);
   }
 
   @Value("${livecontext.hybris.oauth.path}")
@@ -182,7 +193,7 @@ public class OAuthConnector {
 
   @Value("${livecontext.hybris.oauth.password}")
   public void setPassword(String password) {
-    this.password = password;
+    this.password = decodeEntryTransparently(password);
   }
 
   @Value("${livecontext.hybris.oauth.networkAddressCacheTtlInMillis:30000}")

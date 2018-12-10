@@ -21,7 +21,9 @@ abstract class AbstractPaginator implements Paginator {
   protected ThreadLocal<XMLInputFactory> xmlInputFactory = new ThreadLocal<XMLInputFactory>() {
     @Override
     protected XMLInputFactory initialValue() {
-      return XMLInputFactory.newInstance();
+      XMLInputFactory factory = XMLInputFactory.newInstance();
+      factory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+      return factory;
     }
   };
   protected ThreadLocal<XMLOutputFactory> xmlOutputFactory = new ThreadLocal<XMLOutputFactory>() {
@@ -68,7 +70,7 @@ abstract class AbstractPaginator implements Paginator {
     }
     XMLEventReader xmlReader = null;
     try (InputStream inputStream = new ByteArrayInputStream(markup.asXml().getBytes(StandardCharsets.UTF_8))) {
-      xmlReader = xmlInputFactory.get().createXMLEventReader(inputStream);
+      xmlReader = createXmlEventReader(inputStream);
       return splitInternally(xmlReader, markup);
     } catch (Exception e) {
       LOG.error("Error streaming xml", e);
@@ -76,6 +78,11 @@ abstract class AbstractPaginator implements Paginator {
     } finally {
       closeQuietly(xmlReader);
     }
+  }
+
+  @SuppressWarnings("findsecbugs:XXE_XMLSTREAMREADER") // XMLInputFactory is created without external entities support
+  private XMLEventReader createXmlEventReader(InputStream inputStream) throws XMLStreamException {
+    return xmlInputFactory.get().createXMLEventReader(inputStream);
   }
 
   private static void closeQuietly(XMLEventReader xmlReader) {

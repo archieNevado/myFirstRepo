@@ -12,8 +12,8 @@
     [ResourceBundle('com.coremedia.blueprint.studio.BlueprintTabs')]
   </fx:Metadata>
   <fx:Script><![CDATA[
-    import com.coremedia.cms.editor.sdk.util.ILinkListWrapper;
     import com.coremedia.cms.editor.sdk.util.AnnotatedLinkListHelper;
+    import com.coremedia.cms.editor.sdk.util.ILinkListWrapper;
     import com.coremedia.cms.editor.sdk.util.StructContentLinkListWrapper;
     import com.coremedia.ui.skins.PanelSkin;
 
@@ -52,8 +52,8 @@
               <editor:additionalToolbarItems>
                 <TbSeparator/>
                 <bpb-components:QuickCreateToolbarButton contentType="CMArticle"
-                                                         sourceLinkListVE="{getStructContentLinkListWrapper(config).getVE()}"
-                                                         bindTo="{config.bindTo}"/>
+                                                         bindTo="{config.bindTo}"
+                                                         linkListWrapper="{getStructContentLinkListWrapper(config)}"/>
               </editor:additionalToolbarItems>
               <editor:fields>
                 <ui:DataField name="{ValidityColumn.STATUS_ID}"

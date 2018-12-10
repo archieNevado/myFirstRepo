@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMTeaser folder="/Sites/Chef Corp./Germany/German/Content/Homepage/Professionals/Product Overview" name="Products Overview Teaser" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
+<CMTeaser folder="/Sites/Chef Corp./Germany/German/Content/Homepage/Professionals/Product Overview" name="Products Overview Teaser" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
+<link href="../../../../../../United%20States/English/Content/Homepage/Professionals/Product%20Overview/Products%20Overview%20Teaser.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Professionals/Product%20Overview/Products%20Overview%20Teaser"/>
 </master>
 <viewtype>
 </viewtype>
@@ -33,6 +34,8 @@
 </pictures>
 <related>
 </related>
+<authors>
+</authors>
 <target>
 </target>
 </CMTeaser>

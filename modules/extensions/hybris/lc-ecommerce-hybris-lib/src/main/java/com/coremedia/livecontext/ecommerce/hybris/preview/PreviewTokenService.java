@@ -55,7 +55,7 @@ public class PreviewTokenService extends AbstractHybrisService {
 
     if (result == null) {
       try {
-        result = requestPreviewToken(oAuthConnector.getOrRequestAccessToken());
+        result = requestPreviewToken(oAuthConnector.getOrRequestAccessToken(storeContext));
 
         if (request != null) {
           request.setAttribute(REQUEST_ATTRIB_PREVIEW_TOKEN, result);
@@ -63,7 +63,7 @@ public class PreviewTokenService extends AbstractHybrisService {
       } catch (UnauthorizedException e) {
         LOG.warn("Getting \"Unauthorized\" when requesting the preview token for store context: {}, message: {}. Try again...",
                 storeContext, e.getMessage());
-        result = requestPreviewToken(oAuthConnector.renewAccessToken());
+        result = requestPreviewToken(oAuthConnector.renewAccessToken(storeContext));
       }
     }
 

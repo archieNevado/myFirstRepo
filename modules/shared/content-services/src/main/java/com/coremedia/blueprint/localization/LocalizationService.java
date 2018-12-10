@@ -223,7 +223,7 @@ public class LocalizationService {
   private static Locale localeFromName(String name) {
     name = resourceBundleNameWithoutSuffix(name);
     if (name.contains("_")) {
-      String localeStr = name.substring(name.indexOf('_') + 1, name.length());
+      String localeStr = name.substring(name.indexOf('_') + 1);
       return LocaleUtils.toLocale(localeStr);
     }
     return GLOBAL;

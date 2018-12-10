@@ -140,7 +140,7 @@ class CoreMediaWatchPlugin {
 
     // invalidations
     compiler.plugin("invalid", () => {
-      if (init === false) {
+      if (!init) {
         this._log.info("Detected file changes.");
       }
     });
@@ -153,7 +153,7 @@ class CoreMediaWatchPlugin {
         if (stats.compilation.errors.length > 0) {
           const errors = [...new Set(stats.compilation.errors)];
           printErrorStack(errors.join("\n"));
-          if (init === true) {
+          if (init) {
             // initialization of watch mode: don´t upload theme build and abort watch mode, if there are compilation errors
             this._log.error(
               "Watch mode aborted due to compilation errors during initial theme build. Please fix the errors first and start the watch mode again."
@@ -182,13 +182,13 @@ class CoreMediaWatchPlugin {
         if (this._isCacheEmpty()) {
           this._initializeCache(emittedFiles);
           livereload.init(logLevel);
+          init = false;
           if (this._isRemoteWorkflow()) {
             uploadTheme(this.options.themeConfig)
               .then(() => {
                 clearConsole();
                 printInfo();
                 openBrowser();
-                init = false;
               })
               .catch(e => {
                 this._log.error("Error during theme upload: ", e);
@@ -245,9 +245,7 @@ class CoreMediaWatchPlugin {
             this._log.info("Preparing: ", changedFilesForOutput);
             uploadFiles(this.options.themeConfig, filesToUpdate, logLevel)
               .then(count => {
-                this._log.finalInfo(
-                  `Uploaded ${count} file(s) to server.`
-                );
+                this._log.finalInfo(`Uploaded ${count} file(s) to server.`);
                 livereload.trigger(filesToUpdate);
               })
               .catch(e => {
@@ -260,10 +258,12 @@ class CoreMediaWatchPlugin {
             );
             livereload.trigger(filesToUpdate);
           }
-        } else if (init === false) {
-          this._log.finalInfo(
-            "No changes, skipping upload."
-          );
+        } else if (!init) {
+          if (this._isRemoteWorkflow()) {
+            this._log.finalInfo("No changes, skipping upload.");
+          } else {
+            this._log.finalInfo("No changes.");
+          }
         }
 
         /*

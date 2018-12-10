@@ -8,15 +8,16 @@ import com.coremedia.cap.user.User;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
+import edu.umd.cs.findbugs.annotations.Nullable;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriTemplate;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
@@ -46,7 +47,7 @@ public class ComplaintResultHandler extends ElasticContentHandler<ComplaintResul
           "/{" + CONTEXT_ID + "}" +
           "/{" + ID + "}";
 
-  @RequestMapping(value = DYNAMIC_PATTERN_COMPLAINT, method = RequestMethod.GET)
+  @GetMapping(value = DYNAMIC_PATTERN_COMPLAINT)
   public ModelAndView getComplaintResult(@PathVariable(CONTEXT_ID) String contextId,
                                  @PathVariable(ID) String id,
                                  @RequestParam(value = COLLECTION_PARAMETER) String collection,
@@ -86,7 +87,7 @@ public class ComplaintResultHandler extends ElasticContentHandler<ComplaintResul
     return realTarget;
   }
 
-  @RequestMapping(value = DYNAMIC_PATTERN_COMPLAINT, method = RequestMethod.POST)
+  @PostMapping(value = DYNAMIC_PATTERN_COMPLAINT)
   public ModelAndView createComplaint(@PathVariable(CONTEXT_ID) String contextId,
                                    @PathVariable(ID) String targetId,
                                    @RequestParam(value = COMPLAIN_PARAMETER) boolean complain,

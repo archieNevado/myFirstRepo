@@ -8,6 +8,8 @@ import com.coremedia.livecontext.ecommerce.common.UnauthorizedException;
 import com.coremedia.objectserver.dataviews.DataViewHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Stopwatch;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.http.client.HttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +28,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.URI;
@@ -39,6 +39,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper.decodeEntryTransparently;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper.replaceTokensAndDecrypt;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
@@ -110,7 +112,6 @@ public class HybrisRestConnector {
     Object[] vars = uriTemplateParameters != null ? uriTemplateParameters.toArray() : new Object[0];
     UriComponents uriComponents = uriComponentsBuilder.buildAndExpand(vars);
 
-    //UriComponents uriComponents = uriComponentsBuilder.build().encode();
     URI uri = uriComponents.encode().toUri();
 
     HttpEntity<String> requestEntity = new HttpEntity<>(authenticationHeaderMap.get(storeContext.getStoreId()));
@@ -244,8 +245,6 @@ public class HybrisRestConnector {
    */
   private static String toJson(Object model) throws IOException {
     ObjectMapper mapper = new ObjectMapper();
-    //mapper.setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
-    //mapper.configure(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS, false);
     return mapper.writeValueAsString(model);
   }
 
@@ -264,7 +263,7 @@ public class HybrisRestConnector {
       case BASIC:
         LOG.debug("Generating basic authorization header ...");
 
-        String plainCredentials = getUser() + ':' + getPassword();
+        String plainCredentials = getUser() + ':' + getPassword(storeContext);
         byte[] plainCredentialsBytes = plainCredentials.getBytes();
         String basicAuthCredentials = Base64.getEncoder().encodeToString(plainCredentialsBytes);
 
@@ -283,7 +282,7 @@ public class HybrisRestConnector {
       case BEARER:
 
         if (isNullOrEmpty(authToken)) {
-          authToken = fetchAuthToken();
+          authToken = fetchAuthToken(storeContext);
         }
 
         LOG.debug("Generating bearer authorization header ...");
@@ -302,7 +301,7 @@ public class HybrisRestConnector {
   }
 
   @Nullable
-  public String fetchAuthToken() {
+  public String fetchAuthToken(@NonNull StoreContext storeContext) {
     String url = UriComponentsBuilder.newInstance()
             .scheme(protocol)
             .host(host)
@@ -316,7 +315,7 @@ public class HybrisRestConnector {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
 
-    String requestEntityBody = "{\"username\": \"" + user + "\", \"password\": \"" + password + "\"}";
+    String requestEntityBody = "{\"username\": \"" + user + "\", \"password\": \"" + getPassword(storeContext) + "\"}";
     HttpEntity<String> requestEntity = new HttpEntity<>(requestEntityBody, headers);
 
     ResponseEntity<String> response = restTemplate.postForEntity(url, requestEntity, String.class);
@@ -407,13 +406,14 @@ public class HybrisRestConnector {
     this.user = user;
   }
 
-  private String getPassword() {
-    return password;
+  @NonNull
+  private String getPassword(@NonNull StoreContext storeContext) {
+    return replaceTokensAndDecrypt(password, storeContext);
   }
 
   @Value("${livecontext.hybris.password}")
   public void setPassword(String password) {
-    this.password = password;
+    this.password = decodeEntryTransparently(password);
   }
 
   @Value("${livecontext.hybris.authentication.type:UNKNOWN}")

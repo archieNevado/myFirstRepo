@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.ecommerce.hybris.rest;
 
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.hybris.HybrisITBase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,9 +27,11 @@ public class OAuthConnectorIT extends HybrisITBase {
       return;
     }
 
-    AccessToken accessToken = testling.getOrRequestAccessToken();
-    assertThat(accessToken).isNotNull();
+    StoreContext storeContext = getStoreContext();
+    AccessToken requestedAccessToken = testling.getOrRequestAccessToken(storeContext);
+    assertThat(requestedAccessToken).isNotNull();
 
-    assertThat(testling.getOrRequestAccessToken()).isEqualTo(accessToken);
+    //Check if the identity of the newly obtained accessToken is the same as the first one
+    assertThat(testling.getOrRequestAccessToken(storeContext)).isEqualTo(requestedAccessToken);
   }
 }
