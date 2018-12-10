@@ -184,7 +184,23 @@ Alias: `-v`. Print the version and exit.
 
 _Run this command by executing `cm theme-importer upload-theme`._
 
-This command uploads a theme to a remote Studio.
+This command uploads a theme to a remote server.
+
+###### Options
+
+####### --help
+
+Alias: `-h`. Show the help information, similar to this page.
+
+####### --version
+
+Alias: `-v`. Print the version and exit.
+
+##### deploy-theme
+
+_Run this command by executing `cm theme-importer deploy-theme`._
+
+This command uploads and deploys a theme to a remote server.
 
 ###### Options
 

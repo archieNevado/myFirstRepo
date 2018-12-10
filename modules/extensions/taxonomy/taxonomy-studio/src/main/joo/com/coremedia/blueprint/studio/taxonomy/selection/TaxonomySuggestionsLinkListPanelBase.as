@@ -259,6 +259,9 @@ public class TaxonomySuggestionsLinkListPanelBase extends GridPanel {
     if (propertyValueExpression) {
       propertyValueExpression.removeChangeListener(propertyChanged);
     }
+
+    loadMask && loadMask.destroy();
+
     super.onDestroy();
   }
 }

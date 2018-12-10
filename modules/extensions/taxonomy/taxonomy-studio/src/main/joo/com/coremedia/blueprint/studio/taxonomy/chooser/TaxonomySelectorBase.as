@@ -208,11 +208,17 @@ public class TaxonomySelectorBase extends Container {
     pathPanel.removeAll(true);
 
     //Add root
+    var text:String = taxonomyId;
+    var rootName:String = resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', taxonomyId);
+    if(rootName) {
+      text = rootName;
+    }
+
     var root:TextLinkButton = new TextLinkButton(TextLinkButton({
-      text: taxonomyId,
+      text: text,
       itemId: taxonomyId.replace(/\s+/g, ''),
       handler: doSetLevel,
-      node: new TaxonomyNode({name: taxonomyId, ref: taxonomyId, taxonomyId:taxonomyId})
+      node: new TaxonomyNode({name: text, ref: taxonomyId, taxonomyId:taxonomyId})
     }));
 
     //add each level incl. root

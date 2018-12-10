@@ -8,6 +8,9 @@ import com.coremedia.blueprint.taxonomies.TaxonomyUtil;
 import com.coremedia.blueprint.taxonomies.semantic.SemanticStrategy;
 import com.coremedia.blueprint.taxonomies.semantic.Suggestion;
 import com.coremedia.blueprint.taxonomies.semantic.Suggestions;
+import com.coremedia.cap.content.Content;
+import com.coremedia.cap.content.ContentRepository;
+import com.coremedia.cap.content.authorization.AccessControl;
 import com.coremedia.rest.linking.AbstractLinkingResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +50,7 @@ public class TaxonomyResource extends AbstractLinkingResource implements Initial
   private static final String DEFAULT_NAME = "defaultName";
 
   private TaxonomyResolver strategyResolver;
+  private ContentRepository contentRepository;
 
   private List<SemanticStrategy> semanticStrategies = new ArrayList<>();
   private Map<String, SemanticStrategy> semanticStrategyById = new HashMap<>();
@@ -355,6 +359,12 @@ public class TaxonomyResource extends AbstractLinkingResource implements Initial
   }
 
   // === Helper ===
+  private boolean isWriteable(Taxonomy taxonomy) {
+    String capId = TaxonomyUtil.asContentId(taxonomy.getRoot().getRef());
+    Content content = contentRepository.getContent(capId);
+    AccessControl accessControl = contentRepository.getAccessControl();
+    return accessControl.mayWrite(content);
+  }
 
   /**
    * Finds the taxonomy strategy for the given taxonomy id and site.
@@ -377,6 +387,10 @@ public class TaxonomyResource extends AbstractLinkingResource implements Initial
   private Collection<Taxonomy> getTaxonomiesForAdministration(String siteId) {
     List<Taxonomy> result = new ArrayList<>();
     for (Taxonomy taxonomy : strategyResolver.getTaxonomies()) {
+      if(!isWriteable(taxonomy)) {
+        continue;
+      }
+
       if ((siteId == null || taxonomy.getSiteId() == null || taxonomy.getSiteId().equals(siteId)) && taxonomy.isValid()) {
         result.add(taxonomy);
       }
@@ -421,5 +435,10 @@ public class TaxonomyResource extends AbstractLinkingResource implements Initial
     for (SemanticStrategy strategy : semanticStrategies) {
       semanticStrategyById.put(strategy.getServiceId().toLowerCase(), strategy); //NOSONAR
     }
+  }
+
+  @Required
+  public void setContentRepository(ContentRepository contentRepository) {
+    this.contentRepository = contentRepository;
   }
 }

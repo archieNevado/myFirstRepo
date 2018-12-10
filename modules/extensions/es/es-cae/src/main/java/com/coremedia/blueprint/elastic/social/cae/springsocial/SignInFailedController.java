@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.social.support.URIBuilder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -20,7 +20,7 @@ public class SignInFailedController {
 
   private static final Logger LOG = LoggerFactory.getLogger(SignInFailedController.class);
 
-  @RequestMapping(method = RequestMethod.GET)
+  @GetMapping
   public RedirectView signIn(NativeWebRequest request) {
     HttpSession session = getServletRequest(request).getSession();
 

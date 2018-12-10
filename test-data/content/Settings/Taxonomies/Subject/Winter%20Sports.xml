@@ -25,6 +25,8 @@
 </pictures>
 <related>
 </related>
+<authors>
+</authors>
 <value>Winter Sports</value>
 <children>
 <link href="Ski.xml" path="/Settings/Taxonomies/Subject/Ski"/>

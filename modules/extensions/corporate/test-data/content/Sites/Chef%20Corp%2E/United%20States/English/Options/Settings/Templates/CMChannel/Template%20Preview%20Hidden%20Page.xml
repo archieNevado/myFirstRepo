@@ -23,15 +23,18 @@
 <teaserTitle></teaserTitle>
 <pictures>
 </pictures>
+<notSearchable>1</notSearchable>
 <related>
 </related>
+<authors>
+</authors>
 <children>
 <link href="Hero%20Page/New%20Hero%20Page.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/Templates/CMChannel/Hero%20Page/New%20Hero%20Page"/>
 <link href="Detail%20Page/New%20Detail%20Page.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/Templates/CMChannel/Detail%20Page/New%20Detail%20Page"/>
 <link href="Detail%20Page%20with%20Sidebar/New%20Det1fdb2734.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/Templates/CMChannel/Detail%20Page%20with%20Sidebar/New%20Detail%20Page%20With%20Sidebar"/>
 </children>
 <hidden>1</hidden>
-<hiddenInSitemap>1</hiddenInSitemap>
+<hiddenInSitemap>0</hiddenInSitemap>
 <javaScript>
 </javaScript>
 <css>

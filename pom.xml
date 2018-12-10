@@ -49,12 +49,6 @@
       <id>check-dependencies-owasp</id>
       <properties>
         <!-- Skip all other checks -->
-        <skip-joo-unit-tests>true</skip-joo-unit-tests>
-        <skip-unit-tests>true</skip-unit-tests>
-        <enforcer.skip>true</enforcer.skip>
-        <coremedia.enforcer.skip>true</coremedia.enforcer.skip>
-        <mdep.analyze.skip>true</mdep.analyze.skip>
-        <skipTests>true</skipTests>
         <suppressionFile/>
         <nvdMirror>https://</nvdMirror>
       </properties>
@@ -130,7 +124,7 @@
         <plugin>
           <groupId>org.owasp</groupId>
           <artifactId>dependency-check-maven</artifactId>
-          <version>3.3.1</version>
+          <version>3.3.4</version>
         </plugin>
         <plugin>
           <groupId>org.sonarsource.scanner.maven</groupId>

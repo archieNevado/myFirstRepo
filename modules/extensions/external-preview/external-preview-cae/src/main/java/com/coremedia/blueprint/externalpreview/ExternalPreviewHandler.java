@@ -5,6 +5,7 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -45,7 +46,7 @@ public class ExternalPreviewHandler {
   private static final String STATUS_OK = "{\"status\":\"ok\"}";
 
 
-  @RequestMapping(value = URI_PATTERN)
+  @GetMapping(value = URI_PATTERN)
   public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
     try {
       String token = request.getParameter(PARAMETER_TOKEN);

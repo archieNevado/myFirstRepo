@@ -11,7 +11,7 @@ this will NOT work: extraResourcePaths="/=a, /=b"
 
 -->
   <Resources className="org.apache.naming.resources.VirtualDirContext"
-             extraResourcePaths="/=../studio-app/target/classes/META-INF/resources,/=../studio-base-app/target/app"/>
+             extraResourcePaths="/=${project.basedir}/../studio-app/target/classes/META-INF/resources,/=${project.basedir}/../studio-base-app/target/app"/>
 
   <Valve className="org.apache.catalina.valves.RemoteIpValve" protocolHeader="x-forwarded-proto"/>
 </Context>

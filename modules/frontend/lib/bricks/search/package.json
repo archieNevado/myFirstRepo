@@ -7,7 +7,6 @@
     "@coremedia/brick-dynamic-include": "^1.0.0",
     "@coremedia/brick-responsive-images": "^1.0.0",
     "@coremedia/brick-media": "^1.0.0",
-    "@coremedia/js-basic": "^1.0.0",
     "@coremedia/js-logger": "^1.0.0",
     "@coremedia/js-node-decoration-service": "^1.0.0",
     "@coremedia/sass-utils": "^1.0.0",

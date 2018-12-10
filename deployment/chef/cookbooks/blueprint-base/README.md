@@ -21,6 +21,7 @@ Use this cookbook with care and only put things in here if they don't fit anywhe
 * ulimit (~> 0.3.2)
 * chef_handler (~> 1.2.0)
 * compat_resource (~> 12.19.0)
+* ohai (= 5.2.2)
 * java_se (~> 8.0) (Suggested but not required)
 
 # Attributes

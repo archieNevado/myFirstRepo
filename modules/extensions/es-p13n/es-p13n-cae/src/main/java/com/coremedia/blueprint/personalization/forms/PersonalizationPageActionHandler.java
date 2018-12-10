@@ -12,10 +12,11 @@ import com.coremedia.objectserver.web.links.Link;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriTemplate;
 
@@ -59,7 +60,7 @@ public class PersonalizationPageActionHandler extends PageHandlerBase {
    *
    * @param form The form containing the interests
    */
-  @RequestMapping(value = EXPLICITINTEREST_URI, method = RequestMethod.POST)
+  @PostMapping(value = EXPLICITINTEREST_URI)
   public ModelAndView handlePostExplicitInterestsAjax(
           @PathVariable(SEGMENT_ROOT) String context,
           @PathVariable(SEGMENT_ID) ContentBean contentBean,
@@ -88,7 +89,7 @@ public class PersonalizationPageActionHandler extends PageHandlerBase {
   /**
    * Handles GET request on explicit interests via AJAX and provides a {@link PersonalizationForm} as an HTML snippet
    */
-  @RequestMapping(value = EXPLICITINTEREST_URI, method = RequestMethod.GET)
+  @GetMapping(value = EXPLICITINTEREST_URI)
   public ModelAndView handleGetExplicitInterestsAjax(@PathVariable(SEGMENT_ROOT) String context,
                                                      @PathVariable(SEGMENT_ID) ContentBean contentBean,
                                                      HttpServletRequest request) {

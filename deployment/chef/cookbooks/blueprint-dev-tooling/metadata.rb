@@ -16,3 +16,16 @@ depends 'blueprint-tools'
 
 depends 'fpm-tng', '~> 0.1.7'
 depends 'chef-sugar', '~> 3.0'
+
+# fix transitive dependencies
+depends 'repository', '= 0.1.8'
+depends 'reprepro', '= 1.0.0'
+depends 'ruby_installer',  '= 0.1.3'
+depends 'gpg', '= 0.3.0'
+depends 'nginx', '= 8.1.2'
+depends 'zypper', '= 0.4.0'
+depends 'build-essential', '= 8.1.1'
+depends 'yum-epel', '= 3.1.0'
+depends 'ohai', '= 5.2.2'
+depends 'apt', '= 7.0.0'
+depends 'apache2', '= 5.0.1'

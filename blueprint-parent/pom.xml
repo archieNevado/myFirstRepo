@@ -30,14 +30,14 @@
 
     <customer>Blueprint</customer>
 
-    <blueprint-base.version>1810.1</blueprint-base.version>
-    <cms.version>1810.1</cms.version>
-    <personalization.version>1810.1</personalization.version>
-    <elastic.version>1810.1</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
-    <studio.version>1810.1</studio.version>
-    <caetoolbox.version>1810.1</caetoolbox.version>
-    <livecontext.version>1810.1</livecontext.version>
-    <jangaroo.version>4.0.62</jangaroo.version>
+    <blueprint-base.version>1810.2</blueprint-base.version>
+    <cms.version>1810.2</cms.version>
+    <personalization.version>1810.2</personalization.version>
+    <elastic.version>1810.2</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
+    <studio.version>1810.2</studio.version>
+    <caetoolbox.version>1810.2</caetoolbox.version>
+    <livecontext.version>1810.2</livecontext.version>
+    <jangaroo.version>4.0.63</jangaroo.version>
 
     <atlassian.crowd.version>2.5.1</atlassian.crowd.version>
     <!--
@@ -844,7 +844,7 @@
         <plugin>
           <groupId>org.owasp</groupId>
           <artifactId>dependency-check-maven</artifactId>
-          <version>3.3.1</version>
+          <version>3.3.4</version>
         </plugin>
       </plugins>
 
