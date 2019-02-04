@@ -66,8 +66,9 @@ module.exports = {
             targets: {
               browsers: targetBrowsers,
             },
-          },
+          }
         ],
+        "react"
       ],
     },
   ],

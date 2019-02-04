@@ -4,6 +4,7 @@ import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -13,21 +14,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Locale;
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
 
 /**
+ * REST Handler to resolve Settings from the Content Managed System.
  * <p>
- * Rest Handler to resolve Settings from the Content Managed System.<br>
- * This Rest Handler provides the information if the CMS can provide some parts of a page for an augmentation scenario
+ * This REST Handler provides the information if the CMS can provide some parts of a page for an augmentation scenario
  * in LiveContext.
- * </p>
  */
 @Controller
 public class ManagedPagePartsRestHandler {
+
   private static final Logger LOG = LoggerFactory.getLogger(ManagedPagePartsRestHandler.class);
 
   /**

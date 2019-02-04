@@ -17,11 +17,11 @@ import com.coremedia.livecontext.handler.ExternalNavigationHandler;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
 import com.coremedia.livecontext.product.ProductPageHandler;
 import com.coremedia.objectserver.web.links.LinkFormatter;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -29,6 +29,7 @@ import java.util.List;
 import static com.coremedia.blueprint.base.links.UriConstants.Links.ABSOLUTE_URI_KEY;
 
 public class CatalogSitemapUrlGenerator implements SitemapUrlGenerator {
+
   private static final Logger LOG = LoggerFactory.getLogger(CatalogSitemapUrlGenerator.class);
 
   private LiveContextNavigationFactory liveContextNavigationFactory;
@@ -60,11 +61,11 @@ public class CatalogSitemapUrlGenerator implements SitemapUrlGenerator {
     return CurrentCommerceConnection.get().getCatalogService();
   }
 
-
   // --- SitemapUrlGenerator ----------------------------------------
 
   @Override
-  public void generateUrls(HttpServletRequest request, HttpServletResponse response, Site site, boolean absoluteUrls, String protocol, UrlCollector urlCollector) {
+  public void generateUrls(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, Site site,
+                           boolean absoluteUrls, String protocol, UrlCollector urlCollector) {
     if (site==null) {
       throw new IllegalArgumentException("Cannot derive a site from " + request.getPathInfo());
     }
@@ -91,7 +92,6 @@ public class CatalogSitemapUrlGenerator implements SitemapUrlGenerator {
     }
   }
 
-
   // --- internal ---------------------------------------------------
 
   private boolean useCommerceProductLinks(@NonNull Site site) {
@@ -106,8 +106,8 @@ public class CatalogSitemapUrlGenerator implements SitemapUrlGenerator {
             .orElse(false);
   }
 
-  private void generateUrls(List<Category> categories, @NonNull Site site, HttpServletRequest request,
-                            HttpServletResponse response, String protocol, UrlCollector urlCollector) {
+  private void generateUrls(List<Category> categories, @NonNull Site site, @NonNull HttpServletRequest request,
+                            @NonNull HttpServletResponse response, String protocol, UrlCollector urlCollector) {
     // Must not include deep links in sitemap
     if (!useCommerceProductLinks(site)) {
       for (Category category : categories) {
@@ -129,7 +129,8 @@ public class CatalogSitemapUrlGenerator implements SitemapUrlGenerator {
    * ecommerceItem is a Product or a LiveContextNavigation,
    * which have no common super class.
    */
-  private void generateUrl(Object ecommerceItem, HttpServletRequest request, HttpServletResponse response, String protocol, UrlCollector urlCollector) {
+  private void generateUrl(Object ecommerceItem, @NonNull HttpServletRequest request,
+                           @NonNull HttpServletResponse response, String protocol, UrlCollector urlCollector) {
     try {
       String link = linkFormatter.formatLink(ecommerceItem, null, request, response, false);
 

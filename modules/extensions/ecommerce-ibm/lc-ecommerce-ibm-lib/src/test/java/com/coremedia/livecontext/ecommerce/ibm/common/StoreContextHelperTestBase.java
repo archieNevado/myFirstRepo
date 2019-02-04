@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 
@@ -19,7 +19,8 @@ abstract class StoreContextHelperTestBase {
 
   protected IbmStoreContextBuilder buildContext() {
     return IbmStoreContextBuilder
-            .from(StoreContextImpl.builder(SITE_ID))
+            .from(StoreContextBuilderImpl.from())
+            .withSiteId(SITE_ID)
             .withStoreId(STORE_ID)
             .withStoreName(STORE_NAME)
             .withCatalogId(CATALOG_ID)

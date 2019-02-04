@@ -1,15 +1,15 @@
 package com.coremedia.livecontext.web.taglib;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -51,8 +51,8 @@ class PbeStoreSerializerTest {
 
   @NonNull
   private static StoreContext buildStoreContext(@NonNull String siteId, @Nullable WorkspaceId workspaceId) {
-    return StoreContextImpl
-            .builder(siteId)
+    return StoreContextBuilderImpl.from()
+            .withSiteId(siteId)
             .withWorkspaceId(workspaceId)
             .build();
   }

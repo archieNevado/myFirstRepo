@@ -22,13 +22,13 @@ import com.coremedia.livecontext.ecommerce.ibm.pricing.WcPrices;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.xml.Markup;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,6 +57,7 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
 
   private WcCatalogWrapperService catalogWrapperService;
 
+  @NonNull
   protected abstract Map<String, Object> getDelegate();
 
   @Override
@@ -64,6 +65,7 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
     this.delegate = (Map<String, Object>) delegate;
   }
 
+  @Nullable
   abstract Map<String, Object> getDelegateFromCache();
 
   public WcCatalogWrapperService getCatalogWrapperService() {

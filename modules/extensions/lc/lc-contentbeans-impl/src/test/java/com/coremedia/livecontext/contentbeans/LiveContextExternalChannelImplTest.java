@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.contentbeans;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.cache.Cache;
@@ -12,6 +12,7 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
+import com.coremedia.livecontext.augmentation.config.LcAugmentationLegacyAutoConfiguration;
 import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
@@ -26,7 +27,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.ContextConfiguration;
@@ -61,14 +64,14 @@ public class LiveContextExternalChannelImplTest {
           "classpath:/framework/spring/blueprint-contentbeans.xml",
           "classpath:META-INF/coremedia/livecontext-contentbeans.xml",
           "classpath:META-INF/coremedia/livecontext-contentbeans-settings.xml",
-          "classpath:/META-INF/coremedia/lc-services.xml",
-          "classpath:/framework/spring/lc-ecommerce-services.xml"
   })
+  @ComponentScan("com.coremedia.blueprint.base.livecontext.augmentation")
+  @Import(LcAugmentationLegacyAutoConfiguration.class)
   static class LocalConfig {
 
     @Bean
     StoreContext storeContext() {
-      return StoreContextImpl.newStoreContext();
+      return StoreContextBuilderImpl.from().build();
     }
 
     @Bean

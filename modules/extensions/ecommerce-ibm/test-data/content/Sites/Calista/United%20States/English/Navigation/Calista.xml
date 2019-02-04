@@ -19,6 +19,7 @@
 <link href="../Options/Settings/Search%20Configuration.xml" path="/Sites/Calista/United%20States/English/Options/Settings/Search%20Configuration"/>
 </linkedSettings>
 <resourceBundles2>
+<link href="../../../../../Settings/Options/Bundles/Elastic%20Social_en.xml" path="/Settings/Options/Bundles/Elastic%20Social_en"/>
 </resourceBundles2>
 <segment>calista</segment>
 <title>Home</title>
@@ -42,8 +43,7 @@
 <link href="Fragments/Aurora%20Categories/Apparel/New%20Arrivals.xml" path="/Sites/Calista/United%20States/English/Navigation/Fragments/Aurora%20Categories/Apparel/New%20Arrivals"/>
 <link href="../Augmentation/Apparel/Women/Women.xml" path="/Sites/Calista/United%20States/English/Augmentation/Apparel/Women/Women"/>
 <link href="../Augmentation/Apparel/Men/Men.xml" path="/Sites/Calista/United%20States/English/Augmentation/Apparel/Men/Men"/>
-<link href="Microsites/Editorial%20Blog%20Microsite.xml" path="/Sites/Calista/United%20States/English/Navigation/Microsites/Editorial%20Blog%20Microsite"/>
-<link href="Blog/Fashion%20Trends%202017/Fashion%20Trends.xml" path="/Sites/Calista/United%20States/English/Navigation/Blog/Fashion%20Trends%202017/Fashion%20Trends"/>
+<link href="Blog/Blog%20Page.xml" path="/Sites/Calista/United%20States/English/Navigation/Blog/Blog%20Page"/>
 <link href="Fragments/LiveContext%20Fragments%20Hidden%20Page.xml" path="/Sites/Calista/United%20States/English/Navigation/Fragments/LiveContext%20Fragments%20Hidden%20Page"/>
 <link href="Fragments/Search%20Landing%20Pages/LiveContext%20Search%20Landing%20Pages72667d05.xml" path="/Sites/Calista/United%20States/English/Navigation/Fragments/Search%20Landing%20Pages/LiveContext%20Search%20Landing%20Pages%20Hidden%20Page"/>
 <link href="Microsites/Microsite%20Root%20Page.xml" path="/Sites/Calista/United%20States/English/Navigation/Microsites/Microsite%20Root%20Page"/>
@@ -51,6 +51,7 @@
 <link href="../Augmentation/%5BDEFAULT%5D%20Calista%20Spring%20Fashions.xml" path="/Sites/Calista/United%20States/English/Augmentation/%5BDEFAULT%5D%20Calista%20Spring%20Fashions"/>
 <link href="../Editorial/Content/Site%20Wide/SearchResultPage.xml" path="/Sites/Calista/United%20States/English/Editorial/Content/Site%20Wide/SearchResultPage"/>
 <link href="Topic%20Pages/Topicpage.xml" path="/Sites/Calista/United%20States/English/Navigation/Topic%20Pages/Topicpage"/>
+<link href="Authors/Authors.xml" path="/Sites/Calista/United%20States/English/Navigation/Authors/Authors"/>
 </children>
 <javaScript>
 </javaScript>
@@ -103,7 +104,7 @@
 <LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Editorial/Content/Startpage/Gender%20Specific%20Teaser.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Startpage/Gender%20Specific%20Teaser"/>
 </Struct>
 <Struct>
-<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Editorial/Content/Fashion/The%20difference%20between%20style%20and%20fashion%20Image%20Map.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Fashion/The%20difference%20between%20style%20and%20fashion%20Image%20Map"/>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Editorial/Content/Blog/Fashion%20Trends/The%20difference%20between%20style%20and%20fc21adb83.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Blog/Fashion%20Trends/The%20difference%20between%20style%20and%20fashion%20Image%20Map"/>
 </Struct>
 <Struct>
 <LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../Editorial/Content/Men%20and%20Women%20Teaser.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Men%20and%20Women%20Teaser"/>

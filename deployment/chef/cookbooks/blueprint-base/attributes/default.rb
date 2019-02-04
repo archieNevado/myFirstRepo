@@ -131,22 +131,6 @@ default['blueprint']['common_libs']['coremedia-tomcat.jar']['version'] = node['b
 ##################
 ## JAAS CONFIG  ##
 ##################
-# CROWD
-default['blueprint']['jaas']['crowd']['enabled'] = false
-default['blueprint']['jaas']['crowd']['properties']['crowd.domain'] = 'crowd'
-default['blueprint']['jaas']['crowd']['properties']['crowd.expiration'] = '3599'
-default['blueprint']['jaas']['crowd']['properties']['crowd.contentgroups'] = true
-default['blueprint']['jaas']['crowd']['properties']['crowd.livegroups'] = false
-default['blueprint']['jaas']['crowd']['properties']['crowd.admingroups'] = false
-default['blueprint']['jaas']['crowd']['properties']['application.name'] = 'blueprint'
-default['blueprint']['jaas']['crowd']['properties']['application.password'] = 'secret'
-default['blueprint']['jaas']['crowd']['properties']['application.login.url'] = 'https://mycrowdserver:port/crowd/console/'
-default['blueprint']['jaas']['crowd']['properties']['crowd.server.url'] = 'https://mycrowdserver:port/crowd/rest/'
-default['blueprint']['jaas']['crowd']['properties']['crowd.base.url'] = 'https://mycrowdserver:port/crowd/'
-default['blueprint']['jaas']['crowd']['properties']['session.isauthenticated'] = 'session.isauthenticated'
-default['blueprint']['jaas']['crowd']['properties']['session.tokenkey'] = 'session.tokenkey'
-default['blueprint']['jaas']['crowd']['properties']['session.validationinterval'] = 2
-default['blueprint']['jaas']['crowd']['properties']['session.lastvalidation'] = 'session.lastvalidation'
 #LDAP
 default['blueprint']['jaas']['ldap']['enabled'] = false
 default['blueprint']['jaas']['ldap']['host'] = 'my.ldap.host'

@@ -13,8 +13,10 @@ import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFI
 
 /**
  * Redirects to the given URL in the path.
+ * <p>
  * The URL must be encoded once except the / character, it must be encoded twice.
  * Otherwise Spring wouldn't find the handler.
+ * <p>
  * The link is rendered containing a replaceable part in the servlet path which can be replaced with the url where the
  * handler must redirect to.
  */
@@ -31,9 +33,7 @@ public class NextURLRedirectHandler {
 
   private static final String LINK = '/' + PREFIX_SERVICE + "/nexturl/" + LINK_PLACEHOLDER;
 
-  private static final String URI_PATTERN = '/' + PREFIX_SERVICE +
-                                            "/nexturl/"
-                                            + "{" + NEXT_URL + ":.*}";
+  private static final String URI_PATTERN = '/' + PREFIX_SERVICE + "/nexturl/" + "{" + NEXT_URL + ":.*}";
 
   @GetMapping({URI_PATTERN})
   public String handleRequest(@PathVariable(NEXT_URL) String nexturl) throws UnsupportedEncodingException {

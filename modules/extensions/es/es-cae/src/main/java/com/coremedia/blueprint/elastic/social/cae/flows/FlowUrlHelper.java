@@ -4,6 +4,7 @@ import com.coremedia.blueprint.cae.constants.RequestAttributeConstants;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.objectserver.web.links.LinkFormatter;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.webflow.execution.RequestContext;
 
@@ -19,7 +20,6 @@ public class FlowUrlHelper {
 
   @Inject
   private LinkFormatter linkFormatter;
-
 
   @Value("${keep.https.after.logout}")
   private boolean keepHttpsAfterLogout;
@@ -105,7 +105,8 @@ public class FlowUrlHelper {
     return getUrl(bean, view, getRequest(context), getResponse(context));
   }
 
-  private String getUrl(Object bean, String view, HttpServletRequest request, HttpServletResponse response) {
+  private String getUrl(Object bean, String view, @NonNull HttpServletRequest request,
+                        @NonNull HttpServletResponse response) {
     return linkFormatter.formatLink(bean, view, request, response, true);
   }
 

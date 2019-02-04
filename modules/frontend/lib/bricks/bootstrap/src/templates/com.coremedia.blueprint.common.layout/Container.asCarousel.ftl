@@ -11,6 +11,14 @@
 <#-- @ftlvariable name="additionalClass" type="java.lang.String" -->
 <#-- @ftlvariable name="viewItemCssClass" type="java.lang.String" -->
 
+<#--
+  DEPRECATED:
+  This view is deprecated.
+
+  The bootstrap carousel was replaced with the slick carousel.
+  Please check the freemarker library "slickCarousel.ftl" of "@coremedia/slick-carousel".
+-->
+
 <#assign modifier=cm.localParameters().modifier!"" />
 <#assign index=cm.localParameters().index!0 />
 <#assign additionalClass=cm.localParameters().additionalClass!"" />
@@ -23,7 +31,7 @@
 <#assign displayPagination=cm.localParameters().displayPagination!false />
 <#assign displayControls=cm.localParameters().displayControls!true />
 <#assign displayIndicators=cm.localParameters().displayIndicators!false />
-<#assign controlIcon=cm.localParameters().controlIcon!"chevron" />
+<#assign controlIcon=cm.localParameters().controlIcon!"triangle" />
 
 <#assign items=self.flattenedItems![] />
 <#if items?has_content>

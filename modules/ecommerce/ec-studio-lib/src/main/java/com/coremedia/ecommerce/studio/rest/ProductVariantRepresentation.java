@@ -80,10 +80,12 @@ public class ProductVariantRepresentation extends CommerceBeanRepresentation {
     return currency;
   }
 
+  @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
   public List<Content> getPictures() {
     return pictures;
   }
 
+  @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
   public List<Content> getDownloads() {
     return downloads;
   }
@@ -132,12 +134,10 @@ public class ProductVariantRepresentation extends CommerceBeanRepresentation {
     this.currency = currency;
   }
 
-  @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
   public void setPictures(List<Content> pictures) {
     this.pictures = pictures;
   }
 
-  @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
   public void setDownloads(List<Content> downloads) {
     this.downloads = downloads;
   }

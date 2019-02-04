@@ -12,10 +12,10 @@ import com.coremedia.cap.content.events.ContentRepositoryListenerBase;
 import com.coremedia.ecommerce.studio.rest.cache.CommerceCacheInvalidationSource;
 import com.coremedia.livecontext.ecommerce.common.Vendor;
 import com.google.common.collect.ImmutableSet;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.SmartLifecycle;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -25,6 +25,7 @@ import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFo
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CATEGORY;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.SKU;
+import static com.google.common.collect.Sets.newHashSet;
 
 /**
  * A {@link com.coremedia.cap.content.events.ContentRepositoryListener}
@@ -37,10 +38,11 @@ import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.SK
 class AssetInvalidationRepositoryListener extends ContentRepositoryListenerBase implements SmartLifecycle {
 
   private static final String ANY = "any";
+  private static final Vendor ANY_VENDOR = Vendor.of(ANY);
   private static final Set<String> INVALIDATION_ALL_REFERENCES = ImmutableSet.of(
-          format(commerceId(Vendor.of(ANY), CATEGORY).withTechId(ANY).build()),
-          format(commerceId(Vendor.of(ANY), PRODUCT).withTechId(ANY).build()),
-          format(commerceId(Vendor.of(ANY), SKU).withTechId(ANY).build())
+          format(commerceId(ANY_VENDOR, CATEGORY).withTechId(ANY).build()),
+          format(commerceId(ANY_VENDOR, PRODUCT).withTechId(ANY).build()),
+          format(commerceId(ANY_VENDOR, SKU).withTechId(ANY).build())
   );
 
   private static final Set<String> EVENT_WHITELIST = ImmutableSet.of(
@@ -68,16 +70,17 @@ class AssetInvalidationRepositoryListener extends ContentRepositoryListenerBase 
       return;
     }
 
-    commerceCacheInvalidationSource.invalidateReferences(getReferences(event, content));
+    commerceCacheInvalidationSource.invalidateReferences(newHashSet(getReferences(event, content)));
   }
 
   @NonNull
-  private Collection<String> getReferences(@NonNull ContentEvent event, @NonNull Content content) {
+  private static Collection<String> getReferences(@NonNull ContentEvent event, @NonNull Content content) {
     if (event.getType().equals(ContentEvent.CONTENT_REVERTED)) {
       //when a content ist reverted we don't know the old external references.
       // So we have to invalidate all relevant catalog types
       return INVALIDATION_ALL_REFERENCES;
     }
+
     return CommerceReferenceHelper.getExternalReferences(content);
   }
 

@@ -66,20 +66,30 @@
                            expression="30 DAYS TO NOW"/>
               </dcqe:timeSlots>
             </dcqe:ModificationDateConditionEditor>
-            <dcqe:ContextConditionEditor bindTo="{config.bindTo}"
-                                         propertyName="documents"
-                                         group="attributes"
-                                         contentType="CMChannel"
-                                         documentTypes="{['CMArticle', 'CMVideo', 'CMPicture','CMGallery','CMChannel']}"
-                                         forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
+            <dcqe:LinkListConditionEditor bindTo="{config.bindTo}"
+                                          propertyName="documents"
+                                          itemId="contextConditionEditor"
+                                          group="attributes"
+                                          contentType="CMChannel"
+                                          documentTypes="{['CMArticle', 'CMVideo', 'CMPicture','CMGallery','CMChannel']}"
+                                          forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
+            <dcqe:LinkListConditionEditor bindTo="{config.bindTo}"
+                                          propertyName="authors"
+                                          itemId="authorConditionEditor"
+                                          group="attributes"
+                                          contentType="CMPerson"
+                                          documentTypes="{['CMArticle', 'CMVideo', 'CMPicture','CMGallery','CMChannel']}"
+                                          forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
             <taxonomy:TaxonomyConditionEditor bindTo="{config.bindTo}"
                                               propertyName="subjecttaxonomy"
+                                              itemId="subjectTaxonomyConditionEditor"
                                               group="attributes"
                                               contentType="CMTaxonomy"
                                               documentTypes="{['CMArticle', 'CMVideo', 'CMPicture','CMGallery','CMChannel']}"
                                               forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
             <taxonomy:LocationTaxonomyConditionEditor bindTo="{config.bindTo}"
                                                       propertyName="locationtaxonomy"
+                                                      itemId="locationTaxonomyConditionEditor"
                                                       group="attributes"
                                                       contentType="CMLocTaxonomy"
                                                       documentTypes="{['CMArticle', 'CMVideo', 'CMPicture','CMGallery','CMChannel']}"
@@ -87,6 +97,7 @@
             <dcqe:LinkingTaxonomyConditionEditor bindTo="{config.bindTo}"
                                                  group="attributes"
                                                  propertyName="contextTaxonomies"
+                                                 itemId="linkingTaxonomyConditionEditor"
                                                  documentTypes="{['CMArticle', 'CMVideo', 'CMPicture','CMGallery','CMChannel']}"
                                                  forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
           </dcqe:conditions>

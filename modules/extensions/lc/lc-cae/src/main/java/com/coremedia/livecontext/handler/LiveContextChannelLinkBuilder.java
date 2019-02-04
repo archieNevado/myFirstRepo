@@ -32,7 +32,8 @@ public class LiveContextChannelLinkBuilder extends LiveContextPageHandlerBase {
   private CommerceConnectionInitializer commerceConnectionInitializer;
 
   @Required
-  public void setSearchLandingPagesLinkBuilderHelper(SearchLandingPagesLinkBuilderHelper searchLandingPagesLinkBuilderHelper) {
+  public void setSearchLandingPagesLinkBuilderHelper(
+          SearchLandingPagesLinkBuilderHelper searchLandingPagesLinkBuilderHelper) {
     this.searchLandingPagesLinkBuilderHelper = searchLandingPagesLinkBuilderHelper;
   }
 
@@ -104,6 +105,6 @@ public class LiveContextChannelLinkBuilder extends LiveContextPageHandlerBase {
     String seoSegments = commerceLedLinkBuilderHelper.getContentURLKeyword() + "/" + seoSegment;
 
     return findCommercePropertyProvider()
-            .flatMap(urlProvider -> urlProvider.buildShopLink(seoSegments, emptyMap(), request, storeContext));
+            .flatMap(provider -> provider.buildShopLink(seoSegments, emptyMap(), request, storeContext));
   }
 }

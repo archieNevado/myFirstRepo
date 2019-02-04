@@ -2,6 +2,7 @@ package com.coremedia.livecontext.ecommerce.ibm.cae.handler;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.cae.handlers.NavigationSegmentsUriHelper;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.navigation.Navigation;
@@ -32,7 +33,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -76,7 +76,7 @@ public class CartHandlerTest {
     commerceConnection = new BaseCommerceConnection();
     CurrentCommerceConnection.set(commerceConnection);
 
-    StoreContext storeContext = newStoreContext();
+    StoreContext storeContext = StoreContextBuilderImpl.from().build();
     commerceConnection.setStoreContext(storeContext);
 
     commerceConnection.setCartService(cartService);

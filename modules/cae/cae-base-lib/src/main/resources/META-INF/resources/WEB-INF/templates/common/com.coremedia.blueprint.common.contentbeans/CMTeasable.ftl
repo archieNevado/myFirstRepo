@@ -8,7 +8,7 @@
 -->
 
 <div class="cm-teasable">
-  <h1 class="cm-teasable_title">${self.title!""}</h1>
+  <h1 class="cm-teasable__title">${self.title!""}</h1>
   <div class="cm-teasable__picture">
     <@cm.include self=self.picture!cm.UNDEFINED />
   </div>

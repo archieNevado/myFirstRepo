@@ -6,7 +6,6 @@ import com.coremedia.livecontext.ecommerce.ibm.cae.WcsUrlProvider;
 import com.coremedia.livecontext.ecommerce.ibm.login.WcLoginWrapperService;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextProviderImpl;
 import com.coremedia.livecontext.ecommerce.user.UserService;
-import com.coremedia.livecontext.ecommerce.user.UserSessionService;
 import com.coremedia.livecontext.handler.LiveContextProductSeoLinkBuilderHelper;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -51,7 +50,8 @@ public class StoreFrontConfiguration {
                                             WcsUrlProvider wcsPageHandlerUrlProvider,
                                             CommerceCache commerceCache,
                                             WcLoginWrapperService loginWrapperService,
-                                            UserService commerceUserService) {
+                                            UserService commerceUserService,
+                                            UserContextProviderImpl userContextProvider) {
     UserSessionServiceImpl userSessionService = new UserSessionServiceImpl();
     userSessionService.setStoreFrontConnector(storeFrontConnector);
     userSessionService.setCommerceCache(commerceCache);
@@ -59,13 +59,11 @@ public class StoreFrontConfiguration {
     userSessionService.setUserService(commerceUserService);
     userSessionService.setUrlProvider(wcsPageHandlerUrlProvider);
     userSessionService.setWcsStorefrontUrl(wcsStorefrontUrl);
+
+    // customize existing userContextProvider (see livecontext-services.xml) bean instead of overriding the existing bean
+    userContextProvider.setUserSessionService(userSessionService);
+
     return userSessionService;
   }
 
-  @Bean
-  UserContextProviderImpl userContextProvider(UserSessionService userSessionService) {
-    UserContextProviderImpl userContextProvider = new UserContextProviderImpl();
-    userContextProvider.setUserSessionService(userSessionService);
-    return userContextProvider;
-  }
 }

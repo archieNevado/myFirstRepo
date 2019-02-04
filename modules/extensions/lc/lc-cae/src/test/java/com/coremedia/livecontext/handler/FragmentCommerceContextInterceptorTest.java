@@ -47,7 +47,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -96,7 +95,7 @@ public class FragmentCommerceContextInterceptorTest {
 
   @Before
   public void setup() {
-    storeContext = newStoreContext();
+    storeContext = StoreContextBuilderImpl.from().build();
     userContext = UserContext.builder().build();
 
     commerceConnection = new BaseCommerceConnection();

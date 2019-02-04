@@ -2,10 +2,10 @@ package com.coremedia.livecontext.handler;
 
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.List;
 
 public class LiveContextProductSeoLinkBuilderHelper {
@@ -16,10 +16,12 @@ public class LiveContextProductSeoLinkBuilderHelper {
   /**
    * Return the SEO URL for the given commerce bean.
    */
-  public String buildSeoSegmentsFor(@NonNull Product pro) {
+  public String buildSeoSegmentsFor(@NonNull Product product) {
     StringBuilder segments = new StringBuilder();
-    String seoSegment = pro.getSeoSegment();
-    Category category = pro.getCategory();
+
+    String seoSegment = product.getSeoSegment();
+    Category category = product.getCategory();
+
     if (!StringUtils.isBlank(seoSegment) && category != null) {
       segments.append(buildSeoBreadCrumbs(category));
       segments.append(seoSegment);
@@ -35,14 +37,19 @@ public class LiveContextProductSeoLinkBuilderHelper {
    */
   private String buildSeoBreadCrumbs(@NonNull Category category) {
     StringBuilder segments = new StringBuilder();
+
     List<Category> breadcrumb = category.getBreadcrumb();
-    if (breadcrumb.size() > wcsStorefrontMaxUrlSegments) {
-      breadcrumb = breadcrumb.subList(breadcrumb.size() - wcsStorefrontMaxUrlSegments, breadcrumb.size());
+
+    int breadcrumbSize = breadcrumb.size();
+    if (breadcrumbSize > wcsStorefrontMaxUrlSegments) {
+      breadcrumb = breadcrumb.subList(breadcrumbSize - wcsStorefrontMaxUrlSegments, breadcrumbSize);
     }
+
     for (Category c : breadcrumb) {
       segments.append(c.getSeoSegment());
       segments.append('/');
     }
+
     return segments.toString();
   }
 }

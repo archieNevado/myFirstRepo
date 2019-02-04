@@ -4,6 +4,7 @@ alx-p13n
 alx-webtrends
 am
 catalog
+ecommerce-adapter
 es
 es-alx
 es-controlroom
@@ -26,5 +27,3 @@ lc-asset
 ecommerce-ibm
 taxonomy
 validators
-#memory-controlroom
-#notification-memory

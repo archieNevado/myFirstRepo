@@ -13,6 +13,7 @@ import com.coremedia.xml.ExtendedContentHandler;
 import com.coremedia.xml.Filter;
 import com.coremedia.xml.Markup;
 import com.coremedia.xml.MarkupFactory;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -102,11 +103,10 @@ public class LinkEmbedFilterTest {
 
     request.setAttribute(ViewUtils.VIEWDISPATCHER, viewDispatcher);
 
-    testling = linkEmbedFilter.getInstance(request, response);
+    testling = (LinkEmbedFilter) linkEmbedFilter.getInstance(request, response);
     testling.strictNestedPCheck = true;
     newXmlFilters.add(testling);
   }
-
 
   // --- tests ------------------------------------------------------
 
@@ -197,7 +197,6 @@ public class LinkEmbedFilterTest {
     assertEquals("testDontTouchNotAffectedP", expected, result);
   }
 
-
   @Test
   public void testFlowIntoDiv() {
     String result = getResult(252);
@@ -257,7 +256,6 @@ public class LinkEmbedFilterTest {
     // No need for checks, we are happy if no assertion failed so far.
   }
 
-
   // --- internal ---------------------------------------------------
 
   private String getResult(int id) {
@@ -285,7 +283,8 @@ public class LinkEmbedFilterTest {
   private class DivTextView implements TextView {
     @SuppressWarnings("ProhibitedExceptionThrown")
     @Override
-    public void render(Object bean, String view, Writer out, HttpServletRequest request, HttpServletResponse response) {
+    public void render(Object bean, String view, Writer out, @NonNull HttpServletRequest request,
+                       @NonNull HttpServletResponse response) {
       try {
         if (embedAsFlow(bean)) {
           out.write(EMBEDDED_FLOW);
@@ -297,6 +296,5 @@ public class LinkEmbedFilterTest {
       }
     }
   }
-
 }
 

@@ -11,8 +11,8 @@
 <IntProperty Name="searchResultHitsPerPage">10</IntProperty>
 <BooleanProperty Name="searchDisableSpellingSuggestions">false</BooleanProperty>
 <LinkListProperty Name="searchChannelSelect" LinkType="coremedia:///cap/contenttype/CMChannel">
-<Link xlink:href="coremedia:///cap/resources/../../Navigation/Microsites/Editorial%20Blog%20Microsite.xml" cmexport:path="/Sites/Calista/United%20States/English/Navigation/Microsites/Editorial%20Blog%20Microsite"/>
-<Link xlink:href="coremedia:///cap/resources/../../Navigation/Blog/Fashion%20Trends%202017/Fashion%20Trends.xml" cmexport:path="/Sites/Calista/United%20States/English/Navigation/Blog/Fashion%20Trends%202017/Fashion%20Trends"/>
+<Link xlink:href="coremedia:///cap/resources/../../Navigation/Blog/Blog%20Page.xml" cmexport:path="/Sites/Calista/United%20States/English/Navigation/Blog/Blog%20Page"/>
+<Link xlink:href="coremedia:///cap/resources/../../Navigation/Blog/Fashion%20Trends/Fashion%20Trends%20Blog%20Category.xml" cmexport:path="/Sites/Calista/United%20States/English/Navigation/Blog/Fashion%20Trends/Fashion%20Trends%20Blog%20Category"/>
 </LinkListProperty>
 <StringListProperty Name="searchDoctypeSelect">
 <String>CMArticle</String>

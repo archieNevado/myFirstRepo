@@ -7,7 +7,7 @@
 <#assign renderTeaserText=cm.localParameters().renderTeaserText!true />
 <#assign teaserBlockClass=cm.localParameters().teaserBlockClass!"cm-teasable" />
 
-<#assign link=(cm.localParameters().renderLink!true)?then(cm.getLink(self.productInSite!cm.UNDEFINED), "") />
+<#assign link=defaultTeaser.getLink(self.productInSite!cm.UNDEFINED, self.teaserSettings) />
 
 <#assign textHtml>
   <#if renderTeaserText>
@@ -38,6 +38,8 @@
                               openInNewTab=self.openInNewTab
                               ctaButtons=self.callToActionSettings
                               teaserBlockClass=teaserBlockClass
+                              authors=(cm.localParameters().renderAuthors!false)?then(self.authors![], [])
+                              externallyDisplayedDate=(cm.localParameters().renderDate!false)?then(self.externallyDisplayedDate![], [])
                               metadataTitle=["properties.teaserTitle"]
                               metadataText=["properties.teaserText"] />
 <#--custom call-to-action button-->

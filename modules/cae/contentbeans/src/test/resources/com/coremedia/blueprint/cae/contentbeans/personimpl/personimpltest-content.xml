@@ -21,6 +21,13 @@
             <version number="1">
               <stringProperty name="firstName" value="firstName_Person"/>
               <stringProperty name="lastName" value="lastName_Person"/>
+              <stringProperty name="htmlTitle" value="htmlTitle_Person"/>
+            </version>
+          </document>
+          <document id="6" type="CMPerson" name="PersonEmptyDisplayName">
+            <version number="1">
+              <stringProperty name="firstName" value="firstName_Person"/>
+              <stringProperty name="lastName" value="lastName_Person"/>
             </version>
           </document>
         </folder>

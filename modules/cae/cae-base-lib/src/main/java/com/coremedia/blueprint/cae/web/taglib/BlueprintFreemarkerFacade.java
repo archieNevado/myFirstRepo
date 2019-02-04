@@ -441,18 +441,13 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
     if (!(object instanceof CMTeasable)) {
       throw new IllegalArgumentException("Only CMTeasable type supported");
     }
+    CMTeasable teasable = (CMTeasable) object;
 
-    return getDynamizableContainer((CMTeasable) object, propertyPath);
-  }
-
-  @NonNull
-  private Container getDynamizableContainer(@NonNull CMTeasable teasable, @NonNull String propertyPath) {
-    return new DynamizableCMTeasableContainer(teasable, propertyPath) {
-      @Override
-      public boolean isDynamic() {
-        return dynamicContainerStrategy != null && dynamicContainerStrategy.isEnabled(teasable) && dynamicContainerStrategy.isDynamic(getItems());
-      }
-    };
+    if (dynamicContainerStrategy != null) {
+      return new DynamizableCMTeasableContainerWithDynamicStrategy(teasable, propertyPath, dynamicContainerStrategy);
+    } else {
+      return new DynamizableCMTeasableContainerNonDynamic(teasable, propertyPath);
+    }
   }
 
   public boolean isWebflowRequest() {

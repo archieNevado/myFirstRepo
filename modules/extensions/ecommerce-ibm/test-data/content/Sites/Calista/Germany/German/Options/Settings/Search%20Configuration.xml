@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMSettings folder="/Sites/Calista/Germany/German/Options/Settings" name="Search Configuration" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="master-version-destroyed">
+<CMSettings folder="/Sites/Calista/Germany/German/Options/Settings" name="Search Configuration" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <locale>de-DE</locale>
 <master>
 <link href="../../../../United%20States/English/Options/Settings/Search%20Configuration.xml" path="/Sites/Calista/United%20States/English/Options/Settings/Search%20Configuration"/>
@@ -12,8 +12,8 @@
 <IntProperty Name="searchResultHitsPerPage">10</IntProperty>
 <BooleanProperty Name="searchDisableSpellingSuggestions">false</BooleanProperty>
 <LinkListProperty Name="searchChannelSelect" LinkType="coremedia:///cap/contenttype/CMChannel">
-<Link xlink:href="coremedia:///cap/resources/../../Navigation/Microsites/Editorial%20Blog%20Microsite.xml" cmexport:path="/Sites/Calista/Germany/German/Navigation/Microsites/Editorial%20Blog%20Microsite"/>
-<Link xlink:href="coremedia:///cap/resources/../../Navigation/Blog/Fashion%20Trends%202017/Fashion%20Trends.xml" cmexport:path="/Sites/Calista/Germany/German/Navigation/Blog/Fashion%20Trends%202017/Fashion%20Trends"/>
+<Link xlink:href="coremedia:///cap/resources/../../Navigation/Blog/Blog%20Page.xml" cmexport:path="/Sites/Calista/Germany/German/Navigation/Blog/Blog%20Page"/>
+<Link xlink:href="coremedia:///cap/resources/../../Navigation/Blog/Fashion%20Trends/Fashion%20Trends%20Blog%20Category.xml" cmexport:path="/Sites/Calista/Germany/German/Navigation/Blog/Fashion%20Trends/Fashion%20Trends%20Blog%20Category"/>
 </LinkListProperty>
 <StringListProperty Name="searchDoctypeSelect">
 <String>CMArticle</String>

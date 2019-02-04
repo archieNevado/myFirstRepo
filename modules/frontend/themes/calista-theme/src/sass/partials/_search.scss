@@ -5,7 +5,7 @@
       display: none;
       padding: 6px 12px;
       color: #555555;
-      border: 1px solid #000;
+      border: 1px solid $border-color-default;
       border-radius: 2px;
       -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
       box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
@@ -272,7 +272,7 @@
     &-popup {
       &-close {
         border: none;
-        background: #fff;
+        background: $cm-standard-component-background-color;
 
         i {
           @extend .glyphicon;
@@ -304,7 +304,7 @@
     }
 
     &-index {
-      border: 1px solid #fff;
+      border: 1px solid #FFFFFF;
     }
   }
 }
@@ -316,10 +316,10 @@
   padding: 10px 0;
   font-size: 20px;
   line-height: 28px;
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid $border-color-default;
 
   @include breakpoint(sm-and-up) {
-    margin-top: 15px;
+    margin-top: $cm-standard-spacing;
   }
 
   &__tab {
@@ -330,7 +330,7 @@
       margin-right: 2px;
 
       &:hover {
-        border-bottom: 3px solid #000;
+        border-bottom: 3px solid $border-color-default;
         text-decoration: none;
       }
 
@@ -340,7 +340,7 @@
     }
 
     &.active a {
-      border-bottom: 3px solid #000;
+      border-bottom: 3px solid $border-color-default;
       cursor: default;
     }
   }

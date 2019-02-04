@@ -54,7 +54,7 @@
 </Struct>
 <Struct>
 <LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../../Editorial/Content/Fashion/Editorial%20Blog%20Teaser.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Fashion/Editorial%20Blog%20Teaser"/>
+<Link xlink:href="coremedia:///cap/resources/../../Editorial/Content/Blog/Blog%20Home%20Teaser.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Blog/Blog%20Home%20Teaser"/>
 </LinkListProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../Options/Settings/Pagegrid/Placements/sidebar.xml" cmexport:path="/Sites/Calista/United%20States/English/Options/Settings/Pagegrid/Placements/sidebar"/>
 </Struct>

@@ -148,10 +148,9 @@ public class LocalizationServiceTest {
     Content foo_de_DE = mkBundle(folder, "_de_DE");
     testling.hierarchizeResourceBundles(foo);
 
-    assertEquals("", foo.getString("locale"));
     assertEquals("en", foo_en.getString("locale"));
     assertEquals("de", foo_de.getString("locale"));
-    assertEquals("de_DE", foo_de_DE.getString("locale"));
+    assertEquals("de-DE", foo_de_DE.getString("locale"));
 
     assertNull(foo.getLink("master"));
     assertEquals(foo, foo_en.getLink("master"));

@@ -15,7 +15,7 @@ public class ContractsByUserCacheKey extends AbstractCommerceCacheKey<Map<String
 
   private WcContractWrapperService wrapperService;
 
-  public ContractsByUserCacheKey(@NonNull UserContext userContext, StoreContext storeContext,
+  public ContractsByUserCacheKey(@NonNull UserContext userContext, @NonNull StoreContext storeContext,
                                  @Nullable String organizationId, WcContractWrapperService wrapperService,
                                  CommerceCache commerceCache) {
     super(

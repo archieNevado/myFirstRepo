@@ -1,37 +1,46 @@
+// layout for sections
+@mixin cm-details-text-layout {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0;
+
+  @include breakpoint("sm-and-up") {
+    padding: 0 10%;
+  }
+}
+
+/* --- detail page --- */
 .#{$cm-details-prefix} {
   font-family: $font-family-serif;
   margin-bottom: 96px;
 
+  @include breakpoint("md") {
+    margin-top: 48px;
+  }
+
+  // title
   &__headline {
     text-transform: uppercase;
     margin-bottom: 24px;
   }
 
+  // media content
   &__media-box {
-    @include aspect-ratio-box(2.35, 1);
+    @include aspect-ratio-box($cm-details-image-aspect-ratio-x, $cm-details-image-aspect-ratio-y);
   }
 
   &__medias {
     margin-bottom: 24px;
 
-    @include breakpoint(sm-and-up) {
+    @include breakpoint("sm-and-up") {
       margin-bottom: 48px;
     }
   }
 
+  // text container
   &__text {
-    width: 100%;
+    @include cm-details-text-layout;
     hyphens: auto;
-    margin-left: auto;
-    margin-right: auto;
-
-    @include breakpoint(xs) {
-      padding: 0;
-    }
-
-    @include breakpoint(sm-and-up) {
-      width: 80%;
-    }
 
     h1, h2, h3 {
       font-weight: bold;
@@ -57,7 +66,7 @@
       a {
         text-decoration: none;
         padding-bottom: 0;
-        border-bottom: 1px solid #000;
+        border-bottom: 1px solid $border-color-default;
         transition: all 0.1s ease;
 
         &:hover {
@@ -81,19 +90,101 @@
       }
     }
   }
+
+  &__authors {
+    @include cm-details-text-layout;
+
+    &-headline {
+      display: none;
+    }
+  }
+
+  /* --- person detail page --- */
+  &__introduction {
+    @include cm-details-text-layout;
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+
+  &__picture-person {
+    margin-right: 15px;
+
+    @include breakpoint("sm-and-up") {
+      margin-right: $cm-details-padding-large-vertical;
+    }
+  }
+
+  &__name {
+    margin-top: -6px; // align with image
+    margin-bottom: 6px;
+
+    @include breakpoint("sm-and-up") {
+      margin-bottom: 10px;
+    }
+  }
+
+  &__job {
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 1.4;
+
+    @include breakpoint("sm-and-up") {
+      margin-bottom: 10px;
+    }
+  }
+
+  &__email {
+    &-icon {
+      @extend .glyphicon;
+      @extend .glyphicon-envelope;
+    }
+  }
+
+  &__organization,
+  &__email {
+    margin-bottom: 0;
+
+    @include breakpoint("sm-and-up") {
+      margin-bottom: 10px;
+    }
+  }
+
 }
 
-.#{$prefix}related {
+/* --- authors section --- */
+.#{$cm-author-prefix} {
+  &__picture-box {
+    margin-top: 7px; // align with headline
+  }
+}
 
-  &__title {
+/* --- tags section --- */
+.#{$cm-tag-prefix} {
+  &__headline {
     font-size: $font-size-large;
     font-family: $font-family-serif;
     text-transform: uppercase;
+    text-align: center;
+  }
+
+  &__items {
+    display: block;
+    text-align: center;
+  }
+}
+
+/* --- related section --- */
+.#{$cm-related-prefix} {
+  &__headline {
+    font-size: $font-size-large;
+    font-family: $font-family-serif;
+    text-transform: uppercase;
+    text-align: center;
   }
 
   .cm-teasable {
     &__picture-box {
-      @include aspect-ratio-box(2.35, 1);
+      @include aspect-ratio-box($cm-details-image-aspect-ratio-x, $cm-details-image-aspect-ratio-y);
     }
   }
 }

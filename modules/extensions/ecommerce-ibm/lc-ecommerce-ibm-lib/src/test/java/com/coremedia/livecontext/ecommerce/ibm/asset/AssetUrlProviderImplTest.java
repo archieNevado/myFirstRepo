@@ -2,6 +2,7 @@ package com.coremedia.livecontext.ecommerce.ibm.asset;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
@@ -11,7 +12,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -36,7 +36,7 @@ public class AssetUrlProviderImplTest {
     CurrentCommerceConnection.set(commerceConnection);
 
     StoreContextImpl storeContext = IbmStoreContextBuilder
-            .from(newStoreContext())
+            .from(StoreContextBuilderImpl.from().build())
             .withStoreId("10001")
             .withCatalogId(CatalogId.of("catalog"))
             .build();

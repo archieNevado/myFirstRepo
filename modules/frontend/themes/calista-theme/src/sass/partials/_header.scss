@@ -5,11 +5,14 @@
   font-family: $font-family-sans-serif;
 
   @include breakpoint("sm-and-down") {
-    margin: 0 -15px;
+    margin: 0 -#{$cm-standard-spacing};
+  }
+
+  @include breakpoint("md") {
+    margin-bottom: 48px; //align height of header with navigation
   }
 
   // Logo
-
   &__logo {
     margin-top: 5px;
     width: 134px;
@@ -26,7 +29,6 @@
   }
 
   // Login
-
   &__login {
     #cm-login,
     #cm-logout {
@@ -35,12 +37,11 @@
   }
 
   // Navigation
-
   .navbar-nav {
 
     & > li > a {
       text-transform: uppercase;
-      font-size: 12px;
+      font-size: $font-size-normal;
       @include breakpoint("sm-and-down") {
         font-size: 16px;
       }
@@ -64,7 +65,7 @@
         @include breakpoint("sm-and-down") {
           position: absolute;
         }
-        right: 15px;
+        right: $cm-standard-spacing;
 
         .caret {
           border: 0 solid #000000;

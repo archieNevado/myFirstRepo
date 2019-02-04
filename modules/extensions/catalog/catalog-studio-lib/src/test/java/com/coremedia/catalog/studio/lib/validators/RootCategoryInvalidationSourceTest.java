@@ -12,7 +12,6 @@ import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
-import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.rest.invalidations.InvalidationSource;
 import com.coremedia.rest.linking.Linker;
@@ -67,16 +66,12 @@ public class RootCategoryInvalidationSourceTest {
   private ContentType cmCategory;
   private Content rootCategory;
   private Version initialRootDocumentVersion;
-  private MockCommerceEnvBuilder envBuilder;
 
   @Before
   public void setup() {
     configureLinker();
 
     cache.setCapacity(Object.class.getName(), 100);
-
-    envBuilder = MockCommerceEnvBuilder.create();
-    envBuilder.setupEnv();
 
     cmCategory = contentRepository.getContentType("CMCategory");
     site = sitesService.findSite("theSiteId")
@@ -120,7 +115,6 @@ public class RootCategoryInvalidationSourceTest {
     if (!rootCategory.isDestroyed()) {
       rootCategory.destroy();
     }
-    envBuilder.tearDownEnv();
   }
 
   @Test
@@ -144,14 +138,14 @@ public class RootCategoryInvalidationSourceTest {
   public void destroyedRootCategory() {
     rootCategory.destroy();
     Collection<Category> rootCategories = testling.getRootCategories();
-    assertThat(rootCategories, Matchers.<Category>empty());
+    assertThat(rootCategories, Matchers.empty());
   }
 
   @Test
   public void deletedRootCategory() {
     rootCategory.delete();
     Collection<Category> rootCategories = testling.getRootCategories();
-    assertThat(rootCategories, Matchers.<Category>empty());
+    assertThat(rootCategories, Matchers.empty());
   }
 
   @Test
@@ -160,7 +154,7 @@ public class RootCategoryInvalidationSourceTest {
     createAndConfigureRootCategory(RandomStringUtils.randomAlphanumeric(10));
 
     Collection<Category> rootCategories = testling.getRootCategories();
-    assertThat(rootCategories, Matchers.<Category>empty());
+    assertThat(rootCategories, Matchers.empty());
   }
 
   @Test

@@ -15,7 +15,7 @@ public class SegmentCacheKey extends AbstractIbmDocumentCacheKey<Map<String, Obj
 
   private WcSegmentWrapperService wrapperService;
 
-  public SegmentCacheKey(@NonNull CommerceId id, StoreContext storeContext, UserContext userContext,
+  public SegmentCacheKey(@NonNull CommerceId id, @NonNull StoreContext storeContext, UserContext userContext,
                          WcSegmentWrapperService wrapperService, CommerceCache commerceCache) {
     super(id, storeContext, userContext, CONFIG_KEY_SEGMENT, commerceCache);
     this.wrapperService = wrapperService;

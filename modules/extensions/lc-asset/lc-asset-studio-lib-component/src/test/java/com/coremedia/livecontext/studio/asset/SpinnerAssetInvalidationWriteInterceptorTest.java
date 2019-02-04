@@ -17,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,13 +25,14 @@ import java.util.Set;
 
 import static com.coremedia.livecontext.studio.asset.SpinnerAssetInvalidationWriteInterceptor.SEQUENCE_SPINNER_PROPERTY;
 import static java.util.Collections.emptyMap;
+import static java.util.Collections.emptySet;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.hamcrest.MockitoHamcrest.argThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SpinnerAssetInvalidationWriteInterceptorTest {
@@ -79,14 +79,14 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
   }
 
   @Test
-  public void testAssignedProductsChangedNewSettingsNoCommerceStruct() throws Exception {
+  public void testAssignedProductsChangedNewSettingsNoCommerceStruct() {
     when(assetReadSettingsHelper.hasCommerceStruct(newLocalSettings)).thenReturn(false);
 
     assertThat(testling.assignedCommerceReferencesChanged(oldLocalSettings, newLocalSettings)).isFalse();
   }
 
   @Test
-  public void testAssignedProductsChangedOldSettingsNoCommerceStruct() throws Exception {
+  public void testAssignedProductsChangedOldSettingsNoCommerceStruct() {
     when(assetReadSettingsHelper.hasCommerceStruct(newLocalSettings)).thenReturn(true);
     when(assetReadSettingsHelper.hasCommerceStruct(oldLocalSettings)).thenReturn(false);
 
@@ -94,7 +94,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
   }
 
   @Test
-  public void testAssignedProductsChangedNewSettingsHaveNoProducts() throws Exception {
+  public void testAssignedProductsChangedNewSettingsHaveNoProducts() {
     when(assetReadSettingsHelper.hasCommerceStruct(newLocalSettings)).thenReturn(true);
     when(assetReadSettingsHelper.hasCommerceStruct(oldLocalSettings)).thenReturn(true);
     when(assetReadSettingsHelper.hasReferencesList(newLocalSettings)).thenReturn(false);
@@ -103,7 +103,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
   }
 
   @Test
-  public void testAssignedProductsChangedEqualProductList() throws Exception {
+  public void testAssignedProductsChangedEqualProductList() {
     List<String> newProducts = ImmutableList.of("1", "2");
     List<String> oldProducts = ImmutableList.of("1", "2");
     when(assetReadSettingsHelper.hasCommerceStruct(newLocalSettings)).thenReturn(true);
@@ -116,7 +116,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
   }
 
   @Test
-  public void testAssignedProductsChangedNotEqualProductList() throws Exception {
+  public void testAssignedProductsChangedNotEqualProductList() {
     List<String> newProducts = ImmutableList.of("1", "2");
     List<String> oldProducts = ImmutableList.of("1", "3");
     when(assetReadSettingsHelper.hasCommerceStruct(newLocalSettings)).thenReturn(true);
@@ -129,7 +129,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
   }
 
   @Test
-  public void testSequencePropertyChanged() throws Exception {
+  public void testSequencePropertyChanged() {
     Map<String, Object> newProperties = new HashMap<>();
     newProperties.put(SEQUENCE_SPINNER_PROPERTY, mock(Object.class));
     when(contentWriteRequest.getProperties()).thenReturn(newProperties);
@@ -138,7 +138,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
   }
 
   @Test
-  public void testSequencePropertyNotChanged() throws Exception {
+  public void testSequencePropertyNotChanged() {
     Map<String, Object> newProperties = new HashMap<>();
     when(contentWriteRequest.getProperties()).thenReturn(newProperties);
 
@@ -146,7 +146,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
   }
 
   @Test
-  public void resolveAllSpinnerPicturesNoPictures() throws Exception {
+  public void resolveAllSpinnerPicturesNoPictures() {
     Map<String, Object> properties = allSpinnerPicturesTestNewProperties();
 
     Set<Content> contents = testling.resolveAllSpinnerPictures(oldLocalSettings, properties);
@@ -168,7 +168,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
   }
 
   @Test
-  public void resolveAllSpinnerPicturesFromContent() throws Exception {
+  public void resolveAllSpinnerPicturesFromContent() {
     Content oldPicture1 = mock(Content.class);
     Content oldPicture2 = mock(Content.class);
     Map<String, Object> properties = allSpinnerPicturesTestNewProperties();
@@ -182,7 +182,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
   }
 
   @Test
-  public void resolveAllSpinnerPicturesFromNewPropertiesEvenIfOldExist() throws Exception {
+  public void resolveAllSpinnerPicturesFromNewPropertiesEvenIfOldExist() {
     Content oldPicture1 = mock(Content.class);
     Content newPicture1 = mock(Content.class);
     Map<String, Object> properties = allSpinnerPicturesTestNewProperties(newPicture1);
@@ -195,9 +195,9 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
   }
 
   @Test
-  public void testCheckPreconditions() throws Exception {
+  public void testCheckPreconditions() {
     when(contentWriteRequest.getEntity()).thenReturn(mock(Content.class));
-    when(contentWriteRequest.getProperties()).thenReturn(new HashMap<String, Object>());
+    when(contentWriteRequest.getProperties()).thenReturn(new HashMap<>());
 
     boolean actual = testling.checkPreconditions(contentWriteRequest);
 
@@ -205,9 +205,9 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
   }
 
   @Test
-  public void testCheckPreconditionsNoContent() throws Exception {
+  public void testCheckPreconditionsNoContent() {
     when(contentWriteRequest.getEntity()).thenReturn(null);
-    when(contentWriteRequest.getProperties()).thenReturn(new HashMap<String, Object>());
+    when(contentWriteRequest.getProperties()).thenReturn(new HashMap<>());
 
     boolean actual = testling.checkPreconditions(contentWriteRequest);
 
@@ -215,7 +215,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
   }
 
   @Test
-  public void testCheckPreconditionsNoNewProperties() throws Exception {
+  public void testCheckPreconditionsNoNewProperties() {
     when(contentWriteRequest.getEntity()).thenReturn(mock(Content.class));
     when(contentWriteRequest.getProperties()).thenReturn(null);
 
@@ -225,7 +225,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
   }
 
   @Test
-  public void testInheritedChangedNoCommerceStruct() throws Exception {
+  public void testInheritedChangedNoCommerceStruct() {
     when(assetReadSettingsHelper.hasCommerceStruct(newLocalSettings)).thenReturn(Boolean.FALSE);
 
     boolean inheritedChanged = testling.inheritedChanged(oldLocalSettings, newLocalSettings);
@@ -234,7 +234,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
   }
 
   @Test
-  public void testInheritedChangedNullInputs() throws Exception {
+  public void testInheritedChangedNullInputs() {
     when(assetReadSettingsHelper.hasCommerceStruct(null)).thenReturn(Boolean.FALSE);
 
     boolean inheritedChanged = testling.inheritedChanged(null, null);
@@ -243,7 +243,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
   }
 
   @Test
-  public void testInheritedChangedNoOldCommerceStruct() throws Exception {
+  public void testInheritedChangedNoOldCommerceStruct() {
     when(assetReadSettingsHelper.hasCommerceStruct(newLocalSettings)).thenReturn(Boolean.TRUE);
     when(assetReadSettingsHelper.hasCommerceStruct(oldLocalSettings)).thenReturn(Boolean.FALSE);
 
@@ -253,7 +253,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
   }
 
   @Test
-  public void testInheritedChangedInheritStatesAreEqual() throws Exception {
+  public void testInheritedChangedInheritStatesAreEqual() {
     when(assetReadSettingsHelper.hasCommerceStruct(newLocalSettings)).thenReturn(Boolean.TRUE);
     when(assetReadSettingsHelper.hasCommerceStruct(oldLocalSettings)).thenReturn(Boolean.TRUE);
 
@@ -266,7 +266,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
   }
 
   @Test
-  public void testInheritedChangedInheritStatesAreNotEqual() throws Exception {
+  public void testInheritedChangedInheritStatesAreNotEqual() {
     when(assetReadSettingsHelper.hasCommerceStruct(newLocalSettings)).thenReturn(Boolean.TRUE);
     when(assetReadSettingsHelper.hasCommerceStruct(oldLocalSettings)).thenReturn(Boolean.TRUE);
 
@@ -279,36 +279,36 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
   }
 
   @Test
-  public void testInvalidateExternalReferences() throws Exception {
+  public void testInvalidateExternalReferences() {
     testling.invalidateExternalReferences(content, emptyMap(), emptyMap());
 
-    verify(invalidationSource, times(1)).invalidateReferences(Collections.<String>emptySet());
+    verify(invalidationSource, times(1)).invalidateReferences(emptySet());
   }
 
   @Test
-  public void testInvalidateExternalReferencesNoNewSettings() throws Exception {
+  public void testInvalidateExternalReferencesNoNewSettings() {
     List<String> oldSettingsInvalidation = ImmutableList.of("1ProductReference", "2ProductReference", "3ProductReference");
     when(assetReadSettingsHelper.getCommerceReferences(oldLocalSettings)).thenReturn(oldSettingsInvalidation);
     when(assetReadSettingsHelper.hasReferencesList(oldLocalSettings)).thenReturn(Boolean.TRUE);
 
     testling.invalidateExternalReferences(content, oldLocalSettings, emptyMap());
 
-    verify(invalidationSource, times(1)).invalidateReferences(argThat(new SetContainsMatcher(oldSettingsInvalidation)));
+    verify(invalidationSource, times(1)).invalidateReferences(argThat(oldSettingsInvalidation::containsAll));
   }
 
   @Test
-  public void testInvalidateExternalReferencesNoOldSettings() throws Exception {
+  public void testInvalidateExternalReferencesNoOldSettings() {
     List<String> newSettingsInvalidation = ImmutableList.of("1ProductReference", "2ProductReference", "3ProductReference");
     when(assetReadSettingsHelper.getCommerceReferences(newLocalSettings)).thenReturn(newSettingsInvalidation);
     when(assetReadSettingsHelper.hasReferencesList(newLocalSettings)).thenReturn(Boolean.TRUE);
 
     testling.invalidateExternalReferences(content, emptyMap(), newLocalSettings);
 
-    verify(invalidationSource, times(1)).invalidateReferences(argThat(new SetContainsMatcher(newSettingsInvalidation)));
+    verify(invalidationSource, times(1)).invalidateReferences(argThat(newSettingsInvalidation::containsAll));
   }
 
   @Test
-  public void testInvalidateExternalReferencesBothSettings() throws Exception {
+  public void testInvalidateExternalReferencesBothSettings() {
     List<String> oldSettingsInvalidation = ImmutableList.of("1OldProductReference", "2OldProductReference");
     when(assetReadSettingsHelper.getCommerceReferences(oldLocalSettings)).thenReturn(oldSettingsInvalidation);
     when(assetReadSettingsHelper.hasReferencesList(oldLocalSettings)).thenReturn(Boolean.TRUE);
@@ -321,7 +321,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
 
     testling.invalidateExternalReferences(content, oldLocalSettings, newLocalSettings);
 
-    verify(invalidationSource, times(1)).invalidateReferences(argThat(new SetContainsMatcher(expected)));
+    verify(invalidationSource, times(1)).invalidateReferences(argThat(expected::containsAll));
   }
 
   @Test

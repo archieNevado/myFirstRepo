@@ -22,8 +22,8 @@ public class SessionSynchronizationInterceptor extends HandlerInterceptorAdapter
   private SessionSynchronizer sessionSynchronizer;
 
   @Override
-  public boolean preHandle(HttpServletRequest request, HttpServletResponse
-          response, Object handler) throws GeneralSecurityException {
+  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+          throws GeneralSecurityException {
     if (RequestMethod.OPTIONS.toString().equals(request.getMethod())) {
       return true;
     }

@@ -261,6 +261,31 @@ const getWorkspaceConfig = () => {
 };
 
 /**
+ * Read JSON from file. Encoding is UTF-8.
+ *
+ * @param filepath {string} path to the JSON file
+ * @returns {any} the JSON parsed from the file
+ */
+function readJSONFromFilePath(filepath) {
+  return JSON.parse(fs.readFileSync(filepath, "utf8"));
+}
+
+/**
+ * Write JSON to file. Encoding is UTF-8.
+ *
+ * @param filepath {string} path to the JSON file
+ * @param content {any} the JSON to write to the file
+ * @param additionalWriteOptions additional options to be passed to fs.writeFileSync
+ */
+function writeJSONToFilePath(filepath, content, additionalWriteOptions = {}) {
+  const data = JSON.stringify(content, null, 2);
+  fs.writeFileSync(wsConfig.envFile, data, {
+    encoding: "utf8",
+    ...additionalWriteOptions,
+  });
+}
+
+/**
  * Gives the config of the theme the process has been started from.
  *
  * @return {Object} the theme configuration
@@ -272,7 +297,7 @@ function getThemeConfig() {
     const cwd = process.cwd();
     const packageJsonPath = closestPackage.sync(cwd);
 
-    const packageJson = require(packageJsonPath);
+    const packageJson = readJSONFromFilePath(packageJsonPath);
     // packageJson.theme as fallback for backward compatibility
     const themeConfigFromPackageJson =
       packageJson.coremedia || packageJson.theme;
@@ -388,7 +413,7 @@ function getThemeConfig() {
  * @returns {CoreMediaEntry}
  */
 function getCoreMediaEntryFromPackageJson(packageJsonPath) {
-  const packageJson = require(packageJsonPath);
+  const packageJson = readJSONFromFilePath(packageJsonPath);
   return new CoreMediaEntry(packageJson.coremedia);
 }
 
@@ -543,7 +568,7 @@ function getInstallationPath(moduleName, relativeFrom) {
  */
 function getAvailableBricks() {
   const wsConfig = getWorkspaceConfig();
-  const wsPatterns = require(wsConfig.pkgPath).workspaces || [];
+  const wsPatterns = readJSONFromFilePath(wsConfig.pkgPath).workspaces || [];
   const wsDirectories = wsPatterns
     .map(wsPattern =>
       glob.sync(wsPattern, {
@@ -556,13 +581,13 @@ function getAvailableBricks() {
     .map(directory => path.join(wsConfig.path, directory, "package.json"))
     .filter(fs.existsSync)
     .filter(packageJsonPath => {
-      const packageJson = require(packageJsonPath);
+      const packageJson = readJSONFromFilePath(packageJsonPath);
       return packageJson.coremedia && packageJson.coremedia.type === "brick";
     });
 
   return packageJsonPaths
     .map(packageJsonPath => {
-      const packageJson = require(packageJsonPath);
+      const packageJson = readJSONFromFilePath(packageJsonPath);
       return {
         [packageJson.name]: `^${packageJson.version}`,
       };
@@ -677,12 +702,10 @@ const createEnvFile = vars => {
     if (!fs.existsSync(wsConfig.configPath)) {
       fs.mkdirSync(wsConfig.configPath);
     } else if (fs.existsSync(wsConfig.envFile)) {
-      env = JSON.parse(fs.readFileSync(wsConfig.envFile, "utf8"));
+      env = readJSONFromFilePath(wsConfig.envFile, "utf8");
     }
     env = Object.assign(env, vars);
-    const data = JSON.stringify(env, null, 2);
-    fs.writeFileSync(wsConfig.envFile, data, {
-      encoding: "utf8",
+    writeJSONToFilePath(wsConfig.envFile, env, {
       mode: 0o600,
     });
   } catch (e) {
@@ -704,7 +727,7 @@ const getEnv = () => {
     throw new ConfigFileError("No environment file found. Please login.");
   }
   try {
-    return new Env(JSON.parse(fs.readFileSync(wsConfig.envFile, "utf8")));
+    return new Env(readJSONFromFilePath(wsConfig.envFile, "utf8"));
   } catch (e) {
     throw new ConfigFileError("The environment file couldn´t be read.");
   }

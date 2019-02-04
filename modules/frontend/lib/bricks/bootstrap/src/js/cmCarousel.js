@@ -6,6 +6,7 @@ import { carousel } from "./bootstrap-sass.shim";
  * jQuery Plugin that hooks into Bootstrap carousel functionality via the `slid.bs.carousel` to add
  * Responsive Image Resizer Plugin and pagination.
  *
+ * @deprecated use the slick carousel in "@coremedia/slick-carousel" instead.
  * @function "cmCarousel"
  * @summary jQuery Plugin that hooks for Bootstrap carousel
  * @example
@@ -77,12 +78,15 @@ export function cmCarousel($carousel) {
   });
 
   // Stop carousel on touch enabled devices with pointer devices on hover
-  if ('ontouchstart' in document.documentElement) {
-    $carousel.hover(function () {
-      $(this).carousel('pause')
-    }, function () {
-      $(this).carousel('cycle')
-    })
+  if ("ontouchstart" in document.documentElement) {
+    $carousel.hover(
+      function() {
+        $(this).carousel("pause");
+      },
+      function() {
+        $(this).carousel("cycle");
+      }
+    );
   }
 }
 

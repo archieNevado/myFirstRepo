@@ -37,8 +37,8 @@ public class WorkspaceIdAppendingLinkTransformer implements LinkTransformer {
   }
 
   @Override
-  public String transform(String source, Object bean, String view, HttpServletRequest request,
-                          HttpServletResponse response, boolean forRedirect) {
+  public String transform(String source, Object bean, String view, @NonNull HttpServletRequest request,
+                          @NonNull HttpServletResponse response, boolean forRedirect) {
     if (preview) {
       Optional<WorkspaceId> workspaceId = findWorkspaceId();
       if (workspaceId.isPresent()) {

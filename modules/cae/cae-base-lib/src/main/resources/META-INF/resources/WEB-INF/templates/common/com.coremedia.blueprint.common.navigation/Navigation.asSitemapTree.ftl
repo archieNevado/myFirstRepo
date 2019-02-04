@@ -16,11 +16,11 @@
 <#assign cssClass=cm.localParameter("cssClass", "")/>
 <#assign childrenCssClass=cm.localParameter("childrenCssClass", "")/>
 
-<#-- check if navigation has visible children and max tree depth isn't reached yet -->
-<#if self.visibleChildren?has_content && (maxDepth > 0)>
+<#-- check if navigation has visible in sitemap children and max tree depth isn't reached yet -->
+<#if self.sitemapChildren?has_content && (maxDepth > 0)>
 
-  <#-- list children -->
-  <#list self.visibleChildren![]>
+  <#-- list children visible in sitemap -->
+  <#list self.sitemapChildren![]>
     <ul class="cm-sitemap__items">
       <#items as child>
         <@cm.include self=child view="asSitemapItem" params={"maxDepth": maxDepth-1} />

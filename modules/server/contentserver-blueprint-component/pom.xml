@@ -11,11 +11,6 @@
   <artifactId>contentserver-blueprint-component</artifactId>
 
   <dependencies>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-    </dependency>
-
     <!-- RUNTIME SCOPE -->
     <dependency>
       <groupId>com.coremedia.cms</groupId>
@@ -50,53 +45,7 @@
       <type>pom</type>
       <scope>runtime</scope>
     </dependency>
-    <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>coremedia-ldap</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>cap-base</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>com.atlassian.crowd</groupId>
-      <artifactId>crowd-integration-client-rest</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>commons-logging</groupId>
-          <artifactId>commons-logging</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>com.atlassian.crowd</groupId>
-      <artifactId>crowd-integration-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.atlassian.crowd</groupId>
-      <artifactId>embedded-crowd-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.atlassian.crowd</groupId>
-      <artifactId>crowd-integration-client-common</artifactId>
-    </dependency>
   </dependencies>
 
-  <repositories>
-    <repository>
-      <id>atlassian.releases</id>
-      <name>Atlassian Releases Repository</name>
-      <url>https://maven.atlassian.com/repository/public/</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
 </project>
 

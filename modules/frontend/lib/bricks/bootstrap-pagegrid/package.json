@@ -4,13 +4,13 @@
   "private": true,
   "dependencies": {
     "bootstrap-sass": "3.3.7",
-    "jquery": "3.2.1",
+    "jquery": "3.3.1",
     "@coremedia/brick-bootstrap": "^1.0.0",
     "@coremedia/brick-generic-templates": "^1.0.0"
   },
   "devDependencies": {
     "jsdoc-to-markdown": "3.0.0",
-    "prettier": "1.11.1"
+    "prettier": "1.15.2"
   },
   "scripts": {
     "apidoc": "jsdoc2md src/js/*.js > API.md",

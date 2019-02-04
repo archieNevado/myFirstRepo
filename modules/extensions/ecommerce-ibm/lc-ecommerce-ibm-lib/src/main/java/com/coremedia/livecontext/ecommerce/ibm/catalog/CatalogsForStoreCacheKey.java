@@ -4,6 +4,7 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerc
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.cache.Cache;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import java.util.Map;
 
@@ -11,7 +12,7 @@ public class CatalogsForStoreCacheKey extends AbstractCommerceCacheKey<Map<Strin
 
   private WcCatalogWrapperService wrapperService;
 
-  CatalogsForStoreCacheKey(StoreContext storeContext, WcCatalogWrapperService wrapperService,
+  CatalogsForStoreCacheKey(@NonNull StoreContext storeContext, WcCatalogWrapperService wrapperService,
                            CommerceCache commerceCache) {
     super("availableCatalogs", storeContext, null, CONFIG_KEY_CATALOGS_FOR_STORE, commerceCache);
     this.wrapperService = wrapperService;

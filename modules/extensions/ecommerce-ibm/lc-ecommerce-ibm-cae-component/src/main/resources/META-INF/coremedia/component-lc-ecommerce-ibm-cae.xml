@@ -24,9 +24,8 @@
   </bean>
 
   <bean id="calistaloginhandler" class="com.coremedia.livecontext.handler.LoginStatusHandler">
-    <constructor-arg index="0" name="userSessionService" ref="commerceUserSessionService"/>
-    <constructor-arg index="1" name="liveContextSiteResolver" ref="liveContextSiteResolver"/>
-    <constructor-arg index="2" name="commerceConnectionInitializer" ref="commerceConnectionInitializer"/>
+    <constructor-arg index="0" name="liveContextSiteResolver" ref="liveContextSiteResolver"/>
+    <constructor-arg index="1" name="commerceConnectionInitializer" ref="commerceConnectionInitializer"/>
   </bean>
 
   <bean id="cartHandler" class="com.coremedia.livecontext.ecommerce.ibm.cae.handler.CartHandler" parent="ecommerceHandlerBase">

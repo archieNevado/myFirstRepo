@@ -12,15 +12,13 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.rest.cap.intercept.ContentWriteInterceptorBase;
 import com.coremedia.rest.cap.intercept.ContentWriteRequest;
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,10 +32,11 @@ import java.util.Set;
 import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.NAME_LOCAL_SETTINGS;
 import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Collections.emptySet;
+import static java.util.stream.Collectors.toSet;
 
 public class SpinnerAssetInvalidationWriteInterceptor extends ContentWriteInterceptorBase {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ContentWriteInterceptorBase.class);
+  private static final Logger LOG = LoggerFactory.getLogger(SpinnerAssetInvalidationWriteInterceptor.class);
 
   @VisibleForTesting
   static final String SEQUENCE_SPINNER_PROPERTY = "sequence";
@@ -228,15 +227,10 @@ public class SpinnerAssetInvalidationWriteInterceptor extends ContentWriteInterc
 
   @NonNull
   private static Set<String> buildOriginalCommerceReferenceList(@NonNull Set<Content> pictures) {
-    return FluentIterable.from(pictures)
-            .transformAndConcat(new Function<Content, Iterable<String>>() {
-              @Nullable
-              @Override
-              public Iterable<String> apply(@Nullable Content picture) {
-                return CommerceReferenceHelper.getExternalReferences(picture);
-              }
-            })
-            .toSet();
+    return pictures.stream()
+            .map(CommerceReferenceHelper::getExternalReferences)
+            .flatMap(List::stream)
+            .collect(toSet());
   }
 
   @NonNull

@@ -33,7 +33,7 @@ const initPackageJson = (
       ...bricksToCommentOut,
       "@coremedia/js-logger": "^1.0.0",
       "@coremedia/sass-utils": "^1.0.0",
-      jquery: "3.2.1"
+      jquery: "3.3.1"
     },
     dependencies: {
       ...bricksToActivate,
@@ -42,7 +42,7 @@ const initPackageJson = (
       webpack: "3.10.0"
     },
     devDependencies: {
-      prettier: "1.11.1"
+      prettier: "1.15.2"
     },
     main: mainJSFile,
     coremedia: {

@@ -3,6 +3,7 @@ package com.coremedia.livecontext.ecommerce.ibm.cae.storefront;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoCommerceConnectionAvailable;
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontResponse;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.cae.WcsUrlProvider;
@@ -285,7 +286,8 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
     String userId = userContext.getUserId();
 
     try {
-      StoreContext storeContext = StoreContextHelper.findCurrentContext().orElse(null);
+      StoreContext storeContext = StoreContextHelper.findCurrentContext()
+              .orElseThrow(() -> new NoCommerceConnectionAvailable("You should not have gotten this far."));
 
       CommerceUserIsLoggedInCacheKey cacheKey = new CommerceUserIsLoggedInCacheKey(userId, storeContext, userContext,
               loginWrapperService, commerceCache);

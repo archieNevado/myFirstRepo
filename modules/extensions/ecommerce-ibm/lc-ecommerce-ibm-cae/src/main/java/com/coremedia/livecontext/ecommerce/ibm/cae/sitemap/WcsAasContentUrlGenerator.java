@@ -12,12 +12,12 @@ import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.ExternalSeoSegmentBuilder;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -28,6 +28,7 @@ import static com.google.common.base.Preconditions.checkState;
 import static java.lang.Boolean.parseBoolean;
 
 public class WcsAasContentUrlGenerator extends ContentUrlGenerator {
+
   private static final Logger LOG = LoggerFactory.getLogger(WcsAasContentUrlGenerator.class);
 
   private SitesService sitesService;
@@ -77,7 +78,8 @@ public class WcsAasContentUrlGenerator extends ContentUrlGenerator {
   // #TODO: extract @Link method
 
   @Override
-  protected String createLink(Content content, HttpServletRequest request, HttpServletResponse response, boolean absoluteUrls) {
+  protected String createLink(Content content, @NonNull HttpServletRequest request,
+                              @NonNull HttpServletResponse response, boolean absoluteUrls) {
     String secureString = request.getParameter(SECURE_PARAM_NAME);
     String linkForCrawler = createLinkForCrawler(content, request, response, absoluteUrls);
     String linkForIndexer = createLinkForIndexer(content, parseBoolean(secureString));
@@ -85,7 +87,8 @@ public class WcsAasContentUrlGenerator extends ContentUrlGenerator {
     return linkForCrawler + "###" + linkForIndexer;
   }
 
-  private String createLinkForCrawler(Content content, HttpServletRequest request, HttpServletResponse response, boolean absoluteUrls) {
+  private String createLinkForCrawler(Content content, @NonNull HttpServletRequest request,
+                                      @NonNull HttpServletResponse response, boolean absoluteUrls) {
     Object rememberMe = request.getAttribute(ABSOLUTE_URI_KEY);
     try {
       request.setAttribute(ABSOLUTE_URI_KEY, absoluteUrls);
@@ -136,7 +139,7 @@ public class WcsAasContentUrlGenerator extends ContentUrlGenerator {
             .pathSegment(language)
             .pathSegment(shopName)
             .pathSegment(getUrlKeyword())
-            .pathSegment(externalSeoSegmentBuilder.asSeoSegment(context,linkable))
+            .pathSegment(externalSeoSegmentBuilder.asSeoSegment(context, linkable))
             .scheme(secure ? "https" : "http")
             .build().toUriString();
   }
@@ -144,7 +147,7 @@ public class WcsAasContentUrlGenerator extends ContentUrlGenerator {
   private CMChannel getContextFor(Content content) {
     List<Content> contexts = contextStrategy.findContextsFor(content);
     Content channel = contexts.isEmpty() ? null : contexts.get(0);
-    if (channel==null) {
+    if (channel == null) {
       return null;
     }
 

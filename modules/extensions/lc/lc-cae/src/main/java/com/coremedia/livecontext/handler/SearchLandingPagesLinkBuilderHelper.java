@@ -25,6 +25,7 @@ import java.util.Optional;
  * Extension that create custom links on CMChannel documents.
  */
 class SearchLandingPagesLinkBuilderHelper {
+
   private String keywordsProperty;
   private String segmentPath;
   private TreeRelation<Content> navigationTreeRelation;
@@ -32,7 +33,6 @@ class SearchLandingPagesLinkBuilderHelper {
 
   boolean isSearchLandingPage(@NonNull CMChannel channel, @NonNull Site site) {
     Content content = channel.getContent();
-
     Content context = getNavigationContextCached(site);
 
     return context != null && context.getLinks(CMChannel.CHILDREN).contains(content);
@@ -66,6 +66,7 @@ class SearchLandingPagesLinkBuilderHelper {
   Content getNavigationContext(@NonNull Site site) {
     Preconditions.checkArgument(!segmentPath.startsWith("/"),
             "Segment path must be relative and not start with a slash: " + segmentPath);
+
     Iterable<String> segments = Splitter.on('/').omitEmptyStrings().split(segmentPath);
 
     Content context = site.getSiteRootDocument();
@@ -74,12 +75,15 @@ class SearchLandingPagesLinkBuilderHelper {
     }
 
     QueryService queryService = site.getSiteRootDocument().getRepository().getQueryService();
+
     Iterator<String> it = segments.iterator();
     while (it.hasNext() && context != null) {
       String segment = it.next();
       Collection<Content> children = navigationTreeRelation.getChildrenOf(context);
-      context = queryService.getContentFulfilling(children, SearchTermExternalReferenceResolver.QUERY_NAVIGATION_WITH_SEGMENT, segment);
+      context = queryService.getContentFulfilling(children,
+              SearchTermExternalReferenceResolver.QUERY_NAVIGATION_WITH_SEGMENT, segment);
     }
+
     return context;
   }
 

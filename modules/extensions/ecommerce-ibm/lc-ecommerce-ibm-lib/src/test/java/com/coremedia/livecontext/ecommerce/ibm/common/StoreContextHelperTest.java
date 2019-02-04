@@ -12,7 +12,10 @@ public class StoreContextHelperTest extends StoreContextHelperTestBase {
 
   @Test
   public void testCreateContext() {
-    StoreContext context = StoreContextHelper.createContext(SITE_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY);
+    StoreContext context = StoreContextHelper
+            .buildContext(SITE_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY)
+            .build();
+
     assertNotNull(context);
   }
 
@@ -20,40 +23,58 @@ public class StoreContextHelperTest extends StoreContextHelperTestBase {
   public void testCreateContextWithMissingValues() {
     // Attention: it should work without an InvalidContext exception
     // the idea is the exception will be thrown only on access time
-    StoreContext context = StoreContextHelper.createContext(SITE_ID, null, null, null, LOCALE, null);
+    StoreContext context = StoreContextHelper
+            .buildContext(SITE_ID, null, null, null, LOCALE, null)
+            .build();
+
     assertNotNull(context);
   }
 
   @Test
   public void testCreateContextWithInternationalLocale() {
-    StoreContextHelper.createContext(SITE_ID, STORE_ID, STORE_NAME, CATALOG_ID, new Locale("en-001"), CURRENCY);
+    StoreContextHelper
+            .buildContext(SITE_ID, STORE_ID, STORE_NAME, CATALOG_ID, new Locale("en-001"), CURRENCY)
+            .build();
   }
 
   @Test(expected = InvalidContextException.class)
   public void testCreateContextWithInvalidStoreId() {
-    StoreContextHelper.createContext(SITE_ID, "   ", STORE_NAME, CATALOG_ID, LOCALE, CURRENCY);
+    StoreContextHelper
+            .buildContext(SITE_ID, "   ", STORE_NAME, CATALOG_ID, LOCALE, CURRENCY)
+            .build();
   }
 
   @Test(expected = InvalidContextException.class)
   public void testCreateContextWithInvalidStoreName() {
-    StoreContextHelper.createContext(SITE_ID, STORE_ID, "    ", CATALOG_ID, LOCALE, CURRENCY);
+    StoreContextHelper
+            .buildContext(SITE_ID, STORE_ID, "    ", CATALOG_ID, LOCALE, CURRENCY)
+            .build();
   }
 
   @Test(expected = InvalidContextException.class)
   public void testAccessContextWithMissingCurrency() {
-    StoreContext context = StoreContextHelper.createContext(SITE_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, null);
+    StoreContext context = StoreContextHelper
+            .buildContext(SITE_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, null)
+            .build();
+
     StoreContextHelper.getCurrency(context);
   }
 
   @Test(expected = InvalidContextException.class)
   public void testAccessContextWithMissingStoreId() {
-    StoreContext context = StoreContextHelper.createContext(SITE_ID, null, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY);
+    StoreContext context = StoreContextHelper
+            .buildContext(SITE_ID, null, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY)
+            .build();
+
     StoreContextHelper.getStoreId(context);
   }
 
   @Test(expected = InvalidContextException.class)
   public void testAccessContextWithMissingStoreName() {
-    StoreContext context = StoreContextHelper.createContext(SITE_ID, STORE_ID, null, CATALOG_ID, LOCALE, CURRENCY);
+    StoreContext context = StoreContextHelper
+            .buildContext(SITE_ID, STORE_ID, null, CATALOG_ID, LOCALE, CURRENCY)
+            .build();
+
     StoreContextHelper.getStoreName(context);
   }
 }

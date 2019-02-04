@@ -123,11 +123,16 @@ public class WcsLoginUrlsProvider implements LiveContextLoginUrlsProvider {
     HttpServletRequest request = requestAttributes.getRequest();
     HttpServletResponse response = requestAttributes.getResponse();
     request.setAttribute(UriConstants.Links.ABSOLUTE_URI_KEY, true);
-    return linkFormatter.formatLink(NextURLRedirectHandler.LinkTypeNextUrl.NEXTURL, null,
-                                    request, response, false);
+
+    // Expect response to be non-`null`.
+    @SuppressWarnings({"ConstantConditions", "findbugs:NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE"})
+    String link = linkFormatter.formatLink(NextURLRedirectHandler.LinkTypeNextUrl.NEXTURL, null, request, response,
+            false);
+
+    return link;
   }
 
-  private ServletRequestAttributes requestAttributes() {
+  private static ServletRequestAttributes requestAttributes() {
     RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
     return (ServletRequestAttributes) requestAttributes;
   }

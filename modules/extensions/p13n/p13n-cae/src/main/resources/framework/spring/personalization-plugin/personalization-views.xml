@@ -10,6 +10,7 @@
   </description>
 
   <import resource="classpath:/framework/spring/blueprint-views.xml"/>
+  <import resource="classpath:/com/coremedia/cache/cache-services.xml"/>
 
   <customize:prepend id="addPersonalizationRepositoryName" bean="viewRepositories" order="1200">
     <list>
@@ -28,8 +29,9 @@
   </customize:append>
 
   <bean id="dynamicContainerStrategy" class="com.coremedia.blueprint.personalization.include.P13NDynamicContainerStrategy">
-    <property name="sitesService" ref="sitesService"/>
-    <property name="settingsService" ref="settingsService"/>
+    <constructor-arg ref="sitesService"/>
+    <constructor-arg ref="settingsService"/>
+    <constructor-arg ref="cache"/>
   </bean>
 
 </beans>

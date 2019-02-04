@@ -24,7 +24,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -59,7 +58,7 @@ public class CommerceSegmentTestContextExtractorTest {
     contextCollection = new ContextCollectionImpl();
 
     BaseCommerceIdProvider idProvider = TestVendors.getIdProvider("vendor");
-    StoreContextImpl storeContext = newStoreContext();
+    StoreContextImpl storeContext = StoreContextBuilderImpl.from().build();
     when(storeContextProvider.buildContext(storeContext)).thenReturn(StoreContextBuilderImpl.from(storeContext));
 
     commerceConnection = new BaseCommerceConnection();

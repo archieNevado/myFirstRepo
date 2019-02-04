@@ -17,7 +17,7 @@
 <#assign link=cm.getLink(self.target!cm.UNDEFINED) />
 
 <#if !hasEvenIndex>
-  <#assign additionalVariantCssClass="cm-teasable--alternative" />
+  <#assign additionalVariantCssClass="cm-teasable--corporate-identity" />
 <#else>
   <#assign additionalButtonCssClass=additionalButtonCssClass + "cm-button--white " />
 </#if>

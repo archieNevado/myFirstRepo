@@ -18,7 +18,7 @@ public class MarketingSpotCacheKey extends AbstractIbmDocumentCacheKey<Map<Strin
 
   private WcMarketingSpotWrapperService wrapperService;
 
-  public MarketingSpotCacheKey(@NonNull CommerceId id, StoreContext storeContext, UserContext userContext,
+  public MarketingSpotCacheKey(@NonNull CommerceId id, @NonNull StoreContext storeContext, UserContext userContext,
                                WcMarketingSpotWrapperService wrapperService, CommerceCache commerceCache) {
     super(id, storeContext, userContext, CONFIG_KEY_MARKETING_SPOT, commerceCache);
     this.wrapperService = wrapperService;

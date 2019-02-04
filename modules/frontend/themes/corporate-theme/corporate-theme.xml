@@ -11,6 +11,8 @@
     right image sizes in the right aspect ratios and crops. The responsive navigation visualizes 3 levels, even though
     the navigation structure can be arbitrary deeply nested. The floating header and the footer can be configured and
     re-ordered in content settings.
+
+    This theme is discontinued and will be replaced in the next major release (GA) in 2019.
   </description>
   <thumbnail>img/theme-preview.jpg</thumbnail>
 

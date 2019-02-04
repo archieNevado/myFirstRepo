@@ -14,28 +14,42 @@
   <description>
     Configuration of Apache Solr for CoreMedia.
 
-    You can start Solr for local development with the exec-maven-plugin from this POM as follows:
+    You can start Solr for local development and testing with the exec-maven-plugin from this POM as follows:
 
     Prerequisites:
 
     - Download the official Solr distribution,
-      for example from http://archive.apache.org/dist/lucene/solr/6.6.5/solr-6.6.5.tgz
+      for example from http://archive.apache.org/dist/lucene/solr/7.6.0/solr-7.6.0.tgz
     - Extract it into a directory of your choice
     - Set the environment variable SOLR_SCRIPT to point to the Solr start/stop script
       in the extracted directory. Choose "bin/solr" for Unix or "bin/solr.cmd" for a Windows shell.
+    - Build this module.
+    - Open a shell and go to this file's directory.
 
     You can then start and stop Solr, with its admin interface available at http://localhost:40080/solr
-    - mvn exec:exec@start-solr
-    - mvn exec:exec@stop-solr
+      mvn exec:exec@start-solr
+      mvn exec:exec@stop-solr
 
     You can additionally start and stop a Solr Slave, with its admin interface available at http://localhost:40081/solr
-    - mvn exec:exec@start-solr-slave
-    - mvn exec:exec@stop-solr-slave
+      mvn exec:exec@start-solr-slave
+      mvn exec:exec@stop-solr-slave
+
+    Alternatively, you can start a single-node SolrCloud instance with embedded Zookeeper:
+      mvn exec:exec@start-solr-cloud
+      mvn exec:exec@stop-solr-cloud
+
+    However, after the first start of SolrCloud, the config sets must be uploaded manually:
+      $SOLR_SCRIPT zk upconfig -z :40085 -d target/solr-config/configsets/content/conf -n content
+      $SOLR_SCRIPT zk upconfig -z :40085 -d target/solr-config/configsets/cae/conf     -n cae
+      $SOLR_SCRIPT zk upconfig -z :40085 -d target/solr-config/configsets/elastic/conf -n elastic
   </description>
 
   <properties>
     <solr.port>40080</solr.port>
     <solr.slavePort>40081</solr.slavePort>
+    <solr.stopPort>40090</solr.stopPort>
+    <solr.stopSlavePort>40091</solr.stopSlavePort>
+    <solr.embeddedZookeeperPort>40085</solr.embeddedZookeeperPort>
     <solr.coreRootDirectory>${project.build.directory}/cores</solr.coreRootDirectory>
     <solr.slaveCoreRootDirectory>${project.build.directory}/slave-cores</solr.slaveCoreRootDirectory>
   </properties>
@@ -88,7 +102,6 @@
         </configuration>
       </plugin>
       <plugin>
-        <!-- must create empty directory to store Solr cores for "mvn exec:exec@start-..." to avoid errors in log -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
@@ -96,8 +109,14 @@
             <phase>pre-integration-test</phase>
             <configuration>
               <target>
+                <!-- must create empty directories to store Solr cores for "mvn exec:exec@start-..." to avoid errors in log -->
                 <mkdir dir="${solr.coreRootDirectory}"/>
                 <mkdir dir="${solr.slaveCoreRootDirectory}"/>
+                <!-- write Zookeeper configuration for SolrCloud -->
+                <echo file="${project.build.directory}/solr-config/zoo.cfg" append="true">
+clientPort=${solr.embeddedZookeeperPort}
+dataDir=${project.build.directory}/zoo_data
+                </echo>
               </target>
             </configuration>
             <goals>
@@ -127,7 +146,7 @@
                 <SOLR_LOGS_DIR>${project.build.directory}/logs</SOLR_LOGS_DIR>
                 <SOLR_OPTS>-DcoreRootDirectory=${solr.coreRootDirectory} -Dsolr.master=true</SOLR_OPTS>
                 <SOLR_PORT>${solr.port}</SOLR_PORT>
-                <!-- STOP_PORT is <SOLR_PORT>-1000 = 39080. Cannot set a different port currently, see SOLR-9137 -->
+                <STOP_PORT>${solr.stopPort}</STOP_PORT>
               </environmentVariables>
             </configuration>
           </execution>
@@ -140,6 +159,7 @@
               <commandlineArgs>stop</commandlineArgs>
               <environmentVariables>
                 <SOLR_PORT>${solr.port}</SOLR_PORT>
+                <STOP_PORT>${solr.stopPort}</STOP_PORT>
               </environmentVariables>
             </configuration>
           </execution>
@@ -154,7 +174,7 @@
                 <SOLR_LOGS_DIR>${project.build.directory}/slave-logs</SOLR_LOGS_DIR>
                 <SOLR_OPTS>-DcoreRootDirectory=${solr.slaveCoreRootDirectory} -Dsolr.slave=true -Dsolr.master.url=http://localhost:${solr.port}/solr</SOLR_OPTS>
                 <SOLR_PORT>${solr.slavePort}</SOLR_PORT>
-                <!-- STOP_PORT is <SOLR_PORT>-1000 = 39081. Cannot set a different port currently, see SOLR-9137 -->
+                <STOP_PORT>${solr.stopSlavePort}</STOP_PORT>
               </environmentVariables>
             </configuration>
           </execution>
@@ -167,6 +187,35 @@
               <commandlineArgs>stop</commandlineArgs>
               <environmentVariables>
                 <SOLR_PORT>${solr.slavePort}</SOLR_PORT>
+                <STOP_PORT>${solr.stopSlavePort}</STOP_PORT>
+              </environmentVariables>
+            </configuration>
+          </execution>
+          <execution>
+            <id>start-solr-cloud</id>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <commandlineArgs>start -c -s ${project.build.directory}/solr-config</commandlineArgs>
+              <environmentVariables>
+                <SOLR_LOGS_DIR>${project.build.directory}/logs</SOLR_LOGS_DIR>
+                <SOLR_OPTS>-DcoreRootDirectory=${solr.coreRootDirectory}</SOLR_OPTS>
+                <SOLR_PORT>${solr.port}</SOLR_PORT>
+                <STOP_PORT>${solr.stopPort}</STOP_PORT>
+              </environmentVariables>
+            </configuration>
+          </execution>
+          <execution>
+            <id>stop-solr-cloud</id>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <commandlineArgs>stop</commandlineArgs>
+              <environmentVariables>
+                <SOLR_PORT>${solr.port}</SOLR_PORT>
+                <STOP_PORT>${solr.stopPort}</STOP_PORT>
               </environmentVariables>
             </configuration>
           </execution>

@@ -86,6 +86,7 @@ joo = {
         probeRestApiThenLoadScripts(uriPrefix + 'rest/api/',
             function () {
               console.error("No response from Studio REST API at " + uriPrefix + 'api/ or ' + uriPrefix + 'rest/api/');
+              document.body.innerText = "An error occurred. Please contact your system administrator if this problem happens again."
             }
         );
       }

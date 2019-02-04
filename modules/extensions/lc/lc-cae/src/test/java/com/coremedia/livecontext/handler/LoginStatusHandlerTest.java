@@ -15,6 +15,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
@@ -57,7 +58,7 @@ public class LoginStatusHandlerTest {
   @Inject
   private WebApplicationContext wac;
 
-  @Inject
+  @Mock
   private UserSessionService userSessionService;
 
   @Inject
@@ -72,17 +73,16 @@ public class LoginStatusHandlerTest {
   private MockMvc mockMvc;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     assertEquals("Test started with CurrentCommerceConnection set. This is probably because another different test " +
-                 "run before and did not clean up properly.",
-                 Optional.empty(), CurrentCommerceConnection.find());
-
+                    "run before and did not clean up properly.",
+            Optional.empty(), CurrentCommerceConnection.find());
 
     this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
   }
 
   @After
-  public void tearDown() throws Exception {
+  public void tearDown() {
     assertEquals(Optional.empty(), CurrentCommerceConnection.find());
   }
 
@@ -100,7 +100,10 @@ public class LoginStatusHandlerTest {
   @Test
   public void testStatusNotLoggedIn() throws Exception {
     Site site = mockSite(STORE_ID, LOCALE.toLanguageTag());
-    mockConnection(site);
+    CommerceConnection connection = mockConnection(site);
+    when(userSessionService.isLoggedIn()).thenReturn(false);
+    when(connection.getUserSessionService()).thenReturn(userSessionService);
+
     loginStatus(STORE_ID, LOCALE.toLanguageTag())
             .andExpect(status().isOk())
             .andExpect(MockMvcResultMatchers.content().string("{\"loggedIn\":false}"));
@@ -128,10 +131,10 @@ public class LoginStatusHandlerTest {
 
     CurrentCommerceConnection.set(commerceConnection);
     try {
-      assertEquals("/dynamic/loginstatus?storeId=" + STORE_ID + "&locale=" + LOCALE.toLanguageTag(),
-                   linkFormatter.formatLink(LoginStatusHandler.LinkType.STATUS, null, request, response, false));
-    }
-    finally {
+      String expected = "/dynamic/loginstatus?storeId=" + STORE_ID + "&locale=" + LOCALE.toLanguageTag();
+      String actual = linkFormatter.formatLink(LoginStatusHandler.LinkType.STATUS, null, request, response, false);
+      assertEquals(expected, actual);
+    } finally {
       CurrentCommerceConnection.remove();
     }
   }
@@ -149,9 +152,12 @@ public class LoginStatusHandlerTest {
     return connection;
   }
 
-  /** mock logged in user if the given connection is the current connection */
+  /**
+   * Mock logged in user if the given connection is the current connection.
+   */
   private void mockIsLoggedIn(CommerceConnection connection) throws CredentialExpiredException {
     when(userSessionService.isLoggedIn()).then(invocation -> isCurrentConnection(connection));
+    when(connection.getUserSessionService()).thenReturn(userSessionService);
   }
 
   private static boolean isCurrentConnection(@NonNull CommerceConnection connection) {
@@ -160,16 +166,17 @@ public class LoginStatusHandlerTest {
 
   private ResultActions loginStatus(String storeId, String locale) throws Exception {
     return mockMvc.perform(get("/dynamic/loginstatus")
-                                   .accept("application/json")
-                                   .param("storeId", storeId)
-                                   .param("locale", locale)
+            .accept("application/json")
+            .param("storeId", storeId)
+            .param("locale", locale)
     );
   }
 
   @Configuration
   @EnableWebMvc
-  @ImportResource(locations = {"classpath:/com/coremedia/cae/link-services.xml"},
-                  reader = ResourceAwareXmlBeanDefinitionReader.class)
+  @ImportResource(
+          locations = {"classpath:/com/coremedia/cae/link-services.xml"},
+          reader = ResourceAwareXmlBeanDefinitionReader.class)
   static class LocalConfig {
 
     @Inject
@@ -177,12 +184,7 @@ public class LoginStatusHandlerTest {
 
     @Bean
     LoginStatusHandler loginStatusHandler() {
-      return new LoginStatusHandler(userSessionService(), liveContextSiteResolver(), commerceConnectionInitializer());
-    }
-
-    @Bean
-    UserSessionService userSessionService() {
-      return mock(UserSessionService.class);
+      return new LoginStatusHandler(liveContextSiteResolver(), commerceConnectionInitializer());
     }
 
     @Bean
@@ -194,6 +196,5 @@ public class LoginStatusHandlerTest {
     CommerceConnectionInitializer commerceConnectionInitializer() {
       return mock(CommerceConnectionInitializer.class);
     }
-
   }
 }

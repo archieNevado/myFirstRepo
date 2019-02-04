@@ -8,6 +8,7 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import java.util.List;
 import java.util.Map;
@@ -16,8 +17,9 @@ public class ProductsByCategoryCacheKey extends AbstractCommerceCacheKey<List<Ma
 
   private WcCatalogWrapperService wrapperService;
 
-  public ProductsByCategoryCacheKey(String id, CatalogAlias catalog, StoreContext storeContext, UserContext userContext,
-                                    WcCatalogWrapperService wrapperService, CommerceCache commerceCache) {
+  public ProductsByCategoryCacheKey(String id, CatalogAlias catalog, @NonNull StoreContext storeContext,
+                                    UserContext userContext, WcCatalogWrapperService wrapperService,
+                                    CommerceCache commerceCache) {
     super(id, catalog, storeContext, userContext, CONFIG_KEY_PRODUCTS_BY_CATEGORY, commerceCache);
     this.wrapperService = wrapperService;
   }

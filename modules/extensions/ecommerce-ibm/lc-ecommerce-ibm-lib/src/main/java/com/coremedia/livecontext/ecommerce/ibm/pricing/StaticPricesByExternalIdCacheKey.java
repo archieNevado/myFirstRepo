@@ -8,12 +8,13 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.catalog.WcCatalogWrapperService;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 public class StaticPricesByExternalIdCacheKey extends AbstractCommerceCacheKey<WcPrices> {
 
   private WcCatalogWrapperService wrapperService;
 
-  public StaticPricesByExternalIdCacheKey(String id, CatalogAlias catalog, StoreContext storeContext,
+  public StaticPricesByExternalIdCacheKey(String id, CatalogAlias catalog, @NonNull StoreContext storeContext,
                                           UserContext userContext, WcCatalogWrapperService wrapperService,
                                           CommerceCache commerceCache) {
     super(id, catalog, storeContext, userContext, CONFIG_KEY_STATIC_PRICES, commerceCache);

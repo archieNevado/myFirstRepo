@@ -13,6 +13,7 @@
 <#assign center=cm.localParameters().center!true />
 <#assign showHeadline=cm.localParameters().showHeadline!true />
 
+
 <div class="cm-container ${additionalClass}" <@preview.metadata data=[bp.getContainerMetadata(self),bp.getPlacementHighlightingMetaData(self)!""] />>
   <#if showHeadline && self.teaserTitle?has_content>
     <h2 class="cm-container__headline" <@preview.metadata data=[self.content,"properties.teaserTitle"]/>><span>${self.teaserTitle}</span></h2>

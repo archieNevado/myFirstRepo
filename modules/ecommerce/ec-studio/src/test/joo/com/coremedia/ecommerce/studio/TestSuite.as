@@ -4,7 +4,6 @@ import com.coremedia.ecommerce.studio.components.repository.CatalogRepositoryLis
 import com.coremedia.ecommerce.studio.components.tree.AugmentedCategoryTreeRelationTest;
 import com.coremedia.ecommerce.studio.components.tree.CatalogTreeModelTest;
 import com.coremedia.ecommerce.studio.components.tree.ShowInLibraryHelperTest;
-import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.helper.CatalogHelperTest;
 
 import flexunit.framework.TestSuite;

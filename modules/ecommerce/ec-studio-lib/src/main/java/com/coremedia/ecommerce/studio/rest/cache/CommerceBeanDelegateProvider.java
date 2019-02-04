@@ -1,6 +1,6 @@
 package com.coremedia.ecommerce.studio.rest.cache;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdBuilder;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType;
@@ -10,9 +10,9 @@ import com.coremedia.livecontext.ecommerce.common.Vendor;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableMap;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.web.util.UriUtils;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
@@ -53,7 +53,8 @@ class CommerceBeanDelegateProvider {
 
   @NonNull
   static StoreContext createStoreContext() {
-    return StoreContextImpl.builder(SITE_ID)
+    return StoreContextBuilderImpl.from()
+            .withSiteId(SITE_ID)
             .withWorkspaceId(WORKSPACE_ID)
             .build();
   }

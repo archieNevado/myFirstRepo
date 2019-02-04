@@ -6,12 +6,13 @@ import com.coremedia.cache.Cache;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.catalog.WcCatalogWrapperService;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 public class PersonalizedPriceByExternalIdCacheKey extends AbstractCommerceCacheKey<WcPrice> {
 
   private WcCatalogWrapperService wrapperService;
 
-  public PersonalizedPriceByExternalIdCacheKey(String id, StoreContext storeContext, UserContext userContext,
+  public PersonalizedPriceByExternalIdCacheKey(String id, @NonNull StoreContext storeContext, UserContext userContext,
                                                WcCatalogWrapperService wrapperService, CommerceCache commerceCache) {
     super(id, storeContext, userContext, CONFIG_KEY_DYNAMIC_PRICE, commerceCache);
     this.wrapperService = wrapperService;

@@ -11,6 +11,7 @@ import java.util.List;
  * Spring factory for a {@link org.apache.http.conn.scheme.SchemeRegistry}.
  */
 public class SchemeRegistryFactory implements FactoryBean<SchemeRegistry> {
+
   private List<Scheme> schemes = Collections.emptyList();
 
   public void setSchemes(List<Scheme> schemes) {
@@ -20,9 +21,11 @@ public class SchemeRegistryFactory implements FactoryBean<SchemeRegistry> {
   @Override
   public SchemeRegistry getObject() throws Exception {
     SchemeRegistry registry = new SchemeRegistry();
+
     for (Scheme scheme : schemes) {
       registry.register(scheme);
     }
+
     return registry;
   }
 

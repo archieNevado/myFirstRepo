@@ -12,7 +12,7 @@
 
 <@heroTeaser.renderCaption title=self.teaserTitle!""
                            text=textHtml?no_esc
-                           link=cm.getLink(self.target!cm.UNDEFINED)
+                           link=heroTeaser.getLink(self.target!cm.UNDEFINED, self.teaserSettings)
                            openInNewTab=self.openInNewTab
                            ctaButtons=self.callToActionSettings
                            heroBlockClass=cm.localParameters().heroBlockClass!cm.UNDEFINED

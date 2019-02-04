@@ -1,6 +1,7 @@
 "use strict";
 
 const closestPackage = require("closest-package");
+const packages = require("./packages");
 const { getInstallationPath } = require("./workspace");
 
 /**
@@ -85,7 +86,7 @@ function resolveDependencies(
   parentDependency = null,
   resolvedDependenciesByName = {}
 ) {
-  const pkg = require(pkgPath);
+  const pkg = packages.getJsonByFilePath(pkgPath);
   if (!pkg) {
     return null;
   }

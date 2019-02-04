@@ -1,20 +1,20 @@
 package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.user.UserContextHelper;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductAttribute;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.catalog.VariantFilter;
-import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.inventory.AvailabilityInfoImpl;
 import com.coremedia.livecontext.ecommerce.inventory.AvailabilityInfo;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +24,7 @@ import static org.springframework.util.Assert.notNull;
 
 public class ProductVariantImpl extends ProductBase implements ProductVariant {
 
-
+  @NonNull
   @Override
   protected Map<String, Object> getDelegate() {
     if (delegate == null) {
@@ -33,9 +33,11 @@ public class ProductVariantImpl extends ProductBase implements ProductVariant {
         throw new NotFoundException(getId() + " (sku not found in catalog)");
       }
     }
+
     return delegate;
   }
 
+  @Nullable
   @Override
   Map<String, Object> getDelegateFromCache() {
     return getCommerceCache().get(

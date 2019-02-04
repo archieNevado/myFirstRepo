@@ -23,9 +23,9 @@ Contains styling definitions for all content types as cm-carousel.
     // controls bottom right (for default teaser)
     @include breakpoint(sm-and-up) {
       top: auto;
-      right: $padding-base-vertical;
+      right: auto;
       bottom: $padding-base-vertical;
-      left: auto;
+      left: $padding-base-vertical;
     }
 
     &--hero,
@@ -40,16 +40,14 @@ Contains styling definitions for all content types as cm-carousel.
       bottom: inherit;
     }
   }
-
   // controls bottom left (for default teaser)
-  &--alternative &__control {
+  &--corporate-identity &__control {
     @include breakpoint(sm-and-up) {
-      top: auto;
-      right: auto;
-      bottom: $padding-base-vertical;
-      left: $padding-base-vertical;
+      right: $padding-base-vertical;
+      left: auto;
     }
   }
+
   // hack for position the icons in the controller
   & span.glyphicon {
     top: 3px;

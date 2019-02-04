@@ -5,6 +5,7 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.cache.Cache;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import java.util.Map;
 
@@ -14,7 +15,7 @@ public class WorkspacesCacheKey extends AbstractCommerceCacheKey<Map> {
 
   private WcWorkspaceWrapperService wrapperService;
 
-  public WorkspacesCacheKey(StoreContext storeContext, UserContext userContext,
+  public WorkspacesCacheKey(@NonNull StoreContext storeContext, UserContext userContext,
                             WcWorkspaceWrapperService wrapperService, CommerceCache commerceCache) {
     super("workspaces", storeContext, userContext, CONFIG_KEY_WORKSPACES, commerceCache);
     this.wrapperService = wrapperService;

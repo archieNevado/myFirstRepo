@@ -10,7 +10,9 @@ import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.storeinfo.StoreInfoService;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,30 +26,28 @@ import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreCon
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
+@DefaultAnnotation(NonNull.class)
 public class IbmStoreContextProvider extends AbstractStoreContextProvider {
 
   private static final Logger LOG = LoggerFactory.getLogger(IbmStoreContextProvider.class);
 
+  @Nullable
   private StoreInfoService storeInfoService;
 
-  @NonNull
   @Override
-  protected Optional<StoreContext> getStoreContextFromCache(@NonNull Site site) {
+  protected Optional<StoreContext> getStoreContextFromCache(Site site) {
     return findInCache(new SiteToStoreContextCacheKeyWithTimeout(site, this, 30));
   }
 
-  @NonNull
   @Override
-  protected Optional<StoreContext> internalCreateContext(@NonNull Site site) {
+  protected Optional<StoreContext> internalCreateContext(Site site) {
     // Only create store context if settings are found for current site.
     return Optional.of(findRepositoryStoreConfig(site))
             .filter(config -> !config.isEmpty())
             .map(config -> buildContextFromRepositoryStoreConfig(site, config));
   }
 
-  @NonNull
-  private StoreContext buildContextFromRepositoryStoreConfig(@NonNull Site site,
-                                                             @NonNull Map<String, Object> repositoryStoreConfig) {
+  private StoreContext buildContextFromRepositoryStoreConfig(Site site, Map<String, Object> repositoryStoreConfig) {
     Map<String, Object> targetConfig = new HashMap<>();
 
     findConfigId(repositoryStoreConfig)
@@ -63,8 +63,7 @@ public class IbmStoreContextProvider extends AbstractStoreContextProvider {
     return createStoreContext(valuesHolder, site);
   }
 
-  @NonNull
-  private static StoreContextValuesHolder populateValuesHolder(@NonNull Map<String, Object> config) {
+  private static StoreContextValuesHolder populateValuesHolder(Map<String, Object> config) {
     StoreContextValuesHolder valuesHolder = new StoreContextValuesHolder();
 
     valuesHolder.storeId = (String) config.get(CommerceConfigKeys.STORE_ID);
@@ -83,8 +82,7 @@ public class IbmStoreContextProvider extends AbstractStoreContextProvider {
     return valuesHolder;
   }
 
-  protected void updateStoreConfigFromDynamicStoreInfo(@NonNull String siteName,
-                                                       @NonNull StoreContextValuesHolder valuesHolder) {
+  protected void updateStoreConfigFromDynamicStoreInfo(String siteName, StoreContextValuesHolder valuesHolder) {
     if (storeInfoService == null || !storeInfoService.isAvailable()) {
       return;
     }
@@ -97,8 +95,7 @@ public class IbmStoreContextProvider extends AbstractStoreContextProvider {
     getWcsVersion(valuesHolder).ifPresent(wcsVersion -> valuesHolder.wcsVersion = wcsVersion);
   }
 
-  @NonNull
-  private static String getStoreName(@NonNull StoreContextValuesHolder valuesHolder, @NonNull String siteName) {
+  private static String getStoreName(StoreContextValuesHolder valuesHolder, String siteName) {
     String storeName = valuesHolder.storeName;
 
     if (isBlank(storeName)) {
@@ -108,9 +105,7 @@ public class IbmStoreContextProvider extends AbstractStoreContextProvider {
     return storeName;
   }
 
-  @NonNull
-  private Optional<String> getStoreId(@NonNull StoreContextValuesHolder valuesHolder, @NonNull String storeName,
-                                      @NonNull String siteName) {
+  private Optional<String> getStoreId(StoreContextValuesHolder valuesHolder, String storeName, String siteName) {
     String storeIdFromConfig = valuesHolder.storeId;
     if (storeIdFromConfig != null) {
       return Optional.empty();
@@ -126,9 +121,7 @@ public class IbmStoreContextProvider extends AbstractStoreContextProvider {
     return storeId;
   }
 
-  @NonNull
-  private Optional<CatalogId> getCatalogId(@NonNull StoreContextValuesHolder valuesHolder, @NonNull String storeName,
-                                           @NonNull String siteName) {
+  private Optional<CatalogId> getCatalogId(StoreContextValuesHolder valuesHolder, String storeName, String siteName) {
     CatalogId catalogIdFromConfig = valuesHolder.catalogId;
     if (catalogIdFromConfig != null) {
       return Optional.empty();
@@ -156,8 +149,7 @@ public class IbmStoreContextProvider extends AbstractStoreContextProvider {
     return catalogId;
   }
 
-  @NonNull
-  private static Currency parseCurrency(@NonNull String currencyCode) {
+  private static Currency parseCurrency(String currencyCode) {
     try {
       return Currency.getInstance(currencyCode);
     } catch (IllegalArgumentException e) {
@@ -165,8 +157,7 @@ public class IbmStoreContextProvider extends AbstractStoreContextProvider {
     }
   }
 
-  @NonNull
-  private Optional<String> getWcsVersion(@NonNull StoreContextValuesHolder valuesHolder) {
+  private Optional<String> getWcsVersion(StoreContextValuesHolder valuesHolder) {
     Optional<String> storeInfoWcsVersion = storeInfoService.getWcsVersion();
 
     if (!storeInfoWcsVersion.isPresent() || isBlank(storeInfoWcsVersion.get())) {
@@ -186,8 +177,7 @@ public class IbmStoreContextProvider extends AbstractStoreContextProvider {
     return storeInfoWcsVersion;
   }
 
-  @NonNull
-  private static StoreContext createStoreContext(@NonNull StoreContextValuesHolder valuesHolder, @NonNull Site site) {
+  private static StoreContext createStoreContext(StoreContextValuesHolder valuesHolder, Site site) {
     IbmStoreContextBuilder builder = StoreContextHelper
             .buildContext(
                     site.getId(),
@@ -211,14 +201,23 @@ public class IbmStoreContextProvider extends AbstractStoreContextProvider {
 
   private static class StoreContextValuesHolder {
 
+    @Nullable
     private String storeId;
+    @Nullable
     private String storeName;
+    @Nullable
     private CatalogId catalogId;
+    @Nullable
     private CatalogName catalogName;
+    @Nullable
     private Currency currency;
+    @Nullable
     private ZoneId timeZoneId;
+    @Nullable
     private WorkspaceId workspaceId;
+    @Nullable
     private String wcsVersion;
+    @Nullable
     private Map<String, String> replacements;
   }
 

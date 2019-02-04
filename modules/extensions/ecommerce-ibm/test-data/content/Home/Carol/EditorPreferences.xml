@@ -1048,12 +1048,12 @@
 <LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Calista/United%20States/English/Augmentation/Apparel/Women/Dresses/Dresses.xml" cmexport:path="/Sites/Calista/United%20States/English/Augmentation/Apparel/Women/Dresses/Dresses"/>
 </Struct>
 <Struct>
-<StringProperty Name="name">Editorial Blog Microsite</StringProperty>
-<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Calista/United%20States/English/Navigation/Microsites/Editorial%20Blog%20Microsite.xml" cmexport:path="/Sites/Calista/United%20States/English/Navigation/Microsites/Editorial%20Blog%20Microsite"/>
+<StringProperty Name="name">Blog Home</StringProperty>
+<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Calista/United%20States/English/Navigation/Blog/Blog%20Page.xml" cmexport:path="/Sites/Calista/United%20States/English/Navigation/Blog/Blog%20Page"/>
 </Struct>
 <Struct>
 <StringProperty Name="name">Summer Dresses Collection</StringProperty>
-<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Calista/United%20States/English/Editorial/Content/Fashion/Summer%20Dresses%20Collection.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Fashion/Summer%20Dresses%20Collection"/>
+<LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Calista/United%20States/English/Editorial/Content/Blog/Fashion%20Trends/Summer%20Dresses%20Collection.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Blog/Fashion%20Trends/Summer%20Dresses%20Collection"/>
 </Struct>
 <Struct>
 <StringProperty Name="name">Summer Dresses Video</StringProperty>

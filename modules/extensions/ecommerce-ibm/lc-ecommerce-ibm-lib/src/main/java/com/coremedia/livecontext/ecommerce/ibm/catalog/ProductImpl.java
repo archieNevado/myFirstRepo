@@ -11,9 +11,9 @@ import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.inventory.AvailabilityInfo;
 import com.coremedia.livecontext.ecommerce.inventory.AvailabilityService;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +31,7 @@ public class ProductImpl extends ProductBase {
 
   private AvailabilityService availabilityService;
 
-
+  @NonNull
   @Override
   @SuppressWarnings("unchecked")
   protected Map<String, Object> getDelegate() {
@@ -41,13 +41,16 @@ public class ProductImpl extends ProductBase {
         throw new NotFoundException(getId() + " (product not found in catalog)");
       }
     }
+
     return delegate;
   }
 
   /**
    * Perform by-id-call to get detail data
+   *
    * @return detail data map
    */
+  @Nullable
   Map<String, Object> getDelegateFromCache() {
     return getCommerceCache().get(
             new ProductCacheKey(getId(), getContext(), UserContextHelper.getCurrentContext(), getCatalogWrapperService(), getCommerceCache()));

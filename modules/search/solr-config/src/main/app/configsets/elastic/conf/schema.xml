@@ -62,25 +62,21 @@
        to keep it simple and avoid unnecessary overhead.
 
        You can find these additional field types in the configuration file
-       server/solr/configsets/basic_configs/conf/managed-schema
+       server/solr/configsets/_default/conf/managed-schema
        after downloading and unpacking the Apache Solr distribution.
 
        For searching in different languages, see also chapter
        "Searching In Different Languages" in the CoreMedia Search Engine Manual.
        ===================================================================== -->
 
-  <!-- The StrField type is not analyzed, but indexed/stored verbatim.
-     It supports doc values but in that case the field needs to be
-     single-valued and either required or have a default value.
-    -->
+  <!-- The StrField type is not analyzed, but indexed/stored verbatim. -->
   <fieldType name="string" class="solr.StrField" sortMissingLast="true" />
 
   <!-- boolean type: "true" or "false" -->
   <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true"/>
 
   <!--
-      Numeric field types that index values using KD-trees. *Point fields are faster and more efficient than Trie* fields both, at
-      search time and at index time, but some features are still not supported.
+      Numeric field types that index values using KD-trees.
       Point fields don't support FieldCache, so they must have docValues="true" if needed for sorting, faceting, functions, etc.
     -->
     <fieldType name="pint" class="solr.IntPointField" docValues="true"/>
@@ -89,7 +85,7 @@
     <fieldType name="pdouble" class="solr.DoublePointField" docValues="true"/>
 
   <!--
-      Default numeric field types. For faster range queries, consider *PointFields (pint/pfloat/plong/pdouble), or the
+      Numeric field types. For faster range queries, consider *PointFields (pint/pfloat/plong/pdouble), or the
       tint/tfloat/tlong/tdouble types.
   -->
   <fieldType name="int" class="solr.TrieIntField" docValues="true" precisionStep="0" positionIncrementGap="0"/>
@@ -132,7 +128,6 @@
                 ... 6 months and 3 days in the future from the start of
                     the current day
 
-       Consult the TrieDateField javadocs for more information.
   -->
   <!-- KD-tree versions of date fields -->
   <fieldType name="pdate" class="solr.DatePointField" docValues="true"/>

@@ -38,7 +38,7 @@
                 itemId="cmSegmentConditionsForm">
           <editor:items>
             <!-- workaround for rulesField-layout-bug (full-width-bug): use custom margin style -->
-            <perso:ConditionsField propertyName="conditions">
+            <perso:ConditionsField propertyName="conditions" forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}">
               <perso:conditionItems>
                 <perso:TimeCondition
                         conditionName="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationContext', 'p13n_context_system_timeOfDay')}"

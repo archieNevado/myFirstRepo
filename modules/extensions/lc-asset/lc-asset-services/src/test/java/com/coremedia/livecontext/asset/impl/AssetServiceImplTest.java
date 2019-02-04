@@ -2,7 +2,7 @@ package com.coremedia.livecontext.asset.impl;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
@@ -88,7 +88,9 @@ public class AssetServiceImplTest {
 
   @Before
   public void setUp() throws Exception {
-    StoreContext storeContext = StoreContextImpl.builder("site-1").build();
+    StoreContext storeContext = StoreContextBuilderImpl.from()
+            .withSiteId("site-1")
+            .build();
 
     commerceConnection = new BaseCommerceConnection();
     commerceConnection.setIdProvider(TestVendors.getIdProvider("vendor"));

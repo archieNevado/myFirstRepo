@@ -76,15 +76,6 @@ public class DataMapHelper {
     return KEY_INDEX_PATTERN.matcher(key);
   }
 
-  /**
-   * @deprecated Use {@link #findValue(Map, String, Class)} instead.
-   */
-  @Deprecated
-  @Nullable
-  public static <T> T getValueForPath(@NonNull Map<String, Object> map, @NonNull String path, @NonNull Class<T> type) {
-    return findValue(map, path, type).orElse(null);
-  }
-
   @Nullable
   @SuppressWarnings("unchecked")
   public static Object getValueForKey(@NonNull Map<String, Object> map, @NonNull String key) {
@@ -106,15 +97,6 @@ public class DataMapHelper {
     Object value = getValueForPath(map, key);
     T convertedValue = convertWithFallback(value, type);
     return Optional.ofNullable(convertedValue);
-  }
-
-  /**
-   * @deprecated Use {@link #findValue(Map, String, Class)} instead.
-   */
-  @Deprecated
-  @Nullable
-  public static <T> T getValueForKey(@NonNull Map<String, Object> map, @NonNull String key, @NonNull Class<T> type) {
-    return findValue(map, key, type).orElse(null);
   }
 
   @NonNull

@@ -20,7 +20,7 @@ public class ContractCacheKey extends AbstractIbmDocumentCacheKey<Map<String, Ob
 
   private WcContractWrapperService wrapperService;
 
-  public ContractCacheKey(@NonNull CommerceId id, StoreContext storeContext, UserContext userContext,
+  public ContractCacheKey(@NonNull CommerceId id, @NonNull StoreContext storeContext, UserContext userContext,
                           WcContractWrapperService wrapperService, CommerceCache commerceCache) {
     super(id, storeContext, userContext, CONFIG_KEY_CONTRACT, commerceCache);
     this.wrapperService = wrapperService;

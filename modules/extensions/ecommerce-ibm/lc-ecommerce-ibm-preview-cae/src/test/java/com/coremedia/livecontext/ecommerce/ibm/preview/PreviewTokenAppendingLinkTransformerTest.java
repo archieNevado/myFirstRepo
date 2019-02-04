@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.ecommerce.ibm.preview;
 
-
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.livecontext.ecommerce.ibm.common.CommerceConnectionImpl;
 import com.coremedia.livecontext.ecommerce.ibm.login.LoginService;
 import org.junit.After;
@@ -16,7 +16,6 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
@@ -35,12 +34,12 @@ public class PreviewTokenAppendingLinkTransformerTest {
   private HttpServletRequest request;
 
   @Before
-  public void setup(){
+  public void setup() {
     testling.setPreview(true);
     testling.setLoginService(loginService);
 
     CommerceConnectionImpl connection = new CommerceConnectionImpl();
-    connection.setStoreContext(newStoreContext());
+    connection.setStoreContext(StoreContextBuilderImpl.from().build());
 
     CurrentCommerceConnection.set(connection);
 
@@ -67,8 +66,7 @@ public class PreviewTokenAppendingLinkTransformerTest {
   }
 
   @Test
-  public void testLinkTransformerCopyExsiting() {
-
+  public void testLinkTransformerCopyExisting() {
     when(request.getParameter("previewToken")).thenReturn("existingTokenStr");
     String link = testling.transform("//url/to/shop", null, null, request, new MockHttpServletResponse(), false);
     assertEquals("//url/to/shop?previewToken=existingTokenStr", link);
@@ -101,6 +99,4 @@ public class PreviewTokenAppendingLinkTransformerTest {
     String link = testling.transform("//url/to/shop", null, null, request, new MockHttpServletResponse(), false);
     assertEquals("//url/to/shop", link);
   }
-
-
 }

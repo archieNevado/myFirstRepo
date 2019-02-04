@@ -152,8 +152,6 @@
 <LinkProperty Name="content" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Chef%20Corp%2E%20USA%20Home%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Content/Homepage/Chef%20Corp%2E%20USA%20Home%20Page"/>
 </Struct>
 </StructListProperty>
-<StructProperty Name="forms">
-</StructProperty>
 <StructProperty Name="controlRoom">
 <Struct>
 <BooleanProperty Name="showAssets">true</BooleanProperty>

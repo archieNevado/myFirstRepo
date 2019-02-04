@@ -7,6 +7,7 @@ import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,7 @@ public class TopCategoriesCacheKey extends AbstractCommerceCacheKey<List<Map<Str
 
   private WcCatalogWrapperService wrapperService;
 
-  public TopCategoriesCacheKey(CatalogAlias catalogAlias, StoreContext storeContext, UserContext userContext,
+  public TopCategoriesCacheKey(CatalogAlias catalogAlias, @NonNull StoreContext storeContext, UserContext userContext,
                                WcCatalogWrapperService wrapperService, CommerceCache commerceCache) {
     super("root", catalogAlias, storeContext, userContext, CONFIG_KEY_TOP_CATEGORIES, commerceCache);
     this.wrapperService = wrapperService;

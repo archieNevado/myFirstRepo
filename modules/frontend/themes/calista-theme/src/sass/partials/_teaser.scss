@@ -10,6 +10,18 @@
     padding-bottom: 12px;
   }
 
+  & &__author {
+    text-decoration: underline;
+  }
+
+  &__editorial span + span {
+    :before {
+      content: "•";
+      margin: 0 5px 0 2px;
+      display: inline-block;
+    }
+  }
+
   &__caption {
     position: relative;
     transform: none;

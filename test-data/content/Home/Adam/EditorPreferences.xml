@@ -148,6 +148,7 @@
 <StructListProperty Name="tabs">
 <Struct>
 <StringProperty Name="typeId">com.coremedia.cms.editor.sdk.config.startTab</StringProperty>
+
 <StructProperty Name="state">
 <Struct>
 </Struct>

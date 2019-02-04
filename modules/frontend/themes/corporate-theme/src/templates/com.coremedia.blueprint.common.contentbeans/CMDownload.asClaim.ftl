@@ -6,7 +6,7 @@
 <#import "*/node_modules/@coremedia/brick-media/src/freemarkerLibs/media.ftl" as media />
 
 <#assign cssClasses = cm.localParameter("cssClass", "") + cm.localParameter("islast", false)?then(" is-last", "") />
-<#assign link=cm.getLink(self.target!cm.UNDEFINED) />
+<#assign link=self.teaserSettings.renderLinkToDetailPage?then(cm.getLink(self.target!cm.UNDEFINED), "") />
 
 <div class="cm-claim thumbnail ${cssClasses}"<@preview.metadata self.content />>
   <#-- picture -->

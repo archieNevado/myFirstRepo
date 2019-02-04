@@ -7,6 +7,7 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.common.util.Predicate;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.links.LinkFormatter;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,15 +77,14 @@ public class ContentUrlGenerator implements SitemapUrlGenerator {
     this.predicates = predicates;
   }
 
-
   // --- SitemapUrlGenerator ----------------------------------------
 
   /**
    * Generate content URLs
    */
   @Override
-  public void generateUrls(HttpServletRequest request,
-                           HttpServletResponse response,
+  public void generateUrls(@NonNull HttpServletRequest request,
+                           @NonNull HttpServletResponse response,
                            Site site,
                            boolean absoluteUrls,
                            String protocol,
@@ -94,7 +94,6 @@ public class ContentUrlGenerator implements SitemapUrlGenerator {
     Content sitemapRoot = site.getSiteRootFolder();
     buildUrls(sitemapRenderer, sitemapRoot, sitemapRoot, request, response, absoluteUrls, protocol, folderNamesToExclude);
   }
-
 
   // --- internal ---------------------------------------------------
 
@@ -109,8 +108,8 @@ public class ContentUrlGenerator implements SitemapUrlGenerator {
   private void buildUrls(UrlCollector builder,
                          Content folder,
                          Content siteRoot,
-                         HttpServletRequest request,
-                         HttpServletResponse response,
+                         @NonNull HttpServletRequest request,
+                         @NonNull HttpServletResponse response,
                          boolean absoluteUrls,
                          String protocol,
                          List<String> folderNamesToExclude) {
@@ -134,11 +133,12 @@ public class ContentUrlGenerator implements SitemapUrlGenerator {
    * @param request  The active request.
    * @param response The active response.
    */
-  private void buildUrl(UrlCollector builder, Content content, HttpServletRequest request, HttpServletResponse response, boolean absoluteUrls, String protocol) {
+  private void buildUrl(UrlCollector builder, Content content, @NonNull HttpServletRequest request,
+                        @NonNull HttpServletResponse response, boolean absoluteUrls, String protocol) {
     try {
       if (isValid(content)) {
         String link = createLink(content, request, response, absoluteUrls);
-        if (link!=null) {
+        if (link != null) {
           // Make absolutely absolute
           if (link.startsWith("//")) {
             link = protocol + ":" + link;
@@ -164,12 +164,7 @@ public class ContentUrlGenerator implements SitemapUrlGenerator {
   }
 
   private boolean isValid(Content content) {
-    for (Predicate predicate : predicates) {
-      if (!predicate.include(content)) {
-        return false;
-      }
-    }
-    return true;
+    return predicates.stream().allMatch(predicate -> predicate.include(content));
   }
 
   /**
@@ -177,7 +172,8 @@ public class ContentUrlGenerator implements SitemapUrlGenerator {
    *
    * @return The URL for the given content.
    */
-  protected String createLink(Content content, HttpServletRequest request, HttpServletResponse response, boolean absoluteUrls) {
+  protected String createLink(Content content, @NonNull HttpServletRequest request,
+                              @NonNull HttpServletResponse response, boolean absoluteUrls) {
     try {
       CMObject bean = contentBeanFactory.createBeanFor(content, CMObject.class);
       if (validationService.validate(bean)) {
@@ -199,7 +195,7 @@ public class ContentUrlGenerator implements SitemapUrlGenerator {
   private boolean isPathExcluded(Content siteRoot, Content folder) {
     for (String path : exclusionPaths) {
       Content folderInSite = siteRoot.getChild(path);
-      if (folderInSite==null) {
+      if (folderInSite == null) {
         LOG.warn("Path {} is excluded from sitemap creation, but does not exist in {} anyway.  You should clean up the configuration.", path, siteRoot);
       }
       if (folder.equals(folderInSite)) {

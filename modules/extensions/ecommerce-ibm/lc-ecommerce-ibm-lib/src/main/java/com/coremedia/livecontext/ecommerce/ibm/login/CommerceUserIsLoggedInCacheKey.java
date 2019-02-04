@@ -5,12 +5,13 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.cache.Cache;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 public class CommerceUserIsLoggedInCacheKey extends AbstractCommerceCacheKey<Boolean> {
 
   private WcLoginWrapperService wrapperService;
 
-  public CommerceUserIsLoggedInCacheKey(String id, StoreContext storeContext, UserContext userContext,
+  public CommerceUserIsLoggedInCacheKey(String id, @NonNull StoreContext storeContext, UserContext userContext,
                                         WcLoginWrapperService wrapperService, CommerceCache commerceCache) {
     super(id, storeContext, userContext, CONFIG_KEY_IS_CURRENT_USER_LOGGED_IN, commerceCache);
     this.wrapperService = wrapperService;

@@ -4,8 +4,8 @@
     margin-top: 12px;
 
     .cycle-slide-active {
-      background-color: #fff;
-      border: 1px solid #000;
+      background-color: $cm-standard-component-background-color;
+      border: 1px solid $border-color-default;
       padding: 1px;
     }
 
@@ -18,12 +18,12 @@
 
 .cm-product-assets-downloads {
   &__title {
-    font-size: 12px;
-    color: #000;
+    font-size: $font-size-normal;
+    color: $text-color;
     font-weight: bold;
   }
 
   &__item {
-    font-size: 12px;
+    font-size: $font-size-normal;
   }
 }

@@ -14,6 +14,8 @@ import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.links.LinkFormatter;
 import com.coremedia.objectserver.web.links.LinkScheme;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -252,8 +254,10 @@ public class SitemapGenerationControllerTest {
    */
   class GeneralPurposeLinkScheme implements LinkScheme {
 
+    @Nullable
     @Override
-    public String formatLink(Object bean, String view, HttpServletRequest request, HttpServletResponse response, boolean forRedirect) throws URISyntaxException {
+    public String formatLink(Object bean, String view, @NonNull HttpServletRequest request,
+                             @NonNull HttpServletResponse response, boolean forRedirect) throws URISyntaxException {
       ContentBean contentBean = (ContentBean) bean;
       StringBuilder stringBuilder = new StringBuilder("http://www.coremedia.com/");
       stringBuilder.append(contentBean.getContent().getType().getName()).append("/").append(IdHelper.parseContentId(contentBean.getContent().getId()));

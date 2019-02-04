@@ -15,7 +15,7 @@
 
 <@heroTeaser.renderMedia media=media
                          heroBlockClass=cm.localParameters().heroBlockClass!cm.UNDEFINED
-                         link=cm.getLink(self.target!cm.UNDEFINED)
+                         link=heroTeaser.getLink(self.target!cm.UNDEFINED, self.teaserSettings)
                          openInNewTab=self.openInNewTab
                          limitAspectRatios=bp.setting(self, "default_aspect_ratios_for_hero_teaser")
                          metadata=metadata

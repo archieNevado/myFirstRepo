@@ -24,7 +24,7 @@ class ProductCacheKey extends AbstractIbmDocumentCacheKey<Map<String, Object>> {
 
   private WcCatalogWrapperService wrapperService;
 
-  ProductCacheKey(@NonNull CommerceId id, StoreContext storeContext, UserContext userContext,
+  ProductCacheKey(@NonNull CommerceId id, @NonNull StoreContext storeContext, UserContext userContext,
                   WcCatalogWrapperService wrapperService, CommerceCache commerceCache) {
     super(id, storeContext, userContext, CONFIG_KEY_PRODUCT, commerceCache);
     this.wrapperService = wrapperService;

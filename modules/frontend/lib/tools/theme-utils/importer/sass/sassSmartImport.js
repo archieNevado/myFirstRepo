@@ -4,14 +4,14 @@ const path = require("path");
 const nodeSass = require("node-sass");
 
 const {
-  DEFAULT_VARIANT,
-  getThemeConfig,
-  getIsSmartImportModuleFor,
-  getInstallationPath,
-} = require("@coremedia/tool-utils/workspace");
-const {
-  getFlattenedDependencies,
-} = require("@coremedia/tool-utils/dependencies");
+  workspace: { DEFAULT_VARIANT, getThemeConfig, getIsSmartImportModuleFor },
+  packages,
+  dependencies: {
+    getDependencies,
+    getDependentsFirstLoadOrder,
+    getFlattenedDependencies,
+  },
+} = require("@coremedia/tool-utils");
 const { resolveScss } = require("./utils");
 
 const REGEX = /(~(.+))?\?smart-import-(variables|partials)/;
@@ -52,49 +52,53 @@ module.exports = function(url, prev, done) {
     let pkgJson;
     if (providedPackageName) {
       packageName = providedPackageName;
-      pkgJson = closestPackage.sync(getInstallationPath(packageName));
+      pkgJson = packages.getFilePathByPackageName(providedPackageName);
     } else {
       pkgJson = closestPackage.sync(prev);
-      packageName = require(pkgJson).name;
+      packageName = packages.getJsonByFilePath(pkgJson).name;
     }
 
     const variant = getVariant(prev);
 
-    // Get flattendDependencies
-    let flattenedDirectDependencies = getFlattenedDependencies(
+    const dependencies = getDependencies(
       pkgJson,
-      (dependency, parent) =>
-        parent.getName() === packageName &&
-        getIsSmartImportModuleFor(variant)(dependency)
-    );
+      getIsSmartImportModuleFor(null)
+    ).filter(getIsSmartImportModuleFor(variant));
 
-    // variables need to be imports in reverse order due to !default
+    let dependenciesToImport;
+
     if (varsOrPartials === "variables") {
-      flattenedDirectDependencies = flattenedDirectDependencies.reverse();
-    }
-
-    // filter partials (=> css generating code) that would be included twice.
-    // we always assume that the variant is loaded in addition to the default.
-    if (
-      varsOrPartials === "partials" &&
-      variant &&
-      variant !== DEFAULT_VARIANT
-    ) {
-      this._whiteList = getFlattenedDependencies(
-        pkgJson,
-        getIsSmartImportModuleFor(variant)
-      ).map(dependency => dependency.getName());
-    }
-
-    // filter by white list (only applies for partials inside a variant)
-    if (this._whiteList) {
-      flattenedDirectDependencies = flattenedDirectDependencies.filter(
-        dependency => this._whiteList.includes(dependency.getName())
+      // variables need dependents first load order
+      const dependentsFirstLoadOrder = getDependentsFirstLoadOrder(
+        dependencies,
+        packageName
       );
+      dependenciesToImport = dependentsFirstLoadOrder[packageName] || [];
+    } else {
+      // for partials the direct load order specified through the dependency hierarchy is sufficient (which are our dependencies, we just don't flatten them)
+      dependenciesToImport = dependencies;
+
+      // filter partials (=> css generating code) that would be included twice.
+      // we always assume that the variant is loaded in addition to the default.
+      if (variant && variant !== DEFAULT_VARIANT) {
+        this._whiteList = getFlattenedDependencies(
+          pkgJson,
+          getIsSmartImportModuleFor(null)
+        )
+          .filter(getIsSmartImportModuleFor(variant))
+          .map(dependency => dependency.getName());
+      }
+
+      // filter by white list (only applies for partials inside a variant)
+      if (this._whiteList) {
+        dependenciesToImport = dependenciesToImport.filter(dependency =>
+          this._whiteList.includes(dependency.getName())
+        );
+      }
     }
 
     // Get scss paths of the dependent bricks
-    const sassPaths = flattenedDirectDependencies.map(dependency => {
+    const sassPaths = dependenciesToImport.map(dependency => {
       const existingFile = getSmartImportPath(
         dependency,
         varsOrPartials,

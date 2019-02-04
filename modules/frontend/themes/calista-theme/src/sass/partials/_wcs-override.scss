@@ -97,8 +97,8 @@
   #contentWrapper,
   .content_wrapper {
     margin: $wcs-content-margin-top/2 auto 0;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: $cm-standard-spacing;
+    padding-right: $cm-standard-spacing;
     font-family: $font-family-serif;
 
     .container {
@@ -174,7 +174,7 @@
            padding-left: 0;
          }
          > div {
-           margin: 10px 15px;
+           margin: 10px $cm-standard-spacing;
          }
        }
     }
@@ -204,6 +204,7 @@
       > h3 {
         font-size: $font-size-h1;
         text-transform: uppercase;
+        outline: none;
         &:before {
           top: -23px
         }
@@ -222,6 +223,9 @@
           }
         }
       }
+      &.categoryNavWidget {
+        margin-left: 0;
+      }
     }
   }
 
@@ -234,6 +238,7 @@
       color: $text-color;
       border-top: none;
       border-bottom-color: $border-color-default;
+      outline: none;
     }
     .facetSelect li {
       border-bottom: none;

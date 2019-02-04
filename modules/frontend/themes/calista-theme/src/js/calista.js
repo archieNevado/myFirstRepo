@@ -3,6 +3,8 @@ import { ajax } from "@coremedia/js-jquery-utils";
 import * as logger from "@coremedia/js-logger";
 import * as deviceDetector from "@coremedia/js-device-detector";
 import { EVENT_LAYOUT_CHANGED } from "@coremedia/js-basic";
+import { addNodeDecoratorByData } from "@coremedia/js-node-decoration-service";
+import { loadPage } from "./pagination";
 
 const EVENT_PREFIX = "coremedia.blueprint.calista.";
 const EVENT_CHECK_LOGIN_STATUS = EVENT_PREFIX + "loginStatusChecked";
@@ -81,6 +83,17 @@ function handleLogin() {
       });
   }
 }
+
+// Enable pagination
+
+addNodeDecoratorByData(undefined, "cm-pagination-page", ($button, url) => {
+  logger.log("Initialize loadPaginationClickHandler", $button, url);
+  $button.on("click touch", () => {
+    loadPage(url, $button);
+  });
+  // enable button as soon as functionality is attached
+  $button.removeAttr("disabled");
+});
 
 // --- DOCUMENT READY --------------------------------------------------------------------------------------------------
 

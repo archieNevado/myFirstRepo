@@ -5,8 +5,8 @@
   @for $size from 1 through $cm-flex-grid-size {
     .cm-flex-col-#{$breakpoint}-#{$size} {
       flex-basis: $_cm-flex-col-width * $size;
-      padding-left: 15px;
-      padding-right: 15px;
+      padding-left: $cm-standard-spacing;
+      padding-right: $cm-standard-spacing;
     }
   }
 }
@@ -23,8 +23,8 @@
 }
 
 .cm-flex-row {
-  margin-left: -15px;
-  margin-right: -15px;
+  margin-left: -$cm-standard-spacing;
+  margin-right: -$cm-standard-spacing;
   display: flex;
   flex-wrap: wrap;
 

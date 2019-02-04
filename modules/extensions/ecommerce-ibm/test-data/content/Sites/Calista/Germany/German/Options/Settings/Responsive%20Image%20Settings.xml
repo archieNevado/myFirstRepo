@@ -54,13 +54,13 @@
 <Struct>
 <IntProperty Name="widthRatio">1</IntProperty>
 <IntProperty Name="heightRatio">1</IntProperty>
-<IntProperty Name="minWidth">1500</IntProperty>
-<IntProperty Name="minHeight">1500</IntProperty>
+<IntProperty Name="minWidth">1200</IntProperty>
+<IntProperty Name="minHeight">1200</IntProperty>
 <IntProperty Name="previewWidth">600</IntProperty>
 <StructProperty Name="0">
 <Struct>
 <IntProperty Name="width">60</IntProperty>
-<IntProperty Name="height">60</IntProperty>
+<IntProperty Name="height">26</IntProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="1">
@@ -89,8 +89,8 @@
 </StructProperty>
 <StructProperty Name="5">
 <Struct>
-<IntProperty Name="width">1500</IntProperty>
-<IntProperty Name="height">1500</IntProperty>
+<IntProperty Name="width">1200</IntProperty>
+<IntProperty Name="height">1200</IntProperty>
 </Struct>
 </StructProperty>
 </Struct>
@@ -99,8 +99,8 @@
 <Struct>
 <IntProperty Name="widthRatio">235</IntProperty>
 <IntProperty Name="heightRatio">100</IntProperty>
-<IntProperty Name="minWidth">2021</IntProperty>
-<IntProperty Name="minHeight">860</IntProperty>
+<IntProperty Name="minWidth">1200</IntProperty>
+<IntProperty Name="minHeight">511</IntProperty>
 <IntProperty Name="previewWidth">611</IntProperty>
 <StructProperty Name="0">
 <Struct>
@@ -128,8 +128,8 @@
 </StructProperty>
 <StructProperty Name="4">
 <Struct>
-<IntProperty Name="width">2021</IntProperty>
-<IntProperty Name="height">860</IntProperty>
+<IntProperty Name="width">1200</IntProperty>
+<IntProperty Name="height">511</IntProperty>
 </Struct>
 </StructProperty>
 </Struct>
@@ -171,8 +171,8 @@
 <Struct>
 <IntProperty Name="widthRatio">3</IntProperty>
 <IntProperty Name="heightRatio">4</IntProperty>
-<IntProperty Name="minWidth">1500</IntProperty>
-<IntProperty Name="minHeight">2000</IntProperty>
+<IntProperty Name="minWidth">900</IntProperty>
+<IntProperty Name="minHeight">1200</IntProperty>
 <IntProperty Name="previewWidth">595</IntProperty>
 <StructProperty Name="0">
 <Struct>
@@ -188,8 +188,8 @@
 </StructProperty>
 <StructProperty Name="2">
 <Struct>
-<IntProperty Name="width">1500</IntProperty>
-<IntProperty Name="height">2000</IntProperty>
+<IntProperty Name="width">900</IntProperty>
+<IntProperty Name="height">1200</IntProperty>
 </Struct>
 </StructProperty>
 </Struct>

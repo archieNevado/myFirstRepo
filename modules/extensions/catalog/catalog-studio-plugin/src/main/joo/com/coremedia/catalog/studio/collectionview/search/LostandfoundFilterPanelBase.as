@@ -19,12 +19,12 @@ public class LostandfoundFilterPanelBase extends ConditionalFilterPanel {
    * The query fragment to be passed to Solr.
    */
   private static const FILTER_QUERY_LOSTANDFOUND:String = "(type:CMProduct OR type:CMCategory) AND NOT directProductCategories:[* TO *]";
+  private var catalogRootExclusionsExpression:ValueExpression;
   private var catalogRootExclusions:String = "";
 
 
   public function LostandfoundFilterPanelBase(config:ConditionalFilterPanel = null) {
     super(config);
-    initCatalogRootExclusions();
   }
 
   /**
@@ -41,7 +41,7 @@ public class LostandfoundFilterPanelBase extends ConditionalFilterPanel {
     var stateBean:Bean = getStateBean();
     var lostandfoundActive:Boolean = stateBean.get(LOSTANDFOUND_CHECKBOX_SELECTED);
     if (lostandfoundActive) {
-      return FILTER_QUERY_LOSTANDFOUND + catalogRootExclusions;
+      return FILTER_QUERY_LOSTANDFOUND + getCatalogRootExclusions();
     }
     return null;
   }
@@ -58,31 +58,36 @@ public class LostandfoundFilterPanelBase extends ConditionalFilterPanel {
    * The catalog root categories have no parents, but are not to be considered
    * as orphaned.  Exclude them in the query.
    */
-  private function initCatalogRootExclusions():void {
-    var storesExpression:ValueExpression = ValueExpressionFactory.createFromFunction(CatalogStudioPluginBase.findCoreMediaStores);
-    ValueExpressionFactory.createFromFunction(function ():String {
-      var result:String = "";
-      var stores:Array = storesExpression.getValue();
-      if(undefined === stores) {
-        return undefined;
-      }
-      for each (var store:Store in stores) {
-        var category:Category = StoreUtil.getRootCategoryForStoreExpression(store).getValue();
-        if (undefined === category) {
+  private function getCatalogRootExclusions():String {
+    if (!catalogRootExclusionsExpression) {
+      catalogRootExclusionsExpression = ValueExpressionFactory.createFromFunction(function ():String {
+        var result:String = "";
+        var storesExpression:ValueExpression = ValueExpressionFactory.createFromFunction(CatalogStudioPluginBase.findCoreMediaStores);
+        var stores:Array = storesExpression.getValue();
+        if (undefined === stores) {
           return undefined;
         }
-        if (category) {
-          var externalTechId:String = category.getExternalTechId();
-          if(undefined === externalTechId) {
+        for each (var store:Store in stores) {
+          var category:Category = StoreUtil.getRootCategoryForStoreExpression(store).getValue();
+          if (undefined === category) {
             return undefined;
           }
-          result += " AND NOT numericid:" + externalTechId;
+          if (category) {
+            var externalTechId:String = category.getExternalTechId();
+            if (undefined === externalTechId) {
+              return undefined;
+            }
+            result += " AND NOT numericid:" + externalTechId;
+          }
         }
-      }
-      return result;
-    }).loadValue(function (exclusions:String):void {
+        return result;
+      });
+    }
+
+    catalogRootExclusionsExpression.loadValue(function (exclusions:String):void {
       catalogRootExclusions = exclusions;
     });
+    return catalogRootExclusions;
   }
 }
 }

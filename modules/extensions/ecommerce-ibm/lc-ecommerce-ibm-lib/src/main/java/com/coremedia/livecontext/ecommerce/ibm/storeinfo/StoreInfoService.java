@@ -1,14 +1,13 @@
 package com.coremedia.livecontext.ecommerce.ibm.storeinfo;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceCacheKey;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogName;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.Optional;
@@ -95,7 +94,6 @@ public class StoreInfoService {
 
   @PostConstruct
   void initialize() {
-    storeInfoCacheKey = new StoreInfoCacheKey(AbstractCommerceCacheKey.CONFIG_KEY_STORE_INFO, wrapperService,
-            commerceCache, delayOnError);
+    storeInfoCacheKey = new StoreInfoCacheKey(wrapperService, commerceCache, delayOnError);
   }
 }

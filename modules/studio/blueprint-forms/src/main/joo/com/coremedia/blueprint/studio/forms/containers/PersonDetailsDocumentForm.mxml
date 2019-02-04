@@ -3,7 +3,6 @@
                            xmlns:exml="http://www.jangaroo.net/exml/0.8"
                            xmlns="exml:ext.config"
                            xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
-                           xmlns:ui="exml:com.coremedia.ui.config"
                            title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Details_label')}"
                            itemId="personDetailsDocumentForm"
                            propertyNames="{['firstName','lastName','displayName','organization','jobTitle','email','detailText','teaserText']}"
@@ -43,7 +42,8 @@
         <editor:TextAreaPropertyField bindTo="{config.bindTo}"
                                       hideLabel="true"
                                       propertyName="teaserText"
-                                      changeBuffer="1000">
+                                      changeBuffer="1000"
+                                      forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}">
           <editor:plugins exml:mode="append">
             <editor:TextAreaPropertyFieldDelegatePlugin delegatePropertyName="detailText"/>
           </editor:plugins>

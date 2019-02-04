@@ -24,12 +24,7 @@ node.default_unless['blueprint']['webapps'][service_name]['application.propertie
 node.default_unless['blueprint']['webapps'][service_name]['application.properties']['cap.server.login.authentication'] = "#{service_dir}/jaas.conf"
 
 jaas_conf = {}
-if node.deep_fetch('blueprint', 'jaas', 'crowd', 'enabled')
-  node.override['blueprint']['webapps'][service_name]['application.properties']['cap.server.ldap.1.class'] = 'com.coremedia.blueprint.userproviders.crowd.CrowdUserProvider'
-  node.override['blueprint']['webapps'][service_name]['application.properties']['cap.server.ldap.1.properties'] = "#{service_dir}/jndi-crowd.properties"
-  crowd_config = node['blueprint']['webapps'][service_name]['application.properties']['cap.server.ldap.1.properties']
-  jaas_conf = { crowd: { config_file: crowd_config, domain: 'crowd' } }
-elsif node.deep_fetch('blueprint', 'jaas', 'ldap', 'enabled')
+if node.deep_fetch('blueprint', 'jaas', 'ldap', 'enabled')
   # if ldap, set defaults if none are set. To override the following two properties in your node.json file
   node.default_unless['blueprint']['webapps'][service_name]['application.properties']['cap.server.ldap.1.class'] = 'com.coremedia.ldap.ad.ActiveDirectoryUserProvider'
   node.default_unless['blueprint']['webapps'][service_name]['application.properties']['cap.server.ldap.1.properties'] = "#{service_dir}/jndi-ad.properties"
@@ -58,18 +53,6 @@ directory node['blueprint']['webapps'][service_name]['application.properties']['
   recursive true
   owner service_name
   group node['blueprint']['group']
-end
-
-template "#{service_name} - crowd_config" do
-  path crowd_config
-  owner service_name
-  group node['blueprint']['group']
-  mode 0700
-  sensitive true
-  source 'properties.erb'
-  variables props: node['blueprint']['jaas']['crowd']['properties']
-  not_if { crowd_config.nil? }
-  notifies :update, tomcat, :immediately if !crowd_config.nil? && ::File.exist?(crowd_config)
 end
 
 template node['blueprint']['webapps'][service_name]['application.properties']['cap.server.login.authentication'] do

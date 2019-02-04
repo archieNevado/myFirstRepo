@@ -3,6 +3,7 @@ package com.coremedia.livecontext.ecommerce.ibm.cae.storefront;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontConnector;
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontResponse;
@@ -35,7 +36,6 @@ import java.security.GeneralSecurityException;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 import static java.util.Collections.emptyMap;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -104,7 +104,7 @@ public class UserSessionServiceImplTest {
     CurrentCommerceConnection.set(commerceConnection);
 
     StoreContextImpl storeContext = IbmStoreContextBuilder
-            .from(newStoreContext())
+            .from(StoreContextBuilderImpl.from().build())
             .withStoreId("10001")
             .withCatalogId(CatalogId.of("catalog"))
             .build();

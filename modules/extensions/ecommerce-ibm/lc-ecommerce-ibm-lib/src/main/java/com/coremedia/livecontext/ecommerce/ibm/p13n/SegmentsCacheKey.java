@@ -6,6 +6,7 @@ import com.coremedia.cache.Cache;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import java.util.Map;
 
@@ -15,8 +16,8 @@ public class SegmentsCacheKey extends AbstractCommerceCacheKey<Map<String, Objec
 
   private WcSegmentWrapperService wrapperService;
 
-  public SegmentsCacheKey(StoreContext storeContext, UserContext userContext, WcSegmentWrapperService wrapperService,
-                          CommerceCache commerceCache) {
+  public SegmentsCacheKey(@NonNull StoreContext storeContext, UserContext userContext,
+                          WcSegmentWrapperService wrapperService, CommerceCache commerceCache) {
     super("segments", storeContext, userContext, CONFIG_KEY_SEGMENTS, commerceCache);
     this.wrapperService = wrapperService;
   }

@@ -2,6 +2,7 @@ package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractStoreContextProvider;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
@@ -96,32 +97,12 @@ public class StoreContextHelper {
             .build();
   }
 
-  /**
-   * Adds the given values to a store context.
-   * All potential values are possible. You can use a "null" value to omit most single values.
-   *
-   * @param siteId    the site id or null
-   * @param storeId   the store id or null
-   * @param storeName the store name or null
-   * @param catalogId the catalog id or null
-   * @param locale    the locale or null
-   * @param currency  the currency or null
-   * @return the new built store context
-   * @throws com.coremedia.livecontext.ecommerce.common.InvalidContextException if currency or locale has wrong format
-   */
-  @NonNull
-  public static StoreContextImpl createContext(@NonNull String siteId, @Nullable String storeId,
-                                               @Nullable String storeName, @Nullable CatalogId catalogId,
-                                               @NonNull Locale locale, @Nullable Currency currency) {
-    return buildContext(siteId, storeId, storeName, catalogId, locale, currency)
-            .build();
-  }
-
   @NonNull
   public static IbmStoreContextBuilder buildContext(@NonNull String siteId, @Nullable String storeId,
                                                     @Nullable String storeName, @Nullable CatalogId catalogId,
                                                     @NonNull Locale locale, @Nullable Currency currency) {
-    IbmStoreContextBuilder builder = IbmStoreContextBuilder.from(StoreContextImpl.builder(siteId));
+    IbmStoreContextBuilder builder = IbmStoreContextBuilder.from(StoreContextBuilderImpl.from())
+            .withSiteId(siteId);
 
     if (storeId != null) {
       if (StringUtils.isBlank(storeId)) {

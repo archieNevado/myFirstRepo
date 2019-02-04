@@ -35,7 +35,7 @@
                                        itemId="teaserText"
                                        settingsPath="{TeaserOverlayConstants.DEFAULT_SETTINGS_PATH}"
                                        styleDescriptorFolderPaths="{TeaserOverlayConstants.DEFAULT_STYLE_DESCRIPTOR_FOLDER_PATHS}"/>
-    <bpforms:CallToActionConfigurationForm useLegacyCTASettings="true"/>
+    <bpforms:TeaserSettingsPropertyFieldGroup/>
   </local:items>
 
 </local:TeaserDocumentFormBase>

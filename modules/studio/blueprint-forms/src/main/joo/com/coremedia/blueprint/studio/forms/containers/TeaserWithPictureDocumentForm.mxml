@@ -41,6 +41,7 @@
                                        itemId="teaserText"
                                        settingsPath="{TeaserOverlayConstants.DEFAULT_SETTINGS_PATH}"
                                        styleDescriptorFolderPaths="{TeaserOverlayConstants.DEFAULT_STYLE_DESCRIPTOR_FOLDER_PATHS}"/>
+    <bpforms:TeaserSettingsPropertyFieldGroup/>
     <editor:LinkListPropertyField propertyName="{PICTURE_PROPERTY_NAME}"
                                   showThumbnails="true">
       <editor:additionalToolbarItems>
@@ -63,7 +64,6 @@
         <editor:StatusColumn/>
       </editor:columns>
     </editor:LinkListPropertyField>
-    <bpforms:CallToActionConfigurationForm useLegacyCTASettings="true"/>
   </editor:items>
 
 </editor:PropertyFieldGroup>

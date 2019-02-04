@@ -63,7 +63,7 @@ public class SegmentServiceImplIT extends IbmServiceTestBase {
             .satisfies(s -> {
               assertThat(s).hasFieldOrPropertyWithValue("name", "Repeat Customers");
               assertThat(s).extracting(repeatCustomer -> repeatCustomer.getId().getCommerceBeanType())
-                      .containsExactly(SEGMENT);
+                      .isEqualTo(SEGMENT);
             });
   }
 

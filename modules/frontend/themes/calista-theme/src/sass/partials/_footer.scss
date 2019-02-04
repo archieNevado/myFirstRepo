@@ -5,7 +5,7 @@
   clear: left;
 
   &__link {
-    font-size: 12px;
+    font-size: $font-size-normal;
     &:focus {
       color: $cm-footer-color;
     }
@@ -14,7 +14,7 @@
 
 .#{$cm-footer-navigation-prefix}-column {
 
-  font-size: 12px;
+  font-size: $font-size-normal;
   &__title {
     font-size: $font-size-large;
     line-height: 20px;

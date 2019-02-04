@@ -2,6 +2,7 @@ package com.coremedia.blueprint.cae.view;
 
 import com.coremedia.objectserver.view.ServletView;
 import com.coremedia.blueprint.cae.web.HttpHead;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,8 +15,10 @@ import java.util.Map;
  * {@link com.coremedia.blueprint.cae.handlers.PageHandlerBase#optimizeForHeadRequest}
  */
 public class HttpHeadView implements ServletView<HttpHead> {
+
   @Override
-  public void render(HttpHead self, String viewName, HttpServletRequest request, HttpServletResponse response) {
+  public void render(HttpHead self, String viewName, @NonNull HttpServletRequest request,
+                     @NonNull HttpServletResponse response) {
     String contentType = self.getContentType();
     if (contentType!=null) {
       response.setContentType(contentType);
