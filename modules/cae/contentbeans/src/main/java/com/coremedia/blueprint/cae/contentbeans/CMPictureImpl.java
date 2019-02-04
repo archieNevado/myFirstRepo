@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
 import com.coremedia.blueprint.common.cta.CallToActionButtonSettings;
+import com.coremedia.blueprint.common.teaser.TeaserSettings;
 import com.coremedia.cap.common.NoSuchPropertyDescriptorException;
 import com.coremedia.cap.transform.TransformImageService;
 import com.coremedia.cap.transform.Transformation;
@@ -70,5 +71,18 @@ public class CMPictureImpl extends CMPictureBase {
   @Override
   public List<CallToActionButtonSettings> getCallToActionSettings() {
     return Collections.emptyList();
+  }
+
+
+  @Override
+  public TeaserSettings getTeaserSettings() {
+    Map<String, Object> mapping = getTeaserSettingsMap();
+    //noinspection Convert2Lambda
+    return new TeaserSettings() {
+      @Override
+      public boolean isRenderLinkToDetailPage() {
+        return (boolean) mapping.getOrDefault("renderLinkToDetailPage", false);
+      }
+    };
   }
 }

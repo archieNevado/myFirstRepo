@@ -1,10 +1,12 @@
 package com.coremedia.livecontext.ecommerce.sfcc.common;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionFinder;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.livecontext.ecommerce.common.CommerceConfigKeys;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.sfcc.configuration.SfccSiteGenesisStoreContextProperties;
 import com.google.common.collect.ImmutableMap;
@@ -44,13 +46,17 @@ public class SfccStoreContextProviderTest {
 
   @Before
   public void setup() {
-    testling = new SfccStoreContextProvider();
+    CommerceConnection commerceConnection = mock(CommerceConnection.class);
+    CommerceConnectionFinder commerceConnectionFinder = mock(CommerceConnectionFinder.class);
+    when(commerceConnectionFinder.findConnection(any(Site.class))).thenReturn(Optional.of(commerceConnection));
+
+    testling = new SfccStoreContextProvider(commerceConnectionFinder);
     testling.setStoreContextConfigurations(singletonList(sfccSiteGenesisStoreContextProperties));
     testling.initialize();
   }
 
   @Test
-  public void readStoreConfigFromSpring() throws Exception {
+  public void readStoreConfigFromSpring() {
     assertThat(testling.readStoreConfigFromSpring("sitegenesis"))
             .isEqualTo(ImmutableMap.of(
                     CommerceConfigKeys.STORE_ID, "aStoreId",
@@ -61,12 +67,12 @@ public class SfccStoreContextProviderTest {
   }
 
   @Test
-  public void readStoreConfigFromSpringNoMatchingConfig() throws Exception {
+  public void readStoreConfigFromSpringNoMatchingConfig() {
     assertThat(testling.readStoreConfigFromSpring("nonMatching")).isEmpty();
   }
 
   @Test
-  public void localeFromSiteEndsUpInReplacements() throws Exception {
+  public void localeFromSiteEndsUpInReplacements() {
     Site site = mockSite("site-id-314", Locale.ITALY);
 
     Cache cache = mock(Cache.class);

@@ -33,6 +33,7 @@ import java.util.Map;
 import static com.coremedia.blueprint.cae.web.links.NavigationLinkSupport.ATTR_NAME_CMNAVIGATION;
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.from;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_CLASS;
 
@@ -133,7 +134,7 @@ public class CapBlobHandlerTest {
 
     assertThat(handleRequest(URI_ANY))
             .extracting(HandlerHelper::getRootModel)
-            .allMatch(HttpError.class::isInstance);
+            .isInstanceOf(HttpError.class);
 
     assertModel(handleRequest(URI_RAW), capBlobRef);
   }
@@ -155,7 +156,7 @@ public class CapBlobHandlerTest {
 
     assertThat(handleRequest(URI_ANY))
             .extracting(HandlerHelper::getRootModel)
-            .allMatch(HttpError.class::isInstance);
+            .isInstanceOf(HttpError.class);
 
     assertModel(handleRequest(URI_RAW), capBlobRef);
   }
@@ -247,17 +248,15 @@ public class CapBlobHandlerTest {
   private void assertNotFound(ModelAndView modelAndView) {
     assertThat(modelAndView)
             .extracting(HandlerHelper::getRootModel)
-            .allMatch(HttpError.class::isInstance)
-            .extracting(HttpError.class::cast)
-            .extracting(HttpError::getErrorCode)
-            .containsExactly(HttpServletResponse.SC_NOT_FOUND);
+            .isInstanceOfSatisfying(HttpError.class,
+                    e -> assertThat(e)
+                            .returns(HttpServletResponse.SC_NOT_FOUND, from(HttpError::getErrorCode)));
   }
 
   private void assertModel(ModelAndView modelAndView, Object bean) {
     assertThat(modelAndView)
             .extracting(HandlerHelper::getRootModel)
-            .containsExactly(bean);
-
+            .isEqualTo(bean);
   }
 
   private String formatLink(Object bean) {

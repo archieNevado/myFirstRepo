@@ -13,17 +13,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.IOException;
-
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-
 @RunWith(MockitoJUnitRunner.class)
 public class CommercePreviewHandlerTest {
+
   private static final String KNOWN_SITE_ID = "4711";
 
   @InjectMocks
@@ -37,35 +36,43 @@ public class CommercePreviewHandlerTest {
   private LinkFormatter linkFormatter;
 
   private MockHttpServletRequest request;
+  private MockHttpServletResponse response;
 
   @Before
   public void setup() {
     request = new MockHttpServletRequest();
+    response = new MockHttpServletResponse();
   }
 
   @Test
-  public void handleProductPreview() throws IOException {
+  public void handleProductPreview() {
     String productReferenceId = "vendor:///catalog/product/123";
     when(idProvider.parseId(productReferenceId)).thenReturn(mock(Product.class));
-    ModelAndView modelAndView = previewHandler.handleId(productReferenceId, "", KNOWN_SITE_ID, "", request);
-    assertTrue(modelAndView.getModel().get("self") instanceof Product);
-    assertTrue(modelAndView.getViewName().contains("redirect:"));
+
+    ModelAndView modelAndView = previewHandler.handleId(productReferenceId, "", KNOWN_SITE_ID, "", request, response);
+
+    assertThat(modelAndView.getModel().get("self")).isInstanceOf(Product.class);
+    assertThat(modelAndView.getViewName()).contains("redirect:");
   }
 
   @Test
-  public void handleCategoryPreview() throws IOException {
+  public void handleCategoryPreview() {
     String categoryReferenceId = "vendor:///catalog/category/456";
     when(idProvider.parseId(categoryReferenceId)).thenReturn(mock(Category.class));
-    ModelAndView modelAndView = previewHandler.handleId(categoryReferenceId, "", KNOWN_SITE_ID, "", request);
-    assertTrue(modelAndView.getModel().get("self") instanceof Category);
-    assertTrue(modelAndView.getViewName().contains("redirect:"));
+
+    ModelAndView modelAndView = previewHandler.handleId(categoryReferenceId, "", KNOWN_SITE_ID, "", request, response);
+
+    assertThat(modelAndView.getModel().get("self")).isInstanceOf(Category.class);
+    assertThat(modelAndView.getViewName()).contains("redirect:");
   }
 
   @Test
-  public void handleNoBean() throws IOException {
+  public void handleNoBean() {
     when(idProvider.parseId("unknown_id")).thenReturn(mock(IdProvider.UnknownId.class));
-    ModelAndView modelAndView = previewHandler.handleId("unknown_id", "", KNOWN_SITE_ID, "", request);
-    assertTrue(modelAndView.getModel().get("self") instanceof HttpError);
+
+    ModelAndView modelAndView = previewHandler.handleId("unknown_id", "", KNOWN_SITE_ID, "", request, response);
+
+    assertThat(modelAndView.getModel().get("self")).isInstanceOf(HttpError.class);
   }
 }
 

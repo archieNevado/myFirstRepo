@@ -11,6 +11,7 @@
     [ResourceBundle('com.coremedia.ecommerce.studio.ECommerceStudioPlugin')]
   </fx:Metadata>
   <fx:Script><![CDATA[
+    import com.coremedia.ui.data.ValueExpression;
     import com.coremedia.ui.skins.PanelSkin;
 
     public static const xtype:String = "com.coremedia.ecommerce.studio.config.catalogRepositoryThumbnails";
@@ -23,6 +24,18 @@
     public static const THUMB_DATA_VIEW_PANEL_ITEM_ID:String = "thumbdataviewscroller";
 
     private var config:CatalogRepositoryThumbnails;
+
+    /**
+     * value expression that acts as a model for informing a view of a newly created content object.
+     */
+    [Bindable]
+    public var createdContentValueExpression:ValueExpression;
+
+    /**
+     * Value expression that indicates if a new content can be created based on the current selection in the collection view.
+     */
+    [Bindable]
+    public var newContentDisabledValueExpression:ValueExpression;
 
     public native function CatalogRepositoryThumbnails(config:CatalogRepositoryThumbnails = null);
     ]]></fx:Script>
@@ -51,7 +64,9 @@
             <ui:ContextMenuPlugin>
               <ui:contextMenu>
                 <ec:CatalogRepositoryContextMenu selectedItemsValueExpression="{getSelectedItemsValueExpression()}"
-                                                 selectedFolderValueExpression="{getSelectedNodeExpression()}"/>
+                                                 selectedFolderValueExpression="{getSelectedNodeExpression()}"
+                                                 newContentDisabledValueExpression="{config.newContentDisabledValueExpression}"
+                                                 createdContentValueExpression="{config.createdContentValueExpression}"/>
               </ui:contextMenu>
             </ui:ContextMenuPlugin>
           </ec:plugins>

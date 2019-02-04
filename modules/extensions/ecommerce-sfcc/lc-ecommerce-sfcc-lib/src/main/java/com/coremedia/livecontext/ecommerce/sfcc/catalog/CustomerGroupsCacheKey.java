@@ -6,6 +6,7 @@ import com.coremedia.cache.Cache;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.CustomerGroupsDocument;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.CustomerGroupsResource;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 public class CustomerGroupsCacheKey extends AbstractCommerceCacheKey<CustomerGroupsDocument> {
 
@@ -13,7 +14,7 @@ public class CustomerGroupsCacheKey extends AbstractCommerceCacheKey<CustomerGro
 
   private CustomerGroupsResource resource;
 
-  public CustomerGroupsCacheKey(StoreContext storeContext, CustomerGroupsResource resource,
+  public CustomerGroupsCacheKey(@NonNull StoreContext storeContext, CustomerGroupsResource resource,
                                 CommerceCache commerceCache) {
     super("customerGroups", storeContext, CONFIG_KEY_SEGMENTS, commerceCache);
     this.resource = resource;

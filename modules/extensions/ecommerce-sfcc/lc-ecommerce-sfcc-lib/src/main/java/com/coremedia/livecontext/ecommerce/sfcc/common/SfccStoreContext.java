@@ -2,6 +2,7 @@ package com.coremedia.livecontext.ecommerce.sfcc.common;
 
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 import com.google.common.base.MoreObjects;
@@ -25,6 +26,7 @@ import static java.util.Collections.emptyList;
  */
 public class SfccStoreContext implements StoreContext {
 
+  private final CommerceConnection connection;
   private final ImmutableMap<String, String> replacements;
   private final String siteId;
   private final String storeId;
@@ -38,6 +40,7 @@ public class SfccStoreContext implements StoreContext {
 
   @SuppressWarnings("squid:S00107")  /* "Methods should not have too many parameters" */
   SfccStoreContext(
+          @NonNull CommerceConnection connection,
           @NonNull Map<String, String> replacements,
           @NonNull String siteId,
           @NonNull String storeId,
@@ -49,6 +52,7 @@ public class SfccStoreContext implements StoreContext {
           @Nullable ZonedDateTime previewDate,
           @Nullable String userSegments
   ) {
+    this.connection = connection;
     this.replacements = ImmutableMap.copyOf(replacements);
     this.siteId = siteId;
     this.storeId = storeId;
@@ -59,6 +63,11 @@ public class SfccStoreContext implements StoreContext {
     this.locale = locale;
     this.previewDate = previewDate;
     this.userSegments = userSegments;
+  }
+
+  @NonNull
+  public CommerceConnection getConnection() {
+    return connection;
   }
 
   @Override
@@ -169,7 +178,8 @@ public class SfccStoreContext implements StoreContext {
     }
 
     SfccStoreContext that = (SfccStoreContext) o;
-    return Objects.equals(replacements, that.replacements)
+    return Objects.equals(connection, that.connection)
+            && Objects.equals(replacements, that.replacements)
             && Objects.equals(siteId, that.siteId)
             && Objects.equals(storeId, that.storeId)
             && Objects.equals(storeName, that.storeName)
@@ -183,7 +193,7 @@ public class SfccStoreContext implements StoreContext {
 
   @Override
   public int hashCode() {
-    return Objects.hash(replacements, siteId, storeId, storeName, catalogId, catalogAlias, currency, locale,
+    return Objects.hash(connection, replacements, siteId, storeId, storeName, catalogId, catalogAlias, currency, locale,
             previewDate, userSegments);
   }
 

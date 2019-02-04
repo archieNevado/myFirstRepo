@@ -54,22 +54,6 @@
     </property>
   </bean>
 
-  <bean id="cmImageMapValidator" parent="contentTypeValidator">
-    <property name="contentType" value="CMImageMap"/>
-    <property name="validatingSubtypes" value="true"/>
-    <property name="validators">
-      <list>
-        <bean class="com.coremedia.rest.cap.validators.LinkListMaxLengthValidator">
-          <property name="property" value="target"/>
-        </bean>
-        <bean class="com.coremedia.rest.validators.NotEmptyValidator">
-          <property name="property" value="target"/>
-          <property name="severity" value="WARN"/>
-        </bean>
-      </list>
-    </property>
-  </bean>
-
   <bean id="cmImageMapAreasValidator" class="com.coremedia.rest.cap.validators.ImageMapAreasValidator">
     <property name="connection" ref="connection"/>
     <property name="contentType" value="CMImageMap"/>
@@ -105,6 +89,7 @@
     <property name="listPropertyName" value="links"/>
     <property name="indexPropertyName" value="index"/>
     <property name="maxLengthPropertyName" value="limit"/>
+    <property name="paginationPropertyName" value="loadMore"/>
   </bean>
 
   <bean id="cmChannelValidator" parent="contentTypeValidator">
@@ -279,6 +264,9 @@
     <property name="validatingSubtypes" value="true"/>
     <property name="validators">
       <list>
+        <bean class="com.coremedia.rest.validators.NotEmptyValidator">
+          <property name="property" value="data"/>
+        </bean>
         <bean class="com.coremedia.rest.validators.NotEmptyValidator">
           <property name="property" value="title"/>
         </bean>

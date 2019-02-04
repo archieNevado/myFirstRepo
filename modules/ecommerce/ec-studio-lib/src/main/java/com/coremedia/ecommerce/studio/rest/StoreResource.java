@@ -13,16 +13,13 @@ import com.coremedia.livecontext.ecommerce.p13n.MarketingSpotService;
 import com.coremedia.rest.linking.LinkResolver;
 import com.coremedia.rest.linking.LinkResolverUtil;
 import com.coremedia.rest.linking.LocationHeaderResourceFilter;
-import com.google.common.collect.Ordering;
 import com.sun.jersey.spi.container.ResourceFilters;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -49,7 +46,7 @@ public class StoreResource extends AbstractCatalogResource<Store> {
 
   private static final String SHOP_URL_PBE_PARAM = "shopUrl";
 
-  private List<PbeShopUrlTargetResolver> pbeShopUrlTargetResolvers;
+  private List<PbeShopUrlTargetResolver> pbeShopUrlTargetResolvers = emptyList();
 
   @Inject
   private LinkResolver linkResolver;
@@ -62,16 +59,6 @@ public class StoreResource extends AbstractCatalogResource<Store> {
 
   @Inject
   private MappedCatalogsProvider mappedCatalogsProvider;
-
-  @PostConstruct
-  void initialize() {
-    if (pbeShopUrlTargetResolvers == null) {
-      pbeShopUrlTargetResolvers = emptyList();
-    } else {
-      pbeShopUrlTargetResolvers = Ordering.from(AnnotationAwareOrderComparator.INSTANCE)
-              .sortedCopy(pbeShopUrlTargetResolvers);
-    }
-  }
 
   @POST
   @Path("urlService")

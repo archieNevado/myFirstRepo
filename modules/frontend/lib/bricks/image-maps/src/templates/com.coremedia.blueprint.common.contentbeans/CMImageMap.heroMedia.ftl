@@ -7,9 +7,9 @@
 <#assign useQuickinfo=cm.localParameter("useQuickinfo", imagemap_use_quickinfo!true)/>
 
 <#assign imageMapParams=imageMap.generateIds(self)/>
-<#assign link=cm.localParameter("renderLink", true)?then(cm.getLink(self.target!cm.UNDEFINED), "") />
+<#assign link=cm.localParameter("renderLink", self.teaserSettings.renderLinkToDetailPage)?then(cm.getLink(self.target!cm.UNDEFINED), "") />
 
-<div class="cm-imagemap" data-cm-imagemap='{"coordsBaseWidth": "${bp.IMAGE_TRANSFORMATION_BASE_WIDTH}", "defaultLink": "${link}"}'>
+<div class="cm-imagemap" <@cm.dataAttribute name="data-cm-imagemap" data={"coordsBaseWidth": bp.IMAGE_TRANSFORMATION_BASE_WIDTH, "defaultLink": link} />>
 
   <@cm.include self=self view="_picture" params={
     "blockClass": cm.localParameter("heroBlockClass", "cm-hero"),

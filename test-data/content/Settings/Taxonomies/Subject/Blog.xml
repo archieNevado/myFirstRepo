@@ -33,6 +33,8 @@
 <link href="Culture.xml" path="/Settings/Taxonomies/Subject/Culture"/>
 <link href="Gadget.xml" path="/Settings/Taxonomies/Subject/Gadget"/>
 <link href="Beauty.xml" path="/Settings/Taxonomies/Subject/Beauty"/>
+<link href="Fashion%20Trends.xml" path="/Settings/Taxonomies/Subject/Fashion%20Trends"/>
+<link href="Eveningwear%281%29.xml" path="/Settings/Taxonomies/Subject/Eveningwear%281%29"/>
 </children>
 <externalReference></externalReference>
 </CMTaxonomy>

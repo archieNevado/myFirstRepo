@@ -3,6 +3,7 @@ package com.coremedia.livecontext.tree;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.ContentSiteAspect;
@@ -25,7 +26,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.List;
 import java.util.Optional;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
@@ -87,8 +87,7 @@ public class ExternalChannelContentTreeRelationTest {
 
   @Before
   public void setup() {
-
-    StoreContext storeContext = newStoreContext();
+    StoreContext storeContext = StoreContextBuilderImpl.from().build();
 
     BaseCommerceConnection commerceConnection = new BaseCommerceConnection();
     commerceConnection.setCommerceBeanFactory(commerceBeanFactory);

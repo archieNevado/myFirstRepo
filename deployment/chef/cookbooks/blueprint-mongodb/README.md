@@ -20,7 +20,7 @@ This is the wrapper cookbook to install mongodb3.
 
 * `node['ulimit']` - define ulimits for mongod. Defaults to `{ ... }`.
 * `node['mongodb3']['mongod']['disable-transparent-hugepages']` - Disable Transparent Huge Pages (THP). Defaults to `true`.
-* `node['mongodb3']['version']` - fixed version. Defaults to `3.6.4`.
+* `node['mongodb3']['version']` - fixed version. Defaults to `4.0.2`.
 * `node['mongodb3']['config']['mongod']['net']['bindIp']` - fixed configuration. Defaults to `0.0.0.0`.
 * `node['mongodb3']['config']['mongod']['security']['authorization']` -  Defaults to `nil`.
 * `node['mongodb3']['config']['mongod']['storage']['mmapv1']['smallFiles']` -  Defaults to `nil`.

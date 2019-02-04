@@ -246,7 +246,7 @@ public class LocalizationService {
   private static void initializeLocales(Collection<Content> bundles, Collection<Content> changed) {
     for (Content bundle : bundles) {
       if (StringUtils.isEmpty(bundle.getString(LOCALE))) {
-        bundle.set(LOCALE, localeFromName(bundle.getName()).toString());
+        bundle.set(LOCALE, localeFromName(bundle.getName()).toLanguageTag());
         changed.add(bundle);
       }
     }

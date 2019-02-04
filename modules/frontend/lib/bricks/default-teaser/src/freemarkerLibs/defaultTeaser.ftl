@@ -4,6 +4,12 @@
 
 <#assign defaultBlockClass="cm-teasable" />
 
+<#function getLink target
+                   teaserSettings={}>
+  <#-- @ftlvariable name="teaserSettings" type="com.coremedia.blueprint.common.teaser.TeaserSettings" -->
+  <#return (cm.localParameters().renderLink!teaserSettings.renderLinkToDetailPage)?then(cm.getLink(target!cm.UNDEFINED), "") />
+</#function>
+
 <#--
   Renders the media of a teaser.
 
@@ -87,6 +93,8 @@
   @param teaserBlockClass the teaser block class to use
   @param metadataTitle preview metadata to attach to the title element
   @param metadataText preview metadata to attach to the text element
+  @param authors a list of authors, linked to the given content
+  @param externallyDisplayedDate the date to be displayed for the given content
 
   Example:
   <@renderMedia media=self.picture
@@ -99,6 +107,8 @@
                       openInNewTab=false
                       ctaButtons=[]
                       teaserBlockClass=defaultBlockClass
+                      externallyDisplayedDate=[]
+                      authors=[]
                       metadataTitle=[]
                       metadataText=[]>
   <#--
@@ -114,6 +124,27 @@
   <#local metadataText=cm.notUndefined(metadataText, []) />
 
   <div class="${teaserBlockClass}__caption">
+
+    <#if externallyDisplayedDate?has_content || authors?has_content>
+    <p class="${teaserBlockClass}__editorial" <@preview.metadata "properties.authors"/>>
+      <#if externallyDisplayedDate?has_content>
+        <#-- date -->
+        <span class="${teaserBlockClass}__time">
+          <@utils.renderDate date=externallyDisplayedDate.time/>
+        </span>
+      </#if>
+
+      <#if authors?has_content>
+        <#-- authors -->
+        <#list authors![] as author>
+        <span>
+          <a href="${cm.getLink(author)}" class="${teaserBlockClass}__author" <@preview.metadata author.content/>>${author.displayName!""}</a>
+        </span>
+        </#list>
+      </#if>
+    </p>
+    </#if>
+
     <#-- title -->
     <#if title?has_content>
       <@utils.optionalLink href=link openInNewTab=openInNewTab>

@@ -5,6 +5,7 @@ import com.coremedia.blueprint.cae.richtext.filter.ScriptSerializer;
 import com.coremedia.objectserver.view.TextView;
 import com.coremedia.objectserver.view.XmlFilterFactory;
 import com.coremedia.xml.Markup;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Required;
 import org.xml.sax.XMLFilter;
 
@@ -23,10 +24,12 @@ public class ScriptView implements TextView {
   private XmlFilterFactory xmlFilterFactory;
 
   @Override
-  public void render(Object bean, String view, Writer writer, HttpServletRequest request, HttpServletResponse response) {
+  public void render(Object bean, String view, Writer writer, @NonNull HttpServletRequest request,
+                     @NonNull HttpServletResponse response) {
     if (!(bean instanceof Markup)) {
       throw new IllegalArgumentException(bean + " is no " + Markup.class);
     }
+
     Markup markup = (Markup) bean;
     ArrayList<XMLFilter> filters = new ArrayList<>();
     filters.addAll(xmlFilterFactory.createFilters(request, response, markup, "script"));

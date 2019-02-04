@@ -26,9 +26,9 @@
   <local:items>
     <Container region="north"
                id_="topicPagesFormNorth"
-               ui="{ContainerSkin.GRID_200.getSkin()}">
+               ui="{ContainerSkin.LIGHT.getSkin()}">
       <items>
-        <Container>
+        <Container ui="{ContainerSkin.GRID_200.getSkin()}">
           <items>
             <FieldContainer flex="2"
                             fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.topicpages.TopicPages', 'TopicPages_search_title')}">

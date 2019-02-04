@@ -24,7 +24,6 @@ These modules are integrated into CoreMedia Blueprint to enhance CoreMedia CMS a
 - [LiveContext Asset Management Extension](lc-asset/README.md)
 - [LiveContext Elastic Social Extension](lc-es/README.md)
 - [LiveContext Personalization Extension](lc-p13n/README.md)
-- [In-memory Controlroom Extension](memory-controlroom/README.md)
 - [nugg.ad Extension](nuggad/README.md)
 - [Optimizely Extension](optimizely/README.md)
 - [Open Street Map Extension](osm/README.md)

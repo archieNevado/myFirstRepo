@@ -3,8 +3,10 @@
 
 <#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/utils.ftl" as utils />
 
+<#assign link=self.teaserSettings.renderLinkToDetailPage?then(cm.getLink(self.target!cm.UNDEFINED), "") />
+
 <div class="cm-medialist cm-medialist--video"<@preview.metadata self.content />>
-  <@utils.optionalLink href="${cm.getLink(self.target)}">
+  <@utils.optionalLink href="${link}">
     <div class="cm-medialist__wrapper">
       <#-- picture -->
       <#if self.picture?has_content>

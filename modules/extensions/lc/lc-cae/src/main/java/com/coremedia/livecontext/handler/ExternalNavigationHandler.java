@@ -128,7 +128,8 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
   @Nullable
   @Link(type = LiveContextExternalChannelImpl.class)
   public UriComponents buildLinkForExternalChannel(LiveContextExternalChannelImpl navigation, String viewName,
-                                                   Map<String, Object> linkParameters, HttpServletRequest request) {
+                                                   Map<String, Object> linkParameters,
+                                                   @NonNull HttpServletRequest request) {
     // only responsible in non-preview mode
     if (isPreview()) {
       return null;
@@ -140,11 +141,12 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
   @NonNull
   @Link(type = CMExternalPage.class)
   public UriComponentsBuilder buildLinkForExternalPage(CMExternalPage navigation, Map<String, Object> linkParameters,
-                                                       HttpServletRequest request) {
+                                                       @NonNull HttpServletRequest request) {
     Optional<StoreContext> storeContext = CurrentCommerceConnection.find().map(CommerceConnection::getStoreContext);
 
     return findCommercePropertyProvider()
-            .flatMap(p -> storeContext.flatMap(s -> p.buildPageLink(navigation, linkParameters, request, s)))
+            .flatMap(provider -> storeContext
+                    .flatMap(context -> provider.buildPageLink(navigation, linkParameters, request, context)))
             // make sure that no further link schemes are asked to build a link for an external page
             .orElseGet(UriComponentsBuilder::newInstance);
   }
@@ -152,14 +154,15 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
   @Nullable
   @Link(type = LiveContextCategoryNavigation.class)
   public UriComponents buildLinkForCategoryImpl(LiveContextCategoryNavigation navigation, String viewName,
-                                                Map<String, Object> linkParameters, HttpServletRequest request) {
+                                                Map<String, Object> linkParameters,
+                                                @NonNull HttpServletRequest request) {
     return buildCatalogLink(navigation, viewName, linkParameters, request).orElse(null);
   }
 
   @Nullable
   @Link(type = CategoryInSite.class)
   public UriComponents buildLinkFor(CategoryInSite categoryInSite, String viewName, Map<String, Object> linkParameters,
-                                    HttpServletRequest request) {
+                                    @NonNull HttpServletRequest request) {
     LiveContextNavigation navigation = getLiveContextNavigationFactory()
             .createNavigation(categoryInSite.getCategory(), categoryInSite.getSite());
 
@@ -168,7 +171,7 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
 
   @LinkPostProcessor(type = LiveContextExternalChannelImpl.class, order = PostProcessorPrecendences.MAKE_ABSOLUTE)
   public UriComponents makeAbsoluteUri(UriComponents originalUri, LiveContextExternalChannelImpl liveContextNavigation,
-                                       Map<String, Object> linkParameters, HttpServletRequest request) {
+                                       Map<String, Object> linkParameters, @NonNull HttpServletRequest request) {
     return doMakeAbsoluteUri(originalUri, liveContextNavigation, linkParameters, request);
   }
 
@@ -182,7 +185,7 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
 
   private UriComponents doMakeAbsoluteUri(UriComponents originalUri,
                                           @NonNull LiveContextNavigation liveContextNavigation,
-                                          Map<String, Object> linkParameters, HttpServletRequest request) {
+                                          Map<String, Object> linkParameters, @NonNull HttpServletRequest request) {
     Site site = liveContextNavigation.getSite();
 
     // Native category links are absolute anyway, nothing more to do here.
@@ -195,7 +198,8 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
 
   @NonNull
   private Optional<UriComponents> buildCatalogLink(@NonNull LiveContextNavigation navigation, String viewName,
-                                                   Map<String, Object> linkParameters, HttpServletRequest request) {
+                                                   Map<String, Object> linkParameters,
+                                                   @NonNull HttpServletRequest request) {
     Category category = findCategory(navigation).orElse(null);
 
     if (category == null) {
@@ -205,7 +209,7 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
     Site site = navigation.getSite();
     if (useCommerceCategoryLinks(site)) {
       return findCommercePropertyProvider()
-              .flatMap(p -> p.buildCategoryLink(category, linkParameters, request))
+              .flatMap(provider -> provider.buildCategoryLink(category, linkParameters, request))
               .map(UriComponentsBuilder::build);
     } else {
       return buildCaeLinkForCategory(navigation, viewName, linkParameters);

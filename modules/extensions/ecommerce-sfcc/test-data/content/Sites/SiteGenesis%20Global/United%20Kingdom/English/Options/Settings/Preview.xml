@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <CMSettings folder="/Sites/SiteGenesis Global/United Kingdom/English/Options/Settings" name="Preview" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
 <locale>en-GB</locale>
-<master>
-</master>
-<settings>
-<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<master/>
+<settings><Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="sliderMetaData">
 <Struct>
 <StructProperty Name="cm_responsiveDevices">
@@ -105,6 +103,7 @@
 </Struct>
 </StructProperty>
 <LinkListProperty Name="fragmentPreviewCss" LinkType="coremedia:///cap/contenttype/Content_">
+<Link xlink:href="coremedia:///cap/resources/sitegenesis-styles%2Ecss.xml" cmexport:path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Options/Settings/sitegenesis-styles%2Ecss"/>
 </LinkListProperty>
 <LinkListProperty Name="studioPreviewCss" LinkType="coremedia:///cap/contenttype/CMCSS">
 </LinkListProperty>
@@ -116,7 +115,6 @@
 <LinkListProperty Name="previewJs" LinkType="coremedia:///cap/contenttype/CMJavaScript">
 <Link xlink:href="coremedia:///cap/resources/../../../../../../Themes/sitegenesis/js/preview%2Ejs.xml" cmexport:path="/Themes/sitegenesis/js/preview%2Ejs"/>
 </LinkListProperty>
-</Struct>
-</settings>
+</Struct></settings>
 <identifier></identifier>
 </CMSettings>

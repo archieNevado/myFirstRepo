@@ -2,6 +2,7 @@ package com.coremedia.livecontext.ecommerce.sfcc.ocapi;
 
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.sfcc.common.SfccStoreContextBuilder;
 import com.google.common.collect.ImmutableMap;
@@ -17,8 +18,9 @@ class SfccTestConfigBuilder {
   }
 
   @NonNull
-  static StoreContext build(@NonNull String siteId, @NonNull String storeId, @NonNull String storeName,
-                            @NonNull CatalogId catalogId, @NonNull Currency currency, @NonNull Locale locale) {
+  static StoreContext build(@NonNull CommerceConnection commerceConnection, @NonNull String siteId,
+                            @NonNull String storeId, @NonNull String storeName, @NonNull CatalogId catalogId,
+                            @NonNull Currency currency, @NonNull Locale locale) {
     Map<String, String> replacements = ImmutableMap.<String, String>builder()
             .put("catalogId", catalogId.value())
             .put("storeId", storeId)
@@ -31,6 +33,7 @@ class SfccTestConfigBuilder {
 
     return SfccStoreContextBuilder
             .from(
+                    commerceConnection,
                     replacements,
                     siteId,
                     storeId,

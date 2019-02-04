@@ -3,15 +3,14 @@ package com.coremedia.livecontext.handler;
 import java.io.Serializable;
 
 /**
+ * A bean containing settings for a commerce page.
  * <p>
- *  A bean containing settings for a commerce page.
- *  <br>
- *  The settings indicate if the commerce system have to build a part of a page on it's own or if the CMS is able to
- *  render a page.
- * </p>
+ * The settings indicate if the commerce system have to build a part of a page on it's own or if the CMS is able to
+ * render a page.
  */
 @SuppressWarnings("unused") //spring needs getter to serialize.
 class ManagedPagePartsSettings implements Serializable {
+
   private boolean isManagedHeader;
   private boolean isManagedFooter;
   private boolean isManagedNavigation;

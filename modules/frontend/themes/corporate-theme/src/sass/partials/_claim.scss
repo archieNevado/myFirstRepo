@@ -25,6 +25,10 @@ Contains styling definitions for all content types as cm-claim.
 
   @include spacer($brand-primary);
 
+  &__wrapper {
+    position: relative;
+  }
+
   &__link {
     position: relative;
     display: block;

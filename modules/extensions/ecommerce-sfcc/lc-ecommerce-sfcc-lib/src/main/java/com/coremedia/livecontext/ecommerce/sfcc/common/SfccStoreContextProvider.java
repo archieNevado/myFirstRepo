@@ -1,15 +1,19 @@
 package com.coremedia.livecontext.ecommerce.sfcc.common;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractStoreContextProvider;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionFinder;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoCommerceConnectionAvailable;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.CommerceConfigKeys;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.sfcc.configuration.SfccStoreContextProperties;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.CatalogsResource;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.LocaleUtils;
@@ -37,30 +41,37 @@ import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreCon
 import static java.util.Collections.emptyMap;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
+@DefaultAnnotation(NonNull.class)
 public class SfccStoreContextProvider extends AbstractStoreContextProvider {
 
   private static final Logger LOG = LoggerFactory.getLogger(SfccStoreContextProvider.class);
 
   private static final int SITE_TO_CATALOG_CACHE_TIME_IN_SECONDS = 300;
 
+  private final CommerceConnectionFinder commerceConnectionFinder;
+
+  @Nullable
   private CatalogsResource catalogsResource;
 
+  @Nullable
   private List<SfccStoreContextProperties> storeContextConfigurations;
 
+  @Nullable
   private Map<String, SfccStoreContextProperties> storeContextConfigurationsByName;
 
-  @NonNull
+  public SfccStoreContextProvider(CommerceConnectionFinder commerceConnectionFinder) {
+    this.commerceConnectionFinder = commerceConnectionFinder;
+  }
+
   @Override
-  protected Optional<StoreContext> internalCreateContext(@NonNull Site site) {
+  protected Optional<StoreContext> internalCreateContext(Site site) {
     // Only create store context if settings are found for current site.
     return Optional.of(findRepositoryStoreConfig(site))
             .filter(config -> !config.isEmpty())
             .map(config -> buildContextFromRepositoryStoreConfig(site, config));
   }
 
-  @NonNull
-  private StoreContext buildContextFromRepositoryStoreConfig(@NonNull Site site,
-                                                             @NonNull Map<String, Object> repositoryStoreConfig) {
+  private StoreContext buildContextFromRepositoryStoreConfig(Site site, Map<String, Object> repositoryStoreConfig) {
     Map<String, Object> targetConfig = new HashMap<>();
 
     // Read store context configuration from Spring and property files.
@@ -74,9 +85,8 @@ public class SfccStoreContextProvider extends AbstractStoreContextProvider {
     return createContext(site, targetConfig);
   }
 
-  @NonNull
   @Override
-  protected Map<String, Object> readStoreConfigFromSpring(@NonNull String configId) {
+  protected Map<String, Object> readStoreConfigFromSpring(String configId) {
     SfccStoreContextProperties sfccStoreContextProperties = storeContextConfigurationsByName.get(configId);
 
     if (sfccStoreContextProperties == null) {
@@ -86,8 +96,7 @@ public class SfccStoreContextProvider extends AbstractStoreContextProvider {
     return readStoreConfigProperties(sfccStoreContextProperties);
   }
 
-  @NonNull
-  private static Map<String, Object> readStoreConfigProperties(@NonNull SfccStoreContextProperties config) {
+  private static Map<String, Object> readStoreConfigProperties(SfccStoreContextProperties config) {
     Map<String, Object> targetConfig = new HashMap<>();
 
     putValueIfNotNull(CommerceConfigKeys.STORE_ID, config.getStoreId(), targetConfig);
@@ -98,10 +107,12 @@ public class SfccStoreContextProvider extends AbstractStoreContextProvider {
     return targetConfig;
   }
 
-  @NonNull
-  private StoreContext createContext(@NonNull Site site, @NonNull Map<String, Object> storeConfig) {
+  private StoreContext createContext(Site site, Map<String, Object> storeConfig) {
     StoreContextValuesHolder valuesHolder = new StoreContextValuesHolder();
 
+    valuesHolder.connection = commerceConnectionFinder.findConnection(site)
+            .orElseThrow(() -> new NoCommerceConnectionAvailable(
+                    String.format("Could not find commerce connection for site '%s'.", site)));
     valuesHolder.siteId = site.getId();
 
     // adds site locale to values holder and its replacement map
@@ -134,14 +145,14 @@ public class SfccStoreContextProvider extends AbstractStoreContextProvider {
     return createStoreContext(valuesHolder);
   }
 
-  private static void handleSiteLocale(@NonNull Site site, @NonNull StoreContextValuesHolder valuesHolder) {
+  private static void handleSiteLocale(Site site, StoreContextValuesHolder valuesHolder) {
     Locale locale = site.getLocale();
     valuesHolder.locale = locale;
     valuesHolder.replacements.put(LOCALE, locale.toLanguageTag().replaceAll("-", "_"));
   }
 
-  private static void handleConfigStringValueEntry(@NonNull String configEntryKey, @NonNull String configValueString,
-                                                   @NonNull StoreContextValuesHolder valuesHolder) {
+  private static void handleConfigStringValueEntry(String configEntryKey, String configValueString,
+                                                   StoreContextValuesHolder valuesHolder) {
     if (isBlank(configValueString)) {
       LOG.warn("Skipping invalid value for store config with key '{}'", configEntryKey);
       return;
@@ -188,8 +199,8 @@ public class SfccStoreContextProvider extends AbstractStoreContextProvider {
     }
   }
 
-  private static void handleConfigNonStringValueEntry(@NonNull String configEntryKey, @NonNull Object configEntryValue,
-                                                      @NonNull StoreContextValuesHolder valuesHolder) {
+  private static void handleConfigNonStringValueEntry(String configEntryKey, Object configEntryValue,
+                                                      StoreContextValuesHolder valuesHolder) {
     switch (configEntryKey) {
       case CommerceConfigKeys.CURRENCY:
         if (configEntryValue instanceof Currency) {
@@ -209,7 +220,6 @@ public class SfccStoreContextProvider extends AbstractStoreContextProvider {
     }
   }
 
-  @NonNull
   private CatalogId getCatalogIdForStoreId(@Nullable String storeId) {
     SiteToCatalogCacheKey cacheKey = new SiteToCatalogCacheKey("SiteToCatalogCacheKey", catalogsResource,
             SITE_TO_CATALOG_CACHE_TIME_IN_SECONDS);
@@ -222,10 +232,10 @@ public class SfccStoreContextProvider extends AbstractStoreContextProvider {
     return CatalogId.of(catalogId);
   }
 
-  @NonNull
-  private static StoreContext createStoreContext(@NonNull StoreContextValuesHolder valuesHolder) {
+  private static StoreContext createStoreContext(StoreContextValuesHolder valuesHolder) {
     return SfccStoreContextBuilder
             .from(
+                    valuesHolder.connection,
                     valuesHolder.replacements,
                     valuesHolder.siteId,
                     valuesHolder.storeId,
@@ -240,20 +250,33 @@ public class SfccStoreContextProvider extends AbstractStoreContextProvider {
 
   private static class StoreContextValuesHolder {
 
+    @Nullable
+    private CommerceConnection connection;
     private Map<String, String> replacements = new HashMap<>();
+    @Nullable
     private String siteId;
+    @Nullable
     private String storeId;
+    @Nullable
     private String storeName;
+    @Nullable
     private CatalogId catalogId;
+    @Nullable
     private CatalogAlias catalogAlias;
+    @Nullable
     private Currency currency;
+    @Nullable
     private Locale locale;
   }
 
-  @NonNull
   @Override
-  public StoreContextBuilder buildContext(@NonNull StoreContext source) {
-    return SfccStoreContextBuilder.from(source);
+  public StoreContextBuilder buildContext(StoreContext source) {
+    if (!(source instanceof SfccStoreContext)) {
+      throw new IllegalArgumentException(
+              String.format("Store context must be an instance of `%s`.", SfccStoreContext.class.getSimpleName()));
+    }
+
+    return SfccStoreContextBuilder.from((SfccStoreContext) source);
   }
 
   @Autowired

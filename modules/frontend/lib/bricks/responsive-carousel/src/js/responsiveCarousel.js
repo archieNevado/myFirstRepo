@@ -1,6 +1,6 @@
 import $ from "jquery";
 import { log } from "@coremedia/js-logger";
-import "slick-carousel-no-font-no-png/slick/slick.js";
+import slickCarousel from "@coremedia/slick-carousel";
 
 /**
  * Generates a responsive carousel for the given carousel and a given config.
@@ -13,7 +13,7 @@ function responsiveCarousel(carousel, config) {
   const $carousel = $(carousel);
   log("Initialize responsiveCarousel", $carousel);
 
-  $carousel.slick({
+  slickCarousel($carousel, {
     slidesToShow: config.slidesToShowDesktop || 5,
     slidesToScroll: config.slidesToShowDesktop || 5,
     responsive: [

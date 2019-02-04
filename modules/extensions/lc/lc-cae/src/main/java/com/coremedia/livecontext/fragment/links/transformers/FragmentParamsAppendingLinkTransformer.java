@@ -4,6 +4,7 @@ import com.coremedia.livecontext.fragment.FragmentContext;
 import com.coremedia.livecontext.fragment.FragmentContextProvider;
 import com.coremedia.objectserver.web.links.LinkTransformer;
 import com.coremedia.objectserver.web.links.ParameterAppendingLinkTransformer;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,9 +27,8 @@ public class FragmentParamsAppendingLinkTransformer implements LinkTransformer {
   }
 
   @Override
-  public String transform(String source, Object bean, String view, HttpServletRequest request,
-                          HttpServletResponse response, boolean forRedirect) {
-
+  public String transform(String source, Object bean, String view, @NonNull HttpServletRequest request,
+                          @NonNull HttpServletResponse response, boolean forRedirect) {
     Optional<FragmentContext> fragmentContext = FragmentContextProvider.findFragmentContext(request);
     if (fragmentContext.isPresent() && fragmentContext.get().isFragmentRequest() && source.contains("/dynamic/")) {
       String fragmentParamsValue = fragmentContext.get().getParameters().toQueryParam();

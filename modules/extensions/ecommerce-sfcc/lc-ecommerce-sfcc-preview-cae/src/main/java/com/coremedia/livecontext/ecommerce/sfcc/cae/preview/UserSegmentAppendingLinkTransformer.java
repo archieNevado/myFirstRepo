@@ -25,8 +25,8 @@ public class UserSegmentAppendingLinkTransformer implements LinkTransformer {
   }
 
   @Override
-  public String transform(String source, Object bean, String view, HttpServletRequest request,
-                          HttpServletResponse response, boolean forRedirect) {
+  public String transform(String source, Object bean, String view, @NonNull HttpServletRequest request,
+                          @NonNull HttpServletResponse response, boolean forRedirect) {
     findUserSegments()
       .map(UserSegmentFormatter::format)
       .ifPresent(userSegments -> request.setAttribute(REQUEST_PARAMETER_USER_SEGMENTS, userSegments));

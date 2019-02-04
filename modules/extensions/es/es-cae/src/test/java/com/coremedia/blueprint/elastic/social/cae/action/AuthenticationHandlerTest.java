@@ -34,6 +34,7 @@ import static com.coremedia.blueprint.cae.web.links.NavigationLinkSupport.ATTR_N
 import static com.coremedia.objectserver.view.ViewUtils.DEFAULT_VIEW;
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.from;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -75,10 +76,9 @@ public class AuthenticationHandlerTest {
 
     assertThat(modelAndView)
             .extracting(HandlerHelper::getRootModel)
-            .allMatch(HttpError.class::isInstance)
-            .extracting(HttpError.class::cast)
-            .extracting(HttpError::getErrorCode)
-            .containsExactly(HttpServletResponse.SC_NOT_FOUND);
+            .isInstanceOfSatisfying(HttpError.class,
+                    e -> assertThat(e)
+                            .returns(HttpServletResponse.SC_NOT_FOUND, from(HttpError::getErrorCode)));
   }
 
   @Test
@@ -110,14 +110,14 @@ public class AuthenticationHandlerTest {
     assertThat(modelAndView)
             .isNotNull()
             .extracting(ModelAndView::getViewName)
-            .containsOnly(DEFAULT_VIEW);
+            .isEqualTo(DEFAULT_VIEW);
 
     assertThat(modelAndView)
             .extracting(HandlerHelper::getRootModel)
-            .allMatch(Page.class::isInstance)
-            .extracting(Page.class::cast)
-            .extracting(Page::getContent, Page::getNavigation)
-            .containsExactly(new Tuple(content, navigation));
+            .isInstanceOfSatisfying(Page.class,
+                    p -> assertThat(p)
+                            .returns(content, from(Page::getContent))
+                            .returns(navigation, from(Page::getNavigation)));
   }
 
   private String formatLink(Object bean, Map<String, Object> parameters) {

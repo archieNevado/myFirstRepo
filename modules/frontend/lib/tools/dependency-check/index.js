@@ -1,16 +1,22 @@
 const closestPackage = require("closest-package");
 const deepmerge = require("deepmerge");
 const nodeSass = require("node-sass");
+const path = require("path");
 
-const { workspace: { getInstallationPath } } = require("@coremedia/tool-utils");
+const { packages } = require("@coremedia/tool-utils");
 
 function getPkgName(file) {
-  const pkg = require(closestPackage.sync(file));
+  const pkg = packages.getJsonByFilePath(closestPackage.sync(file));
   return pkg && pkg.name;
 }
 
+function getPkgVersion(file) {
+  const pkg = packages.getJsonByFilePath(closestPackage.sync(file));
+  return pkg && pkg.version;
+}
+
 function getDependenciesByName(file) {
-  const pkg = require(closestPackage.sync(file));
+  const pkg = packages.getJsonByFilePath(closestPackage.sync(file));
 
   const pkgDependencies = [];
   if (pkg.dependencies) {
@@ -21,7 +27,7 @@ function getDependenciesByName(file) {
   return pkgDependencies;
 }
 
-function hasPkgDependencyToCached(sourceFile, requiredFile, cache) {
+function hasPkgDependency(sourceFile, requiredFile) {
   const sourcePkgName = getPkgName(sourceFile);
   const requiredPkgName = getPkgName(requiredFile);
 
@@ -33,42 +39,7 @@ function hasPkgDependencyToCached(sourceFile, requiredFile, cache) {
     return true;
   }
 
-  cache[sourcePkgName] =
-    cache[sourcePkgName] || getDependenciesByName(sourceFile);
-
-  return cache[sourcePkgName].indexOf(requiredPkgName) > -1;
-}
-
-/**
- * Checks if the pkg that contains the given sourcefile has a dependency of the pkg that contains the given requiredFile
- *
- * @param sourceFile {string} The file in the depending package
- * @param requiredFile {string} The file in the depended package
- */
-function hasPkgDependencyTo(sourceFile, requiredFile) {
-  return hasPkgDependencyToCached(sourceFile, requiredFile, {});
-}
-
-/**
- * Checks if a path is included, based on a given includes and excludes list.
- * If includes were given the path must match at least one of the includes.
- * If excludes are given the path must not match any of the excludes.
- *
- * @param path the file path to be checked
- * @param includes {Array<String|RegExp>} an array of includes
- * @param excludes {Array<String|RegExp>} an array of excludes
- * @return {boolean} specifies if the file is to be included
- */
-function isIncluded(path, includes, excludes) {
-  const patternOrStringMatches = patternOrString =>
-    (patternOrString instanceof RegExp && patternOrString.test(path)) ||
-    (typeof patternOrString === "string" && path.indexOf(patternOrString) > -1);
-  return (
-    (!includes ||
-      includes.length === 0 ||
-      includes.some(patternOrStringMatches)) &&
-    (!excludes || !excludes.some(patternOrStringMatches))
-  );
+  return getDependenciesByName(sourceFile).indexOf(requiredPkgName) > -1;
 }
 
 function toArray(o) {
@@ -81,43 +52,31 @@ function toArray(o) {
   return [];
 }
 
-function getMissingDependencyErrorMessage(
-  sourceFile,
-  sourcePackage,
-  requiredFile,
-  requiredPackage
-) {
-  return `'${sourceFile}'\nModule:\t\t\t'${sourcePackage}'\nFile To Import:\t\t'${requiredFile}'\nMissing Dependency:\t'${requiredPackage}'`;
+function getMissingDependencyErrorMessage(sourceFile, requiredFile) {
+  const sourcePackageName = getPkgName(sourceFile);
+  const requiredPackageName = getPkgName(requiredFile);
+  const requiredPackageVersion = getPkgVersion(requiredFile);
+  const sourcePackageJsonPath = closestPackage.sync(sourceFile);
+
+  return `'${sourceFile}'
+By using '${requiredFile}' the package '${sourcePackageName}' has a dependency to '${requiredPackageName}'.
+
+Please add the following dependency to '${sourcePackageJsonPath}':
+  ...
+  "dependencies": {
+    ...
+    "${requiredPackageName}": "${requiredPackageVersion}",
+    ...
+  }
+  ...\n`;
 }
 
-function gatherUnmanagedDependencies(sourceModule) {
-  const result = [];
-  const sourceFile = sourceModule && sourceModule.resource;
-  if (!sourceFile) {
-    // cannot test, so assuming everything is ok
-    return result;
+class MissingDependencyError extends Error {
+  constructor(...args) {
+    super(...args);
+    Error.captureStackTrace(this, MissingDependencyError);
+    this.code = "EDEPENDENCYCHECK";
   }
-
-  const cache = {};
-  for (let dependency of sourceModule.dependencies) {
-    const requiredModule = dependency.module;
-    const requiredFile = requiredModule && requiredModule.resource;
-    if (!requiredFile) {
-      // cannot test, so assuming everything is ok
-      continue;
-    }
-
-    if (!hasPkgDependencyToCached(sourceFile, requiredFile, cache)) {
-      result.push({
-        sourceFile: sourceFile,
-        sourcePackage: getPkgName(sourceFile),
-        requiredFile: requiredFile,
-        requiredPackage: getPkgName(requiredFile),
-      });
-    }
-  }
-
-  return result;
 }
 
 class DependencyCheckWebpackPlugin {
@@ -128,79 +87,128 @@ class DependencyCheckWebpackPlugin {
     );
     this.includes = toArray(this.options.include);
     this.excludes = toArray(this.options.exclude);
+
+    this.dependencies = [];
   }
 
   apply(compiler) {
     const plugin = this;
 
     compiler.plugin("done", function(stats) {
-      const modules = stats.compilation.modules;
+      const sourceModules = stats.compilation.modules;
 
-      for (let module of modules) {
-        const unmanagedDependencies = gatherUnmanagedDependencies(module);
-        for (let unmanagedDependency of unmanagedDependencies) {
-          if (
-            isIncluded(
-              unmanagedDependency.sourceFile,
-              plugin.includes,
-              plugin.excludes
-            )
-          ) {
-            stats.compilation.errors.push(
-              new Error(
-                getMissingDependencyErrorMessage(
-                  unmanagedDependency.sourceFile,
-                  unmanagedDependency.sourcePackage,
-                  unmanagedDependency.requiredFile,
-                  unmanagedDependency.requiredPackage
-                )
-              )
-            );
+      for (let sourceModule of sourceModules) {
+        const sourceFile = sourceModule && sourceModule.resource;
+        if (sourceFile) {
+          for (let dependency of sourceModule.dependencies) {
+            const requiredModule = dependency.module;
+            const requiredFile = requiredModule && requiredModule.resource;
+            if (requiredFile) {
+              plugin.dependencies.push({
+                sourceFile,
+                requiredFile,
+              });
+            }
           }
         }
       }
-    });
-  }
-}
 
-/**
- * Creates node-sass custom importer that checks if an import of a sass file from a module has a dependency of the
- * package.json of the dependending sass file. It will not make any transformation, so after the check it will always be
- * skipped by returning 'NULL' which will skip to the next custom importer or the default node-sass importer.
- *
- * @param options
- */
-function getDependencyCheckNodeSassImporter(options) {
-  options = deepmerge({ include: undefined, exclude: undefined }, options);
-  const includes = toArray(options.include);
-  const excludes = toArray(options.exclude);
-
-  /**
-   * @see https://github.com/sass/node-sass#importer--v200---experimental
-   * (not so experimental anymore as tools like the webpack sass-loader also won't work without this)
-   *
-   * @param url the path in import as-is, which LibSass encountered
-   * @param prev the previously resolved path
-   * @param done a callback function to invoke on async completion
-   */
-  return function(url, prev, done) {
-    if (isIncluded(prev, includes, excludes)) {
-      const prefixPattern = /^~/;
-      if (prefixPattern.test(url)) {
-        url = url.replace(prefixPattern, "");
-
-        const modulePattern = /^((@[^\/]+\/)*[^\/])+/;
-        if (modulePattern.test(url)) {
-          const moduleName = modulePattern.exec(url)[0];
-          return getInstallationPath(moduleName, prev);
+      const unmanagedDependencies = plugin.getUnmanagedDependencies();
+      for (let unmanagedDependency of unmanagedDependencies) {
+        if (plugin.isIncluded(unmanagedDependency.sourceFile)) {
+          stats.compilation.errors.push(
+            new MissingDependencyError(
+              getMissingDependencyErrorMessage(
+                unmanagedDependency.sourceFile,
+                unmanagedDependency.requiredFile
+              )
+            )
+          );
         }
       }
-    }
-    done(nodeSass.types.NULL);
-  };
+    });
+
+    compiler.plugin("invalid", () => {
+      plugin.dependencies = [];
+    });
+  }
+
+  /**
+   * Creates node-sass custom importer that checks if an import of a sass file from a module has a dependency of the
+   * package.json of the dependending sass file. It will not make any transformation, so after the check it will always be
+   * skipped by returning 'NULL' which will skip to the next custom importer or the default node-sass importer.
+   */
+  getNodeSassImporter() {
+    const plugin = this;
+
+    /**
+     * @see https://github.com/sass/node-sass#importer--v200---experimental
+     * (not so experimental anymore as tools like the webpack sass-loader also won't work without this)
+     *
+     * @param url the path in import as-is, which LibSass encountered
+     * @param prev the previously resolved path
+     * @param done a callback function to invoke on async completion
+     */
+    return function(url, prev, done) {
+      if (plugin.isIncluded(prev)) {
+        const prefixPattern = /^~/;
+        if (prefixPattern.test(url)) {
+          url = url.replace(prefixPattern, "");
+
+          const modulePattern = /^((@[^\/]+\/)*[^\/])+/;
+          if (modulePattern.test(url)) {
+            const moduleName = modulePattern.exec(url)[0];
+            const filePathByPackageName = packages.getFilePathByPackageName(
+              moduleName,
+              path.dirname(prev)
+            );
+            plugin.dependencies.push({
+              sourceFile: prev,
+              requiredFile: filePathByPackageName,
+            });
+            return filePathByPackageName;
+          }
+        }
+      }
+      done(nodeSass.types.NULL);
+    };
+  }
+
+  getUnmanagedDependencies() {
+    return this.dependencies
+      .filter(({ sourceFile, requiredFile }) => {
+        return !hasPkgDependency(sourceFile, requiredFile);
+      })
+      .map(({ sourceFile, requiredFile }) => {
+        return {
+          sourceFile: sourceFile,
+          requiredFile: requiredFile,
+        };
+      });
+  }
+
+  /**
+   * Checks if a path is included, based on a given includes and excludes list.
+   * If includes were given the path must match at least one of the includes.
+   * If excludes are given the path must not match any of the excludes.
+   *
+   * @param path the file path to be checked
+   * @return {boolean} specifies if the file is to be included
+   */
+  isIncluded(path) {
+    const patternOrStringMatches = patternOrString =>
+      (patternOrString instanceof RegExp && patternOrString.test(path)) ||
+      (typeof patternOrString === "string" &&
+        path.indexOf(patternOrString) > -1);
+    return (
+      (!this.includes ||
+        this.includes.length === 0 ||
+        this.includes.some(patternOrStringMatches)) &&
+      (!this.excludes || !this.excludes.some(patternOrStringMatches))
+    );
+  }
 }
 
 module.exports = {
   DependencyCheckWebpackPlugin,
-  getDependencyCheckNodeSassImporter,
 };

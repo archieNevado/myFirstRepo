@@ -26,19 +26,19 @@
 
   <DocType Name="CMExternalChannel" Parent="CMAbstractCategory">
     <LinkListProperty Name="master" Max="1" LinkType="CMExternalChannel" Override="true" extensions:weakLink="true"/>
-    <StringProperty Name="externalId" Length="256" Index="true"/>
+    <StringProperty Name="externalId" Length="256" Index="true" extensions:observe="true"/>
   </DocType>
 
   <DocType Name="CMExternalProduct" Parent="CMTeasable">
     <LinkListProperty Name="master" Max="1" LinkType="CMExternalProduct" Override="true" extensions:weakLink="true"/>
-    <StringProperty Name="externalId" Length="256" Index="true"/>
+    <StringProperty Name="externalId" Length="256" Index="true" extensions:observe="true"/>
     <XmlProperty Name="pdpPagegrid" Grammar="coremedia-struct-2008"/>
   </DocType>
 
   <DocType Name="CMExternalPage" Parent="CMChannel">
     <LinkListProperty Name="master" Max="1" LinkType="CMExternalPage" Override="true" extensions:weakLink="true"/>
     <StringProperty Name="externalUriPath" Length="256" Index="true"/>
-    <StringProperty Name="externalId" Length="256" Index="true"/>
+    <StringProperty Name="externalId" Length="256" Index="true" extensions:observe="true"/>
   </DocType>
 
   <DocType Name="CMProductList" Parent="CMQueryList">

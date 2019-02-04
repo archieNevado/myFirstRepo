@@ -39,7 +39,7 @@ public class CallToActionConfigurationFormBase extends PropertyFieldGroup implem
       settingsTextListener();
     }
 
-    forceReadOnlyValueExpression.addChangeListener(updateTextDisabledVE);
+    forceReadOnlyValueExpression && forceReadOnlyValueExpression.addChangeListener(updateTextDisabledVE);
   }
 
   [Bindable]

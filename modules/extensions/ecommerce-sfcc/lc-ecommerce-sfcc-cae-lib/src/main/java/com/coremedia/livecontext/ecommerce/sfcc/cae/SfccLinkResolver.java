@@ -12,13 +12,13 @@ import com.coremedia.livecontext.contentbeans.CMProductTeaser;
 import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
+import com.coremedia.livecontext.ecommerce.link.QueryParam;
 import com.coremedia.livecontext.ecommerce.sfcc.common.SfccCommerceConnection;
 import com.coremedia.livecontext.fragment.links.transformers.resolvers.LiveContextLinkResolver;
 import com.coremedia.livecontext.fragment.links.transformers.resolvers.Urls;
 import com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.ExternalSeoSegmentBuilder;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.MoreObjects;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
@@ -49,8 +49,8 @@ public class SfccLinkResolver implements LiveContextLinkResolver {
 
   @NonNull
   @Override
-  public Optional<String> resolveUrl(@NonNull String source, Object bean, String variant, CMNavigation navigation,
-                                     HttpServletRequest request) {
+  public Optional<String> resolveUrl(@NonNull String source, @Nullable Object bean, @Nullable String variant,
+                                     @Nullable CMNavigation navigation, @NonNull HttpServletRequest request) {
     try {
       String link = buildLink(source, bean, navigation, request);
       return Optional.ofNullable(link);
@@ -62,7 +62,8 @@ public class SfccLinkResolver implements LiveContextLinkResolver {
 
   @Nullable
   @SuppressWarnings({"IfStatementWithTooManyBranches", "OverlyComplexMethod"})
-  private String buildLink(@NonNull String source, Object bean, CMNavigation navigation, HttpServletRequest request) {
+  private String buildLink(@NonNull String source, @Nullable Object bean, @Nullable CMNavigation navigation,
+                           @NonNull HttpServletRequest request) {
     if (bean instanceof CMProductTeaser) {
       CMProductTeaser productTeaser = (CMProductTeaser) bean;
       Product product = productTeaser.getProduct();
@@ -128,8 +129,8 @@ public class SfccLinkResolver implements LiveContextLinkResolver {
     for (QueryParam queryParam : queryParams) {
       // unfortunately the original (source) link already contains request parameters
       // they shouldn't be doubled
-      if (!paramsBuilder.toString().contains(queryParam.key)) {
-        paramsBuilder.append(",'").append(queryParam.key).append("','").append(queryParam.value).append("'");
+      if (!paramsBuilder.toString().contains(queryParam.getKey())) {
+        paramsBuilder.append(",'").append(queryParam.getKey()).append("','").append(queryParam.getValue()).append("'");
       }
     }
 
@@ -144,7 +145,7 @@ public class SfccLinkResolver implements LiveContextLinkResolver {
   }
 
   @Nullable
-  private static String debug(Object bean) {
+  private static String debug(@Nullable Object bean) {
     return (bean instanceof ContentBean)
             ? ((ContentBean) bean).getContent().getPath()
             : bean + "";
@@ -157,7 +158,7 @@ public class SfccLinkResolver implements LiveContextLinkResolver {
   }
 
   @Override
-  public boolean isApplicable(Object bean) {
+  public boolean isApplicable(@Nullable Object bean, @NonNull HttpServletRequest request) {
     return isSfcc();
   }
 
@@ -167,7 +168,7 @@ public class SfccLinkResolver implements LiveContextLinkResolver {
             .map(SfccLinkResolver::splitQueryString)
             .orElseGet(Collections::emptyList);
 
-    if (queryParams.size() == 1 && queryParams.get(0).value == null) {
+    if (queryParams.size() == 1 && queryParams.get(0).getValue() == null) {
       return Collections.emptyList();
     }
 
@@ -186,25 +187,6 @@ public class SfccLinkResolver implements LiveContextLinkResolver {
     int idx = keyValuePairStr.indexOf('=');
     String key = idx > 0 ? keyValuePairStr.substring(0, idx) : keyValuePairStr;
     String value = idx > 0 && keyValuePairStr.length() > idx + 1 ? keyValuePairStr.substring(idx + 1) : null;
-    return new QueryParam(key, value);
-  }
-
-  private static class QueryParam {
-
-    final String key;
-    final String value;
-
-    QueryParam(@NonNull String key, @Nullable String value) {
-      this.key = key;
-      this.value = value;
-    }
-
-    @Override
-    public String toString() {
-      return MoreObjects.toStringHelper(this)
-              .add("key", key)
-              .add("value", value)
-              .toString();
-    }
+    return QueryParam.of(key, value);
   }
 }

@@ -1,9 +1,7 @@
 const fs = require("fs");
 const resolveFrom = require("resolve-from");
 const path = require("path");
-const escapeStringRegexp = require("escape-string-regexp");
 const { optimize: { CommonsChunkPlugin } } = require("webpack");
-const { DependencyCheckWebpackPlugin } = require("@coremedia/dependency-check");
 const {
   workspace: {
     DEFAULT_VARIANT,
@@ -18,18 +16,6 @@ const {
 const deepMerge = require("./utils/deepMerge");
 
 const themeConfig = getThemeConfig();
-
-const include = [path.resolve(".")];
-
-const exclude = [
-  // All modules but CoreMedia specific modules
-  new RegExp(
-    escapeStringRegexp(path.sep + "node_modules" + path.sep) +
-      "((?!@coremedia).)*$"
-  ),
-  new RegExp(escapeStringRegexp(path.sep + "legacy" + path.sep)),
-  new RegExp(escapeStringRegexp(path.sep + "vendor" + path.sep)),
-];
 
 const DEFAULT_ENTRY_NAME = themeConfig.name;
 const PREVIEW_ENTRY_NAME = "preview";
@@ -108,7 +94,7 @@ const previewJsPath = mainJsPath
   ? path.resolve(path.dirname(mainJsPath), "preview.js")
   : path.resolve(themeConfig.srcPath, "js/preview.js");
 
-module.exports = () => config =>
+module.exports = ({ include, exclude, dependencyCheckPlugin }) => config =>
   deepMerge(config, {
     entry: {
       ...buildEntryPoint(DEFAULT_ENTRY_NAME, DEFAULT_VARIANT, mainJsPath),
@@ -148,9 +134,7 @@ module.exports = () => config =>
       ],
     },
     plugins: [
-      new DependencyCheckWebpackPlugin({
-        exclude: exclude,
-      }),
+      dependencyCheckPlugin,
       // preview entry is meant to be loaded after the default entry has been loaded
       // so common chunks can be moved to the default entry
       new CommonsChunkPlugin({

@@ -3,6 +3,7 @@ package com.coremedia.blueprint.ecommerce.cae;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.base.multisite.cae.SiteResolver;
 import com.coremedia.cap.multisite.Site;
@@ -18,7 +19,6 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
@@ -48,7 +48,8 @@ public class WebCommerceContextInterceptorTest {
   @Before
   public void setup() {
     testling = new WebCommerceContextInterceptor();
-    StoreContext storeContext = newStoreContext();
+
+    StoreContext storeContext = StoreContextBuilderImpl.from().build();
 
     connection = new BaseCommerceConnection();
     connection.setStoreContext(storeContext);

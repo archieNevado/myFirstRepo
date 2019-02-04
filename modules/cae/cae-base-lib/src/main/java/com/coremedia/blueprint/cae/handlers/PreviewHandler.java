@@ -5,6 +5,8 @@ import com.coremedia.cap.common.IdHelper;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.IdRedirectHandlerBase;
 import com.coremedia.objectserver.web.links.LinkFormatter;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -14,9 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import static com.google.common.base.Strings.emptyToNull;
@@ -49,7 +50,8 @@ public class PreviewHandler extends IdRedirectHandlerBase {
                                @RequestParam(value = "view", required = false) String view,
                                @RequestParam(value = "site", required = false) String siteId,
                                @RequestParam(value = "taxonomyId", required = false) String taxonomyId,
-                               HttpServletRequest request) {
+                               @NonNull HttpServletRequest request,
+                               @NonNull HttpServletResponse response) {
     request.setAttribute(REQUEST_ATTR_IS_STUDIO_PREVIEW, true);
     storeSite(request, siteId);
     storeTaxonomy(request, taxonomyId);
@@ -65,7 +67,7 @@ public class PreviewHandler extends IdRedirectHandlerBase {
 
     // check if link to root model can be build - let common spring MVC exception handling kick in if link building fails
     // note that this is necessary because exceptions during rendering of RedirectView cannot be handled anymore
-    String link = linkFormatter.formatLink(rootModel, view, request, null, true);
+    String link = linkFormatter.formatLink(rootModel, view, request, response, true);
     LOG.debug("redirecting '{}' with view '{}' for bean '{}' to '{}'", id, view, rootModel, link);
     return modelAndView;
   }

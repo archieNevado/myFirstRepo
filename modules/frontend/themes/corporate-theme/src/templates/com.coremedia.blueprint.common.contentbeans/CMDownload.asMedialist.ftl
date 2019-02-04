@@ -4,7 +4,7 @@
 <#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/utils.ftl" as utils />
 <#import "*/node_modules/@coremedia/brick-media/src/freemarkerLibs/media.ftl" as media />
 
-<#assign link=cm.getLink(self.target!cm.UNDEFINED) />
+<#assign link=self.teaserSettings.renderLinkToDetailPage?then(cm.getLink(self.target!cm.UNDEFINED), "") />
 
 <div class="cm-medialist"<@preview.metadata self.content />>
   <@utils.optionalLink href="${link}">

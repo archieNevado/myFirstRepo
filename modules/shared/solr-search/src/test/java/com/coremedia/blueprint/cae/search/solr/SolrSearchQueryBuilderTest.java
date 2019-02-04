@@ -136,7 +136,8 @@ public class SolrSearchQueryBuilderTest {
     SolrSearchQueryBuilder solrQueryBuilder = createBuilder();
     SearchQueryBean input = new SearchQueryBean();
     input.setQuery("hello");
-    input.setSortFields(Arrays.asList("a", "b asc", "c dEsc", "termfreq(folderpath, \" + folderId + \") desc"));
+    input.setSortFields(Arrays.asList("a", "b asc", "c dEsc", "termfreq(folderpath, \" + folderId + \") desc",
+            "legacy1 ascending", "legacy2 descending"));
 
     SolrQuery solrQuery = solrQueryBuilder.buildQuery(input);
     assertEquals("hello", solrQuery.getQuery());
@@ -144,7 +145,8 @@ public class SolrSearchQueryBuilderTest {
             new SolrQuery.SortClause("a", SolrQuery.ORDER.desc),
             new SolrQuery.SortClause("b", SolrQuery.ORDER.asc),
             new SolrQuery.SortClause("c", SolrQuery.ORDER.desc),
-            new SolrQuery.SortClause("termfreq(folderpath, \" + folderId + \")", SolrQuery.ORDER.desc)),
-                 solrQuery.getSorts());
+            new SolrQuery.SortClause("termfreq(folderpath, \" + folderId + \")", SolrQuery.ORDER.desc),
+            new SolrQuery.SortClause("legacy1", SolrQuery.ORDER.asc),
+            new SolrQuery.SortClause("legacy2", SolrQuery.ORDER.desc)), solrQuery.getSorts());
   }
 }

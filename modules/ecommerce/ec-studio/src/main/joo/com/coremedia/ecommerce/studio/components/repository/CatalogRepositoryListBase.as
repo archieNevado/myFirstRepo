@@ -28,7 +28,6 @@ public class CatalogRepositoryListBase extends AbstractCatalogList {
   public function CatalogRepositoryListBase(config:CatalogRepositoryList = null) {
     super(config);
     on('afterrender', bindStoreAndView);
-    on("containerclick", clearSelection);
   }
 
 
@@ -50,10 +49,6 @@ public class CatalogRepositoryListBase extends AbstractCatalogList {
 
   internal function createSelectedItemsValueExpression():ValueExpression {
     return ComponentContextManager.getInstance().getContextExpression(this, CollectionView.SELECTED_REPOSITORY_ITEMS_VARIABLE_NAME);
-  }
-
-  protected function clearSelection():void {
-    selectedItemsValueExpression.setValue([]);
   }
 
   private function selectionChanged():void {

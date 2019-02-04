@@ -31,9 +31,9 @@
           <editor:items>
             <editor:LinkListPropertyField propertyName="root"/>
             <editor:StringPropertyField propertyName="id"
+                                        disabled="{config.forceReadOnlyValueExpression.getValue()}"
                                         forceReadOnlyValueExpression="{ValueExpressionFactory.createFromValue(!isAdministrator())}"/>
-            <editor:StringPropertyField propertyName="name"
-                                        forceReadOnlyValueExpression="{getSiteNameReadOnlyValueExpression()}"/>
+            <editor:StringPropertyField propertyName="name"/>
           </editor:items>
         </editor:PropertyFieldGroup>
         <bpforms:CollapsibleStringPropertyForm propertyName="siteManagerGroup"

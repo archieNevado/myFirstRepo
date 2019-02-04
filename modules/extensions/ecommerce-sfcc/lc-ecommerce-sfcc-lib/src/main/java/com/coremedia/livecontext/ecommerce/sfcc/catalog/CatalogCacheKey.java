@@ -20,7 +20,7 @@ public class CatalogCacheKey extends AbstractSfccDocumentCacheKey<CatalogDocumen
   private CatalogsResource resource;
 
   CatalogCacheKey(@NonNull CommerceId id, @NonNull StoreContext storeContext, CatalogsResource resource, CommerceCache commerceCache) {
-    super(id, storeContext, CONFIG_KEY_CATALOG, commerceCache);
+    super(id, storeContext, CONFIG_KEY_CATALOGS_FOR_STORE, commerceCache);
     this.resource = resource;
 
     if (!id.getCommerceBeanType().equals(BaseCommerceBeanType.CATALOG)) {
@@ -47,7 +47,11 @@ public class CatalogCacheKey extends AbstractSfccDocumentCacheKey<CatalogDocumen
   protected String getCacheIdentifier() {
     return assembleCacheIdentifier(
             id,
-            configKey
+            configKey,
+            storeContext.getSiteId(),
+            storeContext.getStoreId(),
+            storeContext.getLocale(),
+            storeContext.getCurrency()
     );
   }
 }

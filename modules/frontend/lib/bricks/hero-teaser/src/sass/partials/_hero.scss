@@ -2,11 +2,11 @@
   position: relative;
 
   &__picture-box {
+    background: $cm-hero-picture-background-color;
     @include aspect-ratio-box-by-breakpoint($cm-hero-media-aspect-ratio-by-breakpoint);
   }
 
   &__picture {
-    background: $cm-hero-picture-background-color;
     @include stretch-absolute();
   }
 

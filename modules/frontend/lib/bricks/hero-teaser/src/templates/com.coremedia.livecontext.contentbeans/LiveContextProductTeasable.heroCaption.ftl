@@ -7,7 +7,7 @@
 <#assign renderTeaserText=cm.localParameters().renderTeaserText!true />
 <#assign heroBlockClass=cm.localParameters().heroBlockClass!"cm-hero" />
 
-<#assign link=(cm.localParameters().renderLink!true)?then(cm.getLink(self.productInSite!cm.UNDEFINED), "") />
+<#assign link=heroTeaser.getLink(self.productInSite!cm.UNDEFINED, self.teaserSettings) />
 
 <#assign textHtml>
   <#if renderTeaserText>

@@ -9,7 +9,7 @@
 <root>
 <link href="SiteGenesis.xml" path="/Sites/SiteGenesis%20Global/France/French/Navigation/SiteGenesis"/>
 </root>
-<siteManagerGroup>manager-fr-FR</siteManagerGroup>
+<siteManagerGroup>manager-sf-fr-FR</siteManagerGroup>
 <linkedSettings>
 <link href="../Options/Settings/SiteSettings.xml" path="/Sites/SiteGenesis%20Global/France/French/Options/Settings/SiteSettings"/>
 </linkedSettings>

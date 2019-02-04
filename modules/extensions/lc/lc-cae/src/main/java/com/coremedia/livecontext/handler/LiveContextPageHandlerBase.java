@@ -128,6 +128,7 @@ public class LiveContextPageHandlerBase extends PageHandlerBase {
           scheme = (String) schemeAttribute;
         }
       }
+
       return UriComponentsHelper.prefixUri(absoluteUrlPrefix, scheme, originalUri);
     }
 
@@ -137,7 +138,8 @@ public class LiveContextPageHandlerBase extends PageHandlerBase {
   @NonNull
   protected Optional<LiveContextUrlProvider> findCommercePropertyProvider() {
     return CurrentCommerceConnection.find()
-            .flatMap(c -> c.getQualifiedServiceForVendor(LiveContextUrlProvider.class, "pageHandlerUrlProvider"));
+            .flatMap(connection -> connection.getQualifiedServiceForVendor(LiveContextUrlProvider.class,
+                    "pageHandlerUrlProvider"));
   }
 
   /**
@@ -163,7 +165,7 @@ public class LiveContextPageHandlerBase extends PageHandlerBase {
                                                                 @NonNull Map<String, Object> queryParams,
                                                                 @NonNull HttpServletRequest request) {
     return findCommercePropertyProvider()
-            .flatMap(p -> p.buildProductLink(product, queryParams, request));
+            .flatMap(provider -> provider.buildProductLink(product, queryParams, request));
   }
 
   protected boolean isPreview() {

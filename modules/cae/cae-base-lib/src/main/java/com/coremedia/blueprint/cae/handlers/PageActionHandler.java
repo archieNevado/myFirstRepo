@@ -8,9 +8,9 @@ import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.web.links.Link;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriTemplate;
@@ -42,7 +42,7 @@ public class PageActionHandler extends DefaultPageActionHandler {
   /**
    * Fallback: Handles all remaining actions by simply displaying the page
    */
-  @GetMapping(URI_PATTERN)
+  @RequestMapping(value = URI_PATTERN, method = {RequestMethod.GET, RequestMethod.POST})
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ID) ContentBean contentBean,
                                     @PathVariable(SEGMENTS_NAVIGATION) List<String> navigationPath,
                                     @PathVariable(SEGMENT_ACTION) String action,

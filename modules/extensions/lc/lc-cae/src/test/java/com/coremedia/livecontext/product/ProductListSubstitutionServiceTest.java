@@ -2,6 +2,7 @@ package com.coremedia.livecontext.product;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.multisite.Site;
@@ -21,11 +22,10 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
+import static com.google.common.collect.Lists.newArrayList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -72,13 +72,9 @@ public class ProductListSubstitutionServiceTest {
     testling = new ProductListSubstitutionService();
     testling.setLiveContextNavigationFactory(new LiveContextNavigationFactory());
 
-    listOfTablets = new ArrayList<>();
-    listOfTablets.add(product1);
-    listOfTablets.add(product2);
-    listOfTablets.add(product3);
-    listOfTablets.add(product4);
+    listOfTablets = newArrayList(product1, product2, product3, product4);
 
-    StoreContext storeContext = newStoreContext();
+    StoreContext storeContext = StoreContextBuilderImpl.from().build();
     connection = new BaseCommerceConnection();
     connection.setCatalogService(catalogService);
     connection.setStoreContext(storeContext);
@@ -93,7 +89,8 @@ public class ProductListSubstitutionServiceTest {
 
   @After
   public void tearDown() throws Exception {
-    CurrentCommerceConnection.remove();  }
+    CurrentCommerceConnection.remove();
+  }
 
   @Test
   public void getProductListPagesNavigationIsNoNoLiveContextNavigation() {
@@ -145,7 +142,7 @@ public class ProductListSubstitutionServiceTest {
   @SuppressWarnings("ConstantConditions")
   @Test
   public void getProductListListOfProductsFitsIntoOnePage() {
-    ProductList result = testling.getProductList(liveContextNavigation, listOfTablets.size()+5, 10);
+    ProductList result = testling.getProductList(liveContextNavigation, listOfTablets.size() + 5, 10);
     List<ProductInSite> loadedProducts = result.getLoadedProducts();
 
     assertTrue(loadedProducts.isEmpty());
@@ -187,12 +184,10 @@ public class ProductListSubstitutionServiceTest {
   private void checkListItems(List<Product> expectedProducts, ProductList result) {
     List<ProductInSite> loadedProducts = result.getLoadedProducts();
     assertEquals("wrong size", expectedProducts.size(), loadedProducts.size());
-    for (int i=0; i<expectedProducts.size(); ++i) {
+
+    for (int i = 0; i < expectedProducts.size(); ++i) {
       ProductInSite productInSite = loadedProducts.get(i);
       assertEquals("wrong product at " + i, expectedProducts.get(i), productInSite.getProduct());
     }
   }
-
-
-
 }

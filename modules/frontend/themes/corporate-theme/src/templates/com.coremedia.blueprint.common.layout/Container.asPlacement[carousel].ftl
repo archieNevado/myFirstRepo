@@ -4,9 +4,8 @@
 <#assign index=cm.localParameters().index!0 />
 
 <#assign additionalVariantCssClass="" />
-<#assign hasEvenIndex=(index % 2 == 0) />
-<#if !hasEvenIndex>
-  <#assign additionalVariantCssClass=" cm-carousel--alternative" />
+<#if index % 2 == 0>
+  <#assign additionalVariantCssClass=" cm-carousel--corporate-identity" />
 </#if>
 
 <#assign items=self.items![] />

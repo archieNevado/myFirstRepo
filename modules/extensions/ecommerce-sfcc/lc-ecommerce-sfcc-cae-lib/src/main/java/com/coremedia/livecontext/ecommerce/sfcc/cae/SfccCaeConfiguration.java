@@ -20,7 +20,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 @ImportResource(reader = ResourceAwareXmlBeanDefinitionReader.class,
         value = {
                 "classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml",
-                "classpath:/META-INF/coremedia/livecontext-handlers.xml"
+                "classpath:/META-INF/coremedia/livecontext-links.xml"
         }
 )
 @ComponentScan(basePackageClasses = SfccStoreContextProperties.class)

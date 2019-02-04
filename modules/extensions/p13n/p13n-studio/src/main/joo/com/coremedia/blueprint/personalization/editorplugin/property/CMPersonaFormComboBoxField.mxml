@@ -5,6 +5,7 @@
         xmlns="exml:ext.config"
         xmlns:ui="exml:com.coremedia.ui.config"
         xmlns:p13n="exml:com.coremedia.blueprint.personalization.editorplugin.config"
+        xmlns:plugins="com.coremedia.cms.editor.sdk.premular.fields.plugins.*"
         properties="{config.values}"
         typeAhead="true"
         queryMode="local"
@@ -24,6 +25,9 @@
      */
     [Bindable]
     public var bindTo:ValueExpression;
+
+    [Bindable]
+    public var forceReadOnlyValueExpression:ValueExpression;
     ]]></fx:Script>
   <fx:Declarations>
     <!--- the context of the Bean-property to bind in this field -->
@@ -40,6 +44,7 @@
     <ui:BindPropertyPlugin
             bindTo="{config.bindTo.extendBy(config.propertyContext+PersonaContextHelper.CONTEXT_NAME_SEPARATOR+config.propertyName)}"
             bidirectional="true"/>
+    <plugins:BindDisablePlugin forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}" bindTo="{bindTo}"/>
   </p13n:plugins>
 
 </p13n:CMPersonaFormComboBox>

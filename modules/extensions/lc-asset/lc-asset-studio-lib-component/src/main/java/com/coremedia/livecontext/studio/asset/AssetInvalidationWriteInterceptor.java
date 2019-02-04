@@ -9,12 +9,12 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.rest.cap.intercept.ContentWriteInterceptorBase;
 import com.coremedia.rest.cap.intercept.ContentWriteRequest;
 import com.google.common.annotations.VisibleForTesting;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.inject.Inject;
 import java.util.Collection;
 import java.util.List;
@@ -33,7 +33,7 @@ import static com.google.common.collect.Sets.newHashSet;
  */
 public class AssetInvalidationWriteInterceptor extends ContentWriteInterceptorBase {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ContentWriteInterceptorBase.class);
+  private static final Logger LOG = LoggerFactory.getLogger(AssetInvalidationWriteInterceptor.class);
 
   @VisibleForTesting
   static final String STRUCT_PROPERTY_NAME = "localSettings";
@@ -81,7 +81,7 @@ public class AssetInvalidationWriteInterceptor extends ContentWriteInterceptorBa
     List<String> newIds = CommerceReferenceHelper.getExternalReferences(localSettings);
     List<String> oldIds = CommerceReferenceHelper.getExternalReferences(content);
 
-    Collection<String> invalidationsCollection = (Collection<String>) CollectionUtils.disjunction(newIds, oldIds);  // NOSONAR  non generic legacy library
+    Collection<String> invalidationsCollection = CollectionUtils.disjunction(newIds, oldIds);
     Set<String> invalidations = newHashSet(invalidationsCollection);
 
     //if the references aren't changed...

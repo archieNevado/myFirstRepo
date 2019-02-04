@@ -11,7 +11,7 @@ import java.util.Locale;
 @ConfigurationProperties(prefix = "livecontext.sfcc")
 public class SfccConfigurationProperties {
 
-  public static final String SFCC_VENDOR_VERSION = "18.1";
+  public static final String SFCC_VENDOR_VERSION = "18.8";
 
   private String host = "shop.demandware.net";
   private String vendorVersion = SFCC_VENDOR_VERSION;

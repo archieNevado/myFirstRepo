@@ -5,7 +5,7 @@
 <#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/utils.ftl" as utils />
 
 <#assign cssClasses = cm.localParameter("islast", false)?then(" is-last", "") />
-<#assign link=cm.getLink(self.target!cm.UNDEFINED) />
+<#assign link=self.teaserSettings.renderLinkToDetailPage?then(cm.getLink(self.target!cm.UNDEFINED), "") />
 
 <div class="cm-text thumbnail ${cssClasses}"<@preview.metadata self.content />>
   <#-- headline -->

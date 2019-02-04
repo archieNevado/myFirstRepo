@@ -69,6 +69,7 @@
   <component class="com.coremedia.blueprint.studio.forms.containers.PersonSEOForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.PictureDocumentForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.RelatedDocumentForm"/>
+  <component class="com.coremedia.blueprint.studio.forms.containers.TeaserSettingsPropertyFieldGroup"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.SEOForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.SearchableForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.SettingsDocumentForm"/>
@@ -81,4 +82,5 @@
   <component class="com.coremedia.blueprint.studio.forms.containers.ViewTypeSelectorForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.VisibilityConfigurationForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.VisibilityDocumentForm"/>
+  <component class="com.coremedia.blueprint.studio.forms.variants.PreviewVariantsPreviewPanelPlugin"/>
 </componentPackage>

@@ -1,9 +1,9 @@
 #<> Convenience property to set the hostname of sfcc. Do not use or set this attribute in recipes, use the concrete attributes instead.
 default['blueprint']['lc3-sfcc']['host'] = 'localhost'
 default['blueprint']['lc3-sfcc']['application.properties']['livecontext.sfcc.host'] = node['blueprint']['lc3-sfcc']['host']
-default['blueprint']['lc3-sfcc']['application.properties']['livecontext.sfcc.vendorVersion'] = '17.8'
+default['blueprint']['lc3-sfcc']['application.properties']['livecontext.sfcc.vendorVersion'] = '18.8'
 default['blueprint']['lc3-sfcc']['application.properties']['livecontext.sfcc.ocapi.protocol'] = 'https'
-default['blueprint']['lc3-sfcc']['application.properties']['livecontext.sfcc.ocapi.version'] = 'v17_8'
+default['blueprint']['lc3-sfcc']['application.properties']['livecontext.sfcc.ocapi.version'] = 'v18_8'
 default['blueprint']['lc3-sfcc']['application.properties']['livecontext.sfcc.ocapi.dataBasePath'] = '/s/-/dw/data/'
 default['blueprint']['lc3-sfcc']['application.properties']['livecontext.sfcc.ocapi.metaBasePath'] = '/s/-/dw/meta/'
 default['blueprint']['lc3-sfcc']['application.properties']['livecontext.sfcc.ocapi.shopBasePath'] = '/s/{storeId}/dw/shop/'

@@ -78,6 +78,14 @@
             <!-- borrowed from https://stackoverflow.com/questions/17440418/is-it-possible-to-override-executions-in-maven-pluginmanagement -->
             <phase>none</phase>
           </execution>
+          <execution>
+            <!-- Allow the servlet-api compile dependency (transitive by betamax, jetty) -->
+            <id>enforce-versions</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <phase>none</phase>
+          </execution>
         </executions>
       </plugin>
     </plugins>

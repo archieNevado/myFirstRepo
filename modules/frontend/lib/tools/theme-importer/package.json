@@ -14,10 +14,10 @@
     "@coremedia/tool-utils": "^1.0.0",
     "@coremedia/zipper": "^1.0.0",
     "amazon-cognito-identity-js": "1.23.0",
-    "request": "2.81.0"
+    "request": "2.88.0"
   },
   "devDependencies": {
-    "prettier": "1.11.1"
+    "prettier": "1.15.2"
   },
   "scripts": {
     "apidoc": "jsdoc2md src/js/*.js > API.md",

@@ -44,7 +44,7 @@ Contains styling definitions for all content types as cm-medialist.
     padding: 0 0 0 $padding-base-vertical;
   }
 
-  &__headline:hover {
+  a > &__caption > &__headline:hover {
     text-decoration: underline;
   }
 

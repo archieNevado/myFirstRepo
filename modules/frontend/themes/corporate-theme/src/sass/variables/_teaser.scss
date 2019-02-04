@@ -1,1 +1,6 @@
-$cm-teasable-caption-padding: 0 12.6%;
+$cm-teasable-media-aspect-ratio-by-breakpoint: (
+  "xs-and-up": (16, 9),
+  "sm": (1, 1),
+  "md": (16, 9)
+);
+$cm-teasable-headline-color: palette(grey, darker);

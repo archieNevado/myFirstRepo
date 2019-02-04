@@ -36,7 +36,11 @@ class ContentRootNavigationsBySegmentCacheKey extends CacheKey<Map<String, Conte
     final List<Content> rootNavigations = getRootNavigations();
     final Map<String, Content> result = new HashMap<>(rootNavigations.size());
     for (Content rootNavigationContent : rootNavigations) {
-      result.put(urlPathFormattingHelper.getVanityName(rootNavigationContent), rootNavigationContent);
+      try {
+        result.put(urlPathFormattingHelper.getVanityName(rootNavigationContent), rootNavigationContent);
+      } catch (CapObjectDestroyedException e) {
+        LOG.debug("ignoring destroyed content '{}'", rootNavigationContent.getId(), e);
+      }
     }
     return Collections.unmodifiableMap(result);
   }

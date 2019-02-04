@@ -1,5 +1,7 @@
 package com.coremedia.livecontext.fragment;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
@@ -19,13 +21,16 @@ import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.ContentSiteAspect;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
-import com.coremedia.ecommerce.test.MockCommerceEnvBuilder;
+import com.coremedia.ecommerce.test.TestVendors;
 import com.coremedia.livecontext.contentbeans.CMExternalChannel;
 import com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl;
 import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.context.ResolveContextStrategy;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
+import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
@@ -47,6 +52,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Currency;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Optional;
@@ -186,6 +192,12 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
   protected CommerceConnection connection;
 
   @Mock
+  private CatalogService catalogService;
+
+  @Mock
+  private CommerceBeanFactory commerceBeanFactory;
+
+  @Mock
   protected Product product;
 
   @Mock
@@ -194,7 +206,6 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
   private T testling;
 
   protected final Cache cache = new Cache("test");
-  private MockCommerceEnvBuilder envBuilder;
 
   protected void defaultSetup() {
     testling = createTestling();
@@ -266,16 +277,34 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
     when(rootFolder.getRepository()).thenReturn(contentRepository);
     when(contentRepository.getContentType("CMExternalChannel")).thenReturn(externalChannelContentType);
 
-    envBuilder = MockCommerceEnvBuilder.create();
-    connection = envBuilder.setupEnv();
-    connection.setStoreContext(StoreContextBuilderImpl
-            .from((StoreContextImpl) connection.getStoreContext())
-            .withSiteId(SITE_ID)
-            .build());
+    connection = mockCommerceConnection();
   }
 
   protected void defaultTeardown() {
-    envBuilder.tearDownEnv();
+    CurrentCommerceConnection.remove();
+  }
+
+  private BaseCommerceConnection mockCommerceConnection() {
+    BaseCommerceConnection connection = new BaseCommerceConnection();
+
+    connection.setIdProvider(TestVendors.getIdProvider("vendor"));
+    connection.setCatalogService(catalogService);
+    connection.setCommerceBeanFactory(commerceBeanFactory);
+    connection.setStoreContext(createStoreContext());
+
+    CurrentCommerceConnection.set(connection);
+
+    return connection;
+  }
+
+  private static StoreContextImpl createStoreContext() {
+    return StoreContextBuilderImpl.from()
+            .withSiteId(SITE_ID)
+            .withStoreId("10001")
+            .withStoreName("aurora")
+            .withCatalogId(CatalogId.of("catalog"))
+            .withCurrency(Currency.getInstance("USD"))
+            .withLocale(Locale.US).build();
   }
 
   protected void assertDefaultPage(ModelAndView result) {

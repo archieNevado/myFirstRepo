@@ -3,7 +3,6 @@ package com.coremedia.blueprint.elastic.social.cae.springsocial;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.social.support.URIBuilder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -14,7 +13,6 @@ import javax.servlet.http.HttpSession;
 import static com.coremedia.blueprint.elastic.social.cae.springsocial.Requests.getServletRequest;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-@Controller
 @RequestMapping("/signin")
 public class SignInFailedController {
 

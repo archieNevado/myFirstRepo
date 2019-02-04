@@ -1,10 +1,28 @@
 // Details
 // =====================================================================================================================
 
+/* --- detail page --- */
 .#{$cm-details-prefix} {
   @include spacer($brand-primary);
 
-  // product detail page
+  &__authors-headline {
+    display: none;
+  }
+
+  &__authors,
+  &__tags,
+  &__downloads,
+  &__text {
+    padding: 0 $cm-details-padding-base-vertical;
+
+    @include breakpoint("md") {
+      padding: 0;
+    }
+  }
+}
+
+/* --- product detail page --- */
+.#{$cm-details-prefix} {
   &--product {
     .cm-details {
 
@@ -12,10 +30,52 @@
       &__headline {
         font-size: font-format(h2, mobile);
 
-        @include breakpoint(sm-and-up) {
+        @include breakpoint("sm-and-up") {
           font-size: font-format(h2);
         }
       }
+    }
+  }
+}
+
+/* --- person detail page --- */
+.#{$cm-details-prefix} {
+  &--person {
+    @include breakpoint("md") {
+      max-width: 800px !important;
+    }
+  }
+
+  &__introduction {
+    margin-bottom: $cm-details-padding-large-vertical;
+  }
+
+  &__name {
+    margin-top: 0;
+    margin-bottom: 6px;
+
+    @include breakpoint("sm-and-up") {
+      margin-bottom: 12px;
+    }
+  }
+
+  &__job {
+    font-size: font-format(p, mobile);
+    margin-top: 0;
+    margin-bottom: 0;
+
+    @include breakpoint("sm-and-up") {
+      font-size: font-format(h2, mobile);
+      margin-bottom: 12px;
+    }
+  }
+
+  &__organization,
+  &__email {
+    margin-bottom: 0;
+
+    @include breakpoint("sm-and-up") {
+      margin-bottom: 6px;
     }
   }
 
@@ -29,3 +89,4 @@
     text-align: left;
   }
 }
+

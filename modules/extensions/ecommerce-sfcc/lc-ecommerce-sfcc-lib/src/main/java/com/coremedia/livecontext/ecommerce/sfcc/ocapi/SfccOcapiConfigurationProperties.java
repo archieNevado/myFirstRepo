@@ -24,7 +24,7 @@ public class SfccOcapiConfigurationProperties {
   /**
    * URI path variant of {@link SfccConfigurationProperties#SFCC_VENDOR_VERSION}
    */
-  private String version = "v18_1";
+  private String version = "v18_8";
 
   /**
    * Base paths for REST API requests

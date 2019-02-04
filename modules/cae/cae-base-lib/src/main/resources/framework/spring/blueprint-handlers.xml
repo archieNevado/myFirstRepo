@@ -224,6 +224,19 @@
     <property name="sitesService" ref="sitesService"/>
   </bean>
 
+  <bean id="paginationHandler" class="com.coremedia.blueprint.cae.handlers.PaginationHandler" parent="pageHandlerBase">
+    <description>
+      Handler for pagination URLs for Container
+      (Currently supported only by CMQueryListImpl)
+    </description>
+    <property name="permittedLinkParameterNames">
+      <list>
+        <value>view</value>
+        <value>pageNum</value>
+      </list>
+    </property>
+  </bean>
+
 
   <!--
      ===================== services ======================

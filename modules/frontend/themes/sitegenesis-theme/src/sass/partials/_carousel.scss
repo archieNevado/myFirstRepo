@@ -1,28 +1,16 @@
 /*
-Carousel
+Slick Carousel
 ========================================================================================================================
-
-Contains styling definitions for all content types as cm-carousel.
-- cm-carousel
-- cm-carousel-control
 */
 
-.#{$cm-carousel-prefix} {
-  &-control {
-    width: 5%;
-    display: none;  // Hide controls by default (mobile first)
+.#{$cm-slick-carousel-prefix} {
+  &--inner-arrows {
+    .slick-arrow {
+      display: none;  // Hide controls by default (mobile first)
 
-    @include breakpoint(sm-and-up) {
-      display: block;
-    }
-
-  }
-
-  &-inner {
-    .left,
-    .right {
-      float: none;
+      @include breakpoint(sm-and-up) {
+        display: block;
+      }
     }
   }
-
 }

@@ -3,18 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "jquery": "3.2.1",
-    "@coremedia/ftl-utils": "^1.0.0",
-    "@coremedia/sass-utils": "^1.0.0",
-    "@coremedia/brick-media": "^1.0.0"
-  },
-  "devDependencies": {
-    "jsdoc-to-markdown": "3.0.0",
-    "prettier": "1.11.1"
-  },
-  "scripts": {
-    "apidoc": "jsdoc2md src/js/*.js > API.md",
-    "prettier": "prettier \"**/*\" --write"
+    "@coremedia/brick-detail": "^1.0.0",
+    "@coremedia/brick-media": "^1.0.0",
+    "@coremedia/sass-utils": "^1.0.0"
   },
   "coremedia": {
     "type": "brick"

@@ -24,8 +24,8 @@ public class SiteDateAppendingLinkTransformer implements LinkTransformer {
   }
 
   @Override
-  public String transform(String source, Object bean, String view, HttpServletRequest request,
-                          HttpServletResponse response, boolean forRedirect) {
+  public String transform(String source, Object bean, String view, @NonNull HttpServletRequest request,
+                          @NonNull HttpServletResponse response, boolean forRedirect) {
     findPreviewDate()
             .map(SiteDateFormatter::format)
             .ifPresent(siteDateText -> request.setAttribute(REQUEST_PARAMETER_SITE_DATE, siteDateText));

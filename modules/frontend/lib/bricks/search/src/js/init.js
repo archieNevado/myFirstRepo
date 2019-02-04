@@ -40,7 +40,7 @@ function loadSearchResultPageClickHandler($target) {
   });
   /* on dropdown */
   $target.on("change", "[data-cm-search-dropdown]", function() {
-    let link = $(this.selectedOptions).data("cm-search-sort-link");
+    let link = $(this).find('option:selected').data("cm-search-sort-link");
     loadSearchResultPage(
       link,
       searchResultPageContainerId,

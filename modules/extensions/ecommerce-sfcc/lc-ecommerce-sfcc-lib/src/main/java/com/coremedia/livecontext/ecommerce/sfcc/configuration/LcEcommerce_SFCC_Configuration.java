@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.ecommerce.sfcc.configuration;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.DefaultCommerceConnectionFinder;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.SpringCommerceBeanFactory;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cache.Cache;
@@ -25,6 +26,7 @@ import com.coremedia.livecontext.ecommerce.sfcc.ocapi.shop.resources.ShopProduct
 import com.coremedia.livecontext.ecommerce.sfcc.p13n.SegmentServiceImpl;
 import com.coremedia.livecontext.ecommerce.sfcc.user.UserContextProviderImpl;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -32,8 +34,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Scope;
-
-import edu.umd.cs.findbugs.annotations.NonNull;
 
 @Configuration
 @ImportResource(reader = ResourceAwareXmlBeanDefinitionReader.class,
@@ -58,7 +58,7 @@ class LcEcommerce_SFCC_Configuration {
                                         @NonNull CommerceCache commerceCache,
                                         @NonNull CommerceBeanFactory sfccCommerceBeanFactory) {
     return new CatalogServiceImpl(catalogsResource, productsResource, categoryProductAssignmentSearchResource,
-      productSearchResource, shopProductSearchResource, commerceCache, sfccCommerceBeanFactory);
+            productSearchResource, shopProductSearchResource, commerceCache, sfccCommerceBeanFactory);
   }
 
   @Bean
@@ -77,10 +77,11 @@ class LcEcommerce_SFCC_Configuration {
   }
 
   @Bean
-  SfccStoreContextProvider sfccStoreContextProvider(@NonNull SettingsService settingsService,
+  SfccStoreContextProvider sfccStoreContextProvider(@NonNull DefaultCommerceConnectionFinder commerceConnectionFinder,
+                                                    @NonNull SettingsService settingsService,
                                                     @NonNull SitesService sitesService,
                                                     @NonNull Cache cache) {
-    SfccStoreContextProvider storeContextProvider = new SfccStoreContextProvider();
+    SfccStoreContextProvider storeContextProvider = new SfccStoreContextProvider(commerceConnectionFinder);
     storeContextProvider.setSettingsService(settingsService);
     storeContextProvider.setSitesService(sitesService);
     storeContextProvider.setCache(cache);
@@ -121,5 +122,4 @@ class LcEcommerce_SFCC_Configuration {
     connection.setSegmentService(sfccSegmentService);
     return connection;
   }
-
 }

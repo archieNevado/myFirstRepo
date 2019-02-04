@@ -10,11 +10,11 @@ import com.coremedia.livecontext.asset.AssetSearchService;
 import com.coremedia.rest.cap.content.search.SearchService;
 import com.coremedia.rest.cap.content.search.SearchServiceResult;
 import com.google.common.collect.ImmutableList;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 public class StudioAssetSearchService implements AssetSearchService {
 
   private static final Logger LOG = LoggerFactory.getLogger(StudioAssetSearchService.class);
+
   private static final int DEFAULT_CAPACITY = 10000;
 
   private SearchService searchService;
@@ -38,38 +39,36 @@ public class StudioAssetSearchService implements AssetSearchService {
   @PostConstruct
   void initialize() {
     long capacity = cache.getCapacity(SolrQueryCacheKey.CACHE_CLASS);
-    if(capacity < 10) {
-      LOG.info("configuring default capacity {} for cache key {} (must be at least 10 to avoid warnings)", DEFAULT_CAPACITY, SolrQueryCacheKey.CACHE_CLASS);
+
+    if (capacity < 10) {
+      LOG.info("configuring default capacity {} for cache key {} (must be at least 10 to avoid warnings)",
+              DEFAULT_CAPACITY, SolrQueryCacheKey.CACHE_CLASS);
       cache.setCapacity(SolrQueryCacheKey.CACHE_CLASS, DEFAULT_CAPACITY);
     }
   }
 
   @NonNull
   private List<Content> doSearch(@NonNull String contentType, @NonNull String externalId, @NonNull Site site) {
-
     ImmutableList<String> none = ImmutableList.of();
 
     SearchServiceResult result = searchService.search(
-    /* query */              "",
-    /* limit */              -1,
-    /* sortCriteria */       none,
-    /* folder */             site.getSiteRootFolder(), true,
-    /* contentTypes */       contentTypes(contentType), true,
-    /* filterQueries */      ImmutableList.of("commerceitems:\"" + externalId + '"', "isdeleted:false"),
-    /* facetFieldCriteria */ none,
-    /* facetQueries */       none
+            /* query */              "",
+            /* limit */              -1,
+            /* sortCriteria */       none,
+            /* folder */             site.getSiteRootFolder(), true,
+            /* contentTypes */       contentTypes(contentType), true,
+            /* filterQueries */      ImmutableList.of("commerceitems:\"" + externalId + '"', "isdeleted:false"),
+            /* facetFieldCriteria */ none,
+            /* facetQueries */       none
     );
+
     return result.getHits();
   }
 
   @NonNull
   private ImmutableList<ContentType> contentTypes(@NonNull String contentType) {
-    ImmutableList<ContentType> contentTypes = ImmutableList.of();
     ContentType ct = contentRepository.getContentType(contentType);
-    if (ct != null) {
-      contentTypes = ImmutableList.of(ct);
-    }
-    return contentTypes;
+    return ct != null ? ImmutableList.of(ct) : ImmutableList.of();
   }
 
   @Required
@@ -108,7 +107,7 @@ public class StudioAssetSearchService implements AssetSearchService {
       this.externalId = externalId;
       this.site = site;
       this.cacheForInSeconds = cacheForInSeconds;
-      myEqualsValue = contentType+externalId+site.getId()+cacheForInSeconds;
+      myEqualsValue = contentType + externalId + site.getId() + cacheForInSeconds;
     }
 
     @Override
@@ -121,9 +120,11 @@ public class StudioAssetSearchService implements AssetSearchService {
       if (this == o) {
         return true;
       }
+
       if (o == null || getClass() != o.getClass()) {
         return false;
       }
+
       SolrQueryCacheKey that = (SolrQueryCacheKey) o;
       return myEqualsValue.equals(that.myEqualsValue);
     }
@@ -135,7 +136,8 @@ public class StudioAssetSearchService implements AssetSearchService {
 
     @Override
     public List<Content> evaluate(Cache cache) {
-      List<Content> result = null;
+      List<Content> result;
+
       try {
         Cache.disableDependencies();
         result = doSearch(contentType, externalId, site);
@@ -150,8 +152,8 @@ public class StudioAssetSearchService implements AssetSearchService {
         LOG.warn("Asset query has unreasonable cache time: {} and will not be cached", cacheForInSeconds);
         Cache.uncacheable();
       }
+
       return result;
     }
   }
-
 }

@@ -10,7 +10,6 @@
         xmlns="exml:ext.config"
         xmlns:ui="exml:com.coremedia.ui.config"
         xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
-        xmlns:bp-base="com.coremedia.blueprint.base.components.sites.*"
         itemId="externallyVisibleDateForm"
         title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMLinkable_externally_visible_date_text')}"
         propertyNames="{['extDisplayedDate']}"
@@ -19,7 +18,6 @@
     [ResourceBundle('com.coremedia.blueprint.studio.BlueprintDocumentTypes')]
   </fx:Metadata>
   <fx:Script><![CDATA[
-    import com.coremedia.blueprint.base.components.sites.SiteAwareFeatures;
 
     public static const xtype:String = "com.coremedia.blueprint.studio.config.externallyVisibleDateForm";
 
@@ -33,8 +31,6 @@
                            bindTo="{config.bindTo.extendBy('properties', 'extDisplayedDate')}"
                            componentProperty="externallyDisplayedDate"
                            componentEvent="externallyDisplayedDateChanged"/>
-    <bp-base:SiteAwareVisibilityPlugin feature="{SiteAwareFeatures.EXTERNALLY_VISIBLE_DATE_FORM}"
-                                       contentValueExpression="{config.bindTo}"/>
     <editor:PropertyFieldPlugin propertyName="extDisplayedDate"/>
 
   </local:plugins>
@@ -65,9 +61,8 @@
         <layout_HBox/>
       </layout>
       <items>
-        <Component
-                width="18"
-                height="22"/>
+        <Component width="18"
+                   height="22"/>
         <editor:DateTimePropertyField bindTo="{getModelExpression()}"
                                       flex="1"
                                       hideLabel="true"

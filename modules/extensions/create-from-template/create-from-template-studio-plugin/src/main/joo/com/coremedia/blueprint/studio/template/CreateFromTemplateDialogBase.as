@@ -76,12 +76,12 @@ public class CreateFromTemplateDialogBase extends StudioDialog {
 
     getBaseFolderVE().loadValue(function (path:String):void {
       setBaseFolderInModel(path);
-      getBaseFolderVE().addChangeListener(loadAndSetBaseFolder)
+      getBaseFolderVE().addChangeListener(loadAndSetBaseFolder);
     });
 
     getContentBaseFolderVE().loadValue(function (path:String):void {
       setContentBaseFolderInModel(path);
-      getContentBaseFolderVE().addChangeListener(loadAndSetContentBaseFolder)
+      getContentBaseFolderVE().addChangeListener(loadAndSetContentBaseFolder);
     });
 
     validateForm();
@@ -131,6 +131,15 @@ public class CreateFromTemplateDialogBase extends StudioDialog {
   protected function getModel():ProcessingData {
     if (!_model) {
       _model = new ProcessingData();
+
+      //pre-fill default values
+      var site:Site = editorContext.getSitesService().getPreferredSite();
+      if(site) {
+        var root:Content = site.getSiteRootDocument();
+        var property:String = resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'parent_property');
+        _model.set(property, root);
+      }
+
       _model.addValueChangeListener(validateForm);
     }
     return _model;

@@ -2,7 +2,6 @@ package com.coremedia.blueprint.cae.contentbeans;
 
 import com.coremedia.blueprint.base.cae.web.taglib.ImageFunctions;
 import com.coremedia.blueprint.base.settings.SettingsService;
-import com.coremedia.blueprint.common.cta.CallToActionButtonSettings;
 import com.coremedia.blueprint.common.imagemap.ImageMapAreaFilterable;
 import com.google.common.collect.ImmutableMap;
 
@@ -85,10 +84,5 @@ public class CMImageMapImpl extends CMImageMapBase {
 
   public void setImageMapAreaFilters(List<ImageMapAreaFilterable> imageMapAreaFilters) {
     this.imageMapAreaFilters = imageMapAreaFilters;
-  }
-
-  @Override
-  public List<CallToActionButtonSettings> getCallToActionSettings() {
-    return getCallToActionSettingsLegacy();
   }
 }

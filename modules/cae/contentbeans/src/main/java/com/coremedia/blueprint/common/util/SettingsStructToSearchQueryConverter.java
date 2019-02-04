@@ -10,6 +10,7 @@ import com.coremedia.blueprint.cae.search.solr.SolrQueryBuilder;
 import com.coremedia.blueprint.cae.search.solr.SolrSearchFormatHelper;
 import com.coremedia.blueprint.common.contentbeans.CMLocTaxonomy;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
+import com.coremedia.blueprint.common.contentbeans.CMPerson;
 import com.coremedia.blueprint.common.contentbeans.CMQueryList;
 import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
 import com.coremedia.cap.common.IdHelper;
@@ -45,6 +46,9 @@ import static java.util.Collections.singletonList;
 public class SettingsStructToSearchQueryConverter {
   private static final Logger LOG = LoggerFactory.getLogger(SettingsStructToSearchQueryConverter.class);
 
+  // An actual limit for "unlimited" searches
+  private static final int BIG_LIMIT = 1000;
+
   //See RequestAttributeConstants
   private static final String REQUEST_ATTR_NAME_PAGE_MODEL = "cmpage_model";
 
@@ -56,6 +60,7 @@ public class SettingsStructToSearchQueryConverter {
   private static final String KEY_CONTEXT_TAXONOMIES = "contextTaxonomies";
 
   private static final String KEY_DOCUMENTS = "documents";
+  private static final String KEY_AUTHORS = "authors";
   private static final String KEY_LIMIT = "limit";
   private static final String KEY_ORDER = "order";
 
@@ -67,16 +72,35 @@ public class SettingsStructToSearchQueryConverter {
   private final ContentBeanFactory contentBeanFactory;
   private final ContentRepository contentRepository;
 
+  /**
+   * Ignore the limit setting.
+   * <p>
+   * In pagination contexts it denotes the number of items per page, rather
+   * than of the complete result.  We use the same setting for the sake of UI
+   * convenience, so we must take care for the logic here.
+   */
+  private final boolean unlimited;
+
   public SettingsStructToSearchQueryConverter(CMQueryList queryList,
                                               SitesService sitesService,
                                               SettingsService settingsService,
                                               ContentRepository contentRepository,
                                               ContentBeanFactory contentBeanFactory) {
+    this(queryList, sitesService, settingsService, contentRepository, contentBeanFactory, false);
+  }
+
+  public SettingsStructToSearchQueryConverter(CMQueryList queryList,
+                                              SitesService sitesService,
+                                              SettingsService settingsService,
+                                              ContentRepository contentRepository,
+                                              ContentBeanFactory contentBeanFactory,
+                                              boolean unlimited) {
     this.queryList = queryList;
     this.sitesService = sitesService;
     this.settingsService = settingsService;
     this.contentBeanFactory = contentBeanFactory;
     this.contentRepository = contentRepository;
+    this.unlimited = unlimited;
   }
 
   /**
@@ -95,13 +119,18 @@ public class SettingsStructToSearchQueryConverter {
       .map(Site::getSiteRootDocument)
       .ifPresent(root -> searchQuery.setContext(String.valueOf(IdHelper.parseContentId(root.getId()))));
 
-    applyLimit(searchQuery);
+    if (unlimited) {
+      searchQuery.setLimit(BIG_LIMIT);
+    } else {
+      applyLimit(searchQuery);
+    }
     applyOrder(searchQuery);
 
     Struct fqStruct = settingsService.setting(KEY_FQ, Struct.class, queryList.getContent());
     if (fqStruct != null) {
       applyDocumentType(fqStruct, searchQuery);
       applyContexts(fqStruct, searchQuery);
+      applyAuthors(fqStruct, searchQuery);
       applyKeywords(fqStruct, KEY_SUBJECT_TAXONOMY, SearchConstants.FIELDS.SUBJECT_TAXONOMY, searchQuery);
       applyKeywords(fqStruct, KEY_LOCATION_TAXONOMY, SearchConstants.FIELDS.LOCATION_TAXONOMY, searchQuery);
       applyContextKeywords(fqStruct, KEY_CONTEXT_TAXONOMIES, searchQuery);
@@ -174,6 +203,20 @@ public class SettingsStructToSearchQueryConverter {
     }
   }
 
+  /**
+   * Takes the authors from the query (person documents) and
+   * add them as authors criteria to the query.
+   */
+  private void applyAuthors(Struct fqStruct, SearchQueryBean searchQuery) {
+    List<Content> personContents = StructUtil.getLinks(fqStruct, KEY_AUTHORS);
+    if (!personContents.isEmpty()) {
+      List<CMPerson> personBeans = contentBeanFactory.createBeansFor(personContents, CMPerson.class);
+      List<String> personIds = ContentBeanSolrSearchFormatHelper.cmObjectsToIds(personBeans);
+      searchQuery.addFilter(Condition.is(
+              SearchConstants.FIELDS.AUTHORS, Value.anyOf(personIds)));
+    }
+  }
+
 
   /**
    * Parses the documents types, retrieves the concrete instances from
@@ -181,10 +224,7 @@ public class SettingsStructToSearchQueryConverter {
    */
   private void applyDocumentType(Struct fqStruct, SearchQueryBean searchQuery) {
     String docTypes = StructUtil.getString(fqStruct, KEY_DOCUMENT_TYPE);
-    if (!StringUtils.isEmpty(docTypes)) {
-      final Condition documentTypeFilter = SearchQueryUtil.createDocumentTypeFilter(docTypes, contentRepository);
-      searchQuery.addFilter(documentTypeFilter);
-    }
+    SearchQueryUtil.addDocumentTypeFilter(searchQuery, docTypes, contentRepository);
   }
 
   /**

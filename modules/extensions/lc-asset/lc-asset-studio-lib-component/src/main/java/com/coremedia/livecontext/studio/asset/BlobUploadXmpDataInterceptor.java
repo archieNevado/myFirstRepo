@@ -19,12 +19,12 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.rest.cap.intercept.ContentWriteInterceptorBase;
 import com.coremedia.rest.cap.intercept.ContentWriteRequest;
 import com.google.common.annotations.VisibleForTesting;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
@@ -125,7 +125,6 @@ public class BlobUploadXmpDataInterceptor extends ContentWriteInterceptorBase {
   @NonNull
   private List<String> getProductIds(@NonNull CommerceConnection commerceConnection,
                                      @NonNull ContentWriteRequest request, @NonNull Blob blob) {
-
     List<String> productIds = new ArrayList<>();
 
     Iterable<String> xmpIds = getXmpIds(request, blob);

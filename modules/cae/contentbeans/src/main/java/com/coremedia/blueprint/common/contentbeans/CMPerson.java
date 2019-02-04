@@ -54,6 +54,30 @@ public interface CMPerson extends CMTeasable {
 
   /**
    * <p>
+   * Returns the value of the document property {@link #HTML_TITLE}.
+   * If property {@link #HTML_TITLE} is empty,  property {@link #DISPLAY_NAME} will be used as fallback.
+   * </p>
+   *
+   * @return the value of the document property {@link #HTML_TITLE} or property {@link #DISPLAY_NAME} as fallback
+   * @cm.template.api
+   */
+  @Override
+  String getHtmlTitle();
+
+  /**
+   * <p>
+   * Returns the value of the document property {@link #TEASER_TITLE}.
+   * If property {@link #TEASER_TITLE} is empty,  property {@link #DISPLAY_NAME} will be used as fallback.
+   * </p>
+   *
+   * @return the value of the document property {@link #TEASER_TITLE} or property {@link #DISPLAY_NAME} as fallback
+   * @cm.template.api
+   */
+  @Override
+  String getTeaserTitle();
+
+  /**
+   * <p>
    * Returns the value of the document property {@link #FIRST_NAME}.
    * </p>
    *
@@ -90,7 +114,7 @@ public interface CMPerson extends CMTeasable {
    * @return the value of the document property {@link #EMAIL}
    * @cm.template.api
    */
-   @PersonalData String getEMail();
+  @PersonalData String getEMail();
 
   /**
    * <p>
@@ -118,7 +142,16 @@ public interface CMPerson extends CMTeasable {
    * </p>
    *
    * @return the value of the document property {@link #MISC}
-   * @cm.template.api
    */
   @PersonalData Struct getMisc();
+
+  /**
+   * <p>
+   * Returns the value of the document property {@link #MISC} as nested map.
+   * </p>
+   *
+   * @return the value of the document property {@link #MISC} as map
+   * @cm.template.api
+   */
+  @PersonalData Map<String, Object> getFurtherDetails();
 }

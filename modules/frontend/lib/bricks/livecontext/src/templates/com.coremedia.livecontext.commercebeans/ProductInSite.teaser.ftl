@@ -10,18 +10,16 @@
   <#assign link=cm.getLink(self) />
 
   <#assign renderTeaserTitle=cm.localParameter("renderTeaserTitle", true) />
-  <#assign renderTeaserText=cm.localParameter("renderTeaserText", true) />
-  <#assign renderDimmer=cm.localParameter("renderDimmer", true) />
   <#assign renderEmptyImage=cm.localParameter("renderEmptyImage", true) />
 
   <div class="${blockClass} ${blockClass}--product ${cssClasses} ${additionalClass}"<@preview.metadata metadata![] />>
     <div class="${blockClass}__wrapper">
       <@utils.optionalLink href="${link}">
         <#-- picture -->
-        <@bp.responsiveImage self=(self.product.catalogPicture)!cm.UNDEFINED classPrefix=blockClass displayEmptyImage=renderEmptyImage displayDimmer=renderDimmer limitAspectRatios=bp.setting(cmpage.navigation, "default_aspect_ratios_for_teaser", [])/>
+        <@bp.responsiveImage self=(self.product.catalogPicture)!cm.UNDEFINED classPrefix=blockClass displayEmptyImage=renderEmptyImage limitAspectRatios=bp.setting(cmpage.navigation, "default_aspect_ratios_for_teaser", [])/>
         <div class="${blockClass}__caption">
           <#if renderTeaserTitle>
-            <h3 class="${blockClass}__headline">${(self.product.name)!""}</h3>
+            <h3 class="${blockClass}__headline">${self.product.name!""}</h3>
           </#if>
           <@cm.include self=self.product!cm.UNDEFINED view="info" params={
             "classBox": "${blockClass}__info",

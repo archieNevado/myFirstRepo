@@ -22,7 +22,6 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 import java.util.List;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper.parseCommerceIdOrThrow;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -85,7 +84,7 @@ public class CommerceSegmentSourceTest {
     List<Segment> segmentList = newArrayList(seg1, seg2);
     when(segmentService.findSegmentsForCurrentUser(any(StoreContext.class))).thenReturn(segmentList);
 
-    StoreContext storeContext = newStoreContext();
+    StoreContext storeContext = StoreContextBuilderImpl.from().build();
     commerceConnection.setStoreContext(storeContext);
 
     testling.preHandle(request, response, contextCollection);
@@ -95,8 +94,7 @@ public class CommerceSegmentSourceTest {
 
   @Test
   public void testPreHandleFromUserContext() {
-    StoreContext storeContext = StoreContextBuilderImpl
-            .from(newStoreContext())
+    StoreContext storeContext = StoreContextBuilderImpl.from()
             .withUserSegments("id1,id2")
             .build();
     commerceConnection.setStoreContext(storeContext);

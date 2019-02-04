@@ -8,7 +8,6 @@
   <import resource="classpath:/framework/spring/lc-ecommerce-services.xml"/>
   <import resource="classpath:/META-INF/coremedia/lc-services.xml"/>
   <import resource="classpath:/com/coremedia/cache/cache-services.xml"/>
-  <import resource="classpath:/com/coremedia/cae/uapi-services.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/links/bpbase-urlpathformatting.xml"/>
 
@@ -94,35 +93,6 @@
         class="com.coremedia.blueprint.base.rest.validators.ChannelReferrerValidator">
     <property name="connection" ref="connection"/>
     <property name="contentType" value="CMExternalChannel"/>
-  </bean>
-
-  <bean abstract="true" id="abstractUniqueExternalIdValidator"
-        class="com.coremedia.blueprint.base.rest.validators.UniqueInSiteStringValidator">
-    <constructor-arg index="0" name="contentRepository" ref="contentRepository"/>
-    <constructor-arg index="2" name="property" value="externalId"/>
-    <constructor-arg index="4" name="sitesService" ref="sitesService"/>
-    <property name="validatingSubtypes" value="true"/>
-  </bean>
-
-  <bean id="catalogExternalPageIndex"
-        class="com.coremedia.blueprint.base.util.ContentStringPropertyIndex">
-    <constructor-arg index="0" name="contentRepository" ref="contentRepository"/>
-    <constructor-arg index="1" name="contentType" value="CMExternalPage"/>
-    <constructor-arg index="2" name="property" value="externalId"/>
-  </bean>
-
-  <bean id="externalPageUniqueExternalIdValidator"
-        parent="abstractUniqueExternalIdValidator"
-        class="com.coremedia.blueprint.base.rest.validators.UniqueInSiteStringValidator">
-    <constructor-arg index="1" name="contentType" value="CMExternalPage"/>
-    <constructor-arg index="3" name="lookupFunction" value="#{catalogExternalPageIndex.createContentsByValueFunction()}"/>
-  </bean>
-
-  <bean id="externalChannelUniqueExternalIdValidator"
-        parent="abstractUniqueExternalIdValidator"
-        class="com.coremedia.blueprint.base.rest.validators.UniqueInSiteStringValidator">
-    <constructor-arg index="1" name="contentType" value="CMExternalChannel"/>
-    <constructor-arg index="3" name="lookupFunction" value="#{catalogExternalChannelIndex.createContentsByValueFunction()}"/>
   </bean>
 
 </beans>

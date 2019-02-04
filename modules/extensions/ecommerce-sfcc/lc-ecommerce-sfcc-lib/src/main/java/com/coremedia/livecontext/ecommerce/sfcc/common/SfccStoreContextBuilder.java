@@ -2,7 +2,7 @@ package com.coremedia.livecontext.ecommerce.sfcc.common;
 
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 import com.google.common.collect.ImmutableMap;
@@ -20,6 +20,7 @@ import java.util.Map;
 @DefaultAnnotation(NonNull.class)
 public class SfccStoreContextBuilder implements StoreContextBuilder {
 
+  private final CommerceConnection connection;
   private final ImmutableMap<String, String> replacements;
   private String siteId;
   private String storeId;
@@ -37,6 +38,7 @@ public class SfccStoreContextBuilder implements StoreContextBuilder {
 
   @SuppressWarnings({"MethodWithTooManyParameters", "squid:S00107"}) // "Methods should not have too many parameters"
   private SfccStoreContextBuilder(
+          CommerceConnection connection,
           Map<String, String> replacements,
           String siteId,
           String storeId,
@@ -45,6 +47,7 @@ public class SfccStoreContextBuilder implements StoreContextBuilder {
           CatalogAlias catalogAlias,
           Currency currency,
           Locale locale) {
+    this.connection = connection;
     this.replacements = ImmutableMap.copyOf(replacements);
     this.siteId = siteId;
     this.storeId = storeId;
@@ -57,6 +60,7 @@ public class SfccStoreContextBuilder implements StoreContextBuilder {
 
   @SuppressWarnings({"MethodWithTooManyParameters", "squid:S00107"}) // "Methods should not have too many parameters"
   public static SfccStoreContextBuilder from(
+          CommerceConnection connection,
           Map<String, String> replacements,
           String siteId,
           String storeId,
@@ -66,6 +70,7 @@ public class SfccStoreContextBuilder implements StoreContextBuilder {
           Currency currency,
           Locale locale) {
     return new SfccStoreContextBuilder(
+            connection,
             replacements,
             siteId,
             storeId,
@@ -77,8 +82,9 @@ public class SfccStoreContextBuilder implements StoreContextBuilder {
     );
   }
 
-  public static SfccStoreContextBuilder from(StoreContext storeContext) {
+  public static SfccStoreContextBuilder from(SfccStoreContext storeContext) {
     return from(
+            storeContext.getConnection(),
             storeContext.getReplacements(),
             storeContext.getSiteId(),
             storeContext.getStoreId(),
@@ -173,6 +179,7 @@ public class SfccStoreContextBuilder implements StoreContextBuilder {
   @Override
   public SfccStoreContext build() {
     return new SfccStoreContext(
+            connection,
             replacements,
             siteId,
             storeId,

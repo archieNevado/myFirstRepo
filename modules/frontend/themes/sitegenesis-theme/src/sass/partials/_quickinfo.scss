@@ -1,4 +1,38 @@
-@include breakpoint(md) {
+.cm-quickinfo {
+
+  &__title {
+    font-size: 1.1333rem; // overriding cm-heading5
+    font-weight: normal;
+  }
+
+  &__close {
+    padding: 0;
+
+    .cm-icon__symbol {
+      content: "";
+      margin: 0;
+      width: 20px;
+      height: 20px;
+      font-size: 1.2rem;
+      background-color: transparent;
+      color: $base-font-color;
+      z-index: 2;
+      &:before {
+        line-height: 1;
+      }
+    }
+
+  }
+
+  button {
+    transition: unset;
+    &:hover {
+      background-color: transparent;
+    }
+  }
+}
+
+@include breakpoint("md") {
   .mfp-content .cm-teaser__quickinfo {
     margin: 0 auto;
     position: relative;
@@ -13,33 +47,43 @@
   }
 }
 
-@include breakpoint(xs) {
+@include breakpoint("xs") {
   .cm-quickinfo {
     &__controls a {
       margin-top: 4px;
       display: inline-block;
     }
+
+    &__close {
+      margin-top: 8px;
+
+      .cm-icon__symbol {
+        width: 20px;
+        height: 20px;
+        font-size: 1.2rem;
+      }
+    }
+
   }
 }
 
-@include breakpoint(sm-and-up) {
+@include breakpoint("sm-and-up") {
   .cm-quickinfo--main.cm-quickinfo--active {
     display: none;
   }
 
   .cm-quickinfo {
     box-sizing: border-box;
-    background: #fff;
+    background: palette(white);
     width: 306px;
     padding: 43px 3px 3px; /* leave space for absolute positioned title, which is always shown */
-    box-shadow: 0 0 10px #000;
+    box-shadow: 0 0 10px palette(black);
 
     &__title {
       position: absolute;
-      font-weight: normal;
       top: 0;
       left: 0;
-      margin: 5px 13px;
+      margin: 5px 30px 5px 5px;
       line-height: 2rem;
     }
 
@@ -52,27 +96,9 @@
     }
 
     &__close {
-      border: none;
-      background: transparent;
-      padding: 0;
-
       position: absolute;
       right: 10px;
       top: 10px;
-
-      .cm-icon__symbol {
-        content: "";
-        margin: 0;
-        width: 20px;
-        height: 20px;
-        font-size: 1.2rem;
-        background-color: transparent;
-        color: $base-font-color;
-        z-index: 2;
-        &:before {
-          line-height: 1;
-        }
-      }
     }
 
     &__listprice,
@@ -89,7 +115,7 @@
     }
 
     &__property {
-      @include breakpoint(sm-and-up) {
+      @include breakpoint("sm-and-up") {
         display: block;
         text-align: left;
       }
@@ -99,10 +125,10 @@
       position: absolute;
       right: 0.5rem;
       top: 14.75rem;
-      background: #fff;
+      background: palette(white);
 
-      @include breakpoint(sm-and-up) {
-        background: #FFFFFF;
+      @include breakpoint("sm-and-up") {
+        background: palette(white);
         height: auto;
         margin-top: -5rem;
         position: absolute;
@@ -207,7 +233,7 @@
 }
 
 .cm-imagemap__quickinfo {
-  @include breakpoint(sm-and-up) {
+  @include breakpoint("sm-and-up") {
     position: absolute;
 
     .cm-quickinfo__picture-box {

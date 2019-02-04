@@ -15,7 +15,7 @@
 
 <@defaultTeaser.renderMedia media=media
                             teaserBlockClass=cm.localParameters().teaserBlockClass!cm.UNDEFINED
-                            link=(cm.localParameters().renderLink!true)?then(cm.getLink(self.target!cm.UNDEFINED), "")
+                            link=defaultTeaser.getLink(self.target!cm.UNDEFINED, self.teaserSettings)
                             openInNewTab=self.openInNewTab
                             limitAspectRatios=cm.localParameters().limitAspectRatios!cm.UNDEFINED
                             metadata=metadata
