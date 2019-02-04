@@ -527,10 +527,10 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
         "children": [
           {"$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Women"}
         ],
-        "childrenByName": {"displayName":"Women", "child": {
-          "Women": {
-            "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Women"
-          }}
+        "childrenByName": {
+          "Women": {"displayName":"Women", "child": {
+                "$Ref": "livecontext/category/HeliosSiteId/catalog/NO_WS/Women"
+              }}
         },
         "externalId": "Apparel",
         "displayName": "Apparel",

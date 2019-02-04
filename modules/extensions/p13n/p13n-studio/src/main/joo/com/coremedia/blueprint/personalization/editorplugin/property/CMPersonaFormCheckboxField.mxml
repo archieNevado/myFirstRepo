@@ -3,7 +3,7 @@
         xmlns:fx="http://ns.adobe.com/mxml/2009"
         xmlns:exml="http://www.jangaroo.net/exml/0.8"
         xmlns="exml:ext.config"
-        xmlns:ui="exml:com.coremedia.ui.config">
+        xmlns:ui="exml:com.coremedia.ui.config" xmlns:plugins="com.coremedia.cms.editor.sdk.premular.fields.plugins.*">
   <fx:Script><![CDATA[
     import com.coremedia.personalization.ui.util.PersonaContextHelper;
     import com.coremedia.ui.data.ValueExpression;
@@ -19,6 +19,9 @@
      */
     [Bindable]
     public var bindTo:ValueExpression;
+
+    [Bindable]
+    public var forceReadOnlyValueExpression:ValueExpression;
     ]]></fx:Script>
   <fx:Declarations>
     <!--- the context of the Bean-property to bind in this field -->
@@ -32,6 +35,7 @@
     <ui:BindPropertyPlugin
             bindTo="{config.bindTo.extendBy(config.propertyContext+PersonaContextHelper.CONTEXT_NAME_SEPARATOR+config.propertyName)}"
             bidirectional="true"/>
+    <plugins:BindDisablePlugin bindTo="{bindTo}" forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
   </plugins>
 
 </Checkbox>

@@ -35,6 +35,11 @@
       <type>coremedia-application</type>
       <scope>runtime</scope>
     </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>coremedia-spring-boot-traditional</artifactId>
+      <scope>runtime</scope>
+    </dependency>
   </dependencies>
 
   <build>

@@ -8,6 +8,7 @@ import com.coremedia.objectserver.web.links.LinkTransformer;
 import com.coremedia.objectserver.web.links.ParameterAppendingLinkTransformer;
 import com.coremedia.personalization.preview.PreviewPersonalizationHandlerInterceptor;
 import com.coremedia.personalization.preview.TestContextSource;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +37,8 @@ public class PersonaParameterAppendingLinkTransformer implements LinkTransformer
   }
 
   @Override
-  public String transform(String source, Object bean, String view, HttpServletRequest request, HttpServletResponse response, boolean forRedirect) {
+  public String transform(String source, Object bean, String view, @NonNull HttpServletRequest request,
+                          @NonNull HttpServletResponse response, boolean forRedirect) {
     if((bean instanceof CMLinkable || bean instanceof ContentBeanBackedPageGridPlacement
             || bean instanceof DynamizableContainer) && !(bean instanceof CMExternalLink)) {
       String transformed = testContextAppender.transform(source, bean, view, request, response, forRedirect);

@@ -661,12 +661,12 @@ $(function() {
 
   // prevent iOS two click bug
 
-  $(".cm-square__wrapper a, .cm-teasable__text-content a")
+  $(".cm-square a, .cm-teasable a")
     .on("touchstart", function() {
       $(this).data("distance", $("body").scrollTop());
     })
     .on("touchend", function() {
-      if ($(this).data("distance") == $("body").scrollTop()) {
+      if ($(this).data("distance") === $("body").scrollTop()) {
         $(this).click();
       }
     });

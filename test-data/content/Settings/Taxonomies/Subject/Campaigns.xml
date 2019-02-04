@@ -29,7 +29,6 @@
 </authors>
 <value>Campaigns</value>
 <children>
-<link href="Apparel%281%29.xml" path="/Settings/Taxonomies/Subject/Apparel%281%29"/>
 <link href="Winter%20Sports.xml" path="/Settings/Taxonomies/Subject/Winter%20Sports"/>
 <link href="Season.xml" path="/Settings/Taxonomies/Subject/Season"/>
 <link href="Trends.xml" path="/Settings/Taxonomies/Subject/Trends"/>

@@ -27,7 +27,6 @@ public class StoreResourceTest {
   @Before
   public void setup() {
     storeResource.setPbeShopUrlTargetResolvers(Collections.singletonList(pbeShopUrlTargetResolver));
-    storeResource.initialize();
   }
 
   @Test

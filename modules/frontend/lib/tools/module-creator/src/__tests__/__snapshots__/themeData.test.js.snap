@@ -18,7 +18,7 @@ exports[`initPackageJson() returns data for package.json 1`] = `
     \\"some-other-brick\\": \\"^1.0.0\\",
     \\"@coremedia/js-logger\\": \\"^1.0.0\\",
     \\"@coremedia/sass-utils\\": \\"^1.0.0\\",
-    \\"jquery\\": \\"3.2.1\\"
+    \\"jquery\\": \\"3.3.1\\"
   },
   \\"dependencies\\": {
     \\"@coremedia/cm-cli\\": \\"^2.0.0\\",
@@ -26,7 +26,7 @@ exports[`initPackageJson() returns data for package.json 1`] = `
     \\"webpack\\": \\"3.10.0\\"
   },
   \\"devDependencies\\": {
-    \\"prettier\\": \\"1.11.1\\"
+    \\"prettier\\": \\"1.15.2\\"
   },
   \\"main\\": \\"src/js/index.js\\",
   \\"coremedia\\": {

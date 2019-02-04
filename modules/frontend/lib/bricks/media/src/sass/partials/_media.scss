@@ -4,8 +4,8 @@
   // responsive image, use width of outer container
   &--responsive {
     vertical-align: middle;
-    width: 100%;
     @include stretch-absolute();
+    color: transparent; // hide alt text
   }
 
   // lazy loading, show spinner
@@ -14,7 +14,6 @@
     background-repeat: no-repeat;
     background-position: center;
     background-image: url("../../img/loader_big.gif");
-    color: transparent; // hide alt text
   }
 
   // alternative image
@@ -22,4 +21,10 @@
     background-color: $cm-media-missing-background-color;
     background-size: 50%;
   }
+}
+
+// default aspect ratios for most use cases, overwritten in bricks/themes
+.cm-teasable__picture-box,
+.cm-hero__picture-box {
+    @include aspect-ratio-box(4, 3);
 }

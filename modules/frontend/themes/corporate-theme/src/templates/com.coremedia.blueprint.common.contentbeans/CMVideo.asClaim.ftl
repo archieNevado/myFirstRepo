@@ -4,26 +4,29 @@
 
 <#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/utils.ftl" as utils />
 
+<#assign link=self.teaserSettings.renderLinkToDetailPage?then(cm.getLink(self.target!cm.UNDEFINED), "") />
 <#assign cssClasses = cm.localParameter("cssClass", "") + cm.localParameter("islast", false)?then(" is-last", "") />
 
 <div class="cm-claim cm-claim--video thumbnail ${cssClasses}"<@preview.metadata self.content />>
-  <@utils.optionalLink href="${cm.getLink(self.target)}" attr={ "class": "cm-claim__link" }>
-    <#-- picture -->
-    <#if self.picture?has_content>
-      <@cm.include self=self.picture view="media" params={
-        "limitAspectRatios": [ "portrait_ratio1x1" ],
-        "classBox": "cm-claim__picture-box",
-        "classMedia": "cm-claim__picture",
-        "metadata": ["properties.pictures"]
-      }/>
-    <#else>
-      <div class="cm-claim__picture-box">
-        <div class="cm-claim__picture cm-image--blank"></div>
-      </div>
-    </#if>
+  <@utils.optionalLink href="${link}" attr={ "class": "cm-claim__link" }>
+    <div class="cm-claim__wrapper">
+      <#-- picture -->
+      <#if self.picture?has_content>
+        <@cm.include self=self.picture view="media" params={
+          "limitAspectRatios": [ "portrait_ratio1x1" ],
+          "classBox": "cm-claim__picture-box",
+          "classMedia": "cm-claim__picture",
+          "metadata": ["properties.pictures"]
+        }/>
+      <#else>
+        <div class="cm-claim__picture-box">
+          <div class="cm-claim__picture cm-image--blank"></div>
+        </div>
+      </#if>
 
-    <#-- play overlay icon-->
-    <@cm.include self=self view="_playButton" params={"blockClass": "cm-claim", "openAsPopup": true}/>
+      <#-- play overlay icon-->
+      <@cm.include self=self view="_playButton" params={"blockClass": "cm-claim", "openAsPopup": true}/>
+    </div>
   </@utils.optionalLink>
 
   <div class="caption">

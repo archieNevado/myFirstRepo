@@ -141,15 +141,12 @@ public class SolrSearchQueryBuilder implements SolrQueryBuilder {
   private static SolrQuery.SortClause newSortClause(String sortSpec) {
     sortSpec = sortSpec.trim();
 
-    if (sortSpec.length() > SORT_ORDER_ASC.length() + 1 &&
-        sortSpec.substring(sortSpec.length() - SORT_ORDER_ASC.length() - 1).equalsIgnoreCase(' ' + SORT_ORDER_ASC)) {
-      String sort = sortSpec.substring(0, sortSpec.length() - SORT_ORDER_ASC.length() - 1).trim();
-      return new SolrQuery.SortClause(sort, SolrQuery.ORDER.asc);
-    }
-    if (sortSpec.length() > SORT_ORDER_DESC.length() + 1 &&
-        sortSpec.substring(sortSpec.length() - SORT_ORDER_DESC.length() - 1).equalsIgnoreCase(' ' + SORT_ORDER_DESC)) {
-      String sort = sortSpec.substring(0, sortSpec.length() - SORT_ORDER_DESC.length() - 1).trim();
-      return new SolrQuery.SortClause(sort, SolrQuery.ORDER.desc);
+    for (Map.Entry<String, SolrQuery.ORDER> entry : SORT_ORDER_MAPPING.entrySet()) {
+      if (sortSpec.length() > entry.getKey().length() + 1 &&
+          sortSpec.substring(sortSpec.length() - entry.getKey().length() - 1).equalsIgnoreCase(' ' + entry.getKey())) {
+        String sort = sortSpec.substring(0, sortSpec.length() - entry.getKey().length() - 1).trim();
+        return new SolrQuery.SortClause(sort, entry.getValue());
+      }
     }
 
     // default order is descending
@@ -235,7 +232,7 @@ public class SolrSearchQueryBuilder implements SolrQueryBuilder {
    *
    * @param query the query string
    * @return the escaped query string
-   * @see <a href="https://lucene.apache.org/solr/guide/6_6/local-parameters-in-queries.html">
+   * @see <a href="https://lucene.apache.org/solr/guide/7_6/local-parameters-in-queries.html">
    *   Solr Reference Guide: Local Parameters in Queries</a>
    */
   private static String escapeLocalParamsQueryString(String query) {

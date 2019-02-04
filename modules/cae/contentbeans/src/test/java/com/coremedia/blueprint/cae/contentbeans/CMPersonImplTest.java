@@ -9,6 +9,7 @@ import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
+import com.google.common.collect.ImmutableMap;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,6 +23,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.context.request.RequestContextHolder;
 
 import javax.inject.Inject;
+import java.util.Collections;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -33,8 +36,10 @@ public class CMPersonImplTest {
 
   private static final int PERSON1_ID = 2;
   private static final int PERSON2_ID = 4;
+  private static final int PERSON3_ID = 6;
   private CMPerson person1;
   private CMPerson person2;
+  private CMPerson person3;
 
   @Inject
   private ContentRepository contentRepository;
@@ -45,6 +50,7 @@ public class CMPersonImplTest {
   public void setup() {
     person1 = getContentBean(PERSON1_ID);
     person2 = getContentBean(PERSON2_ID);
+    person3 = getContentBean(PERSON3_ID);
   }
 
   private <T> T getContentBean(int id) {
@@ -99,6 +105,29 @@ public class CMPersonImplTest {
     String stringProperty = miscStruct.getString("stringProperty");
     assertNotNull(miscStruct);
     assertEquals("testString", stringProperty);
+  }
+
+  @Test
+  public void getFurtherDetailsMap() {
+    @PersonalData Map<String, Object> miscMap = person1.getFurtherDetails();
+    assertNotNull(miscMap);
+    Map<String, Object> expectedMap = ImmutableMap.of("stringProperty", "testString");
+    assertEquals(expectedMap, miscMap);
+    @PersonalData Map<String, Object> emptyMap = person2.getFurtherDetails();
+    assertEquals(Collections.emptyMap(), emptyMap);
+  }
+
+  @Test
+  public void getHtmlTitle() {
+    assertEquals("htmlTitle_Person", person2.getHtmlTitle());
+    assertEquals("fallback to displayName", person1.getDisplayName(), person1.getHtmlTitle());
+    assertEquals("fallback to firstName and lastName", person3.getDisplayName(), person3.getHtmlTitle());
+  }
+
+  @Test
+  public void getTeaserTitle() {
+    assertEquals("displayName_Person", person1.getTeaserTitle());
+    assertEquals(person2.getDisplayName(), person2.getTeaserTitle());
   }
 
   @Configuration

@@ -16,8 +16,6 @@
     [ResourceBundle('com.coremedia.ecommerce.studio.ECommerceStudioPlugin')]
   </fx:Metadata>
   <fx:Script><![CDATA[
-    import com.coremedia.cms.editor.sdk.collectionview.CollectionSearchContextMenu;
-    import com.coremedia.cms.editor.sdk.collectionview.CollectionSearchContextMenu;
     import com.coremedia.cms.editor.sdk.util.RichTextPlainTextTransformer;
     import com.coremedia.ecommerce.studio.helper.AugmentationUtil;
     import com.coremedia.ecommerce.studio.helper.CatalogHelper;
@@ -27,25 +25,24 @@
 
     public static const xtype:String = "com.coremedia.ecommerce.studio.config.catalogSearchList";
 
-    private var config:CatalogSearchList;
-    private var catalogHelper:CatalogHelper;
-    private var lastClickedCellVE:ValueExpression;
-
     /**
      * The itemId of the copy to system clipboard menu item.
      */
     public static const COPY_COLUMN_CONTENT_TO_SYSTEM_CLIPBOARD:String = "copyCellContentToSystemClipboard";
 
-
+    private var catalogHelper:CatalogHelper;
+    private var lastClickedCellVE:ValueExpression;
 
     // called by generated constructor code
+    //noinspection JSUnusedLocalSymbols
     private function __initialize__():void {
       catalogHelper = CatalogHelper.getInstance();
       lastClickedCellVE = ValueExpressionFactory.createFromValue();
     }
 
-    public native function CatalogSearchList(config:CatalogSearchList = null);
+    private var config:CatalogSearchList;
 
+    public native function CatalogSearchList(config:CatalogSearchList = null);
 
     [Bindable]
     public var searchResultHitsValueExpression:ValueExpression;
@@ -82,7 +79,7 @@
               <plugins:items>
                 <MenuItem itemId="{COPY_COLUMN_CONTENT_TO_SYSTEM_CLIPBOARD}">
                   <baseAction>
-                    <editor:CopyCellContentToSystemClipboardAction lastClickedCellVE="{lastClickedCellVE}" selectedItemsValueExpression="{config.selectedItemsValueExpression}"></editor:CopyCellContentToSystemClipboardAction>
+                    <editor:CopyCellContentToSystemClipboardAction lastClickedCellVE="{lastClickedCellVE}" selectedItemsValueExpression="{config.selectedItemsValueExpression}"/>
                   </baseAction>
                 </MenuItem>
               </plugins:items>

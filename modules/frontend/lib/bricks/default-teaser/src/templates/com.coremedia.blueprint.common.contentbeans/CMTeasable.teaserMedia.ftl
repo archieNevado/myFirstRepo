@@ -6,12 +6,15 @@
 
 <@defaultTeaser.renderMedia media=self.firstMedia!cm.UNDEFINED
                             teaserBlockClass=teaserBlockClass
-                            link=(cm.localParameters().renderLink!true)?then(cm.getLink(self.target!cm.UNDEFINED), "")
+                            link=defaultTeaser.getLink(self.target!cm.UNDEFINED, self.teaserSettings)
                             openInNewTab=self.openInNewTab
                             limitAspectRatios=cm.localParameters().limitAspectRatios!cm.UNDEFINED
                             metadata=["properties.pictures"]
                             renderDimmer=cm.localParameters().renderDimmer!cm.UNDEFINED
                             renderEmptyMedia=(self.teaserOverlaySettings.enabled || cm.localParameters().renderEmptyImage!true) />
 
-<@cm.include self=self.target!cm.UNDEFINED view="_playButton"
-                                           params=cm.isUndefined(teaserBlockClass)?then({}, {"blockClass": teaserBlockClass}) + {"openAsPopup": true} />
+<#-- do not render a video popup if no link to detail page should be rendered (popup is a replacement for the detail page) -->
+<#if self.teaserSettings.renderLinkToDetailPage>
+  <@cm.include self=self.target!cm.UNDEFINED view="_playButton"
+                                             params=cm.isUndefined(teaserBlockClass)?then({}, {"blockClass": teaserBlockClass}) + {"openAsPopup": true} />
+</#if>

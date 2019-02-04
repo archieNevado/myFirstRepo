@@ -87,7 +87,7 @@
         </editor:PropertyFieldGroup>
         <bpforms:TeaserDocumentForm>
           <bpforms:plugins exml:mode="append">
-            <ui:RemoveItemsPlugin>
+            <ui:RemoveItemsPlugin recursive="true">
               <ui:items>
                 <bpforms:CallToActionConfigurationForm/>
               </ui:items>

@@ -30,16 +30,15 @@
 
     <customer>Blueprint</customer>
 
-    <blueprint-base.version>1810.2</blueprint-base.version>
-    <cms.version>1810.2</cms.version>
-    <personalization.version>1810.2</personalization.version>
-    <elastic.version>1810.2</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
-    <studio.version>1810.2</studio.version>
-    <caetoolbox.version>1810.2</caetoolbox.version>
-    <livecontext.version>1810.2</livecontext.version>
-    <jangaroo.version>4.0.63</jangaroo.version>
+    <blueprint-base.version>1901.1</blueprint-base.version>
+    <cms.version>1901.1</cms.version>
+    <personalization.version>1901.1</personalization.version>
+    <elastic.version>1901.1</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
+    <studio.version>1901.1</studio.version>
+    <caetoolbox.version>1901.1</caetoolbox.version>
+    <livecontext.version>1901.1</livecontext.version>
+    <jangaroo.version>4.0.64</jangaroo.version>
 
-    <atlassian.crowd.version>2.5.1</atlassian.crowd.version>
     <!--
      | Version for WAR based deployment. Tomcat 7 and 8 are supported. Don't forget to set the Chef attributes in the
      | Chef blueprint-tomcat cookbook accordingly
@@ -47,7 +46,7 @@
     <tomcat.version>7.0.90</tomcat.version>
     <!-- Version for Maven tomcat7 plugin. Only Tomcat 7 is supported -->
     <tomcat.maven.version>7.0.90</tomcat.maven.version>
-    <spring.boot.version>2.0.3.RELEASE</spring.boot.version>
+    <spring.boot.version>2.1.2.RELEASE</spring.boot.version>
     <application-plugin.version>2.7.10</application-plugin.version>
 
     <!--
@@ -94,8 +93,8 @@
     <theme-importer.argument.runner>com.coremedia.blueprint.themeimporter.client.ThemeImporterRunner</theme-importer.argument.runner>
     <jooProxyPathSpec>/rest/*</jooProxyPathSpec>
 
-    <junit.platform.version>1.2.0</junit.platform.version>
-    <junit.jupiter.version>5.2.0</junit.jupiter.version>
+    <junit.platform.version>1.3.1</junit.platform.version>
+    <junit.jupiter.version>5.3.2</junit.jupiter.version>
     <junit.vintage.version>${junit.jupiter.version}</junit.vintage.version>
 
     <skip-joo-unit-tests>${skipTests}</skip-joo-unit-tests>
@@ -319,33 +318,6 @@
       </dependency>
 
       <dependency>
-        <groupId>org.codehaus.janino</groupId>
-        <artifactId>janino</artifactId>
-        <version>2.6.1</version>
-      </dependency>
-
-      <dependency>
-        <groupId>com.atlassian.crowd</groupId>
-        <artifactId>crowd-integration-client-rest</artifactId>
-        <version>${atlassian.crowd.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.atlassian.crowd</groupId>
-        <artifactId>crowd-integration-api</artifactId>
-        <version>${atlassian.crowd.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.atlassian.crowd</groupId>
-        <artifactId>embedded-crowd-api</artifactId>
-        <version>${atlassian.crowd.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.atlassian.crowd</groupId>
-        <artifactId>crowd-integration-client-common</artifactId>
-        <version>${atlassian.crowd.version}</version>
-      </dependency>
-
-      <dependency>
         <groupId>com.google.apis</groupId>
         <artifactId>google-api-services-youtube</artifactId>
         <version>${google.api.services.youtube.version}</version>
@@ -475,8 +447,8 @@
           <artifactId>frontend-maven-plugin</artifactId>
           <version>1.6</version>
           <configuration>
-            <nodeVersion>v8.11.4</nodeVersion><!-- LTS -->
-            <yarnVersion>v1.9.4</yarnVersion>
+            <nodeVersion>v8.12.0</nodeVersion><!-- LTS -->
+            <yarnVersion>v1.12.3</yarnVersion>
           </configuration>
         </plugin>
         <plugin>
@@ -613,6 +585,9 @@
                 <Implementation-Version>${project.version}</Implementation-Version>
                 <X-Compile-Source-JDK>${compile.source.jdk}</X-Compile-Source-JDK>
                 <X-Compile-Target-JDK>${compile.target.jdk}</X-Compile-Target-JDK>
+                <!-- Configure WebSphere to not scan ASM jars in the WAR, because they contain Java 9 module-info.class
+                     files and cause exceptions in WebSphere. See CMS-12354 -->
+                <Ignore-Scanning-Archives>asm-analysis-7.0.jar,asm-7.0.jar,asm-commons-7.0.jar,asm-tree-7.0.jar</Ignore-Scanning-Archives>
               </manifestEntries>
             </archive>
             <failOnMissingWebXml>false</failOnMissingWebXml>
@@ -937,6 +912,8 @@
                 <DependencyConvergence/>
                 <bannedDependencies>
                   <excludes>
+                    <!-- exclude commons-httpclient, use org.apache.httpcomponents:httpclient instead-->
+                    <exclude>commons-httpclient:commons-httpclient</exclude>
                     <!-- excluded because of conflict with logback -->
                     <exclude>commons-logging:commons-logging</exclude>
                     <!-- excluded because already included in jdk 6 -->
@@ -1002,6 +979,7 @@
                     <exclude>com.coremedia.elastic.core:core-solr-test</exclude>
                     <exclude>com.coremedia.ui:coremedia-rest-test</exclude>
                     <exclude>org.assertj:*</exclude>
+                    <exclude>org.eclipse.jetty:*:(,9)</exclude>
                     <exclude>org.jmock:*</exclude>
                     <exclude>org.junit:*</exclude>
                     <exclude>org.junit.jupiter:*</exclude>
@@ -1021,6 +999,7 @@
                     <include>com.coremedia.elastic.core:core-solr-test:*:*:test</include>
                     <include>com.coremedia.ui:coremedia-rest-test:*:*:test</include>
                     <include>org.assertj:*:*:*:test</include>
+                    <include>org.eclipse.jetty:*:*:*:test</include>
                     <include>org.jmock:*:*:*:test</include>
                     <include>org.junit:*:*:*:test</include>
                     <include>org.junit.jupiter:*:*:*:test</include>

@@ -72,14 +72,15 @@ HOW TO STRUCTURE:
             <editor:PropertyFieldGroup itemId="elasticSocial"
                                        title="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationContext', 'p13n_context_testuser_profile_socialsoftware')}">
               <editor:plugins exml:mode="append">
-                <editor:BindDisablePlugin bindTo="{config.bindTo}"/>
+                <editor:BindDisablePlugin bindTo="{config.bindTo}" forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
               </editor:plugins>
               <editor:items>
                 <perso:PersonaStringPropertyField
                         fieldLabel="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationContext', 'p13n_context_testuser_profile_givenname')}"
                         propertyName="givenname"
                         propertyContext="personal"
-                        emptyText="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationContext', 'p13n_context_testuser_profile_givenname_emptyText')}"/>
+                        emptyText="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationContext', 'p13n_context_testuser_profile_givenname_emptyText')}">
+                </perso:PersonaStringPropertyField>
                 <perso:PersonaStringPropertyField
                         fieldLabel="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationContext', 'p13n_context_testuser_profile_name')}"
                         propertyName="familyname"
@@ -126,7 +127,7 @@ HOW TO STRUCTURE:
             <editor:PropertyFieldGroup itemId="geoLocation"
                                        title="Geolocation">
               <editor:plugins exml:mode="append">
-                <editor:BindDisablePlugin bindTo="{config.bindTo}"/>
+                <editor:BindDisablePlugin bindTo="{config.bindTo}" forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
               </editor:plugins>
               <editor:items>
                 <p13n:CMPersonaFormComboBoxField
@@ -144,7 +145,7 @@ HOW TO STRUCTURE:
             <editor:PropertyFieldGroup itemId="search"
                                        title="Search">
               <editor:plugins exml:mode="append">
-                <editor:BindDisablePlugin bindTo="{config.bindTo}"/>
+                <editor:BindDisablePlugin bindTo="{config.bindTo}" forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
               </editor:plugins>
               <editor:items>
                 <perso:PersonaStringPropertyField
@@ -168,7 +169,7 @@ HOW TO STRUCTURE:
             <editor:PropertyFieldGroup itemId="dateAndTime"
                                        title="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationContext', 'p13n_context_testuser_profile_systemproperties')}">
               <editor:plugins exml:mode="append">
-                <editor:BindDisablePlugin bindTo="{config.bindTo}"/>
+                <editor:BindDisablePlugin bindTo="{config.bindTo}" forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
               </editor:plugins>
               <editor:items>
                 <perso:PersonaDateTimeProperty

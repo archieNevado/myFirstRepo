@@ -187,7 +187,7 @@ public class SearchResultBean {
    * @cm.template.api
    */
   public Map<String, List<String>> getHighlightingResultsItem(Object key) {
-    return this.highlightingResults.get(key);
+    return getHighlightingResults().get(key);
   }
 
   /**

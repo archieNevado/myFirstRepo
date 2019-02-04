@@ -24,6 +24,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>coremedia-spring-boot-traditional</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>content-management-server-blueprint-component</artifactId>
       <version>${project.version}</version>

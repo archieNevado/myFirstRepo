@@ -13,8 +13,8 @@
   <#-- link to this item in navigation -->
   <a href="${cm.getLink(self)}">${self.title!""}</a>
 
-  <#-- include child items, if exist -->
-  <#if self.visibleChildren?has_content>
+  <#-- include child items visible in sitemap, if exist -->
+  <#if self.sitemapChildren?has_content>
     <@cm.include self=self view="asSitemapTree" params={"maxDepth": maxDepth} />
   </#if>
 </li>

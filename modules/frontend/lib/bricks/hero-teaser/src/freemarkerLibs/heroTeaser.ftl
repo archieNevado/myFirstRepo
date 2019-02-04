@@ -4,6 +4,12 @@
 
 <#assign defaultBlockClass="cm-hero" />
 
+<#function getLink target
+                   teaserSettings={}>
+  <#-- @ftlvariable name="teaserSettings" type="com.coremedia.blueprint.common.teaser.TeaserSettings" -->
+  <#return (cm.localParameters().renderLink!teaserSettings.renderLinkToDetailPage)?then(cm.getLink(target!cm.UNDEFINED), "") />
+</#function>
+
 <#--
   Renders the media of a hero teaser.
 

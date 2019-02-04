@@ -28,8 +28,7 @@
     <editor:StringPropertyField bindTo="{config.bindTo}"
                                 propertyName="segment">
       <editor:plugins exml:mode="append">
-        <editor:SEOStringPropertyFieldDelegatePlugin encodeAsURI="true"
-                                                     delegatePropertyNames="{config.delegatePropertyNames}"/>
+        <editor:SEOStringPropertyFieldDelegatePlugin delegatePropertyNames="{config.delegatePropertyNames}"/>
       </editor:plugins>
     </editor:StringPropertyField>
     <editor:StringPropertyField propertyName="htmlTitle">

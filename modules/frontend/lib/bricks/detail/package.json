@@ -1,0 +1,15 @@
+{
+  "name": "@coremedia/brick-detail",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@coremedia/brick-dynamic-include": "^1.0.0",
+    "@coremedia/brick-media": "^1.0.0",
+    "@coremedia/slick-carousel": "^1.0.0",
+    "@coremedia/ftl-utils": "^1.0.0",
+    "@coremedia/sass-utils": "^1.0.0"
+  },
+  "coremedia": {
+    "type": "brick"
+  }
+}

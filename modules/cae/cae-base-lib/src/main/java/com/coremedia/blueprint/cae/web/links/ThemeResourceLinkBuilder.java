@@ -82,8 +82,8 @@ public class ThemeResourceLinkBuilder {
    * @param response  current response (required by the linkFormatter)
    * @return the URL path that belongs to a theme resource or an empty link
    */
-  public String getLinkToThemeResource(String path, HttpServletRequest request, HttpServletResponse response) {
-
+  public String getLinkToThemeResource(String path, @NonNull HttpServletRequest request,
+                                       @NonNull HttpServletResponse response) {
     // sanitize static URL
     if (path == null || path.startsWith("../") || path.contains("/../")) {
       LOG.error("Path to theme resource has to be absolute but is \"{}\".", path);
@@ -124,7 +124,7 @@ public class ThemeResourceLinkBuilder {
 
   @VisibleForTesting
   @NonNull
-  String getLocalResourcePath(HttpServletRequest request, String themeName, String path) {
+  String getLocalResourcePath(@NonNull HttpServletRequest request, String themeName, String path) {
     return request.getContextPath() + "/themes/" + themeName + path;
   }
 

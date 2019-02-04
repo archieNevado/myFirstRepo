@@ -23,6 +23,7 @@
         <bpforms:PersonDetailsDocumentForm bindTo="{config.bindTo}"/>
         <bpforms:MediaDocumentForm bindTo="{config.bindTo}"/>
         <bpforms:MiscSettingsForm collapsed="true"/>
+        <bpforms:RelatedDocumentForm bindTo="{config.bindTo}"/>
       </editor:items>
     </editor:DocumentForm>
     <bpforms:CMPersonMetaDataTab/>

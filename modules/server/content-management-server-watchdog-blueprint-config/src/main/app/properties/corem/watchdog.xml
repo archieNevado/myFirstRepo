@@ -5,8 +5,8 @@
 
   <!-- Watch a CoreMedia Content Server -->
   <Component name="WatchContentServer" startAction="WS-CorbaQuery">
-    <ServerQuery name="WS-CorbaQuery" url="http://localhost:41080/coremedia/ior" user="watchdog" password="watchdog"/>
-    <ServerQuery name="WS-CorbaReQuery" url="http://localhost:41080/coremedia/ior" user="watchdog" password="watchdog"/>
+    <ServerQuery name="WS-CorbaQuery" url="http://localhost:40180/coremedia/ior" user="watchdog" password="watchdog"/>
+    <ServerQuery name="WS-CorbaReQuery" url="http://localhost:40180/coremedia/ior" user="watchdog" password="watchdog"/>
     <DB name="WS-CheckDB" propertyFile="corem/sql.properties"/>
     <Script name="WS-RestartServer" command="command to restart the contentserver" timeout="60" interval="600" events="3"/>
     <Script name="WS-Abort" command="echo watchdog: watch contentserver: abort" timeout="10"/>

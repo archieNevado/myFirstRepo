@@ -6,6 +6,7 @@ const path = require("path");
 const cmLogger = require("@coremedia/cm-logger");
 const { uploadTheme, uploadFiles } = require("@coremedia/theme-importer");
 const livereload = require("@coremedia/livereload");
+const { packages } = require("@coremedia/tool-utils");
 
 const {
   clearConsole,
@@ -140,6 +141,7 @@ class CoreMediaWatchPlugin {
 
     // invalidations
     compiler.plugin("invalid", () => {
+      packages.clearCache();
       if (!init) {
         this._log.info("Detected file changes.");
       }

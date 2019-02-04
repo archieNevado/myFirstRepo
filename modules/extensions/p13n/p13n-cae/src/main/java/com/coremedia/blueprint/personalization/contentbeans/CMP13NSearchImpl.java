@@ -11,8 +11,6 @@ import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.common.util.SearchQueryUtil;
 import com.coremedia.blueprint.personalization.search.SolrContextualSearchChecker;
-import com.coremedia.cap.content.ContentRepository;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,13 +82,7 @@ public class CMP13NSearchImpl extends CMP13NSearchBase {
   }
 
   private void addDocTypeFilter(SearchQueryBean searchQueryBean) {
-    // set doctypes to filter
-    final String documentType = getDocumentType();
-    if (StringUtils.isNotEmpty(documentType)) {
-      final ContentRepository repository = getContent().getRepository();
-      final Condition documentTypeFilter = SearchQueryUtil.createDocumentTypeFilter(documentType, repository);
-      searchQueryBean.addFilter(documentTypeFilter);
-    }
+    SearchQueryUtil.addDocumentTypeFilter(searchQueryBean, getDocumentType(), getContent().getRepository());
   }
 
   /**

@@ -6,10 +6,10 @@
     "@coremedia/tool-utils": "^1.0.0",
     "closest-package": "1.0.0",
     "deepmerge": "1.5.1",
-    "node-sass": "4.7.2"
+    "node-sass": "4.11.0"
   },
   "devDependencies": {
-    "prettier": "1.11.1"
+    "prettier": "1.15.2"
   },
   "scripts": {
     "prettier": "prettier \"**/*\" --write"

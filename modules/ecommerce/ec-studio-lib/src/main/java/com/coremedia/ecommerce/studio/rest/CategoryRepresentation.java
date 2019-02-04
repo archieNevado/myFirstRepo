@@ -97,20 +97,20 @@ public class CategoryRepresentation extends CommerceBeanRepresentation {
     return childrenByName;
   }
 
-  @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
   public void setPictures(List<Content> pictures) {
     this.pictures = pictures;
   }
 
+  @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
   public List<Content> getPictures() {
     return pictures;
   }
 
-  @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
   public void setDownloads(List<Content> downloads) {
     this.downloads = downloads;
   }
 
+  @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
   public List<Content> getDownloads() {
     return downloads;
   }

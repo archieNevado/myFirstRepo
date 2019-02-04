@@ -9,22 +9,22 @@ class SaxElementData {
   private final String qName;
   private final Attributes atts;
 
-  public SaxElementData(String namespaceUri, String localName, String qName, Attributes atts) {
+  SaxElementData(String namespaceUri, String localName, String qName, Attributes atts) {
     this.namespaceUri = namespaceUri;
     this.localName = localName;
     this.qName = qName;
     this.atts = new AttributesImpl(atts);
   }
 
-  public String getNamespaceUri() {
+  String getNamespaceUri() {
     return namespaceUri;
   }
 
-  public String getLocalName() {
+  String getLocalName() {
     return localName;
   }
 
-  public String getqName() {
+  String getqName() {
     return qName;
   }
 
@@ -32,7 +32,11 @@ class SaxElementData {
     return atts;
   }
 
-  public boolean isA(String tagName) {
-    return "".equals(namespaceUri) ? tagName.equalsIgnoreCase(qName) : tagName.equalsIgnoreCase(localName);
+  boolean isA(String tagName) {
+    return tagName.equalsIgnoreCase(asTag());
+  }
+
+  String asTag() {
+    return "".equals(namespaceUri) ? qName : localName;
   }
 }

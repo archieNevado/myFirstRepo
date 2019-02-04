@@ -15,6 +15,7 @@ import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.blueprint.common.cta.CallToActionButtonSettings;
 import com.coremedia.blueprint.common.navigation.Linkable;
+import com.coremedia.blueprint.common.teaser.TeaserSettings;
 import com.coremedia.blueprint.common.teaserOverlay.TeaserOverlaySettings;
 import com.coremedia.blueprint.common.teaserOverlay.TeaserOverlayStyle;
 import com.coremedia.blueprint.common.util.ContentBeanSolrSearchFormatHelper;
@@ -32,6 +33,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.coremedia.xml.MarkupUtil.isEmptyRichtext;
@@ -219,6 +221,22 @@ public class CMTeasableImpl extends CMTeasableBase {
   @Override
   public List<Markup> getTextAsParagraphs() {
     return ParagraphHelper.createParagraphs(getDetailText());
+  }
+
+  public Map<String, Object> getTeaserSettingsMap() {
+    return getSettingsService().settingAsMap(CMTeasable.TEASER_SETTINGS_STRUCT_NAME, String.class, Object.class, this);
+  }
+
+  @Override
+  public TeaserSettings getTeaserSettings() {
+    Map<String, Object> mapping = getTeaserSettingsMap();
+    //noinspection Convert2Lambda
+    return new TeaserSettings() {
+      @Override
+      public boolean isRenderLinkToDetailPage() {
+        return (boolean) mapping.getOrDefault("renderLinkToDetailPage", true);
+      }
+    };
   }
 
   @Override

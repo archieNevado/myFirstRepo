@@ -33,12 +33,12 @@ Object {
     \\"prettier\\": \\"prettier \\\\\\"**/*\\\\\\" --write\\"
   },
   \\"devDependencies\\": {
-    \\"prettier\\": \\"1.11.1\\"
+    \\"prettier\\": \\"1.15.2\\"
   },
   \\"__comment__dependencies__\\": {
     \\"__comment__\\": \\"List of dependencies for the commented out example code. In order to add a dependency, move the entry to 'dependencies'\\",
     \\"@coremedia/js-logger\\": \\"^1.0.0\\",
-    \\"jquery\\": \\"3.2.1\\"
+    \\"jquery\\": \\"3.3.1\\"
   },
   \\"dependencies\\": {},
   \\"main\\": \\"src/js/index.js\\",
@@ -84,7 +84,7 @@ export function consolePrint($text) {
 ",
     "_variables.scss": "// make sure to import variables sass files in _variables.scss
 @import \\"variables/custom-text\\";
-// the smart-import ensures, that all sass variables from depending bricks are loaded 
+// the smart-import ensures, that all sass variables from depending bricks are loaded
 @import \\"?smart-import-variables\\";
 ",
   },
@@ -102,7 +102,7 @@ $custom-text-color: #FF0000 !default;
 ",
   },
   "/path/to/brick/newest-brick/src/templates/com.coremedia.blueprint.common.contentbeans": Object {
-    "Page._body.ftl": "<#-- Use bp.getMessage to display a localized hello world message --> 
+    "Page._body.ftl": "<#-- Use bp.getMessage to display a localized hello world message -->
 <div>
   <span class=\\"custom-text\\">\${bp.getMessage('welcomeText')}</span>
 </div>
@@ -131,12 +131,12 @@ Object {
     \\"prettier\\": \\"prettier \\\\\\"**/*\\\\\\" --write\\"
   },
   \\"devDependencies\\": {
-    \\"prettier\\": \\"1.11.1\\"
+    \\"prettier\\": \\"1.15.2\\"
   },
   \\"__comment__dependencies__\\": {
     \\"__comment__\\": \\"List of dependencies for the commented out example code. In order to add a dependency, move the entry to 'dependencies'\\",
     \\"@coremedia/js-logger\\": \\"^1.0.0\\",
-    \\"jquery\\": \\"3.2.1\\"
+    \\"jquery\\": \\"3.3.1\\"
   },
   \\"dependencies\\": {},
   \\"main\\": \\"src/js/index.js\\",
@@ -182,7 +182,7 @@ export function consolePrint($text) {
 ",
     "_variables.scss": "// make sure to import variables sass files in _variables.scss
 @import \\"variables/custom-text\\";
-// the smart-import ensures, that all sass variables from depending bricks are loaded 
+// the smart-import ensures, that all sass variables from depending bricks are loaded
 @import \\"?smart-import-variables\\";
 ",
   },
@@ -200,7 +200,7 @@ $custom-text-color: #FF0000 !default;
 ",
   },
   "/path/to/brick/newest-brick/src/templates/com.coremedia.blueprint.common.contentbeans": Object {
-    "Page._body.ftl": "<#-- Use bp.getMessage to display a localized hello world message --> 
+    "Page._body.ftl": "<#-- Use bp.getMessage to display a localized hello world message -->
 <div>
   <span class=\\"custom-text\\">\${bp.getMessage('welcomeText')}</span>
 </div>
@@ -289,7 +289,7 @@ Object {
     \\"__comment__\\": \\"List of all brick dependencies. In order to add a dependency, move the entry to 'dependencies'\\",
     \\"@coremedia/js-logger\\": \\"^1.0.0\\",
     \\"@coremedia/sass-utils\\": \\"^1.0.0\\",
-    \\"jquery\\": \\"3.2.1\\"
+    \\"jquery\\": \\"3.3.1\\"
   },
   \\"dependencies\\": {
     \\"@coremedia/cm-cli\\": \\"^2.0.0\\",
@@ -297,7 +297,7 @@ Object {
     \\"webpack\\": \\"3.10.0\\"
   },
   \\"devDependencies\\": {
-    \\"prettier\\": \\"1.11.1\\"
+    \\"prettier\\": \\"1.15.2\\"
   },
   \\"main\\": \\"src/js/index.js\\",
   \\"coremedia\\": {
@@ -447,7 +447,7 @@ Object {
     \\"some-brick\\": \\"^1.0.0\\",
     \\"@coremedia/js-logger\\": \\"^1.0.0\\",
     \\"@coremedia/sass-utils\\": \\"^1.0.0\\",
-    \\"jquery\\": \\"3.2.1\\"
+    \\"jquery\\": \\"3.3.1\\"
   },
   \\"dependencies\\": {
     \\"active-brick\\": \\"^1.0.0\\",
@@ -456,7 +456,7 @@ Object {
     \\"webpack\\": \\"3.10.0\\"
   },
   \\"devDependencies\\": {
-    \\"prettier\\": \\"1.11.1\\"
+    \\"prettier\\": \\"1.15.2\\"
   },
   \\"main\\": \\"src/js/index.js\\",
   \\"coremedia\\": {

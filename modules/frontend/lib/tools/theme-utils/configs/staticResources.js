@@ -6,6 +6,7 @@ const path = require("path");
 const deepMerge = require("./utils/deepMerge");
 const {
   dependencies: { getFlattenedDependencies, NodeModule },
+  packages,
   workspace: { isBrickModule, getThemeConfig },
 } = require("@coremedia/tool-utils");
 const {
@@ -62,7 +63,7 @@ function configureJoinWebpackPluginForResourceBundles(
       // gather resource bundles using a map (with package name as key), so they can be ordered before being stored
       common = common || {};
       const pkgPath = closestPackage.sync(filename);
-      const pkg = require(pkgPath);
+      const pkg = packages.getJsonByFilePath(pkgPath);
 
       // add source of the keys as comment
       const relativeFilePath = path.relative(themeConfig.path, filename);

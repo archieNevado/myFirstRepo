@@ -1,7 +1,5 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
-import com.coremedia.blueprint.cae.search.SearchQueryBean;
-import com.coremedia.blueprint.cae.search.SearchResultBean;
 import com.coremedia.blueprint.cae.search.SearchResultFactory;
 import com.coremedia.blueprint.common.contentbeans.CMQueryList;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
@@ -16,11 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE;
-import static java.util.Collections.emptyList;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 
 public class CMQueryListImplTest extends ContentBeanTestBase {
@@ -42,19 +36,9 @@ public class CMQueryListImplTest extends ContentBeanTestBase {
   public void setUp() throws Exception {
     setUpPreviewDate(REQUEST_ATTRIBUTE_PREVIEW_DATE);
     contentBean = getContentBean(108);
-    resultFactoryEmptyResult = mock(SearchResultFactory.class);
-    resultFactoryNonEmptyResult = mock(SearchResultFactory.class);
-
-    SearchResultBean emptyResult = mock(SearchResultBean.class);
-    when(resultFactoryEmptyResult.createSearchResultUncached(any(SearchQueryBean.class))).thenReturn(emptyResult);
-    when(emptyResult.getHits()).thenReturn(emptyList());
-
-    SearchResultBean nonEmptyResult1 = mock(SearchResultBean.class);
-    when(resultFactoryNonEmptyResult.createSearchResultUncached(any(SearchQueryBean.class))).thenReturn(nonEmptyResult1);
     dynamicContent = getContentBean(10);
-    List contentBeans = Collections.singletonList(dynamicContent);
-    when(nonEmptyResult1.getHits()).thenReturn(contentBeans);
-
+    resultFactoryEmptyResult = new MockSearchResultFactory(Collections.emptyList());
+    resultFactoryNonEmptyResult = new MockSearchResultFactory(Collections.singletonList(dynamicContent));
     extendedItemsContentBean = getContentBean(150);
 
     content2 = getContentBean(2);
@@ -97,24 +81,6 @@ public class CMQueryListImplTest extends ContentBeanTestBase {
   }
 
   @Test
-  @SuppressWarnings("unchecked")
-  public void testGetExtendedItems_withDuplicate() throws Exception {
-    SearchResultFactory resultFactory = mock(SearchResultFactory.class);
-    SearchResultBean nonEmptyResult2 = mock(SearchResultBean.class);
-    when(resultFactory.createSearchResultUncached(any(SearchQueryBean.class))).thenReturn(nonEmptyResult2);
-    CMTeasable duplicateContent = getContentBean(2);
-    List duplicates = Collections.singletonList(duplicateContent);
-    when(nonEmptyResult2.getHits()).thenReturn(duplicates);
-
-    CMQueryListImpl queryListImpl = (CMQueryListImpl) extendedItemsContentBean;
-    queryListImpl.setResultFactory(resultFactory);
-    List<? extends Linkable> items = extendedItemsContentBean.getItems();
-    assertEquals(2, items.size());
-    assertEquals(content2, items.get(0));
-    assertEquals(content6, items.get(1));
-  }
-
-  @Test
   public void testGetExtendedItems_withDuplicateInStruct() throws Exception {
     CMQueryList duplicateExtendedItemsContentBean = getContentBean(174);
     CMQueryListImpl queryListImpl = (CMQueryListImpl) duplicateExtendedItemsContentBean;
@@ -129,14 +95,11 @@ public class CMQueryListImplTest extends ContentBeanTestBase {
   @Test
   @SuppressWarnings("unchecked")
   public void testGetExtendedItems_limitMixedItems() throws Exception {
-    SearchResultFactory resultFactory = mock(SearchResultFactory.class);
-    SearchResultBean nonEmptyResult = mock(SearchResultBean.class);
-    when(resultFactory.createSearchResultUncached(any(SearchQueryBean.class))).thenReturn(nonEmptyResult);
     CMTeasable searchResultContent1 = getContentBean(12);
     CMTeasable searchResultContent2 = getContentBean(14);
     CMTeasable searchResultContent3 = getContentBean(16);
     List contents = Arrays.asList(searchResultContent1, searchResultContent2, searchResultContent3);
-    when(nonEmptyResult.getHits()).thenReturn(contents);
+    SearchResultFactory resultFactory = new MockSearchResultFactory(contents);
 
     CMQueryListImpl queryListImpl = (CMQueryListImpl) extendedItemsContentBean;
     queryListImpl.setResultFactory(resultFactory);

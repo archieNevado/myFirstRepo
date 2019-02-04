@@ -2,6 +2,7 @@ const closestPackage = require("closest-package");
 const fs = require("fs");
 const glob = require("glob");
 const path = require("path");
+const { packages } = require("@coremedia/tool-utils");
 
 const RELATIVE_TEMPLATES_PATH = path.join("src", "templates");
 
@@ -79,7 +80,7 @@ class ViewRepositoryPlugin {
       options: {
         name: resourcePath => {
           const packageJsonPath = closestPackage.sync(resourcePath);
-          const packageJson = require(packageJsonPath);
+          const packageJson = packages.getJsonByFilePath(packageJsonPath);
 
           /**
            * @type {ViewRepositoryMapping}

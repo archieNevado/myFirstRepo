@@ -2,6 +2,7 @@ package com.coremedia.blueprint.studio {
 
 import com.coremedia.blueprint.base.components.sites.SiteAwareFeatureUtil;
 import com.coremedia.blueprint.base.components.util.UserUtil;
+import com.coremedia.blueprint.studio.forms.variants.PreviewVariantsUtil;
 import com.coremedia.blueprint.studio.util.ContentInitializer;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
@@ -10,6 +11,7 @@ import com.coremedia.cms.editor.sdk.IEditorContext;
 import com.coremedia.cms.editor.sdk.collectionview.CollectionView;
 import com.coremedia.cms.editor.sdk.desktop.MainNavigationToolbar;
 import com.coremedia.cms.editor.sdk.plugins.TabExpandPlugin;
+import com.coremedia.cms.editor.sdk.preview.PreviewPanel;
 import com.coremedia.cms.editor.sdk.util.ThumbnailResolverFactory;
 import com.coremedia.ui.data.dependencies.DependencyTracker;
 import com.coremedia.ui.data.validation.Issue;
@@ -123,5 +125,10 @@ public class BlueprintFormsStudioPluginBase extends StudioPlugin {
     });
   }
 
+  protected static function reloadPreview(previewPanel:PreviewPanel):void {
+    if (previewPanel.rendered && PreviewVariantsUtil.canHaveVariants(previewPanel.getCurrentPreviewContent() as Content)) {
+      previewPanel.reloadFrameWhenVisible();
+    }
+  }
 }
 }

@@ -15,6 +15,8 @@ import com.coremedia.objectserver.beans.UnexpectedBeanTypeException;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,8 +27,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 
 @Link
@@ -40,14 +40,7 @@ public class AMAssetPreviewHandler extends PageHandlerBase {
   protected static final String STUDIO_PREFERRED_SITE_PARAMETER = "studioPreferredSite";
   public static final String ASSET_FRAGMENT_PREFIX = "asset=";
 
-  private ContentBeanFactory contentBeanFactory;
   private SettingsService settingsService;
-
-  @Override
-  @Required
-  public void setContentBeanFactory(ContentBeanFactory contentBeanFactory) {
-    this.contentBeanFactory = contentBeanFactory;
-  }
 
   @Required
   public void setSettingsService(SettingsService settingsService) {
@@ -104,6 +97,7 @@ public class AMAssetPreviewHandler extends PageHandlerBase {
 
     Content rootDocument = preferredSite.getSiteRootDocument();
     Content downloadPortalContent = AMUtils.getDownloadPortalRootDocument(settingsService, preferredSite);
+    ContentBeanFactory contentBeanFactory = getContentBeanFactory();
     if (downloadPortalContent != null) {
       try {
         CMChannel downloadPortalChannel = contentBeanFactory.createBeanFor(downloadPortalContent, CMChannel.class);

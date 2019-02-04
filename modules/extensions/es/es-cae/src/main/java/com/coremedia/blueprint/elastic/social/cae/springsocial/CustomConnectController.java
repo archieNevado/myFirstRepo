@@ -95,6 +95,8 @@ public class CustomConnectController extends ConnectController {
     HttpServletRequest httpServletRequest = (HttpServletRequest) request.getNativeRequest();
     HttpServletResponse httpServletResponse = (HttpServletResponse) request.getNativeResponse();
 
+    // Expect response to be non-`null`.
+    @SuppressWarnings({"ConstantConditions", "findbugs:NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE"})
     String url = linkFormatter.formatLink(user, null, httpServletRequest, httpServletResponse, false);
 
     return new RedirectView(url);

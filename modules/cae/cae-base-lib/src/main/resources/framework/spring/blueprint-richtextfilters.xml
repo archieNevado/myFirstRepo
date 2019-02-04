@@ -71,6 +71,7 @@
     <property name="contentRepository" ref="contentRepository"/>
     <property name="contentBeanFactory" ref="contentBeanFactory"/>
     <property name="dataViewFactory" ref="dataViewFactory"/>
+    <property name="validationService" ref="validationService"/>
   </bean>
 
   <bean id="linkEmbedFilter" class="com.coremedia.blueprint.cae.richtext.filter.LinkEmbedFilter">

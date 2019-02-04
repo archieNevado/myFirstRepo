@@ -15,7 +15,6 @@
   <#if (items?size == 1) || !(self.teaserTitle?has_content)>
     <#list items![] as child>
       <@cm.include self=child view="asLinkListItem"  params={
-        "maxDepth": maxDepth!0,
         "isTopLevel": isTopLevel,
         "depth" : depth-1,
         "showPicturesInNavigation": showPicturesInNavigation,
@@ -37,7 +36,7 @@
       </#if>
 
       <ul class="${cssClass} cm-navigation-item__list cm-navigation-item-depth-${depth}__list dropdown-menu">
-        <#if (showNavigationLabel && depth < 2)>
+        <#if (showNavigationLabel && depth < 2) >
           <li class="cm-navigation-list-depth-${depth}__label cm-navigation-list__label">
             <span class="cm-navigation-item-label cm-navigation-item__title" <@preview.metadata ["properties.teaserTitle"] />>${self.teaserTitle!""}</span>
           </li>
@@ -45,7 +44,6 @@
         <#-- considering the flattenedItems call the following navigation items cannot be containers anymore -->
         <#list items![] as child>
           <@cm.include self=child view="asLinkListItem" params={
-          "maxDepth": maxDepth!0,
           "isTopLevel": isTopLevel,
           "depth" : depth,
           "showNavigationLabel" : showNavigationLabel,

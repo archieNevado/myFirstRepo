@@ -30,7 +30,6 @@
     </#if>
     <#list self.visibleChildren![] as child>
       <@cm.include self=child view="asLinkListItem" params={
-        "maxDepth": maxDepth!0,
         "cssClass": childrenCssClass,
         "isTopLevel": isTopLevel,
         "depth": depth,

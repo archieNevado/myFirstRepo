@@ -11,6 +11,7 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.objectserver.view.TextView;
 import com.coremedia.objectserver.web.links.LinkFormatter;
 import com.google.common.base.Strings;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -44,8 +45,8 @@ public class RobotsView implements TextView {
   }
 
   @Override
-  public void render(Object self, String view, Writer writer, HttpServletRequest request, HttpServletResponse response) {
-
+  public void render(Object self, String view, Writer writer, @NonNull HttpServletRequest request,
+                     @NonNull HttpServletResponse response) {
     if (!(self instanceof RobotsBean)) {
       throw new IllegalArgumentException("Not of type [" + RobotsBean.class + "]");
     }
@@ -65,9 +66,8 @@ public class RobotsView implements TextView {
     }
   }
 
-
-  private void renderRobotsNode(RobotsBean robotsBean, Writer writer,
-                                HttpServletRequest request, HttpServletResponse response) throws IOException {
+  private void renderRobotsNode(RobotsBean robotsBean, Writer writer, @NonNull HttpServletRequest request,
+                                @NonNull HttpServletResponse response) throws IOException {
     for (RobotsEntry robotsEntry : robotsBean.getRobotsEntries()) {
       if (!Strings.isNullOrEmpty(robotsEntry.getUserAgent())) {
         LOG.debug("Generating robots.txt user agent node for [{}]", robotsEntry.getUserAgent());
@@ -81,9 +81,8 @@ public class RobotsView implements TextView {
     writeSitemapEntriesRecursively(writer, rootSite(robotsBean.getSite()));
   }
 
-  private void writeUserAgentNode(Writer writer, RobotsEntry robotsEntry,
-                                  HttpServletRequest request, HttpServletResponse response) throws IOException {
-
+  private void writeUserAgentNode(Writer writer, RobotsEntry robotsEntry, @NonNull HttpServletRequest request,
+                                  @NonNull HttpServletResponse response) throws IOException {
     // writing user agent line:
     StringBuilder sb = new StringBuilder();
     sb.append(RobotsEntry.USER_AGENT_TAG).append(COLON_SPACE).append(robotsEntry.getUserAgent()).append(NEWLINE);
@@ -142,9 +141,8 @@ public class RobotsView implements TextView {
     return master==null ? site : rootSite(master);
   }
 
-  private String generateLinkEntries(String tag, CMLinkable link,
-                                     HttpServletRequest request, HttpServletResponse response) {
-
+  private String generateLinkEntries(String tag, CMLinkable link, @NonNull HttpServletRequest request,
+                                     @NonNull HttpServletResponse response) {
     StringBuilder sb = new StringBuilder();
     String url = linkFormatter.formatLink(link, null, request, response, false);
 
@@ -160,5 +158,4 @@ public class RobotsView implements TextView {
     sb.append(NEWLINE);
     return sb.toString();
   }
-
 }

@@ -1,31 +1,34 @@
 
 package com.coremedia.blueprint.cae.feeds;
 
-
 import com.rometools.rome.feed.synd.SyndEntry;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
-  Base interface for FeedItemDataProvider
+ * Base interface for FeedItemDataProvider
  */
 public interface FeedItemDataProvider {
 
   /**
-   * determines, if the provider is suitable for the given content bean
+   * Determines if the provider is suitable for the given content bean.
+   *
    * @param item the content bean to check for
-   * @return true, if the provider is suitable, false if not
+   * @return true if the provider is suitable, false if not
    */
   boolean isSupported(Object item);
 
   /**
-   * creates a ROME SyndEntry for the given linkable Object
-   * @param request the http-request of the user
-   * @param response the http-response of the user
-   * @param bean the linkable to generate the SyndEntry for
-   * @return the generated SyndEntry itselfs
+   * Creates a ROME SyndEntry for the given linkable Object.
+   *
+   * @param request  the HTTP request of the user
+   * @param response the HTTP response of the user
+   * @param bean     the linkable to generate the SyndEntry for
+   * @return the generated SyndEntry itselves
    */
-  SyndEntry getSyndEntry(HttpServletRequest request, HttpServletResponse response, Object bean);
-  
+  @NonNull
+  SyndEntry getSyndEntry(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
+                         @NonNull Object bean);
 }

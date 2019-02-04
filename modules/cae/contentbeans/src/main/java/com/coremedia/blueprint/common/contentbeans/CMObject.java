@@ -80,7 +80,6 @@ public interface CMObject extends ContentBean {
    * </dd></dl>
    *
    * @return a list of Aspects
-   * @cm.template.api
    */
   List<? extends Aspect<? extends CMObject>> getAspects();
 
@@ -107,7 +106,6 @@ public interface CMObject extends ContentBean {
    * </dd></dl>
    *
    * @return a Map from aspectIDs to Aspects
-   * @cm.template.api
    */
   Map<String, ? extends Aspect<? extends CMObject>> getAspectByName();
 

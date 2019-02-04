@@ -88,7 +88,7 @@
             </bppm:PageGridPropertyField>
           </editor:items>
         </editor:PropertyFieldGroup>
-        <bpforms:CallToActionConfigurationForm useLegacyCTASettings="true"/>
+        <bpforms:TeaserSettingsPropertyFieldGroup/>
         <bpforms:ValidityDocumentForm/>
       </editor:items>
     </editor:DocumentForm>

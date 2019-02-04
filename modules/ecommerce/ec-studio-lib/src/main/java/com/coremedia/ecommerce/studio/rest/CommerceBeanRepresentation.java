@@ -64,11 +64,11 @@ public abstract class CommerceBeanRepresentation extends AbstractCatalogRepresen
     this.customAttributes = customAttributes;
   }
 
-  @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
   public void setVisuals(List<Content> visuals) {
     this.visuals = visuals;
   }
 
+  @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
   public List<Content> getVisuals() {
     return visuals;
   }
