@@ -9,10 +9,11 @@
         xmlns:ui="exml:com.coremedia.ui.config"
         xmlns:edtior="exml:com.coremedia.cms.editor.sdk.config">
   <fx:Script><![CDATA[
-    import com.coremedia.cms.editor.sdk.collectionview.CollectionRepositoryContextMenu;
+    import com.coremedia.cms.editor.sdk.collectionview.AbstractContextMenu;
 
     public static const xtype:String = "com.coremedia.ecommerce.studio.config.catalogRepositoryContextMenu";
 
+    //noinspection JSUnusedLocalSymbols
     private var config:CatalogRepositoryContextMenu;
 
     public native function CatalogRepositoryContextMenu(config:CatalogRepositoryContextMenu = null);
@@ -21,9 +22,11 @@
   <edtior:plugins exml:mode="append">
     <ui:RemoveItemsPlugin>
       <ui:items>
-        <Component itemId="{CollectionRepositoryContextMenu.CUT_TO_CLIPBOARD_ITEM_ID}"/>
-        <Component itemId="{CollectionRepositoryContextMenu.PASTE_FROM_CLIPBOARD_ITEM_ID}"/>
-        <Component itemId="{CollectionRepositoryContextMenu.RENAME_CONTENT_ITEM_MENU_ITEM_ID}"/>
+        <Component itemId="{AbstractContextMenu.NEW_FOLDER_ITEM_ID}"/>
+        <Component itemId="{AbstractContextMenu.NEW_CONTENT_ITEM_ID}"/>
+        <Component itemId="{AbstractContextMenu.CUT_TO_CLIPBOARD_ITEM_ID}"/>
+        <Component itemId="{AbstractContextMenu.PASTE_FROM_CLIPBOARD_ITEM_ID}"/>
+        <Component itemId="{AbstractContextMenu.RENAME_MENU_ITEM_ID}"/>
         <Component itemId="createProduct"/>
         <Component itemId="createCategory"/>
       </ui:items>

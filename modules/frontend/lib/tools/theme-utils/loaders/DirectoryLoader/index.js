@@ -5,6 +5,7 @@ const glob = require("glob");
 const closestPackage = require("closest-package");
 const {
   dependencies: { getDependencies, getDependentsFirstLoadOrder },
+  packages,
   workspace: { isBrickModule },
 } = require("@coremedia/tool-utils");
 const { loadModules } = require("../utils");
@@ -30,7 +31,7 @@ module.exports = function() {
     throw new Error("Directory Loader was used without providing a directory");
   }
 
-  const packageName = require(pkgPath).name;
+  const packageName = packages.getJsonByFilePath(pkgPath).name;
   const modulesToLoad = [];
 
   if (!subtask) {

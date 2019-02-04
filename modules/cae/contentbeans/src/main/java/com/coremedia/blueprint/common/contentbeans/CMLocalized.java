@@ -91,7 +91,6 @@ public interface CMLocalized extends CMObject {
    * Returns the value of the document property {@link #MASTER}.
    *
    * @return a {@link CMLocalized} object
-   * @cm.template.api
    */
   CMLocalized getMaster();
 

@@ -1,0 +1,25 @@
+//default variables
+$cm-details-prefix: "cm-details" !default;
+
+$cm-details-margin: 45px !default;
+
+$cm-details-padding-large-horizontal: 45px !default;
+$cm-details-padding-large-vertical: 30px !default;
+$cm-details-padding-base-vertical: 10px !default;
+
+$cm-details-text-color: #777777 !default;
+
+
+// fallback for responsive images on breakpoint "sm-and-up"
+@if not global_variable_exists(breakpoints) {
+  @debug "No Breakpoints defined. Adding a default value for 'sm-and-up'.";
+  $breakpoints: (
+    "sm-and-up": "screen and (min-width: 768px)"
+  ) !default !global;
+} @else {
+  $sm-and-up: map-get($breakpoints, "sm-and-up");
+  @if not $sm-and-up {
+    @debug "Adding a default value for breakpoint 'sm-and-up'.";
+    $breakpoints: map-merge($breakpoints, ("sm-and-up": "screen and (min-width: 768)"));
+  }
+}

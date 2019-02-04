@@ -1,10 +1,12 @@
 package com.coremedia.livecontext.handler;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -12,8 +14,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -78,7 +78,8 @@ class WorkspaceIdAppendingLinkTransformerTest {
 
   @NonNull
   private static StoreContext buildStoreContext(@Nullable WorkspaceId workspaceId) {
-    return StoreContextImpl.builder("someSiteId")
+    return StoreContextBuilderImpl.from()
+            .withSiteId("someSiteId")
             .withWorkspaceId(workspaceId)
             .build();
   }

@@ -11,13 +11,8 @@
   <import resource="classpath:/com/coremedia/cae/contentbean-services.xml"/>
 
   <!-- register link handler for assets -->
-  <bean id="assetLinkHandler" class="com.coremedia.blueprint.assets.cae.AMAssetPreviewHandler">
-    <property name="contentBeanFactory" ref="contentBeanFactory"/>
-    <property name="sitesService" ref="sitesService"/>
+  <bean id="assetLinkHandler" class="com.coremedia.blueprint.assets.cae.AMAssetPreviewHandler" parent="pageHandlerBase">
     <property name="settingsService" ref="settingsService"/>
-    <property name="cache" ref="cache"/>
-    <property name="navigationSegmentsUriHelper" ref="navigationSegmentsUriHelper"/>
-    <property name="contextHelper" ref="contextHelper"/>
   </bean>
 
 </beans>

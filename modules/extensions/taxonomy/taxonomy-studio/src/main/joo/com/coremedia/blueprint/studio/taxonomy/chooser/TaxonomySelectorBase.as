@@ -213,7 +213,7 @@ public class TaxonomySelectorBase extends Container {
     if(rootName) {
       text = rootName;
     }
-
+    
     var root:TextLinkButton = new TextLinkButton(TextLinkButton({
       text: text,
       itemId: taxonomyId.replace(/\s+/g, ''),

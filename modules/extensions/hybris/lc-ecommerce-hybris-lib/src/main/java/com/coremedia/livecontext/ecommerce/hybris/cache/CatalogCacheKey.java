@@ -7,6 +7,7 @@ import com.coremedia.livecontext.ecommerce.common.InvalidIdException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.CatalogDocument;
 import com.coremedia.livecontext.ecommerce.hybris.rest.resources.CatalogResource;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CATALOG;
 
@@ -14,7 +15,7 @@ public class CatalogCacheKey extends AbstractHybrisDocumentCacheKey<CatalogDocum
 
   private CatalogResource resource;
 
-  public CatalogCacheKey(CommerceId id, StoreContext storeContext, CatalogResource resource,
+  public CatalogCacheKey(CommerceId id, @NonNull StoreContext storeContext, CatalogResource resource,
                          CommerceCache commerceCache) {
     super(id, storeContext, CONFIG_KEY_CATEGORY, commerceCache);
     this.resource = resource;

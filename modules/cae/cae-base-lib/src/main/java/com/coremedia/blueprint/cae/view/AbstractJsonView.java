@@ -5,6 +5,7 @@ import com.coremedia.objectserver.view.ViewUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +36,8 @@ public abstract class AbstractJsonView implements TextView {
   private static final Gson GSON = new Gson();
 
   @Override
-  public void render(Object bean, String view, Writer out, HttpServletRequest request, HttpServletResponse response) {
+  public void render(Object bean, String view, Writer out, @NonNull HttpServletRequest request,
+                     @NonNull HttpServletResponse response) {
     String result = new JsonObject().toString();
     try {
 
@@ -59,7 +61,7 @@ public abstract class AbstractJsonView implements TextView {
     return JSON_CONTENT_TYPE;
   }
 
-  private void handleException(HttpServletResponse response, Object bean, Exception exception) {
+  private void handleException(@NonNull HttpServletResponse response, Object bean, Exception exception) {
     LOG.error("Error while serializing bean {}", bean, exception);
     try {
       response.sendError(SC_INTERNAL_SERVER_ERROR);
@@ -67,7 +69,6 @@ public abstract class AbstractJsonView implements TextView {
       LOG.error("Error while sending error response for bean {}", bean, e);
     }
   }
-
 
   public abstract <T> JsonElement getJSON(T bean);
 }

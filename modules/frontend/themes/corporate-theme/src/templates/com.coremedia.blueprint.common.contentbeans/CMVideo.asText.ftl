@@ -7,7 +7,7 @@
 <#assign cssClasses = cm.localParameter("islast", false)?then(" is-last", "") />
 <#assign hasVideo=self.data?has_content || self.dataUrl?has_content />
 <#assign videoLink=media.getLink(self) />
-<#assign link = cm.getLink(self.target) />
+<#assign link=self.teaserSettings.renderLinkToDetailPage?then(cm.getLink(self.target!cm.UNDEFINED), "") />
 
 <div class="cm-text thumbnail ${cssClasses}"<@preview.metadata self.content />>
   <#-- headline -->

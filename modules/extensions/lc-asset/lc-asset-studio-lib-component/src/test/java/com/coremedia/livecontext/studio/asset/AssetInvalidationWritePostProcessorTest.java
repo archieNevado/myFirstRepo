@@ -63,7 +63,7 @@ public class AssetInvalidationWritePostProcessorTest {
   private Struct localSettings;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     mockStatic(CommerceReferenceHelper.class);
 
     testling.setType(cmPictureType);
@@ -85,7 +85,7 @@ public class AssetInvalidationWritePostProcessorTest {
   }
 
   @Test
-  public void testPostProcess() throws Exception {
+  public void testPostProcess() {
     List<String> references = Arrays.asList("a", "b", "c");
 
     when(CommerceReferenceHelper.getExternalReferences(localSettings)).thenReturn(references);

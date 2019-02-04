@@ -1,7 +1,10 @@
 package com.coremedia.blueprint.cae.search.solr;
 
 import com.coremedia.blueprint.cae.search.SearchQueryBean;
+import com.google.common.collect.ImmutableMap;
 import org.apache.solr.client.solrj.SolrQuery;
+
+import java.util.Map;
 
 /**
  * A SolrQueryBuilder is responsible for creating Solrj specific {@link SolrQuery} objects from generic
@@ -12,6 +15,15 @@ public interface SolrQueryBuilder {
 
   String SORT_ORDER_ASC = "ASC";
   String SORT_ORDER_DESC = "DESC";
+
+  Map<String, SolrQuery.ORDER> SORT_ORDER_MAPPING = ImmutableMap.of(
+          SORT_ORDER_ASC, SolrQuery.ORDER.asc,
+          SORT_ORDER_DESC, SolrQuery.ORDER.desc,
+
+          // keys that were used in previous CMS versions and that may still appear in old content
+          "ASCENDING", SolrQuery.ORDER.asc,
+          "DESCENDING", SolrQuery.ORDER.desc
+  );
 
   String ANY_VALUE = "*";
   String OPENING_BRACKET = "[";

@@ -12,9 +12,11 @@
 
 <@defaultTeaser.renderCaption title=(cm.localParameters().renderTeaserTitle!true)?then(self.teaserTitle!"", "")
                               text=textHtml?no_esc
-                              link=(cm.localParameters().renderLink!true)?then(cm.getLink(self.target!cm.UNDEFINED), "")
+                              link=defaultTeaser.getLink(self.target!cm.UNDEFINED, self.teaserSettings)
                               openInNewTab=self.openInNewTab
                               ctaButtons=self.callToActionSettings
                               teaserBlockClass=cm.localParameters().teaserBlockClass!cm.UNDEFINED
+                              authors=(cm.localParameters().renderAuthors!false)?then(self.authors![], [])
+                              externallyDisplayedDate=(cm.localParameters().renderDate!false)?then(self.externallyDisplayedDate![], [])
                               metadataTitle=["properties.teaserTitle"]
                               metadataText=["properties.teaserText"] />

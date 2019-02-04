@@ -9,7 +9,7 @@
 
   <import resource="classpath:/framework/spring/lc-ecommerce-connection.xml"/>
   <import resource="classpath:/framework/spring/livecontext-hybris-services.xml"/>
-  <import resource="classpath:/META-INF/coremedia/livecontext-handlers.xml"/>
+  <import resource="classpath:/META-INF/coremedia/livecontext-links.xml"/>
 
   <context:component-scan base-package="com.coremedia.livecontext.hybris.links"/>
 

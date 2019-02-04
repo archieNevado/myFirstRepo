@@ -14,8 +14,6 @@ import java.util.Currency;
 import java.util.Locale;
 import java.util.Optional;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
-
 public class StoreContextProviderMock implements StoreContextProvider {
 
   @NonNull
@@ -52,7 +50,7 @@ public class StoreContextProviderMock implements StoreContextProvider {
 
   @NonNull
   private StoreContext createContext() {
-    return StoreContextBuilderImpl.from(newStoreContext())
+    return StoreContextBuilderImpl.from()
             .withStoreId("10001")
             .withStoreName("aurora")
             .withCurrency(Currency.getInstance("USD"))

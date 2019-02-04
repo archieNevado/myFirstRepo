@@ -43,12 +43,4 @@ public interface CMGallery<T extends CMMedia> extends CMCollection<T>, Flatless 
 
   @Override
   List<? extends Aspect<? extends CMGallery<T>>> getAspects();
-
-  /**
-   * Returns the value of the document property {@link #ITEMS} filtered by all validators.
-   *
-   * @return a list of {@link CMTeasable} objects
-   */
-  @Override
-  List<T> getItems();
 }

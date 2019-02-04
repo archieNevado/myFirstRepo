@@ -120,7 +120,7 @@ public class PageRssHandler extends PageHandlerBase {
       CMNavigation context = (CMNavigation) getNavigation(source);
       String rootSegment = getRootSegment(context);
       if (rootSegment != null) {
-        return ImmutableMap.of(SEGMENT_ID, getId(context), SEGMENT_ROOT, rootSegment);
+        return ImmutableMap.of(SEGMENT_ID, getId(source), SEGMENT_ROOT, rootSegment);
       }
     }
     return null;

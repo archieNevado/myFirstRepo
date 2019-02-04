@@ -28,6 +28,7 @@
           <ui:items>
             <am:AssetRepositoryListContainer selectionHolder="{selectionHolder}"
                                              selectedRepositoryItemsValueExpression="{selectionHolder.getSelectedRepositoryItemsValueExpression()}"
+                                             newContentDisabledValueExpression="{selectionHolder.getNewContentActionDisabledExpression()}"
                                              createdContentValueExpression="{selectionHolder.getCreatedContentValueExpression()}"/>
           </ui:items>
         </ui:AddItemsPlugin>

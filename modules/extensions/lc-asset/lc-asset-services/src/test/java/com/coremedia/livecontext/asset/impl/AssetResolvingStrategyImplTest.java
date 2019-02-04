@@ -2,6 +2,7 @@ package com.coremedia.livecontext.asset.impl;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.Site;
@@ -12,7 +13,6 @@ import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +26,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper.parseCommerceIdOrThrow;
 import static com.google.common.collect.ImmutableList.of;
 import static org.junit.Assert.assertEquals;
@@ -72,7 +71,7 @@ public class AssetResolvingStrategyImplTest {
 
   @Before
   public void setUp() throws Exception {
-    storeContext = newStoreContext();
+    storeContext = StoreContextBuilderImpl.from().build();
     when(storeContextProvider.findContextBySite(any())).thenReturn(Optional.of(storeContext));
 
     commerceConnection = new BaseCommerceConnection();

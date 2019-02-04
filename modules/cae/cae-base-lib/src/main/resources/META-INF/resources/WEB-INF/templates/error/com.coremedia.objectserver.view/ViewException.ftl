@@ -59,6 +59,7 @@
       box-shadow: 0 0 20px #000;
       font-family: Arial, Helvetica, sans-serif;
       font-size: 12px;
+      overflow-x: scroll;
     }
     .cm-error__box button {
       position: absolute;

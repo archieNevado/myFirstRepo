@@ -22,6 +22,7 @@
     <property name="includePatterns">
       <list>
         <util:constant static-field="com.coremedia.blueprint.cae.handlers.PreviewHandler.URI_PATTERN"/>
+        <util:constant static-field="com.coremedia.blueprint.cae.handlers.PreviewUrlHandler.URI_PATTERN"/>
       </list>
     </property>
   </bean>

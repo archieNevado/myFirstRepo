@@ -7,5 +7,5 @@
 <#assign rel=self.openInNewTab?then('rel="noopener"', "") />
 
 <#if self.url?has_content>
-  <a class="${cssClass!""}" href="${self.url}" ${target?no_esc} ${rel?no_esc}<@preview.metadata data=[self.content, "properties.teaserTitle"] />>${self.teaserTitle!""}</a>
+  <a class="${cssClass!""} cm-header__link" href="${self.url}" ${target?no_esc} ${rel?no_esc}<@preview.metadata data=[self.content, "properties.teaserTitle"] />>${self.teaserTitle!""}</a>
 </#if>

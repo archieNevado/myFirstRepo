@@ -14,13 +14,13 @@ const initPackageJson = (brickName) => {
       prettier: "prettier \"**/*\" --write"
     },
     devDependencies: {
-      prettier: "1.11.1"
+      prettier: "1.15.2"
     },
     __comment__dependencies__: {
       __comment__:
       "List of dependencies for the commented out example code. In order to add a dependency, move the entry to 'dependencies'",
       "@coremedia/js-logger": "^1.0.0",
-      jquery: "3.2.1",
+      jquery: "3.3.1",
     },
     dependencies: {
     },
@@ -98,7 +98,7 @@ const initBrickPartialsScss = () => `// make sure to import partials sass files 
  */
 const initBrickVariablesScss = () => `// make sure to import variables sass files in _variables.scss
 @import "variables/custom-text";
-// the smart-import ensures, that all sass variables from depending bricks are loaded 
+// the smart-import ensures, that all sass variables from depending bricks are loaded
 @import "?smart-import-variables";
 `;
 
@@ -125,7 +125,7 @@ $custom-text-color: #FF0000 !default;
  * returns content for com.coremedia.blueprint.common.contentbeans/Page._body.ftl
  * @return {string}
  */
-const initBrickPageBodyFtl = () => `<#-- Use bp.getMessage to display a localized hello world message --> 
+const initBrickPageBodyFtl = () => `<#-- Use bp.getMessage to display a localized hello world message -->
 <div>
   <span class="custom-text">\${bp.getMessage('welcomeText')}</span>
 </div>

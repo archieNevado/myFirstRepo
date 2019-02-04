@@ -1,15 +1,11 @@
 package com.coremedia.livecontext.contentbeans;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
-import com.coremedia.blueprint.cae.contentbeans.CMQueryListImpl;
-import com.coremedia.blueprint.common.contentbeans.CMCollection;
-import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.cae.contentbeans.CMQueryListImpl;
 import com.coremedia.blueprint.common.navigation.Linkable;
+import com.coremedia.cache.Cache;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.common.NoSuchPropertyDescriptorException;
-import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
@@ -40,7 +36,6 @@ import java.util.Optional;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper.parseCommerceId;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
-import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class CMProductListImpl extends CMQueryListImpl implements CMProductList {
 
@@ -128,6 +123,7 @@ public class CMProductListImpl extends CMQueryListImpl implements CMProductList 
   @Override
   public List<Linkable> getItems() {
     List<Map<String, Object>> fixedItemsStructList = getFixedItemsStructList();
+    Cache.uncacheable(); //register an uncachable dependency since the search for products doesn't use a cache nor set cache dependencies
     List products = getProducts(); // Products should be Linkables
     return mergeFixedItems(fixedItemsStructList, products, getMaxLength());
   }

@@ -19,16 +19,17 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.NAME_LOCAL_SETTINGS;
+import static com.google.common.collect.Sets.newHashSet;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.hamcrest.MockitoHamcrest.argThat;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 @RunWith(PowerMockRunner.class)
@@ -79,7 +80,7 @@ public class AssetInvalidationWriteInterceptorTest {
   }
 
   @Test
-  public void testReferencesChange() throws Exception {
+  public void testReferencesChange() {
     //the old references
     when(CommerceReferenceHelper.getExternalReferences(content)).thenReturn(Arrays.asList("a", "b", "c"));
     //the new references
@@ -87,12 +88,12 @@ public class AssetInvalidationWriteInterceptorTest {
 
     testling.intercept(contentWriteRequest);
 
-    List<String> expected = Arrays.asList("d", "e", "b", "a");
-    verify(invalidationSource, times(1)).invalidateReferences(argThat(new SetContainsMatcher(expected)));
+    Set<String> expected = newHashSet("d", "e", "b", "a");
+    verify(invalidationSource, times(1)).invalidateReferences(argThat(expected::containsAll));
   }
 
   @Test
-  public void testLocalSettingsChange() throws Exception {
+  public void testLocalSettingsChange() {
     //the references are not changed...
     when(CommerceReferenceHelper.getExternalReferences(content)).thenReturn(Arrays.asList("a", "b", "c"));
     when(CommerceReferenceHelper.getExternalReferences(newLocalSettings)).thenReturn(Arrays.asList("a", "b", "c"));
@@ -101,7 +102,7 @@ public class AssetInvalidationWriteInterceptorTest {
 
     testling.intercept(contentWriteRequest);
 
-    List<String> expected = Arrays.asList("a", "b", "c");
-    verify(invalidationSource, times(1)).invalidateReferences(argThat(new SetContainsMatcher(expected)));
+    Set<String> expected = newHashSet("a", "b", "c");
+    verify(invalidationSource, times(1)).invalidateReferences(argThat(expected::containsAll));
   }
 }

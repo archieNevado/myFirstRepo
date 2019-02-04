@@ -1,4 +1,9 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.layout.Container" -->
-<#assign additionalClass=cm.localParameters().additionalClass!"" />
 
-<@cm.include self=self view="asCarousel" params={"viewItems": "asHero", "additionalClass": additionalClass} />
+<#import "*/node_modules/@coremedia/slick-carousel/src/freemarkerLibs/slickCarousel.ftl" as slickCarousel />
+
+<@slickCarousel.render items=self.items
+                       itemsView="asHero"
+                       innerArrows=true
+                       additionalClass=cm.localParameters().additionalClass!""
+                       metadata=[bp.getContainerMetadata(self),bp.getPlacementHighlightingMetaData(self)!""] />

@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.common.contentbeans;
 
 import com.coremedia.blueprint.common.cta.CallToActionButtonSettings;
+import com.coremedia.blueprint.common.teaser.TeaserSettings;
 import com.coremedia.blueprint.common.teaserOverlay.TeaserOverlaySettings;
 import com.coremedia.blueprint.common.teaserOverlay.TeaserOverlayStyle;
 import com.coremedia.cae.aspect.Aspect;
@@ -229,6 +230,19 @@ public interface CMTeasable extends CMHasContexts {
    * @cm.template.api
    */
   List<Markup> getTextAsParagraphs();
+
+  /**
+   * The name of the teaser options settings struct.
+   */
+  String TEASER_SETTINGS_STRUCT_NAME = "teaserSettings";
+
+  /**
+   * Returns the teaser settings.
+   *
+   * @return the teaser settings.
+   * @cm.template.api
+   */
+  TeaserSettings getTeaserSettings();
 
   /**
    * The name of the teaser overlay settings struct.

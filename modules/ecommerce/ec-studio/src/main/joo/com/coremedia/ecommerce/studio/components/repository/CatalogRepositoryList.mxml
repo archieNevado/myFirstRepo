@@ -25,9 +25,6 @@
 
     public static const xtype:String = "com.coremedia.ecommerce.studio.config.catalogRepositoryList";
 
-    private var config:CatalogRepositoryList;
-    private var catalogHelper:CatalogHelper;
-
     /**
      * The itemId of the copy to system clipboard menu item.
      */
@@ -40,10 +37,27 @@
     [Bindable]
     public var mySelectedItemsValueExpression:ValueExpression;
 
+    private var catalogHelper:CatalogHelper;
+
+/**
+     * value expression that acts as a model for informing a view of a newly created content object.
+     */
+    [Bindable]
+    public var createdContentValueExpression:ValueExpression;
+
+    /**
+     * Value expression that indicates if a new content can be created based on the current selection in the collection view.
+     */
+    [Bindable]
+    public var newContentDisabledValueExpression:ValueExpression;
+
     // called by generated constructor code
+    //noinspection JSUnusedLocalSymbols
     private function __initialize__():void {
       catalogHelper = CatalogHelper.getInstance();
     }
+
+    private var config:CatalogRepositoryList;
 
     public native function CatalogRepositoryList(config:CatalogRepositoryList = null);
     ]]></fx:Script>
@@ -71,13 +85,15 @@
     <ui:ContextMenuPlugin lastClickedCellVE="{getLastClickedCellVE()}">
       <ui:contextMenu>
         <ec:CatalogRepositoryContextMenu selectedItemsValueExpression="{config.mySelectedItemsValueExpression}"
-                                         selectedFolderValueExpression="{getSelectedNodeExpression()}">
+                                         selectedFolderValueExpression="{getSelectedNodeExpression()}"
+                                         newContentDisabledValueExpression="{config.newContentDisabledValueExpression}"
+                                         createdContentValueExpression="{config.createdContentValueExpression}">
           <ec:plugins exml:mode="append">
             <plugins:AddItemsPlugin>
               <plugins:items>
                 <MenuItem itemId="{COPY_COLUMN_CONTENT_TO_SYSTEM_CLIPBOARD}">
                   <baseAction>
-                    <editor:CopyCellContentToSystemClipboardAction lastClickedCellVE="{getLastClickedCellVE()}" selectedItemsValueExpression="{config.mySelectedItemsValueExpression}"></editor:CopyCellContentToSystemClipboardAction>
+                    <editor:CopyCellContentToSystemClipboardAction lastClickedCellVE="{getLastClickedCellVE()}" selectedItemsValueExpression="{config.mySelectedItemsValueExpression}"/>
                   </baseAction>
                 </MenuItem>
               </plugins:items>

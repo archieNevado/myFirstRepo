@@ -3,6 +3,7 @@ package com.coremedia.livecontext.studio.asset;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.content.Content;
@@ -27,13 +28,12 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import javax.activation.MimeType;
 import java.io.InputStream;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.newStoreContext;
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -98,7 +98,7 @@ public class BlobUploadXmpDataInterceptorTest {
 
     commerceConnection = new BaseCommerceConnection();
 
-    storeContext = newStoreContext();
+    storeContext = StoreContextBuilderImpl.from().build();
     commerceConnection.setStoreContext(storeContext);
 
     commerceConnection.setCatalogService(catalogService);
@@ -126,7 +126,7 @@ public class BlobUploadXmpDataInterceptorTest {
     when(contentWriteRequest.getProperties()).thenReturn(properties);
     when(contentWriteRequest.getParent()).thenReturn(parentFolder);
     mockStatic(ProductIdExtractor.class);
-    when(ProductIdExtractor.extractProductIds(blob)).thenReturn(Collections.<String>emptyList());
+    when(ProductIdExtractor.extractProductIds(blob)).thenReturn(emptyList());
 
     testling.intercept(contentWriteRequest);
 

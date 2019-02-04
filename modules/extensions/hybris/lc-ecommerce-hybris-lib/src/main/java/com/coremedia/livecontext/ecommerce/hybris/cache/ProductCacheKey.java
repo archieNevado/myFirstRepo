@@ -18,7 +18,7 @@ public class ProductCacheKey extends AbstractHybrisDocumentCacheKey<ProductDocum
 
   private CatalogResource resource;
 
-  public ProductCacheKey(@NonNull CommerceId id, StoreContext storeContext, CatalogResource resource,
+  public ProductCacheKey(@NonNull CommerceId id, @NonNull StoreContext storeContext, CatalogResource resource,
                          CommerceCache commerceCache) {
     super(id, storeContext, CONFIG_KEY_PRODUCT, commerceCache);
     this.resource = resource;

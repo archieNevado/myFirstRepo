@@ -72,10 +72,12 @@ public class ProductRepresentation extends CommerceBeanRepresentation {
     return variants;
   }
 
+  @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
   public List<Content> getPictures() {
     return pictures;
   }
 
+  @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
   public List<Content> getDownloads() {
     return downloads;
   }
@@ -120,12 +122,10 @@ public class ProductRepresentation extends CommerceBeanRepresentation {
     this.variants = variants;
   }
 
-  @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
   public void setPictures(List<Content> pictures) {
     this.pictures = pictures;
   }
 
-  @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
   public void setDownloads(List<Content> downloads) {
     this.downloads = downloads;
   }

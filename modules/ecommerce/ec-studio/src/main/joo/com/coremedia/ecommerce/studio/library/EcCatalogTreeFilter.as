@@ -3,6 +3,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.cms.editor.configuration.TreeFilter;
 import com.coremedia.cms.editor.sdk.collectionview.tree.CompoundChildTreeModel;
+import com.coremedia.cms.editor.sdk.collectionview.tree.CompoundTreeModel;
 import com.coremedia.cms.editor.sdk.collectionview.tree.RepositoryTreeModel;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.sites.Site;
@@ -29,7 +30,14 @@ public class EcCatalogTreeFilter implements TreeFilter {
       }
 
       var content:Content = child as Content;
-      if (!content.getPath()) {
+      if (content) {
+        var repositoryTreeModel:RepositoryTreeModel = treeModel as RepositoryTreeModel;
+        if (repositoryTreeModel) {
+          return false;
+        }
+      }
+
+      if (false && !content.getPath()) {
         return undefined;
       }
 
@@ -68,16 +76,16 @@ public class EcCatalogTreeFilter implements TreeFilter {
     if (rootId == RepositoryTreeModel.REPOSITORY_ROOT_ID) {
       //check if there is currently a CoreMedia store selected
 
-        //if the content belongs to the active site, check if it is a content and should be  hidden
-        if(content.getPath().indexOf("/" + folderName) !== -1) {
-          var sites:Array = editorContext.getSitesService().getSites();
-          for each(var site:Site in sites) {
-            var path:String = site.getSiteRootFolder().getPath() + "/" + folderName;
-            if(path === content.getPath()) {
-              return true;
-            }
+      //if the content belongs to the active site, check if it is a content and should be  hidden
+      if (content.getPath().indexOf("/" + folderName) !== -1) {
+        var sites:Array = editorContext.getSitesService().getSites();
+        for each(var site:Site in sites) {
+          var path:String = site.getSiteRootFolder().getPath() + "/" + folderName;
+          if (path === content.getPath()) {
+            return true;
           }
         }
+      }
     }
 
     return false;

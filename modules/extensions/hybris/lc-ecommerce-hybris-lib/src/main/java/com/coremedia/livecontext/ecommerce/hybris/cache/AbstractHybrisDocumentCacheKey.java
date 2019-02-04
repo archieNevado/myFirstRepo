@@ -9,16 +9,14 @@ import com.coremedia.livecontext.ecommerce.common.InvalidIdException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.hybris.common.HybrisCommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.AbstractHybrisDocument;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 public abstract class AbstractHybrisDocumentCacheKey<T extends AbstractHybrisDocument> extends AbstractCommerceCacheKey<T> {
 
   private final CommerceId commerceId;
 
-  AbstractHybrisDocumentCacheKey(@NonNull CommerceId id,
-                                 StoreContext storeContext,
-                                 String configKey, CommerceCache commerceCache) {
+  AbstractHybrisDocumentCacheKey(@NonNull CommerceId id, @NonNull StoreContext storeContext, String configKey,
+                                 CommerceCache commerceCache) {
     super(CommerceIdFormatterHelper.format(id), storeContext, configKey, commerceCache);
 
     if (!HybrisCommerceIdProvider.isHybrisId(id)) {

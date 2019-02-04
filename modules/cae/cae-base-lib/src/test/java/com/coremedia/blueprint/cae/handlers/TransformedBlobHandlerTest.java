@@ -39,6 +39,7 @@ import static com.coremedia.blueprint.cae.web.links.NavigationLinkSupport.ATTR_N
 import static com.google.common.collect.Maps.newHashMap;
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.from;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -221,17 +222,15 @@ public class TransformedBlobHandlerTest {
     assertThat(modelAndView)
             .as(message)
             .extracting(HandlerHelper::getRootModel)
-            .allMatch(HttpError.class::isInstance)
-            .extracting(HttpError.class::cast)
-            .extracting(HttpError::getErrorCode)
-            .containsExactly(HttpServletResponse.SC_NOT_FOUND);
+            .isInstanceOfSatisfying(HttpError.class,
+                    e -> assertThat(e)
+                            .returns(HttpServletResponse.SC_NOT_FOUND, from(HttpError::getErrorCode)));
   }
 
   private void assertModel(ModelAndView modelAndView, Object bean) {
     assertThat(modelAndView)
             .extracting(HandlerHelper::getRootModel)
-            .containsExactly(bean);
-
+            .isEqualTo(bean);
   }
 
   protected String formatLink(Object bean, String viewName, boolean forRedirect, Map<String, Object> parameters) {

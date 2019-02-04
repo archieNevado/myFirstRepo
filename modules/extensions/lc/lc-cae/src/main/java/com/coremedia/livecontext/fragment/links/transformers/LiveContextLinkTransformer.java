@@ -73,7 +73,7 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
   }
 
   @Override
-  public String transform(@NonNull String cmsLink, @NonNull Object bean, String view,
+  public String transform(@NonNull String cmsLink, @Nullable Object bean, String view,
                           @NonNull HttpServletRequest request,
                           @NonNull HttpServletResponse response,
                           boolean forRedirect) {
@@ -100,7 +100,7 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
   /**
    * Check prerequisites of live context link transformers
    */
-  private boolean canHandle(@NonNull String cmsLink, @NonNull Object bean, @NonNull HttpServletRequest request) {
+  private boolean canHandle(@NonNull String cmsLink, @Nullable Object bean, @NonNull HttpServletRequest request) {
     if (!CurrentCommerceConnection.find().isPresent()) {
       // not a commerce request at all
       return false;
@@ -172,7 +172,7 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
   }
 
   @NonNull
-  private String transform(String source, Object content, Object variant, CMNavigation navigation,
+  private String transform(String source, @Nullable Object content, Object variant, CMNavigation navigation,
                            @NonNull HttpServletRequest request) {
     Optional<String> nonBlankLcUrl = resolveUrl(source, content, variant, navigation, request)
             .filter(StringUtils::isNotBlank);
@@ -188,8 +188,8 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
   }
 
   @NonNull
-  private Optional<String> resolveUrl(String source, Object content, @Nullable Object variant, CMNavigation navigation,
-                                      HttpServletRequest request) {
+  private Optional<String> resolveUrl(String source, @Nullable Object content, @Nullable Object variant,
+                                      CMNavigation navigation, @NonNull HttpServletRequest request) {
     if (source == null) {
       return Optional.empty();
     }
@@ -197,7 +197,7 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
     String variantStr = variant != null ? variant + "" : null;
 
     return liveContextLinkResolverList.stream()
-            .filter(resolver -> resolver.isApplicable(content))
+            .filter(resolver -> resolver.isApplicable(content, request))
             .map(resolver -> resolver.resolveUrl(source, content, variantStr, navigation, request))
             .flatMap(Streams::stream)
             .findFirst();

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "jquery": "3.2.1",
+    "jquery": "3.3.1",
     "@coremedia/brick-media": "^1.0.0",
     "@coremedia/ftl-utils": "^1.0.0",
     "@coremedia/js-basic": "^1.0.0",
@@ -12,7 +12,7 @@
   },
   "devDependencies": {
     "jsdoc-to-markdown": "3.0.0",
-    "prettier": "1.11.1"
+    "prettier": "1.15.2"
   },
   "scripts": {
     "apidoc": "jsdoc2md src/js/*.js > API.md",

@@ -40,9 +40,9 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.EncodedResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -58,9 +58,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-@WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {XmlRepoConfiguration.class, LcStudioValidatorsXmlRepoTest.LocalConfig.class})
+@ContextConfiguration(classes = {
+        XmlRepoConfiguration.class,
+        LcStudioValidatorsXmlRepoTest.LocalConfig.class
+})
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class LcStudioValidatorsXmlRepoTest {
 
   private static final String PROPERTY_NAME = "externalId";
@@ -117,7 +120,9 @@ public class LcStudioValidatorsXmlRepoTest {
 
     commerceConnection = new BaseCommerceConnection();
 
-    StoreContextImpl storeContext = StoreContextImpl.builder(siteId).build();
+    StoreContextImpl storeContext = StoreContextBuilderImpl.from()
+            .withSiteId(siteId)
+            .build();
     commerceConnection.setStoreContext(storeContext);
 
     when(storeContextProvider.buildContext(any())).thenReturn(StoreContextBuilderImpl.from(storeContext));
@@ -149,17 +154,6 @@ public class LcStudioValidatorsXmlRepoTest {
     Iterable<Issue> issues = validate(14);
 
     assertIssueCode(issues, "CMExternalChannel_InvalidId");
-  }
-
-  @Test
-  public void testDuplicateExternalId() {
-    Iterable<Issue> issues1 = validate(16);
-
-    assertIssueCode(issues1, "UniqueInSiteStringValidator");
-
-    Iterable<Issue> issues2 = validate(18);
-
-    assertIssueCode(issues2, "UniqueInSiteStringValidator");
   }
 
   @Test
@@ -315,7 +309,6 @@ public class LcStudioValidatorsXmlRepoTest {
   @Configuration
   @ImportResource(value = {
           "classpath:/com/coremedia/lc/studio/lib/validators.xml",
-          "classpath:/framework/spring/lc-ecommerce-services.xml"
   },
           reader = com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader.class)
   public static class LocalConfig {
@@ -342,7 +335,7 @@ public class LcStudioValidatorsXmlRepoTest {
     MatcherAssert.assertThat(issues, hasItem(code(expectedCode)));
   }
 
-  private static IssueCodeMatcher code(String expectedCode) {
+  static IssueCodeMatcher code(String expectedCode) {
     return new IssueCodeMatcher(expectedCode);
   }
 

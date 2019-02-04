@@ -10,6 +10,7 @@ import com.coremedia.cache.Cache;
 import com.coremedia.objectserver.view.ServletView;
 import com.coremedia.objectserver.view.XmlFilterFactory;
 import com.coremedia.xml.Markup;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -78,10 +79,12 @@ public class MergeableResourcesView implements ServletView {
    * @param response the response
    */
   @Override
-  public void render(Object bean, String view, HttpServletRequest request, HttpServletResponse response) {
+  public void render(Object bean, String view, @NonNull HttpServletRequest request,
+                     @NonNull HttpServletResponse response) {
     if (!(bean instanceof MergeableResources)) {
       throw new IllegalArgumentException(bean + " is no MergeableResources");
     }
+
     try {
       MergeableResources codeResources = (MergeableResources) bean;
       PrintWriter writer = response.getWriter();
@@ -102,7 +105,8 @@ public class MergeableResourcesView implements ServletView {
    * @param codeResources the codeResources element containing the resources
    * @param out        the writer to render to
    */
-  private void renderResources(HttpServletRequest request, HttpServletResponse response, MergeableResources codeResources, Writer out) {
+  private void renderResources(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
+                               MergeableResources codeResources, Writer out) {
     List<CMAbstractCode> codes = codeResources.getMergeableResources();
 
     //set correct contentType

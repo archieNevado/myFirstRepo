@@ -22,7 +22,7 @@ public class DynamizableCMTeasableContainer implements DynamizableContainer {
 
   private static final String PROPERTY_PATH_DEFAULT = "items";
 
-  private CMTeasable teasable;
+  protected CMTeasable teasable;
   private String propertyPath;
 
   public DynamizableCMTeasableContainer(@NonNull CMTeasable teasable, @Nullable String propertyPath) {

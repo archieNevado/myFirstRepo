@@ -2,6 +2,7 @@ package com.coremedia.livecontext.fragment.links.transformers.resolvers;
 
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,8 +26,8 @@ public abstract class AbstractLiveContextLinkResolver implements LiveContextLink
 
   @NonNull
   @Override
-  public Optional<String> resolveUrl(@NonNull String source, Object bean, String variant, CMNavigation navigation,
-                                     HttpServletRequest request) {
+  public Optional<String> resolveUrl(@NonNull String source, @Nullable Object bean, @Nullable String variant,
+                                     @Nullable CMNavigation navigation, @NonNull HttpServletRequest request) {
     try {
       JSONObject json = resolveUrlInternal(source, bean, variant, navigation, request);
 
@@ -39,7 +40,8 @@ public abstract class AbstractLiveContextLinkResolver implements LiveContextLink
 
       return Optional.of(LIVECONTEXT_COMMENT_PREFIX + json.toString() + LIVECONTEXT_COMMENT_SUFFIX);
     } catch (JSONException e) {
-      LOG.error("Could not build URL JSON for {}", bean.toString().concat("#").concat("variant"), e);
+      String beanStr = bean != null ? bean.toString() : "null";
+      LOG.error("Could not build URL JSON for {}", beanStr.concat("#").concat("variant"), e);
       return Optional.empty();
     }
   }
@@ -55,8 +57,9 @@ public abstract class AbstractLiveContextLinkResolver implements LiveContextLink
    * @throws JSONException if something JSON-related goes wrong
    */
   @NonNull
-  protected abstract JSONObject resolveUrlInternal(@NonNull String source, Object bean, String variant,
-                                                   CMNavigation navigation, HttpServletRequest request);
+  protected abstract JSONObject resolveUrlInternal(@NonNull String source, @Nullable Object bean,
+                                                   @Nullable String variant, @Nullable CMNavigation navigation,
+                                                   @NonNull HttpServletRequest request);
 
   @NonNull
   public static String deabsolutizeLink(@NonNull String cmsLink) {

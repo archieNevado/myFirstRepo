@@ -36,6 +36,7 @@
     import com.coremedia.cap.content.Content;
     import com.coremedia.cms.editor.sdk.dashboard.WidgetState;
     import com.coremedia.cms.editor.sdk.desktop.FavoritesToolbar;
+    import com.coremedia.cms.editor.sdk.desktop.WorkArea;
 
     import mx.resources.ResourceManager;
 
@@ -90,6 +91,9 @@
     <editor:PreviewPanel>
       <editor:plugins>
         <bpb-components:AddPreviewDateSelectorButtonPlugin/>
+        <bpforms:PreviewVariantsPreviewPanelPlugin previewVariantVE="{PreviewPanel.PREVIEW_VARIANT_VALUE_EXPRESSION}"/>
+        <ui:BindPlugin bindTo="{PreviewPanel.PREVIEW_VARIANT_VALUE_EXPRESSION}"
+                       boundValueChanged="{reloadPreview}"/>
       </editor:plugins>
     </editor:PreviewPanel>
 

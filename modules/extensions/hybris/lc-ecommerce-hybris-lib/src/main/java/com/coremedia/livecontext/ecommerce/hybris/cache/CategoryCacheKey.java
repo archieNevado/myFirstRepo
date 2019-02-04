@@ -16,7 +16,7 @@ public class CategoryCacheKey extends AbstractHybrisDocumentCacheKey<CategoryDoc
 
   private CatalogResource resource;
 
-  public CategoryCacheKey(@NonNull CommerceId id, StoreContext storeContext, CatalogResource resource,
+  public CategoryCacheKey(@NonNull CommerceId id, @NonNull StoreContext storeContext, CatalogResource resource,
                           CommerceCache commerceCache) {
     super(id, storeContext, CONFIG_KEY_CATEGORY, commerceCache);
     this.resource = resource;

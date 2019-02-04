@@ -59,7 +59,8 @@ public class PrefetchFragmentsView implements TextView {
   private PrefetchFragmentsConfigReader configReader;
 
   @Override
-  public void render(Object bean, String view, Writer out, HttpServletRequest request, HttpServletResponse response) {
+  public void render(Object bean, String view, Writer out, @NonNull HttpServletRequest request,
+                     @NonNull HttpServletResponse response) {
     try {
       Page page = getPage(bean, request);
 
@@ -145,7 +146,8 @@ public class PrefetchFragmentsView implements TextView {
    * @return the json object with the rendered view as the payload property.
    */
   @NonNull
-  private static Optional<JsonObject> renderView(@NonNull Object bean, @NonNull String view, @NonNull HttpServletRequest request,
+  private static Optional<JsonObject> renderView(@NonNull Object bean, @NonNull String view,
+                                                 @NonNull HttpServletRequest request,
                                                  @NonNull HttpServletResponse response) {
     String payload;
     try {
@@ -169,7 +171,8 @@ public class PrefetchFragmentsView implements TextView {
    * @return the json object with the rendered view as the payload property.
    */
   @NonNull
-  private Optional<JsonObject> renderPlacement(@NonNull PageGridPlacement placement, @NonNull HttpServletRequest request,
+  private Optional<JsonObject> renderPlacement(@NonNull PageGridPlacement placement,
+                                               @NonNull HttpServletRequest request,
                                                @NonNull HttpServletResponse response) {
     String placementView = getPlacementView((Page) request.getAttribute(ContextHelper.ATTR_NAME_PAGE), placement).orElse("");
     String payload;

@@ -6,9 +6,6 @@ const nodeSass = require("node-sass");
 const path = require("path");
 
 const { getThemeConfig } = require("@coremedia/tool-utils/workspace");
-const {
-  getDependencyCheckNodeSassImporter,
-} = require("@coremedia/dependency-check");
 const deepMerge = require("./utils/deepMerge");
 const {
   sassSmartImport,
@@ -27,15 +24,6 @@ const CSS_PATH = "css";
 const EXTRACT_CSS_PUBLIC_PATH = CSS_PATH
   ? path.relative(CSS_PATH, "") + "/"
   : undefined;
-
-const include = [path.resolve(".")];
-
-const exclude = [
-  // All modules but CoreMedia specific modules
-  /\/node_modules\/((?!@coremedia).)*$/,
-  /\/legacy\//,
-  /\/vendor\//,
-];
 
 // Create entry point(s)
 
@@ -59,7 +47,7 @@ const extractTextPluginForCss = new ExtractTextPlugin({
   allChunks: true, // prevents second compilation of sass (doubles build speed)
 });
 
-module.exports = () => config =>
+module.exports = ({ dependencyCheckPlugin }) => config =>
   deepMerge(config, {
     entry: entry,
     module: {
@@ -104,7 +92,7 @@ module.exports = () => config =>
                   importer: [
                     sassSmartImport,
                     sassExcludeImport,
-                    getDependencyCheckNodeSassImporter(include, exclude),
+                    dependencyCheckPlugin.getNodeSassImporter(),
                     sassImportOnce,
                   ],
                   functions: {

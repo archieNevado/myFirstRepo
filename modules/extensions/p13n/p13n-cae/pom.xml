@@ -87,11 +87,19 @@
 
     <dependency>
       <groupId>org.springframework</groupId>
+      <artifactId>spring-beans</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
       <artifactId>spring-web</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
-      <artifactId>spring-beans</artifactId>
+      <artifactId>spring-webmvc</artifactId>
     </dependency>
     <dependency>
       <groupId>com.coremedia.cms</groupId>
@@ -104,10 +112,6 @@
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>coremedia-personal-data</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-webmvc</artifactId>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -147,6 +151,27 @@
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>coremedia-cache</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>content-services</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint.base</groupId>
+      <artifactId>bpbase-pagegrid-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>cap-client-xml</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>coremedia-spring</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -167,6 +192,16 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
       <scope>test</scope>
@@ -177,29 +212,14 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>javax.inject</groupId>
       <artifactId>javax.inject</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <!-- Workaround MDEP-594: The dependency is used but usages of type annotations are not correctly detected -->
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>default-cli</id>
-            <configuration>
-              <ignoredUnusedDeclaredDependencies combine.children="append">
-                <ignoredUnusedDeclaredDependency>com.coremedia.cms:coremedia-personal-data</ignoredUnusedDeclaredDependency>
-              </ignoredUnusedDeclaredDependencies>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
 </project>

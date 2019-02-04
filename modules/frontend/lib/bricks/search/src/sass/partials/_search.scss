@@ -272,7 +272,7 @@ Contains styling definitions for search including search field and resultpage.
     &__date {
       color: $cm-search-result-date-color;
 
-      // add devider between date and text
+      // add divider between date and text
       + span {
         &:before {
           color: $cm-search-result-date-color;

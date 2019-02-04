@@ -16,6 +16,7 @@ import com.coremedia.livecontext.handler.ExternalNavigationHandler;
 import com.coremedia.livecontext.logictypes.CommerceLedLinkBuilderHelper;
 import com.google.common.collect.Lists;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -80,7 +81,7 @@ public class CMObjectLiveContextLinkResolver extends AbstractLiveContextLinkReso
   }
 
   @Override
-  public boolean isApplicable(Object bean) {
+  public boolean isApplicable(@Nullable Object bean, @NonNull HttpServletRequest request) {
     // LiveContextLinkTransformer checks if the bean can be handled
     return true;
   }
@@ -105,8 +106,8 @@ public class CMObjectLiveContextLinkResolver extends AbstractLiveContextLinkReso
    */
   @Override
   @NonNull
-  protected JSONObject resolveUrlInternal(@NonNull String source, Object bean, String variant, CMNavigation navigation,
-                                          HttpServletRequest request) {
+  protected JSONObject resolveUrlInternal(@NonNull String source, @Nullable Object bean, @Nullable String variant,
+                                          @Nullable CMNavigation navigation, @NonNull HttpServletRequest request) {
     JSONObject out = new JSONObject();
     out.put(KEY_RENDER_TYPE, RENDER_TYPE_URL);
 
@@ -226,7 +227,7 @@ public class CMObjectLiveContextLinkResolver extends AbstractLiveContextLinkReso
     }
   }
 
-  private void processExternalPage(@NonNull CMExternalPage externalChannel, HttpServletRequest request,
+  private void processExternalPage(@NonNull CMExternalPage externalChannel, @NonNull HttpServletRequest request,
                                    @NonNull JSONObject out) {
     out.put(KEY_OBJECT_TYPE, OBJECT_TYPE_LC_PAGE);
 

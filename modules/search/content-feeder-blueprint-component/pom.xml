@@ -35,7 +35,11 @@
       <artifactId>bpbase-multisite-impl</artifactId>
       <scope>runtime</scope>
     </dependency>
-
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>base-component</artifactId>
+      <scope>runtime</scope>
+    </dependency>
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>content-feeder-solr-component</artifactId>
@@ -56,6 +60,11 @@
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>cap-multisite</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>management-component</artifactId>
+      <scope>runtime</scope>
     </dependency>
 
     <dependency>

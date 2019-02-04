@@ -12,7 +12,7 @@
     "mkdirp": "0.5.1"
   },
   "devDependencies": {
-    "prettier": "1.11.1"
+    "prettier": "1.15.2"
   },
   "scripts": {
     "prettier": "prettier \"**/*\" --write"

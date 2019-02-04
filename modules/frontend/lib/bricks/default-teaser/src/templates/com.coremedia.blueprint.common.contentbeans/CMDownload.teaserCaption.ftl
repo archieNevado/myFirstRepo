@@ -5,7 +5,7 @@
 
 <#assign renderTeaserTitle=cm.localParameters().renderTeaserTitle!true />
 <#assign renderTeaserText=cm.localParameters().renderTeaserText!true />
-<#assign link=(cm.localParameters().renderLink!true)?then(cm.getLink(self.target!cm.UNDEFINED), "") />
+<#assign link=defaultTeaser.getLink(self.target!cm.UNDEFINED, self.teaserSettings) />
 <#assign title=renderTeaserTitle?then(self.teaserTitle!"", "") />
 <#assign text=renderTeaserText?then(self.teaserText!"", "") />
 
@@ -30,5 +30,7 @@
                               openInNewTab=self.openInNewTab
                               ctaButtons=self.callToActionSettings
                               teaserBlockClass=cm.localParameters().teaserBlockClass!cm.UNDEFINED
+                              authors=(cm.localParameters().renderAuthors!false)?then(self.authors![], [])
+                              externallyDisplayedDate=(cm.localParameters().renderDate!false)?then(self.externallyDisplayedDate![], [])
                               metadataTitle=["properties.title"]
                               metadataText=["properties.text"] />

@@ -18,7 +18,7 @@
   <#-- title -->
   <h1 class="${blockClass}__headline"<@preview.metadata "properties.teaserTitle"/>>${self.teaserTitle!""}</h1>
 
-  <div class="cm-imagemap" data-cm-imagemap='{"coordsBaseWidth": "${bp.IMAGE_TRANSFORMATION_BASE_WIDTH}", "defaultLink": "${link}"}'>
+  <div class="cm-imagemap" <@cm.dataAttribute name="data-cm-imagemap" data={"coordsBaseWidth": bp.IMAGE_TRANSFORMATION_BASE_WIDTH, "defaultLink": link} />>
 
     <#-- picture + hot zones -->
     <@cm.include self=self view="_picture" params={
@@ -59,7 +59,7 @@
 
 <#-- related -->
 <#if renderRelated>
-  <@cm.include self=self view="_related" params={"relatedView": relatedView}/>
+  <@cm.include self=self view="_related" params={"relatedView": relatedView, "additionalClass": "${blockClass}__related"}/>
 </#if>
 
 <#-- extensions -->

@@ -31,7 +31,7 @@ import static com.google.common.collect.Sets.newHashSet;
  */
 public class AssetInvalidationWritePostProcessor extends ContentWritePostprocessorBase {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ContentWritePostprocessorBase.class);
+  private static final Logger LOG = LoggerFactory.getLogger(AssetInvalidationWritePostProcessor.class);
 
   @VisibleForTesting
   static final String STRUCT_PROPERTY_NAME = "localSettings";

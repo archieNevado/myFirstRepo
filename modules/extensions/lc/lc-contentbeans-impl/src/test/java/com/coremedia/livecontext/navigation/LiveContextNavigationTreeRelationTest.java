@@ -1,11 +1,8 @@
 package com.coremedia.livecontext.navigation;
 
 import com.coremedia.blueprint.common.navigation.Linkable;
-import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
-import com.coremedia.cap.multisite.SitesService;
-import com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl;
 import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
@@ -33,22 +30,14 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class LiveContextNavigationTreeRelationTest {
 
-  private static final String SITE_ID = "aSiteId";
-
   @Mock
   private ContentBeanFactory contentBeanFactory;
-
-  @Mock
-  private ValidationService validationService;
 
   @Mock
   private Category augmentedCategory;
 
   @Mock
   private CommerceTreeRelation treeRelation;
-
-  @Mock
-  private SitesService sitesService;
 
   @Mock
   private AugmentationService augmentationService;
@@ -58,9 +47,6 @@ public class LiveContextNavigationTreeRelationTest {
 
   @Mock
   private Content content;
-
-  @Mock
-  private LiveContextExternalChannelImpl externalChannel;
 
   @InjectMocks
   @Spy
@@ -73,18 +59,17 @@ public class LiveContextNavigationTreeRelationTest {
   private LiveContextNavigationTreeRelation testling;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     testling.setNavigationFactory(navigationFactory);
     testling.setDelegate(delegate);
     navigationFactory.setTreeRelation(testling);
     delegate.setCommerceTreeRelation(treeRelation);
 
     when(augmentationService.getContent(augmentedCategory)).thenReturn(content);
-    when(contentBeanFactory.createBeanFor(content)).thenReturn(externalChannel);
   }
 
   @Test
-  public void testGetChildrenOf() throws Exception {
+  public void testGetChildrenOf() {
     Category categoryChild1 = mock(Category.class);
     Category categoryChild2 = mock(Category.class);
 
@@ -108,7 +93,7 @@ public class LiveContextNavigationTreeRelationTest {
    * {@link LiveContextNavigationTreeRelation#pathToRoot(com.coremedia.blueprint.common.navigation.Linkable)}
    */
   @Test
-  public void testBreadcrumb_CMS_5573() throws Exception {
+  public void testBreadcrumb_CMS_5573() {
     Category c1 = mock(Category.class);
     Category c2 = mock(Category.class);
     Category c3 = mock(Category.class);
@@ -117,11 +102,5 @@ public class LiveContextNavigationTreeRelationTest {
     LiveContextNavigation testNavigation = navigationFactory.createNavigation(c3, site);
     Collection<Linkable> breadcrumb = testling.pathToRoot(testNavigation);
     assertThat(breadcrumb).hasSize(4);
-
-    /* TODO fixme
-    Iterator<Linkable> iterator = breadcrumb.iterator();
-    assertThat(((LiveContextNavigation) iterator.next()).getCategory()).isSameAs(c1);
-    assertThat(((LiveContextNavigation) iterator.next()).getCategory()).isSameAs(c2);
-    */
   }
 }

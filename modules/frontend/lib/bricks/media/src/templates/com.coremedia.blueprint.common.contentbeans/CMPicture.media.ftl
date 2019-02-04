@@ -21,7 +21,8 @@
 
 <div class="${classBox}"<@preview.metadata data=metadata + [self.content]/>>
   <#if self.data?has_content>
-    <#assign imageLink=""/>
+    <#-- adding an 1x1px transparent png as default to avoid a broken image icon in chrome -->
+    <#assign imageLink="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="/>
     <#assign responsiveData=""/>
 
     <#-- decide if responsiveImage functionality is to be used or uncropped image will be shown -->
@@ -30,7 +31,6 @@
       <#assign imageLink=bp.uncroppedImageLink(self)/>
     <#else>
       <#-- B) display responsive image -->
-      <#-- imageLink is empty in this case -->
       <#assign responsiveData=bp.responsiveImageLinksData(self, limitAspectRatios)!""/>
     </#if>
 

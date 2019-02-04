@@ -9,6 +9,7 @@ import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.livecontext.ecommerce.user.UserSessionService;
 import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
 import com.coremedia.objectserver.web.links.Link;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
 import static java.util.Collections.singletonMap;
@@ -34,20 +34,19 @@ import static java.util.Objects.requireNonNull;
 
 @Link
 @Controller
+@DefaultAnnotation(NonNull.class)
 public class LoginStatusHandler {
 
-  private static final String STATUS = '/' + PREFIX_DYNAMIC + "/loginstatus";
   private static final Logger LOG = LoggerFactory.getLogger(LoginStatusHandler.class);
 
-  private final UserSessionService userSessionService;
+  private static final String STATUS = '/' + PREFIX_DYNAMIC + "/loginstatus";
+
   private final LiveContextSiteResolver liveContextSiteResolver;
   private final CommerceConnectionInitializer commerceConnectionInitializer;
 
   @SuppressWarnings("WeakerAccess") // used in Spring XML
-  public LoginStatusHandler(@NonNull UserSessionService userSessionService,
-                            @NonNull LiveContextSiteResolver liveContextSiteResolver,
-                            @NonNull CommerceConnectionInitializer commerceConnectionInitializer) {
-    this.userSessionService = requireNonNull(userSessionService);
+  public LoginStatusHandler(LiveContextSiteResolver liveContextSiteResolver,
+                            CommerceConnectionInitializer commerceConnectionInitializer) {
     this.liveContextSiteResolver = requireNonNull(liveContextSiteResolver);
     this.commerceConnectionInitializer = requireNonNull(commerceConnectionInitializer);
   }
@@ -55,16 +54,26 @@ public class LoginStatusHandler {
   @GetMapping(value = STATUS, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Map<String, Object>> handleStatus(@RequestParam String storeId,
                                                           @RequestParam Locale locale,
-                                                          @NonNull HttpServletRequest request) {
-    return withConnection(storeId, locale, request, () -> new ResponseEntity<>(status(), HttpStatus.OK));
+                                                          HttpServletRequest request) {
+    CommerceConnection connection = findConnection(storeId, locale).orElse(null);
+    if (connection == null) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    try {
+      CurrentCommerceConnection.set(connection);
+      initUserContext(connection, request);
+
+      Map<String, Object> body = singletonMap("loggedIn", isLoggedIn(connection));
+      return new ResponseEntity<>(body, HttpStatus.OK);
+    } finally {
+      CurrentCommerceConnection.remove();
+    }
   }
 
-  @NonNull
-  private Map<String, Object> status() {
-    return singletonMap("loggedIn", isLoggedIn());
-  }
+  private static boolean isLoggedIn(CommerceConnection connection) {
+    UserSessionService userSessionService = connection.getUserSessionService();
 
-  private boolean isLoggedIn() {
     try {
       return userSessionService.isLoggedIn();
     } catch (CredentialExpiredException e) {
@@ -72,41 +81,7 @@ public class LoginStatusHandler {
     }
   }
 
-  /**
-   * Calls the given handler with {@link CurrentCommerceConnection} set for given store and locale.
-   *
-   * <p>This method ensures that the current commerce connection is restored to its original value when it returns.
-   *
-   * @param storeId store ID
-   * @param locale locale
-   * @param handler handler that is called with commerce connection, if a connection was found for store ID and locale
-   * @param <T> ResponseEntity body type
-   * @return result from given handler, or entity with {@link HttpStatus#NOT_FOUND} if no connection was found.
-   */
-  private <T> ResponseEntity<T> withConnection(String storeId,
-                                               Locale locale,
-                                               @NonNull HttpServletRequest request,
-                                               Supplier<ResponseEntity<T>> handler) {
-    Optional<CommerceConnection> connection = findConnection(storeId, locale);
-    if (!connection.isPresent()) {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    Optional<CommerceConnection> oldConnection = CurrentCommerceConnection.find();
-    try {
-      CurrentCommerceConnection.set(connection.get());
-      initUserContext(connection.get(), request);
-      return handler.get();
-    } finally {
-      oldConnection.ifPresent(CurrentCommerceConnection::set);
-      if (!oldConnection.isPresent()) {
-        CurrentCommerceConnection.remove();
-      }
-    }
-  }
-
-  private static void initUserContext(@NonNull CommerceConnection commerceConnection,
-                                      @NonNull HttpServletRequest request) {
+  private static void initUserContext(CommerceConnection commerceConnection, HttpServletRequest request) {
     try {
       UserContext userContext = commerceConnection.getUserContextProvider().createContext(request);
       commerceConnection.setUserContext(userContext);
@@ -115,8 +90,7 @@ public class LoginStatusHandler {
     }
   }
 
-  @NonNull
-  private Optional<CommerceConnection> findConnection(@NonNull String storeId, @NonNull Locale locale) {
+  private Optional<CommerceConnection> findConnection(String storeId, Locale locale) {
     return liveContextSiteResolver.findSiteFor(storeId, locale)
             .flatMap(commerceConnectionInitializer::findConnectionForSite);
   }

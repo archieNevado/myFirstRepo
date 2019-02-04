@@ -18,6 +18,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Sets.newHashSet;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
@@ -45,7 +46,7 @@ public class AssetInvalidationRepositoryListenerTest {
   private ContentRepository repository;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     mockStatic(CommerceReferenceHelper.class);
 
     testling.setCommerceCacheInvalidationSource(invalidationSource);
@@ -59,7 +60,7 @@ public class AssetInvalidationRepositoryListenerTest {
   }
 
   @Test
-  public void testHandleContentEvent() throws Exception {
+  public void testHandleContentEvent() {
     // content has any external references
     List<String> externalReferences = newArrayList("vendor:///catalog/product/what", "vendor:///catalog/product/ever");
     when(CommerceReferenceHelper.getExternalReferences(content)).thenReturn(externalReferences);
@@ -67,6 +68,6 @@ public class AssetInvalidationRepositoryListenerTest {
     testling.handleContentEvent(event);
 
     // then all products and product variants should be invalidated.
-    verify(invalidationSource).invalidateReferences(externalReferences);
+    verify(invalidationSource).invalidateReferences(newHashSet(externalReferences));
   }
 }

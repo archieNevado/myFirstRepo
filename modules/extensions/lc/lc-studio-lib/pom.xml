@@ -79,6 +79,10 @@
       <artifactId>spring-beans</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-autoconfigure</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
     </dependency>
@@ -97,7 +101,6 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>lc-services-lib</artifactId>
       <version>${project.version}</version>
-      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
@@ -124,7 +127,6 @@
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>coremedia-spring</artifactId>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -175,7 +177,6 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-core</artifactId>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>

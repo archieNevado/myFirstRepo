@@ -16,8 +16,7 @@
   <import resource="classpath:com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/segments/blueprint-segments.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/uapi/bpbase-uapi-cache-services.xml"/>
-  <import resource="classpath:com/coremedia/jmx/mbean-services.xml"/>		
-  <import resource="classpath:META-INF/coremedia/component-cap-client.xml"/>
+  <import resource="classpath:com/coremedia/jmx/mbean-services.xml"/>
 
   <context:component-scan base-package="com.coremedia.elastic.core.impl.settings"/>
   <context:component-scan base-package="com.coremedia.elastic.core.impl.tenant"/>

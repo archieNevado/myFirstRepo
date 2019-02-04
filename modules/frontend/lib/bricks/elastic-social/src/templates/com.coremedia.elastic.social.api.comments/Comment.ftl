@@ -20,10 +20,10 @@
   </#if>
   <#if ["default", "undecided", "rejected"]?seq_contains(commentView)>
     <div class="cm-comment__header">
-      <span class="cm-comment__author-date">
+      <div class="cm-comment__author-date">
         <@bp.message key="comment_author_by" /> <span class="cm-comment__author">${strAuthorName!""}</span>
         <span class="cm-comment__date">${strDate}</span>
-      </span>
+      </div>
     </div>
   </#if>
   <#-- output of comment specific information -->

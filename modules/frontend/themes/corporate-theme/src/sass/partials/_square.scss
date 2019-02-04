@@ -1,11 +1,19 @@
+@include cm-default-teaser(
+  $block-class: $cm-square-prefix,
+  $media-aspect-ratio-by-breakpoint: ("xs-and-up": (1, 1)),
+  $media-background-color: $cm-square-picture-background-color,
+  $caption-padding: $cm-teasable-caption-padding,
+  $headline-color: $cm-square-headline-color
+);
+
 // Transformations are not part of the brick.
-.#{$cm-teasable-prefix} {
+.#{$cm-square-prefix} {
 
   &__text,
   &__headline {
     padding-bottom: $padding-large-vertical;
   }
-  &__headline {
+  a > &__headline {
     // this creates the line under the headline when its being hovered
     &:after {
       content: '';
@@ -16,8 +24,13 @@
       width: 0;
       opacity: 0;
       height: 1px;
-      background-color: $cm-teasable-headline-color;
+      background-color: $cm-square-headline-color;
     }
+  }
+
+  &__dimmer {
+    @include dimmer(0.33);
+    background-color: #000;
   }
 
   &__dimmer,
@@ -33,12 +46,12 @@
     }
   }
 
-  &:hover .#{$cm-teasable-prefix} {
-    &__dimmer {
+  &:hover {
+    .#{$cm-square-prefix}__dimmer {
       opacity: 0.44;
     }
 
-    &__headline {
+    a > .#{$cm-square-prefix}__headline {
       transform: translate3d(0, 5px, 0);
 
       &:after {
@@ -47,34 +60,34 @@
       }
     }
 
-    &__cta {
+    .#{$cm-square-prefix}__cta {
       transform: translate3d(0, -5px, 0);
     }
   }
 
   // if teaser text, more animation
-  &.is-text:hover .#{$cm-teasable-prefix} {
-    &__headline {
+  &.is-text:hover {
+    a > .#{$cm-square-prefix}__headline {
       transform: translate3d(0, 10px, 0);
     }
 
-    &__cta {
+    .#{$cm-square-prefix}__cta {
       transform: translate3d(0, -10px, 0);
     }
   }
 
   // removing hover effects for video
   // the play-button takes the hover
-  &--video:hover .#{$cm-teasable-prefix},
-  &--video.is-text:hover .#{$cm-teasable-prefix} {
-    &__headline {
+  &--video:hover,
+  &--video.is-text:hover {
+    a > .#{$cm-square-prefix}__headline {
       transform: none;
       &:after {
         display: none;
       }
     }
 
-    &__cta {
+    .#{$cm-square-prefix}__cta {
       transform: none;
     }
   }

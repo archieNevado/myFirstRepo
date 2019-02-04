@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.ecommerce.hybris.common;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
@@ -47,7 +48,7 @@ public class HybrisStoreContextBuilder implements StoreContextBuilder {
     return new HybrisStoreContextBuilder(siteId);
   }
 
-  public static HybrisStoreContextBuilder from(StoreContext storeContext) {
+  public static HybrisStoreContextBuilder from(StoreContextImpl storeContext) {
     return from(storeContext.getSiteId())
             .withStoreId(storeContext.getStoreId())
             .withStoreName(storeContext.getStoreName())
@@ -145,8 +146,8 @@ public class HybrisStoreContextBuilder implements StoreContextBuilder {
 
   @Override
   public StoreContext build() {
-    StoreContextImpl storeContext = StoreContextImpl
-            .builder(siteId)
+    StoreContextImpl storeContext = StoreContextBuilderImpl.from()
+            .withSiteId(siteId)
             .withStoreId(storeId)
             .withStoreName(storeName)
             .withCatalogId(catalogId)

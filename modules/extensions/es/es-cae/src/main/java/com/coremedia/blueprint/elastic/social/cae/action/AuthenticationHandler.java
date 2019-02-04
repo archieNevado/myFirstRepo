@@ -148,8 +148,8 @@ public class AuthenticationHandler extends WebflowHandlerBase {
                                     @PathVariable(SEGMENT_ACTION) String actionName,
                                     @RequestParam(value = "targetView", required = false) String view,
                                     @RequestParam(value = "webflow", required = false) String webflow,
-                                    HttpServletRequest request,
-                                    HttpServletResponse response) {
+                                    @NonNull HttpServletRequest request,
+                                    @NonNull HttpServletResponse response) {
     Navigation navigationContext = getNavigation(navigationPath);
     ModelAndView result;
     if (StringUtils.hasText(fragment) && !fragment.equals(FRAGMENT_DEFAULT_VALUE)) {
@@ -175,7 +175,8 @@ public class AuthenticationHandler extends WebflowHandlerBase {
     return result;
   }
 
-  private ModelAndView forceNewPassword(@NonNull CMAction loginAction, @NonNull HttpServletRequest request, @NonNull HttpServletResponse response) {
+  private ModelAndView forceNewPassword(@NonNull CMAction loginAction, @NonNull HttpServletRequest request,
+                                        @NonNull HttpServletResponse response) {
     response.setContentType("text/plain");
     try (PrintWriter writer = response.getWriter()) {
       // Set standard HTTP/1.1 no-cache headers.
@@ -194,7 +195,8 @@ public class AuthenticationHandler extends WebflowHandlerBase {
     return null;
   }
 
-  private String createForceNewPasswordUrl(@NonNull CMAction loginAction, @NonNull HttpServletRequest request, @NonNull HttpServletResponse response) {
+  private String createForceNewPasswordUrl(@NonNull CMAction loginAction, @NonNull HttpServletRequest request,
+                                           @NonNull HttpServletResponse response) {
     CMAction passwordExpiredAction = settingsService.setting(EXPIRED_PASSWORD_SETTING_ID, CMAction.class, loginAction);
     AuthenticationState passwordExpiredState = createLoginActionStateBean(passwordExpiredAction);
 

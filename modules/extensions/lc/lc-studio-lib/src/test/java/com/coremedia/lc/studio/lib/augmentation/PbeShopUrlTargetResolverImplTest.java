@@ -2,6 +2,7 @@ package com.coremedia.lc.studio.lib.augmentation;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
@@ -52,7 +53,8 @@ public class PbeShopUrlTargetResolverImplTest {
     commerceConnection = new BaseCommerceConnection();
     CurrentCommerceConnection.set(commerceConnection);
 
-    storeContext = StoreContextImpl.builder("theSiteId")
+    storeContext = StoreContextBuilderImpl.from()
+            .withSiteId("theSiteId")
             .withStoreName("storeName")
             .build();
     commerceConnection.setStoreContext(storeContext);
