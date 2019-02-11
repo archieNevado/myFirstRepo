@@ -36,7 +36,6 @@
     <module>lc-es</module>
     <module>lc-p13n</module>
     <module>lc-asset</module>
-    <module>ecommerce-adapter</module>
     <module>ecommerce-sfcc</module>
     <module>taxonomy</module>
     <module>validators</module>
