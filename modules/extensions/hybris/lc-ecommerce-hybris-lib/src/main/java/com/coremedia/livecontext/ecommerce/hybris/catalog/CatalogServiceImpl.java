@@ -129,7 +129,7 @@ public class CatalogServiceImpl extends AbstractHybrisService implements Catalog
 
     List<CategoryRefDocument> rootCategories = catalogDocument
             .map(CatalogDocument::getRootCategories)
-            .orElse(emptyList());
+            .orElseGet(Collections::emptyList);
 
     List<Category> topCategories = new ArrayList<>();
     for (CategoryRefDocument categoryRefDocument : rootCategories) {

@@ -94,4 +94,5 @@
   <bean id="assetManagementConfiguration" class="com.coremedia.blueprint.assets.studio.AssetManagementConfiguration">
     <property name="settingsDocument" value="${studio.assets.settingsDocument:AssetManagement}"/>
   </bean>
+  <bean class="com.coremedia.blueprint.assets.studio.AMStudioRestConfiguration" id="amStudioRestConfiguration"/>
 </beans>

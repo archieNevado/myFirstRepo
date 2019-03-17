@@ -81,7 +81,8 @@ public class ProductTeasableHelper {
       return null;
     }
 
-    Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnectionForContent(contentBean.getContent());
+    Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier
+            .findConnection(contentBean.getContent());
 
     if (!commerceConnection.isPresent()) {
       return null;

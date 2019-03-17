@@ -16,6 +16,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.HandlerHelper;
 import org.junit.Before;
@@ -92,7 +93,7 @@ public class P13NFragmentHandlerTest {
     CMSelectionRules cmSelectionRules = mock(CMSelectionRules.class);
     CMNavigation cmNavigation = mock(CMNavigation.class);
     when(contentRepository.getContent(anyString())).thenReturn(p13nContent);
-    when(contentBeanFactory.createBeanFor(p13nContent)).thenReturn(cmSelectionRules);
+    when(contentBeanFactory.createBeanFor(p13nContent, ContentBean.class)).thenReturn(cmSelectionRules);
     configureContext("helios", cmNavigation);
 
     when(cmNavigation.getContent()).thenReturn(cmNavigationContent);
@@ -111,7 +112,7 @@ public class P13NFragmentHandlerTest {
     Content wrongContent = mock(Content.class);
     when(contentRepository.getContent(anyString())).thenReturn(wrongContent);
     CMArticle cmArticle = mock(CMArticle.class);
-    when(contentBeanFactory.createBeanFor(wrongContent)).thenReturn(cmArticle);
+    when(contentBeanFactory.createBeanFor(wrongContent, ContentBean.class)).thenReturn(cmArticle);
 
     ModelAndView modelAndView = testling.handleFragmentRequest("helios", 4711, "myView", new MockHttpServletRequest());
     assertEquals(HandlerHelper.notFound().getModel(), modelAndView.getModel());

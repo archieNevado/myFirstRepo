@@ -16,8 +16,7 @@ public class CaeAssetValidationService implements AssetValidationService {
 
   @Override
   public List<Content> filterAssets(List<Content> source) {
-    //noinspection unchecked
-    List<? extends ContentBean> filteredAssetsAsContentBeans = validationService.filterList(contentBeanFactory.createBeansFor(source));
+    List<? extends ContentBean> filteredAssetsAsContentBeans = validationService.filterList(contentBeanFactory.createBeansFor(source, ContentBean.class));
     return toContent(filteredAssetsAsContentBeans);
   }
 

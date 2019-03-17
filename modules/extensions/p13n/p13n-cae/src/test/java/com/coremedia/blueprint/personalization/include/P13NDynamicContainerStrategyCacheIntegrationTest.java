@@ -208,12 +208,12 @@ public class P13NDynamicContainerStrategyCacheIntegrationTest {
 
   private CMTeasable getTeasable() {
     Content content = contentRepository.getChild("/visitedArticle1");
-    return (CMArticle) contentBeanFactory.createBeanFor(content);
+    return contentBeanFactory.createBeanFor(content, CMArticle.class);
   }
 
   private CMChannel getChannelWithPageGrid() {
     Content content = contentRepository.getChild("/PagegriddedChannel");
-    return (CMChannel) contentBeanFactory.createBeanFor(content);
+    return contentBeanFactory.createBeanFor(content, CMChannel.class);
   }
 
   private void addPersoItemToTeasableItems() {

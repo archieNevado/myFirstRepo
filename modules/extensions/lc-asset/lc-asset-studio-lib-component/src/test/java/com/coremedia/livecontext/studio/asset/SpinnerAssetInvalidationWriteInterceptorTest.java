@@ -72,8 +72,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
 
   @Before
   public void setup() {
-    when(commerceConnectionSupplier.findConnectionForContent(any(Content.class)))
-            .thenReturn(Optional.of(commerceConnection));
+    when(commerceConnectionSupplier.findConnection(any(Content.class))).thenReturn(Optional.of(commerceConnection));
 
     when(contentRepository.getConnection().getStructService().createStructBuilder().build()).thenReturn(emptyStruct);
   }

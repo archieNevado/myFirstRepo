@@ -49,13 +49,11 @@ public class WebCommerceContextInterceptorTest {
   public void setup() {
     testling = new WebCommerceContextInterceptor();
 
-    StoreContext storeContext = StoreContextBuilderImpl.from().build();
-
     connection = new BaseCommerceConnection();
-    connection.setStoreContext(storeContext);
+    connection.setStoreContext(StoreContextBuilderImpl.from(connection, "any-site-id").build());
     CurrentCommerceConnection.set(connection);
 
-    when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(this.connection));
+    when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(connection));
 
     testling.setSiteResolver(siteResolver);
     testling.setInitUserContext(false);

@@ -24,7 +24,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 import java.util.Optional;
 
@@ -59,8 +58,7 @@ public class P13NNavigationHandler extends PageHandlerBase {
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ROOT) String context,
                                     @PathVariable(ID_VARIABLE) CMLinkable linkable,
                                     @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,
-                                    HttpServletRequest request,
-                                    HttpServletResponse response) {
+                                    HttpServletRequest request) {
 
     Optional<Navigation> navigation = findNavigation(context, linkable);
     if (!navigation.isPresent()){
@@ -70,9 +68,7 @@ public class P13NNavigationHandler extends PageHandlerBase {
     User developer = UserVariantHelper.getUser(request);
 
     request.setAttribute(ABSOLUTE_URI_KEY, true);
-    ModelAndView modelAndView = createModelAndView(navigation.get(), linkable != null ? linkable : navigation.get(), view, developer);
-    response.setContentType("text/html; charset=UTF-8");
-    return modelAndView;
+    return createModelAndView(navigation.get(), linkable != null ? linkable : navigation.get(), view, developer);
   }
 
   @Link(type = {Page.class}, view = VIEW_FRAGMENT, uri = DYNAMIC_NAVIGATION_URI_PATTERN)

@@ -70,21 +70,20 @@ public class AssetResolvingStrategyImplTest {
   private StoreContext storeContext;
 
   @Before
-  public void setUp() throws Exception {
-    storeContext = StoreContextBuilderImpl.from().build();
+  public void setUp() {
+    commerceConnection = new BaseCommerceConnection();
+
+    storeContext = StoreContextBuilderImpl.from(commerceConnection, "any-site-id").build();
     when(storeContextProvider.findContextBySite(any())).thenReturn(Optional.of(storeContext));
 
-    commerceConnection = new BaseCommerceConnection();
     commerceConnection.setStoreContextProvider(storeContextProvider);
     commerceConnection.setCatalogService(catalogService);
     commerceConnection.setStoreContext(storeContext);
     CurrentCommerceConnection.set(commerceConnection);
-
-    storeContext = commerceConnection.getStoreContext();
   }
 
   @After
-  public void tearDown() throws Exception {
+  public void tearDown() {
     CurrentCommerceConnection.remove();
   }
 
@@ -172,7 +171,7 @@ public class AssetResolvingStrategyImplTest {
   }
 
   @Test
-  public void findProductAssetsOneIndexedAndCachedAndReferenced() throws Exception {
+  public void findProductAssetsOneIndexedAndCachedAndReferenced() {
     Content picture = createPictureMock("picture");
     List<Content> indexedAssets = of(picture);
     List<Content> cachedAssets = of(picture);
@@ -200,7 +199,7 @@ public class AssetResolvingStrategyImplTest {
   }
 
   @Test
-  public void testFindAssetsForVariants() throws Exception {
+  public void testFindAssetsForVariants() {
     Content variantPicture = createPictureMock("variant picture");
     Content productPicture = createPictureMock("product picture");
 
@@ -222,7 +221,7 @@ public class AssetResolvingStrategyImplTest {
   }
 
   @Test
-  public void findAssetsForSKUsWithFallbackToParent() throws Exception {
+  public void findAssetsForSKUsWithFallbackToParent() {
     Content variantPicture = createPictureMock("variant picture");
     Content productPicture = createPictureMock("product picture");
 

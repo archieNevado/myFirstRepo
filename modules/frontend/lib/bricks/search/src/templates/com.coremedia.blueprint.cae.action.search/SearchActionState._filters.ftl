@@ -18,7 +18,7 @@
 <#assign searchResult=self.result!cm.UNDEFINED/>
 <#assign searchCategories=bp.setting(self, "searchChannelSelect", bp.setting(self, "search.channelselect", []))/>
 <#assign searchActiveCategory=self.form.channelId!"">
-<#assign searchFacets=searchResult.facetResult.getFacets()!{}/>
+<#assign searchFacets=(searchResult.facetResult.getFacets())!{}/>
 
 <#-- show filters only if at least one filter is enabled and with at least one entry-->
 <#if ((enableCategory && searchCategories?size > 0) || (enableFacets && searchFacets?size > 0))>

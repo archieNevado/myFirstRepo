@@ -146,8 +146,7 @@ public class HybrisStoreContextBuilder implements StoreContextBuilder {
 
   @Override
   public StoreContext build() {
-    StoreContextImpl storeContext = StoreContextBuilderImpl.from()
-            .withSiteId(siteId)
+    StoreContextImpl storeContext = StoreContextBuilderImpl.from(siteId)
             .withStoreId(storeId)
             .withStoreName(storeName)
             .withCatalogId(catalogId)

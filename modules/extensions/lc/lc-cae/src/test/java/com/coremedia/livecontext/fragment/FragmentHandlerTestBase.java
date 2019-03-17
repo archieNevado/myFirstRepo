@@ -290,16 +290,15 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
     connection.setIdProvider(TestVendors.getIdProvider("vendor"));
     connection.setCatalogService(catalogService);
     connection.setCommerceBeanFactory(commerceBeanFactory);
-    connection.setStoreContext(createStoreContext());
+    connection.setStoreContext(createStoreContext(connection));
 
     CurrentCommerceConnection.set(connection);
 
     return connection;
   }
 
-  private static StoreContextImpl createStoreContext() {
-    return StoreContextBuilderImpl.from()
-            .withSiteId(SITE_ID)
+  private static StoreContextImpl createStoreContext(CommerceConnection connection) {
+    return StoreContextBuilderImpl.from(connection, SITE_ID)
             .withStoreId("10001")
             .withStoreName("aurora")
             .withCatalogId(CatalogId.of("catalog"))

@@ -87,7 +87,7 @@ public class CMMarketingSpotImplTest {
   @Before
   public void init() {
     initMocks(this);
-    when(commerceConnectionSupplier.findConnectionForContent(any(Content.class))).thenReturn(Optional.of(connection));
+    when(commerceConnectionSupplier.findConnection(any(Content.class))).thenReturn(Optional.of(connection));
 
     when(connection.getStoreContext()).thenReturn(storeContext);
     when(connection.getCommerceBeanFactory()).thenReturn(commerceBeanFactory);

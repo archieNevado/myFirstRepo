@@ -32,10 +32,8 @@ import java.util.Locale;
 import java.util.Optional;
 
 import static com.coremedia.blueprint.base.links.UriConstants.ContentTypes.CONTENT_TYPE_HTML;
-import static com.coremedia.blueprint.base.links.UriConstants.ContentTypes.CONTENT_TYPE_JSON;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
 import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_SERVICE;
-import static com.coremedia.livecontext.view.PrefetchFragmentsView.PREFETCH_FRAGMENT_VIEW;
 
 /**
  * This handler serves all fragment requests, called by the lc:include tag of commerce.
@@ -90,6 +88,8 @@ public class FragmentPageHandler extends PageHandlerBase {
       return HandlerHelper.badRequest("Store context not initialized for fragment call " + request.getRequestURI());
     }
 
+    response.setContentType(CONTENT_TYPE_HTML);
+
     FragmentParameters fragmentParameters = FragmentContextProvider.getFragmentContext(request).getParameters();
 
     //resolve the site first
@@ -98,16 +98,6 @@ public class FragmentPageHandler extends PageHandlerBase {
       return createNoSiteModelAndView(fragmentParameters, storeId, locale);
     }
     SiteHelper.setSiteToRequest(site, request);
-
-    // yet another special bell, but when we are in the well known view "prefetchFragments" for which
-    // a programmed view will later generate a json output, and then it is too late to set the content-type
-    // plus character encoding, sorry.
-    if (PREFETCH_FRAGMENT_VIEW.equals(fragmentParameters.getView())) {
-      response.setContentType(CONTENT_TYPE_JSON);
-      response.setCharacterEncoding("UTF-8");
-    } else {
-      response.setContentType(CONTENT_TYPE_HTML);
-    }
 
     // Update store context with fragment parameters.
     fragmentParameters.getCatalogId().ifPresent(catalogId -> {

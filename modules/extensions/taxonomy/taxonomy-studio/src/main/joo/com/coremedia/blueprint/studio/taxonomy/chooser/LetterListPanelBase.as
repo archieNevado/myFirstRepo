@@ -10,17 +10,18 @@ import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
 import com.coremedia.ui.store.BeanRecord;
+import com.coremedia.ui.util.EventUtil;
 
+import ext.container.Container;
 import ext.data.Model;
 import ext.grid.GridPanel;
-import ext.selection.RowSelectionModel;
 
 /**
  * Displays the active taxonomy node sorted alphabetically.
  */
-public class LetterListPanelBase extends GridPanel {
+public class LetterListPanelBase extends Container {
+  public const ITEMS_CONTAINER_ITEM_ID:String = "itemsContainer";
 
-  private var selectedPositionsExpression:ValueExpression;
   private var selectedValuesExpression:ValueExpression;
   private var listValuesExpression:ValueExpression;
   private var activeLetters:ValueExpression;
@@ -62,13 +63,6 @@ public class LetterListPanelBase extends GridPanel {
     selectedNodeId.setValue(taxonomyId); //lets start with the root level to show
   }
 
-  protected function getSelectedPositionsExpression():ValueExpression {
-    if (!selectedPositionsExpression) {
-      selectedPositionsExpression = ValueExpressionFactory.create("positions", beanFactory.createLocalBean());
-    }
-    return selectedPositionsExpression;
-  }
-
   protected function getSelectedValuesExpression():ValueExpression {
     if (!selectedValuesExpression) {
       selectedValuesExpression = ValueExpressionFactory.create("values", beanFactory.createLocalBean());
@@ -87,19 +81,15 @@ public class LetterListPanelBase extends GridPanel {
    * Selects the entry in the list with the active letter
    */
   private function updateSelectedLetter():void {
-    var letter:String = selectedLetter.getValue();
+    var letter:String = selectedLetter.getValue().toLowerCase();
     if (letter) {
-      for (var i:int = 0; i < getStore().getCount(); i++) {
-        var record:BeanRecord = getStore().getAt(i) as BeanRecord;
-        var bean:Content = record.getBean() as Content;
-        var name:String = bean.getProperties().get('value');
-        if (!name) {
-          name = record.data.name;
-        }
-        if (name.substring(0, 1).toLowerCase() === letter) {
-          var sm:RowSelectionModel = (getSelectionModel() as RowSelectionModel);
-          sm.select([record]);
-          getView().focusRow(i);
+      var itemsContainer:Container = queryById(ITEMS_CONTAINER_ITEM_ID) as Container;
+      for(var i:int = 0; i<itemsContainer.itemCollection.length; i++) {
+        var item:LetterListItemPanel = itemsContainer.itemCollection.getAt(i) as LetterListItemPanel;
+        var itemLetter:String = letterRenderer(item.content).toLowerCase();
+        if(itemLetter === letter) {
+          var height:Number = item.getHeight();
+          this.el.dom.scrollTop = height*i;
           break;
         }
       }
@@ -112,7 +102,6 @@ public class LetterListPanelBase extends GridPanel {
   private function updateUI():void {
     var list:TaxonomyNodeList = selectedNodeList.getValue();
     if (list) {
-//      getListValuesExpression().setValue(list);
       activeNodeList = list;
       letter2NodeMap = beanFactory.createLocalBean();
       updateLetterList(list);
@@ -140,28 +129,15 @@ public class LetterListPanelBase extends GridPanel {
    * Fired when the user double clicks a row.
    * The next taxonomy child level of the selected node is entered then.
    */
-  private function updateSelection():void {
-    var selectedRecord:BeanRecord = (getSelectionModel() as RowSelectionModel).getSelection()[0] as BeanRecord;
-    if (selectedRecord) {
-      var content:Content = selectedRecord.getBean() as Content;
-      var id:String = TaxonomyUtil.getRestIdFromCapId(content.getId());
+  private function updateSelection(contentId:String):void {
+    if (contentId) {
+      var id:String = TaxonomyUtil.getRestIdFromCapId(contentId);
       if (!activeNodeList.getNode(id).isLeaf()) {
         //fire event for path update
         selectedNodeId.setValue(id);
       }
     }
   }
-
-  private function selectRecord(ref:String):void {
-    var nodeId:String = ref.replace('-','/');//unique id generation, problem raised with Ext6 and invalid id characters
-    getStore().each(function (record:*):void {
-      var itemNodeRef:String = TaxonomyUtil.getRestIdFromCapId(record.data.id);
-      if (itemNodeRef === nodeId) {
-        (getSelectionModel() as RowSelectionModel).select(record, false, true);
-      }
-    });
-  }
-
 
   private function convertNodeListToContentList():void {
     var contents:Bean = beanFactory.createLocalBean();
@@ -199,8 +175,9 @@ public class LetterListPanelBase extends GridPanel {
   /**
    * Displays each name of a taxonomy
    */
-  protected function taxonomyRenderer(value:*, metaData:*, record:BeanRecord):String {
-    var node:TaxonomyNode = getTaxonomyNodeByBeanRecord(record);
+  public function taxonomyRenderer(content:Content):String {
+    var list:TaxonomyNodeList = selectedNodeList.getValue();
+    var node:TaxonomyNode = list.getNode(TaxonomyUtil.getRestIdFromCapId(content.getId()));
 
     var selected:Boolean = isInSelection(node.getRef());
     var selectionExists:Boolean = selectionExpression.getValue() && (selectionExpression.getValue() as Array).length === 1;
@@ -221,58 +198,26 @@ public class LetterListPanelBase extends GridPanel {
   //noinspection JSUnusedLocalSymbols
   /**
    * Displays each letter of a taxonomy
-   * @param value
-   * @param metaData
-   * @param record
-   * @return
    */
-  protected function letterRenderer(value:*, metaData:*, record:BeanRecord):String {
-    var node:TaxonomyNode = getTaxonomyNodeByBeanRecord(record);
+  public function letterRenderer(content:Content):String {
+    var list:TaxonomyNodeList = selectedNodeList.getValue();
+    var node:TaxonomyNode = list.getNode(TaxonomyUtil.getRestIdFromCapId(content.getId()));
     var letter:String = node.getName().substr(0, 1).toUpperCase();
 
-    var html:String = '<span><b>&nbsp;</b></span>';
+    var html:String = '';
     if (!letter2NodeMap.get(letter) || letter2NodeMap.get(letter).getRef() === node.getRef()) {
-      html = '<span><b>' + letter + '</b></span>';
+      html = letter;
       letter2NodeMap.set(letter, node);
     }
 
     return html;
   }
 
-  //noinspection JSUnusedLocalSymbols
-  /**
-   * Hides the action column if node is leaf
-   */
-  protected function actionRenderer(value:*, metaData:*, record:BeanRecord, rowIndex:int, colIndex:int):String {
-    var node:TaxonomyNode = getTaxonomyNodeByBeanRecord(record);
-    if (node.isLeaf()) {
-      metaData.style = 'display:none';
-    }
-    return undefined;
-  }
-
-  protected function arrowClickHandler(grid:GridPanel, rowIndex:int):void {
-    var node:TaxonomyNode = getTaxonomyNodeByGrid(grid, rowIndex);
-    nodeClicked(node.getRef());
-  }
-
-  private function getTaxonomyNodeByBeanRecord(record:BeanRecord):TaxonomyNode {
-    var content:Content = record.getBean() as Content;
-    return activeNodeList.getNode(TaxonomyUtil.getRestIdFromCapId(content.getId()));
-  }
-
-  private function getTaxonomyNodeByGrid(grid:GridPanel, rowIndex:int):TaxonomyNode {
-    var record:Model = grid.getStore().getAt(rowIndex);
-    var id:String = record.getData()['id'];
-    return activeNodeList.getNode(TaxonomyUtil.getRestIdFromCapId(id));
-  }
-
   /**
    * Handler executed when the node text is clicked on.
    */
-  public function nodeClicked(ref:String):void {
-    selectRecord(ref);
-    updateSelection(); //has the same behaviour like when double clicking a row.
+  public function nodeClicked(contentId:String):void {
+    updateSelection(contentId); //has the same behaviour like when double clicking a row.
   }
 
   /**
@@ -294,7 +239,7 @@ public class LetterListPanelBase extends GridPanel {
    * Utility method that checks if the given node is already part of the active selection list.
    * @param contentId
    */
-  private function isInSelection(contentId:String):Boolean {
+  public function isInSelection(contentId:String):Boolean {
     var selection:Array = selectionExpression.getValue();
     if (selection) {
       for (var i:int = 0; i < selection.length; i++) {
@@ -312,9 +257,12 @@ public class LetterListPanelBase extends GridPanel {
    * Executes a commit on all records.
    */
   private function updateAll():void {
-    for (var i:int = 0; i < getStore().getCount(); i++) {
-      var record:Model = getStore().getAt(i);
-      record.commit(false);
+    var values:Array = getListValuesExpression().getValue();
+    if(values) {
+      getListValuesExpression().setValue([]);
+      EventUtil.invokeLater(function():void {
+        getListValuesExpression().setValue(values);
+      });
     }
   }
 }

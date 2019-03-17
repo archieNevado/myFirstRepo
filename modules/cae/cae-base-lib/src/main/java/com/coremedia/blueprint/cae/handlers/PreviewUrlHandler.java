@@ -5,6 +5,7 @@ import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.Version;
 import com.coremedia.id.IdProvider;
+import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.objectserver.web.links.LinkFormatter;
@@ -102,9 +103,9 @@ public class PreviewUrlHandler {
 
     if (bean instanceof Version) {
       // convert a version into a content and the content into a ContentBean
-      bean = contentBeanFactory.createBeanFor(((Version) bean).getContainingContent());
+      bean = contentBeanFactory.createBeanFor(((Version) bean).getContainingContent(), ContentBean.class);
     } else if (bean instanceof Content) {
-      bean = contentBeanFactory.createBeanFor((Content) bean);
+      bean = contentBeanFactory.createBeanFor((Content) bean, ContentBean.class);
     }
     // all other beans:  keep them as a model
 

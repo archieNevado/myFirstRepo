@@ -24,8 +24,10 @@ coremedia_tomcat_webapp "/some/path/my-app do
   artifact_id 'my-app'
   version '1.0.0'
   context 'myapp'
+  # context configuration active for this webapp, renders to <catalina_home>/conf/[enginename]/[hostname]/context.xml
   context_config(
     :display_name => 'myapp',
+    :legacy_cookie_processor => true,
     :env_entries => {
       'toggle' => {
         'description' => 'this does nothing',

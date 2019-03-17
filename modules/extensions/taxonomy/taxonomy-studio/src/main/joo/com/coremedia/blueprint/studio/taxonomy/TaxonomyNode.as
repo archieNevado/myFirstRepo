@@ -10,9 +10,6 @@ import mx.resources.ResourceManager;
 
 [ResourceBundle('com.coremedia.blueprint.studio.TaxonomyStudioPluginSettings')]
 public class TaxonomyNode {
-
-  public static const PROPERTY_ROOT_ID:String = "ROOT";
-
   public static const PROPERTY_PATH:String = "path";
   public static const PROPERTY_HTML:String = "html";//property used to store HTML of search combo
   public static const PROPERTY_NAME:String = "name";
@@ -205,16 +202,6 @@ public class TaxonomyNode {
     return name;
   }
 
-
-  /**
-   * Callback returns a node list with the path nodes of this node.
-   * @param callback
-   */
-  public function loadPath(callback:Function):void {
-    var url:String = "taxonomies/path?" + toNodeQuery();
-    TaxonomyNodeFactory.loadRemoteTaxonomyNodeList(url, callback);
-  }
-
   /**
    * Triggers a reload of the given node, invokes the callback
    * function with the reloaded node.
@@ -275,11 +262,12 @@ public class TaxonomyNode {
 
   /**
    * Callback returns a node list with all child nodes of this node.
+   * @param refresh true to force reload
    * @param callback
    */
-  public function loadChildren(callback:Function):void {
+  public function loadChildren(refresh:Boolean, callback:Function):void {
     var url:String = "taxonomies/children?" + toNodeQuery();
-    TaxonomyNodeFactory.loadRemoteTaxonomyNodeList(url, callback);
+    TaxonomyNodeFactory.loadRemoteTaxonomyNodeList(url, refresh, callback);
   }
 
   /**

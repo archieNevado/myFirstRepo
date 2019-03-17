@@ -9,6 +9,7 @@ import com.coremedia.blueprint.personalization.contentbeans.CMUserProfile;
 import com.coremedia.cap.content.Content;
 import com.coremedia.ecommerce.test.TestVendors;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
+import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.context.ContextCollectionImpl;
@@ -52,13 +53,13 @@ public class CommerceSegmentTestContextExtractorTest {
   private StoreContextProvider storeContextProvider;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     testling = new CommerceSegmentTestContextExtractor();
     testling.setContentBeanFactory(contentBeanFactory);
     contextCollection = new ContextCollectionImpl();
 
     BaseCommerceIdProvider idProvider = TestVendors.getIdProvider("vendor");
-    StoreContextImpl storeContext = StoreContextBuilderImpl.from().build();
+    StoreContextImpl storeContext = StoreContextBuilderImpl.from(commerceConnection, "any-site-id").build();
     when(storeContextProvider.buildContext(storeContext)).thenReturn(StoreContextBuilderImpl.from(storeContext));
 
     commerceConnection = new BaseCommerceConnection();
@@ -79,7 +80,7 @@ public class CommerceSegmentTestContextExtractorTest {
     String userSegmentsStr = "vendor:///catalog/segment/segment1,vendor:///catalog/segment/segment2";
     String userSegmentIds = "segment1,segment2";
     List<String> userSegments = Arrays.asList(userSegmentsStr.split(","));
-    when(contentBeanFactory.createBeanFor(content)).thenReturn(cmUserProfile);
+    when(contentBeanFactory.createBeanFor(content, ContentBean.class)).thenReturn(cmUserProfile);
     when(cmUserProfile.getProfileExtensions()).thenReturn(profileExtensions);
     when(profileExtensions.get(CommerceSegmentTestContextExtractor.PROPERTIES_PREFIX)).thenReturn(properties);
     when(properties.get(CommerceSegmentTestContextExtractor.COMMERCE_CONTEXT)).thenReturn(commerce);

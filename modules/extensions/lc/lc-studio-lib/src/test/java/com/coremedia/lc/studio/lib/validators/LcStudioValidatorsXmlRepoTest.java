@@ -120,9 +120,7 @@ public class LcStudioValidatorsXmlRepoTest {
 
     commerceConnection = new BaseCommerceConnection();
 
-    StoreContextImpl storeContext = StoreContextBuilderImpl.from()
-            .withSiteId(siteId)
-            .build();
+    StoreContextImpl storeContext = StoreContextBuilderImpl.from(commerceConnection, siteId).build();
     commerceConnection.setStoreContext(storeContext);
 
     when(storeContextProvider.buildContext(any())).thenReturn(StoreContextBuilderImpl.from(storeContext));

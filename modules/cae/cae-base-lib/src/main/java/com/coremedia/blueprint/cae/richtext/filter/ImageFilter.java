@@ -1,10 +1,10 @@
 package com.coremedia.blueprint.cae.richtext.filter;
 
-import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
+import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.objectserver.view.ViewUtils;
@@ -87,14 +87,14 @@ public class ImageFilter extends PDivUntanglingFilter implements FilterFactory {
   private void processImage(Attributes atts, HttpServletRequest request, HttpServletResponse response) {
     String contentId = atts.getValue(Xlink.NAMESPACE_URI, Xlink.HREF);
     Content content = contentRepository.getContent(IdHelper.parseContentIdFromBlobId(contentId));
-    CMObject picture = contentBeanFactory.createBeanFor(content, CMObject.class);
+    ContentBean picture = contentBeanFactory.createBeanFor(content, ContentBean.class);
     picture = dataViewFactory.loadCached(picture, null);
     if (validationService==null || validationService.validate(picture)) {
       renderPicture(picture, atts, request, response);
     }
   }
 
-  private void renderPicture(CMObject picture, Attributes atts, HttpServletRequest request, HttpServletResponse response) {
+  private void renderPicture(ContentBean picture, Attributes atts, HttpServletRequest request, HttpServletResponse response) {
     // Transfer attributes to request
     String title = Xlink.getTitle(atts);
     String role = Xlink.getRole(atts);

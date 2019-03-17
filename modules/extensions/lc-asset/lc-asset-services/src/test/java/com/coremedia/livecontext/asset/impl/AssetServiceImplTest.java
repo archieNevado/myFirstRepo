@@ -12,7 +12,6 @@ import com.coremedia.livecontext.ecommerce.asset.AssetUrlProvider;
 import com.coremedia.livecontext.ecommerce.asset.CatalogPicture;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -87,16 +86,12 @@ public class AssetServiceImplTest {
   private BaseCommerceConnection commerceConnection;
 
   @Before
-  public void setUp() throws Exception {
-    StoreContext storeContext = StoreContextBuilderImpl.from()
-            .withSiteId("site-1")
-            .build();
-
+  public void setUp() {
     commerceConnection = new BaseCommerceConnection();
     commerceConnection.setIdProvider(TestVendors.getIdProvider("vendor"));
     commerceConnection.setCatalogService(catalogService);
     commerceConnection.setAssetUrlProvider(assetUrlProvider);
-    commerceConnection.setStoreContext(storeContext);
+    commerceConnection.setStoreContext(StoreContextBuilderImpl.from(commerceConnection, "site-1").build());
     CurrentCommerceConnection.set(commerceConnection);
 
     testling.setAssetResolvingStrategy(assetResolvingStrategy);
@@ -105,13 +100,13 @@ public class AssetServiceImplTest {
   }
 
   @After
-  public void tearDown() throws Exception {
+  public void tearDown() {
     CurrentCommerceConnection.remove();
   }
 
   @SuppressWarnings("Duplicates")
   @Test
-  public void testGetCatalogPicture() throws Exception {
+  public void testGetCatalogPicture() {
     when(sitesService.findSite(anyString())).thenReturn(Optional.of(site1));
     Content picture = mock(Content.class);
     when(assetResolvingStrategy.findAssets(CMPICTURE_DOCTYPE_NAME, COMMERCE_ID, site1)).thenReturn(of(picture));
@@ -123,7 +118,7 @@ public class AssetServiceImplTest {
 
   @SuppressWarnings("Duplicates")
   @Test
-  public void testGetCatalogPictureFromCommerceId() throws Exception {
+  public void testGetCatalogPictureFromCommerceId() {
     when(sitesService.findSite(anyString())).thenReturn(Optional.of(site1));
     Content picture = mock(Content.class);
     when(assetResolvingStrategy.findAssets(CMPICTURE_DOCTYPE_NAME, COMMERCE_ID, site1)).thenReturn(of(picture));
@@ -135,7 +130,7 @@ public class AssetServiceImplTest {
 
   @SuppressWarnings("Duplicates")
   @Test
-  public void testGetCatalogPictureSKU() throws Exception {
+  public void testGetCatalogPictureSKU() {
     when(sitesService.findSite(anyString())).thenReturn(Optional.of(site1));
     Content picture = mock(Content.class);
     when(assetResolvingStrategy.findAssets(CMPICTURE_DOCTYPE_NAME, COMMERCE_ID_SKU_AS_PRODUCT, site1)).thenReturn(of(picture));
@@ -147,7 +142,7 @@ public class AssetServiceImplTest {
 
   @SuppressWarnings("Duplicates")
   @Test
-  public void testGetCatalogPictureSKUFromCommerceId() throws Exception {
+  public void testGetCatalogPictureSKUFromCommerceId() {
     when(sitesService.findSite(anyString())).thenReturn(Optional.of(site1));
     Content picture = mock(Content.class);
     when(assetResolvingStrategy.findAssets(CMPICTURE_DOCTYPE_NAME, COMMERCE_ID_SKU_AS_PRODUCT, site1)).thenReturn(of(picture));
@@ -158,7 +153,7 @@ public class AssetServiceImplTest {
   }
 
   @Test
-  public void testGetCatalogPicture2() throws Exception {
+  public void testGetCatalogPicture2() {
     CatalogPicture catalogPicture = testling.getCatalogPicture(COMMERCE_URL);
     assertNotNull(catalogPicture);
     assertNull(catalogPicture.getPicture());
@@ -166,7 +161,7 @@ public class AssetServiceImplTest {
   }
 
   @Test
-  public void testGetCatalogPictureSiteDefault() throws Exception {
+  public void testGetCatalogPictureSiteDefault() {
     when(sitesService.findSite(anyString())).thenReturn(Optional.of(site1));
     when(commerceConnection.getAssetUrlProvider().getImageUrl(NOT_LINKED_URL)).thenReturn(NOT_LINKED_URL);
 
@@ -176,7 +171,7 @@ public class AssetServiceImplTest {
   }
 
   @Test
-  public void testDefaultPicture() throws Exception {
+  public void testDefaultPicture() {
     Content defaultPicture = mock(Content.class);
 
     when(settingsService.getSetting(anyString(), eq(Content.class), nullable(Content.class)))

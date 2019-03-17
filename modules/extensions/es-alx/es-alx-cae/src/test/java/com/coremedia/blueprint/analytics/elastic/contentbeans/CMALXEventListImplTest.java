@@ -6,6 +6,7 @@ import com.coremedia.blueprint.common.contentbeans.CMCollection;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
 import com.coremedia.cap.content.Content;
 import com.coremedia.id.IdProvider;
+import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanDefinition;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import org.junit.Before;
@@ -58,7 +59,7 @@ public class CMALXEventListImplTest {
   public void setup() {
     String service = "service";
     when(contentBeanDefinition.getContentBeanFactory()).thenReturn(contentBeanFactory);
-    when(contentBeanFactory.createBeansFor(Collections.singletonList(defaultContent))).thenReturn(Collections.singletonList(defaultContentPicture));
+    when(contentBeanFactory.createBeansFor(Collections.singletonList(defaultContent), ContentBean.class)).thenReturn(Collections.singletonList(defaultContentPicture));
     when(content.getString(CMALXBaseList.ANALYTICS_PROVIDER)).thenReturn(service);
     when(content.getLinks(CMCollection.ITEMS)).thenReturn(Collections.singletonList(defaultContent));
     when(cmalxBaseListModelServiceFactory.getReportModel(content, service)).thenReturn(reportModel);

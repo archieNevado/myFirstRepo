@@ -6,6 +6,7 @@ import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.context.ContextCollectionImpl;
@@ -77,7 +78,7 @@ public class TaxonomyInterceptorTest {
   }
 
   private <T> T getContentBean(int i) {
-    return (T)contentBeanFactory.createBeanFor(contentRepository.getContent(IdHelper.formatContentId(i)));
+    return (T)contentBeanFactory.createBeanFor(contentRepository.getContent(IdHelper.formatContentId(i)), ContentBean.class);
   }
 
   // tests whether keywords are properly incremented

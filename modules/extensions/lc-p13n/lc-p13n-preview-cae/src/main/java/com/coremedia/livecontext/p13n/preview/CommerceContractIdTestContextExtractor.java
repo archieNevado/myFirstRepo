@@ -2,12 +2,12 @@ package com.coremedia.livecontext.p13n.preview;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
-import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.blueprint.personalization.contentbeans.CMUserProfile;
 import com.coremedia.cap.content.Content;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.preview.TestContextExtractor;
@@ -46,7 +46,7 @@ public class CommerceContractIdTestContextExtractor implements TestContextExtrac
       return;
     }
 
-    CMObject cmUserProfileBean = contentBeanFactory.createBeanFor(content, CMObject.class);
+    ContentBean cmUserProfileBean = contentBeanFactory.createBeanFor(content, ContentBean.class);
     if (!(cmUserProfileBean instanceof CMUserProfile)) {
       LOG.debug("cannot extract context from contentbean of type {}", cmUserProfileBean.getClass().toString());
       return;

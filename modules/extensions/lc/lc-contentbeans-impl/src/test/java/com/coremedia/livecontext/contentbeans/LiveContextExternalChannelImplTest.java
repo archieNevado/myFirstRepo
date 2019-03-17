@@ -19,6 +19,7 @@ import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
+import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import org.junit.After;
@@ -71,7 +72,7 @@ public class LiveContextExternalChannelImplTest {
 
     @Bean
     StoreContext storeContext() {
-      return StoreContextBuilderImpl.from().build();
+      return StoreContextBuilderImpl.from("any-site-id").build();
     }
 
     @Bean
@@ -186,7 +187,7 @@ public class LiveContextExternalChannelImplTest {
    * @return ContentBean
    */
   protected <T> T getContentBean(int id) {
-    return (T) contentBeanFactory.createBeanFor(getContent(id));
+    return (T) contentBeanFactory.createBeanFor(getContent(id), ContentBean.class);
   }
 
   public ContentBeanFactory getContentBeanFactory() {

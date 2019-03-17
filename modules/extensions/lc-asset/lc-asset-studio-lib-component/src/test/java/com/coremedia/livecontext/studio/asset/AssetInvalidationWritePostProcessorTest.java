@@ -69,8 +69,7 @@ public class AssetInvalidationWritePostProcessorTest {
     testling.setType(cmPictureType);
     testling.setCommerceCacheInvalidationSource(invalidationSource);
 
-    when(commerceConnectionSupplier.findConnectionForContent(any(Content.class)))
-            .thenReturn(Optional.of(commerceConnection));
+    when(commerceConnectionSupplier.findConnection(any(Content.class))).thenReturn(Optional.of(commerceConnection));
 
     when(report.getEntity()).thenReturn(content);
 

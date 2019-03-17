@@ -4,11 +4,11 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceCon
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
-import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.blueprint.personalization.contentbeans.CMUserProfile;
 import com.coremedia.cap.content.Content;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
+import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.google.common.collect.ImmutableList;
 import org.junit.After;
@@ -51,8 +51,8 @@ public class CommerceContractIdTestContextExtractorTest {
   private StoreContextProvider storeContextProvider;
 
   @Before
-  public void setUp() throws Exception {
-    StoreContextImpl storeContext = StoreContextBuilderImpl.from().build();
+  public void setUp() {
+    StoreContextImpl storeContext = StoreContextBuilderImpl.from(commerceConnection, "any-site-id").build();
 
     when(storeContextProvider.buildContext(storeContext)).thenReturn(StoreContextBuilderImpl.from(storeContext));
 
@@ -73,7 +73,7 @@ public class CommerceContractIdTestContextExtractorTest {
             "vendor:///catalog/contract/contract1",
             "vendor:///catalog/contract/contract2");
 
-    when(contentBeanFactory.createBeanFor(content, CMObject.class)).thenReturn(cmUserProfile);
+    when(contentBeanFactory.createBeanFor(content, ContentBean.class)).thenReturn(cmUserProfile);
     when(cmUserProfile.getProfileExtensions()).thenReturn(profileExtensions);
     when(profileExtensions.get(CommerceContractIdTestContextExtractor.PROPERTIES_PREFIX)).thenReturn(properties);
     when(properties.get(CommerceContractIdTestContextExtractor.COMMERCE_CONTEXT)).thenReturn(commerce);

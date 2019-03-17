@@ -53,8 +53,7 @@ class CommerceBeanDelegateProvider {
 
   @NonNull
   static StoreContext createStoreContext() {
-    return StoreContextBuilderImpl.from()
-            .withSiteId(SITE_ID)
+    return StoreContextBuilderImpl.from(SITE_ID)
             .withWorkspaceId(WORKSPACE_ID)
             .build();
   }

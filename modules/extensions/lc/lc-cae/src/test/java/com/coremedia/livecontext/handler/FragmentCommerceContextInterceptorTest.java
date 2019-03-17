@@ -95,10 +95,11 @@ public class FragmentCommerceContextInterceptorTest {
 
   @Before
   public void setup() {
-    storeContext = StoreContextBuilderImpl.from().build();
+    commerceConnection = new BaseCommerceConnection();
+
+    storeContext = StoreContextBuilderImpl.from(commerceConnection, "any-site-id").build();
     userContext = UserContext.builder().build();
 
-    commerceConnection = new BaseCommerceConnection();
     commerceConnection.setVendorName("IBM");
     commerceConnection.setStoreContextProvider(storeContextProvider);
     commerceConnection.setUserContextProvider(userContextProvider);

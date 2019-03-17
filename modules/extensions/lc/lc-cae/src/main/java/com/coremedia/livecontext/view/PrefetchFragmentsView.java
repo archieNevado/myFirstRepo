@@ -44,8 +44,6 @@ public class PrefetchFragmentsView implements TextView {
 
   private static final Logger LOG = LoggerFactory.getLogger(PrefetchFragmentsView.class);
 
-  public static final String PREFETCH_FRAGMENT_VIEW = "prefetchFragments";
-
   private static final String JSON_CONTENT_TYPE = "application/json; charset=UTF-8";
 
   private static final Gson GSON = new Gson();
@@ -103,8 +101,6 @@ public class PrefetchFragmentsView implements TextView {
     rootJson.add(FRAGMENTS_PROPERTY, fragmentsJson);
 
     try {
-      // unfortunately setting the character encoding is too late here...
-      // therefore it must also be done the fragment handler, too bad!
       response.setContentType(JSON_CONTENT_TYPE);
       out.write(GSON.toJson(rootJson));
     } catch (IOException e) {
@@ -235,6 +231,7 @@ public class PrefetchFragmentsView implements TextView {
                                    @NonNull HttpServletResponse response) {
     Writer out = new StringWriter();
     ViewUtils.render(bean, view, out, request, response);
+
     return out.toString().trim();
   }
 

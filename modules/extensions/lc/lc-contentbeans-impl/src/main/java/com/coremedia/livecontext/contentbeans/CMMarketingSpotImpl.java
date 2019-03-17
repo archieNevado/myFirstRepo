@@ -125,7 +125,7 @@ public class CMMarketingSpotImpl extends CMDynamicListImpl implements CMMarketin
 
   private MarketingSpot getMarketingSpot() {
     MarketingSpot marketingSpot = null;
-    Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnectionForContent(getContent());
+    Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnection(getContent());
     String marketingSpotId = getExternalId();
     if (commerceConnection.isPresent() && marketingSpotId != null) {
       CommerceConnection connection = commerceConnection.get();

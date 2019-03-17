@@ -44,7 +44,7 @@ public class LiveContextExternalChannelImpl extends CMExternalChannelBase implem
 
   @Override
   public Category getCategory() {
-    Optional<CommerceConnection> connectionForContent = commerceConnectionSupplier.findConnectionForContent(this.getContent());
+    Optional<CommerceConnection> connectionForContent = commerceConnectionSupplier.findConnection(this.getContent());
 
     if (!connectionForContent.isPresent()) {
       return null;

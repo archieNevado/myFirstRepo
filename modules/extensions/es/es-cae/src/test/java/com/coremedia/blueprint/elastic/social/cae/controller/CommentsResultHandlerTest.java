@@ -22,6 +22,7 @@ import com.coremedia.cap.user.User;
 import com.coremedia.elastic.core.cms.ContentWithSite;
 import com.coremedia.elastic.social.api.ModerationType;
 import com.coremedia.elastic.social.api.users.CommunityUser;
+import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.HttpError;
 import com.google.common.collect.ImmutableMap;
@@ -141,9 +142,9 @@ public class CommentsResultHandlerTest {
     handler.setPermittedLinkParameterNames(Collections.singletonList(permittedParamName));
 
     when(contentRepository.getContent(IdHelper.formatContentId(targetId))).thenReturn(content);
-    when(contentBeanFactory.createBeanFor(content)).thenReturn(contentBean);
+    when(contentBeanFactory.createBeanFor(content, ContentBean.class)).thenReturn(contentBean);
     when(contentRepository.getContent(IdHelper.formatContentId(contextId))).thenReturn(navigationContent);
-    when(contentBeanFactory.createBeanFor(navigationContent)).thenReturn(navigation);
+    when(contentBeanFactory.createBeanFor(navigationContent, ContentBean.class)).thenReturn(navigation);
 
     when(contentBean.getContent()).thenReturn(content);
     when(content.getId()).thenReturn(targetId);

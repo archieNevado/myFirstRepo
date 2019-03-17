@@ -63,7 +63,7 @@ public final class TaxonomyExtractor implements TestContextExtractor {
       return;
     }
 
-    final ContentBean cmUserProfileBean = contentBeanFactory.createBeanFor(content);
+    final ContentBean cmUserProfileBean = contentBeanFactory.createBeanFor(content, ContentBean.class);
     if(!(cmUserProfileBean instanceof CMUserProfile)) {
       LOGGER.debug("cannot extract context from contentbean of type {}", cmUserProfileBean.getClass().toString());
       return;

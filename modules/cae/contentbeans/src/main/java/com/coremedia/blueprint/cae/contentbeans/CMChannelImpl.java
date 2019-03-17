@@ -23,6 +23,8 @@ import com.coremedia.cap.user.User;
 import com.google.common.collect.Lists;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import java.util.ArrayList;
@@ -37,6 +39,7 @@ import static java.util.Collections.emptyList;
  * Generated extension class for immutable beans of document type "CMChannel".
  */
 public class CMChannelImpl extends CMChannelBase {
+  private static final Logger LOG = LoggerFactory.getLogger(CMChannelImpl.class);
 
   private static final SettingsBasedVanityUrlMapper EMPTY_VANITY = new SettingsBasedVanityUrlMapper();
 
@@ -233,42 +236,38 @@ public class CMChannelImpl extends CMChannelBase {
   @Override
   @NonNull
   public List<CMMedia> getMedia() {
-    List<CMMedia> media = super.getMedia();
-    return isNotEmpty(media) ? media : grabSomeMedia(new HashSet<>());
+    return fetchMediaWithRecursionDetection(new HashSet<>());
   }
 
+  @Override
   @NonNull
-  private List<CMMedia> grabSomeMedia(Collection<CMChannelImpl> visited) {
-    // Cycle detection for crisscross pagegridded channels
+  public List<CMMedia> fetchMediaWithRecursionDetection(Collection<CMTeasable> visited) {
+    // Recursion detection
     if (visited.contains(this)) {
-      return emptyList();
+      LOG.debug("Recursive lookup of media for {}", this);
+      return Collections.emptyList();
     }
     visited.add(this);
 
-    // Regular lookup
+    // Prefer own media
     List<CMMedia> media = super.getMedia();
-    if (isNotEmpty(media)) {
+    if (!media.isEmpty()) {
       return media;
     }
 
-    // Desperate fallback
-    // (Consider making CMChannel#pictures a mandatory field instead.)
+    // Fallback: media of some main item
     for (Object mainItem : getPageGrid().getMainItems()) {
       CMTeasable teasable = asTeasable(mainItem);
-      if (teasable!=null) {
-        if (teasable instanceof CMChannelImpl) {
-          media = ((CMChannelImpl)teasable).grabSomeMedia(visited);
-        } else {
-          media = teasable.getMedia();
-        }
-        if (isNotEmpty(media)) {
+      if (teasable != null) {
+        media = teasable.fetchMediaWithRecursionDetection(visited);
+        if (!media.isEmpty()) {
           return media;
         }
       }
     }
 
     // Surrender
-    return emptyList();
+    return Collections.emptyList();
   }
 
   private CMTeasable asTeasable(Object obj) {
