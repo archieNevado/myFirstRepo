@@ -48,6 +48,11 @@
     </property>
   </bean>
 
+  <bean id="lcLoginStatusHandler" class="com.coremedia.livecontext.handler.LoginStatusHandler">
+    <constructor-arg index="0" name="liveContextSiteResolver" ref="liveContextSiteResolver"/>
+    <constructor-arg index="1" name="commerceConnectionInitializer" ref="commerceConnectionInitializer"/>
+  </bean>
+
   <bean id="commerceSearchHandler" class="com.coremedia.livecontext.search.CommerceSearchHandler" parent="pageHandlerBase">
     <property name="linkFormatter" ref="linkFormatter"/>
     <property name="commerceConnectionSupplier" ref="commerceConnectionSupplier"/>

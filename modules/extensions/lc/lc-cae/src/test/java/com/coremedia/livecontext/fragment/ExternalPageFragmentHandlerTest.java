@@ -2,7 +2,6 @@ package com.coremedia.livecontext.fragment;
 
 import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.blueprint.cae.contentbeans.PageImpl;
-import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.navigation.Navigation;
@@ -10,6 +9,7 @@ import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.user.User;
 import com.coremedia.livecontext.contentbeans.CMExternalPage;
+import com.coremedia.objectserver.beans.ContentBean;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.junit.After;
 import org.junit.Before;
@@ -55,7 +55,7 @@ public class ExternalPageFragmentHandlerTest extends FragmentHandlerTestBase<Ext
     when(aboutUsPage.getContext()).thenReturn(aboutUsPage);
     when(aboutUsPage.getContent()).thenReturn(aboutUsContent);
     when(aboutUsContent.getString("externalId")).thenReturn("aboutUs");
-    when(contentBeanFactory.createBeanFor(aboutUsContent, CMObject.class)).thenReturn(aboutUsPage);
+    when(contentBeanFactory.createBeanFor(aboutUsContent, ContentBean.class)).thenReturn(aboutUsPage);
 
     when(treeRelation.pathToRoot(any(Content.class))).thenReturn(singletonList(rootChannel));
     when(sitesService.getContentSiteAspect(any()).getSite()).thenReturn(site);

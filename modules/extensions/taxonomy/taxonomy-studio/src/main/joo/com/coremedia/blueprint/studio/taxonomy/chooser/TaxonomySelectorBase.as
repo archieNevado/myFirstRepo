@@ -165,7 +165,7 @@ public class TaxonomySelectorBase extends Container {
       if (ref === taxonomyId) {
         //update the list with the root children
         TaxonomyNodeFactory.loadTaxonomyRoot(siteId, taxonomyId, function (parent:TaxonomyNode):void {
-          parent.loadChildren(function (list:TaxonomyNodeList):void {
+          parent.loadChildren(false, function (list:TaxonomyNodeList):void {
             getSelectedNodeListValueExpression().setValue(list);
           });
         });
@@ -185,7 +185,7 @@ public class TaxonomySelectorBase extends Container {
           newSelection = activePathList.getNode(ref);
         }
         if (!newSelection.isLeaf()) {//do not show children of leafs, which are empty of course).
-          newSelection.loadChildren(function (list:TaxonomyNodeList):void {
+          newSelection.loadChildren( false,function (list:TaxonomyNodeList):void {
             getSelectedNodeListValueExpression().setValue(list);
           });
         }

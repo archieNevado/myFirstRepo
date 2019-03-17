@@ -238,7 +238,8 @@ public class SfccLinkScheme {
   }
 
   private Optional<CommerceConnection> findSfccCommerceConnection(@NonNull CMChannel channel) {
-    return commerceConnectionSupplier.findConnectionForContent(channel.getContent())
+    return commerceConnectionSupplier
+            .findConnection(channel.getContent())
             .filter(SfccCommerceConnection.class::isInstance);
   }
 

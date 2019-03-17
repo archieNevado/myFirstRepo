@@ -29,7 +29,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Links.ABSOLUTE_URI_KEY;
@@ -76,15 +75,12 @@ public class P13NPlacementHandler extends PageHandlerBase {
                                     @PathVariable(PAGEGRID_VARIABLE) String pageGridName,
                                     @PathVariable(PLACEMENT_VARIABLE) String placementName,
                                     @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,
-                                    HttpServletRequest request,
-                                    HttpServletResponse response) {
+                                    HttpServletRequest request) {
     Navigation navigation = getNavigation(context);
 
     if (cmObject instanceof CMChannel && navigation != null) {
       request.setAttribute(ABSOLUTE_URI_KEY, true);
-      ModelAndView modelAndView = createModelAndViewForPlacementAndView((CMChannel) cmObject, pageGridName, placementName, view);
-      response.setContentType("text/html; charset=UTF-8");
-      return modelAndView;
+      return createModelAndViewForPlacementAndView((CMChannel) cmObject, pageGridName, placementName, view);
     }
     return HandlerHelper.notFound();
   }

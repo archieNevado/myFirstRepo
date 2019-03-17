@@ -4,7 +4,6 @@ alx-p13n
 alx-webtrends
 am
 catalog
-ecommerce-adapter
 es
 es-alx
 es-controlroom

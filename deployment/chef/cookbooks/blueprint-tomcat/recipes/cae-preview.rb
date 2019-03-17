@@ -19,6 +19,7 @@ node.default_unless['blueprint']['webapps'][service_name]['application.propertie
 node.default_unless['blueprint']['webapps'][service_name]['application.properties']['repository.maxCachedBlobSize'] = -1
 node.default_unless['blueprint']['webapps'][service_name]['application.properties']['link.urlPrefixType'] = 'preview'
 node.default_unless['blueprint']['webapps'][service_name]['application.properties']['themeImporter.themeDeveloperGroups'] = 'developer'
+node.default_unless['blueprint']['webapps'][service_name]['application.properties']['spring.http.encoding.force'] = "true"
 # The path where the transformed blobs should be saved persistently. If not set, then the feature is deactivated,
 # and all transformed blobs are saved in memory
 node.override['blueprint']['webapps'][service_name]['application.properties']['com.coremedia.transform.blobCache.basePath'] = "#{cache_dir}/persistent-transformed-blobcache"

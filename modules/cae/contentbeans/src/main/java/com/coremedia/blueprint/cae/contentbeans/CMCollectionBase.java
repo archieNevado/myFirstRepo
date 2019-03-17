@@ -4,6 +4,7 @@ import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.blueprint.common.contentbeans.CMCollection;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.content.Content;
+import com.coremedia.objectserver.beans.ContentBean;
 
 import java.util.Collection;
 import java.util.List;
@@ -70,7 +71,7 @@ public abstract class CMCollectionBase<T> extends CMTeasableImpl implements CMCo
   @SuppressWarnings("unchecked")
   public List<T> getItemsUnfiltered() {
     List<Content> contents = getContent().getLinks(CMCollection.ITEMS);
-    return createBeansFor(contents);
+    return (List<T>) createBeansFor(contents, ContentBean.class);
   }
 
 }

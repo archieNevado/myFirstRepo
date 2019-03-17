@@ -50,7 +50,7 @@ public class StoreContextProviderMock implements StoreContextProvider {
 
   @NonNull
   private StoreContext createContext() {
-    return StoreContextBuilderImpl.from()
+    return StoreContextBuilderImpl.from("any-site-id")
             .withStoreId("10001")
             .withStoreName("aurora")
             .withCurrency(Currency.getInstance("USD"))

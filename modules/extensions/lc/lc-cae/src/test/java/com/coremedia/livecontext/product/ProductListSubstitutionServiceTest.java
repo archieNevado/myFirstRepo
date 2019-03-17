@@ -12,7 +12,6 @@ import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
 import org.junit.After;
 import org.junit.Before;
@@ -74,10 +73,9 @@ public class ProductListSubstitutionServiceTest {
 
     listOfTablets = newArrayList(product1, product2, product3, product4);
 
-    StoreContext storeContext = StoreContextBuilderImpl.from().build();
     connection = new BaseCommerceConnection();
     connection.setCatalogService(catalogService);
-    connection.setStoreContext(storeContext);
+    connection.setStoreContext(StoreContextBuilderImpl.from(connection, "any-site-id").build());
     CurrentCommerceConnection.set(connection);
 
     when(page.getNavigation()).thenReturn(liveContextNavigation);
@@ -88,7 +86,7 @@ public class ProductListSubstitutionServiceTest {
   }
 
   @After
-  public void tearDown() throws Exception {
+  public void tearDown() {
     CurrentCommerceConnection.remove();
   }
 

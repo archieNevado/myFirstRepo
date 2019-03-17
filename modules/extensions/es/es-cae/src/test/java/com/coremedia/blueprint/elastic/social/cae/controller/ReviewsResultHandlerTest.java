@@ -25,6 +25,7 @@ import com.coremedia.elastic.social.api.ModerationType;
 import com.coremedia.elastic.social.api.reviews.Review;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.elastic.social.api.users.CommunityUserService;
+import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.google.common.collect.ImmutableList;
 import org.junit.Before;
@@ -146,13 +147,13 @@ public class ReviewsResultHandlerTest {
     handler.setNavigationSegmentsUriHelper(navigationSegmentsUriHelper);
 
     when(contentRepository.getContent(IdHelper.formatContentId(targetId))).thenReturn(content);
-    when(contentBeanFactory.createBeanFor(content)).thenReturn(contentBean);
+    when(contentBeanFactory.createBeanFor(content, ContentBean.class)).thenReturn(contentBean);
     when(contentBean.getContent()).thenReturn(content);
     when(content.getId()).thenReturn(targetId);
     when(contributionTargetHelper.getContentFromTarget(any(ContentWithSite.class))).thenReturn(content);
 
     when(contentRepository.getContent(IdHelper.formatContentId(contextId))).thenReturn(navigationContent);
-    when(contentBeanFactory.createBeanFor(navigationContent)).thenReturn(cmNavigation);
+    when(contentBeanFactory.createBeanFor(navigationContent, ContentBean.class)).thenReturn(cmNavigation);
 
     resourceBundle = new MockResourceBundle();
     when(resourceBundleFactory.resourceBundle(any(Navigation.class), nullable(User.class))).thenReturn(resourceBundle);
@@ -184,7 +185,7 @@ public class ReviewsResultHandlerTest {
     assertEquals(ANONYMOUS, reviewsResultResult.getContributionType());
     verify(contentRepository, atLeastOnce()).getContent(IdHelper.formatContentId(targetId));
     verify(contentRepository, atLeastOnce()).getContent(IdHelper.formatContentId(contextId));
-    verify(contentBeanFactory, atLeastOnce()).createBeanFor(navigationContent);
+    verify(contentBeanFactory, atLeastOnce()).createBeanFor(navigationContent, ContentBean.class);
 
     // make sure reviews are lazily loaded
     reviewsResultResult.getReviews();

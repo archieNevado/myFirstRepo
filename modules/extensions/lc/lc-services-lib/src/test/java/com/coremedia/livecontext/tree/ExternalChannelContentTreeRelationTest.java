@@ -87,11 +87,9 @@ public class ExternalChannelContentTreeRelationTest {
 
   @Before
   public void setup() {
-    StoreContext storeContext = StoreContextBuilderImpl.from().build();
-
     BaseCommerceConnection commerceConnection = new BaseCommerceConnection();
     commerceConnection.setCommerceBeanFactory(commerceBeanFactory);
-    commerceConnection.setStoreContext(storeContext);
+    commerceConnection.setStoreContext(StoreContextBuilderImpl.from(commerceConnection, "any-site-id").build());
     CurrentCommerceConnection.set(commerceConnection);
 
     when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(commerceConnection));
@@ -101,12 +99,12 @@ public class ExternalChannelContentTreeRelationTest {
   }
 
   @After
-  public void tearDown() throws Exception {
+  public void tearDown() {
     CurrentCommerceConnection.remove();
   }
 
   @Test
-  public void testGetParentOf() throws Exception {
+  public void testGetParentOf() {
     // direct parent
     assertThat(testling.getParentOf(leafContent)).isEqualTo(childContent);
 

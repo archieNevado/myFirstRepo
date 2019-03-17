@@ -28,7 +28,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Links.ABSOLUTE_URI_KEY;
@@ -68,13 +67,12 @@ public class P13NContainerHandler extends PageHandlerBase {
 
   @GetMapping(value = DYNAMIC_CONTAINER_URI_PATTERN)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ROOT) String context,
-                                    @PathVariable(ID_VARIABLE) int contentId,
-                                    @PathVariable(PROPERTY_PATH_VARIABLE) String propertyPath,
-                                    @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,
-                                    HttpServletRequest request,
-                                    HttpServletResponse response) {
+                                            @PathVariable(ID_VARIABLE) int contentId,
+                                            @PathVariable(PROPERTY_PATH_VARIABLE) String propertyPath,
+                                            @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,
+                                            HttpServletRequest request) {
     Content content = contentRepository.getContent(IdHelper.formatContentId(contentId));
-    ContentBean contentBean = getContentBeanFactory().createBeanFor(content);
+    ContentBean contentBean = getContentBeanFactory().createBeanFor(content, ContentBean.class);
     Navigation navigation = getNavigation(context);
 
     if (!(contentBean instanceof CMTeasable) || navigation == null) {
@@ -85,7 +83,6 @@ public class P13NContainerHandler extends PageHandlerBase {
     Page page = asPage(navigation, navigation, UserVariantHelper.getUser(request));
     ModelAndView modelAndView = createModelAndView((CMTeasable) contentBean, propertyPath, navigation, view);
     RequestAttributeConstants.setPage(modelAndView, page);
-    response.setContentType("text/html; charset=UTF-8");
     return modelAndView;
   }
 

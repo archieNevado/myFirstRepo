@@ -24,7 +24,6 @@ import com.coremedia.blueprint.common.contentbeans.CMTheme;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.layout.Container;
 import com.coremedia.blueprint.common.layout.DynamicContainerStrategy;
-import com.coremedia.blueprint.common.layout.DynamizableCMTeasableContainer;
 import com.coremedia.blueprint.common.layout.PageGrid;
 import com.coremedia.blueprint.common.layout.PageGridPlacement;
 import com.coremedia.blueprint.common.services.context.ContextHelper;
@@ -37,6 +36,7 @@ import com.coremedia.cap.transform.Transformation;
 import com.coremedia.common.util.WordAbbreviator;
 import com.coremedia.image.ImageDimensionsExtractor;
 import com.coremedia.mimetype.MimeTypeService;
+import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.objectserver.web.UserVariantHelper;
@@ -167,8 +167,8 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
 
   // --- functionality -------------------------------------------------------------------------------------------------
 
-  public CMObject createBeanFor(Content content) {
-    return dataViewFactory.loadCached(contentBeanFactory.createBeanFor(content, CMObject.class), null);
+  public ContentBean createBeanFor(Content content) {
+    return dataViewFactory.loadCached(contentBeanFactory.createBeanFor(content, ContentBean.class), null);
   }
 
   public List<Transformation> getTransformations(Content content) {
@@ -176,7 +176,7 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
   }
 
   public List createBeansFor(List<Content> contents) {
-    return dataViewFactory.loadAllCached(contentBeanFactory.createBeansFor(contents), null);
+    return dataViewFactory.loadAllCached(contentBeanFactory.createBeansFor(contents, ContentBean.class), null);
   }
 
   public Object setting(Object self, String key) {

@@ -128,7 +128,7 @@ public class TaxonomyUtil {
               site: siteId
             });
     var taxRemoteBean:RemoteBean = beanFactory.getRemoteBean(url);
-    taxRemoteBean.invalidate(function ():void {
+    taxRemoteBean.load(function ():void {
       EventUtil.invokeLater(function ():void {
         if (taxRemoteBean.get('path')) { //maybe not set if the taxonomy does not exist
           var nodes:Array = taxRemoteBean.get('path')["nodes"];
@@ -290,7 +290,11 @@ public class TaxonomyUtil {
    * @return
    */
   public static function getRestIdFromCapId(ref:String):String {
-    return 'content/' + ref.substr(ref.lastIndexOf('/') + 1, ref.length);
+    if(ref.indexOf('/') !== -1) {
+      return 'content/' + ref.substr(ref.lastIndexOf('/') + 1, ref.length);
+    }
+
+    return ref.replace('-', '/');
   }
 
   /**

@@ -28,11 +28,11 @@
   </#if>
   <#-- facets filter -->
   <#if params.facetFilters?has_content>
-    <#local localParams = localParams + { "facetFilters": self.result.facetResult.filter().toggle(params.facetFilters).build() } />
+    <#local localParams = localParams + { "facetFilters": (self.result.facetResult.filter().toggle(params.facetFilters).build())!"" } />
   <#elseif params.clearFacetFilters?has_content>
-    <#local localParams = localParams + { "facetFilters": self.result.facetResult.filter().clear(params.clearFacetFilters).build() } />
+    <#local localParams = localParams + { "facetFilters": (self.result.facetResult.filter().clear(params.clearFacetFilters).build())!"" } />
   <#else>
-    <#local localParams = localParams + { "facetFilters": self.result.facetResult.filter().build() } />
+    <#local localParams = localParams + { "facetFilters": (self.result.facetResult.filter().build())!"" } />
   </#if>
   <#-- page number -->
   <#if params.pageNum?has_content || self.form.pageNum?has_content>

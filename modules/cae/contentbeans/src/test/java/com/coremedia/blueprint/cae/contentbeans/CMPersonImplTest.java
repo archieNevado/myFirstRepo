@@ -8,6 +8,7 @@ import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.common.personaldata.PersonalData;
+import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.google.common.collect.ImmutableMap;
 import org.junit.After;
@@ -55,7 +56,7 @@ public class CMPersonImplTest {
 
   private <T> T getContentBean(int id) {
     Content content = contentRepository.getContent(IdHelper.formatContentId(id));
-    return (T) contentBeanFactory.createBeanFor(content);
+    return (T) contentBeanFactory.createBeanFor(content, ContentBean.class);
   }
 
   @After

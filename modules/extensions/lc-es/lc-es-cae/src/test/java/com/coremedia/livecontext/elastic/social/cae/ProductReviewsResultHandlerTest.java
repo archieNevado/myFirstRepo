@@ -37,6 +37,7 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.fragment.FragmentContext;
 import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.livecontext.fragment.FragmentParametersFactory;
+import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import org.junit.After;
 import org.junit.Before;
@@ -176,7 +177,7 @@ public class ProductReviewsResultHandlerTest {
     when(communityUserService.getUserById("1234")).thenReturn(user);
 
     when(contentRepository.getContent(IdHelper.formatContentId(contextId))).thenReturn(navigationContent);
-    when(contentBeanFactory.createBeanFor(navigationContent)).thenReturn(cmNavigation);
+    when(contentBeanFactory.createBeanFor(navigationContent, ContentBean.class)).thenReturn(cmNavigation);
     when(cmNavigation.getContext()).thenReturn(context);
 
     when(elasticSocialPlugin.getElasticSocialConfiguration(any())).thenReturn(elasticSocialConfiguration);

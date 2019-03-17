@@ -84,7 +84,7 @@ public class CommerceSegmentSourceTest {
     List<Segment> segmentList = newArrayList(seg1, seg2);
     when(segmentService.findSegmentsForCurrentUser(any(StoreContext.class))).thenReturn(segmentList);
 
-    StoreContext storeContext = StoreContextBuilderImpl.from().build();
+    StoreContext storeContext = StoreContextBuilderImpl.from(commerceConnection, "any-site-id").build();
     commerceConnection.setStoreContext(storeContext);
 
     testling.preHandle(request, response, contextCollection);
@@ -94,7 +94,7 @@ public class CommerceSegmentSourceTest {
 
   @Test
   public void testPreHandleFromUserContext() {
-    StoreContext storeContext = StoreContextBuilderImpl.from()
+    StoreContext storeContext = StoreContextBuilderImpl.from(commerceConnection, "any-site-id")
             .withUserSegments("id1,id2")
             .build();
     commerceConnection.setStoreContext(storeContext);

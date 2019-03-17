@@ -93,6 +93,7 @@ public class ProductAssetsHandler extends PageHandlerBase {
   private static final String DEFAULT_ORIENTATION = "portrait";
   private static final String DEFAULT_SEGMENT_TYPES = "all";
 
+  @SuppressWarnings("squid:S3752") // multiple request methods allowed by intention, commit states "otherwise the CrossDomainEnabler will not work"
   @RequestMapping(value = DYNAMIC_URI_PATTERN, produces = CONTENT_TYPE_HTML, method = {RequestMethod.GET, RequestMethod.POST})
   public ModelAndView handleFragment(
           @PathVariable(SEGMENT_SITE) String siteName,

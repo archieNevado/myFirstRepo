@@ -98,14 +98,13 @@ public class BlobUploadXmpDataInterceptorTest {
 
     commerceConnection = new BaseCommerceConnection();
 
-    storeContext = StoreContextBuilderImpl.from().build();
+    storeContext = StoreContextBuilderImpl.from(commerceConnection, "any-site-id").build();
     commerceConnection.setStoreContext(storeContext);
 
     commerceConnection.setCatalogService(catalogService);
     commerceConnection.setIdProvider(TestVendors.getIdProvider("vendor"));
 
-    when(commerceConnectionSupplier.findConnectionForContent(any(Content.class)))
-            .thenReturn(Optional.of(commerceConnection));
+    when(commerceConnectionSupplier.findConnection(any(Content.class))).thenReturn(Optional.of(commerceConnection));
   }
 
   @Test

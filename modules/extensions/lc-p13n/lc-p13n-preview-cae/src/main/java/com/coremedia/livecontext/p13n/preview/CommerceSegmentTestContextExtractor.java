@@ -51,7 +51,7 @@ public class CommerceSegmentTestContextExtractor implements TestContextExtractor
       return;
     }
 
-    ContentBean cmUserProfileBean = contentBeanFactory.createBeanFor(content);
+    ContentBean cmUserProfileBean = contentBeanFactory.createBeanFor(content, ContentBean.class);
     if (!(cmUserProfileBean instanceof CMUserProfile)) {
       LOG.debug("cannot extract context from contentbean of type {}", cmUserProfileBean.getClass().toString());
       return;

@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.web.taglib;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -13,6 +14,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 class PbeStoreSerializerTest {
 
@@ -51,8 +53,9 @@ class PbeStoreSerializerTest {
 
   @NonNull
   private static StoreContext buildStoreContext(@NonNull String siteId, @Nullable WorkspaceId workspaceId) {
-    return StoreContextBuilderImpl.from()
-            .withSiteId(siteId)
+    CommerceConnection connection = mock(CommerceConnection.class);
+
+    return StoreContextBuilderImpl.from(connection, siteId)
             .withWorkspaceId(workspaceId)
             .build();
   }

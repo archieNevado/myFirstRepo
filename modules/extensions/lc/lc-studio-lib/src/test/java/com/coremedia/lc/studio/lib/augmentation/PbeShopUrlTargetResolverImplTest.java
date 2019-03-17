@@ -53,8 +53,7 @@ public class PbeShopUrlTargetResolverImplTest {
     commerceConnection = new BaseCommerceConnection();
     CurrentCommerceConnection.set(commerceConnection);
 
-    storeContext = StoreContextBuilderImpl.from()
-            .withSiteId("theSiteId")
+    storeContext = StoreContextBuilderImpl.from(commerceConnection, "theSiteId")
             .withStoreName("storeName")
             .build();
     commerceConnection.setStoreContext(storeContext);
@@ -66,7 +65,7 @@ public class PbeShopUrlTargetResolverImplTest {
   }
 
   @After
-  public void tearDown() throws Exception {
+  public void tearDown() {
     CurrentCommerceConnection.remove();
   }
 

@@ -2,7 +2,6 @@ package com.coremedia.blueprint.elastic.social.contentbeans;
 
 import com.coremedia.blueprint.base.elastic.common.AggregationType;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
-import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.cap.common.NoSuchPropertyDescriptorException;
 import com.coremedia.cap.content.Content;
 import com.coremedia.elastic.core.api.counters.AverageCounter;
@@ -14,6 +13,7 @@ import com.coremedia.elastic.social.api.ratings.LikeService;
 import com.coremedia.elastic.social.api.ratings.RatingService;
 import com.coremedia.elastic.social.api.ratings.ShareService;
 import com.coremedia.elastic.social.api.reviews.ReviewService;
+import com.coremedia.objectserver.beans.ContentBean;
 import com.google.common.collect.ImmutableList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -194,7 +194,7 @@ public class ESDynamicListImpl extends ESDynamicListBase {
         // this manual transformation in this class is not elegant and should change in the future
         if (target instanceof ContentWithSite) {
           Content content = ((ContentWithSite) target).getContent();
-          target = getContentBeanFactory().createBeanFor(content, CMObject.class);
+          target = getContentBeanFactory().createBeanFor(content, ContentBean.class);
         }
         return new Count(count, target);
       }).collect(ImmutableList.toImmutableList());

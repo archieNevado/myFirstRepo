@@ -10,7 +10,7 @@
 -->
 
 <#assign searchForm=self.form!cm.UNDEFINED />
-<#assign searchResultPerPage=self.result.hitsPerPage!10 />
+<#assign searchResultPerPage=(self.result.hitsPerPage)!10 />
 <#assign pageNumber=(searchForm.pageNum!0)+1 />
 <#assign totalPages=(((self.result.numHits)!0) / searchResultPerPage)?ceiling />
 
@@ -30,7 +30,9 @@
   </#if>
 
   <#-- index -->
-  <span class="cm-search__pagination-index">${pageNumber} / ${totalPages}</span>
+  <#if (totalPages > 1) >
+    <span class="cm-search__pagination-index">${pageNumber} / ${totalPages}</span>
+  </#if>
 
   <#-- next page -->
   <#if (pageNumber < totalPages) >

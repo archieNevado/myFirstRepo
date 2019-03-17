@@ -141,6 +141,7 @@ public class AuthenticationHandler extends WebflowHandlerBase {
     ));
   }
 
+  @SuppressWarnings("squid:S3752") // multiple request methods allowed by intention as part of the fix for CMS-13646
   @RequestMapping(value = URI_PATTERN, method = {RequestMethod.GET, RequestMethod.POST})
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ID) CMAction action,
                                     @PathVariable(SEGMENTS_NAVIGATION) List<String> navigationPath,
