@@ -6,6 +6,7 @@ import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
@@ -58,7 +59,7 @@ public abstract class ContentBeanTestBase {
    * @return ContentBean
    */
   protected <T> T getContentBean(int id) {
-    return (T) contentBeanFactory.createBeanFor(getContent(id));
+    return (T) contentBeanFactory.createBeanFor(getContent(id), ContentBean.class);
   }
 
   public ContentBeanFactory getContentBeanFactory() {

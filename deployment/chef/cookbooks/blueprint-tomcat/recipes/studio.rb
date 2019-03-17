@@ -36,6 +36,7 @@ node.default_unless['blueprint']['webapps'][service_name]['application.propertie
 node.default_unless['blueprint']['webapps'][service_name]['application.properties']['studio.dynamicpackages.rest.url'] = "https://studio.#{node['blueprint']['hostname']}/studio/api/dynamicpackages/remote"
 node.default_unless['blueprint']['webapps'][service_name]['application.properties']['studio.dynamicpackages.remote.urls.whitelist'] = "*//localhost:*,*.coremedia.vm*,*.coremedia.com*"
 
+node.default_unless['blueprint']['webapps'][service_name]['application.properties']['spring.http.encoding.force'] = "true"
 # The path where the transformed blobs should be saved persistently. If not set, then the feature is deactivated,
 # and all transformed blobs are saved in memory
 node.default_unless['blueprint']['webapps'][service_name]['application.properties']['com.coremedia.transform.blobCache.basePath'] = "#{cache_dir}/persistent-transformed-blobcache"

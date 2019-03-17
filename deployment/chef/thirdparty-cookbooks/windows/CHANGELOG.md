@@ -2,6 +2,17 @@
 
 This file is used to list changes made in each version of the windows cookbook.
 
+## 5.3.0 (2019-03-06)
+
+- Expanded certificate testing to cover more scenarios - [@Xorima](https://github.com/Xorima)
+- Updated windows_share to better compare the current and desired path in order to prevent converging on each Chef run  - [@Xorima](https://github.com/Xorima)
+- Backported all windows_certificate fixes from Chef 14.8 - 14.11 including improvements to importing the types of certificates that can be imported, suppport for nested certs, and support for importing private keys with certs.
+
+## 5.2.4 (2019-02-28)
+
+- Fix http_acl regex to properly capture SDDL - [@Annih](https://github.com/Annih)
+- Updated windows_share to create share if the share is deleted, and to sanitize paths using Chef::Util::PathHelper.cleanpath (#607) - [@Xorima](https://github.com/Xorima)
+
 ## 5.3.3 (2019-01-30)
 
 - Updated windows_certificate code to match that in Chef 14.10. This increases the requirement of the win32_certstore gem to the latest and resolves multiple issues with the previous implementation.

@@ -9,6 +9,7 @@ import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
+import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import org.junit.After;
 import org.junit.Before;
@@ -63,7 +64,7 @@ public class PageImplTest {
 
   private <T> T getContentBean(int id) {
     Content content = contentRepository.getContent(IdHelper.formatContentId(id));
-    return (T) contentBeanFactory.createBeanFor(content);
+    return (T) contentBeanFactory.createBeanFor(content, ContentBean.class);
   }
 
   @After

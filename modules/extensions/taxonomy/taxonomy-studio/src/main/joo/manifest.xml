@@ -15,6 +15,7 @@
   <component class="com.coremedia.blueprint.studio.taxonomy.administration.TaxonomyExplorerColumn"/>
   <component class="com.coremedia.blueprint.studio.taxonomy.administration.TaxonomyExplorerPanel"/>
   <component class="com.coremedia.blueprint.studio.taxonomy.chooser.LetterListPanel"/>
+  <component class="com.coremedia.blueprint.studio.taxonomy.chooser.LetterListItemPanel"/>
   <component class="com.coremedia.blueprint.studio.taxonomy.chooser.TaxonomySelectionWindow"/>
   <component class="com.coremedia.blueprint.studio.taxonomy.chooser.TaxonomySelector"/>
   <component class="com.coremedia.blueprint.studio.taxonomy.chooser.TextLinkButton"/>

@@ -16,6 +16,8 @@
   // picture (with and without link) and caption share the width
   &__wrapper > a,
   &__wrapper > &__picture-box,
+  // sometimes an image-map is used as a picture instead of a regular picture rendering
+  &__wrapper > .cm-imagemap,
   &__caption {
     @include breakpoint(sm-and-up) {
       flex: 1 1 50%;
@@ -126,7 +128,9 @@
     @include breakpoint(sm-and-up) {
       // change position of picture (with and without link) and caption
       .#{$cm-teasable-prefix}__wrapper > a,
-      .#{$cm-teasable-prefix}__wrapper > .#{$cm-teasable-prefix}__picture-box {
+      .#{$cm-teasable-prefix}__wrapper > .#{$cm-teasable-prefix}__picture-box,
+      // sometimes an image-map is used as a picture instead of a regular picture rendering
+      .#{$cm-teasable-prefix}__wrapper > .cm-imagemap {
         order: 2;
       }
       .#{$cm-teasable-prefix}__caption {
@@ -207,7 +211,9 @@
 
     // hide picture (with and without link)
     .#{$cm-teasable-prefix}__wrapper > a,
-    .#{$cm-teasable-prefix}__wrapper > .#{$cm-teasable-prefix}__picture-box {
+    .#{$cm-teasable-prefix}__wrapper > .#{$cm-teasable-prefix}__picture-box,
+    // sometimes an image-map is used as a picture instead of a regular picture rendering
+    .#{$cm-teasable-prefix}__wrapper > .cm-imagemap {
       display: none;
     }
 

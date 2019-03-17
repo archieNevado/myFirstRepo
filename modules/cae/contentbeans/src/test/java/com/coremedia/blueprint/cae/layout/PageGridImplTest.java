@@ -19,7 +19,6 @@ import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
-
 import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +36,6 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -98,7 +96,7 @@ public class PageGridImplTest {
   @Before
   public void setUp() throws Exception {
     Content content = contentRepository.getContent(IdHelper.formatContentId(222));
-    CMChannel channel = (CMChannel) contentBeanFactory.createBeanFor(content);
+    CMChannel channel = contentBeanFactory.createBeanFor(content, CMChannel.class);
     pageGrid = new PageGridImpl(channel, contentBackedPageGridService, validationService, visibilityValidator, viewtypeService);
   }
 
@@ -162,7 +160,7 @@ public class PageGridImplTest {
   @Test(expected = EvaluationException.class)
   public void testBrokenPageGrid() {
     Content content = contentRepository.getContent(IdHelper.formatContentId(668));
-    CMChannel brokenChannel = (CMChannel) contentBeanFactory.createBeanFor(content);
+    CMChannel brokenChannel = contentBeanFactory.createBeanFor(content, CMChannel.class);
     PageGrid brokenGrid = new PageGridImpl(brokenChannel, contentBackedPageGridService, validationService, visibilityValidator, viewtypeService);
 
     //Exception will be thrown when trying to access a placement.
@@ -172,7 +170,7 @@ public class PageGridImplTest {
   @Test
   public void testVisibilityInPageGrid() {
     Content content = contentRepository.getContent(IdHelper.formatContentId(888));
-    CMChannel channel = (CMChannel) contentBeanFactory.createBeanFor(content);
+    CMChannel channel = contentBeanFactory.createBeanFor(content, CMChannel.class);
     Map<String, Integer> expected = IntStream.range(0, PREVIEW_DATES.size())
             .boxed()
             .collect(Collectors.toMap(

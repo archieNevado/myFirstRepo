@@ -42,6 +42,7 @@ public class PageActionHandler extends DefaultPageActionHandler {
   /**
    * Fallback: Handles all remaining actions by simply displaying the page
    */
+  @SuppressWarnings("squid:S3752") // multiple request methods allowed by intention as part of the fix for CMS-13974
   @RequestMapping(value = URI_PATTERN, method = {RequestMethod.GET, RequestMethod.POST})
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ID) ContentBean contentBean,
                                     @PathVariable(SEGMENTS_NAVIGATION) List<String> navigationPath,

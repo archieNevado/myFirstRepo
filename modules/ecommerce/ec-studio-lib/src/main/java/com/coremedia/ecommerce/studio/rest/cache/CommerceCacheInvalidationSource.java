@@ -34,7 +34,6 @@ import java.util.stream.Stream;
 
 import static com.coremedia.ecommerce.studio.rest.cache.CommerceBeanDelegateProvider.createStoreContext;
 import static java.util.stream.Collectors.toSet;
-import static java.util.stream.Stream.empty;
 import static java.util.stream.Stream.of;
 
 /**
@@ -88,7 +87,7 @@ public class CommerceCacheInvalidationSource extends SimpleInvalidationSource im
     Optional<String> contentType = Optional.ofNullable(invalidation.getContentType());
     return contentType.flatMap(InvalidationEventTypeMapping::get)
             .map(this::link)
-            .orElse(empty());
+            .orElseGet(Stream::empty);
   }
 
   @NonNull

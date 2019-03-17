@@ -8,7 +8,6 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBui
 import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,11 +44,9 @@ public class AbstractCommerceContextInterceptorTest {
 
   @Before
   public void setup() {
-    StoreContext storeContext = StoreContextBuilderImpl.from().build();
-
     BaseCommerceConnection commerceConnection = new BaseCommerceConnection();
     commerceConnection.setStoreContextProvider(storeContextProvider);
-    commerceConnection.setStoreContext(storeContext);
+    commerceConnection.setStoreContext(StoreContextBuilderImpl.from(commerceConnection, "any-site-id").build());
 
     when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(commerceConnection));
 

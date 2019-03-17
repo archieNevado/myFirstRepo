@@ -30,14 +30,14 @@
 
     <customer>Blueprint</customer>
 
-    <blueprint-base.version>1901.1</blueprint-base.version>
-    <cms.version>1901.1</cms.version>
-    <personalization.version>1901.1</personalization.version>
-    <elastic.version>1901.1</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
-    <studio.version>1901.1</studio.version>
-    <caetoolbox.version>1901.1</caetoolbox.version>
-    <livecontext.version>1901.1</livecontext.version>
-    <jangaroo.version>4.0.64</jangaroo.version>
+    <blueprint-base.version>1901.2</blueprint-base.version>
+    <cms.version>1901.2</cms.version>
+    <personalization.version>1901.2</personalization.version>
+    <elastic.version>1901.2</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
+    <studio.version>1901.2</studio.version>
+    <caetoolbox.version>1901.2</caetoolbox.version>
+    <livecontext.version>1901.2</livecontext.version>
+    <jangaroo.version>4.0.65</jangaroo.version>
 
     <!--
      | Version for WAR based deployment. Tomcat 7 and 8 are supported. Don't forget to set the Chef attributes in the
@@ -819,7 +819,7 @@
         <plugin>
           <groupId>org.owasp</groupId>
           <artifactId>dependency-check-maven</artifactId>
-          <version>3.3.4</version>
+          <version>4.0.2</version>
         </plugin>
       </plugins>
 

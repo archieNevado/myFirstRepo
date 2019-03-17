@@ -38,6 +38,7 @@ node.default_unless['blueprint']['webapps'][base_service_name]['application.prop
 node.default_unless['blueprint']['webapps'][base_service_name]['application.properties']['cae.coderesources.maxAge'] = 180
 node.default_unless['blueprint']['webapps'][base_service_name]['application.properties']['blueprint.sitemap.target.root'] = "#{node['blueprint']['cache_dir']}/sitemap"
 node.default_unless['blueprint']['webapps'][base_service_name]['application.properties']['link.urlPrefixType'] = 'live'
+node.default_unless['blueprint']['webapps'][base_service_name]['application.properties']['spring.http.encoding.force'] = true
 # by default disable periodic sitemap generation.
 node.default['blueprint']['webapps'][base_service_name]['application.properties']['blueprint.sitemap.starttime'] = '-'
 (1..node['blueprint']['tomcat'][base_service_name]['instances']).to_a.each do |i|

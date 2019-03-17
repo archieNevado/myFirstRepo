@@ -630,14 +630,14 @@ public class TaxonomyExplorerPanelBase extends Panel {
     setDisabled(b);
     var view:StandAloneDocumentView = getDocumentForm();
     if (view) {
-      //we have to set TextFields to readonly, disabling won't work here since the user can still input if the field is focused.
+      //disabling may not be sufficient here since the user can still input if the field is focused, but we want to support all form configs
       var dfd:Container = Container(view.queryById('documentFormDispatcher'));
-      var spf:Array = dfd.query(createComponentSelector()._xtype(StringPropertyField.xtype).build());
-      for (var i:int = 0; i < spf.length; i++) {
-        var spField:StringPropertyField = spf[i] as StringPropertyField;
-        var text:TextField = spField.queryById('stringPropertyField') as TextField;
-        text.setReadOnly(b);
-      }
+      dfd.itemCollection.getRange().forEach(function (spField:Component):void {
+        if (spField is Container) {
+          var field:Container = spField as Container;
+          field.setDisabled(true);
+        }
+      });
     }
   }
 

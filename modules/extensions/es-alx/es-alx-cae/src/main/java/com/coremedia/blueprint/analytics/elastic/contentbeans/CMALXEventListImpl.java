@@ -3,6 +3,7 @@ package com.coremedia.blueprint.analytics.elastic.contentbeans;
 import com.coremedia.blueprint.common.contentbeans.CMCollection;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
 import com.coremedia.cap.content.Content;
+import com.coremedia.objectserver.beans.ContentBean;
 import com.google.common.collect.Iterables;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public class CMALXEventListImpl extends CMALXEventListBase {
     // default content
     if (result.isEmpty()) {
       List<Content> defaultContentLinks = getContent().getLinks(CMCollection.ITEMS);
-      List defaultContentBeans = createBeansFor(defaultContentLinks);
+      List defaultContentBeans = createBeansFor(defaultContentLinks, ContentBean.class);
       final Iterable filteredDefaultContent = Iterables.filter(defaultContentBeans, instanceOf(CMPicture.class));
       result = copyOf(filteredDefaultContent).subList(0, Math.min(Iterables.size(filteredDefaultContent), maxLength));
     }

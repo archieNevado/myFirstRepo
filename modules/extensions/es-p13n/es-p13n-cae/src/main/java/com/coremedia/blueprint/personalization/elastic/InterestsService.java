@@ -13,6 +13,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.common.logging.PersonalDataLogger;
 import com.coremedia.common.personaldata.PersonalData;
+import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.objectserver.view.substitution.Substitution;
@@ -213,7 +214,7 @@ public class InterestsService {
         if (IdHelper.isContentId(key)) {
           final Content content = contentRepository.getContent(key);
           if(isTaxonomy(content)) {
-            CMObject contentBean = contentBeanFactory.createBeanFor(content, CMObject.class);
+            ContentBean contentBean = contentBeanFactory.createBeanFor(content, ContentBean.class);
 
             // we might deal with ids referring to content from a different repository, therefore the id might belong to a type other than CMTaxonomy
             if (contentBean instanceof CMTaxonomy) {
