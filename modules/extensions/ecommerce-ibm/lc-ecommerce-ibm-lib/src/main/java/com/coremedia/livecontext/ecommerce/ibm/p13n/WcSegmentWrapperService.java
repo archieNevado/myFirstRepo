@@ -10,12 +10,13 @@ import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestServiceMethod;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -176,7 +177,7 @@ public class WcSegmentWrapperService extends AbstractWcWrapperService {
 
       return getRestConnector()
               .callService(FIND_SEGMENTS_BY_USER, variableValues, parameters, null, storeContext, userContext)
-              .orElse(emptyMap());
+              .orElseGet(Collections::emptyMap);
     } catch (CommerceException e) {
       // Commerce returns 403 when the user being queried does not belong to any member groups
       if (e.getResultCode() == 403) {

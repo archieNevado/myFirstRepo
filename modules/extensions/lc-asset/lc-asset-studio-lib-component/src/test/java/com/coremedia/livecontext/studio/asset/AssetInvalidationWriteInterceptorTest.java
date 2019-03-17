@@ -69,8 +69,7 @@ public class AssetInvalidationWriteInterceptorTest {
     testling.setType(cmPictureType);
     testling.afterPropertiesSet();
 
-    when(commerceConnectionSupplier.findConnectionForContent(any(Content.class)))
-            .thenReturn(Optional.of(commerceConnection));
+    when(commerceConnectionSupplier.findConnection(any(Content.class))).thenReturn(Optional.of(commerceConnection));
 
     when(contentWriteRequest.getEntity()).thenReturn(content);
     when(content.getRepository()).thenReturn(repository);

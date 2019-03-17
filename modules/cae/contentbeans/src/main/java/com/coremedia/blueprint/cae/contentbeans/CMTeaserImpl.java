@@ -2,7 +2,6 @@ package com.coremedia.blueprint.cae.contentbeans;
 
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMMedia;
-import com.coremedia.blueprint.common.contentbeans.CMPicture;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.blueprint.common.cta.CallToActionButtonSettings;
 import com.coremedia.cap.struct.Struct;
@@ -11,7 +10,13 @@ import com.coremedia.cap.struct.StructBuilderMode;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -20,6 +25,7 @@ import java.util.Objects;
  * Generated extension class for immutable beans of document type "CMTeaser".
  */
 public class CMTeaserImpl extends CMTeaserBase {
+  private static final Logger LOG = LoggerFactory.getLogger(CMTeaserImpl.class);
 
   /*
    * Add additional methods here.
@@ -64,12 +70,35 @@ public class CMTeaserImpl extends CMTeaserBase {
   }
 
   @Override
+  @NonNull
   public List<CMMedia> getMedia() {
-    List<CMMedia> media = super.getMedia();
-    if (media.isEmpty() && this.getTarget() instanceof CMTeasable && !this.getTarget().equals(this)) {
-      media = ((CMTeasable) this.getTarget()).getMedia();
+    return fetchMediaWithRecursionDetection(new HashSet<>());
+  }
+
+  @Override
+  @NonNull
+  public List<CMMedia> fetchMediaWithRecursionDetection(Collection<CMTeasable> visited) {
+    // Recursion detection
+    if (visited.contains(this)) {
+      LOG.debug("Recursive lookup of media for {}", this);
+      return Collections.emptyList();
     }
-    return media;
+    visited.add(this);
+
+    // Prefer own media
+    List<CMMedia> media = super.getMedia();
+    if (!media.isEmpty()) {
+      return media;
+    }
+
+    // Fallback: media of teaser target
+    CMLinkable target = getTarget();
+    if (target instanceof CMTeasable) {
+      return ((CMTeasableImpl) target).fetchMediaWithRecursionDetection(visited);
+    }
+
+    // Surrender
+    return Collections.emptyList();
   }
 
   @Override

@@ -101,7 +101,7 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
       }
     }
     else if (key === KeyEvent.DOM_VK_RIGHT && activeNode.isExtendable()) {
-      activeNode.loadChildren(function (list:TaxonomyNodeList):void {
+      activeNode.loadChildren(true, function (list:TaxonomyNodeList):void {
         if (list.size() > 0) {
           var selectNode:TaxonomyNode = list.getNodes()[0];
           globalSelectedNodeExpression.setValue([selectNode]);
@@ -239,7 +239,7 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
       }
     };
     if (parentNode) {
-      parentNode.loadChildren(callback);
+      parentNode.loadChildren(true, callback);
     } else {
       var site:String = siteSelectionExpression.getValue();
       TaxonomyNodeFactory.loadTaxonomies(site, callback, reload);

@@ -24,10 +24,10 @@
 <#assign searchPagination=bp.setting(self, "searchResultPagination", false) />
 <#assign searchSpellSuggestions=!bp.setting(self, "searchDisableSpellingSuggestions", false) />
 <#assign searchCategories=bp.setting(self, "searchChannelSelect", bp.setting(self, "search.channelselect", []))/>
-<#assign searchFacets=searchResult.facetResult.getFacets()!{}/>
+<#assign searchFacets=(searchResult.facetResult.getFacets())!{}/>
 <#assign isSortByDate=self.form.sortByDate!false />
 <#-- enable filter at least one filter -->
-<#assign searchFiltersAvailable=(searchCategories?size > 0 || searchResult.facetResult.getFacets()?size > 0)>
+<#assign searchFiltersAvailable=(searchCategories?size > 0 || searchFacets?size > 0)>
 
 <div id="cm-search-result-page" class="cm-search cm-search--results">
 

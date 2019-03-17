@@ -62,7 +62,7 @@ public class AssetInvalidationWriteInterceptor extends ContentWriteInterceptorBa
 
     Set<String> references = getInvalidReferences(content, localSettings);
 
-    Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnectionForContent(content);
+    Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnection(content);
 
     if (!commerceConnection.isPresent()) {
       LOG.debug("Commerce connection not available, will not invalidate references.");

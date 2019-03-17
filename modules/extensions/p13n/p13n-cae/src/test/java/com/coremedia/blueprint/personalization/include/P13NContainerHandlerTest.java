@@ -18,6 +18,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.HandlerHelper;
 import org.junit.Before;
@@ -27,7 +28,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriTemplate;
@@ -112,7 +112,7 @@ public class P13NContainerHandlerTest {
     CMChannel cmContentBean = mock(CMChannel.class);
 
     when(contentRepository.getContent(anyString())).thenReturn(cmContent);
-    when(contentBeanFactory.createBeanFor(cmContent)).thenReturn(cmContentBean);
+    when(contentBeanFactory.createBeanFor(cmContent, ContentBean.class)).thenReturn(cmContentBean);
     when(validationService.validate(cmContentBean)).thenReturn(true);
 
     when(cmContentBean.getContent()).thenReturn(cmContent);
@@ -123,7 +123,7 @@ public class P13NContainerHandlerTest {
 
     MockHttpServletRequest mockRequest = new MockHttpServletRequest();
 
-    ModelAndView modelAndView = testling.handleRequest("helios", 4711, "related", "myView", mockRequest, new MockHttpServletResponse());
+    ModelAndView modelAndView = testling.handleRequest("helios", 4711, "related", "myView", mockRequest);
 
     assertEquals("myView", modelAndView.getViewName());
     assertTrue(modelAndView.getModel().get("self") instanceof DynamizableCMTeasableContainer);
@@ -136,9 +136,9 @@ public class P13NContainerHandlerTest {
     Content wrongContent = mock(Content.class);
     when(contentRepository.getContent(anyString())).thenReturn(wrongContent);
     CMArticle cmArticle = mock(CMArticle.class);
-    when(contentBeanFactory.createBeanFor(wrongContent)).thenReturn(cmArticle);
+    when(contentBeanFactory.createBeanFor(wrongContent, CMArticle.class)).thenReturn(cmArticle);
 
-    ModelAndView modelAndView = testling.handleRequest("helios", 4711, "related", "myView", new MockHttpServletRequest(), new MockHttpServletResponse());
+    ModelAndView modelAndView = testling.handleRequest("helios", 4711, "related", "myView", new MockHttpServletRequest());
     assertEquals(HandlerHelper.notFound().getModel(), modelAndView.getModel());
   }
 

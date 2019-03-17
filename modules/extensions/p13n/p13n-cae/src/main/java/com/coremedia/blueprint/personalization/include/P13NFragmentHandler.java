@@ -65,7 +65,7 @@ public class P13NFragmentHandler extends PageHandlerBase {
                                             @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,
                                             HttpServletRequest request) {
     Content content = contentRepository.getContent(IdHelper.formatContentId(contentId));
-    ContentBean contentBean = getContentBeanFactory().createBeanFor(content);
+    ContentBean contentBean = getContentBeanFactory().createBeanFor(content, ContentBean.class);
     Navigation navigation = getNavigation(context);
 
     if (contentBean != null && navigation != null

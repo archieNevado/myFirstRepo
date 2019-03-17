@@ -3,6 +3,7 @@ package com.coremedia.blueprint.testing;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
+import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 
 import javax.inject.Inject;
@@ -51,7 +52,7 @@ public class ContentTestHelper {
   @SuppressWarnings("unchecked")
   public <T> T getContentBean(int id) {
     Content content = getContent(id);
-    return (T) contentBeanFactory.createBeanFor(content);
+    return (T) contentBeanFactory.createBeanFor(content, ContentBean.class);
   }
 
   /**
@@ -63,6 +64,6 @@ public class ContentTestHelper {
   @SuppressWarnings("unchecked")
   public <T> T getContentBean(String id) {
     Content content = getContent(id);
-    return (T) contentBeanFactory.createBeanFor(content);
+    return (T) contentBeanFactory.createBeanFor(content, ContentBean.class);
   }
 }

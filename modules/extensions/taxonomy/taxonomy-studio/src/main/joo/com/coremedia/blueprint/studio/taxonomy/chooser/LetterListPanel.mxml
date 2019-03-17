@@ -5,15 +5,15 @@
                            xmlns="exml:ext.config"
                            xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
                            xmlns:ui="exml:com.coremedia.ui.config"
-                           hideHeaders="true"
+                           itemId="{config.selectedNodeId}"
                            scrollable="true">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.icons.CoreIcons')]
   </fx:Metadata>
   <fx:Script><![CDATA[
+    import com.coremedia.ui.bem.SpacingBEMEntities;
     import com.coremedia.ui.data.ValueExpression;
-    import com.coremedia.ui.skins.ButtonSkin;
-    import com.coremedia.ui.skins.TableViewSkin;
+    import com.coremedia.ui.skins.ContainerSkin;
 
     public static const xtype:String = "com.coremedia.blueprint.studio.config.taxonomy.letterListPanel";
 
@@ -68,43 +68,25 @@
   <local:plugins>
     <editor:BindDisablePlugin bindTo="{getListValuesExpression()}"
                               forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
-    <ui:BindListPlugin bindTo="{getListValuesExpression()}">
-      <ui:fields>
-        <ui:DataField name="id"/>
-        <ui:DataField name="name"/>
-      </ui:fields>
-    </ui:BindListPlugin>
-    <ui:BindSelectionPlugin selectedPositions="{getSelectedPositionsExpression()}"
-                            selectedValues="{getSelectedValuesExpression()}"/>
   </local:plugins>
-  <local:columns>
-    <GridColumn width="25"
-                fixed="true"
-                sortable="false"
-                dataIndex="name"
-                renderer="{letterRenderer}"/>
-    <GridColumn sortable="false"
-                dataIndex="name"
-                renderer="{taxonomyRenderer}"
-                flex="1"/>
-    <ActionColumn width="50"
-                  dataIndex="name"
-                  renderer="{actionRenderer}"
-                  handler="{arrowClickHandler}">
-      <items>
-        <Button ui="{ButtonSkin.SIMPLE.getSkin()}"
-                scale="small"
-                iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'arrow_right')}"/>
-      </items>
-    </ActionColumn>
-  </local:columns>
-  <local:selModel>
-    <selection_RowModel mode="SINGLE"/>
-  </local:selModel>
-  <local:view>
-    <GridView ui="{TableViewSkin.LIGHT.getSkin()}"
-              deferEmptyText="false"
-              stripeRows="false"/>
-  </local:view>
+  <local:items>
+    <Container flex="1" autoScroll="true" itemId="{ITEMS_CONTAINER_ITEM_ID}">
+      <plugins>
+        <ui:BindComponentsPlugin valueExpression="{getListValuesExpression()}"
+                                 configBeanParameterName="content"
+                                 clearBeforeUpdate="true"
+                                 reuseComponents="false">
+          <ui:template>
+            <local:LetterListItemPanel selectedNodeList="{config.selectedNodeList}"
+                                       letterListPanel="{this}"
+                                       singleSelection="{config.singleSelection}"/>
+          </ui:template>
+        </ui:BindComponentsPlugin>
+      </plugins>
+      <layout>
+        <layout_Anchor/>
+      </layout>
+    </Container>
+  </local:items>
 
 </local:LetterListPanelBase>

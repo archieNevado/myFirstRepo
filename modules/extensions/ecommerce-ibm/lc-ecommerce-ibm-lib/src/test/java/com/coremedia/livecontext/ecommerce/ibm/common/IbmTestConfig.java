@@ -17,9 +17,10 @@ import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERS
 
 public class IbmTestConfig implements TestConfig {
 
-  private static final String SITE_ID = "awesome-site";
+  private static final String SITE_ID = "mySiteIndicator";
   private static final String STORE_ID = System.getProperty("lc.test.storeId", "10201");
   private static final String STORE_NAME = System.getProperty("lc.test.storeName", "AuroraESite");
+  private static final String B2B_SITE_ID = "myB2BSiteIndicator";
   private static final String B2B_STORE_ID = System.getProperty("lc.test.storeId", "10303");
   private static final String B2B_STORE_ID_V80 = System.getProperty("lc.test.storeId", "715838085");
   private static final String B2B_STORE_NAME = System.getProperty("lc.test.storeName", "AuroraB2BESite");
@@ -61,7 +62,6 @@ public class IbmTestConfig implements TestConfig {
   @NonNull
   public StoreContextImpl getStoreContext(@NonNull Currency currency) {
     IbmStoreContextBuilder builder = buildInitialStoreContext(currency)
-            .withSiteId("mySiteIndicator")
             .withWcsVersion(wcsVersion);
 
     return builder
@@ -98,7 +98,6 @@ public class IbmTestConfig implements TestConfig {
   @NonNull
   public StoreContextImpl getB2BStoreContext() {
     IbmStoreContextBuilder builder = buildInitialB2BStoreContext()
-            .withSiteId("myB2BSiteIndicator")
             .withWcsVersion(wcsVersion)
             .withDynamicPricingEnabled(true);
 
@@ -111,11 +110,11 @@ public class IbmTestConfig implements TestConfig {
   private IbmStoreContextBuilder buildInitialB2BStoreContext() {
     switch (wcsVersion) {
       case WCS_VERSION_8_0:
-        return buildContext(SITE_ID, B2B_STORE_ID_V80, B2B_STORE_NAME, CATALOG_ID_B2B_V80, LOCALE, CURRENCY);
+        return buildContext(B2B_SITE_ID, B2B_STORE_ID_V80, B2B_STORE_NAME, CATALOG_ID_B2B_V80, LOCALE, CURRENCY);
       case WCS_VERSION_7_8:
-        return buildContext(SITE_ID, B2B_STORE_ID, B2B_STORE_NAME, CATALOG_ID_B2B_V78, LOCALE, CURRENCY);
+        return buildContext(B2B_SITE_ID, B2B_STORE_ID, B2B_STORE_NAME, CATALOG_ID_B2B_V78, LOCALE, CURRENCY);
       default:
-        return buildContext(SITE_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY);
+        return buildContext(B2B_SITE_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY);
     }
   }
 

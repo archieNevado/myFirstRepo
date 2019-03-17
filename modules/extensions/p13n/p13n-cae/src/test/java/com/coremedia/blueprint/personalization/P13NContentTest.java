@@ -58,9 +58,9 @@ public class P13NContentTest {
   @Before
   public void setUp() {
     Content content = contentRepository.getChild("/personalizedContent");
-    personalizedContent = (CMSelectionRulesImpl) contentBeanFactory.createBeanFor(content);
+    personalizedContent = contentBeanFactory.createBeanFor(content, CMSelectionRulesImpl.class);
     content = contentRepository.getChild("/personalizedContent_2");
-    personalizedContent_2 = (CMSelectionRulesImpl) contentBeanFactory.createBeanFor(content);
+    personalizedContent_2 = contentBeanFactory.createBeanFor(content, CMSelectionRulesImpl.class);
   }
 
   @After

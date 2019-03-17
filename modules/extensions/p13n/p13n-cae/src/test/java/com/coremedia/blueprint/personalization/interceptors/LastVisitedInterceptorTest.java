@@ -7,6 +7,7 @@ import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.context.ContextCollectionImpl;
@@ -83,7 +84,7 @@ public final class LastVisitedInterceptorTest {
   }
 
   private <T> T getContentBean(int i) {
-    return (T) contentBeanFactory.createBeanFor(contentRepository.getContent(IdHelper.formatContentId(i)));
+    return (T) contentBeanFactory.createBeanFor(contentRepository.getContent(IdHelper.formatContentId(i)), ContentBean.class);
   }
 
   //tests if the last requested ID is being stored

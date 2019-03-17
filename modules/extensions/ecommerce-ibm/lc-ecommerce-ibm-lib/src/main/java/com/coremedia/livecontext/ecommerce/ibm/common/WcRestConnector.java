@@ -552,7 +552,7 @@ public class WcRestConnector {
   }
 
   @Nullable
-  private WcCredentials getPreviewCredentials(@Nullable StoreContext storeContext) {
+  private WcCredentials getPreviewCredentials(@NonNull StoreContext storeContext) {
     String user = CommercePropertyHelper.replaceTokens(contractPreviewUserName, storeContext);
     String password = getContractPreviewUserPassword(storeContext);
 

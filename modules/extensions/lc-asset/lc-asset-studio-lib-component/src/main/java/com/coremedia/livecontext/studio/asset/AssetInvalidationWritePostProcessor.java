@@ -56,7 +56,7 @@ public class AssetInvalidationWritePostProcessor extends ContentWritePostprocess
 
     Set<String> productReferences = newHashSet(CommerceReferenceHelper.getExternalReferences(localSettings));
 
-    Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnectionForContent(content);
+    Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnection(content);
 
     if (!commerceConnection.isPresent()) {
       LOG.debug("Commerce connection not available, will not invalidate references.");

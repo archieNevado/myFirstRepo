@@ -124,6 +124,18 @@ public interface CMTeasable extends CMHasContexts {
   List<CMMedia> getMedia();
 
   /**
+   * Functionally equivalent to {@link #getMedia()}
+   * <p>
+   * If your contentbean delegates to other contentbeans in order to accumulate
+   * more media objects, it should support this method in order to prevent
+   * infinite recursions.
+   */
+  @NonNull
+  default List<CMMedia> fetchMediaWithRecursionDetection(Collection<CMTeasable> visited) {
+    return getMedia();
+  }
+
+  /**
    * Returns the first CMPicture stored in the document property {@link #PICTURES}.
    *
    * @return the first CMPicture stored in the document property {@link #PICTURES}

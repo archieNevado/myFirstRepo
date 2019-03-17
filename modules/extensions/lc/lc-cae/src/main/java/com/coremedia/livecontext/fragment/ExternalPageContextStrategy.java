@@ -8,6 +8,7 @@ import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -35,7 +36,8 @@ public class ExternalPageContextStrategy implements ContextStrategy<String, Navi
 
   @Override
   public Navigation findAndSelectContextFor(String pageId, Navigation rootChannel) {
-    return selectContext(rootChannel, findContextsFor(pageId, rootChannel));
+    List<Navigation> candidates = findContextsFor(pageId, rootChannel);
+    return candidates != null && !candidates.isEmpty() ? candidates.get(0) : null;
   }
 
   @Override
@@ -52,7 +54,7 @@ public class ExternalPageContextStrategy implements ContextStrategy<String, Navi
       if (site != null) {
         Content externalChannel = cache.get(new CMExternalPageCacheKey(pageId, site, treeRelation));
         if (externalChannel != null) {
-          CMObject externalChannelBean = contentBeanFactory.createBeanFor(externalChannel, CMObject.class);
+          ContentBean externalChannelBean = contentBeanFactory.createBeanFor(externalChannel, ContentBean.class);
           if (externalChannelBean instanceof Navigation) {
             result.add((Navigation) externalChannelBean);
           }

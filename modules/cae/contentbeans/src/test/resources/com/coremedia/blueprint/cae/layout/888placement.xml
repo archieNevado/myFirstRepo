@@ -40,6 +40,9 @@
           <DateProperty Name="visibleTo">2005-01-01T03:00:00+01:00</DateProperty>
         </Struct>
         <Struct>
+          <!-- empty struct values must be ignored, test CMS-14155 -->
+        </Struct>
+        <Struct>
           <LinkProperty Name="target" xlink:href="coremedia:///cap/content/42"
                         LinkType="coremedia:///cap/contenttype/CMLinkable"/>
           <DateProperty Name="visibleFrom">2007-11-19T06:00:00+01:00</DateProperty>

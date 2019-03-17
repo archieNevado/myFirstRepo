@@ -36,7 +36,7 @@ public class AssetUrlProviderImplTest {
     CurrentCommerceConnection.set(commerceConnection);
 
     StoreContextImpl storeContext = IbmStoreContextBuilder
-            .from(StoreContextBuilderImpl.from().build())
+            .from(StoreContextBuilderImpl.from(commerceConnection, "any-site-id").build())
             .withStoreId("10001")
             .withCatalogId(CatalogId.of("catalog"))
             .build();

@@ -76,14 +76,14 @@ public class CartHandlerTest {
     commerceConnection = new BaseCommerceConnection();
     CurrentCommerceConnection.set(commerceConnection);
 
-    StoreContext storeContext = StoreContextBuilderImpl.from().build();
+    StoreContext storeContext = StoreContextBuilderImpl.from(commerceConnection, "any-site-id").build();
     commerceConnection.setStoreContext(storeContext);
 
     commerceConnection.setCartService(cartService);
   }
 
   @After
-  public void tearDown() throws Exception {
+  public void tearDown() {
     CurrentCommerceConnection.remove();
   }
 

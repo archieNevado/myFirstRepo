@@ -29,7 +29,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.security.auth.login.CredentialExpiredException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.GeneralSecurityException;
@@ -104,7 +103,7 @@ public class UserSessionServiceImplTest {
     CurrentCommerceConnection.set(commerceConnection);
 
     StoreContextImpl storeContext = IbmStoreContextBuilder
-            .from(StoreContextBuilderImpl.from().build())
+            .from(StoreContextBuilderImpl.from(commerceConnection, "any-site-id").build())
             .withStoreId("10001")
             .withCatalogId(CatalogId.of("catalog"))
             .build();
@@ -258,7 +257,7 @@ public class UserSessionServiceImplTest {
   }
 
   @Test
-  public void isLoggedInNoPersonAtAll() throws CredentialExpiredException {
+  public void isLoggedInNoPersonAtAll() {
     when(wcLoginWrapperService.isLoggedIn(anyString(), any(StoreContext.class), any(UserContext.class))).thenReturn(false);
 
     assertFalse(testling.isLoggedIn());
@@ -266,7 +265,7 @@ public class UserSessionServiceImplTest {
   }
 
   @Test
-  public void isLoggedInException() throws CredentialExpiredException {
+  public void isLoggedInException() {
     when(wcLoginWrapperService.isLoggedIn(anyString(), any(StoreContext.class), any(UserContext.class))).thenThrow(new CommerceException(""));
 
     assertFalse(testling.isLoggedIn());
@@ -274,7 +273,7 @@ public class UserSessionServiceImplTest {
   }
 
   @Test
-  public void isLoggedInUserUnknown() throws CredentialExpiredException {
+  public void isLoggedInUserUnknown() {
     when(wcLoginWrapperService.isLoggedIn(anyString(), any(StoreContext.class), any(UserContext.class))).thenReturn(true);
     when(commerceConnection.getUserService().findCurrentUser()).thenReturn(null);
 
@@ -282,7 +281,7 @@ public class UserSessionServiceImplTest {
   }
 
   @Test
-  public void isLoggedInSuccessfully() throws CredentialExpiredException {
+  public void isLoggedInSuccessfully() {
     when(wcLoginWrapperService.isLoggedIn(anyString(), any(StoreContext.class), any(UserContext.class))).thenReturn(true);
     User mock = mock(User.class);
     when(mock.getUserId()).thenReturn(USERID);
@@ -294,7 +293,7 @@ public class UserSessionServiceImplTest {
   }
 
   @Test
-  public void isAnonymousUser() throws CredentialExpiredException {
+  public void isAnonymousUser() {
     UserContext userContext = UserContext.builder().withUserId("").withUserName("").build();
     UserContextHelper.setCurrentContext(userContext);
 

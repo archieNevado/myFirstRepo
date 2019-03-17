@@ -80,7 +80,7 @@ public class LiveContextExternalProductImpl extends CMExternalProductBase implem
       return null;
     }
 
-    Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnectionForContent(getContent());
+    Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnection(getContent());
 
     if (!commerceConnection.isPresent()) {
       return null;

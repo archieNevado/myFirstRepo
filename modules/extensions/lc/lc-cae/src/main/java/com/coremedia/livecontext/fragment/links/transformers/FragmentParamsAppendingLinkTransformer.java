@@ -30,7 +30,7 @@ public class FragmentParamsAppendingLinkTransformer implements LinkTransformer {
   public String transform(String source, Object bean, String view, @NonNull HttpServletRequest request,
                           @NonNull HttpServletResponse response, boolean forRedirect) {
     Optional<FragmentContext> fragmentContext = FragmentContextProvider.findFragmentContext(request);
-    if (fragmentContext.isPresent() && fragmentContext.get().isFragmentRequest() && source.contains("/dynamic/")) {
+    if (fragmentContext.isPresent() && fragmentContext.get().isFragmentRequest() && isDynamicFragment(source)) {
       String fragmentParamsValue = fragmentContext.get().getParameters().toQueryParam();
       if (!fragmentParamsValue.isEmpty()) {
         request.setAttribute(FRAGMENT_CONTEXT_PARAMETER, fragmentParamsValue);
@@ -41,4 +41,7 @@ public class FragmentParamsAppendingLinkTransformer implements LinkTransformer {
     return source;
   }
 
+  private boolean isDynamicFragment(String source) {
+    return source != null && (source.contains("/dynamic/fragment/") || source.contains("/dynamic/placement/"));
+  }
 }

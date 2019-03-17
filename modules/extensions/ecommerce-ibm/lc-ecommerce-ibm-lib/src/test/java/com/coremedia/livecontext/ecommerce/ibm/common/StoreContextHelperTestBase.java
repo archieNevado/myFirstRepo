@@ -19,8 +19,7 @@ abstract class StoreContextHelperTestBase {
 
   protected IbmStoreContextBuilder buildContext() {
     return IbmStoreContextBuilder
-            .from(StoreContextBuilderImpl.from())
-            .withSiteId(SITE_ID)
+            .from(StoreContextBuilderImpl.from(SITE_ID))
             .withStoreId(STORE_ID)
             .withStoreName(STORE_NAME)
             .withCatalogId(CATALOG_ID)

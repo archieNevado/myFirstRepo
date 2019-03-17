@@ -77,9 +77,8 @@ class WorkspaceIdAppendingLinkTransformerTest {
   }
 
   @NonNull
-  private static StoreContext buildStoreContext(@Nullable WorkspaceId workspaceId) {
-    return StoreContextBuilderImpl.from()
-            .withSiteId("someSiteId")
+  private StoreContext buildStoreContext(@Nullable WorkspaceId workspaceId) {
+    return StoreContextBuilderImpl.from(commerceConnection, "someSiteId")
             .withWorkspaceId(workspaceId)
             .build();
   }

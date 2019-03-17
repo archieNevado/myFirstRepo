@@ -101,8 +101,7 @@ public class StoreContextHelper {
   public static IbmStoreContextBuilder buildContext(@NonNull String siteId, @Nullable String storeId,
                                                     @Nullable String storeName, @Nullable CatalogId catalogId,
                                                     @NonNull Locale locale, @Nullable Currency currency) {
-    IbmStoreContextBuilder builder = IbmStoreContextBuilder.from(StoreContextBuilderImpl.from())
-            .withSiteId(siteId);
+    IbmStoreContextBuilder builder = IbmStoreContextBuilder.from(StoreContextBuilderImpl.from(siteId));
 
     if (storeId != null) {
       if (StringUtils.isBlank(storeId)) {

@@ -6,7 +6,6 @@ import com.coremedia.cache.Cache;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.login.LoginService;
 import com.coremedia.livecontext.ecommerce.ibm.login.WcCredentials;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 class PreviewUserCacheKey extends AbstractCommerceCacheKey<WcCredentials> {
@@ -15,7 +14,7 @@ class PreviewUserCacheKey extends AbstractCommerceCacheKey<WcCredentials> {
   private final String password;
   private final LoginService loginService;
 
-  PreviewUserCacheKey(String username, String password, StoreContext storeContext, CommerceCache commerceCache,
+  PreviewUserCacheKey(String username, String password, @NonNull StoreContext storeContext, CommerceCache commerceCache,
                       @NonNull LoginService loginService) {
     super(username, storeContext, CONFIG_KEY_PREVIEW_USER_CREDENTIALS, commerceCache);
     this.username = username;

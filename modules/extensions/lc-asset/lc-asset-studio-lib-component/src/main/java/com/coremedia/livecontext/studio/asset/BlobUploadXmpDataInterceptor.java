@@ -119,7 +119,7 @@ public class BlobUploadXmpDataInterceptor extends ContentWriteInterceptorBase {
       content = request.getParent();
     }
 
-    return commerceConnectionSupplier.findConnectionForContent(content);
+    return commerceConnectionSupplier.findConnection(content);
   }
 
   @NonNull

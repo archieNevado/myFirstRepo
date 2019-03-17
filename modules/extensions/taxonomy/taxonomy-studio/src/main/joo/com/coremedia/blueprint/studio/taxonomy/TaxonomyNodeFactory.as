@@ -16,7 +16,7 @@ public class TaxonomyNodeFactory {
     var url:String = "taxonomies/roots";
     url = appendParam(url, 'site', site);
     url = appendParam(url, 'reload', reload);
-    loadRemoteTaxonomyNodeList(url, callback);
+    loadRemoteTaxonomyNodeList(url, reload, callback);
   }
 
   public static function loadTaxonomyRoot(site:String, taxonomyId:String, callback:Function) {
@@ -25,7 +25,7 @@ public class TaxonomyNodeFactory {
       url+="&site=" + site;
     }
     var remote:RemoteBean = beanFactory.getRemoteBean(url);
-    remote.invalidate(function():void {
+    remote.load(function():void {
       var obj = remote.toObject();
       if(!obj.type || !obj.name) {
         trace('[INFO]', 'No taxonomy found for site "' + site + '" and taxonomy id "' + taxonomyId + '"');
@@ -49,13 +49,21 @@ public class TaxonomyNodeFactory {
     });
   }
 
-  public static function loadRemoteTaxonomyNodeList(url:String, callback:Function) {
+  public static function loadRemoteTaxonomyNodeList(url:String, refresh:Boolean, callback:Function) {
     // create a remote bean which
     var entriesBean:RemoteBean = beanFactory.getRemoteBean(url);
-    entriesBean.invalidate(function ():void {
-      var nodelist:TaxonomyNodeList = new TaxonomyNodeList(entriesBean.get("nodes"));
-      callback(nodelist);
-    });
+    if(refresh) {
+      entriesBean.invalidate(function ():void {
+        var nodelist:TaxonomyNodeList = new TaxonomyNodeList(entriesBean.get("nodes"));
+        callback(nodelist);
+      });
+    }
+    else {
+      entriesBean.load(function ():void {
+        var nodelist:TaxonomyNodeList = new TaxonomyNodeList(entriesBean.get("nodes"));
+        callback(nodelist);
+      });
+    }
   }
 
   public static function loadSuggestions(taxonomyId:String, document:Content, callback:Function):void {

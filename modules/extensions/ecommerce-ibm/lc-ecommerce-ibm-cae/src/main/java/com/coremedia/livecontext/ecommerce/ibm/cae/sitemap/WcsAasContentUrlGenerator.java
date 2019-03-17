@@ -12,6 +12,7 @@ import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.ExternalSeoSegmentBuilder;
+import com.coremedia.objectserver.beans.ContentBean;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,7 +93,7 @@ public class WcsAasContentUrlGenerator extends ContentUrlGenerator {
     Object rememberMe = request.getAttribute(ABSOLUTE_URI_KEY);
     try {
       request.setAttribute(ABSOLUTE_URI_KEY, absoluteUrls);
-      return UriComponentsBuilder.fromUriString(getLinkFormatter().formatLink(getContentBeanFactory().createBeanFor(content), null, request, response, false))
+      return UriComponentsBuilder.fromUriString(getLinkFormatter().formatLink(getContentBeanFactory().createBeanFor(content, ContentBean.class), null, request, response, false))
               .scheme("http")
               .build().toUriString();
     } finally {

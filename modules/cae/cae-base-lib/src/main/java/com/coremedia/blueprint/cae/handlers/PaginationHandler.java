@@ -11,6 +11,7 @@ import com.coremedia.objectserver.web.links.Link;
 import com.google.common.collect.ImmutableMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,7 +45,7 @@ public class PaginationHandler extends PageHandlerBase {
 
   // --- Handler ----------------------------------------------------
 
-  @RequestMapping(value = URI_PATTERN)
+  @GetMapping(value = URI_PATTERN)
   public <T> ModelAndView handlePaginationRequest(
           @PathVariable(SEGMENT_ID) CMCollection<T> container,
           @RequestParam(value = VIEW_PARAMETER, required = false) String view,

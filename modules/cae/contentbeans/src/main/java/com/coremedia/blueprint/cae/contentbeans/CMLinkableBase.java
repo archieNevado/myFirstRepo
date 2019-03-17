@@ -33,7 +33,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -352,8 +351,7 @@ public abstract class CMLinkableBase extends CMLocalizedImpl implements CMLinkab
    */
   @NonNull
   protected List<CMLinkable> getLegacyLinkListUnfiltered(@NonNull String linkListPropertyName) {
-    //noinspection unchecked
-    return createBeansFor(CapStructHelper.getLinks(getContent(), linkListPropertyName));
+    return createBeansFor(CapStructHelper.getLinks(getContent(), linkListPropertyName), CMLinkable.class);
   }
 
   /**

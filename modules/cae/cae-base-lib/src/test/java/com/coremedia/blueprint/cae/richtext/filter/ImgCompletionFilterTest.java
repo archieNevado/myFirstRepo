@@ -1,10 +1,10 @@
 package com.coremedia.blueprint.cae.richtext.filter;
 
-import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.id.IdProvider;
+import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,7 +46,7 @@ public class ImgCompletionFilterTest {
   @Before
   public void setup() {
     when(idProvider.parseId(IdHelper.parseContentIdFromBlobId(BLOB_ID))).thenReturn(blobContent);
-    when(contentBeanFactory.createBeanFor(blobContent, CMObject.class)).thenReturn(picBean);
+    when(contentBeanFactory.createBeanFor(blobContent, ContentBean.class)).thenReturn(picBean);
     when(picBean.getAlt()).thenReturn("foo");
   }
 

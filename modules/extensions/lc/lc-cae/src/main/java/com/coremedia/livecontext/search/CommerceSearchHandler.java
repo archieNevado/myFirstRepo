@@ -167,7 +167,7 @@ public class CommerceSearchHandler extends PageHandlerBase {
 
   private Optional<CommerceConnection> findCommerceConnection(CMObject navigation) {
     Content content = navigation.getContent();
-    return commerceConnectionSupplier.findConnectionForContent(content);
+    return commerceConnectionSupplier.findConnection(content);
   }
 
   @NonNull

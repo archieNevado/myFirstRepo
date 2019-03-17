@@ -39,7 +39,7 @@ public class PreviewTokenAppendingLinkTransformerTest {
     testling.setLoginService(loginService);
 
     CommerceConnectionImpl connection = new CommerceConnectionImpl();
-    connection.setStoreContext(StoreContextBuilderImpl.from().build());
+    connection.setStoreContext(StoreContextBuilderImpl.from(connection, "any-site-id").build());
 
     CurrentCommerceConnection.set(connection);
 
@@ -49,7 +49,7 @@ public class PreviewTokenAppendingLinkTransformerTest {
   }
 
   @After
-  public void tearDown() throws Exception {
+  public void tearDown() {
     CurrentCommerceConnection.remove();
   }
 

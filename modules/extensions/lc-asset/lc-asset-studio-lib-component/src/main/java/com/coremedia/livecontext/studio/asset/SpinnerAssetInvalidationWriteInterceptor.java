@@ -151,7 +151,7 @@ public class SpinnerAssetInvalidationWriteInterceptor extends ContentWriteInterc
       allReferences.addAll(assetReadSettingsHelper.getCommerceReferences(oldProperties));
     }
 
-    Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnectionForContent(content);
+    Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnection(content);
 
     if (!commerceConnection.isPresent()) {
       LOG.debug("Commerce connection not available, will not invalidate references.");

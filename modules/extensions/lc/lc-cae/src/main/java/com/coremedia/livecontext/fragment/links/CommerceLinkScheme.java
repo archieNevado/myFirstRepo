@@ -338,7 +338,7 @@ public class CommerceLinkScheme {
   }
 
   private CommerceConnection findCommerceConnection(CMChannel channel) {
-    return commerceConnectionSupplier.findConnectionForContent(channel.getContent()).orElse(null);
+    return commerceConnectionSupplier.findConnection(channel.getContent()).orElse(null);
   }
 
   /**

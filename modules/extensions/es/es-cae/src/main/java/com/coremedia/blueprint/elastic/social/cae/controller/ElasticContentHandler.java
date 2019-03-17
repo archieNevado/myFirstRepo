@@ -67,7 +67,7 @@ public class ElasticContentHandler<T extends ContributionResult> extends Elastic
     }
 
     if (content != null) {
-      contentBean = contentBeanFactory.createBeanFor(content);
+      contentBean = contentBeanFactory.createBeanFor(content, ContentBean.class);
     } else if (contributionResult.getTarget() instanceof ContentBean) {
       contentBean = (ContentBean) contributionResult.getTarget();
     } else {
@@ -102,7 +102,7 @@ public class ElasticContentHandler<T extends ContributionResult> extends Elastic
    */
   protected Navigation getNavigation(String contextId) {
     final Content content = getContent(contextId);
-    final ContentBean navigation = contentBeanFactory.createBeanFor(content);
+    final ContentBean navigation = contentBeanFactory.createBeanFor(content, ContentBean.class);
     if (navigation instanceof Navigation) {
       return (Navigation) navigation;
     } else {

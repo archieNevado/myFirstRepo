@@ -3,6 +3,7 @@ package com.coremedia.blueprint.cae.action.search;
 import com.coremedia.blueprint.cae.action.CMActionState;
 import com.coremedia.blueprint.cae.search.SearchResultBean;
 import com.coremedia.blueprint.common.contentbeans.CMAction;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 
 /**
@@ -51,12 +52,17 @@ public class SearchActionState implements CMActionState {
   }
 
   /**
+   * Returns the actual search result.
+   *
+   * @return search result or null if no search result is available, for example if {@link #isQueryTooShort()}
    * @cm.template.api
    */
+  @Nullable
   public SearchResultBean getResult() {
     return result;
   }
 
+  @Nullable
   public SearchResultBean getTopicsResult() {
     return topicsResult;
   }

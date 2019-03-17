@@ -100,7 +100,7 @@ public class CMProductListImpl extends CMQueryListImpl implements CMProductList 
       return null;
     }
 
-    Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnectionForContent(getContent());
+    Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnection(getContent());
 
     if (!commerceConnection.isPresent()) {
       return null;
@@ -156,7 +156,7 @@ public class CMProductListImpl extends CMQueryListImpl implements CMProductList 
     Category category = getCategory();
     CatalogAlias catalogAlias = category != null ? category.getReference().getCatalogAlias() : null;
 
-    Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnectionForContent(getContent());
+    Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnection(getContent());
 
     if (!commerceConnection.isPresent()) {
       return Collections.emptyList();
