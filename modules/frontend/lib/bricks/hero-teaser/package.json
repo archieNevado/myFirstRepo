@@ -5,7 +5,6 @@
   "dependencies": {
     "@coremedia/ftl-utils": "^1.0.0",
     "@coremedia/sass-utils": "^1.0.0",
-    "@coremedia/brick-cta": "^1.0.0",
     "@coremedia/brick-media": "^1.0.0"
   },
   "devDependencies": {

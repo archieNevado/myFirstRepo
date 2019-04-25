@@ -1,7 +1,7 @@
 package com.coremedia.ecommerce.studio.rest;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.workspace.Workspace;
@@ -45,7 +45,10 @@ public class WorkspaceResource extends AbstractCatalogResource<Workspace> {
       return null;
     }
 
-    return getWorkspaceService().findAllWorkspaces(storeContext).stream()
+    CommerceConnection commerceConnection = storeContext.getConnection();
+    WorkspaceService workspaceService = commerceConnection.getWorkspaceService();
+
+    return workspaceService.findAllWorkspaces(storeContext).stream()
             .filter(workspace -> getId().equals(workspace.getExternalTechId()))
             .findFirst()
             .orElse(null);
@@ -58,9 +61,5 @@ public class WorkspaceResource extends AbstractCatalogResource<Workspace> {
     setId(externalId);
 
     setSiteId(workspace.getContext().getSiteId());
-  }
-
-  private WorkspaceService getWorkspaceService() {
-    return CurrentCommerceConnection.get().getWorkspaceService();
   }
 }

@@ -25,6 +25,8 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,8 +39,6 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -177,7 +177,7 @@ public class ProductAssetsHandler extends PageHandlerBase {
     String orientation = findAttribute(request, SEGMENT_ORIENTATION).orElse(DEFAULT_ORIENTATION);
     String types = findAttribute(request, SEGMENT_TYPES).orElse(DEFAULT_SEGMENT_TYPES);
 
-    Map<String, String> paramMap = new HashMap<>(6);
+    Map<String, String> paramMap = new HashMap<>();
     paramMap.put(SEGMENT_CATEGORY_ID, categoryId);
     paramMap.put(SEGMENT_PRODUCT_ID, product.getExternalTechId());
     paramMap.put(SEGMENT_ORIENTATION, orientation);
@@ -280,9 +280,9 @@ public class ProductAssetsHandler extends PageHandlerBase {
   }
 
   @Nullable
-  private Product findProduct(String productId, @Nullable String skuId, @Nullable CatalogAlias catalogAlias, @Nullable String attributes,
-                              @NonNull StoreContext storeContext) {
-    if (catalogAlias == null){
+  private Product findProduct(String productId, @Nullable String skuId, @Nullable CatalogAlias catalogAlias,
+                              @Nullable String attributes, @NonNull StoreContext storeContext) {
+    if (catalogAlias == null) {
       catalogAlias = storeContext.getCatalogAlias();
     }
 
@@ -357,26 +357,21 @@ public class ProductAssetsHandler extends PageHandlerBase {
             .orElse(product);
   }
 
-  private CommerceId formatProductId(CatalogAlias catalogAlias, String externalId) {
-    CommerceIdProvider commerceIdProvider = getCommerceIdProvider();
+  private CommerceId formatProductId(CatalogAlias catalogAlias, String externalId, @NonNull StoreContext storeContext) {
+    CommerceIdProvider commerceIdProvider = storeContext.getConnection().getIdProvider();
+
     return useStableIds
             ? commerceIdProvider.formatProductId(catalogAlias, externalId)
             : commerceIdProvider.formatProductTechId(catalogAlias, externalId);
   }
 
-  private CommerceId formatProductVariantId(CatalogAlias catalogAlias, String externalId) {
-    CommerceIdProvider commerceIdProvider = getCommerceIdProvider();
+  private CommerceId formatProductVariantId(CatalogAlias catalogAlias, String externalId,
+                                            @NonNull StoreContext storeContext) {
+    CommerceIdProvider commerceIdProvider = storeContext.getConnection().getIdProvider();
+
     return useStableIds
             ? commerceIdProvider.formatProductVariantId(catalogAlias, externalId)
             : commerceIdProvider.formatProductVariantTechId(catalogAlias, externalId);
-  }
-
-  private static CommerceBeanFactory getCommerceBeanFactory() {
-    return CurrentCommerceConnection.get().getCommerceBeanFactory();
-  }
-
-  private static CommerceIdProvider getCommerceIdProvider() {
-    return CurrentCommerceConnection.get().getIdProvider();
   }
 
   @NonNull
@@ -387,20 +382,23 @@ public class ProductAssetsHandler extends PageHandlerBase {
   @Nullable
   private Product loadProduct(@NonNull CatalogAlias catalogAlias, String externalId,
                               @NonNull StoreContext storeContext) {
-    CommerceId productId = formatProductId(catalogAlias, externalId);
+    CommerceId productId = formatProductId(catalogAlias, externalId, storeContext);
     return loadCommerceBean(productId, storeContext);
   }
 
   @Nullable
   private ProductVariant loadProductVariant(@NonNull CatalogAlias catalogAlias, String externalId,
                                             @NonNull StoreContext storeContext) {
-    CommerceId productVariantId = formatProductVariantId(catalogAlias, externalId);
+    CommerceId productVariantId = formatProductVariantId(catalogAlias, externalId, storeContext);
     return loadCommerceBean(productVariantId, storeContext);
   }
 
   @Nullable
-  private static <T extends CommerceBean> T loadCommerceBean(@NonNull CommerceId commerceId, @NonNull StoreContext storeContext) {
-    return (T) getCommerceBeanFactory().loadBeanFor(commerceId, storeContext);
+  private static <T extends CommerceBean> T loadCommerceBean(@NonNull CommerceId commerceId,
+                                                             @NonNull StoreContext storeContext) {
+    CommerceConnection commerceConnection = storeContext.getConnection();
+    CommerceBeanFactory commerceBeanFactory = commerceConnection.getCommerceBeanFactory();
+    return (T) commerceBeanFactory.loadBeanFor(commerceId, storeContext);
   }
 
   public void setUseStableIds(boolean useStableIds) {

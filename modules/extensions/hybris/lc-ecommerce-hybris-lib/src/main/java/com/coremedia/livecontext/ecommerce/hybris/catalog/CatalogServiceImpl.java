@@ -59,7 +59,7 @@ public class CatalogServiceImpl extends AbstractHybrisService implements Catalog
   private static final Logger LOG = LoggerFactory.getLogger(CatalogServiceImpl.class);
 
   public static final String SEARCH_PARAM_PAGENUMBER = "currentPage";
-  public static final String SEARCH_PARAM_CATEGORYID = "category";
+  public static final String SEARCH_PARAM_CATEGORYID = "allCategories";
 
   private CatalogResource catalogResource;
 

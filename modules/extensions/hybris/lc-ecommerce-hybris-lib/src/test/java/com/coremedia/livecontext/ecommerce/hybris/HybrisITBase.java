@@ -3,6 +3,7 @@ package com.coremedia.livecontext.ecommerce.hybris;
 import co.freeside.betamax.Recorder;
 import com.coremedia.blueprint.lc.test.BetamaxTestHelper;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.hybris.common.HybrisStoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.hybris.rest.HybrisRestConnector;
@@ -26,8 +27,10 @@ public class HybrisITBase {
 
   @Before
   public void setup() {
+    CommerceConnection connection = null;
+
     storeContext = HybrisStoreContextBuilder
-            .from("theSiteId")
+            .from(connection, "theSiteId")
             .withStoreId("apparel-uk")
             .withStoreName("Apparel-Catalog")
             .withCatalogId(CatalogId.of("apparelProductCatalog"))
@@ -37,7 +40,7 @@ public class HybrisITBase {
             .build();
   }
 
-  protected StoreContext getStoreContext(){
+  protected StoreContext getStoreContext() {
     return storeContext;
   }
 

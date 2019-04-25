@@ -7,7 +7,7 @@
 
   <#-- info box for users with javascript disabled -->
   <noscript class="cm-javascript">
-    ${bp.getMessage("error_noJavascript")}
+    ${cm.getMessage("error_noJavascript")}
   </noscript>
 
   <#-- include javascript files at the end -->

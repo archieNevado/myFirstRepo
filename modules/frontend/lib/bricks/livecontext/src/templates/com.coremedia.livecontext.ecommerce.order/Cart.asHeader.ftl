@@ -1,7 +1,7 @@
 <@cm.responseHeader name="Content-Type" value="text/html; charset=UTF-8"/><#-- could be used as fragment -->
 <#-- @ftlvariable name="self" type="com.coremedia.livecontext.ecommerce.order.Cart" -->
 
-<#assign labelCart><@bp.message "cart" "" false /></#assign>
+<#assign labelCart><@cm.message "cart" "" false /></#assign>
 
 <div class="cm-icon cm-icon--cart"
      data-cm-popup-control='{ "button": ".cm-popup-button--cart", "popup": ".cm-popup--cart" }'

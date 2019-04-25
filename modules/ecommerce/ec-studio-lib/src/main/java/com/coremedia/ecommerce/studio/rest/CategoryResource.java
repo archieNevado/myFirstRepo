@@ -23,14 +23,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.coremedia.ecommerce.studio.rest.CategoryResource.URI_PATH;
+
 /**
  * A catalog {@link Category} object as a RESTful resource.
  */
 @Produces(MediaType.APPLICATION_JSON)
-@Path(CategoryResource.URI_PATH)
+@Path(URI_PATH)
 public class CategoryResource extends CommerceBeanResource<Category> {
 
-  public static final String URI_PATH
+  static final String URI_PATH
           = "livecontext/category/{siteId:[^/]+}/{catalogAlias:[^/]+}/{workspaceId:[^/]+}/{id:.+}";
 
   @Override

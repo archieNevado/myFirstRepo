@@ -112,7 +112,7 @@ public class CatalogPictureHandlerBase extends HandlerBase {
 
   @NonNull
   protected CatalogAlias resolveCatalogAliasFromId(@NonNull CatalogId catalogId, @NonNull StoreContext storeContext) {
-    return catalogAliasTranslationService.getCatalogAliasForId(catalogId, storeContext.getSiteId())
+    return catalogAliasTranslationService.getCatalogAliasForId(catalogId, storeContext.getSiteId(), storeContext)
             .orElseGet(storeContext::getCatalogAlias);
   }
 

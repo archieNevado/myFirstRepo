@@ -31,7 +31,7 @@
     <ul class="cm-search-suggestions">
       <li class="cm-search-suggestions__item"></li>
     </ul>
-    <span class="cm-search-no-suggestions"><@bp.message "search_no_suggestions" /></span>
+    <span class="cm-search-no-suggestions"><@cm.message "search_no_suggestions" /></span>
   </div>
 </form>
 

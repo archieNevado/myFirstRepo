@@ -24,8 +24,8 @@ export default function(container, config) {
 
   const hasOrientationSpecificOptions =
     config.responsive &&
-    config.responsive.find(config =>
-      [PORTRAIT, LANDSCAPE].includes(config.orientation)
+    config.responsive.some(config =>
+      [PORTRAIT, LANDSCAPE].indexOf(config.orientation) !== -1
     );
 
   if (hasOrientationSpecificOptions) {

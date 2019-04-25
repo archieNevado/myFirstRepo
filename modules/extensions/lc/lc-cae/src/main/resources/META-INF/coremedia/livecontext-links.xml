@@ -21,16 +21,6 @@
     <property name="commerceConnectionInitializer" ref="commerceConnectionInitializer"/>
   </bean>
 
-  <bean id="legacyExternalSeoSegmentBuilder"
-        class="com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.LegacyExternalSeoSegmentBuilder"/>
-
-  <bean id="externalSeoSegmentBuilder"
-        class="com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.ExternalSeoSegmentBuilder">
-    <property name="navigationSegmentsUriHelper" ref="navigationSegmentsUriHelper"/>
-    <property name="settingsService" ref="settingsService"/>
-    <property name="cache" ref="cache"/>
-  </bean>
-
   <!--
   The LiveContextLinkTransformer must be the last one in the chain as it needs to pick
   up the query parameters added by other link transformers before it returns

@@ -170,7 +170,9 @@ public class LinklistPageResourceBundleFactory implements PageResourceBundleFact
     Content theme = themeService.directTheme(Collections.singletonList(cmNavigation), developer);
     if (theme != null) {
       List<Content> bundles = theme.getLinks(THEME_RESOURCEBUNDLES);
-      structs.add(localizationService.resources(bundles, locale));
+      // always fallback to the linked resource bundles of a theme (e.g. if no explicit resource bundles exist for the
+      // given localization)
+      structs.add(localizationService.resources(bundles, locale, bundles));
     }
     return StructUtil.mergeStructList(structs);
   }

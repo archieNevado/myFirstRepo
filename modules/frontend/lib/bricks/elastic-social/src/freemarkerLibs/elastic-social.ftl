@@ -9,7 +9,7 @@
   @param attr Additional attributes for the label tag.
 
   Example:
-  <@labelFromSpring path="bpLoginForm.name" text=bp.getMessage("login_name_label") />
+  <@labelFromSpring path="bpLoginForm.name" text=cm.getMessage("login_name_label") />
 -->
 <#macro labelFromSpring path text="" bindPath=true attr={}>
   <#if bindPath><@spring.bind path=path /></#if>

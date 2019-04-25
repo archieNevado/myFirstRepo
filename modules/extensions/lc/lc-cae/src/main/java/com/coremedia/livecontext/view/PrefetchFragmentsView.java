@@ -44,6 +44,8 @@ public class PrefetchFragmentsView implements TextView {
 
   private static final Logger LOG = LoggerFactory.getLogger(PrefetchFragmentsView.class);
 
+  private static final String DEFAULT_VIEW_IDENTIFIER = "DEFAULT";
+
   private static final String JSON_CONTENT_TYPE = "application/json; charset=UTF-8";
 
   private static final Gson GSON = new Gson();
@@ -118,6 +120,7 @@ public class PrefetchFragmentsView implements TextView {
     //for content pages use the bean otherwise page
     Object myBean = bean instanceof CMLinkable ? bean : page;
     getPredefinedViews(bean, page).stream()
+            .map(view -> DEFAULT_VIEW_IDENTIFIER.equals(view) ? "" : view)
             .map(view -> renderView(myBean, nullToEmpty(view), request, response))
             .forEach(viewJson -> viewJson.ifPresent(fragmentsJson::add));
   }

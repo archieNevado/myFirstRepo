@@ -28,8 +28,8 @@
       <span class="cm-logo__image"></span>
     </a>
     <div class="cm-footer__meta">
-      <span class="cm-footer__name">${bp.getMessage("footer_text")}</span>
-      <span class="cm-footer__copyright">${bp.getMessage("copyright")}</span>
+      <span class="cm-footer__name">${cm.getMessage("footer_text")}</span>
+      <span class="cm-footer__copyright">${cm.getMessage("copyright")}</span>
     </div>
   </div>
 </footer>

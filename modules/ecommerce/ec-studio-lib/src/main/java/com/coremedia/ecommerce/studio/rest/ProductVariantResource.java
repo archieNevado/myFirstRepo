@@ -15,13 +15,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import static com.coremedia.ecommerce.studio.rest.ProductVariantResource.URI_PATH;
 import static java.util.Objects.requireNonNull;
 
 /**
  * A catalog {@link ProductVariant} object as a RESTful resource.
  */
 @Produces(MediaType.APPLICATION_JSON)
-@Path(ProductVariantResource.URI_PATH)
+@Path(URI_PATH)
 public class ProductVariantResource extends CommerceBeanResource<ProductVariant> {
 
   static final String URI_PATH = "livecontext/sku/{siteId:[^/]+}/{catalogAlias:[^/]+}/{workspaceId:[^/]+}/{id:.+}";

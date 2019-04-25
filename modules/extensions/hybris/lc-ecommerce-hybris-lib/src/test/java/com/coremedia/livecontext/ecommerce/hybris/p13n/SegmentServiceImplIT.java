@@ -29,7 +29,7 @@ public class SegmentServiceImplIT extends AbstractServiceTest {
   @Betamax(tape = "hy_testFindAllSegments", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testFindAllSegments() throws Exception {
-    List<Segment> allSegments = testling.findAllSegments(getStoreContext());
+    List<Segment> allSegments = testling.findAllSegments(storeContext);
     assertThat(allSegments).isNotEmpty();
 
     Segment segment = allSegments.get(0);
@@ -41,7 +41,7 @@ public class SegmentServiceImplIT extends AbstractServiceTest {
   @Test
   public void testFindSegmentById() throws Exception {
     CommerceId segmentId = HybrisCommerceIdProvider.commerceId(SEGMENT).withExternalId("customergroup").build();
-    Segment segment = testling.findSegmentById(segmentId, getStoreContext());
+    Segment segment = testling.findSegmentById(segmentId, storeContext);
     assertThat(segment).isNotNull();
     assertThat(segment.getId()).isNotNull();
     assertThat(segment.getName()).isNotNull();
@@ -50,7 +50,7 @@ public class SegmentServiceImplIT extends AbstractServiceTest {
   @Betamax(tape = "hy_testFindSegmentsForCurrentUser", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testFindSegmentsForCurrentUser() throws Exception {
-    List<Segment> segments = testling.findSegmentsForCurrentUser(getStoreContext());
+    List<Segment> segments = testling.findSegmentsForCurrentUser(storeContext);
     assertThat(segments).isEmpty();
   }
 }

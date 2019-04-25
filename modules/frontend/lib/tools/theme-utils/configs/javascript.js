@@ -1,7 +1,9 @@
 const fs = require("fs");
 const resolveFrom = require("resolve-from");
 const path = require("path");
-const { optimize: { CommonsChunkPlugin } } = require("webpack");
+const {
+  optimize: { CommonsChunkPlugin },
+} = require("webpack");
 const {
   workspace: {
     DEFAULT_VARIANT,
@@ -9,7 +11,6 @@ const {
     getShims,
     getThemeConfig,
     getIsSmartImportModuleFor,
-    isBrickModule,
   },
   dependencies: { getFlattenedDependencies },
 } = require("@coremedia/tool-utils");
@@ -45,8 +46,8 @@ function buildEntryPoint(name, variant, path) {
   }
   const autoActivateDependencies = getFlattenedDependencies(
     themeConfig.pkgPath,
-    getIsSmartImportModuleFor(variant)
-  );
+    getIsSmartImportModuleFor(null)
+  ).filter(getIsSmartImportModuleFor(variant));
   const autoActivateEntryPoints = autoActivateDependencies
     .map(getInitJs)
     .filter(dependency => !!dependency);
@@ -68,7 +69,10 @@ function getLoaderParams(obj) {
 }
 
 function getShimLoaderConfig() {
-  return getFlattenedDependencies(themeConfig.pkgPath, isBrickModule)
+  return getFlattenedDependencies(
+    themeConfig.pkgPath,
+    getIsSmartImportModuleFor(null)
+  )
     .map(getShims)
     .reduce((aggregator, next) => aggregator.concat(next), [])
     .map(shim => {

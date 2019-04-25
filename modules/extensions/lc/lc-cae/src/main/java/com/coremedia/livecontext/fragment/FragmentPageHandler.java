@@ -102,7 +102,7 @@ public class FragmentPageHandler extends PageHandlerBase {
     // Update store context with fragment parameters.
     fragmentParameters.getCatalogId().ifPresent(catalogId -> {
       Optional<CatalogAlias> catalogAlias = catalogAliasTranslationService
-              .getCatalogAliasForId(catalogId, site.getId());
+              .getCatalogAliasForId(catalogId, site.getId(), storeContext);
 
       StoreContext updatedStoreContext = commerceConnection
               .getStoreContextProvider()

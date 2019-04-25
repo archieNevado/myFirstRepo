@@ -25,4 +25,9 @@
 
   <bean class="com.coremedia.livecontext.preview.LiveContextPreviewCaeConfiguration"/>
 
+  <bean id="seoSegmentBuilderHandler" class="com.coremedia.livecontext.preview.SeoSegmentBuilderHandler">
+    <constructor-arg index="0" name="contextHelper" ref="contextHelper"/>
+    <constructor-arg index="1" name="externalSeoSegmentBuilder" ref="externalSeoSegmentBuilder"/>
+  </bean>
+
 </beans>

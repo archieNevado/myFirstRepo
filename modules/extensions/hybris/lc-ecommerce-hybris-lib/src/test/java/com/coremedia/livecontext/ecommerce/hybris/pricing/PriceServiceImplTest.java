@@ -133,7 +133,7 @@ public class PriceServiceImplTest extends AbstractServiceTest {
     when(priceDocument3.getPrice()).thenReturn("188.88");
 
     List<PriceDocument> priceDocuments = newArrayList(priceDocument1, priceDocument2, priceDocument3);
-    Optional<BigDecimal> price = testling.findListPriceForPrices(priceDocuments);
+    Optional<BigDecimal> price = testling.findListPriceForPrices(priceDocuments, storeContext);
 
     assertThat(price).map(BigDecimal::toString).contains(priceDocument1.getPrice());
   }
@@ -156,7 +156,7 @@ public class PriceServiceImplTest extends AbstractServiceTest {
     when(priceDocument3.getPrice()).thenReturn("188.88");
 
     List<PriceDocument> priceDocuments = newArrayList(priceDocument1, priceDocument2, priceDocument3);
-    Optional<BigDecimal> price = testling.findListPriceForPrices(priceDocuments);
+    Optional<BigDecimal> price = testling.findListPriceForPrices(priceDocuments, storeContext);
 
     assertThat(price).isNotPresent();
   }
@@ -179,7 +179,7 @@ public class PriceServiceImplTest extends AbstractServiceTest {
     when(priceDocument3.getPrice()).thenReturn("188.88");
 
     List<PriceDocument> priceDocuments = newArrayList(priceDocument1, priceDocument2, priceDocument3);
-    Optional<BigDecimal> price = testling.findOfferPriceForPrices(priceDocuments);
+    Optional<BigDecimal> price = testling.findOfferPriceForPrices(priceDocuments, storeContext);
 
     assertThat(price).map(BigDecimal::toString).contains(priceDocument1.getPrice());
   }
@@ -202,7 +202,7 @@ public class PriceServiceImplTest extends AbstractServiceTest {
     when(priceDocument3.getPrice()).thenReturn("188.88");
 
     List<PriceDocument> priceDocuments = newArrayList(priceDocument1, priceDocument2, priceDocument3);
-    Optional<BigDecimal> price = testling.findOfferPriceForPrices(priceDocuments);
+    Optional<BigDecimal> price = testling.findOfferPriceForPrices(priceDocuments, storeContext);
 
     assertThat(price).isNotPresent();
   }

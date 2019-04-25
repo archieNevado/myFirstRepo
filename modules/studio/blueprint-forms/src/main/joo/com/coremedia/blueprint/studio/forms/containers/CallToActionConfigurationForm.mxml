@@ -23,6 +23,8 @@
     import com.coremedia.cms.editor.sdk.util.IAnnotatedLinkListProvider;
     import com.coremedia.ui.data.ValueExpressionFactory;
 
+    import ext.Ext;
+
     public static const xtype:String = "com.coremedia.blueprint.studio.config.callToActionConfigurationForm";
 
     private var config:CallToActionConfigurationForm;
@@ -36,7 +38,11 @@
     }
 
     public static function isAnnotated(annotatedLinkListProvider:IAnnotatedLinkListProvider, rowIndex:Number):Boolean {
-      var struct:Struct = annotatedLinkListProvider.getAnnotatedLinkListVE().getValue()[rowIndex] as Struct;
+      var linkList:Array = annotatedLinkListProvider.getAnnotatedLinkListVE().getValue();
+      var struct:Struct = null;
+      if (!Ext.isEmpty(linkList)) {
+        struct = linkList[rowIndex] as Struct;
+      }
       return struct ? struct.get('callToActionEnabled') === true : false;
     }
     ]]></fx:Script>

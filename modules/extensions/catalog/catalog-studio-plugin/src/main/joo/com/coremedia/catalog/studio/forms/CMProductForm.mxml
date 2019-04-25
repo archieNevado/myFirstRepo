@@ -86,7 +86,6 @@
         <bpforms:RelatedDocumentForm bindTo="{config.bindTo}"
                                      title="{resourceManager.getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'PropertyGroup_RelatedProducts_label')}"/>
         <bpforms:TeaserSettingsPropertyFieldGroup/>
-        <!--<bpforms:viewTypeSelectorForm bindTo="{config.bindTo}"/>-->
         <bpforms:ValidityDocumentForm bindTo="{config.bindTo}"/>
       </editor:items>
     </editor:DocumentForm>

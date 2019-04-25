@@ -1,10 +1,13 @@
 package com.coremedia.livecontext.ecommerce.hybris.common;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractStoreContextProvider;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionFinder;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoCommerceConnectionAvailable;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.CommerceConfigKeys;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextBuilder;
@@ -25,6 +28,8 @@ import java.util.Optional;
 @DefaultAnnotation(NonNull.class)
 public class HybrisStoreContextProvider extends AbstractStoreContextProvider {
 
+  private final CommerceConnectionFinder commerceConnectionFinder;
+
   @Nullable
   private StoreConfigResource storeConfigResource;
 
@@ -37,6 +42,10 @@ public class HybrisStoreContextProvider extends AbstractStoreContextProvider {
   private String previewDefaultCatalogVersion;
   @Nullable
   private String liveDefaultCatalogVersion;
+
+  public HybrisStoreContextProvider(CommerceConnectionFinder commerceConnectionFinder) {
+    this.commerceConnectionFinder = commerceConnectionFinder;
+  }
 
   @Override
   protected Optional<StoreContext> internalCreateContext(Site site) {
@@ -61,7 +70,11 @@ public class HybrisStoreContextProvider extends AbstractStoreContextProvider {
   }
 
   private StoreContextValuesHolder populateValuesHolder(Map<String, Object> config, Site site) {
-    StoreContextValuesHolder valuesHolder = new StoreContextValuesHolder();
+    CommerceConnection connection = commerceConnectionFinder.findConnection(site)
+            .orElseThrow(() -> new NoCommerceConnectionAvailable(
+                    String.format("Could not find commerce connection for site '%s'.", site)));
+
+    StoreContextValuesHolder valuesHolder = new StoreContextValuesHolder(connection);
 
     valuesHolder.siteId = site.getId();
     valuesHolder.storeId = (String) config.get(CommerceConfigKeys.STORE_ID);
@@ -93,6 +106,7 @@ public class HybrisStoreContextProvider extends AbstractStoreContextProvider {
    * @throws com.coremedia.livecontext.ecommerce.common.InvalidContextException if locale or currency has wrong format
    */
   private static StoreContext createStoreContext(StoreContextValuesHolder valuesHolder) {
+    CommerceConnection connection = valuesHolder.connection;
     String siteId = valuesHolder.siteId;
     String storeId = valuesHolder.storeId;
     String storeName = valuesHolder.storeName;
@@ -101,7 +115,7 @@ public class HybrisStoreContextProvider extends AbstractStoreContextProvider {
     Locale locale = valuesHolder.locale;
     Currency currency = valuesHolder.currency;
 
-    HybrisStoreContextBuilder builder = HybrisStoreContextBuilder.from(siteId);
+    HybrisStoreContextBuilder builder = HybrisStoreContextBuilder.from(connection, siteId);
 
     if (storeId != null) {
       if (StringUtils.isBlank(storeId)) {
@@ -152,6 +166,8 @@ public class HybrisStoreContextProvider extends AbstractStoreContextProvider {
 
   private static class StoreContextValuesHolder {
 
+    private final CommerceConnection connection;
+
     @Nullable
     private String siteId;
     @Nullable
@@ -166,6 +182,10 @@ public class HybrisStoreContextProvider extends AbstractStoreContextProvider {
     private Currency currency;
     @Nullable
     private Locale locale;
+
+    private StoreContextValuesHolder(CommerceConnection connection) {
+      this.connection = connection;
+    }
   }
 
   @Override

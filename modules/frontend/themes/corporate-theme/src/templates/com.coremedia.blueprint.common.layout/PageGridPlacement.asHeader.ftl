@@ -10,12 +10,12 @@
     <#-- logo -->
     <a class="cm-logo navbar-brand" href="${cm.getLink(cmpage.navigation.rootNavigation!cm.UNDEFINED)}">
       <span class="cm-logo__image"></span>
-      <span class="sr-only">${bp.getMessage("home")}</span>
+      <span class="sr-only">${cm.getMessage("home")}</span>
     </a>
 
     <#-- button for navigation -->
     <button type="button" class="cm-header__button navbar-toggle collapsed" data-toggle="collapse" data-target=".cm-header-is-collapse">
-      <span class="sr-only">${bp.getMessage("navigation_toggle")}</span>
+      <span class="sr-only">${cm.getMessage("navigation_toggle")}</span>
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>

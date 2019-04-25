@@ -17,7 +17,7 @@
     <#if self.teaserTitle?has_content && overlay.displayTitle>
       <span <#if !self.target?has_content>class="cm-overlay__link"</#if> <@preview.metadata "properties.teaserTitle" />>${self.teaserTitle}</span>
     <#else>
-      <span <#if !self.target?has_content>class="cm-overlay__link"</#if>><@bp.message "button_quickinfo" /></span>
+      <span <#if !self.target?has_content>class="cm-overlay__link"</#if>><@cm.message "button_quickinfo" /></span>
     </#if>
   </@utils.optionalLink>
 </div>

@@ -1,6 +1,5 @@
 package com.coremedia.livecontext.ecommerce.hybris.preview;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoStoreContextAvailable;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.UnauthorizedException;
@@ -10,6 +9,8 @@ import com.coremedia.livecontext.ecommerce.hybris.rest.AccessToken;
 import com.coremedia.livecontext.ecommerce.hybris.rest.OAuthConnector;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.PreviewTokenDocument;
 import com.coremedia.livecontext.ecommerce.hybris.rest.resources.PreviewTokenResource;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,6 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,7 +54,7 @@ public class PreviewTokenService extends AbstractHybrisService {
 
     if (result == null) {
       try {
-        result = requestPreviewToken(oAuthConnector.getOrRequestAccessToken(storeContext));
+        result = requestPreviewToken(storeContext, oAuthConnector.getOrRequestAccessToken(storeContext));
 
         if (request != null) {
           request.setAttribute(REQUEST_ATTRIB_PREVIEW_TOKEN, result);
@@ -63,7 +62,7 @@ public class PreviewTokenService extends AbstractHybrisService {
       } catch (UnauthorizedException e) {
         LOG.warn("Getting \"Unauthorized\" when requesting the preview token for store context: {}, message: {}. Try again...",
                 storeContext, e.getMessage());
-        result = requestPreviewToken(oAuthConnector.renewAccessToken(storeContext));
+        result = requestPreviewToken(storeContext, oAuthConnector.renewAccessToken(storeContext));
       }
     }
 
@@ -71,10 +70,8 @@ public class PreviewTokenService extends AbstractHybrisService {
   }
 
   @Nullable
-  private PreviewTokenDocument requestPreviewToken(@NonNull AccessToken accessToken) {
-    StoreContext storeContext = StoreContextHelper.findCurrentContext()
-            .orElseThrow(() -> new NoStoreContextAvailable("requesting preview token"));
-
+  private PreviewTokenDocument requestPreviewToken(@NonNull StoreContext storeContext,
+                                                   @NonNull AccessToken accessToken) {
     return tokenResource.getPreviewToken(preparePreviewTokenParams(storeContext), accessToken);
   }
 

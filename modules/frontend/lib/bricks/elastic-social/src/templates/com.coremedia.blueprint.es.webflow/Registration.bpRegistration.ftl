@@ -17,7 +17,7 @@
 <div class="container">
   <div class="row">
     <div class="cm-form cm-form--registration well col-xs-12 col-md-6 col-md-push-3"<@preview.metadata data=[registrationAction.content!"", "properties.id"]/>>
-      <h1 class="cm-form__headline"><@bp.message "registration_register" /></h1>
+      <h1 class="cm-form__headline"><@cm.message "registration_register" /></h1>
       <form method="post" enctype="multipart/form-data" data-cm-form--registration=""${(elasticSocialConfiguration.recaptchaForRegistrationRequired!false)?then(' onsubmit="substituteRecaptchaBindElement();"'?no_esc,'')}>
         <input type="hidden" name="execution" value="${flowExecutionKey!""}">
         <#--<input type="hidden" name="tenant" value="${elasticSocialConfiguration.tenant!""}">-->
@@ -32,32 +32,32 @@
         <#-- username -->
         <@spring.bind path="bpRegistration.username"/>
         <div class="form-group<#if spring.status.error> has-error</#if>">
-          <@elasticSocial.labelFromSpring path="bpRegistration.username" text='${bp.getMessage("registration_username_label")}'/>
-          <@spring.formInput path="bpRegistration.username" attributes='class="form-control" placeholder="${bp.getMessage("registration_username_label")}" required'/>
+          <@elasticSocial.labelFromSpring path="bpRegistration.username" text='${cm.getMessage("registration_username_label")}'/>
+          <@spring.formInput path="bpRegistration.username" attributes='class="form-control" placeholder="${cm.getMessage("registration_username_label")}" required'/>
           <#if spring.status.error><span class="help-block">${spring.status.getErrorMessagesAsString("\n")}</span></#if>
         </div>
 
         <#-- given name -->
         <@spring.bind path="bpRegistration.givenname"/>
         <div class="form-group<#if spring.status.error> has-error</#if>">
-          <@elasticSocial.labelFromSpring path="bpRegistration.givenname" text='${bp.getMessage("registration_givenname_label")}'/>
-          <@spring.formInput path="bpRegistration.givenname" attributes='class="form-control" placeholder="${bp.getMessage("registration_givenname_label")}" required'/>
+          <@elasticSocial.labelFromSpring path="bpRegistration.givenname" text='${cm.getMessage("registration_givenname_label")}'/>
+          <@spring.formInput path="bpRegistration.givenname" attributes='class="form-control" placeholder="${cm.getMessage("registration_givenname_label")}" required'/>
           <#if spring.status.error><span class="help-block">${spring.status.getErrorMessagesAsString("\n")}</span></#if>
         </div>
 
         <#-- surname -->
         <@spring.bind path="bpRegistration.surname"/>
         <div class="form-group<#if spring.status.error> has-error</#if>">
-          <@elasticSocial.labelFromSpring path="bpRegistration.surname" text='${bp.getMessage("registration_surname_label")}'/>
-          <@spring.formInput path="bpRegistration.surname" attributes='class="form-control" placeholder="${bp.getMessage("registration_surname_label")}" required'/>
+          <@elasticSocial.labelFromSpring path="bpRegistration.surname" text='${cm.getMessage("registration_surname_label")}'/>
+          <@spring.formInput path="bpRegistration.surname" attributes='class="form-control" placeholder="${cm.getMessage("registration_surname_label")}" required'/>
           <#if spring.status.error><span class="help-block">${spring.status.getErrorMessagesAsString("\n")}</span></#if>
         </div>
 
         <#-- email -->
         <@spring.bind path="bpRegistration.emailAddress"/>
         <div class="form-group<#if spring.status.error> has-error</#if>">
-          <@elasticSocial.labelFromSpring path="bpRegistration.emailAddress" text='${bp.getMessage("registration_emailAddress_label")}'/>
-          <@spring.formInput path="bpRegistration.emailAddress" attributes='class="form-control" placeholder="${bp.getMessage("registration_emailAddress_label")}" required' fieldType="email"/>
+          <@elasticSocial.labelFromSpring path="bpRegistration.emailAddress" text='${cm.getMessage("registration_emailAddress_label")}'/>
+          <@spring.formInput path="bpRegistration.emailAddress" attributes='class="form-control" placeholder="${cm.getMessage("registration_emailAddress_label")}" required' fieldType="email"/>
           <#if spring.status.error><span class="help-block">${spring.status.getErrorMessagesAsString("\n")}</span></#if>
         </div>
 
@@ -65,15 +65,15 @@
         <#if !(registrationFlow.registeringWithProvider!false)>
           <@spring.bind path="bpRegistration.password"/>
           <div class="form-group<#if spring.status.error> has-error</#if>">
-            <@elasticSocial.labelFromSpring path="bpRegistration.password" text='${bp.getMessage("registration_password_label")}'/>
-            <@spring.formInput path="bpRegistration.password" attributes='class="form-control" placeholder="${bp.getMessage("registration_password_label")}" required' fieldType="password"/>
+            <@elasticSocial.labelFromSpring path="bpRegistration.password" text='${cm.getMessage("registration_password_label")}'/>
+            <@spring.formInput path="bpRegistration.password" attributes='class="form-control" placeholder="${cm.getMessage("registration_password_label")}" required' fieldType="password"/>
             <#if spring.status.error><span class="help-block">${spring.status.getErrorMessagesAsString("\n")}</span></#if>
           </div>
 
           <@spring.bind path="bpRegistration.confirmPassword"/>
           <div class="form-group<#if spring.status.error> has-error</#if>">
-            <@elasticSocial.labelFromSpring path="bpRegistration.confirmPassword" text='${bp.getMessage("registration_confirmPassword_label")}'/>
-            <@spring.formInput path="bpRegistration.confirmPassword" attributes='class="form-control" placeholder="${bp.getMessage("registration_confirmPassword_label")}" required' fieldType="password"/>
+            <@elasticSocial.labelFromSpring path="bpRegistration.confirmPassword" text='${cm.getMessage("registration_confirmPassword_label")}'/>
+            <@spring.formInput path="bpRegistration.confirmPassword" attributes='class="form-control" placeholder="${cm.getMessage("registration_confirmPassword_label")}" required' fieldType="password"/>
             <#if spring.status.error><span class="help-block">${spring.status.getErrorMessagesAsString("\n")}</span></#if>
           </div>
         </#if>
@@ -81,7 +81,7 @@
         <#-- user image -->
         <@spring.bind path="bpRegistration.profileImage"/>
         <div class="form-group<#if spring.status.error> has-error</#if>">
-          <label for="imageFile"><@bp.message "registration_imageFile_label" /></label>
+          <label for="imageFile"><@cm.message "registration_imageFile_label" /></label>
           <input name="imageFile" type="file" value="" accept="image/*">
           <#if spring.status.error><span class="help-block">${spring.status.getErrorMessagesAsString("\n")}</span></#if>
         </div>
@@ -90,8 +90,8 @@
           <#assign imageUrl=cm.getLink(bpRegistration.profileImage)/>
           <div>
             <img src="${imageUrl!""}" alt="userimage"><br>
-            <@spring.formCheckbox bp.getMessage("registration_deleteProfileImage") />
-            <label for="deleteProfileImage"><@bp.message "registration_deleteProfileImage" /></label>
+            <@spring.formCheckbox cm.getMessage("registration_deleteProfileImage") />
+            <label for="deleteProfileImage"><@cm.message "registration_deleteProfileImage" /></label>
           </div>
         </#if>
 
@@ -118,9 +118,9 @@
         <#-- terms of use -->
         <@spring.bind path="bpRegistration.acceptTermsOfUse"/>
         <#outputformat "plainText">
-          <#assign privacyPolicy><a href="${privacyPolicyLink!""}" target="_blank" rel="noopener"><@bp.message "registration_linkPrivacyPolicy_label" /></a></#assign>
-          <#assign termsOfUse><a href="${termsOfUseLink!""}" target="_blank" rel="noopener"><@bp.message "registration_linkTermsOfUse_label" /></a></#assign>
-          <#assign text=bp.getMessage("registration_acceptTermsOfUse_label", ["#privacyPolicy#", "#termsOfUse#"])/>
+          <#assign privacyPolicy><a href="${privacyPolicyLink!""}" target="_blank" rel="noopener"><@cm.message "registration_linkPrivacyPolicy_label" /></a></#assign>
+          <#assign termsOfUse><a href="${termsOfUseLink!""}" target="_blank" rel="noopener"><@cm.message "registration_linkTermsOfUse_label" /></a></#assign>
+          <#assign text=cm.getMessage("registration_acceptTermsOfUse_label", ["#privacyPolicy#", "#termsOfUse#"])/>
         </#outputformat>
         <div class="form-group<#if spring.status.error> has-error</#if>">
           <div class="checkbox">
@@ -135,7 +135,7 @@
 
         <#-- button-->
         <div class="form-group text-right">
-          <@components.button text=bp.getMessage("registration_title") attr={"type": "submit", "classes": ["btn","btn-primary"]} />
+          <@components.button text=cm.getMessage("registration_title") attr={"type": "submit", "classes": ["btn","btn-primary"]} />
         </div>
       </form>
     </div>

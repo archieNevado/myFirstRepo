@@ -125,9 +125,9 @@ $custom-text-color: #FF0000 !default;
  * returns content for com.coremedia.blueprint.common.contentbeans/Page._body.ftl
  * @return {string}
  */
-const initBrickPageBodyFtl = () => `<#-- Use bp.getMessage to display a localized hello world message -->
+const initBrickPageBodyFtl = () => `<#-- Use cm.getMessage to display a localized hello world message -->
 <div>
-  <span class="custom-text">\${bp.getMessage('welcomeText')}</span>
+  <span class="custom-text">\${cm.getMessage('welcomeText')}</span>
 </div>
 `;
 

@@ -70,7 +70,7 @@
       <div class="cm-carousel__control ${clsModifier}">
           <a class="left cm-carousel-control carousel-control" href="#${carouselId}" role="button" data-slide="prev">
               <span class="glyphicon glyphicon-${controlIcon}-left" aria-hidden="true"></span>
-              <span class="sr-only">${bp.getMessage("button_previous")}</span>
+              <span class="sr-only">${cm.getMessage("button_previous")}</span>
           </a>
         <#if displayPagination>
             <p class="cm-carousel__pagination">
@@ -81,7 +81,7 @@
         </#if>
           <a class="right cm-carousel-control carousel-control" href="#${carouselId}" role="button" data-slide="next">
               <span class="glyphicon glyphicon-${controlIcon}-right" aria-hidden="true"></span>
-              <span class="sr-only">${bp.getMessage("button_next")}</span>
+              <span class="sr-only">${cm.getMessage("button_next")}</span>
           </a>
       </div>
   </#if>

@@ -78,7 +78,7 @@
     <#assign downloads=bp.createBeansFor(self.downloads) />
     <#if (downloads?size > 0)>
       <div class="cm-product-assets__downloads cm-product-assets-downloads">
-        <h3 class="cm-product-assets-downloads__title cm-heading3">${bp.getMessage("product_assets_downloads")}</h3>
+        <h3 class="cm-product-assets-downloads__title cm-heading3">${cm.getMessage("product_assets_downloads")}</h3>
         <ul class="cm-product-assets-downloads__list">
           <#list downloads![] as download>
             <#if download.data?has_content>

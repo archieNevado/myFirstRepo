@@ -17,13 +17,13 @@
       } />
       <div class="am-download-collection" <@cm.dataAttribute name="data-am-download-collection-trigger" data=btnDataDownloadCollection/>>
         <button type="button" class="am-download-collection__button am-download-collection__downloadButton am-button am-text-scalable">
-          ${bp.getMessage("am_download_collection_download_button")}
+          ${cm.getMessage("am_download_collection_download_button")}
         </button>
       </div>
     </div>
   <#else>
     <div class="am-download-collection-overview__notification am-notification am-notification--info">
-      ${bp.getMessage("am_download_collection_overview_empty")}
+      ${cm.getMessage("am_download_collection_overview_empty")}
     </div>
   </#if>
 </div>

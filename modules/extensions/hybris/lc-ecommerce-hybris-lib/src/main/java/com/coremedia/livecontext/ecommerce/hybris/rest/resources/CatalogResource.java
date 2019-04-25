@@ -35,8 +35,8 @@ public class CatalogResource extends AbstractHybrisResource {
 
   @Nullable
   public CatalogDocument getCatalog(@NonNull StoreContext storeContext) {
-    String catalogId = getCatalogId().value();
-    String catalogVersion = getCatalogVersion();
+    String catalogId = storeContext.getCatalogId().get().value();
+    String catalogVersion = storeContext.getCatalogVersion();
 
     List<String> uriTemplateParameters = newUriTemplateParameters(storeContext, catalogId, catalogVersion);
 
@@ -68,8 +68,8 @@ public class CatalogResource extends AbstractHybrisResource {
 
   @Nullable
   public ProductDocument getProductById(String productId, @NonNull StoreContext storeContext) {
-    String catalogId = getCatalogId().value();
-    String catalogVersion = getCatalogVersion();
+    String catalogId = storeContext.getCatalogId().get().value();
+    String catalogVersion = storeContext.getCatalogVersion();
 
     List<String> uriTemplateParameters = newUriTemplateParameters(storeContext, catalogId, catalogVersion, productId);
 
@@ -160,18 +160,5 @@ public class CatalogResource extends AbstractHybrisResource {
     } catch (IllegalArgumentException e) {
       return OrderByType.ORDER_BY_DEFAULT.getValue();
     }
-  }
-
-  @NonNull
-  private static CatalogId getCatalogId() {
-    return getStoreContext().getCatalogId().get();
-  }
-
-  private static String getCatalogVersion() {
-    return getStoreContext().getCatalogVersion();
-  }
-
-  private static StoreContext getStoreContext() {
-    return StoreContextHelper.getCurrentContextOrThrow();
   }
 }

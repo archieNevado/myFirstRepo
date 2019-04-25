@@ -1,6 +1,5 @@
 package com.coremedia.livecontext.ecommerce.hybris.beans;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.cap.content.Content;
 import com.coremedia.livecontext.ecommerce.asset.CatalogPicture;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
@@ -18,18 +17,19 @@ import com.coremedia.livecontext.ecommerce.hybris.rest.documents.ProductRefDocum
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.ProductVariantRefDocument;
 import com.coremedia.livecontext.ecommerce.inventory.AvailabilityInfo;
 import com.coremedia.xml.Markup;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
@@ -76,7 +76,7 @@ public class ProductImpl extends AbstractHybrisCommerceBean implements Product {
 
   @Override
   public Currency getCurrency() {
-    StoreContext storeContext = CurrentCommerceConnection.get().getStoreContext();
+    StoreContext storeContext = StoreContextHelper.getCurrentContextOrThrow();
     return storeContext.getCurrency();
   }
 
@@ -115,13 +115,13 @@ public class ProductImpl extends AbstractHybrisCommerceBean implements Product {
   @Nullable
   @Override
   public BigDecimal getListPrice() {
-    return priceService.findListPriceForProduct(this);
+    return priceService.findListPriceForProduct(this).orElse(null);
   }
 
   @Nullable
   @Override
   public BigDecimal getOfferPrice() {
-    return priceService.findOfferPriceForProduct(this);
+    return priceService.findOfferPriceForProduct(this).orElse(null);
   }
 
   @Nullable
@@ -164,9 +164,13 @@ public class ProductImpl extends AbstractHybrisCommerceBean implements Product {
 
     if (!pictures.isEmpty()) {
       StoreContext storeContext = StoreContextHelper.getCurrentContextOrThrow();
-      return getAssetUrlProvider().getImageUrl("/catalogimage/product/" +
-              StoreContextHelper.getStoreId(storeContext) + "/" +
-              StoreContextHelper.getLocale(storeContext) + "/full/" + getExternalId() + ".jpg");
+
+      String storeId = StoreContextHelper.getStoreId(storeContext);
+      Locale locale = StoreContextHelper.getLocale(storeContext);
+      String externalId = getExternalId();
+
+      return getAssetUrlProvider()
+              .getImageUrl("/catalogimage/product/" + storeId + "/" + locale + "/full/" + externalId + ".jpg");
     }
 
     return getAssetUrlProvider().getImageUrl(getDelegate().getPictureDownloadUrl());
@@ -179,9 +183,13 @@ public class ProductImpl extends AbstractHybrisCommerceBean implements Product {
 
     if (!pictures.isEmpty()) {
       StoreContext storeContext = StoreContextHelper.getCurrentContextOrThrow();
-      return getAssetUrlProvider().getImageUrl("/catalogimage/product/" +
-              StoreContextHelper.getStoreId(storeContext) + "/" +
-              StoreContextHelper.getLocale(storeContext) + "/thumbnail/" + getExternalId() + ".jpg");
+
+      String storeId = StoreContextHelper.getStoreId(storeContext);
+      Locale locale = StoreContextHelper.getLocale(storeContext);
+      String externalId = getExternalId();
+
+      return getAssetUrlProvider()
+              .getImageUrl("/catalogimage/product/" + storeId + "/" + locale + "/thumbnail/" + externalId + ".jpg");
     }
 
     return getAssetUrlProvider().getImageUrl(getDelegate().getThumbnailDownloadUrl());

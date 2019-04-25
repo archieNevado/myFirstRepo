@@ -28,7 +28,7 @@ public class InvalidationServiceImplIT extends AbstractServiceTest {
       return;
     }
 
-    List<InvalidationEvent> invalidations = testling.getInvalidations(-1, getStoreContext());
+    List<InvalidationEvent> invalidations = testling.getInvalidations(-1, storeContext);
     assertThat(invalidations).isNotNull();
 
     if (!invalidations.isEmpty()) {
@@ -43,7 +43,7 @@ public class InvalidationServiceImplIT extends AbstractServiceTest {
       return;
     }
 
-    List<InvalidationEvent> invalidations = testling.getInvalidations(10000, getStoreContext());
+    List<InvalidationEvent> invalidations = testling.getInvalidations(10000, storeContext);
     assertThat(invalidations).isNotEmpty();
     assertThat(invalidations.size()).isEqualTo(1);
     assertThat(invalidations.get(0).getContentType()).isEqualTo(InvalidationEvent.CLEAR_ALL_EVENT);

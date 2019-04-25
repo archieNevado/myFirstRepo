@@ -108,7 +108,7 @@ public class CategoryFragmentHandler extends FragmentHandler {
   private ModelAndView createBasicModelAndView(@NonNull Navigation navigation, @Nullable String placement,
                                                @Nullable String view, @NonNull CMChannel rootChannel,
                                                @Nullable User developer) {
-    if (isNullOrEmpty(placement)) { // NOSONAR - Workaround for spotbugs/spotbugs#621, see CMS-12169
+    if (isNullOrEmpty(placement)) {
       if (useOriginalNavigationContext) {
         return createModelAndView(navigation, view, developer);
       } else {

@@ -157,7 +157,7 @@ public class CMCatalogPictureHandlerTest {
     StoreContext storeContext = mock(StoreContext.class);
     when(storeContext.getSiteId()).thenReturn("siteId");
     when(storeContext.getCatalogAlias()).thenReturn(DEFAULT_CATALOG_ALIAS);
-    when(catalogAliasTranslationService.getCatalogAliasForId(CatalogId.of("catalogId"), "siteId"))
+    when(catalogAliasTranslationService.getCatalogAliasForId(CatalogId.of("catalogId"), "siteId", storeContext ))
             .thenReturn(Optional.of(CatalogAlias.of("catalogAlias")));
 
     CatalogAlias catalogAlias = testling.resolveCatalogAliasFromId(CatalogId.of("catalogId"), storeContext);

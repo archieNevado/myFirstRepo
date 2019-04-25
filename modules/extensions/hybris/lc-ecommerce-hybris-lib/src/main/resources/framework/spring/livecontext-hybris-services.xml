@@ -26,6 +26,7 @@
         class="com.coremedia.livecontext.ecommerce.hybris.common.HybrisCommerceIdProvider"/>
 
   <bean id="hybrisStoreContextProvider" class="com.coremedia.livecontext.ecommerce.hybris.common.HybrisStoreContextProvider">
+    <constructor-arg index="0" name="commerceConnectionFinder" ref="defaultCommerceConnectionFinder"/>
     <property name="settingsService" ref="settingsService"/>
     <property name="sitesService" ref="sitesService"/>
     <property name="cache" ref="cache"/>

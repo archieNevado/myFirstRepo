@@ -28,14 +28,14 @@
       <#list searchCategories>
         <div class="cm-search__filter" data-cm-search-filter="category">
           <h3 class="cm-search__filter-title" data-cm-search-filter-toggle="">
-            ${bp.getMessage("search_filter_category")}
+            ${cm.getMessage("search_filter_category")}
             <i class="cm-search__filter-title-icon"></i>
           </h3>
           <ul class="cm-search__filter-list" data-cm-search-filter-links="">
             <#if searchActiveCategory?has_content>
               <li>
                 <i class="cm-button__icon cm-search__filter-all-icon"></i>
-                <span class="cm-search__filter-list-link cm-search__link" data-cm-search-link="${search.getLink(self, {"channelId": ""})}">${bp.getMessage("search_filter_all_categories")}</span>
+                <span class="cm-search__filter-list-link cm-search__link" data-cm-search-link="${search.getLink(self, {"channelId": ""})}">${cm.getMessage("search_filter_all_categories")}</span>
               </li>
             </#if>
             <#items as category>
@@ -57,7 +57,7 @@
       <#-- iterate over all enabled facets -->
       <#list searchFacets as facet, facetList>
         <#list facetList![]>
-          <#assign facetLabel=bp.getMessage("search_filter_" + facet)?has_content?then(bp.getMessage("search_filter_" + facet), facet) />
+          <#assign facetLabel=cm.getMessage("search_filter_" + facet)?has_content?then(cm.getMessage("search_filter_" + facet), facet) />
           <div class="cm-search__filter" data-cm-search-filter="facet">
             <h3 class="cm-search__filter-title" data-cm-search-filter-toggle="">
               ${facetLabel}
@@ -66,7 +66,7 @@
             <ul class="cm-search__filter-list" data-cm-search-filter-links="">
               <#-- add "all" entry, if a filter is selected -->
               <#if (searchResult.facetResult.isFacetWithFilter(facet))>
-              <#assign allLabel=bp.getMessage("search_filter_all_" + facet)?has_content?then(bp.getMessage("search_filter_all_" + facet), bp.getMessage("search_filter_all")) />
+              <#assign allLabel=cm.getMessage("search_filter_all_" + facet)?has_content?then(cm.getMessage("search_filter_all_" + facet), cm.getMessage("search_filter_all")) />
               <li>
                 <i class="cm-button__icon cm-search__filter-all-icon"></i>
                 <span class="cm-search__filter-list-link cm-search__link" data-cm-search-link="${search.getLink(self, {"clearFacetFilters": facet})}">${allLabel}</span>
@@ -76,7 +76,7 @@
                 <li class="cm-search__filter-list-item" data-cm-search-link="${search.getLink(self, {"facetFilters": facetItem})}">
                   <#assign itemId=bp.generateId("filter_item") />
                   <#-- use the label of the facetItem, if empty use a translation of it with a key like "search_filter_document_CMArticle -->
-                  <#assign facetLabel=facetItem.label?has_content?then(facetItem.label, bp.getMessage("search_filter_" + facet + "_" + facetItem.value)) />
+                  <#assign facetLabel=facetItem.label?has_content?then(facetItem.label, cm.getMessage("search_filter_" + facet + "_" + facetItem.value)) />
                     <input id="${itemId}" class="cm-search__filter-list-checkbox" type="checkbox" ${facetItem.filter?then("checked", "")}>
                     <span class="cm-search__filter-list-checkbox-icon ${facetItem.filter?then("cm-search__filter-list-checkbox-icon--checked", "")}"></span>
                     <label for="${itemId}" class="cm-search__filter-list-link ${facetItem.filter?then("cm-search__filter-list-link--checked", "cm-search__link")}">

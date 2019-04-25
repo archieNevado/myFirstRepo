@@ -10,20 +10,24 @@ import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.hybris.cache.CategoryCacheKey;
 import com.coremedia.livecontext.ecommerce.hybris.common.StoreContextHelper;
+import com.coremedia.livecontext.ecommerce.hybris.rest.documents.AbstractHybrisDocument;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.CategoryDocument;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.CategoryRefDocument;
 import com.coremedia.livecontext.ecommerce.hybris.rest.documents.MediaDocument;
 import com.coremedia.xml.Markup;
-import org.apache.commons.lang3.StringUtils;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CATEGORY;
 import static com.coremedia.livecontext.ecommerce.hybris.common.HybrisCommerceIdProvider.commerceId;
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
 
 public class CategoryImpl extends AbstractHybrisCommerceBean implements Category {
 
@@ -71,13 +75,21 @@ public class CategoryImpl extends AbstractHybrisCommerceBean implements Category
 
     if (!pictures.isEmpty()) {
       StoreContext storeContext = StoreContextHelper.getCurrentContextOrThrow();
-      return getAssetUrlProvider().getImageUrl("/catalogimage/category/" +
-              StoreContextHelper.getStoreId(storeContext) + "/" +
-              StoreContextHelper.getLocale(storeContext) + "/thumbnail/" + getExternalId() + ".jpg");
+
+      String storeId = StoreContextHelper.getStoreId(storeContext);
+      Locale locale = StoreContextHelper.getLocale(storeContext);
+      String externalId = getExternalId();
+
+      return getAssetUrlProvider()
+              .getImageUrl("/catalogimage/category/" + storeId + "/" + locale + "/thumbnail/" + externalId + ".jpg");
     }
 
     MediaDocument doc = getDelegate().getThumbnail();
-    return doc != null ? getAssetUrlProvider().getImageUrl(doc.getDownloadUrl()) : getDefaultImageUrl();
+    if (doc == null) {
+      return getDefaultImageUrl();
+    }
+
+    return getAssetUrlProvider().getImageUrl(doc.getDownloadUrl());
   }
 
   @Override
@@ -86,13 +98,21 @@ public class CategoryImpl extends AbstractHybrisCommerceBean implements Category
 
     if (!pictures.isEmpty()) {
       StoreContext storeContext = StoreContextHelper.getCurrentContextOrThrow();
-      return getAssetUrlProvider().getImageUrl("/catalogimage/category/" +
-              StoreContextHelper.getStoreId(storeContext) + "/" +
-              StoreContextHelper.getLocale(storeContext) + "/full/" + getExternalId() + ".jpg");
+
+      String storeId = StoreContextHelper.getStoreId(storeContext);
+      Locale locale = StoreContextHelper.getLocale(storeContext);
+      String externalId = getExternalId();
+
+      return getAssetUrlProvider()
+              .getImageUrl("/catalogimage/category/" + storeId + "/" + locale + "/full/" + externalId + ".jpg");
     }
 
     MediaDocument doc = getDelegate().getPicture();
-    return doc != null ? getAssetUrlProvider().getImageUrl(doc.getDownloadUrl()) : null;
+    if (doc == null) {
+      return null;
+    }
+
+    return getAssetUrlProvider().getImageUrl(doc.getDownloadUrl());
   }
 
   @NonNull
@@ -104,21 +124,26 @@ public class CategoryImpl extends AbstractHybrisCommerceBean implements Category
         return getCatalogService().findTopCategories(catalogAlias, getContext());
       }
 
-      List<Category> childrenNew = new ArrayList<>();
-
-      List<CategoryRefDocument> refDocuments = getDelegate().getSubCategories();
-      if (refDocuments != null) {
-        for (CategoryRefDocument refDocument : refDocuments) {
-          // lazy loading of subcategories
-          String externalId = refDocument.getCode();
-          CommerceId commerceId = commerceId(CATEGORY).withExternalId(externalId).build();
-          childrenNew.add((Category) getCommerceBeanFactory().createBeanFor(commerceId, getContext()));
-        }
-      }
-
-      children = childrenNew;
+      children = collectChildren();
     }
     return children;
+  }
+
+  @NonNull
+  private List<Category> collectChildren() {
+    List<CategoryRefDocument> refDocuments = getDelegate().getSubCategories();
+    if (refDocuments == null) {
+      return emptyList();
+    }
+
+    StoreContext storeContext = getContext();
+
+    // lazy loading of subcategories
+    return refDocuments.stream()
+            .map(AbstractHybrisDocument::getCode)
+            .map(externalId -> commerceId(CATEGORY).withExternalId(externalId).build())
+            .map(commerceId -> (Category) getCommerceBeanFactory().createBeanFor(commerceId, storeContext))
+            .collect(toList());
   }
 
   @NonNull
@@ -216,13 +241,13 @@ public class CategoryImpl extends AbstractHybrisCommerceBean implements Category
   @NonNull
   @Override
   public List<Content> getVisuals() {
-    return Collections.emptyList();
+    return emptyList();
   }
 
   @NonNull
   @Override
   public List<Content> getDownloads() {
-    return Collections.emptyList();
+    return emptyList();
   }
 
   @Override

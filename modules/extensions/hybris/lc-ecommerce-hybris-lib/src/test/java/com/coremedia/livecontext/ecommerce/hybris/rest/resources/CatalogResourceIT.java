@@ -32,7 +32,7 @@ public class CatalogResourceIT extends AbstractServiceTest {
   @Betamax(tape = "hy_testGetCategory", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testGetCategory() {
-    CategoryDocument cat = catalogResource.getCategoryById("40500", getStoreContext());
+    CategoryDocument cat = catalogResource.getCategoryById("40500", storeContext);
 
     assertThat(cat).isNotNull();
     assertThat(cat.getCode()).isEqualTo("40500");
@@ -41,7 +41,7 @@ public class CatalogResourceIT extends AbstractServiceTest {
   @Betamax(tape = "hy_testGetCategoryProducts", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testGetCategoryProducts() {
-    CategoryDocument cat = catalogResource.getCategoryById("Vans", getStoreContext());
+    CategoryDocument cat = catalogResource.getCategoryById("Vans", storeContext);
 
     assertThat(cat).isNotNull();
     assertThat(cat.getProducts()).isNotEmpty();
@@ -50,7 +50,7 @@ public class CatalogResourceIT extends AbstractServiceTest {
   @Betamax(tape = "hy_testListUserGroups", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testListUserGroups() {
-    List<UserGroupRefDocument> userGroups = catalogResource.getAllUserGroups(getStoreContext());
+    List<UserGroupRefDocument> userGroups = catalogResource.getAllUserGroups(storeContext);
 
     assertThat(userGroups).isNotEmpty();
   }
@@ -58,7 +58,7 @@ public class CatalogResourceIT extends AbstractServiceTest {
   @Betamax(tape = "hy_testGetUserGroup", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testGetUserGroup() {
-    UserGroupDocument userGroup = catalogResource.getUserGroup("customergroup", getStoreContext());
+    UserGroupDocument userGroup = catalogResource.getUserGroup("customergroup", storeContext);
 
     assertThat(userGroup).isNotNull();
     assertThat(userGroup.getUid()).isEqualTo("customergroup");
@@ -67,7 +67,7 @@ public class CatalogResourceIT extends AbstractServiceTest {
   @Test
   @Ignore("CMS-11883 - Bearer Authentication for hybris not workin ")
   public void testFetchAuthToken() {
-    String token = catalogResource.getConnector().fetchAuthToken(getStoreContext());
+    String token = catalogResource.getConnector().fetchAuthToken(storeContext);
 
     assertThat(token).isEqualTo("foo");
   }

@@ -56,7 +56,7 @@ class PbeShopUrlTargetResolverImpl implements PbeShopUrlTargetResolver {
 
     // get potential partNumber from urlStr
     List<String> pathSegments = Arrays.asList(shopUrl.getPath().split("/"));
-    String externalId = Iterables.getLast(pathSegments, null); // NOSONAR - Workaround for spotbugs/spotbugs#621, see CMS-12169
+    String externalId = Iterables.getLast(pathSegments, null);
 
     if (isSeoUrl(shopUrl) && !StringUtils.isBlank(externalId)) {
       // try to load category from partNumber

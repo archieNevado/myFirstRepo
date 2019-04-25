@@ -21,6 +21,7 @@ import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.fragment.FragmentContextProvider;
 import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.objectserver.view.substitution.Substitution;
@@ -168,13 +169,14 @@ public class ProductReviewsResultHandler extends AbstractReviewsResultHandler {
 
   private Product getProduct(@NonNull String productTechId, @NonNull Site site, @Nullable CatalogId catalogId) {
     CommerceConnection connection = CurrentCommerceConnection.get();
+    StoreContext storeContext = connection.getStoreContext();
 
     CatalogAlias catalogAlias = Optional.ofNullable(catalogId)
-            .flatMap(id -> catalogAliasTranslationService.getCatalogAliasForId(id, site.getId()))
+            .flatMap(id -> catalogAliasTranslationService.getCatalogAliasForId(id, site.getId(), storeContext))
             .orElse(DEFAULT_CATALOG_ALIAS);
 
     CommerceId techId = connection.getIdProvider().formatProductTechId(catalogAlias, productTechId);
-    Product product = getCatalogService(connection).findProductById(techId, connection.getStoreContext());
+    Product product = getCatalogService(connection).findProductById(techId, storeContext);
 
     if (product instanceof ProductVariant) {
       // we only use products as targets for reviews, no product variants (SKUs)

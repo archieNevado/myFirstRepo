@@ -4,6 +4,7 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBui
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
@@ -20,6 +21,7 @@ import java.util.Locale;
 @DefaultAnnotation(NonNull.class)
 public class HybrisStoreContextBuilder implements StoreContextBuilder {
 
+  private final CommerceConnection connection;
   private String siteId;
   @Nullable
   private String storeId;
@@ -40,16 +42,17 @@ public class HybrisStoreContextBuilder implements StoreContextBuilder {
   @Nullable
   private String userSegments;
 
-  private HybrisStoreContextBuilder(String siteId) {
+  private HybrisStoreContextBuilder(CommerceConnection connection, String siteId) {
+    this.connection = connection;
     this.siteId = siteId;
   }
 
-  public static HybrisStoreContextBuilder from(String siteId) {
-    return new HybrisStoreContextBuilder(siteId);
+  public static HybrisStoreContextBuilder from(CommerceConnection connection, String siteId) {
+    return new HybrisStoreContextBuilder(connection, siteId);
   }
 
   public static HybrisStoreContextBuilder from(StoreContextImpl storeContext) {
-    return from(storeContext.getSiteId())
+    return from(storeContext.getConnection(), storeContext.getSiteId())
             .withStoreId(storeContext.getStoreId())
             .withStoreName(storeContext.getStoreName())
             .withCatalogId(storeContext.getCatalogId().get())
@@ -146,7 +149,7 @@ public class HybrisStoreContextBuilder implements StoreContextBuilder {
 
   @Override
   public StoreContext build() {
-    StoreContextImpl storeContext = StoreContextBuilderImpl.from(siteId)
+    StoreContextImpl storeContext = StoreContextBuilderImpl.from(connection, siteId)
             .withStoreId(storeId)
             .withStoreName(storeName)
             .withCatalogId(catalogId)

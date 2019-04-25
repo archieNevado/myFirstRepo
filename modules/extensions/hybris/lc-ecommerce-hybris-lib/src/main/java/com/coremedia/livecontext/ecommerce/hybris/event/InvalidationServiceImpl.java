@@ -4,10 +4,11 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.event.InvalidationEvent;
 import com.coremedia.livecontext.ecommerce.event.InvalidationService;
 import com.coremedia.livecontext.ecommerce.hybris.common.AbstractHybrisService;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -36,12 +37,11 @@ public class InvalidationServiceImpl extends AbstractHybrisService implements In
   @Override
   @NonNull
   public List<InvalidationEvent> getInvalidations(long lastExecutionTimeStamp, @NonNull StoreContext storeContext) {
-    InvalidationsDocument invalidationsDocument = invalidationResource.getInvalidations(lastExecutionTimeStamp, maxWaitInMilliseconds, chunkSize);
-    if (invalidationsDocument == null) {
-      return emptyList();
-    }
+    List<JsonInvalidationEvent> invalidations = invalidationResource
+            .getInvalidations(lastExecutionTimeStamp, maxWaitInMilliseconds, chunkSize, storeContext)
+            .map(InvalidationsDocument::getInvalidations)
+            .orElse(null);
 
-    List<JsonInvalidationEvent> invalidations = invalidationsDocument.getInvalidations();
     if (invalidations == null) {
       return emptyList();
     }
@@ -52,46 +52,41 @@ public class InvalidationServiceImpl extends AbstractHybrisService implements In
             .collect(Collectors.toList());
   }
 
-  private InvalidationEvent convertEvent(InvalidationEvent sourceEvent) {
-    if (sourceEvent.getTechId() != null) {
-      String techId = sourceEvent.getTechId();
-      String contentType = sourceEvent.getContentType().toLowerCase();
-      if (StringUtils.isNotBlank(techId) && StringUtils.isNotBlank(contentType)) {
-        switch (contentType) {
-          case CLEAR_ALL_CONTENT_TYPE:
-            return new InvalidationEvent(
-                    techId,
-                    CLEAR_ALL_EVENT, sourceEvent.getTimestamp()
-            );
-          case PRODUCT_CONTENT_TYPE:
-            return new InvalidationEvent(
-                    techId,
-                    PRODUCT_EVENT, sourceEvent.getTimestamp()
-            );
-          case SKU_CONTENT_TYPE:
-            return new InvalidationEvent(
-                    techId,
-                    SKU_EVENT, sourceEvent.getTimestamp()
-            );
-          case CATEGORY_CONTENT_TYPE:
-            return new InvalidationEvent(
-                    techId,
-                    CATEGORY_EVENT, sourceEvent.getTimestamp()
-            );
-          case SEGMENT_TYPE:
-            return new InvalidationEvent(
-                    techId,
-                    SEGMENT_EVENT, sourceEvent.getTimestamp()
-            );
-          default:
-            return new InvalidationEvent(
-                    techId,
-                    UNKNOWN_TYPE_EVENT, sourceEvent.getTimestamp()
-            );
-        }
-      }
+  @Nullable
+  private InvalidationEvent convertEvent(@NonNull JsonInvalidationEvent sourceEvent) {
+    String techId = sourceEvent.getTechId();
+    if (techId == null) {
+      return null;
     }
-    return null;
+
+    String contentType = sourceEvent.getContentType().toLowerCase();
+
+    if (StringUtils.isBlank(techId) || StringUtils.isBlank(contentType)) {
+      return null;
+    }
+
+    long timestamp = sourceEvent.getTimestamp();
+
+    return createInvalidationEvent(techId, contentType, timestamp);
+  }
+
+  @NonNull
+  private static InvalidationEvent createInvalidationEvent(@NonNull String techId, @NonNull String contentType,
+                                                           long timestamp) {
+    switch (contentType) {
+      case CLEAR_ALL_CONTENT_TYPE:
+        return new InvalidationEvent(techId, CLEAR_ALL_EVENT, timestamp);
+      case PRODUCT_CONTENT_TYPE:
+        return new InvalidationEvent(techId, PRODUCT_EVENT, timestamp);
+      case SKU_CONTENT_TYPE:
+        return new InvalidationEvent(techId, SKU_EVENT, timestamp);
+      case CATEGORY_CONTENT_TYPE:
+        return new InvalidationEvent(techId, CATEGORY_EVENT, timestamp);
+      case SEGMENT_TYPE:
+        return new InvalidationEvent(techId, SEGMENT_EVENT, timestamp);
+      default:
+        return new InvalidationEvent(techId, UNKNOWN_TYPE_EVENT, timestamp);
+    }
   }
 
   @NonNull

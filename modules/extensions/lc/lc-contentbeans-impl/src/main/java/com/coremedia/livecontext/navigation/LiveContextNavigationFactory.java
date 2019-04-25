@@ -10,11 +10,10 @@ import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl;
 import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
-import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -36,9 +35,6 @@ public class LiveContextNavigationFactory {
    * Creates a new live context navigation from the given category.
    * Since the category and therefore the corresponding store is already resolved,
    * we don't need to pass the channel document here.
-   *
-   * @return If the category is augmented a {@link LiveContextExternalChannelImpl} is returned, otherwise a {@link LiveContextCategoryNavigation}.
-   *
    *
    * @param category The category the navigation should be build for.
    */
@@ -64,10 +60,16 @@ public class LiveContextNavigationFactory {
    */
   @NonNull
   public LiveContextNavigation createNavigationBySeoSegment(@NonNull Content parentChannel, @NonNull String seoSegment) {
-    StoreContext storeContext = getStoreContextProvider().findContextByContent(parentChannel)
+    CommerceConnection commerceConnection = CurrentCommerceConnection.get();
+
+    StoreContext storeContext = commerceConnection
+            .getStoreContextProvider()
+            .findContextByContent(parentChannel)
             .orElseThrow(() -> new IllegalArgumentException("No store context found for " + parentChannel.getName()));
 
-    Category category = getCatalogService().findCategoryBySeoSegment(seoSegment, storeContext);
+    Category category = commerceConnection
+            .getCatalogService()
+            .findCategoryBySeoSegment(seoSegment, storeContext);
     notNull(category, "No category found for seo segment: " + seoSegment);
 
     Site site = sitesService.getContentSiteAspect(parentChannel).findSite()
@@ -100,20 +102,11 @@ public class LiveContextNavigationFactory {
     return new ProductInSiteImpl(product, site);
   }
 
-
   // --- configuration ----------------------------------------------
 
   @Required
   public void setTreeRelation(LiveContextNavigationTreeRelation treeRelation) {
     this.treeRelation = treeRelation;
-  }
-
-  public StoreContextProvider getStoreContextProvider() {
-    return CurrentCommerceConnection.get().getStoreContextProvider();
-  }
-
-  public CatalogService getCatalogService() {
-    return CurrentCommerceConnection.get().getCatalogService();
   }
 
   @Required

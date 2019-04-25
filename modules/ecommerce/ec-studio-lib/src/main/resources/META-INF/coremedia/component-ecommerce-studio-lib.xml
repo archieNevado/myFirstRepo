@@ -11,7 +11,6 @@
   <import resource="classpath:/framework/spring/lc-ecommerce-connection.xml"/>
   <import resource="classpath:/framework/spring/lc-ecommerce-services.xml"/>
   <import resource="classpath:/com/coremedia/cap/multisite/multisite-services.xml"/>
-  <import resource="classpath:/com/coremedia/ecommerce/studio/rest/validators/ecommerce-validators.xml"/>
 
   <bean id="abstractCatalogResource" abstract="true" class="com.coremedia.ecommerce.studio.rest.AbstractCatalogResource"/>
 
@@ -29,11 +28,21 @@
   <bean id="catalogResource" parent="abstractCatalogResource" class="com.coremedia.ecommerce.studio.rest.CatalogResource" scope="prototype"/>
   <bean id="workspacesResource" parent="abstractCatalogResource" class="com.coremedia.ecommerce.studio.rest.WorkspacesResource" scope="prototype"/>
   <bean id="facetsResource" parent="abstractCatalogResource" class="com.coremedia.ecommerce.studio.rest.FacetsResource" scope="prototype"/>
+  <bean id="contentPushStateResource" parent="abstractCatalogResource" class="com.coremedia.ecommerce.studio.rest.ContentPushStateResource" scope="prototype"/>
+  <bean id="commerceBeanPushStateResource" parent="abstractCatalogResource" class="com.coremedia.ecommerce.studio.rest.CommerceBeanPushStateResource" scope="prototype"/>
 
   <bean id="catalogConfig" class="com.coremedia.ecommerce.studio.rest.CatalogServiceResource" scope="prototype"/>
+
+  <bean id="pushStateInvalidationSource" class="com.coremedia.rest.invalidations.SimpleInvalidationSource">
+   <property name="id" value="pushStateInvalidationSource"/>
+    <property name="capacity" value="1000"/>
+  </bean>
 
   <bean class="com.coremedia.ecommerce.studio.rest.filter.EcStudioFilters"/>
 
   <customize:append id="commerceExceptionMapperConfigurer" bean="jerseyConfigPropertyPackages"
                     custom-value="com.coremedia.ecommerce.studio.rest.exception"/>
+
+  <bean id="contentPushJobFactory" class="com.coremedia.ecommerce.studio.rest.job.ContentPushJobFactory"/>
+  <bean id="removePushedContentJobFactory" class="com.coremedia.ecommerce.studio.rest.job.RemovePushedContentJobFactory"/>
 </beans>

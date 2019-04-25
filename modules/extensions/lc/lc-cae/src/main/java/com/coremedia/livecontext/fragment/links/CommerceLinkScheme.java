@@ -1,12 +1,11 @@
 package com.coremedia.livecontext.fragment.links;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.multisite.SiteHelper;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.handlers.PreviewHandler;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
-import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.content.Content;
 import com.coremedia.livecontext.commercebeans.CategoryInSite;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.contentbeans.CMExternalPage;
@@ -15,6 +14,7 @@ import com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl;
 import com.coremedia.livecontext.contentbeans.LiveContextExternalProduct;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
+import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.link.PreviewUrlService;
@@ -27,7 +27,6 @@ import com.coremedia.objectserver.web.links.Link;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -35,24 +34,24 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.link.UrlUtil.convertToQueryParamList;
 import static com.coremedia.livecontext.handler.ExternalNavigationHandler.LIVECONTEXT_POLICY_COMMERCE_CATEGORY_LINKS;
 import static com.coremedia.livecontext.product.ProductPageHandler.LIVECONTEXT_POLICY_COMMERCE_PRODUCT_LINKS;
+import static com.google.common.base.Strings.isNullOrEmpty;
 
-@Component
 @DefaultAnnotation(NonNull.class)
 @Link
 public class CommerceLinkScheme {
+
+  // dummy URL meant to be replaced by the commerce link resolver later on
+  private static final UriComponents DUMMY_URI_TO_BE_REPLACED = toUriComponents("http://lc-generic-live.vm");
 
   private final CommerceConnectionSupplier commerceConnectionSupplier;
   private final CommerceLedLinkBuilderHelper commerceLedPageExtension;
   private final SettingsService settingsService;
   private final ExternalSeoSegmentBuilder seoSegmentBuilder;
-
-  private static final UriComponents EMPTY_URI_COMPONENT_BUILDER = UriComponentsBuilder
-          .fromUriString("http://lc-generic-live.vm")
-          .build();
 
   CommerceLinkScheme(CommerceConnectionSupplier commerceConnectionSupplier,
                      CommerceLedLinkBuilderHelper commerceLedPageExtension,
@@ -68,7 +67,8 @@ public class CommerceLinkScheme {
   @Nullable
   public UriComponents buildLinkForCategory(Category category, Map<String, Object> linkParameters,
                                             HttpServletRequest request) {
-    PreviewUrlService previewUrlService = getPreviewUrlService();
+    CommerceConnection commerceConnection = getCommerceConnection(category);
+    PreviewUrlService previewUrlService = getPreviewUrlService(commerceConnection);
     if (previewUrlService == null) {
       return null;
     }
@@ -77,18 +77,16 @@ public class CommerceLinkScheme {
       return null;
     }
 
-    // if it's not studio preview build a dummy link that will be later replaced by the commerce link resolver
-    if (!isStudioPreviewRequest(request)) {
-      return EMPTY_URI_COMPONENT_BUILDER;
+    if (isStudioPreviewRequest(request)) {
+      List<QueryParam> queryParamList = convertToQueryParamList(linkParameters);
+      return previewUrlService.getCategoryUrl(category, queryParamList, request);
     }
 
-    List<QueryParam> queryParamList = convertToQueryParamList(linkParameters);
-
-    return previewUrlService.getCategoryUrl(category, queryParamList, request);
+    return DUMMY_URI_TO_BE_REPLACED;
   }
 
-  @Nullable
   @Link(type = CategoryInSite.class)
+  @Nullable
   public UriComponents buildLinkForCategoryInSite(CategoryInSite categoryInSite, Map<String, Object> linkParameters,
                                                   HttpServletRequest request) {
     Category category = categoryInSite.getCategory();
@@ -104,7 +102,8 @@ public class CommerceLinkScheme {
   @Nullable
   public UriComponents buildLinkForProduct(Product product, Map<String, Object> linkParameters,
                                            HttpServletRequest request) {
-    PreviewUrlService previewUrlService = getPreviewUrlService();
+    CommerceConnection commerceConnection = getCommerceConnection(product);
+    PreviewUrlService previewUrlService = getPreviewUrlService(commerceConnection);
     if (previewUrlService == null) {
       return null;
     }
@@ -113,12 +112,11 @@ public class CommerceLinkScheme {
       return null;
     }
 
-    // if it's not studio preview build a dummy link that will be later replaced by the commerce link resolver
-    if (!isStudioPreviewRequest(request)) {
-      return EMPTY_URI_COMPONENT_BUILDER;
+    if (isStudioPreviewRequest(request)) {
+      return buildProductPreviewUri(previewUrlService, product, linkParameters, request);
     }
 
-    return buildProductPreviewUri(previewUrlService, product, linkParameters, request);
+    return DUMMY_URI_TO_BE_REPLACED;
   }
 
   @Link(type = ProductInSite.class, order = 1)
@@ -132,7 +130,12 @@ public class CommerceLinkScheme {
   @Nullable
   public UriComponents buildLinkFor(CMProductTeaser productTeaser, Map<String, Object> linkParameters,
                                     HttpServletRequest request) {
-    PreviewUrlService previewUrlService = getPreviewUrlService();
+    CommerceConnection commerceConnection = findCommerceConnection(productTeaser.getContent()).orElse(null);
+    if (commerceConnection == null) {
+      return null;
+    }
+
+    PreviewUrlService previewUrlService = getPreviewUrlService(commerceConnection);
     if (previewUrlService == null) {
       return null;
     }
@@ -146,19 +149,23 @@ public class CommerceLinkScheme {
       return null;
     }
 
-    // if it's not studio preview build a dummy link that will be later replaced by the commerce link resolver
-    if (!isStudioPreviewRequest(request)) {
-      return EMPTY_URI_COMPONENT_BUILDER;
+    if (isStudioPreviewRequest(request)) {
+      return buildProductPreviewUri(previewUrlService, productInSite.getProduct(), linkParameters, request);
     }
 
-    return buildProductPreviewUri(previewUrlService, productInSite.getProduct(), linkParameters, request);
+    return DUMMY_URI_TO_BE_REPLACED;
   }
 
   @Link(type = LiveContextExternalProduct.class, order = 1)
   @Nullable
   public UriComponents buildLinkForExternalProduct(LiveContextExternalProduct externalProduct,
                                                    Map<String, Object> linkParameters, HttpServletRequest request) {
-    PreviewUrlService previewUrlService = getPreviewUrlService();
+    CommerceConnection commerceConnection = findCommerceConnection(externalProduct.getContent()).orElse(null);
+    if (commerceConnection == null) {
+      return null;
+    }
+
+    PreviewUrlService previewUrlService = getPreviewUrlService(commerceConnection);
     if (previewUrlService == null) {
       return null;
     }
@@ -173,51 +180,57 @@ public class CommerceLinkScheme {
       return null;
     }
 
-    //only build link for studio preview
-    if (!isStudioPreviewRequest(request)) {
-      return EMPTY_URI_COMPONENT_BUILDER;
+    if (isStudioPreviewRequest(request)) {
+      return buildProductPreviewUri(previewUrlService, product, linkParameters, request);
     }
 
-    return buildProductPreviewUri(previewUrlService, product, linkParameters, request);
+    return DUMMY_URI_TO_BE_REPLACED;
   }
 
   @Link(type = CMExternalPage.class, order = 1)
   @Nullable
   public UriComponents buildLinkForExternalPage(CMExternalPage externalPage, Map<String, Object> linkParameters,
                                                 HttpServletRequest request) {
-    CommerceConnection commerceConnection = findCommerceConnection(externalPage);
+    CommerceConnection commerceConnection = findCommerceConnection(externalPage).orElse(null);
     if (commerceConnection == null) {
       return null;
     }
 
-    PreviewUrlService previewUrlService = getPreviewUrlService();
+    PreviewUrlService previewUrlService = getPreviewUrlService(commerceConnection);
     if (previewUrlService == null) {
       return null;
     }
 
-    // if it's not studio preview build a dummy link that will be later replaced by the commerce link resolver
-    if (!isStudioPreviewRequest(request)) {
-      return EMPTY_URI_COMPONENT_BUILDER;
+    if (isStudioPreviewRequest(request)) {
+      String externalId = externalPage.getExternalId();
+      String externalUriPath = externalPage.getExternalUriPath();
+      StoreContext storeContext = commerceConnection.getStoreContext();
+      List<QueryParam> queryParamList = convertToQueryParamList(linkParameters);
+
+      if (!isNullOrEmpty(externalUriPath)) {
+        Optional<UriComponents> nonSeoUrl = previewUrlService
+                .getExternalPageNonSeoUrl(externalUriPath, storeContext, queryParamList, request);
+        if (nonSeoUrl.isPresent()) {
+          return nonSeoUrl.get();
+        }
+      }
+
+      return previewUrlService.getExternalPageSeoUrl(externalId, storeContext, queryParamList, request);
     }
 
-    String externalId = externalPage.getExternalId();
-    String externalUriPath = externalPage.getExternalUriPath();
-    StoreContext storeContext = commerceConnection.getStoreContext();
-    List<QueryParam> queryParamList = convertToQueryParamList(linkParameters);
-
-    return previewUrlService.getExternalPageUrl(externalId, externalUriPath, storeContext, queryParamList, request);
+    return DUMMY_URI_TO_BE_REPLACED;
   }
 
   @Link(type = CMChannel.class, order = 1)
   @Nullable
   public UriComponents buildLinkForCMChannel(CMChannel channel, Map<String, Object> linkParameters,
                                              HttpServletRequest request) {
-    CommerceConnection commerceConnection = findCommerceConnection(channel);
+    CommerceConnection commerceConnection = findCommerceConnection(channel).orElse(null);
     if (commerceConnection == null) {
       return null;
     }
 
-    PreviewUrlService previewUrlService = getPreviewUrlService();
+    PreviewUrlService previewUrlService = getPreviewUrlService(commerceConnection);
     if (previewUrlService == null) {
       return null;
     }
@@ -226,16 +239,15 @@ public class CommerceLinkScheme {
       return null;
     }
 
-    // if it's not studio preview build a dummy link that will be later replaced by the commerce link resolver
-    if (!isStudioPreviewRequest(request)) {
-      return EMPTY_URI_COMPONENT_BUILDER;
+    if (isStudioPreviewRequest(request)) {
+      String seoPath = seoSegmentBuilder.asSeoSegment(channel, channel);
+      StoreContext storeContext = commerceConnection.getStoreContext();
+      List<QueryParam> queryParamList = convertToQueryParamList(linkParameters);
+
+      return previewUrlService.getContentUrl(seoPath, storeContext, queryParamList, request);
     }
 
-    String seoPath = seoSegmentBuilder.asSeoSegment(channel, channel);
-    StoreContext storeContext = commerceConnection.getStoreContext();
-    List<QueryParam> queryParamList = convertToQueryParamList(linkParameters);
-
-    return previewUrlService.getContentUrl(seoPath, storeContext, queryParamList, request);
+    return DUMMY_URI_TO_BE_REPLACED;
   }
 
   @Link(type = LiveContextCategoryNavigation.class, order = 1)
@@ -243,7 +255,13 @@ public class CommerceLinkScheme {
   public UriComponents buildLinkForLiveContextCategoryNavigation(LiveContextCategoryNavigation categoryNavigation,
                                                                  Map<String, Object> linkParameters,
                                                                  HttpServletRequest request) {
-    PreviewUrlService previewUrlService = getPreviewUrlService();
+    CommerceConnection commerceConnection = commerceConnectionSupplier.findConnection(categoryNavigation.getSite())
+            .orElse(null);
+    if (commerceConnection == null) {
+      return null;
+    }
+
+    PreviewUrlService previewUrlService = getPreviewUrlService(commerceConnection);
     if (previewUrlService == null) {
       return null;
     }
@@ -252,21 +270,19 @@ public class CommerceLinkScheme {
       return null;
     }
 
-    // if it's not studio preview build a dummy link that will be later replaced by the commerce link resolver
-    if (!isStudioPreviewRequest(request)) {
-      return EMPTY_URI_COMPONENT_BUILDER;
+    if (isStudioPreviewRequest(request)) {
+      Category category = categoryNavigation.getCategory();
+      return buildCategoryPreviewUri(previewUrlService, category, linkParameters, request);
     }
 
-    Category category = categoryNavigation.getCategory();
-
-    return buildCategoryPreviewUri(previewUrlService, category, linkParameters, request);
+    return DUMMY_URI_TO_BE_REPLACED;
   }
 
   @Link(type = LiveContextExternalChannelImpl.class, order = 1)
   @Nullable
   public UriComponents buildLinkForExternalChannel(LiveContextExternalChannelImpl channel,
                                                    Map<String, Object> linkParameters, HttpServletRequest request) {
-    CommerceConnection commerceConnection = findCommerceConnection(channel);
+    CommerceConnection commerceConnection = findCommerceConnection(channel).orElse(null);
     if (commerceConnection == null) {
       return null;
     }
@@ -280,14 +296,12 @@ public class CommerceLinkScheme {
       return null;
     }
 
-    // if it's not studio preview build a dummy link that will be later replaced by the commerce link resolver
-    if (!isStudioPreviewRequest(request)) {
-      return EMPTY_URI_COMPONENT_BUILDER;
+    if (isStudioPreviewRequest(request)) {
+      Category category = channel.getCategory();
+      return buildCategoryPreviewUri(previewUrlService, category, linkParameters, request);
     }
 
-    Category category = channel.getCategory();
-
-    return buildCategoryPreviewUri(previewUrlService, category, linkParameters, request);
+    return DUMMY_URI_TO_BE_REPLACED;
   }
 
   /**
@@ -297,9 +311,8 @@ public class CommerceLinkScheme {
    * @param request  current request
    * @return {@link UriComponents} for category link
    */
-  @Nullable
-  private UriComponents buildCategoryPreviewUri(PreviewUrlService previewUrlService, Category category,
-                                                Map<String, Object> linkParameters, HttpServletRequest request) {
+  private static UriComponents buildCategoryPreviewUri(PreviewUrlService previewUrlService, Category category,
+                                                       Map<String, Object> linkParameters, HttpServletRequest request) {
     List<QueryParam> queryParamList = convertToQueryParamList(linkParameters);
 
     return previewUrlService.getCategoryUrl(category, queryParamList, request);
@@ -322,46 +335,60 @@ public class CommerceLinkScheme {
     return previewUrlService.getProductUrl(product, category, queryParamList, request);
   }
 
-  @SuppressWarnings("ConstantConditions")
-  private boolean useCommerceProductLinks(HttpServletRequest request) {
-    Site site = SiteHelper.findSite(request).orElse(null);
-    return settingsService.settingWithDefault(LIVECONTEXT_POLICY_COMMERCE_PRODUCT_LINKS, Boolean.class, true, site);
+  private boolean useCommerceProductLinks(ServletRequest request) {
+    return findSiteSetting(request, LIVECONTEXT_POLICY_COMMERCE_PRODUCT_LINKS).orElse(true);
   }
 
   private boolean useCommerceCategoryLinks(ServletRequest request) {
-    Site site = SiteHelper.findSite(request).orElse(null);
-    return settingsService.settingWithDefault(LIVECONTEXT_POLICY_COMMERCE_CATEGORY_LINKS, Boolean.class, false, site);
+    return findSiteSetting(request, LIVECONTEXT_POLICY_COMMERCE_CATEGORY_LINKS).orElse(false);
+  }
+
+  private Optional<Boolean> findSiteSetting(ServletRequest request, String settingName) {
+    return SiteHelper.findSite(request)
+            .flatMap(site -> settingsService.getSetting(settingName, Boolean.class, site));
   }
 
   private boolean useCommerceLinkForChannel(CMChannel channel) {
     return commerceLedPageExtension.isCommerceLedChannel(channel);
   }
 
-  private CommerceConnection findCommerceConnection(CMChannel channel) {
-    return commerceConnectionSupplier.findConnection(channel.getContent()).orElse(null);
+  private Optional<CommerceConnection> findCommerceConnection(CMChannel channel) {
+    return findCommerceConnection(channel.getContent());
   }
 
   /**
-   * To evaluate if the newPreviewSession query parameter has to be applied to a commerce url, the evaluator has to know
-   * if it's the first request triggered by a studio action (e.g. open in tab) or it's a follow up trigger by an author
-   * clicking in the preview.
-   * If it's a request triggered by a studio action an author want's to have a cleared session (no logged in user or
-   * p13n context). If he tests in studio the preview the author want to stay logged in and use the same p13n context.
+   * To evaluate if the newPreviewSession query parameter has to be applied to a
+   * commerce URL, the evaluator has to know if it's the first request triggered
+   * by a Studio action (e.g. open in tab) or if it's a follow-up trigger by an
+   * author clicking in the preview.
+   * <p>
+   * If it's a request triggered by a Studio action, an author wants to have a
+   * cleared session (no logged in user or p13n context). If he tests in Studio,
+   * the preview the author want to stay logged in and use the same p13n context.
    *
    * @param request the current request
-   * @return true if the request was triggered by a studio action.
+   * @return true if the request was triggered by a Studio action.
    */
   private static boolean isStudioPreviewRequest(HttpServletRequest request) {
     return PreviewHandler.isStudioPreviewRequest(request);
   }
 
   @Nullable
-  private static PreviewUrlService getPreviewUrlService() {
-    return getPreviewUrlService(CurrentCommerceConnection.get());
-  }
-
-  @Nullable
   private static PreviewUrlService getPreviewUrlService(CommerceConnection commerceConnection) {
     return commerceConnection.getPreviewUrlService().orElse(null);
+  }
+
+  private static CommerceConnection getCommerceConnection(CommerceBean commerceBean) {
+    return commerceBean.getContext().getConnection();
+  }
+
+  private Optional<CommerceConnection> findCommerceConnection(Content content) {
+    return commerceConnectionSupplier.findConnection(content);
+  }
+
+  private static UriComponents toUriComponents(String uri) {
+    return UriComponentsBuilder
+            .fromUriString(uri)
+            .build();
   }
 }
