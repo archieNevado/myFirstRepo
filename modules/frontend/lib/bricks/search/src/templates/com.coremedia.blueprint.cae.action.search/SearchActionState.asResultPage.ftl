@@ -34,11 +34,11 @@
   <#-- results header -->
   <div class="cm-search__header">
     <#-- headline -->
-    <h1 class="cm-search__headline">${bp.getMessage("search_results")}</h1>
+    <h1 class="cm-search__headline">${cm.getMessage("search_results")}</h1>
     <#-- box with infos about this search -->
     <div class="cm-search__status">
       <#if searchResultHits?has_content>
-        ${bp.getMessage("search_searchTerm", [searchResult.numHits, searchQuery?esc?markup_string])?no_esc}
+        ${cm.getMessage("search_searchTerm", [searchResult.numHits, searchQuery?esc?markup_string])?no_esc}
       </#if>
     </div>
   </div>
@@ -49,16 +49,16 @@
     <#-- search input -->
     <div class="cm-search__form ${searchFiltersAvailable?then("", "cm-search__form-without-filters")}">
       <form data-cm-search-form-submit="${search.getLink(self, {"query": ""})}">
-        <label for="cm-search-result-page-query" class="cm-search__label">${bp.getMessage("search_label")}</label>
+        <label for="cm-search-result-page-query" class="cm-search__label">${cm.getMessage("search_label")}</label>
         <input id="cm-search-result-page-query" type="search" class="cm-search__form-input" value="${searchQuery}" data-cm-search-form-input=""/>
-        <@components.button text=bp.getMessage("search_button_label") baseClass="" attr={"type": "submit", "class": "cm-search__form-button"}/>
+        <@components.button text=cm.getMessage("search_button_label") baseClass="" attr={"type": "submit", "class": "cm-search__form-button"}/>
       </form>
     </div>
 
     <#-- search filter button on mobile, only if results are available -->
     <#if searchResultHits?has_content>
       <div class="cm-search__filter-switch">
-        <@components.button iconClass="cm-search__filter-switch-icon" text=bp.getMessage("search_filters") attr={"class": "cm-search__filter-switch-button", "data-cm-search-filter-popup-toggle": ""}/>
+        <@components.button iconClass="cm-search__filter-switch-icon" text=cm.getMessage("search_filters") attr={"class": "cm-search__filter-switch-button", "data-cm-search-filter-popup-toggle": ""}/>
       </div>
     </#if>
 
@@ -66,20 +66,20 @@
 
       <#-- headline and close button -->
       <div class="cm-search__filter-popup-head">
-        <h2 class="cm-search__filter-popup-heading">${bp.getMessage("search_filters")}</h2>
-        <@components.button baseClass="" iconClass="cm-search__filter-close-icon" text=bp.getMessage("search_button_close") attr={"class": "cm-search__filter-popup-close", "data-cm-search-filter-popup-toggle": ""}/>
+        <h2 class="cm-search__filter-popup-heading">${cm.getMessage("search_filters")}</h2>
+        <@components.button baseClass="" iconClass="cm-search__filter-close-icon" text=cm.getMessage("search_button_close") attr={"class": "cm-search__filter-popup-close", "data-cm-search-filter-popup-toggle": ""}/>
       </div>
 
       <#-- search sort, only if results are available -->
       <div class="cm-search__sort">
         <#if searchResultHits?has_content>
           <label for="cm-search-sort" class="cm-search__sort-label">
-            ${bp.getMessage("search_sort_by")}
+            ${cm.getMessage("search_sort_by")}
           </label>
           <select id="cm-search-sort" class="cm-search__sort--dropdown" data-cm-search-dropdown>
-            <option data-cm-search-sort-link="${search.getLink(self, {"sortByDate": false})}">${bp.getMessage("search_sort_by_relevance")}</option>
+            <option data-cm-search-sort-link="${search.getLink(self, {"sortByDate": false})}">${cm.getMessage("search_sort_by_relevance")}</option>
             <option <#if isSortByDate>selected</#if> data-cm-search-sort-link="${search.getLink(self, {"sortByDate": true})}">
-              ${bp.getMessage("search_sort_by_date")}
+              ${cm.getMessage("search_sort_by_date")}
             </option>
           </select>
         </#if>
@@ -98,14 +98,14 @@
         <@cm.include self=self view="asResultList" params={"searchResultView": searchResultView, "loadMore": !searchPagination} />
       <#else>
         <#if self.queryTooShort!false>
-          <h3 class="cm-search__warning">${bp.getMessage("search_error_belowMinQueryLength", [self.minimalSearchQueryLength])}</h3>
+          <h3 class="cm-search__warning">${cm.getMessage("search_error_belowMinQueryLength", [self.minimalSearchQueryLength])}</h3>
         <#else>
-          <h3 class="cm-search__warning">${bp.getMessage("search_error_noresults", [searchQuery?esc?markup_string])?no_esc}</h3>
+          <h3 class="cm-search__warning">${cm.getMessage("search_error_noresults", [searchQuery?esc?markup_string])?no_esc}</h3>
         </#if>
         <#-- optional spell suggestion-->
         <#if (searchSpellSuggestions && searchResult.spellSuggestion?has_content)>
           <div class="cm-search__suggestion">
-            ${bp.getMessage("search_spell_suggestion")}
+            ${cm.getMessage("search_spell_suggestion")}
             <span class="cm-search__suggestion-link cm-search__link" data-cm-search-link="${search.getLink(self, {"query": searchResult.spellSuggestion})}" data-cm-search-suggestion="${searchResult.spellSuggestion}">${searchResult.spellSuggestion}</span>
           </div>
           </#if>

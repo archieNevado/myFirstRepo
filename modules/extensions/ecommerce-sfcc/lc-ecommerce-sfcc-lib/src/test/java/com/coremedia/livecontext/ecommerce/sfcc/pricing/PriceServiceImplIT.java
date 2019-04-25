@@ -3,11 +3,13 @@ package com.coremedia.livecontext.ecommerce.sfcc.pricing;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.sfcc.configuration.SfccStoreContextProperties;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.SfccTestConfig;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.SiteGenesisGlobalTestConfig;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.shop.ShopApiResourceTestBase;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.shop.resources.ProductsResource;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.Optional;
@@ -51,10 +52,10 @@ public class PriceServiceImplIT extends ShopApiResourceTestBase {
       return;
     }
 
-    assertThatPriceIsEqual(priceService.findListPriceForProduct(PRODUCT_ID, STORE_ID, CURRENCY_GBP), "48.00");
-    assertThatPriceIsEqual(priceService.findListPriceForProduct(PRODUCT_ID, STORE_ID, CURRENCY_EUR), "54.00");
-    assertThatPriceIsEqual(priceService.findListPriceForProduct(PRODUCT_ID, STORE_ID, CURRENCY_JPY), "9044.00");
-    assertThatPriceIsEqual(priceService.findListPriceForProduct(PRODUCT_ID, STORE_ID, CURRENCY_CNY), "480.00");
+    assertThatPriceIsEqual(priceService.findListPriceForProduct(PRODUCT_ID, STORE_ID, CURRENCY_GBP, storeContext), "48.00");
+    assertThatPriceIsEqual(priceService.findListPriceForProduct(PRODUCT_ID, STORE_ID, CURRENCY_EUR, storeContext), "54.00");
+    assertThatPriceIsEqual(priceService.findListPriceForProduct(PRODUCT_ID, STORE_ID, CURRENCY_JPY, storeContext), "9044.00");
+    assertThatPriceIsEqual(priceService.findListPriceForProduct(PRODUCT_ID, STORE_ID, CURRENCY_CNY, storeContext), "480.00");
   }
 
   @Test
@@ -63,10 +64,10 @@ public class PriceServiceImplIT extends ShopApiResourceTestBase {
       return;
     }
 
-    assertThatPriceIsEqual(priceService.findOfferPriceForProduct(PRODUCT_ID, STORE_ID, CURRENCY_GBP), "48.00");
-    assertThatPriceIsEqual(priceService.findOfferPriceForProduct(PRODUCT_ID, STORE_ID, CURRENCY_EUR), "54.00");
-    assertThatPriceIsEqual(priceService.findOfferPriceForProduct(PRODUCT_ID, STORE_ID, CURRENCY_JPY), "9044.00");
-    assertThatPriceIsEqual(priceService.findOfferPriceForProduct(PRODUCT_ID, STORE_ID, CURRENCY_CNY), "480.00");
+    assertThatPriceIsEqual(priceService.findOfferPriceForProduct(PRODUCT_ID, STORE_ID, CURRENCY_GBP, storeContext), "48.00");
+    assertThatPriceIsEqual(priceService.findOfferPriceForProduct(PRODUCT_ID, STORE_ID, CURRENCY_EUR, storeContext), "54.00");
+    assertThatPriceIsEqual(priceService.findOfferPriceForProduct(PRODUCT_ID, STORE_ID, CURRENCY_JPY, storeContext), "9044.00");
+    assertThatPriceIsEqual(priceService.findOfferPriceForProduct(PRODUCT_ID, STORE_ID, CURRENCY_CNY, storeContext), "480.00");
   }
 
   private static void assertThatPriceIsEqual(
@@ -89,8 +90,8 @@ public class PriceServiceImplIT extends ShopApiResourceTestBase {
     CatalogAliasTranslationService theCatalogAliasTranslationService() {
       CatalogAliasTranslationService catalogAliasTranslationService = mock(CatalogAliasTranslationService.class);
 
-      Optional<CatalogId> catalogId = Optional.of(CatalogId.of("sitegenisis"));
-      when(catalogAliasTranslationService.getCatalogIdForAlias(any(), any()))
+      Optional<CatalogId> catalogId = Optional.of(CatalogId.of("sitegenesis"));
+      when(catalogAliasTranslationService.getCatalogIdForAlias(any(), any(), any(StoreContext.class)))
               .thenReturn(catalogId);
 
       return catalogAliasTranslationService;

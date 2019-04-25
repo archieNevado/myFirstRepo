@@ -66,14 +66,9 @@ public class SfccStoreContext implements StoreContext {
   }
 
   @NonNull
+  @Override
   public CommerceConnection getConnection() {
     return connection;
-  }
-
-  @Override
-  public Object get(@NonNull String name) {
-    // Always return `null` for now. Only implement if unavoidable, e.g. using reflection.
-    return null;
   }
 
   @NonNull
@@ -83,6 +78,7 @@ public class SfccStoreContext implements StoreContext {
     return replacements;
   }
 
+  @NonNull
   @Override
   public String getSiteId() {
     return siteId;

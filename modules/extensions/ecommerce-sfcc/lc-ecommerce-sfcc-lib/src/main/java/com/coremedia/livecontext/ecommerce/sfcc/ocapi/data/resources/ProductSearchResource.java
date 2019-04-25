@@ -11,10 +11,11 @@ import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.TermQueryDo
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.TextQueryDocument;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ListMultimap;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -33,6 +34,7 @@ import static java.util.Collections.emptyMap;
 /**
  * ProductSearch resource.
  */
+@DefaultAnnotation(NonNull.class)
 @Service("ocapiProductSearchResource")
 public class ProductSearchResource extends AbstractDataResource {
 
@@ -46,11 +48,8 @@ public class ProductSearchResource extends AbstractDataResource {
    * @param storeContext the effective store context
    * @return the list of product documents or an empty list if no product is found
    */
-  @NonNull
-  public Optional<ProductSearchResultDocument> searchProducts(@NonNull String query,
-                                                              @NonNull Map<String, String> params,
-                                                              @NonNull Set<String> categoryIds,
-                                                              @NonNull StoreContext storeContext) {
+  public Optional<ProductSearchResultDocument> searchProducts(String query, Map<String, String> params,
+                                                              Set<String> categoryIds, StoreContext storeContext) {
     ListMultimap<String, String> queryParams = ImmutableListMultimap
             .of("site_id", storeContext.getStoreId());
     String searchPhrase = StringUtils.isBlank(query) ? "*" : query;
@@ -96,12 +95,12 @@ public class ProductSearchResource extends AbstractDataResource {
     }
     String requestBody = searchRequest.toJSONString();
 
-    return getConnector().postResource(PRODUCT_SEARCH_PATH, emptyMap(), queryParams, requestBody,
-            ProductSearchResultDocument.class);
+    return getConnector()
+            .postResource(PRODUCT_SEARCH_PATH, emptyMap(), queryParams, requestBody,
+                    ProductSearchResultDocument.class, storeContext);
   }
 
-  @NonNull
-  public List<ProductDocument> getProductsById(@NonNull List<String> productIds, @NonNull StoreContext storeContext) {
+  public List<ProductDocument> getProductsById(List<String> productIds, StoreContext storeContext) {
     ListMultimap<String, String> queryParams = ImmutableListMultimap
             .of("site_id", storeContext.getStoreId());
 
@@ -110,8 +109,9 @@ public class ProductSearchResource extends AbstractDataResource {
     searchRequest.setQuery(new TermQueryDocument("id", Operator.one_of, productIds));
     String requestBody = searchRequest.toJSONString();
 
-    Optional<ProductSearchResultDocument> doc = getConnector().postResource(PRODUCT_SEARCH_PATH, emptyMap(), queryParams,
-            requestBody, ProductSearchResultDocument.class);
+    Optional<ProductSearchResultDocument> doc = getConnector()
+            .postResource(PRODUCT_SEARCH_PATH, emptyMap(), queryParams, requestBody,
+                    ProductSearchResultDocument.class, storeContext);
 
     return doc
             .map(AbstractOCSearchResultDocument::getHits)

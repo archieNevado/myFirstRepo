@@ -1,15 +1,11 @@
 package com.coremedia.livecontext.context;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.cache.Cache;
 import com.coremedia.cache.CacheKey;
 import com.coremedia.cap.multisite.Site;
-import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
-import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -42,19 +38,6 @@ public class LiveContextResolveContextStrategy implements ResolveContextStrategy
   @Required
   public void setCache(Cache cache) {
     this.cache = cache;
-  }
-
-  protected CatalogService getCatalogService() {
-    return getCommerceConnection().getCatalogService();
-  }
-
-  protected StoreContextProvider getStoreContextProvider() {
-    return getCommerceConnection().getStoreContextProvider();
-  }
-
-  @NonNull
-  protected CommerceConnection getCommerceConnection() {
-    return CurrentCommerceConnection.get();
   }
 
   @Required

@@ -6,10 +6,13 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.SpringCommerceB
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.id.IdProvider;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.ecommerce.p13n.SegmentService;
+import com.coremedia.livecontext.ecommerce.push.PushService;
+import com.coremedia.livecontext.ecommerce.push.SyncStatusStrategy;
 import com.coremedia.livecontext.ecommerce.sfcc.asset.AssetUrlProviderImpl;
 import com.coremedia.livecontext.ecommerce.sfcc.beans.AbstractSfccCommerceBean;
 import com.coremedia.livecontext.ecommerce.sfcc.catalog.CatalogServiceImpl;
@@ -20,13 +23,19 @@ import com.coremedia.livecontext.ecommerce.sfcc.ocapi.AbstractOCAPIConnector;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.CatalogsResource;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.CategoryProductAssignmentSearchResource;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.CustomerGroupsResource;
+import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.LibrariesResource;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.ProductSearchResource;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.ProductsResource;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.shop.resources.ShopProductSearchResource;
 import com.coremedia.livecontext.ecommerce.sfcc.p13n.SegmentServiceImpl;
+import com.coremedia.livecontext.ecommerce.sfcc.push.FetchContentUrlHelper;
+import com.coremedia.livecontext.ecommerce.sfcc.push.DefaultSyncStatusStrategy;
+import com.coremedia.livecontext.ecommerce.sfcc.push.PushServiceImpl;
+import com.coremedia.livecontext.ecommerce.sfcc.push.SfccContentHelper;
 import com.coremedia.livecontext.ecommerce.sfcc.user.UserContextProviderImpl;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -47,7 +56,7 @@ import org.springframework.context.annotation.Scope;
         AbstractOCAPIConnector.class
 })
 @EnableConfigurationProperties(SfccConfigurationProperties.class)
-class LcEcommerce_SFCC_Configuration {
+public class LcEcommerce_SFCC_Configuration {
 
   @Bean
   CatalogServiceImpl sfccCatalogService(@NonNull CatalogsResource catalogsResource,
@@ -95,6 +104,37 @@ class LcEcommerce_SFCC_Configuration {
     return new SegmentServiceImpl(customerGroupsResource, sfccCommerceBeanFactory, commerceCache);
   }
 
+
+  @Bean
+  PushServiceImpl sfccPushService(@NonNull LibrariesResource resource,
+                                  @NonNull IdProvider idProvider,
+                                  @NonNull SfccContentHelper sfccContentHelper,
+                                  @NonNull FetchContentUrlHelper fetchContentUrlHelper,
+                                  @NonNull SyncStatusStrategy syncStatusStrategy,
+                                  @NonNull Cache cache) {
+    return new PushServiceImpl(resource, idProvider, sfccContentHelper, fetchContentUrlHelper, syncStatusStrategy, cache);
+  }
+
+  @Bean
+  SfccContentHelper sfccContentHelper(@NonNull LibrariesResource resource,
+                                      @NonNull IdProvider idProvider,
+                                      @NonNull FetchContentUrlHelper fetchContentUrlHelper,
+                                      @NonNull Cache cache
+                                      ) {
+    return new SfccContentHelper(resource, idProvider, fetchContentUrlHelper, cache);
+  }
+
+  @Bean
+  FetchContentUrlHelper fetchContentUrlHelper(@NonNull @Value("${studio.previewUrlPrefix}") String previewUrlPrefix,
+                                              @NonNull IdProvider idProvider) {
+    return new FetchContentUrlHelper(previewUrlPrefix, idProvider);
+  }
+
+  @Bean
+  DefaultSyncStatusStrategy syncStatusStrategy() {
+    return new DefaultSyncStatusStrategy();
+  }
+
   @Bean
   CommerceBeanFactory sfccCommerceBeanFactory(@NonNull StoreContextProvider sfccStoreContextProvider) {
     SpringCommerceBeanFactory springCommerceBeanFactory = new SpringCommerceBeanFactory();
@@ -111,6 +151,7 @@ class LcEcommerce_SFCC_Configuration {
                                                 @NonNull SfccCommerceIdProvider sfccCommerceIdProvider,
                                                 @NonNull CommerceBeanFactory sfccCommerceBeanFactory,
                                                 @NonNull SegmentService sfccSegmentService,
+                                                @NonNull PushService sfccPushService,
                                                 @NonNull SfccConfigurationProperties sfccConfigurationProperties) {
     SfccCommerceConnection connection = new SfccCommerceConnection(sfccConfigurationProperties);
     connection.setAssetUrlProvider(sfccAssetUrlProvider);
@@ -120,6 +161,7 @@ class LcEcommerce_SFCC_Configuration {
     connection.setIdProvider(sfccCommerceIdProvider);
     connection.setCommerceBeanFactory(sfccCommerceBeanFactory);
     connection.setSegmentService(sfccSegmentService);
+    connection.setPushService(sfccPushService);
     return connection;
   }
 }

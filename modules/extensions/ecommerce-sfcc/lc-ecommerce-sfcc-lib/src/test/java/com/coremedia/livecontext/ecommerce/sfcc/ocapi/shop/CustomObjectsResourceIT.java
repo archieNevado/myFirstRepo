@@ -21,7 +21,8 @@ public class CustomObjectsResourceIT extends ShopApiResourceTestBase {
   @Test
   @Ignore("custom objects not used at the moment")
   public void testSampleCustomObject() {
-    CustomObjectDocument doc = resource.getCustomObject("sample_object_type", "someKey");
+    CustomObjectDocument doc = resource.getCustomObject("sample_object_type", "someKey", storeContext);
+
     assertEquals("sample_object_type", doc.getObjectType());
     assertEquals("key_attribute", doc.getKeyProperty());
     assertEquals("test", doc.get("c_foo"));

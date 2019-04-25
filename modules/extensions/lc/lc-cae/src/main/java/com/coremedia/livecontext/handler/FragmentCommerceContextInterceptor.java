@@ -90,15 +90,19 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
     return connection;
   }
 
-  private void updateStoreContext(@NonNull CommerceConnection connection,
-                                  @NonNull HttpServletRequest request, @NonNull String siteId) {
+  private void updateStoreContext(@NonNull CommerceConnection connection, @NonNull HttpServletRequest request,
+                                  @NonNull String siteId) {
     FragmentParameters fragmentParameters = FragmentContextProvider.getFragmentContext(request).getParameters();
+
     fragmentParameters.getCatalogId().ifPresent(catalogId -> {
-      Optional<CatalogAlias> catalogAlias = catalogAliasTranslationService.getCatalogAliasForId(catalogId, siteId);
+      StoreContext originalStoreContext = connection.getStoreContext();
+
+      Optional<CatalogAlias> catalogAlias = catalogAliasTranslationService
+              .getCatalogAliasForId(catalogId, siteId, originalStoreContext);
 
       StoreContext updatedStoreContext = connection
               .getStoreContextProvider()
-              .buildContext(connection.getStoreContext())
+              .buildContext(originalStoreContext)
               .withCatalogId(catalogId)
               .withCatalogAlias(catalogAlias.orElse(null))
               .build();

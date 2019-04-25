@@ -66,7 +66,8 @@ public class FilterDocumentsTest {
   @Test
   public void testQueryFilterJSON() {
     // enabled=false OR active=false
-    FilterDocument filter = new QueryFilterDocument(new TermQueryDocument(Arrays.asList("enabled", "active"), Operator.is, false));
+    FilterDocument filter = new QueryFilterDocument(
+            new TermQueryDocument(Arrays.asList("enabled", "active"), Operator.is, false));
 
     String expected = "{" +
             "\"query_filter\":{" +
@@ -79,6 +80,4 @@ public class FilterDocumentsTest {
 
     assertEquals(expected, filter.toJSONString(), true);
   }
-
-
 }

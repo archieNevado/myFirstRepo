@@ -1,9 +1,9 @@
 package com.coremedia.livecontext.ecommerce.sfcc.beans;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.livecontext.ecommerce.asset.CatalogPicture;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductAttribute;
@@ -28,12 +28,12 @@ import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.ProductsRes
 import com.coremedia.livecontext.ecommerce.sfcc.pricing.PriceServiceImpl;
 import com.coremedia.xml.Markup;
 import com.google.common.annotations.VisibleForTesting;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Named;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
@@ -130,7 +130,7 @@ public class ProductImpl extends AbstractSfccCommerceBean implements Product {
   @Nullable
   @Override
   public BigDecimal getListPrice() {
-    if (priceService == null){
+    if (priceService == null) {
       return null;
     }
 
@@ -139,14 +139,14 @@ public class ProductImpl extends AbstractSfccCommerceBean implements Product {
     String storeId = storeContext.getStoreId();
     Currency currency = storeContext.getCurrency();
 
-    return priceService.findListPriceForProduct(getExternalId(), storeId, currency)
+    return priceService.findListPriceForProduct(getExternalId(), storeId, currency, storeContext)
             .orElse(null);
   }
 
   @Nullable
   @Override
   public BigDecimal getOfferPrice() {
-    if (priceService == null){
+    if (priceService == null) {
       return null;
     }
 
@@ -155,7 +155,7 @@ public class ProductImpl extends AbstractSfccCommerceBean implements Product {
     String storeId = storeContext.getStoreId();
     Currency currency = storeContext.getCurrency();
 
-    return priceService.findOfferPriceForProduct(getExternalId(), storeId, currency)
+    return priceService.findOfferPriceForProduct(getExternalId(), storeId, currency, storeContext)
             .orElse(null);
   }
 
@@ -305,23 +305,26 @@ public class ProductImpl extends AbstractSfccCommerceBean implements Product {
   @NonNull
   @Override
   public List<ProductVariant> getVariants() {
+    StoreContext storeContext = getContext();
+
     if (variants == null) {
       variants = getDelegate().getVariants();
       if (variants == null) {
         variants = getCommerceCache().get(
-                new ProductVariantsCacheKey(getId(), getContext(), resource, getCommerceCache()));
+                new ProductVariantsCacheKey(getId(), storeContext, resource, getCommerceCache()));
       }
       if (variants == null) {
         variants = emptyList();
       }
     }
 
+    CommerceIdProvider idProvider = storeContext.getConnection().getIdProvider();
+    CatalogService catalogService = getCatalogService();
+
     List<ProductVariant> result = new ArrayList<>();
     for (VariantDocument variantDocument : variants) {
-      CommerceIdProvider idProvider = CurrentCommerceConnection.get().getIdProvider();
       CommerceId commerceId = idProvider.formatProductVariantId(null, variantDocument.getProductId());
-
-      ProductVariant productVariant = getCatalogService().findProductVariantById(commerceId, getContext());
+      ProductVariant productVariant = catalogService.findProductVariantById(commerceId, storeContext);
 
       if (productVariant != null) {
         result.add(productVariant);

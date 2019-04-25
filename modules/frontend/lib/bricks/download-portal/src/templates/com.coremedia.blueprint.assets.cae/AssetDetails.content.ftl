@@ -22,7 +22,7 @@
         <table class="am-asset-info">
           <#list self.metadataProperties?keys as key>
             <tr class="am-asset-info__property">
-              <td class="am-asset-info__property-name">${bp.getMessage("am_asset_metadata_${key}")}</td>
+              <td class="am-asset-info__property-name">${cm.getMessage("am_asset_metadata_${key}")}</td>
               <td class="am-asset-info__property-value">${self.metadataProperties[key]!""}</td>
             </tr>
           </#list>
@@ -33,7 +33,7 @@
 
   <div class="am-asset-details__renditions">
     <#if self.asset.publishedRenditions?has_content>
-      <h3 class="am-asset-details__renditions-title am-heading-3">${bp.getMessage("am_renditions")}</h3>
+      <h3 class="am-asset-details__renditions-title am-heading-3">${cm.getMessage("am_renditions")}</h3>
       <table class="am-asset-details__renditions-list am-renditions">
         <#list self.asset.publishedRenditions as rendition>
           <@cm.include self=rendition view="_asset-details" />

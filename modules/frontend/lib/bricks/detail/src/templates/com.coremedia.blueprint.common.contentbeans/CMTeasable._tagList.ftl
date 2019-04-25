@@ -13,7 +13,7 @@
 <#if (tags?size > 0)>
   <section class="${parentClass}__tags ${blockClass}"<@preview.metadata "properties.subjectTaxonomy"/>>
     <#-- headline -->
-    <h3 class="${blockClass}__headline"><@bp.message key="tags_label"/></h3>
+    <h3 class="${blockClass}__headline"><@cm.message key="tags_label"/></h3>
 
     <#-- tags -->
     <ul class="${blockClass}__items">

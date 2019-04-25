@@ -1,8 +1,7 @@
 package com.coremedia.livecontext.ecommerce.sfcc.ocapi;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
-import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.codec.binary.Base64;
@@ -19,7 +18,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper.decodeEntryTransparently;
@@ -29,6 +28,7 @@ import static com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce
 /**
  * Salesforce Commerce Cloud Open Commerce API OAuth connector.
  */
+@DefaultAnnotation(NonNull.class)
 @Service("sfccOAuthConnector")
 public class OAuthConnector {
 
@@ -45,9 +45,10 @@ public class OAuthConnector {
 
   private final RestTemplate restTemplate = new RestTemplate();
 
+  @Nullable
   private volatile AccessToken accessToken;
 
-  OAuthConnector(@NonNull SfccOAuthConfigurationProperties properties) {
+  OAuthConnector(SfccOAuthConfigurationProperties properties) {
     protocol = properties.getProtocol();
     host = properties.getHost();
     path = properties.getPath();
@@ -55,15 +56,24 @@ public class OAuthConnector {
     password = decodeEntryTransparently(properties.getClientPassword());
   }
 
+  public Optional<AccessToken> getOrRequestAccessToken(StoreContext storeContext) {
+    if (accessToken == null || accessToken.isExpired()) {
+      accessToken = requestAccessToken(storeContext);
+    }
+
+    return Optional.ofNullable(accessToken);
+  }
+
   /**
    * Requests an access token from the configured Account Manager host using the configured clientId and password.
-   *
-   * @return AccesToken
    */
   @Nullable
-  private AccessToken requestAccessToken() {
+  private AccessToken requestAccessToken(StoreContext storeContext) {
     String url = buildRequestUrl();
-    HttpEntity<String> requestEntity = buildRequestEntity(getClientId(), getPassword());
+
+    HttpEntity<String> requestEntity = buildRequestEntity(
+            getClientId(storeContext),
+            getPassword(storeContext));
 
     LOG.info("Requesting access token. {}", url);
     try {
@@ -85,7 +95,6 @@ public class OAuthConnector {
     }
   }
 
-  @NonNull
   private String buildRequestUrl() {
     return UriComponentsBuilder.newInstance()
             .scheme(protocol)
@@ -94,8 +103,7 @@ public class OAuthConnector {
             .build().toString();
   }
 
-  @NonNull
-  private static HttpEntity<String> buildRequestEntity(@NonNull String clientId, @NonNull String password) {
+  private static HttpEntity<String> buildRequestEntity(String clientId, String password) {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
@@ -104,34 +112,20 @@ public class OAuthConnector {
     return new HttpEntity<>("grant_type=client_credentials", headers);
   }
 
-  @NonNull
-  private static String createAuthorizationHeaderValue(@NonNull String clientId, @NonNull String password) {
+  private static String createAuthorizationHeaderValue(String clientId, String password) {
     // Create basic auth header
     String auth = clientId + ":" + password;
 
-    byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(Charset.forName("US-ASCII")));
+    byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(StandardCharsets.US_ASCII));
 
     return "Basic " + new String(encodedAuth);
   }
 
-  @NonNull
-  public Optional<AccessToken> getOrRequestAccessToken() {
-    if (accessToken == null || accessToken.isExpired()) {
-      accessToken = requestAccessToken();
-    }
-
-    return Optional.ofNullable(accessToken);
-  }
-
-  @NonNull
-  private String getClientId() {
-    StoreContext storeContext = CurrentCommerceConnection.find().map(CommerceConnection::getStoreContext).orElse(null);
+  private String getClientId(StoreContext storeContext) {
     return replaceTokens(clientId, storeContext);
   }
 
-  @NonNull
-  private String getPassword() {
-    StoreContext storeContext = CurrentCommerceConnection.find().map(CommerceConnection::getStoreContext).orElse(null);
+  private String getPassword(StoreContext storeContext) {
     return replaceTokensAndDecrypt(password, storeContext);
   }
 }

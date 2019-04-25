@@ -2,7 +2,6 @@ package com.coremedia.livecontext.ecommerce.sfcc.cae.preview;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
-import com.coremedia.livecontext.ecommerce.common.ForVendor;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.objectserver.web.links.LinkTransformer;
 import com.coremedia.objectserver.web.links.ParameterAppendingLinkTransformer;
@@ -12,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
-@ForVendor("sfcc")
 public class UserSegmentAppendingLinkTransformer implements LinkTransformer {
 
   private static final String REQUEST_PARAMETER_USER_SEGMENTS = "__customerGroup";

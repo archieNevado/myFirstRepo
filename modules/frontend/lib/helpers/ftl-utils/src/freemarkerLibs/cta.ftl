@@ -16,7 +16,7 @@
                      additionalClass=""
                      metadata=[]>
   <#if !text?has_content>
-    <#local text=bp.getMessage("button_read_more") />
+    <#local text=cm.getMessage("button_read_more") />
   </#if>
 
   <#local attr={

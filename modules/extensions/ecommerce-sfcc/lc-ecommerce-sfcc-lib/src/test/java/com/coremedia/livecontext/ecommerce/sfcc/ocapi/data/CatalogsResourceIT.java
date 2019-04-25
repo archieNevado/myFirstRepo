@@ -22,7 +22,7 @@ public class CatalogsResourceIT extends DataApiResourceTestBase {
       return;
     }
 
-    List<CatalogDocument> catalogs = resource.getCatalogs();
+    List<CatalogDocument> catalogs = resource.getCatalogs(storeContext);
 
     assertThat(catalogs).isNotNull();
   }
@@ -33,7 +33,7 @@ public class CatalogsResourceIT extends DataApiResourceTestBase {
       return;
     }
 
-    Optional<CatalogDocument> catalog = resource.getCatalogById("storefront-catalog-en");
+    Optional<CatalogDocument> catalog = resource.getCatalogById("storefront-catalog-en", storeContext);
 
     assertThat(catalog).isPresent();
     assertThat(catalog).hasValueSatisfying(c -> assertThat(c.getId()).isEqualTo("storefront-catalog-en"));

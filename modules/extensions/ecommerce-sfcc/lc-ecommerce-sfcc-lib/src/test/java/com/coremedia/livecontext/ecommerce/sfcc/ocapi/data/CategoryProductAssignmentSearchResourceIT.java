@@ -21,7 +21,7 @@ public class CategoryProductAssignmentSearchResourceIT extends DataApiResourceTe
       return;
     }
 
-    List<ProductDocument> products = resource.getProductsByCategory("mens-accessories-ties", getCurrentStoreContext());
+    List<ProductDocument> products = resource.getProductsByCategory("mens-accessories-ties", storeContext);
     assertThat(products).hasSize(4);
 
     for (ProductDocument product : products) {

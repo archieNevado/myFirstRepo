@@ -100,7 +100,7 @@ public class PreviewHandler extends IdRedirectHandlerBase {
    * @param siteId The id of the site
    */
   private static void storeSite(@NonNull HttpServletRequest request, @Nullable String siteId) {
-    String attributeValue = emptyToNull(siteId); // NOSONAR - Workaround for spotbugs/spotbugs#621, see CMS-12169
+    String attributeValue = emptyToNull(siteId);
     setSessionAttribute(request, RequestAttributeConstants.ATTR_NAME_PAGE_SITE, attributeValue);
   }
 
@@ -111,7 +111,7 @@ public class PreviewHandler extends IdRedirectHandlerBase {
    * @param taxonomyId The numeric content id of the taxonomy node.
    */
   private static void storeTaxonomy(@NonNull HttpServletRequest request, @Nullable String taxonomyId) {
-    if (!isNullOrEmpty(taxonomyId)) { // NOSONAR - Workaround for spotbugs/spotbugs#621, see CMS-12169
+    if (!isNullOrEmpty(taxonomyId)) {
       String id = IdHelper.formatContentId(taxonomyId);
       setSessionAttribute(request, RequestAttributeConstants.ATTR_NAME_PAGE_MODEL, id);
     }

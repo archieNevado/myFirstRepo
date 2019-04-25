@@ -5,6 +5,9 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHel
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.handlers.PreviewHandler;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
+import com.coremedia.blueprint.common.contentbeans.CMLinkable;
+import com.coremedia.blueprint.common.contentbeans.CMNavigation;
+import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.contentbeans.CMExternalPage;
@@ -18,20 +21,24 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.sfcc.common.SfccCommerceConnection;
 import com.coremedia.livecontext.ecommerce.sfcc.common.SfccCommerceIdProvider;
+import com.coremedia.livecontext.ecommerce.sfcc.push.FetchContentUrlHelper;
+import com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.ExternalSeoSegmentBuilder;
 import com.coremedia.livecontext.logictypes.CommerceLedLinkBuilderHelper;
 import com.coremedia.livecontext.navigation.LiveContextCategoryNavigation;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.coremedia.livecontext.ecommerce.sfcc.push.PushServiceImpl.PUSH_MODE_PARAMETER;
+import static com.coremedia.livecontext.ecommerce.sfcc.push.PushServiceImpl.PUSH_MODE_PARAMETER_VALUE_RECORD;
 import static com.coremedia.livecontext.handler.LiveContextPageHandlerBase.P13N_URI_PARAMETER;
 import static com.coremedia.livecontext.product.ProductPageHandler.LIVECONTEXT_POLICY_COMMERCE_PRODUCT_LINKS;
 import static java.util.Collections.emptyMap;
@@ -47,17 +54,23 @@ public class SfccLinkScheme {
   private final CommerceConnectionSupplier commerceConnectionSupplier;
   private final CommerceLedLinkBuilderHelper commerceLedPageExtension;
   private final SettingsService settingsService;
+  private final ContextHelper contextHelper;
+  private final ExternalSeoSegmentBuilder externalSeoSegmentBuilder;
 
   private final String REDIRECT_SERVICE_URL_TEMPLATE_PREFIX = "/Sites-{storeId}-Site/{locale}/CM-RedirectUrl?link=";
 
   SfccLinkScheme(@NonNull SfccCommerceUrlProvider urlProvider,
                  @NonNull CommerceConnectionSupplier commerceConnectionSupplier,
                  @NonNull CommerceLedLinkBuilderHelper commerceLedPageExtension,
-                 @NonNull SettingsService settingsService) {
+                 @NonNull SettingsService settingsService,
+                 @NonNull ContextHelper contextHelper,
+                 @NonNull ExternalSeoSegmentBuilder externalSeoSegmentBuilder) {
     this.urlProvider = urlProvider;
     this.commerceConnectionSupplier = commerceConnectionSupplier;
     this.commerceLedPageExtension = commerceLedPageExtension;
     this.settingsService = settingsService;
+    this.contextHelper = contextHelper;
+    this.externalSeoSegmentBuilder = externalSeoSegmentBuilder;
   }
 
 
@@ -160,11 +173,33 @@ public class SfccLinkScheme {
       // Special link building for root channel.
       urlTemplate = REDIRECT_SERVICE_URL_TEMPLATE_PREFIX+"Home-Show";
     } else {
-      String pageId = channel.getSegment() + "--" + channel.getContentId();
-      params = singletonMap("pageId", pageId);
+      String seoPath = externalSeoSegmentBuilder.asSeoSegment(channel, channel);
+
+      params = singletonMap("pageId", seoPath);
       urlTemplate = REDIRECT_SERVICE_URL_TEMPLATE_PREFIX+"CM-Content,pageid,{pageId},view,asMicroSite";
     }
     return buildUriFromTemplate(urlTemplate, params, storeContext, request);
+  }
+
+  @Link(type = CMLinkable.class, order = 2, view = FetchContentUrlHelper.PUSH_MODE_VIEW)
+  @Nullable
+  public Object buildLinkForLinkablesInPushMode(@NonNull CMLinkable linkable, String viewName, Map<String, Object> linkParameters,
+                                                       @NonNull HttpServletRequest request, HttpServletResponse response){
+
+    if (linkable instanceof CMChannel){
+      return buildLinkForCMChannel((CMChannel) linkable, viewName, linkParameters, request, response);
+    }
+
+    Optional<StoreContext> storeContextOpt = findStoreContext(linkable);
+    if(!storeContextOpt.isPresent()){
+      return null;
+    }
+
+    String urlTemplate = REDIRECT_SERVICE_URL_TEMPLATE_PREFIX + "CM-Content,pageid,{pageId}";
+    CMNavigation cmNavigation = contextHelper.contextFor(linkable);
+    String pageId = externalSeoSegmentBuilder.asSeoSegment(cmNavigation, linkable);
+
+    return buildUriFromTemplate(urlTemplate, singletonMap("pageId", pageId), storeContextOpt.get(), request);
   }
 
   @Link(type = LiveContextCategoryNavigation.class, order = 2)
@@ -225,7 +260,7 @@ public class SfccLinkScheme {
   }
 
   private UriComponents buildUriFromTemplate(@NonNull String urlTemplate, @NonNull Map<String, Object> params, @NonNull StoreContext storeContext, @NonNull HttpServletRequest request) {
-    if (isStudioPreviewRequest(request)) {
+    if (isStudioPreviewRequest(request) && !isPushModeRequest(request)) {
       urlTemplate += ",preview,true";
     }
     UriComponentsBuilder uriBuilder = urlProvider.provideValue(urlTemplate, params, storeContext);
@@ -237,10 +272,16 @@ public class SfccLinkScheme {
     return settingsService.settingWithDefault(LIVECONTEXT_POLICY_COMMERCE_PRODUCT_LINKS, Boolean.class, true, site);
   }
 
-  private Optional<CommerceConnection> findSfccCommerceConnection(@NonNull CMChannel channel) {
+  private Optional<CommerceConnection> findSfccCommerceConnection(@NonNull CMLinkable channel) {
     return commerceConnectionSupplier
             .findConnection(channel.getContent())
             .filter(SfccCommerceConnection.class::isInstance);
+  }
+
+  @NonNull
+  Optional<StoreContext> findStoreContext(@NonNull CMLinkable linkable) {
+    return findSfccCommerceConnection(linkable)
+            .map(CommerceConnection::getStoreContext);
   }
 
   private static boolean isSfcc(@NonNull CommerceBean commerceBean) {
@@ -255,6 +296,10 @@ public class SfccLinkScheme {
 
   private static boolean isStudioPreviewRequest(@NonNull HttpServletRequest request) {
     return PreviewHandler.isStudioPreviewRequest(request) || "true".equals(request.getParameter(P13N_URI_PARAMETER));
+  }
+
+  private static boolean isPushModeRequest(@NonNull HttpServletRequest request) {
+    return PUSH_MODE_PARAMETER_VALUE_RECORD.equals(request.getParameter(PUSH_MODE_PARAMETER));
   }
 
 }

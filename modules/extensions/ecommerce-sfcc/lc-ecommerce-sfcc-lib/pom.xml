@@ -33,6 +33,11 @@
     </dependency>
 
     <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>coremedia-id</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>com.coremedia.livecontext</groupId>
       <artifactId>lc-ecommerce-api</artifactId>
     </dependency>
@@ -148,6 +153,11 @@
       <groupId>com.github.spotbugs</groupId>
       <artifactId>spotbugs-annotations</artifactId>
       <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
     </dependency>
 
     <dependency>

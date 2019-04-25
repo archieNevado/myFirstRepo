@@ -1,7 +1,9 @@
 package com.coremedia.livecontext.ecommerce.sfcc.common;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.cache.Cache;
 import com.coremedia.cache.CacheKey;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.CatalogDocument;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.SiteDocument;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.CatalogsResource;
@@ -30,7 +32,9 @@ class SiteToCatalogCacheKey extends CacheKey<Map<String, String>> {
 
     try {
       Map<String, String> siteToCatalogMap = new HashMap<>();
-      List<CatalogDocument> catalogDocuments = catalogsResource.getCatalogs();
+
+      StoreContext storeContext = CurrentCommerceConnection.get().getStoreContext();
+      List<CatalogDocument> catalogDocuments = catalogsResource.getCatalogs(storeContext);
       for (CatalogDocument catalogDocument : catalogDocuments) {
         String catalogId = catalogDocument.getId();
         List<SiteDocument> assignedSites = catalogDocument.getAssignedSites();

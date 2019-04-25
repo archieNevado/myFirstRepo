@@ -1,13 +1,15 @@
 package com.coremedia.livecontext.ecommerce.sfcc.ocapi.shop.resources;
 
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.shop.documents.ProductDocument;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ListMultimap;
-import org.springframework.stereotype.Service;
-
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.springframework.stereotype.Service;
+
 import java.util.Currency;
 import java.util.Locale;
 import java.util.Map;
@@ -15,6 +17,7 @@ import java.util.Optional;
 
 import static com.coremedia.livecontext.ecommerce.sfcc.ocapi.shop.OCShopApiConnector.STORE_ID_PARAM;
 
+@DefaultAnnotation(NonNull.class)
 @Service("ocapiShopProductsResource")
 public class ProductsResource extends AbstractShopResource {
 
@@ -29,8 +32,8 @@ public class ProductsResource extends AbstractShopResource {
    * @param productId product id
    * @return
    */
-  public Optional<ProductDocument> getProductById(@NonNull String productId, @NonNull String storeId) {
-    return getProductById(productId, storeId, null, null);
+  public Optional<ProductDocument> getProductById(String productId, String storeId, StoreContext storeContext) {
+    return getProductById(productId, storeId, null, null, storeContext);
   }
 
   /**
@@ -41,16 +44,16 @@ public class ProductsResource extends AbstractShopResource {
    * @param currency  currency to use for prices
    * @return
    */
-  public Optional<ProductDocument> getProductById(@NonNull String productId, @NonNull String storeId, Locale locale,
-                                                  Currency currency) {
+  public Optional<ProductDocument> getProductById(String productId, String storeId, @Nullable Locale locale,
+                                                  @Nullable Currency currency, StoreContext storeContext) {
     Map<String, String> pathParameters = ImmutableMap.of(STORE_ID_PARAM, storeId, PRODUCT_ID_PARAM, productId);
 
     ListMultimap<String, String> queryParams = buildQueryParams(locale, currency);
 
-    return getConnector().getResource(PRODUCTS_ID_PATH, pathParameters, queryParams, ProductDocument.class);
+    return getConnector()
+            .getResource(PRODUCTS_ID_PATH, pathParameters, queryParams, ProductDocument.class, storeContext);
   }
 
-  @NonNull
   private static ListMultimap<String, String> buildQueryParams(@Nullable Locale locale, @Nullable Currency currency) {
     ImmutableListMultimap.Builder<String, String> builder = ImmutableListMultimap.builder();
 

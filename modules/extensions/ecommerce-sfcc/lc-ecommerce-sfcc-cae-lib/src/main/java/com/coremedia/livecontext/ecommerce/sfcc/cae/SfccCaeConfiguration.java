@@ -2,6 +2,7 @@ package com.coremedia.livecontext.ecommerce.sfcc.cae;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.settings.SettingsService;
+import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.livecontext.ecommerce.sfcc.configuration.SfccStoreContextProperties;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.shop.resources.ProductsResource;
 import com.coremedia.livecontext.ecommerce.sfcc.pricing.PriceServiceImpl;
@@ -35,8 +36,10 @@ public class SfccCaeConfiguration {
   SfccLinkScheme sfccLinkScheme(@NonNull SfccCommerceUrlProvider urlProvider,
                                 @NonNull CommerceConnectionSupplier commerceConnectionSupplier,
                                 @NonNull CommerceLedLinkBuilderHelper commerceLedPageExtension,
-                                @NonNull SettingsService settingsService) {
-    return new SfccLinkScheme(urlProvider, commerceConnectionSupplier, commerceLedPageExtension, settingsService);
+                                @NonNull SettingsService settingsService,
+                                @NonNull ContextHelper contextHelper,
+                                @NonNull ExternalSeoSegmentBuilder externalSeoSegmentBuilder) {
+    return new SfccLinkScheme(urlProvider, commerceConnectionSupplier, commerceLedPageExtension, settingsService, contextHelper, externalSeoSegmentBuilder);
   }
 
   @Bean

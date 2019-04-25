@@ -35,8 +35,8 @@ public class LinkableBeanContextSelector implements ContextSelector<CMContext, C
   @Override
   public CMContext selectContext(@Nullable CMContext currentContext, @NonNull List<? extends CMContext> candidates, @Nullable CMObject target) {
     Content currentContextContent = currentContext != null ? currentContext.getContent() : null;
-    List<Content> candidateContents = candidates.stream().map(ContentBean::getContent).collect(Collectors.toList());
     Content targetContent = target != null ? target.getContent() : null;
+    List<Content> candidateContents = candidates.stream().map(ContentBean::getContent).collect(Collectors.toList());
     Content context = delegate.selectContext(currentContextContent, candidateContents, targetContent);
     return context != null ? dataViewFactory.loadCached(contentBeanFactory.createBeanFor(context, CMContext.class), null) : null;
   }

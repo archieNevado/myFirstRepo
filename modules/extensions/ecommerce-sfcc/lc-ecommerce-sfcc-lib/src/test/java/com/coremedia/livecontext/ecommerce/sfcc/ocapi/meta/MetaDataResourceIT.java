@@ -42,7 +42,8 @@ public class MetaDataResourceIT extends OCAPITestBase {
       return;
     }
 
-    Map<String, String> apis = resource.getAvailableApis();
+    Map<String, String> apis = resource.getAvailableApis(storeContext);
+
     // Make sure, that at least Data and Shop APIs are available
     assertThat(apis).containsKeys("data", "meta", "shop");
   }
@@ -53,7 +54,7 @@ public class MetaDataResourceIT extends OCAPITestBase {
       return;
     }
 
-    List<ApiVersionDocument> dataApiVersions = resource.getAvailableApiVersions("data");
+    List<ApiVersionDocument> dataApiVersions = resource.getAvailableApiVersions("data", storeContext);
 
     Optional<ApiVersionDocument> document = dataApiVersions.stream()
             .filter(apiVersionDocument -> apiVersionDocument.getName().equals(EXPECTED_API_VERSION))
@@ -69,7 +70,7 @@ public class MetaDataResourceIT extends OCAPITestBase {
       return;
     }
 
-    List<ApiVersionDocument> dataApiVersions = resource.getAvailableApiVersions("shop");
+    List<ApiVersionDocument> dataApiVersions = resource.getAvailableApiVersions("shop", storeContext);
 
     Optional<ApiVersionDocument> document = dataApiVersions.stream()
             .filter(apiVersionDocument -> apiVersionDocument.getName().equals(EXPECTED_API_VERSION))

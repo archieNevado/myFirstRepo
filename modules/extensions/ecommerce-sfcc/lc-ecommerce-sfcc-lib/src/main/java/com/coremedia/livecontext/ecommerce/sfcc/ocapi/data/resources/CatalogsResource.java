@@ -1,12 +1,14 @@
 package com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources;
 
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.CatalogDocument;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.CatalogResultDocument;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ListMultimap;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +20,7 @@ import static java.util.Collections.singletonMap;
 /**
  * Catalog resource.
  */
+@DefaultAnnotation(NonNull.class)
 @Service("ocapiCatalogResource")
 public class CatalogsResource extends AbstractDataResource {
 
@@ -30,15 +33,14 @@ public class CatalogsResource extends AbstractDataResource {
    *
    * @return the list of catalogs or en empty list of no catalogs exist
    */
-  @NonNull
-  public List<CatalogDocument> getCatalogs() {
+  public List<CatalogDocument> getCatalogs(StoreContext storeContext) {
     ListMultimap<String, String> queryParams = ImmutableListMultimap
             .of("select", "(**)");
 
     return getConnector()
-            .getResource(CATALOGS_PATH, emptyMap(), queryParams, CatalogResultDocument.class)
+            .getResource(CATALOGS_PATH, emptyMap(), queryParams, CatalogResultDocument.class, storeContext)
             .map(CatalogResultDocument::getData)
-            .orElseGet(Collections::<CatalogDocument>emptyList);
+            .orElseGet(Collections::emptyList);
   }
 
   /**
@@ -47,10 +49,9 @@ public class CatalogsResource extends AbstractDataResource {
    * @param catalogId the id of the catalog
    * @return the catalog document, or nothing if it does not exist
    */
-  @NonNull
-  public Optional<CatalogDocument> getCatalogById(@NonNull String catalogId) {
+  public Optional<CatalogDocument> getCatalogById(String catalogId, StoreContext storeContext) {
     Map<String, String> pathParameters = singletonMap(CATALOG_ID_PARAM, catalogId);
 
-    return getConnector().getResource(CATALOG_PATH, pathParameters, CatalogDocument.class);
+    return getConnector().getResource(CATALOG_PATH, pathParameters, CatalogDocument.class, storeContext);
   }
 }

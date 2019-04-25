@@ -23,7 +23,7 @@
   <#-- play button -->
   <#if videoLink?has_content>
     <@utils.optionalLink href=link attr={ "class": "cm-text__cta cm-button cm-button--primary btn", "data-cm-video-popup": { "url": videoLink } }>
-      ${bp.getMessage("button_video")}
+      ${cm.getMessage("button_video")}
     </@utils.optionalLink>
   </#if>
 </div>

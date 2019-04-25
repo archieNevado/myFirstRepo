@@ -8,13 +8,13 @@ import com.coremedia.ui.data.ValueExpression;
 
 public class TaxonomyCache {
   private var taxId:String;
-  private var activeContent:Content;
+  private var activeContentVE:ValueExpression;
   private var cachedSuggestions:TaxonomyNodeList;
   private var pvExpression:ValueExpression;
 
-  public function TaxonomyCache(content:Content, propertyValueExpression:ValueExpression, taxonomyId:String) {
+  public function TaxonomyCache(contentVE:ValueExpression, propertyValueExpression:ValueExpression, taxonomyId:String) {
     pvExpression = propertyValueExpression;
-    activeContent = content;
+    activeContentVE = contentVE;
     taxId = taxonomyId;
   }
 
@@ -24,7 +24,7 @@ public class TaxonomyCache {
    * @param callback The callback handler that processes the suggestions list.
    */
   public function invalidate(callback:Function):void {
-    TaxonomyNodeFactory.loadSuggestions(taxId, activeContent, function (nodeList:TaxonomyNodeList):void {
+    TaxonomyNodeFactory.loadSuggestions(taxId, activeContentVE.getValue() as Content, function (nodeList:TaxonomyNodeList):void {
       cachedSuggestions = nodeList;
       callback(getActiveSuggestions());
     });

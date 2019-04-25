@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:customize="http://www.coremedia.com/2007/coremedia-spring-beans-customization"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.coremedia.com/2007/coremedia-spring-beans-customization http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
   <import resource="classpath:com/coremedia/rest/cap/cap-rest-service.xml"/>
   <import resource="classpath:META-INF/coremedia/bpbase-studio-rest.xml"/>
@@ -12,6 +9,20 @@
 
   <bean id="catalogProductValidator" parent="contentTypeValidator" class="com.coremedia.catalog.studio.lib.validators.CatalogProductValidator">
     <property name="contentType" value="CMProduct"/>
+    <property name="validators">
+      <list>
+        <bean class="com.coremedia.rest.validators.NotEmptyValidator">
+          <property name="property" value="productCode"/>
+        </bean>
+        <bean class="com.coremedia.rest.validators.RegExpValidator">
+          <property name="regExp" value="[^:/\s]*"/>
+          <property name="property" value="productCode"/>
+        </bean>
+        <bean class="com.coremedia.rest.validators.NotEmptyValidator">
+          <property name="property" value="productName"/>
+        </bean>
+      </list>
+    </property>
   </bean>
 
   <bean id="catalogCategoryValidator" parent="contentTypeValidator" class="com.coremedia.catalog.studio.lib.validators.CatalogCategoryValidator">

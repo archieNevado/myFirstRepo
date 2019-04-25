@@ -22,7 +22,7 @@ public class CategoriesResourceIT extends DataApiResourceTestBase {
       return;
     }
 
-    Optional<CategoryDocument> category = resource.getCategoryById("root", getCurrentStoreContext());
+    Optional<CategoryDocument> category = resource.getCategoryById("root", storeContext);
 
     assertThat(category).isPresent()
             .hasValueSatisfying(c -> {
@@ -37,7 +37,7 @@ public class CategoriesResourceIT extends DataApiResourceTestBase {
       return;
     }
 
-    Optional<CategoryDocument> category = resource.getCategoryById("mens-clothing-suits", getCurrentStoreContext());
+    Optional<CategoryDocument> category = resource.getCategoryById("mens-clothing-suits", storeContext);
 
     assertThat(category).isPresent();
     assertThat(category).hasValueSatisfying(c -> assertThat(c.getId()).isEqualTo("mens-clothing-suits"));

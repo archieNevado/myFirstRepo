@@ -8,6 +8,7 @@ import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.ProductDocu
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.SearchRequestDocument;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.TextQueryDocument;
 import com.google.common.collect.ImmutableMap;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ import static java.util.stream.Collectors.toList;
 /**
  * CategoryProductAssignmentSearch resource.
  */
+@DefaultAnnotation(NonNull.class)
 @Service("ocapiCategoryProductAssignmentSearchResource")
 public class CategoryProductAssignmentSearchResource extends AbstractDataResource {
 
@@ -27,8 +29,7 @@ public class CategoryProductAssignmentSearchResource extends AbstractDataResourc
   private static final String CATEGORY_ID_PARAM = "categoryId";
   private static final String CATEGORY_PRODUCT_ASSIGNMENT_SEARCH_PATH = "/catalogs/{" + CATALOG_ID_PARAM + "}/categories/{" + CATEGORY_ID_PARAM + "}/category_product_assignment_search";
 
-  @NonNull
-  public List<ProductDocument> getProductsByCategory(@NonNull String categoryId, @NonNull StoreContext storeContext) {
+  public List<ProductDocument> getProductsByCategory(String categoryId, StoreContext storeContext) {
     SearchRequestDocument searchRequest = new SearchRequestDocument();
     searchRequest.setExpand("product_base");
     searchRequest.setQuery(new TextQueryDocument("product_id", "*"));
@@ -39,9 +40,9 @@ public class CategoryProductAssignmentSearchResource extends AbstractDataResourc
             .put(CATEGORY_ID_PARAM, categoryId)
             .build();
 
-    Optional<CategoryProductAssignmentSearchResultDocument> doc = getConnector().postResource(
-            CATEGORY_PRODUCT_ASSIGNMENT_SEARCH_PATH, pathParameters, requestBody,
-            CategoryProductAssignmentSearchResultDocument.class);
+    Optional<CategoryProductAssignmentSearchResultDocument> doc = getConnector()
+            .postResource(CATEGORY_PRODUCT_ASSIGNMENT_SEARCH_PATH, pathParameters, requestBody,
+                    CategoryProductAssignmentSearchResultDocument.class, storeContext);
 
     return doc
             .map(AbstractOCSearchResultDocument::getHits)
@@ -49,8 +50,7 @@ public class CategoryProductAssignmentSearchResource extends AbstractDataResourc
             .orElseGet(Collections::emptyList);
   }
 
-  @NonNull
-  private static List<ProductDocument> getProductsFromHits(@NonNull List<CategoryProductAssignmentDocument> hits) {
+  private static List<ProductDocument> getProductsFromHits(List<CategoryProductAssignmentDocument> hits) {
     return hits.stream()
             .map(CategoryProductAssignmentDocument::getProduct)
             .collect(toList());

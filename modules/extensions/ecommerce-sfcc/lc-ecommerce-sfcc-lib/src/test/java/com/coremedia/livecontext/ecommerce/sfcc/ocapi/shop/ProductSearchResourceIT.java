@@ -7,8 +7,10 @@ import com.coremedia.livecontext.ecommerce.sfcc.ocapi.shop.documents.ShopProduct
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.shop.resources.ShopProductSearchResource;
 import com.google.common.base.Strings;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 import java.util.Map;
@@ -23,9 +25,9 @@ import static com.coremedia.livecontext.ecommerce.catalog.CatalogService.SEARCH_
 import static com.google.common.collect.Maps.newHashMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration
 public class ProductSearchResourceIT extends ShopApiResourceTestBase {
-
 
   private static final String CATEGORY_ID = "womens-clothing-bottoms";
 
@@ -40,14 +42,13 @@ public class ProductSearchResourceIT extends ShopApiResourceTestBase {
 
     Map<String, String> params = newHashMap();
     params.put(SEARCH_PARAM_CATEGORYID, CATEGORY_ID);
-    Optional<ShopProductSearchResultDocument> searchResultDocument = resource.searchProducts("", params, getCurrentStoreContext());
+    Optional<ShopProductSearchResultDocument> searchResultDocument = resource.searchProducts("", params, storeContext);
     assertThat(searchResultDocument).isPresent();
 
     List<ProductSearchRefinementDocument> refinements = searchResultDocument.get().getRefinements();
     assertThat(refinements.size()).isEqualTo(4);
 
     refinements.forEach(this::assertRefinement);
-
   }
 
   @Test
@@ -59,7 +60,7 @@ public class ProductSearchResourceIT extends ShopApiResourceTestBase {
     //test first without specified category
     Map<String, String> params = newHashMap();
     params.put(SEARCH_PARAM_TOTAL, "300");
-    Optional<ShopProductSearchResultDocument> searchResultDocument = resource.searchProducts("", params, getCurrentStoreContext());
+    Optional<ShopProductSearchResultDocument> searchResultDocument = resource.searchProducts("", params, storeContext);
     assertThat(searchResultDocument).isPresent();
     //The maximum number of instances per request is 200
     assertThat(searchResultDocument.get().getHits().size()).isEqualTo(200);
@@ -70,12 +71,11 @@ public class ProductSearchResourceIT extends ShopApiResourceTestBase {
     //test the facet on a category
     params.put(SEARCH_PARAM_CATEGORYID, CATEGORY_ID);
     params.put(SEARCH_PARAM_FACET, "c_refinementColor=Blue");
-    searchResultDocument = resource.searchProducts("", params, getCurrentStoreContext());
+    searchResultDocument = resource.searchProducts("", params, storeContext);
     assertThat(searchResultDocument).isPresent();
     assertThat(searchResultDocument.get().getHits().size()).isEqualTo(27);
     assertThat(searchResultDocument.get().getCount()).isEqualTo(27);
     assertThat(searchResultDocument.get().getTotal()).isEqualTo(27);
-
   }
 
   @Test
@@ -93,7 +93,7 @@ public class ProductSearchResourceIT extends ShopApiResourceTestBase {
     //give me the prices
     params.put("expand", "prices");
 
-    Optional<ShopProductSearchResultDocument> searchResultDocument = resource.searchProducts("", params, getCurrentStoreContext());
+    Optional<ShopProductSearchResultDocument> searchResultDocument = resource.searchProducts("", params, storeContext);
     assertThat(searchResultDocument).isPresent();
     assertThat(searchResultDocument.get().getHits().size()).isEqualTo(10);
 
@@ -105,7 +105,7 @@ public class ProductSearchResourceIT extends ShopApiResourceTestBase {
 
     params.put(SEARCH_PARAM_ORDERBY, "ORDER_BY_TYPE_PRICE_DSC");
 
-    searchResultDocument = resource.searchProducts("", params, getCurrentStoreContext());
+    searchResultDocument = resource.searchProducts("", params, storeContext);
     assertThat(searchResultDocument).isPresent();
     assertThat(searchResultDocument.get().getHits().size()).isEqualTo(10);
 
@@ -118,7 +118,7 @@ public class ProductSearchResourceIT extends ShopApiResourceTestBase {
     //skip the first 10 most expensive products.
     params.put(SEARCH_PARAM_OFFSET, "10");
 
-    searchResultDocument = resource.searchProducts("", params, getCurrentStoreContext());
+    searchResultDocument = resource.searchProducts("", params, storeContext);
     assertThat(searchResultDocument).isPresent();
     assertThat(searchResultDocument.get().getHits().size()).isEqualTo(10);
 
@@ -127,7 +127,6 @@ public class ProductSearchResourceIT extends ShopApiResourceTestBase {
 
     cheapestProduct = searchResultDocument.get().getHits().get(9);
     assertThat(cheapestProduct.getPrice()).isEqualTo(39.59);
-
   }
 
   private void assertRefinement(ProductSearchRefinementDocument refinement) {
@@ -148,6 +147,5 @@ public class ProductSearchResourceIT extends ShopApiResourceTestBase {
 
     assertThat(Strings.isNullOrEmpty(refinementValue.getLabel())).as("RefinementValue label is not set.").isFalse();
     assertThat(Strings.isNullOrEmpty(refinementValue.getQuery())).as("RefinementValue value is not set.").isFalse();
-
   }
 }

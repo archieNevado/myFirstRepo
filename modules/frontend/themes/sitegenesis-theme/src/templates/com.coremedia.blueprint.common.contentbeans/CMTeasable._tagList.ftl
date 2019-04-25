@@ -5,7 +5,7 @@
 <#if (tags?size > 0)>
   <div class="cm-tag">
     <#-- headline -->
-    <h3 class="cm-tag__title"><@bp.message key="tags_label"/></h3>
+    <h3 class="cm-tag__title"><@cm.message key="tags_label"/></h3>
     <#--tags -->
     <ul class="cm-tag__items">
       <#list tags as tag>

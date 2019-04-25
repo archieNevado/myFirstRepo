@@ -1,14 +1,17 @@
 package com.coremedia.livecontext.ecommerce.sfcc.ocapi.shop.resources;
 
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.shop.documents.CustomObjectDocument;
-import org.springframework.stereotype.Service;
-
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.springframework.stereotype.Service;
 
 /*
  * Serves as generic resource to get any data type via shop API for
  * development and debugging purposes ("Schweizer Taschenmesser").
  */
+@DefaultAnnotation(NonNull.class)
 @Service
 public class CustomObjectsResource extends AbstractShopResource {
 
@@ -25,11 +28,12 @@ public class CustomObjectsResource extends AbstractShopResource {
    * @return
    */
   @Nullable
-  public CustomObjectDocument getCustomObject(String objectType, String key) {
+  public CustomObjectDocument getCustomObject(String objectType, String key, StoreContext storeContext) {
     String requestPath = CUSTOM_OBJECTS_PATH.replace(OBJECT_TYPE_PLACEHOLDER, objectType);
     requestPath = requestPath.replace(KEY_PLACEHOLDER, key);
 
-    return getConnector().getResource(requestPath, CustomObjectDocument.class)
+    return getConnector()
+            .getResource(requestPath, CustomObjectDocument.class, storeContext)
             .orElse(null);
   }
 }

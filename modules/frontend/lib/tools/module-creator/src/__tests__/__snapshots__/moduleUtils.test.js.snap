@@ -102,9 +102,9 @@ $custom-text-color: #FF0000 !default;
 ",
   },
   "/path/to/brick/newest-brick/src/templates/com.coremedia.blueprint.common.contentbeans": Object {
-    "Page._body.ftl": "<#-- Use bp.getMessage to display a localized hello world message -->
+    "Page._body.ftl": "<#-- Use cm.getMessage to display a localized hello world message -->
 <div>
-  <span class=\\"custom-text\\">\${bp.getMessage('welcomeText')}</span>
+  <span class=\\"custom-text\\">\${cm.getMessage('welcomeText')}</span>
 </div>
 ",
   },
@@ -200,9 +200,9 @@ $custom-text-color: #FF0000 !default;
 ",
   },
   "/path/to/brick/newest-brick/src/templates/com.coremedia.blueprint.common.contentbeans": Object {
-    "Page._body.ftl": "<#-- Use bp.getMessage to display a localized hello world message -->
+    "Page._body.ftl": "<#-- Use cm.getMessage to display a localized hello world message -->
 <div>
-  <span class=\\"custom-text\\">\${bp.getMessage('welcomeText')}</span>
+  <span class=\\"custom-text\\">\${cm.getMessage('welcomeText')}</span>
 </div>
 ",
   },

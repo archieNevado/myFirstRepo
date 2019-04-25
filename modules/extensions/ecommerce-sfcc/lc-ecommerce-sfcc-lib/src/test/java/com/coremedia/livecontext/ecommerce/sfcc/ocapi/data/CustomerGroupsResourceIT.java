@@ -22,7 +22,7 @@ public class CustomerGroupsResourceIT extends DataApiResourceTestBase {
       return;
     }
 
-    Optional<CustomerGroupsDocument> customerGroups = resource.getAllCustomerGroups(getCurrentStoreContext());
+    Optional<CustomerGroupsDocument> customerGroups = resource.getAllCustomerGroups(storeContext);
     assertThat(customerGroups).isPresent();
     assertThat(customerGroups).hasValueSatisfying(c -> assertThat(c.getData().size()).isGreaterThanOrEqualTo(4));
   }
@@ -33,7 +33,7 @@ public class CustomerGroupsResourceIT extends DataApiResourceTestBase {
       return;
     }
 
-    Optional<CustomerGroupDocument> customerGroup = resource.getCustomerGroupById("Everyone", getCurrentStoreContext());
+    Optional<CustomerGroupDocument> customerGroup = resource.getCustomerGroupById("Everyone", storeContext);
     assertThat(customerGroup).isPresent();
     assertThat(customerGroup).hasValueSatisfying(c -> assertThat(c.getId()).isEqualTo("Everyone"));
   }

@@ -9,6 +9,7 @@ import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductAttribute;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import com.coremedia.livecontext.ecommerce.sfcc.SfccTestInitializer;
 import org.junit.Before;
@@ -43,69 +44,71 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
   CatalogServiceImpl testling;
 
   @Value("${PRODUCT_CODE}")
-  protected String PRODUCT_CODE;
+  private String PRODUCT_CODE;
 
   @Value("${PRODUCT_CODE_B2B}")
-  protected String PRODUCT_CODE_B2B;
+  private String PRODUCT_CODE_B2B;
 
   @Value("${PRODUCT_NAME}")
-  protected String PRODUCT_NAME;
+  private String PRODUCT_NAME;
 
   @Value("${PRODUCT_CODE_WITH_SLASH}")
-  protected String PRODUCT_CODE_WITH_SLASH;
+  private String PRODUCT_CODE_WITH_SLASH;
 
   @Value("${PRODUCT_SEO_SEGMENT}")
-  protected String PRODUCT_SEO_SEGMENT;
+  private String PRODUCT_SEO_SEGMENT;
 
   @Value("${CATEGORY_CODE}")
-  protected String CATEGORY_CODE;
+  private String CATEGORY_CODE;
 
   @Value("${CATEGORY_CODE_B2B}")
-  protected String CATEGORY_CODE_B2B;
+  private String CATEGORY_CODE_B2B;
 
   @Value("${CATEGORY_WITH_SLASH}")
-  protected String CATEGORY_WITH_SLASH;
+  private String CATEGORY_WITH_SLASH;
 
   @Value("${CATEGORY_SEO_SEGMENT}")
-  protected String CATEGORY_SEO_SEGMENT;
+  private String CATEGORY_SEO_SEGMENT;
 
   @Value("${CATEGORY_SEO_SEGMENT_DE}")
-  protected String CATEGORY_SEO_SEGMENT_DE;
+  private String CATEGORY_SEO_SEGMENT_DE;
 
   @Value("${CATEGORY_NAME}")
-  protected String CATEGORY_NAME;
+  private String CATEGORY_NAME;
 
   @Value("${PRODUCT_VARIANT_CODE}")
-  protected String PRODUCT_VARIANT_CODE;
+  private String PRODUCT_VARIANT_CODE;
 
   @Value("${PRODUCT_VARIANT_WITH_SLASH}")
-  protected String PRODUCT_VARIANT_WITH_SLASH;
+  private String PRODUCT_VARIANT_WITH_SLASH;
 
   @Value("${SEARCH_TERM_1}")
-  protected String SEARCH_TERM_1;
+  private String SEARCH_TERM_1;
 
   @Value("${SEARCH_TERM_2}")
-  protected String SEARCH_TERM_2;
+  private String SEARCH_TERM_2;
 
   @Value("${SEARCH_TERM_3}")
-  protected String SEARCH_TERM_3;
+  private String SEARCH_TERM_3;
 
   @Value("${TOP_CATEGORY_NAME}")
-  protected String TOP_CATEGORY_NAME;
+  private String TOP_CATEGORY_NAME;
 
   @Value("${LEAF_CATEGORY_CODE}")
-  protected String LEAF_CATEGORY_CODE;
+  private String LEAF_CATEGORY_CODE;
 
   @Value("${FILTER_NAME}")
-  protected String FILTER_NAME;
+  private String FILTER_NAME;
 
   @Value("${FILTER_VALUE}")
-  protected String FILTER_VALUE;
+  private String FILTER_VALUE;
 
   @Before
   public void setup() {
     super.setup();
-    when(catalogAliasTranslationService.getCatalogIdForAlias(any(), any())).thenReturn(Optional.of(CatalogId.of("storefront-catalog-non-en")));
+
+    when(catalogAliasTranslationService.getCatalogIdForAlias(any(), any(), any(StoreContext.class)))
+            .thenReturn(Optional.of(CatalogId.of("storefront-catalog-non-en")));
   }
 
   @Test
@@ -114,7 +117,7 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
       return;
     }
 
-    Product tg250 = testling.findProductById(getIdProvider().formatProductId(null, "TG250"), getStoreContext());
+    Product tg250 = testling.findProductById(getIdProvider().formatProductId(null, "TG250"), storeContext);
     ProductVariant productVariantA = tg250.getVariants().get(0);
     ProductVariant productVariantB = tg250.getVariants().get(1);
 
@@ -259,13 +262,13 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
   }
 
   @Test
-  public void testSearchProductsWithFacet() throws Exception {
+  public void testSearchProductsWithFacet() {
     if (useBetamaxTapes()) {
       return;
     }
 
     CommerceId categoryId = getIdProvider().formatCategoryId(null, LEAF_CATEGORY_CODE);
-    Category category = testling.findCategoryById(categoryId, getStoreContext());
+    Category category = testling.findCategoryById(categoryId, storeContext);
     Map<String, String> searchParams = new HashMap<>();
 
     searchParams.put(CatalogService.SEARCH_PARAM_FACET_SUPPORT, "true");
@@ -273,13 +276,13 @@ public class CatalogServiceImplIT extends CatalogServiceBaseTest {
     searchParams.put(CatalogService.SEARCH_PARAM_TOTAL, "200");
     searchParams.put(CatalogService.SEARCH_PARAM_FACET, "price=(20..50)");
     searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, category.getExternalTechId());
-    SearchResult<Product> searchProducts = testling.searchProducts("", searchParams, getStoreContext());
+    SearchResult<Product> searchProducts = testling.searchProducts("", searchParams, storeContext);
     assertThat(searchProducts).isNotNull();
     assertThat(searchProducts.getTotalCount()).isEqualTo(70);
 
     //test the color facet
     searchParams.put(CatalogService.SEARCH_PARAM_FACET, "c_refinementColor=Blue");
-    searchProducts = testling.searchProducts("", searchParams, getStoreContext());
+    searchProducts = testling.searchProducts("", searchParams, storeContext);
     assertThat(searchProducts).isNotNull();
     assertThat(searchProducts.getTotalCount()).isEqualTo(27);
   }

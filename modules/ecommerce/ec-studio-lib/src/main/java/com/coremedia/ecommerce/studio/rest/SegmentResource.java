@@ -1,7 +1,7 @@
 package com.coremedia.ecommerce.studio.rest;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.p13n.Segment;
@@ -45,7 +45,8 @@ public class SegmentResource extends AbstractCatalogResource<Segment> {
       return null;
     }
 
-    SegmentService segmentService = getSegmentService();
+    CommerceConnection commerceConnection = storeContext.getConnection();
+    SegmentService segmentService = commerceConnection.getSegmentService();
     CommerceId commerceId = getConnection().getIdProvider().formatSegmentId(getId());
     return segmentService != null ? segmentService.findSegmentById(commerceId, storeContext) : null;
   }
@@ -59,9 +60,5 @@ public class SegmentResource extends AbstractCatalogResource<Segment> {
     StoreContext context = segment.getContext();
     setSiteId(context.getSiteId());
     setWorkspaceId(context.getWorkspaceId().orElse(null));
-  }
-
-  public SegmentService getSegmentService() {
-    return CurrentCommerceConnection.get().getSegmentService();
   }
 }

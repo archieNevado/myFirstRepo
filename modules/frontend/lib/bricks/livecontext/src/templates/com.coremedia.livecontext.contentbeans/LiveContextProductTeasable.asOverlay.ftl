@@ -17,7 +17,7 @@
     <#if overlay.displayTitle && self.teaserTitle?has_content>
       <div class="cm-overlay__item cm-overlay__item--title"<@preview.metadata "properties.teaserTitle" />>${self.teaserTitle}</div>
     <#else>
-      <div class="cm-overlay__item cm-overlay__item--title"><@bp.message "button_quickinfo" /></div>
+      <div class="cm-overlay__item cm-overlay__item--title"><@cm.message "button_quickinfo" /></div>
     </#if>
     <div class="cm-overlay__item"<@preview.metadata "properties.externalId" />>
       <@cm.include self=self.product!cm.UNDEFINED view="pricing" params={"showListPrice": overlay.displayDefaultPrice, "showOfferPrice": overlay.displayDiscountedPrice, "classListPrice": "cm-price--overlay", "classOfferPrice": "cm-price--overlay"} />

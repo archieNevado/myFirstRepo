@@ -17,16 +17,17 @@ import javax.ws.rs.core.MediaType;
 import java.util.Currency;
 import java.util.Locale;
 
+import static com.coremedia.ecommerce.studio.rest.ProductResource.URI_PATH;
 import static java.util.Objects.requireNonNull;
 
 /**
  * A catalog {@link Product} object as a RESTful resource.
  */
 @Produces(MediaType.APPLICATION_JSON)
-@Path(ProductResource.URI_PATH)
+@Path(URI_PATH)
 public class ProductResource extends CommerceBeanResource<Product> {
 
-  public static final String URI_PATH
+  static final String URI_PATH
           = "livecontext/product/{siteId:[^/]+}/{catalogAlias:[^/]+}/{workspaceId:[^/]+}/{id:.+}";
 
   @Override

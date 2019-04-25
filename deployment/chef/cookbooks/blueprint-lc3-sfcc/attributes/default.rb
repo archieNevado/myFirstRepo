@@ -9,6 +9,7 @@ default['blueprint']['lc3-sfcc']['application.properties']['livecontext.sfcc.oca
 default['blueprint']['lc3-sfcc']['application.properties']['livecontext.sfcc.ocapi.shopBasePath'] = '/s/{storeId}/dw/shop/'
 default['blueprint']['lc3-sfcc']['application.properties']['livecontext.sfcc.oauth.clientId'] = 'clientId'
 default['blueprint']['lc3-sfcc']['application.properties']['livecontext.sfcc.oauth.clientPassword'] = 'clientPassword'
+default['blueprint']['lc3-sfcc']['application.properties']['livecontext.sfcc.prefetch.url'] = "http://sitegenesis.#{node['blueprint']['hostname']}/service/fragment"
 
 default['blueprint']['lc3-sfcc']['virtual_host']['delivery']['cluster']['default']['host'] = node['blueprint']['lc3-sfcc']['cms_host']
 default['blueprint']['lc3-sfcc']['virtual_host']['delivery']['cluster']['default']['port'] = '42180'

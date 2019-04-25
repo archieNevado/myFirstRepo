@@ -32,6 +32,6 @@
   </@utils.optionalTag>
 <#else>
   <div class="cm-audio--missing"<@preview.metadata self.content/>>
-    ${bp.getMessage("error_audio_not_available")}
+    ${cm.getMessage("error_audio_not_available")}
   </div>
 </#if>

@@ -3,7 +3,7 @@
 <#-- @ftlvariable name="classOverlay" type="java.lang.String" -->
 <#-- @ftlvariable name="metadata" type="java.util.List" -->
 
-<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/utils.ftl" as utils /> 
+<#import "*/node_modules/@coremedia/ftl-utils/src/freemarkerLibs/utils.ftl" as utils />
 
 <#-- if overlay configuration is not set explicitly assert false for each key not set -->
 <#assign overlay={
@@ -15,7 +15,7 @@
     <#if self.title?has_content && overlay.displayTitle>
       <div class="cm-overlay__item cm-overlay__item--title"<@preview.metadata "properties.teaserTitle" />>${self.title}</div>
     <#else>
-      <div class="cm-overlay__item cm-overlay__item--title"><@bp.message "button_quickinfo" /></div>
+      <div class="cm-overlay__item cm-overlay__item--title"><@cm.message "button_quickinfo" /></div>
     </#if>
   </@utils.optionalLink>
 </div>

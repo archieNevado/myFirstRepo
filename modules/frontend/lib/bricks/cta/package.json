@@ -1,5 +1,6 @@
 {
   "name": "@coremedia/brick-cta",
+  "description": "Deprecated: Use cta.ftl contained in @coremedia/ftl-utils instead.",
   "version": "1.0.0",
   "private": true,
   "dependencies": {

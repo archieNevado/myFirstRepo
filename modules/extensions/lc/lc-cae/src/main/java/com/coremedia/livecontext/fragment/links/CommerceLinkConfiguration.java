@@ -10,11 +10,9 @@ import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
 @Configuration
-@Import(CommerceLinkScheme.class)
 @ImportResource(
         value = {"classpath:/META-INF/coremedia/livecontext-fragment.xml",
                 "classpath:/META-INF/coremedia/livecontext-links.xml",

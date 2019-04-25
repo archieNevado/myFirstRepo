@@ -2,10 +2,12 @@ package com.coremedia.livecontext.ecommerce.sfcc.catalog;
 
 import com.coremedia.blueprint.lc.test.TestConfig;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.sfcc.configuration.SfccStoreContextProperties;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.SfccTestConfig;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.SiteGenesisGlobalTestConfig;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -26,13 +28,13 @@ public class ServiceTestBaseConfiguration implements TestConfig {
   }
 
   @Override
-  public StoreContext getStoreContext() {
-    return testConfig().getStoreContext();
+  public StoreContext getStoreContext(@NonNull CommerceConnection connection) {
+    return testConfig().getStoreContext(connection);
   }
 
   @Override
-  public StoreContext getGermanStoreContext() {
-    return testConfig().getGermanStoreContext();
+  public StoreContext getGermanStoreContext(@NonNull CommerceConnection connection) {
+    return testConfig().getGermanStoreContext(connection);
   }
 
   @Override
@@ -42,11 +44,6 @@ public class ServiceTestBaseConfiguration implements TestConfig {
 
   @Override
   public String getCatalogName() {
-    return testConfig().getCatalogName();
-  }
-
-  @Override
-  public String getStoreName() {
     return testConfig().getCatalogName();
   }
 }

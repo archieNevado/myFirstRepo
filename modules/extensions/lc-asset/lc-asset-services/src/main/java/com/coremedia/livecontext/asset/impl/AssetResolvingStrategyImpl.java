@@ -14,11 +14,11 @@ import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.google.common.annotations.VisibleForTesting;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -144,7 +144,7 @@ public class AssetResolvingStrategyImpl implements AssetResolvingStrategy {
   private List<Content> findFallbackForProductVariant(@NonNull CommerceId id,
                                                       @NonNull Site site,
                                                       @NonNull String contentType) {
-    CommerceConnection commerceConnection = getCommerceConnection();
+    CommerceConnection commerceConnection = CurrentCommerceConnection.get();
 
     StoreContextProvider storeContextProvider = commerceConnection.getStoreContextProvider();
     StoreContext storeContextForSite = storeContextProvider.findContextBySite(site).orElse(null);
@@ -154,7 +154,8 @@ public class AssetResolvingStrategyImpl implements AssetResolvingStrategy {
 
     commerceConnection.setStoreContext(storeContextForSite);
 
-    Product product = getCatalogService().findProductById(id, storeContextForSite);
+    CatalogService catalogService = commerceConnection.getCatalogService();
+    Product product = catalogService.findProductById(id, storeContextForSite);
     if (!(product instanceof ProductVariant)) {
       return emptyList();
     }
@@ -165,15 +166,6 @@ public class AssetResolvingStrategyImpl implements AssetResolvingStrategy {
     }
 
     return findAssets(contentType, parentProduct.getReference(), site);
-  }
-
-  private static CatalogService getCatalogService() {
-    return getCommerceConnection().getCatalogService();
-  }
-
-  @NonNull
-  private static CommerceConnection getCommerceConnection() {
-    return CurrentCommerceConnection.get();
   }
 
   @VisibleForTesting

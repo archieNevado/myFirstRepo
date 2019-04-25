@@ -21,7 +21,7 @@
   <div class="row">
     <div class="cm-form cm-form--login well col-xs-12 col-md-6 col-md-push-3"<@preview.metadata data=[loginAction.content!"", "properties.id"] />>
       <#-- login -->
-      <h1 class="cm-form__headline"><@bp.message "login_sign_in" /></h1>
+      <h1 class="cm-form__headline"><@cm.message "login_sign_in" /></h1>
       <form method="post">
         <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}">
         <input type="hidden" name="execution" value="${flowExecutionKey!""}">
@@ -33,27 +33,27 @@
 
         <#-- Login Name -->
         <div class="form-group">
-          <@elasticSocial.labelFromSpring path="bpLoginForm.name" text='${bp.getMessage("login_name_label")}'/>
-          <@spring.formInput path="bpLoginForm.name" attributes='class="form-control" placeholder="${bp.getMessage("login_name_label")}" required'/>
+          <@elasticSocial.labelFromSpring path="bpLoginForm.name" text='${cm.getMessage("login_name_label")}'/>
+          <@spring.formInput path="bpLoginForm.name" attributes='class="form-control" placeholder="${cm.getMessage("login_name_label")}" required'/>
         </div>
 
         <#-- Password -->
         <div class="form-group">
-          <@elasticSocial.labelFromSpring path="bpLoginForm.password" text='${bp.getMessage("login_password_label")}'/>
-          <@spring.formInput path="bpLoginForm.password" fieldType="password" attributes='class="form-control" placeholder="${bp.getMessage("login_password_label")}" required'/>
+          <@elasticSocial.labelFromSpring path="bpLoginForm.password" text='${cm.getMessage("login_password_label")}'/>
+          <@spring.formInput path="bpLoginForm.password" fieldType="password" attributes='class="form-control" placeholder="${cm.getMessage("login_password_label")}" required'/>
         </div>
 
         <#-- Forgot Password Link -->
         <#if forgotPasswordUrl?has_content>
           <div class="form-group">
             <a href="${forgotPasswordUrl!""}"
-               class="cm-form__link"><@bp.message "login_forgot_password" /></a>
+               class="cm-form__link"><@cm.message "login_forgot_password" /></a>
           </div>
         </#if>
 
         <#-- Send Button -->
         <div class="form-group">
-          <@components.button text=bp.getMessage("login_sign_in") attr={"type": "submit", "classes": ["btn","btn-primary"]} />
+          <@components.button text=cm.getMessage("login_sign_in") attr={"type": "submit", "classes": ["btn","btn-primary"]} />
         </div>
       </form>
 
@@ -66,7 +66,7 @@
           "absolute": true
         }) />
         <div class="cm-form__container">
-          <h3><@bp.message "userdetails_external_account" /></h3>
+          <h3><@cm.message "userdetails_external_account" /></h3>
           <#assign tenant=es.getCurrentTenant() />
           <#if elasticSocialConfiguration.facebookAuthenticationEnabled>
             <#assign facebookUrl=cm.getLink('/signin/facebook_' + tenant)/>
@@ -77,7 +77,7 @@
               <input type="hidden" name="scope" value="email">
               <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}">
               <input type="hidden" name="forceRegister" value="false">
-              <@components.button text=bp.getMessage("login_with_facebook") attr={"type": "submit", "id": "facebookConnect","classes": ["btn", "btn-default", "cm-button-group__button"]} />
+              <@components.button text=cm.getMessage("login_with_facebook") attr={"type": "submit", "id": "facebookConnect","classes": ["btn", "btn-default", "cm-button-group__button"]} />
             </form>
           </#if>
 
@@ -89,16 +89,16 @@
               <input type="hidden" name="loginUrl" value="${loginUrl!""}">
               <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}">
               <input type="hidden" name="forceRegister" value="false">
-              <@components.button text=bp.getMessage("login_with_twitter") attr={"type": "submit", "id": "twitterConnect","classes": ["btn", "btn-default", "cm-button-group__button"]} />
+              <@components.button text=cm.getMessage("login_with_twitter") attr={"type": "submit", "id": "twitterConnect","classes": ["btn", "btn-default", "cm-button-group__button"]} />
             </form>
           </#if>
         </div>
       </#if>
 
       <div class="cm-form__container">
-        <h3><@bp.message "login_create_account" /></h3>
+        <h3><@cm.message "login_create_account" /></h3>
         <a href="${registerLink}" class="btn cm-button cm-button--secondary">
-          <@bp.message "login_sign_up_button" />
+          <@cm.message "login_sign_up_button" />
         </a>
       </div>
     </div>

@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.coremedia.livecontext.ecommerce.sfcc.cae.preview.SfccPreviewCaeConfiguration

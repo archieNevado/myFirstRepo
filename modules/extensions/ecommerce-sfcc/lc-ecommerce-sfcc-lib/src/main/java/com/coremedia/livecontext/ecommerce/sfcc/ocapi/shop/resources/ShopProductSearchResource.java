@@ -5,7 +5,9 @@ import com.coremedia.livecontext.ecommerce.sfcc.ocapi.shop.documents.ShopProduct
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ListMultimap;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.Currency;
@@ -21,6 +23,7 @@ import static com.coremedia.livecontext.ecommerce.catalog.CatalogService.SEARCH_
 import static com.coremedia.livecontext.ecommerce.sfcc.ocapi.shop.OCShopApiConnector.STORE_ID_PARAM;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
+@DefaultAnnotation(NonNull.class)
 @Service("ocapiShopProductSearchResource")
 public class ShopProductSearchResource extends AbstractShopResource {
 
@@ -53,20 +56,19 @@ public class ShopProductSearchResource extends AbstractShopResource {
    * @param storeContext the effective store context
    * @return the list of product documents or an empty list if no product is found
    */
-  public Optional<ShopProductSearchResultDocument> searchProducts(@NonNull String query,
-                                                                  @NonNull Map<String, String> params,
-                                                                  @NonNull StoreContext storeContext) {
+  public Optional<ShopProductSearchResultDocument> searchProducts(String query, Map<String, String> params,
+                                                                  StoreContext storeContext) {
     Map<String, String> pathParameters = ImmutableMap.of(STORE_ID_PARAM, storeContext.getStoreId());
 
     ListMultimap<String, String> queryParams = buildQueryParams(query, params, storeContext);
 
-    return getConnector().getResource(PRODUCT_SEARCH_PATH, pathParameters, queryParams, ShopProductSearchResultDocument.class);
+    return getConnector()
+            .getResource(PRODUCT_SEARCH_PATH, pathParameters, queryParams, ShopProductSearchResultDocument.class,
+                    storeContext);
   }
 
-  @NonNull
-  private static ListMultimap<String, String> buildQueryParams(@NonNull String query,
-                                                               @NonNull Map<String, String> params,
-                                                               @NonNull StoreContext storeContext) {
+  private static ListMultimap<String, String> buildQueryParams(String query, Map<String, String> params,
+                                                               StoreContext storeContext) {
     ImmutableListMultimap.Builder<String, String> builder = ImmutableListMultimap.builder();
 
     //query is ignored as we are only interested in the facet search
@@ -122,6 +124,7 @@ public class ShopProductSearchResource extends AbstractShopResource {
     return builder.build();
   }
 
+  @Nullable
   private static String mapOrderByType(String orderByType) {
     try {
       return OrderByType.valueOf(orderByType).getValue();

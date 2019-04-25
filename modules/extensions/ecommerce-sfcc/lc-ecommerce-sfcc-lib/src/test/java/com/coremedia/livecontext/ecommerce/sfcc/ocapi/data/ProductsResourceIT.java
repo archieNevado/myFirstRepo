@@ -26,7 +26,7 @@ public class ProductsResourceIT extends DataApiResourceTestBase {
       return;
     }
 
-    ProductDocument product = resource.getProductById("25050736", getCurrentStoreContext())
+    ProductDocument product = resource.getProductById("25050736", storeContext)
             .orElse(null);
 
     assertProduct(product);
@@ -47,7 +47,7 @@ public class ProductsResourceIT extends DataApiResourceTestBase {
       return;
     }
 
-    ProductDocument product = resource.getProductById("008884303996", getCurrentStoreContext())
+    ProductDocument product = resource.getProductById("008884303996", storeContext)
             .orElse(null);
 
     assertProduct(product);
@@ -60,7 +60,7 @@ public class ProductsResourceIT extends DataApiResourceTestBase {
   @Test
   @Ignore("Fetching multiple products by id is not yet supported by OCAPI.")
   public void testGetProductVariantsById() {
-    ProductDocument product = resource.getProductById("25050736", getCurrentStoreContext())
+    ProductDocument product = resource.getProductById("25050736", storeContext)
             .orElse(null);
 
     assertThat(product).isNotNull();

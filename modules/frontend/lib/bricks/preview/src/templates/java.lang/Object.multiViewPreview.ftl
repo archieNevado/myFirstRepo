@@ -23,7 +23,7 @@
     <div class="toggle-item cm-preview-item" data-id="${toggleId}">
       <a href="#" class="toggle-button cm-preview-item__headline">
         <#if titleKey?has_content && (bp.hasMessage(titleKey) || !title?has_content)>
-            <@bp.message titleKey />
+            <@cm.message titleKey />
           <#else>
         ${title}
         </#if>

@@ -3,24 +3,17 @@ package com.coremedia.livecontext.ecommerce.sfcc.ocapi;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import java.util.Currency;
 import java.util.Locale;
 
-import static org.mockito.Mockito.mock;
-
 public class SiteGenesisGlobalTestConfig extends SfccTestConfig {
 
-  private final CommerceConnection commerceConnection;
-
-  public SiteGenesisGlobalTestConfig() {
-    this.commerceConnection = mock(CommerceConnection.class);
-  }
-
   @Override
-  public StoreContext getStoreContext() {
+  public StoreContext getStoreContext(@NonNull CommerceConnection connection) {
     return SfccTestConfigBuilder.build(
-            commerceConnection,
+            connection,
             "SiteGenesis",
             "SiteGenesisGlobal",
             "SiteGenesisGlobal",
@@ -31,9 +24,9 @@ public class SiteGenesisGlobalTestConfig extends SfccTestConfig {
   }
 
   @Override
-  public StoreContext getGermanStoreContext() {
+  public StoreContext getGermanStoreContext(@NonNull CommerceConnection connection) {
     return SfccTestConfigBuilder.build(
-            commerceConnection,
+            connection,
             "SiteGenesis",
             "SiteGenesisGlobal",
             "SiteGenesisGlobal",

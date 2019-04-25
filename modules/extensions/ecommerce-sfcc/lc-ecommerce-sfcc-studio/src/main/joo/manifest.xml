@@ -4,4 +4,8 @@
   <component class="com.coremedia.livecontext.sfcc.studio.action.OpenBusinessManagerAction"/>
   <component class="com.coremedia.livecontext.sfcc.studio.action.OpenInBusinessManagerAction"/>
   <component class="com.coremedia.livecontext.sfcc.studio.components.OpenBusinessManagerButton"/>
+  <component class="com.coremedia.livecontext.sfcc.studio.action.PushContentAction"/>
+  <component class="com.coremedia.livecontext.sfcc.studio.components.PushContentButton"/>
+  <component class="com.coremedia.livecontext.sfcc.studio.action.DeleteContentAction"/>
+  <component class="com.coremedia.livecontext.sfcc.studio.components.DeleteContentButton"/>
 </componentPackage>

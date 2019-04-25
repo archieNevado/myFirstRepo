@@ -4,9 +4,10 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.ProductDocument;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ListMultimap;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
@@ -14,6 +15,7 @@ import java.util.Optional;
 /**
  * Products resource.
  */
+@DefaultAnnotation(NonNull.class)
 @Service("ocapiProductsResource")
 public class ProductsResource extends AbstractDataResource {
 
@@ -30,8 +32,7 @@ public class ProductsResource extends AbstractDataResource {
    * @param storeContext the effective store context
    * @return the category document, or nothing if it does not exist
    */
-  @NonNull
-  public Optional<ProductDocument> getProductById(@NonNull String productId, @NonNull StoreContext storeContext) {
+  public Optional<ProductDocument> getProductById(String productId, StoreContext storeContext) {
     Map<String, String> pathParameters = Collections.singletonMap(PRODUCT_ID_PARAM, productId);
 
     ListMultimap<String, String> queryParams = ImmutableListMultimap.<String, String>builder()
@@ -39,6 +40,7 @@ public class ProductsResource extends AbstractDataResource {
             .put(EXPAND, EXPAND_ALL)
             .build();
 
-    return getConnector().getResource(PRODUCT_PATH, pathParameters, queryParams, ProductDocument.class);
+    return getConnector()
+            .getResource(PRODUCT_PATH, pathParameters, queryParams, ProductDocument.class, storeContext);
   }
 }

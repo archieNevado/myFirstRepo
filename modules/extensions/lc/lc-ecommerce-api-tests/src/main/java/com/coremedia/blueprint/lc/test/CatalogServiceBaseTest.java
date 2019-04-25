@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.lc.test;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.livecontext.ecommerce.catalog.AxisFilter;
@@ -17,6 +16,8 @@ import com.coremedia.livecontext.ecommerce.search.SearchFacet;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.TestPropertySource;
 
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService.DEFAULT_CATALOG_ALIAS;
 import static java.util.Collections.emptyMap;
@@ -35,6 +37,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @TestPropertySource(properties = "livecontext.sfcc.ocapi.shopBasePath=/s/{storeId}/dw/shop/")
 public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
+
+  private static final Logger LOG = LoggerFactory.getLogger(CatalogServiceBaseTest.class);
 
   @Inject
   CatalogService testling;
@@ -111,7 +115,7 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
   protected void testFindProductById() throws Exception {
     CommerceId productId = getIdProvider().formatProductId(null, PRODUCT_CODE);
 
-    Product product = testling.findProductById(productId, getStoreContext());
+    Product product = testling.findProductById(productId, storeContext);
 
     assertThat(product.getExternalId()).isEqualTo(PRODUCT_CODE);
     assertProduct(product);
@@ -121,9 +125,6 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
   protected void testFindB2BProductFromMultiCatalogs() throws Exception {
     CatalogAlias catalogAlias = CatalogAlias.of("b2b");
     CommerceId productId = getIdProvider().formatProductId(catalogAlias, PRODUCT_CODE_B2B);
-
-    StoreContext storeContext = getStoreContext();
-    CurrentCommerceConnection.get().setStoreContext(storeContext);
 
     Product product = testling.findProductById(productId, storeContext);
     assertThat(product).isNotNull();
@@ -154,7 +155,7 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
   protected void testFindProductByIdNotFound() throws Exception {
     CommerceId productId = getIdProvider().formatProductId(null, "blablablub");
 
-    Product product = testling.findProductById(productId, getStoreContext());
+    Product product = testling.findProductById(productId, storeContext);
 
     assertThat(product).isNull();
   }
@@ -162,21 +163,21 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
   protected void testFindProductByIdWithSlash() {
     CommerceId productId = getIdProvider().formatProductId(null, PRODUCT_CODE_WITH_SLASH);
 
-    Product product = testling.findProductById(productId, getStoreContext());
+    Product product = testling.findProductById(productId, storeContext);
 
     assertThat(product).isNotNull();
     assertThat(product.getExternalId()).isEqualTo(PRODUCT_CODE_WITH_SLASH);
   }
 
   protected void testFindProductBySeoSegment() throws Exception {
-    Product product = testling.findProductBySeoSegment(PRODUCT_SEO_SEGMENT, getStoreContext());
+    Product product = testling.findProductBySeoSegment(PRODUCT_SEO_SEGMENT, storeContext);
 
     assertThat(product.getSeoSegment()).isEqualTo(PRODUCT_SEO_SEGMENT);
     assertProduct(product);
   }
 
   protected void testFindProductBySeoSegmentIsNull() throws Exception {
-    Product product = testling.findProductBySeoSegment("blablablub", getStoreContext());
+    Product product = testling.findProductBySeoSegment("blablablub", storeContext);
 
     assertThat(product).isNull();
   }
@@ -184,7 +185,7 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
   protected void testFindProductVariantById() throws Exception {
     CommerceId productVariantId = getIdProvider().formatProductVariantId(null, PRODUCT_VARIANT_CODE);
 
-    ProductVariant productVariant = testling.findProductVariantById(productVariantId, getStoreContext());
+    ProductVariant productVariant = testling.findProductVariantById(productVariantId, storeContext);
     assertThat(productVariant).isNotNull();
     assertThat(productVariant.getExternalId()).isEqualTo(PRODUCT_VARIANT_CODE);
     assertProductVariant(productVariant);
@@ -199,7 +200,7 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
   protected void testFindProductVariantByIdWithSlash() throws Exception {
     CommerceId productVariantId = getIdProvider().formatProductVariantId(null, PRODUCT_VARIANT_WITH_SLASH);
 
-    ProductVariant productVariant = testling.findProductVariantById(productVariantId, getStoreContext());
+    ProductVariant productVariant = testling.findProductVariantById(productVariantId, storeContext);
 
     assertThat(productVariant).isNotNull();
     assertThat(productVariant.getExternalId()).isEqualTo(PRODUCT_VARIANT_WITH_SLASH);
@@ -208,7 +209,7 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
   protected void testFindProductsByCategory() throws Exception {
     CommerceId productId = getIdProvider().formatProductId(null, PRODUCT_CODE);
 
-    Product product = testling.findProductById(productId, getStoreContext());
+    Product product = testling.findProductById(productId, storeContext);
     assertThat(product).isNotNull();
 
     Category category = product.getCategory();
@@ -219,24 +220,27 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
   }
 
   protected void testFindProductsByCategoryIsEmpty() throws Exception {
-    Category rootCategory = testling.findRootCategory(DEFAULT_CATALOG_ALIAS, getStoreContext());//does not have any products
+    Category rootCategory = testling.findRootCategory(DEFAULT_CATALOG_ALIAS, storeContext); // does not have any products
     List<Product> products = testling.findProductsByCategory(rootCategory);
 
     assertThat(products).isEmpty();
   }
 
-  protected void testFindProductsByCategoryIsRoot(String rootCategoryId) throws Exception {
+  protected void testFindProductsByCategoryIsRoot(String rootCategoryId) {
     CommerceId commerceId = getIdProvider().formatCategoryId(null, rootCategoryId);
 
-    Category rootCategory = testling.findCategoryById(commerceId, getStoreContext());
+    Category rootCategory = testling.findCategoryById(commerceId, storeContext);
     List<Product> products = testling.findProductsByCategory(rootCategory);
 
     assertThat(products).isEmpty();
   }
 
   protected void testFindTopCategories() throws Exception {
-    List<Category> topCategories = testling.findTopCategories(DEFAULT_CATALOG_ALIAS, getStoreContext());
-
+    List<Category> topCategories = testling.findTopCategories(DEFAULT_CATALOG_ALIAS, storeContext);
+    String topCategoryDisplayNamesStr = topCategories.stream().map(Category::getDisplayName)
+            .map(displayName -> '"' + displayName + '"')
+            .collect(Collectors.joining(", ", "[", "]"));
+    LOG.debug("Top categories: {}", topCategoryDisplayNamesStr);
     assertThat(topCategories).isNotEmpty();
 
     Category category = topCategories.get(0);
@@ -247,9 +251,9 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
     assertThat(categoryParent.isRoot()).isTrue();
   }
 
-  protected void testFindRootCategory(String rootCategoryId) throws Exception {
+  protected void testFindRootCategory(String rootCategoryId) {
     CommerceId commerceId = getIdProvider().formatCategoryId(null, rootCategoryId);
-    Category rootCategory = testling.findCategoryById(commerceId, getStoreContext());
+    Category rootCategory = testling.findCategoryById(commerceId, storeContext);
 
     assertThat(rootCategory).isNotNull();
     assertThat(rootCategory.isRoot()).isTrue();
@@ -258,7 +262,7 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
   }
 
   protected void testFindSubCategories() throws Exception {
-    Category category = findAndAssertCategory(TOP_CATEGORY_NAME, null, testConfig.getStoreContext());
+    Category category = findAndAssertCategory(TOP_CATEGORY_NAME, null, storeContext);
 
     List<Category> subCategories = testling.findSubCategories(category);
     assertThat(subCategories).isNotEmpty();
@@ -271,7 +275,7 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
   protected void testFindSubCategoriesIsEmpty() throws Exception {
     CommerceId categoryId = getIdProvider().formatCategoryId(null, LEAF_CATEGORY_CODE);
 
-    Category leafCategory = testling.findCategoryById(categoryId, getStoreContext());
+    Category leafCategory = testling.findCategoryById(categoryId, storeContext);
     List<Category> subCategories = testling.findSubCategories(leafCategory);
 
     assertThat(subCategories).isEmpty();
@@ -279,15 +283,13 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
 
   protected void testFindCategoryById() throws Exception {
     CommerceId commerceId = getIdProvider().formatCategoryId(null, CATEGORY_CODE);
-    Category category = testling.findCategoryById(commerceId, getStoreContext());
+    Category category = testling.findCategoryById(commerceId, storeContext);
 
     assertCategory(category);
   }
 
   protected void testFindB2BCategoryFromMultiCatalogs() throws Exception {
     CatalogAlias catalogAlias = CatalogAlias.of("b2b");
-    StoreContext storeContext = getStoreContext();
-    CurrentCommerceConnection.get().setStoreContext(storeContext);
 
     CommerceId commerceId = getIdProvider().formatCategoryId(catalogAlias, CATEGORY_CODE_B2B);
 
@@ -312,27 +314,27 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
 
   protected void testFindCategoryByIdWithSlash() {
     CommerceId commerceId = getIdProvider().formatCategoryId(null, CATEGORY_WITH_SLASH);
-    Category category = testling.findCategoryById(commerceId, getStoreContext());
+    Category category = testling.findCategoryById(commerceId, storeContext);
 
     assertThat(category).isNotNull();
   }
 
   protected void testFindCategoryByIdIsNull() {
     CommerceId commerceId = getIdProvider().formatCategoryId(null, "balablablub");
-    Category category = testling.findCategoryById(commerceId, getStoreContext());
+    Category category = testling.findCategoryById(commerceId, storeContext);
 
     assertThat(category).isNull();
   }
 
   protected void testFindCategoryBySeoSegment() throws Exception {
-    Category category = testling.findCategoryBySeoSegment(CATEGORY_SEO_SEGMENT, getStoreContext());
+    Category category = testling.findCategoryBySeoSegment(CATEGORY_SEO_SEGMENT, storeContext);
 
     assertCategory(category);
   }
 
   protected void testFindGermanCategoryBySeoSegment() throws Exception {
     Locale germanLocale = Locale.GERMANY;
-    StoreContext germanStoreContext = StoreContextBuilderImpl.from((StoreContextImpl) testConfig.getStoreContext())
+    StoreContext germanStoreContext = StoreContextBuilderImpl.from((StoreContextImpl) storeContext)
             .withLocale(germanLocale)
             .build();
 
@@ -344,24 +346,24 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
   }
 
   protected void testFindCategoryBySeoSegmentIsNull() throws Exception {
-    Category category = testling.findCategoryBySeoSegment("blablablub", getStoreContext());
+    Category category = testling.findCategoryBySeoSegment("blablablub", storeContext);
 
     assertThat(category).isNull();
   }
 
   protected void testSearchProducts() throws Exception {
-    SearchResult<Product> searchResult = testling.searchProducts(SEARCH_TERM_1, emptyMap(), getStoreContext());
+    SearchResult<Product> searchResult = testling.searchProducts(SEARCH_TERM_1, emptyMap(), storeContext);
     assertThat(searchResult).isNotNull();
     assertThat(searchResult.getSearchResult()).isNotEmpty();
 
     // search product below category
     CommerceId commerceId = getIdProvider().formatCategoryId(null, LEAF_CATEGORY_CODE);
-    Category category = testling.findCategoryById(commerceId, getStoreContext());
+    Category category = testling.findCategoryById(commerceId, storeContext);
     Map<String, String> searchParams = new HashMap<>();
     assertThat(category).isNotNull();
     searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, category.getExternalTechId());
     searchParams.put(CatalogService.SEARCH_PARAM_TOTAL, "7");
-    SearchResult<Product> searchResultByCategory = testling.searchProducts(SEARCH_TERM_1, searchParams, getStoreContext());
+    SearchResult<Product> searchResultByCategory = testling.searchProducts(SEARCH_TERM_1, searchParams, storeContext);
     assertThat(searchResultByCategory).isNotNull();
     assertThat(searchResultByCategory.getSearchResult().size()).isGreaterThanOrEqualTo(3);
     assertThat(searchResultByCategory.getTotalCount()).isLessThan(searchResult.getTotalCount());
@@ -370,13 +372,13 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
     Map<String, String> pagingParams = new HashMap<>();
     pagingParams.put(CatalogService.SEARCH_PARAM_PAGESIZE, "10");
     pagingParams.put(CatalogService.SEARCH_PARAM_PAGENUMBER, "1");
-    SearchResult<Product> searchResultPaging = testling.searchProducts(SEARCH_TERM_1, pagingParams, getStoreContext());
+    SearchResult<Product> searchResultPaging = testling.searchProducts(SEARCH_TERM_1, pagingParams, storeContext);
     assertThat(searchResultPaging).isNotNull();
     Product product1 = searchResultPaging.getSearchResult().get(9);
 
     pagingParams.put(CatalogService.SEARCH_PARAM_PAGESIZE, "9");
     pagingParams.put(CatalogService.SEARCH_PARAM_PAGENUMBER, "2");
-    SearchResult<Product> searchResultPaging2 = testling.searchProducts(SEARCH_TERM_1, pagingParams, getStoreContext());
+    SearchResult<Product> searchResultPaging2 = testling.searchProducts(SEARCH_TERM_1, pagingParams, storeContext);
     Product product2 = searchResultPaging2.getSearchResult().get(0);
     assertThat(searchResultPaging2).isNotNull();
     assertThat(product1.getId()).isEqualTo(product2.getId());
@@ -386,32 +388,32 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
     ignoredParam.put("blub", "10");
     ignoredParam.put(CatalogService.SEARCH_PARAM_PAGESIZE, "10");
     ignoredParam.put(CatalogService.SEARCH_PARAM_PAGENUMBER, "1");
-    SearchResult<Product> searchResultIgnoredParam = testling.searchProducts(SEARCH_TERM_1, ignoredParam, getStoreContext());
+    SearchResult<Product> searchResultIgnoredParam = testling.searchProducts(SEARCH_TERM_1, ignoredParam, storeContext);
     assertThat(searchResultIgnoredParam).isNotNull();
 
     // search product no hits
-    SearchResult<Product> searchResultEmpty = testling.searchProducts("schnasndasn", emptyMap(), getStoreContext());
+    SearchResult<Product> searchResultEmpty = testling.searchProducts("schnasndasn", emptyMap(), storeContext);
     assertThat(searchResultEmpty).isNotNull();
     assertThat(searchResultEmpty.getSearchResult()).isEmpty();
 
     // search product multiple words
-    SearchResult<Product> searchResultMultipleWords = testling.searchProducts(SEARCH_TERM_1 + " " + SEARCH_TERM_2, emptyMap(), getStoreContext());
+    SearchResult<Product> searchResultMultipleWords = testling.searchProducts(SEARCH_TERM_1 + " " + SEARCH_TERM_2, emptyMap(), storeContext);
     assertThat(searchResultMultipleWords).isNotNull();
     assertThat(searchResultMultipleWords.getSearchResult()).isNotEmpty();
 
     // search product multiple words no hit
-    SearchResult<Product> searchResultMultipleWords2 = testling.searchProducts(SEARCH_TERM_2 + " schnasndasn", emptyMap(), getStoreContext());
+    SearchResult<Product> searchResultMultipleWords2 = testling.searchProducts(SEARCH_TERM_2 + " schnasndasn", emptyMap(), storeContext);
     assertThat(searchResultMultipleWords2).isNotNull();
     assertThat(searchResultMultipleWords2.getSearchResult()).isEmpty();
   }
 
   protected void testSortedSearchProducts() throws Exception {
     CommerceId categoryId = getIdProvider().formatCategoryId(null, LEAF_CATEGORY_CODE);
-    Category category = testling.findCategoryById(categoryId, getStoreContext());
+    Category category = testling.findCategoryById(categoryId, storeContext);
     Map<String, String> searchParams = new HashMap<>();
     searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, category.getExternalTechId());
     searchParams.put(CatalogService.SEARCH_PARAM_ORDERBY, SEARCH_ORDER_BY_PRICE_ASC);
-    SearchResult<Product> searchProducts = testling.searchProducts(SEARCH_TERM_1, searchParams, getStoreContext());
+    SearchResult<Product> searchProducts = testling.searchProducts(SEARCH_TERM_1, searchParams, storeContext);
     assertThat(searchProducts).isNotNull();
     int total = searchProducts.getTotalCount();
     List<Product> products = searchProducts.getSearchResult();
@@ -428,7 +430,7 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
     searchParams = new HashMap<>();
     searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, category.getExternalTechId());
     searchParams.put(CatalogService.SEARCH_PARAM_ORDERBY, SEARCH_ORDER_BY_PRICE_DESC);
-    searchProducts = testling.searchProducts(SEARCH_TERM_1, searchParams, getStoreContext());
+    searchProducts = testling.searchProducts(SEARCH_TERM_1, searchParams, storeContext);
     assertThat(searchProducts).isNotNull();
     total = searchProducts.getTotalCount();
     products = searchProducts.getSearchResult();
@@ -447,7 +449,7 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
     int start = 3;
     int total = 5;
     Map<String, String> searchParams = new HashMap<>();
-    SearchResult<Product> searchProducts = testling.searchProducts(SEARCH_TERM_3, searchParams, getStoreContext());
+    SearchResult<Product> searchProducts = testling.searchProducts(SEARCH_TERM_3, searchParams, storeContext);
     assertThat(searchProducts).isNotNull();
     List<Product> originalProducts = searchProducts.getSearchResult();
     assertThat(originalProducts).isNotNull();
@@ -456,7 +458,7 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
 
     searchParams.put(CatalogService.SEARCH_PARAM_OFFSET, Integer.toString(start));
     searchParams.put(CatalogService.SEARCH_PARAM_TOTAL, Integer.toString(total));
-    SearchResult<Product> searchProductsWithOffset = testling.searchProducts(SEARCH_TERM_3, searchParams, getStoreContext());
+    SearchResult<Product> searchProductsWithOffset = testling.searchProducts(SEARCH_TERM_3, searchParams, storeContext);
     assertThat(searchProductsWithOffset).isNotNull();
     assertThat(searchProductsWithOffset.getTotalCount()).isEqualTo(originalProducts.size());
     List<Product> limitedProducts = searchProductsWithOffset.getSearchResult();
@@ -470,7 +472,7 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
     lastProduct = originalProducts.get(start + total - 2);
     searchParams.put(CatalogService.SEARCH_PARAM_OFFSET, Integer.toString(start));
     searchParams.put(CatalogService.SEARCH_PARAM_TOTAL, Integer.toString(total));
-    searchProductsWithOffset = testling.searchProducts(SEARCH_TERM_3, searchParams, getStoreContext());
+    searchProductsWithOffset = testling.searchProducts(SEARCH_TERM_3, searchParams, storeContext);
     assertThat(searchProductsWithOffset).isNotNull();
     assertThat(searchProductsWithOffset.getTotalCount()).isEqualTo(originalProducts.size());
     limitedProducts = searchProductsWithOffset.getSearchResult();
@@ -482,7 +484,7 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
     total = 3;
     searchParams.put(CatalogService.SEARCH_PARAM_OFFSET, Integer.toString(start));
     searchParams.put(CatalogService.SEARCH_PARAM_TOTAL, Integer.toString(total));
-    searchProductsWithOffset = testling.searchProducts(SEARCH_TERM_3, searchParams, getStoreContext());
+    searchProductsWithOffset = testling.searchProducts(SEARCH_TERM_3, searchParams, storeContext);
     assertThat(searchProductsWithOffset).isNotNull();
     assertThat(searchProductsWithOffset.getTotalCount()).isEqualTo(originalProducts.size());
     limitedProducts = searchProductsWithOffset.getSearchResult();
@@ -491,22 +493,22 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
 
   protected void testGetFacetSearchProducts() throws Exception {
     CommerceId categoryId = getIdProvider().formatCategoryId(null, TOP_CATEGORY_CODE);
-    Category category = testling.findCategoryById(categoryId, getStoreContext());
-    Map<String, List<SearchFacet>> facetProducts = testling.getFacetsForProductSearch(category, getStoreContext());
+    Category category = testling.findCategoryById(categoryId, storeContext);
+    Map<String, List<SearchFacet>> facetProducts = testling.getFacetsForProductSearch(category, storeContext);
     assertThat(facetProducts).isNotNull();
     int total = facetProducts.size();
     assertThat(total).isGreaterThan(0);
 
     categoryId = getIdProvider().formatCategoryId(null, LEAF_CATEGORY_CODE);
-    category = testling.findCategoryById(categoryId, getStoreContext());
-    facetProducts = testling.getFacetsForProductSearch(category, getStoreContext());
+    category = testling.findCategoryById(categoryId, storeContext);
+    facetProducts = testling.getFacetsForProductSearch(category, storeContext);
     assertThat(facetProducts).isNotNull();
     assertThat(facetProducts.size()).isGreaterThan(0);
   }
 
   protected void testSearchProductsWithFacet() throws Exception {
     CommerceId categoryId = getIdProvider().formatCategoryId(null, TOP_CATEGORY_CODE);
-    Category category = testling.findCategoryById(categoryId, getStoreContext());
+    Category category = testling.findCategoryById(categoryId, storeContext);
     Map<String, String> searchParams = new HashMap<>();
     String facet = "price_USD:({200 300} 300)";
 
@@ -517,7 +519,7 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
     searchParams.put(CatalogService.SEARCH_PARAM_PAGENUMBER, "1");
     searchParams.put(CatalogService.SEARCH_PARAM_PAGESIZE, "1");
 
-    SearchResult<Product> searchProducts = testling.searchProducts("*", searchParams, getStoreContext());
+    SearchResult<Product> searchProducts = testling.searchProducts("*", searchParams, storeContext);
     assertThat(searchProducts).isNotNull();
     assertThat(searchProducts.getTotalCount()).isEqualTo(2);
     List<Product> searchResult = searchProducts.getSearchResult();
@@ -532,7 +534,7 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
     facet = "mfName_ntk_cs%3A%22Adelee+Plus%22";
     searchParams.put(CatalogService.SEARCH_PARAM_FACET, facet);
     searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, category.getExternalTechId());
-    searchProducts = testling.searchProducts("*", searchParams, getStoreContext());
+    searchProducts = testling.searchProducts("*", searchParams, storeContext);
     assertThat(searchProducts).isNotNull();
     assertThat(searchProducts.getTotalCount()).isEqualTo(7);
     searchResult = searchProducts.getSearchResult();
@@ -558,7 +560,7 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
 
   protected void testSearchProductVariants() throws Exception {
     SearchResult<ProductVariant> searchResult1 = testling.searchProductVariants(SEARCH_TERM_1 + " " + SEARCH_TERM_2,
-            emptyMap(), getStoreContext());
+            emptyMap(), storeContext);
     assertThat(searchResult1).isNotNull();
 
     List<ProductVariant> searchResult1ProductVariants = searchResult1.getSearchResult();
@@ -568,13 +570,13 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
 
     // search product variants by parent part number
 
-    SearchResult<ProductVariant> searchResult2 = testling.searchProductVariants(PRODUCT_CODE, emptyMap(), getStoreContext());
+    SearchResult<ProductVariant> searchResult2 = testling.searchProductVariants(PRODUCT_CODE, emptyMap(), storeContext);
     assertThat(searchResult2).isNotNull();
 
     List<ProductVariant> searchResult2ProductVariants = searchResult2.getSearchResult();
 
     CommerceId productId = getIdProvider().formatProductId(null, PRODUCT_CODE);
-    Product product = testling.findProductById(productId, getStoreContext());
+    Product product = testling.findProductById(productId, storeContext);
 
     assertThat(product).isNotNull();
 
@@ -593,25 +595,24 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
   }
 
   protected void testGetDefaultCatalog() {
-    Optional<Catalog> defaultCatalog = testling.getDefaultCatalog(getStoreContext());
+    Optional<Catalog> defaultCatalog = testling.getDefaultCatalog(storeContext);
     assertThat(defaultCatalog.isPresent()).isTrue();
     assertThat(defaultCatalog.get().getName().value()).containsIgnoringCase("Extended Sites Catalog Asset Store Consumer Direct");
     assertThat(defaultCatalog.get().isDefaultCatalog()).isTrue();
   }
 
   protected void testGetCatalogs() {
-    List<Catalog> catalogs = testling.getCatalogs(getStoreContext());
+    List<Catalog> catalogs = testling.getCatalogs(storeContext);
     assertThat(catalogs).isNotEmpty();
     assertThat(catalogs.get(0).getName().value()).containsIgnoringCase("Extended Sites Catalog Asset Store");
   }
 
-  protected void testSearchFacetsProducts(String query, Map<String, String> searchParams) throws Exception {
-
+  protected void testSearchFacetsProducts(String query, Map<String, String> searchParams) {
     searchParams.put(CatalogService.SEARCH_PARAM_TOTAL, "1");
     searchParams.put(CatalogService.SEARCH_PARAM_PAGENUMBER, "1");
     searchParams.put(CatalogService.SEARCH_PARAM_PAGESIZE, "1");
 
-    SearchResult<Product> searchResult = testling.searchProducts(query, searchParams, getStoreContext());
+    SearchResult<Product> searchResult = testling.searchProducts(query, searchParams, storeContext);
     assertThat(searchResult).isNotNull();
 
     List<SearchFacet> facets = searchResult.getFacets();
@@ -630,10 +631,9 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
   }
 
   protected void testWithStoreContext() {
-    StoreContext storeContext = getStoreContext();
     assertThat(storeContext.getLocale()).isNotEqualTo(Locale.GERMAN);
 
-    StoreContext germanStoreContext = testConfig.getGermanStoreContext();
+    StoreContext germanStoreContext = testConfig.getGermanStoreContext(connection);
 
     CommerceId productId = getIdProvider().formatProductId(storeContext.getCatalogAlias(), PRODUCT_CODE);
 
@@ -659,7 +659,7 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
     List<Category> categoryBreadcrumb = category.getBreadcrumb();
     assertThat(categoryBreadcrumb).isNotEmpty();
     assertThat(categoryBreadcrumb.get(categoryBreadcrumb.size() - 1)).isEqualTo(category);
-    assertThat(category.getLocale()).isEqualTo(getStoreContext().getLocale());
+    assertThat(category.getLocale()).isEqualTo(storeContext.getLocale());
   }
 
   protected void assertProductVariant(ProductVariant productVariant) {
@@ -675,8 +675,8 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
     assertThat(productVariant.getOfferPrice()).isNotNull();
   }
 
-  protected static CommerceIdProvider getIdProvider() {
-    return CurrentCommerceConnection.get().getIdProvider();
+  protected CommerceIdProvider getIdProvider() {
+    return connection.getIdProvider();
   }
 
   protected void assertProduct(Product product) {

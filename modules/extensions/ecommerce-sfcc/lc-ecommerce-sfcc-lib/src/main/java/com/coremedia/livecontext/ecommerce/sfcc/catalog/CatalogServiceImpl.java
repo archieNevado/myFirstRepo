@@ -9,7 +9,6 @@ import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType;
-import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
@@ -38,7 +37,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -46,14 +44,15 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Collections.emptyList;
-import static java.util.Collections.emptyMap;
 import static java.util.Collections.emptySet;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 
 /**
- * {@link com.coremedia.livecontext.ecommerce.catalog.CatalogService} implementation for Salesforce Commerce Cloud Commerce.
+ * {@link com.coremedia.livecontext.ecommerce.catalog.CatalogService} implementation for
+ * Salesforce Commerce Cloud Commerce.
  */
 public class CatalogServiceImpl implements CatalogService {
 
@@ -94,9 +93,11 @@ public class CatalogServiceImpl implements CatalogService {
     }
 
     if (delegate.getType().isVariant()) {
-      return CommerceBeanUtils.createBeanFor(commerceBeanFactory, delegate, storeContext, BaseCommerceBeanType.SKU, ProductVariant.class);
+      return CommerceBeanUtils.createBeanFor(commerceBeanFactory, delegate, storeContext, BaseCommerceBeanType.SKU,
+              ProductVariant.class);
     } else {
-      return CommerceBeanUtils.createBeanFor(commerceBeanFactory, delegate, storeContext, BaseCommerceBeanType.PRODUCT, Product.class);
+      return CommerceBeanUtils.createBeanFor(commerceBeanFactory, delegate, storeContext, BaseCommerceBeanType.PRODUCT,
+              Product.class);
     }
   }
 
@@ -112,8 +113,8 @@ public class CatalogServiceImpl implements CatalogService {
     ProductCacheKey cacheKey = new ProductCacheKey(commerceId, storeContext, productsResource, commerceCache);
 
     return commerceCache.find(cacheKey)
-            .map(delegate -> CommerceBeanUtils
-                    .createBeanFor(commerceBeanFactory, delegate, storeContext, BaseCommerceBeanType.SKU, ProductVariant.class))
+            .map(delegate -> CommerceBeanUtils.createBeanFor(commerceBeanFactory, delegate, storeContext,
+                    BaseCommerceBeanType.SKU, ProductVariant.class))
             .orElse(null);
   }
 
@@ -138,9 +139,8 @@ public class CatalogServiceImpl implements CatalogService {
   @NonNull
   @Override
   public Category findRootCategory(@NonNull CatalogAlias catalogAlias, @NonNull StoreContext storeContext) {
-
     Optional<CatalogDocument> catalogDocumentOptional = getCatalogDocument(storeContext);
-    if (!catalogDocumentOptional.isPresent()){
+    if (!catalogDocumentOptional.isPresent()) {
       throw new CommerceException("Could not find root category for context " + storeContext);
     }
 
@@ -160,16 +160,16 @@ public class CatalogServiceImpl implements CatalogService {
   @NonNull
   private Optional<CatalogDocument> getCatalogDocument(@NonNull StoreContext storeContext) {
     CatalogId catalogId = storeContext.getCatalogId()
-            .orElseThrow(() -> new CommerceException("Could not find root category. The catalog id is missing in context "
-                    + storeContext));
+            .orElseThrow(() -> new CommerceException(
+                    "Could not find root category. The catalog id is missing in context " + storeContext));
 
     CommerceId catalogCommerceId = SfccCommerceIdProvider
             .commerceId(BaseCommerceBeanType.CATALOG)
             .withExternalId(catalogId.value())
             .build();
 
-    return Optional.ofNullable(
-            commerceCache.get(new CatalogCacheKey(catalogCommerceId, storeContext, catalogsResource, commerceCache)));
+    CatalogCacheKey cacheKey = new CatalogCacheKey(catalogCommerceId, storeContext, catalogsResource, commerceCache);
+    return Optional.ofNullable(commerceCache.get(cacheKey));
   }
 
   @NonNull
@@ -207,7 +207,7 @@ public class CatalogServiceImpl implements CatalogService {
   public SearchResult<Product> searchProducts(@NonNull String searchTerm,
                                               @NonNull Map<String, String> searchParams,
                                               @NonNull StoreContext storeContext) {
-    //when the facet support is specified use the shop product search
+    // If the facet support is specified, use the shop product search.
     if (searchParams.containsKey(SEARCH_PARAM_FACET_SUPPORT)) {
       return getProductSearchResultByShopApi(searchTerm, searchParams, storeContext);
     } else {
@@ -220,9 +220,10 @@ public class CatalogServiceImpl implements CatalogService {
                                                                 @NonNull Map<String, String> searchParams,
                                                                 @NonNull StoreContext storeContext) {
     Set<String> categoryIdsForSearch = emptySet();
+
     if (searchParams.containsKey(SEARCH_PARAM_CATEGORYID)) {
-      //Epand with all subcategories, since SFCC OC Data Api connot search recursively below a category.
-      //All underlying categories must be computed before.
+      // Expand with all subcategories, since SFCC OC Data API cannot search recursively below a category.
+      // All underlying categories must be computed beforehand.
       String categoryId = searchParams.get(SEARCH_PARAM_CATEGORYID);
       categoryIdsForSearch = prepareCategoryIdsForSearch(storeContext, categoryId);
     }
@@ -241,41 +242,35 @@ public class CatalogServiceImpl implements CatalogService {
             .map(AbstractOCSearchResultDocument::getTotal)
             .orElse(0);
 
-    SearchResult<Product> result = new SearchResult<>();
-    result.setSearchResult(products);
-    result.setTotalCount(totalCount);
-    return result;
+    return createSearchResult(products, totalCount);
   }
 
   @NonNull
   private SearchResult<Product> getProductSearchResultByShopApi(@NonNull String searchTerm,
                                                                 @NonNull Map<String, String> searchParams,
                                                                 @NonNull StoreContext storeContext) {
-    Optional<ShopProductSearchResultDocument>
-      productSearchResultDocument = shopProductSearchResource.searchProducts(searchTerm, searchParams, storeContext);
+    Optional<ShopProductSearchResultDocument> productSearchResultDocument = shopProductSearchResource
+            .searchProducts(searchTerm, searchParams, storeContext);
 
     List<Product> products = productSearchResultDocument
-      .map(ShopProductSearchResultDocument::getHits)
-      .map(productSearchHitDocuments -> shopProductsToProductBeans(productSearchHitDocuments, storeContext))
-      .orElseGet(Collections::emptyList);
+            .map(ShopProductSearchResultDocument::getHits)
+            .map(productSearchHitDocuments -> shopProductsToProductBeans(productSearchHitDocuments, storeContext))
+            .orElseGet(Collections::emptyList);
 
     int totalCount = productSearchResultDocument
-      .map(ShopProductSearchResultDocument::getTotal)
-      .orElse(0);
+            .map(ShopProductSearchResultDocument::getTotal)
+            .orElse(0);
 
-    SearchResult<Product> result = new SearchResult<>();
-    result.setSearchResult(products);
-    result.setTotalCount(totalCount);
-    return result;
+    return createSearchResult(products, totalCount);
   }
 
   @NonNull
   private List<Product> shopProductsToProductBeans(List<ProductSearchHitDocument> productSearchHitDocuments,
                                                    @NonNull StoreContext storeContext) {
     return productSearchHitDocuments.stream()
-      .map(productSearchHitDocument -> CommerceBeanUtils.createLightweightBeanFor(
-        commerceBeanFactory, productSearchHitDocument, storeContext, BaseCommerceBeanType.PRODUCT, Product.class))
-      .collect(Collectors.toList());
+            .map(productSearchHitDocument -> CommerceBeanUtils.createLightweightBeanFor(commerceBeanFactory,
+                    productSearchHitDocument, storeContext, BaseCommerceBeanType.PRODUCT, Product.class))
+            .collect(Collectors.toList());
   }
 
   @NonNull
@@ -284,21 +279,23 @@ public class CatalogServiceImpl implements CatalogService {
                                                                   @NonNull StoreContext storeContext) {
     String categoryId = category.getExternalTechId();
     Map<String, String> searchParams = ImmutableMap.of(
-      SEARCH_PARAM_CATEGORYID, categoryId,
-      //the price facets are given with the specified currency only if specified expand parameter value contains prices.
-      "expand", "prices");
+            SEARCH_PARAM_CATEGORYID, categoryId,
+            // The price facets are given with the specified currency only if specified expand parameter value
+            // contains prices.
+            "expand", "prices");
 
-    Optional<ShopProductSearchResultDocument>
-      searchResultDocument = shopProductSearchResource.searchProducts("", searchParams, storeContext);
+    return shopProductSearchResource
+            .searchProducts("", searchParams, storeContext)
+            .map(ShopProductSearchResultDocument::getRefinements)
+            .map(CatalogServiceImpl::getChildFacetsByLabel)
+            .orElseGet(Collections::emptyMap);
+  }
 
-    Optional<List<ProductSearchRefinementDocument>> productSearchRefinementDocuments = searchResultDocument
-      .map(ShopProductSearchResultDocument::getRefinements);
-    if (!productSearchRefinementDocuments.isPresent()) {
-      return emptyMap();
-    }
-
-    return productSearchRefinementDocuments.get().stream()
-      .collect(toMap(SearchFacet::getLabel, SearchFacet::getChildFacets));
+  @NonNull
+  private static Map<String, List<SearchFacet>> getChildFacetsByLabel(
+          @NonNull List<ProductSearchRefinementDocument> productSearchRefinementDocuments) {
+    return productSearchRefinementDocuments.stream()
+            .collect(toMap(SearchFacet::getLabel, SearchFacet::getChildFacets));
   }
 
   /**
@@ -315,8 +312,6 @@ public class CatalogServiceImpl implements CatalogService {
   public SearchResult<ProductVariant> searchProductVariants(@NonNull String searchTerm,
                                                             @NonNull Map<String, String> searchParams,
                                                             @NonNull StoreContext storeContext) {
-    SearchResult<ProductVariant> result = new SearchResult<>();
-
     // Lookup product variants via product id first.
     CommerceId commerceId = SfccCommerceIdProvider
             .commerceId(BaseCommerceBeanType.PRODUCT)
@@ -325,60 +320,70 @@ public class CatalogServiceImpl implements CatalogService {
     Product masterProduct = findProductById(commerceId, storeContext);
     if (masterProduct != null) {
       List<ProductVariant> productVariants = masterProduct.getVariants();
-      result.setSearchResult(productVariants);
-      result.setTotalCount(productVariants.size());
-    } else {
-      //search products and return all its variants. maximum hits are limited to 500
-      SearchResult<Product> productSearchResult = searchProducts(searchTerm, searchParams, storeContext);
-      if (productSearchResult.getTotalCount() > 0) {
-        List<ProductVariant> productVariants = new ArrayList<>();
-        int countHits = 0;
-        for (int i = 0; i < productSearchResult.getTotalCount() && countHits < 500; i++) {
-          Product master = productSearchResult.getSearchResult().get(i);
-          List<ProductVariant> variants = master.getVariants();
-          productVariants.addAll(variants);
-          countHits += variants.size();
-        }
-        result.setSearchResult(productVariants);
-        result.setTotalCount(productVariants.size());
-      }
+      return createSearchResult(productVariants, productVariants.size());
     }
-    return result;
+
+    // Search products and return all its variants.
+    SearchResult<Product> productSearchResult = searchProducts(searchTerm, searchParams, storeContext);
+    if (productSearchResult.getTotalCount() > 0) {
+      List<ProductVariant> productVariants = new ArrayList<>();
+
+      int countHits = 0;
+      final int maximumHits = 500;
+      for (int i = 0; i < productSearchResult.getTotalCount() && countHits < maximumHits; i++) {
+        Product master = productSearchResult.getSearchResult().get(i);
+        List<ProductVariant> variants = master.getVariants();
+        productVariants.addAll(variants);
+        countHits += variants.size();
+      }
+
+      return createSearchResult(productVariants, productVariants.size());
+    }
+
+    return new SearchResult<>();
   }
 
   @NonNull
   private Set<String> prepareCategoryIdsForSearch(@NonNull StoreContext storeContext, String categoryId) {
-    Set<String> setOfSearchCategoryIds = new HashSet<>();
-    setOfSearchCategoryIds.add(categoryId);
+    Set<String> searchCategoryIds = newHashSet(categoryId);
 
     CommerceId commerceId = SfccCommerceIdProvider
             .commerceId(BaseCommerceBeanType.CATEGORY)
             .withExternalId(categoryId)
             .build();
 
-    CommerceBean category = commerceBeanFactory.loadBeanFor(commerceId, storeContext);
+    Category category = findCategoryById(commerceId, storeContext);
 
     if (category != null) {
-      setOfSearchCategoryIds.addAll(
-              getSubCategoriesRecursively((Category) category).stream()
+      searchCategoryIds.addAll(
+              getSubCategoriesRecursively(category).stream()
                       .map(Category::getExternalId)
                       .filter(Objects::nonNull)
                       .collect(toSet())
       );
     }
 
-    return setOfSearchCategoryIds;
+    return searchCategoryIds;
   }
 
   @NonNull
   private static Set<Category> getSubCategoriesRecursively(@NonNull Category category) {
-    Set<Category> allChildren = new HashSet<>();
     List<Category> children = category.getChildren();
-    allChildren.addAll(children);
+
+    Set<Category> allChildren = newHashSet(children);
     for (Category child : children) {
       allChildren.addAll(getSubCategoriesRecursively(child));
     }
+
     return allChildren;
+  }
+
+  @NonNull
+  private static <T> SearchResult<T> createSearchResult(@NonNull List<T> items, int totalCount) {
+    SearchResult<T> result = new SearchResult<>();
+    result.setSearchResult(items);
+    result.setTotalCount(totalCount);
+    return result;
   }
 
   @NonNull
@@ -404,5 +409,4 @@ public class CatalogServiceImpl implements CatalogService {
   public Optional<Catalog> getDefaultCatalog(@NonNull StoreContext storeContext) {
     return Optional.empty();
   }
-
 }

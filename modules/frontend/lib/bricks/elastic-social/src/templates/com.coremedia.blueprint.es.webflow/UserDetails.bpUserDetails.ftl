@@ -17,10 +17,10 @@
 
         <#-- headline -->
         <#if userDetails.viewOwnProfile>
-          <h1 class="cm-form__headline"><@bp.message "userDetails_personalDetails" /></h1>
+          <h1 class="cm-form__headline"><@cm.message "userDetails_personalDetails" /></h1>
         </#if>
         <#if !userDetails.viewOwnProfile>
-          <h1 class="cm-form__headline"><@bp.message "userDetails_title" /></h1>
+          <h1 class="cm-form__headline"><@cm.message "userDetails_title" /></h1>
         </#if>
 
         <#-- show properties -->
@@ -28,13 +28,13 @@
 
           <#-- premoderation notification -->
           <#if userDetails.viewOwnProfile && userDetails.preModerationChanged>
-            <div><@bp.message "userDetails_changesForPreModeration" /></div>
+            <div><@cm.message "userDetails_changesForPreModeration" /></div>
           </#if>
 
           <#-- image -->
           <#if userDetails.profileImage?has_content>
             <div class="form-group">
-              <label><@bp.message "userDetails_profileImage" /></label>
+              <label><@cm.message "userDetails_profileImage" /></label>
               <#assign link=cm.getLink(userDetails.profileImage {"transform":true, "width":elasticSocialConfiguration.userImageWidth!100?int, "height": elasticSocialConfiguration.userImageHeight!100?int})/>
               <img class="cm-form__image" src="${link}" title="" alt="userimage">
             </div>
@@ -42,23 +42,23 @@
 
           <#-- username -->
           <div class="form-group">
-            <@elasticSocial.labelFromSpring path="userDetails.username" text='${bp.getMessage("userDetails_username")}'/>
+            <@elasticSocial.labelFromSpring path="userDetails.username" text='${cm.getMessage("userDetails_username")}'/>
             <@spring.formInput path="userDetails.username" attributes='class="form-control" disabled="disabled"'/>
           </div>
 
           <#if userDetails.viewOwnProfile || userDetails.preview>
             <div class="form-group">
-              <@elasticSocial.labelFromSpring path="userDetails.givenname" text='${bp.getMessage("userDetails_givenname")}'/>
+              <@elasticSocial.labelFromSpring path="userDetails.givenname" text='${cm.getMessage("userDetails_givenname")}'/>
             <@spring.formInput path="userDetails.givenname" attributes='class="form-control" disabled="disabled"'/>
             </div>
 
             <div class="form-group">
-              <@elasticSocial.labelFromSpring path="userDetails.surname" text='${bp.getMessage("userDetails_surname")}'/>
+              <@elasticSocial.labelFromSpring path="userDetails.surname" text='${cm.getMessage("userDetails_surname")}'/>
             <@spring.formInput path="userDetails.surname" attributes='class="form-control" disabled="disabled"'/>
             </div>
 
             <div class="form-group">
-              <@elasticSocial.labelFromSpring path="userDetails.emailAddress" text='${bp.getMessage("userDetails_emailAddress")}'/>
+              <@elasticSocial.labelFromSpring path="userDetails.emailAddress" text='${cm.getMessage("userDetails_emailAddress")}'/>
             <@spring.formInput path="userDetails.emailAddress" attributes='class="form-control" disabled="disabled"' fieldType="email"/>
             </div>
           </#if>
@@ -70,7 +70,7 @@
               <input type="hidden" name="_eventId_editUser">
 
               <div class="form-group text-right">
-                <@components.button text=bp.getMessage("userDetails_editProfile") attr={"type": "submit", "id": "saveUser", "classes": ["btn","btn-primary"]} />
+                <@components.button text=cm.getMessage("userDetails_editProfile") attr={"type": "submit", "id": "saveUser", "classes": ["btn","btn-primary"]} />
               </div>
 
             </form>
@@ -92,7 +92,7 @@
         && elasticSocialConfiguration?has_content
         && ((elasticSocialConfiguration.twitterAuthenticationEnabled && !userDetails.connectedWithTwitter)
         || (elasticSocialConfiguration.facebookAuthenticationEnabled && !userDetails.connectedWithFacebook))>
-          <h3><@bp.message "userdetails_external_account" /></h3>
+          <h3><@cm.message "userdetails_external_account" /></h3>
           <div class="cm-form">
 
             <#assign loginAction=self.loginAction!cm.UNDEFINED />
@@ -117,7 +117,7 @@
                   <input type="hidden" name="scope" value="email">
                   <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}">
                   <input type="hidden" name="forceRegister" value="false">
-                  <@components.button text=bp.getMessage("login_with_facebook") attr={"type": "submit", "id": "facebookConnect","classes": ["btn", "btn-default"]} />
+                  <@components.button text=cm.getMessage("login_with_facebook") attr={"type": "submit", "id": "facebookConnect","classes": ["btn", "btn-default"]} />
                 </form>
               </#if>
 
@@ -129,7 +129,7 @@
                   <input type="hidden" name="loginUrl" value="${loginUrl!""}">
                   <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}">
                   <input type="hidden" name="forceRegister" value="false">
-                  <@components.button text=bp.getMessage("login_with_twitter") attr={"type": "submit", "id": "twitterConnect","classes": ["btn", "btn-default"]} />
+                  <@components.button text=cm.getMessage("login_with_twitter") attr={"type": "submit", "id": "twitterConnect","classes": ["btn", "btn-default"]} />
                 </form>
               </#if>
             </div>
@@ -137,47 +137,47 @@
         </#if>
 
         <#-- user activity -->
-        <h2><@bp.message "userDetails_logging"/></h2>
+        <h2><@cm.message "userDetails_logging"/></h2>
         <div class="cm-form">
           <#if userDetails.lastLoginDate?has_content>
             <div class="form-group">
-              <label class="cm-form__label">${bp.getMessage("userDetails_lastLoginDate")}</label>
+              <label class="cm-form__label">${cm.getMessage("userDetails_lastLoginDate")}</label>
               <span class="help-block">${userDetails.lastLoginDate!?datetime?string.medium}</span>
             </div>
           </#if>
           <#if userDetails.registrationDate?has_content>
             <div class="form-group">
-              <label class="cm-form__label">${bp.getMessage("userDetails_registrationDate")}</label>
+              <label class="cm-form__label">${cm.getMessage("userDetails_registrationDate")}</label>
               <span class="help-block">${userDetails.registrationDate!?datetime?string.medium}</span>
             </div>
           </#if>
           <#if (userDetails.numberOfLogins?has_content && userDetails.numberOfLogins > 0)>
             <div class="form-group">
-              <label class="cm-form__label">${bp.getMessage("userDetails_numberOfLogins")}</label>
+              <label class="cm-form__label">${cm.getMessage("userDetails_numberOfLogins")}</label>
               <span class="help-block">${userDetails.numberOfLogins}</span>
             </div>
           </#if>
           <#if (userDetails.numberOfReviews?has_content && userDetails.numberOfReviews > 0)>
           <div class="form-group">
-            <label class="cm-form__label">${bp.getMessage("userDetails_numberOfReviews")}</label>
+            <label class="cm-form__label">${cm.getMessage("userDetails_numberOfReviews")}</label>
               <span class="help-block">${userDetails.numberOfReviews}</span>
           </div>
           </#if>
           <#if (userDetails.numberOfComments?has_content && userDetails.numberOfComments > 0)>
             <div class="form-group">
-              <label class="cm-form__label">${bp.getMessage("userDetails_numberOfComments")}</label>
+              <label class="cm-form__label">${cm.getMessage("userDetails_numberOfComments")}</label>
               <span class="help-block">${userDetails.numberOfComments}</span>
             </div>
           </#if>
           <#if (userDetails.numberOfRatings?has_content && userDetails.numberOfRatings > 0)>
             <div class="form-group">
-              <label class="cm-form__label">${bp.getMessage("userDetails_numberOfRatings")}</label>
+              <label class="cm-form__label">${cm.getMessage("userDetails_numberOfRatings")}</label>
               <span class="help-block">${userDetails.numberOfRatings}</span>
             </div>
           </#if>
           <#if (userDetails.numberOfLikes?has_content && userDetails.numberOfLikes > 0)>
             <div class="form-group">
-              <label class="cm-form__label">${bp.getMessage("userDetails_numberOfLikes")}</label>
+              <label class="cm-form__label">${cm.getMessage("userDetails_numberOfLikes")}</label>
               <span class="help-block">${userDetails.numberOfLikes}</span>
             </div>
           </#if>
@@ -190,7 +190,7 @@
 
       </div>
       <#else>
-        <@elasticSocial.notification type="error" text=bp.getMessage("userDetails_noUserFound") additionalClasses=["alert alert-danger"] />
+        <@elasticSocial.notification type="error" text=cm.getMessage("userDetails_noUserFound") additionalClasses=["alert alert-danger"] />
       </#if>
     </div>
   </div>

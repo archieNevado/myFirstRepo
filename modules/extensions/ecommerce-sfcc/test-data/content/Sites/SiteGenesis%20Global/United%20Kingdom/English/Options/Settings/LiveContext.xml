@@ -13,6 +13,7 @@
 <String>metadata</String>
 <String>externalHead</String>
 <String>externalFooter</String>
+<String>topNavigation</String>
 </StringListProperty>
 <StructListProperty Name="contentTypes">
 <Struct>
@@ -89,6 +90,8 @@
 <StringProperty Name="store.id">SiteGenesisGlobal</StringProperty>
 <StringProperty Name="store.name">SiteGenesis Global Shop</StringProperty>
 <StringProperty Name="currency">GBP</StringProperty>
+<StringProperty Name="content-asset-library">SiteGenesisSharedLibrary</StringProperty>
+<StringProperty Name="content-asset-library-folder">CoreMedia</StringProperty>
 </Struct>
 </StructProperty>
 </Struct>

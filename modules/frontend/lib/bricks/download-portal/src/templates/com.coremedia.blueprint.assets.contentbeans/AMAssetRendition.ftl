@@ -20,5 +20,5 @@
 
 <#-- error -->
 <#else>
-  <span<@preview.metadata data=[self.asset.content, "properties." + self.name] />>${bp.getMessage('preview_am_rendition')}</span>
+  <span<@preview.metadata data=[self.asset.content, "properties." + self.name] />>${cm.getMessage('preview_am_rendition')}</span>
 </#if>

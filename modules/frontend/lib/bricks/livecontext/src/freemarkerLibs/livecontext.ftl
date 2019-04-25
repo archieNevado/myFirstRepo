@@ -25,20 +25,20 @@
   <#local isProductAvailable=(product.isAvailable())!false />
 
   <#-- variant 1) unavailable -->
-  <#local buttonLabel=bp.getMessage("cart_unavailable") />
+  <#local buttonLabel=cm.getMessage("cart_unavailable") />
   <#local buttonData={} />
   <#local buttonClasses=[] />
   <#local iconClass="" />
 
   <#-- variant 2) available -->
   <#if (alwaysShow || isProductAvailable)>
-    <#local buttonLabel=bp.getMessage("cart_view_variants") />
+    <#local buttonLabel=cm.getMessage("cart_view_variants") />
     <#local buttonClasses=buttonClasses + ["cm-button--primary"] />
 
   <#-- variant 3) available with one sku -->
     <#if (enableShopNow && (alwaysClickable || hasSingleSKU))>
       <#local cart=cm.substitute("cart", product) />
-      <#local buttonLabel=bp.getMessage("cart_add_item") />
+      <#local buttonLabel=cm.getMessage("cart_add_item") />
       <#local externalTechId=hasSingleSKU?then(product.variants[0].externalTechId, product.externalTechId)/>
       <#local buttonData={"data-cm-cart-add-item": '{"id": "${externalTechId!""}", "link": "${cm.getLink(cart, "ajax")}", "cart": ".cm-cart" }'} />
       <#local iconClass="icon-none" />

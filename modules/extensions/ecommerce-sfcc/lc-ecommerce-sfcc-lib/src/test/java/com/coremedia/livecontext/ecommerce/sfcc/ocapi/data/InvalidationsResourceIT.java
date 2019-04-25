@@ -19,7 +19,8 @@ public class InvalidationsResourceIT extends DataApiResourceTestBase {
   @Test
   @Ignore("Current OCAPI version does not support invalidations.")
   public void testGetInvalidations() {
-    Map<String, Object> invalidations = resource.getInvalidations(123L);
+    Map<String, Object> invalidations = resource.getInvalidations(123L, storeContext);
+
     assertNotNull(invalidations);
   }
 }

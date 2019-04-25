@@ -90,6 +90,8 @@
 <StringProperty Name="store.id">SiteGenesisGlobal</StringProperty>
 <StringProperty Name="store.name">SiteGenesis Global Shop</StringProperty>
 <StringProperty Name="currency">EUR</StringProperty>
+<StringProperty Name="content-asset-library">SiteGenesisSharedLibrary</StringProperty>
+<StringProperty Name="content-asset-library-folder">CoreMedia</StringProperty>
 </Struct>
 </StructProperty>
 </Struct>

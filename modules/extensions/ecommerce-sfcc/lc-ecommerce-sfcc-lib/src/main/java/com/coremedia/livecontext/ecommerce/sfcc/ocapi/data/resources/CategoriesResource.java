@@ -3,6 +3,7 @@ package com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.CategoryDocument;
 import com.google.common.collect.ImmutableMap;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,7 @@ import java.util.Optional;
 /**
  * Categories resource.
  */
+@DefaultAnnotation(NonNull.class)
 @Service("ocapiCategoriesResource")
 public class CategoriesResource extends AbstractDataResource {
 
@@ -25,13 +27,12 @@ public class CategoriesResource extends AbstractDataResource {
    * @param storeContext the effective store context
    * @return the category document, or nothing if it does not exist
    */
-  @NonNull
-  public Optional<CategoryDocument> getCategoryById(@NonNull String categoryId, @NonNull StoreContext storeContext) {
+  public Optional<CategoryDocument> getCategoryById(String categoryId, StoreContext storeContext) {
     ImmutableMap<String, String> pathParameters = ImmutableMap.<String, String>builder()
             .put(CATALOG_ID_PARAM, storeContext.getCatalogId().get().value())
             .put(CATEGORY_ID_PARAM, categoryId)
             .build();
 
-    return getConnector().getResource(CATEGORIES_PATH, pathParameters, CategoryDocument.class);
+    return getConnector().getResource(CATEGORIES_PATH, pathParameters, CategoryDocument.class, storeContext);
   }
 }

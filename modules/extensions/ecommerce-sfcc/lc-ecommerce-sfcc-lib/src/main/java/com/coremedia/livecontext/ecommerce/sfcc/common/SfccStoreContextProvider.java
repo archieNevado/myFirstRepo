@@ -108,11 +108,12 @@ public class SfccStoreContextProvider extends AbstractStoreContextProvider {
   }
 
   private StoreContext createContext(Site site, Map<String, Object> storeConfig) {
-    StoreContextValuesHolder valuesHolder = new StoreContextValuesHolder();
-
-    valuesHolder.connection = commerceConnectionFinder.findConnection(site)
+    CommerceConnection connection = commerceConnectionFinder.findConnection(site)
             .orElseThrow(() -> new NoCommerceConnectionAvailable(
                     String.format("Could not find commerce connection for site '%s'.", site)));
+
+    StoreContextValuesHolder valuesHolder = new StoreContextValuesHolder(connection);
+
     valuesHolder.siteId = site.getId();
 
     // adds site locale to values holder and its replacement map
@@ -250,8 +251,8 @@ public class SfccStoreContextProvider extends AbstractStoreContextProvider {
 
   private static class StoreContextValuesHolder {
 
-    @Nullable
-    private CommerceConnection connection;
+    private final CommerceConnection connection;
+
     private Map<String, String> replacements = new HashMap<>();
     @Nullable
     private String siteId;
@@ -267,6 +268,10 @@ public class SfccStoreContextProvider extends AbstractStoreContextProvider {
     private Currency currency;
     @Nullable
     private Locale locale;
+
+    private StoreContextValuesHolder(CommerceConnection connection) {
+      this.connection = connection;
+    }
   }
 
   @Override

@@ -3,6 +3,7 @@ package com.coremedia.livecontext.ecommerce.sfcc.ocapi.shop;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.sfcc.configuration.SfccStoreContextProperties;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.SfccTestConfig;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.SiteGenesisGlobalTestConfig;
@@ -28,13 +29,16 @@ public class ShopApiTestConfiguration {
     @Primary
     CatalogAliasTranslationService theCatalogAliasTranslationService() {
       CatalogAliasTranslationService catalogAliasTranslationService = mock(CatalogAliasTranslationService.class);
-      when(catalogAliasTranslationService.getCatalogIdForAlias(any(), any())).thenReturn(Optional.of(CatalogId.of("sitegenisis")));
+
+      when(catalogAliasTranslationService.getCatalogIdForAlias(any(), any(), any(StoreContext.class)))
+              .thenReturn(Optional.of(CatalogId.of("sitegenesis")));
+
       return catalogAliasTranslationService;
     }
 
     @Bean
     @Primary
-    public SfccTestConfig testConfig(){
+    public SfccTestConfig testConfig() {
       return new SiteGenesisGlobalTestConfig();
     }
   }

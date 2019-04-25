@@ -24,7 +24,23 @@
     public native function EcommerceSfccStudioPlugin(config:EcommerceSfccStudioPlugin = null);
     ]]></fx:Script>
 
+  <editor:rules>
+    <editor:ActionsToolbar>
+      <editor:plugins>
+        <ui:AddItemsPlugin>
+          <ui:items>
+            <TbSeparator height="1"/>
+            <sfcc:PushContentButton/>
+            <sfcc:DeleteContentButton/>
+          </ui:items>
+          <ui:after>
+            <Component itemId="{ActionsToolbar.WITHDRAW_BUTTON_ITEM_ID}"/>
+          </ui:after>
+        </ui:AddItemsPlugin>
+      </editor:plugins>
+    </editor:ActionsToolbar>
 
+  </editor:rules>
 
   <editor:configuration>
     <editor:CopyResourceBundleProperties

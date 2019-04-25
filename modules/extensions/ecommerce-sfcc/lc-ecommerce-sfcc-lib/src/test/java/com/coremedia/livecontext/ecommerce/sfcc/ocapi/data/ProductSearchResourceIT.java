@@ -4,10 +4,10 @@ import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.ProductDocu
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.documents.ProductSearchResultDocument;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.resources.ProductSearchResource;
 import com.google.common.collect.ImmutableSet;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -34,7 +34,7 @@ public class ProductSearchResourceIT extends DataApiResourceTestBase {
     //params.put("categoryId", "electronics-digital-cameras");
 
     Optional<ProductSearchResultDocument> searchResultDocument = resource
-            .searchProducts("nikon", params, emptySet(), getCurrentStoreContext());
+            .searchProducts("nikon", params, emptySet(), storeContext);
     assertThat(searchResultDocument).isPresent();
 
     List<ProductDocument> products = searchResultDocument.get().getHits();
@@ -60,7 +60,7 @@ public class ProductSearchResourceIT extends DataApiResourceTestBase {
   private int getSearchProductsCount(@NonNull String query, @NonNull Map<String, String> params,
                                      @NonNull Set<String> categoryIds) {
     Optional<ProductSearchResultDocument> resultDocument = resource
-            .searchProducts(query, params, categoryIds, getCurrentStoreContext());
+            .searchProducts(query, params, categoryIds, storeContext);
     assertThat(resultDocument).isPresent();
 
     return resultDocument.get().getCount();
@@ -74,7 +74,7 @@ public class ProductSearchResourceIT extends DataApiResourceTestBase {
 
     List<String> productIds = newArrayList("nikon-d40-wlens", "nikon-d60-wlens", "nikon-d90-wlens");
 
-    List<ProductDocument> productDocuments = resource.getProductsById(productIds, getCurrentStoreContext());
+    List<ProductDocument> productDocuments = resource.getProductsById(productIds, storeContext);
 
     assertThat(productDocuments).as("No SKUs found.").isNotEmpty();
   }

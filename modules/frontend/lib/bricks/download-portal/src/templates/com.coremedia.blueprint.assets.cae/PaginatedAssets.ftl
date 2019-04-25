@@ -2,7 +2,7 @@
 
 <#if self.assets?has_content || self.notification?has_content>
   <div class="am-paginated-assets">
-    <h2 class="am-heading-2">${bp.getMessage("am_assets")}</h2>
+    <h2 class="am-heading-2">${cm.getMessage("am_assets")}</h2>
 
     <@cm.include self=self.notification!cm.UNDEFINED params={"classBox": "am-paginated-assets__notification"} />
 

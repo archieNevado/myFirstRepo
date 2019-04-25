@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.ecommerce.sfcc.ocapi;
 
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ListMultimap;
@@ -17,9 +18,13 @@ class AbstractOCAPIConnectorRequestUrlBuildingTest {
 
   private AbstractOCAPIConnector connector;
 
+  private StoreContext storeContext;
+
   @BeforeEach
-  void setUp() throws Exception {
+  void setUp() {
     connector = getConnector();
+
+    storeContext = mock(StoreContext.class);
   }
 
   @Test
@@ -27,7 +32,7 @@ class AbstractOCAPIConnectorRequestUrlBuildingTest {
     Map<String, String> pathParams = ImmutableMap.of("catalogId", "winter-2017", "categoryId", "accessories");
     ListMultimap<String, String> queryParams = ImmutableListMultimap.of();
 
-    String actual = connector.buildRequestUrl("/catalogs", pathParams, queryParams);
+    String actual = connector.buildRequestUrl("/catalogs", pathParams, queryParams, storeContext);
 
     assertThat(actual).isEqualTo("https://shop-ref.demandware.net/base-path/catalogs");
   }
@@ -37,7 +42,7 @@ class AbstractOCAPIConnectorRequestUrlBuildingTest {
     Map<String, String> pathParams = ImmutableMap.of("catalogId", "winter-2017", "categoryId", "accessories");
     ListMultimap<String, String> queryParams = ImmutableListMultimap.of();
 
-    String actual = connector.buildRequestUrl("/catalogs", pathParams, queryParams);
+    String actual = connector.buildRequestUrl("/catalogs", pathParams, queryParams, storeContext);
 
     assertThat(actual).isEqualTo("https://shop-ref.demandware.net/base-path/catalogs");
   }
@@ -47,7 +52,8 @@ class AbstractOCAPIConnectorRequestUrlBuildingTest {
     Map<String, String> pathParams = ImmutableMap.of("catalogId", "winter-2017", "categoryId", "accessories");
     ListMultimap<String, String> queryParams = ImmutableListMultimap.of();
 
-    String actual = connector.buildRequestUrl("/catalogs/{catalogId}/categories/{categoryId}", pathParams, queryParams);
+    String actual = connector
+            .buildRequestUrl("/catalogs/{catalogId}/categories/{categoryId}", pathParams, queryParams, storeContext);
 
     assertThat(actual).isEqualTo("https://shop-ref.demandware.net/base-path/catalogs/winter-2017/categories/accessories");
   }
@@ -61,8 +67,8 @@ class AbstractOCAPIConnectorRequestUrlBuildingTest {
             .put("two", "bar?foo")
             .build();
 
-    String actual = connector.buildRequestUrl("/catalogs/{catalogId}/categories/{categoryId}", pathParams, queryParams
-    );
+    String actual = connector
+            .buildRequestUrl("/catalogs/{catalogId}/categories/{categoryId}", pathParams, queryParams, storeContext);
 
     assertThat(actual).isEqualTo(
             "https://shop-ref.demandware.net/base-path/catalogs/winter-2017/categories/foo%23bar?one=foo%26bar&two=bar%3Ffoo");
@@ -77,12 +83,12 @@ class AbstractOCAPIConnectorRequestUrlBuildingTest {
             .put("two", "zwei")
             .build();
 
-    String actual = connector.buildRequestUrl("/catalogs", pathParams, queryParams);
+    String actual = connector.buildRequestUrl("/catalogs", pathParams, queryParams, storeContext);
 
     assertThat(actual).isEqualTo("https://shop-ref.demandware.net/base-path/catalogs?one=eins&two=zwei");
   }
 
-  private static AbstractOCAPIConnector getConnector() throws Exception {
+  private static AbstractOCAPIConnector getConnector() {
     SfccOcapiConfigurationProperties props = new SfccOcapiConfigurationProperties();
     props.setHost("shop-ref.demandware.net");
 

@@ -9,10 +9,10 @@ import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.rest.cap.content.ContentRepositoryResource;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.inject.Inject;
 import java.net.URLEncoder;
 

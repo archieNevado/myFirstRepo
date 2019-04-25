@@ -15,11 +15,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CatalogCacheKey extends AbstractSfccDocumentCacheKey<CatalogDocument> {
+
   private static final Logger LOG = LoggerFactory.getLogger(CatalogCacheKey.class);
 
   private CatalogsResource resource;
 
-  CatalogCacheKey(@NonNull CommerceId id, @NonNull StoreContext storeContext, CatalogsResource resource, CommerceCache commerceCache) {
+  CatalogCacheKey(@NonNull CommerceId id, @NonNull StoreContext storeContext, CatalogsResource resource,
+                  CommerceCache commerceCache) {
     super(id, storeContext, CONFIG_KEY_CATALOGS_FOR_STORE, commerceCache);
     this.resource = resource;
 
@@ -32,8 +34,10 @@ public class CatalogCacheKey extends AbstractSfccDocumentCacheKey<CatalogDocumen
 
   @Override
   public CatalogDocument computeValue(Cache cache) {
-    return resource.getCatalogById(getExternalIdOrTechId()).orElseThrow(() -> new CommerceException("Could not find root category. The catalog with the id "
-            + getExternalIdOrTechId() + " could not be found"));
+    return resource.getCatalogById(getExternalIdOrTechId(), storeContext)
+            .orElseThrow(() -> new CommerceException(
+                    "Could not find root category. The catalog with the id "
+                            + getExternalIdOrTechId() + " could not be found"));
   }
 
   @Override

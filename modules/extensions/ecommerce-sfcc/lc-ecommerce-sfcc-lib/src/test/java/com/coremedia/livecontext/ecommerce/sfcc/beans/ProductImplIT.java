@@ -7,7 +7,6 @@ import com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.sfcc.common.SfccCommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.sfcc.ocapi.data.DataApiResourceTestBase;
 import org.junit.Test;
@@ -30,12 +29,10 @@ public class ProductImplIT extends DataApiResourceTestBase {
   private CommerceBeanFactory commerceBeanFactory;
 
   @Test
-  public void testPrimaryCategoryOnProductVariant() throws Exception {
+  public void testPrimaryCategoryOnProductVariant() {
     if (useBetamaxTapes()) {
       return;
     }
-
-    StoreContext context = getCurrentStoreContext();
 
     CommerceId productVariantId = SfccCommerceIdProvider
             .commerceId(BaseCommerceBeanType.SKU)
@@ -43,7 +40,7 @@ public class ProductImplIT extends DataApiResourceTestBase {
             .withCatalogAlias(DEFAULT_CATALOG_ALIAS)
             .build();
 
-    CommerceBean productVariant = commerceBeanFactory.loadBeanFor(productVariantId, context);
+    CommerceBean productVariant = commerceBeanFactory.loadBeanFor(productVariantId, storeContext);
     assertThat(productVariant).isInstanceOf(ProductVariant.class);
 
     //noinspection ConstantConditions
@@ -53,12 +50,10 @@ public class ProductImplIT extends DataApiResourceTestBase {
   }
 
   @Test
-  public void testPrimaryCategoryOnMasterProduct() throws Exception {
+  public void testPrimaryCategoryOnMasterProduct() {
     if (useBetamaxTapes()) {
       return;
     }
-
-    StoreContext context = getCurrentStoreContext();
 
     CommerceId productId = SfccCommerceIdProvider
             .commerceId(BaseCommerceBeanType.PRODUCT)
@@ -66,7 +61,7 @@ public class ProductImplIT extends DataApiResourceTestBase {
             .withCatalogAlias(DEFAULT_CATALOG_ALIAS)
             .build();
 
-    CommerceBean product = commerceBeanFactory.loadBeanFor(productId, context);
+    CommerceBean product = commerceBeanFactory.loadBeanFor(productId, storeContext);
     assertThat(product).isInstanceOf(Product.class);
 
     //noinspection ConstantConditions

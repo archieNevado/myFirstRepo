@@ -5,7 +5,8 @@ import com.coremedia.blueprint.studio.taxonomy.TaxonomyUtil;
 import com.coremedia.blueprint.studio.taxonomy.rendering.TaxonomyRenderFactory;
 import com.coremedia.blueprint.studio.taxonomy.rendering.TaxonomyRenderer;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cms.editor.sdk.editorContext;
+import com.coremedia.cms.editor.sdk.premular.DocumentForm;
+import com.coremedia.cms.editor.sdk.premular.DocumentTabPanel;
 import com.coremedia.cms.editor.sdk.util.ContentLocalizationUtil;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
@@ -14,6 +15,7 @@ import com.coremedia.ui.store.BeanRecord;
 
 import ext.EventManager;
 import ext.LoadMask;
+import ext.container.Container;
 import ext.grid.GridPanel;
 
 import js.KeyEvent;
@@ -36,6 +38,9 @@ public class TaxonomySuggestionsLinkListPanelBase extends GridPanel {
   private var selectedPositionsExpression:ValueExpression;
   private var selectedItemsExpression:ValueExpression;
 
+  private var documentFormParent:DocumentForm;
+  private var needsUpdateAfterContentChange:Boolean = false;
+
 
   /**
    * @param config The configuration options. See the config class for details.
@@ -45,14 +50,23 @@ public class TaxonomySuggestionsLinkListPanelBase extends GridPanel {
   public function TaxonomySuggestionsLinkListPanelBase(config:TaxonomySuggestionsLinkListPanel = null) {
     super(config);
 
+    documentFormParent = findParentBy(function (cont:Container):Boolean {
+      return cont is DocumentForm && cont.up() && cont.up() is DocumentTabPanel;
+    }) as DocumentForm;
+
+    if (documentFormParent) {
+      mon(documentFormParent, "activate", documentFormActivated);
+    }
+
     if (!config.disableSuggestions) {
       bindTo = config.bindTo;
 
       propertyValueExpression = ValueExpressionFactory.create('properties.' + config.propertyName, bindTo.getValue());
       propertyValueExpression.addChangeListener(propertyChanged);
+      bindTo.addChangeListener(contentChanged);
       taxonomyId = config.taxonomyId;
 
-      cache = new TaxonomyCache(bindTo.getValue() as Content, propertyValueExpression, taxonomyId);
+      cache = new TaxonomyCache(bindTo, propertyValueExpression, taxonomyId);
     }
   }
 
@@ -100,6 +114,31 @@ public class TaxonomySuggestionsLinkListPanelBase extends GridPanel {
    */
   private function propertyChanged():void {
     updateSuggestions(false);
+  }
+
+  /**
+   * Fired when the underlying content changes
+   * We use this event to refresh and reload the taxonomy list iff
+   * the surrounding document form is visible. Otherwise, wait
+   * for activation.
+   */
+  private function contentChanged():void {
+    if (documentFormParent && documentFormParent.isVisible()) {
+      updateSuggestions(true);
+      needsUpdateAfterContentChange = false;
+    } else {
+      needsUpdateAfterContentChange = true;
+    }
+  }
+
+  /**
+   * After activation of the surrounding document form
+   */
+  private function documentFormActivated():void {
+    if (needsUpdateAfterContentChange) {
+      updateSuggestions(true);
+      needsUpdateAfterContentChange = false;
+    }
   }
 
   protected function getSuggestionsExpression():ValueExpression {
@@ -229,7 +268,6 @@ public class TaxonomySuggestionsLinkListPanelBase extends GridPanel {
    * @return
    */
   protected function taxonomyRenderer(value:*, metaData:*, record:BeanRecord):String {
-    var siteId:String = editorContext.getSitesService().getSiteIdFor(bindTo.getValue());
     TaxonomyUtil.loadTaxonomyPath(record, bindTo.getValue(), taxonomyId, function (updatedRecord:BeanRecord):void {
       var content:Content = record.getBean() as Content;
       var renderer:TaxonomyRenderer = TaxonomyRenderFactory.createSuggestionsRenderer(record.data.nodes, getId(), cache.getWeight(content.getId()));
@@ -256,9 +294,9 @@ public class TaxonomySuggestionsLinkListPanelBase extends GridPanel {
   }
 
   override protected function onDestroy():void {
-    if (propertyValueExpression) {
-      propertyValueExpression.removeChangeListener(propertyChanged);
-    }
+    bindTo.removeChangeListener(contentChanged);
+    documentFormParent && mun(documentFormParent, "activate", documentFormActivated);
+    propertyValueExpression && propertyValueExpression.removeChangeListener(propertyChanged);
 
     loadMask && loadMask.destroy();
 
