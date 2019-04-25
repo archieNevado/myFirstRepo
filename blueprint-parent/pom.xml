@@ -30,13 +30,13 @@
 
     <customer>Blueprint</customer>
 
-    <blueprint-base.version>1901.2</blueprint-base.version>
-    <cms.version>1901.2</cms.version>
-    <personalization.version>1901.2</personalization.version>
-    <elastic.version>1901.2</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
-    <studio.version>1901.2</studio.version>
-    <caetoolbox.version>1901.2</caetoolbox.version>
-    <livecontext.version>1901.2</livecontext.version>
+    <blueprint-base.version>1904.1</blueprint-base.version>
+    <cms.version>1904.1</cms.version>
+    <personalization.version>1904.1</personalization.version>
+    <elastic.version>1904.1</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
+    <studio.version>1904.1</studio.version>
+    <caetoolbox.version>1904.1</caetoolbox.version>
+    <livecontext.version>1904.1</livecontext.version>
     <jangaroo.version>4.0.65</jangaroo.version>
 
     <!--
@@ -814,7 +814,7 @@
         <plugin>
           <groupId>org.sonarsource.scanner.maven</groupId>
           <artifactId>sonar-maven-plugin</artifactId>
-          <version>3.4.1.1168</version>
+          <version>3.6.0.1398</version>
         </plugin>
         <plugin>
           <groupId>org.owasp</groupId>
@@ -912,10 +912,14 @@
                 <DependencyConvergence/>
                 <bannedDependencies>
                   <excludes>
+                    <!-- use spring utilities instead -->
+                    <exclude>commons-beanutils:commons-beanutils</exclude>
                     <!-- exclude commons-httpclient, use org.apache.httpcomponents:httpclient instead-->
                     <exclude>commons-httpclient:commons-httpclient</exclude>
                     <!-- excluded because of conflict with logback -->
-                    <exclude>commons-logging:commons-logging</exclude>
+                    <exclude>commons-logging:commons-logging:*</exclude>
+                    <!-- use hibernate validator instead -->
+                    <exclude>commons-validator:commons-validator:*</exclude>
                     <!-- excluded because already included in jdk 6 -->
                     <exclude>stax:stax-api</exclude>
                     <exclude>org.apache.geronimo.specs:geronimo-stax-api_1.0_spec</exclude>
@@ -1000,7 +1004,6 @@
                     <include>com.coremedia.ui:coremedia-rest-test:*:*:test</include>
                     <include>org.assertj:*:*:*:test</include>
                     <include>org.eclipse.jetty:*:*:*:test</include>
-                    <include>org.jmock:*:*:*:test</include>
                     <include>org.junit:*:*:*:test</include>
                     <include>org.junit.jupiter:*:*:*:test</include>
                     <include>org.junit.platform:*:*:*:test</include>

@@ -52,16 +52,6 @@ public class CatalogServiceResource {
   public static final String SEARCH_TYPE_PRODUCT_VARIANT = "ProductVariant";
   private static final String SEARCH_TYPE_MARKETING_SPOTS = "MarketingSpot";
 
-  @Nullable
-  public CatalogService getCatalogService() {
-    return CurrentCommerceConnection.get().getCatalogService();
-  }
-
-  @Nullable
-  public MarketingSpotService getMarketingSpotService() {
-    return CurrentCommerceConnection.get().getMarketingSpotService();
-  }
-
   @GET
   @Path("search/{siteId:[^/]+}")
   @Nullable
@@ -123,26 +113,33 @@ public class CatalogServiceResource {
     // check if it is the actual id of the root category
     // (depends on the commerce implementation)
     CatalogAlias myAlias = StringUtils.isEmpty(catalogAlias) ? DEFAULT_CATALOG_ALIAS : CatalogAlias.of(catalogAlias);
-    String rootCategoryId = getCatalogService().findRootCategory(myAlias, storeContext).getExternalId();
+    CommerceConnection commerceConnection = storeContext.getConnection();
+    CatalogService catalogService = commerceConnection.getCatalogService();
+    String rootCategoryId = catalogService.findRootCategory(myAlias, storeContext).getExternalId();
     return categoryParam.equals(rootCategoryId);
   }
 
   private SearchResult<? extends CommerceBean> search(String query, String searchType,
                                                       @NonNull StoreContext newStoreContextForSite,
                                                       @NonNull Map<String, String> params) {
+    CommerceConnection commerceConnection = newStoreContextForSite.getConnection();
+
     if (searchType != null && searchType.equals(SEARCH_TYPE_PRODUCT_VARIANT)) {
-      return getCatalogService().searchProductVariants(query, params, newStoreContextForSite);
+      CatalogService catalogService = commerceConnection.getCatalogService();
+      return catalogService.searchProductVariants(query, params, newStoreContextForSite);
     } else if (searchType != null && searchType.equals(SEARCH_TYPE_MARKETING_SPOTS)) {
-      if (getMarketingSpotService() == null) {
+      MarketingSpotService marketingSpotService = commerceConnection.getMarketingSpotService();
+      if (marketingSpotService == null) {
         SearchResult<? extends CommerceBean> searchResult = new SearchResult<>();
         searchResult.setSearchResult(emptyList());
         searchResult.setTotalCount(0);
         return searchResult;
       } else {
-        return getMarketingSpotService().searchMarketingSpots(query, params, newStoreContextForSite);
+        return marketingSpotService.searchMarketingSpots(query, params, newStoreContextForSite);
       }
     } else {// default: Product
-      return getCatalogService().searchProducts(query, params, newStoreContextForSite);
+      CatalogService catalogService = commerceConnection.getCatalogService();
+      return catalogService.searchProducts(query, params, newStoreContextForSite);
     }
   }
 

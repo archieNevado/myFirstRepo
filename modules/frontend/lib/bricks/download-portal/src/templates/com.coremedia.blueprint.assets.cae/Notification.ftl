@@ -4,5 +4,5 @@
 <#assign classBox=cm.localParameters().classBox!"" />
 
 <div class="${classBox} am-notification am-notification--${self.type?string?lower_case}">
-  <@bp.message key=self.key args=self.params!cm.UNDEFINED highlightErrors=true />
+  <@cm.message key=self.key args=self.params!cm.UNDEFINED highlightErrors=true />
 </div>

@@ -12,13 +12,13 @@
       <h3 class="cm-comments__title cm-heading3">
         <#switch numberOfContributions>
           <#case 0>
-          <@bp.message key="comments_no_comments" />
+          <@cm.message key="comments_no_comments" />
           <#break>
           <#case 1>
-            <@bp.message key="comments_headline_singular" />
+            <@cm.message key="comments_headline_singular" />
             <#break>
           <#default>
-            <@bp.message key="comments_headline" args=[numberOfContributions] />
+            <@cm.message key="comments_headline" args=[numberOfContributions] />
         </#switch>
       </h3>
   </#if>
@@ -28,10 +28,10 @@
     <@elasticSocial.notification type="inactive" text="" additionalClasses=["cm-comments__notification"] attr={"data-cm-notification": '{"path": ""}'} />
 
       <div class="cm-comments__toolbar cm-toolbar cm-toolbar--comments">
-        <@components.button text=bp.getMessage("comments_write") attr={"data-cm-button--comment": '{"replyTo": ""}'} />
+        <@components.button text=cm.getMessage("comments_write") attr={"data-cm-button--comment": '{"replyTo": ""}'} />
       </div>
   <#elseif self.isWritingContributionsEnabled() && es.isAnonymousUser()>
-    <@elasticSocial.notification type="info" text=bp.getMessage("commentForm_not_logged_in") additionalClasses=["cm-comments__notification"] attr={"data-cm-comments-notification-type": "LOGIN_REQUIRED"} />
+    <@elasticSocial.notification type="info" text=cm.getMessage("commentForm_not_logged_in") additionalClasses=["cm-comments__notification"] attr={"data-cm-comments-notification-type": "LOGIN_REQUIRED"} />
       <div class="cm-comments__toolbar cm-toolbar cm-toolbar--comments">
         <@cm.include self=es.getLogin()!cm.UNDEFINED view="asButtonGroup" />
       </div>

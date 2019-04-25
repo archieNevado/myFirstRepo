@@ -30,14 +30,14 @@
       <div class="cm-fieldset__item cm-field">
         <#assign idTitle=bp.generateId("cm-new-review__title-") />
         <@elasticSocial.notification type="inactive" additionalClasses=["cm-field__notification"] attr={"data-cm-notification": '{"path": "title"}'} />
-        <label for="${idTitle}" class="cm-field__name"><@bp.message "reviewForm_label_title" /></label>
-        <input type="text" class="cm-field__value cm-textfield" name="title" id="${idTitle}" placeholder="${bp.getMessage("reviewForm_placeholder_title")}">
+        <label for="${idTitle}" class="cm-field__name"><@cm.message "reviewForm_label_title" /></label>
+        <input type="text" class="cm-field__value cm-textfield" name="title" id="${idTitle}" placeholder="${cm.getMessage("reviewForm_placeholder_title")}">
       </div>
       <div class="cm-fieldset__item cm-field">
         <#assign idText=bp.generateId("cm-new-review__textarea-") />
         <@elasticSocial.notification type="inactive" additionalClasses=["cm-field__notification"] attr={"data-cm-notification": '{"path": "text"}'} />
-        <label for="${idText}" class="cm-field__name"><@bp.message "reviewForm_label_text" /></label>
-        <textarea name="text" class="cm-field__value cm-textarea" id="${idText}" placeholder="${bp.getMessage("reviewForm_placeholder_text")}"></textarea>
+        <label for="${idText}" class="cm-field__name"><@cm.message "reviewForm_label_text" /></label>
+        <textarea name="text" class="cm-field__value cm-textarea" id="${idText}" placeholder="${cm.getMessage("reviewForm_placeholder_text")}"></textarea>
       </div>
 
       <#if es.isAnonymousUser() && self.elasticSocialConfiguration.recaptchaForReviewRequired!false>
@@ -47,8 +47,8 @@
       </#if>
 
       <div class="cm-fieldset__item cm-button-group cm-button-group--default">
-        <@components.button text=bp.getMessage("reviewForm_label_hide") attr={"type": "button", "classes": ["btn", "cm-button-group__button", "cm-button--secondary"], "data-cm-button--cancel": ""} />
-        <@components.button text=bp.getMessage("reviewForm_label_submit") attr={"type": "submit", "classes": ["btn", "cm-button-group__button"], "data-cm-button--submit": ""} />
+        <@components.button text=cm.getMessage("reviewForm_label_hide") attr={"type": "button", "classes": ["btn", "cm-button-group__button", "cm-button--secondary"], "data-cm-button--cancel": ""} />
+        <@components.button text=cm.getMessage("reviewForm_label_submit") attr={"type": "submit", "classes": ["btn", "cm-button-group__button"], "data-cm-button--submit": ""} />
       </div>
     </fieldset>
   </form>

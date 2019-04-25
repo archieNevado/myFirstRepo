@@ -5,7 +5,7 @@
   <div class="am-category-overview__sub-categories">
     <#assign subcategories=self.subcategories />
     <#if subcategories?has_content>
-      <h2 class="am-heading-2">${bp.getMessage("am_categories")}</h2>
+      <h2 class="am-heading-2">${cm.getMessage("am_categories")}</h2>
       <#list subcategories as subcategory>
         <div class="am-category-overview__sub-category">
           <@cm.include self=subcategory.category view="asTeaser" params={"assetCount" : subcategory.assetsInCategory}/>

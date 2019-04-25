@@ -17,7 +17,7 @@
         <#assign averageRatingRounded=averageRating?round />
 
         <div class="cm-ratings-average__header">
-  
+
           <span class="cm-ratings-average__rating cm-rating">
             <#list es.getMaxRating()..1 as currentRating>
               <#assign classRatingIndicator="" />
@@ -28,14 +28,14 @@
             </#list>
           </span>
           <span class="cm-ratings-average__text" itemprop="rating" itemscope="itemscope" itemtype="http://data-vocabulary.org/Rating">
-            <@bp.message key="ratings_average_symbol" /> <span itemprop="average">${averageRating?string("0.##")}</span> <@bp.message key="ratings_average_out_of" /> <span itemprop="best">${es.getMaxRating()}</span>
+            <@cm.message key="ratings_average_symbol" /> <span itemprop="average">${averageRating?string("0.##")}</span> <@cm.message key="ratings_average_out_of" /> <span itemprop="best">${es.getMaxRating()}</span>
           </span>
           <span class="cm-ratings-average__votes">
             <#assign ratingsLabel="" />
             <#if (numberOfRatings == 1)>
-              <#assign ratingsLabel=bp.getMessage("rating_number_of_ratings_singular") />
+              <#assign ratingsLabel=cm.getMessage("rating_number_of_ratings_singular") />
             <#else>
-              <#assign ratingsLabel=bp.getMessage("rating_number_of_ratings") />
+              <#assign ratingsLabel=cm.getMessage("rating_number_of_ratings") />
             </#if>
             (<span itemprop="votes">${numberOfRatings}</span> ${ratingsLabel})
           </span>
@@ -47,13 +47,13 @@
           <#assign numberOfRatings=self.getNumberOfRatings()!0 />
           <#switch numberOfRatings>
             <#case 0>
-              <@bp.message key="ratings_no_ratings" />
+              <@cm.message key="ratings_no_ratings" />
               <#break>
             <#case 1>
-              <@bp.message key="ratings_headline_singular" />
+              <@cm.message key="ratings_headline_singular" />
               <#break>
             <#default>
-              <@bp.message key="ratings_headline" args=[numberOfRatings] />
+              <@cm.message key="ratings_headline" args=[numberOfRatings] />
           </#switch>
         </h3>
       </#if>
@@ -65,17 +65,17 @@
       <@elasticSocial.notification type="inactive" text="" additionalClasses=["cm-ratings__notification"] attr={"data-cm-notification": '{"path": ""}'} />
       <#if (es.hasUserRated(self.getTarget()))!false>
         <div class="cm-ratings__toolbar cm-toolbar cm-toolbar--ratings">
-          <@components.button text=bp.getMessage("ratings_write") attr={"class": "cm-button cm-button--small cm-button--rating cm-button--disabled"} />
+          <@components.button text=cm.getMessage("ratings_write") attr={"class": "cm-button cm-button--small cm-button--rating cm-button--disabled"} />
         </div>
-        <@elasticSocial.notification type="info" text=bp.getMessage("reviewForm_already_rated") additionalClasses=["cm-ratings__notification"] attr={"data-cm-ratings-notification-type": "ALREADY_RATED"} />
+        <@elasticSocial.notification type="info" text=cm.getMessage("reviewForm_already_rated") additionalClasses=["cm-ratings__notification"] attr={"data-cm-ratings-notification-type": "ALREADY_RATED"} />
       <#else>
         <div class="cm-ratings__toolbar cm-toolbar cm-toolbar--ratings">
-          <@components.button text=bp.getMessage("ratings_write") attr={"class": "cm-button cm-button--small cm-button--rating", "data-cm-button--rating": ''} />
+          <@components.button text=cm.getMessage("ratings_write") attr={"class": "cm-button cm-button--small cm-button--rating", "data-cm-button--rating": ''} />
         </div>
         <@cm.include self=self view="ratingForm" />
       </#if>
     <#elseif self.isWritingContributionsEnabled() && es.isAnonymousUser()>
-      <@elasticSocial.notification type="info" text=bp.getMessage("ratingForm_not_logged_in") additionalClasses=["cm-ratings__notification"] attr={"data-cm-ratings-notification-type": "LOGIN_REQUIRED"} />
+      <@elasticSocial.notification type="info" text=cm.getMessage("ratingForm_not_logged_in") additionalClasses=["cm-ratings__notification"] attr={"data-cm-ratings-notification-type": "LOGIN_REQUIRED"} />
       <div class="cm-ratings__toolbar cm-toolbar cm-toolbar--ratings">
         <@cm.include self=es.getLogin()!cm.UNDEFINED view="asButton" />
       </div>

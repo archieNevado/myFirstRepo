@@ -33,10 +33,10 @@ public abstract class AbstractCatalogResource<Entity extends CommerceObject> imp
 
   private CatalogAliasTranslationService catalogAliasTranslationService;
 
-  private static final String ID = "id";
-  private static final String SITE_ID = "siteId";
-  private static final String CATALOG_ALIAS = "catalogAlias";
-  private static final String WORKSPACE_ID = "workspaceId";
+  static final String ID = "id";
+  static final String SITE_ID = "siteId";
+  static final String CATALOG_ALIAS = "catalogAlias";
+  static final String WORKSPACE_ID = "workspaceId";
 
   private String id;
   private String siteId;
@@ -127,7 +127,9 @@ public abstract class AbstractCatalogResource<Entity extends CommerceObject> imp
             .withWorkspaceId(workspaceId);
 
     if (catalogAlias != null && catalogAliasTranslationService != null) {
-      Optional<CatalogId> catalogId = catalogAliasTranslationService.getCatalogIdForAlias(catalogAlias, siteId);
+      Optional<CatalogId> catalogId = catalogAliasTranslationService
+              .getCatalogIdForAlias(catalogAlias, siteId, originalContext);
+
       clonedContextBuilder = clonedContextBuilder
               .withCatalogId(catalogId.orElse(null))
               .withCatalogAlias(catalogAlias);

@@ -34,6 +34,7 @@
     public static const TAXONOMY_EXPLORER_SEP_SECOND_ITEM_ID:String = "taxonomyExplorerSepSecond";
 
     public static const TAXONOMY_EXPLORER_PANEL_BLOCK:String = "cm-taxonomy-explorer-panel";
+    public static const TAXONOMY_DOCUMENT_VIEW_ITEM_ID:String = "taxonomyStandaloneDocumentView";
 
     private var config:TaxonomyExplorerPanel;
 
@@ -115,15 +116,16 @@
         </TabPanel>
 
         <!--Display Panel Right-->
-        <editor:StandAloneDocumentView id_="taxonomyStandaloneDocumentView"
-                                       width="400"
-                                       flex="1"
-                                       minWidth="200"
-                                       bindTo="{getDisplayedTaxonomyContentExpression()}">
-          <editor:mixins>
+        <local:TaxonomyStandAloneDocumentView id_="{TAXONOMY_DOCUMENT_VIEW_ITEM_ID}"
+                                              width="400"
+                                              flex="1"
+                                              minWidth="200"
+                                              bindTo="{getDisplayedTaxonomyContentExpression()}"
+                                              forceReadOnlyValueExpression="{getForceReadOnlyValueExpression()}">
+          <local:mixins>
             <ui:BEMMixin bemElement="form"/>
-          </editor:mixins>
-        </editor:StandAloneDocumentView>
+          </local:mixins>
+        </local:TaxonomyStandAloneDocumentView>
       </items>
     </Container>
   </local:items>

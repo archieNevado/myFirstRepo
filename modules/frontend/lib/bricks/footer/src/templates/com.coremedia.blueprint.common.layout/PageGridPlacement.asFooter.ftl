@@ -9,7 +9,7 @@
     <div class="row">
       <div class="col-xs-12 col-sm-9">
         <#-- copyright info in footer (left) -->
-        <div class="cm-footer__copyright">${bp.getMessage("copyright")}</div>
+        <div class="cm-footer__copyright">${cm.getMessage("copyright")}</div>
         <#-- items of placement as links -->
         <#list self.items![]>
           <ul class="cm-footer__links">

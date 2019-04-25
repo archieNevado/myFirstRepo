@@ -40,6 +40,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
 @ActiveProfiles(LocalizationServiceTest.LocalConfig.PROFILE)
 public class LocalizationServiceTest {
   private static final Locale HAMBURG_LOCALE = new Locale("de", "DE", "hamburg");
+  private static final Locale OTHER_LOCALE = new Locale("lv");
 
   @Configuration
   @Import({XmlRepoConfiguration.class, LocalizationServiceConfiguration.class})
@@ -114,6 +115,18 @@ public class LocalizationServiceTest {
     assertEquals("strdede", resources.get("strdede"));
     assertEquals("strde", resources.get("strde"));
     assertNull(resources.get("strfr"));
+  }
+
+  @Test
+  public void testUnknownLocaleWithoutExplicitFallbacks() {
+    Struct resources = testling.resources(content(10), OTHER_LOCALE);
+    assertNull(resources.get("stren"));
+  }
+
+  @Test
+  public void testUnknownLocaleWitExplicitFallback() {
+    Struct resources = testling.resources(contents(10), OTHER_LOCALE, contents(14));
+    assertEquals("stren", resources.get("stren"));
   }
 
   @Test

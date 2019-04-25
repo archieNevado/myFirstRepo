@@ -99,14 +99,14 @@
 <span id="complainTag_${id}" class="complaint">
   <#if value?has_content>
       <a class="enabled complaint button ${customClass}" id="complainAnchor_${id}" style="display:none"
-         onclick="c_${id}.complain(complainerId, true);"><@bp.message "comment-complaint"/></a>
+         onclick="c_${id}.complain(complainerId, true);"><@cm.message "comment-complaint"/></a>
       <a class="enabled uncomplaint button ${customClass}" id="uncomplainAnchor_${id}"
-         onclick="c_${id}.complain(complainerId, false);"><@bp.message "comment-uncomplaint"/></a>
+         onclick="c_${id}.complain(complainerId, false);"><@cm.message "comment-uncomplaint"/></a>
   <#else>
       <a class="enabled complaint button ${customClass}" id="complainAnchor_${id}"
-         onclick="c_${id}.complain(complainerId, true);"><@bp.message "comment-complaint"/></a>
+         onclick="c_${id}.complain(complainerId, true);"><@cm.message "comment-complaint"/></a>
       <a class="enabled uncomplaint button ${customClass}" id="uncomplainAnchor_${id}" style="display:none"
-         onclick="c_${id}.complain(complainerId, false);"><@bp.message "comment-uncomplaint"/></a>
+         onclick="c_${id}.complain(complainerId, false);"><@cm.message "comment-uncomplaint"/></a>
   </#if>
 </span>
 <#local complainUrl=cm.getLink("/elastic/social/complaint")/>

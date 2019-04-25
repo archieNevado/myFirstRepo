@@ -16,7 +16,7 @@
 <div class="container">
   <div class="row">
     <div class="cm-form cm-form--userdetailsform well col-xs-12 col-md-6 col-md-push-3"<@preview.metadata data=[self.action.content!"", "properties.id"]/>>
-      <h1 class="cm-form__headline"><@bp.message "userDetails_personalDetails" /></h1>
+      <h1 class="cm-form__headline"><@cm.message "userDetails_personalDetails" /></h1>
 
       <#if userDetails?has_content>
         <form method="post" enctype="multipart/form-data">
@@ -28,8 +28,8 @@
           <#-- username -->
           <@spring.bind path="userDetails.username"/>
           <div class="form-group<#if spring.status.error> has-error</#if>">
-            <@elasticSocial.labelFromSpring path="userDetails.username" text='${bp.getMessage("userDetails_username")}'/>
-            <@spring.formInput path="userDetails.username" attributes='class="form-control" placeholder="${bp.getMessage("registration_username_label")}" required'/>
+            <@elasticSocial.labelFromSpring path="userDetails.username" text='${cm.getMessage("userDetails_username")}'/>
+            <@spring.formInput path="userDetails.username" attributes='class="form-control" placeholder="${cm.getMessage("registration_username_label")}" required'/>
             <#if spring.status.error><span class="help-block">${spring.status.getErrorMessagesAsString("\n")}</span></#if>
           </div>
 
@@ -38,24 +38,24 @@
             <#-- givenname -->
             <@spring.bind path="userDetails.givenname"/>
             <div class="form-group<#if spring.status.error> has-error</#if>">
-              <@elasticSocial.labelFromSpring path="userDetails.givenname" text='${bp.getMessage("userDetails_givenname")}'/>
-              <@spring.formInput path="userDetails.givenname" attributes='class="form-control" placeholder="${bp.getMessage("registration_username_label")}" required'/>
+              <@elasticSocial.labelFromSpring path="userDetails.givenname" text='${cm.getMessage("userDetails_givenname")}'/>
+              <@spring.formInput path="userDetails.givenname" attributes='class="form-control" placeholder="${cm.getMessage("registration_username_label")}" required'/>
               <#if spring.status.error><span class="help-block">${spring.status.getErrorMessagesAsString("\n")}</span></#if>
             </div>
 
             <#-- surname -->
             <@spring.bind path="userDetails.surname"/>
             <div class="form-group<#if spring.status.error> has-error</#if>">
-              <@elasticSocial.labelFromSpring path="userDetails.surname" text='${bp.getMessage("userDetails_surname")}'/>
-              <@spring.formInput path="userDetails.surname" attributes='class="form-control" placeholder="${bp.getMessage("registration_username_label")}" required'/>
+              <@elasticSocial.labelFromSpring path="userDetails.surname" text='${cm.getMessage("userDetails_surname")}'/>
+              <@spring.formInput path="userDetails.surname" attributes='class="form-control" placeholder="${cm.getMessage("registration_username_label")}" required'/>
               <#if spring.status.error><span class="help-block">${spring.status.getErrorMessagesAsString("\n")}</span></#if>
             </div>
 
             <#-- email -->
             <@spring.bind path="userDetails.emailAddress"/>
             <div class="form-group<#if spring.status.error> has-error</#if>">
-              <@elasticSocial.labelFromSpring path="userDetails.emailAddress" text='${bp.getMessage("userDetails_emailAddress")}'/>
-              <@spring.formInput path="userDetails.emailAddress" attributes='class="form-control" placeholder="${bp.getMessage("userDetails_emailAddress")}" required' fieldType="email"/>
+              <@elasticSocial.labelFromSpring path="userDetails.emailAddress" text='${cm.getMessage("userDetails_emailAddress")}'/>
+              <@spring.formInput path="userDetails.emailAddress" attributes='class="form-control" placeholder="${cm.getMessage("userDetails_emailAddress")}" required' fieldType="email"/>
               <#if spring.status.error><span class="help-block">${spring.status.getErrorMessagesAsString("\n")}</span></#if>
             </div>
 
@@ -64,7 +64,7 @@
             <div class="form-group<#if spring.status.error> has-error</#if>">
               <div class="checkbox">
                 <label>
-                  <@spring.formCheckbox path="userDetails.receiveCommentReplyEmails"/>${bp.getMessage("userDetails_receiveCommentReplyEmails")}
+                  <@spring.formCheckbox path="userDetails.receiveCommentReplyEmails"/>${cm.getMessage("userDetails_receiveCommentReplyEmails")}
                 </label>
               </div>
             </div>
@@ -73,7 +73,7 @@
           <#-- profile image -->
             <div class="form-group">
               <@spring.bind path="userDetails.profileImage"/>
-              <label for="${spring.status.expression?replace('[','')?replace(']','')}">${bp.getMessage("userDetails_profileImage")}</label>
+              <label for="${spring.status.expression?replace('[','')?replace(']','')}">${cm.getMessage("userDetails_profileImage")}</label>
 
               <div class="row">
                 <#if userDetails.profileImage?has_content>
@@ -84,7 +84,7 @@
                   <@spring.bind path="userDetails.deleteProfileImage"/>
                   <div class="checkbox">
                     <label>
-                      <@spring.formCheckbox path="userDetails.deleteProfileImage"/>${bp.getMessage("userDetails_deleteProfileImage")}
+                      <@spring.formCheckbox path="userDetails.deleteProfileImage"/>${cm.getMessage("userDetails_deleteProfileImage")}
                     </label>
                   </div>
                 </div>
@@ -98,7 +98,7 @@
           <#-- timezone -->
           <@spring.bind path="userDetails.timeZoneId"/>
           <div class="form-group<#if spring.status.error> has-error</#if>">
-            <@elasticSocial.labelFromSpring path="userDetails.timeZoneId" text='${bp.getMessage("userDetails_timeZone")}'/>
+            <@elasticSocial.labelFromSpring path="userDetails.timeZoneId" text='${cm.getMessage("userDetails_timeZone")}'/>
             <select id="${spring.status.expression?replace('[','')?replace(']','')}"
                     name="${spring.status.expression}" class="form-control">
               <#list timeZones![] as value>
@@ -111,7 +111,7 @@
           <#-- language -->
           <@spring.bind path="userDetails.localizedLocale"/>
           <div class="form-group<#if spring.status.error> has-error</#if>">
-            <@elasticSocial.labelFromSpring path="userDetails.localizedLocale" text='${bp.getMessage("userDetails_localeLanguage")}'/>
+            <@elasticSocial.labelFromSpring path="userDetails.localizedLocale" text='${cm.getMessage("userDetails_localeLanguage")}'/>
             <select id="${spring.status.expression?replace('[','')?replace(']','')}"
                     name="${spring.status.expression}" class="form-control">
               <#list locales as value>
@@ -122,41 +122,41 @@
           </div>
 
           <div class="form-group">
-            <h3><@bp.message "userDetails_changePassword" /></h3>
+            <h3><@cm.message "userDetails_changePassword" /></h3>
           </div>
 
           <#-- password -->
           <@spring.bind path="userDetails.password"/>
           <div class="form-group<#if spring.status.error> has-error</#if>">
-            <@elasticSocial.labelFromSpring path="userDetails.password" text='${bp.getMessage("userDetails_password")}'/>
-            <@spring.formInput path="userDetails.password" attributes='class="form-control" placeholder="${bp.getMessage("userDetails_password")}"' fieldType="password"/>
+            <@elasticSocial.labelFromSpring path="userDetails.password" text='${cm.getMessage("userDetails_password")}'/>
+            <@spring.formInput path="userDetails.password" attributes='class="form-control" placeholder="${cm.getMessage("userDetails_password")}"' fieldType="password"/>
             <#if spring.status.error><span class="help-block">${spring.status.getErrorMessagesAsString("\n")}</span></#if>
           </div>
 
           <#-- new password -->
           <@spring.bind path="userDetails.newPassword"/>
           <div class="form-group<#if spring.status.error> has-error</#if>">
-            <@elasticSocial.labelFromSpring path="userDetails.newPassword" text='${bp.getMessage("userDetails_newPassword")}'/>
-            <@spring.formInput path="userDetails.newPassword" attributes='class="form-control" placeholder="${bp.getMessage("userDetails_newPassword")}"' fieldType="password"/>
+            <@elasticSocial.labelFromSpring path="userDetails.newPassword" text='${cm.getMessage("userDetails_newPassword")}'/>
+            <@spring.formInput path="userDetails.newPassword" attributes='class="form-control" placeholder="${cm.getMessage("userDetails_newPassword")}"' fieldType="password"/>
             <#if spring.status.error><span class="help-block">${spring.status.getErrorMessagesAsString("\n")}</span></#if>
           </div>
 
           <#-- repeat new password -->
           <@spring.bind path="userDetails.newPasswordRepeat"/>
           <div class="form-group<#if spring.status.error> has-error</#if>">
-            <@elasticSocial.labelFromSpring path="userDetails.newPasswordRepeat" text='${bp.getMessage("userDetails_newPasswordRepeat")}'/>
-            <@spring.formInput path="userDetails.newPasswordRepeat" attributes='class="form-control" placeholder="${bp.getMessage("userDetails_newPasswordRepeat")}"' fieldType="password"/>
+            <@elasticSocial.labelFromSpring path="userDetails.newPasswordRepeat" text='${cm.getMessage("userDetails_newPasswordRepeat")}'/>
+            <@spring.formInput path="userDetails.newPasswordRepeat" attributes='class="form-control" placeholder="${cm.getMessage("userDetails_newPasswordRepeat")}"' fieldType="password"/>
             <#if spring.status.error><span class="help-block">${spring.status.getErrorMessagesAsString("\n")}</span></#if>
           </div>
 
           <div class="form-group text-right">
-            <@components.button text=bp.getMessage("userDetails_deleteProfile") attr={"type": "submit", "id": "deleteUser", "name": "_eventId_deleteUser", "classes": ["btn","cm-button--secondary", "pull-left"]} />
-            <@components.button text=bp.getMessage("userDetails_cancel")        attr={"type": "submit", "id": "cancel", "name": "_eventId_cancel","classes": ["btn", "cm-button--secondary"]} />
-            <@components.button text=bp.getMessage("userDetails_saveProfile")   attr={"type": "submit", "id": "saveUser", "classes": ["btn","btn-primary"]} />
+            <@components.button text=cm.getMessage("userDetails_deleteProfile") attr={"type": "submit", "id": "deleteUser", "name": "_eventId_deleteUser", "classes": ["btn","cm-button--secondary", "pull-left"]} />
+            <@components.button text=cm.getMessage("userDetails_cancel")        attr={"type": "submit", "id": "cancel", "name": "_eventId_cancel","classes": ["btn", "cm-button--secondary"]} />
+            <@components.button text=cm.getMessage("userDetails_saveProfile")   attr={"type": "submit", "id": "saveUser", "classes": ["btn","btn-primary"]} />
           </div>
         </form>
       <#else>
-        <@elasticSocial.notification type="error" text=bp.getMessage("userDetails_noUserFound") additionalClasses=["alert alert-danger"] />
+        <@elasticSocial.notification type="error" text=cm.getMessage("userDetails_noUserFound") additionalClasses=["alert alert-danger"] />
       </#if>
     </div>
   </div>

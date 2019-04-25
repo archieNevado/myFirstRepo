@@ -24,14 +24,14 @@
         <ul class="cm-user-chooser__items collapse">
           <li class="cm-user-chooser__item">
             <a href="${cm.getLink(profileAction)}"
-               title="${bp.getMessage("userDetails_title")}" <@preview.metadata data=[profileAction.content, "properties.id"] />>
-              <span class="cm-icon__info"><@bp.message "userDetails_title" /></span>
+               title="${cm.getMessage("userDetails_title")}" <@preview.metadata data=[profileAction.content, "properties.id"] />>
+              <span class="cm-icon__info"><@cm.message "userDetails_title" /></span>
             </a>
           </li>
           <li class="cm-user-chooser__item">
             <a href="${logoutLink}"
-               title="${bp.getMessage("logout_title")}" <@preview.metadata data=[logoutAction.content, "properties.id"] />>
-              <span class="cm-icon__info"><@bp.message "logout_title" /></span>
+               title="${cm.getMessage("logout_title")}" <@preview.metadata data=[logoutAction.content, "properties.id"] />>
+              <span class="cm-icon__info"><@cm.message "logout_title" /></span>
             </a>
           </li>
         </ul>

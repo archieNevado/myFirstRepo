@@ -18,8 +18,6 @@ import com.coremedia.rest.linking.TypeBasedResourceClassFinder;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.net.URISyntaxException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +45,7 @@ public class CommerceCacheInvalidationSourceTest {
     // prepare the basic Studio REST linking infrastructure beans
     EntityResourceLinker linker = new EntityResourceLinker();
     TypeBasedResourceClassFinder resourceClassFinder = new TypeBasedResourceClassFinder();
-    resourceClassFinder.setResourceClasses(Arrays.<Class>asList(
+    resourceClassFinder.setResourceClasses(newArrayList(
             CatalogResource.class,
             CategoryResource.class,
             MarketingSpotResource.class,
@@ -66,7 +64,7 @@ public class CommerceCacheInvalidationSourceTest {
   }
 
   @Test
-  public void testInvalidate() throws InterruptedException, URISyntaxException {
+  public void testInvalidate() throws InterruptedException {
     InvalidationEvent event1 = createEvent(CATALOG_PREFIX + "product/" + ID1, "product");
     InvalidationEvent event2 = createEvent(CATALOG_PREFIX + "product/" + ID2, "product");
     InvalidationEvent event3 = createEvent(CATALOG_PREFIX + "marketingspot/" + ID3, "marketingspot");
@@ -94,7 +92,7 @@ public class CommerceCacheInvalidationSourceTest {
   }
 
   @Test
-  public void testInvalidateClearAll() throws InterruptedException, URISyntaxException {
+  public void testInvalidateClearAll() throws InterruptedException {
     InvalidationEvent event1 = createEvent(CATALOG_PREFIX + "product/" + ID1, "product");
     InvalidationEvent event2 = createEvent(null, "clearall");
 
@@ -110,7 +108,7 @@ public class CommerceCacheInvalidationSourceTest {
   }
 
   @Test
-  public void testInvalidateInvalidEvents() throws InterruptedException, URISyntaxException {
+  public void testInvalidateInvalidEvents() throws InterruptedException {
     InvalidationEvent event1 = createEvent(CATALOG_PREFIX + "product/" + ID1, "product");
     InvalidationEvent event2 = createEvent("blub", "unknown");
     InvalidationEvent event3 = createEvent(null, null);

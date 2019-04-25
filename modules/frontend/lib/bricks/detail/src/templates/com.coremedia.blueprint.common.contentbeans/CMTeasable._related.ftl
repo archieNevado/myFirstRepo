@@ -15,7 +15,7 @@
 <#if self.related?has_content>
   <section class="${blockClass} ${additionalClass}" <@preview.metadata "properties.related"/>>
     <#-- headline -->
-    <h3 class="${blockClass}__headline"><@bp.message key="related_label"/></h3>
+    <h3 class="${blockClass}__headline"><@cm.message key="related_label"/></h3>
 
     <#--items -->
     <@cm.include self=bp.getDynamizableContainer(self, "related") view=relatedView />

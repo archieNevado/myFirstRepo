@@ -6,7 +6,7 @@ const closestPackage = require("closest-package");
 const {
   dependencies: { getDependencies, getDependentsFirstLoadOrder },
   packages,
-  workspace: { isBrickModule },
+  workspace: { getIsSmartImportModuleFor },
 } = require("@coremedia/tool-utils");
 const { loadModules } = require("../utils");
 
@@ -38,7 +38,10 @@ module.exports = function() {
     // clear array of imported views as new run was started
     importedViews.length = 0;
 
-    const dependencies = getDependencies(pkgPath, isBrickModule);
+    const dependencies = getDependencies(
+      pkgPath,
+      getIsSmartImportModuleFor(null)
+    );
     dependenciesToLoadByPackageName = getDependentsFirstLoadOrder(
       dependencies,
       packageName

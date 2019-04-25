@@ -1,14 +1,14 @@
 package com.coremedia.ecommerce.studio.rest;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdHelper;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.contract.Contract;
 import com.coremedia.livecontext.ecommerce.contract.ContractService;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
+
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -42,22 +42,24 @@ public class ContractResource extends AbstractCatalogResource<Contract> {
 
   @Override
   protected Contract doGetEntity() {
-    ContractService contractService = getContractService();
-    if (contractService == null) {
-      return null;
-    }
-
     String id = getId();
 
-    // Iterating all eligible contracts is a workaround since the
-    // `findContractById` call does not consider the store ID.
-    // Therefor we make use of the eligible call since it does consider
-    // the store ID.
     StoreContext storeContext = getStoreContext();
     if (storeContext == null) {
       return null;
     }
 
+    CommerceConnection commerceConnection = storeContext.getConnection();
+
+    ContractService contractService = commerceConnection.getContractService();
+    if (contractService == null) {
+      return null;
+    }
+
+    // Iterating all eligible contracts is a workaround since the
+    // `findContractById` call does not consider the store ID.
+    // Therefor we make use of the eligible call since it does consider
+    // the store ID.
     return contractService.findContractIdsForServiceUser(storeContext).stream()
             .filter(contract -> externalIdMatches(contract, id))
             .findFirst()
@@ -79,9 +81,5 @@ public class ContractResource extends AbstractCatalogResource<Contract> {
     StoreContext context = contract.getContext();
     setSiteId(context.getSiteId());
     setWorkspaceId(context.getWorkspaceId().orElse(null));
-  }
-
-  public ContractService getContractService() {
-    return CurrentCommerceConnection.get().getContractService();
   }
 }

@@ -7,7 +7,7 @@
 <div class="container">
   <div class="row">
     <div class="cm-form cm-form--success col-xs-12 col-md-8 col-md-push-2"<@preview.metadata data=[self.action.content!"", "properties.id"]/>>
-      <@elasticSocial.notification type="success" title=bp.getMessage("registration_title") text=bp.getMessage("registration_success", [emailAddress!""]) additionalClasses=["alert alert-success"] />
+      <@elasticSocial.notification type="success" title=cm.getMessage("registration_title") text=cm.getMessage("registration_success", [emailAddress!""]) additionalClasses=["alert alert-success"] />
       <#if flowRequestContext?has_content && flowRequestContext.messageContext?has_content>
         <#list flowRequestContext.messageContext.allMessages![] as message>
           <@elasticSocial.notification type="warning" text=message.text!"" additionalClasses=["alert alert-warning"] />

@@ -7,7 +7,7 @@ const deepMerge = require("./utils/deepMerge");
 const {
   dependencies: { getFlattenedDependencies, NodeModule },
   packages,
-  workspace: { isBrickModule, getThemeConfig },
+  workspace: { getIsSmartImportModuleFor, getThemeConfig },
 } = require("@coremedia/tool-utils");
 const {
   ViewRepositoryMapping,
@@ -116,7 +116,7 @@ module.exports = () => config => {
   );
   const brickDependencies = getFlattenedDependencies(
     themeModule.getPkgPath(),
-    isBrickModule
+    getIsSmartImportModuleFor(null)
   );
 
   const joinWebpackPlugin = configureJoinWebpackPluginForResourceBundles(
