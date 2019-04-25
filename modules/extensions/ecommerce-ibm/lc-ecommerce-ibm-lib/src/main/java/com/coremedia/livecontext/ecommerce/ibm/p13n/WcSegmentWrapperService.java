@@ -108,10 +108,10 @@ public class WcSegmentWrapperService extends AbstractWcWrapperService {
               .orElse(null);
 
       if (data != null) {
-        List<Map<String, Object>> memberGroups = DataMapHelper.getListValue(data, "MemberGroup");
+        List<Map<String, Object>> memberGroups = DataMapHelper.getList(data, "MemberGroup");
         if (!memberGroups.isEmpty()) {
           Map<String, Object> firstSegment = memberGroups.get(0);
-          String segmentId = DataMapHelper.findStringValue(firstSegment, "id").orElse("");
+          String segmentId = DataMapHelper.findString(firstSegment, "id").orElse("");
           if (!segmentId.isEmpty()) {
             return firstSegment;
           }

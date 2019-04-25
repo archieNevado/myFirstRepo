@@ -43,4 +43,5 @@ public class StoreResourceTest {
     Map<String, Object> rawJson = singletonMap("shopUrl", url);
     assertThat(storeResource.handlePost(rawJson)).isSameAs(o);
   }
+
 }

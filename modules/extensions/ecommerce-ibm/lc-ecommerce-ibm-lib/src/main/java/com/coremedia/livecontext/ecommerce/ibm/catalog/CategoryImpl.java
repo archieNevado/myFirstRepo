@@ -16,22 +16,23 @@ import com.coremedia.livecontext.ecommerce.ibm.common.DataMapTransformationHelpe
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.xml.Markup;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService.DEFAULT_CATALOG_ALIAS;
-import static com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper.findStringValue;
+import static com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper.findString;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -39,7 +40,7 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
 
   private static final Logger LOG = LoggerFactory.getLogger(CategoryImpl.class);
 
-  static final String ROOT_CATEGORY_ROLE_ID = "ROOT";
+  public static final String ROOT_CATEGORY_ROLE_ID = "ROOT";
 
   private Map<String, Object> delegate;
   private WcCatalogWrapperService catalogWrapperService;
@@ -125,14 +126,14 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
 
   @Override
   public String getThumbnailUrl() {
-    return findStringValue(getDelegate(), "thumbnail")
+    return findString(getDelegate(), "thumbnail")
             .map(thumbnailUri -> getAssetUrlProvider().getImageUrl(thumbnailUri, true))
             .orElse(null);
   }
 
   @Override
   public String getDefaultImageUrl() {
-    return findStringValue(getDelegate(), "fullImage")
+    return findString(getDelegate(), "fullImage")
             .map(defaultImageUri -> getAssetUrlProvider().getImageUrl(defaultImageUri))
             .orElse(null);
   }
@@ -167,16 +168,23 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
     List<String> parentCategoryIds = DataMapTransformationHelper.getParentCatGroupIdForSingleWrapper(getDelegate(),
             catalogId);
 
-    if (!parentCategoryIds.isEmpty()) {
-      String parentCatalogGroupID = parentCategoryIds.get(0);
-      if (!isNullOrEmpty(parentCatalogGroupID) && !"-1".equals(parentCatalogGroupID)) {
-        CommerceId commerceId = getCommerceIdProvider().formatCategoryTechId(catalogAlias, parentCatalogGroupID);
-        return (Category) getCommerceBeanFactory().createBeanFor(commerceId, context);
-      }
-    }
+    return parentCategoryIds.stream()
+            .filter(categoryId -> !isNullOrEmpty(categoryId) && !"-1".equals(categoryId))
+            .map(this::findCategoryOrLog)
+            .filter(Objects::nonNull)
+            .findFirst()
+            .orElseGet(() -> getCatalogService().findRootCategory(catalogAlias, context));
+  }
 
-    CommerceId commerceId = getCommerceIdProvider().formatCategoryId(catalogAlias, ROOT_CATEGORY_ROLE_ID);
-    return (Category) getCommerceBeanFactory().createBeanFor(commerceId, context);
+  @Nullable
+  private Category findCategoryOrLog(@NonNull String categoryId) {
+    CommerceId commerceId = getCommerceIdProvider().formatCategoryTechId(getCatalogAlias(), categoryId);
+    Category category = getCatalogService().findCategoryById(commerceId, getContext());
+    if (category == null) {
+      LOG.debug("Category '{}' points to an invalid parent category: {}", this.getId(), commerceId);
+      return null;
+    }
+    return category;
   }
 
   @Override
@@ -383,6 +391,6 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
 
   @Nullable
   private String getStringValueFromDelegate(@NonNull String key) {
-    return findStringValue(getDelegate(), key).orElse(null);
+    return findString(getDelegate(), key).orElse(null);
   }
 }

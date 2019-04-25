@@ -50,7 +50,7 @@ public class MarketingSpotCacheKey extends AbstractIbmDocumentCacheKey<Map<Strin
 
   @NonNull
   private static Optional<String> getDependencyFieldIdentifierKey(@NonNull Map<String, Object> wcMarketingSpot) {
-    return DataMapHelper.findStringValue(wcMarketingSpot, "resourceName")
+    return DataMapHelper.findString(wcMarketingSpot, "resourceName")
             .map(resourceName -> "espot".equals(resourceName)
                     ? "MarketingSpotData[0].marketingSpotIdentifier"
                     : "MarketingSpot[0].spotId");
@@ -59,7 +59,7 @@ public class MarketingSpotCacheKey extends AbstractIbmDocumentCacheKey<Map<Strin
   @NonNull
   private static Optional<String> getDependencyFieldIdentifier(@NonNull Map<String, Object> wcMarketingSpot,
                                                                @NonNull String dependencyFieldIdentifierKey) {
-    return DataMapHelper.findStringValue(wcMarketingSpot, dependencyFieldIdentifierKey)
+    return DataMapHelper.findString(wcMarketingSpot, dependencyFieldIdentifierKey)
             .filter(value -> !value.isEmpty());
   }
 }

@@ -3,7 +3,6 @@ package com.coremedia.livecontext.ecommerce.ibm.user;
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
-import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.user.User;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import org.apache.commons.lang3.StringUtils;
@@ -12,10 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 import javax.inject.Inject;
-import java.util.UUID;
 
-import static com.coremedia.blueprint.lc.test.BetamaxTestHelper.useBetamaxTapes;
-import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_7;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -29,8 +25,7 @@ public class UserServiceImplIT extends IbmServiceTestBase {
 
   @Betamax(tape = "psi_testFindPerson", match = {MatchRule.path, MatchRule.query})
   @Test
-  public void testFindPerson() throws Exception {
-    StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
+  public void testFindPerson() {
     UserContext userContext = UserContext.builder().build();
     UserContextHelper.setCurrentContext(userContext);
     User user = testling.findCurrentUser();

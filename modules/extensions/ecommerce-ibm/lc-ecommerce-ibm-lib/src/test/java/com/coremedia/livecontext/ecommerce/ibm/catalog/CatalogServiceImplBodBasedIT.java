@@ -221,8 +221,7 @@ public class CatalogServiceImplBodBasedIT extends IbmCatalogServiceBaseTest {
   @Betamax(tape = "csi_testFindCategoryMultiSEOByExternalTechId", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
-  public void testFindCategoryMultiSEOByExternalTechId() throws Exception {
-    StoreContext storeContext = getStoreContext();
+  public void testFindCategoryMultiSEOByExternalTechId() {
     CommerceId categoryId = getIdProvider().formatCategoryId(storeContext.getCatalogAlias(), CATEGORY1_WITH_MULTI_SEO);
     Category category = testling.findCategoryById(categoryId, storeContext);
     String seoSegment = category.getSeoSegment();

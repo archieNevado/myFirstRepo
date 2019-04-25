@@ -135,7 +135,7 @@ public class LiveContextSiteResolverImpl implements LiveContextSiteResolver {
 
   @Nullable
   private static String extractSiteNameFromEnvironment(@NonNull String environment) {
-    if (isNullOrEmpty(environment) || !environment.startsWith("site:")) { // NOSONAR - Workaround for spotbugs/spotbugs#621, see CMS-12169
+    if (isNullOrEmpty(environment) || !environment.startsWith("site:")) {
       return null;
     }
 

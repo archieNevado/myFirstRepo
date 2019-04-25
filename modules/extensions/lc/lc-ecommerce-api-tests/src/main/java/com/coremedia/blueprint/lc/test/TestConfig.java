@@ -1,16 +1,16 @@
 package com.coremedia.blueprint.lc.test;
 
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 public interface TestConfig {
 
-  StoreContext getStoreContext();
+  StoreContext getStoreContext(@NonNull CommerceConnection connection);
 
-  StoreContext getGermanStoreContext();
+  StoreContext getGermanStoreContext(@NonNull CommerceConnection connection);
 
   String getConnectionId();
 
   String getCatalogName();
-
-  String getStoreName();
 }

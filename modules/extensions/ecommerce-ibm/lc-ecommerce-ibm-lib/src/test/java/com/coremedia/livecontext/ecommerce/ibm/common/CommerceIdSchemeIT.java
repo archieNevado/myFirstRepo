@@ -8,7 +8,6 @@ import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -37,21 +36,14 @@ public class CommerceIdSchemeIT extends IbmServiceTestBase {
   @Inject
   private IbmCommerceIdProvider ibmCommerceIdProvider;
 
-  @Before
-  @Override
-  public void setup() {
-    super.setup();
-    StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
-  }
-
-  public void testInvalidBeanId() throws Exception {
+  public void testInvalidBeanId() {
     Object o = testling.parseId("ibm://catalog/bla/blub");
     assertEquals(o, CommerceIdScheme.CANNOT_HANDLE);
   }
 
   @Betamax(tape = "cis_testProductId", match = {MatchRule.path, MatchRule.query})
   @Test
-  public void testProductId() throws Exception {
+  public void testProductId() {
     Product product = (Product) testling.parseId(PRODUCT_ID);
     assertNotNull("bean most not be null", product);
     assertEquals(PRODUCT, product.getExternalId());
@@ -61,19 +53,19 @@ public class CommerceIdSchemeIT extends IbmServiceTestBase {
 
   @Betamax(tape = "cis_testProductNotFound", match = {MatchRule.path, MatchRule.query})
   @Test(expected = NotFoundException.class)
-  public void testProductNotFound() throws Exception {
+  public void testProductNotFound() {
     Product product = (Product) testling.parseId("ibm:///catalog/product/blablub");
     assertEquals(PRODUCT, product.getExternalId());
   }
 
   @Betamax(tape = "cis_testProductVariantId", match = {MatchRule.path, MatchRule.query})
   @Test
-  public void testProductVariantId() throws Exception {
+  public void testProductVariantId() {
     Product product = (Product) testling.parseId(PRODUCT_ID);
     List<ProductVariant> variants = product.getVariants();
     ProductVariant sku = variants.get(0);
     String skuTechId = sku.getExternalTechId();
-    String skuId = format(ibmCommerceIdProvider.formatProductVariantTechId(getStoreContext().getCatalogAlias(), skuTechId));
+    String skuId = format(ibmCommerceIdProvider.formatProductVariantTechId(storeContext.getCatalogAlias(), skuTechId));
     ProductVariant sku2 = (ProductVariant) testling.parseId(skuId);
     assertNotNull("bean most not be null", sku2);
     assertEquals(sku, sku2);
@@ -83,14 +75,14 @@ public class CommerceIdSchemeIT extends IbmServiceTestBase {
 
   @Betamax(tape = "cis_testProductVariantNotFound", match = {MatchRule.path, MatchRule.query})
   @Test(expected = NotFoundException.class)
-  public void testProductVariantNotFound() throws Exception {
+  public void testProductVariantNotFound() {
     ProductVariant sku = (ProductVariant) testling.parseId(SKU_ID_PREFIX + "blablub");
     assertEquals("blablub", sku.getExternalId());
   }
 
   @Betamax(tape = "cis_testCategoryId", match = {MatchRule.path, MatchRule.query})
   @Test
-  public void testCategoryId() throws Exception {
+  public void testCategoryId() {
     Category category = (Category) testling.parseId(CATEGORY_ID);
     assertNotNull("bean most not be null", category);
     assertEquals(CATEGORY, category.getExternalId());
@@ -100,9 +92,8 @@ public class CommerceIdSchemeIT extends IbmServiceTestBase {
 
   @Betamax(tape = "cis_testCategoryNotFound", match = {MatchRule.path, MatchRule.query})
   @Test(expected = NotFoundException.class)
-  public void testCategoryNotFound() throws Exception {
+  public void testCategoryNotFound() {
     Category category = (Category) testling.parseId("ibm:///catalog/category/blablub");
     assertEquals(CATEGORY, category.getExternalId());
   }
-
 }

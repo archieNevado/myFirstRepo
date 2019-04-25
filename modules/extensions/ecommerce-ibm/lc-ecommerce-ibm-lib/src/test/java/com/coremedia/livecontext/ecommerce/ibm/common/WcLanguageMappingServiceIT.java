@@ -25,7 +25,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.inject.Inject;
-import java.io.IOException;
 import java.util.Currency;
 import java.util.Locale;
 import java.util.Map;
@@ -61,7 +60,7 @@ public class WcLanguageMappingServiceIT extends AbstractWrapperServiceTestCase {
             .orElseThrow(() -> new IllegalStateException("Could not obtain commerce connection."));
 
     storeInfoService.getWcsVersion().ifPresent(testConfig::setWcsVersion);
-    connection.setStoreContext(testConfig.getStoreContext());
+    connection.setStoreContext(testConfig.getStoreContext(connection));
     CurrentCommerceConnection.set(connection);
   }
 
@@ -72,7 +71,7 @@ public class WcLanguageMappingServiceIT extends AbstractWrapperServiceTestCase {
 
   @Betamax(tape = "wcws_testLanguageMapping", match = {MatchRule.path, MatchRule.query})
   @Test
-  public void testLanguageMapping() throws IOException {
+  public void testLanguageMapping() {
     assertThat(testling.getLanguageMapping()).isNotNull();
 
     StoreContext storeContext = connection.getStoreContext();

@@ -1,7 +1,6 @@
 package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
 import com.coremedia.livecontext.ecommerce.catalog.Catalog;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
@@ -55,11 +54,16 @@ public class CatalogResource extends AbstractCatalogResource<Catalog> {
   @Override
   protected Catalog doGetEntity() {
     CatalogId catalogId = getCatalogId();
+
     StoreContext storeContext = getStoreContext();
     if (storeContext == null) {
       return null;
     }
-    return getCatalogService().getCatalog(catalogId, storeContext).orElse(null);
+
+    CommerceConnection commerceConnection = storeContext.getConnection();
+    CatalogService catalogService = commerceConnection.getCatalogService();
+
+    return catalogService.getCatalog(catalogId, storeContext).orElse(null);
   }
 
   @Nullable
@@ -70,7 +74,7 @@ public class CatalogResource extends AbstractCatalogResource<Catalog> {
       return null;
     }
 
-    CommerceConnection commerceConnection = CurrentCommerceConnection.get();
+    CommerceConnection commerceConnection = storeContext.getConnection();
     StoreContextProvider storeContextProvider = commerceConnection.getStoreContextProvider();
 
     StoreContextBuilder clonedContextBuilder = storeContextProvider.buildContext(storeContext);
@@ -83,7 +87,7 @@ public class CatalogResource extends AbstractCatalogResource<Catalog> {
     } else {
       CatalogId catalogId = getCatalogId();
       Optional<CatalogAlias> catalogAliasForId = catalogAliasTranslationService
-              .getCatalogAliasForId(catalogId, getSiteId());
+              .getCatalogAliasForId(catalogId, getSiteId(), storeContext);
 
       clonedContextBuilder = clonedContextBuilder
               .withCatalogId(catalogId)
@@ -99,10 +103,6 @@ public class CatalogResource extends AbstractCatalogResource<Catalog> {
     String extId = commerceId.getExternalId().orElseGet(catalog::getExternalId);
     setId(extId);
     setSiteId(catalog.getContext().getSiteId());
-  }
-
-  public CatalogService getCatalogService() {
-    return CurrentCommerceConnection.get().getCatalogService();
   }
 
   private CatalogId getCatalogId() {

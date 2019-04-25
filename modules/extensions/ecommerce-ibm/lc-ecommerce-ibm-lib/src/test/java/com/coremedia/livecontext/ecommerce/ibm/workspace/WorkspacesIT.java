@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.ecommerce.ibm.workspace;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
@@ -9,7 +10,6 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreContextBuilder;
-import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.livecontext.ecommerce.workspace.Workspace;
@@ -45,7 +45,7 @@ public class WorkspacesIT extends IbmServiceTestBase {
   private IbmCommerceIdProvider ibmCommerceIdProvider;
 
   @Test
-  public void testFindAllWorkspaces() throws Exception {
+  public void testFindAllWorkspaces() {
     if (useBetamaxTapes()) {
       return;
     }
@@ -62,14 +62,13 @@ public class WorkspacesIT extends IbmServiceTestBase {
 
     Workspace workspace = findWorkspace("Anniversary");
 
-    StoreContext storeContext = IbmStoreContextBuilder
-            .from(testConfig.getStoreContext())
+    StoreContext storeContextWithWorkspaceId = IbmStoreContextBuilder
+            .from((StoreContextImpl) storeContext)
             .withWorkspaceId(WorkspaceId.of(workspace.getExternalTechId()))
             .build();
-    StoreContextHelper.setCurrentContext(storeContext);
 
-    CommerceId categoryId = ibmCommerceIdProvider.formatCategoryId(storeContext.getCatalogAlias(), "PC_ForTheCook");
-    Category category0 = catalogService.findCategoryById(categoryId, storeContext);
+    CommerceId categoryId = ibmCommerceIdProvider.formatCategoryId(storeContextWithWorkspaceId.getCatalogAlias(), "PC_ForTheCook");
+    Category category0 = catalogService.findCategoryById(categoryId, storeContextWithWorkspaceId);
     assertNotNull("category \"PC_ForTheCook\" not found", category0);
 
     List<Category> subCategories = catalogService.findSubCategories(category0);
@@ -85,11 +84,10 @@ public class WorkspacesIT extends IbmServiceTestBase {
   }
 
   private Workspace findWorkspace(String name) {
-    StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
     UserContext userContext = UserContext.builder().build();
     UserContextHelper.setCurrentContext(userContext);
 
-    List<Workspace> workspaces = workspaceService.findAllWorkspaces(StoreContextHelper.getCurrentContextOrThrow());
+    List<Workspace> workspaces = workspaceService.findAllWorkspaces(storeContext);
     assertNotNull(workspaces);
     assertFalse(workspaces.isEmpty());
 

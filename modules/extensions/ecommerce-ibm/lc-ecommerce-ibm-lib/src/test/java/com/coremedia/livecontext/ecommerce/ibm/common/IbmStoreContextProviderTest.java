@@ -1,10 +1,12 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
@@ -66,6 +68,11 @@ public class IbmStoreContextProviderTest {
     public XmlUapiConfig xmlUapiConfig() {
       return new XmlUapiConfig(CONTENT_REPOSITORY);
     }
+
+    @Bean(name = "commerce:wcs1")
+    CommerceConnection commerceConnection() {
+      return new BaseCommerceConnection();
+    }
   }
 
   @Inject
@@ -123,7 +130,7 @@ public class IbmStoreContextProviderTest {
   }
 
   @Test
-  public void testFindContextBySiteNoStoreConfig() throws Exception {
+  public void testFindContextBySiteNoStoreConfig() {
     Site currentSite = getSite("Media");
     assertNotNull("Expected site Media in test content was not found.", currentSite);
 
@@ -138,7 +145,7 @@ public class IbmStoreContextProviderTest {
   }
 
   @Test(expected = InvalidContextException.class)
-  public void testFindContextBySiteIncompleteStoreConfig() throws Exception {
+  public void testFindContextBySiteIncompleteStoreConfig() {
     Site currentSite = getSite("Helios-incomplete");
     assertNotNull("Expected site Helios-incomplete in test content was not found.", currentSite);
 

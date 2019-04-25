@@ -42,7 +42,6 @@ public class CatalogServiceImplSearchBasedIT extends IbmCatalogServiceBaseTest {
     super.testFindB2BProductFromMultiCatalogs();
   }
 
-
   @Betamax(tape = "csi_testFindCategoryById_search", match = {MatchRule.path, MatchRule.query})
   @Test
   @Override
@@ -175,11 +174,11 @@ public class CatalogServiceImplSearchBasedIT extends IbmCatalogServiceBaseTest {
 
     //additional tests
     CommerceId categoryId = getIdProvider().formatCategoryId(null, LEAF_CATEGORY_CODE);
-    Category category = testling.findCategoryById(categoryId, getStoreContext());
+    Category category = testling.findCategoryById(categoryId, storeContext);
     Map<String, String> searchParams = new HashMap<>();
     searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, category.getExternalTechId());
     searchParams.put(CatalogService.SEARCH_PARAM_ORDERBY, "ORDER_BY_TYPE_CATEGORY_ASC");
-    SearchResult<Product> searchProducts = testling.searchProducts(SEARCH_TERM_1, searchParams, getStoreContext());
+    SearchResult<Product> searchProducts = testling.searchProducts(SEARCH_TERM_1, searchParams, storeContext);
     assertThat(searchProducts).isNotNull();
     int total = searchProducts.getTotalCount();
     List<Product> products = searchProducts.getSearchResult();
@@ -238,8 +237,8 @@ public class CatalogServiceImplSearchBasedIT extends IbmCatalogServiceBaseTest {
 
   @Test
   @Betamax(tape = "csi_testSearchProductVariants_search", match = {MatchRule.path, MatchRule.query})
-  public void testSearchFacetsProductVariants() throws Exception {
-    SearchResult<ProductVariant> searchResult = testling.searchProductVariants(SEARCH_TERM_1 + " " + SEARCH_TERM_2, emptyMap(), getStoreContext());
+  public void testSearchFacetsProductVariants() {
+    SearchResult<ProductVariant> searchResult = testling.searchProductVariants(SEARCH_TERM_1 + " " + SEARCH_TERM_2, emptyMap(), storeContext);
     assertNotNull(searchResult);
 
     List<SearchFacet> facets = searchResult.getFacets();
@@ -353,5 +352,4 @@ public class CatalogServiceImplSearchBasedIT extends IbmCatalogServiceBaseTest {
   public void testWithStoreContext() {
     super.testWithStoreContext();
   }
-
 }

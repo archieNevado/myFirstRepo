@@ -58,7 +58,7 @@
           <h5 class="cm-quickinfo__title cm-heading5"<@preview.metadata "properties.teaserTitle" />>${self.teaserTitle}</h5>
         </#if>
         <#-- close button -->
-        <@components.button baseClass="" iconClass="cm-icon__symbol icon-close" iconText=bp.getMessage("button_close") attr={"class": "cm-quickinfo__close cm-icon"}/>
+        <@components.button baseClass="" iconClass="cm-icon__symbol icon-close" iconText=cm.getMessage("button_close") attr={"class": "cm-quickinfo__close cm-icon"}/>
       </div>
 
       <#-- price -->
@@ -91,8 +91,8 @@
   <#-- next/previous buttons -->
   <#if (quickInfoNextId?? && quickInfoPreviousId??)>
     <#if (quickInfoNextId?length > 0 && quickInfoPreviousId?length > 0)>
-      <@components.button baseClass="" iconClass="cm-icon__symbol icon-next" iconText=bp.getMessage("button_next") attr={"class": "cm-quickinfo__switch cm-quickinfo__switch--next", "data-cm-target": quickInfoNextId}/>
-      <@components.button baseClass="" iconClass="cm-icon__symbol icon-prev" iconText=bp.getMessage("button_prev") attr={"class": "cm-quickinfo__switch cm-quickinfo__switch--prev", "data-cm-target": quickInfoPreviousId}/>
+      <@components.button baseClass="" iconClass="cm-icon__symbol icon-next" iconText=cm.getMessage("button_next") attr={"class": "cm-quickinfo__switch cm-quickinfo__switch--next", "data-cm-target": quickInfoNextId}/>
+      <@components.button baseClass="" iconClass="cm-icon__symbol icon-prev" iconText=cm.getMessage("button_prev") attr={"class": "cm-quickinfo__switch cm-quickinfo__switch--prev", "data-cm-target": quickInfoPreviousId}/>
     </#if>
   </#if>
 </div>

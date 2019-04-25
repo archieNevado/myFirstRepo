@@ -1,9 +1,11 @@
 package com.coremedia.ecommerce.studio.rest.cache;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdBuilder;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.Vendor;
@@ -53,7 +55,8 @@ class CommerceBeanDelegateProvider {
 
   @NonNull
   static StoreContext createStoreContext() {
-    return StoreContextBuilderImpl.from(SITE_ID)
+    CommerceConnection connection = new BaseCommerceConnection();
+    return StoreContextBuilderImpl.from(connection, SITE_ID)
             .withWorkspaceId(WORKSPACE_ID)
             .build();
   }

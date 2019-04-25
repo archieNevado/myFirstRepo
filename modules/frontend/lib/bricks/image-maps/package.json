@@ -10,7 +10,6 @@
     "@coremedia/js-basic": "^1.0.0",
     "@coremedia/sass-utils": "^1.0.0",
     "@coremedia/brick-bootstrap": "^1.0.0",
-    "@coremedia/brick-cta": "^1.0.0",
     "@coremedia/brick-media": "^1.0.0",
     "@coremedia/brick-quick-info": "^1.0.0"
   },

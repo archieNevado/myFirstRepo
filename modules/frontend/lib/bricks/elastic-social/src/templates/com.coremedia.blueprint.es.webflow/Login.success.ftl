@@ -5,7 +5,7 @@
 <div class="container">
   <div class="row">
     <div class="cm-form cm-form--success col-xs-12 col-md-8 col-md-push-2"<@preview.metadata data=[self.action.content!"", "properties.id"]/>>
-      <@elasticSocial.notification type="success" text=bp.getMessage("login_success") additionalClasses=["alert alert-success"] />
+      <@elasticSocial.notification type="success" text=cm.getMessage("login_success") additionalClasses=["alert alert-success"] />
     </div>
   </div>
 </div>

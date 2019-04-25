@@ -10,9 +10,9 @@ import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.handler.ExternalNavigationHandler;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
 import com.coremedia.livecontext.product.ProductPageHandler;
@@ -53,39 +53,42 @@ public class CatalogSitemapUrlGenerator implements SitemapUrlGenerator {
     this.linkFormatter = linkFormatter;
   }
 
-  public StoreContextProvider getStoreContextProvider() {
-    return CurrentCommerceConnection.get().getStoreContextProvider();
-  }
-
-  public CatalogService getCatalogService() {
-    return CurrentCommerceConnection.get().getCatalogService();
-  }
-
   // --- SitemapUrlGenerator ----------------------------------------
 
   @Override
   public void generateUrls(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, Site site,
                            boolean absoluteUrls, String protocol, UrlCollector urlCollector) {
-    if (site==null) {
+    if (site == null) {
       throw new IllegalArgumentException("Cannot derive a site from " + request.getPathInfo());
     }
+
     try {
-      StoreContext storeContext = getStoreContextProvider().findContextBySite(site).orElse(null);
-      if (storeContext != null) {
-        // Deep links have a different domain and must thus not be included
-        // in sitemaps.org sitemaps.
-        boolean deepLinksOnly = useCommerceCategoryLinks(site) && useCommerceProductLinks(site);
-        if (!deepLinksOnly) {
-          request.setAttribute(ABSOLUTE_URI_KEY, absoluteUrls);
-          List<Category> categories = getCatalogService().findTopCategories(storeContext.getCatalogAlias(), storeContext);
-          generateUrls(categories, site, request, response, protocol, urlCollector);
-        } else {
-          LOG.debug("Only deep links for {}", site);
-        }
-      } else {
+      CommerceConnection commerceConnection = CurrentCommerceConnection.get();
+
+      StoreContext storeContext = commerceConnection.getStoreContextProvider()
+              .findContextBySite(site)
+              .orElse(null);
+
+      if (storeContext == null) {
         // Legal state: A web presence may have sites which are not related to eCommerce.
-        LOG.debug("No store context for {}", site);
+        LOG.debug("No store context for site {}.", site);
+        return;
       }
+
+      // Deep links have a different domain and must thus not be included
+      // in sitemaps.org sitemaps.
+      boolean deepLinksOnly = useCommerceCategoryLinks(site) && useCommerceProductLinks(site);
+      if (deepLinksOnly) {
+        LOG.debug("Only deep links for {}", site);
+        return;
+      }
+
+      request.setAttribute(ABSOLUTE_URI_KEY, absoluteUrls);
+
+      CatalogService catalogService = commerceConnection.getCatalogService();
+      List<Category> categories = catalogService.findTopCategories(storeContext.getCatalogAlias(), storeContext);
+
+      generateUrls(categories, site, request, response, protocol, urlCollector);
     } catch (InvalidContextException e) {
       LOG.info("Cannot create a sitemap for '{}' because the site has no valid store context. " +
               "I assume the site is not a shop and proceed without creating a catalog sitemap.", site.getName());
@@ -109,19 +112,22 @@ public class CatalogSitemapUrlGenerator implements SitemapUrlGenerator {
   private void generateUrls(List<Category> categories, @NonNull Site site, @NonNull HttpServletRequest request,
                             @NonNull HttpServletResponse response, String protocol, UrlCollector urlCollector) {
     // Must not include deep links in sitemap
-    if (!useCommerceProductLinks(site)) {
-      for (Category category : categories) {
-        // Only include the category's products if the category has a context,
-        // i.e. if some parent is linked into the navigation as an external channel.
-        LiveContextNavigation liveContextNavigation = liveContextNavigationFactory.createNavigation(category, site);
-        if (liveContextNavigation.getContext()!=null) {
-          for (Product product : category.getProducts()) {
-            ProductInSite productInSite = liveContextNavigationFactory.createProductInSite(product, site);
-            generateUrl(productInSite, request, response, protocol, urlCollector);
-          }
+    if (useCommerceProductLinks(site)) {
+      return;
+    }
+
+    for (Category category : categories) {
+      // Only include the category's products if the category has a context,
+      // i.e. if some parent is linked into the navigation as an external channel.
+      LiveContextNavigation liveContextNavigation = liveContextNavigationFactory.createNavigation(category, site);
+      if (liveContextNavigation.getContext() != null) {
+        for (Product product : category.getProducts()) {
+          ProductInSite productInSite = liveContextNavigationFactory.createProductInSite(product, site);
+          generateUrl(productInSite, request, response, protocol, urlCollector);
         }
-        generateUrls(category.getChildren(), site, request, response, protocol, urlCollector);
       }
+
+      generateUrls(category.getChildren(), site, request, response, protocol, urlCollector);
     }
   }
 

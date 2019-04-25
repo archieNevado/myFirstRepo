@@ -171,7 +171,7 @@ public abstract class AbstractWcWrapperService {
   @VisibleForTesting
   protected Optional<CatalogId> findCatalogId(@NonNull CatalogAlias catalogAlias, @NonNull StoreContext storeContext) {
     String siteId = storeContext.getSiteId();
-    return catalogAliasTranslationService.getCatalogIdForAlias(catalogAlias, siteId);
+    return catalogAliasTranslationService.getCatalogIdForAlias(catalogAlias, siteId, storeContext);
   }
 
   @NonNull

@@ -8,13 +8,14 @@ import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.ecommerce.event.InvalidationEvent;
 import com.coremedia.livecontext.ecommerce.event.InvalidationPropagator;
 import com.coremedia.livecontext.ecommerce.event.InvalidationService;
+import com.coremedia.livecontext.ecommerce.ibm.catalog.CategoryImpl;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmService;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -25,9 +26,9 @@ import static com.coremedia.livecontext.ecommerce.event.InvalidationEvent.CLEAR_
 import static com.coremedia.livecontext.ecommerce.event.InvalidationEvent.MARKETING_SPOT_EVENT;
 import static com.coremedia.livecontext.ecommerce.event.InvalidationEvent.PRODUCT_EVENT;
 import static com.coremedia.livecontext.ecommerce.event.InvalidationEvent.SEGMENT_EVENT;
-import static com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper.findStringValue;
+import static com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper.findString;
 import static com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper.findValue;
-import static com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper.getListValue;
+import static com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper.getList;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
@@ -73,7 +74,7 @@ class InvalidationServiceImpl extends AbstractIbmService implements Invalidation
 
     Map<String, Object> cacheInvalidations = wcInvalidationWrapperService.getCacheInvalidations(
             timestamp, maxWaitInMilliseconds, chunkSize, storeContext);
-    List<Map<String, Object>> invalidations = getListValue(cacheInvalidations, "invalidations");
+    List<Map<String, Object>> invalidations = getList(cacheInvalidations, "invalidations");
     if (invalidations.isEmpty()) {
       return emptyList();
     }
@@ -81,10 +82,21 @@ class InvalidationServiceImpl extends AbstractIbmService implements Invalidation
     long lastInvalidationTimestamp = findValue(cacheInvalidations, "lastInvalidation", Long.class).orElse(-1L);
 
     // the list to return using API classes
-    return invalidations.stream()
+    List<InvalidationEvent> eventList = invalidations.stream()
             .filter(Objects::nonNull)
             .map(invalidation -> convertEvent(invalidation, lastInvalidationTimestamp))
             .collect(toList());
+
+    // Because the ibm commerce system does not know anything about a root category it will never
+    // signal a root category change. Therefore a root category change should always be included if any category
+    // is changed. Actually it would only be necessary for a top level category but for this test we would have
+    // to create a full category bean which seems a bit to heavy.
+
+    if (eventList.stream().anyMatch(event -> CATEGORY_EVENT.equals(event.getContentType()))) {
+      eventList.add(new InvalidationEvent(CategoryImpl.ROOT_CATEGORY_ROLE_ID, CATEGORY_EVENT, lastInvalidationTimestamp));
+    }
+
+    return eventList;
   }
 
   @NonNull
@@ -124,32 +136,33 @@ class InvalidationServiceImpl extends AbstractIbmService implements Invalidation
 
   @NonNull
   InvalidationEvent convertEvent(@NonNull Map<String, Object> event, long lastTimestamp) {
-    long timestamp = findStringValue(event, "timestamp")
+    String techId = getStringValueForKey(event, "techId");
+    String contentType = getStringValueForKey(event, "contentType");
+    long timestamp = findString(event, "timestamp")
             .map(Long::parseLong)
             .orElse(lastTimestamp);
 
-    String contentType = getStringValueForKey(event, "contentType");
     if (contentType != null) {
       switch (contentType) {
         case CONTENT_IDENTIFIER_CLEAR_ALL:
-          return new InvalidationEvent(getStringValueForKey(event, "techId"), CLEAR_ALL_EVENT, timestamp);
+          return new InvalidationEvent(techId, CLEAR_ALL_EVENT, timestamp);
         case CONTENT_IDENTIFIER_PRODUCT:
-          return new InvalidationEvent(getStringValueForKey(event, "techId"), PRODUCT_EVENT, timestamp);
+          return new InvalidationEvent(techId, PRODUCT_EVENT, timestamp);
         case CONTENT_IDENTIFIER_CATEGORY: // same as top category
         case CONTENT_IDENTIFIER_TOP_CATEGORY:
-          return new InvalidationEvent(getStringValueForKey(event, "techId"), CATEGORY_EVENT, timestamp);
+          return new InvalidationEvent(techId, CATEGORY_EVENT, timestamp);
         case CONTENT_IDENTIFIER_MARKETING_SPOT:
-          return new InvalidationEvent(getStringValueForKey(event, "techId"), MARKETING_SPOT_EVENT, timestamp);
+          return new InvalidationEvent(techId, MARKETING_SPOT_EVENT, timestamp);
         case CONTENT_IDENTIFIER_SEGMENT:
-          return new InvalidationEvent(getStringValueForKey(event, "techId"), SEGMENT_EVENT, timestamp);
+          return new InvalidationEvent(techId, SEGMENT_EVENT, timestamp);
       }
     }
 
-    return new InvalidationEvent(getStringValueForKey(event, "techId"), null, timestamp);
+    return new InvalidationEvent(techId, null, timestamp);
   }
 
   @Nullable
   private static String getStringValueForKey(@NonNull Map<String, Object> map, @NonNull String key) {
-    return findStringValue(map, key).orElse(null);
+    return findString(map, key).orElse(null);
   }
 }

@@ -287,6 +287,8 @@
       &--active {
         @include breakpoint("xs") {
           padding-top: 50px;
+          position: fixed;
+          bottom: 0;
         }
       }
     }

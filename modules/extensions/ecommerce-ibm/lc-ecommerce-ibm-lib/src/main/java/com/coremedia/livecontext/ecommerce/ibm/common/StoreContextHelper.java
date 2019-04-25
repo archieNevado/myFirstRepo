@@ -2,7 +2,6 @@ package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractStoreContextProvider;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
@@ -83,26 +82,15 @@ public class StoreContextHelper {
       return currentStoreContext;
     }
 
-    return buildContext(
-            currentStoreContext.getSiteId(),
-            currentStoreContext.getStoreId(),
-            currentStoreContext.getStoreName(),
-            currentStoreContext.getCatalogId().orElse(null),
-            locale,
-            currentStoreContext.getCurrency()
-    )
-            .withCatalogAlias(currentStoreContext.getCatalogAlias())
-            .withWorkspaceId(currentStoreContext.getWorkspaceId().orElse(null))
-            .withWcsVersion(getWcsVersion(currentStoreContext))
-            .build();
+    return buildContext(currentStoreContext, locale);
   }
 
   @NonNull
-  public static IbmStoreContextBuilder buildContext(@NonNull String siteId, @Nullable String storeId,
-                                                    @Nullable String storeName, @Nullable CatalogId catalogId,
-                                                    @NonNull Locale locale, @Nullable Currency currency) {
-    IbmStoreContextBuilder builder = IbmStoreContextBuilder.from(StoreContextBuilderImpl.from(siteId));
+  private static StoreContextImpl buildContext(@NonNull StoreContext currentStoreContext, @NonNull Locale locale) {
+    IbmStoreContextBuilder builder = IbmStoreContextBuilder
+            .from(currentStoreContext.getConnection(), currentStoreContext.getSiteId());
 
+    String storeId = currentStoreContext.getStoreId();
     if (storeId != null) {
       if (StringUtils.isBlank(storeId)) {
         throw new InvalidContextException("Store ID must not be blank.");
@@ -111,6 +99,7 @@ public class StoreContextHelper {
       builder.withStoreId(storeId);
     }
 
+    String storeName = currentStoreContext.getStoreName();
     if (storeName != null) {
       if (StringUtils.isBlank(storeName)) {
         throw new InvalidContextException("Store name must not be blank.");
@@ -119,17 +108,19 @@ public class StoreContextHelper {
       builder.withStoreName(storeName);
     }
 
-    if (catalogId != null) {
-      builder.withCatalogId(catalogId);
-    }
+    currentStoreContext.getCatalogId().ifPresent(builder::withCatalogId);
 
-    builder.withLocale(locale);
-
+    Currency currency = currentStoreContext.getCurrency();
     if (currency != null) {
       builder.withCurrency(currency);
     }
 
-    return builder;
+    return builder
+            .withLocale(locale)
+            .withCatalogAlias(currentStoreContext.getCatalogAlias())
+            .withWorkspaceId(currentStoreContext.getWorkspaceId().orElse(null))
+            .withWcsVersion(getWcsVersion(currentStoreContext))
+            .build();
   }
 
   /**

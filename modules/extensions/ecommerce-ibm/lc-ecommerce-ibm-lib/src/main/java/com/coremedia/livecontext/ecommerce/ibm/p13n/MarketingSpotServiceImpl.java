@@ -128,16 +128,14 @@ public class MarketingSpotServiceImpl implements MarketingSpotService {
     List<MarketingSpot> result = new ArrayList<>();
 
     List<Map<String, Object>> marketingSpotWrapperList = getInnerElements(marketingSpotWrappers);
-    if (marketingSpotWrapperList != null) {
-      for (Map<String, Object> wrapper : marketingSpotWrapperList) {
-        Map<String, Object> outerWrapper = new HashMap<>();
-        // these properties are required by the model bean in order to distinguish which REST handler provided
-        // the data and which keys to use for reading
-        outerWrapper.put("resourceId", marketingSpotWrappers.get("resourceId"));
-        outerWrapper.put("resourceName", marketingSpotWrappers.get("resourceName"));
-        outerWrapper.put(isESpotResult(outerWrapper) ? "MarketingSpotData" : "MarketingSpot", asList(wrapper));
-        result.add(createMarketingSpotBeanFor(outerWrapper, true, storeContext));
-      }
+    for (Map<String, Object> wrapper : marketingSpotWrapperList) {
+      Map<String, Object> outerWrapper = new HashMap<>();
+      // these properties are required by the model bean in order to distinguish which REST handler provided
+      // the data and which keys to use for reading
+      outerWrapper.put("resourceId", marketingSpotWrappers.get("resourceId"));
+      outerWrapper.put("resourceName", marketingSpotWrappers.get("resourceName"));
+      outerWrapper.put(isESpotResult(outerWrapper) ? "MarketingSpotData" : "MarketingSpot", asList(wrapper));
+      result.add(createMarketingSpotBeanFor(outerWrapper, true, storeContext));
     }
 
     return Collections.unmodifiableList(result);
@@ -147,21 +145,18 @@ public class MarketingSpotServiceImpl implements MarketingSpotService {
     return "espot".equals(getStringValueForKey(marketingSpotWrappers, "resourceName"));
   }
 
+  @NonNull
   private static List<Map<String, Object>> getInnerElements(Map<String, Object> wcMarketingSpot) {
     // results may come from different REST handlers identified by resourceName field ('spot' or 'espot')
     // must be distinguished when retrieving data
     // noinspection unchecked
-    return getListValueForKey(wcMarketingSpot, isESpotResult(wcMarketingSpot) ? "MarketingSpotData" : "MarketingSpot");
-  }
-
-  @Nullable
-  private static List getListValueForKey(@NonNull Map<String, Object> map, @NonNull String key) {
-    return DataMapHelper.findValue(map, key, List.class).orElse(null);
+    String key = isESpotResult(wcMarketingSpot) ? "MarketingSpotData" : "MarketingSpot";
+    return DataMapHelper.getList(wcMarketingSpot, key);
   }
 
   @Nullable
   private static String getStringValueForKey(@NonNull Map<String, Object> map, @NonNull String key) {
-    return DataMapHelper.findStringValue(map, key).orElse(null);
+    return DataMapHelper.findString(map, key).orElse(null);
   }
 
   public CommerceCache getCommerceCache() {
@@ -197,5 +192,4 @@ public class MarketingSpotServiceImpl implements MarketingSpotService {
   public void setUseExternalIdForBeanCreation(boolean useExternalIdForBeanCreation) {
     this.useExternalIdForBeanCreation = useExternalIdForBeanCreation;
   }
-
 }

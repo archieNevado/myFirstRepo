@@ -60,12 +60,12 @@ public class CartServiceImplIT extends IbmServiceTestBase {
   private WcsUrlProvider wcsUrlProvider;
 
   @Test
-  public void testGetCart() throws Exception {
+  public void testGetCart() {
     if (useBetamaxTapes()) {
       return;
     }
 
-    if (StoreContextHelper.getWcsVersion(testConfig.getStoreContext()).lessThan(WCS_VERSION_7_7)) {
+    if (StoreContextHelper.getWcsVersion(storeContext).lessThan(WCS_VERSION_7_7)) {
       return;
     }
 
@@ -73,8 +73,7 @@ public class CartServiceImplIT extends IbmServiceTestBase {
 
     testLoginUser();
 
-    StoreContext context = StoreContextHelper.getCurrentContextOrThrow();
-    Cart cart = testling.getCart(context);
+    Cart cart = testling.getCart(storeContext);
     assertNotNull(cart);
     assertEquals("1.0", cart.getOrderItems().get(0).getQuantity().toPlainString());
 
@@ -84,14 +83,13 @@ public class CartServiceImplIT extends IbmServiceTestBase {
     updateParams.add(new CartService.OrderItemParam(
             orderItem.getExternalId(),
             orderItem.getQuantity().add(BigDecimal.ONE)));
-    testling.updateCart(updateParams, context);
-    cart = testling.getCart(context);
+    testling.updateCart(updateParams, storeContext);
+    cart = testling.getCart(storeContext);
     assertEquals("2.0", cart.getOrderItems().get(0).getQuantity().toPlainString());
-    testling.cancelCart(context);
+    testling.cancelCart(storeContext);
   }
 
   private void testLoginUser() {
-    StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
     UserContextHelper.setCurrentContext(UserContextHelper.getCurrentContext());
 
     HttpServletRequest request = new MockHttpServletRequest();
@@ -102,12 +100,13 @@ public class CartServiceImplIT extends IbmServiceTestBase {
   }
 
   @Test
-  public void testUpdateCartWithAnonymousUser() throws Exception {
-    if (useBetamaxTapes() || StoreContextHelper.getWcsVersion(testConfig.getStoreContext()).lessThan(WCS_VERSION_7_7)) {
+  public void testUpdateCartWithAnonymousUser() {
+    StoreContext storeContext = testConfig.getStoreContext(connection);
+
+    if (useBetamaxTapes() || StoreContextHelper.getWcsVersion(storeContext).lessThan(WCS_VERSION_7_7)) {
       return;
     }
 
-    StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
     UserContextHelper.setCurrentContext(UserContextHelper.getCurrentContext());
 
     MockHttpServletRequest request = new MockHttpServletRequest();
@@ -116,10 +115,8 @@ public class CartServiceImplIT extends IbmServiceTestBase {
     boolean guestIdentitySuccess = userSessionService.ensureGuestIdentity(request, response);
     assertTrue(guestIdentitySuccess);
 
-    StoreContext currentContext = testConfig.getStoreContext();
-    testling.cancelCart(currentContext);
-    StoreContext context = currentContext;
-    Cart cart = testling.getCart(context);
+    testling.cancelCart(storeContext);
+    Cart cart = testling.getCart(storeContext);
     assertNotNull(cart);
     assertTrue(cart.getOrderItems().isEmpty());
 
@@ -130,8 +127,8 @@ public class CartServiceImplIT extends IbmServiceTestBase {
     addToParams.add(new CartService.OrderItemParam(
             orderItemId,
             BigDecimal.ONE));
-    testling.addToCart(addToParams, context);
-    cart = testling.getCart(context);
+    testling.addToCart(addToParams, storeContext);
+    cart = testling.getCart(storeContext);
     assertNotNull(cart);
 
     Cart.OrderItem orderItem = cart.getOrderItems().get(0);
@@ -141,19 +138,18 @@ public class CartServiceImplIT extends IbmServiceTestBase {
     updateParams.add(new CartService.OrderItemParam(
             orderItem.getExternalId(),
             orderItem.getQuantity().add(BigDecimal.ONE)));
-    testling.updateCart(updateParams, context);
-    cart = testling.getCart(context);
+    testling.updateCart(updateParams, storeContext);
+    cart = testling.getCart(storeContext);
     orderItem = cart.getOrderItems().get(0);
     assertEquals("2.0", orderItem.getQuantity().toPlainString());
 
-    testling.cancelCart(currentContext);
+    testling.cancelCart(storeContext);
   }
 
-  private void prefillCart() throws Exception {
+  private void prefillCart() {
     testLoginUser();
 
-    StoreContext context = StoreContextHelper.getCurrentContextOrThrow();
-    Cart cart = testling.getCart(context);
+    Cart cart = testling.getCart(storeContext);
     assertNotNull(cart);
 
     String orderItemId = getOrderItemId(SKU_CODE);
@@ -163,18 +159,19 @@ public class CartServiceImplIT extends IbmServiceTestBase {
     updateParams.add(new CartService.OrderItemParam(
             orderItemId,
             BigDecimal.ONE));
-    testling.addToCart(updateParams, context);
-    cart = testling.getCart(context);
+    testling.addToCart(updateParams, storeContext);
+    cart = testling.getCart(storeContext);
     assertNotNull(cart);
     assertEquals("1.0", cart.getOrderItems().get(0).getQuantity().toPlainString());
   }
 
   private String getOrderItemId(String id) {
-    CommerceId productVariantId = ibmCommerceIdProvider.formatProductVariantId(getStoreContext().getCatalogAlias(), id);
-    Product product = catalogService.findProductById(productVariantId, getStoreContext());
+    CommerceId productVariantId = ibmCommerceIdProvider.formatProductVariantId(storeContext.getCatalogAlias(), id);
+    Product product = catalogService.findProductById(productVariantId, storeContext);
     if (product != null) {
       return product.getExternalTechId();
     }
+
     return null;
   }
 }

@@ -26,6 +26,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Coordinates CMResourceBundle fallback strategies.
@@ -82,12 +83,19 @@ public class LocalizationService {
    * collection represents the set of all its variants, and two variants of the
    * same bundle (like myBundle_de and myBundle_de_DE) in the bundles
    * collection are considered as duplicate.
+   * <p>
+   * Explicit fallback bundles (third parameter) are guaranteed to be used as
+   * a fallback. If the given explicit bundles are not already contained in the
+   * list of merged variants (see previous paragraph) they will be appended to the
+   * fallback list, so their localization is used if no other resource bundle
+   * contains the requested localization.
    */
   @NonNull
-  public Struct resources(@NonNull Collection<Content> bundles, @Nullable Locale locale) {
+  public Struct resources(@NonNull Collection<Content> bundles, @Nullable Locale locale, @NonNull Collection<Content> explicitFallbackBundles) {
     checkAreBundles(bundles);
     List<Struct> localizations = new ArrayList<>();
     List<Content> fallback = localizationFallback(locale!=null ? locale : GLOBAL, variantsMaps(bundles));
+    fallback.addAll(explicitFallbackBundles.stream().filter(bundle -> !fallback.contains(bundle)).collect(Collectors.toList()));
     for (Content bundle : fallback) {
       Struct l10ns = bundleResolver.resolveBundle(bundle);
       if (l10ns != null) {
@@ -96,6 +104,15 @@ public class LocalizationService {
     }
     Struct result = StructUtil.mergeStructList(localizations);
     return result!=null ? result : structService.emptyStruct();
+  }
+
+  /**
+   * Convenience variant of {@link #resources(Collection, Locale, Collection)} with
+   * no explicit fallback bundles.
+   */
+  @NonNull
+  public Struct resources(@NonNull Collection<Content> bundles, @Nullable Locale locale) {
+    return resources(bundles, locale, Collections.emptyList());
   }
 
   /**

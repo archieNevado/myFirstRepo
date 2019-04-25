@@ -35,12 +35,17 @@ public abstract class AbstractServiceTest {
   @Rule
   public Recorder recorder = new Recorder(BetamaxTestHelper.updateSystemPropertiesWithBetamaxConfig());
 
+  protected CommerceConnection connection;
+
+  protected StoreContext storeContext;
+
   @Before
   public void setup() {
-    CommerceConnection connection = commerce.findConnection(testConfig.getConnectionId())
+    connection = commerce.findConnection(testConfig.getConnectionId())
             .orElseThrow(() -> new IllegalStateException("Could not obtain commerce connection."));
 
-    connection.setStoreContext(testConfig.getStoreContext());
+    storeContext = testConfig.getStoreContext(connection);
+    connection.setStoreContext(storeContext);
     CurrentCommerceConnection.set(connection);
 
     userContextProvider.clearCurrentContext();
@@ -56,9 +61,5 @@ public abstract class AbstractServiceTest {
 
   public TestConfig getTestConfig() {
     return testConfig;
-  }
-
-  protected StoreContext getStoreContext() {
-    return testConfig.getStoreContext();
   }
 }

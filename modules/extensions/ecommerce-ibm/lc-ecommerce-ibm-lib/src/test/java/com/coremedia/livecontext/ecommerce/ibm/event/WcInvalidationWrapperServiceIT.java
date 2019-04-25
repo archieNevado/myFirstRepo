@@ -2,11 +2,8 @@ package com.coremedia.livecontext.ecommerce.ibm.event;
 
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
-import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
 import org.junit.After;
 import org.junit.Before;
@@ -51,13 +48,11 @@ public class WcInvalidationWrapperServiceIT extends IbmServiceTestBase {
   WcInvalidationWrapperService testling;
 
   String origServiceEndpoint;
-  private StoreContext storeContext;
 
   @Before
   @Override
   public void setup() {
     super.setup();
-    storeContext = CurrentCommerceConnection.get().getStoreContext();
     origServiceEndpoint = testling.getRestConnector().getServiceEndpoint(storeContext);
   }
 
@@ -67,7 +62,7 @@ public class WcInvalidationWrapperServiceIT extends IbmServiceTestBase {
   }
 
   @Test
-  public void testGetCacheInvalidations() throws Exception {
+  public void testGetCacheInvalidations() {
     if (useBetamaxTapes()) {
       return;
     }
@@ -78,15 +73,14 @@ public class WcInvalidationWrapperServiceIT extends IbmServiceTestBase {
 
   @Betamax(tape = "cache_testGetCacheInvalidationsUnknownHost", match = {MatchRule.path, MatchRule.query})
   @Test(expected = CommerceException.class)
-  public void testGetCacheInvalidationsUnknownHost() throws Exception {
+  public void testGetCacheInvalidationsUnknownHost() {
     testling.getRestConnector().setServiceEndpoint("http://does.not.exists/blub");
     testling.getCacheInvalidations(TIME_STAMP, 20000, 500, storeContext);
   }
 
   @Betamax(tape = "cache_testGetCacheInvalidationsError404", match = {MatchRule.path, MatchRule.query})
   @Test(expected = CommerceException.class)
-  public void testGetCacheInvalidationsError404() throws Exception {
-    StoreContext storeContext = StoreContextHelper.getCurrentContextOrThrow();
+  public void testGetCacheInvalidationsError404() {
     testling.getRestConnector().setServiceEndpoint(testling.getRestConnector().getServiceEndpoint(storeContext) + "/blub");
     testling.getCacheInvalidations(TIME_STAMP, 20000, 500, this.storeContext);
   }

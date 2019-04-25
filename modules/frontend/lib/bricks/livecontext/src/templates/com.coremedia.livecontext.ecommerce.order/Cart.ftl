@@ -9,7 +9,7 @@
     <#-- close cart preview -->
     <button class="cm-cart__close cm-icon cm-popup-button cm-popup-button--cart" type="button"
             data-cm-popup-control='{ "button": ".cm-popup-button--cart", "popup": ".cm-popup--cart" }'>
-      <i class="cm-icon__symbol icon-close"><span class="cm-visuallyhidden"><@bp.message "cart_close"/></span></i>
+      <i class="cm-icon__symbol icon-close"><span class="cm-visuallyhidden"><@cm.message "cart_close"/></span></i>
     </button>
   </div>
 
@@ -42,7 +42,7 @@
           <div class="cm-cart-item__properties">
               <#-- remove from cart button -->
               <div class="cm-icon cm-icon--cart-remove-item cm-icon--nospace"
-                   title="<@bp.message key="cart_remove_item" highlightErrors=false />"
+                   title="<@cm.message key="cart_remove_item" highlightErrors=false />"
                    data-cm-cart-remove-item='{
                       "id": "${item.externalId!""}",
                       "link": "${cm.getLink(self, "ajax")}",
@@ -50,25 +50,25 @@
                       "item": ".cm-cart__item",
                       "quantity": "${item.quantity}"}'>
                   <i class="cm-icon__symbol icon-cancel-circle"></i>
-                  <span class="cm-icon__info cm-visuallyhidden"><@bp.message "cart_remove_item" /></span>
+                  <span class="cm-icon__info cm-visuallyhidden"><@cm.message "cart_remove_item" /></span>
               </div>
 
               <div class="cm-property cm-property--title">
-                  <div class="cm-property__name cm-visuallyhidden"><@bp.message "cart_product" />:</div>
+                  <div class="cm-property__name cm-visuallyhidden"><@cm.message "cart_product" />:</div>
                   <div class="cm-property__value">
                       <a href="${cm.getLink(productInSite)}">${item.product.name!""}</a>
                   </div>
               </div>
               <div class="cm-property cm-property--quantity">
-                  <div class="cm-property__name"><@bp.message "cart_quantity" />:</div>
+                  <div class="cm-property__name"><@cm.message "cart_quantity" />:</div>
                   <div class="cm-property__value">${item.quantity!0}</div>
               </div>
               <div class="cm-property cm-property--price">
-                  <div class="cm-property__name"><@bp.message "cart_price" />:</div>
+                  <div class="cm-property__name"><@cm.message "cart_price" />:</div>
                   <div class="cm-property__value">${totalPriceFormatted!""}</div>
               </div>
               <div class="cm-property cm-property--description">
-                  <div class="cm-property__name"><@bp.message "cart_description" />:</div>
+                  <div class="cm-property__name"><@cm.message "cart_description" />:</div>
                   <div class="cm-property__value"><@cm.include self=item.product.shortDescription/></div>
               </div>
           </div>
@@ -80,13 +80,13 @@
 <#-- cart is empty -->
 <#else>
     <div class="cm-cart__empty">
-      <@bp.message "cart_empty" />
+      <@cm.message "cart_empty" />
     </div>
 </#if>
 
     <div class="cm-cart__footer cm-button-group cm-button-group--equal">
     <@components.button href=cm.getLink(self)
-                        text=bp.getMessage("cart_go_to_cart")
+                        text=cm.getMessage("cart_go_to_cart")
                         attr={"classes": ["cm-button-group__button cm-button--primary"]} />
     </div>
 </div>

@@ -29,6 +29,7 @@ public class TopCategoriesCacheKey extends AbstractCommerceCacheKey<List<Map<Str
 
   @Override
   public void addExplicitDependency(List<Map<String, Object>> wcCategories) {
+    Cache.dependencyOn(CategoryImpl.ROOT_CATEGORY_ROLE_ID);
   }
 
   @Override

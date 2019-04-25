@@ -2,6 +2,7 @@ package com.coremedia.livecontext.ecommerce.ibm.contract;
 
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.Vendor;
 import com.coremedia.livecontext.ecommerce.contract.Contract;
@@ -31,19 +32,26 @@ public class ContractServiceImplIT extends IbmServiceTestBase {
   @Inject
   ContractServiceImpl testling;
 
+  private StoreContextImpl storeContext;
+
+  @Override
+  public void setup() {
+    super.setup();
+
+    storeContext = testConfig.getB2BStoreContext(connection);
+  }
+
   @Betamax(tape = "contract_testFindContractIdsForUser", match = {MatchRule.path, MatchRule.query})
   @Test
-  public void testFindContractIdsForUser() throws Exception {
-    StoreContextHelper.setCurrentContext(testConfig.getB2BStoreContext());
-
+  public void testFindContractIdsForUser() {
     UserContext userContext = UserContext.builder().withUserName(testConfig.getUser2Name()).build();
     UserContextHelper.setCurrentContext(userContext);
 
     Collection<Contract> contractIdsForUser = testling.findContractIdsForUser(UserContextHelper.getCurrentContext(),
-            StoreContextHelper.getCurrentContextOrThrow());
+            storeContext);
     assertNotNull(contractIdsForUser);
 
-    if (WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(testConfig.getB2BStoreContext()))) {
+    if (WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(storeContext))) {
       assertFalse("number of eligible contracts should be more than zero", contractIdsForUser.isEmpty());
     } else {
       assertTrue("number of eligible contracts should be zero", contractIdsForUser.isEmpty());
@@ -52,16 +60,15 @@ public class ContractServiceImplIT extends IbmServiceTestBase {
 
   @Betamax(tape = "contract_testFindContractIdsForUser", match = {MatchRule.path, MatchRule.query})
   @Test
-  public void testFindContractIdsForPreviewUser() throws Exception {
-    StoreContextHelper.setCurrentContext(testConfig.getB2BStoreContext());
+  public void testFindContractIdsForPreviewUser() {
     UserContext userContext = UserContext.builder().withUserName(testConfig.getPreviewUserName()).build();
     UserContextHelper.setCurrentContext(userContext);
 
     Collection<Contract> contracts = testling.findContractIdsForUser(UserContextHelper.getCurrentContext(),
-            StoreContextHelper.getCurrentContextOrThrow());
+            storeContext);
     assertNotNull(contracts);
 
-    if (WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(testConfig.getB2BStoreContext()))) {
+    if (WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(storeContext))) {
       assertEquals(3, contracts.size());
 
       for (Contract contract : contracts) {
@@ -75,13 +82,11 @@ public class ContractServiceImplIT extends IbmServiceTestBase {
 
   @Betamax(tape = "contract_testFindContractIdsForServiceUserWithNoServiceUser", match = {MatchRule.path, MatchRule.query})
   @Test
-  public void testFindContractIdsForServiceUserWithNoServiceUser() throws Exception {
-    StoreContextHelper.setCurrentContext(testConfig.getB2BStoreContext());
+  public void testFindContractIdsForServiceUserWithNoServiceUser() {
     String contractPreviewServiceUserName = testling.getContractPreviewServiceUserName();
     try {
       testling.setContractPreviewServiceUserName(null);
-      Collection<Contract> contracts = testling.findContractIdsForServiceUser(
-              StoreContextHelper.getCurrentContextOrThrow());
+      Collection<Contract> contracts = testling.findContractIdsForServiceUser(storeContext);
       assertNotNull(contracts);
       assertTrue(contracts.isEmpty());
     } finally {
@@ -91,19 +96,21 @@ public class ContractServiceImplIT extends IbmServiceTestBase {
 
   @Betamax(tape = "contract_testFindContractById", match = {MatchRule.path, MatchRule.query})
   @Test
-  public void testFindContractById() throws Exception {
-    StoreContextHelper.setCurrentContext(testConfig.getB2BStoreContext());
+  public void testFindContractById() {
+    StoreContextImpl storeContext = testConfig.getB2BStoreContext(connection);
+    connection.setStoreContext(storeContext);
+
     UserContext userContext = UserContext.builder().withUserName(testConfig.getPreviewUserName()).build();
     UserContextHelper.setCurrentContext(userContext);
 
     Collection<Contract> contracts = testling.findContractIdsForUser(UserContextHelper.getCurrentContext(),
-            StoreContextHelper.getCurrentContextOrThrow());
+            storeContext);
     assertNotNull(contracts);
 
-    if (WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(testConfig.getB2BStoreContext()))) {
+    if (WCS_VERSION_7_7.lessThan(StoreContextHelper.getWcsVersion(storeContext))) {
       for (Contract contract : contracts) {
         CommerceId contractId = toContractId(contract.getExternalId());
-        Contract contractById = testling.findContractById(contractId, testConfig.getB2BStoreContext());
+        Contract contractById = testling.findContractById(contractId, storeContext);
         assertNotNull(contractById);
         assertEquals(contract.getExternalId(), contractById.getExternalId());
       }
@@ -112,10 +119,9 @@ public class ContractServiceImplIT extends IbmServiceTestBase {
 
   @Betamax(tape = "contract_testInvalidContract", match = {MatchRule.path, MatchRule.query})
   @Test
-  public void testInvalidContract() throws Exception {
-    StoreContextHelper.setCurrentContext(testConfig.getB2BStoreContext());
+  public void testInvalidContract() {
     CommerceId contractId = toContractId("xxxx");
-    Contract testcontract = testling.findContractById(contractId, testConfig.getB2BStoreContext());
+    Contract testcontract = testling.findContractById(contractId, storeContext);
     assertNull(testcontract);
   }
 }

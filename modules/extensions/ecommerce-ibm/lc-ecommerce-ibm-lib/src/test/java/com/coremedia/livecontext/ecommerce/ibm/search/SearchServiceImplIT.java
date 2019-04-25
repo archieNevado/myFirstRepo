@@ -28,18 +28,16 @@ public class SearchServiceImplIT extends IbmServiceTestBase {
   @Override
   public void setup() {
     super.setup();
-    StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
   }
 
   @Test
   @Betamax(tape = "ssi_testGetAutocompleteSuggestions", match = {MatchRule.path, MatchRule.query})
   public void testGetAutocompleteSuggestions() {
-    StoreContext currentContext = StoreContextHelper.getCurrentContextOrThrow();
-    if (StoreContextHelper.getWcsVersion(currentContext).lessThan(WCS_VERSION_7_7)) {
+    if (StoreContextHelper.getWcsVersion(storeContext).lessThan(WCS_VERSION_7_7)) {
       return;
     }
 
-    List<SuggestionResult> suggestions = testling.getAutocompleteSuggestions("dres", currentContext);
+    List<SuggestionResult> suggestions = testling.getAutocompleteSuggestions("dres", storeContext);
     assertFalse(suggestions.isEmpty());
   }
 }

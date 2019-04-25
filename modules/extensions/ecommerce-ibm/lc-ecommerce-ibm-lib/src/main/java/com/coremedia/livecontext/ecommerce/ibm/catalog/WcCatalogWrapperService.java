@@ -581,7 +581,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
     Map<String, String[]> parameters = builder.build();
 
     return callRestService(serviceMethod, variableValues, parameters, storeContext, null)
-      .flatMap(productsMap -> getFirstProductWrapper(productsMap, storeContext));
+            .flatMap(productsMap -> getFirstProductWrapper(productsMap, storeContext));
   }
 
   /**
@@ -972,7 +972,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
       return emptyList();
     }
 
-    List<Map<String, Object>> facetViewWrappers = DataMapHelper.getListValue(searchResultMap, "facetView");
+    List<Map<String, Object>> facetViewWrappers = DataMapHelper.getList(searchResultMap, "facetView");
 
     return facetViewWrappers.stream()
             .map(SearchFacetImpl::new)
@@ -1000,7 +1000,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
    */
   @NonNull
   private static List getCatalogEntryView(@NonNull Map<String, Object> productsMap) {
-    return DataMapHelper.getListValue(productsMap, "catalogEntryView");
+    return DataMapHelper.getList(productsMap, "catalogEntryView");
   }
 
   /**
@@ -1011,7 +1011,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
    */
   @NonNull
   private static List getCatalogGroupView(@NonNull Map<String, Object> categoriesWrapper) {
-    return DataMapHelper.getListValue(categoriesWrapper, "catalogGroupView");
+    return DataMapHelper.getList(categoriesWrapper, "catalogGroupView");
   }
 
   @NonNull
@@ -1037,25 +1037,23 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
   @NonNull
   protected List<Map<String, Object>> getCategoryWrapperListForSubCategories(
           @NonNull Map<String, Object> categoriesMap, String parentCategoryId) {
-    String jsonCategoryId = DataMapHelper.findStringValue(categoriesMap, "catalogGroupView[0].uniqueID").orElse(null);
+    String jsonCategoryId = DataMapHelper.findString(categoriesMap, "catalogGroupView[0].uniqueID").orElse(null);
     if (jsonCategoryId != null && Objects.equals(jsonCategoryId, parentCategoryId)) {
       //JSON handling for fix pack IFJR55049
-      Map<String, Object> resultMap = DataMapHelper.findValue(categoriesMap, "catalogGroupView[0]", Map.class)
-              .orElse(null);
-      if (resultMap == null) {
+      Map<String, Object> resultMap = DataMapHelper.getMap(categoriesMap, "catalogGroupView[0]");
+      if (resultMap.isEmpty()) {
         return emptyList();
       }
 
-      List<Map<String, Object>> categories = DataMapHelper.findValue(resultMap, "catalogGroupView", List.class)
-              .orElse(null);
-      if (categories == null) {
+      List<Map<String, Object>> categories = DataMapHelper.getList(resultMap, "catalogGroupView");
+      if (categories.isEmpty()) {
         return emptyList();
       }
 
       if (!useSearchRestHandlerCategory(StoreContextHelper.getCurrentContextOrThrow())) {
         resultMap = DataMapTransformationHelper.transformCategoryBodMap(resultMap);
       }
-      categories = DataMapHelper.findValue(resultMap, "catalogGroupView", List.class).orElse(null);
+      categories = DataMapHelper.getList(resultMap, "catalogGroupView");
       return unmodifiableList(categories);
     } else {
       return getCategoryWrapperList(categoriesMap);

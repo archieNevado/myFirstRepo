@@ -2,9 +2,8 @@ package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.search.SearchFacet;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
-import java.util.Collections;
+
 import java.util.List;
 import java.util.Map;
 
@@ -26,8 +25,8 @@ public class SearchFacetImpl implements SearchFacet {
   @NonNull
   @Override
   public String getLabel() {
-    return DataMapHelper.findStringValue(delegate, "label")
-            .orElseGet(() -> DataMapHelper.findStringValue(delegate, "name").orElse(null));
+    return DataMapHelper.findString(delegate, "label")
+            .orElseGet(() -> DataMapHelper.findString(delegate, "name").orElse(null));
   }
 
   @Override
@@ -38,7 +37,7 @@ public class SearchFacetImpl implements SearchFacet {
   @NonNull
   @Override
   public String getQuery() {
-    return DataMapHelper.findStringValue(delegate, "value").orElse(null);
+    return DataMapHelper.findString(delegate, "value").orElse(null);
   }
 
   @Override
@@ -49,14 +48,13 @@ public class SearchFacetImpl implements SearchFacet {
   @NonNull
   @Override
   public Map<String, Object> getExtendedData() {
-    return DataMapHelper.findValue(delegate, "extendedData", Map.class)
-            .orElseGet(Collections::emptyMap);
+    return DataMapHelper.getMap(delegate, "extendedData");
   }
 
   @NonNull
   @Override
   public List<SearchFacet> getChildFacets() {
-    List<Map<String, Object>> entry = DataMapHelper.getListValue(delegate, "entry");
+    List<Map<String, Object>> entry = DataMapHelper.getList(delegate, "entry");
 
     return entry.stream().map(SearchFacetImpl::new).collect(toList());
   }

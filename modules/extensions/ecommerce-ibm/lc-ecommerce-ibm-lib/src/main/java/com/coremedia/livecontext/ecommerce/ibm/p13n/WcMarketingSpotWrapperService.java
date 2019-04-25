@@ -9,11 +9,11 @@ import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestServiceMethod;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.StringUtils;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -241,9 +241,8 @@ public class WcMarketingSpotWrapperService extends AbstractWcWrapperService {
     marketingSpotWrappedHit.put("resourceName", resourceName);
 
     //noinspection unchecked
-    List<Map<String, Object>> marketingSpotsFromHits = DataMapHelper.findValue(marketingSpotHits,
-            "espot".equals(resourceName) ? "MarketingSpotData" : "MarketingSpot", List.class)
-            .orElseGet(Collections::emptyList);
+    List<Map<String, Object>> marketingSpotsFromHits = DataMapHelper.getList(marketingSpotHits,
+            "espot".equals(resourceName) ? "MarketingSpotData" : "MarketingSpot");
 
     if (marketingSpotsFromHits.isEmpty()) {
       return emptyMap();
@@ -293,12 +292,10 @@ public class WcMarketingSpotWrapperService extends AbstractWcWrapperService {
         Map<String, Object> allMarketingSpots = findMarketingSpots(storeContext, userContext);
 
         //noinspection unchecked
-        List<Map<String, Object>> wrappedSpots = DataMapHelper.findValue(allMarketingSpots, "MarketingSpots",
-                List.class)
-                .orElseGet(Collections::emptyList);
+        List<Map<String, Object>> wrappedSpots = DataMapHelper.getList(allMarketingSpots, "MarketingSpots");
 
         for (Map<String, Object> spot : wrappedSpots) {
-          String spotName = DataMapHelper.findStringValue(spot, "eSpotName").orElse("");
+          String spotName = DataMapHelper.findString(spot, "eSpotName").orElse("");
           if (StringUtils.isEmpty(searchTerm)
                   || "*".equals(searchTerm)
                   || (!spotName.isEmpty() && spotName.toLowerCase().contains(searchTerm.toLowerCase()))) {

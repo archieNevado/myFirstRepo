@@ -1,7 +1,6 @@
 package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.lc.test.CatalogServiceBaseTest;
 import com.coremedia.cap.multisite.Site;
@@ -12,7 +11,6 @@ import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductAttribute;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.contract.Contract;
 import com.coremedia.livecontext.ecommerce.contract.ContractService;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
@@ -92,18 +90,23 @@ public abstract class IbmCatalogServiceBaseTest extends CatalogServiceBaseTest {
   @Before
   @Override
   public void setup() {
-    doAnswer(invocationOnMock -> Optional.of(CurrentCommerceConnection.get())).when(commerceConnectionInitializer).findConnectionForSite(any(Site.class));
+    doAnswer(invocationOnMock -> Optional.of(connection))
+            .when(commerceConnectionInitializer).findConnectionForSite(any(Site.class));
+
     storeInfoService.getWcsVersion().ifPresent(testConfig::setWcsVersion);
+
     super.setup();
   }
 
   protected void testFindProductVariantByExternalIdWithContractSupport() throws Exception {
-    if (useBetamaxTapes() || StoreContextHelper.getWcsVersion(testConfig.getStoreContext()).lessThan(WCS_VERSION_7_8)) {
+    StoreContextImpl storeContext = testConfig.getB2BStoreContext(connection);
+
+    if (useBetamaxTapes() || StoreContextHelper.getWcsVersion(storeContext).lessThan(WCS_VERSION_7_8)) {
       return;
     }
 
-    StoreContextImpl storeContext = testConfig.getB2BStoreContext();
-    CurrentCommerceConnection.get().setStoreContext(storeContext);
+    connection.setStoreContext(storeContext);
+
     CommerceId commerceId = ibmCommerceIdProvider.formatProductVariantId(storeContext.getCatalogAlias(),
             PRODUCT_VARIANT_CODE_B2B);
 
@@ -126,53 +129,66 @@ public abstract class IbmCatalogServiceBaseTest extends CatalogServiceBaseTest {
 
   protected void testFindProductByExternalTechId() throws Exception {
     Product product1 = getTestProductByExternalId(PRODUCT_CODE);
-    Product product2 = testling.findProductByExternalTechId(product1.getExternalTechId());
+
+    Product product2 = testling.findProductByExternalTechId(product1.getExternalTechId(), storeContext);
     assertProduct(product2);
   }
 
   private Product getTestProductByExternalId(String externalId) {
-    return testling.findProductById(IbmCommerceIdProvider.commerceId(PRODUCT).withExternalId(externalId).build(), getStoreContext());
+    CommerceId commerceId = IbmCommerceIdProvider
+            .commerceId(PRODUCT)
+            .withExternalId(externalId)
+            .build();
+
+    return testling.findProductById(commerceId, storeContext);
   }
 
   protected void testFindProductByExternalTechIdIsNull() throws Exception {
-    Product product = testling.findProductByExternalTechId("blablablub");
+    Product product = testling.findProductByExternalTechId("blablablub", storeContext);
     assertNull(product);
   }
 
   protected void testFindProductMultiSEOByExternalTechId() throws Exception {
+    String lowerCaseStoreName = storeContext.getStoreName().toLowerCase();
+
     Product product = getTestProductByExternalId(PRODUCT1_WITH_MULTI_SEO);
     assertNotNull(product.getSeoSegment());
-    assertTrue(product.getSeoSegment().contains(testConfig.getStoreName().toLowerCase()));
+    assertTrue(product.getSeoSegment().contains(lowerCaseStoreName));
+
     product = getTestProductByExternalId(PRODUCT2_WITH_MULTI_SEO);
     assertNotNull(product.getSeoSegment());
-    assertTrue(product.getSeoSegment().contains(testConfig.getStoreName().toLowerCase()));
+    assertTrue(product.getSeoSegment().contains(lowerCaseStoreName));
+
     product = getTestProductByExternalId(PRODUCT3_WITH_MULTI_SEO);
     assertNotNull(product.getSeoSegment());
-    assertFalse(product.getSeoSegment().contains(testConfig.getStoreName().toLowerCase()));
-    ;
+    assertFalse(product.getSeoSegment().contains(lowerCaseStoreName));
   }
 
   protected void testFindProductVariantByExternalTechId() throws Exception {
-    StoreContext storeContext = getStoreContext();
-    CommerceId productVariantId = ibmCommerceIdProvider.formatProductVariantId(storeContext.getCatalogAlias(), PRODUCT_VARIANT_CODE);
-    ProductVariant productVariant = testling.findProductVariantById(productVariantId, getStoreContext());
+    CatalogAlias catalogAlias = storeContext.getCatalogAlias();
+
+    CommerceId productVariantId = ibmCommerceIdProvider.formatProductVariantId(catalogAlias, PRODUCT_VARIANT_CODE);
+    ProductVariant productVariant = testling.findProductVariantById(productVariantId, storeContext);
     assertEquals(PRODUCT_VARIANT_CODE, productVariant.getExternalId());
+
     String techId = productVariant.getExternalTechId();
-    CommerceId productVariantTechId = ibmCommerceIdProvider.formatProductVariantTechId(storeContext.getCatalogAlias(), techId);
-    ProductVariant productVariant2 = testling.findProductVariantById(productVariantTechId, getStoreContext());
+    CommerceId productVariantTechId = ibmCommerceIdProvider.formatProductVariantTechId(catalogAlias, techId);
+    ProductVariant productVariant2 = testling.findProductVariantById(productVariantTechId, storeContext);
     assertEquals(productVariant, productVariant2);
     assertProductVariant(productVariant2);
   }
 
   protected void testFindTopCategoriesWithContractSupport() throws Exception {
-    if (useBetamaxTapes() || StoreContextHelper.getWcsVersion(testConfig.getStoreContext()).lessThan(WCS_VERSION_7_8)) {
+    StoreContextImpl storeContext = testConfig.getB2BStoreContext(connection);
+
+    if (useBetamaxTapes() || StoreContextHelper.getWcsVersion(storeContext).lessThan(WCS_VERSION_7_8)) {
       return;
     }
 
-    StoreContextImpl storeContext = testConfig.getB2BStoreContext();
-    StoreContextHelper.setCurrentContext(storeContext);
+    connection.setStoreContext(storeContext);
 
     CatalogAlias catalogAlias = storeContext.getCatalogAlias();
+
     List<Category> topCategories = testling.findTopCategories(catalogAlias, storeContext);
     int topCategoriesCount = topCategories.size();
 
@@ -185,33 +201,39 @@ public abstract class IbmCatalogServiceBaseTest extends CatalogServiceBaseTest {
   }
 
   protected void testFindCategoryByExternalTechId() throws Exception {
-    StoreContext storeContext = getStoreContext();
-    CommerceId categoryId = ibmCommerceIdProvider.formatCategoryId(storeContext.getCatalogAlias(), CATEGORY_CODE);
+    CatalogAlias catalogAlias = storeContext.getCatalogAlias();
+
+    CommerceId categoryId = ibmCommerceIdProvider.formatCategoryId(catalogAlias, CATEGORY_CODE);
     Category category1 = testling.findCategoryById(categoryId, storeContext);
-    CommerceId categoryTechId = ibmCommerceIdProvider.formatCategoryTechId(storeContext.getCatalogAlias(), category1.getExternalTechId());
+
+    CommerceId categoryTechId = ibmCommerceIdProvider.formatCategoryTechId(catalogAlias, category1.getExternalTechId());
     Category category2 = testling.findCategoryById(categoryTechId, storeContext);
     assertCategory(category2);
   }
 
   protected void testFindCategoryMultiSEOByExternalTechId() throws Exception {
-    StoreContext storeContext = getStoreContext();
-    CommerceId categoryId = ibmCommerceIdProvider.formatCategoryId(storeContext.getCatalogAlias(), CATEGORY1_WITH_MULTI_SEO);
-    Category category = testling.findCategoryById(categoryId, getStoreContext());
+    CatalogAlias catalogAlias = storeContext.getCatalogAlias();
+    String lowerCaseStoreName = storeContext.getStoreName().toLowerCase();
+
+    CommerceId categoryId = ibmCommerceIdProvider.formatCategoryId(catalogAlias, CATEGORY1_WITH_MULTI_SEO);
+    Category category = testling.findCategoryById(categoryId, storeContext);
     assertNotNull(category.getSeoSegment());
-    assertTrue(category.getSeoSegment().contains(testConfig.getStoreName().toLowerCase()));
-    CommerceId categoryId1 = ibmCommerceIdProvider.formatCategoryId(storeContext.getCatalogAlias(), CATEGORY2_WITH_MULTI_SEO);
-    category = testling.findCategoryById(categoryId1, getStoreContext());
+    assertTrue(category.getSeoSegment().contains(lowerCaseStoreName));
+
+    CommerceId categoryId1 = ibmCommerceIdProvider.formatCategoryId(catalogAlias, CATEGORY2_WITH_MULTI_SEO);
+    category = testling.findCategoryById(categoryId1, storeContext);
     assertNotNull(category.getSeoSegment());
-    assertTrue(category.getSeoSegment().contains(testConfig.getStoreName().toLowerCase()));
-    CommerceId categoryId2 = ibmCommerceIdProvider.formatCategoryId(storeContext.getCatalogAlias(), CATEGORY3_WITH_MULTI_SEO);
-    category = testling.findCategoryById(categoryId2, getStoreContext());
+    assertTrue(category.getSeoSegment().contains(lowerCaseStoreName));
+
+    CommerceId categoryId2 = ibmCommerceIdProvider.formatCategoryId(catalogAlias, CATEGORY3_WITH_MULTI_SEO);
+    category = testling.findCategoryById(categoryId2, storeContext);
     assertNotNull(category.getSeoSegment());
-    assertFalse(category.getSeoSegment().contains(testConfig.getStoreName().toLowerCase()));
+    assertFalse(category.getSeoSegment().contains(lowerCaseStoreName));
   }
 
   protected void testFindCategoryByExternalTechIdIsNull() throws Exception {
-    CommerceId categoryTechId = ibmCommerceIdProvider.formatCategoryTechId(getStoreContext().getCatalogAlias(), "blablablub");
-    Category category = testling.findCategoryById(categoryTechId, getStoreContext());
+    CommerceId categoryTechId = ibmCommerceIdProvider.formatCategoryTechId(storeContext.getCatalogAlias(), "blablablub");
+    Category category = testling.findCategoryById(categoryTechId, storeContext);
     assertNull(category);
   }
 
@@ -244,7 +266,8 @@ public abstract class IbmCatalogServiceBaseTest extends CatalogServiceBaseTest {
   @Override
   protected void assertProduct(Product product) {
     super.assertProduct(product);
-    //test attributes
+
+    // Test attributes.
     List<ProductAttribute> definingAttributes = product.getDefiningAttributes();
     assertNotNull(definingAttributes);
     assertThat(definingAttributes.isEmpty(), is(false));
@@ -253,12 +276,12 @@ public abstract class IbmCatalogServiceBaseTest extends CatalogServiceBaseTest {
     assertNotNull(describingAttributes);
     assertThat(describingAttributes.isEmpty(), is(false));
 
-    //test variants
+    // Test variants.
     List<ProductVariant> variants = product.getVariants();
     assertNotNull(variants);
     assertThat(variants.isEmpty(), is(false));
 
-    //test axis filter
+    // Test axis filter.
     List<String> variantAxisNames = product.getVariantAxisNames();
     if (!variantAxisNames.isEmpty()) {
       List<ProductVariant> filteredVariants = product.getVariants(AxisFilter.onAnyValue(variantAxisNames.get(0)));
@@ -269,8 +292,10 @@ public abstract class IbmCatalogServiceBaseTest extends CatalogServiceBaseTest {
   @Override
   protected void assertProductVariant(ProductVariant productVariant) {
     super.assertProductVariant(productVariant);
+
     List<ProductAttribute> describingAttributes = productVariant.getDescribingAttributes();
     assertThat(describingAttributes.isEmpty(), is(false));
+
     List<ProductAttribute> definingAttributes = productVariant.getDefiningAttributes();
     assertThat(definingAttributes.isEmpty(), is(false));
   }

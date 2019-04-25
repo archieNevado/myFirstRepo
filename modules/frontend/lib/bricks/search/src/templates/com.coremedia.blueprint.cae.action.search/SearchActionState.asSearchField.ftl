@@ -12,8 +12,8 @@
 <#assign additionalCssClass=searchQuery?has_content?then(" focus", "")/>
 
 <form id="cm-search-form" class="cm-search cm-search--form" action="${searchLink}" role="search">
-  <label for="cm-search-query" class="cm-search__label">${bp.getMessage("search_label")}</label>
-  <input id="cm-search-query" type="search" class="cm-search__input${additionalCssClass}" name="query" value="${searchQuery}" placeholder="${bp.getMessage("search_placeholder")}" minlength="${self.minimalSearchQueryLength!3}" required>
+  <label for="cm-search-query" class="cm-search__label">${cm.getMessage("search_label")}</label>
+  <input id="cm-search-query" type="search" class="cm-search__input${additionalCssClass}" name="query" value="${searchQuery}" placeholder="${cm.getMessage("search_placeholder")}" minlength="${self.minimalSearchQueryLength!3}" required>
   <button class="cm-search__button">
     <i class="cm-search__button-icon"></i>
     <span class="cm-search__button-label">${self.action.title!""}</span>

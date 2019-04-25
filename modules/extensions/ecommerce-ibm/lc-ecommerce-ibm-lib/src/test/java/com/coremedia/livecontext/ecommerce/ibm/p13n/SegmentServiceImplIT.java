@@ -30,6 +30,59 @@ import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.SE
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_7;
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Integration test(s) for the {@link com.coremedia.livecontext.ecommerce.p13n.SegmentService}.
+ * <p>
+ * Unfortunately the WCS uses technical IDs to create segments which differ between WCS7 and WCS8. That why You should
+ * avoid using IDs if possible. Currently we're using following IDs for WCS versions 7 and 8:
+ * <table>
+ * <tr>
+ * <th>Segment Name</th>
+ * <th>ID WCS7</th>
+ * <th>ID WCS8</th>
+ * </tr>
+ * <tr>
+ * <td>Customers who are 40 years of age or older</td>
+ * <td>8000000000000000557</td>
+ * <td>8407790678950000508</td>
+ * </tr>
+ * <tr>
+ * <td>Customers who are under 40 years of age</td>
+ * <td>8000000000000000556</td>
+ * <td>8407790678950000507</td>
+ * </tr>
+ * <tr>
+ * <td>Female Customers</td>
+ * <td>8000000000000000555</td>
+ * <td>8407790678950000506</td>
+ * </tr>
+ * <tr>
+ * <td>Frequent Buyer</td>
+ * <td>8000000000000000751</td>
+ * <td>8407790678950000652</td>
+ * </tr>
+ * <tr>
+ * <td>Guest Shoppers</td>
+ * <td>8000000000000000553</td>
+ * <td>8407790678950000504</td>
+ * </tr>
+ * <tr>
+ * <td>Male Customers</td>
+ * <td>8000000000000000554</td>
+ * <td>8407790678950000505</td>
+ * </tr>
+ * <tr>
+ * <td>Registered Customers</td>
+ * <td>8000000000000000551</td>
+ * <td>8407790678950000502</td>
+ * </tr>
+ * <tr>
+ * <td>Repeat Customers</td>
+ * <td>8000000000000000552</td>
+ * <td>8407790678950000503</td>
+ * </tr>
+ * </table>
+ */
 @ContextConfiguration(classes = IbmServiceTestBase.LocalConfig.class)
 @ActiveProfiles(IbmServiceTestBase.LocalConfig.PROFILE)
 public class SegmentServiceImplIT extends IbmServiceTestBase {
@@ -47,7 +100,7 @@ public class SegmentServiceImplIT extends IbmServiceTestBase {
   public void setup() {
     super.setup();
 
-    boolean olderThan_7_7 = StoreContextHelper.getWcsVersion(getStoreContext()).lessThan(WCS_VERSION_7_7);
+    boolean olderThan_7_7 = StoreContextHelper.getWcsVersion(storeContext).lessThan(WCS_VERSION_7_7);
     Assumptions.assumeFalse(olderThan_7_7);
 
     UserContextHelper.setCurrentContext(UserContext.builder().build());
@@ -55,8 +108,8 @@ public class SegmentServiceImplIT extends IbmServiceTestBase {
 
   @Betamax(tape = "ssi_testFindAllSegments", match = {MatchRule.path, MatchRule.query})
   @Test
-  public void testFindAllSegments() throws Exception {
-    List<Segment> segments = testling.findAllSegments(getStoreContext());
+  public void testFindAllSegments() {
+    List<Segment> segments = testling.findAllSegments(storeContext);
     assertThat(segments)
             .isNotEmpty()
             .last()
@@ -69,8 +122,8 @@ public class SegmentServiceImplIT extends IbmServiceTestBase {
 
   @Betamax(tape = "ssi_testFindSegmentById", match = {MatchRule.path, MatchRule.query})
   @Test
-  public void testFindSegmentById() throws Exception {
-    Segment registeredCustomers = testling.findAllSegments(getStoreContext())
+  public void testFindSegmentById() {
+    Segment registeredCustomers = testling.findAllSegments(storeContext)
             .stream()
             .filter(s -> REGISTERED_CUSTOMERS.equals(s.getName()))
             .findFirst()
@@ -81,7 +134,7 @@ public class SegmentServiceImplIT extends IbmServiceTestBase {
     assertThat(externalTechId).isNotBlank();
 
     CommerceId registeredCustomersId = CommerceIdParserHelper.parseCommerceIdOrThrow("ibm:///x/segment/" + externalTechId);
-    Segment segment2 = testling.findSegmentById(registeredCustomersId, getStoreContext());
+    Segment segment2 = testling.findSegmentById(registeredCustomersId, storeContext);
     assertThat(segment2).isNotNull();
 
     CommerceId commerceId = segment2.getId();
@@ -92,20 +145,20 @@ public class SegmentServiceImplIT extends IbmServiceTestBase {
 
   @Betamax(tape = "ssi_testFindSegmentsByUser", match = {MatchRule.path, MatchRule.query})
   @Test
-  public void testFindSegmentsByUser() throws Exception {
+  public void testFindSegmentsByUser() {
     UserContext userContext = UserContext.builder()
             .withUserId(System.getProperty("lc.test.user2.id", "4"))
             .withUserName(testConfig.getUser2Name())
             .build();
     UserContextHelper.setCurrentContext(userContext);
 
-    List<Segment> segments = testling.findSegmentsForCurrentUser(getStoreContext());
+    List<Segment> segments = testling.findSegmentsForCurrentUser(storeContext);
     assertThat(segments).isNotEmpty();
     assertThat(segments.size()).isGreaterThanOrEqualTo(3);
   }
 
   @Test
-  public void testFindSegmentsByUserInWS() throws Exception {
+  public void testFindSegmentsByUserInWS() {
     if (useBetamaxTapes()) {
       return;
     }
@@ -116,7 +169,6 @@ public class SegmentServiceImplIT extends IbmServiceTestBase {
             .build();
     UserContextHelper.setCurrentContext(userContext);
 
-    StoreContext storeContext = getStoreContext();
     WorkspaceId workspaceId = findAnniversaryWorkspaceId(storeContext);
     StoreContext storeContextWithWorkspaceId = IbmStoreContextBuilder
             .from((StoreContextImpl) storeContext)
@@ -126,7 +178,7 @@ public class SegmentServiceImplIT extends IbmServiceTestBase {
     List<Segment> segments = testling.findSegmentsForCurrentUser(storeContextWithWorkspaceId);
     assertThat(segments).isNotEmpty()
             .extracting("name")
-            .containsExactly("Loyal, early Perfect Chef Customer", "Frequent Buyer", "Male Customers", REGISTERED_CUSTOMERS);
+            .contains("Loyal, early Perfect Chef Customer", "Frequent Buyer", "Male Customers", REGISTERED_CUSTOMERS);
   }
 
   @NonNull

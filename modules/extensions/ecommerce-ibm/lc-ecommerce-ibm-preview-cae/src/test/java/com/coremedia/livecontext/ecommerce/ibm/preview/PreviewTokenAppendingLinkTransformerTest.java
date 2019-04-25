@@ -1,8 +1,8 @@
 package com.coremedia.livecontext.ecommerce.ibm.preview;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.livecontext.ecommerce.ibm.common.CommerceConnectionImpl;
+import com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.ibm.login.LoginService;
 import org.junit.After;
 import org.junit.Before;
@@ -39,7 +39,7 @@ public class PreviewTokenAppendingLinkTransformerTest {
     testling.setLoginService(loginService);
 
     CommerceConnectionImpl connection = new CommerceConnectionImpl();
-    connection.setStoreContext(StoreContextBuilderImpl.from(connection, "any-site-id").build());
+    connection.setStoreContext(IbmStoreContextBuilder.from(connection, "any-site-id").build());
 
     CurrentCommerceConnection.set(connection);
 

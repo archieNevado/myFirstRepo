@@ -24,6 +24,7 @@
 <String>asBreadcrumbFragment</String>
 <String>externalHead</String>
 <String>externalFooter</String>
+<String>DEFAULT</String>
 </StringListProperty>
 </Struct>
 </StructListProperty>

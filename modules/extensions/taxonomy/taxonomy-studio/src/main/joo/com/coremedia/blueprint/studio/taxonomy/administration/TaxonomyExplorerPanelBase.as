@@ -10,7 +10,6 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.premular.DocumentTabPanel;
 import com.coremedia.cms.editor.sdk.premular.PropertyFieldGroup;
-import com.coremedia.cms.editor.sdk.premular.StandAloneDocumentView;
 import com.coremedia.cms.editor.sdk.premular.TabbedDocumentFormDispatcher;
 import com.coremedia.cms.editor.sdk.premular.fields.StringPropertyField;
 import com.coremedia.cms.editor.sdk.util.MessageBoxUtil;
@@ -45,6 +44,7 @@ public class TaxonomyExplorerPanelBase extends Panel {
   private var displayedTaxonomyNodeExpression:ValueExpression;
   private var siteSelectionExpression:ValueExpression;
   private var searchResultExpression:ValueExpression;
+  private var forceReadOnleValueExpression:ValueExpression;
 
   private var columnsContainer:Container;
   private var clipboardValueExpression:ValueExpression;
@@ -109,6 +109,13 @@ public class TaxonomyExplorerPanelBase extends Panel {
     return displayedTaxonomyNodeExpression;
   }
 
+  protected function getForceReadOnlyValueExpression():ValueExpression {
+    if (!forceReadOnleValueExpression) {
+      forceReadOnleValueExpression = ValueExpressionFactory.createFromValue(false);
+    }
+    return forceReadOnleValueExpression;
+  }
+
   /**
    * Handler implementation of the 'Add child node' button.
    */
@@ -145,8 +152,7 @@ public class TaxonomyExplorerPanelBase extends Panel {
     var restId:String = TaxonomyUtil.parseRestId(bindTo.getValue());
     if (newChild.getRef() === restId) {
       callback.call(null);
-    }
-    else {
+    } else {
       EventUtil.invokeLater(function ():void {
         waitForDocumentForm(newChild, callback);
       });
@@ -160,8 +166,8 @@ public class TaxonomyExplorerPanelBase extends Panel {
     var selection:Array = getSelectedValueExpression().getValue();
 
     //check if the given node is deleteable at all
-    TaxonomyUtil.bulkStrongLinks(selection, function(result:Array):void {
-      if(result.length > 0) {
+    TaxonomyUtil.bulkStrongLinks(selection, function (result:Array):void {
+      if (result.length > 0) {
         var title:String = resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyEditor_deletion_title');
         var msg:String = resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyEditor_deletion_blocked_text');
         msg = StringUtil.format(msg, result.length);
@@ -170,7 +176,7 @@ public class TaxonomyExplorerPanelBase extends Panel {
       }
 
       //next check referrers
-      TaxonomyUtil.bulkLinks(selection, function(result:Array):void {
+      TaxonomyUtil.bulkLinks(selection, function (result:Array):void {
         doDeletion(selection, result);
       });
     });
@@ -212,8 +218,7 @@ public class TaxonomyExplorerPanelBase extends Panel {
                 }
                 getSelectedValueExpression().setValue([parent]);
               });
-            }
-            else {
+            } else {
               setBusy(false);
               var msg:String = resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyEditor_deletion_failed_text');
               MessageBox.alert(resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyEditor_deletion_failed_title'), msg);
@@ -253,8 +258,7 @@ public class TaxonomyExplorerPanelBase extends Panel {
 
         if (parentNodeContent.isFolder()) {
           newContentLocation.setValue(resourceManager.getString('com.coremedia.blueprint.studio.TaxonomyStudioPluginSettings', 'taxonomy_location_default_value'));
-        }
-        else {
+        } else {
           parentLocation.loadValue(function (location:String):void {
             newContentLocation.loadValue(function ():void {
               newContentLocation.setValue(location);
@@ -290,8 +294,7 @@ public class TaxonomyExplorerPanelBase extends Panel {
       var node:TaxonomyNode = nodes[i];
       if (i === 0) {
         getRootColumnPanel().selectNode(node);
-      }
-      else {
+      } else {
         addColumn(nodes[i - 1]);
         if (i === nodes.length - 1) {
           selectedValueExpression.setValue([node]);
@@ -341,8 +344,7 @@ public class TaxonomyExplorerPanelBase extends Panel {
       updateActions(newNode);
       updateTaxonomyNodeForm(newNode);
       updateColumns(newNode);
-    }
-    else {
+    } else {
       getRootColumnPanel().selectNode(null);
       getColumnsContainer().removeAll(true);
     }
@@ -388,8 +390,7 @@ public class TaxonomyExplorerPanelBase extends Panel {
           ensureExpandState(dfd, content);
           Ext.resumeLayouts(true);
         });
-      }
-      else {
+      } else {
         dfd.hide();
         previewLoadMask.hide();
         setBusy(false);
@@ -413,7 +414,7 @@ public class TaxonomyExplorerPanelBase extends Panel {
       var stringPropertyFields:Array = collapsable.query(createComponentSelector()._xtype(StringPropertyField.xtype).build());
 
       for each(var field:StringPropertyField in stringPropertyFields) {
-        if(field.propertyName === fieldId) {
+        if (field.propertyName === fieldId) {
           var nameField:TextField = field.query(createComponentSelector()._xtype("textfield").build())[0] as TextField;
           nameField.selectOnFocus = true;
           nameField.focus(true);
@@ -577,9 +578,9 @@ public class TaxonomyExplorerPanelBase extends Panel {
    */
   public function isMarkedForCopying(id:String):Boolean {
     var selection:Array = getClipboardValueExpression().getValue();
-    if(selection) {
+    if (selection) {
       for each(var node:TaxonomyNode in selection) {
-        if(node.getRef() === id) {
+        if (node.getRef() === id) {
           return true;
         }
       }
@@ -628,17 +629,7 @@ public class TaxonomyExplorerPanelBase extends Panel {
    */
   public function setBusy(b:Boolean):void {
     setDisabled(b);
-    var view:StandAloneDocumentView = getDocumentForm();
-    if (view) {
-      //disabling may not be sufficient here since the user can still input if the field is focused, but we want to support all form configs
-      var dfd:Container = Container(view.queryById('documentFormDispatcher'));
-      dfd.itemCollection.getRange().forEach(function (spField:Component):void {
-        if (spField is Container) {
-          var field:Container = spField as Container;
-          field.setDisabled(true);
-        }
-      });
-    }
+    getForceReadOnlyValueExpression().setValue(b);
   }
 
   /**
@@ -701,8 +692,8 @@ public class TaxonomyExplorerPanelBase extends Panel {
     getRootColumnPanel().initColumn();
   }
 
-  private static function getDocumentForm():StandAloneDocumentView {
-    return Ext.getCmp('taxonomyStandaloneDocumentView') as StandAloneDocumentView;
+  private static function getDocumentForm():TaxonomyStandAloneDocumentView {
+    return Ext.getCmp(TaxonomyExplorerPanel.TAXONOMY_DOCUMENT_VIEW_ITEM_ID) as TaxonomyStandAloneDocumentView;
   }
 }
 }

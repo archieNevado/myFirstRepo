@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
       return null;
     }
 
-    String userId = DataMapHelper.findStringValue(personWrapper, "userId").orElse(null);
+    String userId = DataMapHelper.findString(personWrapper, "userId").orElse(null);
     if (userId == null) {
       return null;
     }

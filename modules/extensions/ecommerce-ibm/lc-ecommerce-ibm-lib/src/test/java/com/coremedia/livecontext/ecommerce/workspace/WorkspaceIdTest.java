@@ -30,7 +30,7 @@ class WorkspaceIdTest {
   }
 
   @Test
-  void equality() throws Exception {
+  void equality() {
     WorkspaceId anniversary1 = WorkspaceId.of("anniversary");
     WorkspaceId anniversary2 = WorkspaceId.of("anniversary");
     WorkspaceId winterCollection = WorkspaceId.of("winter_collection");

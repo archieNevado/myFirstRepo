@@ -70,13 +70,12 @@ public class AvailabilityServiceImpl extends AbstractIbmService implements Avail
         }
         Map<ProductVariant, AvailabilityInfo> result = new HashMap<>();
         List<Map<String, Object>> inventoryAvailabilityList = DataMapHelper
-                .findValue(wcInventoryAvailabilityList, "InventoryAvailability", List.class)
-                .orElse(null);
+                .getList(wcInventoryAvailabilityList, "InventoryAvailability");
 
         for (Map<String, Object> inventoryAvailability : inventoryAvailabilityList) {
             //TODO: Online Store only??
-            if (DataMapHelper.findStringValue(inventoryAvailability, "onlineStoreId").isPresent()) {
-              String productId = DataMapHelper.findStringValue(inventoryAvailability, "productId").orElse(null);
+            if (DataMapHelper.findString(inventoryAvailability, "onlineStoreId").isPresent()) {
+              String productId = DataMapHelper.findString(inventoryAvailability, "productId").orElse(null);
               CommerceId commerceId = getCommerceIdProvider().formatProductVariantTechId(context.getCatalogAlias(), productId);
               ProductVariant sku = (ProductVariant) commerceBeanFactory.createBeanFor(commerceId, context);
               result.put(sku, new AvailabilityInfoImpl(inventoryAvailability));

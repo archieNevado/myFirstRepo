@@ -2,20 +2,19 @@ package com.coremedia.livecontext.ecommerce.ibm.asset;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreContextBuilder;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class AssetUrlProviderImplTest {
+class AssetUrlProviderImplTest {
 
   private static final String HTTP_ASSET_URL = "http://url/to/storefront";
   private static final String HTTPS_ASSET_URL = "https://url/to/storefront";
@@ -25,20 +24,24 @@ public class AssetUrlProviderImplTest {
   private static final String VALID_PREFIX_TRAILED_SLASH = "ExtendedCatalog/perfectchef/";
   private static final String VALID_PREFIX_TRAILED_AND_LEADING_SLASH = "/ExtendedCatalog/perfectchef/";
 
+  private static final String PRODUCT_IMAGE_SEGMENT = "product/url";
+  private static final String PRODUCT_IMAGE_SEGMENT_WITH_LEADING_SLASH
+          = VALID_PREFIX_TRAILED_AND_LEADING_SLASH + PRODUCT_IMAGE_SEGMENT; // happens when search-based REST handlers are used
+
+  private static final String STORE_ID = "10001";
+  private static final CatalogId CATALOG_ID = CatalogId.of("catalog");
+
   private AssetUrlProviderImpl testling = new AssetUrlProviderImpl();
 
-  private String productImageSegment = "product/url";
-  private String productImageSegmentWithLeadingSlash = VALID_PREFIX_TRAILED_AND_LEADING_SLASH + productImageSegment; // happens when Search based REST handlers are used
-
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     CommerceConnection commerceConnection = new BaseCommerceConnection();
     CurrentCommerceConnection.set(commerceConnection);
 
     StoreContextImpl storeContext = IbmStoreContextBuilder
-            .from(StoreContextBuilderImpl.from(commerceConnection, "any-site-id").build())
-            .withStoreId("10001")
-            .withCatalogId(CatalogId.of("catalog"))
+            .from(commerceConnection, "any-site-id")
+            .withStoreId(STORE_ID)
+            .withCatalogId(CATALOG_ID)
             .build();
     commerceConnection.setStoreContext(storeContext);
 
@@ -46,45 +49,45 @@ public class AssetUrlProviderImplTest {
     testling.setCommercePreviewUrl("//preview/url");
   }
 
-  @After
-  public void teardown() {
+  @AfterEach
+  void teardown() {
     CurrentCommerceConnection.remove();
   }
 
-  @Test(expected = IllegalStateException.class)
-  public void whenHostIsEmpty_IllegalArgumentExceptionIsExpected() {
+  @Test
+  void whenHostIsEmpty_IllegalArgumentExceptionIsExpected() {
     testling.setCommerceProductionUrl("");
     testling.setCatalogPathPrefix(VALID_PREFIX_WITHOUT_SLASHES);
 
-    testling.getImageUrl(productImageSegment);
+    assertThrows(IllegalStateException.class, () -> testling.getImageUrl(PRODUCT_IMAGE_SEGMENT));
   }
 
-  @Test(expected = IllegalStateException.class)
-  public void whenHostIsBlank_IllegalArgumentExceptionIsExpected() {
+  @Test
+  void whenHostIsBlank_IllegalArgumentExceptionIsExpected() {
     testling.setCommerceProductionUrl("    ");
     testling.setCatalogPathPrefix(VALID_PREFIX_WITHOUT_SLASHES);
 
-    testling.getImageUrl(productImageSegment);
+    assertThrows(IllegalStateException.class, () -> testling.getImageUrl(PRODUCT_IMAGE_SEGMENT));
   }
 
-  @Test(expected = IllegalStateException.class)
-  public void whenAPathPrefixShouldBeAppendedButIsNotGiven_AnIllegalStateExceptionMustBeThrown() {
+  @Test
+  void whenAPathPrefixShouldBeAppendedButIsNotGiven_AnIllegalStateExceptionMustBeThrown() {
     testling.setCommerceProductionUrl(SCHEMELESS_ASSET_URL);
     testling.setCatalogPathPrefix(null);
 
-    testling.getImageUrl(productImageSegment, true);
+    assertThrows(IllegalStateException.class, () -> testling.getImageUrl(PRODUCT_IMAGE_SEGMENT, true));
   }
 
   //TEST CHECK LOGIC - Without path prefix
   @Test
-  public void whenAValidHostAndImageUrlIsGiven_AValidURLMustBeBuild() {
+  void whenAValidHostAndImageUrlIsGiven_AValidURLMustBeBuild() {
     testling.setCommerceProductionUrl(HTTP_ASSET_URL);
     testling.setCatalogPathPrefix(VALID_PREFIX_WITHOUT_SLASHES);
-    assertEquals("http://url/to/storefront/product/url", testling.getImageUrl(productImageSegment));
+    assertEquals("http://url/to/storefront/product/url", testling.getImageUrl(PRODUCT_IMAGE_SEGMENT));
   }
 
   @Test
-  public void whenAnInvalidProductImageUrlIsGiven_theUrlIsNull() {
+  void whenAnInvalidProductImageUrlIsGiven_theUrlIsNull() {
     testling.setCommerceProductionUrl(SCHEMELESS_ASSET_URL);
     testling.setCatalogPathPrefix(VALID_PREFIX_WITHOUT_SLASHES);
 
@@ -92,85 +95,81 @@ public class AssetUrlProviderImplTest {
   }
 
   @Test
-  public void whenAHttpAssetUrlIsGiven_AHttpUrlMustBeBuild() {
+  void whenAHttpAssetUrlIsGiven_AHttpUrlMustBeBuild() {
     testling.setCommerceProductionUrl(HTTP_ASSET_URL);
     testling.setCatalogPathPrefix(VALID_PREFIX_WITHOUT_SLASHES);
 
-    assertEquals("http://url/to/storefront/product/url", testling.getImageUrl(productImageSegment));
+    assertEquals("http://url/to/storefront/product/url", testling.getImageUrl(PRODUCT_IMAGE_SEGMENT));
   }
 
   @Test
-  public void whenAHttpsAssetUrlIsGiven_AHttpsUrlMustBeBuild() {
+  void whenAHttpsAssetUrlIsGiven_AHttpsUrlMustBeBuild() {
     testling.setCommerceProductionUrl(HTTPS_ASSET_URL);
     testling.setCatalogPathPrefix(VALID_PREFIX_WITHOUT_SLASHES);
 
-    assertEquals("https://url/to/storefront/product/url", testling.getImageUrl(productImageSegment));
+    assertEquals("https://url/to/storefront/product/url", testling.getImageUrl(PRODUCT_IMAGE_SEGMENT));
   }
 
   @Test
-  public void whenASchemelessAssetUrlIsGiven_ASchemelessUrlMustBeBuild() {
+  void whenASchemelessAssetUrlIsGiven_ASchemelessUrlMustBeBuild() {
     testling.setCommerceProductionUrl(SCHEMELESS_ASSET_URL);
     testling.setCatalogPathPrefix(VALID_PREFIX_WITHOUT_SLASHES);
 
-    assertEquals("//url/to/storefront/product/url", testling.getImageUrl(productImageSegment));
+    assertEquals("//url/to/storefront/product/url", testling.getImageUrl(PRODUCT_IMAGE_SEGMENT));
   }
 
   @Test
-  public void whenAnAbsoluteAssetUrlIsGiven_ASchemelessURLMustBeReturned() {
+  void whenAnAbsoluteAssetUrlIsGiven_ASchemelessURLMustBeReturned() {
     testling.setCommerceProductionUrl(SCHEMELESS_ASSET_URL);
     assertEquals("//url/to/storefront/product/url", testling.getImageUrl("http://url/to/storefront/product/url"));
   }
 
   //TEST CHECK LOGIC - With path prefix
   @Test
-  public void whenAPathPrefixShouldBeAppendedAndIsGiven_TheURLMustContainThePathPrefix() {
+  void whenAPathPrefixShouldBeAppendedAndIsGiven_TheURLMustContainThePathPrefix() {
     testling.setCommerceProductionUrl(SCHEMELESS_ASSET_URL);
     testling.setCatalogPathPrefix(VALID_PREFIX_WITHOUT_SLASHES);
 
-    assertEquals("//url/to/storefront/ExtendedCatalog/perfectchef/product/url", testling.getImageUrl(productImageSegment, true));
+    assertEquals("//url/to/storefront/ExtendedCatalog/perfectchef/product/url", testling.getImageUrl(PRODUCT_IMAGE_SEGMENT, true));
   }
 
   @Test
-  public void whenALeadingSlashPathPrefixShouldBeAppendedAndIsGiven_TheURLMustContainThePathPrefix() {
+  void whenALeadingSlashPathPrefixShouldBeAppendedAndIsGiven_TheURLMustContainThePathPrefix() {
     testling.setCommerceProductionUrl(SCHEMELESS_ASSET_URL);
     testling.setCatalogPathPrefix(VALID_PREFIX_LEADING_SLASH);
 
-    assertEquals("//url/to/storefront/ExtendedCatalog/perfectchef/product/url", testling.getImageUrl(productImageSegment, true));
+    assertEquals("//url/to/storefront/ExtendedCatalog/perfectchef/product/url", testling.getImageUrl(PRODUCT_IMAGE_SEGMENT, true));
   }
 
   @Test
-  public void whenAServerRelativePathIsGiven_TheURLMustNotContainThePathPrefix() {
+  void whenAServerRelativePathIsGiven_TheURLMustNotContainThePathPrefix() {
     testling.setCommerceProductionUrl(SCHEMELESS_ASSET_URL);
     testling.setCatalogPathPrefix(VALID_PREFIX_LEADING_SLASH);
 
-    assertEquals("//url/to/storefront/ExtendedCatalog/perfectchef/product/url", testling.getImageUrl(productImageSegmentWithLeadingSlash, true));
+    assertEquals("//url/to/storefront/ExtendedCatalog/perfectchef/product/url", testling.getImageUrl(PRODUCT_IMAGE_SEGMENT_WITH_LEADING_SLASH, true));
   }
 
   @Test
-  public void whenATrailedSlashPathPrefixShouldBeAppendedAndIsGiven_TheURLMustContainThePathPrefix() {
+  void whenATrailedSlashPathPrefixShouldBeAppendedAndIsGiven_TheURLMustContainThePathPrefix() {
     testling.setCommerceProductionUrl(SCHEMELESS_ASSET_URL);
     testling.setCatalogPathPrefix(VALID_PREFIX_TRAILED_SLASH);
 
-    assertEquals("//url/to/storefront/ExtendedCatalog/perfectchef/product/url", testling.getImageUrl(productImageSegment, true));
+    assertEquals("//url/to/storefront/ExtendedCatalog/perfectchef/product/url", testling.getImageUrl(PRODUCT_IMAGE_SEGMENT, true));
   }
 
   @Test
-  public void whenASlashesPathPrefixShouldBeAppendedAndIsGiven_TheURLMustContainThePathPrefix() {
+  void whenASlashesPathPrefixShouldBeAppendedAndIsGiven_TheURLMustContainThePathPrefix() {
     testling.setCommerceProductionUrl(SCHEMELESS_ASSET_URL);
     testling.setCatalogPathPrefix(VALID_PREFIX_TRAILED_AND_LEADING_SLASH);
 
-    assertEquals("//url/to/storefront/ExtendedCatalog/perfectchef/product/url", testling.getImageUrl(productImageSegment, true));
+    assertEquals("//url/to/storefront/ExtendedCatalog/perfectchef/product/url", testling.getImageUrl(PRODUCT_IMAGE_SEGMENT, true));
   }
 
   @Test
-  public void testReplaceToken() {
+  void testReplaceToken() {
     testling.setCommerceProductionUrl(SCHEMELESS_ASSET_URL);
     testling.setCatalogPathPrefix(VALID_PREFIX_TRAILED_AND_LEADING_SLASH);
 
-    StoreContext storeContext = CurrentCommerceConnection.get().getStoreContext();
-    String storeId = storeContext.getStoreId();
-    String catalogId = storeContext.getCatalogId().get().value();
-
-    assertEquals("//localhost/" + storeId + "/" + catalogId, testling.getImageUrl("//[cmsHost]/[storeId]/[catalogId]", true));
+    assertEquals("//localhost/" + STORE_ID + "/" + CATALOG_ID.value(), testling.getImageUrl("//[cmsHost]/[storeId]/[catalogId]", true));
   }
 }

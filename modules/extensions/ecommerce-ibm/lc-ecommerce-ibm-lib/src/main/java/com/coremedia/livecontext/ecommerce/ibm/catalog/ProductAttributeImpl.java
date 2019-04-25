@@ -53,7 +53,7 @@ class ProductAttributeImpl implements ProductAttribute {
   @Override
   public Object getValue() {
     //noinspection unchecked
-    List<Map<String, Object>> valueForKey = DataMapHelper.getListValue(delegate, "values");
+    List<Map<String, Object>> valueForKey = DataMapHelper.getList(delegate, "values");
 
     return valueForKey.stream()
             .findFirst()
@@ -65,7 +65,7 @@ class ProductAttributeImpl implements ProductAttribute {
   @Override
   public List<Object> getValues() {
     //noinspection unchecked
-    List<Map<String, Object>> valueForKey = DataMapHelper.getListValue(delegate, "values");
+    List<Map<String, Object>> valueForKey = DataMapHelper.getList(delegate, "values");
 
     return valueForKey.stream()
             .map(item -> DataMapHelper.getValueForKey(item, "value"))
@@ -103,6 +103,6 @@ class ProductAttributeImpl implements ProductAttribute {
 
   @Nullable
   private static String getStringValue(@NonNull Map<String, Object> map, @NonNull String key) {
-    return DataMapHelper.findStringValue(map, key).orElse(null);
+    return DataMapHelper.findString(map, key).orElse(null);
   }
 }

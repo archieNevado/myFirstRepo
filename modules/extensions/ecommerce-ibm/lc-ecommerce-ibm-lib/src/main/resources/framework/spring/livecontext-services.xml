@@ -155,6 +155,7 @@
   <bean id="ibmCommerceIdProvider" class="com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvider"/>
 
   <bean id="storeContextProvider" class="com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreContextProvider">
+    <constructor-arg index="0" name="commerceConnectionFinder" ref="defaultCommerceConnectionFinder"/>
     <property name="sitesService" ref="sitesService"/>
     <property name="settingsService" ref="settingsService"/>
     <property name="storeConfigurations" ref="ibmStoreConfigurations"/>

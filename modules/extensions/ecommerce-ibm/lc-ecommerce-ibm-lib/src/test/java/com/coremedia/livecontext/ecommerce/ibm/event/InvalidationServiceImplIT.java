@@ -5,10 +5,8 @@ import co.freeside.betamax.MatchRule;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.event.InvalidationEvent;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
-import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
 import com.google.common.collect.Iterables;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ActiveProfiles;
@@ -38,25 +36,20 @@ public class InvalidationServiceImplIT extends IbmServiceTestBase {
   @Inject
   private WcRestConnector restConnector;
 
-  @Before
-  @Override
-  public void setup() {
-    super.setup();
-  }
-
   @Betamax(tape = "commercecache_testPollCacheInvalidations", match = {MatchRule.path, MatchRule.query})
   @Test
-  public void testPollCacheInvalidations() throws Exception {
-    List<InvalidationEvent> commerceCacheInvalidations = invalidationService.getInvalidations(-1, getStoreContext());
+  public void testPollCacheInvalidations() {
+    List<InvalidationEvent> commerceCacheInvalidations = invalidationService.getInvalidations(-1, storeContext);
     assertNotNull(commerceCacheInvalidations);
     assertTrue(!commerceCacheInvalidations.isEmpty());
   }
 
   @Betamax(tape = "commercecache_testPollCacheInvalidationsWithEntries", match = {MatchRule.path})
   @Test
-  public void testPollCacheInvalidationsWithEntries() throws Exception {
+  public void testPollCacheInvalidationsWithEntries() {
     //if you have to re-record this test, you should change the timestamp to now-1h or something similar
-    List<InvalidationEvent> commerceCacheInvalidations = invalidationService.getInvalidations(TEST_TIMESTAMP, getStoreContext());
+
+    List<InvalidationEvent> commerceCacheInvalidations = invalidationService.getInvalidations(TEST_TIMESTAMP, storeContext);
 
     assertNotNull(commerceCacheInvalidations);
     assertFalse(commerceCacheInvalidations.isEmpty());
@@ -70,11 +63,11 @@ public class InvalidationServiceImplIT extends IbmServiceTestBase {
   }
 
   @Test(expected = CommerceException.class)
-  public void testPollCacheInvalidationsError() throws Exception {
-    String origServiceEndpoint = restConnector.getServiceEndpoint(StoreContextHelper.getCurrentContextOrThrow());
+  public void testPollCacheInvalidationsError() {
+    String origServiceEndpoint = restConnector.getServiceEndpoint(storeContext);
     try {
       restConnector.setServiceEndpoint("http://does.not.exists/blub");
-      invalidationService.getInvalidations(0, getStoreContext());
+      invalidationService.getInvalidations(0, storeContext);
     } finally {
       restConnector.setServiceEndpoint(origServiceEndpoint);
     }

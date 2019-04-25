@@ -27,5 +27,5 @@
     "fragmentViews": fragmentViews
   }/>
 <#else>
-  <span>${bp.getMessage('preview_am_no_renditions')}</span>
+  <span>${cm.getMessage('preview_am_no_renditions')}</span>
 </#if>

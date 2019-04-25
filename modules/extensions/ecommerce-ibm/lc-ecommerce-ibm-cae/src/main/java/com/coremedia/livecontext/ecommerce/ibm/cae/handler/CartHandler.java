@@ -107,7 +107,7 @@ public class CartHandler extends LiveContextPageHandlerBase {
   @GetMapping(value = URI_PATTERN)
   public View handleRequest(@PathVariable(SEGMENT_ROOT) String context, HttpServletRequest request,
                             HttpServletResponse response) {
-    CommerceConnection currentConnection = findCommerceConnection().orElse(null);
+    CommerceConnection currentConnection = CurrentCommerceConnection.find().orElse(null);
     if (currentConnection == null) {
       return null;
     }
@@ -211,7 +211,12 @@ public class CartHandler extends LiveContextPageHandlerBase {
   }
 
   private void deleteCartOrderItem(String orderItemId) {
-    getCartService().deleteCartOrderItem(orderItemId, CurrentCommerceConnection.get().getStoreContext());
+    CommerceConnection commerceConnection = CurrentCommerceConnection.get();
+
+    CartService cartService = commerceConnection.getCartService();
+    StoreContext storeContext = commerceConnection.getStoreContext();
+
+    cartService.deleteCartOrderItem(orderItemId, storeContext);
   }
 
   private void addCartOrderItem(String orderItemId) {
@@ -220,7 +225,12 @@ public class CartHandler extends LiveContextPageHandlerBase {
 
     List<OrderItemParam> orderItems = singletonList(orderItem);
 
-    getCartService().addToCart(orderItems, CurrentCommerceConnection.get().getStoreContext());
+    CommerceConnection commerceConnection = CurrentCommerceConnection.get();
+
+    CartService cartService = commerceConnection.getCartService();
+    StoreContext storeContext = commerceConnection.getStoreContext();
+
+    cartService.addToCart(orderItems, storeContext);
   }
 
   private static boolean orderItemExist(@NonNull Cart cart, @Nullable String orderItemId) {
@@ -229,12 +239,9 @@ public class CartHandler extends LiveContextPageHandlerBase {
 
   @Nullable
   public UserSessionService getUserSessionService() {
-    return findCommerceConnection().map(CommerceConnection::getUserSessionService).orElse(null);
-  }
-
-  @NonNull
-  private Optional<CommerceConnection> findCommerceConnection() {
-    return CurrentCommerceConnection.find();
+    return CurrentCommerceConnection.find()
+            .map(CommerceConnection::getUserSessionService)
+            .orElse(null);
   }
 
   @Required
@@ -289,19 +296,23 @@ public class CartHandler extends LiveContextPageHandlerBase {
     return uriBuilder.buildAndExpand(uriVariables);
   }
 
-  public CartService getCartService() {
-    return CurrentCommerceConnection.get().getCartService();
-  }
-
   @Required
   public void setCheckoutRedirectUrlProvider(WcsUrlProvider checkoutRedirectUrlProvider) {
     this.checkoutRedirectUrlProvider = checkoutRedirectUrlProvider;
   }
 
   @Nullable
-  private Cart resolveCart() {
-    CartService cartService = getCartService();
-    return cartService != null ? cartService.getCart(CurrentCommerceConnection.get().getStoreContext()) : null;
+  private static Cart resolveCart() {
+    CommerceConnection commerceConnection = CurrentCommerceConnection.get();
+
+    CartService cartService = commerceConnection.getCartService();
+    if (cartService == null) {
+      return null;
+    }
+
+    StoreContext storeContext = commerceConnection.getStoreContext();
+
+    return cartService.getCart(storeContext);
   }
 
   @VisibleForTesting

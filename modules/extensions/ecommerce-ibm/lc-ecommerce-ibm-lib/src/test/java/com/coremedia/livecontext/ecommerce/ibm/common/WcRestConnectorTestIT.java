@@ -2,9 +2,7 @@ package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
@@ -16,7 +14,7 @@ import com.coremedia.livecontext.ecommerce.ibm.order.WcCart;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.google.common.collect.ImmutableList;
-import org.junit.After;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpMethod;
@@ -91,13 +89,7 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
             .orElseThrow(() -> new IllegalStateException("Could not obtain commerce connection."));
 
     storeInfoService.getWcsVersion().ifPresent(testConfig::setWcsVersion);
-    connection.setStoreContext(testConfig.getStoreContext());
-    CurrentCommerceConnection.set(connection);
-  }
-
-  @After
-  public void teardown() {
-    CurrentCommerceConnection.remove();
+    connection.setStoreContext(testConfig.getStoreContext(connection));
   }
 
   /**
@@ -108,13 +100,12 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
    * reconnect is neccessary.
    */
   @Test
-  public void testReconnectForAuthorizedServiceCalls() throws Exception {
+  public void testReconnectForAuthorizedServiceCalls() {
     if (useBetamaxTapes() || WCS_VERSION_7_8.compareTo(testConfig.getWcsVersion()) <= 0) {
       return;
     }
 
-    StoreContext storeContext = testConfig.getStoreContext();
-    StoreContextHelper.setCurrentContext(storeContext);
+    StoreContext storeContext = testConfig.getStoreContext(connection);
     UserContext userContext = UserContext.builder().withUserName(TEST_USER).build();
 
     WcCredentials credentials = loginService.loginServiceIdentity(storeContext);
@@ -145,11 +136,10 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
 
   @Test
   @Betamax(tape = "wrc_testGetRequestCookieHeader", match = {MatchRule.path, MatchRule.query})
-  public void testGetRequestCookieHeader() throws Exception {
+  public void testGetRequestCookieHeader() {
     String cookieHeader = "myCookieHeader";
 
-    StoreContext storeContext = StoreContextHelper
-            .buildContext(SITE_ID, "storeId", "storeName", CATALOG_ID, LOCALE_DE, CURRENCY_EUR)
+    StoreContext storeContext = buildStoreContext()
             .withWcsVersion(testConfig.getWcsVersion())
             .build();
 
@@ -177,22 +167,16 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
   }
 
   @Test
-  public void testGetRequestCookieHeaderForContracts() throws Exception {
+  public void testGetRequestCookieHeaderForContracts() {
     String cookieHeader = "myCookieHeader";
 
-    CommerceConnection commerceConnection = new BaseCommerceConnection();
-    CurrentCommerceConnection.set(commerceConnection);
-
-    StoreContextImpl storeContext = StoreContextHelper
-            .buildContext(SITE_ID, "storeId", "storeName", CATALOG_ID, LOCALE_DE, CURRENCY_EUR)
+    StoreContextImpl storeContext = buildStoreContext()
             .withContractIds(ImmutableList.of("contractA", "contractB"))
             .withWcsVersion(WCS_VERSION_7_8)
             .build();
-    commerceConnection.setStoreContext(storeContext);
 
     UserContext userContext = mock(UserContext.class);
     when(userContext.getCookieHeader()).thenReturn(cookieHeader);
-    commerceConnection.setUserContext(userContext);
 
     LoginService loginServiceMock = mock(LoginService.class);
     WcCredentials wcCredentialsMock = mock(WcCredentials.class);
@@ -205,7 +189,8 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
       testling.setLoginService(loginServiceMock);
       when(loginServiceMock.loginServiceIdentity(storeContext)).thenReturn(wcCredentialsMock);
 
-      Map<String, String> requiredHeaders = testling.getRequiredHeaders(FIND_SUB_CATEGORIES_SEARCH, true, storeContext, userContext);
+      Map<String, String> requiredHeaders = testling
+              .getRequiredHeaders(FIND_SUB_CATEGORIES_SEARCH, true, storeContext, userContext);
 
       String cookieHeader2 = requiredHeaders.get("Cookie");
       assertNotNull(cookieHeader2);
@@ -216,11 +201,11 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
   }
 
   @Test
-  public void testGetRequestUri() throws Exception {
-    StoreContext storeContext = testConfig.getStoreContext();
+  public void testGetRequestUri() {
+    StoreContext storeContext = testConfig.getStoreContext(connection);
 
     Locale locale = storeContext.getLocale();
-    Currency currency = Currency.getInstance(Locale.GERMANY);
+    Currency currency = CURRENCY_EUR;
     String userName = "mu&rk{e}l";
 
     List<String> variableValues = newArrayList("param1value", "param & 2 {value}", "param3value");
@@ -233,9 +218,20 @@ public class WcRestConnectorTestIT extends AbstractWrapperServiceTestCase {
             requestUri.toString());
   }
 
+  @NonNull
+  private IbmStoreContextBuilder buildStoreContext() {
+    return IbmStoreContextBuilder.from(connection, SITE_ID)
+            .withStoreId("storeId")
+            .withStoreName("storeName")
+            .withCatalogId(CATALOG_ID)
+            .withCurrency(CURRENCY_EUR)
+            .withLocale(LOCALE_DE);
+  }
+
   /**
    * Adds the given values to a parameters map
    */
+  @NonNull
   private static Map<String, String[]> createParametersMap(Locale locale, Currency currency, String userName) {
     Map<String, String[]> parameters = new TreeMap<>();
 

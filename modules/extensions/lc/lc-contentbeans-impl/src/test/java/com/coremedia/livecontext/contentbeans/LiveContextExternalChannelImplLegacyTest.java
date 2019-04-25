@@ -74,7 +74,8 @@ public class LiveContextExternalChannelImplLegacyTest {
 
     @Bean
     StoreContext storeContext() {
-      return StoreContextBuilderImpl.from("any-site-id").build();
+      CommerceConnection connection = mock(CommerceConnection.class);
+      return StoreContextBuilderImpl.from(connection, "any-site-id").build();
     }
 
     @Bean

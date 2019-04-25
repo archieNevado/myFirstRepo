@@ -3,7 +3,6 @@ package com.coremedia.livecontext.ecommerce.ibm.cae.storefront;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontConnector;
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontResponse;
@@ -103,7 +102,7 @@ public class UserSessionServiceImplTest {
     CurrentCommerceConnection.set(commerceConnection);
 
     StoreContextImpl storeContext = IbmStoreContextBuilder
-            .from(StoreContextBuilderImpl.from(commerceConnection, "any-site-id").build())
+            .from(commerceConnection, "any-site-id")
             .withStoreId("10001")
             .withCatalogId(CatalogId.of("catalog"))
             .build();

@@ -32,6 +32,6 @@
   </@utils.optionalTag>
 <#else>
   <div class="cm-video--missing"<@preview.metadata self.content/>>
-    ${bp.getMessage("error_video_not_available")}
+    ${cm.getMessage("error_video_not_available")}
   </div>
 </#if>

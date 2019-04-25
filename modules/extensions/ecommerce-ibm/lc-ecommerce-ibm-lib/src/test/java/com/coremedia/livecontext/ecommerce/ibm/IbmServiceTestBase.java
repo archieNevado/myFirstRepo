@@ -1,7 +1,6 @@
 package com.coremedia.livecontext.ecommerce.ibm;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.lc.test.AbstractServiceTest;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
@@ -59,11 +58,11 @@ public abstract class IbmServiceTestBase extends AbstractServiceTest {
   @Profile(PROFILE)
   public static class LocalConfig {
     public static final String PROFILE = "IbmServiceTestBase";
+
     @Bean
     public XmlUapiConfig xmlUapiConfig() {
       return new XmlUapiConfig("classpath:/content/testcontent.xml");
     }
-
   }
 
   @MockBean
@@ -81,10 +80,9 @@ public abstract class IbmServiceTestBase extends AbstractServiceTest {
   @Override
   @Before
   public void setup() {
-    doAnswer(invocationOnMock -> Optional.of(CurrentCommerceConnection.get())).when(commerceConnectionInitializer).findConnectionForSite(any(Site.class));
+    doAnswer(invocationOnMock -> Optional.of(connection)).when(commerceConnectionInitializer).findConnectionForSite(any(Site.class));
     storeInfoService.getWcsVersion().ifPresent(testConfig::setWcsVersion);
     super.setup();
     loginService.clearIdentityCache();
   }
-
 }

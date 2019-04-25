@@ -16,15 +16,15 @@
     <#if self.authenticated>
       <#assign logoutLink=cm.getLink(logoutAction)/>
       <div class="cm-icon cm-icon--logout"<@preview.metadata data=[logoutAction.content, "properties.id"] />>
-        <a href="${logoutLink}" title="<@bp.message "logout_title" />">
+        <a href="${logoutLink}" title="<@cm.message "logout_title" />">
           <i class="cm-icon__symbol icon-profile-unlocked-alternative"></i>
-          <span class="cm-icon__info cm-visuallyhidden"><@bp.message "logout_title" /></span>
+          <span class="cm-icon__info cm-visuallyhidden"><@cm.message "logout_title" /></span>
         </a>
       </div>
       <div class="cm-icon cm-icon--user-details"<@preview.metadata data=[profileAction.content, "properties.id"] />>
-        <a href="${cm.getLink(profileAction)}" title="<@bp.message "userDetails_title" />">
+        <a href="${cm.getLink(profileAction)}" title="<@cm.message "userDetails_title" />">
           <i class="cm-icon__symbol icon-profile-unlocked"></i>
-          <span class="cm-icon__info cm-visuallyhidden"><@bp.message "userDetails_title" /></span>
+          <span class="cm-icon__info cm-visuallyhidden"><@cm.message "userDetails_title" /></span>
         </a>
       </div>
     <#else>

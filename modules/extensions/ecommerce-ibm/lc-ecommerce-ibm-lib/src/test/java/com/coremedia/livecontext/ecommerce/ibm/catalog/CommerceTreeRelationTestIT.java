@@ -5,9 +5,7 @@ import co.freeside.betamax.MatchRule;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
-import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.tree.CommerceTreeRelation;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,10 +16,10 @@ import org.springframework.test.context.ContextConfiguration;
 import javax.inject.Inject;
 import java.util.List;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test for CommerceTreeRelation below module bpbase-lc-common.
@@ -30,6 +28,7 @@ import static org.junit.Assert.assertNull;
 @ContextConfiguration(classes = {IbmServiceTestBase.LocalConfig.class, CommerceTreeRelationTestIT.LocalConfig.class})
 @ActiveProfiles(IbmServiceTestBase.LocalConfig.PROFILE)
 public class CommerceTreeRelationTestIT extends IbmServiceTestBase {
+
   @Configuration
   @Profile(IbmServiceTestBase.LocalConfig.PROFILE)
   public static class LocalConfig {
@@ -46,13 +45,6 @@ public class CommerceTreeRelationTestIT extends IbmServiceTestBase {
 
   @Inject
   private CatalogService catalogService;
-
-  @Before
-  @Override
-  public void setup() {
-    super.setup();
-    StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
-  }
 
   @Betamax(tape = "ctr_testGetChildrenOf", match = {MatchRule.path, MatchRule.query})
   @Test
@@ -73,7 +65,6 @@ public class CommerceTreeRelationTestIT extends IbmServiceTestBase {
     assertNull(rootCategory.getTitle());
   }
 
-
   @Betamax(tape = "ctr_testPathToRoot", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testPathToRoot() {
@@ -89,6 +80,6 @@ public class CommerceTreeRelationTestIT extends IbmServiceTestBase {
   }
 
   private Category getCategory() {
-    return catalogService.findCategoryBySeoSegment(CATEGORY_SEO_SEGMENT, getStoreContext());
+    return catalogService.findCategoryBySeoSegment(CATEGORY_SEO_SEGMENT, storeContext);
   }
 }

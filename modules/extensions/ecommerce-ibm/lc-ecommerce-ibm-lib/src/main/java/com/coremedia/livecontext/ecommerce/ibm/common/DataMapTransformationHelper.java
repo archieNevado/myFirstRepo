@@ -124,7 +124,7 @@ public class DataMapTransformationHelper {
    */
   private static void unifyProductWrapperKeys(Map<String, Object> productWrapper) {
     //noinspection unchecked
-    List<Map<String, Object>> catalogEntryView = DataMapHelper.getListValue(productWrapper, "catalogEntryView");
+    List<Map<String, Object>> catalogEntryView = DataMapHelper.getList(productWrapper, "catalogEntryView");
     replaceKeys(catalogEntryView);
     replaceProductAttributeKeys(catalogEntryView);
     replaceSkus(catalogEntryView);
@@ -137,7 +137,7 @@ public class DataMapTransformationHelper {
    */
   private static void unifyCategoryWrapperKeys(Map<String, Object> categoryWrapper) {
     //noinspection unchecked
-    List<Map<String, Object>> catalogGroupView = DataMapHelper.getListValue(categoryWrapper, "catalogGroupView");
+    List<Map<String, Object>> catalogGroupView = DataMapHelper.getList(categoryWrapper, "catalogGroupView");
     replaceKeys(catalogGroupView);
   }
 
@@ -183,7 +183,7 @@ public class DataMapTransformationHelper {
    */
   private static void replaceSkus(List<Map<String, Object>> mapList) {
     for (Map<String, Object> listEntry : mapList) {
-      List<Map<String, Object>> sKUs = (List<Map<String, Object>>) DataMapHelper.getListValue(listEntry, "sKUs");
+      List<Map<String, Object>> sKUs = (List<Map<String, Object>>) DataMapHelper.getList(listEntry, "sKUs");
       for (Map<String, Object> sKU : sKUs) {
         if (sKU.containsKey("sKUUniqueID")) {
           sKU.put("uniqueID", sKU.remove("sKUUniqueID"));
@@ -199,10 +199,10 @@ public class DataMapTransformationHelper {
    */
   private static void replaceProductAttributeKeys(List<Map<String, Object>> mapList) {
     for (Map<String, Object> listEntry : mapList) {
-      List<Map<String, Object>> attributes = (List<Map<String, Object>>) DataMapHelper.getListValue(listEntry, "attributes");
+      List<Map<String, Object>> attributes = (List<Map<String, Object>>) DataMapHelper.getList(listEntry, "attributes");
       for (Map<String, Object> attribute : attributes) {
         //rename inner values only
-        List<Map<String, Object>> values = DataMapHelper.getListValue(attribute, "values");
+        List<Map<String, Object>> values = DataMapHelper.getList(attribute, "values");
         for (Map<String, Object> value : values) {
           if (value.containsKey("values")) {
             value.put("value", value.remove("values"));

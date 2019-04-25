@@ -79,7 +79,7 @@ public class CustomConnectController extends ConnectController {
    */
   @NonNull
   private static String getPathExtension(@NonNull HttpServletRequest request) {
-    return nullToEmpty(UriUtils.extractFileExtension(request.getRequestURI())); // NOSONAR - Workaround for spotbugs/spotbugs#621, see CMS-12169
+    return nullToEmpty(UriUtils.extractFileExtension(request.getRequestURI()));
   }
 
   @NonNull

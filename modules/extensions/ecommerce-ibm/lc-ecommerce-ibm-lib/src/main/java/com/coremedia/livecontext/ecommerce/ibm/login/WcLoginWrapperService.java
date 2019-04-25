@@ -9,9 +9,9 @@ import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestServiceMethod;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.google.common.annotations.VisibleForTesting;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.http.HttpMethod;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,11 +21,11 @@ import java.util.Optional;
 import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.getStoreId;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonList;
-import static org.springframework.util.StringUtils.hasText;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class WcLoginWrapperService extends AbstractWcWrapperService {
 
-  public static final String ERROR_KEY_AUTHENTICATION_ERROR = "_ERR_AUTHENTICATION_ERROR";
+  private static final String ERROR_KEY_AUTHENTICATION_ERROR = "_ERR_AUTHENTICATION_ERROR";
 
   private static final WcRestServiceMethod<WcSession, WcLoginParam> LOGIN_IDENTITY = WcRestServiceMethod
           .builder(HttpMethod.POST, "store/{storeId}/loginidentity", WcLoginParam.class, WcSession.class)
@@ -55,8 +55,8 @@ public class WcLoginWrapperService extends AbstractWcWrapperService {
       List<String> variableValues = singletonList(getStoreId(storeContext));
       WcLoginParam wcLoginParam = new WcLoginParam(logonId, password);
 
-      return getRestConnector().callServiceInternal(LOGIN_IDENTITY, variableValues, emptyMap(), wcLoginParam,
-              storeContext, null);
+      return getRestConnector()
+              .callServiceInternal(LOGIN_IDENTITY, variableValues, emptyMap(), wcLoginParam, storeContext, null);
 
       //if login not successfully a RemoteException is thrown
     } catch (CommerceRemoteException e) {
@@ -82,17 +82,18 @@ public class WcLoginWrapperService extends AbstractWcWrapperService {
 
       List<String> variableValues = singletonList(getStoreId(storeContext));
 
-      Map userContextData = getRestConnector().callServiceInternal(USER_CONTEXT_DATA, variableValues, parameters, null,
-              storeContext, userContext).orElse(null);
+      Map userContextData = getRestConnector()
+              .callServiceInternal(USER_CONTEXT_DATA, variableValues, parameters, null, storeContext, userContext)
+              .orElse(null);
 
-      if (userContextData != null && hasText(logonId)) {
-        Double value = (Double) DataMapHelper.findValue(userContextData, "basicInfo.callerId", Double.class)
-                .orElse(null);
-        if (value != null) {
-          return equalsWithTypeConversion(logonId, value);
-        }
+      if (userContextData == null || !isNotBlank(logonId)) {
+        return false;
       }
-      return false;
+
+      Optional<Double> value = DataMapHelper.findValue(userContextData, "basicInfo.callerId", Double.class);
+      return value
+              .map(v -> equalsWithTypeConversion(logonId, v))
+              .orElse(false);
     } catch (CommerceException e) {
       throw e;
     } catch (Exception e) {
@@ -110,7 +111,8 @@ public class WcLoginWrapperService extends AbstractWcWrapperService {
   public boolean logout(String storeId) {
     List<String> variableValues = singletonList(storeId);
 
-    getRestConnector().callServiceInternal(LOGOUT_IDENTITY, variableValues, emptyMap(), null, null, null);
+    getRestConnector()
+            .callServiceInternal(LOGOUT_IDENTITY, variableValues, emptyMap(), null, null, null);
 
     // Todo: if no exception is thrown we assume that the user was logged out successfully. is that correct?
     return true;

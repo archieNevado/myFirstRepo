@@ -1,10 +1,8 @@
 package com.coremedia.livecontext.ecommerce.ibm.cae;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.lc.test.TestConfig;
-import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
-import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.catalog.CatalogServiceImpl;
 import com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreContextBuilder;
@@ -14,16 +12,13 @@ import com.coremedia.objectserver.web.links.TokenResolverHelper;
 import com.google.common.collect.ImmutableList;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.hamcrest.Matchers;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -37,6 +32,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class WcsUrlProviderTest {
@@ -58,8 +54,11 @@ public class WcsUrlProviderTest {
 
   private final TestConfig testConfig = new IbmTestConfig();
 
+  private CatalogServiceImpl catalogService;
+
   private WcsUrlProvider testling;
   private HttpServletRequest request;
+  private StoreContextImpl storeContext;
 
   @Before
   public void setup() {
@@ -73,28 +72,23 @@ public class WcsUrlProviderTest {
 
     request = new MockHttpServletRequest();
 
-    CommerceConnection connection = Mockito.mock(CommerceConnection.class);
-    CatalogServiceImpl catalogService = Mockito.mock(CatalogServiceImpl.class);
-
-    CurrentCommerceConnection.set(connection);
-    when(connection.getCatalogService()).thenReturn(catalogService);
+    catalogService = mock(CatalogServiceImpl.class);
     when(catalogService.getLanguageId(any(Locale.class))).thenReturn("-1");
-  }
 
-  @After
-  public void teardown() {
-    CurrentCommerceConnection.remove();
+    BaseCommerceConnection connection = new BaseCommerceConnection();
+    storeContext = (StoreContextImpl) testConfig.getStoreContext(connection);
+
+    connection.setCatalogService(catalogService);
   }
 
   @Test
-  public void testUrlFormatting() throws UnsupportedEncodingException {
+  public void testUrlFormatting() {
     Map<String, Object> params = new HashMap<>();
-    StoreContext context = testConfig.getStoreContext();
     params.put(WcsUrlProvider.URL_TEMPLATE, URL_TEMPLATE);
     params.put(WcsUrlProvider.SEO_SEGMENT, SEO_SEGMENT);
     params.put(WcsUrlProvider.SEARCH_TERM, SEARCH_TERM_WITH_UMLAUTS);
 
-    String formattedUrl = toUriString(testling.provideValue(params, request, context));
+    String formattedUrl = toUriString(testling.provideValue(params, request, storeContext));
     assertNotNull(formattedUrl);
     assertThat("URL Tokens got replaced and umlauts are correctly added to the URL.",
             formattedUrl,
@@ -108,26 +102,25 @@ public class WcsUrlProviderTest {
   public void testUrlPreviewLive() {
     Map<String, Object> params = new HashMap<>();
     params.put(WcsUrlProvider.IS_STUDIO_PREVIEW, true);
-    StoreContext context = testConfig.getStoreContext();
 
     String url;
 
-    url = toUriString(testling.provideValue(params, request, context));
+    url = toUriString(testling.provideValue(params, request, storeContext));
     assertTrue(url.startsWith(PREVIEW_STOREFRONT));
 
     params.put(WcsUrlProvider.IS_STUDIO_PREVIEW, false);
 
-    url = toUriString(testling.provideValue(params, request, context));
+    url = toUriString(testling.provideValue(params, request, storeContext));
     assertTrue(url.startsWith(DEFAULT_STOREFRONT));
 
     params.remove(WcsUrlProvider.IS_STUDIO_PREVIEW);
 
-    url = toUriString(testling.provideValue(params, request, context));
+    url = toUriString(testling.provideValue(params, request, storeContext));
     assertTrue(url.startsWith(DEFAULT_STOREFRONT));
   }
 
   @Test
-  public void testUrlEmptyParameterMap() throws UnsupportedEncodingException {
+  public void testUrlEmptyParameterMap() {
     assertEquals(UriComponentsBuilder.fromUriString(DEFAULT_STOREFRONT + URL_TEMPLATE).build().toString(),
             toUriString(testling.provideValue(emptyMap(), request, null)));
   }
@@ -150,12 +143,12 @@ public class WcsUrlProviderTest {
     params.put(WcsUrlProvider.SEO_SEGMENT, SEO_SEGMENT);
     params.put(WcsUrlProvider.IS_STUDIO_PREVIEW, true);
 
-    StoreContext storeContext = IbmStoreContextBuilder
-            .from((StoreContextImpl) testConfig.getStoreContext())
+    StoreContext storeContextWithContractIds = IbmStoreContextBuilder
+            .from(storeContext)
             .withContractIdsForPreview(ImmutableList.of("4711", "0815"))
             .build();
 
-    String providedUrl = toUriString(testling.provideValue(params, request, storeContext));
+    String providedUrl = toUriString(testling.provideValue(params, request, storeContextWithContractIds));
     assertTrue(providedUrl.contains("en/auroraesite/seo"));
     assertTrue(providedUrl.startsWith(PREVIEW_STOREFRONT + "/Logon?"));
     assertTrue(providedUrl.contains("contractId=4711"));
@@ -186,15 +179,14 @@ public class WcsUrlProviderTest {
     Map<String, Object> queryParams = new HashMap<>();
     queryParams.put(WcsUrlProvider.PRODUCT_ID, PRODUCT_ID);
     params.put(WcsUrlProvider.QUERY_PARAMS, queryParams);
-    StoreContext storeContext = testConfig.getStoreContext();
+
     String providedUrl = toUriString(testling.provideValue(params, request, storeContext));
     String expectedUrl = UriComponentsBuilder.fromUriString(DEFAULT_STOREFRONT + "/" + PRODUCT_NON_SEO_URL).build().toString();
 
     Map<String, Object> parametersMap = new HashMap<>();
     parametersMap.put(WcsUrlProvider.PRODUCT_ID, PRODUCT_ID);
     Locale locale = StoreContextHelper.getLocale(storeContext);
-    CatalogService catalogService = CurrentCommerceConnection.get().getCatalogService();
-    String languageId = ((CatalogServiceImpl) catalogService).getLanguageId(locale);
+    String languageId = catalogService.getLanguageId(locale);
     parametersMap.put(WcsUrlProvider.PARAM_LANG_ID, languageId);
     parametersMap.put(WcsUrlProvider.PARAM_STORE_ID, storeContext.getStoreId());
 
@@ -204,22 +196,23 @@ public class WcsUrlProviderTest {
 
   @Test
   public void testNonSeoCategoryUrl() {
-    Map<String, Object> params = new HashMap<>();
-    params.put(WcsUrlProvider.SEO_SEGMENT, "");
-
     Map<String, Object> queryParams = new HashMap<>();
     queryParams.put(WcsUrlProvider.CATEGORY_ID, CATEGORY_ID);
+
+    Map<String, Object> params = new HashMap<>();
+    params.put(WcsUrlProvider.SEO_SEGMENT, "");
     params.put(WcsUrlProvider.QUERY_PARAMS, queryParams);
-    StoreContext storeContext = testConfig.getStoreContext();
 
     String providedUrl = toUriString(testling.provideValue(params, request, storeContext));
-    String expectedUrl = UriComponentsBuilder.fromUriString(DEFAULT_STOREFRONT + "/" + CATEGORY_NON_SEO_URL).build().toString();
+    String expectedUrl = UriComponentsBuilder
+            .fromUriString(DEFAULT_STOREFRONT + "/" + CATEGORY_NON_SEO_URL)
+            .build()
+            .toString();
 
     Map<String, Object> parametersMap = new HashMap<>();
     parametersMap.put(WcsUrlProvider.CATEGORY_ID, CATEGORY_ID);
     Locale locale = StoreContextHelper.getLocale(storeContext);
-    CatalogService catalogService = CurrentCommerceConnection.get().getCatalogService();
-    String languageId = ((CatalogServiceImpl) catalogService).getLanguageId(locale);
+    String languageId = catalogService.getLanguageId(locale);
     parametersMap.put(WcsUrlProvider.PARAM_LANG_ID, languageId);
     parametersMap.put(WcsUrlProvider.PARAM_STORE_ID, storeContext.getStoreId());
 
@@ -231,7 +224,6 @@ public class WcsUrlProviderTest {
   public void testWithCatalogId() {
     Map<String, Object> params = new HashMap<>();
     params.put(WcsUrlProvider.URL_TEMPLATE, "{language}/{storeName}/{seoSegment}");
-    StoreContext storeContext = testConfig.getStoreContext();
     params.put(WcsUrlProvider.SEO_SEGMENT, "simsalabim");
     params.put(WcsUrlProvider.SEO_SEGMENT, SEO_SEGMENT);
 

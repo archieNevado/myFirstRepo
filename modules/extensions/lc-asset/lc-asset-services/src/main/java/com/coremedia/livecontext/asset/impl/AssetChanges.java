@@ -132,10 +132,10 @@ class AssetChanges implements RemovalListener<Content, String>, InitializingBean
       Multimap<Content, String> multimap = entry.getValue();
       Multimap<String, Content> inverseMultimap = siteToInverseMultimap.get(site);
       if (!multimap.containsKey(content)) {
-        multimap.put(content, null); // NOSONAR - Workaround for spotbugs/spotbugs#621, see CMS-12169
+        multimap.put(content, null);
       }
       if (!inverseMultimap.containsValue(content)) {
-        inverseMultimap.put(null, content); // NOSONAR - Workaround for spotbugs/spotbugs#621, see CMS-12169
+        inverseMultimap.put(null, content);
       }
     }
   }

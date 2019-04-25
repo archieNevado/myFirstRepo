@@ -5,11 +5,9 @@ import co.freeside.betamax.MatchRule;
 import com.coremedia.blueprint.lc.test.CatalogServiceBaseTest;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.ibm.common.IbmTestConfig;
-import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.storeinfo.StoreInfoService;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,20 +42,17 @@ public class CatalogServiceImplUnknownHostIT extends CatalogServiceBaseTest {
 
   @Inject
   private StoreInfoService storeInfoService;
-  private StoreContext storeContext;
 
   @Before
   @Override
   public void setup() {
     super.setup();
     storeInfoService.getWcsVersion().ifPresent(testConfig::setWcsVersion);
-    storeContext = testConfig.getStoreContext();
-    StoreContextHelper.setCurrentContext(storeContext);
   }
 
   @Betamax(tape = "csi_testFindProductByExternalIdReturns502_search", match = {MatchRule.path, MatchRule.query})
   @Test
-  public void testFindProductByIdReturns502() throws Exception {
+  public void testFindProductByIdReturns502() {
     String endpoint = testling.getCatalogWrapperService().getCatalogConnector().getSearchServiceEndpoint(storeContext);
     testling.getCatalogWrapperService().getCatalogConnector().setSearchServiceEndpoint("http://unknownhost.unknowndomain/wcs/resources");
     Throwable exception = null;

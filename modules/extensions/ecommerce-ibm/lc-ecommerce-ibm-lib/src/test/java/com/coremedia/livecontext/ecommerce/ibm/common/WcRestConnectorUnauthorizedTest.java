@@ -1,23 +1,21 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.UnauthorizedException;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.message.BasicHttpResponse;
 import org.apache.http.message.BasicStatusLine;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.util.List;
@@ -35,6 +33,7 @@ public class WcRestConnectorUnauthorizedTest extends AbstractWrapperServiceTestC
 
   @Inject
   protected Commerce commerce;
+
   protected CommerceConnection connection;
 
   @Before
@@ -43,13 +42,7 @@ public class WcRestConnectorUnauthorizedTest extends AbstractWrapperServiceTestC
             .orElseThrow(() -> new IllegalStateException("Could not obtain commerce connection."));
 
     storeInfoService.getWcsVersion().ifPresent(testConfig::setWcsVersion);
-    connection.setStoreContext(testConfig.getStoreContext());
-    CurrentCommerceConnection.set(connection);
-  }
-
-  @After
-  public void teardown() {
-    CurrentCommerceConnection.remove();
+    connection.setStoreContext(testConfig.getStoreContext(connection));
   }
 
   @Test(expected = UnauthorizedException.class)

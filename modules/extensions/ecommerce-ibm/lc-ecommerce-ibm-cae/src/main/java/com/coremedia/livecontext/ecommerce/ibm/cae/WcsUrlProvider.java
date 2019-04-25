@@ -2,7 +2,6 @@ package com.coremedia.livecontext.ecommerce.ibm.cae;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.cae.handlers.PreviewHandler;
 import com.coremedia.livecontext.contentbeans.CMExternalPage;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
@@ -113,33 +112,29 @@ public class WcsUrlProvider implements LiveContextUrlProvider {
     if (!catalogId.isPresent()) {
       CatalogAlias catalogAlias = storeContext.getCatalogAlias();
       String siteId = storeContext.getSiteId();
-      catalogId = catalogAliasTranslationService.getCatalogIdForAlias(catalogAlias, siteId);
+      catalogId = catalogAliasTranslationService.getCatalogIdForAlias(catalogAlias, siteId, storeContext);
     }
 
     // The language ID has to be transformed into the format of the commerce system.
     Locale locale = StoreContextHelper.getLocale(storeContext);
-    Optional<String> languageId = findLanguageId(locale);
-    languageId.ifPresent(value -> parameters.put(PARAM_LANG_ID, value));
+    String languageId = getLanguageId(storeContext, locale);
+    parameters.put(PARAM_LANG_ID, languageId);
     parameters.put(PARAM_LANGUAGE, locale.getLanguage());
 
-    if (languageId.isPresent()) {
-      // The catalog ID may be defaulted to the store ID if the store is not an e-store.
-      if (!catalogId.isPresent()) {
-        catalogId = Optional.of(CatalogId.of(storeId));
-      }
-
-      parameters.put(PARAM_STORE_ID, storeId);
-      parameters.put(PARAM_CATALOG_ID, catalogId.map(CatalogId::value).orElse(null));
+    // The catalog ID may be defaulted to the store ID if the store is not an e-store.
+    if (!catalogId.isPresent()) {
+      catalogId = Optional.of(CatalogId.of(storeId));
     }
+
+    parameters.put(PARAM_STORE_ID, storeId);
+    parameters.put(PARAM_CATALOG_ID, catalogId.map(CatalogId::value).orElse(null));
   }
 
   @NonNull
-  private static Optional<String> findLanguageId(@NonNull Locale locale) {
-    return CurrentCommerceConnection.find()
-            .map(CommerceConnection::getCatalogService)
-            .filter(CatalogServiceImpl.class::isInstance)
-            .map(CatalogServiceImpl.class::cast)
-            .map(catalogService -> catalogService.getLanguageId(locale));
+  private static String getLanguageId(@NonNull StoreContext storeContext, @NonNull Locale locale) {
+    CommerceConnection connection = storeContext.getConnection();
+    CatalogServiceImpl catalogService = (CatalogServiceImpl) connection.getCatalogService();
+    return catalogService.getLanguageId(locale);
   }
 
   @Autowired

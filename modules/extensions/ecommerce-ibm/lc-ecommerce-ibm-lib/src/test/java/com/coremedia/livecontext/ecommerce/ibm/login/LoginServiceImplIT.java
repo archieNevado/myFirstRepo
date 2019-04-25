@@ -5,7 +5,6 @@ import co.freeside.betamax.MatchRule;
 import com.coremedia.livecontext.ecommerce.common.InvalidLoginException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
-import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,8 +31,7 @@ public class LoginServiceImplIT extends IbmServiceTestBase {
   public void setup() {
     super.setup();
     origServiceUser = testling.getServiceUser();
-    origServicePassword = testling.getServicePassword(getStoreContext());
-    StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
+    origServicePassword = testling.getServicePassword(storeContext);
   }
 
   @After
@@ -45,8 +43,8 @@ public class LoginServiceImplIT extends IbmServiceTestBase {
 
   @Test
   @Betamax(tape = "lsi_testLoginSuccess", match = {MatchRule.path, MatchRule.query})
-  public void testLoginSuccess() throws Exception {
-    WcCredentials credentials = testling.loginServiceIdentity(StoreContextHelper.getCurrentContextOrThrow());
+  public void testLoginSuccess() {
+    WcCredentials credentials = testling.loginServiceIdentity(storeContext);
     assertThat(credentials).isNotNull();
     assertThat(credentials.getSession()).isNotNull();
   }
@@ -61,13 +59,12 @@ public class LoginServiceImplIT extends IbmServiceTestBase {
    * permanently.
    */
   @Test
-  public void testLoginSuccessWithWorkspaces() throws Exception {
+  public void testLoginSuccessWithWorkspaces() {
     if (useBetamaxTapes()) {
       return;
     }
 
-    StoreContext storeContext = testConfig.getStoreContextWithWorkspace();
-    StoreContextHelper.setCurrentContext(storeContext);
+    StoreContext storeContext = testConfig.getStoreContextWithWorkspace(connection);
     WcCredentials credentials = testling.loginServiceIdentity(storeContext);
     assertThat(credentials).isNotNull();
     assertThat(credentials.getSession()).isNotNull();
@@ -75,29 +72,29 @@ public class LoginServiceImplIT extends IbmServiceTestBase {
 
   @Test(expected = InvalidLoginException.class)
   @Betamax(tape = "lsi_testLoginFailure", match = {MatchRule.path, MatchRule.query, MatchRule.body})
-  public void testLoginFailure() throws Exception {
+  public void testLoginFailure() {
     testling.setServicePassword("wrong password");
-    testling.loginServiceIdentity(StoreContextHelper.getCurrentContextOrThrow());
+    testling.loginServiceIdentity(storeContext);
   }
 
   @Test
   @Betamax(tape = "lsi_testLogout", match = {MatchRule.path, MatchRule.query})
-  public void testLogout() throws Exception {
-    WcCredentials credentials = testling.loginServiceIdentity(StoreContextHelper.getCurrentContextOrThrow());
+  public void testLogout() {
+    WcCredentials credentials = testling.loginServiceIdentity(storeContext);
     assertThat(credentials).isNotNull();
-    boolean success = testling.logoutServiceIdentity(StoreContextHelper.getCurrentContextOrThrow());
+
+    boolean success = testling.logoutServiceIdentity(storeContext);
     assertThat(success).isTrue();
   }
 
   @Test
-  public void testGetPreviewToken() throws Exception {
+  public void testGetPreviewToken() {
     if (useBetamaxTapes()) {
       return;
     }
 
-    WcPreviewToken previewToken = testling.getPreviewToken(StoreContextHelper.getCurrentContextOrThrow());
+    WcPreviewToken previewToken = testling.getPreviewToken(storeContext);
     assertThat(previewToken).isNotNull();
     assertThat(previewToken.getPreviewToken()).isNotEmpty();
   }
-
 }

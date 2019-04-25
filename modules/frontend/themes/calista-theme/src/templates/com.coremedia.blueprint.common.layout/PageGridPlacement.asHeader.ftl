@@ -33,7 +33,7 @@
       </div>
       <div id="cmSearchWrapper" class="cm-search navbar-form navbar-right" <@preview.metadata [searchAction.content]/>>
         <button type="button" class="navbar-toggle pull-left cm-search-form__close">
-          <span class="sr-only">${bp.getMessage('search_close')}</span>
+          <span class="sr-only">${cm.getMessage('search_close')}</span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
@@ -52,8 +52,8 @@
 
         <#-- login/logout -->
         <li class="cm-header__login" data-cm-loginstatus="${lc.getStatusUrl()}">
-          <a id="cm-login" class="cm-header__login-status" href="${lc.getLoginFormUrl()}" title="${bp.getMessage("login_title")}">${bp.getMessage("login_title")}</a>
-          <a id="cm-logout" class="cm-header__login-status" href="${lc.getLogoutUrl()}" title="${bp.getMessage("logout_title")}">${bp.getMessage("logout_title")}</a>
+          <a id="cm-login" class="cm-header__login-status" href="${lc.getLoginFormUrl()}" title="${cm.getMessage("login_title")}">${cm.getMessage("login_title")}</a>
+          <a id="cm-logout" class="cm-header__login-status" href="${lc.getLogoutUrl()}" title="${cm.getMessage("logout_title")}">${cm.getMessage("logout_title")}</a>
         </li>
 
         <#-- navigation -->

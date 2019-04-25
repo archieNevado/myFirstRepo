@@ -45,7 +45,7 @@
   <#assign quickInfoId=bp.generateId("cm-quickinfo-") />
   <#-- button -->
   <div class="${heroBlockClass}__shop-now-button cm-button-group cm-button-group--overlay cm-button-group--shopnow">
-    <@components.button text=bp.getMessage("button_shop_now") attr={
+    <@components.button text=cm.getMessage("button_shop_now") attr={
       "classes": ["cm-button-group__button", "cm-button--primary", "cm-button--shadow"],
       "data-cm-button--quickinfo": '{"target": "${quickInfoId!""}"}'
     } />

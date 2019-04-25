@@ -109,7 +109,7 @@ public class ProductFragmentHandler extends FragmentHandler {
       return createModelAndViewForProductPage(navigation, externalTechId, view, orientation, types, developer);
     }
 
-    return createModelAndViewForProductPage(navigation, externalTechId, view, null, null, developer); // NOSONAR - Workaround for spotbugs/spotbugs#621, see CMS-12169
+    return createModelAndViewForProductPage(navigation, externalTechId, view, null, null, developer);
   }
 
   private LiveContextNavigation getLiveContextNavigation(@NonNull FragmentParameters params, Site site, String externalTechId, String categoryTechId) {
@@ -229,7 +229,7 @@ public class ProductFragmentHandler extends FragmentHandler {
 
   @Nullable
   private Product getProductFromId(@Nullable String productId) {
-    if (isNullOrEmpty(productId)) { // NOSONAR - Workaround for spotbugs/spotbugs#621, see CMS-12169
+    if (isNullOrEmpty(productId)) {
       return null;
     }
 
@@ -276,7 +276,7 @@ public class ProductFragmentHandler extends FragmentHandler {
 
   @Nullable
   private static String extractParameterValue(@Nullable String parameters, @NonNull String parameterName) {
-    if (isNullOrEmpty(parameters)) { // NOSONAR - Workaround for spotbugs/spotbugs#621, see CMS-12169
+    if (isNullOrEmpty(parameters)) {
       return parameters;
     }
 

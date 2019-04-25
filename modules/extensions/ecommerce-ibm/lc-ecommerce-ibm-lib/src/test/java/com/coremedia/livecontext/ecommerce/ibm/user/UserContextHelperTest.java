@@ -3,48 +3,48 @@ package com.coremedia.livecontext.ecommerce.ibm.user;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class UserContextHelperTest {
+class UserContextHelperTest {
 
-  @Before
-  public void setup() {
-   CurrentCommerceConnection.set(new BaseCommerceConnection());
+  @BeforeEach
+  void setup() {
+    CurrentCommerceConnection.set(new BaseCommerceConnection());
   }
 
-  @After
-  public void teardown() {
+  @AfterEach
+  void teardown() {
     CurrentCommerceConnection.remove();
   }
 
   @Test
-  public void testNullContext() {
+  void testNullContext() {
     assertNull(UserContextHelper.getForUserName(null));
   }
 
   @Test
-  public void testInvalidValues() {
-    UserContext userContext = Mockito.mock(UserContext.class);
+  void testInvalidValues() {
+    UserContext userContext = mock(UserContext.class);
     when(userContext.getUserName()).thenReturn(null);
 
     assertNull(UserContextHelper.getForUserName(userContext));
   }
 
   @Test
-  public void testCreateContext() {
+  void testCreateContext() {
     UserContext userContext = UserContext.builder().withUserName("forUser").build();
     assertEquals("forUser", UserContextHelper.getForUserName(userContext));
   }
 
   @Test
-  public void testCurrentContext() {
+  void testCurrentContext() {
     UserContext userContext = UserContext.builder().withUserName("forUser").build();
     UserContextHelper.setCurrentContext(userContext);
     assertEquals(userContext, UserContextHelper.getCurrentContext());

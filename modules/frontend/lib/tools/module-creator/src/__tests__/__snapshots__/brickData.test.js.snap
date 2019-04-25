@@ -50,9 +50,9 @@ export function consolePrint($text) {
 `;
 
 exports[`initBrickPageBodyFtl() returns data for Page._body.ftl 1`] = `
-"<#-- Use bp.getMessage to display a localized hello world message -->
+"<#-- Use cm.getMessage to display a localized hello world message -->
 <div>
-  <span class=\\"custom-text\\">\${bp.getMessage('welcomeText')}</span>
+  <span class=\\"custom-text\\">\${cm.getMessage('welcomeText')}</span>
 </div>
 "
 `;

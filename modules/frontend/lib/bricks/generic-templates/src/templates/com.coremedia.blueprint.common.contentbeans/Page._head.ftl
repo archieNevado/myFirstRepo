@@ -2,7 +2,7 @@
 <#-- @ftlvariable name="self.content" type="com.coremedia.blueprint.common.contentbeans.CMLinkable" -->
 
 <#assign studioExtraFilesMetadata=preview.getStudioAdditionalFilesMetadata(bp.setting(self, "studioPreviewCss"), bp.setting(self, "studioPreviewJs"))/>
-<#assign titleSuffix=bp.setting(self, "customTitleSuffixText", bp.getMessage('title_suffix'))/>
+<#assign titleSuffix=bp.setting(self, "customTitleSuffixText", cm.getMessage('title_suffix'))/>
 
 <head<@preview.metadata data=studioExtraFilesMetadata/>>
 <#-- add encoding first! -->

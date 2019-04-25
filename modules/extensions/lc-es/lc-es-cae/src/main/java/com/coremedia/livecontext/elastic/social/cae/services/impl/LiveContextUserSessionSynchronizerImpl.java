@@ -12,6 +12,7 @@ import com.coremedia.livecontext.ecommerce.user.UserService;
 import com.coremedia.livecontext.ecommerce.user.UserSessionService;
 import com.coremedia.livecontext.services.SessionSynchronizer;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -36,23 +37,32 @@ public class LiveContextUserSessionSynchronizerImpl implements SessionSynchroniz
   @Override
   public void synchronizeUserSession(HttpServletRequest request, HttpServletResponse response)
           throws GeneralSecurityException {
-    if (isAuthenticatedOnCommerce()) {
-      synchronizeUserContext();
+    CommerceConnection commerceConnection = CurrentCommerceConnection.find().orElse(null);
+
+    if (isAuthenticatedOnCommerce(commerceConnection)) {
+      synchronizeUserContext(commerceConnection);
     }
   }
 
-  private static boolean isAuthenticatedOnCommerce() throws CredentialExpiredException {
-    UserSessionService commerceUserSessionService = getCommerceConnection()
+  private static boolean isAuthenticatedOnCommerce(@Nullable CommerceConnection commerceConnection)
+          throws CredentialExpiredException {
+    UserSessionService commerceUserSessionService = Optional.ofNullable(commerceConnection)  // Nasty!
             .map(CommerceConnection::getUserSessionService)
             .orElse(null);
+
     return commerceUserSessionService != null && commerceUserSessionService.isLoggedIn();
   }
 
-  private void synchronizeUserContext() {
-    User shopUser = findCurrentUser().orElse(null);
+  private void synchronizeUserContext(@Nullable CommerceConnection commerceConnection) {
+    User shopUser = Optional.ofNullable(commerceConnection)  // Nasty!
+            .flatMap(LiveContextUserSessionSynchronizerImpl::findCurrentUser)
+            .orElse(null);
 
     if (shopUser == null) {
-      String currentUserId = findCurrentUserId().orElse(null);
+      String currentUserId = Optional.ofNullable(commerceConnection)  // Nasty!
+              .flatMap(LiveContextUserSessionSynchronizerImpl::findCurrentUserId)
+              .orElse(null);
+
       LOG.warn(PERSONAL_DATA, "Could not find current user '{}' in shop system", currentUserId);
       return;
     }
@@ -62,15 +72,15 @@ public class LiveContextUserSessionSynchronizerImpl implements SessionSynchroniz
   }
 
   @NonNull
-  private static Optional<User> findCurrentUser() {
-    return getCommerceConnection()
+  private static Optional<User> findCurrentUser(@NonNull CommerceConnection commerceConnection) {
+    return Optional.of(commerceConnection)  // Nasty!
             .map(CommerceConnection::getUserService)
             .map(UserService::findCurrentUser);
   }
 
   @NonNull
-  private static Optional<String> findCurrentUserId() {
-    return getCommerceConnection()
+  private static Optional<String> findCurrentUserId(@NonNull CommerceConnection commerceConnection) {
+    return Optional.of(commerceConnection)  // Nasty!
             .map(CommerceConnection::getUserContextProvider)
             .map(UserContextProvider::getCurrentContext)
             .map(UserContext::getUserId);
@@ -107,10 +117,5 @@ public class LiveContextUserSessionSynchronizerImpl implements SessionSynchroniz
   @Required
   public void setCommunityUserService(CommunityUserService communityUserService) {
     this.communityUserService = communityUserService; //NOSONAR - the setter is called before the service is used.
-  }
-
-  @NonNull
-  private static Optional<CommerceConnection> getCommerceConnection() {
-    return CurrentCommerceConnection.find();
   }
 }

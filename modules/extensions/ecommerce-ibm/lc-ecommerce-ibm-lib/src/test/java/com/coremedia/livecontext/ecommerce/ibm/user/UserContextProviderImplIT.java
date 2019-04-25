@@ -1,11 +1,9 @@
 package com.coremedia.livecontext.ecommerce.ibm.user;
 
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
-import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.login.LoginServiceImpl;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -21,13 +19,6 @@ public class UserContextProviderImplIT extends IbmServiceTestBase {
 
   @Inject
   UserContextProviderImpl testling;
-
-  @Before
-  @Override
-  public void setup() {
-    super.setup();
-    StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
-  }
 
   @After
   public void tearDown() throws Exception {

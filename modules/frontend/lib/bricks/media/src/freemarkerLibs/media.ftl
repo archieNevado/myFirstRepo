@@ -87,10 +87,10 @@
       <@preview.metadata data=metadata/>>
       <#-- making this explicit, concatinated resource bundle keys are not a good idea -->
       <#if tag == "video">
-        ${bp.getMessage("error_video_not_available")}
+        ${cm.getMessage("error_video_not_available")}
       </#if>
       <#if tag == "audio">
-        ${bp.getMessage("error_audio_not_available")}
+        ${cm.getMessage("error_audio_not_available")}
       </#if>
     </video>
   </#compress>

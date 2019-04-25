@@ -5,6 +5,7 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBui
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
@@ -22,21 +23,30 @@ import java.util.Map;
 public class IbmStoreContextBuilder implements StoreContextBuilder {
 
   private StoreContextBuilderImpl builder;
+  private final CommerceConnection connection;
   @Nullable
   private WcsVersion wcsVersion;
   private boolean dynamicPricingEnabled = false;
 
-  private IbmStoreContextBuilder(StoreContextBuilderImpl builder) {
+  private IbmStoreContextBuilder(StoreContextBuilderImpl builder, CommerceConnection connection) {
     this.builder = builder;
+    this.connection = connection;
   }
 
-  static IbmStoreContextBuilder from(StoreContextBuilderImpl builder) {
-    return new IbmStoreContextBuilder(builder);
+  public static IbmStoreContextBuilder from(CommerceConnection connection, String siteId) {
+    StoreContextBuilderImpl builder = StoreContextBuilderImpl.from(connection, siteId);
+    return new IbmStoreContextBuilder(builder, connection);
   }
 
+  @SuppressWarnings(
+          // Suppress until connection can be obtained from store context.
+          "findbugs:NP_NULL_PARAM_DEREF_NONVIRTUAL"
+  )
   public static IbmStoreContextBuilder from(StoreContextImpl storeContext) {
+    CommerceConnection connection = null;
+
     StoreContextBuilderImpl builder = StoreContextBuilderImpl.from(storeContext);
-    return new IbmStoreContextBuilder(builder);
+    return new IbmStoreContextBuilder(builder, connection);
   }
 
   @Override

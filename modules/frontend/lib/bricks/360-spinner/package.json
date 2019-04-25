@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@coremedia/brick-cta": "^1.0.0",
     "@coremedia/brick-media": "^1.0.0",
     "@coremedia/ftl-utils": "^1.0.0",
     "@coremedia/js-360-spinner": "^1.0.0",

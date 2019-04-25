@@ -3,6 +3,7 @@ package com.coremedia.livecontext.ecommerce.ibm.common;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.lc.test.TestConfig;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -12,8 +13,9 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.buildContext;
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_8_0;
+import static com.google.common.base.Preconditions.checkArgument;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class IbmTestConfig implements TestConfig {
 
@@ -55,13 +57,13 @@ public class IbmTestConfig implements TestConfig {
 
   @NonNull
   @Override
-  public StoreContextImpl getStoreContext() {
-    return getStoreContext(CURRENCY);
+  public StoreContextImpl getStoreContext(@NonNull CommerceConnection connection) {
+    return getStoreContext(connection, CURRENCY);
   }
 
   @NonNull
-  public StoreContextImpl getStoreContext(@NonNull Currency currency) {
-    IbmStoreContextBuilder builder = buildInitialStoreContext(currency)
+  public StoreContextImpl getStoreContext(@NonNull CommerceConnection connection, @NonNull Currency currency) {
+    IbmStoreContextBuilder builder = buildInitialStoreContext(connection, currency)
             .withWcsVersion(wcsVersion);
 
     return builder
@@ -70,14 +72,15 @@ public class IbmTestConfig implements TestConfig {
   }
 
   @NonNull
-  private IbmStoreContextBuilder buildInitialStoreContext(@NonNull Currency currency) {
+  private IbmStoreContextBuilder buildInitialStoreContext(@NonNull CommerceConnection connection,
+                                                          @NonNull Currency currency) {
     switch (wcsVersion) {
       case WCS_VERSION_8_0:
-        return buildContext(SITE_ID, STORE_ID_V80, STORE_NAME, CATALOG_ID_B2C_V80, LOCALE, currency);
+        return buildContext(connection, SITE_ID, STORE_ID_V80, STORE_NAME, CATALOG_ID_B2C_V80, LOCALE, currency);
       case WCS_VERSION_7_8:
-        return buildContext(SITE_ID, STORE_ID_V78, STORE_NAME, CATALOG_ID_B2C_V78, LOCALE, currency);
+        return buildContext(connection, SITE_ID, STORE_ID_V78, STORE_NAME, CATALOG_ID_B2C_V78, LOCALE, currency);
       default:
-        return buildContext(SITE_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, currency);
+        return buildContext(connection, SITE_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, currency);
     }
   }
 
@@ -88,16 +91,16 @@ public class IbmTestConfig implements TestConfig {
 
   @NonNull
   @Override
-  public StoreContextImpl getGermanStoreContext() {
+  public StoreContextImpl getGermanStoreContext(@NonNull CommerceConnection connection) {
     return IbmStoreContextBuilder
-            .from(getStoreContext())
+            .from(getStoreContext(connection))
             .withLocale(Locale.GERMAN)
             .build();
   }
 
   @NonNull
-  public StoreContextImpl getB2BStoreContext() {
-    IbmStoreContextBuilder builder = buildInitialB2BStoreContext()
+  public StoreContextImpl getB2BStoreContext(@NonNull CommerceConnection connection) {
+    IbmStoreContextBuilder builder = buildInitialB2BStoreContext(connection)
             .withWcsVersion(wcsVersion)
             .withDynamicPricingEnabled(true);
 
@@ -107,14 +110,14 @@ public class IbmTestConfig implements TestConfig {
   }
 
   @NonNull
-  private IbmStoreContextBuilder buildInitialB2BStoreContext() {
+  private IbmStoreContextBuilder buildInitialB2BStoreContext(@NonNull CommerceConnection connection) {
     switch (wcsVersion) {
       case WCS_VERSION_8_0:
-        return buildContext(B2B_SITE_ID, B2B_STORE_ID_V80, B2B_STORE_NAME, CATALOG_ID_B2B_V80, LOCALE, CURRENCY);
+        return buildContext(connection, B2B_SITE_ID, B2B_STORE_ID_V80, B2B_STORE_NAME, CATALOG_ID_B2B_V80, LOCALE, CURRENCY);
       case WCS_VERSION_7_8:
-        return buildContext(B2B_SITE_ID, B2B_STORE_ID, B2B_STORE_NAME, CATALOG_ID_B2B_V78, LOCALE, CURRENCY);
+        return buildContext(connection, B2B_SITE_ID, B2B_STORE_ID, B2B_STORE_NAME, CATALOG_ID_B2B_V78, LOCALE, CURRENCY);
       default:
-        return buildContext(B2B_SITE_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY);
+        return buildContext(connection, B2B_SITE_ID, STORE_ID, STORE_NAME, CATALOG_ID, LOCALE, CURRENCY);
     }
   }
 
@@ -130,29 +133,33 @@ public class IbmTestConfig implements TestConfig {
   }
 
   @NonNull
-  public StoreContextImpl getStoreContextWithWorkspace() {
+  public StoreContextImpl getStoreContextWithWorkspace(@NonNull CommerceConnection connection) {
     return IbmStoreContextBuilder
-            .from(getStoreContext())
+            .from(getStoreContext(connection))
             .withWorkspaceId(WORKSPACE_ID)
             .build();
+  }
+
+  @NonNull
+  private static IbmStoreContextBuilder buildContext(@NonNull CommerceConnection connection, @NonNull String siteId,
+                                                     @NonNull String storeId, @NonNull String storeName,
+                                                     @NonNull CatalogId catalogId, @NonNull Locale locale,
+                                                     @NonNull Currency currency) {
+    checkArgument(isNotBlank(storeId), "Store ID must not be blank.");
+    checkArgument(isNotBlank(storeName), "Store name must not be blank.");
+
+    return IbmStoreContextBuilder
+            .from(connection, siteId)
+            .withStoreId(storeId)
+            .withStoreName(storeName)
+            .withCatalogId(catalogId)
+            .withLocale(locale)
+            .withCurrency(currency);
   }
 
   @Override
   public String getCatalogName() {
     return CATALOG_NAME;
-  }
-
-  @Override
-  public String getStoreName() {
-    return StoreContextHelper.getStoreName(getStoreContext());
-  }
-
-  public String getStoreId() {
-    return StoreContextHelper.getStoreId(getStoreContext());
-  }
-
-  public Locale getLocale() {
-    return StoreContextHelper.getLocale(getStoreContext());
   }
 
   public String getUser1Name() {

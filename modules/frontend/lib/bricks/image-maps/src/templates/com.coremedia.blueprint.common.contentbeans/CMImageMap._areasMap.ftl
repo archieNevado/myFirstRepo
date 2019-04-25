@@ -67,7 +67,7 @@
           <#if useQuickinfo>
             <#assign parameters+={"data-cm-button--quickinfo": '{"target": "${quickInfoId!""}"}'}/>
           </#if>
-          <@components.button baseClass="" href="${link}" iconText=(linkedContent.teaserTitle!bp.getMessage("button_quickinfo")) attr=parameters />
+          <@components.button baseClass="" href="${link}" iconText=(linkedContent.teaserTitle!cm.getMessage("button_quickinfo")) attr=parameters />
         </#if>
       </#if>
     </#if>

@@ -55,6 +55,7 @@
   </util:map>
 
   <bean id="testStoreContextProvider" class="com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreContextProvider">
+    <constructor-arg index="0" name="commerceConnectionFinder" ref="defaultCommerceConnectionFinder"/>
     <property name="sitesService" ref="sitesService"/>
     <property name="settingsService" ref="settingsService"/>
     <property name="storeConfigurations" ref="testStoreConfigurations"/>

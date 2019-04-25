@@ -29,7 +29,7 @@
 
   <#-- product code -->
   <div class="${blockClass}__code"<@preview.metadata "properties.productCode"/>>
-      <span>${bp.getMessage("product_code")}</span> ${self.productCode!""}
+      <span>${cm.getMessage("product_code")}</span> ${self.productCode!""}
   </div>
 
   <#-- text -->
@@ -42,7 +42,7 @@
   <#-- downloads -->
   <#if self.downloads?has_content>
     <div class="${blockClass}__downloads cm-downloads"<@preview.metadata "properties.downloads"/>>
-      <h3>${bp.getMessage("download_label")}</h3>
+      <h3>${cm.getMessage("download_label")}</h3>
       <ul class="cm-downloads__items">
         <#list self.downloads![] as download>
           <li class="cm-downloads__item">

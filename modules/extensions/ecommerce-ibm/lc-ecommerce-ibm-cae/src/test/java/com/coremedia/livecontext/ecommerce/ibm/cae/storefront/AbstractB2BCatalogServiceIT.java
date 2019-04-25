@@ -1,10 +1,8 @@
 package com.coremedia.livecontext.ecommerce.ibm.cae.storefront;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType;
-import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.contract.Contract;
 import com.coremedia.livecontext.ecommerce.ibm.catalog.IbmCatalogServiceBaseTest;
 import com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreContextBuilder;
@@ -46,13 +44,11 @@ abstract class AbstractB2BCatalogServiceIT extends IbmCatalogServiceBaseTest {
     boolean loginSuccess = userSessionService.loginUser(request, response, user, password);
     assertTrue(loginSuccess);
 
-    CommerceConnection commerceConnection = CurrentCommerceConnection.get();
-
-    UserContext userContextAfterLogin = commerceConnection.getUserContext();
+    UserContext userContextAfterLogin = connection.getUserContext();
     assertNotNull(userContextAfterLogin.getCookieHeader());
 
     Collection<Contract> contractIdsForUser = contractService.findContractIdsForUser(userContextAfterLogin,
-            commerceConnection.getStoreContext());
+            storeContext);
     return contractIdsForUser.stream()
             .map(contract -> {
               assert contract != null;
@@ -62,17 +58,16 @@ abstract class AbstractB2BCatalogServiceIT extends IbmCatalogServiceBaseTest {
   }
 
   protected void testFindSubCategoriesWithContract() throws Exception {
-    if (useBetamaxTapes() || StoreContextHelper.getWcsVersion(testConfig.getStoreContext()).lessThan(WCS_VERSION_7_8)) {
+    if (useBetamaxTapes() || StoreContextHelper.getWcsVersion(storeContext).lessThan(WCS_VERSION_7_8)) {
       return;
     }
 
-    StoreContextImpl storeContext = testConfig.getB2BStoreContext();
-    StoreContextHelper.setCurrentContext(storeContext);
+    StoreContextImpl b2bStoreContext = testConfig.getB2BStoreContext(connection);
 
-    Category category = findAndAssertCategory("Lighting", null, storeContext);
+    Category category = findAndAssertCategory("Lighting", null, b2bStoreContext);
     assertNotNull(category);
 
-    category = findAndAssertCategory("Fasteners", null, storeContext);
+    category = findAndAssertCategory("Fasteners", null, b2bStoreContext);
     assertNotNull(category);
 
     List<Category> subCategoriesNoContract = testling.findSubCategories(category);
@@ -80,12 +75,12 @@ abstract class AbstractB2BCatalogServiceIT extends IbmCatalogServiceBaseTest {
 
     // Test b2b categories with contract.
     List<String> contractIds = getContractIdsForUser("bmiller", "passw0rd");
-    storeContext = IbmStoreContextBuilder
-            .from(storeContext)
+    StoreContextImpl b2bStoreContextWithContractIds = IbmStoreContextBuilder
+            .from(b2bStoreContext)
             .withContractIds(contractIds)
             .build();
 
-    category = findAndAssertCategory("Fasteners", null, storeContext);
+    category = findAndAssertCategory("Fasteners", null, b2bStoreContextWithContractIds);
 
     List<Category> subCategoriesWithContract = testling.findSubCategories(category);
     assertEquals(2, subCategoriesWithContract.size());

@@ -147,4 +147,31 @@ $(function() {
     // disable browser history in search
     $("body").data("cm-search-disable-browser-history", "true");
   });
+
+  // fixing body when mobile navigation is open
+  const $filterButton = $(".cm-search__filter-switch-button");
+  const $filterCloseButton = $(".cm-search__filter-popup-close");
+  const $filterPopup = $(".cm-search__filter-popup");
+
+  $filterButton.on("click", function() {
+    $("body").addClass("fixed");
+  });
+
+  $filterCloseButton.on("click", function() {
+    $("body").removeClass("fixed");
+  });
+
+  const $document = $(document);
+  $document.on(deviceDetector.EVENT_DEVICE_CHANGED, function(
+    event,
+    newDevice,
+    oldDevice
+  ){
+    if (oldDevice.type !== newDevice.type) {
+      if (newDevice.type !== "mobile") {
+        $("body").removeClass("fixed");
+        $filterPopup.removeClass("cm-search__filter-popup--active");
+      }
+    }
+  });
 });

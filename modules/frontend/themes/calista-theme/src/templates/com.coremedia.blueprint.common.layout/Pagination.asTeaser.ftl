@@ -22,7 +22,7 @@
 <#-- show button to load more results via ajax -->
 <#if (nextPageNumber < numberOfPages)>
   <button disabled class="cm-pagination__more" data-cm-pagination-page="${cm.getLink(self, {"view": "asTeaser", "pageNum": nextPageNumber})}">
-    ${bp.getMessage("pagination_load_more")}
+    ${cm.getMessage("pagination_load_more")}
   </button>
   <div class="cm-pagination__loading" data-cm-pagination-loading></div>
 </#if>

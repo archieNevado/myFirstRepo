@@ -83,10 +83,10 @@ public class ProductImpl extends ProductBase {
     if (variants == null) {
       List<ProductVariant> newVariants = new ArrayList<>();
       @SuppressWarnings("unchecked")
-      List<HashMap<String, Object>> wcSkus = DataMapHelper.findValue(getDelegate(), "sKUs", List.class).orElse(null);
+      List<HashMap<String, Object>> wcSkus = DataMapHelper.getList(getDelegate(), "sKUs");
       if (wcSkus != null && !wcSkus.isEmpty()) {
         for (Map<String, Object> wcSku : wcSkus) {
-          DataMapHelper.findStringValue(wcSku, "uniqueID").ifPresent(technicalId -> {
+          DataMapHelper.findString(wcSku, "uniqueID").ifPresent(technicalId -> {
             CatalogAlias catalogAlias = getCatalogAlias();
             CommerceId commerceId = getCommerceIdProvider().formatProductVariantTechId(catalogAlias, technicalId);
             ProductVariant pv = (ProductVariant) getCommerceBeanFactory().createBeanFor(commerceId, getContext());
@@ -215,5 +215,4 @@ public class ProductImpl extends ProductBase {
   public String toString() {
     return "[Product " + getId() + "]";
   }
-
 }

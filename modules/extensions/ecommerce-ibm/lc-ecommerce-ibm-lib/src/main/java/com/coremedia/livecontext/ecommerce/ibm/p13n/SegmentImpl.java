@@ -65,6 +65,6 @@ public class SegmentImpl extends AbstractIbmCommerceBean implements Segment {
 
   @Nullable
   private static String getStringValue(@NonNull Map<String, Object> map, @NonNull String key) {
-    return DataMapHelper.findStringValue(map, key).orElse(null);
+    return DataMapHelper.findString(map, key).orElse(null);
   }
 }

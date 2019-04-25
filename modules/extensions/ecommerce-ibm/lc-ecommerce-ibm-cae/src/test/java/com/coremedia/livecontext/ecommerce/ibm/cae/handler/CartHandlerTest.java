@@ -2,12 +2,12 @@ package com.coremedia.livecontext.ecommerce.ibm.cae.handler;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentCommerceConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.cae.handlers.NavigationSegmentsUriHelper;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.cae.WcsUrlProvider;
+import com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.order.Cart;
 import com.coremedia.livecontext.ecommerce.order.CartService;
 import com.coremedia.objectserver.web.HttpError;
@@ -71,12 +71,14 @@ public class CartHandlerTest {
   @Mock
   private CartService cartService;
 
+  private StoreContext storeContext;
+
   @Before
   public void beforeEachTest() {
     commerceConnection = new BaseCommerceConnection();
     CurrentCommerceConnection.set(commerceConnection);
 
-    StoreContext storeContext = StoreContextBuilderImpl.from(commerceConnection, "any-site-id").build();
+    storeContext = IbmStoreContextBuilder.from(commerceConnection, "any-site-id").build();
     commerceConnection.setStoreContext(storeContext);
 
     commerceConnection.setCartService(cartService);
@@ -218,7 +220,7 @@ public class CartHandlerTest {
   }
 
   private void checkCartServiceIsUsedCorrectly() {
-    verify(commerceConnection.getCartService(), times(1)).getCart(CurrentCommerceConnection.get().getStoreContext());
+    verify(commerceConnection.getCartService(), times(1)).getCart(storeContext);
   }
 
   private void checkSelfIsHttpError(ModelAndView modelAndView) {
@@ -226,7 +228,6 @@ public class CartHandlerTest {
   }
 
   private void verifyCartDeleteOrderItem(String orderItemId) {
-    verify(commerceConnection.getCartService(), times(1))
-            .deleteCartOrderItem(orderItemId, CurrentCommerceConnection.get().getStoreContext());
+    verify(commerceConnection.getCartService(), times(1)).deleteCartOrderItem(orderItemId, storeContext);
   }
 }

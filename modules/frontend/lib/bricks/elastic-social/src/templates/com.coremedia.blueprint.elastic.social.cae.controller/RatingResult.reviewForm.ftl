@@ -26,8 +26,8 @@
         </fieldset>
       </div>
       <div class="cm-fieldset__item cm-button-group cm-button-group--default">
-        <@components.button text=bp.getMessage("reviewForm_label_hide") attr={"type": "button", "classes": ["btn", "cm-button-group__button", "cm-button--secondary"], "data-cm-button--cancel": ""} />
-        <@components.button text=bp.getMessage("reviewForm_label_submit") attr={"type": "submit", "classes": ["btn", "cm-button-group__button"], "data-cm-button--submit": ""} />
+        <@components.button text=cm.getMessage("reviewForm_label_hide") attr={"type": "button", "classes": ["btn", "cm-button-group__button", "cm-button--secondary"], "data-cm-button--cancel": ""} />
+        <@components.button text=cm.getMessage("reviewForm_label_submit") attr={"type": "submit", "classes": ["btn", "cm-button-group__button"], "data-cm-button--submit": ""} />
       </div>
     </fieldset>
   </form>

@@ -1,11 +1,14 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractStoreContextProvider;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionFinder;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoCommerceConnectionAvailable;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.SiteToStoreContextCacheKeyWithTimeout;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogName;
 import com.coremedia.livecontext.ecommerce.common.CommerceConfigKeys;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.storeinfo.StoreInfoService;
@@ -31,8 +34,14 @@ public class IbmStoreContextProvider extends AbstractStoreContextProvider {
 
   private static final Logger LOG = LoggerFactory.getLogger(IbmStoreContextProvider.class);
 
+  private final CommerceConnectionFinder commerceConnectionFinder;
+
   @Nullable
   private StoreInfoService storeInfoService;
+
+  public IbmStoreContextProvider(CommerceConnectionFinder commerceConnectionFinder) {
+    this.commerceConnectionFinder = commerceConnectionFinder;
+  }
 
   @Override
   protected Optional<StoreContext> getStoreContextFromCache(Site site) {
@@ -56,15 +65,19 @@ public class IbmStoreContextProvider extends AbstractStoreContextProvider {
 
     updateStoreConfigFromRepository(repositoryStoreConfig, targetConfig);
 
-    StoreContextValuesHolder valuesHolder = populateValuesHolder(targetConfig);
+    StoreContextValuesHolder valuesHolder = populateValuesHolder(targetConfig, site);
 
     updateStoreConfigFromDynamicStoreInfo(site.getName(), valuesHolder);
 
     return createStoreContext(valuesHolder, site);
   }
 
-  private static StoreContextValuesHolder populateValuesHolder(Map<String, Object> config) {
-    StoreContextValuesHolder valuesHolder = new StoreContextValuesHolder();
+  private StoreContextValuesHolder populateValuesHolder(Map<String, Object> config, Site site) {
+    CommerceConnection connection = commerceConnectionFinder.findConnection(site)
+            .orElseThrow(() -> new NoCommerceConnectionAvailable(
+                    String.format("Could not find commerce connection for site '%s'.", site)));
+
+    StoreContextValuesHolder valuesHolder = new StoreContextValuesHolder(connection);
 
     valuesHolder.storeId = (String) config.get(CommerceConfigKeys.STORE_ID);
     valuesHolder.storeName = (String) config.get(CommerceConfigKeys.STORE_NAME);
@@ -89,8 +102,14 @@ public class IbmStoreContextProvider extends AbstractStoreContextProvider {
 
     String storeName = getStoreName(valuesHolder, siteName);
 
-    getStoreId(valuesHolder, storeName, siteName).ifPresent(storeId -> valuesHolder.storeId = storeId);
-    getCatalogId(valuesHolder, storeName, siteName).ifPresent(catalogId -> valuesHolder.catalogId = catalogId);
+    if (valuesHolder.storeId == null) {
+      valuesHolder.storeId = getStoreIdFromStoreInfo(storeName, siteName);
+    }
+
+    if (valuesHolder.catalogId == null) {
+      valuesHolder.catalogId = getCatalogIdFromStoreInfo(storeName, valuesHolder.catalogName, siteName);
+    }
+
     valuesHolder.timeZoneId = storeInfoService.getTimeZone().toZoneId();
     getWcsVersion(valuesHolder).ifPresent(wcsVersion -> valuesHolder.wcsVersion = wcsVersion);
   }
@@ -105,48 +124,30 @@ public class IbmStoreContextProvider extends AbstractStoreContextProvider {
     return storeName;
   }
 
-  private Optional<String> getStoreId(StoreContextValuesHolder valuesHolder, String storeName, String siteName) {
-    String storeIdFromConfig = valuesHolder.storeId;
-    if (storeIdFromConfig != null) {
-      return Optional.empty();
-    }
-
-    Optional<String> storeId = storeInfoService.getStoreId(storeName);
-
-    if (!storeId.isPresent() || isBlank(storeId.get())) {
-      throw new InvalidContextException(
-              "No store id found for store '" + storeName + "' in WCS (site: " + siteName + ").");
-    }
-
-    return storeId;
+  private String getStoreIdFromStoreInfo(String storeName, String siteName) {
+    return storeInfoService.getStoreId(storeName)
+            .orElseThrow(() -> new InvalidContextException(
+                    "No store id found for store '" + storeName + "' in WCS (site: " + siteName + ")."));
   }
 
-  private Optional<CatalogId> getCatalogId(StoreContextValuesHolder valuesHolder, String storeName, String siteName) {
-    CatalogId catalogIdFromConfig = valuesHolder.catalogId;
-    if (catalogIdFromConfig != null) {
-      return Optional.empty();
-    }
-
-    Optional<CatalogId> catalogId;
-
-    CatalogName catalogName = valuesHolder.catalogName;
+  private CatalogId getCatalogIdFromStoreInfo(String storeName, CatalogName catalogName, String siteName) {
     if (catalogName != null) {
-      catalogId = storeInfoService.getCatalogId(storeName, catalogName.value());
-
-      if (!catalogId.isPresent() || isBlank(catalogId.get().value())) {
-        throw new InvalidContextException(
-                "No catalog '" + catalogName.value() + "' found in WCS (site: " + siteName + ").");
-      }
+      return getCatalogId(storeName, catalogName, siteName);
     } else {
-      catalogId = storeInfoService.getDefaultCatalogId(storeName);
-
-      if (!catalogId.isPresent() || isBlank(catalogId.get().value())) {
-        throw new InvalidContextException(
-                "No default catalog id found for store '" + storeName + "' in WCS (site: " + siteName + ").");
-      }
+      return getDefaultCatalogId(storeName, siteName);
     }
+  }
 
-    return catalogId;
+  private CatalogId getCatalogId(String storeName, CatalogName catalogName, String siteName) {
+    return storeInfoService.getCatalogId(storeName, catalogName.value())
+            .orElseThrow(() -> new InvalidContextException(
+                    "No catalog '" + catalogName.value() + "' found in WCS (site: " + siteName + ")."));
+  }
+
+  private CatalogId getDefaultCatalogId(String storeName, String siteName) {
+    return storeInfoService.getDefaultCatalogId(storeName)
+            .orElseThrow(() -> new InvalidContextException(
+                    "No default catalog id found for store '" + storeName + "' in WCS (site: " + siteName + ")."));
   }
 
   private static Currency parseCurrency(String currencyCode) {
@@ -160,7 +161,7 @@ public class IbmStoreContextProvider extends AbstractStoreContextProvider {
   private Optional<String> getWcsVersion(StoreContextValuesHolder valuesHolder) {
     Optional<String> storeInfoWcsVersion = storeInfoService.getWcsVersion();
 
-    if (!storeInfoWcsVersion.isPresent() || isBlank(storeInfoWcsVersion.get())) {
+    if (!storeInfoWcsVersion.isPresent()) {
       LOG.info("No dynamic WCS version. Please update the StoreInfoHandler.");
       return Optional.empty();
     }
@@ -178,15 +179,34 @@ public class IbmStoreContextProvider extends AbstractStoreContextProvider {
   }
 
   private static StoreContext createStoreContext(StoreContextValuesHolder valuesHolder, Site site) {
-    IbmStoreContextBuilder builder = StoreContextHelper
-            .buildContext(
-                    site.getId(),
-                    valuesHolder.storeId,
-                    valuesHolder.storeName,
-                    valuesHolder.catalogId,
-                    site.getLocale(),
-                    valuesHolder.currency
-            )
+    IbmStoreContextBuilder builder = IbmStoreContextBuilder.from(valuesHolder.connection, site.getId());
+
+    if (valuesHolder.storeId != null) {
+      if (isBlank(valuesHolder.storeId)) {
+        throw new InvalidContextException("Store ID must not be blank.");
+      }
+
+      builder.withStoreId(valuesHolder.storeId);
+    }
+
+    if (valuesHolder.storeName != null) {
+      if (isBlank(valuesHolder.storeName)) {
+        throw new InvalidContextException("Store name must not be blank.");
+      }
+
+      builder.withStoreName(valuesHolder.storeName);
+    }
+
+    if (valuesHolder.catalogId != null) {
+      builder.withCatalogId(valuesHolder.catalogId);
+    }
+
+    if (valuesHolder.currency != null) {
+      builder.withCurrency(valuesHolder.currency);
+    }
+
+    builder
+            .withLocale(site.getLocale())
             .withTimeZoneId(valuesHolder.timeZoneId)
             .withWorkspaceId(valuesHolder.workspaceId)
             .withReplacements(valuesHolder.replacements);
@@ -200,6 +220,8 @@ public class IbmStoreContextProvider extends AbstractStoreContextProvider {
   }
 
   private static class StoreContextValuesHolder {
+
+    private final CommerceConnection connection;
 
     @Nullable
     private String storeId;
@@ -219,6 +241,10 @@ public class IbmStoreContextProvider extends AbstractStoreContextProvider {
     private String wcsVersion;
     @Nullable
     private Map<String, String> replacements;
+
+    private StoreContextValuesHolder(CommerceConnection connection) {
+      this.connection = connection;
+    }
   }
 
   public void setStoreInfoService(StoreInfoService storeInfoService) {

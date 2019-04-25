@@ -13,7 +13,7 @@
 <#list self.authors![]>
   <section class="${parentClass}__authors" <@preview.metadata "properties.authors"/>>
     <#-- headline -->
-    <h3 class="${parentClass}__authors-headline"><@bp.message key="authors_label"/></h3>
+    <h3 class="${parentClass}__authors-headline"><@cm.message key="authors_label"/></h3>
     <#--authors -->
     <#items as author>
       <@cm.include self=author view="asBlurb" />

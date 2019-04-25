@@ -2,7 +2,7 @@ package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
@@ -11,10 +11,10 @@ import static java.util.Collections.emptyMap;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-public class DataMapHelperTest {
+class DataMapHelperTest {
 
   @Test
-  public void testSimpleValue() throws Exception {
+  void testSimpleValue() {
     Map<String, Object> map = ImmutableMap.<String, Object>builder()
             .put("testEntry", "testValue")
             .build();
@@ -23,7 +23,7 @@ public class DataMapHelperTest {
   }
 
   @Test
-  public void testPathInnerMap() throws Exception {
+  void testPathInnerMap() {
     Map<String, Object> innerMap = ImmutableMap.<String, Object>builder()
             .put("targetValue", "42")
             .build();
@@ -36,7 +36,7 @@ public class DataMapHelperTest {
   }
 
   @Test
-  public void testPathInnerList() throws Exception {
+  void testPathInnerList() {
     List<String> innerList = ImmutableList.of("zero", "one", "two");
 
     Map<String, Object> outerMap = ImmutableMap.<String, Object>builder()
@@ -49,13 +49,13 @@ public class DataMapHelperTest {
   }
 
   @Test
-  public void testPathWithComplexInnerList() throws Exception {
+  void testPathWithComplexInnerList() {
     Map<String, Object> mapInList = ImmutableMap.<String, Object>builder()
             .put("key1", "value1")
             .put("key2", "value2")
             .build();
 
-    List<Object> innerList = ImmutableList.<Object>of(emptyMap(), mapInList);
+    List<Object> innerList = ImmutableList.of(emptyMap(), mapInList);
 
     Map<String, Object> outerMap = ImmutableMap.<String, Object>builder()
             .put("aList", innerList)
@@ -68,20 +68,20 @@ public class DataMapHelperTest {
   }
 
   @Test
-  public void testNotExistingArray() throws Exception {
+  void testNotExistingArray() {
     Map<String, Object> map = emptyMap();
 
     assertNull(DataMapHelper.getValueForKey(map, "MyList[0]"));
   }
 
   @Test
-  public void testArrayIndexOutOfBounds() throws Exception {
+  void testArrayIndexOutOfBounds() {
     Map<String, Object> mapInList = ImmutableMap.<String, Object>builder()
             .put("key1", "value1")
             .put("key2", "value2")
             .build();
 
-    List<Object> innerList = ImmutableList.<Object>of(emptyMap(), mapInList);
+    List<Object> innerList = ImmutableList.of(emptyMap(), mapInList);
 
     Map<String, Object> outerMap = ImmutableMap.<String, Object>builder()
             .put("aList", innerList)

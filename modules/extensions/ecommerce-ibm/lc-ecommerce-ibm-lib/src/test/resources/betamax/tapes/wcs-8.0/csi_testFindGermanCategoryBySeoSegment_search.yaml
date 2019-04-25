@@ -21,6 +21,7 @@ interactions:
       Expires: Thu, 01 Dec 1994 16:00:00 GMT
       Set-Cookie: JSESSIONID=0000XMzsQU1MnRFFkf8pMuBz5Sq:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"serverTimezoneId":"Europe\/Berlin","wcsVersion":"8.0","stores":{"AuroraB2BESite":{"defaultCatalog":"Extended Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites
       Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838085","defaultCatalogId":"3074457345616676718"},"AuroraB2BStorefrontAssetStore":{"defaultCatalog":"Extended Sites Catalog
@@ -48,6 +49,7 @@ interactions:
       Date: Mon, 04 Sep 2017 16:31:43 GMT
       Expires: Mon, 04 Sep 2017 17:31:43 GMT
       Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
       X-Powered-By: Servlet/3.0
     body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/kleider?profileName=CoreMedia_findCategoryBySeoSegment&locale=de_DE","recordSetCount":1,"recordSetComplete":"true","recordSetStartNumber":0,"resourceName":"categoryview","catalogGroupView":[{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676673","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/category\/catr_wcl_dresses.png","seo_token_ntk":"kleider","shortDescription":"Kleider","parentCatalogGroupID":["3074457345616676668_3074457345616676670","3074457345616676719_3074457345616676670"],"name":"Kleider","uniqueID":"3074457345616676673","storeID":"715837934","cm_seo_token_ntk":"715837934_kleider","identifier":"Dresses","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/category\/catr_wcl_dresses.png"}]}'
 - recorded: 2017-09-04T16:31:44.063Z
@@ -77,3 +79,46 @@ interactions:
       Sites Catalog Asset Store","description":[{"name":"Extended Sites Catalog Asset Store"}],"primary":true,"catalogId":"3074457345616676668"},{"catalogIdentifier":"Extended Sites Catalog Asset Store B2B Direct","description":[{"shortDescription":"Aurora B2B
       direct sample data","name":"Aurora B2B direct sample data"}],"primary":false,"catalogId":"3074457345616676718"},{"default":true,"catalogIdentifier":"Extended Sites Catalog Asset Store Consumer Direct","description":[{"shortDescription":"Aurora Consumer
       Direct sample data","name":"Aurora consumer direct sample data"}],"primary":false,"catalogId":"3074457345616676719"}],"resourceName":"catalog"}'
+- recorded: 2019-01-25T16:19:19.275Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.6 (Java/1.8.0_192)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Fri, 25 Jan 2019 16:19:19 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000EXd89Q_1fLCR-8UXncISNMK:-1; HTTPOnly; Path=/; Domain=.master-ci-master-websphere-1-cms.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"ro":"-21","zh":"-8","pt_BR":"-6","pl_PL":"-22","en_US":"-1","ja_JP":"-10","ru_RU":"-20","zh_CN":"-7","ro_RO":"-21","de":"-3","zh_TW":"-8","fr":"-2","es_ES":"-5","it":"-4","ko_KR":"-9","ko":"-9","it_IT":"-4","de_DE":"-3","ar":"-23","ar_EG":"-23","fr_FR":"-2","pl":"-22","pt":"-6","en":"-1","ru":"-20","es":"-5","ja":"-10"}'
+- recorded: 2019-01-25T16:19:19.286Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/categoryview/byId/3074457345616676670?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=3074457345616676719&langId=-3
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.6 (Java/1.8.0_192)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Fri, 25 Jan 2019 16:19:19 GMT
+      Expires: Fri, 25 Jan 2019 17:19:19 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676670?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=3074457345616676719&langId=-3","recordSetCount":1,"recordSetComplete":"true","recordSetStartNumber":0,"resourceName":"categoryview","catalogGroupView":[{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676670","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/category\/catr_app_women.png","seo_token_ntk":"damen","shortDescription":"Damen","parentCatalogGroupID":["3074457345616676668_3074457345616676668","3074457345616676719_3074457345616676668","3074457345616676768_3074457345616676668"],"name":"Damen","uniqueID":"3074457345616676670","childCatalogGroupID":["3074457345616676668_3074457345616676673","3074457345616676668_3074457345616676674","3074457345616676668_3074457345616676675","3074457345616676668_3074457345616676676","3074457345616676668_3074457345616676677","3074457345616676668_3074457345616676678","3074457345616676668_3074457345616676679","3074457345616676668_3074457345616676680","3074457345616676719_3074457345616676673","3074457345616676719_3074457345616676674","3074457345616676719_3074457345616676675","3074457345616676719_3074457345616676676","3074457345616676719_3074457345616676677","3074457345616676719_3074457345616676678","3074457345616676719_3074457345616676679","3074457345616676719_3074457345616676680","3074457345616676768_3074457345616676673","3074457345616676768_3074457345616676674","3074457345616676768_3074457345616676675","3074457345616676768_3074457345616676676","3074457345616676768_3074457345616676677","3074457345616676768_3074457345616676678","3074457345616676768_3074457345616676679","3074457345616676768_3074457345616676680"],"storeID":"715837934","cm_seo_token_ntk":"715837934_damen","identifier":"Women","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/category\/catr_app_women.png"}]}'

@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class WcRestConnectorTest {
 
   @Test
-  public void testParseFromJson() throws Exception {
+  public void testParseFromJson() {
     // some test json that has different structures, submap, list, direct values, as plain numbers and as strings
     // we need all values be parsed into Strings as some IBM WCS systems will return numbers, some return numbers as strings
     String json = "{\"submap\": {" +

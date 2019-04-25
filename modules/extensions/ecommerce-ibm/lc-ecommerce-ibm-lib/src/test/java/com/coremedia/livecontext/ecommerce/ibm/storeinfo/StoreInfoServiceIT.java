@@ -4,6 +4,7 @@ import co.freeside.betamax.Betamax;
 import co.freeside.betamax.MatchRule;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -23,18 +24,27 @@ public class StoreInfoServiceIT extends IbmServiceTestBase {
   @Inject
   private StoreInfoService testling;
 
+  private String storeName;
+
+  @Before
+  public void setup() {
+    super.setup();
+
+    storeName = testConfig.getStoreContext(connection).getStoreName();
+  }
+
   @Betamax(tape = "sis_testGetStoreInfos", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testGetStoreId() {
-    Optional<String> storeId = testling.getStoreId(getTestConfig().getStoreName());
+    Optional<String> storeId = testling.getStoreId(storeName);
 
-    assertThat(storeId).contains(getTestConfig().getStoreContext().getStoreId());
+    assertThat(storeId).contains(storeContext.getStoreId());
   }
 
   @Betamax(tape = "sis_testGetStoreInfos", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testDefaultCatalogId() {
-    Optional<CatalogId> catalogId = testling.getDefaultCatalogId(getTestConfig().getStoreName());
+    Optional<CatalogId> catalogId = testling.getDefaultCatalogId(storeName);
 
     assertThat(catalogId).isPresent();
   }
@@ -42,8 +52,7 @@ public class StoreInfoServiceIT extends IbmServiceTestBase {
   @Betamax(tape = "sis_testGetStoreInfos", match = {MatchRule.path, MatchRule.query})
   @Test
   public void testCatalogId() {
-    Optional<CatalogId> catalogId = testling.getCatalogId(getTestConfig().getStoreName(),
-            getTestConfig().getCatalogName());
+    Optional<CatalogId> catalogId = testling.getCatalogId(storeName, testConfig.getCatalogName());
 
     assertThat(catalogId).isPresent();
   }

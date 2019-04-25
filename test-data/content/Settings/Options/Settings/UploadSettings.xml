@@ -35,9 +35,6 @@
           <StringProperty Name="text/html">data</StringProperty>
         </Struct>
       </StructProperty>
-      <StringListProperty Name="autoOpenDocumentTypes">
-        <String>CMArticle</String>
-      </StringListProperty>
     </Struct>
   </settings>
   <identifier></identifier>

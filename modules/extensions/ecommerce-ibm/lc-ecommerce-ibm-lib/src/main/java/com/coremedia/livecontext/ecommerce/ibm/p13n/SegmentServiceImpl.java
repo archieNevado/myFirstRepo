@@ -10,10 +10,10 @@ import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.p13n.Segment;
 import com.coremedia.livecontext.ecommerce.p13n.SegmentService;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
-import org.springframework.beans.factory.annotation.Required;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Required;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -82,7 +82,7 @@ public class SegmentServiceImpl implements SegmentService {
       return null;
     }
 
-    String segmentId = DataMapHelper.findStringValue(segmentMap, "id").orElse(null);
+    String segmentId = DataMapHelper.findString(segmentMap, "id").orElse(null);
     CommerceId commerceId = commerceId(SEGMENT).withExternalId(segmentId).build();
     Segment segment = (Segment) commerceBeanFactory.createBeanFor(commerceId, storeContext);
     ((AbstractIbmCommerceBean) segment).setDelegate(segmentMap);
@@ -95,12 +95,10 @@ public class SegmentServiceImpl implements SegmentService {
       return Collections.emptyList();
     }
 
-    List<Map<String, Object>> memberGroups = DataMapHelper.findValue(segmentsMap, "MemberGroup", List.class)
-            .orElseGet(Collections::emptyList);
+    List<Map<String, Object>> memberGroups = DataMapHelper.getList(segmentsMap, "MemberGroup");
 
     return memberGroups.stream()
             .map(memberGroup -> createSegmentBeanFor(memberGroup, storeContext))
             .collect(collectingAndThen(toList(), Collections::unmodifiableList));
   }
-
 }

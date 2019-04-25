@@ -61,18 +61,18 @@
 
     <!-- configure the UI for the translation workflow -->
     <collab:AddTranslationWorkflowPlugin processDefinitionName="Translation"
-                                         listToolbarButtons="{WorkflowUtils.getTranslationToolbarButtons()}">
+                                         listToolbarButtonsFunction="{WorkflowUtils.getTranslationToolbarButtons()}">
       <collab:inboxPanel>
         <collab:DefaultTranslationWorkflowDetailForm>
           <collab:workflowStateTransitions>
             <collab:WorkflowStateTransition task="Translate"
-                                            nextSteps="{['sendToTranslationService', 'rollbackTranslation', 'finishTranslation']}"
+                                            nextSteps="{[{nextStep:'sendToTranslationService', allowAlways:false}, {nextStep:'rollbackTranslation', allowAlways:true}, {nextStep:'finishTranslation', allowAlways:false}]}"
                                             defaultStep="finishTranslation"/>
             <collab:WorkflowStateTransition task="TranslateSelf"
-                                            nextSteps="{['sendToTranslationService', 'rollbackTranslation', 'finishTranslation']}"
+                                            nextSteps="{[{nextStep:'sendToTranslationService', allowAlways:false}, {nextStep:'rollbackTranslation', allowAlways:true}, {nextStep:'finishTranslation', allowAlways:false}]}"
                                             defaultStep="finishTranslation"/>
             <collab:WorkflowStateTransition task="Review"
-                                            nextSteps="{['translationReviewed']}"/>
+                                            nextSteps="{[{nextStep:'translationReviewed', allowAlways:false}]}"/>
           </collab:workflowStateTransitions>
         </collab:DefaultTranslationWorkflowDetailForm>
       </collab:inboxPanel>
@@ -90,12 +90,12 @@
       </collab:startPanel>
     </collab:AddTranslationWorkflowPlugin>
     <collab:AddTranslationWorkflowPlugin processDefinitionName="Synchronization"
-                                         listToolbarButtons="{WorkflowUtils.getTranslationToolbarButtons()}">
+                                         listToolbarButtonsFunction="{WorkflowUtils.getTranslationToolbarButtons()}">
       <collab:inboxPanel>
         <collab:DefaultTranslationWorkflowDetailForm>
           <collab:workflowStateTransitions>
             <collab:WorkflowStateTransition task="Synchronize"
-                                            nextSteps="{['finishSynchronization']}"
+                                            nextSteps="{[{nextStep:'finishSynchronization', allowAlways:false}]}"
                                             defaultStep="finishSynchronization"/>
           </collab:workflowStateTransitions>
         </collab:DefaultTranslationWorkflowDetailForm>

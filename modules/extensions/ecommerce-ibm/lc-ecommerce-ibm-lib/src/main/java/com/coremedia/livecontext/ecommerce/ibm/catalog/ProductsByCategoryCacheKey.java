@@ -37,7 +37,7 @@ public class ProductsByCategoryCacheKey extends AbstractCommerceCacheKey<List<Ma
 
     Map<String, Object> firstWcProduct = wcProducts.get(0);
     if (DataMapHelper.getValueForKey(firstWcProduct, "parentCatalogGroupID[0]") != null) {
-      Cache.dependencyOn(DataMapHelper.findStringValue(firstWcProduct, "parentCatalogGroupID[0]").orElse(null));
+      Cache.dependencyOn(DataMapHelper.findString(firstWcProduct, "parentCatalogGroupID[0]").orElse(null));
     }
   }
 

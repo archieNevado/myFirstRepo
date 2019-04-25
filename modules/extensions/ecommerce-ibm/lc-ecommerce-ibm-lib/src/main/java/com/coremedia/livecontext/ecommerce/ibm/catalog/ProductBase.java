@@ -37,7 +37,9 @@ import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
@@ -310,7 +312,7 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
   @Nullable
   @Override
   public String getDefaultImageUrl() {
-    return DataMapHelper.findStringValue(getDelegate(), "fullImage")
+    return DataMapHelper.findString(getDelegate(), "fullImage")
             .map(fullImage -> getAssetUrlProvider().getImageUrl(fullImage))
             .orElse(null);
   }
@@ -318,7 +320,7 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
   @Nullable
   @Override
   public String getThumbnailUrl() {
-    return DataMapHelper.findStringValue(getDelegate(), "thumbnail")
+    return DataMapHelper.findString(getDelegate(), "thumbnail")
             .map(thumbnail -> getAssetUrlProvider().getImageUrl(thumbnail))
             .orElse(null);
   }
@@ -381,7 +383,7 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
 
   @Override
   public boolean isVariant() {
-    return DataMapHelper.findStringValue(getDelegate(), "parentCatalogEntryID")
+    return DataMapHelper.findString(getDelegate(), "parentCatalogEntryID")
             .isPresent();
   }
 
@@ -440,7 +442,7 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
     definingAttributes = new ArrayList<>();
     describingAttributes = new ArrayList<>();
 
-    List<Map<String, Object>> wcAttributes = DataMapHelper.getListValue(getDelegate(), "attributes");
+    List<Map<String, Object>> wcAttributes = DataMapHelper.getList(getDelegate(), "attributes");
     for (Map<String, Object> wcAttribute : wcAttributes) {
       ProductAttribute pa = new ProductAttributeImpl(wcAttribute);
       if (USAGE_DEFINING.equals(getStringValue(wcAttribute, "usage"))) {
@@ -470,15 +472,27 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
     List<String> parentCategoryIds = DataMapTransformationHelper.getParentCatGroupIdForSingleWrapper(getDelegate(),
             catalog.getExternalId());
 
-    String parentCategoryID = parentCategoryIds.stream().findFirst()
+    return parentCategoryIds.stream()
+            .filter(categoryId -> !isNullOrEmpty(categoryId) && !"-1".equals(categoryId))
+            .map(this::findCategoryOrLog)
+            .filter(Objects::nonNull)
+            .findFirst()
             .orElseThrow(() -> new IllegalStateException("Product '" + this + "' does not have a parent category."));
+  }
 
-    CommerceId commerceId = getCommerceIdProvider().formatCategoryTechId(getCatalogAlias(), parentCategoryID);
-    return (Category) getCommerceBeanFactory().createBeanFor(commerceId, getContext());
+  @Nullable
+  private Category findCategoryOrLog(@NonNull String categoryId) {
+    CommerceId commerceId = getCommerceIdProvider().formatCategoryTechId(getCatalogAlias(), categoryId);
+    Category category = getCatalogService().findCategoryById(commerceId, getContext());
+    if (category == null) {
+      LOG.debug("Product '{}' points to an invalid category: {}", this.getId(), commerceId);
+      return null;
+    }
+    return category;
   }
 
   @Nullable
   private static String getStringValue(@NonNull Map<String, Object> map, @NonNull String key) {
-    return DataMapHelper.findStringValue(map, key).orElse(null);
+    return DataMapHelper.findString(map, key).orElse(null);
   }
 }

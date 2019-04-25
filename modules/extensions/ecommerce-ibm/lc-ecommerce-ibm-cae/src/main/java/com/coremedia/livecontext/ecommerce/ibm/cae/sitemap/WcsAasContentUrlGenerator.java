@@ -64,13 +64,11 @@ public class WcsAasContentUrlGenerator extends ContentUrlGenerator {
     this.urlKeyword = urlKeyword;
   }
 
-  public String getUrlKeyword() {
-    StoreContext storeContext = CurrentCommerceConnection.get().getStoreContext();
+  public String getUrlKeyword(@NonNull StoreContext storeContext) {
     return CommercePropertyHelper.replaceTokens(urlKeyword, storeContext);
   }
 
-  public String getWcsStorefrontUrl() {
-    StoreContext storeContext = CurrentCommerceConnection.get().getStoreContext();
+  public String getWcsStorefrontUrl(@NonNull StoreContext storeContext) {
     return CommercePropertyHelper.replaceTokens(wcsStorefrontUrl, storeContext);
   }
 
@@ -132,17 +130,21 @@ public class WcsAasContentUrlGenerator extends ContentUrlGenerator {
       return null;
     }
 
-    String shopName = connection.getStoreContext().getStoreName();
+    storeContext = connection.getStoreContext();
+
+    String shopName = storeContext.getStoreName();
     if (shopName != null) {
       shopName = shopName.toLowerCase();
     }
-    return UriComponentsBuilder.fromUriString(getWcsStorefrontUrl())
+
+    return UriComponentsBuilder.fromUriString(getWcsStorefrontUrl(storeContext))
             .pathSegment(language)
             .pathSegment(shopName)
-            .pathSegment(getUrlKeyword())
+            .pathSegment(getUrlKeyword(storeContext))
             .pathSegment(externalSeoSegmentBuilder.asSeoSegment(context, linkable))
             .scheme(secure ? "https" : "http")
-            .build().toUriString();
+            .build()
+            .toUriString();
   }
 
   private CMChannel getContextFor(Content content) {

@@ -1,11 +1,12 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import com.google.common.base.Splitter;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.support.DefaultConversionService;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import java.util.regex.Pattern;
  * and maps without having to worry about {@code NullPointerException}s while
  * providing automatic type conversion.
  */
+@DefaultAnnotation(NonNull.class)
 public class DataMapHelper {
 
   private static final Splitter KEY_PATH_SPLITTER = Splitter.on('.');
@@ -30,7 +32,7 @@ public class DataMapHelper {
 
   @Nullable
   @SuppressWarnings("unchecked")
-  public static Object getValueForPath(@NonNull Map<String, Object> map, @NonNull String path) {
+  public static Object getValueForPath(Map<String, Object> map, String path) {
     Object value = null;
 
     Map<String, Object> myMap = map;
@@ -52,7 +54,7 @@ public class DataMapHelper {
           String keyWithoutIndex = matcher.group(1);
           int index = Integer.parseInt(matcher.group(2));
 
-          List tmpList = getListValue(myMap, keyWithoutIndex);
+          List tmpList = getList(myMap, keyWithoutIndex);
           if (tmpList.size() > index) {
             value = tmpList.get(index);
             if (value instanceof Map) {
@@ -71,14 +73,13 @@ public class DataMapHelper {
     return value;
   }
 
-  @NonNull
-  private static Matcher matchIndexPattern(@NonNull CharSequence key) {
+  private static Matcher matchIndexPattern(CharSequence key) {
     return KEY_INDEX_PATTERN.matcher(key);
   }
 
   @Nullable
   @SuppressWarnings("unchecked")
-  public static Object getValueForKey(@NonNull Map<String, Object> map, @NonNull String key) {
+  public static Object getValueForKey(Map<String, Object> map, String key) {
     Object value = map.get(key);
 
     if (value instanceof List) {
@@ -91,46 +92,33 @@ public class DataMapHelper {
     return value;
   }
 
-  @NonNull
-  public static <T> Optional<T> findValue(@NonNull Map<String, Object> map, @NonNull String key,
-                                          @NonNull Class<T> type) {
+  public static <T> Optional<T> findValue(Map<String, Object> map, String key, Class<T> type) {
     Object value = getValueForPath(map, key);
-    T convertedValue = convertWithFallback(value, type);
-    return Optional.ofNullable(convertedValue);
+
+    return Optional.ofNullable(value)
+            .map(v -> DEFAULT_CONVERSION_SERVICE.convert(v, type));
   }
 
-  @NonNull
-  public static Optional<String> findStringValue(@NonNull Map<String, Object> map, @NonNull String key) {
+  /**
+   * Return the string at that key, or nothing if the key is not found or the value is null.
+   */
+  public static Optional<String> findString(Map<String, Object> map, String key) {
     return findValue(map, key, String.class);
   }
 
-  @NonNull
-  public static List getListValue(@NonNull Map<String, Object> map, @NonNull String key) {
+  /**
+   * Return the list at that key, or an empty list if the key is not found or the value is null.
+   */
+  public static List getList(Map<String, Object> map, String key) {
     return findValue(map, key, List.class)
             .orElseGet(Collections::emptyList);
   }
 
-  @Nullable
-  private static <T> T convertWithFallback(@Nullable Object source, @NonNull Class<T> targetType) {
-    if (source != null) {
-      return convert(source, targetType);
-    }
-
-    // Avoid NPE when trying to lookup map.
-    if (Map.class.isAssignableFrom(targetType)) {
-      return (T) Collections.emptyMap();
-    }
-
-    // Avoid NPE when trying to lookup list.
-    if (List.class.isAssignableFrom(targetType)) {
-      return (T) Collections.emptyList();
-    }
-
-    return null;
-  }
-
-  @Nullable
-  private static <T> T convert(@NonNull Object source, @NonNull Class<T> targetType) {
-    return DEFAULT_CONVERSION_SERVICE.convert(source, targetType);
+  /**
+   * Return the map at that key, or an empty map if the key is not found or the value is null.
+   */
+  public static Map getMap(Map<String, Object> map, String key) {
+    return findValue(map, key, Map.class)
+            .orElseGet(Collections::emptyMap);
   }
 }

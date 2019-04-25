@@ -1,7 +1,8 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
+
+import java.util.Optional;
 
 /**
  * An IBM specific connection class. Manages the IBM vendor specific properties.
@@ -14,10 +15,9 @@ public class CommerceConnectionImpl extends BaseCommerceConnection {
 
   @Override
   public String getVendorVersion() {
-    StoreContext storeContext = getStoreContext();
-    if (storeContext != null) {
-      return StoreContextHelper.getWcsVersion(storeContext).toVersionString();
-    }
-    return super.getVendorVersion();
+    return Optional.ofNullable(getStoreContext())
+            .map(StoreContextHelper::getWcsVersion)
+            .map(WcsVersion::toVersionString)
+            .orElseGet(super::getVendorVersion);
   }
 }

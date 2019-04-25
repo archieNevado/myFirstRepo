@@ -101,7 +101,7 @@ public class WcContractWrapperService extends AbstractWcWrapperService {
         return null;
       }
 
-      List<Map<String, Object>> resultList = DataMapHelper.getListValue(data, "resultList");
+      List<Map<String, Object>> resultList = DataMapHelper.getList(data, "resultList");
       if (resultList.isEmpty()) {
         return null;
       }

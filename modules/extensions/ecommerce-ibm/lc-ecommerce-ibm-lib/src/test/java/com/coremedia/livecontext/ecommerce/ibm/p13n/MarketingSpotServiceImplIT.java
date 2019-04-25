@@ -10,7 +10,6 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.ibm.common.IbmTestConfig;
-import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.p13n.MarketingImage;
 import com.coremedia.livecontext.ecommerce.p13n.MarketingSpot;
@@ -34,7 +33,6 @@ import static com.coremedia.livecontext.ecommerce.ibm.p13n.MarketingSpotServiceI
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeTrue;
@@ -61,13 +59,11 @@ public class MarketingSpotServiceImplIT extends IbmServiceTestBase {
 
   @Betamax(tape = "csi_testFindMarketingSpots", match = {MatchRule.path, MatchRule.query})
   @Test
-  public void testFindMarketingSpots() throws Exception {
-    StoreContextHelper.setCurrentContext(testConfig.getStoreContext());
-
+  public void testFindMarketingSpots() {
     UserContext userContext = UserContext.builder().build();
     UserContextHelper.setCurrentContext(userContext);
 
-    List<MarketingSpot> marketingSpots = testling.findMarketingSpots(StoreContextHelper.getCurrentContextOrThrow());
+    List<MarketingSpot> marketingSpots = testling.findMarketingSpots(storeContext);
     assertTrue(marketingSpots.size() > 100);
 
     MarketingSpot spot = marketingSpots.get(0);
@@ -77,12 +73,10 @@ public class MarketingSpotServiceImplIT extends IbmServiceTestBase {
   }
 
   @Test
-  public void testFindAllMarketingSpotsInWorkspace() throws Exception {
+  public void testFindAllMarketingSpotsInWorkspace() {
     if (useBetamaxTapes()) {
       return;
     }
-
-    StoreContext storeContext = testConfig.getStoreContext();
 
     List<MarketingSpot> marketingSpotsWithoutWorkspace = testling.findMarketingSpots(storeContext);
     assertTrue(marketingSpotsWithoutWorkspace.size() > 100);
@@ -98,19 +92,19 @@ public class MarketingSpotServiceImplIT extends IbmServiceTestBase {
     //
     // We only compare the results exactly when different amounts of marketing spots are returned.
     // If the amount is the same, the test is skipped.
-    assumeTrue(marketingSpotsWithWorkspace.size() != marketingSpotsWithoutWorkspace.size() );
+    assumeTrue(marketingSpotsWithWorkspace.size() != marketingSpotsWithoutWorkspace.size());
     assertEquals(marketingSpotsWithWorkspace.size(), marketingSpotsWithoutWorkspace.size() + 2);
   }
 
   @Test
-  public void testFindMarketingSpotInWSByExternalId() throws Exception {
+  public void testFindMarketingSpotInWSByExternalId() {
     if (useBetamaxTapes()) {
       return;
     }
 
-    StoreContext storeContext = setWorkspaceId(testConfig.getStoreContext(), WORKSPACE_ID);
+    StoreContextImpl storeContextWithWorkspaceId = setWorkspaceId((StoreContextImpl) storeContext, WORKSPACE_ID);
 
-    MarketingSpot spot = findMarketingSpotByExternalId(MARKETING_SPOT_WS_EXTERNAL_ID, storeContext);
+    MarketingSpot spot = findMarketingSpotByExternalId(MARKETING_SPOT_WS_EXTERNAL_ID, storeContextWithWorkspaceId);
     assertNotNull(spot);
     assertNotNull(spot.getId());
     assertEquals(MARKETING_SPOT_WS_EXTERNAL_ID, spot.getName());
@@ -125,8 +119,8 @@ public class MarketingSpotServiceImplIT extends IbmServiceTestBase {
 
   @Betamax(tape = "csi_testFindMarketingSpotByExternalId1", match = {MatchRule.path, MatchRule.query})
   @Test
-  public void testFindMarketingSpotByExternalId1() throws Exception {
-    MarketingSpot spot = findMarketingSpotByExternalId(MARKETING_SPOT_EXTERNAL_ID1, testConfig.getStoreContext());
+  public void testFindMarketingSpotByExternalId1() {
+    MarketingSpot spot = findMarketingSpotByExternalId(MARKETING_SPOT_EXTERNAL_ID1, storeContext);
     assertNotNull(spot);
 
     List<CommerceObject> entities = spot.getEntities();
@@ -139,8 +133,8 @@ public class MarketingSpotServiceImplIT extends IbmServiceTestBase {
 
   @Betamax(tape = "csi_testFindMarketingSpotByExternalId2", match = {MatchRule.path, MatchRule.query})
   @Test
-  public void testFindMarketingSpotByExternalId2() throws Exception {
-    MarketingSpot spot = findMarketingSpotByExternalId(MARKETING_SPOT_EXTERNAL_ID2, testConfig.getStoreContext());
+  public void testFindMarketingSpotByExternalId2() {
+    MarketingSpot spot = findMarketingSpotByExternalId(MARKETING_SPOT_EXTERNAL_ID2, storeContext);
     assertNotNull(spot);
 
     List<CommerceObject> entities = spot.getEntities();
@@ -167,8 +161,8 @@ public class MarketingSpotServiceImplIT extends IbmServiceTestBase {
 
   @Betamax(tape = "csi_testFindMarketingSpotByExternalId3", match = {MatchRule.path, MatchRule.query})
   @Test
-  public void testFindMarketingSpotByExternalId3() throws Exception {
-    MarketingSpot spot = findMarketingSpotByExternalId(MARKETING_SPOT_EXTERNAL_ID3, testConfig.getStoreContext());
+  public void testFindMarketingSpotByExternalId3() {
+    MarketingSpot spot = findMarketingSpotByExternalId(MARKETING_SPOT_EXTERNAL_ID3, storeContext);
     assertNotNull(spot);
 
     List entities = spot.getEntities();
@@ -182,36 +176,9 @@ public class MarketingSpotServiceImplIT extends IbmServiceTestBase {
 
   @Betamax(tape = "csi_testFindMarketingSpotPersonalizedOld", match = {MatchRule.path, MatchRule.query})
   @Test
-  public void testFindMarketingSpotPersonalizedOld() throws Exception {
-
+  public void testFindMarketingSpotPersonalizedOld() {
     UserContext userContext = UserContext.builder().withUserName(testConfig.getUser2Name()).build();
     UserContextHelper.setCurrentContext(userContext);
-
-    MarketingSpot spot = findMarketingSpotByExternalId(MARKETING_SPOT_EXTERNAL_ID3, testConfig.getStoreContext());
-    assertNotNull(spot);
-
-    List entities = spot.getEntities();
-    assertNotNull(entities);
-    assertFalse("entities should have size > 0", entities.isEmpty());
-    assertTrue("MarketingText expected", entities.get(0) instanceof MarketingText);
-
-    MarketingText first = (MarketingText) entities.get(0);
-    assertTrue("the men's text should be there", first.getText().contains("Men's"));
-  }
-
-  @Test
-  public void testFindMarketingSpotPersonalizedTestContext() throws Exception {
-    if (useBetamaxTapes()) {
-      return;
-    }
-
-    String userSegments = testConfig.getUserSegment1Id().concat("," + testConfig.getUserSegment2Id());
-
-    StoreContext storeContext = IbmStoreContextBuilder
-            .from(testConfig.getStoreContext())
-            .withUserSegments(userSegments)
-            .build();
-    StoreContextHelper.setCurrentContext(storeContext);
 
     MarketingSpot spot = findMarketingSpotByExternalId(MARKETING_SPOT_EXTERNAL_ID3, storeContext);
     assertNotNull(spot);
@@ -225,16 +192,41 @@ public class MarketingSpotServiceImplIT extends IbmServiceTestBase {
     assertTrue("the men's text should be there", first.getText().contains("Men's"));
   }
 
+  @Test
+  public void testFindMarketingSpotPersonalizedTestContext() {
+    if (useBetamaxTapes()) {
+      return;
+    }
+
+    String userSegments = testConfig.getUserSegment1Id().concat("," + testConfig.getUserSegment2Id());
+
+    StoreContext storeContextWithUserSegments = IbmStoreContextBuilder
+            .from((StoreContextImpl) storeContext)
+            .withUserSegments(userSegments)
+            .build();
+
+    MarketingSpot spot = findMarketingSpotByExternalId(MARKETING_SPOT_EXTERNAL_ID3, storeContextWithUserSegments);
+    assertNotNull(spot);
+
+    List entities = spot.getEntities();
+    assertNotNull(entities);
+    assertFalse("entities should have size > 0", entities.isEmpty());
+    assertTrue("MarketingText expected", entities.get(0) instanceof MarketingText);
+
+    MarketingText first = (MarketingText) entities.get(0);
+    assertTrue("the men's text should be there", first.getText().contains("Men's"));
+  }
+
   @Betamax(tape = "csi_testFindMarketingSpotByExternalTechId", match = {MatchRule.path, MatchRule.query})
   @Test
-  public void testFindMarketingSpotByExternalTechId() throws Exception {
+  public void testFindMarketingSpotByExternalTechId() {
     UserContext userContext = UserContext.builder().build();
     UserContextHelper.setCurrentContext(userContext);
 
-    MarketingSpot spot = findMarketingSpotByExternalId(MARKETING_SPOT_EXTERNAL_ID1, testConfig.getStoreContext());
+    MarketingSpot spot = findMarketingSpotByExternalId(MARKETING_SPOT_EXTERNAL_ID1, storeContext);
     assertNotNull(spot);
 
-    spot = findMarketingSpotByExternalTechId(spot.getExternalTechId(), testConfig.getStoreContext());
+    spot = findMarketingSpotByExternalTechId(spot.getExternalTechId(), storeContext);
     assertNotNull(spot);
     assertNotNull(spot.getDescription());
     assertNotNull(spot.getExternalId());
@@ -244,7 +236,7 @@ public class MarketingSpotServiceImplIT extends IbmServiceTestBase {
 
   @Nullable
   @VisibleForTesting
-  MarketingSpot findMarketingSpotByExternalTechId(@NonNull String externalTechId, StoreContextImpl storeContext) {
+  MarketingSpot findMarketingSpotByExternalTechId(@NonNull String externalTechId, StoreContext storeContext) {
     CommerceId marketingSpotTechId = toMarketingSpotTechId(externalTechId);
     return testling.findMarketingSpotById(marketingSpotTechId, storeContext);
   }
@@ -253,18 +245,18 @@ public class MarketingSpotServiceImplIT extends IbmServiceTestBase {
   @VisibleForTesting
   MarketingSpot findMarketingSpotByExternalId(@NonNull String externalId, StoreContext storeContext) {
     CommerceId marketingSpotId = toMarketingSpotId(externalId);
-    return testling.findMarketingSpotById(marketingSpotId,storeContext);
+    return testling.findMarketingSpotById(marketingSpotId, storeContext);
   }
 
   @Betamax(tape = "csi_testFindMarketingSpotByExternalIdForStudio", match = {MatchRule.path, MatchRule.query})
   @Test
-  public void testFindMarketingSpotByExternalIdForStudio() throws Exception {
+  public void testFindMarketingSpotByExternalIdForStudio() {
     UserContext userContext = UserContext.builder().build();
     UserContextHelper.setCurrentContext(userContext);
 
     testling.getMarketingSpotWrapperService().setUseServiceCallsForStudio(true);
     try {
-      MarketingSpot test = findMarketingSpotByExternalId(MARKETING_SPOT_EXTERNAL_ID1, testConfig.getStoreContext());
+      MarketingSpot test = findMarketingSpotByExternalId(MARKETING_SPOT_EXTERNAL_ID1, storeContext);
       assertNotNull(test);
       assertNotNull(test.getDescription());
       assertNotNull(test.getExternalId());
@@ -277,16 +269,17 @@ public class MarketingSpotServiceImplIT extends IbmServiceTestBase {
 
   @Betamax(tape = "csi_testSearchMarketingSpots", match = {MatchRule.path, MatchRule.query})
   @Test
-  public void testSearchMarketingSpots() throws Exception {
+  public void testSearchMarketingSpots() {
     UserContext userContext = UserContext.builder().build();
     UserContextHelper.setCurrentContext(userContext);
 
-    SearchResult<MarketingSpot> marketingSpots = testling.searchMarketingSpots("Shirts", null, testConfig.getStoreContext());
+    SearchResult<MarketingSpot> marketingSpots = testling.searchMarketingSpots("Shirts", null, storeContext);
     assertFalse(marketingSpots.getSearchResult().isEmpty());
   }
 
   @NonNull
-  private static StoreContext setWorkspaceId(@NonNull StoreContextImpl storeContext, @Nullable WorkspaceId workspaceId) {
+  private static StoreContextImpl setWorkspaceId(@NonNull StoreContextImpl storeContext,
+                                                 @Nullable WorkspaceId workspaceId) {
     return IbmStoreContextBuilder
             .from(storeContext)
             .withWorkspaceId(workspaceId)
