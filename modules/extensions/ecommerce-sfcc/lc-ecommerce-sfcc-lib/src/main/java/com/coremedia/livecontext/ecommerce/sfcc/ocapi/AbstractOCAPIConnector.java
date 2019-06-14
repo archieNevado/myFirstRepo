@@ -236,14 +236,14 @@ public abstract class AbstractOCAPIConnector implements OCAPIConnector {
                                          Class<T> responseType) {
     Stopwatch stopwatch = null;
     try {
-      if (LOG.isInfoEnabled()) {
+      if (LOG.isTraceEnabled()) {
         stopwatch = Stopwatch.createStarted();
       }
 
       // For "Evaluate Expression" debugging: `restTemplate.exchange(url, httpMethod, requestEntity, String.class)`
       ResponseEntity<T> responseEntity = restTemplate.exchange(URI.create(url), httpMethod, requestEntity, responseType);
 
-      if (LOG.isInfoEnabled() && stopwatch != null && stopwatch.isRunning()) {
+      if (LOG.isTraceEnabled() && stopwatch != null && stopwatch.isRunning()) {
         stopwatch.stop();
         LOG.trace("{} Request '{}' returned with HTTP status code: {} (took {})", httpMethod, url,
                 responseEntity.getStatusCode().value(), stopwatch);

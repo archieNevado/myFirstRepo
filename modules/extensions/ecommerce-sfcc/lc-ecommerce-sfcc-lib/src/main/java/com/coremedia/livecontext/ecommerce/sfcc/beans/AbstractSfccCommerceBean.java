@@ -82,7 +82,7 @@ public abstract class AbstractSfccCommerceBean extends AbstractCommerceBean {
 
   @Override
   public String getExternalId() {
-    return getDelegate().getId();
+    return getId().getExternalId().orElseGet(() -> getDelegate().getId());
   }
 
   @Override

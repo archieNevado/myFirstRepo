@@ -11,6 +11,7 @@ import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.beanFactory;
 import com.coremedia.ui.data.impl.RemoteService;
 import com.coremedia.ui.logging.Logger;
+import com.coremedia.ui.util.AbortingAjaxProxy;
 
 import ext.Ext;
 import ext.XTemplate;
@@ -96,7 +97,7 @@ public class TaxonomySearchFieldBase extends StatefulComboBox {
       reader.rootProperty = NODES;
 
       //noinspection JSUnusedGlobalSymbols
-      httpProxy = Ext.create(AjaxProxy, {
+      httpProxy = Ext.create(AbortingAjaxProxy, {
         failure: function (response:XMLHttpRequest):void {
           Logger.info('Taxonomy search request failed:' + response.responseText);
         },
