@@ -57,7 +57,7 @@
             </additionalCssNonBundle>
             <additionalJsNonBundle>
               <value>resources/joo/resources/js/raphael.js</value>
-              <value>resources/joo/resources/js/jquery-3.3.1.min.js</value>
+              <value>resources/joo/resources/js/jquery-3.4.1.min.js</value>
               <value>resources/joo/resources/js/morris.js</value>
               <value>resources/joo/resources/js/morris.esalx-plugin.js</value>
             </additionalJsNonBundle>

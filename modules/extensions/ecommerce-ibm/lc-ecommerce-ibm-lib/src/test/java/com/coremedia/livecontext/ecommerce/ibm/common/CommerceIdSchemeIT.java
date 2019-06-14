@@ -55,7 +55,7 @@ public class CommerceIdSchemeIT extends IbmServiceTestBase {
   @Test(expected = NotFoundException.class)
   public void testProductNotFound() {
     Product product = (Product) testling.parseId("ibm:///catalog/product/blablub");
-    assertEquals(PRODUCT, product.getExternalId());
+    assertEquals(PRODUCT, product.getName());
   }
 
   @Betamax(tape = "cis_testProductVariantId", match = {MatchRule.path, MatchRule.query})
@@ -77,7 +77,7 @@ public class CommerceIdSchemeIT extends IbmServiceTestBase {
   @Test(expected = NotFoundException.class)
   public void testProductVariantNotFound() {
     ProductVariant sku = (ProductVariant) testling.parseId(SKU_ID_PREFIX + "blablub");
-    assertEquals("blablub", sku.getExternalId());
+    assertEquals("blablub", sku.getName());
   }
 
   @Betamax(tape = "cis_testCategoryId", match = {MatchRule.path, MatchRule.query})
@@ -94,6 +94,6 @@ public class CommerceIdSchemeIT extends IbmServiceTestBase {
   @Test(expected = NotFoundException.class)
   public void testCategoryNotFound() {
     Category category = (Category) testling.parseId("ibm:///catalog/category/blablub");
-    assertEquals(CATEGORY, category.getExternalId());
+    assertEquals(CATEGORY, category.getName());
   }
 }

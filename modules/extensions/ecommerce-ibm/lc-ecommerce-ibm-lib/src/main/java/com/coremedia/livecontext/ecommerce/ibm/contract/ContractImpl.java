@@ -56,12 +56,13 @@ public class ContractImpl extends AbstractIbmCommerceBean implements Contract {
 
   @Override
   public String getExternalId() {
-    return getStringValue(getDelegate(), "referenceNumber");
+    return getId().getExternalId()
+            .orElseGet(() -> getStringValue(getDelegate(), "referenceNumber"));
   }
 
   @Override
   public String getExternalTechId() {
-    return getStringValue(getDelegate(), "referenceNumber");
+    return getExternalId();
   }
 
   public void setContractWrapperService(WcContractWrapperService contractWrapperService) {

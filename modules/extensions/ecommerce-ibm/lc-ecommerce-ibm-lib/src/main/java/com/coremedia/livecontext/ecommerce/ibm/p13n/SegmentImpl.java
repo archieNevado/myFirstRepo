@@ -47,12 +47,13 @@ public class SegmentImpl extends AbstractIbmCommerceBean implements Segment {
 
   @Override
   public String getExternalId() {
-    return getStringValue(getDelegate(), "id");
+    return getId().getExternalId()
+            .orElseGet(() -> getStringValue(getDelegate(), "id"));
   }
 
   @Override
   public String getExternalTechId() {
-    return getStringValue(getDelegate(), "id");
+    return getExternalId();
   }
 
   public void setSegmentWrapperService(WcSegmentWrapperService segmentWrapperService) {

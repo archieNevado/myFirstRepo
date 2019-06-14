@@ -4,6 +4,7 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnect
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.NotFoundException;
 import com.coremedia.livecontext.ecommerce.push.PushService;
 import com.coremedia.livecontext.ecommerce.push.PushState;
 import com.coremedia.rest.linking.EntityResource;
@@ -74,10 +75,14 @@ public class ContentPushStateResource implements EntityResource<PushState> {
   @GET
   public PushStateRepresentation get(@Context UriInfo uriInfo) {
     PushState pushState = getEntity();
-    return pushState != null ? getRepresentation(pushState) : null;
+    if (pushState == null){
+      throw new NotFoundException("Push State bean not found");
+    }
+    return getRepresentation(pushState);
   }
 
 
+  @NonNull
   static PushStateRepresentation getRepresentation(@NonNull PushState pushState){
     Date date = pushState.getModificationDate()
             .map(modificationDate -> Date.from(modificationDate.toInstant())).orElse(null);

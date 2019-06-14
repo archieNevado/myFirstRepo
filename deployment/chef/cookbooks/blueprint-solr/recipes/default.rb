@@ -125,20 +125,19 @@ end
 
 ruby_block 'restart_solr_service' do
   block do
-
-    r = resources(:service => 'solr')
-    a = Array.new(r.action)
-
-    a << :restart unless a.include?(:restart)
-    a.delete(:start) if a.include?(:restart)
-
-    r.action(a)
-
+    # guard to prevent a restart action to be written into the runlist if start_service is false
+    if node['blueprint']['solr']['start_service']
+      r = resources(:service => 'solr')
+      a = Array.new(r.action)
+      a << :restart unless a.include?(:restart)
+      a.delete(:start) if a.include?(:restart)
+      r.action(a)
+    end
   end
   action :nothing
 end
 
 service 'solr' do
   supports restart: true, status: true
-  action [:enable, :start]
+  action node['blueprint']['solr']['start_service'] ? [:enable, :start] : [:enable]
 end

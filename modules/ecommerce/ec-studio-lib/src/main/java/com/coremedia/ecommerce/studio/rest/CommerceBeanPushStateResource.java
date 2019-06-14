@@ -8,6 +8,7 @@ import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
+import com.coremedia.livecontext.ecommerce.common.NotFoundException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.push.PushService;
 import com.coremedia.livecontext.ecommerce.push.PushState;
@@ -111,9 +112,13 @@ public class CommerceBeanPushStateResource implements EntityResource<PushState> 
   @GET
   public PushStateRepresentation get() {
     PushState pushState = getEntity();
-    return pushState != null ? getRepresentation(pushState) : null;
+    if (pushState == null){
+      throw new NotFoundException("Push State bean not found");
+    }
+    return getRepresentation(pushState);
   }
 
+  @NonNull
   static PushStateRepresentation getRepresentation(@NonNull PushState pushState){
     Date date = pushState.getModificationDate()
             .map(modificationDate -> Date.from(modificationDate.toInstant())).orElse(null);

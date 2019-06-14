@@ -100,12 +100,14 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
 
   @Override
   public String getExternalId() {
-    return getStringValue(getDelegate(), "partNumber");
+    return getId().getExternalId()
+            .orElseGet(() -> getStringValue(getDelegate(), "partNumber"));
   }
 
   @Override
   public String getExternalTechId() {
-    return getStringValue(getDelegate(), "uniqueID");
+    return getId().getTechId()
+            .orElseGet(() -> getStringValue(getDelegate(), "uniqueID"));
   }
 
   @Override

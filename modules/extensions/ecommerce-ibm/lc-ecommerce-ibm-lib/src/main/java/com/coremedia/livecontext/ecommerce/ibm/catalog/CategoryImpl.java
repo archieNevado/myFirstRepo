@@ -94,13 +94,14 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
     if (isRoot()) {
       return ROOT_CATEGORY_ROLE_ID;
     }
-
-    return getStringValueFromDelegate("identifier");
+    return getId().getExternalId()
+            .orElseGet(() -> getStringValueFromDelegate("identifier"));
   }
 
   @Override
   public String getExternalTechId() {
-    return getStringValueFromDelegate("uniqueID");
+    return getId().getTechId()
+            .orElseGet(() -> getStringValueFromDelegate("uniqueID"));
   }
 
   @Override

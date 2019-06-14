@@ -28,7 +28,8 @@ public class CatalogImpl extends AbstractIbmCommerceBean implements Catalog {
 
   @Override
   public String getExternalId() {
-    return DataMapHelper.findString(getDelegate(), "catalogId").orElse(null);
+    return getId().getExternalId()
+            .orElseGet(() -> DataMapHelper.findString(getDelegate(), "catalogId").orElse(null));
   }
 
   @Override

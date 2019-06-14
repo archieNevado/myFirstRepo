@@ -11,7 +11,7 @@
        that you fully re-index after changing this setting as it can
        affect both how text is indexed and queried.
   -->
-  <luceneMatchVersion>7.6.0</luceneMatchVersion>
+  <luceneMatchVersion>7.7.2</luceneMatchVersion>
 
   <!-- Data Directory
 
@@ -272,8 +272,7 @@
          since it is purely an arbitrary limit to try and catch user errors where
          large boolean queries may not be the best implementation choice.
       -->
-    <maxBooleanClauses>1024</maxBooleanClauses>
-
+    <maxBooleanClauses>${solr.max.booleanClauses:1024}</maxBooleanClauses>
 
     <!-- Solr Internal Query Caches
 
