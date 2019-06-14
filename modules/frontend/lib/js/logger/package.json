@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "jquery": "3.3.1",
+    "@coremedia/js-utils": "^1.0.0",
     "console-polyfill": "0.3.0",
-    "@coremedia/js-utils": "^1.0.0"
+    "jquery": "3.3.1"
   },
   "devDependencies": {
-    "babel-core": "6.26.0",
-    "babel-preset-env": "1.6.0",
+    "babel-core": "6.26.3",
     "babel-jest": "23.6.0",
+    "babel-preset-env": "1.7.0",
     "jest": "23.6.0",
     "jsdoc-to-markdown": "3.0.0",
     "prettier": "1.15.2"

@@ -184,7 +184,6 @@ class CoreMediaWatchPlugin {
         if (this._isCacheEmpty()) {
           this._initializeCache(emittedFiles);
           livereload.init(logLevel);
-          init = false;
           if (this._isRemoteWorkflow()) {
             uploadTheme(this.options.themeConfig)
               .then(() => {
@@ -267,6 +266,8 @@ class CoreMediaWatchPlugin {
             this._log.finalInfo("No changes.");
           }
         }
+
+        init = false;
 
         /*
         deletion code does not work yet because of 2 reasons:

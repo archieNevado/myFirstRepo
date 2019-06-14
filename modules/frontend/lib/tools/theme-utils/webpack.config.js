@@ -2,7 +2,9 @@ const escapeStringRegexp = require("escape-string-regexp");
 const path = require("path");
 const flow = require("lodash/fp/flow");
 const { DependencyCheckWebpackPlugin } = require("@coremedia/dependency-check");
-const { workspace: { getThemeConfig } } = require("@coremedia/tool-utils");
+const {
+  workspace: { getThemeConfig },
+} = require("@coremedia/tool-utils");
 
 const clean = require("./configs/clean");
 const themeZip = require("./configs/themeZip");
@@ -28,7 +30,7 @@ const exclude = [
 ];
 
 const dependencyCheckPlugin = new DependencyCheckWebpackPlugin({
-  include: include,
+  // do not pass include here, this is only for es-lint
   exclude: exclude,
 });
 

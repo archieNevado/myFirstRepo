@@ -19,9 +19,9 @@ This is an application cookbook. It provides recipes to install:
 
 # Attributes
 
-* `node['blueprint']['solr']['version']` - define solr version to use. Defaults to `7.6.0`.
+* `node['blueprint']['solr']['version']` - define solr version to use. Defaults to `7.7.2`.
 * `node['blueprint']['solr']['url']` - define solr download url. Defaults to `http://archive.apache.org/dist/lucene/solr/#{node['blueprint']['solr']['version']}/solr-#{node['blueprint']['solr']['version']}.tgz`.
-* `node['blueprint']['solr']['checksum']` - define artifact checksum. Defaults to `2cb425a0b30ff153465d306803e514e53e41924d74f28d842cb3a07cace759d5`.
+* `node['blueprint']['solr']['checksum']` - define artifact checksum. Defaults to `eb8ee4038f25364328355de3338e46961093e39166c9bcc28b5915ae491320df`.
 * `node['blueprint']['solr']['solr_home']` - define solr home. Defaults to `/opt/coremedia/solr-home`.
 * `node['blueprint']['solr']['clean_solr_home_on_update']` - clean solr home on update. Defaults to `true`.
 * `node['blueprint']['solr']['solr_data_dir']` - define solr index data directory. Defaults to `/var/coremedia/solr-data`.
@@ -39,6 +39,7 @@ This is an application cookbook. It provides recipes to install:
 * `node['blueprint']['solr']['config_zip_artifact_id']` - define the maven artifact id for solr-config.zip. Defaults to `solr-config`.
 * `node['blueprint']['solr']['config_zip_version']` - define the maven version for solr-config.zip. Defaults to `node['blueprint']['default_version'] ? node['blueprint']['default_version'] : '1-SNAPSHOT`.
 * `node['blueprint']['maven_repository_url']` - The repository url from which the webapp artifacts are downloaded. Defaults to `file://localhost/maven-repo/`.
+* `node['blueprint']['solr']['start_service']` - Toggles if the service should be started or not. Defaults to `true`.
 
 # Recipes
 

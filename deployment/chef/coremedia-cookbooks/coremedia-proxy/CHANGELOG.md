@@ -2,6 +2,10 @@ coremedia-proxy Cookbook CHANGELOG
 ======================
 This file is used to list changes made in each version of the coremedia-proxy cookbook.
 
+1.0.2
+-----
+- remove `chef-sugar` version constraint
+
 1.0.1
 -----
 - fix gzip removal for etags in header.

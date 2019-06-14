@@ -50,7 +50,7 @@
     <!---
      If true, suggestions field is not shown, default is false.
     -->
-    <fx:String id="disableSuggestions"/>
+    <fx:Boolean id="disableSuggestions"/>
   </fx:Declarations>
 
   <local:plugins>
