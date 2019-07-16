@@ -1,0 +1,55 @@
+!tape
+name: ctr_testGetRootCategory
+interactions:
+- recorded: 2017-11-14T15:39:27.842Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:27 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000J8DTFGGHJPwDWeWHKyphU89:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10201"},"AuroraStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10151"},"PerfectChefESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10302"},"AuroraB2BESite":{"defaultCatalogId":"10151","defaultCatalog":"Extended
+      Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10303"},"Extended Sites Hub":{"defaultCatalogId":null,"defaultCatalog":"","catalogs":{},"storeId":"10051"},"AuroraB2BStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10251"},"AuroraESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10301"},"Extended Sites
+      Catalog Asset Store":{"defaultCatalogId":"10101","defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog
+      Asset Store":"10101"},"storeId":"10101"}},"serverTimezoneId":"Europe\/Berlin"}'
+- recorded: 2017-11-14T15:39:27.866Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/categoryview/pc-on-the-table?profileName=CoreMedia_findCategoryBySeoSegment&locale=en_US
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:27 GMT
+      Expires: Tue, 14 Nov 2017 16:39:27 GMT
+      Vary: Accept
+    body: '{"recordSetTotal":1,"resourceName":"categoryview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/pc-on-the-table?profileName=CoreMedia_findCategoryBySeoSegment&locale=en_US","recordSetStartNumber":0,"recordSetComplete":"true","catalogGroupView":[{"shortDescription":"On
+      The Table","longDescription":"Find everything to make your table special and unforgettable.","cm_seo_token_ntk":"10101_pc-on-the-table","identifier":"PC_OnTheTable","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10201","name":"On
+      The Table","parentCatalogGroupID":["10101_-1","10152_-1"],"thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_OnTheTable.jpg","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_OnTheTable.jpg","uniqueID":"10201","storeID":"10101","childCatalogGroupID":["10101_10205","10101_10206","10101_10207","10101_10208","10101_10209","10152_10205","10152_10206","10152_10207","10152_10208","10152_10209"],"seo_token_ntk":"pc-on-the-table"}],"recordSetCount":1}'

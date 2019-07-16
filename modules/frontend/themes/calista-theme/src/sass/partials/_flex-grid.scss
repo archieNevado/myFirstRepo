@@ -1,0 +1,34 @@
+// Create column styles for a certain breakpoint
+@mixin cm-flex-column($breakpoint) {
+  $_cm-flex-column-as-percentage: percentage((100/$cm-flex-grid-size)/100);
+  $_cm-flex-col-width: $_cm-flex-column-as-percentage;
+  @for $size from 1 through $cm-flex-grid-size {
+    .cm-flex-col-#{$breakpoint}-#{$size} {
+      flex-basis: $_cm-flex-col-width * $size;
+      padding-left: $cm-standard-spacing;
+      padding-right: $cm-standard-spacing;
+    }
+  }
+}
+
+@include cm-flex-column("xs");
+@include breakpoint("sm-and-up") {
+  @include cm-flex-column("sm");
+}
+@include breakpoint("md") {
+  @include cm-flex-column("md");
+}
+@include breakpoint("lg") {
+  @include cm-flex-column("lg");
+}
+
+.cm-flex-row {
+  margin-left: -$cm-standard-spacing;
+  margin-right: -$cm-standard-spacing;
+  display: flex;
+  flex-wrap: wrap;
+
+  &--center {
+    justify-content: center;
+  }
+}

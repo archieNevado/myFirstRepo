@@ -1,0 +1,150 @@
+/* default teaser */
+.#{$cm-teasable-prefix} {
+
+  font-family: $font-family-serif;
+  margin-bottom: 48px;
+
+  &__headline {
+    font-size: $font-size-large;
+    text-transform: uppercase;
+    padding-bottom: 12px;
+  }
+
+  & &__author {
+    text-decoration: underline;
+  }
+
+  &__editorial span + span {
+    :before {
+      content: "•";
+      margin: 0 5px 0 2px;
+      display: inline-block;
+    }
+  }
+
+  &__caption {
+    position: relative;
+    transform: none;
+    font-size: inherit;
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .glyphicon-download:before {
+      display: block;
+      width: 16px;
+      height: 14px;
+      margin-right: 8px;
+      content: "";
+      background: transparent url("../../img/download-icon.svg") center center no-repeat;
+    }
+
+    .cm-product-info {
+      display: inline-block;
+
+      &__title {
+        display: none;
+      }
+
+      .cm-price {
+        font-size: $font-size-large;
+        color: $text-color;
+
+        &--old {
+          font-size: $font-size-base;
+        }
+      }
+    }
+
+  }
+
+  &__text {
+    padding-bottom: 24px;
+    line-height: 24px;
+  }
+
+  & a:hover &__headline {
+    text-decoration: underline;
+  }
+
+  & a:hover {
+    text-decoration: none;
+  }
+
+  // when the teaser caption, the position of the play button needs to be adjusted
+  // sadly, cannot use & in :not()
+  &__play {
+    transform: translate(50%, -50%);
+  }
+
+  // only show shop-now buttons on hover
+  &__shop-now-button {
+    @include aspect-ratio-box(2.35, 1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    pointer-events: none;
+    .cm-button-group__button {
+      @include center-absolute();
+      pointer-events: initial;
+    }
+  }
+
+  &--overlay-enabled {
+    .#{$cm-teasable-prefix}__picture-box {
+      @include aspect-ratio-box(1, 1);
+    }
+
+    // center absolute again
+    .#{$cm-teasable-prefix}__play {
+      @include center-absolute();
+    }
+
+    .#{$cm-teasable-prefix}__shop-now-button {
+      &:before {
+        padding-top: calculatePaddingTop(1, 1);
+      }
+    }
+  }
+}
+
+/* portrait teaser */
+.cm-portrait-teaser {
+  .#{$cm-teasable-prefix} {
+    &__headline {
+      font-size: $font-size-base;
+    }
+
+    &__text {
+      padding-bottom: 12px;
+    }
+
+    &__picture-box {
+      @include aspect-ratio-box(20, 31);
+    }
+
+    &__shop-now-button {
+      &:before {
+        padding-top: calculatePaddingTop(20, 31);
+      }
+    }
+  }
+
+  .cm-price {
+    padding-top: 0;
+
+    &--special {
+      padding-left: 0 !important;
+    }
+    &--old {
+      padding-right: 0 !important;
+    }
+  }
+}
+
+.cm-teaser-overlay__text{
+  line-height: 24px;
+  padding-bottom: 24px;
+}

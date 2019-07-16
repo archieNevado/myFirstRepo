@@ -1,0 +1,17 @@
+.#{$cm-quickinfo-prefix}--shop-now {
+  width: 514px;
+
+  margin: 0 auto;
+
+  @include breakpoint(xs) {
+    display: none;
+  }
+  @include breakpoint(sm) {
+    display: none;
+  }
+
+  .#{$cm-quickinfo-prefix}__price {
+    flex-direction: row;
+    width: 254px; // 50% does not work
+  }
+}

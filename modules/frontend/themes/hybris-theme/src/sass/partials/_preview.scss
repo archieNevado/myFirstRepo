@@ -1,0 +1,13 @@
+// ### FRAGMENT PREVIEW ###
+
+.cm-preview-content > .content {
+  .cm-container--fullwidth {
+    left: inherit;
+    margin: auto;
+    width: inherit;
+  }
+}
+
+body {
+  overflow-x: hidden!important;
+}

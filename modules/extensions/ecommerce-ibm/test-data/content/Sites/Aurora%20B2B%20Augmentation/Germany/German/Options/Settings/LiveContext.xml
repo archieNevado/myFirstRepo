@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMSettings folder="/Sites/Aurora B2B Augmentation/Germany/German/Options/Settings" name="LiveContext" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
+<locale>de-DE</locale>
+<master>
+<link href="../../../../United%20States/English/Options/Settings/LiveContext.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Settings/LiveContext"/>
+</master>
+<settings>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<IntProperty Name="livecontext.navigation.depth">2</IntProperty>
+<BooleanProperty Name="livecontext.manageNavigation">true</BooleanProperty>
+<BooleanProperty Name="livecontext.displayAvailability">true</BooleanProperty>
+<BooleanProperty Name="livecontext.policy.commerce-product-links">true</BooleanProperty>
+<BooleanProperty Name="livecontext.policy.commerce-category-links">true</BooleanProperty>
+<BooleanProperty Name="livecontext.policy.commerce-page-links">true</BooleanProperty>
+<BooleanProperty Name="p13n-dynamic-includes-enabled">true</BooleanProperty>
+<StringProperty Name="livecontext.connectionId">wcs1</StringProperty>
+<StructProperty Name="livecontext.store.config">
+<Struct>
+<StringProperty Name="currency">EUR</StringProperty>
+<StringProperty Name="store.name">AuroraB2BESite</StringProperty>
+<StringProperty Name="config.id">aurora</StringProperty>
+</Struct>
+</StructProperty>
+</Struct>
+</settings>
+<identifier></identifier>
+</CMSettings>

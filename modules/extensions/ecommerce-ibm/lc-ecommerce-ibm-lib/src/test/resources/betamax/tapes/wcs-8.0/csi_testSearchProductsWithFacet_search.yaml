@@ -1,0 +1,328 @@
+!tape
+name: csi_testSearchProductsWithFacet_search
+interactions:
+- recorded: 2017-11-02T09:59:46.717Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 02 Nov 2017 09:59:46 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000y0uTksBox6-fuBLvk94l16z:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-calau-tomcat-3-cms.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
+      X-Powered-By: Servlet/3.0
+    body: '{"serverTimezoneId":"Europe\/Berlin","wcsVersion":"8.0","stores":{"AuroraB2BESite":{"defaultCatalog":"Extended Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Calista Spring
+      Fashions":"3074457345616676768","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838085","defaultCatalogId":"3074457345616676718"},"CalistaESite":{"defaultCatalog":"Calista
+      Spring Fashions","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Calista Spring Fashions":"3074457345616676768","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset
+      Store":"3074457345616676668"},"storeId":"715838086","defaultCatalogId":"3074457345616676768"},"AuroraB2BStorefrontAssetStore":{"defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Calista
+      Spring Fashions":"3074457345616676768","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838034","defaultCatalogId":"3074457345616676668"},"AuroraStorefrontAssetStore":{"defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Calista Spring Fashions":"3074457345616676768","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog
+      Asset Store":"3074457345616676668"},"storeId":"715837984","defaultCatalogId":"3074457345616676668"},"Extended Sites Hub":{"defaultCatalog":"","catalogs":{},"storeId":"715837884","defaultCatalogId":null},"Extended Sites Catalog Asset Store":{"defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Calista Spring Fashions":"3074457345616676768","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog
+      Asset Store":"3074457345616676668"},"storeId":"715837934","defaultCatalogId":"3074457345616676668"},"AuroraESite":{"defaultCatalog":"Extended Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Calista
+      Spring Fashions":"3074457345616676768","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838084","defaultCatalogId":"3074457345616676719"},"CMStorefrontAssetStore":{"defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Calista Spring Fashions":"3074457345616676768","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog
+      Asset Store":"3074457345616676668"},"storeId":"715838584","defaultCatalogId":"3074457345616676668"}}}'
+- recorded: 2017-11-02T09:59:47.567Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/catalog
+    headers:
+      Accept-Encoding: text/plain
+      Authorization: Basic Y21hZG1pbjpWVEpqeW8wQVlTblhGSEkyMDF5bw==
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 02 Nov 2017 09:59:47 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000l3WnRVSc1KeRWonhtejkO-O:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-calau-tomcat-3-cms.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":4,"resourceId":"http:\/\/toko-ci-01-calau-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/catalog","recordSetCount":4,"recordSetComplete":true,"recordSetStartNumber":0,"resultList":[{"catalogIdentifier":"Extended
+      Sites Catalog Asset Store","description":[{"name":"Extended Sites Catalog Asset Store"}],"primary":true,"catalogId":"3074457345616676668"},{"catalogIdentifier":"Extended Sites Catalog Asset Store B2B Direct","description":[{"shortDescription":"Aurora B2B
+      direct sample data","name":"Aurora B2B direct sample data"}],"primary":false,"catalogId":"3074457345616676718"},{"default":true,"catalogIdentifier":"Extended Sites Catalog Asset Store Consumer Direct","description":[{"shortDescription":"Aurora Consumer
+      Direct sample data","name":"Aurora consumer direct sample data"}],"primary":false,"catalogId":"3074457345616676719"},{"catalogIdentifier":"Calista Spring Fashions","description":[{"shortDescription":"Spring Fashions","name":"Spring Fashions"}],"primary":false,"catalogId":"3074457345616676768"}],"resourceName":"catalog"}'
+- recorded: 2017-11-02T09:59:47.744Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 02 Nov 2017 09:59:47 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000-_FHFgIVAIxsbzQrilvGmm9:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-calau-tomcat-3-cms.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
+      X-Powered-By: Servlet/3.0
+    body: '{"ro":"-21","zh":"-8","pt_BR":"-6","pl_PL":"-22","en_US":"-1","ja_JP":"-10","ru_RU":"-20","zh_CN":"-7","ro_RO":"-21","de":"-3","zh_TW":"-8","fr":"-2","es_ES":"-5","it":"-4","ko_KR":"-9","ko":"-9","it_IT":"-4","de_DE":"-3","ar":"-23","ar_EG":"-23","fr_FR":"-2","pl":"-22","pt":"-6","en":"-1","ru":"-20","es":"-5","ja":"-10"}'
+- recorded: 2017-11-02T09:59:47.801Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/categoryview/%2520?categoryIdentifier=Electronics&profileName=CoreMedia_findCategoryByIdentifier&catalogId=3074457345616676719&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 02 Nov 2017 09:59:47 GMT
+      Expires: Thu, 02 Nov 2017 10:59:47 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/%2520?categoryIdentifier=Electronics&profileName=CoreMedia_findCategoryByIdentifier&catalogId=3074457345616676719&langId=-1","recordSetCount":1,"recordSetComplete":"true","recordSetStartNumber":0,"resourceName":"categoryview","catalogGroupView":[{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676694","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/category\/catr_cta_tablets.png","seo_token_ntk":"electronics","shortDescription":"Electronics","parentCatalogGroupID":["3074457345616676668_-1","3074457345616676719_-1","3074457345616676768_-1"],"name":"Electronics","uniqueID":"3074457345616676694","childCatalogGroupID":["3074457345616676668_3074457345616676695","3074457345616676668_3074457345616676696","3074457345616676668_3074457345616676697","3074457345616676668_3074457345616676698","3074457345616676668_3074457345616676699","3074457345616676719_3074457345616676695","3074457345616676719_3074457345616676696","3074457345616676719_3074457345616676697","3074457345616676719_3074457345616676698","3074457345616676719_3074457345616676699","3074457345616676768_3074457345616676695","3074457345616676768_3074457345616676696","3074457345616676768_3074457345616676697","3074457345616676768_3074457345616676698","3074457345616676768_3074457345616676699"],"storeID":"715837934","cm_seo_token_ntk":"715837934_electronics","identifier":"Electronics","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/category\/catr_cta_tablets.png"}]}'
+- recorded: 2017-11-02T09:59:48.269Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/productview/bySearchTerm/*?profileName=CoreMedia_findProductsBySearchTerm&categoryId=3074457345616676694&currency=USD&facet=price_USD:(%7B200%20300%7D%20300)&langId=-1&pageNumber=1&pageSize=100&searchType=2
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 02 Nov 2017 09:59:48 GMT
+      Expires: Thu, 02 Nov 2017 10:59:48 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":2,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/bySearchTerm\/*?profileName=CoreMedia_findProductsBySearchTerm&categoryId=3074457345616676694&currency=USD&facet=price_USD:(%7B200%20300%7D%20300)&langId=-1&pageNumber=1&pageSize=100&searchType=2","recordSetCount":2,"facetView":[{"entry":[{"extendedData":{"uniqueId":"1121141059910195858368584012342324948481253249484841"},"count":0,"value":"price_USD%3A%28%7B*+100%7D+100%29","label":"({*
+      100} 100)"},{"extendedData":{"uniqueId":"11211410599101958583685840123494848325048481253250484841"},"count":0,"value":"price_USD%3A%28%7B100+200%7D+200%29","label":"({100 200} 200)"},{"extendedData":{"uniqueId":"11211410599101958583685840123504848325148481253251484841"},"count":2,"value":"price_USD%3A%28%7B200+300%7D+300%29","label":"({200
+      300} 300)"},{"extendedData":{"uniqueId":"11211410599101958583685840123514848325248481253252484841"},"count":0,"value":"price_USD%3A%28%7B300+400%7D+400%29","label":"({300 400} 400)"},{"extendedData":{"uniqueId":"11211410599101958583685840123524848325348481253253484841"},"count":0,"value":"price_USD%3A%28%7B400+500%7D+500%29","label":"({400
+      500} 500)"},{"extendedData":{"uniqueId":"11211410599101958583685840123534848324212541"},"count":0,"value":"price_USD%3A%28%7B500+*%7D%29","label":"({500 *})"}],"name":"OfferPrice_USD","value":"price_USD"},{"extendedData":{"displaySequence":"0.0","srchattridentifier":"_cat.ParentCatalogGroup","group_id":"0","allValuesReturned":true,"max_display":"20","maximumValuesToDisplay":"20","propertyvalue":"parentCatgroup_id_search","zero_display":"0","storeent_id":"0","displayable":"1","srchattr_id":"-1013","selection":"0","facet_id":"-1001","groupId":"0","sortorder":"0","fdesc":"The
+      category","propertyname":"facet","keyword_search":"1","fname":"Category","allowMultipleValueSelection":"false"},"name":"ParentCatalogGroup","entry":[{"extendedData":{"parentIds":"3074457345616676694","uniqueId":"3074457345616676696"},"count":"1","value":"3074457345616676696","label":"Tablets"},{"extendedData":{"parentIds":"3074457345616676694","uniqueId":"3074457345616676699"},"count":"1","value":"3074457345616676699","label":"Components"}],"value":"parentCatgroup_id_search"},{"extendedData":{"displaySequence":"0.0","srchattridentifier":"_cat.ManufacturerName","group_id":"0","allValuesReturned":true,"max_display":"20","maximumValuesToDisplay":"20","propertyvalue":"mfName_ntk_cs","zero_display":"0","storeent_id":"0","displayable":"1","srchattr_id":"-1002","selection":"0","facet_id":"-1000","groupId":"0","sortorder":"0","fdesc":"The
+      manufacturer","propertyname":"facet","keyword_search":"1","fname":"Brand","allowMultipleValueSelection":"false"},"name":"ManufacturerName","entry":[{"extendedData":{"uniqueId":"-1002651001011081011013280108117115"},"count":"1","value":"mfName_ntk_cs%3A%22Adelee+Plus%22","label":"Adelee
+      Plus"},{"extendedData":{"uniqueId":"-100268868232841019910411010599115"},"count":"1","value":"mfName_ntk_cs%3A%22DVR+Technics%22","label":"DVR Technics"}],"value":"mfName_ntk_cs"}],"catalogEntryView":[{"hasSingleSKU":false,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676699","3074457345616676719_3074457345616676699","3074457345616676768_3074457345616676699"],"price_USD":"229.65","uniqueID":"3074457345616679312","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679312","price":[{"description":"L","value":"229.65","usage":"Display","currency":"USD"},{"description":"O","value":"","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/ccm039_components\/200x310\/ccm039_3905.jpg","seo_token_ntk":"video-card","shortDescription":"Improve
+      the performance of your videos and games with a powerful video card.","manufacturer":"DVR Technics","name":"Video Card","buyable":"true","attributes":[{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":".00000","name":"VRAM","uniqueID":"7741124012283333406","usage":"Defining","comparable":false,"displayable":true,"identifier":"ComputersComponentsVRAM","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"1
+      GB, 3 GB","uniqueID":"7741124012283334888","unitID":"","unitOfMeasure":"","identifier":"CCM039_3905"}],"sequence":"1.00000","name":"VRAM","uniqueID":"7741124012283333413","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"VRAM","facetable":false,"searchable":false}],"storeID":"715837934","cm_seo_token_ntk":"715837934_video-card","partNumber":"CCM039_3905"},{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676696","3074457345616676719_3074457345616676696","3074457345616676768_3074457345616676696"],"price_USD":"300.0","singleSKUCatalogEntryID":"3074457345616679346","uniqueID":"3074457345616679345","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679345","price":[{"description":"L","value":"300.0","usage":"Display","currency":"USD"},{"description":"O","value":"","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cta023_tablets\/200x310\/cta023_2304.jpg","seo_token_ntk":"budget-tablet","shortDescription":"An
+      overall decent tablet for casual use.","manufacturer":"Adelee Plus","name":"Budget Tablet","buyable":"true","attributes":[{"storeDisplay":false,"values":[{"sequence":"3.00000","value":"5\"","uniqueID":"7741124012283334955","unitID":"","unitOfMeasure":"","identifier":"CTA023_2304"}],"sequence":".00000","name":"Size","uniqueID":"7741124012283333348","usage":"Descriptive","comparable":true,"displayable":true,"identifier":"Size","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":".00000","name":"Size","uniqueID":"7741124012283333425","usage":"Defining","comparable":true,"displayable":true,"identifier":"ComputersTabletsSize","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":"1.00000","name":"Brand","uniqueID":"7741124012283333427","usage":"Defining","comparable":false,"displayable":true,"identifier":"ComputersTabletsBrand","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"2.00000","value":"8
+      GB","uniqueID":"7741124012283334966","unitID":"","unitOfMeasure":"","identifier":"CTA023_2304"}],"sequence":"2.00000","name":"Storage","uniqueID":"7741124012283333429","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Storage","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":"2.00000","name":"Storage","uniqueID":"7741124012283333428","usage":"Defining","comparable":true,"displayable":true,"identifier":"ComputersTabletsStorage","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"4.00000","value":"4
+      hours","uniqueID":"7741124012283334963","unitID":"","unitOfMeasure":"","identifier":"CTA023_2304"}],"sequence":"3.00000","name":"Battery Life","uniqueID":"7741124012283333423","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Battery
+      Life","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":"3.00000","name":"Battery Life","uniqueID":"7741124012283333426","usage":"Defining","comparable":true,"displayable":true,"identifier":"ComputersTabletsBattery
+      Life","facetable":false,"searchable":false}],"storeID":"715837934","cm_seo_token_ntk":"715837934_budget-tablet","partNumber":"CTA023_2304"}],"recordSetComplete":"true","recordSetStartNumber":0,"recordSetTotalMatches":2,"breadCrumbTrailEntryViewExtended":[{"0":{"type_":"FACET_ENTRY_CATEGORY","value":"3074457345616676694","label":"Electronics"}}],"metaData":{"price":"2"},"resourceName":"productview","breadCrumbTrailEntryView":[{"type_":"FACET_ENTRY_CATEGORY","value":"3074457345616676694","label":"Electronics"}]}'
+- recorded: 2017-11-02T09:59:48.869Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/productview/byId/3074457345616679312?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 02 Nov 2017 09:59:48 GMT
+      Expires: Thu, 02 Nov 2017 10:59:48 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679312?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":1,"catalogEntryView":[{"hasSingleSKU":false,"catalogEntryTypeCode":"ProductBean","disallowRecurringOrder":"1","parentCatalogGroupID":["3074457345616676668_3074457345616676699","3074457345616676719_3074457345616676699","3074457345616676768_3074457345616676699"],"price_USD":"229.65","uniqueID":"3074457345616679312","sKUs":[{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679313","catalogEntryTypeCode":"ItemBean","name":"Video
+      Card","uniqueID":"3074457345616679313","storeID":"715837934","partNumber":"CCM039_390501"},{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679314","catalogEntryTypeCode":"ItemBean","name":"Video
+      Card","uniqueID":"3074457345616679314","storeID":"715837934","partNumber":"CCM039_390502"}],"fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/ccm039_components\/646x1000\/ccm039_3905.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679312","price":[{"description":"L","value":"229.65","usage":"Display","currency":"USD"},{"description":"O","value":"","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/ccm039_components\/200x310\/ccm039_3905.jpg","seo_token_ntk":"video-card","shortDescription":"Improve
+      the performance of your videos and games with a powerful video card.","manufacturer":"DVR Technics","name":"Video Card","subscriptionTypeCode":"NONE","buyable":"true","longDescription":"Play all your games at the highest quality settings, and optimum resolutions
+      with a top-of-the-line video card.  You can even hook up multiple monitors and play games in style!","attributes":[{"storeDisplay":false,"values":[],"sequence":".00000","associatedKeyword":"-","name":"VRAM","uniqueID":"7741124012283333406","usage":"Defining","comparable":false,"displayable":true,"identifier":"ComputersComponentsVRAM","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"1
+      GB, 3 GB","uniqueID":"7741124012283334888","unitID":"","unitOfMeasure":"","identifier":"CCM039_3905"}],"sequence":"1.00000","associatedKeyword":"-","name":"VRAM","uniqueID":"7741124012283333413","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"VRAM","facetable":false,"searchable":false}],"storeID":"715837934","cm_seo_token_ntk":"715837934_video-card","numberOfSKUs":2,"partNumber":"CCM039_3905"}],"recordSetComplete":"true","recordSetStartNumber":0,"recordSetTotalMatches":1,"metaData":{"price":"2"},"resourceName":"productview"}'
+- recorded: 2017-11-02T09:59:48.947Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/price?q=byPartNumbers&partNumber=CCM039_3905&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Authorization: Basic Y21hZG1pbjpWVEpqeW8wQVlTblhGSEkyMDF5bw==
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 02 Nov 2017 09:59:48 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000N98f8BibyNReiUeyZCotEyl:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-calau-tomcat-3-cms.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
+      X-Powered-By: Servlet/3.0
+    body: '{"resourceId":"http:\/\/toko-ci-01-calau-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/price?q=byPartNumbers&partNumber=CCM039_3905&currency=USD&langId=-1","EntitledPrice":[{"contractId":"4000000000000000005","UnitPrice":[{"price":{"value":229.65,"currency":"USD"},"quantity":{"uom":"C62","value":1.0}}],"productId":"3074457345616679312","partNumber":"CCM039_3905"}],"resourceName":"price"}'
+- recorded: 2017-11-02T09:59:49.012Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/productview/byId/3074457345616679345?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 02 Nov 2017 09:59:49 GMT
+      Expires: Thu, 02 Nov 2017 10:59:49 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679345?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":1,"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","disallowRecurringOrder":"1","parentCatalogGroupID":["3074457345616676668_3074457345616676696","3074457345616676719_3074457345616676696","3074457345616676768_3074457345616676696"],"price_USD":"300.0","uniqueID":"3074457345616679345","singleSKUCatalogEntryID":"3074457345616679346","sKUs":[{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679346","catalogEntryTypeCode":"ItemBean","name":"Budget
+      Tablet","uniqueID":"3074457345616679346","storeID":"715837934","partNumber":"CTA023_230401"}],"fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cta023_tablets\/646x1000\/cta023_2304.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679345","price":[{"description":"L","value":"300.0","usage":"Display","currency":"USD"},{"description":"O","value":"","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cta023_tablets\/200x310\/cta023_2304.jpg","seo_token_ntk":"budget-tablet","shortDescription":"An
+      overall decent tablet for casual use.","manufacturer":"Adelee Plus","name":"Budget Tablet","subscriptionTypeCode":"NONE","longDescription":"This average tablet will get you from point A to point B, without having to worry about spending a fortune to get
+      things done.  This is the perfect tablet to perform lightweight tasks like checking e-mail and browsing the Web.","buyable":"true","attributes":[{"storeDisplay":false,"values":[{"sequence":"3.00000","value":"5\"","uniqueID":"7741124012283334955","unitID":"","unitOfMeasure":"","identifier":"CTA023_2304"}],"sequence":".00000","associatedKeyword":"-","name":"Size","uniqueID":"7741124012283333348","usage":"Descriptive","comparable":true,"displayable":true,"identifier":"Size","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":".00000","associatedKeyword":"-","name":"Size","uniqueID":"7741124012283333425","usage":"Defining","comparable":true,"displayable":true,"identifier":"ComputersTabletsSize","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":"1.00000","associatedKeyword":"-","name":"Brand","uniqueID":"7741124012283333427","usage":"Defining","comparable":false,"displayable":true,"identifier":"ComputersTabletsBrand","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"2.00000","value":"8
+      GB","uniqueID":"7741124012283334966","unitID":"","unitOfMeasure":"","identifier":"CTA023_2304"}],"sequence":"2.00000","associatedKeyword":"-","name":"Storage","uniqueID":"7741124012283333429","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Storage","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":"2.00000","associatedKeyword":"-","name":"Storage","uniqueID":"7741124012283333428","usage":"Defining","comparable":true,"displayable":true,"identifier":"ComputersTabletsStorage","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"4.00000","value":"4
+      hours","uniqueID":"7741124012283334963","unitID":"","unitOfMeasure":"","identifier":"CTA023_2304"}],"sequence":"3.00000","associatedKeyword":"-","name":"Battery Life","uniqueID":"7741124012283333423","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Battery
+      Life","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":"3.00000","associatedKeyword":"-","name":"Battery Life","uniqueID":"7741124012283333426","usage":"Defining","comparable":true,"displayable":true,"identifier":"ComputersTabletsBattery
+      Life","facetable":false,"searchable":false}],"storeID":"715837934","cm_seo_token_ntk":"715837934_budget-tablet","numberOfSKUs":1,"partNumber":"CTA023_2304"}],"recordSetComplete":"true","recordSetStartNumber":0,"recordSetTotalMatches":1,"metaData":{"price":"2"},"resourceName":"productview"}'
+- recorded: 2017-11-02T09:59:49.093Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/price?q=byPartNumbers&partNumber=CTA023_2304&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Authorization: Basic Y21hZG1pbjpWVEpqeW8wQVlTblhGSEkyMDF5bw==
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 02 Nov 2017 09:59:49 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=00002eNzbb4lCgMRGNvEQ9-uh2r:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-calau-tomcat-3-cms.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"resourceId":"http:\/\/toko-ci-01-calau-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/price?q=byPartNumbers&partNumber=CTA023_2304&currency=USD&langId=-1","EntitledPrice":[{"contractId":"4000000000000000005","UnitPrice":[{"price":{"value":300.00,"currency":"USD"},"quantity":{"uom":"C62","value":1.0}}],"productId":"3074457345616679345","partNumber":"CTA023_2304"}],"resourceName":"price"}'
+- recorded: 2017-11-02T09:59:49.134Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/productview/bySearchTerm/*?profileName=CoreMedia_findProductsBySearchTerm&categoryId=3074457345616676694&currency=USD&facet=mfName_ntk_cs%253A%2522Adelee%2BPlus%2522&langId=-1&pageNumber=1&pageSize=100&searchType=2
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 02 Nov 2017 09:59:49 GMT
+      Expires: Thu, 02 Nov 2017 10:59:49 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":7,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/bySearchTerm\/*?profileName=CoreMedia_findProductsBySearchTerm&categoryId=3074457345616676694&currency=USD&facet=mfName_ntk_cs%253A%2522Adelee%2BPlus%2522&langId=-1&pageNumber=1&pageSize=100&searchType=2","recordSetCount":7,"facetView":[{"entry":[{"extendedData":{"uniqueId":"1121141059910195858368584012342324948481253249484841"},"count":1,"value":"price_USD%3A%28%7B*+100%7D+100%29","label":"({*
+      100} 100)"},{"extendedData":{"uniqueId":"11211410599101958583685840123494848325048481253250484841"},"count":0,"value":"price_USD%3A%28%7B100+200%7D+200%29","label":"({100 200} 200)"},{"extendedData":{"uniqueId":"11211410599101958583685840123504848325148481253251484841"},"count":1,"value":"price_USD%3A%28%7B200+300%7D+300%29","label":"({200
+      300} 300)"},{"extendedData":{"uniqueId":"11211410599101958583685840123514848325248481253252484841"},"count":1,"value":"price_USD%3A%28%7B300+400%7D+400%29","label":"({300 400} 400)"},{"extendedData":{"uniqueId":"11211410599101958583685840123524848325348481253253484841"},"count":1,"value":"price_USD%3A%28%7B400+500%7D+500%29","label":"({400
+      500} 500)"},{"extendedData":{"uniqueId":"11211410599101958583685840123534848324212541"},"count":3,"value":"price_USD%3A%28%7B500+*%7D%29","label":"({500 *})"}],"name":"OfferPrice_USD","value":"price_USD"},{"extendedData":{"displaySequence":"0.0","srchattridentifier":"_cat.ParentCatalogGroup","group_id":"0","allValuesReturned":true,"max_display":"20","maximumValuesToDisplay":"20","propertyvalue":"parentCatgroup_id_search","zero_display":"0","storeent_id":"0","displayable":"1","srchattr_id":"-1013","selection":"0","facet_id":"-1001","groupId":"0","sortorder":"0","fdesc":"The
+      category","propertyname":"facet","keyword_search":"1","fname":"Category","allowMultipleValueSelection":"false"},"name":"ParentCatalogGroup","entry":[{"extendedData":{"parentIds":"3074457345616676694","uniqueId":"3074457345616676696"},"count":"2","value":"3074457345616676696","label":"Tablets"},{"extendedData":{"parentIds":"3074457345616676694","uniqueId":"3074457345616676697"},"count":"2","value":"3074457345616676697","label":"Laptops"},{"extendedData":{"parentIds":"3074457345616676694","uniqueId":"3074457345616676698"},"count":"2","value":"3074457345616676698","label":"Desktops"},{"extendedData":{"parentIds":"3074457345616676694","uniqueId":"3074457345616676695"},"count":"1","value":"3074457345616676695","label":"Accessories"}],"value":"parentCatgroup_id_search"},{"extendedData":{"displaySequence":"0.0","srchattridentifier":"_cat.ManufacturerName","group_id":"0","allValuesReturned":true,"max_display":"20","maximumValuesToDisplay":"20","propertyvalue":"mfName_ntk_cs","zero_display":"0","storeent_id":"0","displayable":"1","srchattr_id":"-1002","selection":"0","facet_id":"-1000","groupId":"0","sortorder":"0","fdesc":"The
+      manufacturer","propertyname":"facet","keyword_search":"1","fname":"Brand","allowMultipleValueSelection":"false"},"name":"ManufacturerName","entry":[{"extendedData":{"uniqueId":"-1002651001011081011013280108117115"},"count":"7","value":"mfName_ntk_cs%3A%22Adelee+Plus%22","label":"Adelee
+      Plus"}],"value":"mfName_ntk_cs"}],"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676695","3074457345616676719_3074457345616676695","3074457345616676768_3074457345616676695"],"price_USD":"60.0","singleSKUCatalogEntryID":"3074457345616679293","uniqueID":"3074457345616679292","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679292","price":[{"description":"L","value":"60.0","usage":"Display","currency":"USD"},{"description":"O","value":"","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cac024_accessories\/200x310\/cac024_2402.jpg","seo_token_ntk":"inkjet-printer","shortDescription":"A
+      capable printer suitable for everyday use.","manufacturer":"Adelee Plus","name":"Inkjet Printer","buyable":"true","attributes":[{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"15 ppm","uniqueID":"7741124012283334863","unitID":"","unitOfMeasure":"","identifier":"CAC024_2402"}],"sequence":".00000","name":"Speed","uniqueID":"7741124012283333403","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Speed","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":".00000","name":"Speed","uniqueID":"7741124012283333402","usage":"Defining","comparable":true,"displayable":true,"identifier":"ComputersAccessoriesSpeed","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":"1.00000","name":"Brand","uniqueID":"7741124012283333400","usage":"Defining","comparable":false,"displayable":true,"identifier":"ComputersAccessoriesBrand","facetable":false,"searchable":false},{"storeDisplay":true,"values":[{"sequence":"1.00000","value":"Clearance","uniqueID":"7741124012283336260","unitID":"","unitOfMeasure":"","identifier":"Clearance"}],"sequence":"1.00000","name":"Clearance","uniqueID":"7741124012283333512","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Clearance","facetable":false,"searchable":false}],"storeID":"715837934","cm_seo_token_ntk":"715837934_inkjet-printer","partNumber":"CAC024_2402"},{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676698","3074457345616676719_3074457345616676698","3074457345616676768_3074457345616676698"],"price_USD":"800.0","singleSKUCatalogEntryID":"3074457345616679322","uniqueID":"3074457345616679321","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679321","price":[{"description":"L","value":"800.0","usage":"Display","currency":"USD"},{"description":"O","value":"","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cde021_desktops\/200x310\/cde021_2102.jpg","seo_token_ntk":"office-computer","shortDescription":"The
+      perfect workstation for the home office.","manufacturer":"Adelee Plus","name":"Office Computer","buyable":"true","attributes":[{"storeDisplay":false,"values":[{"sequence":"2.00000","value":"4 GB","uniqueID":"7741124012283334898","unitID":"","unitOfMeasure":"","identifier":"CDE021_2102"}],"sequence":".00000","name":"Memory","uniqueID":"7741124012283333417","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Memory","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":".00000","name":"Memory","uniqueID":"7741124012283333415","usage":"Defining","comparable":true,"displayable":true,"identifier":"ComputersDesktopsMemory","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"2.00000","value":"1000
+      GB","uniqueID":"7741124012283334902","unitID":"","unitOfMeasure":"","identifier":"CDE021_2102"}],"sequence":"1.00000","name":"Hard Drive","uniqueID":"7741124012283333418","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Hard Drive","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":"1.00000","name":"Hard
+      Drive","uniqueID":"7741124012283333416","usage":"Defining","comparable":true,"displayable":true,"identifier":"ComputersDesktopsHard Drive","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":"2.00000","name":"Brand","uniqueID":"7741124012283333414","usage":"Defining","comparable":false,"displayable":true,"identifier":"ComputersDesktopsBrand","facetable":false,"searchable":false}],"storeID":"715837934","cm_seo_token_ntk":"715837934_office-computer","partNumber":"CDE021_2102"},{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676698","3074457345616676719_3074457345616676698","3074457345616676768_3074457345616676698"],"price_USD":"1150.0","singleSKUCatalogEntryID":"3074457345616679324","uniqueID":"3074457345616679323","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679323","price":[{"description":"L","value":"1300.0","usage":"Display","currency":"USD"},{"description":"O","value":"","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cde021_desktops\/200x310\/cde021_2103.jpg","seo_token_ntk":"gaming-computer","shortDescription":"A
+      powerful computer capable of handling the latest games.","manufacturer":"Adelee Plus","name":"Gaming Computer","buyable":"true","attributes":[{"storeDisplay":false,"values":[{"sequence":"3.00000","value":"8 GB","uniqueID":"7741124012283334899","unitID":"","unitOfMeasure":"","identifier":"CDE021_2103"}],"sequence":".00000","name":"Memory","uniqueID":"7741124012283333417","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Memory","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":".00000","name":"Memory","uniqueID":"7741124012283333415","usage":"Defining","comparable":true,"displayable":true,"identifier":"ComputersDesktopsMemory","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"3.00000","value":"2000
+      GB","uniqueID":"7741124012283334904","unitID":"","unitOfMeasure":"","identifier":"CDE021_2103"}],"sequence":"1.00000","name":"Hard Drive","uniqueID":"7741124012283333418","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Hard Drive","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":"1.00000","name":"Hard
+      Drive","uniqueID":"7741124012283333416","usage":"Defining","comparable":true,"displayable":true,"identifier":"ComputersDesktopsHard Drive","facetable":false,"searchable":false},{"storeDisplay":true,"values":[{"sequence":"1.00000","value":"Exclusive","uniqueID":"7741124012283336259","unitID":"","unitOfMeasure":"","identifier":"Exclusive"}],"sequence":"1.00000","name":"Exclusive","uniqueID":"7741124012283333511","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Exclusive","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":"2.00000","name":"Brand","uniqueID":"7741124012283333414","usage":"Defining","comparable":false,"displayable":true,"identifier":"ComputersDesktopsBrand","facetable":false,"searchable":false}],"storeID":"715837934","cm_seo_token_ntk":"715837934_gaming-computer","partNumber":"CDE021_2103"},{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676697","3074457345616676719_3074457345616676697","3074457345616676768_3074457345616676697"],"price_USD":"750.0","singleSKUCatalogEntryID":"3074457345616679330","uniqueID":"3074457345616679329","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679329","price":[{"description":"L","value":"800.0","usage":"Display","currency":"USD"},{"description":"O","value":"","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/200x310\/cla022_2202.jpg","seo_token_ntk":"bedroom-laptop","shortDescription":"A
+      powerful laptop capable of everyday use.","manufacturer":"Adelee Plus","name":"Bedroom Laptop","buyable":"true","attributes":[{"storeDisplay":false,"values":[{"sequence":"2.00000","value":"4 GB","uniqueID":"7741124012283334922","unitID":"","unitOfMeasure":"","identifier":"CLA022_2202"}],"sequence":".00000","name":"Memory","uniqueID":"7741124012283333417","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Memory","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":".00000","name":"Memory","uniqueID":"7741124012283333421","usage":"Defining","comparable":true,"displayable":true,"identifier":"ComputersLaptopsMemory","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":"1.00000","name":"Brand","uniqueID":"7741124012283333419","usage":"Defining","comparable":false,"displayable":true,"identifier":"ComputersLaptopsBrand","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"2.00000","value":"2
+      lb","uniqueID":"7741124012283334933","unitID":"","unitOfMeasure":"","identifier":"CLA022_2202"}],"sequence":"2.00000","name":"Weight","uniqueID":"7741124012283333424","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Weight","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":"2.00000","name":"Weight","uniqueID":"7741124012283333422","usage":"Defining","comparable":true,"displayable":true,"identifier":"ComputersLaptopsWeight","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"2.00000","value":"3
+      hours","uniqueID":"7741124012283334927","unitID":"","unitOfMeasure":"","identifier":"CLA022_2202"}],"sequence":"3.00000","name":"Battery Life","uniqueID":"7741124012283333423","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Battery
+      Life","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":"3.00000","name":"Battery Life","uniqueID":"7741124012283333420","usage":"Defining","comparable":true,"displayable":true,"identifier":"ComputersLaptopsBattery
+      Life","facetable":false,"searchable":false}],"storeID":"715837934","cm_seo_token_ntk":"715837934_bedroom-laptop","partNumber":"CLA022_2202"},{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676697","3074457345616676719_3074457345616676697","3074457345616676768_3074457345616676697"],"price_USD":"400.0","singleSKUCatalogEntryID":"3074457345616679338","uniqueID":"3074457345616679337","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679337","price":[{"description":"L","value":"400.0","usage":"Display","currency":"USD"},{"description":"O","value":"","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/200x310\/cla022_2206.jpg","seo_token_ntk":"budget-laptop","shortDescription":"An
+      overall decent laptop for casual use.","manufacturer":"Adelee Plus","name":"Budget Laptop","buyable":"true","attributes":[{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"2 GB","uniqueID":"7741124012283334921","unitID":"","unitOfMeasure":"","identifier":"CLA022_2206"}],"sequence":".00000","name":"Memory","uniqueID":"7741124012283333417","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Memory","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":".00000","name":"Memory","uniqueID":"7741124012283333421","usage":"Defining","comparable":true,"displayable":true,"identifier":"ComputersLaptopsMemory","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":"1.00000","name":"Brand","uniqueID":"7741124012283333419","usage":"Defining","comparable":false,"displayable":true,"identifier":"ComputersLaptopsBrand","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"2.00000","value":"2
+      lb","uniqueID":"7741124012283334934","unitID":"","unitOfMeasure":"","identifier":"CLA022_2206"}],"sequence":"2.00000","name":"Weight","uniqueID":"7741124012283333424","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Weight","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":"2.00000","name":"Weight","uniqueID":"7741124012283333422","usage":"Defining","comparable":true,"displayable":true,"identifier":"ComputersLaptopsWeight","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"2
+      hours","uniqueID":"7741124012283334926","unitID":"","unitOfMeasure":"","identifier":"CLA022_2206"}],"sequence":"3.00000","name":"Battery Life","uniqueID":"7741124012283333423","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Battery
+      Life","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":"3.00000","name":"Battery Life","uniqueID":"7741124012283333420","usage":"Defining","comparable":true,"displayable":true,"identifier":"ComputersLaptopsBattery
+      Life","facetable":false,"searchable":false}],"storeID":"715837934","cm_seo_token_ntk":"715837934_budget-laptop","partNumber":"CLA022_2206"},{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676696","3074457345616676719_3074457345616676696","3074457345616676768_3074457345616676696"],"price_USD":"475.0","singleSKUCatalogEntryID":"3074457345616679344","uniqueID":"3074457345616679343","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679343","price":[{"description":"L","value":"500.0","usage":"Display","currency":"USD"},{"description":"O","value":"","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cta023_tablets\/200x310\/cta023_2303.jpg","seo_token_ntk":"portable-tablet","shortDescription":"A
+      lightweight and portable tablet with excellent battery life.","manufacturer":"Adelee Plus","name":"Portable Tablet","buyable":"true","attributes":[{"storeDisplay":false,"values":[{"sequence":"2.00000","value":"4\"","uniqueID":"7741124012283334954","unitID":"","unitOfMeasure":"","identifier":"CTA023_2303"}],"sequence":".00000","name":"Size","uniqueID":"7741124012283333348","usage":"Descriptive","comparable":true,"displayable":true,"identifier":"Size","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":".00000","name":"Size","uniqueID":"7741124012283333425","usage":"Defining","comparable":true,"displayable":true,"identifier":"ComputersTabletsSize","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":"1.00000","name":"Brand","uniqueID":"7741124012283333427","usage":"Defining","comparable":false,"displayable":true,"identifier":"ComputersTabletsBrand","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"3.00000","value":"32
+      GB","uniqueID":"7741124012283334967","unitID":"","unitOfMeasure":"","identifier":"CTA023_2303"}],"sequence":"2.00000","name":"Storage","uniqueID":"7741124012283333429","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Storage","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":"2.00000","name":"Storage","uniqueID":"7741124012283333428","usage":"Defining","comparable":true,"displayable":true,"identifier":"ComputersTabletsStorage","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"3.00000","value":"24
+      hours","uniqueID":"7741124012283334962","unitID":"","unitOfMeasure":"","identifier":"CTA023_2303"}],"sequence":"3.00000","name":"Battery Life","uniqueID":"7741124012283333423","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Battery
+      Life","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":"3.00000","name":"Battery Life","uniqueID":"7741124012283333426","usage":"Defining","comparable":true,"displayable":true,"identifier":"ComputersTabletsBattery
+      Life","facetable":false,"searchable":false}],"storeID":"715837934","cm_seo_token_ntk":"715837934_portable-tablet","partNumber":"CTA023_2303"},{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676696","3074457345616676719_3074457345616676696","3074457345616676768_3074457345616676696"],"price_USD":"300.0","singleSKUCatalogEntryID":"3074457345616679346","uniqueID":"3074457345616679345","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679345","price":[{"description":"L","value":"300.0","usage":"Display","currency":"USD"},{"description":"O","value":"","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cta023_tablets\/200x310\/cta023_2304.jpg","seo_token_ntk":"budget-tablet","shortDescription":"An
+      overall decent tablet for casual use.","manufacturer":"Adelee Plus","name":"Budget Tablet","buyable":"true","attributes":[{"storeDisplay":false,"values":[{"sequence":"3.00000","value":"5\"","uniqueID":"7741124012283334955","unitID":"","unitOfMeasure":"","identifier":"CTA023_2304"}],"sequence":".00000","name":"Size","uniqueID":"7741124012283333348","usage":"Descriptive","comparable":true,"displayable":true,"identifier":"Size","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":".00000","name":"Size","uniqueID":"7741124012283333425","usage":"Defining","comparable":true,"displayable":true,"identifier":"ComputersTabletsSize","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":"1.00000","name":"Brand","uniqueID":"7741124012283333427","usage":"Defining","comparable":false,"displayable":true,"identifier":"ComputersTabletsBrand","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"2.00000","value":"8
+      GB","uniqueID":"7741124012283334966","unitID":"","unitOfMeasure":"","identifier":"CTA023_2304"}],"sequence":"2.00000","name":"Storage","uniqueID":"7741124012283333429","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Storage","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":"2.00000","name":"Storage","uniqueID":"7741124012283333428","usage":"Defining","comparable":true,"displayable":true,"identifier":"ComputersTabletsStorage","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"4.00000","value":"4
+      hours","uniqueID":"7741124012283334963","unitID":"","unitOfMeasure":"","identifier":"CTA023_2304"}],"sequence":"3.00000","name":"Battery Life","uniqueID":"7741124012283333423","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Battery
+      Life","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":"3.00000","name":"Battery Life","uniqueID":"7741124012283333426","usage":"Defining","comparable":true,"displayable":true,"identifier":"ComputersTabletsBattery
+      Life","facetable":false,"searchable":false}],"storeID":"715837934","cm_seo_token_ntk":"715837934_budget-tablet","partNumber":"CTA023_2304"}],"recordSetComplete":"true","recordSetStartNumber":0,"recordSetTotalMatches":7,"breadCrumbTrailEntryViewExtended":[{"0":{"type_":"FACET_ENTRY_CATEGORY","value":"3074457345616676694","label":"Electronics"}}],"metaData":{"price":"2"},"resourceName":"productview","breadCrumbTrailEntryView":[{"type_":"FACET_ENTRY_CATEGORY","value":"3074457345616676694","label":"Electronics"}]}'
+- recorded: 2018-01-15T15:16:45.089Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/productview/bySearchTerm/*?profileName=CoreMedia_findProductsBySearchTerm&categoryId=3074457345616676694&currency=USD&facet=price_USD:(%7B200%20300%7D%20300)&langId=-1&pageNumber=1&pageSize=1&searchType=2
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_144)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Mon, 15 Jan 2018 15:16:45 GMT
+      Expires: Mon, 15 Jan 2018 16:16:45 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":2,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/bySearchTerm\/*?profileName=CoreMedia_findProductsBySearchTerm&categoryId=3074457345616676694&currency=USD&facet=price_USD:(%7B200%20300%7D%20300)&langId=-1&pageNumber=1&pageSize=1&searchType=2","recordSetCount":1,"facetView":[{"entry":[{"extendedData":{"uniqueId":"1121141059910195858368584012342324948481253249484841"},"count":0,"value":"price_USD%3A%28%7B*+100%7D+100%29","label":"({*
+      100} 100)"},{"extendedData":{"uniqueId":"11211410599101958583685840123494848325048481253250484841"},"count":0,"value":"price_USD%3A%28%7B100+200%7D+200%29","label":"({100 200} 200)"},{"extendedData":{"uniqueId":"11211410599101958583685840123504848325148481253251484841"},"count":2,"value":"price_USD%3A%28%7B200+300%7D+300%29","label":"({200
+      300} 300)"},{"extendedData":{"uniqueId":"11211410599101958583685840123514848325248481253252484841"},"count":0,"value":"price_USD%3A%28%7B300+400%7D+400%29","label":"({300 400} 400)"},{"extendedData":{"uniqueId":"11211410599101958583685840123524848325348481253253484841"},"count":0,"value":"price_USD%3A%28%7B400+500%7D+500%29","label":"({400
+      500} 500)"},{"extendedData":{"uniqueId":"11211410599101958583685840123534848324212541"},"count":0,"value":"price_USD%3A%28%7B500+*%7D%29","label":"({500 *})"}],"name":"OfferPrice_USD","value":"price_USD"},{"extendedData":{"displaySequence":"0.0","srchattridentifier":"_cat.ParentCatalogGroup","group_id":"0","allValuesReturned":true,"max_display":"20","maximumValuesToDisplay":"20","propertyvalue":"parentCatgroup_id_search","zero_display":"0","storeent_id":"0","displayable":"1","srchattr_id":"-1013","selection":"0","facet_id":"-1001","groupId":"0","sortorder":"0","fdesc":"The
+      category","propertyname":"facet","keyword_search":"1","fname":"Category","allowMultipleValueSelection":"false"},"name":"ParentCatalogGroup","entry":[{"extendedData":{"parentIds":"3074457345616676694","uniqueId":"3074457345616676696"},"count":"1","value":"3074457345616676696","label":"Tablets"},{"extendedData":{"parentIds":"3074457345616676694","uniqueId":"3074457345616676699"},"count":"1","value":"3074457345616676699","label":"Components"}],"value":"parentCatgroup_id_search"},{"extendedData":{"displaySequence":"0.0","srchattridentifier":"_cat.ManufacturerName","group_id":"0","allValuesReturned":true,"max_display":"20","maximumValuesToDisplay":"20","propertyvalue":"mfName_ntk_cs","zero_display":"0","storeent_id":"0","displayable":"1","srchattr_id":"-1002","selection":"0","facet_id":"-1000","groupId":"0","sortorder":"0","fdesc":"The
+      manufacturer","propertyname":"facet","keyword_search":"1","fname":"Brand","allowMultipleValueSelection":"false"},"name":"ManufacturerName","entry":[{"extendedData":{"uniqueId":"-1002651001011081011013280108117115"},"count":"1","value":"mfName_ntk_cs%3A%22Adelee+Plus%22","label":"Adelee
+      Plus"},{"extendedData":{"uniqueId":"-100268868232841019910411010599115"},"count":"1","value":"mfName_ntk_cs%3A%22DVR+Technics%22","label":"DVR Technics"}],"value":"mfName_ntk_cs"}],"catalogEntryView":[{"hasSingleSKU":false,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676699","3074457345616676719_3074457345616676699","3074457345616676768_3074457345616676699"],"price_USD":"229.65","uniqueID":"3074457345616679312","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679312","price":[{"description":"L","value":"229.65","usage":"Display","currency":"USD"},{"description":"O","value":"","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/ccm039_components\/200x310\/ccm039_3905.jpg","seo_token_ntk":"video-card","shortDescription":"Improve
+      the performance of your videos and games with a powerful video card.","manufacturer":"DVR Technics","name":"Video Card","buyable":"true","attributes":[{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":".00000","name":"VRAM","uniqueID":"7741124012283333406","usage":"Defining","comparable":false,"displayable":true,"identifier":"ComputersComponentsVRAM","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"1
+      GB, 3 GB","uniqueID":"7741124012283334888","unitID":"","unitOfMeasure":"","identifier":"CCM039_3905"}],"sequence":"1.00000","name":"VRAM","uniqueID":"7741124012283333413","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"VRAM","facetable":false,"searchable":false}],"storeID":"715837934","cm_seo_token_ntk":"715837934_video-card","partNumber":"CCM039_3905"}],"recordSetComplete":"false","recordSetStartNumber":0,"recordSetTotalMatches":2,"breadCrumbTrailEntryViewExtended":[{"0":{"type_":"FACET_ENTRY_CATEGORY","value":"3074457345616676694","label":"Electronics"}}],"metaData":{"price":"2"},"resourceName":"productview","breadCrumbTrailEntryView":[{"type_":"FACET_ENTRY_CATEGORY","value":"3074457345616676694","label":"Electronics"}]}'

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:customize="http://www.coremedia.com/2007/coremedia-spring-beans-customization"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.coremedia.com/2007/coremedia-spring-beans-customization
+                           http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+  <context:annotation-config/>
+
+  <bean id="sfccCaeConfiguration" class="com.coremedia.livecontext.ecommerce.sfcc.cae.SfccCaeConfiguration"/>
+
+  <!-- CORS whitelist -->
+  <!-- List of all the origins that are allowed to receive cross origin AJAX requests. -->
+  <!-- Entries must have the form http://my.host.something and be comma separated -->
+  <customize:append id="liveContextSfccCaeCorsConfiguration" bean="caeCorsConfiguration" property="allowedOrigins"
+                    custom-value="http://${livecontext.apache.sfcc.host},https://${livecontext.apache.sfcc.host},http://${livecontext.sfcc.host},https://${livecontext.sfcc.host}"/>
+
+  <customize:prepend id="sfccLinkResolverCustomizer" bean="liveContextLinkResolvers">
+    <list>
+      <ref bean="sfccLinkResolver"/>
+    </list>
+  </customize:prepend>
+
+</beans>

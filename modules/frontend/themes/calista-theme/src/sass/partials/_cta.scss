@@ -1,0 +1,39 @@
+.cm-cta-button {
+  position: relative;
+  white-space: normal; //overwrite bootstraps nowrap for CTAs with long text
+  outline: none !important; //remove bootstrap's blue shadow
+  text-decoration: none;
+  background-color: rgba(255, 255, 255, 0.75);
+  border: 1px solid #000000;
+  border-radius: 0;
+  // quick-fix for CMS-9915
+  pointer-events: auto;
+  text-transform: uppercase;
+  padding: 14px 21px;
+  transition: all 0.1s ease;
+
+  &:after {
+    position: absolute;
+    content: " ";
+    border-bottom: 1px solid #000;
+    bottom: 16px;
+    left: 21px;
+    right: 21px;
+    transition: all 0.1s ease;
+  }
+
+  &:hover {
+    text-decoration: none;
+    background-color: rgba(255, 255, 255, 1);
+
+    &:after {
+      bottom: 14px;
+    }
+  }
+
+  &:active, &:focus {
+    text-decoration: none;
+    background-color: rgba(255, 255, 255, 1);
+    box-shadow: inset 0 0 0 1px $btn-primary-color, inset 0 0 0 2px $btn-primary-bg;
+  }
+}

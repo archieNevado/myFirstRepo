@@ -1,0 +1,556 @@
+!tape
+name: csiwc_testCategoryIsCached2
+interactions:
+- recorded: 2017-01-27T12:17:29.425Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Fri, 27 Jan 2017 12:17:29 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000ZmtcFwKsYHd9nwD8oC9VD7K:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
+      X-Powered-By: Servlet/3.0
+    body: '{"serverTimezoneId":"Europe\/Berlin","wcsVersion":"8.0","stores":{"AuroraB2BESite":{"defaultCatalog":"Extended Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites
+      Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838085","defaultCatalogId":"3074457345616676718"},"AuroraB2BStorefrontAssetStore":{"defaultCatalog":"Extended Sites Catalog
+      Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838034","defaultCatalogId":"3074457345616676668"},"AuroraStorefrontAssetStore":{"defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837984","defaultCatalogId":"3074457345616676668"},"Extended
+      Sites Hub":{"defaultCatalog":"","catalogs":{},"storeId":"715837884","defaultCatalogId":null},"Extended Sites Catalog Asset Store":{"defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended
+      Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837934","defaultCatalogId":"3074457345616676668"},"AuroraESite":{"defaultCatalog":"Extended Sites Catalog Asset Store
+      Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838084","defaultCatalogId":"3074457345616676719"}}}'
+- recorded: 2017-01-27T12:17:29.464Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/categoryview/Fruit?catalogId=3074457345616676719&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Fri, 27 Jan 2017 12:17:29 GMT
+      Expires: Fri, 27 Jan 2017 13:17:29 GMT
+      Set-Cookie: JSESSIONID=0000Waz2bjVWGnsCHp0FklHKqbS:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":"1","CatalogGroupView":[{"parentCatalogGroupID":["3074457345616676700"],"metaDescription":"Fruit","uniqueID":"3074457345616676702","xcatgroup_seoSegment":"fruit-3074457345616676702--1","fullImage":"images\/catalog\/grocery\/category\/catr_gfr_fruit.png","resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676702","title":"Fruit
+      | AuroraESite","productsURL":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676702","thumbnail":"images\/catalog\/grocery\/category\/catr_gfr_fruit.png","shortDescription":"Fruit","name":"Fruit","metaKeyword":"Fruit","fullImageAltDescription":"Image
+      for Fruit from AuroraESite","identifier":"Fruit"}],"resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/Fruit?catalogId=3074457345616676719&langId=-1","recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","recordSetStartNumber":"0","resourceName":"categoryview"}'
+- recorded: 2017-01-27T12:17:29.496Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/categoryview/byId/3074457345616676702?catalogId=3074457345616676719&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Fri, 27 Jan 2017 12:17:29 GMT
+      Expires: Fri, 27 Jan 2017 13:17:29 GMT
+      Set-Cookie: JSESSIONID=0000sFJwkUUrmguKSRvxo-_BYgK:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":"1","CatalogGroupView":[{"parentCatalogGroupID":["3074457345616676700"],"metaDescription":"Fruit","uniqueID":"3074457345616676702","xcatgroup_seoSegment":"fruit-3074457345616676702--1","fullImage":"images\/catalog\/grocery\/category\/catr_gfr_fruit.png","resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676702","title":"Fruit
+      | AuroraESite","productsURL":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676702","thumbnail":"images\/catalog\/grocery\/category\/catr_gfr_fruit.png","shortDescription":"Fruit","name":"Fruit","metaKeyword":"Fruit","fullImageAltDescription":"Image
+      for Fruit from AuroraESite","identifier":"Fruit"}],"resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676702?catalogId=3074457345616676719&langId=-1","recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","recordSetStartNumber":"0","resourceName":"categoryview"}'
+- recorded: 2017-01-27T12:17:29.507Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Fri, 27 Jan 2017 12:17:29 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000OYq1ZYtxXrrNJoRBcup9r6q:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
+      X-Powered-By: Servlet/3.0
+    body: '{"ro":"-21","zh":"-8","pt_BR":"-6","pl_PL":"-22","en_US":"-1","ja_JP":"-10","ru_RU":"-20","zh_CN":"-7","ro_RO":"-21","de":"-3","zh_TW":"-8","fr":"-2","es_ES":"-5","it":"-4","ko_KR":"-9","ko":"-9","it_IT":"-4","de_DE":"-3","ar":"-23","ar_EG":"-23","fr_FR":"-2","pl":"-22","pt":"-6","en":"-1","ru":"-20","es":"-5","ja":"-10"}'
+- recorded: 2017-01-27T12:17:29.532Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/categoryview/byId/3074457345616676700?catalogId=3074457345616676719&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Fri, 27 Jan 2017 12:17:29 GMT
+      Expires: Fri, 27 Jan 2017 13:17:29 GMT
+      Set-Cookie: JSESSIONID=0000g5Tc3mcEZ0DrfLz4oL_DDON:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":"1","CatalogGroupView":[{"resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676700","title":"Grocery | AuroraESite","thumbnail":"images\/catalog\/grocery\/category\/catr_gda_dairy.png","productsURL":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676700","shortDescription":"Grocery","name":"Grocery","metaDescription":"Grocery","uniqueID":"3074457345616676700","metaKeyword":"Grocery","fullImageAltDescription":"Image
+      for Grocery from AuroraESite","xcatgroup_seoSegment":"grocery","identifier":"Grocery","fullImage":"images\/catalog\/grocery\/category\/catr_gda_dairy.png"}],"resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/categoryview\/byId\/3074457345616676700?catalogId=3074457345616676719&langId=-1","recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","recordSetStartNumber":"0","resourceName":"categoryview"}'
+- recorded: 2017-01-27T12:17:29.570Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/productview/byCategory/3074457345616676702?catalogId=3074457345616676719&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Fri, 27 Jan 2017 12:17:29 GMT
+      Expires: Fri, 27 Jan 2017 13:17:29 GMT
+      Set-Cookie: JSESSIONID=0000FaOkOsdqKlVI2SK2kKNDjX_:-1; HTTPOnly; Path=/; Domain=.toko-cms-01.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":"11","resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byCategory\/3074457345616676702?catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":"11","MetaData":[{"metaKey":"price","metaData":"1"}],"recordSetComplete":"true","CatalogEntryView":[{"uniqueID":"3074457345616679369","parentCategoryID":"3074457345616676702","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3301.jpg","productType":"ProductBean","resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679369","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3301.jpg","shortDescription":"Sun
+      drenched oranges.","name":"Oranges","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"1.6"}],"buyable":"true","longDescription":"High in vitamin C and bursting with flavor. Great as a snack or fresh squeezed into juice. Part of a complete
+      and balanced breakfast.","xcatentry_seoSegment":"oranges-gfr033-3301--1","storeID":"715837934","partNumber":"GFR033_3301"},{"uniqueID":"3074457345616679371","parentCategoryID":"3074457345616676702","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3302.jpg","productType":"ProductBean","resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679371","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3302.jpg","shortDescription":"Rocky
+      mountain blackberries.","name":"Blackberries","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"3.49"}],"buyable":"true","longDescription":"Sweet with just a bit of tartness, blackberries are perfect on their own or with ice cream. Part
+      of a complete and balanced breakfast. Blackberries are also perfect for making jam.","xcatentry_seoSegment":"blackberries","storeID":"715837934","partNumber":"GFR033_3302"},{"uniqueID":"3074457345616679373","parentCategoryID":"3074457345616676702","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3303.jpg","productType":"ProductBean","resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679373","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3303.jpg","shortDescription":"Succulent
+      sweet mangoes.","name":"Mangoes","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"3.29"}],"buyable":"true","longDescription":"Mangoes are a delicious tropical delight. Rich in vitamins, antioxidants and minerals. Imported daily fresh
+      from Peru.","xcatentry_seoSegment":"mangoes","storeID":"715837934","partNumber":"GFR033_3303"},{"uniqueID":"3074457345616679375","parentCategoryID":"3074457345616676702","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3304.jpg","productType":"ProductBean","resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679375","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3304.jpg","shortDescription":"Juicy
+      and sweet pears.","name":"Pears","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"2.29"}],"buyable":"true","longDescription":"Pears have a soft buttery yet slightly grainy texture. Related to the quince fruit but easier to eat raw. A
+      delicious alternative to the every day apple.","xcatentry_seoSegment":"pears","storeID":"715837934","partNumber":"GFR033_3304"},{"uniqueID":"3074457345616679377","parentCategoryID":"3074457345616676702","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3305.jpg","productType":"ProductBean","resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679377","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3305.jpg","shortDescription":"Seedless
+      California grapes","name":"Seedless Grapes","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"3.29"}],"buyable":"true","longDescription":"Grapes were once considered a luxury treat. Bursting with flavor, grapes are a refreshing snack.
+      Great in a bowl with yogourt and granola.","xcatentry_seoSegment":"seedless-grapes","storeID":"715837934","partNumber":"GFR033_3305"},{"uniqueID":"3074457345616679379","parentCategoryID":"3074457345616676702","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3306.jpg","productType":"ProductBean","resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679379","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3306.jpg","shortDescription":"Field
+      fresh peaches.","name":"Peaches","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"2.79"}],"buyable":"true","longDescription":"Sweet and juicy with a pit in the middle. Enjoy the taste of summer in fresh peaches. Part of a complete and
+      balanced breakfast.","xcatentry_seoSegment":"peaches","storeID":"715837934","partNumber":"GFR033_3306"},{"uniqueID":"3074457345616679381","parentCategoryID":"3074457345616676702","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3307.jpg","productType":"ProductBean","resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679381","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3307.jpg","shortDescription":"Seedless
+      California Concord grapes.","name":"Concord Grapes","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"3.99"}],"buyable":"true","longDescription":"Fuller in flavor than green grapes. Seedless grapes are the perfect guilt free snack. Bet
+      you can''t eat just one!","xcatentry_seoSegment":"concord-grapes","storeID":"715837934","partNumber":"GFR033_3307"},{"uniqueID":"3074457345616679383","parentCategoryID":"3074457345616676702","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3308.jpg","productType":"ProductBean","resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679383","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3308.jpg","shortDescription":"Plump
+      and juicy strawberries","name":"Strawberries","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"2.49"}],"buyable":"true","longDescription":"Plump and bursting with flavour. Strawberries are great eaten fresh, on ice cream or dipped in
+      chocolate. Great for making jam to store for the winter months.","xcatentry_seoSegment":"strawberries","storeID":"715837934","partNumber":"GFR033_3308"},{"uniqueID":"3074457345616679385","parentCategoryID":"3074457345616676702","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3309.jpg","productType":"ProductBean","resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679385","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3309.jpg","shortDescription":"The
+      most popular red apple.","name":"Red Delicious Apples","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"1.29"}],"buyable":"true","longDescription":"Red Delicious apples are perfect for eating fresh, in salads, or for juicing. For more
+      fun, try dipping apples in hot caramel. As a game, fill a tub with water and play bobbing for apples.","xcatentry_seoSegment":"red-delicious-apples","storeID":"715837934","partNumber":"GFR033_3309"},{"uniqueID":"3074457345616679387","parentCategoryID":"3074457345616676702","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3310.jpg","productType":"ProductBean","resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679387","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3310.jpg","shortDescription":"Perfect
+      pie or sauce making apples.","name":"Crispin Apples","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"1.49"}],"buyable":"true","longDescription":"Cross between the Golden Delicious and the Japanese Indo. Firm, pleasing texture with just
+      the right amount of tartness. Crispin apples keep their shape and texture in baking, making them perfect for pies.","xcatentry_seoSegment":"crispin-apples","storeID":"715837934","partNumber":"GFR033_3310"},{"uniqueID":"3074457345616679389","parentCategoryID":"3074457345616676702","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3311.jpg","productType":"ProductBean","resourceId":"http:\/\/toko-wcs-01.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/productview\/byId\/3074457345616679389","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3311.jpg","shortDescription":"Fresh
+      and ripe bananas.","name":"Bananas","Price":[{"priceUsage":"Offer","priceDescription":"I","priceValue":"0.79"}],"buyable":"true","longDescription":"Bananas are high in vitamin B6, vitamin C and potassium. They are the perfect on the go snack and a healthy
+      alternative to a chocolate bar. As an indulgence, make a banasplit with ice cream, whipped cream and chocolate syrup.","xcatentry_seoSegment":"bananas-gfr033-3311--1","storeID":"715837934","partNumber":"GFR033_3311"}],"recordSetStartNumber":"0","FacetView":[{"Entry":[{"count":"11","label":"({*
+      100} 100)","entryValue":"price_USD%3A%28%7B*+100%7D+100%29"},{"count":"0","label":"({100 200} 200)","entryValue":"price_USD%3A%28%7B100+200%7D+200%29"},{"count":"0","label":"({200 300} 300)","entryValue":"price_USD%3A%28%7B200+300%7D+300%29"},{"count":"0","label":"({300
+      400} 400)","entryValue":"price_USD%3A%28%7B300+400%7D+400%29"},{"count":"0","label":"({400 500} 500)","entryValue":"price_USD%3A%28%7B400+500%7D+500%29"},{"count":"0","label":"({500 *})","entryValue":"price_USD%3A%28%7B500+*%7D%29"}],"name":"OfferPrice_USD","value":"price_USD"},{"Entry":[{"count":"3","label":"California
+      Sun","entryValue":"mfName_ntk_cs%3A%22California+Sun%22"},{"count":"3","label":"Oxford Orchards","entryValue":"mfName_ntk_cs%3A%22Oxford+Orchards%22"},{"count":"3","label":"Sunshine","entryValue":"mfName_ntk_cs%3A%22Sunshine%22"},{"count":"2","label":"Winston
+      Organics","entryValue":"mfName_ntk_cs%3A%22Winston+Organics%22"}],"name":"ManufacturerName","value":"mfName_ntk_cs"}],"BreadCrumbTrailEntryView":[{"value":"3074457345616676700","label":"Grocery","type":"FACET_ENTRY_CATEGORY"},{"value":"3074457345616676702","label":"Fruit","type":"FACET_ENTRY_CATEGORY"}],"resourceName":"productview"}'
+- recorded: 2017-02-07T18:47:11.699Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/categoryview/%2520?categoryIdentifier=Fruit&profileName=CoreMedia_findCategoryByIdentifier&catalogId=3074457345616676719&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 07 Feb 2017 18:47:11 GMT
+      Expires: Tue, 07 Feb 2017 19:47:11 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/%2520?categoryIdentifier=Fruit&profileName=CoreMedia_findCategoryByIdentifier&catalogId=3074457345616676719&langId=-1","recordSetCount":1,"recordSetComplete":"true","recordSetStartNumber":0,"resourceName":"categoryview","catalogGroupView":[{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676702","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/category\/catr_gfr_fruit.png","seo_token_ntk":"fruit-3074457345616676702--1","shortDescription":"Fruit","parentCatalogGroupID":["3074457345616676668_3074457345616676700","3074457345616676719_3074457345616676700"],"name":"Fruit","uniqueID":"3074457345616676702","storeID":"715837934","cm_seo_token_ntk":"715837934_fruit-3074457345616676702--1","identifier":"Fruit","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/category\/catr_gfr_fruit.png"}]}'
+- recorded: 2017-02-07T18:47:11.714Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/categoryview/byId/3074457345616676702?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=3074457345616676719&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 07 Feb 2017 18:47:11 GMT
+      Expires: Tue, 07 Feb 2017 19:47:11 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676702?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=3074457345616676719&langId=-1","recordSetCount":1,"recordSetComplete":"true","recordSetStartNumber":0,"resourceName":"categoryview","catalogGroupView":[{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676702","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/category\/catr_gfr_fruit.png","seo_token_ntk":"fruit-3074457345616676702--1","shortDescription":"Fruit","parentCatalogGroupID":["3074457345616676668_3074457345616676700","3074457345616676719_3074457345616676700"],"name":"Fruit","uniqueID":"3074457345616676702","storeID":"715837934","cm_seo_token_ntk":"715837934_fruit-3074457345616676702--1","identifier":"Fruit","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/category\/catr_gfr_fruit.png"}]}'
+- recorded: 2017-02-07T18:47:11.729Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/categoryview/byId/3074457345616676700?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=3074457345616676719&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 07 Feb 2017 18:47:11 GMT
+      Expires: Tue, 07 Feb 2017 19:47:11 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676700?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=3074457345616676719&langId=-1","recordSetCount":1,"recordSetComplete":"true","recordSetStartNumber":0,"resourceName":"categoryview","catalogGroupView":[{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676700","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/category\/catr_gda_dairy.png","seo_token_ntk":"grocery","shortDescription":"Grocery","parentCatalogGroupID":["3074457345616676668_-1","3074457345616676719_-1"],"name":"Grocery","uniqueID":"3074457345616676700","childCatalogGroupID":["3074457345616676668_3074457345616676701","3074457345616676668_3074457345616676702","3074457345616676668_3074457345616676703","3074457345616676668_3074457345616676704","3074457345616676719_3074457345616676701","3074457345616676719_3074457345616676702","3074457345616676719_3074457345616676703","3074457345616676719_3074457345616676704"],"storeID":"715837934","cm_seo_token_ntk":"715837934_grocery","identifier":"Grocery","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/category\/catr_gda_dairy.png"}]}'
+- recorded: 2017-02-07T18:47:11.749Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/productview/byCategory/3074457345616676702?profileName=CoreMedia_findProductsByCategory&catalogId=3074457345616676719&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 07 Feb 2017 18:47:11 GMT
+      Expires: Tue, 07 Feb 2017 19:47:11 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":11,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byCategory\/3074457345616676702?profileName=CoreMedia_findProductsByCategory&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":11,"facetView":[{"entry":[{"extendedData":{"uniqueId":"1121141059910195858368584012342324948481253249484841"},"count":11,"value":"price_USD%3A%28%7B*+100%7D+100%29","label":"({*
+      100} 100)"},{"extendedData":{"uniqueId":"11211410599101958583685840123494848325048481253250484841"},"count":0,"value":"price_USD%3A%28%7B100+200%7D+200%29","label":"({100 200} 200)"},{"extendedData":{"uniqueId":"11211410599101958583685840123504848325148481253251484841"},"count":0,"value":"price_USD%3A%28%7B200+300%7D+300%29","label":"({200
+      300} 300)"},{"extendedData":{"uniqueId":"11211410599101958583685840123514848325248481253252484841"},"count":0,"value":"price_USD%3A%28%7B300+400%7D+400%29","label":"({300 400} 400)"},{"extendedData":{"uniqueId":"11211410599101958583685840123524848325348481253253484841"},"count":0,"value":"price_USD%3A%28%7B400+500%7D+500%29","label":"({400
+      500} 500)"},{"extendedData":{"uniqueId":"11211410599101958583685840123534848324212541"},"count":0,"value":"price_USD%3A%28%7B500+*%7D%29","label":"({500 *})"}],"name":"OfferPrice_USD","value":"price_USD"},{"extendedData":{"displaySequence":"0.0","srchattridentifier":"_cat.ManufacturerName","group_id":"0","allValuesReturned":true,"max_display":"20","maximumValuesToDisplay":"20","propertyvalue":"mfName_ntk_cs","zero_display":"0","storeent_id":"0","displayable":"1","srchattr_id":"-1002","selection":"0","facet_id":"-1000","groupId":"0","sortorder":"0","fdesc":"The
+      manufacturer","propertyname":"facet","keyword_search":"1","fname":"Brand","allowMultipleValueSelection":"false"},"name":"ManufacturerName","entry":[{"extendedData":{"uniqueId":"-10026797108105102111114110105973283117110"},"count":"3","value":"mfName_ntk_cs%3A%22California+Sun%22","label":"California
+      Sun"},{"extendedData":{"uniqueId":"-10027912010211111410032791149910497114100115"},"count":"3","value":"mfName_ntk_cs%3A%22Oxford+Orchards%22","label":"Oxford Orchards"},{"extendedData":{"uniqueId":"-100283117110115104105110101"},"count":"3","value":"mfName_ntk_cs%3A%22Sunshine%22","label":"Sunshine"},{"extendedData":{"uniqueId":"-10028710511011511611111032791141039711010599115"},"count":"2","value":"mfName_ntk_cs%3A%22Winston+Organics%22","label":"Winston
+      Organics"}],"value":"mfName_ntk_cs"}],"catalogEntryView":[{"hasSingleSKU":true,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679369","price":[{"description":"L","value":"","usage":"Display","currency":"USD"},{"value":""}],"catalogEntryTypeCode":"ProductBean","seo_token_ntk":"oranges-gfr033-3301--1","uniqueID":"3074457345616679369","singleSKUCatalogEntryID":"3074457345616679370","storeID":"715837934","cm_seo_token_ntk":"715837934_oranges-gfr033-3301--1","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3301.jpg","partNumber":"GFR033_3301"},{"hasSingleSKU":true,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679371","price":[{"description":"L","value":"","usage":"Display","currency":"USD"},{"value":""}],"catalogEntryTypeCode":"ProductBean","seo_token_ntk":"blackberries","uniqueID":"3074457345616679371","singleSKUCatalogEntryID":"3074457345616679372","storeID":"715837934","cm_seo_token_ntk":"715837934_blackberries","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3302.jpg","partNumber":"GFR033_3302"},{"hasSingleSKU":true,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679373","price":[{"description":"L","value":"","usage":"Display","currency":"USD"},{"value":""}],"catalogEntryTypeCode":"ProductBean","seo_token_ntk":"mangoes","uniqueID":"3074457345616679373","singleSKUCatalogEntryID":"3074457345616679374","storeID":"715837934","cm_seo_token_ntk":"715837934_mangoes","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3303.jpg","partNumber":"GFR033_3303"},{"hasSingleSKU":true,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679375","price":[{"description":"L","value":"","usage":"Display","currency":"USD"},{"value":""}],"catalogEntryTypeCode":"ProductBean","seo_token_ntk":"pears","uniqueID":"3074457345616679375","singleSKUCatalogEntryID":"3074457345616679376","storeID":"715837934","cm_seo_token_ntk":"715837934_pears","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3304.jpg","partNumber":"GFR033_3304"},{"hasSingleSKU":true,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679377","price":[{"description":"L","value":"","usage":"Display","currency":"USD"},{"value":""}],"catalogEntryTypeCode":"ProductBean","seo_token_ntk":"seedless-grapes","uniqueID":"3074457345616679377","singleSKUCatalogEntryID":"3074457345616679378","storeID":"715837934","cm_seo_token_ntk":"715837934_seedless-grapes","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3305.jpg","partNumber":"GFR033_3305"},{"hasSingleSKU":true,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679379","price":[{"description":"L","value":"","usage":"Display","currency":"USD"},{"value":""}],"catalogEntryTypeCode":"ProductBean","seo_token_ntk":"peaches","uniqueID":"3074457345616679379","singleSKUCatalogEntryID":"3074457345616679380","storeID":"715837934","cm_seo_token_ntk":"715837934_peaches","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3306.jpg","partNumber":"GFR033_3306"},{"hasSingleSKU":true,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679381","price":[{"description":"L","value":"","usage":"Display","currency":"USD"},{"value":""}],"catalogEntryTypeCode":"ProductBean","seo_token_ntk":"concord-grapes","uniqueID":"3074457345616679381","singleSKUCatalogEntryID":"3074457345616679382","storeID":"715837934","cm_seo_token_ntk":"715837934_concord-grapes","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3307.jpg","partNumber":"GFR033_3307"},{"hasSingleSKU":true,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679383","price":[{"description":"L","value":"","usage":"Display","currency":"USD"},{"value":""}],"catalogEntryTypeCode":"ProductBean","seo_token_ntk":"strawberries","uniqueID":"3074457345616679383","singleSKUCatalogEntryID":"3074457345616679384","storeID":"715837934","cm_seo_token_ntk":"715837934_strawberries","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3308.jpg","partNumber":"GFR033_3308"},{"hasSingleSKU":true,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679385","price":[{"description":"L","value":"","usage":"Display","currency":"USD"},{"value":""}],"catalogEntryTypeCode":"ProductBean","seo_token_ntk":"red-delicious-apples","uniqueID":"3074457345616679385","singleSKUCatalogEntryID":"3074457345616679386","storeID":"715837934","cm_seo_token_ntk":"715837934_red-delicious-apples","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3309.jpg","partNumber":"GFR033_3309"},{"hasSingleSKU":true,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679387","price":[{"description":"L","value":"","usage":"Display","currency":"USD"},{"value":""}],"catalogEntryTypeCode":"ProductBean","seo_token_ntk":"crispin-apples","uniqueID":"3074457345616679387","singleSKUCatalogEntryID":"3074457345616679388","storeID":"715837934","cm_seo_token_ntk":"715837934_crispin-apples","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3310.jpg","partNumber":"GFR033_3310"},{"hasSingleSKU":true,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679389","price":[{"description":"L","value":"","usage":"Display","currency":"USD"},{"value":""}],"catalogEntryTypeCode":"ProductBean","seo_token_ntk":"bananas-gfr033-3311--1","uniqueID":"3074457345616679389","singleSKUCatalogEntryID":"3074457345616679390","storeID":"715837934","cm_seo_token_ntk":"715837934_bananas-gfr033-3311--1","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3311.jpg","partNumber":"GFR033_3311"}],"recordSetComplete":"true","recordSetStartNumber":0,"recordSetTotalMatches":11,"breadCrumbTrailEntryViewExtended":[{"1":{"type_":"FACET_ENTRY_CATEGORY","value":"3074457345616676702","label":"Fruit"},"0":{"type_":"FACET_ENTRY_CATEGORY","value":"3074457345616676700","label":"Grocery"}}],"metaData":{"price":"1"},"resourceName":"productview","breadCrumbTrailEntryView":[{"type_":"FACET_ENTRY_CATEGORY","value":"3074457345616676700","label":"Grocery"},{"type_":"FACET_ENTRY_CATEGORY","value":"3074457345616676702","label":"Fruit"}]}'
+- recorded: 2017-02-07T18:47:11.774Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/productview/byId/3074457345616679369?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 07 Feb 2017 18:47:11 GMT
+      Expires: Tue, 07 Feb 2017 19:47:11 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679369?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":1,"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676702","3074457345616676719_3074457345616676702"],"uniqueID":"3074457345616679369","singleSKUCatalogEntryID":"3074457345616679370","sKUs":[{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679370","catalogEntryTypeCode":"ItemBean","name":"Oranges","uniqueID":"3074457345616679370","storeID":"715837934","partNumber":"GFR033_330101"}],"fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3301.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679369","price":[{"description":"L","value":"1.6","usage":"Display","currency":"USD"},{"description":"I","value":"1.6","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3301.jpg","seo_token_ntk":"oranges-gfr033-3301--1","shortDescription":"Sun
+      drenched oranges.","manufacturer":"Sunshine","name":"Oranges","buyable":"true","longDescription":"High in vitamin C and bursting with flavor. Great as a snack or fresh squeezed into juice. Part of a complete and balanced breakfast.","attributes":[{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"Large","uniqueID":"7741124012283335017","unitID":"","unitOfMeasure":"","identifier":"GFR033_3301"}],"sequence":".00000","associatedKeyword":"-","name":"Size","uniqueID":"7741124012283333348","usage":"Descriptive","comparable":true,"displayable":true,"identifier":"Size","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":".00000","associatedKeyword":"-","name":"Brand","uniqueID":"7741124012283333435","usage":"Defining","comparable":false,"displayable":true,"identifier":"FruitBrand","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":"1.00000","associatedKeyword":"-","name":"Type","uniqueID":"7741124012283333434","usage":"Defining","comparable":true,"displayable":true,"identifier":"FruitType","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"\/lb","uniqueID":"7741124012283335039","unitID":"","unitOfMeasure":"","identifier":"GFR033_3301"}],"sequence":"2.00000","associatedKeyword":"-","name":"Price","uniqueID":"7741124012283333436","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Price","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"Citrus","uniqueID":"7741124012283335050","unitID":"","unitOfMeasure":"","identifier":"GFR033_3301"}],"sequence":"3.00000","associatedKeyword":"-","name":"Type","uniqueID":"7741124012283333433","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Type","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"Fruit","uniqueID":"7741124012283335028","unitID":"","unitOfMeasure":"","identifier":"GFR033_3301"}],"sequence":"4.00000","associatedKeyword":"-","name":"Category","uniqueID":"7741124012283333432","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Category","facetable":false,"searchable":false}],"storeID":"715837934","cm_seo_token_ntk":"715837934_oranges-gfr033-3301--1","numberOfSKUs":1,"partNumber":"GFR033_3301"}],"recordSetComplete":"true","recordSetStartNumber":0,"recordSetTotalMatches":1,"metaData":{"price":"1"},"resourceName":"productview"}'
+- recorded: 2017-02-07T18:47:11.795Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/productview/byId/3074457345616679371?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 07 Feb 2017 18:47:11 GMT
+      Expires: Tue, 07 Feb 2017 19:47:11 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679371?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":1,"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676702","3074457345616676719_3074457345616676702"],"uniqueID":"3074457345616679371","singleSKUCatalogEntryID":"3074457345616679372","sKUs":[{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679372","catalogEntryTypeCode":"ItemBean","name":"Blackberries","uniqueID":"3074457345616679372","storeID":"715837934","partNumber":"GFR033_330201"}],"fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3302.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679371","price":[{"description":"L","value":"3.99","usage":"Display","currency":"USD"},{"description":"I","value":"3.49","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3302.jpg","seo_token_ntk":"blackberries","shortDescription":"Rocky
+      mountain blackberries.","manufacturer":"Sunshine","name":"Blackberries","buyable":"true","longDescription":"Sweet with just a bit of tartness, blackberries are perfect on their own or with ice cream. Part of a complete and balanced breakfast. Blackberries
+      are also perfect for making jam.","attributes":[{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"Large","uniqueID":"7741124012283335018","unitID":"","unitOfMeasure":"","identifier":"GFR033_3302"}],"sequence":".00000","associatedKeyword":"-","name":"Size","uniqueID":"7741124012283333348","usage":"Descriptive","comparable":true,"displayable":true,"identifier":"Size","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":".00000","associatedKeyword":"-","name":"Brand","uniqueID":"7741124012283333435","usage":"Defining","comparable":false,"displayable":true,"identifier":"FruitBrand","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":"1.00000","associatedKeyword":"-","name":"Type","uniqueID":"7741124012283333434","usage":"Defining","comparable":true,"displayable":true,"identifier":"FruitType","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"\/lb","uniqueID":"7741124012283335040","unitID":"","unitOfMeasure":"","identifier":"GFR033_3302"}],"sequence":"2.00000","associatedKeyword":"-","name":"Price","uniqueID":"7741124012283333436","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Price","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"2.00000","value":"Berries","uniqueID":"7741124012283335051","unitID":"","unitOfMeasure":"","identifier":"GFR033_3302"}],"sequence":"3.00000","associatedKeyword":"-","name":"Type","uniqueID":"7741124012283333433","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Type","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"Fruit","uniqueID":"7741124012283335029","unitID":"","unitOfMeasure":"","identifier":"GFR033_3302"}],"sequence":"4.00000","associatedKeyword":"-","name":"Category","uniqueID":"7741124012283333432","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Category","facetable":false,"searchable":false}],"storeID":"715837934","cm_seo_token_ntk":"715837934_blackberries","numberOfSKUs":1,"partNumber":"GFR033_3302"}],"recordSetComplete":"true","recordSetStartNumber":0,"recordSetTotalMatches":1,"metaData":{"price":"1"},"resourceName":"productview"}'
+- recorded: 2017-02-07T18:47:11.818Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/productview/byId/3074457345616679373?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 07 Feb 2017 18:47:11 GMT
+      Expires: Tue, 07 Feb 2017 19:47:11 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679373?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":1,"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676702","3074457345616676719_3074457345616676702"],"uniqueID":"3074457345616679373","singleSKUCatalogEntryID":"3074457345616679374","sKUs":[{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679374","catalogEntryTypeCode":"ItemBean","name":"Mangoes","uniqueID":"3074457345616679374","storeID":"715837934","partNumber":"GFR033_330301"}],"fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3303.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679373","price":[{"description":"L","value":"3.29","usage":"Display","currency":"USD"},{"description":"I","value":"3.29","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3303.jpg","seo_token_ntk":"mangoes","shortDescription":"Succulent
+      sweet mangoes.","manufacturer":"Sunshine","name":"Mangoes","buyable":"true","longDescription":"Mangoes are a delicious tropical delight. Rich in vitamins, antioxidants and minerals. Imported daily fresh from Peru.","attributes":[{"storeDisplay":false,"values":[{"sequence":"2.00000","value":"Medium","uniqueID":"7741124012283335021","unitID":"","unitOfMeasure":"","identifier":"GFR033_3303"}],"sequence":".00000","associatedKeyword":"-","name":"Size","uniqueID":"7741124012283333348","usage":"Descriptive","comparable":true,"displayable":true,"identifier":"Size","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":".00000","associatedKeyword":"-","name":"Brand","uniqueID":"7741124012283333435","usage":"Defining","comparable":false,"displayable":true,"identifier":"FruitBrand","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":"1.00000","associatedKeyword":"-","name":"Type","uniqueID":"7741124012283333434","usage":"Defining","comparable":true,"displayable":true,"identifier":"FruitType","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"\/lb","uniqueID":"7741124012283335041","unitID":"","unitOfMeasure":"","identifier":"GFR033_3303"}],"sequence":"2.00000","associatedKeyword":"-","name":"Price","uniqueID":"7741124012283333436","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Price","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"3.00000","value":"Tropical","uniqueID":"7741124012283335053","unitID":"","unitOfMeasure":"","identifier":"GFR033_3303"}],"sequence":"3.00000","associatedKeyword":"-","name":"Type","uniqueID":"7741124012283333433","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Type","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"Fruit","uniqueID":"7741124012283335030","unitID":"","unitOfMeasure":"","identifier":"GFR033_3303"}],"sequence":"4.00000","associatedKeyword":"-","name":"Category","uniqueID":"7741124012283333432","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Category","facetable":false,"searchable":false}],"storeID":"715837934","cm_seo_token_ntk":"715837934_mangoes","numberOfSKUs":1,"partNumber":"GFR033_3303"}],"recordSetComplete":"true","recordSetStartNumber":0,"recordSetTotalMatches":1,"metaData":{"price":"1"},"resourceName":"productview"}'
+- recorded: 2017-02-07T18:47:11.838Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/productview/byId/3074457345616679375?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 07 Feb 2017 18:47:11 GMT
+      Expires: Tue, 07 Feb 2017 19:47:11 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679375?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":1,"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676702","3074457345616676719_3074457345616676702"],"uniqueID":"3074457345616679375","singleSKUCatalogEntryID":"3074457345616679376","sKUs":[{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679376","catalogEntryTypeCode":"ItemBean","name":"Pears","uniqueID":"3074457345616679376","storeID":"715837934","partNumber":"GFR033_330401"}],"fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3304.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679375","price":[{"description":"L","value":"2.29","usage":"Display","currency":"USD"},{"description":"I","value":"2.29","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3304.jpg","seo_token_ntk":"pears","shortDescription":"Juicy
+      and sweet pears.","manufacturer":"Oxford Orchards","name":"Pears","buyable":"true","longDescription":"Pears have a soft buttery yet slightly grainy texture. Related to the quince fruit but easier to eat raw. A delicious alternative to the every day apple.","attributes":[{"storeDisplay":false,"values":[{"sequence":"2.00000","value":"Medium","uniqueID":"7741124012283335022","unitID":"","unitOfMeasure":"","identifier":"GFR033_3304"}],"sequence":".00000","associatedKeyword":"-","name":"Size","uniqueID":"7741124012283333348","usage":"Descriptive","comparable":true,"displayable":true,"identifier":"Size","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":".00000","associatedKeyword":"-","name":"Brand","uniqueID":"7741124012283333435","usage":"Defining","comparable":false,"displayable":true,"identifier":"FruitBrand","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":"1.00000","associatedKeyword":"-","name":"Type","uniqueID":"7741124012283333434","usage":"Defining","comparable":true,"displayable":true,"identifier":"FruitType","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"\/lb","uniqueID":"7741124012283335042","unitID":"","unitOfMeasure":"","identifier":"GFR033_3304"}],"sequence":"2.00000","associatedKeyword":"-","name":"Price","uniqueID":"7741124012283333436","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Price","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"4.00000","value":"Pears","uniqueID":"7741124012283335055","unitID":"","unitOfMeasure":"","identifier":"GFR033_3304"}],"sequence":"3.00000","associatedKeyword":"-","name":"Type","uniqueID":"7741124012283333433","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Type","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"Fruit","uniqueID":"7741124012283335031","unitID":"","unitOfMeasure":"","identifier":"GFR033_3304"}],"sequence":"4.00000","associatedKeyword":"-","name":"Category","uniqueID":"7741124012283333432","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Category","facetable":false,"searchable":false}],"storeID":"715837934","cm_seo_token_ntk":"715837934_pears","numberOfSKUs":1,"partNumber":"GFR033_3304"}],"recordSetComplete":"true","recordSetStartNumber":0,"recordSetTotalMatches":1,"metaData":{"price":"1"},"resourceName":"productview"}'
+- recorded: 2017-02-07T18:47:11.858Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/productview/byId/3074457345616679377?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 07 Feb 2017 18:47:11 GMT
+      Expires: Tue, 07 Feb 2017 19:47:11 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679377?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":1,"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676702","3074457345616676719_3074457345616676702"],"uniqueID":"3074457345616679377","singleSKUCatalogEntryID":"3074457345616679378","sKUs":[{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679378","catalogEntryTypeCode":"ItemBean","name":"Seedless
+      Grapes","uniqueID":"3074457345616679378","storeID":"715837934","partNumber":"GFR033_330501"}],"fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3305.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679377","price":[{"description":"L","value":"3.79","usage":"Display","currency":"USD"},{"description":"I","value":"3.29","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3305.jpg","seo_token_ntk":"seedless-grapes","shortDescription":"Seedless
+      California grapes","manufacturer":"California Sun","name":"Seedless Grapes","buyable":"true","longDescription":"Grapes were once considered a luxury treat. Bursting with flavor, grapes are a refreshing snack. Great in a bowl with yogourt and granola.","attributes":[{"storeDisplay":false,"values":[{"sequence":"2.00000","value":"Medium","uniqueID":"7741124012283335023","unitID":"","unitOfMeasure":"","identifier":"GFR033_3305"}],"sequence":".00000","associatedKeyword":"-","name":"Size","uniqueID":"7741124012283333348","usage":"Descriptive","comparable":true,"displayable":true,"identifier":"Size","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":".00000","associatedKeyword":"-","name":"Brand","uniqueID":"7741124012283333435","usage":"Defining","comparable":false,"displayable":true,"identifier":"FruitBrand","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":"1.00000","associatedKeyword":"-","name":"Type","uniqueID":"7741124012283333434","usage":"Defining","comparable":true,"displayable":true,"identifier":"FruitType","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"\/lb","uniqueID":"7741124012283335043","unitID":"","unitOfMeasure":"","identifier":"GFR033_3305"}],"sequence":"2.00000","associatedKeyword":"-","name":"Price","uniqueID":"7741124012283333436","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Price","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"5.00000","value":"Grapes","uniqueID":"7741124012283335056","unitID":"","unitOfMeasure":"","identifier":"GFR033_3305"}],"sequence":"3.00000","associatedKeyword":"-","name":"Type","uniqueID":"7741124012283333433","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Type","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"Fruit","uniqueID":"7741124012283335032","unitID":"","unitOfMeasure":"","identifier":"GFR033_3305"}],"sequence":"4.00000","associatedKeyword":"-","name":"Category","uniqueID":"7741124012283333432","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Category","facetable":false,"searchable":false}],"storeID":"715837934","cm_seo_token_ntk":"715837934_seedless-grapes","numberOfSKUs":1,"partNumber":"GFR033_3305"}],"recordSetComplete":"true","recordSetStartNumber":0,"recordSetTotalMatches":1,"metaData":{"price":"1"},"resourceName":"productview"}'
+- recorded: 2017-02-07T18:47:11.879Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/productview/byId/3074457345616679379?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 07 Feb 2017 18:47:11 GMT
+      Expires: Tue, 07 Feb 2017 19:47:11 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679379?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":1,"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676702","3074457345616676719_3074457345616676702"],"uniqueID":"3074457345616679379","singleSKUCatalogEntryID":"3074457345616679380","sKUs":[{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679380","catalogEntryTypeCode":"ItemBean","name":"Peaches","uniqueID":"3074457345616679380","storeID":"715837934","partNumber":"GFR033_330601"}],"fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3306.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679379","price":[{"description":"L","value":"2.79","usage":"Display","currency":"USD"},{"description":"I","value":"2.79","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3306.jpg","seo_token_ntk":"peaches","shortDescription":"Field
+      fresh peaches.","manufacturer":"California Sun","name":"Peaches","buyable":"true","longDescription":"Sweet and juicy with a pit in the middle. Enjoy the taste of summer in fresh peaches. Part of a complete and balanced breakfast.","attributes":[{"storeDisplay":false,"values":[{"sequence":"3.00000","value":"Small","uniqueID":"7741124012283335026","unitID":"","unitOfMeasure":"","identifier":"GFR033_3306"}],"sequence":".00000","associatedKeyword":"-","name":"Size","uniqueID":"7741124012283333348","usage":"Descriptive","comparable":true,"displayable":true,"identifier":"Size","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":".00000","associatedKeyword":"-","name":"Brand","uniqueID":"7741124012283333435","usage":"Defining","comparable":false,"displayable":true,"identifier":"FruitBrand","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":"1.00000","associatedKeyword":"-","name":"Type","uniqueID":"7741124012283333434","usage":"Defining","comparable":true,"displayable":true,"identifier":"FruitType","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"\/lb","uniqueID":"7741124012283335044","unitID":"","unitOfMeasure":"","identifier":"GFR033_3306"}],"sequence":"2.00000","associatedKeyword":"-","name":"Price","uniqueID":"7741124012283333436","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Price","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"6.00000","value":"Peaches","uniqueID":"7741124012283335058","unitID":"","unitOfMeasure":"","identifier":"GFR033_3306"}],"sequence":"3.00000","associatedKeyword":"-","name":"Type","uniqueID":"7741124012283333433","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Type","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"Fruit","uniqueID":"7741124012283335033","unitID":"","unitOfMeasure":"","identifier":"GFR033_3306"}],"sequence":"4.00000","associatedKeyword":"-","name":"Category","uniqueID":"7741124012283333432","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Category","facetable":false,"searchable":false}],"storeID":"715837934","cm_seo_token_ntk":"715837934_peaches","numberOfSKUs":1,"partNumber":"GFR033_3306"}],"recordSetComplete":"true","recordSetStartNumber":0,"recordSetTotalMatches":1,"metaData":{"price":"1"},"resourceName":"productview"}'
+- recorded: 2017-02-07T18:47:11.899Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/productview/byId/3074457345616679381?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 07 Feb 2017 18:47:11 GMT
+      Expires: Tue, 07 Feb 2017 19:47:11 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679381?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":1,"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676702","3074457345616676719_3074457345616676702"],"uniqueID":"3074457345616679381","singleSKUCatalogEntryID":"3074457345616679382","sKUs":[{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679382","catalogEntryTypeCode":"ItemBean","name":"Concord
+      Grapes","uniqueID":"3074457345616679382","storeID":"715837934","partNumber":"GFR033_330701"}],"fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3307.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679381","price":[{"description":"L","value":"4.25","usage":"Display","currency":"USD"},{"description":"I","value":"3.99","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3307.jpg","seo_token_ntk":"concord-grapes","shortDescription":"Seedless
+      California Concord grapes.","manufacturer":"Winston Organics","name":"Concord Grapes","buyable":"true","longDescription":"Fuller in flavor than green grapes. Seedless grapes are the perfect guilt free snack. Bet you can''t eat just one!","attributes":[{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"Large","uniqueID":"7741124012283335019","unitID":"","unitOfMeasure":"","identifier":"GFR033_3307"}],"sequence":".00000","associatedKeyword":"-","name":"Size","uniqueID":"7741124012283333348","usage":"Descriptive","comparable":true,"displayable":true,"identifier":"Size","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":".00000","associatedKeyword":"-","name":"Brand","uniqueID":"7741124012283333435","usage":"Defining","comparable":false,"displayable":true,"identifier":"FruitBrand","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":"1.00000","associatedKeyword":"-","name":"Type","uniqueID":"7741124012283333434","usage":"Defining","comparable":true,"displayable":true,"identifier":"FruitType","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"\/lb","uniqueID":"7741124012283335045","unitID":"","unitOfMeasure":"","identifier":"GFR033_3307"}],"sequence":"2.00000","associatedKeyword":"-","name":"Price","uniqueID":"7741124012283333436","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Price","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"5.00000","value":"Grapes","uniqueID":"7741124012283335057","unitID":"","unitOfMeasure":"","identifier":"GFR033_3307"}],"sequence":"3.00000","associatedKeyword":"-","name":"Type","uniqueID":"7741124012283333433","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Type","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"Fruit","uniqueID":"7741124012283335034","unitID":"","unitOfMeasure":"","identifier":"GFR033_3307"}],"sequence":"4.00000","associatedKeyword":"-","name":"Category","uniqueID":"7741124012283333432","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Category","facetable":false,"searchable":false}],"storeID":"715837934","cm_seo_token_ntk":"715837934_concord-grapes","numberOfSKUs":1,"partNumber":"GFR033_3307"}],"recordSetComplete":"true","recordSetStartNumber":0,"recordSetTotalMatches":1,"metaData":{"price":"1"},"resourceName":"productview"}'
+- recorded: 2017-02-07T18:47:11.919Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/productview/byId/3074457345616679383?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 07 Feb 2017 18:47:11 GMT
+      Expires: Tue, 07 Feb 2017 19:47:11 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679383?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":1,"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676702","3074457345616676719_3074457345616676702"],"uniqueID":"3074457345616679383","singleSKUCatalogEntryID":"3074457345616679384","sKUs":[{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679384","catalogEntryTypeCode":"ItemBean","name":"Strawberries","uniqueID":"3074457345616679384","storeID":"715837934","partNumber":"GFR033_330801"}],"fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3308.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679383","price":[{"description":"L","value":"2.99","usage":"Display","currency":"USD"},{"description":"I","value":"2.49","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3308.jpg","seo_token_ntk":"strawberries","shortDescription":"Plump
+      and juicy strawberries","manufacturer":"Oxford Orchards","name":"Strawberries","buyable":"true","longDescription":"Plump and bursting with flavour. Strawberries are great eaten fresh, on ice cream or dipped in chocolate. Great for making jam to store for
+      the winter months.","attributes":[{"storeDisplay":false,"values":[{"sequence":"2.00000","value":"Medium","uniqueID":"7741124012283335024","unitID":"","unitOfMeasure":"","identifier":"GFR033_3308"}],"sequence":".00000","associatedKeyword":"-","name":"Size","uniqueID":"7741124012283333348","usage":"Descriptive","comparable":true,"displayable":true,"identifier":"Size","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":".00000","associatedKeyword":"-","name":"Brand","uniqueID":"7741124012283333435","usage":"Defining","comparable":false,"displayable":true,"identifier":"FruitBrand","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":"1.00000","associatedKeyword":"-","name":"Type","uniqueID":"7741124012283333434","usage":"Defining","comparable":true,"displayable":true,"identifier":"FruitType","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"\/lb","uniqueID":"7741124012283335046","unitID":"","unitOfMeasure":"","identifier":"GFR033_3308"}],"sequence":"2.00000","associatedKeyword":"-","name":"Price","uniqueID":"7741124012283333436","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Price","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"2.00000","value":"Berries","uniqueID":"7741124012283335052","unitID":"","unitOfMeasure":"","identifier":"GFR033_3308"}],"sequence":"3.00000","associatedKeyword":"-","name":"Type","uniqueID":"7741124012283333433","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Type","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"Fruit","uniqueID":"7741124012283335035","unitID":"","unitOfMeasure":"","identifier":"GFR033_3308"}],"sequence":"4.00000","associatedKeyword":"-","name":"Category","uniqueID":"7741124012283333432","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Category","facetable":false,"searchable":false}],"storeID":"715837934","cm_seo_token_ntk":"715837934_strawberries","numberOfSKUs":1,"partNumber":"GFR033_3308"}],"recordSetComplete":"true","recordSetStartNumber":0,"recordSetTotalMatches":1,"metaData":{"price":"1"},"resourceName":"productview"}'
+- recorded: 2017-02-07T18:47:11.942Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/productview/byId/3074457345616679385?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 07 Feb 2017 18:47:11 GMT
+      Expires: Tue, 07 Feb 2017 19:47:11 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679385?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":1,"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676702","3074457345616676719_3074457345616676702"],"uniqueID":"3074457345616679385","singleSKUCatalogEntryID":"3074457345616679386","sKUs":[{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679386","catalogEntryTypeCode":"ItemBean","name":"Red
+      Delicious Apples","uniqueID":"3074457345616679386","storeID":"715837934","partNumber":"GFR033_330901"}],"fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3309.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679385","price":[{"description":"L","value":"1.29","usage":"Display","currency":"USD"},{"description":"I","value":"1.29","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3309.jpg","seo_token_ntk":"red-delicious-apples","shortDescription":"The
+      most popular red apple.","manufacturer":"Winston Organics","name":"Red Delicious Apples","buyable":"true","longDescription":"Red Delicious apples are perfect for eating fresh, in salads, or for juicing. For more fun, try dipping apples in hot caramel.
+      As a game, fill a tub with water and play bobbing for apples.","attributes":[{"storeDisplay":false,"values":[{"sequence":"4.00000","value":"Extra large","uniqueID":"7741124012283335027","unitID":"","unitOfMeasure":"","identifier":"GFR033_3309"}],"sequence":".00000","associatedKeyword":"-","name":"Size","uniqueID":"7741124012283333348","usage":"Descriptive","comparable":true,"displayable":true,"identifier":"Size","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":".00000","associatedKeyword":"-","name":"Brand","uniqueID":"7741124012283333435","usage":"Defining","comparable":false,"displayable":true,"identifier":"FruitBrand","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":"1.00000","associatedKeyword":"-","name":"Type","uniqueID":"7741124012283333434","usage":"Defining","comparable":true,"displayable":true,"identifier":"FruitType","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"\/lb","uniqueID":"7741124012283335047","unitID":"","unitOfMeasure":"","identifier":"GFR033_3309"}],"sequence":"2.00000","associatedKeyword":"-","name":"Price","uniqueID":"7741124012283333436","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Price","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"7.00000","value":"Apples","uniqueID":"7741124012283335059","unitID":"","unitOfMeasure":"","identifier":"GFR033_3309"}],"sequence":"3.00000","associatedKeyword":"-","name":"Type","uniqueID":"7741124012283333433","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Type","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"Fruit","uniqueID":"7741124012283335036","unitID":"","unitOfMeasure":"","identifier":"GFR033_3309"}],"sequence":"4.00000","associatedKeyword":"-","name":"Category","uniqueID":"7741124012283333432","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Category","facetable":false,"searchable":false}],"storeID":"715837934","cm_seo_token_ntk":"715837934_red-delicious-apples","numberOfSKUs":1,"partNumber":"GFR033_3309"}],"recordSetComplete":"true","recordSetStartNumber":0,"recordSetTotalMatches":1,"metaData":{"price":"1"},"resourceName":"productview"}'
+- recorded: 2017-02-07T18:47:11.961Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/productview/byId/3074457345616679387?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 07 Feb 2017 18:47:11 GMT
+      Expires: Tue, 07 Feb 2017 19:47:11 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679387?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":1,"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676702","3074457345616676719_3074457345616676702"],"uniqueID":"3074457345616679387","singleSKUCatalogEntryID":"3074457345616679388","sKUs":[{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679388","catalogEntryTypeCode":"ItemBean","name":"Crispin
+      Apples","uniqueID":"3074457345616679388","storeID":"715837934","partNumber":"GFR033_331001"}],"fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3310.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679387","price":[{"description":"L","value":"1.79","usage":"Display","currency":"USD"},{"description":"I","value":"1.49","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3310.jpg","seo_token_ntk":"crispin-apples","shortDescription":"Perfect
+      pie or sauce making apples.","manufacturer":"Oxford Orchards","name":"Crispin Apples","buyable":"true","longDescription":"Cross between the Golden Delicious and the Japanese Indo. Firm, pleasing texture with just the right amount of tartness. Crispin apples
+      keep their shape and texture in baking, making them perfect for pies.","attributes":[{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"Large","uniqueID":"7741124012283335020","unitID":"","unitOfMeasure":"","identifier":"GFR033_3310"}],"sequence":".00000","associatedKeyword":"-","name":"Size","uniqueID":"7741124012283333348","usage":"Descriptive","comparable":true,"displayable":true,"identifier":"Size","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":".00000","associatedKeyword":"-","name":"Brand","uniqueID":"7741124012283333435","usage":"Defining","comparable":false,"displayable":true,"identifier":"FruitBrand","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":"1.00000","associatedKeyword":"-","name":"Type","uniqueID":"7741124012283333434","usage":"Defining","comparable":true,"displayable":true,"identifier":"FruitType","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"\/lb","uniqueID":"7741124012283335048","unitID":"","unitOfMeasure":"","identifier":"GFR033_3310"}],"sequence":"2.00000","associatedKeyword":"-","name":"Price","uniqueID":"7741124012283333436","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Price","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"7.00000","value":"Apples","uniqueID":"7741124012283335060","unitID":"","unitOfMeasure":"","identifier":"GFR033_3310"}],"sequence":"3.00000","associatedKeyword":"-","name":"Type","uniqueID":"7741124012283333433","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Type","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"Fruit","uniqueID":"7741124012283335037","unitID":"","unitOfMeasure":"","identifier":"GFR033_3310"}],"sequence":"4.00000","associatedKeyword":"-","name":"Category","uniqueID":"7741124012283333432","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Category","facetable":false,"searchable":false}],"storeID":"715837934","cm_seo_token_ntk":"715837934_crispin-apples","numberOfSKUs":1,"partNumber":"GFR033_3310"}],"recordSetComplete":"true","recordSetStartNumber":0,"recordSetTotalMatches":1,"metaData":{"price":"1"},"resourceName":"productview"}'
+- recorded: 2017-02-07T18:47:11.984Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/productview/byId/3074457345616679389?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.3.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 07 Feb 2017 18:47:11 GMT
+      Expires: Tue, 07 Feb 2017 19:47:11 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Betamax: PLAY
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679389?profileName=CoreMedia_findProductByIds_Details&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":1,"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676702","3074457345616676719_3074457345616676702"],"uniqueID":"3074457345616679389","singleSKUCatalogEntryID":"3074457345616679390","sKUs":[{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679390","catalogEntryTypeCode":"ItemBean","name":"Bananas","uniqueID":"3074457345616679390","storeID":"715837934","partNumber":"GFR033_331101"}],"fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/646x1000\/gfr033_3311.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679389","price":[{"description":"L","value":"0.89","usage":"Display","currency":"USD"},{"description":"I","value":"0.79","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/gfr033_fruit\/200x310\/gfr033_3311.jpg","seo_token_ntk":"bananas-gfr033-3311--1","shortDescription":"Fresh
+      and ripe bananas.","manufacturer":"California Sun","name":"Bananas","buyable":"true","longDescription":"Bananas are high in vitamin B6, vitamin C and potassium. They are the perfect on the go snack and a healthy alternative to a chocolate bar. As an indulgence,
+      make a banasplit with ice cream, whipped cream and chocolate syrup.","attributes":[{"storeDisplay":false,"values":[{"sequence":"2.00000","value":"Medium","uniqueID":"7741124012283335025","unitID":"","unitOfMeasure":"","identifier":"GFR033_3311"}],"sequence":".00000","associatedKeyword":"-","name":"Size","uniqueID":"7741124012283333348","usage":"Descriptive","comparable":true,"displayable":true,"identifier":"Size","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":".00000","associatedKeyword":"-","name":"Brand","uniqueID":"7741124012283333435","usage":"Defining","comparable":false,"displayable":true,"identifier":"FruitBrand","facetable":false,"searchable":false},{"storeDisplay":false,"values":[],"sequence":"1.00000","associatedKeyword":"-","name":"Type","uniqueID":"7741124012283333434","usage":"Defining","comparable":true,"displayable":true,"identifier":"FruitType","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"\/lb","uniqueID":"7741124012283335049","unitID":"","unitOfMeasure":"","identifier":"GFR033_3311"}],"sequence":"2.00000","associatedKeyword":"-","name":"Price","uniqueID":"7741124012283333436","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Price","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"3.00000","value":"Tropical","uniqueID":"7741124012283335054","unitID":"","unitOfMeasure":"","identifier":"GFR033_3311"}],"sequence":"3.00000","associatedKeyword":"-","name":"Type","uniqueID":"7741124012283333433","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Type","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"Fruit","uniqueID":"7741124012283335038","unitID":"","unitOfMeasure":"","identifier":"GFR033_3311"}],"sequence":"4.00000","associatedKeyword":"-","name":"Category","uniqueID":"7741124012283333432","usage":"Descriptive","comparable":false,"displayable":true,"identifier":"Category","facetable":false,"searchable":false}],"storeID":"715837934","cm_seo_token_ntk":"715837934_bananas-gfr033-3311--1","numberOfSKUs":1,"partNumber":"GFR033_3311"}],"recordSetComplete":"true","recordSetStartNumber":0,"recordSetTotalMatches":1,"metaData":{"price":"1"},"resourceName":"productview"}'
+- recorded: 2017-09-07T11:44:16.782Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/catalog
+    headers:
+      Accept-Encoding: text/plain
+      Authorization: Basic Y21hZG1pbjpWVEpqeW8wQVlTblhGSEkyMDF5bw==
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_144)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Thu, 07 Sep 2017 11:44:16 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000vW9JKfG0pO6FX-qI9uGPxk5:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-01-tomcat-3-cms.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":3,"resourceId":"http:\/\/toko-ci-01-01-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/catalog","recordSetCount":3,"recordSetComplete":true,"recordSetStartNumber":0,"resultList":[{"catalogIdentifier":"Extended
+      Sites Catalog Asset Store","description":[{"name":"Extended Sites Catalog Asset Store"}],"primary":true,"catalogId":"3074457345616676668"},{"catalogIdentifier":"Extended Sites Catalog Asset Store B2B Direct","description":[{"shortDescription":"Aurora B2B
+      direct sample data","name":"Aurora B2B direct sample data"}],"primary":false,"catalogId":"3074457345616676718"},{"default":true,"catalogIdentifier":"Extended Sites Catalog Asset Store Consumer Direct","description":[{"shortDescription":"Aurora Consumer
+      Direct sample data","name":"Aurora consumer direct sample data"}],"primary":false,"catalogId":"3074457345616676719"}],"resourceName":"catalog"}'

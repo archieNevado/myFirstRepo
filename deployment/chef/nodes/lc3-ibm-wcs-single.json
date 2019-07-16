@@ -1,0 +1,48 @@
+{
+  "blueprint": {
+    "hostname": "CMS_HOST",
+    "loopback_hostname": "localhost",
+    "maven_repository_url": "file://localhost/tmp/maven-repo",
+    "webapps":{
+      "content-management-server": {
+        "application.properties": {
+          "cap.server.license": "properties/corem/license.zip"
+        }
+      },
+      "master-live-server": {
+        "application.properties": {
+          "cap.server.license": "properties/corem/license.zip"
+        }
+      }
+    },
+    "lc3-ibm-wcs": {
+      "host": "WCS_HOST",
+      "application.properties": {
+        "livecontext.cookie.domain": ".DOMAIN"
+      }
+    },
+    "dev": {
+      "content": {
+        "content_zip": "file://localhost/tmp/content-users.zip"
+      }
+    }
+  },
+  "run_list": [
+    "role[mysql]",
+    "role[mongodb]",
+    "role[lc3-ibm-wcs-config]",
+    "role[solr]",
+    "role[management]",
+    "role[publication]",
+    "role[preview]",
+    "role[preview-proxy]",
+    "role[lc3-ibm-wcs-preview-proxy]",
+    "role[studio]",
+    "role[studio-proxy]",
+    "role[delivery]",
+    "role[lc3-ibm-wcs-delivery-proxy]",
+    "recipe[blueprint-lc3-ibm-wcs::overview]",
+    "recipe[blueprint-lc3-ibm-wcs::test-data-config]",
+    "recipe[blueprint-dev-tooling::content]"
+  ]
+}

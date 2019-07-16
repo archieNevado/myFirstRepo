@@ -1,0 +1,49 @@
+<%- if @params[:ssl] -%>
+  SSLProxyEngine On
+  <%- unless @params[:ssl_proxy_verify] -%>
+  SSLProxyVerify none
+  SSLProxyCheckPeerCN off
+  SSLProxyCheckPeerName off
+  <%- end -%>
+<%- end -%>
+  ProxyPreserveHost Off
+
+  <%- if @params[:headers] -%>
+  # during development it may be convenient to add headers to share remote WCS systems more efficiently
+  <%- @params[:headers].sort.each do |header| -%>
+  <%= header %>
+  <%- end -%>
+  <%- end -%>
+
+  # CAE proxy
+  <%- protocol =  @params[:protocol].nil? ? 'http' : @params[:protocol] -%>
+
+  ProxyPass /dynamic <%= protocol %>://<%= @params[:site_server_name] %>/dynamic timeout=60
+  ProxyPassReverse /dynamic <%= protocol %>://<%= @params[:site_server_name] %>/dynamic
+
+  ProxyPass /service <%= protocol %>://<%= @params[:site_server_name] %>/service timeout=60
+  ProxyPassReverse /service <%= protocol %>://<%= @params[:site_server_name] %>/service
+
+  <%- wcs_protocol =  @params[:ssl] ? 'https' : 'http' -%>
+  # WCS stores & search pass through WCS IHS(apache)
+  <%- wcs_preview_port = @params[:ssl] ? '8006' : '8007' -%>
+  ProxyPass /wcs <%= wcs_protocol %>://<%= @params[:wcs_host] %>:<%= wcs_preview_port %>/wcs timeout=600
+  ProxyPassReverse /wcs <%= wcs_protocol %>://<%= @params[:wcs_host] %>:<%= wcs_preview_port %>/wcs
+
+  ProxyPass /wcsstore <%= wcs_protocol %>://<%= @params[:wcs_host] %>:<%= wcs_preview_port %>/wcsstore timeout=600
+  ProxyPassReverse /wcsstore <%= wcs_protocol %>://<%= @params[:wcs_host] %>:<%= wcs_preview_port %>/wcsstore
+
+  ProxyPass /webapp/wcs/stores <%= wcs_protocol %>://<%= @params[:wcs_host] %>/webapp/wcs/stores timeout=600
+  ProxyPassReverse /webapp/wcs/stores <%= wcs_protocol %>://<%= @params[:wcs_host] %>/webapp/wcs/stores
+
+  ProxyPass /webapp <%= wcs_protocol %>://<%= @params[:wcs_host] %>:<%= wcs_preview_port %>/webapp timeout=600
+  ProxyPassReverse /webapp <%= wcs_protocol %>://<%= @params[:wcs_host] %>:<%= wcs_preview_port %>/webapp
+
+  # WCS tools pass through WCS IHS(apache)
+  ProxyPass /lobtools https://<%= @params[:wcs_host] %>:8000/lobtools timeout=600
+  ProxyPassReverse /lobtools https://<%= @params[:wcs_host] %>:8000/lobtools
+  ProxyPass /orgadminconsole https://<%= @params[:wcs_host] %>:8004/orgadminconsole timeout=600
+  ProxyPassReverse /orgadminconsole https://<%= @params[:wcs_host] %>:8004/orgadminconsole
+
+  ProxyPass / <%= wcs_protocol %>://<%= @params[:wcs_host] %>:<%= wcs_preview_port %>/ timeout=600
+  ProxyPassReverse / <%= wcs_protocol %>://<%= @params[:wcs_host] %>:<%= wcs_preview_port %>/

@@ -52,7 +52,7 @@
           <contextFile>${project.basedir}/src/main/servletengine/tomcat-context.xml</contextFile>
           <systemProperties>
             <coremedia.blueprint.project.directory>${project.basedir}/../../../</coremedia.blueprint.project.directory>
-            <propertieslocations>classpath:/cae-preview.properties</propertieslocations>
+            <propertieslocations>classpath:/cae-preview.properties,classpath:/wcs.properties,classpath:/hybris.properties,classpath:/sfcc.properties</propertieslocations>
           </systemProperties>
         </configuration>
       </plugin>

@@ -1,0 +1,11 @@
+{
+  "name": "lc3-ibm-wcs-delivery-proxy",
+  "chef_type": "role",
+  "json_class": "Chef::Role",
+  "description": "The role for the wcs delivery proxy node",
+  "run_list": [
+    "role[base]",
+    "recipe[blueprint-lc3-ibm-wcs::shop-proxy]",
+    "recipe[blueprint-lc3-ibm-wcs::delivery-proxy]"
+  ]
+}

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMCollection folder="/Sites/Calista/Germany/German/Editorial/Content/Startpage" name="The Black and White Collection" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
+<locale>de-DE</locale>
+<master>
+<link href="../../../../../United%20States/English/Editorial/Content/Startpage/The%20Black%20and%20White%20Collection.xml" path="/Sites/Calista/United%20States/English/Editorial/Content/Startpage/The%20Black%20and%20White%20Collection"/>
+</master>
+<viewtype>
+</viewtype>
+<linkedSettings>
+</linkedSettings>
+<resourceBundles2>
+</resourceBundles2>
+<segment></segment>
+<title></title>
+<htmlTitle></htmlTitle>
+<keywords></keywords>
+<htmlDescription></htmlDescription>
+<subjectTaxonomy>
+</subjectTaxonomy>
+<locationTaxonomy>
+</locationTaxonomy>
+<contexts>
+</contexts>
+<teaserTitle>Die Schwarz-Weiß-Sammlung</teaserTitle>
+<pictures>
+</pictures>
+<related>
+</related>
+<authors>
+</authors>
+<items>
+<link href="../../Products/Hermitage%20Fit%20and%20Flare%20Dress.xml" path="/Sites/Calista/Germany/German/Editorial/Products/Hermitage%20Fit%20and%20Flare%20Dress"/>
+<link href="../Blog/Eveningwear/Gusso%20Cocktail%20Sheath%20Dress.xml" path="/Sites/Calista/Germany/German/Editorial/Content/Blog/Eveningwear/Gusso%20Cocktail%20Sheath%20Dress"/>
+<link href="../Blog/Eveningwear/Albini%20Sleeveless%20Silk%20Dress.xml" path="/Sites/Calista/Germany/German/Editorial/Content/Blog/Eveningwear/Albini%20Sleeveless%20Silk%20Dress"/>
+<link href="../Blog/Eveningwear/Hermitage%20Pencil%20Cocktail%20Dress.xml" path="/Sites/Calista/Germany/German/Editorial/Content/Blog/Eveningwear/Hermitage%20Pencil%20Cocktail%20Dress"/>
+<link href="../../Products/Luigi%20Valenti%20Strapless%20Cocktail%20Dress.xml" path="/Sites/Calista/Germany/German/Editorial/Products/Luigi%20Valenti%20Strapless%20Cocktail%20Dress"/>
+</items>
+</CMCollection>

@@ -1,0 +1,11 @@
+{
+  "name": "lc3-sfcc-delivery-proxy",
+  "chef_type": "role",
+  "json_class": "Chef::Role",
+  "description": "The role for the sfcc delivery proxy node",
+  "run_list": [
+    "role[base]",
+    "recipe[blueprint-lc3-sfcc::shop-proxy]",
+    "recipe[blueprint-lc3-sfcc::delivery-proxy]"
+  ]
+}

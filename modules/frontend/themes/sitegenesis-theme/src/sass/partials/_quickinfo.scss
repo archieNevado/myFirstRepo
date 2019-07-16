@@ -1,0 +1,248 @@
+.cm-quickinfo {
+
+  &__title {
+    font-size: 1.1333rem; // overriding cm-heading5
+    font-weight: normal;
+  }
+
+  &__close {
+    padding: 0;
+
+    .cm-icon__symbol {
+      content: "";
+      margin: 0;
+      width: 20px;
+      height: 20px;
+      font-size: 1.2rem;
+      background-color: transparent;
+      color: $base-font-color;
+      z-index: 2;
+      &:before {
+        line-height: 1;
+      }
+    }
+
+  }
+
+  button {
+    transition: unset;
+    &:hover {
+      background-color: transparent;
+    }
+  }
+}
+
+@include breakpoint("md") {
+  .mfp-content .cm-teaser__quickinfo {
+    margin: 0 auto;
+    position: relative;
+    width: 514px;
+  }
+
+  .mfp-content .cm-teaser__quickinfo .cm-quickinfo__property--pricing,
+  .mfp-content .cm-teaser__quickinfo .cm-quickinfo__property--pricing + .cm-quickinfo__property--controls {
+    display: table-cell;
+    vertical-align: middle;
+    width: 254px; // 50% does not work
+  }
+}
+
+@include breakpoint("xs") {
+  .cm-quickinfo {
+    &__controls a {
+      margin-top: 4px;
+      display: inline-block;
+    }
+
+    &__close {
+      margin-top: 8px;
+
+      .cm-icon__symbol {
+        width: 20px;
+        height: 20px;
+        font-size: 1.2rem;
+      }
+    }
+
+  }
+}
+
+@include breakpoint("sm-and-up") {
+  .cm-quickinfo--main.cm-quickinfo--active {
+    display: none;
+  }
+
+  .cm-quickinfo {
+    box-sizing: border-box;
+    background: palette(white);
+    width: 306px;
+    padding: 43px 3px 3px; /* leave space for absolute positioned title, which is always shown */
+    box-shadow: 0 0 10px palette(black);
+
+    &__title {
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin: 5px 30px 5px 5px;
+      line-height: 2rem;
+    }
+
+    &__text {
+      margin: 0.5rem;
+    }
+
+    &__text p {
+      margin: 0;
+    }
+
+    &__close {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+    }
+
+    &__listprice,
+    &__offerprice {
+      white-space: nowrap;
+
+      display: table-cell;
+      /* margin is ignored in table-cell */
+      padding: 8px;
+    }
+
+    &__button {
+      margin: 8px 0;
+    }
+
+    &__property {
+      @include breakpoint("sm-and-up") {
+        display: block;
+        text-align: left;
+      }
+    }
+
+    &__property--add-to-cart {
+      position: absolute;
+      right: 0.5rem;
+      top: 14.75rem;
+      background: palette(white);
+
+      @include breakpoint("sm-and-up") {
+        background: palette(white);
+        height: auto;
+        margin-top: -5rem;
+        position: absolute;
+        right: 1rem;
+        width: auto;
+      }
+
+      a {
+        display: block;
+        padding: 0.5rem;
+
+        @include breakpoint(sm) {
+          display: block;
+          padding: 0.5rem;
+        }
+      }
+    }
+
+    &__property--image,
+    &__property--general {
+      display: block;
+    }
+
+    &__property--controls {
+      text-align: right;
+    }
+
+    //Title and text
+    &__text {
+      margin: 0.5rem;
+      color: palette(black);
+    }
+
+    &__text p {
+      margin: 0;
+    }
+
+    .cm-button-group__button {
+      color: palette(black);
+      border-color: palette(black);
+      display: inline-block;
+      &:hover {
+        color: palette(white);
+        background-color: palette(black);
+      }
+    }
+
+    .cm-teasable--alternative & {
+      &__title {
+        color: palette(black);
+      }
+
+      &__text {
+        color: palette(black);
+      }
+
+      &__cta {
+        color: palette(black);
+        border-color: palette(black);
+      }
+    }
+
+    &--active {
+      position: static;
+    }
+
+    &__property--pricing {
+      .cm-price {
+        color: palette(black);
+      }
+    }
+
+  }
+}
+
+/* in two-column-layout the quickinfo has to be smaller */
+.cm-grid--lc-two-column .cm-quickinfo {
+  width: 246px;
+  &__text {
+    display: none;
+  }
+}
+
+.cm-quickinfo--compact .cm-quickinfo__property--pricing,
+  /* only if pricing is present */
+.cm-quickinfo--compact .cm-quickinfo__property--pricing + .cm-quickinfo__property--controls {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+/* only if pricing is present */
+.cm-quickinfo--compact .cm-quickinfo__property--pricing + .cm-quickinfo__property--controls {
+  width: 243px;
+}
+
+.cm-quickinfo--compact .cm-quickinfo__listprice,
+.cm-quickinfo--compact .cm-quickinfo__offerprice {
+  display: block;
+  /* see base implementation */
+  padding: 0;
+  margin: 0 0.5rem;
+}
+
+.cm-imagemap__quickinfo {
+  @include breakpoint("sm-and-up") {
+    position: absolute;
+
+    .cm-quickinfo__picture-box {
+      margin-top: 12px;
+    }
+  }
+}
+
+/* for headings in shoppable videos */
+.cm-quickinfo--shoppable .cm-quickinfo__title {
+  position: relative;
+}

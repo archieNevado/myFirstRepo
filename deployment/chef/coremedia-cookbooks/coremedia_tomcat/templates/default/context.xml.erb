@@ -14,11 +14,6 @@ sessionCookieName="<%= @session_cookie_name %>"
 
 <!-- Default set of monitored resources -->
   <WatchedResource>WEB-INF/web.xml</WatchedResource>
-
-<%if @legacy_cookie_processor -%>
-  <CookieProcessor className="org.apache.tomcat.util.http.LegacyCookieProcessor"/>
-<%- end %>
-
 <%- if @env_entries && !@env_entries.empty? -%>
 <%- @env_entries.keys.sort.each do |entry_name| -%>
   <Environment name="<%= entry_name %>"

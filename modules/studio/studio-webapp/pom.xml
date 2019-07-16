@@ -16,7 +16,7 @@
   <properties>
     <development-properties.dir>${project.basedir}/../../../workspace-configuration/development-properties/default</development-properties.dir>
     <logging-properties.dir>${project.basedir}/../../../workspace-configuration/logging</logging-properties.dir>
-    <propertieslocations>classpath:/studio.properties</propertieslocations>
+    <propertieslocations>classpath:/studio.properties,classpath:/wcs.properties,classpath:/hybris.properties</propertieslocations>
   </properties>
 
   <dependencies>

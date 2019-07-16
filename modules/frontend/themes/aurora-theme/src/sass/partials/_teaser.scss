@@ -1,0 +1,70 @@
+// Teaser
+// =====================================================================================================================
+
+//fix CMS-7403 - center teaser with max-width as in WCS
+.cm-placement-header {
+  max-width: 785px;
+  margin: 0 auto;
+
+  > .#{$cm-teasable-prefix} {
+    margin: 20px;
+  }
+
+  @include breakpoint(sm-and-up) {
+    .#{$cm-teasable-prefix}__picture-box {
+      @include aspect-ratio-box(16, 9);
+    }
+  }
+}
+
+.#{$cm-teasable-prefix} {
+  display: flex;
+  height: 100%;
+
+  &__wrapper {
+    display: flex;
+    align-content: stretch;
+    flex-direction: column;
+  }
+
+  &__caption {
+    flex: 1 1 auto; // use full flex definition because of different defaults
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    position: static;
+    transform: none;
+  }
+
+  &__headline, &__text, &__cta {
+    margin : 5px 0;
+  }
+
+  &__info {
+    flex: 1 1 auto; // use full flex definition because of different defaults
+  }
+
+  .cm-product-info {
+    &__title {
+      display: none;
+    }
+  }
+}
+
+.cm-product-info {
+  display: inline-block;
+
+  &__title,
+  &__pricing {
+    display: inline-block;
+  }
+
+  .cm-price {
+    font-size: $font-size-large;
+    color: $text-color;
+
+    &--old {
+      font-size: $font-size-base;
+    }
+  }
+}

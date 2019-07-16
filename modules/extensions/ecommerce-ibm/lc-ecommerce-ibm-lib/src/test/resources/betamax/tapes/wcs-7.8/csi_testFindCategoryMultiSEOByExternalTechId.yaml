@@ -1,0 +1,78 @@
+!tape
+name: csi_testFindCategoryMultiSEOByExternalTechId
+interactions:
+- recorded: 2017-11-14T15:38:50.135Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:38:50 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000OpfNe6LCMGKOkbixeilw0j2:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10201"},"AuroraStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10151"},"PerfectChefESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10302"},"AuroraB2BESite":{"defaultCatalogId":"10151","defaultCatalog":"Extended
+      Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10303"},"Extended Sites Hub":{"defaultCatalogId":null,"defaultCatalog":"","catalogs":{},"storeId":"10051"},"AuroraB2BStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10251"},"AuroraESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10301"},"Extended Sites
+      Catalog Asset Store":{"defaultCatalogId":"10101","defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog
+      Asset Store":"10101"},"storeId":"10101"}},"serverTimezoneId":"Europe\/Berlin"}'
+- recorded: 2017-11-14T15:38:50.182Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:38:50 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000yBPo-LgcNGUBHUj_r4A1UMC:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
+- recorded: 2017-11-14T15:38:50.215Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/categoryview/PC_Magazines?catalogId=10152&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:38:50 GMT
+      Expires: Tue, 14 Nov 2017 16:38:50 GMT
+      Set-Cookie: JSESSIONID=0000xPGERmGJQE3_g8trZlkqq7v:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Vary: Accept
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/PC_Magazines?catalogId=10152&langId=-1","resourceName":"categoryview","recordSetStartNumber":"0","recordSetComplete":"true","CatalogGroupView":[{"longDescription":"Find
+      the best style, fashion and cooking magazines.","shortDescription":"Magazines","metaKeyword":"magazine, magazines, style, fashion, good life","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10228","identifier":"PC_Magazines","productsURL":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10228","parentCatalogGroupID":["10218"],"name":"Magazines","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Magazines.jpg","fullImage":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/full\/PC_Magazines.jpg","uniqueID":"10228","xcatgroup_seoSegment":"pc-magazines;pc-magazines-auroraesite","metaDescription":"Magazines","title":"Magazines
+      | AuroraESite","xcatgroup_cmSeoSegment":"10101_pc-magazines;10301_pc-magazines-auroraesite","fullImageAltDescription":"Image for Magazines from AuroraESite"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'

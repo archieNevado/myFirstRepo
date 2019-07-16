@@ -56,16 +56,6 @@ coremedia_tomcat 'solr' do
                                    'version' => '1.7.6'
                                    'nexus_repo' => 'central' # optional nexus repo name, that has precendence to the global nexus_repo attribute
   })
-  # common context configuration active for all webapps, renders to <catalina_home>/conf/context.xml
-  context_config(
-    :legacy_cookie_processor => true,
-    :env_entries => {
-      'toggle' => {
-        'description' => 'this does nothing',
-        'value' => 'false',
-        'type'  => 'java.lang.Boolean'
-      }
-    },
   log_dir '/var/log/solr'
   jmx_remote true
   jmx_remote_server_name node[:fqdn]

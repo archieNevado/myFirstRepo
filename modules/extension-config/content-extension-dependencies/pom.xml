@@ -34,5 +34,29 @@
       <type>zip</type>
       <scope>runtime</scope>
     </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>hybris-test-data</artifactId>
+      <version>1-SNAPSHOT</version>
+      <classifier>content</classifier>
+      <type>zip</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>lc-test-data</artifactId>
+      <version>1-SNAPSHOT</version>
+      <classifier>content</classifier>
+      <type>zip</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>sfcc-test-data</artifactId>
+      <version>1-SNAPSHOT</version>
+      <classifier>content</classifier>
+      <type>zip</type>
+      <scope>runtime</scope>
+    </dependency>
   </dependencies>
 </project>

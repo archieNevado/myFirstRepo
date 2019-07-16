@@ -1,0 +1,55 @@
+.#{$cm-hero-prefix} {
+  &__headline {
+    @include breakpoint(md) {
+      font-size: 3em;
+      margin: 1.5em auto 1em;
+    }
+    font-size: 2em;
+  }
+
+  &__text {
+    @include breakpoint(md) {
+      font-size: 2em;
+      margin: 0 auto 1.5em;
+    }
+    font-size: 1.2em;
+  }
+
+  .cm-product-info {
+    display: none;
+  }
+
+  .cm-teaser-overlay {
+    &__text {
+
+      @include breakpoint(sm-and-up) {
+        h1 {
+          font-size: 3em;
+        }
+
+        p {
+          font-size: 2em;
+        }
+      }
+    }
+  }
+
+}
+
+.cm-slot-main {
+  .cm-placement-main {
+    .cm-carousel {
+      .#{$cm-hero-prefix}__picture-box, .#{$cm-hero-prefix}__video-background {
+        @include breakpoint(md) {
+          @include aspect-ratio-box(8, 3);
+        }
+      }
+    }
+  }
+}
+
+.primary-content {
+  .#{$cm-hero-prefix}__picture-box, .#{$cm-hero-prefix}__video-background {
+    @include aspect-ratio-box(8, 3);
+  }
+}

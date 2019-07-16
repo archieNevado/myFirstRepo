@@ -72,6 +72,48 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>hybris-cae</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>lc-asset-cae-component</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>lc-cae</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>lc-ecommerce-ibm-cae-component</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>lc-ecommerce-sfcc-cae-component</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>lc-es-cae</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>lc-p13n-cae</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
       <artifactId>nuggad-cae</artifactId>
       <version>1-SNAPSHOT</version>
       <scope>runtime</scope>

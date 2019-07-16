@@ -1,0 +1,199 @@
+@include breakpoint("sm-and-down") {
+  .cm-header-navbar {
+    overflow-x: hidden;
+
+    &__divider {
+      border-top: 1px solid #fff;
+      margin: 0 15px;
+    }
+
+    .dropdown-menu > li > a {
+      text-align: center;
+      &:focus,
+      &:hover {
+        background-color: transparent;
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.navbar-toggle {
+  &.collapsed {
+    @include breakpoint("sm-and-down") {
+      display: block;
+    }
+  }
+  .icon-bar {
+    background-color: $text-color;
+  }
+}
+
+@include breakpoint("sm-and-down") {
+  .navbar-collapse.collapse.in,
+  .navbar-collapse.collapsing {
+    background-color: $main-color-grey;
+    color: #fff;
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 100;
+
+    & li > a {
+      color: #fff;
+    }
+  }
+}
+
+.#{$cm-navigation-prefix}-item {
+  &__picture-link {
+    padding: 0 15px !important;
+  }
+  &__list {
+    @include breakpoint("sm-and-down") {
+      text-align: center;
+    }
+  }
+
+  @include breakpoint("sm-and-down") {
+    &.cm-navigation-item--active,
+    &.cm-navigation-item--active:hover {
+      background-color: $mobile-nav-dropdown-bg;
+      a {
+        background-color: transparent;
+      }
+    }
+  }
+}
+
+.#{$cm-navigation-prefix}-item-depth-0 {
+  &.dropdown.open {
+    background-color: $mobile-nav-dropdown-bg;
+  }
+
+  &__list {
+    // remove small spacing between li elements in mobile
+    @include breakpoint(md) {
+      font-size: 0;
+    }
+    text-align: center;
+
+    .cm-navigation-item__title {
+      padding-left: 15px !important;
+    }
+
+    & & {
+      margin: 5px 0 15px;
+    }
+  }
+}
+
+.#{$cm-navigation-prefix}-item-depth-1 {
+  &.open {
+    @include breakpoint("sm-and-down") {
+      padding-bottom: 10px;
+    }
+
+    > &__list {
+      margin-top: 15px;
+    }
+  }
+
+  & > .cm-navigation-item__title {
+    font-size: 12px;
+    padding-top: 17px;
+    padding-bottom: 13px;
+  }
+
+  &__list {
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    border-bottom: 1px solid $main-color-grey-light;
+    border-top: 1px solid $main-color-grey-light;
+    margin-top: 0;
+
+    a:hover {
+      text-decoration: underline !important;
+    }
+    a:hover,
+    a:focus {
+      background-color: transparent !important;
+    }
+
+    > .cm-navigation-list__label > a.cm-navigation-item-label {
+      &:hover,
+      &:focus {
+        color: $text-color;
+        text-decoration: $link-hover-decoration;
+        background-color: transparent;
+      }
+    }
+
+    @include breakpoint(md) {
+      .cm-navigation-item.cm-navigation-item--active > a {
+        color: $text-color;
+        text-decoration: $link-hover-decoration;
+        background-color: transparent;
+        &:hover,
+        &:focus {
+          color: $text-color;
+          text-decoration: $link-hover-decoration;
+          background-color: transparent;
+        }
+      }
+
+      & > .cm-navigation-item {
+        text-align: left;
+
+        .cm-navigation-item__list {
+          text-align: left;
+
+          & > .cm-navigation-item > a {
+            font-size: 12px;
+            padding-top: 6px;
+            padding-bottom: 6px;
+          }
+        }
+      }
+    }
+  }
+
+  @include breakpoint(md) {
+    border-bottom: 4px solid transparent;
+    transition: border-color $cm-navigation-delay step-end;
+
+    &.cm-navigation-item--active {
+      border-color: $main-color;
+      transition: none;
+    }
+    &:hover {
+      border-color: $main-color !important;
+      transition: none;
+    }
+  }
+}
+
+.#{$cm-navigation-prefix}-item-depth-2 {
+  & > .#{$cm-navigation-prefix}-item__title {
+    font-weight: bold;
+  }
+}
+
+.#{$cm-navigation-prefix} {
+  @include breakpoint(md) {
+    &--hovered {
+      .cm-navigation-item.cm-navigation-item--active {
+        border-color: transparent;
+        transition: none;
+      }
+    }
+    &-item__list:not(&--hovered) {
+      .cm-navigation-item.cm-navigation-item--active {
+        border-bottom-width: 4px !important;
+        transition: border-bottom-width $cm-navigation-delay step-end !important;
+      }
+    }
+  }
+}

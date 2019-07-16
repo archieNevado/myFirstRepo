@@ -1,0 +1,184 @@
+!tape
+name: csi_testFindProductsByCategory_search
+interactions:
+- recorded: 2017-11-14T15:39:01.621Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:01 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000UxeER_4sJhOWVRPQtz_Vt_L:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10201"},"AuroraStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10151"},"PerfectChefESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10302"},"AuroraB2BESite":{"defaultCatalogId":"10151","defaultCatalog":"Extended
+      Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10303"},"Extended Sites Hub":{"defaultCatalogId":null,"defaultCatalog":"","catalogs":{},"storeId":"10051"},"AuroraB2BStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10251"},"AuroraESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10301"},"Extended Sites
+      Catalog Asset Store":{"defaultCatalogId":"10101","defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog
+      Asset Store":"10101"},"storeId":"10101"}},"serverTimezoneId":"Europe\/Berlin"}'
+- recorded: 2017-11-14T15:39:01.670Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:01 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=00003NUuawFNf2odJuL78WM-wKE:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
+- recorded: 2017-11-14T15:39:01.695Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/%2520?partNumber=CLA022_2203&profileName=CoreMedia_findProductByPartNumber_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:01 GMT
+      Expires: Tue, 14 Nov 2017 16:39:01 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/%2520?partNumber=CLA022_2203&profileName=CoreMedia_findProductByPartNumber_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"This
+      tiny laptop is made with portability and battery life in mind, so that you can take it anywhere and not have to worry about running low on power.  Read those important work e-mails on the go, or put the finishing touches on a late project with this travel
+      companion.","shortDescription":"A lightweight and portable laptop with excellent battery life.","catalogEntryTypeCode":"ProductBean","buyable":"true","subscriptionTypeCode":"NONE","cm_seo_token_ntk":"10101_travel-laptop","price":[{"value":"600.0","currency":"USD","usage":"Display","description":"L"},{"value":"575.0","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16614","singleSKUCatalogEntryID":"16615","parentCatalogGroupID":["10101_10130","10152_10130"],"name":"Travel
+      Laptop","uniqueID":"16614","disallowRecurringOrder":"1","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/200x310\/cla022_2203.jpg","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/646x1000\/cla022_2203.jpg","manufacturer":"DVR
+      Technics","sKUs":[{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16615","name":"Travel Laptop","hasSingleSKU":false,"partNumber":"CLA022_220301","uniqueID":"16615","storeID":"10101"}],"numberOfSKUs":1,"attributes":[{"storeDisplay":false,"sequence":".00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"1.00000","value":"2
+      GB","unitOfMeasure":"","identifier":"CLA022_2203","uniqueID":"7000000000000004535","unitID":""}],"searchable":false,"identifier":"Memory","comparable":false,"name":"Memory","uniqueID":"7000000000000000283","displayable":true},{"storeDisplay":false,"sequence":".00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"ComputersLaptopsMemory","comparable":true,"name":"Memory","uniqueID":"7000000000000000287","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"ComputersLaptopsBrand","comparable":false,"name":"Brand","uniqueID":"7000000000000000285","displayable":true},{"storeDisplay":false,"sequence":"2.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"1.00000","value":"1
+      lb","unitOfMeasure":"","identifier":"CLA022_2203","uniqueID":"7000000000000004547","unitID":""}],"searchable":false,"identifier":"Weight","comparable":false,"name":"Weight","uniqueID":"7000000000000000290","displayable":true},{"storeDisplay":false,"sequence":"2.00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"ComputersLaptopsWeight","comparable":true,"name":"Weight","uniqueID":"7000000000000000288","displayable":true},{"storeDisplay":false,"sequence":"3.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"3.00000","value":"6
+      hours","unitOfMeasure":"","identifier":"CLA022_2203","uniqueID":"7000000000000004544","unitID":""}],"searchable":false,"identifier":"Battery Life","comparable":false,"name":"Battery Life","uniqueID":"7000000000000000289","displayable":true},{"storeDisplay":false,"sequence":"3.00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"ComputersLaptopsBattery
+      Life","comparable":true,"name":"Battery Life","uniqueID":"7000000000000000286","displayable":true}],"hasSingleSKU":true,"partNumber":"CLA022_2203","storeID":"10101","seo_token_ntk":"travel-laptop"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:01.760Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/categoryview/byId/10130?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=10152&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:01 GMT
+      Expires: Tue, 14 Nov 2017 16:39:01 GMT
+      Vary: Accept
+    body: '{"recordSetTotal":1,"resourceName":"categoryview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10130?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=10152&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","catalogGroupView":[{"shortDescription":"Laptops","cm_seo_token_ntk":"10101_laptops-10130--1","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10130","identifier":"Computers
+      Laptops","parentCatalogGroupID":["10101_10127","10152_10127"],"name":"Laptops","uniqueID":"10130","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/category\/catr_cla_laptops.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/category\/catr_cla_laptops.png","seo_token_ntk":"laptops-10130--1"}],"recordSetCount":1}'
+- recorded: 2017-11-14T15:39:01.781Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byCategory/10130?profileName=CoreMedia_findProductsByCategory&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:01 GMT
+      Expires: Tue, 14 Nov 2017 16:39:01 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":6,"recordSetTotal":6,"breadCrumbTrailEntryView":[{"value":"10127","label":"Electronics","type_":"FACET_ENTRY_CATEGORY"},{"value":"10130","label":"Laptops","type_":"FACET_ENTRY_CATEGORY"}],"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byCategory\/10130?profileName=CoreMedia_findProductsByCategory&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","facetView":[{"value":"price_USD","entry":[{"value":"price_USD%3A%28%7B*+100%7D+100%29","extendedData":{"uniqueId":"1121141059910195858368584012342324948481253249484841"},"label":"({*
+      100} 100)","count":0},{"value":"price_USD%3A%28%7B100+200%7D+200%29","extendedData":{"uniqueId":"11211410599101958583685840123494848325048481253250484841"},"label":"({100 200} 200)","count":0},{"value":"price_USD%3A%28%7B200+300%7D+300%29","extendedData":{"uniqueId":"11211410599101958583685840123504848325148481253251484841"},"label":"({200
+      300} 300)","count":0},{"value":"price_USD%3A%28%7B300+400%7D+400%29","extendedData":{"uniqueId":"11211410599101958583685840123514848325248481253252484841"},"label":"({300 400} 400)","count":1},{"value":"price_USD%3A%28%7B400+500%7D+500%29","extendedData":{"uniqueId":"11211410599101958583685840123524848325348481253253484841"},"label":"({400
+      500} 500)","count":1},{"value":"price_USD%3A%28%7B500+*%7D%29","extendedData":{"uniqueId":"11211410599101958583685840123534848324212541"},"label":"({500 *})","count":4}],"name":"OfferPrice_USD"},{"value":"mfName_ntk_cs","entry":[{"value":"mfName_ntk_cs%3A%22Adelee+Plus%22","extendedData":{"uniqueId":"-1002651001011081011013280108117115"},"label":"Adelee
+      Plus","count":"2"},{"value":"mfName_ntk_cs%3A%22DVR+Technics%22","extendedData":{"uniqueId":"-100268868232841019910411010599115"},"label":"DVR Technics","count":"2"},{"value":"mfName_ntk_cs%3A%22Eye+Dee+Team%22","extendedData":{"uniqueId":"-1002691211013268101101328410197109"},"label":"Eye
+      Dee Team","count":"2"}],"extendedData":{"propertyname":"facet","facet_id":"-1000","displaySequence":"0.0","maximumValuesToDisplay":"20","srchattr_id":"-1002","max_display":"20","zero_display":"0","selection":"0","sortorder":"0","storeent_id":"0","fname":"Brand","allValuesReturned":true,"allowMultipleValueSelection":"false","fdesc":"The
+      manufacturer","groupId":"0","group_id":"0","displayable":"1","propertyvalue":"mfName_ntk_cs","srchattridentifier":"_cat.ManufacturerName","keyword_search":"1"},"name":"ManufacturerName"}],"breadCrumbTrailEntryViewExtended":[{"0":{"value":"10127","label":"Electronics","type_":"FACET_ENTRY_CATEGORY"},"1":{"value":"10130","label":"Laptops","type_":"FACET_ENTRY_CATEGORY"}}],"recordSetCount":6,"catalogEntryView":[{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_child-laptop","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16610","singleSKUCatalogEntryID":"16611","hasSingleSKU":true,"partNumber":"CLA022_2201","uniqueID":"16610","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/646x1000\/cla022_2201.jpg","seo_token_ntk":"child-laptop"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_bedroom-laptop","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16612","singleSKUCatalogEntryID":"16613","hasSingleSKU":true,"partNumber":"CLA022_2202","uniqueID":"16612","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/646x1000\/cla022_2202.jpg","seo_token_ntk":"bedroom-laptop"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_travel-laptop","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16614","singleSKUCatalogEntryID":"16615","hasSingleSKU":true,"partNumber":"CLA022_2203","uniqueID":"16614","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/646x1000\/cla022_2203.jpg","seo_token_ntk":"travel-laptop"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_student-laptop","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16616","singleSKUCatalogEntryID":"16617","hasSingleSKU":true,"partNumber":"CLA022_2204","uniqueID":"16616","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/646x1000\/cla022_2204.jpg","seo_token_ntk":"student-laptop"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_office-laptop","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16618","singleSKUCatalogEntryID":"16619","hasSingleSKU":true,"partNumber":"CLA022_2205","uniqueID":"16618","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/646x1000\/cla022_2205.jpg","seo_token_ntk":"office-laptop"},{"catalogEntryTypeCode":"ProductBean","cm_seo_token_ntk":"10101_budget-laptop","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16620","singleSKUCatalogEntryID":"16621","hasSingleSKU":true,"partNumber":"CLA022_2206","uniqueID":"16620","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/646x1000\/cla022_2206.jpg","seo_token_ntk":"budget-laptop"}]}'
+- recorded: 2017-11-14T15:39:01.853Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/16610?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:01 GMT
+      Expires: Tue, 14 Nov 2017 16:39:01 GMT
+      Vary: Accept
+      X-Betamax: PLAY
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16610?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"This
+      fun laptop is a great complement to a child''s bedroom. It''s small and lightweight, and can handle everyday tasks like reading stories and watching videos.","shortDescription":"A fun and colorful laptop for children.","catalogEntryTypeCode":"ProductBean","buyable":"true","subscriptionTypeCode":"NONE","cm_seo_token_ntk":"10101_child-laptop","price":[{"value":"500.0","currency":"USD","usage":"Display","description":"L"},{"value":"500.0","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16610","singleSKUCatalogEntryID":"16611","parentCatalogGroupID":["10101_10130","10152_10130"],"name":"Child
+      Laptop","uniqueID":"16610","disallowRecurringOrder":"1","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/200x310\/cla022_2201.jpg","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/646x1000\/cla022_2201.jpg","manufacturer":"Eye
+      Dee Team","sKUs":[{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16611","name":"Child Laptop","hasSingleSKU":false,"partNumber":"CLA022_220101","uniqueID":"16611","storeID":"10101"}],"numberOfSKUs":1,"attributes":[{"storeDisplay":false,"sequence":".00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"1.00000","value":"2
+      GB","unitOfMeasure":"","identifier":"CLA022_2201","uniqueID":"7000000000000004534","unitID":""}],"searchable":false,"identifier":"Memory","comparable":false,"name":"Memory","uniqueID":"7000000000000000283","displayable":true},{"storeDisplay":false,"sequence":".00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"ComputersLaptopsMemory","comparable":true,"name":"Memory","uniqueID":"7000000000000000287","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"ComputersLaptopsBrand","comparable":false,"name":"Brand","uniqueID":"7000000000000000285","displayable":true},{"storeDisplay":false,"sequence":"2.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"1.00000","value":"1
+      lb","unitOfMeasure":"","identifier":"CLA022_2201","uniqueID":"7000000000000004546","unitID":""}],"searchable":false,"identifier":"Weight","comparable":false,"name":"Weight","uniqueID":"7000000000000000290","displayable":true},{"storeDisplay":false,"sequence":"2.00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"ComputersLaptopsWeight","comparable":true,"name":"Weight","uniqueID":"7000000000000000288","displayable":true},{"storeDisplay":false,"sequence":"3.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"1.00000","value":"2
+      hours","unitOfMeasure":"","identifier":"CLA022_2201","uniqueID":"7000000000000004540","unitID":""}],"searchable":false,"identifier":"Battery Life","comparable":false,"name":"Battery Life","uniqueID":"7000000000000000289","displayable":true},{"storeDisplay":false,"sequence":"3.00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"ComputersLaptopsBattery
+      Life","comparable":true,"name":"Battery Life","uniqueID":"7000000000000000286","displayable":true}],"hasSingleSKU":true,"partNumber":"CLA022_2201","storeID":"10101","seo_token_ntk":"child-laptop"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:01.973Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/16611?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:01 GMT
+      Expires: Tue, 14 Nov 2017 16:39:01 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16611?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"This
+      fun laptop is a great complement to a child''s bedroom. It''s small and lightweight, and can handle everyday tasks like reading stories and watching videos.","shortDescription":"A fun and colorful laptop for children.","catalogEntryTypeCode":"ItemBean","buyable":"true","subscriptionTypeCode":"NONE","cm_seo_token_ntk":"10101_child-laptop-cla022-220101","price":[{"value":"500.0","currency":"USD","usage":"Display","description":"L"},{"value":"500.0","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16611","parentCatalogGroupID":["10101_10130","10152_10130"],"name":"Child
+      Laptop","uniqueID":"16611","disallowRecurringOrder":"1","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/646x1000\/cla022_2201.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/200x310\/cla022_2201.jpg","manufacturer":"Eye
+      Dee Team","attributes":[{"usage":"Defining","storeDisplay":false,"sequence":".00000","facetable":false,"values":[{"sequence":"1.00000","value":"Eye Dee Team","unitOfMeasure":"one","identifier":"Eye Dee Team","uniqueID":"7000000000000004521","unitID":"C62"}],"searchable":false,"identifier":"ComputersLaptopsBrand","comparable":false,"name":"Brand","uniqueID":"7000000000000000285","displayable":true},{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"1.00000","value":"2
+      GB","unitOfMeasure":"one","identifier":"2 GB","uniqueID":"7000000000000004528","unitID":"C62"}],"searchable":false,"identifier":"ComputersLaptopsMemory","comparable":true,"name":"Memory","uniqueID":"7000000000000000287","displayable":true},{"usage":"Defining","storeDisplay":false,"sequence":"2.00000","facetable":false,"values":[{"sequence":"1.00000","value":"2
+      hours","unitOfMeasure":"one","identifier":"2 hours","uniqueID":"7000000000000004524","unitID":"C62"}],"searchable":false,"identifier":"ComputersLaptopsBattery Life","comparable":true,"name":"Battery Life","uniqueID":"7000000000000000286","displayable":true},{"usage":"Defining","storeDisplay":false,"sequence":"3.00000","facetable":false,"values":[{"sequence":"1.00000","value":"1
+      lb","unitOfMeasure":"one","identifier":"1 lb","uniqueID":"7000000000000004531","unitID":"C62"}],"searchable":false,"identifier":"ComputersLaptopsWeight","comparable":true,"name":"Weight","uniqueID":"7000000000000000288","displayable":true}],"hasSingleSKU":false,"partNumber":"CLA022_220101","storeID":"10101","seo_token_ntk":"child-laptop-cla022-220101","parentCatalogEntryID":"16610"}],"metaData":{"price":"1"}}'

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMSite folder="/Sites/Calista/Germany/German/Navigation" name="Calista [Site]" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
+<locale>de-DE</locale>
+<master>
+<link href="../../../United%20States/English/Navigation/Calista%20%5BSite%5D.xml" path="/Sites/Calista/United%20States/English/Navigation/Calista%20%5BSite%5D"/>
+</master>
+<id>8197498560ddde53525b83be7be397e8</id>
+<name>Calista</name>
+<root>
+<link href="Calista.xml" path="/Sites/Calista/Germany/German/Navigation/Calista"/>
+</root>
+<siteManagerGroup>manager-calista-de-DE</siteManagerGroup>
+<linkedSettings>
+<link href="../Options/Settings/SiteSettings.xml" path="/Sites/Calista/Germany/German/Options/Settings/SiteSettings"/>
+</linkedSettings>
+</CMSite>

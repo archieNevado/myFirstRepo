@@ -1,0 +1,212 @@
+!tape
+name: csi_testFindSubCategories_search
+interactions:
+- recorded: 2017-11-14T15:38:58.107Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:38:58 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000y1pV1g2o2Ti-zUolTtLAFe8:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10201"},"AuroraStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10151"},"PerfectChefESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10302"},"AuroraB2BESite":{"defaultCatalogId":"10151","defaultCatalog":"Extended
+      Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10303"},"Extended Sites Hub":{"defaultCatalogId":null,"defaultCatalog":"","catalogs":{},"storeId":"10051"},"AuroraB2BStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10251"},"AuroraESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10301"},"Extended Sites
+      Catalog Asset Store":{"defaultCatalogId":"10101","defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog
+      Asset Store":"10101"},"storeId":"10101"}},"serverTimezoneId":"Europe\/Berlin"}'
+- recorded: 2017-11-14T15:38:58.328Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:38:58 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=000081N7xwiDsMnQ_0QOZym-vdn:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
+- recorded: 2017-11-14T15:38:58.388Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/categoryview/@top?profileName=CoreMedia_findSubCategories&catalogId=10152&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:38:58 GMT
+      Expires: Tue, 14 Nov 2017 16:38:58 GMT
+      Vary: Accept
+    body: '{"recordSetTotal":10,"resourceName":"categoryview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/@top?profileName=CoreMedia_findSubCategories&catalogId=10152&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","catalogGroupView":[{"shortDescription":"On
+      The Table","sequence":["10101_-1_1.10000","10152_-1_.10000"],"cm_seo_token_ntk":"10101_pc-on-the-table","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10201","identifier":"PC_OnTheTable","parentCatalogGroupID":["10101_-1","10152_-1"],"name":"On
+      The Table","uniqueID":"10201","storeID":"10101","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_OnTheTable.jpg","seo_token_ntk":"pc-on-the-table","childCatalogGroupID":["10101_10205","10101_10206","10101_10207","10101_10208","10101_10209","10152_10205","10152_10206","10152_10207","10152_10208","10152_10209"]},{"shortDescription":"In
+      The Kitchen","sequence":["10101_-1_1.20000","10152_-1_.20000"],"cm_seo_token_ntk":"10101_pc-in-the-kitchen","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10202","identifier":"PC_InTheKitchen","parentCatalogGroupID":["10101_-1","10152_-1"],"name":"In
+      The Kitchen","uniqueID":"10202","storeID":"10101","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_InTheKitchen.jpg","seo_token_ntk":"pc-in-the-kitchen","childCatalogGroupID":["10101_10210","10101_10211","10101_10212","10101_10213","10101_10214","10152_10210","10152_10211","10152_10212","10152_10213","10152_10214"]},{"shortDescription":"For
+      The Cook","sequence":["10101_-1_1.30000","10152_-1_.30000"],"cm_seo_token_ntk":"10101_pc-for-the-cook","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10203","identifier":"PC_ForTheCook","parentCatalogGroupID":["10101_-1","10152_-1"],"name":"For
+      The Cook","uniqueID":"10203","storeID":"10101","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_ForTheCook.jpg","seo_token_ntk":"pc-for-the-cook","childCatalogGroupID":["10101_10217","10101_10218","10152_10217","10152_10218"]},{"shortDescription":"Deli","sequence":["10101_-1_1.40000","10152_-1_.40000"],"cm_seo_token_ntk":"10101_pc-deli","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10204","identifier":"PC_Deli","parentCatalogGroupID":["10101_-1","10152_-1"],"name":"Deli","uniqueID":"10204","storeID":"10101","thumbnail":"http:\/\/[cmsHost]\/catalogimage\/category\/[storeId]\/en_US\/thumbnail\/PC_Deli.jpg","seo_token_ntk":"pc-deli","childCatalogGroupID":["10101_10226","10101_10227","10152_10226","10152_10227"]},{"shortDescription":"The
+      latest styles for the entire family.","sequence":["10101_-1_4.00000","10152_-1_1.00000"],"cm_seo_token_ntk":"10101_apparel","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10101","identifier":"Apparel","parentCatalogGroupID":["10101_-1","10152_-1"],"name":"Apparel","uniqueID":"10101","storeID":"10101","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/category\/catr_wcl_pants.png","seo_token_ntk":"apparel","childCatalogGroupID":["10101_10105","10101_10104","10101_10103","10101_10102","10152_10105","10152_10104","10152_10103","10152_10102"]},{"shortDescription":"Electronics","sequence":["10101_-1_5.00000","10152_-1_2.00000"],"cm_seo_token_ntk":"10101_electronics","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10127","identifier":"Electronics","parentCatalogGroupID":["10101_-1","10152_-1"],"name":"Electronics","uniqueID":"10127","storeID":"10101","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/category\/catr_cta_tablets.png","seo_token_ntk":"electronics","childCatalogGroupID":["10101_10128","10101_10129","10101_10130","10101_10131","10101_10132","10152_10128","10152_10129","10152_10130","10152_10131","10152_10132"]},{"shortDescription":"Grocery","sequence":["10101_-1_5.00000","10152_-1_3.00000"],"cm_seo_token_ntk":"10101_grocery","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10133","identifier":"Grocery","parentCatalogGroupID":["10101_-1","10152_-1"],"name":"Grocery","uniqueID":"10133","storeID":"10101","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/grocery\/category\/catr_gda_dairy.png","seo_token_ntk":"grocery","childCatalogGroupID":["10101_10134","10101_10135","10101_10136","10101_10137","10152_10134","10152_10135","10152_10136","10152_10137"]},{"shortDescription":"Health","sequence":["10101_-1_5.00000","10152_-1_4.00000"],"cm_seo_token_ntk":"10101_health","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10138","identifier":"Health","parentCatalogGroupID":["10101_-1","10152_-1"],"name":"Health","uniqueID":"10138","storeID":"10101","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/health\/category\/catr_hme_medicine.png","seo_token_ntk":"health","childCatalogGroupID":["10101_10139","10101_10140","10152_10139","10152_10140"]},{"shortDescription":"Home
+      & Furnishing","sequence":["10101_-1_5.00000","10152_-1_5.00000"],"cm_seo_token_ntk":"10101_home---furnishing","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10141","identifier":"Home Furnishings","parentCatalogGroupID":["10101_-1","10152_-1"],"name":"Home
+      & Furnishing","uniqueID":"10141","storeID":"10101","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/category\/catr_hap_appliances.png","seo_token_ntk":"home---furnishing","childCatalogGroupID":["10101_10142","10101_10143","10101_10144","10101_10145","10101_10146","10101_10147","10152_10142","10152_10143","10152_10144","10152_10145","10152_10146","10152_10147"]},{"shortDescription":"Newsletters
+      & Magazines","sequence":["10101_-1_10.00000","10152_-1_6.00000"],"cm_seo_token_ntk":"10101_newsletters---magazines","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10148","identifier":"NewslettersAndMagazines","parentCatalogGroupID":["10101_-1","10152_-1"],"name":"Newsletters
+      & Magazines","uniqueID":"10148","storeID":"10101","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/newslettersmagazines\/category\/catr_nma_magazines.png","seo_token_ntk":"newsletters---magazines","childCatalogGroupID":["10101_10149","10101_10150","10152_10149","10152_10150"]}],"recordSetCount":10}'
+- recorded: 2017-11-14T15:38:58.579Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/categoryview/byParentCategory/10101?profileName=CoreMedia_findSubCategories&catalogId=10152&depthAndLimit=-1&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:38:58 GMT
+      Expires: Tue, 14 Nov 2017 16:38:58 GMT
+      Vary: Accept
+    body: '{"recordSetTotal":25,"resourceName":"categoryview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byParentCategory\/10101?profileName=CoreMedia_findSubCategories&catalogId=10152&depthAndLimit=-1&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","catalogGroupView":[{"shortDescription":"Girls","sequence":["10101_10101_1.00000","10152_10101_1.00000"],"cm_seo_token_ntk":"10101_girls","identifier":"Girls","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10105","name":"Girls","parentCatalogGroupID":["10101_10101","10152_10101"],"catalogGroupView":[{"shortDescription":"Shoes","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10120","identifier":"Girls
+      Shoes","parentCatalogGroupID":["10101_10105","10152_10105"],"name":"Shoes","uniqueID":"10120","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/girls\/category\/catr_gsh_shoes.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/girls\/category\/catr_gsh_shoes.png"},{"shortDescription":"Pants","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10121","identifier":"Girls
+      Pants","parentCatalogGroupID":["10101_10105","10152_10105"],"name":"Pants","uniqueID":"10121","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/girls\/category\/catr_gcl_pants.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/girls\/category\/catr_gcl_pants.png"},{"shortDescription":"Skirts","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10122","identifier":"Girls
+      Dresses Skirts","parentCatalogGroupID":["10101_10105","10152_10105"],"name":"Skirts","uniqueID":"10122","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/girls\/category\/catr_gcl_skirts.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/girls\/category\/catr_gcl_skirts.png"},{"shortDescription":"Tops","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10123","identifier":"Girls
+      Tops","parentCatalogGroupID":["10101_10105","10152_10105"],"name":"Tops","uniqueID":"10123","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/girls\/category\/catr_gcl_tops.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/girls\/category\/catr_gcl_tops.png"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/girls\/category\/catr_app_girls.png","uniqueID":"10105","storeID":"10101","childCatalogGroupID":["10101_10120","10101_10121","10101_10122","10101_10123","10152_10120","10152_10121","10152_10122","10152_10123"],"seo_token_ntk":"girls"},{"shortDescription":"boys","sequence":["10101_10101_2.00000","10152_10101_2.00000"],"cm_seo_token_ntk":"10101_boys","identifier":"Boys","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10104","name":"Boys","parentCatalogGroupID":["10101_10101","10152_10101"],"catalogGroupView":[{"shortDescription":"Pants","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10124","identifier":"Boys
+      Pants","parentCatalogGroupID":["10101_10104","10152_10104"],"name":"Pants","uniqueID":"10124","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/boys\/category\/catr_bcl_pants.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/boys\/category\/catr_bcl_pants.png"},{"shortDescription":"Tops","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10125","identifier":"Boys
+      Tops","parentCatalogGroupID":["10101_10104","10152_10104"],"name":"Tops","uniqueID":"10125","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/boys\/category\/catr_bcl_tops.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/boys\/category\/catr_bcl_tops.png"},{"shortDescription":"Shoes","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10126","identifier":"Boys
+      Shoes","parentCatalogGroupID":["10101_10104","10152_10104"],"name":"Shoes","uniqueID":"10126","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/boys\/category\/catr_bsh_shoes.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/boys\/category\/catr_bsh_shoes.png"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/boys\/category\/catr_app_boys.png","uniqueID":"10104","storeID":"10101","childCatalogGroupID":["10101_10124","10101_10125","10101_10126","10152_10124","10152_10125","10152_10126"],"seo_token_ntk":"boys"},{"shortDescription":"Women","sequence":["10101_10101_3.00000","10152_10101_3.00000"],"cm_seo_token_ntk":"10101_women","identifier":"Women","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10103","name":"Women","parentCatalogGroupID":["10101_10101","10152_10101"],"catalogGroupView":[{"shortDescription":"Dresses","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10106","identifier":"Dresses","parentCatalogGroupID":["10101_10103","10152_10103"],"name":"Dresses","uniqueID":"10106","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/category\/catr_wcl_dresses.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/category\/catr_wcl_dresses.png"},{"shortDescription":"Blouses","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10107","identifier":"Women
+      Shirts Blouses","parentCatalogGroupID":["10101_10103","10152_10103"],"name":"Blouses","uniqueID":"10107","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/category\/catr_wcl_blouses.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/category\/catr_wcl_blouses.png"},{"shortDescription":"Sweaters","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10108","identifier":"Women
+      Sweaters","parentCatalogGroupID":["10101_10103","10152_10103"],"name":"Sweaters","uniqueID":"10108","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/category\/catr_wcl_sweaters.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/category\/catr_wcl_sweaters.png"},{"shortDescription":"Skirts","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10109","identifier":"Women
+      Skirts","parentCatalogGroupID":["10101_10103","10152_10103"],"name":"Skirts","uniqueID":"10109","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/category\/catr_wcl_skirts.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/category\/catr_wcl_skirts.png"},{"shortDescription":"Pants","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10110","identifier":"Women
+      Pants","parentCatalogGroupID":["10101_10103","10152_10103"],"name":"Pants","uniqueID":"10110","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/category\/catr_wcl_pants.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/category\/catr_wcl_pants.png"},{"shortDescription":"Shoes","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10111","identifier":"Women
+      Shoes","parentCatalogGroupID":["10101_10103","10152_10103"],"name":"Shoes","uniqueID":"10111","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/category\/catr_wsh_shoes.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/category\/catr_wsh_shoes.png"},{"shortDescription":"Handbags","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10112","identifier":"Women
+      Handbags","parentCatalogGroupID":["10101_10103","10152_10103"],"name":"Handbags","uniqueID":"10112","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/category\/catr_wbg_handbags.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/category\/catr_wbg_handbags.png"},{"shortDescription":"Accessories","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10113","identifier":"Women
+      Accessories","parentCatalogGroupID":["10101_10103","10152_10103"],"name":"Accessories","uniqueID":"10113","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/category\/catr_wac_accessories.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/category\/catr_wac_accessories.png"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/category\/catr_app_women.png","uniqueID":"10103","storeID":"10101","childCatalogGroupID":["10101_10106","10101_10107","10101_10108","10101_10109","10101_10110","10101_10111","10101_10112","10101_10113","10152_10106","10152_10107","10152_10108","10152_10109","10152_10110","10152_10111","10152_10112","10152_10113"],"seo_token_ntk":"women"},{"shortDescription":"Men","sequence":["10101_10101_4.00000","10152_10101_4.00000"],"cm_seo_token_ntk":"10101_men","identifier":"Men","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10102","name":"Men","parentCatalogGroupID":["10101_10101","10152_10101"],"catalogGroupView":[{"shortDescription":"Jackets","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10114","identifier":"Men
+      Jackets","parentCatalogGroupID":["10101_10102","10152_10102"],"name":"Jackets","uniqueID":"10114","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/category\/catr_mcl_jackets.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/category\/catr_mcl_jackets.png"},{"shortDescription":"Shirts","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10115","identifier":"Men
+      Shirts","parentCatalogGroupID":["10101_10102","10152_10102"],"name":"Shirts","uniqueID":"10115","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/category\/catr_mcl_shirts.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/category\/catr_mcl_shirts.png"},{"shortDescription":"Suits","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10116","identifier":"Men
+      Suits","parentCatalogGroupID":["10101_10102","10152_10102"],"name":"Suits","uniqueID":"10116","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/category\/catr_mcl_suits.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/category\/catr_mcl_suits.png"},{"shortDescription":"Pants","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10117","identifier":"Men
+      Pants","parentCatalogGroupID":["10101_10102","10152_10102"],"name":"Pants","uniqueID":"10117","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/category\/catr_mcl_pants.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/category\/catr_mcl_pants.png"},{"shortDescription":"Accessories","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10118","identifier":"Men
+      Accessories","parentCatalogGroupID":["10101_10102","10152_10102"],"name":"Accessories","uniqueID":"10118","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/category\/catr_mac_accessories.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/category\/catr_mac_accessories.png"},{"shortDescription":"Shoes","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10119","identifier":"Men
+      Shoes","parentCatalogGroupID":["10101_10102","10152_10102"],"name":"Shoes","uniqueID":"10119","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/category\/catr_msh_shoes.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/category\/catr_msh_shoes.png"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/category\/catr_app_men.png","uniqueID":"10102","storeID":"10101","childCatalogGroupID":["10101_10114","10101_10115","10101_10116","10101_10117","10101_10118","10101_10119","10152_10114","10152_10115","10152_10116","10152_10117","10152_10118","10152_10119"],"seo_token_ntk":"men"}],"recordSetCount":25}'
+- recorded: 2017-11-14T15:38:58.738Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/categoryview/byId/10105?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=10152&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:38:58 GMT
+      Expires: Tue, 14 Nov 2017 16:38:58 GMT
+      Vary: Accept
+    body: '{"recordSetTotal":1,"resourceName":"categoryview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10105?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=10152&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","catalogGroupView":[{"shortDescription":"Girls","cm_seo_token_ntk":"10101_girls","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10105","identifier":"Girls","parentCatalogGroupID":["10101_10101","10152_10101"],"name":"Girls","uniqueID":"10105","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/girls\/category\/catr_app_girls.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/girls\/category\/catr_app_girls.png","seo_token_ntk":"girls","childCatalogGroupID":["10101_10120","10101_10121","10101_10122","10101_10123","10152_10120","10152_10121","10152_10122","10152_10123"]}],"recordSetCount":1}'
+- recorded: 2017-11-14T15:38:58.813Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/categoryview/byParentCategory/10105?profileName=CoreMedia_findSubCategories&catalogId=10152&depthAndLimit=-1&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:38:58 GMT
+      Expires: Tue, 14 Nov 2017 16:38:58 GMT
+      Vary: Accept
+    body: '{"recordSetTotal":4,"resourceName":"categoryview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byParentCategory\/10105?profileName=CoreMedia_findSubCategories&catalogId=10152&depthAndLimit=-1&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","catalogGroupView":[{"shortDescription":"Tops","sequence":["10101_10105_.00000","10152_10105_.00000"],"cm_seo_token_ntk":"10101_tops","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10123","identifier":"Girls
+      Tops","parentCatalogGroupID":["10101_10105","10152_10105"],"name":"Tops","uniqueID":"10123","storeID":"10101","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/girls\/category\/catr_gcl_tops.png","seo_token_ntk":"tops"},{"shortDescription":"Pants","sequence":["10101_10105_.00000","10152_10105_.00000"],"cm_seo_token_ntk":"10101_pants-10121--1","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10121","identifier":"Girls
+      Pants","parentCatalogGroupID":["10101_10105","10152_10105"],"name":"Pants","uniqueID":"10121","storeID":"10101","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/girls\/category\/catr_gcl_pants.png","seo_token_ntk":"pants-10121--1"},{"shortDescription":"Shoes","sequence":["10101_10105_.00000","10152_10105_.00000"],"cm_seo_token_ntk":"10101_shoes-10120--1","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10120","identifier":"Girls
+      Shoes","parentCatalogGroupID":["10101_10105","10152_10105"],"name":"Shoes","uniqueID":"10120","storeID":"10101","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/girls\/category\/catr_gsh_shoes.png","seo_token_ntk":"shoes-10120--1"},{"shortDescription":"Skirts","sequence":["10101_10105_.00000","10152_10105_.00000"],"cm_seo_token_ntk":"10101_skirts-10122--1","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10122","identifier":"Girls
+      Dresses Skirts","parentCatalogGroupID":["10101_10105","10152_10105"],"name":"Skirts","uniqueID":"10122","storeID":"10101","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/girls\/category\/catr_gcl_skirts.png","seo_token_ntk":"skirts-10122--1"}],"recordSetCount":4}'
+- recorded: 2017-11-14T15:38:58.894Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byCategory/10105?profileName=CoreMedia_findProductsByCategory&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:38:58 GMT
+      Expires: Tue, 14 Nov 2017 16:38:58 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":0,"recordSetTotal":0,"breadCrumbTrailEntryView":[{"value":"10101","label":"Apparel","type_":"FACET_ENTRY_CATEGORY"},{"value":"10105","label":"Girls","type_":"FACET_ENTRY_CATEGORY"}],"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byCategory\/10105?profileName=CoreMedia_findProductsByCategory&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","breadCrumbTrailEntryViewExtended":[{"0":{"value":"10101","label":"Apparel","type_":"FACET_ENTRY_CATEGORY"},"1":{"value":"10105","label":"Girls","type_":"FACET_ENTRY_CATEGORY"}}],"recordSetCount":0,"catalogEntryView":[]}'
+- recorded: 2017-11-14T15:38:59.010Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/categoryview/byId/10101?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=10152&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:38:58 GMT
+      Expires: Tue, 14 Nov 2017 16:38:58 GMT
+      Vary: Accept
+      X-Betamax: PLAY
+    body: '{"recordSetTotal":1,"resourceName":"categoryview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10101?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=10152&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","catalogGroupView":[{"shortDescription":"The
+      latest styles for the entire family.","cm_seo_token_ntk":"10101_apparel","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/categoryview\/byId\/10101","identifier":"Apparel","parentCatalogGroupID":["10101_-1","10152_-1"],"name":"Apparel","uniqueID":"10101","storeID":"10101","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/category\/catr_wcl_pants.png","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/category\/catr_wcl_pants.png","seo_token_ntk":"apparel","childCatalogGroupID":["10101_10105","10101_10104","10101_10103","10101_10102","10152_10105","10152_10104","10152_10103","10152_10102"]}],"recordSetCount":1}'

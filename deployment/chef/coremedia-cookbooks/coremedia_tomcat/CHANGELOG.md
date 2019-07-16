@@ -2,12 +2,6 @@ coremedia_tomcat Cookbook CHANGELOG
 ======================
 This file is used to list changes made in each version of the coremedia_tomcat cookbook.
 
-v2.2.1
-------
-- if `legacy_cookie_processor` is set to `true` in `context_config` map in either webapp or tomcat resource, the
-  legacy cookie processor is activated. This may be necessary for `8.5` deployments, see
-  [Apache Tomcat Docs](http://tomcat.apache.org/tomcat-8.5-doc/config/cookie-processor.html#Legacy_Cookie_Processor_-_org.apache.tomcat.util.http.LegacyCookieProcessor).
-
 v2.2.0
 ------
 - add toggle `keep_old_instances` on the `coremedia_tomcat` resource to trigger cleanup of old Tomcat installations.

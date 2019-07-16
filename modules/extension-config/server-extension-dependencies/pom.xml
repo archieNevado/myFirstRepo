@@ -42,6 +42,12 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>lc-server</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
       <artifactId>p13n-server</artifactId>
       <version>1-SNAPSHOT</version>
       <scope>runtime</scope>

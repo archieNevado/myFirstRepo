@@ -1,0 +1,82 @@
+!tape
+name: csi_testFindMarketingSpotByExternalId1
+interactions:
+- recorded: 2017-11-14T15:39:42.101Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:42 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000hA1Tf24f9_B9r7oaXYcKQd9:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10201"},"AuroraStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10151"},"PerfectChefESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10302"},"AuroraB2BESite":{"defaultCatalogId":"10151","defaultCatalog":"Extended
+      Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10303"},"Extended Sites Hub":{"defaultCatalogId":null,"defaultCatalog":"","catalogs":{},"storeId":"10051"},"AuroraB2BStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10251"},"AuroraESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10301"},"Extended Sites
+      Catalog Asset Store":{"defaultCatalogId":"10101","defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog
+      Asset Store":"10101"},"storeId":"10101"}},"serverTimezoneId":"Europe\/Berlin"}'
+- recorded: 2017-11-14T15:39:42.123Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:42 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000CtwUwtbxr0na-NfIJfxZ_Mt:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
+- recorded: 2017-11-14T15:39:42.192Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/espot/ApparelRow1_Content?currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Authorization: Basic Y21hZG1pbjpWVEpqeW8wQVlTblhGSEkyMDF5bw==
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:42 GMT
+      Expires: Tue, 14 Nov 2017 16:39:42 GMT
+      Set-Cookie: JSESSIONID=0000WfUbjXe1Zfn58SU36RiINDA:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Vary: Accept
+    body: '{"MarketingSpotData":[{"baseMarketingSpotActivityData":[{"baseMarketingSpotActivityID":"10439","contentStoreId":"10151","contentName":"ApparelHeroImage","contentClickAction":"None","marketingContentDescription":[{"marketingText":"<link rel=\"stylesheet\"
+      href=\"[imagePath]rwdWebAssets\/deptMainESpot\/styles.css\" \/> <div id=\"deptMainESpot\" class=\"container\">    <div id=\"deptMainESpot-bkgrd\">       <div id=\"deptMainESpot-bkgrd-couple\">          <div><\/div>       <\/div>       <div id=\"deptMainESpot-container\"
+      class=\"espotCont\">          <div id=\"deptMainESpot-girl2\">    <!--[if IE 8]>       <img src=\"[imagePath]rwdWebAssets\/deptMainESpot\/female.png\"\/>    <![endif]-->    <!--[if gte IE 9]><!-->          <div><\/div>    <!--<![endif]-->          <\/div>          <div
+      id=\"deptMainESpot-titleCont\">             <div class=\"title\">Fashionable <\/div>             <div class=\"title2\">Evening Wear<\/div>             <div class=\"title4\">Save on women''s dresses <br\/>and men''s suits<\/div>          <\/div>          <div
+      id=\"deptMainESpot-multiImgCont\">             <div id=\"deptMainESpot-couple\">                <!--[if IE 8]>      <img src=\"[imagePath]rwdWebAssets\/deptMainESpot\/couple.png\"\/>     <![endif]-->     <!--[if gte IE 9]><!-->           <div><\/div>     <!--<![endif]-->             <\/div>             <div
+      id=\"deptMainESpot-male\">                <div><\/div>             <\/div>          <\/div>       <\/div>    <\/div> <\/div>","language":"-1"}],"MarketingContentDescription":[{}],"contentFormatId":"2","baseMarketingSpotActivityName":"ApparelHeroImage","activityPriority":"1","activityIdentifierID":"0","properties":[{"baseMarketingKey":"mktActivityDescription"},{"baseMarketingKey":"displaySequence","baseMarketingValue":"1.0"}],"contentId":"10439","contentFormatName":"Text","baseMarketingSpotDataType":"MarketingContent"}],"marketingSpotIdentifier":"12438","eSpotName":"ApparelRow1_Content","behavior":"0","nextTimeLimit":"-1","defaultContentDisplaySequence":[{"displaySequence":"1.0","resultFormat":"MarketingContent","resultId":"10439"}]}],"resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/espot\/ApparelRow1_Content?currency=USD&langId=-1","resourceName":"espot"}'

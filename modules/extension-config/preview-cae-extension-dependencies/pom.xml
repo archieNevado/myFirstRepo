@@ -24,6 +24,30 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>lc-ecommerce-ibm-preview-cae</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>lc-ecommerce-sfcc-preview-cae</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>lc-p13n-preview-cae</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>lc-preview-cae</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
       <artifactId>p13n-preview-cae</artifactId>
       <version>1-SNAPSHOT</version>
       <scope>runtime</scope>

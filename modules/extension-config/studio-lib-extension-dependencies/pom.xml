@@ -78,6 +78,43 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>hybris-studio-lib</artifactId>
+      <version>1-SNAPSHOT</version>
+      <type>pom</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>lc-asset-studio-lib-component</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>lc-ecommerce-ibm-studio-lib</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>lc-ecommerce-sfcc-studio-component</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>lc-es-studio-lib-component</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>lc-studio-lib</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
       <artifactId>notification-elastic-studio-lib</artifactId>
       <version>1-SNAPSHOT</version>
       <type>pom</type>

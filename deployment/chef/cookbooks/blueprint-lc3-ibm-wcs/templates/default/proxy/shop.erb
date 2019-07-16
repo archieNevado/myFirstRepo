@@ -1,0 +1,40 @@
+<%- if @params[:ssl] -%>
+  SSLProxyEngine On
+  <%- unless @params[:ssl_proxy_verify] -%>
+  SSLProxyVerify none
+  SSLProxyCheckPeerCN off
+  SSLProxyCheckPeerName off
+  <%- end -%>
+<%- end -%>
+  ProxyPreserveHost On
+
+  <%- if @params[:headers] -%>
+  # during development it may be convenient to add headers to share remote WCS systems more efficiently
+  <%- @params[:headers].sort.each do |header| -%>
+  <%= header %>
+  <%- end -%>
+  <%- end -%>
+
+  # CAE proxy
+  <%- protocol =  @params[:protocol].nil? ? 'http' : @params[:protocol] -%>
+
+  ProxyPass /dynamic <%= protocol %>://<%= @params[:site_server_name] %>/dynamic timeout=60
+  ProxyPassReverse /dynamic <%= protocol %>://<%= @params[:site_server_name] %>/dynamic
+
+  ProxyPass /service <%= protocol %>://<%= @params[:site_server_name] %>/service timeout=60
+  ProxyPassReverse /service <%= protocol %>://<%= @params[:site_server_name] %>/service
+
+  <%- wcs_protocol =  @params[:ssl] ? 'https' : 'http' -%>
+  # WCS stores & search pass through WCS IHS(apache)
+  ProxyPass /wcs <%= wcs_protocol %>://<%= @params[:wcs_host] %>/wcs timeout=600
+  ProxyPassReverse /wcs <%= wcs_protocol %>://<%= @params[:wcs_host] %>/wcs
+
+  ProxyPass /wcsstore <%= wcs_protocol %>://<%= @params[:wcs_host] %>/wcsstore timeout=600
+  ProxyPassReverse /wcsstore <%= wcs_protocol %>://<%= @params[:wcs_host] %>/wcsstore
+
+  ProxyPass /webapp <%= wcs_protocol %>://<%= @params[:wcs_host] %>/webapp timeout=600
+  ProxyPassReverse /webapp <%= wcs_protocol %>://<%= @params[:wcs_host] %>/webapp
+
+  # WCS tools pass through WCS IHS(apache)
+  ProxyPass / <%= protocol %>://<%= @params[:wcs_host] %>/ timeout=600
+  ProxyPassReverse / <%= protocol %>://<%= @params[:wcs_host] %>/

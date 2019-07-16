@@ -1,0 +1,488 @@
+!tape
+name: csi_testGetAvailabilityInfo
+interactions:
+- recorded: 2017-11-14T15:39:40.526Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:40 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000aVwjslH4oFZG0dA-WYe4xU6:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10201"},"AuroraStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10151"},"PerfectChefESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10302"},"AuroraB2BESite":{"defaultCatalogId":"10151","defaultCatalog":"Extended
+      Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10303"},"Extended Sites Hub":{"defaultCatalogId":null,"defaultCatalog":"","catalogs":{},"storeId":"10051"},"AuroraB2BStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10251"},"AuroraESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10301"},"Extended Sites
+      Catalog Asset Store":{"defaultCatalogId":"10101","defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog
+      Asset Store":"10101"},"storeId":"10101"}},"serverTimezoneId":"Europe\/Berlin"}'
+- recorded: 2017-11-14T15:39:40.572Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:40 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000WaRZrVWAaOhhfwGCqAogbeV:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
+- recorded: 2017-11-14T15:39:40.594Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/%2520?partNumber=AuroraWMDRS-1&profileName=CoreMedia_findProductByPartNumber_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:40 GMT
+      Expires: Tue, 14 Nov 2017 16:39:40 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/%2520?partNumber=AuroraWMDRS-1&profileName=CoreMedia_findProductByPartNumber_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"Classically
+      tailored, this elegant satin dress features a bateau neckline, soft pleating, and a clasped belt to define the waist.","shortDescription":"Jewel-toned cocktail dress with fitted bodice and gently flared skirt","catalogEntryTypeCode":"ProductBean","buyable":"true","subscriptionTypeCode":"NONE","cm_seo_token_ntk":"10101_hermitage-fit-and-flare-dress","price":[{"value":"250.0","currency":"USD","usage":"Display","description":"L"},{"value":"100.0","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13951","parentCatalogGroupID":["10101_10106","10152_10106"],"name":"Hermitage
+      Fit and Flare Dress","uniqueID":"13951","disallowRecurringOrder":"1","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/646x1000\/wcl000_0028_a_red.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/200x310\/wcl000_0028_a_red.jpg","attachments":[{"usage":"SWATCH_IMAGE","attachmentAssetPath":"ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/patternswatches_28x28\/wcl000_0028_a_red_s.jpg","attachmentAssetID":3233,"identifier":"AuroraWMDRS-1_swatchcolor_Red","mimeType":"image\/jpg","catentry_id":13951},{"usage":"SWATCH_IMAGE","attachmentAssetPath":"ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/patternswatches_28x28\/wcl000_0028_a_teal_s.jpg","attachmentAssetID":3234,"identifier":"AuroraWMDRS-1_swatchcolor_Teal","mimeType":"image\/jpg","catentry_id":13951},{"usage":"SWATCH_IMAGE","attachmentAssetPath":"ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/patternswatches_28x28\/wcl000_0028_a_blue_s.jpg","attachmentAssetID":3235,"identifier":"AuroraWMDRS-1_swatchcolor_Blue","mimeType":"image\/jpg","catentry_id":13951}],"manufacturer":"Hermitage
+      Collection","sKUs":[{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13990","name":"Hermitage Fit and Flare Dress","hasSingleSKU":false,"partNumber":"AuroraWMDRS-001","uniqueID":"13990","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13991","name":"Hermitage
+      Fit and Flare Dress","hasSingleSKU":false,"partNumber":"AuroraWMDRS-002","uniqueID":"13991","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13992","name":"Hermitage
+      Fit and Flare Dress","hasSingleSKU":false,"partNumber":"AuroraWMDRS-003","uniqueID":"13992","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13993","name":"Hermitage
+      Fit and Flare Dress","hasSingleSKU":false,"partNumber":"AuroraWMDRS-004","uniqueID":"13993","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13994","name":"Hermitage
+      Fit and Flare Dress","hasSingleSKU":false,"partNumber":"AuroraWMDRS-005","uniqueID":"13994","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13995","name":"Hermitage
+      Fit and Flare Dress","hasSingleSKU":false,"partNumber":"AuroraWMDRS-006","uniqueID":"13995","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13996","name":"Hermitage
+      Fit and Flare Dress","hasSingleSKU":false,"partNumber":"AuroraWMDRS-007","uniqueID":"13996","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13997","name":"Hermitage
+      Fit and Flare Dress","hasSingleSKU":false,"partNumber":"AuroraWMDRS-008","uniqueID":"13997","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13998","name":"Hermitage
+      Fit and Flare Dress","hasSingleSKU":false,"partNumber":"AuroraWMDRS-009","uniqueID":"13998","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13999","name":"Hermitage
+      Fit and Flare Dress","hasSingleSKU":false,"partNumber":"AuroraWMDRS-010","uniqueID":"13999","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/14000","name":"Hermitage
+      Fit and Flare Dress","hasSingleSKU":false,"partNumber":"AuroraWMDRS-011","uniqueID":"14000","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/14001","name":"Hermitage
+      Fit and Flare Dress","hasSingleSKU":false,"partNumber":"AuroraWMDRS-012","uniqueID":"14001","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/14002","name":"Hermitage
+      Fit and Flare Dress","hasSingleSKU":false,"partNumber":"AuroraWMDRS-013","uniqueID":"14002","storeID":"10101"}],"numberOfSKUs":13,"attributes":[{"storeDisplay":false,"sequence":"1.00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"swatchcolor","comparable":true,"name":"Color","uniqueID":"7000000000000000202","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"19.00000","value":"Knit","unitOfMeasure":"one","identifier":"Knit","uniqueID":"7000000000000002975","unitID":"C62"}],"searchable":false,"identifier":"construction","comparable":true,"name":"Construction","uniqueID":"7000000000000000203","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"20.00000","value":"Short","unitOfMeasure":"one","identifier":"Short","uniqueID":"7000000000000002977","unitID":"C62"}],"searchable":false,"identifier":"length","comparable":true,"name":"Length","uniqueID":"7000000000000000204","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"21.00000","value":"Synthetic","unitOfMeasure":"one","identifier":"Synthetic","uniqueID":"7000000000000002980","unitID":"C62"}],"searchable":false,"identifier":"material","comparable":true,"name":"Material","uniqueID":"7000000000000000205","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"25.00000","value":"Cocktail
+      & Evening","unitOfMeasure":"one","identifier":"Cocktail & Evening","uniqueID":"7000000000000002987","unitID":"C62"}],"searchable":false,"identifier":"occasion","comparable":true,"name":"Occasion","uniqueID":"7000000000000000206","displayable":true},{"storeDisplay":false,"sequence":"2.00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"swatchSize","comparable":true,"name":"Available
+      Sizes","uniqueID":"7000000000000000201","displayable":true}],"hasSingleSKU":false,"partNumber":"AuroraWMDRS-1","storeID":"10101","seo_token_ntk":"hermitage-fit-and-flare-dress"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:40.702Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/13990?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:40 GMT
+      Expires: Tue, 14 Nov 2017 16:39:40 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13990?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"Classically
+      tailored, this elegant satin dress features a bateau neckline, soft pleating, and a clasped belt to define the waist.","shortDescription":"Jewel-toned cocktail dress with fitted bodice and gently flared skirt","catalogEntryTypeCode":"ItemBean","buyable":"true","subscriptionTypeCode":"NONE","cm_seo_token_ntk":"10101_hermitage-fit-and-flare-dress-aurorawmdrs-001","price":[{"value":"250.0","currency":"USD","usage":"Display","description":"L"},{"value":"100.0","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13990","parentCatalogGroupID":["10101_10106","10152_10106"],"name":"Hermitage
+      Fit and Flare Dress","uniqueID":"13990","disallowRecurringOrder":"1","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/646x1000\/wcl000_0028_a_red.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/200x310\/wcl000_0028_a_red.jpg","manufacturer":"Hermitage
+      Collection","attributes":[{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"1.00000","value":"XS","unitOfMeasure":"one","image1":"images\/catalog\/apparel\/women\/Swatches\/swatch_size\/size_xs_enabled.png","identifier":"XS","image1path":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/Swatches\/swatch_size\/size_xs_enabled.png","uniqueID":"7000000000000002954","unitID":"C62"}],"searchable":false,"identifier":"swatchSize","comparable":true,"name":"Available
+      Sizes","uniqueID":"7000000000000000201","displayable":true},{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"1.00000","value":"Red","unitOfMeasure":"one","image1":"images\/catalog\/apparel\/women\/Swatches\/swatch_red.png","identifier":"Red","image1path":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/Swatches\/swatch_red.png","uniqueID":"7000000000000002957","unitID":"C62"}],"searchable":false,"identifier":"swatchcolor","comparable":true,"name":"Color","uniqueID":"7000000000000000202","displayable":true}],"hasSingleSKU":false,"partNumber":"AuroraWMDRS-001","storeID":"10101","seo_token_ntk":"hermitage-fit-and-flare-dress-aurorawmdrs-001","parentCatalogEntryID":"13951"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:40.735Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/13991?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:40 GMT
+      Expires: Tue, 14 Nov 2017 16:39:40 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13991?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"Classically
+      tailored, this elegant satin dress features a bateau neckline, soft pleating, and a clasped belt to define the waist.","shortDescription":"Jewel-toned cocktail dress with fitted bodice and gently flared skirt","catalogEntryTypeCode":"ItemBean","buyable":"true","subscriptionTypeCode":"NONE","cm_seo_token_ntk":"10101_hermitage-fit-and-flare-dress-aurorawmdrs-002","price":[{"value":"250.0","currency":"USD","usage":"Display","description":"L"},{"value":"100.0","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13991","parentCatalogGroupID":["10101_10106","10152_10106"],"name":"Hermitage
+      Fit and Flare Dress","uniqueID":"13991","disallowRecurringOrder":"1","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/646x1000\/wcl000_0028_a_red.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/200x310\/wcl000_0028_a_red.jpg","manufacturer":"Hermitage
+      Collection","attributes":[{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"3.00000","value":"M","unitOfMeasure":"one","image1":"images\/catalog\/apparel\/women\/Swatches\/swatch_size\/size_m_enabled.png","identifier":"M","image1path":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/Swatches\/swatch_size\/size_m_enabled.png","uniqueID":"7000000000000002952","unitID":"C62"}],"searchable":false,"identifier":"swatchSize","comparable":true,"name":"Available
+      Sizes","uniqueID":"7000000000000000201","displayable":true},{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"1.00000","value":"Red","unitOfMeasure":"one","image1":"images\/catalog\/apparel\/women\/Swatches\/swatch_red.png","identifier":"Red","image1path":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/Swatches\/swatch_red.png","uniqueID":"7000000000000002957","unitID":"C62"}],"searchable":false,"identifier":"swatchcolor","comparable":true,"name":"Color","uniqueID":"7000000000000000202","displayable":true}],"hasSingleSKU":false,"partNumber":"AuroraWMDRS-002","storeID":"10101","seo_token_ntk":"hermitage-fit-and-flare-dress-aurorawmdrs-002","parentCatalogEntryID":"13951"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:40.762Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/13992?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:40 GMT
+      Expires: Tue, 14 Nov 2017 16:39:40 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13992?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"Classically
+      tailored, this elegant satin dress features a bateau neckline, soft pleating, and a clasped belt to define the waist.","shortDescription":"Jewel-toned cocktail dress with fitted bodice and gently flared skirt","catalogEntryTypeCode":"ItemBean","buyable":"true","subscriptionTypeCode":"NONE","cm_seo_token_ntk":"10101_hermitage-fit-and-flare-dress-aurorawmdrs-003","price":[{"value":"250.0","currency":"USD","usage":"Display","description":"L"},{"value":"100.0","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13992","parentCatalogGroupID":["10101_10106","10152_10106"],"name":"Hermitage
+      Fit and Flare Dress","uniqueID":"13992","disallowRecurringOrder":"1","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/646x1000\/wcl000_0028_a_red.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/200x310\/wcl000_0028_a_red.jpg","manufacturer":"Hermitage
+      Collection","attributes":[{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"4.00000","value":"L","unitOfMeasure":"one","image1":"images\/catalog\/apparel\/women\/Swatches\/swatch_size\/size_l_enabled.png","identifier":"L","image1path":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/Swatches\/swatch_size\/size_l_enabled.png","uniqueID":"7000000000000002953","unitID":"C62"}],"searchable":false,"identifier":"swatchSize","comparable":true,"name":"Available
+      Sizes","uniqueID":"7000000000000000201","displayable":true},{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"1.00000","value":"Red","unitOfMeasure":"one","image1":"images\/catalog\/apparel\/women\/Swatches\/swatch_red.png","identifier":"Red","image1path":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/Swatches\/swatch_red.png","uniqueID":"7000000000000002957","unitID":"C62"}],"searchable":false,"identifier":"swatchcolor","comparable":true,"name":"Color","uniqueID":"7000000000000000202","displayable":true}],"hasSingleSKU":false,"partNumber":"AuroraWMDRS-003","storeID":"10101","seo_token_ntk":"hermitage-fit-and-flare-dress-aurorawmdrs-003","parentCatalogEntryID":"13951"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:40.790Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/13993?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:40 GMT
+      Expires: Tue, 14 Nov 2017 16:39:40 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13993?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"Classically
+      tailored, this elegant satin dress features a bateau neckline, soft pleating, and a clasped belt to define the waist.","shortDescription":"Jewel-toned cocktail dress with fitted bodice and gently flared skirt","catalogEntryTypeCode":"ItemBean","buyable":"true","subscriptionTypeCode":"NONE","cm_seo_token_ntk":"10101_hermitage-fit-and-flare-dress-aurorawmdrs-004","price":[{"value":"250.0","currency":"USD","usage":"Display","description":"L"},{"value":"100.0","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13993","parentCatalogGroupID":["10101_10106","10152_10106"],"name":"Hermitage
+      Fit and Flare Dress","uniqueID":"13993","disallowRecurringOrder":"1","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/646x1000\/wcl000_0028_a_red.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/200x310\/wcl000_0028_a_red.jpg","manufacturer":"Hermitage
+      Collection","attributes":[{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"1.00000","value":"Red","unitOfMeasure":"one","image1":"images\/catalog\/apparel\/women\/Swatches\/swatch_red.png","identifier":"Red","image1path":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/Swatches\/swatch_red.png","uniqueID":"7000000000000002957","unitID":"C62"}],"searchable":false,"identifier":"swatchcolor","comparable":true,"name":"Color","uniqueID":"7000000000000000202","displayable":true},{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"5.00000","value":"XL","unitOfMeasure":"one","image1":"images\/catalog\/apparel\/women\/Swatches\/swatch_size\/size_xl_enabled.png","identifier":"XL","image1path":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/Swatches\/swatch_size\/size_xl_enabled.png","uniqueID":"7000000000000002955","unitID":"C62"}],"searchable":false,"identifier":"swatchSize","comparable":true,"name":"Available
+      Sizes","uniqueID":"7000000000000000201","displayable":true}],"hasSingleSKU":false,"partNumber":"AuroraWMDRS-004","storeID":"10101","seo_token_ntk":"hermitage-fit-and-flare-dress-aurorawmdrs-004","parentCatalogEntryID":"13951"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:40.814Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/13994?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:40 GMT
+      Expires: Tue, 14 Nov 2017 16:39:40 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13994?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"Classically
+      tailored, this elegant satin dress features a bateau neckline, soft pleating, and a clasped belt to define the waist.","shortDescription":"Jewel-toned cocktail dress with fitted bodice and gently flared skirt","catalogEntryTypeCode":"ItemBean","buyable":"true","subscriptionTypeCode":"NONE","cm_seo_token_ntk":"10101_hermitage-fit-and-flare-dress-aurorawmdrs-005","price":[{"value":"250.0","currency":"USD","usage":"Display","description":"L"},{"value":"100.0","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13994","parentCatalogGroupID":["10101_10106","10152_10106"],"name":"Hermitage
+      Fit and Flare Dress","uniqueID":"13994","disallowRecurringOrder":"1","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/646x1000\/wcl000_0028_a_teal.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/200x310\/wcl000_0028_a_teal.jpg","manufacturer":"Hermitage
+      Collection","attributes":[{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"2.00000","value":"S","unitOfMeasure":"one","image1":"images\/catalog\/apparel\/women\/Swatches\/swatch_size\/size_s_enabled.png","identifier":"S","image1path":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/Swatches\/swatch_size\/size_s_enabled.png","uniqueID":"7000000000000002951","unitID":"C62"}],"searchable":false,"identifier":"swatchSize","comparable":true,"name":"Available
+      Sizes","uniqueID":"7000000000000000201","displayable":true},{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"2.00000","value":"Teal","unitOfMeasure":"one","image1":"images\/catalog\/apparel\/women\/Swatches\/swatch_teal.png","identifier":"Teal","image1path":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/Swatches\/swatch_teal.png","uniqueID":"7000000000000002958","unitID":"C62"}],"searchable":false,"identifier":"swatchcolor","comparable":true,"name":"Color","uniqueID":"7000000000000000202","displayable":true}],"hasSingleSKU":false,"partNumber":"AuroraWMDRS-005","storeID":"10101","seo_token_ntk":"hermitage-fit-and-flare-dress-aurorawmdrs-005","parentCatalogEntryID":"13951"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:40.840Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/13995?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:40 GMT
+      Expires: Tue, 14 Nov 2017 16:39:40 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13995?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"Classically
+      tailored, this elegant satin dress features a bateau neckline, soft pleating, and a clasped belt to define the waist.","shortDescription":"Jewel-toned cocktail dress with fitted bodice and gently flared skirt","catalogEntryTypeCode":"ItemBean","buyable":"true","subscriptionTypeCode":"NONE","cm_seo_token_ntk":"10101_hermitage-fit-and-flare-dress-aurorawmdrs-006","price":[{"value":"250.0","currency":"USD","usage":"Display","description":"L"},{"value":"100.0","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13995","parentCatalogGroupID":["10101_10106","10152_10106"],"name":"Hermitage
+      Fit and Flare Dress","uniqueID":"13995","disallowRecurringOrder":"1","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/646x1000\/wcl000_0028_a_teal.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/200x310\/wcl000_0028_a_teal.jpg","manufacturer":"Hermitage
+      Collection","attributes":[{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"3.00000","value":"M","unitOfMeasure":"one","image1":"images\/catalog\/apparel\/women\/Swatches\/swatch_size\/size_m_enabled.png","identifier":"M","image1path":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/Swatches\/swatch_size\/size_m_enabled.png","uniqueID":"7000000000000002952","unitID":"C62"}],"searchable":false,"identifier":"swatchSize","comparable":true,"name":"Available
+      Sizes","uniqueID":"7000000000000000201","displayable":true},{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"2.00000","value":"Teal","unitOfMeasure":"one","image1":"images\/catalog\/apparel\/women\/Swatches\/swatch_teal.png","identifier":"Teal","image1path":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/Swatches\/swatch_teal.png","uniqueID":"7000000000000002958","unitID":"C62"}],"searchable":false,"identifier":"swatchcolor","comparable":true,"name":"Color","uniqueID":"7000000000000000202","displayable":true}],"hasSingleSKU":false,"partNumber":"AuroraWMDRS-006","storeID":"10101","seo_token_ntk":"hermitage-fit-and-flare-dress-aurorawmdrs-006","parentCatalogEntryID":"13951"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:40.866Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/13996?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:40 GMT
+      Expires: Tue, 14 Nov 2017 16:39:40 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13996?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"Classically
+      tailored, this elegant satin dress features a bateau neckline, soft pleating, and a clasped belt to define the waist.","shortDescription":"Jewel-toned cocktail dress with fitted bodice and gently flared skirt","catalogEntryTypeCode":"ItemBean","buyable":"true","subscriptionTypeCode":"NONE","cm_seo_token_ntk":"10101_hermitage-fit-and-flare-dress-aurorawmdrs-007","price":[{"value":"250.0","currency":"USD","usage":"Display","description":"L"},{"value":"100.0","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13996","parentCatalogGroupID":["10101_10106","10152_10106"],"name":"Hermitage
+      Fit and Flare Dress","uniqueID":"13996","disallowRecurringOrder":"1","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/646x1000\/wcl000_0028_a_teal.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/200x310\/wcl000_0028_a_teal.jpg","manufacturer":"Hermitage
+      Collection","attributes":[{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"4.00000","value":"L","unitOfMeasure":"one","image1":"images\/catalog\/apparel\/women\/Swatches\/swatch_size\/size_l_enabled.png","identifier":"L","image1path":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/Swatches\/swatch_size\/size_l_enabled.png","uniqueID":"7000000000000002953","unitID":"C62"}],"searchable":false,"identifier":"swatchSize","comparable":true,"name":"Available
+      Sizes","uniqueID":"7000000000000000201","displayable":true},{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"2.00000","value":"Teal","unitOfMeasure":"one","image1":"images\/catalog\/apparel\/women\/Swatches\/swatch_teal.png","identifier":"Teal","image1path":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/Swatches\/swatch_teal.png","uniqueID":"7000000000000002958","unitID":"C62"}],"searchable":false,"identifier":"swatchcolor","comparable":true,"name":"Color","uniqueID":"7000000000000000202","displayable":true}],"hasSingleSKU":false,"partNumber":"AuroraWMDRS-007","storeID":"10101","seo_token_ntk":"hermitage-fit-and-flare-dress-aurorawmdrs-007","parentCatalogEntryID":"13951"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:40.893Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/13997?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:40 GMT
+      Expires: Tue, 14 Nov 2017 16:39:40 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13997?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"Classically
+      tailored, this elegant satin dress features a bateau neckline, soft pleating, and a clasped belt to define the waist.","shortDescription":"Jewel-toned cocktail dress with fitted bodice and gently flared skirt","catalogEntryTypeCode":"ItemBean","buyable":"true","subscriptionTypeCode":"NONE","cm_seo_token_ntk":"10101_hermitage-fit-and-flare-dress-aurorawmdrs-008","price":[{"value":"250.0","currency":"USD","usage":"Display","description":"L"},{"value":"100.0","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13997","parentCatalogGroupID":["10101_10106","10152_10106"],"name":"Hermitage
+      Fit and Flare Dress","uniqueID":"13997","disallowRecurringOrder":"1","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/646x1000\/wcl000_0028_a_teal.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/200x310\/wcl000_0028_a_teal.jpg","manufacturer":"Hermitage
+      Collection","attributes":[{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"5.00000","value":"XL","unitOfMeasure":"one","image1":"images\/catalog\/apparel\/women\/Swatches\/swatch_size\/size_xl_enabled.png","identifier":"XL","image1path":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/Swatches\/swatch_size\/size_xl_enabled.png","uniqueID":"7000000000000002955","unitID":"C62"}],"searchable":false,"identifier":"swatchSize","comparable":true,"name":"Available
+      Sizes","uniqueID":"7000000000000000201","displayable":true},{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"2.00000","value":"Teal","unitOfMeasure":"one","image1":"images\/catalog\/apparel\/women\/Swatches\/swatch_teal.png","identifier":"Teal","image1path":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/Swatches\/swatch_teal.png","uniqueID":"7000000000000002958","unitID":"C62"}],"searchable":false,"identifier":"swatchcolor","comparable":true,"name":"Color","uniqueID":"7000000000000000202","displayable":true}],"hasSingleSKU":false,"partNumber":"AuroraWMDRS-008","storeID":"10101","seo_token_ntk":"hermitage-fit-and-flare-dress-aurorawmdrs-008","parentCatalogEntryID":"13951"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:40.936Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/13998?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:40 GMT
+      Expires: Tue, 14 Nov 2017 16:39:40 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13998?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"Classically
+      tailored, this elegant satin dress features a bateau neckline, soft pleating, and a clasped belt to define the waist.","shortDescription":"Jewel-toned cocktail dress with fitted bodice and gently flared skirt","catalogEntryTypeCode":"ItemBean","buyable":"true","subscriptionTypeCode":"NONE","cm_seo_token_ntk":"10101_hermitage-fit-and-flare-dress-aurorawmdrs-009","price":[{"value":"250.0","currency":"USD","usage":"Display","description":"L"},{"value":"100.0","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13998","parentCatalogGroupID":["10101_10106","10152_10106"],"name":"Hermitage
+      Fit and Flare Dress","uniqueID":"13998","disallowRecurringOrder":"1","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/646x1000\/wcl000_0028_a_blue.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/200x310\/wcl000_0028_a_blue.jpg","manufacturer":"Hermitage
+      Collection","attributes":[{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"1.00000","value":"XS","unitOfMeasure":"one","image1":"images\/catalog\/apparel\/women\/Swatches\/swatch_size\/size_xs_enabled.png","identifier":"XS","image1path":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/Swatches\/swatch_size\/size_xs_enabled.png","uniqueID":"7000000000000002954","unitID":"C62"}],"searchable":false,"identifier":"swatchSize","comparable":true,"name":"Available
+      Sizes","uniqueID":"7000000000000000201","displayable":true},{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"6.00000","value":"Blue","unitOfMeasure":"one","image1":"images\/catalog\/apparel\/women\/Swatches\/swatch_blue.png","identifier":"Blue","image1path":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/Swatches\/swatch_blue.png","uniqueID":"7000000000000002962","unitID":"C62"}],"searchable":false,"identifier":"swatchcolor","comparable":true,"name":"Color","uniqueID":"7000000000000000202","displayable":true}],"hasSingleSKU":false,"partNumber":"AuroraWMDRS-009","storeID":"10101","seo_token_ntk":"hermitage-fit-and-flare-dress-aurorawmdrs-009","parentCatalogEntryID":"13951"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:40.962Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/13999?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:40 GMT
+      Expires: Tue, 14 Nov 2017 16:39:40 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13999?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"Classically
+      tailored, this elegant satin dress features a bateau neckline, soft pleating, and a clasped belt to define the waist.","shortDescription":"Jewel-toned cocktail dress with fitted bodice and gently flared skirt","catalogEntryTypeCode":"ItemBean","buyable":"true","subscriptionTypeCode":"NONE","cm_seo_token_ntk":"10101_hermitage-fit-and-flare-dress-aurorawmdrs-010","price":[{"value":"250.0","currency":"USD","usage":"Display","description":"L"},{"value":"100.0","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13999","parentCatalogGroupID":["10101_10106","10152_10106"],"name":"Hermitage
+      Fit and Flare Dress","uniqueID":"13999","disallowRecurringOrder":"1","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/646x1000\/wcl000_0028_a_blue.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/200x310\/wcl000_0028_a_blue.jpg","manufacturer":"Hermitage
+      Collection","attributes":[{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"2.00000","value":"S","unitOfMeasure":"one","image1":"images\/catalog\/apparel\/women\/Swatches\/swatch_size\/size_s_enabled.png","identifier":"S","image1path":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/Swatches\/swatch_size\/size_s_enabled.png","uniqueID":"7000000000000002951","unitID":"C62"}],"searchable":false,"identifier":"swatchSize","comparable":true,"name":"Available
+      Sizes","uniqueID":"7000000000000000201","displayable":true},{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"6.00000","value":"Blue","unitOfMeasure":"one","image1":"images\/catalog\/apparel\/women\/Swatches\/swatch_blue.png","identifier":"Blue","image1path":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/Swatches\/swatch_blue.png","uniqueID":"7000000000000002962","unitID":"C62"}],"searchable":false,"identifier":"swatchcolor","comparable":true,"name":"Color","uniqueID":"7000000000000000202","displayable":true}],"hasSingleSKU":false,"partNumber":"AuroraWMDRS-010","storeID":"10101","seo_token_ntk":"hermitage-fit-and-flare-dress-aurorawmdrs-010","parentCatalogEntryID":"13951"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:40.987Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/14000?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:40 GMT
+      Expires: Tue, 14 Nov 2017 16:39:40 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/14000?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"Classically
+      tailored, this elegant satin dress features a bateau neckline, soft pleating, and a clasped belt to define the waist.","shortDescription":"Jewel-toned cocktail dress with fitted bodice and gently flared skirt","catalogEntryTypeCode":"ItemBean","buyable":"true","subscriptionTypeCode":"NONE","cm_seo_token_ntk":"10101_hermitage-fit-and-flare-dress-aurorawmdrs-011","price":[{"value":"250.0","currency":"USD","usage":"Display","description":"L"},{"value":"100.0","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/14000","parentCatalogGroupID":["10101_10106","10152_10106"],"name":"Hermitage
+      Fit and Flare Dress","uniqueID":"14000","disallowRecurringOrder":"1","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/646x1000\/wcl000_0028_a_blue.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/200x310\/wcl000_0028_a_blue.jpg","manufacturer":"Hermitage
+      Collection","attributes":[{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"3.00000","value":"M","unitOfMeasure":"one","image1":"images\/catalog\/apparel\/women\/Swatches\/swatch_size\/size_m_enabled.png","identifier":"M","image1path":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/Swatches\/swatch_size\/size_m_enabled.png","uniqueID":"7000000000000002952","unitID":"C62"}],"searchable":false,"identifier":"swatchSize","comparable":true,"name":"Available
+      Sizes","uniqueID":"7000000000000000201","displayable":true},{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"6.00000","value":"Blue","unitOfMeasure":"one","image1":"images\/catalog\/apparel\/women\/Swatches\/swatch_blue.png","identifier":"Blue","image1path":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/Swatches\/swatch_blue.png","uniqueID":"7000000000000002962","unitID":"C62"}],"searchable":false,"identifier":"swatchcolor","comparable":true,"name":"Color","uniqueID":"7000000000000000202","displayable":true}],"hasSingleSKU":false,"partNumber":"AuroraWMDRS-011","storeID":"10101","seo_token_ntk":"hermitage-fit-and-flare-dress-aurorawmdrs-011","parentCatalogEntryID":"13951"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:41.014Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/14001?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:40 GMT
+      Expires: Tue, 14 Nov 2017 16:39:40 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/14001?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"Classically
+      tailored, this elegant satin dress features a bateau neckline, soft pleating, and a clasped belt to define the waist.","shortDescription":"Jewel-toned cocktail dress with fitted bodice and gently flared skirt","catalogEntryTypeCode":"ItemBean","buyable":"true","subscriptionTypeCode":"NONE","cm_seo_token_ntk":"10101_hermitage-fit-and-flare-dress-aurorawmdrs-012","price":[{"value":"250.0","currency":"USD","usage":"Display","description":"L"},{"value":"100.0","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/14001","parentCatalogGroupID":["10101_10106","10152_10106"],"name":"Hermitage
+      Fit and Flare Dress","uniqueID":"14001","disallowRecurringOrder":"1","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/646x1000\/wcl000_0028_a_blue.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/200x310\/wcl000_0028_a_blue.jpg","manufacturer":"Hermitage
+      Collection","attributes":[{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"5.00000","value":"XL","unitOfMeasure":"one","image1":"images\/catalog\/apparel\/women\/Swatches\/swatch_size\/size_xl_enabled.png","identifier":"XL","image1path":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/Swatches\/swatch_size\/size_xl_enabled.png","uniqueID":"7000000000000002955","unitID":"C62"}],"searchable":false,"identifier":"swatchSize","comparable":true,"name":"Available
+      Sizes","uniqueID":"7000000000000000201","displayable":true},{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"6.00000","value":"Blue","unitOfMeasure":"one","image1":"images\/catalog\/apparel\/women\/Swatches\/swatch_blue.png","identifier":"Blue","image1path":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/Swatches\/swatch_blue.png","uniqueID":"7000000000000002962","unitID":"C62"}],"searchable":false,"identifier":"swatchcolor","comparable":true,"name":"Color","uniqueID":"7000000000000000202","displayable":true}],"hasSingleSKU":false,"partNumber":"AuroraWMDRS-012","storeID":"10101","seo_token_ntk":"hermitage-fit-and-flare-dress-aurorawmdrs-012","parentCatalogEntryID":"13951"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:41.090Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/14002?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:41 GMT
+      Expires: Tue, 14 Nov 2017 16:39:41 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/14002?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"Classically
+      tailored, this elegant satin dress features a bateau neckline, soft pleating, and a clasped belt to define the waist.","shortDescription":"Jewel-toned cocktail dress with fitted bodice and gently flared skirt","catalogEntryTypeCode":"ItemBean","buyable":"true","subscriptionTypeCode":"NONE","cm_seo_token_ntk":"10101_hermitage-fit-and-flare-dress-aurorawmdrs-013","price":[{"value":"250.0","currency":"USD","usage":"Display","description":"L"},{"value":"100.0","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/14002","parentCatalogGroupID":["10101_10106","10152_10106"],"name":"Hermitage
+      Fit and Flare Dress","uniqueID":"14002","disallowRecurringOrder":"1","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/646x1000\/wcl000_0028_a_blue.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/200x310\/wcl000_0028_a_blue.jpg","manufacturer":"Hermitage
+      Collection","attributes":[{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"6.00000","value":"2XL","unitOfMeasure":"one","image1":"images\/catalog\/apparel\/women\/Swatches\/swatch_size\/size_xxl_enabled.png","identifier":"2XL","image1path":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/Swatches\/swatch_size\/size_xxl_enabled.png","uniqueID":"7000000000000002956","unitID":"C62"}],"searchable":false,"identifier":"swatchSize","comparable":true,"name":"Available
+      Sizes","uniqueID":"7000000000000000201","displayable":true},{"usage":"Defining","storeDisplay":false,"sequence":"1.00000","facetable":false,"values":[{"sequence":"6.00000","value":"Blue","unitOfMeasure":"one","image1":"images\/catalog\/apparel\/women\/Swatches\/swatch_blue.png","identifier":"Blue","image1path":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/Swatches\/swatch_blue.png","uniqueID":"7000000000000002962","unitID":"C62"}],"searchable":false,"identifier":"swatchcolor","comparable":true,"name":"Color","uniqueID":"7000000000000000202","displayable":true}],"hasSingleSKU":false,"partNumber":"AuroraWMDRS-013","storeID":"10101","seo_token_ntk":"hermitage-fit-and-flare-dress-aurorawmdrs-013","parentCatalogEntryID":"13951"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:41.144Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/inventoryavailability/13990,13991,13992,13993,13994,13995,13996,13997,13998,13999,14000,14001,14002?langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Authorization: Basic Y21hZG1pbjpWVEpqeW8wQVlTblhGSEkyMDF5bw==
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:41 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000ogsKIE9BJ6ksFcI0wB0cb5c:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+      X-Betamax: PLAY
+    body: '{"InventoryAvailability":[{"unitOfMeasure":"C62","availableQuantity":"101.0","onlineStoreName":"AuroraESite","onlineStoreId":"10301","productId":"13990","inventoryStatus":"Available"},{"unitOfMeasure":"C62","availableQuantity":"101.0","onlineStoreName":"AuroraESite","onlineStoreId":"10301","productId":"13991","inventoryStatus":"Available"},{"unitOfMeasure":"C62","availableQuantity":"101.0","onlineStoreName":"AuroraESite","onlineStoreId":"10301","productId":"13992","inventoryStatus":"Available"},{"unitOfMeasure":"C62","availableQuantity":"101.0","onlineStoreName":"AuroraESite","onlineStoreId":"10301","productId":"13993","inventoryStatus":"Available"},{"unitOfMeasure":"C62","availableQuantity":"101.0","onlineStoreName":"AuroraESite","onlineStoreId":"10301","productId":"13994","inventoryStatus":"Available"},{"unitOfMeasure":"C62","availableQuantity":"101.0","onlineStoreName":"AuroraESite","onlineStoreId":"10301","productId":"13995","inventoryStatus":"Available"},{"unitOfMeasure":"C62","availableQuantity":"101.0","onlineStoreName":"AuroraESite","onlineStoreId":"10301","productId":"13996","inventoryStatus":"Available"},{"unitOfMeasure":"C62","availableQuantity":"101.0","onlineStoreName":"AuroraESite","onlineStoreId":"10301","productId":"13997","inventoryStatus":"Available"},{"unitOfMeasure":"C62","availableQuantity":"101.0","onlineStoreName":"AuroraESite","onlineStoreId":"10301","productId":"13998","inventoryStatus":"Available"},{"unitOfMeasure":"C62","availableQuantity":"101.0","onlineStoreName":"AuroraESite","onlineStoreId":"10301","productId":"13999","inventoryStatus":"Available"},{"unitOfMeasure":"C62","availableQuantity":"101.0","onlineStoreName":"AuroraESite","onlineStoreId":"10301","productId":"14000","inventoryStatus":"Available"},{"unitOfMeasure":"C62","availableQuantity":"101.0","onlineStoreName":"AuroraESite","onlineStoreId":"10301","productId":"14001","inventoryStatus":"Available"},{"unitOfMeasure":"C62","availableQuantity":"101.0","onlineStoreName":"AuroraESite","onlineStoreId":"10301","productId":"14002","inventoryStatus":"Available"}],"resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/inventoryavailability\/13990,13991,13992,13993,13994,13995,13996,13997,13998,13999,14000,14001,14002?langId=-1","resourceName":"inventoryavailability"}'
+- recorded: 2017-11-14T15:39:41.272Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/inventoryavailability/13990?langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Authorization: Basic Y21hZG1pbjpWVEpqeW8wQVlTblhGSEkyMDF5bw==
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:41 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=00003xN28ZIX1MscFhqaFfB98-h:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"InventoryAvailability":[{"unitOfMeasure":"C62","availableQuantity":"101.0","onlineStoreName":"AuroraESite","onlineStoreId":"10301","productId":"13990","inventoryStatus":"Available"}],"resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/inventoryavailability\/13990?langId=-1","resourceName":"inventoryavailability"}'
+- recorded: 2017-11-14T15:39:41.312Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/13951?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:41 GMT
+      Expires: Tue, 14 Nov 2017 16:39:41 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13951?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"Classically
+      tailored, this elegant satin dress features a bateau neckline, soft pleating, and a clasped belt to define the waist.","shortDescription":"Jewel-toned cocktail dress with fitted bodice and gently flared skirt","catalogEntryTypeCode":"ProductBean","buyable":"true","subscriptionTypeCode":"NONE","cm_seo_token_ntk":"10101_hermitage-fit-and-flare-dress","price":[{"value":"250.0","currency":"USD","usage":"Display","description":"L"},{"value":"100.0","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13951","parentCatalogGroupID":["10101_10106","10152_10106"],"name":"Hermitage
+      Fit and Flare Dress","uniqueID":"13951","disallowRecurringOrder":"1","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/646x1000\/wcl000_0028_a_red.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/200x310\/wcl000_0028_a_red.jpg","attachments":[{"usage":"SWATCH_IMAGE","attachmentAssetPath":"ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/patternswatches_28x28\/wcl000_0028_a_red_s.jpg","attachmentAssetID":3233,"identifier":"AuroraWMDRS-1_swatchcolor_Red","mimeType":"image\/jpg","catentry_id":13951},{"usage":"SWATCH_IMAGE","attachmentAssetPath":"ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/patternswatches_28x28\/wcl000_0028_a_teal_s.jpg","attachmentAssetID":3234,"identifier":"AuroraWMDRS-1_swatchcolor_Teal","mimeType":"image\/jpg","catentry_id":13951},{"usage":"SWATCH_IMAGE","attachmentAssetPath":"ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/women\/wcl000_dresses\/patternswatches_28x28\/wcl000_0028_a_blue_s.jpg","attachmentAssetID":3235,"identifier":"AuroraWMDRS-1_swatchcolor_Blue","mimeType":"image\/jpg","catentry_id":13951}],"manufacturer":"Hermitage
+      Collection","sKUs":[{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13990","name":"Hermitage Fit and Flare Dress","hasSingleSKU":false,"partNumber":"AuroraWMDRS-001","uniqueID":"13990","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13991","name":"Hermitage
+      Fit and Flare Dress","hasSingleSKU":false,"partNumber":"AuroraWMDRS-002","uniqueID":"13991","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13992","name":"Hermitage
+      Fit and Flare Dress","hasSingleSKU":false,"partNumber":"AuroraWMDRS-003","uniqueID":"13992","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13993","name":"Hermitage
+      Fit and Flare Dress","hasSingleSKU":false,"partNumber":"AuroraWMDRS-004","uniqueID":"13993","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13994","name":"Hermitage
+      Fit and Flare Dress","hasSingleSKU":false,"partNumber":"AuroraWMDRS-005","uniqueID":"13994","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13995","name":"Hermitage
+      Fit and Flare Dress","hasSingleSKU":false,"partNumber":"AuroraWMDRS-006","uniqueID":"13995","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13996","name":"Hermitage
+      Fit and Flare Dress","hasSingleSKU":false,"partNumber":"AuroraWMDRS-007","uniqueID":"13996","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13997","name":"Hermitage
+      Fit and Flare Dress","hasSingleSKU":false,"partNumber":"AuroraWMDRS-008","uniqueID":"13997","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13998","name":"Hermitage
+      Fit and Flare Dress","hasSingleSKU":false,"partNumber":"AuroraWMDRS-009","uniqueID":"13998","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/13999","name":"Hermitage
+      Fit and Flare Dress","hasSingleSKU":false,"partNumber":"AuroraWMDRS-010","uniqueID":"13999","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/14000","name":"Hermitage
+      Fit and Flare Dress","hasSingleSKU":false,"partNumber":"AuroraWMDRS-011","uniqueID":"14000","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/14001","name":"Hermitage
+      Fit and Flare Dress","hasSingleSKU":false,"partNumber":"AuroraWMDRS-012","uniqueID":"14001","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/14002","name":"Hermitage
+      Fit and Flare Dress","hasSingleSKU":false,"partNumber":"AuroraWMDRS-013","uniqueID":"14002","storeID":"10101"}],"numberOfSKUs":13,"attributes":[{"storeDisplay":false,"sequence":"1.00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"swatchcolor","comparable":true,"name":"Color","uniqueID":"7000000000000000202","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"19.00000","value":"Knit","unitOfMeasure":"one","identifier":"Knit","uniqueID":"7000000000000002975","unitID":"C62"}],"searchable":false,"identifier":"construction","comparable":true,"name":"Construction","uniqueID":"7000000000000000203","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"20.00000","value":"Short","unitOfMeasure":"one","identifier":"Short","uniqueID":"7000000000000002977","unitID":"C62"}],"searchable":false,"identifier":"length","comparable":true,"name":"Length","uniqueID":"7000000000000000204","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"21.00000","value":"Synthetic","unitOfMeasure":"one","identifier":"Synthetic","uniqueID":"7000000000000002980","unitID":"C62"}],"searchable":false,"identifier":"material","comparable":true,"name":"Material","uniqueID":"7000000000000000205","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"25.00000","value":"Cocktail
+      & Evening","unitOfMeasure":"one","identifier":"Cocktail & Evening","uniqueID":"7000000000000002987","unitID":"C62"}],"searchable":false,"identifier":"occasion","comparable":true,"name":"Occasion","uniqueID":"7000000000000000206","displayable":true},{"storeDisplay":false,"sequence":"2.00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"swatchSize","comparable":true,"name":"Available
+      Sizes","uniqueID":"7000000000000000201","displayable":true}],"hasSingleSKU":false,"partNumber":"AuroraWMDRS-1","storeID":"10101","seo_token_ntk":"hermitage-fit-and-flare-dress"}],"metaData":{"price":"1"}}'

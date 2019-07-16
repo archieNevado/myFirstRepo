@@ -1,0 +1,257 @@
+!tape
+name: csi_testFindCategoryByExternalTechId
+interactions:
+- recorded: 2017-11-14T15:38:50.390Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:38:50 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000d4HcPcOjIqxNgfh6zZJwOGh:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10201"},"AuroraStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10151"},"PerfectChefESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10302"},"AuroraB2BESite":{"defaultCatalogId":"10151","defaultCatalog":"Extended
+      Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10303"},"Extended Sites Hub":{"defaultCatalogId":null,"defaultCatalog":"","catalogs":{},"storeId":"10051"},"AuroraB2BStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10251"},"AuroraESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10301"},"Extended Sites
+      Catalog Asset Store":{"defaultCatalogId":"10101","defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog
+      Asset Store":"10101"},"storeId":"10101"}},"serverTimezoneId":"Europe\/Berlin"}'
+- recorded: 2017-11-14T15:38:50.502Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:38:50 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000oyupxrS4Nwcbz4GfhWTRhpP:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
+- recorded: 2017-11-14T15:38:50.540Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/categoryview/Furniture?catalogId=10152&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:38:50 GMT
+      Expires: Tue, 14 Nov 2017 16:38:50 GMT
+      Set-Cookie: JSESSIONID=0000KcBOZ9JZfd89VeeQa31qL1X:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Vary: Accept
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/Furniture?catalogId=10152&langId=-1","resourceName":"categoryview","recordSetStartNumber":"0","recordSetComplete":"true","CatalogGroupView":[{"shortDescription":"Furniture","metaKeyword":"Furniture","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10143","identifier":"Furniture","productsURL":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10143","parentCatalogGroupID":["10141"],"name":"Furniture","thumbnail":"images\/catalog\/homefurnishings\/category\/catr_hfu_furniture.png","fullImage":"images\/catalog\/homefurnishings\/category\/catr_hfu_furniture.png","uniqueID":"10143","xcatgroup_seoSegment":"furniture","metaDescription":"Furniture","title":"Furniture
+      | AuroraESite","xcatgroup_cmSeoSegment":"10101_furniture","fullImageAltDescription":"Image for Furniture from AuroraESite"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'
+- recorded: 2017-11-14T15:38:50.581Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/categoryview/byId/10143?catalogId=10152&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:38:50 GMT
+      Expires: Tue, 14 Nov 2017 16:38:50 GMT
+      Set-Cookie: JSESSIONID=0000zaAuuSSSxIp4Xnx5IOBYClD:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Vary: Accept
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10143?catalogId=10152&langId=-1","resourceName":"categoryview","recordSetStartNumber":"0","recordSetComplete":"true","CatalogGroupView":[{"shortDescription":"Furniture","metaKeyword":"Furniture","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10143","identifier":"Furniture","productsURL":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10143","parentCatalogGroupID":["10141"],"name":"Furniture","thumbnail":"images\/catalog\/homefurnishings\/category\/catr_hfu_furniture.png","fullImage":"images\/catalog\/homefurnishings\/category\/catr_hfu_furniture.png","uniqueID":"10143","xcatgroup_seoSegment":"furniture","metaDescription":"Furniture","title":"Furniture
+      | AuroraESite","xcatgroup_cmSeoSegment":"10101_furniture","fullImageAltDescription":"Image for Furniture from AuroraESite"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'
+- recorded: 2017-11-14T15:38:50.654Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/categoryview/byParentCategory/10143?catalogId=10152&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 404
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:38:50 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=00000RFFgGgkMXjl_Cmp0c-pPVO:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: ''
+- recorded: 2017-11-14T15:38:50.713Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/productview/byCategory/10143?catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:38:50 GMT
+      Expires: Tue, 14 Nov 2017 16:38:50 GMT
+      Set-Cookie: JSESSIONID=0000B4_XN3QJlW_LJbbdZx4QAkK:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Vary: Accept
+    body: '{"recordSetTotal":"33","BreadCrumbTrailEntryView":[{"value":"10141","label":"Home & Furnishing","type":"FACET_ENTRY_CATEGORY"},{"value":"10143","label":"Furniture","type":"FACET_ENTRY_CATEGORY"}],"resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10143?catalogId=10152&currency=USD&langId=-1","resourceName":"productview","recordSetStartNumber":"0","recordSetComplete":"true","FacetView":[{"value":"price_USD","Entry":[{"label":"({*
+      100} 100)","count":"7","entryValue":"price_USD%3A%28%7B*+100%7D+100%29"},{"label":"({100 200} 200)","count":"7","entryValue":"price_USD%3A%28%7B100+200%7D+200%29"},{"label":"({200 300} 300)","count":"8","entryValue":"price_USD%3A%28%7B200+300%7D+300%29"},{"label":"({300
+      400} 400)","count":"0","entryValue":"price_USD%3A%28%7B300+400%7D+400%29"},{"label":"({400 500} 500)","count":"3","entryValue":"price_USD%3A%28%7B400+500%7D+500%29"},{"label":"({500 *})","count":"8","entryValue":"price_USD%3A%28%7B500+*%7D%29"}],"name":"OfferPrice_USD"},{"value":"mfName_ntk_cs","Entry":[{"label":"Stonehenge","count":"14","entryValue":"mfName_ntk_cs%3A%22Stonehenge%22"},{"label":"StyleHome","count":"14","entryValue":"mfName_ntk_cs%3A%22StyleHome%22"},{"label":"SleepyHead","count":"3","entryValue":"mfName_ntk_cs%3A%22SleepyHead%22"},{"label":"Supreme","count":"2","entryValue":"mfName_ntk_cs%3A%22Supreme%22"}],"name":"ManufacturerName"}],"CatalogEntryView":[{"longDescription":"A
+      sofa set with a modern design from StyleHome that is perfect for you living room. Made from 100% leather and memory foam its as comfortable as it looks.","buyable":"true","shortDescription":"3 piece sofa set with a very modern design.","xcatentry_seoSegment":"stylehome-modern-rimmed-3-piece-sofa-set","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16786","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"2325.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_stylehome-modern-rimmed-3-piece-sofa-set","name":"StyleHome
+      Modern Rimmed 3 Piece Sofa Set","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3201.jpg","uniqueID":"16786","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3201.jpg","storeID":"10101","partNumber":"HFU032_3201"},{"longDescription":"This
+      large sofa from StyleHome looks and feels very sophisticated with its plain design and hard memory foam. Its neither soft nor hard so that your guests don''t sag in neither feel they are sitting on a counter.","buyable":"true","shortDescription":"Sophisticated
+      modern sofa design.","xcatentry_seoSegment":"stylehome-modern-plain-single-large-sofa","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16788","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"1099.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_stylehome-modern-plain-single-large-sofa","name":"StyleHome
+      Modern Plain Single Large Sofa","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3202.jpg","uniqueID":"16788","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3202.jpg","storeID":"10101","partNumber":"HFU032_3202"},{"longDescription":"StyleHome
+      presents a sofa that is appropriate for the office and also your home. This is the perfect sofa for the waiting lounge outside the CEO''s office or a small living room with minimalist style.","buyable":"true","shortDescription":"InOffice sofas are made
+      for the typical office environment.","xcatentry_seoSegment":"stylehome-inoffice-double-sofa","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16790","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"289.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_stylehome-inoffice-double-sofa","name":"StyleHome
+      InOffice Double Sofa","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3203.jpg","uniqueID":"16790","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3203.jpg","storeID":"10101","partNumber":"HFU032_3203"},{"longDescription":"StyleHome
+      presents a sofa that is appropriate for the office and also your home. This is the perfect sofa for the waiting lounge outside the CEO''s office or a small living room with minimalist style.","buyable":"true","shortDescription":"InOffice sofas are made
+      for the typical office environment.","xcatentry_seoSegment":"stylehome-inoffice-single-sofa","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16792","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"195.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_stylehome-inoffice-single-sofa","name":"StyleHome
+      InOffice Single Sofa","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3204.jpg","uniqueID":"16792","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3204.jpg","storeID":"10101","partNumber":"HFU032_3204"},{"longDescription":"A
+      very snug sofa set with a 3 seat sofa and a divan. Ideal for placing along corner of your large living room. Watch TV while enjoying the company of your friends and family in this giant sofa set.","buyable":"true","shortDescription":"2 piece sofa set with
+      shams for a cozy living room.","xcatentry_seoSegment":"supreme-giantscorner-sofa-set","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16794","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"949.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_supreme-giantscorner-sofa-set","name":"Supreme
+      GiantsCorner Sofa Set","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3205.jpg","uniqueID":"16794","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3205.jpg","storeID":"10101","partNumber":"HFU032_3205"},{"longDescription":"This
+      smooth synthetic is perfect for lounge environment, and is stain proof. It as easy as wiping stain off it with a wipe, thus reducing maintenance. It is built tough so that it does not tear or break easily.","buyable":"true","shortDescription":"A long cozy
+      double sofa for lounges.","xcatentry_seoSegment":"supreme-loungestyle-double-sofa","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16796","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"209.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_supreme-loungestyle-double-sofa","name":"Supreme
+      LoungeStyle Double Sofa","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3206.jpg","uniqueID":"16796","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3206.jpg","storeID":"10101","partNumber":"HFU032_3206"},{"longDescription":"A
+      large study table appropriate for artists, architects etc. With a flat low design, and a large sleek drawer to keep drawing utensils this is a table for working artists. With a well curved wood finish, it is ideal for both home and office environment.","buyable":"true","shortDescription":"A
+      large low study table with a single drawer.","xcatentry_seoSegment":"stylehome-loom-large-artists-table","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16798","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"169.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_stylehome-loom-large-artists-table","name":"StyleHome
+      Loom Large Artists Table","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3207.jpg","uniqueID":"16798","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3207.jpg","storeID":"10101","partNumber":"HFU032_3207"},{"longDescription":"Japanese
+      dining table made of sturdy Oakwood, with a traditional design. Design is also appropriate for a centre table in a large living room.","buyable":"true","shortDescription":"A large Oakwood Japanese dining table.","xcatentry_seoSegment":"stonehenge-origami-japanese-dining-table","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16800","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"235.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_stonehenge-origami-japanese-dining-table","name":"Stonehenge
+      Origami Japanese Dining Table","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3208.jpg","uniqueID":"16800","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3208.jpg","storeID":"10101","partNumber":"HFU032_3208"},{"longDescription":"Cozy
+      single sofa made of leather and a boxy design meant for both home and office environments. Can also be used as a reading chair as its memory keeps you from back ache from long periods of seating.","buyable":"true","shortDescription":"A modern single sofa
+      with leather seat and steel legs.","xcatentry_seoSegment":"stonehenge-modern-steelet-single-sofa","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16802","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"235.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_stonehenge-modern-steelet-single-sofa","name":"Stonehenge
+      Modern Steelet Single Sofa","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3209.jpg","uniqueID":"16802","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3209.jpg","storeID":"10101","partNumber":"HFU032_3209"},{"longDescription":"Very
+      comfortable leaning chair with 2 legs, so the chairs bends to your weight and leans back to give you the most comfortable possible position to take a short nap, read a novel or just relax.","buyable":"true","shortDescription":"Comfortable leaning chair
+      with a double leg design.","xcatentry_seoSegment":"stonehenge-rocoz-double-legged-leaning-chair","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16804","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"160.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_stonehenge-rocoz-double-legged-leaning-chair","name":"Stonehenge
+      Rocoz Double Legged Leaning chair","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3210.jpg","uniqueID":"16804","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3210.jpg","storeID":"10101","partNumber":"HFU032_3210"},{"longDescription":"The
+      sofa has a short back rest but a long width to get lazy while sitting lazy. With a matte fabric finish and a soft center, this is the perfect sofa to indulge someone to get lazy and stay back.","buyable":"true","shortDescription":"Very cozy short design
+      single sofa.","xcatentry_seoSegment":"stylehome-ultracozy-single-sofa","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16806","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"289.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_stylehome-ultracozy-single-sofa","name":"StyleHome
+      UltraCozy Single Sofa","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3211.jpg","uniqueID":"16806","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3211.jpg","storeID":"10101","partNumber":"HFU032_3211"},{"longDescription":"The
+      sofa has a short back rest but a long width to get lazy while sitting lazy. With a matte fabric finish and a soft center, this is the perfect sofa to indulge someone to get lazy and stay back.","buyable":"true","shortDescription":"Very cozy short design
+      Large sofa.","xcatentry_seoSegment":"stylehome-ultracozy-large-sofa","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16808","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"572.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_stylehome-ultracozy-large-sofa","name":"StyleHome
+      UltraCozy Large Sofa","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3212.jpg","uniqueID":"16808","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3212.jpg","storeID":"10101","partNumber":"HFU032_3212"},{"longDescription":"A
+      very tough table where you can do all sorts of heavy machinery works such as sawing or drilling. Sturdy legs to keep the table from shaking and thick top to stop it from breaking.","buyable":"true","shortDescription":"Working table made to take damage.","xcatentry_seoSegment":"stonehenge-workman-working-table","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16810","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"102.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_stonehenge-workman-working-table","name":"Stonehenge
+      WorkMan Working Table","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3213.jpg","uniqueID":"16810","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3213.jpg","storeID":"10101","partNumber":"HFU032_3213"},{"longDescription":"Mahogany
+      wardrobe to beautify your room and to stowe away clothes in an organized way. Inside there are 3 large drawers and hanger compartment so you can easily organize your clothes.","buyable":"true","shortDescription":"Beautiful Mahogany wardrobe with drawers
+      and hanger cabinet.","xcatentry_seoSegment":"stylehome-large-double-door-mahogany-wardrobe","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16812","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"849.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_stylehome-large-double-door-mahogany-wardrobe","name":"StyleHome
+      Large Double Door Mahogany Wardrobe","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3214.jpg","uniqueID":"16812","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3214.jpg","storeID":"10101","partNumber":"HFU032_3214"},{"longDescription":"Now
+      you can efficiently stow away clothes without the worry of losing track of your clothes. With 1 hanger compartment, 3 shelf compartment and 3 drawers you can organize your clothes however you want.","buyable":"true","shortDescription":"A multiple compartment
+      wardrobe.","xcatentry_seoSegment":"stonehenge-kcloth-multi-compartment-wardrobe","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16814","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"435.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_stonehenge-kcloth-multi-compartment-wardrobe","name":"Stonehenge
+      Kcloth Multi Compartment Wardrobe","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3215.jpg","uniqueID":"16814","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3215.jpg","storeID":"10101","partNumber":"HFU032_3215"},{"longDescription":"Very
+      large mahogany wardrobe that will keep all your clothes and make your room look beautiful. The wardrobe has 2 drawers and 2 hanger compartments and 1 shelf compartment. The striped mahogany makes the wardrobe a piece of art.","buyable":"true","shortDescription":"A
+      very large beautifully designed wardrobe with 2 drawers and 3 compartments","xcatentry_seoSegment":"stonehenge-large-mahogany-wardrobe","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16816","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"949.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_stonehenge-large-mahogany-wardrobe","name":"Stonehenge
+      Large Mahogany Wardrobe","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3216.jpg","uniqueID":"16816","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3216.jpg","storeID":"10101","partNumber":"HFU032_3216"},{"longDescription":"A
+      low design double bed for kids. The design has a simple head board and short legs so kids don''t have a hard time getting onto the bed. Made of light weight wood the design is very appealing in both girls and boys room.","buyable":"true","shortDescription":"Kids
+      low double bed made of wood.","xcatentry_seoSegment":"sleepyhead-storytime-double-bed","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16818","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"435.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_sleepyhead-storytime-double-bed","name":"SleepyHead
+      Storytime Double Bed","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3217.jpg","uniqueID":"16818","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3217.jpg","storeID":"10101","partNumber":"HFU032_3217"},{"longDescription":"Elegantly
+      designed queen bed for romantic couples. Low design with a large head board, and made of sturdy hard wood. Perfectly polished bed, will perfect suit any master bedroom.","buyable":"true","shortDescription":"Elegent queen bed for your master bedroom.","xcatentry_seoSegment":"sleepyhead-elegent-queen-bed","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16820","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"749.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_sleepyhead-elegent-queen-bed","name":"SleepyHead
+      Elegent Queen Bed","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3218.jpg","uniqueID":"16820","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3218.jpg","storeID":"10101","partNumber":"HFU032_3218"},{"longDescription":"Made
+      to make you feel as close to the ground as possible, this low key bed design is for people who love bedding on the floor. Large, crafted sideboards give the bed a contemporary look.","buyable":"true","shortDescription":"Very low design double bed.","xcatentry_seoSegment":"sleepyhead-lowkey-double-bed","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16822","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"549.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_sleepyhead-lowkey-double-bed","name":"SleepyHead
+      LowKey Double Bed","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3219.jpg","uniqueID":"16822","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3219.jpg","storeID":"10101","partNumber":"HFU032_3219"},{"longDescription":"A
+      simple wood design chest of drawer with 3 large drawers. Peg legs to keep it off the floor and easily move around. The sspace-saving slide on rails drawers for smooth opening and closing.","buyable":"true","shortDescription":"Medium width chest of Drawer
+      with 3 drawers.","xcatentry_seoSegment":"stonehenge-clodit-chest-of-drawer","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16824","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"300.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_stonehenge-clodit-chest-of-drawer","name":"Stonehenge
+      Clodit Chest of drawer","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3220.jpg","uniqueID":"16824","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3220.jpg","storeID":"10101","partNumber":"HFU032_3220"},{"longDescription":"Inexpensive
+      but functional chest of drawer from Stonehenge, when you just need a chest of drawer to store your clothes nicely, without any fancy wood work or a fancy price.","buyable":"true","shortDescription":"Small width 3 drawer chest of drawer.","xcatentry_seoSegment":"stonehenge-lodraw-chest-of-drawer","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16826","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"175.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_stonehenge-lodraw-chest-of-drawer","name":"Stonehenge
+      Lodraw Chest of drawer","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3221.jpg","uniqueID":"16826","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3221.jpg","storeID":"10101","partNumber":"HFU032_3221"},{"longDescription":"Made
+      of dark ash wood, this chest of drawer is as hardy as it looks. 4 large drawers fitted with smooth railed grid for easy opening and closing. Ash wood cannot be easily scratched or cracked, the chest of drawer will keep looking new for ages.","buyable":"true","shortDescription":"Large
+      4 drawer chest of drawer made of ash wood.","xcatentry_seoSegment":"stylehome-large-ash-wood-chest-of-drawer","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16828","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"475.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_stylehome-large-ash-wood-chest-of-drawer","name":"StyleHome
+      Large Ash wood Chest of drawer","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3222.jpg","uniqueID":"16828","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3222.jpg","storeID":"10101","partNumber":"HFU032_3222"},{"longDescription":"This
+      is a simple design chest of drawer from StyleHome made from Birch wood. If you want something that is not expensive but will last for a long time, this is the perfect chest of drawer.","buyable":"true","shortDescription":"Chest of drawer with 4 drawer
+      made of Birch wood.","xcatentry_seoSegment":"stylehome-intree-chest-of-drawer","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16830","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"245.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_stylehome-intree-chest-of-drawer","name":"StyleHome
+      Intree Chest of drawer","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3223.jpg","uniqueID":"16830","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3223.jpg","storeID":"10101","partNumber":"HFU032_3223"},{"longDescription":"Dining
+      chair from StyleHome made for utmost comfort. Foam covered with fabric on back rest and the sit, this looks great and feels great in around any dining table.","buyable":"true","shortDescription":"A dining chair with foam sit and back rest.","xcatentry_seoSegment":"stylehome-comfy-dining-chair","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16832","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"56.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_stylehome-comfy-dining-chair","name":"StyleHome
+      Comfy Dining chair","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3224.jpg","uniqueID":"16832","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3224.jpg","storeID":"10101","partNumber":"HFU032_3224"},{"longDescription":"Rigg
+      dining chair from StyleHome is affordable, stylish and durable. Sturdy build will keep the chair from breaking under a lot of weight. And curvy design adorns your dining room with a modern look.","buyable":"true","shortDescription":"A rigid dining chair
+      with steel legs and plastic surface.","xcatentry_seoSegment":"stylehome-rigg-dining-chair","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16834","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"30.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_stylehome-rigg-dining-chair","name":"StyleHome
+      Rigg Dining chair","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3225.jpg","uniqueID":"16834","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3225.jpg","storeID":"10101","partNumber":"HFU032_3225"},{"longDescription":"For
+      people who prefer a classic look to their home, this is a dining chair made to suit a nobleman''s mansion from the last century or today''s home with a classic look. It is sturdy and durable as well.","buyable":"true","shortDescription":"A classic dining
+      chair made entirely of wood.","xcatentry_seoSegment":"stylehome-woodek-dining-chair","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16836","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"45.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_stylehome-woodek-dining-chair","name":"StyleHome
+      Woodek Dining chair","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3226.jpg","uniqueID":"16836","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3226.jpg","storeID":"10101","partNumber":"HFU032_3226"},{"longDescription":"A
+      durable plastic dining chair from Stonehenge. If you don''t want to spend too much money on dining chair but you want your dining room to still look out, these are the perfect chairs.","buyable":"true","shortDescription":"Dining chair made of plastic.","xcatentry_seoSegment":"stonehenge-cheper-dining-chair","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16838","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"25.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_stonehenge-cheper-dining-chair","name":"Stonehenge
+      Cheper Dining chair","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3227.jpg","uniqueID":"16838","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3227.jpg","storeID":"10101","partNumber":"HFU032_3227"},{"longDescription":"Offtone
+      is meant for offices, but it is not rigid or uncomfortable unlike other office chairs. It can be placed inside the office or the waiting room. This chair will make the customers comfortable while waiting in any office environment.","buyable":"true","shortDescription":"Office
+      chair designed for comfort,","xcatentry_seoSegment":"stonehenge-offtone-office-chair","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16840","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"72.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_stonehenge-offtone-office-chair","name":"Stonehenge
+      Offtone Office Chair","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3228.jpg","uniqueID":"16840","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3228.jpg","storeID":"10101","partNumber":"HFU032_3228"},{"longDescription":"An
+      inexpensive office chair that looks splendid in any room! Made with steel and fabric, this is a great chair if you plan to buy a lot of chair without breaking your account. It can also look great in a modern style home.","buyable":"true","shortDescription":"Simple
+      Office chair with a great design.","xcatentry_seoSegment":"stonehenge-fil-e-office-chair","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16842","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"65.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_stonehenge-fil-e-office-chair","name":"Stonehenge
+      Fil-e Office Chair","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3229.jpg","uniqueID":"16842","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3229.jpg","storeID":"10101","partNumber":"HFU032_3229"},{"longDescription":"A
+      different type of dining chair made with wood surface on steel legs. It has a very modern design and will look amazing in any type of dining room.","buyable":"true","shortDescription":"Dining chair with a bold design.","xcatentry_seoSegment":"stongehenge-bolds-dining-chair","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16844","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"72.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_stongehenge-bolds-dining-chair","name":"Stongehenge
+      Bolds Dining chair","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3230.jpg","uniqueID":"16844","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3230.jpg","storeID":"10101","partNumber":"HFU032_3230"},{"longDescription":"A
+      table made from fir wood with a simple design. The table might be inexpensive, but it is as strong as any other work table. Easy to assemble packaging.","buyable":"true","shortDescription":"A medium sized study table made of fir wood.","xcatentry_seoSegment":"stonehenge-booktop-study-table","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16846","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"109.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_stonehenge-booktop-study-table","name":"Stonehenge
+      Booktop Study table","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3231.jpg","uniqueID":"16846","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3231.jpg","storeID":"10101","partNumber":"HFU032_3231"},{"longDescription":"A
+      classic study table made from pine wood which can also be used as a work table. Extremely hard table with a thick top that cannot be scratched or broken easily. For the people who likes to put all their stuff on the table.","buyable":"true","shortDescription":"A
+      medium study table made of pine wood.","xcatentry_seoSegment":"stonehenge-bookelf-study-table","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16848","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"165.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_stonehenge-bookelf-study-table","name":"Stonehenge
+      Bookelf Study table","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3232.jpg","uniqueID":"16848","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3232.jpg","storeID":"10101","partNumber":"HFU032_3232"},{"longDescription":"Stylish
+      study table from StyleHome, and also extremely durable and strong. This table is very hard to break, even if your kids started jumping on top, nothing will happen. Cedar wood does not absorb moisture, does not rot nor wear, this table will last you through
+      ages.","buyable":"true","shortDescription":"Very sturdy study table made of cedar.","xcatentry_seoSegment":"stylehome-sturdy-study-table","parentCategoryID":"10143","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16850","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"229.0"}],"productType":"ProductBean","xcatentry_cmSeoSegment":"10101_stylehome-sturdy-study-table","name":"StyleHome
+      Sturdy Study table","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/200x310\/hfu032_3233.jpg","uniqueID":"16850","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/homefurnishings\/hfu032_furniture\/646x1000\/hfu032_3233.jpg","storeID":"10101","partNumber":"HFU032_3233"}],"recordSetCount":"33","MetaData":[{"metaKey":"price","metaData":"1"}]}'
+- recorded: 2017-11-14T15:38:51.061Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/categoryview/byId/10141?catalogId=10152&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:38:51 GMT
+      Expires: Tue, 14 Nov 2017 16:38:51 GMT
+      Set-Cookie: JSESSIONID=0000Q3wxSVgRTXgpB36Qcr1KJtF:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Vary: Accept
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10141?catalogId=10152&langId=-1","resourceName":"categoryview","recordSetStartNumber":"0","recordSetComplete":"true","CatalogGroupView":[{"shortDescription":"Home
+      & Furnishing","metaKeyword":"Home & Furnishing","identifier":"Home Furnishings","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/categoryview\/byId\/10141","productsURL":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byCategory\/10141","name":"Home
+      & Furnishing","thumbnail":"images\/catalog\/homefurnishings\/category\/catr_hap_appliances.png","fullImage":"images\/catalog\/homefurnishings\/category\/catr_hap_appliances.png","uniqueID":"10141","xcatgroup_seoSegment":"home---furnishing","metaDescription":"Home
+      & Furnishing","title":"Home & Furnishing | AuroraESite","xcatgroup_cmSeoSegment":"10101_home---furnishing","fullImageAltDescription":"Image for Home & Furnishing from AuroraESite"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'

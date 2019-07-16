@@ -1,0 +1,121 @@
+!tape
+name: csi_testSearchProductVariants
+interactions:
+- recorded: 2017-11-14T15:38:45.243Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:38:45 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000yya9BwZGLeH9LjnaGxaxQuf:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10201"},"AuroraStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10151"},"PerfectChefESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10302"},"AuroraB2BESite":{"defaultCatalogId":"10151","defaultCatalog":"Extended
+      Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10303"},"Extended Sites Hub":{"defaultCatalogId":null,"defaultCatalog":"","catalogs":{},"storeId":"10051"},"AuroraB2BStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10251"},"AuroraESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10301"},"Extended Sites
+      Catalog Asset Store":{"defaultCatalogId":"10101","defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog
+      Asset Store":"10101"},"storeId":"10101"}},"serverTimezoneId":"Europe\/Berlin"}'
+- recorded: 2017-11-14T15:38:45.269Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:38:45 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000xGHkXcq6dkSzXPPJPNFlQAf:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
+- recorded: 2017-11-14T15:38:45.329Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/productview/bySearchTerm/shoe%20sport?currency=USD&langId=-1&pageNumber=1&pageSize=100&searchType=102
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:38:45 GMT
+      Expires: Tue, 14 Nov 2017 16:38:45 GMT
+      Set-Cookie: JSESSIONID=0000Jf6-xuep8V9KBwW9o1yuScO:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Vary: Accept
+    body: '{"recordSetTotal":"8","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/bySearchTerm\/shoe sport?currency=USD&langId=-1&pageNumber=1&pageSize=100&searchType=102","resourceName":"productview","recordSetStartNumber":"0","recordSetComplete":"true","FacetView":[{"value":"price_USD","Entry":[{"label":"({*
+      100} 100)","count":"8","entryValue":"price_USD%3A%28%7B*+100%7D+100%29"},{"label":"({100 200} 200)","count":"0","entryValue":"price_USD%3A%28%7B100+200%7D+200%29"},{"label":"({200 300} 300)","count":"0","entryValue":"price_USD%3A%28%7B200+300%7D+300%29"},{"label":"({300
+      400} 400)","count":"0","entryValue":"price_USD%3A%28%7B300+400%7D+400%29"},{"label":"({400 500} 500)","count":"0","entryValue":"price_USD%3A%28%7B400+500%7D+500%29"},{"label":"({500 *})","count":"0","entryValue":"price_USD%3A%28%7B500+*%7D%29"}],"name":"OfferPrice_USD"},{"value":"parentCatgroup_id_search","Entry":[{"label":"Apparel","count":"8","entryValue":"10101"},{"label":"Men","count":"8","entryValue":"10102"},{"label":"Shoes","count":"8","entryValue":"10119"}],"name":"ParentCatalogGroup"},{"value":"mfName_ntk_cs","Entry":[{"label":"Baril","count":"8","entryValue":"mfName_ntk_cs%3A%22Baril%22"}],"name":"ManufacturerName"}],"CatalogEntryView":[{"longDescription":"With
+      Italian-inspired styling, this sneaker looks great on or off the court.  Offers a breathable upper and a cushioned collar for extra support.","buyable":"true","shortDescription":"An athletic shoe with style to spare","parentProductID":"15970","xcatentry_seoSegment":"baril-goforit-sport-shoe-msh012-121601","parentCategoryID":"10119","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/15971","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"59.0"}],"productType":"ItemBean","xcatentry_cmSeoSegment":"10101_baril-goforit-sport-shoe-msh012-121601","name":"Baril
+      Goforit Sport Shoe","uniqueID":"15971","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/646x1000\/msh012_1216.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/200x310\/msh012_1216.jpg","storeID":"10101","partNumber":"MSH012_121601"},{"longDescription":"With
+      Italian-inspired styling, this sneaker looks great on or off the court.  Offers a breathable upper and a cushioned collar for extra support.","buyable":"true","shortDescription":"An athletic shoe with style to spare","parentProductID":"15970","xcatentry_seoSegment":"baril-goforit-sport-shoe-msh012-121602","parentCategoryID":"10119","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/15972","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"59.0"}],"productType":"ItemBean","xcatentry_cmSeoSegment":"10101_baril-goforit-sport-shoe-msh012-121602","name":"Baril
+      Goforit Sport Shoe","uniqueID":"15972","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/646x1000\/msh012_1216.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/200x310\/msh012_1216.jpg","storeID":"10101","partNumber":"MSH012_121602"},{"longDescription":"With
+      Italian-inspired styling, this sneaker looks great on or off the court.  Offers a breathable upper and a cushioned collar for extra support.","buyable":"true","shortDescription":"An athletic shoe with style to spare","parentProductID":"15970","xcatentry_seoSegment":"baril-goforit-sport-shoe-msh012-121603","parentCategoryID":"10119","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/15973","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"59.0"}],"productType":"ItemBean","xcatentry_cmSeoSegment":"10101_baril-goforit-sport-shoe-msh012-121603","name":"Baril
+      Goforit Sport Shoe","uniqueID":"15973","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/646x1000\/msh012_1216.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/200x310\/msh012_1216.jpg","storeID":"10101","partNumber":"MSH012_121603"},{"longDescription":"With
+      Italian-inspired styling, this sneaker looks great on or off the court.  Offers a breathable upper and a cushioned collar for extra support.","buyable":"true","shortDescription":"An athletic shoe with style to spare","parentProductID":"15970","xcatentry_seoSegment":"baril-goforit-sport-shoe-msh012-121604","parentCategoryID":"10119","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/15974","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"59.0"}],"productType":"ItemBean","xcatentry_cmSeoSegment":"10101_baril-goforit-sport-shoe-msh012-121604","name":"Baril
+      Goforit Sport Shoe","uniqueID":"15974","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/646x1000\/msh012_1216.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/200x310\/msh012_1216.jpg","storeID":"10101","partNumber":"MSH012_121604"},{"longDescription":"With
+      Italian-inspired styling, this sneaker looks great on or off the court.  Offers a breathable upper and a cushioned collar for extra support.","buyable":"true","shortDescription":"An athletic shoe with style to spare","parentProductID":"15970","xcatentry_seoSegment":"baril-goforit-sport-shoe-msh012-121605","parentCategoryID":"10119","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/15975","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"59.0"}],"productType":"ItemBean","xcatentry_cmSeoSegment":"10101_baril-goforit-sport-shoe-msh012-121605","name":"Baril
+      Goforit Sport Shoe","uniqueID":"15975","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/646x1000\/msh012_1216.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/200x310\/msh012_1216.jpg","storeID":"10101","partNumber":"MSH012_121605"},{"longDescription":"With
+      Italian-inspired styling, this sneaker looks great on or off the court.  Offers a breathable upper and a cushioned collar for extra support.","buyable":"true","shortDescription":"An athletic shoe with style to spare","parentProductID":"15970","xcatentry_seoSegment":"baril-goforit-sport-shoe-msh012-121606","parentCategoryID":"10119","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/15976","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"59.0"}],"productType":"ItemBean","xcatentry_cmSeoSegment":"10101_baril-goforit-sport-shoe-msh012-121606","name":"Baril
+      Goforit Sport Shoe","uniqueID":"15976","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/646x1000\/msh012_1216.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/200x310\/msh012_1216.jpg","storeID":"10101","partNumber":"MSH012_121606"},{"longDescription":"With
+      Italian-inspired styling, this sneaker looks great on or off the court.  Offers a breathable upper and a cushioned collar for extra support.","buyable":"true","shortDescription":"An athletic shoe with style to spare","parentProductID":"15970","xcatentry_seoSegment":"baril-goforit-sport-shoe-msh012-121607","parentCategoryID":"10119","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/15977","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"59.0"}],"productType":"ItemBean","xcatentry_cmSeoSegment":"10101_baril-goforit-sport-shoe-msh012-121607","name":"Baril
+      Goforit Sport Shoe","uniqueID":"15977","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/646x1000\/msh012_1216.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/200x310\/msh012_1216.jpg","storeID":"10101","partNumber":"MSH012_121607"},{"longDescription":"With
+      Italian-inspired styling, this sneaker looks great on or off the court.  Offers a breathable upper and a cushioned collar for extra support.","buyable":"true","shortDescription":"An athletic shoe with style to spare","parentProductID":"15970","xcatentry_seoSegment":"baril-goforit-sport-shoe-msh012-121608","parentCategoryID":"10119","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/15978","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"59.0"}],"productType":"ItemBean","xcatentry_cmSeoSegment":"10101_baril-goforit-sport-shoe-msh012-121608","name":"Baril
+      Goforit Sport Shoe","uniqueID":"15978","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/646x1000\/msh012_1216.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/200x310\/msh012_1216.jpg","storeID":"10101","partNumber":"MSH012_121608"}],"recordSetCount":"8","MetaData":[{"metaKey":"price","metaData":"1"}]}'
+- recorded: 2017-11-14T15:38:45.476Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/productview/bySearchTerm/CLA022_2203?currency=USD&langId=-1&pageNumber=1&pageSize=100&searchType=102
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:38:45 GMT
+      Expires: Tue, 14 Nov 2017 16:38:45 GMT
+      Set-Cookie: JSESSIONID=0000iXk2sbmOMT1Hn6N7GX7cqXp:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Vary: Accept
+    body: '{"recordSetTotal":"1","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/bySearchTerm\/CLA022_2203?currency=USD&langId=-1&pageNumber=1&pageSize=100&searchType=102","resourceName":"productview","recordSetStartNumber":"0","recordSetComplete":"true","FacetView":[{"value":"price_USD","Entry":[{"label":"({*
+      100} 100)","count":"0","entryValue":"price_USD%3A%28%7B*+100%7D+100%29"},{"label":"({100 200} 200)","count":"0","entryValue":"price_USD%3A%28%7B100+200%7D+200%29"},{"label":"({200 300} 300)","count":"0","entryValue":"price_USD%3A%28%7B200+300%7D+300%29"},{"label":"({300
+      400} 400)","count":"0","entryValue":"price_USD%3A%28%7B300+400%7D+400%29"},{"label":"({400 500} 500)","count":"0","entryValue":"price_USD%3A%28%7B400+500%7D+500%29"},{"label":"({500 *})","count":"1","entryValue":"price_USD%3A%28%7B500+*%7D%29"}],"name":"OfferPrice_USD"},{"value":"parentCatgroup_id_search","Entry":[{"label":"Electronics","count":"1","entryValue":"10127"},{"label":"Laptops","count":"1","entryValue":"10130"}],"name":"ParentCatalogGroup"},{"value":"mfName_ntk_cs","Entry":[{"label":"DVR
+      Technics","count":"1","entryValue":"mfName_ntk_cs%3A%22DVR+Technics%22"}],"name":"ManufacturerName"}],"CatalogEntryView":[{"longDescription":"This tiny laptop is made with portability and battery life in mind, so that you can take it anywhere and not have
+      to worry about running low on power.  Read those important work e-mails on the go, or put the finishing touches on a late project with this travel companion.","buyable":"true","shortDescription":"A lightweight and portable laptop with excellent battery
+      life.","parentProductID":"16614","xcatentry_seoSegment":"travel-laptop-cla022-220301","parentCategoryID":"10130","resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/productview\/byId\/16615","Price":[{"priceDescription":"I","priceUsage":"Offer","priceValue":"575.0"}],"productType":"ItemBean","xcatentry_cmSeoSegment":"10101_travel-laptop-cla022-220301","name":"Travel
+      Laptop","uniqueID":"16615","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/646x1000\/cla022_2203.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cla022_laptops\/200x310\/cla022_2203.jpg","storeID":"10101","partNumber":"CLA022_220301"}],"recordSetCount":"1","MetaData":[{"metaKey":"price","metaData":"1"}]}'

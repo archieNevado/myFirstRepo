@@ -1,0 +1,17 @@
+<%- if @params[:preview] -%>
+  ServerAlias <%= @params[:time_travel_alias] %>
+
+  RequestHeader set X-FragmentHost preview
+  Header unset X-Frame-Options
+
+  # Send empty URL to shop home page
+  RewriteRule ^/$ /s/SiteGenesisGlobal/home?preview=true [R=302,L]
+
+<%- else -%>
+  RequestHeader set X-FragmentHost live
+  Header unset X-Frame-Options
+
+  # Send empty URL to shop home page
+  RewriteRule ^/$ /s/SiteGenesisGlobal/home [R=302,L]
+
+<%- end -%>

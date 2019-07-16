@@ -28,5 +28,11 @@
       <version>1-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>lc-es-worker-component</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
   </dependencies>
 </project>

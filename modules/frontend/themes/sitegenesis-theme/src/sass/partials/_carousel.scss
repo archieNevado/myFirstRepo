@@ -1,0 +1,16 @@
+/*
+Slick Carousel
+========================================================================================================================
+*/
+
+.#{$cm-slick-carousel-prefix} {
+  &--inner-arrows {
+    .slick-arrow {
+      display: none;  // Hide controls by default (mobile first)
+
+      @include breakpoint(sm-and-up) {
+        display: block;
+      }
+    }
+  }
+}

@@ -1,0 +1,270 @@
+!tape
+name: csi_testFindB2BProductFromMultiCatalogs_search
+interactions:
+- recorded: 2017-09-13T12:50:44.323Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Wed, 13 Sep 2017 12:50:43 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=000013xZbHGIFwUsoSXweoW-WqG:-1; HTTPOnly; Path=/; Domain=.toko-ci-02-02-tomcat-3-cms.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"serverTimezoneId":"Europe\/Berlin","wcsVersion":"8.0","stores":{"AuroraB2BESite":{"defaultCatalog":"Extended Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites
+      Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838085","defaultCatalogId":"3074457345616676718"},"AuroraB2BStorefrontAssetStore":{"defaultCatalog":"Extended Sites Catalog
+      Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838034","defaultCatalogId":"3074457345616676668"},"AuroraStorefrontAssetStore":{"defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837984","defaultCatalogId":"3074457345616676668"},"Extended
+      Sites Hub":{"defaultCatalog":"","catalogs":{},"storeId":"715837884","defaultCatalogId":null},"Extended Sites Catalog Asset Store":{"defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended
+      Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715837934","defaultCatalogId":"3074457345616676668"},"AuroraESite":{"defaultCatalog":"Extended Sites Catalog Asset Store
+      Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838084","defaultCatalogId":"3074457345616676719"}}}'
+- recorded: 2017-09-13T12:50:44.811Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/catalog
+    headers:
+      Accept-Encoding: text/plain
+      Authorization: Basic Y21hZG1pbjpWVEpqeW8wQVlTblhGSEkyMDF5bw==
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Wed, 13 Sep 2017 12:50:44 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000rUHW-QlbDzem68xNtWS7etM:-1; HTTPOnly; Path=/; Domain=.toko-ci-02-02-tomcat-3-cms.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":3,"resourceId":"http:\/\/toko-ci-02-02-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/catalog","recordSetCount":3,"recordSetComplete":true,"recordSetStartNumber":0,"resultList":[{"catalogIdentifier":"Extended
+      Sites Catalog Asset Store","description":[{"name":"Extended Sites Catalog Asset Store"}],"primary":true,"catalogId":"3074457345616676668"},{"catalogIdentifier":"Extended Sites Catalog Asset Store B2B Direct","description":[{"shortDescription":"Aurora B2B
+      direct sample data","name":"Aurora B2B direct sample data"}],"primary":false,"catalogId":"3074457345616676718"},{"default":true,"catalogIdentifier":"Extended Sites Catalog Asset Store Consumer Direct","description":[{"shortDescription":"Aurora Consumer
+      Direct sample data","name":"Aurora consumer direct sample data"}],"primary":false,"catalogId":"3074457345616676719"}],"resourceName":"catalog"}'
+- recorded: 2017-09-13T12:50:44.912Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Wed, 13 Sep 2017 12:50:44 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000b6-_KpcZbOTWonP2DfmbIji:-1; HTTPOnly; Path=/; Domain=.toko-ci-02-02-tomcat-3-cms.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"ro":"-21","zh":"-8","pt_BR":"-6","pl_PL":"-22","en_US":"-1","ja_JP":"-10","ru_RU":"-20","zh_CN":"-7","ro_RO":"-21","de":"-3","zh_TW":"-8","fr":"-2","es_ES":"-5","it":"-4","ko_KR":"-9","ko":"-9","it_IT":"-4","de_DE":"-3","ar":"-23","ar_EG":"-23","fr_FR":"-2","pl":"-22","pt":"-6","en":"-1","ru":"-20","es":"-5","ja":"-10"}'
+- recorded: 2017-09-13T12:50:44.998Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/productview/%2520?partNumber=ChefSupply_RGB_LED_Strip&profileName=CoreMedia_findProductByPartNumber_Details&catalogId=3074457345616676718&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Wed, 13 Sep 2017 12:50:44 GMT
+      Expires: Wed, 13 Sep 2017 13:50:44 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/%2520?partNumber=ChefSupply_RGB_LED_Strip&profileName=CoreMedia_findProductByPartNumber_Details&catalogId=3074457345616676718&currency=USD&langId=-1","recordSetCount":1,"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","disallowRecurringOrder":"1","parentCatalogGroupID":["3074457345616676668_3074457345616676720","3074457345616676718_3074457345616676720"],"price_USD":"89.99","uniqueID":"3074457345616681118","singleSKUCatalogEntryID":"3074457345616681119","sKUs":[{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616681119","catalogEntryTypeCode":"ItemBean","name":"ChefSupply
+      RGB LED Strip","uniqueID":"3074457345616681119","storeID":"715837934","partNumber":"ChefSupply_RGB_LED_Strip_SKU"}],"fullImage":"http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/full\/ChefSupply_RGB_LED_Strip.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616681118","price":[{"description":"L","value":"99.99","usage":"Display","currency":"USD"},{"description":"O","value":"","usage":"Offer","currency":"USD"}],"thumbnail":"http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/thumbnail\/ChefSupply_RGB_LED_Strip.jpg","seo_token_ntk":"ChefSupply-RGB-LED-Strip","shortDescription":"ChefSupply
+      RGB LED Strip Light with Built in Controller","name":"ChefSupply RGB LED Strip","subscriptionTypeCode":"NONE","longDescription":"This is a fantastic and easy to use water-resistant Digital RGB LED Strip Light with a built in controller that allows for
+      quick and easy plug and play use of 300 amazing color changing and chasing lighting effects. Simply plug the LED Strip into any 12VDC LED Power Supply, larger than 70W, turn on power from the remote control and browse through 300 stunning lighting modes.
+      Adjust the speed of each mode from 1-10 speed levels. A memory function allows for the same scene to be played once power is turned off and back on or you can set the strip to cycle randomly through the 300 modes. The silicon housing offers a water-resistant
+      lighting solution that can fit in even the smallest of mounting spaces.","buyable":"true","storeID":"715837934","cm_seo_token_ntk":"715837934_ChefSupply-RGB-LED-Strip","numberOfSKUs":1,"partNumber":"ChefSupply_RGB_LED_Strip"}],"recordSetComplete":"true","recordSetStartNumber":0,"recordSetTotalMatches":1,"metaData":{"price":"2"},"resourceName":"productview"}'
+- recorded: 2017-09-13T12:50:45.463Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/categoryview/byId/3074457345616676720?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=3074457345616676718&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Wed, 13 Sep 2017 12:50:45 GMT
+      Expires: Wed, 13 Sep 2017 13:50:45 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676720?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=3074457345616676718&langId=-1","recordSetCount":1,"recordSetComplete":"true","recordSetStartNumber":0,"resourceName":"categoryview","catalogGroupView":[{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676720","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/category\/catr_hw_lighting.png","seo_token_ntk":"lighting-3074457345616676720--1","shortDescription":"Light
+      bulbs in every shape and size","parentCatalogGroupID":["3074457345616676668_3074457345616676718","3074457345616676718_-1"],"name":"Lighting","uniqueID":"3074457345616676720","storeID":"715837934","cm_seo_token_ntk":"715837934_lighting-3074457345616676720--1","identifier":"Hardware
+      Lighting","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/category\/catr_hw_lighting.png"}]}'
+- recorded: 2017-09-13T12:50:45.526Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/productview/%2520?partNumber=ChefSupply_RGB_LED_Strip&profileName=CoreMedia_findProductByPartNumber_Details&catalogId=3074457345616676668&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Wed, 13 Sep 2017 12:50:45 GMT
+      Expires: Wed, 13 Sep 2017 13:50:45 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/%2520?partNumber=ChefSupply_RGB_LED_Strip&profileName=CoreMedia_findProductByPartNumber_Details&catalogId=3074457345616676668&currency=USD&langId=-1","recordSetCount":1,"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","disallowRecurringOrder":"1","parentCatalogGroupID":["3074457345616676668_3074457345616676720","3074457345616676718_3074457345616676720"],"price_USD":"89.99","uniqueID":"3074457345616681118","singleSKUCatalogEntryID":"3074457345616681119","sKUs":[{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616681119","catalogEntryTypeCode":"ItemBean","name":"ChefSupply
+      RGB LED Strip","uniqueID":"3074457345616681119","storeID":"715837934","partNumber":"ChefSupply_RGB_LED_Strip_SKU"}],"fullImage":"http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/full\/ChefSupply_RGB_LED_Strip.jpg","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616681118","price":[{"description":"L","value":"99.99","usage":"Display","currency":"USD"},{"description":"O","value":"","usage":"Offer","currency":"USD"}],"thumbnail":"http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/thumbnail\/ChefSupply_RGB_LED_Strip.jpg","seo_token_ntk":"ChefSupply-RGB-LED-Strip","shortDescription":"ChefSupply
+      RGB LED Strip Light with Built in Controller","name":"ChefSupply RGB LED Strip","subscriptionTypeCode":"NONE","longDescription":"This is a fantastic and easy to use water-resistant Digital RGB LED Strip Light with a built in controller that allows for
+      quick and easy plug and play use of 300 amazing color changing and chasing lighting effects. Simply plug the LED Strip into any 12VDC LED Power Supply, larger than 70W, turn on power from the remote control and browse through 300 stunning lighting modes.
+      Adjust the speed of each mode from 1-10 speed levels. A memory function allows for the same scene to be played once power is turned off and back on or you can set the strip to cycle randomly through the 300 modes. The silicon housing offers a water-resistant
+      lighting solution that can fit in even the smallest of mounting spaces.","buyable":"true","storeID":"715837934","cm_seo_token_ntk":"715837934_ChefSupply-RGB-LED-Strip","numberOfSKUs":1,"partNumber":"ChefSupply_RGB_LED_Strip"}],"recordSetComplete":"true","recordSetStartNumber":0,"recordSetTotalMatches":1,"metaData":{"price":"2"},"resourceName":"productview"}'
+- recorded: 2017-09-13T12:50:45.583Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/categoryview/byId/3074457345616676720?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=3074457345616676668&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Wed, 13 Sep 2017 12:50:45 GMT
+      Expires: Wed, 13 Sep 2017 13:50:45 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676720?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=3074457345616676668&langId=-1","recordSetCount":1,"recordSetComplete":"true","recordSetStartNumber":0,"resourceName":"categoryview","catalogGroupView":[{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676720","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/category\/catr_hw_lighting.png","seo_token_ntk":"lighting-3074457345616676720--1","shortDescription":"Light
+      bulbs in every shape and size","parentCatalogGroupID":["3074457345616676668_3074457345616676718","3074457345616676718_-1"],"name":"Lighting","uniqueID":"3074457345616676720","storeID":"715837934","cm_seo_token_ntk":"715837934_lighting-3074457345616676720--1","identifier":"Hardware
+      Lighting","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/category\/catr_hw_lighting.png"}]}'
+- recorded: 2017-09-13T12:50:45.742Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/categoryview/byParentCategory/3074457345616676720?profileName=CoreMedia_findSubCategories&catalogId=3074457345616676668&depthAndLimit=-1&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Wed, 13 Sep 2017 12:50:45 GMT
+      Expires: Wed, 13 Sep 2017 13:50:45 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byParentCategory\/3074457345616676720?profileName=CoreMedia_findSubCategories&catalogId=3074457345616676668&depthAndLimit=-1&langId=-1","recordSetCount":1,"recordSetComplete":"true","recordSetStartNumber":0,"resourceName":"categoryview","catalogGroupView":[{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676720","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/category\/catr_hw_lighting.png","shortDescription":"Light
+      bulbs in every shape and size","sequence":["3074457345616676668_3074457345616676718_1.00000","3074457345616676718_-1_2.00000"],"parentCatalogGroupID":["3074457345616676668_3074457345616676718","3074457345616676718_-1"],"name":"Lighting","uniqueID":"3074457345616676720","storeID":"715837934","identifier":"Hardware
+      Lighting"}]}'
+- recorded: 2017-09-13T12:50:45.818Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/productview/byCategory/3074457345616676720?profileName=CoreMedia_findProductsByCategory&catalogId=3074457345616676668&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Wed, 13 Sep 2017 12:50:45 GMT
+      Expires: Wed, 13 Sep 2017 13:50:45 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":10,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byCategory\/3074457345616676720?profileName=CoreMedia_findProductsByCategory&catalogId=3074457345616676668&currency=USD&langId=-1","recordSetCount":10,"facetView":[{"entry":[{"extendedData":{"uniqueId":"1121141059910195858368584012342324948481253249484841"},"count":10,"value":"price_USD%3A%28%7B*+100%7D+100%29","label":"({*
+      100} 100)"},{"extendedData":{"uniqueId":"11211410599101958583685840123494848325048481253250484841"},"count":0,"value":"price_USD%3A%28%7B100+200%7D+200%29","label":"({100 200} 200)"},{"extendedData":{"uniqueId":"11211410599101958583685840123504848325148481253251484841"},"count":0,"value":"price_USD%3A%28%7B200+300%7D+300%29","label":"({200
+      300} 300)"},{"extendedData":{"uniqueId":"11211410599101958583685840123514848325248481253252484841"},"count":0,"value":"price_USD%3A%28%7B300+400%7D+400%29","label":"({300 400} 400)"},{"extendedData":{"uniqueId":"11211410599101958583685840123524848325348481253253484841"},"count":0,"value":"price_USD%3A%28%7B400+500%7D+500%29","label":"({400
+      500} 500)"},{"extendedData":{"uniqueId":"11211410599101958583685840123534848324212541"},"count":0,"value":"price_USD%3A%28%7B500+*%7D%29","label":"({500 *})"}],"name":"OfferPrice_USD","value":"price_USD"},{"extendedData":{"displaySequence":"0.0","srchattridentifier":"_cat.ManufacturerName","group_id":"0","allValuesReturned":true,"max_display":"20","maximumValuesToDisplay":"20","propertyvalue":"mfName_ntk_cs","zero_display":"0","storeent_id":"0","displayable":"1","srchattr_id":"-1002","selection":"0","facet_id":"-1000","groupId":"0","sortorder":"0","fdesc":"The
+      manufacturer","propertyname":"facet","keyword_search":"1","fname":"Brand","allowMultipleValueSelection":"false"},"name":"ManufacturerName","entry":[{"extendedData":{"uniqueId":"-10026697100100101991073287111114108100119105100101"},"count":"3","value":"mfName_ntk_cs%3A%22Baddeck+Worldwide%22","label":"Baddeck
+      Worldwide"},{"extendedData":{"uniqueId":"-1002711081111091111143276105103104116105110103"},"count":"3","value":"mfName_ntk_cs%3A%22Glomor+Lighting%22","label":"Glomor Lighting"},{"extendedData":{"uniqueId":"-10028010511410511010532731109946"},"count":"3","value":"mfName_ntk_cs%3A%22Pirini+Inc.%22","label":"Pirini
+      Inc."}],"value":"mfName_ntk_cs"}],"catalogEntryView":[{"hasSingleSKU":true,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616681118","price":[{"description":"L","value":"","usage":"Display","currency":"USD"},{"description":"O","value":"","usage":"Offer","currency":"USD"}],"catalogEntryTypeCode":"ProductBean","seo_token_ntk":"ChefSupply-RGB-LED-Strip","uniqueID":"3074457345616681118","singleSKUCatalogEntryID":"3074457345616681119","storeID":"715837934","cm_seo_token_ntk":"715837934_ChefSupply-RGB-LED-Strip","fullImage":"http:\/\/[cmsHost]\/catalogimage\/product\/[storeId]\/en_US\/full\/ChefSupply_RGB_LED_Strip.jpg","partNumber":"ChefSupply_RGB_LED_Strip"},{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616680509","price":[{"description":"L","value":"","usage":"Display","currency":"USD"},{"description":"O","value":"","usage":"Offer","currency":"USD"}],"catalogEntryTypeCode":"ProductBean","seo_token_ntk":"compact-fluorescent-bulb","uniqueID":"3074457345616680509","storeID":"715837934","cm_seo_token_ntk":"715837934_compact-fluorescent-bulb","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/fla42_lighting\/646x1000\/la042_4201.jpg","partNumber":"LA042_4201"},{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616680518","price":[{"description":"L","value":"","usage":"Display","currency":"USD"},{"description":"O","value":"","usage":"Offer","currency":"USD"}],"catalogEntryTypeCode":"ProductBean","seo_token_ntk":"medium-base-chandelier-bulb","uniqueID":"3074457345616680518","storeID":"715837934","cm_seo_token_ntk":"715837934_medium-base-chandelier-bulb","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/fla42_lighting\/646x1000\/la042_4202.jpg","partNumber":"LA042_4202"},{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616680521","price":[{"description":"L","value":"","usage":"Display","currency":"USD"},{"description":"O","value":"","usage":"Offer","currency":"USD"}],"catalogEntryTypeCode":"ProductBean","seo_token_ntk":"standard-incandescent-bulb","uniqueID":"3074457345616680521","storeID":"715837934","cm_seo_token_ntk":"715837934_standard-incandescent-bulb","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/fla42_lighting\/646x1000\/la042_4203.jpg","partNumber":"LA042_4203"},{"hasSingleSKU":true,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616680538","price":[{"description":"L","value":"","usage":"Display","currency":"USD"},{"description":"O","value":"","usage":"Offer","currency":"USD"}],"catalogEntryTypeCode":"ProductBean","seo_token_ntk":"dual-tube-ultraviolet-bulb","uniqueID":"3074457345616680538","singleSKUCatalogEntryID":"3074457345616680539","storeID":"715837934","cm_seo_token_ntk":"715837934_dual-tube-ultraviolet-bulb","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/fla42_lighting\/646x1000\/la042_4204.jpg","partNumber":"LA042_4204"},{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616680540","price":[{"description":"L","value":"","usage":"Display","currency":"USD"},{"description":"O","value":"","usage":"Offer","currency":"USD"}],"catalogEntryTypeCode":"ProductBean","seo_token_ntk":"screw-in-led-bulb","uniqueID":"3074457345616680540","storeID":"715837934","cm_seo_token_ntk":"715837934_screw-in-led-bulb","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/fla42_lighting\/646x1000\/la042_4205.jpg","partNumber":"LA042_4205"},{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616680545","price":[{"description":"L","value":"","usage":"Display","currency":"USD"},{"description":"O","value":"","usage":"Offer","currency":"USD"}],"catalogEntryTypeCode":"ProductBean","seo_token_ntk":"halogen-floodlight-bulb","uniqueID":"3074457345616680545","storeID":"715837934","cm_seo_token_ntk":"715837934_halogen-floodlight-bulb","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/fla42_lighting\/646x1000\/la042_4206.jpg","partNumber":"LA042_4206"},{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616680550","price":[{"description":"L","value":"","usage":"Display","currency":"USD"},{"description":"O","value":"","usage":"Offer","currency":"USD"}],"catalogEntryTypeCode":"ProductBean","seo_token_ntk":"candelabra-incandescent-bulb","uniqueID":"3074457345616680550","storeID":"715837934","cm_seo_token_ntk":"715837934_candelabra-incandescent-bulb","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/fla42_lighting\/646x1000\/la042_4207.jpg","partNumber":"LA042_4207"},{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616680559","price":[{"description":"L","value":"","usage":"Display","currency":"USD"},{"description":"O","value":"","usage":"Offer","currency":"USD"}],"catalogEntryTypeCode":"ProductBean","seo_token_ntk":"linear-fluorescent-bulb","uniqueID":"3074457345616680559","storeID":"715837934","cm_seo_token_ntk":"715837934_linear-fluorescent-bulb","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/fla42_lighting\/646x1000\/la042_4209.jpg","partNumber":"LA042_4209"},{"hasSingleSKU":false,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616680578","price":[{"description":"L","value":"","usage":"Display","currency":"USD"},{"description":"O","value":"","usage":"Offer","currency":"USD"}],"catalogEntryTypeCode":"ProductBean","seo_token_ntk":"neon-indicator-bulb","uniqueID":"3074457345616680578","storeID":"715837934","cm_seo_token_ntk":"715837934_neon-indicator-bulb","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/lighting\/fla42_lighting\/646x1000\/la042_4210.jpg","partNumber":"LA042_4210"}],"recordSetComplete":"true","recordSetStartNumber":0,"recordSetTotalMatches":10,"breadCrumbTrailEntryViewExtended":[{"1":{"type_":"FACET_ENTRY_CATEGORY","value":"3074457345616676720","label":"Lighting"},"0":{"type_":"FACET_ENTRY_CATEGORY","value":"3074457345616676718","label":"Hardware"}}],"metaData":{"price":"2"},"resourceName":"productview","breadCrumbTrailEntryView":[{"type_":"FACET_ENTRY_CATEGORY","value":"3074457345616676718","label":"Hardware"},{"type_":"FACET_ENTRY_CATEGORY","value":"3074457345616676720","label":"Lighting"}]}'
+- recorded: 2017-09-13T12:50:46.063Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/categoryview/byId/3074457345616676718?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=3074457345616676668&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Wed, 13 Sep 2017 12:50:46 GMT
+      Expires: Wed, 13 Sep 2017 13:50:46 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676718?profileName=CoreMedia_findCategoryByUniqueIds&catalogId=3074457345616676668&langId=-1","recordSetCount":1,"recordSetComplete":"true","recordSetStartNumber":0,"resourceName":"categoryview","catalogGroupView":[{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676718","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/fasteners\/category\/catr_fbo_bolts.png","seo_token_ntk":"hardware-3074457345616676718--1","shortDescription":"An
+      extensive selection of lighting and fasteners","parentCatalogGroupID":"-1","name":"Hardware","uniqueID":"3074457345616676718","childCatalogGroupID":["3074457345616676668_3074457345616676719","3074457345616676668_3074457345616676720"],"storeID":"715837934","cm_seo_token_ntk":"715837934_hardware-3074457345616676718--1","identifier":"Hardware","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/hardware\/fasteners\/category\/catr_fbo_bolts.png"}]}'
+- recorded: 2017-09-13T12:50:46.127Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/productview/%2520?partNumber=ChefSupply_RGB_LED_Strip&profileName=CoreMedia_findProductByPartNumber_Details&catalogId=3074457345616676719&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.4.1 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Wed, 13 Sep 2017 12:50:46 GMT
+      Expires: Wed, 13 Sep 2017 13:50:46 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":0,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/%2520?partNumber=ChefSupply_RGB_LED_Strip&profileName=CoreMedia_findProductByPartNumber_Details&catalogId=3074457345616676719&currency=USD&langId=-1","recordSetCount":0,"catalogEntryView":[],"recordSetComplete":"true","recordSetStartNumber":0,"recordSetTotalMatches":0,"metaData":{"price":"2"},"resourceName":"productview"}'

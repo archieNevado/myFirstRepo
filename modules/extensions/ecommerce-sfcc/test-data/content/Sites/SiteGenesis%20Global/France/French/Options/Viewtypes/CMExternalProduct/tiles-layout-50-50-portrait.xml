@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMViewtype folder="/Sites/SiteGenesis Global/France/French/Options/Viewtypes/CMExternalProduct" name="tiles-layout-50-50-portrait" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
+<locale>fr-FR</locale>
+<master>
+<link href="../../../../../United%20Kingdom/English/Options/Viewtypes/CMExternalProduct/tiles-layout-50-50-portrait.xml" path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Options/Viewtypes/CMExternalProduct/tiles-layout-50-50-portrait"/>
+</master>
+<description>Affiche une collection à 50:50 tuiles disposition (portrait).</description>
+<layout>tiles-layout-50-50-portrait</layout>
+</CMViewtype>

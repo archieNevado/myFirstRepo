@@ -1,0 +1,27 @@
+!tape
+name: wcws_testUnknownUser
+interactions:
+- recorded: 2017-11-14T15:39:31.507Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/price?q=byPartNumbers&partNumber=CLA022_2203&currency=USD&forUser=mr.unknown&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Authorization: Basic Y21hZG1pbjpWVEpqeW8wQVlTblhGSEkyMDF5bw==
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 400
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:31 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=00001Ut696zvYngjFzgL_cNbCnV:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"errors":[{"errorParameters":"","errorCode":"The following finder exception has occurred during processing: \"javax.ejb.ObjectNotFoundException: forUserId mr.unknown does not exist\".","errorKey":"The following finder exception has occurred during
+      processing: \"javax.ejb.ObjectNotFoundException: forUserId mr.unknown does not exist\".","errorMessage":"The following finder exception has occurred during processing: \"javax.ejb.ObjectNotFoundException: forUserId mr.unknown does not exist\"."}]}'

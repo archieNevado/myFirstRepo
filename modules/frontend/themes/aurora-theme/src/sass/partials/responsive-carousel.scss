@@ -1,0 +1,27 @@
+.#{$cm-responsive-carousel-prefix} {
+
+  .cm-teasable__caption {
+    margin-top: 0;
+    position: relative;
+
+    .cm-teasable__headline {
+      position: relative;
+      font-size: 1rem;
+    }
+
+    .cm-product-info {
+      position: relative;
+
+      &__pricing {
+        margin: 0;
+
+        .cm-product-info__offerprice,
+        .cm-product-info__listprice {
+          position: relative;
+          top: inherit;
+          display: inline-block;
+        }
+      }
+    }
+  }
+}

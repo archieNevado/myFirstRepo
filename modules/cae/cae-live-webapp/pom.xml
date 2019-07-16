@@ -50,7 +50,7 @@
           <contextFile>${project.basedir}/src/main/servletengine/tomcat-context.xml</contextFile>
           <systemProperties>
             <coremedia.blueprint.project.directory>${project.basedir}/../../../</coremedia.blueprint.project.directory>
-            <propertieslocations>classpath:/cae-live.properties</propertieslocations>
+            <propertieslocations>classpath:/cae-live.properties,classpath:/wcs.properties,classpath:/hybris.properties,classpath:/sfcc.properties</propertieslocations>
           </systemProperties>
         </configuration>
       </plugin>

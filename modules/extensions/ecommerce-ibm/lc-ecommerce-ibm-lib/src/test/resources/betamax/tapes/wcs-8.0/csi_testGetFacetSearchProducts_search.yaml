@@ -1,0 +1,183 @@
+!tape
+name: csi_testGetFacetSearchProducts_search
+interactions:
+- recorded: 2017-11-01T13:11:09.914Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Wed, 01 Nov 2017 13:11:09 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000EiyWcFb_YQrp2woFLLE7QF6:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-calau-tomcat-3-cms.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"serverTimezoneId":"Europe\/Berlin","wcsVersion":"8.0","stores":{"AuroraB2BESite":{"defaultCatalog":"Extended Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Calista Spring
+      Fashions":"3074457345616676768","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838085","defaultCatalogId":"3074457345616676718"},"CalistaESite":{"defaultCatalog":"Calista
+      Spring Fashions","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Calista Spring Fashions":"3074457345616676768","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset
+      Store":"3074457345616676668"},"storeId":"715838086","defaultCatalogId":"3074457345616676768"},"AuroraB2BStorefrontAssetStore":{"defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Calista
+      Spring Fashions":"3074457345616676768","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838034","defaultCatalogId":"3074457345616676668"},"AuroraStorefrontAssetStore":{"defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Calista Spring Fashions":"3074457345616676768","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog
+      Asset Store":"3074457345616676668"},"storeId":"715837984","defaultCatalogId":"3074457345616676668"},"Extended Sites Hub":{"defaultCatalog":"","catalogs":{},"storeId":"715837884","defaultCatalogId":null},"Extended Sites Catalog Asset Store":{"defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Calista Spring Fashions":"3074457345616676768","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog
+      Asset Store":"3074457345616676668"},"storeId":"715837934","defaultCatalogId":"3074457345616676668"},"AuroraESite":{"defaultCatalog":"Extended Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Calista
+      Spring Fashions":"3074457345616676768","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog Asset Store":"3074457345616676668"},"storeId":"715838084","defaultCatalogId":"3074457345616676719"},"CMStorefrontAssetStore":{"defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store B2B Direct":"3074457345616676718","Calista Spring Fashions":"3074457345616676768","Extended Sites Catalog Asset Store Consumer Direct":"3074457345616676719","Extended Sites Catalog
+      Asset Store":"3074457345616676668"},"storeId":"715838584","defaultCatalogId":"3074457345616676668"}}}'
+- recorded: 2017-11-01T13:11:10.719Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/715838084/catalog
+    headers:
+      Accept-Encoding: text/plain
+      Authorization: Basic Y21hZG1pbjpWVEpqeW8wQVlTblhGSEkyMDF5bw==
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Wed, 01 Nov 2017 13:11:10 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000y27WJVPG26Ve8nDn5JXO2-F:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-calau-tomcat-3-cms.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":4,"resourceId":"http:\/\/toko-ci-01-calau-tomcat-3-shop-ibm.coremedia.vm\/wcs\/resources\/lbs\/store\/715838084\/catalog","recordSetCount":4,"recordSetComplete":true,"recordSetStartNumber":0,"resultList":[{"catalogIdentifier":"Extended
+      Sites Catalog Asset Store","description":[{"name":"Extended Sites Catalog Asset Store"}],"primary":true,"catalogId":"3074457345616676668"},{"catalogIdentifier":"Extended Sites Catalog Asset Store B2B Direct","description":[{"shortDescription":"Aurora B2B
+      direct sample data","name":"Aurora B2B direct sample data"}],"primary":false,"catalogId":"3074457345616676718"},{"default":true,"catalogIdentifier":"Extended Sites Catalog Asset Store Consumer Direct","description":[{"shortDescription":"Aurora Consumer
+      Direct sample data","name":"Aurora consumer direct sample data"}],"primary":false,"catalogId":"3074457345616676719"},{"catalogIdentifier":"Calista Spring Fashions","description":[{"shortDescription":"Spring Fashions","name":"Spring Fashions"}],"primary":false,"catalogId":"3074457345616676768"}],"resourceName":"catalog"}'
+- recorded: 2017-11-01T13:11:10.839Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Wed, 01 Nov 2017 13:11:10 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=00007gn9OMG2B-td6ohkBV77q4h:-1; HTTPOnly; Path=/; Domain=.toko-ci-01-calau-tomcat-3-cms.coremedia.vm; HttpOnly
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"ro":"-21","zh":"-8","pt_BR":"-6","pl_PL":"-22","en_US":"-1","ja_JP":"-10","ru_RU":"-20","zh_CN":"-7","ro_RO":"-21","de":"-3","zh_TW":"-8","fr":"-2","es_ES":"-5","it":"-4","ko_KR":"-9","ko":"-9","it_IT":"-4","de_DE":"-3","ar":"-23","ar_EG":"-23","fr_FR":"-2","pl":"-22","pt":"-6","en":"-1","ru":"-20","es":"-5","ja":"-10"}'
+- recorded: 2017-11-01T13:11:10.930Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/categoryview/%2520?categoryIdentifier=Electronics&profileName=CoreMedia_findCategoryByIdentifier&catalogId=3074457345616676719&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Wed, 01 Nov 2017 13:11:10 GMT
+      Expires: Wed, 01 Nov 2017 14:11:10 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/%2520?categoryIdentifier=Electronics&profileName=CoreMedia_findCategoryByIdentifier&catalogId=3074457345616676719&langId=-1","recordSetCount":1,"recordSetComplete":"true","recordSetStartNumber":0,"resourceName":"categoryview","catalogGroupView":[{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676694","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/category\/catr_cta_tablets.png","seo_token_ntk":"electronics","shortDescription":"Electronics","parentCatalogGroupID":["3074457345616676668_-1","3074457345616676719_-1","3074457345616676768_-1"],"name":"Electronics","uniqueID":"3074457345616676694","childCatalogGroupID":["3074457345616676668_3074457345616676695","3074457345616676668_3074457345616676696","3074457345616676668_3074457345616676697","3074457345616676668_3074457345616676698","3074457345616676668_3074457345616676699","3074457345616676719_3074457345616676695","3074457345616676719_3074457345616676696","3074457345616676719_3074457345616676697","3074457345616676719_3074457345616676698","3074457345616676719_3074457345616676699","3074457345616676768_3074457345616676695","3074457345616676768_3074457345616676696","3074457345616676768_3074457345616676697","3074457345616676768_3074457345616676698","3074457345616676768_3074457345616676699"],"storeID":"715837934","cm_seo_token_ntk":"715837934_electronics","identifier":"Electronics","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/category\/catr_cta_tablets.png"}]}'
+- recorded: 2017-11-01T13:11:11.154Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/productview/bySearchTerm/*?profileName=CoreMedia_findProductsBySearchTerm&categoryId=3074457345616676694&currency=USD&langId=-1&pageNumber=1&pageSize=1&searchType=2
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Wed, 01 Nov 2017 13:11:11 GMT
+      Expires: Wed, 01 Nov 2017 14:11:11 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":26,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/bySearchTerm\/*?profileName=CoreMedia_findProductsBySearchTerm&categoryId=3074457345616676694&currency=USD&langId=-1&pageNumber=1&pageSize=1&searchType=2","recordSetCount":1,"facetView":[{"entry":[{"extendedData":{"uniqueId":"1121141059910195858368584012342324948481253249484841"},"count":6,"value":"price_USD%3A%28%7B*+100%7D+100%29","label":"({*
+      100} 100)"},{"extendedData":{"uniqueId":"11211410599101958583685840123494848325048481253250484841"},"count":2,"value":"price_USD%3A%28%7B100+200%7D+200%29","label":"({100 200} 200)"},{"extendedData":{"uniqueId":"11211410599101958583685840123504848325148481253251484841"},"count":2,"value":"price_USD%3A%28%7B200+300%7D+300%29","label":"({200
+      300} 300)"},{"extendedData":{"uniqueId":"11211410599101958583685840123514848325248481253252484841"},"count":4,"value":"price_USD%3A%28%7B300+400%7D+400%29","label":"({300 400} 400)"},{"extendedData":{"uniqueId":"11211410599101958583685840123524848325348481253253484841"},"count":2,"value":"price_USD%3A%28%7B400+500%7D+500%29","label":"({400
+      500} 500)"},{"extendedData":{"uniqueId":"11211410599101958583685840123534848324212541"},"count":10,"value":"price_USD%3A%28%7B500+*%7D%29","label":"({500 *})"}],"name":"OfferPrice_USD","value":"price_USD"},{"extendedData":{"displaySequence":"0.0","srchattridentifier":"_cat.ParentCatalogGroup","group_id":"0","allValuesReturned":true,"max_display":"20","maximumValuesToDisplay":"20","propertyvalue":"parentCatgroup_id_search","zero_display":"0","storeent_id":"0","displayable":"1","srchattr_id":"-1013","selection":"0","facet_id":"-1001","groupId":"0","sortorder":"0","fdesc":"The
+      category","propertyname":"facet","keyword_search":"1","fname":"Category","allowMultipleValueSelection":"false"},"name":"ParentCatalogGroup","entry":[{"extendedData":{"parentIds":"3074457345616676694","uniqueId":"3074457345616676696"},"count":"6","value":"3074457345616676696","label":"Tablets"},{"extendedData":{"parentIds":"3074457345616676694","uniqueId":"3074457345616676697"},"count":"6","value":"3074457345616676697","label":"Laptops"},{"extendedData":{"parentIds":"3074457345616676694","uniqueId":"3074457345616676699"},"count":"6","value":"3074457345616676699","label":"Components"},{"extendedData":{"parentIds":"3074457345616676694","uniqueId":"3074457345616676695"},"count":"4","value":"3074457345616676695","label":"Accessories"},{"extendedData":{"parentIds":"3074457345616676694","uniqueId":"3074457345616676698"},"count":"4","value":"3074457345616676698","label":"Desktops"}],"value":"parentCatgroup_id_search"},{"extendedData":{"displaySequence":"0.0","srchattridentifier":"_cat.ManufacturerName","group_id":"0","allValuesReturned":true,"max_display":"20","maximumValuesToDisplay":"20","propertyvalue":"mfName_ntk_cs","zero_display":"0","storeent_id":"0","displayable":"1","srchattr_id":"-1002","selection":"0","facet_id":"-1000","groupId":"0","sortorder":"0","fdesc":"The
+      manufacturer","propertyname":"facet","keyword_search":"1","fname":"Brand","allowMultipleValueSelection":"false"},"name":"ManufacturerName","entry":[{"extendedData":{"uniqueId":"-100268868232841019910411010599115"},"count":"11","value":"mfName_ntk_cs%3A%22DVR+Technics%22","label":"DVR
+      Technics"},{"extendedData":{"uniqueId":"-1002691211013268101101328410197109"},"count":"8","value":"mfName_ntk_cs%3A%22Eye+Dee+Team%22","label":"Eye Dee Team"},{"extendedData":{"uniqueId":"-1002651001011081011013280108117115"},"count":"7","value":"mfName_ntk_cs%3A%22Adelee+Plus%22","label":"Adelee
+      Plus"}],"value":"mfName_ntk_cs"}],"catalogEntryView":[{"hasSingleSKU":true,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676695","3074457345616676719_3074457345616676695","3074457345616676768_3074457345616676695"],"price_USD":"135.0","singleSKUCatalogEntryID":"3074457345616679291","uniqueID":"3074457345616679290","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616679290","price":[{"description":"L","value":"150.0","usage":"Display","currency":"USD"},{"description":"O","value":"","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/electronics\/cac024_accessories\/200x310\/cac024_2401.jpg","seo_token_ntk":"widescreen-lcd-monitor","shortDescription":"A
+      monitor capable of high-definition resolutions with rich colors and contrast.","manufacturer":"Eye Dee Team","name":"Widescreen LCD Monitor","buyable":"true","attributes":[{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"24\"","uniqueID":"7741124012283334862","unitID":"","unitOfMeasure":"","identifier":"CAC024_2401"}],"sequence":".00000","name":"Size","uniqueID":"7741124012283333348","usage":"Descriptive","comparable":true,"displayable":true,"identifier":"Size","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":".00000","name":"Size","uniqueID":"7741124012283333401","usage":"Defining","comparable":true,"displayable":true,"identifier":"ComputersAccessoriesSize","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":"1.00000","name":"Brand","uniqueID":"7741124012283333400","usage":"Defining","comparable":false,"displayable":true,"identifier":"ComputersAccessoriesBrand","facetable":false,"searchable":false}],"storeID":"715837934","cm_seo_token_ntk":"715837934_widescreen-lcd-monitor","partNumber":"CAC024_2401"}],"recordSetComplete":"false","recordSetStartNumber":0,"recordSetTotalMatches":26,"breadCrumbTrailEntryViewExtended":[{"0":{"type_":"FACET_ENTRY_CATEGORY","value":"3074457345616676694","label":"Electronics"}}],"metaData":{"price":"2"},"resourceName":"productview","breadCrumbTrailEntryView":[{"type_":"FACET_ENTRY_CATEGORY","value":"3074457345616676694","label":"Electronics"}]}'
+- recorded: 2017-11-01T13:11:11.584Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/categoryview/%2520?categoryIdentifier=Men%20Shoes&profileName=CoreMedia_findCategoryByIdentifier&catalogId=3074457345616676719&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Wed, 01 Nov 2017 13:11:11 GMT
+      Expires: Wed, 01 Nov 2017 14:11:11 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":1,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/%2520?categoryIdentifier=Men%20Shoes&profileName=CoreMedia_findCategoryByIdentifier&catalogId=3074457345616676719&langId=-1","recordSetCount":1,"recordSetComplete":"true","recordSetStartNumber":0,"resourceName":"categoryview","catalogGroupView":[{"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/categoryview\/byId\/3074457345616676686","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/category\/catr_msh_shoes.png","seo_token_ntk":"shoes-3074457345616676686-1","shortDescription":"Shoes","parentCatalogGroupID":["3074457345616676668_3074457345616676669","3074457345616676719_3074457345616676669","3074457345616676768_3074457345616676669"],"name":"Shoes","uniqueID":"3074457345616676686","storeID":"715837934","cm_seo_token_ntk":"715837934_shoes-3074457345616676686-1","identifier":"Men
+      Shoes","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/category\/catr_msh_shoes.png"}]}'
+- recorded: 2017-11-01T13:11:11.632Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/715838084/productview/bySearchTerm/*?profileName=CoreMedia_findProductsBySearchTerm&categoryId=3074457345616676686&currency=USD&langId=-1&pageNumber=1&pageSize=1&searchType=2
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Wed, 01 Nov 2017 13:11:11 GMT
+      Expires: Wed, 01 Nov 2017 14:11:11 GMT
+      Vary: Accept,Accept-Encoding,User-Agent
+      X-Powered-By: Servlet/3.0
+    body: '{"recordSetTotal":15,"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/bySearchTerm\/*?profileName=CoreMedia_findProductsBySearchTerm&categoryId=3074457345616676686&currency=USD&langId=-1&pageNumber=1&pageSize=1&searchType=2","recordSetCount":1,"facetView":[{"entry":[{"extendedData":{"uniqueId":"1121141059910195858368584012342324948481253249484841"},"count":10,"value":"price_USD%3A%28%7B*+100%7D+100%29","label":"({*
+      100} 100)"},{"extendedData":{"uniqueId":"11211410599101958583685840123494848325048481253250484841"},"count":4,"value":"price_USD%3A%28%7B100+200%7D+200%29","label":"({100 200} 200)"},{"extendedData":{"uniqueId":"11211410599101958583685840123504848325148481253251484841"},"count":1,"value":"price_USD%3A%28%7B200+300%7D+300%29","label":"({200
+      300} 300)"},{"extendedData":{"uniqueId":"11211410599101958583685840123514848325248481253252484841"},"count":0,"value":"price_USD%3A%28%7B300+400%7D+400%29","label":"({300 400} 400)"},{"extendedData":{"uniqueId":"11211410599101958583685840123524848325348481253253484841"},"count":0,"value":"price_USD%3A%28%7B400+500%7D+500%29","label":"({400
+      500} 500)"},{"extendedData":{"uniqueId":"11211410599101958583685840123534848324212541"},"count":0,"value":"price_USD%3A%28%7B500+*%7D%29","label":"({500 *})"}],"name":"OfferPrice_USD","value":"price_USD"},{"extendedData":{"displaySequence":"0.0","srchattridentifier":"_cat.ManufacturerName","group_id":"0","allValuesReturned":true,"max_display":"20","maximumValuesToDisplay":"20","propertyvalue":"mfName_ntk_cs","zero_display":"0","storeent_id":"0","displayable":"1","srchattr_id":"-1002","selection":"0","facet_id":"-1000","groupId":"0","sortorder":"0","fdesc":"The
+      manufacturer","propertyname":"facet","keyword_search":"1","fname":"Brand","allowMultipleValueSelection":"false"},"name":"ManufacturerName","entry":[{"extendedData":{"uniqueId":"-10026697114105108"},"count":"3","value":"mfName_ntk_cs%3A%22Baril%22","label":"Baril"},{"extendedData":{"uniqueId":"-10026611111411597116105"},"count":"3","value":"mfName_ntk_cs%3A%22Borsati%22","label":"Borsati"},{"extendedData":{"uniqueId":"-10026797115115101116116105"},"count":"3","value":"mfName_ntk_cs%3A%22Cassetti%22","label":"Cassetti"},{"extendedData":{"uniqueId":"-100276101111"},"count":"3","value":"mfName_ntk_cs%3A%22Leo%22","label":"Leo"},{"extendedData":{"uniqueId":"-100277101115111"},"count":"3","value":"mfName_ntk_cs%3A%22Meso%22","label":"Meso"}],"value":"mfName_ntk_cs"}],"catalogEntryView":[{"hasSingleSKU":false,"catalogEntryTypeCode":"ProductBean","parentCatalogGroupID":["3074457345616676668_3074457345616676686","3074457345616676719_3074457345616676686","3074457345616676768_3074457345616676686"],"price_USD":"89.0","uniqueID":"3074457345616678606","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/715838084\/productview\/byId\/3074457345616678606","price":[{"description":"L","value":"99.0","usage":"Display","currency":"USD"},{"description":"O","value":"","usage":"Offer","currency":"USD"}],"thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/men\/msh012_shoes\/200x310\/msh012_1201.jpg","seo_token_ntk":"borsati-fife-dress-loafer","shortDescription":"Black
+      slip-on dress shoe in a wide fit","manufacturer":"Borsati","name":"Borsati Fife Dress Loafer","buyable":"true","attributes":[{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"Loafer","uniqueID":"7741124012283334325","unitID":"","unitOfMeasure":"","identifier":"MSH012_1201"}],"sequence":".00000","name":"Style","uniqueID":"7741124012283333344","usage":"Descriptive","comparable":true,"displayable":true,"identifier":"Style","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":".00000","name":"Color","uniqueID":"7741124012283333384","usage":"Defining","comparable":true,"displayable":true,"identifier":"MenShoesColor","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":"1.00000","value":"Wide","uniqueID":"7741124012283334340","unitID":"","unitOfMeasure":"","identifier":"MSH012_1201"}],"sequence":"1.00000","name":"Width","uniqueID":"7741124012283333352","usage":"Descriptive","comparable":true,"displayable":true,"identifier":"Width","facetable":false,"searchable":false},{"storeDisplay":false,"values":[{"sequence":".00000","value":"0","uniqueID":"0","unitID":"","unitOfMeasure":"","identifier":"0"}],"sequence":"1.00000","name":"Shoe
+      Size","uniqueID":"7741124012283333383","usage":"Defining","comparable":true,"displayable":true,"identifier":"MenShoesShoe Size","facetable":false,"searchable":false}],"storeID":"715837934","cm_seo_token_ntk":"715837934_borsati-fife-dress-loafer","partNumber":"MSH012_1201"}],"recordSetComplete":"false","recordSetStartNumber":0,"recordSetTotalMatches":15,"breadCrumbTrailEntryViewExtended":[{"2":{"type_":"FACET_ENTRY_CATEGORY","value":"3074457345616676686","label":"Shoes"},"1":{"type_":"FACET_ENTRY_CATEGORY","value":"3074457345616676669","label":"Men"},"0":{"type_":"FACET_ENTRY_CATEGORY","value":"3074457345616676668","label":"Apparel"}}],"metaData":{"price":"2"},"resourceName":"productview","breadCrumbTrailEntryView":[{"type_":"FACET_ENTRY_CATEGORY","value":"3074457345616676668","label":"Apparel"},{"type_":"FACET_ENTRY_CATEGORY","value":"3074457345616676669","label":"Men"},{"type_":"FACET_ENTRY_CATEGORY","value":"3074457345616676686","label":"Shoes"}]}'

@@ -1,0 +1,211 @@
+!tape
+name: csi_testFindMarketingSpotByExternalId2
+interactions:
+- recorded: 2017-11-14T15:39:42.371Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/storeinfo
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:42 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000qE4ZTo-OduaFqSD3geIV51s:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"wcsVersion":"7.8","stores":{"Aurora":{"defaultCatalogId":"10052","defaultCatalog":"Aurora Consumer Direct","catalogs":{"Aurora":"10001","Aurora Consumer Direct":"10052","Aurora B2B Direct":"10051"},"storeId":"10001"},"CMStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10201"},"AuroraStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10151"},"PerfectChefESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10302"},"AuroraB2BESite":{"defaultCatalogId":"10151","defaultCatalog":"Extended
+      Sites Catalog Asset Store B2B Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10303"},"Extended Sites Hub":{"defaultCatalogId":null,"defaultCatalog":"","catalogs":{},"storeId":"10051"},"AuroraB2BStorefrontAssetStore":{"defaultCatalogId":"10101","defaultCatalog":"Extended
+      Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10251"},"AuroraESite":{"defaultCatalogId":"10152","defaultCatalog":"Extended
+      Sites Catalog Asset Store Consumer Direct","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog Asset Store":"10101"},"storeId":"10301"},"Extended Sites
+      Catalog Asset Store":{"defaultCatalogId":"10101","defaultCatalog":"Extended Sites Catalog Asset Store","catalogs":{"Extended Sites Catalog Asset Store Consumer Direct":"10152","Extended Sites Catalog Asset Store B2B Direct":"10151","Extended Sites Catalog
+      Asset Store":"10101"},"storeId":"10101"}},"serverTimezoneId":"Europe\/Berlin"}'
+- recorded: 2017-11-14T15:39:42.384Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/coremedia/languagemap
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-cache="set-cookie, set-cookie2"
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:42 GMT
+      Expires: Thu, 01 Dec 1994 16:00:00 GMT
+      Set-Cookie: JSESSIONID=0000xne-mzsiUXmhKw0PQCRZ-gG:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Surrogate-Control: no-store
+      Vary: Accept
+    body: '{"de":"-3","ru":"-20","pt":"-6","fr":"-2","ja_JP":"-10","zh_CN":"-7","pl_PL":"-22","fr_FR":"-2","es_ES":"-5","ko_KR":"-9","ko":"-9","en":"-1","it":"-4","pt_BR":"-6","es":"-5","zh":"-8","ar_EG":"-23","ar":"-23","en_US":"-1","zh_TW":"-8","ja":"-10","pl":"-22","ro":"-21","ro_RO":"-21","ru_RU":"-20","it_IT":"-4","de_DE":"-3"}'
+- recorded: 2017-11-14T15:39:42.481Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com/wcs/resources/store/10301/espot/BoysRow4_CatEntries?currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Authorization: Basic Y21hZG1pbjpWVEpqeW8wQVlTblhGSEkyMDF5bw==
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600, no-cache=set-cookie
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:42 GMT
+      Expires: Tue, 14 Nov 2017 16:39:42 GMT
+      Set-Cookie: JSESSIONID=00001xI6Av3d-ZGamTZ2hI6qTxX:-1; Path=/; Domain=.toko-ci-01-ulm-cms.coremedia.vm
+      Vary: Accept
+    body: '{"MarketingSpotData":[{"baseMarketingSpotActivityData":[{"catalogEntryTypeCode":"ProductBean","baseMarketingSpotActivityID":"16467","activityIdentifierName":"BoysRow4_CatEntries","activityFormat":"web","productId":"16467","productPartNumber":"BCL014_1402","listPrice":"50.00","standardPrice":"50.00","ownerID":"7000000000000000151","baseMarketingSpotActivityName":"Gusso
+      Green Khaki Shirt","properties":[{"baseMarketingKey":"mktActivityDescription","baseMarketingValue":"Product Recommendation for Boys"}],"activityIdentifierID":"11187","activityPriority":"1","attributes":[{"stringValue":"ExtendedSitesCatalogAssetStore","name":"rootDirectory"},{"stringValue":"ShoppingArea\/CatalogSection\/CatalogEntrySubsection\/ProductDisplay","name":"displayTemplate"}],"contractPrice":[{"currency":"USD","origin":"6","contractPrice":"50.00","majorVersionNumber":"1","minimumQuantity":"1.0","name":"AuroraESite
+      - AuroraESite","minorVersionNumber":"0","contractID":"4000000000000000506","ownerID":"7000000000000000351"}],"baseMarketingSpotDataType":"CatalogEntry","listPriceCurrency":"USD","description":[{"longDescription":"This khakhi green shirt has front pockets
+      and hemmed sleeves. In true sportsman style, this shirt has a brown shoulder panel with same brown repeated in a patch over the left pocket with gold stars embossed. Made of thin cotton blend, this shirt is suitable for the summer season.","shortDescription":"Green
+      khaki shirt with front pockets","language":"-1","productName":"Gusso Green Khaki Shirt","fullImage":"images\/catalog\/apparel\/boys\/bcl014_tops\/646x1000\/bcl014_1402.jpg","thumbnail":"images\/catalog\/apparel\/boys\/bcl014_tops\/200x310\/bcl014_1402.jpg"}],"standardPriceCurrency":"USD"},{"catalogEntryTypeCode":"ProductBean","baseMarketingSpotActivityID":"16473","activityIdentifierName":"BoysRow4_CatEntries","activityFormat":"web","productId":"16473","productPartNumber":"BCL014_1403","listPrice":"50.00","standardPrice":"50.00","ownerID":"7000000000000000151","baseMarketingSpotActivityName":"Borsati
+      Dual-Toned T-Shirt","properties":[{"baseMarketingKey":"mktActivityDescription","baseMarketingValue":"Product Recommendation for Boys"}],"activityIdentifierID":"11187","activityPriority":"1","attributes":[{"stringValue":"ExtendedSitesCatalogAssetStore","name":"rootDirectory"},{"stringValue":"ShoppingArea\/CatalogSection\/CatalogEntrySubsection\/ProductDisplay","name":"displayTemplate"}],"contractPrice":[{"currency":"USD","origin":"6","contractPrice":"50.00","majorVersionNumber":"1","minimumQuantity":"1.0","name":"AuroraESite
+      - AuroraESite","minorVersionNumber":"0","contractID":"4000000000000000506","ownerID":"7000000000000000351"}],"baseMarketingSpotDataType":"CatalogEntry","listPriceCurrency":"USD","description":[{"longDescription":"This vibrant red and purple t-shirt displays
+      a contrast in colours for a cool and spunky look. It has a ribbed collar and a two-button placket. The ribbed armbands at the short sleeves, which sets off the color contrasts, is eye-catching.  ","shortDescription":"Dual-toned t-shirt with purple shoulders","language":"-1","productName":"Borsati
+      Dual-Toned T-Shirt","fullImage":"images\/catalog\/apparel\/boys\/bcl014_tops\/646x1000\/bcl014_1403.jpg","thumbnail":"images\/catalog\/apparel\/boys\/bcl014_tops\/200x310\/bcl014_1403.jpg"}],"standardPriceCurrency":"USD"},{"catalogEntryTypeCode":"ProductBean","baseMarketingSpotActivityID":"16511","activityIdentifierName":"BoysRow4_CatEntries","activityFormat":"web","productId":"16511","productPartNumber":"BCL014_1408","listPrice":"30.00","standardPrice":"30.00","ownerID":"7000000000000000151","baseMarketingSpotActivityName":"Gusso
+      Woollen Baby Vest","properties":[{"baseMarketingKey":"mktActivityDescription","baseMarketingValue":"Product Recommendation for Boys"}],"activityIdentifierID":"11187","activityPriority":"1","attributes":[{"stringValue":"ExtendedSitesCatalogAssetStore","name":"rootDirectory"},{"stringValue":"ShoppingArea\/CatalogSection\/CatalogEntrySubsection\/ProductDisplay","name":"displayTemplate"}],"contractPrice":[{"currency":"USD","origin":"6","contractPrice":"30.00","majorVersionNumber":"1","minimumQuantity":"1.0","name":"AuroraESite
+      - AuroraESite","minorVersionNumber":"0","contractID":"4000000000000000506","ownerID":"7000000000000000351"}],"baseMarketingSpotDataType":"CatalogEntry","listPriceCurrency":"USD","description":[{"longDescription":"This cutesy woollen baby vest in navy blue
+      is an adorable top for toddler boys. This vest is cable knit and follows the styling similar to adult vests. Team it with a shirt, jeans and tie and your baby will steal the limelight.  ","shortDescription":"Woollen baby vest in navy blue","language":"-1","productName":"Gusso
+      Woollen Baby Vest","fullImage":"images\/catalog\/apparel\/boys\/bcl014_tops\/646x1000\/bcl014_1408.jpg","thumbnail":"images\/catalog\/apparel\/boys\/bcl014_tops\/200x310\/bcl014_1408.jpg"}],"standardPriceCurrency":"USD"},{"catalogEntryTypeCode":"ProductBean","baseMarketingSpotActivityID":"16559","activityIdentifierName":"BoysRow4_CatEntries","activityFormat":"web","productId":"16559","productPartNumber":"BCL014_1415","listPrice":"40.00","standardPrice":"36.00","ownerID":"7000000000000000151","baseMarketingSpotActivityName":"Borsati
+      Classic Checkered Shirt","properties":[{"baseMarketingKey":"mktActivityDescription","baseMarketingValue":"Product Recommendation for Boys"}],"activityIdentifierID":"11187","activityPriority":"1","attributes":[{"stringValue":"ExtendedSitesCatalogAssetStore","name":"rootDirectory"},{"stringValue":"ShoppingArea\/CatalogSection\/CatalogEntrySubsection\/ProductDisplay","name":"displayTemplate"}],"contractPrice":[{"currency":"USD","origin":"6","contractPrice":"36.00","majorVersionNumber":"1","minimumQuantity":"1.0","name":"AuroraESite
+      - AuroraESite","minorVersionNumber":"0","contractID":"4000000000000000506","ownerID":"7000000000000000351"}],"baseMarketingSpotDataType":"CatalogEntry","listPriceCurrency":"USD","description":[{"longDescription":"Chic and classy, this elegant shirt in
+      small checks makes your young man look stylish. This pocketless shirt has a bias button panel. Shirttail hem and barrel cuffs further adorn the shirt.","shortDescription":"Classic checkered fitting shirt","language":"-1","productName":"Borsati Classic
+      Checkered Shirt","fullImage":"images\/catalog\/apparel\/boys\/bcl014_tops\/646x1000\/bcl014_1415.jpg","thumbnail":"images\/catalog\/apparel\/boys\/bcl014_tops\/200x310\/bcl014_1415.jpg"}],"standardPriceCurrency":"USD"}],"marketingSpotIdentifier":"12465","eSpotName":"BoysRow4_CatEntries","behavior":"0","marketingSpotDataTitle":[{"marketingSpotDataTitleActivityID":"0","marketingSpotDataTitleId":"10445","marketingSpotDataTitleName":"ApparelESpotDefaultTitle","contentStoreId":"10151","contentId":"10445","contentName":"ApparelESpotDefaultTitle","contentClickAction":"None","MarketingContentDescription":[{}],"marketingContentDescription":[{"marketingText":"On
+      Sale Now","language":"-1"}],"marketingSpotDataTitleDataType":"MarketingContent","contentFormatName":"Text","contentFormatId":"2"}],"nextTimeLimit":"-1"}],"resourceId":"http:\/\/shop-tools.toko-ci-01-ulm-wcs.coremedia.vm\/wcs\/resources\/store\/10301\/espot\/BoysRow4_CatEntries?currency=USD&langId=-1","resourceName":"espot"}'
+- recorded: 2017-11-14T15:39:42.525Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/16467?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:42 GMT
+      Expires: Tue, 14 Nov 2017 16:39:42 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16467?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"This
+      khakhi green shirt has front pockets and hemmed sleeves. In true sportsman style, this shirt has a brown shoulder panel with same brown repeated in a patch over the left pocket with gold stars embossed. Made of thin cotton blend, this shirt is suitable
+      for the summer season.","shortDescription":"Green khaki shirt with front pockets","catalogEntryTypeCode":"ProductBean","buyable":"true","subscriptionTypeCode":"NONE","cm_seo_token_ntk":"10101_gusso-green-khaki-shirt","price":[{"value":"50.0","currency":"USD","usage":"Display","description":"L"},{"value":"50.0","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16467","parentCatalogGroupID":["10101_10125","10152_10125"],"name":"Gusso
+      Green Khaki Shirt","uniqueID":"16467","disallowRecurringOrder":"1","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/boys\/bcl014_tops\/646x1000\/bcl014_1402.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/boys\/bcl014_tops\/200x310\/bcl014_1402.jpg","manufacturer":"Gusso","sKUs":[{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16468","name":"Gusso
+      Green Khaki Shirt","hasSingleSKU":false,"partNumber":"BCL014_140201","uniqueID":"16468","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16469","name":"Gusso
+      Green Khaki Shirt","hasSingleSKU":false,"partNumber":"BCL014_140202","uniqueID":"16469","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16470","name":"Gusso
+      Green Khaki Shirt","hasSingleSKU":false,"partNumber":"BCL014_140203","uniqueID":"16470","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16471","name":"Gusso
+      Green Khaki Shirt","hasSingleSKU":false,"partNumber":"BCL014_140204","uniqueID":"16471","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16472","name":"Gusso
+      Green Khaki Shirt","hasSingleSKU":false,"partNumber":"BCL014_140205","uniqueID":"16472","storeID":"10101"}],"numberOfSKUs":5,"attributes":[{"storeDisplay":false,"sequence":".00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"2.00000","value":"Shirt","unitOfMeasure":"","identifier":"BCL014_1402","uniqueID":"7000000000000004458","unitID":""}],"searchable":false,"identifier":"Style","comparable":true,"name":"Style","uniqueID":"7000000000000000210","displayable":true},{"storeDisplay":false,"sequence":".00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"BoysTopsSize","comparable":true,"name":"Size","uniqueID":"7000000000000000264","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"2.00000","value":"Cotton","unitOfMeasure":"","identifier":"BCL014_1402","uniqueID":"7000000000000004444","unitID":""}],"searchable":false,"identifier":"Material","comparable":true,"name":"Material","uniqueID":"7000000000000000209","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"BoysTopsColor","comparable":true,"name":"Color","uniqueID":"7000000000000000265","displayable":true},{"storeDisplay":false,"sequence":"3.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"2.00000","value":"Half
+      sleeve","unitOfMeasure":"","identifier":"BCL014_1402","uniqueID":"7000000000000004410","unitID":""}],"searchable":false,"identifier":"Sleeve Length","comparable":true,"name":"Sleeve Length","uniqueID":"7000000000000000229","displayable":true},{"storeDisplay":false,"sequence":"4.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"1.00000","value":"8-16","unitOfMeasure":"","identifier":"BCL014_1402","uniqueID":"7000000000000004425","unitID":""}],"searchable":false,"identifier":"Age","comparable":true,"name":"Age","uniqueID":"7000000000000000253","displayable":true}],"hasSingleSKU":false,"partNumber":"BCL014_1402","storeID":"10101","seo_token_ntk":"gusso-green-khaki-shirt"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:42.554Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/16473?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:42 GMT
+      Expires: Tue, 14 Nov 2017 16:39:42 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16473?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"This
+      vibrant red and purple t-shirt displays a contrast in colours for a cool and spunky look. It has a ribbed collar and a two-button placket. The ribbed armbands at the short sleeves, which sets off the color contrasts, is eye-catching.","shortDescription":"Dual-toned
+      t-shirt with purple shoulders","catalogEntryTypeCode":"ProductBean","buyable":"true","subscriptionTypeCode":"NONE","cm_seo_token_ntk":"10101_borsati-dual-toned-t-shirt","price":[{"value":"50.0","currency":"USD","usage":"Display","description":"L"},{"value":"50.0","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16473","parentCatalogGroupID":["10101_10125","10152_10125"],"name":"Borsati
+      Dual-Toned T-Shirt","uniqueID":"16473","disallowRecurringOrder":"1","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/boys\/bcl014_tops\/646x1000\/bcl014_1403.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/boys\/bcl014_tops\/200x310\/bcl014_1403.jpg","manufacturer":"Borsati","sKUs":[{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16474","name":"Borsati
+      Dual-Toned T-Shirt","hasSingleSKU":false,"partNumber":"BCL014_140301","uniqueID":"16474","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16475","name":"Borsati
+      Dual-Toned T-Shirt","hasSingleSKU":false,"partNumber":"BCL014_140302","uniqueID":"16475","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16476","name":"Borsati
+      Dual-Toned T-Shirt","hasSingleSKU":false,"partNumber":"BCL014_140303","uniqueID":"16476","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16477","name":"Borsati
+      Dual-Toned T-Shirt","hasSingleSKU":false,"partNumber":"BCL014_140304","uniqueID":"16477","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16478","name":"Borsati
+      Dual-Toned T-Shirt","hasSingleSKU":false,"partNumber":"BCL014_140305","uniqueID":"16478","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16479","name":"Borsati
+      Dual-Toned T-Shirt","hasSingleSKU":false,"partNumber":"BCL014_140306","uniqueID":"16479","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16480","name":"Borsati
+      Dual-Toned T-Shirt","hasSingleSKU":false,"partNumber":"BCL014_140307","uniqueID":"16480","storeID":"10101"}],"numberOfSKUs":7,"attributes":[{"storeDisplay":false,"sequence":".00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"3.00000","value":"T-shirt","unitOfMeasure":"","identifier":"BCL014_1403","uniqueID":"7000000000000004462","unitID":""}],"searchable":false,"identifier":"Style","comparable":true,"name":"Style","uniqueID":"7000000000000000210","displayable":true},{"storeDisplay":false,"sequence":".00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"BoysTopsSize","comparable":true,"name":"Size","uniqueID":"7000000000000000264","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"2.00000","value":"Cotton","unitOfMeasure":"","identifier":"BCL014_1403","uniqueID":"7000000000000004445","unitID":""}],"searchable":false,"identifier":"Material","comparable":true,"name":"Material","uniqueID":"7000000000000000209","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"BoysTopsColor","comparable":true,"name":"Color","uniqueID":"7000000000000000265","displayable":true},{"storeDisplay":false,"sequence":"3.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"2.00000","value":"Half
+      sleeve","unitOfMeasure":"","identifier":"BCL014_1403","uniqueID":"7000000000000004411","unitID":""}],"searchable":false,"identifier":"Sleeve Length","comparable":true,"name":"Sleeve Length","uniqueID":"7000000000000000229","displayable":true},{"storeDisplay":false,"sequence":"4.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"1.00000","value":"8-16","unitOfMeasure":"","identifier":"BCL014_1403","uniqueID":"7000000000000004426","unitID":""}],"searchable":false,"identifier":"Age","comparable":true,"name":"Age","uniqueID":"7000000000000000253","displayable":true}],"hasSingleSKU":false,"partNumber":"BCL014_1403","storeID":"10101","seo_token_ntk":"borsati-dual-toned-t-shirt"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:42.591Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/16511?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:42 GMT
+      Expires: Tue, 14 Nov 2017 16:39:42 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16511?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"This
+      cutesy woollen baby vest in navy blue is an adorable top for toddler boys. This vest is cable knit and follows the styling similar to adult vests. Team it with a shirt, jeans and tie and your baby will steal the limelight.","shortDescription":"Woollen
+      baby vest in navy blue","catalogEntryTypeCode":"ProductBean","buyable":"true","subscriptionTypeCode":"NONE","cm_seo_token_ntk":"10101_gusso-woollen-baby-vest","price":[{"value":"30.0","currency":"USD","usage":"Display","description":"L"},{"value":"30.0","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16511","parentCatalogGroupID":["10101_10125","10152_10125"],"name":"Gusso
+      Woollen Baby Vest","uniqueID":"16511","disallowRecurringOrder":"1","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/boys\/bcl014_tops\/646x1000\/bcl014_1408.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/boys\/bcl014_tops\/200x310\/bcl014_1408.jpg","manufacturer":"Gusso","sKUs":[{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16512","name":"Gusso
+      Woollen Baby Vest","hasSingleSKU":false,"partNumber":"BCL014_140801","uniqueID":"16512","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16513","name":"Gusso
+      Woollen Baby Vest","hasSingleSKU":false,"partNumber":"BCL014_140802","uniqueID":"16513","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16514","name":"Gusso
+      Woollen Baby Vest","hasSingleSKU":false,"partNumber":"BCL014_140803","uniqueID":"16514","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16515","name":"Gusso
+      Woollen Baby Vest","hasSingleSKU":false,"partNumber":"BCL014_140804","uniqueID":"16515","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16516","name":"Gusso
+      Woollen Baby Vest","hasSingleSKU":false,"partNumber":"BCL014_140805","uniqueID":"16516","storeID":"10101"}],"numberOfSKUs":5,"attributes":[{"storeDisplay":false,"sequence":".00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"5.00000","value":"Vest","unitOfMeasure":"","identifier":"BCL014_1408","uniqueID":"7000000000000004471","unitID":""}],"searchable":false,"identifier":"Style","comparable":true,"name":"Style","uniqueID":"7000000000000000210","displayable":true},{"storeDisplay":false,"sequence":".00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"BoysTopsSize","comparable":true,"name":"Size","uniqueID":"7000000000000000264","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"1.00000","value":"Wool","unitOfMeasure":"","identifier":"BCL014_1408","uniqueID":"7000000000000004442","unitID":""}],"searchable":false,"identifier":"Material","comparable":true,"name":"Material","uniqueID":"7000000000000000209","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"BoysTopsColor","comparable":true,"name":"Color","uniqueID":"7000000000000000265","displayable":true},{"storeDisplay":false,"sequence":"3.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"5.00000","value":"Sleeveless","unitOfMeasure":"","identifier":"BCL014_1408","uniqueID":"7000000000000004415","unitID":""}],"searchable":false,"identifier":"Sleeve
+      Length","comparable":true,"name":"Sleeve Length","uniqueID":"7000000000000000229","displayable":true},{"storeDisplay":false,"sequence":"4.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"2.00000","value":"0-2","unitOfMeasure":"","identifier":"BCL014_1408","uniqueID":"7000000000000004429","unitID":""}],"searchable":false,"identifier":"Age","comparable":true,"name":"Age","uniqueID":"7000000000000000253","displayable":true}],"hasSingleSKU":false,"partNumber":"BCL014_1408","storeID":"10101","seo_token_ntk":"gusso-woollen-baby-vest"}],"metaData":{"price":"1"}}'
+- recorded: 2017-11-14T15:39:42.620Z
+  request:
+    method: GET
+    uri: http://shop-ref.ecommerce.coremedia.com:3737/search/resources/store/10301/productview/byId/16559?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1
+    headers:
+      Accept-Encoding: text/plain
+      Content-Type: application/json
+      Host: shop-ref.ecommerce.coremedia.com:3737
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_65)
+  response:
+    status: 200
+    headers:
+      Cache-Control: no-transform, max-age=3600
+      Content-Language: en-US
+      Content-Type: application/json
+      Date: Tue, 14 Nov 2017 15:39:42 GMT
+      Expires: Tue, 14 Nov 2017 16:39:42 GMT
+      Vary: Accept
+    body: '{"recordSetTotalMatches":1,"recordSetTotal":1,"resourceName":"productview","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16559?profileName=CoreMedia_findProductByIds_Details&catalogId=10152&currency=USD&langId=-1","recordSetStartNumber":0,"recordSetComplete":"true","recordSetCount":1,"catalogEntryView":[{"longDescription":"Chic
+      and classy, this elegant shirt in small checks makes your young man look stylish. This pocketless shirt has a bias button panel. Shirttail hem and barrel cuffs further adorn the shirt.","shortDescription":"Classic checkered fitting shirt","catalogEntryTypeCode":"ProductBean","buyable":"true","subscriptionTypeCode":"NONE","cm_seo_token_ntk":"10101_borsati-classic-checkered-shirt","price":[{"value":"40.0","currency":"USD","usage":"Display","description":"L"},{"value":"36.0","currency":"USD","usage":"Offer","description":"I"}],"resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16559","parentCatalogGroupID":["10101_10125","10152_10125"],"name":"Borsati
+      Classic Checkered Shirt","uniqueID":"16559","disallowRecurringOrder":"1","fullImage":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/boys\/bcl014_tops\/646x1000\/bcl014_1415.jpg","thumbnail":"\/wcsstore\/ExtendedSitesCatalogAssetStore\/images\/catalog\/apparel\/boys\/bcl014_tops\/200x310\/bcl014_1415.jpg","manufacturer":"Borsati","sKUs":[{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16560","name":"Borsati
+      Classic Checkered Shirt","hasSingleSKU":false,"partNumber":"BCL014_141501","uniqueID":"16560","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16561","name":"Borsati
+      Classic Checkered Shirt","hasSingleSKU":false,"partNumber":"BCL014_141502","uniqueID":"16561","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16562","name":"Borsati
+      Classic Checkered Shirt","hasSingleSKU":false,"partNumber":"BCL014_141503","uniqueID":"16562","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16563","name":"Borsati
+      Classic Checkered Shirt","hasSingleSKU":false,"partNumber":"BCL014_141504","uniqueID":"16563","storeID":"10101"},{"catalogEntryTypeCode":"ItemBean","resourceId":"http:\/\/shop-ref.ecommerce.coremedia.com:3737\/search\/resources\/store\/10301\/productview\/byId\/16564","name":"Borsati
+      Classic Checkered Shirt","hasSingleSKU":false,"partNumber":"BCL014_141505","uniqueID":"16564","storeID":"10101"}],"numberOfSKUs":5,"attributes":[{"storeDisplay":false,"sequence":".00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"2.00000","value":"Shirt","unitOfMeasure":"","identifier":"BCL014_1415","uniqueID":"7000000000000004461","unitID":""}],"searchable":false,"identifier":"Style","comparable":true,"name":"Style","uniqueID":"7000000000000000210","displayable":true},{"storeDisplay":false,"sequence":".00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"BoysTopsSize","comparable":true,"name":"Size","uniqueID":"7000000000000000264","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"2.00000","value":"Cotton","unitOfMeasure":"","identifier":"BCL014_1415","uniqueID":"7000000000000004454","unitID":""}],"searchable":false,"identifier":"Material","comparable":true,"name":"Material","uniqueID":"7000000000000000209","displayable":true},{"storeDisplay":false,"sequence":"1.00000","usage":"Defining","facetable":false,"values":[],"searchable":false,"identifier":"BoysTopsColor","comparable":true,"name":"Color","uniqueID":"7000000000000000265","displayable":true},{"storeDisplay":false,"sequence":"3.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"6.00000","value":"Full
+      sleeves","unitOfMeasure":"","identifier":"BCL014_1415","uniqueID":"7000000000000004422","unitID":""}],"searchable":false,"identifier":"Sleeve Length","comparable":true,"name":"Sleeve Length","uniqueID":"7000000000000000229","displayable":true},{"storeDisplay":false,"sequence":"4.00000","usage":"Descriptive","facetable":false,"values":[{"sequence":"4.00000","value":"8-16","unitOfMeasure":"","identifier":"BCL014_1415","uniqueID":"7000000000000004439","unitID":""}],"searchable":false,"identifier":"Age","comparable":true,"name":"Age","uniqueID":"7000000000000000253","displayable":true}],"hasSingleSKU":false,"partNumber":"BCL014_1415","storeID":"10101","seo_token_ntk":"borsati-classic-checkered-shirt"}],"metaData":{"price":"1"}}'

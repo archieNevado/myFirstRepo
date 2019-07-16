@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMCSS folder="/Sites/Aurora Augmentation/United States/English/Options/Settings" name="black.css" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
+<locale>en-US</locale>
+<master>
+</master>
+<description></description>
+<code grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p>img{filter:grayscale(100%)}#footer,#headerRow1,#headerRow2,.departmentMenu,body{background:#000}#headerRow2,.cm-breadcrumb__item a{color:#fff}.cm-carousel,.cm-collection--slideshow,.cm-teasable,.cm-teaser{border-width:0}.cm-teaser-overlay{background-color:inherit!important}.cm-teaser-overlay__text{margin-top:0;color:#fff;text-shadow:0 0 30px #000}#searchBox{background-color:#000}#searchBox&gt;.submitButton{border:8px solid #000}#searchBox [placeholder],#searchBox input[placeholder]{color:#fff!important}#content{overflow:inherit}.cm-price--special{color:#000}@media screen and (min-width:1025px){.cm-navigation{background-color:transparent;}}</p></div></code>
+<ieExpression></ieExpression>
+<include>
+</include>
+<dataUrl></dataUrl>
+<media></media>
+</CMCSS>
