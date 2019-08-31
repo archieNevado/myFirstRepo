@@ -1,7 +1,0 @@
-// first, load 3rd party dependencies
-@import "variables/bootstrap-sass";
-// load viariables of this brick
-@import "variables/breakpoints";
-@import "variables/carousel";
-// last, load internal dependencies
-@import "?smart-import-variables";
