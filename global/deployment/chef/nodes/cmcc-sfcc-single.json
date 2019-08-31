@@ -1,0 +1,58 @@
+{
+  "blueprint": {
+    "hostname": "CMS_HOST",
+    "loopback_hostname": "localhost",
+    "maven_repository_url": "file://localhost/tmp/maven-repo",
+    "apps":{
+      "content-management-server": {
+        "application.properties": {
+          "cap.server.license": "properties/corem/license.zip"
+        }
+      },
+      "master-live-server": {
+        "application.properties": {
+          "cap.server.license": "properties/corem/license.zip"
+        }
+      }
+    },
+    "sfcc": {
+      "enabled": true,
+      "host": "SFCC_HOST",
+      "application.properties": {
+        "livecontext.sfcc.host": "SFCC_HOST",
+        "livecontext.sfcc.vendorVersion": "17.8",
+        "livecontext.sfcc.ocapi.protocol": "https",
+        "livecontext.sfcc.ocapi.version": "v17_8",
+        "livecontext.sfcc.ocapi.trustSelfSignedCerts": false,
+        "livecontext.sfcc.ocapi.dataBasePath": "/s/-/dw/data/",
+        "livecontext.sfcc.ocapi.metaBasePath": "/s/-/dw/meta/",
+        "livecontext.sfcc.ocapi.shopBasePath": "/s/{storeId}/dw/shop/",
+        "livecontext.sfcc.oauth.clientId": "SFCC_CLIENT_ID",
+        "livecontext.sfcc.oauth.clientPassword": "SFCC_CLIENT_PASSWORD"
+      }
+    },
+    "dev": {
+      "content": {
+        "content_zip": "file://localhost/tmp/content-users.zip"
+      }
+    }
+  },
+  "run_list": [
+    "role[mysql]",
+    "role[mongodb]",
+    "role[solr]",
+    "role[commerce-adapter]",
+    "role[cmcc-config]",
+    "role[management]",
+    "role[publication]",
+    "role[preview]",
+    "role[preview-headless]",
+    "role[studio]",
+    "role[cmcc-studio-proxy]",
+    "role[delivery]",
+    "role[delivery-headless]",
+    "role[cmcc-delivery-proxy]",
+    "recipe[blueprint-cmcc::overview]",
+    "recipe[blueprint-dev-tooling::content]"
+  ]
+}

@@ -1,0 +1,8 @@
+// first set variables
+$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
+$bootstrap-sass-asset-helper: false !default;
+$icon-font-name: "glyphicons-halflings-regular" !default;
+$icon-font-svg-id: "glyphicons_halflingsregular" !default;
+
+// then load internal dependencies
+@import "?smart-import-variables";

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <include resource="logback-common.xml"/>
+
+  <springProfile name="elk">
+    <include resource="logback-elk.xml"/>
+  </springProfile>
+
+  <springProfile name="local | studio-console-logger">
+    <property name="CONSOLE_LOG_FILE" value="${CONSOLE_LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/studio-console.log}"/>
+    <property name="CONSOLE_FILE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss} %-7([%level]) %logger [%X{tenant}] - %message \\(%thread\\)%n"/>
+
+    <appender name="STUDIO_CONSOLE_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+      <encoder>
+        <pattern>${CONSOLE_FILE_LOG_PATTERN}</pattern>
+      </encoder>
+      <file>${CONSOLE_LOG_FILE}</file>
+      <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+        <fileNamePattern>${CONSOLE_LOG_FILE}.console.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+        <maxFileSize>${LOG_FILE_MAX_SIZE:-10MB}</maxFileSize>
+        <maxHistory>${LOG_FILE_MAX_HISTORY:-0}</maxHistory>
+      </rollingPolicy>
+    </appender>
+
+    <logger name="local | studio-console-logger" additivity="false" level="debug">
+      <appender-ref ref="STUDIO_CONSOLE_FILE"/>
+    </logger>
+  </springProfile>
+
+  <root level="WARN">
+    <springProfile name="elk">
+      <appender-ref ref="ELASTIC"/>
+    </springProfile>
+    <appender-ref ref="FILE"/>
+    <appender-ref ref="CONSOLE"/>
+  </root>
+
+</configuration>

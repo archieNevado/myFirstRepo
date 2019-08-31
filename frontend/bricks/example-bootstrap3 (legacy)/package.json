@@ -1,0 +1,86 @@
+{
+  "name": "@coremedia-examples/brick-bootstrap3",
+  "version": "1.0.1",
+  "private": true,
+  "dependencies": {
+    "bootstrap-sass": "3.3.7",
+    "jquery": "^3.0.0",
+    "@coremedia/brick-node-decoration-service": "^1.0.0",
+    "@coremedia/brick-utils": "^1.0.0",
+    "@coremedia/brick-media": "^1.0.0",
+    "@coremedia-examples/brick-glyphicons": "^1.0.0"
+  },
+  "devDependencies": {
+    "prettier": "^1.0.0"
+  },
+  "scripts": {
+    "prettier": "prettier \"**/*\" --write"
+  },
+  "main": "src/js/index.js",
+  "coremedia": {
+    "type": "brick",
+    "init": "src/js/init.js",
+    "shim": {
+      "bootstrap-sass/assets/javascripts/bootstrap/transition": {
+        "imports": {
+          "jQuery": "jquery"
+        }
+      },
+      "bootstrap-sass/assets/javascripts/bootstrap/alert": {
+        "imports": {
+          "jQuery": "jquery"
+        }
+      },
+      "bootstrap-sass/assets/javascripts/bootstrap/button": {
+        "imports": {
+          "jQuery": "jquery"
+        }
+      },
+      "bootstrap-sass/assets/javascripts/bootstrap/carousel": {
+        "imports": {
+          "jQuery": "jquery"
+        }
+      },
+      "bootstrap-sass/assets/javascripts/bootstrap/collapse": {
+        "imports": {
+          "jQuery": "jquery"
+        }
+      },
+      "bootstrap-sass/assets/javascripts/bootstrap/dropdown": {
+        "imports": {
+          "jQuery": "jquery"
+        }
+      },
+      "bootstrap-sass/assets/javascripts/bootstrap/modal": {
+        "imports": {
+          "jQuery": "jquery"
+        }
+      },
+      "bootstrap-sass/assets/javascripts/bootstrap/tab": {
+        "imports": {
+          "jQuery": "jquery"
+        }
+      },
+      "bootstrap-sass/assets/javascripts/bootstrap/affix": {
+        "imports": {
+          "jQuery": "jquery"
+        }
+      },
+      "bootstrap-sass/assets/javascripts/bootstrap/scrollspy": {
+        "imports": {
+          "jQuery": "jquery"
+        }
+      },
+      "bootstrap-sass/assets/javascripts/bootstrap/tooltip": {
+        "imports": {
+          "jQuery": "jquery"
+        }
+      },
+      "bootstrap-sass/assets/javascripts/bootstrap/popover": {
+        "imports": {
+          "jQuery": "jquery"
+        }
+      }
+    }
+  }
+}

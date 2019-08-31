@@ -1,0 +1,238 @@
+.cm-navigation {
+  &__picture-box {
+    display: none;
+    @include breakpoints(("sm", landscape) "lg-and-up") {
+      display: block;
+    }
+  }
+
+  @include breakpoints(("sm", landscape) "lg-and-up") {
+    background-color: #FFFFFF;
+  }
+}
+
+.cm-navigation-item {
+
+  .cm-navigation {
+    &__picture-box {
+      @include aspect-ratio-box(16, 9);
+    }
+    &__picture {
+      @include stretch-absolute();
+    }
+  }
+
+  &__toggle {
+    background-color: transparent;
+    border: none;
+    padding: 10px 15px;
+    line-height: 20px;
+    cursor: pointer;
+    overflow: visible; // IE11
+
+    &::before {
+      content: "";
+      display: inline-block;
+      box-sizing: border-box;
+      width: 0;
+      height: 0;
+      margin-left: 2px;
+      vertical-align: middle;
+      border-top: 4px dashed;
+      border-right: 4px solid transparent;
+      border-left: 4px solid transparent;
+    }
+  }
+
+  &__menu {
+    display: none;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    // JavaScript sets opacity for transition effects in mega menu (large devices)
+    // avoid that the opacity breaks mobile navigation
+    @include breakpoints("xs" ("sm", portrait)) {
+      opacity: 1 !important;
+    }
+  }
+
+  &__menu-label {
+    display: none;
+    @include breakpoints(("sm", landscape) "lg-and-up") {
+      display: block;
+    }
+  }
+
+  &__title {
+    display: block;
+    padding: 5px 15px 5px 25px;
+    font-weight: normal;
+    line-height: 20px;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none; // avoid that utilizing the navigation selects text
+
+    @include breakpoints(("sm", landscape) "lg-and-up") {
+      padding: 3px 20px;
+      line-height: 1.428571429;
+
+      cursor: initial;
+      @at-root a#{&} {
+        cursor: pointer;
+      }
+    }
+  }
+
+  &--open {
+    .cm-navigation-item {
+      &__toggle {
+        &::before {
+          transform: rotate(180deg);
+        }
+      }
+
+      &__menu {
+        display: block;
+      }
+    }
+  }
+
+  &--depth-0 {
+    @include breakpoints(("sm", landscape) "lg-and-up") {
+      position: absolute;
+      z-index: 1;
+      left: 0;
+      right: 0;
+
+      > .cm-navigation-item__menu {
+        display: inline-block;
+        position: static;
+      }
+    }
+  }
+
+  &--depth-1 {
+    > a,
+    > .cm-navigation-item__title {
+      padding: 10px 15px;
+      display: inline-block;
+    }
+
+    .cm-navigation-item__menu {
+      @include breakpoints(("sm", landscape) "lg-and-up") {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        z-index: 1000;
+        min-width: 160px;
+        margin: 2px 0 0;
+        list-style: none;
+        font-size: 14px;
+        text-align: left;
+        background-color: #fff;
+      }
+    }
+
+    @include breakpoints(("sm", landscape) "lg-and-up") {
+      display: inline-block;
+      position: static;
+
+      &.open,
+      &.open > a {
+        background-color: transparent;
+      }
+
+      &:hover {
+        .cm-navigation-item__menu {
+          visibility: visible;
+          z-index: 1001;
+          background-clip: border-box;
+        }
+      }
+
+      > .cm-navigation-item__menu {
+        left: 0;
+        display: flex;
+        flex-wrap: wrap;
+        visibility: hidden;
+        transition: visibility $cm-navigation-delay;
+        background-clip: border-box;
+
+        > .cm-navigation-item__menu-label {
+          flex: none;
+          width: 100%; // force wrap
+
+          > .cm-navigation-item__title {
+            // link should not take the whole space
+            display: inline-block;
+          }
+        }
+
+        > li {
+          width: 20%;
+          position: static;
+
+          > a {
+            display: block;
+          }
+
+          .cm-navigation-item__menu {
+            position: static;
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+          }
+        }
+      }
+    }
+  }
+
+  &--depth-2 {
+    > .cm-navigation-item__toggle {
+      display: none;
+    }
+
+    > .cm-navigation-item__title {
+      white-space: normal;
+    }
+
+    @include breakpoints(("sm", landscape) "lg-and-up") {
+      padding-bottom: 15px;
+
+      > .cm-navigation-item__menu {
+        display: block;
+      }
+    }
+  }
+
+  &--depth-3 {
+    > .cm-navigation-item__toggle {
+      display: none;
+    }
+
+    @include breakpoints(("sm", landscape) "lg-and-up") {
+      > .cm-navigation-item__menu {
+        display: block;
+      }
+    }
+  }
+}
+
+// using bootstrap vars to style PageGridPlacement.asNavigationHeader as navigation example only
+.cm-header {
+  &--navigation {
+    border-color: #ddd;
+    .cm-hamburger-icon {
+      border-color: #ddd;
+    }
+  }
+}
+
+.cm-body--navigation-active {
+  overflow: hidden; // prevent scrolling
+
+  @include breakpoints(("sm", landscape) "lg-and-up") {
+    overflow: visible;
+  }
+}

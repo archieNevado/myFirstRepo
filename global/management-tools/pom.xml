@@ -1,0 +1,170 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <!--
+      You will need to change the groupId in all modules
+      A global search&replace will do the job !
+  -->
+  <groupId>com.coremedia.blueprint</groupId>
+  <artifactId>management-tools.blueprint</artifactId>
+  <version>1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <description>CoreMedia CMS Blueprint</description>
+
+  <organization>
+    <name>Blueprint</name>
+  </organization>
+
+  <properties>
+    <customer>Blueprint</customer>
+
+  </properties>
+
+  <profiles>
+    <profile>
+      <!-- Profile not supported. Can be removed safely-->
+      <id>check-dependencies-owasp</id>
+      <properties>
+        <!-- Skip all other checks -->
+        <suppressionFile />
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.owasp</groupId>
+            <artifactId>dependency-check-maven</artifactId>
+            <configuration>
+              <suppressionFiles>
+                <suppressionFile>${suppressionFile}</suppressionFile>
+              </suppressionFiles>
+              <skipArtifactType>pom|coremedia-application</skipArtifactType>
+              <skipProvidedScope>true</skipProvidedScope>
+              <skipSystemScope>true</skipSystemScope>
+              <failOnError>true</failOnError>
+              <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
+              <cveUrlBase>https://nvd.nist.gov/feeds/json/cve/1.0/nvdcve-1.0-%d.json.gz</cveUrlBase>
+              <cveUrlModified>https://nvd.nist.gov/feeds/json/cve/1.0/nvdcve-1.0-modified.json.gz</cveUrlModified>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>check-sonar</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.sonarsource.scanner.maven</groupId>
+            <artifactId>sonar-maven-plugin</artifactId>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>with-docker</id>
+      <modules>
+        <module>docker</module>
+      </modules>
+    </profile>
+  </profiles>
+
+  <modules>
+    <module>blueprint-parent</module>
+    <module>management-tools-blueprint-bom</module>
+  </modules>
+
+  <scm>
+    <connection>scm:git:git@github.com:CoreMedia/cms.git</connection>
+    <developerConnection>scm:git:git@github.com:CoreMedia/cms.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>localfs</id>
+      <url>file://${project.basedir}/target</url>
+    </snapshotRepository>
+    <repository>
+      <id>coremedia.external.releases</id>
+      <url>https://repository.coremedia.com/nexus/service/local/staging/deploy/maven2</url>
+    </repository>
+    <site>
+      <id>localsite</id>
+      <url>file://${project.basedir}/target/site-deploy</url>
+    </site>
+  </distributionManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.owasp</groupId>
+          <artifactId>dependency-check-maven</artifactId>
+          <version>5.2.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.sonarsource.scanner.maven</groupId>
+          <artifactId>sonar-maven-plugin</artifactId>
+          <version>3.6.0.1398</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>com.coremedia.maven</groupId>
+        <artifactId>coremedia-application-maven-plugin</artifactId>
+        <version>2.7.10</version>
+        <extensions>true</extensions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>3.0.0-M2</version>
+        <executions>
+          <execution>
+            <id>enforce-maven</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireMavenVersion>
+                  <version>3.3</version>
+                </requireMavenVersion>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <reporting>
+    <excludeDefaults>true</excludeDefaults>
+  </reporting>
+
+  <repositories>
+    <repository>
+      <id>coremedia.external.releases</id>
+      <name>CoreMedia CMS</name>
+      <url>https://repository.coremedia.com/nexus/content/groups/cms/</url>
+      <layout>default</layout>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>coremedia.external.releases</id>
+      <name>CoreMedia CMS</name>
+      <url>https://repository.coremedia.com/nexus/content/groups/cms/</url>
+      <layout>default</layout>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+
+</project>

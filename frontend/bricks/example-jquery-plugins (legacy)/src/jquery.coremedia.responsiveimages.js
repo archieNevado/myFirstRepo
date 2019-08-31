@@ -1,0 +1,36 @@
+import $ from "jquery";
+import responsiveImages from "@coremedia/brick-media";
+
+/**
+ * Picks a suitable image from a given set of images regarding given dimensions and the maximum size needed.
+ *
+ * @function "$.fn.responsiveImages"
+ * @version 2.0
+ * @copyright CoreMedia AG
+ * @summary Responsive Image Resizer jQuery Plugin
+ * @example
+ * ###### Usage
+ * ```javascript
+ * $("[data-cm-responsive-media]").responsiveImage();
+ * ```
+ *
+ * ###### HTML
+ * ```html
+ * <img src="image3x1.jpg" data-cm-responsive-media="[
+ *  {
+ *    "name" : "3x1",
+ *    "ratioWidth" : 3,
+ *    "ratioHeight" : 1,
+ *    "linksForWidth" : {"320": "image3x1_small.jpg", "640": "image_medium.jpg", "1024": "image_large.jpg"}
+ *  },
+ *  {
+ *    "name" : "2x1",
+ *    "ratioWidth" : 2,
+ *    "ratioHeight" : 1,
+ *    "linksForWidth" : {"200": "image2x1_small.jpg", "400": "image2x1_other.jpg"}
+ *  }]" >
+ * ```
+ */
+$.fn.responsiveImages = function() {
+  responsiveImages(this);
+};

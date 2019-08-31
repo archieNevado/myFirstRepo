@@ -1,0 +1,190 @@
+.#{$cm-navigation-prefix}__picture-box {
+  @include breakpoint("sm-and-down") {
+    display: none;
+  }
+}
+.#{$cm-navigation-prefix}-list__label {
+  @include breakpoint("sm-and-down") {
+    display: none;
+  }
+}
+
+.#{$cm-navigation-prefix} {
+  @include breakpoints(("sm", landscape) "lg-and-up") {
+    background-color: #FFFFFF;
+  }
+}
+
+.#{$cm-navigation-prefix}-item {
+
+  .#{$cm-navigation-prefix} {
+    &__picture-box {
+      @include aspect-ratio-box($cm-navigation-image-aspect-ratio-x, $cm-navigation-image-aspect-ratio-y);
+    }
+    &__picture {
+      @include stretch-absolute();
+    }
+  }
+
+  &.open &__list {
+    @include breakpoint("sm-and-down") {
+      display: block;
+    }
+  }
+
+  &__list {
+    list-style-type: none;
+    padding: 0;
+
+    // to make the navigation transition on desktop work, we need to work with a combination of display=none and opacity=0.
+    // this results in disappearing texts on mobile. Therefore we have to enforce opacity=1 on mobile devices.
+    @include breakpoint("sm-and-down") {
+      opacity: 1 !important;
+    }
+  }
+
+  // overrides bootstrap styling from _dropdowns.scss:
+  &__title {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: $line-height-base;
+    white-space: nowrap;
+  }
+
+  @include breakpoint("sm-and-down") {
+    &__list > &__label {
+      display: none;
+    }
+
+    // overrides bootstrap styling from _navbar.scss:
+    // @media (max-width: 991px).navbar-nav .open .dropdown-menu > li > a
+    &__title {
+      padding: 5px 15px 5px 25px;
+      line-height: 20px;
+    }
+  }
+
+}
+
+.#{$cm-navigation-prefix}-item-depth-0 {
+  @include breakpoints(("sm", landscape) "lg-and-up") {
+    position: absolute !important;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    top: $cm-navigation-header-height;
+
+    & > &__list {
+      display: inline-block;
+      position: static;
+    }
+  }
+}
+
+.#{$cm-navigation-prefix}-item-depth-1 {
+  @include breakpoint("sm-and-down") {
+    &.open > &__list {
+      opacity: 1 !important;
+    }
+  }
+  & > a,
+  & > .cm-navigation-item__title {
+    padding: 10px 15px;
+    display: inline-block;
+  }
+  @include breakpoints(("sm", landscape) "lg-and-up") {
+    display: inline-block;
+    position: static;
+
+    &.open,
+    &.open > a {
+      background-color: transparent;
+    }
+
+    &:hover {
+      .cm-navigation-item__list {
+        visibility: visible;
+        z-index: 1001;
+        background-clip: border-box;
+      }
+    }
+
+    & > a {
+      cursor: pointer; // fix for collections in navigation root (since they have no href attribute)
+      &.cm-navigation-item__dropdown {
+        display: none;
+      }
+    }
+
+    &__list {
+      left: 0 !important;
+      display: flex !important;
+      flex-wrap: wrap;
+      visibility: hidden;
+      transition: visibility $cm-navigation-delay;
+      background-clip: border-box;
+
+      & > li {
+        flex: $cm-navigation-flex;
+        position: static;
+
+        & > a {
+          display: block;
+        }
+
+        .cm-navigation-item__list {
+          position: static;
+          border: none;
+          box-shadow: none;
+          border-radius: 0;
+        }
+      }
+
+      padding-top: 47px;
+      > .cm-navigation-list__label {
+        flex: none;
+        > .cm-navigation-item-label {
+          position: absolute;
+          top: 6px;
+        }
+      }
+    }
+  }
+}
+
+.#{$cm-navigation-prefix}-item-depth-2 {
+  @include breakpoints(("sm", landscape) "lg-and-up") {
+    padding-bottom: $cm-navigation-padding-bottom;
+  }
+
+  > a {
+    white-space: normal !important;
+  }
+
+  &__dropdown.dropdown-toggle {
+    display: none;
+  }
+
+  // display every list from this depth on as display:block
+  @include breakpoints(("sm", landscape) "lg-and-up") {
+    &__list,
+    &__list .#{$cm-navigation-prefix}-item__list{
+      display: block;
+    }
+  }
+}
+
+// using bootstrap vars to style PageGridPlacement.asNavigationHeader as navigation example only
+.cm-header {
+  &--navigation {
+    border-color: $navbar-default-toggle-hover-bg;
+    .navbar-toggle {
+      border-color: $navbar-default-toggle-hover-bg;
+      .icon-bar {
+        background-color: $navbar-default-border;
+      }
+    }
+  }
+}

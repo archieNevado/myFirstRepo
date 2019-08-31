@@ -1,0 +1,445 @@
+= Build and Run the Applications
+
+This workspace provides Maven modules to build Spring Boot applications for Blueprint applications.
+
+[discrete]
+====== Prerequisites
+
+Before you can develop the applications, you have to build the
+https://github.com/coremedia-contributions/coremedia-blueprints-workspace[CoreMedia Blueprints Workspace] in advance.
+
+[source,bash]
+----
+mvn clean install -Pwith-docker
+----
+
+[discrete]
+===== Workspace Structure
+
+* `+apps/<app-name>/spring-boot+` - below this folder there is a Maven module for each service application.
+Each of these modules will build a single Spring Boot application packaged as a JAR file.
+* `+shared/common/spring-boot/blueprint-spring-boot-autoconfigure+`, this module encapsulates common configuration
+aspects for all Spring Boot service modules.
+
+[discrete]
+===== Application Structure
+
+Each Spring Boot application module is structured the same way:
+
+* A source folder containing at least the application starter class. It could also contain other classes implementing
+Spring configuration classes.
+* A resources folder containing the properties files and the logging configuration file.
+
+[discrete]
+===== Spring Configuration
+
+Each application can define properties in multiple Spring Boot profiles:
+
+* The *default* profiles with properties defined in `+application.properties+`.
+* The *development* profiles defined in `+application-dev*.properties+`.
+* The *local* profiles with properties defined in `+application-.*-local.properties+`. These properties can contain
+paths only available on a local workstation. The default local profile is named `+local+` and should be used when
+starting the application using either Idea or Maven.
+
+The Docker specific Spring Boot profiles can be found under `+apps/<app-name>/docker/src/docker/config+`, like
+
+* *Commerce specific* settings:
+** `+application-dev-wcs.properties+`
+** `+application-dev-hybris.properties+`
+** `+application-dev-sfcc.properties+`
+* *Development profiles* activating development features for local and CI environments.
+** The default development profile is named `+dev+` and should be used when starting the application using either Idea
+or Maven.
+
+[discrete]
+===== Logging
+
+The overall logging setup is configured in the configuration files `+logback-common.xml+` and `+logback-elk.xml+`
+located in the module `+blueprint-spring-boot-autoconfigure+`. Note that these files are declared as `+included+` and
+must be referenced in the concrete `+logback-spring.xml+` file of each application. This way, every application can
+configure it’s own default log level and appenders.
+
+[discrete]
+===== Developing with CoreMedia Blueprint applications
+
+Currently there are two different approaches to start the Spring Boot apps you want to develop locally:
+
+* using the spring-boot-maven-plugin
+* using IntelliJ Idea run configurations together with the Run Dashboard
+
+The apps you don’t want to alter, can be provided using either:
+
+* a remote deployment of any kind using the Spring Boot apps i.e. Docker or Chef.
+* a local Docker deployment for complete isolation or running offline.
+
+For very special use cases it may desireable to start all applications using Maven or Idea, but this should not be the
+default and will only be addressed briefly in this chapter.
+
+[discrete]
+===== Application Configuration Facade
+
+To configure the locally started applications, Spring Boot profiles are being used:
+
+* `+dev+` - this profile activates development features like actuators, monitoring etc. and should not add filesystem or
+localhost features. This profile will be active by default if you include the `+development.yml+` in the docker-compose
+setup included with this workspace.
+* `+local+` - this profile configures local paths within the workspace like paths to licenses or source folders of other
+modules. This profile should only be activated for locally started apps using Maven or Idea but not the docker-compose
+setup.
+
+To configure which application should be used from a remote system, there is a list of convenience host properties,
+forming a simple configuration facade. The intent of these properties is to use them only on the command-line or in
+Idea run configurations when you are developing locally. Do not use these properties outside of the
+`+application-local.properties+` files.
+
+The main property is `+installation.host+` which when set implicates all other services / endpoints are running remotely.
+By default all other convenience host properties derive their default from `+installation.host+`. If you start more
+then one service locally, lets say studio-server and preview, then you need to tell studio-server to use the locally
+started preview instead of a remote one and you have to set `+cae-preview.host+` to `+localhost+`.
+
+....
+- installation.host
+    |- db.host
+    |- mongoDb.host
+    |- solr.host
+    |- content-management-server.host
+    |- master-live-server.host
+    |- workflow-server.host
+    |- cae-preview.host
+    |- cae-live.host
+    |- wcs.host
+    |- sfcc.host
+    `- hybris.host
+....
+
+== Start applications using Intellij Idea
+
+Since Idea 2018.2 Spring Boot applications are natively supported in the Run Dashboard. To ease the setup, copy the
+xml files below `+ideaRunConfigurations+` into the `+.idea/runConfigurations+` folder in your workspace.
+
+Unfortunately, new run configurations in `+.idea/runConfigurations+` are not recognized by default.
+
+*You need to re-open your Idea project.*
+
+You can edit the run configurations by setting the `+installation.host+` or any of the other convenience properties.
+Please keep the Application Configuration Facade in mind.
+
+[discrete]
+===== Run Dashboard not visible
+
+To show Idea’s _Run Dashboard_, open dialog _Edit configuration_, click on _Templates_, then add _Spring Boot_ to
+`+Add SpringConfigurations available in Run Dashboard+`.
+
+[discrete]
+===== Copy all run configurations at once
+
+To copy all provided run configurations to your `+.idea/runConfigurations+` folder at once, use the script
+`+copy-run-configurations.sh+`.
+
+[discrete]
+===== Use our provided run configurations as a starting point
+
+To start the Spring Boot applications via Idea, you need to provide some settings. All required settings are already
+defined via our provided run configurations
+
+== Start Applications using Maven
+
+Alternatively to the Idea integration, you can start most of the applications using the
+https://docs.spring.io/spring-boot/docs/current/maven-plugin/[spring-boot-maven-plugin].
+
+_Exception:
+Start Studio Client via a local Jetty Server_
+
+Using our configuration facade makes it very simple to use remote services when developing a single app. Simply run
+[source,bash]
+----
+mvn spring-boot:run -Dinstallation.host=<FQDN>
+----
+
+If more than one app is started locally simply add the required convenience host properties to the command-line.
+
+*Notice* Please activate the Maven profile `+dev+`, .i.e. `+mvn spring-boot:run -Pdev+`, when you start the following
+Spring Boot apps locally:
+
+* cae-preview-app and cae-live-app
+* workflow-server-app
+* studio-packages-proxy-app
+* content-server-app
+
+=== Studio Client and Studio Server
+
+You have two possibilities, either start the `+studio-packages-proxy-app+` or use the `+jangaroo:run+` Maven goal.
+
+[discrete]
+===== Studio Packages Proxy App
+
+This Spring Boot application delivers your local static Studio Client resources.
+
+*Working Directory*:
+....
+apps/studio-packages-proxy/spring-boot/studio-packages-proxy-app
+....
+
+You have two possibilities to connect your Studio Client with a Studio server:
+
+[arabic]
+. *Connect Remote Studio Server*
++
+Start the Studio Packages Proxy and connect against a remote Studio server running at `+<FQDN>+` via
++
+[source,bash]
+----
+mvn spring-boot:run -Pdev -Dinstallation.host=<FQDN>
+----
++
+. *Connect Local Studio Server*
++
+First step: Start Studio Server locally. Then start the Studio Packages Proxy via
++
+[source,bash]
+----
+mvn spring-boot:run -Pdev
+----
+
+[discrete]
+====== Limitations
+
+Unfortunately, with this approach, it is not possible to deliver static resources from a single, local Maven modul only
+and proxy all other static resources from a remote Studio Server.
+
+This is only possible using the `+jangaroo:run+` approach
+
+[discrete]
+====== Links
+
+* http://localhost:43080/?cache#joo.debug[Studio]
+* http://localhost:43081/actuator[Actuators]
+
+=== Studio Client using a local Jetty Server
+
+This approach delivers your local static Studio Client resources via a Jetty Server started with the Maven goal
+`+jangaroo:run+`.
+
+*Working Directory*:
+....
+apps/studio-client/modules/studio
+....
+
+You have two possibilities to connect your Studio Client with a Studio server.
+
+[discrete]
+====== Connect Remote Studio Server
+
+Start the Studio Client and connect against a remote Studio running at v`+<FQDN>+` via
+
+[source,bash]
+----
+mvn jangaroo:run -pl :studio-app -Dinstallation.host=<FQDN>
+----
+
+With this command line call, only Rest requests are proxied to/from the remote Studio Server.
+No remote static Studio Client resources are proxied, i.e. all Studio Client resources are served locally.
+
+[discrete]
+====== Proxy Remote Studio Server and remote Studio Client Resources
+
+This case is interesting if you develop a custom Studio plugin, e.g. `+my-studio-module+` and want to proxy the static
+resources of the Studio Client as well as the Rest requests.
+
+To proxy all request to/from the remote Studio, you need to start the Studio Client via
+
+[source,bash]
+----
+mvn jangaroo:run -pl :my-studio-module \
+   -DjooProxyPathSpec=/* \
+   -DjooProxyTargetUri=http://studio.<FQDN>:41080
+----
+
+or
+
+[source,bash]
+----
+mvn jangaroo:run -pl :my-studio-module \
+   -DjooProxyPathSpec=/* \
+   -Dinstallation.host=<FQDN>
+----
+
+Now, all Rest requests are proxied from/to the remote Studio Server as well as the Studio Client resources from the
+remote Studio.
+
+[discrete]
+====== Connect Local Studio Server
+
+First: Start Studio Server locally.
+
+Then just start the Studio Client via
+
+[source,bash]
+----
+mvn jangaroo:run -pl :studio-app
+----
+
+With this command line call, the Rest requests are proxied to/from the locally started Studio Server.
+
+[discrete]
+====== Links
+
+* http://localhost:8080/?cache#joo.debug[Studio]
+
+=== Studio Server
+
+*Working Directory*:
+....
+apps/studio-server/spring-boot/studio-server-app
+....
+
+Start Studio Server locally via
+
+[source,bash]
+----
+mvn spring-boot:run -Dinstallation.host=<FQDN>
+----
+
+[discrete]
+====== Links
+
+* http://localhost:41081/actuator[Actuators]
+
+
+=== Studio-Server and Studio-Client locally against local CAE
+
+Start Studio Client and Studio Server locally as described above.
+
+Keep in mind to add `+-Dcae-preview.host=localhost+` and/or `+-Dcae-live.host=localhost+` to the Studio Server’s
+maven call.
+
+=== CAE Preview
+
+*Working Directory*:
+....
+apps/cae/spring-boot/cae-preview-app
+....
+
+Start CAE Preview locally via
+
+[source,bash]
+----
+mvn spring-boot:run -Pdev -Dinstallation.host=<FQDN>
+----
+
+[discrete]
+====== Links
+
+* http://localhost:40980/blueprint/servlet/actuator[Actuators]
+* http://localhost:40980/blueprint[CAE Preview]
+* http://localhost:40980/blueprint/servlet/actuator/logfile[Log File]
+
+=== CAE Live
+
+*Working Directory*:
+....
+apps/cae/spring-boot/cae-live-app
+....
+
+Start CAE Live locally via
+
+[source,bash]
+----
+mvn spring-boot:run -Pdev -Dinstallation.host=<FQDN>
+----
+
+* http://localhost:42180/blueprint/servlet/actuator[Actuators]
+* http://localhost:42180/blueprint[CAE Live]
+* http://localhost:42180/blueprint/servlet/actuator/logfile[Log File]
+
+[discrete]
+====== Links
+
+* http://localhost:8080/?cache#joo.debug[Studio Client]
+* http://localhost:41081/actuator[Studio Server Actuators]
+
+== Local Docker Test System
+
+With a local docker test system, you only have to start it correctly and then its the same as above.
+
+[arabic]
+. Prepare your `+global/deployment/docker/blueprint/.env+` file
+* Make sure `+compose/development.yml+` is included in the `+COMPOSE_FILE+` variable, it is required to expose the
+container internal ports to the docker host.
+* Make sure `+compose/development-local.yml+` is included in the `+COMPOSE_FILE+` variable, it is required for content
+import from blueprint and optionally for loading licenses from local `+coremedia-licenses+` directory.
+. Prepare your licenses
++
+Place them at `+deployment/coremedia-licenses+` with the correct names i.e. `+cms-license.zip+` (offline)
+. Prepare your `+/etc/hosts+` or `+%windir%\system32\drivers\etc\hosts+` file, you will find the documentation in the
+`+global/deployment/docker/README.adoc+`.
+. Start the engine
++
+[source,bash]
+----
+cd global/deployment/docker docker-compose up -d
+----
+
+[discrete]
+===== Shrink the setup to your needs
+
+If you hesitate to start the whole stack, shrink it, it is simple.
+
+[arabic]
+. List all services
++
+[source,bash]
+----
+cd global/deployment/docker
+docker-compose config --services
+----
+. From the list of services make a space separated list of services you want to start and put them in an environment
+variable, i.e.
++
+[source,bash]
+----
+export DC_DB="mongodb mysql"
+export DC_MANAGEMWENT_BACKEND="${DC_DB} solr content-management-server \
+       workflow-server content-feeder caefeeder-preview user-changes \
+       elastic-worker studio-server"
+export DC_PUBLICATION_BACKEND="master-live-server caefeeder-live"
+export DC_PREVIEW="cae-preview studio-client traefik"
+export DC_LIVE="cae-live" export DC_CONTENT=management-tools
+----
+Now you can use this to start what you most often need:
+
+[source,bash]
+----
+docker-compose up -d ${DC_DB} ${DC_MANAGEMENT_BACKEND} ${DC_CONTENT} overview
+----
+
+`+overview+` is not a docker command but the overview service with all the links.
+
+A different approach is to freeze the setup and then cut out everyting you need.
+
+[source,bash]
+----
+docker-compose config > docker-compose.yml
+----
+
+You can then remove everything you don’t want. `+docker-compose.yml+` is ignored by git with our default `+.gitignore+`.
+You only have to make sure, that in your `+.env+` file
+....
+COMPOSE_FILE=docker-compose.yml
+....
+is set, otherwise the file won’t be loaded.
+
+Of course there are a log of toggles for your convenience: +
+
+* `+JAVA_DEBUG+` - default ports `+XXX06+` for JDWP
+* `+FORCE_REIMPORT_CONTENT+` - once imported, the content won’t reimport unless forced +
+* `+SKIP_CONTENT+` - same as not running the `+management-tools+`
+container
+
+[discrete]
+====== Having multiple backends in parallel or keep multiple backend data volumes
+
+In order to work on multiple tasks in an interleaved modus, you may want to keep the example content of each setup and
+switch back and forth. In order to do so, you can use the `+COMPOSE_PROJECT_NAME+`. If set docker-compose will prefix
+all resources with the set value, i.e. a volume will be named `+JIRA-55_db-data+` if `+COMPOSE_PROJECT_NAME=JIRA-55+`.
+The only thing to keep in mind with this approach is to never use the `+-v+` flag when running `+docker-compose down+`.

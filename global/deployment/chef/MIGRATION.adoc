@@ -1,0 +1,109 @@
+= Deployment Archive Migration Relevant Changes
+
+[discrete]
+=== Major Changes
+
+* Spring-Boot application `+JAR+` files instead of webapp `+WAR+` files as main artifacts.
+* `+blueprint-spring-boot+` cookbook instead of `+blueprint-tomcat+` cookbook.
+* Tomcat version is now defined at build time of the artifacts instead of deployment time. The Tomcat is now
+  embedded in the Spring-Boot application jar.
+* SystemD init system instead of SystemV
+* Studio has been split up into a `+studio-server+` app and a `+studio-client+` part consisting only of
+  static resources served by an Apache HTTPd web server. As a result all application properties previously defined below
+  `+node['blueprint']['webapps']['studio']['application.properties']+` must now be defined below
+  `+node['blueprint']['apps']['studio-server']['application.properties']+`.
+* To deploy the Studio Client part, two recipes are required in your run list.
+** `blueprint-spring-boot::studio-client` to download and extract the static resources.
+** `blueprint-proxy::studio` to configure the Apache configuration.
+
+[discrete]
+=== Minor Changes
+
+* The `+blueprint-spring-boot+` cookbook does not provide a Chef definition (macro) for CoreMedia services as did the
+  `+blueprint-tomcat+` cookbook. The `+blueprint-spring-boot+` cookbook instead provides a `+spring_boot_application+`
+  resource, that abstracts from the process of downloading the maven artifact, rendering the configuration properties
+  file and the installation of the SystemD service. To prevent unnecessary restarts at first installation, all
+  notifications are directed to a `+ruby_block+` resource, which aggregates all triggered actions into either a
+  `+start+` or `+restart+` action at the corresponding `+service+` resource.
++
+[source,ruby]
+----
+template 'my_service_custom_conf' do
+  # renders additional application config. If changed trigger restart check
+  notifies :create, 'ruby_block[restart_my_service]', :immediately
+end
+
+spring_boot_application 'my_application' do
+  # install and configure application. If changed trigger restart check
+  notifies :create, 'ruby_block[restart_my_service]', :immediately
+end
+
+service 'my_service' do
+  # manage service state
+  action [:enable, :start]
+end
+
+ruby_block 'restart_my_service' do
+  # restart check
+  block do
+    # some code removing unnecessary restart action if start already present
+  end
+  action :nothing
+end
+----
+
+[discrete]
+=== Configuration Changes
+
+With the old deployment archive each applications configuration was splitted into three parts:
+
+* The application configuration:
+** Maven coordinates of the artifact
+** Application properties
+* The global installation configuration:
+** JVM options
+** JMX options
+** logging configuration
+* The service specific installation configuration which allows to override the global configuration but also adds
+  specific configuration options like:
+** heap settings
+** enabling / disabling the service for autostart
+
+With the new deployment archive this logic is being kept, except for the hashes being used:
+
+* Old deployment archive
+** application configuration below `+node['blueprint']['webapps’]+`
+** global installation configuration below `+node['blueprint']['tomcat']+`
+** service specific installation configuration below `+node['blueprint']['tomcat']+`
+* New deployment archive
+** application configuration below `+node['blueprint']['apps']['<SERVICE KEY>']+`
+** global installation configuration below `+node['blueprint']['spring-boot']+`
+** service specific installation configuration below `+node['blueprint']['spring-boot']['<SERVICE KEY>']+`
+
+For the application configuration below `+node['blueprint']['webapps']['<SERVICE_KEY'>']['application.properties']+`
+an automated migration is being done in the recipes by copying all previous attributes to the new attribute path.
+
+Some of the old installation configurations have been removed or have a new equivalent. This includes:
+
+* `+node['blueprint']['tomcat']['shutdown_force']+` - not supported anymore
+* `+node['blueprint']['tomcat']['shutdown_wait']+` - not supported anymore
+* `+node['blueprint']['tomcat']['clean_log_dir_on_start']+` - not supported anymore
+* `+node['blueprint']['tomcat']['keep_old_instances']+` - not supported anymore
+* `+node['blueprint']['tomcat']['context_config']+` - not supported anymore, this should be done programatically
+   using Spring Boot
+* `+node['blueprint']['tomcat']['logback_config']+` - not supported anymore, logback configuration can be passed in using
+`+application.properties+` or `+boot_opts+`
+* `+node['blueprint']['tomcat']['<SERVICE_KEY>']['perm']+` - Since Java 8 there is no perm space configurable anymore
+* `+node['blueprint']['tomcat']['common_libs']+` - not supported any more, package extra libs within your Spring Boot app.
+* `+node['blueprint']['tomcat']['catalina_opts']+` - use one of
+** `+node['blueprint']['spring-boot']['java_opts']+`
+** `+node['blueprint']['spring-boot']['<SERVICE KEY>']['java_opts']+`
+* `+node['blueprint']['tomcat']['<SERVICE_KEY>']['port_prefix']+` - not supported anymore. Port prefixes are now longer
+   configurable in the deployment. Ports are being specified using the spring boot properties within the application
+   artifacts. However, you can set boot opts or application properties to change the ports, i.e. 
+** `+node['blueprint']['spring-boot']['studio-server']['boot_opts']['server.port']+`
+** `+node['blueprint']['apps']['studio-server']['application.properties']['server.port']+`
+
++
+Keep in mind that if you do so, you need manually find references to the old ports and change them, this may include
+hard coded references in recipes as well as properties of services using an endpoint of the modified service.

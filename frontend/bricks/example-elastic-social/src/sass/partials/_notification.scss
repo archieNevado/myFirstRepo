@@ -1,0 +1,75 @@
+/* =====================================================================================================================
+   Notification classes
+   Contains styling definitions for notifications.
+   ================================================================================================================== */
+
+/* box */
+.cm-notification {
+  position: relative;
+  padding: 10px 25px 10px 35px;
+  min-height: 20px;
+  color: #cccccc;
+  line-height: 20px;
+  margin: 5px 0;
+
+  /* title */
+  &__headline {
+    font-weight: bold;
+  }
+
+  /* icon */
+  &:before {
+    font-family: 'Glyphicons Halflings';
+  }
+
+  &--error {
+    color: $cm-notification-color-error;
+    &:before {
+      content: "\e101";
+    }
+  }
+
+  &--warning {
+    color: $cm-notification-color-warning;
+    &:before {
+      content: "\e101";
+    }
+  }
+
+  &--info {
+    color: $cm-notification-color-info;
+    &:before {
+      content: "\e086";
+    }
+  }
+
+  &--success {
+    color: $cm-notification-color-success;
+    &:before {
+      content: "\e084";
+    }
+  }
+
+  /* dismiss-button */
+  &__dismiss {
+    font-family: 'Glyphicons Halflings';
+    &::before {
+      position: absolute;
+      top: 2px;
+      right: 5px;
+      color: rgba(0, 0, 0, 0.75);
+      font-size: 12px;
+      cursor: pointer;
+      content: "\e014";
+    }
+  }
+
+  /* dismiss in error alert */
+  &--error &__dismiss:before {
+    color: rgba(255, 255, 255, 1);
+  }
+
+  &--inactive {
+    display: none;
+  }
+}

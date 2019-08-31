@@ -1,0 +1,4 @@
+// first, load 3rd party dependencies
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/glyphicons";
+// load internal dependencies last
+@import "?smart-import-partials";

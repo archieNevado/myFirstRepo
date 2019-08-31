@@ -1,0 +1,20 @@
+{
+  "name": "@coremedia-examples/jquery-plugins",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "jquery": "^3.0.0",
+    "@coremedia/brick-utils": "^1.0.0",
+    "@coremedia/brick-media": "^1.0.0"
+  },
+  "devDependencies": {
+    "prettier": "^1.0.0"
+  },
+  "scripts": {
+    "prettier": "prettier \"**/*\" --write"
+  },
+  "coremedia": {
+    "type": "lib",
+    "init": "src/init.js"
+  }
+}

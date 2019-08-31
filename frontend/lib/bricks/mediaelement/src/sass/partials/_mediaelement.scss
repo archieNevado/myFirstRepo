@@ -1,0 +1,5 @@
+.cm-mediaelementwrapper {
+  > iframe {                      // Is needed to show iframe videos (youtube, etc) correctly in a popup
+    @include stretch-absolute();
+  }
+}

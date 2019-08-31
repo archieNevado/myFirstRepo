@@ -1,0 +1,35 @@
+.cm-container {
+  padding-top: $cm-grid-gutter-width;
+  &:first-child {
+    padding-top: 0;
+  }
+}
+
+
+.row.row-grid {
+  padding-bottom: $cm-grid-gutter-width;
+  &:last-child {
+    padding-bottom: 0;
+  }
+  & [class*="col-"] + [class*="col-"] {
+    margin-top: $cm-grid-gutter-width;
+  }
+
+  @include breakpoint(lg) {
+    & [class*="col-lg-"] + [class*="col-lg-"] {
+      margin-top: 0;
+    }
+  }
+
+  @include breakpoint(md) {
+    & [class*="col-md-"] + [class*="col-md-"] {
+      margin-top: 0;
+    }
+  }
+
+  @include breakpoint(sm-and-up) {
+    & [class*="col-sm-"] + [class*="col-sm-"] {
+      margin-top: 0;
+    }
+  }
+}

@@ -1,0 +1,54 @@
+.cm-price {
+  display: inline-block;
+
+  &--overlay {
+    color: inherit;
+  }
+
+  &--old {
+    text-decoration: line-through;
+    font-size: 1.2rem;
+    @include breakpoint(xs) {
+      font-size: 1rem;
+    }
+  }
+
+  &--special {
+    color: #b54850;
+  }
+
+  &--teaser {
+    font-size: 1rem;
+    @include breakpoint(sm) {
+      font-size: 1.2rem;
+    }
+    @include breakpoint(md) {
+      font-weight: normal;
+      font-size: 1.7rem;
+    }
+  }
+
+  &.cm-price--special {
+    font-size: 1.2rem;
+    @include breakpoint(sm) {
+      font-size: 1.46rem;
+    }
+    @include breakpoint(md) {
+      font-size: 2rem;
+    }
+  }
+
+  &--popup {
+    font-weight: normal;
+    font-size: 1rem;
+    &.cm-price--special {
+      font-size: 1.2rem;
+      @include breakpoint(sm) {
+        font-size: 1.46rem;
+      }
+      @include breakpoint(md) {
+        font-size: 2rem;
+      }
+    }
+  }
+}
