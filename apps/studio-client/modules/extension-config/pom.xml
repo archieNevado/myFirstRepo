@@ -21,7 +21,6 @@
 
   <modules>
     <module>studio-client-dynamic-extension-dependencies</module>
-    <module>studio-client-dynamic-extensions-bom</module>
     <module>studio-client-extension-dependencies</module>
     <module>studio-client-extensions-bom</module>
   </modules>

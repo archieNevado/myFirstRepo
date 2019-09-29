@@ -21,4 +21,4 @@ chef_version '>= 12.5' if respond_to?(:chef_version)
 
 depends 'blueprint-base'
 depends 'coremedia_maven', '~> 3.0.1'
-depends 'chef-sugar', '~> 5.0.1'
+depends 'chef-sugar', '~> 5.0.4'

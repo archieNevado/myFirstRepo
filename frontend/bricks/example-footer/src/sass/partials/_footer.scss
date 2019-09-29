@@ -73,6 +73,8 @@
   }
 
   &__social-icons {
+    line-height: 1;
+
     @include breakpoints(("sm", landscape) "lg-and-up") {
       width: percentage(2 / 12);
       text-align: right;
@@ -80,16 +82,13 @@
     }
 
     .social-icon {
-      height: 16px;
-      width: 28px;
+      height: 24px;
+      width: 32px;
       display: inline-block;
       background: no-repeat center center;
 
       &.facebook {
         background-image: url("../../img/facebook.svg");
-      }
-      &.googleplus {
-        background-image: url("../../img/googleplus.svg");
       }
       &.linkedin {
         background-image: url("../../img/linkedin.svg");

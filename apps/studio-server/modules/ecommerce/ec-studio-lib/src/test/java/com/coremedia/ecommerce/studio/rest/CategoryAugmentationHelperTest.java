@@ -37,10 +37,10 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.coremedia.blueprint.base.pagegrid.PageGridContentKeywords.PAGE_GRID_STRUCT_PROPERTY;
+import static com.coremedia.ecommerce.studio.rest.AugmentationHelperBase.DEFAULT_BASE_FOLDER_NAME;
+import static com.coremedia.ecommerce.studio.rest.AugmentationHelperBase.EXTERNAL_ID;
 import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.CATEGORY_PAGEGRID_STRUCT_PROPERTY;
 import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.CATEGORY_PRODUCT_PAGEGRID_STRUCT_PROPERTY;
-import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.DEFAULT_BASE_FOLDER_NAME;
-import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.EXTERNAL_ID;
 import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.SEGMENT;
 import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.TITLE;
 import static com.google.common.collect.Lists.newArrayList;
@@ -59,7 +59,8 @@ import static org.mockito.Mockito.when;
 @TestPropertySource(properties = {"livecontext.cache.invalidation.enabled=false"})
 public class CategoryAugmentationHelperTest {
 
-  private static final String CATEGORY_ID = "test:///catalog/category/leafCategory";
+  private static final String CATEGORY_EXTERNALID = "leafCategory";
+  private static final String CATEGORY_ID = "test:///catalog/category/" + CATEGORY_EXTERNALID;
   //External ids of category can contain '/'. See CMS-5075
   private static final String CATEGORY_DISPLAY_NAME = "le/af";
   private static final String ESCAPED_CATEGORY_DISPLAY_NAME = "le_af";
@@ -114,6 +115,7 @@ public class CategoryAugmentationHelperTest {
     leafCategory = mock(Category.class, RETURNS_DEEP_STUBS);
     when(leafCategory.getParent()).thenReturn(topCategory);
     when(leafCategory.getDisplayName()).thenReturn(CATEGORY_DISPLAY_NAME);
+    when(leafCategory.getExternalId()).thenReturn(CATEGORY_EXTERNALID);
     when(leafCategory.getId()).thenReturn(CommerceIdParserHelper.parseCommerceIdOrThrow(CATEGORY_ID));
     List<Category> breadcrumb = newArrayList(rootCategory, topCategory, leafCategory);
     when(leafCategory.getBreadcrumb()).thenReturn(breadcrumb);
@@ -130,9 +132,9 @@ public class CategoryAugmentationHelperTest {
     testling.augment(leafCategory);
 
     Content externalChannel = contentRepository.getChild("/Sites/Content Test/" + DEFAULT_BASE_FOLDER_NAME + "/"
-            + ROOT + "/" + TOP + "/" + ESCAPED_CATEGORY_DISPLAY_NAME + "/" + ESCAPED_CATEGORY_DISPLAY_NAME);
+            + ROOT + "/" + TOP + "/" + ESCAPED_CATEGORY_DISPLAY_NAME + "/" + ESCAPED_CATEGORY_DISPLAY_NAME + "(" + CATEGORY_EXTERNALID + ")");
     assertThat(externalChannel).isNotNull();
-    assertThat(externalChannel.getName()).isEqualTo(ESCAPED_CATEGORY_DISPLAY_NAME);
+    assertThat(externalChannel.getName()).isEqualTo(ESCAPED_CATEGORY_DISPLAY_NAME  + "(" + CATEGORY_EXTERNALID + ")");
     assertThat(externalChannel.getString(EXTERNAL_ID)).isEqualTo(CATEGORY_ID);
     assertThat(externalChannel.getString(TITLE)).isEqualTo(CATEGORY_DISPLAY_NAME);
     assertThat(externalChannel.getString(SEGMENT)).isEqualTo(CATEGORY_DISPLAY_NAME);

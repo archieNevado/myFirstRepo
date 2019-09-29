@@ -195,11 +195,11 @@ public class TaxonomyNode {
   }
 
   public function getDisplayName():String {
-    var name:String = getName();
+    var name:String = getRawName();
     if(getWeight()) {
       name = name + " (" + getWeight() + ")";
     }
-    return name;
+    return TaxonomyUtil.escapeHTML(name);
   }
 
   /**

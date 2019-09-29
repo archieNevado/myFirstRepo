@@ -18,5 +18,5 @@
                          token=_CSRFToken!""
                          withLink=cm.getLink(self.productInSite!(cm.UNDEFINED))
                          enableShopNow=self.isShopNowEnabled(cmpage.context)
-                         attr={"classes": ["cm-button-group__button", "cm-button--popup", (lc.getVendorName() == 'SAP Hybris')?then('btn btn-default', '')]} />
+                         attr={"classes": ["cm-button-group__button", "cm-button--popup"]} />
 </div>

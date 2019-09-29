@@ -44,6 +44,6 @@ COPY --chown=solr:solr target/solr-home /opt/solr/server/solr
 COPY --chown=solr:solr src/docker/bin /docker-entrypoint-initdb.d
 COPY --chown=solr:solr src/docker/prometheus /opt/solr/prometheus
 # Windows compatibility step
-RUN find /opt/solr -type d -exec chmod 770 {} \;
+RUN find -H /opt/solr -type d -exec chmod 770 {} \;
 
 EXPOSE 8199 8983

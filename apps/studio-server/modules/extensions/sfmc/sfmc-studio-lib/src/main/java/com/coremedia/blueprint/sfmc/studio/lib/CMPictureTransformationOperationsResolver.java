@@ -15,14 +15,13 @@ public class CMPictureTransformationOperationsResolver implements ContentTransfo
   @NonNull
   public Map<String, String> resolveOperations(@NonNull Content content, @NonNull String propertyName) {
     Struct localSettings = content.getStruct("localSettings");
-    if (localSettings == null) {
+    if (localSettings == null || localSettings.getType().getDescriptor("transforms") == null) {
       return new HashMap<>();
     }
-
     Map<String, Object> structMap = localSettings.getStruct("transforms").getProperties();
     return structMap.entrySet()
-                    .stream()
-                    .collect(Collectors.toMap(Map.Entry::getKey, e -> (String) e.getValue()));
+            .stream()
+            .collect(Collectors.toMap(Map.Entry::getKey, e -> (String) e.getValue()));
   }
 
   @Override

@@ -43,8 +43,8 @@ $.extend($.expr[":"], {
  * @module logger
  */
 
-// check cookie if developerMode is active
-if (document.cookie.indexOf("cmUserVariant=") > 0) {
+// check cookie if developerMode is active (cookie available and not empty)
+if (document.cookie.indexOf("cmUserVariant=") > 0 && document.cookie.indexOf("cmUserVariant=\"\"") === -1) {
   Logger.setLevel(Logger.LEVEL.ALL);
 }
 

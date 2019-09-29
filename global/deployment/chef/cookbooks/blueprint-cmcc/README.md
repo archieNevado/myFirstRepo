@@ -82,7 +82,6 @@ This is the wrapper cookbook to deploy the config for CoreMedia Content Cloud de
 * `node['blueprint']['proxy']['virtual_host']['preview']['server_aliases']['ibm-wcs']` -  Defaults to `preview-fragment.supplier.blueprint-box.vagrant`.
 * `node['blueprint']['sap-hybris']['host']` -  Defaults to `hybrishost`.
 * `node['blueprint']['sap-hybris']['enabled']` - Set to true to activate the SAP Hybris Commerce integration. Defaults to `false`.
-* `node['blueprint']['sap-hybris']['application.properties']['livecontext.hybris.host']` -  Defaults to `node['blueprint']['sap-hybris']['host']`.
 * `node['blueprint']['sap-hybris']['application.properties']['livecontext.cookie.domain']` -  Defaults to `.#{node['fqdn']}`.
 * `node['blueprint']['sap-hybris']['virtual_host']['delivery']['cluster']['default']['host']` -  Defaults to `localhost`.
 * `node['blueprint']['sap-hybris']['virtual_host']['delivery']['cluster']['default']['port']` -  Defaults to `42180`.

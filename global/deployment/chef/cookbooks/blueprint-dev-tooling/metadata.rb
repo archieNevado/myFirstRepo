@@ -14,4 +14,4 @@ depends 'blueprint-postgresql'
 depends 'blueprint-mongodb'
 depends 'blueprint-tools'
 
-depends 'chef-sugar', '~> 5.0.1'
+depends 'chef-sugar', '~> 5.0.4'

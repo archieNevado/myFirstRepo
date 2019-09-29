@@ -5,7 +5,6 @@ import com.coremedia.ui.dynamicpackages.servlet.DynamicPackagesListServlet;
 import com.coremedia.ui.dynamicpackages.servlet.PackagesFilter;
 import com.coremedia.ui.dynamicpackages.servlet.RemoteDynamicPackagesServlet;
 import com.google.common.collect.ImmutableMap;
-import org.mitre.dsmiley.httpproxy.ProxyServlet;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -41,8 +40,8 @@ public class StudioPackagesProxyApp {
 
   @Bean
   @ConditionalOnExpression("!'${studio.client.url}'.isEmpty()")
-  public ServletRegistrationBean<ProxyServlet> localPackagesServletRegistration() {
-    ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean<>(new ProxyServlet(), "/*");
+  public ServletRegistrationBean localPackagesServletRegistration() {
+    ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean<>(new StudioClientResourcesProxyServlet(), "/*");
     servletRegistrationBean.addInitParameter("targetUri", studioClientUrl);
     return servletRegistrationBean;
   }

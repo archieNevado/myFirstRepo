@@ -1,7 +1,5 @@
 package com.coremedia.blueprint.common.util;
 
-import com.coremedia.blueprint.base.querylist.FilterQueryHelper;
-import com.coremedia.blueprint.base.querylist.QueryListHelper;
 import com.coremedia.blueprint.cae.search.Condition;
 import com.coremedia.blueprint.cae.search.SearchConstants;
 import com.coremedia.blueprint.cae.search.SearchQueryBean;
@@ -17,7 +15,7 @@ import java.lang.invoke.MethodHandles;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.coremedia.blueprint.base.querylist.FilterQueryHelper.*;
+import static com.coremedia.blueprint.base.querylist.FilterQueryHelper.getContentTypeNames;
 
 /**
  * Utility methods for search queries

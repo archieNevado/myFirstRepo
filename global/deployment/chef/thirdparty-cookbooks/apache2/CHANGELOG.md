@@ -61,7 +61,7 @@ See UPGRADING.md for upgrading.
 
 - Revert ports.conf fix (ports.conf that gets installed by package conflicts.
 
-## v5.2.0 (26-08-2018)
+## v5.2.1 (26-08-2018)
 
 - Drop Chef 12 support
 - Add Danger and CircleCI support

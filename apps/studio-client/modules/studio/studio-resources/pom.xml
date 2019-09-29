@@ -10,10 +10,6 @@
   <artifactId>studio-resources</artifactId>
   <packaging>jar</packaging>
 
-  <properties>
-    <failOnWarning>false</failOnWarning>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>com.coremedia.ui.sdk</groupId>

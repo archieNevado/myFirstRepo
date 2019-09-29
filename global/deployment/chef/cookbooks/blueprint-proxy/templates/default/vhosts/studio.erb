@@ -55,7 +55,6 @@
 
   ProxyPass /api <%= rest_servlet_url %>/api <%= rest_proxy_params || '' %>
   ProxyPassReverse /api <%= rest_servlet_url %>/api
-  ProxyPassReverseCookiePath / /api
 
   ProxyPass /login <%= rest_servlet_url %>/login <%= rest_proxy_params || '' %>
   ProxyPass /logout <%= rest_servlet_url %>/logout <%= rest_proxy_params || '' %>

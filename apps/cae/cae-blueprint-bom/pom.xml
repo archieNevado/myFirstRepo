@@ -62,49 +62,12 @@
       </dependency>
       <dependency>
         <groupId>com.coremedia.blueprint</groupId>
-        <artifactId>lc-ecommerce-ibm-cae</artifactId>
-        <version>1-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
-        <artifactId>es-cae-users</artifactId>
-        <version>1-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
-        <artifactId>es-contentbeans</artifactId>
-        <version>1-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
-        <artifactId>lc-contentbeans-api</artifactId>
-        <version>1-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
-        <artifactId>lc-contentbeans-impl</artifactId>
-        <version>1-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
-        <artifactId>p13n-test-content</artifactId>
-        <version>1-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
         <artifactId>link-services</artifactId>
         <version>1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>com.coremedia.blueprint</groupId>
         <artifactId>cae-extensions-bom</artifactId>
-        <version>1-SNAPSHOT</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
-        <artifactId>preview-cae-extensions-bom</artifactId>
         <version>1-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>

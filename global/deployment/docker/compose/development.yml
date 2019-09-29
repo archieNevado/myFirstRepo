@@ -35,7 +35,7 @@ services:
     ports:
       - 40180:8080
       - 40181:8081
-      - 40183:${CMS_ORB_PORT:-8083}
+      - 40183:${CMS_ORB_PORT:-40183}
       - 40105:5005
     environment:
       << : *development-boot-envs
@@ -63,13 +63,13 @@ services:
     ports:
       - 40280:8080
       - 40281:8081
-      - 40283:${MLS_ORB_PORT:-8083}
+      - 40283:${MLS_ORB_PORT:-40283}
       - 40205:5005
     environment:
       <<: *development-boot-envs
       COM_COREMEDIA_CORBA_SERVER_HOST: ${MLS_ORB_HOST:-master-live-server}
       # when accessing a remote system it is necessary to have the forwarded port equal to the internal port
-      COM_COREMEDIA_CORBA_SERVER_PORT: ${MLS_ORB_PORT:-40383}
+      COM_COREMEDIA_CORBA_SERVER_PORT: ${MLS_ORB_PORT:-40283}
       SQL_STORE_DRIVER: com.mysql.cj.jdbc.Driver
       SQL_STORE_URL: jdbc:mysql://mysql:3306/cm_master
       SQL_STORE_USER: cm_master
@@ -92,7 +92,7 @@ services:
       << : *development-boot-envs
       COM_COREMEDIA_CORBA_SERVER_HOST: ${WFS_ORB_HOST:-workflow-server}
       # when accessing a remote system it is necessary to have the forwarded port equal to the internal port
-      COM_COREMEDIA_CORBA_SERVER_PORT: ${WFS_ORB_PORT:-40483}
+      COM_COREMEDIA_CORBA_SERVER_PORT: ${WFS_ORB_PORT:-40383}
       CAP_CLIENT_SERVER_IOR_URL: http://content-management-server:8080/ior
       WORKFLOW_IOR_URL: http://content-management-server:8080/ior
       MONGODB_CLIENTURI: mongodb://mongodb:27017

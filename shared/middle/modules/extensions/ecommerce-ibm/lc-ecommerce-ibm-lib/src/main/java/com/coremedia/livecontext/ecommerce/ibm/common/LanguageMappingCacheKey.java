@@ -4,12 +4,20 @@ import com.coremedia.cache.Cache;
 import com.coremedia.cache.CacheKey;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import static java.lang.invoke.MethodHandles.lookup;
 
 class LanguageMappingCacheKey extends CacheKey<Map<String, String>> {
 
+  private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
+
   @NonNull
-  private WcLanguageMappingService wcLanguageMappingService;
+  private final WcLanguageMappingService wcLanguageMappingService;
 
   LanguageMappingCacheKey(@NonNull WcLanguageMappingService wcLanguageMappingService) {
     this.wcLanguageMappingService = wcLanguageMappingService;
@@ -17,7 +25,15 @@ class LanguageMappingCacheKey extends CacheKey<Map<String, String>> {
 
   @Override
   public Map<String, String> evaluate(Cache cache) throws Exception {
-    return wcLanguageMappingService.getLanguageMappingUncached();
+    Map<String, String> languageMapping = wcLanguageMappingService.getLanguageMappingUncached();
+    if (languageMapping == null || languageMapping.isEmpty()) {
+      int delayOnErrorSeconds = wcLanguageMappingService.getDelayOnErrorSeconds();
+      LOG.warn("Could not determine the value of Language Mapping! Falling back to default behavior. Retry in {} seconds", delayOnErrorSeconds);
+      Cache.cacheFor(delayOnErrorSeconds, TimeUnit.SECONDS);
+    } else {
+      LOG.debug("Got language mapping '{}'.", languageMapping);
+    }
+    return languageMapping;
   }
 
   @Override

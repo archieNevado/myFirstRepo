@@ -68,7 +68,7 @@
     <taxonomy:TaxonomyLinkListGridPanel itemId="{GRID_PANEL_ITEM_ID}"
                                         linkListWrapper="{getLinkListWrapper(config)}"
                                         taxonomyId="{config.taxonomyId}"
-                                        siteId="{getSiteId(config.bindTo)}"
+                                        bindTo="{config.bindTo}"
                                         selectedPositionsExpression="{getSelectedPositionsVE()}"
                                         selectedValuesExpression="{getSelectedValuesVE()}"
                                         readOnlyValueExpression="{PropertyEditorUtil.createReadOnlyValueExpression(config.bindTo, config.forceReadOnlyValueExpression)}">

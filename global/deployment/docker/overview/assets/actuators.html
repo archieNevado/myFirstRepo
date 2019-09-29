@@ -1,4 +1,8 @@
-<!--# set var="optionalServices" value="${OPTIONAL_SERVICES}" -->
+<!--# set var="ibmWcsEnabled" value="${IBM_WCS_ENABLED}" -->
+<!--# set var="sapHybrisEnabled" value="${SAP_HYBRIS_ENABLED}" -->
+<!--# set var="sfccEnabled" value="${SFCC_ENABLED}" -->
+<!--# set var="adapterMockEnabled" value="${ADAPTER_MOCK_ENABLED}" -->
+<!--# set var="studioPackagesProxyEnabled" value="${STUDIO_PACKAGES_PROXY_ENABLED}" -->
 <h2>Actuator URLs</h2>
 
 <table>
@@ -142,7 +146,7 @@
     </td>
   </tr>
 
-  <!--# if expr="$optionalServices = /studio-packages-proxy/" -->
+  <!--# if expr="$studioPackagesProxyEnabled = true" -->
   <tr>
     <td><a href="http://docker.localhost:43081/actuator">Studio Packages Proxy</a></td>
     <td>
@@ -198,7 +202,7 @@
     </td>
   </tr>
 
-  <!--# if expr="$optionalServices = /commerce-adapter-mock/" -->
+  <!--# if expr="$adapterMockEnabled = true" -->
   <tr>
     <td><a href="http://docker.localhost:44081/actuator">Commerce Adapter Mock</a></td>
     <td>
@@ -214,7 +218,7 @@
   </tr>
   <!--# endif -->
 
-  <!--# if expr="$optionalServices = /commerce-adapter-sfcc/" -->
+  <!--# if expr="$sfccEnabled = true" -->
   <tr>
     <td><a href="http://docker.localhost:44181/actuator">Commerce Adapter Salesforce Commerce Cloud</a></td>
     <td>
@@ -230,7 +234,7 @@
   </tr>
   <!--# endif -->
 
-  <!--# if expr="$optionalServices = /commerce-adapter-hybris/" -->
+  <!--# if expr="$sapHybrisEnabled = true" -->
   <tr>
     <td><a href="http://docker.localhost:44281/actuator">Commerce Adapter SAP Commerce Cloud</a></td>
     <td>
@@ -246,7 +250,7 @@
   </tr>
   <!--# endif -->
 
-  <!--# if expr="$optionalServices = /commerce-adapter-wcs/" -->
+  <!--# if expr="$ibmWcsEnabled = true" -->
   <tr>
     <td><a href="http://docker.localhost:44381/actuator">Commerce Adapter HCL Commerce</a></td>
     <td>

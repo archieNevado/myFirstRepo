@@ -1,12 +1,11 @@
 @if $cm-include-taxonomy-filter-panel {
 
   $_block: "cm-taxonomy-filter-panel";
-
-  $_block_node: "cm-taxonomy-node";
+  $_block-node: "cm-taxonomy-node";
 
   // overrides styles of com.coremedia.blueprint.studio.rendering.TaxonomyNodeBEMEntities
   .#{$_block} {
-    .#{$_block_node} {
+    .#{$_block-node} {
       display: flex;
       &__box {
         overflow: hidden;

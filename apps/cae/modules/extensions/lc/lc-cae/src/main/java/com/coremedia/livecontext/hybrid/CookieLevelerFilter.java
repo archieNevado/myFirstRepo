@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static java.lang.invoke.MethodHandles.lookup;
 import static org.apache.commons.lang3.ArrayUtils.isEmpty;
 
 /**
@@ -32,12 +33,13 @@ import static org.apache.commons.lang3.ArrayUtils.isEmpty;
  * handle container managed cookies like the session cookie for example!
  */
 public class CookieLevelerFilter implements Filter {
-  private static final Logger LOGGER = LoggerFactory.getLogger(CookieLevelerFilter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(lookup().lookupClass());
 
   private String[] cookieDomains;
 
   @Override
-  public void init(FilterConfig filterConfig) throws ServletException {
+  public void init(FilterConfig filterConfig) {
+    LOGGER.info("Configured domains: {}", ArrayUtils.toString(cookieDomains));
   }
 
   @Override
@@ -64,12 +66,8 @@ public class CookieLevelerFilter implements Filter {
         return;
       }
     }
-    LOGGER.info("Request host \"" + host + "\" is not configured for rewrite cookies to it. Configured domains: " + ArrayUtils.toString(cookieDomains));
+    LOGGER.debug("Request host {} is not configured for rewrite cookies to it.", host);
     chain.doFilter(request, response);
-  }
-
-  @Override
-  public void destroy() {
   }
 
   @Value("${livecontext.cookie.domain}")
@@ -77,10 +75,10 @@ public class CookieLevelerFilter implements Filter {
     this.cookieDomains = cookieDomain;
   }
 
-  protected class HttpServletResponseCookieAware extends SaveContextOnUpdateOrErrorResponseWrapper {
+  protected static class HttpServletResponseCookieAware extends SaveContextOnUpdateOrErrorResponseWrapper {
     private final String cookieDomain;
 
-    public HttpServletResponseCookieAware(HttpServletResponse response, String cookieDomain) {
+    HttpServletResponseCookieAware(HttpServletResponse response, String cookieDomain) {
       super(response, false);
       this.cookieDomain = cookieDomain;
     }

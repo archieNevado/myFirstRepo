@@ -18,7 +18,7 @@
     </div>
   <#else>
     <div class="cm-button-group cm-button-group--default">
-      <@components.button href="#" text=cm.getMessage("login_title") iconClass="glyphicon glyphicon-log-in" attr={"metadata": [loginAction.content, "properties.id"], "classes": ["cm-button-group__button"], "data-href": cm.getLink(self, {"next": "$nextUrl$", "absolute": true, "scheme": lc.getSecureScheme()})} />
+      <@components.button href="#" text=cm.getMessage("login_title") iconClass="glyphicon glyphicon-log-in" attr={"metadata": [loginAction.content, "properties.id"], "classes": ["cm-button-group__button"], "data-href": cm.getLink(self, {"next": "$nextUrl$", "absolute": true})} />
     </div>
   </#if>
 </#if>

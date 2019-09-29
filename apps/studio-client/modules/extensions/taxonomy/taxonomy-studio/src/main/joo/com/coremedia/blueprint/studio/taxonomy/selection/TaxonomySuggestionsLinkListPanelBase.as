@@ -181,10 +181,12 @@ public class TaxonomySuggestionsLinkListPanelBase extends GridPanel {
    * @param busy
    */
   public function setBusy(busy:Boolean = false):void {
+    if(!loadMask) {
+      return;
+    }
+
     if (busy) {
-      if(loadMask) {
-        loadMask.show();
-      }
+      loadMask.show();
     } else {
       loadMask.hide();
     }

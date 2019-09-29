@@ -43,6 +43,11 @@
       </dependency>
       <dependency>
         <groupId>com.coremedia.blueprint</groupId>
+        <artifactId>am-preview-cae</artifactId>
+        <version>1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.coremedia.blueprint</groupId>
         <artifactId>corporate-cae</artifactId>
         <version>1-SNAPSHOT</version>
       </dependency>
@@ -59,12 +64,27 @@
       </dependency>
       <dependency>
         <groupId>com.coremedia.blueprint</groupId>
+        <artifactId>es-cae-users</artifactId>
+        <version>1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.coremedia.blueprint</groupId>
         <artifactId>es-cae</artifactId>
         <version>1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>com.coremedia.blueprint</groupId>
+        <artifactId>es-contentbeans</artifactId>
+        <version>1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.coremedia.blueprint</groupId>
         <artifactId>es-p13n-cae</artifactId>
+        <version>1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.coremedia.blueprint</groupId>
+        <artifactId>external-preview-cae</artifactId>
         <version>1-SNAPSHOT</version>
       </dependency>
       <dependency>
@@ -79,7 +99,27 @@
       </dependency>
       <dependency>
         <groupId>com.coremedia.blueprint</groupId>
+        <artifactId>lc-contentbeans-api</artifactId>
+        <version>1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.coremedia.blueprint</groupId>
+        <artifactId>lc-contentbeans-impl</artifactId>
+        <version>1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.coremedia.blueprint</groupId>
         <artifactId>lc-ecommerce-ibm-cae-component</artifactId>
+        <version>1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.coremedia.blueprint</groupId>
+        <artifactId>lc-ecommerce-ibm-cae</artifactId>
+        <version>1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.coremedia.blueprint</groupId>
+        <artifactId>lc-ecommerce-ibm-preview-cae</artifactId>
         <version>1-SNAPSHOT</version>
       </dependency>
       <dependency>
@@ -90,6 +130,16 @@
       <dependency>
         <groupId>com.coremedia.blueprint</groupId>
         <artifactId>lc-p13n-cae</artifactId>
+        <version>1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.coremedia.blueprint</groupId>
+        <artifactId>lc-p13n-preview-cae</artifactId>
+        <version>1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.coremedia.blueprint</groupId>
+        <artifactId>lc-preview-cae</artifactId>
         <version>1-SNAPSHOT</version>
       </dependency>
       <dependency>
@@ -120,6 +170,16 @@
       <dependency>
         <groupId>com.coremedia.blueprint</groupId>
         <artifactId>p13n-cae</artifactId>
+        <version>1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.coremedia.blueprint</groupId>
+        <artifactId>p13n-preview-cae</artifactId>
+        <version>1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.coremedia.blueprint</groupId>
+        <artifactId>p13n-test-content</artifactId>
         <version>1-SNAPSHOT</version>
       </dependency>
     </dependencies>

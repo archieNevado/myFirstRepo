@@ -2,13 +2,10 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:customize="http://www.coremedia.com/2007/coremedia-spring-beans-customization"
-       xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.coremedia.com/2007/coremedia-spring-beans-customization
-                           http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd
-                           http://www.springframework.org/schema/util
-                           http://www.springframework.org/schema/util/spring-util.xsd">
+                           http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd">
 
   <import resource="classpath:/com/coremedia/cae/view-error-services.xml"/>
   <import resource="classpath:/com/coremedia/cae/view-development-services.xml"/>
@@ -66,6 +63,7 @@
                      custom-ref="errorAndExceptionMappingResolver" order="100000"/>
 
   <bean id="errorAndExceptionMappingResolver"
+        autowire="constructor"
         class="com.coremedia.blueprint.cae.exception.resolver.ErrorAndExceptionMappingResolver">
     <property name="exceptionMappings">
       <props>
@@ -74,17 +72,6 @@
       </props>
     </property>
     <property name="defaultErrorView" value="asError"/>
-    <property name="exceptionHandler">
-      <util:list>
-        <ref bean="cyclicDependencyExceptionHandler"/>
-        <ref bean="invalidContentException"/>
-        <ref bean="conversionFailedExceptionHandler"/>
-        <ref bean="accessDeniedExceptionHandler"/>
-        <ref bean="illegalArgumentExceptionHandler"/>
-        <ref bean="illegalStateExceptionHandler"/>
-        <ref bean="missingServletRequestParameterExceptionHandler"/>
-      </util:list>
-    </property>
   </bean>
 
   <bean id="cyclicDependencyExceptionHandler"

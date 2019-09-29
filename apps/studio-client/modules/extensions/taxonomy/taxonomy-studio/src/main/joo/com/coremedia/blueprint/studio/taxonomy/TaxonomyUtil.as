@@ -47,6 +47,8 @@ public class TaxonomyUtil {
 
 
   public static function escapeHTML(xml:String):String {
+    xml = xml.replace(/&/g, "&amp;");
+
     while (xml.indexOf('>') !== -1) {
       xml = xml.replace('>', '&gt;');
     }
@@ -264,7 +266,7 @@ public class TaxonomyUtil {
       newSelection.push(bean);
       var selection:Array = selectionExpression.getValue();
       if (selection) {
-        newSelection = newSelection.concat(selection);
+        newSelection = selection.concat(newSelection);
       }
       selectionExpression.setValue(newSelection);
     });

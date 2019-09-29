@@ -20,14 +20,14 @@ if node['blueprint']['ibm-wcs']['enabled']
   node.default['blueprint']['apps']['cae-live']['application.properties']['livecontext.crossdomain.whitelist'] = cors_hosts.join(',')
 
   # inject wcs configuration
-  node['blueprint']['ibm-wcs']['application.properties'].each_pair do |k, v|
-    node.default['blueprint']['apps']['cae-live']['application.properties'][k] = v
+  if node['blueprint']['ibm-wcs']['application.properties']
+    node['blueprint']['ibm-wcs']['application.properties'].each_pair do |k, v|
+      node.default['blueprint']['apps']['cae-live']['application.properties'][k] = v
+    end
   end
 end
 
 if node['blueprint']['sap-hybris']['enabled']
-  node.default['blueprint']['apps']['cae-live']['application.properties']['livecontext.hybris.host'] = node['blueprint']['sap-hybris']['host']
-  node.default['blueprint']['apps']['cae-live']['application.properties']['livecontext.apache.hybris.host'] = "shop-hybris.#{node['blueprint']['hostname']}"
   node.default['blueprint']['apps']['cae-live']['application.properties']['commerce.hub.data.customEntityParams.catalogVersion'] = 'Online'
 
   cors_hosts << "https://#{node['blueprint']['sap-hybris']['virtual_host']['shop']['server_name']}"
@@ -36,8 +36,10 @@ if node['blueprint']['sap-hybris']['enabled']
   end
 
   # inject sap hybris configuration
-  node['blueprint']['sap-hybris']['application.properties'].each_pair do |k, v|
-    node.default['blueprint']['apps']['cae-live']['application.properties'][k] = v
+  if node['blueprint']['sap-hybris']['application.properties']
+    node['blueprint']['sap-hybris']['application.properties'].each_pair do |k, v|
+      node.default['blueprint']['apps']['cae-live']['application.properties'][k] = v
+    end
   end
 end
 

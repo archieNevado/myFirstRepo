@@ -5,7 +5,7 @@
 <master>
 <link href="../../../../../United%20States/English/Options/Viewtypes/CMChannel/landscape.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Options/Viewtypes/CMChannel/landscape"/>
 </master>
-<description>Zeigt Inhalt als Landschaftskacheln an.</description>
+<description>Zeigt den Inhalt im Querformat an.</description>
 <icon href="landscape.icon.svg%2Bxml" mimetype="image/svg+xml"/>
 <layout>landscape</layout>
 </CMViewtype>

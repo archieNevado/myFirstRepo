@@ -60,16 +60,16 @@ public class TaxonomyLinkListGridPanelBase extends GridPanel implements IValidat
   public var selectedValuesExpression:ValueExpression;
 
   /**
+   * The premular content ValueExpression
+   */
+  [Bindable]
+  public var bindTo:ValueExpression;
+
+  /**
    * The taxonomy identifier configured on the server side.
    */
   [Bindable]
   public var taxonomyId:String;
-
-  /**
-   * (optional) The siteId
-   */
-  [Bindable]
-  public var siteId:String = null;
 
   private var dropTarget:DropTarget;
 
@@ -94,7 +94,7 @@ public class TaxonomyLinkListGridPanelBase extends GridPanel implements IValidat
     if (this.scrollable) {
       ScrollManager.register(getScrollerDom());
 
-      this.addListener("beforedestroy", onBeforeDestroy, this, {single:true});
+      this.addListener("beforedestroy", onBeforeDestroy, this, {single: true});
     }
   }
 
@@ -149,9 +149,10 @@ public class TaxonomyLinkListGridPanelBase extends GridPanel implements IValidat
     TaxonomyUtil.isEditable(taxonomyId, function (editable:Boolean):void {
       if (editable) {
         var content:Content = null;
-        if(initialConfig.linkListWrapper && initialConfig.linkListWrapper._bindTo) {
-          content = initialConfig.linkListWrapper._bindTo.getValue();
+        if (bindTo && bindTo.getValue()) {
+          content = bindTo.getValue();
         }
+
         TaxonomyUtil.loadTaxonomyPath(record, content, taxonomyId, function (updatedRecord:BeanRecord):void {
           //noinspection JSMismatchedCollectionQueryUpdate
           var links:Array = linkListWrapper.getLinks() || [];
@@ -165,8 +166,7 @@ public class TaxonomyLinkListGridPanelBase extends GridPanel implements IValidat
             }
           });
         });
-      }
-      else {
+      } else {
         var msg:String = StringUtil.format(resourceManager.getString('com.coremedia.cms.editor.Editor', 'Content_notReadable_text'), IdHelper.parseContentId(record.getBean()));
         var html:String = '<img width="16" height="16" src="' + Ext.BLANK_IMAGE_URL + '" data-qtip="" />'
                 + '<span>' + msg + '</span>';
@@ -189,7 +189,7 @@ public class TaxonomyLinkListGridPanelBase extends GridPanel implements IValidat
    * Executes after layout, we have to refresh the HTML too.
    */
   private function refreshLinkList():void {
-    for(var i:int = 0; i<getStore().getCount(); i++) {
+    for (var i:int = 0; i < getStore().getCount(); i++) {
       getStore().getAt(i).data.html = null;
     }
   }

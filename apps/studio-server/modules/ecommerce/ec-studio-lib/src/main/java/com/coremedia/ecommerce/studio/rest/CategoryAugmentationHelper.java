@@ -62,7 +62,13 @@ class CategoryAugmentationHelper extends AugmentationHelperBase<Category> {
       initializeLayoutSettings(category, properties);
     }
 
-    return createContent(categoryFolder, getEscapedDisplayName(category), properties);
+    return createContent(categoryFolder, computeDocumentName(category), properties);
+  }
+
+  @NonNull
+  private static String computeDocumentName(@NonNull Category category) {
+    return (getEscapedDisplayName(category) + "(" + category.getExternalId() + ")")
+            .replace('/', '_');
   }
 
   @VisibleForTesting

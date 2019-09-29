@@ -7,6 +7,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.util.ContentLinkListWrapper;
 import com.coremedia.cms.editor.sdk.util.ILinkListWrapper;
+import com.coremedia.cms.editor.sdk.util.PropertyEditorUtil;
 import com.coremedia.ui.bem.LinkListBEMEntities;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
@@ -86,6 +87,7 @@ public class TaxonomyLinkListPropertyFieldBase extends FieldContainer {
       linkListWrapperCfg.propertyName = config.propertyName;
       linkListWrapperCfg.linkTypeName = config.linkType;
       linkListWrapperCfg.maxCardinality = config.maxCardinality;
+      linkListWrapperCfg.readOnlyVE = PropertyEditorUtil.createReadOnlyValueExpression(config.bindTo, config.forceReadOnlyValueExpression);
       linkListWrapper = new ContentLinkListWrapper(linkListWrapperCfg);
     }
     return linkListWrapper;

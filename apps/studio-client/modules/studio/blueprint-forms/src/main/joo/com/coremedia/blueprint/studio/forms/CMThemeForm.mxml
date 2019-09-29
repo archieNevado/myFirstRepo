@@ -15,7 +15,8 @@
 
   <editor:items>
     <editor:DocumentForm
-            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}"
+            itemId="contentTab">
       <editor:items>
         <editor:PropertyFieldGroup
                 title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMTheme_javaScriptGroup_text')}"
@@ -44,7 +45,8 @@
       </editor:items>
     </editor:DocumentForm>
     <editor:DocumentForm
-            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}">
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}"
+            itemId="metadata">
       <editor:items>
         <editor:PropertyFieldGroup
                 title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Description_label')}"
@@ -61,7 +63,8 @@
       </editor:items>
     </editor:DocumentForm>
     <editor:DocumentForm
-            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_locale_title')}">
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_locale_title')}"
+            itemId="locale">
       <editor:items>
         <editor:PropertyFieldGroup
                 title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMTheme_resourceBundles_text')}"

@@ -69,27 +69,34 @@ module.exports = function loader(content) {
   const modulesToLoad = [];
   const result = content.replace(
     FTL_REFERENCE_PATTERN,
-    (wholeExpression, directive, ftlPath, tail) => {
-      const resolvedPath = resolveFreemarkerRef(ftlPath, sourcePath);
+    (wholeExpression, directive, ftlPath, tail, index, wholeTemplate) => {
+      
+      // checking if the include/import is part of a comment which could lead to errors if processed further
+      const checkForComment = wholeTemplate.slice(0,index);
+      if (checkForComment.lastIndexOf('<#--') > checkForComment.lastIndexOf('-->')) {
+        return wholeExpression;
+      } else {
+        const resolvedPath = resolveFreemarkerRef(ftlPath, sourcePath);
 
-      // if the resolved path is outside the templates path, it will be moved to freemarkerLibs by the
-      // ViewRepositoryPlugin
-      if (path.relative(templatesPath, resolvedPath).startsWith("..")) {
-        // the library needs to be loaded as well
-        modulesToLoad.push(resolvedPath);
+        // if the resolved path is outside the templates path, it will be moved to freemarkerLibs by the
+        // ViewRepositoryPlugin
+        if (path.relative(templatesPath, resolvedPath).startsWith("..")) {
+          // the library needs to be loaded as well
+          modulesToLoad.push(resolvedPath);
 
-        // calculate where the library will be placed in the target directory
-        // this could be achieved by evaluating the result of the prior loadModule call
-        const packageJsonPath = closestPackage.sync(resolvedPath);
-        const packageJson = packages.getJsonByFilePath(packageJsonPath);
-        const transformedPath = `*/${viewRepositoryName}/freemarkerLibs/${
-          packageJson.name
-        }/${path.basename(resolvedPath)}`;
-        return `<#${directive} ${JSON.stringify(transformedPath)}${tail}>`;
+          // calculate where the library will be placed in the target directory
+          // this could be achieved by evaluating the result of the prior loadModule call
+          const packageJsonPath = closestPackage.sync(resolvedPath);
+          const packageJson = packages.getJsonByFilePath(packageJsonPath);
+          const transformedPath = `*/${viewRepositoryName}/freemarkerLibs/${
+            packageJson.name
+          }/${path.basename(resolvedPath)}`;
+          return `<#${directive} ${JSON.stringify(transformedPath)}${tail}>`;
+        }
+
+        // otherwise no transformation needed
+        return wholeExpression;
       }
-
-      // otherwise no transformation needed
-      return wholeExpression;
     }
   );
 

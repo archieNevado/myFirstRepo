@@ -136,7 +136,7 @@ public class ECommerceCollectionViewExtension implements CollectionViewExtension
     return CatalogSearchToolbarContainer.CATALOG_SEARCH_TOOLBAR_ITEM_ID;
   }
 
-  public function getEnabledSearchFilterIds():Array {
+  public function getEnabledSearchFilterIds(model:Object):Array {
     return null;
   }
 

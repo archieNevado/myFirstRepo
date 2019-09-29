@@ -29,7 +29,7 @@
 
     <customer>Blueprint</customer>
 
-    <cm.content.core.version>1907.1</cm.content.core.version>
+    <cm.content.core.version>1907.2</cm.content.core.version>
 
     <spring.boot.version>2.1.6.RELEASE</spring.boot.version>
     <application-plugin.version>2.7.10</application-plugin.version>
@@ -53,8 +53,6 @@
     <db.host>${installation.host}</db.host>
     <mongoDb.host>${installation.host}</mongoDb.host>
     <wcs.host>commerce-wcs-host</wcs.host>
-    <hybris.host>commerce-hybris-host</hybris.host>
-    <sfcc.host>commerce-sfcc-host</sfcc.host>
     <proxy.host>${installation.host}</proxy.host>
 
     <!-- logback appender for maven tomcat plugin start -->
@@ -78,14 +76,14 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.21</tomcat.embed.version>
+    <tomcat.embed.version>9.0.26</tomcat.embed.version>
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.content.core.version>1907.1</cm.content.core.version>
-    <cm.common.core.version>1907.1</cm.common.core.version>
+    <cm.content.core.version>1907.2</cm.content.core.version>
+    <cm.common.core.version>1907.2</cm.common.core.version>
     <cm.common.bp.version>1-SNAPSHOT</cm.common.bp.version>
-    <cm.middle.core.version>1907.1</cm.middle.core.version>
+    <cm.middle.core.version>1907.2</cm.middle.core.version>
     <cm.middle.bp.version>1-SNAPSHOT</cm.middle.bp.version>
   </properties>
 
@@ -100,7 +98,7 @@
       <id>skip-sfcc-tests</id>
       <activation>
         <property>
-          <name>sfcc.host</name>
+          <name>sfcc.tests.enabled</name>
         </property>
       </activation>
       <properties>
@@ -111,7 +109,7 @@
       <id>skip-ibm-tests</id>
       <activation>
         <property>
-          <name>wcs.host</name>
+          <name>wcs.tests.enabled</name>
         </property>
       </activation>
       <properties>
@@ -122,7 +120,7 @@
       <id>skip-hybris-tests</id>
       <activation>
         <property>
-          <name>hybris.host</name>
+          <name>hybris.tests.enabled</name>
         </property>
       </activation>
       <properties>
@@ -173,7 +171,7 @@
               <dependency>
                 <groupId>com.coremedia.maven</groupId>
                 <artifactId>coremedia-enforcer-rules</artifactId>
-                <version>1.1.13</version>
+                <version>1.1.16</version>
               </dependency>
               <dependency>
                 <groupId>com.coremedia.cms</groupId>
@@ -636,12 +634,12 @@
         <plugin>
           <groupId>org.sonarsource.scanner.maven</groupId>
           <artifactId>sonar-maven-plugin</artifactId>
-          <version>3.6.0.1398</version>
+          <version>3.6.1.1688</version>
         </plugin>
         <plugin>
           <groupId>org.owasp</groupId>
           <artifactId>dependency-check-maven</artifactId>
-          <version>5.2.0</version>
+          <version>5.2.1</version>
         </plugin>
       </plugins>
 

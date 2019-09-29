@@ -1,0 +1,229 @@
+scalar BigDecimal
+
+extend type Query {
+  commerce: CommerceRoot
+}
+
+type CommerceRoot {
+  catalogs(siteId:String!): [Catalog] @fetch(from: "@commerceFacade.getCatalogs(#siteId)")
+  catalog(catalogId:String, siteId: String!): Catalog @fetch(from: "@commerceFacade.getCatalog(#catalogId, #siteId)")
+  catalogByAlias(catalogAlias: String, siteId: String!): Catalog @fetch(from: "@commerceFacade.getCatalogByAlias(#catalogAlias, #siteId)")
+
+  category(categoryId: String!, siteId: String!): Category @fetch(from: "@commerceFacade.getCategory(#categoryId, #siteId)")
+  categoryBySeoSegment(seoSegment: String!, siteId: String!): Category @fetch(from: "@commerceFacade.findCategoryBySeoSegment(#seoSegment, #siteId)")
+
+  product(externalId: String!, siteId: String!): Product @fetch(from: "@commerceFacade.getProduct(#externalId, #siteId)")
+  productByTechId(techId: String!, siteId: String!): Product @fetch(from: "@commerceFacade.getProductByTechId(#techId, #siteId)")
+  productBySeoSegment(seoSegment: String!, siteId: String!): Product @fetch(from: "@commerceFacade.findProductBySeoSegment(#seoSegment, #siteId)")
+
+  productVariant(externalId: String!, siteId: String!): ProductVariant  @fetch(from: "@commerceFacade.getProductVariant(#externalId, #siteId)")
+}
+
+extend type ContentRoot {
+  productList(id: String!): CMProductList @fetch(from: "#this.getContent(#id, 'CMProductList')")
+}
+
+interface CommerceBean {
+  externalId: String
+  externalTechId: String
+  locale: String
+}
+
+interface Catalog @inherit(from: ["CommerceBean"]) {
+  name: String
+  rootCategory: Category
+  isDefaultCatalog: Boolean
+  isMasterCatalog: Boolean
+}
+
+interface Category @inherit(from: ["CommerceBean"]) {
+  name: String
+  shortDescription: String
+  longDescription: String
+  catalogPicture: CatalogPicture
+  products: [Product]!
+  parent: [Category]
+  children: [Category]!
+  breadcrumb: [Category]!
+  picture: CMPicture
+  pictures: [CMPicture]!
+  visuals: [CMVisual]!
+  downloads: [CMDownload]!
+  productList: CMProductList
+}
+
+interface Product @inherit(from: ["CommerceBean"]) {
+  name: String
+  title: String
+  currency: String
+  shortDescription: String
+  longDescription: String
+  metaDescription: String
+  metaKeywords: String
+
+  listPrice: BigDecimal
+  offerPrice: BigDecimal
+
+  seoSegment: String
+
+  category: Category
+  variants: [ProductVariant]!
+
+  defaultImageAlt: String
+  defaultImageUrl: String
+  thumbnailUrl: String
+  storefrontUrl: String
+
+  definingAttributes: [ProductAttribute]!
+  describingAttributes: [ProductAttribute]!
+
+  variantAxisNames: [String]!
+  variantAxisValues(axisName: String!): [String]!
+
+  totalStockCount: Float!
+  isAvailable: Boolean!
+  isVariant: Boolean!
+
+  picture: CMPicture
+  pictures: [CMPicture]!
+  catalogPicture: CatalogPicture
+  visuals: [CMVisual]!
+  downloads: [CMDownload]!
+}
+
+interface ProductVariant @inherit(from: ["Product"]) {
+  parent: Product
+  attributeValue(attributeId: String!): String
+}
+
+type CommerceBeanImpl implements CommerceBean {
+  externalId: String @fetch(from: "@commerceFacade.getExternalId(#this)")
+  externalTechId: String
+  locale: String
+}
+
+type CatalogImpl implements Catalog @inherit(from: ["CommerceBeanImpl"]) {
+  name: String
+  rootCategory: Category
+  isDefaultCatalog: Boolean
+  isMasterCatalog: Boolean
+}
+
+type CategoryImpl implements Category @inherit(from: ["CommerceBeanImpl"]) {
+  name: String
+  shortDescription: String
+  longDescription: String
+  catalogPicture: CatalogPicture
+  products: [Product]!
+  parent: [Category]
+  children: [Category]!
+  breadcrumb: [Category]!
+  picture: CMPicture
+  pictures: [CMPicture]!
+  visuals: [CMVisual]!
+  downloads: [CMDownload]!
+  productList: CMProductList
+}
+
+extend interface Banner {}
+extend interface CollectionItem {}
+
+type ProductImpl implements Product, Banner, CollectionItem @inherit(from: ["CommerceBeanImpl"]) {
+  name: String
+  title: String
+  currency: String
+  shortDescription: String
+  longDescription: String
+  metaDescription: String
+  metaKeywords: String
+
+  listPrice: BigDecimal
+  offerPrice: BigDecimal
+
+  seoSegment: String
+
+  category: Category
+  variants: [ProductVariant]!
+
+  defaultImageAlt: String
+  defaultImageUrl: String
+  thumbnailUrl: String
+  storefrontUrl: String
+
+  definingAttributes: [ProductAttribute]!
+  describingAttributes: [ProductAttribute]!
+
+  variantAxisNames: [String]!
+  variantAxisValues(axisName: String!): [String]!
+
+  totalStockCount: Float!
+  isAvailable: Boolean!
+  isVariant: Boolean!
+
+  picture: CMPicture
+  pictures: [CMPicture]!
+  catalogPicture: CatalogPicture!
+  visuals: [CMVisual]!
+  downloads: [CMDownload]!
+  teaserTitle: String @fetch(from: "name?:title")
+  teaserText(view: String): String @fetch(from: "shortDescription")
+  media: [CMMedia] @fetch(from: "visuals")
+  _emptyInterfaceMarker: String @fetch(from:  "'emptyInterfaceMarker'")
+}
+
+type ProductVariantImpl implements ProductVariant @inherit(from: ["ProductImpl"]) {
+  parent: Product
+  attributeValue(attributeId: String!): String
+}
+
+type ProductAttribute {
+  id: String
+  displayName: String
+  type: String
+  unit: String
+  description: String
+  externalId: String
+  value: String
+  values: [String]!
+  isDefining: Boolean!
+}
+
+type CatalogPicture {
+  url: String
+  picture: CMPicture
+}
+
+extend interface CMProductList  {
+  category: Category
+  productItems: [Product]
+}
+
+extend type CMProductListImpl {
+  category: Category @fetch(from: "@commerceFacade.getCategory(#this.externalId, @sitesService.getContentSiteAspect(#this).site?.id)")
+  productItems: [Product] @fetch(from: "@productListAdapter.to(#root).getProducts()")
+}
+
+extend interface CMExternalChannel {
+  category: Category
+}
+
+extend type CMExternalChannelImpl {
+  category: Category @fetch(from: "@commerceFacade.getCategory(#this.externalId, @sitesService.getContentSiteAspect(#this).site?.id)")
+}
+
+extend interface CMProductTeaser {
+  product: Product
+}
+
+extend type CMProductTeaserImpl {
+  product: Product @fetch(from: "@commerceFacade.getProduct(#this.externalId, @sitesService.getContentSiteAspect(#this).site?.id)")
+  teaserTitle: String @fetch(from: "teaserTitle?:@commerceFacade.getProduct(#this.externalId, @sitesService.getContentSiteAspect(#this).site?.id)?.name")
+}
+
+extend interface CMExternalProduct {
+  product: Product
+}
+
+extend type CMExternalProductImpl {
+  product: Product @fetch(from: "@commerceFacade.getProduct(#this.externalId, @sitesService.getContentSiteAspect(#this).site?.id)")
+}

@@ -54,7 +54,7 @@ public class AssetCollectionViewExtension extends RepositoryCollectionViewExtens
     return false;
   }
 
-  override public function getEnabledSearchFilterIds():Array {
+  override public function getEnabledSearchFilterIds(model:Object):Array {
     return [
       StatusFilterPanel.FILTER_ID,
       LastEditedFilterPanel.FILTER_ID,

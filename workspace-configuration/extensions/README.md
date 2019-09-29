@@ -35,7 +35,7 @@ The output indicates inactive extensions by a hash prefix ("#").
 
 ## Verifying Extension Consistency
 
-In a clean git repository state, run 
+In a clean Git repository state, run 
 ```
 mvn extensions:sync
 ```
@@ -47,8 +47,8 @@ There should be no changed files afterwards.
 mvn extensions:sync -Ddisable=<extension1>,<extension2>,...
 ```
 
-Moves all (aggregator) modules belonging to the listed extensions into a profile "inactive-extensions" and
-removes their dependencies from the corresponding extension points.
+Disables the listed extensions by removing all their (aggregator) modules from their aggregator POM
+and removing their dependencies from the corresponding extension points. No files are deleted.
 
 ## Removing Extensions
 
@@ -56,11 +56,14 @@ removes their dependencies from the corresponding extension points.
 mvn extensions:sync -Dremove=<extension1>,<extension2>,...
 ```
 
-Moves all (aggregator) modules belonging to the listed extensions into a profile "inactive-extensions" and
-removes their dependencies from the corresponding extension points.
+Removes the listed extensions by removing all their (aggregator) modules from their aggregator POM
+and removing their dependencies from the corresponding extension points, and deletes all their source
+files.
 
-You could add `-Dprune` to remove even all source code of the listed extensions, but this is discouraged because
-deleting files leads to merge conflicts when updating to a new Blueprint git state.
+After removing an extension, it cannot be enabled again (only by restoring a previous state via Git).
+
+Even if you want to get rid of an extension for good, using this command is discouraged because
+deleting files leads to merge conflicts when updating to a new Blueprint Git state.
 
 ## Enabling Extensions
 
@@ -68,11 +71,16 @@ deleting files leads to merge conflicts when updating to a new Blueprint git sta
 mvn extensions:sync -Denable=<extension1>,<extension2>,...
 ```
 
-Moves all (aggregator) modules belonging to the listed extensions from the profile "inactive-extensions" to the
-normal sub-modules and adds their dependencies to the corresponding extension points.
+Enables the listed extensions by adding all their (aggregator) modules to their aggregator POM
+and adding their dependencies to the corresponding extension points.
 
-Note that this only works for disabled extensions, not for extensions that are not even part of the Maven Reactor
-when the profile "inactive-extensions" is switched on. To add extensions to the aggregator, see "Adding Projects".
+Note that this only works for disabled extensions, not for extensions that have been removed.
+
+You can even enable "new" extensions, given they are placed at the specified locations. Each workspace
+has a folder `modules/extensions` with subfolders that are named like the extension they contribute to.
+You can also place a "centralized" extension below the top-level `modules/extensions` folder.
+For details, see the help text of goal `sync`, especially its option `enable`, and the Blueprint
+Developer Manual, section "Implementing a Custom Extension".
 
 ## Managing a Set of Extensions
 
@@ -82,16 +90,5 @@ mvn extensions:sync -DextensionsFile=<extensionsFilePathAndName>
 
 Emulating the "task input file" of the previous extensions tool, this option allows to specify a file containing
 the set of extensions to enable (or disable). All other extensions that are present in the workspace, but not
-mentioned in the `extensionsFile`, are removed (or even pruned, see "Removing Extensions").
-
-## Adding Projects
-
-```
-mvn extensions:sync -DaddProjects=<project-path1>,<project-path2>,...
-```
-
-The Maven projects at the given directory paths are added to their respective aggregator (which already must
-exist!) before synchronizing extension state. This is useful to add and enable new extensions that are not yet
-part of the Maven Reactor (see "Enabling Extensions").
-
-Even new extension points can be added and used immediately by new extensions.
+mentioned in the `extensionsFile`, are disabled or even removed, when the flag `-Dprune` is added to the
+command (see "Removing Extensions").

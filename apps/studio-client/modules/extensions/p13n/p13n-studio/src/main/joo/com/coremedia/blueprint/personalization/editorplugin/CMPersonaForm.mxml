@@ -52,7 +52,8 @@ HOW TO STRUCTURE:
 
   <local:items>
     <editor:DocumentForm
-            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_standard_title')}">
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_standard_title')}"
+            itemId="contentTab">
       <editor:items>
         <perso:PersonaMainContainer profileSettingsExpression="{config.bindTo.extendBy('properties.profileSettings')}">
           <perso:items>

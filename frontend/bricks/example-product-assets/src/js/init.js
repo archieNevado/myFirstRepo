@@ -83,7 +83,7 @@ addNodeDecoratorByData(
     });
 
     // do not use zoom plugin on touch devices
-    if (!getLastDevice().isTouch || getLastDevice().type === "desktop") {
+    if ($slideshow.length > 0 && (!getLastDevice().isTouch || getLastDevice().type === "desktop")) {
       instance.zoom = new Zoom($slideshow[0], zoom);
 
       instance.updateZoomImage = () => {
@@ -172,7 +172,10 @@ addNodeDecoratorByData(
     $slideshow.on("init", finishProductAssetsInitialization);
   },
   function($target, {}, instance) {
-    instance.zoom.destroy();
-    $target.off("afterChange", instance.updateZoomImage());
+    instance.zoom && instance.zoom.destroy();
+    if (instance.updateZoomImage) {
+      $target.off("afterChange", instance.updateZoomImage);
+      instance.updateZoomImage = null;
+    }
   }
 );

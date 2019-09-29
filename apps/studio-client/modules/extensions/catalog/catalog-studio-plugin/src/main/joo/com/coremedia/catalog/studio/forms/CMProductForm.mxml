@@ -23,7 +23,8 @@
 
   <editor:items>
     <editor:DocumentForm
-            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}"
+            itemId="contentTab">
       <editor:items>
         <editor:PropertyFieldGroup
                 title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Details_label')}"
@@ -89,7 +90,8 @@
       </editor:items>
     </editor:DocumentForm>
     <editor:DocumentForm
-            title="{resourceManager.getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'Tab_catalog_structure_title')}">
+            title="{resourceManager.getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'Tab_catalog_structure_title')}"
+            itemId="structureTab">
       <editor:items>
         <editor:PropertyFieldGroup itemId="contextsPropertyField"
                                    title="{resourceManager.getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'CMProduct_parentChannel_text')}">

@@ -8,12 +8,10 @@
 
   // load more button
   &__more {
-    border: none;
     display: block;
-    margin: 0 auto;
+    margin: 48px auto 0 auto;
     cursor: pointer;
-    // TODO: avoid @extend
-    @extend .cm-button--secondary;
+    @extend .cm-cta-button;
   }
 
   // load more spinner

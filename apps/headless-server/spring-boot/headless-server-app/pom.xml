@@ -43,6 +43,13 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>headless-server-extension-dependencies</artifactId>
+      <version>${blueprint.version}</version>
+      <type>pom</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
       <artifactId>json-preview-client</artifactId>
       <version>${blueprint.version}</version>
       <scope>provided</scope>

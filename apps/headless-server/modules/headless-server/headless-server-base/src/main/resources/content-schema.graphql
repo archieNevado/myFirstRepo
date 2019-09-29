@@ -7,7 +7,7 @@ directive @fetch(
 ) on FIELD_DEFINITION
 
 directive @inherit(
-  from: String
+  from: [String!]!
 ) on OBJECT | INTERFACE
 
 #Built-in map of scalar type
@@ -61,31 +61,34 @@ interface Content_ {
   type: String!
 }
 
-interface CMArticle @inherit(from: "CMTeasable") {
+interface CMArticle @inherit(from: ["CMTeasable"]) {
 }
 
-interface CMChannel @inherit(from: "CMNavigation") {
+interface CMChannel @inherit(from: ["CMNavigation"]) {
   header: [CMLinkable]
   footer: [CMLinkable]
 }
 
-interface CMCollection @inherit(from: "CMTeasable") {
-  items: [CMTeasable]
+interface CMCollection @inherit(from: ["CMTeasable"]) {
+  items: [CollectionItem]
+  teasableItems: [CMTeasable]
+  bannerItems: [Banner]
+  detailItems: [Detail]
 }
 
-interface CMDownload @inherit(from: "CMTeasable") {
+interface CMDownload @inherit(from: ["CMTeasable"]) {
   data: Blob
   filename: String
 }
 
-interface CMDynamicList @inherit(from: "CMCollection") {
+interface CMDynamicList @inherit(from: ["CMCollection"]) {
 }
 
-interface CMImage @inherit(from: "CMLocalized") {
+interface CMImage @inherit(from: ["CMLocalized"]) {
   data: Blob
 }
 
-interface CMImageMap @inherit(from: "CMTeaser") {
+interface CMImageMap @inherit(from: ["CMTeaser"]) {
   displayPicture: Boolean
   displayShortText: Boolean
   displayTitle: Boolean
@@ -93,7 +96,7 @@ interface CMImageMap @inherit(from: "CMTeaser") {
   transformedHotZones: [TransformedHotZone]
 }
 
-interface CMLinkable @inherit(from: "CMLocalized") {
+interface CMLinkable @inherit(from: ["CMLocalized"]) {
   link: Link
   navigationPath: [CMLinkable]
   segment: String
@@ -103,89 +106,82 @@ interface CMLinkable @inherit(from: "CMLocalized") {
   viewtype: String
 }
 
-interface CMLocalized @inherit(from: "CMObject") {
+interface CMLocalized @inherit(from: ["CMObject"]) {
   ignoreUpdates: Int
   languageId: String
 }
 
-interface CMMedia @inherit(from: "CMTeasable") {
+interface CMMedia @inherit(from: ["CMTeasable"]) {
   alt: String
   caption(view: String): String
   copyright: String
   data: Blob
 }
 
-interface CMNavigation @inherit(from: "CMTeasable") {
+interface CMNavigation @inherit(from: ["CMTeasable"]) {
   children: [CMLinkable]
   grid: PageGrid
   hidden: Boolean
   hiddenInSitemap: Boolean
 }
 
-interface CMObject @inherit(from: "Content_") {
+interface CMObject @inherit(from: ["Content_"]) {
 }
 
-interface CMPicture @inherit(from: "CMVisual") {
+interface CMPicture @inherit(from: ["CMVisual"]) {
   base64Images(cropNames: [String!]): [Base64Image]!
   crops: [Crop!]!
   uriTemplate: String
 }
 
-interface CMProduct @inherit(from: "CMTeasable") {
+interface CMProduct @inherit(from: ["CMTeasable"]) {
   downloads: [CMDownload]
   price: Float
   productCode: String
   productName: String
 }
 
-interface CMQueryList @inherit(from: "CMDynamicList") {
+interface CMQueryList @inherit(from: ["CMDynamicList"]) {
   pagedItems(offset: Int): [CMTeasable]
 }
 
-interface CMResourceBundle @inherit(from: "CMLocalized") {
+interface CMResourceBundle @inherit(from: ["CMLocalized"]) {
   localizations: MapOfString
 }
 
-interface CMSite @inherit(from: "CMLocalized") {
+interface CMSite @inherit(from: ["CMLocalized"]) {
   id: String
   root: CMNavigation
 }
 
-interface CMTeasable @inherit(from: "CMLinkable") {
+interface CMTeasable @inherit(from: ["CMLinkable", "Detail", "Banner"]) {
   authors: [CMTeasable]
   context: CMNavigation
-  detailText(view: String): String
-  detailTextAsTree(view: String): RichTextTree
-  media: [CMMedia]
-  picture: CMPicture
-  pictures: [CMPicture]
   related: [CMTeasable]
   teaserOverlaySettings: TeaserOverlaySettings
   teaserTarget: CMLinkable
   teaserTargets: [ExtendedTeaserTarget]
-  teaserText(view: String): String
-  teaserTitle: String
   video: CMVideo
   videos: [CMVideo]
 }
 
-interface CMTeaser @inherit(from: "CMTeasable") {
+interface CMTeaser @inherit(from: ["CMTeasable"]) {
 }
 
-interface CMVideo @inherit(from: "CMVisual") {
+interface CMVideo @inherit(from: ["CMVisual"]) {
   timeLine: TimeLine
 }
 
-interface CMVisual @inherit(from: "CMMedia") {
+interface CMVisual @inherit(from: ["CMMedia"]) {
   dataUrl: String
   height: Int
   width: Int
 }
 
-type CMArticleImpl implements CMArticle @inherit(from: "CMTeasableImpl") {
+type CMArticleImpl implements CMArticle @inherit(from: ["CMTeasableImpl"]) {
 }
 
-type CMChannelImpl implements CMChannel @inherit(from: "CMNavigationImpl") {
+type CMChannelImpl implements CMChannel @inherit(from: ["CMNavigationImpl"]) {
   header: [CMLinkable]
   footer: [CMLinkable]
 
@@ -196,25 +192,32 @@ type CMChannelImpl implements CMChannel @inherit(from: "CMNavigationImpl") {
   videos: [CMVideo] @fetch(from: "@channelMediaLinkListAdapter.to(#this, 'CMVideo').list()")
 }
 
-type CMCollectionImpl implements CMCollection @inherit(from: "CMTeasableImpl") {
-  items: [CMTeasable]
+type CMCollectionImpl implements CMCollection @inherit(from: ["CMTeasableImpl"]) {
+  items: [CollectionItem]
   teaserTargets: [ExtendedTeaserTarget] @fetch(from: "{{target: #root, callToActionEnabled: !@settingsAdapter.to(#root).get('callToActionDisabled', false), callToActionCustomText: @settingsAdapter.to(#root).get('callToActionCustomText', '')}}")
+  teasableItems: [CMTeasable] @fetch(from: "#this.items")
+  bannerItems: [Banner] @fetch(from: "#this.items")
+  detailItems: [Detail] @fetch(from: "#this.items")
 }
 
-type CMDownloadImpl implements CMDownload @inherit(from: "CMTeasableImpl") {
+type CMSpinnerImpl implements CMSpinner @inherit(from: ["CMVisualImpl"]) {
+  sequence: [CMPicture]
+}
+
+type CMDownloadImpl implements CMDownload @inherit(from: ["CMTeasableImpl"]) {
   data: Blob @fetch(from: "@contentBlobAdapter.to(#root, 'data')")
   filename: String
 }
 
-type CMDynamicListImpl implements CMDynamicList @inherit(from: "CMCollectionImpl") {
+type CMDynamicListImpl implements CMDynamicList @inherit(from: ["CMCollectionImpl"]) {
 }
 
-type CMImageImpl implements CMImage @inherit(from: "CMLocalizedImpl") {
+type CMImageImpl implements CMImage @inherit(from: ["CMLocalizedImpl"]) {
   data: Blob @fetch(from: "@contentBlobAdapter.to(#root, 'data')")
   description: String
 }
 
-type CMImageMapImpl implements CMImageMap @inherit(from: "CMTeaserImpl") {
+type CMImageMapImpl implements CMImageMap @inherit(from: ["CMTeaserImpl"]) {
   detailText(view: String): String @fetch(from: "detailText.view(#view?:'default')")
   displayPicture: Boolean @fetch(from: "localSettings?.overlay?.get('displayPicture')")
   displayShortText: Boolean @fetch(from: "localSettings?.overlay?.get('displayShortText')")
@@ -224,7 +227,7 @@ type CMImageMapImpl implements CMImageMap @inherit(from: "CMTeaserImpl") {
   transformedHotZones: [TransformedHotZone] @fetch(from: "@hotZonesAdapter.to(#root).transformedHotZones.?[linkedContent != null]")
 }
 
-type CMLinkableImpl implements CMLinkable @inherit(from: "CMLocalizedImpl") {
+type CMLinkableImpl implements CMLinkable @inherit(from: ["CMLocalizedImpl"]) {
   context: CMNavigation @fetch(from: "@navigationAdapter.to(#root).context")
   extDisplayedDate: String
   link: Link @fetch(from: "@graphQlLinkComposer.apply(#root)")
@@ -236,12 +239,12 @@ type CMLinkableImpl implements CMLinkable @inherit(from: "CMLocalizedImpl") {
   viewtype: String @fetch(from: "getLink('viewtype')?.layout")
 }
 
-type CMLocalizedImpl implements CMLocalized @inherit(from: "CMObjectImpl") {
+type CMLocalizedImpl implements CMLocalized @inherit(from: ["CMObjectImpl"]) {
   ignoreUpdates: Int
   languageId: String
 }
 
-type CMMediaImpl implements CMMedia @inherit(from: "CMTeasableImpl") {
+type CMMediaImpl implements CMMedia @inherit(from: ["CMTeasableImpl"]) {
   alt: String
   authors: [CMTeasable]
   caption(view: String): String
@@ -250,17 +253,17 @@ type CMMediaImpl implements CMMedia @inherit(from: "CMTeasableImpl") {
   data: Blob @fetch(from: "@contentBlobAdapter.to(#root, 'data')")
 }
 
-type CMNavigationImpl implements CMNavigation @inherit(from: "CMTeasableImpl") {
+type CMNavigationImpl implements CMNavigation @inherit(from: ["CMTeasableImpl"]) {
   children: [CMLinkable] @fetch(from: "@navigationAdapter.to(#root).children")
   grid: PageGrid @fetch(from: "@pageGridAdapter.to(#root,'placement')")
   hidden: Boolean
   hiddenInSitemap: Boolean
 }
 
-type CMObjectImpl implements CMObject @inherit(from: "Content_Impl") {
+type CMObjectImpl implements CMObject @inherit(from: ["Content_Impl"]) {
 }
 
-type CMPictureImpl implements CMPicture @inherit(from: "CMVisualImpl") {
+type CMPictureImpl implements CMPicture @inherit(from: ["CMVisualImpl"]) {
   base64Images(cropNames: [String!]): [Base64Image]!  @fetch(from: "@responsiveMediaAdapter.to(#root, 'data').base64Images(#cropNames)")
   caption(view: String): String
   crops: [Crop!]!  @fetch(from:"@responsiveMediaAdapter.to(#root, 'data').crops" )
@@ -269,32 +272,36 @@ type CMPictureImpl implements CMPicture @inherit(from: "CMVisualImpl") {
   uriTemplate: String! @fetch(from: "@uriLinkComposer.apply(@responsiveMediaAdapter.to(#root, 'data'))")
 }
 
-type CMProductImpl implements CMProduct @inherit(from: "CMTeasableImpl") {
+type CMProductImpl implements CMProduct @inherit(from: ["CMTeasableImpl"]) {
+  authors: [CMTeasable]
   downloads: [CMDownload]
   price: Float @fetch(from: "localSettings?.price")
   productCode: String
   productName: String
 }
 
-type CMQueryListImpl implements CMQueryList @inherit(from: "CMDynamicListImpl") {
-  items: [CMTeasable] @fetch(from: "@queryListAdapter.to(#root).get(null)")
-  pagedItems(offset: Int): [CMTeasable] @fetch(from: "@queryListAdapter.to(#root).get(#offset)")
+type CMQueryListImpl implements CMQueryList @inherit(from: ["CMDynamicListImpl"]) {
+  items: [CollectionItem] @fetch(from: "@queryListAdapter.to(#root, null).getItems()")
+  pagedItems(offset: Int): [CMTeasable] @fetch(from: "@queryListAdapter.to(#root, #offset).getItems()")
+  teasableItems: [CMTeasable] @fetch(from: "@queryListAdapter.to(#root, null).getItems()")
+  bannerItems: [Banner]  @fetch(from: "@queryListAdapter.to(#root, null).getItems()")
+  detailItems: [Detail]  @fetch(from: "@queryListAdapter.to(#root, null).getItems()")
 }
 
-type CMResourceBundleImpl implements CMResourceBundle @inherit(from: "CMLocalizedImpl") {
+type CMResourceBundleImpl implements CMResourceBundle @inherit(from: ["CMLocalizedImpl"]) {
   localizations: MapOfString
 }
 
-type CMSiteImpl implements CMSite @inherit(from: "CMLocalizedImpl") {
+type CMSiteImpl implements CMSite @inherit(from: ["CMLocalizedImpl"]) {
   id: String
   root: CMNavigation
 }
 
-type CMTeasableImpl implements CMTeasable @inherit(from: "CMLinkableImpl") {
+type CMTeasableImpl implements CMTeasable, Detail, Banner, CollectionItem @inherit(from: ["CMLinkableImpl"]) {
   authors: [CMTeasable]
   context: CMNavigation
-  detailText(view: String): String @fetch(from: "detailText.view(#view?:'default')")
-  detailTextAsTree(view: String): RichTextTree @fetch(from: "detailText.view(#view?:'default')")
+  detailText(view: String): String @fetch(from: "detailText?.view(#view?:'default')")
+  detailTextAsTree(view: String): RichTextTree @fetch(from: "detailText?.view(#view?:'default')")
   related: [CMTeasable]
   teaserOverlaySettings: TeaserOverlaySettings @fetch(from: "localSettings?.teaserOverlay?:{enabled: false}")
   teaserTarget: CMLinkable @fetch(from: "#root")
@@ -309,9 +316,10 @@ type CMTeasableImpl implements CMTeasable @inherit(from: "CMLinkableImpl") {
 
   video: CMVideo @fetch(from: "@mediaLinkListAdapter.to(#root, 'CMVideo').first()")
   videos: [CMVideo] @fetch(from: "@mediaLinkListAdapter.to(#root, 'CMVideo').list()")
+  _emptyInterfaceMarker: String @fetch(from:  "'emptyInterfaceMarker'")
 }
 
-type CMTeaserImpl implements CMTeaser @inherit(from: "CMTeasableImpl") {
+type CMTeaserImpl implements CMTeaser @inherit(from: ["CMTeasableImpl"]) {
   target: CMLinkable @fetch(from: "#first(targets?.links?:target)")
   teaserTarget: CMLinkable @fetch(from: "@teaserTargetsAdapter.to(#root).target")
   teaserTargets: [ExtendedTeaserTarget]  @fetch(from: "@teaserTargetsAdapter.to(#root).extendedTargets")
@@ -325,13 +333,13 @@ type CMTeaserImpl implements CMTeaser @inherit(from: "CMTeasableImpl") {
   videos: [CMVideo] @fetch(from: "@teaserMediaLinkListAdapter.to(#root, 'CMVideo').list()")
 }
 
-type CMVideoImpl implements CMVideo @inherit(from: "CMVisualImpl") {
+type CMVideoImpl implements CMVideo @inherit(from: ["CMVisualImpl"]) {
   timeLine: TimeLine @fetch(from: "getLink('viewtype')?.layout == 'shoppable'? timeLine : null")
   video: CMVideo @fetch(from: "#root")
   videos: [CMVideo] @fetch(from: "{#root}")
 }
 
-type CMVisualImpl implements CMVisual @inherit(from: "CMMediaImpl") {
+type CMVisualImpl implements CMVisual @inherit(from: ["CMMediaImpl"]) {
   dataUrl: String
   height: Int
   width: Int
@@ -448,47 +456,74 @@ type Base64Image {
   base64: String
 }
 
-interface CMExternalPage  @inherit(from: "CMChannel") {
+interface CMProductList @inherit(from: ["CMQueryList"]) {
+  externalId: String
+}
+
+interface CMExternalPage  @inherit(from: ["CMChannel"]) {
   externalUriPath: String
   externalId: String
 }
 
-interface CMAbstractCategory @inherit(from: "CMChannel") {
+interface CMAbstractCategory @inherit(from: ["CMChannel"]) {
   externalId: String
   #pdpPagegrid
 }
 
-interface CMExternalChannel @inherit(from: "CMAbstractCategory") {
+interface CMExternalChannel @inherit(from: ["CMAbstractCategory"]) {
 }
 
-interface CMProductTeaser @inherit(from: "CMTeasable") {
+interface CMProductTeaser @inherit(from: ["CMTeasable"]) {
   externalId: String
 }
 
-interface CMExternalProduct @inherit(from: "CMTeasable") {
+interface CMExternalProduct @inherit(from: ["CMTeasable"]) {
   #pdpPagegrid
   externalId: String
 }
+interface Detail {
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+}
 
-type CMExternalPageImpl implements CMExternalPage @inherit(from: "CMChannelImpl") {
+interface CollectionItem {
+  _emptyInterfaceMarker: String
+}
+
+interface Banner {
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+}
+
+type CMProductListImpl implements CMProductList @inherit(from: ["CMQueryListImpl"]) {
+  externalId: String
+  items: [CollectionItem] @fetch(from: "@productListAdapter.to(#root).getItems()")
+  teasableItems: [CMTeasable] @fetch(from: "@productListAdapter.to(#root).getFixedItems()")
+  bannerItems: [Banner]  @fetch(from: "@productListAdapter.to(#root).getItems()")
+}
+
+type CMExternalPageImpl implements CMExternalPage @inherit(from: ["CMChannelImpl"]) {
   externalUriPath: String
   externalId: String
 }
 
-type CMProductTeaserImpl implements CMProductTeaser @inherit(from: "CMTeasableImpl") {
+type CMProductTeaserImpl implements CMProductTeaser @inherit(from: ["CMTeasableImpl"]) {
   externalId: String
 }
 
-type CMExternalProductImpl implements CMExternalProduct @inherit(from: "CMTeasableImpl") {
+type CMExternalProductImpl implements CMExternalProduct @inherit(from: ["CMTeasableImpl"]) {
   externalId: String
 }
 
-type CMAbstractCategoryImpl implements CMAbstractCategory @inherit(from: "CMChannelImpl") {
+type CMAbstractCategoryImpl implements CMAbstractCategory @inherit(from: ["CMChannelImpl"]) {
   externalId: String
   #pdpPagegrid
 }
 
-type CMExternalChannelImpl implements CMExternalChannel @inherit(from: "CMAbstractCategoryImpl") {
+type CMExternalChannelImpl implements CMExternalChannel @inherit(from: ["CMAbstractCategoryImpl"]) {
   externalId: String
 }
 

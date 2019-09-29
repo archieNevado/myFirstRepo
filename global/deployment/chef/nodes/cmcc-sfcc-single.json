@@ -3,7 +3,7 @@
     "hostname": "CMS_HOST",
     "loopback_hostname": "localhost",
     "maven_repository_url": "file://localhost/tmp/maven-repo",
-    "apps":{
+    "apps": {
       "content-management-server": {
         "application.properties": {
           "cap.server.license": "properties/corem/license.zip"
@@ -13,23 +13,21 @@
         "application.properties": {
           "cap.server.license": "properties/corem/license.zip"
         }
+      },
+      "commerce-adapter-sfcc": {
+        "application.properties": {
+          "sfcc.ocapi.host": "SFCC_HOST",
+          "sfcc.ocapi.sandbox": "true",
+          "sfcc.oauth.clientId": "SFCC_CLIENT_ID",
+          "sfcc.oauth.clientPassword": "SFCC_CLIENT_PASSWORD",
+          "sfcc.link.storefront-host": "SFCC_LINK_STOREFRONT_HOST",
+          "link.storefront-url": "LINK_STOREFRONT_URL"
+        }
       }
     },
     "sfcc": {
       "enabled": true,
-      "host": "SFCC_HOST",
-      "application.properties": {
-        "livecontext.sfcc.host": "SFCC_HOST",
-        "livecontext.sfcc.vendorVersion": "17.8",
-        "livecontext.sfcc.ocapi.protocol": "https",
-        "livecontext.sfcc.ocapi.version": "v17_8",
-        "livecontext.sfcc.ocapi.trustSelfSignedCerts": false,
-        "livecontext.sfcc.ocapi.dataBasePath": "/s/-/dw/data/",
-        "livecontext.sfcc.ocapi.metaBasePath": "/s/-/dw/meta/",
-        "livecontext.sfcc.ocapi.shopBasePath": "/s/{storeId}/dw/shop/",
-        "livecontext.sfcc.oauth.clientId": "SFCC_CLIENT_ID",
-        "livecontext.sfcc.oauth.clientPassword": "SFCC_CLIENT_PASSWORD"
-      }
+      "host": "SFCC_HOST"
     },
     "dev": {
       "content": {

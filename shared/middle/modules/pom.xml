@@ -17,6 +17,7 @@
   <modules>
     <module>cae</module>
     <module>ecommerce</module>
+    <module>extension-config</module>
     <module>extensions</module>
     <module>shared</module>
   </modules>

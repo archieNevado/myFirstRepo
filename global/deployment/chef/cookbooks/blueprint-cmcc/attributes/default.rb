@@ -99,7 +99,6 @@ default['blueprint']['proxy']['virtual_host']['preview']['server_aliases']['ibm-
 default['blueprint']['sap-hybris']['host'] = 'hybrishost'
 #<> Set to true to activate the SAP Hybris Commerce integration
 default['blueprint']['sap-hybris']['enabled'] = false
-default['blueprint']['sap-hybris']['application.properties']['livecontext.hybris.host'] = node['blueprint']['sap-hybris']['host']
 default['blueprint']['sap-hybris']['application.properties']['livecontext.cookie.domain'] = ".#{node['fqdn']}"
 
 default['blueprint']['sap-hybris']['virtual_host']['delivery']['cluster']['default']['host'] = 'localhost'

@@ -65,6 +65,9 @@ class ImaggaFeedbackHubAdapter implements BlobKeywordsFeedbackHubAdapter {
   private static final String EN_DEFAULT_LANGUAGE = "en";
   private static final String STATUS_KEY = "status";
   private static final String TEXT_KEY = "text";
+  private static final String BOUNDARY = "ImageUpload";
+  private static final String PNG = "png";
+  private static final String JPG = "jpg";
 
   private final Cache cache;
   private final String url;
@@ -100,7 +103,11 @@ class ImaggaFeedbackHubAdapter implements BlobKeywordsFeedbackHubAdapter {
   @Override
   @NonNull
   public CompletionStage<List<Keyword>> getKeywords(Blob blob, @Nullable Locale locale) {
-    return upload(blob).thenCompose(uploadId -> tags(uploadId, locale, blob));
+    try {
+      return upload(blob).thenCompose(uploadId -> tags(uploadId, locale, blob));
+    } catch (FeedbackHubException e) {
+      return CompletableFuture.failedFuture(e);
+    }
   }
 
   @Override
@@ -123,7 +130,7 @@ class ImaggaFeedbackHubAdapter implements BlobKeywordsFeedbackHubAdapter {
     HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(url + UPLOAD_URI))
             .header("Authorization", "Basic " + basicAuthKey)
-            .header("Content-Type", "multipart/form-data;boundary=Image Upload")
+            .header("Content-Type", "multipart/form-data;boundary=" + BOUNDARY)
             .POST(HttpRequest.BodyPublishers.ofInputStream(getInputStreamSupplierForBlob(blob)))
             .build();
     return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
@@ -263,23 +270,42 @@ class ImaggaFeedbackHubAdapter implements BlobKeywordsFeedbackHubAdapter {
     }
   }
 
+  /**
+   * A multipart request should have the following structure:
+   *
+   ** Content-Type: multipart/form-data; boundary=ImageUpload
+   *
+   *
+   *+ --ImageUpload
+   ** Content-Disposition: form-data; name="image"
+   ** <…file content…>
+   *
+   *  ImageUpload--
+   */
   private Supplier<InputStream> getInputStreamSupplierForBlob(Blob blob) {
     String crlf = "\r\n";
     String twoHyphens = "--";
-    String boundary = "Image Upload";
 
-    String prefix = (twoHyphens + boundary + crlf);
+    String prefix = (twoHyphens + BOUNDARY + crlf);
     String blobName = blob.getETag();
     Optional<String> extension = blob.findExtension();
     if (extension.isPresent()) {
-      blobName = blobName + "." + extension.get();
+      String fileExtension = extension.get();
+      if(!fileExtension.equals(PNG) && !fileExtension.equals(JPG)){
+        throw new FeedbackHubException("Unsupported file format. Only .png and .jpg are allowed", ImaggaFeedbackHubErrorCode.NOT_SUPPORTED_FILE_TYPE, Collections.singletonList(fileExtension));
+      }
+      blobName = blobName + "." + extension;
     }
     String parameters = ("Content-Disposition: form-data; name=\"image\";filename=\"" + blobName + "\"" + crlf);
     String pictureContext = prefix + parameters + crlf;
 
     ByteArrayInputStream pictureContextStream = new ByteArrayInputStream(pictureContext.getBytes());
+    ByteArrayInputStream endingForMultiPartStream = new ByteArrayInputStream((crlf + crlf + BOUNDARY + twoHyphens).getBytes());
+
     SequenceInputStream sequenceInputStream = new SequenceInputStream(pictureContextStream, blob.getInputStream());
-    return () -> sequenceInputStream;
+    SequenceInputStream sequenceInputStreamWithEnding = new SequenceInputStream(sequenceInputStream, endingForMultiPartStream);
+
+    return () -> sequenceInputStreamWithEnding;
   }
 
   @Nullable
@@ -307,7 +333,7 @@ class ImaggaFeedbackHubAdapter implements BlobKeywordsFeedbackHubAdapter {
 
   // --- cache keys -------------------------------------------------
 
-  private class UploadIdCacheKey extends CacheKey<String> {
+  private static class UploadIdCacheKey extends CacheKey<String> {
     private final String eTag;
 
     // Include url and authKey in the cache key, otherwise you could not
@@ -351,7 +377,7 @@ class ImaggaFeedbackHubAdapter implements BlobKeywordsFeedbackHubAdapter {
     }
   }
 
-  private class TagsCacheKey extends CacheKey<List<Keyword>> {
+  private static class TagsCacheKey extends CacheKey<List<Keyword>> {
     private final String uploadId;
     private final Locale locale;
     private final int minAccuracy;

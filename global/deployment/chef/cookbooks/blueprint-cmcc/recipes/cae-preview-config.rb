@@ -29,15 +29,14 @@ if node['blueprint']['ibm-wcs']['enabled']
   node.default['blueprint']['apps']['cae-preview']['application.properties']['livecontext.crossdomain.whitelist'] = cors_hosts.join(',')
 
 # inject wcs configuration
-  node['blueprint']['ibm-wcs']['application.properties'].each_pair do |k, v|
-    node.default['blueprint']['apps']['cae-preview']['application.properties'][k] = v
+  if node['blueprint']['ibm-wcs']['application.properties']
+    node['blueprint']['ibm-wcs']['application.properties'].each_pair do |k, v|
+      node.default['blueprint']['apps']['cae-preview']['application.properties'][k] = v
+    end
   end
 end
 
 if node['blueprint']['sap-hybris']['enabled']
-  node.default['blueprint']['apps']['cae-preview']['application.properties']['livecontext.hybris.host'] = node['blueprint']['sap-hybris']['host']
-  node.default['blueprint']['apps']['cae-preview']['application.properties']['livecontext.apache.hybris.host'] = "shop-preview-hybris.#{node['blueprint']['hostname']}"
-  node.default['blueprint']['apps']['cae-preview']['application.properties']['livecontext.hybris.storeFrontUrl'] = "https://shop-preview-hybris.#{node['blueprint']['hostname']}/yacceleratorstorefront"
   node.default['blueprint']['apps']['cae-preview']['application.properties']['commerce.hub.data.customEntityParams.catalogVersion'] = 'Staged'
 
   cors_hosts << "https://#{node['blueprint']['sap-hybris']['virtual_host']['shop-preview']['server_name']}"
@@ -46,8 +45,10 @@ if node['blueprint']['sap-hybris']['enabled']
   end
 
   # inject wcs configuration
-  node['blueprint']['sap-hybris']['application.properties'].each_pair do |k, v|
-    node.default['blueprint']['apps']['cae-preview']['application.properties'][k] = v
+  if node['blueprint']['sap-hybris']['application.properties']
+    node['blueprint']['sap-hybris']['application.properties'].each_pair do |k, v|
+      node.default['blueprint']['apps']['cae-preview']['application.properties'][k] = v
+    end
   end
 end
 

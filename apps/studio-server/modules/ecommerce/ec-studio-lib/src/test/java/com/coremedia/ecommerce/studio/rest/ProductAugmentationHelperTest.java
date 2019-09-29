@@ -33,9 +33,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static com.coremedia.ecommerce.studio.rest.AugmentationHelperBase.DEFAULT_BASE_FOLDER_NAME;
+import static com.coremedia.ecommerce.studio.rest.AugmentationHelperBase.EXTERNAL_ID;
 import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.CATEGORY_PRODUCT_PAGEGRID_STRUCT_PROPERTY;
-import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.DEFAULT_BASE_FOLDER_NAME;
-import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.EXTERNAL_ID;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
@@ -49,7 +49,8 @@ import static org.mockito.Mockito.when;
 @TestPropertySource(properties = {"livecontext.cache.invalidation.enabled=false"})
 public class ProductAugmentationHelperTest {
 
-  private static final String PRODUCT_ID = "test:///catalog/product/prodId";
+  private static final String PRODUCT_EXTERNAL_ID = "prodId";
+  private static final String PRODUCT_ID = "test:///catalog/product/" + PRODUCT_EXTERNAL_ID;
   private static final String CATEGORY_ID = "test:///catalog/category/leafCategory";
   private static final String CATEGORY_DISPLAY_NAME = "leaf";
   private static final String PRODUCT_NAME = "productName";
@@ -111,6 +112,7 @@ public class ProductAugmentationHelperTest {
 
     when(product.getCategory()).thenReturn(leafCategory);
     when(product.getName()).thenReturn(PRODUCT_NAME);
+    when(product.getExternalId()).thenReturn(PRODUCT_EXTERNAL_ID);
     when(product.getId()).thenReturn(CommerceIdParserHelper.parseCommerceIdOrThrow(PRODUCT_ID));
   }
 
@@ -119,9 +121,9 @@ public class ProductAugmentationHelperTest {
     testling.augment(product);
 
     Content cmProduct = contentRepository.getChild("/Sites/Content Test/" + DEFAULT_BASE_FOLDER_NAME + "/"
-            + ROOT + "/" + TOP + "/" + CATEGORY_DISPLAY_NAME + "/" + product.getName());
+            + ROOT + "/" + TOP + "/" + CATEGORY_DISPLAY_NAME + "/" + product.getName() + "(" + PRODUCT_EXTERNAL_ID + ")");
     assertThat(cmProduct).isNotNull();
-    assertThat(cmProduct.getName()).isEqualTo(PRODUCT_NAME);
+    assertThat(cmProduct.getName()).isEqualTo(PRODUCT_NAME + "(" + PRODUCT_EXTERNAL_ID + ")");
     assertThat(cmProduct.getString(EXTERNAL_ID)).isEqualTo(PRODUCT_ID);
 
     // Assert the initialized layout for product pages.

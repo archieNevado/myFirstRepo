@@ -56,3 +56,6 @@ overlays/
 .kitchen
 .kitchen.local.yml
 .rakeTasks
+
+#shade plugin
+dependency-reduced-pom.xml

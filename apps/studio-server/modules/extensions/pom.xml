@@ -35,14 +35,4 @@
     <module>validators</module>
   </modules>
 
-  <profiles>
-    <profile>
-      <id>inactive-extensions</id>
-      <modules>
-        <module>sfmc</module>
-        <module>sfmc-p13n</module>
-      </modules>
-    </profile>
-  </profiles>
-
 </project>

@@ -34,15 +34,4 @@
     <module>p13n</module>
   </modules>
 
-  <profiles>
-    <profile>
-      <id>inactive-extensions</id>
-      <modules>
-        <module>sfmc</module>
-        <module>sfmc-es-p13n</module>
-        <module>sfmc-p13n</module>
-      </modules>
-    </profile>
-  </profiles>
-
 </project>

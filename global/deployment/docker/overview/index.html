@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<!--# set var="optionalServices" value="${OPTIONAL_SERVICES}" -->
+<!--# set var="ibmWcsEnabled" value="${IBM_WCS_ENABLED}" -->
+<!--# set var="sapHybrisEnabled" value="${SAP_HYBRIS_ENABLED}" -->
+<!--# set var="sfccEnabled" value="${SFCC_ENABLED}" -->
 <html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8"/>
@@ -54,7 +56,7 @@
         </tbody>
       </table>
 
-      <!--# if expr="$optionalServices = /commerce-adapter-wcs/" -->
+      <!--# if expr="$ibmWcsEnabled = true" -->
       <h3>HCL Commerce</h3>
       <table class="sites">
         <thead>
@@ -102,7 +104,7 @@
       </table>
       <!--# endif -->
 
-      <!--# if expr="$optionalServices = /commerce-adapter-hybris/" -->
+      <!--# if expr="$sapHybrisEnabled = true" -->
       <h3>SAP Commerce Cloud</h3>
       <table class="sites">
         <thead>
@@ -128,7 +130,7 @@
       </table>
       <!--# endif -->
 
-      <!--# if expr="$optionalServices = /commerce-adapter-sfcc/" -->
+      <!--# if expr="$sfccEnabled = true" -->
       <h3>Salesforce Commerce Cloud</h3>
       <table class="sites">
         <thead>
@@ -167,7 +169,7 @@
 
       <div><!--# include file="assets/management.html" --></div>
 
-      <!--# if expr="$optionalServices = /commerce-adapter-wcs/" -->
+      <!--# if expr="$ibmWcsEnabled = true" -->
       <h3>HCL Commerce</h3>
       <ul>
         <li>
@@ -187,7 +189,7 @@
       </ul>
       <!--# endif -->
 
-      <!--# if expr="$optionalServices = /commerce-adapter-hybris/" -->
+      <!--# if expr="$sapHybrisEnabled = true" -->
       <h3>SAP Commerce Cloud</h3>
       <ul>
         <li><a href="https://shop-tools-hybris.docker.localhost" target="_blank">SAP Hybris Adminstration Console</a></li>
@@ -198,7 +200,7 @@
       </ul>
       <!--# endif -->
 
-      <!--# if expr="$optionalServices = /commerce-adapter-sfcc/" -->
+      <!--# if expr="$sfccEnabled = true" -->
       <h3>Salesforce Commerce Cloud</h3>
       <ul>
         <li>
@@ -212,9 +214,9 @@
 
       <div id="actuators"><!--# include file="assets/actuators.html" --></div>
 
-      <!--# if expr="$optionalServices = /commerce-adapter-wcs/" -->
+      <!--# if expr="$ibmWcsEnabled = true" -->
       <!--# set var="showCandySitesHeader" value="true" -->
-      <!--# elif expr="$optionalServices = /commerce-adapter-hybris/" -->
+      <!--# elif expr="$sapHybrisEnabled = true" -->
       <!--# set var="showCandySitesHeader" value="true" -->
       <!--# else -->
       <!--# set var="showCandySitesHeader" value="false" -->
@@ -232,7 +234,7 @@
       </p>
       <!--# endif -->
 
-      <!--# if expr="$optionalServices = /commerce-adapter-wcs/" -->
+      <!--# if expr="$ibmWcsEnabled = true" -->
       <h3>HCL Commerce</h3>
       <table class="sites">
         <thead>
@@ -269,7 +271,7 @@
       </table>
       <!--# endif -->
 
-      <!--# if expr="$optionalServices = /commerce-adapter-hybris/" -->
+      <!--# if expr="$sapHybrisEnabled = true" -->
       <h3>SAP Commerce Cloud</h3>
       <table class="sites">
         <thead>

@@ -28,7 +28,7 @@
 
     <customer>Blueprint</customer>
 
-    <cm.studio-client.core.version>1907.1</cm.studio-client.core.version>
+    <cm.studio-client.core.version>1907.2</cm.studio-client.core.version>
     <jangaroo.version>4.0.69</jangaroo.version>
     <jooUnitWebDriverBrowser>chrome</jooUnitWebDriverBrowser>
 
@@ -54,8 +54,6 @@
     <db.host>${installation.host}</db.host>
     <mongoDb.host>${installation.host}</mongoDb.host>
     <wcs.host>commerce-wcs-host</wcs.host>
-    <hybris.host>commerce-hybris-host</hybris.host>
-    <sfcc.host>commerce-sfcc-host</sfcc.host>
     <proxy.host>${installation.host}</proxy.host>
 
     <!-- logback appender for maven tomcat plugin start -->
@@ -82,12 +80,12 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.21</tomcat.embed.version>
+    <tomcat.embed.version>9.0.26</tomcat.embed.version>
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.studio-client.core.version>1907.1</cm.studio-client.core.version>
-    <cm.common.core.version>1907.1</cm.common.core.version>
+    <cm.studio-client.core.version>1907.2</cm.studio-client.core.version>
+    <cm.common.core.version>1907.2</cm.common.core.version>
   </properties>
 
   <profiles>
@@ -107,7 +105,7 @@
       <id>skip-sfcc-tests</id>
       <activation>
         <property>
-          <name>sfcc.host</name>
+          <name>sfcc.tests.enabled</name>
         </property>
       </activation>
       <properties>
@@ -118,7 +116,7 @@
       <id>skip-ibm-tests</id>
       <activation>
         <property>
-          <name>wcs.host</name>
+          <name>wcs.tests.enabled</name>
         </property>
       </activation>
       <properties>
@@ -129,7 +127,7 @@
       <id>skip-hybris-tests</id>
       <activation>
         <property>
-          <name>hybris.host</name>
+          <name>hybris.tests.enabled</name>
         </property>
       </activation>
       <properties>
@@ -587,12 +585,12 @@
         <plugin>
           <groupId>org.sonarsource.scanner.maven</groupId>
           <artifactId>sonar-maven-plugin</artifactId>
-          <version>3.6.0.1398</version>
+          <version>3.6.1.1688</version>
         </plugin>
         <plugin>
           <groupId>org.owasp</groupId>
           <artifactId>dependency-check-maven</artifactId>
-          <version>5.2.0</version>
+          <version>5.2.1</version>
         </plugin>
       </plugins>
 

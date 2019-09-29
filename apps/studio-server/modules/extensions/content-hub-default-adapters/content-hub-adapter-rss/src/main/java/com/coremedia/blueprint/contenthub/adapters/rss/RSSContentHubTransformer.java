@@ -11,6 +11,7 @@ import com.coremedia.contenthub.api.ContentModel;
 import com.coremedia.contenthub.api.ContentModelReference;
 import com.coremedia.contenthub.api.Item;
 import com.coremedia.contenthub.api.MimeTypeFactory;
+import com.rometools.rome.feed.synd.SyndContent;
 import com.rometools.rome.feed.synd.SyndEntry;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -20,9 +21,9 @@ import java.util.List;
 
 public class RSSContentHubTransformer implements ContentHubTransformer {
 
-  private ContentCreationUtil contentCreationUtil;
+  private final ContentCreationUtil contentCreationUtil;
 
-  RSSContentHubTransformer(ContentCreationUtil contentCreationUtil) {
+  RSSContentHubTransformer(@NonNull ContentCreationUtil contentCreationUtil) {
     this.contentCreationUtil = contentCreationUtil;
   }
 
@@ -32,7 +33,10 @@ public class RSSContentHubTransformer implements ContentHubTransformer {
     RSSItem rssItem = (RSSItem) item;
     ContentModel contentModel = new ContentModel(rssItem.getRssEntry().getTitle(), item.getId());
     contentModel.put("title", rssItem.getName());
-    contentModel.put("detailText", contentCreationUtil.convertStringToMarkup(rssItem.getRssEntry().getDescription().getValue()));
+    String description = extractDescription(rssItem);
+    if (description != null) {
+      contentModel.put("detailText", contentCreationUtil.convertStringToMarkup(description));
+    }
 
     SyndEntry rssEntry = rssItem.getRssEntry();
     List<String> imageUrls = FeedImageExtractor.extractImageUrls(rssEntry);
@@ -51,9 +55,11 @@ public class RSSContentHubTransformer implements ContentHubTransformer {
   public ContentModel resolveReference(ContentModelReference reference, ContentHubAdapter contentHubAdapter, ContentHubContext contentHubContext) {
     String imageUrl = (String) reference.getData();
     String imageName = contentCreationUtil.extractNameFromUrl(imageUrl);
+    if (imageName == null) {
+      return null;
+    }
     ContentHubObjectId contentHubObjectId = reference.getOwner().getContentHubObjectId();
     ContentHubObjectId referenceId = ContentHubObjectId.createReference(contentHubObjectId, imageName);
-
     ContentModel contentModel = new ContentModel(imageName, referenceId);
     Blob pictureBlob = contentCreationUtil.createPictureFromUrl(imageUrl,
             "Image " + imageName,
@@ -69,4 +75,13 @@ public class RSSContentHubTransformer implements ContentHubTransformer {
     return contentHubObject instanceof RSSHubObject;
   }
 
+
+  // --- internal ---------------------------------------------------
+
+  @Nullable
+  private String extractDescription(@Nullable RSSItem rssItem) {
+    SyndEntry rssEntry = rssItem==null ? null : rssItem.getRssEntry();
+    SyndContent syndContent = rssEntry==null ? null : rssEntry.getDescription();
+    return syndContent==null ? null : syndContent.getValue();
+  }
 }

@@ -192,7 +192,7 @@ public class ProductFragmentHandler extends FragmentHandler {
 
     Product parentProduct = ((ProductVariant) product).getParent();
 
-    while (parentProduct != null && parentProduct.isVariant()) {
+    while (parentProduct instanceof ProductVariant && parentProduct.isVariant()) {
       parentProduct = ((ProductVariant) parentProduct).getParent();
     }
 

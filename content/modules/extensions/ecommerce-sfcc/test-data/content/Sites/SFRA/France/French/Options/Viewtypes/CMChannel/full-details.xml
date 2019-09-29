@@ -5,7 +5,7 @@
 <master>
 <link href="../../../../../United%20Kingdom/English/Options/Viewtypes/CMChannel/full-details.xml" path="/Sites/SFRA/United%20Kingdom/English/Options/Viewtypes/CMChannel/full-details"/>
 </master>
-<description>Displays content with full detail, e.g. as a full article with text, instead of a banner.</description>
+<description>Affiche le contenu avec tous les détails.</description>
 <icon href="full-details.icon.svg%2Bxml" mimetype="image/svg+xml"/>
 <layout>full-details</layout>
 </CMViewtype>

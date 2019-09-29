@@ -15,7 +15,8 @@
   <description>Headless Server libraries</description>
 
   <modules>
-    <module>ecommerce</module>
+    <module>extension-config</module>
+    <module>extensions</module>
     <module>headless-server</module>
   </modules>
 </project>

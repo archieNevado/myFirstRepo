@@ -45,8 +45,6 @@ The Docker specific Spring Boot profiles can be found under `+apps/<app-name>/do
 
 * *Commerce specific* settings:
 ** `+application-dev-wcs.properties+`
-** `+application-dev-hybris.properties+`
-** `+application-dev-sfcc.properties+`
 * *Development profiles* activating development features for local and CI environments.
 ** The default development profile is named `+dev+` and should be used when starting the application using either Idea
 or Maven.
@@ -107,9 +105,7 @@ started preview instead of a remote one and you have to set `+cae-preview.host+`
     |- workflow-server.host
     |- cae-preview.host
     |- cae-live.host
-    |- wcs.host
-    |- sfcc.host
-    `- hybris.host
+    `- wcs.host
 ....
 
 == Start applications using Intellij Idea

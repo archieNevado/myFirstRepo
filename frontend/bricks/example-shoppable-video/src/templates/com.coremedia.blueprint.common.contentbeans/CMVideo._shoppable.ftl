@@ -40,14 +40,7 @@
     <#-- default teaser -->
     <#if self.timeLineDefaultTarget?has_content>
       <div class="cm-shoppable__teaser cm-shoppable__default">
-        <@cm.include self=self.timeLineDefaultTarget!cm.UNDEFINED view="teaser" params={
-          "blockClass": "cm-shoppable-teaser",
-          "renderWrapper": false,
-          "renderTeaserText": true,
-          "renderEmptyImage": false,
-          "renderLink": false,
-          "enableTeaserOverlay": false
-        }/>
+        <@cm.include self=self.timeLineDefaultTarget!cm.UNDEFINED view="asShoppableTeaser"/>
       </div>
     </#if>
     <#-- list all timeline teaser -->
@@ -55,14 +48,7 @@
       <#list timelineEntries as entry>
         <#if entry.startTimeMillis?has_content && entry.link?has_content>
           <div class="cm-shoppable__teaser" data-cm-video-shoppable-time="${entry.startTimeMillis}">
-            <@cm.include self=entry.link view="teaser" params={
-              "blockClass": "cm-shoppable-teaser",
-              "renderWrapper": false,
-              "renderTeaserText": true,
-              "renderEmptyImage": false,
-              "renderLink": false,
-              "enableTeaserOverlay": false
-            }/>
+            <@cm.include self=entry.link view="asShoppableTeaser"/>
           </div>
         </#if>
       </#list>

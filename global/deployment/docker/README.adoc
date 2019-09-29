@@ -199,20 +199,13 @@ WCS_HOST=your.wcs.host
 LiveContext for SAP Hybris
 +
 ....
-SPRING_PROFILE=dev-hybris
 COMPOSE_FILE=compose/default.yml:compose/development-hybris.yml
-HYBRIS_HOST=your.hybris.host
 ....
 +
 LiveContext for Salesforce Commerce Cloud
 +
 ....
-SPRING_PROFILE=dev-sfcc
 COMPOSE_FILE=compose/default.yml:compose/development-sfcc.yml
-SFCC_HOST=your.sfcc.host
-SFCC_CLIENTID=YOUR_CLIENT_ID
-SFCC_CLIENTPASSWORD=YOUR_CLIENT_PASSWORD
-SFCC_SITEID=YOUR_SITE_ID (default is SiteGenesisGlobal)
 ....
 +
 

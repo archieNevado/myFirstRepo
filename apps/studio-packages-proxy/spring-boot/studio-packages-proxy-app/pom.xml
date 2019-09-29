@@ -25,6 +25,11 @@
     </dependency>
 
     <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpcore</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>com.coremedia.blueprint.boot</groupId>
       <artifactId>blueprint-spring-boot-autoconfigure</artifactId>
       <scope>runtime</scope>

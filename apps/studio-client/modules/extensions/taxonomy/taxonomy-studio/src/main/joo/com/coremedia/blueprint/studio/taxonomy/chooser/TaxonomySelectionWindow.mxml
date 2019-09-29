@@ -38,6 +38,9 @@
     [Bindable]
     public var propertyValueExpression:ValueExpression;
 
+    [Bindable]
+    public var bindTo:ValueExpression;
+
     /**
      * An optional ValueExpression which makes the component read-only if it is evaluated to true.
      */
@@ -66,6 +69,7 @@
       <items>
         <taxonomy:TaxonomyLinkListGridPanel id_="selectedTaxonomies"
                                             scrollable="true"
+                                            bindTo="{config.bindTo}"
                                             taxonomyId="{config.taxonomyId}"
                                             emptyText="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyLinkList_empty_chooser_text')}">
           <taxonomy:linkListWrapper>

@@ -5,6 +5,6 @@
 <master>
 <link href="../../../../../United%20Kingdom/English/Options/Viewtypes/CMExternalProduct/square.xml" path="/Sites/SFRA/United%20Kingdom/English/Options/Viewtypes/CMExternalProduct/square"/>
 </master>
-<description></description>
+<description>Affiche une collection dans une disposition de tuiles (équerre).</description>
 <layout>square</layout>
 </CMViewtype>

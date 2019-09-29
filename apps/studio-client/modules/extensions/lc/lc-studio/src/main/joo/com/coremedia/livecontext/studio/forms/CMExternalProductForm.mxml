@@ -107,7 +107,8 @@
     <livecontext:CommerceAttributesForm bindTo="{catalogObjectExpression}"/>
     <livecontext:CommerceProductStructureForm itemId="{STRUCTURE_TAB_ITEM_ID}" bindTo="{catalogObjectExpression}"/>
     <editor:DocumentForm
-            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}">
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}"
+            itemId="metadata">
       <editor:items>
         <bpforms:CategoryDocumentForm/>
       </editor:items>

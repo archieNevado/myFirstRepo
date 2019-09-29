@@ -23,7 +23,6 @@
     <module>cae-extension-dependencies</module>
     <module>cae-extensions-bom</module>
     <module>preview-cae-extension-dependencies</module>
-    <module>preview-cae-extensions-bom</module>
   </modules>
 
 </project>

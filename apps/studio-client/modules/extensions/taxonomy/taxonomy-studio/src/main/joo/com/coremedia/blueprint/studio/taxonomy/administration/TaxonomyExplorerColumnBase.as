@@ -316,7 +316,7 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
     });
 
     // convert to html
-    return '<div class="' + cls + '">' + TaxonomyUtil.escapeHTML(name) + '</div>';
+    return '<div class="' + cls + '">' + name + '</div>';
   }
 
   /**

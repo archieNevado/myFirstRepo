@@ -5,7 +5,7 @@
 <master>
 <link href="../../../../../United%20Kingdom/English/Options/Viewtypes/CMChannel/square.xml" path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Options/Viewtypes/CMChannel/square"/>
 </master>
-<description>Displays content as a square banner.</description>
+<description>Zeigt die Inhalte als quadratischen Banner an.</description>
 <icon href="square.icon.svg%2Bxml" mimetype="image/svg+xml"/>
 <layout>square</layout>
 </CMViewtype>

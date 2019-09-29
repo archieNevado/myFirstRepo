@@ -13,6 +13,16 @@
         "application.properties": {
           "cap.server.license": "properties/corem/license.zip"
         }
+      },
+      "commerce-adapter-hybris": {
+        "application.properties": {
+          "hybris.host": "HYBRIS_HOST",
+          "hybris.user": "HYBRIS_USER",
+          "hybris.password": "HYBRIS_PASSWORD",
+          "hybris.storeFrontHost": "HYBRIS_STOREFRONTHOST",
+          "hybris.storeFrontUrl": "HYBRIS_STOREFRONTURL",
+          "hybris.assetUrl": "HYBRIS_ASSETURL"
+        }
       }
     },
     "sap-hybris": {

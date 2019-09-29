@@ -2,11 +2,12 @@ package com.coremedia.blueprint.cae.exception.resolver;
 
 import com.coremedia.blueprint.cae.exception.ExceptionRenderDynamicViewDecorator;
 import com.coremedia.blueprint.cae.exception.handler.ErrorAndExceptionHandler;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
+import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -15,13 +16,20 @@ import static java.lang.invoke.MethodHandles.lookup;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
- * ExceptionResolver that selects a {@link ErrorAndExceptionHandler} and maps an exception to it.
+ * {@link org.springframework.web.servlet.HandlerExceptionResolver} that selects a
+ * {@link ErrorAndExceptionHandler} and maps an exception to it.
+ *
+ * @see DispatcherServlet#processHandlerException(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object, java.lang.Exception)
  */
 public class ErrorAndExceptionMappingResolver extends SimpleMappingExceptionResolver {
 
   private static final Logger LOG = getLogger(lookup().lookupClass());
 
-  private List<ErrorAndExceptionHandler> errorAndExceptionHandler;
+  private final List<ErrorAndExceptionHandler> errorAndExceptionHandler;
+
+  public ErrorAndExceptionMappingResolver(List<ErrorAndExceptionHandler> errorAndExceptionHandler) {
+    this.errorAndExceptionHandler = errorAndExceptionHandler;
+  }
 
   @Override
   public ModelAndView resolveException(@NonNull HttpServletRequest request,
@@ -61,10 +69,5 @@ public class ErrorAndExceptionMappingResolver extends SimpleMappingExceptionReso
     LOG.debug("Could not find a handler for {}.", ex.getClass().getName());
     return null;
   }
-
-  public void setExceptionHandler(List<ErrorAndExceptionHandler> handlers) {
-    this.errorAndExceptionHandler = handlers;
-  }
-
 
 }

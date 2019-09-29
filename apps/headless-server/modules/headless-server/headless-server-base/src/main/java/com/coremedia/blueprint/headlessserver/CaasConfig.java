@@ -49,13 +49,19 @@ import com.coremedia.caas.web.CaasServiceConfig;
 import com.coremedia.caas.web.interceptor.RequestDateInitializer;
 import com.coremedia.caas.web.wiring.GraphQLInvocationImpl;
 import com.coremedia.caas.wiring.CapStructPropertyAccessor;
+import com.coremedia.caas.wiring.CompositeTypeNameResolver;
+import com.coremedia.caas.wiring.CompositeTypeNameResolverProvider;
 import com.coremedia.caas.wiring.ContentRepositoryWiringFactory;
 import com.coremedia.caas.wiring.ContextInstrumentation;
 import com.coremedia.caas.wiring.FallbackPropertyAccessor;
+import com.coremedia.caas.wiring.ProvidesTypeNameResolver;
+import com.coremedia.caas.wiring.TypeNameResolver;
+import com.coremedia.caas.wiring.TypeNameResolverWiringFactory;
 import com.coremedia.cache.Cache;
 import com.coremedia.cache.CacheCapacityConfigurer;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
+import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.id.IdScheme;
@@ -72,6 +78,7 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 import graphql.GraphQL;
 import graphql.execution.instrumentation.ChainedInstrumentation;
 import graphql.execution.instrumentation.Instrumentation;
+import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLScalarType;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.idl.RuntimeWiring;
@@ -80,8 +87,6 @@ import graphql.schema.idl.SchemaGenerator;
 import graphql.schema.idl.TypeDefinitionRegistry;
 import graphql.schema.idl.WiringFactory;
 import graphql.spring.web.servlet.GraphQLInvocation;
-import io.micrometer.core.instrument.MeterRegistry;
-import io.micrometer.core.instrument.binder.cache.CaffeineCacheMetrics;
 import org.apache.solr.client.solrj.SolrClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,6 +102,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.expression.MapAccessor;
 import org.springframework.context.support.ConversionServiceFactoryBean;
 import org.springframework.core.convert.ConversionService;
@@ -230,14 +236,13 @@ public class CaasConfig implements WebMvcConfigurer {
 
   @Bean("cacheManager")
   @SuppressWarnings("unchecked")
-  public CacheManager cacheManager(MeterRegistry registry) {
+  public CacheManager cacheManager() {
     ImmutableList.Builder<org.springframework.cache.Cache> builder = ImmutableList.builder();
     // richtext cache
     if (serviceConfig.getCacheSpecs().containsKey(CacheInstances.RICHTEXT)) {
       com.github.benmanes.caffeine.cache.Cache cache = Caffeine.from(serviceConfig.getCacheSpecs().get(CacheInstances.RICHTEXT))
               .weigher((Weigher<Object, Weighted>) (key, value) -> value.getWeight())
               .build();
-      CaffeineCacheMetrics.monitor(registry, cache, CacheInstances.RICHTEXT);
       builder.add(new CaffeineCache(CacheInstances.RICHTEXT, cache));
     }
     SimpleCacheManager cacheManager = new SimpleCacheManager();
@@ -262,6 +267,55 @@ public class CaasConfig implements WebMvcConfigurer {
   public LinkComposer<Object, String> uriLinkComposer(List<LinkComposer<?, ? extends UriLinkBuilder>> linkComposers) {
     return new UriLinkComposer<>(
             new CompositeLinkComposer<>(linkComposers, emptyList()));
+  }
+
+  /**
+   * Returns a type resolver mapping content type names to GraphQL object types by appending the string "Impl".
+   * If such a GraphQL type exists within the schema, it is returned (wrapped with an Optional).
+   * Otherwise, the name of the parent content type is tried (again with the string "Impl" appended),
+   * and so on until either a corresponding GraphQL type is found or the top of the content type hierarchy is reached.
+   * In the latter case, an empty Optional is returned.
+   */
+  @Bean
+  public TypeNameResolver<Content> contentTypeNameResolver(@Lazy GraphQLSchema schema) {
+    return content -> {
+      ContentType currentContentType = content.getType();
+      while (currentContentType != null) {
+        String typeName = currentContentType.getName() + "Impl";
+        GraphQLObjectType type = schema.getObjectType(typeName);
+        if (type != null) {
+          return Optional.of(type.getName());
+        }
+        currentContentType = currentContentType.getParent();
+      }
+      return Optional.empty();
+    };
+  }
+
+  @Bean
+  public ProvidesTypeNameResolver providesContentTypeNameResolver(ContentRepository repository) {
+    return typeName ->
+      "Banner".equals(typeName) ||
+      "Detail".equals(typeName) ||
+      "CollectionItem".equals(typeName) ||
+      repository.getContentType(typeName) != null ? Optional.of(true) : Optional.empty();
+  }
+
+  @Bean
+  public TypeNameResolver<Object> compositeTypeNameResolver(List<TypeNameResolver<?>> typeNameResolvers) {
+    return new CompositeTypeNameResolver<>(typeNameResolvers);
+  }
+
+  @Bean
+  public ProvidesTypeNameResolver compositeProvidesTypeNameResolver(List<ProvidesTypeNameResolver> providesTypeNameResolvers) {
+    return new CompositeTypeNameResolverProvider(providesTypeNameResolvers);
+  }
+
+  @Bean
+  public TypeNameResolverWiringFactory typeNameResolverWiringFactory(
+          @Qualifier("compositeProvidesTypeNameResolver") ProvidesTypeNameResolver providesTypeNameResolver,
+          @Qualifier("compositeTypeNameResolver") TypeNameResolver<Object> typeNameResolver) {
+    return new TypeNameResolverWiringFactory(providesTypeNameResolver, typeNameResolver);
   }
 
   @Bean
@@ -364,7 +418,7 @@ public class CaasConfig implements WebMvcConfigurer {
                                                   List<IdScheme> idSchemes,
                                                   @Qualifier("dynamicContentSolrQueryBuilder") SolrQueryBuilder solrQueryBuilder,
                                                   @Qualifier("collectionExtendedItemsAdapter") ExtendedLinkListAdapterFactory collectionExtendedItemsAdapter,
-                                                  @Qualifier("navigationAdapter") NavigationAdapterFactory navigationAdapterFactory){
+                                                  @Qualifier("navigationAdapter") NavigationAdapterFactory navigationAdapterFactory) {
     return new QueryListAdapterFactory(searchResultFactory, contentRepository, settingsService, sitesService, idSchemes, solrQueryBuilder, collectionExtendedItemsAdapter, navigationAdapterFactory);
   }
 
@@ -406,8 +460,8 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public RichtextTransformerRegistry richtextTransformerRegistry(@Qualifier("richTextConfigResourceLoader") ConfigResourceLoader resourceLoader) throws IOException {
-    return new RichtextTransformerReader(resourceLoader).read();
+  public RichtextTransformerRegistry richtextTransformerRegistry(@Qualifier("richTextConfigResourceLoader") ConfigResourceLoader resourceLoader, @Qualifier("cacheManager") CacheManager cacheManager) throws IOException {
+    return new RichtextTransformerReader(resourceLoader, cacheManager).read();
   }
 
   @Bean
@@ -511,20 +565,39 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public GraphQL graphQL(Map<String, SchemaDirectiveWiring> directiveWirings,
-                         @Qualifier("rootModelMapper") ModelMapper<Object, Object> modelMapper,
-                         List<WiringFactory> wiringFactories,
-                         List<Instrumentation> instrumentations)
+  public TypeDefinitionRegistry typeDefinitionRegistry()
+          throws IOException {
+    SchemaParser schemaParser = new SchemaParser();
+    PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
+    var typeRegistry = new TypeDefinitionRegistry();
+    for (var resource : loader.getResources("classpath*:*-schema.graphql")) {
+      LOG.info("merging GraphQL schema {}", resource.getURI());
+      InputStreamReader in = new InputStreamReader(resource.getInputStream());
+      TypeDefinitionRegistry newRegistry = schemaParser.parse(in);
+      typeRegistry.merge(newRegistry);
+    }
+    return typeRegistry;
+  }
+
+  @Bean
+  public GraphQLSchema graphQLSchema(Map<String, SchemaDirectiveWiring> directiveWirings,
+                                     @Qualifier("rootModelMapper") ModelMapper<Object, Object> modelMapper,
+                                     List<WiringFactory> wiringFactories)
           throws IOException {
     WiringFactory wiringFactory = new ModelMappingWiringFactory(modelMapper, wiringFactories);
     RuntimeWiring.Builder builder = RuntimeWiring.newRuntimeWiring()
             .wiringFactory(wiringFactory);
     directiveWirings.forEach(builder::directive);
     RuntimeWiring wiring = builder.build();
-    var typeRegistry = buildTypeDefinitionRegistry();
+    TypeDefinitionRegistry typeRegistry = typeDefinitionRegistry();
     SchemaGenerator schemaGenerator = new SchemaGenerator();
-    GraphQLSchema schema = schemaGenerator.makeExecutableSchema(typeRegistry, wiring);
-    return GraphQL.newGraphQL(schema)
+    return schemaGenerator.makeExecutableSchema(typeRegistry, wiring);
+  }
+
+  @Bean
+  public GraphQL graphQL(GraphQLSchema graphQLSchema,
+                         List<Instrumentation> instrumentations) {
+    return GraphQL.newGraphQL(graphQLSchema)
             .instrumentation(new ChainedInstrumentation(instrumentations))
             .build();
   }
@@ -589,19 +662,6 @@ public class CaasConfig implements WebMvcConfigurer {
       renamedQueryRoots.put(name, rootEntry.getValue());
     }
     return renamedQueryRoots;
-  }
-
-  private TypeDefinitionRegistry buildTypeDefinitionRegistry() throws IOException {
-    SchemaParser schemaParser = new SchemaParser();
-    PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
-    var typeRegistry = new TypeDefinitionRegistry();
-    for (var resource :loader.getResources("classpath*:*-schema.graphql")) {
-      LOG.info("merging GraphQL schema {}", resource.getURI());
-      InputStreamReader in = new InputStreamReader(resource.getInputStream());
-      TypeDefinitionRegistry newRegistry = schemaParser.parse(in);
-      typeRegistry.merge(newRegistry);
-    }
-    return typeRegistry;
   }
 
 }

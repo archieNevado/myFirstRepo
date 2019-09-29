@@ -45,18 +45,6 @@
       </dependency>
       <dependency>
         <groupId>com.coremedia.blueprint</groupId>
-        <artifactId>alx-studio-plugin</artifactId>
-        <version>1-SNAPSHOT</version>
-        <type>swc</type>
-      </dependency>
-      <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
-        <artifactId>lc-studio-test-helper</artifactId>
-        <version>1-SNAPSHOT</version>
-        <type>swc</type>
-      </dependency>
-      <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
         <artifactId>blueprint-forms</artifactId>
         <version>1-SNAPSHOT</version>
         <type>swc</type>
@@ -91,13 +79,6 @@
       <dependency>
         <groupId>com.coremedia.blueprint</groupId>
         <artifactId>studio-client-extensions-bom</artifactId>
-        <version>1-SNAPSHOT</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
-        <artifactId>studio-client-dynamic-extensions-bom</artifactId>
         <version>1-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>

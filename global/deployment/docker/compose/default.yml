@@ -294,6 +294,7 @@ services:
     environment:
       SPRING_APPLICATION_NAME: 'headless-server-preview'
       REPOSITORY_URL: http://content-management-server:8080/ior
+      SOLR_URL: http://solr:8983/solr
       ENVIRONMENT_FQDN: ${ENVIRONMENT_FQDN:-docker.localhost}
       CAAS_PREVIEW: "true"
       GRAPHIQL_ENABLED: "true"

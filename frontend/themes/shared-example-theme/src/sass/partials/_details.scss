@@ -163,6 +163,15 @@
     @include cm-details-text-layout();
     margin-top: 3 * $cm-standard-spacing;
   }
+
+  // hide cta on related content on person detail page
+  &--person {
+    .#{$cm-related-prefix} {
+      .cm-cta {
+        display: none;
+      }
+    }
+  }
 }
 
 /* --- authors section --- */

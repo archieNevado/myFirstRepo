@@ -61,6 +61,7 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
   public static final String LIVECONTEXT_CONTENT_LED = "livecontext.contentLed";
   private static final String DYNAMIC_LINK_INDICATOR = "/" + PREFIX_DYNAMIC + "/";
   private static final String P13N_LINK_INDICATOR = "/p13n/";
+  private static final String UNSUPPORTED_LINK = "#";
 
   private List<LiveContextLinkResolver> liveContextLinkResolverList;
   private boolean isRemoveJSession = true;
@@ -83,17 +84,22 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
     }
 
     CMNavigation navigation = getNavigation(bean);
-    Object content = getContent(bean);
-
-    // do not post-process links to content of a different site
+    // do not generate links if the navigation is null, discard the previously generated link
+    if (navigation == null) {
+      LOG.debug("Cannot transform link. Navigation is null. Link target: {}", bean);
+      return UNSUPPORTED_LINK;
+    }
+    // do not generate links to content of a different site, discard the previously generated link
     if (isContentOfDifferentSite(navigation, request)) {
-      return cmsLink;
+      LOG.debug("Cannot transform link to a different site. Link target: {}", bean);
+      return UNSUPPORTED_LINK;
     }
 
     String modifiableSource = removeBaseUri(cmsLink, request);
     modifiableSource = removeJSession(modifiableSource);
     Object variant = ViewUtils.getParameters(request).get(VARIANT_PARAM);
 
+    Object content = getContent(bean);
     return transform(modifiableSource, content, variant, navigation, request);
   }
 

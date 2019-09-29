@@ -168,7 +168,6 @@
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>cae-util</artifactId>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.cms</groupId>
