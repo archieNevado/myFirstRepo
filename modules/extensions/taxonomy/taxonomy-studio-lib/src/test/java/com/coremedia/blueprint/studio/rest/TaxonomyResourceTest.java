@@ -1,12 +1,10 @@
 package com.coremedia.blueprint.studio.rest;
 
 import com.coremedia.blueprint.studio.rest.taxonomies.TaxonomyResource;
-import com.coremedia.blueprint.taxonomies.Taxonomy;
 import com.coremedia.blueprint.taxonomies.TaxonomyNode;
 import com.coremedia.blueprint.taxonomies.TaxonomyNodeList;
 import com.coremedia.blueprint.taxonomies.TaxonomyResolver;
 import com.coremedia.blueprint.taxonomies.semantic.SemanticStrategy;
-import com.coremedia.blueprint.taxonomies.semantic.service.SemanticServiceStrategy;
 import com.coremedia.blueprint.taxonomies.strategy.TaxonomyResolverImpl;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.SitesService;
@@ -23,7 +21,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,10 +29,6 @@ import java.util.Map;
 public class TaxonomyResourceTest {
   @Inject
   private TaxonomyResource taxonomyResource;
-  @Inject
-  private ContentRepository contentRepository;
-  @Inject
-  private TaxonomyResolver taxonomyResolver;
 
   @Test
   public void testTaxonomyResource() throws Exception {
@@ -61,17 +54,6 @@ public class TaxonomyResourceTest {
     }
   }
 
-  @Test
-  public void testSemanticMatching() throws Exception {
-    SemanticServiceStrategy strategy = new SemanticServiceStrategy();
-    strategy.setContentRepository(contentRepository);
-    strategy.setServiceId("nameMatching");
-
-    Collection<Taxonomy> taxonomies = taxonomyResolver.getTaxonomies();
-    Taxonomy taxonomy = taxonomies.iterator().next();
-    //mpf, not a real test since the SOLR instance is null
-  }
-
   @Configuration
   @ImportResource(value = {"classpath:com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
   },
@@ -83,11 +65,10 @@ public class TaxonomyResourceTest {
     }
 
     @Bean
-    TaxonomyResource taxonomyResource(TaxonomyResolver taxonomyResolver, ContentRepository contentRepository) {
+    TaxonomyResource taxonomyResource(TaxonomyResolver taxonomyResolver) {
       final TaxonomyResource taxonomyResource = new TaxonomyResource();
       taxonomyResource.setSemanticStrategies(new ArrayList<SemanticStrategy>());
       taxonomyResource.setStrategyResolver(taxonomyResolver);
-      taxonomyResource.setContentRepository(contentRepository);
       taxonomyResource.afterPropertiesSet();
       return taxonomyResource;
     }

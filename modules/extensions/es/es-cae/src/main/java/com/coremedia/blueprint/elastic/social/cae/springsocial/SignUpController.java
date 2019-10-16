@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import static com.coremedia.blueprint.elastic.social.cae.springsocial.Requests.getServletRequest;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
+@Deprecated
 @RequestMapping("/signup")
 public class SignUpController {
 

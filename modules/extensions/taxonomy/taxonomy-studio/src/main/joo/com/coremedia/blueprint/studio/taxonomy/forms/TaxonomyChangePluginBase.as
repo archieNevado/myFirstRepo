@@ -47,8 +47,11 @@ public class TaxonomyChangePluginBase implements Plugin {
     var node:TaxonomyNode = TaxonomyUtil.getLatestSelection();
     var content:Content = SESSION.getConnection().getContentRepository().getContent(node.getRef());
     content.invalidate(function ():void {
-      //mmh, not the best check, but the node name is already escaped
-      if (TaxonomyUtil.escapeHTML(content.getName()) !== node.getName() || !content.isPublished()) {
+      var defaultName:String = ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.TaxonomyStudioPluginSettings', 'taxonomy_default_name');
+      if(TaxonomyUtil.decodeHTML(node.getName()) === defaultName) {
+        setBusy(false);
+      }
+      else if (TaxonomyUtil.escapeHTML(content.getName()) !== node.getName() || !content.isPublished()) {
         node.commitNode(function ():void {
           content.invalidate(function ():void {
             setBusy(false);

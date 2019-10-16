@@ -17,7 +17,6 @@ import ext.Component;
 import ext.Ext;
 import ext.data.Model;
 import ext.data.Store;
-import ext.event.Event;
 import ext.grid.GridPanel;
 import ext.grid.plugin.GridViewDragDropPlugin;
 import ext.selection.RowSelectionModel;
@@ -71,7 +70,7 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
     taxonomyExplorerColumnDropTarget = new TaxonomyExplorerColumnDropTarget(this);
 
     var ddPlugin:GridViewDragDropPlugin = getView().getPlugin(DRAG_DROP_PLUGIN_ID) as GridViewDragDropPlugin;
-    if(ddPlugin && ddPlugin.dragZone) {
+    if (ddPlugin && ddPlugin.dragZone) {
       ddPlugin.dragZone['getDragText'] = getDragText;
       //DnD is causing focus issues, so we skip the focus handling here and simply call the parent
       ddPlugin.dragZone['onValidDrop'] = function (target:*, e:*, id:*):void {
@@ -88,19 +87,20 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
    * Registers the additional key handlers for left/right navigation.
    */
   private function addKeyNavigation():void {
-    getEl().addListener("keyup", onKeyInput);
+    addListener("cellkeydown", onKeyInput);
   }
 
-  private function onKeyInput(event:Event):void {
-    var key:Number = event.getKey();
+  private function onKeyInput(grid:*, td:*, cellIndex:*, record:*, tr:*, rowIndex:*, e:*, eOpts:*):Boolean {
+    var key:Number = e.getKey();
     if (key === KeyEvent.DOM_VK_LEFT) {
       if (globalSelectedNodeExpression && parentNode) {
         activeNode = parentNode;
         globalSelectedNodeExpression.setValue([parentNode]);
         getExplorerPanel().getColumnContainer(parentNode).selectNode(parentNode);
+        return false;
       }
     }
-    else if (key === KeyEvent.DOM_VK_RIGHT && activeNode.isExtendable()) {
+    else if (key === KeyEvent.DOM_VK_RIGHT && !activeNode.isLeaf()) {
       activeNode.loadChildren(true, function (list:TaxonomyNodeList):void {
         if (list.size() > 0) {
           var selectNode:TaxonomyNode = list.getNodes()[0];
@@ -108,7 +108,13 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
           getExplorerPanel().getColumnContainer(selectNode).selectNode(selectNode);
         }
       });
+      return false;
     }
+    else if(key === KeyEvent.DOM_VK_RIGHT) {
+      return false;
+    }
+
+    return true;
   }
 
   /**
@@ -154,7 +160,7 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
 
     if (globalSelectedNodeExpression) {
       activeNode = null;
-      if(selectionResult.length > 0) {
+      if (selectionResult.length > 0) {
         activeNode = selectionResult[0];
       }
       globalSelectedNodeExpression.setValue(selectionResult);
@@ -193,8 +199,7 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
             getView().focusRow(i);
           }
         }
-      }
-      else {
+      } else {
         (getSelectionModel() as RowSelectionModel).deselectRange(0, getStore().getCount() - 1);
       }
 
@@ -260,7 +265,7 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
       names.push(node.getName());
     }
     var text:String = names.join(", ");
-    if(text.length > 100) {
+    if (text.length > 100) {
       text = text.substr(0, 100) + "...";
     }
 
@@ -282,7 +287,7 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
     if (record.data.root) {
       if (record.data.siteId) {
         var i18nName:String = resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', name);
-        if(i18nName) {
+        if (i18nName) {
           name = i18nName;
         }
 
@@ -296,8 +301,7 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
       }
       if (!record.data.extendable || !record.data.selectable) {
         modifiers.push(COLUMN_ENTRY_MODIFIER_NOT_EXTENDABLE);
-      }
-      else if (record.data.leaf) {
+      } else if (record.data.leaf) {
         modifiers.push(COLUMN_ENTRY_MODIFIER_LEAF);
       }
     }
@@ -350,7 +354,7 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
   private function onBeforeDestroy():void {
     taxonomyExplorerColumnDropTarget && taxonomyExplorerColumnDropTarget.unreg();
     if (getEl()) {
-      getEl().removeListener("keyup", onKeyInput);
+      removeListener("cellkeydown", onKeyInput);
     }
   }
 }

@@ -79,6 +79,9 @@ public class EcCatalogTreeFilter implements TreeFilter {
       //if the content belongs to the active site, check if it is a content and should be  hidden
       if (content.getPath().indexOf("/" + folderName) !== -1) {
         var sites:Array = editorContext.getSitesService().getSites();
+        if (sites === undefined) {
+          return undefined;
+        }
         for each(var site:Site in sites) {
           var path:String = site.getSiteRootFolder().getPath() + "/" + folderName;
           if (path === content.getPath()) {

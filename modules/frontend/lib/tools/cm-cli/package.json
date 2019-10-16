@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "jest": "23.6.0",
-    "prettier": "1.15.2"
+    "prettier": "^1.0.0"
   },
   "scripts": {
     "prettier": "prettier \"**/*\" --write",

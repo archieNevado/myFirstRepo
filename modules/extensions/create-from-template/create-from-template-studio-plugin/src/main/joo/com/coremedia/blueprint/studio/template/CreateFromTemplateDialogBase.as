@@ -100,16 +100,20 @@ public class CreateFromTemplateDialogBase extends StudioDialog {
   }
 
   private function setBaseFolderInModel(path:String):void {
-    var baseFolder:Content = editorContext.getSession().getConnection().getContentRepository().getChild(path);
-    if (baseFolder) {
-      getModel().set(ProcessingData.FOLDER_PROPERTY, [baseFolder]);
+    if (path) {
+      var baseFolder:Content = editorContext.getSession().getConnection().getContentRepository().getChild(path);
+      if (baseFolder) {
+        getModel().set(ProcessingData.FOLDER_PROPERTY, [baseFolder]);
+      }
     }
   }
 
   private function setContentBaseFolderInModel(path:String):void {
-    var contentBaseFolder:Content = editorContext.getSession().getConnection().getContentRepository().getChild(path);
-    if (contentBaseFolder) {
-      getModel().set(resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'editorial_folder_property'), [contentBaseFolder]);
+    if (path) {
+      var contentBaseFolder:Content = editorContext.getSession().getConnection().getContentRepository().getChild(path);
+      if (contentBaseFolder) {
+        getModel().set(resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'editorial_folder_property'), [contentBaseFolder]);
+      }
     }
   }
 

@@ -5,12 +5,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -56,23 +57,20 @@ public class ExternalPreviewResource {
    * Forwards the preview data information to the CAE, that that the polling that is executed in it returns
    * the correct content item to preview.
    *
-   * @param form The content data that should be shown on the external preview.
    * @return True if the data was forward successfully.
    */
   @POST
   @Path(METHOD_UPDATE_PATH)
-  public boolean updatePreviewData(MultivaluedMap<String, String> form) {
+  public boolean updatePreviewData(@FormParam(PARAM_DATA) @DefaultValue("") String json,
+                                   @FormParam(PARAM_TOKEN) @DefaultValue("") String token,
+                                   @FormParam(PARAM_METHOD) @DefaultValue("") String method,
+                                   @FormParam(PARAM_PREVIEW_URL) @DefaultValue("") String previewUrl) {
     String url = null;
     try {
-      String json = form.getFirst(PARAM_DATA);
-      String token = form.getFirst(PARAM_TOKEN);
-      String method = form.getFirst(PARAM_METHOD);
       json = URLEncoder.encode(json, URL_ENCODING);
-
-      String previewUrl = form.getFirst(PARAM_PREVIEW_URL);
       url = previewUrl + "?token=" + token + "&method=" + method;
-      if(json != null && !json.isEmpty()) {
-        url+="&data=" + json;
+      if (json != null && !json.isEmpty()) {
+        url += "&data=" + json;
       }
       return sendRequest(url);
     } catch (Exception e) {//NOSONAR
@@ -83,6 +81,7 @@ public class ExternalPreviewResource {
 
   /**
    * Returns the preview urls and host names for displaying the content to preview.
+   *
    * @return configuration
    */
   @GET
@@ -94,6 +93,7 @@ public class ExternalPreviewResource {
 
   /**
    * Executes a GET request that is send to the preview CAE.
+   *
    * @param urlString The url string including parameters.
    * @return True if the request was successful.
    * @throws java.io.IOException Thrown if the preview CAE is not available.
