@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.Optional;
 
+@Deprecated
 @Named
 public class ProviderConfiguration {
 

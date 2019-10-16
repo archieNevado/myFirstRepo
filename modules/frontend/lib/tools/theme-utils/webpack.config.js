@@ -27,6 +27,9 @@ const exclude = [
   ),
   new RegExp(escapeStringRegexp(path.sep + "legacy" + path.sep)),
   new RegExp(escapeStringRegexp(path.sep + "vendor" + path.sep)),
+  // exclude variable files imported via smart import from dependency check as
+  // the load order is calculated in a way that it might not match the actual dependencies
+  new RegExp(["", "smart-import-variables.scss"].join(escapeStringRegexp(path.sep))),
 ];
 
 const dependencyCheckPlugin = new DependencyCheckWebpackPlugin({

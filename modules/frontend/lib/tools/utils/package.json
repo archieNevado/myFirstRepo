@@ -10,10 +10,10 @@
     "@coremedia/cm-logger": "^1.0.0",
     "closest-package": "1.0.0",
     "get-installed-path": "4.0.8",
-    "selfsigned": "1.10.1"
+    "selfsigned": "1.10.4"
   },
   "devDependencies": {
-    "prettier": "1.15.2"
+    "prettier": "^1.0.0"
   },
   "scripts": {
     "prettier": "prettier \"**/*\" --write"

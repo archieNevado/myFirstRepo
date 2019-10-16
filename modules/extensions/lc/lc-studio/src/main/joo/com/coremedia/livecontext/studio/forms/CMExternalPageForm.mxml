@@ -34,7 +34,8 @@
 
   <editor:items>
     <editor:DocumentForm
-            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}"
+            itemId="contentTab">
       <editor:items>
         <bpforms:CollapsibleStringPropertyForm propertyName="title"
                                                title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMChannel_title_text')}"/>
@@ -78,7 +79,8 @@
       </editor:items>
     </editor:DocumentForm>
     <editor:DocumentForm
-            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_navigation_title')}">
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_navigation_title')}"
+            itemId="navigation">
       <editor:items>
         <editor:PropertyFieldGroup
                 title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Navigation_label')}"
@@ -124,7 +126,8 @@
       </editor:items>
     </editor:DocumentForm>
     <editor:DocumentForm
-            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}">
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}"
+            itemId="metadata">
       <editor:items>
         <bpforms:CategoryDocumentForm/>
         <bpforms:SEOForm/>

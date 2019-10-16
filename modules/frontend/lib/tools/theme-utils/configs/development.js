@@ -6,7 +6,12 @@ const {
 } = require("@coremedia/tool-utils/workspace");
 
 const themeConfig = getThemeConfig();
-const monitorConfig = getMonitorConfig();
+let monitorConfig = getMonitorConfig();
+
+// eslint-disable-next-line no-extra-boolean-cast
+if (!!process.env.target) {
+  monitorConfig.target = process.env.target;
+}
 
 /**
  * @module contains the webpack configuration for the development environment

@@ -257,6 +257,7 @@ public class UserDetailsHelper {
     return zone.getID().length() == MAX_LENGTH_TIMEZONE_ID;
   }
 
+  @Deprecated
   public void postProcessProviderConnection(RequestContext context) {
     SharedAttributeMap sessionMap = context.getExternalContext().getSessionMap();
     if (sessionMap.remove("social.addConnection.duplicate") != null) {

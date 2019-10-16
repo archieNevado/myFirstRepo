@@ -22,7 +22,7 @@
     public native function CatalogThumbDataView(config:CatalogThumbDataView = null);
 
     private function computeCatalogThumbnailImage(v:String, catalogObject:CatalogObject):ThumbnailImage {
-      return computeThumbnailImage(catalogObject, CatalogHelper.getInstance().getType(catalogObject))
+      return computeThumbnailImage(CatalogHelper.getInstance().getType(catalogObject), catalogObject)
     }
     ]]></fx:Script>
   <local:fields>

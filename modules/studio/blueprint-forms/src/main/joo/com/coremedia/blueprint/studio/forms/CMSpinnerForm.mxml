@@ -26,7 +26,8 @@
 
   <editor:items>
     <editor:DocumentForm
-            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}"
+            itemId="contentTab">
       <editor:items>
         <bpforms:DetailsDocumentForm itemId="detailsForm"
                                      collapsed="true"/>
@@ -45,7 +46,8 @@
       </editor:items>
     </editor:DocumentForm>
     <editor:DocumentForm
-            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}">
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_extras_title')}"
+            itemId="metadata">
       <editor:items>
         <bpforms:CategoryDocumentForm/>
         <editor:PropertyFieldGroup collapsed="false"

@@ -27,6 +27,7 @@ import static com.google.common.base.Strings.nullToEmpty;
  * Patched version of ConnectController for spring 5 compatibility and redirecting to the
  * Elastic Social user profile
  */
+@Deprecated
 public class CustomConnectController extends ConnectController {
 
   private final UrlPathHelper urlPathHelper = new UrlPathHelper();

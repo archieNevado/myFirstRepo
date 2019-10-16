@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
+@Deprecated
 @Configuration
 public class SpringSocialConfiguration {
 

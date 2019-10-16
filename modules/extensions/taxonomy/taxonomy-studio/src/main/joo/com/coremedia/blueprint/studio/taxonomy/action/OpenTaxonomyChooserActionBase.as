@@ -1,11 +1,9 @@
 package com.coremedia.blueprint.studio.taxonomy.action {
 import com.coremedia.blueprint.studio.taxonomy.chooser.TaxonomySelectionWindow;
+import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.util.AccessControlUtil;
 import com.coremedia.ui.actions.DependencyTrackedAction;
 import com.coremedia.ui.data.ValueExpression;
-
-import ext.Action;
-import ext.Ext;
 
 /**
  * Shows the dialog for choosing taxonomies for a linklist property.
@@ -34,8 +32,8 @@ public class OpenTaxonomyChooserActionBase extends DependencyTrackedAction {
 
 
   override protected function calculateDisabled():Boolean {
-    if(bindTo && forceReadOnlyValueExpression) {
-      return bindTo.getValue().isCheckedOutByOther() || AccessControlUtil.isReadOnly(bindTo.getValue()) || forceReadOnlyValueExpression.getValue();
+    if(bindTo && bindTo.getValue() is Content && forceReadOnlyValueExpression) {
+      return (bindTo.getValue() as Content).isCheckedOutByOther() || AccessControlUtil.isReadOnly(bindTo.getValue()) || forceReadOnlyValueExpression.getValue();
     }
     return false;
   }

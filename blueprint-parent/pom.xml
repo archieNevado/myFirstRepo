@@ -30,14 +30,14 @@
 
     <customer>Blueprint</customer>
 
-    <blueprint-base.version>1904.2</blueprint-base.version>
-    <cms.version>1904.2</cms.version>
-    <personalization.version>1904.2</personalization.version>
-    <elastic.version>1904.2</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
-    <studio.version>1904.2</studio.version>
-    <caetoolbox.version>1904.2</caetoolbox.version>
-    <livecontext.version>1904.2</livecontext.version>
-    <jangaroo.version>4.0.65</jangaroo.version>
+    <blueprint-base.version>1904.3</blueprint-base.version>
+    <cms.version>1904.3</cms.version>
+    <personalization.version>1904.3</personalization.version>
+    <elastic.version>1904.3</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
+    <studio.version>1904.3</studio.version>
+    <caetoolbox.version>1904.3</caetoolbox.version>
+    <livecontext.version>1904.3</livecontext.version>
+    <jangaroo.version>4.0.68</jangaroo.version>
 
     <!--
      | Version for WAR based deployment. Tomcat 7 and 8 are supported. Don't forget to set the Chef attributes in the
@@ -46,7 +46,7 @@
     <tomcat.version>7.0.94</tomcat.version>
     <!-- Version for Maven tomcat7 plugin. Only Tomcat 7 is supported -->
     <tomcat.maven.version>7.0.94</tomcat.maven.version>
-    <spring.boot.version>2.1.4.RELEASE</spring.boot.version>
+    <spring.boot.version>2.1.6.RELEASE</spring.boot.version>
     <application-plugin.version>2.7.10</application-plugin.version>
 
     <!--
@@ -587,7 +587,7 @@
                 <X-Compile-Target-JDK>${compile.target.jdk}</X-Compile-Target-JDK>
                 <!-- Configure WebSphere to not scan ASM jars in the WAR, because they contain Java 9 module-info.class
                      files and cause exceptions in WebSphere. See CMS-12354 -->
-                <Ignore-Scanning-Archives>asm-analysis-7.1.jar,asm-7.1.jar,asm-commons-7.1.jar,asm-tree-7.1.jar</Ignore-Scanning-Archives>
+                <Ignore-Scanning-Archives>asm-analysis-7.2-beta.jar,asm-7.2-beta.jar,asm-commons-7.2-beta.jar,asm-tree-7.2-beta.jar</Ignore-Scanning-Archives>
               </manifestEntries>
             </archive>
             <failOnMissingWebXml>false</failOnMissingWebXml>
@@ -814,12 +814,12 @@
         <plugin>
           <groupId>org.sonarsource.scanner.maven</groupId>
           <artifactId>sonar-maven-plugin</artifactId>
-          <version>3.6.0.1398</version>
+          <version>3.6.1.1688</version>
         </plugin>
         <plugin>
           <groupId>org.owasp</groupId>
           <artifactId>dependency-check-maven</artifactId>
-          <version>5.0.0-M3</version>
+          <version>5.2.1</version>
         </plugin>
       </plugins>
 

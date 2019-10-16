@@ -11,6 +11,8 @@
     [ResourceBundle('com.coremedia.blueprint.studio.CustomLabels')]
   </fx:Metadata>
   <fx:Script><![CDATA[
+    import com.coremedia.ui.data.ValueExpressionFactory;
+
     public static const xtype:String = "com.coremedia.blueprint.studio.config.validityDocumentForm";
 
     private var config:ValidityDocumentForm;

@@ -11,7 +11,6 @@
   <bean id="taxonomies" class="com.coremedia.blueprint.studio.rest.taxonomies.TaxonomyResource" scope="prototype">
     <property name="strategyResolver" ref="strategyResolver"/>
     <property name="semanticStrategies" ref="semanticServiceStrategies"/>
-    <property name="contentRepository" ref="contentRepository" />
   </bean>
 
 </beans>

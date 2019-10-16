@@ -11,7 +11,7 @@
   <artifactId>ec-common</artifactId>
 
   <properties>
-    <jetty.version>9.4.18.v20190429</jetty.version>
+    <jetty.version>9.4.19.v20190610</jetty.version>
   </properties>
 
   <dependencyManagement>

@@ -58,6 +58,7 @@ public class WordUploadInterceptor extends ContentWriteInterceptorBase {
 
   private static final String DOC_MIMETYPE = "application/msword";
   private static final String DOCX_MIMETYPE = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+  private static final String OFFICE_OPEN_XML_MIMETYPE = "application/x-tika-ooxml";
   private static final List<String> INVALID_IMAGE_MIME_TYPES = Arrays.asList("bmp", "image/x-emf");
 
   private static final String PICTURE_KEY = "_picture";
@@ -168,7 +169,7 @@ public class WordUploadInterceptor extends ContentWriteInterceptorBase {
     if (contentType.getBaseType().equals(DOC_MIMETYPE)) {
       extractDocImages(bytes, result);
     }
-    else if (contentType.getBaseType().equals(DOCX_MIMETYPE)) {
+    else if (contentType.getBaseType().equals(DOCX_MIMETYPE) || contentType.getBaseType().equals(OFFICE_OPEN_XML_MIMETYPE)) {
       extractDocxImages(bytes, result);
 
     }
