@@ -116,6 +116,7 @@ public class RegistrationHelper {
             springSocialConfiguration.usersConnectionRepository());
   }
 
+  @Deprecated
   public void preProcess(Registration registration, RequestContext context) {
     Connection<?> connection = providerSignInUtils.getConnectionFromSession(getRequestAttributes(context)); // NOSONAR
 
@@ -157,6 +158,7 @@ public class RegistrationHelper {
     }
   }
 
+  @Deprecated
   private void getProfileImage(Connection<?> connection, RequestContext context, Registration registration,
                                @PersonalData String userName, @PersonalData String imageUrl) {
     try {
@@ -352,6 +354,7 @@ public class RegistrationHelper {
     return new ServletRequestAttributes(servletRequest);
   }
 
+  @Deprecated
   public void postProcessProviderRegistration(@NonNull RequestContext context) {
     if (context.getRequestParameters().contains("error")) {
       addErrorMessage(context, WebflowMessageKeys.REGISTRATION_PROVIDER_ERROR);

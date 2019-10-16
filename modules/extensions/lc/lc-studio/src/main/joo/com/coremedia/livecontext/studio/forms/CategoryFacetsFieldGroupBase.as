@@ -110,7 +110,7 @@ public class CategoryFacetsFieldGroupBase extends PropertyFieldGroup {
                   return link;
                 }
                 var category:Category = CatalogHelper.getInstance().getCatalogObject(link, bindTo) as Category;
-                return category.getFacets();
+                return category && category.getFacets();
               }
       );
     }

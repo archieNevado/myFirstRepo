@@ -11,5 +11,6 @@
 
 <@cm.include self=self view="teaser" params={
   "additionalClass": additionalClasses?join(" "),
-  "renderDimmer": false
+  "renderDimmer": false,
+  "enableTeaserOverlay": false
 }/>

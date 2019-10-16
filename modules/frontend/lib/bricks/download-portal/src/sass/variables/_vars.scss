@@ -1,4 +1,4 @@
-$am-text-color: $black !default;
+$am-text-color: $am-black !default;
 $am-text-size: 15px !default;
 $am-margin-large: 24px !default;
 $am-margin-medium: 12px !default;
@@ -18,24 +18,24 @@ $am-notification-error-text-color: #a94442 !default;
 $am-notification-error-background-color: #f2dede !default;
 $am-notification-error-border-color: #ebccd1 !default;
 
-$am-page-number-border: 1px solid $gray !default;
-$am-page-number-text-color: $red !default;
-$am-page-number-text-color-hover: $white !default;
-$am-page-number-text-color-active: $white !default;
-$am-page-number-background-color: $white !default;
-$am-page-number-background-color-hover: $gray !default;
-$am-page-number-background-color-active: $red !default;
+$am-page-number-border: 1px solid $am-gray !default;
+$am-page-number-text-color: $am-red !default;
+$am-page-number-text-color-hover: $am-white !default;
+$am-page-number-text-color-active: $am-white !default;
+$am-page-number-background-color: $am-white !default;
+$am-page-number-background-color-hover: $am-gray !default;
+$am-page-number-background-color-active: $am-red !default;
 
-$am-breadcrumb-item-link-color: $black !default;
-$am-breadcrumb-item-link-color-hover: $red !default;
+$am-breadcrumb-item-link-color: $am-black !default;
+$am-breadcrumb-item-link-color-hover: $am-red !default;
 
-$am-button-background-color: $white !default;
-$am-button-border-color: $red !default;
+$am-button-background-color: $am-white !default;
+$am-button-border-color: $am-red !default;
 $am-button-border-width: 2px !default;
-$am-button-text-color: $red !default;
+$am-button-text-color: $am-red !default;
 $am-button-height-circle: 30px !default;
-$am-button-background-color-hover: $red !default;
-$am-button-text-color-hover: $white !default;
+$am-button-background-color-hover: $am-red !default;
+$am-button-text-color-hover: $am-white !default;
 $am-button-text-color-disabled: #cc8888 !default;
 $am-button-border-color-disabled: #cc8888 !default;
 
@@ -49,19 +49,19 @@ $am-breakpoint-large-device-min: $am-breakpoint-medium-device-max + 1px !default
 
 $am-picture-box-badge-height-percentage: 20% !default;
 $am-picture-box-badge-icon-padding: 10% !default;
-$am-picture-box-empty-background-color: $gray !default;
+$am-picture-box-empty-background-color: $am-gray !default;
 
-$am-subject-tag-background: $gray !default;
-$am-subject-tag-text-color: $white !default;
+$am-subject-tag-background: $am-gray !default;
+$am-subject-tag-text-color: $am-white !default;
 
 $am-input-text-size: 17px !default;
 $am-input-height: 40px !default;
 $am-input-border-width: 1px !default;
-$am-input-border-color: $white !default;
-$am-input-border-color-focus: $red !default;
+$am-input-border-color: $am-white !default;
+$am-input-border-color-focus: $am-red !default;
 
-$am-icon-button-background-color: $red !default;
+$am-icon-button-background-color: $am-red !default;
 $am-icon-button-height: 40px !default;
 
-$am-search-border-color: $gray !default;
+$am-search-border-color: $am-gray !default;
 $am-search-submit-width: 70px !default;

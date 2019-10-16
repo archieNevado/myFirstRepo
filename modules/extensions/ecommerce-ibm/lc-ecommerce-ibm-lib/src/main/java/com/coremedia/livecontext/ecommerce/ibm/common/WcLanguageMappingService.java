@@ -3,23 +3,25 @@ package com.coremedia.livecontext.ecommerce.ibm.common;
 import com.coremedia.cache.Cache;
 import com.coremedia.cache.CacheKey;
 import com.coremedia.cache.EvaluationException;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
+import static java.lang.invoke.MethodHandles.lookup;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 
 class WcLanguageMappingService {
 
-  private static final Logger LOG = LoggerFactory.getLogger(WcLanguageMappingService.class);
+  private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
 
   //default is english
   private static final String DEFAULT_LANGUAGE_ID = "-1";
@@ -32,6 +34,8 @@ class WcLanguageMappingService {
   private Cache cache;
 
   private final CacheKey<Map<String, String>> languageMappingCacheKey = new LanguageMappingCacheKey(this);
+
+  private int delayOnErrorSeconds;
 
   Map<String, String> getLanguageMapping() {
     try {
@@ -77,6 +81,10 @@ class WcLanguageMappingService {
     return Optional.ofNullable(langId);
   }
 
+  int getDelayOnErrorSeconds() {
+    return delayOnErrorSeconds;
+  }
+
   @Autowired
   public void setCache(Cache cache) {
     this.cache = cache;
@@ -85,5 +93,10 @@ class WcLanguageMappingService {
   @Autowired
   public void setRestConnector(WcRestConnector connector) {
     this.restConnector = connector;
+  }
+
+  @Value("${livecontext.ibm.languageMapping.delayOnErrorSeconds:30}")
+  public void setDelayOnErrorSeconds(int delayOnErrorSeconds) {
+    this.delayOnErrorSeconds = delayOnErrorSeconds;
   }
 }

@@ -24,7 +24,6 @@ import {
 
 import {
   DEVICE_DESKTOP,
-  DEVICE_TABLET,
   PDP_ASSET_READY_EVENT,
   setMegaMenuItemsWidth,
   updateCartControl,
@@ -80,14 +79,6 @@ $(function() {
         const $activeImg = $(incomingSlideEl).find("img[data-zoom-image]");
         const $prevImg = $(outgoingSlideEl).find("img[data-zoom-image]");
         resetMagnifierPlugin($activeImg, $prevImg);
-      };
-      instance.disablePointerEvents = function() {
-        // disabling pointer events for zoomWindow means enabling them for the image
-        $(this).css("pointer-events", "none");
-      };
-      instance.enablePointerEvents = function() {
-        // re-enable pointer-events after finishing the click on the image
-        $(".zoomContainer").css("pointer-events", "");
       };
       $target.data("cm-product-assets", instance);
 
@@ -169,16 +160,7 @@ $(function() {
             });
           }
 
-          if (!magnifierPluginEventsInitialized) {
-            // disable mouse click events on zoom window to support PDE and saving of images
-            $("body").on(
-              "mousedown",
-              ".zoomContainer",
-              instance.disablePointerEvents
-            );
-            $img.on("click", instance.enablePointerEvents);
-            magnifierPluginEventsInitialized = true;
-          }
+          magnifierPluginEventsInitialized = true;
         }
       }
 
@@ -197,11 +179,6 @@ $(function() {
     },
     function($target) {
       const instance = $target.data("cm-product-assets");
-      $("body").off(
-        "mousedown",
-        ".zoomContainer",
-        instance.disablePointerEvents
-      );
       $target.off(PDP_ASSET_READY_EVENT, instance.findZoomImage);
       $window.off("scroll", instance.findZoomImageByTarget);
       $window.off("resize", instance.findZoomImageByTarget);

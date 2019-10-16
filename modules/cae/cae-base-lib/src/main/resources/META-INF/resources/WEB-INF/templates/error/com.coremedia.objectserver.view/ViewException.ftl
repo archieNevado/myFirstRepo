@@ -59,7 +59,6 @@
       box-shadow: 0 0 20px #000;
       font-family: Arial, Helvetica, sans-serif;
       font-size: 12px;
-      overflow-x: scroll;
     }
     .cm-error__box button {
       position: absolute;
@@ -69,6 +68,7 @@
     }
     .cm-error__details {
       position: relative;
+      padding: 12px 3px 0;
     }
     .cm-error__details pre,
     .cm-error__details textarea {
@@ -94,7 +94,8 @@
     }
     .cm-error__small {
       max-height: 150px;
-      overflow-y: scroll;
+      overflow-y: auto;
+      resize: vertical;
     }
   </style>
   <script>
@@ -153,17 +154,17 @@
 
       <div class="cm-error__details">
         <label class="cm-error__label">View:</label>
-        <p>${self.view!""}</p>
+        <pre class="cm-error__view">${self.view!""}</pre>
         <label class="cm-error__label">Model:</label>
-        <p>${self.bean!""}</p>
+        <pre class="cm-error__model">${self.bean!""}</pre>
         <label class="cm-error__label">Cause:</label>
-        <pre><#noautoesc>${self.messagesAsHtml!""}</#noautoesc></pre>
-        <label class="cm-error__label">class hierarchy:</label>
+        <pre class="cm-error__cause cm-error__small"><#noautoesc>${self.messagesAsHtml!""}</#noautoesc></pre>
+        <label class="cm-error__label">Class Hierarchy:</label>
         <pre class="cm-error__small"><#list self.getHierarchy() as hierachy>
           ${hierachy}
         </#list></pre>
-        <label for="cm-error-text" class="cm-error__label">Full Stack Trace:</label>
-        <textarea id="cm-error-text" readonly onclick="this.select();" class="cm-error__small" rows="10">${bp.getStackTraceAsString(self)!""}</textarea>
+        <label class="cm-error__label">Full Stack Trace:</label>
+        <textarea readonly class="cm-error__stacktrace cm-error__small" rows="10">${bp.getStackTraceAsString(self)!""}</textarea>
       </div>
     </div>
   </div>

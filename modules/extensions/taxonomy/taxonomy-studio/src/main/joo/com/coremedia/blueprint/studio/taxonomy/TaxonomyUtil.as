@@ -38,6 +38,14 @@ public class TaxonomyUtil {
     latestAdminSelection = node;
   }
 
+  public static function decodeHTML(xml:String):String {
+    while (xml.indexOf('&nbsp;') !== -1) {
+      xml = xml.replace('&nbsp;', ' ');
+    }
+    return xml;
+  }
+
+
   public static function escapeHTML(xml:String):String {
     while (xml.indexOf('>') !== -1) {
       xml = xml.replace('>', '&gt;');

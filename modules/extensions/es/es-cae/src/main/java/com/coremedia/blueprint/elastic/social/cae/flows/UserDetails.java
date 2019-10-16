@@ -358,10 +358,12 @@ public class UserDetails implements Serializable {
   /**
    * @cm.template.api
    */
+  @Deprecated
   public boolean isConnectedWithTwitter() {
     return connectedWithTwitter;
   }
 
+  @Deprecated
   public void setConnectedWithTwitter(boolean connectedWithTwitter) {
     this.connectedWithTwitter = connectedWithTwitter;
   }
@@ -369,10 +371,12 @@ public class UserDetails implements Serializable {
   /**
    * @cm.template.api
    */
+  @Deprecated
   public boolean isConnectedWithFacebook() {
     return connectedWithFacebook;
   }
 
+  @Deprecated
   public void setConnectedWithFacebook(boolean connectedWithFacebook) {
     this.connectedWithFacebook = connectedWithFacebook;
   }
