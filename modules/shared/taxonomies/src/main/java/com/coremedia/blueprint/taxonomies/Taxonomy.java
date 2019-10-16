@@ -147,4 +147,11 @@ public interface Taxonomy<T> {
    * @return the list of items referencing the node
    */
   List<T> getStrongLinks(TaxonomyNode node, boolean recursive);
+
+  /**
+   * Returns true if the taxonomy can be modified by the current user.
+   */
+  default boolean isWriteable() {
+    return true;
+  }
 }

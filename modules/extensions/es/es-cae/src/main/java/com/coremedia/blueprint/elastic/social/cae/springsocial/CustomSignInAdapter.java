@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import static com.coremedia.blueprint.elastic.social.cae.springsocial.Requests.getServletRequest;
 import static org.slf4j.LoggerFactory.getLogger;
 
+@Deprecated
 public class CustomSignInAdapter implements SignInAdapter {
 
   private static final Logger LOG = getLogger(CustomSignInAdapter.class);

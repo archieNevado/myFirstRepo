@@ -78,7 +78,7 @@ public class BlueprintFormsStudioPluginBase extends StudioPlugin {
       DependencyTracker.dependOnObservable(libToggleBtn, "toggle");
     }
     var collectionView:CollectionView = Ext.getCmp(CollectionView.COLLECTION_VIEW_ID) as CollectionView;
-    if (collectionView) {
+    if (collectionView && collectionView.isVisible(true)) {
       var content:Content = collectionView.getSelectedFolderValueExpression().getValue() as Content;
       if (content) {
         return content.getPath();

@@ -54,6 +54,7 @@ public class LoginHelper {
 
   private AuthenticationTrustResolver authenticationTrustResolver = new AuthenticationTrustResolverImpl();
 
+  @Deprecated
   public void preProcess(RequestContext context) {
     ProviderSignInUtils providerSignInUtils = new ProviderSignInUtils(springSocialConfiguration.connectionFactoryLocator(), springSocialConfiguration.usersConnectionRepository());
 
@@ -122,6 +123,7 @@ public class LoginHelper {
     return elasticSocialUserHelper.getLoggedInUser() != null;
   }
 
+  @Deprecated
   public void postProcessProviderLogin(RequestContext context) {
     if (context.getRequestParameters().contains("error")) {
       addErrorMessage(context, WebflowMessageKeys.LOGIN_PROVIDER_ERROR);

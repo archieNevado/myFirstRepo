@@ -12,11 +12,11 @@
   "dependencies": {
     "@coremedia/cm-logger": "^1.0.0",
     "@coremedia/tool-utils": "^1.0.0",
-    "tiny-lr": "1.0.5"
+    "tiny-lr": "1.1.1"
   },
   "devDependencies": {
     "jest": "23.6.0",
-    "prettier": "1.15.2"
+    "prettier": "^1.0.0"
   },
   "scripts": {
     "prettier": "prettier \"**/*\" --write",

@@ -82,10 +82,12 @@ const handler = argv => {
   };
 
   // overwrite target in config with given parameter
-  if(!!argv.local) {
-    monitorConfig.target = "local";
-  } else if(!!argv.remote) {
-    monitorConfig.target = "remote";
+  // eslint-disable-next-line no-extra-boolean-cast
+  if (!!argv.local) {
+    process.env.target = monitorConfig.target = "local";
+    // eslint-disable-next-line no-extra-boolean-cast
+  } else if (!!argv.remote) {
+    process.env.target = monitorConfig.target = "remote";
   }
 
   if (monitorConfig.target === "remote") {

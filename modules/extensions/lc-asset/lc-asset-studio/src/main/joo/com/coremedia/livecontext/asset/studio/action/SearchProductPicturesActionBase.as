@@ -58,8 +58,9 @@ public class SearchProductPicturesActionBase extends LiveContextCatalogObjectAct
       var searchState:SearchState = new SearchState();
       searchState.searchText = product.getExternalId();
       searchState.contentType = "CMPicture";
-      searchState.folder = preferredSite.getSiteRootFolder();
-
+      if (preferredSite) {
+        searchState.folder = preferredSite.getSiteRootFolder();
+      }
       editorContext.getCollectionViewManager().openSearch(searchState, true, CollectionViewConstants.LIST_VIEW);
     }
   }

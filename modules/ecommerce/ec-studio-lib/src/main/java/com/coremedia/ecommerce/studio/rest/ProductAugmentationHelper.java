@@ -52,7 +52,7 @@ public class ProductAugmentationHelper extends AugmentationHelperBase<Product> {
       initializeLayoutSettings(product, properties);
     }
 
-    return createContent(categoryFolder, getEscapedDisplayName(product), properties);
+    return createContent(categoryFolder, computeDocumentName(product), properties);
   }
 
   @VisibleForTesting
@@ -80,7 +80,6 @@ public class ProductAugmentationHelper extends AugmentationHelperBase<Product> {
     properties.put(PAGEGRID_STRUCT_PROPERTY, structWithLayoutLink);
   }
 
-
   @Override
   Content getCategoryContent(@NonNull Category category) {
     return categoryAugmentationService.getContent(category);
@@ -97,9 +96,9 @@ public class ProductAugmentationHelper extends AugmentationHelperBase<Product> {
   }
 
   @NonNull
-  private static String getEscapedDisplayName(@NonNull Product product) {
-    // External ids of products can contain '/'. See CMS-5075
-    return product.getName().replace('/', '_');
+  private static String computeDocumentName(@NonNull Product product) {
+    return (product.getName() + "(" + product.getExternalId() + ")")
+            .replace('/', '_');
   }
 
   @Autowired(required = false)

@@ -225,7 +225,7 @@ GRAPH
     ohai (>= 0.0.0)
   ulimit (0.3.3)
   user (0.7.0)
-  windows (6.0.0)
+  windows (6.0.1)
   yum (4.2.0)
   yum-centos (2.3.0)
     compat_resource (>= 12.16.3)

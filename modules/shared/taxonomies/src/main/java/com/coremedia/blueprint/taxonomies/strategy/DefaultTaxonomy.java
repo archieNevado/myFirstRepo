@@ -10,6 +10,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.content.Version;
+import com.coremedia.cap.content.authorization.AccessControl;
 import com.coremedia.cap.content.publication.PublicationService;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.rest.cap.content.search.solr.SolrSearchService;
@@ -37,7 +38,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
 
   private static final Logger LOG = LoggerFactory.getLogger(DefaultTaxonomy.class);
 
-  private static final int LIMIT = 100;
+  private static final int LIMIT = 10;
   private static final String VALUE = "value";
   private static final String CHILDREN = "children";
 
@@ -71,6 +72,13 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     root.setRef(TaxonomyUtil.getRestIdFromCapId(rootFolder.getId()));
     root.setType(ROOT_TYPE);
     root.setLevel(0);
+  }
+
+  @Override
+  public boolean isWriteable() {
+    Content content = asContent(getRoot());
+    AccessControl accessControl = contentRepository.getAccessControl();
+    return accessControl.mayCreate(content, taxonomyContentType);
   }
 
   @Override
@@ -167,11 +175,11 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
 
     for (Content child : allChildren) {
       for (Content ref : child.getReferrers()) {
-        if(ref.getName().equals(ROOT_SETTINGS_DOCUMENT)) {
+        if (ref.getName().equals(ROOT_SETTINGS_DOCUMENT)) {
           continue;
         }
         if (!result.contains(ref) && ref.isInProduction() && !ref.getType().isSubtypeOf(taxonomyContentType)) {
-          if(!isWeakLinked(child, ref)) {
+          if (!isWeakLinked(child, ref)) {
             result.add(ref);
           }
         }
@@ -252,7 +260,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     }
     else {
       List<Content> rootNodesFromSettings = getRootNodesFromSettings();
-      if(rootNodesFromSettings != null) {
+      if (rootNodesFromSettings != null) {
         rootNodesFromSettings.add(nodeContent);
         updateRootNodeSettings(rootNodesFromSettings);
       }
@@ -293,9 +301,9 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     //collect all sub nodes we have to delete
     List<Content> allChildren = new ArrayList<>();
     collectChildren(deleteMe, allChildren);
-    deleteChildren(allChildren);
-
     unlinkFromParent(deleteMe, parent);
+
+    deleteChildren(allChildren);
 
     return (parent == null) ? root : asNode(parent);
   }
@@ -338,6 +346,10 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
    */
   private void unlinkFromParent(Content child, Content parent) {
     if (parent != null) {
+      if(parent.isCheckedOut() && !parent.isCheckedOutByCurrentSession()) {
+        throw new IllegalStateException("Parent '" + parent.getName() + "' is currently checked out by another user, node deletion aborted.");
+      }
+
       if (!parent.isCheckedOut()) {
         parent.checkOut();
       }
@@ -351,7 +363,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     }
     else {
       List<Content> rootNodesFromSettings = getRootNodesFromSettings();
-      if(rootNodesFromSettings != null) {
+      if (rootNodesFromSettings != null) {
         rootNodesFromSettings.remove(child);
         updateRootNodeSettings(rootNodesFromSettings);
       }
@@ -376,6 +388,10 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     updateContentName(content, defaultName);
 
     if (parent != null) {
+      if(parent.isCheckedOut() && !parent.isCheckedOutByCurrentSession()) {
+        throw new IllegalStateException("Parent '" + parentNode.getName() + "' is currently checked out by another user, node creation aborted.");
+      }
+
       if (!parent.isCheckedOut()) {
         parent.checkOut();
       }
@@ -386,7 +402,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     }
     else {
       List<Content> rootNodesFromSettings = getRootNodesFromSettings();
-      if(rootNodesFromSettings != null) {
+      if (rootNodesFromSettings != null) {
         rootNodesFromSettings.add(content);
         updateRootNodeSettings(rootNodesFromSettings);
       }
@@ -404,6 +420,11 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
         //test if renaming is required
         if (!node.getName().equals(content.getName())) {
           String newNodeName = getTaxonomyDocumentName(content);
+          if (!node.getName().equals(newNodeName)) {
+            LOG.info("Ignoring taxonomy renaming of {} to {}", content.getName(), newNodeName);
+            return node;
+          }
+
           //check out document and...
           if (!content.isCheckedOut()) {
             content.checkOut();
@@ -467,7 +488,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
 
   private List<Content> getRootNodesFromSettings() {
     Content rootSettings = rootFolder.getChild(ROOT_SETTINGS_DOCUMENT);
-    if(rootSettings != null && rootSettings.getType().getName().equals(TYPE_SETTINGS)) {
+    if (rootSettings != null && rootSettings.getType().getName().equals(TYPE_SETTINGS)) {
       Struct settings = rootSettings.getStruct(SETTINGS_STRUCT);
       return new ArrayList<>(settings.getLinks(ROOTS_LIST));
     }
@@ -477,8 +498,8 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
 
   private void updateRootNodeSettings(List<Content> topNodes) {
     Content rootSettings = rootFolder.getChild(ROOT_SETTINGS_DOCUMENT);
-    if(rootSettings != null && rootSettings.getType().getName().equals(TYPE_SETTINGS)) {
-      if(!rootSettings.isCheckedOut()) {
+    if (rootSettings != null && rootSettings.getType().getName().equals(TYPE_SETTINGS)) {
+      if (!rootSettings.isCheckedOut()) {
         rootSettings.checkOut();
       }
 
@@ -497,16 +518,16 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     List<CapPropertyDescriptor> descriptors = linkingContent.getType().getDescriptors();
     for (CapPropertyDescriptor descriptor : descriptors) {
       //..if they link the content and if they are not weak link
-      if(descriptor.getType().equals(CapPropertyDescriptorType.LINK)) {
+      if (descriptor.getType().equals(CapPropertyDescriptorType.LINK)) {
         LinkPropertyDescriptor linkPropertyDescriptor = (LinkPropertyDescriptor) descriptor;
         List<Content> links = linkingContent.getLinks(descriptor.getName());
-        if(links.contains(linkedContent) && !linkPropertyDescriptor.isWeakLink()) {
+        if (links.contains(linkedContent) && !linkPropertyDescriptor.isWeakLink()) {
           return false;
         }
       }
-      else if(descriptor.getType().equals(CapPropertyDescriptorType.STRUCT)) {
+      else if (descriptor.getType().equals(CapPropertyDescriptorType.STRUCT)) {
         Struct struct = linkingContent.getStruct(descriptor.getName());
-        if(struct != null && containsLink(struct, linkedContent)) {
+        if (struct != null && containsLink(struct, linkedContent)) {
           return false;
         }
       }
@@ -516,7 +537,8 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
 
   /**
    * Checks if the content is linked inside the struct
-   * @param struct the struct property to check
+   *
+   * @param struct        the struct property to check
    * @param linkedContent the content to search for
    */
   private boolean containsLink(Struct struct, Content linkedContent) {
@@ -532,18 +554,18 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
   private void collectStructReferences(Map<String, Object> properties, Content linkedContent, List<Content> result) {
     for (Map.Entry<String, Object> entry : properties.entrySet()) {
       Object value = entry.getValue();
-      if(value instanceof Map) {
+      if (value instanceof Map) {
         Map<String, Object> nestedMap = (Map<String, Object>) value;
         collectStructReferences(nestedMap, linkedContent, result);
       }
       else if (value instanceof List) {
         List<Object> list = (List<Object>) value;
         for (Object listItem : list) {
-          if(listItem instanceof Map) {
+          if (listItem instanceof Map) {
             collectStructReferences((Map<String, Object>) listItem, linkedContent, result);
           }
-          else if(listItem instanceof Content) {
-            if(listItem.equals(linkedContent)) {
+          else if (listItem instanceof Content) {
+            if (listItem.equals(linkedContent)) {
               result.add((Content) listItem);
             }
           }
@@ -717,7 +739,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     node.setExtendable(true);
     node.setSiteId(getSiteId());
     node.setType(taxonomyContentType.getName());
-    node.setLeaf(getValidChildren(content).isEmpty());
+    node.setLeaf(getValidChildren(content, 1).isEmpty());
     List<Content> path = new ArrayList<>();
     buildPathRecursively(content, path);
     node.setLevel(path.size());
@@ -735,13 +757,16 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
    * @return valid children
    */
   private List<Content> getValidChildren(Content content) {
-    List<Content> validChildren = new ArrayList<>();
-    for (Content child : content.getLinks(CHILDREN)) {
-      if (!child.isDestroyed() && child.isInProduction() && !validChildren.contains(child)) {
-        validChildren.add(child);
-      }
+    return getValidChildren(content, 0);
+  }
+
+  private List<Content> getValidChildren(Content content, int limit) {
+    String query = "TYPE " + taxonomyContentType.getName() + " :isInProduction";
+    if (limit > 0) {
+      query = query + " LIMIT " + limit;
     }
-    return validChildren;
+
+    return content.getLinksFulfilling(CHILDREN, query);
   }
 
   /**
@@ -769,18 +794,16 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
    */
   private void findRootNodes(Content folder, List<Content> matches) {
     List<Content> rootNodesFromSettings = getRootNodesFromSettings();
-    if(rootNodesFromSettings != null) {
+    if (rootNodesFromSettings != null) {
       matches.addAll(rootNodesFromSettings);
       return;
     }
 
-    Collection<Content> nodes = folder.getChildren();
+    String query = "TYPE " + taxonomyContentType.getName() + " :isInProduction";
+    Collection<Content> nodes = folder.getChildrenFulfilling(query);
     for (Content child : nodes) {
-      if (child.isDocument()
-              && !child.isDeleted()
-              && !child.isDestroyed()
-              && getParent(child) == null
-              && !contentRepository.getPublicationService().isToBeDeleted(child)) { //NOSONAR
+      if (getParent(child) == null
+          && !contentRepository.getPublicationService().isToBeDeleted(child)) { //NOSONAR
         matches.add(child);
       }
     }

@@ -264,14 +264,4 @@ public class TaxonomyResolverImpl implements TaxonomyResolver, InitializingBean 
     }
     return strategy;
   }
-
-  /**
-   * Checks if the given Taxonomy entry is still valid.
-   * @param entry The strategy entry to check.
-   * @return True, if the entry is still valid.
-   */
-  private boolean isValid(Map.Entry<String, Taxonomy> entry) {
-    return entry.getValue().isValid();
-  }
-
 }

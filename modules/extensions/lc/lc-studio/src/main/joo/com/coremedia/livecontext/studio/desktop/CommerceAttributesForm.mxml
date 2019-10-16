@@ -6,7 +6,8 @@
         xmlns:ui="exml:com.coremedia.ui.config"
         xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
         xmlns:livecontext="exml:com.coremedia.livecontext.studio.config"
-        title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Tab_attributes_title')}">
+        title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Commerce_Tab_attributes_title')}"
+        itemId="attributes">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.livecontext.studio.LivecontextStudioPlugin')]
   </fx:Metadata>

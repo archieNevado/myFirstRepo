@@ -55,7 +55,8 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration(classes = {XmlRepoConfiguration.class, CategoryAugmentationHelperTest.LocalConfig.class})
 public class CategoryAugmentationHelperTest {
 
-  private static final String CATEGORY_ID = "test:///catalog/category/leafCategory";
+  private static final String CATEGORY_EXTERNALID = "leafCategory";
+  private static final String CATEGORY_ID = "test:///catalog/category/" + CATEGORY_EXTERNALID;
   //External ids of category can contain '/'. See CMS-5075
   private static final String CATEGORY_DISPLAY_NAME = "le/af";
   private static final String ESCAPED_CATEGORY_DISPLAY_NAME = "le_af";
@@ -109,6 +110,7 @@ public class CategoryAugmentationHelperTest {
     leafCategory = mock(Category.class, RETURNS_DEEP_STUBS);
     when(leafCategory.getParent()).thenReturn(topCategory);
     when(leafCategory.getDisplayName()).thenReturn(CATEGORY_DISPLAY_NAME);
+    when(leafCategory.getExternalId()).thenReturn(CATEGORY_EXTERNALID);
     when(leafCategory.getId()).thenReturn(CommerceIdParserHelper.parseCommerceIdOrThrow(CATEGORY_ID));
     List<Category> breadcrumb = newArrayList(rootCategory, topCategory, leafCategory);
     when(leafCategory.getBreadcrumb()).thenReturn(breadcrumb);
@@ -125,9 +127,9 @@ public class CategoryAugmentationHelperTest {
     testling.augment(leafCategory);
 
     Content externalChannel = contentRepository.getChild("/Sites/Content Test/" + DEFAULT_BASE_FOLDER_NAME + "/"
-            + ROOT + "/" + TOP + "/" + ESCAPED_CATEGORY_DISPLAY_NAME + "/" + ESCAPED_CATEGORY_DISPLAY_NAME);
+            + ROOT + "/" + TOP + "/" + ESCAPED_CATEGORY_DISPLAY_NAME + "/" + ESCAPED_CATEGORY_DISPLAY_NAME + "(" + CATEGORY_EXTERNALID + ")");
     assertThat(externalChannel).isNotNull();
-    assertThat(externalChannel.getName()).isEqualTo(ESCAPED_CATEGORY_DISPLAY_NAME);
+    assertThat(externalChannel.getName()).isEqualTo(ESCAPED_CATEGORY_DISPLAY_NAME  + "(" + CATEGORY_EXTERNALID + ")");
     assertThat(externalChannel.getString(EXTERNAL_ID)).isEqualTo(CATEGORY_ID);
     assertThat(externalChannel.getString(TITLE)).isEqualTo(CATEGORY_DISPLAY_NAME);
     assertThat(externalChannel.getString(SEGMENT)).isEqualTo(CATEGORY_DISPLAY_NAME);

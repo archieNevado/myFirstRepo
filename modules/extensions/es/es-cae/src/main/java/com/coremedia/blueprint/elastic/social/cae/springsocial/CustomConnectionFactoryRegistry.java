@@ -20,6 +20,7 @@ import java.util.Set;
 
 import static java.lang.String.format;
 
+@Deprecated
 public class CustomConnectionFactoryRegistry implements ConnectionFactoryLocator {
 
   private ConnectionFactory<Facebook> facebookConnectionFactory;

@@ -9,7 +9,7 @@
     "node-sass": "4.12.0"
   },
   "devDependencies": {
-    "prettier": "1.15.2"
+    "prettier": "^1.0.0"
   },
   "scripts": {
     "prettier": "prettier \"**/*\" --write"

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * Request utilities
  */
+@Deprecated
 class Requests {
 
   private Requests() {
