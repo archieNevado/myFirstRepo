@@ -31,7 +31,8 @@
 
   <local:items>
     <editor:DocumentForm
-            title="{resourceManager.getString('com.coremedia.blueprint.base.queryeditor.QueryEditor', 'DCQE_label_conditions')}">
+            title="{resourceManager.getString('com.coremedia.blueprint.base.queryeditor.QueryEditor', 'DCQE_label_conditions')}"
+            itemId="conditionsTab">
       <editor:items>
         <editor:PropertyFieldGroup
                 title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'CMProductList_category_text')}"
@@ -91,7 +92,8 @@
       </editor:items>
     </editor:DocumentForm>
     <editor:DocumentForm
-            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}">
+            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}"
+            itemId="contentTab">
       <editor:items>
         <bpforms:TeaserDocumentForm/>
         <bpforms:FixedIndexItemsForm/>

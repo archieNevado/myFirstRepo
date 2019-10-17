@@ -161,8 +161,9 @@
 }
 
 /** elevateZoom fix */
-.zoomContainer, .zoomLens {
+.zoomContainer {
   z-index: 2;
+  pointer-events: none;
 }
 
 /* used for positioning and sizing the zoom window */

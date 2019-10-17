@@ -18,7 +18,9 @@ import java.util.Optional;
 
 /**
  * A filter that copies the current site from the request to the user's session (if available)
+ * @deprecated will be moved to com.coremedia.blueprint.elastic.social.cae.filter
  */
+@Deprecated
 @Named
 public class SessionSiteFilter implements Filter {
 

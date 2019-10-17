@@ -24,7 +24,12 @@ public class TaxonomyCache {
    * @param callback The callback handler that processes the suggestions list.
    */
   public function invalidate(callback:Function):void {
-    TaxonomyNodeFactory.loadSuggestions(taxId, activeContentVE.getValue() as Content, function (nodeList:TaxonomyNodeList):void {
+    var content:Content = activeContentVE.getValue() as Content;
+    if (!content) {
+      return;
+    }
+
+    TaxonomyNodeFactory.loadSuggestions(taxId, content, function (nodeList:TaxonomyNodeList):void {
       cachedSuggestions = nodeList;
       callback(getActiveSuggestions());
     });

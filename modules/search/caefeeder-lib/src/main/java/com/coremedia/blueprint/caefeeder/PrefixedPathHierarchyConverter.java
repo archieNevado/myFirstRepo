@@ -39,7 +39,6 @@ import java.util.stream.Stream;
  *   The converter assumes that the levels of the hierarchy are separated by slashes.
  * </p>
  *
- *
  * @see <a href="https://wiki.apache.org/solr/HierarchicalFaceting">'facet.prefix' based drill down</a>
  */
 public class PrefixedPathHierarchyConverter implements PropertyConverter {

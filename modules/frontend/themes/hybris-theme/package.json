@@ -36,7 +36,7 @@
     "webpack": "3.10.0"
   },
   "devDependencies": {
-    "prettier": "1.15.2"
+    "prettier": "^1.0.0"
   },
   "main": "src/js/index.js",
   "coremedia": {

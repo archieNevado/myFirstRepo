@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "jsdoc-to-markdown": "3.0.0",
-    "prettier": "1.15.2"
+    "prettier": "^1.0.0"
   },
   "scripts": {
     "apidoc": "jsdoc2md src/js/*.js > API.md",

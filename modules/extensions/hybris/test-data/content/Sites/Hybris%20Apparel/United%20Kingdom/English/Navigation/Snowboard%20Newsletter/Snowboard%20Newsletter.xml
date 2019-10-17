@@ -8,10 +8,6 @@
 <localSettings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <BooleanProperty Name="pricesInImage">false</BooleanProperty>
-<StringListProperty Name="viewRepositoryNames">
-<String>newsletter</String>
-<String>perfectchef</String>
-</StringListProperty>
 <StringProperty Name="fromName">Hybris Shop</StringProperty>
 <StringProperty Name="fromAddress">testmail@silverpop.com</StringProperty>
 <StringProperty Name="replyTo">testmail@silverpop.com</StringProperty>

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Common utility methods for taxonomies.
@@ -124,17 +125,16 @@ public final class TaxonomyUtil {
    * @return first taxonomy found in hierarchy, null if non can be found.
    */
   public static Content findFirstTaxonomy(Content folder, String contentType) {
-    for (Content c : folder.getChildren()) {
-      if (c.isDocument()) {
-        if (isTaxonomy(c, contentType)) {
-          return c;
-        }
-      } else {
-        return findFirstTaxonomy(c, contentType);
+    Set<Content> childDocuments = folder.getChildDocuments();
+    for (Content childDocument : childDocuments) {
+      if (isTaxonomy(childDocument, contentType)) {
+        return childDocument;
       }
     }
+
     return null;
   }
+
 
   public static String getRestIdFromCapId(String ref) {
     return "content/" + ref.substring(ref.lastIndexOf('/') + 1, ref.length());

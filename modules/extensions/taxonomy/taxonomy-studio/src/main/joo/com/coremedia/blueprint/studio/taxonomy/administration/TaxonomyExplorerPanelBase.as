@@ -17,13 +17,11 @@ import com.coremedia.ui.data.Bean;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
-import com.coremedia.ui.skins.LoadMaskSkin;
 import com.coremedia.ui.util.EventUtil;
 import com.coremedia.ui.util.createComponentSelector;
 
 import ext.Component;
 import ext.Ext;
-import ext.LoadMask;
 import ext.MessageBox;
 import ext.StringUtil;
 import ext.button.Button;
@@ -48,7 +46,6 @@ public class TaxonomyExplorerPanelBase extends Panel {
 
   private var columnsContainer:Container;
   private var clipboardValueExpression:ValueExpression;
-  private var previewLoadMask:LoadMask;
 
   public function TaxonomyExplorerPanelBase(config:TaxonomyExplorerPanel = null) {
     super(config);
@@ -64,16 +61,6 @@ public class TaxonomyExplorerPanelBase extends Panel {
     super.afterRender();
     var formDispatcher:TabbedDocumentFormDispatcher = getDocumentForm().getTabbedDocumentFormDispatcher();
     formDispatcher.bindTo.addChangeListener(updateTabs);
-
-    var target:Component = queryById('preview');
-    var loadMaskCfg:LoadMask = LoadMask({
-      target: target
-    });
-    loadMaskCfg.msg = resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomySearch_loading_text');
-    loadMaskCfg.ui = LoadMaskSkin.OPAQUE.getSkin();
-
-    previewLoadMask = new LoadMask(loadMaskCfg);
-    previewLoadMask.disable();
   }
 
   public function getSelectedValueExpression():ValueExpression {
@@ -124,6 +111,11 @@ public class TaxonomyExplorerPanelBase extends Panel {
     var selections:Array = getSelectedValueExpression().getValue();
     var parent:TaxonomyNode = selections[0];
     parent.createChild(function (newChild:TaxonomyNode):void {
+      if(newChild === null) {
+        setBusy(false);
+        return;
+      }
+
       parent.invalidate(function ():void {
         refreshNode(parent);
         updateColumns(parent);
@@ -133,7 +125,7 @@ public class TaxonomyExplorerPanelBase extends Panel {
         //callback is called after the grid selection was made
         selectNode(newChild, function ():void {
           waitForDocumentForm(newChild, function ():void {
-            updateTaxonomyNodeForm(newChild);
+            updateTaxonomyNodeForm(newChild, true);
             // Preset location latitude/longitude for location taxonomy nodes
             setInitialLocation(newChild, parent);
           });
@@ -342,7 +334,7 @@ public class TaxonomyExplorerPanelBase extends Panel {
       var newNode:TaxonomyNode = newNodes[0];
       TaxonomyUtil.setLatestSelection(newNode);
       updateActions(newNode);
-      updateTaxonomyNodeForm(newNode);
+      updateTaxonomyNodeForm(newNode, false);
       updateColumns(newNode);
     } else {
       getRootColumnPanel().selectNode(null);
@@ -367,13 +359,13 @@ public class TaxonomyExplorerPanelBase extends Panel {
    * Updates after the selected node has been changed. The document form dispatcher is updated afterwards
    * with the selected content or hidden, if no content is selected.
    * @param node The node to display the Document Form Dispatcher for.
+   * @param titleFocus True to focus the title field after selection
    */
-  public function updateTaxonomyNodeForm(node:TaxonomyNode):void {
-    previewLoadMask.show();
+  public function updateTaxonomyNodeForm(node:TaxonomyNode, titleFocus:Boolean):void {
     setBusy(true);
     getDisplayedTaxonomyNodeExpression().setValue(node);
-    var dfd:Container = queryById('documentFormDispatcher') as Container;
 
+    var dfd:Container = queryById('documentFormDispatcher') as Container;
     if (node && !node.isRoot()) {
       var content:Content = SESSION.getConnection().getContentRepository().getContent(node.getRef());
       if (content) {//null after content deletion
@@ -384,44 +376,49 @@ public class TaxonomyExplorerPanelBase extends Panel {
           ValueExpressionFactory.create(propertyName, content).addChangeListener(selectedTaxonomyNameChanged);
           getDisplayedTaxonomyContentExpression().setValue(content);
           dfd.show();
-          previewLoadMask.hide();
           setBusy(false);
 
-          ensureExpandState(dfd, content);
+          ensureExpandState(content);
+          if (titleFocus) {
+            focusTitle();
+          }
           Ext.resumeLayouts(true);
         });
       } else {
         dfd.hide();
-        previewLoadMask.hide();
         setBusy(false);
       }
     } else {
       //hide the document dispatcher panel!
       dfd.hide();
-      previewLoadMask.hide();
       setBusy(false);
     }
   }
 
-  private function ensureExpandState(dfd:Container, content:Content):void {
+  private function ensureExpandState(content:Content):void {
+    var dfd:Container = queryById('documentFormDispatcher') as Container;
     EventUtil.invokeLater(function ():void {
       var collapsable:Panel = dfd.query(createComponentSelector()._xtype(PropertyFieldGroup.xtype).build())[0] as Panel;
       if (collapsable && collapsable.collapsed) {
         collapsable.expand(false);
       }
-
-      var fieldId:String = resourceManager.getString('com.coremedia.blueprint.studio.TaxonomyStudioPluginSettings', 'taxonomy_display_property');
-      var stringPropertyFields:Array = collapsable.query(createComponentSelector()._xtype(StringPropertyField.xtype).build());
-
-      for each(var field:StringPropertyField in stringPropertyFields) {
-        if (field.propertyName === fieldId) {
-          var nameField:TextField = field.query(createComponentSelector()._xtype("textfield").build())[0] as TextField;
-          nameField.selectOnFocus = true;
-          nameField.focus(true);
-          return;
-        }
-      }
     });
+  }
+
+  private function focusTitle():void {
+    var dfd:Container = queryById('documentFormDispatcher') as Container;
+    var collapsable:Panel = dfd.query(createComponentSelector()._xtype(PropertyFieldGroup.xtype).build())[0] as Panel;
+    var fieldId:String = resourceManager.getString('com.coremedia.blueprint.studio.TaxonomyStudioPluginSettings', 'taxonomy_display_property');
+    var stringPropertyFields:Array = collapsable.query(createComponentSelector()._xtype(StringPropertyField.xtype).build());
+
+    for each(var field:StringPropertyField in stringPropertyFields) {
+      if (field.propertyName === fieldId) {
+        var nameField:TextField = field.query(createComponentSelector()._xtype("textfield").build())[0] as TextField;
+        nameField.selectOnFocus = true;
+        nameField.focus(true);
+        return;
+      }
+    }
   }
 
   /**

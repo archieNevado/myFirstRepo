@@ -357,6 +357,7 @@ function printDependencyGraphAsDOT(dependencies, packageName) {
 // noinspection JSUnusedGlobalSymbols
 module.exports = {
   NodeModule,
+  flattenDependencies,
   getDependencies,
   getFlattenedDependencies,
   getDependentsFirstLoadOrder,

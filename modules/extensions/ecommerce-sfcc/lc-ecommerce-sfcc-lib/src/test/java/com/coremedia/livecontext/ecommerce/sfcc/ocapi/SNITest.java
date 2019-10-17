@@ -26,6 +26,9 @@ public class SNITest {
     ResponseEntity<HashMap> result = restTemplate.exchange("https://check-tls.akamaized.net/v1/tlssni.json", HttpMethod.GET, null, HashMap.class);
     Object tls_sni_status = result.getBody().get("tls_sni_status");
     assertThat(tls_sni_status).isEqualTo("present");
+
+    Object tlsVersion = result.getBody().get("tls_version");
+    assertThat(tlsVersion).isEqualTo("tls1.2");
   }
 
 }

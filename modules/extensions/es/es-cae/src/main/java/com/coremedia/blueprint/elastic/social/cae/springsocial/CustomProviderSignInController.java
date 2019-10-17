@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import static com.coremedia.blueprint.elastic.social.cae.springsocial.Requests.getServletRequest;
 
+@Deprecated
 public class CustomProviderSignInController extends ProviderSignInController {
 
   /**

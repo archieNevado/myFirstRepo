@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(MockitoJUnitRunner.class)
 public class WcCookieFilterTest {
@@ -33,7 +35,7 @@ public class WcCookieFilterTest {
     request.setAttribute(LiveContextPageHandlerBase.HAS_PREVIEW_TOKEN, true);
     request.setCookies(
             new Cookie("WC_USERACTIVITY_-1002","-1002%2C10302%2Cbla"),
-            new Cookie("WC_ToBeFiltered", "doesNotMatter")
+            new Cookie("WC_AnotherActivity", "doesNotMatter")
     );
     MyFilterChain filterChain = new MyFilterChain();
 
@@ -44,7 +46,7 @@ public class WcCookieFilterTest {
   private class MyFilterChain implements FilterChain {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse) throws IOException, ServletException {
       assertEquals(0, ((HttpServletRequest) servletRequest).getCookies().length);
-      assertEquals("NOT_APPLICABLE_HERE_USERACTIVITY_-1002=-1002%2C10302%2Cbla", ((HttpServletRequest) servletRequest).getHeader("Cookie"));
+      assertFalse(((HttpServletRequest) servletRequest).getHeader("Cookie").contains("WC_"));
     }
   }
 }
