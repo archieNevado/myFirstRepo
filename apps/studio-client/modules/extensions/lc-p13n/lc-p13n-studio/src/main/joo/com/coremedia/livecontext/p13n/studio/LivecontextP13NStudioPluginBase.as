@@ -34,7 +34,7 @@ public class LivecontextP13NStudioPluginBase extends StudioPlugin {
           //value should be the store
           var sitesService:SitesService = editorContext.getSitesService();
           var site:Site = sitesService.getSite(store.getSiteId());
-          var selectedSitePath:String = site.getSiteRootFolder().getPath() + '/' + path;
+          var selectedSitePath:String = site ? site.getSiteRootFolder().getPath() + '/' + path : null;
           callback.call(null, selectedSitePath);
         });
       }

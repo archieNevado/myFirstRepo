@@ -16,8 +16,14 @@ if [ ! -z "${CONTENT_ARCHIVE_URL}" ]; then
     curl -L --insecure -o /var/tmp/content-archive.zip "${CONTENT_ARCHIVE_URL}"
     mkdir -p /var/tmp/content-archive
     unzip -qo /var/tmp/content-archive.zip -d /var/tmp/content-archive
-    mv -n /var/tmp/content-archive/content/* ${IMPORT_CONTENT_DIR}/
-    mv -n /var/tmp/content-archive/users/* ${IMPORT_USERS_DIR}/
+    if [ "$(ls -A /var/tmp/content-archive/content)" ]; then
+      echo "[DOCKER ENTRYPOINT] - content found in content archive, moving to import dir"
+      mv -n /var/tmp/content-archive/content/* ${IMPORT_CONTENT_DIR}/
+    fi
+    if [ "$(ls -A /var/tmp/content-archive/users)" ]; then
+      echo "[DOCKER ENTRYPOINT] - user files found in content archive, moving to import dir"
+      mv -n /var/tmp/content-archive/users/* ${IMPORT_USERS_DIR}/
+    fi
     rm -rf /var/tmp/content-archive /var/tmp/content-archive.zip
   else
     echo "[DOCKER ENTRYPOINT] - content archive already downloaded and extracted, skipping ..."

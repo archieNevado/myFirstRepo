@@ -34,7 +34,8 @@
       </#if>
         <#assign pictureParams={
           "classBox": "cm-popup__picture-box",
-          "classMedia": "cm-popup__picture"
+          "classMedia": "cm-popup__picture",
+          "metadata": ["properties.pictures"]
         } />
         <#if self.picture?has_content>
           <@cm.include self=self.picture!cm.UNDEFINED view="media" params=pictureParams />

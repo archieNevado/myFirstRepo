@@ -17,50 +17,7 @@
 
   <properties>
     <customer>Blueprint</customer>
-
   </properties>
-
-  <profiles>
-    <profile>
-      <!-- Profile not supported. Can be removed safely-->
-      <id>check-dependencies-owasp</id>
-      <properties>
-        <!-- Skip all other checks -->
-        <suppressionFile />
-      </properties>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.owasp</groupId>
-            <artifactId>dependency-check-maven</artifactId>
-            <configuration>
-              <suppressionFiles>
-                <suppressionFile>${suppressionFile}</suppressionFile>
-              </suppressionFiles>
-              <skipArtifactType>pom|coremedia-application</skipArtifactType>
-              <skipProvidedScope>true</skipProvidedScope>
-              <skipSystemScope>true</skipSystemScope>
-              <failOnError>true</failOnError>
-              <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
-              <cveUrlBase>https://nvd.nist.gov/feeds/json/cve/1.0/nvdcve-1.0-%d.json.gz</cveUrlBase>
-              <cveUrlModified>https://nvd.nist.gov/feeds/json/cve/1.0/nvdcve-1.0-modified.json.gz</cveUrlModified>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>check-sonar</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.sonarsource.scanner.maven</groupId>
-            <artifactId>sonar-maven-plugin</artifactId>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 
   <modules>
     <module>blueprint-parent</module>
@@ -90,51 +47,6 @@
     </site>
   </distributionManagement>
 
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.owasp</groupId>
-          <artifactId>dependency-check-maven</artifactId>
-          <version>5.2.1</version>
-        </plugin>
-        <plugin>
-          <groupId>org.sonarsource.scanner.maven</groupId>
-          <artifactId>sonar-maven-plugin</artifactId>
-          <version>3.6.1.1688</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-    <plugins>
-      <plugin>
-        <groupId>com.coremedia.maven</groupId>
-        <artifactId>coremedia-application-maven-plugin</artifactId>
-        <version>2.7.10</version>
-        <extensions>true</extensions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <version>3.0.0-M2</version>
-        <executions>
-          <execution>
-            <id>enforce-maven</id>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <configuration>
-              <rules>
-                <requireMavenVersion>
-                  <version>3.3</version>
-                </requireMavenVersion>
-              </rules>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
-
   <reporting>
     <excludeDefaults>true</excludeDefaults>
   </reporting>
@@ -162,5 +74,4 @@
       </snapshots>
     </pluginRepository>
   </pluginRepositories>
-
 </project>

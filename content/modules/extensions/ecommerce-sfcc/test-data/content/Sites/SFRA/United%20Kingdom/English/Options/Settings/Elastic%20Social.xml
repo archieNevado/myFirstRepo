@@ -11,6 +11,7 @@
 <BooleanProperty Name="enabled">true</BooleanProperty>
 <StringProperty Name="commentType">ANONYMOUS</StringProperty>
 <StringProperty Name="commentModerationType">PRE_MODERATION</StringProperty>
+<StringProperty Name="reviewModerationType">PRE_MODERATION</StringProperty>
 <StringProperty Name="tenant">sfra-en-gb</StringProperty>
 </Struct>
 </StructProperty>

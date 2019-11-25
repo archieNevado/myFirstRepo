@@ -34,14 +34,13 @@
 <String>metadata</String>
 <String>externalHead</String>
 <String>externalFooter</String>
-<String>topNavigation</String>
 </StringListProperty>
 <StructListProperty Name="contentTypes">
 <Struct>
 <StringProperty Name="type">CMLinkable</StringProperty>
 <StringListProperty Name="prefetchedViews">
 <String>metadata</String>
-<String>asFragment</String>
+<String>DEFAULT</String>
 <String>asBreadcrumb</String>
 <String>externalHead</String>
 <String>externalFooter</String>
@@ -76,6 +75,15 @@
 <String>externalFooter</String>
 </StringListProperty>
 </Struct>
+<Struct>
+<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/CMSettings" xlink:href="coremedia:///cap/resources/Pagegrid/Layouts/PagegridNavigation.xml" cmexport:path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Options/Settings/Pagegrid/Layouts/PagegridNavigation"/>
+<StringListProperty Name="prefetchedViews">
+<String>DEFAULT</String>
+<String>metadata</String>
+<String>externalHead</String>
+<String>externalFooter</String>
+</StringListProperty>
+</Struct>
 </StructListProperty>
 </Struct>
 </StructProperty>
@@ -92,6 +100,10 @@
 </Struct>
 <Struct>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/Pagegrid/Placements/footer.xml" cmexport:path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Options/Settings/Pagegrid/Placements/footer"/>
+<StringProperty Name="view">asDefaultFragment</StringProperty>
+</Struct>
+<Struct>
+<LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/Pagegrid/Placements/additional.xml" cmexport:path="/Sites/SiteGenesis%20Global/United%20Kingdom/English/Options/Settings/Pagegrid/Placements/additional"/>
 <StringProperty Name="view">asDefaultFragment</StringProperty>
 </Struct>
 </StructListProperty>

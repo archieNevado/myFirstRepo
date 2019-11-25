@@ -33,6 +33,7 @@ import com.coremedia.rest.cap.validators.CrossSiteLinkValidator;
 import com.coremedia.rest.cap.validators.ImageMapAreasValidator;
 import com.coremedia.rest.cap.validators.ImageMapOverlayConfigurationValidator;
 import com.coremedia.rest.cap.validators.LinkListMaxLengthValidator;
+import com.coremedia.rest.cap.validators.ContentLocaleMatchesSiteLocaleValidator;
 import com.coremedia.rest.cap.validators.MasterVersionUpdatedValidator;
 import com.coremedia.rest.cap.validators.SelfReferringStructLinkListValidator;
 import com.coremedia.rest.cap.validators.SiteNameValidator;
@@ -322,6 +323,21 @@ class ValidatorsStudioConfiguration {
     masterVersionUpdatedValidator.setContentType("CMLocalized");
     masterVersionUpdatedValidator.setValidatingSubtypes(true);
     return masterVersionUpdatedValidator;
+  }
+
+  @Bean
+  ContentLocaleMatchesSiteLocaleValidator contentLocaleMatchesSiteLocaleValidator(
+          CapConnection connection,
+          SitesService sitesService,
+          @Value("${contentLocaleMatchesSiteLocaleValidator.severity:INFO}") Severity severity) {
+
+    ContentLocaleMatchesSiteLocaleValidator validator
+            = new ContentLocaleMatchesSiteLocaleValidator(sitesService);
+    validator.setConnection(connection);
+    validator.setContentType("CMLocalized");
+    validator.setSeverity(severity);
+    validator.setValidatingSubtypes(true);
+    return validator;
   }
 
   @Bean

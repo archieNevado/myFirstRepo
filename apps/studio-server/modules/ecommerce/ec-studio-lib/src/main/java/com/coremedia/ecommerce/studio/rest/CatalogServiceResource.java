@@ -10,7 +10,6 @@ import com.coremedia.livecontext.ecommerce.p13n.MarketingSpotService;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 import com.coremedia.rest.cap.common.represent.SuggestionResultRepresentation;
-import com.coremedia.rest.cap.content.SearchParameterNames;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
@@ -141,14 +140,15 @@ public class CatalogServiceResource {
     }
   }
 
+  @SuppressWarnings("unused")
   @GetMapping("suggestions")
   @NonNull
   public SuggestionResultRepresentation searchSuggestions(
-          @RequestParam(SearchParameterNames.QUERY) String query,
-          @RequestParam(value = SearchParameterNames.LIMIT, defaultValue = DEFAULT_SUGGESTIONS_LIMIT) int limit,
+          @RequestParam(SEARCH_PARAM_QUERY) String query,
+          @RequestParam(value = SEARCH_PARAM_LIMIT, defaultValue = DEFAULT_SUGGESTIONS_LIMIT) int limit,
           @RequestParam(SEARCH_PARAM_SEARCH_TYPE) String searchType,
           @RequestParam(SEARCH_PARAM_SITE_ID) String siteId,
-          @RequestParam(SEARCH_PARAM_CATEGORY) String category,
+          @RequestParam(value = SEARCH_PARAM_CATEGORY, required = false) String category,
           @RequestParam(SEARCH_PARAM_WORKSPACE_ID) String workspaceId
   ) {
     //TODO not supported yet

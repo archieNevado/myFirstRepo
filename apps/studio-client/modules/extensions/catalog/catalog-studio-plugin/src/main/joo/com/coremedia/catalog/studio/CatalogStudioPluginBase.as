@@ -30,6 +30,7 @@ import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.helper.StoreUtil;
 import com.coremedia.ecommerce.studio.model.Category;
 import com.coremedia.ecommerce.studio.model.Store;
+import com.coremedia.ui.data.RemoteBean;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
@@ -280,8 +281,8 @@ public class CatalogStudioPluginBase extends StudioPlugin {
     EventUtil.invokeLater(function ():void {
       ValueExpressionFactory.createFromFunction(function ():Content {
         var catalogRoot:Content = getCatalogRootForSite(site);
-        if (catalogRoot === undefined) {
-          return undefined;
+        if (!catalogRoot) {
+          return catalogRoot;
         }
         if (!catalogRoot.getPath()) {
           return undefined;
@@ -311,7 +312,7 @@ public class CatalogStudioPluginBase extends StudioPlugin {
         if (undefined === externalTechId) {
           return undefined;
         }
-        return Content(beanFactory.getRemoteBean("content/" + externalTechId));
+        return beanFactory.getRemoteBean("content/" + externalTechId) as Content;
       }
     }
     return null;

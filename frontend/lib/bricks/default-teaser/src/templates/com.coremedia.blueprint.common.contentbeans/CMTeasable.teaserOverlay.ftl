@@ -12,7 +12,8 @@
   <#assign afterText>
     <@cta.render buttons=self.callToActionSettings
                  additionalClass="cm-teaser-overlay__cta"
-                 additionalButtonClass="cm-teaser-overlay__cta-button ${ctaCls}" />
+                 additionalButtonClass="cm-teaser-overlay__cta-button ${ctaCls}"
+                 metadata="properties.targets" />
   </#assign>
 </#if>
 

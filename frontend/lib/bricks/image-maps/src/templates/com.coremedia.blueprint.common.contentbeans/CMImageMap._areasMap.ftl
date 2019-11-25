@@ -9,7 +9,7 @@
 <#assign areaCssClass="cm-imagemap__area"/>
 
 <#--imagemap with areas -->
-<map <@utils.renderAttr attr={ "name": imageMapId, "classes": ["cm-imagemap__areas"] } />>
+<map <@utils.renderAttr attr={ "name": imageMapId, "classes": ["cm-imagemap__areas"] } /><@preview.metadata "properties.imageMapAreas" />>
   <#-- show hotzones as areas with inline overlay or as icon -->
   <#list imageMapAreas![] as imageMapArea>
     <#assign dataCoords=bp.responsiveImageMapAreaData(imageMapArea.coords)/>
@@ -36,14 +36,13 @@
         <div class="cm-imagemap__hotzone cm-imagemap__hotzone--text">
           <@cm.include self=linkedContent!cm.UNDEFINED view="asImageMapInlineOverlay" params={
             "classOverlay": classOverlay,
-            "metadata": ["properties.localSettings"],
             "overlay": bp.setting(self, "overlay", {})
           } />
         </div>
 
       <#-- icon -->
       <#else>
-        <#assign parameters={"class": "cm-imagemap__hotzone cm-imagemap__hotzone--icon cm-imagemap__hotzone--loading", "data-cm-metadata": linkedContent.content }/>
+        <#assign parameters={"class": "cm-imagemap__hotzone cm-imagemap__hotzone--icon cm-imagemap__hotzone--loading", "metadata": linkedContent.content }/>
         <@components.button baseClass="" href="${link}" iconText=(linkedContent.teaserTitle!cm.getMessage("button_popup")) attr=parameters />
       </#if>
     </#if>

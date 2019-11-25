@@ -275,7 +275,6 @@ class ImaggaFeedbackHubAdapter implements BlobKeywordsFeedbackHubAdapter {
    *
    ** Content-Type: multipart/form-data; boundary=ImageUpload
    *
-   *
    *+ --ImageUpload
    ** Content-Disposition: form-data; name="image"
    ** <…file content…>

@@ -2,7 +2,7 @@
   <configuration default="false" name="Studio Server" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="CoreMedia Blueprint Apps">
     <module name="studio-server-app" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.coremedia.blueprint.boot.studio.StudioServerApp" />
-    <option name="ACTIVE_PROFILES" value="dev, local, studio-console-logger" />
+    <option name="ACTIVE_PROFILES" value="dev, local" />
     <option name="VM_PARAMETERS" value="-DthemeImporter.apiKeyStore.basePath=$MODULE_WORKING_DIR$/target/themeImporter/apiKeyStore -XX:+ExitOnOutOfMemoryError -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses -Xmx768m" />
     <option name="WORKING_DIRECTORY" value="file://$MODULE_WORKING_DIR$" />
     <option name="ALTERNATIVE_JRE_PATH" />

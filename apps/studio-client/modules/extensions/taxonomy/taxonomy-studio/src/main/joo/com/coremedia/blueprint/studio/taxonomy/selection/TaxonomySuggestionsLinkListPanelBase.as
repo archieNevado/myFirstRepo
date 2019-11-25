@@ -61,7 +61,7 @@ public class TaxonomySuggestionsLinkListPanelBase extends GridPanel {
     if (!config.disableSuggestions) {
       bindTo = config.bindTo;
 
-      propertyValueExpression = ValueExpressionFactory.create('properties.' + config.propertyName, bindTo.getValue());
+      propertyValueExpression = bindTo.extendBy('properties.' + config.propertyName);
       propertyValueExpression.addChangeListener(propertyChanged);
       bindTo.addChangeListener(contentChanged);
       taxonomyId = config.taxonomyId;

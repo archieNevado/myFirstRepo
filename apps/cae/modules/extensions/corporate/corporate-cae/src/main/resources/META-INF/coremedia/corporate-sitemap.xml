@@ -50,7 +50,6 @@
     <property name="exclusionPaths">
       <list>
         <value>Options</value>
-        <value>Content/Site-Wide/404 Page</value>
       </list>
     </property>
     <property name="predicates">

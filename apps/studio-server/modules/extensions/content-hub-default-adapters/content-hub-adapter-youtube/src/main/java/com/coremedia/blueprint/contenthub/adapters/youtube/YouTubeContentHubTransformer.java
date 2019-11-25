@@ -12,12 +12,13 @@ import com.coremedia.contenthub.api.ContentModelReference;
 import com.coremedia.contenthub.api.Item;
 import com.coremedia.contenthub.api.MimeTypeFactory;
 import com.google.api.services.youtube.model.ThumbnailDetails;
+import com.google.api.services.youtube.model.Video;
+import com.google.api.services.youtube.model.VideoSnippet;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 
 public class YouTubeContentHubTransformer implements ContentHubTransformer {
 
@@ -30,6 +31,10 @@ public class YouTubeContentHubTransformer implements ContentHubTransformer {
   @NonNull
   @Override
   public ContentModel transform(Item item, ContentHubAdapter contentHubAdapter, ContentHubContext contentHubContext) {
+    if (!(item instanceof YouTubeItem)) {
+      throw new IllegalArgumentException("Cannot handle " + item);
+    }
+
     YouTubeItem video = (YouTubeItem) item;
     ContentModel contentModel = new ContentModel(item.getDisplayName(), item.getId());
     contentModel.put("title", item.getName());
@@ -45,29 +50,11 @@ public class YouTubeContentHubTransformer implements ContentHubTransformer {
     }
 
     //store image references
-    List<ContentModelReference> refs = new ArrayList<>();
-    ThumbnailDetails thumbnails = video.getVideo().getSnippet().getThumbnails();
-    if (thumbnails != null) {
-      String url = null;
-      if (thumbnails.getMaxres() != null) {
-        url = thumbnails.getMaxres().getUrl();
-      }
-
-      if (url == null && thumbnails.getHigh() != null) {
-        url = thumbnails.getHigh().getUrl();
-      }
-
-      if (url == null && thumbnails.getDefault() != null) {
-        url = thumbnails.getDefault().getUrl();
-      }
-
-      if (url != null) {
-        ContentModelReference contentModelRef = ContentModelReference.create(contentModel, "CMPicture", url);
-        refs.add(contentModelRef);
-      }
+    String url = thumbnailUrl(video.getVideo());
+    if (url != null) {
+      ContentModelReference ref = ContentModelReference.create(contentModel, "CMPicture", url);
+      contentModel.put("pictures", Collections.singletonList(ref));
     }
-
-    contentModel.put("pictures", refs);
 
     return contentModel;
   }
@@ -75,8 +62,13 @@ public class YouTubeContentHubTransformer implements ContentHubTransformer {
   @Override
   @Nullable
   public ContentModel resolveReference(ContentModelReference reference, ContentHubAdapter contentHubAdapter, ContentHubContext contentHubContext) {
-    String imageUrl = (String) reference.getData();
-    String imageName = contentCreationUtil.extractNameFromUrl(imageUrl);
+    Object data = reference.getData();
+    if (!(data instanceof String)) {
+      throw new IllegalArgumentException("Not my reference: " + reference);
+    }
+
+    String imageUrl = (String) data;
+    String imageName = reference.getOwner().getContentName() + " (Thumbnail)";
     ContentHubObjectId referenceId = ContentHubObjectId.createReference(reference.getOwner().getContentHubObjectId(), imageName);
 
     ContentModel contentModel = new ContentModel(imageName, referenceId);
@@ -92,4 +84,21 @@ public class YouTubeContentHubTransformer implements ContentHubTransformer {
     return contentHubObject instanceof YouTubeHubObject;
   }
 
+  @Nullable
+  private static String thumbnailUrl(@Nullable Video video) {
+    VideoSnippet snippet = video!=null ? video.getSnippet() : null;
+    ThumbnailDetails thumbnails = snippet!=null ? snippet.getThumbnails() : null;
+    if (thumbnails != null) {
+      if (thumbnails.getMaxres() != null) {
+        return thumbnails.getMaxres().getUrl();
+      }
+      if (thumbnails.getHigh() != null) {
+        return thumbnails.getHigh().getUrl();
+      }
+      if (thumbnails.getDefault() != null) {
+        return thumbnails.getDefault().getUrl();
+      }
+    }
+    return null;
+  }
 }

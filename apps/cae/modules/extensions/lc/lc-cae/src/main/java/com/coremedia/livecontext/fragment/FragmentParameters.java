@@ -1,11 +1,12 @@
 package com.coremedia.livecontext.fragment;
 
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Locale;
@@ -89,8 +90,11 @@ public class FragmentParameters {
   }
 
   public Optional<CatalogId> getCatalogId() {
-    return Optional.ofNullable(getParameter(CATALOG_ID))
-            .map(CatalogId::of);
+    String catalogId = getParameter(CATALOG_ID);
+    if (StringUtils.isNotBlank(catalogId)) {
+      return Optional.of(CatalogId.of(catalogId));
+    }
+    return Optional.empty();
   }
 
   public String getCategoryId() {

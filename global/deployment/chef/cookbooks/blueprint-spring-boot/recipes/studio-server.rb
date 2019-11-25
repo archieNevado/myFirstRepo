@@ -29,6 +29,9 @@ node.default_unless['blueprint']['apps'][service_name]['application.properties']
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['themeImporter.themeDeveloperGroups'] = 'developer'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['server.port'] = 41080
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['management.server.port'] = 41081
+# studio console logging is activated by activating one of the following spring profiles: studio-console-logger, dev, local
+node.default_unless['blueprint']['apps'][service_name]['application.properties']['console.log.file'] = "#{node['blueprint']['log_dir']}/#{service_name}/studio-console.log"
+node.default_unless['blueprint']['apps'][service_name]['application.properties']['console.log.level'] = "warn"
 # The API key store directory and its parents should only be writable by the studio user,
 # so that other service cannot exchange the key store, if compromised.
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['themeImporter.apiKeyStore.basePath'] = "#{service_dir}/coremedia-apiKeyStore"

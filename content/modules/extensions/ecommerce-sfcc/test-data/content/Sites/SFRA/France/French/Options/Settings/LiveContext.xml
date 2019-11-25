@@ -7,6 +7,30 @@
 </master>
 <settings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StructProperty Name="livecontext-fragments">
+<Struct>
+<StructProperty Name="prefetchedViews">
+<Struct>
+<StringListProperty Name="defaults">
+<String>metadata</String>
+<String>externalHead</String>
+<String>externalFooter</String>
+</StringListProperty>
+<StructListProperty Name="contentTypes">
+<Struct>
+<StringProperty Name="type">CMLinkable</StringProperty>
+<StringListProperty Name="prefetchedViews">
+<String>metadata</String>
+<String/>
+<String>externalHead</String>
+<String>externalFooter</String>
+</StringListProperty>
+</Struct>
+</StructListProperty>
+</Struct>
+</StructProperty>
+</Struct>
+</StructProperty>
 <StructProperty Name="commerce">
 <Struct>
 <StringProperty Name="endpoint">${commerce.adapter.sfcc.endpoint}</StringProperty>

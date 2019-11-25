@@ -1,8 +1,8 @@
 <h2>Repository IORs</h2>
 <ul>
-  <li><a href="http://<%= @host %>:40180/ior" target="_blank">Content Management Server IOR</a></li>
-  <li><a href="http://<%= @host %>:40280/ior" target="_blank">Master Live Server IOR</a></li>
-  <li><a href="http://<%= @host %>:40380/ior"  target="_blank">Workflow Server IOR</a></li>
+  <li><a href="http://<%= @host %>:40180/ior" target="_blank" data-cm-test="">Content Management Server IOR</a></li>
+  <li><a href="http://<%= @host %>:40280/ior" target="_blank" data-cm-test="">Master Live Server IOR</a></li>
+  <li><a href="http://<%= @host %>:40380/ior" target="_blank" data-cm-test="">Workflow Server IOR</a></li>
 </ul>
 
 <h2>JMX Service Addresses</h2>
@@ -15,10 +15,10 @@
 
 <h2>Headless Server</h2>
 <ul>
-  <li><a href="https://headless-server-preview.<%= @host %>/graphiql" target="_blank">GraphiQL</a> - <code>https://headless-server-preview.<%= @host %>/graphiql</code></li>
-  <li><a href="https://headless-server-preview.<%= @host %>/swagger-ui.html" target="_blank">Swagger UI</a> - <code>https://headless-server-preview.<%= @host %>/swagger-ui.html</code></li>
-  <li>GraphQL Endpoint URL Preview</a> - <code>https://headless-server-preview.<%= @host %>/graphql</code></li>
-  <li>GraphQL Endpoint URL Live</a> - <code>https://headless-server-live.<%= @host %>/graphql</code></li>
+  <li><a href="https://headless-server-preview.<%= @host %>/graphiql" target="_blank" data-cm-test="">GraphiQL</a> - <code>https://headless-server-preview.<%= @host %>/graphiql</code></li>
+  <li><a href="https://headless-server-preview.<%= @host %>/swagger-ui.html" target="_blank" data-cm-test="">Swagger UI</a> - <code>https://headless-server-preview.<%= @host %>/swagger-ui.html</code></li>
+  <li>GraphQL Endpoint URL Preview - <code>https://headless-server-preview.<%= @host %>/graphql</code></li>
+  <li>GraphQL Endpoint URL Live - <code>https://headless-server-live.<%= @host %>/graphql</code></li>
 </ul>
 
 <h2>Actuator URLs</h2>
@@ -75,7 +75,7 @@
     </td>
   </tr>
   <tr>
-    <td><a href="http://<%= @host %>:40481/actuator">Content Feeder</a></td>
+    <td><a href="http://<%= @host %>:40481/actuator" data-cm-test="">Content Feeder</a></td>
     <td>
       <a href="/content-feeder/info" target="_blank">Info</a> ·
       <a href="/content-feeder/logfile" target="_blank">Logfile</a> ·
@@ -114,7 +114,7 @@
     </td>
   </tr>
   <tr>
-    <td><a href="http://<%= @host %>:40781/actuator">CAE Feeder Preview</a></td>
+    <td><a href="http://<%= @host %>:40781/actuator" data-cm-test="">CAE Feeder Preview</a></td>
     <td>
       <a href="/cae-feeder-preview/info" target="_blank">Info</a> ·
       <a href="/cae-feeder-preview/logfile" target="_blank">Logfile</a> ·
@@ -127,7 +127,7 @@
     </td>
   </tr>
   <tr>
-    <td><a href="http://<%= @host %>:40881/actuator">CAE Feeder Live</a></td>
+    <td><a href="http://<%= @host %>:40881/actuator" data-cm-test="">CAE Feeder Live</a></td>
     <td>
       <a href="/cae-feeder-live/info" target="_blank">Info</a> ·
       <a href="/cae-feeder-live/logfile" target="_blank">Logfile</a> ·
@@ -140,7 +140,7 @@
     </td>
   </tr>
   <tr>
-    <td><a href="http://<%= @host %>:40980/blueprint/servlet/actuator">CAE Preview</a></td>
+    <td><a href="http://<%= @host %>:40980/blueprint/servlet/actuator" data-cm-test="">CAE Preview</a></td>
     <td>
       <a href="/cae-preview/info" target="_blank">Info</a> ·
       <a href="/cae-preview/logfile" target="_blank">Logfile</a> ·
@@ -153,10 +153,11 @@
     </td>
   </tr>
   <tr>
-    <td><a href="http://<%= @host %>:41081/actuator">Studio Server</a></td>
+    <td><a href="http://<%= @host %>:41081/actuator" data-cm-test="">Studio Server</a></td>
     <td>
       <a href="/studio-server/info" target="_blank">Info</a> ·
       <a href="/studio-server/logfile" target="_blank">Logfile</a> ·
+      <a href="/studio-server/studioConsole" target="_blank">Console Log</a> ·
       <a href="/studio-server/env" target="_blank">Environment</a> ·
       <a href="/studio-server/configprops" target="_blank">Config</a> ·
       <a href="/studio-server/health"  target="_blank" class="health_check">Health</a>
@@ -166,7 +167,7 @@
     </td>
   </tr>
   <tr>
-    <td><a href="http://<%= @host %>:42180/blueprint/servlet/actuator">CAE Live</a></td>
+    <td><a href="http://<%= @host %>:42180/blueprint/servlet/actuator" data-cm-test="">CAE Live</a></td>
     <td>
       <a href="/cae-live/info" target="_blank">Info</a> ·
       <a href="/cae-live/logfile" target="_blank">Logfile</a> ·
@@ -179,7 +180,7 @@
     </td>
   </tr>
   <tr>
-    <td><a href="http://<%= @host %>:41181/actuator">Headless Server Preview</a></td>
+    <td><a href="http://<%= @host %>:41181/actuator" data-cm-test="">Headless Server Preview</a></td>
     <td>
       <a href="/headless-server-preview/info" target="_blank">Info</a> ·
       <a href="/headless-server-preview/logfile" target="_blank">Logfile</a> ·
@@ -192,7 +193,7 @@
     </td>
   </tr>
   <tr>
-    <td><a href="http://<%= @host %>:41281/actuator">Headless Server Live</a></td>
+    <td><a href="http://<%= @host %>:41281/actuator" data-cm-test="">Headless Server Live</a></td>
     <td>
       <a href="/headless-server-live/info" target="_blank">Info</a> ·
       <a href="/headless-server-live/logfile" target="_blank">Logfile</a> ·
@@ -205,7 +206,7 @@
     </td>
   </tr>
   <tr>
-    <td><a href="http://<%= @host %>:44081/actuator">Commerce Adapter Mock</a></td>
+    <td><a href="http://<%= @host %>:44081/actuator" data-cm-test="">Commerce Adapter Mock</a></td>
     <td>
       <a href="/commerce-adapter-mock/info" target="_blank">Info</a> ·
       <a href="/commerce-adapter-mock/logfile" target="_blank">Logfile</a> ·
@@ -219,7 +220,7 @@
   </tr>
   <%- if @sfcc -%>
   <tr>
-    <td><a href="http://<%= @host %>:44181/actuator">Commerce Adapter Salesforce Commerce Cloud</a></td>
+    <td><a href="http://<%= @host %>:44181/actuator" data-cm-test="">Commerce Adapter Salesforce Commerce Cloud</a></td>
     <td>
       <a href="/commerce-adapter-sfcc/info" target="_blank">Info</a> ·
       <a href="/commerce-adapter-sfcc/logfile" target="_blank">Logfile</a> ·
@@ -234,7 +235,7 @@
   <%- end %>
   <%- if @sap_hybris -%>
   <tr>
-    <td><a href="http://<%= @host %>:44281/actuator">Commerce Adapter SAP Commerce Cloud</a></td>
+    <td><a href="http://<%= @host %>:44281/actuator" data-cm-test="">Commerce Adapter SAP Commerce Cloud</a></td>
     <td>
       <a href="/commerce-adapter-hybris/info" target="_blank">Info</a> ·
       <a href="/commerce-adapter-hybris/logfile" target="_blank">Logfile</a> ·
@@ -249,7 +250,7 @@
   <%- end %>
   <%- if @ibm_wcs -%>
   <tr>
-    <td><a href="http://<%= @host %>:44381/actuator">Commerce Adapter HCL Commerce</a></td>
+    <td><a href="http://<%= @host %>:44381/actuator" data-cm-test="">Commerce Adapter HCL Commerce</a></td>
     <td>
       <a href="/commerce-adapter-wcs/info" target="_blank">Info</a> ·
       <a href="/commerce-adapter-wcs/logfile" target="_blank">Logfile</a> ·

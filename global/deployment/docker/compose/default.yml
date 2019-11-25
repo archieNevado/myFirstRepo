@@ -34,6 +34,13 @@ services:
   solr:
     image: ${REPOSITORY_PREFIX:-coremedia}/solr:${SOLR_TAG:-latest}
     container_name: solr
+    environment:
+      GC_TUNE: >-
+        -XX:+UseG1GC
+        -XX:+PerfDisableSharedMem
+        -XX:+ParallelRefProcEnabled
+        -XX:MaxGCPauseMillis=250
+        -XX:+AlwaysPreTouch
     volumes:
       - solr-data:/var/solr
     networks:

@@ -4,11 +4,9 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerc
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.ecommerce.studio.rest.model.Store;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
-import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
-import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.xml.Markup;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -21,8 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Currency;
 import java.util.Locale;
 import java.util.Map;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * A catalog {@link Product} object as a RESTful resource.

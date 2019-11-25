@@ -19,7 +19,7 @@
 <#assign popupIndex=0 />
 
 <#--imagemap with areas -->
-<map <@utils.renderAttr attr={ "name": imageMapId, "classes": ["cm-imagemap__areas"], "data-cm-imagemap-popup": "" } />>
+<map <@utils.renderAttr attr={ "name": imageMapId, "classes": ["cm-imagemap__areas"], "data-cm-imagemap-popup": "" } /> <@preview.metadata "properties.imageMapAreas" />>
   <#-- show hotzones as areas with inline overlay or as icon -->
   <#list imageMapAreas![] as imageMapArea>
     <#assign dataCoords=bp.responsiveImageMapAreaData(imageMapArea.coords)/>
@@ -48,7 +48,6 @@
         <div class="cm-imagemap__hotzone cm-imagemap__hotzone--text">
           <@cm.include self=linkedContent!cm.UNDEFINED view="asImageMapInlineOverlay" params={
             "classOverlay": classOverlay,
-            "metadata": ["properties.localSettings"],
             "overlay": bp.setting(self, "overlay", {})
           } />
         </div>
@@ -59,7 +58,7 @@
           "data-cm-imagemap-target": "#${popupId}",
           "data-cm-imagemap-target-id": "${popupIndex}",
           "class": "cm-imagemap__hotzone cm-imagemap__hotzone--icon cm-imagemap__hotzone--loading",
-          "data-cm-metadata": linkedContent.content
+          "metadata": linkedContent.content
         }/>
         <#-- hot zones as areas -->
         <area shape="${imageMapArea.shape}"

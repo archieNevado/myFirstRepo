@@ -1,4 +1,4 @@
-= Docker Compose Setup
+= Docker Compose Setup[[dockerApproach]]
 
 This tutorial will guide you through the first steps to start the CoreMedia Content Cloud Services using
 `+docker-compose+`, which is a tool to simplify the deployment of development environments using docker.

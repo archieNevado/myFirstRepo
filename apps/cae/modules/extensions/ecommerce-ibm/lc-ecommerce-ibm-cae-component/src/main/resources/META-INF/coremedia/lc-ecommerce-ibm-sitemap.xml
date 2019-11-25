@@ -70,6 +70,7 @@
   </bean>
 
   <bean id="livecontextSitemapCatalogUrlGenerator" class="com.coremedia.livecontext.ecommerce.ibm.cae.sitemap.CatalogSitemapUrlGenerator">
+    <property name="commerceConnectionInitializer" ref="commerceConnectionInitializer"/>
     <property name="settingsService" ref="settingsService" />
     <property name="liveContextNavigationFactory" ref="liveContextNavigationFactory"/>
     <property name="linkFormatter" ref="linkFormatter"/>
@@ -111,6 +112,7 @@
     <property name="urlKeyword" value="${livecontext.url-keyword}"/>
     <property name="linkFormatter" ref="linkFormatter"/>
     <property name="externalSeoSegmentBuilder" ref="externalSeoSegmentBuilder"/>
+    <property name="commerceConnectionInitializer" ref="commerceConnectionInitializer"/>
   </bean>
 
   <bean id="sitemapWcsAasRendererFactory" class="com.coremedia.livecontext.ecommerce.ibm.cae.sitemap.SitemapWcsAasRendererFactory"/>

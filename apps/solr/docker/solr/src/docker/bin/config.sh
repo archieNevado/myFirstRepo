@@ -10,6 +10,11 @@ function solr_config_append() {
 
 mkdir -p /var/solr/data/preview /var/solr/data/live /var/solr/data/studio
 
+# The base image has "ENV SOLR_HOME=/var/solr/data" which does not really fit, because SOLR_HOME/lib contains JAR files.
+# Let's override SOLR_HOME to <solr>/server/solr (the Solr default) and only keep Solr cores in /var/solr/data.
+solr_config_append SOLR_OPTS "\$SOLR_OPTS -DcoreRootDirectory=/var/solr/data"
+solr_config_append SOLR_HOME "server/solr"
+
 # Delete unused files from the base image, which uses /var/solr/data as SOLR_HOME.
 # In this CoreMedia Solr docker image, /var/solr/data is just the coreRootDirectory, while SOLR_HOME is in
 # /opt/solr/server/solr and contains the effective solr.xml/zoo.cfg configuration files

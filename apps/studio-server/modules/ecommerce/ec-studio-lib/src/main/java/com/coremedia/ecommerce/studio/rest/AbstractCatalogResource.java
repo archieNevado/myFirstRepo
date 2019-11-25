@@ -35,6 +35,7 @@ public abstract class AbstractCatalogResource<Entity extends CommerceObject> imp
   static final String PATH_SITE_ID = "siteId";
   static final String PATH_CATALOG_ALIAS = "catalogAlias";
   static final String PATH_WORKSPACE_ID = "workspaceId";
+  public static final String QUERY_ID = "id";
 
   private WorkspaceId workspaceId = WORKSPACE_ID_NONE;
 

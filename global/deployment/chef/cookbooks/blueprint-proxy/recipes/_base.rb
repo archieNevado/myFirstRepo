@@ -28,8 +28,7 @@ apache2_module 'ssl' do
    protocol: 'all -SSLv2 -SSLv3',
    directives: {
     SSLCertificateFile: '/etc/pki/tls/certs/localhost.crt',
-    SSLCertificateKeyFile:'/etc/pki/tls/private/localhost.key',
-    Header: 'always add Strict-Transport-Security "max-age=15768000"'
+    SSLCertificateKeyFile:'/etc/pki/tls/private/localhost.key'
    }})
 end
 

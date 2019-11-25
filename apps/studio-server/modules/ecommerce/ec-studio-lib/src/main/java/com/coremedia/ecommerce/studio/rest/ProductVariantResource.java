@@ -12,7 +12,6 @@ import com.coremedia.rest.cap.content.ContentRepositoryResource;
 import com.coremedia.xml.Markup;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

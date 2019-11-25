@@ -30,7 +30,7 @@
 
     <customer>Blueprint</customer>
 
-    <cm.elastic-worker.core.version>1907.2</cm.elastic-worker.core.version>
+    <cm.elastic-worker.core.version>1907.3</cm.elastic-worker.core.version>
 
     <spring.boot.version>2.1.6.RELEASE</spring.boot.version>
     <application-plugin.version>2.7.10</application-plugin.version>
@@ -81,11 +81,12 @@
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.elastic-worker.core.version>1907.2</cm.elastic-worker.core.version>
-    <cm.common.core.version>1907.2</cm.common.core.version>
+    <cm.elastic-worker.core.version>1907.3</cm.elastic-worker.core.version>
+    <cm.common.core.version>1907.3</cm.common.core.version>
     <cm.common.bp.version>1-SNAPSHOT</cm.common.bp.version>
-    <cm.middle.core.version>1907.2</cm.middle.core.version>
+    <cm.middle.core.version>1907.3</cm.middle.core.version>
     <cm.middle.bp.version>1-SNAPSHOT</cm.middle.bp.version>
+    <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
   </properties>
 
   <profiles>
@@ -127,28 +128,6 @@
       <properties>
         <skip-hybris-tests>false</skip-hybris-tests>
       </properties>
-    </profile>
-    <profile>
-      <id>check-dependencies-owasp</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.owasp</groupId>
-            <artifactId>dependency-check-maven</artifactId>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>check-sonar</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.sonarsource.scanner.maven</groupId>
-            <artifactId>sonar-maven-plugin</artifactId>
-          </plugin>
-        </plugins>
-      </build>
     </profile>
 
     <profile>
@@ -452,7 +431,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-failsafe-plugin</artifactId>
-          <version>2.22.2</version>
+          <version>${maven-surefire-plugin.version}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -488,7 +467,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.0.1</version>
+          <version>3.1.1</version>
           <configuration>
             <doclint>none</doclint>
           </configuration>
@@ -524,7 +503,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.22.2</version>
+          <version>${maven-surefire-plugin.version}</version>
           <configuration>
             <redirectTestOutputToFile>true</redirectTestOutputToFile>
             <systemPropertyVariables>
@@ -536,7 +515,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-report-plugin</artifactId>
-          <version>2.22.2</version>
+          <version>${maven-surefire-plugin.version}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -631,16 +610,6 @@
           <groupId>org.primefaces.extensions</groupId>
           <artifactId>resources-optimizer-maven-plugin</artifactId>
           <version>2.3.2</version>
-        </plugin>
-        <plugin>
-          <groupId>org.sonarsource.scanner.maven</groupId>
-          <artifactId>sonar-maven-plugin</artifactId>
-          <version>3.6.1.1688</version>
-        </plugin>
-        <plugin>
-          <groupId>org.owasp</groupId>
-          <artifactId>dependency-check-maven</artifactId>
-          <version>5.2.1</version>
         </plugin>
       </plugins>
 
