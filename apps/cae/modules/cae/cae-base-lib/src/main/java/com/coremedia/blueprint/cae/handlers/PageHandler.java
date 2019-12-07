@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -67,20 +68,22 @@ public class PageHandler extends DefaultPageHandler {
   @SuppressWarnings("unused")
   @Link(type = CMTaxonomy.class)
   @Nullable
-  public UriComponentsBuilder buildLinkForTaxonomy(
+  public UriComponents buildLinkForTaxonomy(
           @NonNull CMTaxonomy taxonomy,
           @Nullable String viewName,
           @NonNull Map<String, Object> linkParameters) {
-    return buildLinkForTaxonomyInternal(taxonomy, viewName, linkParameters).orElse(null);
+    UriComponentsBuilder ucb = buildLinkForTaxonomyInternal(taxonomy, viewName, linkParameters).orElse(null);
+    return ucb==null ? null : ucb.build();
   }
 
   @SuppressWarnings("unused")
   @Link(type = CMLinkable.class)
   @Nullable
-  public UriComponentsBuilder buildLinkForLinkable(
+  public UriComponents buildLinkForLinkable(
           @NonNull CMLinkable linkable,
           @Nullable String viewName,
           @NonNull Map<String, Object> linkParameters) {
-    return buildLinkForLinkableInternal(linkable, viewName, linkParameters).orElse(null);
+    UriComponentsBuilder ucb = buildLinkForLinkableInternal(linkable, viewName, linkParameters).orElse(null);
+    return ucb==null ? null : ucb.build();
   }
 }

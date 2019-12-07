@@ -5,6 +5,7 @@ ENV JAVA_HEAP=384m
 EXPOSE 8080 8081 8083 8199
 HEALTHCHECK --start-period=60s --interval=30s --timeout=3s CMD curl -Lf http://localhost:8080/ior || exit 1
 COPY --chown=coremedia:coremedia src/docker /coremedia
+COPY --chown=coremedia:coremedia src/confd /etc/confd
 COPY --chown=coremedia:coremedia target/corem-home /coremedia/corem-home
 COPY --chown=coremedia:coremedia target/workflow-server-app.jar /coremedia/application.jar
 COPY --chown=coremedia:coremedia target/tools /coremedia/tools

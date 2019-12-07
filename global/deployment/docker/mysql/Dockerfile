@@ -1,4 +1,4 @@
-FROM mysql:5.7.23
+FROM mysql:5.7.28
 COPY initdb.d/* /docker-entrypoint-initdb.d/
 COPY conf.d/* /etc/mysql/conf.d/
 ENV MYSQL_PASSWORD=secret

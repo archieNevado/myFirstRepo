@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.UriTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -50,9 +51,10 @@ public class AMAssetPreviewHandler extends PageHandlerBase {
   @SuppressWarnings("UnusedDeclaration")
   @Link(type = AMAsset.class, uri = URI_PATTERN)
   public UriComponents buildAssetLink(AMAsset asset,
-                                      UriComponentsBuilder uriBuilder,
+                                      UriTemplate uriTemplate,
                                       String viewName,
                                       HttpServletRequest request) {
+    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromPath(uriTemplate.toString());
     if (!StringUtils.isEmpty(viewName)) {
       uriBuilder.queryParam(RequestParameters.VIEW_PARAMETER, viewName);
     }

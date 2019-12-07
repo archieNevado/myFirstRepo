@@ -25,6 +25,7 @@
     "@coremedia-examples/brick-shoppable-video": "^1.0.0",
     "@coremedia-examples/brick-square-banner": "^1.0.0",
     "@coremedia/brick-default-teaser": "^1.0.0",
+    "@coremedia/brick-device-detector": "^1.0.0",
     "@coremedia/brick-dynamic-include": "^1.0.0",
     "@coremedia/brick-image-maps": "^1.0.0",
     "@coremedia/brick-media": "^1.0.0",
@@ -34,6 +35,7 @@
     "@coremedia/brick-utils": "^1.0.0",
     "@coremedia/cm-cli": "^2.0.0",
     "@coremedia/theme-utils": "^3.0.0",
+    "bootstrap-sass": "3.3.7",
     "jquery": "^3.0.0",
     "webpack": "^4.0.0"
   },

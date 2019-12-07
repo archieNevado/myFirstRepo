@@ -17,7 +17,7 @@ if [ -d ${IMPORT_USERS_DIR} ]; then
     echo "[DOCKER ENTRYPOINT] - * importing ${user_file}"
     if [ "${IMPORTED}" != "true"  ] || [ "${FORCE_REIMPORT_CONTENT}" = "true" ] ; then
       ./tools/bin/cm restoreusers -u ${TOOLS_USER} -p ${TOOLS_PASSWORD} -f ${user_file} 2> /dev/null
-      ./tools/bin/cm groovysh /coremedia/setSystemTableProperty.groovy -q -DpropKey=users-imported -DpropVal=true < /dev/null &> /dev/null
+      ./tools/bin/cm groovysh /coremedia/setSystemTableProperty.groovy -q -DpropKey=users-imported -DpropVal=true < /dev/null 2> /dev/null
     else
       echo "[DOCKER ENTRYPOINT] - user file already imported, skipping ..."
     fi

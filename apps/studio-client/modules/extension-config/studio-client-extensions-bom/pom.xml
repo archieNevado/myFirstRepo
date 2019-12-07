@@ -45,6 +45,18 @@
       </dependency>
       <dependency>
         <groupId>com.coremedia.blueprint</groupId>
+        <artifactId>content-hub-rss</artifactId>
+        <version>1-SNAPSHOT</version>
+        <type>swc</type>
+      </dependency>
+      <dependency>
+        <groupId>com.coremedia.blueprint</groupId>
+        <artifactId>content-hub-youtube</artifactId>
+        <version>1-SNAPSHOT</version>
+        <type>swc</type>
+      </dependency>
+      <dependency>
+        <groupId>com.coremedia.blueprint</groupId>
         <artifactId>create-from-template-studio-plugin</artifactId>
         <version>1-SNAPSHOT</version>
         <type>swc</type>

@@ -76,6 +76,7 @@
              | DO NOT USE jvmArguments, the spring boot plugin will then fork a VM, which is not possible on Windows
              | hosts due to command line length restrictions.
              -->
+            <fork>false</fork>
           </configuration>
         </plugin>
         <plugin>

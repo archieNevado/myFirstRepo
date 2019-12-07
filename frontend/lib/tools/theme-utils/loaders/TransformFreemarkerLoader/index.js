@@ -70,7 +70,7 @@ module.exports = function loader(content) {
   const result = content.replace(
     FTL_REFERENCE_PATTERN,
     (wholeExpression, directive, ftlPath, tail, index, wholeTemplate) => {
-      
+
       // checking if the include/import is part of a comment which could lead to errors if processed further
       const checkForComment = wholeTemplate.slice(0,index);
       if (checkForComment.lastIndexOf('<#--') > checkForComment.lastIndexOf('-->')) {

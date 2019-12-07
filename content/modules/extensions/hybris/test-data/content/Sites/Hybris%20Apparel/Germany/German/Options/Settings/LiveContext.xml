@@ -9,7 +9,7 @@
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="commerce">
 <Struct>
-<StringProperty Name="endpoint">${commerce.adapter.hybris.endpoint}</StringProperty>
+<StringProperty Name="endpoint">${commerce.hub.data.endpoints.hybris}</StringProperty>
 <StringProperty Name="currency">EUR</StringProperty>
 <StringProperty Name="locale">de-DE</StringProperty>
 <StructProperty Name="storeConfig">
@@ -113,7 +113,7 @@
 </StructProperty>
 </Struct>
 </StructProperty>
-<BooleanProperty Name="livecontext.manageNavigation">false</BooleanProperty>
+<BooleanProperty Name="livecontext.manageNavigation">true</BooleanProperty>
 <BooleanProperty Name="livecontext.policy.commerce-product-links">true</BooleanProperty>
 <BooleanProperty Name="livecontext.policy.commerce-category-links">true</BooleanProperty>
 <BooleanProperty Name="livecontext.policy.commerce-page-links">true</BooleanProperty>

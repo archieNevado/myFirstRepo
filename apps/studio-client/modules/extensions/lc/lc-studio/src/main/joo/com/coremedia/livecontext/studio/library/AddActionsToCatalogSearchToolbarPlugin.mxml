@@ -38,6 +38,12 @@
                 catalogObjectExpression="{componentConfig.selectedSearchItemsValueExpression}"/>
       </ui:baseAction>
     </ui:IconButton>
+    <ui:IconButton itemId="{LivecontextStudioPlugin.AUGMENT_CATEGORY_BUTTON_ITEM_ID}">
+      <ui:baseAction>
+        <livecontext:AugmentCategoryAction
+                catalogObjectExpression="{componentConfig.selectedSearchItemsValueExpression}"/>
+      </ui:baseAction>
+    </ui:IconButton>
     <ui:IconButton itemId="{LivecontextStudioPlugin.CREATE_MARKETING_SPOT_BUTTON_ITEM_ID}">
       <ui:baseAction>
         <livecontext:CreateMarketingSpotAction

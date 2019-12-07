@@ -11,6 +11,7 @@ import com.coremedia.objectserver.web.links.Link;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,8 +36,8 @@ public class ExternalPageLinkScheme {
 
   @Link(type = CMExternalPage.class, order = 2)
   @Nullable
-  public UriComponentsBuilder buildLinkForExternalPage(CMExternalPage externalPage, Map<String, Object> linkParameters,
-                                                       HttpServletRequest request) {
+  public UriComponents buildLinkForExternalPage(CMExternalPage externalPage, Map<String, Object> linkParameters,
+                                                HttpServletRequest request) {
 
     StoreContext storeContext = StoreContextHelper.findStoreContext(request)
             .orElseGet(() -> findCommerceStoreContext(externalPage.getContent()).orElse(null));
@@ -45,8 +46,8 @@ public class ExternalPageLinkScheme {
       return null;
     }
 
-    return wcsUrlProvider.buildPageLink(externalPage, linkParameters, request, storeContext)
-            .orElse(null);
+    UriComponentsBuilder ucb = wcsUrlProvider.buildPageLink(externalPage, linkParameters, request, storeContext).orElse(null);
+    return ucb==null ? null : ucb.build();
   }
 
   private Optional<StoreContext> findCommerceStoreContext(Content content) {

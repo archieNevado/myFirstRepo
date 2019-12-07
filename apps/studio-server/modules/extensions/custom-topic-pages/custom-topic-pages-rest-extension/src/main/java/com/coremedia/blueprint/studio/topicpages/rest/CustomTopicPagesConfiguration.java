@@ -15,11 +15,15 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Scope;
 
 @Configuration
-@ImportResource(value = {
-        "classpath:/com/coremedia/cap/common/uapi-services.xml"
-}, reader = ResourceAwareXmlBeanDefinitionReader.class)
-@Import({BlueprintBaseStudioRestConfiguration.class,
-        TaxonomyConfiguration.class})
+@ImportResource(
+        value = {
+                "classpath:/com/coremedia/cap/common/uapi-services.xml",
+        },
+        reader = ResourceAwareXmlBeanDefinitionReader.class)
+@Import({
+        BlueprintBaseStudioRestConfiguration.class,
+        TaxonomyConfiguration.class,
+})
 public class CustomTopicPagesConfiguration {
 
   @Bean

@@ -14,6 +14,7 @@
 <StringListProperty Name="children">
 <String>hybris:///catalog/category/200100</String>
 <String>hybris:///catalog/category/200300</String>
+<String>hybris:///catalog/category/260000</String>
 </StringListProperty>
 </Struct>
 </StructProperty>

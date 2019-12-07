@@ -3,6 +3,8 @@ package com.coremedia.blueprint.caas.preview.client;
 import com.google.common.base.Charsets;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
@@ -43,6 +45,7 @@ import java.util.NoSuchElementException;
 
 
 @RestController
+@Api(value = "/previewurl", tags = "Json Preview Client")
 @DefaultAnnotation(NonNull.class)
 public class JsonPreviewController {
   static final String ERROR_MSG_NO_QUERY_DEFINITION = "No json preview query definition available for selected document type.";
@@ -72,7 +75,10 @@ public class JsonPreviewController {
   }
 
   @GetMapping(PREVIEW_PATH + "/{" + PARAM_NUMERIC_ID + "}/{" + PARAM_TYPE + "}")
-  public ResponseEntity<String> preview(@PathVariable String numericId, @PathVariable String type, @RequestParam(required = false, name = "previewDate") String previewDate) {
+  public ResponseEntity<String> preview(
+          @ApiParam(value = "The id of the item", required = true) @PathVariable String numericId,
+          @ApiParam(value = "The type of the item", required = true) @PathVariable String type,
+          @ApiParam(value = "The preview date", required = false) @RequestParam(required = false, name = "previewDate") String previewDate) {
 
     org.thymeleaf.context.Context ctx = new org.thymeleaf.context.Context();
 

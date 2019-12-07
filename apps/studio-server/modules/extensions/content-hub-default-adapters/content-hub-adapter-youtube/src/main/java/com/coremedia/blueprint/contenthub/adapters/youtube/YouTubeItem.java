@@ -1,40 +1,96 @@
 package com.coremedia.blueprint.contenthub.adapters.youtube;
 
 
-import com.coremedia.contenthub.api.ContentHubAdapterBinding;
+import com.coremedia.contenthub.api.BlobCache;
+import com.coremedia.contenthub.api.ContentHubBlob;
 import com.coremedia.contenthub.api.ContentHubObjectId;
+import com.coremedia.contenthub.api.ContentHubType;
 import com.coremedia.contenthub.api.Item;
-import com.coremedia.contenthub.api.MimeTypeFactory;
+import com.coremedia.contenthub.api.UrlBlobBuilder;
+import com.coremedia.contenthub.api.preview.DetailsElement;
+import com.coremedia.contenthub.api.preview.DetailsSection;
+import com.google.api.client.util.DateTime;
+import com.google.api.services.youtube.model.PlaylistItem;
+import com.google.api.services.youtube.model.PlaylistItemSnippet;
+import com.google.api.services.youtube.model.SearchResult;
+import com.google.api.services.youtube.model.SearchResultSnippet;
+import com.google.api.services.youtube.model.ThumbnailDetails;
 import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoSnippet;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
-import javax.activation.MimeType;
-import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
-public class YouTubeItem extends YouTubeHubObject implements Item {
+class YouTubeItem extends YouTubeHubObject implements Item {
 
-  private Video video;
+  private final String name;
+  private final String description;
+  private final DateTime lastModified;
+  private final ThumbnailDetails thumbnails;
+  private final String videoId;
+  private final BlobCache blobCache;
 
-  YouTubeItem(ContentHubAdapterBinding binding, ContentHubObjectId id, Video video) {
-    super(binding, id);
-    this.video = video;
+
+  // The constructors look like boilerplate code, but the YouTube classes are
+  // indeed completely distinct.  :-(
+
+  YouTubeItem(@NonNull ContentHubObjectId id, @NonNull Video video, @NonNull BlobCache blobCache) {
+    super(id);
+    this.blobCache = blobCache;
+    VideoSnippet snippet = video.getSnippet();
+    if (snippet == null) {
+      throw new IllegalArgumentException("Video " + video + " has no snippet.  Cannot handle.");
+    }
+    name = titleToName(snippet.getTitle());
+    description = snippet.getDescription();
+    lastModified = snippet.getPublishedAt();
+    thumbnails = snippet.getThumbnails();
+    videoId = video.getId();
   }
 
-  Video getVideo() {
-    return video;
+  YouTubeItem(@NonNull ContentHubObjectId id, @NonNull PlaylistItem item, @NonNull BlobCache blobCache) {
+    super(id);
+    this.blobCache = blobCache;
+    PlaylistItemSnippet snippet = item.getSnippet();
+    if (snippet == null) {
+      throw new IllegalArgumentException("PlayListItem " + item + " has no snippet.  Cannot handle.");
+    }
+    name = titleToName(snippet.getTitle());
+    description = snippet.getDescription();
+    lastModified = snippet.getPublishedAt();
+    thumbnails = snippet.getThumbnails();
+    videoId = snippet.getResourceId().getVideoId();
   }
 
-  @Nullable
+  YouTubeItem(@NonNull ContentHubObjectId id, @NonNull SearchResult searchResult, @NonNull BlobCache blobCache) {
+    super(id);
+    this.blobCache = blobCache;
+    SearchResultSnippet snippet = searchResult.getSnippet();
+    if (snippet == null) {
+      throw new IllegalArgumentException("PlayListItem " + searchResult + " has no snippet.  Cannot handle.");
+    }
+    name = titleToName(snippet.getTitle());
+    description = snippet.getDescription();
+    lastModified = snippet.getPublishedAt();
+    thumbnails = snippet.getThumbnails();
+    videoId = searchResult.getId().getVideoId();
+  }
+
+
+  // --- Item -------------------------------------------------------
+
+  @NonNull
   @Override
-  public MimeType getItemType() {
-    return MimeTypeFactory.create("youtube");
+  public ContentHubType getContentHubType() {
+    return new ContentHubType(YouTubeTypes.ITEM);
   }
 
-  @Nullable
+  @NonNull
   @Override
-  public String getTargetContentType() {
+  public String getCoreMediaContentType() {
     return "CMVideo";
   }
 
@@ -46,19 +102,51 @@ public class YouTubeItem extends YouTubeHubObject implements Item {
   @NonNull
   @Override
   public String getName() {
-
-    return video.getSnippet().getTitle();
+    return name;
   }
 
   @Nullable
   @Override
   public String getDescription() {
-    return video.getSnippet().getDescription();
+    return description;
   }
 
+  @NonNull
   @Override
-  public Date getLastModified() {
-    VideoSnippet snippet = video.getSnippet();
-    return new Date(snippet.getPublishedAt().getValue() + snippet.getPublishedAt().getTimeZoneShift() * 60000L);
+  public List<DetailsSection> getDetails() {
+    ContentHubBlob blob = blobCache.cached(new UrlBlobBuilder(this, "classifier").withUrl(getDefaultThumbnailUrl()).build());
+    return List.of(new DetailsSection("main", List.of(
+            new DetailsElement<>(getName(), false, Objects.requireNonNullElse(blob, SHOW_TYPE_ICON))
+            ), false, false, false),
+            new DetailsSection("metadata", List.of(
+                    new DetailsElement<>("text", formatPreviewString(description)),
+                    new DetailsElement<>("lastModified", formatPreviewDate(lastModified)),
+                    new DetailsElement<>("videoId", videoId),
+                    new DetailsElement<>("link", getVideoUrl())
+            ).stream().filter(p -> Objects.nonNull(p.getValue())).collect(Collectors.toUnmodifiableList())));
+  }
+
+  @Nullable
+  @Override
+  public ContentHubBlob getBlob(String classifier) {
+    return blobCache.cached(new UrlBlobBuilder(this, classifier).withUrl(getDefaultThumbnailUrl()).build());
+  }
+
+  private String getDefaultThumbnailUrl() {
+    return getThumbnails().getDefault().getUrl();
+  }
+
+  // --- more features ----------------------------------------------
+
+  DateTime getLastModified() {
+    return lastModified;
+  }
+
+  ThumbnailDetails getThumbnails() {
+    return thumbnails;
+  }
+
+  String getVideoUrl() {
+    return "https://www.youtube.com/watch?v=" + videoId;
   }
 }

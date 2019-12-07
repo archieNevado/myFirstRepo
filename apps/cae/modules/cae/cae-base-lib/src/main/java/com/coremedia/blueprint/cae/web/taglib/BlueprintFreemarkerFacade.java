@@ -166,6 +166,10 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
 
   // --- functionality -------------------------------------------------------------------------------------------------
 
+  /**
+   * @deprecated since 1910, do not create beans in views
+   */
+  @Deprecated(since = "1910", forRemoval = true)
   public ContentBean createBeanFor(Content content) {
     return dataViewFactory.loadCached(contentBeanFactory.createBeanFor(content, ContentBean.class), null);
   }
@@ -174,6 +178,10 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
     return transformImageService.getTransformations(content);
   }
 
+  /**
+   * @deprecated since 1910, do not create beans in views
+   */
+  @Deprecated(since = "1910", forRemoval = true)
   public List createBeansFor(Iterable<? extends Content> contents) {
     return dataViewFactory.loadAllCached(contentBeanFactory.createBeansFor(contents, ContentBean.class), null);
   }
@@ -262,7 +270,7 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
       Map<String, Map> aspectRatioSizes = responsiveImageSettings.get(aspectRatioName);
       if (aspectRatioSizes != null) {
         Blob blob = picture.getTransformedData(aspectRatioName);
-        Map<Integer, String> links = ImageFunctions.getImageLinksForAspectRatios(blob, aspectRatioName, aspectRatioSizes, currentRequest, currentResponse);
+        Map<Integer, String> links = ImageFunctions.getImageLinksForAspectRatios(blob, aspectRatioName, aspectRatioSizes, false, currentRequest, currentResponse);
 
         if (!isEmpty(links)) {
           // only the "TransformImageService" holds the actual crop ratio in proper values
@@ -312,6 +320,7 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
       if (transformedData != null) {
         return ImageFunctions.getImageLinkForAspectRatio(transformedData,
                 aspectRatio, biggestSize,
+                false,
                 FreemarkerEnvironment.getCurrentRequest(),
                 FreemarkerEnvironment.getCurrentResponse());
       }
@@ -443,17 +452,33 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
   }
 
   /**
-   * @param size in bytes
-   * @return a human readable size
+   *
+   * @param size for file size format
+   * @return a human readable file size
+   * @deprecated since 1910, use {@link #getDisplayFileSize(int, Locale)} instead.
    */
+  @Deprecated(since="1910")
   public String getDisplaySize(int size) {
+    return getDisplayFileSize(size, DEFAULT_LOCALE);
+  }
+
+  /**
+   *
+   * @param size in bytes
+   * @param locale for file size format
+   * @return a human readable file size
+   */
+  public String getDisplayFileSize(int size, Locale locale) {
+    if (locale == null) {
+      locale = DEFAULT_LOCALE;
+    }
     int unit = 1024;
     if (size < unit) {
       return size + " Bytes";
     }
     int exp = (int) (Math.log(size) / Math.log(unit));
     char pre = "KMGTPE".charAt(exp - 1);
-    return String.format("%.1f %sB", size / Math.pow(unit, exp), pre);
+    return String.format(locale, "%.1f %sB", size / Math.pow(unit, exp), pre);
   }
 
   public String getDisplayFileFormat(String mimeType) {
@@ -703,8 +728,6 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
   private static boolean hasItems(PageGridPlacement placement, boolean isInLayout) {
     return isInLayout && !placement.getItems().isEmpty();
   }
-
-  //====================================================================================================================
 
   private CMTheme findThemeFor(CMNavigation self) {
     return self.getTheme(UserVariantHelper.getUser(FreemarkerEnvironment.getCurrentRequest()));

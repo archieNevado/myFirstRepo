@@ -113,6 +113,7 @@
   }
 
   &--depth-1 {
+    border-bottom-width: $cm-navigation-border-bottom-width;
     > a,
     > .cm-navigation-item__title {
       padding: 10px 15px;
@@ -120,6 +121,7 @@
     }
 
     .cm-navigation-item__menu {
+      opacity: 1;
       @include breakpoints(("sm", landscape) "lg-and-up") {
         position: absolute;
         top: 100%;
@@ -132,6 +134,13 @@
         text-align: left;
         background-color: #fff;
       }
+      &--hidden {
+        opacity: 0;
+      }
+    }
+
+    &.cm-navigation-item--no-border-bottom {
+      border-bottom-width: 0;
     }
 
     @include breakpoints(("sm", landscape) "lg-and-up") {

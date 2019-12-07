@@ -46,7 +46,7 @@
       <ul class="cm-downloads__items">
         <#list self.downloads![] as download>
           <li class="cm-downloads__item">
-            <a href="${cm.getLink(download.target!cm.UNDEFINED)}" class="cm-glyphicon-before"<@preview.metadata data=[download.content, "properties.teaserTitle"] />>${download.teaserTitle!""}</a>
+            <a href="${cm.getLink(download.target!cm.UNDEFINED)}" <@preview.metadata data=[download.content, "properties.teaserTitle"] />>${download.teaserTitle!""}</a>
           </li>
         </#list>
       </ul>

@@ -385,7 +385,7 @@ public class ProductAssetsHandler extends PageHandlerBase {
   private ProductVariant loadProductVariant(@NonNull CatalogAlias catalogAlias, String externalId,
                                             @NonNull StoreContext storeContext) {
     CommerceId productVariantId = formatProductVariantId(catalogAlias, externalId, storeContext);
-    final Product possibleProductVariant = loadCommerceBean(productVariantId, storeContext);
+    Product possibleProductVariant = loadCommerceBean(productVariantId, storeContext);
     return possibleProductVariant instanceof ProductVariant ? (ProductVariant) possibleProductVariant : null;
   }
 

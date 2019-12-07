@@ -17,6 +17,8 @@ node.default_unless['blueprint']['apps'][service_name]['application.properties']
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['graphiql.enabled'] = 'true'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['caas.swagger.enabled'] = 'true'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['link.urlPrefixType'] = 'preview'
+node.default_unless['blueprint']['apps'][service_name]['application.properties']['caas-rest.jslt-enabled'] = 'true'
+node.default_unless['blueprint']['apps'][service_name]['application.properties']['commerce.hub.data.customEntityParams.catalogVersion'] = 'Staged'
 
 application_config_hash = Mash.new
 application_config_hash = Chef::Mixin::DeepMerge.hash_only_merge!(application_config_hash, node['blueprint']['apps'][service_name]['application.properties'])

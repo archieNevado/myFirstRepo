@@ -335,8 +335,8 @@ public class WcRestConnector {
             LOG.trace("result from " + httpClientRequest.getURI() + " will be interpreted as \"no result found\": " +
                     statusCode + " (" + statusLine.getReasonPhrase() + ")");
           } else if (remoteError != null) {
-            LOG.trace("Remote Error occurred: {} (Error Key: {}, Error Code: {}",
-                    remoteError.getErrorMessage(), remoteError.getErrorKey(), remoteError.getErrorCode());
+            LOG.warn("Remote error (Error Key: {}, Error Code: {}) occurred when calling {}",
+                    remoteError.getErrorKey(), remoteError.getErrorCode(), httpClientRequest.getURI());
             throw new CommerceRemoteException(remoteError.getErrorMessage(), statusCode, remoteError.getErrorCode(),
                     remoteError.getErrorKey());
           }

@@ -1,26 +1,22 @@
 package com.coremedia.blueprint.contenthub.adapters.rss;
 
 
-import com.coremedia.contenthub.api.ContentHubAdapterBinding;
 import com.coremedia.contenthub.api.ContentHubObjectId;
+import com.coremedia.contenthub.api.ContentHubType;
 import com.coremedia.contenthub.api.Folder;
 import com.rometools.rome.feed.synd.SyndFeed;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
-import java.util.Date;
+class RSSFolder extends RSSHubObject implements Folder {
 
-public class RSSFolder extends RSSHubObject implements Folder {
-
-  RSSFolder(ContentHubAdapterBinding binding, ContentHubObjectId id, SyndFeed feed) {
-    super(binding, id, feed);
+  RSSFolder(ContentHubObjectId id, SyndFeed feed, String name) {
+    super(id, feed);
+    setName(name);
   }
 
+  @NonNull
   @Override
-  public String getType() {
-    return "feed";
-  }
-
-  @Override
-  public Date getLastModified() {
-    return getFeed().getPublishedDate();
+  public ContentHubType getContentHubType() {
+    return new ContentHubType("feed");
   }
 }

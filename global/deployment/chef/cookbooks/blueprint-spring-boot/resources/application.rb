@@ -194,7 +194,7 @@ action :install do
   end
 
   java_opts_cmd_line = new_resource.java_opts
-  java_opts_cmd_line << " -Dlogging.file=#{new_resource.log_dir}/#{new_resource.name}.log"
+  java_opts_cmd_line << " -Dlogging.file.name=#{new_resource.log_dir}/#{new_resource.name}.log"
 
   if new_resource.jmx_remote
     java_opts_cmd_line << " -Djava.rmi.server.hostname=#{new_resource.jmx_remote_server_name}"
@@ -248,6 +248,11 @@ action :install do
     post_start_cmds << check_script.path
   end
 
+  reload_service_r = execute "#{new_resource.name} systemctl daemon-reload" do
+    command '/bin/systemctl daemon-reload'
+    action :nothing
+  end
+
   template "/etc/systemd/system/#{new_resource.name}.service" do
     source "bootapp.service_systemD.erb"
     mode '0664'
@@ -267,6 +272,9 @@ action :install do
             service_timeout: new_resource.service_timeout,
             working_dir: new_resource.path
     )
+    # reload the service unit file after changes from the template rendering
+    # during the first run this will not do anything as the service is not yet registered with chef
+    notifies :run, reload_service_r, :immediately
   end
 end
 

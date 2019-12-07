@@ -9,6 +9,9 @@
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="elasticSocial">
 <Struct>
+<StringListProperty Name="commentDocumentTypes">
+<String>CMArticle</String>
+</StringListProperty>
 <BooleanProperty Name="enabled">true</BooleanProperty>
 <StringProperty Name="tenant">calista</StringProperty>
 <StringProperty Name="commentType">ANONYMOUS</StringProperty>

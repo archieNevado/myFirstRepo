@@ -22,7 +22,7 @@ const lastDevice = {
  * reads the current device type from body:after content defined by css media queries
  * @returns {string} "mobile"|"tablet"|"desktop"
  */
-function detectDeviceType() {
+export function detectDeviceType() {
   return window
     .getComputedStyle(document.body, ":after")
     .getPropertyValue("content")
@@ -33,7 +33,7 @@ function detectDeviceType() {
  * reads the current device orientation from body:before content defined by css media queries
  * @returns {string} "portrait"|"landscape"
  */
-function detectDeviceOrientation() {
+export function detectDeviceOrientation() {
   return window
     .getComputedStyle(document.body, ":before")
     .getPropertyValue("content")
@@ -44,7 +44,7 @@ function detectDeviceOrientation() {
  * checks if the current device is a touch device which means that swiping is possible but hovering is not.
  * @returns {boolean} true if touch device otherwise false
  */
-function isTouchDevice() {
+export function isTouchDevice() {
   return "ontouchstart" in window || navigator.msMaxTouchPoints;
 }
 

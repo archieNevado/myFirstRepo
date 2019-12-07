@@ -6,14 +6,14 @@ service_group = node['blueprint']['group']
 service_dir = "#{node['blueprint']['base_dir']}/#{service_name}"
 
 # use default_unless to allow configuration in recipes run prior to this one
-node.default_unless['blueprint']['apps'][service_name]['application.properties']['grpc.port'] = '44065'
+node.default_unless['blueprint']['apps'][service_name]['application.properties']['grpc.server.port'] = '44065'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['server.port'] = '44080'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['management.server.port'] = '44081'
-node.default_unless['blueprint']['apps']['studio-server']['application.properties']['commerce.adapter.mock.endpoint'] = 'localhost:44065'
-node.default_unless['blueprint']['apps']['cae-preview']['application.properties']['commerce.adapter.mock.endpoint'] = 'localhost:44065'
-node.default_unless['blueprint']['apps']['cae-live']['application.properties']['commerce.adapter.mock.endpoint'] = 'localhost:44065'
-node.default_unless['blueprint']['apps']['headless-server-preview']['application.properties']['commerce.adapter.mock.endpoint'] = 'localhost:44065'
-node.default_unless['blueprint']['apps']['headless-server-live']['application.properties']['commerce.adapter.mock.endpoint'] = 'localhost:44065'
+node.default_unless['blueprint']['apps']['studio-server']['application.properties']['commerce.hub.data.endpoints.mock'] = 'localhost:44065'
+node.default_unless['blueprint']['apps']['cae-preview']['application.properties']['commerce.hub.data.endpoints.mock'] = 'localhost:44065'
+node.default_unless['blueprint']['apps']['cae-live']['application.properties']['commerce.hub.data.endpoints.mock'] = 'localhost:44065'
+node.default_unless['blueprint']['apps']['headless-server-preview']['application.properties']['commerce.hub.data.endpoints.mock'] = 'localhost:44065'
+node.default_unless['blueprint']['apps']['headless-server-live']['application.properties']['commerce.hub.data.endpoints.mock'] = 'localhost:44065'
 
 application_config_hash = Mash.new
 # legacy compatibility step. Here we merge the defaults from old node.json files

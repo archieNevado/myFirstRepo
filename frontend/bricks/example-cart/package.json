@@ -6,7 +6,6 @@
     "@coremedia/brick-utils": "^1.0.0",
     "@coremedia/brick-node-decoration-service": "^1.0.0",
     "@coremedia/brick-media": "^1.0.0",
-    "@coremedia-examples/brick-glyphicons": "^1.0.0",
     "@coremedia-examples/brick-popup": "^1.0.0",
     "jquery": "^3.0.0"
   },

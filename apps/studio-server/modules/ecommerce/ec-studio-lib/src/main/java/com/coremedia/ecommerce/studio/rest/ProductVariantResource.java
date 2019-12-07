@@ -25,7 +25,8 @@ import java.util.Map;
 @RequestMapping(value = ProductVariantResource.URI_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProductVariantResource extends CommerceBeanResource<ProductVariant> {
 
-  static final String URI_PATH = "livecontext/sku/{" + PATH_SITE_ID + "}/{" + PATH_CATALOG_ALIAS + "}/{" + PATH_WORKSPACE_ID + "}/{id:.+}";
+  static final String PATH_TYPE = "sku";
+  static final String URI_PATH = "livecontext/" + PATH_TYPE + "/{" + PATH_SITE_ID + "}/{" + PATH_CATALOG_ALIAS + "}/{" + PATH_WORKSPACE_ID + "}/{id:.+}";
 
   @Autowired
   private ContentRepositoryResource contentRepositoryResource;
@@ -47,7 +48,7 @@ public class ProductVariantResource extends CommerceBeanResource<ProductVariant>
     ProductVariant entity = getEntity(params);
 
     if (entity == null) {
-      throw new CatalogBeanNotFoundRestException("Could not load sku bean");
+      throw new CatalogBeanNotFoundRestException("Could not load " + PATH_TYPE + " bean");
     }
 
     representation.setId(CommerceIdFormatterHelper.format(entity.getId()));

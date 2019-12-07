@@ -34,8 +34,9 @@ import java.util.Optional;
 @RequestMapping(value = CategoryResource.URI_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
 public class CategoryResource extends CommerceBeanResource<Category> {
 
+  static final String PATH_TYPE = "category";
   static final String URI_PATH
-          = "livecontext/category/{" + PATH_SITE_ID + "}/{" + PATH_CATALOG_ALIAS + "}/{" + PATH_WORKSPACE_ID + "}/{id:.+}";
+          = "livecontext/" + PATH_TYPE + "/{" + PATH_SITE_ID + "}/{" + PATH_CATALOG_ALIAS + "}/{" + PATH_WORKSPACE_ID + "}/{id:.+}";
 
   @Autowired
   public CategoryResource(CatalogAliasTranslationService catalogAliasTranslationService) {

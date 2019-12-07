@@ -2,5 +2,10 @@
 main > .container {
   .cm-placement {
     margin: 48px auto;
+    @include breakpoint("sm-and-down") {
+      &:first-child {
+        margin-top: 10px;
+      }
+    }
   }
 }

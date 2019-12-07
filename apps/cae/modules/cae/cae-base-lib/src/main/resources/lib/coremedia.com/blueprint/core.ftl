@@ -1,6 +1,7 @@
 <#ftl strip_whitespace=true>
 <#-- @ftlvariable name="blueprintFreemarkerFacade" type="com.coremedia.blueprint.cae.web.taglib.BlueprintFreemarkerFacade" -->
 <#-- @ftlvariable name="cmFacade" type="com.coremedia.objectserver.view.freemarker.CAEFreemarkerFacade" -->
+<#-- @ftlvariable name="springMacroRequestContext" type="org.springframework.web.servlet.support.RequestContext" -->
 
 <#-- -------------------------------------------------------------------------------------------------------------------
  *
@@ -53,9 +54,18 @@
   <#return blueprintFreemarkerFacade.isWebflowRequest()!false>
 </#function>
 
-<#-- SIZE AS INTEGER -->
-<#function getDisplaySize size>
-  <#return blueprintFreemarkerFacade.getDisplaySize(size) />
+<#-- GET FILE SIZE AS HUMAN READABLE FORMAT -->
+<#function getDisplayFileSize size locale=cm.UNDEFINED>
+  <#if !size?is_number>
+    <#return 0>
+  </#if>
+  <#if cm.isUndefined(locale)>
+    <#local locale=(cmpage.locale)!cm.UNDEFINED />
+    <#if cm.isUndefined(locale)>
+      <#local locale=springMacroRequestContext.getLocale()>
+    </#if>
+  </#if>
+  <#return blueprintFreemarkerFacade.getDisplayFileSize(size, locale) />
 </#function>
 
 <#-- GET FILE EXTENSION -->
@@ -89,4 +99,9 @@
 <#-- DEPRECATED -->
 <#function createBeansFor contents>
   <#return blueprintFreemarkerFacade.createBeansFor(contents)>
+</#function>
+
+<#-- DEPRECATED, use getDisplayFileSize instead -->
+<#function getDisplaySize size>
+  <#return blueprintFreemarkerFacade.getDisplaySize(size) />
 </#function>

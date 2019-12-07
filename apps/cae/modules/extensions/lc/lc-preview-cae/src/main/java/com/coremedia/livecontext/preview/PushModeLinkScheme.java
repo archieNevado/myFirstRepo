@@ -11,6 +11,7 @@ import com.coremedia.objectserver.web.links.Link;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.springframework.web.util.UriComponents;
 
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
@@ -37,8 +38,8 @@ public class PushModeLinkScheme {
 
   @Link(type = CMLinkable.class, order = 2, view = "pushMode")
   @Nullable
-  public Object buildLinkForLinkablesInPushMode(CMLinkable linkable, @Nullable String viewName, @Nullable Map<String, Object> linkParameters,
-                                                HttpServletRequest request) {
+  public UriComponents buildLinkForLinkablesInPushMode(CMLinkable linkable, @Nullable String viewName, @Nullable Map<String, Object> linkParameters,
+                                                       HttpServletRequest request) {
 
     Optional<CommerceConnection> connection = commerceConnectionSupplier.findConnection(linkable.getContent());
 

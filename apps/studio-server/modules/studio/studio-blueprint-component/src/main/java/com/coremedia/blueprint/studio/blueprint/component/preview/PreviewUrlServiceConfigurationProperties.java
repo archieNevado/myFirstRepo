@@ -11,7 +11,6 @@ public class PreviewUrlServiceConfigurationProperties {
   private boolean enabled = false;
   private Map<String, String> config = new HashMap<>();
 
-
   public boolean isEnabled() {
     return enabled;
   }

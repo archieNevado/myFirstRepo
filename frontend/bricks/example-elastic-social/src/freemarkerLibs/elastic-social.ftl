@@ -24,18 +24,16 @@
   @param additionalClasses Additional classes to be attached to the root element of the notification.
   @param title Defines the title of the notification.
   @param text Defines the text of the notification.
-  @param dismissable Defines if the notification is dismissable.
   @param iconClass Defines an the CSS class of an icon to be attached to the notification.
   @param attr Defines additional attributes to be attached to the root element of the notification.
 
   Example:
   <@notification type="inactive"
                  text=""
-                 dismissable=false
                  additionalClasses=["cm-comment__notification"]
                  attr={"data-cm-notification": '{"path": ""}'}/>
 -->
-<#macro notification type baseClass="cm-notification" additionalClasses=[] title="" text="" dismissable=false iconClass="" attr={}>
+<#macro notification type baseClass="cm-notification" additionalClasses=[] title="" text="" iconClass="" attr={}>
   <#local classes=[baseClass, baseClass + "--" + type] + additionalClasses />
   <#local attr=utils.extendSequenceInMap(attr, "classes", classes) />
   <div<@utils.renderAttr attr=attr />>

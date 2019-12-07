@@ -30,6 +30,80 @@ Environment Variables
 * `CONTENT_ARCHIVE_URL` - if set to a http url pointing to a `content-users.zip`
 as produced by the `test-data` maven module from the Blueprint workspace.
 
+Configuration
+-------------
+
+To configure the tools for arbitrary environments, [confd](https://github.com/kelseyhightower/confd/tree/v0.16.0) has 
+been added to the [java-application-base](https://hub.docker.com/repository/docker/coremedia/java-application-base) image.
+
+By default the following environment variables can be used to configure the tools.
+
+#### repository connection
+* `CAP_CLIENT_SERVER_IOR_URL`  
+* `CAP_CLIENT_TIMEZONE_DEFAULT`
+
+#### resetcaefeeder
+* `JDBC_DRIVER`
+* `JDBC_URL`
+* `JDBC_USER`
+* `JDBC_PASSWORD`
+
+#### repository sql access
+* `SQL_STORE_DRIVER`
+* `SQL_STORE_URL`
+* `SQL_STORE_USER`
+* `SQL_STORE_PASSWORD`
+
+#### workflowconverter
+* `WORKFLOW_MAP_ROLE_TRANSLATION_MANAGER_ROLE` 
+* `WORKFLOW_MAP_ROLE_ADMINISTRATOREN`
+* `WORKFLOW_MAP_ROLE_APPROVER_ROLE`
+* `WORKFLOW_MAP_ROLE_COMPOSER_ROLE`
+* `WORKFLOW_MAP_ROLE_PUBLISHER_ROLE`
+
+Alternatively to environment variables, a yaml file can be used for the configuration keys. This can be configured using
+the environment variable `CONFD_BACKEND` set to `file` and an environment variable `CONFD_ARGS` set to `-file <config.yml>`.
+
+By specifying `CONFD_PREFIX`, all keys can be prefixed to separate deployment environments. I.e. by setting `CONFD_PREFIX=foo/bar`
+environment keys are prefixed with `FOO_BAR` and yaml keys are expected to be placed below:
+```yaml
+foo:
+  bar:
+```
+
+##### Example:
+If you want to define multiple environments i.e. for uat and prod and content-management-server, master-live-server and
+two replication-live-servers, you can define an env file like:
+```bash
+# UAT
+UAT_MANAGEMENT_CAP_CLIENT_SERVER_IOR_URL=http://uat-content-management-server:8080/ior
+UAT_MASTER_CAP_CLIENT_SERVER_IOR_URL=http://uat-master-live-server:8080/ior
+UAT_REPLICATION_1_CAP_CLIENT_SERVER_IOR_URL=http://uat-master-live-server:8080/ior
+UAT_REPLICATION_2_CAP_CLIENT_SERVER_IOR_URL=http://uat-master-live-server:8080/ior
+# PROD
+PROD_MANAGEMENT_CAP_CLIENT_SERVER_IOR_URL=http://prod-content-management-server:8080/ior
+PROD_MASTER_CAP_CLIENT_SERVER_IOR_URL=http://prod-master-live-server:8080/ior
+PROD_REPLICATION_1_CAP_CLIENT_SERVER_IOR_URL=http://prod-master-live-server:8080/ior
+PROD_REPLICATION_2_CAP_CLIENT_SERVER_IOR_URL=http://prod-master-live-server:8080/ior
+```
+
+Now you can use the `management-tools` image. Remember these examples do not work in the docker-compose setup unless
+you add `--network compose_backend` to the command-line. 
+
+* Connect against UAT content-management-server
+```bash
+docker run --rm \
+  --env-file=.env -e CONFD_PREFIX=uat/management \
+  coremedia/management-tools \
+  confd tools/bin/cm dump -u admin -p admin 3
+```
+* Connect against PROD master-live-server
+```bash
+docker run --rm \
+  --env-file=.env -e CONFD_PREFIX=prod/master \
+  coremedia/management-tools \
+  confd tools/bin/cm dump -u admin -p admin 3
+```
 
 General purpose tools
 ---------------------

@@ -17,7 +17,7 @@
             <h3 class="cm-like__title">has not liked of likes ${self.numberOfLikes}</h3>
             <input type="hidden" name="like" value="true">
         </#if>
-        <@components.button text="Like" iconClass="glyphicon glyphicon-ok" attr={"type": "submit", "class": "cm-button cm-button--small"} />
+        <@components.button text="Like" attr={"type": "submit", "class": "cm-button cm-button--small"} />
       </form>
   </div>
 </#if>

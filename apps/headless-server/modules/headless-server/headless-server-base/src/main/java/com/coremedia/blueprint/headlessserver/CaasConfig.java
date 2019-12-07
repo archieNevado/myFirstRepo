@@ -40,20 +40,27 @@ import com.coremedia.caas.search.id.CaasContentBeanIdScheme;
 import com.coremedia.caas.search.solr.SolrCaeQueryBuilder;
 import com.coremedia.caas.search.solr.SolrQueryBuilder;
 import com.coremedia.caas.search.solr.SolrSearchResultFactory;
-import com.coremedia.caas.service.cache.CacheInstances;
 import com.coremedia.caas.service.cache.Weighted;
 import com.coremedia.caas.spel.SpelDirectiveWiring;
 import com.coremedia.caas.spel.SpelEvaluationStrategy;
 import com.coremedia.caas.spel.SpelFunctions;
 import com.coremedia.caas.web.CaasServiceConfig;
 import com.coremedia.caas.web.interceptor.RequestDateInitializer;
+import com.coremedia.caas.web.persistedqueries.DefaultPersistedQueriesLoader;
+import com.coremedia.caas.web.persistedqueries.DefaultQueryNormalizer;
+import com.coremedia.caas.web.persistedqueries.PersistedQueriesLoader;
+import com.coremedia.caas.web.persistedqueries.QueryNormalizer;
 import com.coremedia.caas.web.wiring.GraphQLInvocationImpl;
 import com.coremedia.caas.wiring.CapStructPropertyAccessor;
 import com.coremedia.caas.wiring.CompositeTypeNameResolver;
 import com.coremedia.caas.wiring.CompositeTypeNameResolverProvider;
 import com.coremedia.caas.wiring.ContentRepositoryWiringFactory;
 import com.coremedia.caas.wiring.ContextInstrumentation;
+import com.coremedia.caas.wiring.ConvertingDataFetcher;
+import com.coremedia.caas.wiring.DataFetcherMappingInstrumentation;
+import com.coremedia.caas.wiring.ExecutionTimeoutInstrumentation;
 import com.coremedia.caas.wiring.FallbackPropertyAccessor;
+import com.coremedia.caas.wiring.FilteringDataFetcher;
 import com.coremedia.caas.wiring.ProvidesTypeNameResolver;
 import com.coremedia.caas.wiring.TypeNameResolver;
 import com.coremedia.caas.wiring.TypeNameResolverWiringFactory;
@@ -71,11 +78,12 @@ import com.coremedia.link.uri.UriLinkBuilder;
 import com.coremedia.link.uri.UriLinkComposer;
 import com.coremedia.xml.Markup;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.Weigher;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import graphql.GraphQL;
+import graphql.analysis.MaxQueryComplexityInstrumentation;
+import graphql.analysis.MaxQueryDepthInstrumentation;
 import graphql.execution.instrumentation.ChainedInstrumentation;
 import graphql.execution.instrumentation.Instrumentation;
 import graphql.schema.GraphQLObjectType;
@@ -86,6 +94,7 @@ import graphql.schema.idl.SchemaDirectiveWiring;
 import graphql.schema.idl.SchemaGenerator;
 import graphql.schema.idl.TypeDefinitionRegistry;
 import graphql.schema.idl.WiringFactory;
+import graphql.spring.web.servlet.ExecutionResultHandler;
 import graphql.spring.web.servlet.GraphQLInvocation;
 import org.apache.solr.client.solrj.SolrClient;
 import org.slf4j.Logger;
@@ -147,6 +156,7 @@ import static java.util.Collections.emptyList;
         "com.coremedia.caas",
         "com.coremedia.blueprint.base.caas",
         "com.coremedia.cap.undoc.common.spring",
+        "com.coremedia.blueprint.caas.rest",
         "com.coremedia.blueprint.caas.commerce"
 })
 @ImportResource({
@@ -161,12 +171,23 @@ public class CaasConfig implements WebMvcConfigurer {
 
   private static final Logger LOG = LoggerFactory.getLogger(CaasConfig.class);
   private static final String OPTIONAL_QUERY_ROOT_BEAN_NAME_PREFIX = "query-root:";
+  private static final int TWENTY_FOUR_HOURS = 24 * 60 * 60;
+  private static final int CORS_RESPONSE_MAX_AGE = TWENTY_FOUR_HOURS;
 
   @Value("${graphiql.enabled:false}")
   private boolean isGraphiqlEnabled;
 
   @Value("${caas.swagger.enabled:false}")
   private boolean isSwaggerEnabled;
+
+  @Value("${caas.graphql.max-query-execution-time:0}")
+  private long maxExecutionTimeout;
+
+  @Value("${caas.graphql.max-query-depth:30}")
+  private int maxQueryDepth;
+
+  @Value("${caas.graphql.max-query-complexity:0}")
+  private int maxQueryComplexity;
 
   private CaasServiceConfig serviceConfig;
 
@@ -184,7 +205,8 @@ public class CaasConfig implements WebMvcConfigurer {
     registry.addMapping("/**")
             .allowedOrigins("*")
             .allowedMethods("GET", "POST", "OPTIONS")
-            .allowCredentials(true);
+            .allowCredentials(true)
+            .maxAge(CORS_RESPONSE_MAX_AGE);
   }
 
   @Override
@@ -238,13 +260,17 @@ public class CaasConfig implements WebMvcConfigurer {
   @SuppressWarnings("unchecked")
   public CacheManager cacheManager() {
     ImmutableList.Builder<org.springframework.cache.Cache> builder = ImmutableList.builder();
-    // richtext cache
-    if (serviceConfig.getCacheSpecs().containsKey(CacheInstances.RICHTEXT)) {
-      com.github.benmanes.caffeine.cache.Cache cache = Caffeine.from(serviceConfig.getCacheSpecs().get(CacheInstances.RICHTEXT))
-              .weigher((Weigher<Object, Weighted>) (key, value) -> value.getWeight())
+    serviceConfig.getCacheSpecs().forEach((cacheName, cacheSpec) -> {
+      com.github.benmanes.caffeine.cache.Cache cache = Caffeine.from(cacheSpec)
+              .weigher((key, value) -> {
+                if (value instanceof Weighted) {
+                  return ((Weighted) value).getWeight();
+                }
+                return String.valueOf(value).length();
+              })
               .build();
-      builder.add(new CaffeineCache(CacheInstances.RICHTEXT, cache));
-    }
+      builder.add(new CaffeineCache(cacheName, cache));
+    });
     SimpleCacheManager cacheManager = new SimpleCacheManager();
     cacheManager.setCaches(builder.build());
     return cacheManager;
@@ -293,12 +319,13 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
+  @SuppressWarnings("squid:S1067")
   public ProvidesTypeNameResolver providesContentTypeNameResolver(ContentRepository repository) {
     return typeName ->
-      "Banner".equals(typeName) ||
-      "Detail".equals(typeName) ||
-      "CollectionItem".equals(typeName) ||
-      repository.getContentType(typeName) != null ? Optional.of(true) : Optional.empty();
+            "Banner".equals(typeName) ||
+                    "Detail".equals(typeName) ||
+                    "CollectionItem".equals(typeName) ||
+                    repository.getContentType(typeName) != null ? Optional.of(true) : Optional.empty();
   }
 
   @Bean
@@ -411,6 +438,7 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
+  @SuppressWarnings("squid:S00107")
   public QueryListAdapterFactory queryListAdapter(@Qualifier("queryListSearchResultFactory") SolrSearchResultFactory searchResultFactory,
                                                   ContentRepository contentRepository,
                                                   @Qualifier("settingsService") SettingsService settingsService,
@@ -501,10 +529,8 @@ public class CaasConfig implements WebMvcConfigurer {
 
   @Bean
   public SchemaDirectiveWiring fetch(SpelEvaluationStrategy spelEvaluationStrategy,
-                                     @Qualifier("graphQlConversionService") ConversionService conversionService,
-                                     @Qualifier("globalSpelVariables") Map<String, Object> globalSpelVariables,
-                                     @Qualifier("conversionTypeMap") Map<String, Class<?>> conversionTypeMap) {
-    return new SpelDirectiveWiring(spelEvaluationStrategy, conversionService, globalSpelVariables, conversionTypeMap);
+                                     @Qualifier("globalSpelVariables") Map<String, Object> globalSpelVariables) {
+    return new SpelDirectiveWiring(spelEvaluationStrategy, globalSpelVariables);
   }
 
   @Bean
@@ -531,10 +557,8 @@ public class CaasConfig implements WebMvcConfigurer {
 
   @Bean
   public ContentRepositoryWiringFactory contentRepositoryWiringFactory(Map<String, GraphQLScalarType> builtinScalars,
-                                                                       ContentRepository repository,
-                                                                       @Qualifier("graphQlConversionService") ConversionService conversionService,
-                                                                       @Qualifier("conversionTypeMap") Map<String, Class<?>> conversionTypeMap) {
-    return new ContentRepositoryWiringFactory(repository, builtinScalars, conversionService, conversionTypeMap);
+                                                                       ContentRepository repository) {
+    return new ContentRepositoryWiringFactory(repository, builtinScalars);
   }
 
   @Bean
@@ -560,8 +584,73 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
+  public ExecutionResultHandler executionResultHandler() {
+    return new CaasExecutionResultHandler();
+  }
+
+  @Bean
+  public QueryNormalizer queryNormalizer() {
+    return new DefaultQueryNormalizer();
+  }
+
+  @Bean
+  public PersistedQueriesLoader persistedQueriesLoader(@Value("${caas.persisted-queries.query-resources-pattern:classpath:graphql/queries/*.graphql}") String queryResourcesPattern,
+                                                       @Value("${caas.persisted-queries.query-resources-map-pattern.apollo:classpath:graphql/queries/apollo*.json}") String apolloQueryMapResourcesPattern,
+                                                       @Value("${caas.persisted-queries.query-resources-map-pattern.relay:classpath:graphql/queries/relay*.json}") String relayQueryMapResourcesPattern,
+                                                       @Value("${caas.persisted-queries.query-resources-exclude-pattern:.*Fragment(s)?.graphql}") String excludeFileNamePattern) {
+    return new DefaultPersistedQueriesLoader(queryResourcesPattern,
+            apolloQueryMapResourcesPattern,
+            relayQueryMapResourcesPattern,
+            excludeFileNamePattern);
+  }
+
+  @Bean
+  public Map<String, String> persistedQueries(PersistedQueriesLoader persistedQueriesLoader) {
+    return persistedQueriesLoader.loadQueries();
+  }
+
+  @Bean
   public ContextInstrumentation contextInstrumentation() {
     return new ContextInstrumentation();
+  }
+
+  @Bean
+  public DataFetcherMappingInstrumentation dataFetchingInstrumentation(SpelEvaluationStrategy spelEvaluationStrategy,
+                                                                       @Qualifier("filterPredicate") List<Predicate<Object>> filterPredicates,
+                                                                       @Qualifier("graphQlConversionService") ConversionService conversionService,
+                                                                       @Qualifier("conversionTypeMap") Map<String, Class<?>> conversionTypeMap) {
+    return new DataFetcherMappingInstrumentation((dataFetcher, parameters) ->
+            new ConvertingDataFetcher(
+                    new FilteringDataFetcher(dataFetcher, filterPredicates),
+                    conversionService,
+                    conversionTypeMap));
+  }
+
+  @Bean
+  public ExecutionTimeoutInstrumentation executionTimeoutInstrumentation() {
+    if (maxExecutionTimeout > 0) {
+      LOG.info("graphql.max-execution-timeout: {} ms", maxExecutionTimeout);
+      return new ExecutionTimeoutInstrumentation(maxExecutionTimeout);
+    }
+    return null;
+  }
+
+  @Bean
+  public MaxQueryDepthInstrumentation maxQueryDepthInstrumentation() {
+    if (maxQueryDepth > 0) {
+      LOG.info("graphql.max-query-depth: {}", maxQueryDepth);
+      return new MaxQueryDepthInstrumentation(maxQueryDepth);
+    }
+    return null;
+  }
+
+  @Bean
+  public MaxQueryComplexityInstrumentation maxQueryComplexityInstrumentation() {
+    if (maxQueryComplexity > 0) {
+      LOG.info("graphql.max-query-complexity: {}", maxQueryComplexity);
+      return new MaxQueryComplexityInstrumentation(maxQueryComplexity);
+    }
+    return null;
   }
 
   @Bean
@@ -620,31 +709,37 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
+  @SuppressWarnings("all")
   public GraphQLScalarType MapOfString(ConversionService conversionService) {
     return new GraphQLScalarType("MapOfString", "Built-in map of scalar type", new CoercingMap<>(String.class, conversionService));
   }
 
   @Bean
+  @SuppressWarnings("all")
   public GraphQLScalarType MapOfInt(ConversionService conversionService) {
     return new GraphQLScalarType("MapOfInt", "Map of Integer", new CoercingMap<>(Integer.class, conversionService));
   }
 
   @Bean
+  @SuppressWarnings("all")
   public GraphQLScalarType MapOfLong(ConversionService conversionService) {
     return new GraphQLScalarType("MapOfLong", "Map of Long", new CoercingMap<>(Long.class, conversionService));
   }
 
   @Bean
+  @SuppressWarnings("all")
   public GraphQLScalarType MapOfFloat(ConversionService conversionService) {
     return new GraphQLScalarType("MapOfFloat", "Map of Float", new CoercingMap<>(Double.class, conversionService));
   }
 
   @Bean
+  @SuppressWarnings("all")
   public GraphQLScalarType MapOfBoolean(ConversionService conversionService) {
     return new GraphQLScalarType("MapOfBoolean", "Map of Boolean", new CoercingMap<>(Boolean.class, conversionService));
   }
 
   @Bean
+  @SuppressWarnings("all")
   public GraphQLScalarType RichTextTree() {
     return new GraphQLScalarType("RichTextTree", "Built-in rich text object tree", new CoercingRichTextTree());
   }

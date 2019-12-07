@@ -24,6 +24,11 @@ header ~ .container {
   z-index: 51;
 }
 
+.container .row > .cm-placement--banner {
+  margin: 0 15px 48px 15px;
+  width: 100%;
+}
+
 .product-detail .description-and-detail .description > .cm-placement--additional {
   margin: 2em 15px 0 15px;
   width: 100%;

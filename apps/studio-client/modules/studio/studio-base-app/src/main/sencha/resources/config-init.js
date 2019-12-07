@@ -80,12 +80,12 @@ joo = {
   var isDevelopmentMode = pathname.indexOf("/target/app/") >= 0;
   var uriPrefix = isDevelopmentMode ? '/' : '';
 
-  probeRestApiThenLoadScripts(uriPrefix + 'api/',
+  probeRestApiThenLoadScripts(uriPrefix + 'rest/api/',
       function () {
-        // fallback: try new "rest/" URL prefix
-        probeRestApiThenLoadScripts(uriPrefix + 'rest/api/',
+        // fallback: try old "api/" URL prefix
+        probeRestApiThenLoadScripts(uriPrefix + 'api/',
             function () {
-              console.error("No response from Studio Server API at " + uriPrefix + 'api/ or ' + uriPrefix + 'rest/api/');
+              console.error("No response from Studio Server API at " + uriPrefix + 'rest/api/ or ' + uriPrefix + 'api/');
               document.body.innerText = "An error occurred. Please contact your system administrator if this problem happens again."
             }
         );

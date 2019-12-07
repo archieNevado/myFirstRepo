@@ -5,7 +5,9 @@ import com.coremedia.ecommerce.studio.CatalogModel;
 import com.coremedia.ecommerce.studio.catalogHelper;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.library.ECommerceCollectionViewExtension;
+import com.coremedia.ecommerce.studio.model.Catalog;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
+import com.coremedia.ecommerce.studio.model.Category;
 import com.coremedia.ecommerce.studio.model.Marketing;
 import com.coremedia.ecommerce.studio.model.Store;
 
@@ -25,6 +27,12 @@ public class LivecontextCollectionViewExtension extends ECommerceCollectionViewE
     name: CatalogModel.TYPE_PRODUCT_VARIANT,
     label: ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'ProductVariant_label'),
     icon: ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'ProductVariant_icon')
+  };
+
+  protected static const CATEGORY_TYPE_RECORD:Object = {
+    name: CatalogModel.TYPE_CATEGORY,
+    label: ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Category_label'),
+    icon: ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Category_icon')
   };
 
   protected static const MARKETING_SPOT_TYPE_RECORD:Object = {
@@ -56,9 +64,14 @@ public class LivecontextCollectionViewExtension extends ECommerceCollectionViewE
       var availableSearchTypes:Array = [DEFAULT_TYPE_PRODUCT_RECORD, PRODUCT_VARIANT_TYPE_RECORD];
       if (folder is Store) {
         var store:Store = catalogHelper.getActiveStoreExpression().getValue();
-        if (store.isMarketingEnabled()){
+        if (store.isMarketingEnabled()) {
           availableSearchTypes.push(MARKETING_SPOT_TYPE_RECORD);
         }
+      }
+      // category search is only available if category root or catalog is selected.
+      // category search within the category tree is not possible since category drill down is not supported.
+      if (folder is Store || folder is Catalog || (folder is Category && folder.getParent() == null)) {
+        availableSearchTypes.push(CATEGORY_TYPE_RECORD);
       }
       return availableSearchTypes;
     }

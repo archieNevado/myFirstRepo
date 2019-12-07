@@ -227,6 +227,12 @@
 </StructListProperty>
 </Struct>
 </StructProperty>
+<StructProperty Name="forms">
+<Struct>
+<BooleanProperty Name="formCollapsed">true</BooleanProperty>
+<BooleanProperty Name="previewCollapsed">true</BooleanProperty>
+</Struct>
+</StructProperty>
 <StructProperty Name="workarea">
 <Struct>
 <StructListProperty Name="tabs">

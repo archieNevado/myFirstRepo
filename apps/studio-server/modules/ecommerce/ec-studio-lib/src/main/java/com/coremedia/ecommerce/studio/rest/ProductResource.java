@@ -27,7 +27,8 @@ import java.util.Map;
 @RequestMapping(value = ProductResource.URI_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProductResource extends CommerceBeanResource<Product> {
 
-  static final String URI_PATH = "livecontext/product/{" + PATH_SITE_ID + "}/{" + PATH_CATALOG_ALIAS + "}/{" + PATH_WORKSPACE_ID + "}/{id:.+}";
+  static final String PATH_TYPE = "product";
+  static final String URI_PATH = "livecontext/" + PATH_TYPE + "/{" + PATH_SITE_ID + "}/{" + PATH_CATALOG_ALIAS + "}/{" + PATH_WORKSPACE_ID + "}/{id:.+}";
 
   @Autowired
   public ProductResource(CatalogAliasTranslationService catalogAliasTranslationService) {

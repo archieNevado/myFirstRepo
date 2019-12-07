@@ -1,5 +1,8 @@
 package com.coremedia.blueprint.taxonomies;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
+
 import java.util.List;
 
 /**
@@ -13,6 +16,7 @@ public interface Taxonomy<T> {
    *
    * @return id
    */
+  @NonNull
   String getTaxonomyId();
 
   /**
@@ -29,6 +33,7 @@ public interface Taxonomy<T> {
    *
    * @return The root node of the taxonomy strategy.
    */
+  @NonNull
   TaxonomyNode getRoot();
 
   /**
@@ -38,6 +43,7 @@ public interface Taxonomy<T> {
    * @param ref The reference of the node to find.
    * @return The node to find or null.
    */
+  @Nullable
   TaxonomyNode getNodeByRef(String ref);
 
 
@@ -47,7 +53,8 @@ public interface Taxonomy<T> {
    * @param ref The id of the node
    * @return The parent of the node.
    */
-  TaxonomyNode getParent(String ref);
+  @Nullable
+  TaxonomyNode getParent(@NonNull String ref);
 
   /**
    * Returns the children of the given node.
@@ -57,7 +64,8 @@ public interface Taxonomy<T> {
    * @param count  The page count if paging is used.
    * @return The node list wrapper that contains child nodes.
    */
-  TaxonomyNodeList getChildren(TaxonomyNode node, int offset, int count);
+  @NonNull
+  TaxonomyNodeList getChildren(@NonNull TaxonomyNode node, int offset, int count);
 
   /**
    * The TaxonomyNodeList contains the full path of the node, including itself
@@ -66,7 +74,8 @@ public interface Taxonomy<T> {
    * @param node The node to retrieve the path from.
    * @return The node that contains all nodes of the path.
    */
-  TaxonomyNode getPath(TaxonomyNode node);
+  @NonNull
+  TaxonomyNode getPath(@NonNull TaxonomyNode node);
 
   /**
    * Looks up nodes for the given search text. This method is
@@ -75,7 +84,8 @@ public interface Taxonomy<T> {
    * @param text The search text.
    * @return A list of hits that match the search text.
    */
-  TaxonomyNodeList find(String text);
+  @NonNull
+  TaxonomyNodeList find(@NonNull String text);
 
   /**
    * Deletes the given node from the taxonomy tree.
@@ -83,7 +93,8 @@ public interface Taxonomy<T> {
    * @param toDelete The node to be deleted
    * @return The parent of the deleted node or null if the deletion was not possible (e.g. referrers)
    */
-  TaxonomyNode delete(TaxonomyNode toDelete);
+  @Nullable
+  TaxonomyNode delete(@NonNull TaxonomyNode toDelete);
 
   /**
    * Creates a new child for the given parent.
@@ -92,7 +103,8 @@ public interface Taxonomy<T> {
    * @param defaultName The default name to use for the new child.
    * @return The newly created node.
    */
-  TaxonomyNode createChild(TaxonomyNode parent, String defaultName);
+  @NonNull
+  TaxonomyNode createChild(@NonNull TaxonomyNode parent, @Nullable String defaultName);
 
   /**
    * Commits the changes that have been done on the node.
@@ -100,7 +112,8 @@ public interface Taxonomy<T> {
    * @param node The node to store the new values for.
    * @return The updated node instance.
    */
-  TaxonomyNode commit(TaxonomyNode node);
+  @NonNull
+  TaxonomyNode commit(@NonNull TaxonomyNode node);
 
   /**
    * Moves the given taxonomy node to the children of the target node.
@@ -109,13 +122,15 @@ public interface Taxonomy<T> {
    * @param target The target node that will be the new parent.
    * @return The move node with updated references.
    */
-  TaxonomyNode moveNode(TaxonomyNode node, TaxonomyNode target);
+  @Nullable
+  TaxonomyNode moveNode(@NonNull TaxonomyNode node, @NonNull TaxonomyNode target);
 
   /**
    * Returns a list of all available keywords for this taxonomy.
    *
    * @return list of all available keywords
    */
+  @NonNull
   List<TaxonomyNode> getAllChildren();
 
   /**
@@ -138,6 +153,7 @@ public interface Taxonomy<T> {
    * @param recursive true to check the child nodes of the given node too
    * @return the list of items referencing the given node
    */
+  @NonNull
   List<T> getLinks(TaxonomyNode node, boolean recursive);
 
   /**
@@ -146,7 +162,8 @@ public interface Taxonomy<T> {
    * @param node the node to check
    * @return the list of items referencing the node
    */
-  List<T> getStrongLinks(TaxonomyNode node, boolean recursive);
+  @NonNull
+  List<T> getStrongLinks(@NonNull TaxonomyNode node, boolean recursive);
 
   /**
    * Returns true if the taxonomy can be modified by the current user.

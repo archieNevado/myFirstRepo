@@ -15,6 +15,12 @@
 
   <dependencies>
     <dependency>
+      <!-- referenced in framework/spring/blobstore/am/blobstore.xml -->
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>cap-server-media</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>cap-server-plugins</artifactId>
     </dependency>

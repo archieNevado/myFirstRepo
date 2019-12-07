@@ -30,9 +30,9 @@
 
     <customer>Blueprint</customer>
 
-    <cm.user-changes.core.version>1907.3</cm.user-changes.core.version>
+    <cm.user-changes.core.version>1910.1</cm.user-changes.core.version>
 
-    <spring.boot.version>2.1.6.RELEASE</spring.boot.version>
+    <spring.boot.version>2.2.1.RELEASE</spring.boot.version>
     <application-plugin.version>2.7.10</application-plugin.version>
 
     <!--
@@ -77,16 +77,19 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.26</tomcat.embed.version>
+    <tomcat.embed.version>9.0.27</tomcat.embed.version>
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.user-changes.core.version>1907.3</cm.user-changes.core.version>
-    <cm.common.core.version>1907.3</cm.common.core.version>
+    <cm.user-changes.core.version>1910.1</cm.user-changes.core.version>
+    <cm.common.core.version>1910.1</cm.common.core.version>
     <cm.common.bp.version>1-SNAPSHOT</cm.common.bp.version>
-    <cm.middle.core.version>1907.3</cm.middle.core.version>
+    <cm.middle.core.version>1910.1</cm.middle.core.version>
     <cm.middle.bp.version>1-SNAPSHOT</cm.middle.bp.version>
     <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
+
+    <showDeprecation>true</showDeprecation>
+    <showWarnings>true</showWarnings>
   </properties>
 
   <profiles>
@@ -381,10 +384,6 @@
                 </includes>
                 <followSymlinks>false</followSymlinks>
               </fileset>
-              <!-- node is created by frontend-maven-plugin -->
-              <fileset>
-                <directory>node</directory>
-              </fileset>
             </filesets>
           </configuration>
         </plugin>
@@ -393,8 +392,8 @@
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.8.0</version>
           <configuration>
-            <showDeprecation>true</showDeprecation>
-            <showWarnings>true</showWarnings>
+            <showDeprecation>${showDeprecation}</showDeprecation>
+            <showWarnings>${showWarnings}</showWarnings>
           </configuration>
         </plugin>
         <plugin>
@@ -415,15 +414,6 @@
               </exclusions>
             </dependency>
           </dependencies>
-        </plugin>
-        <plugin>
-          <groupId>com.github.eirslett</groupId>
-          <artifactId>frontend-maven-plugin</artifactId>
-          <version>1.7.6</version>
-          <configuration>
-            <nodeVersion>v10.16.0</nodeVersion><!-- LTS -->
-            <yarnVersion>v1.17.3</yarnVersion>
-          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -543,7 +533,7 @@
                 <X-Compile-Target-JDK>${maven.compiler.release}</X-Compile-Target-JDK>
                 <!-- Configure WebSphere to not scan ASM jars in the WAR, because they contain Java 9 module-info.class
                      files and cause exceptions in WebSphere. See CMS-12354 -->
-                <Ignore-Scanning-Archives>asm-analysis-7.2-beta.jar,asm-7.2-beta.jar,asm-commons-7.2-beta.jar,asm-tree-7.2-beta.jar</Ignore-Scanning-Archives>
+                <Ignore-Scanning-Archives>asm-analysis-7.2.jar,asm-7.2.jar,asm-commons-7.2.jar,asm-tree-7.2.jar</Ignore-Scanning-Archives>
               </manifestEntries>
             </archive>
             <failOnMissingWebXml>false</failOnMissingWebXml>

@@ -3,9 +3,9 @@ package com.coremedia.ecommerce.studio.rest.filter;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.security.web.util.matcher.RequestMatcher;
-import org.springframework.web.filter.GenericFilterBean;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -21,16 +21,18 @@ import static com.coremedia.ecommerce.studio.rest.AbstractCatalogResource.QUERY_
  * Filter detects and forwards catalog rest resource requests with special IDs containing "/".
  * The ID is then passed as query parameter instead of path parameter.
  *
- * See also {@link com.coremedia.ecommerce.studio.rest.CategoryResourceEncodedId},
- * {@link com.coremedia.ecommerce.studio.rest.ProductResourceEncodedId},
- * {@link com.coremedia.ecommerce.studio.rest.ProductVariantResourceEncodedId}
+ * See also {@link com.coremedia.ecommerce.studio.rest.CommerceBeanResourceWithEncodedId}
  */
 @DefaultAnnotation(NonNull.class)
-public class CatalogResourceEncodingFilter extends GenericFilterBean {
+public class CatalogResourceEncodingFilter implements Filter {
   private static final String NO_WS = "NO_WS/";
   private static final int STR_LENGTH = NO_WS.length();
 
-  private List<RequestMatcher> includeRequestMatchers = List.of();
+  private final List<RequestMatcher> includeRequestMatchers;
+
+  public CatalogResourceEncodingFilter(List<RequestMatcher> includeRequestMatchers) {
+    this.includeRequestMatchers = includeRequestMatchers;
+  }
 
   @Override
   public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -44,7 +46,7 @@ public class CatalogResourceEncodingFilter extends GenericFilterBean {
       if (isEncodingNeeded(id)) {
         String redirectUrl = getForwardUrl(request, id);
 
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(redirectUrl);
+        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher(redirectUrl);
         dispatcher.forward(servletRequest, servletResponse);
         return;
       }
@@ -70,13 +72,5 @@ public class CatalogResourceEncodingFilter extends GenericFilterBean {
 
   private boolean isRequestIncluded(HttpServletRequest request) {
     return includeRequestMatchers.stream().anyMatch(matcher -> matcher.matches(request));
-  }
-
-  public List<RequestMatcher> getIncludeRequestMatchers() {
-    return includeRequestMatchers;
-  }
-
-  public void setIncludeRequestMatchers(List<RequestMatcher> includeRequestMatchers) {
-    this.includeRequestMatchers = includeRequestMatchers;
   }
 }

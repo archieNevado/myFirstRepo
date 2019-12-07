@@ -13,12 +13,12 @@
 <#if loginAction?has_content && logoutAction?has_content && profileAction?has_content>
   <#if self.authenticated>
     <div class="cm-button-group cm-button-group--default">
-      <@components.button href="${cm.getLink(logoutAction!cm.UNDEFINED)}" text=cm.getMessage("logout_title") iconClass="glyphicon glyphicon-log-out" attr={"metadata": [logoutAction.content, "properties.id"]} />
-      <@components.button href="${cm.getLink(profileAction!cm.UNDEFINED)}" text=cm.getMessage("userDetails_title") iconClass="glyphicon glyphicon-user" attr={"metadata": [profileAction.content, "properties.id"], "classes": ["cm-button-group__button"]} />
+      <@components.button href="${cm.getLink(logoutAction!cm.UNDEFINED)}" text=cm.getMessage("logout_title") attr={"metadata": [logoutAction.content, "properties.id"]} />
+      <@components.button href="${cm.getLink(profileAction!cm.UNDEFINED)}" text=cm.getMessage("userDetails_title") attr={"metadata": [profileAction.content, "properties.id"], "classes": ["cm-button-group__button"]} />
     </div>
   <#else>
     <div class="cm-button-group cm-button-group--default">
-      <@components.button href="#" text=cm.getMessage("login_title") iconClass="glyphicon glyphicon-log-in" attr={"metadata": [loginAction.content, "properties.id"], "classes": ["cm-button-group__button"], "data-href": cm.getLink(self, {"next": "$nextUrl$", "absolute": true})} />
+      <@components.button href="#" text=cm.getMessage("login_title") attr={"metadata": [loginAction.content, "properties.id"], "classes": ["cm-button-group__button"], "data-href": cm.getLink(self, {"next": "$nextUrl$", "absolute": true})} />
     </div>
   </#if>
 </#if>

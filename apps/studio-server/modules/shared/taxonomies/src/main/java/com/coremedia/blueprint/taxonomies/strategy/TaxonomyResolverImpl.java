@@ -2,7 +2,7 @@ package com.coremedia.blueprint.taxonomies.strategy;
 
 import com.coremedia.blueprint.taxonomies.Taxonomy;
 import com.coremedia.blueprint.taxonomies.TaxonomyResolver;
-import com.coremedia.blueprint.taxonomies.TaxonomyUtil;
+import com.coremedia.blueprint.taxonomies.cycleprevention.TaxonomyCycleValidator;
 import com.coremedia.cap.common.CapObjectDestroyedException;
 import com.coremedia.cap.common.CapSession;
 import com.coremedia.cap.content.Content;
@@ -12,10 +12,11 @@ import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SiteDestroyedException;
 import com.coremedia.cap.multisite.SitesService;
-import com.coremedia.rest.cap.content.search.solr.SolrSearchService;
+import com.coremedia.rest.cap.content.search.SearchService;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.PostConstruct;
 import java.util.Collection;
@@ -32,7 +33,8 @@ public class TaxonomyResolverImpl implements TaxonomyResolver {
   private static final String TAXONOMY_FOLDER_NAME = "Taxonomies";
 
   private ContentRepository contentRepository;
-  private SolrSearchService solrSearchService;
+  private SearchService searchService;
+  private TaxonomyCycleValidator taxonomyCycleValidator;
   private Map<String, Taxonomy> strategies;
   private Map<String, String> aliasMapping;
   private SitesService sitesService;
@@ -40,38 +42,23 @@ public class TaxonomyResolverImpl implements TaxonomyResolver {
   private String siteConfigPath;
   private String globalConfigPath;
 
-  //--- Spring configuration --
-  @Required
-  public void setSitesService(SitesService sitesService) {
+  public TaxonomyResolverImpl(@NonNull SitesService sitesService,
+                              @NonNull ContentRepository contentRepository,
+                              @NonNull SearchService searchService,
+                              @NonNull TaxonomyCycleValidator taxonomyCycleValidator,
+                              @NonNull Map<String, String> aliasMapping,
+                              @NonNull String contentType,
+                              @NonNull String siteConfigPath,
+                              @NonNull String globalConfigPath) {
     this.sitesService = sitesService;
-  }
-
-  @Required
-  public void setContentRepository(ContentRepository contentRepository) {
     this.contentRepository = contentRepository;
-  }
-
-  @Required
-  public void setSolrSearchService(SolrSearchService solrSearchService) {
-    this.solrSearchService = solrSearchService;
-  }
-
-  @Required
-  public void setAliasMapping(Map<String, String> aliasMapping) {
+    this.searchService = searchService;
+    this.taxonomyCycleValidator = taxonomyCycleValidator;
     this.aliasMapping = aliasMapping;
-  }
-
-  @Required
-  public void setSiteConfigPath(String siteConfigPath) {
+    this.contentType = contentType;
     this.siteConfigPath = siteConfigPath;
-  }
-
-  @Required
-  public void setGlobalConfigPath(String globalConfigPath) {
     this.globalConfigPath = globalConfigPath;
   }
-
-  // -- Impl ------
 
   @Override
   public Collection<Taxonomy> getTaxonomies() {
@@ -84,20 +71,13 @@ public class TaxonomyResolverImpl implements TaxonomyResolver {
     return true;
   }
 
-  @Required
-  public void setContentType(String contentType) {
-    this.contentType = contentType;
-  }
-
   @Override
   public Taxonomy getTaxonomy(String siteId, String taxonomyId) {
     Taxonomy taxonomy = findTaxonomy(siteId, taxonomyId);
     //run validity check.
     if (taxonomy != null && !taxonomy.isValid()) {
       String key = toKey(taxonomy.getTaxonomyId(), taxonomy.getSiteId());
-      if (strategies.containsKey(key)) {
-        strategies.remove(key);
-      }
+      strategies.remove(key);
     }
     return taxonomy;
   }
@@ -105,7 +85,7 @@ public class TaxonomyResolverImpl implements TaxonomyResolver {
 
   @PostConstruct
   public void init() {
-    strategies = Collections.synchronizedMap(new HashMap<String, Taxonomy>());
+    strategies = Collections.synchronizedMap(new HashMap<>());
     loadTaxonomies();
   }
 
@@ -116,7 +96,7 @@ public class TaxonomyResolverImpl implements TaxonomyResolver {
    * @param site       The site the taxonomy is used for or null.
    * @return The key of the taxonomy.
    */
-  protected String toKey(String taxonomyId, String site) {
+  private String toKey(String taxonomyId, String site) {
     return taxonomyId + "_" + site;
   }
 
@@ -129,27 +109,41 @@ public class TaxonomyResolverImpl implements TaxonomyResolver {
     for (Site site : sites) {
       try {
         Content siteTaxonomyFolder = getSiteConfigFolder(site);
-        addStrategies(newTaxonomies, siteTaxonomyFolder, site.getId());
+        if (siteTaxonomyFolder == null) {
+          continue;
+        }
+
+        newTaxonomies.putAll(getStrategies(siteTaxonomyFolder, site.getId()));
       } catch (CapObjectDestroyedException | SiteDestroyedException e) {
         LOG.debug("ignoring destroyed site '{}'", site.getId(), e);
       }
     }
 
     Content globalConfigFolder = getGlobalConfigFolder();
-    addStrategies(newTaxonomies, globalConfigFolder, null);
+    if (globalConfigFolder != null) {
+      newTaxonomies.putAll(getStrategies(globalConfigFolder, null));
+    }
 
     strategies.clear();
     strategies.putAll(newTaxonomies);
   }
 
-  private void addStrategies(Map<String, Taxonomy> newTaxonomies, Content taxonomyRootFolder, String id) {
-    if (taxonomyRootFolder != null) {
-      Content taxonomyFolder = taxonomyRootFolder.getChild(TAXONOMY_FOLDER_NAME);
-      if (taxonomyFolder != null) {
-        Map<String, Taxonomy> taxonomies = createStrategies(taxonomyFolder, id);
-        newTaxonomies.putAll(taxonomies);
-      }
+  @NonNull
+  private Map<String, Taxonomy> getStrategies(@NonNull Content taxonomyRootFolder, @Nullable String id) {
+    Content taxonomyFolder = taxonomyRootFolder.getChild(TAXONOMY_FOLDER_NAME);
+
+    if (taxonomyFolder == null) {
+      LOG.warn("Invalid taxonomy root folder [null]");
+      return new HashMap<>();
     }
+
+
+    ContentType contentType = contentRepository.getContentType(this.contentType);
+    if (contentType == null) {
+      return new HashMap<>();
+    }
+
+    return createStrategies(taxonomyFolder, contentType, id);
   }
 
   /**
@@ -192,38 +186,23 @@ public class TaxonomyResolverImpl implements TaxonomyResolver {
    *
    * @param taxFolderContent The folder to lookup keywords in.
    */
-  private Map<String,Taxonomy> createStrategies(Content taxFolderContent, String siteId) {
+  @NonNull
+  private Map<String,Taxonomy> createStrategies(@NonNull Content taxFolderContent, @NonNull ContentType contentType, @Nullable String siteId) {
     Map<String,Taxonomy> taxonomies = new HashMap<>();
-    LOG.debug("Creating taxonomy strategy for folder '{}', site '{}'", (taxFolderContent == null ? null : taxFolderContent.getPath()), siteId);
+    LOG.debug("Creating taxonomy strategy for folder '{}', site '{}'", (taxFolderContent.getPath()), siteId);
     //lookup the root folder
     try {
-      if (taxFolderContent != null) {
-        Set<Content> taxonomyFolderChildren = taxFolderContent.getSubfolders();
-        //check each subfolder that is a separate taxonomy tree
-        if (!taxonomyFolderChildren.isEmpty()) {
-          for (Content taxonomyFolder : taxonomyFolderChildren) {
-            //find first taxonomy child to determine the type of taxonomy
-            Content indexingTaxonomy = TaxonomyUtil.findFirstTaxonomy(taxonomyFolder, contentType);
-            if (indexingTaxonomy != null) {
-              ContentType type = indexingTaxonomy.getType();
-
-              //we only have one strategy here, maybe some customers need more logic here and different strategies...
-              long start = System.currentTimeMillis();
-              DefaultTaxonomy strategy = new DefaultTaxonomy(taxonomyFolder, siteId, type, contentRepository, solrSearchService);
-              taxonomies.put(toKey(strategy.getTaxonomyId(), siteId), strategy);
-
-              if (LOG.isDebugEnabled()) {
-                LOG.debug("Taxonomy strategy for folder '" + taxonomyFolder + "' took " + (System.currentTimeMillis() - start) + " ms");
-              }
-            }
-          }
+      Set<Content> taxonomyFolderChildren = taxFolderContent.getSubfolders();
+      //check each subfolder that is a separate taxonomy tree
+      if (!taxonomyFolderChildren.isEmpty()) {
+        for (Content taxonomyFolder : taxonomyFolderChildren) {
+          //we only have one strategy here, maybe some customers need more logic here and different strategies...
+          DefaultTaxonomy strategy = new DefaultTaxonomy(taxonomyFolder, siteId, contentType, contentRepository, searchService, taxonomyCycleValidator);
+          taxonomies.put(toKey(strategy.getTaxonomyId(), siteId), strategy);
         }
-      } else {
-        LOG.warn("Invalid taxonomy root folder [null]");
       }
-    }
-    catch (Exception e) {
-      LOG.error("Error resolving taxonomy strategey for '{}' and site id '{}'", taxFolderContent != null ? taxFolderContent.getPath() : "[null]", siteId, e);
+    } catch (Exception e) {
+      LOG.warn("Error resolving taxonomy strategy for '{}' and site id '{}'", taxFolderContent.getPath(), siteId, e);
     }
 
     return taxonomies;

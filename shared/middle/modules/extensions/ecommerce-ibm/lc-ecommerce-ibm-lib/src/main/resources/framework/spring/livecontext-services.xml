@@ -182,6 +182,7 @@
     <property name="defaultStoreFrontUrl" value="${livecontext.ibm.wcs.storefront.url}"/>
     <property name="previewStoreFrontUrl" value="${livecontext.ibm.wcs.storefront.preview.url}"/>
     <property name="shoppingFlowUrlForContractPreview" value="${livecontext.ibm.contract.preview.url}"/>
+    <property name="shoppingFlowUrlForContractPreviewWcs9" value="${livecontext.wcs9.contract.preview.url}"/>
     <property name="productNonSeoUrl" value="${livecontext.ibm.product.non-seo.url}"/>
     <property name="categoryNonSeoUrl" value="${livecontext.ibm.category.non-seo.url}"/>
     <property name="urlPattern" value="{language}/{storeName}/{seoSegment}"/>

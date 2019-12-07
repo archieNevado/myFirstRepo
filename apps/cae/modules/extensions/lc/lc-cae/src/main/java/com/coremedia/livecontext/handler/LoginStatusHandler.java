@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.UriTemplate;
 
 import javax.security.auth.login.CredentialExpiredException;
 import javax.servlet.http.HttpServletRequest;
@@ -102,13 +103,14 @@ public class LoginStatusHandler {
   // --- Link building ----------------------------------------------------------------------
 
   @Link(type = LinkType.class, uri = STATUS)
-  public UriComponents buildLink(LinkType linkType, UriComponentsBuilder uriTemplate) {
+  public UriComponents buildLink(LinkType linkType, UriTemplate uriTemplate) {
+    UriComponentsBuilder builder = UriComponentsBuilder.fromPath(uriTemplate.toString());
     StoreContext storeContext = CurrentStoreContext.get();
     String storeId = storeContext.getStoreId();
     Locale locale = storeContext.getLocale();
-    uriTemplate.queryParam("storeId", storeId);
-    uriTemplate.queryParam("locale", locale.toLanguageTag());
-    return uriTemplate.build();
+    builder.queryParam("storeId", storeId);
+    builder.queryParam("locale", locale.toLanguageTag());
+    return builder.build();
   }
 
   public enum LinkType {

@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.UriTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -180,7 +181,8 @@ public class CommerceSearchHandler extends PageHandlerBase {
 
   @SuppressWarnings("UnusedDeclaration") // NOSONAR
   @Link(type = CommerceSearchActionState.class, uri = URI_PATTERN)
-  public UriComponents buildSearchActionLink(CommerceSearchActionState state, UriComponentsBuilder uri, Map<String, Object> linkParameters, HttpServletRequest request) {
+  public UriComponents buildSearchActionLink(CommerceSearchActionState state, UriTemplate uriTemplate, Map<String, Object> linkParameters, HttpServletRequest request) {
+    UriComponentsBuilder uri = UriComponentsBuilder.fromPath(uriTemplate.toString());
     UriComponentsBuilder builder = addLinkParametersAsQueryParameters(uri, linkParameters);
 
     Content content = state.getAction().getContent();

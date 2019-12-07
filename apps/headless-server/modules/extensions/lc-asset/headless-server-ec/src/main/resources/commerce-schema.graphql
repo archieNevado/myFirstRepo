@@ -42,7 +42,7 @@ interface Category @inherit(from: ["CommerceBean"]) {
   longDescription: String
   catalogPicture: CatalogPicture
   products: [Product]!
-  parent: [Category]
+  parent: Category
   children: [Category]!
   breadcrumb: [Category]!
   picture: CMPicture
@@ -115,7 +115,7 @@ type CategoryImpl implements Category @inherit(from: ["CommerceBeanImpl"]) {
   longDescription: String
   catalogPicture: CatalogPicture
   products: [Product]!
-  parent: [Category]
+  parent: Category
   children: [Category]!
   breadcrumb: [Category]!
   picture: CMPicture

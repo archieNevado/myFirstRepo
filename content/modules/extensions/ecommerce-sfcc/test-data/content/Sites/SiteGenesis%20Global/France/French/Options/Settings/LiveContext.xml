@@ -9,7 +9,7 @@
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="commerce">
 <Struct>
-<StringProperty Name="endpoint">${commerce.adapter.sfcc.endpoint}</StringProperty>
+<StringProperty Name="endpoint">${commerce.hub.data.endpoints.sfcc}</StringProperty>
 <StringProperty Name="currency">EUR</StringProperty>
 <StringProperty Name="locale">fr-FR</StringProperty>
 <StructProperty Name="storeConfig">

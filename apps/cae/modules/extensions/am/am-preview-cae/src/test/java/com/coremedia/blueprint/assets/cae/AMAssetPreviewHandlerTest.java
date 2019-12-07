@@ -23,6 +23,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.UriTemplate;
 
 import java.util.Optional;
 
@@ -78,7 +79,7 @@ public class AMAssetPreviewHandlerTest {
 
   private AMAssetPreviewHandler handler = new AMAssetPreviewHandler();
 
-  private UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.newInstance();
+  private UriTemplate uriTemplate = new UriTemplate("/");
 
   private MockHttpServletRequest request = new MockHttpServletRequest();
 
@@ -104,7 +105,7 @@ public class AMAssetPreviewHandlerTest {
     request.setParameter(STUDIO_PREFERRED_SITE_PARAMETER, preferredSiteId);
     when(asset.getContentId()).thenReturn(contentId);
 
-    UriComponents uriComponents = handler.buildAssetLink(asset, uriComponentsBuilder, viewName, request);
+    UriComponents uriComponents = handler.buildAssetLink(asset, uriTemplate, viewName, request);
 
     assertTrue(uriComponents.getQueryParams().containsKey(STUDIO_PREFERRED_SITE_PARAMETER));
     assertEquals(preferredSiteId, uriComponents.getQueryParams().get(STUDIO_PREFERRED_SITE_PARAMETER).get(0));
@@ -114,7 +115,7 @@ public class AMAssetPreviewHandlerTest {
 
   @Test
   public void buildAssetLink_emptyViewName() {
-    UriComponents uriComponents = handler.buildAssetLink(asset, uriComponentsBuilder, null, request);
+    UriComponents uriComponents = handler.buildAssetLink(asset, uriTemplate, null, request);
 
     assertFalse(uriComponents.getQueryParams().containsKey(UriConstants.RequestParameters.VIEW_PARAMETER));
   }

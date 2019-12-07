@@ -315,6 +315,8 @@ services:
       DEBUG_ENTRYPOINT: "${DEBUG_ENTRYPOINT}"
       # file path or URL to a frontend.zip
       THEMES_ARCHIVE_URL: "${THEMES_ARCHIVE_URL:-/coremedia/import/frontend.zip}"
+      # configure the tools against the content-management-server
+      CONFD_PREFIX: "dev/management"
     command: ["wait-for-content-management-server",
               "wait-for-workflow-server",
               "wait-for-master-live-server",
@@ -338,6 +340,7 @@ services:
     environment:
       <<: *development-boot-envs
       CAAS_CONTEXT_TRACE_ENABLED: "false"
+      CAASREST_JSLTENABLED: "true"
       # only used in the test content
       BLUEPRINT_SITE_MAPPING_CORPORATE: //preview.${ENVIRONMENT_FQDN:-docker.localhost}
       BLUEPRINT_SITE_MAPPING_APPAREL: //preview.${ENVIRONMENT_FQDN:-docker.localhost}
@@ -361,6 +364,7 @@ services:
       - 41205:5005
     environment:
       <<: *development-boot-envs
+      CAASREST_JSLTENABLED: "true"
       REPOSITORY_URL: http://master-live-server:8080/ior
       # only used in the test content
       BLUEPRINT_SITE_MAPPING_CORPORATE: //corporate.${ENVIRONMENT_FQDN:-docker.localhost}

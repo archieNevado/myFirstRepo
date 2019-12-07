@@ -1,7 +1,7 @@
 import $ from "jquery";
 
 import { addNodeDecoratorBySelector } from "@coremedia/brick-node-decoration-service";
-import { getLastDevice } from "@coremedia/brick-device-detector";
+import { getLastDevice, isTouchDevice } from "@coremedia/brick-device-detector";
 
 const BLOCK = "cm-navigation";
 const MODIFIER_HOVERED = BLOCK + "--hovered";
@@ -10,28 +10,19 @@ const ITEM_BLOCK = "cm-navigation-item";
 const ITEM_ELEMENT_TITLE = `${ITEM_BLOCK}__title`;
 const ITEM_ELEMENT_TOGGLE = `${ITEM_BLOCK}__toggle`;
 const ITEM_ELEMENT_MENU = `${ITEM_BLOCK}__menu`;
-const ITEM_MODIFIER_DEPTH_0 = `${ITEM_BLOCK}--depth-0`;
+const ITEM_ELEMENT_MENU_VISIBILITY_MODIFIER = `${ITEM_ELEMENT_MENU}--hidden`;
+const ITEM_ELEMENT_MENU_MODIFIER = `${ITEM_BLOCK}--over`;
+const ITEM_ELEMENT_MENU_ACTIVE_MODIFIER = `${ITEM_BLOCK}-menu--active`;
 const ITEM_MODIFIER_DEPTH_1 = `${ITEM_BLOCK}--depth-1`;
+const ITEM_MODIFIER_DEPTH_1_BORDER_MODIFIER = `${ITEM_BLOCK}--no-border-bottom`;
 const ITEM_MODIFIER_OPEN = `${ITEM_BLOCK}--open`;
-
-// touch device detection
-const deviceAgent = navigator.userAgent.toLowerCase();
-let isTouchDevice =
-  deviceAgent.match(/(iphone|ipod|ipad)/) ||
-  deviceAgent.match(/(android)/) ||
-  deviceAgent.match(/(iemobile)/) ||
-  deviceAgent.match(/iphone/i) ||
-  deviceAgent.match(/ipad/i) ||
-  deviceAgent.match(/ipod/i) ||
-  deviceAgent.match(/blackberry/i) ||
-  deviceAgent.match(/bada/i);
 
 function isMobileOrTablet() {
   return getLastDevice().type !== "desktop";
 }
 
 addNodeDecoratorBySelector(
-  `.${ITEM_MODIFIER_DEPTH_0}`,
+  `.${BLOCK}`,
   ($navigationRoot) => {
     const $navigationRootList = $navigationRoot.find(`.${ITEM_ELEMENT_MENU}`);
     let $navigationEntries = $navigationRootList.find(`.${ITEM_MODIFIER_DEPTH_1}`);
@@ -40,28 +31,49 @@ addNodeDecoratorBySelector(
     // To make sure that only one menu is visible, we need to set the opacity of all other menus to 0.
     $navigationEntries.mouseover(function() {
       const $currentNavigationEntry = $(this);
+      const $menuVisible = $currentNavigationEntry.find(`ul.${ITEM_ELEMENT_MENU}`);
+
       $navigationRootList.addClass(MODIFIER_HOVERED);
       $navigationEntries.not(this).each(function() {
         const $this = $(this);
-        $this.find(`ul.${ITEM_ELEMENT_MENU}`).css("opacity", 0);
-        $this.css("border-bottom-width", 0);
+
+        $this.removeClass(ITEM_ELEMENT_MENU_MODIFIER + ' ' + ITEM_ELEMENT_MENU_ACTIVE_MODIFIER);
+        $this.addClass(ITEM_MODIFIER_DEPTH_1_BORDER_MODIFIER);
+        $this
+          .find(`ul.${ITEM_ELEMENT_MENU}`)
+          .addClass(ITEM_ELEMENT_MENU_VISIBILITY_MODIFIER);
       });
 
-      $currentNavigationEntry.css("border-bottom-width", 4);
+      $currentNavigationEntry.removeClass(ITEM_MODIFIER_DEPTH_1_BORDER_MODIFIER);
       $currentNavigationEntry
         .find(`ul.${ITEM_ELEMENT_MENU}`)
-        .css("opacity", 1);
+        .removeClass(ITEM_ELEMENT_MENU_VISIBILITY_MODIFIER);
+
+      if ($menuVisible.length > 0 && !isMobileOrTablet()){
+        $currentNavigationEntry.addClass(ITEM_ELEMENT_MENU_ACTIVE_MODIFIER);
+      }
+
+      if (!isMobileOrTablet()){
+        $currentNavigationEntry.addClass(ITEM_ELEMENT_MENU_MODIFIER);
+      }
     });
 
     $navigationEntries.mouseout(() => {
+      $navigationEntries.not(this).each(function() {
+        const $this = $(this);
+        if (!isMobileOrTablet()){
+          $this.removeClass(ITEM_ELEMENT_MENU_MODIFIER + ' ' + ITEM_ELEMENT_MENU_ACTIVE_MODIFIER);
+        }
+      });
+
       $navigationRootList.removeClass(MODIFIER_HOVERED);
     });
 
     $navigationEntries.on("click", function(e) {
-      // prevent further code from beeing executed if a sublist of the list is clicked
+      // prevent further code from being executed if a sublist of the list is clicked
       if (e.target.parentNode !== this) return;
       // ignore click on touch devices. we don't want to trigger the link, just display the subnavigation
-      if (isTouchDevice && !isMobileOrTablet()) {
+      if (isTouchDevice() && !isMobileOrTablet()) {
         e.preventDefault();
       }
     });

@@ -135,9 +135,11 @@ if (!$("body").data("cm-search-disable-browser-history")) {
   /**
    *  Push default history state for browser back button.
    */
-  window.history.replaceState(
-    { id: "search", link: window.location + "&view=asSearchResultPage" },
-    "",
-    window.location
-  );
+  if($('.cm-search--results')[0]) {
+    window.history.replaceState(
+      { id: "search", link: window.location + "&view=asSearchResultPage" },
+      "",
+      window.location
+    );
+  }
 }

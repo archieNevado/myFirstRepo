@@ -10,7 +10,7 @@ import com.coremedia.blueprint.taxonomies.semantic.Suggestions;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
-import com.coremedia.rest.cap.content.search.solr.SolrSearchService;
+import com.coremedia.rest.cap.content.search.SearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -28,7 +28,7 @@ public class SemanticServiceStrategy implements SemanticStrategy {
   private static final int LIMIT = 100;
 
   private SemanticService semanticService;
-  private SolrSearchService solrSearchService;
+  private SearchService searchService;
   private ContentRepository contentRepository;
   private String serviceId;
   private String referencePropertyName;
@@ -45,8 +45,8 @@ public class SemanticServiceStrategy implements SemanticStrategy {
   }
 
   @Required
-  public void setSolrSearchService(SolrSearchService solrSearchService) {
-    this.solrSearchService = solrSearchService;
+  public void setSearchService(SearchService searchService) {
+    this.searchService = searchService;
   }
 
   @Required
@@ -110,7 +110,7 @@ public class SemanticServiceStrategy implements SemanticStrategy {
                                    Map<String, Collection<SemanticEntity>> identifiers,
                                    Content rootFolder,
                                    Collection<ContentType> contentTypes) {
-    List<Content> allContentChildren = TaxonomyUtil.solrSearch(solrSearchService, rootFolder, contentTypes, null, -1);
+    List<Content> allContentChildren = TaxonomyUtil.search(searchService, rootFolder, contentTypes, null, -1);
     for (Map.Entry<String, Collection<SemanticEntity>> stringCollectionEntry : identifiers.entrySet()) {
       Collection<SemanticEntity> entities = stringCollectionEntry.getValue();
       for (SemanticEntity entity : entities) {

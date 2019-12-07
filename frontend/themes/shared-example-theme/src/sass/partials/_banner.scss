@@ -49,15 +49,11 @@
     margin-bottom: 15px;
   }
 
-  &__caption {
-    .glyphicon-download:before {
-      display: block;
-      width: 16px;
-      height: 14px;
-      margin-right: 8px;
-      content: "";
-      background: transparent url("../../img/download-icon.svg") center center no-repeat;
-    }
+  &__download-icon:before {
+    @include icon;
+    margin-right: 8px;
+    content: "";
+    background: transparent url("../../img/download-icon.svg") center center no-repeat;
   }
 }
 

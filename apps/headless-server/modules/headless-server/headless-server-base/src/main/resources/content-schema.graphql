@@ -81,6 +81,10 @@ interface CMDownload @inherit(from: ["CMTeasable"]) {
   filename: String
 }
 
+interface CMSpinner @inherit(from: ["CMVisual"]) {
+  sequence: [CMPicture]
+}
+
 interface CMDynamicList @inherit(from: ["CMCollection"]) {
 }
 
@@ -163,6 +167,7 @@ interface CMTeasable @inherit(from: ["CMLinkable", "Detail", "Banner"]) {
   teaserTargets: [ExtendedTeaserTarget]
   video: CMVideo
   videos: [CMVideo]
+  spinner: CMSpinner
 }
 
 interface CMTeaser @inherit(from: ["CMTeasable"]) {
@@ -316,6 +321,10 @@ type CMTeasableImpl implements CMTeasable, Detail, Banner, CollectionItem @inher
 
   video: CMVideo @fetch(from: "@mediaLinkListAdapter.to(#root, 'CMVideo').first()")
   videos: [CMVideo] @fetch(from: "@mediaLinkListAdapter.to(#root, 'CMVideo').list()")
+
+  spinner: CMSpinner @fetch(from: "@mediaLinkListAdapter.to(#root, 'CMSpinner').first()")
+  spinners: [CMSpinner] @fetch(from: "@mediaLinkListAdapter.to(#root, 'CMSpinner').list()")
+
   _emptyInterfaceMarker: String @fetch(from:  "'emptyInterfaceMarker'")
 }
 
@@ -331,6 +340,9 @@ type CMTeaserImpl implements CMTeaser @inherit(from: ["CMTeasableImpl"]) {
 
   video: CMVideo @fetch(from: "@teaserMediaLinkListAdapter.to(#root, 'CMVideo').first()")
   videos: [CMVideo] @fetch(from: "@teaserMediaLinkListAdapter.to(#root, 'CMVideo').list()")
+
+  spinner: CMSpinner @fetch(from: "@teaserMediaLinkListAdapter.to(#root, 'CMSpinner').first()")
+  spinners: [CMSpinner] @fetch(from: "@teaserMediaLinkListAdapter.to(#root, 'CMSpinner').list()")
 }
 
 type CMVideoImpl implements CMVideo @inherit(from: ["CMVisualImpl"]) {

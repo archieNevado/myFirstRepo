@@ -13,7 +13,7 @@ IMPORTED=$(./tools/bin/cm groovysh /coremedia/getSystemTableProperty.groovy -q -
 echo "[DOCKER ENTRYPOINT] - importing themes from ${THEMES_ARCHIVE_URL}"
 if [ "${IMPORTED}" != "true"  ] || [ "${FORCE_REIMPORT_THEMES}" = "true" ]; then
   ./tools/bin/cm import-themes -u "${TOOLS_USER}" -p "${TOOLS_PASSWORD}" "${THEMES_ARCHIVE_URL}" 2> /dev/null
-  ./tools/bin/cm groovysh /coremedia/setSystemTableProperty.groovy -q -DpropKey=themes-imported -DpropVal=true < /dev/null &> /dev/null
+  ./tools/bin/cm groovysh /coremedia/setSystemTableProperty.groovy -q -DpropKey=themes-imported -DpropVal=true < /dev/null 2> /dev/null
 else
   echo "[DOCKER ENTRYPOINT] - themes already imported, skipping ..."
 fi

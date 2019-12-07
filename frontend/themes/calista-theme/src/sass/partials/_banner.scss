@@ -29,12 +29,12 @@
 }
 
 .cm-hero-banner,
-.cm-square-banner {
-  &__cta .cm-cta__button,
-  .cm-cta .cm-cta__button {
-    border: none;
-  }
-}
+ .cm-square-banner {
+   &__cta .cm-cta__button,
+   .cm-cta .cm-cta__button {
+     border: none;
+   }
+ }
 
 .cm-landscape-banner,
 .cm-portrait-banner,

@@ -155,6 +155,12 @@
         @include aspect-ratio-box(1, 1);
       }
     }
+
+    &__download-icon:before {
+      @include icon;
+      background-image: url("../../img/download-icon.svg");
+      content: "";
+    }
   }
 
   &__more {
@@ -186,15 +192,18 @@
       text-transform: uppercase;
 
       .#{$cm-search-prefix} &-icon {
-        @extend .glyphicon;
-        @extend .glyphicon-chevron-up;
+        @include icon;
+        background-image: url("../../img/chevron.svg");
         transform: rotate(180deg);
         transition: all 0.2s ease;
-        vertical-align: text-top;
+
+        &:before {
+          display: none;
+        }
       }
 
       .#{$cm-search-prefix} &--list-collapsed &-icon {
-        @extend .glyphicon-chevron-up;
+        background-image: url("../../img/chevron.svg");
         transform: rotate(0deg);
         transition: all 0.2s ease;
       }
@@ -222,13 +231,11 @@
         display: none;
 
         &-icon {
-          @extend .glyphicon;
-          @extend .glyphicon-unchecked;
-          font-size: 90%;
-          color: $cm-text-color;
+          @include icon;
+          background-image: url("../../img/unchecked.svg");
 
           &#{&}--checked {
-            @extend .glyphicon-check;
+            background-image: url("../../img/checked.svg");
           }
         }
       }
@@ -240,17 +247,19 @@
       }
 
       &-icon {
-        @extend .glyphicon;
-        @extend .glyphicon-filter;
+        @include icon;
+        background-image: url("../../img/filter.svg");
         float: right;
         margin: 3px 0 0 5px;
       }
     }
 
     .#{$cm-search-prefix} &-all-icon {
-      @extend .glyphicon;
-      @extend .glyphicon-arrow-left;
-      font-size: 80%;
+      @include icon;
+      background-image: url("../../img/arrow-back.svg");
+      &:before {
+        display: none;
+      }
     }
 
     &-popup {
@@ -264,8 +273,8 @@
         background: $cm-standard-component-background-color;
 
         i {
-          @extend .glyphicon;
-          @extend .glyphicon-remove;
+          @include icon;
+          background-image: url("../../img/close.svg");
         }
 
         span {

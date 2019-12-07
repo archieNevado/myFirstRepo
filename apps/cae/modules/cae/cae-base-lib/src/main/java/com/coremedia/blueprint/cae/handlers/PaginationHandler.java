@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.UriTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -71,8 +72,9 @@ public class PaginationHandler extends PageHandlerBase {
 
   @Link(type=Pagination.class, parameter=PARAMETER_PAGENUM, uri=URI_PATTERN)
   public UriComponents buildLinkForPagination(Pagination pagination,
-                                              UriComponentsBuilder uri,
+                                              UriTemplate uriTemplate,
                                               Map<String, Object> linkParameters) {
+    UriComponentsBuilder uri = UriComponentsBuilder.fromPath(uriTemplate.toString());
     uri = addLinkParametersAsQueryParameters(uri, linkParameters);
     CMNavigation navigation = getContextHelper().contextFor(pagination.linkable());
     return uri.buildAndExpand(ImmutableMap.of(

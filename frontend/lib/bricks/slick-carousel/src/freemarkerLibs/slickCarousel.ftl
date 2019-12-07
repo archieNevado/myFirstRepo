@@ -31,7 +31,7 @@
     <#list items as item>
       <#-- this div is used by slick for the slides -->
       <div class="${blockClass}__item">
-        <@cm.include self=item view=itemsView params=itemsParams />
+        <@cm.include self=item view=itemsView params=itemsParams + {"item": {"index": item_index, "first": item?is_first, "last": item?is_last, "length": items?size}} />
       </div>
     </#list>
   </div>

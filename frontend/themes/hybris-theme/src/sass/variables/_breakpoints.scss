@@ -18,6 +18,7 @@ $breakpoints: (
   "xs": "screen and (max-width: #{$_cm-screen-xs-max})",
   "xs-and-up": "screen and (min-width: 0)",
   "sm": "screen and (min-width: #{$cm-screen-sm-min}) and (max-width: #{$_cm-screen-sm-max})",
+  "sm-and-down": "screen and (max-width: #{$_cm-screen-sm-max})",
   "sm-and-up": "screen and (min-width: #{$cm-screen-sm-min})",
   "lg": "screen and (min-width: #{$cm-screen-lg-min})",
   "lg-and-up": "screen and (min-width: #{$cm-screen-lg-min})",

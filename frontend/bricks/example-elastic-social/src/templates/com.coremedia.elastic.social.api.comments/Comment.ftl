@@ -52,8 +52,8 @@
   </#if>
   <#if ["default", "undecided"]?seq_contains(commentView) && commentingAllowed!false>
     <div class="cm-comment__toolbar cm-toolbar cm-toolbar--comments">
-      <@components.button text=cm.getMessage("commentForm_label_reply") iconClass="glyphicon glyphicon-pencil" attr={"data-cm-button--comment": '{"replyTo": "${self.id}"}'} />
-      <@components.button text=cm.getMessage("commentForm_label_quote") iconClass="glyphicon glyphicon-asterisk" attr={"data-cm-button--comment": '{"replyTo": "${self.id}", "quote": {"author": "${(strAuthorName!"")?json_string}", "date": "${strDate?json_string}", "text": "${self.text?json_string}"}}'} />
+      <@components.button text=cm.getMessage("commentForm_label_reply") attr={"data-cm-button--comment": '{"replyTo": "${self.id}"}'} />
+      <@components.button text=cm.getMessage("commentForm_label_quote") attr={"data-cm-button--comment": '{"replyTo": "${self.id}", "quote": {"author": "${(strAuthorName!"")?json_string}", "date": "${strDate?json_string}", "text": "${self.text?json_string}"}}'} />
     </div>
   </#if>
 

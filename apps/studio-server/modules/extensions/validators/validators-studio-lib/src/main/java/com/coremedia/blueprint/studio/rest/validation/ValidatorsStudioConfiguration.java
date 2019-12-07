@@ -329,7 +329,7 @@ class ValidatorsStudioConfiguration {
   ContentLocaleMatchesSiteLocaleValidator contentLocaleMatchesSiteLocaleValidator(
           CapConnection connection,
           SitesService sitesService,
-          @Value("${contentLocaleMatchesSiteLocaleValidator.severity:INFO}") Severity severity) {
+          @Value("${contentLocaleMatchesSiteLocaleValidator.severity:WARN}") Severity severity) {
 
     ContentLocaleMatchesSiteLocaleValidator validator
             = new ContentLocaleMatchesSiteLocaleValidator(sitesService);

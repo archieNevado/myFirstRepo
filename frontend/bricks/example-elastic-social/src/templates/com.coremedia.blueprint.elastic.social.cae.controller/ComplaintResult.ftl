@@ -17,7 +17,7 @@
             <h3 class="cm-comments__title">has not complained</h3>
             <input type="hidden" name="complain" value="true">
         </#if>
-        <@components.button text=cm.getMessage("complaintForm_label_submit") iconClass="glyphicon glyphicon-ok" attr={"type": "submit", "class": "cm-button cm-button--small"} />
+        <@components.button text=cm.getMessage("complaintForm_label_submit") attr={"type": "submit", "class": "cm-button cm-button--small"} />
       </form>
   </div>
 </#if>

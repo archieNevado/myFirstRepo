@@ -3,6 +3,7 @@ package com.coremedia.blueprint.taxonomies.strategy;
 import com.coremedia.blueprint.taxonomies.Taxonomy;
 import com.coremedia.blueprint.taxonomies.TaxonomyNode;
 import com.coremedia.cap.content.Content;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 /**
  * The abstract base class of taxonomy strategies, implementing some
@@ -13,7 +14,7 @@ public abstract class TaxonomyBase implements Taxonomy<Content> {
   private String taxonomyId;
   private String siteId;
 
-  public TaxonomyBase(String taxonomyId, String siteId) {
+  public TaxonomyBase(@NonNull String taxonomyId, String siteId) {
     this.taxonomyId = taxonomyId;
     this.siteId = siteId;
   }
@@ -23,6 +24,7 @@ public abstract class TaxonomyBase implements Taxonomy<Content> {
   }
 
   @Override
+  @NonNull
   public final String getTaxonomyId() {
     return taxonomyId;
   }

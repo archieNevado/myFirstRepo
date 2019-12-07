@@ -70,8 +70,7 @@
       position: relative;
       padding: 12px 3px 0;
     }
-    .cm-error__details pre,
-    .cm-error__details textarea {
+    .cm-error__details pre {
       box-sizing: border-box;
       display: block;
       width: 100%;
@@ -145,8 +144,8 @@
   </script>
   <div class="cm-error__info">
       <span>An error occured in template <em>${template}</em>
-        <#if contentId?has_content> for Content with ID <b>${contentId}</b>.</#if><br>
-        <a href="#" onclick="cmError.showBox('${boxId}'); return false;">Show Details</a>
+      <#if contentId?has_content> for Content with ID <b>${contentId}</b>.</#if><br>
+      <a href="#" onclick="cmError.showBox('${boxId}'); return false;">Show Details</a></span>
   </div>
   <div id="${boxId}" class="cm-error__background">
     <div class="cm-error__box">
@@ -164,7 +163,7 @@
           ${hierachy}
         </#list></pre>
         <label class="cm-error__label">Full Stack Trace:</label>
-        <textarea readonly class="cm-error__stacktrace cm-error__small" rows="10">${bp.getStackTraceAsString(self)!""}</textarea>
+        <pre class="cm-error__stacktrace cm-error__small">${bp.getStackTraceAsString(self)!""}</pre>
       </div>
     </div>
   </div>

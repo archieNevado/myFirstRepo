@@ -8,7 +8,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import javax.servlet.Filter;
-import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
@@ -33,15 +32,12 @@ public class EcStudioFilters {
 
   @Bean
   public CatalogResourceEncodingFilter catalogResourceEncodingFilter() {
-    CatalogResourceEncodingFilter encodingFilter = new CatalogResourceEncodingFilter();
+    List<RequestMatcher> includeRequestMatchers = List.of(
+            new AntPathRequestMatcher("/api/livecontext/category/**"),
+            new AntPathRequestMatcher("/api/livecontext/product/**"),
+            new AntPathRequestMatcher("/api/livecontext/sku/**")
+    );
 
-    List<RequestMatcher> includeRequestMatchers = new ArrayList<>();
-    includeRequestMatchers.add(new AntPathRequestMatcher("/api/livecontext/category/**"));
-    includeRequestMatchers.add(new AntPathRequestMatcher("/api/livecontext/product/**"));
-    includeRequestMatchers.add(new AntPathRequestMatcher("/api/livecontext/sku/**"));
-
-    encodingFilter.setIncludeRequestMatchers(includeRequestMatchers);
-
-    return encodingFilter;
+    return new CatalogResourceEncodingFilter(includeRequestMatchers);
   }
 }

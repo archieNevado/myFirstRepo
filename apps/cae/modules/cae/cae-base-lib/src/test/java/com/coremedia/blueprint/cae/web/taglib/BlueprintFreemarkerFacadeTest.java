@@ -12,6 +12,7 @@ import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.coremedia.blueprint.cae.web.taglib.BlueprintFreemarkerFacade.HAS_ITEMS;
@@ -72,6 +73,19 @@ public class BlueprintFreemarkerFacadeTest {
     assertThat(getIsInLayout(placementHighlightingMetaData)).isTrue();
     assertThat(getHasItems(placementHighlightingMetaData)).isTrue();
     assertThat(getPlacementName(placementHighlightingMetaData)).isEqualTo("myPlacementName");
+  }
+
+  @Test
+  public void getDisplayFileSizeDefault() {
+    int testSize = 123456789;
+    assertThat(testling.getDisplayFileSize(testSize, BlueprintFreemarkerFacade.DEFAULT_LOCALE)).isEqualTo("117.7 MB");
+  }
+
+  @Test
+  public void getDisplayFileSizeGerman() {
+    int testSize = 123456789;
+    Locale testLocale = Locale.GERMAN;
+    assertThat(testling.getDisplayFileSize(testSize, testLocale)).isEqualTo("117,7 MB");
   }
 
   private Boolean getIsInLayout(Map<String, Object> placementHighlightingMetaData) {

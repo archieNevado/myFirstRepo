@@ -95,12 +95,17 @@
   }
 
   &:before {
-    top: 5px;
-    font-family: Glyphicons Halflings;
-    content: "\e116";
-    color: $cm-text-color-light;
-    clip: inherit;
-    font-size: 20px;
+    content: "";
+    background-image: url("../../img/cart.svg");
+    width: 27px;
+    height: 25px;
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-position: center center;
+    position: absolute;
+    top: 3px;
+    left: 0;
+    clip: auto;
   }
 }
 

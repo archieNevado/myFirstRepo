@@ -5,13 +5,12 @@ if [ "${DEBUG_ENTRYPOINT}" = "true" ]; then
   set -x
 fi
 
-CMS_IOR_PROPERTY="cap.client.server.ior.url=${CAP_CLIENT_SERVER_IOR_URL:-http://content-management-server:8080/ior}"
-sed -i "s|cap.client.server.ior.url=http://content-management-server:8080/ior|${CMS_IOR_PROPERTY}|" /coremedia/tools/properties/corem/capclient.properties
+./confd ../bin/true
 
 if [ "${SKIP_CONTENT}" = "true" ]; then
-  echo "[DOCKER ENTRYPOINT] - skipping content import chain $@"
+  echo "[DOCKER ENTRYPOINT] - skipping entrypoint chain $@"
 else
-  echo "[DOCKER ENTRYPOINT] - starting content import chain $@"
+  echo "[DOCKER ENTRYPOINT] - starting entrypoint chain $@"
   export EXPORT_CONTENT_DIR=/coremedia/export
   export IMPORT_CONTENT_DIR=/coremedia/import/content
   export IMPORT_USERS_DIR=/coremedia/import/users

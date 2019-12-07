@@ -3,6 +3,8 @@ package com.coremedia.blueprint.caas.preview.urlservice;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
@@ -23,6 +26,7 @@ import java.util.Map;
 
 @CrossOrigin
 @RestController
+@Api(value = "/previewurl", tags = "Preview Url")
 @DefaultAnnotation(NonNull.class)
 public class JsonPreviewUrlController {
 
@@ -37,7 +41,9 @@ public class JsonPreviewUrlController {
   }
 
   @GetMapping(value = PREVIEW_URL_PATH)
-  public ResponseEntity<String> previewUrl(@RequestParam(name = "id") String id, @RequestParam(name = "contentType") String contentType, HttpServletRequest request) {
+  public ResponseEntity<String> previewUrl(@ApiParam(value = "Content id", required = true) @RequestParam(name = "id") String id,
+                                           @ApiParam(value = "Type of the content object", required = true) @RequestParam(name = "contentType") String contentType,
+                                           @ApiIgnore HttpServletRequest request) {
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setAccessControlAllowHeaders(Collections.singletonList(X_CSRF_TOKEN));
 

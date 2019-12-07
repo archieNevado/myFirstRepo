@@ -301,7 +301,6 @@ services:
     environment:
       SPRING_APPLICATION_NAME: 'headless-server-preview'
       REPOSITORY_URL: http://content-management-server:8080/ior
-      SOLR_URL: http://solr:8983/solr
       ENVIRONMENT_FQDN: ${ENVIRONMENT_FQDN:-docker.localhost}
       CAAS_PREVIEW: "true"
       GRAPHIQL_ENABLED: "true"
@@ -309,6 +308,7 @@ services:
       CAAS_SOLR_COLLECTION: preview
       LINK_URLPREFIXTYPE: preview
       PREVIEWCLIENT_URL: https://headless-server-preview.${ENVIRONMENT_FQDN:-docker.localhost}/preview
+      COMMERCE_HUB_CUSTOMENTITYPARAMS_CATALOGVERSION: Staged
     labels:
       traefik.enable: "true"
       traefik.port: "8080"
@@ -338,6 +338,7 @@ services:
       SOLR_URL: http://solr:8983/solr
       CAAS_SOLR_COLLECTION: live
       LINK_URLPREFIXTYPE: live
+      COMMERCE_HUB_CUSTOMENTITYPARAMS_CATALOGVERSION: Online
     labels:
       traefik.enable: "true"
       traefik.port: "8080"

@@ -210,6 +210,11 @@ public class TaxonomySearchFieldBase extends StatefulComboBox {
    * Handler function for node selection.
    */
   private function onNodeSelection(combo:TaxonomySearchField, record:Model, index:Number):void {
+    // Harden for possibly malformed 'select' events.
+    if (!record || !record.data || !record.data[TaxonomyNode.PROPERTY_REF]) {
+      setValue("");
+      return;
+    }
     var content:Content = beanFactory.getRemoteBean(record.data[TaxonomyNode.PROPERTY_REF]) as Content;
     content.load(function (c:Content):void {
       setSelectionString(record.data.name);

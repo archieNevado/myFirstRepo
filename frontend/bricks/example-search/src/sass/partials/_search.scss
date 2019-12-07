@@ -300,6 +300,10 @@ Contains styling definitions for search including search field and resultpage.
         }
       }
     }
+
+    &__download-icon:before {
+      content: "\21e9";
+    }
   }
 
   /* --- load more button --- */

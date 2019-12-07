@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.Cookie;
@@ -99,12 +100,12 @@ public class GuidCookieHandlerTest {
     when(rootChannelBean.isRoot()).thenReturn(true);
     when(rootChannelBean.getRootNavigation()).thenReturn(rootChannelBean);
 
-    UriComponentsBuilder uriComponentsBuilder = testling.buildGUIDLink(rootChannelBean);
+    UriComponents uriComponents = testling.buildGUIDLink(rootChannelBean);
 
-    assertNotNull(uriComponentsBuilder);
+    assertNotNull(uriComponents);
 
     String expectedURI = "/" + PREFIX_DYNAMIC + "/" + PREFIX_SERVICE + "/" + GUID_COOKIE_PREFIX + "/" + DEFAULT_CONTENT_ID;
-    assertEquals(expectedURI, uriComponentsBuilder.build().toUriString());
+    assertEquals(expectedURI, uriComponents.toUriString());
   }
 
   /**

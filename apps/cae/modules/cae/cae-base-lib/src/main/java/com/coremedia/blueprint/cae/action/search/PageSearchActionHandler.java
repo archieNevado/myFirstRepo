@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.UriTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
@@ -180,11 +181,12 @@ public class PageSearchActionHandler extends PageHandlerBase {
 
 
   @Link(type = SearchActionState.class, uri = URI_PATTERN)
-  public UriComponents buildSearchActionLink(SearchActionState action, UriComponentsBuilder uri, Map<String, Object> linkParameters, HttpServletRequest request) {
+  public UriComponents buildSearchActionLink(SearchActionState action, UriTemplate uriTemplate, Map<String, Object> linkParameters, HttpServletRequest request) {
     Page page = (Page) linkParameters.get("page");
     if (page == null) {
       throw new IllegalArgumentException("Missing 'page' parameter when building link for "+action);
     }
+    UriComponentsBuilder uri = UriComponentsBuilder.fromPath(uriTemplate.toString());
     UriComponentsBuilder result = addLinkParametersAsQueryParameters(uri, linkParameters);
     return result.buildAndExpand(ImmutableMap.of(
             SEGMENT_ID, getId(action.getAction()),

@@ -111,13 +111,12 @@ public class GuidCookieHandler {
    * which is capable of processing "guid" cookie.
    *
    * @param channel rootChannel of the site, needed to access site Settings, to check if ES is activated
-   * @return UriComponentsBuilder
+   * @return UriComponents
    */
   @SuppressWarnings("UnusedDeclaration")
   @Link(type = CMNavigation.class, view = "asGuidCookieLink", uri = URI_PATTERN)
   @Nullable
-  public UriComponentsBuilder buildGUIDLink(
-    @NonNull CMNavigation channel) {
+  public UriComponents buildGUIDLink(@NonNull CMNavigation channel) {
 
     //we always generate link on the root channel
     channel = channel.isRoot() ? channel : channel.getRootNavigation();
@@ -125,8 +124,7 @@ public class GuidCookieHandler {
     ImmutableMap<String, String> uriVariables = ImmutableMap.of(
       SEGMENT_ID, getNumericId(channel));
 
-    UriComponents uriComponents = UriComponentsBuilder.newInstance().replacePath(URI_PATTERN).buildAndExpand(uriVariables);
-    return UriComponentsBuilder.newInstance().uriComponents(uriComponents);
+    return UriComponentsBuilder.newInstance().replacePath(URI_PATTERN).buildAndExpand(uriVariables);
   }
 
   private void setCookie(HttpServletRequest request, HttpServletResponse response){

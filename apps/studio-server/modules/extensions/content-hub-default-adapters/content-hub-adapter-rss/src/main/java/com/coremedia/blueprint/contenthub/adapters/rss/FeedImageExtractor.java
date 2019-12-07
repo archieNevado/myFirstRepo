@@ -20,6 +20,8 @@ import java.util.regex.Pattern;
  * Utility class to extract all image URLs from a feed entry.
  */
 class FeedImageExtractor {
+  // static class
+  private FeedImageExtractor() {}
 
   /**
    * Evaluates the HTML and the metadata for the RSS entry to find images

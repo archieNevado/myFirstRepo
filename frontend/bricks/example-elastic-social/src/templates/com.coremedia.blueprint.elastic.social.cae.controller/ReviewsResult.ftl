@@ -95,7 +95,7 @@
         <#--<div class="cm-reviews__toolbar cm-toolbar cm-toolbar--reviews">
           <@components.button text=cm.getMessage(es.messageKeys.REVIEWS_WRITE) attr={"data-cm-button--review": '{"disabled": true}', "classes": ["cm-button--disabled"], "disabled": ""} />
         </div>-->
-        <@elasticSocial.notification type="info" text=cm.getMessage("reviewForm_already_reviewed") <#--iconClass="glyphicon glyphicon-info-sign"--> additionalClasses=["cm-reviews__notification"] attr={"data-cm-reviews-notification-type": "ALREADY_REVIEWED"} />
+        <@elasticSocial.notification type="info" text=cm.getMessage("reviewForm_already_reviewed") additionalClasses=["cm-reviews__notification"] attr={"data-cm-reviews-notification-type": "ALREADY_REVIEWED"} />
       <#else>
         <div class="cm-reviews__toolbar cm-toolbar cm-toolbar--reviews">
           <@components.button text=cm.getMessage("reviews_write") attr={"data-cm-button--review": ""} />
@@ -103,7 +103,7 @@
         <@cm.include self=self view="reviewForm" />
       </#if>
     <#elseif self.isWritingContributionsEnabled() && es.isAnonymousUser()>
-      <@elasticSocial.notification type="info" text=cm.getMessage("reviewForm_not_logged_in") <#--iconClass="glyphicon glyphicon-info-sign"--> additionalClasses=["cm-reviews__notification"] attr={"data-cm-reviews-notification-type": "LOGIN_REQUIRED"} />
+      <@elasticSocial.notification type="info" text=cm.getMessage("reviewForm_not_logged_in") additionalClasses=["cm-reviews__notification"] attr={"data-cm-reviews-notification-type": "LOGIN_REQUIRED"} />
       <#assign loginFlow=es.getLogin() />
       <#if loginFlow?has_content && !cm.isUndefined(loginFlow)>
         <div class="cm-reviews__toolbar cm-toolbar cm-toolbar--reviews">

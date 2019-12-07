@@ -59,6 +59,9 @@
   RewriteCond %{DOCUMENT_ROOT}/system/maintenance.html -f
   RewriteCond %{SCRIPT_FILENAME} !maintenance.html
   RewriteRule ^.*$ /system/maintenance.html [L,R=503]
+
+  # redirect 404 to overview page
+  ErrorDocument 404 https://<%= @server_name %>/
 </VirtualHost>
 
 <VirtualHost *:443>
@@ -123,4 +126,7 @@
   RewriteCond %{DOCUMENT_ROOT}/system/maintenance.html -f
   RewriteCond %{SCRIPT_FILENAME} !maintenance.html
   RewriteRule ^.*$ /system/maintenance.html [L,R=503]
+
+  # redirect 404 to overview page
+  ErrorDocument 404 https://<%= @server_name %>/
 </VirtualHost>

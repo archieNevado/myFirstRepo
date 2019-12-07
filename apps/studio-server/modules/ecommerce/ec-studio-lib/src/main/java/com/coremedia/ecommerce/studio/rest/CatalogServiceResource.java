@@ -47,7 +47,8 @@ public class CatalogServiceResource {
   private static final String SEARCH_PARAM_WORKSPACE_ID = "workspaceId";
 
   private static final String SEARCH_PARAM_SEARCH_TYPE = "searchType";
-  public static final String SEARCH_TYPE_PRODUCT_VARIANT = "ProductVariant";
+  private static final String SEARCH_TYPE_PRODUCT_VARIANT = "ProductVariant";
+  private static final String SEARCH_TYPE_CATEGORY = "Category";
   private static final String SEARCH_TYPE_MARKETING_SPOTS = "MarketingSpot";
 
   @GetMapping("search/{siteId}")
@@ -124,6 +125,9 @@ public class CatalogServiceResource {
     if (searchType != null && searchType.equals(SEARCH_TYPE_PRODUCT_VARIANT)) {
       return commerceConnection.getCatalogService()
               .searchProductVariants(query, params, newStoreContextForSite);
+    } else if (searchType != null && searchType.equals(SEARCH_TYPE_CATEGORY)) {
+      return commerceConnection.getCatalogService()
+              .searchCategories(query, params, newStoreContextForSite);
     } else if (searchType != null && searchType.equals(SEARCH_TYPE_MARKETING_SPOTS)) {
       MarketingSpotService marketingSpotService = commerceConnection.getMarketingSpotService().orElse(null);
       if (marketingSpotService == null) {

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.UriComponents;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -66,8 +67,8 @@ public class LiveContextExternalChannelPreviewHandler extends LiveContextPageHan
   @SuppressWarnings("unused")
   @Link(type = LiveContextExternalChannelImpl.class)
   @Nullable
-  public Object buildLinkForExternalChannel(@NonNull LiveContextExternalChannelImpl navigation, String viewName,
-                                            Map<String, Object> linkParameters, HttpServletRequest request) {
+  public UriComponents buildLinkForExternalChannel(@NonNull LiveContextExternalChannelImpl navigation, String viewName,
+                                                   Map<String, Object> linkParameters, HttpServletRequest request) {
     Optional<StoreContext> storeContext = CurrentStoreContext.find();
     if (storeContext.isEmpty()) {
       // not responsible

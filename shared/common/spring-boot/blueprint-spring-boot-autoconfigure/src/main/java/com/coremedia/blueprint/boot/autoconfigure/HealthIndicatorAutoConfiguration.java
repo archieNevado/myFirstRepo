@@ -18,6 +18,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.unit.DataSize;
 
 import javax.inject.Named;
 import java.io.File;
@@ -130,7 +131,7 @@ public class HealthIndicatorAutoConfiguration {
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public DiskSpaceHealthIndicator blobCacheDiskSpaceHealthIndicator(CapConnection connection) {
       File blobCachePath = new File(connection.getManager().getBlobCachePath());
-      return new DiskSpaceHealthIndicator(blobCachePath, diskspaceThreshold);
+      return new DiskSpaceHealthIndicator(blobCachePath, DataSize.ofBytes(diskspaceThreshold));
     }
   }
 }

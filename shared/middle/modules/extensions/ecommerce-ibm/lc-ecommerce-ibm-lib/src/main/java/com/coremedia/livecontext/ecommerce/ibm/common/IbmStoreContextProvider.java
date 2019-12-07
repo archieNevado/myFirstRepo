@@ -53,7 +53,9 @@ public class IbmStoreContextProvider extends AbstractStoreContextProvider {
     // Only create store context if settings are found for current site.
     return Optional.of(findRepositoryStoreConfig(site))
             .filter(config -> !config.isEmpty())
-            .map(config -> buildContextFromRepositoryStoreConfig(site, config));
+            .map(config -> buildContextFromRepositoryStoreConfig(site, config))
+            // only expose valid store context
+            .filter(StoreContextHelper::isValid);
   }
 
   private StoreContext buildContextFromRepositoryStoreConfig(Site site, Map<String, Object> repositoryStoreConfig) {

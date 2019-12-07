@@ -685,7 +685,7 @@
 <BooleanProperty Name="teaserDocumentForm">true</BooleanProperty>
 <BooleanProperty Name="linkedSettings">false</BooleanProperty>
 <BooleanProperty Name="referrerListPanel">true</BooleanProperty>
-<BooleanProperty Name="cmVersionHistory">true</BooleanProperty>
+<BooleanProperty Name="cmVersionHistory">false</BooleanProperty>
 <BooleanProperty Name="resourceBundles">true</BooleanProperty>
 <BooleanProperty Name="seoForm">true</BooleanProperty>
 <BooleanProperty Name="subjectTaxonomyDocumentForm">false</BooleanProperty>
@@ -699,6 +699,7 @@
 <BooleanProperty Name="content-4786">true</BooleanProperty>
 <BooleanProperty Name="content-5184">true</BooleanProperty>
 <BooleanProperty Name="teaserSettings">false</BooleanProperty>
+<BooleanProperty Name="content-9262">false</BooleanProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="CMChannel">
@@ -740,6 +741,20 @@
 <StructProperty Name="CMVideo">
 <Struct>
 <BooleanProperty Name="teaserDocumentForm">false</BooleanProperty>
+</Struct>
+</StructProperty>
+<BooleanProperty Name="formCollapsed">false</BooleanProperty>
+<BooleanProperty Name="previewCollapsed">false</BooleanProperty>
+<StructProperty Name="CMExternalChannel">
+<Struct>
+<BooleanProperty Name="picture">true</BooleanProperty>
+<BooleanProperty Name="teaserDocumentForm">false</BooleanProperty>
+</Struct>
+</StructProperty>
+<StructProperty Name="CMPicture">
+<Struct>
+<BooleanProperty Name="metaSections">false</BooleanProperty>
+<BooleanProperty Name="assetLink">false</BooleanProperty>
 </Struct>
 </StructProperty>
 </Struct>
@@ -833,6 +848,13 @@
 </StringListProperty>
 <IntProperty Name="previewReloadDelay">1</IntProperty>
 <StringProperty Name="locale">en</StringProperty>
+<StructProperty Name="lastUsedContentCreationFolders">
+<Struct>
+<LinkListProperty Name="CMDownload" LinkType="coremedia:///cap/contenttype/Content_">
+<Link xlink:href="coremedia:///cap/resources/../../Sites/Hybris%20Apparel/United%20Kingdom/English/Downloads/" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Downloads/"/>
+</LinkListProperty>
+</Struct>
+</StructProperty>
 <StructListProperty Name="bookmarks">
 <Struct>
 <StringProperty Name="name">Hybris Apparel UK</StringProperty>

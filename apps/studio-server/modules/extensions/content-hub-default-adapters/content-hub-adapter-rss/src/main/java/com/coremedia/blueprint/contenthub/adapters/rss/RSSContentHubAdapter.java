@@ -1,11 +1,14 @@
 package com.coremedia.blueprint.contenthub.adapters.rss;
 
+import com.coremedia.contenthub.api.BlobCache;
 import com.coremedia.contenthub.api.ContentHubAdapter;
-import com.coremedia.contenthub.api.ContentHubAdapterBinding;
 import com.coremedia.contenthub.api.ContentHubContext;
+import com.coremedia.contenthub.api.ContentHubObject;
 import com.coremedia.contenthub.api.ContentHubObjectId;
+import com.coremedia.contenthub.api.ContentHubTransformer;
 import com.coremedia.contenthub.api.Folder;
 import com.coremedia.contenthub.api.Item;
+import com.coremedia.contenthub.api.column.ColumnProvider;
 import com.coremedia.contenthub.api.exception.ContentHubException;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
@@ -28,29 +31,31 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class RSSContentHubAdapter implements ContentHubAdapter {
+class RSSContentHubAdapter implements ContentHubAdapter {
   private static final Logger LOGGER = LoggerFactory.getLogger(RSSContentHubAdapter.class);
 
-  private ContentHubAdapterBinding<RSSContentHubSettings> binding;
-  private RSSFolder rootFolder;
-  private SyndFeed feed;
+  private final RSSContentHubSettings settings;
+  private final String connectionId;
+  private final SyndFeed feed;
+  private final RSSColumnProvider columnProvider;
+  private final BlobCache blobCache;
 
-  RSSContentHubAdapter(ContentHubAdapterBinding<RSSContentHubSettings> binding) {
-    this.binding = binding;
-    String url = null;
-    if (binding.getSettings() != null) {
-      url = binding.getSettings().getUrl();
-    }
-    if(url == null){
-      String msg = "Error reading url for RSS stream with id:" + binding.getFactoryId();
+  RSSContentHubAdapter(RSSContentHubSettings settings, String connectionId, BlobCache blobCache) {
+    this.settings = settings;
+    this.connectionId = connectionId;
+    this.blobCache = blobCache;
+    columnProvider = new RSSColumnProvider();
+    String url = settings!=null ? settings.getUrl() : null;
+    if (url == null) {
+      String msg = "Error reading url for RSS stream with id:" + connectionId;
       LOGGER.error(msg);
       throw new ContentHubException(msg);
     }
 
     try {
-      String proxyHost = binding.getSettings().getProxyHost();
-      String proxyType = binding.getSettings().getProxyType();
-      Integer proxyPort = binding.getSettings().getProxyPort();
+      String proxyHost = settings.getProxyHost();
+      String proxyType = settings.getProxyType();
+      Integer proxyPort = settings.getProxyPort();
 
       SyndFeedInput input = new SyndFeedInput();
 
@@ -62,8 +67,7 @@ public class RSSContentHubAdapter implements ContentHubAdapter {
         XmlReader.setDefaultEncoding("utf8");
         XmlReader reader = new XmlReader(urlConnection);
         feed = input.build(reader);
-      }
-      else {
+      } else {
         XmlReader.setDefaultEncoding("utf8");
         XmlReader reader = new XmlReader(feedSource);
         feed = input.build(reader);
@@ -79,15 +83,12 @@ public class RSSContentHubAdapter implements ContentHubAdapter {
   @NonNull
   @Override
   public Folder getRootFolder(@NonNull ContentHubContext context) throws ContentHubException {
-    String displayName = binding.getSettings().getDisplayName();
+    String displayName = settings.getDisplayName();
     if (StringUtils.isEmpty(displayName)) {
-      displayName = binding.getSettings().getUrl();
+      displayName = settings.getUrl();
     }
-
-    ContentHubObjectId rootId = ContentHubObjectId.createRootId(binding.getConnectionId(), feed.getUri());
-    rootFolder = new RSSFolder(binding, rootId, feed);
-    rootFolder.setName(displayName);
-    return rootFolder;
+    ContentHubObjectId rootId = new ContentHubObjectId(connectionId, connectionId);
+    return new RSSFolder(rootId, feed, displayName);
   }
 
   @Nullable
@@ -97,7 +98,7 @@ public class RSSContentHubAdapter implements ContentHubAdapter {
     String externalId = id.getExternalId();
     for (SyndEntry entry : entries) {
       if (entry.getUri().equals(externalId)) {
-        return new RSSItem(binding, id, feed, entry);
+        return new RSSItem(id, feed, entry, blobCache);
       }
     }
     return null;
@@ -106,8 +107,6 @@ public class RSSContentHubAdapter implements ContentHubAdapter {
   @Nullable
   @Override
   public Folder getFolder(@NonNull ContentHubContext context, @NonNull ContentHubObjectId id) throws ContentHubException {
-    //there is always only 1x folder which can be invalidates too, so we refresh the feed for every getter, relying on studio caching
-    this.rootFolder = null;
     return getRootFolder(context);
   }
 
@@ -117,8 +116,8 @@ public class RSSContentHubAdapter implements ContentHubAdapter {
     List<Item> result = new ArrayList<>();
     List<SyndEntry> entries = feed.getEntries();
     for (SyndEntry entry : entries) {
-      ContentHubObjectId id = ContentHubObjectId.createItemId(folder.getId(), entry.getUri());
-      result.add(new RSSItem(binding, id, feed, entry));
+      ContentHubObjectId id = new ContentHubObjectId(connectionId, entry.getUri());
+      result.add(new RSSItem(id, feed, entry, blobCache));
     }
     return result;
   }
@@ -131,9 +130,19 @@ public class RSSContentHubAdapter implements ContentHubAdapter {
 
   @Nullable
   @Override
-  public Folder getParent(@NonNull ContentHubContext context, @NonNull Folder folder) throws ContentHubException {
+  public Folder getParent(@NonNull ContentHubContext context, @NonNull ContentHubObject contentHubObject) throws ContentHubException {
+    if (!contentHubObject.getId().equals(getRootFolder(context).getId())) {
+      return getRootFolder(context);
+    }
     return null;
   }
+
+  @Override
+  @NonNull
+  public ContentHubTransformer transformer() {
+    return new RSSContentHubTransformer(blobCache);
+  }
+
 
   //------------------------ Helper ------------------------------------------------------------------------------------
 
@@ -157,5 +166,11 @@ public class RSSContentHubAdapter implements ContentHubAdapter {
       //ignore
     }
     return response.toString();
+  }
+
+  @NonNull
+  @Override
+  public ColumnProvider columnProvider() {
+    return columnProvider;
   }
 }

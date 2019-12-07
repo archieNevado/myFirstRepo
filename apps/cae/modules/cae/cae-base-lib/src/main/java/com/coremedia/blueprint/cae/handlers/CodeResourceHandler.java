@@ -38,6 +38,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.UriTemplate;
 
 import javax.activation.MimeTypeParseException;
 import javax.servlet.http.HttpServletRequest;
@@ -297,7 +298,8 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
    * @return                UriComponents of the generated link.
    */
   @Link(type = CMAbstractCode.class, uri = URI_PATTERN_SINGLE)
-  public UriComponents buildLink(CMAbstractCode cmAbstractCode, UriComponentsBuilder uriBuilder) {
+  public UriComponents buildLink(CMAbstractCode cmAbstractCode, UriTemplate uriTemplate) {
+    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromPath(uriTemplate.toString());
     final String dataUrl = cmAbstractCode.getDataUrl();
     if (dataUrl != null && !dataUrl.isEmpty()) {
       return UriComponentsBuilder.fromUriString(dataUrl).build();

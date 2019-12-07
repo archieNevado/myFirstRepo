@@ -12,7 +12,7 @@ default['ulimit'] = {
 default['mongodb3']['mongod']['disable-transparent-hugepages'] = true
 
 #<> fixed version
-default['mongodb3']['version'] = '4.0.2'
+default['mongodb3']['version'] = '4.0.13'
 
 #<> fixed configuration
 default['mongodb3']['config']['mongod']['net']['bindIp'] = '0.0.0.0'

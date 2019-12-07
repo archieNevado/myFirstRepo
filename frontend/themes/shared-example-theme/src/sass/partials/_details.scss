@@ -145,8 +145,10 @@
 
   &__email {
     &-icon {
-      @extend .glyphicon;
-      @extend .glyphicon-envelope;
+      @include icon;
+      background-image: url("../../img/envelope.svg");
+      height: 18px;
+      width: 18px;
     }
   }
 

@@ -11,14 +11,14 @@
 
 <#assign titleHtml>
   <#if link?has_content && renderTeaserTitle?has_content>
-    <i class="glyphicon glyphicon-download" aria-hidden="true"></i>
+    <i class="${teaserBlockClass}__download-icon" aria-hidden="true"></i>
   </#if>
   ${title}
 </#assign>
 
 <#assign textHtml>
   <#if self.data?has_content>
-    <span<@preview.metadata "properties.data" />>(${cm.getLink(self)?keep_after_last(".")?keep_before("?") + ", "} ${bp.getDisplaySize(self.data.size)})</span>
+    <span<@preview.metadata "properties.data" />>(${cm.getLink(self)?keep_after_last(".")?keep_before("?") + ", "} ${bp.getDisplayFileSize(self.data.size)})</span>
     <br>
   </#if>
   <@utils.renderWithLineBreaks text=bp.truncateText(text, bp.setting(self, "teaser.max.length", 200)) />

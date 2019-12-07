@@ -1,59 +1,86 @@
 package com.coremedia.blueprint.contenthub.adapters.youtube;
 
-import com.coremedia.blueprint.contenthub.adapters.youtube.caching.ChannelSearchResultCacheKey;
-import com.coremedia.blueprint.contenthub.adapters.youtube.caching.PlayListItemsCacheKey;
-import com.coremedia.blueprint.contenthub.adapters.youtube.caching.PlayListsByChannelCacheKey;
-import com.coremedia.blueprint.contenthub.adapters.youtube.caching.PlayListsByUserCacheKey;
-import com.coremedia.blueprint.contenthub.adapters.youtube.caching.VideoCacheKey;
-import com.coremedia.cache.Cache;
+import com.coremedia.contenthub.api.search.Sort;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.Playlist;
 import com.google.api.services.youtube.model.PlaylistItem;
+import com.google.api.services.youtube.model.SearchResult;
 import com.google.api.services.youtube.model.Video;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * The YouTubeConnector is responsible for the connection to youtube.
- * The requests to youtube's API are cached, and the cache is invalidated every 60 minutes.
  */
 class YouTubeConnector {
 
-  private static final int POLLING_INTERVAL_MINUTES = 60;
-  private YouTube youTube;
-  private Cache cache;
+  /**
+   * Response paging chunk size
+   * <p>
+   * Do not confuse with {@link ChannelSearchResult#MAX_LIMIT}, which is the
+   * overall limit of search result sizes.
+   * <p>
+   *
+   * @implNote 50 is the max value.  Don't know why we should fetch less and do
+   * more roundtrips instead.  However, default is suspiciously low 5.
+   * So maybe I understood something wrong, and 50 is not appropriate.
+   * S. https://developers.google.com/youtube/v3/docs/search/list # Optional parameters # maxResults
+   */
+  static final long MAX_RESULTS = 50L;
 
-  public YouTubeConnector(YouTube youTube, Cache cache) {
+  private YouTube youTube;
+
+  YouTubeConnector(YouTube youTube) {
     this.youTube = youTube;
-    this.cache = cache;
   }
 
   List<Playlist> getPlaylistsByUser(String user) {
-    return cache.get(new PlayListsByUserCacheKey(youTube, user, POLLING_INTERVAL_MINUTES));
+    try {
+      return new PlayListsByUser(youTube, user).playlists();
+    } catch (Exception e) {
+      throw new IllegalStateException("Cannot fetch playlists by user " + user, e);
+    }
   }
 
   List<Playlist> getPlaylistsByChannel(String channelId) {
-    return cache.get(new PlayListsByChannelCacheKey(youTube, channelId, POLLING_INTERVAL_MINUTES));
+    try {
+      return new PlayListsByChannel(youTube, channelId).playlistsByChannel();
+    } catch (IOException e) {
+      throw new IllegalStateException("Cannot fetch playlists by channel id " + channelId, e);
+    }
   }
 
   Video getVideo(String videoId) {
-    return cache.get(new VideoCacheKey(youTube, videoId, POLLING_INTERVAL_MINUTES));
-  }
-
-  List<Video> getVideos(String channelId) {
-    List<Video> result = new ArrayList<>();
-    List<String> videoIds = cache.get(new ChannelSearchResultCacheKey(youTube, channelId, " ", POLLING_INTERVAL_MINUTES));
-    for (String videoId : videoIds) {
-      Video video = getVideo(videoId);
-      if (video != null) {
-        result.add(video);
-      }
+    try {
+      return new VideoById(youTube, videoId).video();
+    } catch (IOException e) {
+      throw new IllegalStateException("Cannot fetch video by id " + videoId, e);
     }
-    return result;
   }
 
-  public List<PlaylistItem> getPlaylistItems(String playlistId) {
-    return cache.get(new PlayListItemsCacheKey(youTube, playlistId, POLLING_INTERVAL_MINUTES));
+  @NonNull
+  List<SearchResult> getVideos(String channelId) {
+    return searchVideos(channelId, null, Collections.emptyList(), -1);
+  }
+
+  List<PlaylistItem> getPlaylistItems(String playlistId) {
+    try {
+      return new PlayListItems(youTube, playlistId).playlistItems();
+    } catch (Exception e) {
+      throw new IllegalStateException("Cannot fetch playlist items by id " + playlistId, e);
+    }
+  }
+
+  @NonNull
+  List<SearchResult> searchVideos(@NonNull String channelId, @Nullable String term, @NonNull List<Sort> sortCriteria, int limit) {
+    try {
+      return new ChannelSearchResult(youTube, channelId, term, limit, sortCriteria).channelSearchResult();
+    } catch (Exception e) {
+      throw new IllegalStateException("Cannot fetch videos by channel id " + channelId, e);
+    }
   }
 }

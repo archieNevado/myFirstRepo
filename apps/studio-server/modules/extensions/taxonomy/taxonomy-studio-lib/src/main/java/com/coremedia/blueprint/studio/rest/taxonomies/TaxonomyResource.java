@@ -150,7 +150,16 @@ public class TaxonomyResource extends AbstractLinkingResource {
       String[] nodeReferences = refs.split(",");
       for (String nodeReference : nodeReferences) {
         TaxonomyNode node = strategy.getNodeByRef(nodeReference);
+        if (node == null) {
+          LOG.warn("Can not move taxonomy node {} because it couldn't be resolved", nodeReference);
+          continue;
+        }
+
         TaxonomyNode targetNode = strategy.getNodeByRef(targetRef);
+        if (targetNode == null) {
+          LOG.warn("Can not move taxonomy node {} because the target node {} couldn't be resolved", nodeReference, targetRef);
+          continue;
+        }
         result.getNodes().add(strategy.moveNode(node, targetNode));
       }
 
@@ -172,6 +181,10 @@ public class TaxonomyResource extends AbstractLinkingResource {
       String[] nodeReferences = refs.split(",");
       for (String nodeReference : nodeReferences) {
         TaxonomyNode node = strategy.getNodeByRef(nodeReference);
+        if (node == null) {
+          LOG.warn("Can't remove taxonomy node with reference {} because it couldn't be resolved", nodeReference);
+          continue;
+        }
         parent = strategy.delete(node);
       }
       return parent;
@@ -214,6 +227,10 @@ public class TaxonomyResource extends AbstractLinkingResource {
       String[] nodeReferences = refs.split(",");
       for (String nodeReference : nodeReferences) {
         TaxonomyNode node = strategy.getNodeByRef(nodeReference);
+        if (node == null) {
+          LOG.warn("Can not resolve taxonomy node by reference \"{}\"",nodeReference);
+          continue;
+        }
         result.addAll(strategy.getStrongLinks(node, true));
       }
 
@@ -235,6 +252,9 @@ public class TaxonomyResource extends AbstractLinkingResource {
       }
       Taxonomy strategy = getTaxonomy(siteId, taxonomyId);
       TaxonomyNode node = strategy.getNodeByRef(ref);
+      if (node == null) {
+        return null;
+      }
       return strategy.getPath(node);
     } catch (Exception e) {
       LOG.error("getPath failed for " + ref, e);
@@ -258,6 +278,11 @@ public class TaxonomyResource extends AbstractLinkingResource {
       TaxonomyNode node = (ref == null)
               ? strategy.getRoot()
               : strategy.getNodeByRef(ref);
+      if (node == null) {
+        LOG.warn("Can't resolve the children because the taxonomy node with id {} couldn't be resolved", taxonomyId);
+        return null;
+      }
+
       TaxonomyNodeList children = strategy.getChildren(node, (offset == null) ? 0 : offset, (length == null) ? -1 : length);
       children.sortByName();
       return children;
@@ -277,6 +302,11 @@ public class TaxonomyResource extends AbstractLinkingResource {
       TaxonomyNode node = (ref == null)
               ? strategy.getRoot()
               : strategy.getNodeByRef(ref);
+
+      if (node == null) {
+        LOG.warn("Can't create a child because the taxonomy node with id {} couldn't be resolved", taxonomyId);
+        return null;
+      }
 
       TaxonomyNode newChild = strategy.createChild(node, defaultName);
       if (node.isRoot()) {
@@ -298,7 +328,10 @@ public class TaxonomyResource extends AbstractLinkingResource {
       TaxonomyNode node = (ref == null)
               ? strategy.getRoot()
               : strategy.getNodeByRef(ref);
-
+      if (node == null) {
+        LOG.warn("Can't commit because the taxonomy node with id {} couldn't be resolved", taxonomyId);
+        return null;
+      }
       return strategy.commit(node);
     } catch (Exception e) {
       LOG.error("commit failed for {}", ref, e);
@@ -325,6 +358,10 @@ public class TaxonomyResource extends AbstractLinkingResource {
           for (Suggestion match : result) {
             String restId = TaxonomyUtil.getRestIdFromCapId(match.getId());
             TaxonomyNode hit = taxonomyStrategy.getNodeByRef(restId);
+            if (hit == null) {
+              LOG.warn("Can't resolve suggestions for taxonomy node with reference {} because the node couldn't be resolved", restId);
+              return null;
+            }
             TaxonomyNodeList nodeList = taxonomyStrategy.getPath(hit).getPath();
             hit.setPath(nodeList);
             hit.setWeight(match.getWeight());
@@ -332,7 +369,7 @@ public class TaxonomyResource extends AbstractLinkingResource {
           }
         }
         else {
-          LOG.warn("Semantic strategy '{0}' not found, returning empty suggestion list.", semanticStrategyId);
+          LOG.warn("Semantic strategy '{}' not found, returning empty suggestion list.", semanticStrategyId);
         }
       }
 

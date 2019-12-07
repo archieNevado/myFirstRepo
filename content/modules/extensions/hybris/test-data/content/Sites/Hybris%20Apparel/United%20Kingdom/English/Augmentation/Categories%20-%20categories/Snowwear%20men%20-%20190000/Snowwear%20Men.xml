@@ -15,6 +15,7 @@
 <String>hybris:///catalog/category/190700</String>
 <String>hybris:///catalog/category/190100</String>
 <String>hybris:///catalog/category/190300</String>
+<String>hybris:///catalog/category/250000</String>
 </StringListProperty>
 </Struct>
 </StructProperty>

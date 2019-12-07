@@ -16,9 +16,12 @@ import com.coremedia.livecontext.ecommerce.ibm.catalog.CatalogServiceImpl;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.link.QueryParam;
 import com.coremedia.objectserver.web.links.TokenResolverHelper;
+import com.google.common.annotations.VisibleForTesting;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.util.UriComponents;
@@ -32,25 +35,31 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.link.UrlUtil.convertToParamMap;
+import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_9_0;
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.commons.lang3.StringUtils.substring;
+import static org.springframework.web.util.UriUtils.encodeQueryParam;
 
 /**
  * WCS-specific implementation for the LiveContextUrlProvider
  */
 public class WcsUrlProvider {
 
-  private static final String PARAM_STORE_ID = "storeId";
+  private static final Logger LOG = LoggerFactory.getLogger(WcsUrlProvider.class);
+
+  @VisibleForTesting static final String PARAM_STORE_ID = "storeId";
   private static final String NEW_PREVIEW_SESSION_VARIABLE = "newPreviewSession";
   private static final String PARAM_CATALOG_ID = "catalogId";
-  private static final String PARAM_LANG_ID = "langId";
-  private static final String URL_TEMPLATE = "urlTemplate";
-  private static final String SEO_SEGMENT = "seoSegment";
-  private static final String SEARCH_TERM = "searchTerm";
+  @VisibleForTesting static final String PARAM_LANG_ID = "langId";
+  @VisibleForTesting static final String URL_TEMPLATE = "urlTemplate";
+  @VisibleForTesting static final String SEO_SEGMENT = "seoSegment";
+  @VisibleForTesting static final String SEARCH_TERM = "searchTerm";
   private static final String IS_INITIAL_STUDIO_REQUEST = "isInitialStudioRequest";
-  private static final String QUERY_PARAMS = "queryParams";
-  private static final String PRODUCT_ID = "productId";
-  private static final String CATEGORY_ID = "categoryId";
-  private static final String CATALOG_ID = "catalogId";
+  @VisibleForTesting static final String QUERY_PARAMS = "queryParams";
+  @VisibleForTesting static final String PRODUCT_ID = "productId";
+  @VisibleForTesting static final String CATEGORY_ID = "categoryId";
+  @VisibleForTesting static final String CATALOG_ID = "catalogId";
 
   private static final String PARAM_LANGUAGE = "language";
   private static final String PARAM_SEO_SEGMENT = "seoSegment";
@@ -61,11 +70,14 @@ public class WcsUrlProvider {
 
   private static final String SEO_URI_PREFIX = "/{language}/{storeName}/";
 
+  private static final String DEFAULT_LANGUAGE_ID = "-1";
+
   private CatalogAliasTranslationService catalogAliasTranslationService;
   private String defaultStoreFrontUrl;
   private String previewStoreFrontUrl;
   private String urlPattern;
   private String shoppingFlowUrlForContractPreview;
+  private String shoppingFlowUrlForContractPreviewWcs9;
   private String productNonSeoUrl;
   private String categoryNonSeoUrl;
 
@@ -77,6 +89,11 @@ public class WcsUrlProvider {
 
   public boolean isPreview() {
     return preview;
+  }
+
+  @VisibleForTesting
+  void setPreview(boolean preview) {
+    this.preview = preview;
   }
 
   private static boolean isInitialStudioRequest(@NonNull Map<String, Object> parameters) {
@@ -116,7 +133,7 @@ public class WcsUrlProvider {
     // The language ID has to be transformed into the format of the commerce system.
     Locale locale = StoreContextHelper.getLocale(storeContext);
     Optional<String> languageId = findLanguageId(locale);
-    languageId.ifPresent(value -> parameters.put(PARAM_LANG_ID, value));
+    parameters.put(PARAM_LANG_ID, languageId.orElse(DEFAULT_LANGUAGE_ID));
     parameters.put(PARAM_LANGUAGE, locale.getLanguage());
 
     if (languageId.isPresent()) {
@@ -176,6 +193,10 @@ public class WcsUrlProvider {
     this.shoppingFlowUrlForContractPreview = shoppingFlowUrlForContractPreview;
   }
 
+  public void setShoppingFlowUrlForContractPreviewWcs9(String shoppingFlowUrlForContractPreviewWcs9) {
+    this.shoppingFlowUrlForContractPreviewWcs9 = shoppingFlowUrlForContractPreviewWcs9;
+  }
+
   public void setProductNonSeoUrl(String productNonSeoUrl) {
     this.productNonSeoUrl = productNonSeoUrl;
   }
@@ -208,6 +229,34 @@ public class WcsUrlProvider {
             .map(UriComponentsBuilder::build);
   }
 
+  private static String insertContractIdParams(@NonNull String urlPattern, @NonNull Iterable<String> contractIds) {
+    if (urlPattern.contains("{{contractIdParams}}")) {
+      StringBuilder replacement = new StringBuilder();
+      contractIds.forEach(string -> replacement
+              .append("&")
+              .append(PARAM_CONTRACT_ID_FOR_PREVIEW)
+              .append("=")
+              .append(string));
+      return urlPattern.replace("{{contractIdParams}}", replacement.substring(1));
+    }
+    return urlPattern;
+  }
+
+  private static String encodeCascadedRedirectUrlParams(@NonNull String url) {
+
+    int posAssignment = url.indexOf("&URL=") + 5;
+    if (posAssignment >= 5) {
+      String baseUrl = substring(url, 0, posAssignment);
+      String unencodedParam = substring(url, posAssignment);
+      String unencodedParamCascaded = encodeCascadedRedirectUrlParams(unencodedParam);
+      String encodedParamCascaded = encodeQueryParam(unencodedParamCascaded, UTF_8);
+      String encodedUrl = baseUrl + encodedParamCascaded;
+      return encodedUrl;
+    }
+
+    return url;
+  }
+
   @NonNull
   private Optional<UriComponentsBuilder> buildLink(@NonNull Map<String, Object> parameters,
                                                    @Nullable StoreContext storeContext) {
@@ -226,13 +275,34 @@ public class WcsUrlProvider {
         String redirectUrl = applyParameters(resultUrl, parameters, storeContext);
         redirectUrl = redirectUrl.startsWith("/") ? redirectUrl.substring(1) : redirectUrl;
         parameters.put(REDIRECT_URL, redirectUrl);
-        resultUrl = applyParameters(shoppingFlowUrlForContractPreview, parameters, storeContext);
 
-        // Add contract IDs.
-        resultUrl = UriComponentsBuilder.fromUriString(resultUrl)
-                .queryParam(PARAM_CONTRACT_ID_FOR_PREVIEW, toArray(storeContext.getContractIdsForPreview()))
-                .build()
-                .toUriString();
+        if (StoreContextHelper.getWcsVersion(storeContext).lessThan(WCS_VERSION_9_0)) {
+          resultUrl = applyParameters(shoppingFlowUrlForContractPreview, parameters, storeContext);
+
+          // Add contract IDs.
+          resultUrl = UriComponentsBuilder.fromUriString(resultUrl)
+                  .queryParam(PARAM_CONTRACT_ID_FOR_PREVIEW, toArray(storeContext.getContractIdsForPreview()))
+                  .build()
+                  .toUriString();
+        } else {
+          configureParametersForUrlReplacements(parameters, storeContext);
+          resultUrl = insertContractIdParams(shoppingFlowUrlForContractPreviewWcs9, storeContext.getContractIdsForPreview());
+          resultUrl = CommercePropertyHelper.replaceTokens(resultUrl, parameters, false);
+          resultUrl = CommercePropertyHelper.replaceTokens(resultUrl, storeContext);
+
+          LOG.debug("Encoding WCS9 contract preview URL {}", resultUrl);
+          resultUrl = encodeCascadedRedirectUrlParams(resultUrl);
+          LOG.debug("Encoded WCS9 contract preview URL {}", resultUrl);
+
+          // Proper and complete encoding of cascaded redirect URI params for WCS can only be achieved
+          // here (in #encodeCascadedRedirectUrlParams). There's another URI encoding done later on in
+          // com.coremedia.objectserver.web.links.LinkBindings#convertUriToString that must be prevented.
+          // The 'PreventAnotherUrlEncodingForWcsContractPreviewInStudio' fragment is used as identifier
+          // for the URIs that must not be encoded once again. Unfortunately there's no proper place that
+          // is accessible from both involved classes where a common constant with the fragment name may
+          // be defined.
+          resultUrl += "#PreventAnotherUrlEncodingForWcsContractPreviewInStudio";
+        }
       } else {
         resultUrl = applyParameters(resultUrl, parameters, storeContext);
       }

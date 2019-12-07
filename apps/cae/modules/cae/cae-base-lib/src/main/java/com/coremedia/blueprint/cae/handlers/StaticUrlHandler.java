@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.cae.handlers;
 
 import com.coremedia.objectserver.web.links.Link;
+import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
@@ -19,13 +20,13 @@ public class StaticUrlHandler extends HandlerBase {
                   "/{" + STATIC_URL + ":" + PATTERN_SEGMENTS + "}";
 
   @Link(type = String.class, uri = URI_PATTERN)
-  public UriComponentsBuilder buildLink(Object staticUrl, Map<String, Object> linkParameters) {
+  public UriComponents buildLink(Object staticUrl, Map<String, Object> linkParameters) {
     List<String> paths = splitPathInfo(String.valueOf(staticUrl));
 
     UriComponentsBuilder uriBuilder = UriComponentsBuilder.newInstance()
             .pathSegment(URI_PREFIX)
             .pathSegment(paths.toArray(new String[paths.size()]));
     addLinkParametersAsQueryParameters(uriBuilder, linkParameters);
-    return uriBuilder;
+    return uriBuilder.build();
   }
 }

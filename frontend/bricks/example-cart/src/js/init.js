@@ -23,7 +23,7 @@ function decorateCartButton($button, link, data) {
     //disable button and show spinner
     $button.attr("disabled", "true");
     $button.addClass("cm-button--loading");
-    $icon.removeClass("glyphicon glyphicon-ok glyphicon-warning-sign");
+    $icon.removeClass("cm-cart__icon-ok cm-cart__icon-warning");
 
     // send ajax call
     ajax({
@@ -34,15 +34,15 @@ function decorateCartButton($button, link, data) {
     })
       .done(function() {
         //show success icon
-        $icon.addClass("glyphicon glyphicon-ok");
+        $icon.addClass("cm-cart__icon-ok");
         window.setTimeout(function() {
           $icon.fadeOut(400, function() {
-            $icon.removeClass("glyphicon glyphicon-ok").removeAttr("style");
+            $icon.removeClass("cm-cart__icon-ok").removeAttr("style");
           });
         }, 1500);
       })
       .fail(function() {
-        $icon.addClass("glyphicon glyphicon-warning-sign");
+        $icon.addClass("cm-cart__icon-warning");
       })
       .always(function() {
         $button.removeAttr("disabled");

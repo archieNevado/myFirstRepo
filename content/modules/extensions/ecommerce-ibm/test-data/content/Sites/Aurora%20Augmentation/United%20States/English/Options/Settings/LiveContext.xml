@@ -8,7 +8,7 @@
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="commerce">
 <Struct>
-<StringProperty Name="endpoint">${commerce.adapter.wcs.endpoint}</StringProperty>
+<StringProperty Name="endpoint">${commerce.hub.data.endpoints.wcs}</StringProperty>
 <StringProperty Name="currency">USD</StringProperty>
 <StringProperty Name="locale">en-US</StringProperty>
 <StructProperty Name="storeConfig">

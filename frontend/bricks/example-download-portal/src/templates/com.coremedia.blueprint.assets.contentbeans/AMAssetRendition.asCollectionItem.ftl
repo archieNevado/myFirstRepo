@@ -17,7 +17,7 @@
       <a <@cm.dataAttribute name="data-hash-based-fragment-link" data=linkData />>${self.asset.title!""}</a>
     </h3>
     <div class="am-download-collection-item__description">
-      ${cm.getMessage("am_rendition_${self.name}")} (${bp.getDisplaySize(self.size)})
+      ${cm.getMessage("am_rendition_${self.name}")} (${bp.getDisplayFileSize(self.size)})
     </div>
     <div class="am-download-collection-item__type">
       <#if self.mimeType?has_content>

@@ -10,7 +10,7 @@
     "classBox": classBox,
     "classMedia": classMedia
   }/>
-<#else>
+<#elseif self.url?has_content>
   <div class="${classBox}">
     <img class="${classMedia} cm-media cm-media--uncropped" src="${self.url!""}" alt="">
   </div>
