@@ -149,24 +149,26 @@ module.exports = ({ dependencyCheckPlugin, mode }) => config =>
               loader: "sass-loader",
               options: {
                 sourceMap: true, // needed for resolve-url-loader, removed in css-loader
-                outputStyle: "expanded",
-                precision: 10,
-                importer: [
-                  sassSmartImport,
-                  sassExcludeImport,
-                  dependencyCheckPlugin.getNodeSassImporter(),
-                  sassImportOnce,
-                ],
-                functions: {
-                  "encodeBase64($string)": function($string) {
-                    const buffer = new Buffer($string.getValue());
-                    return nodeSass.types.String(buffer.toString("base64"));
+                sassOptions: {
+                  outputStyle: "expanded",
+                  importer: [
+                    sassSmartImport,
+                    sassExcludeImport,
+                    dependencyCheckPlugin.getNodeSassImporter(),
+                    sassImportOnce,
+                  ],
+                  functions: {
+                    "encodeBase64($string)": function($string) {
+                      const buffer = new Buffer($string.getValue());
+                      return nodeSass.types.String(buffer.toString("base64"));
+                    },
+                    "encodeURIComponent($string)": function($string) {
+                      return nodeSass.types.String(
+                        encodeURIComponent($string.getValue())
+                      );
+                    },
                   },
-                  "encodeURIComponent($string)": function($string) {
-                    return nodeSass.types.String(
-                      encodeURIComponent($string.getValue())
-                    );
-                  },
+                  precision: 10,
                 },
               },
             },

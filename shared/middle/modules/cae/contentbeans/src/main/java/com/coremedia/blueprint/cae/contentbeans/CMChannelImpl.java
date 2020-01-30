@@ -17,6 +17,8 @@ import com.coremedia.blueprint.common.layout.PageGrid;
 import com.coremedia.blueprint.common.layout.PageGridService;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.navigation.Navigation;
+import com.coremedia.cache.Cache;
+import com.coremedia.cache.util.ObjectCacheKey;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.user.User;
@@ -45,6 +47,7 @@ public class CMChannelImpl extends CMChannelBase {
 
   private PageGridService pageGridService;
   private ThemeService themeService;
+  private Cache cache;
 
   /**
    * If the header is empty, fallback to parent channel.
@@ -155,10 +158,20 @@ public class CMChannelImpl extends CMChannelBase {
   @Override
   public VanityUrlMapper getVanityUrlMapper() {
     if (isRoot()) {
-      return new SettingsBasedVanityUrlMapper(this, getSettingsService());
+      return cache==null ? createVanityUrlMapper() : cache.get(new VanityUrlMapperCacheKey());
     } else {
       // optimization, assume vanity URLs are only managed on the root channel
       return EMPTY_VANITY;
+    }
+  }
+
+  private VanityUrlMapper createVanityUrlMapper() {
+    return new SettingsBasedVanityUrlMapper(this, getSettingsService());
+  }
+
+  private class VanityUrlMapperCacheKey extends ObjectCacheKey<CMChannelImpl, VanityUrlMapper> {
+    VanityUrlMapperCacheKey() {
+      super(CMChannelImpl.this, CMChannelImpl.this::createVanityUrlMapper);
     }
   }
 
@@ -192,6 +205,10 @@ public class CMChannelImpl extends CMChannelBase {
   @Required
   public void setThemeService(ThemeService themeService) {
     this.themeService = themeService;
+  }
+
+  public void setCache(Cache cache) {
+    this.cache = cache;
   }
 
   @Override

@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-    <groupId>com.coremedia.blueprint</groupId>
+    <groupId>com.coremedia.blueprint.content-hub</groupId>
     <artifactId>studio-server.content-hub-default-adapters</artifactId>
     <version>1-SNAPSHOT</version>
   </parent>
@@ -19,8 +19,8 @@
 
     <!-- PROJECT dependencies -->
     <dependency>
-      <groupId>com.coremedia.contenthub</groupId>
-      <artifactId>contenthub-lib</artifactId>
+      <groupId>com.coremedia.content-hub</groupId>
+      <artifactId>content-hub-api</artifactId>
     </dependency>
 
     <!-- THIRD-PARTY dependencies -->

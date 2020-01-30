@@ -9,6 +9,8 @@ const optimizeCssAssetsPlugin = new OptimizeCssAssetsPlugin();
 module.exports = () => config =>
   deepMerge(config, {
     mode: "production",
+    // see https://webpack.js.org/configuration/stats/
+    stats: "minimal",
     performance: {
       // disable newly introduced performance warnings about chunk size as we will not
       // make heavy use of chunk splitting at the moment (which could improve performance)

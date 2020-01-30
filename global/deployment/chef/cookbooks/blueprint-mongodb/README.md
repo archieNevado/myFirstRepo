@@ -26,6 +26,7 @@ This is the wrapper cookbook to install mongodb3.
 * `node['mongodb3']['config']['mongod']['net']['bindIp']` - fixed configuration. Defaults to `0.0.0.0`.
 * `node['mongodb3']['config']['mongod']['security']['authorization']` -  Defaults to `nil`.
 * `node['mongodb3']['config']['mongod']['storage']['mmapv1']['smallFiles']` -  Defaults to `nil`.
+* `node['mongodb3']['config']['mongod']['security']['authorization']` -  Defaults to `enabled`.
 
 # Recipes
 

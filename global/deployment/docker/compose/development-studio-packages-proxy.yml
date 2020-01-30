@@ -21,3 +21,6 @@ services:
       traefik.frontend.headers.SSLRedirect: "false"
       traefik.actuator.port: '8081'
       traefik.actuator.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/studio-packages-proxy;AddPrefix:/actuator
+  overview:
+    environment:
+      STUDIO_PACKAGES_PROXY_ENABLED: "true"

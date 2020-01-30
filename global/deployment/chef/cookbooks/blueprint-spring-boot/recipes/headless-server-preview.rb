@@ -13,11 +13,13 @@ node.default_unless['blueprint']['apps'][service_name]['application.properties']
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['server.port'] = 41180
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['management.server.port'] = 41181
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['previewclient.url'] = "https://headless-server-preview.#{node['blueprint']['hostname']}/preview"
+node.default_unless['blueprint']['apps'][service_name]['application.properties']['caasserver.endpoint'] = "http://#{node['blueprint']['hostname']}:41180/graphql"
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['caas.preview'] = 'true'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['graphiql.enabled'] = 'true'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['caas.swagger.enabled'] = 'true'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['link.urlPrefixType'] = 'preview'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['caas-rest.jslt-enabled'] = 'true'
+node.default_unless['blueprint']['apps'][service_name]['application.properties']['caas.remote.baseurl'] = "http://#{node['blueprint']['hostname']}:40980/blueprint/servlet/internal/service/url"
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['commerce.hub.data.customEntityParams.catalogVersion'] = 'Staged'
 
 application_config_hash = Mash.new

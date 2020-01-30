@@ -6,11 +6,11 @@
 #
 
 # <> define solr version to use
-default['blueprint']['solr']['version'] = '8.1.1'
+default['blueprint']['solr']['version'] = '8.4.0'
 # <> define solr download url
 default['blueprint']['solr']['url'] = "http://archive.apache.org/dist/lucene/solr/#{node['blueprint']['solr']['version']}/solr-#{node['blueprint']['solr']['version']}.tgz"
 # <> define artifact checksum
-default['blueprint']['solr']['checksum'] = 'b515598c11f53fe28d682e3d71238642e9f34509194e3c4746e39bb7d7bb46a1'
+default['blueprint']['solr']['checksum'] = '66e7ed14e5ba8ac81af7749700cafac7ab49239137ddba92ae8bf863100f81a6'
 # <> define solr home
 default['blueprint']['solr']['solr_home'] = '/opt/coremedia/solr-home'
 #<> clean solr home on update

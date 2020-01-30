@@ -44,16 +44,14 @@ const handler = () => {
     })
     .catch(e => {
       throw new Error(
-        `[${PKG_NAME}] An error occured while preparing zip file for themes: ${
-          e.message
-        }`
+        `[${PKG_NAME}] An error occurred while preparing zip file for themes: ${e.message}`
       );
     });
 };
 
 module.exports = {
   command: "build-frontend-zip",
-  desc: "Build a single zip file containg all built themes.",
+  desc: "Build a single zip file containing all prebuilt themes.",
   builder: yargs => yargs.epilogue(docs),
   handler,
 };

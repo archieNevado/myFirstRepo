@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.sfmc.studio.lib;
 
+import com.coremedia.blueprint.base.sfmc.contentlib.contentbuilder.push.SFMCContentBuilderPushService;
 import com.coremedia.blueprint.base.sfmc.contentlib.contentbuilder.push.blob.images.BaseSFMCContentBuilderBlobConfiguration;
 import com.coremedia.blueprint.base.sfmc.contentlib.contentbuilder.push.blob.images.ContentTransformationOperationsResolver;
 import com.coremedia.blueprint.base.sfmc.contentlib.contentbuilder.push.markup.BaseSFMCContentBuilderMarkupConfiguration;
@@ -19,5 +20,10 @@ public class SFMCStudioLibConfiguration {
   @Bean
   public ContentTransformationOperationsResolver cmPictureTransformationOperationsResolver() {
     return new CMPictureTransformationOperationsResolver();
+  }
+
+  @Bean
+  public SFMCContentBuilderPushService picturesSFMCContentBuilderPushService() {
+    return new SFMCContentBuilderPicturesPushService();
   }
 }

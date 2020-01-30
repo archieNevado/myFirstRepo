@@ -16,7 +16,7 @@
   <!-- import bean "contentRepository" -->
   <import resource="classpath:/com/coremedia/cae/uapi-services.xml"/>
   <!-- import bean "solrClient" -->
-  <import resource="classpath:com/coremedia/search/solr/client/coremedia-solr-client.xml"/>
+  <bean class="com.coremedia.search.solr.client.SolrClientConfiguration"/>
 
   <bean class="org.springframework.beans.factory.config.ListFactoryBean" id="solrSearchFilters">
     <property name="sourceList">

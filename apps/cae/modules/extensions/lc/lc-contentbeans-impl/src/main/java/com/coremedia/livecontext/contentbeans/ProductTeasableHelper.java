@@ -96,7 +96,7 @@ public class ProductTeasableHelper {
     try {
       return connection.getCatalogService().findProductById(commerceId, storeContext);
     } catch (CommerceException e) {
-      LOG.warn("Could not retrieve product for ProductTeaser {}.", this, e);
+      LOG.warn("Could not retrieve product '{}' in store '{}'.", commerceId, storeContext.getStoreName(), e);
       return null;
     }
   }

@@ -62,10 +62,11 @@ function handleLogin() {
   const $logoutBtn = $("#cm-logout");
 
   if (loginStatusURL) {
-    utils.ajax({
-      url: loginStatusURL,
-      dataType: "json",
-    })
+    utils
+      .ajax({
+        url: loginStatusURL,
+        dataType: "json",
+      })
       .done(function(data) {
         if (data.loggedIn) {
           $logoutBtn.css("display", "inline-block");
@@ -89,7 +90,7 @@ function handleLogin() {
 addNodeDecoratorBySelector(".cm-wcs-tabs", () => {
   const $tabs = $(".cm-wcs-tabs__tab a");
   /* --- Search --- */
-  $tabs.on("click touch", function (event) {
+  $tabs.on("click touch", function(event) {
     event.preventDefault();
 
     const $clickedLink = $(this);

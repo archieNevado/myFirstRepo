@@ -60,10 +60,6 @@
         class="com.coremedia.livecontext.ecommerce.ibm.inventory.WcAvailabilityWrapperService"
         parent="abstractWcWrapperService"/>
 
-  <bean id="marketingSpotWrapperService"
-        class="com.coremedia.livecontext.ecommerce.ibm.p13n.WcMarketingSpotWrapperService"
-        parent="abstractWcWrapperService"/>
-
   <bean id="cartWrapperService"
         class="com.coremedia.livecontext.ecommerce.ibm.order.WcCartWrapperService"
         parent="abstractWcWrapperService"/>
@@ -112,12 +108,6 @@
     <property name="commerceBeanFactory" ref="commerceBeanFactory"/>
     <property name="commerceCache" ref="commerceCache"/>
     <property name="contractPreviewServiceUserName" value="${livecontext.ibm.contract.preview.credentials.username}"/>
-  </bean>
-
-  <bean id="marketingSpotService" class="com.coremedia.livecontext.ecommerce.ibm.p13n.MarketingSpotServiceImpl">
-    <property name="marketingSpotWrapperService" ref="marketingSpotWrapperService"/>
-    <property name="commerceBeanFactory" ref="commerceBeanFactory"/>
-    <property name="commerceCache" ref="commerceCache"/>
   </bean>
 
   <bean id="cartService" class="com.coremedia.livecontext.ecommerce.ibm.order.CartServiceImpl">

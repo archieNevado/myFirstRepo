@@ -58,7 +58,8 @@
     }
   }
 
-  &__picture {
+  &__picture,
+  &__picture-box .cm-mediaelementwrapper iframe {
     @include stretch-absolute();
   }
 
@@ -76,6 +77,10 @@
     padding: 20px;
     text-align: center;
     @include aspect-ratio-box(16, 9);
+
+   .cm-mediaelementwrapper iframe {
+      @include stretch-absolute();
+    }
   }
 
   // avoid flickering

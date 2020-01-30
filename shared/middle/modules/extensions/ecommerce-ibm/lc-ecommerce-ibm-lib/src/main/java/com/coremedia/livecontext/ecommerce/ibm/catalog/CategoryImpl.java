@@ -235,135 +235,10 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
     return result;
   }
 
-  private String getCmSeoSegment() {
-    String cmLocalizedSeoSegment = getStringValueFromDelegate("cm_seo_token_ntk");
-    cmLocalizedSeoSegment = processCmLocalizedSeoSegment(cmLocalizedSeoSegment);
-
-    if (cmLocalizedSeoSegment == null) {
-      return null;
-    }
-
-    String[] localizedSeoSegments = cmLocalizedSeoSegment.split(";");
-    List<String> localizedSeoSegmentList = Arrays.asList(localizedSeoSegments);
-    if (localizedSeoSegmentList.size() <= 1) {
-      return cmLocalizedSeoSegment.substring(cmLocalizedSeoSegment.indexOf('_') + 1);
-    }
-
-    String storeId = getStoreId();
-    for (String seoSegment : localizedSeoSegmentList) {
-      if (seoSegment.startsWith(storeId)) {
-        return seoSegment.substring(storeId.length() + 1);
-      }
-    }
-
-    return localizedSeoSegmentList.get(0).substring(cmLocalizedSeoSegment.indexOf('_') + 1);
-  }
-
-  private String getCmSeoSegmentFromList() {
-    List<String> cmLocalizedSeoSegment = DataMapHelper.getList(getDelegate(), "x_cm_seo_token_ntk");
-
-    if (cmLocalizedSeoSegment.isEmpty()) {
-      return null;
-    }
-
-    String firstLocalizedSeoSegment = cmLocalizedSeoSegment.get(0);
-
-    if (cmLocalizedSeoSegment.size() == 1) {
-      return firstLocalizedSeoSegment.substring(firstLocalizedSeoSegment.indexOf('_') + 1);
-    }
-
-    String storeId = getStoreId();
-    for (String seoSegment : cmLocalizedSeoSegment) {
-      if (seoSegment.startsWith(storeId + '_')) {
-        return seoSegment.substring(storeId.length() + 1);
-      }
-    }
-
-    return firstLocalizedSeoSegment.substring(firstLocalizedSeoSegment.indexOf('_') + 1);
-  }
-
-  @Nullable
-  private String processCmLocalizedSeoSegment(@Nullable String cmLocalizedSeoSegment) {
-    if (!isBlank(cmLocalizedSeoSegment)) {
-      return cmLocalizedSeoSegment;
-    }
-
-    Locale defaultLocale = getDefaultLocale();
-    if (defaultLocale == null) {
-      LOG.warn("Default locale does not set for commerce beans.");
-    }
-
-    if (getLocale().equals(defaultLocale)) {
-      return cmLocalizedSeoSegment;
-    }
-
-    LOG.info("Category {} does not have a cm seo segment for locale {}. Return the cm seo segment of the category for the default locale {}.",
-            getName(), getLocale(), defaultLocale);
-
-    StoreContext newStoreContext = StoreContextHelper.getCurrentContextFor(defaultLocale);
-    CommerceId categoryId = getCommerceIdProvider().formatCategoryId(getCatalogAlias(), getExternalId());
-
-    CategoryImpl master = (CategoryImpl) getCatalogService().findCategoryById(categoryId, newStoreContext);
-
-    if (master != null && !equals(master)) {
-      cmLocalizedSeoSegment = StoreContextHelper.getWcsVersion(getContext()).lessThan(WCS_VERSION_9_0) ?
-              master.getCmSeoSegment() : master.getCmSeoSegmentFromList();
-    }
-
-    return cmLocalizedSeoSegment;
-  }
-
   @Nullable
   @Override
   public String getSeoSegment() {
-    String localizedSeoSegment = StoreContextHelper.getWcsVersion(getContext()).lessThan(WCS_VERSION_9_0) ?
-            getCmSeoSegment() : getCmSeoSegmentFromList();
-
-    if (!isBlank(localizedSeoSegment)) {
-      return localizedSeoSegment;
-    }
-
-    localizedSeoSegment = getStringValueFromDelegate("seo_token_ntk");
-    localizedSeoSegment = processLocalizedSeoSegment(localizedSeoSegment);
-
-    if (localizedSeoSegment == null) {
-      localizedSeoSegment = "";
-    } else {
-      String[] localizedSeoSegments = localizedSeoSegment.split(";");
-      List<String> localizedSeoSegmentList = Arrays.asList(localizedSeoSegments);
-      if (localizedSeoSegmentList.size() > 1) {
-        localizedSeoSegment = localizedSeoSegmentList.get(0);
-      }
-    }
-
-    return localizedSeoSegment;
-  }
-
-  @Nullable
-  private String processLocalizedSeoSegment(@Nullable String localizedSeoSegment) {
-    if (!isBlank(localizedSeoSegment)) {
-      return localizedSeoSegment;
-    }
-
-    Locale defaultLocale = getDefaultLocale();
-    if (defaultLocale == null) {
-      LOG.warn("Default locale does not set for commerce beans.");
-    }
-
-    if (!getLocale().equals(defaultLocale)) {
-      LOG.info("Category {} does not have a seo segment for locale {}. Return the seo segment of the category for the default locale {}.",
-              getName(), getLocale(), defaultLocale);
-
-      StoreContext newStoreContext = StoreContextHelper.getCurrentContextFor(defaultLocale);
-      CommerceId commerceId = getCommerceIdProvider().formatCategoryId(getCatalogAlias(), getExternalId());
-      Category master = getCatalogService().findCategoryById(commerceId, newStoreContext);
-
-      if (master != null && !equals(master)) {
-        localizedSeoSegment = master.getSeoSegment();
-      }
-    }
-
-    return localizedSeoSegment;
+    return SeoSegmentHelper.getSeoSegment(getDelegate(), getContext());
   }
 
   @Override
@@ -437,6 +312,7 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
             .orElseGet(Collections::emptyList);
   }
 
+  @Override
   public boolean isRoot() {
     return isRootCategoryId(getId());
   }

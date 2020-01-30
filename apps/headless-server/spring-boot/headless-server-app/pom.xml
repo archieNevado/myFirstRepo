@@ -63,13 +63,6 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-tomcat</artifactId>
       <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <!-- exclude for java-11 -->
-          <groupId>javax.annotation</groupId>
-          <artifactId>javax.annotation-api</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.github.spotbugs</groupId>
@@ -106,13 +99,6 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
       <scope>runtime</scope>
-      <exclusions>
-        <exclusion>
-          <!-- exclude for java-11 -->
-          <groupId>javax.annotation</groupId>
-          <artifactId>javax.annotation-api</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
   </dependencies>
 

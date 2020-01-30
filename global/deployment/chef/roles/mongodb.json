@@ -6,5 +6,12 @@
   "run_list": [
     "role[base]",
     "recipe[blueprint-mongodb::default]"
-  ]
+  ],
+  "env_run_lists": {
+    "development": [
+      "role[base]",
+      "recipe[blueprint-mongodb::default]",
+      "recipe[blueprint-mongodb::user]"
+    ]
+  }
 }

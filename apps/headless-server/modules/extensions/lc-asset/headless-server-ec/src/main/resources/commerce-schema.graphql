@@ -16,7 +16,10 @@ type CommerceRoot {
   productByTechId(techId: String!, siteId: String!): Product @fetch(from: "@commerceFacade.getProductByTechId(#techId, #siteId)")
   productBySeoSegment(seoSegment: String!, siteId: String!): Product @fetch(from: "@commerceFacade.findProductBySeoSegment(#seoSegment, #siteId)")
 
-  productVariant(externalId: String!, siteId: String!): ProductVariant  @fetch(from: "@commerceFacade.getProductVariant(#externalId, #siteId)")
+  productVariant(externalId: String!, siteId: String!): ProductVariant @fetch(from: "@commerceFacade.getProductVariant(#externalId, #siteId)")
+
+  externalPage(externalId: String!, siteId: String!): CMExternalPage
+    @fetch(from: "@externalPageAugmentationService.getContentByExternalId(#externalId, @sitesService.getSite(#siteId))")
 }
 
 extend type ContentRoot {
@@ -32,8 +35,8 @@ interface CommerceBean {
 interface Catalog @inherit(from: ["CommerceBean"]) {
   name: String
   rootCategory: Category
-  isDefaultCatalog: Boolean
-  isMasterCatalog: Boolean
+  defaultCatalog: Boolean
+  masterCatalog: Boolean
 }
 
 interface Category @inherit(from: ["CommerceBean"]) {
@@ -45,6 +48,12 @@ interface Category @inherit(from: ["CommerceBean"]) {
   parent: Category
   children: [Category]!
   breadcrumb: [Category]!
+
+  externalChannel: CMExternalChannel
+
+  # retrieves the page grid for this category, taking inheritance (Category -> Parent Category) into account
+  grid: PageGrid
+
   picture: CMPicture
   pictures: [CMPicture]!
   visuals: [CMVisual]!
@@ -77,12 +86,16 @@ interface Product @inherit(from: ["CommerceBean"]) {
   definingAttributes: [ProductAttribute]!
   describingAttributes: [ProductAttribute]!
 
-  variantAxisNames: [String]!
-  variantAxisValues(axisName: String!): [String]!
-
   totalStockCount: Float!
-  isAvailable: Boolean!
-  isVariant: Boolean!
+
+  available: Boolean!
+  variant: Boolean!
+
+  # retrieves the external product if this product or product variant is augmented directly
+  externalProduct: CMExternalProduct
+
+  # retrieves the product detail page grid for this product, taking inheritance (ProductVariant -> Product -> Category -> ParentCategory) into account
+  grid: PageGrid
 
   picture: CMPicture
   pictures: [CMPicture]!
@@ -93,7 +106,6 @@ interface Product @inherit(from: ["CommerceBean"]) {
 
 interface ProductVariant @inherit(from: ["Product"]) {
   parent: Product
-  attributeValue(attributeId: String!): String
 }
 
 type CommerceBeanImpl implements CommerceBean {
@@ -105,11 +117,12 @@ type CommerceBeanImpl implements CommerceBean {
 type CatalogImpl implements Catalog @inherit(from: ["CommerceBeanImpl"]) {
   name: String
   rootCategory: Category
-  isDefaultCatalog: Boolean
-  isMasterCatalog: Boolean
+
+  defaultCatalog: Boolean
+  masterCatalog: Boolean
 }
 
-type CategoryImpl implements Category @inherit(from: ["CommerceBeanImpl"]) {
+type CategoryImpl implements Category, HasPageGrid @inherit(from: ["CommerceBeanImpl"]) {
   name: String
   shortDescription: String
   longDescription: String
@@ -123,57 +136,64 @@ type CategoryImpl implements Category @inherit(from: ["CommerceBeanImpl"]) {
   visuals: [CMVisual]!
   downloads: [CMDownload]!
   productList: CMProductList
+
+  externalChannel: CMExternalChannel @fetch(from: "@categoryAugmentationService.getContent(#this)")
+  grid: PageGrid  @fetch(from: "@categoryPageGridAdapter.to(#this)")
 }
 
+extend interface HasPageGrid {}
 extend interface Banner {}
 extend interface CollectionItem {}
 
-type ProductImpl implements Product, Banner, CollectionItem @inherit(from: ["CommerceBeanImpl"]) {
-  name: String
-  title: String
-  currency: String
-  shortDescription: String
-  longDescription: String
-  metaDescription: String
-  metaKeywords: String
+type ProductImpl implements Product, Banner, CollectionItem, HasPageGrid @inherit(from: ["CommerceBeanImpl"]) {
+  name: String @fetch(from: "getName()")
+  title: String @fetch(from: "getTitle()")
+  currency: String @fetch(from: "getCurrency()")
+
+  shortDescription: String @fetch(from: "getShortDescription()")
+  longDescription: String @fetch(from: "getLongDescription()")
+  metaDescription: String @fetch(from: "getMetaDescription()")
+  metaKeywords: String @fetch(from: "getMetaKeywords()")
 
   listPrice: BigDecimal
   offerPrice: BigDecimal
 
-  seoSegment: String
+  seoSegment: String @fetch(from: "getSeoSegment()")
 
-  category: Category
-  variants: [ProductVariant]!
+  category: Category @fetch(from: "getCategory()")
+  variants: [ProductVariant]!  @fetch(from: "getVariants()")
 
-  defaultImageAlt: String
-  defaultImageUrl: String
-  thumbnailUrl: String
-  storefrontUrl: String
+  defaultImageAlt: String @fetch(from: "getDefaultImageAlt()")
+  defaultImageUrl: String @fetch(from: "getDefaultImageUrl()")
+  thumbnailUrl: String @fetch(from: "getThumbnailUrl()")
+  storefrontUrl: String @fetch(from: "getStorefrontUrl()")
 
-  definingAttributes: [ProductAttribute]!
-  describingAttributes: [ProductAttribute]!
+  definingAttributes: [ProductAttribute]! @fetch(from: "getDefiningAttributes()")
+  describingAttributes: [ProductAttribute]! @fetch(from: "getDescribingAttributes()")
 
-  variantAxisNames: [String]!
-  variantAxisValues(axisName: String!): [String]!
+  totalStockCount: Float! @fetch(from: "getTotalStockCount()")
 
-  totalStockCount: Float!
-  isAvailable: Boolean!
-  isVariant: Boolean!
+  available: Boolean! @fetch(from: "isAvailable()")
+  variant: Boolean! @fetch(from: "isVariant()")
 
-  picture: CMPicture
-  pictures: [CMPicture]!
-  catalogPicture: CatalogPicture!
-  visuals: [CMVisual]!
-  downloads: [CMDownload]!
+  picture: CMPicture @fetch(from: "getPicture()")
+  pictures: [CMPicture]! @fetch(from: "getPictures()")
+  catalogPicture: CatalogPicture! @fetch(from: "getCatalogPicture()")
+  visuals: [CMVisual]! @fetch(from: "getVisuals()")
+  downloads: [CMDownload]! @fetch(from: "getDownloads()")
+
+  externalProduct: CMExternalProduct @fetch(from: "@productAugmentationService.getContent(#this)")
+  grid: PageGrid  @fetch(from: "@productPageGridAdapter.to(#this)")
+
   teaserTitle: String @fetch(from: "name?:title")
   teaserText(view: String): String @fetch(from: "shortDescription")
+
   media: [CMMedia] @fetch(from: "visuals")
-  _emptyInterfaceMarker: String @fetch(from:  "'emptyInterfaceMarker'")
+  remoteLink(siteId:String, context:String): String!
 }
 
 type ProductVariantImpl implements ProductVariant @inherit(from: ["ProductImpl"]) {
   parent: Product
-  attributeValue(attributeId: String!): String
 }
 
 type ProductAttribute {
@@ -185,7 +205,7 @@ type ProductAttribute {
   externalId: String
   value: String
   values: [String]!
-  isDefining: Boolean!
+  defining: Boolean!
 }
 
 type CatalogPicture {

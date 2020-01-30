@@ -22,7 +22,7 @@ public class LiveContextProductSeoLinkBuilderHelper {
     String seoSegment = product.getSeoSegment();
     Category category = product.getCategory();
 
-    if (!StringUtils.isBlank(seoSegment) && category != null) {
+    if (!StringUtils.isBlank(seoSegment)) {
       segments.append(buildSeoBreadCrumbs(category));
       segments.append(seoSegment);
     }

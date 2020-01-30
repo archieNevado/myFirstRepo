@@ -48,7 +48,11 @@
 
       <#if showPicturesInNavigation && depth == 2 && self.picture?has_content>
         <a class="cm-navigation-item__picture-link" href="${cm.getLink(self.target!cm.UNDEFINED)}">
-          <@bp.responsiveImage self=self.picture!cm.UNDEFINED classPrefix="cm-navigation"/>
+          <@cm.include self=self.picture!cm.UNDEFINED view="media" params={
+            "classBox": "cm-navigation-item__picture-box",
+            "classMedia": "cm-navigation-item__picture",
+            "metadata": ["properties.picture"]
+          }/>
         </a>
       </#if>
     </li>

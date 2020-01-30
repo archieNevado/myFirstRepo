@@ -22,15 +22,12 @@ $(function() {
   /* --- Mobile Header Search --- */
   const $search = $("#cmSearchWrapper");
   const $searchInput = $search.find(".cm-search__form-input");
-  $(".cm-mobile-search-button, .cm-search__form-close").on(
-    "click",
-    function() {
-      $search.toggleClass("open");
-      if ($search.hasClass("open")) {
-        $searchInput.focus();
-      }
+  $(".cm-mobile-search-button, .cm-search__form-close").on("click", function() {
+    $search.toggleClass("open");
+    if ($search.hasClass("open")) {
+      $searchInput.focus();
     }
-  );
+  });
 
   // prevent empty search on all search fields
   $(".cm-search__form-button").on("click", function(e) {

@@ -8,12 +8,11 @@
  * -> for this added new "regExp" configuration
  */
 
-const JoinPlugin = require("../../plugins/JoinWebpackPlugin");
-
 const { interpolateName, getOptions } = require("loader-utils");
 
 function namePreTmpl(context, name, regExp) {
   let preTmpl = name;
+  // eslint-disable-next-line no-useless-escape
   const hashRegex = /\[[^\[]*hash[^\]]*]/g;
   let hashMatch = name.match(hashRegex);
   if (hashMatch) {
@@ -51,7 +50,7 @@ module.exports = function(source) {
 
   plugin.group(groupName).filetmpl = namePreTmpl(this, name, regExp);
 
-  name = plugin.addSource(groupName, source, this.resourcePath, this._module);
+  name = plugin.addSource(groupName, source, this.resourcePath);
 
   return (
     "module.exports = __webpack_public_path__ + " + JSON.stringify(name) + ";"

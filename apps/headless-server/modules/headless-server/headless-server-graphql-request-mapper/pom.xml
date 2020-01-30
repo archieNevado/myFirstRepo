@@ -57,6 +57,10 @@
       <artifactId>springfox-core</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-core</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.fasterxml</groupId>
       <artifactId>classmate</artifactId>
     </dependency>

@@ -22,9 +22,9 @@
 <StructProperty Name="commerce">
 <Struct>
 <StringListProperty Name="usersegments">
-<String>ibm:///catalog/segment/8407790678950000505</String>
-<String>ibm:///catalog/segment/8407790678950000502</String>
-<String>ibm:///catalog/segment/8407790678950000508</String>
+<String>ibm:///catalog/segment/8000000000000001007</String>
+<String>ibm:///catalog/segment/8000000000000001004</String>
+<String>ibm:///catalog/segment/8000000000000001001</String>
 </StringListProperty>
 </Struct>
 </StructProperty>

@@ -5,7 +5,9 @@ import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentPropertyNames;
 import com.coremedia.cap.content.ContentType;
+import com.coremedia.cap.content.results.BulkOperationResultItem;
 import com.coremedia.cap.content.results.CopyResult;
+import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.util.ContentCreationUtil;
 import com.coremedia.ui.data.FlushResult;
 import com.coremedia.ui.data.ValueExpressionFactory;
@@ -17,22 +19,21 @@ import mx.resources.ResourceManager;
  */
 [ResourceBundle('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings')]
 public class CreateFromTemplateProcessor {
-  private static var data:ProcessingData;
 
   public static function process(data:ProcessingData, callback:Function):void {
-    CreateFromTemplateProcessor.data = data;
-
     var template:Array = data.get(ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'template_property'));
 
     convertToPageTemplate(template[0], function(pageTemplate:PageTemplate):void {
       data.set(ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'template_property'), pageTemplate);
       if (pageTemplate) {
-        copyTemplateFiles(function ():void {
-          renameTemplateChannel(function ():void {
-            deleteTemplateSymbols(function ():void {
-              movePageToNavigation(function (channel:Content):void {
-                linkToList(channel, function ():void {
-                  callback.call(null);
+        copyTemplateFiles(data, function (contents:Array):void {
+          initializeNewlyCreatedContents(contents, function ():void {
+            renameTemplateChannel(data,function ():void {
+              deleteTemplateSymbols(data,function ():void {
+                movePageToNavigation(data,function (channel:Content):void {
+                  linkToList(data, channel, function ():void {
+                    callback.call(null);
+                  });
                 });
               });
             });
@@ -76,12 +77,29 @@ public class CreateFromTemplateProcessor {
     });
   }
 
+  private static function initializeNewlyCreatedContents(contents:Array, callback:Function):void {
+    if (!contents) {
+      callback.call(null);
+      return;
+    }
+    contents.forEach(function (content:Content):void {
+      var initializer:Function = editorContext.lookupContentInitializer(content.getType());
+      if (initializer) {
+        initializer(content);
+      }
+    });
+
+    callback.call(null);
+  }
+
   /**
    * Renames the template channel document after is has been copied to the new
    * editorial folder. The channel is copied afterwards...
+   * @param data
    * @param callback
    */
-  private static function renameTemplateChannel(callback:Function):void {
+  private static function renameTemplateChannel(data: ProcessingData,
+                                                callback:Function):void {
     var initializer:PageTemplate = data.get(ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'template_property'));
     var folder:Content = data.get(ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'editorial_folder_property'));
     folder.getChild(initializer.getPage().getName(), function (copiedChannel:Content):void {
@@ -94,9 +112,11 @@ public class CreateFromTemplateProcessor {
 
   /**
    * Deletes the symbol document from the copied template folder.
+   * @param data
    * @param callback
    */
-  private static function deleteTemplateSymbols(callback:Function):void {
+  private static function deleteTemplateSymbols(data:ProcessingData,
+                                                callback:Function):void {
     var targetEditorialFolder:Content = data.get(ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'editorial_folder_property'));
     targetEditorialFolder.invalidate(function():void {
       var children:Array = targetEditorialFolder.getChildDocuments();
@@ -142,9 +162,10 @@ public class CreateFromTemplateProcessor {
 
   /**
    * Moves the copied channel document from the editorial folder to the navigation/selected folder.
+   * @param data
    * @param callback
    */
-  private static function movePageToNavigation(callback:Function):void {
+  private static function movePageToNavigation(data:ProcessingData, callback:Function):void {
     //resolved target name and folder
     var name:String = data.getName();
     var sourceFolder:Content = data.getFolder();
@@ -180,9 +201,10 @@ public class CreateFromTemplateProcessor {
 
   /**
    * Copies the files of the template to the corresponding editorial folder.
+   * @param data
    * @param callback
    */
-  private static function copyTemplateFiles(callback:Function):void {
+  private static function copyTemplateFiles(data: ProcessingData, callback:Function):void {
     var initializer:PageTemplate = data.get(ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'template_property'));
     //resolve the target folder for the template files
     var folder:Content = data.get(ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'editorial_folder_property'))[0];
@@ -197,7 +219,8 @@ public class CreateFromTemplateProcessor {
         toBeCopied = toBeCopied.filter(notCMSymbol);
         SESSION.getConnection().getContentRepository().copyRecursivelyTo(toBeCopied, folder, function (result:CopyResult):void {
           if (result.successful) {
-            callback.call(null);
+            var contents:Array = result.results.map(toContent);
+            callback(contents);
           }
           else {
             trace('[WARN]', 'Template copy failed: ' + result.error.errorName);
@@ -206,6 +229,10 @@ public class CreateFromTemplateProcessor {
         });
       });
     });
+  }
+
+  private static function toContent(resultItem:BulkOperationResultItem): Content {
+    return resultItem.content;
   }
 
 
@@ -234,7 +261,9 @@ public class CreateFromTemplateProcessor {
   /**
    * Links the newly created channel to the navigation hierarchy.
    */
-  private static function linkToList(channel:Content, callback:Function):void {
+  private static function linkToList(data:ProcessingData,
+                                     channel:Content,
+                                     callback:Function):void {
     var parentContent:Content = data.get(ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'parent_property'));
     if (parentContent) {
       parentContent.load(function ():void {

@@ -36,7 +36,7 @@
             toggleDialog="true"
             text="{resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPlugin', 'text')}">
       <ui:dialog>
-        <template:CreateFromTemplateDialog/>
+        <template:CreateFromTemplateDialog positionFun="{getPosition}"/>
       </ui:dialog>
     </ui:OpenDialogAction>
   </baseAction>

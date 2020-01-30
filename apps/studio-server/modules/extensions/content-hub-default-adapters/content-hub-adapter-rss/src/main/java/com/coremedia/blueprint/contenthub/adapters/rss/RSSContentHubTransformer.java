@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.contenthub.adapters.rss;
 
-import com.coremedia.contenthub.api.BlobCache;
 import com.coremedia.contenthub.api.ContentCreationUtil;
 import com.coremedia.contenthub.api.ContentHubAdapter;
 import com.coremedia.contenthub.api.ContentHubContext;
@@ -19,12 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 class RSSContentHubTransformer implements ContentHubTransformer {
-  private final BlobCache blobCache;
-
-  RSSContentHubTransformer(BlobCache blobCache) {
-    this.blobCache = blobCache;
-  }
-
   @Override
   @NonNull
   public ContentModel transform(Item item, ContentHubAdapter contentHubAdapter, ContentHubContext contentHubContext) {
@@ -43,7 +36,7 @@ class RSSContentHubTransformer implements ContentHubTransformer {
       return null;
     }
     ContentModel referenceModel = ContentModel.createReferenceModel(imageName, reference.getCoreMediaContentType());
-    referenceModel.put("data", blobCache.cached(new UrlBlobBuilder(owner, "rssPicture").withUrl(imageUrl).withEtag().build()));
+    referenceModel.put("data", new UrlBlobBuilder(owner, "rssPicture").withUrl(imageUrl).withEtag().build());
     referenceModel.put("title", "Image " + imageName);
 
     return referenceModel;
@@ -58,7 +51,7 @@ class RSSContentHubTransformer implements ContentHubTransformer {
     contentModel.put("title", item.getName());
     String description = extractDescription(item);
     if (description != null) {
-      contentModel.put("detailText", ContentCreationUtil.convertStringToMarkup(description));
+      contentModel.put("detailText", ContentCreationUtil.convertStringToRichtext(description));
     }
 
     SyndEntry rssEntry = item.getRssEntry();

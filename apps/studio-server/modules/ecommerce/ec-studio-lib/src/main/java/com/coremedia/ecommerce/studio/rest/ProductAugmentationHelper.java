@@ -32,6 +32,8 @@ public class ProductAugmentationHelper extends AugmentationHelperBase<Product> {
   private static final String CM_EXTERNAL_PRODUCT = "CMExternalProduct";
   private static final String PAGEGRID_STRUCT_PROPERTY = "pdpPagegrid";
 
+  static final String TITLE = "title";
+
   private AugmentationService categoryAugmentationService;
 
   @Override
@@ -92,12 +94,17 @@ public class ProductAugmentationHelper extends AugmentationHelperBase<Product> {
     Map<String, Object> properties = new HashMap<>();
     properties.put(EXTERNAL_ID, format(product.getId()));
 
+    // Initialize title with the product name instead of relying on
+    // `ContentInitializer.initChannel` as the latter will initialize the title
+    // with the name of the content which is not intended
+    properties.put(TITLE, product.getName());
+
     return properties;
   }
 
   @NonNull
   private static String computeDocumentName(@NonNull Product product) {
-    return (product.getName() + "(" + product.getExternalId() + ")")
+    return (product.getName() + " (" + product.getExternalId() + ")")
             .replace('/', '_');
   }
 

@@ -21,68 +21,73 @@ function isMobileOrTablet() {
   return getLastDevice().type !== "desktop";
 }
 
-addNodeDecoratorBySelector(
-  `.${BLOCK}`,
-  ($navigationRoot) => {
-    const $navigationRootList = $navigationRoot.find(`.${ITEM_ELEMENT_MENU}`);
-    let $navigationEntries = $navigationRootList.find(`.${ITEM_MODIFIER_DEPTH_1}`);
+addNodeDecoratorBySelector(`.${BLOCK}`, $navigationRoot => {
+  const $navigationRootList = $navigationRoot.find(`.${ITEM_ELEMENT_MENU}`);
+  let $navigationEntries = $navigationRootList.find(
+    `.${ITEM_MODIFIER_DEPTH_1}`
+  );
 
-    // Previously hovered menus could still be visible since they won't disappear until the end of their transition.
-    // To make sure that only one menu is visible, we need to set the opacity of all other menus to 0.
-    $navigationEntries.mouseover(function() {
-      const $currentNavigationEntry = $(this);
-      const $menuVisible = $currentNavigationEntry.find(`ul.${ITEM_ELEMENT_MENU}`);
+  // Previously hovered menus could still be visible since they won't disappear until the end of their transition.
+  // To make sure that only one menu is visible, we need to set the opacity of all other menus to 0.
+  $navigationEntries.mouseover(function() {
+    const $currentNavigationEntry = $(this);
+    const $menuVisible = $currentNavigationEntry.find(
+      `ul.${ITEM_ELEMENT_MENU}`
+    );
 
-      $navigationRootList.addClass(MODIFIER_HOVERED);
-      $navigationEntries.not(this).each(function() {
-        const $this = $(this);
+    $navigationRootList.addClass(MODIFIER_HOVERED);
+    $navigationEntries.not(this).each(function() {
+      const $this = $(this);
 
-        $this.removeClass(ITEM_ELEMENT_MENU_MODIFIER + ' ' + ITEM_ELEMENT_MENU_ACTIVE_MODIFIER);
-        $this.addClass(ITEM_MODIFIER_DEPTH_1_BORDER_MODIFIER);
-        $this
-          .find(`ul.${ITEM_ELEMENT_MENU}`)
-          .addClass(ITEM_ELEMENT_MENU_VISIBILITY_MODIFIER);
-      });
-
-      $currentNavigationEntry.removeClass(ITEM_MODIFIER_DEPTH_1_BORDER_MODIFIER);
-      $currentNavigationEntry
+      $this.removeClass(
+        ITEM_ELEMENT_MENU_MODIFIER + " " + ITEM_ELEMENT_MENU_ACTIVE_MODIFIER
+      );
+      $this.addClass(ITEM_MODIFIER_DEPTH_1_BORDER_MODIFIER);
+      $this
         .find(`ul.${ITEM_ELEMENT_MENU}`)
-        .removeClass(ITEM_ELEMENT_MENU_VISIBILITY_MODIFIER);
-
-      if ($menuVisible.length > 0 && !isMobileOrTablet()){
-        $currentNavigationEntry.addClass(ITEM_ELEMENT_MENU_ACTIVE_MODIFIER);
-      }
-
-      if (!isMobileOrTablet()){
-        $currentNavigationEntry.addClass(ITEM_ELEMENT_MENU_MODIFIER);
-      }
+        .addClass(ITEM_ELEMENT_MENU_VISIBILITY_MODIFIER);
     });
 
-    $navigationEntries.mouseout(() => {
-      $navigationEntries.not(this).each(function() {
-        const $this = $(this);
-        if (!isMobileOrTablet()){
-          $this.removeClass(ITEM_ELEMENT_MENU_MODIFIER + ' ' + ITEM_ELEMENT_MENU_ACTIVE_MODIFIER);
-        }
-      });
+    $currentNavigationEntry.removeClass(ITEM_MODIFIER_DEPTH_1_BORDER_MODIFIER);
+    $currentNavigationEntry
+      .find(`ul.${ITEM_ELEMENT_MENU}`)
+      .removeClass(ITEM_ELEMENT_MENU_VISIBILITY_MODIFIER);
 
-      $navigationRootList.removeClass(MODIFIER_HOVERED);
-    });
+    if ($menuVisible.length > 0 && !isMobileOrTablet()) {
+      $currentNavigationEntry.addClass(ITEM_ELEMENT_MENU_ACTIVE_MODIFIER);
+    }
 
-    $navigationEntries.on("click", function(e) {
-      // prevent further code from being executed if a sublist of the list is clicked
-      if (e.target.parentNode !== this) return;
-      // ignore click on touch devices. we don't want to trigger the link, just display the subnavigation
-      if (isTouchDevice() && !isMobileOrTablet()) {
-        e.preventDefault();
+    if (!isMobileOrTablet()) {
+      $currentNavigationEntry.addClass(ITEM_ELEMENT_MENU_MODIFIER);
+    }
+  });
+
+  $navigationEntries.mouseout(() => {
+    $navigationEntries.not(this).each(function() {
+      const $this = $(this);
+      if (!isMobileOrTablet()) {
+        $this.removeClass(
+          ITEM_ELEMENT_MENU_MODIFIER + " " + ITEM_ELEMENT_MENU_ACTIVE_MODIFIER
+        );
       }
     });
-  }
-);
+
+    $navigationRootList.removeClass(MODIFIER_HOVERED);
+  });
+
+  $navigationEntries.on("click", function(e) {
+    // prevent further code from being executed if a sublist of the list is clicked
+    if (e.target.parentNode !== this) return;
+    // ignore click on touch devices. we don't want to trigger the link, just display the subnavigation
+    if (isTouchDevice() && !isMobileOrTablet()) {
+      e.preventDefault();
+    }
+  });
+});
 
 addNodeDecoratorBySelector(
   ".cm-header__mobile-navigation-button.cm-hamburger-icon",
-  ($hamburgerIcon) => {
+  $hamburgerIcon => {
     const $body = $("body");
     $hamburgerIcon.on("click touch", () => {
       const toBeOpened = !$hamburgerIcon.hasClass("cm-hamburger-icon--toggled");
@@ -99,32 +104,29 @@ addNodeDecoratorBySelector(
   }
 );
 
-addNodeDecoratorBySelector(
-  ".cm-navigation-item",
-  ($navigationItem) => {
-    const $toggle = $navigationItem.find(`> .${ITEM_ELEMENT_TOGGLE}`);
-    const $title = $navigationItem.find(`> .${ITEM_ELEMENT_TITLE}`);
-    const $menu = $navigationItem.find(`> .${ITEM_ELEMENT_MENU}`);
-    if ($menu.length > 0) {
-      $toggle.on("click touch", () => {
+addNodeDecoratorBySelector(".cm-navigation-item", $navigationItem => {
+  const $toggle = $navigationItem.find(`> .${ITEM_ELEMENT_TOGGLE}`);
+  const $title = $navigationItem.find(`> .${ITEM_ELEMENT_TITLE}`);
+  const $menu = $navigationItem.find(`> .${ITEM_ELEMENT_MENU}`);
+  if ($menu.length > 0) {
+    $toggle.on("click touch", () => {
+      const toBeOpened = !$navigationItem.hasClass(ITEM_MODIFIER_OPEN);
+      $(`.${ITEM_BLOCK}`).removeClass(ITEM_MODIFIER_OPEN);
+      if (toBeOpened) {
+        $navigationItem.addClass(ITEM_MODIFIER_OPEN);
+      }
+    });
+    // only make title clickable if not a link
+    if (!$title.is("a[href]")) {
+      $title.on("click touch", () => {
         const toBeOpened = !$navigationItem.hasClass(ITEM_MODIFIER_OPEN);
         $(`.${ITEM_BLOCK}`).removeClass(ITEM_MODIFIER_OPEN);
         if (toBeOpened) {
           $navigationItem.addClass(ITEM_MODIFIER_OPEN);
         }
       });
-      // only make title clickable if not a link
-      if (!$title.is("a[href]")) {
-        $title.on("click touch", () => {
-          const toBeOpened = !$navigationItem.hasClass(ITEM_MODIFIER_OPEN);
-          $(`.${ITEM_BLOCK}`).removeClass(ITEM_MODIFIER_OPEN);
-          if (toBeOpened) {
-            $navigationItem.addClass(ITEM_MODIFIER_OPEN);
-          }
-        });
-      }
-      // activate button as soon as functionality is applied
-      $toggle.removeAttr("disabled");
     }
+    // activate button as soon as functionality is applied
+    $toggle.removeAttr("disabled");
   }
-);
+});

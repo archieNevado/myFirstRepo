@@ -1,8 +1,5 @@
 package com.coremedia.blueprint.cae.web.taglib;
 
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -11,11 +8,11 @@ import java.util.Map;
  * responsive image handling (see "jquery.coremedia.responsiveimages.js").
  * Consequently every change to this data structure is likely to require changes to the JavaScript.
  */
-final class TransformationLinks {
-  private String name = StringUtils.EMPTY;
-  private Integer ratioWidth = 1;
-  private Integer ratioHeight = 1;
-  private Map<Integer, String> linksForWidth = Collections.emptyMap();
+public final class TransformationLinks {
+  private final String name;
+  private final Integer ratioWidth;
+  private final Integer ratioHeight;
+  private final Map<Integer, String> linksForWidth;
 
   public TransformationLinks(String name, Integer ratioWidth, Integer ratioHeight, Map<Integer, String> linksForWidth) {
     this.name = name;

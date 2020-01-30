@@ -25,7 +25,6 @@
     <property name="navigationPathList" associationType="static"/>
     <property name="locationTaxonomy" associationType="static"/>
     <property name="subjectTaxonomy" associationType="static"/>
-    <property name="vanityUrlMapper" associationType="static"/>
     <property name="placement"/>
   </dataview>
 </dataviews>

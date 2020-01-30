@@ -28,7 +28,7 @@
     <docker.image.tag>latest</docker.image.tag>
     <!--used as docker build args-->
     <docker.java-application-base-image.repo>coremedia/java-application-base</docker.java-application-base-image.repo>
-    <docker.java-application-base-image.tag>2.1.6</docker.java-application-base-image.tag>
+    <docker.java-application-base-image.tag>2.1.7</docker.java-application-base-image.tag>
 
     <application-plugin.version>2.7.10</application-plugin.version>
   </properties>

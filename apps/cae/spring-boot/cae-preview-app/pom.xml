@@ -70,12 +70,6 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-tomcat</artifactId>
       <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>javax.annotation</groupId>
-          <artifactId>javax.annotation-api</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.tomcat.embed</groupId>

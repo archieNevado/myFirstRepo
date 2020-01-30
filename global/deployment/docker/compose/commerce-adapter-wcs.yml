@@ -19,7 +19,7 @@ x-logging:
 
 services:
   commerce-adapter-wcs:
-    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-wcs:${COMMERCE_ADAPTER_WCS_VERSION:-1.1.4}
+    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-wcs:${COMMERCE_ADAPTER_WCS_VERSION:-1.2.5}
     container_name: commerce-adapter-wcs
     restart: always
     logging: *default-logging
@@ -43,6 +43,7 @@ services:
       WCS_USERNAME: ${WCS_USERNAME}
       WCS_PASSWORD: ${WCS_PASSWORD}
       WCS_VERSION: ${WCS_VERSION}
+      MANAGEMENT_HEALTH_STORES_ENABLED: ${MANAGEMENT_HEALTH_STORES_ENABLED:-true}
 
   studio-server:
     environment:

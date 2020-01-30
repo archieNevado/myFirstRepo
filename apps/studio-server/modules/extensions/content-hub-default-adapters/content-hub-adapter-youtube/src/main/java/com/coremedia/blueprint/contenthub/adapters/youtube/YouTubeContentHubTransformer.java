@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.contenthub.adapters.youtube;
 
-import com.coremedia.contenthub.api.BlobCache;
 import com.coremedia.contenthub.api.ContentCreationUtil;
 import com.coremedia.contenthub.api.ContentHubAdapter;
 import com.coremedia.contenthub.api.ContentHubContext;
@@ -10,6 +9,7 @@ import com.coremedia.contenthub.api.ContentModel;
 import com.coremedia.contenthub.api.ContentModelReference;
 import com.coremedia.contenthub.api.Item;
 import com.coremedia.contenthub.api.UrlBlobBuilder;
+import com.coremedia.contenthub.api.ContentCreationUtil;
 import com.google.api.services.youtube.model.ThumbnailDetails;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -18,13 +18,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Collections;
 
 class YouTubeContentHubTransformer implements ContentHubTransformer {
-  private final BlobCache blobCache;
-
-
-  YouTubeContentHubTransformer(BlobCache blobCache) {
-    this.blobCache = blobCache;
-  }
-
   @NonNull
   @Override
   public ContentModel transform(Item item, ContentHubAdapter contentHubAdapter, ContentHubContext contentHubContext) {
@@ -47,7 +40,7 @@ class YouTubeContentHubTransformer implements ContentHubTransformer {
 
     ContentModel referenceModel = ContentModel.createReferenceModel(imageName, reference.getCoreMediaContentType());
 
-    referenceModel.put("data", blobCache.cached(new UrlBlobBuilder(owner, "thumbnail").withUrl(imageUrl).build()));
+    referenceModel.put("data", new UrlBlobBuilder(owner, "thumbnail").withUrl(imageUrl).build());
     referenceModel.put("title", "YouTube Thumbnail " + imageName);
 
     return referenceModel;
@@ -66,7 +59,7 @@ class YouTubeContentHubTransformer implements ContentHubTransformer {
     //put description
     String description = item.getDescription();
     if (!StringUtils.isEmpty(description)) {
-      contentModel.put("detailText", ContentCreationUtil.convertStringToMarkup(description));
+      contentModel.put("detailText", ContentCreationUtil.convertStringToRichtext(description));
     }
 
     //store image references

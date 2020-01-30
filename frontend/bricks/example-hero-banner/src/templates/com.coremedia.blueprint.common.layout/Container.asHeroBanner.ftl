@@ -17,6 +17,7 @@
     items=items
     itemsView="asHeroBanner"
     innerArrows=true
+    slickConfig={"fade": true}
     additionalClass="cm-hero-banner-container"
   />
 </#if>

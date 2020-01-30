@@ -48,6 +48,13 @@ $_aspect-ratio-by-breakpoint: (
     margin-bottom: 12px;
   }
 
+  &__picture-box {
+    //youtube videos inside the banner
+    .cm-mediaelementwrapper iframe {
+      @include stretch-absolute();
+    }
+  }
+
   &__shop-now {
     @include aspect-ratio-box-by-breakpoint($_aspect-ratio-by-breakpoint);
     display: none;

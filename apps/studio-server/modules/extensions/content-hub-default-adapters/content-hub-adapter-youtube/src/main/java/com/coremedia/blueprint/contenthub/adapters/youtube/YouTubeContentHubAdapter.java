@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.contenthub.adapters.youtube;
 
-import com.coremedia.contenthub.api.BlobCache;
 import com.coremedia.contenthub.api.ContentHubAdapter;
 import com.coremedia.contenthub.api.ContentHubContext;
 import com.coremedia.contenthub.api.ContentHubObject;
@@ -48,12 +47,10 @@ class YouTubeContentHubAdapter implements ContentHubAdapter, ContentHubSearchSer
   private final YouTubeColumnProvider columnProvider;
   private final YouTubeConnector youTubeConnector;
   private final ContentHubObjectId rootId;
-  private final BlobCache blobCache;
 
-  YouTubeContentHubAdapter(YouTubeContentHubSettings settings, String connectionId, BlobCache blobCache) {
+  YouTubeContentHubAdapter(YouTubeContentHubSettings settings, String connectionId) {
     this.settings = settings;
     this.connectionId = connectionId;
-    this.blobCache = blobCache;
     rootId = new ContentHubObjectId(connectionId, connectionId);
     columnProvider = new YouTubeColumnProvider();
 
@@ -87,7 +84,7 @@ class YouTubeContentHubAdapter implements ContentHubAdapter, ContentHubSearchSer
   @NonNull
   @Override
   public Folder getRootFolder(@NonNull ContentHubContext context) throws ContentHubException {
-    return new YouTubeFolder(rootId, getChannelDisplayName(), blobCache);
+    return new YouTubeFolder(rootId, getChannelDisplayName());
   }
 
   @Nullable
@@ -141,7 +138,7 @@ class YouTubeContentHubAdapter implements ContentHubAdapter, ContentHubSearchSer
           break;
         }
         ContentHubObjectId categoryId = new ContentHubObjectId(connectionId, list.getId());
-        YouTubeFolder channel = new YouTubeFolder(categoryId, list, blobCache);
+        YouTubeFolder channel = new YouTubeFolder(categoryId, list);
         result.add(channel);
         counter++;
       }
@@ -159,7 +156,7 @@ class YouTubeContentHubAdapter implements ContentHubAdapter, ContentHubSearchSer
   @Override
   @NonNull
   public ContentHubTransformer transformer() {
-    return new YouTubeContentHubTransformer(blobCache);
+    return new YouTubeContentHubTransformer();
   }
 
   @NonNull
@@ -232,19 +229,19 @@ class YouTubeContentHubAdapter implements ContentHubAdapter, ContentHubSearchSer
 
   private Item item(@NonNull ContentHubObjectId id) {
     Video video = youTubeConnector.getVideo(id.getExternalId());
-    return new YouTubeItem(id, video, blobCache);
+    return new YouTubeItem(id, video);
   }
 
   private Item item(PlaylistItem playlistItem) {
     String videoId = playlistItem.getSnippet().getResourceId().getVideoId();
     ContentHubObjectId objectId = new ContentHubObjectId(connectionId, videoId);
-    return new YouTubeItem(objectId, playlistItem, blobCache);
+    return new YouTubeItem(objectId, playlistItem);
   }
 
   private Item item(SearchResult searchResult) {
     String videoId = searchResult.getId().getVideoId();
     ContentHubObjectId objectId = new ContentHubObjectId(connectionId, videoId);
-    return new YouTubeItem(objectId, searchResult, blobCache);
+    return new YouTubeItem(objectId, searchResult);
   }
 
   private String getChannelDisplayName() {

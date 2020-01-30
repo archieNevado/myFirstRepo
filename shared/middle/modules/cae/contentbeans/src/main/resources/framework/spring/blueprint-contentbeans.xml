@@ -9,6 +9,7 @@
   Generated content bean mappings. These are spring prototype bean definitions with a special
   naming scheme. These are called by the bean factory in .../framework/contentbeanfactory.xml.
   -->
+  <import resource="classpath:/com/coremedia/cache/cache-services.xml"/>
   <import resource="classpath:/com/coremedia/cae/uapi-services.xml"/>
   <import resource="classpath:/com/coremedia/cae/contentbean-services.xml"/>
   <import resource="classpath:/com/coremedia/cap/multisite/multisite-services.xml"/>
@@ -96,6 +97,7 @@
     <property name="treeRelation" ref="cmNavigationTreeRelation"/>
     <property name="codeResourcesTreeRelation" ref="navigationTreeRelation"/>
     <property name="themeService" ref="themeService"/>
+    <property name="cache" ref="cache"/>
   </bean>
 
   <bean name="abstractMediaBean-blueprint-doctypes" parent="abstractTeasable-blueprint-doctypes"

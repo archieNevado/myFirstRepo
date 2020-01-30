@@ -266,30 +266,9 @@ class CoreMediaWatchPlugin {
         }
 
         init = false;
-
-        /*
-        deletion code does not work yet because of 2 reasons:
-        1) non-templates will not be deleted yet (and these will be part of filesToChange as they are uploaded via jar)
-        2) when testing the code a 500 status code was triggered, maybe the REST API is no longer present?
-
-        if (filesToDelete.length > 0 && this._isRemoteWorkflow()) {
-          filesToDelete.forEach(removedFile =>
-            // deleteFile needs to be imported again from "@coremedia/theme-importer"
-            deleteFile(this.options.themeConfig, removedFile).then(
-              ({ type, file, error }) => {
-                if (type === "ERROR") {
-                  this._log.error("Error during file deletion: ", error);
-                } else {
-                  this._log.info(`Removed ${file} from remote server.`);
-                }
-              }
-            )
-          );
-        }
-        */
       }
     });
   }
 }
 
-module.exports = { CoreMediaWatchPlugin };
+module.exports = CoreMediaWatchPlugin;

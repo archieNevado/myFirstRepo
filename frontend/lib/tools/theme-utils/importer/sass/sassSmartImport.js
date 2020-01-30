@@ -88,7 +88,8 @@ module.exports = function(url, prev, done) {
     let dependenciesToImport;
     if (varsOrPartials === "variables") {
       // variables need dependents first load order
-      dependenciesToImport = this._sassSmartImport.dependentsFirstLoadOrder[packageName] || [];
+      dependenciesToImport =
+        this._sassSmartImport.dependentsFirstLoadOrder[packageName] || [];
     } else {
       // for partials the direct load order specified through the dependency hierarchy is sufficient (which are our dependencies, we just don't flatten them)
       dependenciesToImport = getDependencies(

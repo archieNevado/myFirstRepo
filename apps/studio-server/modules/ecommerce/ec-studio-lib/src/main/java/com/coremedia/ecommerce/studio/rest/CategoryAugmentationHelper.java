@@ -67,7 +67,7 @@ class CategoryAugmentationHelper extends AugmentationHelperBase<Category> {
 
   @NonNull
   private static String computeDocumentName(@NonNull Category category) {
-    return (getEscapedDisplayName(category) + "(" + category.getExternalId() + ")")
+    return (getEscapedDisplayName(category) + " (" + category.getExternalId() + ")")
             .replace('/', '_');
   }
 
@@ -128,7 +128,7 @@ class CategoryAugmentationHelper extends AugmentationHelperBase<Category> {
     // try to find another root category, maybe in another catalog
     StoreContext context = category.getContext();
     List<Category> configuredRootCategories =
-            mappedCatalogsProvider.getConfiguredRootCategories(context.getSiteId(), context);
+            mappedCatalogsProvider.getConfiguredRootCategories(context);
 
     return configuredRootCategories.stream()
             .map(augmentationService::getContent)

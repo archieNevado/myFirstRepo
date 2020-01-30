@@ -5,8 +5,10 @@ import com.coremedia.blueprint.base.caas.model.util.SearchHelper;
 import com.coremedia.caas.search.solr.SearchQueryHelper;
 import com.coremedia.caas.search.solr.SolrQueryBuilder;
 import com.coremedia.caas.search.solr.SolrSearchResultFactory;
+import com.coremedia.cap.common.CapType;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
+import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.id.IdScheme;
 import com.coremedia.livecontext.asset.AssetSearchService;
@@ -19,15 +21,16 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
-import static java.util.Collections.singletonList;
 
 @DefaultAnnotation(NonNull.class)
 public class CaasAssetSearchService implements AssetSearchService {
 
-  private final static String COMMERCE_ITEMS_FIELD = "commerceitems";
+  private static final String COMMERCE_ITEMS_FIELD = "commerceitems";
 
   private ContentRepository contentRepository;
   private final List<IdScheme> idSchemes;
@@ -55,7 +58,7 @@ public class CaasAssetSearchService implements AssetSearchService {
     filterQueries.add(SearchQueryHelper.validToQuery(solrQueryBuilder.getValidToFieldName()));
 
     // Content type filter
-    docTypeFilterQuery(singletonList(contentType)).ifPresent(filterQueries::add);
+    docTypeFilterQuery(contentType).ifPresent(filterQueries::add);
 
     String query = SearchQueryHelper.exactQuery(COMMERCE_ITEMS_FIELD, '"' + externalId + '"');
 
@@ -70,8 +73,19 @@ public class CaasAssetSearchService implements AssetSearchService {
     return searchServiceResult.getResult();
   }
 
-  private Optional<String> docTypeFilterQuery(List<String> docTypes) {
-    return SearchHelper.contentTypesFilterQuery(docTypes, emptyList(), solrQueryBuilder.getDocumentTypeFieldName(), contentRepository);
+  private Optional<String> docTypeFilterQuery(String docType) {
+    ContentType contentType = contentRepository.getContentType(docType);
+    if (contentType == null) {
+      return Optional.empty();
+    }
+    Set<ContentType> children = contentType.getChildren();
+    List<String> docTypes = children.stream().map(CapType::getName).collect(Collectors.toList());
+    docTypes.add(docType);
+    return SearchHelper.contentTypesFilterQuery(
+            docTypes,
+            emptyList(),
+            solrQueryBuilder.getDocumentTypeFieldName(),
+            contentRepository);
   }
 
   @NonNull

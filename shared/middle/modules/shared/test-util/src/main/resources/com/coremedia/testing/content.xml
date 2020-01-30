@@ -915,19 +915,20 @@
 
     <!-- ES-ALX Test Site -->
     <folder name="AnalyticsRetrievalTestFolder" id="12345">
-      <folder name="Navigations" id="123457">
-        <document id="12344" name="SiteAlx" type="CMSite">
-          <version number="1">
-            <linkProperty name="root">
-              <link id="12346"/>
-            </linkProperty>
-            <stringProperty name="id" value="siteAlx"/>
-            <stringProperty name="locale" value="en"/>
-            <stringProperty name="name" value="alx"/>
-            <linkProperty name="master"/>
-          </version>
-        </document>
 
+      <document id="12344" name="SiteAlx" type="CMSite">
+        <version number="1">
+          <linkProperty name="root">
+            <link id="12346"/>
+          </linkProperty>
+          <stringProperty name="id" value="siteAlx"/>
+          <stringProperty name="locale" value="en"/>
+          <stringProperty name="name" value="alx"/>
+          <linkProperty name="master"/>
+        </version>
+      </document>
+
+      <folder name="Navigations" id="123457">
         <document id="12346" type="CMChannel" name="analyticsRetrievalRootChannel">
           <version number="1">
             <markupProperty name="localSettings" url="12345settings.xml" grammar="coremedia-struct-2008"/>

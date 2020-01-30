@@ -10,6 +10,22 @@
     <folder id="1" name="">
       <folder id="11" name="Sites">
         <folder id="111" name="Media">
+          <document id="504" name="MediaSite" type="CMSite">
+            <!--
+              The Site Indicator for the Media site, references the Root Channel.
+              Needed to
+                1. resolve the first URL segment ("media")
+                2. lookup the topicpage channel's site root
+            -->
+            <version number="1">
+              <linkProperty name="root">
+                <link id="124"/>
+              </linkProperty>
+              <stringProperty name="locale" value="en-US"/>
+              <stringProperty name="id" value="site-id"/>
+              <stringProperty name="name" value="site-name"/>
+            </version>
+          </document>
           <folder id="1111" name="Navigation">
             <folder id="11111" name="Topic Pages">
               <document id="600" name="Lifestyle [Topic]" type="CMChannel">
@@ -22,22 +38,6 @@
                 </version>
               </document>
             </folder>
-            <document id="504" name="MediaSite" type="CMSite">
-              <!--
-                The Site Indicator for the Media site, references the Root Channel.
-                Needed to
-                  1. resolve the first URL segment ("media")
-                  2. lookup the topicpage channel's site root
-              -->
-              <version number="1">
-                <linkProperty name="root">
-                  <link id="124"/>
-                </linkProperty>
-                <stringProperty name="locale" value="en-US"/>
-                <stringProperty name="id" value="site-id"/>
-                <stringProperty name="name" value="site-name"/>
-              </version>
-            </document>
             <document id="124" name="Media" type="CMChannel">
               <!--
                 The Root Channel of the Media site, referenced by the Site Indicator.

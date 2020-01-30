@@ -9,6 +9,7 @@ import com.schibsted.spt.data.jslt.Parser;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import io.micrometer.core.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -65,10 +66,11 @@ public class GraphqlRequestMapper {
     this.persistedQueryExecutor = persistedQueryExecutor;
     this.requestMappingMap = requestMappingMap;
     this.jsltEnabled = graphqlRequestMapperConfig.isJsltEnabled();
-    LOG.info("JSLT transformation {}", (jsltEnabled ? "enabled" : "disabled"));
+    LOG.info("JSLT transformation {}", jsltEnabled ? "enabled" : "disabled");
   }
 
   @GetMapping("/**")
+  @Timed
   public Object handleGetRequest(ServletWebRequest servletWebRequest) {
 
     String requestPath = getRequestPath(servletWebRequest);

@@ -6,18 +6,18 @@
     <folder id="1" name="">
       <folder id="3" name="Sites">
         <folder id="5" name="Helios">
+          <!-- Site Helios EN with sub channel Helios-a1 -->
+          <document id="100" name="Helios" type="CMSite">
+            <version number="1">
+              <linkProperty name="root">
+                <link id="1000"/>
+              </linkProperty>
+              <stringProperty name="locale" value="en"/>
+              <stringProperty name="id" value="mySiteIndicator"/>
+              <stringProperty name="name" value="Helios"/>
+            </version>
+          </document>
           <folder id="7" name="Navigation">
-            <!-- Site Helios EN with sub channel Helios-a1 -->
-            <document id="100" name="Helios" type="CMSite">
-              <version number="1">
-                <linkProperty name="root">
-                  <link id="1000"/>
-                </linkProperty>
-                <stringProperty name="locale" value="en"/>
-                <stringProperty name="id" value="mySiteIndicator"/>
-                <stringProperty name="name" value="Helios"/>
-              </version>
-            </document>
             <document id="1000" name="Helios" type="CMChannel">
               <version number="1">
                 <stringProperty name="segment" value="helios"/>
@@ -43,18 +43,18 @@
           </folder>
         </folder>
         <folder id="99" name="B2B">
+          <!-- Site Helios EN with sub channel Helios-a1 -->
+          <document id="150" name="B2BSite" type="CMSite">
+            <version number="1">
+              <linkProperty name="root">
+                <link id="1500"/>
+              </linkProperty>
+              <stringProperty name="locale" value="en"/>
+              <stringProperty name="id" value="myB2BSiteIndicator"/>
+              <stringProperty name="name" value="B2B"/>
+            </version>
+          </document>
           <folder id="999" name="Navigation">
-            <!-- Site Helios EN with sub channel Helios-a1 -->
-            <document id="150" name="B2BSite" type="CMSite">
-              <version number="1">
-                <linkProperty name="root">
-                  <link id="1500"/>
-                </linkProperty>
-                <stringProperty name="locale" value="en"/>
-                <stringProperty name="id" value="myB2BSiteIndicator"/>
-                <stringProperty name="name" value="B2B"/>
-              </version>
-            </document>
             <document id="1500" name="B2BRoot" type="CMChannel">
               <version number="1">
                 <stringProperty name="segment" value="b2b"/>
@@ -65,18 +65,18 @@
           </folder>
         </folder>
         <folder id="15" name="Media">
+          <!-- Site Media EN with sub channel Media-a1 -->
+          <document id="1100" name="Media" type="CMSite">
+            <version number="1">
+              <linkProperty name="root">
+                <link id="11000"/>
+              </linkProperty>
+              <stringProperty name="locale" value="en"/>
+              <stringProperty name="id" value="myMediaSiteIndicator"/>
+              <stringProperty name="name" value="Media"/>
+            </version>
+          </document>
           <folder id="17" name="Navigation">
-            <!-- Site Media EN with sub channel Media-a1 -->
-            <document id="1100" name="Media" type="CMSite">
-              <version number="1">
-                <linkProperty name="root">
-                  <link id="11000"/>
-                </linkProperty>
-                <stringProperty name="locale" value="en"/>
-                <stringProperty name="id" value="myMediaSiteIndicator"/>
-                <stringProperty name="name" value="Media"/>
-              </version>
-            </document>
             <document id="11000" name="Media" type="CMChannel">
               <version number="1">
                 <stringProperty name="segment" value="media"/>
@@ -101,18 +101,18 @@
           </folder>
         </folder>
         <folder id="25" name="Helios-incomplete">
+          <!-- Site Helios-incomplete EN with sub channel Helios-incomplete-a1 -->
+          <document id="2100" name="Helios-incomplete" type="CMSite">
+            <version number="1">
+              <linkProperty name="root">
+                <link id="21000"/>
+              </linkProperty>
+              <stringProperty name="locale" value="en"/>
+              <stringProperty name="id" value="myHeliosIncompleteSiteIndicator"/>
+              <stringProperty name="name" value="Helios-incomplete"/>
+            </version>
+          </document>
           <folder id="27" name="Navigation">
-            <!-- Site Helios-incomplete EN with sub channel Helios-incomplete-a1 -->
-            <document id="2100" name="Helios-incomplete" type="CMSite">
-              <version number="1">
-                <linkProperty name="root">
-                  <link id="21000"/>
-                </linkProperty>
-                <stringProperty name="locale" value="en"/>
-                <stringProperty name="id" value="myHeliosIncompleteSiteIndicator"/>
-                <stringProperty name="name" value="Helios-incomplete"/>
-              </version>
-            </document>
             <document id="21000" name="Helios-incomplete" type="CMChannel">
               <version number="1">
                 <stringProperty name="segment" value="helios-incomplete"/>
@@ -139,17 +139,17 @@
           </folder>
         </folder>
         <folder id="11" name="Alternative">
+          <document id="110" name="Alternative" type="CMSite">
+            <version number="1">
+              <linkProperty name="root">
+                <link id="1010"/>
+              </linkProperty>
+              <stringProperty name="locale" value="de"/>
+              <stringProperty name="id" value="mySiteIndicator2"/>
+              <stringProperty name="name" value="Alternative"/>
+            </version>
+          </document>
           <folder id="13" name="Navigation">
-            <document id="110" name="Alternative" type="CMSite">
-              <version number="1">
-                <linkProperty name="root">
-                  <link id="1010"/>
-                </linkProperty>
-                <stringProperty name="locale" value="de"/>
-                <stringProperty name="id" value="mySiteIndicator2"/>
-                <stringProperty name="name" value="Alternative"/>
-              </version>
-            </document>
             <document id="1010" name="Alternative" type="CMChannel">
               <version number="1">
                 <stringProperty name="segment" value="alternative"/>

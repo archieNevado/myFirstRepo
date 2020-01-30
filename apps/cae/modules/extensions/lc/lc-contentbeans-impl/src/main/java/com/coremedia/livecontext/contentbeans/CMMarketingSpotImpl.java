@@ -4,24 +4,19 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnect
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.blueprint.cae.contentbeans.CMDynamicListImpl;
 import com.coremedia.cae.aspect.Aspect;
-import com.coremedia.cap.multisite.Site;
-import com.coremedia.livecontext.ecommerce.catalog.Category;
-import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceObject;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.p13n.MarketingSpot;
-import com.coremedia.livecontext.ecommerce.p13n.MarketingSpotService;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Required;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -81,27 +76,8 @@ public class CMMarketingSpotImpl extends CMDynamicListImpl implements CMMarketin
 
   @Override
   public List<CommerceObject> getItems() {
-    List<CommerceObject> result = new ArrayList<>();
-    MarketingSpot spot = getMarketingSpot();
-    if (spot != null) {
-      Site site = getSitesService().getContentSiteAspect(getContent()).findSite()
-              .orElseThrow(() -> new NullPointerException("Site must not be null"));
-
-      List<CommerceObject> entities = spot.getEntities();
-      for (CommerceObject o : entities) {
-        // consider the the max length of items
-        if (getMaxLength() <= 0 || result.size() < getMaxLength()) {
-          if (o instanceof Product) {
-            result.add(liveContextNavigationFactory.createProductInSite((Product) o, site));
-          } else if (o instanceof Category) {
-            result.add(liveContextNavigationFactory.createCategoryInSite((Category) o, site));
-          } else if (o != null) {
-            result.add(o);
-          }
-        }
-      }
-    }
-    return result;
+    //since the commerce system renders marketing spots, we do not need to return the items anymore
+    return List.of(getMarketingSpot());
   }
 
   /**
@@ -131,20 +107,21 @@ public class CMMarketingSpotImpl extends CMDynamicListImpl implements CMMarketin
     this.commerceConnectionSupplier = commerceConnectionSupplier;
   }
 
-  private MarketingSpot getMarketingSpot() {
-    MarketingSpot marketingSpot = null;
-    Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnection(getContent());
-    String marketingSpotId = getExternalId();
-    if (commerceConnection.isPresent() && marketingSpotId != null) {
-      CommerceConnection connection = commerceConnection.get();
-      StoreContext storeContext = connection.getStoreContext();
-      Optional<MarketingSpotService> marketingSpotService = connection.getMarketingSpotService();
-      if (marketingSpotService.isPresent()) {
-        CommerceId commerceId = CommerceIdParserHelper.parseCommerceIdOrThrow(marketingSpotId);
-        marketingSpot = marketingSpotService.get().findMarketingSpotById(commerceId, storeContext);
-      }
-    }
+  @Override
+  @Nullable
+  public MarketingSpot getMarketingSpot() {
+    return commerceConnectionSupplier.findConnection(getContent())
+            .map(con -> doGetMarketingSpot(con, getExternalId()))
+            .orElse(null);
+  }
 
-    return marketingSpot;
+  @Nullable
+  private MarketingSpot doGetMarketingSpot(CommerceConnection connection, String marketingSpotId) {
+    StoreContext storeContext = connection.getStoreContext();
+    CommerceId commerceId = CommerceIdParserHelper.parseCommerceIdOrThrow(marketingSpotId);
+
+    return connection.getMarketingSpotService()
+            .map(spotService -> spotService.findMarketingSpotById(commerceId, storeContext))
+            .orElse(null);
   }
 }

@@ -7,156 +7,55 @@
 }
 
 .cm-navigation-item {
-  &__picture-link {
-    display: none;
-    @include breakpoints(("sm", landscape) "lg-and-up") {
-      display: block;
-      padding: 0 15px !important;
-    }
-  }
-
   &__toggle {
     @include breakpoints(("sm", landscape) "lg-and-up") {
       display: none;
     }
   }
 
-  &__menu {
-    text-align: center;
-    @include breakpoints(("sm", landscape) "lg-and-up") {
-      font-size: 0;
-      text-align: left;
-    }
-  }
-
-  &.cm-navigation-item--active,
-  &.cm-navigation-item--active:hover {
-    background-color: $cm-mobile-nav-dropdown-bg;
-    a {
-      background-color: transparent;
-    }
-
-    @include breakpoints(("sm", landscape) "lg-and-up") {
-      background-color: transparent;
-    }
-  }
-
-  &--depth-0 {
-    &.cm-navigation-item--open {
-      background-color: $cm-mobile-nav-dropdown-bg;
-    }
-
-    .cm-navigation-item__menu {
-      text-align: center;
-
-      .cm-navigation-item__title {
-        padding-left: 15px !important;
-      }
-
-      & & {
-        margin: 5px 0 15px;
-      }
-    }
-  }
 
   &--depth-1 {
-    &.open {
-      padding-bottom: 10px;
-
-      @include breakpoints(("sm", landscape) "lg-and-up") {
-        padding-bottom: 0;
-      }
-
-      > .cm-navigation-item__menu {
-        margin-top: 15px;
-      }
-    }
-
     > .cm-navigation-item__title {
-      font-size: 12px;
       padding-top: 17px;
       padding-bottom: 13px;
+      text-transform: none;
     }
 
-    > .cm-navigation-item__menu {
-      > .cm-navigation-item__menu-label {
-        @include breakpoints(("sm", landscape) "lg-and-up") {
-          margin-top: 10px;
-          margin-bottom: 15px;
-        }
-      }
-
-      @include breakpoints(("sm", landscape) "lg-and-up") {
-        text-align: left;
+    .cm-navigation-item__menu-label {
+      > .cm-navigation-item__title {
+        text-transform: none;
       }
     }
 
     .cm-navigation-item__menu {
-      border: none;
-      box-shadow: none;
-      border-radius: 0;
-      margin-top: 0;
-
-      a:hover {
-        text-decoration: underline !important;
-      }
-      a:hover,
-      a:focus {
-        background-color: transparent !important;
-      }
-
       > .cm-navigation-item__menu-label > a.cm-navigation-item__title {
         &:hover,
         &:focus {
           color: $cm-text-color;
-          text-decoration: underline;
-          background-color: transparent;
         }
       }
 
       @include breakpoints(("sm", landscape) "lg-and-up") {
-        border-bottom: 1px solid $cm-main-color-grey-light;
-        border-top: 1px solid $cm-main-color-grey-light;
+        border-color: $cm-main-color-grey-light;
 
         .cm-navigation-item.cm-navigation-item--active > a {
           color: $cm-text-color;
-          text-decoration: underline;
-          background-color: transparent;
+
           &:hover,
           &:focus {
             color: $cm-text-color;
-            text-decoration: underline;
-            background-color: transparent;
-          }
-        }
-
-        > .cm-navigation-item {
-          text-align: left;
-
-          .cm-navigation-item__menu {
-            text-align: left;
-
-            > .cm-navigation-item > a {
-              font-size: 12px;
-              padding-top: 6px;
-              padding-bottom: 6px;
-            }
           }
         }
       }
     }
 
     @include breakpoints(("sm", landscape) "lg-and-up") {
-      border-bottom: 4px solid transparent;
-      transition: border-color $cm-navigation-delay step-end;
 
       &.cm-navigation-item--active {
         border-color: $cm-main-color;
-        transition: none;
       }
       &:hover {
-        border-color: $cm-main-color !important;
-        transition: none;
+        border-color: $cm-main-color;
       }
     }
   }
@@ -164,25 +63,21 @@
   &--depth-2 {
     > .cm-navigation-item__title {
       font-weight: bold;
-      font-size: 14px;
+      text-transform: none;
     }
   }
 }
 
 .cm-navigation {
+  &.cm-navigation-item--open {
+    background-color: $cm-mobile-nav-dropdown-bg;
+  }
+
   @include breakpoints(("sm", landscape) "lg-and-up") {
     display: flex;
-    &--hovered {
-      .cm-navigation-item.cm-navigation-item--active {
-        border-color: transparent;
-        transition: none;
-      }
-    }
-    &-item__menu:not(&--hovered) {
-      .cm-navigation-item.cm-navigation-item--active {
-        border-bottom-width: 4px !important;
-        transition: border-bottom-width $cm-navigation-delay step-end !important;
-      }
-    }
   }
+}
+
+.cm-hamburger-icon {
+  margin: 3px 0;
 }

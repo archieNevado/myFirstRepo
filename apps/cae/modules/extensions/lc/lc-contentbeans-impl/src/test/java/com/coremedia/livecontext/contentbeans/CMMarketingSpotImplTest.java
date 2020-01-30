@@ -1,32 +1,32 @@
 package com.coremedia.livecontext.contentbeans;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdUtils;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.ContentSiteAspect;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
-import com.coremedia.livecontext.commercebeans.CategoryInSite;
-import com.coremedia.livecontext.commercebeans.ProductInSite;
-import com.coremedia.livecontext.ecommerce.catalog.Category;
-import com.coremedia.livecontext.ecommerce.catalog.Product;
+import com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
-import com.coremedia.livecontext.ecommerce.common.CommerceObject;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.common.Vendor;
 import com.coremedia.livecontext.ecommerce.p13n.MarketingSpot;
 import com.coremedia.livecontext.ecommerce.p13n.MarketingSpotService;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Answers;
 import org.mockito.Mock;
 
-import java.util.List;
 import java.util.Optional;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -56,7 +56,7 @@ public class CMMarketingSpotImplTest {
   @Mock
   private SitesService sitesService;
 
-  @Mock
+  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
   private StoreContext storeContext;
 
   @Mock
@@ -64,21 +64,6 @@ public class CMMarketingSpotImplTest {
 
   @Mock
   private Site site;
-
-  @Mock
-  private CommerceObject commerceObject;
-
-  @Mock
-  private Product product;
-
-  @Mock
-  private Category category;
-
-  @Mock
-  private ProductInSite productInSite;
-
-  @Mock
-  private CategoryInSite categoryInSite;
 
   private CMMarketingSpotImpl testling;
 
@@ -88,15 +73,19 @@ public class CMMarketingSpotImplTest {
 
     CommerceConnection commerceConnection = mock(CommerceConnection.class);
     when(commerceConnection.getStoreContext()).thenReturn(storeContext);
+    when(storeContext.getConnection().getVendor()).thenReturn(Vendor.of("moin"));
     when(commerceConnection.getCommerceBeanFactory()).thenReturn(commerceBeanFactory);
     when(commerceConnection.getMarketingSpotService()).thenReturn(Optional.of(marketingSpotService));
 
     when(commerceConnectionSupplier.findConnection(any(Content.class))).thenReturn(Optional.of(commerceConnection));
 
-    when(marketingSpotService.findMarketingSpotById(any(), any(StoreContext.class))).thenReturn(marketingSpot);
+    CommerceId externalId = CommerceIdUtils.builder(BaseCommerceBeanType.MARKETING_SPOT, storeContext)
+            .withExternalId("myExternalId")
+            .build();
+    when(marketingSpotService.findMarketingSpotById(eq(externalId), any(StoreContext.class))).thenReturn(marketingSpot);
     when(marketingSpot.getName()).thenReturn(MY_MARKETING_SPOT_NAME);
 
-    when(content.getString(CMMarketingSpotImpl.EXTERNAL_ID)).thenReturn("test:///me/marketingspot/myExternalId");
+    when(content.getString(CMMarketingSpotImpl.EXTERNAL_ID)).thenReturn(CommerceIdFormatterHelper.format(externalId));
 
     testling = new TestCMMarketingSpotImpl();
     testling.setSitesService(sitesService);
@@ -104,22 +93,6 @@ public class CMMarketingSpotImplTest {
     testling.setCommerceConnectionSupplier(commerceConnectionSupplier);
     when(sitesService.getContentSiteAspect(any(Content.class))).thenReturn(contentSiteAspect);
     when(contentSiteAspect.findSite()).thenReturn(Optional.of(site));
-  }
-
-  @Test
-  public void testGetItems() {
-    assertThat(testling.getItems()).as("There should be no item").isEmpty();
-
-    List<CommerceObject> entities = newArrayList(commerceObject, product, category);
-    when(marketingSpot.getEntities()).thenReturn(entities);
-    when(liveContextNavigationFactory.createProductInSite(product, site)).thenReturn(productInSite);
-    when(liveContextNavigationFactory.createCategoryInSite(category, site)).thenReturn(categoryInSite);
-
-    List<CommerceObject> items = testling.getItems();
-    assertThat(items).as("There should be 3 items").hasSize(3);
-    assertThat(items.get(0)).isEqualTo(commerceObject);
-    assertThat(items.get(1)).isEqualTo(productInSite);
-    assertThat(items.get(2)).isEqualTo(categoryInSite);
   }
 
   @Test
@@ -136,6 +109,19 @@ public class CMMarketingSpotImplTest {
     assertThat(testling.getTeaserTitle())
             .as("the teaser title of the CMMarketingSpot is the same as the teaserTitle string property of the content")
             .isEqualTo(MY_MARKETING_SPOT_NAME);
+  }
+
+  @Test
+  public void testGetMarketingSpot() {
+    MarketingSpot marketingSpot = testling.getMarketingSpot();
+    assertThat(marketingSpot).isNotNull();
+    assertThat(marketingSpot.getName()).isEqualTo(MY_MARKETING_SPOT_NAME);
+  }
+
+  @Test
+  public void testGetMarketingSpotIdNotValid() {
+    when(content.getString(CMMarketingSpotImpl.EXTERNAL_ID)).thenReturn("test:///me/marketingspot/notFound");
+    assertThat(testling.getMarketingSpot()).isNull();
   }
 
   private class TestCMMarketingSpotImpl extends CMMarketingSpotImpl {

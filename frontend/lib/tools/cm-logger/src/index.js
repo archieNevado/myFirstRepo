@@ -47,7 +47,6 @@ const cmLogger = Object.assign(defaultLogger, {
     if (typeof stats === "string" && Object.keys(LEVEL).includes(stats)) {
       return LEVEL[stats];
     }
-    return;
   },
 });
 

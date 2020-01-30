@@ -12,7 +12,11 @@ import {
   formSubmitEnd,
   formSubmitStart,
 } from "./es";
-import { EVENT_LAYOUT_CHANGED, ajax, findAndSelf } from "@coremedia/brick-utils";
+import {
+  EVENT_LAYOUT_CHANGED,
+  ajax,
+  findAndSelf,
+} from "@coremedia/brick-utils";
 import { refreshFragment } from "@coremedia/brick-dynamic-include";
 
 const ES_AJAX_FORM_IDENTIFIER = "cm-es-ajax-form";

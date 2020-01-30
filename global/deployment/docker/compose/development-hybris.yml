@@ -28,7 +28,6 @@ services:
       traefik.frontend.headers.SSLRedirect: "true"
       traefik.shop-hybris.frontend.rule: Host:shop-hybris.${ENVIRONMENT_FQDN:-docker.localhost}
       traefik.shop-preview.frontend.rule: Host:shop-preview-hybris.${ENVIRONMENT_FQDN:-docker.localhost}
-      traefik.shop-tools.frontend.rule: Host:shop-tools-hybris.${ENVIRONMENT_FQDN:-docker.localhost}
       # candy rulez!!!
       traefik.candy-shop-preview.frontend.rule: Host:candy-shop-preview-hybris.${ENVIRONMENT_FQDN:-docker.localhost}
       traefik.candy-shop.frontend.rule: Host:candy-shop-hybris.${ENVIRONMENT_FQDN:-docker.localhost}
@@ -46,3 +45,8 @@ services:
       traefik.enable: "true"
       traefik.actuator.port: "8081"
       traefik.actuator.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/commerce-adapter-hybris;AddPrefix:/actuator
+
+  overview:
+    environment:
+      COMMERCE_HYBRIS_ENABLED: "true"
+      COMMERCE_HYBRIS_HOST: ${HYBRIS_HOST}

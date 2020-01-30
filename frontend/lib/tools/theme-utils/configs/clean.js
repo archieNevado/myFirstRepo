@@ -7,10 +7,8 @@ const deepMerge = require("./utils/deepMerge");
 module.exports = () => config =>
   deepMerge(config, {
     plugins: [
-      new CleanWebpackPlugin(
-        {
-          cleanStaleWebpackAssets: false,
-        }
-      ),
+      new CleanWebpackPlugin({
+        cleanStaleWebpackAssets: false,
+      }),
     ],
   });

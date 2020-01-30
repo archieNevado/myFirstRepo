@@ -7,20 +7,20 @@
     <folder id="1" name="" placeApproved="true" published="true" modificationDate="2009-06-01T20:59:42.000+01:00">
       <folder id="11" name="Sites">
         <folder id="3" name="Content Test">
-          <folder id="5" name="Navigation">
+          <document id="54" name="Site-Indicator" type="CMSite">
+            <version number="1">
+              <linkProperty name="root">
+                <link id="10"/>
+              </linkProperty>
+              <stringProperty name="id" value="theSiteId"/>
+              <stringProperty name="name" value="theSite"/>
+              <stringProperty name="locale" value="en"/>
+              <linkProperty name="master"/>
+            </version>
+          </document>
 
+          <folder id="5" name="Navigation">
             <!-- a site with some channels -->
-            <document id="54" name="Site-Indicator" type="CMSite">
-              <version number="1">
-                <linkProperty name="root">
-                  <link id="10"/>
-                </linkProperty>
-                <stringProperty name="id" value="theSiteId"/>
-                <stringProperty name="name" value="theSite"/>
-                <stringProperty name="locale" value="en"/>
-                <linkProperty name="master"/>
-              </version>
-            </document>
             <document id="10" type="CMChannel" name="root">
               <version number="1">
                 <stringProperty name="segment" value="root"/>

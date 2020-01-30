@@ -3,6 +3,7 @@ package com.coremedia.blueprint.caas.preview.client;
 import com.google.common.base.Charsets;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import io.micrometer.core.annotation.Timed;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.io.IOUtils;
@@ -75,12 +76,13 @@ public class JsonPreviewController {
   }
 
   @GetMapping(PREVIEW_PATH + "/{" + PARAM_NUMERIC_ID + "}/{" + PARAM_TYPE + "}")
+  @Timed
   public ResponseEntity<String> preview(
           @ApiParam(value = "The id of the item", required = true) @PathVariable String numericId,
           @ApiParam(value = "The type of the item", required = true) @PathVariable String type,
           @ApiParam(value = "The preview date", required = false) @RequestParam(required = false, name = "previewDate") String previewDate) {
 
-    org.thymeleaf.context.Context ctx = new org.thymeleaf.context.Context();
+    Context ctx = new Context();
 
     String query;
     try {

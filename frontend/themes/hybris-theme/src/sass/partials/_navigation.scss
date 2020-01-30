@@ -43,6 +43,7 @@
 
   // align header navigation with breadcrumb
   @include breakpoint("lg-and-up") {
+    text-align: initial;
     padding-left: $cm-spacing-default;
   }
 }
@@ -57,8 +58,13 @@
     display: block;
   }
 
+  &__picture-link {
+    padding: 0 15px 0 0;
+  }
+
   // head navigation
   &--depth-1 {
+    border-bottom-width: $cm-navigation-border-bottom-width;
 
     @include breakpoint("sm-and-down") {
       position: relative;
@@ -92,6 +98,7 @@
     @include breakpoint("sm-and-down") {
 
       &.cm-navigation-item--open {
+
         .cm-navigation-item__menu {
           opacity: 1;
           background-color: $cm-navigation-background-color-hover;
@@ -110,8 +117,37 @@
           }
 
         }
+
+        .cm-navigation-item__toggle {
+          &:before {
+            transform: rotate(180deg);
+          }
+        }
+
+      }
+    }
+
+    .cm-navigation-item__toggle {
+      color: $cm-navigation-color;
+      display: block;
+      position: absolute;
+      top: 0;
+      right: $cm-spacing-default;
+      outline: none;
+      padding: 8px $cm-spacing-default;
+
+      // bigger arrow
+      &:before {
+        border: none;
+        border-top: 6px dashed;
+        border-right: 5px solid transparent;
+        border-left: 5px solid transparent;
+        transform: none;
       }
 
+      @include breakpoint("lg-and-up") {
+        display: none;
+      }
     }
 
     > .cm-navigation-item__title {
@@ -128,27 +164,6 @@
       }
     }
 
-    .cm-navigation-item__toggle {
-      color: $cm-navigation-color;
-      display: block;
-      position: absolute;
-      top: 0;
-      right: $cm-spacing-default;
-      outline: none;
-      padding: 8px $cm-spacing-default;
-
-      // bigger arrow
-      &:before {
-        border-top: 6px dashed;
-        border-right: 5px solid transparent;
-        border-left: 5px solid transparent;
-      }
-
-      @include breakpoint("lg-and-up") {
-        display: none;
-      }
-    }
-
     .cm-navigation-item__menu {
       display: none;
       margin-top: 0;
@@ -158,6 +173,7 @@
         padding: $cm-spacing-default $cm-spacing-default 0;
         background-color: $cm-navigation-menu-background-color;
         border-bottom: 1px solid $cm-hybris-border-color;
+        border-top: none;
       }
     }
 

@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.contenthub.adapters.rss;
 
-import com.coremedia.contenthub.api.BlobCache;
 import com.coremedia.contenthub.api.ContentHubAdapter;
 import com.coremedia.contenthub.api.ContentHubContext;
 import com.coremedia.contenthub.api.ContentHubObject;
@@ -38,12 +37,10 @@ class RSSContentHubAdapter implements ContentHubAdapter {
   private final String connectionId;
   private final SyndFeed feed;
   private final RSSColumnProvider columnProvider;
-  private final BlobCache blobCache;
 
-  RSSContentHubAdapter(RSSContentHubSettings settings, String connectionId, BlobCache blobCache) {
+  RSSContentHubAdapter(RSSContentHubSettings settings, String connectionId) {
     this.settings = settings;
     this.connectionId = connectionId;
-    this.blobCache = blobCache;
     columnProvider = new RSSColumnProvider();
     String url = settings!=null ? settings.getUrl() : null;
     if (url == null) {
@@ -98,7 +95,7 @@ class RSSContentHubAdapter implements ContentHubAdapter {
     String externalId = id.getExternalId();
     for (SyndEntry entry : entries) {
       if (entry.getUri().equals(externalId)) {
-        return new RSSItem(id, feed, entry, blobCache);
+        return new RSSItem(id, feed, entry);
       }
     }
     return null;
@@ -117,7 +114,7 @@ class RSSContentHubAdapter implements ContentHubAdapter {
     List<SyndEntry> entries = feed.getEntries();
     for (SyndEntry entry : entries) {
       ContentHubObjectId id = new ContentHubObjectId(connectionId, entry.getUri());
-      result.add(new RSSItem(id, feed, entry, blobCache));
+      result.add(new RSSItem(id, feed, entry));
     }
     return result;
   }
@@ -140,7 +137,7 @@ class RSSContentHubAdapter implements ContentHubAdapter {
   @Override
   @NonNull
   public ContentHubTransformer transformer() {
-    return new RSSContentHubTransformer(blobCache);
+    return new RSSContentHubTransformer();
   }
 
 

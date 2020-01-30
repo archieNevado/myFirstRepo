@@ -2,6 +2,7 @@ package com.coremedia.livecontext.studio.components.link {
 import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
+import com.coremedia.cms.editor.sdk.util.IContentAwareLinkListWrapper;
 import com.coremedia.cms.editor.sdk.util.LinkListUtil;
 import com.coremedia.cms.editor.sdk.util.LinkListWrapperBase;
 import com.coremedia.cms.editor.sdk.util.PropertyEditorUtil;
@@ -9,7 +10,7 @@ import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 
-public class CatalogAssetsLinkListWrapper extends LinkListWrapperBase {
+public class CatalogAssetsLinkListWrapper extends LinkListWrapperBase implements IContentAwareLinkListWrapper {
 
   [Bindable]
   public var bindTo:ValueExpression;
@@ -89,8 +90,29 @@ public class CatalogAssetsLinkListWrapper extends LinkListWrapperBase {
   }
 
   private static function getContentType(linkTypeName:String):ContentType {
-    return SESSION.getConnection().getContentRepository().getContentType(linkTypeName);
+    return SESSION.getConnection().getContentRepository().getContentType(linkTypeName) as ContentType;
   }
 
+  public function isAccepted(contentType:ContentType):Boolean {
+    var allowedContentTypes:Array = getAllowedContentType(assetContentTypes);
+    return allowedContentTypes.some(function (allowedContentType: ContentType): Boolean {
+      return contentType.isSubtypeOf(allowedContentType);
+    });
+  }
+
+  public function getOwnerContent():Content {
+    return bindTo.getValue() as Content;
+  }
+
+  private static function getAllowedContentType(contentTypeNames: Array): Array {
+    var allowedContentTypes: Array = [];
+    for (var allowedContentType:String in contentTypeNames) {
+      var contentType:ContentType = getContentType(allowedContentType);
+      if(contentType) {
+        allowedContentTypes.push(contentType);
+      }
+    }
+    return allowedContentTypes;
+  }
 }
 }

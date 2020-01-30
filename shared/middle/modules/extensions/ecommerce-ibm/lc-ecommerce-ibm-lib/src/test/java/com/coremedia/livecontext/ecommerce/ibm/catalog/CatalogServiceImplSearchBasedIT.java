@@ -6,6 +6,7 @@ import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
+import com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion;
 import com.coremedia.livecontext.ecommerce.search.SearchFacet;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import io.specto.hoverfly.junit5.api.HoverflyConfig;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -169,9 +171,57 @@ public class CatalogServiceImplSearchBasedIT extends IbmCatalogServiceBaseTest {
   }
 
   @Test
-  @Override
   public void testSortedSearchProducts() throws Exception {
-    super.testSortedSearchProducts();
+    WcsVersion wcsVersion = testConfig.getWcsVersion();
+
+    // Tests moved here from base class
+    CommerceId categoryId1 = getIdProvider().formatCategoryId(null, LEAF_CATEGORY_CODE);
+    Category category1 = this.testling.findCategoryById(categoryId1, storeContext);
+    Map<String, String> searchParams1 = new HashMap<>();
+    searchParams1.put(CatalogService.SEARCH_PARAM_CATEGORYID, category1.getExternalTechId());
+    searchParams1.put(CatalogService.SEARCH_PARAM_ORDERBY, SEARCH_ORDER_BY_PRICE_ASC);
+    SearchResult<Product> searchProducts1 = this.testling.searchProducts(SEARCH_TERM_1, searchParams1, storeContext);
+    assertThat(searchProducts1).isNotNull();
+    int total1 = searchProducts1.getTotalCount();
+    List<Product> products1 = searchProducts1.getSearchResult();
+    int counter1 = 1;
+    while (counter1 < total1) {
+      Product previousProduct1 = products1.get(counter1 - 1);
+      Product currentProduct1 = products1.get(counter1);
+      if (WcsVersion.WCS_VERSION_8_0.lessThan(wcsVersion)) {
+        BigDecimal previousProductOfferPrice = previousProduct1.getOfferPrice();
+        BigDecimal currentProductOfferPrice = currentProduct1.getOfferPrice();
+        assertThat(previousProductOfferPrice).isLessThanOrEqualTo(currentProductOfferPrice);
+      } else {
+        BigDecimal previousProductListPrice = previousProduct1.getListPrice();
+        BigDecimal currentProductListPrice = currentProduct1.getListPrice();
+        assertThat(previousProductListPrice).isLessThanOrEqualTo(currentProductListPrice);
+      }
+      counter1++;
+    }
+
+    searchParams1 = new HashMap<>();
+    searchParams1.put(CatalogService.SEARCH_PARAM_CATEGORYID, category1.getExternalTechId());
+    searchParams1.put(CatalogService.SEARCH_PARAM_ORDERBY, SEARCH_ORDER_BY_PRICE_DESC);
+    searchProducts1 = this.testling.searchProducts(SEARCH_TERM_1, searchParams1, storeContext);
+    assertThat(searchProducts1).isNotNull();
+    total1 = searchProducts1.getTotalCount();
+    products1 = searchProducts1.getSearchResult();
+    counter1 = 1;
+    while (counter1 < total1) {
+      Product previousProduct1 = products1.get(counter1 - 1);
+      Product currentProduct1 = products1.get(counter1);
+      if (WcsVersion.WCS_VERSION_8_0.lessThan(wcsVersion)) {
+        BigDecimal previousProductOfferPrice = previousProduct1.getOfferPrice();
+        BigDecimal currentProductOfferPrice = currentProduct1.getOfferPrice();
+        assertThat(previousProductOfferPrice).isGreaterThanOrEqualTo(currentProductOfferPrice);
+      } else {
+        BigDecimal previousProductListPrice = previousProduct1.getListPrice();
+        BigDecimal currentProductListPrice = currentProduct1.getListPrice();
+        assertThat(previousProductListPrice).isGreaterThanOrEqualTo(currentProductListPrice);
+      }
+      counter1++;
+    }
 
     //additional tests
     CommerceId categoryId = getIdProvider().formatCategoryId(null, LEAF_CATEGORY_CODE);
@@ -213,7 +263,7 @@ public class CatalogServiceImplSearchBasedIT extends IbmCatalogServiceBaseTest {
     Map<String, String> searchParams = new HashMap<>();
     String facet = testConfig.getWcsVersion().lessThan(WCS_VERSION_9_0)
             ? "price_USD:({200 300} 300)"
-            : "price_USD:({200 TO 300])";
+            : "OfferPrice_USD:(price_USD_10005:([200+TO+300]))";
 
     searchParams.put(CatalogService.SEARCH_PARAM_FACET, facet);
     searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, category.getExternalTechId());

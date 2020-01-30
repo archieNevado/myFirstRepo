@@ -16,14 +16,14 @@ import Zoom from "./zoom";
 
 // IBM specific code
 // TODO: move to themes
-function getChangeImagesFn($productAssets, productDisplayJS) {
+function getChangeImagesFn($productAssets, shoppingActionsJS) {
   return function(catEntryId, productId) {
     //reload the fragment with selected product variants.
     //to this end we send the catEntryId, productId and the selected attributes name/value pairs
     //as ';'-separated string as "attributes" to the reloader
     const entitledItemId = "entitledItem_" + productId;
     const selectedAttributes =
-      productDisplayJS.selectedAttributesList[entitledItemId];
+      shoppingActionsJS.selectedAttributesList[entitledItemId];
     let attributes = "";
     for (let attribute in selectedAttributes) {
       if (selectedAttributes.hasOwnProperty(attribute)) {
@@ -38,19 +38,47 @@ function getChangeImagesFn($productAssets, productDisplayJS) {
   };
 }
 
-const dojo = window.dojo;
-if (typeof dojo !== "undefined") {
-  addNodeDecoratorBySelector(".cm-product-assets", function($target) {
-    dojo.addOnLoad(function() {
-      const productDisplayJS = window.productDisplayJS;
-      if (productDisplayJS) {
-        const changeImages = getChangeImagesFn($target, productDisplayJS);
-        dojo.topic.subscribe("DefiningAttributes_Resolved", changeImages);
-        dojo.topic.subscribe("DefiningAttributes_Changed", changeImages);
-      }
-    });
-  });
-}
+const productAssetsStateIbmId = "cm-product-assets-state-ibm";
+addNodeDecoratorBySelector(".cm-product-assets", function($target) {
+  const wcTopic = window.wcTopic;
+  const productAssetsStateIbm = {
+    onUnload: () => {}
+  };
+  if (typeof wcTopic !== "undefined") {
+    // WCS 9
+    const shoppingActionsJS = window.shoppingActionsJS;
+    if (shoppingActionsJS) {
+      const changeImages = getChangeImagesFn($target, shoppingActionsJS);
+      const events = ["DefiningAttributes_Resolved", "DefiningAttributes_Changed"];
+      wcTopic.subscribe(events, changeImages);
+      productAssetsStateIbm.onUnload = () => {
+        // use private API here as there is no wcTopic.unsubscribe...
+        events.forEach(id => wcTopic._topics[id].unsubscribe(changeImages));
+      };
+    }
+  } else {
+    const dojo = window.dojo;
+    if (typeof dojo !== "undefined") {
+      // WCS 8
+      dojo.addOnLoad(function () {
+        const productDisplayJS = window.productDisplayJS;
+        if (productDisplayJS) {
+          const changeImages = getChangeImagesFn($target, productDisplayJS);
+          const events = ["DefiningAttributes_Resolved", "DefiningAttributes_Changed"];
+          const tokens = events.map(id => dojo.topic.subscribe(id, changeImages));
+          productAssetsStateIbm.onUnload = () => {
+            tokens.forEach(token => token.remove());
+          };
+        }
+      });
+    }
+  }
+  $target.data(productAssetsStateIbmId, productAssetsStateIbm);
+}, function($target) {
+  const { onUnload } = $target.data(productAssetsStateIbmId) || {};
+  onUnload && onUnload();
+  $target.removeData(productAssetsStateIbmId);
+});
 
 // synchronize carousel should control slideshow
 // sadly we cannot use the build-in feature of slick-carousel because it has some serious issues...
@@ -82,8 +110,17 @@ addNodeDecoratorByData(
       $slideshow.slick("slickGoTo", goToSingleSlide);
     });
 
+    $carousel.ready(function() {
+      $carousel
+        .find(".slick-slide.slick-current")
+        .addClass("slick-slide--active");
+    });
+
     // do not use zoom plugin on touch devices
-    if ($slideshow.length > 0 && (!getLastDevice().isTouch || getLastDevice().type === "desktop")) {
+    if (
+      $slideshow.length > 0 &&
+      (!getLastDevice().isTouch || getLastDevice().type === "desktop")
+    ) {
       instance.zoom = new Zoom($slideshow[0], zoom);
 
       instance.updateZoomImage = () => {
@@ -123,7 +160,7 @@ addNodeDecoratorByData(
           );
           if (responsiveImageFormat) {
             // if found: use item type: image
-        const biggestWidth = Math.max(
+            const biggestWidth = Math.max(
               ...Object.keys(responsiveImageFormat.linksForWidth).map(key =>
                 parseInt(key)
               )

@@ -16,7 +16,7 @@
   <RemoteControl enabled="true"/>
 
   <!-- control the analysis of the site structure -->
-  <SiteModel siteIndicatorDocumentType="CMSite" siteIndicatorDepth="1"
+  <SiteModel siteIndicatorDocumentType="CMSite" siteIndicatorDepth="0"
              idProperty="id" rootProperty="root" masterProperty="master" localeProperty="locale" nameProperty="name"/>
 
   <LookAndFeel class="com.apple.laf.AquaLookAndFeel" os="mac"/>
@@ -319,13 +319,13 @@
             <ModelClass class="hox.corem.editor.toolkit.property.richtext.impl.ConcurrentXmlPropertyModel"/>
           </PropertyType>
         </DocumentType>
-    
+
         <DocumentType name="CMSegment">
           <PropertyType name="conditions">
             <ModelClass class="hox.corem.editor.toolkit.property.richtext.impl.ConcurrentXmlPropertyModel"/>
           </PropertyType>
         </DocumentType>
-    
+
         <DocumentType name="CMP13NSearch">
           <PropertyType Name="searchQuery"/>
           <PropertyType Name="documentType"/>

@@ -12,6 +12,7 @@ node.default_unless['blueprint']['apps'][service_name]['application.properties']
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['elastic.solr.url'] = 'http://localhost:40080/solr'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['elastic.social.mail.smtp.server'] = 'localhost'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['elastic.social.mail.smtp.port'] = 25
+node.default_unless['blueprint']['apps'][service_name]['application.properties']['mongoDb.clientURI'] = 'mongodb://coremedia:coremedia@localhost:27017'
 
 application_config_hash = Mash.new
 # legacy compatibility step. Here we merge the defaults from old node.json files

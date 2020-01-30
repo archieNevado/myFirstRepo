@@ -175,7 +175,7 @@
     <property name="navigationPathList" associationType="static"/>
     <property name="locationTaxonomy" associationType="static"/>
     <property name="subjectTaxonomy" associationType="static"/>
-    <property name="vanityUrlMapper" associationType="static"/>
+    <!--property name="vanityUrlMapper" associationType="static"/--> <!-- Cannot DV, cyclic reference -->
     <property name="placement"/>
     <!--property name="itemsFlattened" associationType="static"/--> <!-- Performs better w/o DV -->
   </dataview>

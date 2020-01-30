@@ -72,9 +72,11 @@ public interface CMDownload extends CMTeasable {
   String FILENAME = "filename";
 
   /**
-   * Returns the value of the document property {@link #FILENAME}.
+   * Returns the value of the document property {@link #FILENAME} if the feature
+   * "useCMDownloadFilename" is enabled.
+   * The result must not be cached, it depends on the current context.
    *
-   * @return the value of the document property {@link #FILENAME}
+   * @return the filename property if the feature is enabled
    * @cm.template.api
    */
   String getFilename();

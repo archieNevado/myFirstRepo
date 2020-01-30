@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.view;
 
 import com.coremedia.blueprint.common.contentbeans.AbstractPage;
+import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.layout.PageGrid;
@@ -54,6 +55,7 @@ public class PrefetchFragmentsView implements TextView {
   private static final String FRAGMENTS_PROPERTY = "fragments";
   private static final String FRAGMENT_KEY_PROPERTY = "fragmentKey";
   private static final String PAYLOAD_PROPERTY = "payload";
+  private static final String DEFAULT_CHANNEL_VIEW = "asFragment";
 
   @Inject
   private PrefetchFragmentsConfigReader configReader;
@@ -232,8 +234,11 @@ public class PrefetchFragmentsView implements TextView {
   @NonNull
   private static String getPayload(@NonNull Object bean, @NonNull String view, @NonNull HttpServletRequest request,
                                    @NonNull HttpServletResponse response) {
+
+    String effectiveView = view.isBlank() ? determineView(bean) : view;
+
     Writer out = new StringWriter();
-    ViewUtils.render(bean, view, out, request, response);
+    ViewUtils.render(bean, effectiveView, out, request, response);
 
     return out.toString().trim();
   }
@@ -268,4 +273,25 @@ public class PrefetchFragmentsView implements TextView {
             .withKeyValueSeparator("=")
             .join(parameterMap);
   }
+
+  /**
+   * A channel in combination with the default view should always be rendered as full pagegrid (without header and footer).
+   * This can be done by using the view "asFragment".
+   * see also FragmentHandler#normalizedPageFragmentView()
+   * @param bean the render model
+   * @return a magic "normalized" default view "asFragment" or empty string;
+   */
+  private static String determineView(Object bean) {
+    if (bean instanceof CMChannel) {
+      return DEFAULT_CHANNEL_VIEW;
+    }
+    if (bean instanceof Page) {
+      Page page = (Page) bean;
+      if (page.getContent() instanceof CMChannel) {
+        return DEFAULT_CHANNEL_VIEW;
+      }
+    }
+    return "";
+  }
+
 }

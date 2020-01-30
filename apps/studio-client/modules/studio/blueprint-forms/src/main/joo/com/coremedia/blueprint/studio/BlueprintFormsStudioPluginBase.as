@@ -9,7 +9,7 @@ import com.coremedia.cap.content.ContentType;
 import com.coremedia.cms.editor.configuration.StudioPlugin;
 import com.coremedia.cms.editor.sdk.IEditorContext;
 import com.coremedia.cms.editor.sdk.collectionview.CollectionView;
-import com.coremedia.cms.editor.sdk.desktop.MainNavigationToolbar;
+import com.coremedia.cms.editor.sdk.desktop.maintoolbar.MainNavigationToolbar;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.plugins.TabExpandPlugin;
 import com.coremedia.cms.editor.sdk.premular.Premular;

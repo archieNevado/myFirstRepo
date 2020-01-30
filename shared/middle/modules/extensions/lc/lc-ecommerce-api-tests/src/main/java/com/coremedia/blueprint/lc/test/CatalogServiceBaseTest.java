@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.TestPropertySource;
 
 import javax.inject.Inject;
-import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -405,44 +404,6 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
     SearchResult<Product> searchResultMultipleWords2 = testling.searchProducts(SEARCH_TERM_2 + " schnasndasn", emptyMap(), storeContext);
     assertThat(searchResultMultipleWords2).isNotNull();
     assertThat(searchResultMultipleWords2.getSearchResult()).isEmpty();
-  }
-
-  protected void testSortedSearchProducts() throws Exception {
-    CommerceId categoryId = getIdProvider().formatCategoryId(null, LEAF_CATEGORY_CODE);
-    Category category = testling.findCategoryById(categoryId, storeContext);
-    Map<String, String> searchParams = new HashMap<>();
-    searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, category.getExternalTechId());
-    searchParams.put(CatalogService.SEARCH_PARAM_ORDERBY, SEARCH_ORDER_BY_PRICE_ASC);
-    SearchResult<Product> searchProducts = testling.searchProducts(SEARCH_TERM_1, searchParams, storeContext);
-    assertThat(searchProducts).isNotNull();
-    int total = searchProducts.getTotalCount();
-    List<Product> products = searchProducts.getSearchResult();
-    int counter = 1;
-    while (counter < total) {
-      Product previousProduct = products.get(counter - 1);
-      Product currentProduct = products.get(counter);
-      BigDecimal previousProductListPrice = previousProduct.getListPrice();
-      BigDecimal currentProductListPrice = currentProduct.getListPrice();
-      assertThat(previousProductListPrice).isLessThanOrEqualTo(currentProductListPrice);
-      counter++;
-    }
-
-    searchParams = new HashMap<>();
-    searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, category.getExternalTechId());
-    searchParams.put(CatalogService.SEARCH_PARAM_ORDERBY, SEARCH_ORDER_BY_PRICE_DESC);
-    searchProducts = testling.searchProducts(SEARCH_TERM_1, searchParams, storeContext);
-    assertThat(searchProducts).isNotNull();
-    total = searchProducts.getTotalCount();
-    products = searchProducts.getSearchResult();
-    counter = 1;
-    while (counter < total) {
-      Product previousProduct = products.get(counter - 1);
-      Product currentProduct = products.get(counter);
-      BigDecimal previousProductListPrice = previousProduct.getListPrice();
-      BigDecimal currentProductListPrice = currentProduct.getListPrice();
-      assertThat(previousProductListPrice).isGreaterThanOrEqualTo(currentProductListPrice);
-      counter++;
-    }
   }
 
   protected void testSearchProductsWithOffset() throws Exception {

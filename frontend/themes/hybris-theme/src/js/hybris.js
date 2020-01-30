@@ -1,6 +1,9 @@
 import $ from "jquery";
 import * as utils from "@coremedia/brick-utils";
-import { EVENT_DEVICE_CHANGED, detectDeviceType } from "@coremedia/brick-device-detector";
+import {
+  EVENT_DEVICE_CHANGED,
+  detectDeviceType,
+} from "@coremedia/brick-device-detector";
 
 // --- DOCUMENT READY --------------------------------------------------------------------------------------------------
 $(function() {
@@ -14,8 +17,10 @@ $(function() {
   });
 
   $document.on(EVENT_DEVICE_CHANGED, function() {
-    if(detectDeviceType() === "desktop") {
-      $(".cm-header__navigation").removeClass("collapse").removeAttr("style");
+    if (detectDeviceType() === "desktop") {
+      $(".cm-header__navigation")
+        .removeClass("collapse")
+        .removeAttr("style");
     }
   });
 });

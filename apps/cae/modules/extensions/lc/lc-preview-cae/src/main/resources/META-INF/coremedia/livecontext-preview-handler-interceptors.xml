@@ -23,6 +23,7 @@
       <list>
         <util:constant static-field="com.coremedia.blueprint.cae.handlers.PreviewHandler.URI_PATTERN"/>
         <util:constant static-field="com.coremedia.blueprint.cae.handlers.PreviewUrlHandler.URI_PATTERN"/>
+        <util:constant static-field="com.coremedia.blueprint.cae.handlers.PreviewUrlHandler.URI_PATTERN_LEGACY"/>
       </list>
     </property>
   </bean>

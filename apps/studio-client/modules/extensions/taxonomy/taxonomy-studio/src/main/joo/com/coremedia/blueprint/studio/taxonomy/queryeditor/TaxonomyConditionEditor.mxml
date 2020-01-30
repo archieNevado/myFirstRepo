@@ -11,6 +11,12 @@
 
     private var config:TaxonomyConditionEditor;
 
+    /**
+     * the id of the taxonomy whose tree is used to add items from.
+     */
+    [Bindable]
+    public var taxonomyId:String;
+
     public native function TaxonomyConditionEditor(config:TaxonomyConditionEditor = null);
     ]]></fx:Script>
 
@@ -21,11 +27,11 @@
     <taxonomy:TaxonomyLinkListPropertyField bindTo="{config.bindTo}"
                                             linkType="{config.contentType}"
                                             itemId="taxonomyLinkList"
-                                            taxonomyId="Subject"
+                                            taxonomyId="{config.taxonomyId || 'Subject'}"
                                             forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
                                             labelSeparator=":"
                                             anchor="100%"
-                                            propertyName="localSettings.fq.subjecttaxonomy">
+                                            propertyName="{'localSettings.fq.' + config.propertyName}">
       <taxonomy:plugins exml:mode="append">
         <editor:BindDisablePlugin bindTo="{config.bindTo}"
                                   forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>

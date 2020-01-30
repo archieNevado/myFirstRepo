@@ -97,8 +97,9 @@ public class CommerceLinkScheme {
       if (previewUrlService == null) {
         return null;
       }
+      StoreContext storeContext = StoreContextHelper.findStoreContext(request).orElse(category.getContext());
       List<QueryParam> queryParamList = convertToQueryParamList(linkParameters);
-      return previewUrlService.getCategoryUrl(category, queryParamList, request);
+      return previewUrlService.getCategoryUrl(category, storeContext, queryParamList, request);
     }
 
     // a content-led link on the live site is the only remaining case
@@ -156,8 +157,9 @@ public class CommerceLinkScheme {
         return null;
       }
       Category category = product.getCategory();
+      StoreContext storeContext = StoreContextHelper.findStoreContext(request).orElse(product.getContext());
       List<QueryParam> queryParamList = convertToQueryParamList(linkParameters);
-      return previewUrlService.getProductUrl(product, category, queryParamList, request);
+      return previewUrlService.getProductUrl(product, category, storeContext, queryParamList, request);
     }
 
     // a content-led link on the live site is the only remaining case

@@ -39,14 +39,6 @@ public class MarketingSpotRepresentation extends AbstractCatalogRepresentation {
     return externalTechId;
   }
 
-  public List<CommerceBean> getChildren() {
-    return Collections.emptyList();
-  }
-
-  public Map<String, CommerceBean> getChildrenByName() {
-    return Collections.emptyMap();
-  }
-
   public void setName(String name) {
     this.name = name;
   }

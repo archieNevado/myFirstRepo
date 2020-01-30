@@ -21,6 +21,7 @@
       <#if hasStillPicture>
         <@cm.include self=self.picture!cm.UNDEFINED view="media" params={
           "classBox": "cm-teaser__content cm-shoppable__content",
+          "classMedia": "cm-shoppable__still-picture",
           "metadata": ["properties.pictures"]
         }/>
         <#-- play overlay icon-->
@@ -31,7 +32,9 @@
         "classBox": "${blockClass}--video__video cm-shoppable__player",
         "classMedia": "cm-shoppable__video-element",
         "hideControls": false,
-        "preload": true
+        "preload": true,
+        "autoplay": false,
+        "loop": false
       }/>
     </div>
   </div>

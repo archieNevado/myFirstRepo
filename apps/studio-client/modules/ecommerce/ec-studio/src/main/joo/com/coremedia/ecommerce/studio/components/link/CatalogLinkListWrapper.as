@@ -1,7 +1,10 @@
 package com.coremedia.ecommerce.studio.components.link {
+import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.content.ContentType;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.sites.Site;
+import com.coremedia.cms.editor.sdk.util.IContentAwareLinkListWrapper;
 import com.coremedia.cms.editor.sdk.util.LinkListWrapperBase;
 import com.coremedia.ecommerce.studio.augmentation.augmentationService;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
@@ -14,7 +17,7 @@ import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.logging.Logger;
 
-public class CatalogLinkListWrapper extends LinkListWrapperBase {
+public class CatalogLinkListWrapper extends LinkListWrapperBase implements IContentAwareLinkListWrapper {
 
   [Bindable]
   public var bindTo:ValueExpression;
@@ -231,5 +234,27 @@ public class CatalogLinkListWrapper extends LinkListWrapperBase {
     return maxCardinality === 1 ? "" : [];
   }
 
+  public function isAccepted(contentType:ContentType):Boolean {
+    var allowedContentTypes:Array = getAllowedContentTypes();
+    return allowedContentTypes.some(function (allowedContentType: ContentType): Boolean {
+      return contentType.isSubtypeOf(allowedContentType);
+    });
+  }
+
+  private function getAllowedContentTypes(): Array {
+    var allowedContentTypes: Array = [];
+
+    for (var contentTypeName: String in linkTypeNames) {
+      var contentType:ContentType = SESSION.getConnection().getContentRepository().getContentType(contentTypeName);
+      if (contentType) {
+        allowedContentTypes.push(contentType);
+      }
+    }
+    return allowedContentTypes;
+  }
+
+  public function getOwnerContent():Content {
+    return bindTo.getValue() as Content;
+  }
 }
 }

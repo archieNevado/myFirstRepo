@@ -2,6 +2,8 @@ package com.coremedia.livecontext.contentbeans;
 
 import com.coremedia.blueprint.common.contentbeans.CMDynamicList;
 import com.coremedia.cae.aspect.Aspect;
+import com.coremedia.livecontext.ecommerce.p13n.MarketingSpot;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -59,7 +61,6 @@ public interface CMMarketingSpot extends CMDynamicList {
    * prefix which identifies the plugin provider.
    *
    * @return a {@code Map} from aspectIDs to {@code Aspect}s
-   *
    * @deprecated since 1907.1; Implement optional features as extensions.
    */
   @Deprecated
@@ -71,7 +72,6 @@ public interface CMMarketingSpot extends CMDynamicList {
    * PlugIns that are registered to this content bean.
    *
    * @return a list of {@link com.coremedia.cae.aspect.Aspect}
-   *
    * @deprecated since 1907.1; Implement optional features as extensions.
    */
   @Deprecated
@@ -90,5 +90,13 @@ public interface CMMarketingSpot extends CMDynamicList {
    */
   @Override
   List getItems();
+
+  /**
+   * Returns the commerce marketing spot
+   *
+   * @cm.template.api
+   */
+  @Nullable
+  MarketingSpot getMarketingSpot();
 
 }

@@ -22,6 +22,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.release>11</maven.compiler.release>
+    <sonar.java.source>${maven.compiler.release}</sonar.java.source>
 
     <google.api.services.analytics.version>v3-rev99-1.19.0</google.api.services.analytics.version>
     <google.api.services.youtube.version>v3-rev152-1.19.0</google.api.services.youtube.version>
@@ -29,10 +30,10 @@
 
     <customer>Blueprint</customer>
 
-    <cm.common.core.version>1910.1</cm.common.core.version>
+    <cm.common.core.version>2001.1</cm.common.core.version>
 
-    <spring.boot.version>2.2.1.RELEASE</spring.boot.version>
-    <micrometer.version>1.3.1</micrometer.version>
+    <spring.boot.version>2.2.3.RELEASE</spring.boot.version>
+    <micrometer.version>1.3.2</micrometer.version>
     <application-plugin.version>2.7.10</application-plugin.version>
 
     <!--
@@ -77,11 +78,11 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.27</tomcat.embed.version>
+    <tomcat.embed.version>9.0.30</tomcat.embed.version>
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.common.core.version>1910.1</cm.common.core.version>
+    <cm.common.core.version>2001.1</cm.common.core.version>
     <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
 
     <showDeprecation>true</showDeprecation>
@@ -179,6 +180,69 @@
                 <phase>validate</phase>
               </execution>
             </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <!--
+        Profile to let the build fail if personal data escapes its intended scope in non-test Java code.
+
+        This profile enables an annotation processor based on the Checker Framework that analyzes the data flow
+        of Java types annotated with com.coremedia.common.personaldata.PersonalData. The check will run for all
+        modules with a (transitive) dependency to com.coremedia.cms:coremedia-personal-data.
+
+        To verify that the checker actually runs, search for "Checking @PersonalData usage" in the Maven output.
+      -->
+      <id>checkPersonalData</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.checkerframework</groupId>
+          <artifactId>checker</artifactId>
+          <scope>provided</scope>
+        </dependency>
+      </dependencies>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>default-compile</id>
+                <phase>compile</phase>
+                <goals>
+                  <goal>compile</goal>
+                </goals>
+                <configuration>
+                  <compilerArgs>
+                    <!-- Add <arg>-Awarns</arg> to not let the build fail but just show warnings -->
+                    <arg>-AcheckPersonalData=true</arg>
+                    <arg>-ArequirePrefixInWarningSuppressions</arg>
+                    <arg>-Anocheckjdk</arg>
+                  </compilerArgs>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <configuration>
+              <ignoredUsedUndeclaredDependencies combine.children="append">
+                <!-- The Checker Framework possibly adds annotations from checker-qual.jar to compiled classes
+                     (e.g. @Pure, @SideEffectFree). The dependency analyzer warns about an "used undeclared dependency"
+                     then, even though no annotations from checker-qual.jar are used in source files.
+                     Details: https://groups.google.com/forum/#!msg/checker-framework-discuss/v0K0f05Uk50/U7quKT1dAwAJ
+                -->
+                <ignoredUsedUndeclaredDependency>org.checkerframework:checker-qual</ignoredUsedUndeclaredDependency>
+                <!-- The Checker Framework adds the default annotation @NonPersonalData
+                     to compiled classes, even if no annotations have been added explicitly in the module.
+                  -->
+                <ignoredUsedUndeclaredDependency>com.coremedia.cms:coremedia-personal-data</ignoredUsedUndeclaredDependency>
+              </ignoredUsedUndeclaredDependencies>
+            </configuration>
           </plugin>
         </plugins>
       </build>
@@ -394,7 +458,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-deploy-plugin</artifactId>
-          <version>2.8.2</version>
+          <version>3.0.0-M1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -409,7 +473,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-install-plugin</artifactId>
-          <version>2.5.2</version>
+          <version>3.0.0-M1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>

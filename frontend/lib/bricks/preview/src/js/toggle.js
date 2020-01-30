@@ -99,10 +99,13 @@ export function init(toggleItem) {
   }
 
   // bind click-listener
-  $toggleItem.find(".toggle-button").bind("click", function() {
-    toggle(toggleItem);
-    return false;
-  }).removeClass("toggle-button--disabled");
+  $toggleItem
+    .find(".toggle-button")
+    .bind("click", function() {
+      toggle(toggleItem);
+      return false;
+    })
+    .removeClass("toggle-button--disabled");
   // bind toggleState-listener
   $toggleItem.bind("toggleStateChanged", function(event, newState) {
     if (useStorage) {

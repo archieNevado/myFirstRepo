@@ -52,12 +52,15 @@ public class CMDownloadImplTest extends ContentBeanTestBase {
   }
 
   @Test
-  public void testFilenameWithoutSetting() throws Exception {
-    Assert.assertEquals(null, download.getFilename());
+  public void testFilenameWithoutContext() throws Exception {
+    Assert.assertEquals("a-filename", download.getFilename());
   }
 
   @Test
-  public void testFilenameWithLocalSetting() throws Exception {
+  public void testFilenameWithLocalSettingTrue() throws Exception {
+    ContentBean channel = getContentBean(10);
+    setRequestAttribute(channel, NavigationLinkSupport.ATTR_NAME_CMNAVIGATION, ServletRequestAttributes.SCOPE_REQUEST);
+
     Struct localSettings = getContentRepository().getConnection().getStructService().createStructBuilder()
             .set(CMDownloadImpl.SETTING_USE_CM_DOWNLOAD_FILENAME, true)
             .build();

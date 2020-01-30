@@ -5,17 +5,16 @@
     <folder id="11" name="Sites">
       <folder id="111" name="MySite">
         <folder id="1111" name="DE">
+          <document id="10000" name="MySite-DE" type="CMSite">
+            <version number="1">
+              <linkProperty name="root">
+                <link id="10010"/>
+              </linkProperty>
+              <stringProperty name="locale" value="de"/>
+              <stringProperty name="id" value="the-site-id-de"/>
+            </version>
+          </document>
           <folder id="11111" name="Navigation">
-            <document id="10000" name="MySite-DE" type="CMSite">
-              <version number="1">
-                <linkProperty name="root">
-                  <link id="10010"/>
-                </linkProperty>
-                <stringProperty name="locale" value="de"/>
-                <stringProperty name="id" value="the-site-id-de"/>
-              </version>
-            </document>
-
             <document id="10010" type="CMChannel" name="MySite-ParentChannel_DE">
               <version number="1">
                 <linkProperty name="children">
@@ -63,17 +62,16 @@
 
         </folder>
         <folder id="2111" name="EN">
+          <document id="20000" name="MySite-EN" type="CMSite">
+            <version number="1">
+              <linkProperty name="root">
+                <link id="20010"/>
+              </linkProperty>
+              <stringProperty name="locale" value="en"/>
+              <stringProperty name="id" value="the-site-id-en"/>
+            </version>
+          </document>
           <folder id="21111" name="Navigation">
-            <document id="20000" name="MySite-EN" type="CMSite">
-              <version number="1">
-                <linkProperty name="root">
-                  <link id="20010"/>
-                </linkProperty>
-                <stringProperty name="locale" value="en"/>
-                <stringProperty name="id" value="the-site-id-en"/>
-              </version>
-            </document>
-
             <document id="20010" type="CMChannel" name="MySite-ParentChannel_EN">
               <version number="1">
                 <stringProperty name="locale" value="en"/>

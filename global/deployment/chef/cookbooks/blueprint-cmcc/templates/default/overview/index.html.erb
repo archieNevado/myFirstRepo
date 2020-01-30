@@ -2,6 +2,7 @@
 <html lang="en" dir="ltr">
 <%- host = node['blueprint']['hostname'] -%>
 <%- wcs_host = node['blueprint']['ibm-wcs']['host'] -%>
+<%- wcs_version = node['blueprint']['ibm-wcs']['version'].to_s -%>
 <%- hybris_host = node['blueprint']['sap-hybris']['host'] -%>
 <%- sfcc_host = node['blueprint']['sfcc']['host'] -%>
 <head>
@@ -72,23 +73,23 @@
         <tr>
           <td>Aurora</td>
           <td>
-            <a href="https://shop-preview-production-ibm.<%= host %>/webapp/wcs/stores/servlet/en/auroraesite" target="_blank" data-cm-test="cae">English</a> ·
-            <a href="https://shop-preview-production-ibm.<%= host %>/webapp/wcs/stores/servlet/de/auroraesite" target="_blank" data-cm-test="cae">German</a>
+            <a href="https://shop-preview-production-ibm.<%= host %>/wcs/shop/en/auroraesite" target="_blank" data-cm-test="cae">English</a> ·
+            <a href="https://shop-preview-production-ibm.<%= host %>/wcs/shop/de/auroraesite" target="_blank" data-cm-test="cae">German</a>
           </td>
           <td>
-            <a href="https://shop-ibm.<%= host %>/webapp/wcs/stores/servlet/en/auroraesite" target="_blank" data-cm-test="cae">English</a> ·
-            <a href="https://shop-ibm.<%= host %>/webapp/wcs/stores/servlet/de/auroraesite" target="_blank" data-cm-test="cae">German</a>
+            <a href="https://shop-ibm.<%= host %>/wcs/shop/en/auroraesite" target="_blank" data-cm-test="cae">English</a> ·
+            <a href="https://shop-ibm.<%= host %>/wcs/shop/de/auroraesite" target="_blank" data-cm-test="cae">German</a>
           </td>
         </tr>
         <tr>
           <td>Aurora B2B</td>
           <td>
-            <a href="https://shop-preview-production-ibm.<%= host %>/webapp/wcs/stores/servlet/en/aurorab2besite" target="_blank" data-cm-test="cae">English</a> ·
-            <a href="https://shop-preview-production-ibm.<%= host %>/webapp/wcs/stores/servlet/de/aurorab2besite" target="_blank" data-cm-test="cae">German</a>
+            <a href="https://shop-preview-production-ibm.<%= host %>/wcs/shop/en/aurorab2besite" target="_blank" data-cm-test="cae">English</a> ·
+            <a href="https://shop-preview-production-ibm.<%= host %>/wcs/shop/de/aurorab2besite" target="_blank" data-cm-test="cae">German</a>
           </td>
           <td>
-            <a href="https://shop-ibm.<%= host %>/webapp/wcs/stores/servlet/en/aurorab2besite" target="_blank" data-cm-test="cae">English</a> ·
-            <a href="https://shop-ibm.<%= host %>/webapp/wcs/stores/servlet/de/aurorab2besite" target="_blank" data-cm-test="cae">German</a>
+            <a href="https://shop-ibm.<%= host %>/wcs/shop/en/aurorab2besite" target="_blank" data-cm-test="cae">English</a> ·
+            <a href="https://shop-ibm.<%= host %>/wcs/shop/de/aurorab2besite" target="_blank" data-cm-test="cae">German</a>
           </td>
         </tr>
         <tr>
@@ -178,13 +179,20 @@
       <% if node['blueprint']['ibm-wcs']['enabled']%>
       <h3>HCL Commerce</h3>
       <ul>
-        <li><a href="https://<%= wcs_host %>:8000/lobtools/cmc/ManagementCenterMain?locale=en_US" target="_blank" data-cm-test="">HCL WCS Management Center</a></li>
-        <li><a href="https://<%= wcs_host %>:8000/webapp/wcs/tools/servlet/ToolsLogon?XMLFile=common.mcLogon" target="_blank" data-cm-test="">HCL WCS Accelerator</a></li>
-        <li><a href="https://<%= wcs_host %>:8002/webapp/wcs/admin/servlet/ToolsLogon?XMLFile=adminconsole.AdminConsoleLogon" target="_blank">HCL WCS Administration Console</a></li>
-        <li><a href="https://<%= wcs_host %>:8004/webapp/wcs/orgadmin/servlet/ToolsLogon?XMLFile=buyerconsole.BuyAdminConsoleLogon&storeId=0" target="_blank">HCL WCS Organization Administration Console</a></li>
-        <li><a href="https://<%= wcs_host %>:9104/ibm/console/" target="_blank">HCL WCS Websphere Console</a> <span class="login">Login: configadmin/configadmin01</span></li>
-        <li><a href="https://<%= wcs_host %>:9043/ibm/console/" target="_blank">HCL WCS Solr Websphere Console</a> <span class="login">Login: no login</span></li>
-        <li><a href="http://<%= wcs_host %>:8008/" target="_blank">HCL IHS Admin Control Server</a> <span class="login">Login: ihsadmin/ihsadmin</span></li>
+        <% if wcs_version == '9.0'%>
+          <li><a href="https://<%= wcs_host %>:8000/lobtools/cmc/ManagementCenterMain?locale=en_US" target="_blank" data-cm-test="">WebSphere Management Center</a> <span class="login">Login: wcsadmin/wcsadmin01</span></li>
+          <li><a href="https://<%= wcs_host %>:8001/webapp/wcs/tools/servlet/ToolsLogon?XMLFile=common.mcLogon" target="_blank" data-cm-test="">WebSphere Accelerator</a></li>
+          <li><a href="https://<%= wcs_host %>:8002/webapp/wcs/admin/servlet/ToolsLogon?XMLFile=adminconsole.AdminConsoleLogon" target="_blank">WebSphere Administration Console</a></li>
+          <li><a href="https://<%= wcs_host %>:8004/webapp/wcs/orgadmin/servlet/ToolsLogon?XMLFile=buyerconsole.BuyAdminConsoleLogon&storeId=0" target="_blank">WebSphere Organization Administration Console</a></li>
+          <li><a href="https://<%= wcs_host %>:9043/ibm/console/" target="_blank">WCS9 Websphere Console</a> <span class="login">Login: configadmin/passw0rd</span></li>
+        <% end %>
+        <% if wcs_version != '9.0'%>
+          <li><a href="https://<%= wcs_host %>:8000/lobtools/cmc/ManagementCenterMain?locale=en_US" target="_blank" data-cm-test="">WebSphere Management Center</a> <span class="login">Login: wcsadmin/wcsadmin01</span></li>
+          <li><a href="https://<%= wcs_host %>:8000/webapp/wcs/tools/servlet/ToolsLogon?XMLFile=common.mcLogon" target="_blank" data-cm-test="">WebSphere Accelerator</a></li>
+          <li><a href="https://<%= wcs_host %>:8002/webapp/wcs/admin/servlet/ToolsLogon?XMLFile=adminconsole.AdminConsoleLogon" target="_blank">WebSphere Administration Console</a></li>
+          <li><a href="https://<%= wcs_host %>:8004/webapp/wcs/orgadmin/servlet/ToolsLogon?XMLFile=buyerconsole.BuyAdminConsoleLogon&storeId=0" target="_blank">WebSphere Organization Administration Console</a></li>
+          <li><a href="https://<%= wcs_host %>:9104/ibm/console/" target="_blank">WebSphere Websphere Console</a> <span class="login">Login: configadmin/configadmin01</span></li>
+        <% end %>
       </ul>
       <% end %>
 

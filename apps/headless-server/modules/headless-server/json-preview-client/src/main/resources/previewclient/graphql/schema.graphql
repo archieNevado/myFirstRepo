@@ -291,7 +291,6 @@ interface CMExternalProduct {
   creationDate: String!
   detailText(view: String): String
   detailTextAsTree(view: String): RichTextTree
-  "pdpPagegrid"
   externalId: String
   ignoreUpdates: Int
   languageId: String

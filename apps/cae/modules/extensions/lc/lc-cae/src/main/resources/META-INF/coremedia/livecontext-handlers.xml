@@ -83,14 +83,6 @@
     </property>
   </bean>
 
-  <bean id="marketingSpotHandler" class="com.coremedia.livecontext.marketingspot.CMMarketingSpotHandler" parent="pageHandlerBase">
-    <property name="permittedLinkParameterNames">
-      <list>
-        <value>targetView</value>
-      </list>
-    </property>
-  </bean>
-
   <bean id="searchLandingPagesLinkBuilderHelper" class="com.coremedia.livecontext.handler.SearchLandingPagesLinkBuilderHelper">
     <property name="navigationTreeRelation" ref="navigationTreeRelation"/>
     <property name="segmentPath" value="${livecontext.slp.segmentPath}" />

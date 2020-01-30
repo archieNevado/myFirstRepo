@@ -13,12 +13,4 @@
                      bean="catalogService"
                      property="useExternalIdForBeanCreation"
                      custom-value="true"/>
-  <customize:replace id="marketingSpotServiceBeanIdCustomizer"
-                     bean="marketingSpotService"
-                     property="useExternalIdForBeanCreation"
-                     custom-value="true"/>
-  <customize:replace id="marketingSpotWrapperServiceCustomizer"
-                     bean="marketingSpotWrapperService"
-                     property="useServiceCallsForStudio"
-                     custom-value="true"/>
 </beans>

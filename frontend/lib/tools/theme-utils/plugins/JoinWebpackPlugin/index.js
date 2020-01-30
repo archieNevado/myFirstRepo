@@ -66,7 +66,7 @@ class JoinWebpackPlugin {
     return this.groups[groupName];
   }
 
-  addSource(groupName, source, path, module) {
+  addSource(groupName, source, path) {
     const group = this.group(groupName);
     if (this.state === "loading") {
       group.sources[path] = source;

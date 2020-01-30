@@ -80,6 +80,9 @@
 <LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../../../Navigation/Fragments/Aurora%20Categories/Apparel/Women/Women%20Main%20f078abe.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/Fragments/Aurora%20Categories/Apparel/Women/Women%20Main%20Collection"/>
 </Struct>
 <Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../../../Navigation/e-Marketing%20Spots/PC_Homepage_Offer.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Navigation/e-Marketing%20Spots/PC_Homepage_Offer"/>
+</Struct>
+<Struct>
 <LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Fashion/Summer%20Dresses%20Collection.xml" cmexport:path="/Sites/Aurora%20Augmentation/United%20States/English/Editorial/Content/Fashion/Summer%20Dresses%20Collection"/>
 </Struct>
 <Struct>

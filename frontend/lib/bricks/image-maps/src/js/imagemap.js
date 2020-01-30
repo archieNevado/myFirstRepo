@@ -1,8 +1,5 @@
 import $ from "jquery";
-import {
-  EVENT_SRC_CHANGED,
-  EVENT_SRC_CHANGING,
-} from "@coremedia/brick-media";
+import { EVENT_SRC_CHANGED, EVENT_SRC_CHANGING } from "@coremedia/brick-media";
 
 /**
  * Transforms a comma-separated String of coords into an array of points.
@@ -305,7 +302,9 @@ export function update($imagemap, newRatio) {
             $hotzoneIndicator.data("cm-hotzone-indicator-disabled")
           ) {
             $hotzoneIndicator.data("cm-hotzone-indicator-disabled", false);
-            $hotzoneIndicator.removeClass("cm-imagemap__hotzone--loading cm-imagemap__hotzone--disabled");
+            $hotzoneIndicator.removeClass(
+              "cm-imagemap__hotzone--loading cm-imagemap__hotzone--disabled"
+            );
             $hotzoneIndicator.css({
               top: (hotzoneCenter.y * 100) / $wrapper.height() + "%",
               left: (hotzoneCenter.x * 100) / $wrapper.width() + "%",

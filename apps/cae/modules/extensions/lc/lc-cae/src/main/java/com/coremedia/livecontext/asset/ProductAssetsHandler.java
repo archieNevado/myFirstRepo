@@ -203,11 +203,6 @@ public class ProductAssetsHandler extends PageHandlerBase {
 
   private static String getCategoryExternalTechId(@NonNull Product product) {
     Category category = product.getCategory();
-
-    if (category == null) {
-      throw new CommerceException(format("product '%s' has no category", product));
-    }
-
     return category.getExternalTechId();
   }
 

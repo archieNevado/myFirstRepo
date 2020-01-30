@@ -325,6 +325,8 @@
                                    includeSubtypes="true"
                                    mayCreate="{mayCreateESpot}"/>
     <editor:RegisterLibraryTreeFilter filter="{new EcCatalogTreeFilter('Augmentation')}"/>
+    <editor:ConfigureDocumentTypes names="CMMarketingSpot"
+                                   preview="false"/>
   </local:configuration>
 
 

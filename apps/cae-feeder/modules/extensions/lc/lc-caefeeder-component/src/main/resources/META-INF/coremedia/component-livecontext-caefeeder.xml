@@ -18,6 +18,9 @@
   <bean name="contentBeanFactory:CMProductTeaser" parent="abstractTeasable-blueprint-doctypes"
         class="com.coremedia.blueprint.cae.contentbeans.CMTeasableImpl"/>
 
+  <bean name="contentBeanFactory:CMExternalProduct" parent="abstractTeasable-blueprint-doctypes"
+        class="com.coremedia.blueprint.cae.contentbeans.CMTeasableImpl"/>
+
   <customize:append id="addLiveContextFeedablePopulators" bean="feedablePopulators">
     <list>
       <bean class="com.coremedia.livecontext.feeder.CommerceItemsPopulator"/>

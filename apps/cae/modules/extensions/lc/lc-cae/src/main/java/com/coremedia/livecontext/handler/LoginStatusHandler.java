@@ -66,7 +66,10 @@ public class LoginStatusHandler {
       CurrentStoreContext.set(connection.getStoreContext());
       initUserContext(connection, request);
 
-      Map<String, Object> body = singletonMap("loggedIn", isLoggedIn(connection));
+      boolean loggedIn = CurrentUserContext.get().isLoggedIn();
+      //either the new implementation login status can be resolved via the generic client
+      // or the legacy implementation will be used.
+      Map<String, Object> body = singletonMap("loggedIn", loggedIn || isLoggedIn(connection));
       return new ResponseEntity<>(body, HttpStatus.OK);
     } finally {
       CurrentStoreContext.remove();

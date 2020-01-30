@@ -1,5 +1,7 @@
 package com.coremedia.blueprint.taxonomies;
 
+import edu.umd.cs.findbugs.annotations.Nullable;
+
 import java.util.Collection;
 
 /**
@@ -10,8 +12,9 @@ public interface TaxonomyResolver {
   /**
    * Returns the taxonomy that matches the given taxonomy id.
    *
-   * @return the taxonomy that matches the given taxonomy id.
+   * @return the taxonomy that matches the given taxonomy id; {@code null} if not found.
    */
+  @Nullable
   Taxonomy getTaxonomy(String siteId, String taxonomyId);
 
   /**
@@ -24,6 +27,11 @@ public interface TaxonomyResolver {
 
   /**
    * Method for manual reload of taxonomies, e.g. after server imports.
+   *
+   * @deprecated Explicit reload is not robust. Use automatic invalidation for taxonomies instead, like using CacheKeys.
    */
-  boolean reload();
+  @Deprecated(since = "1910")
+  default boolean reload() {
+    return true;
+  }
 }

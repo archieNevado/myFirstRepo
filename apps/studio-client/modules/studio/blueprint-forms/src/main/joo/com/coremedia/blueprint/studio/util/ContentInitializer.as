@@ -52,6 +52,7 @@ public class ContentInitializer {
 
   private static function initFolderProperties(content:Content):void {
     content.rename("_folderProperties");
+    initCMLocalized(content);
   }
 
   private static function initSpinner(content:Content):void {

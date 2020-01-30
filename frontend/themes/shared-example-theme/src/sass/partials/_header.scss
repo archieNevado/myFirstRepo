@@ -99,10 +99,6 @@
 
     .cm-hamburger-icon--toggled ~ & {
       display: flex;
-
-      > .cm-navigation-item--depth-0 > .cm-navigation-item__menu {
-        display: block;
-      }
     }
 
     @include breakpoints(("sm", landscape) "lg-and-up") {

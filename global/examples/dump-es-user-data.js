@@ -4,19 +4,23 @@
 // Elastic Social models database. The name of the user must be passed to the script
 // as variable userName.
 //
+// When authentication is enabled for MongoDB, the corresponding credentials must be passed as username (-u) and
+// password (-p) together with the authenticationDatabase "admin".
+//
 // For example, to output data of user "paul" for the tenant "corporate" stored in
 // a locally running MongoDB, invoke the script as follows:
 //
-// mongo localhost:27017/blueprint_corporate_models --quiet --eval "var userName='paul'" dump-es-user-data.js
+// mongo localhost:27017/blueprint_corporate_models -u [mongodb_user] -p [mongodb_password] --authenticationDatabase admin
+// --quiet --eval "var userName='paul'" dump-es-user-data.js
 //
 // See also section "Administration and Operation | Administration | Stored Personal Data"
 // in the Elastic Social manual.
 
 // check that a userName has been set
 if (typeof userName === 'undefined') {
-  print('userName not set. This script must be called with Mongo Shell and the global variable ' + '\'userName\', ' +
-          'for example:\n mongo localhost:27017/blueprint_corporate_models --quiet --eval "var userName=\'paul\'" ' +
-          'dump-es-user-data.js');
+  print('userName not set. This script must be called with Mongo Shell, MongoDB credentials and the global variable ' +
+          '\'userName\', for example:\n mongo localhost:27017/blueprint_corporate_models -u [mongodb_user] -p [mongodb_password] ' +
+          '--authenticationDatabase admin --quiet --eval "var userName=\'paul\'" dump-es-user-data.js');
   quit(1);
 }
 
@@ -95,14 +99,16 @@ findCounter(counterDb.counters, userId, "reviews:rejectedReviews", function(v) {
 print('\n### Binary Data');
 if (imageId) {
   print('The user has uploaded a profile image. Use the following command to fetch it:');
-  print(`  mongofiles --host [hostname] --port [port] -d ${prefix}_${tenant}_blobs get_id 'ObjectId("${imageId}")'`);
+  print(`  mongofiles --host [hostname] --port [port] -u [mongodb_user] -p [mongodb_password] --authenticationDatabase admin 
+  -d ${prefix}_${tenant}_blobs get_id 'ObjectId("${imageId}")'`);
 }
 // remove duplicate attachment ids
 attachments = attachments.filter(function(value, index, self) { return self.indexOf(value) === index; });
 if (attachments.length > 0) {
   print('The user has uploaded attachments for comments or reviews. Use the following commands to fetch them:');
   attachments.forEach(function(a) {
-      print(`  mongofiles --host [hostname] --port [port] -d ${prefix}_${tenant}_blobs get_id 'ObjectId("${a}")'`);
+      print(`  mongofiles --host [hostname] --port [port] -u [mongodb_user] -p [mongodb_password] --authenticationDatabase admin 
+      -d ${prefix}_${tenant}_blobs get_id 'ObjectId("${a}")'`);
   });
 }
 

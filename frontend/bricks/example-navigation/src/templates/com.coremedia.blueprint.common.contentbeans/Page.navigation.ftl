@@ -8,7 +8,7 @@
 <#assign showPicturesInNavigation=cm.localParameters().showPicturesInNavigation!true/>
 
 <#if (cmpage.navigation.rootNavigation)?has_content>
-  <li id="cm-navigation" class="cm-navigation cm-navigation-item--depth-0">
+  <li id="cm-navigation" class="cm-navigation">
     <@cm.include self=self.navigation.rootNavigation view="asLinkList" params={
     "maxDepth": bp.setting(self, "navigation_depth", 3),
     "isTopLevel": true,

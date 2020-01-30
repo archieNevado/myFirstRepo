@@ -38,5 +38,7 @@ class UserContextHelperTest {
     UserContext userContext2 = UserContext.builder().withUserName("forUser2").build();
     CurrentUserContext.set(userContext2);
     assertThat(CurrentUserContext.get()).isEqualTo(userContext2);
+
+    CurrentUserContext.remove();
   }
 }

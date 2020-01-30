@@ -6,15 +6,16 @@
     <folder id="1" name="">
       <folder id="3" name="Sites">
         <folder id="5" name="Media">
-          <folder id="4001" name="DepthForSiteIndicator">
-            <document id="4000" name="Site-Indicator" type="CMSite">
-              <version number="1">
-                <linkProperty name="root">
-                  <link id="4002"/>
-                </linkProperty>
-                <stringProperty name="id" value="theSiteId"/>
-              </version>
-            </document>
+          <document id="4000" name="Site-Indicator" type="CMSite">
+            <version number="1">
+              <linkProperty name="root">
+                <link id="4002"/>
+              </linkProperty>
+              <stringProperty name="id" value="theSiteId"/>
+            </version>
+          </document>
+
+          <folder id="4001" name="Navigation">
             <document id="4002" type="CMChannel" name="rootchannel">
               <version number="1">
                 <stringProperty name="segment" value="theSiteSegment"/>

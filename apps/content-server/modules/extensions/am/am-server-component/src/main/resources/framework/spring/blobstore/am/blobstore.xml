@@ -40,7 +40,7 @@
             <property name="conditions">
               <list>
                 <bean class="hox.corem.server.media.MatchCondition">
-                  <property name="documentTypeName" value="AMAsset"/>
+                  <property name="declaringDocumentTypeName" value="AMAsset"/>
                   <property name="propertyName" value="original"/>
                 </bean>
                 <!-- Add further match conditions for additional asset types here. -->

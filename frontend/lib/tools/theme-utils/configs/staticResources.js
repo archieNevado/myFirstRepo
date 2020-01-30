@@ -243,9 +243,7 @@ module.exports = () => config => {
           test: /\.param\.svg$/,
           loader: require.resolve("../loaders/SvgParamLoader"),
           options: {
-            name: "[name].[ext]",
-            limit: 0, // always inline svg with parameters
-            outputPath: "svg/", // if for whatever reasons limit 0 does not work
+            limit: true, // always inline svg with parameters
           },
         },
         {

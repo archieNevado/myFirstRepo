@@ -26,8 +26,12 @@ services:
       context: ../mongodb
     volumes:
       - mongo-data:/data/db
+      - ../mongodb/initdb.d/:/docker-entrypoint-initdb.d/
     networks:
       - backend
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
     restart: always
     logging: *default-logging
 
@@ -101,6 +105,8 @@ services:
     logging: *default-logging
     networks:
       - backend
+    environment:
+      MONGODB_CLIENTURI: mongodb://coremedia:coremedia@mongodb:27017
     command:
       - set-corem-home
       - wait-for-content-management-server
@@ -145,6 +151,8 @@ services:
     container_name: user-changes
     restart: always
     logging: *default-logging
+    environment:
+      MONGODB_CLIENTURI: mongodb://coremedia:coremedia@mongodb:27017
     networks:
       - backend
     command:
@@ -160,6 +168,7 @@ services:
       - backend
     environment:
       ELASTIC_SOCIAL_MAIL_SMTP_SERVER: ${ELASTIC_SOCIAL_MAIL_SMTP_SERVER:-localhost}
+      MONGODB_CLIENTURI: mongodb://coremedia:coremedia@mongodb:27017
     command:
       - wait-for-content-management-server
       - application
@@ -176,6 +185,7 @@ services:
       SFMC_CREDENTIALS_CUSTOMERID: ${SFMC_CREDENTIALS_CUSTOMERID}
       SFMC_CREDENTIALS_CLIENTID: ${SFMC_CREDENTIALS_CLIENTID}
       SFMC_CREDENTIALS_CLIENTSECRET: ${SFMC_CREDENTIALS_CLIENTSECRET}
+      MONGODB_CLIENTURI: mongodb://coremedia:coremedia@mongodb:27017
     labels:
       traefik.enable: "true"
       traefik.port: "8080"
@@ -223,6 +233,7 @@ services:
       SFMC_CREDENTIALS_CUSTOMERID: ${SFMC_CREDENTIALS_CUSTOMERID}
       SFMC_CREDENTIALS_CLIENTID: ${SFMC_CREDENTIALS_CLIENTID}
       SFMC_CREDENTIALS_CLIENTSECRET: ${SFMC_CREDENTIALS_CLIENTSECRET}
+      MONGODB_CLIENTURI: mongodb://coremedia:coremedia@mongodb:27017
     labels:
       traefik.enable: "true"
       traefik.port: "8080"
@@ -250,6 +261,7 @@ services:
       SFMC_CREDENTIALS_CUSTOMERID: ${SFMC_CREDENTIALS_CUSTOMERID}
       SFMC_CREDENTIALS_CLIENTID: ${SFMC_CREDENTIALS_CLIENTID}
       SFMC_CREDENTIALS_CLIENTSECRET: ${SFMC_CREDENTIALS_CLIENTSECRET}
+      MONGODB_CLIENTURI: mongodb://coremedia:coremedia@mongodb:27017
     labels:
       traefik.enable: "true"
       traefik.port: "8080"
@@ -301,11 +313,13 @@ services:
     environment:
       SPRING_APPLICATION_NAME: 'headless-server-preview'
       REPOSITORY_URL: http://content-management-server:8080/ior
+      SOLR_URL: http://solr:8983/solr
       ENVIRONMENT_FQDN: ${ENVIRONMENT_FQDN:-docker.localhost}
       CAAS_PREVIEW: "true"
       GRAPHIQL_ENABLED: "true"
       CAAS_SWAGGER_ENABLED: "true"
       CAAS_SOLR_COLLECTION: preview
+      CAAS_REMOTE_BASEURL: http://cae-preview:8080/blueprint/servlet/internal/service/url
       LINK_URLPREFIXTYPE: preview
       PREVIEWCLIENT_URL: https://headless-server-preview.${ENVIRONMENT_FQDN:-docker.localhost}/preview
       COMMERCE_HUB_CUSTOMENTITYPARAMS_CATALOGVERSION: Staged
@@ -337,6 +351,7 @@ services:
       REPOSITORY_URL: http://replication-live-server:8080/ior
       SOLR_URL: http://solr:8983/solr
       CAAS_SOLR_COLLECTION: live
+      CAAS_REMOTE_BASEURL: http://cae-live:8080/blueprint/servlet/internal/service/url
       LINK_URLPREFIXTYPE: live
       COMMERCE_HUB_CUSTOMENTITYPARAMS_CATALOGVERSION: Online
     labels:

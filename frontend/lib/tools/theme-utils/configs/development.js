@@ -1,5 +1,5 @@
 const deepMerge = require("./utils/deepMerge");
-const { CoreMediaWatchPlugin } = require("../plugins/CoreMediaWatchPlugin");
+const CoreMediaWatchPlugin = require("../plugins/CoreMediaWatchPlugin");
 const {
   workspace: { getThemeConfig, getMonitorConfig },
 } = require("@coremedia/tool-utils");
@@ -11,6 +11,7 @@ let monitorConfig = getMonitorConfig();
 if (!!process.env.target) {
   monitorConfig.target = process.env.target;
 }
+const stats = process.env.verbose === "verbose" ? "verbose" : "minimal";
 
 /**
  * @module contains the webpack configuration for the development environment
@@ -20,6 +21,8 @@ module.exports = () => config =>
     mode: "development",
     // provide an inline-source-map
     devtool: "inline-source-map",
+    // see https://webpack.js.org/configuration/stats/
+    stats: stats,
     // make sure sourcemaps provided by other modules are also bundled
     module: {
       rules: [

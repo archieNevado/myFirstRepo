@@ -21,6 +21,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.release>11</maven.compiler.release>
+    <sonar.java.source>${maven.compiler.release}</sonar.java.source>
 
     <google.api.services.analytics.version>v3-rev99-1.19.0</google.api.services.analytics.version>
     <google.api.services.youtube.version>v3-rev152-1.19.0</google.api.services.youtube.version>
@@ -28,11 +29,11 @@
 
     <customer>Blueprint</customer>
 
-    <cm.studio-client.core.version>1910.1</cm.studio-client.core.version>
+    <cm.studio-client.core.version>2001.1</cm.studio-client.core.version>
     <jangaroo.version>4.0.69</jangaroo.version>
     <jooUnitWebDriverBrowser>chrome</jooUnitWebDriverBrowser>
 
-    <spring.boot.version>2.2.1.RELEASE</spring.boot.version>
+    <spring.boot.version>2.2.3.RELEASE</spring.boot.version>
     <application-plugin.version>2.7.10</application-plugin.version>
 
     <!--
@@ -80,12 +81,12 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.27</tomcat.embed.version>
+    <tomcat.embed.version>9.0.30</tomcat.embed.version>
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.studio-client.core.version>1910.1</cm.studio-client.core.version>
-    <cm.common.core.version>1910.1</cm.common.core.version>
+    <cm.studio-client.core.version>2001.1</cm.studio-client.core.version>
+    <cm.common.core.version>2001.1</cm.common.core.version>
     <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
 
     <showDeprecation>true</showDeprecation>
@@ -341,7 +342,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-deploy-plugin</artifactId>
-          <version>2.8.2</version>
+          <version>3.0.0-M1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -356,7 +357,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-install-plugin</artifactId>
-          <version>2.5.2</version>
+          <version>3.0.0-M1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>

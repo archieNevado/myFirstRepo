@@ -111,7 +111,7 @@ General purpose tools
 Using the default entrypoint all default tools can be used, i.e.
 
 ```
-docker-compose run --rm management-tools /coremedia/tools/bin/cm dump
+docker run --rm --entrypoint="/coremedia/tools/bin/cm" --user="coremedia" --network="coremedia" <REGISTRY>/management-tools:<VERSION> dump
 ```
 
 Customize the entrypoint chain in docker-compose

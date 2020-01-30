@@ -40,10 +40,6 @@
     <property name="catalogWrapperService" ref="catalogWrapperService"/>
     <property name="wcsUrlProvider" ref="wcsUrlProvider"/>
   </bean>
-  <bean name="commerceBeanFactory:marketingspot" parent="abstractCommerceBean"
-        class="com.coremedia.livecontext.ecommerce.ibm.p13n.MarketingSpotImpl" scope="prototype">
-    <property name="marketingSpotWrapperService" ref="marketingSpotWrapperService" />
-  </bean>
   <bean name="commerceBeanFactory:category" parent="abstractCommerceBean"
         class="com.coremedia.livecontext.ecommerce.ibm.catalog.CategoryImpl" scope="prototype">
     <property name="catalogWrapperService" ref="catalogWrapperService"/>

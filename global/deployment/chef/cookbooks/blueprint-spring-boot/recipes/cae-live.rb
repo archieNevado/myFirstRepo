@@ -12,7 +12,7 @@ node.default_unless['blueprint']['apps'][base_service_name]['application.propert
 node.default_unless['blueprint']['apps'][base_service_name]['application.properties']['solr.url'] = 'http://localhost:40080/solr'
 node.default_unless['blueprint']['apps'][base_service_name]['application.properties']['solr.collection.cae'] = 'live'
 node.default_unless['blueprint']['apps'][base_service_name]['application.properties']['elastic.solr.url'] = 'http://localhost:40080/solr'
-node.default_unless['blueprint']['apps'][base_service_name]['application.properties']['mongoDb.clientURI'] = 'mongodb://localhost:27017'
+node.default_unless['blueprint']['apps'][base_service_name]['application.properties']['mongoDb.clientURI'] = 'mongodb://coremedia:coremedia@localhost:27017'
 node.default_unless['blueprint']['apps'][base_service_name]['application.properties']['mongoDb.prefix'] = 'blueprint'
 node.default_unless['blueprint']['apps'][base_service_name]['application.properties']['repository.heapCacheSize'] = 100 * 1024 * 1024
 node.default_unless['blueprint']['apps'][base_service_name]['application.properties']['repository.blobCacheSize'] = 10 * 1024 * 1024 * 1024
@@ -62,6 +62,7 @@ end
   service_user = service_name
   cache_dir = "#{node['blueprint']['cache_dir']}/#{service_name}"
   service_port = base_service_port + i * 100 - 100
+  service_management_port = base_service_port + i * 100 - 99
   service_dir = "#{node['blueprint']['base_dir']}/#{service_name}"
   service_jmx_registry_port = base_service_jmx_registry_port + i * 100 - 100
   service_jmx_server_port = base_service_jmx_server_port + i * 100 - 100
@@ -77,7 +78,8 @@ end
 
   node.override['blueprint']['apps'][service_name]['application.properties']['repository.blobCachePath'] = cache_dir
   node.override['blueprint']['apps'][service_name]['application.properties']['com.coremedia.transform.blobCache.basePath'] = "#{cache_dir}/persistent-transformed-blobcache"
-  node.override['blueprint']['spring-boot'][service_name]['boot_opts']['server.port'] = service_port
+  node.override['blueprint']['apps'][service_name]['application.properties']['server.port'] = service_port
+  node.override['blueprint']['apps'][service_name]['application.properties']['management.server.port'] = service_management_port
 
   if node.deep_fetch('blueprint', 'spring-boot', service_name, 'sitemap', 'enabled')
     start_time = node.deep_fetch('blueprint', 'spring-boot', service_name, 'sitemap', 'start_time')
@@ -124,7 +126,7 @@ end
     java_home spring_boot_default(service_name, 'java_home', 'cae-live')
     boot_opts service_boot_opts
     application_properties service_application_config
-    post_start_wait_url "http://localhost:#{service_port}/blueprint/servlet/actuator/health"
+    post_start_wait_url "http://localhost:#{service_management_port}/actuator/health"
     log_dir "#{node['blueprint']['log_dir']}/#{service_name}"
     jmx_remote spring_boot_default(service_name, 'jmx_remote', 'cae-live')
     jmx_remote_server_name spring_boot_default(service_name, 'jmx_remote_server_name', 'cae-live')

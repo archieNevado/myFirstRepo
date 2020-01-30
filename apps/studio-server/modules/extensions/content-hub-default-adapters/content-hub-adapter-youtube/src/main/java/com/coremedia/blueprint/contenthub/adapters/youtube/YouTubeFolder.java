@@ -1,7 +1,6 @@
 package com.coremedia.blueprint.contenthub.adapters.youtube;
 
 
-import com.coremedia.contenthub.api.BlobCache;
 import com.coremedia.contenthub.api.ContentHubBlob;
 import com.coremedia.contenthub.api.ContentHubObjectId;
 import com.coremedia.contenthub.api.ContentHubType;
@@ -22,27 +21,24 @@ class YouTubeFolder extends YouTubeHubObject implements Folder {
 
   private final String name;
   private final Playlist playlist;
-  private final BlobCache blobCache;
 
   /**
    * Constructor for the channel
    */
-  YouTubeFolder(ContentHubObjectId id, String name, BlobCache blobCache) {
+  YouTubeFolder(ContentHubObjectId id, String name) {
     super(id);
     this.playlist = null;
     this.name = name;
-    this.blobCache = blobCache;
     this.type = new ContentHubType(YouTubeTypes.CHANNEL);
   }
 
   /**
    * Constructor for playlists
    */
-  YouTubeFolder(ContentHubObjectId id, Playlist playlist, BlobCache blobCache) {
+  YouTubeFolder(ContentHubObjectId id, Playlist playlist) {
     super(id);
     this.playlist = playlist;
     this.name = playlist.getSnippet().getTitle();
-    this.blobCache = blobCache;
     this.type = new ContentHubType(YouTubeTypes.PLAYLIST);
   }
 
@@ -75,12 +71,12 @@ class YouTubeFolder extends YouTubeHubObject implements Folder {
   @Nullable
   @Override
   public ContentHubBlob getBlob(String classifier) {
-    return blobCache.cached(new UrlBlobBuilder(this, classifier).withUrl(getThumbnailUrl()).build());
+    return new UrlBlobBuilder(this, classifier).withUrl(getThumbnailUrl()).build();
   }
 
   private Object getPlayListPicture() {
     return Objects.requireNonNullElse(
-            blobCache.cached(new UrlBlobBuilder(this, "playlist").withUrl(getThumbnailUrl()).build()),
+            new UrlBlobBuilder(this, "playlist").withUrl(getThumbnailUrl()).build(),
             SHOW_TYPE_ICON);
   }
 

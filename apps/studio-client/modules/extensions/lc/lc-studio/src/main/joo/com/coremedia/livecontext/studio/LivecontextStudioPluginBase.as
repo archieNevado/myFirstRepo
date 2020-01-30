@@ -19,6 +19,7 @@ import com.coremedia.cms.editor.sdk.sites.Site;
 import com.coremedia.cms.editor.sdk.util.MetaStyleService;
 import com.coremedia.cms.editor.sdk.util.ThumbnailResolverFactory;
 import com.coremedia.ecommerce.studio.CatalogModel;
+import com.coremedia.ecommerce.studio.augmentation.augmentationService;
 import com.coremedia.ecommerce.studio.components.link.CatalogLinkPropertyField;
 import com.coremedia.ecommerce.studio.helper.AugmentationUtil;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
@@ -261,13 +262,11 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
   }
 
   private static function initExternalChannel(content:Content):void {
-    ContentInitializer.initializePropertyWithName(content, 'title');
     ContentInitializer.initCMLinkable(content);
     ContentInitializer.initCMLocalized(content);
   }
 
   private static function initExternalProduct(content:Content):void {
-    ContentInitializer.initializePropertyWithName(content, 'title');
     ContentInitializer.initCMLinkable(content);
     ContentInitializer.initCMLocalized(content);
   }

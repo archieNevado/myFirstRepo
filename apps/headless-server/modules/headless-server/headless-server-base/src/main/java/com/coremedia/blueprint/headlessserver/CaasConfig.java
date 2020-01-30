@@ -10,6 +10,8 @@ import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGridService;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.blueprint.image.transformation.ImageTransformationConfiguration;
+import com.coremedia.caas.config.RemoteServiceConfiguration;
+import com.coremedia.caas.filter.InProductionFilterPredicate;
 import com.coremedia.caas.filter.ValidityDateFilterPredicate;
 import com.coremedia.caas.link.GraphQLLink;
 import com.coremedia.caas.media.ResponsiveMediaAdapterFactory;
@@ -18,6 +20,7 @@ import com.coremedia.caas.model.adapter.ContentBlobAdapterFactory;
 import com.coremedia.caas.model.adapter.ExtendedLinkListAdapterFactory;
 import com.coremedia.caas.model.adapter.LinkListAdapter;
 import com.coremedia.caas.model.adapter.LinkListAdapterFactory;
+import com.coremedia.caas.model.adapter.RemoteServiceAdapterFactory;
 import com.coremedia.caas.model.adapter.RichTextAdapter;
 import com.coremedia.caas.model.adapter.RichTextAdapterFactory;
 import com.coremedia.caas.model.converter.RichTextToStringConverter;
@@ -40,6 +43,8 @@ import com.coremedia.caas.search.id.CaasContentBeanIdScheme;
 import com.coremedia.caas.search.solr.SolrCaeQueryBuilder;
 import com.coremedia.caas.search.solr.SolrQueryBuilder;
 import com.coremedia.caas.search.solr.SolrSearchResultFactory;
+import com.coremedia.caas.service.cache.CacheInstances;
+import com.coremedia.caas.service.cache.CacheMapWrapper;
 import com.coremedia.caas.service.cache.Weighted;
 import com.coremedia.caas.spel.SpelDirectiveWiring;
 import com.coremedia.caas.spel.SpelEvaluationStrategy;
@@ -62,6 +67,7 @@ import com.coremedia.caas.wiring.ExecutionTimeoutInstrumentation;
 import com.coremedia.caas.wiring.FallbackPropertyAccessor;
 import com.coremedia.caas.wiring.FilteringDataFetcher;
 import com.coremedia.caas.wiring.ProvidesTypeNameResolver;
+import com.coremedia.caas.wiring.RemoteLinkWiringFactory;
 import com.coremedia.caas.wiring.TypeNameResolver;
 import com.coremedia.caas.wiring.TypeNameResolverWiringFactory;
 import com.coremedia.cache.Cache;
@@ -76,6 +82,8 @@ import com.coremedia.link.CompositeLinkComposer;
 import com.coremedia.link.LinkComposer;
 import com.coremedia.link.uri.UriLinkBuilder;
 import com.coremedia.link.uri.UriLinkComposer;
+import com.coremedia.objectserver.urlservice.UrlServiceRequestParams;
+import com.coremedia.search.solr.client.SolrClientConfiguration;
 import com.coremedia.xml.Markup;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.collect.ImmutableList;
@@ -97,6 +105,12 @@ import graphql.schema.idl.WiringFactory;
 import graphql.spring.web.servlet.ExecutionResultHandler;
 import graphql.spring.web.servlet.GraphQLInvocation;
 import org.apache.solr.client.solrj.SolrClient;
+import org.dataloader.BatchLoaderEnvironment;
+import org.dataloader.BatchLoaderWithContext;
+import org.dataloader.DataLoader;
+import org.dataloader.DataLoaderOptions;
+import org.dataloader.DataLoaderRegistry;
+import org.dataloader.Try;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
@@ -144,6 +158,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -152,7 +168,7 @@ import static java.util.Collections.emptyList;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(value = {
+@ComponentScan({
         "com.coremedia.caas",
         "com.coremedia.blueprint.base.caas",
         "com.coremedia.cap.undoc.common.spring",
@@ -164,9 +180,11 @@ import static java.util.Collections.emptyList;
         "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
         "classpath:/com/coremedia/blueprint/base/pagegrid/impl/bpbase-pagegrid-services.xml",
         "classpath:/com/coremedia/blueprint/base/navigation/context/bpbase-default-contextstrategy.xml",
-        "classpath:/com/coremedia/search/solr/client/coremedia-solr-client.xml",
 })
-@Import({ImageTransformationConfiguration.class})
+@Import({
+        ImageTransformationConfiguration.class,
+        SolrClientConfiguration.class
+})
 public class CaasConfig implements WebMvcConfigurer {
 
   private static final Logger LOG = LoggerFactory.getLogger(CaasConfig.class);
@@ -325,6 +343,7 @@ public class CaasConfig implements WebMvcConfigurer {
             "Banner".equals(typeName) ||
                     "Detail".equals(typeName) ||
                     "CollectionItem".equals(typeName) ||
+                    "HasPageGrid".equals(typeName) ||
                     repository.getContentType(typeName) != null ? Optional.of(true) : Optional.empty();
   }
 
@@ -401,6 +420,11 @@ public class CaasConfig implements WebMvcConfigurer {
   @Bean
   public ContentBlobAdapterFactory contentBlobAdapter() {
     return new ContentBlobAdapterFactory();
+  }
+
+  @Bean
+  public RemoteServiceAdapterFactory remoteServiceAdapter(RemoteServiceConfiguration remoteServiceConfiguration) {
+    return new RemoteServiceAdapterFactory(remoteServiceConfiguration);
   }
 
   @Bean
@@ -562,9 +586,20 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
+  public RemoteLinkWiringFactory remoteLinkWiringFactory() {
+    return new RemoteLinkWiringFactory();
+  }
+
+  @Bean
   @Qualifier("filterPredicate")
   public Predicate<Object> validityDateFilterPredicate() {
     return new ValidityDateFilterPredicate();
+  }
+
+  @Bean
+  @Qualifier("filterPredicate")
+  public Predicate<Object> inProductionFilterPredicate() {
+    return new InProductionFilterPredicate();
   }
 
   @Bean
@@ -579,8 +614,8 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public GraphQLInvocation graphQLInvocation(GraphQL graphQL, @Qualifier("queryRoot") Map<String, Object> queryRoots) {
-    return new GraphQLInvocationImpl(graphQL, renameQueryRootsWithOptionalPrefix(queryRoots));
+  public GraphQLInvocation graphQLInvocation(GraphQL graphQL, @Qualifier("queryRoot") Map<String, Object> queryRoots, DataLoaderRegistry dataLoaderRegistry) {
+    return new GraphQLInvocationImpl(graphQL, renameQueryRootsWithOptionalPrefix(queryRoots), dataLoaderRegistry);
   }
 
   @Bean
@@ -757,6 +792,47 @@ public class CaasConfig implements WebMvcConfigurer {
       renamedQueryRoots.put(name, rootEntry.getValue());
     }
     return renamedQueryRoots;
+  }
+
+  @Bean
+  public DataLoaderRegistry dataLoaderRegistry(Map<String, DataLoader<String, Try<String>>> dataLoaders) {
+
+    DataLoaderRegistry registry = new DataLoaderRegistry();
+    dataLoaders.forEach(registry::register);
+    return registry;
+
+  }
+
+  @Bean
+  public DataLoader<String, Try<String>> remoteLinkDataLoader(RemoteServiceAdapterFactory rsa, CacheManager cacheManager) {
+
+    BatchLoaderWithContext<String, Try<String>> batchLoader = new BatchLoaderWithContext<String, Try<String>>() {
+      @Override
+      public CompletionStage<List<Try<String>>> load(List<String> keys, BatchLoaderEnvironment environment) {
+
+        return CompletableFuture.supplyAsync(() -> {
+          return rsa.to().formatLinks(keys.stream().map(key -> {
+            return UrlServiceRequestParams.create(
+                    key,
+                    (String) ((Map) environment.getKeyContexts().get(key)).get("siteId"),
+                    (String) ((Map) environment.getKeyContexts().get(key)).get("context")
+            );
+          }).collect(Collectors.toList()));
+        });
+
+      }
+    };
+
+    org.springframework.cache.Cache remoteLinkCache = cacheManager.getCache(CacheInstances.REMOTE_LINKS);
+    DataLoaderOptions options;
+    if(remoteLinkCache != null) {
+      options = DataLoaderOptions.newOptions().setCacheMap(new CacheMapWrapper(remoteLinkCache));
+    } else {
+      options = DataLoaderOptions.newOptions().setCachingEnabled(false);
+      LOG.warn("No configuration for caffeine cache '{}' found. Caching disabled!", CacheInstances.REMOTE_LINKS);
+    }
+    return DataLoader.newDataLoader(batchLoader, options);
+
   }
 
 }

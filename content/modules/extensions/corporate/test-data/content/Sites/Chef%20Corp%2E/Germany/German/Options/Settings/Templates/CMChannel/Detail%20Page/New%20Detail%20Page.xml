@@ -52,7 +52,7 @@
 <Struct>
 <StructListProperty Name="extendedItems">
 <Struct>
-<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../../../../../Editorial/Homepage/Blog/New%20Article.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Editorial/Homepage/Blog/New%20Article"/>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/New%20Article.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Options/Settings/Templates/CMChannel/Detail%20Page/New%20Article"/>
 </Struct>
 </StructListProperty>
 <LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../../../../Viewtypes/CMChannel/full-details.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Options/Viewtypes/CMChannel/full-details"/>

@@ -14,8 +14,8 @@
                                     resizeHandles="e"
                                     minWidth="401"
                                     width="401"
-                                    x="113"
-                                    y="84"
+                                    x="{config.positionFun ? config.positionFun()[0] : 113}"
+                                    y="{config.positionFun ? config.positionFun()[1] : 84}"
                                     constrainHeader="true"
                                     ui="{WindowSkin.GRID_200.getSkin()}">
   <fx:Metadata>
@@ -31,6 +31,9 @@
     import com.coremedia.ui.skins.WindowSkin;
 
     public static const xtype:String = "com.coremedia.blueprint.studio.template.config.createFromTemplateDialog";
+
+    [ExtConfig]
+    public var positionFun:Function;
 
     private var config:CreateFromTemplateDialog;
 

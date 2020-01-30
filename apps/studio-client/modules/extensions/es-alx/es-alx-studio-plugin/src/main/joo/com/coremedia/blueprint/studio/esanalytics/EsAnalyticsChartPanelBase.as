@@ -90,7 +90,7 @@ public class EsAnalyticsChartPanelBase extends PropertyFieldGroup {
   }
 
   private static function validContent(content:Content):Boolean {
-    return content && "CMArticle" === content.getType().getName() && content.getPath();
+    return content && content.getPath();
   }
 
   private function getTenantVE():ValueExpression {

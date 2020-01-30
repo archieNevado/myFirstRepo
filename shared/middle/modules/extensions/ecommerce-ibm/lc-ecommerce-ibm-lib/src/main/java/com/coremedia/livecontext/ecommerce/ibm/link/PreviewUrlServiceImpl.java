@@ -34,22 +34,22 @@ public class PreviewUrlServiceImpl implements PreviewUrlService {
   }
 
   @Override
-  public UriComponents getCategoryUrl(Category category, List<QueryParam> linkParameters, HttpServletRequest request) {
+  public UriComponents getCategoryUrl(Category category, StoreContext storeContext, List<QueryParam> linkParameters, HttpServletRequest request) {
     UriComponentsBuilder builder = wcsUrlProvider.buildCategoryLink(category, linkParameters, true)
             .orElseThrow(() -> new CommerceException(
                     "Could not build preview URL for category '" + category.getId() + "'."));
 
-    return setPreviewTokenParam(builder, category.getContext());
+    return setPreviewTokenParam(builder, storeContext);
   }
 
   @Override
-  public UriComponents getProductUrl(Product product, @Nullable Category category, List<QueryParam> linkParameters,
+  public UriComponents getProductUrl(Product product, @Nullable Category category, StoreContext storeContext, List<QueryParam> linkParameters,
                                      HttpServletRequest request) {
     UriComponentsBuilder builder = wcsUrlProvider.buildProductLink(product, linkParameters, true)
             .orElseThrow(() -> new CommerceException(
                     "Could not build preview URL for product '" + product.getId() + "'."));
 
-    return setPreviewTokenParam(builder, product.getContext());
+    return setPreviewTokenParam(builder, storeContext);
   }
 
   @Override

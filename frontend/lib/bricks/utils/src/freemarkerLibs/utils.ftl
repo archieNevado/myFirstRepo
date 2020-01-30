@@ -1,6 +1,6 @@
 <#--
   Renders a given mapping of attributes and their values to be used in a html-tag.
-  If an attribute has an empty value or the value is cm.UNDEFINED it will be omitted.
+  If the value of an attribute is cm.UNDEFINED it will be omitted.
   The rendered output will always have a leading space and all attributes are rendered in a single line.
 
   @param attr contains a mapping of attribute names to their corresponding values.
@@ -13,7 +13,7 @@
   ${""?left_pad(1)}<@compress single_line=true>
   <#list attr?keys as name>
     <#local value=(attr[name]!"")?string />
-    <#if value?has_content && !cm.isUndefined(value)>
+    <#if !cm.isUndefined(value)>
       ${name}="${value}"
     </#if>
   </#list>
@@ -22,6 +22,7 @@
 
 <#--
   Renders a given mapping of attributes and their values to be used in a html-tag.
+  The rendered output will always have a leading space and all attributes are rendered in a single line.
 
   @param attr contains a mapping of attribute names to their corresponding values.
   @param ignore contains a list of attribute names to ignore (e.g. when passing attr from a different source and some
@@ -35,6 +36,7 @@
   <img src="#" class="cm-image" <@renderAttr attributes/>>
 -->
 <#macro renderAttr attr={} ignore=[]>
+  ${""?left_pad(1)}<@compress single_line=true>
   <#if attr?keys?seq_contains("classes") && !ignore?seq_contains("classes")>
     <#local classes=attr["classes"] />
     <#if attr?keys?seq_contains("class")>
@@ -43,7 +45,19 @@
     <#local attr=attr + {"class": classes?join(" ")} />
   </#if>
   <#local ignore=ignore + ["classes"] />
-  <#list attr?keys as key><#if !ignore?seq_contains(key)><#local value=attr[key]/><#if key=="metadata"><@preview.metadata data=value /><#elseif key?contains("data-")><@cm.dataAttribute name=key data=value/><#elseif value?has_content> ${key}="${value?string}"</#if></#if></#list>
+  <#list attr?keys as key>
+    <#if !ignore?seq_contains(key)>
+      <#local value=attr[key]/>
+      <#if (key=="metadata" || key=="data-cm-metadata")>
+        <@preview.metadata data=value />
+      <#elseif key?contains("data-")>
+        <@cm.dataAttribute name=key data=value/>
+      <#elseif !cm.isUndefined(value)>
+        ${key}="${value?string!""}"
+      </#if>
+    </#if>
+  </#list>
+  </@compress>
 </#macro>
 
 <#--
@@ -79,8 +93,8 @@
   </@utils.optionalLink>
 -->
 <#macro optionalLink href openInNewTab=false attr={}>
-  <#local target=openInNewTab?then("_blank", "_self") />
-  <#local rel=openInNewTab?then("noopener", "") />
+  <#local target=openInNewTab?then("_blank", cm.UNDEFINED) />
+  <#local rel=openInNewTab?then("noopener noreferrer", cm.UNDEFINED) />
   <@optionalTag condition=href?has_content tagName="a" attr={
     "href": href,
     "target": target,

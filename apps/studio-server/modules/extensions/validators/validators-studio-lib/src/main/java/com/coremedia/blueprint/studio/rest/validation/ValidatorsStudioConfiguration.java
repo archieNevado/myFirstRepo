@@ -29,12 +29,14 @@ import com.coremedia.rest.cap.CapRestServiceConfiguration;
 import com.coremedia.rest.cap.config.StudioConfigurationProperties;
 import com.coremedia.rest.cap.content.imagevariants.ImageCropSizeValidator;
 import com.coremedia.rest.cap.validation.ContentTypeValidator;
+import com.coremedia.rest.cap.validators.ContentLocaleMatchesSiteLocaleValidator;
 import com.coremedia.rest.cap.validators.CrossSiteLinkValidator;
+import com.coremedia.rest.cap.validators.DuplicateDerivedInSiteValidator;
 import com.coremedia.rest.cap.validators.ImageMapAreasValidator;
 import com.coremedia.rest.cap.validators.ImageMapOverlayConfigurationValidator;
 import com.coremedia.rest.cap.validators.LinkListMaxLengthValidator;
-import com.coremedia.rest.cap.validators.ContentLocaleMatchesSiteLocaleValidator;
 import com.coremedia.rest.cap.validators.MasterVersionUpdatedValidator;
+import com.coremedia.rest.cap.validators.SameMasterLinkValidator;
 import com.coremedia.rest.cap.validators.SelfReferringStructLinkListValidator;
 import com.coremedia.rest.cap.validators.SiteNameValidator;
 import com.coremedia.rest.cap.validators.StructLinkListIndexValidator;
@@ -67,10 +69,8 @@ import java.util.Collections;
                 "classpath:/com/coremedia/blueprint/base/pagegrid/impl/bpbase-pagegrid-services.xml"
         },
         reader = ResourceAwareXmlBeanDefinitionReader.class)
-@Import(value = {CapRestServiceConfiguration.class})
-@EnableConfigurationProperties({
-        StudioConfigurationProperties.class
-})
+@Import(CapRestServiceConfiguration.class)
+@EnableConfigurationProperties(StudioConfigurationProperties.class)
 class ValidatorsStudioConfiguration {
 
   @Bean
@@ -333,6 +333,36 @@ class ValidatorsStudioConfiguration {
 
     ContentLocaleMatchesSiteLocaleValidator validator
             = new ContentLocaleMatchesSiteLocaleValidator(sitesService);
+    validator.setConnection(connection);
+    validator.setContentType("CMLocalized");
+    validator.setSeverity(severity);
+    validator.setValidatingSubtypes(true);
+    return validator;
+  }
+
+  @Bean
+  SameMasterLinkValidator sameMasterLinkValidator(
+          CapConnection connection,
+          SitesService sitesService,
+          @Value("${sameMasterLinkValidator.severity:WARN}") Severity severity) {
+
+    SameMasterLinkValidator validator
+            = new SameMasterLinkValidator(sitesService);
+    validator.setConnection(connection);
+    validator.setContentType("CMLocalized");
+    validator.setSeverity(severity);
+    validator.setValidatingSubtypes(true);
+    return validator;
+  }
+
+  @Bean
+  DuplicateDerivedInSiteValidator duplicateDerivedInSiteValidator(
+          CapConnection connection,
+          SitesService sitesService,
+          @Value("${duplicateDerivedInSiteValidator.severity:WARN}") Severity severity) {
+
+    DuplicateDerivedInSiteValidator validator
+            = new DuplicateDerivedInSiteValidator(sitesService);
     validator.setConnection(connection);
     validator.setContentType("CMLocalized");
     validator.setSeverity(severity);

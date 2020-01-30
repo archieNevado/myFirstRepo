@@ -156,6 +156,10 @@
       }
     }
 
+    &__picture {
+      @include stretch-absolute();
+    }
+
     &__download-icon:before {
       @include icon;
       background-image: url("../../img/download-icon.svg");

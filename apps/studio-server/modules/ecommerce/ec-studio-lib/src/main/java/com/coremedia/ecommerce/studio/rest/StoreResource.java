@@ -131,7 +131,7 @@ public class StoreResource extends AbstractCatalogResource<Store> {
 
     try {
       StoreContext context = entity.getContext();
-      List<Catalog> configuredCatalogs = mappedCatalogsProvider.getConfiguredCatalogs(siteId, context);
+      List<Catalog> configuredCatalogs = mappedCatalogsProvider.getConfiguredCatalogs(context);
       CommerceConnection connection = context.getConnection();
 
       representation.setMarketingEnabled(hasMarketingSpots(connection, context));

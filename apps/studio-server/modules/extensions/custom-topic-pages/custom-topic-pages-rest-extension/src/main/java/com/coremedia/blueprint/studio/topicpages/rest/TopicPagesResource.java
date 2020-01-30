@@ -17,6 +17,7 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SiteDestroyedException;
 import com.coremedia.cap.multisite.SitesService;
 import com.google.common.base.Strings;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -253,6 +254,7 @@ public class TopicPagesResource {
    * @param siteId     The id of the site
    * @return The taxonomy strategy for the given taxonomy id and site
    */
+  @Nullable
   private Taxonomy findTaxonomy(String siteId, String taxonomyId) {
     Taxonomy taxonomyStrategy = strategyResolver.getTaxonomy(siteId, taxonomyId);
     if (taxonomyStrategy == null) {
@@ -418,9 +420,7 @@ public class TopicPagesResource {
       if (add) {
         newChildrenList.add(topicPage);
       } else {
-        if (newChildrenList.contains(topicPage)) {
-          newChildrenList.remove(topicPage);
-        }
+        newChildrenList.remove(topicPage);
       }
 
       //update children link list of the root channel

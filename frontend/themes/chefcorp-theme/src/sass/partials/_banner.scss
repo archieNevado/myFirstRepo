@@ -5,12 +5,6 @@
 .cm-hero-banner {
   font-family: $cm-font-family-sans-serif;
 
-  &__picture-box {
-    @include breakpoint("xs", "landscape") {
-      @include aspect-ratio-box(8, 3);
-    }
-  }
-
   &__headline,
   &__text {
     text-shadow: 0 0 10px #000000;

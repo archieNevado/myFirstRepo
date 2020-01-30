@@ -95,12 +95,13 @@ public class WcsLoginUrlsProvider implements LiveContextLoginUrlsProvider {
   private String buildUrl(String urlTemplate, HttpServletRequest request) {
     StoreContext storeContext = CurrentStoreContext.get();
     CommerceConnection connection = storeContext.getConnection();
-    CatalogServiceImpl catalogService = getCatalogService(connection);
+    CatalogService catalogService = connection.getCatalogService();
 
     String commerceTokensReplacedUrl = CommercePropertyHelper.replaceTokens(urlTemplate, storeContext);
     String nexturl = buildNextUrl();
     Map<String, ?> parametersMap = ImmutableMap.of(
-            "langId", catalogService.getLanguageId(storeContext.getLocale()),
+            "langId", catalogService instanceof CatalogServiceImpl ?
+                    ((CatalogServiceImpl) catalogService).getLanguageId(storeContext.getLocale()) : "-1",
             "storeId", storeContext.getStoreId(),
             "catalogId", storeContext.getCatalogId().get().value(),
             "nexturl", nexturl
@@ -172,14 +173,4 @@ public class WcsLoginUrlsProvider implements LiveContextLoginUrlsProvider {
     return baseUrl + relativeUrlPart;
   }
 
-  @NonNull
-  private static CatalogServiceImpl getCatalogService(@NonNull CommerceConnection connection) {
-    CatalogService catalogService = connection.getCatalogService();
-
-    if (!(catalogService instanceof CatalogServiceImpl)) {
-      throw new IllegalStateException("No catalog service found for connection " + connection);
-    }
-
-    return (CatalogServiceImpl) catalogService;
-  }
 }

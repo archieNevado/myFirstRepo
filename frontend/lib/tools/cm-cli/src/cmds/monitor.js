@@ -54,7 +54,10 @@ const handler = argv => {
     }
     args.push("--mode=development");
     args.push("--watch");
-    if (!argv.verbose) {
+    if (argv.verbose) {
+      args.push("--display=verbose");
+      process.env.verbose = true;
+    } else {
       args.push("--display=none");
     }
     const result = spawnSync(PACKAGE_MANAGER_EXECUTABLE, args, {
@@ -97,6 +100,9 @@ const handler = argv => {
       .whoami()
       .then(user => {
         log.info(`You are logged in as user '${user.name}' (id=${user.id}).`);
+        if(argv.verbose) {
+          log.info(`Verbose logging is enabled.`);
+        }
         log.info(`Creating initial theme build.`);
         startWebpackWatchMode();
       })

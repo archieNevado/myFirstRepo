@@ -95,7 +95,6 @@ services:
       COM_COREMEDIA_CORBA_SERVER_PORT: ${WFS_ORB_PORT:-40383}
       CAP_CLIENT_SERVER_IOR_URL: http://content-management-server:8080/ior
       WORKFLOW_IOR_URL: http://content-management-server:8080/ior
-      MONGODB_CLIENTURI: mongodb://mongodb:27017
       MONGODB_PREFIX: blueprint
       SQL_STORE_DRIVER: com.mysql.cj.jdbc.Driver
       SQL_STORE_URL: jdbc:mysql://mysql:3306/cm_management
@@ -188,7 +187,6 @@ services:
     environment:
       <<: *development-boot-envs
       REPOSITORY_URL: http://content-management-server:8080/ior
-      MONGODB_CLIENTURI: mongodb://mongodb:27017
       HEAP_DUMP_FILENAME: user-changes-heapdump
     labels:
       traefik.enable: "true"
@@ -205,7 +203,6 @@ services:
     environment:
       <<: *development-boot-envs
       REPOSITORY_URL: http://content-management-server:8080/ior
-      MONGODB_CLIENTURI: mongodb://mongodb:27017
       ELASTIC_SOLR_URL: http://solr:8983/solr
       TENANT_DEFAULT: helios
       HEAP_DUMP_FILENAME: elastic-worker-heapdump
@@ -253,7 +250,9 @@ services:
       traefik.frontend.headers.SSLRedirect: "false"
       # FIXME: this rule is required in the tests <FQDN>/corporate should work too
       traefik.preview-test.frontend.rule: Host:preview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/blueprint/servlet
-      traefik.actuator.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/cae-preview;AddPrefix:/blueprint/servlet/actuator
+      # these traefik labels are only required for the overview page
+      traefik.actuator.port: "8081"
+      traefik.actuator.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/cae-preview;AddPrefix:/actuator
 
   replication-live-server:
     # in the dev setup we simply override the startup
@@ -287,7 +286,9 @@ services:
       traefik.frontend.headers.SSLRedirect: "false"
       # FIXME: this rule is required in the tests, <FQDN>/corporate should work too
       traefik.live-test.frontend.rule: Host:corporate.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/blueprint/servlet
-      traefik.actuator.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/cae-live;AddPrefix:/blueprint/servlet/actuator
+      # these traefik labels are only required for the overview page
+      traefik.actuator.port: "8081"
+      traefik.actuator.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/cae-live;AddPrefix:/actuator
     command:
       - wait-for-master-live-server
       - enable-sitemap-generation
@@ -340,7 +341,7 @@ services:
     environment:
       <<: *development-boot-envs
       CAAS_CONTEXT_TRACE_ENABLED: "false"
-      CAASREST_JSLTENABLED: "true"
+      CAASSERVER_ENDPOINT: http://${ENVIRONMENT_FQDN:-docker.localhost}:41180/graphql
       # only used in the test content
       BLUEPRINT_SITE_MAPPING_CORPORATE: //preview.${ENVIRONMENT_FQDN:-docker.localhost}
       BLUEPRINT_SITE_MAPPING_APPAREL: //preview.${ENVIRONMENT_FQDN:-docker.localhost}
@@ -364,7 +365,6 @@ services:
       - 41205:5005
     environment:
       <<: *development-boot-envs
-      CAASREST_JSLTENABLED: "true"
       REPOSITORY_URL: http://master-live-server:8080/ior
       # only used in the test content
       BLUEPRINT_SITE_MAPPING_CORPORATE: //corporate.${ENVIRONMENT_FQDN:-docker.localhost}
@@ -397,7 +397,7 @@ services:
     networks:
       backend: null
     environment:
-      COMPOSE_FILE: ${COMPOSE_FILE:-}
+      ENVIRONMENT_FQDN: ${ENVIRONMENT_FQDN:-docker.localhost}
     labels:
       traefik.backend: overview
       traefik.enable: "true"

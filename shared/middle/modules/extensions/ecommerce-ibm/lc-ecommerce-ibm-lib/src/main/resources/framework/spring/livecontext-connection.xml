@@ -10,7 +10,6 @@
     <property name="storeContextProvider" ref="storeContextProvider"/>
     <property name="userContextProvider" ref="userContextProvider"/>
     <property name="catalogService" ref="catalogService"/>
-    <property name="marketingSpotService" ref="marketingSpotService"/>
     <property name="segmentService" ref="segmentService"/>
     <property name="cartService" ref="cartService"/>
     <property name="availabilityService" ref="availabilityService"/>

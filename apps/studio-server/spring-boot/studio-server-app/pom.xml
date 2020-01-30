@@ -49,21 +49,7 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-tomcat</artifactId>
       <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <!-- exclude for java-11 -->
-          <groupId>javax.annotation</groupId>
-          <artifactId>javax.annotation-api</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
-    <!-- begin java-11-dependencies -->
-    <dependency>
-      <groupId>jakarta.annotation</groupId>
-      <artifactId>jakarta.annotation-api</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <!-- end java-11-dependencies -->
     <dependency>
       <groupId>org.apache.tomcat.embed</groupId>
       <artifactId>tomcat-embed-jasper</artifactId>

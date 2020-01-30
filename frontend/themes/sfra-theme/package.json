@@ -17,6 +17,8 @@
     "@coremedia-examples/brick-hero-banner": "^1.0.0",
     "@coremedia-examples/brick-landscape-banner": "^1.0.0",
     "@coremedia-examples/brick-left-right-banner": "^1.0.0",
+    "@coremedia-examples/brick-navigation": "^1.0.0",
+    "@coremedia/brick-node-decoration-service": "^1.0.0",
     "@coremedia-examples/brick-popup": "^1.0.0",
     "@coremedia-examples/brick-portrait-banner": "^1.0.0",
     "@coremedia-examples/brick-product-assets": "^1.0.0",
@@ -28,6 +30,7 @@
     "@coremedia/brick-utils": "^1.0.0",
     "@coremedia/cm-cli": "^2.0.0",
     "@coremedia/theme-utils": "^3.0.0",
+    "jquery": "^3.0.0",
     "webpack": "^4.0.0"
   },
   "devDependencies": {

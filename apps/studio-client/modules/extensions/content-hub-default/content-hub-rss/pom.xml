@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>com.coremedia.blueprint</groupId>
+    <groupId>com.coremedia.blueprint.content-hub</groupId>
     <artifactId>studio-client.content-hub-default</artifactId>
     <version>1-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
@@ -41,7 +41,7 @@
 
     <dependency>
       <groupId>com.coremedia.ui.sdk</groupId>
-      <artifactId>contenthub-editor-components</artifactId>
+      <artifactId>content-hub-editor-components</artifactId>
       <type>swc</type>
     </dependency>
 

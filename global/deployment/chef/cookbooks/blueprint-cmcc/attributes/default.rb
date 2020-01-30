@@ -55,12 +55,13 @@ default['blueprint']['ibm-wcs']['application.properties']['livecontext.ibm.wcs.u
 default['blueprint']['ibm-wcs']['application.properties']['livecontext.ibm.wcs.store.name.aurora'] = 'AuroraESite'
 default['blueprint']['ibm-wcs']['application.properties']['livecontext.ibm.wcs.currency.aurora'] = 'USD'
 default['blueprint']['ibm-wcs']['application.properties']['livecontext.ibm.wcs.vendor.aurora'] = 'ibm'
+default['blueprint']['ibm-wcs']['application.properties']['cae.crossdomain.whitelist'] = "https://#{node['blueprint']['ibm-wcs']['host']}:8443"
 
 # The following properties are derived from `livecontext.ibm.wcs.host`, if you need to set them explicitly comment in the lines below
 # default['blueprint']['ibm-wcs']['application.properties']['livecontext.ibm.wcs.url'] = "http://#{node['blueprint']['ibm-wcs']['host']}"
 # default['blueprint']['ibm-wcs']['application.properties']['livecontext.ibm.wcs.secureUrl'] = "https://#{node['blueprint']['ibm-wcs']['host']}"
 # default['blueprint']['ibm-wcs']['application.properties']['livecontext.ibm.wcs.rest.search.url'] = "http://#{node['blueprint']['ibm-wcs']['host']}:3737/search/resources"
-# default['blueprint']['ibm-wcs']['application.properties']['livecontext.ibm.wcs.rest.search.secureUrl'] = "https://#{node['blueprint']['ibm-wcs']['host']}:3738/search/previewresources"
+# default['blueprint']['ibm-wcs']['application.properties']['livecontext.ibm.wcs.rest.search.secureUrl'] = "https://#{node['blueprint']['ibm-wcs']['host']}:3738/search/resources"
 # default['blueprint']['ibm-wcs']['application.properties']['livecontext.managementtool.web.url'] = "https://#{node['blueprint']['ibm-wcs']['host']}:8000/lobtools/CoreMediaManagementCenterWrapper.html"
 
 # set this to true to disable SSLProxyVerify, SSLProxyCheckPeerCN, SSLProxyCheckPeerName

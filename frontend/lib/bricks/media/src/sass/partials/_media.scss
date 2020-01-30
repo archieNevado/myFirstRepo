@@ -2,10 +2,7 @@
 .#{$cm-media-prefix} {
   max-width: 100%;
 
-  // responsive image, use width of outer container
   &--responsive {
-    vertical-align: middle;
-    @include stretch-absolute();
     color: transparent; // hide alt text
   }
 

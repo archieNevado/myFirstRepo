@@ -3,7 +3,7 @@
 const fs = require("fs");
 const glob = require("glob");
 const path = require("path");
-const semver = require("semver");
+const { clean, valid } = require("semver");
 
 const themeData = require("./themeData");
 const brickData = require("./brickData");
@@ -48,10 +48,10 @@ const isModuleNameInUse = modulePath => fs.existsSync(modulePath);
  * @returns {string} if a valid version was given the caret version otherwise the given version
  */
 const convertVersionToCaretVersion = version => {
-  if (!version || !semver.valid(version)) {
+  if (!version || !valid(version)) {
     return version;
   }
-  version = semver.clean(version);
+  version = clean(version);
   return version.indexOf("^") === 0 ? version : `^${version}`;
 };
 

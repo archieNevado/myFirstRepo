@@ -57,7 +57,5 @@ module.exports = (env, { mode = "production" }) =>
     context: themeConfig.path,
     output: {
       path: themeConfig.themeTargetPath,
-    },
-    // see https://webpack.js.org/configuration/stats/
-    stats: "minimal",
+    }
   });

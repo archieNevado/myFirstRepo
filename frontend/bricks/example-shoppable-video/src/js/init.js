@@ -3,7 +3,10 @@ import $ from "jquery";
 import { addNodeDecorator } from "@coremedia/brick-node-decoration-service";
 import * as utils from "@coremedia/brick-utils";
 import * as mediaelement from "@coremedia/brick-mediaelement";
-import { EVENT_VIDEO_START, EVENT_VIDEO_ENDED } from "@coremedia/brick-mediaelement";
+import {
+  EVENT_VIDEO_START,
+  EVENT_VIDEO_ENDED,
+} from "@coremedia/brick-mediaelement";
 
 /**
  *  CoreMedia Blueprint Javascript Framework Extension for Shoppable Video
@@ -79,10 +82,7 @@ addNodeDecorator(function($target) {
     const $allTeasers = $shoppableVideo.find(".cm-shoppable__teaser");
     const $video = $shoppableVideo.find(".cm-shoppable__video");
 
-    if (
-      $allTeasers.length > 0 &&
-      $video.length > 0
-    ) {
+    if ($allTeasers.length > 0 && $video.length > 0) {
       // initialization
       utils.log("Video is shoppable!");
 

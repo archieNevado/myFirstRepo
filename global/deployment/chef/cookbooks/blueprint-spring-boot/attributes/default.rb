@@ -4,6 +4,8 @@ default['blueprint']['spring-boot']['java_home'] = '/usr/lib/jvm/java'
 default['blueprint']['spring-boot']['java_opts']['network'] = '-Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses'
 #<> Global jvm opt to exit on out of memory errors
 default['blueprint']['spring-boot']['java_opts']['oom_handling'] = '-XX:+ExitOnOutOfMemoryError'
+#<> Use ParallelGC in favor of G1GC. In case of multi service deployments on the same node, you may want to set the maximum threads on a service level, i.e. default['blueprint']['spring-boot']['cae-live']['java_opts']['parallel_gc_threads'] = "-XX:ParallelGCThreads=4"
+default['blueprint']['spring-boot']['java_opts']['use_parallel_gc'] = '-XX:+UseParallelGC'
 #<> Global Spring Boot opts. This map will be transformed into --<key>=<value> on the command-line, can be overridden using  a more specific hash  i.e. default['blueprint']['spring-boot']['workflow-server']['boot_opts'] = {}
 default['blueprint']['spring-boot']['boot_opts'] = {}
 #<> Start Services can be overridden using a more specific key, i.e. default['blueprint']['spring-boot']['workflow-server']['start_service'] = false

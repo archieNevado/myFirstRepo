@@ -2,6 +2,7 @@ package com.coremedia.blueprint.lc.test;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentUserContext;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.user.UserContextProvider;
@@ -42,6 +43,7 @@ public abstract class AbstractServiceTest {
   @AfterEach
   public void teardown() {
     CurrentStoreContext.remove();
+    CurrentUserContext.remove();
   }
 
   public TestConfig getTestConfig() {

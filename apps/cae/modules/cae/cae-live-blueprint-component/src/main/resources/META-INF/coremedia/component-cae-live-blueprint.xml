@@ -13,5 +13,21 @@
   <customize:replace id="caeLiveServiceInfoManager" bean="serviceInfoManager" property="serviceType"
                      custom-value="cae-live"/>
 
+  <bean id="urlHandler" class="com.coremedia.blueprint.cae.handlers.UrlHandler">
+    <description>
+      Url Handler
+    </description>
+    <property name="contentBeanFactory" ref="contentBeanFactory"/>
+    <property name="dataViewFactory">
+      <description>
+        Don't use dataviews here because we will run into trouble with non-contentbean generated classes otherwise
+      </description>
+      <null/>
+    </property>
+    <property name="idProvider" ref="idProvider"/>
+    <property name="linkFormatter" ref="linkFormatter"/>
+    <property name="sitesService" ref="sitesService"/>
+  </bean>
+
 </beans>
 

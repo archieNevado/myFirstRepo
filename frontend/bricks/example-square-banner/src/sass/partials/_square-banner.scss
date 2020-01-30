@@ -20,6 +20,13 @@ $_aspect-ratio-by-breakpoint: ("xs-and-up": (1, 1));
     margin-bottom: 12px;
   }
 
+  &__picture-box {
+    //youtube videos inside the banner
+    .cm-mediaelementwrapper iframe {
+      @include stretch-absolute();
+    }
+  }
+
   &__additional {
     margin-bottom: 12px;
   }

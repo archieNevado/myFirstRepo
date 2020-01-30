@@ -19,7 +19,7 @@
 <resourceBundles2>
 </resourceBundles2>
 <segment>editorial-blog</segment>
-<title>Editorial Blog</title>
+<title>Blog éditorial</title>
 <htmlTitle></htmlTitle>
 <keywords></keywords>
 <htmlDescription></htmlDescription>
@@ -29,7 +29,7 @@
 </locationTaxonomy>
 <contexts>
 </contexts>
-<teaserTitle></teaserTitle>
+<teaserTitle>Blog</teaserTitle>
 <pictures>
 <link href="../../../Editorial/Pictures/Fashion%20shooting%20in%20desert%20of%20palm%20springs%2E%203.xml" path="/Sites/SFRA/France/French/Editorial/Pictures/Fashion%20shooting%20in%20desert%20of%20palm%20springs%2E%203"/>
 </pictures>
@@ -40,7 +40,7 @@
 </authors>
 <children>
 </children>
-<hidden>1</hidden>
+<hidden>0</hidden>
 <javaScript>
 </javaScript>
 <css>

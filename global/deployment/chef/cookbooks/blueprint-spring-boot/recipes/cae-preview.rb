@@ -10,7 +10,7 @@ node.default_unless['blueprint']['apps'][service_name]['application.properties']
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['solr.url'] = 'http://localhost:40080/solr'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['solr.collection.cae'] = 'preview'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['elastic.solr.url'] = 'http://localhost:40080/solr'
-node.default_unless['blueprint']['apps'][service_name]['application.properties']['mongoDb.clientURI'] = 'mongodb://localhost:27017'
+node.default_unless['blueprint']['apps'][service_name]['application.properties']['mongoDb.clientURI'] = 'mongodb://coremedia:coremedia@localhost:27017'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['mongoDb.prefix'] = 'blueprint'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['repository.heapCacheSize'] = 100 * 1024 * 1024
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['repository.blobCacheSize'] = 10 * 1024 * 1024 * 1024
@@ -27,6 +27,7 @@ node.default_unless['blueprint']['apps'][service_name]['application.properties']
 # and all transformed blobs are saved in memory
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['com.coremedia.transform.blobCache.basePath'] = "#{node['blueprint']['cache_dir']}/#{service_name}/persistent-transformed-blobcache"
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['server.port'] = 40980
+node.default_unless['blueprint']['apps'][service_name]['application.properties']['management.server.port'] = 40981
 
 application_config_hash = Mash.new
 # legacy compatibility step. Here we merge the defaults from old node.json files
@@ -72,7 +73,7 @@ spring_boot_application service_name do
   java_home spring_boot_default(service_name, 'java_home')
   boot_opts boot_opts_config_hash
   application_properties application_config_hash
-  post_start_wait_url "http://localhost:40980/blueprint/servlet/actuator/health"
+  post_start_wait_url "http://localhost:40981/actuator/health"
   log_dir "#{node['blueprint']['log_dir']}/#{service_name}"
   jmx_remote spring_boot_default(service_name, 'jmx_remote')
   jmx_remote_server_name spring_boot_default(service_name, 'jmx_remote_server_name')

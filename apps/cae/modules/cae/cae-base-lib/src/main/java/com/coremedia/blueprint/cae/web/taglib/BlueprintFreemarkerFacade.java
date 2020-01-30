@@ -214,21 +214,25 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
     return UniqueIdGenerator.generateId(prefix, FreemarkerEnvironment.getCurrentRequest());
   }
 
+  @Deprecated(since = "2001", forRemoval = true)
   public String cssClassFor(Boolean itemHasNext, Integer index, Boolean createCssClassAttribute) {
     return com.coremedia.blueprint.base.cae.web.taglib.CssClassFor.cssClassFor(itemHasNext, index,
             createCssClassAttribute);
   }
 
+  @Deprecated(since = "2001", forRemoval = true)
   public String cssClassForFirstLast(Boolean itemHasNext, Integer index, Boolean createCssClassAttribute) {
     return com.coremedia.blueprint.base.cae.web.taglib.CssClassFor.cssClassForFirstLast(itemHasNext, index,
             createCssClassAttribute);
   }
 
+  @Deprecated(since = "2001", forRemoval = true)
   public String cssClassForOddEven(Boolean itemHasNext, Integer index, Boolean createCssClassAttribute) {
     return com.coremedia.blueprint.base.cae.web.taglib.CssClassFor.cssClassForOddEven(itemHasNext, index,
             createCssClassAttribute);
   }
 
+  @Deprecated(since = "2001", forRemoval = true)
   public String cssClassAppendNavigationActive(String currentCssClass, String appendix, Object navigation, List<Object> navigationPathList) {
     return CssClassFor.cssClassAppendNavigationActive(currentCssClass, appendix, navigation, navigationPathList);
   }
@@ -297,24 +301,44 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
     return result;
   }
 
+  public String transformedImageUrl(CMPicture picture, String aspectRatio, int width, int height) {
+    if (picture == null) {
+      throw new IllegalArgumentException("Error creating image link: picture must not be null");
+    }
+    if (aspectRatio == null) {
+      throw new IllegalArgumentException("Error creating image link: aspect ratio must not be null");
+    }
+
+    Blob blob = picture.getTransformedData(aspectRatio);
+    if (blob == null) {
+      LOG.warn("Transformation not applicable: {} -> {}, width {}, height {}", picture, aspectRatio, width, height);
+      return "";
+    }
+    String link = ImageFunctions.getImageLinkForAspectRatio(blob,
+            aspectRatio,
+            Map.of(ImageFunctions.WIDTH, width, ImageFunctions.HEIGHT, height),
+            false,
+            FreemarkerEnvironment.getCurrentRequest(),
+            FreemarkerEnvironment.getCurrentResponse());
+    return link==null ? "" : link;
+  }
 
   public String getLinkForBiggestImageWithRatio(CMPicture picture, Page page, String aspectRatio) {
     if (picture == null) {
       throw new IllegalArgumentException("Error creating responsive image links: picture must not be null");
     }
-    // get responsive image settings
-    Map<String, Map> responsiveImageSettings = getResponsiveImageSettings(page);
-    // use list of given aspect ratios if set, otherwise use all
     if (aspectRatio == null) {
       throw new IllegalArgumentException("Error creating responsive image links: aspect ratio must not be null");
     }
+
+    Map<String, Map> responsiveImageSettings = getResponsiveImageSettings(page);
     @SuppressWarnings("unchecked")
-    Map<String, ?> aspectRatioSizes = responsiveImageSettings.get(aspectRatio);
+    Map<String, Map<String, Object>> aspectRatioSizes = responsiveImageSettings.get(aspectRatio);
     if (aspectRatioSizes == null || aspectRatioSizes.isEmpty()) {
       throw new IllegalArgumentException(String.format("Error creating responsive image links: aspect ratio '%s' not defined", aspectRatio));
     }
     @SuppressWarnings("unchecked")
-    Map<String, ?> biggestSize = ImageFunctions.getBiggestSize((Map<String, Map<String, Object>>) aspectRatioSizes);
+    Map<String, ?> biggestSize = ImageFunctions.getBiggestSize(aspectRatioSizes);
     if (biggestSize != null) {
       Blob transformedData = picture.getTransformedData(aspectRatio);
       if (transformedData != null) {

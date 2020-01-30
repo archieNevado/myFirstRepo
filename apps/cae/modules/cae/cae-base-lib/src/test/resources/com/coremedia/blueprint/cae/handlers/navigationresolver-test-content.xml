@@ -6,21 +6,21 @@
     <folder id="1" name="">
       <folder id="11" name="Sites">
         <folder id="111" name="Media">
+          <document id="504" name="MediaSite" type="CMSite">
+            <!--
+              The Site Indicator for the site, references the Root Channel.
+              Needed to resolve the first URL segment ("root")
+            -->
+            <version number="1">
+              <linkProperty name="root">
+                <link id="124"/>
+              </linkProperty>
+              <stringProperty name="locale" value="en-US"/>
+              <stringProperty name="id" value="site1"/>
+              <stringProperty name="name" value="site1"/>
+            </version>
+          </document>
           <folder id="1111" name="Navigation">
-            <document id="504" name="MediaSite" type="CMSite">
-              <!--
-                The Site Indicator for the site, references the Root Channel.
-                Needed to resolve the first URL segment ("root")
-              -->
-              <version number="1">
-                <linkProperty name="root">
-                  <link id="124"/>
-                </linkProperty>
-                <stringProperty name="locale" value="en-US"/>
-                <stringProperty name="id" value="site1"/>
-                <stringProperty name="name" value="site1"/>
-              </version>
-            </document>
             <document id="124" name="Root" type="CMChannel">
               <!-- The Root Channel of the site, referenced by the Site Indicator. -->
               <version number="1">

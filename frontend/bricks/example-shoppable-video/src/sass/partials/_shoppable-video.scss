@@ -116,6 +116,7 @@
     @include aspect-ratio-box(16, 9);
   }
 
+  &__still-picture,
   &__video-element {
     @include stretch-absolute();
   }

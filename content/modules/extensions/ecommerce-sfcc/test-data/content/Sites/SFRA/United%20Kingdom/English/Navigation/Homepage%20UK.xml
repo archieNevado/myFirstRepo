@@ -43,10 +43,11 @@
 <authors>
 </authors>
 <children>
-<link href="../Augmentation/New%20Arrivals/New%20Arrivals.xml" path="/Sites/SFRA/United%20Kingdom/English/Augmentation/New%20Arrivals/New%20Arrivals"/>
+<link href="New%20Arrivals/New%20Arrivals%20Navigation%20Container.xml" path="/Sites/SFRA/United%20Kingdom/English/Navigation/New%20Arrivals/New%20Arrivals%20Navigation%20Container"/>
 <link href="../Augmentation/Womens/Womens.xml" path="/Sites/SFRA/United%20Kingdom/English/Augmentation/Womens/Womens"/>
 <link href="../Augmentation/Mens/Mens.xml" path="/Sites/SFRA/United%20Kingdom/English/Augmentation/Mens/Mens"/>
 <link href="../Augmentation/Top%20Sellers/Top%20Sellers.xml" path="/Sites/SFRA/United%20Kingdom/English/Augmentation/Top%20Sellers/Top%20Sellers"/>
+<link href="Microsites/Editorial%20Blog/Editorial%20Blog.xml" path="/Sites/SFRA/United%20Kingdom/English/Navigation/Microsites/Editorial%20Blog/Editorial%20Blog"/>
 <link href="../Augmentation/Storefront%20Catalog%20-%20EN.xml" path="/Sites/SFRA/United%20Kingdom/English/Augmentation/Storefront%20Catalog%20-%20EN"/>
 <link href="Microsites/Microsite%20Root%20Page.xml" path="/Sites/SFRA/United%20Kingdom/English/Navigation/Microsites/Microsite%20Root%20Page"/>
 <link href="Fragments/Fragments%20Hidden%20Page.xml" path="/Sites/SFRA/United%20Kingdom/English/Navigation/Fragments/Fragments%20Hidden%20Page"/>
@@ -54,7 +55,6 @@
 <link href="Fashion%20Newsletter/Fashion%20Newsletter.xml" path="/Sites/SFRA/United%20Kingdom/English/Navigation/Fashion%20Newsletter/Fashion%20Newsletter"/>
 <link href="../Editorial/Content/Homepage/Locale%20Chooser.xml" path="/Sites/SFRA/United%20Kingdom/English/Editorial/Content/Homepage/Locale%20Chooser"/>
 <link href="../Editorial/Content/Homepage/Account%20Header.xml" path="/Sites/SFRA/United%20Kingdom/English/Editorial/Content/Homepage/Account%20Header"/>
-<link href="Microsites/Editorial%20Blog/Editorial%20Blog.xml" path="/Sites/SFRA/United%20Kingdom/English/Navigation/Microsites/Editorial%20Blog/Editorial%20Blog"/>
 <link href="Topic%20Pages/Topicpage.xml" path="/Sites/SFRA/United%20Kingdom/English/Navigation/Topic%20Pages/Topicpage"/>
 </children>
 <javaScript>

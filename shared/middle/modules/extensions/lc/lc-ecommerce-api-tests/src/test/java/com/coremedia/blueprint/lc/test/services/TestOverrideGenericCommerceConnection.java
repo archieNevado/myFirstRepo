@@ -4,7 +4,9 @@ import com.coremedia.blueprint.base.livecontext.client.common.GenericCommerceCon
 import com.coremedia.blueprint.base.livecontext.client.common.RequiresGenericCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.client.data.DataCatalogService;
 import com.coremedia.blueprint.base.livecontext.client.data.DataCategoryService;
+import com.coremedia.blueprint.base.livecontext.client.data.DataCookieUserService;
 import com.coremedia.blueprint.base.livecontext.client.data.DataLinkService;
+import com.coremedia.blueprint.base.livecontext.client.data.DataMarketingSpotService;
 import com.coremedia.blueprint.base.livecontext.client.data.DataPriceService;
 import com.coremedia.blueprint.base.livecontext.client.data.DataProductService;
 import com.coremedia.blueprint.base.livecontext.client.data.DataSearchService;
@@ -26,6 +28,11 @@ class TestOverrideGenericCommerceConnection extends BaseCommerceConnection
   @Override
   public void setGenericCommerceConnection(GenericCommerceConnection genericCommerceConnection) {
     delegate = genericCommerceConnection;
+  }
+
+  @Override
+  public DataMarketingSpotService getDataMarketingSpotService() {
+    return delegate.getDataMarketingSpotService();
   }
 
   @Override
@@ -66,6 +73,11 @@ class TestOverrideGenericCommerceConnection extends BaseCommerceConnection
   @Override
   public DataPriceService getDataPriceService() {
     return delegate.getDataPriceService();
+  }
+
+  @Override
+  public DataCookieUserService getDataCookieUserService() {
+    return delegate.getDataCookieUserService();
   }
 
   @Override

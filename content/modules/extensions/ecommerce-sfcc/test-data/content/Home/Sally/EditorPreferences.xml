@@ -1012,6 +1012,7 @@
 </StructProperty>
 <StringListProperty Name="preferredTypesForCreation">
 <String>CMArticle</String>
+<String>CMTeaser</String>
 <String>CMCollection</String>
 <String>CMPicture</String>
 </StringListProperty>

@@ -22,7 +22,7 @@
 <String>ibm:///catalog/segment/8500000000000323452</String>
 </StringListProperty>
 <StringListProperty Name="usercontracts">
-<String>ibm:///catalog/contract/4000000000000000510</String>
+<String>ibm:///catalog/contract/4000000000000000513</String>
 </StringListProperty>
 </Struct>
 </StructProperty>

@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.contenthub.adapters.rss;
 
-import com.coremedia.contenthub.api.BlobCache;
 import com.coremedia.contenthub.api.ContentHubAdapter;
 import com.coremedia.contenthub.api.ContentHubAdapterFactory;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -19,9 +18,8 @@ class RSSContentHubAdapterFactory implements ContentHubAdapterFactory<RSSContent
   @NonNull
   @Override
   public ContentHubAdapter createAdapter(@NonNull RSSContentHubSettings settings,
-                                         @NonNull String connectionId,
-                                         @NonNull BlobCache blobCache) {
-    return new RSSContentHubAdapter(settings, connectionId, blobCache);
+                                         @NonNull String connectionId) {
+    return new RSSContentHubAdapter(settings, connectionId);
   }
 
 }

@@ -1,7 +1,6 @@
 package com.coremedia.blueprint.contenthub.adapters.youtube;
 
 
-import com.coremedia.contenthub.api.BlobCache;
 import com.coremedia.contenthub.api.ContentHubBlob;
 import com.coremedia.contenthub.api.ContentHubObjectId;
 import com.coremedia.contenthub.api.ContentHubType;
@@ -31,15 +30,13 @@ class YouTubeItem extends YouTubeHubObject implements Item {
   private final DateTime lastModified;
   private final ThumbnailDetails thumbnails;
   private final String videoId;
-  private final BlobCache blobCache;
 
 
   // The constructors look like boilerplate code, but the YouTube classes are
   // indeed completely distinct.  :-(
 
-  YouTubeItem(@NonNull ContentHubObjectId id, @NonNull Video video, @NonNull BlobCache blobCache) {
+  YouTubeItem(@NonNull ContentHubObjectId id, @NonNull Video video) {
     super(id);
-    this.blobCache = blobCache;
     VideoSnippet snippet = video.getSnippet();
     if (snippet == null) {
       throw new IllegalArgumentException("Video " + video + " has no snippet.  Cannot handle.");
@@ -51,9 +48,8 @@ class YouTubeItem extends YouTubeHubObject implements Item {
     videoId = video.getId();
   }
 
-  YouTubeItem(@NonNull ContentHubObjectId id, @NonNull PlaylistItem item, @NonNull BlobCache blobCache) {
+  YouTubeItem(@NonNull ContentHubObjectId id, @NonNull PlaylistItem item) {
     super(id);
-    this.blobCache = blobCache;
     PlaylistItemSnippet snippet = item.getSnippet();
     if (snippet == null) {
       throw new IllegalArgumentException("PlayListItem " + item + " has no snippet.  Cannot handle.");
@@ -65,9 +61,8 @@ class YouTubeItem extends YouTubeHubObject implements Item {
     videoId = snippet.getResourceId().getVideoId();
   }
 
-  YouTubeItem(@NonNull ContentHubObjectId id, @NonNull SearchResult searchResult, @NonNull BlobCache blobCache) {
+  YouTubeItem(@NonNull ContentHubObjectId id, @NonNull SearchResult searchResult) {
     super(id);
-    this.blobCache = blobCache;
     SearchResultSnippet snippet = searchResult.getSnippet();
     if (snippet == null) {
       throw new IllegalArgumentException("PlayListItem " + searchResult + " has no snippet.  Cannot handle.");
@@ -94,11 +89,6 @@ class YouTubeItem extends YouTubeHubObject implements Item {
     return "CMVideo";
   }
 
-  @Override
-  public long getSize() {
-    return -1;
-  }
-
   @NonNull
   @Override
   public String getName() {
@@ -114,7 +104,7 @@ class YouTubeItem extends YouTubeHubObject implements Item {
   @NonNull
   @Override
   public List<DetailsSection> getDetails() {
-    ContentHubBlob blob = blobCache.cached(new UrlBlobBuilder(this, "classifier").withUrl(getDefaultThumbnailUrl()).build());
+    ContentHubBlob blob = new UrlBlobBuilder(this, "classifier").withUrl(getDefaultThumbnailUrl()).build();
     return List.of(new DetailsSection("main", List.of(
             new DetailsElement<>(getName(), false, Objects.requireNonNullElse(blob, SHOW_TYPE_ICON))
             ), false, false, false),
@@ -129,7 +119,7 @@ class YouTubeItem extends YouTubeHubObject implements Item {
   @Nullable
   @Override
   public ContentHubBlob getBlob(String classifier) {
-    return blobCache.cached(new UrlBlobBuilder(this, classifier).withUrl(getDefaultThumbnailUrl()).build());
+    return new UrlBlobBuilder(this, classifier).withUrl(getDefaultThumbnailUrl()).build();
   }
 
   private String getDefaultThumbnailUrl() {

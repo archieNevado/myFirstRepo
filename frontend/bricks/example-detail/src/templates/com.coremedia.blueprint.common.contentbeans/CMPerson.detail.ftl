@@ -19,7 +19,8 @@
       <#if self.picture?has_content>
         <div class="${blockClass}__picture-person">
           <@cm.include self=self.picture view="media" params={
-            "classBox": "${blockClass}__picture",
+            "classBox": "${blockClass}__picture-box",
+            "classMedia": "${blockClass}__picture",
             "metadata": ["properties.picture"]
           }/>
         </div>

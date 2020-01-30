@@ -16,6 +16,20 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.coremedia.blueprint.content-hub</groupId>
+      <artifactId>content-hub-rss</artifactId>
+      <version>1-SNAPSHOT</version>
+      <type>swc</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint.content-hub</groupId>
+      <artifactId>content-hub-youtube</artifactId>
+      <version>1-SNAPSHOT</version>
+      <type>swc</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
       <groupId>com.coremedia.blueprint</groupId>
       <artifactId>alx-google-studio-plugin</artifactId>
       <version>1-SNAPSHOT</version>
@@ -39,20 +53,6 @@
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
       <artifactId>catalog-studio-plugin</artifactId>
-      <version>1-SNAPSHOT</version>
-      <type>swc</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>content-hub-rss</artifactId>
-      <version>1-SNAPSHOT</version>
-      <type>swc</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>content-hub-youtube</artifactId>
       <version>1-SNAPSHOT</version>
       <type>swc</type>
       <scope>runtime</scope>

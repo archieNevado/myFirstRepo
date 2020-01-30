@@ -9,7 +9,7 @@ service_dir = "#{node['blueprint']['base_dir']}/#{service_name}"
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['repository.url'] = 'http://localhost:40180/ior'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['server.port'] = 40580
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['management.server.port'] = 40581
-node.default_unless['blueprint']['apps'][service_name]['application.properties']['mongoDb.clientURI'] = 'mongodb://localhost:27017'
+node.default_unless['blueprint']['apps'][service_name]['application.properties']['mongoDb.clientURI'] = 'mongodb://coremedia:coremedia@localhost:27017'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['mongoDb.prefix'] = 'blueprint'
 
 application_config_hash = Mash.new

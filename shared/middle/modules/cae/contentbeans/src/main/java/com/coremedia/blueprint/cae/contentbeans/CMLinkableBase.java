@@ -553,6 +553,10 @@ public abstract class CMLinkableBase extends CMLocalizedImpl implements CMLinkab
     List<Map<String, Object>> filtered = annotatedLinkListItems.stream()
       .filter(targetMap -> {
         CMLinkable bean = (CMLinkable) targetMap.get(ANNOTATED_LINK_STRUCT_TARGET_PROPERTY_NAME);
+        Content content = bean.getContent();
+        if (content == null || !content.isInProduction()) {
+          return false;
+        }
         return getValidationService().validate(bean);
       })
       .collect(Collectors.toList());

@@ -14,6 +14,16 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+        <groupId>com.coremedia.blueprint.content-hub</groupId>
+        <artifactId>content-hub-adapter-rss</artifactId>
+        <version>1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.coremedia.blueprint.content-hub</groupId>
+        <artifactId>content-hub-adapter-youtube</artifactId>
+        <version>1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
         <groupId>com.coremedia.blueprint</groupId>
         <artifactId>alx-google-studio-lib</artifactId>
         <version>1-SNAPSHOT</version>
@@ -36,16 +46,6 @@
       <dependency>
         <groupId>com.coremedia.blueprint</groupId>
         <artifactId>catalog-studio-lib</artifactId>
-        <version>1-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
-        <artifactId>content-hub-adapter-rss</artifactId>
-        <version>1-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
-        <artifactId>content-hub-adapter-youtube</artifactId>
         <version>1-SNAPSHOT</version>
       </dependency>
       <dependency>

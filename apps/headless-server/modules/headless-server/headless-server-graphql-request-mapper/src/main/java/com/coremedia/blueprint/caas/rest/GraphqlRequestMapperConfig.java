@@ -6,6 +6,7 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +29,8 @@ import java.util.Map;
 public class GraphqlRequestMapperConfig implements WebMvcConfigurer {
   private static final Logger LOG = LoggerFactory.getLogger(GraphqlRequestMapperConfig.class);
 
-  private boolean jsltEnabled;
+  // enabled by default
+  private boolean jsltEnabled = true;
 
   public boolean isJsltEnabled() {
     return jsltEnabled;
@@ -45,26 +47,36 @@ public class GraphqlRequestMapperConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public Map<UriTemplate, String> requestMappingMap() {
-    var loader = new PathMatchingResourcePatternResolver();
-    var resource = loader.getResource("classpath:query-mapping.properties");
-    var fileName = resource.getFilename();
-    if (fileName == null) {
-      LOG.warn("query-mapping.properties not found");
-    }
+  public Map<UriTemplate, String> requestMappingMap(@Value("${caas-rest.query-mapping-pattern:classpath:graphql/rest-mapping/*.properties}") String queryMappingPattern) {
+
     Map<UriTemplate, String> requestMapping = new HashMap<>();
-    try (var in = new LineNumberReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8))) {
-      String line;
-      while ((line = in.readLine()) != null) {
-        Map.Entry<UriTemplate, String> entry = stringToMapEntry(line);
-        if (entry != null) {
-          requestMapping.put(entry.getKey(), entry.getValue());
+    try {
+
+      var loader = new PathMatchingResourcePatternResolver();
+      for(var resource : loader.getResources(queryMappingPattern)) {
+
+        var fileName = resource.getFilename();
+        try (var in = new LineNumberReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8))) {
+          LOG.info("Loading query mappings from {}", resource.getFilename());
+          String line;
+          while ((line = in.readLine()) != null) {
+            Map.Entry<UriTemplate, String> entry = stringToMapEntry(line);
+            if (entry != null) {
+              requestMapping.put(entry.getKey(), entry.getValue());
+              LOG.info("Added rest mapping from {} to persisted query {}", entry.getKey(), entry.getValue());
+            }
+          }
+        } catch (IOException e) {
+          LOG.error("Error reading resource {}", resource.getFilename(), e);
         }
+
       }
+
     } catch (IOException e) {
-      LOG.error("Error reading resource " + resource.getFilename(), e);
+      LOG.error("Error loading resource", e);
     }
     return requestMapping;
+
   }
 
   /**

@@ -33,3 +33,10 @@ header ~ .container {
   margin: 2em 15px 0 15px;
   width: 100%;
 }
+
+// Adjust sfra mobile navigation to our needs
+.menu-toggleable-left.navbar-toggleable-sm.in {
+  min-width: 100%;
+  left: 0;
+  overflow-y: auto;
+}

@@ -19,7 +19,7 @@ x-logging:
 
 services:
   commerce-adapter-mock:
-    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-mock:${COMMERCE_ADAPTER_MOCK_VERSION:-1.1.5}
+    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-mock:${COMMERCE_ADAPTER_MOCK_VERSION:-1.2.5}
     container_name: commerce-adapter-mock
     restart: always
     logging: *default-logging
@@ -53,3 +53,6 @@ services:
   headless-server-live:
     environment:
       COMMERCE_HUB_DATA_ENDPOINTS_MOCK: ${COMMERCE_HUB_DATA_ENDPOINTS_MOCK:-commerce-adapter-mock:6565}
+  overview:
+    environment:
+      COMMERCE_MOCK_ENABLED: "true"

@@ -75,6 +75,11 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
+      <groupId>com.coremedia.ui</groupId>
+      <artifactId>usermanager-rest-component</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
       <groupId>com.coremedia.ui.collaboration</groupId>
       <artifactId>control-room-rest-component</artifactId>
       <scope>runtime</scope>
@@ -84,8 +89,13 @@
       <artifactId>workflow-notifications-lib</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.contenthub</groupId>
-      <artifactId>contenthub-rest-component</artifactId>
+      <groupId>com.coremedia.content-hub</groupId>
+      <artifactId>content-hub-rest-component</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.content-hub</groupId>
+      <artifactId>content-hub-adapter-mock</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>

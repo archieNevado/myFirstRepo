@@ -12,7 +12,12 @@ import com.coremedia.ui.data.ValueExpressionFactory;
 internal class AugmentationServiceImpl implements IAugmentationService {
 
   public function getContent(catalogObject:CatalogObject):Content {
-    return ContentProxyHelper.getContent(catalogObject);
+    var content:Content = ContentProxyHelper.getContent(catalogObject);
+    //load the content already so that Studio knows more about the augmenting content.
+    if (content) {
+      content.load();
+    }
+    return content;
   }
 
   public function getCatalogObject(content:Content):CatalogObject {

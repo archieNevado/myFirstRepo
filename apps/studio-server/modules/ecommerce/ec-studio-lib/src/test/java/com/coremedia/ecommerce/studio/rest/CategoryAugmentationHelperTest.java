@@ -132,9 +132,9 @@ public class CategoryAugmentationHelperTest {
     testling.augment(leafCategory);
 
     Content externalChannel = contentRepository.getChild("/Sites/Content Test/" + DEFAULT_BASE_FOLDER_NAME + "/"
-            + ROOT + "/" + TOP + "/" + ESCAPED_CATEGORY_DISPLAY_NAME + "/" + ESCAPED_CATEGORY_DISPLAY_NAME + "(" + CATEGORY_EXTERNALID + ")");
+            + ROOT + "/" + TOP + "/" + ESCAPED_CATEGORY_DISPLAY_NAME + "/" + ESCAPED_CATEGORY_DISPLAY_NAME + " (" + CATEGORY_EXTERNALID + ")");
     assertThat(externalChannel).isNotNull();
-    assertThat(externalChannel.getName()).isEqualTo(ESCAPED_CATEGORY_DISPLAY_NAME  + "(" + CATEGORY_EXTERNALID + ")");
+    assertThat(externalChannel.getName()).isEqualTo(ESCAPED_CATEGORY_DISPLAY_NAME  + " (" + CATEGORY_EXTERNALID + ")");
     assertThat(externalChannel.getString(EXTERNAL_ID)).isEqualTo(CATEGORY_ID);
     assertThat(externalChannel.getString(TITLE)).isEqualTo(CATEGORY_DISPLAY_NAME);
     assertThat(externalChannel.getString(SEGMENT)).isEqualTo(CATEGORY_DISPLAY_NAME);
@@ -171,7 +171,7 @@ public class CategoryAugmentationHelperTest {
     listOfRootCategories.add(0, rootCategory);
     listOfRootCategories.add(1, bCategory);
     Content bCategoryAugmentation = mock(Content.class);
-    when(mappedCatalogsProvider.getConfiguredRootCategories(any(String.class), any(StoreContext.class))).thenReturn(listOfRootCategories);
+    when(mappedCatalogsProvider.getConfiguredRootCategories(any(StoreContext.class))).thenReturn(listOfRootCategories);
     when(augmentationService.getContent(rootCategory)).thenReturn(null);
     when(augmentationService.getContent(bCategory)).thenReturn(bCategoryAugmentation);
 

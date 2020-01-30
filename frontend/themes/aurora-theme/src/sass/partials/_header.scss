@@ -40,14 +40,6 @@
 
     .cm-hamburger-icon--toggled ~ & {
       display: block;
-
-      > .cm-navigation-item--depth-0 > .cm-navigation-item__menu {
-        display: block;
-      }
-    }
-
-    .cm-navigation-item__menu > li > a {
-      text-align: center;
     }
 
     @include breakpoints(("sm", landscape) "lg-and-up") {

@@ -36,6 +36,7 @@ import java.util.Optional;
 import static com.coremedia.ecommerce.studio.rest.AugmentationHelperBase.DEFAULT_BASE_FOLDER_NAME;
 import static com.coremedia.ecommerce.studio.rest.AugmentationHelperBase.EXTERNAL_ID;
 import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.CATEGORY_PRODUCT_PAGEGRID_STRUCT_PROPERTY;
+import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.TITLE;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
@@ -121,10 +122,11 @@ public class ProductAugmentationHelperTest {
     testling.augment(product);
 
     Content cmProduct = contentRepository.getChild("/Sites/Content Test/" + DEFAULT_BASE_FOLDER_NAME + "/"
-            + ROOT + "/" + TOP + "/" + CATEGORY_DISPLAY_NAME + "/" + product.getName() + "(" + PRODUCT_EXTERNAL_ID + ")");
+            + ROOT + "/" + TOP + "/" + CATEGORY_DISPLAY_NAME + "/" + product.getName() + " (" + PRODUCT_EXTERNAL_ID + ")");
     assertThat(cmProduct).isNotNull();
-    assertThat(cmProduct.getName()).isEqualTo(PRODUCT_NAME + "(" + PRODUCT_EXTERNAL_ID + ")");
+    assertThat(cmProduct.getName()).isEqualTo(PRODUCT_NAME + " (" + PRODUCT_EXTERNAL_ID + ")");
     assertThat(cmProduct.getString(EXTERNAL_ID)).isEqualTo(PRODUCT_ID);
+    assertThat(cmProduct.getString(TITLE)).isEqualTo(PRODUCT_NAME);
 
     // Assert the initialized layout for product pages.
 

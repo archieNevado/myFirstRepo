@@ -2,7 +2,6 @@ package com.coremedia.blueprint.contenthub.adapters.rss;
 
 
 import com.coremedia.common.util.WordAbbreviator;
-import com.coremedia.contenthub.api.BlobCache;
 import com.coremedia.contenthub.api.ContentHubBlob;
 import com.coremedia.contenthub.api.ContentHubObjectId;
 import com.coremedia.contenthub.api.ContentHubType;
@@ -26,13 +25,10 @@ class RSSItem extends RSSHubObject implements Item {
   private static final WordAbbreviator ABBREVIATOR = new WordAbbreviator();
   private static final int BLOB_SIZE_LIMIT = 10000000;
   private final SyndEntry rssEntry;
-  private final BlobCache blobCache;
 
-
-  RSSItem(ContentHubObjectId id, SyndFeed feed, @NonNull SyndEntry rssEntry, BlobCache blobCache) {
+  RSSItem(ContentHubObjectId id, SyndFeed feed, @NonNull SyndEntry rssEntry) {
     super(id, feed);
     this.rssEntry = rssEntry;
-    this.blobCache = blobCache;
   }
 
   SyndEntry getRssEntry() {
@@ -43,11 +39,6 @@ class RSSItem extends RSSHubObject implements Item {
   @Override
   public ContentHubType getContentHubType() {
     return new ContentHubType("rss");
-  }
-
-  @Override
-  public long getSize() {
-    return -1;
   }
 
   @NonNull
@@ -96,7 +87,7 @@ class RSSItem extends RSSHubObject implements Item {
     List<String> imageUrls = getImageUrls();
     return imageUrls.isEmpty() ?
             null :
-            blobCache.cached(new UrlBlobBuilder(this, classifier).withUrl(imageUrls.get(0)).withEtag().build());
+            new UrlBlobBuilder(this, classifier).withUrl(imageUrls.get(0)).withEtag().build();
   }
 
   @Nullable
@@ -105,7 +96,7 @@ class RSSItem extends RSSHubObject implements Item {
     // The particular classifier value is irrelevant here, since #getBlob does not consider it.
     return imageUrls.isEmpty() ?
             null :
-            blobCache.cached(new UrlBlobBuilder(this, "classifier").withUrl(imageUrls.get(0)).withEtag().build());
+            new UrlBlobBuilder(this, "classifier").withUrl(imageUrls.get(0)).withEtag().build();
   }
 
   @NonNull

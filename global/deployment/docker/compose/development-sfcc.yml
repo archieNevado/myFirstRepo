@@ -25,7 +25,6 @@ services:
         traefik.frontend.headers.SSLRedirect: "true"
         traefik.shop-sfcc.frontend.rule: Host:shop-sfcc.${ENVIRONMENT_FQDN:-docker.localhost}
         traefik.shop-preview.frontend.rule: Host:shop-preview-sfcc.${ENVIRONMENT_FQDN:-docker.localhost}
-        traefik.shop-tools.frontend.rule: Host:shop-tools-sfcc.${ENVIRONMENT_FQDN:-docker.localhost}
 
   cae-preview:
     environment:
@@ -60,3 +59,8 @@ services:
       traefik.enable: "true"
       traefik.actuator.port: "8081"
       traefik.actuator.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/commerce-adapter-sfcc;AddPrefix:/actuator
+
+  overview:
+    environment:
+      COMMERCE_SFCC_ENABLED: "true"
+      COMMERCE_SFCC_HOST: ${SFCC_HOST}

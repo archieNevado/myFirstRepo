@@ -38,14 +38,14 @@
   Header unset X-Frame-Options
 
   RewriteCond %{HTTP_HOST} ^<%= @time_travel_alias.gsub('.', '\.') %>$
-  RewriteCond %{REQUEST_URI} ^/webapp/wcs/stores/(.*)$
-  RewriteRule ^/(.*)$ /webapp/wcs/preview/%1 [R=302,L]
+  RewriteCond %{REQUEST_URI} ^/wcs/shop/(.*)$
+  RewriteRule ^/(.*)$ /webapp/remote/preview/%1 [R=302,L]
 
   RewriteRule ^/lobtools/(.*) /lobtools/$1 [PT,L]
 
   <%- ([@server_name] + @server_aliases).each do |alias_name| -%>
   RewriteCond %{HTTP_HOST} ^<%= alias_name.gsub('.', '\.') %>$
-  RewriteRule ^/$ /webapp/wcs/stores/servlet/en/auroraesite [R=302,L]
+  RewriteRule ^/$ /wcs/shop/en/auroraesite [R=302,L]
   <%- end %>
 
   #####################
@@ -77,14 +77,14 @@
 
   # WCS stores & search pass through WCS IHS(apache)
 
-  ProxyPass /wcs https://<%= @wcs_host %>/wcs timeout=600
-  ProxyPassReverse /wcs https://<%= @wcs_host %>/wcs
+  ProxyPass /wcs https://<%= @wcs_host %>:8443/wcs timeout=600
+  ProxyPassReverse /wcs https://<%= @wcs_host %>:8443/wcs
 
-  ProxyPass /wcsstore https://<%= @wcs_host %>/wcsstore timeout=600
-  ProxyPassReverse /wcsstore https://<%= @wcs_host %>/wcsstore
+  ProxyPass /wcsstore https://<%= @wcs_host %>:8443/wcsstore timeout=600
+  ProxyPassReverse /wcsstore https://<%= @wcs_host %>:8443/wcsstore
 
-  ProxyPass /webapp https://<%= @wcs_host %>/webapp timeout=600
-  ProxyPassReverse /webapp https://<%= @wcs_host %>/webapp
+  ProxyPass /webapp https://<%= @wcs_host %>:8443/webapp timeout=600
+  ProxyPassReverse /webapp https://<%= @wcs_host %>:8443/webapp
 
   # WCS tools pass through WCS IHS(apache)
   ProxyPass /lobtools https://<%= @wcs_host %>/lobtools timeout=600

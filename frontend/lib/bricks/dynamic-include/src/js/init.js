@@ -31,16 +31,18 @@ $(function() {
   // load all dynamic fragments. The special header X-Requested-With is needed by the CAE to identify
   // the request as an Ajax request
   addNodeDecoratorByData(undefined, "cm-fragment", function($fragment, url) {
-    utils.ajax({
-      url: url,
-      dataType: "text",
-    }).done(function(html) {
-      const $html = $(html);
-      undecorateNode($fragment);
-      $fragment.replaceWith($html);
-      decorateNode($html);
-      $document.trigger(EVENT_NODE_APPENDED, [$html]);
-    });
+    utils
+      .ajax({
+        url: url,
+        dataType: "text",
+      })
+      .done(function(html) {
+        const $html = $(html);
+        undecorateNode($fragment);
+        $fragment.replaceWith($html);
+        decorateNode($html);
+        $document.trigger(EVENT_NODE_APPENDED, [$html]);
+      });
   });
   // handle hashBasedFragmentHandler
   addNodeDecoratorByData(

@@ -12,7 +12,6 @@ import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import io.specto.hoverfly.junit5.api.HoverflyConfig;
 import io.specto.hoverfly.junit5.api.HoverflySimulate;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,7 +31,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-@ExtendWith({SwitchableHoverflyExtension.class})
+@ExtendWith(SwitchableHoverflyExtension.class)
 @HoverflySimulate(
         source = @HoverflySimulate.Source(
                 "wcs8_ContractServiceImplIT.json"
@@ -60,12 +59,6 @@ public class ContractServiceImplIT extends IbmServiceTestBase {
     super.setup();
 
     storeContext = testConfig.getB2BStoreContext(connection);
-  }
-
-  @AfterEach
-  void tearDown() {
-    CurrentStoreContext.remove();
-    CurrentUserContext.remove();
   }
 
   @Test

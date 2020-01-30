@@ -38,7 +38,9 @@ if node['blueprint']['ibm-wcs']['enabled']
             rewrite_log_level: node['blueprint']['ibm-wcs']['virtual_host']['shop-preview']['rewrite_log_level'],
             site_server_name: node['blueprint']['proxy']['virtual_host']['preview']['server_name'],
             headers: node['blueprint']['ibm-wcs']['virtual_host']['shop-preview']['headers'],
-            ssl_proxy_verify: node['blueprint']['ibm-wcs']['ssl_proxy_verify']
+            ssl_proxy_verify: node['blueprint']['ibm-wcs']['ssl_proxy_verify'],
+            ssl: "true",
+            protocol: "https"
     )
   end
   apache2_site "ibm-wcs-commerce-shop-preview"

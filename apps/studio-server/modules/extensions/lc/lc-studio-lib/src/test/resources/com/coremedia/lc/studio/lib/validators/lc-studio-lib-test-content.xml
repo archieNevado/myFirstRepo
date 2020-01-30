@@ -7,7 +7,7 @@
     <folder id="1" name="" placeApproved="true" published="true" modificationDate="2009-06-01T20:59:42.000+01:00">
       <folder id="11" name="Sites">
         <folder id="3" name="Content Test">
-          <folder id="5" name="Navigation">
+          <folder id="5" name="English">
             <!-- a site with some channels -->
             <document id="54" name="Site-Indicator" type="CMSite">
               <version number="1">

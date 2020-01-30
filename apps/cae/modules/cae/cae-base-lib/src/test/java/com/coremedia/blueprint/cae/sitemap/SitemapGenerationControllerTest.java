@@ -43,6 +43,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -138,7 +139,7 @@ public class SitemapGenerationControllerTest {
 
     SitemapSetup sitemapSetup = new SitemapSetup();
     sitemapSetup.setSitemapRendererFactory(new PlainSitemapRendererFactory());
-    sitemapSetup.setUrlGenerators(singletonList((SitemapUrlGenerator) urlGenerator));
+    sitemapSetup.setUrlGenerators(singletonList(urlGenerator));
     SpringBasedSitemapSetupFactory setupFactory = new SpringBasedSitemapSetupFactory();
     setupFactory.setSitemapSetup(sitemapSetup);
 
@@ -196,7 +197,7 @@ public class SitemapGenerationControllerTest {
 
   @Test
   public void testParamExcludeMultipleFolders() throws Exception {
-    request.addParameter(SitemapRequestParams.PARAM_EXCLUDE_FOLDERS, "Contact,DepthForSiteIndicator");
+    request.addParameter(SitemapRequestParams.PARAM_EXCLUDE_FOLDERS, "Contact,Navigation");
 
     testling.handleRequestInternal(request, response);
 
@@ -309,7 +310,7 @@ public class SitemapGenerationControllerTest {
     }
     gzipInputStream.close();
     baos.close();
-    return asList(new String(baos.toByteArray(), "UTF-8"));
+    return asList(new String(baos.toByteArray(), StandardCharsets.UTF_8));
   }
 
   /**

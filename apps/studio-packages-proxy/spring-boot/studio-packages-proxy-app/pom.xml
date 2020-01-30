@@ -75,12 +75,6 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-tomcat</artifactId>
       <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>javax.annotation</groupId>
-          <artifactId>javax.annotation-api</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -94,10 +88,6 @@
         <exclusion>
           <groupId>org.hibernate.validator</groupId>
           <artifactId>hibernate-validator</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>javax.annotation</groupId>
-          <artifactId>javax.annotation-api</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -113,13 +103,6 @@
       <groupId>org.mitre.dsmiley.httpproxy</groupId>
       <artifactId>smiley-http-proxy-servlet</artifactId>
     </dependency>
-    <!-- begin java-11-dependencies -->
-    <dependency>
-      <groupId>jakarta.annotation</groupId>
-      <artifactId>jakarta.annotation-api</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <!-- end java-11-dependencies -->
   </dependencies>
 
   <build>

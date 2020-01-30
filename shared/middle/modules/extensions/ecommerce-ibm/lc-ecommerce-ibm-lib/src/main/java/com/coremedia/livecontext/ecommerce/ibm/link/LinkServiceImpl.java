@@ -2,7 +2,6 @@ package com.coremedia.livecontext.ecommerce.ibm.link;
 
 import com.coremedia.blueprint.base.links.UrlPrefixResolver;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
 import com.coremedia.blueprint.base.livecontext.ecommerce.link.GenericStorefrontRefBuilder;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
@@ -128,12 +127,8 @@ public class LinkServiceImpl implements LinkService, InitializingBean {
     Map<String, Object> replacements = new HashMap<>(product.getContext().getReplacements());
 
     Category category = alternativeCategory != null ? alternativeCategory : product.getCategory();
-    if (category != null) {
-      replacements.put("productId", product.getExternalTechId());
-      replacements.put("categoryId", category.getExternalTechId());
-    } else {
-      replacements.put("productId", product.getExternalTechId());
-    }
+    replacements.put("productId", product.getExternalTechId());
+    replacements.put("categoryId", category.getExternalTechId());
 
     String linkTemplate = "<!--CM {"
             + "\"productId\":\"{productId}\","
@@ -154,7 +149,7 @@ public class LinkServiceImpl implements LinkService, InitializingBean {
     if (alternativePath != null) {
       replacements.put("alternativePath", alternativePath);
     } else {
-      replacements.put("externalSeoSegment", (seoPath != null ? seoPath : ""));
+      replacements.put("externalSeoSegment", seoPath != null ? seoPath : "");
     }
 
     String linkTemplate = "<!--CM {"
@@ -172,7 +167,7 @@ public class LinkServiceImpl implements LinkService, InitializingBean {
                                       List<QueryParam> linkParameters, HttpServletRequest request) {
     Map<String, Object> replacements = new HashMap<>(storeContext.getReplacements());
 
-    replacements.put("externalSeoSegment", (seoPath != null ? seoPath : ""));
+    replacements.put("externalSeoSegment", seoPath != null ? seoPath : "");
 
     String linkTemplate = "<!--CM {"
             + "\"externalSeoSegment\":\"{externalSeoSegment}\","
