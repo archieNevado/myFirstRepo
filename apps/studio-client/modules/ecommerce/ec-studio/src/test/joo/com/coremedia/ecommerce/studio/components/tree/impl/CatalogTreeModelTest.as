@@ -1,4 +1,4 @@
-package com.coremedia.ecommerce.studio.components.tree {
+package com.coremedia.ecommerce.studio.components.tree.impl {
 import com.coremedia.cms.editor.sdk.EditorContextImpl;
 import com.coremedia.ecommerce.studio.AbstractCatalogStudioTest;
 import com.coremedia.ecommerce.studio.components.tree.impl.CatalogTreeModel;
@@ -10,7 +10,7 @@ import mx.resources.ResourceManager;
 [ResourceBundle('com.coremedia.ecommerce.studio.ECommerceStudioPlugin')]
 public class CatalogTreeModelTest extends AbstractCatalogStudioTest {
 
-  private var catalogTreeModel:TreeModel;
+  private var catalogTreeModel:CatalogTreeModel;
 
   override public function setUp():void {
     super.setUp();
@@ -19,6 +19,9 @@ public class CatalogTreeModelTest extends AbstractCatalogStudioTest {
 
     //noinspection BadExpressionStatementJS
     catalogTreeModel = new CatalogTreeModel();
+    catalogTreeModel.getSortCategoriesByName = function ():Boolean {
+      return true;
+    }
   }
 
   public function testGetStoreText():void {
@@ -38,7 +41,7 @@ public class CatalogTreeModelTest extends AbstractCatalogStudioTest {
         return catalogTreeModel.getText(TOP_CATEGORY_ID);
       },
       function():void {
-        assertEquals(catalogTreeModel.getText(TOP_CATEGORY_ID), TOP_CATEGORY_EXTERNAL_ID);
+        assertEquals(catalogTreeModel.getText(TOP_CATEGORY_ID), TOP_CATEGORY_ID);
       }
     );
   }
@@ -49,7 +52,7 @@ public class CatalogTreeModelTest extends AbstractCatalogStudioTest {
         return catalogTreeModel.getText(LEAF_CATEGORY_ID);
       },
       function():void {
-        assertEquals(catalogTreeModel.getText(LEAF_CATEGORY_ID), LEAF_CATEGORY_EXTERNAL_ID);
+        assertEquals(catalogTreeModel.getText(LEAF_CATEGORY_ID), LEAF_CATEGORY_ID);
       }
     );
   }

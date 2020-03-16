@@ -1,5 +1,6 @@
 "use strict";
 
+const inquirer = require("inquirer");
 const path = require("path");
 const cmLogger = require("@coremedia/cm-logger");
 const {
@@ -14,7 +15,7 @@ const {
 } = require("@coremedia/module-creator");
 const { PKG_NAME } = require("../lib/constants");
 
-const command = "create-brick <name>";
+const command = "create-brick [name]";
 const desc = "Create a blank, minimal brick";
 const builder = yargs =>
   yargs
@@ -27,6 +28,9 @@ const builder = yargs =>
     .epilogue(args.docs);
 
 const handler = argv => {
+  let brickName = "";
+  let brickPath = "";
+
   const log = cmLogger.getLogger({
     name: PKG_NAME,
     level: argv.verbose ? "debug" : "info",
@@ -37,22 +41,6 @@ const handler = argv => {
     wsConfig = getWorkspaceConfig();
   } catch (error) {
     log.error(error.message);
-    process.exit(1);
-  }
-
-  const brickName = convertModuleName(argv.name);
-  if (!brickName) {
-    log.error(
-      "No valid brick name was provided. Only characters (A-Z, a-z), numbers (0-9) and hyphens (-) are allowed. Please try again."
-    );
-    process.exit(1);
-  }
-
-  const brickPath = path.join(wsConfig.bricksPath, `${brickName}`);
-  if (isModuleNameInUse(brickPath)) {
-    log.error(
-      `The brick "${brickName}" already exists. Please choose another name.`
-    );
     process.exit(1);
   }
 
@@ -67,7 +55,50 @@ const handler = argv => {
       );
     }
   }
-  doIt();
+
+  const setPath = (brickName) => {
+    brickPath = path.join(wsConfig.bricksPath, `${brickName}`);
+    if (isModuleNameInUse(brickPath)) {
+      log.error(
+        `The brick "${brickName}" already exists. Please choose another name.`
+      );
+      getName();
+    } else {
+      doIt();
+    }
+  };
+
+  const getName = () => {
+    inquirer
+      .prompt([
+        {
+          type: "string",
+          name: "chosenName",
+          message: "How should the brick be named?",
+        },
+      ])
+      .then(({ chosenName }) => {
+        if (!chosenName) {
+          log.error(
+            `The theme name must not be empty.`
+          );
+          getName();
+        } else {
+          brickName = chosenName;
+          setPath(chosenName);
+        }
+      });
+  };
+
+  // starting cli prompts
+
+  brickName = convertModuleName(argv.name);
+
+  if (!brickName) {
+    getName();
+  } else {
+    setPath(brickName);
+  }
 };
 
 module.exports = {

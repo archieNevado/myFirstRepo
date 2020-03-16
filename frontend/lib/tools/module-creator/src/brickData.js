@@ -84,10 +84,10 @@ import * as ${brickName} from "./${brickName}";
  * returns content for _partials.scss
  * @return {string}
  */
-const initBrickPartialsScss = () => `// make sure to import partials sass files in _partials.scss
+const initBrickPartialsScss = brickName => `// make sure to import partials sass files in _partials.scss
 // the smart-import ensures, that all sass partials from depending bricks are loaded
 @import "?smart-import-partials";
-@import "partials/custom-text";
+@import "partials/${brickName}";
 
 `;
 
@@ -95,27 +95,27 @@ const initBrickPartialsScss = () => `// make sure to import partials sass files 
  * returns content for _variables.scss
  * @return {string}
  */
-const initBrickVariablesScss = () => `// make sure to import variables sass files in _variables.scss
-@import "variables/custom-text";
+const initBrickVariablesScss = brickName => `// make sure to import variables sass files in _variables.scss
+@import "variables/${brickName}";
 // the smart-import ensures, that all sass variables from depending bricks are loaded
 @import "?smart-import-variables";
 `;
 
 /**
- * returns content for partials/_custom-text.scss
+ * returns content for partials/_{brickName}.scss
  * @return {string}
  */
-const initBrickCustomTextPartialsScss = () => `// css rules in partials may use variables, defined in the sass/variables folder
+const initBrickCustomPartialsScss = () => `// css rules in partials may use variables, defined in the sass/variables folder
 .custom-text {
   color: $custom-text-color;
 }
 `;
 
 /**
- * returns content for variables/_custom-text.scss
+ * returns content for variables/_{brickName}.scss
  * @return {string}
  */
-const initBrickCustomTextVariablesScss = () => `// brick scss variables to be used in partials files
+const initBrickCustomVariablesScss = () => `// brick scss variables to be used in partials files
 // use the !default flag to make this variable configurable in themes
 $custom-text-color: #FF0000 !default;
 `;
@@ -149,8 +149,8 @@ module.exports = {
   initBrickJs,
   initBrickPartialsScss,
   initBrickVariablesScss,
-  initBrickCustomTextPartialsScss,
-  initBrickCustomTextVariablesScss,
+  initBrickCustomPartialsScss,
+  initBrickCustomVariablesScss,
   initBrickPrettierignore,
   initBrickPageBodyFtl,
   initBrickDeProperties,

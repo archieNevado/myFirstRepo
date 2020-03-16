@@ -40,7 +40,4 @@
     </property>
   </bean>
 
-  <customize:replace id="userChangesServiceInfoManager" bean="serviceInfoManager" property="serviceType"
-                     custom-value="user-changes"/>
-
 </beans>

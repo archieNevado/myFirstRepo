@@ -81,8 +81,4 @@
     </list>
   </customize:prepend>
 
-  <customize:replace id="caePreviewServiceInfoManager" bean="serviceInfoManager" property="serviceType"
-                     custom-value="cae-preview"/>
-
 </beans>
-
