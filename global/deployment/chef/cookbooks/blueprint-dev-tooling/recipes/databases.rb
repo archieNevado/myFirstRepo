@@ -50,6 +50,7 @@ when 'postgresql'
     node.force_default['blueprint']['tools'][app]['property_files']['resetcaefeeder.properties']['jdbc.user'] = db_schemas[app]
     node.force_default['blueprint']['tools'][app]['property_files']['resetcaefeeder.properties']['jdbc.password'] = db_schemas[app]
   end
+  node.force_default['blueprint']['apps']['studio-server']['application.properties']['editorial.comments.datasource.url'] = "jdbc:postgresql://#{node['blueprint']['dev']['db']['host']}:5432/coremedia"
   node.override['blueprint']['postgresql']['schemas'] = db_schemas.values
   include_recipe 'blueprint-postgresql::schemas' if node['blueprint']['dev']['db']['host'] == 'localhost'
 when 'mysql'
@@ -70,6 +71,7 @@ when 'mysql'
     node.force_default['blueprint']['tools'][app]['property_files']['resetcaefeeder.properties']['jdbc.user'] = db_schemas[app]
     node.force_default['blueprint']['tools'][app]['property_files']['resetcaefeeder.properties']['jdbc.password'] = db_schemas[app]
   end
+  node.force_default['blueprint']['apps']['studio-server']['application.properties']['editorial.comments.datasource.url'] = "jdbc:mysql://#{node['blueprint']['dev']['db']['host']}:3306/cm_editorial_comments?useUnicode=yes&characterEncoding=UTF-8"
   node.override['blueprint']['mysql']['schemas'] = db_schemas.values.uniq
   include_recipe 'blueprint-mysql::schemas' if node['blueprint']['dev']['db']['host'] == 'localhost'
 end

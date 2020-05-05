@@ -17,6 +17,7 @@ x-development-boot-envs:
   # writes heapdumps to /coremedia/heapdumps on oom exceptions. restart the container or mount a volume to
   # that directory to inspect the heapdumps
   HEAP_DUMP_ON_OOM: "${HEAP_DUMP_ON_OOM:-true}"
+  JAVA_OPTS: "-Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses -XX:MetaspaceSize=64m -XX:MaxMetaspaceSize=192m -XX:TieredStopAtLevel=1"
 
 services:
   mysql:
@@ -223,6 +224,8 @@ services:
       - 41081:8081
       - 41005:5005
     environment:
+      EDITORIAL_COMMENTS_DATASOURCE_URL: jdbc:mysql://mysql:3306/cm_editorial_comments?useUnicode=yes&characterEncoding=UTF-8
+
       <<: *development-boot-envs
       HEAP_DUMP_FILENAME: studio-server-heapdump
     labels:
@@ -350,9 +353,12 @@ services:
       BLUEPRINT_SITE_MAPPING_SITEGENESIS: //preview.${ENVIRONMENT_FQDN:-docker.localhost}
       BLUEPRINT_SITE_MAPPING_SFRA: //preview.${ENVIRONMENT_FQDN:-docker.localhost}
       HEAP_DUMP_FILENAME: headless-server-preview-heapdump
+      COMMERCE_HUB_DATA_CUSTOMENTITYPARAMS_CATALOGVERSION: Staged
+      COMMERCE_HUB_DATA_CUSTOMENTITYPARAMS_ENVIRONMENT: preview
     labels:
       traefik.enable: "true"
       traefik.actuator.port: "8081"
+      # no redirect to https because otherwise clients (JVMs) need to use valid cacerts
       traefik.frontend.headers.SSLRedirect: "false"
       traefik.preview-test.frontend.rule: Host:headless-server-preview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/
       traefik.actuator.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/headless-server-preview;AddPrefix:/actuator
@@ -377,9 +383,11 @@ services:
       BLUEPRINT_SITE_MAPPING_SITEGENESIS: //sitegenesis.${ENVIRONMENT_FQDN:-docker.localhost}
       BLUEPRINT_SITE_MAPPING_SFRA: //sfra.${ENVIRONMENT_FQDN:-docker.localhost}
       HEAP_DUMP_FILENAME: headless-server-live-heapdump
+      COMMERCE_HUB_DATA_CUSTOMENTITYPARAMS_ENVIRONMENT: live
     labels:
       traefik.enable: "true"
       traefik.actuator.port: "8081"
+      # no redirect to https because otherwise clients (JVMs) need to use valid cacerts
       traefik.frontend.headers.SSLRedirect: "false"
       traefik.live-test.frontend.rule: Host:headless-server-live.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/
       traefik.actuator.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/headless-server-live;AddPrefix:/actuator
@@ -398,7 +406,6 @@ services:
     logging: *default-logging
     build:
       context: ../overview
-    # no redirect to https because otherwise clients (JVMs) need to use valid cacerts
     networks:
       backend: null
     environment:
@@ -409,6 +416,7 @@ services:
       traefik.port: "80"
       traefik.frontend.entryPoints: http,https
       traefik.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost}
+
 
 volumes:
   content-feeder-cache: {}

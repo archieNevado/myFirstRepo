@@ -1,6 +1,8 @@
 
 fragment ContentInfo on Content_ {
+  id
   name
+  type
   creationDate
 }
 

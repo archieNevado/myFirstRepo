@@ -64,7 +64,7 @@ addNodeDecoratorByData(
   ($button, { id, link, token }) => {
     decorateCartButton($button, link, {
       action: "addOrderItem",
-      externalTechId: id,
+      externalId: id,
       _CSRFToken: token,
     });
   }

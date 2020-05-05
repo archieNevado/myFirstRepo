@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<local:PreviewPluginBase
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:local="com.acme.coremedia.studio.preview.*">
+  <fx:Script><![CDATA[
+    public native function PreviewPlugin(config:PreviewPlugin = null);
+    ]]></fx:Script>
+
+  <!-- Dummy Plugin:
+    This plugin only serves static files to be used from within
+    the tests without modifying the Studio itself.
+  -->
+</local:PreviewPluginBase>

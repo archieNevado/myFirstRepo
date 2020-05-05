@@ -24,17 +24,6 @@
 
   <bean class="com.coremedia.blueprint.component.cae.CaeBaseComponentConfiguration"/>
 
-  <bean class="com.coremedia.objectserver.beans.ContentBeanPrefetcher">
-    <description>
-      initialize content beans when starting the CAE instance
-    </description>
-    <property name="contentBeanFactory" ref="contentBeanFactory"/>
-    <property name="contentRepository" ref="contentRepository"/>
-    <property name="dataViewFactory" ref="dataViewFactory"/>
-    <property name="query" value="${blueprint.contentbean.initialization.query}"/>
-    <property name="lenientLogging" value="true"/>
-  </bean>
-
   <!-- ================== Data views cache capacity configuration ================== -->
 
   <bean id="blueprintDataviewsCacheCapacityConfigurer" class="com.coremedia.cache.CacheCapacityConfigurer" init-method="init">

@@ -7,7 +7,7 @@ import {
   decorateNode,
 } from "@coremedia/brick-node-decoration-service";
 
-import { EVENT_NODE_APPENDED, renderFragmentHrefs } from "./fragment";
+import {EVENT_NODE_APPENDED, FRAGMENT_IDENTIFIER, renderFragmentHrefs} from "./fragment";
 import {
   default as Handler,
   BASE_CONFIG as HANDLER_BASE_CONFIG,
@@ -30,7 +30,7 @@ $(function() {
 
   // load all dynamic fragments. The special header X-Requested-With is needed by the CAE to identify
   // the request as an Ajax request
-  addNodeDecoratorByData(undefined, "cm-fragment", function($fragment, url) {
+  addNodeDecoratorByData(undefined, FRAGMENT_IDENTIFIER, function($fragment, url) {
     utils
       .ajax({
         url: url,

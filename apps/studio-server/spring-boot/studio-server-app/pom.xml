@@ -55,6 +55,12 @@
       <artifactId>tomcat-embed-jasper</artifactId>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>database-drivers</artifactId>
+      <type>pom</type>
+      <scope>runtime</scope>
+    </dependency>
   </dependencies>
 
   <build>

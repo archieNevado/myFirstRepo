@@ -4,6 +4,7 @@ package com.coremedia.blueprint.common.contentbeans;
 import com.coremedia.blueprint.common.feeds.FeedSource;
 import com.coremedia.blueprint.common.layout.Container;
 import com.coremedia.cae.aspect.Aspect;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import java.util.Collection;
 import java.util.List;
@@ -63,6 +64,18 @@ public interface CMCollection<T> extends CMTeasable, FeedSource<T>, Container<T>
    * Name of the document property 'items'.
    */
   String ITEMS = "items";
+
+  @NonNull
+  @Override
+  default List<Object> getContainerMetadata() {
+    return List.of(getContent());
+  }
+
+  @NonNull
+  @Override
+  default List<Object> getItemsMetadata() {
+    return List.of(METADATA_PROPERTIES_PREFIX + ITEMS);
+  }
 
   /**
    * Name of the document property 'extendedItems'.

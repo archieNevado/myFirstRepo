@@ -7,8 +7,9 @@
 <#assign renderWrapper=cm.localParameters().renderWrapper!true />
 <#assign enableTeaserOverlay=cm.localParameters().enableTeaserOverlay!true /> <#-- de-/activate teaser overlay generally-->
 <#assign renderCTA=cm.localParameters().renderCTA!true />
+<#assign metadata=cm.localParameters().metadata![] />
 
-<div class="${blockClass} ${additionalClass}"<@preview.metadata self.content />>
+<div class="${blockClass} ${additionalClass}"<@preview.metadata metadata + [self.content] />>
   <@utils.optionalTag condition=renderWrapper attr={"class": "${blockClass}__wrapper"}>
     <@cm.include self=self view="teaserMedia" params={
       "teaserBlockClass": blockClass

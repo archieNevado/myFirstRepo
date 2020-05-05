@@ -13,7 +13,7 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.push.PushService;
 import com.coremedia.livecontext.ecommerce.push.PushState;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
-import com.coremedia.rest.linking.EntityResource;
+import com.coremedia.rest.controller.EntityController;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +36,7 @@ import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.SK
 
 @RestController
 @RequestMapping(value = URI_PATH, produces = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
-public class CommerceBeanPushStateResource implements EntityResource<PushState> {
+public class CommerceBeanPushStateResource implements EntityController<PushState> {
 
   private static final String PATH_TYPE = "type";
   static final String URI_PATH = "livecontext/pushState/{" + PATH_TYPE + "}/{" + PATH_SITE_ID + "}/{" + PATH_CATALOG_ALIAS + "}/{" + PATH_WORKSPACE_ID + "}/{" + PATH_ID + ":.+}";

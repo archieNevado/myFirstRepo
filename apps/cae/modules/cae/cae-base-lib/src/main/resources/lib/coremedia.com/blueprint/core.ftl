@@ -88,6 +88,13 @@
   <#return blueprintFreemarkerFacade.getLinkToThemeResource(path)>
 </#function>
 
+<#-- GET BLOB LINK -->
+<#function getBlobLink target filename="">
+  <#if cm.isUndefined(target)>
+    <#return ""/>
+  </#if>
+  <#return blueprintFreemarkerFacade.getBlobLink(target, filename)>
+</#function>
 
 <#-- --- DEPRECATED/UNUSED ----------------------------------------------------------------------------------------- -->
 

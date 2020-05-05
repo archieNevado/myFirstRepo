@@ -1,6 +1,6 @@
-query SiteQuery($id: String!) {
+query SiteQuery($siteId: String!) {
   content {
-    site(id: $id) {
+    site(siteId: $siteId) {
       name
       id
       root {

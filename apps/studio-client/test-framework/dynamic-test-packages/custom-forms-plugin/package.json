@@ -1,0 +1,8 @@
+{
+  "studioPlugins": [
+    {
+      "mainClass": "com.acme.coremedia.studio.forms.CustomFormsPlugin",
+      "name": "CustomFormsPlugin"
+    }
+  ]
+}

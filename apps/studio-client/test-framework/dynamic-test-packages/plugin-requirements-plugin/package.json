@@ -1,0 +1,42 @@
+{
+  "studioPlugins": [
+    {
+      "mainClass": "com.acme.coremedia.studio.pluginperms.EmptyEditorPlugin",
+      "name": "Plugin Requirements: None"
+    },
+    {
+      "mainClass": "com.acme.coremedia.studio.pluginperms.EmptyEditorPlugin",
+      "name": "Plugin Requirements: Valid License",
+      "requiredLicenseFeature": "workflow"
+    },
+    {
+      "mainClass": "com.acme.coremedia.studio.pluginperms.EmptyEditorPlugin",
+      "name": "Plugin Requirements: Valid Group",
+      "requiredGroup": "plugin-requirements-group-for-user"
+    },
+    {
+      "mainClass": "com.acme.coremedia.studio.pluginperms.EmptyEditorPlugin",
+      "name": "Plugin Requirements: Valid License & Valid Group",
+      "requiredLicenseFeature": "workflow",
+      "requiredGroup": "plugin-requirements-group-for-user"
+    },
+    {
+      "mainClass": "com.acme.coremedia.studio.pluginperms.EmptyEditorPlugin",
+      "name": "Plugin Requirements: Missing License & Valid Group",
+      "requiredLicenseFeature": "non_existent_license_feature",
+      "requiredGroup": "plugin-requirements-group-for-user"
+    },
+    {
+      "mainClass": "com.acme.coremedia.studio.pluginperms.EmptyEditorPlugin",
+      "name": "Plugin Requirements: Valid License & Non-Existing Group",
+      "requiredLicenseFeature": "workflow",
+      "requiredGroup": "plugin-requirements-group-not-existing"
+    },
+    {
+      "mainClass": "com.acme.coremedia.studio.pluginperms.EmptyEditorPlugin",
+      "name": "Plugin Requirements: Valid License & Unmatched Group",
+      "requiredLicenseFeature": "workflow",
+      "requiredGroup": "plugin-requirements-group-unused"
+    }
+  ]
+}

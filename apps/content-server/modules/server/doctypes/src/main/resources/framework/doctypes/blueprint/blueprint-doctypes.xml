@@ -362,7 +362,7 @@
 
   <DocType Name="CMResourceBundle" Parent="CMLocalized">
     <LinkListProperty Name="master" Max="1" LinkType="CMResourceBundle" Override="true" extensions:weakLink="true"/>
-    <XmlProperty Name="localizations" Grammar="coremedia-struct-2008" extensions:translatable="true" extensions:automerge="true"/>
+    <XmlProperty Name="localizations" Grammar="coremedia-struct-2008" extensions:translatable="true"/>
   </DocType>
 
   <!--
@@ -380,11 +380,6 @@
     <LinkListProperty Name="include" LinkType="CMAbstractCode"/>
     <StringProperty Name="dataUrl" Length="1024"/>
     <XmlProperty Name="htmlAttributes" Grammar="coremedia-struct-2008"/>
-    <!-- deprecated:
-     We will be removing the compression of code from the CAE as the frontend workspace provides options to compress the
-      code before it is uploaded to the content repository. When the compression is removed this property does not have
-      any effect.
-    -->
     <IntProperty Name="disableCompress"/>
   </DocType>
 

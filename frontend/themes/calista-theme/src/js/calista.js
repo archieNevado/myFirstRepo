@@ -5,7 +5,6 @@ import { addNodeDecoratorBySelector } from "@coremedia/brick-node-decoration-ser
 
 const EVENT_PREFIX = "coremedia.blueprint.base.";
 const EVENT_CHECK_LOGIN_STATUS = EVENT_PREFIX + "loginStatusChecked";
-const LINK_PLACEHOLDER = "NEXT_URL_PLACEHOLDER";
 
 const $document = $(document);
 
@@ -18,39 +17,7 @@ function urlParams($btn) {
   if (!btnUrl) {
     return;
   }
-
-  let nexturl = encodeUrlForWcsAndSpring(window.location.href);
-
-  btnUrl = btnUrl.replace(LINK_PLACEHOLDER, nexturl);
-  $btn.attr("href", btnUrl);
-}
-
-/**
- * <p>
- * Due to using the URL query parameter to hand over to WCS we have to adapt the value to be correctly encoded to
- * keep the original query parameters otherwise WCS will truncate them and we will lose necessary query parameters.
- * </p>
- *
- * <p>
- * "correctly encoded" means:
- * </p>
- * <ul>
- *   <li> Once encoded, that the WCS can decode it and place it in the hidden input field </li>
- *   <li> second time encoded, that all query parameters are still encoded after WCS decoding </li>
- *   <li> after those complete encodings we must encode the `/` character a third time to still have a double encoded `/` to
- *    make spring find our handler.  </li>
- * </ul>
- * @param $url
- * @returns {string}
- */
-function encodeUrlForWcsAndSpring($url) {
-  let $urlencodedurl = encodeURIComponent($url);
-  let $doubleencodedurl = encodeURIComponent($urlencodedurl);
-
-  let doubleEncodedSlash = encodeURIComponent(encodeURIComponent("/"));
-  let tripleEncodedSlash = encodeURIComponent(doubleEncodedSlash);
-
-  return $doubleencodedurl.split(doubleEncodedSlash).join(tripleEncodedSlash);
+  $btn.attr("href", btnUrl + "&URL=" + window.location.href);
 }
 
 /**

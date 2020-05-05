@@ -13,7 +13,6 @@ import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.rest.RestCoreLinkingConfiguration;
 import com.coremedia.rest.cap.content.search.solr.SolrSearchService;
-import com.coremedia.rest.linking.LinkResolver;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -67,9 +66,8 @@ public class TaxonomyResourceTest {
     }
 
     @Bean
-    TaxonomyResource taxonomyResource(TaxonomyResolver taxonomyResolver, LinkResolver linkResolver) {
+    TaxonomyResource taxonomyResource(TaxonomyResolver taxonomyResolver) {
       final TaxonomyResource taxonomyResource = new TaxonomyResource(taxonomyResolver, new ArrayList<>());
-      taxonomyResource.setLinkResolver(linkResolver);
       taxonomyResource.afterPropertiesSet();
       return taxonomyResource;
     }

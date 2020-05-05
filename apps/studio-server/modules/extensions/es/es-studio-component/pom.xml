@@ -159,10 +159,6 @@
       <artifactId>core-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.ui</groupId>
-      <artifactId>coremedia-rest-core</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>coremedia-xml</artifactId>
     </dependency>

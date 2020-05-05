@@ -17,7 +17,6 @@ import org.apache.http.entity.StringEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +34,7 @@ import javax.json.JsonException;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.stream.JsonParser;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -42,8 +42,8 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
+import java.util.List;
 import java.util.NoSuchElementException;
-
 
 @RestController
 @Api(value = "/previewurl", tags = "Json Preview Client")
@@ -52,7 +52,7 @@ public class JsonPreviewController {
   static final String ERROR_MSG_NO_QUERY_DEFINITION = "No json preview query definition available for selected document type.";
   static final String ERROR_MSG_NO_ENTITY = "No response entity available.";
 
-  static final String REQUEST_NOT_SUCCESSFUL = "Request not successful";
+  static final String REQUEST_NOT_SUCCESSFUL = "Request not successful, check configuration of previewclient.caasserver-endpoint";
 
   private static final Logger LOG = LoggerFactory.getLogger(JsonPreviewController.class);
   private static final DateTimeFormatter STUDIO_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm VV");
@@ -67,20 +67,23 @@ public class JsonPreviewController {
 
   private HttpClient httpClient;
   private ITemplateEngine templateEngine;
-  private String caasServerEndpoint;
 
-  public JsonPreviewController(HttpClient httpClient, @Qualifier("htmlTemplateEngine") TemplateEngine templateEngine, @Value("${caasserver.endpoint}") String caasServerEndpoint) {
+  private final JsonPreviewConfigurationProperties jsonPreviewConfigurationProperties;
+
+  public JsonPreviewController(HttpClient httpClient,
+                               @Qualifier("htmlTemplateEngine") TemplateEngine templateEngine,
+                               JsonPreviewConfigurationProperties jsonPreviewConfigurationProperties) {
     this.httpClient = httpClient;
     this.templateEngine = templateEngine;
-    this.caasServerEndpoint = caasServerEndpoint;
+    this.jsonPreviewConfigurationProperties = jsonPreviewConfigurationProperties;
   }
 
   @GetMapping(PREVIEW_PATH + "/{" + PARAM_NUMERIC_ID + "}/{" + PARAM_TYPE + "}")
   @Timed
-  public ResponseEntity<String> preview(
-          @ApiParam(value = "The id of the item", required = true) @PathVariable String numericId,
-          @ApiParam(value = "The type of the item", required = true) @PathVariable String type,
-          @ApiParam(value = "The preview date", required = false) @RequestParam(required = false, name = "previewDate") String previewDate) {
+  public ResponseEntity<String> preview(HttpServletRequest request,
+                                        @ApiParam(value = "The id of the item", required = true) @PathVariable String numericId,
+                                        @ApiParam(value = "The type of the item", required = true) @PathVariable String type,
+                                        @ApiParam(value = "The preview date") @RequestParam(required = false, name = "previewDate") String previewDate) {
 
     Context ctx = new Context();
 
@@ -93,9 +96,9 @@ public class JsonPreviewController {
 
     HttpResponse response;
     try {
-      response = executePostRequest(caasServerEndpoint, numericId, type, query, previewDate, httpClient);
+      response = executePostRequest(request, jsonPreviewConfigurationProperties.getForwardHeaderNames(), jsonPreviewConfigurationProperties.isForwardCookies(), jsonPreviewConfigurationProperties.getCaasserverEndpoint(), numericId, type, query, previewDate, httpClient);
     } catch (IOException e) {
-      return getResponseEntity(ctx, TEMPLATE_VAR_ERROR, e.getMessage());
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
 
     if (response.getEntity() == null) {
@@ -123,9 +126,7 @@ public class JsonPreviewController {
     return templateEngine.process(TEMPLATE_PATH, ctx);
   }
 
-
-
-  private static HttpResponse executePostRequest(String caasServerEndpoint, String id, String type, String query, String previewDate, HttpClient httpClient) throws IOException {
+  private static HttpResponse executePostRequest(HttpServletRequest request, List<String> forwardHeaderNames, boolean forwardCookies, String caasServerEndpoint, String id, String type, String query, String previewDate, HttpClient httpClient) throws IOException {
     URI uri = getCaasServerUri(caasServerEndpoint);
 
     JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
@@ -146,6 +147,26 @@ public class JsonPreviewController {
         LOG.warn("Invalid previewDate: {}", e.getMessage());
       }
     }
+
+    if (forwardHeaderNames != null && !forwardHeaderNames.isEmpty()) {
+      forwardHeaderNames.forEach(s -> {
+        String headerName = s.trim();
+        String headerValue = request.getHeader(headerName);
+        if (headerValue != null) {
+          httpPost.addHeader(headerName, headerValue);
+          LOG.debug("Forwarding http-header {}", headerName);
+        }
+      });
+    }
+
+    if (forwardCookies) {
+      String rawCookies = request.getHeader(HttpHeaders.COOKIE);
+      if (rawCookies != null) {
+        httpPost.addHeader(HttpHeaders.COOKIE, rawCookies);
+        LOG.debug("Forwarding http cookies");
+      }
+    }
+
     httpPost.setEntity(entity);
 
     HttpResponse response = httpClient.execute(httpPost);

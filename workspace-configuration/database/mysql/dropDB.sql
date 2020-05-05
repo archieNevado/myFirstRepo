@@ -9,3 +9,4 @@ drop user cm_caefeeder@localhost;
 drop user cm_master@localhost;
 drop user cm_mcaefeeder@localhost;
 drop user cm_replication@localhost;
+drop user cm_editorial_comments@localhost;

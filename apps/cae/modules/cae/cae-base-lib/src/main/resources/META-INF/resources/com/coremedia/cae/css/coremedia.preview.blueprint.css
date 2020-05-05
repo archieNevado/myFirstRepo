@@ -2,7 +2,7 @@
 
 .cm-preview-missing-key {
   font-weight: bold;
-  background-color: #e74c3c;
+  background-color: #DD342B;
 }
 
 /* display developer-mode symbol on top right */
@@ -11,7 +11,7 @@
   top: 70px;
   right: 0;
   z-index: 999;
-  background-color: #e74c3c;
+  background-color: #DD342B;
   padding: 7px 9px;
   border-radius: 5px 0 0 5px;
   cursor: default;
@@ -41,15 +41,15 @@
 
 /* Available Empty Placement: */
 .cm-placement-highlighting-green {
-  background: #F2FBE5;
-  border: 2px solid #7ED900;
+  background: #E8F8AF;
+  border: 2px solid #2FAC66;
   margin: 3px 0;
 }
 
 /* Unavailable Placement: */
 .cm-placement-highlighting-orange {
-  background: #FEF6E8;
-  border: 2px solid #F1A20E;
+  background: #FFFCCC;
+  border: 2px solid #ED8703;
   margin: 3px 0;
 }
 
@@ -57,18 +57,18 @@
 .cm-placement-highlighting-blue .cm-placement-border-left,
 .cm-placement-highlighting-blue .cm-placement-border-right,
 .cm-placement-highlighting-blue .cm-placement-border-top,
-.cm-placement-highlighting-blue .cm-placement-border-bottom  {
-  background-color: #1972C6;
+.cm-placement-highlighting-blue .cm-placement-border-bottom {
+  background-color: #006CAE;
 }
 
 .cm-placement-border-left,
 .cm-placement-border-right,
 .cm-placement-border-top,
-.cm-placement-border-bottom
-{
+.cm-placement-border-bottom {
   position: absolute;
   z-index: 10;
   margin-bottom: 0;
+  margin-top: 0 !important;
 }
 
 .cm-placement-border-left,
@@ -110,6 +110,7 @@
   left: -1px;
   width: initial;
   padding: 0 3px;
+  margin-top: 0 !important;
   z-index: 10;
   font-weight: bold;
 }
@@ -120,18 +121,18 @@
 }
 
 .cm-placement-highlighting-green-overlay {
-  background: #F2FBE5;
-  border: 1px solid #7ED900;
+  background: #E8F8AF;
+  border: 1px solid #2FAC66;
 }
 
 .cm-placement-highlighting-orange-overlay {
-  background: #FEF6E8;
-  border: 1px solid #F1A20E;
+  background: #FFFCCC;
+  border: 1px solid #ED8703;
 }
 
 .cm-placement-highlighting-blue-overlay {
-  background: #E8F1F9;
-  border: 1px solid #1972C6;
+  background: #D6F0FF;
+  border: 1px solid #006CAE;
 }
 
 .cm-placement-highlighting-blue-overlay,
@@ -143,5 +144,10 @@
   font-size: 12px;
   line-height: 1.4;
   text-align: left;
-  color: #000;
+  color: #4F4F4F;
+}
+
+.cm-placement-highlighting-green-text,
+.cm-placement-highlighting-orange-text {
+  margin-top: 0 !important;
 }

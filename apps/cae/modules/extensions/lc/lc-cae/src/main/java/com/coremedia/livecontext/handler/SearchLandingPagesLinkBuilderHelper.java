@@ -8,6 +8,7 @@ import com.coremedia.cap.content.query.QueryService;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.link.StorefrontRef;
 import com.coremedia.livecontext.fragment.resolver.SearchTermExternalReferenceResolver;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
@@ -15,11 +16,15 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Optional;
+
+import static com.coremedia.livecontext.fragment.links.CommerceLinkTemplateTypes.SEARCH_REDIRECT;
+import static com.coremedia.livecontext.search.CommerceSearchHandler.SEARCH_TERM_KEY;
 
 /**
  * Extension that create custom links on CMChannel documents.
@@ -44,13 +49,17 @@ class SearchLandingPagesLinkBuilderHelper {
    */
   @NonNull
   Optional<UriComponents> createSearchLandingPageURLFor(@NonNull CMChannel channel,
-                                                        @NonNull CommerceConnection commerceConnection,
-                                                        @NonNull HttpServletRequest request,
-                                                        @NonNull StoreContext storeContext) {
-    String term = channel.getContent().getString(keywordsProperty);
+                                                        @NonNull CommerceConnection commerceConnection) {
+    Content content = channel.getContent();
+    String term = content.getString(keywordsProperty);
+    StoreContext storeContext = commerceConnection.getStoreContext();
 
-    return commerceConnection.getServiceForVendor(CommerceSearchRedirectUrlProvider.class)
-            .flatMap(provider -> provider.provideRedirectUrl(term, request, storeContext));
+    return commerceConnection.getLinkService()
+            .flatMap(linkService -> linkService.getStorefrontRef(SEARCH_REDIRECT, storeContext))
+            .map(storefrontRef -> storefrontRef.replace(Map.of(SEARCH_TERM_KEY, term)))
+            .map(StorefrontRef::toLink)
+            .map(UriComponentsBuilder::fromUriString)
+            .map(UriComponentsBuilder::build);
   }
 
   // ----------------- Helper -------------------------------

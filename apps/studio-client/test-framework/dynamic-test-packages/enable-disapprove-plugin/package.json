@@ -1,0 +1,8 @@
+{
+  "studioPlugins": [
+    {
+      "mainClass": "com.acme.coremedia.studio.disapprove.AcmeEnableDisapprovePlugin",
+      "name": "AcmeEnableDisapprovePlugin"
+    }
+  ]
+}

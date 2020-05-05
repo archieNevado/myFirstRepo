@@ -20,6 +20,7 @@ if node['blueprint']['ibm-wcs']['enabled']
   node.default['blueprint']['apps']['cae-preview']['application.properties']['livecontext.apache.live.production.wcs.host'] = "shop-ibm.#{node['blueprint']['hostname']}"
   node.default['blueprint']['apps']['cae-preview']['application.properties']['blueprint.host.helios'] = "preview.#{node['blueprint']['hostname']}"
   node.default['blueprint']['apps']['cae-live']['application.properties']['blueprint.host.helios'] = "helios.#{node['blueprint']['hostname']}"
+  node.default['blueprint']['apps']['cae-live']['application.properties']['commerce.hub.data.customEntityParams.environment'] = 'preview'
 
   cors_hosts << "https://#{node['blueprint']['ibm-wcs']['virtual_host']['shop-preview']['server_name']}"
   node['blueprint']['ibm-wcs']['virtual_host']['shop-preview']['server_aliases'].each do |s|

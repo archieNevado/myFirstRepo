@@ -371,14 +371,17 @@ public class UserSessionServiceImpl extends IbmStoreFrontService implements User
     updateUserContext(userContext, newUserId, newCookieHeader);
   }
 
+  @SuppressWarnings("deprecation")
   private static void updateUserContext(@NonNull UserContext userContext, @Nullable String userId,
                                         @Nullable String cookieHeader) {
-    UserContext updatedUserContext = UserContext.buildCopyOf(userContext)
-            .withUserId(userId)
-            .withCookieHeader(cookieHeader)
-            .build();
-
-    CurrentUserContext.set(updatedUserContext);
+    UserContext.Builder userContextBuilder = UserContext.buildCopyOf(userContext);
+    if (userId != null) {
+      userContextBuilder.withUserId(userId);
+    }
+    if (cookieHeader != null) {
+      userContextBuilder.withCookieHeader(cookieHeader);
+    }
+    CurrentUserContext.set(userContextBuilder.build());
   }
 
   private static boolean isAnonymousUser(@NonNull UserContext userContext) {

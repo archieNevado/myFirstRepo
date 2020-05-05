@@ -7,6 +7,12 @@
   <LinkListProperty Name="linkProperty" LinkType="coremedia:///cap/contenttype/CMTeasable">
     <Link xlink:href="coremedia:///cap/resources/6"/>
   </LinkListProperty>
+  <MarkupListProperty Name="markupListProperty">
+    <Markup Grammar="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0"><p/></div></Markup>
+  </MarkupListProperty>
+  <BlobListProperty Name="blobListProperty" RequiredContentType="*/*">
+    <Blob Url="http://www.coremedia.com/" Size="123" ContentType="text/html"/>
+  </BlobListProperty>
   <StructListProperty Name="structProperty">
     <Struct>
       <StringProperty Name="simpleString1">simple string1</StringProperty>

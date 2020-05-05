@@ -2,8 +2,12 @@ package com.coremedia.blueprint.workflow.boot;
 
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
+import com.coremedia.translate.TranslatablePredicate;
 import com.coremedia.translate.workflow.AllMergeablePropertiesPredicateFactory;
 import com.coremedia.translate.workflow.CleanInTranslation;
+import com.coremedia.translate.workflow.synchronization.CopyOver;
+import com.coremedia.translate.workflow.DefaultAutoMergePredicateFactory;
 import com.coremedia.translate.workflow.DefaultAutoMergeStructListMapKey;
 import com.coremedia.translate.workflow.DefaultAutoMergeStructListMapKeyFactory;
 import com.coremedia.translate.workflow.DefaultTranslationWorkflowDerivedContentsStrategy;
@@ -32,10 +36,11 @@ import java.util.stream.Collectors;
         WorkflowServerElasticProcessArchiveConfiguration.class,
         WorkflowServerMemoryProcessArchiveConfiguration.class,
 })
-@ImportResource({
+@ImportResource(value = {
         "classpath:/com/coremedia/blueprint/base/multisite/bpbase-sitemodel.xml",
-        "classpath:com/coremedia/cap/multisite/multisite-services.xml"
-})
+        "classpath:com/coremedia/cap/multisite/multisite-services.xml",
+        "classpath:/com/coremedia/blueprint/common/multisite/translation-config.xml"
+}, reader = ResourceAwareXmlBeanDefinitionReader.class)
 @PropertySource("classpath:/com/coremedia/blueprint/base/multisite/bpbase-sitemodel-defaults.properties")
 class BlueprintWorkflowServerAutoConfiguration {
 
@@ -57,6 +62,11 @@ class BlueprintWorkflowServerAutoConfiguration {
     strategy.setDerivedContentsVariable("derivedContents");
     strategy.setMasterContentObjectsVariable("masterContentObjects");
     return strategy;
+  }
+
+  @Bean
+  DefaultAutoMergePredicateFactory defaultAutoMergePredicateFactory(TranslatablePredicate translatablePredicate) {
+    return new DefaultAutoMergePredicateFactory(translatablePredicate);
   }
 
   @Bean
@@ -108,6 +118,11 @@ class BlueprintWorkflowServerAutoConfiguration {
                                         ContentRepository contentRepository,
                                         SitesService sitesService) {
     return new CleanInTranslation(strategies, contentRepository, sitesService);
+  }
+
+  @Bean
+  CopyOver copyOver() {
+    return new CopyOver();
   }
 
   @Configuration

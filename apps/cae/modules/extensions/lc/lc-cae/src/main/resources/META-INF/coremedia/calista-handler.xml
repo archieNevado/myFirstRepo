@@ -5,6 +5,7 @@
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
   <import resource="classpath:/META-INF/coremedia/livecontext-site-services.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml"/>
+  <import resource="livecontext-handlers.xml"/>
 
   <bean id="managedPagePartsRestHandler" class="com.coremedia.livecontext.handler.ManagedPagePartsRestHandler">
     <constructor-arg index="0" name="siteResolver" ref="liveContextSiteResolver"/>
@@ -16,4 +17,14 @@
   by hand over the redirect to the CMS.
   -->
   <bean id="nextURLRedirectHandler" class="com.coremedia.livecontext.handler.NextURLRedirectHandler"/>
+
+  <bean id="cartHandler" class="com.coremedia.livecontext.handler.CartHandler" parent="ecommerceHandlerBase">
+    <property name="resolveContextStrategy" ref="resolveLivecontextContextStrategy"/>
+    <property name="liveContextNavigationFactory" ref="liveContextNavigationFactory"/>
+    <property name="permittedLinkParameterNames">
+      <list>
+        <value>targetView</value>
+      </list>
+    </property>
+  </bean>
 </beans>

@@ -11,7 +11,7 @@
     <#-- list of sub-categories -->
     <#if categories?has_content>
       <div class="cm-category__subcategories">
-        <@cm.include self=bp.getContainer(categories) view="asPortraitBanner" />
+        <@cm.include self=bp.getContainer(categories) view="asPortraitBannerContainer" />
       </div>
     </#if>
   </div>

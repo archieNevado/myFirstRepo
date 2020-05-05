@@ -17,9 +17,11 @@
 
   <customize:append id="CCIPatternsAppender" bean="webCommerceContextInterceptorPatterns">
     <list>
-    <util:constant static-field="com.coremedia.livecontext.handler.ExternalNavigationHandler.URI_PATTERN"/>
-    <util:constant static-field="com.coremedia.livecontext.product.ProductPageHandler.URI_PATTERN"/>
-    <util:constant static-field="com.coremedia.livecontext.asset.ProductAssetsHandler.DYNAMIC_URI_PATTERN"/>
+      <util:constant static-field="com.coremedia.livecontext.handler.ExternalNavigationHandler.URI_PATTERN"/>
+      <util:constant static-field="com.coremedia.livecontext.product.ProductPageHandler.URI_PATTERN"/>
+      <util:constant static-field="com.coremedia.livecontext.asset.ProductAssetsHandler.DYNAMIC_URI_PATTERN"/>
+      <util:constant static-field="com.coremedia.livecontext.handler.CartHandler.URI_PATTERN"/>
+      <util:constant static-field="com.coremedia.livecontext.handler.CartHandler.DYNAMIC_URI_PATTERN"/>
     </list>
   </customize:append>
 

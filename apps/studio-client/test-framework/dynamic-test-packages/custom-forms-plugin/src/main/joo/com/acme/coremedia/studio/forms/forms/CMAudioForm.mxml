@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editor:DocumentTabPanel
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:exml="http://www.jangaroo.net/exml/0.8"
+        xmlns="exml:ext.config"
+        xmlns:editor="exml:com.coremedia.cms.editor.sdk.config">
+  <fx:Script><![CDATA[
+    public static const xtype:String = "acme.config.cmAudioForm";
+
+    private var config:CMAudioForm;
+
+    public native function CMAudioForm(config:CMAudioForm = null);
+    ]]></fx:Script>
+
+  <editor:items>
+    <editor:DocumentForm title="A">
+      <editor:items>
+        <editor:PropertyFieldGroup title="A"
+                                   itemId="A">
+          <editor:items>
+            <editor:StringPropertyField propertyName="title"/>
+          </editor:items>
+        </editor:PropertyFieldGroup>
+      </editor:items>
+    </editor:DocumentForm>
+    <editor:DocumentForm title="B"
+                         autoHide="true">
+      <editor:items>
+        <editor:PropertyFieldGroup title="B"
+                                   itemId="B">
+          <editor:items>
+            <editor:StringPropertyField propertyName="copyright"/>
+          </editor:items>
+        </editor:PropertyFieldGroup>
+      </editor:items>
+    </editor:DocumentForm>
+    <editor:DocumentForm title="C"
+                         autoHide="true">
+      <editor:items>
+        <editor:PropertyFieldGroup title="C"
+                                   itemId="C">
+          <editor:items>
+            <editor:StringPropertyField propertyName="teaserTitle"/>
+          </editor:items>
+        </editor:PropertyFieldGroup>
+      </editor:items>
+    </editor:DocumentForm>
+  </editor:items>
+
+</editor:DocumentTabPanel>

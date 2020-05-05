@@ -57,29 +57,6 @@
     <property name="xmlFilterFactory" ref="cmRichtextToHtmlFilterFactory"/>
   </bean>
 
-  <bean id="javaScriptMinifier" class="com.coremedia.blueprint.cae.view.processing.JavaScriptMinifier">
-    <description>
-      A JavaScript minifier.
-    </description>
-    <property name="linebreak" value="-1"/>
-    <property name="disableOptimization" value="false"/>
-    <property name="munge" value="true"/>
-    <property name="preserveAllSemicolons" value="false"/>
-    <property name="verbose" value="false"/>
-  </bean>
-
-  <bean id="cssMinifier" class="com.coremedia.blueprint.cae.view.processing.CssMinifier">
-    <description>
-      A CSS minifier.
-    </description>
-    <property name="linebreak" value="-1">
-      <description>
-        Specifies the linebreak-param for the YUICompressor. From YUI-Documentation:
-        Specify 0 to get a line break after each semi-colon in JavaScript, and after each rule in CSS.
-      </description>
-    </property>
-  </bean>
-
   <bean id="mergedCodeResourcesViewBase" abstract="true">
     <description>
       Abstract super bean of merged code views.
@@ -92,7 +69,6 @@
     <description>
       A view for merging the JavaScript of a page into one file.
     </description>
-    <property name="minifier" ref="javaScriptMinifier"/>
     <property name="contentType" value="text/javascript"/>
   </bean>
 
@@ -100,7 +76,6 @@
     <description>
       A view for merging the CSS of a page into one file.
     </description>
-    <property name="minifier" ref="cssMinifier"/>
     <property name="contentType" value="text/css"/>
   </bean>
 

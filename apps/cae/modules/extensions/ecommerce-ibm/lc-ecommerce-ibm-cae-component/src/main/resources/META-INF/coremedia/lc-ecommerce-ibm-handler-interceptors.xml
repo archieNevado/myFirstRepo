@@ -13,8 +13,6 @@
     <list>
       <util:constant static-field="com.coremedia.livecontext.ecommerce.ibm.cae.sitemap.WcsCalistaSitemapGenerationHandler.URI_PATTERN"/>
       <util:constant static-field="com.coremedia.livecontext.ecommerce.ibm.cae.sitemap.WcsAasSitemapGenerationHandler.URI_PATTERN"/>
-      <util:constant static-field="com.coremedia.livecontext.ecommerce.ibm.cae.handler.CartHandler.URI_PATTERN"/>
-      <util:constant static-field="com.coremedia.livecontext.ecommerce.ibm.cae.handler.CartHandler.DYNAMIC_URI_PATTERN"/>
     </list>
   </customize:append>
 </beans>

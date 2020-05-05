@@ -126,15 +126,8 @@ public class CatalogTreeModel implements CompoundChildTreeModel, LazyLoadingTree
       return undefined;
     }
 
-    var sortCategoriesByName:Boolean = getSortCategoriesByName();
-
-    //sorting should be activated if undefined to avoid breaking change. Deactivated by default since 2004.1
-    if(sortCategoriesByName === undefined){
-      sortCategoriesByName = true;
-    }
-
     //sorting will disable lazy loading
-    if (subCategories.length > 0 && sortCategoriesByName) {
+    if (subCategories.length > 0 && getSortCategoriesByName()) {
       if (!preloadChildren(subCategories)) {
         return undefined;
       }
@@ -318,14 +311,14 @@ public class CatalogTreeModel implements CompoundChildTreeModel, LazyLoadingTree
     return CATALOG_TREE_ID;
   }
 
-  public function loadNodeModels(nodeList:Array):Boolean {
+  public function loadNodeModelsById(nodeList:Array):Boolean {
     var reloadNecessary:Boolean = false;
-    nodeList.forEach(function (node:TreeModel):void {
-      var category:RemoteBean = getNodeModel(node.getId()) as RemoteBean;
+    nodeList.forEach(function (nodeId:String):void {
+      var category:RemoteBean = getNodeModel(nodeId) as RemoteBean;
 
       //" " is used as a placeholder text, for an entirely empty String the folder would show "Root" as text.
       //we check for loaded content that still has placeholder data shown, in that case we need to manually trigger "reload" of the tree
-      if (category.isLoaded() && node.data.text === " ") {
+      if (category.isLoaded()) {
         reloadNecessary = true;
       } else {
         category.load();
@@ -341,9 +334,8 @@ public class CatalogTreeModel implements CompoundChildTreeModel, LazyLoadingTree
     iconsByChildId[childId] = ResourceManager.getInstance().getString('com.coremedia.icons.CoreIcons', "tree_view_spinner") + " "  + "cm-spin";
   }
 
-  internal function getSortCategoriesByName():* {
+  internal function getSortCategoriesByName():Boolean {
     return editorContext.getPreferences().get(CatalogPreferencesBase.SORT_CATEGORIES_BY_NAME_KEY);
   }
-
 }
 }

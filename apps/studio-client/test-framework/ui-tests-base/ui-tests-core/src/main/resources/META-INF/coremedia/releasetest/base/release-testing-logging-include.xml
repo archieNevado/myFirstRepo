@@ -1,0 +1,173 @@
+<!--
+  Base Logback Configuration meant for Release Tests based on
+  CoreMedia Web Application Test Framework WATF.
+
+  To debug logging configuration set the system property logback.debug to true.
+
+  All properties come with reasonable default values for running tests in the IDE.
+  To override set system properties at the command line with -Dkey=value.
+
+  To use without modifications just create a file logback-test.xml containing:
+
+  <configuration>
+    <include resource="META-INF/coremedia/releasetest/base/release-testing-logging-include.xml"/>
+  </configuration>
+
+  Configured appenders you might use for custom loggers are:
+
+    * console
+    * sift
+
+  For adjusting Spring Logging for example you might use:
+
+  <configuration>
+    <include resource="META-INF/coremedia/releasetest/base/release-testing-logging-include.xml"/>
+
+    <logger name="org.springframework" additivity="false" level="info">
+      <appender-ref ref="sift"/>
+      <appender-ref ref="console"/>
+    </logger>
+  </configuration>
+
+  See Also:
+
+  * http://logback.qos.ch/
+  * http://logback.qos.ch/manual/configuration.html#fileInclusion
+  * http://logback.qos.ch/manual/configuration.html#defaultValuesForVariables
+-->
+<included>
+
+  <contextName>release-tests</contextName>
+
+  <variable scope="system"
+            resource="META-INF/coremedia/releasetest/base/release-testing-logging.properties"/>
+
+  <include resource="META-INF/joala/bdd/bdd-logback.xml"/>
+  <include resource="logback-include-ignored-report.xml"/>
+
+  <appender name="rerun" class="ch.qos.logback.core.FileAppender">
+    <file>${log.dir:-target/logs}/test-flakes.csv</file>
+    <append>false</append>
+    <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+      <layout class="com.coremedia.testing.junit.RerunFailingTestsCountWorkaroundRuleLayout">
+        <onlyFlakes>true</onlyFlakes>
+      </layout>
+    </encoder>
+  </appender>
+
+  <logger name="com.coremedia.testing.junit.RerunFailingTestsCountWorkaroundRule" additivity="true" level="all">
+    <appender-ref ref="rerun"/>
+  </logger>
+
+  <!--
+   Prevent parallel threads to log to the same file.
+
+   See Also:
+
+   * Logback – different log file for each thread by mkyong 2015-02-05
+     http://www.mkyong.com/logging/logback-different-log-file-for-each-thread/
+
+   * SiftingAppender
+     http://logback.qos.ch/manual/appenders.html#SiftingAppender
+  -->
+  <appender name="sift" class="ch.qos.logback.classic.sift.SiftingAppender">
+
+    <discriminator>
+      <key>testSimpleName</key>
+      <defaultValue>Main</defaultValue>
+    </discriminator>
+
+    <sift>
+      <appender name="file-${testSimpleName}" class="ch.qos.logback.core.FileAppender">
+        <file>${log.dir:-target/logs}/TEST-${testSimpleName}.itest.log</file>
+        <append>true</append>
+        <encoder>
+          <pattern>%date{ISO8601} [%5level] [%thread] %logger: %message%n%xEx{5}</pattern>
+        </encoder>
+      </appender>
+    </sift>
+
+  </appender>
+
+  <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>${config.log.pattern}</pattern>
+    </encoder>
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>info</level>
+    </filter>
+  </appender>
+
+  <logger name="${config.release.tests.package}" additivity="false" level="${config.release.tests.log.level}">
+    <appender-ref ref="sift"/>
+    <appender-ref ref="console"/>
+  </logger>
+
+  <logger name="${config.watf.package}" additivity="false" level="${config.watf.log.level}">
+    <appender-ref ref="sift"/>
+    <appender-ref ref="console"/>
+  </logger>
+
+  <logger name="${bdd.story.logger.name}" additivity="false" level="${bdd.log.level}">
+    <appender-ref ref="sift"/>
+  </logger>
+
+  <logger name="${bdd.steps.logger.name}" additivity="false" level="${bdd.log.level}">
+    <appender-ref ref="sift"/>
+  </logger>
+
+  <!-- Only controls logging in Studio. Not meant to log anything to the log file. -->
+  <logger name="browser.studio" additivity="false" level="${studio.loglevel:-warn}">
+    <appender-ref ref="sift"/>
+  </logger>
+
+  <logger name="com.coremedia.testing.logging.LogbackMdcTestName" additivity="false" level="info">
+    <appender-ref ref="sift"/>
+  </logger>
+
+  <logger name="com.coremedia.uitesting.webdriver.WebAppProxyContextInitializer" additivity="false" level="info">
+    <appender-ref ref="sift"/>
+  </logger>
+
+  <logger name="com.coremedia.uitesting.webdriver.PropertySourcesConfigurer" additivity="false" level="info">
+    <appender-ref ref="sift"/>
+  </logger>
+
+  <logger name="com.coremedia.studio.test.dynamicpkg" additivity="false" level="debug">
+    <appender-ref ref="sift"/>
+  </logger>
+
+  <logger name="com.coremedia.uitesting.junit.webdriver.rule.ContentSecurityPolicyTestRule" level="WARN" additivity="false">
+    <appender-ref ref="console"/>
+    <appender-ref ref="sift"/>
+  </logger>
+
+  <logger name="com.coremedia.testing.junit" level="INFO" additivity="false">
+    <appender-ref ref="sift"/>
+  </logger>
+
+  <logger name="com.coremedia.uitesting.webdriver.error" level="INFO" additivity="false">
+    <appender-ref ref="sift"/>
+  </logger>
+
+  <logger name="com.coremedia.uitesting.webdriver.interactions" additivity="false" level="trace">
+    <appender-ref ref="sift"/>
+  </logger>
+
+  <logger name="com.coremedia.uitesting.webdriver.JsExpressionEvaluator" level="INFO" additivity="false">
+    <appender-ref ref="sift"/>
+  </logger>
+
+  <logger name="com.coremedia.blueprint.internal.releasetest.base" level="info" additivity="false">
+    <appender-ref ref="sift"/>
+  </logger>
+
+  <logger name="org.springframework" level="${spring.log.level:-warn}" additivity="false">
+    <appender-ref ref="sift"/>
+  </logger>
+
+  <root level="${config.root.log.level}">
+    <appender-ref ref="sift"/>
+  </root>
+
+</included>

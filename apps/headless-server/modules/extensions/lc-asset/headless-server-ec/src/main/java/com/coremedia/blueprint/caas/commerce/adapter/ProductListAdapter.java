@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.caas.commerce.adapter;
 
 import com.coremedia.blueprint.base.caas.model.adapter.AbstractDynamicListAdapter;
+import com.coremedia.blueprint.base.querylist.PaginationHelper;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.caas.commerce.model.CommerceFacade;
 import com.coremedia.caas.model.adapter.ExtendedLinkListAdapterFactory;
@@ -14,7 +15,6 @@ import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
@@ -41,22 +41,23 @@ public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
   private final SettingsService settingsService;
   private final CommerceFacade commerceFacade;
   private final String siteId;
+  private final Integer offset;
 
   public ProductListAdapter(ExtendedLinkListAdapterFactory extendedLinkListAdapterFactory, Content content, SettingsService settingsService, CommerceFacade commerceFacade, String siteId) {
+    this(extendedLinkListAdapterFactory, content, settingsService, commerceFacade, siteId, OFFSET_DEFAULT);
+  }
+
+  public ProductListAdapter(ExtendedLinkListAdapterFactory extendedLinkListAdapterFactory, Content content, SettingsService settingsService, CommerceFacade commerceFacade, String siteId, Integer offset) {
     super(extendedLinkListAdapterFactory, content);
     this.settingsService = settingsService;
     this.commerceFacade = commerceFacade;
     this.siteId = siteId;
-  }
-
-  private int getOffset() {
-    String value = StructUtil.getString(getSettings(), STRUCT_KEY_PRODUCTLIST_OFFSET);
-    return value != null ? Integer.parseInt(value) : OFFSET_DEFAULT;
+    this.offset = offset;
   }
 
   private int getMaxLength() {
-    String value = StructUtil.getString(getSettings(), STRUCT_KEY_PRODUCTLIST_MAX_LENGTH);
-    return value != null ? Integer.parseInt(value) : MAX_LENGTH_DEFAULT;
+    Integer value = StructUtil.getInteger(getSettings(), STRUCT_KEY_PRODUCTLIST_MAX_LENGTH);
+    return !(value == null || value == 0) ? value : MAX_LENGTH_DEFAULT;
   }
 
   private String getOrderBy() {
@@ -78,12 +79,12 @@ public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
   }
 
   private Map<String, String> getSearchParams() {
-    Category category = commerceFacade.getCategory(getExternalId(), siteId);
+    Category category = commerceFacade.getCategory(getExternalId(), siteId).getData();
     Map<String, String> params = new HashMap<>();
     CatalogAlias catalogAlias = category != null ? category.getReference().getCatalogAlias() : null;
     String orderBy = getOrderBy();
     int limit = getMaxLength();
-    int offset = getOffset();
+    int productOffset = getProductOffset();
     Optional<String> overrideCategoryId = getOverrideCategoryId();
     String facet = getFacet();
 
@@ -108,8 +109,8 @@ public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
       params.put(CatalogService.SEARCH_PARAM_TOTAL, String.valueOf(limit));
     }
 
-    if (offset > 0) {
-      params.put(CatalogService.SEARCH_PARAM_OFFSET, String.valueOf(offset));
+    if (productOffset > 0) {
+      params.put(CatalogService.SEARCH_PARAM_OFFSET, String.valueOf(productOffset));
     }
 
     if (StringUtils.isNotEmpty(facet)) {
@@ -117,6 +118,15 @@ public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
     }
 
     return params;
+  }
+
+  private int getProductOffset() {
+    int initialOffset = Optional.ofNullable(StructUtil.getInteger(getSettings(), STRUCT_KEY_PRODUCTLIST_OFFSET)).orElse(0);
+    int productOffset = initialOffset;
+    if (Optional.ofNullable(offset).isPresent()) {
+      productOffset = initialOffset + PaginationHelper.dynamicOffset(getFixedItemsStructList(), offset, ANNOTATED_LINK_STRUCT_INDEX_PROPERTY_NAME);
+    }
+    return productOffset;
   }
 
   private Optional<String> getOverrideCategoryId() {
@@ -131,10 +141,6 @@ public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
     return settingsService.setting(STRUCT_KEY_PRODUCTLIST, Struct.class, getContent());
   }
 
-  private int getStart(@Nullable Integer offset) {
-    return (offset != null && offset > 0) ? offset : 0;
-  }
-
   private String getExternalId() {
     return getContent().getString(STRUCT_KEY_EXTERNAL_ID);
   }
@@ -146,7 +152,7 @@ public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
 
   @Override
   public int getStart() {
-    return getStart(getOffset());
+    return (offset != null && offset > 0) ? offset : 0;
   }
 
   @Override

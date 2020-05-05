@@ -9,14 +9,11 @@ public class CMGalleryImpl<T extends CMMedia> extends CMGalleryBase<T> {
 
   @Override
   public String getFeedTitle() {
-    String title = null;
-    if (getTitle() != null) {
-      title = getTitle();
-    } else if (getTeaserTitle() != null) {
+    String title = getTitle();
+    if (title == null) {
       title = getTeaserTitle();
     }
-
-    if(title == null) {
+    if (title == null) {
       title = getContent().getName();
     }
     return title;

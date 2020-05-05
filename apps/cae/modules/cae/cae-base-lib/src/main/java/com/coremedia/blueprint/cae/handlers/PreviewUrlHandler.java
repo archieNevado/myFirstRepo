@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import static com.coremedia.blueprint.cae.handlers.PreviewHandler.REQUEST_ATTR_IS_STUDIO_PREVIEW;
 import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_INTERNAL;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
@@ -57,6 +58,7 @@ public class PreviewUrlHandler extends AbstractUrlHandler {
                                        @RequestParam(value = "context", required = false) Object context,
                                        @NonNull HttpServletRequest request,
                                        @NonNull HttpServletResponse response) {
+    request.setAttribute(REQUEST_ATTR_IS_STUDIO_PREVIEW, true);
     return super.getLink(id, view, siteId, context, request, response);
   }
 
@@ -73,6 +75,7 @@ public class PreviewUrlHandler extends AbstractUrlHandler {
                                          @RequestParam(value = "taxonomyId", required = false) String taxonomyId,
                                          @NonNull HttpServletRequest request,
                                          @NonNull HttpServletResponse response) {
+    request.setAttribute(REQUEST_ATTR_IS_STUDIO_PREVIEW, true);
     storeTaxonomy(request, taxonomyId);
     return super.getLink(id, view, siteId, context, request, response);
   }

@@ -9,7 +9,7 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
-import com.coremedia.rest.linking.EntityResource;
+import com.coremedia.rest.controller.EntityController;
 import com.google.common.annotations.VisibleForTesting;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
@@ -25,7 +25,7 @@ import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreCon
 /**
  * An abstract catalog object as a RESTful resource.
  */
-public abstract class AbstractCatalogResource<Entity extends CommerceObject> implements EntityResource<Entity> {
+public abstract class AbstractCatalogResource<Entity extends CommerceObject> implements EntityController<Entity> {
 
   protected static final Logger LOG = LoggerFactory.getLogger(AbstractCatalogResource.class);
 

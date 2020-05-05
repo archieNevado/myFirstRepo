@@ -30,9 +30,9 @@
 
     <customer>Blueprint</customer>
 
-    <cm.site-manager.core.version>2001.2</cm.site-manager.core.version>
+    <cm.site-manager.core.version>2004.1</cm.site-manager.core.version>
 
-    <spring.boot.version>2.2.5.RELEASE</spring.boot.version>
+    <spring.boot.version>2.2.6.RELEASE</spring.boot.version>
     <application-plugin.version>2.8.3</application-plugin.version>
 
     <!--
@@ -77,14 +77,14 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.31</tomcat.embed.version>
+    <tomcat.embed.version>9.0.33</tomcat.embed.version>
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.site-manager.core.version>2001.2</cm.site-manager.core.version>
-    <cm.common.core.version>2001.2</cm.common.core.version>
+    <cm.site-manager.core.version>2004.1</cm.site-manager.core.version>
+    <cm.common.core.version>2004.1</cm.common.core.version>
     <cm.common.bp.version>1-SNAPSHOT</cm.common.bp.version>
-    <cm.middle.core.version>2001.2</cm.middle.core.version>
+    <cm.middle.core.version>2004.1</cm.middle.core.version>
     <cm.middle.bp.version>1-SNAPSHOT</cm.middle.bp.version>
     <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
 
@@ -154,7 +154,7 @@
               <dependency>
                 <groupId>com.coremedia.maven</groupId>
                 <artifactId>coremedia-enforcer-rules</artifactId>
-                <version>1.1.16</version>
+                <version>1.1.17</version>
               </dependency>
               <dependency>
                 <groupId>com.coremedia.cms</groupId>
@@ -462,21 +462,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-dependency-plugin</artifactId>
-          <version>3.1.1</version>
-          <!-- TODO-java11 workaround MDEP-613 for CMS-13789 -->
-          <dependencies>
-            <dependency>
-              <groupId>org.apache.maven.shared</groupId>
-              <artifactId>maven-dependency-analyzer</artifactId>
-              <version>1.11.1</version>
-              <exclusions>
-                <exclusion>
-                  <artifactId>maven-project</artifactId>
-                  <groupId>org.apache.maven</groupId>
-                </exclusion>
-              </exclusions>
-            </dependency>
-          </dependencies>
+          <version>3.1.2</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -596,7 +582,7 @@
                 <X-Compile-Target-JDK>${maven.compiler.release}</X-Compile-Target-JDK>
                 <!-- Configure WebSphere to not scan ASM jars in the WAR, because they contain Java 9 module-info.class
                      files and cause exceptions in WebSphere. See CMS-12354 -->
-                <Ignore-Scanning-Archives>asm-analysis-7.3.jar,asm-7.3.jar,asm-commons-7.3.jar,asm-tree-7.3.jar</Ignore-Scanning-Archives>
+                <Ignore-Scanning-Archives>asm-analysis-7.3.1.jar,asm-7.3.1.jar,asm-commons-7.3.1.jar,asm-tree-7.3.1.jar</Ignore-Scanning-Archives>
               </manifestEntries>
             </archive>
             <failOnMissingWebXml>false</failOnMissingWebXml>

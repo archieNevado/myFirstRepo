@@ -1,15 +1,23 @@
 package com.coremedia.blueprint.headlessserver;
 
 import com.coremedia.blueprint.base.caas.model.adapter.NavigationAdapterFactory;
+import com.coremedia.blueprint.base.caas.model.adapter.PageByPathAdapterFactory;
 import com.coremedia.blueprint.base.caas.model.adapter.PageGridAdapterFactory;
 import com.coremedia.blueprint.base.caas.model.adapter.QueryListAdapterFactory;
 import com.coremedia.blueprint.base.caas.model.adapter.SearchServiceAdapterFactory;
 import com.coremedia.blueprint.base.caas.model.adapter.SettingsAdapterFactory;
+import com.coremedia.blueprint.base.caas.model.adapter.StructAdapterFactory;
+import com.coremedia.blueprint.base.caas.segments.CMLinkableSegmentStrategy;
+import com.coremedia.blueprint.base.links.ContentSegmentStrategy;
+import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
+import com.coremedia.blueprint.base.links.UrlSegmentService;
 import com.coremedia.blueprint.base.navigation.context.ContextStrategy;
 import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGridService;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.blueprint.image.transformation.ImageTransformationConfiguration;
+import com.coremedia.caas.config.CaasGraphqlConfigurationProperties;
+import com.coremedia.caas.config.CaasSearchConfigurationProperties;
 import com.coremedia.caas.config.RemoteServiceConfiguration;
 import com.coremedia.caas.filter.InProductionFilterPredicate;
 import com.coremedia.caas.filter.ValidityDateFilterPredicate;
@@ -49,12 +57,16 @@ import com.coremedia.caas.service.cache.Weighted;
 import com.coremedia.caas.spel.SpelDirectiveWiring;
 import com.coremedia.caas.spel.SpelEvaluationStrategy;
 import com.coremedia.caas.spel.SpelFunctions;
-import com.coremedia.caas.web.CaasServiceConfig;
+import com.coremedia.caas.web.CaasPersistedQueryConfigurationProperties;
+import com.coremedia.caas.web.CaasServiceConfigurationProperties;
+import com.coremedia.caas.web.CaasWebConfig;
+import com.coremedia.caas.web.GraphiqlConfigurationProperties;
 import com.coremedia.caas.web.interceptor.RequestDateInitializer;
 import com.coremedia.caas.web.persistedqueries.DefaultPersistedQueriesLoader;
 import com.coremedia.caas.web.persistedqueries.DefaultQueryNormalizer;
 import com.coremedia.caas.web.persistedqueries.PersistedQueriesLoader;
 import com.coremedia.caas.web.persistedqueries.QueryNormalizer;
+import com.coremedia.caas.web.view.ViewBySiteFilterDataFetcher;
 import com.coremedia.caas.web.wiring.GraphQLInvocationImpl;
 import com.coremedia.caas.wiring.CapStructPropertyAccessor;
 import com.coremedia.caas.wiring.CompositeTypeNameResolver;
@@ -77,10 +89,12 @@ import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.struct.Struct;
+import com.coremedia.cap.struct.StructService;
 import com.coremedia.id.IdScheme;
 import com.coremedia.link.CompositeLinkComposer;
 import com.coremedia.link.LinkComposer;
 import com.coremedia.link.uri.UriLinkBuilder;
+import com.coremedia.link.uri.UriLinkBuilderImpl;
 import com.coremedia.link.uri.UriLinkComposer;
 import com.coremedia.objectserver.urlservice.UrlServiceRequestParams;
 import com.coremedia.search.solr.client.SolrClientConfiguration;
@@ -94,6 +108,7 @@ import graphql.analysis.MaxQueryComplexityInstrumentation;
 import graphql.analysis.MaxQueryDepthInstrumentation;
 import graphql.execution.instrumentation.ChainedInstrumentation;
 import graphql.execution.instrumentation.Instrumentation;
+import graphql.scalars.ExtendedScalars;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLScalarType;
 import graphql.schema.GraphQLSchema;
@@ -116,8 +131,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.caffeine.CaffeineCache;
 import org.springframework.cache.support.SimpleCacheManager;
@@ -142,6 +157,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.Filter;
 import javax.servlet.http.HttpServletRequest;
@@ -165,22 +181,30 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.coremedia.caas.web.CaasWebConfig.ATTRIBUTE_NAMES_TO_GQL_CONTEXT;
+import static com.coremedia.caas.web.CaasWebConfig.FORWARD_HEADER_MAP;
 import static java.util.Collections.emptyList;
 
 @Configuration
+@EnableConfigurationProperties({
+        CaasServiceConfigurationProperties.class,
+        CaasGraphqlConfigurationProperties.class,
+        CaasPersistedQueryConfigurationProperties.class,
+        CaasSearchConfigurationProperties.class,
+        RemoteServiceConfiguration.class,
+        GraphiqlConfigurationProperties.class,
+})
 @EnableWebMvc
 @ComponentScan({
         "com.coremedia.caas",
         "com.coremedia.blueprint.base.caas",
-        "com.coremedia.cap.undoc.common.spring",
-        "com.coremedia.blueprint.caas.rest",
-        "com.coremedia.blueprint.caas.commerce"
+        "com.coremedia.cap.undoc.common.spring"
 })
 @ImportResource({
         "classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml",
         "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
         "classpath:/com/coremedia/blueprint/base/pagegrid/impl/bpbase-pagegrid-services.xml",
-        "classpath:/com/coremedia/blueprint/base/navigation/context/bpbase-default-contextstrategy.xml",
+        "classpath:/com/coremedia/blueprint/base/navigation/context/bpbase-default-contextstrategy.xml"
 })
 @Import({
         ImageTransformationConfiguration.class,
@@ -193,25 +217,22 @@ public class CaasConfig implements WebMvcConfigurer {
   private static final int TWENTY_FOUR_HOURS = 24 * 60 * 60;
   private static final int CORS_RESPONSE_MAX_AGE = TWENTY_FOUR_HOURS;
 
-  @Value("${graphiql.enabled:false}")
-  private boolean isGraphiqlEnabled;
+  private final CaasServiceConfigurationProperties caasServiceConfigurationProperties;
+  private final CaasGraphqlConfigurationProperties caasGraphqlConfigurationProperties;
+  private final CaasPersistedQueryConfigurationProperties caasPersistedQueryConfigurationProperties;
+  private final CaasSearchConfigurationProperties caasSearchConfigurationProperties;
+  private final GraphiqlConfigurationProperties graphiqlConfigurationProperties;
 
-  @Value("${caas.swagger.enabled:false}")
-  private boolean isSwaggerEnabled;
-
-  @Value("${caas.graphql.max-query-execution-time:0}")
-  private long maxExecutionTimeout;
-
-  @Value("${caas.graphql.max-query-depth:30}")
-  private int maxQueryDepth;
-
-  @Value("${caas.graphql.max-query-complexity:0}")
-  private int maxQueryComplexity;
-
-  private CaasServiceConfig serviceConfig;
-
-  public CaasConfig(CaasServiceConfig serviceConfig) {
-    this.serviceConfig = serviceConfig;
+  public CaasConfig(CaasServiceConfigurationProperties caasServiceConfigurationProperties,
+                    CaasGraphqlConfigurationProperties caasGraphqlConfigurationProperties,
+                    CaasPersistedQueryConfigurationProperties caasPersistedQueryConfigurationProperties,
+                    CaasSearchConfigurationProperties caasSearchConfigurationProperties,
+                    GraphiqlConfigurationProperties graphiqlConfigurationProperties) {
+    this.caasServiceConfigurationProperties = caasServiceConfigurationProperties;
+    this.caasGraphqlConfigurationProperties = caasGraphqlConfigurationProperties;
+    this.caasPersistedQueryConfigurationProperties = caasPersistedQueryConfigurationProperties;
+    this.caasSearchConfigurationProperties = caasSearchConfigurationProperties;
+    this.graphiqlConfigurationProperties = graphiqlConfigurationProperties;
   }
 
   @Override
@@ -230,23 +251,23 @@ public class CaasConfig implements WebMvcConfigurer {
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
-    registry.addInterceptor(new RequestDateInitializer(serviceConfig.isPreview())).addPathPatterns("/**");
+    registry.addInterceptor(new RequestDateInitializer(caasServiceConfigurationProperties.isPreview())).addPathPatterns("/**");
   }
 
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
     List<String> resources = new ArrayList<>(Arrays.asList("/static/**", "/docs/**"));
     List<String> resourceLocations = new ArrayList<>();
-    if (isGraphiqlEnabled) {
+    if (graphiqlConfigurationProperties.isEnabled()) {
       resources.add("/graphiql/static/**");
       resourceLocations.add("classpath:/static/docs/");
     }
-    if (isSwaggerEnabled) {
+    if (caasServiceConfigurationProperties.getSwagger().isEnabled()) {
       resources.add("swagger-ui.html");
       resources.add("/webjars/**");
       resourceLocations.add("classpath:/META-INF/resources/webjars/");
     }
-    if (serviceConfig.isPreview()) {
+    if (caasServiceConfigurationProperties.isPreview()) {
       resourceLocations.add("classpath:/static/");
       resourceLocations.add("classpath:/META-INF/resources/");
     }
@@ -279,7 +300,7 @@ public class CaasConfig implements WebMvcConfigurer {
   @SuppressWarnings("unchecked")
   public CacheManager cacheManager() {
     ImmutableList.Builder<org.springframework.cache.Cache> builder = ImmutableList.builder();
-    serviceConfig.getCacheSpecs().forEach((cacheName, cacheSpec) -> {
+    caasServiceConfigurationProperties.getCacheSpecs().forEach((cacheName, cacheSpec) -> {
       com.github.benmanes.caffeine.cache.Cache cache = Caffeine.from(cacheSpec)
               .weigher((key, value) -> {
                 if (value instanceof Weighted) {
@@ -299,7 +320,7 @@ public class CaasConfig implements WebMvcConfigurer {
   public CacheCapacityConfigurer configureCache(Cache cache) {
     CacheCapacityConfigurer configurer = new CacheCapacityConfigurer();
     configurer.setCache(cache);
-    configurer.setCapacities(serviceConfig.getCacheCapacities());
+    configurer.setCapacities(caasServiceConfigurationProperties.getCacheCapacities());
     return configurer;
   }
 
@@ -312,6 +333,12 @@ public class CaasConfig implements WebMvcConfigurer {
   public LinkComposer<Object, String> uriLinkComposer(List<LinkComposer<?, ? extends UriLinkBuilder>> linkComposers) {
     return new UriLinkComposer<>(
             new CompositeLinkComposer<>(linkComposers, emptyList()));
+  }
+
+  @Bean
+  public LinkComposer<Content, UriLinkBuilder> contentUriLinkComposer() {
+    return content -> Optional.of(new UriLinkBuilderImpl(
+            UriComponentsBuilder.fromUriString(content.getId()).build()));
   }
 
   /**
@@ -414,8 +441,13 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public SettingsAdapterFactory settingsAdapter(@Qualifier("settingsService") SettingsService settingsService) {
-    return new SettingsAdapterFactory(settingsService);
+  public SettingsAdapterFactory settingsAdapter(SettingsService settingsService, StructAdapterFactory structAdapterFactory) {
+    return new SettingsAdapterFactory(settingsService, structAdapterFactory);
+  }
+
+  @Bean
+  public StructAdapterFactory structAdapter(StructService structService) {
+    return new StructAdapterFactory(structService);
   }
 
   @Bean
@@ -430,24 +462,20 @@ public class CaasConfig implements WebMvcConfigurer {
 
   @Bean
   public SolrSearchResultFactory searchResultFactory(@Qualifier("solrClient") SolrClient solrClient,
-                                                     ContentRepository contentRepository,
-                                                     @Value("${caas.solr.collection}") String solrCollectionName,
-                                                     @Value("${caas.querylist.search.cache.seconds}") Integer cacheForSeconds) {
-    SolrSearchResultFactory solrSearchResultFactory = new SolrSearchResultFactory(contentRepository, solrClient, solrCollectionName);
-    if (!serviceConfig.isPreview()) {
-      solrSearchResultFactory.setCacheForSeconds(cacheForSeconds);
+                                                     ContentRepository contentRepository) {
+    SolrSearchResultFactory solrSearchResultFactory = new SolrSearchResultFactory(contentRepository, solrClient, caasServiceConfigurationProperties.getSolr().getCollection());
+    if (!caasServiceConfigurationProperties.isPreview()) {
+      solrSearchResultFactory.setCacheForSeconds(this.caasServiceConfigurationProperties.getQuerylistSearchCacheForSeconds());
     }
     return solrSearchResultFactory;
   }
 
   @Bean
   public SolrSearchResultFactory queryListSearchResultFactory(@Qualifier("solrClient") SolrClient solrClient,
-                                                              ContentRepository contentRepository,
-                                                              @Value("${caas.solr.collection}") String solrCollectionName,
-                                                              @Value("${caas.search.cache.seconds}") Integer cacheForSeconds) {
-    SolrSearchResultFactory solrSearchResultFactory = new SolrSearchResultFactory(contentRepository, solrClient, solrCollectionName);
-    if (!serviceConfig.isPreview()) {
-      solrSearchResultFactory.setCacheForSeconds(cacheForSeconds);
+                                                              ContentRepository contentRepository) {
+    SolrSearchResultFactory solrSearchResultFactory = new SolrSearchResultFactory(contentRepository, solrClient, caasServiceConfigurationProperties.getSolr().getCollection());
+    if (!caasServiceConfigurationProperties.isPreview()) {
+      solrSearchResultFactory.setCacheForSeconds(caasSearchConfigurationProperties.getSeconds());
     }
     return solrSearchResultFactory;
   }
@@ -473,6 +501,11 @@ public class CaasConfig implements WebMvcConfigurer {
                                                   @Qualifier("collectionExtendedItemsAdapter") ExtendedLinkListAdapterFactory collectionExtendedItemsAdapter,
                                                   @Qualifier("navigationAdapter") NavigationAdapterFactory navigationAdapterFactory) {
     return new QueryListAdapterFactory(searchResultFactory, contentRepository, settingsService, sitesService, idSchemes, solrQueryBuilder, collectionExtendedItemsAdapter, navigationAdapterFactory);
+  }
+
+  @Bean
+  public PageByPathAdapterFactory pageByPathAdapter(ContentRepository repository, SitesService sitesService, UrlPathFormattingHelper urlPathFormattingHelper, @Qualifier("navigationAdapter") NavigationAdapterFactory navigationAdapterFactory) {
+    return new PageByPathAdapterFactory(repository, sitesService, urlPathFormattingHelper, navigationAdapterFactory);
   }
 
   @Bean
@@ -615,8 +648,33 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public GraphQLInvocation graphQLInvocation(GraphQL graphQL, @Qualifier("queryRoot") Map<String, Object> queryRoots, DataLoaderRegistry dataLoaderRegistry) {
-    return new GraphQLInvocationImpl(graphQL, renameQueryRootsWithOptionalPrefix(queryRoots), dataLoaderRegistry);
+  public UrlPathFormattingHelper urlPathFormattingHelper(UrlSegmentService urlSegmentService) {
+    UrlPathFormattingHelper helper = new UrlPathFormattingHelper();
+    helper.setUrlSegmentService(urlSegmentService);
+    return helper;
+  }
+
+  @Bean
+  public UrlSegmentService urlSegmentService(@Qualifier("segmentStrategies") Map<String, ContentSegmentStrategy> segmentStrategies) {
+    UrlSegmentService service = new UrlSegmentService();
+    service.setStrategies(segmentStrategies);
+    return service;
+  }
+
+  @Bean
+  @Qualifier("segmentStrategies")
+  @SuppressWarnings("java:S100")
+  // note: methodname in upper case on purpose: method name is used as the key in the segmentStrategies map, which is necessary for UrlSegmentService to find the correct strategy
+  public CMLinkableSegmentStrategy CMLinkable() {
+    return new CMLinkableSegmentStrategy();
+  }
+
+  @Bean
+  public GraphQLInvocation graphQLInvocation(GraphQL graphQL,
+                                             @Qualifier("queryRoot") Map<String, Object> queryRoots,
+                                             DataLoaderRegistry dataLoaderRegistry, CaasServiceConfigurationProperties caasServiceConfigurationProperties,
+                                             @Qualifier(ATTRIBUTE_NAMES_TO_GQL_CONTEXT) Set<String> requestAttributeNamesToGraphqlContext) {
+    return new GraphQLInvocationImpl(graphQL, renameQueryRootsWithOptionalPrefix(queryRoots), dataLoaderRegistry, caasServiceConfigurationProperties, requestAttributeNamesToGraphqlContext);
   }
 
   @Bean
@@ -630,14 +688,11 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public PersistedQueriesLoader persistedQueriesLoader(@Value("${caas.persisted-queries.query-resources-pattern:classpath*:graphql/queries/*.graphql}") String queryResourcesPattern,
-                                                       @Value("${caas.persisted-queries.query-resources-map-pattern.apollo:classpath*:graphql/queries/apollo*.json}") String apolloQueryMapResourcesPattern,
-                                                       @Value("${caas.persisted-queries.query-resources-map-pattern.relay:classpath*:graphql/queries/relay*.json}") String relayQueryMapResourcesPattern,
-                                                       @Value("${caas.persisted-queries.query-resources-exclude-pattern:.*Fragment(s)?.graphql}") String excludeFileNamePattern) {
-    return new DefaultPersistedQueriesLoader(queryResourcesPattern,
-            apolloQueryMapResourcesPattern,
-            relayQueryMapResourcesPattern,
-            excludeFileNamePattern);
+  public PersistedQueriesLoader persistedQueriesLoader() {
+    return new DefaultPersistedQueriesLoader(caasPersistedQueryConfigurationProperties.getQueryResourcesPattern(),
+            caasPersistedQueryConfigurationProperties.getApolloQueryMapResourcesPattern(),
+            caasPersistedQueryConfigurationProperties.getRelayQueryMapResourcesPattern(),
+            caasPersistedQueryConfigurationProperties.getExcludeFileNamePattern());
   }
 
   @Bean
@@ -654,37 +709,40 @@ public class CaasConfig implements WebMvcConfigurer {
   public DataFetcherMappingInstrumentation dataFetchingInstrumentation(SpelEvaluationStrategy spelEvaluationStrategy,
                                                                        @Qualifier("filterPredicate") List<Predicate<Object>> filterPredicates,
                                                                        @Qualifier("graphQlConversionService") ConversionService conversionService,
-                                                                       @Qualifier("conversionTypeMap") Map<String, Class<?>> conversionTypeMap) {
+                                                                       @Qualifier("conversionTypeMap") Map<String, Class<?>> conversionTypeMap,
+                                                                       SitesService sitesService
+  ) {
     return new DataFetcherMappingInstrumentation((dataFetcher, parameters) ->
             new ConvertingDataFetcher(
-                    new FilteringDataFetcher(dataFetcher, filterPredicates),
+                    new FilteringDataFetcher(
+                            new ViewBySiteFilterDataFetcher(dataFetcher, sitesService), filterPredicates),
                     conversionService,
                     conversionTypeMap));
   }
 
   @Bean
   public ExecutionTimeoutInstrumentation executionTimeoutInstrumentation() {
-    if (maxExecutionTimeout > 0) {
-      LOG.info("graphql.max-execution-timeout: {} ms", maxExecutionTimeout);
-      return new ExecutionTimeoutInstrumentation(maxExecutionTimeout);
+    if (caasGraphqlConfigurationProperties.getMaxExecutionTimeout() > 0) {
+      LOG.info("caas.graphql.max-execution-timeout: {} ms", caasGraphqlConfigurationProperties.getMaxExecutionTimeout());
+      return new ExecutionTimeoutInstrumentation(caasGraphqlConfigurationProperties.getMaxExecutionTimeout());
     }
     return null;
   }
 
   @Bean
   public MaxQueryDepthInstrumentation maxQueryDepthInstrumentation() {
-    if (maxQueryDepth > 0) {
-      LOG.info("graphql.max-query-depth: {}", maxQueryDepth);
-      return new MaxQueryDepthInstrumentation(maxQueryDepth);
+    if (caasGraphqlConfigurationProperties.getMaxQueryDepth() > 0) {
+      LOG.info("caas.graphql.max-query-depth: {}", caasGraphqlConfigurationProperties.getMaxQueryDepth());
+      return new MaxQueryDepthInstrumentation(caasGraphqlConfigurationProperties.getMaxQueryDepth());
     }
     return null;
   }
 
   @Bean
   public MaxQueryComplexityInstrumentation maxQueryComplexityInstrumentation() {
-    if (maxQueryComplexity > 0) {
-      LOG.info("graphql.max-query-complexity: {}", maxQueryComplexity);
-      return new MaxQueryComplexityInstrumentation(maxQueryComplexity);
+    if (caasGraphqlConfigurationProperties.getMaxQueryComplexity() > 0) {
+      LOG.info("caas.graphql.max-query-complexity: {}", caasGraphqlConfigurationProperties.getMaxQueryComplexity());
+      return new MaxQueryComplexityInstrumentation(caasGraphqlConfigurationProperties.getMaxQueryComplexity());
     }
     return null;
   }
@@ -697,8 +755,11 @@ public class CaasConfig implements WebMvcConfigurer {
     StringBuilder stringBuilder = new StringBuilder();
     for (var resource : loader.getResources("classpath*:*-schema.graphql")) {
       LOG.info("merging GraphQL schema {}", resource.getURI());
-      InputStreamReader in = new InputStreamReader(resource.getInputStream());
-      stringBuilder.append(IOUtils.toString(in));
+      try(InputStreamReader in = new InputStreamReader(resource.getInputStream())) {
+        stringBuilder.append(IOUtils.toString(in));
+      } catch (IOException e) {
+        throw new IOException("There was an error while reading the schema file " + resource.getFilename(), e);
+      }
     }
     return schemaParser.parse(stringBuilder.toString());
   }
@@ -739,6 +800,7 @@ public class CaasConfig implements WebMvcConfigurer {
             .put("MapOfFloat", Map.class)
             .put("MapOfBoolean", Map.class)
             .put("RichTextTree", ElementRepresentation.class)
+            .put("JSON", Map.class)
             .build();
 
   }
@@ -779,6 +841,11 @@ public class CaasConfig implements WebMvcConfigurer {
     return new GraphQLScalarType("RichTextTree", "Built-in rich text object tree", new CoercingRichTextTree());
   }
 
+  @Bean
+  public GraphQLScalarType JSON() {
+    return ExtendedScalars.Json;
+  }
+
   private Map<String, Object> renameQueryRootsWithOptionalPrefix(Map<String, Object> queryRoots) {
     Map<String, Object> renamedQueryRoots = new LinkedHashMap<>(queryRoots.size());
     for (var rootEntry : queryRoots.entrySet()) {
@@ -810,6 +877,7 @@ public class CaasConfig implements WebMvcConfigurer {
       @Override
       public CompletionStage<List<Try<String>>> load(List<String> keys, BatchLoaderEnvironment environment) {
 
+        environment.getKeyContexts().put(FORWARD_HEADER_MAP, CaasWebConfig.getForwardHeaderMap());
         return CompletableFuture.supplyAsync(() -> {
           return rsa.to().formatLinks(keys.stream().map(key -> {
             return UrlServiceRequestParams.create(
@@ -817,7 +885,7 @@ public class CaasConfig implements WebMvcConfigurer {
                     (String) ((Map) environment.getKeyContexts().get(key)).get("siteId"),
                     (String) ((Map) environment.getKeyContexts().get(key)).get("context")
             );
-          }).collect(Collectors.toList()));
+          }).collect(Collectors.toList()), (Map<String, String>) environment.getKeyContexts().get(FORWARD_HEADER_MAP));
         });
 
       }
@@ -825,7 +893,7 @@ public class CaasConfig implements WebMvcConfigurer {
 
     org.springframework.cache.Cache remoteLinkCache = cacheManager.getCache(CacheInstances.REMOTE_LINKS);
     DataLoaderOptions options;
-    if(remoteLinkCache != null) {
+    if (remoteLinkCache != null) {
       options = DataLoaderOptions.newOptions().setCacheMap(new CacheMapWrapper(remoteLinkCache));
     } else {
       options = DataLoaderOptions.newOptions().setCachingEnabled(false);

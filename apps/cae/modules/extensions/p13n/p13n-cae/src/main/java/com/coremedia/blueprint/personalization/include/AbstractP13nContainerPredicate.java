@@ -1,16 +1,15 @@
 package com.coremedia.blueprint.personalization.include;
 
+import com.coremedia.blueprint.cae.view.DynamicIncludeHelper;
 import com.coremedia.blueprint.cae.view.DynamicIncludePredicate;
 import com.coremedia.objectserver.view.RenderNode;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.regex.Pattern;
 
-import static com.coremedia.blueprint.cae.view.DynamicIncludeHelper.isAlreadyIncludedDynamically;
-
 public abstract class AbstractP13nContainerPredicate implements DynamicIncludePredicate {
 
-  private static Pattern VIEW_EXCLUDE_PATTERN = Pattern.compile("^fragmentPreview(\\[[^\\]]*\\]){0,1}$");
+  private static Pattern VIEW_EXCLUDE_PATTERN = Pattern.compile("^fragmentPreview(\\[[^]]*])?$");
   private static final String VIEW_NAME_AS_PREVIEW = "asPreview";
   private static final String MULTI_VIEW_PREVIEW = "multiViewPreview";
 
@@ -19,7 +18,7 @@ public abstract class AbstractP13nContainerPredicate implements DynamicIncludePr
     if (input == null) {
       return false;
     }
-    if (isAlreadyIncludedDynamically()) {
+    if (DynamicIncludeHelper.isAlreadyIncludedDynamically()) {
       return false;
     }
     if (isViewMatching(input.getView())) {

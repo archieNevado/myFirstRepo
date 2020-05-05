@@ -302,11 +302,13 @@ table.sites td:nth-child(n+2) {
 }
 
 .cm-details code {
+  float: right;
   padding: 4px 8px;
   background: #e0e0e0;
   color: #333;
   border-radius: 2px;
   font-size: 14px;
+  cursor: copy;
 }
 
 .cm-details button {

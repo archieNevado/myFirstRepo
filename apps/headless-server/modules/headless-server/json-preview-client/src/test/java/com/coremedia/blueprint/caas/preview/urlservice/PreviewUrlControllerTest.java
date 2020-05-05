@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.caas.preview.urlservice;
 
+import com.coremedia.blueprint.caas.preview.client.JsonPreviewConfigurationProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,15 +14,15 @@ import static org.junit.Assert.assertEquals;
 @RunWith(MockitoJUnitRunner.class)
 public class PreviewUrlControllerTest {
 
-  private static final String PREVIEW_CLIENT_URL = "http://localhost:8080";
-
+  private JsonPreviewConfigurationProperties config;
   private JsonPreviewUrlController previewUrlController;
-
   private MockHttpServletRequest mockHttpServletRequest = new MockHttpServletRequest();
 
   @Before
   public void init() {
-    previewUrlController = new JsonPreviewUrlController(PREVIEW_CLIENT_URL);
+    config = new JsonPreviewConfigurationProperties();
+    config.setUrl("http://localhost:8080");
+    previewUrlController = new JsonPreviewUrlController(config);
   }
 
   @Test
@@ -29,7 +30,7 @@ public class PreviewUrlControllerTest {
     ResponseEntity<String> responseEntity = previewUrlController.previewUrl("coremedia://cap/content/1234", "CMArticle", mockHttpServletRequest);
 
     assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-    assertEquals(PREVIEW_CLIENT_URL + "/preview/1234/CMArticle", responseEntity.getBody());
+    assertEquals(config.getUrl() + "/preview/1234/CMArticle", responseEntity.getBody());
   }
 
   @Test
@@ -37,7 +38,7 @@ public class PreviewUrlControllerTest {
     ResponseEntity<String> responseEntity = previewUrlController.previewUrl("coremedia://cap/content/1234", "CMChannel", mockHttpServletRequest);
 
     assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-    assertEquals(PREVIEW_CLIENT_URL + "/preview/1234/CMChannel", responseEntity.getBody());
+    assertEquals(config.getUrl() + "/preview/1234/CMChannel", responseEntity.getBody());
   }
 
   @Test

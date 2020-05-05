@@ -3,6 +3,7 @@ package com.coremedia.blueprint.cae.web.taglib;
 import com.coremedia.blueprint.common.layout.Container;
 import com.coremedia.blueprint.common.navigation.HasViewTypeName;
 import com.coremedia.blueprint.common.util.ContainerFlattener;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import java.util.List;
 
@@ -11,15 +12,15 @@ import java.util.List;
  */
 class ContainerWithViewTypeName implements Container<Object>, HasViewTypeName {
 
-  private Container baseContainer;
+  private Container<?> baseContainer;
   private List<Object> items;
 
-  ContainerWithViewTypeName(Container baseContainer, List<Object> items) {
+  ContainerWithViewTypeName(Container<?> baseContainer, List<Object> items) {
     this.baseContainer = baseContainer;
     this.items = items;
   }
 
-  Container getBaseContainer() {
+  Container<?> getBaseContainer() {
     return baseContainer;
   }
 
@@ -34,6 +35,12 @@ class ContainerWithViewTypeName implements Container<Object>, HasViewTypeName {
   @Override
   public List<Object> getItems() {
     return items;
+  }
+
+  @NonNull
+  @Override
+  public List<Object> getItemsMetadata() {
+    return baseContainer.getItemsMetadata();
   }
 
   @Override

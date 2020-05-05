@@ -8,19 +8,15 @@ import com.google.api.client.util.DateTime;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
-import java.net.http.HttpClient;
 import java.util.Calendar;
 
 abstract class YouTubeHubObject implements ContentHubObject {
-
-  HttpClient httpClient;
 
   private static final WordAbbreviator ABBREVIATOR = new WordAbbreviator();
 
   private final ContentHubObjectId hubId;
 
   YouTubeHubObject(@NonNull ContentHubObjectId hubId) {
-    httpClient = HttpClient.newHttpClient();
     this.hubId = hubId;
   }
 

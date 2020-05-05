@@ -40,7 +40,7 @@
     },
     "disableServerSideCompression": {
       "type": "boolean",
-      "description": "If true the script file will never be compressed in the CAE. Set this flag if the file is already compressed or if it is not compatible with the YUI compressor. Files with a suffix '.min.js' (based on the 'target' configuration) and bundled files will not be compressed too. Deprecated: The compression of code will be removed from the CAE as the Frontend Workspace provides options to compress the code before it is uploaded to the content repository. When the compression is removed, this property does not have any effect."
+      "description": "If true the script file will never be compressed in the CAE. This property does not have any effect if no minifier is configured for the CAE. If this is the case, set this flag if the file is already compressed or if it is not compatible with the used minifier. Files with a suffix '.min.js' and '.min.css' (based on the 'target' configuration) and bundled files will never be compressed."
     },
     "inHead": {
       "type": "boolean",

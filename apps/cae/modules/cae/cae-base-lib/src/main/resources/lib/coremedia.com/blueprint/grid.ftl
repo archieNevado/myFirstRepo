@@ -19,7 +19,7 @@
   <#return blueprintFreemarkerFacade.getPlacementPropertyName(placement) />
 </#function>
 
-<#-- GET CONTAINER METADATA -->
+<#-- DEPRECATED -->
 <#function getContainerMetadata container>
   <#return blueprintFreemarkerFacade.getContainerMetadata(container) />
 </#function>

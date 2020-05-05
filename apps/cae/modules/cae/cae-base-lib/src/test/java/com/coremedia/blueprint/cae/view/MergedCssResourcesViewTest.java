@@ -13,6 +13,7 @@ import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
+import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,7 +32,9 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 import static com.coremedia.blueprint.cae.view.MergedCssResourcesViewTest.LocalConfig.PROFILE;
 import static com.coremedia.cap.test.xmlrepo.XmlRepoResources.CONTENT_BEAN_FACTORY;
@@ -92,12 +95,10 @@ public class MergedCssResourcesViewTest {
   }
 
   @Test
-  public void testMergedResources() throws UnsupportedEncodingException {
+  public void testMergedResources() throws UnsupportedEncodingException, IOException {
     MergeableResources mergeableResources = new MergeableResourcesImpl(codeResources.getModel("body"), contentBeanFactory, null);
     testling.render(mergeableResources, null, request, response);
-    String expected = ".my-custom-class-34{content:css code id 34}\n" +
-            ".my-custom-class-32{content:css code id 32}\n" +
-            ".my-custom-class-30{content:css code id 30}\n";
+    String expected = IOUtils.toString(getClass().getResourceAsStream("mergedcodeview/mergedCss.css"), StandardCharsets.UTF_8);
     assertEquals("Output does not match", expected, response.getContentAsString());
   }
 }

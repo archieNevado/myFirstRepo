@@ -41,7 +41,6 @@
             <span class="cm-navigation-item__title" <@preview.metadata ["properties.teaserTitle"] />>${self.teaserTitle!""}</span>
           </li>
         </#if>
-        <#-- considering the flattenedItems call the following navigation items cannot be containers anymore -->
         <#list items![] as child>
           <@cm.include self=child view="asLinkListItem" params={
           "isTopLevel": isTopLevel,

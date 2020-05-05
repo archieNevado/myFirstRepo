@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.cae.handlers;
 
+import com.coremedia.blueprint.cae.exception.BlobTransformationException;
 import com.coremedia.blueprint.cae.util.SecureHashCodeGeneratorStrategy;
 import com.coremedia.blueprint.common.contentbeans.CMMedia;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
@@ -14,6 +15,7 @@ import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.coremedia.transform.TransformedBeanBlob;
 import com.google.common.collect.ImmutableMap;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -122,14 +124,12 @@ public class TransformedBlobHandler extends HandlerBase {
               .build();
       if (secureHashCodeGeneratorStrategy.matches(parameters, secHash)) {
         //request is valid, resolve blob and return model
-        Blob transformedBlob = getTransformedBlob(media, transformationName, extension, width, height);
-        if (transformedBlob != null) {
-          if (webRequest.checkNotModified(transformedBlob.getETag())) {
-            // shortcut exit - no further processing necessary
-            return null;
-          }
-          return HandlerHelper.createModel(transformedBlob);
+        Blob transformedBlob = transformedData(media, transformationName, extension, width, height);
+        if (webRequest.checkNotModified(transformedBlob.getETag())) {
+          // shortcut exit - no further processing necessary
+          return null;
         }
+        return HandlerHelper.createModel(transformedBlob);
       }
     }
 
@@ -193,6 +193,28 @@ public class TransformedBlobHandler extends HandlerBase {
   }
 
   // === internal ======================================================================================================
+
+  /**
+   * Returns the transformed "data" blob of the media bean.
+   *
+   * @throws BlobTransformationException in case of any problems.
+   */
+  @NonNull
+  private Blob transformedData(CMMedia media, String transformName, String extension, Integer width, Integer height) {
+    try {
+      Blob blob = getTransformedBlob(media, transformName, extension, width, height);
+      if (blob != null) {
+        return blob;
+      } else {
+        // Due to the TransformImageService#transformWithDimensions implementation,
+        // null may denote a non-transformable blob, but also an obfuscated IOException.
+        // We cannot distinguish this here.
+        throw new BlobTransformationException("Transformed blob of " + media.getContent().getId() + "#" + CMMedia.DATA + ", transformation " + transformName + ", width " + width + ", height " + height + " is not available");
+      }
+    } catch (Exception e) {
+      throw new BlobTransformationException("Transformation of blob " + media.getContent().getId() + "#" + CMMedia.DATA + ", transformation " + transformName + ", width " + width + ", height " + height + " failed", e);
+    }
+  }
 
   private String getName(CapBlobRef o) {
     if (o.getCapObject().isContentObject() && ((ContentObject) o.getCapObject()).isContent()) {

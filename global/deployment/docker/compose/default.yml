@@ -127,6 +127,8 @@ services:
     logging: *default-logging
     networks:
       - backend
+    environment:
+      SPRING_APPLICATION_NAME: 'cae-feeder-preview'
     command:
       - wait-for-content-management-server
       - application
@@ -138,6 +140,8 @@ services:
     logging: *default-logging
     networks:
       - backend
+    environment:
+      SPRING_APPLICATION_NAME: 'cae-feeder-live'
     command:
       - wait-for-replication-live-server
       - application
@@ -182,6 +186,7 @@ services:
       SFMC_CREDENTIALS_CLIENTID: ${SFMC_CREDENTIALS_CLIENTID}
       SFMC_CREDENTIALS_CLIENTSECRET: ${SFMC_CREDENTIALS_CLIENTSECRET}
       MONGODB_CLIENTURI: mongodb://coremedia:coremedia@mongodb:27017
+
     labels:
       traefik.enable: "true"
       traefik.port: "8080"
@@ -240,7 +245,7 @@ services:
       # needed for static resources because of cae.is.standalone needs to be true in the preview
       traefik.preview-static-files.frontend.rule: Host:preview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/blueprint
       traefik.preview-landing.frontend.rule: Host:preview.${ENVIRONMENT_FQDN:-docker.localhost};Path:/;AddPrefix:/blueprint/servlet/corporate
-      traefik.preview-servlets.frontend.rule: Host:preview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/preview,/assets,/service,/dynamic,/resource,/corporate,/corporate-de-de,/styleguide;AddPrefix:/blueprint/servlet
+      traefik.preview-servlets.frontend.rule: Host:preview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/preview,/previewurl,/assets,/service,/dynamic,/resource,/corporate,/corporate-de-de,/styleguide;AddPrefix:/blueprint/servlet
     command:
       - wait-for-content-management-server
       - application
@@ -318,7 +323,7 @@ services:
       CAAS_REMOTE_BASEURL: http://cae-preview:8080/blueprint/servlet/internal/service/url
       LINK_URLPREFIXTYPE: preview
       PREVIEWCLIENT_URL: https://headless-server-preview.${ENVIRONMENT_FQDN:-docker.localhost}/preview
-      COMMERCE_HUB_CUSTOMENTITYPARAMS_CATALOGVERSION: Staged
+      COMMERCE_HUB_DATA_CUSTOMENTITYPARAMS_CATALOGVERSION: Staged
     labels:
       traefik.enable: "true"
       traefik.port: "8080"
@@ -349,7 +354,6 @@ services:
       CAAS_SOLR_COLLECTION: live
       CAAS_REMOTE_BASEURL: http://cae-live:8080/blueprint/servlet/internal/service/url
       LINK_URLPREFIXTYPE: live
-      COMMERCE_HUB_CUSTOMENTITYPARAMS_CATALOGVERSION: Online
     labels:
       traefik.enable: "true"
       traefik.port: "8080"

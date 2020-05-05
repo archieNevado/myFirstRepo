@@ -1,17 +1,16 @@
 import $ from "jquery";
-import * as logger from "@coremedia/brick-utils";
 import { addNodeDecoratorByData } from "@coremedia/brick-node-decoration-service";
-import { loadPage } from "./pagination";
+import { updateTarget } from "@coremedia/brick-dynamic-include";
+import { initPagination } from "./pagination";
 
 // Enable pagination
-
-addNodeDecoratorByData(undefined, "cm-pagination-page", ($button, url) => {
-  logger.log("Initialize loadPaginationClickHandler", $button, url);
-  $button.on("click touch", () => {
-    loadPage(url, $button);
+addNodeDecoratorByData(undefined, "cm-pagination", ($pagination, url) => {
+  const $button = $pagination.find(".cm-pagination__more");
+  const $spinner = $pagination.find(".cm-pagination__loading");
+  initPagination($button, $spinner, url, newPage => {
+    // replace the whole pagination with the result (the result has a new one)
+    updateTarget($pagination, $(newPage), true);
   });
-  // enable button as soon as functionality is attached
-  $button.removeAttr("disabled");
 });
 
 // --- DOCUMENT READY --------------------------------------------------------------------------------------------------

@@ -9,6 +9,8 @@ const $document = $(document);
 
 export const EVENT_NODE_APPENDED = "coremedia.blueprint.basic.nodeAppended";
 
+export const FRAGMENT_IDENTIFIER = "cm-fragment";
+
 /**
  * Replace "$nextUrl$" in all data-href and store as href attribute.
  * Assumes that if the page contains a form with a nextUrl hidden input field, the form is already loaded.
@@ -160,4 +162,26 @@ export function refreshFragment($fragment, callback, requestParams) {
     params: requestParams,
   };
   updateTargetWithAjaxResponse($fragment, requestConfig, true, callback);
+}
+
+/**
+ * Delays the execution of the given callback until all fragments of the given container are loaded.
+ * If all fragments are already loaded the callback is executed immediately.
+ *
+ * @param {Object} config
+ * @param {Function} config.callback the callback to trigger after the fragments are loaded.
+ * @param {Node} config.container the container containing the fragments. If not provided the whole document will be used.
+ */
+export function waitForFragments({ callback, container = document }) {
+  const $container = $(container);
+  const wrappedCallback = () => {
+    const $dynamicItems = $container.find(`[data-${FRAGMENT_IDENTIFIER}]`);
+    // delay initialization until all dynamic fragments that are used as items inside the slideshow are loaded
+    if ($dynamicItems.length === 0) {
+      $document.off(EVENT_NODE_APPENDED, wrappedCallback);
+      callback();
+    }
+  };
+  $document.on(EVENT_NODE_APPENDED, wrappedCallback);
+  wrappedCallback();
 }

@@ -24,8 +24,12 @@ public class ProductListAdapterFactory {
     this.commerceFacade = commerceFacade;
   }
 
-  public ProductListAdapter to(Content queryList) {
-    return new ProductListAdapter(extendedLinkListAdapterFactory, queryList, settingsService, commerceFacade,
-            Objects.requireNonNull(sitesService.getContentSiteAspect(queryList).getSite()).getId());
+  public ProductListAdapter to(Content productList) {
+    return to(productList, ProductListAdapter.OFFSET_DEFAULT);
+  }
+
+  public ProductListAdapter to(Content productList, Integer offset) {
+    return new ProductListAdapter(extendedLinkListAdapterFactory, productList, settingsService, commerceFacade,
+            Objects.requireNonNull(sitesService.getContentSiteAspect(productList).getSite()).getId(), offset);
   }
 }

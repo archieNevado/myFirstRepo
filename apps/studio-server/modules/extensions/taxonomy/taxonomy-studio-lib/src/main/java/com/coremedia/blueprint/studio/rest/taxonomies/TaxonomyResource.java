@@ -9,7 +9,6 @@ import com.coremedia.blueprint.taxonomies.semantic.SemanticStrategy;
 import com.coremedia.blueprint.taxonomies.semantic.Suggestion;
 import com.coremedia.blueprint.taxonomies.semantic.Suggestions;
 import com.coremedia.rest.exception.WebApplicationException;
-import com.coremedia.rest.linking.AbstractLinkingResource;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +32,7 @@ import static java.lang.String.format;
 
 @RestController
 @RequestMapping(value = "taxonomies", produces = MediaType.APPLICATION_JSON_VALUE)
-public class TaxonomyResource extends AbstractLinkingResource {
+public class TaxonomyResource {
   private static final Logger LOG = LoggerFactory.getLogger(TaxonomyResource.class);
   private static final String ID = "id";
   private static final String MAX = "max";

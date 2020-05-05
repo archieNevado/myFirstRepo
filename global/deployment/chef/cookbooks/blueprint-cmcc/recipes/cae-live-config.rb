@@ -12,6 +12,7 @@ if node['blueprint']['ibm-wcs']['enabled']
   node.default['blueprint']['apps']['cae-live']['application.properties']['livecontext.apache.preview.production.wcs.host'] = "shop-ibm.#{node['blueprint']['hostname']}"
   node.default['blueprint']['apps']['cae-live']['application.properties']['livecontext.apache.preview.wcs.host'] = "shop-ibm.#{node['blueprint']['hostname']}"
   node.default['blueprint']['apps']['cae-live']['application.properties']['livecontext.apache.live.production.wcs.host'] = "shop-ibm.#{node['blueprint']['hostname']}"
+  node.default['blueprint']['apps']['cae-live']['application.properties']['commerce.hub.data.customEntityParams.environment'] = 'live'
 
   cors_hosts << "https://#{node['blueprint']['ibm-wcs']['virtual_host']['shop']['server_name']}"
   node['blueprint']['ibm-wcs']['virtual_host']['shop']['server_aliases'].each do |s|

@@ -1,11 +1,4 @@
 .cm-pagination {
-  // block of items
-  &__block {
-    .cm-teasable__text {
-      padding-bottom: 0;
-    }
-  }
-
   // load more button
   &__more {
     display: block;

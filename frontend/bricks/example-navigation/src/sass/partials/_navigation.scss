@@ -35,6 +35,7 @@
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
+  position: relative;
 
   @include breakpoints(("sm", landscape) "lg-and-up") {
     display: inline-block;
@@ -60,6 +61,7 @@
   &__toggle {
     position: absolute;
     right: 15px;
+    top: 0;
     background-color: transparent;
     border: none;
     padding: 10px 15px;

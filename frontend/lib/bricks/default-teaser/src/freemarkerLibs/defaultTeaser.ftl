@@ -49,7 +49,7 @@
   <#local renderEmptyMedia=cm.notUndefined(renderEmptyMedia, true) />
 
   <@utils.optionalLink href="${link}" openInNewTab=openInNewTab attr={"class": "${teaserBlockClass}__link"}>
-    <#if media?has_content && !cm.isUndefined(media)>
+    <#if media?has_content>
       <#-- media -->
       <@cm.include self=media view=mediaView params={
         "classBox": "${teaserBlockClass}__picture-box",

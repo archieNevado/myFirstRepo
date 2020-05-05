@@ -3,6 +3,7 @@ package com.coremedia.blueprint.caas.commerce.model;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
+import com.coremedia.caas.model.error.SiteIdUndefined;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.catalog.Catalog;
@@ -22,6 +23,7 @@ import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import graphql.execution.DataFetcherResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,98 +47,122 @@ public class CommerceFacade {
     this.sitesService = sitesService;
   }
 
-  @Nullable
-  public Product getProduct(String externalId, String siteId) {
-    return parseId(externalId, siteId, Product.class);
+  public DataFetcherResult<Product> getProduct(String externalId, String siteId) {
+    DataFetcherResult.Builder<Product> builder = DataFetcherResult.<Product>newResult();
+    if (siteId == null) {
+      return builder.error(SiteIdUndefined.getInstance()).build();
+    }
+    return builder.data(parseId(externalId, siteId, Product.class)).build();
   }
 
-  @Nullable
-  public Product getProductByTechId(String techId, String siteId) {
+  public DataFetcherResult<Product> getProductByTechId(String techId, String siteId) {
+    DataFetcherResult.Builder<Product> builder = DataFetcherResult.<Product>newResult();
+    if (siteId == null) {
+      return builder.error(SiteIdUndefined.getInstance()).build();
+    }
     CommerceConnection connection = getCommerceConnection(siteId);
     if (connection == null) {
-      return null;
+      return builder.build();
     }
     StoreContext storeContext = connection.getStoreContext();
     CommerceId productCommerceId = connection.getIdProvider().formatProductTechId(storeContext.getCatalogAlias(), techId);
     try {
       CatalogService catalogService = connection.getCatalogService();
-      return catalogService.findProductById(productCommerceId, storeContext);
+      return builder.data(catalogService.findProductById(productCommerceId, storeContext)).build();
     } catch (CommerceException e) {
-      LOG.warn("Could not retrieve product for techId " + techId, e);
-      return null;
+      LOG.warn("Could not retrieve product for techId {}", techId, e);
+      return builder.build();
     }
 
   }
 
-  @Nullable
-  public Catalog getCatalog(String catalogId, String siteId) {
+  public DataFetcherResult<Catalog> getCatalog(String catalogId, String siteId) {
+    DataFetcherResult.Builder<Catalog> builder = DataFetcherResult.<Catalog>newResult();
+    if (siteId == null) {
+      return builder.error(SiteIdUndefined.getInstance()).build();
+    }
     CommerceConnection connection = getCommerceConnection(siteId);
     if (connection == null) {
-      return null;
+      return builder.build();
     }
     if (catalogId == null) {
-      return getDefaultCatalog(siteId);
+      return builder.data(getDefaultCatalog(siteId)).build();
     }
-    return parseId(catalogId, siteId, Catalog.class);
+    return builder.data(parseId(catalogId, siteId, Catalog.class)).build();
   }
 
-  @Nullable
-  public List<Catalog> getCatalogs(String siteId) {
+  public DataFetcherResult<List<Catalog>> getCatalogs(String siteId) {
+    DataFetcherResult.Builder<List<Catalog>> builder = DataFetcherResult.<List<Catalog>>newResult();
+    if (siteId == null) {
+      return builder.error(SiteIdUndefined.getInstance()).build();
+    }
     CommerceConnection connection = getCommerceConnection(siteId);
     if (connection == null) {
-      return null;
+      return builder.build();
     }
 
     try {
       CatalogService catalogService = connection.getCatalogService();
-      return catalogService.getCatalogs(connection.getStoreContext());
+      return builder.data(catalogService.getCatalogs(connection.getStoreContext())).build();
     } catch (CommerceException e) {
-      LOG.warn("Could not retrieve catalogs for siteId " + siteId, e);
-      return null;
+      LOG.warn("Could not retrieve catalogs for siteId {}", siteId, e);
+      return builder.build();
     }
   }
 
-  @Nullable
-  public Category getCategory(String categoryId, String siteId) {
-    return parseId(categoryId, siteId, Category.class);
+  public DataFetcherResult<Category> getCategory(String categoryId, String siteId) {
+    DataFetcherResult.Builder<Category> builder = DataFetcherResult.<Category>newResult();
+    if (siteId == null) {
+      return builder.error(SiteIdUndefined.getInstance()).build();
+    }
+    return builder.data(parseId(categoryId, siteId, Category.class)).build();
   }
 
-  @Nullable
-  public Product findProductBySeoSegment(String seoSegment, String siteId) {
+  public DataFetcherResult<Product> findProductBySeoSegment(String seoSegment, String siteId) {
+    DataFetcherResult.Builder<Product> builder = DataFetcherResult.<Product>newResult();
+    if (siteId == null) {
+      return builder.error(SiteIdUndefined.getInstance()).build();
+    }
     CommerceConnection connection = getCommerceConnection(siteId);
     if (connection == null) {
-      return null;
+      return builder.build();
     }
     StoreContext storeContext = connection.getStoreContext();
     try {
       CatalogService catalogService = connection.getCatalogService();
-      return catalogService.findProductBySeoSegment(seoSegment, storeContext);
+      return builder.data(catalogService.findProductBySeoSegment(seoSegment, storeContext)).build();
     } catch (CommerceException e) {
-      LOG.warn("Could not retrieve product for seoSegment " + seoSegment, e);
-      return null;
+      LOG.warn("Could not retrieve product for seoSegment {}", seoSegment, e);
+      return builder.build();
     }
   }
 
   @SuppressWarnings("unused")
-  @Nullable
-  public ProductVariant getProductVariant(String productVariantId, String siteId) {
-    return parseId(productVariantId, siteId, ProductVariant.class);
+  public DataFetcherResult<ProductVariant> getProductVariant(String productVariantId, String siteId) {
+    DataFetcherResult.Builder<ProductVariant> builder = DataFetcherResult.<ProductVariant>newResult();
+    if(siteId == null) {
+      return builder.error(SiteIdUndefined.getInstance()).build();
+    }
+    return builder.data(parseId(productVariantId, siteId, ProductVariant.class)).build();
   }
 
-  @Nullable
-  public Category findCategoryBySeoSegment(String seoSegment, String siteId) {
+  public DataFetcherResult<Category> findCategoryBySeoSegment(String seoSegment, String siteId) {
+    DataFetcherResult.Builder<Category> builder = DataFetcherResult.<Category>newResult();
+    if (siteId == null) {
+      return builder.error(SiteIdUndefined.getInstance()).build();
+    }
     CommerceConnection connection = getCommerceConnection(siteId);
     if (connection == null) {
-      return null;
+      return builder.build();
     }
     StoreContext storeContext = connection.getStoreContext();
 
     try {
       CatalogService catalogService = connection.getCatalogService();
-      return catalogService.findCategoryBySeoSegment(seoSegment, storeContext);
+      return builder.data(catalogService.findCategoryBySeoSegment(seoSegment, storeContext)).build();
     } catch (CommerceException e) {
-      LOG.warn("Could not retrieve category by seoSegment " + seoSegment, e);
-      return null;
+      LOG.warn("Could not retrieve category by seoSegment {}", seoSegment, e);
+      return builder.build();
     }
   }
 
@@ -152,7 +178,7 @@ public class CommerceFacade {
       CatalogService catalogService = connection.getCatalogService();
       return catalogService.searchProducts(searchTerm, searchParams, storeContext);
     } catch (CommerceException e) {
-      LOG.warn("Could not search products with searchTerm " + searchTerm, e);
+      LOG.warn("Could not search products with searchTerm {}", searchTerm, e);
       return null;
     }
   }
@@ -175,7 +201,7 @@ public class CommerceFacade {
       }
       return catalogService.getFacetsForProductSearch(category, storeContext);
     } catch (CommerceException e) {
-      LOG.warn("Could not retrieve facets for categoryId " + categoryId, e);
+      LOG.warn("Could not retrieve facets for categoryId {}", categoryId, e);
       return null;
     }
   }
@@ -192,27 +218,30 @@ public class CommerceFacade {
       CatalogService catalogService = connection.getCatalogService();
       return catalogService.searchProductVariants(searchTerm, searchParams, storeContext);
     } catch (CommerceException e) {
-      LOG.warn("Could not search product variants with searchTerm " + searchTerm, e);
+      LOG.warn("Could not search product variants with searchTerm {}", searchTerm, e);
       return null;
     }
   }
 
-  @Nullable
-  public Catalog getCatalogByAlias(String catalogAlias, String siteId) {
+  public DataFetcherResult<Catalog> getCatalogByAlias(String catalogAlias, String siteId) {
+    DataFetcherResult.Builder<Catalog> builder = DataFetcherResult.<Catalog>newResult();
+    if (siteId == null) {
+      return builder.error(SiteIdUndefined.getInstance()).build();
+    }
     CommerceConnection connection = getCommerceConnection(siteId);
     if (connection == null) {
-      return null;
+      return builder.build();
     }
     StoreContext storeContext = connection.getStoreContext();
 
     try {
       CatalogService catalogService = connection.getCatalogService();
-      return catalogService
+      return builder.data(catalogService
               .getCatalog(CatalogAlias.of(catalogAlias), storeContext)
-              .orElse(null);
+              .orElse(null)).build();
     } catch (CommerceException e) {
-      LOG.warn("Could not retrieve catalog for catalogAlias " + catalogAlias, e);
-      return null;
+      LOG.warn("Could not retrieve catalog for catalogAlias {}", catalogAlias, e);
+      return builder.build();
     }
   }
 
@@ -244,13 +273,14 @@ public class CommerceFacade {
         return null;
       }
       CommerceConnection connection = commerceConnectionInitializer.findConnectionForSite(site).orElse(null);
+
       if (connection == null) {
         LOG.warn("Cannot find commerce connection for siteId {}", siteId);
         return null;
       }
       return connection;
     } catch (CommerceException e) {
-      LOG.warn("Cannot find commerce connection for siteId " + siteId, e);
+      LOG.warn("Cannot find commerce connection for siteId {}", siteId, e);
       return null;
     }
   }
@@ -289,7 +319,7 @@ public class CommerceFacade {
       //noinspection unchecked
       return (T) bean;
     } catch (CommerceException e) {
-      LOG.warn("Could not retrieve product for id " + id, e);
+      LOG.warn("Could not retrieve product for id {}", id, e);
       return null;
     }
   }

@@ -4,7 +4,6 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnect
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.logictypes.CommerceLedLinkBuilderHelper;
 import com.coremedia.objectserver.web.links.Link;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.UriComponents;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 /**
@@ -50,7 +48,7 @@ public class LiveContextChannelLinkBuilder extends LiveContextPageHandlerBase {
   @SuppressWarnings("unused")
   @Link(type = CMChannel.class)
   @Nullable
-  public UriComponents buildLinkForSearchLandingPage(@NonNull CMChannel channel, @NonNull HttpServletRequest request) {
+  public UriComponents buildLinkForSearchLandingPage(@NonNull CMChannel channel) {
     Site site = findSite(channel).orElse(null);
     if (site == null) {
       return null;
@@ -65,10 +63,8 @@ public class LiveContextChannelLinkBuilder extends LiveContextPageHandlerBase {
         return null;
       }
 
-      StoreContext storeContext = commerceConnection.getStoreContext();
-
       return searchLandingPagesLinkBuilderHelper
-              .createSearchLandingPageURLFor(channel, commerceConnection, request, storeContext)
+              .createSearchLandingPageURLFor(channel, commerceConnection)
               .orElse(null);
     }
 

@@ -9,4 +9,4 @@
     @since 1907
 -->
 
-<@cm.include self=self view="asLandscapeBanner" params={"additionalClass": "cm-related__items"} />
+<@cm.include self=self view="asLandscapeBannerContainer" params={"additionalClass": "cm-related__items"} />

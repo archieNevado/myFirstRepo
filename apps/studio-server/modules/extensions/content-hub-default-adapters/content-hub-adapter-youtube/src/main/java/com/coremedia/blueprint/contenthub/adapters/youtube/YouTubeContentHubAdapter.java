@@ -1,5 +1,11 @@
 package com.coremedia.blueprint.contenthub.adapters.youtube;
 
+import com.coremedia.blueprint.contenthub.adapters.youtube.connector.YouTubeConnector;
+import com.coremedia.blueprint.contenthub.adapters.youtube.connector.YouTubeConstants;
+import com.coremedia.blueprint.contenthub.adapters.youtube.connector.playlists.GetPlaylistItemsResponse;
+import com.coremedia.blueprint.contenthub.adapters.youtube.connector.playlists.GetPlaylistsResponse;
+import com.coremedia.blueprint.contenthub.adapters.youtube.connector.search.SearchInChannelResponse;
+import com.coremedia.blueprint.contenthub.adapters.youtube.connector.search.YouTubeSearchService;
 import com.coremedia.contenthub.api.ContentHubAdapter;
 import com.coremedia.contenthub.api.ContentHubContext;
 import com.coremedia.contenthub.api.ContentHubObject;
@@ -7,28 +13,25 @@ import com.coremedia.contenthub.api.ContentHubObjectId;
 import com.coremedia.contenthub.api.ContentHubTransformer;
 import com.coremedia.contenthub.api.ContentHubType;
 import com.coremedia.contenthub.api.Folder;
+import com.coremedia.contenthub.api.GetChildrenResult;
 import com.coremedia.contenthub.api.Item;
 import com.coremedia.contenthub.api.column.ColumnProvider;
 import com.coremedia.contenthub.api.exception.ContentHubException;
+import com.coremedia.contenthub.api.pagination.PaginationRequest;
+import com.coremedia.contenthub.api.pagination.PaginationResponse;
 import com.coremedia.contenthub.api.search.ContentHubSearchResult;
 import com.coremedia.contenthub.api.search.ContentHubSearchService;
 import com.coremedia.contenthub.api.search.Sort;
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.Playlist;
 import com.google.api.services.youtube.model.PlaylistItem;
 import com.google.api.services.youtube.model.SearchResult;
 import com.google.api.services.youtube.model.Video;
-import com.google.common.collect.Lists;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -38,9 +41,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 class YouTubeContentHubAdapter implements ContentHubAdapter, ContentHubSearchService {
+
   private static final Logger LOGGER = LoggerFactory.getLogger(YouTubeContentHubAdapter.class);
-  private static final String HTTPS_WWW_GOOGLEAPIS_COM_AUTH_YOUTUBE_FORCE_SSL = "https://www.googleapis.com/auth/youtube.force-ssl";
   private static final List<ContentHubType> SEARCH_TYPES = Collections.singletonList(new ContentHubType(YouTubeTypes.ITEM));
+  public static final String VIDEOS_PAGE_TOKEN_PREFIX = "videos_";
 
   private final YouTubeContentHubSettings settings;
   private final String connectionId;
@@ -48,31 +52,13 @@ class YouTubeContentHubAdapter implements ContentHubAdapter, ContentHubSearchSer
   private final YouTubeConnector youTubeConnector;
   private final ContentHubObjectId rootId;
 
-  YouTubeContentHubAdapter(@NonNull YouTubeContentHubSettings settings, @NonNull String connectionId) {
+  YouTubeContentHubAdapter(YouTubeConnector youTubeConnector,
+                           YouTubeContentHubSettings settings, String connectionId) {
+    this.youTubeConnector = youTubeConnector;
     this.settings = settings;
     this.connectionId = connectionId;
     rootId = new ContentHubObjectId(connectionId, connectionId);
     columnProvider = new YouTubeColumnProvider();
-
-    try {
-      List<String> scopes = Lists.newArrayList(HTTPS_WWW_GOOGLEAPIS_COM_AUTH_YOUTUBE_FORCE_SSL);
-      String credentialsJson = settings.getCredentialsJson();
-      if (credentialsJson == null || credentialsJson.length() == 0) {
-        throw new ContentHubException("No credentialsJson found for youtube adapter '" + connectionId + "'");
-      }
-
-      GoogleCredential credential = GoogleCredential.fromStream(new ByteArrayInputStream(credentialsJson.getBytes()));
-      if (credential.createScopedRequired()) {
-        credential = credential.createScoped(scopes);
-      }
-      YouTube youTube = new YouTube.Builder(new NetHttpTransport(), new JacksonFactory(), credential).setApplicationName("youtubeProvider").build();
-      youTubeConnector = new YouTubeConnector(youTube);
-    } catch (ContentHubException che) {
-      throw che;
-    } catch (Exception e) {
-      LOGGER.error("Error initializing youtube adapter '" + connectionId + "': " + e.getMessage(), e);
-      throw new ContentHubException(e);
-    }
   }
 
 
@@ -97,54 +83,72 @@ class YouTubeContentHubAdapter implements ContentHubAdapter, ContentHubSearchSer
   @Nullable
   @Override
   public Folder getFolder(@NonNull ContentHubContext context, @NonNull ContentHubObjectId id) throws ContentHubException {
-    if(id.getExternalId().equals(connectionId)){
+    if (rootId.equals(id)) {
       return getRootFolder(context);
-    } else {
-      return getYouTubeFolder(youTubeConnector.getPlayListById(id.getExternalId()));
     }
+    return youTubeConnector.getPlayList(id.getExternalId())
+            .map(playlist -> {
+              ContentHubObjectId categoryId = new ContentHubObjectId(connectionId, playlist.getId());
+              return new YouTubeFolder(categoryId, playlist);
+            })
+            .orElse(null);
   }
 
   @NonNull
   @Override
-  public List<Item> getItems(@NonNull ContentHubContext context, @NonNull Folder folder) throws ContentHubException {
-    if (rootId.equals(folder.getId())) {
-      if (settings != null) {
-        String channelId = settings.getChannelId();
-        if (!StringUtils.isEmpty(channelId)) {
-          return youTubeConnector.getVideos(channelId).stream()
-                  .map(this::item)
-                  .collect(Collectors.toUnmodifiableList());
-        }
-      }
-      throw new IllegalStateException("No channelId to fetch items for");
-    } else {
-      String playlistId = folder.getId().getExternalId();
-      return youTubeConnector.getPlaylistItems(playlistId).stream()
-              .map(this::item)
-              .collect(Collectors.toUnmodifiableList());
+  public GetChildrenResult getChildren(@NonNull ContentHubContext context, @NonNull Folder folder, @Nullable PaginationRequest paginationRequest) {
+    String pageCursor = paginationRequest == null ? null : paginationRequest.getNextPageCursor();
+    if (isRootFolder(folder)) {
+      return getChildrenOfRootFolder(pageCursor);
     }
+
+    return getChildrenOfPlaylist(folder, pageCursor);
   }
 
   @NonNull
-  @Override
-  public List<Folder> getSubFolders(@NonNull ContentHubContext context, @NonNull Folder folder) throws ContentHubException {
-    List<Folder> result = new ArrayList<>();
+  private ContentHubObject toContentHubObject(@NonNull Playlist playlist) {
+    ContentHubObjectId categoryId = new ContentHubObjectId(connectionId, playlist.getId());
+    return new YouTubeFolder(categoryId, playlist);
+  }
 
-    if (rootId.equals(folder.getId())) {
-      List<Playlist> playLists = getPlaylists();
-      int counter = 0;
-      for (Playlist playlist : playLists) {
-        //in order to prevent performance issues, only deliver 1000 items max!
-        if (counter == 1000) {
-          break;
-        }
-        Folder playListFolder = getYouTubeFolder(playlist);
-        result.add(playListFolder);
-        counter++;
+  @NonNull
+  private GetChildrenResult getChildrenOfRootFolder(@Nullable String pageCursor) {
+    String channelId = getChannelId(settings);
+    List<ContentHubObject> playlists = null;
+    if(pageCursor == null || !pageCursor.startsWith(VIDEOS_PAGE_TOKEN_PREFIX)){
+    GetChildrenResult playlistsResult = getPlaylists(pageCursor);
+      playlists = playlistsResult.getChildren();
+      boolean pageIsFull = playlists.size() == YouTubeConstants.LOW_COST_REQUEST_PAGE_SIZE;
+      if (pageIsFull) {
+        return playlistsResult;
       }
     }
 
-    return result;
+    boolean noPlaylistsFound = playlists == null || playlists.isEmpty();
+    if (noPlaylistsFound) {
+      String videoPageCursor = pageCursor == null ? null : pageCursor.replace(VIDEOS_PAGE_TOKEN_PREFIX, "");
+      return getVideosPaginated(channelId, videoPageCursor);
+    }
+
+    List<ContentHubObject> mergeResults = new ArrayList<>(playlists);
+    GetChildrenResult videoResult = getVideosPaginated(channelId, null);
+    mergeResults.addAll(videoResult.getChildren());
+
+    return new GetChildrenResult(mergeResults, videoResult.getPaginationResponse());
+  }
+
+  @NonNull
+  private GetChildrenResult getVideosPaginated(@NonNull String channelId, @Nullable String pageCursor) {
+    SearchInChannelResponse videos = youTubeConnector.getVideos(channelId, pageCursor);
+    List<ContentHubObject> children = videos.getResults().stream().map(this::item).collect(Collectors.toList());
+    return new GetChildrenResult(children, new PaginationResponse(videos.getNextPageToken() != null, VIDEOS_PAGE_TOKEN_PREFIX + videos.getNextPageToken()));
+  }
+
+  @NonNull
+  private GetChildrenResult getChildrenOfPlaylist(@NonNull Folder folder, @Nullable String pageCursor) {
+    GetPlaylistItemsResponse playlistItems = youTubeConnector.getPlaylistItems(folder.getId().getExternalId(), pageCursor);
+    List<ContentHubObject> children = playlistItems.getPlaylistItems().stream().map(this::item).collect(Collectors.toList());
+    return new GetChildrenResult(children, new PaginationResponse(playlistItems.getNextPageCursor() != null, playlistItems.getNextPageCursor()));
   }
 
   @Nullable
@@ -177,12 +181,12 @@ class YouTubeContentHubAdapter implements ContentHubAdapter, ContentHubSearchSer
   @Override
   @NonNull
   public Set<Sort> supportedSortCriteria() {
-    return ChannelSearchResult.YOUTUBE_VIDEO_ORDERS.keySet();
+    return YouTubeSearchService.YOUTUBE_VIDEO_ORDERS.keySet();
   }
 
   @Override
   public int supportedLimit() {
-    return ChannelSearchResult.MAX_LIMIT;
+    return YouTubeConstants.MAX_LIMIT;
   }
 
   @Override
@@ -224,12 +228,11 @@ class YouTubeContentHubAdapter implements ContentHubAdapter, ContentHubSearchSer
     }
   }
 
-
   //------------------------ Helper ------------------------------------------------------------------------------------
 
   private Item item(@NonNull ContentHubObjectId id) {
     Video video = youTubeConnector.getVideo(id.getExternalId());
-    return new YouTubeItem(id, video);
+    return video != null ? new YouTubeItem(id, video) : null;
   }
 
   private Item item(PlaylistItem playlistItem) {
@@ -253,23 +256,37 @@ class YouTubeContentHubAdapter implements ContentHubAdapter, ContentHubSearchSer
     return name;
   }
 
-  private List<Playlist> getPlaylists() {
-    String channelId = settings.getChannelId();
-    if (!StringUtils.isEmpty(channelId)) {
-      return youTubeConnector.getPlaylistsByChannel(channelId);
+  @NonNull
+  private GetChildrenResult getPlaylists(@Nullable String pageCursor) {
+    String channelId = getChannelId(settings);
+    if (StringUtils.isEmpty(channelId)) {
+      return new GetChildrenResult(Collections.emptyList());
     }
 
-    String user = settings.getUser();
-    if (!StringUtils.isEmpty(user)) {
-      return youTubeConnector.getPlaylistsByUser(user);
-    }
-
-    return Collections.emptyList();
+    GetPlaylistsResponse playlistsResponse = youTubeConnector.getPlaylistsByChannel(channelId, pageCursor);
+    String nextPage = playlistsResponse.getNextPageCursor();
+    List<Playlist> children = playlistsResponse.getPlaylists();
+    List<ContentHubObject> asObjects = children.stream().map(this::toContentHubObject).collect(Collectors.toList());
+    return new GetChildrenResult(asObjects, new PaginationResponse(nextPage != null, nextPage));
   }
 
-  private Folder getYouTubeFolder(Playlist list) {
-    ContentHubObjectId categoryId = new ContentHubObjectId(connectionId, list.getId());
-    return new YouTubeFolder(categoryId, list);
+  @NonNull
+  private String getChannelId(@Nullable YouTubeContentHubSettings settings) {
+
+    if (settings == null) {
+      throw new IllegalStateException("No channelId to fetch items for");
+    }
+
+    String channelId = settings.getChannelId();
+    if (StringUtils.isEmpty(channelId)) {
+      throw new IllegalStateException("No channelId to fetch items for");
+    }
+
+    return channelId;
+  }
+
+  private boolean isRootFolder(@NonNull Folder folder) {
+    return rootId.equals(folder.getId());
   }
 
   @NonNull

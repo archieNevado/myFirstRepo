@@ -55,7 +55,7 @@ public class CommerceLinkResolver implements LiveContextLinkResolver {
       String link = buildLink(source, bean, navigation, request);
       return Optional.ofNullable(link);
     } catch (Exception e) {
-      LOG.error("Error creating Salesforce intermediate link representation for '{}'.", debug(bean), e);
+      LOG.warn("Unable to create intermediate commerce link representation for '{}'.", debug(bean), e);
       return Optional.empty();
     }
   }
@@ -116,9 +116,9 @@ public class CommerceLinkResolver implements LiveContextLinkResolver {
       if (externalPage.isRoot()) {
         return Optional.of(linkService.getExternalPageLink(null, null, storeContext, linkParameters, request));
       }
-
       String seoPath = externalPage.getExternalId();
-      return Optional.of(linkService.getExternalPageLink(seoPath, null, storeContext, linkParameters, request));
+      String externalUriPath = externalPage.getExternalUriPath();
+      return Optional.of(linkService.getExternalPageLink(seoPath, externalUriPath, storeContext, linkParameters, request));
     } else if (bean instanceof LiveContextNavigation) {
       LiveContextNavigation liveContextNavigation = (LiveContextNavigation) bean;
       Category category = liveContextNavigation.getCategory();

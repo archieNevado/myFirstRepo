@@ -127,4 +127,10 @@
     <property name="statusCode" value="410"/>
   </bean>
 
+  <bean id="blobTransformationExceptionHandler"
+        class="com.coremedia.blueprint.cae.exception.handler.SimpleExceptionHandler">
+    <property name="exceptionType" value="#{T(com.coremedia.blueprint.cae.exception.BlobTransformationException)}"/>
+    <property name="statusCode" value="404"/>
+  </bean>
+
 </beans>

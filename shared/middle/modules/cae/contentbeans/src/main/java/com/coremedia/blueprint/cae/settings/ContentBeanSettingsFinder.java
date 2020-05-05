@@ -2,12 +2,16 @@ package com.coremedia.blueprint.cae.settings;
 
 import com.coremedia.blueprint.base.settings.SettingsFinder;
 import com.coremedia.blueprint.base.settings.SettingsService;
+import com.coremedia.blueprint.cae.contentbeans.BlobFromContentBeanSetting;
+import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
+import com.coremedia.objectserver.beans.ContentIdRewriter;
 import com.coremedia.objectserver.dataviews.DataViewCollections;
 import com.coremedia.objectserver.dataviews.DataViewHelper;
+import com.coremedia.xml.Markup;
 import org.springframework.beans.factory.annotation.Required;
 
 import java.util.ArrayList;
@@ -50,11 +54,12 @@ public class ContentBeanSettingsFinder implements SettingsFinder {
       return null;
     }
     // Delegate down to UAPI level
-    Object setting = settingsService.setting(name, Object.class, ((ContentBean)bean).getContent());
+    ContentBean contentBean = (ContentBean) bean;
+    Object setting = settingsService.setting(name, Object.class, contentBean.getContent());
     // Back to beans
-    Object contentBeanedResult = toContentBeans(setting);
+    Object contentBeanedResult = toContentBeans(contentBean, setting, name);
     // If the source bean is a dataview, return a dataviewed result.
-    return DataViewHelper.isDataView(bean) ? dataViewCollections.nestedDataview(contentBeanedResult) : contentBeanedResult;
+    return DataViewHelper.isDataView(contentBean) ? dataViewCollections.nestedDataview(contentBeanedResult) : contentBeanedResult;
   }
 
 
@@ -63,18 +68,24 @@ public class ContentBeanSettingsFinder implements SettingsFinder {
   /**
    * Cast any Content results back into the ContentBean domain.
    */
-  private Object toContentBeans(Object value) {
+  private Object toContentBeans(ContentBean root, Object value, String settingsName) {
     if (value instanceof Content) {
       return contentBeanFactory.createBeanFor((Content) value, ContentBean.class);
     }
     if (value instanceof Struct) {
-      return contentBeanFactory.createBeanMapFor((Struct)value);
+      return contentBeanFactory.createBeanMapFor((Struct) value);
+    }
+    if (value instanceof Blob) {
+      return new BlobFromContentBeanSetting(root, settingsName, (Blob) value);
+    }
+    if (value instanceof Markup) {
+      return ((Markup) value).transform(new ContentIdRewriter());
     }
     if (value instanceof List) {
-      List list = (List)value;
+      List list = (List) value;
       ArrayList<Object> result = new ArrayList<>(list.size());
       for (Object item : list) {
-        result.add(toContentBeans(item));
+        result.add(toContentBeans(root, item, settingsName));
       }
       return result;
     }

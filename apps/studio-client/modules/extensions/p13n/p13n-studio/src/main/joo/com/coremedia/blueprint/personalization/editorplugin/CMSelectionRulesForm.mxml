@@ -146,6 +146,14 @@
                         conditionName="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'con_social_background_login')}"
                         propertyName="es_check.userLoggedIn"
                         checkedByDefault="true"/>
+                <perso:EnumCondition
+                        conditionName="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'con_gender')}"
+                        propertyName="socialuser.gender"
+                        operators="{['eq', 'ne']}"
+                        value="{[
+                                              ['male', resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'con_gender_male')],
+                                              ['female', resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'con_gender_female')]
+                                              ]}"/>
               </perso:conditionItems>
             </perso:SelectionRulesField>
           </editor:items>

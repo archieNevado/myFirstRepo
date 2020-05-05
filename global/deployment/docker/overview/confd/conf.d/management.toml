@@ -1,0 +1,6 @@
+[template]
+src   = "management.html.tmpl"
+dest  = "/usr/share/nginx/html/assets/management.html"
+keys  = [
+         "/environment/fqdn"
+]

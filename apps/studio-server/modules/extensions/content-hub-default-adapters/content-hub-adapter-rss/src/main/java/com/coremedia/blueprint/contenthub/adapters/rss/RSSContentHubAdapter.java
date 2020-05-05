@@ -6,9 +6,11 @@ import com.coremedia.contenthub.api.ContentHubObject;
 import com.coremedia.contenthub.api.ContentHubObjectId;
 import com.coremedia.contenthub.api.ContentHubTransformer;
 import com.coremedia.contenthub.api.Folder;
+import com.coremedia.contenthub.api.GetChildrenResult;
 import com.coremedia.contenthub.api.Item;
 import com.coremedia.contenthub.api.column.ColumnProvider;
 import com.coremedia.contenthub.api.exception.ContentHubException;
+import com.coremedia.contenthub.api.pagination.PaginationRequest;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.SyndFeedInput;
@@ -26,7 +28,6 @@ import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -109,20 +110,14 @@ class RSSContentHubAdapter implements ContentHubAdapter {
 
   @NonNull
   @Override
-  public List<Item> getItems(@NonNull ContentHubContext context, @NonNull Folder folder) throws ContentHubException {
-    List<Item> result = new ArrayList<>();
+  public GetChildrenResult getChildren(@NonNull ContentHubContext context, @NonNull Folder folder, @Nullable PaginationRequest paginationRequest) {
+    List<ContentHubObject> result = new ArrayList<>();
     List<SyndEntry> entries = feed.getEntries();
     for (SyndEntry entry : entries) {
       ContentHubObjectId id = new ContentHubObjectId(connectionId, entry.getUri());
       result.add(new RSSItem(id, feed, entry));
     }
-    return result;
-  }
-
-  @NonNull
-  @Override
-  public List<Folder> getSubFolders(@NonNull ContentHubContext context, @NonNull Folder folder) throws ContentHubException {
-    return Collections.emptyList();
+    return new GetChildrenResult(result);
   }
 
   @Nullable

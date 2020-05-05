@@ -6,9 +6,7 @@
     <div class="cm-footer-navigation__columns">
       <#items as column>
         <#compress>
-          <div class="cm-footer-navigation__column"<@preview.metadata column.content />>
-            <@cm.include self=column view="asFooterNavigationColumn" />
-          </div>
+          <@cm.include self=column view="asFooterNavigationColumn" />
         </#compress>
       </#items>
     </div>

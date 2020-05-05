@@ -53,8 +53,6 @@
 <link href="Fragments/Fragments%20Hidden%20Page.xml" path="/Sites/SFRA/United%20Kingdom/English/Navigation/Fragments/Fragments%20Hidden%20Page"/>
 <link href="../Options/Settings/Templates/CMChannel/Templates.xml" path="/Sites/SFRA/United%20Kingdom/English/Options/Settings/Templates/CMChannel/Templates"/>
 <link href="Fashion%20Newsletter/Fashion%20Newsletter.xml" path="/Sites/SFRA/United%20Kingdom/English/Navigation/Fashion%20Newsletter/Fashion%20Newsletter"/>
-<link href="../Editorial/Content/Homepage/Locale%20Chooser.xml" path="/Sites/SFRA/United%20Kingdom/English/Editorial/Content/Homepage/Locale%20Chooser"/>
-<link href="../Editorial/Content/Homepage/Account%20Header.xml" path="/Sites/SFRA/United%20Kingdom/English/Editorial/Content/Homepage/Account%20Header"/>
 <link href="Topic%20Pages/Topicpage.xml" path="/Sites/SFRA/United%20Kingdom/English/Navigation/Topic%20Pages/Topicpage"/>
 </children>
 <javaScript>

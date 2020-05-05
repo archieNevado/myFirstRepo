@@ -1,7 +1,6 @@
 package com.coremedia.livecontext.handler;
 
 import com.coremedia.blueprint.base.links.UrlPrefixResolver;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.handlers.PageHandlerBase;
 import com.coremedia.blueprint.cae.handlers.PreviewHandler;
@@ -10,7 +9,6 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.context.ResolveContextStrategy;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
-import com.coremedia.livecontext.ecommerce.link.LinkService;
 import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
 import com.coremedia.objectserver.web.links.UriComponentsHelper;
@@ -132,13 +130,6 @@ public class LiveContextPageHandlerBase extends PageHandlerBase {
     }
 
     return UriComponentsHelper.prefixUri(absoluteUrlPrefix, null, originalUri);
-  }
-
-  @NonNull
-  protected Optional<LinkService> getLinkService() {
-    return CurrentStoreContext.get()
-            .getConnection()
-            .getLinkService();
   }
 
   /**

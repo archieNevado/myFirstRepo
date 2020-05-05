@@ -6,6 +6,9 @@ query PageQuery($id: String!) {
       title
       teaserTitle
       teaserText
+      ... on CollectionItem {
+        remoteLink
+      }
       grid {
         cssClassName
         rows {

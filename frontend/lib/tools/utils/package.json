@@ -26,6 +26,6 @@
   "main": "src/index.js",
   "private": true,
   "engines": {
-    "node": ">=10"
+    "node": ">=12"
   }
 }

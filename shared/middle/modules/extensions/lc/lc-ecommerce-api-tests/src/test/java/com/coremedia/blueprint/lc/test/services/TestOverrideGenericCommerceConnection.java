@@ -2,6 +2,7 @@ package com.coremedia.blueprint.lc.test.services;
 
 import com.coremedia.blueprint.base.livecontext.client.common.GenericCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.client.common.RequiresGenericCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.client.data.DataCartService;
 import com.coremedia.blueprint.base.livecontext.client.data.DataCatalogService;
 import com.coremedia.blueprint.base.livecontext.client.data.DataCategoryService;
 import com.coremedia.blueprint.base.livecontext.client.data.DataCookieUserService;
@@ -33,6 +34,11 @@ class TestOverrideGenericCommerceConnection extends BaseCommerceConnection
   @Override
   public DataMarketingSpotService getDataMarketingSpotService() {
     return delegate.getDataMarketingSpotService();
+  }
+
+  @Override
+  public DataCartService getDataCartService() {
+    return delegate.getDataCartService();
   }
 
   @Override

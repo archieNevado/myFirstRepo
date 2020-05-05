@@ -84,7 +84,6 @@ public class CompressionFlagTest {
     assertThat(folder.getChild("compressible.js").getBoolean("disableCompress")).isFalse();
     assertThat(folder.getChild("knownuncompressible.js").getBoolean("disableCompress")).isTrue();
     assertThat(folder.getChild("misconfigureduncompressible.min.js").getBoolean("disableCompress")).isTrue();
-    assertThat(folder.getChild("unknownuncompressible.js").getBoolean("disableCompress")).isTrue();
     assertThat(folder.getChild("unwantedcompressible.js").getBoolean("disableCompress")).isTrue();
 
     folder = capConnection.getContentRepository().getChild(THEMES).getChild("compression").getChild("css");

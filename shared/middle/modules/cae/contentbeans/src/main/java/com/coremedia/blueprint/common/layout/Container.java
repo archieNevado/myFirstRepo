@@ -1,11 +1,20 @@
 package com.coremedia.blueprint.common.layout;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
+
+import java.util.Collections;
 import java.util.List;
 
 /**
  * @cm.template.api
  */
 public interface Container<T> {
+
+  @NonNull
+  default List<Object> getContainerMetadata() {
+    return Collections.emptyList();
+  }
+
   /**
    * Retrieves the items of the implementing class.
    * <p>
@@ -16,11 +25,18 @@ public interface Container<T> {
    */
   List<? extends T> getItems();
 
+  @NonNull
+  default List<Object> getItemsMetadata() {
+    return Collections.emptyList();
+  }
+
   /**
    * Returns the items, transitively flattening inner containers.
    *
    * @cm.template.api
+   * @deprecated since 2004. Flattening should be handled via dedicated templates to preserve PBE information.
    */
+  @Deprecated(since="2004")
   List<?> getFlattenedItems();
 
 

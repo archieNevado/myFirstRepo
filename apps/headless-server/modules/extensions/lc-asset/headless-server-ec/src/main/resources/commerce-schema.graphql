@@ -5,20 +5,20 @@ extend type Query {
 }
 
 type CommerceRoot {
-  catalogs(siteId:String!): [Catalog] @fetch(from: "@commerceFacade.getCatalogs(#siteId)")
-  catalog(catalogId:String, siteId: String!): Catalog @fetch(from: "@commerceFacade.getCatalog(#catalogId, #siteId)")
-  catalogByAlias(catalogAlias: String, siteId: String!): Catalog @fetch(from: "@commerceFacade.getCatalogByAlias(#catalogAlias, #siteId)")
+  catalogs(siteId:String): [Catalog] @fetch(from: "@commerceFacade.getCatalogs(#siteId)")
+  catalog(catalogId:String, siteId: String): Catalog @fetch(from: "@commerceFacade.getCatalog(#catalogId, #siteId)")
+  catalogByAlias(catalogAlias: String, siteId: String): Catalog @fetch(from: "@commerceFacade.getCatalogByAlias(#catalogAlias, #siteId)")
 
-  category(categoryId: String!, siteId: String!): Category @fetch(from: "@commerceFacade.getCategory(#categoryId, #siteId)")
-  categoryBySeoSegment(seoSegment: String!, siteId: String!): Category @fetch(from: "@commerceFacade.findCategoryBySeoSegment(#seoSegment, #siteId)")
+  category(categoryId: String!, siteId: String): Category @fetch(from: "@commerceFacade.getCategory(#categoryId, #siteId)")
+  categoryBySeoSegment(seoSegment: String!, siteId: String): Category @fetch(from: "@commerceFacade.findCategoryBySeoSegment(#seoSegment, #siteId)")
 
-  product(externalId: String!, siteId: String!): Product @fetch(from: "@commerceFacade.getProduct(#externalId, #siteId)")
-  productByTechId(techId: String!, siteId: String!): Product @fetch(from: "@commerceFacade.getProductByTechId(#techId, #siteId)")
-  productBySeoSegment(seoSegment: String!, siteId: String!): Product @fetch(from: "@commerceFacade.findProductBySeoSegment(#seoSegment, #siteId)")
+  product(externalId: String!, siteId: String): Product @fetch(from: "@commerceFacade.getProduct(#externalId, #siteId)")
+  productByTechId(techId: String!, siteId: String): Product @fetch(from: "@commerceFacade.getProductByTechId(#techId, #siteId)")
+  productBySeoSegment(seoSegment: String!, siteId: String): Product @fetch(from: "@commerceFacade.findProductBySeoSegment(#seoSegment, #siteId)")
 
-  productVariant(externalId: String!, siteId: String!): ProductVariant @fetch(from: "@commerceFacade.getProductVariant(#externalId, #siteId)")
+  productVariant(externalId: String!, siteId: String): ProductVariant @fetch(from: "@commerceFacade.getProductVariant(#externalId, #siteId)")
 
-  externalPage(externalId: String!, siteId: String!): CMExternalPage
+  externalPage(externalId: String!, siteId: String): CMExternalPage
     @fetch(from: "@externalPageAugmentationService.getContentByExternalId(#externalId, @sitesService.getSite(#siteId))")
 }
 
@@ -27,6 +27,7 @@ extend type ContentRoot {
 }
 
 interface CommerceBean {
+  id: ID!
   externalId: String
   externalTechId: String
   locale: String
@@ -140,6 +141,7 @@ interface CMExternalChannel @inherit(from: ["CMAbstractCategory"]) {
 }
 
 type CommerceBeanImpl implements CommerceBean {
+  id: ID! @fetch(from: "@commerceFacade.getExternalId(#this)")
   externalId: String @fetch(from: "@commerceFacade.getExternalId(#this)")
   externalTechId: String
   locale: String
@@ -251,7 +253,7 @@ type CMProductListImpl implements CMProductList @inherit(from: ["CMQueryListImpl
   teasableItems: [CMTeasable] @fetch(from: "@productListAdapter.to(#root).getFixedItems()")
   bannerItems: [Banner]  @fetch(from: "@productListAdapter.to(#root).getItems()")
   category: Category @fetch(from: "@commerceFacade.getCategory(#this.externalId, @sitesService.getContentSiteAspect(#this).site?.id)")
-  productItems: [Product] @fetch(from: "@productListAdapter.to(#root).getProducts()")
+  productItems: [Product] @fetch(from: "@productListAdapter.to(#root,#null).getProducts()")
 }
 
 type CMExternalPageImpl implements CMExternalPage @inherit(from: ["CMChannelImpl"]) {
@@ -262,7 +264,8 @@ type CMExternalPageImpl implements CMExternalPage @inherit(from: ["CMChannelImpl
 type CMProductTeaserImpl implements CMProductTeaser @inherit(from: ["CMTeasableImpl"]) {
   externalId: String
   product: Product @fetch(from: "@commerceFacade.getProduct(#this.externalId, @sitesService.getContentSiteAspect(#this).site?.id)")
-  teaserTitle: String @fetch(from: "teaserTitle?:@commerceFacade.getProduct(#this.externalId, @sitesService.getContentSiteAspect(#this).site?.id)?.name")
+  teaserTitle: String @fetch(from: "teaserTitle?:@commerceFacade.getProduct(#this.externalId, @sitesService.getContentSiteAspect(#this).site?.id)?.getData()?.name")
+  teaserText(view: String): String @fetch(from: "teaserText?.nullIfEmpty()?.view(#view?:'simplified')?:@commerceFacade.getProduct(#this.externalId, @sitesService.getContentSiteAspect(#this).site?.id)?.getData()?.shortDescription")
 }
 
 type CMExternalProductImpl implements CMExternalProduct @inherit(from: ["CMTeasableImpl"]) {

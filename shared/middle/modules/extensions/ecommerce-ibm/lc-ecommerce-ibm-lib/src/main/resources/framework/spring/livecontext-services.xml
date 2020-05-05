@@ -110,11 +110,6 @@
     <property name="contractPreviewServiceUserName" value="${livecontext.ibm.contract.preview.credentials.username}"/>
   </bean>
 
-  <bean id="cartService" class="com.coremedia.livecontext.ecommerce.ibm.order.CartServiceImpl">
-    <property name="cartWrapperService" ref="cartWrapperService"/>
-    <property name="commerceBeanFactory" ref="commerceBeanFactory"/>
-  </bean>
-
   <bean id="userLoginService" class="com.coremedia.livecontext.ecommerce.ibm.login.LoginServiceImpl">
     <property name="servicePassword" value="${livecontext.service.credentials.password}"/>
     <property name="serviceUser" value="${livecontext.service.credentials.username}"/>

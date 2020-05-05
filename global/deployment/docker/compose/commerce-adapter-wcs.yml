@@ -2,7 +2,7 @@ version: "3.4"
 
 # default environment variables for all spring-boot services
 x-development-boot-envs:
-  &development-boot-envs
+        &development-boot-envs
   DEVELOPMENT_SETUP: "${DEVELOPMENT_SETUP:-false}"
   JAVA_DEBUG: "${JAVA_DEBUG:-false}"
   JAVA_DEBUG_SUSPEND: "${JAVA_DEBUG_SUSPEND:-false}"
@@ -15,7 +15,7 @@ x-development-boot-envs:
 
 # default logging configuration
 x-logging:
-  &default-logging
+        &default-logging
   options:
     max-size: '12m'
     max-file: '5'
@@ -23,7 +23,7 @@ x-logging:
 
 services:
   commerce-adapter-wcs:
-    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-wcs:${COMMERCE_ADAPTER_WCS_VERSION:-1.2.9}
+    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-wcs:${COMMERCE_ADAPTER_WCS_VERSION:-1.3.4}
     container_name: commerce-adapter-wcs
     restart: always
     logging: *default-logging
@@ -44,6 +44,10 @@ services:
       WCS_LINK_PREVIEW_STOREFRONT_URL: ${WCS_LINK_PREVIEW_STOREFRONT_URL}
       WCS_LINK_ASSET_URL: ${WCS_LINK_ASSET_URL}
       WCS_LINK_PREVIEW_ASSET_URL: ${WCS_LINK_PREVIEW_ASSET_URL}
+      WCS_LINK_STOREFRONTURLFOR_LIVE: ${WCS_LINK_STOREFRONTURLFOR_LIVE}
+      WCS_LINK_STOREFRONTURLFOR_PREVIEW: ${WCS_LINK_STOREFRONTURLFOR_PREVIEW}
+      WCS_LINK_ASSETURLFOR_LIVE: ${WCS_LINK_ASSETURLFOR_LIVE}
+      WCS_LINK_ASSETURLFOR_PREVIEW: ${WCS_LINK_ASSETURLFOR_PREVIEW}
       WCS_USERNAME: ${WCS_USERNAME}
       WCS_PASSWORD: ${WCS_PASSWORD}
       WCS_VERSION: ${WCS_VERSION}

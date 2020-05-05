@@ -27,10 +27,23 @@ public class CommerceLinkConfiguration {
   }
 
   @Bean
-  CommerceLinkScheme genericClientLinkScheme(CommerceConnectionSupplier connectionSupplier,
-                                             CommerceLedLinkBuilderHelper linkBuilderHelper,
-                                             SettingsService settingsService,
-                                             ExternalSeoSegmentBuilder seoSegmentBuilder) {
-    return new CommerceLinkScheme(connectionSupplier, linkBuilderHelper, settingsService, seoSegmentBuilder);
+  CommerceLinkHelper commerceLinkHelper(CommerceLedLinkBuilderHelper commerceLedPageExtension, SettingsService settingsService,
+                                        CommerceConnectionSupplier commerceConnectionSupplier) {
+    return new CommerceLinkHelper(commerceLedPageExtension, settingsService, commerceConnectionSupplier);
+  }
+
+  @Bean
+  CommerceContentLedLinks commerceContentLedLinks(CommerceLinkHelper commerceLinkHelper) {
+    return new CommerceContentLedLinks(commerceLinkHelper);
+  }
+
+  @Bean
+  CommerceLedLinks commerceLedLinks(CommerceLinkHelper commerceLinkHelper) {
+    return new CommerceLedLinks(commerceLinkHelper);
+  }
+
+  @Bean
+  CommerceStudioLinks commerceStudioLinks(ExternalSeoSegmentBuilder seoSegmentBuilder, CommerceLinkHelper commerceLinkHelper) {
+    return new CommerceStudioLinks(seoSegmentBuilder, commerceLinkHelper);
   }
 }

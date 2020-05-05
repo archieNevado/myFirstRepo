@@ -2,13 +2,17 @@ package com.coremedia.blueprint.cae.settings;
 
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
+import com.coremedia.blueprint.common.contentbeans.CMSettings;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.ContentRepository;
+import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
+import com.coremedia.objectserver.beans.ContentIdRewriter;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.objectserver.dataviews.DataViewHelper;
+import com.coremedia.xml.Markup;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +31,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -76,6 +81,23 @@ public class ContentBeanSettingsFinderTest {
     assertNotNull("No linkable", target);
     assertFalse("empty", target.isEmpty());
     assertEquals("unexpected linkable", 124, target.get(0).getContentId());
+  }
+
+  @Test
+  public void testContentBeanMarkup() {
+    List<CMSettings> linkedSettings = linkable.getLinkedSettings();
+    assertEquals("No linked settings", 1, linkedSettings.size());
+    CMSettings linkedSetting = linkedSettings.get(0);
+    assertNotNull("Linked setting is empty", linkedSetting);
+    Struct struct = linkedSetting.getSettings();
+    assertNotNull("No local settings", struct);
+    assertNotNull("No markup property", struct.getType().getDescriptor("markupProperty"));
+    Markup originalMarkup = struct.getMarkup("markupProperty");
+    assertNotNull("Empty markup property", originalMarkup);
+    Markup transformedMarkup = settingsService.setting("markupProperty", Markup.class, linkable);
+    assertNotNull("No transformed markup", transformedMarkup);
+    // Markup should be rewritten
+    assertEquals(originalMarkup.transform(new ContentIdRewriter()), transformedMarkup);
   }
 
   @Test

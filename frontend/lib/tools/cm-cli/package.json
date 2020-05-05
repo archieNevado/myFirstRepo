@@ -8,7 +8,7 @@
   "private": true,
   "version": "2.0.0",
   "engines": {
-    "node": ">=10"
+    "node": ">=12"
   },
   "bin": {
     "cm": "./bin/cm-cli.js"

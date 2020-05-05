@@ -8,4 +8,4 @@
   @since 1907
 -->
 
-<@cm.include self=self.target!cm.UNDEFINED view="asCarouselBanner" />
+<@cm.include self=self.target!cm.UNDEFINED view="asCarouselBanner" params=cm.localParameters() />

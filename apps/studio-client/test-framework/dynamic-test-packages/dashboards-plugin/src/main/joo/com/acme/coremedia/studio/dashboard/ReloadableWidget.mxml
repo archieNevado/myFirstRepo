@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dashboard:ReloadableWidgetBase
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:local="com.acme.coremedia.studio.dashboard.*"
+        xmlns:exml="http://www.jangaroo.net/exml/0.8"
+        xmlns="exml:ext.config" xmlns:dashboard="com.acme.coremedia.studio.dashboard.*">
+  <fx:Script><![CDATA[
+    public static const xtype:String = "acme.config.reloadableWidget";
+
+    private var config:ReloadableWidget;
+
+    public native function ReloadableWidget(config:ReloadableWidget = null);
+    ]]></fx:Script>
+
+  <local:items>
+    <Label text="Widget"/>
+  </local:items>
+
+</dashboard:ReloadableWidgetBase>

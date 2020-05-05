@@ -38,6 +38,7 @@ services:
     environment:
       WCS_HOST: ${WCS_HOST}
       SPRING_PROFILES: ${SPRING_PROFILES:-dev-wcs}
+      COMMERCE_HUB_DATA_CUSTOMENTITYPARAMS_ENVIRONMENT: preview
     labels:
       traefik.wcs-servlets.frontend.rule: Host:preview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/assets,/calista,/aurora,/dynamic,/service,/resource,/catalogimage;AddPrefix:/blueprint/servlet
 
@@ -45,6 +46,7 @@ services:
     environment:
       WCS_HOST: ${WCS_HOST}
       SPRING_PROFILES: ${SPRING_PROFILES:-dev-wcs}
+      COMMERCE_HUB_DATA_CUSTOMENTITYPARAMS_ENVIRONMENT: live
     labels:
       # here we only need to add a new landing rule
       traefik.calista-landing.frontend.rule: Host:calista.${ENVIRONMENT_FQDN:-docker.localhost};Path:/;AddPrefix:/blueprint/servlet/calista
@@ -60,8 +62,14 @@ services:
     environment:
       WCS_HOST: ${WCS_HOST}
       SPRING_PROFILES: ${SPRING_PROFILES:-dev-wcs}
+      COMMERCE_HUB_DATA_CUSTOMENTITYPARAMS_ENVIRONMENT: preview
 
   commerce-adapter-wcs:
+    environment:
+      WCS_LINK_STOREFRONTURLFOR_LIVE: ${WCS_LINK_STOREFRONTURLFOR_LIVE}
+      WCS_LINK_STOREFRONTURLFOR_PREVIEW : ${WCS_LINK_STOREFRONTURLFOR_PREVIEW}
+      WCS_LINK_ASSETURLFOR_LIVE : ${WCS_LINK_ASSETURLFOR_LIVE}
+      WCS_LINK_ASSETURLFOR_PREVIEW : ${WCS_LINK_ASSETURLFOR_PREVIEW}
     labels:
       traefik.enable: "true"
       traefik.actuator.port: "8081"

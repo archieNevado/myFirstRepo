@@ -3,7 +3,7 @@
 <div class="am-overlay">
   <div class="am-overlay--shadow am-rendition">
     <div class="am-overlay--content">
-      <div class="am-icon am-overlay__close-button"/>
+      <div class="am-icon am-overlay__close-button"></div>
       <div class="am-overlay__checkboxes">
         <#list self.publishedRenditions as rendition>
           <div class="am-overlay__checkbox">

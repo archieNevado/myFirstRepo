@@ -64,6 +64,7 @@
                                   allowBlank="false"
                                   displayField="label"
                                   valueField="key"
+                                  minWidth="140"
                                   tpl="{getTemplate()}">
                   <ui:plugins exml:mode="append">
                     <ui:BindPropertyPlugin bindTo="{config.previewVariantVE}"

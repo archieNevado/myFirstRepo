@@ -39,8 +39,8 @@
     <#if (enableShopNow && (alwaysClickable || hasSingleSKU))>
       <#local cart=cm.substitute("cart", product) />
       <#local buttonLabel=cm.getMessage("cart_add_item") />
-      <#local externalTechId=hasSingleSKU?then(product.variants[0].externalTechId, product.externalTechId)/>
-      <#local buttonData={"data-cm-cart-add-item": {"id": externalTechId!"", "link": cm.getLink(cart, "ajax"), "token": token }} />
+      <#local externalId=hasSingleSKU?then(product.variants[0].externalId, product.externalId)/>
+      <#local buttonData={"data-cm-cart-add-item": {"id": externalId!"", "link": cm.getLink(cart, "ajax"), "token": token }} />
       <#-- provide non empty string for button macro -->
       <#local iconClass=" " />
     </#if>

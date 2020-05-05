@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editor:DocumentTabPanel
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:exml="http://www.jangaroo.net/exml/0.8"
+        xmlns="exml:ext.config"
+        xmlns:editor="exml:com.coremedia.cms.editor.sdk.config">
+  <fx:Script><![CDATA[
+    import com.coremedia.cap.common.SESSION;
+    import com.coremedia.cap.content.Content;
+    import com.coremedia.cap.content.ContentRepository;
+    import com.coremedia.ui.data.ValueExpressionFactory;
+    import com.coremedia.ui.util.UrlUtil;
+
+    public static const xtype:String = "acme.config.cmArticleForm";
+
+    private var config:CMArticleForm;
+
+    public native function CMArticleForm(config:CMArticleForm = null);
+    ]]></fx:Script>
+
+  <editor:items>
+    <editor:DocumentForm title="A">
+      <editor:items>
+        <editor:PropertyFieldGroup title="A"
+                                   itemId="A">
+          <editor:items>
+
+            <editor:LinkListPropertyField propertyName="pictures"
+                                          showThumbnails="true"
+                                          hideLabel="true">
+              <editor:columns>
+                <editor:ThumbnailColumn/>
+                <editor:TypeIconColumn/>
+                <editor:NameColumn flex="1"/>
+                <editor:StatusColumn/>
+              </editor:columns>
+            </editor:LinkListPropertyField>
+
+            <editor:DateTimePropertyField bindTo="{config.bindTo}"
+                                          forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
+                                          itemId="validFrom"
+                                          labelAlign="top"
+                                          propertyName="validFrom"
+                                          timeZoneHidden="false"
+                                          defaultTimeZoneValueExpression="{ValueExpressionFactory.createFromFunction(function():String {
+                                            // enforces usage of the default behaviour
+                                            return null;
+                                          })}"/>
+
+            <editor:DateTimePropertyField bindTo="{config.bindTo}"
+                                          forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
+                                          itemId="validTo"
+                                          labelAlign="top"
+                                          propertyName="validTo"
+                                          timeZoneHidden="false"
+                                          defaultTimeZoneValueExpression="{ValueExpressionFactory.createFromFunction(function():String {
+                                            // read the default timezone from another document in the repository
+                                            var contentRepo:ContentRepository = SESSION.getConnection().getContentRepository();
+                                            var content:Content = contentRepo.getChild('/' + UrlUtil.getHashParam('defaultTimeZoneDoc'));
+                                            if (content) {
+                                              var defaultTZ:String = ValueExpressionFactory.create('properties.' + UrlUtil.getHashParam('defaultTimeZoneProp'),content).getValue() as String;
+                                              return defaultTZ;
+                                            }
+                                            return undefined;
+                                          })}"/>
+
+          </editor:items>
+        </editor:PropertyFieldGroup>
+      </editor:items>
+    </editor:DocumentForm>
+  </editor:items>
+
+</editor:DocumentTabPanel>

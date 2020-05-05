@@ -18,7 +18,7 @@
 
   <properties>
     <content-server.mode>cms</content-server.mode>
-    <content-server.spring.profiles>dev,local,${content-server.mode}-local</content-server.spring.profiles>
+    <content-server.spring.profiles>local,${content-server.mode}-local,dev,${content-server.mode}-dev</content-server.spring.profiles>
   </properties>
 
   <dependencies>

@@ -30,3 +30,5 @@ default['blueprint']['dev']['db']['schemas']['replication-live-server'] = 'cm_re
 default['blueprint']['dev']['db']['schemas']['caefeeder-preview'] = 'cm_mcaefeeder'
 #<> The schema, user and password for the caefeeder live
 default['blueprint']['dev']['db']['schemas']['caefeeder-live'] = 'cm_caefeeder'
+#<> The schema, user and password for editorial comments
+default['blueprint']['dev']['db']['schemas']['cm-editorial-comments'] = 'cm_editorial_comments'

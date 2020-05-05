@@ -19,7 +19,7 @@
     <@cm.include self=self view="asFooterNavigation"/>
   <#-- default -->
   <#else>
-    <@cm.include self=self view="asPlacement" />
+    <@cm.include self=self view="asContainer" />
   </#if>
 
 </div>

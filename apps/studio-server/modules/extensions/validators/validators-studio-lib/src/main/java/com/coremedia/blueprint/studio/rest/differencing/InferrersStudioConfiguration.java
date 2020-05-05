@@ -87,11 +87,6 @@ class InferrersStudioConfiguration {
     return ieReleavedPropertiesInferrer;
   }
 
-  /**
-   * @deprecated We will be removing the compression of code from the CAE as the frontend workspace provides options to compress
-   *             the code before it is uploaded to the content repository. When the compression is removed this property does not
-   *             have any effect.
-   */
   @Bean
   @Deprecated
   ZeroDefaultValuePropertyInferrer disableCompressPropertiesInferrer(@Value("CMAbstractCode") ContentType contentType) {

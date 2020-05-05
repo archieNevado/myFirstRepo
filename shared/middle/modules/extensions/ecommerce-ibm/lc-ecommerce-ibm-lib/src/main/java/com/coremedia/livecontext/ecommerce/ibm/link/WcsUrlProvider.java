@@ -287,7 +287,7 @@ public class WcsUrlProvider {
         } else {
           configureParametersForUrlReplacements(parameters, storeContext);
           resultUrl = insertContractIdParams(shoppingFlowUrlForContractPreviewWcs9, storeContext.getContractIdsForPreview());
-          resultUrl = CommercePropertyHelper.replaceTokens(resultUrl, parameters, false);
+          resultUrl = CommercePropertyHelper.propertySourcesPropertyResolver(parameters).resolvePlaceholders(resultUrl);
           resultUrl = CommercePropertyHelper.replaceTokens(resultUrl, storeContext);
 
           LOG.debug("Encoding WCS9 contract preview URL {}", resultUrl);

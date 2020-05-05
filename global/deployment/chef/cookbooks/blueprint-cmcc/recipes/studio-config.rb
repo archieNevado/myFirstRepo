@@ -26,6 +26,8 @@ if node['blueprint']['ibm-wcs']['enabled']
   node.default['blueprint']['apps']['studio-server']['application.properties']['livecontext.apache.live.production.wcs.host'] = "shop-ibm.#{node['blueprint']['hostname']}"
   node.default['blueprint']['apps']['studio-server']['application.properties']['livecontext.ibm.contract.preview.credentials.username'] = 'preview'
   node.default['blueprint']['apps']['studio-server']['application.properties']['livecontext.ibm.contract.preview.credentials.password'] = 'passw0rd'
+  node.default['blueprint']['apps']['studio-server']['application.properties']['commerce.hub.data.customEntityParams.environment'] = 'preview'
+
   # inject wcs configuration
   if node['blueprint']['ibm-wcs']['application.properties']
     node['blueprint']['ibm-wcs']['application.properties'].each_pair do |k, v|

@@ -2,6 +2,7 @@ package com.coremedia.blueprint.common.layout;
 
 import com.coremedia.blueprint.common.navigation.HasViewTypeName;
 import com.coremedia.blueprint.common.navigation.Linkable;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,13 @@ import java.util.Map;
  * @cm.template.api
  */
 public interface PageGridPlacement extends HasViewTypeName, Container<Linkable> {
+
+  @NonNull
+  @Override
+  default List<Object> getContainerMetadata() {
+    return List.of(getPropertyName());
+  }
+
   /**
    * Retrieves the items of this PageGridPlacement
    */

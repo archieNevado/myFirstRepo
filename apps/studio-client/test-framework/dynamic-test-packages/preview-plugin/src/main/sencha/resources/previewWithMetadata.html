@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Responsive Preview</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+  <script type="text/javascript" src="jquery-min.js"></script>
+  <script type="text/javascript" src="coremedia.preview.js"></script>
+</head>
+<!--
+  This HTML page offers the following parameters (defaults in brackets) to control the PBE behavior:
+
+  * content1 (content/2)
+  * content2 (content/4)
+  * content3 (content/6)
+
+-->
+
+<body data-cm-metadata="&#x5b;&#x7b;&quot;metadataBody&quot; : &quot;metadataBodyValue&quot;&#x7d;&#x5d;">
+<h1>HTML Ipsum Presents CM Metadata</h1>
+
+<div data-cm-metadata="&#x5b;&#x7b;&quot;metadataLevel1-1&quot; : &quot;metadataLevel1.1Value&quot;&#x7d;&#x5d;">
+  <ol data-cm-metadata="&#x5b;&#x7b;&quot;metadataLevel2-1&quot; : &quot;metadataLevel2.1Value&quot;&#x7d;, &#x7b;&quot;metadataLevel3-1&quot; : &#x7b;&quot;supportedLocale&quot; : &#x5b;&quot;en&quot;,&quot;de&quot;&#x5d;, &quot;content&quot; : &#x7b;&quot;$Ref&quot; : &quot;content/2&quot;&#x7d;&#x7d;&#x7d;&#x5d;">
+    <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+    <li>Aliquam tincidunt mauris eu risus.</li>
+  </ol>
+</div>
+
+<div data-cm-metadata="&#x5b;&#x7b;&quot;metadataLevel1-2&quot; : &quot;metadataLevel1.2Value&quot;&#x7d;&#x5d;">
+  <ul>
+    <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+    <li>Aliquam tincidunt mauris eu risus.</li>
+  </ul>
+</div>
+
+<p id="text-pbe" class="nodeWithPBEInfo"><a href="#">Text node with PBE info.</a></p>
+<p id="text-css" class="nodeWithCSSHoverConfig"><a href="#">Text node with CSS hover config</a></p>
+<p id="text-direct-property" class="nodeWithDirectProperty"><a href="#">Text node with direct property</a></p>
+
+<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam,
+  feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies
+  mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi,
+  condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum
+  rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent
+  dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat.
+  Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus</p>
+</body>
+</html>
+
+<script type="text/javascript">
+  // https://developer.mozilla.org/en-US/docs/Web/API/URL
+  var searchParams = {};
+  if (URL) {
+    var params = new URL(window.location.href).searchParams;
+    for (let p of params) {
+      searchParams[p[0]] = p[1];
+    }
+  } else {
+    var search = window.location.search;
+    search.replace(
+            new RegExp("([^?=&]+)(=([^&]*))?", "g"),
+            function ($0, $1, $2, $3) {
+              searchParams[$1] = $3;
+            }
+    );
+  }
+
+  var content = searchParams["content"];
+  var content1 = searchParams["content1"] || "content/2";
+  var content2 = searchParams["content2"] || "content/4";
+  var content3 = searchParams["content3"] || "content/6";
+
+  var metadata = [
+    {
+      "_": {
+        "$Ref": content1
+      }
+    },
+    {
+      "_": "properties.related"
+    },
+    {
+      "_": {
+        "$Ref": content2
+      }
+    }
+  ];
+  document.getElementById("text-pbe").setAttribute("data-cm-metadata", JSON.stringify(metadata));
+
+  metadata = [{"cm_highlightStrategy": "CSS"}, {"_": {"$Ref": content3}}];
+  document.getElementById("text-css").setAttribute("data-cm-metadata", JSON.stringify(metadata));
+
+  var metadata1 = [
+    {"cm_highlightStrategy": "CSS"},
+    {
+      "_": {
+        "$Ref": content
+      }
+    },{
+      "_": "properties.title"
+    }
+  ];
+  document.getElementById("text-direct-property").setAttribute("data-cm-metadata", JSON.stringify(metadata1));
+
+</script>

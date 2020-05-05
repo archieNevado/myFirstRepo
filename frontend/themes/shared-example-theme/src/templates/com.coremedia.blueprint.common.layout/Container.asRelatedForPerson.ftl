@@ -9,7 +9,7 @@
     @since 1901
 -->
 
-<#assign relatedView=cm.localParameters().relatedView!"asLandscapeBanner" />
+<#assign relatedView="asLandscapeBannerContainer" />
 
 <#if self.isPaginated()!false>
   <@cm.include self=self.asPagination() view=relatedView />

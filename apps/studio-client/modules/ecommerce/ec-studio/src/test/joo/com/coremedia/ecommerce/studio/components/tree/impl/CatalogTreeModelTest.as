@@ -1,9 +1,7 @@
 package com.coremedia.ecommerce.studio.components.tree.impl {
 import com.coremedia.cms.editor.sdk.EditorContextImpl;
 import com.coremedia.ecommerce.studio.AbstractCatalogStudioTest;
-import com.coremedia.ecommerce.studio.components.tree.impl.CatalogTreeModel;
 import com.coremedia.ui.models.NodeChildren;
-import com.coremedia.ui.models.TreeModel;
 
 import mx.resources.ResourceManager;
 

@@ -40,12 +40,13 @@
 @mixin cm-dark-background-focus-state {
   outline: none;
   box-shadow: inset 0 0 0 1px $cm-btn-secondary-border,
-              inset 0 0 0 2px #FFFFFF;
+  inset 0 0 0 2px #FFFFFF;
 }
+
 @mixin cm-light-background-focus-state {
   outline: none;
   box-shadow: inset 0 0 0 1px #FFFFFF,
-              inset 0 0 0 2px $cm-btn-primary-bg;
+  inset 0 0 0 2px $cm-btn-primary-bg;
 }
 
 // WCS page wrapper
@@ -55,6 +56,7 @@
   // input fields
   input {
     @include cm-input;
+
     &:focus {
       @include cm-light-background-focus-state;
     }
@@ -109,8 +111,10 @@
     input[id^="WC_AccountDisplay_FormInput_rememberMe_In_Logon_"] {
       margin: -6px 6px 0 0;
     }
+
     .sign_in_registration {
       color: $cm-text-color;
+
       .title > h1 {
         font-size: 24px;
         font-weight: 500;
@@ -118,15 +122,18 @@
         margin-top: 20px;
         margin-bottom: 10px;
       }
+
       .align {
         padding: 0;
         border: none;
       }
+
       .myaccount_header {
         background-color: transparent;
         border-color: $cm-border-color-default $wcs-border-color-grey-01 $wcs-border-color-grey-01;
         border: none;
         padding: 0;
+
         > .registration_header {
           color: $cm-text-color;
           font-size: $cm-font-size-large;
@@ -136,39 +143,52 @@
           margin-bottom: 10px;
         }
       }
+
       .myaccount_link {
         color: $cm-text-color;
       }
     }
   }
 
-  // breadcrumb widget & category page container
-  // wrapper
+  // hide breadcrumb widget & generic e-spot
   .rowContainer {
     padding-top: 10px;
-     > .row.margin-true {
-       > div {
-         #widget_breadcrumb {
-           display: none;
-           margin-top: 7px;
-           margin-bottom: 7px;
-           margin-left: 0;
-           padding-left: 0;
-         }
-       }
+
+    > .row.margin-true {
+      > div {
+        > .genericESpot {
+          &.previewEspot {
+            min-height: 0;
+            margin: 0;
+          }
+        }
+      }
+      #widget_breadcrumb {
+        display: none;
+      }
+
     }
+  }
+
+  // Espot
+
+  .emptyESpot, .previewEspot {
+    min-height: auto;
   }
 
   // fonts
   #widget_breadcrumb > ul li {
     color: $cm-text-color;
+
     a {
       color: $cm-text-color;
     }
+
     .divider {
       color: $cm-text-color;
       margin: 0 2px 0 4px;
     }
+
     &.current {
       color: $cm-text-color;
       text-decoration: underline;
@@ -180,31 +200,50 @@
     .collapsible {
       background-color: transparent;
       padding-left: 0;
+
       > h3 {
         font-size: $cm-font-size-h1;
         text-transform: uppercase;
         outline: none;
+
         &:before {
           top: -23px
         }
       }
+
       .content {
         .widget_left_nav {
           .section_list {
             // override deep nested rules
             background-color: transparent !important;
+
             a {
               color: $cm-text-color !important;
             }
           }
+
           .facetSelect li {
             border-bottom: none;
           }
         }
       }
+
       &.categoryNavWidget {
         margin-left: 0;
       }
+    }
+  }
+
+  // facet options on left
+
+  .facetWidget {
+    .clearAll {
+      position: relative;
+      float: none;
+      text-align: left;
+      right: auto;
+      top: auto;
+      padding-top: 5px;
     }
   }
 
@@ -219,8 +258,10 @@
       border-bottom-color: $cm-border-color-default;
       outline: none;
     }
+
     .facetSelect li {
       border-bottom: none;
+
       input {
         &.range_input {
           @include cm-input;
@@ -232,29 +273,41 @@
   // product listing widget
   .productListingWidget {
     border: none;
+
     > .header_bar {
       padding: 0 5px;
       border-bottom: none;
+
       > .title {
         padding: 10px 0 8px 0;
         @include cm-label-capitalize;
       }
+
       .sorting_controls {
         > span {
-          vertical-align: middle;
-          padding-top: 3px;
+          vertical-align: top;
+          padding-top: 4px;
           white-space: nowrap;
           text-overflow: ellipsis;
           overflow: hidden;
+
           > label {
             @include cm-label-capitalize;
           }
         }
+        .selectWrapperPageSize {
+          vertical-align: top;
+          .ui-icon {
+            margin-top: 8px;
+          }
+        }
       }
+
       .paging_controls {
         > * {
           vertical-align: top;
         }
+
         > .right_arrow,
         > .left_arrow {
           > img {
@@ -278,15 +331,22 @@
   .selectWrapper {
     padding-top: 0;
     background-color: transparent;
-    height: $wcs-control-height;
+    height: 22px;
     border-radius: $cm-border-radius-default;
     border-color: $cm-btn-secondary-border;
+    .wcSelect{
+      padding: 0;
+      .ui-selectmenu-text {
+        line-height: 1.2;
+      }
+    }
     .dijitSelect {
       border-radius: $cm-border-radius-default;
       font-family: $cm-font-family-sans-serif;
       font-size: $cm-font-size-base;
       color: $cm-text-color;
       padding: 0;
+
       .dijitButtonText {
         > span {
           padding-bottom: 3px !important; // WCS uses !important also
@@ -304,14 +364,17 @@
       border-color: $cm-btn-secondary-border;
       font-family: $cm-font-family-sans-serif;
       color: $cm-text-color;
+
       .dijitButtonContents {
         > .dijitButtonText {
           padding-left: 6px;
         }
       }
+
       .dijitArrowButtonContainer {
         position: relative;
         width: 15px;
+
         &:before {
           margin-top: -2px;
           right: 2px;
@@ -325,6 +388,7 @@
     &.number {
       height: $wcs-control-height;
       line-height: 20px;
+
       > a {
         @include cm-button-small;
       }
@@ -344,16 +408,20 @@
     position: absolute;
     top: -18px;
   }
+
   a.grid_icon:before {
     left: -39px;
   }
+
   div.grid_icon:before,
   a.grid_icon:hover:before {
     left: -58px;
   }
+
   a.list_icon:before {
     left: -78px;
   }
+
   div.list_icon:before,
   a.list_icon:hover:before {
     left: -99px;
@@ -361,22 +429,22 @@
 
   // product price
   .product_info {
-    margin-top: 24px;
+    margin-top: 0;
     > .product_name {
       > a {
         color: $cm-text-color;
-        text-align: center;
       }
     }
+
     > .product_price {
       color: $cm-text-color;
       font-family: $cm-font-family-serif;
       font-weight: normal;
-      text-align: center;
       > .price,
       > .old_price {
         @include cm-price-font;
       }
+
       > .price {
         font-size: $cm-font-size-large;
       }
@@ -387,11 +455,13 @@
   .compare_target {
     width: 100%;
     text-align: center;
+
     > label {
       color: $cm-text-color;
       font-size: $cm-font-size-base;
       font-weight: normal;
     }
+
     > input[type="checkbox"] {
       margin-top: 0;
     }
@@ -400,22 +470,26 @@
   // single price container
   .namePartPriceContainer {
     border-bottom-color: transparent;
+
     > div {
       > span {
         &.price,
         &.old_price {
           @include cm-price-font;
         }
+
         &.old_price {
           font-size: $cm-font-size-base;
         }
       }
+
       > h1 {
         &.main_header {
           font-size: $cm-font-size-h1;
         }
       }
     }
+
     > span {
       &.sku {
         font-size: $cm-font-size-base;
@@ -428,6 +502,7 @@
   .product_text,
   .available {
     border-bottom-color: transparent;
+
     > p,
     > .subHeading,
     > .check_stores {
@@ -487,10 +562,12 @@
       line-height: $wcs-shopping-button-height;
       border-color: $cm-btn-secondary-border;
       text-decoration: none;
+
       &:hover {
         background-color: $wcs-primary-button-hover-background-color;
         border-color: $wcs-primary-button-hover-background-color;
       }
+
       &:active, &:focus {
         @include cm-dark-background-focus-state;
       }
@@ -504,19 +581,24 @@
       background-color: $cm-btn-secondary-bg;
       border-color: $cm-btn-secondary-border;
       border-radius: $cm-border-radius-default;
+
       &:hover {
         background-color: $wcs-primary-button-select-hover-background-color;
       }
+
       > a {
         font-family: $cm-font-family-sans-serif;
         color: $cm-text-color;
         font-size: $cm-font-size-large;
+
         &:focus {
           @include cm-light-background-focus-state;
         }
       }
+
       > .drop {
         border-left-color: transparent;
+
         div {
           &:before {
             top: 4px;
@@ -539,15 +621,18 @@
         border-left: none;
         border-right: none;
         border-bottom: 2px solid transparent;
+
         .contentRecommendationWidget {
           border: none !important;
         }
       }
+
       > .active_tab {
         border-bottom-color: $cm-border-color-default;
       }
     }
   }
+
   .tab {
     border-color: transparent;
   }
@@ -561,6 +646,7 @@
   .catPos {
     background-color: transparent;
     border: none;
+
     > .container {
       background-color: transparent;
     }
@@ -615,16 +701,19 @@ div[id^="attrName_"] > table[id^="attrName_"] > tbody tr td {
   color: $cm-btn-primary-color !important;
   border: 1px solid $cm-btn-secondary-border;
   border-radius: $cm-border-radius-default;
+
   &:hover {
     background: none;
     background-color: $wcs-primary-button-hover-background-color;
     border-color: $wcs-primary-button-hover-background-color;
     text-decoration: none;
   }
+
   &:active, &:focus {
     text-decoration: none;
     @include cm-dark-background-focus-state;
   }
+
   > .button_text {
     border: none;
     padding: 9px 18px;
@@ -637,12 +726,15 @@ div[id^="attrName_"] > table[id^="attrName_"] > tbody tr td {
 #continueShoppingButton > a,
 .sign_in_registration a[role="button"].button_secondary {
   background-color: $cm-btn-secondary-bg;
+
   &:hover {
     background-color: $wcs-primary-button-select-hover-background-color;
   }
+
   &:active, &:focus {
     @include cm-light-background-focus-state;
   }
+
   > .button_text {
     color: $cm-text-color;
   }
@@ -653,6 +745,7 @@ div[id^="attrName_"] > table[id^="attrName_"] > tbody tr td {
   border-top-width: 1px;
   border-color: $cm-border-color-default;
   border-radius: 0;
+
   .footer .basicButton span {
     border: none;
   }
@@ -670,6 +763,7 @@ div {
       width: inherit !important;
       position: initial !important;
     }
+
     // override wcs styles for different media query width
     @media screen and (max-width: 600px) {
       width: 100% !important;
@@ -682,10 +776,10 @@ div {
       left: auto !important;
     }
     @include breakpoint("sm", "landscape") {
-      right: calc((100vw - #{1025px - $_padding_md})/2) !important;
+      right: calc((100vw - #{1025px - $_padding_md}) / 2) !important;
     }
     @include breakpoint("lg") {
-      right: calc((100vw - #{$cm-screen-lg-min - $_padding_lg})/2) !important;
+      right: calc((100vw - #{$cm-screen-lg-min - $_padding_lg}) / 2) !important;
     }
   }
 }

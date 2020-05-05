@@ -169,6 +169,15 @@
     <property name="resourceBundleInterceptor" ref="pageResourceBundlesInterceptor"/>
   </bean>
 
+  <bean id="blobHandler" class="com.coremedia.blueprint.cae.handlers.BlobHandler">
+    <description>
+      Handles standard blobs
+    </description>
+    <constructor-arg index="0" name="validationService" ref="validationService"/>
+    <constructor-arg index="1" name="mimeTypeService" ref="mimeTypeService"/>
+    <constructor-arg index="2" name="settingsService" ref="settingsService"/>
+  </bean>
+
   <bean id="transformedBlobHandler" class="com.coremedia.blueprint.cae.handlers.TransformedBlobHandler" parent="handlerBase">
     <description>
       Handles scaled/transformed images/blobs
@@ -180,7 +189,7 @@
 
   <bean id="capBlobHandler" class="com.coremedia.blueprint.cae.handlers.CapBlobHandler" parent="handlerBase">
     <description>
-      Handles standard images/blobs
+      Handles standard images/blobs referenced by a cap object
     </description>
     <property name="mimeTypeService" ref="mimeTypeService"/>
     <property name="validationService" ref="validationService"/>

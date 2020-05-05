@@ -12,7 +12,6 @@ import com.coremedia.livecontext.ecommerce.catalog.ProductAttribute;
 import com.coremedia.livecontext.ecommerce.catalog.VariantFilter;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceObject;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmCommerceBean;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapTransformationHelper;
@@ -35,17 +34,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Currency;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.util.Collections.emptyList;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * Base class for product and product variant implementation.
@@ -251,7 +247,6 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
    * Returns a "ready-to-use" storefront url that points to the shop product page.
    * Normally (when the commerce adapter supports it) it would come from the commerce adapter/system.
    * Until that happens we simulate this by computing this value for ourselves.
-   * Todo: change this implementation to read the url from delegate or use a template or whatsoever
    */
   @Override
   public String getStorefrontUrl() {

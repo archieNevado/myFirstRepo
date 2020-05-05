@@ -632,10 +632,6 @@ public class ThemeImporterImpl implements ThemeImporter {
       LOGGER.warn("The name {} indicates that the JavaScript is already minified and thus cannot be compressed significantly.", name);
       return false;
     }
-    if (!JavaScriptCompressionValidator.isCompressible(name, jsCode)) {
-      LOGGER.warn("Our JS compressor cannot handle {}.  See DEBUG logging for details.", name);
-      return false;
-    }
     return true;
   }
 

@@ -32,7 +32,6 @@ public class AMStudioRestConfiguration {
 
   private static final String CM_PICTURE_DOCTYPE = "CMPicture";
   private static final String CM_VIDEO_DOCTYPE = "CMVideo";
-  private static final String CM_ARTICLE_DOCTYPE = "CMArticle";
   private static final String AM_PICTURE_ASSET_DOCTYPE = "AMPictureAsset";
   private static final String AM_VIDEO_ASSET_DOCTYPE = "AMVideoAsset";
   private static final String AM_DOCUMENT_ASSET_DOCTYPE = "AMDocumentAsset";
@@ -152,12 +151,15 @@ public class AMStudioRestConfiguration {
 
   @Bean
   public AMDoctypeRewriteUploadInterceptor amDocumentUploadInterceptor(@NonNull ContentRepository contentRepository) {
-    ContentType articleDoctype = contentRepository.getContentType(CM_ARTICLE_DOCTYPE);
     ContentType amDocumentDoctype = contentRepository.getContentType(AM_DOCUMENT_ASSET_DOCTYPE);
-    if (articleDoctype == null || amDocumentDoctype == null) {
-      throw new IllegalStateException("Can not initialize UploadInterceptor. Missing Doctype " + CM_ARTICLE_DOCTYPE + " or " + AM_DOCUMENT_ASSET_DOCTYPE);
+    if (amDocumentDoctype == null) {
+      throw new IllegalStateException("Can not initialize UploadInterceptor. Missing Doctype " + AM_DOCUMENT_ASSET_DOCTYPE);
     }
 
-    return new AMDoctypeRewriteUploadInterceptor(articleDoctype, amDocumentDoctype);
+    AMDoctypeRewriteUploadInterceptor amDoctypeRewriteUploadInterceptor = new AMDoctypeRewriteUploadInterceptor(contentRepository.getContentContentType(), amDocumentDoctype);
+    amDoctypeRewriteUploadInterceptor.setInterceptingSubtypes(true);
+    // avoid that this interceptor is run before the other AMDoctypeRewriteUploadInterceptors
+    amDoctypeRewriteUploadInterceptor.setPriority(amDoctypeRewriteUploadInterceptor.getPriority() + 1);
+    return amDoctypeRewriteUploadInterceptor;
   }
 }

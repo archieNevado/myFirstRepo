@@ -34,7 +34,7 @@ public class ExternalPageLinkScheme {
     this.commerceConnectionSupplier = commerceConnectionSupplier;
   }
 
-  @Link(type = CMExternalPage.class, order = 2)
+  @Link(type = CMExternalPage.class, order = 4)
   @Nullable
   public UriComponents buildLinkForExternalPage(CMExternalPage externalPage, Map<String, Object> linkParameters,
                                                 HttpServletRequest request) {

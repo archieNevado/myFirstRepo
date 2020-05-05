@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!---
+ Created by fwienber on 29.06.2018.
+-->
+<editor:StudioPlugin
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns="exml:ext.config"
+        xmlns:ui="exml:com.coremedia.ui.config"
+        xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+>
+  <fx:Script><![CDATA[
+    import com.coremedia.cms.editor.sdk.util.FormatUtil;
+
+    public native function MyDynamicStudioPlugin(config:MyDynamicStudioPlugin = null);
+    ]]></fx:Script>
+
+  <editor:rules>
+    <editor:ExtensionsMenuToolbar>
+      <editor:plugins>
+        <ui:AddItemsPlugin>
+          <ui:items>
+            <Button id_="jooDynamicStudioModuleButton">
+              <baseAction>
+                <ui:OpenDialogAction
+                        tooltip="{resourceManager.getString('com.acme.coremedia.studio.MyDynamicProperties', 'extensionMenuButton_toolTip')}"
+                        text="{resourceManager.getString('com.acme.coremedia.studio.MyDynamicProperties', 'extensionMenuButton_text')}"
+                        iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'external_library')}">
+                  <ui:dialog>
+                    <Window id_="jooDynamicStudioModuleWindow"
+                            title="{resourceManager.getString('com.acme.coremedia.studio.MyDynamicProperties', 'windowTitle_text')}">
+                      <items>
+                        <Label html="{FormatUtil.format(resourceManager.getString('com.acme.coremedia.studio.MyDynamicProperties', 'windowContent_template'),
+                                                   resourceManager.getString('com.acme.coremedia.studio.MyDynamicProperties', 'windowContent_headline'),
+                                                   resourceManager.getString('com.acme.coremedia.studio.MyDynamicProperties', 'windowContent_text'))}"/>
+                      </items>
+                    </Window>
+                  </ui:dialog>
+                </ui:OpenDialogAction>
+              </baseAction>
+            </Button>
+          </ui:items>
+        </ui:AddItemsPlugin>
+      </editor:plugins>
+    </editor:ExtensionsMenuToolbar>
+
+  </editor:rules>
+
+</editor:StudioPlugin>

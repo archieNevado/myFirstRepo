@@ -18,3 +18,6 @@ CREATE SCHEMA cm_replication CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
 GRANT ALL PRIVILEGES ON cm_replication.* TO 'cm_replication'@'localhost' IDENTIFIED BY 'cm_replication';
 GRANT ALL PRIVILEGES ON cm_replication.* TO 'cm_replication'@'%' IDENTIFIED BY 'cm_replication';
 
+CREATE SCHEMA cm_editorial_comments CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+GRANT ALL PRIVILEGES ON cm_editorial_comments.* TO 'cm_editorial_comments'@'localhost' IDENTIFIED BY 'cm_editorial_comments';
+GRANT ALL PRIVILEGES ON cm_editorial_comments.* TO 'cm_editorial_comments'@'%' IDENTIFIED BY 'cm_editorial_comments';

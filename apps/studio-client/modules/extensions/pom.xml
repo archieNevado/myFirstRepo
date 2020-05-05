@@ -29,7 +29,6 @@
     <module>lc-asset</module>
     <module>lc-es</module>
     <module>lc-p13n</module>
-    <module>nuggad</module>
     <module>optimizely</module>
     <module>osm</module>
     <module>p13n</module>

@@ -24,7 +24,7 @@ public class CaasExecutionResultHandler implements ExecutionResultHandler {
         LOG.warn(exc.getMessage());
         return new ExecutionResultImpl((AbortExecutionException) exc.getCause());
       }
-      LOG.error(exc.getMessage());
+      LOG.error(exc.getMessage(), exc);
       return new ExecutionResultImpl(new CaasGraphQLError(exc.getCause()));
 
     }).thenApply(ExecutionResult::toSpecification);

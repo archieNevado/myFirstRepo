@@ -6,12 +6,17 @@ import com.coremedia.blueprint.cae.filter.SiteFilter;
 import com.coremedia.blueprint.cae.filter.UnknownMimetypeCharacterEncodingFilter;
 import com.coremedia.springframework.boot.web.servlet.RegistrationBeanBuilder;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.web.servlet.ConditionalOnMissingFilterBean;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.filter.OrderedRequestContextFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
+import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.filter.RequestContextFilter;
 
 import javax.servlet.Filter;
 import java.nio.charset.StandardCharsets;
@@ -30,6 +35,14 @@ public class CaeBaseComponentConfiguration {
     return RegistrationBeanBuilder.forFilter(filter)
             .order(Ordered.HIGHEST_PRECEDENCE)
             .build();
+  }
+
+  // reset request attributes (copied from org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration.WebMvcAutoConfigurationAdapter)
+  @Bean
+  @ConditionalOnMissingBean({ RequestContextListener.class, RequestContextFilter.class })
+  @ConditionalOnMissingFilterBean(RequestContextFilter.class)
+  public static RequestContextFilter requestContextFilter() {
+    return new OrderedRequestContextFilter();
   }
 
   @Bean

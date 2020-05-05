@@ -15,7 +15,6 @@
 
   <modules>
     <module>headless-server-base</module>
-    <module>headless-server-graphql-request-mapper</module>
     <module>json-preview-client</module>
   </modules>
 </project>

@@ -19,7 +19,7 @@ public interface CMExternalPage extends CMChannel {
   /**
    * Name of the document property 'externalId'.
    *
-   * <p>Useful for queries and content level code.
+   * <p>Useful for queries.
    */
   String EXTERNAL_ID = "externalId";
 

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editor:DashboardConfiguration
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:exml="http://www.jangaroo.net/exml/0.8"
+        xmlns="exml:ext.config"
+        xmlns:editor="exml:com.coremedia.cms.editor.sdk.config">
+  <fx:Script><![CDATA[
+    public static const xtype:String = "acme.config.fixedSearchWidgetDashboardConfiguration";
+
+    private var config:FixedSearchWidgetDashboardConfiguration;
+
+    public native function FixedSearchWidgetDashboardConfiguration(config:FixedSearchWidgetDashboardConfiguration = null);
+    ]]></fx:Script>
+
+  <editor:widgets>
+    <editor:WidgetState widgetTypeId="testWidgetType"/>
+  </editor:widgets>
+
+  <editor:types>
+    <editor:FixedSearchWidgetType id_="testWidgetType">
+      <editor:search>
+        <editor:SearchState searchText="story752fixedSearchWidget"/>
+      </editor:search>
+    </editor:FixedSearchWidgetType>
+  </editor:types>
+
+</editor:DashboardConfiguration>

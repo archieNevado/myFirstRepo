@@ -14,13 +14,12 @@
     <#-- render the placement items -->
     <#-- sidebar -->
     <#elseif self.name! == "sidebar">
-      <#-- flatten items to avoid nested layouts in sidebar -->
-      <#list self.flattenedItems![] as item>
+      <#list self.items![] as item>
         <@cm.include self=item view="asSquareBanner" />
       </#list>
     <#-- default -->
     <#else>
-      <@cm.include self=self view="asPlacement" />
+      <@cm.include self=self view="asContainer" />
     </#if>
   </div>
 </#if>

@@ -53,6 +53,9 @@ public class AMDoctypeRewriteUploadInterceptor extends ContentWriteInterceptorBa
   @Nullable
   private Content createContent(@NonNull ContentWriteRequest request) {
     Map<String, Object> properties = request.getProperties();
+    if (!properties.containsKey(DATA_ATTRIBUTE)) {
+      return null;
+    }
     Object data = properties.get(DATA_ATTRIBUTE);
     properties.remove(DATA_ATTRIBUTE);
 

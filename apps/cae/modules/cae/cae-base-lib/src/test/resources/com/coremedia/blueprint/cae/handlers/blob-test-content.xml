@@ -25,6 +25,7 @@
             <document id="16" type="CMPicture" name="nä me.jpg">
               <version number="1">
                 <blobProperty name="data" url="16data.jpg" type="image/jpeg"/>
+                <markupProperty name="localSettings" url="24localSettings.xml" grammar="coremedia-struct-2008"/>
               </version>
             </document>
             <document id="18" type="CMPicture" name="pic18">

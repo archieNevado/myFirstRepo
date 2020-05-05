@@ -6,6 +6,7 @@ import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.livecontext.contentbeans.LiveContextExternalChannel;
 import com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -65,9 +66,9 @@ public class LiveContextExternalChannelPreviewHandler extends LiveContextPageHan
   }
 
   @SuppressWarnings("unused")
-  @Link(type = LiveContextExternalChannelImpl.class)
+  @Link(type = LiveContextExternalChannel.class)
   @Nullable
-  public UriComponents buildLinkForExternalChannel(@NonNull LiveContextExternalChannelImpl navigation, String viewName,
+  public UriComponents buildLinkForExternalChannel(@NonNull LiveContextExternalChannel navigation, String viewName,
                                                    Map<String, Object> linkParameters, HttpServletRequest request) {
     Optional<StoreContext> storeContext = CurrentStoreContext.find();
     if (storeContext.isEmpty()) {

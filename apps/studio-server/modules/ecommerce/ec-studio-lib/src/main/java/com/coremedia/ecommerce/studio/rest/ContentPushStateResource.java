@@ -7,7 +7,7 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
 import com.coremedia.livecontext.ecommerce.push.PushService;
 import com.coremedia.livecontext.ecommerce.push.PushState;
-import com.coremedia.rest.linking.EntityResource;
+import com.coremedia.rest.controller.EntityController;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +23,7 @@ import static com.coremedia.ecommerce.studio.rest.ContentPushStateResource.URI_P
 
 @RestController
 @RequestMapping(value = URI_PATH, produces = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
-public class ContentPushStateResource implements EntityResource<PushState> {
+public class ContentPushStateResource implements EntityController<PushState> {
 
   private static final String PATH_PARAM_CAP_ID = "id";
   static final String URI_PATH = "livecontext/pushState/content/{" + PATH_PARAM_CAP_ID + ":[0-9]+}";

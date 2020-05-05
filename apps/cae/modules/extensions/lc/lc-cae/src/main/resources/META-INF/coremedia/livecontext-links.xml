@@ -41,7 +41,6 @@
     <property name="removeJSession" value="true"/>
     <property name="liveContextLinkResolverList" ref="liveContextLinkResolvers"/>
     <property name="currentContextService" ref="currentContextService"/>
-    <property name="settingsService" ref="settingsService"/>
   </bean>
 
   <util:list id="liveContextLinkResolvers">
@@ -53,9 +52,7 @@
   </util:list>
 
   <bean id="commerceLedLinkBuilderHelper" class="com.coremedia.livecontext.logictypes.CommerceLedLinkBuilderHelper">
-    <property name="contentURLKeyword" value="${livecontext.content-url-prefix}"/>
     <!--Use legacyExternalSeoSegmentBuilder for the legacy format-->
-    <property name="seoSegmentBuilder" ref="externalSeoSegmentBuilder"/>
     <property name="settingsService" ref="settingsService"/>
   </bean>
 

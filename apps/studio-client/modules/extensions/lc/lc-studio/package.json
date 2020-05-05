@@ -3,6 +3,10 @@
     {
       "mainClass": "com.coremedia.livecontext.studio.LivecontextStudioPlugin",
       "name": "Livecontext Extensions"
+    },
+    {
+      "mainClass": "com.coremedia.livecontext.studio.desktop.ClassicLCStudioPlugin",
+      "name": "ClassicLCStudioPlugin"
     }
   ]
 }

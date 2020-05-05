@@ -103,6 +103,11 @@
       <artifactId>feedback-hub-rest-component</artifactId>
       <scope>runtime</scope>
     </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>editorial-comments-rest</artifactId>
+      <scope>runtime</scope>
+    </dependency>
     <!-- bpbase -->
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
@@ -156,6 +161,11 @@
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
       <artifactId>image-transformation</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>multi-site</artifactId>
       <scope>runtime</scope>
     </dependency>
 

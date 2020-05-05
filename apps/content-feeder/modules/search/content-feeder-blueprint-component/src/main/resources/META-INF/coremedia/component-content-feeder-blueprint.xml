@@ -132,8 +132,11 @@
           <list>
             <value>settings</value>
             <value>localSettings</value>
+            <value>localizations</value>
           </list>
         </property>
+        <property name="propertyDescriptorPredicate" ref="contentFeederPropertyDescriptorPredicate"/>
+        <property name="propertyValuePredicate" ref="contentFeederPropertyValuePredicate"/>
       </bean>
 
       <ref bean="contentFeederLanguageFeedablePopulator"/>

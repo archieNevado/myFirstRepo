@@ -233,6 +233,12 @@
         </exclusion>
       </exclusions>
     </dependency>
+    <dependency>
+      <!-- replacement for excluded transitive dependency org.tallison:metadata-extractor of tika-parsers -->
+      <groupId>com.drewnoakes</groupId>
+      <artifactId>metadata-extractor</artifactId>
+      <scope>runtime</scope>
+    </dependency>
 
     <!-- begin java-11-dependencies -->
     <dependency>

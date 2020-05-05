@@ -1,12 +1,12 @@
 package com.coremedia.blueprint.cae.web.taglib;
 
-import com.coremedia.blueprint.base.cae.web.taglib.CssClassFor;
 import com.coremedia.blueprint.base.cae.web.taglib.ImageFunctions;
 import com.coremedia.blueprint.base.cae.web.taglib.UniqueIdGenerator;
 import com.coremedia.blueprint.base.cae.web.taglib.ViewHookEventNamesFreemarker;
 import com.coremedia.blueprint.base.links.UriConstants;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.action.webflow.BlueprintFlowUrlHandler;
+import com.coremedia.blueprint.cae.handlers.BlobHandler;
 import com.coremedia.blueprint.cae.web.FreemarkerEnvironment;
 import com.coremedia.blueprint.cae.web.links.ThemeResourceLinkBuilder;
 import com.coremedia.blueprint.coderesources.ThemeService;
@@ -38,7 +38,9 @@ import com.coremedia.mimetype.MimeTypeService;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
+import com.coremedia.objectserver.util.RequestServices;
 import com.coremedia.objectserver.web.UserVariantHelper;
+import com.coremedia.objectserver.web.links.LinkFormatter;
 import com.coremedia.objectserver.web.taglib.MetadataTagSupport;
 import com.coremedia.xml.Markup;
 import com.coremedia.xml.MarkupUtil;
@@ -214,29 +216,6 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
     return UniqueIdGenerator.generateId(prefix, FreemarkerEnvironment.getCurrentRequest());
   }
 
-  @Deprecated(since = "2001", forRemoval = true)
-  public String cssClassFor(Boolean itemHasNext, Integer index, Boolean createCssClassAttribute) {
-    return com.coremedia.blueprint.base.cae.web.taglib.CssClassFor.cssClassFor(itemHasNext, index,
-            createCssClassAttribute);
-  }
-
-  @Deprecated(since = "2001", forRemoval = true)
-  public String cssClassForFirstLast(Boolean itemHasNext, Integer index, Boolean createCssClassAttribute) {
-    return com.coremedia.blueprint.base.cae.web.taglib.CssClassFor.cssClassForFirstLast(itemHasNext, index,
-            createCssClassAttribute);
-  }
-
-  @Deprecated(since = "2001", forRemoval = true)
-  public String cssClassForOddEven(Boolean itemHasNext, Integer index, Boolean createCssClassAttribute) {
-    return com.coremedia.blueprint.base.cae.web.taglib.CssClassFor.cssClassForOddEven(itemHasNext, index,
-            createCssClassAttribute);
-  }
-
-  @Deprecated(since = "2001", forRemoval = true)
-  public String cssClassAppendNavigationActive(String currentCssClass, String appendix, Object navigation, List<Object> navigationPathList) {
-    return CssClassFor.cssClassAppendNavigationActive(currentCssClass, appendix, navigation, navigationPathList);
-  }
-
   public String getStackTraceAsString(Exception e) {
     //print stackTrace the Java way here so that we automatically get all causes, messages etc.
     StringWriter stringWriter = new StringWriter(); //NOSONAR
@@ -399,7 +378,9 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
   /**
    * @param container The container the metadata should be determined for
    * @return The metadata that was determined as list
+   * @deprecated since 2004, use {@link Container#getContainerMetadata()} instead.
    */
+  @Deprecated(since="2004")
   public Object getContainerMetadata(Container container) {
     if (container instanceof ContainerWithViewTypeName) {
       return getContainerMetadata(((ContainerWithViewTypeName) container).getBaseContainer());
@@ -628,6 +609,30 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
     return themeResourceLinkBuilder.getLinkToThemeResource(pathToResource,
                                                            FreemarkerEnvironment.getCurrentRequest(),
                                                            FreemarkerEnvironment.getCurrentResponse());
+  }
+
+  /**
+   * Generates a link to the given blob ending with the given filename.
+   *
+   * @param blob the blob the link should be generated for
+   * @param filename the filename
+   * @return a link to the given blob ending with the given filename
+   */
+  public String getBlobLink(Blob blob, String filename) {
+    HttpServletRequest request = FreemarkerEnvironment.getCurrentRequest();
+    LinkFormatter linkFormatter = (LinkFormatter) request.getAttribute(RequestServices.LINK_FORMATTER);
+    if( linkFormatter == null ) {
+      throw new IllegalStateException("No LinkFormatter available");
+    }
+    Object oldFilename = request.getAttribute(BlobHandler.ATTRIBUTE_FILENAME);
+    request.setAttribute(BlobHandler.ATTRIBUTE_FILENAME, filename);
+    try {
+      return linkFormatter.formatLink(blob, null, request, FreemarkerEnvironment.getCurrentResponse(), false);
+    } finally {
+      if (oldFilename != null) {
+        request.setAttribute(BlobHandler.ATTRIBUTE_FILENAME, oldFilename);
+      }
+    }
   }
 
   /**

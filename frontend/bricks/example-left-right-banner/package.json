@@ -4,7 +4,8 @@
   "private": true,
   "dependencies": {
     "@coremedia/brick-utils": "^1.0.0",
-    "@coremedia/brick-default-teaser": "^1.0.0"
+    "@coremedia/brick-default-teaser": "^1.0.0",
+    "@coremedia/brick-node-decoration-service": "^1.0.0"
   },
   "devDependencies": {
     "prettier": "^1.0.0"
@@ -13,6 +14,7 @@
     "prettier": "prettier \"**/*\" --write"
   },
   "coremedia": {
-    "type": "brick"
+    "type": "brick",
+    "init": "src/js/init.js"
   }
 }

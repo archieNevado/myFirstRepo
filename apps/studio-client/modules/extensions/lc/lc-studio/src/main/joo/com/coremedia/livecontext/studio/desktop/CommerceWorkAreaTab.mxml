@@ -65,6 +65,8 @@
                           ui="{SplitterSkin.PREMULAR.getSkin()}"
                           width="4px"
                           collapseOnDblClick="false"/>
+
+    <!-- PREVIEW -->
     <editor:PreviewPanel itemId="{PREVIEW_PANEL_ITEM_ID}"
                          flex="1"
                          height="100%"
@@ -73,9 +75,11 @@
                          collapseHandler="{function():void {collapsePanel(PREVIEW_PANEL_ITEM_ID);}}"
                          bindTo="{getEntityExpression()}"
                          reloadAfterChangesDelay="1000"/>
+
+    <!-- ACTIONS TOOLBAR -->
+    <editor:ActionsToolbarContainer/>
   </local:items>
   <local:layout>
     <layout_HBox/>
   </local:layout>
-
 </local:CommerceWorkAreaTabBase>

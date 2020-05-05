@@ -10,6 +10,7 @@
     "theme-importer": "cm theme-importer"
   },
   "dependencies": {
+    "@coremedia-examples/brick-tag-management": "^1.0.0",
     "@coremedia-examples/brick-360-spinner": "^1.0.0",
     "@coremedia-examples/brick-carousel-banner": "^1.0.0",
     "@coremedia-examples/brick-detail": "^1.0.0",

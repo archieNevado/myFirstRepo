@@ -17,10 +17,10 @@ import java.util.List;
 /**
  * Adds a custom column for the lifecycle status of a content.
  */
-class YouTubeColumnProvider extends DefaultColumnProvider {
+public class YouTubeColumnProvider extends DefaultColumnProvider {
 
-  static final String DATA_INDEX_NAME_COLUMN = "name";
-  static final String DATA_INDEX_LAST_MODIFIED = "lastModified";
+  public static final String DATA_INDEX_NAME_COLUMN = "name";
+  public static final String DATA_INDEX_LAST_MODIFIED = "lastModified";
 
   @NonNull
   @Override

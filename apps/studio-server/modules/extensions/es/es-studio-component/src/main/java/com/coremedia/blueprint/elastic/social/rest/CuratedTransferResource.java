@@ -14,7 +14,6 @@ import com.coremedia.elastic.social.api.comments.Comment;
 import com.coremedia.elastic.social.api.comments.CommentService;
 import com.coremedia.elastic.social.api.reviews.ReviewService;
 import com.coremedia.elastic.social.api.users.CommunityUser;
-import com.coremedia.rest.linking.AbstractLinkingResource;
 import com.coremedia.xml.Markup;
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.StringUtils;
@@ -45,7 +44,7 @@ import static com.coremedia.elastic.social.rest.api.ElasticSocialRestConstants.E
 @Named
 @RestController
 @RequestMapping(value = CuratedTransferResource.PATH, produces = MediaType.APPLICATION_JSON_VALUE)
-public class CuratedTransferResource extends AbstractLinkingResource {
+public class CuratedTransferResource {
   public static final String PATH = ELASTIC_SOCIAL_REST_PREFIX + "/curate";
   private static final Logger LOG = LoggerFactory.getLogger(CuratedTransferResource.class);
   private static final String LINEBREAK = "\r\n";

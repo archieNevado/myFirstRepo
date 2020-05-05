@@ -20,9 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper.format;
 import static com.google.common.base.Strings.isNullOrEmpty;
@@ -73,8 +71,9 @@ public class CommerceSegmentSource extends AbstractContextSource {
   }
 
   private static boolean isEmpty(@NonNull UserContext userContext) {
-    return Stream.of(userContext.getUserId(), userContext.getUserName(), userContext.getCookieHeader())
-            .allMatch(Objects::isNull);
+    return userContext.getUserId() == null
+            && userContext.getUserName() == null
+            && userContext.getCookies().isEmpty();
   }
 
   @NonNull

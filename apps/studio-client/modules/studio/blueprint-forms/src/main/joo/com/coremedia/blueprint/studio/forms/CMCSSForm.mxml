@@ -27,8 +27,6 @@
           <editor:items>
             <editor:StringPropertyField propertyName="dataUrl"/>
             <editor:RichTextPropertyField propertyName="code"/>
-            <editor:BooleanPropertyField bindTo="{config.bindTo}"
-                                         propertyName="disableCompress"/>
           </editor:items>
         </editor:PropertyFieldGroup>
         <editor:PropertyFieldGroup

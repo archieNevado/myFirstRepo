@@ -129,12 +129,6 @@
       </dependency>
       <dependency>
         <groupId>com.coremedia.blueprint</groupId>
-        <artifactId>nuggad-studio</artifactId>
-        <version>1-SNAPSHOT</version>
-        <type>swc</type>
-      </dependency>
-      <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
         <artifactId>optimizely-studio</artifactId>
         <version>1-SNAPSHOT</version>
         <type>swc</type>

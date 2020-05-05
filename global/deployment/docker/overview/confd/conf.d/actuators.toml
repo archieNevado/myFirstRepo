@@ -2,6 +2,7 @@
 src   = "actuators.html.tmpl"
 dest  = "/usr/share/nginx/html/assets/actuators.html"
 keys  = [
+        "/environment/fqdn",
         "/studio/packages/proxy/enabled",
         "/commerce/mock/enabled",
         "/commerce/sfcc/enabled",

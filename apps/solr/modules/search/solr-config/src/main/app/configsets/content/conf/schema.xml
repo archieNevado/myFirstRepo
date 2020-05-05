@@ -72,6 +72,11 @@
   <field name="numericid" type="content" indexed="true" stored="false"/>
 
   <!--
+    The UUID of the content
+  -->
+  <field name="uuid" type="uuid" indexed="true" stored="true"/>
+
+  <!--
     The name of the content.
     This field is required for the Content Feeder.
     It also gets copied to the "name_lc" field, which supports case-insenstive sorting.
@@ -143,8 +148,8 @@
 
   <!--
     A set of IDs of CoreMedia groups which potentially have read rights on the
-    CoreMedia content. This can be used to restrict the number of candidate
-    search results.
+    CoreMedia content, if this content is not deleted.
+    This can be used to restrict the number of candidate search results.
 
     The Content Feeder feeds this field with the correct groups that have read rights on the content
     as long as the following constructs of the rights system are not used:
@@ -189,6 +194,7 @@
   <field name="isplaceapproved"      type="boolean" indexed="true" stored="true"/>
   <field name="isplacepublished"     type="boolean" indexed="true" stored="true"/>
   <field name="latestversion"        type="pint"    indexed="true" stored="false"/>
+  <field name="latestversionuuid"    type="uuid"    indexed="true" stored="true"/>
 
   <!-- The set of referenced contents as numeric IDs -->
   <field name="references"           type="content" indexed="true" stored="false" multiValued="true"/>
@@ -463,6 +469,8 @@
       <filter class="solr.LowerCaseFilterFactory" />
     </analyzer>
   </fieldType>
+
+  <fieldType name="uuid" class="solr.UUIDField"/>
 
   <!-- since fields of this type are by default not stored or indexed,
        any data added to them will be ignored outright.  -->

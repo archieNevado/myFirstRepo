@@ -1,6 +1,6 @@
 package com.coremedia.blueprint.contenthub.adapters.youtube;
 
-interface YouTubeContentHubSettings {
+public interface YouTubeContentHubSettings {
   String getDisplayName();
   String getCredentialsJson();
   String getChannelId();

@@ -159,9 +159,6 @@ public interface CMAbstractCode extends CMLocalized {
 
   /**
    * Name of the document property 'disableCompress'.
-   *
-   * @deprecated  We will be removing the compression of code from the CAE as the frontend workspace provides
-   *              options to compress the code before it is uploaded to the content repository.
    */
   @Deprecated
   String DISABLE_COMPRESSION = "disableCompress";
@@ -170,9 +167,6 @@ public interface CMAbstractCode extends CMLocalized {
    * Returns the value of the document property {@link #DISABLE_COMPRESSION}.
    *
    * @return the value of the document property {@link #DISABLE_COMPRESSION}
-   *
-   * @deprecated We will be removing the compression of code from the CAE as the frontend workspace provides
-   *             options to compress the code before it is uploaded to the content repository.
    */
   @Deprecated
   boolean isCompressionDisabled();

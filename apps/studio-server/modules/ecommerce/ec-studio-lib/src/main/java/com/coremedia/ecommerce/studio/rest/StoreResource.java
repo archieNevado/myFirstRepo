@@ -11,8 +11,6 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.p13n.MarketingSpot;
-import com.coremedia.rest.linking.LinkResolver;
-import com.coremedia.rest.linking.LinkResolverUtil;
 import com.coremedia.rest.linking.ResponseLocationHeaderLinker;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -53,9 +51,6 @@ public class StoreResource extends AbstractCatalogResource<Store> {
   private List<PbeShopUrlTargetResolver> pbeShopUrlTargetResolvers = emptyList();
 
   @Autowired
-  private LinkResolver linkResolver;
-
-  @Autowired
   private CategoryAugmentationHelper categoryAugmentationHelper;
 
   @Autowired
@@ -71,8 +66,8 @@ public class StoreResource extends AbstractCatalogResource<Store> {
 
   @PostMapping("urlService")
   @Nullable
-  public Object handlePost(@PathVariable Map<String, String> params, @RequestBody @NonNull Map<String, Object> rawJson) {
-    String shopUrlStr = (String) rawJson.get(SHOP_URL_PBE_PARAM);
+  public Object handlePost(@PathVariable Map<String, String> params, @RequestBody @NonNull Map<String, Object> json) {
+    String shopUrlStr = (String) json.get(SHOP_URL_PBE_PARAM);
     Object resolved = null;
     if (shopUrlStr != null) {
       resolved = findFirstPbeShopUrlTargetResolver(params, shopUrlStr).orElse(null);
@@ -101,15 +96,13 @@ public class StoreResource extends AbstractCatalogResource<Store> {
   @PostMapping("augment")
   @ResponseLocationHeaderLinker
   @Nullable
-  public Content augment(@RequestBody @NonNull Map<String, Object> rawJson) {
-    Object catalogObject = LinkResolverUtil.resolveJson(rawJson, linkResolver);
-
+  public Content augment(@RequestBody @NonNull Object catalogObject) {
     if (catalogObject instanceof Category) {
       return categoryAugmentationHelper.augment((Category) catalogObject);
     } else if (catalogObject instanceof Product) {
       return productAugmentationHelper.augment((Product) catalogObject);
     } else {
-      LOG.debug("Cannot augment object {}: only categories are supported. JSON parameters: {}", catalogObject, rawJson);
+      LOG.debug("Cannot augment object {}: only categories and products are supported. JSON parameters: {}", catalogObject, catalogObject);
       return null;
     }
   }

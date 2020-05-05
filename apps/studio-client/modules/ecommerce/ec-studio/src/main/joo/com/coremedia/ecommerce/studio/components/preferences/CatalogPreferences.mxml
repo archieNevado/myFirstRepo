@@ -35,7 +35,7 @@
                   boxLabel="{resourceManager.getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'EcCatalogPreferences_sort_children')}">
           <plugins>
             <ui:BindPropertyPlugin bidirectional="true"
-                                   ifUndefined="true"
+                                   ifUndefined="false"
                                    bindTo="{getSortCategoriesByNameExpression()}"/>
           </plugins>
         </Checkbox>

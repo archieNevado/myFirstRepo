@@ -7,7 +7,8 @@ ENV COMMERCE_MOCK_ENABLED=false \
     COMMERCE_WCS_ENABLED=false \
     COMMERCE_WCS_HOST="" \
     COMMERCE_WCS_VERSION="8.0" \
-    STUDIO_PACKAGES_PROXY_ENABLED=false
+    STUDIO_PACKAGES_PROXY_ENABLED=false \
+    PWA_ENABLED=false
 COPY entrypoint.sh /entrypoint.sh
 RUN apk add --update \
       curl \

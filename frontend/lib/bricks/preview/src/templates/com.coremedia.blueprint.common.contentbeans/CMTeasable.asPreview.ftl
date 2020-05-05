@@ -3,7 +3,7 @@
 <#assign fragmentViews=[
   {
     "viewName": "",
-    "titleKey": "preview_label_DEFAULT"
+    "titleKey": "preview_label_default"
   }] />
 
 <#assign fragmentedPreviews=bp.previewTypes(cmpage, self, fragmentViews)/>

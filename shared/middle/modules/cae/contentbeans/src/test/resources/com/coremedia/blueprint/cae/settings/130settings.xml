@@ -5,6 +5,11 @@
   <LinkListProperty Name="linkListProperty" LinkType="coremedia:///cap/contenttype/CMTeasable">
     <Link xlink:href="coremedia:///cap/resources/124"/>
   </LinkListProperty>
+  <MarkupProperty Name="markupProperty" Grammar="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <p>
+        <a xlink:actuate="onRequest" xlink:show="replace" xlink:type="simple" xlink:href="coremedia:///cap/resources/124">Some Link</a>
+      </p>
+    </div></MarkupProperty>
   <StructListProperty Name="structListProperty">
     <Struct>
       <StringProperty Name="simpleString1">simple string1</StringProperty>

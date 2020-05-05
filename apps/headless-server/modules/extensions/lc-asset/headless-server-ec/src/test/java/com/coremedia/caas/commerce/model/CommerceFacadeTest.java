@@ -109,7 +109,7 @@ public class CommerceFacadeTest {
   public void getProduct() {
     CommerceId commerceId = CommerceIdParserHelper.parseCommerceId(PRODUCT_ID).get();
     when(commerceBeanFactory.createBeanFor(commerceId, storeContext)).thenReturn(product);
-    Product gotProduct = commerceFacade.getProduct(PRODUCT_ID, SITE_ID);
+    Product gotProduct = commerceFacade.getProduct(PRODUCT_ID, SITE_ID).getData();
     assertSame(product, gotProduct);
   }
 
@@ -118,7 +118,7 @@ public class CommerceFacadeTest {
     when(commerceIdProvider.formatProductTechId(CATALOG_ALIAS, PRODUCT_ID)).thenReturn(commerceId);
     when(catalogService.findProductById(commerceId, storeContext)).thenReturn(product);
 
-    Product product = commerceFacade.getProductByTechId(PRODUCT_ID, SITE_ID);
+    Product product = commerceFacade.getProductByTechId(PRODUCT_ID, SITE_ID).getData();
 
     assertNotNull(product);
     verify(catalogService).findProductById(commerceId, storeContext);
@@ -129,7 +129,7 @@ public class CommerceFacadeTest {
     String catalogId = "ibm:///catalog/catalog/3074457345616676668";
     CommerceId commerceId = CommerceIdParserHelper.parseCommerceId(catalogId).get();
     when(commerceBeanFactory.createBeanFor(commerceId, storeContext)).thenReturn(catalog);
-    Catalog gotCatalog = commerceFacade.getCatalog(catalogId, SITE_ID);
+    Catalog gotCatalog = commerceFacade.getCatalog(catalogId, SITE_ID).getData();
     assertSame(catalog, gotCatalog);
   }
 
@@ -137,7 +137,7 @@ public class CommerceFacadeTest {
   public void getCatalogByAlias() {
     String catalogAlias = "testAlias";
     when(catalogService.getCatalog(CatalogAlias.of(catalogAlias), storeContext)).thenReturn(Optional.of(catalog));
-    Catalog catalog = commerceFacade.getCatalogByAlias(catalogAlias, SITE_ID);
+    Catalog catalog = commerceFacade.getCatalogByAlias(catalogAlias, SITE_ID).getData();
 
     assertNotNull(catalog);
     verify(catalogService).getCatalog(CatalogAlias.of(catalogAlias), storeContext);
@@ -155,7 +155,7 @@ public class CommerceFacadeTest {
   @Test
   public void getCatalogs() {
     when(catalogService.getCatalogs(storeContext)).thenReturn(Collections.singletonList(catalog));
-    List<Catalog> catalogs = commerceFacade.getCatalogs(SITE_ID);
+    List<Catalog> catalogs = commerceFacade.getCatalogs(SITE_ID).getData();
 
     assertNotNull(catalogs);
     assertTrue(catalogs.size() > 0);
@@ -167,7 +167,7 @@ public class CommerceFacadeTest {
     CommerceId commerceId = CommerceIdParserHelper.parseCommerceId(CATEGORY_ID).get();
     when(commerceBeanFactory.createBeanFor(commerceId, storeContext)).thenReturn(category);
 
-    Category gotCategory = commerceFacade.getCategory(CATEGORY_ID, SITE_ID);
+    Category gotCategory = commerceFacade.getCategory(CATEGORY_ID, SITE_ID).getData();
     assertSame(category, gotCategory);
   }
 
@@ -175,7 +175,7 @@ public class CommerceFacadeTest {
   public void findProductBySeoSegment() {
     String seoSegment = "testSegment";
     when(catalogService.findProductBySeoSegment(seoSegment, storeContext)).thenReturn(product);
-    Product product = commerceFacade.findProductBySeoSegment(seoSegment, SITE_ID);
+    Product product = commerceFacade.findProductBySeoSegment(seoSegment, SITE_ID).getData();
 
     assertNotNull(product);
     verify(catalogService).findProductBySeoSegment(seoSegment, storeContext);
@@ -186,7 +186,7 @@ public class CommerceFacadeTest {
     String productVariantId = "ibm:///catalog/sku/catalog:master;techId:3074457345616680732";
     CommerceId commerceId = CommerceIdParserHelper.parseCommerceId(productVariantId).get();
     when(commerceBeanFactory.createBeanFor(commerceId, storeContext)).thenReturn(productVariant);
-    Product gotProductVariant = commerceFacade.getProductVariant(productVariantId, SITE_ID);
+    Product gotProductVariant = commerceFacade.getProductVariant(productVariantId, SITE_ID).getData();
     assertSame(productVariant, gotProductVariant);
   }
 
@@ -194,7 +194,7 @@ public class CommerceFacadeTest {
   public void findCategoryBySeoSegment() {
     String seoSegment = "testSegment";
     when(catalogService.findCategoryBySeoSegment(seoSegment, storeContext)).thenReturn(category);
-    Category category = commerceFacade.findCategoryBySeoSegment(seoSegment, SITE_ID);
+    Category category = commerceFacade.findCategoryBySeoSegment(seoSegment, SITE_ID).getData();
 
     assertNotNull(category);
     verify(catalogService).findCategoryBySeoSegment(seoSegment, storeContext);

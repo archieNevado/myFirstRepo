@@ -19,9 +19,7 @@
       <@cm.include self=self.asPagination() view="asLeftRightBanner" />
     <#else>
       <#list self.items![] as item>
-        <div class="cm-left-right-banner-grid__item">
-          <@cm.include self=item view="asTeaser" params={"even": item?is_even_item}/>
-        </div>
+        <@cm.include self=item view="_leftRightBannerGridItem" />
       </#list>
     </#if>
   </div>

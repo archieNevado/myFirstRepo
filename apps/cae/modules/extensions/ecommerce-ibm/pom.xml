@@ -19,6 +19,5 @@
   <modules>
     <module>lc-ecommerce-ibm-cae</module>
     <module>lc-ecommerce-ibm-cae-component</module>
-    <module>lc-ecommerce-ibm-preview-cae</module>
   </modules>
 </project>

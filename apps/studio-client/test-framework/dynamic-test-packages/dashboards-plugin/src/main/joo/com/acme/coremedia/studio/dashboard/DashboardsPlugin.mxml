@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editor:StudioPlugin
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+>
+  <fx:Script><![CDATA[
+    public native function DashboardsPlugin(config:DashboardsPlugin = null);
+    ]]></fx:Script>
+
+  <!-- Dummy Plugin:
+    This plugin only provides classes to the classpath without
+    modifying the Studio itself.
+  -->
+
+</editor:StudioPlugin>

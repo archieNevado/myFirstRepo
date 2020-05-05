@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.caas.preview.urlservice;
 
+import com.coremedia.blueprint.caas.preview.client.JsonPreviewConfigurationProperties;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -7,7 +8,6 @@ import io.micrometer.core.annotation.Timed;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
@@ -37,8 +37,8 @@ public class JsonPreviewUrlController {
 
   private String previewClientUrl;
 
-  public JsonPreviewUrlController(@Value("${previewclient.url}") String previewClientUrl) {
-    this.previewClientUrl = previewClientUrl;
+  public JsonPreviewUrlController(JsonPreviewConfigurationProperties jsonPreviewConfigurationProperties) {
+    this.previewClientUrl = jsonPreviewConfigurationProperties.getUrl();
   }
 
   @GetMapping(PREVIEW_URL_PATH)

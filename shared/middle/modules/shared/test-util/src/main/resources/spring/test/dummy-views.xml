@@ -38,12 +38,7 @@
     <description>
       A view for merging the CSS of a page into one file.
     </description>
-    <property name="minifier" ref="cssMinifier"/>
     <property name="contentType" value="text/css"/>
-  </bean>
-
-  <bean id="cssMinifier" class="com.coremedia.blueprint.cae.view.processing.CssMinifier">
-    <property name="linebreak" value="-1"/>
   </bean>
 
   <bean id="blobView" class="com.coremedia.objectserver.view.MultiRangeBlobView">

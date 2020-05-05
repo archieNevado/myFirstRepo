@@ -11,6 +11,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.user.User;
 import com.coremedia.livecontext.commercebeans.CategoryInSite;
+import com.coremedia.livecontext.contentbeans.LiveContextExternalChannel;
 import com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl;
 import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
@@ -125,8 +126,8 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
   }
 
   @Nullable
-  @Link(type = LiveContextExternalChannelImpl.class)
-  public UriComponents buildLinkForExternalChannel(LiveContextExternalChannelImpl navigation, String viewName,
+  @Link(type = LiveContextExternalChannel.class)
+  public UriComponents buildLinkForExternalChannel(LiveContextExternalChannel navigation, String viewName,
                                                    Map<String, Object> linkParameters,
                                                    @NonNull HttpServletRequest request) {
     // only responsible in non-preview mode

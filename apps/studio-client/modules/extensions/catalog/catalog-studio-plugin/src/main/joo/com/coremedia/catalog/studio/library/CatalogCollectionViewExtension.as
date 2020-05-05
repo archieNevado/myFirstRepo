@@ -1,9 +1,9 @@
 package com.coremedia.catalog.studio.library {
 
+import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.content.ContentTypeNames;
-import com.coremedia.cap.content.impl.ContentImpl;
 import com.coremedia.cap.content.search.SearchParameters;
 import com.coremedia.catalog.studio.repository.RepositoryCatalogSearchListContainer;
 import com.coremedia.cms.editor.sdk.ContentTreeRelation;
@@ -78,7 +78,7 @@ public class CatalogCollectionViewExtension extends RepositoryCollectionViewExte
    * Adds an additional query fragment to filter for categories if a category is selected
    */
   override public function applySearchParameters(folder:Content, filterQueryFragments:Array, searchParameters:SearchParameters):SearchParameters {
-    filterQueryFragments.push((searchParameters.includeSubfolders ? "allProductCategories" : "directProductCategories") + ":" + ContentImpl(folder).getNumericId());
+    filterQueryFragments.push((searchParameters.includeSubfolders ? "allProductCategories" : "directProductCategories") + ":" + IdHelper.parseContentId(folder));
     searchParameters.folder = null;
 
     //re-apply doctype filtering without catalog doctypes

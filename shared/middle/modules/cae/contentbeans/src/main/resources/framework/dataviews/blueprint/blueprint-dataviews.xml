@@ -65,6 +65,17 @@
     <property name="itemsUnfiltered" associationType="static"/>
   </dataview>
 
+  <dataview appliesTo="com.coremedia.blueprint.cae.contentbeans.CMGalleryImpl">
+    <property name="aspectByName" associationType="composition"/>
+    <property name="localSettings"/>
+    <property name="picturesUnfiltered" associationType="static"/>
+    <property name="segment"/>
+    <property name="teaserText"/>
+    <property name="teaserTitle"/>
+    <property name="viewtype" associationType="aggregation"/>
+    <property name="itemsUnfiltered" associationType="static"/>
+  </dataview>
+
   <dataview appliesTo="com.coremedia.blueprint.cae.contentbeans.CMPictureImpl">
     <property name="aspectByName" associationType="composition"/>
     <property name="localSettings"/>

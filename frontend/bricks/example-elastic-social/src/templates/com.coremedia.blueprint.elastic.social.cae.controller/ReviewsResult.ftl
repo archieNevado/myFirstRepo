@@ -105,7 +105,7 @@
     <#elseif self.isWritingContributionsEnabled() && es.isAnonymousUser()>
       <@elasticSocial.notification type="info" text=cm.getMessage("reviewForm_not_logged_in") additionalClasses=["cm-reviews__notification"] attr={"data-cm-reviews-notification-type": "LOGIN_REQUIRED"} />
       <#assign loginFlow=es.getLogin() />
-      <#if loginFlow?has_content && !cm.isUndefined(loginFlow)>
+      <#if loginFlow?has_content>
         <div class="cm-reviews__toolbar cm-toolbar cm-toolbar--reviews">
           <@cm.include self=loginFlow view="asButtonGroup" />
         </div>

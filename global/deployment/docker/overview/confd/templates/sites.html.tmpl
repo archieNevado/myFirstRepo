@@ -1,8 +1,9 @@
-<div>
+<div id="sites">
 <h2>Demo Sites</h2>
 <table class="sites">
   <thead>
   <tr>
+    <th></th>
     <th></th>
     <th>Preview</th>
     <th>Live</th>
@@ -10,14 +11,26 @@
   </thead>
   <tbody>
   <tr>
-    <td>Chef Corp.</td>
+    <td rowspan="2">Chef Corp.</td>
+    <td>Web</td>
     <td>
-      <a href="https://preview.docker.localhost/corporate" target="_blank" data-cm-test="cae">English</a> ·
-      <a href="https://preview.docker.localhost/corporate-de-de" target="_blank" data-cm-test="cae">German</a>
+      <a href="https://preview.{{ getv "/environment/fqdn" }}/corporate" target="_blank" data-cm-test="cae">English</a> ·
+      <a href="https://preview.{{ getv "/environment/fqdn" }}/corporate-de-de" target="_blank" data-cm-test="cae">German</a>
     </td>
     <td>
-      <a href="https://corporate.docker.localhost" target="_blank" data-cm-test="cae">English</a> ·
-      <a href="https://corporate-de.docker.localhost" target="_blank" data-cm-test="cae">German</a>
+      <a href="https://corporate.{{ getv "/environment/fqdn" }}" target="_blank" data-cm-test="cae">English</a> ·
+      <a href="https://corporate-de.{{ getv "/environment/fqdn" }}" target="_blank" data-cm-test="cae">German</a>
+    </td>
+  </tr>
+  <tr>
+    <td>GraphQL</td>
+    <td>
+      <a href="https://headless-server-preview.{{ getv "/environment/fqdn" }}/corporate/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">English</a> ·
+      <a href="https://headless-server-preview.{{ getv "/environment/fqdn" }}/corporate-de-de/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">German</a>
+    </td>
+    <td>
+      <a href="https://headless-server-live.{{ getv "/environment/fqdn" }}/corporate/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">English</a> ·
+      <a href="https://headless-server-live.{{ getv "/environment/fqdn" }}/corporate-de-de/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">German</a>
     </td>
   </tr>
   </tbody>
@@ -29,43 +42,90 @@
   <thead>
   <tr>
     <th></th>
+    <th></th>
     <th>Preview</th>
     <th>Live</th>
   </tr>
   </thead>
   <tbody>
   <tr>
-    <td>Aurora</td>
+    <td rowspan="2">Aurora</td>
+    <td>Web</td>
     <td>
-      <a href="https://shop-preview-production-ibm.docker.localhost/wcs/shop/en/auroraesite" target="_blank" data-cm-test="cae">English</a> ·
-      <a href="https://shop-preview-production-ibm.docker.localhost/wcs/shop/de/auroraesite" target="_blank" data-cm-test="cae">German</a>
+      <a href="https://shop-preview-production-ibm.{{ getv "/environment/fqdn" }}/wcs/shop/en/auroraesite" target="_blank" data-cm-test="cae">English</a> ·
+      <a href="https://shop-preview-production-ibm.{{ getv "/environment/fqdn" }}/wcs/shop/de/auroraesite" target="_blank" data-cm-test="cae">German</a>
     </td>
     <td>
-      <a href="https://shop-ibm.docker.localhost/wcs/shop/en/auroraesite" target="_blank" data-cm-test="cae">English</a> ·
-      <a href="https://shop-ibm.docker.localhost/wcs/shop/de/auroraesite" target="_blank" data-cm-test="cae">German</a>
-    </td>
-  </tr>
-  <tr>
-    <td>Aurora B2B</td>
-    <td>
-      <a href="https://shop-preview-production-ibm.docker.localhost/wcs/shop/en/aurorab2besite" target="_blank" data-cm-test="cae">English</a> ·
-      <a href="https://shop-preview-production-ibm.docker.localhost/wcs/shop/de/aurorab2besite" target="_blank" data-cm-test="cae">German</a>
-    </td>
-    <td>
-      <a href="https://shop-ibm.docker.localhost/wcs/shop/en/aurorab2besite" target="_blank" data-cm-test="cae">English</a> ·
-      <a href="https://shop-ibm.docker.localhost/wcs/shop/de/aurorab2besite" target="_blank" data-cm-test="cae">German</a>
+      <a href="https://shop-ibm.{{ getv "/environment/fqdn" }}/wcs/shop/en/auroraesite" target="_blank" data-cm-test="cae">English</a> ·
+      <a href="https://shop-ibm.{{ getv "/environment/fqdn" }}/wcs/shop/de/auroraesite" target="_blank" data-cm-test="cae">German</a>
     </td>
   </tr>
   <tr>
-    <td>Calista</td>
+    <td>GraphQL</td>
     <td>
-      <a href="https://preview.docker.localhost/calista" target="_blank" data-cm-test="cae">English</a> ·
-      <a href="https://preview.docker.localhost/calista-de-de" target="_blank" data-cm-test="cae">German</a>
+      <a href="https://headless-server-preview.{{ getv "/environment/fqdn" }}/aurora/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">English</a> ·
+      <a href="https://headless-server-preview.{{ getv "/environment/fqdn" }}/aurora-de-de/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">German</a>
     </td>
     <td>
-      <a href="https://calista.docker.localhost/calista" target="_blank" data-cm-test="cae">English</a> ·
-      <a href="https://calista.docker.localhost/calista-de-de" target="_blank" data-cm-test="cae">German</a>
+      <a href="https://headless-server-live.{{ getv "/environment/fqdn" }}/aurora/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">English</a> ·
+      <a href="https://headless-server-live.{{ getv "/environment/fqdn" }}/aurora-de-de/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">German</a>
     </td>
+  </tr>
+  <tr>
+    <td rowspan="2">Aurora B2B</td>
+    <td>Web</td>
+    <td>
+      <a href="https://shop-preview-production-ibm.{{ getv "/environment/fqdn" }}/wcs/shop/en/aurorab2besite" target="_blank" data-cm-test="cae">English</a> ·
+      <a href="https://shop-preview-production-ibm.{{ getv "/environment/fqdn" }}/wcs/shop/de/aurorab2besite" target="_blank" data-cm-test="cae">German</a>
+    </td>
+    <td>
+      <a href="https://shop-ibm.{{ getv "/environment/fqdn" }}/wcs/shop/en/aurorab2besite" target="_blank" data-cm-test="cae">English</a> ·
+      <a href="https://shop-ibm.{{ getv "/environment/fqdn" }}/wcs/shop/de/aurorab2besite" target="_blank" data-cm-test="cae">German</a>
+    </td>
+  </tr>
+  <tr>
+    <td>GraphQL</td>
+    <td>
+      <a href="https://headless-server-preview.{{ getv "/environment/fqdn" }}/aurorab2b/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">English</a> ·
+      <a href="https://headless-server-preview.{{ getv "/environment/fqdn" }}/aurorab2b-de-de/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">German</a>
+    </td>
+    <td>
+      <a href="https://headless-server-live.{{ getv "/environment/fqdn" }}/aurorab2b/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">English</a> ·
+      <a href="https://headless-server-live.{{ getv "/environment/fqdn" }}/aurorab2b-de-de/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">German</a>
+    </td>
+  </tr>
+  <tr>
+    <td rowspan="{{ if eq (getv "/pwa/enabled" "true") "true" }}3{{ else }}2{{ end }}">Calista</td>
+    <td>Web</td>
+    <td>
+      <a href="https://preview.{{ getv "/environment/fqdn" }}/calista" target="_blank" data-cm-test="cae">English</a> ·
+      <a href="https://preview.{{ getv "/environment/fqdn" }}/calista-de-de" target="_blank" data-cm-test="cae">German</a>
+    </td>
+    <td>
+      <a href="https://calista.{{ getv "/environment/fqdn" }}/calista" target="_blank" data-cm-test="cae">English</a> ·
+      <a href="https://calista.{{ getv "/environment/fqdn" }}/calista-de-de" target="_blank" data-cm-test="cae">German</a>
+    </td>
+  </tr>
+  <tr>
+    <td>GraphQL</td>
+    <td>
+      <a href="https://headless-server-preview.{{ getv "/environment/fqdn" }}/calista/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">English</a> ·
+      <a href="https://headless-server-preview.{{ getv "/environment/fqdn" }}/calista-de-de/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">German</a>
+    </td>
+    <td>
+      <a href="https://headless-server-live.{{ getv "/environment/fqdn" }}/calista/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">English</a> ·
+      <a href="https://headless-server-live.{{ getv "/environment/fqdn" }}/calista-de-de/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">German</a>
+    </td>
+  {{ if eq (getv "/pwa/enabled" "true") "true" }}
+  </tr>
+  <tr>
+    <td>App</td>
+    <td>
+      <a href="https://pwa.{{ getv "/environment/fqdn" }}/" target="_blank">English</a>
+    </td>
+    <td>
+    </td>
+  {{end}}
   </tr>
   </tbody>
 </table>
@@ -77,20 +137,33 @@
   <thead>
   <tr>
     <th></th>
+    <th></th>
     <th>Preview</th>
     <th>Live</th>
   </tr>
   </thead>
   <tbody>
   <tr>
-    <td>Apparel</td>
+    <td rowspan="2">Apparel</td>
+    <td>Web</td>
     <td>
-      <a href="https://shop-preview-hybris.docker.localhost/yacceleratorstorefront/?site=apparel-uk&clear=true" target="_blank" data-cm-test="cae">English</a> ·
-      <a href="https://shop-preview-hybris.docker.localhost/yacceleratorstorefront/?site=apparel-de&clear=true" target="_blank" data-cm-test="cae">German</a>
+      <a href="https://shop-preview-hybris.{{ getv "/environment/fqdn" }}/yacceleratorstorefront/?site=apparel-uk&clear=true" target="_blank" data-cm-test="cae">English</a> ·
+      <a href="https://shop-preview-hybris.{{ getv "/environment/fqdn" }}/yacceleratorstorefront/?site=apparel-de&clear=true" target="_blank" data-cm-test="cae">German</a>
     </td>
     <td>
-      <a href="https://shop-hybris.docker.localhost/yacceleratorstorefront/?site=apparel-uk&clear=true" target="_blank" data-cm-test="cae">English</a> ·
-      <a href="https://shop-hybris.docker.localhost/yacceleratorstorefront/?site=apparel-de&clear=true" target="_blank" data-cm-test="cae">German</a>
+      <a href="https://shop-hybris.{{ getv "/environment/fqdn" }}/yacceleratorstorefront/?site=apparel-uk&clear=true" target="_blank" data-cm-test="cae">English</a> ·
+      <a href="https://shop-hybris.{{ getv "/environment/fqdn" }}/yacceleratorstorefront/?site=apparel-de&clear=true" target="_blank" data-cm-test="cae">German</a>
+    </td>
+  </tr>
+  <tr>
+    <td>GraphQL</td>
+    <td>
+      <a href="https://headless-server-preview.{{ getv "/environment/fqdn" }}/apparelhomepage/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">English</a> ·
+      <a href="https://headless-server-preview.{{ getv "/environment/fqdn" }}/apparelhomepage-de-de/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">German</a>
+    </td>
+    <td>
+      <a href="https://headless-server-live.{{ getv "/environment/fqdn" }}/apparelhomepage/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">English</a> ·
+      <a href="https://headless-server-live.{{ getv "/environment/fqdn" }}/apparelhomepage-de-de/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">German</a>
     </td>
   </tr>
   </tbody>
@@ -103,31 +176,56 @@
   <thead>
   <tr>
     <th></th>
+    <th></th>
     <th>Preview</th>
     <th>Live</th>
   </tr>
   </thead>
   <tbody>
   <tr>
-    <td>Storefront Reference Architecture</td>
+    <td rowspan="2">Storefront Reference Architecture</td>
+    <td>Web</td>
     <td>
-      <a href="https://shop-preview-sfcc.docker.localhost/s/RefArchGlobal/home?preview=true" target="_blank" data-cm-test="cae">English</a> ·
-      <a href="https://shop-preview-sfcc.docker.localhost/s/RefArchGlobal/home?preview=true&lang=fr_FR" target="_blank" data-cm-test="cae">French</a>
+      <a href="https://shop-preview-sfcc.{{ getv "/environment/fqdn" }}/s/RefArchGlobal/home?preview=true" target="_blank" data-cm-test="cae">English</a> ·
+      <a href="https://shop-preview-sfcc.{{ getv "/environment/fqdn" }}/s/RefArchGlobal/home?preview=true&lang=fr_FR" target="_blank" data-cm-test="cae">French</a>
     </td>
     <td>
-      <a href="https://shop-sfcc.docker.localhost/s/RefArchGlobal/home" target="_blank" data-cm-test="cae">English</a> ·
-      <a href="https://shop-sfcc.docker.localhost/s/RefArchGlobal/home?lang=fr_FR" target="_blank" data-cm-test="cae">French</a>
+      <a href="https://shop-sfcc.{{ getv "/environment/fqdn" }}/s/RefArchGlobal/home" target="_blank" data-cm-test="cae">English</a> ·
+      <a href="https://shop-sfcc.{{ getv "/environment/fqdn" }}/s/RefArchGlobal/home?lang=fr_FR" target="_blank" data-cm-test="cae">French</a>
     </td>
   </tr>
   <tr>
-    <td>SiteGenesis</td>
+    <td>GraphQL</td>
     <td>
-      <a href="https://shop-preview-sfcc.docker.localhost/s/SiteGenesisGlobal/home?preview=true" target="_blank" data-cm-test="cae">English</a> ·
-      <a href="https://shop-preview-sfcc.docker.localhost/s/SiteGenesisGlobal/home?preview=true&lang=fr_FR" target="_blank" data-cm-test="cae">French</a>
+      <a href="https://headless-server-preview.{{ getv "/environment/fqdn" }}/sfra-en-gb/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">English</a> ·
+      <a href="https://headless-server-preview.{{ getv "/environment/fqdn" }}/sfra-en-gb-fr-fr/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">French</a>
     </td>
     <td>
-      <a href="https://shop-sfcc.docker.localhost/s/SiteGenesisGlobal/home" target="_blank" data-cm-test="cae">English</a> ·
-      <a href="https://shop-sfcc.docker.localhost/s/SiteGenesisGlobal/home?lang=fr_FR" target="_blank" data-cm-test="cae">French</a>
+      <a href="https://headless-server-live.{{ getv "/environment/fqdn" }}/sfra-en-gb/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">English</a> ·
+      <a href="https://headless-server-live.{{ getv "/environment/fqdn" }}/sfra-en-gb-fr-fr/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">French</a>
+    </td>
+  </tr>
+  <tr>
+    <td rowspan="2">SiteGenesis</td>
+    <td>Web</td>
+    <td>
+      <a href="https://shop-preview-sfcc.{{ getv "/environment/fqdn" }}/s/SiteGenesisGlobal/home?preview=true" target="_blank" data-cm-test="cae">English</a> ·
+      <a href="https://shop-preview-sfcc.{{ getv "/environment/fqdn" }}/s/SiteGenesisGlobal/home?preview=true&lang=fr_FR" target="_blank" data-cm-test="cae">French</a>
+    </td>
+    <td>
+      <a href="https://shop-sfcc.{{ getv "/environment/fqdn" }}/s/SiteGenesisGlobal/home" target="_blank" data-cm-test="cae">English</a> ·
+      <a href="https://shop-sfcc.{{ getv "/environment/fqdn" }}/s/SiteGenesisGlobal/home?lang=fr_FR" target="_blank" data-cm-test="cae">French</a>
+    </td>
+  </tr>
+  <tr>
+    <td>GraphQL</td>
+    <td>
+      <a href="https://headless-server-preview.{{ getv "/environment/fqdn" }}/sitegenesis-en-gb/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">English</a> ·
+      <a href="https://headless-server-preview.{{ getv "/environment/fqdn" }}/sitegenesis-en-gb-fr-fr/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">French</a>
+    </td>
+    <td>
+      <a href="https://headless-server-live.{{ getv "/environment/fqdn" }}/sitegenesis-en-gb/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">English</a> ·
+      <a href="https://headless-server-live.{{ getv "/environment/fqdn" }}/sitegenesis-en-gb-fr-fr/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">French</a>
     </td>
   </tr>
   </tbody>

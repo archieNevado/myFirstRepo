@@ -1,38 +1,34 @@
 package com.coremedia.blueprint.personalization.include;
 
-import com.coremedia.blueprint.cae.view.DynamicIncludePredicate;
+import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.personalization.contentbeans.CMP13NSearch;
 import com.coremedia.blueprint.personalization.contentbeans.CMSelectionRules;
-import com.coremedia.objectserver.view.RenderNode;
+import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.objectserver.beans.ContentBean;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
-import java.util.regex.Pattern;
+public class P13NIncludePredicate extends AbstractP13nContainerPredicate {
 
-public class P13NIncludePredicate implements DynamicIncludePredicate {
+  private final SitesService sitesService;
+  private final SettingsService settingsService;
 
-  private static Pattern VIEW_EXCLUDE_PATTERN = Pattern.compile("^fragmentPreview(\\[[^\\]]*\\]){0,1}$");
-  private static final String VIEW_NAME_AS_PREVIEW = "asPreview";
-  private static final String MULTI_VIEW_PREVIEW = "multiViewPreview";
+  public P13NIncludePredicate(SitesService sitesService, SettingsService settingsService) {
+    super();
+    this.sitesService = sitesService;
+    this.settingsService = settingsService;
+  }
 
   @Override
-  public boolean apply(@Nullable RenderNode input) {
-    if (input == null) {
-      return false;
-    }
-    if (isBeanMatching(input.getBean())){
-      return isViewMatching(input.getView());
+  protected boolean isBeanMatching(Object bean) {
+    if (bean instanceof CMSelectionRules || bean instanceof CMP13NSearch) {
+      ContentBean contentBean = (ContentBean) bean;
+      Site site = sitesService.getContentSiteAspect(contentBean.getContent()).getSite();
+      if (site == null) {
+        return false;
+      }
+      return settingsService.getSetting(P13NDynamicIncludeSettings.P13N_DYNAMIC_INCLUDES_ENABLED_SETTING, Boolean.class, site).orElse(false)
+              && settingsService.getSetting(P13NDynamicIncludeSettings.P13N_DYNAMIC_INCLUDES_PER_ITEMS_SETTING, Boolean.class, site).orElse(false);
     }
     return false;
-  }
-
-  private boolean isViewMatching(String view) {
-    if (view == null) {
-      return true;
-    }
-    return !(VIEW_EXCLUDE_PATTERN.matcher(view).matches() || view.equals(VIEW_NAME_AS_PREVIEW) || view.equals(MULTI_VIEW_PREVIEW));
-  }
-
-  private boolean isBeanMatching(Object bean) {
-    return bean instanceof CMSelectionRules || bean instanceof CMP13NSearch;
   }
 }

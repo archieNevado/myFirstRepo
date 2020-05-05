@@ -14,9 +14,7 @@ import com.coremedia.livecontext.ecommerce.common.CommerceObject;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmCommerceBean;
-import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapTransformationHelper;
-import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.link.WcsUrlProvider;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.xml.Markup;
@@ -28,20 +26,16 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService.DEFAULT_CATALOG_ALIAS;
 import static com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper.findString;
-import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_9_0;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.util.Collections.emptyList;
-import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class CategoryImpl extends AbstractIbmCommerceBean implements Category, CommerceObject {
 
@@ -160,7 +154,6 @@ public class CategoryImpl extends AbstractIbmCommerceBean implements Category, C
    * Returns a "ready-to-use" storefront url that points to the shop category page.
    * Normally (when the commerce adapter supports it) it would come from the commerce adapter/system.
    * Until that happens we simulate this by computing this value for ourselves.
-   * Todo: change this implementation to read the url from delegate or use a template or whatsoever
    */
   @Override
   public String getStorefrontUrl() {

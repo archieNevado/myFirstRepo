@@ -74,13 +74,7 @@ public abstract class CMPictureBase extends CMVisualImpl implements CMPicture {
 
   @Override
   public boolean getDisableCropping() {
-    Boolean disableCroppingBoolean = getSettingsService().setting(DISABLE_CROPPING, Boolean.class, getContent());
-    if (disableCroppingBoolean == null) {
-      Integer disableCroppingInteger = getSettingsService().setting(DISABLE_CROPPING, Integer.class, getContent());
-      return disableCroppingInteger != null && disableCroppingInteger != 0;
-    } else {
-      return disableCroppingBoolean;
-    }
+    return getSettingsService().settingWithDefault(DISABLE_CROPPING, Boolean.class, false, getContent());
   }
 
   @Override
@@ -114,4 +108,4 @@ public abstract class CMPictureBase extends CMVisualImpl implements CMPicture {
     }
   }
 }
-  
+

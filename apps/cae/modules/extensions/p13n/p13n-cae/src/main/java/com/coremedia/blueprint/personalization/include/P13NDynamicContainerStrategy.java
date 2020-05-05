@@ -12,7 +12,6 @@ import com.coremedia.objectserver.beans.ContentBean;
 import com.google.common.annotations.VisibleForTesting;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.springframework.beans.factory.annotation.Required;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -20,8 +19,6 @@ import java.util.List;
 
 @DefaultAnnotation(NonNull.class)
 public class P13NDynamicContainerStrategy implements DynamicContainerStrategy {
-
-  public static final String P13N_DYNAMIC_INCLUDES_SETTING = "p13n-dynamic-includes-enabled";
 
   private final SettingsService settingsService;
   private final SitesService sitesService;
@@ -42,7 +39,8 @@ public class P13NDynamicContainerStrategy implements DynamicContainerStrategy {
     if (site == null) {
       return false;
     }
-    return settingsService.getSetting(P13N_DYNAMIC_INCLUDES_SETTING, Boolean.class, site).orElse(false);
+    return settingsService.getSetting(P13NDynamicIncludeSettings.P13N_DYNAMIC_INCLUDES_ENABLED_SETTING, Boolean.class, site).orElse(false)
+            && !settingsService.getSetting(P13NDynamicIncludeSettings.P13N_DYNAMIC_INCLUDES_PER_ITEMS_SETTING, Boolean.class, site).orElse(false);
   }
 
   public boolean isDynamic(@NonNull List items) {

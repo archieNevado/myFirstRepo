@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.thymeleaf.TemplateEngine;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
@@ -35,7 +36,6 @@ public class PreviewControllerTest {
 
   private JsonPreviewController previewController;
 
-  private static final String CAAS_SERVER_ENDPOINT = "http://caasServer.com:8080/graphql";
 
   @Inject
   private CloseableHttpClient httpClient;
@@ -46,9 +46,17 @@ public class PreviewControllerTest {
   @Mock(answer = Answers.RETURNS_DEEP_STUBS)
   private CloseableHttpResponse response;
 
+  @Mock
+  private HttpServletRequest httpServletRequest;
+
+  private JsonPreviewConfigurationProperties config;
+
   @Before
   public void init() {
-    previewController = new JsonPreviewController(httpClient, htmlTemplateEngine, CAAS_SERVER_ENDPOINT);
+    config = new JsonPreviewConfigurationProperties();
+    config.setUrl("http://localhost:8080");
+    config.setCaasserverEndpoint("http://caasServer.com:8080/graphql");
+    previewController = new JsonPreviewController(httpClient, htmlTemplateEngine, config);
     MockitoAnnotations.initMocks(this);
   }
 
@@ -59,7 +67,7 @@ public class PreviewControllerTest {
     String jsonData = "{\"data\":{\"content\":{\"article\":{\"name\":\"Test Name\",\"title\":\"Test Title\"}}}}";
     when(response.getEntity().getContent()).thenReturn(IOUtils.toInputStream(jsonData, StandardCharsets.UTF_8));
 
-    ResponseEntity<String> responseEntity = previewController.preview("1234", "article", null);
+    ResponseEntity<String> responseEntity = previewController.preview(httpServletRequest,"1234", "article", null);
 
     assertEquals(200, responseEntity.getStatusCode().value());
     assertNotNull(responseEntity.getBody());
@@ -73,7 +81,7 @@ public class PreviewControllerTest {
     String jsonData = "{\"data\":{\"content\":{\"page\":{\"name\":\"Test Name\",\"title\":\"Test Title\"}}}}";
     when(response.getEntity().getContent()).thenReturn(IOUtils.toInputStream(jsonData, StandardCharsets.UTF_8));
 
-    ResponseEntity<String> responseEntity = previewController.preview("1234", "page", null);
+    ResponseEntity<String> responseEntity = previewController.preview(httpServletRequest,"1234", "page", null);
 
     assertEquals(200, responseEntity.getStatusCode().value());
     assertNotNull(responseEntity.getBody());
@@ -85,7 +93,7 @@ public class PreviewControllerTest {
     when(httpClient.execute(any(HttpUriRequest.class))).thenReturn(response);
     when(response.getStatusLine().getStatusCode()).thenReturn(200);
     when(response.getEntity()).thenReturn(null);
-    ResponseEntity<String> responseEntity = previewController.preview("1234", "article", null);
+    ResponseEntity<String> responseEntity = previewController.preview(httpServletRequest,"1234", "article", null);
 
     assertEquals(200, responseEntity.getStatusCode().value());
     assertNotNull(responseEntity.getBody());
@@ -97,9 +105,9 @@ public class PreviewControllerTest {
     when(httpClient.execute(any(HttpUriRequest.class))).thenReturn(response);
     when(response.getStatusLine().getStatusCode()).thenReturn(300);
     when(response.getEntity()).thenReturn(null);
-    ResponseEntity<String> responseEntity = previewController.preview("1234", "article", null);
+    ResponseEntity<String> responseEntity = previewController.preview(httpServletRequest,"1234", "article", null);
 
-    assertEquals(200, responseEntity.getStatusCode().value());
+    assertEquals(500, responseEntity.getStatusCode().value());
     assertNotNull(responseEntity.getBody());
     assertTrue(responseEntity.getBody().contains(REQUEST_NOT_SUCCESSFUL));
   }
@@ -110,7 +118,7 @@ public class PreviewControllerTest {
     when(response.getStatusLine().getStatusCode()).thenReturn(200);
     String errorMsg = "IO Error";
     when(response.getEntity().getContent()).thenThrow(new IOException(errorMsg));
-    ResponseEntity<String> responseEntity = previewController.preview("1234", "article", null);
+    ResponseEntity<String> responseEntity = previewController.preview(httpServletRequest,"1234", "article", null);
 
     assertEquals(200, responseEntity.getStatusCode().value());
     assertNotNull(responseEntity.getBody());
@@ -122,9 +130,9 @@ public class PreviewControllerTest {
     String errorMsg = "Cannot connect to caas server";
     when(httpClient.execute(any(HttpUriRequest.class))).thenThrow(new IOException(errorMsg));
 
-    ResponseEntity<String> responseEntity = previewController.preview("1234", "article", null);
+    ResponseEntity<String> responseEntity = previewController.preview(httpServletRequest,"1234", "article", null);
 
-    assertEquals(200, responseEntity.getStatusCode().value());
+    assertEquals(500, responseEntity.getStatusCode().value());
     assertNotNull(responseEntity.getBody());
     assertTrue(responseEntity.getBody().contains(errorMsg));
   }
@@ -137,7 +145,7 @@ public class PreviewControllerTest {
     String jsonData = "{\"data\":{\"content\":{\"article\":{\"name\":\"Test Name\",\"title\":\"Test Title\"}}}}";
     when(response.getEntity().getContent()).thenReturn(IOUtils.toInputStream(jsonData, StandardCharsets.UTF_8));
 
-    ResponseEntity<String> responseEntity = previewController.preview("1234", "article", "12-03-2019 00:00 Europe/Berlin");
+    ResponseEntity<String> responseEntity = previewController.preview(httpServletRequest,"1234", "article", "12-03-2019 00:00 Europe/Berlin");
 
     assertEquals(200, responseEntity.getStatusCode().value());
     assertNotNull(responseEntity.getBody());
@@ -152,7 +160,7 @@ public class PreviewControllerTest {
     String jsonData = "{\"data\":{\"content\":{\"article\":{\"name\":\"Test Name\",\"title\":\"Test Title\"}}}}";
     when(response.getEntity().getContent()).thenReturn(IOUtils.toInputStream(jsonData, StandardCharsets.UTF_8));
 
-    ResponseEntity<String> responseEntity = previewController.preview("1234", "article", "12345678");
+    ResponseEntity<String> responseEntity = previewController.preview(httpServletRequest,"1234", "article", "12345678");
 
     assertEquals(200, responseEntity.getStatusCode().value());
     assertNotNull(responseEntity.getBody());

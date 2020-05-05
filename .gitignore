@@ -59,3 +59,7 @@ overlays/
 
 #shade plugin
 dependency-reduced-pom.xml
+
+# Spring Development Profiles
+**/src/*/resources/**/application-dev*.properties
+**/src/*/resources/**/application*-dev.properties

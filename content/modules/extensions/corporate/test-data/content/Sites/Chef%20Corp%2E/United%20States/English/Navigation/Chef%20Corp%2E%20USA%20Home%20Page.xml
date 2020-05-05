@@ -20,6 +20,7 @@
 <link href="../Options/Settings/Elastic%20Social.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/Elastic%20Social"/>
 <link href="../../../../../Settings/Options/Settings/Elastic%20Social%20Credentials.xml" path="/Settings/Options/Settings/Elastic%20Social%20Credentials"/>
 <link href="../Options/Settings/SFMC.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/SFMC"/>
+<link href="../Options/Settings/TagManagement.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/TagManagement"/>
 </linkedSettings>
 <resourceBundles2>
 <link href="../../../../../Settings/Options/Bundles/Elastic%20Social_en.xml" path="/Settings/Options/Bundles/Elastic%20Social_en"/>

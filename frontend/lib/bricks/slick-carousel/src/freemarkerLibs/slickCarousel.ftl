@@ -1,3 +1,5 @@
+<#import "*/node_modules/@coremedia/brick-utils/src/freemarkerLibs/utils.ftl" as utils />
+
 <#--
   Renders the given items inside a slick carousel.
 
@@ -20,6 +22,7 @@
 -->
 <#macro render items
                itemsView=cm.UNDEFINED
+               itemsWrapperView="_slickCarouselItem"
                itemsParams={}
                slickConfig={}
                innerArrows=false
@@ -29,10 +32,7 @@
   <#local innerArrowsCls=innerArrows?then("${blockClass}--inner-arrows", "") />
   <div class="${blockClass} ${innerArrowsCls} ${additionalClass}" <@cm.dataAttribute name="data-cm-slick-carousel" data=slickConfig /><@preview.metadata data=metadata />>
     <#list items as item>
-      <#-- this div is used by slick for the slides -->
-      <div class="${blockClass}__item">
-        <@cm.include self=item view=itemsView params=itemsParams + {"item": {"index": item_index, "first": item?is_first, "last": item?is_last, "length": items?size}} />
-      </div>
+      <@cm.include self=item view=itemsWrapperView params=itemsParams + {"itemView": itemsView, "item": {"index": item_index, "first": item?is_first, "last": item?is_last, "length": items?size}} />
     </#list>
   </div>
 </#macro>

@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.asset.studio {
-import com.coremedia.cap.common.impl.StructRemoteBeanImpl;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.struct.StructRemoteBean;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.ecommerce.studio.ECommerceStudioPlugin;
 import com.coremedia.ecommerce.studio.components.link.CatalogLinkContextMenu;
@@ -76,7 +76,7 @@ public class InheritReferencesTest extends AbstractCatalogAssetTest {
     picture.getRepository().getAccessControl().mayWrite = function ():Boolean {
       return !contentReadOnlyExpression.getValue();
     };
-    var localSettings:StructRemoteBeanImpl = beanFactory.getRemoteBean(path + '/structs/localSettings') as StructRemoteBeanImpl;
+    var localSettings:StructRemoteBean = beanFactory.getRemoteBean(path + '/structs/localSettings') as StructRemoteBean;
     //PUT should cause no trouble
     localSettings["doWriteChanges"] = function ():void {
       //ignore

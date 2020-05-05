@@ -9,7 +9,6 @@ import com.coremedia.contenthub.api.ContentModel;
 import com.coremedia.contenthub.api.ContentModelReference;
 import com.coremedia.contenthub.api.Item;
 import com.coremedia.contenthub.api.UrlBlobBuilder;
-import com.coremedia.contenthub.api.ContentCreationUtil;
 import com.google.api.services.youtube.model.ThumbnailDetails;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
