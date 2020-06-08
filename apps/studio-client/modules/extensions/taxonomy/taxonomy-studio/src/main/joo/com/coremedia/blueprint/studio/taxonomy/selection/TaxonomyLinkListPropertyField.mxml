@@ -58,7 +58,7 @@
                                         bindTo="{config.bindTo}"
                                         forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
                                         propertyValueExpression="{config.bindTo.extendBy('properties.' + config.propertyName)}"
-                                        taxonomyId="{config.taxonomyId}"/>
+                                        taxonomyIdExpression="{config.taxonomyIdExpression}"/>
   </local:actionList>
   <local:plugins>
     <editor:SetPropertyLabelPlugin bindTo="{config.bindTo}"
@@ -67,7 +67,7 @@
   <local:items>
     <taxonomy:TaxonomyLinkListGridPanel itemId="{GRID_PANEL_ITEM_ID}"
                                         linkListWrapper="{getLinkListWrapper(config)}"
-                                        taxonomyId="{config.taxonomyId}"
+                                        taxonomyIdExpression="{config.taxonomyIdExpression}"
                                         bindTo="{config.bindTo}"
                                         selectedPositionsExpression="{getSelectedPositionsVE()}"
                                         selectedValuesExpression="{getSelectedValuesVE()}"
@@ -181,7 +181,7 @@
                                           flex="1"
                                           resetOnBlur="true"
                                           showSelectionPath="false"
-                                          taxonomyId="{config.taxonomyId}"
+                                          taxonomyIdExpression="{config.taxonomyIdExpression}"
                                           bindTo="{config.bindTo}"
                                           forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
                                           propertyName="{config.propertyName}"

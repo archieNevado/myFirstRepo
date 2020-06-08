@@ -18,7 +18,5 @@
     ]]></fx:Script>
   <fx:Declarations>
     <fx:Boolean id="singleSelection"/>
-
-    <fx:String id="taxonomyId"/>
   </fx:Declarations>
 </local:OpenTaxonomyChooserActionBase>

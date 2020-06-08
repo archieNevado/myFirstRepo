@@ -17,6 +17,7 @@ public class DynamicIncludeHelper {
   public static final String PLACEMENT_FRAGMENT_ROOT_INDICATOR_VIEW = "_delegate";
 
   private static final String PATTERN_DYNAMIC = "/" + PREFIX_DYNAMIC + "/";
+  private static final String PATTERN_AJAX = "ajax=true";
 
   /**
    * Checks if the current request is a dynamic include request.
@@ -32,7 +33,7 @@ public class DynamicIncludeHelper {
       return ((Boolean) value);
     }
     String requestUri = request.getRequestURI();
-    boolean isDynamic = requestUri.contains(PATTERN_DYNAMIC);
+    boolean isDynamic = requestUri.contains(PATTERN_DYNAMIC) || requestUri.contains(PATTERN_AJAX);
     request.setAttribute(ATTR_NAME_DYNAMIC_INCLUDE, isDynamic);
     return isDynamic;
   }

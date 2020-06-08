@@ -69,7 +69,7 @@ public class TaxonomyLinkListGridPanelBase extends GridPanel implements IValidat
    * The taxonomy identifier configured on the server side.
    */
   [Bindable]
-  public var taxonomyId:String;
+  public var taxonomyIdExpression:ValueExpression;
 
   private var dropTarget:DropTarget;
 
@@ -146,6 +146,7 @@ public class TaxonomyLinkListGridPanelBase extends GridPanel implements IValidat
    * @return String
    */
   protected function taxonomyRenderer(value:*, metaData:*, record:BeanRecord):String {
+    var taxonomyId:String = taxonomyIdExpression.getValue();
     TaxonomyUtil.isEditable(taxonomyId, function (editable:Boolean):void {
       if (editable) {
         var content:Content = null;

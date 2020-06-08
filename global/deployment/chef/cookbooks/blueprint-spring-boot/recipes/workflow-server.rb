@@ -11,8 +11,8 @@ node.default_unless['blueprint']['apps'][service_name]['application.properties']
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['com.coremedia.corba.server.port']  = '40383'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['server.port'] = '40380'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['management.server.port'] = '40381'
-node.default_unless['blueprint']['apps'][service_name]['application.properties']['mongoDb.clientURI'] = 'mongodb://coremedia:coremedia@localhost:27017'
-node.default_unless['blueprint']['apps'][service_name]['application.properties']['mongoDb.prefix'] = 'blueprint'
+node.default_unless['blueprint']['apps'][service_name]['application.properties']['mongodb.client-uri'] = 'mongodb://coremedia:coremedia@localhost:27017'
+node.default_unless['blueprint']['apps'][service_name]['application.properties']['mongodb.prefix'] = 'blueprint'
 
 application_config_hash = Mash.new
 # legacy compatibility step. Here we merge the defaults from old node.json files

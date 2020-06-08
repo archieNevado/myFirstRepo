@@ -11,11 +11,13 @@ import com.coremedia.ui.data.ValueExpression;
 public class OpenTaxonomyChooserActionBase extends DependencyTrackedAction {
 
   private var propertyValueExpression:ValueExpression;
-  private var taxId:String;
   private var singleSelection:Boolean;
 
   public var bindTo:ValueExpression;
   public var forceReadOnlyValueExpression:ValueExpression;
+
+  [Bindable]
+  public var taxonomyIdExpression:ValueExpression;
 
   /**
    * @param config
@@ -25,7 +27,7 @@ public class OpenTaxonomyChooserActionBase extends DependencyTrackedAction {
     singleSelection = config.singleSelection;
     bindTo = config.bindTo;
     forceReadOnlyValueExpression = config.forceReadOnlyValueExpression;
-    taxId = config.taxonomyId;
+    taxonomyIdExpression = config.taxonomyIdExpression;
     config.handler = showChooser;
     super(config);
   }
@@ -40,7 +42,7 @@ public class OpenTaxonomyChooserActionBase extends DependencyTrackedAction {
 
   private function showChooser():void {
     var taxChooser:TaxonomySelectionWindow = new TaxonomySelectionWindow(TaxonomySelectionWindow({
-      taxonomyId: taxId,
+      taxonomyIdExpression: taxonomyIdExpression,
       singleSelection: singleSelection,
       bindTo: bindTo,
       propertyValueExpression: propertyValueExpression

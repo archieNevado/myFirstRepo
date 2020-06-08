@@ -1,8 +1,0 @@
-{
-  "studioPlugins": [
-    {
-      "mainClass": "com.acme.coremedia.studio.MyDynamicStudioPlugin",
-      "name": "My Dynamic Studio Plugin"
-    }
-  ]
-}

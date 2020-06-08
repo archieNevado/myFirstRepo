@@ -30,7 +30,7 @@
 
     <customer>Blueprint</customer>
 
-    <cm.common.core.version>2004.1</cm.common.core.version>
+    <cm.common.core.version>2004.2</cm.common.core.version>
 
     <spring.boot.version>2.2.6.RELEASE</spring.boot.version>
     <micrometer.version>1.3.6</micrometer.version>
@@ -53,7 +53,7 @@
     <cae-preview.host>${installation.host}</cae-preview.host>
     <cae-live.host>${installation.host}</cae-live.host>
     <db.host>${installation.host}</db.host>
-    <mongoDb.host>${installation.host}</mongoDb.host>
+    <mongodb.host>${installation.host}</mongodb.host>
     <wcs.host>commerce-wcs-host</wcs.host>
     <proxy.host>${installation.host}</proxy.host>
 
@@ -82,7 +82,7 @@
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.common.core.version>2004.1</cm.common.core.version>
+    <cm.common.core.version>2004.2</cm.common.core.version>
     <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
 
     <showDeprecation>true</showDeprecation>
@@ -455,6 +455,9 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-failsafe-plugin</artifactId>
           <version>${maven-surefire-plugin.version}</version>
+          <configuration>
+            <trimStackTrace>false</trimStackTrace>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -533,6 +536,7 @@
               <java.io.tmpdir>${project.build.directory}</java.io.tmpdir>
             </systemPropertyVariables>
             <skipTests>${skip-unit-tests}</skipTests>
+            <trimStackTrace>false</trimStackTrace>
           </configuration>
         </plugin>
         <plugin>
@@ -559,7 +563,7 @@
                 <X-Compile-Target-JDK>${maven.compiler.release}</X-Compile-Target-JDK>
                 <!-- Configure WebSphere to not scan ASM jars in the WAR, because they contain Java 9 module-info.class
                      files and cause exceptions in WebSphere. See CMS-12354 -->
-                <Ignore-Scanning-Archives>asm-analysis-7.3.1.jar,asm-7.3.1.jar,asm-commons-7.3.1.jar,asm-tree-7.3.1.jar</Ignore-Scanning-Archives>
+                <Ignore-Scanning-Archives>asm-analysis-8.0.1.jar,asm-8.0.1.jar,asm-commons-8.0.1.jar,asm-tree-8.0.1.jar</Ignore-Scanning-Archives>
               </manifestEntries>
             </archive>
             <failOnMissingWebXml>false</failOnMissingWebXml>

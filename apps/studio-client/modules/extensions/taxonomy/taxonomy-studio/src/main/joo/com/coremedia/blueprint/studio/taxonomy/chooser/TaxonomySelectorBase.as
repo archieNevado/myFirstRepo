@@ -29,7 +29,9 @@ public class TaxonomySelectorBase extends Container {
   private var selectedNodeIdVE:ValueExpression;
   private var selectedNodeListVE:ValueExpression;
 
-  private var taxonomyId:String;
+  [Bindable]
+  public var taxonomyIdExpression:ValueExpression;
+
   private var activePathList:TaxonomyNodeList;
 
   private var buttonCache:Array;
@@ -63,8 +65,6 @@ public class TaxonomySelectorBase extends Container {
     ALPHABET[24] = 'Y';
     ALPHABET[25] = 'Z';
     super(config);
-
-    taxonomyId = config.taxonomyId;
   }
 
   /**
@@ -162,6 +162,7 @@ public class TaxonomySelectorBase extends Container {
     if (ref) {
       var content:Content = WorkArea.ACTIVE_CONTENT_VALUE_EXPRESSION.getValue();
       var siteId:String = editorContext.getSitesService().getSiteIdFor(content);
+      var taxonomyId:String = taxonomyIdExpression.getValue();
       if (ref === taxonomyId) {
         //update the list with the root children
         TaxonomyNodeFactory.loadTaxonomyRoot(siteId, taxonomyId, function (parent:TaxonomyNode):void {
@@ -208,12 +209,13 @@ public class TaxonomySelectorBase extends Container {
     pathPanel.removeAll(true);
 
     //Add root
-    var text:String = taxonomyId;
+    var text:String = taxonomyIdExpression.getValue();
+    var taxonomyId:String = taxonomyIdExpression.getValue();
     var rootName:String = resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', taxonomyId);
     if(rootName) {
       text = rootName;
     }
-    
+
     var root:TextLinkButton = new TextLinkButton(TextLinkButton({
       text: text,
       itemId: taxonomyId.replace(/\s+/g, ''),

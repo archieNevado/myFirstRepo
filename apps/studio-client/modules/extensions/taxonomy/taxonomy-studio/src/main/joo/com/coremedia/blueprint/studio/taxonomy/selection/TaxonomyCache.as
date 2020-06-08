@@ -7,15 +7,15 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.ui.data.ValueExpression;
 
 public class TaxonomyCache {
-  private var taxId:String;
+  private var taxonomyIdExpression:ValueExpression;
   private var activeContentVE:ValueExpression;
   private var cachedSuggestions:TaxonomyNodeList;
   private var pvExpression:ValueExpression;
 
-  public function TaxonomyCache(contentVE:ValueExpression, propertyValueExpression:ValueExpression, taxonomyId:String) {
+  public function TaxonomyCache(contentVE:ValueExpression, propertyValueExpression:ValueExpression, taxIdExpression:ValueExpression) {
     pvExpression = propertyValueExpression;
     activeContentVE = contentVE;
-    taxId = taxonomyId;
+    taxonomyIdExpression = taxIdExpression;
   }
 
   /**
@@ -29,9 +29,11 @@ public class TaxonomyCache {
       return;
     }
 
-    TaxonomyNodeFactory.loadSuggestions(taxId, content, function (nodeList:TaxonomyNodeList):void {
-      cachedSuggestions = nodeList;
-      callback(getActiveSuggestions());
+    taxonomyIdExpression.loadValue(function(taxId:String):void {
+      TaxonomyNodeFactory.loadSuggestions(taxId, content, function (nodeList:TaxonomyNodeList):void {
+        cachedSuggestions = nodeList;
+        callback(getActiveSuggestions());
+      });
     });
   }
 

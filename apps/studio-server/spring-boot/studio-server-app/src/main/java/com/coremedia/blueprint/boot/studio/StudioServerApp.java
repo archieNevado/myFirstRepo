@@ -12,9 +12,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
  */
 @EnableWebSecurity
 @SpringBootApplication(exclude = {
-  FreeMarkerAutoConfiguration.class,
-  MongoAutoConfiguration.class,
-  SecurityFilterAutoConfiguration.class,
+        FreeMarkerAutoConfiguration.class,
+        MongoAutoConfiguration.class,
+        SecurityFilterAutoConfiguration.class,
+        //Used to disable editorial comments feature.
+        //EditorialCommentsAutoConfiguration.class, //part of module com.coremedia.cms:editorial-comments-rest
+        //DataSourceAutoConfiguration.class,
 })
 public class StudioServerApp {
 

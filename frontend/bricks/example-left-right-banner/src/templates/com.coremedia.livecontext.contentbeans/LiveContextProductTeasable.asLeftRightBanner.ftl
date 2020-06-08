@@ -19,4 +19,4 @@
   "enableTeaserOverlay": false,
   "renderAuthors": false,
   "renderDate": false
-}/>
+} + cm.localParameters() />

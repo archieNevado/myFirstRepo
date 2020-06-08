@@ -6,12 +6,13 @@ import com.coremedia.livecontext.ecommerce.link.StorefrontRefKey;
  * Enumeration of well-known {@link StorefrontRefKey}s.
  */
 public enum CommerceLinkTemplateTypes implements StorefrontRefKey {
+  CHECKOUT_REDIRECT,
+  CM_CONTENT,
   EXTERNAL_PAGE_SEO,
   EXTERNAL_PAGE_NON_SEO,
   LOGIN,
   LOGOUT,
-  SEARCH_REDIRECT,
-  CHECKOUT_REDIRECT;
+  SEARCH_REDIRECT;
 
   private final String value = name().toLowerCase().replace("_", "");
 

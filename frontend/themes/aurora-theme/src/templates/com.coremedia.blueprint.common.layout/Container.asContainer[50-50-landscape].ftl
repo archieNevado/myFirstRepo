@@ -8,4 +8,6 @@
   @since 1907
 -->
 
-<@cm.include self=self view="asLandscapeBannerContainer" params={"additionalClass": "cm-landscape-banner-grid--50-50"} />
+<@cm.include self=self view="asLandscapeBannerContainer" params={
+  "additionalClass": "cm-landscape-banner-grid--50-50"
+} + cm.localParameters() />

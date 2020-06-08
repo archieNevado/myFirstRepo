@@ -29,10 +29,6 @@
     public var forceReadOnlyValueExpression:ValueExpression;
     ]]></fx:Script>
   <fx:Declarations>
-    <!---
-     The taxonomy identifier configured on the server side.
-    -->
-    <fx:String id="taxonomyId"/>
 
     <!--- If true, only one item can be selected from the list. -->
     <fx:String id="singleSelection"/>
@@ -61,7 +57,7 @@
                                   selectionExpression="{config.selectionExpression}"
                                   singleSelection="{config.singleSelection}"
                                   selectedNodeId="{getSelectedNodeIdValueExpression()}"
-                                  taxonomyId="{config.taxonomyId}"
+                                  taxonomyId="{config.taxonomyIdExpression.getValue()}"
                                   itemId="letterpanel"
                                   flex="1"
                                   forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>

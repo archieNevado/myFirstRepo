@@ -16,10 +16,11 @@
     [ResourceBundle('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin')]
   </fx:Metadata>
   <fx:Script><![CDATA[
+    import com.coremedia.ui.data.ValueExpressionFactory;
+    import com.coremedia.ui.models.bem.BEMBlock;
+
     import ext.form.field.ComboBox;
     import ext.tip.ToolTip;
-
-    import com.coremedia.ui.models.bem.BEMBlock;
 
     public static const xtype:String = "com.coremedia.blueprint.studio.config.taxonomy.taxonomyFilterPanel";
 
@@ -39,7 +40,7 @@
                                       resetOnBlur="true"
                                       flex="1"
                                       itemId="taxonomyFilterSearchField"
-                                      taxonomyId="{config.taxonomyId}">
+                                      taxonomyIdExpression="{ValueExpressionFactory.createFromValue(config.taxonomyId)}">
           <taxonomy:listeners>
             <fx:Object afterrender="{function(combo:ComboBox):void {
                 var toolTip:ToolTip = new ToolTip(ToolTip({}));
@@ -55,7 +56,7 @@
                        tooltip="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'Taxonomy_action_tooltip')}">
           <ui:baseAction>
             <taxonomy:OpenTaxonomyChooserAction propertyValueExpression="{getSelectionExpression()}"
-                                                taxonomyId="{config.taxonomyId}"/>
+                                                taxonomyIdExpression="{ValueExpressionFactory.createFromValue(config.taxonomyId)}"/>
           </ui:baseAction>
         </ui:IconButton>
       </items>

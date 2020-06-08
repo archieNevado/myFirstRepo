@@ -44,7 +44,9 @@ public class TaxonomySearchFieldBase extends StatefulComboBox {
   private var searchResultExpression:ValueExpression;
 
   private var showSelectionPath:Boolean;
-  private var taxonomyId:String;
+
+  [Bindable]
+  public var taxonomyIdExpression:ValueExpression;
 
   // It is assumed that cachedValue always corresponds to a valid tag.
   // Consequently its always originates from onNodeSelection().
@@ -58,7 +60,6 @@ public class TaxonomySearchFieldBase extends StatefulComboBox {
   private var httpProxy:AjaxProxy;
 
   public function TaxonomySearchFieldBase(config:TaxonomySearchField = null) {
-    taxonomyId = config.taxonomyId;
     siteSelectionExpression = config.siteSelectionExpression;
     if (siteSelectionExpression) {
       siteSelectionExpression.addChangeListener(siteSelectionChanged);
@@ -71,10 +72,6 @@ public class TaxonomySearchFieldBase extends StatefulComboBox {
     }
 
     this.resetOnBlur = config.resetOnBlur;
-
-    if (taxonomyId === undefined) {
-      taxonomyId = "";
-    }
 
     var superConfig:TaxonomySearchField = TaxonomySearchField({});
     super(TaxonomySearchField(Ext.apply(superConfig, config)));
@@ -90,7 +87,7 @@ public class TaxonomySearchFieldBase extends StatefulComboBox {
     });
   }
 
-  internal function getSearchSuggestionsDataProxy(taxId:String, siteSelectionExpression:ValueExpression):AjaxProxy {
+  internal function getSearchSuggestionsDataProxy(config:TaxonomySearchField):AjaxProxy {
     if(!httpProxy) {
       this.siteSelectionExpression = siteSelectionExpression;
       var reader:JsonReader = JsonReader({});
@@ -102,7 +99,7 @@ public class TaxonomySearchFieldBase extends StatefulComboBox {
           Logger.info('Taxonomy search request failed:' + response.responseText);
         },
         method: "GET",
-        url: RemoteService.calculateRequestURI('taxonomies/find?' + getTaxonomyIdParam(taxId) + getSiteParam()),
+        url: RemoteService.calculateRequestURI('taxonomies/find?' + getTaxonomyIdParam(getTaxonomyId(config)) + getSiteParam()),
         reader: reader
       });
     }
@@ -110,8 +107,21 @@ public class TaxonomySearchFieldBase extends StatefulComboBox {
     return httpProxy;
   }
 
+  private function getTaxonomyId(config:TaxonomySearchField):String {
+    if(config.taxonomyIdExpression === undefined) {
+      return "";
+    }
+
+    return config.taxonomyIdExpression.getValue();
+  }
+
   private function siteSelectionChanged():void {
     reset();
+    var taxonomyId:String = "";
+    if(taxonomyIdExpression) {
+      taxonomyId = taxonomyIdExpression.getValue();
+    }
+
     ((getStore() as JsonStore).proxy as AjaxProxy).setUrl(RemoteService.calculateRequestURI('taxonomies/find?' + getTaxonomyIdParam(taxonomyId) + getSiteParam()));
   }
 

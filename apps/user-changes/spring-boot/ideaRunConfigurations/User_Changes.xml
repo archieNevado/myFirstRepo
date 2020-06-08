@@ -20,7 +20,7 @@
       </param>
       <param>
         <option name="enabled" value="false" />
-        <option name="name" value="mongoDb.host" />
+        <option name="name" value="mongodb.host" />
         <option name="value" value="SET_ME" />
       </param>
     </additionalParameters>

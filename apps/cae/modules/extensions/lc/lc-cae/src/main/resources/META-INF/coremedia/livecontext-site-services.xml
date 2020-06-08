@@ -10,8 +10,9 @@
   <bean class="com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceServicesAutoConfiguration"/>
 
   <bean id="liveContextSiteResolver" class="com.coremedia.livecontext.handler.util.LiveContextSiteResolverImpl">
-    <property name="delegate" ref="siteResolver"/>
-    <property name="sitesService" ref="sitesService"/>
-    <property name="commerceConnectionInitializer" ref="commerceConnectionInitializer"/>
+    <constructor-arg index="0" ref="siteResolver"/>
+    <constructor-arg index="1" ref="sitesService"/>
+    <constructor-arg index="2" ref="commerceConnectionInitializer"/>
+    <constructor-arg index="3" ref="cache"/>
   </bean>
 </beans>

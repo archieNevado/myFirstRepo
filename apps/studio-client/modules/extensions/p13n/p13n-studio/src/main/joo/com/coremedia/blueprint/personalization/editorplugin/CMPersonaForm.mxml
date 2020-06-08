@@ -40,6 +40,7 @@ HOW TO STRUCTURE:
   </fx:Metadata>
   <fx:Script><![CDATA[
     import com.coremedia.ui.bem.SpacingBEMEntities;
+    import com.coremedia.ui.data.ValueExpressionFactory;
 
     public static const xtype:String = "com.coremedia.blueprint.personalization.editorplugin.config.cmPersonaForm";
 
@@ -184,7 +185,7 @@ HOW TO STRUCTURE:
                                        title="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'p13n_context_taxonomy_explicit_interests_label')}">
               <editor:items>
                 <taxonomy:TaxonomyLinkListPropertyField bindTo="{config.bindTo}"
-                                                        taxonomyId="Subject"
+                                                        taxonomyIdExpression="{ValueExpressionFactory.createFromValue('Subject')}"
                                                         propertyName="{'profileExtensions.properties.' + TAXONOMY_PROPERTY_NAME_EXPLICIT}"
                                                         hideLabel="true"
                                                         forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
@@ -195,7 +196,7 @@ HOW TO STRUCTURE:
                                        title="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'p13n_context_taxonomy_implicit_interests_label')}">
               <editor:items>
                 <taxonomy:TaxonomyLinkListPropertyField bindTo="{config.bindTo}"
-                                                        taxonomyId="Subject"
+                                                        taxonomyIdExpression="{ValueExpressionFactory.createFromValue('Subject')}"
                                                         propertyName="{'profileExtensions.properties.' + TAXONOMY_PROPERTY_NAME_IMPLICIT}"
                                                         hideLabel="true"
                                                         forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>

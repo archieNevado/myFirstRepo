@@ -36,6 +36,11 @@
   <#return liveContextFreemarkerFacade.getVendorName()>
 </#function>
 
+<#-- GET HOME PAGE -->
+<#function getHomePage>
+  <#return liveContextFreemarkerFacade.getHomePage()>
+</#function>
+
 <#-- GET LOGIN STATUS URL -->
 <#function getStatusUrl>
   <#return liveContextLoginFreemarkerFacade.getStatusUrl()>

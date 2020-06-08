@@ -71,9 +71,6 @@
     -->
     <fx:Boolean id="showSelectionPath"/>
 
-    <!--- the id of the taxonomy that's tree is used to add items from. -->
-    <fx:String id="taxonomyId"/>
-
     <!--- True, if the search field is used for the taxonomy administration, defaults to false. -->
     <fx:Boolean id="resetOnBlur"/>
   </fx:Declarations>
@@ -84,7 +81,7 @@
   </local:plugins>
   <local:store>
     <store_Json autoDestroy="true"
-                proxy="{getSearchSuggestionsDataProxy(config.taxonomyId, config.siteSelectionExpression)}"
+                proxy="{getSearchSuggestionsDataProxy(config)}"
                 autoLoad="{true}">
       <fields>
         <data_AutoField name="{TaxonomyNode.PROPERTY_NAME}"/>

@@ -1,5 +1,5 @@
 .cm-navigation {
-  @include breakpoints(("sm", landscape) "lg-and-up") {
+  @include breakpoints($cm-navigation-full-menu-breakpoints) {
     position: static;
     background-color: transparent;
     text-align: center;
@@ -8,7 +8,7 @@
   &-item {
     color: #444;
 
-    @include breakpoints(("sm", landscape) "lg-and-up") {
+    @include breakpoints($cm-navigation-full-menu-breakpoints) {
       color: #fff;
     }
 
@@ -34,7 +34,7 @@
         font-weight: 500;
         text-transform: none;
 
-        @include breakpoints(("sm", landscape) "lg-and-up") {
+        @include breakpoints($cm-navigation-full-menu-breakpoints) {
           font-size: 16px;
           font-weight: 400;
         }
@@ -54,7 +54,7 @@
         }
       }
 
-      @include breakpoints(("sm", landscape) "lg-and-up") {
+      @include breakpoints($cm-navigation-full-menu-breakpoints) {
         &:hover {
           background-color: #fff;
           border-bottom-color: transparent;
@@ -84,7 +84,7 @@
 .cm-hamburger-icon {
   padding: 35px 40px;
 
-  @include breakpoints(("sm", landscape) "lg-and-up") {
+  @include breakpoints($cm-navigation-full-menu-breakpoints) {
     display: none;
   }
 }
@@ -95,6 +95,11 @@
   position: relative;
   list-style: none;
   width: 100%;
+
+  @include breakpoint("sm-and-up", portrait) {
+    width: 769px;
+    max-width: none;
+  }
 
   @include breakpoint("sm-and-up", landscape) {
     width: 920px;

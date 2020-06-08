@@ -43,6 +43,9 @@
     -->
     <fx:String id="taxonomyId"/>
 
+    <!--- a value expression to calculate the taxonomyId in case the field 'taxonomyId' has not been set -->
+    <fx:Object id="taxonomyIdExpression"/>
+
     <!---
      If true, suggestions field is not shown, default is false.
     -->
@@ -51,19 +54,20 @@
 
   <local:defaults>
     <editor:PropertyField bindTo="{config.bindTo}"
-                          u:taxonomyId="{config.taxonomyId}"
                           u:propertyName="{config.propertyName}"
+                          u:taxonomyIdExpression="{getTaxonomyIdExpr(config)}"
                           forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
   </local:defaults>
   <local:items>
-    <taxonomy:TaxonomyLinkListPropertyField bindTo="{config.bindTo}" hideLabel="true"
+    <taxonomy:TaxonomyLinkListPropertyField bindTo="{config.bindTo}"
+                                            hideLabel="true"
                                             propertyName="{config.propertyName}"
                                             labelAlign="top"/>
     <Container itemId="suggestionsPanel">
       <defaults>
         <editor:PropertyField bindTo="{config.bindTo}"
-                              u:taxonomyId="{config.taxonomyId}"
                               u:propertyName="{config.propertyName}"
+                              u:taxonomyIdExpression="{getTaxonomyIdExpr(config)}"
                               forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
       </defaults>
       <items>

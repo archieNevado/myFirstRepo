@@ -10,8 +10,8 @@ node.default_unless['blueprint']['apps'][service_name]['application.properties']
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['solr.url'] = 'http://localhost:40080/solr'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['solr.collection.cae'] = 'preview'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['elastic.solr.url'] = 'http://localhost:40080/solr'
-node.default_unless['blueprint']['apps'][service_name]['application.properties']['mongoDb.clientURI'] = 'mongodb://coremedia:coremedia@localhost:27017'
-node.default_unless['blueprint']['apps'][service_name]['application.properties']['mongoDb.prefix'] = 'blueprint'
+node.default_unless['blueprint']['apps'][service_name]['application.properties']['mongodb.client-uri'] = 'mongodb://coremedia:coremedia@localhost:27017'
+node.default_unless['blueprint']['apps'][service_name]['application.properties']['mongodb.prefix'] = 'blueprint'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['repository.heapCacheSize'] = 100 * 1024 * 1024
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['repository.blobCacheSize'] = 10 * 1024 * 1024 * 1024
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['repository.blobStreamingSizeThreshold'] = -1

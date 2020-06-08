@@ -48,9 +48,6 @@
     public var forceReadOnlyValueExpression:ValueExpression;
     ]]></fx:Script>
   <fx:Declarations>
-    <!--- Defines the taxonomy type to choose from. -->
-    <fx:String id="taxonomyId"/>
-
     <!--- If true, only one item can be selected from the list. -->
     <fx:String id="singleSelection"/>
   </fx:Declarations>
@@ -70,7 +67,7 @@
         <taxonomy:TaxonomyLinkListGridPanel id_="selectedTaxonomies"
                                             scrollable="true"
                                             bindTo="{config.bindTo}"
-                                            taxonomyId="{config.taxonomyId}"
+                                            taxonomyIdExpression="{config.taxonomyIdExpression}"
                                             emptyText="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyLinkList_empty_chooser_text')}">
           <taxonomy:linkListWrapper>
             <editor:MemoryLinkListWrapper linksVE="{getSelectionExpression()}"
@@ -89,7 +86,7 @@
       <items>
         <taxonomy:TaxonomySelector selectionExpression="{getSelectionExpression()}"
                                    singleSelection="{config.singleSelection}"
-                                   taxonomyId="{config.taxonomyId}"
+                                   taxonomyIdExpression="{config.taxonomyIdExpression}"
                                    forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
       </items>
     </FieldContainer>

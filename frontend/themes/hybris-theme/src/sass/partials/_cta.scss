@@ -8,6 +8,7 @@
   font-size: 16px;
   line-height: 1.375;
   text-decoration: none;
+  pointer-events: auto;
 
   &:hover,
   &:active,
@@ -16,6 +17,5 @@
     background-color: #ff973b;
     border-color: #ff973b;
     text-decoration: none;
-
   }
 }

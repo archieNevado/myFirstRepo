@@ -4,12 +4,12 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnect
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
-import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.fragment.FragmentContext;
 import com.coremedia.livecontext.fragment.FragmentContextProvider;
 import com.coremedia.livecontext.logictypes.CommerceLedLinkBuilderHelper;
+import com.coremedia.objectserver.beans.ContentBean;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.web.util.UriComponents;
@@ -27,8 +27,6 @@ import static com.coremedia.livecontext.product.ProductPageHandler.LIVECONTEXT_P
 @Named
 @DefaultAnnotation(NonNull.class)
 public class CommerceLinkHelper {
-
-  private static final String LIVECONTEXT_CONTENT_LED = "livecontext.contentLed";
 
   private final CommerceLedLinkBuilderHelper commerceLedPageExtension;
   private final SettingsService settingsService;
@@ -81,16 +79,8 @@ public class CommerceLinkHelper {
     }
   }
 
-  boolean isSiteContentLed(ServletRequest request){
-    return findSiteSetting(request, LIVECONTEXT_CONTENT_LED).orElse(false);
-  }
-
-  Optional<CommerceConnection> findCommerceConnection(CMChannel channel) {
-    return findCommerceConnection(channel.getContent());
-  }
-
-  private Optional<CommerceConnection> findCommerceConnection(Content content) {
-    return commerceConnectionSupplier.findConnection(content);
+  Optional<CommerceConnection> findCommerceConnection(ContentBean contentBean) {
+    return commerceConnectionSupplier.findConnection(contentBean.getContent());
   }
 
   static UriComponents toUriComponents(String uri) {

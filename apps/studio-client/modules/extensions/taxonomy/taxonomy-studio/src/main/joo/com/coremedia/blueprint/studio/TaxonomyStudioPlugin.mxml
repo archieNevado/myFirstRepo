@@ -12,7 +12,6 @@
     [ResourceBundle('com.coremedia.icons.CoreIcons')]
   </fx:Metadata>
   <fx:Script><![CDATA[
-    import com.coremedia.ui.data.ValueExpression;
     import com.coremedia.ui.data.ValueExpressionFactory;
     import com.coremedia.ui.skins.ButtonSkin;
 
@@ -74,7 +73,7 @@
               <editor:items>
                 <taxonomy:TaxonomyPropertyField propertyName="subjectTaxonomy"
                                                 hideLabel="true"
-                                                taxonomyId="Subject"/>
+                                                taxonomyIdExpression="{ValueExpressionFactory.createFromValue('Subject')}"/>
               </editor:items>
             </editor:PropertyFieldGroup>
             <editor:PropertyFieldGroup title="{ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Free_Keywords_label')}"
@@ -94,7 +93,7 @@
                 <taxonomy:TaxonomyPropertyField itemId="locTaxonomyItemId"
                                                 hideLabel="true"
                                                 propertyName="locationTaxonomy"
-                                                taxonomyId="Location"/>
+                                                taxonomyIdExpression="{ValueExpressionFactory.createFromValue('Location')}"/>
               </editor:items>
             </editor:PropertyFieldGroup>
           </ui:items>

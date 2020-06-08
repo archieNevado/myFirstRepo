@@ -290,7 +290,7 @@ type CMImageMapImpl implements CMImageMap @inherit(from: ["CMTeaserImpl"]) {
 
 type CMLinkableImpl implements CMLinkable @inherit(from: ["CMLocalizedImpl"]) {
   settings(paths: [[String!]!]!): JSON @fetch(from: "@settingsAdapter.to(#root).getWrappedInStruct(#paths)")
-  context: CMNavigation @fetch(from: "@navigationAdapter.to(#root).context")
+  context: CMNavigation @fetch(from: "@navigationAdapter.to(#root).findContext()")
   extDisplayedDate: String
   link: Link @fetch(from: "@graphQlLinkComposer.apply(#root)")
   navigationPath: [CMLinkable] @fetch(from: "@navigationAdapter.to(#root).pathToRoot")

@@ -7,5 +7,4 @@
   "renderEmptyImage": false,
   "renderLink": false,
   "enableTeaserOverlay": false
-}/>
-
+} + cm.localParameters() />

@@ -132,26 +132,12 @@ public class LiveContextPageHandlerBase extends PageHandlerBase {
     return UriComponentsHelper.prefixUri(absoluteUrlPrefix, null, originalUri);
   }
 
-  /**
-   * To evaluate if the newPreviewSession query parameter has to be applied to a commerce url, the evaluator has to know
-   * if it's the first request triggered by a studio action (e.g. open in tab) or it's a follow up trigger by an author
-   * clicking in the preview.
-   * If it's a request triggered by a studio action an author want's to have a cleared session (no logged in user or
-   * p13n context). If he tests in studio the preview the author want to stay logged in and use the same p13n context.
-   *
-   * @param request the current request
-   * @return true if the request was triggered by a studio action.
-   */
-  public static boolean isInitialStudioRequest(@NonNull HttpServletRequest request) {
-    return PreviewHandler.isStudioPreviewRequest(request);
-  }
-
   protected boolean isPreview() {
     return contentRepository.isContentManagementServer();
   }
 
   public static boolean isStudioPreviewRequest(@NonNull HttpServletRequest request) {
-    return isInitialStudioRequest(request)
+    return PreviewHandler.isStudioPreviewRequest(request)
             || isTrue(request.getAttribute(HAS_PREVIEW_TOKEN))
             || isTrue(request.getParameter(REQUEST_PARAMETER_PREVIEW))
             || isTrue(request.getParameter(P13N_URI_PARAMETER));

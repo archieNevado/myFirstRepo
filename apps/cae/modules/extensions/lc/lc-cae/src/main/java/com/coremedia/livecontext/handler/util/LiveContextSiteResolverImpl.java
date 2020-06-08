@@ -2,6 +2,7 @@ package com.coremedia.livecontext.handler.util;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.blueprint.base.multisite.cae.SiteResolver;
+import com.coremedia.cache.Cache;
 import com.coremedia.cap.common.CapObjectDestroyedException;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SiteDestroyedException;
@@ -10,6 +11,7 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.fragment.FragmentParameters;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
@@ -28,17 +30,25 @@ import static java.util.stream.Collectors.toSet;
 /**
  * Utility class for resolving a site from an URL.
  */
+@DefaultAnnotation(NonNull.class)
 public class LiveContextSiteResolverImpl implements LiveContextSiteResolver {
 
   private static final Logger LOG = LoggerFactory.getLogger(LiveContextSiteResolverImpl.class);
 
-  private SiteResolver delegate;
-  private SitesService sitesService;
-  private CommerceConnectionInitializer commerceConnectionInitializer;
+  private final SiteResolver delegate;
+  private final SitesService sitesService;
+  private final CommerceConnectionInitializer commerceConnectionInitializer;
+  private final Cache cache;
 
-  @NonNull
+  public LiveContextSiteResolverImpl(SiteResolver delegate, SitesService sitesService, CommerceConnectionInitializer commerceConnectionInitializer, Cache cache) {
+    this.delegate = delegate;
+    this.sitesService = sitesService;
+    this.commerceConnectionInitializer = commerceConnectionInitializer;
+    this.cache = cache;
+  }
+
   @Override
-  public Optional<Site> findSiteFor(@NonNull FragmentParameters fragmentParameters) {
+  public Optional<Site> findSiteFor(FragmentParameters fragmentParameters) {
     Optional<Site> site = findSiteForEnvironment(fragmentParameters.getLocale(), fragmentParameters.getEnvironment());
     if (site.isPresent()) {
       return site;
@@ -47,9 +57,12 @@ public class LiveContextSiteResolverImpl implements LiveContextSiteResolver {
     return findSiteFor(fragmentParameters.getStoreId(), fragmentParameters.getLocale());
   }
 
-  @NonNull
   @Override
-  public Optional<Site> findSiteFor(@NonNull String storeId, @NonNull Locale locale) {
+  public Optional<Site> findSiteFor(String storeId, Locale locale) {
+    return cache.get(new StoreIdAndLocaleToSiteCacheKey(storeId, locale, this));
+  }
+
+  Optional<Site> findSiteForUncached(String storeId, Locale locale) {
     Set<Site> matchingSites = sitesService.getSites().stream()
             .filter(site -> localeMatchesSite(site, locale))
             .filter(site -> siteHasStore(site, storeId))
@@ -73,7 +86,7 @@ public class LiveContextSiteResolverImpl implements LiveContextSiteResolver {
 
   // --- internal ---------------------------------------------------
 
-  private boolean siteHasStore(@NonNull Site site, @NonNull String storeId) {
+  private boolean siteHasStore(Site site, String storeId) {
     StoreContext storeContext;
 
     try {
@@ -93,7 +106,7 @@ public class LiveContextSiteResolverImpl implements LiveContextSiteResolver {
     return storeId.equalsIgnoreCase(String.valueOf(storeContext.getStoreId()));
   }
 
-  private static boolean localeMatchesSite(@NonNull Site site, @NonNull Locale locale) {
+  private static boolean localeMatchesSite(Site site, Locale locale) {
     Locale siteLocale = site.getLocale();
     return locale.equals(siteLocale) ||
             (isNullOrEmpty(siteLocale.getCountry()) && locale.getLanguage().equals(siteLocale.getLanguage()));
@@ -106,8 +119,7 @@ public class LiveContextSiteResolverImpl implements LiveContextSiteResolver {
    * @param environment The name of the environment which contains the site name to use.
    * @return The site that was resolved by the environment (name matching by default).
    */
-  @NonNull
-  private Optional<Site> findSiteForEnvironment(@NonNull Locale locale, @Nullable String environment) {
+  private Optional<Site> findSiteForEnvironment(Locale locale, String environment) {
     if (environment == null) {
       return Optional.empty();
     }
@@ -134,7 +146,7 @@ public class LiveContextSiteResolverImpl implements LiveContextSiteResolver {
   }
 
   @Nullable
-  private static String extractSiteNameFromEnvironment(@NonNull String environment) {
+  private static String extractSiteNameFromEnvironment(String environment) {
     if (isNullOrEmpty(environment) || !environment.startsWith("site:")) {
       return null;
     }
@@ -145,39 +157,26 @@ public class LiveContextSiteResolverImpl implements LiveContextSiteResolver {
   // -------------- Defaults ------------------------------
 
   @Override
-  public Site findSiteByPath(String normalizedPath) {
+  @Nullable
+  public Site findSiteByPath(@Nullable String normalizedPath) {
     return delegate.findSiteByPath(normalizedPath);
   }
 
   @Override
-  public Site findSiteBySegment(String siteSegment) {
+  @Nullable
+  public Site findSiteBySegment(@Nullable String siteSegment) {
     return delegate.findSiteBySegment(siteSegment);
   }
 
   @Override
-  public Site findSiteForPathWithContentId(String normalizedPath) {
+  @Nullable
+  public Site findSiteForPathWithContentId(@Nullable String normalizedPath) {
     return delegate.findSiteForPathWithContentId(normalizedPath);
   }
 
   @Override
+  @Nullable
   public Site findSiteForContentId(int contentId) {
     return delegate.findSiteForContentId(contentId);
-  }
-
-  // --- configuration ----------------------------------------------
-
-  @Required
-  public void setDelegate(SiteResolver delegate) {
-    this.delegate = delegate;
-  }
-
-  @Required
-  public void setSitesService(SitesService sitesService) {
-    this.sitesService = sitesService;
-  }
-
-  @Required
-  public void setCommerceConnectionInitializer(CommerceConnectionInitializer commerceConnectionInitializer) {
-    this.commerceConnectionInitializer = commerceConnectionInitializer;
   }
 }

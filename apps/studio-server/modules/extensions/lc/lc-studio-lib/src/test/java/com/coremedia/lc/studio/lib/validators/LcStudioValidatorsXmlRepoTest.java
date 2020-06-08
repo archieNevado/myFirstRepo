@@ -43,6 +43,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.Optional;
 
 import static java.util.Arrays.asList;
@@ -307,8 +308,8 @@ public class LcStudioValidatorsXmlRepoTest {
 
     @SuppressWarnings("MethodMayBeStatic")
     @Bean
-    ApplicationContextCapTypeValidators validators() {
-      return new ApplicationContextCapTypeValidators();
+    ApplicationContextCapTypeValidators validators(List<CapTypeValidator> capTypeValidators) {
+      return new ApplicationContextCapTypeValidators(capTypeValidators);
     }
   }
 

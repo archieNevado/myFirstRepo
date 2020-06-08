@@ -43,11 +43,6 @@
     <fx:String id="propertyName"/>
 
     <!---
-     The taxonomy identifier configured on the server side.
-    -->
-    <fx:String id="taxonomyId"/>
-
-    <!---
      If true, suggestions field is not shown, default is false.
     -->
     <fx:Boolean id="disableSuggestions"/>

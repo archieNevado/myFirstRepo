@@ -59,6 +59,9 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
 
   private static final Logger LOG = LoggerFactory.getLogger(FragmentCommerceContextInterceptor.class);
 
+  private static final String REQUEST_PARAM_TIMESTAMP = "timestamp";
+  private static final String REQUEST_PARAM_TIMEZONE = "timezone";
+
   private CatalogAliasTranslationService catalogAliasTranslationService;
   private LiveContextContextAccessor fragmentContextAccessor;
   private LiveContextSiteResolver liveContextSiteResolver;
@@ -209,6 +212,15 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
     if (isStudioPreviewRequest(request)) {
       // preview date
       newPreviewDate = createPreviewDate(fragmentContext).orElse(null);
+
+      if (newPreviewDate == null) {
+        String timestampText = request.getParameter(REQUEST_PARAM_TIMESTAMP);
+        String timezoneText = request.getParameter(REQUEST_PARAM_TIMEZONE);
+        if (timestampText != null && timezoneText != null) {
+          ZoneId zoneId = parseTimeZone(timestampText);
+          newPreviewDate = parsePreviewDate(timestampText, zoneId).orElse(null);
+        }
+      }
 
       // preview user group segments
       Optional<String> previewUserGroupSegments = findStringValue(fragmentContext, contextNamePreviewUserGroup);
@@ -387,5 +399,13 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
 
   public void setContextNameContractIds(String contextNameContractIds) {
     this.contextNameContractIds = contextNameContractIds;
+  }
+
+  public void setContextNamePreviewUserGroup(String contextNamePreviewUserGroup) {
+    this.contextNamePreviewUserGroup = contextNamePreviewUserGroup;
+  }
+
+  public void setContextNameUserGroupIds(String contextNameUserGroupIds) {
+    this.contextNameUserGroupIds = contextNameUserGroupIds;
   }
 }

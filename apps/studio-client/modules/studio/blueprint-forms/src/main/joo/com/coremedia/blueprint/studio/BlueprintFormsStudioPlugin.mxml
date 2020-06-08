@@ -181,7 +181,7 @@
           <ui:rules>
             <ui:LocalComboBox>
               <ui:plugins exml:mode="append">
-                <editor:SyncComboBoxValueOnTabReusePlugin/>
+                <editor:SyncComboBoxValueWithStorePlugin/>
               </ui:plugins>
             </ui:LocalComboBox>
           </ui:rules>
@@ -241,7 +241,7 @@
     </editor:ConfigureDocumentTypes>
 
     <!-- Register document types to be allowed to be dropped -->
-    <editor:ConfigureDocumentTypes names="CMTeasable"
+    <editor:ConfigureDocumentTypes names="CMLinkable"
                                    richTextLinkable="true"/>
 
     <!-- register Image Types for thumbnail view and RichText Drag'n'Drop -->

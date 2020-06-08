@@ -2,7 +2,9 @@ package com.coremedia.livecontext.web.taglib;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
 import com.coremedia.blueprint.cae.web.FreemarkerEnvironment;
+import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
@@ -19,6 +21,7 @@ import com.coremedia.livecontext.fragment.FragmentContext;
 import com.coremedia.livecontext.fragment.FragmentContextProvider;
 import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
+import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.taglib.MetadataTagSupport;
 import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -27,6 +30,7 @@ import org.springframework.beans.factory.annotation.Required;
 import java.util.Currency;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.google.common.base.Strings.nullToEmpty;
 import static java.util.Collections.emptyMap;
@@ -51,6 +55,7 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
   private AugmentationService productAugmentationService;
 
   private SitesService sitesService;
+  private ContentBeanFactory contentBeanFactory;
 
   public AugmentationService getCategoryAugmentationService() {
     return categoryAugmentationService;
@@ -186,10 +191,24 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
     this.liveContextNavigationFactory = liveContextNavigationFactory;
   }
 
+  public void setContentBeanFactory(ContentBeanFactory contentBeanFactory) {
+    this.contentBeanFactory = contentBeanFactory;
+  }
+
   public String getVendorName() {
     return CurrentStoreContext.find()
             .map(StoreContext::getConnection)
             .map(CommerceConnection::getVendorName)
             .orElse(null);
   }
+
+  public CMChannel getHomePage() {
+    StoreContext storeContext = CurrentStoreContext.get();
+    String siteId = storeContext.getSiteId();
+    return Optional.ofNullable(sitesService.getSite(siteId))
+            .map(Site::getSiteRootDocument)
+            .map(content -> contentBeanFactory.createBeanFor(content, CMChannel.class))
+            .orElseThrow(() -> new IllegalStateException("Unable to find Homepage for site '" + siteId + "'."));
+  }
+
 }

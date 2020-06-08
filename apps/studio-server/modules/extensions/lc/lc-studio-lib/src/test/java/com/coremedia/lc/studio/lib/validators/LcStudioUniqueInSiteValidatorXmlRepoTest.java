@@ -3,6 +3,7 @@ package com.coremedia.lc.studio.lib.validators;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.lc.studio.lib.LcStudioValidationConfiguration;
+import com.coremedia.rest.cap.validation.CapTypeValidator;
 import com.coremedia.rest.cap.validation.impl.ApplicationContextCapTypeValidators;
 import com.coremedia.rest.validation.impl.Issue;
 import com.coremedia.rest.validation.impl.IssuesImpl;
@@ -20,6 +21,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.inject.Inject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.coremedia.lc.studio.lib.validators.LcStudioValidatorsXmlRepoTest.code;
 import static java.util.Collections.emptySet;
@@ -73,8 +77,8 @@ public class LcStudioUniqueInSiteValidatorXmlRepoTest {
   public static class LocalConfig {
 
     @Bean
-    ApplicationContextCapTypeValidators validators() {
-      return new ApplicationContextCapTypeValidators();
+    ApplicationContextCapTypeValidators validators(List<CapTypeValidator> capTypeValidators) {
+      return new ApplicationContextCapTypeValidators(capTypeValidators);
     }
 
   }

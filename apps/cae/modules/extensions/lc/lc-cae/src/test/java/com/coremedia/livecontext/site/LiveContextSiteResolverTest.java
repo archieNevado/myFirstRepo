@@ -1,6 +1,8 @@
 package com.coremedia.livecontext.site;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.multisite.cae.SiteResolver;
+import com.coremedia.cache.Cache;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.fragment.FragmentParameters;
@@ -17,6 +19,7 @@ import java.util.Locale;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -36,16 +39,14 @@ public class LiveContextSiteResolverTest {
   @Mock
   private Site site2;
 
-  private LiveContextSiteResolverImpl testling = new LiveContextSiteResolverImpl();
+  private LiveContextSiteResolverImpl testling;
 
   @Mock
   private CommerceConnectionInitializer commerceConnectionInitializer;
 
   @Before
   public void setup() {
-
-    testling.setSitesService(sitesService);
-    testling.setCommerceConnectionInitializer(commerceConnectionInitializer);
+    testling = new LiveContextSiteResolverImpl(mock(SiteResolver.class), sitesService, commerceConnectionInitializer, mock(Cache.class));
 
     when(site2.getLocale()).thenReturn(LOCALE);
     when(site1.getName()).thenReturn(SITE_NAME_1);

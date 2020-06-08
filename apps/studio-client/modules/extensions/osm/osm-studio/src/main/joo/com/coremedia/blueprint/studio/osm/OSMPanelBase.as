@@ -29,6 +29,7 @@ public class OSMPanelBase extends Panel {
     super(config);
     this.latLngExpression = config.latLngExpression;
     addListener('afterlayout', initMap);
+    addListener('afterlayout', resized);
     calcZoomLevel();
   }
 

@@ -48,7 +48,7 @@
   <#else>
     <img src="${src}"
          alt="${alt}"
-         class="${blockClass} ${blockClass}--loading ${additionalClass}"
+         class="${blockClass} ${additionalClass}"
          <@utils.renderAttr attr=additionalAttributes ignore=["src", "alt", "class"]/>
          <@preview.metadata data=metadata />>
   </#if>

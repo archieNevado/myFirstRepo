@@ -7,6 +7,7 @@ import com.coremedia.contenthub.api.column.ColumnValue;
 import com.coremedia.contenthub.api.column.DefaultColumnProvider;
 import com.rometools.rome.feed.synd.SyndEntry;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,28 +31,52 @@ class RSSColumnProvider extends DefaultColumnProvider {
   @NonNull
   @Override
   public List<ColumnValue> getColumnValues(ContentHubObject hubObject) {
-    String author = null;
-    Calendar lastModified = null;
     if (hubObject instanceof RSSItem) {
-      RSSItem item = (RSSItem) hubObject;
-      author = item.getRssEntry().getAuthor();
-      SyndEntry rssEntry = item.getRssEntry();
+      return getColumnValues((RSSItem) hubObject);
+    }
 
-      lastModified = getCalendarFromDate(rssEntry.getUpdatedDate() != null ? rssEntry.getUpdatedDate() : rssEntry.getPublishedDate());
-
-
-    } else if (hubObject instanceof RSSFolder) {
-      RSSFolder folder = (RSSFolder) hubObject;
-      lastModified = getCalendarFromDate(folder.getFeed().getPublishedDate());
+    if (hubObject instanceof RSSFolder) {
+      return getColumnValues((RSSFolder) hubObject);
     }
 
     List<ColumnValue> columnValues = new ArrayList<>(super.getColumnValues(hubObject));
+    columnValues.add(new ColumnValue("author", null, null, null));
+    columnValues.add(new ColumnValue("lastModified", null, null, null));
+    return columnValues;
+  }
+
+  @NonNull
+  private List<ColumnValue> getColumnValues(@NonNull RSSFolder rssFolder) {
+    Calendar lastModified = evaluateLastModified(rssFolder);
+    List<ColumnValue> columnValues = new ArrayList<>(super.getColumnValues(rssFolder));
+    columnValues.add(new ColumnValue("author", null, null, null));
+    columnValues.add(new ColumnValue("lastModified", lastModified, null, null));
+    return columnValues;
+  }
+
+  @Nullable
+  private Calendar evaluateLastModified(@NonNull RSSFolder rssFolder) {
+    Date publishedDate = rssFolder.getFeed().getPublishedDate();
+    if (publishedDate == null) {
+      return null;
+    }
+    return getCalendarFromDate(publishedDate);
+  }
+
+  @NonNull
+  private List<ColumnValue> getColumnValues(@NonNull RSSItem rssItem) {
+    String author = rssItem.getRssEntry().getAuthor();
+    SyndEntry rssEntry = rssItem.getRssEntry();
+    Date lastModifiedDate = rssEntry.getUpdatedDate() != null ? rssEntry.getUpdatedDate() : rssEntry.getPublishedDate();
+    Calendar lastModified = getCalendarFromDate(lastModifiedDate);
+    List<ColumnValue> columnValues = new ArrayList<>(super.getColumnValues(rssItem));
     columnValues.add(new ColumnValue("author", author, null, author));
     columnValues.add(new ColumnValue("lastModified", lastModified, null, author));
     return columnValues;
   }
 
-  private Calendar getCalendarFromDate(Date date) {
+  @NonNull
+  private Calendar getCalendarFromDate(@NonNull Date date) {
     Calendar calendar = Calendar.getInstance();
     calendar.setTime(date);
     return calendar;

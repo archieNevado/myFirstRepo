@@ -78,8 +78,8 @@
   <group name="translation-workflow-robots" contentgroup="true" livegroup="false" administrative="false">
     <rule content="/" type="Document_" rights="R"/>
     <rule content="/" type="Folder_" rights="R"/>
-    <rule content="/Sites" type="Document_" rights="RMDA"/>
-    <rule content="/Sites" type="Folder_" rights="RMDA"/>
+    <rule content="/Sites" type="Document_" rights="RMDAS"/>
+    <rule content="/Sites" type="Folder_" rights="RMDAS"/>
     <members>
       <user id="translation-workflow-robot" name="translation-workflow-robot"/>
     </members>

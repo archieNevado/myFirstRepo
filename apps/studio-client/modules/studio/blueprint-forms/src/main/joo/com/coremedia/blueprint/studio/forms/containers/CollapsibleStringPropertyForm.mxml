@@ -4,11 +4,9 @@
         xmlns:exml="http://www.jangaroo.net/exml/0.8"
         xmlns="exml:ext.config"
         xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
-        title="{config.title}"
-        itemId="{config.propertyName + 'Form'}">
+        title="{formatTitle(config.bindTo, config.propertyName, config.title)}"
+        itemId="{formatItemId(config.propertyName, 'Form')}">
   <fx:Script><![CDATA[
-    import com.coremedia.ui.data.ValueExpression;
-
     public static const xtype:String = "com.coremedia.blueprint.studio.config.collapsibleStringPropertyForm";
 
     private var config:CollapsibleStringPropertyForm;

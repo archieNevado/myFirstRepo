@@ -21,4 +21,4 @@
   "renderAuthors": true,
   "renderVideoInline": true,
   "renderDate": true
-}/>
+} + cm.localParameters() />

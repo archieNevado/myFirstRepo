@@ -1,7 +1,7 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.layout.PageGridPlacement" -->
 
 <#assign numberOfItems=self.items?size />
-<#assign localizations=cmpage.content.localizations![] />
+<#assign localizations=lc.getHomePage().localizations![] />
 <#assign cartAction=bp.setting(self,"cartAction", {})/>
 <#assign searchAction=bp.setting(self,"shopSearchAction", {})/>
 

@@ -1,5 +1,8 @@
 package com.coremedia.blueprint.studio.taxonomy.selection {
 
+import com.coremedia.ui.data.ValueExpression;
+import com.coremedia.ui.data.ValueExpressionFactory;
+
 import ext.form.FieldContainer;
 
 /**
@@ -21,6 +24,16 @@ public class TaxonomyPropertyFieldBase extends FieldContainer {
     if(disableSuggestions) {
       queryById('suggestionsPanel').hide();
     }
+  }
+
+  protected function getTaxonomyIdExpr(config:TaxonomyPropertyField):ValueExpression {
+    return ValueExpressionFactory.createFromFunction(function():String {
+      if(config.taxonomyId) {
+        return config.taxonomyId;
+      }
+
+      return config.taxonomyIdExpression.getValue();
+    });
   }
 }
 }

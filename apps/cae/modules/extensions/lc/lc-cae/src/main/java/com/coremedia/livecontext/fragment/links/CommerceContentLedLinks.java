@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.fragment.links;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
+import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.livecontext.commercebeans.CategoryInSite;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.contentbeans.CMExternalPage;
@@ -14,6 +15,7 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.link.StorefrontRef;
 import com.coremedia.livecontext.ecommerce.link.StorefrontRefKey;
 import com.coremedia.livecontext.ecommerce.order.Cart;
+import com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.ExternalSeoSegmentBuilder;
 import com.coremedia.livecontext.navigation.LiveContextCategoryNavigation;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
@@ -27,9 +29,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.coremedia.blueprint.cae.handlers.PreviewHandler.isStudioPreviewRequest;
 import static com.coremedia.livecontext.fragment.links.CommerceLinkHelper.isFragmentRequest;
 import static com.coremedia.livecontext.fragment.links.CommerceLinkHelper.toUriComponents;
 import static com.coremedia.livecontext.fragment.links.CommerceLinkTemplateTypes.CHECKOUT_REDIRECT;
+import static com.coremedia.livecontext.fragment.links.CommerceLinkTemplateTypes.CM_CONTENT;
 import static com.coremedia.livecontext.fragment.links.CommerceLinkTemplateTypes.EXTERNAL_PAGE_NON_SEO;
 import static com.coremedia.livecontext.fragment.links.CommerceLinkTemplateTypes.EXTERNAL_PAGE_SEO;
 import static com.coremedia.livecontext.handler.CartHandler.URI_PATTERN;
@@ -52,9 +56,33 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 public class CommerceContentLedLinks {
 
   private final CommerceLinkHelper commerceLinkHelper;
+  private final ExternalSeoSegmentBuilder seoSegmentBuilder;
 
-  public CommerceContentLedLinks(CommerceLinkHelper commerceLinkHelper) {
+  public CommerceContentLedLinks(CommerceLinkHelper commerceLinkHelper, ExternalSeoSegmentBuilder seoSegmentBuilder) {
     this.commerceLinkHelper = commerceLinkHelper;
+    this.seoSegmentBuilder = seoSegmentBuilder;
+  }
+
+  @Link(type = CMLinkable.class, order = 3)
+  @Nullable
+  public UriComponents buildLinkForCMLinkable(CMLinkable cmLinkable, HttpServletRequest request) {
+    if (isStudioPreviewRequest(request)
+            || isFragmentRequest(request)
+            || !commerceLinkHelper.useCommerceLinkForLinkable(cmLinkable)) {
+      return null;
+    }
+
+    return commerceLinkHelper.findCommerceConnection(cmLinkable)
+            .flatMap(commerceConnection -> buildLinkForCMLinkable(commerceConnection, cmLinkable))
+            .orElse(null);
+  }
+
+  private Optional<UriComponents> buildLinkForCMLinkable(CommerceConnection connection, CMLinkable cmLinkable) {
+    return cmLinkable.getContexts().stream()
+            .findFirst()
+            .map(cmContext -> seoSegmentBuilder.asSeoSegment(cmContext, cmLinkable))
+            .filter(segment -> !segment.isBlank())
+            .flatMap(segment -> buildLink(connection, CM_CONTENT, Map.of("seoSegment", segment)));
   }
 
   @Link(type = Category.class, order = 3)
@@ -62,7 +90,7 @@ public class CommerceContentLedLinks {
   public UriComponents buildLinkForCategory(Category category,
                                             HttpServletRequest request) {
 
-    if (isFragmentRequest(request) || !commerceLinkHelper.isSiteContentLed(request)
+    if (isFragmentRequest(request)
             || !commerceLinkHelper.useCommerceCategoryLinks(request)) {
       return null;
     }
@@ -114,7 +142,7 @@ public class CommerceContentLedLinks {
   public UriComponents buildLinkForProduct(Product product,
                                            HttpServletRequest request) {
 
-    if (isFragmentRequest(request) || !commerceLinkHelper.isSiteContentLed(request)
+    if (isFragmentRequest(request)
             || !commerceLinkHelper.useCommerceProductLinks(request)) {
       return null;
     }
@@ -164,7 +192,7 @@ public class CommerceContentLedLinks {
   public UriComponents buildLinkForExternalPage(CMExternalPage externalPage,
                                                 HttpServletRequest request) {
 
-    if (isFragmentRequest(request) || !commerceLinkHelper.isSiteContentLed(request)) {
+    if (isFragmentRequest(request)) {
       return null;
     }
 
@@ -178,7 +206,6 @@ public class CommerceContentLedLinks {
   public UriComponents buildGoToCartLink(@NonNull HttpServletRequest request) {
     return CurrentStoreContext.find()
             // only perform this check, if the store context is available
-            .filter(context -> commerceLinkHelper.isSiteContentLed(request))
             .flatMap(context -> getUriComponents(context, CHECKOUT_REDIRECT))
             .orElse(null);
   }

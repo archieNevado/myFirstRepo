@@ -39,7 +39,6 @@ import com.coremedia.livecontext.fragment.resolver.ContentNumericIdExternalRefer
 import com.coremedia.livecontext.fragment.resolver.ContentNumericIdWithChannelIdExternalReferenceResolver;
 import com.coremedia.livecontext.fragment.resolver.ContentPathExternalReferenceResolver;
 import com.coremedia.livecontext.fragment.resolver.LinkableAndNavigation;
-import com.coremedia.livecontext.handler.util.LiveContextSiteResolverImpl;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.HttpError;
@@ -171,9 +170,6 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
   protected CMLinkable linkableBean;
 
   @Mock
-  protected LiveContextSiteResolverImpl siteResolver;
-
-  @Mock
   protected HttpServletRequest request;
 
   @Mock
@@ -214,8 +210,6 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
     testling.setValidationService(validationService);
     testling.setBeanFactory(beanFactory);
     when(beanFactory.getBean("cmPage", PageImpl.class)).thenReturn(new PageImpl(false, sitesService, cache, null, null, null));
-
-    siteResolver.setSitesService(sitesService);
 
     when(request.getAttribute(FragmentContextProvider.FRAGMENT_CONTEXT_ATTRIBUTE)).thenReturn(fragmentContext);
 

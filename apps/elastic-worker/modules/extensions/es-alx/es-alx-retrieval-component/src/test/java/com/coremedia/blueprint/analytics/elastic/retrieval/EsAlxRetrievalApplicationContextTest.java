@@ -65,7 +65,7 @@ import static org.mockito.Mockito.when;
         "repository.params.contentxml=classpath:/com/coremedia/testing/contenttest.xml",
         "repository.params.userxml=classpath:/com/coremedia/testing/usertest.xml",
         "tenant.default=tenant",
-        "models.createIndexes=false",
+        "mongodb.models.create-indexes=false",
         "elastic.solr.lazyIndexCreation=true"
 })
 public class EsAlxRetrievalApplicationContextTest {

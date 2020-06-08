@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.fragment.links;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextHelper;
+import com.coremedia.blueprint.cae.handlers.PreviewHandler;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.livecontext.contentbeans.CMExternalPage;
 import com.coremedia.livecontext.contentbeans.LiveContextExternalChannel;
@@ -24,8 +25,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.coremedia.blueprint.base.links.UriConstants.RequestParameters.VIEW_PARAMETER;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.link.UrlUtil.convertToQueryParamList;
-import static com.coremedia.livecontext.handler.LiveContextPageHandlerBase.isInitialStudioRequest;
+import static com.coremedia.blueprint.cae.handlers.HandlerBase.FRAGMENT_PREVIEW;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
@@ -56,7 +58,7 @@ public class CommerceStudioLinks {
   @Nullable
   public UriComponents buildLinkForCategory(Category category, Map<String, Object> linkParameters,
                                             HttpServletRequest request) {
-    if (!isInitialStudioRequest(request) || !commerceLinkHelper.useCommerceCategoryLinks(request)) {
+    if (!isStudioPreviewRequest(request) || !commerceLinkHelper.useCommerceCategoryLinks(request)) {
       // not responsible
       return null;
     }
@@ -68,7 +70,6 @@ public class CommerceStudioLinks {
             .map(urlService -> urlService.getCategoryUrl(category, storeContext, convertToQueryParamList(linkParameters), request))
             .orElse(null);
   }
-
 
   @Link(type = LiveContextExternalChannel.class, order = 2)
   @Nullable
@@ -87,7 +88,7 @@ public class CommerceStudioLinks {
   public UriComponents buildLinkForProduct(Product product, Map<String, Object> linkParameters,
                                            HttpServletRequest request) {
 
-    if (!isInitialStudioRequest(request) || !commerceLinkHelper.useCommerceProductLinks(request)) {
+    if (!isStudioPreviewRequest(request) || !commerceLinkHelper.useCommerceProductLinks(request)) {
       // not responsible
       return null;
     }
@@ -119,7 +120,7 @@ public class CommerceStudioLinks {
   @Nullable
   public UriComponents buildLinkForExternalPage(CMExternalPage externalPage, Map<String, Object> linkParameters,
                                                 HttpServletRequest request) {
-    if (!isInitialStudioRequest(request)) {
+    if (!isStudioPreviewRequest(request)) {
       // not responsible
       return null;
     }
@@ -160,7 +161,7 @@ public class CommerceStudioLinks {
   public UriComponents buildLinkForCMChannel(CMChannel channel, Map<String, Object> linkParameters,
                                              HttpServletRequest request) {
 
-    if (!isInitialStudioRequest(request) || !commerceLinkHelper.useCommerceLinkForChannel(channel)) {
+    if (!isStudioPreviewRequest(request) || !commerceLinkHelper.useCommerceLinkForChannel(channel)) {
       // not responsible
       return null;
     }
@@ -184,5 +185,9 @@ public class CommerceStudioLinks {
 
   private static Optional<PreviewUrlService> getPreviewUrlService(CommerceBean commerceBean) {
     return commerceBean.getContext().getConnection().getPreviewUrlService();
+  }
+
+  private static boolean isStudioPreviewRequest(HttpServletRequest request) {
+    return PreviewHandler.isStudioPreviewRequest(request) || FRAGMENT_PREVIEW.equals(request.getParameter(VIEW_PARAMETER));
   }
 }

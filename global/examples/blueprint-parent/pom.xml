@@ -30,7 +30,7 @@
 
     <customer>Blueprint</customer>
 
-    <cm.examples.core.version>2004.1</cm.examples.core.version>
+    <cm.examples.core.version>2004.2</cm.examples.core.version>
 
     <spring.boot.version>2.2.6.RELEASE</spring.boot.version>
     <application-plugin.version>2.8.3</application-plugin.version>
@@ -52,7 +52,7 @@
     <cae-preview.host>${installation.host}</cae-preview.host>
     <cae-live.host>${installation.host}</cae-live.host>
     <db.host>${installation.host}</db.host>
-    <mongoDb.host>${installation.host}</mongoDb.host>
+    <mongodb.host>${installation.host}</mongodb.host>
     <wcs.host>commerce-wcs-host</wcs.host>
     <proxy.host>${installation.host}</proxy.host>
 
@@ -81,22 +81,22 @@
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.examples.core.version>2004.1</cm.examples.core.version>
-    <cm.common.core.version>2004.1</cm.common.core.version>
+    <cm.examples.core.version>2004.2</cm.examples.core.version>
+    <cm.common.core.version>2004.2</cm.common.core.version>
     <cm.common.bp.version>1-SNAPSHOT</cm.common.bp.version>
-    <cm.middle.core.version>2004.1</cm.middle.core.version>
+    <cm.middle.core.version>2004.2</cm.middle.core.version>
     <cm.middle.bp.version>1-SNAPSHOT</cm.middle.bp.version>
-    <cm.cae.core.version>2004.1</cm.cae.core.version>
+    <cm.cae.core.version>2004.2</cm.cae.core.version>
     <cm.cae.bp.version>1-SNAPSHOT</cm.cae.bp.version>
-    <cm.content-feeder.core.version>2004.1</cm.content-feeder.core.version>
+    <cm.content-feeder.core.version>2004.2</cm.content-feeder.core.version>
     <cm.content-feeder.bp.version>1-SNAPSHOT</cm.content-feeder.bp.version>
-    <cm.cae-feeder.core.version>2004.1</cm.cae-feeder.core.version>
+    <cm.cae-feeder.core.version>2004.2</cm.cae-feeder.core.version>
     <cm.cae-feeder.bp.version>1-SNAPSHOT</cm.cae-feeder.bp.version>
-    <cm.content-server.core.version>2004.1</cm.content-server.core.version>
+    <cm.content-server.core.version>2004.2</cm.content-server.core.version>
     <cm.content-server.bp.version>1-SNAPSHOT</cm.content-server.bp.version>
-    <cm.workflow-server.core.version>2004.1</cm.workflow-server.core.version>
+    <cm.workflow-server.core.version>2004.2</cm.workflow-server.core.version>
     <cm.workflow-server.bp.version>1-SNAPSHOT</cm.workflow-server.bp.version>
-    <cm.studio-server.core.version>2004.1</cm.studio-server.core.version>
+    <cm.studio-server.core.version>2004.2</cm.studio-server.core.version>
     <cm.studio-server.bp.version>1-SNAPSHOT</cm.studio-server.bp.version>
     <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
 
@@ -567,6 +567,9 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-failsafe-plugin</artifactId>
           <version>${maven-surefire-plugin.version}</version>
+          <configuration>
+            <trimStackTrace>false</trimStackTrace>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -645,6 +648,7 @@
               <java.io.tmpdir>${project.build.directory}</java.io.tmpdir>
             </systemPropertyVariables>
             <skipTests>${skip-unit-tests}</skipTests>
+            <trimStackTrace>false</trimStackTrace>
           </configuration>
         </plugin>
         <plugin>
@@ -671,7 +675,7 @@
                 <X-Compile-Target-JDK>${maven.compiler.release}</X-Compile-Target-JDK>
                 <!-- Configure WebSphere to not scan ASM jars in the WAR, because they contain Java 9 module-info.class
                      files and cause exceptions in WebSphere. See CMS-12354 -->
-                <Ignore-Scanning-Archives>asm-analysis-7.3.1.jar,asm-7.3.1.jar,asm-commons-7.3.1.jar,asm-tree-7.3.1.jar</Ignore-Scanning-Archives>
+                <Ignore-Scanning-Archives>asm-analysis-8.0.1.jar,asm-8.0.1.jar,asm-commons-8.0.1.jar,asm-tree-8.0.1.jar</Ignore-Scanning-Archives>
               </manifestEntries>
             </archive>
             <failOnMissingWebXml>false</failOnMissingWebXml>

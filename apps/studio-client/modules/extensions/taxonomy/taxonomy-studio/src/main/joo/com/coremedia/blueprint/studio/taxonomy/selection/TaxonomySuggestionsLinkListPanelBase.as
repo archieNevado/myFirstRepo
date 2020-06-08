@@ -30,7 +30,9 @@ public class TaxonomySuggestionsLinkListPanelBase extends GridPanel {
   private var bindTo:ValueExpression;
 
   private var propertyValueExpression:ValueExpression;
-  private var taxonomyId:String;
+
+  [Bindable]
+  private var taxonomyIdExpression:ValueExpression;
 
   private var loadMask:LoadMask;
   private var cache:TaxonomyCache;
@@ -64,9 +66,8 @@ public class TaxonomySuggestionsLinkListPanelBase extends GridPanel {
       propertyValueExpression = bindTo.extendBy('properties.' + config.propertyName);
       propertyValueExpression.addChangeListener(propertyChanged);
       bindTo.addChangeListener(contentChanged);
-      taxonomyId = config.taxonomyId;
 
-      cache = new TaxonomyCache(bindTo, propertyValueExpression, taxonomyId);
+      cache = new TaxonomyCache(bindTo, propertyValueExpression, config.taxonomyIdExpression);
     }
   }
 
@@ -270,16 +271,19 @@ public class TaxonomySuggestionsLinkListPanelBase extends GridPanel {
    * @return
    */
   protected function taxonomyRenderer(value:*, metaData:*, record:BeanRecord):String {
-    TaxonomyUtil.loadTaxonomyPath(record, bindTo.getValue(), taxonomyId, function (updatedRecord:BeanRecord):void {
-      var content:Content = record.getBean() as Content;
-      var renderer:TaxonomyRenderer = TaxonomyRenderFactory.createSuggestionsRenderer(record.data.nodes, getId(), cache.getWeight(content.getId()));
-      renderer.doRender(function (html:String):void {
-        if (record.data.html !== html) {
-          record.data.html = html;
-          record.commit(false);
-        }
+    taxonomyIdExpression.loadValue(function(taxonomyId:String):void {
+      TaxonomyUtil.loadTaxonomyPath(record, bindTo.getValue(), taxonomyId, function (updatedRecord:BeanRecord):void {
+        var content:Content = record.getBean() as Content;
+        var renderer:TaxonomyRenderer = TaxonomyRenderFactory.createSuggestionsRenderer(record.data.nodes, getId(), cache.getWeight(content.getId()));
+        renderer.doRender(function (html:String):void {
+          if (record.data.html !== html) {
+            record.data.html = html;
+            record.commit(false);
+          }
+        });
       });
     });
+
     if (!record.data.html) {
       return "<div class='loading'>" + resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyLinkList_status_loading_text') + "</div>";
     }
@@ -296,7 +300,7 @@ public class TaxonomySuggestionsLinkListPanelBase extends GridPanel {
   }
 
   override protected function onDestroy():void {
-    bindTo.removeChangeListener(contentChanged);
+    bindTo && bindTo.removeChangeListener(contentChanged);
     documentFormParent && mun(documentFormParent, "activate", documentFormActivated);
     propertyValueExpression && propertyValueExpression.removeChangeListener(propertyChanged);
 

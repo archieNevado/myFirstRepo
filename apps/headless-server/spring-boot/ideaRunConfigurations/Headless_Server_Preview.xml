@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Headless Server Preview" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="CoreMedia Blueprint Apps">
-    <module name="headless-server-preview-app" />
-    <option name="SPRING_BOOT_MAIN_CLASS" value="com.coremedia.blueprint.boot.headlessserver.preview.HeadlessServerApp" />
+    <module name="headless-server-app" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.coremedia.blueprint.boot.headlessserver.HeadlessServerApp" />
     <option name="ACTIVE_PROFILES" value="dev,local,preview-local" />
     <option name="VM_PARAMETERS" value="-XX:+ExitOnOutOfMemoryError -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses -Xmx128m" />
     <option name="WORKING_DIRECTORY" value="file://$MODULE_WORKING_DIR$" />

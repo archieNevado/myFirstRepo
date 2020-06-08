@@ -14,6 +14,9 @@ public class TaxonomySelectionWindowBase extends StudioDialog {
   private var propertyValueExpression:ValueExpression;
   private var singleSelection:Boolean;
 
+  [Bindable]
+  public var taxonomyIdExpression:ValueExpression;
+
   public function TaxonomySelectionWindowBase(config:TaxonomySelectionWindow = null) {
     super(config);
     singleSelection = config.singleSelection;

@@ -35,6 +35,7 @@
     <property name="categoryAugmentationService" ref="categoryAugmentationService"/>
     <property name="productAugmentationService" ref="productAugmentationService"/>
     <property name="sitesService" ref="sitesService"/>
+    <property name="contentBeanFactory" ref="contentBeanFactory"/>
   </bean>
 
   <bean id="liveContextLoginFreemarkerFacade" class="com.coremedia.livecontext.web.taglib.LiveContextLoginFreemarkerFacade">

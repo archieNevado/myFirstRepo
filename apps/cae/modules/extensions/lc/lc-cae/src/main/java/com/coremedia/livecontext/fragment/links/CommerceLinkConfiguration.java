@@ -33,8 +33,9 @@ public class CommerceLinkConfiguration {
   }
 
   @Bean
-  CommerceContentLedLinks commerceContentLedLinks(CommerceLinkHelper commerceLinkHelper) {
-    return new CommerceContentLedLinks(commerceLinkHelper);
+  CommerceContentLedLinks commerceContentLedLinks(CommerceLinkHelper commerceLinkHelper,
+                                                  ExternalSeoSegmentBuilder seoSegmentBuilder) {
+    return new CommerceContentLedLinks(commerceLinkHelper, seoSegmentBuilder);
   }
 
   @Bean

@@ -67,7 +67,7 @@ use one of the following bash aliases:\n\
 USER coremedia
 
 # Windows compatibility step
-RUN find /coremedia -type d -exec chmod 770 {} \; && \
+RUN find /coremedia -type d -exec chmod 770 {} \; && chmod 770 /etc/confd /etc/confd/templates /etc/confd/conf.d && \
     chmod +x tools/bin/cm entrypoint.sh import-themes use-remote-content-archive import-user import-content import-default-workflows \
              import-custom-workflow publish-content export-content
 

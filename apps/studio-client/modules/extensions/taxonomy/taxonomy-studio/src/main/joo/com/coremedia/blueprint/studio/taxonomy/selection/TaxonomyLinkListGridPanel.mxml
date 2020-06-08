@@ -18,6 +18,9 @@
 
     public static const xtype:String = "com.coremedia.blueprint.studio.config.taxonomy.taxonomyLinkListGridPanel";
 
+    protected static const DD_GROUPS:Array = ['ContentDD', 'ContentLinkDD'];
+    protected static const DRAG_GROUPS:Array = ['ContentLinkDD'];
+
     private var config:TaxonomyLinkListGridPanel;
 
     public native function TaxonomyLinkListGridPanel(config:TaxonomyLinkListGridPanel = null);
@@ -43,7 +46,9 @@
                           deferEmptyText="false"
                           stripeRows="false">
       <ui:plugins>
-        <editor:LinkListViewDragDropPlugin linkListWrapper="{config.linkListWrapper}" />
+        <editor:LinkListViewDragDropPlugin linkListWrapper="{config.linkListWrapper}"
+                                           dragGroups="{DRAG_GROUPS}"
+                                           dropGroups="{DD_GROUPS}"/>
         <ui:BindPropertyPlugin componentProperty="readOnly"
                                bindTo="{config.readOnlyValueExpression || ValueExpressionFactory.createFromValue(false)}"/>
       </ui:plugins>

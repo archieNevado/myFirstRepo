@@ -28,7 +28,7 @@ public class TaxonomyLinkListPropertyFieldBase extends FieldContainer {
    * the id of the taxonomy whose tree is used to add items from.
    */
   [Bindable]
-  public var taxonomyId:String;
+  public var taxonomyIdExpression:ValueExpression;
 
   [Bindable]
   public var bindTo:ValueExpression;
