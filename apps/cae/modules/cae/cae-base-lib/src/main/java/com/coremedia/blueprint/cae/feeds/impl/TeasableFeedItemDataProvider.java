@@ -8,7 +8,7 @@ import com.coremedia.blueprint.common.contentbeans.CMVideo;
 import com.coremedia.blueprint.common.contentbeans.CMVisual;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.content.ContentType;
-import com.coremedia.objectserver.view.ViewUtils;
+import com.coremedia.objectserver.request.RequestUtils;
 import com.coremedia.objectserver.web.links.LinkFormatter;
 import com.coremedia.xml.MarkupUtil;
 import com.rometools.modules.mediarss.MediaEntryModule;
@@ -265,7 +265,7 @@ public class TeasableFeedItemDataProvider implements FeedItemDataProvider {
   }
 
   /**
-   * Encapsulates the creation of visual enclosures URIs to ensure that the request param {@link ViewUtils#PARAMETERS}
+   * Encapsulates the creation of visual enclosures URIs to ensure that the request param {@link RequestUtils#PARAMETERS}
    * will be restored after generating the link.
    *
    * @param blob     The blob which serves the visual enclosure.
@@ -278,16 +278,16 @@ public class TeasableFeedItemDataProvider implements FeedItemDataProvider {
   @NonNull
   private String createUrlForTransformedBlob(@NonNull Blob blob, @NonNull HttpServletRequest request,
                                              @NonNull HttpServletResponse response, int width, int height) {
-    Object oldParameters = request.getAttribute(ViewUtils.PARAMETERS);
+    Object oldParameters = request.getAttribute(RequestUtils.PARAMETERS);
 
     Map<String, String> params = new HashMap<>();
     params.put(TransformedBlobHandler.WIDTH_SEGMENT, String.valueOf(width));
     params.put(TransformedBlobHandler.HEIGHT_SEGMENT, String.valueOf(height));
-    request.setAttribute(ViewUtils.PARAMETERS, params);
+    request.setAttribute(RequestUtils.PARAMETERS, params);
     try {
       return getLinkFormatter().formatLink(blob, null, request, response, false);
     } finally {
-      request.setAttribute(ViewUtils.PARAMETERS, oldParameters);
+      request.setAttribute(RequestUtils.PARAMETERS, oldParameters);
     }
   }
 

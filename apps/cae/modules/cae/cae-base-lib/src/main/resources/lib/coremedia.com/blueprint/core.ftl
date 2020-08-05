@@ -39,6 +39,14 @@
   <#return blueprintFreemarkerFacade.truncateHighlightedText(text, maxLength)>
 </#function>
 
+<#-- CHECK IF RICHTEXT IS EMPTY -->
+<#function isEmptyRichtext richtext>
+  <#if richtext?has_content>
+    <#return blueprintFreemarkerFacade.isEmptyRichtext(richtext)>
+  </#if>
+  <#return true />
+</#function>
+
 <#-- GET FRAGMENTS FOR PREVIEW -->
 <#function previewTypes page self defaultFragmentViews=[]>
   <#return blueprintFreemarkerFacade.getPreviewViews(self, page, defaultFragmentViews)>

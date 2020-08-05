@@ -22,7 +22,7 @@ const searchResultPageContainerId = "cm-search-result-page";
 function loadSearchResultPageClickHandler($target) {
   log("Initialize loadSearchResultPageClickHandler", $target);
   /* on links like filters */
-  $target.on("click touch", "[data-cm-search-link]", function(event) {
+  $target.on("click touch", "[data-cm-search-link]", function (event) {
     // avoid 2nd click on label for input field
     event.preventDefault();
     let $this = $(this);
@@ -39,10 +39,8 @@ function loadSearchResultPageClickHandler($target) {
     );
   });
   /* on dropdown */
-  $target.on("change", "[data-cm-search-dropdown]", function() {
-    let link = $(this)
-      .find("option:selected")
-      .data("cm-search-sort-link");
+  $target.on("change", "[data-cm-search-dropdown]", function () {
+    let link = $(this).find("option:selected").data("cm-search-sort-link");
     loadSearchResultPage(
       link,
       searchResultPageContainerId,
@@ -50,7 +48,7 @@ function loadSearchResultPageClickHandler($target) {
     );
   });
   /* on search submit */
-  $target.on("submit", "[data-cm-search-form-submit]", function(event) {
+  $target.on("submit", "[data-cm-search-form-submit]", function (event) {
     event.preventDefault();
     let query = $("[data-cm-search-form-input]").val();
     // update search query input field, if suggestion is available
@@ -84,7 +82,7 @@ addNodeDecoratorBySelector(
  */
 function toggleFilterMobilePopupClickHandler($target) {
   log("Initialize toggleFilterMobilePopupClickHandler");
-  $target.on("click touch", function() {
+  $target.on("click touch", function () {
     $("[data-cm-search-filter-popup]").toggleClass(
       "cm-search__filter-popup--active"
     );
@@ -101,11 +99,9 @@ addNodeDecoratorBySelector(
  */
 function toggleSearchFilterClickHandler($target) {
   log("Initialize toggleSearchFilterClickHandler", $target);
-  $target.on("click touch", "[data-cm-search-filter-toggle]", function() {
+  $target.on("click touch", "[data-cm-search-filter-toggle]", function () {
     $(this).toggleClass("cm-search__filter-title--list-collapsed");
-    $(this)
-      .next("[data-cm-search-filter-links]")
-      .toggle();
+    $(this).next("[data-cm-search-filter-links]").toggle();
   });
 }
 addNodeDecoratorBySelector(
@@ -120,7 +116,7 @@ if (!$("body").data("cm-search-disable-browser-history")) {
    */
   window.addEventListener(
     "popstate",
-    function() {
+    function () {
       if (history.state && history.state.id === "search") {
         loadSearchResultPage(
           history.state.link,
@@ -135,7 +131,7 @@ if (!$("body").data("cm-search-disable-browser-history")) {
   /**
    *  Push default history state for browser back button.
    */
-  if($('.cm-search--results')[0]) {
+  if ($(".cm-search--results")[0]) {
     window.history.replaceState(
       { id: "search", link: window.location + "&view=asSearchResultPage" },
       "",

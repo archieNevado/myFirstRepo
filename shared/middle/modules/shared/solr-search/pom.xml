@@ -18,6 +18,11 @@
 
     <dependency>
       <groupId>com.coremedia.cms</groupId>
+      <artifactId>cap-delivery-configuration</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
       <artifactId>cap-unified-api</artifactId>
     </dependency>
 
@@ -28,7 +33,7 @@
 
     <dependency>
       <groupId>com.coremedia.cms</groupId>
-      <artifactId>cae-contentbeanservices-api</artifactId>
+      <artifactId>cae-contentbeanservices</artifactId>
     </dependency>
 
     <dependency>

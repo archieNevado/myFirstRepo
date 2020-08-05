@@ -153,24 +153,8 @@ public class ProductVariantImpl extends ProductBase implements ProductVariant {
     return parent != null ? parent.getVariantAxisValues(axisName, filter) : Collections.emptyList();
   }
 
-  @Override
-  @NonNull
-  public Map<ProductVariant, AvailabilityInfo> getAvailabilityMap() {
-    Product parent = getParent();
-    return parent != null ? parent.getAvailabilityMap() : Collections.emptyMap();
-  }
-
-  @Override
-  public float getTotalStockCount() {
-    Product parent = getParent();
-    return parent != null ? parent.getTotalStockCount() : 0.0F;
-  }
-
-  @Override
-  public boolean isAvailable() {
-    AvailabilityInfo availabilityInfo = getAvailabilityInfo();
-    return Boolean.parseBoolean(DataMapHelper.findString(getDelegate(), "buyable").orElse(null))
-            && availabilityInfo != null && availabilityInfo.getQuantity() > 0;
+  public boolean isBuyable() {
+    return Boolean.parseBoolean(DataMapHelper.findString(getDelegate(), "buyable").orElse(null));
   }
 
   @Override

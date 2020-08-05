@@ -4,7 +4,7 @@ import com.coremedia.blueprint.cae.search.SearchResultFactory;
 import com.coremedia.blueprint.common.contentbeans.CMQueryList;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.blueprint.common.navigation.Linkable;
-import com.coremedia.blueprint.testing.ContentBeanTestBase;
+import com.coremedia.blueprint.cae.contentbeans.testing.ContentBeanTestBase;
 import com.coremedia.objectserver.beans.ContentBean;
 import org.junit.Before;
 import org.junit.Test;

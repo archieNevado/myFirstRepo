@@ -9,13 +9,14 @@
        default-init-method="validateConfig">
 
   <import resource="classpath:/com/coremedia/cap/common/uapi-services.xml"/>
+  <import resource="classpath:/com/coremedia/id/id-services.xml"/>
   <import resource="classpath:/framework/spring/blueprint-contentbeans.xml"/>
 
   <bean id="testContextSource" class="com.coremedia.personalization.preview.TestContextSource">
     <description>
       Configures a context source that reads test-contexts from the CMS repository.
     </description>
-    <property name="capConnection" ref="connection"/>
+    <property name="idProvider" ref="idProvider"/>
     <property name="contextExtractors" ref="testContextExtractors"/>
   </bean>
 

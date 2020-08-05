@@ -1,5 +1,5 @@
 /*! Theme calista: Preview JS */
-window.coremedia.blueprint.$(function() {
+window.coremedia.blueprint.$(function () {
   function replaceLoginPreviewURL() {
     const $loginBtn = window.coremedia.blueprint.$("#cm-login");
     if ($loginBtn.length > 0) {

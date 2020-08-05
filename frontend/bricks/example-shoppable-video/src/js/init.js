@@ -1,4 +1,4 @@
-/*! Shoppable Video Feature | Copyright (c) CoreMedia AG */
+/*! Shoppable Video Feature */
 import $ from "jquery";
 import { addNodeDecorator } from "@coremedia/brick-node-decoration-service";
 import * as utils from "@coremedia/brick-utils";
@@ -14,7 +14,7 @@ import {
 const $document = $(document);
 
 // handle video in teasers for shoppable video
-addNodeDecorator(function($target) {
+addNodeDecorator(function ($target) {
   const baseConfig = {
     preview: undefined,
     play: undefined,
@@ -25,7 +25,7 @@ addNodeDecorator(function($target) {
   };
   const identifier = "cm-teasable--video";
   const selector = "[data-" + identifier + "]";
-  utils.findAndSelf($target, selector).each(function() {
+  utils.findAndSelf($target, selector).each(function () {
     const $videoTeaser = $(this);
     const config = $.extend(baseConfig, $videoTeaser.data(identifier));
     const $preview = $videoTeaser.find(config.preview);
@@ -48,13 +48,13 @@ addNodeDecorator(function($target) {
     // all teaser with videos show an image and change on click
     // hiding the image and showing the video. when video has finished
     // show image again
-    $play.bind("click", function() {
+    $play.bind("click", function () {
       $caption.css("display", "");
       $preview.css("display", "none");
       $play.css("display", "none");
       $player.css("display", "");
       const selector = "[data-cm-video]";
-      utils.findAndSelf($player, selector).each(function() {
+      utils.findAndSelf($player, selector).each(function () {
         const $video = $(this);
 
         // start video
@@ -67,7 +67,7 @@ addNodeDecorator(function($target) {
     });
 
     // when fullscreen playback is canceled on mobiles, videoEnded is not triggered
-    $videoTeaser.on("webkitendfullscreen", function() {
+    $videoTeaser.on("webkitendfullscreen", function () {
       $videoTeaser.trigger(EVENT_VIDEO_ENDED);
     });
   });
@@ -75,8 +75,8 @@ addNodeDecorator(function($target) {
 
 // set teaser for shoppable videos to the same height as of the video
 // and change teasers according to the timestamps
-addNodeDecorator(function($target) {
-  utils.findAndSelf($target, ".cm-shoppable").each(function() {
+addNodeDecorator(function ($target) {
+  utils.findAndSelf($target, ".cm-shoppable").each(function () {
     const $shoppableVideo = $(this);
     const $defaultTeaser = $shoppableVideo.find(".cm-shoppable__default");
     const $allTeasers = $shoppableVideo.find(".cm-shoppable__teaser");
@@ -87,7 +87,7 @@ addNodeDecorator(function($target) {
       utils.log("Video is shoppable!");
 
       const shoppableVideoTeasers = {};
-      $allTeasers.each(function() {
+      $allTeasers.each(function () {
         const $teaser = $(this);
         const time = parseInt($teaser.attr("data-cm-video-shoppable-time"));
         if (!isNaN(time)) {
@@ -95,7 +95,7 @@ addNodeDecorator(function($target) {
         }
       });
 
-      $video.on(mediaelement.EVENT_VIDEO_ENDED, function() {
+      $video.on(mediaelement.EVENT_VIDEO_ENDED, function () {
         $allTeasers.hide();
         if ($defaultTeaser.length > 0) {
           $defaultTeaser.show();
@@ -103,7 +103,7 @@ addNodeDecorator(function($target) {
       });
 
       let $lastTeaser = $defaultTeaser || undefined;
-      $video.on(mediaelement.EVENT_VIDEO_TIME_UPDATED, function(e, data) {
+      $video.on(mediaelement.EVENT_VIDEO_TIME_UPDATED, function (e, data) {
         const timestamp = data.position;
         const $teaser = shoppableVideoTeasers[timestamp];
         if ($teaser) {

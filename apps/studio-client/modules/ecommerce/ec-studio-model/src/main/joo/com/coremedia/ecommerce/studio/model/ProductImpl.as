@@ -1,4 +1,6 @@
 package com.coremedia.ecommerce.studio.model {
+import com.coremedia.ui.data.Previews;
+
 [RestResource(uriTemplate="livecontext/product/{siteId:[^/]+}/{catalogAlias:[^/]+}/{workspaceId:[^/]+}/{externalId:.+}")]
 public class ProductImpl extends CatalogObjectImpl implements Product {
   public function ProductImpl(uri:String) {
@@ -18,8 +20,16 @@ public class ProductImpl extends CatalogObjectImpl implements Product {
 
   }
 
-  public function getPreviewUrl():String {
+  public function getDefaultPreviewUrl():String {
     return get(CatalogObjectPropertyNames.PREVIEW_URL);
+  }
+
+  public function hasMultiPreviews():Boolean {
+    return false;
+  }
+
+  public function getPreviews():Previews {
+    return null;
   }
 
   public function getOfferPrice():Number {

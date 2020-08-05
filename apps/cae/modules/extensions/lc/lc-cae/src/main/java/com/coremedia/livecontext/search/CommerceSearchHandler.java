@@ -66,7 +66,7 @@ public class CommerceSearchHandler extends PageHandlerBase {
    * e.g.: /dynamic/shopName/shopsearch?type=suggest&query=dre
    * e.g.: /dynamic/shopName/shopsearch?query=dress
    */
-  private static final String   URI_PATTERN =
+  static final String   URI_PATTERN =
                   '/' + PREFIX_DYNAMIC +
                   "/{" + SEGMENT_ROOT + "}" +
                   '/' + ACTION_NAME;

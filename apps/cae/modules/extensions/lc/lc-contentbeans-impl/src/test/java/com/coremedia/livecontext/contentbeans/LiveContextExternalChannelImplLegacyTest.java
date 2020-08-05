@@ -21,12 +21,14 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -66,10 +68,12 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public class LiveContextExternalChannelImplLegacyTest {
 
   @Configuration
+  @EnableConfigurationProperties({
+          DeliveryConfigurationProperties.class
+  })
   @ImportResource({
           "classpath:/framework/spring/blueprint-contentbeans.xml",
           "classpath:META-INF/coremedia/livecontext-contentbeans.xml",
-          "classpath:META-INF/coremedia/livecontext-contentbeans-settings.xml",
   })
   @ComponentScan("com.coremedia.blueprint.base.livecontext.augmentation")
   @Import(LcAugmentationLegacyAutoConfiguration.class)

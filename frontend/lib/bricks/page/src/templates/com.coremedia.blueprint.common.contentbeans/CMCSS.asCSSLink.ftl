@@ -6,7 +6,7 @@
     This template is used for CSS files if
     - ieExpression (conditional comments for IE) is set
     - css includes an external css file
-    - cae.use.local.resources and/or cae.developer.mode are set to true
+    - delivery.local-resources and/or delivery.developer-mode are set to true
     Otherwise MergableResources.asCSSLink.ftl is used.
 -->
 

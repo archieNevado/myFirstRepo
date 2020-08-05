@@ -7,10 +7,12 @@ import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -43,6 +45,9 @@ public class LocalizationServiceTest {
   private static final Locale OTHER_LOCALE = new Locale("lv");
 
   @Configuration
+  @EnableConfigurationProperties({
+          DeliveryConfigurationProperties.class
+  })
   @Import({XmlRepoConfiguration.class, LocalizationServiceConfiguration.class})
   @ImportResource(
           value = {"classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml"},

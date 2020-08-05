@@ -2,7 +2,7 @@ package com.coremedia.blueprint.cae.contentbeans;
 
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
-import com.coremedia.blueprint.testing.ContentBeanTestBase;
+import com.coremedia.blueprint.cae.contentbeans.testing.ContentBeanTestBase;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

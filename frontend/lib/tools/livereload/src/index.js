@@ -36,7 +36,7 @@ const init = (logLevel = "warn") => {
     } else {
       server = tinylr(config);
       server.server.removeAllListeners("error");
-      server.server.on("error", err => {
+      server.server.on("error", (err) => {
         if (err.code === "EADDRINUSE") {
           log.error(
             `Port ${config.port} is already in use by another process.`
@@ -45,7 +45,7 @@ const init = (logLevel = "warn") => {
           log.error(err);
         }
       });
-      server.listen(config.port, config.host, err => {
+      server.listen(config.port, config.host, (err) => {
         if (err) {
           log.error(err);
           return;

@@ -84,11 +84,6 @@
       </dependency>
       <dependency>
         <groupId>com.coremedia.blueprint</groupId>
-        <artifactId>external-preview-cae</artifactId>
-        <version>1-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
         <artifactId>lc-asset-cae-component</artifactId>
         <version>1-SNAPSHOT</version>
       </dependency>

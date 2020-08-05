@@ -110,13 +110,12 @@ public class CMTeaserImpl extends CMTeaserBase {
               .map((Function<Map<String, Object>, CallToActionButtonSettings>) stringObjectMap -> {
                         ImmutableMap.Builder<String, Object> mapBuilder = ImmutableMap.builder();
                         CMLinkable target = getSettingsService().setting("target", CMLinkable.class, stringObjectMap);
-                        //noinspection ConstantConditions non-null fallback provided
                         boolean enabled = getSettingsService().settingWithDefault(ANNOTATED_LINK_STRUCT_CTA_ENABLED_PROPERTY_NAME, boolean.class, false, stringObjectMap);
+                        String hash = getSettingsService().settingWithDefault(ANNOTATED_LINK_STRUCT_CTA_HASH_PROPERTY_NAME, String.class, "", stringObjectMap);
                         if (target != null && enabled) {
                           mapBuilder.put("target", target);
-                          //noinspection ConstantConditions non-null fallback provided
+                          mapBuilder.put("hash", hash);
                           mapBuilder.put("text", getSettingsService().settingWithDefault(ANNOTATED_LINK_STRUCT_CTA_CUSTOM_TEXT_PROPERTY_NAME, String.class, "", stringObjectMap));
-                          //noinspection ConstantConditions non-null fallback provided
                           mapBuilder.put("openInNewTab", target.isOpenInNewTab());
                           mapBuilder.put("metadata", ImmutableList.of("properties." + TARGETS));
                           return getSettingsService().createProxy(CallToActionButtonSettings.class, mapBuilder.build());
@@ -129,4 +128,4 @@ public class CMTeaserImpl extends CMTeaserBase {
     return ImmutableList.of();
   }
 }
-  
+

@@ -1,6 +1,6 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.cae.action.webflow.WebflowActionState" -->
 <#-- @ftlvariable name="flowExecutionKey" scope="request" type="java.lang.String" -->
-<#-- @ftlvariable name="_CSRFToken" type="java.lang.String" -->
+<#-- @ftlvariable name="_csrf" type="org.springframework.security.web.csrf.CsrfToken" -->
 <#-- @ftlvariable name="nextUrl" type="java.lang.String" -->
 
 <#import "*/node_modules/@coremedia/brick-utils/src/freemarkerLibs/components.ftl" as components />
@@ -9,7 +9,7 @@
 <div class="cm-form cm-form--resetpassword"<@preview.metadata data=[self.action.content!"", "properties.id"]/>>
   <h1 class="cm-form__headline"><@cm.message "passwordReset_title" /></h1>
   <form method="post" data-cm-form--reset="">
-    <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}">
+    <#if _csrf?has_content><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"></#if>
     <input type="hidden" name="execution" value="${flowExecutionKey!""}">
     <input type="hidden" name="nextUrl" value="${nextUrl!""}">
     <input type="hidden" name="_eventId_submit">

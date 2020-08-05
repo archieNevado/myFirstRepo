@@ -6,13 +6,11 @@
   "definitions": {
     "resourceType": {
       "description": "The type of the resource.",
-      "enum": [
-        "webpack", "copy", "externalLink"
-      ]
+      "enum": ["webpack", "copy", "externalLink"]
     },
     "externalUri": {
       "type": "string",
-      "pattern": "^(http:|https:)?\/\/",
+      "pattern": "^(http:|https:)?//",
       "description": "An external uri (starting with 'http://', 'https://' or '//')."
     },
     "srcFilePath": {
@@ -53,14 +51,16 @@
     "smartImport": {
       "description": "Defines the smart import behaviour (automatically activated dependencies). Defaults to 'default'.",
       "$ref": "types.schema.json#/definitions/nonEmptyStringOrNull",
-      "enum": [
-        "default", "preview", null
-      ]
+      "enum": ["default", "preview", null]
     },
     "entryPointName": {
       "$ref": "types.schema.json#/definitions/nonEmptyStringOrNull",
       "pattern": "^[^/\\\\]*$",
       "description": "If provided you can specify the name of the webpack entry point that is used as a base name for the resulting target filename. This value defaults to the base name of the first given src or the theme name if src is an empty array."
+    },
+    "bundleEncoding": {
+      "description": "The encoding of the resource bundle.",
+      "enum": ["ISO-8859-1", "UTF-8"]
     }
   },
   "properties": {
@@ -105,7 +105,7 @@
         "if": {
           "properties": {
             "type": {
-              "enum": [ "webpack" ]
+              "enum": ["webpack"]
             }
           }
         },
@@ -141,14 +141,14 @@
               "default": null
             }
           },
-          "required": ["type" ,"src"],
+          "required": ["type", "src"],
           "additionalProperties": false
         },
         "else": {
           "if": {
             "properties": {
               "type": {
-                "enum": [ "copy" ]
+                "enum": ["copy"]
               }
             }
           },
@@ -171,7 +171,7 @@
                 "$ref": "#/definitions/ieExpression",
                 "default": null
               },
-              "disableServerSideCompression":  {
+              "disableServerSideCompression": {
                 "$ref": "#/definitions/disableServerSideCompression",
                 "default": false
               }
@@ -183,7 +183,7 @@
             "if": {
               "properties": {
                 "type": {
-                  "enum": [ "externalLink" ]
+                  "enum": ["externalLink"]
                 }
               }
             },
@@ -191,7 +191,6 @@
               "properties": {
                 "type": {
                   "type": "string"
-
                 },
                 "src": {
                   "allOf": [
@@ -258,7 +257,7 @@
         "if": {
           "properties": {
             "type": {
-              "enum": [ "webpack" ]
+              "enum": ["webpack"]
             }
           }
         },
@@ -302,14 +301,14 @@
               "default": false
             }
           },
-          "required": ["type" ,"src"],
+          "required": ["type", "src"],
           "additionalProperties": false
         },
         "else": {
           "if": {
             "properties": {
               "type": {
-                "enum": [ "copy" ]
+                "enum": ["copy"]
               }
             }
           },
@@ -317,7 +316,6 @@
             "properties": {
               "type": {
                 "type": "string"
-
               },
               "src": {
                 "$ref": "#/definitions/srcFilePath"
@@ -341,7 +339,7 @@
                 "$ref": "#/definitions/defer",
                 "default": false
               },
-              "disableServerSideCompression":  {
+              "disableServerSideCompression": {
                 "$ref": "#/definitions/disableServerSideCompression",
                 "default": false
               }
@@ -353,7 +351,7 @@
             "if": {
               "properties": {
                 "type": {
-                  "enum": [ "externalLink" ]
+                  "enum": ["externalLink"]
                 }
               }
             },
@@ -443,6 +441,10 @@
           "description": "The language id of the master language",
           "default": "en"
         },
+        "bundleEncoding": {
+          "$ref": "#/definitions/bundleEncoding",
+          "default": "ISO-8859-1"
+        },
         "bundleNames": {
           "$ref": "types.schema.json#/definitions/nonEmptyStringList",
           "default": [],
@@ -455,7 +457,5 @@
     }
   },
   "additionalProperties": false,
-  "required": [
-    "name"
-  ]
+  "required": ["name"]
 }

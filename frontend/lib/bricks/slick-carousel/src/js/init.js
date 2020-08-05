@@ -2,7 +2,7 @@ import $ from "jquery";
 import { EVENT_LAYOUT_CHANGED } from "@coremedia/brick-utils";
 import { addNodeDecoratorByData } from "@coremedia/brick-node-decoration-service";
 import slickCarousel from "./index";
-import {waitForFragments} from "@coremedia/brick-dynamic-include";
+import { waitForFragments } from "@coremedia/brick-dynamic-include";
 
 const $document = $(document);
 
@@ -25,6 +25,6 @@ addNodeDecoratorByData({}, "cm-slick-carousel", ($container, config) => {
         }
       });
     },
-    container: $container[0]
+    container: $container[0],
   });
 });

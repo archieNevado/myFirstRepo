@@ -29,7 +29,7 @@ const polyfill = () => {
       style.currentStyle;
 
     styleMedia = {
-      matchMedium: media => {
+      matchMedium: (media) => {
         const text = `@media ${media}{ #matchmediajs-test { width: 1px; } }`;
 
         // "style.styleSheet" is used by IE <= 8 and "style.textContent" for all other browsers
@@ -45,7 +45,7 @@ const polyfill = () => {
     };
   }
 
-  return media => ({
+  return (media) => ({
     matches: styleMedia.matchMedium(media || "all"),
     media: media || "all",
   });

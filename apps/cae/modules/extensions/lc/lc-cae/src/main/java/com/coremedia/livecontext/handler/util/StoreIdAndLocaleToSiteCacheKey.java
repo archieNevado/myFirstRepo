@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @DefaultAnnotation(NonNull.class)
-public class StoreIdAndLocaleToSiteCacheKey extends CacheKey<Optional<Site>> {
+class StoreIdAndLocaleToSiteCacheKey extends CacheKey<Optional<Site>> {
 
   private final String storeId;
   private final Locale locale;

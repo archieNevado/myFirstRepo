@@ -1,11 +1,8 @@
 package com.coremedia.blueprint.component.cae;
 
 import com.coremedia.blueprint.base.multisite.cae.SiteResolver;
-import com.coremedia.blueprint.cae.filter.SecurityHeadersFilter;
 import com.coremedia.blueprint.cae.filter.SiteFilter;
 import com.coremedia.blueprint.cae.filter.UnknownMimetypeCharacterEncodingFilter;
-import com.coremedia.springframework.boot.web.servlet.RegistrationBeanBuilder;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.web.servlet.ConditionalOnMissingFilterBean;
@@ -15,54 +12,42 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.web.context.request.RequestContextListener;
-import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.RequestContextFilter;
 
-import javax.servlet.Filter;
 import java.nio.charset.StandardCharsets;
 
 @Configuration
 public class CaeBaseComponentConfiguration {
 
   public static final int ORDER_SITE_FILTER = 100;
+  private static final int ORDER_MIMETYPE_FILTER = Ordered.HIGHEST_PRECEDENCE + 1_147_483_648; // == -1_000_000_000
 
   @Bean
-  @ConditionalOnProperty(value="cae.set-unknown-mime-type")
-  public FilterRegistrationBean characterEncodingFilterRegistration() {
-    CharacterEncodingFilter filter = new UnknownMimetypeCharacterEncodingFilter();
+  @ConditionalOnProperty(value = "cae.set-unknown-mime-type")
+  public FilterRegistrationBean<UnknownMimetypeCharacterEncodingFilter> characterEncodingFilterRegistration() {
+    var filter = new UnknownMimetypeCharacterEncodingFilter();
     filter.setEncoding(StandardCharsets.UTF_8.toString());
     filter.setForceEncoding(true);
-    return RegistrationBeanBuilder.forFilter(filter)
-            .order(Ordered.HIGHEST_PRECEDENCE)
-            .build();
+    var registrationBean = new FilterRegistrationBean<>(filter);
+    registrationBean.setOrder(ORDER_MIMETYPE_FILTER);
+    return registrationBean;
   }
 
   // reset request attributes (copied from org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration.WebMvcAutoConfigurationAdapter)
   @Bean
-  @ConditionalOnMissingBean({ RequestContextListener.class, RequestContextFilter.class })
+  @ConditionalOnMissingBean({RequestContextListener.class, RequestContextFilter.class})
   @ConditionalOnMissingFilterBean(RequestContextFilter.class)
   public static RequestContextFilter requestContextFilter() {
     return new OrderedRequestContextFilter();
   }
 
   @Bean
-  public Filter siteFilter(SiteResolver siteResolver) {
-    SiteFilter siteFilter = new SiteFilter();
+  public FilterRegistrationBean<SiteFilter> siteFilterRegistration(SiteResolver siteResolver) {
+    var siteFilter = new SiteFilter();
     siteFilter.setSiteResolver(siteResolver);
-    return siteFilter;
+    var registrationBean = new FilterRegistrationBean<>(siteFilter);
+    registrationBean.setOrder(ORDER_SITE_FILTER);
+    registrationBean.addUrlPatterns("/servlet/*");
+    return registrationBean;
   }
-
-  @Bean
-  public FilterRegistrationBean siteFilterRegistration(Filter siteFilter) {
-    return RegistrationBeanBuilder.forFilter(siteFilter)
-            .urlPatterns("/servlet/*")
-            .order(ORDER_SITE_FILTER)
-            .build();
-  }
-
-  @Bean
-  public Filter securityHeadersFilter(@Value("${cae.is.preview:false}") boolean caeIsPreview) {
-    return new SecurityHeadersFilter(caeIsPreview);
-  }
-
 }

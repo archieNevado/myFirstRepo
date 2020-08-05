@@ -15,11 +15,11 @@
     "tiny-lr": "^1.0.0"
   },
   "devDependencies": {
-    "jest": "^24.0.0",
-    "prettier": "^1.0.0"
+    "jest": "^26.1.0",
+    "prettier": "^2.0.5"
   },
   "scripts": {
-    "prettier": "prettier \"**/*\" --write",
+    "prettier": "prettier --write \"src/**/*.{js,json}\"",
     "test": "jest"
   },
   "main": "src/index.js"

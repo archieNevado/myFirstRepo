@@ -47,7 +47,7 @@ function getResponsiveMediaFormats(image) {
 export function getCurrentResponsiveImageFormat(image) {
   const formats = getResponsiveMediaFormats(image);
   const lastRatio = $(image).data("lastRatio");
-  return formats.filter(format => format.name === lastRatio)[0];
+  return formats.filter((format) => format.name === lastRatio)[0];
 }
 
 /**
@@ -115,9 +115,9 @@ function responsiveImage(image) {
    */
   const bestFittingFormat = formats
     // a format is only valid if height and width are greater than zero
-    .filter(format => format.ratioHeight > 0 && format.ratioWidth > 0)
+    .filter((format) => format.ratioHeight > 0 && format.ratioWidth > 0)
     // calculate and store the difference between the container ratio and the format
-    .map(format => ({
+    .map((format) => ({
       format: format,
       difference: Math.abs(
         containerRatio - format.ratioWidth / format.ratioHeight
@@ -144,9 +144,9 @@ function responsiveImage(image) {
   // find best fitting width
   const bestFittingWidth = Object.keys(bestFittingFormat.linksForWidth)
     // a key should represent the (maximum) width
-    .map(key => parseInt(key))
+    .map((key) => parseInt(key))
     // make sure that a valid number is parsed and the link is not empty
-    .filter(width => !isNaN(width) && bestFittingFormat.linksForWidth[width])
+    .filter((width) => !isNaN(width) && bestFittingFormat.linksForWidth[width])
     // find the width with 1) the least quality loss that is 2) as small as possible
     .reduce(
       (currentBestWidth, nextWidth) => {
@@ -226,9 +226,9 @@ function responsiveImage(image) {
   }
 }
 
-export default function(domElementOrJQueryResult) {
+export default function (domElementOrJQueryResult) {
   if (domElementOrJQueryResult instanceof $) {
-    $.each(domElementOrJQueryResult, function(index, item) {
+    $.each(domElementOrJQueryResult, function (index, item) {
       responsiveImage(item);
     });
   } else {

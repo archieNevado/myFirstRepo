@@ -106,7 +106,7 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.cms</groupId>
-      <artifactId>cae-contentbeanservices-impl</artifactId>
+      <artifactId>cae-contentbeanservices</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>

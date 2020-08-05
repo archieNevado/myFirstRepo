@@ -4,7 +4,7 @@ import com.coremedia.blueprint.testing.ContentTestHelper;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.transform.TransformImageService;
-import com.coremedia.objectserver.view.ViewUtils;
+import com.coremedia.objectserver.request.RequestUtils;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.HttpError;
 import com.coremedia.objectserver.web.links.LinkFormatter;
@@ -235,7 +235,7 @@ public class TransformedBlobHandlerTest {
 
   protected String formatLink(Object bean, String viewName, boolean forRedirect, Map<String, Object> parameters) {
     MockHttpServletRequest request = newRequest(emptyMap());
-    request.setAttribute(ViewUtils.PARAMETERS, newHashMap(parameters));
+    request.setAttribute(RequestUtils.PARAMETERS, newHashMap(parameters));
     return linkFormatter.formatLink(bean, viewName, request, new MockHttpServletResponse(), forRedirect);
   }
 

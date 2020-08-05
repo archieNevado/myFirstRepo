@@ -14,7 +14,6 @@
   <bean class="com.coremedia.livecontext.preview.PreviewCommerceContextInterceptor"
         id="previewStoreContextProviderInterceptor" parent="storeContextInterceptor">
     <property name="initUserContext" value="true"/>
-    <property name="sitesService" ref="sitesService"/>
   </bean>
 
   <bean class="com.coremedia.objectserver.web.MappedInterceptor" id="mappedPreviewStoreContextProviderInterceptor">

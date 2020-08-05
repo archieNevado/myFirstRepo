@@ -1,24 +1,25 @@
 package com.coremedia.blueprint.assets.cae.handlers;
 
 import com.coremedia.blueprint.assets.cae.TaxonomyOverview;
-import com.coremedia.blueprint.cae.view.DynamicIncludePredicate;
-import com.coremedia.blueprint.cae.view.DynamicIncludeProvider;
 import com.coremedia.blueprint.cae.view.HashBasedFragmentHandler;
 import com.coremedia.objectserver.view.RenderNode;
+import com.coremedia.objectserver.view.dynamic.DynamicIncludePredicate;
+import com.coremedia.objectserver.view.dynamic.DynamicIncludeProvider;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
-import java.util.Arrays;
 import java.util.List;
 
+@DefaultAnnotation(NonNull.class)
 public class PaginatedSubjectAssetsPredicate implements DynamicIncludePredicate, DynamicIncludeProvider {
 
-  private static final List<String> VALID_PARAMS = Arrays.asList(
+  private static final List<String> VALID_PARAMS = List.of(
           DownloadPortalHandler.SUBJECT_REQUEST_PARAMETER_NAME,
           DownloadPortalHandler.PAGE_REQUEST_PARAMETER_NAME
   );
 
   @Override
-  public boolean apply(@Nullable RenderNode input) {
+  public boolean test(RenderNode input) {
     return null != input
             && input.getBean() instanceof TaxonomyOverview
             && DownloadPortalHandler.ASSETS_VIEW.equals(input.getView());

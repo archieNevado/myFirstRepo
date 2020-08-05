@@ -38,7 +38,7 @@ public class TopicPreviewPanelBase extends Panel {
     if(record) {
       var topic:Content = record.data.topic;
       topic.load(function():void {
-        var url:String = topic.getPreviewUrl();
+        var url:String = topic.getDefaultPreviewUrl();
         url = url + '&site=' + editorContext.getSitesService().getPreferredSiteId();
         //recheck URL after 2 seconds
         window.setTimeout(function():void {

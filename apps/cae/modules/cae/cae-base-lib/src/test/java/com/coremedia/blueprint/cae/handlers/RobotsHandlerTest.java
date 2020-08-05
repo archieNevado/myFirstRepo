@@ -10,11 +10,13 @@ import com.coremedia.blueprint.testing.ContentTestConfiguration;
 import com.coremedia.blueprint.testing.ContentTestHelper;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.objectserver.web.HttpError;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -56,10 +58,13 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER
 @ContextConfiguration(classes = RobotsHandlerTest.LocalConfig.class)
 @ActiveProfiles(PROFILE)
 @DirtiesContext(classMode = AFTER_CLASS)
-@TestPropertySource(properties = "cae.is.standalone=false")
+@TestPropertySource(properties = "delivery.standalone=false")
 public class RobotsHandlerTest {
 
   @Configuration
+  @EnableConfigurationProperties({
+          DeliveryConfigurationProperties.class
+  })
   @ImportResource(
           value = {
                   LINK_FORMATTER,
@@ -90,7 +95,7 @@ public class RobotsHandlerTest {
 
   private ModelAndView mavMedia;
   private ModelAndView mavInvalid;
-  
+
   @Inject
   private ContentTestHelper contentTestHelper;
   @Inject

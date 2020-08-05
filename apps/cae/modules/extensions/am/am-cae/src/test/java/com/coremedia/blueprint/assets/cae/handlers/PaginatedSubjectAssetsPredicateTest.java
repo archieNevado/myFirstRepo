@@ -6,6 +6,8 @@ import com.coremedia.blueprint.cae.view.HashBasedFragmentHandler;
 import com.coremedia.objectserver.view.RenderNode;
 import org.junit.Test;
 
+import java.util.function.Predicate;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -21,8 +23,8 @@ public class PaginatedSubjectAssetsPredicateTest {
     when(node.getBean()).thenReturn(overview);
     when(node.getView()).thenReturn(DownloadPortalHandler.ASSETS_VIEW);
 
-    PaginatedSubjectAssetsPredicate predicate = new PaginatedSubjectAssetsPredicate();
-    assertTrue(predicate.apply(node));
+    Predicate<RenderNode> predicate = new PaginatedSubjectAssetsPredicate();
+    assertTrue(predicate.test(node));
   }
 
   @Test
@@ -32,8 +34,8 @@ public class PaginatedSubjectAssetsPredicateTest {
     when(node.getBean()).thenReturn(overview);
     when(node.getView()).thenReturn("anyView");
 
-    PaginatedSubjectAssetsPredicate predicate = new PaginatedSubjectAssetsPredicate();
-    assertFalse(predicate.apply(node));
+    Predicate<RenderNode> predicate = new PaginatedSubjectAssetsPredicate();
+    assertFalse(predicate.test(node));
   }
 
   @Test

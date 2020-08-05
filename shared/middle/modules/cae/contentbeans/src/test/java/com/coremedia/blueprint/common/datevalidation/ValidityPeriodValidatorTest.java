@@ -1,9 +1,17 @@
 package com.coremedia.blueprint.common.datevalidation;
 
+import com.coremedia.blueprint.cae.contentbeans.testing.ContentBeanTestBase;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
-import com.coremedia.blueprint.testing.ContentBeanTestBase;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 import java.util.ArrayList;
@@ -31,10 +39,21 @@ import static org.mockito.Mockito.when;
  * 4. 15.3.2007
  * 5. 15.3.2010
  */
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class ValidityPeriodValidatorTest {
 
   private List<CMLinkable> itemsUnfiltered;
 
+  @SuppressWarnings("unused")
+  @Mock
+  private DeliveryConfigurationProperties deliveryConfigurationProperties;
+
+  @SuppressWarnings("unused")
+  @Mock
+  private ObjectProvider<ValidUntilConsumer> validUntilConsumers;
+
+  @InjectMocks
   private ValidityPeriodValidator validator;
 
   @BeforeEach
@@ -77,9 +96,8 @@ class ValidityPeriodValidatorTest {
     return linkable;
   }
 
-  private ValidityPeriodValidator preparePreviewDate(int day, int month, int year) {
+  private void preparePreviewDate(int day, int month, int year) {
     ContentBeanTestBase.setUpPreviewDate(new MockHttpServletRequest(), REQUEST_ATTRIBUTE_PREVIEW_DATE, year, month, day);
-    return new ValidityPeriodValidator();
   }
 
   private static void initTime(Calendar now) {
@@ -94,7 +112,7 @@ class ValidityPeriodValidatorTest {
    */
   @Test
   void testFilterListCase1() {
-    validator = preparePreviewDate(15, Calendar.MARCH, 1999);
+    preparePreviewDate(15, Calendar.MARCH, 1999);
 
     List<CMLinkable> validItems = new ArrayList<>(validator.filterList(itemsUnfiltered));
 
@@ -106,7 +124,7 @@ class ValidityPeriodValidatorTest {
    */
   @Test
   void testFilterListCase2() {
-    validator = preparePreviewDate(15, Calendar.MARCH, 2001);
+    preparePreviewDate(15, Calendar.MARCH, 2001);
 
     List<CMLinkable> validItems = new ArrayList<>(validator.filterList(itemsUnfiltered));
 
@@ -118,7 +136,7 @@ class ValidityPeriodValidatorTest {
    */
   @Test
   void testFilterListCase3() {
-    validator = preparePreviewDate(15, Calendar.MARCH, 2005);
+    preparePreviewDate(15, Calendar.MARCH, 2005);
 
     List<CMLinkable> validItems = newArrayList(validator.filterList(itemsUnfiltered));
 
@@ -130,7 +148,7 @@ class ValidityPeriodValidatorTest {
    */
   @Test
   void testFilterListCase4() {
-    validator = preparePreviewDate(15, Calendar.MARCH, 2007);
+    preparePreviewDate(15, Calendar.MARCH, 2007);
 
     List<CMLinkable> validItems = newArrayList(validator.filterList(itemsUnfiltered));
 
@@ -142,7 +160,7 @@ class ValidityPeriodValidatorTest {
    */
   @Test
   void testFilterListCase5() {
-    validator = preparePreviewDate(15, Calendar.MARCH, 2010);
+    preparePreviewDate(15, Calendar.MARCH, 2010);
 
     List<CMLinkable> validItems = new ArrayList<>(validator.filterList(itemsUnfiltered));
 
@@ -153,11 +171,11 @@ class ValidityPeriodValidatorTest {
   void testFilterListCase6() {
     List<CMLinkable> validItems;
 
-    validator = preparePreviewDate(15, Calendar.APRIL, 2012);
+    preparePreviewDate(15, Calendar.APRIL, 2012);
     validItems = new ArrayList<>(validator.filterList(itemsUnfiltered));
     assertThat(validItems).hasSize(1);
 
-    validator = preparePreviewDate(13, Calendar.APRIL, 2012);
+    preparePreviewDate(13, Calendar.APRIL, 2012);
     validItems = new ArrayList<>(validator.filterList(itemsUnfiltered));
     assertThat(validItems).isEmpty();
   }
@@ -167,7 +185,7 @@ class ValidityPeriodValidatorTest {
    */
   @Test
   void testValidate() {
-    validator = preparePreviewDate(15, Calendar.MARCH, 2007);
+    preparePreviewDate(15, Calendar.MARCH, 2007);
 
     assertThat(validator.validate(itemsUnfiltered.get(0))).isFalse();
     assertThat(validator.validate(itemsUnfiltered.get(1))).isFalse();

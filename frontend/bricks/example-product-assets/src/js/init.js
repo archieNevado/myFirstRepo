@@ -17,7 +17,7 @@ import Zoom from "./zoom";
 // IBM specific code
 // TODO: move to themes
 function getChangeImagesFn($productAssets, shoppingActionsJS) {
-  return function(catEntryId, productId) {
+  return function (catEntryId, productId) {
     //reload the fragment with selected product variants.
     //to this end we send the catEntryId, productId and the selected attributes name/value pairs
     //as ';'-separated string as "attributes" to the reloader
@@ -39,46 +39,58 @@ function getChangeImagesFn($productAssets, shoppingActionsJS) {
 }
 
 const productAssetsStateIbmId = "cm-product-assets-state-ibm";
-addNodeDecoratorBySelector(".cm-product-assets", function($target) {
-  const wcTopic = window.wcTopic;
-  const productAssetsStateIbm = {
-    onUnload: () => {}
-  };
-  if (typeof wcTopic !== "undefined") {
-    // WCS 9
-    const shoppingActionsJS = window.shoppingActionsJS;
-    if (shoppingActionsJS) {
-      const changeImages = getChangeImagesFn($target, shoppingActionsJS);
-      const events = ["DefiningAttributes_Resolved", "DefiningAttributes_Changed"];
-      wcTopic.subscribe(events, changeImages);
-      productAssetsStateIbm.onUnload = () => {
-        // use private API here as there is no wcTopic.unsubscribe...
-        events.forEach(id => wcTopic._topics[id].unsubscribe(changeImages));
-      };
+addNodeDecoratorBySelector(
+  ".cm-product-assets",
+  function ($target) {
+    const wcTopic = window.wcTopic;
+    const productAssetsStateIbm = {
+      onUnload: () => {},
+    };
+    if (typeof wcTopic !== "undefined") {
+      // WCS 9
+      const shoppingActionsJS = window.shoppingActionsJS;
+      if (shoppingActionsJS) {
+        const changeImages = getChangeImagesFn($target, shoppingActionsJS);
+        const events = [
+          "DefiningAttributes_Resolved",
+          "DefiningAttributes_Changed",
+        ];
+        wcTopic.subscribe(events, changeImages);
+        productAssetsStateIbm.onUnload = () => {
+          // use private API here as there is no wcTopic.unsubscribe...
+          events.forEach((id) => wcTopic._topics[id].unsubscribe(changeImages));
+        };
+      }
+    } else {
+      const dojo = window.dojo;
+      if (typeof dojo !== "undefined") {
+        // WCS 8
+        dojo.addOnLoad(function () {
+          const productDisplayJS = window.productDisplayJS;
+          if (productDisplayJS) {
+            const changeImages = getChangeImagesFn($target, productDisplayJS);
+            const events = [
+              "DefiningAttributes_Resolved",
+              "DefiningAttributes_Changed",
+            ];
+            const tokens = events.map((id) =>
+              dojo.topic.subscribe(id, changeImages)
+            );
+            productAssetsStateIbm.onUnload = () => {
+              tokens.forEach((token) => token.remove());
+            };
+          }
+        });
+      }
     }
-  } else {
-    const dojo = window.dojo;
-    if (typeof dojo !== "undefined") {
-      // WCS 8
-      dojo.addOnLoad(function () {
-        const productDisplayJS = window.productDisplayJS;
-        if (productDisplayJS) {
-          const changeImages = getChangeImagesFn($target, productDisplayJS);
-          const events = ["DefiningAttributes_Resolved", "DefiningAttributes_Changed"];
-          const tokens = events.map(id => dojo.topic.subscribe(id, changeImages));
-          productAssetsStateIbm.onUnload = () => {
-            tokens.forEach(token => token.remove());
-          };
-        }
-      });
-    }
+    $target.data(productAssetsStateIbmId, productAssetsStateIbm);
+  },
+  function ($target) {
+    const { onUnload } = $target.data(productAssetsStateIbmId) || {};
+    onUnload && onUnload();
+    $target.removeData(productAssetsStateIbmId);
   }
-  $target.data(productAssetsStateIbmId, productAssetsStateIbm);
-}, function($target) {
-  const { onUnload } = $target.data(productAssetsStateIbmId) || {};
-  onUnload && onUnload();
-  $target.removeData(productAssetsStateIbmId);
-});
+);
 
 // synchronize carousel should control slideshow
 // sadly we cannot use the build-in feature of slick-carousel because it has some serious issues...
@@ -90,11 +102,11 @@ addNodeDecoratorByData(
     zoom: {},
   },
   "cm-product-assets",
-  function($target, { zoom }, instance) {
+  function ($target, { zoom }, instance) {
     const $slideshow = $target.find(".cm-product-assets__slideshow");
     const $carousel = $target.find(".cm-product-assets__carousel");
 
-    $slideshow.on("afterChange", function(event, slick, currentSlide) {
+    $slideshow.on("afterChange", function (event, slick, currentSlide) {
       $carousel.slick("slickGoTo", currentSlide);
       $carousel
         .find(".slick-slide.slick-slide--active")
@@ -104,13 +116,13 @@ addNodeDecoratorByData(
         .addClass("slick-slide--active");
     });
 
-    $carousel.on("click", ".slick-slide", function() {
+    $carousel.on("click", ".slick-slide", function () {
       const goToSingleSlide = $(this).data("slick-index");
 
       $slideshow.slick("slickGoTo", goToSingleSlide);
     });
 
-    $carousel.ready(function() {
+    $carousel.ready(function () {
       $carousel
         .find(".slick-slide.slick-current")
         .addClass("slick-slide--active");
@@ -133,7 +145,7 @@ addNodeDecoratorByData(
           const responsiveImageFormat = getCurrentResponsiveImageFormat(img);
           if (responsiveImageFormat) {
             const biggestWidth = Math.max(
-              ...Object.keys(responsiveImageFormat.linksForWidth).map(key =>
+              ...Object.keys(responsiveImageFormat.linksForWidth).map((key) =>
                 parseInt(key)
               )
             );
@@ -153,7 +165,7 @@ addNodeDecoratorByData(
       gallery: { enabled: true },
       delegate: ".cm-product-asset[data-cm-product-asset-gallery-item]",
       callbacks: {
-        elementParse: item => {
+        elementParse: (item) => {
           // try to find a responsive images
           const responsiveImageFormat = getCurrentResponsiveImageFormat(
             item.el.find(".cm-product-asset__media[data-cm-responsive-media]")
@@ -161,7 +173,7 @@ addNodeDecoratorByData(
           if (responsiveImageFormat) {
             // if found: use item type: image
             const biggestWidth = Math.max(
-              ...Object.keys(responsiveImageFormat.linksForWidth).map(key =>
+              ...Object.keys(responsiveImageFormat.linksForWidth).map((key) =>
                 parseInt(key)
               )
             );
@@ -181,7 +193,7 @@ addNodeDecoratorByData(
 
     const slideshowDeferrer = $.Deferred(); //indicates if the product asset's slideshow is fully initialized
 
-    $.when(slideshowDeferrer).done(function() {
+    $.when(slideshowDeferrer).done(function () {
       $document.trigger(EVENT_LAYOUT_CHANGED);
       instance.updateZoomImage && instance.updateZoomImage();
       $slideshow.trigger(PRODUCT_ASSET_CAROUSEL_READY_EVENT);
@@ -195,7 +207,7 @@ addNodeDecoratorByData(
           slideshowDeferrer.resolve();
         } else {
           // if the image is not loaded yet then we need to wait for the "srcChanged" event
-          $activeImg.one(EVENT_SRC_CHANGED, function() {
+          $activeImg.one(EVENT_SRC_CHANGED, function () {
             slideshowDeferrer.resolve();
           });
         }
@@ -208,7 +220,7 @@ addNodeDecoratorByData(
     }
     $slideshow.on("init", finishProductAssetsInitialization);
   },
-  function($target, {}, instance) {
+  function ($target, {}, instance) {
     instance.zoom && instance.zoom.destroy();
     if (instance.updateZoomImage) {
       $target.off("afterChange", instance.updateZoomImage);

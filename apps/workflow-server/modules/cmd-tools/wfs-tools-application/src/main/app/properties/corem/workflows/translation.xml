@@ -41,6 +41,9 @@
     <!-- map that groups each masterVersion by its derived content-->
     <Variable name="premularConfigData" type="Blob"/>
 
+    <!-- string that defines the strategy how to calculate derived content-->
+    <Variable name="placeholderPreparationStrategy" type="String"/>
+
 
     <InitialAssignment>
       <Writes variable="subject"/>
@@ -48,6 +51,7 @@
       <Writes variable="autoSelfAssigned"/>
       <Writes variable="masterContentObjects"/>
       <Writes variable="targetSiteId"/>
+      <Writes variable="placeholderPreparationStrategy"/>
     </InitialAssignment>
 
     <Assignment>
@@ -61,6 +65,7 @@
       <Writes variable="targetSiteManagerGroup"/>
       <Writes variable="targetSiteId"/>
       <Writes variable="performer"/>
+      <Writes variable="placeholderPreparationStrategy"/>
     </Assignment>
 
     <AutomatedTask name="ValidateParameters" successor="GetDerivedContents">
@@ -75,6 +80,7 @@
               masterContentObjectsVariable="masterContentObjects"
               derivedContentsVariable="derivedContents"
               createdContentsVariable="createdContents"
+              placeholderPreparationStrategyVariable="placeholderPreparationStrategy"
               targetSiteIdVariable="targetSiteId"/>
       <Action class="com.coremedia.translate.workflow.FilterDerivedContentsAction"
               masterContentObjectsVariable="masterContentObjects"

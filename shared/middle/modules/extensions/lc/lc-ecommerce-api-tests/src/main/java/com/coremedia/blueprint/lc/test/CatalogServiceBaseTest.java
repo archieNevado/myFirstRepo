@@ -105,12 +105,6 @@ public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
   @Value("${LEAF_CATEGORY_CODE}")
   protected String LEAF_CATEGORY_CODE;
 
-  @Value("${FILTER_NAME}")
-  protected String FILTER_NAME;
-
-  @Value("${FILTER_VALUE}")
-  protected String FILTER_VALUE;
-
   protected void testFindProductById() throws Exception {
     CommerceId productId = getIdProvider().formatProductId(null, PRODUCT_CODE);
 

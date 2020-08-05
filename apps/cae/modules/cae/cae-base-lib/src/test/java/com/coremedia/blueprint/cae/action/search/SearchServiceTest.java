@@ -20,6 +20,7 @@ import com.coremedia.blueprint.testing.ContentTestConfiguration;
 import com.coremedia.blueprint.testing.ContentTestHelper;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -27,6 +28,7 @@ import com.google.common.collect.ImmutableSet;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -65,6 +67,9 @@ import static org.junit.Assert.fail;
 })
 public class SearchServiceTest {
   @Configuration
+  @EnableConfigurationProperties({
+          DeliveryConfigurationProperties.class
+  })
   @ComponentScan("com.coremedia.cap.common.xml")
   @ImportResource(
           value = {

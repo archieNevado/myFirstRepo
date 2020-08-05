@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.contenthub.adapters.rss;
 
+import com.coremedia.blueprint.contenthub.adapters.rss.imageurlextractor.FeedImageExtractor;
 import com.coremedia.contenthub.api.ContentHubAdapter;
 import com.coremedia.contenthub.api.ContentHubContext;
 import com.coremedia.contenthub.api.ContentHubObject;
@@ -34,12 +35,19 @@ import java.util.List;
 class RSSContentHubAdapter implements ContentHubAdapter {
   private static final Logger LOGGER = LoggerFactory.getLogger(RSSContentHubAdapter.class);
 
+  private final RSSContentHubTransformer rssContentHubTransformer;
+  private final FeedImageExtractor feedImageExtractor;
   private final RSSContentHubSettings settings;
   private final String connectionId;
   private final SyndFeed feed;
   private final RSSColumnProvider columnProvider;
 
-  RSSContentHubAdapter(@NonNull RSSContentHubSettings settings, @NonNull String connectionId) {
+  RSSContentHubAdapter(@NonNull RSSContentHubTransformer rssContentHubTransformer,
+                       @NonNull FeedImageExtractor feedImageExtractor,
+                       @NonNull RSSContentHubSettings settings,
+                       @NonNull String connectionId) {
+    this.rssContentHubTransformer = rssContentHubTransformer;
+    this.feedImageExtractor = feedImageExtractor;
     this.settings = settings;
     this.connectionId = connectionId;
     columnProvider = new RSSColumnProvider();
@@ -96,7 +104,7 @@ class RSSContentHubAdapter implements ContentHubAdapter {
     String externalId = id.getExternalId();
     for (SyndEntry entry : entries) {
       if (entry.getUri().equals(externalId)) {
-        return new RSSItem(id, feed, entry);
+        return new RSSItem(feedImageExtractor, id, feed, entry);
       }
     }
     return null;
@@ -115,7 +123,7 @@ class RSSContentHubAdapter implements ContentHubAdapter {
     List<SyndEntry> entries = feed.getEntries();
     for (SyndEntry entry : entries) {
       ContentHubObjectId id = new ContentHubObjectId(connectionId, entry.getUri());
-      result.add(new RSSItem(id, feed, entry));
+      result.add(new RSSItem(feedImageExtractor, id, feed, entry));
     }
     return new GetChildrenResult(result);
   }
@@ -132,7 +140,7 @@ class RSSContentHubAdapter implements ContentHubAdapter {
   @Override
   @NonNull
   public ContentHubTransformer transformer() {
-    return new RSSContentHubTransformer();
+    return rssContentHubTransformer;
   }
 
 

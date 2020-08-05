@@ -4,9 +4,11 @@ import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -16,6 +18,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
@@ -29,10 +32,14 @@ import static org.assertj.core.api.Assertions.assertThat;
         "repository.params.contentxml=classpath:com/coremedia/blueprint/cae/view/resolver/content.xml",
         "repository.params.contentschemaxml=classpath:com/coremedia/blueprint/cae/view/resolver/test-doctypes.xml"
 })
+@WebAppConfiguration
 @ActiveProfiles(ThemeTemplateViewRepositoryProviderTest.LocalConfig.PROFILE)
 public class ThemeTemplateViewRepositoryProviderTest {
 
   @Configuration
+  @EnableConfigurationProperties({
+          DeliveryConfigurationProperties.class
+  })
   @ComponentScan("com.coremedia.cap.common.xml")
   @ImportResource(
           value = {

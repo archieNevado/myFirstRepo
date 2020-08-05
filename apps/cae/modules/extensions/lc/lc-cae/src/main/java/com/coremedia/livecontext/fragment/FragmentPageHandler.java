@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.fragment;
 
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextHelper;
@@ -19,6 +20,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -59,8 +61,13 @@ public class FragmentPageHandler extends PageHandlerBase {
 
   private CatalogAliasTranslationService catalogAliasTranslationService;
 
-  private boolean isPreview = false;
+  private DeliveryConfigurationProperties deliveryConfigurationProperties;
   private List<FragmentHandler> fragmentHandlers;
+
+  @Autowired
+  public void setDeliveryConfigurationProperties(DeliveryConfigurationProperties deliveryConfigurationProperties) {
+    this.deliveryConfigurationProperties = deliveryConfigurationProperties;
+  }
 
   // --- interface --------------------------------------------------
 
@@ -135,10 +142,6 @@ public class FragmentPageHandler extends PageHandlerBase {
     this.fragmentHandlers = ImmutableList.copyOf(fragmentHandlers);
   }
 
-  public void setPreview(boolean isPreview) {
-    this.isPreview = isPreview;
-  }
-
   @Required
   public void setCatalogAliasTranslationService(CatalogAliasTranslationService catalogAliasTranslationService) {
     this.catalogAliasTranslationService = catalogAliasTranslationService;
@@ -174,7 +177,7 @@ public class FragmentPageHandler extends PageHandlerBase {
   @Nullable
   private ModelAndView createNoSiteModelAndView(@NonNull FragmentParameters fragmentParameters, @NonNull String storeId,
                                                 @NonNull Locale locale) {
-    if (isPreview) {
+    if (deliveryConfigurationProperties.isPreviewMode()) {
       return HandlerHelper.badRequest("Could not find a site for store " + fragmentParameters);
     }
 

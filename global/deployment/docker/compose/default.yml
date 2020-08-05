@@ -12,7 +12,7 @@ x-default-boot-envs:
   # extracts the app at startup to speed up the annotation and property scanning of the classpath. The startup improvements
   # are around 2-3x faster. It is also the recommended way by Spring. With Spring-Boot 2.3 the spring-maven-plugin will
   # be able to build images with exploded layout.
-  SPRING_BOOT_EXPLODED_APP: "false"
+  SPRING_BOOT_EXPLODED_APP: "${SPRING_BOOT_EXPLODED_APP:-true}"
 
 services:
   mysql:
@@ -264,7 +264,7 @@ services:
       traefik.frontend.headers.SSLRedirect: "true"
       # service rules
       traefik.preview.frontend.rule: Host:preview.${ENVIRONMENT_FQDN:-docker.localhost};AddPrefix:/blueprint
-      # needed for static resources because of cae.is.standalone needs to be true in the preview
+      # needed for static resources because of delivery.standalone needs to be true in the preview
       traefik.preview-static-files.frontend.rule: Host:preview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/blueprint
       traefik.preview-landing.frontend.rule: Host:preview.${ENVIRONMENT_FQDN:-docker.localhost};Path:/;AddPrefix:/blueprint/servlet/corporate
       traefik.preview-servlets.frontend.rule: Host:preview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/preview,/previewurl,/assets,/service,/dynamic,/resource,/corporate,/corporate-de-de,/styleguide;AddPrefix:/blueprint/servlet

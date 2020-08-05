@@ -21,7 +21,7 @@ function isMobileOrTablet() {
   return getLastDevice().type !== "desktop";
 }
 
-addNodeDecoratorBySelector(`.${BLOCK}`, $navigationRoot => {
+addNodeDecoratorBySelector(`.${BLOCK}`, ($navigationRoot) => {
   const $navigationRootList = $navigationRoot.find(`.${ITEM_ELEMENT_MENU}`);
   let $navigationEntries = $navigationRootList.find(
     `.${ITEM_MODIFIER_DEPTH_1}`
@@ -29,14 +29,14 @@ addNodeDecoratorBySelector(`.${BLOCK}`, $navigationRoot => {
 
   // Previously hovered menus could still be visible since they won't disappear until the end of their transition.
   // To make sure that only one menu is visible, we need to set the opacity of all other menus to 0.
-  $navigationEntries.mouseover(function() {
+  $navigationEntries.mouseover(function () {
     const $currentNavigationEntry = $(this);
     const $menuVisible = $currentNavigationEntry.find(
       `ul.${ITEM_ELEMENT_MENU}`
     );
 
     $navigationRootList.addClass(MODIFIER_HOVERED);
-    $navigationEntries.not(this).each(function() {
+    $navigationEntries.not(this).each(function () {
       const $this = $(this);
 
       $this.removeClass(
@@ -63,7 +63,7 @@ addNodeDecoratorBySelector(`.${BLOCK}`, $navigationRoot => {
   });
 
   $navigationEntries.mouseout(() => {
-    $navigationEntries.not(this).each(function() {
+    $navigationEntries.not(this).each(function () {
       const $this = $(this);
       if (!isMobileOrTablet()) {
         $this.removeClass(
@@ -75,7 +75,7 @@ addNodeDecoratorBySelector(`.${BLOCK}`, $navigationRoot => {
     $navigationRootList.removeClass(MODIFIER_HOVERED);
   });
 
-  $navigationEntries.on("click", function(e) {
+  $navigationEntries.on("click", function (e) {
     // prevent further code from being executed if a sublist of the list is clicked
     if (e.target.parentNode !== this) return;
     // ignore click on touch devices. we don't want to trigger the link, just display the subnavigation
@@ -87,7 +87,7 @@ addNodeDecoratorBySelector(`.${BLOCK}`, $navigationRoot => {
 
 addNodeDecoratorBySelector(
   ".cm-header__mobile-navigation-button.cm-hamburger-icon",
-  $hamburgerIcon => {
+  ($hamburgerIcon) => {
     const $body = $("body");
     $hamburgerIcon.on("click touch", () => {
       const toBeOpened = !$hamburgerIcon.hasClass("cm-hamburger-icon--toggled");
@@ -104,7 +104,7 @@ addNodeDecoratorBySelector(
   }
 );
 
-addNodeDecoratorBySelector(".cm-navigation-item", $navigationItem => {
+addNodeDecoratorBySelector(".cm-navigation-item", ($navigationItem) => {
   const $toggle = $navigationItem.find(`> .${ITEM_ELEMENT_TOGGLE}`);
   const $title = $navigationItem.find(`> .${ITEM_ELEMENT_TITLE}`);
   const $menu = $navigationItem.find(`> .${ITEM_ELEMENT_MENU}`);

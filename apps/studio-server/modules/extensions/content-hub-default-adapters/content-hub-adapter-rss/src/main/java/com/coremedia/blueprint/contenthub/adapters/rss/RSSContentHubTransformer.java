@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.contenthub.adapters.rss;
 
+import com.coremedia.blueprint.contenthub.adapters.rss.imageurlextractor.FeedImageExtractor;
 import com.coremedia.contenthub.api.ContentCreationUtil;
 import com.coremedia.contenthub.api.ContentHubAdapter;
 import com.coremedia.contenthub.api.ContentHubContext;
@@ -18,6 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 class RSSContentHubTransformer implements ContentHubTransformer {
+
+  private final FeedImageExtractor feedImageExtractor;
+
+  public RSSContentHubTransformer(@NonNull FeedImageExtractor feedImageExtractor) {
+    this.feedImageExtractor = feedImageExtractor;
+  }
+
   @Override
   @NonNull
   public ContentModel transform(Item item, ContentHubAdapter contentHubAdapter, ContentHubContext contentHubContext) {
@@ -55,7 +63,7 @@ class RSSContentHubTransformer implements ContentHubTransformer {
     }
 
     SyndEntry rssEntry = item.getRssEntry();
-    List<String> imageUrls = FeedImageExtractor.extractImageUrls(rssEntry);
+    List<String> imageUrls = feedImageExtractor.extractImageUrls(rssEntry);
     List<ContentModelReference> refs = new ArrayList<>();
     for (String imageUrl : imageUrls) {
       ContentModelReference contentModelRef = ContentModelReference.create(contentModel, "CMPicture", imageUrl);

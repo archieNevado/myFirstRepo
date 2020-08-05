@@ -1,12 +1,16 @@
 package com.coremedia.blueprint.common.datevalidation;
 
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
-import org.junit.jupiter.api.BeforeEach;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.ObjectProvider;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Stream;
@@ -16,14 +20,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class ValidityPeriodValidatorIsValidityPeriodUsedTest {
 
-  private ValidityPeriodValidator testling;
+  @Mock
+  private ObjectProvider<ValidUntilConsumer> validUntilConsumers;
 
-  @BeforeEach
-  void setUp() {
-    testling = new ValidityPeriodValidator();
-  }
+  @InjectMocks
+  private ValidityPeriodValidator testling;
 
   @ParameterizedTest
   @MethodSource("provideIsValidityPeriodUsedData")

@@ -1,5 +1,5 @@
 <#-- @ftlvariable name="self" type="com.coremedia.livecontext.ecommerce.order.Cart" -->
-<#-- @ftlvariable name="_CSRFToken" type="java.lang.String" -->
+<#-- @ftlvariable name="_csrf" type="org.springframework.security.web.csrf.CsrfToken" -->
 
 <#import "*/node_modules/@coremedia/brick-utils/src/freemarkerLibs/components.ftl" as components />
 
@@ -68,14 +68,14 @@
               </div>
 
               <#-- remove from cart button -->
+              <#assign csrfParams=_csrf?has_content?then({ _csrf.parameterName: _csrf.token }, {}) />
               <button class="cm-cart-item__remove"
                       title="${cm.getMessage("cart_remove_item")}"
                       <@cm.dataAttribute name="data-cm-cart-remove-item"
                                          data={
                                            "id": item.externalId!"",
-                                           "link": cm.getLink(self, "ajax"),
-                                           "token": _CSRFToken!""
-                                         } />>
+                                           "link": cm.getLink(self, "ajax")
+                                         } + csrfParams />>
                 <span>${cm.getMessage("cart_remove_item")}</span>
               </button>
             </#if>

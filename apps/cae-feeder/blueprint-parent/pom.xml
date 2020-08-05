@@ -31,9 +31,9 @@
 
     <customer>Blueprint</customer>
 
-    <cm.cae-feeder.core.version>2004.2</cm.cae-feeder.core.version>
+    <cm.cae-feeder.core.version>2007.1</cm.cae-feeder.core.version>
 
-    <spring.boot.version>2.2.6.RELEASE</spring.boot.version>
+    <spring.boot.version>2.2.8.RELEASE</spring.boot.version>
     <application-plugin.version>2.8.3</application-plugin.version>
 
     <!--
@@ -78,16 +78,16 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.33</tomcat.embed.version>
+    <tomcat.embed.version>9.0.36</tomcat.embed.version>
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.cae-feeder.core.version>2004.2</cm.cae-feeder.core.version>
-    <cm.common.core.version>2004.2</cm.common.core.version>
+    <cm.cae-feeder.core.version>2007.1</cm.cae-feeder.core.version>
+    <cm.common.core.version>2007.1</cm.common.core.version>
     <cm.common.bp.version>1-SNAPSHOT</cm.common.bp.version>
-    <cm.middle.core.version>2004.2</cm.middle.core.version>
+    <cm.middle.core.version>2007.1</cm.middle.core.version>
     <cm.middle.bp.version>1-SNAPSHOT</cm.middle.bp.version>
-    <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
+    <maven-surefire-plugin.version>3.0.0-M4</maven-surefire-plugin.version>
 
     <showDeprecation>true</showDeprecation>
     <showWarnings>true</showWarnings>
@@ -155,7 +155,7 @@
               <dependency>
                 <groupId>com.coremedia.maven</groupId>
                 <artifactId>coremedia-enforcer-rules</artifactId>
-                <version>1.1.17</version>
+                <version>1.1.18</version>
               </dependency>
               <dependency>
                 <groupId>com.coremedia.cms</groupId>

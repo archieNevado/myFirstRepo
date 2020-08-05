@@ -24,7 +24,8 @@
       <editor:items>
         <editor:PropertyFieldGroup
                 title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMExternalLink_url_text')}"
-                itemId="urlForm">
+                itemId="urlForm"
+                decorateAsUnlabeled="true">
           <editor:items>
             <editor:StringPropertyField propertyName="url" hideLabel="true"/>
             <editor:BooleanPropertyField propertyName="openInNewTab" hideLabel="true"/>

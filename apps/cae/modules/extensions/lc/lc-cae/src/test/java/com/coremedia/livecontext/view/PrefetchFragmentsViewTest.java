@@ -49,7 +49,7 @@ class PrefetchFragmentsViewTest {
       + MATRIX_SEPERATOR
       + PAGE_ID_KEY + KEY_VALUE_SEPERATOR + PAGE_ID_VALUE;
 
-    assertThat(PrefetchFragmentsView.createPageKeyFromParameters(fragmentParameters)).isEqualTo(pageKey);
+    assertThat(PrefetchFragmentsViewUtils.createPageKeyFromParameters(fragmentParameters)).isEqualTo(pageKey);
   }
 
   @Test
@@ -65,6 +65,6 @@ class PrefetchFragmentsViewTest {
       + MATRIX_SEPERATOR
       + PAGE_ID_KEY + KEY_VALUE_SEPERATOR + PAGE_ID_VALUE;
 
-    assertThat(PrefetchFragmentsView.createPageKeyFromParameters(fragmentParameters)).isEqualTo(pageKey);
+    assertThat(PrefetchFragmentsViewUtils.createPageKeyFromParameters(fragmentParameters)).isEqualTo(pageKey);
   }
 }

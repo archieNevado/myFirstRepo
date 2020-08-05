@@ -32,14 +32,14 @@
     <#-- display name with link -->
     <#if self.displayName?has_content>
       <a class="${blockClass}__link" href="${cm.getLink(self)}">
-        <h3 class="${blockClass}__headline"<@preview.metadata self.displayName/>>${self.displayName!""}</h3>
+        <h3 class="${blockClass}__headline"<@preview.metadata "properties.displayName" />>${self.displayName!""}</h3>
       </a>
     </#if>
 
     <#-- short bio -->
-    <#if self.teaserText?has_content>
-      <p class="${blockClass}__short-text"<@preview.metadata self.teaserText/>>
-        <@utils.renderWithLineBreaks text=bp.truncateText(self.teaserText!"", shortBioMaxLength)/>
+    <#if !bp.isEmptyRichtext(self.teaserText!"")>
+      <p class="${blockClass}__short-text"<@preview.metadata "properties.teaserText" />>
+        <@utils.renderWithLineBreaks text=bp.truncateText(self.teaserText, shortBioMaxLength)/>
       </p>
     </#if>
   </div>

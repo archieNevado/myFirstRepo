@@ -3,7 +3,6 @@ package com.coremedia.blueprint.studio.rest.intercept.word;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tika.sax.ContentHandlerDecorator;
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,14 +11,14 @@ import java.util.List;
 /**
  * ContentHandlerDecorator for extracting the content title property from a paragraph.
  */
-public class DocTitleHandler extends ContentHandlerDecorator implements IDocumentEntryResolver {
+public class DocTitleHandler extends ContentHandlerDecorator {
 
   public static final String CLASS_ATTRIBUTE = "class";
 
   private boolean titleMode = false;
   private String title = null;
-  private String defaultTitle = null;
-  private List<String> titleTags = new ArrayList<>();
+  private final String defaultTitle;
+  private final List<String> titleTags = new ArrayList<>();
 
   public DocTitleHandler(String defaultTitle) {
     this.defaultTitle = defaultTitle;
@@ -32,7 +31,7 @@ public class DocTitleHandler extends ContentHandlerDecorator implements IDocumen
   }
 
   @Override
-  public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
+  public void startElement(String uri, String localName, String qName, Attributes atts) {
     String lastStyle = (atts.getValue(CLASS_ATTRIBUTE) != null) ? "-" + atts.getValue(CLASS_ATTRIBUTE) : "";
     String tagAndStyle = (localName + lastStyle).toLowerCase();
 
@@ -42,7 +41,7 @@ public class DocTitleHandler extends ContentHandlerDecorator implements IDocumen
   }
 
   @Override
-  public void characters(char[] ch, int start, int length) throws SAXException {
+  public void characters(char[] ch, int start, int length) {
     String s = new String(ch);
 
     if (StringUtils.isEmpty(title) && titleMode && !StringUtils.isEmpty(s)) {
@@ -51,27 +50,22 @@ public class DocTitleHandler extends ContentHandlerDecorator implements IDocumen
   }
 
   @Override
-  public void endElement(String uri, String localName, String name) throws SAXException {
+  public void endElement(String uri, String localName, String name) {
     this.titleMode = false;
   }
 
 
   @Override
-  public void startDocument() throws SAXException {
+  public void startDocument() {
   }
 
 
   @Override
-  public void endDocument() throws SAXException {
+  public void endDocument() {
   }
 
-  @Override
-  public DocumentEntry getDocumentEntry() {
-    return new DocumentEntry("title", getTitle());
-  }
-
-  private String getTitle() {
-    if(StringUtils.isEmpty(title)) {
+  public String getTitle() {
+    if (StringUtils.isEmpty(title)) {
       return defaultTitle;
     }
     return title;

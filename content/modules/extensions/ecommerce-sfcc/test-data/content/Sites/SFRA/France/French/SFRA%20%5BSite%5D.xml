@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMSite folder="/Sites/SFRA/France/French" name="SFRA [Site]" translationState="up-to-date">
+<CMSite folder="/Sites/SFRA/France/French" name="SFRA [Site]" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <externalRefId></externalRefId>
 <locale>fr-FR</locale>
 <master>

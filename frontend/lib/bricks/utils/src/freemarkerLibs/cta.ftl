@@ -3,6 +3,7 @@
 <#function getButtonSettings base={}>
   <#return {
     "target": base.target!cm.UNDEFINED,
+    "hash": base.hash!cm.UNDEFINED,
     "text": base.text!"",
     "openInNewTab": base.openInNewTab!false,
     "metadata": base.metadata![]
@@ -36,8 +37,10 @@
     <div class="cm-cta ${additionalClass}"<@preview.metadata data=metadata />>
       <#items as button>
         <#local buttonSettings=getButtonSettings(button!{}) />
-        <#assign previewContent=preview.content(buttonSettings.target!cm.UNDEFINED) />
-        <@renderButton link=cm.getLink(buttonSettings.target!cm.UNDEFINED)
+        <#local previewContent=preview.content(buttonSettings.target!cm.UNDEFINED) />
+        <#local hashCharacter=(buttonSettings.hash?has_content && !buttonSettings.hash?contains("#"))?then("#", "") />
+        <#local linkSuffix=buttonSettings.hash?has_content?then(hashCharacter + buttonSettings.hash, "") />
+        <@renderButton link=cm.getLink(buttonSettings.target!cm.UNDEFINED) + linkSuffix
                        text=buttonSettings.text!""
                        openInNewTab=buttonSettings.openInNewTab!false
                        additionalClass=additionalButtonClass

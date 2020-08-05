@@ -140,7 +140,7 @@ public class DownloadPortalHandler {
                   "/" + DOWNLOAD_COLLECTION +
                   "/" + DC_DOWNLOAD;
 
-  private static final String PATTERN_DOWNLOAD_COLLECTION_OVERVIEW =
+  static final String PATTERN_DOWNLOAD_COLLECTION_OVERVIEW =
           DYNAMIC_PORTAL_PREFIX +
                   "/" + DOWNLOAD_COLLECTION_OVERVIEW +
                   "/{" + CONTEXT_ID + "}";

@@ -16,12 +16,18 @@ const fixAlternatingClasses = (firstItem, secondItem, selector = null) => {
     return;
   }
   const firstBanner = selector ? firstItem.querySelector(selector) : firstItem;
-  const secondBanner = selector ? secondItem.querySelector(selector) : secondItem;
+  const secondBanner = selector
+    ? secondItem.querySelector(selector)
+    : secondItem;
   if (!firstBanner || !secondBanner) {
     return;
   }
-  const firstIsAlternative = firstBanner.classList.contains(bannerModifierAlternative);
-  const secondIsAlternative = secondBanner.classList.contains(bannerModifierAlternative);
+  const firstIsAlternative = firstBanner.classList.contains(
+    bannerModifierAlternative
+  );
+  const secondIsAlternative = secondBanner.classList.contains(
+    bannerModifierAlternative
+  );
 
   // if both are alternative or not alternative
   if (firstIsAlternative === secondIsAlternative) {
@@ -34,13 +40,16 @@ const fixAlternatingClasses = (firstItem, secondItem, selector = null) => {
   }
 };
 
-
-addNodeDecoratorBySelector(`.${bannerBlock}`, $banner => {
+addNodeDecoratorBySelector(`.${bannerBlock}`, ($banner) => {
   const banner = $banner[0];
   fixAlternatingClasses(banner.previousElementSibling, banner);
 });
 
-addNodeDecoratorBySelector(`.${gridElementItem}`, $gridItem => {
+addNodeDecoratorBySelector(`.${gridElementItem}`, ($gridItem) => {
   const gridItem = $gridItem[0];
-  fixAlternatingClasses(gridItem.previousElementSibling, gridItem, `.${bannerBlock}`);
+  fixAlternatingClasses(
+    gridItem.previousElementSibling,
+    gridItem,
+    `.${bannerBlock}`
+  );
 });

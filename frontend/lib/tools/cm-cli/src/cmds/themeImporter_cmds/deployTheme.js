@@ -14,7 +14,7 @@ const { PACKAGE_MANAGER_EXECUTABLE } = require("../../lib/paths");
 
 const command = "deploy-theme";
 const desc = "Upload and deploy theme on server";
-const builder = yargs => yargs.epilogue(args.docs);
+const builder = (yargs) => yargs.epilogue(args.docs);
 
 const handler = () => {
   const log = cmLogger.getLogger({
@@ -52,35 +52,35 @@ const handler = () => {
 
     themeImporter
       .whoami()
-      .then(user => {
+      .then((user) => {
         log.info(`You are logged in as user '${user.name}' (id=${user.id}).`);
         themeImporter
           .deployTheme(themeConfig)
-          .then(zipFile => {
+          .then((zipFile) => {
             log.success(
               `Theme has successfully been uploaded and deployed (file ${path.basename(
                 zipFile
               )}).`
             );
           })
-          .catch(e => {
+          .catch((e) => {
             log.error(e.message);
             process.exit(1);
           });
       })
-      .catch(e => {
+      .catch((e) => {
         log.error(e.message);
         runLoginCmd();
         themeImporter
           .deployTheme(themeConfig)
-          .then(zipFile => {
+          .then((zipFile) => {
             log.success(
               `Theme has successfully been uploaded and deployed (file ${path.basename(
                 zipFile
               )}).`
             );
           })
-          .catch(e => {
+          .catch((e) => {
             log.error(e.message);
             process.exit(1);
           });

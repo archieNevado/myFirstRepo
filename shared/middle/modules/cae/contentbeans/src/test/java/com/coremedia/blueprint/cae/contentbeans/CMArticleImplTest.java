@@ -11,7 +11,7 @@ import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.blueprint.common.contentbeans.CMVideo;
 import com.coremedia.blueprint.common.services.context.CurrentContextService;
-import com.coremedia.blueprint.testing.ContentBeanTestBase;
+import com.coremedia.blueprint.cae.contentbeans.testing.ContentBeanTestBase;
 import com.coremedia.xml.MarkupUtil;
 import org.junit.Before;
 import org.junit.Test;

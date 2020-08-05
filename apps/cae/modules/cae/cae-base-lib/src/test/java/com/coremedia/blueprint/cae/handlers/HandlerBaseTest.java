@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.cae.handlers;
 
+import com.coremedia.objectserver.configuration.CaeConfigurationProperties;
 import com.coremedia.objectserver.view.ViewUtils;
 import com.coremedia.objectserver.web.HandlerHelper;
 import org.junit.Before;
@@ -19,6 +20,8 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 @RunWith(MockitoJUnitRunner.class)
 public class HandlerBaseTest {
 
+  private CaeConfigurationProperties caeConfigurationProperties;
+
   @Spy
   private HandlerBase handlerBase;
 
@@ -27,7 +30,9 @@ public class HandlerBaseTest {
 
   @Before
   public void setup() {
-    handlerBase.setSingleNode(false);
+    caeConfigurationProperties = new CaeConfigurationProperties();
+    caeConfigurationProperties.setSingleNode(false);
+    handlerBase.setDeliveryConfigurationProperties(caeConfigurationProperties);
   }
 
   @Test
@@ -47,7 +52,7 @@ public class HandlerBaseTest {
 
   @Test
   public void sendRedirect() {
-    handlerBase.setSingleNode(true);
+    caeConfigurationProperties.setSingleNode(true);
     ModelAndView modelAndView = handlerBase.doCreateModelWithView(false, this, null, null, response);
     assertThat(modelAndView)
       .isNotNull()
@@ -73,5 +78,4 @@ public class HandlerBaseTest {
       });
     verify(response).setHeader("Cache-Control", "no-store");
   }
-
 }

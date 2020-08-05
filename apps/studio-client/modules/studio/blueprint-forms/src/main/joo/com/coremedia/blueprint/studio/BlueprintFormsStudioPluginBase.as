@@ -2,7 +2,6 @@ package com.coremedia.blueprint.studio {
 
 import com.coremedia.blueprint.base.components.sites.SiteAwareFeatureUtil;
 import com.coremedia.blueprint.base.components.util.UserUtil;
-import com.coremedia.blueprint.studio.forms.variants.PreviewVariantsUtil;
 import com.coremedia.blueprint.studio.util.ContentInitializer;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
@@ -13,7 +12,6 @@ import com.coremedia.cms.editor.sdk.desktop.maintoolbar.MainNavigationToolbar;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.plugins.TabExpandPlugin;
 import com.coremedia.cms.editor.sdk.premular.Premular;
-import com.coremedia.cms.editor.sdk.preview.PreviewPanel;
 import com.coremedia.cms.editor.sdk.util.MetaStyleService;
 import com.coremedia.cms.editor.sdk.util.ThumbnailResolverFactory;
 import com.coremedia.ui.data.ValueExpression;
@@ -139,12 +137,6 @@ public class BlueprintFormsStudioPluginBase extends StudioPlugin {
     return !all.some(function (issue:Issue):Boolean {
       return ISSUE_CODES_WITHOUT_PREVIEW.indexOf(issue.code) > -1;
     });
-  }
-
-  protected static function reloadPreview(previewPanel:PreviewPanel):void {
-    if (previewPanel.rendered && PreviewVariantsUtil.canHaveVariants(previewPanel.getCurrentPreviewContentValueExpression().getValue() as Content)) {
-      previewPanel.reloadFrameWhenVisible();
-    }
   }
 
   protected function getContentTypeVE():ValueExpression {

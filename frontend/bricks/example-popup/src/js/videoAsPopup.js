@@ -3,7 +3,7 @@ import magnificPopup from "@coremedia/brick-magnific-popup";
 import { log, error } from "@coremedia/brick-utils";
 import { videoAsMediaElement } from "@coremedia/brick-mediaelement";
 
-export default function(
+export default function (
   $popupElements,
   { url, parentSelector, autoplay, hideControls, muted, loop }
 ) {
@@ -34,13 +34,13 @@ export default function(
       midClick: true,
 
       callbacks: {
-        elementParse: function(item) {
+        elementParse: function (item) {
           //generate popup on the fly (for lazy loading)
           item.src = `<div class="cm-popup--video">
           <video data-cm-video class="cm-popup__video cm-video" src="${url}" ${playerSettings.autoplay} ${playerSettings.hideControls} ${playerSettings.muted} ${playerSettings.loop}></video>
           </div>`;
         },
-        open: function() {
+        open: function () {
           log("Video popup opened.");
           // find video inside popup
           const $video = $(".mfp-content [data-cm-video]");
@@ -51,7 +51,7 @@ export default function(
             error("Error: No video found in popup");
           }
         },
-        close: function() {
+        close: function () {
           log("Video popup closed.");
         },
       },

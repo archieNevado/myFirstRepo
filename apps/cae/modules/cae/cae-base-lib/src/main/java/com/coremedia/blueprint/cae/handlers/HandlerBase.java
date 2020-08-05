@@ -7,6 +7,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.mimetype.MimeTypeService;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanIdConverter;
+import com.coremedia.objectserver.configuration.CaeConfigurationProperties;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.google.common.base.Joiner;
@@ -16,7 +17,7 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.WebContentGenerator;
@@ -48,7 +49,12 @@ public abstract class HandlerBase extends WebContentGenerator {
   private DataViewFactory dataViewFactory;
   private ContentBeanIdConverter contentBeanIdConverter = new ContentBeanIdConverter();
   private List<String> permittedLinkParameterNames = Collections.emptyList();
-  private boolean singleNode;
+  private CaeConfigurationProperties caeConfigurationProperties;
+
+  @Autowired
+  public void setDeliveryConfigurationProperties(CaeConfigurationProperties deliveryConfigurationProperties) {
+    this.caeConfigurationProperties = deliveryConfigurationProperties;
+  }
 
   // --- Spring Config -------------------------------------------------------------------------------------------------
 
@@ -82,12 +88,7 @@ public abstract class HandlerBase extends WebContentGenerator {
   }
 
   protected boolean isSingleNode() {
-    return singleNode;
-  }
-
-  @Value("${cae.single-node:false}")
-  void setSingleNode(boolean singleNode) {
-    this.singleNode = singleNode;
+    return caeConfigurationProperties.isSingleNode();
   }
 
   // ===================================================================================================================
@@ -104,7 +105,7 @@ public abstract class HandlerBase extends WebContentGenerator {
                                                @NonNull HttpServletResponse response) {
     if (!isUpToDate) {
       // the handler detected that the link wasn't generated for this CAE's latest version of the given bean
-      if (singleNode) {
+      if (isSingleNode()) {
         // redirect to latest version
         return HandlerHelper.redirectTo(bean, viewName, httpStatus);
       } else {

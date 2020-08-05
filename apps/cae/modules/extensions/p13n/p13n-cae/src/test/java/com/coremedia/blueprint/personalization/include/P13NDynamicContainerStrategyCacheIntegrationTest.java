@@ -22,11 +22,13 @@ import com.coremedia.cap.struct.StructBuilder;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
@@ -49,6 +51,22 @@ import static org.mockito.Mockito.when;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {XmlRepoConfiguration.class, P13NDynamicContainerStrategyCacheIntegrationTest.LocalConfig.class})
 public class P13NDynamicContainerStrategyCacheIntegrationTest {
+
+  @Configuration
+  @EnableConfigurationProperties({
+          DeliveryConfigurationProperties.class
+  })
+  @ImportResource(
+          value = {
+                  "classpath:/framework/spring/personalization-plugin/personalization-contentbeans.xml"
+          },
+          reader = ResourceAwareXmlBeanDefinitionReader.class)
+  public static class LocalConfig {
+    @Bean
+    public XmlUapiConfig xmlUapiConfig() {
+      return new XmlUapiConfig("classpath:/com/coremedia/blueprint/P13NDynamicContainerStrategyCache/p13nContainerStrategyCacheTestRepo.xml");
+    }
+  }
 
   private Content persoContent;
 
@@ -232,20 +250,5 @@ public class P13NDynamicContainerStrategyCacheIntegrationTest {
   private void setProperty(Content content, String propertyName, Object propertyValue) {
     content.set(propertyName, propertyValue);
     contentRepository.getConnection().flush();
-  }
-
-  // --- configuration class ----------------------------------------------------------------------
-
-  @Configuration
-  @ImportResource(
-    value = {
-      "classpath:/framework/spring/personalization-plugin/personalization-contentbeans.xml"
-    },
-    reader = ResourceAwareXmlBeanDefinitionReader.class)
-  public static class LocalConfig {
-    @Bean
-    public XmlUapiConfig xmlUapiConfig() {
-      return new XmlUapiConfig("classpath:/com/coremedia/blueprint/P13NDynamicContainerStrategyCache/p13nContainerStrategyCacheTestRepo.xml");
-    }
   }
 }

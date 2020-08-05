@@ -19,7 +19,7 @@
   <#return blueprintFreemarkerFacade.getLinkForBiggestImageWithRatio(picture, cmpage, aspectRatio)>
 </#function>
 
-<#-- GET IMAGE LINK FR A GIVEN ASPECTRATIO AND SIZE -->
+<#-- GET IMAGE LINK FOR A GIVEN ASPECTRATIO AND SIZE -->
 <#function transformedImageUrl picture aspectRatio width height>
   <#return blueprintFreemarkerFacade.transformedImageUrl(picture, aspectRatio, width, height)>
 </#function>

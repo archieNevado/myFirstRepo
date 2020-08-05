@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
 import com.coremedia.blueprint.common.contentbeans.CMJavaScript;
-import com.coremedia.blueprint.testing.ContentBeanTestBase;
+import com.coremedia.blueprint.cae.contentbeans.testing.ContentBeanTestBase;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Assert;
 import org.junit.Before;

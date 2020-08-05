@@ -127,3 +127,23 @@
     }
   }
 }
+
+.cm-add-to-cart-button {
+  &__not-available {
+    display: block;
+  }
+
+  &__available {
+    display: none;
+  }
+
+  &--available {
+    .cm-add-to-cart-button__not-available {
+      display: none;
+    }
+
+    .cm-add-to-cart-button__available {
+      display: block;
+    }
+  }
+}

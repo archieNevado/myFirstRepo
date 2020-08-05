@@ -92,9 +92,6 @@
     <editor:PreviewPanel>
       <editor:plugins>
         <bpb-components:AddPreviewDateSelectorButtonPlugin/>
-        <bpforms:PreviewVariantsPreviewPanelPlugin previewVariantVE="{PreviewPanel.PREVIEW_VARIANT_VALUE_EXPRESSION}"/>
-        <ui:BindPlugin bindTo="{PreviewPanel.PREVIEW_VARIANT_VALUE_EXPRESSION}"
-                       boundValueChanged="{reloadPreview}"/>
       </editor:plugins>
     </editor:PreviewPanel>
 

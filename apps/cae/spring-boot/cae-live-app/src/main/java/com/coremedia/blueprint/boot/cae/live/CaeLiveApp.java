@@ -11,7 +11,6 @@ import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguratio
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -25,7 +24,6 @@ import java.util.Collections;
  * - FMAC because otherwise we have conflicting FreemarkerConfiguration beans
  *  for CAE and studio for server also exclude JDBC
  */
-@EnableWebSecurity
 @SpringBootApplication(exclude = {WebMvcAutoConfiguration.class, FreeMarkerAutoConfiguration.class, MongoAutoConfiguration.class})
 public class CaeLiveApp {
 

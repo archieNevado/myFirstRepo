@@ -2,7 +2,6 @@ package com.coremedia.livecontext.studio.asset;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.util.CommerceReferenceHelper;
-import com.coremedia.blueprint.common.contentbeans.CMPicture;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.ecommerce.studio.rest.cache.CommerceCacheInvalidationSource;
@@ -31,6 +30,12 @@ public class AssetInvalidationWritePostProcessor extends ContentWritePostprocess
 
   private static final Logger LOG = LoggerFactory.getLogger(AssetInvalidationWritePostProcessor.class);
 
+  /**
+   * Name of the document property CMPicture#data.
+   */
+  @VisibleForTesting
+  static String CMPICTURE_DATA = "data";
+
   @VisibleForTesting
   static final String STRUCT_PROPERTY_NAME = "localSettings";
 
@@ -48,7 +53,7 @@ public class AssetInvalidationWritePostProcessor extends ContentWritePostprocess
     Content content = report.getEntity();
     Map<String, Object> properties = report.getOverwrittenProperties();
 
-    if (content != null && properties != null && properties.containsKey(CMPicture.DATA)) {
+    if (content != null && properties != null && properties.containsKey(CMPICTURE_DATA)) {
       invalidate(content);
     }
   }

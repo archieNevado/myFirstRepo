@@ -1,7 +1,6 @@
 package com.coremedia.blueprint.cae.handlers;
 
 import com.coremedia.blueprint.cae.exception.BlobTransformationException;
-import com.coremedia.blueprint.cae.util.SecureHashCodeGeneratorStrategy;
 import com.coremedia.blueprint.common.contentbeans.CMMedia;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cap.common.Blob;
@@ -12,10 +11,12 @@ import com.coremedia.cap.content.ContentObject;
 import com.coremedia.cap.transform.TransformImageService;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.web.HandlerHelper;
+import com.coremedia.objectserver.web.SecureHashCodeGeneratorStrategy;
 import com.coremedia.objectserver.web.links.Link;
 import com.coremedia.transform.TransformedBeanBlob;
 import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import javax.activation.MimeType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -25,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.activation.MimeType;
 import java.util.Map;
 import java.util.Optional;
 

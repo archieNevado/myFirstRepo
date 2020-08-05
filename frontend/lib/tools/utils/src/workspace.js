@@ -37,7 +37,7 @@ const ajv = new Ajv({
       cwd: JSON_SCHEMA_ROOT,
       absolute: true,
     })
-    .map(schemaFile => readJSONFromFilePath(schemaFile)),
+    .map((schemaFile) => readJSONFromFilePath(schemaFile)),
 });
 
 /**
@@ -211,7 +211,7 @@ class Shim {
  * @param entryPointName the name of the entry point
  * @returns {string}
  */
-const generateCssFileNameFromEntryPointName = entryPointName => {
+const generateCssFileNameFromEntryPointName = (entryPointName) => {
   return path.join("css", `${entryPointName}.css`);
 };
 
@@ -221,7 +221,7 @@ const generateCssFileNameFromEntryPointName = entryPointName => {
  * @returns {string}
  */
 
-const generateJsFileNameFromEntryPointName = entryPointName => {
+const generateJsFileNameFromEntryPointName = (entryPointName) => {
   return path.join("js", `${entryPointName}.js`);
 };
 
@@ -230,7 +230,7 @@ const generateJsFileNameFromEntryPointName = entryPointName => {
  * @param {String} from where to start from
  * @return {String|null} the path to the CoreMedia Frontend Workspace or null if not found
  */
-const getWSPackageJson = from => {
+const getWSPackageJson = (from) => {
   let cwd = from;
 
   const check = () => {
@@ -287,7 +287,10 @@ const getWorkspaceConfig = () => {
     const bricksPath = path.join(wsPath, DEFAULT_BRICKS_PATH);
     const targetPath = path.join(wsPath, DEFAULT_TARGET_PATH);
     const resourcesTargetPath = path.join(targetPath, "resources");
-    const descriptorsTargetPath = path.join(resourcesTargetPath, "THEME-METADATA");
+    const descriptorsTargetPath = path.join(
+      resourcesTargetPath,
+      "THEME-METADATA"
+    );
     const themesTargetPath = path.join(resourcesTargetPath, "themes");
 
     wsConfig = {
@@ -339,13 +342,13 @@ function readJSONFromFilePath(filepath) {
  *
  */
 const transformLinksInJson = (jsonObj, transformer, ...transformerParams) => {
-  Object.keys(jsonObj).forEach(function(key) {
+  Object.keys(jsonObj).forEach(function (key) {
     let jsonProperty = jsonObj[key];
     if (key === "$Link") {
       // this is a file link in the json, we need to
       jsonObj[key] = transformer(jsonProperty, ...transformerParams);
     } else if (Array.isArray(jsonProperty)) {
-      jsonProperty.forEach(element => {
+      jsonProperty.forEach((element) => {
         transformLinksInJson(element, transformer, ...transformerParams);
       });
     } else if (typeof jsonProperty === "object") {
@@ -377,7 +380,7 @@ function validateSettings(settingsJson) {
  * @throws {Error} if a path does not exist
  */
 function checkPathsInSettingsJson(jsonObj, settingsDirPath) {
-  Object.keys(jsonObj).forEach(function(key) {
+  Object.keys(jsonObj).forEach(function (key) {
     let jsonProperty = jsonObj[key];
     if (key === "$Link") {
       // this is a file link in the json, we need to check if the file exists
@@ -388,7 +391,7 @@ function checkPathsInSettingsJson(jsonObj, settingsDirPath) {
         );
       }
     } else if (Array.isArray(jsonProperty)) {
-      jsonProperty.forEach(element => {
+      jsonProperty.forEach((element) => {
         checkPathsInSettingsJson(element, settingsDirPath);
       });
     } else if (typeof jsonProperty === "object") {
@@ -437,7 +440,7 @@ function parseSettings(filename, settings = undefined) {
   // check json for invalid/non-existing filenames
   checkPathsInSettingsJson(settingsJson, settingsDirPath);
 
-  const transformLinksRelativeToSrcPath = relativeFilePath =>
+  const transformLinksRelativeToSrcPath = (relativeFilePath) =>
     path.join(settingsDirPath, relativeFilePath);
   transformLinksInJson(settingsJson, transformLinksRelativeToSrcPath);
 
@@ -452,7 +455,7 @@ function parseSettings(filename, settings = undefined) {
  */
 function mergeSettings(settings) {
   return settings
-    .filter(content => !!content)
+    .filter((content) => !!content)
     .reduce((mergedSettings, additionalSettings) => {
       const newMergedSettings = mergeWith(
         mergeWith({}, mergedSettings),
@@ -475,7 +478,7 @@ ${settingsToMerge}
 Settings (after merge):
 ${afterMerge}
 
-Ignoring additional settings. 
+Ignoring additional settings.
 
 ${e.message}`);
       }
@@ -530,19 +533,19 @@ function postProcessThemeConfig(themeConfig, defaultRootPath) {
   // check relative file paths
   themeConfig.styles
     .concat(themeConfig.scripts)
-    .filter(item => ["webpack", "copy"].includes(item.type))
-    .map(item => item.src)
-    .map(src => (src instanceof Array ? src : [src]))
+    .filter((item) => ["webpack", "copy"].includes(item.type))
+    .map((item) => item.src)
+    .map((src) => (src instanceof Array ? src : [src]))
     .reduce((aggregator, srcList) => aggregator.concat(srcList), [])
-    .forEach(src =>
+    .forEach((src) =>
       assertConfiguredPathExists(path.join(themeConfig.path, src))
     );
 
   // fill in missing entry point names
   themeConfig.styles
     .concat(themeConfig.scripts)
-    .filter(item => item.type === "webpack" && !item.entryPointName)
-    .forEach(webpack => {
+    .filter((item) => item.type === "webpack" && !item.entryPointName)
+    .forEach((webpack) => {
       const firstSrc =
         webpack.src instanceof Array ? webpack.src[0] : webpack.src;
       webpack.entryPointName = firstSrc
@@ -585,12 +588,21 @@ function getThemeConfig() {
     const themeConfigValidator = ajv.getSchema(JSON_SCHEMA_THEME_CONFIG);
     if (!themeConfigValidator(plainThemeConfig)) {
       const concatinatedErrors = themeConfigValidator.errors
-        .map(error => {
+        .map((error) => {
           // print out additional property name
-          if (error.keyword === "additionalProperties") {
-            error.message = `should not have property: ${
-              error.params.additionalProperty
-            }`;
+          if (
+            error.keyword === "additionalProperties" &&
+            error.params.additionalProperty
+          ) {
+            error.message = `should not have property: ${error.params.additionalProperty}`;
+          }
+          // print out allowed values in enum
+          if (error.keyword === "enum" && error.params.allowedValues) {
+            error.message +=
+              ": " +
+              error.params.allowedValues
+                .map((allowedValue) => `"${allowedValue}"`)
+                .join(", ");
           }
           return `- ${error.dataPath || "root"}: ${error.message}`;
         })
@@ -752,12 +764,12 @@ function absoluteRequire(require, context) {
 function parseShim(target, config, context) {
   const shim = new Shim(absoluteRequire(target, context));
 
-  Object.keys(config.imports || {}).forEach(name => {
+  Object.keys(config.imports || {}).forEach((name) => {
     const module = config.imports[name];
     shim.addImport(name, absoluteRequire(module, context));
   });
 
-  Object.keys(config.exports || {}).forEach(name => {
+  Object.keys(config.exports || {}).forEach((name) => {
     shim.addExport(name, config.exports[name]);
   });
 
@@ -772,7 +784,7 @@ function parseShim(target, config, context) {
  */
 function getShims(nodeModule) {
   const shimConfigByTarget = getCoreMediaEntry(nodeModule).shim;
-  return Object.keys(shimConfigByTarget).map(target =>
+  return Object.keys(shimConfigByTarget).map((target) =>
     parseShim(
       target,
       shimConfigByTarget[target],
@@ -843,7 +855,7 @@ function isLibraryModule(nodeModule) {
  * @returns {function(NodeModule=): boolean}
  */
 function getIsSmartImportModuleFor(variant = DEFAULT_VARIANT) {
-  return nodeModule =>
+  return (nodeModule) =>
     (isBrickModule(nodeModule) ||
       isLibraryModule(nodeModule) ||
       isThemeModule(nodeModule)) &&
@@ -891,7 +903,7 @@ function getAvailableModules(moduleType) {
   const wsConfig = getWorkspaceConfig();
   const wsPatterns = readJSONFromFilePath(wsConfig.pkgPath).workspaces || [];
   const wsDirectories = wsPatterns
-    .map(wsPattern =>
+    .map((wsPattern) =>
       glob.sync(wsPattern, {
         cwd: wsConfig.path,
       })
@@ -899,15 +911,15 @@ function getAvailableModules(moduleType) {
     .reduce((all, newValue) => all.concat(newValue), []);
 
   const packageJsonPaths = wsDirectories
-    .map(directory => path.join(wsConfig.path, directory, "package.json"))
+    .map((directory) => path.join(wsConfig.path, directory, "package.json"))
     .filter(fs.existsSync)
-    .filter(packageJsonPath => {
+    .filter((packageJsonPath) => {
       const packageJson = readJSONFromFilePath(packageJsonPath);
       return packageJson.coremedia && packageJson.coremedia.type === moduleType;
     });
 
   return packageJsonPaths
-    .map(packageJsonPath => {
+    .map((packageJsonPath) => {
       const packageJson = readJSONFromFilePath(packageJsonPath);
       return {
         [packageJson.name]: `^${packageJson.version}`,
@@ -1034,7 +1046,7 @@ const getMonitorConfig = () => {
  * Write variables into env.json
  * @param {Object} vars
  */
-const createEnvFile = vars => {
+const createEnvFile = (vars) => {
   try {
     const wsConfig = getWorkspaceConfig();
     let env = {};
@@ -1049,9 +1061,7 @@ const createEnvFile = vars => {
     });
   } catch (e) {
     throw new ConfigFileError(
-      `An error occured while trying to store the environment variables: ${
-        e.message
-      }`
+      `An error occured while trying to store the environment variables: ${e.message}`
     );
   }
 };
@@ -1076,7 +1086,7 @@ const getEnv = () => {
  * Sets the enviroment configuration
  * @param {Env} env the enviroment configuration
  */
-const setEnv = env => {
+const setEnv = (env) => {
   createEnvFile(env);
 };
 
@@ -1085,7 +1095,7 @@ const setEnv = env => {
  * @returns {Boolean}
  * @private
  */
-const isCertExpired = certFile => {
+const isCertExpired = (certFile) => {
   const certStat = new Date(fs.statSync(certFile).mtime);
   const certExpiration = 1000 * 60 * 60 * 24 * 30;
   const now = new Date();
@@ -1122,9 +1132,7 @@ const createCertFile = (configPath, certFile) => {
     });
   } catch (e) {
     log.error(
-      `An error occured while trying to store the certificate for the LiveReload server: ${
-        e.message
-      }`
+      `An error occured while trying to store the certificate for the LiveReload server: ${e.message}`
     );
   }
 };
@@ -1153,7 +1161,7 @@ const getCert = () => {
  * Write file apikey.txt
  * @param {string} apiKey
  */
-const createApiKeyFile = apiKey => {
+const createApiKeyFile = (apiKey) => {
   try {
     const wsConfig = getWorkspaceConfig();
 

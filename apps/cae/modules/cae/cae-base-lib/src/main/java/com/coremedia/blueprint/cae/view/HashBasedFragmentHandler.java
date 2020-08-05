@@ -1,7 +1,11 @@
 package com.coremedia.blueprint.cae.view;
 
 import com.google.common.collect.ImmutableList;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -9,13 +13,14 @@ import java.util.List;
  *
  * @cm.template.api
  */
+@DefaultAnnotation(NonNull.class)
 public class HashBasedFragmentHandler extends DynamicInclude {
 
   public static final String MODIFIED_PARAMETERS_HEADER_PREFIX = "CM_MODIFIED_PARAMETERS_";
 
-  private List<String> validParameters;
+  private final List<String> validParameters;
 
-  public HashBasedFragmentHandler(Object delegate, String view, List<String> validParameters) {
+  public HashBasedFragmentHandler(Object delegate, @Nullable String view, Collection<String> validParameters) {
     super(delegate, view);
     this.validParameters = ImmutableList.copyOf(validParameters);
   }

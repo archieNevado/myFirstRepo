@@ -9,12 +9,15 @@ import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
 import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.blueprint.common.services.context.CurrentContextService;
 import com.coremedia.blueprint.testing.ContentTestHelper;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
+import com.coremedia.objectserver.configuration.CaeConfigurationProperties;
 import com.coremedia.objectserver.web.links.LinkFormatter;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -48,6 +51,10 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
 public class TopicpageHandlerTest {
 
   @Configuration
+  @EnableConfigurationProperties({
+          DeliveryConfigurationProperties.class,
+          CaeConfigurationProperties.class
+  })
   @ImportResource(
           value = {
                   "classpath:/framework/spring/blueprint-page.xml",

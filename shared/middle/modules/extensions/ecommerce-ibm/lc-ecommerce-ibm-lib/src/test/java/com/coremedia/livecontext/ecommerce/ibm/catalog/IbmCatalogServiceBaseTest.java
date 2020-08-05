@@ -29,6 +29,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -42,6 +43,7 @@ import static com.coremedia.blueprint.lc.test.HoverflyTestHelper.useTapes;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_8;
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_8_0;
+import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_9_0;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
@@ -55,6 +57,7 @@ import static org.mockito.Mockito.doAnswer;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = IbmServiceTestBase.LocalConfig.class)
+@WebAppConfiguration
 @ActiveProfiles(IbmServiceTestBase.LocalConfig.PROFILE)
 public abstract class IbmCatalogServiceBaseTest extends CatalogServiceBaseTest {
 
@@ -189,6 +192,22 @@ public abstract class IbmCatalogServiceBaseTest extends CatalogServiceBaseTest {
     assertProductVariant(productVariant2);
   }
 
+  protected void testFindProductVariantWithoutParentByExternalId() throws Exception {
+    if (StoreContextHelper.getWcsVersion(storeContext).lessThan(WCS_VERSION_9_0)) {
+      // Skip the test for wcs version < 9.0
+      return;
+    }
+
+    PRODUCT_VARIANT_CODE = "PC_SKU_WITHOUT_PARENT";
+
+    CatalogAlias catalogAlias = storeContext.getCatalogAlias();
+    CommerceId productVariantId = ibmCommerceIdProvider.formatProductVariantId(catalogAlias, PRODUCT_VARIANT_CODE);
+    ProductVariant productVariant = testling.findProductVariantById(productVariantId, storeContext);
+    assertEquals(PRODUCT_VARIANT_CODE, productVariant.getExternalId());
+    assertTrue(productVariant.isVariant());
+    assertNull(productVariant.getParent());
+  }
+
   protected void testFindTopCategoriesWithContractSupport() throws Exception {
     StoreContextImpl storeContext = testConfig.getB2BStoreContext(connection);
 
@@ -240,6 +259,29 @@ public abstract class IbmCatalogServiceBaseTest extends CatalogServiceBaseTest {
     category = testling.findCategoryById(categoryId2, storeContext);
     assertNotNull(category.getSeoSegment());
     assertFalse(category.getSeoSegment().contains(lowerCaseStoreName));
+  }
+
+  protected void testFindCategoryWithSpecialChars() throws Exception {
+    if (StoreContextHelper.getWcsVersion(storeContext).lessThan(WCS_VERSION_9_0)) {
+      // Skip the test for wcs version < 9.0
+      return;
+    }
+
+    String CATEGORY_CODE = "PC_Blouses/+%Sweaters";
+    CommerceId categoryId = ibmCommerceIdProvider.formatCategoryId(storeContext.getCatalogAlias(), CATEGORY_CODE);
+    Category category = testling.findCategoryById(categoryId, storeContext);
+
+    assertTrue(category.getExternalId().contains(CATEGORY_CODE));
+    List<Product> products = category.getProducts();
+    assertTrue(products.size() == 2);
+    Iterator<Product> iterator = products.iterator();
+    Product product = null;
+    while (iterator.hasNext()) {
+      product = iterator.next();
+      String externalId = product.getExternalId();
+      assertTrue(externalId.contains("PC"));
+      assertFalse(externalId.contains("SKU"));
+    }
   }
 
   protected void testFindCategoryByExternalTechIdIsNull() throws Exception {

@@ -88,7 +88,6 @@
 <BooleanProperty Name="livecontext.policy.commerce-product-links">true</BooleanProperty>
 <BooleanProperty Name="livecontext.policy.commerce-category-links">true</BooleanProperty>
 <BooleanProperty Name="livecontext.policy.commerce-page-links">true</BooleanProperty>
-<BooleanProperty Name="p13n-dynamic-includes-enabled">false</BooleanProperty>
 <StructProperty Name="livecontext.catalogAliases">
 <Struct>
 <StringProperty Name="catalog">Extended Sites Catalog Asset Store Consumer Direct</StringProperty>

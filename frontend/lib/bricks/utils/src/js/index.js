@@ -3,3 +3,4 @@ export * from "./logger";
 export * from "./breakpoint";
 export * from "./debounce";
 export * from "./bem";
+export * from "./taskQueue";

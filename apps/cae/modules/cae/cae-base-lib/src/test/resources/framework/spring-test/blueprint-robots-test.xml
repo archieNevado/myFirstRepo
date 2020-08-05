@@ -25,7 +25,7 @@
     <property name="settingsService" ref="settingsService"/>
     <property name="urlPrefixResolver" ref="ruleUrlPrefixResolver"/>
     <property name="sitemapConfigurations" ref="sitemapConfigurations"/>
-    <property name="prependBaseUri" value="${cae.is.standalone:true}"/>
+    <property name="prependBaseUri" value="${delivery.standalone:true}"/>
   </bean>
 
   <util:map id="sitemapConfigurations" key-type="java.lang.String" value-type="com.coremedia.blueprint.cae.sitemap.SitemapSetup">

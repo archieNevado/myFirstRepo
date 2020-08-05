@@ -5,7 +5,7 @@
   <h2 class="cm-left-right-banner-container__headline"<@preview.metadata "properties.teaserTitle"/>>${self.teaserTitle}</h2>
 </#if>
 <#-- teasertext -->
-<#if self.teaserText?has_content>
+<#if !bp.isEmptyRichtext(self.teaserText!"")>
   <div class="cm-left-right-banner-container__text"<@preview.metadata "properties.teaserText"/>>
     <@cm.include self.teaserText />
   </div>

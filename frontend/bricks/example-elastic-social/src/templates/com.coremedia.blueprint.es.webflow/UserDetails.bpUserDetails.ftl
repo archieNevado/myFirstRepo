@@ -2,7 +2,7 @@
 <#-- @ftlvariable name="userDetails" type="com.coremedia.blueprint.elastic.social.cae.flows.UserDetails" -->
 <#-- @ftlvariable name="elasticSocialConfiguration" type="com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration" -->
 <#-- @ftlvariable name="flowExecutionKey" type="java.lang.String" -->
-<#-- @ftlvariable name="_CSRFToken" type="java.lang.String" -->
+<#-- @ftlvariable name="_csrf" type="org.springframework.security.web.csrf.CsrfToken" -->
 
 <#import "*/node_modules/@coremedia/brick-utils/src/freemarkerLibs/components.ftl" as components />
 <#import "../../freemarkerLibs/elastic-social.ftl" as elasticSocial />
@@ -64,7 +64,7 @@
       <#if userDetails.viewOwnProfile>
         <form method="post" enctype="multipart/form-data">
           <input type="hidden" name="execution" value="${flowExecutionKey!""}">
-          <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}">
+          <#if _csrf?has_content><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"></#if>
           <input type="hidden" name="_eventId_editUser">
 
           <div class="cm-form-group cm-form-group--text-end">

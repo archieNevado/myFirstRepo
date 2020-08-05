@@ -17,6 +17,13 @@ node.default_unless['blueprint']['apps'][service_name]['application.properties']
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['caas.remote.baseurl'] = "http://#{node['blueprint']['hostname']}:42180/blueprint/servlet/internal/service/url"
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['commerce.hub.data.customEntityParams.catalogversion'] = 'Online'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['commerce.hub.data.customEntityParams.environment'] = 'live'
+node.default_unless['blueprint']['apps'][service_name]['application.properties']['repository.blobCacheSize'] = 10 * 1024 * 1024 * 1024
+
+
+node.default_unless['blueprint']['apps'][service_name]['application.properties']['repository.blobCachePath'] = "#{node['blueprint']['cache_dir']}/#{service_name}"
+# The path where the transformed blobs should be saved persistently. If not set, then the feature is deactivated,
+# and all transformed blobs are saved in memory
+node.default_unless['blueprint']['apps'][service_name]['application.properties']['com.coremedia.transform.blobCache.basePath'] = "#{node['blueprint']['cache_dir']}/#{service_name}/persistent-transformed-blobcache"
 
 application_config_hash = Mash.new
 application_config_hash = Chef::Mixin::DeepMerge.hash_only_merge!(application_config_hash, node['blueprint']['apps'][service_name]['application.properties'])
@@ -24,6 +31,13 @@ application_config_hash = Chef::Mixin::DeepMerge.hash_only_merge!(application_co
 blueprint_service_user service_user do
   home service_dir
   group service_group
+  notifies :create, "ruby_block[restart_#{service_name}]", :immediately
+end
+
+directory node['blueprint']['apps'][service_name]['application.properties']['repository.blobCachePath'] do
+  owner service_user
+  group service_group
+  recursive true
   notifies :create, "ruby_block[restart_#{service_name}]", :immediately
 end
 

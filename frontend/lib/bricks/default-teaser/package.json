@@ -3,14 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@coremedia/brick-utils": "^1.0.0",
-    "@coremedia/brick-media": "^1.0.0"
-  },
-  "devDependencies": {
-    "prettier": "^1.0.0"
-  },
-  "scripts": {
-    "prettier": "prettier \"**/*\" --write"
+    "@coremedia/brick-media": "^1.0.0",
+    "@coremedia/brick-utils": "^1.0.0"
   },
   "coremedia": {
     "type": "brick"

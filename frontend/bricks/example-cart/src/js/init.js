@@ -16,7 +16,7 @@ function decorateCartButton($button, link, data) {
   const $icon = $button.find(".cm-button__icon");
 
   //button clicked
-  $button.on("click", function(e) {
+  $button.on("click", function (e) {
     // don't let the add-to-cart button trigger the teaser link
     e.preventDefault();
 
@@ -32,19 +32,19 @@ function decorateCartButton($button, link, data) {
       data: data,
       dataType: "text",
     })
-      .done(function() {
+      .done(function () {
         //show success icon
         $icon.addClass("cm-cart__icon-ok");
-        window.setTimeout(function() {
-          $icon.fadeOut(400, function() {
+        window.setTimeout(function () {
+          $icon.fadeOut(400, function () {
             $icon.removeClass("cm-cart__icon-ok").removeAttr("style");
           });
         }, 1500);
       })
-      .fail(function() {
+      .fail(function () {
         $icon.addClass("cm-cart__icon-warning");
       })
-      .always(function() {
+      .always(function () {
         $button.removeAttr("disabled");
         $button.removeClass("cm-button--loading");
         //refresh cart
@@ -58,14 +58,13 @@ addNodeDecoratorByData(
   {
     id: undefined,
     link: undefined,
-    token: undefined,
   },
   "cm-cart-add-item",
-  ($button, { id, link, token }) => {
+  ($button, { id, link, ...moreParameters }) => {
     decorateCartButton($button, link, {
       action: "addOrderItem",
       externalId: id,
-      _CSRFToken: token,
+      ...moreParameters,
     });
   }
 );
@@ -75,14 +74,13 @@ addNodeDecoratorByData(
   {
     id: undefined,
     link: undefined,
-    token: undefined,
   },
   "cm-cart-remove-item",
-  ($button, { id, link, token }) => {
+  ($button, { id, link, ...moreParameters }) => {
     decorateCartButton($button, link, {
       action: "removeOrderItem",
       orderItemId: id,
-      _CSRFToken: token,
+      ...moreParameters,
     });
   }
 );

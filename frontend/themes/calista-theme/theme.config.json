@@ -17,6 +17,7 @@
     }
   ],
   "l10n": {
+    "bundleEncoding": "UTF-8",
     "bundleNames": [
       "Calista",
       "SharedExample",

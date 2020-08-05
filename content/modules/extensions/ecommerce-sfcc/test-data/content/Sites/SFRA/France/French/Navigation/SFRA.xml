@@ -114,7 +114,7 @@
 <LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/Microsites/Editorial%20Blog/Editorial%20Blog.xml" cmexport:path="/Sites/SFRA/France/French/Navigation/Microsites/Editorial%20Blog/Editorial%20Blog"/>
 </Struct>
 <Struct>
-<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../Augmentation/Womens/Jewelry/Jewelry.xml" cmexport:path="/Sites/SFRA/France/French/Augmentation/Womens/Jewelry/Jewelry"/>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../Jewelry%20Teaser.xml" cmexport:path="/Sites/SFRA/France/French/Jewelry%20Teaser"/>
 </Struct>
 </StructListProperty>
 <LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../Options/Viewtypes/CMChannel/square.xml" cmexport:path="/Sites/SFRA/France/French/Options/Viewtypes/CMChannel/square"/>

@@ -616,7 +616,7 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
       Map<String, String[]> parameters = builder.build();
 
       return callRestService(serviceMethod, variableValues, parameters, storeContext, userContext)
-              .map(productsMap -> getProductWrapperList(productsMap, storeContext))
+              .map(productsMap -> getProductList(storeContext, productsMap))
               .orElseGet(Collections::emptyList);
     } catch (CommerceException e) {
       // if category could not be resolved an remote error is thrown
@@ -629,6 +629,16 @@ public class WcCatalogWrapperService extends AbstractWcWrapperService {
     } catch (Exception e) {
       throw new CommerceException(e);
     }
+  }
+
+  private List<Map<String, Object>> getProductList(@NonNull StoreContext storeContext, Map<String, Object> productsMap) {
+    return getProductWrapperList(productsMap, storeContext).stream()
+            .filter(catalogEntry -> isProduct(catalogEntry))
+            .collect(toList());
+  }
+
+  private boolean isProduct(Map<String, Object> catalogEntry) {
+    return "ProductBean".equals(catalogEntry.get("catalogEntryTypeCode"));
   }
 
   /**

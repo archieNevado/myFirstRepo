@@ -65,14 +65,14 @@ function videoAsMediaElement(videoElement) {
       useDefaultControls: true,
 
       // events of videos
-      success: function(mediaElement) {
+      success: function (mediaElement) {
         const $mediaElement = $(mediaElement);
         // attach css class
         $mediaElement.addClass("cm-mediaelementwrapper");
         // video loaded
         mediaElement.addEventListener(
           "loadedmetadata",
-          function() {
+          function () {
             utils.log(
               "Video " +
                 mediaElement.src +
@@ -92,7 +92,7 @@ function videoAsMediaElement(videoElement) {
         // video started
         mediaElement.addEventListener(
           "playing",
-          function() {
+          function () {
             utils.log("Video started with duration of " + me.duration + "ms.");
           },
           false
@@ -103,7 +103,7 @@ function videoAsMediaElement(videoElement) {
         // additionally youtube/vimeo/.. players could be able to trigger videoEnded event
         mediaElement.addEventListener(
           "ended",
-          function() {
+          function () {
             utils.log("Video playback ended.");
             $video.trigger(EVENT_VIDEO_ENDED);
           },
@@ -114,7 +114,7 @@ function videoAsMediaElement(videoElement) {
         // used in shoppable video
         mediaElement.addEventListener(
           "timeupdate",
-          function(event) {
+          function (event) {
             let currentTime = event.detail.target.currentTime;
             $video.trigger(EVENT_VIDEO_TIME_UPDATED, {
               position: Math.floor(currentTime) * 1000,
@@ -123,7 +123,7 @@ function videoAsMediaElement(videoElement) {
           false
         );
       },
-      error: function(mediaElement) {
+      error: function (mediaElement) {
         utils.error("Error: Could not load video.", mediaElement.src);
       },
     },
@@ -131,13 +131,13 @@ function videoAsMediaElement(videoElement) {
   );
 
   // start video, triggered by EVENT_VIDEO_START from outside, like in shoppable video or pdp
-  $video.on(EVENT_VIDEO_START, function() {
+  $video.on(EVENT_VIDEO_START, function () {
     utils.log("Video started by EVENT_VIDEO_START");
     me.play();
   });
 
   // stop video, triggered by EVENT_VIDEO_STOP from outside, like in popup
-  $video.on(EVENT_VIDEO_STOP, function() {
+  $video.on(EVENT_VIDEO_STOP, function () {
     utils.log("Video stopped by EVENT_VIDEO_STOP");
     me.pause();
   });
@@ -147,9 +147,9 @@ function videoAsMediaElement(videoElement) {
  * default wrapper function to handle dom elements or jQuery selectors
  * @param domElementOrJQueryResult
  */
-export default function(domElementOrJQueryResult) {
+export default function (domElementOrJQueryResult) {
   if (domElementOrJQueryResult instanceof $) {
-    $.each(domElementOrJQueryResult, function(index, item) {
+    $.each(domElementOrJQueryResult, function (index, item) {
       videoAsMediaElement(item);
     });
   } else {

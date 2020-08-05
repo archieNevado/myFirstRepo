@@ -76,11 +76,6 @@
       </dependency>
       <dependency>
         <groupId>com.coremedia.blueprint</groupId>
-        <artifactId>external-preview-studio-lib</artifactId>
-        <version>1-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
         <artifactId>feedback-hub-imagga-studio-lib</artifactId>
         <version>1-SNAPSHOT</version>
       </dependency>

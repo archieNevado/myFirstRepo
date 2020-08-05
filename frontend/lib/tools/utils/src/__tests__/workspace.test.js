@@ -2,11 +2,11 @@ const path = require("path");
 const cmLogger = require("@coremedia/cm-logger");
 const { PKG_NAME, parseSettings, mergeSettings } = require("../workspace");
 
-const asLink = link => ({ $Link: link });
-const asLinks = links => links.map(asLink);
+const asLink = (link) => ({ $Link: link });
+const asLinks = (links) => links.map(asLink);
 
-const asDate = date => ({ $Date: date });
-const asDates = dates => dates.map(asDate);
+const asDate = (date) => ({ $Date: date });
+const asDates = (dates) => dates.map(asDate);
 
 describe("parseSettings()", () => {
   const testSettingsPath = path.join(__dirname, "test-settings.json");
@@ -180,13 +180,12 @@ describe("parseSettings()", () => {
           dateTimeWithTimeZone: "2018-11-13 20:20:39-09:00",
         })
       )
-    )
-    .toEqual({
+    ).toEqual({
       date: "2018-11-13",
       dateTime: "2018-11-13 20:20:39",
       dateWithTimeZone: "2018-11-13+03:00",
       dateTimeWithTimeZone: "2018-11-13 20:20:39-09:00",
-    })
+    });
   });
 });
 

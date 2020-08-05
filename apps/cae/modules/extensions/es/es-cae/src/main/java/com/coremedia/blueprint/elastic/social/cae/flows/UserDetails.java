@@ -4,7 +4,7 @@ import com.coremedia.blueprint.elastic.social.cae.controller.BlobRef;
 import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.webflow.execution.RequestContext;
 
 import java.io.Serializable;
@@ -331,7 +331,7 @@ public class UserDetails implements Serializable {
     }
   }
 
-  public boolean hasChangesWhichNeedModeration(CommunityUser user, CommonsMultipartFile file) {
+  public boolean hasChangesWhichNeedModeration(CommunityUser user, MultipartFile file) {
     boolean result;
     result = !StringUtils.equals(username, user.getName());
     result |= !StringUtils.equals(emailAddress, user.getEmail());

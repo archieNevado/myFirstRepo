@@ -1,80 +1,43 @@
 package com.coremedia.livecontext.fragment.links;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
-import com.coremedia.livecontext.commercebeans.CategoryInSite;
-import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.contentbeans.CMExternalPage;
-import com.coremedia.livecontext.contentbeans.CMProductTeaser;
-import com.coremedia.livecontext.contentbeans.LiveContextExternalChannel;
-import com.coremedia.livecontext.contentbeans.LiveContextExternalProduct;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.link.StorefrontRef;
 import com.coremedia.livecontext.ecommerce.link.StorefrontRefKey;
-import com.coremedia.livecontext.ecommerce.order.Cart;
 import com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.ExternalSeoSegmentBuilder;
 import com.coremedia.livecontext.navigation.LiveContextCategoryNavigation;
-import com.coremedia.objectserver.web.HandlerHelper;
-import com.coremedia.objectserver.web.links.Link;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
+import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.coremedia.blueprint.cae.handlers.PreviewHandler.isStudioPreviewRequest;
-import static com.coremedia.livecontext.fragment.links.CommerceLinkHelper.isFragmentRequest;
-import static com.coremedia.livecontext.fragment.links.CommerceLinkHelper.toUriComponents;
-import static com.coremedia.livecontext.fragment.links.CommerceLinkTemplateTypes.CHECKOUT_REDIRECT;
 import static com.coremedia.livecontext.fragment.links.CommerceLinkTemplateTypes.CM_CONTENT;
 import static com.coremedia.livecontext.fragment.links.CommerceLinkTemplateTypes.EXTERNAL_PAGE_NON_SEO;
 import static com.coremedia.livecontext.fragment.links.CommerceLinkTemplateTypes.EXTERNAL_PAGE_SEO;
-import static com.coremedia.livecontext.handler.CartHandler.URI_PATTERN;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
-/**
- * Link building for content led integration (CAE renders links to shop pages directly).
- * <p/>
- * The commerce specific link building to shop pages takes place in the commerce specific commerce adapter implementation.
- * <p/>
- * There are competing commerce specific link schemes, which need to be executed in this specific order:
- * <ol>
- *   <li>{@link CommerceLedLinks}</li>
- *   <li>{@link CommerceStudioLinks}</li>
- *   <li>{@link CommerceContentLedLinks}</li>
- * </ol>
- */
 @DefaultAnnotation(NonNull.class)
-@Link
-public class CommerceContentLedLinks {
+class CommerceContentLedLinks {
 
   private final CommerceLinkHelper commerceLinkHelper;
   private final ExternalSeoSegmentBuilder seoSegmentBuilder;
 
-  public CommerceContentLedLinks(CommerceLinkHelper commerceLinkHelper, ExternalSeoSegmentBuilder seoSegmentBuilder) {
+  CommerceContentLedLinks(CommerceLinkHelper commerceLinkHelper, ExternalSeoSegmentBuilder seoSegmentBuilder) {
     this.commerceLinkHelper = commerceLinkHelper;
     this.seoSegmentBuilder = seoSegmentBuilder;
   }
 
-  @Link(type = CMLinkable.class, order = 3)
-  @Nullable
-  public UriComponents buildLinkForCMLinkable(CMLinkable cmLinkable, HttpServletRequest request) {
-    if (isStudioPreviewRequest(request)
-            || isFragmentRequest(request)
-            || !commerceLinkHelper.useCommerceLinkForLinkable(cmLinkable)) {
-      return null;
-    }
-
-    return commerceLinkHelper.findCommerceConnection(cmLinkable)
-            .flatMap(commerceConnection -> buildLinkForCMLinkable(commerceConnection, cmLinkable))
-            .orElse(null);
+  Optional<UriComponents> buildLinkForCMLinkable(CMLinkable bean) {
+    return commerceLinkHelper.findCommerceConnection(bean)
+            .flatMap(commerceConnection -> buildLinkForCMLinkable(commerceConnection, bean));
   }
 
   private Optional<UriComponents> buildLinkForCMLinkable(CommerceConnection connection, CMLinkable cmLinkable) {
@@ -85,152 +48,31 @@ public class CommerceContentLedLinks {
             .flatMap(segment -> buildLink(connection, CM_CONTENT, Map.of("seoSegment", segment)));
   }
 
-  @Link(type = Category.class, order = 3)
-  @Nullable
-  public UriComponents buildLinkForCategory(Category category,
-                                            HttpServletRequest request) {
-
-    if (isFragmentRequest(request)
-            || !commerceLinkHelper.useCommerceCategoryLinks(request)) {
-      return null;
-    }
-
-    String storefrontUrl = category.getStorefrontUrl();
-    if (isNullOrEmpty(storefrontUrl)) {
-      return null;
-    }
-
-    return toUriComponents(storefrontUrl);
-  }
-
-  @Link(type = CategoryInSite.class, order = 3)
-  @Nullable
-  public UriComponents buildLinkForCategoryInSite(CategoryInSite categoryInSite,
-                                                  HttpServletRequest request) {
-
-    Category category = categoryInSite.getCategory();
-    if (category == null) {
-      return null;
-    }
-    return buildLinkForCategory(category, request);
-  }
-
-  @Link(type = LiveContextCategoryNavigation.class, order = 3)
-  @Nullable
-  public UriComponents buildLinkForLiveContextCategoryNavigation(LiveContextCategoryNavigation categoryNavigation,
-                                                                 HttpServletRequest request) {
-
-    Category category = categoryNavigation.getCategory();
-
-    return buildLinkForCategory(category, request);
-  }
-
-  @Link(type = LiveContextExternalChannel.class, order = 3)
-  @Nullable
-  public UriComponents buildLinkForExternalChannel(LiveContextExternalChannel augmentedCategory,
-                                                   HttpServletRequest request) {
-
-    Category category = augmentedCategory.getCategory();
-    if (category == null) {
-      return null;
-    }
-    return buildLinkForCategory(category, request);
-  }
-
-  @Link(type = Product.class, order = 3)
-  @Nullable
-  public UriComponents buildLinkForProduct(Product product,
-                                           HttpServletRequest request) {
-
-    if (isFragmentRequest(request)
-            || !commerceLinkHelper.useCommerceProductLinks(request)) {
-      return null;
-    }
-
-    String storefrontUrl = product.getStorefrontUrl();
-    if (isNullOrEmpty(storefrontUrl)) {
-      return null;
-    }
-
-    return toUriComponents(storefrontUrl);
-  }
-
-  @Link(type = ProductInSite.class, order = 3)
-  @Nullable
-  public UriComponents buildLinkForProductInSite(ProductInSite productInSite,
-                                                 HttpServletRequest request) {
-
-    return buildLinkForProduct(productInSite.getProduct(), request);
-  }
-
-  @Link(type = CMProductTeaser.class, view = HandlerHelper.VIEWNAME_DEFAULT, order = 3)
-  @Nullable
-  public UriComponents buildLinkForProductTeaser(CMProductTeaser productTeaser,
-                                                 HttpServletRequest request) {
-
-    Product product = productTeaser.getProduct();
-    if (product == null) {
-      return null;
-    }
-    return buildLinkForProduct(product, request);
-  }
-
-  @Link(type = LiveContextExternalProduct.class, order = 3)
-  @Nullable
-  public UriComponents buildLinkForExternalProduct(LiveContextExternalProduct externalProduct,
-                                                   HttpServletRequest request) {
-
-    Product product = externalProduct.getProduct();
-    if (product == null) {
-      return null;
-    }
-    return buildLinkForProduct(product, request);
-  }
-
-  @Link(type = CMExternalPage.class, order = 3)
-  @Nullable
-  public UriComponents buildLinkForExternalPage(CMExternalPage externalPage,
-                                                HttpServletRequest request) {
-
-    if (isFragmentRequest(request)) {
-      return null;
-    }
-
-    return commerceLinkHelper.findCommerceConnection(externalPage)
-            .flatMap(commerceConnection -> buildContentLedLinkForExternalPage(externalPage, commerceConnection))
-            .orElse(null);
-  }
-
-  @Link(type = Cart.class, uri = URI_PATTERN)
-  @Nullable
-  public UriComponents buildGoToCartLink(@NonNull HttpServletRequest request) {
-    return CurrentStoreContext.find()
-            // only perform this check, if the store context is available
-            .flatMap(context -> getUriComponents(context, CHECKOUT_REDIRECT))
-            .orElse(null);
-  }
-
-  @Nullable
-  @Link(type = StorefrontRefKey.class)
-  public UriComponents buildContentLedUrl(StorefrontRefKey storefrontRefKey) {
-    return CurrentStoreContext.find()
-            .flatMap(context -> getUriComponents(context, storefrontRefKey))
-            .orElse(null);
-  }
-
-  public static Optional<UriComponents> getUriComponents(StoreContext storeContext, StorefrontRefKey storefrontRefKey) {
-    return getStorefrontRef(storeContext, storefrontRefKey)
-            .map(StorefrontRef::toLink)
+  Optional<UriComponents> buildLinkForCategory(Category category) {
+    return Optional.ofNullable(category.getStorefrontUrl())
+            .filter(StringUtils::hasText)
             .map(UriComponentsBuilder::fromUriString)
             .map(UriComponentsBuilder::build);
   }
 
-  private static Optional<StorefrontRef> getStorefrontRef(StoreContext storeContext, StorefrontRefKey templateKey) {
-    return storeContext.getConnection().getLinkService()
-            .flatMap(linkService -> linkService.getStorefrontRef(templateKey, storeContext));
+  Optional<UriComponents> buildLinkForLiveContextCategoryNavigation(LiveContextCategoryNavigation categoryNavigation) {
+    Category category = categoryNavigation.getCategory();
+    return buildLinkForCategory(category);
   }
 
-  private Optional<UriComponents> buildContentLedLinkForExternalPage(CMExternalPage externalPage,
+  Optional<UriComponents> buildLinkForProduct(Product product) {
+    return Optional.ofNullable(product.getStorefrontUrl())
+            .filter(StringUtils::hasText)
+            .map(UriComponentsBuilder::fromUriString)
+            .map(UriComponentsBuilder::build);
+  }
+
+  Optional<UriComponents> buildLinkForExternalPage(CMExternalPage externalPage) {
+    return commerceLinkHelper.findCommerceConnection(externalPage)
+            .flatMap(commerceConnection -> buildContentLedLinkForExternalPage(externalPage, commerceConnection));
+  }
+
+  private static Optional<UriComponents> buildContentLedLinkForExternalPage(CMExternalPage externalPage,
                                                            CommerceConnection commerceConnection) {
 
     String externalUriPath = externalPage.getExternalUriPath();

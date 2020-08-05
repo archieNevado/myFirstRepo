@@ -20,7 +20,6 @@
   <import resource="classpath:/framework/spring/blueprint-servlet.xml"/>
   <import resource="classpath:/framework/spring/errorhandling.xml"/>
   <import resource="classpath:/framework/spring/blueprint-sitemap.xml"/>
-  <import resource="classpath:/framework/spring/blueprint-testUrls.xml"/>
 
   <bean class="com.coremedia.blueprint.component.cae.CaeBaseComponentConfiguration"/>
 
@@ -38,5 +37,10 @@
       </map>
     </property>
   </bean>
+  
+  <beans profile="dev">
+    <!-- only expose com.coremedia.blueprint.cae.sitemap.TestUrlsGenerationHandler in development mode -->
+    <import resource="classpath:/framework/spring/blueprint-testUrls.xml"/>
+  </beans>
 
 </beans>

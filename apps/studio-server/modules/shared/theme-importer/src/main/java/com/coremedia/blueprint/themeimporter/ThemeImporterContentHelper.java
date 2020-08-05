@@ -11,13 +11,12 @@ import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.struct.StructBuilder;
 import com.coremedia.cap.themeimporter.ThemeImporterResultImpl;
 import com.google.common.annotations.VisibleForTesting;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.io.StringReader;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -174,7 +173,7 @@ class ThemeImporterContentHelper {
   void propertiesToStructBuilder(String text, StructBuilder structBuilder) {
     try {
       Properties props = new Properties();
-      props.load(new ByteArrayInputStream(text.getBytes(StandardCharsets.ISO_8859_1)));
+      props.load(new StringReader(text));
       props.forEach((key, value) -> structBuilder.declareString(key.toString(), Integer.MAX_VALUE, value.toString().trim()));
     } catch (IOException e) {
       String snippet = text.length()<30 ? text : text.substring(0, 30)+"...";

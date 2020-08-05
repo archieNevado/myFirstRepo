@@ -54,7 +54,7 @@ const login = (studioUrl, previewUrl, proxyUrl, username, password) => {
 
     api
       .login(trimmedStudioUrl, proxyUrl, username, password)
-      .then(result => {
+      .then((result) => {
         finalStudioUrl = result.url;
         if (trimmedStudioUrl !== finalStudioUrl) {
           log.info(`Studio running at ${finalStudioUrl}`);
@@ -62,7 +62,7 @@ const login = (studioUrl, previewUrl, proxyUrl, username, password) => {
         createApiKeyFile(result.apiKey);
         return api.whoami(finalStudioUrl, proxyUrl, result.apiKey);
       })
-      .then(user => {
+      .then((user) => {
         const previewUrlDevMode = utils.getPreviewUrlDevMode(
           previewUrl,
           user.id
@@ -72,7 +72,7 @@ const login = (studioUrl, previewUrl, proxyUrl, username, password) => {
           previewUrl: previewUrlDevMode,
         });
       })
-      .catch(e => {
+      .catch((e) => {
         reject(e);
       });
   });
@@ -96,7 +96,7 @@ const logout = () => {
           removeApiKeyFile();
           resolve("You have successfully been logged out.");
         })
-        .catch(e => {
+        .catch((e) => {
           reject(e);
         });
     } catch (e) {
@@ -119,10 +119,10 @@ const whoami = () => {
 
       api
         .whoami(studioUrl, proxyUrl, apiKey)
-        .then(user => {
+        .then((user) => {
           resolve(user);
         })
-        .catch(e => {
+        .catch((e) => {
           if (e.code === "EUNAUTHORIZED") {
             removeApiKeyFile();
           }
@@ -139,7 +139,7 @@ const whoami = () => {
  * @param {Object} themeConfig
  * @returns {Promise}
  */
-const uploadTheme = themeConfig => {
+const uploadTheme = (themeConfig) => {
   return new Promise((resolve, reject) => {
     try {
       const { studioUrl, proxyUrl } = getEnv();
@@ -166,7 +166,7 @@ const uploadTheme = themeConfig => {
           .then(() => {
             resolve(themeConfig.themeArchiveTargetPath);
           })
-          .catch(e => {
+          .catch((e) => {
             if (e.code === "EUNAUTHORIZED") {
               removeApiKeyFile();
             }
@@ -184,7 +184,7 @@ const uploadTheme = themeConfig => {
  * @param {Object} themeConfig
  * @returns {Promise}
  */
-const deployTheme = themeConfig => {
+const deployTheme = (themeConfig) => {
   return new Promise((resolve, reject) => {
     try {
       const { studioUrl, proxyUrl } = getEnv();
@@ -210,7 +210,7 @@ const deployTheme = themeConfig => {
           .then(() => {
             resolve(themeConfig.themeArchiveTargetPath);
           })
-          .catch(e => {
+          .catch((e) => {
             if (e.code === "EUNAUTHORIZED") {
               removeApiKeyFile();
             }
@@ -246,7 +246,7 @@ const uploadFiles = (themeConfig, fileList, logLevel = "info") => {
 
       const { studioUrl, proxyUrl } = getEnv();
       const apiKey = getApiKey();
-      const patterns = fileList.map(file => {
+      const patterns = fileList.map((file) => {
         const context = file.includes(themeConfig.themeTargetPath)
           ? path.join(themeConfig.themeTargetPath, "..")
           : themeConfig.resourcesTargetPath;
@@ -260,7 +260,7 @@ const uploadFiles = (themeConfig, fileList, logLevel = "info") => {
         filepath: themeConfig.themeUpdateArchiveTargetPath,
         logLevel,
       })
-        .then(count => {
+        .then((count) => {
           //_log.debug(`Using ${studioUrl}`);
           _log.debug(
             `Uploading file ${path.basename(
@@ -278,11 +278,11 @@ const uploadFiles = (themeConfig, fileList, logLevel = "info") => {
             .then(() => {
               resolve(count);
             })
-            .catch(e => {
+            .catch((e) => {
               reject(e);
             });
         })
-        .catch(e => {
+        .catch((e) => {
           reject(
             new Error(
               `[${PKG_NAME}] An error occured while preparing for upload: ${e.message}`
@@ -302,7 +302,7 @@ const uploadFiles = (themeConfig, fileList, logLevel = "info") => {
  * @returns {Promise}
  */
 const deleteFile = (themeConfig, file) => {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     try {
       log.info(`Deleting file ${file} on server.`);
 
@@ -327,7 +327,7 @@ const deleteFile = (themeConfig, file) => {
             file: path.basename(file),
           });
         })
-        .catch(e => {
+        .catch((e) => {
           resolve({
             type: "ERROR",
             file: path.basename(file),

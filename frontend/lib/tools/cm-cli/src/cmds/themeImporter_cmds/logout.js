@@ -8,7 +8,7 @@ const { PKG_NAME } = require("../../lib/constants");
 
 const command = "logout";
 const desc = "Logout user and delete API key";
-const builder = yargs => yargs.epilogue(args.docs);
+const builder = (yargs) => yargs.epilogue(args.docs);
 
 const handler = () => {
   const log = cmLogger.getLogger({
@@ -18,10 +18,10 @@ const handler = () => {
 
   themeImporter
     .logout()
-    .then(msg => {
+    .then((msg) => {
       log.success(msg);
     })
-    .catch(e => {
+    .catch((e) => {
       log.error(e);
     });
 };

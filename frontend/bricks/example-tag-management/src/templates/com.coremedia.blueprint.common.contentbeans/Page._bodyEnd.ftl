@@ -36,7 +36,7 @@ Include tag manager - This is the only difference to the same template defined i
 -->
 <#assign tagManagers=bp.setting(self, "TagManagement", [])/>
 <#list tagManagers as tagManager>
-  <#if tagManager.bodyEnd?has_content>
+  <#if !bp.isEmptyRichtext(tagManager.bodyEnd!"")>
     <@cm.include self=tagManager.bodyEnd view="script" />
   </#if>
 </#list>

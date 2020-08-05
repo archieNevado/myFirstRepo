@@ -1,38 +1,21 @@
 package com.coremedia.blueprint.cae.sitemap;
 
 import com.coremedia.blueprint.base.links.UrlPrefixResolver;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.ObjectProvider;
 
 public final class SitemapIndexRendererFactory implements SitemapRendererFactory {
 
-  private String targetDirectory;
-  private UrlPrefixResolver urlPrefixResolver;
-  private SitemapHelper sitemapHelper;
-  private boolean prependBaseUri = true;
+  private final String targetDirectory;
+  private final UrlPrefixResolver urlPrefixResolver;
+  private final ObjectProvider<SitemapHelper> sitemapHelperProvider;
+  private final boolean prependBaseUri;
 
-
-  // --- Spring config ----------------------------------------------
-
-  @Required
-  public void setTargetDirectory(String targetDirectory) {
+  public SitemapIndexRendererFactory(String targetDirectory, UrlPrefixResolver urlPrefixResolver, ObjectProvider<SitemapHelper> sitemapHelperProvider, boolean prependBaseUri) {
     this.targetDirectory = targetDirectory;
-  }
-
-  @Required
-  public void setUrlPrefixResolver(UrlPrefixResolver urlPrefixResolver) {
     this.urlPrefixResolver = urlPrefixResolver;
-  }
-
-  @Required
-  public void setSitemapHelper(SitemapHelper sitemapHelper) {
-    this.sitemapHelper = sitemapHelper;
-  }
-
-  // Keep consistent with BaseUriPrepender#setActive: Not @Required, default true.
-  public void setPrependBaseUri(boolean prependBaseUri) {
+    this.sitemapHelperProvider = sitemapHelperProvider;
     this.prependBaseUri = prependBaseUri;
   }
-
 
   // --- SitemapRendererFactory -------------------------------------
 
@@ -41,7 +24,7 @@ public final class SitemapIndexRendererFactory implements SitemapRendererFactory
     SitemapIndexRenderer sitemapIndexRenderer = new SitemapIndexRenderer();
     sitemapIndexRenderer.setTargetDirectory(targetDirectory);
     sitemapIndexRenderer.setUrlPrefixResolver(urlPrefixResolver);
-    sitemapIndexRenderer.setSitemapHelper(sitemapHelper);
+    sitemapIndexRenderer.setSitemapHelper(sitemapHelperProvider.getObject());
     sitemapIndexRenderer.setPrependBaseUri(prependBaseUri);
     return sitemapIndexRenderer;
   }

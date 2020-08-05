@@ -5,6 +5,7 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBui
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,9 +21,13 @@ class WorkspaceIdAppendingLinkTransformerTest {
 
   private WorkspaceIdAppendingLinkTransformer testling;
 
+  private DeliveryConfigurationProperties deliveryConfigurationProperties;
+
   @BeforeEach
   void setUp() {
+    deliveryConfigurationProperties = new DeliveryConfigurationProperties();
     testling = new WorkspaceIdAppendingLinkTransformer();
+    testling.setDeliveryConfigurationProperties(deliveryConfigurationProperties);
   }
 
   @AfterEach
@@ -41,7 +46,7 @@ class WorkspaceIdAppendingLinkTransformerTest {
 
     CurrentStoreContext.set(storeContext);
 
-    testling.setPreview(preview);
+    deliveryConfigurationProperties.setPreviewMode(preview);
 
     String actual = testling.transform("/foo/bar/baz", null, null, null, null, false);
 

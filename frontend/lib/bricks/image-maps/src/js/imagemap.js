@@ -12,7 +12,7 @@ import { EVENT_SRC_CHANGED, EVENT_SRC_CHANGING } from "@coremedia/brick-media";
 function coordsToRect(coords) {
   // coords = left,top,right,bottom
   // browsers also support flipped rects (so right < left and bottom < top are valid)
-  const coordsAsInts = coords.split(",").map(function(i) {
+  const coordsAsInts = coords.split(",").map(function (i) {
     return Math.floor(parseInt(i));
   });
 
@@ -215,8 +215,12 @@ export function update($imagemap, newRatio) {
   const fraction = width / config.coordsBaseWidth;
 
   // iterate over all areas having shape and data-coords set
-  $areas.find("area[data-coords][shape]").each(function() {
+  $areas.find("area[data-coords][shape]").each(function () {
     const $area = $(this);
+    // ignore disabled areas
+    if ($area.data("disabled")) {
+      return;
+    }
     let coords = $area.data("current-coords");
     const shape = $area.attr("shape");
     if (newRatio !== undefined) {
@@ -294,7 +298,7 @@ export function update($imagemap, newRatio) {
         }
         $area.removeClass("cm-imagemap__area--disabled");
 
-        $hotzoneIndicator.each(function() {
+        $hotzoneIndicator.each(function () {
           const $hotzoneIndicator = $(this);
           // the area's marker div must be repositioned if ratio has changed
           if (
@@ -337,11 +341,11 @@ export function init($imagemap) {
 
   // Handle responsive and non-responsive images
   if ($image.data("cm-responsive-media-state") !== undefined) {
-    $image.on(EVENT_SRC_CHANGING, function() {
+    $image.on(EVENT_SRC_CHANGING, function () {
       // hide hotzones if src is changing
       $imagemap.find(".cm-imagemap__hotzone").css("display", "none");
     });
-    $image.on(EVENT_SRC_CHANGED, function(event) {
+    $image.on(EVENT_SRC_CHANGED, function (event) {
       // display hotzones if src has changed (and is fully loaded)
       $imagemap.find(".cm-imagemap__hotzone").css("display", "");
       update($imagemap, event.ratio);
@@ -367,10 +371,8 @@ export function init($imagemap) {
   }
 
   // delegate click to button
-  $imagemap.find(".cm-imagemap__area").click(function() {
-    $(this)
-      .next(".cm-imagemap__hotzone")
-      .trigger("click");
+  $imagemap.find(".cm-imagemap__area").click(function () {
+    $(this).next(".cm-imagemap__hotzone").trigger("click");
     return false;
   });
 

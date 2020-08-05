@@ -25,66 +25,61 @@ public class P13NContainerPredicateTest {
   private DynamizableCMTeasableContainer dynamizableContainer;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     testling = new P13NContainerPredicate();
     when(dynamizableContainer.isDynamic()).thenReturn(true);
     RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(new MockHttpServletRequest()));
   }
 
   @Test
-  public void testInputNull() throws Exception {
-    assertFalse(testling.apply(null));
-  }
-
-  @Test
-  public void testInputNotMatching() throws Exception {
+  public void testInputNotMatching() {
     RenderNode input = mock(RenderNode.class);
     when(input.getBean()).thenReturn(new Object());
-    assertFalse(testling.apply(input));
+    assertFalse(testling.test(input));
   }
 
   @Test
-  public void testContainerIsStatic() throws Exception {
+  public void testContainerIsStatic() {
     RenderNode input = mock(RenderNode.class);
     when(input.getBean()).thenReturn(dynamizableContainer);
     when(dynamizableContainer.isDynamic()).thenReturn(false);
-    assertFalse(testling.apply(input));
+    assertFalse(testling.test(input));
   }
 
   @Test
-  public void testInputMatchingNoView() throws Exception {
+  public void testInputMatchingNoView() {
     RenderNode input = mock(RenderNode.class);
     when(input.getBean()).thenReturn(dynamizableContainer);
     when(input.getView()).thenReturn(null);
-    assertTrue(testling.apply(input));
+    assertTrue(testling.test(input));
   }
 
   @Test
-  public void testInputMatchingAndFragmentPreviewSet() throws Exception {
+  public void testInputMatchingAndFragmentPreviewSet() {
     RenderNode input = mock(RenderNode.class);
     when(input.getView()).thenReturn("fragmentPreview");
-    assertFalse(testling.apply(input));
+    assertFalse(testling.test(input));
   }
 
   @Test
-  public void testInputMatchingAndMultiViewPreviewSet() throws Exception {
+  public void testInputMatchingAndMultiViewPreviewSet() {
     RenderNode input = mock(RenderNode.class);
     when(input.getView()).thenReturn("multiViewPreview");
-    assertFalse(testling.apply(input));
+    assertFalse(testling.test(input));
   }
 
   @Test
-  public void testInputMatchingAndAsPreviewSet() throws Exception {
+  public void testInputMatchingAndAsPreviewSet() {
     RenderNode input = mock(RenderNode.class);
     when(input.getView()).thenReturn("asPreview");
-    assertFalse(testling.apply(input));
+    assertFalse(testling.test(input));
   }
 
   @Test
-  public void testInputMatchingOtherViewSet() throws Exception {
+  public void testInputMatchingOtherViewSet() {
     RenderNode input = mock(RenderNode.class);
     when(input.getBean()).thenReturn(dynamizableContainer);
     when(input.getView()).thenReturn("any_view_except_fragmentPreview");
-    assertTrue(testling.apply(input));
+    assertTrue(testling.test(input));
   }
 }

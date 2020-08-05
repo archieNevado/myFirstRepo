@@ -36,7 +36,7 @@ if (window) {
  *
  * @see http://dimsemenov.com/plugins/magnific-popup/documentation.html#initializing-popup
  */
-export default function($self, options) {
+export default function ($self, options) {
   if ($self) {
     return $self.magnificPopup(options);
   }

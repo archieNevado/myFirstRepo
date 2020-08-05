@@ -2,8 +2,10 @@ package com.coremedia.ecommerce.studio.rest.cache;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
+import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.base.settings.impl.MapEntrySettingsFinder;
 import com.coremedia.blueprint.base.settings.impl.SettingsServiceImpl;
+import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.ecommerce.studio.rest.CatalogResource;
 import com.coremedia.ecommerce.studio.rest.CategoryResource;
 import com.coremedia.ecommerce.studio.rest.MarketingResource;
@@ -45,6 +47,12 @@ class CommerceCacheInvalidationSourceTest {
 
   @Mock
   private CatalogAliasTranslationService catalogAliasTranslationService;
+
+  @Mock
+  private SitesService sitesService;
+
+  @Mock
+  private SettingsService settingsService;
 
   private CommerceCacheInvalidationSource testling;
 
@@ -90,7 +98,7 @@ class CommerceCacheInvalidationSourceTest {
     SegmentResource segmentResource = new SegmentResource(catalogAliasTranslationService);
     when(context.getBean(SegmentResource.class)).thenReturn(segmentResource);
 
-    SegmentsResource segmentsResource = new SegmentsResource(catalogAliasTranslationService);
+    SegmentsResource segmentsResource = new SegmentsResource(catalogAliasTranslationService, sitesService, settingsService);
     when(context.getBean(SegmentsResource.class)).thenReturn(segmentsResource);
 
     linker.setApplicationContext(context);

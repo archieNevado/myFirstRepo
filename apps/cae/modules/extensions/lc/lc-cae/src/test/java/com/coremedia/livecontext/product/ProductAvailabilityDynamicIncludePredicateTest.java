@@ -18,51 +18,46 @@ public class ProductAvailabilityDynamicIncludePredicateTest {
   ProductAvailabilityDynamicIncludePredicate testling;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     testling = new ProductAvailabilityDynamicIncludePredicate();
   }
 
   @Test
-  public void testInputNull() throws Exception {
-    assertFalse(testling.apply(null));
-  }
-
-  @Test
-  public void testInputNotInstanceOfProductInSite() throws Exception {
+  public void testInputNotInstanceOfProductInSite() {
     RenderNode input = mock(RenderNode.class);
     when(input.getBean()).thenReturn(new Object());
-    assertFalse(testling.apply(input));
+    assertFalse(testling.test(input));
   }
 
   @Test
-  public void testInputProductInSiteNoView() throws Exception {
+  public void testInputProductInSiteNoView() {
     RenderNode input = mock(RenderNode.class);
     when(input.getBean()).thenReturn(mock(ProductInSite.class));
     when(input.getView()).thenReturn(null);
-    assertFalse(testling.apply(input));
+    assertFalse(testling.test(input));
   }
 
   @Test
-  public void testInputProductInSiteViewNotMatching() throws Exception {
+  public void testInputProductInSiteViewNotMatching() {
     RenderNode input = mock(RenderNode.class);
     when(input.getBean()).thenReturn(mock(ProductInSite.class));
     when(input.getView()).thenReturn("i_do_not_match");
-    assertFalse(testling.apply(input));
+    assertFalse(testling.test(input));
   }
 
   @Test
-  public void testInputProductInSiteViewMatches() throws Exception {
+  public void testInputProductInSiteViewMatches() {
     RenderNode input = mock(RenderNode.class);
     when(input.getBean()).thenReturn(mock(ProductInSite.class));
     when(input.getView()).thenReturn(ProductAvailabilityDynamicIncludePredicate.VIEW_NAME_AVAILABILITY_FRAGMENT);
-    assertTrue(testling.apply(input));
+    assertTrue(testling.test(input));
   }
 
   @Test
-  public void testInputNotProductInSiteViewMatching() throws Exception {
+  public void testInputNotProductInSiteViewMatching() {
     RenderNode input = mock(RenderNode.class);
     when(input.getBean()).thenReturn(new Object());
     when(input.getView()).thenReturn(ProductAvailabilityDynamicIncludePredicate.VIEW_NAME_AVAILABILITY_FRAGMENT);
-    assertFalse(testling.apply(input));
+    assertFalse(testling.test(input));
   }
 }

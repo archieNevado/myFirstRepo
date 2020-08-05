@@ -19,7 +19,6 @@
 
   <bean name="commerceBeanFactory:product" parent="abstractCommerceBean"
         class="com.coremedia.livecontext.ecommerce.ibm.catalog.ProductImpl" scope="prototype">
-    <property name="availabilityService" ref="availabilityService"/>
     <property name="catalogWrapperService" ref="catalogWrapperService"/>
     <property name="wcsUrlProvider" ref="wcsUrlProvider"/>
   </bean>

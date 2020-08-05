@@ -16,7 +16,7 @@ class HttpError extends Error {
  * @returns {Promise}
  * @private
  */
-const request = options => {
+const request = (options) => {
   const request = require("request");
   return new Promise((resolve, reject) => {
     try {
@@ -32,7 +32,10 @@ const request = options => {
 
           if (response.statusCode === 401) {
             let error = JSON.parse(body);
-            let message = (error.cause === "unknown") ? "Invalid username or password." : "You are not a member of any developer group.";
+            let message =
+              error.cause === "unknown"
+                ? "Invalid username or password."
+                : "You are not a member of any developer group.";
             httpError = new HttpError(
               "EUNAUTHORIZED",
               `${response.statusCode} ${response.statusMessage}: ${
@@ -67,8 +70,9 @@ const request = options => {
               "EMISC",
               `${response.statusCode} ${
                 response.statusMessage
-              }: Please contact your system administrator. ${cause &&
-                `, cause: ${cause}`}`
+              }: Please contact your system administrator. ${
+                cause && `, cause: ${cause}`
+              }`
             );
           }
           reject(httpError);
@@ -131,13 +135,13 @@ const getOptions = (url, opts) => {
  * @returns {Promise} - promise resolving to object with url and apiKey attributes
  */
 const login = (url, proxy, username, password) =>
-  getBackendData(url, proxy).then(backendData => {
+  getBackendData(url, proxy).then((backendData) => {
     if (backendData && backendData.cognitoPoolData) {
       return authenticateCognito(
         backendData.cognitoPoolData,
         username,
         password
-      ).then(value => loginCMS(backendData.url, proxy, username, value));
+      ).then((value) => loginCMS(backendData.url, proxy, username, value));
     } else {
       return loginCMS(backendData.url, proxy, username, password);
     }
@@ -167,13 +171,13 @@ const loginCMS = (url, proxy, username, password) => {
       });
 
       request(options)
-        .then(value => {
+        .then((value) => {
           resolve({
             url,
             apiKey: value.body,
           });
         })
-        .catch(e => {
+        .catch((e) => {
           reject(e);
         });
     } catch (e) {
@@ -197,7 +201,7 @@ const getBackendData = (url, proxy) => {
       });
 
       request(options)
-        .then(value => {
+        .then((value) => {
           const { cognitoPoolData } = JSON.parse(value.body);
           resolve({
             url,
@@ -211,7 +215,7 @@ const getBackendData = (url, proxy) => {
           });
 
           request(options)
-            .then(value => {
+            .then((value) => {
               const { cognitoPoolData } = JSON.parse(value.body);
               resolve({
                 url: modernUrl,
@@ -253,11 +257,11 @@ const authenticateCognito = (poolData, username, password) => {
     const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
 
     const callback = {
-      onSuccess: result => {
+      onSuccess: (result) => {
         const accessToken = result.getAccessToken().getJwtToken();
         resolve(accessToken);
       },
-      onFailure: error => {
+      onFailure: (error) => {
         reject(error);
       },
       newPasswordRequired: (/*userAttributes, requiredAttributes*/) => {
@@ -295,7 +299,7 @@ const logout = (url, proxy, apiKey) => {
           );
         }
       })
-      .catch(e => {
+      .catch((e) => {
         reject(e);
       });
   });
@@ -315,10 +319,10 @@ const whoami = (url, proxy, apiKey) => {
       apiKey,
     });
     request(options)
-      .then(value => {
+      .then((value) => {
         resolve(JSON.parse(value.body));
       })
-      .catch(e => {
+      .catch((e) => {
         reject(e);
       });
   });
@@ -349,7 +353,7 @@ const upload = (url, proxy, apiKey, file, clean = "false") => {
       .then(() => {
         resolve();
       })
-      .catch(e => {
+      .catch((e) => {
         reject(e);
       });
   });
@@ -378,7 +382,7 @@ const deploy = (url, proxy, apiKey, file) => {
       .then(() => {
         resolve();
       })
-      .catch(e => {
+      .catch((e) => {
         reject(e);
       });
   });
@@ -407,7 +411,7 @@ const deleteFile = (url, proxy, apiKey, file) => {
       .then(() => {
         resolve();
       })
-      .catch(e => {
+      .catch((e) => {
         reject(e);
       });
   });

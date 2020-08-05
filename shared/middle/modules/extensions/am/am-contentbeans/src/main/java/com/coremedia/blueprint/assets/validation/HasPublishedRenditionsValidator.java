@@ -1,8 +1,9 @@
 package com.coremedia.blueprint.assets.validation;
 
 import com.coremedia.blueprint.assets.contentbeans.AMAsset;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.blueprint.common.services.validation.AbstractValidator;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.function.Predicate;
 
@@ -12,17 +13,17 @@ import java.util.function.Predicate;
  */
 public class HasPublishedRenditionsValidator extends AbstractValidator<AMAsset> {
 
-  private boolean preview;
+  private DeliveryConfigurationProperties deliveryConfigurationProperties;
 
-  @Value("${cae.is.preview:false}")
-  public void setPreview(boolean preview) {
-    this.preview = preview;
+  @Autowired
+  public void setDeliveryConfigurationProperties(DeliveryConfigurationProperties deliveryConfigurationProperties) {
+    this.deliveryConfigurationProperties = deliveryConfigurationProperties;
   }
 
   @Override
   protected Predicate<AMAsset> createPredicate() {
     return asset -> asset != null
-            && (preview ? !asset.getRenditions().isEmpty() : !asset.getPublishedRenditions().isEmpty());
+            && (deliveryConfigurationProperties.isPreviewMode() ? !asset.getRenditions().isEmpty() : !asset.getPublishedRenditions().isEmpty());
   }
 
   @Override

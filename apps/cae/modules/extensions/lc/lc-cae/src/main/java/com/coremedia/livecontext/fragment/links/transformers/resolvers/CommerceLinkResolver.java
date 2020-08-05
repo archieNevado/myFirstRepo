@@ -3,6 +3,7 @@ package com.coremedia.livecontext.fragment.links.transformers.resolvers;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
 import com.coremedia.blueprint.cae.handlers.PreviewHandler;
 import com.coremedia.blueprint.cae.layout.ContentBeanBackedPageGridPlacement;
+import com.coremedia.blueprint.common.contentbeans.CMDynamicList;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.layout.DynamizableContainer;
@@ -133,6 +134,9 @@ public class CommerceLinkResolver implements LiveContextLinkResolver {
       CMNavigation cmNavigation = (CMNavigation) bean;
       String seoPath = seoSegmentBuilder.asSeoSegment(navigation, cmNavigation);
       return Optional.of(linkService.getContentLink(seoPath, storeContext, linkParameters, request));
+    } else if (bean instanceof CMDynamicList) {
+      String relativeLink = deabsolutizeLink(source);
+      return Optional.of(linkService.getAjaxLink(relativeLink, storeContext, request));
     } else if (bean instanceof CMLinkable) {
       CMLinkable cmLinkable = (CMLinkable) bean;
       String seoPath = seoSegmentBuilder.asSeoSegment(navigation, cmLinkable);

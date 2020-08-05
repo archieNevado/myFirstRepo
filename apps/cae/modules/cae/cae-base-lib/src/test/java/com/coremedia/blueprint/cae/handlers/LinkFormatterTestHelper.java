@@ -1,6 +1,6 @@
 package com.coremedia.blueprint.cae.handlers;
 
-import com.coremedia.objectserver.view.ViewUtils;
+import com.coremedia.objectserver.request.RequestUtils;
 import com.coremedia.objectserver.web.links.LinkFormatter;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -61,7 +61,7 @@ public class LinkFormatterTestHelper {
   public String formatLink(@Nullable Map<String, Object> cmParams, Object bean,
                            @Nullable Map<String, Object> requestAttributes, @Nullable String view) {
     if (cmParams != null) {
-      request.setAttribute(ViewUtils.PARAMETERS, cmParams);
+      request.setAttribute(RequestUtils.PARAMETERS, cmParams);
     }
 
     if (requestAttributes != null) {

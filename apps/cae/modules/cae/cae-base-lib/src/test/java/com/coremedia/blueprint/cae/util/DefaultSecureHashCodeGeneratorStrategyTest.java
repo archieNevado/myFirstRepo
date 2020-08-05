@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
- * Test {@link com.coremedia.blueprint.cae.util.DefaultSecureHashCodeGeneratorStrategy}
+ * Test {@link DefaultSecureHashCodeGeneratorStrategy}
  */
 public class DefaultSecureHashCodeGeneratorStrategyTest {
 

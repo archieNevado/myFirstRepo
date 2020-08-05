@@ -6,7 +6,7 @@
   -->
   <#assign tagManagers=bp.setting(self, "TagManagement", [])/>
   <#list tagManagers as tagManager>
-    <#if tagManager.bodyStart?has_content>
+    <#if !bp.isEmptyRichtext(tagManager.bodyStart!"")>
       <@cm.include self=tagManager.bodyStart view="script" />
     </#if>
   </#list>

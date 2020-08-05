@@ -265,14 +265,12 @@ public class CMTeasableImpl extends CMTeasableBase {
 
   List<CallToActionButtonSettings> getCallToActionSettingsLegacy() {
     CMLinkable target = getTarget();
-    //noinspection ConstantConditions
     boolean enabled = !getSettingsService().settingWithDefault(LEGACY_STRUCT_CTA_DISABLED_PROPERTY_NAME, boolean.class, false, this);
     if (target != null && enabled) {
       ImmutableMap.Builder<String, Object> mapBuilder = ImmutableMap.builder();
       mapBuilder.put("target", target);
-      //noinspection ConstantConditions
+      mapBuilder.put("hash", "");
       mapBuilder.put("text", getSettingsService().settingWithDefault(LEGACY_STRUCT_CTA_CUSTOM_TEXT_PROPERTY_NAME, String.class, "", this));
-      //noinspection ConstantConditions
       mapBuilder.put("openInNewTab", target.isOpenInNewTab());
       mapBuilder.put("metadata", ImmutableList.of("properties.localSettings"));
       return ImmutableList.of(getSettingsService().createProxy(CallToActionButtonSettings.class, mapBuilder.build()));

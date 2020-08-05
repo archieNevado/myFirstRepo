@@ -24,9 +24,9 @@
     <@cm.include self=self view="_detailMedia" params=cm.localParameters() />
 
     <#-- text -->
-    <#if self.detailText?has_content>
+    <#if !bp.isEmptyRichtext(self.detailText!"")>
       <div class="${blockClass}__text cm-richtext"<@preview.metadata "properties.detailText"/>>
-        <@cm.include self=self.detailText!cm.UNDEFINED />
+        <@cm.include self=self.detailText />
       </div>
     </#if>
 

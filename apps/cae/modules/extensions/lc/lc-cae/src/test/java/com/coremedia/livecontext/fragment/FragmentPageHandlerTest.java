@@ -13,6 +13,7 @@ import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.HttpError;
 import org.junit.After;
@@ -47,6 +48,8 @@ public class FragmentPageHandlerTest {
 
   private FragmentPageHandler testling;
   private FragmentParameters fragmentParameters;
+
+  private DeliveryConfigurationProperties deliveryConfigurationProperties;
 
   @Mock
   private BeanFactory beanFactory;
@@ -85,7 +88,10 @@ public class FragmentPageHandlerTest {
 
   @Before
   public void setUp() {
+    deliveryConfigurationProperties = new DeliveryConfigurationProperties();
+    deliveryConfigurationProperties.setPreviewMode(false);
     testling = new FragmentPageHandler();
+    testling.setDeliveryConfigurationProperties(deliveryConfigurationProperties);
     testling.setBeanFactory(beanFactory);
     testling.setFragmentHandlers(new ArrayList<>());
     testling.setContentBeanFactory(contentBeanFactory);
@@ -144,7 +150,7 @@ public class FragmentPageHandlerTest {
 
   @Test
   public void noSiteInPreview() {
-    testling.setPreview(true);
+    deliveryConfigurationProperties.setPreviewMode(true);
 
     CurrentStoreContext.remove();
 
@@ -158,7 +164,6 @@ public class FragmentPageHandlerTest {
 
   @Test
   public void noSiteNoPreview() {
-    testling.setPreview(false);
     when(sitesService.getSite(SITE_ID)).thenReturn(null);
     assertNull(testling.handleFragment("unknown", LOCALE, request, response));
   }

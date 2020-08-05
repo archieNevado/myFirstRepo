@@ -6,9 +6,12 @@ import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.personalization.forms.FormField;
 import com.coremedia.blueprint.personalization.forms.PersonalizationForm;
+import com.coremedia.cae.security.CaeCsrfConfigurationProperties;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
+import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.context.MapPropertyMaintainer;
@@ -18,6 +21,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -32,19 +38,32 @@ import java.util.Map;
 import static org.mockito.Mockito.mock;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({
-        "classpath:/com/coremedia/cae/contentbean-services.xml",
-        "classpath:/com/coremedia/cae/dataview-services.xml",
-        "classpath:/com/coremedia/cae/link-services.xml",
-        "classpath:/com/coremedia/cache/cache-services.xml",
-        "classpath:/com/coremedia/id/id-services.xml",
-        "classpath:/com/coremedia/blueprint/personalization/p13n-xml-repo-context.xml",
-        "classpath:/framework/spring/blueprint-contentbeans.xml",
-        "classpath:/META-INF/coremedia/es-p13n-contexts.xml",
-        "classpath:/com/coremedia/blueprint/personalization/elastic/es-p13n-cae-test-context.xml"
+@EnableWebSecurity
+@ContextConfiguration(classes = {
+        XmlRepoConfiguration.class,
+        CaeCsrfConfigurationProperties.class,
+        DeliveryConfigurationProperties.class,
+        InterestsServiceTest.LocalConfig.class,
 })
-@TestPropertySource(properties = "elastic.core.persistence=memory")
+@TestPropertySource(properties = {
+        "elastic.core.persistence=memory",
+        "repository.factoryClassName=com.coremedia.cap.xmlrepo.XmlCapConnectionFactory",
+        "repository.params.contentxml=classpath:/com/coremedia/blueprint/personalization/personalizationTestRepo.xml",
+})
 public class InterestsServiceTest {
+
+  @Configuration
+  @ImportResource({
+          "classpath:/com/coremedia/cae/contentbean-services.xml",
+          "classpath:/com/coremedia/cae/dataview-services.xml",
+          "classpath:/com/coremedia/cae/link-services.xml",
+          "classpath:/com/coremedia/id/id-services.xml",
+          "classpath:/framework/spring/blueprint-contentbeans.xml",
+          "classpath:/META-INF/coremedia/es-p13n-contexts.xml",
+          "classpath:/com/coremedia/blueprint/personalization/elastic/es-p13n-cae-test-context.xml"
+  })
+  static class LocalConfig {
+  }
 
   @Inject
   private InterestsService interestsService;
@@ -139,6 +158,5 @@ public class InterestsServiceTest {
       value -= 2;
     }
   }
-
 
 }

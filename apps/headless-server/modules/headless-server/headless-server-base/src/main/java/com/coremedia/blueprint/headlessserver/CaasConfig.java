@@ -10,7 +10,6 @@ import com.coremedia.blueprint.base.caas.model.adapter.StructAdapterFactory;
 import com.coremedia.blueprint.base.caas.segments.CMLinkableSegmentStrategy;
 import com.coremedia.blueprint.base.links.ContentSegmentStrategy;
 import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
-import com.coremedia.blueprint.base.links.UrlSegmentService;
 import com.coremedia.blueprint.base.navigation.context.ContextStrategy;
 import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGridService;
 import com.coremedia.blueprint.base.settings.SettingsService;
@@ -19,6 +18,7 @@ import com.coremedia.blueprint.image.transformation.ImageTransformationConfigura
 import com.coremedia.caas.config.CaasGraphqlConfigurationProperties;
 import com.coremedia.caas.config.CaasSearchConfigurationProperties;
 import com.coremedia.caas.config.RemoteServiceConfiguration;
+import com.coremedia.caas.config.StaxContextConfigurationProperties;
 import com.coremedia.caas.filter.InProductionFilterPredicate;
 import com.coremedia.caas.filter.ValidityDateFilterPredicate;
 import com.coremedia.caas.link.GraphQLLink;
@@ -31,6 +31,7 @@ import com.coremedia.caas.model.adapter.LinkListAdapterFactory;
 import com.coremedia.caas.model.adapter.RemoteServiceAdapterFactory;
 import com.coremedia.caas.model.adapter.RichTextAdapter;
 import com.coremedia.caas.model.adapter.RichTextAdapterFactory;
+import com.coremedia.caas.model.converter.MapToNestedMapsConverter;
 import com.coremedia.caas.model.converter.RichTextToStringConverter;
 import com.coremedia.caas.model.converter.RichTextToTreeConverter;
 import com.coremedia.caas.model.converter.StructToNestedMapsConverter;
@@ -76,7 +77,6 @@ import com.coremedia.caas.wiring.ContextInstrumentation;
 import com.coremedia.caas.wiring.ConvertingDataFetcher;
 import com.coremedia.caas.wiring.DataFetcherMappingInstrumentation;
 import com.coremedia.caas.wiring.ExecutionTimeoutInstrumentation;
-import com.coremedia.caas.wiring.FallbackPropertyAccessor;
 import com.coremedia.caas.wiring.FilteringDataFetcher;
 import com.coremedia.caas.wiring.ProvidesTypeNameResolver;
 import com.coremedia.caas.wiring.RemoteLinkWiringFactory;
@@ -98,6 +98,7 @@ import com.coremedia.link.uri.UriLinkBuilderImpl;
 import com.coremedia.link.uri.UriLinkComposer;
 import com.coremedia.objectserver.urlservice.UrlServiceRequestParams;
 import com.coremedia.search.solr.client.SolrClientConfiguration;
+import com.coremedia.springframework.customizer.Customize;
 import com.coremedia.xml.Markup;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.collect.ImmutableList;
@@ -169,6 +170,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -179,7 +181,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.coremedia.caas.web.CaasWebConfig.ATTRIBUTE_NAMES_TO_GQL_CONTEXT;
 import static com.coremedia.caas.web.CaasWebConfig.FORWARD_HEADER_MAP;
@@ -193,6 +194,7 @@ import static java.util.Collections.emptyList;
         CaasSearchConfigurationProperties.class,
         RemoteServiceConfiguration.class,
         GraphiqlConfigurationProperties.class,
+        StaxContextConfigurationProperties.class
 })
 @EnableWebMvc
 @ComponentScan({
@@ -204,7 +206,9 @@ import static java.util.Collections.emptyList;
         "classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml",
         "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
         "classpath:/com/coremedia/blueprint/base/pagegrid/impl/bpbase-pagegrid-services.xml",
-        "classpath:/com/coremedia/blueprint/base/navigation/context/bpbase-default-contextstrategy.xml"
+        "classpath:/com/coremedia/blueprint/base/navigation/context/bpbase-default-contextstrategy.xml",
+        "classpath:/com/coremedia/blueprint/base/uapi/bpbase-uapi-cache-services.xml",
+        "classpath:/com/coremedia/blueprint/base/links/bpbase-urlpathformatting.xml"
 })
 @Import({
         ImageTransformationConfiguration.class,
@@ -446,8 +450,8 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public StructAdapterFactory structAdapter(StructService structService) {
-    return new StructAdapterFactory(structService);
+  public StructAdapterFactory structAdapter(StructService structService, SettingsService settingsService) {
+    return new StructAdapterFactory(structService, settingsService);
   }
 
   @Bean
@@ -546,8 +550,8 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public RichtextTransformerRegistry richtextTransformerRegistry(@Qualifier("richTextConfigResourceLoader") ConfigResourceLoader resourceLoader, @Qualifier("cacheManager") CacheManager cacheManager) throws IOException {
-    return new RichtextTransformerReader(resourceLoader, cacheManager).read();
+  public RichtextTransformerRegistry richtextTransformerRegistry(@Qualifier("richTextConfigResourceLoader") ConfigResourceLoader resourceLoader, @Qualifier("cacheManager") CacheManager cacheManager, StaxContextConfigurationProperties staxContextConfigurationProperties) throws IOException {
+    return new RichtextTransformerReader(resourceLoader, cacheManager, staxContextConfigurationProperties).read();
   }
 
   @Bean
@@ -568,9 +572,8 @@ public class CaasConfig implements WebMvcConfigurer {
   @Bean
   @Qualifier("propertyAccessors")
   public List<PropertyAccessor> propertyAccessors(List<PropertyAccessor> propertyAccessors, ModelMapper<Object, Object> modelMapper) {
-    return Stream.concat(propertyAccessors.stream()
-                    .map(propertyAccessor -> new ModelMappingPropertyAccessor(propertyAccessor, modelMapper)),
-            Stream.of(new FallbackPropertyAccessor()))
+    return propertyAccessors.stream()
+            .map(propertyAccessor -> new ModelMappingPropertyAccessor(propertyAccessor, modelMapper))
             .collect(Collectors.toList());
   }
 
@@ -602,8 +605,15 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public Converter<Struct, Map> structToNestedMapsConverter() {
-    return new StructToNestedMapsConverter();
+  public Converter<Map<String, Object>, Map> mapToNestedMapsConverter(ModelMapper<Markup, RichTextAdapter> richTextModelMapper,
+                                                                      ContentBlobAdapterFactory contentBlobAdapterFactory,
+                                                                      LinkComposer<Object, String> uriLinkComposer) {
+    return new MapToNestedMapsConverter(richTextModelMapper, contentBlobAdapterFactory, uriLinkComposer, RichTextAdapter.DEFAULT_VIEW);
+  }
+
+  @Bean
+  public Converter<Struct, Map> structToNestedMapsConverter(MapToNestedMapsConverter mapToNestedMapsConverter) {
+    return new StructToNestedMapsConverter(mapToNestedMapsConverter);
   }
 
   @Bean
@@ -648,25 +658,9 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public UrlPathFormattingHelper urlPathFormattingHelper(UrlSegmentService urlSegmentService) {
-    UrlPathFormattingHelper helper = new UrlPathFormattingHelper();
-    helper.setUrlSegmentService(urlSegmentService);
-    return helper;
-  }
-
-  @Bean
-  public UrlSegmentService urlSegmentService(@Qualifier("segmentStrategies") Map<String, ContentSegmentStrategy> segmentStrategies) {
-    UrlSegmentService service = new UrlSegmentService();
-    service.setStrategies(segmentStrategies);
-    return service;
-  }
-
-  @Bean
-  @Qualifier("segmentStrategies")
-  @SuppressWarnings("java:S100")
-  // note: methodname in upper case on purpose: method name is used as the key in the segmentStrategies map, which is necessary for UrlSegmentService to find the correct strategy
-  public CMLinkableSegmentStrategy CMLinkable() {
-    return new CMLinkableSegmentStrategy();
+  @Customize("contentSegmentStrategyMap")
+  public Map<String, ContentSegmentStrategy> caasContentSegmentStrategyMap() {
+    return Map.of("CMLinkable", new CMLinkableSegmentStrategy());
   }
 
   @Bean
@@ -755,7 +749,7 @@ public class CaasConfig implements WebMvcConfigurer {
     StringBuilder stringBuilder = new StringBuilder();
     for (var resource : loader.getResources("classpath*:*-schema.graphql")) {
       LOG.info("merging GraphQL schema {}", resource.getURI());
-      try(InputStreamReader in = new InputStreamReader(resource.getInputStream())) {
+      try (InputStreamReader in = new InputStreamReader(resource.getInputStream())) {
         stringBuilder.append(IOUtils.toString(in));
       } catch (IOException e) {
         throw new IOException("There was an error while reading the schema file " + resource.getFilename(), e);

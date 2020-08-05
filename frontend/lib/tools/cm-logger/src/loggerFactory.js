@@ -25,8 +25,8 @@ const DEFAULTS = {
   name: "<unknown>",
   level: "warn",
   prefix: {
-    level: opts => SYMBOLS[opts.level],
-    name: opts => opts.name,
+    level: (opts) => SYMBOLS[opts.level],
+    name: (opts) => opts.name,
     template: `[{{time}}] {{level}} ${chalk.gray("｢{{name}}｣")} `,
     time: () => format(new Date(), "HH:mm:ss.SSS"),
   },
@@ -50,7 +50,7 @@ const buildPrefix = (level, options) => {
   });
 };
 
-const loggerFactory = options => {
+const loggerFactory = (options) => {
   const opts = Object.assign({}, DEFAULTS, options);
   opts.level =
     opts.level && Object.keys(LEVELS).includes(opts.level.toUpperCase())

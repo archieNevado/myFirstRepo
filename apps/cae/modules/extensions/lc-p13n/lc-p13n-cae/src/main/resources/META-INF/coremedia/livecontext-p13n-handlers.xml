@@ -31,6 +31,7 @@
 
   <customize:append id="appendFragmentCommerceInterceptorIncludePatternsCustomizer" bean="fragmentCommerceInterceptorIncludePatterns">
     <list>
+      <util:constant static-field="com.coremedia.blueprint.personalization.include.P13NFragmentHandler.DYNAMIC_URI_PATTERN"/>
       <util:constant static-field="com.coremedia.livecontext.p13n.include.P13NPlacementHandler.DYNAMIC_PLACEMENT_URI_PATTERN"/>
       <util:constant static-field="com.coremedia.blueprint.personalization.include.P13NContainerHandler.DYNAMIC_CONTAINER_URI_PATTERN"/>
       <util:constant static-field="com.coremedia.livecontext.p13n.include.P13NNavigationHandler.DYNAMIC_NAVIGATION_URI_PATTERN"/>

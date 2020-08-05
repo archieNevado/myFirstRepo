@@ -6,21 +6,19 @@ import {
 } from "@coremedia/brick-device-detector";
 
 // --- DOCUMENT READY --------------------------------------------------------------------------------------------------
-$(function() {
+$(function () {
   const $document = $(document);
 
   utils.log("Welcome to CoreMedia Hybris Integration");
 
   // to load initially hidden images in tabs
-  $(".tabs-list a").on("click", function() {
+  $(".tabs-list a").on("click", function () {
     $document.trigger(utils.EVENT_LAYOUT_CHANGED);
   });
 
-  $document.on(EVENT_DEVICE_CHANGED, function() {
+  $document.on(EVENT_DEVICE_CHANGED, function () {
     if (detectDeviceType() === "desktop") {
-      $(".cm-header__navigation")
-        .removeClass("collapse")
-        .removeAttr("style");
+      $(".cm-header__navigation").removeClass("collapse").removeAttr("style");
     }
   });
 });

@@ -92,6 +92,7 @@ exports[`initThemeConfigJson() returns data for theme descriptor 1`] = `
     }
   ],
   \\"l10n\\": {
+    \\"bundleEncoding\\": \\"UTF-8\\",
     \\"bundleNames\\": [
       \\"Test\\"
     ]

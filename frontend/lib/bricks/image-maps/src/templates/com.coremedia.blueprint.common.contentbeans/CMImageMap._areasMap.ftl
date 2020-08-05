@@ -6,24 +6,19 @@
 <#-- if imageMapId is not given, generate new id -->
 <#assign imageMapId=cm.localParameters().imageMapId!(bp.generateId("cm-map-")) />
 <#assign imageMapAreas=bp.responsiveImageMapAreas(self) />
-<#assign areaCssClass="cm-imagemap__area"/>
 
 <#--imagemap with areas -->
 <map <@utils.renderAttr attr={ "name": imageMapId, "classes": ["cm-imagemap__areas"] } /><@preview.metadata "properties.imageMapAreas" />>
   <#-- show hotzones as areas with inline overlay or as icon -->
   <#list imageMapAreas![] as imageMapArea>
-    <#assign dataCoords=bp.responsiveImageMapAreaData(imageMapArea.coords)/>
     <#if imageMapArea.linkedContent?has_content>
       <#assign linkedContent=imageMapArea.linkedContent />
       <#assign link=cm.getLink(linkedContent.target!cm.UNDEFINED) />
 
       <#-- hot zones as areas -->
-      <area shape="${imageMapArea.shape}"
-            coords="0,0,0,0"
-            <@cm.dataAttribute name="data-coords" data=dataCoords />
-            href="${link}"
-            class="${areaCssClass}"
-            alt="${imageMapArea.alt!""}">
+      <@cm.include self=linkedContent!cm.UNDEFINED view="asImageMapArea" params={
+        "imageMapArea": imageMapArea
+      } />
 
       <#-- inline overlay -->
       <#if imageMapArea.displayAsInlineOverlay!false>
@@ -49,8 +44,6 @@
 
   <#-- add area for default target if no hotzones are available -->
   <#else>
-    <#assign target=(self.target?has_content && self.target.openInNewTab)?then('target="_blank"', "") />
-    <#assign rel=(self.target?has_content && self.target.openInNewTab)?then('rel="noopener"', "") />
-    <area shape="default" href="${cm.getLink(self.target!cm.UNDEFINED)}" ${target?no_esc} ${rel?no_esc} class="cm-imagemap__area" alt="">
+    <@cm.include self=self view="asImageMapArea" />
   </#list>
 </map>

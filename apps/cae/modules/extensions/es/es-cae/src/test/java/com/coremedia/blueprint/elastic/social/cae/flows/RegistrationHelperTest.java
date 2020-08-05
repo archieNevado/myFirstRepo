@@ -33,7 +33,7 @@ import org.springframework.binding.message.DefaultMessageResolver;
 import org.springframework.binding.message.MessageResolver;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.webflow.context.ExternalContext;
 import org.springframework.webflow.execution.RequestContext;
 import org.springframework.webflow.execution.RequestContextHolder;
@@ -104,7 +104,7 @@ public class RegistrationHelperTest {
   private InputStream inputStream;
 
   @Mock
-  private CommonsMultipartFile file;
+  private MultipartFile file;
 
   @Mock
   private HttpServletRequest request;
@@ -279,8 +279,8 @@ public class RegistrationHelperTest {
     verify(registrationService).register(USERNAME, PASSWORD, EMAIL, Locale.ENGLISH, TimeZone.getTimeZone("UTC"), USER_PROPERTIES);
     verify(registrationService).activateRegistration(nullable(String.class), nullable(ModerationType.class));
     verify(messageContext, atLeastOnce()).addMessage(message(ACTIVATE_REGISTRATION_SUCCESS));
-  }  
-  
+  }
+
   @Test
   public void testRegisterWithBlobException() {
     when(registrationService.register(USERNAME, PASSWORD, EMAIL, LOCALE, TimeZone.getTimeZone("UTC"), USER_PROPERTIES)).thenReturn(communityUser);

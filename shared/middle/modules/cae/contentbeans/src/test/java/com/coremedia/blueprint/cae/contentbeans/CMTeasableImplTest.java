@@ -8,11 +8,13 @@ import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.xml.Markup;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -30,6 +32,24 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = CMTeasableImplTest.TestConfiguration.class)
 public class CMTeasableImplTest {
+
+  @Configuration
+  @EnableConfigurationProperties({
+          DeliveryConfigurationProperties.class
+  })
+  @Import(XmlRepoConfiguration.class)
+  @ImportResource(value = {
+          "classpath:/com/coremedia/cap/common/xml/uapi-xml-services.xml",
+          "classpath:/framework/spring/blueprint-contentbeans.xml"
+  },
+          reader = com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader.class)
+  static class TestConfiguration {
+    @Bean
+    public XmlUapiConfig xmlUapiConfig() {
+      return new XmlUapiConfig(CONTENT_REPOSITORY_URL)  ;
+    }
+  }
+
   private static final String CONTENT_REPOSITORY_URL = "classpath:/com/coremedia/blueprint/cae/contentbeans/teasableimpl/content.xml";
 
   private static final int ARTICLE_ID = 30;
@@ -62,20 +82,5 @@ public class CMTeasableImplTest {
     assertNotNull(article);
     List<Markup> paragraphs = article.getTextAsParagraphs();
     assertEquals(2, paragraphs.size());
-  }
-
-
-  @Configuration
-  @Import(XmlRepoConfiguration.class)
-  @ImportResource(value = {
-          "classpath:/com/coremedia/cap/common/xml/uapi-xml-services.xml",
-          "classpath:/framework/spring/blueprint-contentbeans.xml"
-  },
-          reader = com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader.class)
-  static class TestConfiguration {
-    @Bean
-    public XmlUapiConfig xmlUapiConfig() {
-      return new XmlUapiConfig(CONTENT_REPOSITORY_URL)  ;
-    }
   }
 }

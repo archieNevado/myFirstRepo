@@ -16,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -43,6 +44,7 @@ import static org.junit.Assert.assertTrue;
         )
 )
 @ActiveProfiles(IbmServiceTestBase.LocalConfig.PROFILE)
+@WebAppConfiguration
 @ContextConfiguration(classes = IbmServiceTestBase.LocalConfig.class)
 public class CatalogServiceImplUnknownHostIT extends CatalogServiceBaseTest {
 

@@ -3,31 +3,41 @@ package com.coremedia.blueprint.studio.rest.intercept;
 import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
 import com.coremedia.blueprint.base.rest.intercept.ChannelWriteInterceptor;
 import com.coremedia.blueprint.base.rest.intercept.SiteWriteInterceptor;
+import com.coremedia.blueprint.taxonomies.TaxonomyConfiguration;
+import com.coremedia.blueprint.taxonomies.TaxonomyResolver;
 import com.coremedia.blueprint.themeimporter.MapToStructAdapter;
 import com.coremedia.blueprint.themeimporter.SettingsJsonToMapAdapter;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.SiteModel;
+import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.themeimporter.ThemeImporter;
 import com.coremedia.image.ImageDimensionsExtractor;
 import com.coremedia.rest.cap.configuration.ConfigurationPublisher;
 import com.coremedia.rest.cap.intercept.BlobFilenameWriteInterceptor;
+import com.coremedia.rest.cap.intercept.ContentWriteInterceptor;
 import com.coremedia.rest.cap.intercept.PictureUploadInterceptor;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import com.coremedia.transform.BlobTransformer;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
+
+import java.util.List;
 
 @Configuration
 @ImportResource(
         value = {
                 "classpath:/com/coremedia/blueprint/base/links/bpbase-links-services.xml",
                 "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
-                "classpath:/com/coremedia/cap/transform/transform-services.xml"
+                "classpath:/com/coremedia/cap/transform/transform-services.xml",
+                "classpath:/com/coremedia/cap/multisite/multisite-services.xml"
         },
         reader = ResourceAwareXmlBeanDefinitionReader.class)
+@Import({TaxonomyConfiguration.class})
 class InterceptorsStudioConfiguration {
 
   @Bean
@@ -48,6 +58,17 @@ class InterceptorsStudioConfiguration {
     siteWriteInterceptor.setType(contentType);
     siteWriteInterceptor.setSiteModel(siteModel);
     return siteWriteInterceptor;
+  }
+
+  @Bean
+  public AnchorWriteInterceptor anchorWriteInterceptor(@Value("CMTeaser") ContentType contentType,
+                                                       UrlPathFormattingHelper urlPathFormattingHelper) {
+    AnchorWriteInterceptor anchorWriteInterceptor = new AnchorWriteInterceptor();
+    anchorWriteInterceptor.setType(contentType);
+    anchorWriteInterceptor.setInterceptingSubtypes(true);
+    anchorWriteInterceptor.setAnnotatedLinkListPropertyName("targets");
+    anchorWriteInterceptor.setAnchorAnnotationName("callToActionHash");
+    return anchorWriteInterceptor;
   }
 
   @Bean
@@ -90,8 +111,12 @@ class InterceptorsStudioConfiguration {
 
   @Bean
   WordUploadInterceptor wordUploadInterceptor(@Value("CMArticle") ContentType contentType,
-                                              ContentRepository contentRepository) {
-    WordUploadInterceptor wordUploadInterceptor = new WordUploadInterceptor(contentRepository);
+                                              ContentRepository contentRepository,
+                                              SitesService sitesService,
+                                              TaxonomyResolver taxonomyResolver,
+                                              @NonNull List<ContentWriteInterceptor> contentWriteInterceptors
+  ) {
+    WordUploadInterceptor wordUploadInterceptor = new WordUploadInterceptor(contentRepository, sitesService, taxonomyResolver, contentWriteInterceptors);
     wordUploadInterceptor.setType(contentType);
     wordUploadInterceptor.setPriority(1);
     return wordUploadInterceptor;

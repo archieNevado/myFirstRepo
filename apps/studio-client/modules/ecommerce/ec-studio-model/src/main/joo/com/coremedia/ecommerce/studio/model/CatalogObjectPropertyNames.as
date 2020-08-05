@@ -116,7 +116,7 @@ public class CatalogObjectPropertyNames {
 
   /**
    * @eventType previewUrl
-   * @see Product#getPreviewUrl() and Category#getPreviewUrl()
+   * @see Product#getDefaultPreviewUrl() and Category#getPreviewUrl()
    */
   public static const PREVIEW_URL:String = 'previewUrl';
 

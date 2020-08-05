@@ -2,8 +2,10 @@ package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
 import com.coremedia.livecontext.ecommerce.ibm.storeinfo.StoreInfoService;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.test.context.ActiveProfiles;
@@ -21,6 +23,9 @@ import javax.inject.Inject;
 @TestPropertySource(properties = "livecontext.cache.invalidation.enabled:false")
 public abstract class AbstractWrapperServiceTestCase {
   @Configuration
+  @EnableConfigurationProperties({
+          DeliveryConfigurationProperties.class
+  })
   @ImportResource(
           value = {
                   "classpath:/com.coremedia.livecontext.ecommerce.ibm.service/test-commerce-services-bod-customizers.xml",

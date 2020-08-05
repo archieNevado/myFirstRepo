@@ -28,6 +28,7 @@ import com.coremedia.elastic.social.api.reviews.ReviewService;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.elastic.social.api.users.CommunityUserService;
 import com.coremedia.elastic.social.impl.comments.CommentServiceImpl;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
@@ -71,6 +72,9 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ElasticSocialServiceTest {
+
+  private DeliveryConfigurationProperties deliveryConfigurationProperties;
+
   @InjectMocks
   private ElasticSocialService elasticSocialService;
 
@@ -145,6 +149,10 @@ public class ElasticSocialServiceTest {
 
   @Before
   public void setUp() {
+    deliveryConfigurationProperties = new DeliveryConfigurationProperties();
+    deliveryConfigurationProperties.setPreviewMode(false);
+    elasticSocialService.setDeliveryConfigurationProperties(deliveryConfigurationProperties);
+
     String id1 = "4711";
     String id2 = "42";
 
@@ -531,7 +539,7 @@ public class ElasticSocialServiceTest {
 
   @Test
   public void getCommentsResultPreview() {
-    elasticSocialService.setPreview(true);
+    deliveryConfigurationProperties.setPreviewMode(true);
     when(commentService.getCommentsForPreview(any(ContentWithSite.class), eq(ASCENDING), eq(COMMENT_FETCH_LIMIT)))
             .thenReturn(asList(comment1, comment2));
     sortThreadedDiscussion();
@@ -556,7 +564,7 @@ public class ElasticSocialServiceTest {
     List<Review> reviews = Collections.singletonList(review);
     when(reviewService.getReviewsForPreview(contentWithSite, ASCENDING, REVIEW_FETCH_LIMIT)).thenReturn(reviews);
     when(contributionTargetHelper.getTarget(contentWithSite)).thenReturn(contentWithSite);
-    elasticSocialService.setPreview(true);
+    deliveryConfigurationProperties.setPreviewMode(true);
 
     List<Review> reviewsResult = elasticSocialService.getReviews(contentWithSite, communityUser);
 
@@ -570,7 +578,6 @@ public class ElasticSocialServiceTest {
     List<Review> reviews = Collections.singletonList(review);
     when(reviewService.getOnlineReviews(target, null, ASCENDING, REVIEW_FETCH_LIMIT)).thenReturn(reviews);
     when(contributionTargetHelper.getTarget(target)).thenReturn(target);
-    elasticSocialService.setPreview(false);
 
     List<Review> reviewsResult = elasticSocialService.getReviews(target, communityUser);
 
@@ -602,5 +609,4 @@ public class ElasticSocialServiceTest {
     elasticSocialService.share(communityUser, teasable, navigation, "provider");
     verify(shareService).updateShare(eq(communityUser), any(ContentWithSite.class), eq("provider"), eq(Collections.<String>emptyList()));
   }
-
 }

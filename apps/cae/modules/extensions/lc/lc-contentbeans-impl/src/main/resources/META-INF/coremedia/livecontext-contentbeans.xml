@@ -31,9 +31,15 @@
         class="com.coremedia.livecontext.contentbeans.CMProductTeaserImpl" scope="prototype">
   </bean>
 
-  <bean name="pdpPage" parent="cmPage"
+  <bean name="pdpPage"
         class="com.coremedia.livecontext.contentbeans.ProductDetailPage" scope="prototype">
+    <constructor-arg index="0" name="developerMode" value="${delivery.developer-mode:false}"/>
+    <constructor-arg index="1" name="sitesService" ref="sitesService"/>
+    <constructor-arg index="2" name="cache" ref="cache"/>
     <constructor-arg index="3" name="contentTreeRelation" ref="externalChannelContentTreeRelation"/>
+    <constructor-arg index="4" name="contentBeanFactory" ref="contentBeanFactory"/>
+    <constructor-arg index="5" name="dataViewFactory" ref="dataViewFactory"/>
+    <property name="mergeCodeResources" value="${cae.mergeCodeResources:false}"/>
   </bean>
 
   <bean name="contentBeanFactory:CMExternalPage" parent="abstractChannel-blueprint-doctypes"

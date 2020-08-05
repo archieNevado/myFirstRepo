@@ -1,5 +1,5 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.cae.action.webflow.WebflowActionState" -->
-<#-- @ftlvariable name="_CSRFToken" type="java.lang.String" -->
+<#-- @ftlvariable name="_csrf" type="org.springframework.security.web.csrf.CsrfToken" -->
 <#-- @ftlvariable name="flowExecutionKey" type="java.lang.String" -->
 <#-- @ftlvariable name="nextUrl" type="java.lang.String" -->
 
@@ -9,7 +9,7 @@
 <div class="cm-form cm-form--reset"<@preview.metadata data=[self.action.content!"", "properties.id"]/>>
   <h1 class="cm-form__headline"><@cm.message "passwordReset_title" /></h1>
   <form method="post" data-cm-form--forgot="">
-    <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}">
+    <#if _csrf?has_content><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"></#if>
     <input type="hidden" name="execution" value="${flowExecutionKey!""}">
     <input type="hidden" name="nextUrl" value="${nextUrl!""}">
     <input type="hidden" name="_eventId_submit">

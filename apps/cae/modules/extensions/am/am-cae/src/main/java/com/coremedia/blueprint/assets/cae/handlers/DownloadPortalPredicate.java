@@ -1,18 +1,19 @@
 package com.coremedia.blueprint.assets.cae.handlers;
 
 import com.coremedia.blueprint.assets.cae.DownloadPortal;
-import com.coremedia.blueprint.cae.view.DynamicIncludePredicate;
-import com.coremedia.blueprint.cae.view.DynamicIncludeProvider;
 import com.coremedia.blueprint.cae.view.HashBasedFragmentHandler;
 import com.coremedia.objectserver.view.RenderNode;
-import com.google.common.collect.Lists;
+import com.coremedia.objectserver.view.dynamic.DynamicIncludePredicate;
+import com.coremedia.objectserver.view.dynamic.DynamicIncludeProvider;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 
+@DefaultAnnotation(NonNull.class)
 public class DownloadPortalPredicate implements DynamicIncludePredicate, DynamicIncludeProvider {
 
-  private static final List<String> VALID_PARAMS = Lists.newArrayList(
+  private static final List<String> VALID_PARAMS = List.of(
           DownloadPortalHandler.CATEGORY_REQUEST_PARAMETER_NAME,
           DownloadPortalHandler.ASSET_REQUEST_PARAMETER_NAME,
           DownloadPortalHandler.SUBJECT_REQUEST_PARAMETER_NAME,
@@ -21,9 +22,8 @@ public class DownloadPortalPredicate implements DynamicIncludePredicate, Dynamic
   );
 
   @Override
-  public boolean apply(@Nullable RenderNode input) {
-    return null != input
-            && input.getBean() instanceof DownloadPortal
+  public boolean test(RenderNode input) {
+    return input.getBean() instanceof DownloadPortal
             && input.getView() == null;
   }
 

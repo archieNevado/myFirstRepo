@@ -3,21 +3,22 @@ package com.coremedia.blueprint.elastic.social.cae.controller;
 import com.coremedia.objectserver.view.RenderNode;
 import org.junit.Test;
 
+import java.util.function.Predicate;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 public class ElasticSocialPredicateTest {
 
-  private ElasticSocialPredicate predicate = new ElasticSocialPredicate();
-
+  private final Predicate<RenderNode> predicate = new ElasticSocialPredicate();
 
   @Test
   public void withReviewsResult() {
     ReviewsResult reviewsResult = mock(ReviewsResult.class);
     RenderNode renderNode = new RenderNode(reviewsResult, null);
 
-    boolean apply = predicate.apply(renderNode);
+    boolean apply = predicate.test(renderNode);
 
     assertTrue(apply);
   }
@@ -27,7 +28,7 @@ public class ElasticSocialPredicateTest {
     CommentsResult commentsResult = mock(CommentsResult.class);
     RenderNode renderNode = new RenderNode(commentsResult, null);
 
-    boolean apply = predicate.apply(renderNode);
+    boolean apply = predicate.test(renderNode);
 
     assertTrue(apply);
   }
@@ -37,7 +38,7 @@ public class ElasticSocialPredicateTest {
     LikeResult likeResult = mock(LikeResult.class);
     RenderNode renderNode = new RenderNode(likeResult, null);
 
-    boolean apply = predicate.apply(renderNode);
+    boolean apply = predicate.test(renderNode);
 
     assertTrue(apply);
   }
@@ -47,7 +48,7 @@ public class ElasticSocialPredicateTest {
     ComplaintResult complaintResult = mock(ComplaintResult.class);
     RenderNode renderNode = new RenderNode(complaintResult, null);
 
-    boolean apply = predicate.apply(renderNode);
+    boolean apply = predicate.test(renderNode);
 
     assertTrue(apply);
   }
@@ -57,7 +58,7 @@ public class ElasticSocialPredicateTest {
     Object target = new Object();
     RenderNode renderNode = new RenderNode(target, null);
 
-    boolean apply = predicate.apply(renderNode);
+    boolean apply = predicate.test(renderNode);
 
     assertFalse(apply);
   }

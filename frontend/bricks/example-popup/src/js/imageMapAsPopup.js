@@ -2,7 +2,7 @@ import $ from "jquery";
 import { api as magnificPopupApi } from "@coremedia/brick-magnific-popup";
 import { log } from "@coremedia/brick-utils";
 
-export default function($imageMaps) {
+export default function ($imageMaps) {
   $imageMaps.each((index, imageMap) => {
     const $popupElement = $(imageMap);
 
@@ -21,7 +21,7 @@ export default function($imageMaps) {
     //clickable buttons (hotzone icons and areas)
     $popupElement
       .find("[data-cm-imagemap-target-id]")
-      .on("click", function(event) {
+      .on("click", function (event) {
         //prevent the default href link
         event.preventDefault();
 

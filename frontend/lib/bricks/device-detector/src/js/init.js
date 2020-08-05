@@ -1,6 +1,6 @@
 import $ from "jquery";
 import { init } from "./deviceDetector";
 
-$(function() {
+$(function () {
   init();
 });

@@ -17,6 +17,7 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.inventory.AvailabilityService;
 import com.coremedia.livecontext.fragment.FragmentContext;
 import com.coremedia.livecontext.fragment.FragmentContextProvider;
 import com.coremedia.livecontext.fragment.FragmentParameters;
@@ -31,6 +32,7 @@ import java.util.Currency;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static com.google.common.base.Strings.nullToEmpty;
 import static java.util.Collections.emptyMap;
@@ -90,6 +92,10 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
     return liveContextNavigationFactory.createProductInSite(product, storeContext.getSiteId());
   }
 
+  public boolean isFragmentRequest() {
+    return fragmentContext().isFragmentRequest();
+  }
+
   /**
    * This method returns a {@link Map} which contains information for the preview.<br>
    * The map contains the following keys: {@link #CATALOG_ID}, {@link #LANG_ID}, {@link #SITE_ID} and {@link #STORE_ID}.<br>
@@ -102,7 +108,7 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
       return emptyMap();
     }
 
-    if (!fragmentContext().isFragmentRequest()) {
+    if (!isFragmentRequest()) {
       return emptyMap();
     }
 
@@ -209,6 +215,19 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
             .map(Site::getSiteRootDocument)
             .map(content -> contentBeanFactory.createBeanFor(content, CMChannel.class))
             .orElseThrow(() -> new IllegalStateException("Unable to find Homepage for site '" + siteId + "'."));
+  }
+
+  public boolean isProductAvailable(@NonNull Product product) {
+    // a product is available if at least one product variant is available
+    return product.getContext().getConnection().getAvailabilityService()
+            .map(service -> quantitiesAvailable(product, service))
+            .orElseGet(Stream::empty)
+            .anyMatch(d -> d > 0.0);
+  }
+
+  private static Stream<Float> quantitiesAvailable(@NonNull Product product,
+                                                   @NonNull AvailabilityService service) {
+    return product.getVariants().stream().map(service::getQuantityAvailable);
   }
 
 }

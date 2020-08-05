@@ -29,11 +29,11 @@
 
     <customer>Blueprint</customer>
 
-    <cm.studio-client.core.version>2004.2</cm.studio-client.core.version>
-    <jangaroo.version>4.0.69</jangaroo.version>
+    <cm.studio-client.core.version>2007.1</cm.studio-client.core.version>
+    <jangaroo.version>4.0.70</jangaroo.version>
     <jooUnitWebDriverBrowser>chrome</jooUnitWebDriverBrowser>
 
-    <spring.boot.version>2.2.6.RELEASE</spring.boot.version>
+    <spring.boot.version>2.2.8.RELEASE</spring.boot.version>
     <application-plugin.version>2.8.3</application-plugin.version>
 
     <!--
@@ -81,13 +81,13 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.33</tomcat.embed.version>
+    <tomcat.embed.version>9.0.36</tomcat.embed.version>
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.studio-client.core.version>2004.2</cm.studio-client.core.version>
-    <cm.common.core.version>2004.2</cm.common.core.version>
-    <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
+    <cm.studio-client.core.version>2007.1</cm.studio-client.core.version>
+    <cm.common.core.version>2007.1</cm.common.core.version>
+    <maven-surefire-plugin.version>3.0.0-M4</maven-surefire-plugin.version>
 
     <showDeprecation>true</showDeprecation>
     <showWarnings>true</showWarnings>
@@ -392,7 +392,7 @@
         </plugin>
         <plugin>
           <artifactId>maven-shade-plugin</artifactId>
-          <version>3.2.2</version>
+          <version>3.2.4</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>

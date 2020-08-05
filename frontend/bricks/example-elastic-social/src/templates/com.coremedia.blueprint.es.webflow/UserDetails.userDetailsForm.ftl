@@ -4,7 +4,7 @@
 <#-- @ftlvariable name="actionHandler" type="com.coremedia.blueprint.common.contentbeans.CMAction" -->
 <#-- @ftlvariable name="elasticSocialConfiguration" type="com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration" -->
 <#-- @ftlvariable name="explicitInterests" type="com.coremedia.blueprint.personalization.forms.PersonalizationForm" -->
-<#-- @ftlvariable name="_CSRFToken" type="java.lang.String" -->
+<#-- @ftlvariable name="_csrf" type="org.springframework.security.web.csrf.CsrfToken" -->
 <#-- @ftlvariable name="value" type="java.util.TimeZone" -->
 
 <#import "*/node_modules/@coremedia/brick-utils/src/freemarkerLibs/components.ftl" as components />
@@ -18,7 +18,7 @@
 
       <#if userDetails?has_content>
         <form method="post" enctype="multipart/form-data">
-          <input type="hidden" name="_CSRFToken" value="${_CSRFToken}">
+          <#if _csrf?has_content><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"></#if>
           <input type="hidden" name="execution" value="${flowExecutionKey}">
           <input type="hidden" name="_eventId_saveUser">
           <@elasticSocial.notificationFromSpring path="userDetails" />

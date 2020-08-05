@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.preview;
 
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -7,7 +8,7 @@ import com.coremedia.livecontext.ecommerce.link.PreviewUrlService;
 import com.coremedia.objectserver.web.links.LinkTransformer;
 import com.coremedia.objectserver.web.links.ParameterAppendingLinkTransformer;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,21 +19,17 @@ import java.util.Set;
  */
 public class PreviewParametersAppendingLinkTransformer implements LinkTransformer {
 
-  private boolean preview;
+  private DeliveryConfigurationProperties deliveryConfigurationProperties;
 
-  public boolean isPreview() {
-    return preview;
-  }
-
-  @Value("${cae.is.preview}")
-  public void setPreview(boolean preview) {
-    this.preview = preview;
+  @Autowired
+  public void setDeliveryConfigurationProperties(DeliveryConfigurationProperties deliveryConfigurationProperties) {
+    this.deliveryConfigurationProperties = deliveryConfigurationProperties;
   }
 
   @Override
   public String transform(String source, Object bean, String view, @NonNull HttpServletRequest request,
                           @NonNull HttpServletResponse response, boolean forRedirect) {
-    if (!isPreview()) {
+    if (!deliveryConfigurationProperties.isPreviewMode()) {
       return source;
     }
 

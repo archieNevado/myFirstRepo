@@ -134,7 +134,7 @@ export const getCurrentLevelName = () => {
  * @param {LEVEL} level - Level to be set.
  * @return {LEVEL}
  */
-export const setLevel = level => {
+export const setLevel = (level) => {
   if (typeof level !== "number") {
     throw new TypeError("Value of parameter level must be of type number.");
   }
@@ -153,7 +153,7 @@ export const setLevel = level => {
  * @param {string} prefix
  * @return {string}
  */
-export const setPrefix = prefix => {
+export const setPrefix = (prefix) => {
   if (typeof prefix !== "string") {
     throw new TypeError("Value of parameter prefix must be of type string.");
   }

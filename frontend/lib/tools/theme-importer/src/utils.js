@@ -5,7 +5,7 @@
  * @param {string} themeName
  * @return {boolean}
  */
-const validateThemeName = themeName =>
+const validateThemeName = (themeName) =>
   typeof themeName === "string" && themeName.length > 0;
 
 /**
@@ -13,7 +13,7 @@ const validateThemeName = themeName =>
  * @param {string[]} fileList
  * @return {boolean}
  */
-const validateFileList = fileList =>
+const validateFileList = (fileList) =>
   fileList && Array.isArray(fileList) && fileList.length > 0;
 
 /**
@@ -21,7 +21,7 @@ const validateFileList = fileList =>
  * @param {string} file
  * @return {boolean}
  */
-const validateFile = file => typeof file === "string" && file.length > 0;
+const validateFile = (file) => typeof file === "string" && file.length > 0;
 
 /**
  * Return Preview URL including userVariant Parameter for current user.

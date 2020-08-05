@@ -1,42 +1,19 @@
 package com.coremedia.blueprint.cae.view;
 
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
+
 /**
- * A wrapper class for bean includes
+ * A wrapper class for dynamic bean includes
  *
  * @cm.template.api
  */
-public class DynamicInclude {
+@DefaultAnnotation(NonNull.class)
+public class DynamicInclude extends com.coremedia.objectserver.view.dynamic.DynamicInclude {
 
-  private Object delegate;
-  private String view;
-
-  public DynamicInclude(Object delegate, String view) {
-    this.delegate = delegate;
-    this.view = view;
-  }
-
-  /**
-   * @cm.template.api
-   */
-  public String getView() {
-    return view;
-  }
-
-  public void setView(String view) {
-    this.view = view;
-  }
-
-  public void setDelegate(Object delegate) {
-    if (this.delegate == null) {
-      this.delegate = delegate;
-    }
-  }
-
-  /**
-   * @cm.template.api
-   */
-  public Object getDelegate() {
-    return delegate;
+  public DynamicInclude(Object delegate, @Nullable String view) {
+    super(delegate, view);
   }
 
 }

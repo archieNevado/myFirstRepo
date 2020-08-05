@@ -87,9 +87,9 @@ interface Product @inherit(from: ["CommerceBean"]) {
   definingAttributes: [ProductAttribute]!
   describingAttributes: [ProductAttribute]!
 
-  totalStockCount: Float!
+  totalStockCount: Float! @deprecated(reason: "stock information is not supported anymore by commerce hub")
 
-  available: Boolean!
+  available: Boolean! @deprecated(reason: "stock information is not supported anymore by commerce hub")
   variant: Boolean!
 
   # retrieves the external product if this product or product variant is augmented directly
@@ -200,9 +200,9 @@ type ProductImpl implements Product, Banner, CollectionItem, HasPageGrid @inheri
   definingAttributes: [ProductAttribute]! @fetch(from: "getDefiningAttributes()")
   describingAttributes: [ProductAttribute]! @fetch(from: "getDescribingAttributes()")
 
-  totalStockCount: Float! @fetch(from: "getTotalStockCount()")
+  totalStockCount: Float! @fetch(from: "getTotalStockCount()") @deprecated(reason: "stock information is not supported anymore by commerce hub")
 
-  available: Boolean! @fetch(from: "isAvailable()")
+  available: Boolean! @fetch(from: "isAvailable()") @deprecated(reason: "stock information is not supported anymore by commerce hub")
   variant: Boolean! @fetch(from: "isVariant()")
 
   picture: CMPicture @fetch(from: "getPicture()")

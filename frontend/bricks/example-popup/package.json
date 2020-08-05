@@ -3,19 +3,19 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "prettier": "prettier \"**/*\" --write"
+    "prettier": "prettier --write \"src/**/*.{js,json}\""
   },
   "devDependencies": {
-    "prettier": "^1.0.0"
+    "prettier": "^2.0.5"
   },
   "dependencies": {
-    "@coremedia/brick-utils": "^1.0.0",
-    "@coremedia/brick-node-decoration-service": "^1.0.0",
-    "@coremedia/brick-magnific-popup": "^1.0.0",
     "@coremedia/brick-default-teaser": "^1.0.0",
-    "@coremedia/brick-media": "^1.0.0",
     "@coremedia/brick-image-maps": "^1.0.0",
+    "@coremedia/brick-magnific-popup": "^1.0.0",
+    "@coremedia/brick-media": "^1.0.0",
     "@coremedia/brick-mediaelement": "^1.0.0",
+    "@coremedia/brick-node-decoration-service": "^1.0.0",
+    "@coremedia/brick-utils": "^1.0.0",
     "jquery": "^3.0.0",
     "magnific-popup": "1.1.0"
   },

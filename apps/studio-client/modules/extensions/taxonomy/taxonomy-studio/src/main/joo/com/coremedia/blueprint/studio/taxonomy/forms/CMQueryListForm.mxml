@@ -82,6 +82,7 @@
                                           forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
             <taxonomy:TaxonomyConditionEditor bindTo="{config.bindTo}"
                                               propertyName="subjecttaxonomy"
+                                              taxonomyId="Subject"
                                               itemId="subjectTaxonomyConditionEditor"
                                               group="attributes"
                                               contentType="CMTaxonomy"
@@ -89,6 +90,7 @@
                                               forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
             <taxonomy:LocationTaxonomyConditionEditor bindTo="{config.bindTo}"
                                                       propertyName="locationtaxonomy"
+                                                      taxonomyId="Location"
                                                       itemId="locationTaxonomyConditionEditor"
                                                       group="attributes"
                                                       contentType="CMLocTaxonomy"

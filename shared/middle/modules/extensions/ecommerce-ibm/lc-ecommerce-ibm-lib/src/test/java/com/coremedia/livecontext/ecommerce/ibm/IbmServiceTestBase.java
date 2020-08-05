@@ -9,9 +9,11 @@ import com.coremedia.livecontext.ecommerce.ibm.common.IbmTestConfig;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestConnector;
 import com.coremedia.livecontext.ecommerce.ibm.login.LoginService;
 import com.coremedia.livecontext.ecommerce.ibm.storeinfo.StoreInfoService;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +27,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import javax.inject.Inject;
 import java.util.Optional;
 
-import static com.coremedia.cap.test.xmlrepo.XmlRepoResources.HANDLERS;
 import static com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase.LocalConfig.PROFILE;
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_8_0;
 import static org.mockito.ArgumentMatchers.any;
@@ -35,6 +36,9 @@ import static org.mockito.Mockito.doAnswer;
 @WebAppConfiguration
 public abstract class IbmServiceTestBase extends AbstractServiceTest {
   @Configuration
+  @EnableConfigurationProperties({
+          DeliveryConfigurationProperties.class
+  })
   @PropertySource(
           value = {
                   "classpath:/framework/spring/lc-ecommerce-ibm.properties",
@@ -44,7 +48,6 @@ public abstract class IbmServiceTestBase extends AbstractServiceTest {
   )
   @ImportResource(
           value = {
-                  HANDLERS,
                   "classpath:/com.coremedia.livecontext.ecommerce.ibm.service/test-commerce-services.xml",
                   "classpath:/framework/spring/livecontext-connection.xml",
                   "classpath:/framework/spring/livecontext-services.xml",

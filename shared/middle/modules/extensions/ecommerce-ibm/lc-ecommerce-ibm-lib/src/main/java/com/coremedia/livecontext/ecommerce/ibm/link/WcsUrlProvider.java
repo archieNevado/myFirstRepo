@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.ecommerce.ibm.link;
 
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceBean;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommercePropertyHelper;
@@ -80,20 +81,14 @@ public class WcsUrlProvider {
   private String shoppingFlowUrlForContractPreviewWcs9;
   private String productNonSeoUrl;
   private String categoryNonSeoUrl;
-
-  @Value("${cae.is.preview:false}")
-  private boolean preview;
+  private DeliveryConfigurationProperties deliveryConfigurationProperties;
 
   @Value("${livecontext.max-category-segments:2}")
   private int wcsStorefrontMaxUrlSegments = 2;
 
-  public boolean isPreview() {
-    return preview;
-  }
-
-  @VisibleForTesting
-  void setPreview(boolean preview) {
-    this.preview = preview;
+  @Autowired
+  public void setDeliveryConfigurationProperties(DeliveryConfigurationProperties deliveryConfigurationProperties) {
+    this.deliveryConfigurationProperties = deliveryConfigurationProperties;
   }
 
   private static boolean isInitialStudioRequest(@NonNull Map<String, Object> parameters) {
@@ -271,7 +266,7 @@ public class WcsUrlProvider {
       }
 
       // Compile shopping flow URL if contract IDs for preview are stored in the store context.
-      if (storeContext != null && isContractPreview(storeContext, isPreview())) {
+      if (storeContext != null && isContractPreview(storeContext, deliveryConfigurationProperties.isPreviewMode())) {
         String redirectUrl = applyParameters(resultUrl, parameters, storeContext);
         redirectUrl = redirectUrl.startsWith("/") ? redirectUrl.substring(1) : redirectUrl;
         parameters.put(REDIRECT_URL, redirectUrl);
@@ -484,7 +479,7 @@ public class WcsUrlProvider {
       return url;
     }
 
-    boolean usePreviewStoreFrontUrl = isPreview() && getPreviewStoreFrontUrl() != null;
+    boolean usePreviewStoreFrontUrl = deliveryConfigurationProperties.isPreviewMode() && getPreviewStoreFrontUrl() != null;
     String prefix = usePreviewStoreFrontUrl ? getPreviewStoreFrontUrl() : getDefaultStoreFrontUrl();
 
     // Avoid `//` in concatenated URLs.

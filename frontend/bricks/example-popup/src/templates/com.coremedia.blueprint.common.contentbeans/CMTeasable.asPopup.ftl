@@ -24,22 +24,20 @@
   "displayOutOfStockLink": false
 } + cm.localParameters().overlay!{} />
 <#assign showTitle=self.teaserTitle?has_content && overlay.displayTitle />
-<#assign showTeaserText=self.teaserText?has_content && overlay.displayShortText />
+<#assign showTeaserText=!bp.isEmptyRichtext(self.teaserText!"") && overlay.displayShortText />
 
 <div ${popupId?no_esc} class="cm-popup ${additionalClass}" <@preview.metadata self.content />>
   <#-- image -->
   <#if overlay.displayPicture>
     <div class="cm-popup__container">
-      <a href="${cm.getLink(self.target!(cm.UNDEFINED))}" class="cm-popup__picture-link">
-        <#assign pictureParams={
-          "classBox": "cm-popup__picture-box",
-          "classMedia": "cm-popup__picture",
-          "metadata": ["properties.pictures"]
-        } />
-        <#if self.picture?has_content>
-          <@cm.include self=self.picture!cm.UNDEFINED view="media" params=pictureParams />
-        </#if>
-      </a>
+      <#assign pictureParams={
+        "classBox": "cm-popup__picture-box",
+        "classMedia": "cm-popup__picture",
+        "metadata": ["properties.pictures"]
+      } />
+      <#if self.picture?has_content>
+        <@cm.include self=self.picture!cm.UNDEFINED view="media" params=pictureParams />
+      </#if>
     </div>
   </#if>
   <div class="cm-popup__container">

@@ -37,12 +37,12 @@ const handler = () => {
       filepath: themesZipTargetPath,
     }
   )
-    .then(count => {
+    .then((count) => {
       log.info(
         `Success, zipped ${count} files to location "${themesZipTargetPath}".`
       );
     })
-    .catch(e => {
+    .catch((e) => {
       throw new Error(
         `[${PKG_NAME}] An error occurred while preparing zip file for themes: ${e.message}`
       );
@@ -52,6 +52,6 @@ const handler = () => {
 module.exports = {
   command: "build-frontend-zip",
   desc: "Build a single zip file containing all prebuilt themes.",
-  builder: yargs => yargs.epilogue(docs),
+  builder: (yargs) => yargs.epilogue(docs),
   handler,
 };

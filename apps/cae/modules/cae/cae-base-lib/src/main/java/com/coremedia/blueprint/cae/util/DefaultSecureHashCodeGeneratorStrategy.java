@@ -1,5 +1,7 @@
 package com.coremedia.blueprint.cae.util;
 
+import com.coremedia.objectserver.view.dynamic.MD5SecureHashCodeGeneratorStrategy;
+import com.coremedia.objectserver.web.SecureHashCodeGeneratorStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,8 +13,11 @@ import java.util.zip.Adler32;
 import java.util.zip.Checksum;
 
 /**
- * Default blueprint implementation of a {@link SecureHashCodeGeneratorStrategy}
+ * Default blueprint implementation of a {@link SecureHashCodeGeneratorStrategy}.
+ * Warning: This strategy does not use a secret for generating the hash code.
+ * Consider using {@link MD5SecureHashCodeGeneratorStrategy} instead.
  */
+@Deprecated
 public class DefaultSecureHashCodeGeneratorStrategy implements SecureHashCodeGeneratorStrategy {
 
   private static final Logger LOG = LoggerFactory.getLogger(DefaultSecureHashCodeGeneratorStrategy.class);
@@ -28,16 +33,14 @@ public class DefaultSecureHashCodeGeneratorStrategy implements SecureHashCodeGen
    * <p>
    * Defaults to the VM default file encoding. When using VM default file encodings, generating/validating checksums
    * in a mixed environment of platforms with different default file encodings will fail.
-   *
+   * <p>
    * To avoid such problems, it is recommended to set a fixed encoding to be used on all platforms, e.g. "UTF-8".
    * </p>
    *
    * @param encoding character set name, as returned by {@link java.nio.charset.Charset#availableCharsets()}
-   *
    * @throws java.nio.charset.IllegalCharsetNameException if the given {@code encoding} is illegal
-   * @throws IllegalArgumentException if the given {@code encoding} is null
+   * @throws IllegalArgumentException                     if the given {@code encoding} is null
    * @throws java.nio.charset.UnsupportedCharsetException if no support for the named charset is available in this instance of the Java virtual machine
-   *
    * @since cm7-23
    */
   public void setEncoding(String encoding) {

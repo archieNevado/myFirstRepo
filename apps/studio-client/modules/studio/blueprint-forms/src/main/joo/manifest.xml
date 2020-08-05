@@ -81,5 +81,4 @@
   <component class="com.coremedia.blueprint.studio.forms.containers.ViewTypeSelectorForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.VisibilityConfigurationForm"/>
   <component class="com.coremedia.blueprint.studio.forms.containers.VisibilityDocumentForm"/>
-  <component class="com.coremedia.blueprint.studio.forms.variants.PreviewVariantsPreviewPanelPlugin"/>
 </componentPackage>

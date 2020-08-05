@@ -5,6 +5,7 @@ import com.coremedia.blueprint.testing.ContentTestHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.objectserver.view.TextView;
 import com.coremedia.objectserver.view.ViewDispatcher;
 import com.coremedia.objectserver.view.ViewUtils;
@@ -17,6 +18,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -53,6 +55,9 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
 @ActiveProfiles(PROFILE)
 public class LinkEmbedFilterTest {
   @Configuration
+  @EnableConfigurationProperties({
+          DeliveryConfigurationProperties.class
+  })
   @ImportResource(
           value = {
               "classpath:framework/spring/blueprint-richtextfilters.xml",

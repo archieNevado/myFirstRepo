@@ -8,6 +8,7 @@ public class CallToActionViewModel extends BeanImpl {
 
   public static const CTA_ENABLED_PROPERTY_NAME:String = "CTAEnabled";
   public static const CTA_TEXT_PROPERTY_NAME:String = "CTAText";
+  public static const CTA_HASH_PROPERTY_NAME:String = "CTAHash";
 
   public function CallToActionViewModel() {
   }
@@ -19,5 +20,9 @@ public class CallToActionViewModel extends BeanImpl {
   public native function get CTAText():String;
 
   public native function set CTAText(value:String):void;
+
+  public native function get CTAHash():String;
+
+  public native function set CTAHash(value:String):void;
 }
 }

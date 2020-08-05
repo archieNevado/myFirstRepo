@@ -23,7 +23,7 @@ x-logging:
 
 services:
   commerce-adapter-wcs:
-    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-wcs:${COMMERCE_ADAPTER_WCS_VERSION:-1.3.5}
+    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-wcs:${COMMERCE_ADAPTER_WCS_VERSION:-1.3.12}
     container_name: commerce-adapter-wcs
     restart: always
     logging: *default-logging
@@ -48,7 +48,7 @@ services:
       WCS_LINK_STOREFRONTURLFOR_PREVIEW: ${WCS_LINK_STOREFRONTURLFOR_PREVIEW}
       WCS_LINK_ASSETURLFOR_LIVE: ${WCS_LINK_ASSETURLFOR_LIVE}
       WCS_LINK_ASSETURLFOR_PREVIEW: ${WCS_LINK_ASSETURLFOR_PREVIEW}
-      WCS_LINK_LINKTEMPLATES_CMCONTENT: '{storefrontUrl}/{language}/{storeName}/cm/{seoSegment}'
+      WCS_LINK_PRODUCT_MAX_URL_SEGMENTS: ${WCS_LINK_PRODUCT_MAX_URL_SEGMENTS:-7}
       WCS_USERNAME: ${WCS_USERNAME}
       WCS_PASSWORD: ${WCS_PASSWORD}
       WCS_VERSION: ${WCS_VERSION}

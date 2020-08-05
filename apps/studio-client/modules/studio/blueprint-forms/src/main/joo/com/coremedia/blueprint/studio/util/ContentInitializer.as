@@ -71,6 +71,14 @@ public class ContentInitializer {
   private static function initQueryList(content:Content):void {
     var localSettings:Struct = content.getProperties().get('localSettings');
     localSettings.getType().addIntegerProperty('limit', 10);
+    
+    //should be part of the query editor, but since the document types are set for each condition we've added the default init here
+    var documentTypes:Array = ['CMArticle', 'CMVideo', 'CMPicture','CMGallery','CMChannel'];
+    var struct:Struct = content.getProperties().get('localSettings');
+    struct.getType().addStructProperty('fq');
+    var fq:Struct = struct.get('fq');
+    fq.getType().addStringProperty("documenttype", int.MAX_VALUE, documentTypes.join(","));
+    
     initCMLinkable(content);
     initCMLocalized(content);
   }

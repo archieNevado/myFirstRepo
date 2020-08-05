@@ -4,7 +4,7 @@ import com.coremedia.blueprint.base.cae.web.taglib.ImageFunctions;
 import com.coremedia.blueprint.common.contentbeans.CMArticle;
 import com.coremedia.blueprint.common.contentbeans.CMImageMap;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
-import com.coremedia.blueprint.testing.ContentBeanTestBase;
+import com.coremedia.blueprint.cae.contentbeans.testing.ContentBeanTestBase;
 import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;

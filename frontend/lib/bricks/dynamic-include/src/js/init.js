@@ -7,7 +7,11 @@ import {
   decorateNode,
 } from "@coremedia/brick-node-decoration-service";
 
-import {EVENT_NODE_APPENDED, FRAGMENT_IDENTIFIER, renderFragmentHrefs} from "./fragment";
+import {
+  EVENT_NODE_APPENDED,
+  FRAGMENT_IDENTIFIER,
+  renderFragmentHrefs,
+} from "./fragment";
 import {
   default as Handler,
   BASE_CONFIG as HANDLER_BASE_CONFIG,
@@ -22,7 +26,7 @@ import {
 } from "./hashBasedFragment.Form";
 
 // --- DOCUMENT READY --------------------------------------------------------------------------------------------------
-$(function() {
+$(function () {
   const $document = $(document);
 
   // this will substitute all data-hrefs rendered by ESI
@@ -30,18 +34,25 @@ $(function() {
 
   // load all dynamic fragments. The special header X-Requested-With is needed by the CAE to identify
   // the request as an Ajax request
-  addNodeDecoratorByData(undefined, FRAGMENT_IDENTIFIER, function($fragment, url) {
+  addNodeDecoratorByData(undefined, FRAGMENT_IDENTIFIER, function (
+    $fragment,
+    url
+  ) {
+    utils.pushTaskQueue();
     utils
       .ajax({
         url: url,
         dataType: "text",
       })
-      .done(function(html) {
+      .done(function (html) {
         const $html = $(html);
         undecorateNode($fragment);
         $fragment.replaceWith($html);
         decorateNode($html);
         $document.trigger(EVENT_NODE_APPENDED, [$html]);
+      })
+      .always(function () {
+        utils.popTaskQueue();
       });
   });
   // handle hashBasedFragmentHandler
@@ -49,7 +60,7 @@ $(function() {
     HANDLER_BASE_CONFIG,
     "hash-based-fragment-handler",
     // decorate
-    function($handler, handlerConfig, state) {
+    function ($handler, handlerConfig, state) {
       try {
         state.instance = new Handler($handler, handlerConfig);
       } catch (error) {
@@ -57,24 +68,26 @@ $(function() {
       }
     },
     // undecorate
-    function($handler, handlerConfig, state) {
+    function ($handler, handlerConfig, state) {
       state.instance && state.instance.destroy();
     }
   );
 
   // handle hashBasedFragmentLinks
-  addNodeDecoratorByData(LINK_BASE_CONFIG, "hash-based-fragment-link", function(
-    $link,
-    linkConfig
-  ) {
-    new Link($link, linkConfig);
-  });
+  addNodeDecoratorByData(
+    LINK_BASE_CONFIG,
+    "hash-based-fragment-link",
+    function ($link, linkConfig) {
+      new Link($link, linkConfig);
+    }
+  );
 
   // handle hashBasedFragmentForms
-  addNodeDecoratorByData(FORM_BASE_CONFIG, "hash-based-fragment-form", function(
-    $form,
-    formConfig
-  ) {
-    new Form($form, formConfig);
-  });
+  addNodeDecoratorByData(
+    FORM_BASE_CONFIG,
+    "hash-based-fragment-form",
+    function ($form, formConfig) {
+      new Form($form, formConfig);
+    }
+  );
 });

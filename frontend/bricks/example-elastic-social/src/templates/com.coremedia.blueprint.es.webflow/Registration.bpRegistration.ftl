@@ -3,7 +3,7 @@
 <#-- @ftlvariable name="nextUrl" type="java.lang.String" -->
 <#-- @ftlvariable name="elasticSocialConfiguration" type="com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration" -->
 <#-- @ftlvariable name="registrationFlow" type="com.coremedia.blueprint.elastic.social.cae.flows.Registration" -->
-<#-- @ftlvariable name="_CSRFToken" type="java.lang.String" -->
+<#-- @ftlvariable name="_csrf" type="org.springframework.security.web.csrf.CsrfToken" -->
 
 <#import "*/node_modules/@coremedia/brick-utils/src/freemarkerLibs/components.ftl" as components />
 <#import "../../freemarkerLibs/elastic-social.ftl" as elasticSocial />
@@ -19,7 +19,7 @@
       <form method="post" enctype="multipart/form-data" data-cm-form--registration=""${(elasticSocialConfiguration.recaptchaForRegistrationRequired!false)?then(' onsubmit="substituteRecaptchaBindElement();"'?no_esc,'')}>
         <input type="hidden" name="execution" value="${flowExecutionKey!""}">
         <#--<input type="hidden" name="tenant" value="${elasticSocialConfiguration.tenant!""}">-->
-        <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}">
+        <#if _csrf?has_content><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"></#if>
         <input type="hidden" name="_eventId_submit">
         <@spring.bind path="bpRegistration.timeZoneId"/>
         <input type="hidden" name="timeZoneId" id="timezone" value="${spring.stringStatusValue}">

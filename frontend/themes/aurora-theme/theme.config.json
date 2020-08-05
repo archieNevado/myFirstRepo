@@ -22,6 +22,7 @@
     }
   ],
   "l10n": {
+    "bundleEncoding": "UTF-8",
     "bundleNames": [
       "Aurora",
       "Bricks"

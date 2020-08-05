@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.boot.cae.preview;
 
+import com.coremedia.objectserver.configuration.CaeConfigurationProperties;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -11,7 +12,6 @@ import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguratio
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -27,7 +27,6 @@ import java.util.List;
  * - FMAC because otherwise we have conflicting FreemarkerConfiguration beans
  *  for CAE and studio for server also exclude JDBC
  */
-@EnableWebSecurity
 @SpringBootApplication(exclude = {WebMvcAutoConfiguration.class, FreeMarkerAutoConfiguration.class, MongoAutoConfiguration.class})
 public class CaePreviewApp {
 
@@ -58,15 +57,15 @@ public class CaePreviewApp {
    * Workaround to allow CORS also for fonts
    */
   @Bean
-  public BeanPostProcessor corsCustomizer(@Value("${livecontext.crossdomain.whitelist}") String[] crossDomainWhiteList, @Value("${cae.crossdomain.whitelist}") String[] caeCrossDomainWhiteList) {
+  public BeanPostProcessor corsCustomizer(@Value("${livecontext.crossdomain.whitelist}") String[] crossDomainWhiteList, CaeConfigurationProperties caeConfigurationProperties) {
     return new BeanPostProcessor() {
       @Override
       public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         if ("requestMappingHandlerMapping".equals(beanName) && bean instanceof RequestMappingHandlerMapping) {
           CorsConfiguration corsConfiguration = new CorsConfiguration();
-          List<String> allowedOrigins = new ArrayList<String>();
+          List<String> allowedOrigins = new ArrayList<>();
           allowedOrigins.addAll(Arrays.asList(crossDomainWhiteList));
-          allowedOrigins.addAll(Arrays.asList(caeCrossDomainWhiteList));
+          allowedOrigins.addAll(caeConfigurationProperties.getPreview().getCrossdomainWhitelist());
           corsConfiguration.setAllowedOrigins(allowedOrigins);
           // to get the ratings via /dynamic
           corsConfiguration.setAllowedHeaders(Arrays.asList("x-requested-with","X-CSRF-Token"));

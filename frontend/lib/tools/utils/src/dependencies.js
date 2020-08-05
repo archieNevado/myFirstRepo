@@ -97,7 +97,7 @@ function resolveDependencies(
   }
 
   if (pkg.dependencies instanceof Object) {
-    Object.keys(pkg.dependencies).forEach(dependencyName => {
+    Object.keys(pkg.dependencies).forEach((dependencyName) => {
       if (dependencyName in resolvedDependenciesByName) {
         const resolvedDependency = resolvedDependenciesByName[dependencyName];
         if (accept(resolvedDependency, me)) {
@@ -193,7 +193,7 @@ function calculateLongestPath(
     longestPathByVertex[currentVertex] < currentWeight
   ) {
     longestPathByVertex[currentVertex] = currentWeight;
-    (edges[currentVertex] || []).forEach(vertex => {
+    (edges[currentVertex] || []).forEach((vertex) => {
       longestPathByVertex = calculateLongestPath(
         edges,
         vertex,
@@ -274,11 +274,11 @@ function createDependencyTree(
     (aggregator, nextModuleName) => {
       aggregator[nextModuleName] = nodeModuleByModuleName[nextModuleName]
         .getDependencies()
-        .map(dependency => dependency.getName());
+        .map((dependency) => dependency.getName());
       return aggregator;
     },
     {
-      [basePackageName]: dependencies.map(dependency => dependency.getName()),
+      [basePackageName]: dependencies.map((dependency) => dependency.getName()),
     }
   );
 }
@@ -312,7 +312,7 @@ function getDependentsFirstLoadOrder(dependencies, basePackageName) {
     // transform the tree into a mapping of moduleName => Array<NodeModule>
     return Object.keys(loadOrder).reduce((aggregator, moduleName) => {
       aggregator[moduleName] = loadOrder[moduleName].map(
-        moduleName => nodeModuleByModuleName[moduleName]
+        (moduleName) => nodeModuleByModuleName[moduleName]
       );
       return aggregator;
     }, {});
@@ -337,7 +337,7 @@ function getDependentsFirstLoadOrder(dependencies, basePackageName) {
 function printDependencyGraphAsDOT(dependencies, packageName) {
   const edges = {};
   function collectEdges(dependencies, parentName) {
-    dependencies.forEach(dependency => {
+    dependencies.forEach((dependency) => {
       edges[parentName] = edges[parentName] || new Set();
       edges[parentName].add(dependency.getName());
       collectEdges(dependency.getDependencies(), dependency.getName());
@@ -346,7 +346,9 @@ function printDependencyGraphAsDOT(dependencies, packageName) {
   collectEdges(dependencies, packageName);
 
   const nodes = Object.keys(edges)
-    .map(from => Array.from(edges[from]).map(to => `  "${from}" -> "${to}"`))
+    .map((from) =>
+      Array.from(edges[from]).map((to) => `  "${from}" -> "${to}"`)
+    )
     .reduce((acc, next) => acc.concat(next), []);
 
   console.log("digraph {");

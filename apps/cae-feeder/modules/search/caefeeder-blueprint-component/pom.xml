@@ -38,7 +38,7 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.cms</groupId>
-      <artifactId>cae-linkservices-impl</artifactId>
+      <artifactId>cae-linkservices</artifactId>
       <scope>runtime</scope>
     </dependency>
 

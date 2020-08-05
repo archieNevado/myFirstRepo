@@ -5,9 +5,9 @@ import videoAsPopup from "./videoAsPopup";
 import imageMapAsPopup from "./imageMapAsPopup";
 
 // --- JQUERY DOCUMENT READY -------------------------------------------------------------------------------------------
-$(function() {
+$(function () {
   // disable any click events for the popup buttons since it should only trigger the popup to open
-  $("body").on("click", ".cm-button--popup-loading", function(e) {
+  $("body").on("click", ".cm-button--popup-loading", function (e) {
     return false;
   });
 

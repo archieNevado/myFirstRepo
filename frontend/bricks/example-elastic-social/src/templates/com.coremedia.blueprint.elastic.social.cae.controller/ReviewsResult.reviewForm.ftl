@@ -1,6 +1,6 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.elastic.social.cae.controller.ReviewsResult" -->
 <#-- @ftlvariable name="elasticSocialConfiguration" type="com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration" -->
-<#-- @ftlvariable name="_CSRFToken" type="java.lang.String" -->
+<#-- @ftlvariable name="_csrf" type="org.springframework.security.web.csrf.CsrfToken" -->
 
 <#import "*/node_modules/@coremedia/brick-utils/src/freemarkerLibs/components.ftl" as components />
 <#import "../../freemarkerLibs/elastic-social.ftl" as elasticSocial />
@@ -10,7 +10,7 @@
 
     <@elasticSocial.notification type="inactive" additionalClasses=["cm-form__notification"] attr={"data-cm-notification": '{"path": ""}'} />
 
-    <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}">
+    <#if _csrf?has_content><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"></#if>
     <input type="hidden" name="replyTo" value="">
     <fieldset class="cm-form__fieldset cm-fieldset">
 

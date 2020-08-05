@@ -42,6 +42,7 @@
   RewriteRule ^/<%= @servlet_context %>/+servlet/+internal/preview/previewurl - [PT,L]
   RewriteRule ^/<%= @servlet_context %>/+servlet/+internal/(.*) - [F,PT,L]
   RewriteRule ^/+internal/(.*) - [F,PT,L]
+  RewriteRule ^/externalpreview /blueprint/externalpreview [PT,L]
 
   <%- else %>
   <%- # LIVE RULES -%>

@@ -13,6 +13,8 @@
     [ResourceBundle('com.coremedia.blueprint.studio.CustomLabels')]
   </fx:Metadata>
   <fx:Script><![CDATA[
+    import com.coremedia.ui.skins.PanelSkin;
+
     /**
      * Workaround to eliminate the false browser calculated height.
      */

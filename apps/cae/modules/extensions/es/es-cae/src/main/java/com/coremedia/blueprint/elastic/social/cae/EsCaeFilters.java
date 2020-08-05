@@ -4,9 +4,10 @@ import com.coremedia.springframework.boot.web.servlet.RegistrationBeanBuilder;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
 
 import javax.servlet.Filter;
+
+import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
 @Configuration
 public class EsCaeFilters {
@@ -17,11 +18,13 @@ public class EsCaeFilters {
   // site filter is registered in com.coremedia.blueprint.component.cae.CaeBaseComponentConfiguration with order 100
   private static final int ORDER_SITE_FILTER = 100;
 
+  private static final int ORDER_SPRING_SECURITY_FILTER_CHAIN = HIGHEST_PRECEDENCE + 1_147_483_648; // == -1_000_000_000
+
   @Bean
   public FilterRegistrationBean springSecurityFilterChainRegistration(Filter springSecurityFilterChain) {
     return RegistrationBeanBuilder
             .forFilter(springSecurityFilterChain)
-            .order(Ordered.HIGHEST_PRECEDENCE)
+            .order(ORDER_SPRING_SECURITY_FILTER_CHAIN)
             .build();
   }
 

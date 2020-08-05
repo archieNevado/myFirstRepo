@@ -1,6 +1,9 @@
 package com.coremedia.blueprint.personalization.preview;
 
 import com.coremedia.cap.common.IdHelper;
+import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
+import com.coremedia.objectserver.configuration.CaeConfigurationProperties;
 import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.context.PropertyProvider;
 import com.coremedia.personalization.context.collector.SegmentSource;
@@ -12,10 +15,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -26,23 +33,36 @@ import java.util.Collection;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({
-        "classpath:/com/coremedia/cae/contentbean-services.xml",
-        "classpath:/com/coremedia/cae/dataview-services.xml",
-        "classpath:/com/coremedia/cae/link-services.xml",
-        "classpath:/com/coremedia/cache/cache-services.xml",
-        "classpath:/com/coremedia/id/id-services.xml",
-        "classpath:/com/coremedia/cae/dataview-services.xml",
-        "classpath:/com/coremedia/cae/contentbean-services.xml",
-        "classpath:/com/coremedia/blueprint/personalization/p13n-xml-repo-context.xml",
-
-        "classpath:/framework/spring/personalization-plugin/personalization-contentbeans.xml",
-        "classpath:/framework/spring/personalization-plugin/personalization-context.xml",
-        "classpath:/framework/spring/personalization-plugin/personalization-interceptors.xml",
-        "classpath:/META-INF/coremedia/p13n-preview-cae-context.xml",
-        "classpath:/com/coremedia/cae/handler-services.xml"
+@WebAppConfiguration
+@ContextConfiguration(classes = {
+        XmlRepoConfiguration.class,
+        DeliveryConfigurationProperties.class,
+        CaeConfigurationProperties.class,
+        P13NPreviewContentTest.LocalConfig.class,
+})
+@TestPropertySource(properties = {
+        "repository.factoryClassName=com.coremedia.cap.xmlrepo.XmlCapConnectionFactory",
+        "repository.params.contentxml=classpath:/com/coremedia/blueprint/personalization/personalizationTestRepo.xml",
 })
 public class P13NPreviewContentTest {
+
+  @Configuration
+  @ImportResource(value = {
+          "classpath:/com/coremedia/cae/contentbean-services.xml",
+          "classpath:/com/coremedia/cae/dataview-services.xml",
+          "classpath:/com/coremedia/cae/link-services.xml",
+          "classpath:/com/coremedia/id/id-services.xml",
+          "classpath:/com/coremedia/cae/dataview-services.xml",
+          "classpath:/com/coremedia/cae/contentbean-services.xml",
+          "classpath:/framework/spring/personalization-plugin/personalization-contentbeans.xml",
+          "classpath:/framework/spring/personalization-plugin/personalization-context.xml",
+          "classpath:/framework/spring/personalization-plugin/personalization-interceptors.xml",
+          "classpath:/META-INF/coremedia/p13n-preview-cae-context.xml",
+          "classpath:/com/coremedia/cae/handler-services.xml",
+  },
+          reader = com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader.class)
+  public static class LocalConfig {
+  }
 
   @Inject
   private BeanFactory beanFactory;

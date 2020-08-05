@@ -18,14 +18,12 @@ node.default_unless['blueprint']['apps'][service_name]['application.properties']
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['repository.blobStreamingSizeThreshold'] = -1
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['repository.blobStreamingThreads'] = -1
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['repository.maxCachedBlobSize'] = -1
+node.default_unless['blueprint']['apps'][service_name]['application.properties']['preview.urlservice.headlessPreviewHost'] = "//headless-server-preview.#{node['blueprint']['hostname']}"
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['studio.previewUrlPrefix'] = "//preview.#{node['blueprint']['hostname']}"
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['studio.previewUrlWhitelist'] = "*.#{node['blueprint']['hostname']}"
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['es.cae.http.host'] = node['blueprint']['hostname']
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['es.cae.protocol'] = 'http'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['es.cae.http.port'] = '80'
-node.default_unless['blueprint']['apps'][service_name]['application.properties']['externalpreview.restUrl'] = "http://preview.#{node['blueprint']['hostname']}/blueprint/servlet/service/externalpreview"
-node.default_unless['blueprint']['apps'][service_name]['application.properties']['externalpreview.previewUrl'] = "https://preview.#{node['blueprint']['hostname']}/blueprint/externalpreview"
-node.default_unless['blueprint']['apps'][service_name]['application.properties']['externalpreview.urlPrefix'] = "https://preview.#{node['blueprint']['hostname']}"
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['themeImporter.themeDeveloperGroups'] = 'developer'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['server.port'] = 41080
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['management.server.port'] = 41081

@@ -1,4 +1,6 @@
 package com.coremedia.ecommerce.studio.model {
+import com.coremedia.ui.data.Previews;
+
 [RestResource(uriTemplate="livecontext/category/{siteId:[^/]+}/{catalogAlias:[^/]+}/{workspaceId:[^/]+}/{externalId:.+}")]
 public class CategoryImpl extends CatalogObjectImpl implements Category {
   public function CategoryImpl(uri:String,vars:Object) {
@@ -23,8 +25,16 @@ public class CategoryImpl extends CatalogObjectImpl implements Category {
     return get(CatalogObjectPropertyNames.THUMBNAIL_URL);
   }
 
-  public function getPreviewUrl():String {
+  public function getDefaultPreviewUrl():String {
     return get(CatalogObjectPropertyNames.PREVIEW_URL);
+  }
+
+  public function hasMultiPreviews():Boolean {
+    return false;
+  }
+
+  public function getPreviews():Previews {
+    return null;
   }
 
   public function getParent():Category {
@@ -58,6 +68,5 @@ public class CategoryImpl extends CatalogObjectImpl implements Category {
   public function getFacets():Facets {
     return get(CatalogObjectPropertyNames.FACETS);
   }
-
 }
 }

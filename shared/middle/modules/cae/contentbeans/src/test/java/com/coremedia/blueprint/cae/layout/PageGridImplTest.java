@@ -18,11 +18,13 @@ import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -52,6 +54,20 @@ import static org.mockito.Mockito.when;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes={PageGridImplTest.LocalConfig.class, XmlRepoConfiguration.class})
 public class PageGridImplTest {
+
+  @Configuration
+  @EnableConfigurationProperties({
+          DeliveryConfigurationProperties.class
+  })
+  @Import(ViewtypeServiceConfiguration.class)
+  @ImportResource(value = {"classpath:/framework/spring/blueprint-contentbeans.xml", "classpath:/framework/spring/blueprint-services.xml"},
+          reader = ResourceAwareXmlBeanDefinitionReader.class)
+  public static class LocalConfig {
+    @Bean
+    public XmlUapiConfig xmlUapiConfig() {
+      return new XmlUapiConfig("classpath:/com/coremedia/blueprint/cae/layout/pagegridcontent.xml");
+    }
+  }
 
   private static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_DATE_TIME;
 
@@ -208,19 +224,6 @@ public class PageGridImplTest {
   @Test
   public void testGetCssClass() {
     assertEquals("wrong cssClassName", "test-setting", pageGrid.getCssClassName());
-  }
-
-  //====================================================================================================================
-
-  @Configuration
-  @Import(ViewtypeServiceConfiguration.class)
-  @ImportResource(value = {"classpath:/framework/spring/blueprint-contentbeans.xml", "classpath:/framework/spring/blueprint-services.xml"},
-          reader = ResourceAwareXmlBeanDefinitionReader.class)
-  public static class LocalConfig {
-    @Bean
-    public XmlUapiConfig xmlUapiConfig() {
-      return new XmlUapiConfig("classpath:/com/coremedia/blueprint/cae/layout/pagegridcontent.xml");
-    }
   }
 
 }

@@ -28,7 +28,7 @@ const NEW_REVIEW_IDENTIFIER = "cm-new-review";
 const $document = $(document);
 
 /* --- document ready ----------------------------------------------------------------------------------------------- */
-$(function() {
+$(function () {
   // Sets a timezone string, i.e. "Europe/Berlin", into the element with corresponding id .
   $("#coremedia-blueprint-basic-timezone").val(determine_timezone().name());
   $("#timezone").val(timezone.determine_timezone().name());
@@ -38,9 +38,9 @@ $(function() {
 nodeDecorationService.addNodeDecoratorByData(
   { message: undefined },
   "cm-button--confirm",
-  function($target, config) {
+  function ($target, config) {
     if (config.message !== undefined) {
-      $target.bind("click", function() {
+      $target.bind("click", function () {
         return confirm(config.message);
       });
     }
@@ -51,8 +51,8 @@ nodeDecorationService.addNodeDecoratorByData(
 nodeDecorationService.addNodeDecoratorByData(
   {},
   ES_AJAX_FORM_IDENTIFIER,
-  function($form) {
-    $form.on("submit", function(ev) {
+  function ($form) {
+    $form.on("submit", function (ev) {
       ev.preventDefault();
       if (formSubmitStart($form)) {
         clearNotifications($form);
@@ -64,7 +64,7 @@ nodeDecorationService.addNodeDecoratorByData(
           dataType: "json",
           global: true, // keep default value after using common ajax function, not sure if this is important
         })
-          .done(function(result) {
+          .done(function (result) {
             result = $.extend(
               { success: false, messages: [], id: undefined },
               result
@@ -81,7 +81,7 @@ nodeDecorationService.addNodeDecoratorByData(
             }
             $document.trigger(EVENT_LAYOUT_CHANGED);
           })
-          .fail(function() {
+          .fail(function () {
             addNotifications($form, [
               {
                 type: "error",
@@ -89,7 +89,7 @@ nodeDecorationService.addNodeDecoratorByData(
               },
             ]);
           })
-          .always(function() {
+          .always(function () {
             formSubmitEnd($form);
           });
         $document.trigger(EVENT_LAYOUT_CHANGED);
@@ -99,10 +99,10 @@ nodeDecorationService.addNodeDecoratorByData(
 );
 
 // activate cancel functionality for es forms
-nodeDecorationService.addNodeDecoratorByData({}, "cm-button--cancel", function(
+nodeDecorationService.addNodeDecoratorByData({}, "cm-button--cancel", function (
   $button
 ) {
-  $button.on("click", function() {
+  $button.on("click", function () {
     $button.trigger(EVENT_FORM_CLOSE);
   });
 });
@@ -114,8 +114,8 @@ nodeDecorationService.addNodeDecoratorByData(
     quote: { author: undefined, date: undefined, text: undefined },
   },
   "cm-button--comment",
-  function($commentButton, config) {
-    $commentButton.on("click", function() {
+  function ($commentButton, config) {
+    $commentButton.on("click", function () {
       const $comments = $commentButton.closest("." + COMMENTS_IDENTIFIER);
       // deactivate all active buttons due to form element being reused
       $comments
@@ -127,10 +127,12 @@ nodeDecorationService.addNodeDecoratorByData(
         "." + COMMENTS_IDENTIFIER + "__new-comment"
       );
       // reset form
-      $container.find("." + NEW_COMMENT_IDENTIFIER + "__form").each(function() {
-        this.reset();
-        clearNotifications(this);
-      });
+      $container
+        .find("." + NEW_COMMENT_IDENTIFIER + "__form")
+        .each(function () {
+          this.reset();
+          clearNotifications(this);
+        });
       $container.addClass(NEW_COMMENT_IDENTIFIER + "--active");
 
       const $replyToField = $container.find("[name='replyTo']");
@@ -169,23 +171,23 @@ nodeDecorationService.addNodeDecoratorByData(
 // activate functionality for new comment form
 nodeDecorationService.addNodeDecoratorBySelector(
   "." + NEW_COMMENT_IDENTIFIER,
-  function($newCommentWidget) {
+  function ($newCommentWidget) {
     // catch es ajax form events
     findAndSelf(
       $newCommentWidget,
       "form." + NEW_COMMENT_IDENTIFIER + "__form"
-    ).each(function() {
+    ).each(function () {
       const $newCommentForm = $(this);
       const $commentsWidget = $newCommentForm.closest(
         "." + COMMENTS_IDENTIFIER
       );
-      $newCommentForm.on(EVENT_FORM_SUBMIT, function() {
+      $newCommentForm.on(EVENT_FORM_SUBMIT, function () {
         clearNotifications($commentsWidget);
         $document.trigger(EVENT_LAYOUT_CHANGED);
       });
-      $newCommentForm.on(EVENT_MODEL_INFO, function(event, handlerInfo) {
+      $newCommentForm.on(EVENT_MODEL_INFO, function (event, handlerInfo) {
         if (handlerInfo.success) {
-          refreshFragment($commentsWidget, function(
+          refreshFragment($commentsWidget, function (
             _,
             $commentsWidgetRefreshed
           ) {
@@ -193,13 +195,17 @@ nodeDecorationService.addNodeDecoratorBySelector(
               const $comment = $commentsWidgetRefreshed.find(
                 "[data-cm-comment-id='" + handlerInfo.id + "']"
               );
-              addNotifications($comment, handlerInfo.messages);
-              $("html, body").animate(
-                {
-                  scrollTop: $comment.offset().top,
-                },
-                500
-              );
+              if ($comment.length) {
+                addNotifications($comment, handlerInfo.messages);
+                if ($comment.is(":visible")) {
+                  $("html, body").animate(
+                    {
+                      scrollTop: $comment.offset().top,
+                    },
+                    500
+                  );
+                }
+              }
             } else {
               // fallback if no id is provided
               addNotifications($commentsWidgetRefreshed, handlerInfo.messages);
@@ -211,7 +217,7 @@ nodeDecorationService.addNodeDecoratorBySelector(
     });
 
     // activate cancel functionality for comment form
-    $newCommentWidget.on(EVENT_FORM_CLOSE, function() {
+    $newCommentWidget.on(EVENT_FORM_CLOSE, function () {
       $newCommentWidget.removeClass(NEW_COMMENT_IDENTIFIER + "--active");
       $newCommentWidget
         .closest("." + COMMENTS_IDENTIFIER)
@@ -226,9 +232,9 @@ nodeDecorationService.addNodeDecoratorBySelector(
 nodeDecorationService.addNodeDecoratorByData(
   { disabled: false },
   "cm-button--review",
-  function($reviewButton, config) {
+  function ($reviewButton, config) {
     if (!config.disabled) {
-      $reviewButton.on("click", function() {
+      $reviewButton.on("click", function () {
         const $reviews = $reviewButton.closest("." + REVIEWS_IDENTIFIER);
         // deactivate all active buttons due to form element being reused
         $reviews
@@ -242,7 +248,7 @@ nodeDecorationService.addNodeDecoratorByData(
         // reset form
         $container
           .find("." + NEW_REVIEW_IDENTIFIER + "__form")
-          .each(function() {
+          .each(function () {
             this.reset();
             clearNotifications(this);
           });
@@ -261,32 +267,39 @@ nodeDecorationService.addNodeDecoratorByData(
 // activate functionality for new review form
 nodeDecorationService.addNodeDecoratorBySelector(
   "." + NEW_REVIEW_IDENTIFIER,
-  function($newReviewWidget) {
+  function ($newReviewWidget) {
     // catch form submit for review functionality and replace it with ajax call
     findAndSelf(
       $newReviewWidget,
       "form." + NEW_REVIEW_IDENTIFIER + "__form"
-    ).each(function() {
+    ).each(function () {
       const $newReviewForm = $(this);
       const $reviewsWidget = $newReviewForm.closest("." + REVIEWS_IDENTIFIER);
-      $newReviewForm.on(EVENT_FORM_SUBMIT, function() {
+      $newReviewForm.on(EVENT_FORM_SUBMIT, function () {
         clearNotifications($reviewsWidget);
         $document.trigger(EVENT_LAYOUT_CHANGED);
       });
-      $newReviewForm.on(EVENT_MODEL_INFO, function(event, modelInfo) {
+      $newReviewForm.on(EVENT_MODEL_INFO, function (event, modelInfo) {
         if (modelInfo.success) {
-          refreshFragment($reviewsWidget, function(_, $reviewsWidgetRefreshed) {
+          refreshFragment($reviewsWidget, function (
+            _,
+            $reviewsWidgetRefreshed
+          ) {
             if (modelInfo.id !== undefined) {
               const $review = $reviewsWidgetRefreshed.find(
                 "[data-cm-review-id='" + modelInfo.id + "']"
               );
-              addNotifications($review, modelInfo.messages);
-              $("html, body").animate(
-                {
-                  scrollTop: $review.offset().top,
-                },
-                500
-              );
+              if ($review.length) {
+                addNotifications($review, modelInfo.messages);
+                if ($review.is(":visible")) {
+                  $("html, body").animate(
+                    {
+                      scrollTop: $review.offset().top,
+                    },
+                    500
+                  );
+                }
+              }
             } else {
               // fallback if no id is provided
               addNotifications($reviewsWidgetRefreshed, modelInfo.messages);
@@ -297,7 +310,7 @@ nodeDecorationService.addNodeDecoratorBySelector(
       });
     });
 
-    $newReviewWidget.on(EVENT_FORM_CLOSE, function() {
+    $newReviewWidget.on(EVENT_FORM_CLOSE, function () {
       $newReviewWidget.removeClass(NEW_REVIEW_IDENTIFIER + "--active");
       $newReviewWidget
         .closest("." + REVIEWS_IDENTIFIER)
@@ -311,8 +324,8 @@ nodeDecorationService.addNodeDecoratorBySelector(
 // initialize reviews widget
 nodeDecorationService.addNodeDecoratorBySelector(
   ".cm-ratings-average",
-  function($target) {
-    $target.on(EVENT_TOGGLE_AVERAGE_RATING, function() {
+  function ($target) {
+    $target.on(EVENT_TOGGLE_AVERAGE_RATING, function () {
       $target.toggleClass("cm-ratings-average--active");
     });
   }
@@ -322,7 +335,7 @@ nodeDecorationService.addNodeDecoratorBySelector(
 nodeDecorationService.addNodeDecoratorByData(
   { lines: undefined },
   "cm-readmore",
-  function($target, config) {
+  function ($target, config) {
     const blockReadMore = "cm-readmore";
     // read the line height for the given target
     let lineHeight = $target.css("line-height");
@@ -353,19 +366,19 @@ nodeDecorationService.addNodeDecoratorByData(
         // default without any action by the user ist the non expanded (less) version
         $target.addClass(blockReadMore + "--less");
         $wrapper.css("max-height", maxHeight);
-        $buttonMore.on("click", function() {
+        $buttonMore.on("click", function () {
           $target.removeClass(blockReadMore + "--less");
           $target.addClass(blockReadMore + "--more");
           $wrapper.css("max-height", "");
           $document.trigger(EVENT_LAYOUT_CHANGED);
         });
-        $buttonLess.on("click", function() {
+        $buttonLess.on("click", function () {
           $target.removeClass(blockReadMore + "--more");
           $target.addClass(blockReadMore + "--less");
           $wrapper.css("max-height", maxHeight);
           $document.trigger(EVENT_LAYOUT_CHANGED);
         });
-        $buttonLess.on("click", function() {
+        $buttonLess.on("click", function () {
           $target.removeClass(blockReadMore + "--more");
           $target.addClass(blockReadMore + "--less");
           $wrapper.css("max-height", maxHeight);

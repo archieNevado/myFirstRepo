@@ -12,6 +12,8 @@ import com.coremedia.ui.components.IAnnotatedLinkListForm;
 public class CallToActionConfigurationFormBase extends PropertyFieldGroup implements IAnnotatedLinkListForm {
 
   public static const CTA_CONFIGURATION_CHANGED_EVENT:String = "CTAConfigurationChanged";
+  internal static const TEXT_ITEM_ID:String = "customCTAText";
+  internal static const HASH_ITEM_ID:String = "CTAHash";
 
   /**
    * A value expression that leads to a bean storing the {@link CallToActionSettings}.
@@ -28,18 +30,14 @@ public class CallToActionConfigurationFormBase extends PropertyFieldGroup implem
 
   private var _ctaViewModel:CallToActionViewModel;
 
-  private var textDisabledVE:ValueExpression;
-
   public function CallToActionConfigurationFormBase(config:CallToActionConfigurationForm = null) {
     super(config);
-    ctaSettings.addListener(CallToActionSettings.CALL_TO_ACTION_ENABLED_PROPERTY_NAME, settingsEnabledListener);
-    ctaSettings.addListener(CallToActionSettings.CALL_TO_ACTION_CUSTOM_TEXT_PROPERTY_NAME, settingsTextListener);
+    ctaSettings.addListener(CallToActionSettings.CALL_TO_ACTION_ENABLED_PROPERTY_NAME, ctaConfigurationChangedListener);
+    ctaSettings.addListener(CallToActionSettings.CALL_TO_ACTION_CUSTOM_TEXT_PROPERTY_NAME, ctaConfigurationChangedListener);
+    ctaSettings.addListener(CallToActionSettings.CALL_TO_ACTION_HASH_PROPERTY_NAME, ctaConfigurationChangedListener);
     if (settingsVE.isLoaded()) {
-      settingsEnabledListener();
-      settingsTextListener();
+      ctaConfigurationChangedListener();
     }
-
-    forceReadOnlyValueExpression && forceReadOnlyValueExpression.addChangeListener(updateTextDisabledVE);
   }
 
   [Bindable]
@@ -58,12 +56,7 @@ public class CallToActionConfigurationFormBase extends PropertyFieldGroup implem
     return _ctaViewModel;
   }
 
-  private function settingsEnabledListener():void {
-    fireEvent(CTA_CONFIGURATION_CHANGED_EVENT);
-    updateTextDisabledVE();
-  }
-
-  private function settingsTextListener():void {
+  private function ctaConfigurationChangedListener():void {
     fireEvent(CTA_CONFIGURATION_CHANGED_EVENT);
   }
 
@@ -71,22 +64,6 @@ public class CallToActionConfigurationFormBase extends PropertyFieldGroup implem
     ctaViewModel.destroy();
     ctaSettings.destroy();
     super.onDestroy();
-  }
-
-  private function updateTextDisabledVE():void {
-    var ctaTextDisabled:Boolean = calcTextDisabled(_ctaSettings && ctaSettings.callToActionEnabled);
-    getTextDisabledVE().setValue(ctaTextDisabled);
-  }
-
-  private function calcTextDisabled(value:Boolean):Boolean {
-    return !value && forceReadOnlyValueExpression && !forceReadOnlyValueExpression.getValue();
-  }
-
-  protected function getTextDisabledVE():ValueExpression {
-    if (!textDisabledVE) {
-      textDisabledVE = ValueExpressionFactory.createFromValue(false);
-    }
-    return textDisabledVE;
   }
 
   [Bindable]

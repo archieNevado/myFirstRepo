@@ -5,14 +5,14 @@ import * as imagemap from "./imagemap";
 
 const $document = $(document);
 
-$(function() {
+$(function () {
   // initializes imagemaps
-  nodeDecorationService.addNodeDecorator(function($target) {
-    utils.findAndSelf($target, ".cm-imagemap").each(function() {
+  nodeDecorationService.addNodeDecorator(function ($target) {
+    utils.findAndSelf($target, ".cm-imagemap").each(function () {
       const $imagemap = $(this);
       imagemap.init($imagemap);
 
-      $document.on(utils.EVENT_LAYOUT_CHANGED, function() {
+      $document.on(utils.EVENT_LAYOUT_CHANGED, function () {
         imagemap.update($imagemap);
       });
     });

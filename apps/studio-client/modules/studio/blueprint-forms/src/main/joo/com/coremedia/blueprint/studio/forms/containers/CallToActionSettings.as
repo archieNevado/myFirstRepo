@@ -24,6 +24,7 @@ public class CallToActionSettings extends PropertiesWithDefaultsAdapterBase {
 
   public static const CALL_TO_ACTION_ENABLED_PROPERTY_NAME:String = "callToActionEnabled";
   public static const CALL_TO_ACTION_CUSTOM_TEXT_PROPERTY_NAME:String = "callToActionCustomText";
+  public static const CALL_TO_ACTION_HASH_PROPERTY_NAME:String = "callToActionHash";
 
   private var legacy:Boolean;
 
@@ -31,6 +32,7 @@ public class CallToActionSettings extends PropertiesWithDefaultsAdapterBase {
     super(ve,
         CALL_TO_ACTION_ENABLED_PROPERTY_NAME, false,
         CALL_TO_ACTION_CUSTOM_TEXT_PROPERTY_NAME, "",
+        CALL_TO_ACTION_HASH_PROPERTY_NAME, "",
         // legacy
         CALL_TO_ACTION_DISABLED_PROPERTY_NAME, false
     );
@@ -66,6 +68,14 @@ public class CallToActionSettings extends PropertiesWithDefaultsAdapterBase {
 
   public function set callToActionCustomText(value:String):void {
     setProperty(CALL_TO_ACTION_CUSTOM_TEXT_PROPERTY_NAME, value);
+  }
+
+  public function get callToActionHash():String {
+    return getProperty(CALL_TO_ACTION_HASH_PROPERTY_NAME);
+  }
+
+  public function set callToActionHash(value:String):void {
+    setProperty(CALL_TO_ACTION_HASH_PROPERTY_NAME, value);
   }
 
   override public function destroy(...params):void {

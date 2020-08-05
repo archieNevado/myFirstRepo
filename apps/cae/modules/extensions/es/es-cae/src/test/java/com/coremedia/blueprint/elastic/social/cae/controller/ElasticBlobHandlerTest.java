@@ -1,10 +1,11 @@
 package com.coremedia.blueprint.elastic.social.cae.controller;
 
-import com.coremedia.blueprint.cae.util.SecureHashCodeGeneratorStrategy;
 import com.coremedia.elastic.core.api.blobs.Blob;
 import com.coremedia.elastic.core.api.blobs.BlobService;
+import com.coremedia.objectserver.web.SecureHashCodeGeneratorStrategy;
 import com.coremedia.transform.BlobTransformer;
 import com.google.common.collect.ImmutableMap;
+import javax.servlet.http.HttpServletRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 

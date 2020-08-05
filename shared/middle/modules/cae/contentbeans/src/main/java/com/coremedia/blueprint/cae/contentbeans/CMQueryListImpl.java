@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.blueprint.base.querylist.QueryListHelper;
 import com.coremedia.blueprint.cae.search.Condition;
 import com.coremedia.blueprint.cae.search.SearchConstants;
@@ -18,6 +19,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,13 +44,12 @@ public class CMQueryListImpl extends CMQueryListBase {
 
   private static final int CACHE_QUERY_FOR_IN_SECONDS = 5;
 
-  private boolean preview;
+  private DeliveryConfigurationProperties deliveryConfigurationProperties;
 
-  @org.springframework.beans.factory.annotation.Value("${cae.is.preview}")
-  public void setPreview(boolean preview) {
-    this.preview = preview;
+  @Autowired
+  public void setDeliveryConfigurationProperties(DeliveryConfigurationProperties deliveryConfigurationProperties) {
+    this.deliveryConfigurationProperties = deliveryConfigurationProperties;
   }
-
 
   // --- classic Container ------------------------------------------
 
@@ -187,7 +188,7 @@ public class CMQueryListImpl extends CMQueryListBase {
 
   private SearchResultBean createSearchResult(SearchQueryBean searchQuery) {
     SearchResultBean searchResult;
-    if (preview){
+    if (deliveryConfigurationProperties.isPreviewMode()){
       searchResult = getResultFactory().createSearchResultUncached(searchQuery);
       Cache.uncacheable();
     } else {

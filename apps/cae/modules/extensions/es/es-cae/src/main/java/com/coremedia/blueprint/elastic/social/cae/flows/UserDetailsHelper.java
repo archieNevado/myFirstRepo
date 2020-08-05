@@ -8,6 +8,7 @@ import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.elastic.social.cae.controller.BlobRefImpl;
 import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
 import com.coremedia.cap.content.ContentRepository;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.elastic.core.api.blobs.Blob;
 import com.coremedia.elastic.core.api.blobs.BlobException;
@@ -26,9 +27,8 @@ import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.elastic.social.api.users.CommunityUserService;
 import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
-import org.springframework.webflow.core.collection.SharedAttributeMap;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.webflow.execution.RequestContext;
 
 import javax.inject.Inject;
@@ -45,7 +45,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import static com.coremedia.blueprint.elastic.social.cae.flows.MessageHelper.addErrorMessage;
 import static com.coremedia.blueprint.elastic.social.cae.flows.MessageHelper.addErrorMessageWithSource;
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -62,9 +61,6 @@ public class UserDetailsHelper {
   private static final String PROFILE_IMAGE_ID = "profileImage";
   private static List<TimeZone> timeZones = new ArrayList<>();
   private static final int MAX_LENGTH_TIMEZONE_ID = 3;
-
-  @Value("${cae.is.preview}")
-  private boolean preview;
 
   @Inject
   protected CommentService commentService;
@@ -92,12 +88,19 @@ public class UserDetailsHelper {
 
   @Inject
   protected StagingService stagingService;
-  
+
   @Inject
   protected FlowUrlHelper flowUrlHelper;
 
   @Inject
   protected ElasticSocialPlugin elasticSocialPlugin;
+
+  private DeliveryConfigurationProperties deliveryConfigurationProperties;
+
+  @Autowired
+  public void setDeliveryConfigurationProperties(DeliveryConfigurationProperties deliveryConfigurationProperties) {
+    this.deliveryConfigurationProperties = deliveryConfigurationProperties;
+  }
 
   public UserDetails getUserDetails(RequestContext context, PasswordPolicy passwordPolicy) {
     return getUserDetails(context, passwordPolicy, null);
@@ -108,7 +111,7 @@ public class UserDetailsHelper {
     Locale requestLocale = getLocaleFromContext(context);
 
     if (authorName == null) {
-      return getDetails(loggedInUser, true, passwordPolicy, requestLocale, preview);
+      return getDetails(loggedInUser, true, passwordPolicy, requestLocale, deliveryConfigurationProperties.isPreviewMode());
     }
     if (isBlank(authorName)) {
       return null;
@@ -118,10 +121,10 @@ public class UserDetailsHelper {
       return null;
     }
     CommunityUser communityUser = communityUserService.createFrom(user);
-    if (preview || communityUser.isActivated() || communityUser.isActivatedAndRequiresModeration()) {
-      return getDetails(user, user.equals(loggedInUser), passwordPolicy, requestLocale, preview);
+    if (deliveryConfigurationProperties.isPreviewMode() || communityUser.isActivated() || communityUser.isActivatedAndRequiresModeration()) {
+      return getDetails(user, user.equals(loggedInUser), passwordPolicy, requestLocale, deliveryConfigurationProperties.isPreviewMode());
     } else if (communityUser.isIgnored() && user.equals(loggedInUser)) {
-      return getDetails(user, true, passwordPolicy, requestLocale, preview);
+      return getDetails(user, true, passwordPolicy, requestLocale, deliveryConfigurationProperties.isPreviewMode());
     }
     return null;
   }
@@ -154,14 +157,14 @@ public class UserDetailsHelper {
     }
   }
 
-  public boolean save(UserDetails userDetails, RequestContext context, CommonsMultipartFile file) {
+  public boolean save(UserDetails userDetails, RequestContext context, MultipartFile file) {
     userDetails.validate(context);
     final boolean result = !context.getMessageContext().hasErrorMessages() && doSave(userDetails, context, file);
     userDetails.setDeleteProfileImage(false);
     return result;
   }
 
-  public boolean doSave(UserDetails userDetails, RequestContext context, CommonsMultipartFile file) {
+  public boolean doSave(UserDetails userDetails, RequestContext context, MultipartFile file) {
     CommunityUser user = getLoggedInUser();
     if (user != null) {
       boolean hasChanges = false;
@@ -257,16 +260,16 @@ public class UserDetailsHelper {
     return zone.getID().length() == MAX_LENGTH_TIMEZONE_ID;
   }
 
-  protected UserDetails getDetails(User user, boolean viewOwnProfile, PasswordPolicy passwordPolicy, Locale requestLocale, boolean preview) {
+  protected UserDetails getDetails(User user, boolean viewOwnProfile, PasswordPolicy passwordPolicy, Locale requestLocale, @SuppressWarnings("unused") boolean preview) {
     if (user != null) {
       CommunityUser communityUser = communityUserService.createFrom(user);
       final UserDetails details = createUserDetails();
-      if (viewOwnProfile || preview) {
+      if (viewOwnProfile || deliveryConfigurationProperties.isPreviewMode()) {
         if (communityUser.hasChangesForPreModeration()) {
           details.setPreModerationChanged(true);
           communityUser.applyChangesFromPreModeration();
         }
-        if (preview) {
+        if (deliveryConfigurationProperties.isPreviewMode()) {
           stagingService.applyChanges(communityUser);
         }
         details.setViewOwnProfile(viewOwnProfile);
@@ -294,7 +297,7 @@ public class UserDetailsHelper {
                                                       : null;
       details.setLocalizedLocale(localizedLocale);
       details.setPasswordPolicy(passwordPolicy);
-      details.setPreview(preview);
+      details.setPreview(deliveryConfigurationProperties.isPreviewMode());
       details.setReceiveCommentReplyEmails(communityUser.isReceiveCommentReplyEmails());
       if (communityUser.getTimeZone() != null) {
         details.setTimeZoneId(communityUser.getTimeZone().getID());
@@ -327,7 +330,7 @@ public class UserDetailsHelper {
     return UserContext.getUser();
   }
 
-  private CommunityUser setChangesForModeration(UserDetails userDetails, CommunityUser user, CommonsMultipartFile file, RequestContext context) {
+  private CommunityUser setChangesForModeration(UserDetails userDetails, CommunityUser user, MultipartFile file, RequestContext context) {
     @PersonalData Blob profileImage = null;
     if (!userDetails.isDeleteProfileImage()) {
       profileImage = saveProfileImage(context, file);
@@ -363,7 +366,7 @@ public class UserDetailsHelper {
     return communityUserService.createFrom(user);
   }
 
-  private @PersonalData Blob saveProfileImage(RequestContext context, CommonsMultipartFile file) {
+  private @PersonalData Blob saveProfileImage(RequestContext context, MultipartFile file) {
     if (file != null && file.getSize() > 0) {
       Page page = RequestAttributeConstants.getPage((HttpServletRequest) context.getExternalContext().getNativeRequest());
       ElasticSocialConfiguration elasticSocialConfiguration = elasticSocialPlugin.getElasticSocialConfiguration(page);
@@ -414,9 +417,5 @@ public class UserDetailsHelper {
     public int compare(TimeZone timeZone1, TimeZone timeZone2) {
       return timeZone1.getID().compareTo(timeZone2.getID());
     }
-  }
-
-  public void setPreview(boolean preview) {
-    this.preview = preview;
   }
 }

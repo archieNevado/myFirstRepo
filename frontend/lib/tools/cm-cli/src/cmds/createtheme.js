@@ -21,7 +21,7 @@ const {
 
 const command = "create-theme [name]";
 const desc = "Create a new CoreMedia theme";
-const builder = yargs =>
+const builder = (yargs) =>
   yargs
     .option("verbose", {
       alias: "V",
@@ -47,8 +47,8 @@ const handler = ({ name, verbose }) => {
 
   const availableBricks = getAvailableBricks();
   const availableThemes = getAvailableThemes();
-  let themeName ="";
-  let themePath ="";
+  let themeName = "";
+  let themePath = "";
   let themeToDeriveFrom = "";
   let dependenciesToActivate = {};
   let dependenciesToCommentOut = availableBricks;
@@ -74,13 +74,13 @@ const handler = ({ name, verbose }) => {
   }
 
   const brickChoices = sortChoices(
-    Object.keys(availableBricks).map(brickName =>
+    Object.keys(availableBricks).map((brickName) =>
       getBrickChoice(brickName, { [brickName]: availableBricks[brickName] })
     )
   );
 
   const themeChoices = sortChoices(
-    Object.keys(availableThemes).map(themeName =>
+    Object.keys(availableThemes).map((themeName) =>
       getThemeChoice(themeName, { [themeName]: availableThemes[themeName] })
     )
   );
@@ -120,7 +120,7 @@ const handler = ({ name, verbose }) => {
         );
         if (commentOutBricks) {
           dependenciesToCommentOut = Object.keys(availableBricks)
-            .filter(brickName => !(brickName in dependenciesToActivate))
+            .filter((brickName) => !(brickName in dependenciesToActivate))
             .reduce(
               (aggregator, brickName) => ({
                 ...aggregator,
@@ -192,9 +192,7 @@ const handler = ({ name, verbose }) => {
       ])
       .then(({ chosenName }) => {
         if (!chosenName) {
-          log.error(
-            `The theme name must not be empty.`
-          );
+          log.error(`The theme name must not be empty.`);
           getName();
         } else {
           themeName = chosenName;
@@ -212,7 +210,6 @@ const handler = ({ name, verbose }) => {
   } else {
     setPath(themeName);
   }
-
 };
 
 module.exports = {

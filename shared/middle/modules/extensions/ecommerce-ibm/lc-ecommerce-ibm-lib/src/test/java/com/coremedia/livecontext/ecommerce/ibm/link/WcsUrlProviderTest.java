@@ -8,6 +8,7 @@ import com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.ibm.common.IbmTestConfig;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.objectserver.web.links.TokenResolverHelper;
 import com.google.common.collect.ImmutableList;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -34,7 +35,6 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.springframework.web.util.UriUtils.encodeQueryParam;
 
 public class WcsUrlProviderTest {
 
@@ -62,9 +62,14 @@ public class WcsUrlProviderTest {
   protected StoreContextImpl storeContext;
   protected String previewStoreFront;
 
+  protected DeliveryConfigurationProperties deliveryConfigurationProperties;
+
   @Before
   public void setup() {
+    deliveryConfigurationProperties = new DeliveryConfigurationProperties();
+    deliveryConfigurationProperties.setPreviewMode(false);
     testling = new WcsUrlProvider();
+    testling.setDeliveryConfigurationProperties(deliveryConfigurationProperties);
     testling.setDefaultStoreFrontUrl(DEFAULT_STOREFRONT);
     previewStoreFront = PREVIEW_STOREFRONT;
     if (WcsVersion.WCS_VERSION_8_0.lessThan(testConfig.getWcsVersion())) {
@@ -108,14 +113,14 @@ public class WcsUrlProviderTest {
   @Test
   public void testUrlPreviewLive() {
     Map<String, Object> params = new HashMap<>();
-    testling.setPreview(true);
+    deliveryConfigurationProperties.setPreviewMode(true);
 
     String url;
 
     url = toUriString(testling.provideValue(params, request, storeContext));
     assertTrue(url.startsWith(previewStoreFront));
 
-    testling.setPreview(false);
+    deliveryConfigurationProperties.setPreviewMode(false);
 
     url = toUriString(testling.provideValue(params, request, storeContext));
     assertTrue(url.startsWith(DEFAULT_STOREFRONT));
@@ -143,7 +148,7 @@ public class WcsUrlProviderTest {
     Map<String, Object> params = new HashMap<>();
     params.put(WcsUrlProvider.URL_TEMPLATE, "{language}/{storeName}/{seoSegment}");
     params.put(WcsUrlProvider.SEO_SEGMENT, SEO_SEGMENT);
-    testling.setPreview(true);
+    deliveryConfigurationProperties.setPreviewMode(true);
 
     StoreContext storeContextWithContractIds = IbmStoreContextBuilder
             .from(storeContext)

@@ -14,6 +14,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.google.common.collect.ImmutableList;
 import org.junit.Before;
@@ -99,7 +100,7 @@ public class DownloadPortalSearchServiceTest {
   public void setUp() {
     searchService = spy(searchService);
     searchService.setCacheTimeInSecs(60);
-    searchService.setPreview(false);
+    searchService.setDeliveryConfigurationProperties(new DeliveryConfigurationProperties());
 
     when(facet.getCount()).thenReturn(2l);
     when(facet.getValue()).thenReturn("0/111");

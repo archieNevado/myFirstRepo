@@ -18,8 +18,6 @@
 
     public static const xtype:String = "com.coremedia.blueprint.studio.config.controlroom.controlRoomStudioPlugin";
 
-    private var config:ControlRoomStudioPlugin;
-
     public native function ControlRoomStudioPlugin(config:ControlRoomStudioPlugin = null);
     ]]></fx:Script>
 
@@ -59,10 +57,10 @@
       </collab:projectListViewColumns>
     </collab:ConfigureProjectListViewPlugin>
 
-    <!-- configure the UI for the translation workflow -->
+    <!-- configure the UI for the translation workxflow -->
     <collab:AddTranslationWorkflowPlugin processDefinitionName="Translation"
                                          listToolbarButtonsFunction="{WorkflowUtils.getTranslationToolbarButtons()}">
-      <collab:inboxPanel>
+      <collab:inboxForm>
         <collab:DefaultTranslationWorkflowDetailForm>
           <collab:workflowStateTransitions>
             <collab:WorkflowStateTransition task="Translate"
@@ -75,23 +73,23 @@
                                             nextSteps="{[{nextStep:'translationReviewed', allowAlways:false}]}"/>
           </collab:workflowStateTransitions>
         </collab:DefaultTranslationWorkflowDetailForm>
-      </collab:inboxPanel>
+      </collab:inboxForm>
 
-      <collab:pendingPanel>
+      <collab:pendingForm>
         <collab:DefaultTranslationWorkflowInfoForm showTranslationStatus="true"/>
-      </collab:pendingPanel>
+      </collab:pendingForm>
 
-      <collab:finishedPanel>
+      <collab:finishedForm>
         <collab:DefaultTranslationWorkflowInfoForm/>
-      </collab:finishedPanel>
+      </collab:finishedForm>
 
-      <collab:startPanel>
-        <collab:DefaultStartTranslationWorkflowPanel/>
-      </collab:startPanel>
+      <collab:startForm>
+        <collab:DefaultStartTranslationWorkflowForm/>
+      </collab:startForm>
     </collab:AddTranslationWorkflowPlugin>
     <collab:AddTranslationWorkflowPlugin processDefinitionName="Synchronization"
                                          listToolbarButtonsFunction="{WorkflowUtils.getTranslationToolbarButtons()}">
-      <collab:inboxPanel>
+      <collab:inboxForm>
         <collab:DefaultTranslationWorkflowDetailForm>
           <collab:workflowStateTransitions>
             <collab:WorkflowStateTransition task="Synchronize"
@@ -99,19 +97,19 @@
                                             defaultStep="finishSynchronization"/>
           </collab:workflowStateTransitions>
         </collab:DefaultTranslationWorkflowDetailForm>
-      </collab:inboxPanel>
+      </collab:inboxForm>
 
-      <collab:pendingPanel>
+      <collab:pendingForm>
         <collab:DefaultTranslationWorkflowInfoForm showTranslationStatus="true"/>
-      </collab:pendingPanel>
+      </collab:pendingForm>
 
-      <collab:finishedPanel>
+      <collab:finishedForm>
         <collab:DefaultTranslationWorkflowInfoForm/>
-      </collab:finishedPanel>
+      </collab:finishedForm>
 
-      <collab:startPanel>
-        <collab:DefaultStartSynchronizationWorkflowPanel/>
-      </collab:startPanel>
+      <collab:startForm>
+        <collab:DefaultStartSynchronizationWorkflowForm/>
+      </collab:startForm>
     </collab:AddTranslationWorkflowPlugin>
 
     <editor:CopyResourceBundleProperties

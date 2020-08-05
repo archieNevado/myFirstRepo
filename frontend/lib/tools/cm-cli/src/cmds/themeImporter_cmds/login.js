@@ -13,7 +13,7 @@ const { PKG_NAME } = require("../../lib/constants");
 
 const command = "login [options]";
 const desc = "Authenticate user and create API key";
-const builder = yargs => {
+const builder = (yargs) => {
   let defaults = {};
   try {
     const env = getEnv();
@@ -61,7 +61,7 @@ const builder = yargs => {
         type: "string",
       },
     })
-    .check(argv => {
+    .check((argv) => {
       const checks = [
         {
           key: "Studio URL",
@@ -96,16 +96,16 @@ const builder = yargs => {
             isValidStringValue(argv.password),
         },
       ];
-      const errors = checks.filter(check => typeof check.value === "string");
+      const errors = checks.filter((check) => typeof check.value === "string");
       if (errors.length > 0) {
-        return errors.map(error => `${error.key}: ${error.value}`).join(", ");
+        return errors.map((error) => `${error.key}: ${error.value}`).join(", ");
       }
       return true;
     })
     .epilogue(args.docs);
 };
 
-const handler = argv => {
+const handler = (argv) => {
   const log = cmLogger.getLogger({
     name: PKG_NAME,
     level: "info",
@@ -121,7 +121,7 @@ const handler = argv => {
           name: "studioUrl",
           message: "Studio URL:",
           default: args.studioUrl,
-          validate: input => isValidURL(input),
+          validate: (input) => isValidURL(input),
         },
         // Ask if browser should be opened after the theme was build
         // As soon as https://github.com/SBoudrias/Inquirer.js/issues/590 is integrated, we can discuss if it makes
@@ -138,7 +138,7 @@ const handler = argv => {
           name: "previewUrl",
           message: "Preview URL:",
           default: args.previewUrl,
-          validate: input => !input || isValidURL(input),
+          validate: (input) => !input || isValidURL(input),
           when: ({ openBrowser }) => !!openBrowser,
         },
         {
@@ -146,23 +146,23 @@ const handler = argv => {
           name: "proxyUrl",
           message: "Proxy URL:",
           default: args.proxyUrl,
-          validate: input => !input || isValidURL(input),
+          validate: (input) => !input || isValidURL(input),
         },
         {
           type: "input",
           name: "username",
           message: "Username:",
           default: args.username,
-          validate: input => isValidStringValue(input),
+          validate: (input) => isValidStringValue(input),
         },
         {
           type: "password",
           name: "password",
           message: "Password:",
-          validate: input => isValidStringValue(input),
+          validate: (input) => isValidStringValue(input),
         },
       ])
-      .then(args => {
+      .then((args) => {
         themeImporter
           .login(
             args.studioUrl,
@@ -179,7 +179,7 @@ const handler = argv => {
               args.proxyUrl
             )
           )
-          .catch(e => {
+          .catch((e) => {
             log.error(e.message);
             process.exit(1);
           });
@@ -201,7 +201,7 @@ const handler = argv => {
           args.proxyUrl
         )
       )
-      .catch(e => {
+      .catch((e) => {
         log.error(e.message);
         process.exit(1);
       });

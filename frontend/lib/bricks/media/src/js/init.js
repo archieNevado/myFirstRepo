@@ -5,11 +5,11 @@ import { EVENT_LAYOUT_CHANGED } from "@coremedia/brick-utils";
 
 const RESPONSIVE_IMAGES_SELECTOR = "[data-cm-responsive-media]";
 
-$(function() {
+$(function () {
   // initializes responsive images
   nodeDecorationService.addNodeDecoratorBySelector(
     RESPONSIVE_IMAGES_SELECTOR,
-    function($target) {
+    function ($target) {
       responsiveImages($target);
     }
   );
@@ -17,8 +17,8 @@ $(function() {
   // adds removes spinner if an image has finished loading
   nodeDecorationService.addNodeDecoratorBySelector(
     ".cm-media--loading",
-    function($target) {
-      const callback = function() {
+    function ($target) {
+      const callback = function () {
         $target.removeClass("cm-media--loading");
       };
       if (typeof $.fn.imagesLoaded === typeof callback) {
@@ -29,7 +29,7 @@ $(function() {
     }
   );
 
-  $(document).on(EVENT_LAYOUT_CHANGED, function() {
+  $(document).on(EVENT_LAYOUT_CHANGED, function () {
     responsiveImages($(RESPONSIVE_IMAGES_SELECTOR));
   });
 });

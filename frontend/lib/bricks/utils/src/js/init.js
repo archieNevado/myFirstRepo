@@ -10,13 +10,13 @@ import { EVENT_LAYOUT_CHANGED } from "./utils";
  */
 $.extend($.expr[":"], {
   data: $.expr.createPseudo
-    ? $.expr.createPseudo(function(dataName) {
-        return function(elem) {
+    ? $.expr.createPseudo(function (dataName) {
+        return function (elem) {
           return !!$.data(elem, dataName);
         };
       })
     : // support: jQuery <1.8
-      function(elem, i, match) {
+      function (elem, i, match) {
         return !!$.data(elem, match[3]);
       },
 });
@@ -52,7 +52,7 @@ if (
 }
 
 // --- DOCUMENT READY --------------------------------------------------------------------------------------------------
-$(function() {
+$(function () {
   const $window = $(window);
   const $document = $(document);
 
@@ -72,7 +72,7 @@ $(function() {
   $window.on(
     "resize",
     {},
-    debounce(function() {
+    debounce(function () {
       Logger.log("Window resized");
       $document.trigger(EVENT_LAYOUT_CHANGED);
     })

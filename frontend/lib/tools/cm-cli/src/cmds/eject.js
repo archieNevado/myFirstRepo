@@ -52,10 +52,10 @@ const handler = ({ verbose }) => {
   function getDependenciesFor(brickName) {
     return getFlattenedDependencies(
       path.join(installationPathByBrickName[brickName], "package.json"),
-      nodeModule => getAvailableBrickNames().includes(nodeModule.getName())
+      (nodeModule) => getAvailableBrickNames().includes(nodeModule.getName())
     )
       .filter(isExampleBrickModule)
-      .map(dependency => dependency.getName());
+      .map((dependency) => dependency.getName());
   }
 
   /**
@@ -71,9 +71,9 @@ const handler = ({ verbose }) => {
   );
 
   const dependentsByExampleBrickName = {};
-  Object.keys(flattenedExampleBrickDependenciesByBrickName).forEach(name => {
+  Object.keys(flattenedExampleBrickDependenciesByBrickName).forEach((name) => {
     const dependencies = flattenedExampleBrickDependenciesByBrickName[name];
-    dependencies.forEach(dependency => {
+    dependencies.forEach((dependency) => {
       dependentsByExampleBrickName[dependency] =
         dependentsByExampleBrickName[dependency] || [];
       dependentsByExampleBrickName[dependency].push(name);
@@ -90,14 +90,14 @@ const handler = ({ verbose }) => {
   const newNameByOldName = {};
 
   function doEject() {
-    const bricksToEject = Object.keys(newNameByOldName).filter(oldName => {
+    const bricksToEject = Object.keys(newNameByOldName).filter((oldName) => {
       const newName = newNameByOldName[oldName];
       return (
         newName !== undefined && !getAvailableBrickNames().includes(newName)
       );
     });
 
-    bricksToEject.forEach(oldName => {
+    bricksToEject.forEach((oldName) => {
       log.debug(`Ejecting brick "${oldName}"`);
       const newName = newNameByOldName[oldName];
       const oldPath = installationPathByBrickName[oldName];
@@ -121,10 +121,10 @@ const handler = ({ verbose }) => {
         message: `Please pick the ejected brick ${ejectedBrick} from the list:`,
         choices: sortChoices(
           getAvailableBrickNames()
-            .filter(availableBrick => !isExampleModuleName(availableBrick))
-            .map(brickName => getBrickChoice(brickName))
+            .filter((availableBrick) => !isExampleModuleName(availableBrick))
+            .map((brickName) => getBrickChoice(brickName))
         ),
-        validate: input => {
+        validate: (input) => {
           if (!input || input.length === 0) {
             return "You need to select a brick from the list";
           }
@@ -141,7 +141,7 @@ const handler = ({ verbose }) => {
     const trackedDependencies = Object.keys(newNameByOldName);
     const dependents = (
       dependentsByExampleBrickName[unhandledDependency] || []
-    ).filter(dependent => trackedDependencies.includes(dependent));
+    ).filter((dependent) => trackedDependencies.includes(dependent));
     inquirer
       .prompt({
         type: "list",
@@ -189,7 +189,7 @@ const handler = ({ verbose }) => {
         type: "question",
         name: `newName`,
         message: `Please enter a new name for the example brick ${brick} (only lowercase characters (a-z), numbers (0-9) and hyphens (-) are allowed):`,
-        validate: newName => {
+        validate: (newName) => {
           if (!newName) {
             return "Name must not be empty";
           }
@@ -218,7 +218,7 @@ const handler = ({ verbose }) => {
   function checkInformation() {
     const trackedDependencies = Object.keys(newNameByOldName);
     const unhandledEjections = trackedDependencies.filter(
-      key => newNameByOldName[key] === undefined
+      (key) => newNameByOldName[key] === undefined
     );
 
     if (unhandledEjections.length > 0) {
@@ -229,14 +229,16 @@ const handler = ({ verbose }) => {
     const unhandledDependencies = Object.keys(
       flattenedExampleBrickDependenciesByBrickName
     )
-      .filter(dependencyName => trackedDependencies.includes(dependencyName))
+      .filter((dependencyName) => trackedDependencies.includes(dependencyName))
       .reduce((aggregator, next) => {
         return [
           ...aggregator,
           ...flattenedExampleBrickDependenciesByBrickName[next],
         ];
       }, [])
-      .filter(dependencyName => !trackedDependencies.includes(dependencyName));
+      .filter(
+        (dependencyName) => !trackedDependencies.includes(dependencyName)
+      );
 
     if (unhandledDependencies.length > 0) {
       askForDependencyHandling(unhandledDependencies.shift());
@@ -258,7 +260,7 @@ const handler = ({ verbose }) => {
           choices: sortChoices(
             getAvailableBrickNames()
               .filter(isExampleModuleName)
-              .map(brickName => getBrickChoice(brickName))
+              .map((brickName) => getBrickChoice(brickName))
           ),
           default: [],
         },
@@ -267,7 +269,7 @@ const handler = ({ verbose }) => {
         if (chosenBricks.length === 0) {
           log.success("Nothing to do.");
         } else {
-          chosenBricks.forEach(chosenBrick => {
+          chosenBricks.forEach((chosenBrick) => {
             newNameByOldName[chosenBrick] = undefined;
           });
           checkInformation();
@@ -281,7 +283,7 @@ const handler = ({ verbose }) => {
 module.exports = {
   command: "eject",
   desc: "Eject a brick",
-  builder: yargs =>
+  builder: (yargs) =>
     yargs
       .option("verbose", {
         alias: "V",

@@ -8,6 +8,7 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBui
 import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +25,8 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AbstractCommerceContextInterceptorTest {
+
+  private DeliveryConfigurationProperties deliveryConfigurationProperties;
 
   @Mock
   private Site site;
@@ -44,6 +47,10 @@ public class AbstractCommerceContextInterceptorTest {
 
   @Before
   public void setup() {
+    deliveryConfigurationProperties = new DeliveryConfigurationProperties();
+    deliveryConfigurationProperties.setPreviewMode(false);
+    testling.setDeliveryConfigurationProperties(deliveryConfigurationProperties);
+
     BaseCommerceConnection commerceConnection = new BaseCommerceConnection();
     commerceConnection.setStoreContextProvider(storeContextProvider);
     commerceConnection.setInitialStoreContext(StoreContextBuilderImpl.from(commerceConnection, "any-site-id").build());
@@ -97,7 +104,7 @@ public class AbstractCommerceContextInterceptorTest {
   public void testInitStoreContextProviderWithPreviewParameters() {
     when(request.getParameter(ValidityPeriodValidator.REQUEST_PARAMETER_PREVIEW_DATE)).thenReturn("12-06-2014 13:00 Europe/Berlin");
     when(request.getParameter(AbstractCommerceContextInterceptor.QUERY_PARAMETER_WORKSPACE_ID)).thenReturn("aWorkspaceId");
-    testling.setPreview(true);
+    deliveryConfigurationProperties.setPreviewMode(true);
 
     Optional<CommerceConnection> connection = testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
 

@@ -5,6 +5,8 @@ import com.coremedia.blueprint.personalization.contentbeans.CMSelectionRulesImpl
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
+import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.personalization.context.BasicPropertyMaintainer;
 import com.coremedia.personalization.context.ContextCollection;
@@ -12,13 +14,17 @@ import com.coremedia.personalization.context.MapPropertyMaintainer;
 import com.coremedia.personalization.context.PropertyProfile;
 import com.coremedia.personalization.context.util.SegmentUtil;
 import com.coremedia.personalization.rulelang.ConditionsProcessor;
+import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import com.google.common.base.Function;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
@@ -29,20 +35,30 @@ import java.util.List;
 import static com.google.common.collect.Lists.transform;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({
-        "classpath:/com/coremedia/cae/contentbean-services.xml",
-        "classpath:/com/coremedia/cae/dataview-services.xml",
-        "classpath:/com/coremedia/cae/link-services.xml",
-        "classpath:/com/coremedia/cache/cache-services.xml",
-        "classpath:/com/coremedia/id/id-services.xml",
-        "classpath:/com/coremedia/cae/dataview-services.xml",
-        "classpath:/com/coremedia/cae/contentbean-services.xml",
-        "classpath:/com/coremedia/blueprint/personalization/p13n-xml-repo-context.xml",
-        "classpath:/framework/spring/blueprint-contentbeans.xml",
-
-        "classpath:/framework/spring/personalization-plugin/personalization-contentbeans.xml"
+@ContextConfiguration(classes = {
+        XmlRepoConfiguration.class,
+        DeliveryConfigurationProperties.class,
+        P13NContentTest.LocalConfig.class,
+})
+@TestPropertySource(properties = {
+        "repository.factoryClassName=com.coremedia.cap.xmlrepo.XmlCapConnectionFactory",
+        "repository.params.contentxml=classpath:/com/coremedia/blueprint/personalization/personalizationTestRepo.xml",
 })
 public class P13NContentTest {
+
+  @Configuration
+  @ImportResource(value = {
+          "classpath:/com/coremedia/cae/contentbean-services.xml",
+          "classpath:/com/coremedia/cae/dataview-services.xml",
+          "classpath:/com/coremedia/cae/link-services.xml",
+          "classpath:/com/coremedia/id/id-services.xml",
+          "classpath:/com/coremedia/cae/dataview-services.xml",
+          "classpath:/com/coremedia/cae/contentbean-services.xml",
+          "classpath:/framework/spring/blueprint-contentbeans.xml",
+          "classpath:/framework/spring/personalization-plugin/personalization-contentbeans.xml"
+  }, reader = ResourceAwareXmlBeanDefinitionReader.class)
+  static class LocalConfig {
+  }
 
   private CMSelectionRulesImpl personalizedContent;
   private CMSelectionRulesImpl personalizedContent_2;

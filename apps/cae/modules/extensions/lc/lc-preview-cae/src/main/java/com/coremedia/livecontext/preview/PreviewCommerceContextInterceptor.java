@@ -2,48 +2,81 @@ package com.coremedia.livecontext.preview;
 
 import com.coremedia.blueprint.ecommerce.cae.AbstractCommerceContextInterceptor;
 import com.coremedia.cap.common.IdHelper;
+import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.id.IdProvider;
+import com.coremedia.objectserver.web.IdRedirectHandlerBase;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Required;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
+
+import static java.lang.invoke.MethodHandles.lookup;
 
 /**
  * Creates the store context for preview urls.
  */
+@DefaultAnnotation(NonNull.class)
 public class PreviewCommerceContextInterceptor extends AbstractCommerceContextInterceptor {
 
-  private SitesService sitesService;
+  private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
+
+  private final SitesService sitesService;
+  private final IdProvider idProvider;
+
+  public PreviewCommerceContextInterceptor(SitesService sitesService, IdProvider idProvider) {
+    this.sitesService = sitesService;
+    this.idProvider = idProvider;
+  }
 
   @NonNull
   @Override
   protected Optional<Site> findSite(HttpServletRequest request, String normalizedPath) {
-    Site site = null;
-
-    String[] siteIds = request.getParameterMap().get("site");
-    if (siteIds != null && siteIds.length == 1) {
-      site = sitesService.getSite(siteIds[0]);
-    }
-
-    if (site == null) {
-      String[] ids = request.getParameterMap().get("id");
-      if (ids != null && ids.length > 0) {
-        String id = ids[0];
-        if (IdHelper.isContentId(id) || StringUtils.isNumeric(id)) {
-          int contentId = IdHelper.parseContentId(id);
-          site = getSiteResolver().findSiteForContentId(contentId);
-        }
-      }
-    }
-
-    return Optional.ofNullable(site);
+    return findSiteViaSiteId(request).or(() -> findSiteViaBeanId(request));
   }
 
-  @Required
-  public void setSitesService(SitesService siteService) {
-    this.sitesService = siteService;
+  @NonNull
+  private Optional<Site> findSiteViaSiteId(HttpServletRequest request) {
+    String[] ids = request.getParameterValues("site");
+    if (ids == null) {
+      return Optional.empty();
+    }
+    return Arrays.stream(ids)
+            .map(sitesService::getSite)
+            .filter(Objects::nonNull)
+            .findFirst()
+            .or(() -> {
+              LOG.debug("Cannot find site using request param 'site={}'", Arrays.toString(ids));
+              return Optional.empty();
+            });
   }
+
+  @NonNull
+  private Optional<Site> findSiteViaBeanId(@NonNull HttpServletRequest request) {
+    String id = request.getParameter("id");
+    if (id == null) {
+      return Optional.empty();
+    }
+    return asNumericContentId(id)
+            .map(getSiteResolver()::findSiteForContentId)
+            .or(() -> {
+              LOG.debug("Cannot find site using request param 'id={}'", id);
+              return Optional.empty();
+            });
+  }
+
+  private Optional<Integer> asNumericContentId(String beanId) {
+    return IdRedirectHandlerBase.getBean(beanId, idProvider)
+            .filter(Content.class::isInstance)
+            .map(Content.class::cast)
+            .map(Content::getId)
+            .map(IdHelper::parseContentId);
+  }
+
 }

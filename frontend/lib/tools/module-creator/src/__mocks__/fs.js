@@ -5,7 +5,7 @@ const path = require("path");
 const fs = jest.genMockFromModule("fs");
 
 let mockFiles = Object.create(null);
-fs.__setMockFiles = newMockFiles => {
+fs.__setMockFiles = (newMockFiles) => {
   mockFiles = newMockFiles.reduce((files, file) => {
     const dir = path.dirname(file).replace(/\\/g, "/");
     if (!files[dir]) {
@@ -29,18 +29,18 @@ fs.__resetMockDirectories = () => {
 
 fs.__getMockDirectories = () => mockDirectories;
 
-fs.mkdirSync = directory => {
+fs.mkdirSync = (directory) => {
   const dir = directory.replace(/\\/g, "/");
   mockDirectories.push(dir);
 };
 
-fs.existsSync = directory => {
+fs.existsSync = (directory) => {
   const dir = path.dirname(directory);
   const name = path.basename(directory);
   return Object.keys(mockFiles).includes(dir) && mockFiles[dir].includes(name);
 };
 
-fs.readdirSync = directory => mockFiles[directory] || [];
+fs.readdirSync = (directory) => mockFiles[directory] || [];
 
 fs.writeFileSync = (file, data) => {
   const dir = path.dirname(file).replace(/\\/g, "/");

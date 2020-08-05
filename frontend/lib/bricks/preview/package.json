@@ -3,19 +3,21 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "jquery": "^3.0.0",
+    "@coremedia/brick-node-decoration-service": "^1.0.0",
     "@coremedia/brick-utils": "^1.0.0",
-    "@coremedia/brick-node-decoration-service": "^1.0.0"
+    "jquery": "^3.0.0"
   },
   "devDependencies": {
-    "prettier": "^1.0.0"
+    "prettier": "^2.0.5"
   },
   "scripts": {
-    "prettier": "prettier \"**/*\" --write"
+    "prettier": "prettier --write \"src/**/*.{js,json}\""
   },
   "coremedia": {
     "type": "brick",
     "init": "src/js/init.js",
-    "smartImport": ["preview"]
+    "smartImport": [
+      "preview"
+    ]
   }
 }

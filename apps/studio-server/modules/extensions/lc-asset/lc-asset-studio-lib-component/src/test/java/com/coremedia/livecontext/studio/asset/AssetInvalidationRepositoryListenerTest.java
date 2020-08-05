@@ -1,7 +1,6 @@
 package com.coremedia.livecontext.studio.asset;
 
 import com.coremedia.blueprint.base.livecontext.util.CommerceReferenceHelper;
-import com.coremedia.blueprint.common.contentbeans.CMPicture;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
@@ -10,7 +9,6 @@ import com.coremedia.ecommerce.studio.rest.cache.CommerceCacheInvalidationSource
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -56,7 +54,7 @@ public class AssetInvalidationRepositoryListenerTest {
     when(event.getContent()).thenReturn(content);
     when(content.getRepository()).thenReturn(repository);
     when(content.getType()).thenReturn(cmPictureType);
-    when(cmPictureType.isSubtypeOf(CMPicture.NAME)).thenReturn(true);
+    when(cmPictureType.isSubtypeOf(AssetInvalidationRepositoryListener.CMPICTURE)).thenReturn(true);
   }
 
   @Test

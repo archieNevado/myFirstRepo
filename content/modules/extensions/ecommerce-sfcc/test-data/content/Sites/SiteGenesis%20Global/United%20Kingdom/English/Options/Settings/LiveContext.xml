@@ -115,7 +115,6 @@
 <BooleanProperty Name="livecontext.policy.commerce-product-links">true</BooleanProperty>
 <BooleanProperty Name="livecontext.policy.commerce-page-links">true</BooleanProperty>
 <BooleanProperty Name="livecontext.policy.commerce-microsite-links">true</BooleanProperty>
-<BooleanProperty Name="p13n-dynamic-includes-enabled">true</BooleanProperty>
 </Struct>
 </settings>
 <identifier></identifier>

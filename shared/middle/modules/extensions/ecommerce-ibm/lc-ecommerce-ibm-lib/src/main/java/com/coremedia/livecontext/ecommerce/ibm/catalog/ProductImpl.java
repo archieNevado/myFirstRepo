@@ -9,8 +9,6 @@ import com.coremedia.livecontext.ecommerce.catalog.VariantFilter;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
-import com.coremedia.livecontext.ecommerce.inventory.AvailabilityInfo;
-import com.coremedia.livecontext.ecommerce.inventory.AvailabilityService;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -29,8 +27,6 @@ public class ProductImpl extends ProductBase {
 
   private List<String> variantAxis;
   private List<ProductVariant> variants;
-
-  private AvailabilityService availabilityService;
 
   @NonNull
   @Override
@@ -156,35 +152,6 @@ public class ProductImpl extends ProductBase {
 
   @Override
   @NonNull
-  public Map<ProductVariant, AvailabilityInfo> getAvailabilityMap() {
-    return availabilityService.getAvailabilityInfo(this.getVariants());
-  }
-
-  @Override
-  public float getTotalStockCount() {
-    Map<ProductVariant, AvailabilityInfo> availabilityMap = getAvailabilityMap();
-    float result = 0;
-    for (Map.Entry<ProductVariant, AvailabilityInfo> entry : availabilityMap.entrySet()) {
-      result += entry.getValue().getQuantity();
-    }
-
-    return result;
-  }
-
-  @Override
-  public boolean isAvailable() {
-    // a product is available if at least one product variant is available
-    boolean result = false;
-
-    for (ProductVariant variant : getVariants()) {
-      result = result || variant.isAvailable();
-    }
-
-    return result;
-  }
-
-  @Override
-  @NonNull
   public List<Object> getVariantAxisValues(@NonNull String axisName, @NonNull List<VariantFilter> filters) {
     List<Object> result = new ArrayList<>();
 
@@ -206,15 +173,6 @@ public class ProductImpl extends ProductBase {
     }
 
     return getVariantAxisValues(axisName, singletonList(filter));
-  }
-
-  @SuppressWarnings("unused")
-  public AvailabilityService getAvailabilityService() {
-    return availabilityService;
-  }
-
-  public void setAvailabilityService(AvailabilityService availabilityService) {
-    this.availabilityService = availabilityService;
   }
 
   @Override

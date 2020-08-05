@@ -2,7 +2,6 @@ package com.coremedia.livecontext.studio.asset;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.util.CommerceReferenceHelper;
-import com.coremedia.blueprint.common.contentbeans.CMPicture;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
@@ -14,7 +13,6 @@ import com.coremedia.rest.intercept.WriteReport;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -74,7 +72,7 @@ public class AssetInvalidationWritePostProcessorTest {
     when(report.getEntity()).thenReturn(content);
 
     Map<String, Object> properties = new HashMap<>();
-    properties.put(CMPicture.DATA, new Object());
+    properties.put(AssetInvalidationWritePostProcessor.CMPICTURE_DATA, new Object());
     when(report.getOverwrittenProperties()).thenReturn(properties);
 
     when(content.getRepository()).thenReturn(repository);

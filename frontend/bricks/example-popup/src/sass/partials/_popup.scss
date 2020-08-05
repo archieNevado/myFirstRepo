@@ -83,6 +83,12 @@
     }
   }
 
+  &--hide-button {
+    .#{$cm-popup-prefix}__button {
+      display: none;
+    }
+  }
+
   // avoid flickering
   &__video {
     @include stretch-absolute();

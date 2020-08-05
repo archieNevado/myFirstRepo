@@ -18,8 +18,6 @@ x-development-boot-envs:
   # that directory to inspect the heapdumps
   HEAP_DUMP_ON_OOM: "${HEAP_DUMP_ON_OOM:-true}"
   JAVA_OPTS: "-Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses -XX:MetaspaceSize=64m -XX:MaxMetaspaceSize=192m -XX:TieredStopAtLevel=1"
-  # see description on default.yml. For development purposes the default is set to true.
-  SPRING_BOOT_EXPLODED_APP: "${SPRING_BOOT_EXPLODED_APP:-true}"
 
 services:
   mysql:
@@ -368,6 +366,7 @@ services:
       traefik.caas.frontend.rule: Host:headless-server-preview.${ENVIRONMENT_FQDN:-docker.localhost}
     volumes:
       - heapdumps:/coremedia/heapdumps
+      - headless-server-preview-cache:/coremedia/cache
 
   headless-server-live:
     ports:
@@ -400,6 +399,7 @@ services:
       - application
     volumes:
       - heapdumps:/coremedia/heapdumps
+      - headless-server-live-cache:/coremedia/cache
 
   overview:
     image: ${REPOSITORY_PREFIX:-coremedia}/overview
@@ -426,3 +426,5 @@ volumes:
   cae-live-cache: {}
   studio-cache: {}
   heapdumps: {}
+  headless-server-preview-cache: {}
+  headless-server-live-cache: {}

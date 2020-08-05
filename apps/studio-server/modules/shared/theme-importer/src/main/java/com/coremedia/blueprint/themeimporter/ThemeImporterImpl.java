@@ -16,13 +16,15 @@ import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.themeimporter.ThemeImporter;
 import com.coremedia.cap.themeimporter.ThemeImporterResult;
 import com.coremedia.cap.themeimporter.ThemeImporterResultImpl;
-import com.coremedia.mimetype.MimeTypeService;
 import com.coremedia.common.util.PathUtil;
 import com.coremedia.common.util.WordAbbreviator;
+import com.coremedia.mimetype.MimeTypeService;
 import com.coremedia.xml.Markup;
 import com.coremedia.xml.MarkupFactory;
 import com.coremedia.xml.XmlUtil5;
 import com.google.common.annotations.VisibleForTesting;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -30,12 +32,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import javax.activation.MimeTypeParseException;
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.xml.bind.DatatypeConverter;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -341,11 +338,9 @@ public class ThemeImporterImpl implements ThemeImporter {
 
   private static ThemeDefinition domToThemeDefinition(Document document) {
     try {
-      JAXBContext jaxbContext = JAXBContext.newInstance(ThemeDefinition.class);
-      Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-      return (ThemeDefinition) jaxbUnmarshaller.unmarshal(document);
-    } catch (JAXBException e) {
-      LOGGER.error("Cannot extract theme from DOM", e);
+      return ThemeDefinitionHelper.themeDefinitionFromDom(document);
+    } catch (Exception e) {
+      LOGGER.error("Cannot create theme definition, ignore", e);
       return null;
     }
   }

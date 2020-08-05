@@ -22,29 +22,23 @@ import org.springframework.context.annotation.ImportResource;
 public class CommerceLinkConfiguration {
 
   @Bean
-  CommerceLinkResolver genericClientLinkResolver(ExternalSeoSegmentBuilder seoSegmentBuilder) {
+  CommerceLinkResolver commerceLinkResolver(ExternalSeoSegmentBuilder seoSegmentBuilder) {
     return new CommerceLinkResolver(seoSegmentBuilder);
   }
 
   @Bean
-  CommerceLinkHelper commerceLinkHelper(CommerceLedLinkBuilderHelper commerceLedPageExtension, SettingsService settingsService,
+  CommerceLinkHelper commerceLinkHelper(CommerceLedLinkBuilderHelper commerceLedPageExtension,
+                                        SettingsService settingsService,
                                         CommerceConnectionSupplier commerceConnectionSupplier) {
     return new CommerceLinkHelper(commerceLedPageExtension, settingsService, commerceConnectionSupplier);
   }
 
   @Bean
-  CommerceContentLedLinks commerceContentLedLinks(CommerceLinkHelper commerceLinkHelper,
-                                                  ExternalSeoSegmentBuilder seoSegmentBuilder) {
-    return new CommerceContentLedLinks(commerceLinkHelper, seoSegmentBuilder);
+  CommerceLinks commerceLinks(CommerceLinkHelper commerceLinkHelper,
+                              ExternalSeoSegmentBuilder seoSegmentBuilder) {
+    var commerceStudioLinks = new CommerceStudioLinks(seoSegmentBuilder, commerceLinkHelper);
+    var commerceContentLedLinks = new CommerceContentLedLinks(commerceLinkHelper, seoSegmentBuilder);
+    return new CommerceLinks(commerceLinkHelper, commerceStudioLinks, commerceContentLedLinks);
   }
 
-  @Bean
-  CommerceLedLinks commerceLedLinks(CommerceLinkHelper commerceLinkHelper) {
-    return new CommerceLedLinks(commerceLinkHelper);
-  }
-
-  @Bean
-  CommerceStudioLinks commerceStudioLinks(ExternalSeoSegmentBuilder seoSegmentBuilder, CommerceLinkHelper commerceLinkHelper) {
-    return new CommerceStudioLinks(seoSegmentBuilder, commerceLinkHelper);
-  }
 }

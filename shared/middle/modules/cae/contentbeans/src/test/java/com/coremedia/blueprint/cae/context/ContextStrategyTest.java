@@ -7,11 +7,13 @@ import com.coremedia.blueprint.testing.ContentTestConfiguration;
 import com.coremedia.blueprint.testing.ContentTestHelper;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -25,6 +27,21 @@ import java.util.Locale;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {ContextStrategyTest.LocalConfig.class, XmlRepoConfiguration.class})
 public class ContextStrategyTest {
+
+  @Configuration
+  @EnableConfigurationProperties({
+          DeliveryConfigurationProperties.class
+  })
+  @ImportResource(value = {"classpath:/framework/spring/blueprint-contentbeans.xml", "classpath:/framework/spring/blueprint-contextstrategy.xml"},
+          reader = ResourceAwareXmlBeanDefinitionReader.class)
+  @Import({ContentTestConfiguration.class, XmlRepoConfiguration.class})
+  public static class LocalConfig {
+    @Bean
+    public XmlUapiConfig xmlUapiConfig() {
+      return new XmlUapiConfig("classpath:/com/coremedia/blueprint/cae/context/context.xml");
+    }
+  }
+
   @Inject
   private ContentTestHelper contentTestHelper;
 
@@ -65,16 +82,5 @@ public class ContextStrategyTest {
 
     // Final Assert
     Assert.assertEquals(englishChannelOnThirdLevel, computedContext);
-  }
-
-  @Configuration
-  @ImportResource(value = {"classpath:/framework/spring/blueprint-contentbeans.xml", "classpath:/framework/spring/blueprint-contextstrategy.xml"},
-          reader = ResourceAwareXmlBeanDefinitionReader.class)
-  @Import({ContentTestConfiguration.class, XmlRepoConfiguration.class})
-  public static class LocalConfig {
-    @Bean
-    public XmlUapiConfig xmlUapiConfig() {
-      return new XmlUapiConfig("classpath:/com/coremedia/blueprint/cae/context/context.xml");
-    }
   }
 }

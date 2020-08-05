@@ -16,6 +16,12 @@ public interface CallToActionButtonSettings {
   Object getTarget();
 
   /**
+   * @return the hash that will be appended to the link of the Call-ToAction Button
+   * @cm.template.api
+   */
+  String getHash();
+
+  /**
    * @return the text to show on the Call-To-Action Button
    * @cm.template.api
    */

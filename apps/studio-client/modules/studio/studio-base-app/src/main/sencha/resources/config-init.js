@@ -42,10 +42,31 @@ joo = {
 
     xhr.onload = function() {
       if (xhr.status === 200) {
-        window.coremediaRemoteServiceUri = coremediaRemoteServiceUri;
-        loadScripts()
+        xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+          if (xhr.status === 200) {
+            var csp = xhr.getResponseHeader("Content-Security-Policy");
+            if (csp) {
+              // strip off frame-ancestors, this cannot be achieved with CSP in <meta> tags
+              csp = csp.split(";").filter(function (directive) {
+                var directiveParts = directive.trim().split(/\s+/g);
+                return directiveParts[0].trim().toLowerCase() !== "frame-ancestors";
+              }).join(";");
+              var metaCsp = document.createElement("meta");
+              metaCsp.httpEquiv = "Content-Security-Policy";
+              metaCsp.content = csp;
+              document.head.appendChild(metaCsp);
+            }
+            window.coremediaRemoteServiceUri = coremediaRemoteServiceUri;
+            loadScripts()
+          } else {
+            failure();
+          }
+        }
+        xhr.open('GET', coremediaRemoteServiceUri + '../index.html' + (document.location.search || ""));
+        xhr.send();
       } else {
-        failure()
+        failure();
       }
     };
 

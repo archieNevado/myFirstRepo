@@ -1,20 +1,15 @@
 package com.coremedia.livecontext.fragment.links;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextHelper;
-import com.coremedia.blueprint.cae.handlers.PreviewHandler;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.livecontext.contentbeans.CMExternalPage;
-import com.coremedia.livecontext.contentbeans.LiveContextExternalChannel;
-import com.coremedia.livecontext.contentbeans.LiveContextExternalProduct;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
-import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.link.PreviewUrlService;
 import com.coremedia.livecontext.ecommerce.link.QueryParam;
 import com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.ExternalSeoSegmentBuilder;
-import com.coremedia.objectserver.web.links.Link;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -25,78 +20,37 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.coremedia.blueprint.base.links.UriConstants.RequestParameters.VIEW_PARAMETER;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.link.UrlUtil.convertToQueryParamList;
-import static com.coremedia.blueprint.cae.handlers.HandlerBase.FRAGMENT_PREVIEW;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
-/**
- * Link building for the studio preview of commerce beans.
- * <p/>
- * The commerce specific link building to shop pages takes place in the commerce specific commerce adapter implementation.
- * <p/>
- * There are competing commerce specific link schemes, which need to be executed in this specific order:
- * <ol>
- *   <li>{@link CommerceLedLinks}</li>
- *   <li>{@link CommerceStudioLinks}</li>
- *   <li>{@link CommerceContentLedLinks}</li>
- * </ol>
- */
 @DefaultAnnotation(NonNull.class)
-@Link
-public class CommerceStudioLinks {
+class CommerceStudioLinks {
 
   private final ExternalSeoSegmentBuilder seoSegmentBuilder;
   private final CommerceLinkHelper commerceLinkHelper;
 
-  public CommerceStudioLinks(ExternalSeoSegmentBuilder seoSegmentBuilder, CommerceLinkHelper commerceLinkHelper) {
+  CommerceStudioLinks(ExternalSeoSegmentBuilder seoSegmentBuilder, CommerceLinkHelper commerceLinkHelper) {
     this.seoSegmentBuilder = seoSegmentBuilder;
     this.commerceLinkHelper = commerceLinkHelper;
   }
 
-  @Link(type = Category.class, order = 2)
-  @Nullable
-  public UriComponents buildLinkForCategory(Category category, Map<String, Object> linkParameters,
-                                            HttpServletRequest request) {
-    if (!isStudioPreviewRequest(request) || !commerceLinkHelper.useCommerceCategoryLinks(request)) {
-      // not responsible
-      return null;
-    }
-
-    Optional<PreviewUrlService> previewUrlService = getPreviewUrlService(category);
+  Optional<UriComponents> buildLinkForCategory(Category category, Map<String, Object> linkParameters,
+                                               HttpServletRequest request) {
     StoreContext storeContext = StoreContextHelper.findStoreContext(request).orElse(category.getContext());
-
-    return previewUrlService
-            .map(urlService -> urlService.getCategoryUrl(category, storeContext, convertToQueryParamList(linkParameters), request))
-            .orElse(null);
+    return CommerceLinkUtils.getPreviewUrlService(storeContext)
+            .map(urlService -> urlService.getCategoryUrl(category, storeContext, convertToQueryParamList(linkParameters), request));
   }
 
-  @Link(type = LiveContextExternalChannel.class, order = 2)
-  @Nullable
-  public UriComponents buildLinkForExternalChannel(LiveContextExternalChannel augmentedCategory,
-                                                   Map<String, Object> linkParameters, HttpServletRequest request) {
-    Category category = augmentedCategory.getCategory();
-    if (category == null) {
-      return null;
-    }
-
-    return buildLinkForCategory(category, linkParameters, request);
+  Optional<UriComponents> buildLinkForProduct(Product product, Map<String, Object> linkParameters,
+                                              HttpServletRequest request) {
+    return CommerceLinkUtils.getPreviewUrlService(product.getContext())
+            .map(previewUrlService -> buildLinkForProduct(product, linkParameters, request, previewUrlService));
   }
 
-  @Link(type = Product.class, order = 2)
-  @Nullable
-  public UriComponents buildLinkForProduct(Product product, Map<String, Object> linkParameters,
-                                           HttpServletRequest request) {
-
-    if (!isStudioPreviewRequest(request) || !commerceLinkHelper.useCommerceProductLinks(request)) {
-      // not responsible
-      return null;
-    }
-
-    PreviewUrlService previewUrlService = getPreviewUrlService(product).orElse(null);
-    if (previewUrlService == null) {
-      return null;
-    }
+  UriComponents buildLinkForProduct(Product product,
+                                    Map<String, Object> linkParameters,
+                                    HttpServletRequest request,
+                                    PreviewUrlService previewUrlService) {
     Category category = product.getCategory();
     List<QueryParam> queryParamList = convertToQueryParamList(linkParameters);
     StoreContext storeContext = StoreContextHelper.findStoreContext(request).orElse(category.getContext());
@@ -104,40 +58,29 @@ public class CommerceStudioLinks {
     return previewUrlService.getProductUrl(product, category, storeContext, queryParamList, request);
   }
 
-  @Link(type = LiveContextExternalProduct.class, order = 2)
-  @Nullable
-  public UriComponents buildLinkForExternalProduct(LiveContextExternalProduct externalProduct,
-                                                   Map<String, Object> linkParameters, HttpServletRequest request) {
-    Product product = externalProduct.getProduct();
-    if (product == null) {
-      return null;
-    }
-
-    return buildLinkForProduct(product, linkParameters, request);
+  Optional<UriComponents> buildLinkForExternalPage(CMExternalPage externalPage,
+                                                   Map<String, Object> linkParameters,
+                                                   HttpServletRequest request) {
+    return commerceLinkHelper.findCommerceConnection(externalPage)
+            .flatMap(connection -> buildLinkForExternalPage(externalPage, linkParameters, request, connection));
   }
 
-  @Link(type = CMExternalPage.class, order = 2)
-  @Nullable
-  public UriComponents buildLinkForExternalPage(CMExternalPage externalPage, Map<String, Object> linkParameters,
-                                                HttpServletRequest request) {
-    if (!isStudioPreviewRequest(request)) {
-      // not responsible
-      return null;
-    }
+  private Optional<UriComponents> buildLinkForExternalPage(CMExternalPage bean,
+                                                           Map<String, Object> linkParameters,
+                                                           HttpServletRequest request,
+                                                           CommerceConnection connection) {
+    return connection.getPreviewUrlService()
+            .map(previewUrlService -> buildLinkForExternalPage(bean, linkParameters, request, connection, previewUrlService));
+  }
 
-    CommerceConnection commerceConnection = commerceLinkHelper.findCommerceConnection(externalPage).orElse(null);
-    if (commerceConnection == null) {
-      return null;
-    }
-
-    PreviewUrlService previewUrlService = commerceConnection.getPreviewUrlService().orElse(null);
-    if (previewUrlService == null) {
-      return null;
-    }
-
-    StoreContext storeContext = StoreContextHelper.findStoreContext(request).orElse(commerceConnection.getStoreContext());
+  private UriComponents buildLinkForExternalPage(CMExternalPage bean,
+                                                 Map<String, Object> linkParameters,
+                                                 HttpServletRequest request,
+                                                 CommerceConnection connection,
+                                                 PreviewUrlService previewUrlService) {
+    StoreContext storeContext = StoreContextHelper.findStoreContext(request).orElse(connection.getStoreContext());
     // build the studio preview link
-    return buildPreviewLinkForExternalPage(externalPage, linkParameters, previewUrlService, storeContext, request);
+    return buildPreviewLinkForExternalPage(bean, linkParameters, previewUrlService, storeContext, request);
   }
 
   @Nullable
@@ -156,26 +99,27 @@ public class CommerceStudioLinks {
     return previewUrlService.getExternalPageSeoUrl(externalId, storeContext, queryParamList, request);
   }
 
-  @Link(type = CMChannel.class, order = 2)
-  @Nullable
-  public UriComponents buildLinkForCMChannel(CMChannel channel, Map<String, Object> linkParameters,
-                                             HttpServletRequest request) {
+  Optional<UriComponents> buildLinkForCMChannel(CMChannel channel,
+                                                Map<String, Object> linkParameters,
+                                                HttpServletRequest request) {
 
-    if (!isStudioPreviewRequest(request) || !commerceLinkHelper.useCommerceLinkForChannel(channel)) {
-      // not responsible
-      return null;
-    }
+    return commerceLinkHelper.findCommerceConnection(channel)
+            .flatMap(commerceConnection -> buildLinkForCMChannel(channel, linkParameters, request, commerceConnection));
+  }
 
-    CommerceConnection commerceConnection = commerceLinkHelper.findCommerceConnection(channel).orElse(null);
-    if (commerceConnection == null) {
-      return null;
-    }
+  Optional<UriComponents> buildLinkForCMChannel(CMChannel channel,
+                                                Map<String, Object> linkParameters,
+                                                HttpServletRequest request,
+                                                CommerceConnection commerceConnection) {
+    return commerceConnection.getPreviewUrlService()
+            .map(service -> buildLinkForChannel(channel, linkParameters, request, commerceConnection, service));
+  }
 
-    PreviewUrlService previewUrlService = commerceConnection.getPreviewUrlService().orElse(null);
-    if (previewUrlService == null) {
-      return null;
-    }
-
+  private UriComponents buildLinkForChannel(CMChannel channel,
+                                            Map<String, Object> linkParameters,
+                                            HttpServletRequest request,
+                                            CommerceConnection commerceConnection,
+                                            PreviewUrlService previewUrlService) {
     String seoPath = seoSegmentBuilder.asSeoSegment(channel, channel);
     List<QueryParam> queryParamList = convertToQueryParamList(linkParameters);
 
@@ -183,11 +127,4 @@ public class CommerceStudioLinks {
     return previewUrlService.getContentUrl(seoPath, storeContext, queryParamList, request);
   }
 
-  private static Optional<PreviewUrlService> getPreviewUrlService(CommerceBean commerceBean) {
-    return commerceBean.getContext().getConnection().getPreviewUrlService();
-  }
-
-  private static boolean isStudioPreviewRequest(HttpServletRequest request) {
-    return PreviewHandler.isStudioPreviewRequest(request) || FRAGMENT_PREVIEW.equals(request.getParameter(VIEW_PARAMETER));
-  }
 }

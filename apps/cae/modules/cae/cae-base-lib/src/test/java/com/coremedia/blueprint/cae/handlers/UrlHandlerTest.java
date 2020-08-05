@@ -166,7 +166,8 @@ public class UrlHandlerTest {
 
   @Test
   public void testHandleRequest_notFound() {
-    when(idProvider.parseId(id)).thenReturn(null);
+    when(idProvider.parseId(id)).thenReturn(new IdProvider.UnknownId(id) {});
+    when(idProvider.parseId(contextId)).thenReturn(context);
     List<UrlServiceResponse> formatResponse = urlHandler.handleId(idWithContext, request, response);
 
     assertTrue(formatResponse.stream().findFirst().isPresent());

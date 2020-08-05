@@ -5,7 +5,7 @@
  * @param  {string} brickName the name of the brick
  * @return {string}
  */
-const initPackageJson = brickName => {
+const initPackageJson = (brickName) => {
   const content = {
     name: `@coremedia/brick-${brickName}`,
     version: "1.0.0",
@@ -47,7 +47,7 @@ const initBrickPrettierignore = () => `/*
  * @param  {string} brickName
  * @return {string}
  */
-const initBrickIndexJs = brickName => `import "./${brickName}.js";
+const initBrickIndexJs = (brickName) => `import "./${brickName}.js";
 `;
 
 /**
@@ -72,7 +72,7 @@ export function consolePrint($text) {
  * @param  {string} brickName
  * @return {string}
  */
-const initBrickInitJs = brickName => `//import $ from "jquery";
+const initBrickInitJs = (brickName) => `//import $ from "jquery";
 import * as ${brickName} from "./${brickName}";
 // --- JQUERY DOCUMENT READY -------------------------------------------------------------------------------------------
 //$(function () {
@@ -84,7 +84,9 @@ import * as ${brickName} from "./${brickName}";
  * returns content for _partials.scss
  * @return {string}
  */
-const initBrickPartialsScss = brickName => `// make sure to import partials sass files in _partials.scss
+const initBrickPartialsScss = (
+  brickName
+) => `// make sure to import partials sass files in _partials.scss
 // the smart-import ensures, that all sass partials from depending bricks are loaded
 @import "?smart-import-partials";
 @import "partials/${brickName}";
@@ -95,7 +97,9 @@ const initBrickPartialsScss = brickName => `// make sure to import partials sass
  * returns content for _variables.scss
  * @return {string}
  */
-const initBrickVariablesScss = brickName => `// make sure to import variables sass files in _variables.scss
+const initBrickVariablesScss = (
+  brickName
+) => `// make sure to import variables sass files in _variables.scss
 @import "variables/${brickName}";
 // the smart-import ensures, that all sass variables from depending bricks are loaded
 @import "?smart-import-variables";

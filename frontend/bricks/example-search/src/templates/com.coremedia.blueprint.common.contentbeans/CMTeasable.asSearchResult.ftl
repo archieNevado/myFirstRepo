@@ -40,7 +40,7 @@
     </h3>
 
     <#-- teaserText or htmlDescription as fallback -->
-    <#if teaserText?has_content>
+    <#if !bp.isEmptyRichtext(self.teaserText!"")>
       <p<@preview.metadata "properties.teaserText" />>
         <@search.renderDate date=self.externallyDisplayedDate />
         <span<@preview.metadata "properties.teaserText" />><@utils.renderWithLineBreaks text=teaserText /></span>

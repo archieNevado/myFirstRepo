@@ -48,7 +48,7 @@
       List of handler LinkResolvers.
       This list might be populated with customizers.
     </description>
-    <ref bean="genericClientLinkResolver"/>
+    <ref bean="commerceLinkResolver"/>
   </util:list>
 
   <bean id="commerceLedLinkBuilderHelper" class="com.coremedia.livecontext.logictypes.CommerceLedLinkBuilderHelper">

@@ -6,6 +6,8 @@ import com.coremedia.blueprint.cae.view.HashBasedFragmentHandler;
 import com.coremedia.objectserver.view.RenderNode;
 import org.junit.Test;
 
+import java.util.function.Predicate;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -20,8 +22,8 @@ public class DownloadPortalPredicateTest {
     when(node.getBean()).thenReturn(overview);
     when(node.getView()).thenReturn(null);
 
-    DownloadPortalPredicate predicate = new DownloadPortalPredicate();
-    assertTrue(predicate.apply(node));
+    Predicate<RenderNode> predicate = new DownloadPortalPredicate();
+    assertTrue(predicate.test(node));
   }
 
   @Test
@@ -31,8 +33,8 @@ public class DownloadPortalPredicateTest {
     when(node.getBean()).thenReturn(overview);
     when(node.getView()).thenReturn("anyView");
 
-    DownloadPortalPredicate predicate = new DownloadPortalPredicate();
-    assertFalse(predicate.apply(node));
+    Predicate<RenderNode> predicate = new DownloadPortalPredicate();
+    assertFalse(predicate.test(node));
   }
 
   @Test

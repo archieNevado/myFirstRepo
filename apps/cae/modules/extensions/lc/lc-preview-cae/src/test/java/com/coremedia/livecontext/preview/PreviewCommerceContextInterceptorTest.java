@@ -1,71 +1,96 @@
 package com.coremedia.livecontext.preview;
 
+import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.id.IdProvider;
+import com.coremedia.id.IdScheme;
 import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockHttpServletRequest;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class PreviewCommerceContextInterceptorTest {
+@ExtendWith(MockitoExtension.class)
+class PreviewCommerceContextInterceptorTest {
 
   private PreviewCommerceContextInterceptor interceptor;
+
+  @Mock
   private LiveContextSiteResolver sitesResolver;
+  @Mock
   private SitesService sitesService;
-  private HttpServletRequest request;
-  private Map<String, String[]> params;
+  @Mock
+  private IdScheme idScheme;
+  @Mock
   private Site abcSite;
+  @Mock
+  private Content content;
 
-  @Before
-  public void setup() {
-    interceptor = new PreviewCommerceContextInterceptor();
-    sitesResolver = mock(LiveContextSiteResolver.class);
-    sitesService = mock(SitesService.class);
-    abcSite = mock(Site.class);
-    when(sitesService.getSite("abc")).thenReturn(abcSite);
-    interceptor.setSitesService(sitesService);
+  private final IdProvider idProvider = new IdProvider();
+  private final MockHttpServletRequest request = new MockHttpServletRequest();
+
+  @BeforeEach
+  void setup() {
+    idProvider.setSchemes(List.of(idScheme));
+    interceptor = new PreviewCommerceContextInterceptor(sitesService, idProvider);
     interceptor.setSiteResolver(sitesResolver);
-    request = mock(HttpServletRequest.class);
-    params = new HashMap<>();
-    when(request.getParameterMap()).thenReturn(params);
   }
 
   @Test
-  public void testWithContentId() {
-    String id = "123";
-    params.put("id", new String[]{id});
+  void testWithNumericContentId() {
+    request.addParameter("id", "123");
 
-    interceptor.findSite(request, "path");
+    when(idScheme.parseId("coremedia:///cap/content/123")).thenReturn(content);
+    when(content.getId()).thenReturn("coremedia:///cap/content/123");
+    when(sitesResolver.findSiteForContentId(123)).thenReturn(abcSite);
 
-    verify(sitesResolver).findSiteForContentId(Integer.parseInt(id));
+    Optional<Site> site = interceptor.findSite(request, "ignoredPath");
+    assertThat(site).contains(abcSite);
+
+    verify(sitesResolver).findSiteForContentId(123);
   }
 
   @Test
-  public void testWithSiteId() {
-    String siteId = "abc";
-    params.put("site", new String[]{siteId});
+  void testWithNormalizedContentId() {
+    request.addParameter("id", "coremedia:///cap/content/123");
 
-    Optional<Site> site = interceptor.findSite(request, "path");
+    when(idScheme.parseId("coremedia:///cap/content/123")).thenReturn(content);
+    when(content.getId()).thenReturn("coremedia:///cap/content/123");
+    when(sitesResolver.findSiteForContentId(123)).thenReturn(abcSite);
+
+    Optional<Site> site = interceptor.findSite(request, "ignoredPath");
+    assertThat(site).contains(abcSite);
+
+    verify(sitesResolver).findSiteForContentId(123);
+  }
+
+  @Test
+  void testWithSiteId() {
+    when(sitesService.getSite("abc")).thenReturn(abcSite);
+    request.addParameter("site", "abc");
+
+    Optional<Site> site = interceptor.findSite(request, "ignoredPath");
     assertThat(site).contains(abcSite);
   }
 
   @Test
-  public void testWithElasticSocialId() {
-    String id = "es:comment:539ae297e4b0971a9a345115";
-    params.put("id", new String[]{id});
+  void testWithElasticSocialId() {
+    request.addParameter("id", "es:comment:539ae297e4b0971a9a345115");
 
-    interceptor.findSite(request, "path");
+    Optional<Site> site = interceptor.findSite(request, "ignoredPath");
+    assertThat(site).isEmpty();
 
     verify(sitesResolver, never()).findSiteForContentId(anyInt());
   }

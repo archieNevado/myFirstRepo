@@ -103,7 +103,7 @@
 <LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../Editorial/Personalization/Personalized%20Teaser.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Editorial/Personalization/Personalized%20Teaser"/>
 </Struct>
 <Struct>
-<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/Consumers/Consumers%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Navigation/Consumers/Consumers%20Page"/>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../Editorial/Homepage/Consumers/Consumers%20Page%20Skiplink.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Editorial/Homepage/Consumers/Consumers%20Page%20Skiplink"/>
 </Struct>
 <Struct>
 <LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/Company/Company%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Navigation/Company/Company%20Page"/>

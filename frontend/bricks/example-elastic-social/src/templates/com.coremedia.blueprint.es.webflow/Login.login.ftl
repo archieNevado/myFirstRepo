@@ -1,7 +1,7 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.elastic.social.cae.action.AuthenticationState" -->
 <#-- @ftlvariable name="flowExecutionKey" type="java.lang.String" -->
 <#-- @ftlvariable name="nextUrl" type="java.lang.String" -->
-<#-- @ftlvariable name="_CSRFToken" type="java.lang.String" -->
+<#-- @ftlvariable name="_csrf" type="org.springframework.security.web.csrf.CsrfToken" -->
 
 <#import "*/node_modules/@coremedia/brick-utils/src/freemarkerLibs/components.ftl" as components />
 <#import "../../freemarkerLibs/elastic-social.ftl" as elasticSocial />
@@ -21,7 +21,7 @@
     <#-- login -->
     <h1 class="cm-form__headline"><@cm.message "login_sign_in" /></h1>
     <form method="post">
-      <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}">
+      <#if _csrf?has_content><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"></#if>
       <input type="hidden" name="execution" value="${flowExecutionKey!""}">
       <input type="hidden" name="nextUrl" value="${nextUrl!""}">
       <input type="hidden" name="_eventId_submit">

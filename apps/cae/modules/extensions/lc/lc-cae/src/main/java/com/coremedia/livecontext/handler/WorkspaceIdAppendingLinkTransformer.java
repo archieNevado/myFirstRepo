@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.handler;
 
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
 import com.coremedia.blueprint.ecommerce.cae.AbstractCommerceContextInterceptor;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -7,7 +8,7 @@ import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 import com.coremedia.objectserver.web.links.LinkTransformer;
 import com.coremedia.objectserver.web.links.ParameterAppendingLinkTransformer;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -23,11 +24,16 @@ public class WorkspaceIdAppendingLinkTransformer implements LinkTransformer {
 
   private final ParameterAppendingLinkTransformer parameterAppender;
 
-  private boolean preview;
+  private DeliveryConfigurationProperties deliveryConfigurationProperties;
 
   public WorkspaceIdAppendingLinkTransformer() {
     parameterAppender = new ParameterAppendingLinkTransformer();
     parameterAppender.setParameterName(AbstractCommerceContextInterceptor.QUERY_PARAMETER_WORKSPACE_ID);
+  }
+
+  @Autowired
+  public void setDeliveryConfigurationProperties(DeliveryConfigurationProperties deliveryConfigurationProperties) {
+    this.deliveryConfigurationProperties = deliveryConfigurationProperties;
   }
 
   @PostConstruct
@@ -38,7 +44,7 @@ public class WorkspaceIdAppendingLinkTransformer implements LinkTransformer {
   @Override
   public String transform(String source, Object bean, String view, @NonNull HttpServletRequest request,
                           @NonNull HttpServletResponse response, boolean forRedirect) {
-    if (preview) {
+    if (isPreview()) {
       Optional<WorkspaceId> workspaceId = findWorkspaceId();
       if (workspaceId.isPresent()) {
         parameterAppender.setParameterValue(workspaceId.get().value());
@@ -57,11 +63,6 @@ public class WorkspaceIdAppendingLinkTransformer implements LinkTransformer {
   }
 
   public boolean isPreview() {
-    return preview;
-  }
-
-  @Value("${cae.is.preview}")
-  public void setPreview(boolean preview) {
-    this.preview = preview;
+    return deliveryConfigurationProperties.isPreviewMode();
   }
 }

@@ -6,6 +6,7 @@ import com.coremedia.blueprint.localization.LocalResourcesBundleResolver;
 import com.coremedia.blueprint.localization.LocalizationService;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.struct.StructService;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,14 +31,13 @@ public class LocalizationServiceConfiguration {
   private StructService structService;
   private SitesService sitesService;
 
-  private boolean useLocalResources;
   private File blueprintDir;
 
   /**
    * Set the file path to the local blueprint workspace, excl. the modules
    * directory.
    * <p>
-   * Required if {@link #setUseLocalResources(boolean)} is true.
+   * Required if property delivery.local-resources is true.
    */
   @Value("${coremedia.blueprint.project.directory:}")
   public void setBlueprintPath(String blueprintPath) {
@@ -47,17 +47,6 @@ public class LocalizationServiceConfiguration {
         throw new IllegalArgumentException("blueprintPath \"" + blueprintPath + "\" is no suitable directory.");
       }
     }
-  }
-
-  /**
-   * Activate a {@link LocalResourcesBundleResolver} for faster frontend
-   * development roundtrips.
-   * <p>
-   * Do not set in production setups!
-   */
-  @Value("${cae.use.local.resources:false}")
-  public void setUseLocalResources(boolean useLocalResources) {
-    this.useLocalResources = useLocalResources;
   }
 
   @Inject
@@ -71,9 +60,9 @@ public class LocalizationServiceConfiguration {
   }
 
   @Bean(name="localizationService")
-  public LocalizationService localizationService() {
+  public LocalizationService localizationService(DeliveryConfigurationProperties deliveryConfigurationProperties) {
     BundleResolver bundleResolver = new ContentBundleResolver();
-    if (useLocalResources && blueprintDir!=null) {
+    if (deliveryConfigurationProperties.isLocalResources() && blueprintDir!=null) {
       bundleResolver = new LocalResourcesBundleResolver(bundleResolver, structService, blueprintDir);
       LOG.info("Enabled local resource bundles in {}", blueprintDir.getAbsolutePath());
     }

@@ -3,6 +3,7 @@ package com.coremedia.livecontext.validation;
 import com.coremedia.livecontext.contentbeans.CMProductTeaser;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +26,8 @@ public class EmptyProductValidatorTest {
   private EmptyProductValidator testling;
   private Predicate predicate;
 
+  private DeliveryConfigurationProperties deliveryConfigurationProperties;
+
   @Mock(answer = Answers.RETURNS_DEEP_STUBS)
   private CMProductTeaser productTeaser;
 
@@ -33,7 +36,10 @@ public class EmptyProductValidatorTest {
 
   @Before
   public void defaultSetup() {
+    deliveryConfigurationProperties = new DeliveryConfigurationProperties();
+    deliveryConfigurationProperties.setPreviewMode(false);
     testling = new EmptyProductValidator();
+    testling.setDeliveryConfigurationProperties(deliveryConfigurationProperties);
     predicate = testling.createPredicate();
     when(productTeaser.getProduct()).thenReturn(product);
     when(productTeaser.getContent().getPath()).thenReturn("irrelevant");
@@ -51,7 +57,7 @@ public class EmptyProductValidatorTest {
 
   @Test
   public void predicateIsPreviewNoProductTeaser() {
-    testling.setPreview(true);
+    deliveryConfigurationProperties.setPreviewMode(true);
     assertTrue(predicate.test(null));
   }
 
@@ -76,7 +82,7 @@ public class EmptyProductValidatorTest {
 
   @Test
   public void predicateIsPreviewNoProduct() {
-    testling.setPreview(true);
+    deliveryConfigurationProperties.setPreviewMode(true);
     assertTrue(predicate.test(productTeaser));
     verify(productTeaser, never()).getProduct();
   }
@@ -90,7 +96,7 @@ public class EmptyProductValidatorTest {
 
   @Test
   public void predicateIsPreviewNotFoundException() {
-    testling.setPreview(true);
+    deliveryConfigurationProperties.setPreviewMode(true);
     assertTrue(predicate.test(productTeaser));
     verify(productTeaser, never()).getProduct();
   }

@@ -20,6 +20,7 @@
 </StructListProperty>
 </Struct>
 </StructProperty>
+<BooleanProperty Name="p13n-dynamic-includes-enabled">true</BooleanProperty>
 </Struct>
 </settings>
 <identifier></identifier>

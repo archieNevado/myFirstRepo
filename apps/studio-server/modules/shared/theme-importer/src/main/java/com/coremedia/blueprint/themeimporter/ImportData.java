@@ -1,11 +1,13 @@
 package com.coremedia.blueprint.themeimporter;
 
+import com.coremedia.blueprint.themeimporter.descriptors.ThemeDefinition;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.common.CapConnection;
-import com.coremedia.mimetype.MimeTypeService;
 import com.coremedia.common.util.PathUtil;
+import com.coremedia.mimetype.MimeTypeService;
 import com.coremedia.xml.XmlUtil5;
 import com.google.common.annotations.VisibleForTesting;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,12 +15,13 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import javax.activation.MimeTypeParseException;
-import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,6 +29,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -47,12 +51,16 @@ class ImportData {
   private final Map<String, String> styleSheets = createPathToObjectMap();
   private final Map<String, String> javaScripts = createPathToObjectMap();
   private final Map<String, Document> themeDescriptors = createPathToObjectMap();
-  private final Map<String, String> resourceBundles = createPathToObjectMap();
+  @VisibleForTesting
+  final Map<String, String> resourceBundles = createPathToObjectMap();
   private final Map<String, Blob> webFonts = createPathToObjectMap();
   private final Map<String, Blob> images = createPathToObjectMap();
   private final Map<String, Blob> interactiveObjects = createPathToObjectMap();
   private final Map<String, Blob> templateSets = createPathToObjectMap();
   private final Map<String, String> settings = createPathToObjectMap();
+
+  private final Map<String, byte[]> rawResourceBundles = new LinkedHashMap<>();
+
 
   // --- construct and configure ------------------------------------
 
@@ -66,6 +74,7 @@ class ImportData {
     allFileMaps.add(result);
     return result;
   }
+
 
   // --- build ------------------------------------------------------
 
@@ -82,6 +91,28 @@ class ImportData {
         }
         zipStream.closeEntry();
       }
+    }
+
+    // Now we can access the theme descriptors, determine the resource bundle
+    // encoding and turn the interim resource bundle bytes into Strings.
+    Charset encoding = resourceBundleEncoding();
+    for (Map.Entry<String, byte[]> entry : rawResourceBundles.entrySet()) {
+      String resourceBundle = IOUtils.toString(new BufferedReader(new InputStreamReader(new ByteArrayInputStream(entry.getValue()), encoding)));
+      resourceBundles.put(entry.getKey(), resourceBundle);
+    }
+    rawResourceBundles.clear();
+  }
+
+  private Charset resourceBundleEncoding() {
+    try {
+      return Charset.forName(themeDescriptors.values().stream()
+              .map(ThemeDefinitionHelper::themeDefinitionFromDom)
+              .map(ThemeDefinition::getBundleEncoding)
+              .filter(Objects::nonNull)
+              .findFirst().orElse("ISO-8859-1"));  // backward compatible default
+    } catch (Exception e) {
+      LOG.warn("Cannot determine resource bundle encoding, fallback to default ISO-8859-1", e);
+      return StandardCharsets.ISO_8859_1;
     }
   }
 
@@ -154,7 +185,7 @@ class ImportData {
     if (hasType(mimeTypeLC, "css")) {
       styleSheets.put(path, IOUtils.toString(stream, StandardCharsets.UTF_8));
     } else if (hasType(mimeTypeLC, "properties")) {
-      resourceBundles.put(path, readProperties(stream));
+      rawResourceBundles.put(path, IOUtils.toByteArray(stream));
     } else if (hasType(mimeTypeLC, "javascript")) {
       javaScripts.put(path, IOUtils.toString(stream, StandardCharsets.UTF_8));
     } else if (hasType(mimeTypeLC, WEBFONT_TYPES)) {
@@ -172,13 +203,6 @@ class ImportData {
     } else if (!path.endsWith(".map")) {
       LOG.warn("Ignoring file {} with mimetype {}", path, mimeType);
     }
-  }
-
-  @VisibleForTesting
-  String readProperties(InputStream stream) throws IOException {
-    // Properties files in the Java world are latin-1 encoded, due to
-    // Properties#load(InputStream).
-    return IOUtils.toString(new BufferedReader(new InputStreamReader(stream, StandardCharsets.ISO_8859_1)));
   }
 
   private void putBlob(InputStream stream, String path, String mimeType, Map<String, Blob> collection) throws MimeTypeParseException, IOException {

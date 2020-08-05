@@ -5,7 +5,7 @@
  * @param {string} value
  * @return {boolean}
  */
-const isValidURL = value => {
+const isValidURL = (value) => {
   if (
     !(
       typeof value === "string" &&
@@ -23,7 +23,7 @@ const isValidURL = value => {
  * @param {string} value
  * @return {boolean}
  */
-const isValidStringValue = value => {
+const isValidStringValue = (value) => {
   if (typeof value !== "string" || value.length === 0) {
     return "Please enter a string value.";
   }

@@ -19,38 +19,31 @@
                     withLink=cm.getLink(self.productInSite)
                     attr={"classes":["my-button-group__button", "my-button--linked"]} />
 -->
-<#macro addToCartButton product token="" alwaysShow=false alwaysClickable=false enableShopNow=true withLink="" attr={}>
-  <#local numberOfVariants=(product.variants?size)!0 />
-  <#local hasSingleSKU=(numberOfVariants == 1) />
-  <#local isProductAvailable=(product.isAvailable())!false />
-
-  <#-- variant 1) unavailable -->
-  <#local buttonLabel=cm.getMessage("cart_unavailable") />
-  <#local buttonData={} />
-  <#local buttonClasses=[] />
-  <#local iconClass="" />
-
-  <#-- variant 2) available -->
-  <#if (alwaysShow || isProductAvailable)>
-    <#local buttonLabel=cm.getMessage("cart_view_variants") />
-    <#local buttonClasses=buttonClasses + ["cm-button--primary"] />
-
-  <#-- variant 3) available with one sku -->
+<#macro addToCartButton product csrf=cm.UNDEFINED alwaysShow=false alwaysClickable=false enableShopNow=true withLink="" attr={}>
+  <#-- @ftlvariable name="csrf" type="org.springframework.security.web.csrf.CsrfToken" -->
+  <#-- @ftlvariable name="product" type="com.coremedia.livecontext.ecommerce.catalog.Product" -->
+  <#assign availableClass="cm-add-to-cart-button--available" />
+  <div class="cm-add-to-cart-button<#if alwaysShow> ${availableClass}<#else><@lc.availability product=product ifTrue=" ${availableClass}" ifFalse="" /></#if>">
+    <@components.button text=cm.getMessage("cart_unavailable")
+                        href=withLink
+                        baseClass="cm-button"
+                        attr=utils.extendSequenceInMap(attr, "classes", ["cm-add-to-cart-button__not-available"]) />
+    <#local attr=utils.extendSequenceInMap(attr, "classes", ["cm-button--primary", "cm-add-to-cart-button__available"]) />
+    <#local hasSingleSKU=(product.variants?size == 1) />
     <#if (enableShopNow && (alwaysClickable || hasSingleSKU))>
       <#local cart=cm.substitute("cart", product) />
-      <#local buttonLabel=cm.getMessage("cart_add_item") />
       <#local externalId=hasSingleSKU?then(product.variants[0].externalId, product.externalId)/>
-      <#local buttonData={"data-cm-cart-add-item": {"id": externalId!"", "link": cm.getLink(cart, "ajax"), "token": token }} />
-      <#-- provide non empty string for button macro -->
-      <#local iconClass=" " />
+      <#local csrfParams=csrf?has_content?then({ csrf.parameterName: csrf.token }, {}) />
+      <#local buttonData={"data-cm-cart-add-item": {"id": externalId!"", "link": cm.getLink(cart, "ajax") } + csrfParams} />
+      <@components.button text=cm.getMessage("cart_add_item")
+                          baseClass="cm-button"
+                          iconClass=" "
+                          attr=(attr + buttonData) />
+    <#else>
+      <@components.button text=cm.getMessage("cart_view_variants")
+                          href=withLink
+                          baseClass="cm-button"
+                          attr=attr />
     </#if>
-  </#if>
-
-  <#local attr=utils.extendSequenceInMap(attr, "classes", buttonClasses) />
-
-  <#local link="" />
-  <#if (withLink?has_content && ((!alwaysClickable && !hasSingleSKU) || !enableShopNow))>
-    <#local link=withLink>
-  </#if>
-  <@components.button text=buttonLabel href=link baseClass="cm-button" iconClass=iconClass attr=(attr + buttonData) />
+  </div>
 </#macro>

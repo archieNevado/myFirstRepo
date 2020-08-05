@@ -11,10 +11,12 @@ import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -35,6 +37,27 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = PageImplTest.PageImplTestConfiguration.class)
 public class PageImplTest {
+
+  @Configuration
+  @EnableConfigurationProperties({
+          DeliveryConfigurationProperties.class
+  })
+  @Import(XmlRepoConfiguration.class)
+  @ImportResource(value = {
+          "classpath:/com/coremedia/cap/common/xml/uapi-xml-services.xml",
+          "classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml",
+          "classpath:/framework/spring/blueprint-contentbeans.xml",
+          "classpath:/framework/spring/blueprint-contentbeans-settings.xml"
+  },
+          reader = com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader.class)
+  static class PageImplTestConfiguration {
+
+    @Bean
+    public XmlUapiConfig xmlUapiConfig() {
+      return new XmlUapiConfig(CONTENT_REPOSITORY_URL)  ;
+    }
+  }
+
   private static final String CONTENT_REPOSITORY_URL = "classpath:/com/coremedia/blueprint/cae/contentbeans/pageimpl/pageimpltest-content.xml";
 
   private static final int ARTICLE_ID = 2;
@@ -190,22 +213,5 @@ public class PageImplTest {
     page = new PageImpl(childChannel, childChannel, true, sitesService, null, null, null, null);
     assertNotNull(page.getFavicon());
     assertEquals(favicon, page.getFavicon());
-  }
-
-  @Configuration
-  @Import(XmlRepoConfiguration.class)
-  @ImportResource(value = {
-          "classpath:/com/coremedia/cap/common/xml/uapi-xml-services.xml",
-          "classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml",
-          "classpath:/framework/spring/blueprint-contentbeans.xml",
-          "classpath:/framework/spring/blueprint-contentbeans-settings.xml"
-  },
-          reader = com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader.class)
-  static class PageImplTestConfiguration {
-
-    @Bean
-    public XmlUapiConfig xmlUapiConfig() {
-      return new XmlUapiConfig(CONTENT_REPOSITORY_URL)  ;
-    }
   }
 }

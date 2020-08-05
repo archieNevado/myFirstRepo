@@ -1,38 +1,31 @@
 package com.coremedia.livecontext.view;
 
 import com.coremedia.blueprint.common.contentbeans.AbstractPage;
-import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.layout.PageGrid;
 import com.coremedia.blueprint.common.layout.PageGridPlacement;
 import com.coremedia.blueprint.common.layout.PageGridRow;
 import com.coremedia.blueprint.common.services.context.ContextHelper;
-import com.coremedia.livecontext.fragment.FragmentContextProvider;
-import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.objectserver.view.TextView;
 import com.coremedia.objectserver.view.ViewException;
 import com.coremedia.objectserver.view.ViewUtils;
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableMap;
+import com.coremedia.objectserver.web.cachecontrol.CacheControlStrategy;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
 
-import javax.inject.Inject;
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.io.Writer;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import static com.google.common.base.Strings.nullToEmpty;
@@ -50,15 +43,21 @@ public class PrefetchFragmentsView implements TextView {
   private static final String JSON_CONTENT_TYPE = "application/json; charset=UTF-8";
 
   private static final Gson GSON = new Gson();
-  private static final String MATRIX_SEPERATOR = ";";
   private static final String PAGE_KEY_PROPERTY = "pageKey";
   private static final String FRAGMENTS_PROPERTY = "fragments";
   private static final String FRAGMENT_KEY_PROPERTY = "fragmentKey";
   private static final String PAYLOAD_PROPERTY = "payload";
-  private static final String DEFAULT_CHANNEL_VIEW = "asFragment";
+  private static final String EXPIRES_HEADER_PROPERTY = "expires";
 
-  @Inject
-  private PrefetchFragmentsConfigReader configReader;
+  private final PrefetchFragmentsConfigReader configReader;
+  private final CacheControlStrategy<Instant> cacheControlStrategy;
+
+  public PrefetchFragmentsView(PrefetchFragmentsConfigReader configReader,
+                               ObjectProvider<CacheControlStrategy<Instant>> cacheControlStrategyProvider) {
+    this.configReader = configReader;
+    this.cacheControlStrategy = cacheControlStrategyProvider.getIfAvailable(() -> new CacheControlStrategy<>() {
+    });
+  }
 
   @Override
   public void render(Object bean, String view, Writer out, @NonNull HttpServletRequest request,
@@ -101,7 +100,7 @@ public class PrefetchFragmentsView implements TextView {
                              @NonNull HttpServletResponse response, @NonNull Page page,
                              @NonNull JsonArray fragmentsJson) {
     JsonObject rootJson = new JsonObject();
-    rootJson.addProperty(PAGE_KEY_PROPERTY, createPageKey(request));
+    rootJson.addProperty(PAGE_KEY_PROPERTY, PrefetchFragmentsViewUtils.createPageKey(request));
     rootJson.add(FRAGMENTS_PROPERTY, fragmentsJson);
 
     try {
@@ -147,22 +146,38 @@ public class PrefetchFragmentsView implements TextView {
    * @return the json object with the rendered view as the payload property.
    */
   @NonNull
-  private static Optional<JsonObject> renderView(@NonNull Object bean, @NonNull String view,
-                                                 @NonNull HttpServletRequest request,
-                                                 @NonNull HttpServletResponse response) {
-    String payload;
+  private Optional<JsonObject> renderView(@NonNull Object bean, @NonNull String view,
+                                          @NonNull HttpServletRequest request,
+                                          @NonNull HttpServletResponse response) {
+    String fragmentKey = PrefetchFragmentsViewUtils.createFragmentKey(bean, view, request);
+    JsonObject jsonObject = new JsonObject();
+    jsonObject.addProperty(FRAGMENT_KEY_PROPERTY, fragmentKey);
+
     try {
-      payload = getPayload(bean, view, request, response);
+      cacheControlStrategy.startRecording(request, response);
+      var payload = PrefetchFragmentsViewUtils.getPayload(bean, view, request, response);
+      jsonObject.addProperty(PAYLOAD_PROPERTY, payload);
     } catch (ViewException e) {
       LOG.warn("Exception when rendering the view {} of the bean {} ({})", view, bean, e.getMessage());
       return empty();
+    } finally {
+      endRecording(bean, view, request, response, jsonObject);
     }
-    JsonObject jsonObject = new JsonObject();
-    String fragmentKey = createFragmentKey(bean, view, request);
-    jsonObject.addProperty(FRAGMENT_KEY_PROPERTY, createFragmentKey(bean, view, request));
-    jsonObject.addProperty(PAYLOAD_PROPERTY, payload);
+
     LOG.trace("Render predefined view as prefetched json: {}", fragmentKey);
     return Optional.of(jsonObject);
+  }
+
+  private void endRecording(@NonNull Object bean,
+                            @NonNull String viewName,
+                            @NonNull HttpServletRequest request,
+                            @NonNull HttpServletResponse response,
+                            @NonNull JsonObject jsonObject) {
+    // get the min of the current and configured value
+    cacheControlStrategy.getCacheControl(bean, viewName, request).getValidUntil()
+            .map(PrefetchFragmentsViewUtils::format)
+            .ifPresent(expiresHeader -> jsonObject.addProperty(EXPIRES_HEADER_PROPERTY, expiresHeader));
+    cacheControlStrategy.endRecording(request, response);
   }
 
   /**
@@ -176,18 +191,21 @@ public class PrefetchFragmentsView implements TextView {
                                                @NonNull HttpServletRequest request,
                                                @NonNull HttpServletResponse response) {
     String placementView = getPlacementView((Page) request.getAttribute(ContextHelper.ATTR_NAME_PAGE), placement).orElse("");
-    String payload;
+    JsonObject jsonObject = new JsonObject();
+    String fragmentKey = PrefetchFragmentsViewUtils.createFragmentKey(placement, placementView, request);
+    jsonObject.addProperty(FRAGMENT_KEY_PROPERTY, fragmentKey);
+
     try {
-      payload = getPayload(placement, placementView, request, response);
+      cacheControlStrategy.startRecording(request, response);
+      var payload = PrefetchFragmentsViewUtils.getPayload(placement, placementView, request, response);
+      jsonObject.addProperty(PAYLOAD_PROPERTY, payload);
     } catch (ViewException e) {
       LOG.warn("Exception when rendering the view {} of the bean {} ({})", placementView, placement, e.getMessage());
       return empty();
+    } finally {
+      endRecording(placement, placementView, request, response, jsonObject);
     }
 
-    JsonObject jsonObject = new JsonObject();
-    String fragmentKey = createFragmentKey(placement, placementView, request);
-    jsonObject.addProperty(FRAGMENT_KEY_PROPERTY, fragmentKey);
-    jsonObject.addProperty(PAYLOAD_PROPERTY, payload);
     LOG.trace("Render placement as prefetched json: {}", fragmentKey);
     return Optional.of(jsonObject);
   }
@@ -223,75 +241,6 @@ public class PrefetchFragmentsView implements TextView {
             .flatMap(List::stream)
             .map(placement -> renderPlacement(placement, request, response)) // We don't know the view of the placement.
             .forEach(placementJson -> placementJson.ifPresent(fragmentsJson::add));
-  }
-
-  /**
-   * renders the view of the given bean and returns the payload.
-   *
-   * @param bean the given bean
-   * @param view the given view
-   */
-  @NonNull
-  private static String getPayload(@NonNull Object bean, @NonNull String view, @NonNull HttpServletRequest request,
-                                   @NonNull HttpServletResponse response) {
-
-    String effectiveView = view.isBlank() ? determineView(bean) : view;
-
-    Writer out = new StringWriter();
-    ViewUtils.render(bean, effectiveView, out, request, response);
-
-    return out.toString().trim();
-  }
-
-  @NonNull
-  private static String createFragmentKey(@NonNull Object bean, @NonNull String view, @NonNull ServletRequest request) {
-    String placement = bean instanceof PageGridPlacement ? ((PageGridPlacement) bean).getName() : "";
-    return createPageKey(request) + MATRIX_SEPERATOR +
-            "view=" + view + MATRIX_SEPERATOR +
-            "placement=" + nullToEmpty(placement).trim();
-  }
-
-  @NonNull
-  private static String createPageKey(@NonNull ServletRequest request) {
-    FragmentParameters parameters = FragmentContextProvider.getFragmentContext(request).getParameters();
-    return createPageKeyFromParameters(parameters);
-  }
-
-  @NonNull
-  @VisibleForTesting
-  static String createPageKeyFromParameters(@NonNull FragmentParameters parameters) {
-    // The ImmutableMap guarantees a deterministic iteration order and Null-hostility.
-    // For further information on guarantees @see com.google.common.collect.ImmutableCollection
-    Map<String, String> parameterMap = ImmutableMap.of(
-            "externalRef", nullToEmpty(parameters.getExternalRef()),
-            "categoryId", nullToEmpty(parameters.getCategoryId()),
-            "productId", nullToEmpty(parameters.getProductId()),
-            "pageId", nullToEmpty(parameters.getPageId())
-    );
-
-    return Joiner.on(MATRIX_SEPERATOR)
-            .withKeyValueSeparator("=")
-            .join(parameterMap);
-  }
-
-  /**
-   * A channel in combination with the default view should always be rendered as full pagegrid (without header and footer).
-   * This can be done by using the view "asFragment".
-   * see also FragmentHandler#normalizedPageFragmentView()
-   * @param bean the render model
-   * @return a magic "normalized" default view "asFragment" or empty string;
-   */
-  private static String determineView(Object bean) {
-    if (bean instanceof CMChannel) {
-      return DEFAULT_CHANNEL_VIEW;
-    }
-    if (bean instanceof Page) {
-      Page page = (Page) bean;
-      if (page.getContent() instanceof CMChannel) {
-        return DEFAULT_CHANNEL_VIEW;
-      }
-    }
-    return "";
   }
 
 }

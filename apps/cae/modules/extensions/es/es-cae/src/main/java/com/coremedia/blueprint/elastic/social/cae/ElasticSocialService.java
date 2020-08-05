@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.elastic.social.cae;
 
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.blueprint.base.elastic.common.CategoryExtractor;
 import com.coremedia.blueprint.base.elastic.social.common.ContributionTargetHelper;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
@@ -27,7 +28,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -89,7 +90,12 @@ public class ElasticSocialService {
   @Inject
   private ContributionTargetHelper contributionTargetHelper;
 
-  private boolean preview;
+  private DeliveryConfigurationProperties deliveryConfigurationProperties;
+
+  @Autowired
+  public void setDeliveryConfigurationProperties(DeliveryConfigurationProperties deliveryConfigurationProperties) {
+    this.deliveryConfigurationProperties = deliveryConfigurationProperties;
+  }
 
   /**
    * Retrieves the sorted list of all {@link Comment}s on a given target <tt>CMTeasable</tt>.
@@ -508,14 +514,8 @@ public class ElasticSocialService {
   }
 
   public boolean isPreview() {
-    return preview;
+    return deliveryConfigurationProperties.isPreviewMode();
   }
-
-  @Value("${cae.is.preview}")
-  public void setPreview(boolean preview) {
-    this.preview = preview;
-  }
-
 
   public Comment getComment(String id) {
     return commentService.getComment(id);

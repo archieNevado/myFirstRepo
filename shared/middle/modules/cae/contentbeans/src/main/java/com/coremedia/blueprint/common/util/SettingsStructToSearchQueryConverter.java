@@ -1,7 +1,6 @@
 package com.coremedia.blueprint.common.util;
 
 import com.coremedia.blueprint.base.settings.SettingsService;
-import com.coremedia.cap.util.StructUtil;
 import com.coremedia.blueprint.cae.search.Condition;
 import com.coremedia.blueprint.cae.search.SearchConstants;
 import com.coremedia.blueprint.cae.search.SearchQueryBean;
@@ -18,6 +17,7 @@ import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.struct.Struct;
+import com.coremedia.cap.util.CapStructUtil;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
@@ -168,7 +168,7 @@ public class SettingsStructToSearchQueryConverter {
    * using the expert mode of the Studio!
    */
   private void applyModificationDate(Struct fqStruct, SearchQueryBean searchQuery) {
-    String dateString = StructUtil.getString(fqStruct, KEY_MODIFICATION_DATE);
+    String dateString = CapStructUtil.getString(fqStruct, KEY_MODIFICATION_DATE);
     Optional<String> formattedString = getModificationDate(dateString);
     formattedString.ifPresent(formatted -> searchQuery.addFilter(Condition.greaterThan(SearchConstants.FIELDS.MODIFICATION_DATE, Value.exactly(formatted))));
   }
@@ -178,7 +178,7 @@ public class SettingsStructToSearchQueryConverter {
    * add them as navigation criteria to the query.
    */
   private void applyContexts(Struct fqStruct, SearchQueryBean searchQuery) {
-    List<Content> docs = StructUtil.getLinks(fqStruct, KEY_DOCUMENTS);
+    List<Content> docs = CapStructUtil.getLinks(fqStruct, KEY_DOCUMENTS);
     if (!docs.isEmpty()) {
       List<CMNavigation> navigations = contentBeanFactory.createBeansFor(docs, CMNavigation.class);
       List<String> convertedNavigation = ContentBeanSolrSearchFormatHelper.cmNavigationsToId(navigations);
@@ -192,7 +192,7 @@ public class SettingsStructToSearchQueryConverter {
    * add them as authors criteria to the query.
    */
   private void applyAuthors(Struct fqStruct, SearchQueryBean searchQuery) {
-    List<Content> personContents = StructUtil.getLinks(fqStruct, KEY_AUTHORS);
+    List<Content> personContents = CapStructUtil.getLinks(fqStruct, KEY_AUTHORS);
     if (!personContents.isEmpty()) {
       List<CMPerson> personBeans = contentBeanFactory.createBeansFor(personContents, CMPerson.class);
       List<String> personIds = ContentBeanSolrSearchFormatHelper.cmObjectsToIds(personBeans);
@@ -207,7 +207,7 @@ public class SettingsStructToSearchQueryConverter {
    * the repository and adds them to the query list.
    */
   private void applyDocumentType(Struct fqStruct, SearchQueryBean searchQuery) {
-    String docTypes = StructUtil.getString(fqStruct, KEY_DOCUMENT_TYPE);
+    String docTypes = CapStructUtil.getString(fqStruct, KEY_DOCUMENT_TYPE);
     SearchQueryUtil.addDocumentTypeFilter(searchQuery, docTypes, contentRepository);
   }
 
@@ -218,7 +218,7 @@ public class SettingsStructToSearchQueryConverter {
    * @param searchQuery
    */
   private void applyKeywords(Struct fqStruct, String fqId, SearchConstants.FIELDS field, SearchQueryBean searchQuery) {
-    List<Content> docs = StructUtil.getLinks(fqStruct, fqId);
+    List<Content> docs = CapStructUtil.getLinks(fqStruct, fqId);
     if (!docs.isEmpty()) {
       List<CMTaxonomy> taxonomies = contentBeanFactory.createBeansFor(docs, CMTaxonomy.class);
       List<String> taxonomyIds = ContentBeanSolrSearchFormatHelper.cmObjectsToIds(taxonomies);
@@ -234,7 +234,7 @@ public class SettingsStructToSearchQueryConverter {
    * @param searchQuery
    */
   private void applyContextKeywords(Struct fqStruct, String fqId, SearchQueryBean searchQuery) {
-    boolean useContextTaxonomies = StructUtil.getBoolean(fqStruct, fqId);
+    boolean useContextTaxonomies = CapStructUtil.getBoolean(fqStruct, fqId);
     if (useContextTaxonomies) {
       Content taxonomy = getCurrentTaxonomy().orElse(null);
       if (taxonomy!=null) {

@@ -1,5 +1,10 @@
 import $ from "jquery";
-import { findAndSelf, ajax } from "@coremedia/brick-utils";
+import {
+  findAndSelf,
+  ajax,
+  pushTaskQueue,
+  popTaskQueue,
+} from "@coremedia/brick-utils";
 import {
   decorateNode,
   undecorateNode,
@@ -33,7 +38,7 @@ export function renderFragmentHrefs($target) {
   }
 
   const selector = "a[data-href]";
-  findAndSelf($target, selector).each(function() {
+  findAndSelf($target, selector).each(function () {
     const $this = $(this);
     $this.attr(
       "href",
@@ -50,17 +55,19 @@ export function renderFragmentHrefs($target) {
  * @param {boolean} replaceTarget if TRUE target will be replaced with the given target, otherwise only inner nodes will be removed
  */
 export function updateTarget($target, $update, replaceTarget) {
+  pushTaskQueue();
   if (replaceTarget) {
     undecorateNode($target);
     $target.replaceWith($update);
   } else {
-    $target.children().each(function() {
+    $target.children().each(function () {
       undecorateNode(this);
     });
     $target.empty().append($update);
   }
   decorateNode($update);
   $document.trigger(EVENT_NODE_APPENDED, [$update]);
+  popTaskQueue();
 }
 
 /**
@@ -97,7 +104,7 @@ export function updateTargetWithAjaxResponse(
     const requestId = ($target.data(FRAGMENT_REQUEST_COUNTER) || 0) + 1;
     $target.data(FRAGMENT_REQUEST_COUNTER, requestId);
 
-    const isOutdated = function() {
+    const isOutdated = function () {
       // if $target is no longer in DOM or the request is not the current latest request: ignore update
       return (
         !$.contains(document.documentElement, $target[0]) ||
@@ -112,7 +119,7 @@ export function updateTargetWithAjaxResponse(
       data: requestConfig.params,
       dataType: "text",
     })
-      .done(function(data, _, jqXHR) {
+      .done(function (data, _, jqXHR) {
         if (isOutdated()) {
           return;
         }
@@ -125,12 +132,12 @@ export function updateTargetWithAjaxResponse(
           callback(jqXHR, $html);
         }
       })
-      .fail(function(jqXHR) {
+      .fail(function (jqXHR) {
         if (callback) {
           callback(jqXHR);
         }
       })
-      .always(function() {
+      .always(function () {
         if (isOutdated()) {
           return;
         }

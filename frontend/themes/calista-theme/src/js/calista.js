@@ -34,7 +34,7 @@ function handleLogin() {
         url: loginStatusURL,
         dataType: "json",
       })
-      .done(function(data) {
+      .done(function (data) {
         if (data.loggedIn) {
           $logoutBtn.css("display", "inline-block");
           urlParams($logoutBtn);
@@ -44,7 +44,7 @@ function handleLogin() {
         }
         $document.trigger(EVENT_CHECK_LOGIN_STATUS);
       })
-      .fail(function(e) {
+      .fail(function (e) {
         utils.error(
           `Error in AJAX login status check.`,
           e.status,
@@ -57,11 +57,11 @@ function handleLogin() {
 addNodeDecoratorBySelector(".cm-wcs-tabs", () => {
   const $tabs = $(".cm-wcs-tabs__tab a");
   /* --- Search --- */
-  $tabs.on("click touch", function(event) {
+  $tabs.on("click touch", function (event) {
     event.preventDefault();
 
     const $clickedLink = $(this);
-    $tabs.each(function() {
+    $tabs.each(function () {
       const $link = $(this);
       const $tab = $link.closest(".cm-wcs-tabs__tab");
       const $tabPanel = $($link.attr("href"));
@@ -84,7 +84,7 @@ addNodeDecoratorBySelector(".cm-wcs-tabs", () => {
 
 // --- DOCUMENT READY --------------------------------------------------------------------------------------------------
 
-$(function() {
+$(function () {
   "use strict";
 
   utils.log("Welcome to CoreMedia Calista Integration");
@@ -93,7 +93,7 @@ $(function() {
   handleLogin();
 
   // update tabs in wcs (e.g. pdp)
-  $(".tab_container").on("click", function() {
+  $(".tab_container").on("click", function () {
     $document.trigger(utils.EVENT_LAYOUT_CHANGED);
   });
 });

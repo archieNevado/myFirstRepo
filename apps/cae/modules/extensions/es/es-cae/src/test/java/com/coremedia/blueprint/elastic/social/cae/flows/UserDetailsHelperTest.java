@@ -5,6 +5,7 @@ import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPl
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
 import com.coremedia.cap.content.ContentRepository;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.elastic.core.api.blobs.Blob;
 import com.coremedia.elastic.core.api.blobs.BlobException;
 import com.coremedia.elastic.core.api.blobs.BlobService;
@@ -28,7 +29,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.verification.VerificationMode;
 import org.springframework.binding.message.DefaultMessageContext;
 import org.springframework.binding.message.MessageResolver;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.webflow.context.ExternalContext;
 import org.springframework.webflow.core.collection.SharedAttributeMap;
 import org.springframework.webflow.execution.RequestContext;
@@ -73,6 +74,8 @@ public class UserDetailsHelperTest {
   private String contentType = "image/jpeg";
   private Map<String, Object> params = new HashMap<>();
   private UserDetails details = new UserDetails();
+
+  private DeliveryConfigurationProperties deliveryConfigurationProperties;
 
   @InjectMocks
   private UserDetailsHelper userDetailsHelper;
@@ -120,7 +123,7 @@ public class UserDetailsHelperTest {
   private InputStream inputStream;
 
   @Mock
-  private CommonsMultipartFile file;
+  private MultipartFile file;
 
   @Mock
   private CommunityUser loggedInUser;
@@ -152,6 +155,8 @@ public class UserDetailsHelperTest {
   @Before
   @SuppressWarnings("unchecked")
   public void setUp() throws IOException {
+    deliveryConfigurationProperties = new DeliveryConfigurationProperties();
+    deliveryConfigurationProperties.setPreviewMode(false);
     Map<String, Object> properties = getProperties();
     when(communityUser.getEmail()).thenReturn(emailAddress);
     when(communityUser.getProperties()).thenReturn(properties);
@@ -196,6 +201,8 @@ public class UserDetailsHelperTest {
     details = getUserDetails();
 
     userDetailsHelper = new UserDetailsHelper();
+    userDetailsHelper.setDeliveryConfigurationProperties(deliveryConfigurationProperties);
+
     inject(userDetailsHelper, commentService);
     inject(userDetailsHelper, ratingService);
     inject(userDetailsHelper, likeService);
@@ -216,7 +223,7 @@ public class UserDetailsHelperTest {
     assertNotNull(details);
 
     verify(communityUserService, never()).getUserByName(userName);
-    verifyStatsServicesBeingCalled(times(1));    
+    verifyStatsServicesBeingCalled(times(1));
     verify(communityUser).isReceiveCommentReplyEmails();
     verify(communityUser).getGivenName();
     verify(communityUser).getSurName();
@@ -232,7 +239,7 @@ public class UserDetailsHelperTest {
   @Test
   public void testUserDetailsForPreview() {
     UserContext.clear();
-    userDetailsHelper.setPreview(true);
+    deliveryConfigurationProperties.setPreviewMode(true);
 
     UserDetails details = userDetailsHelper.getUserDetails(requestContext, passwordPolicy, userName);
     assertNotNull(details);
@@ -275,7 +282,7 @@ public class UserDetailsHelperTest {
 
   @Test
   public void getIgnoredUserOnProduction() {
-    userDetailsHelper.setPreview(true);
+    deliveryConfigurationProperties.setPreviewMode(true);
     UserContext.clear();
 
     UserDetails details = userDetailsHelper.getUserDetails(requestContext, passwordPolicy, userName);
@@ -286,7 +293,7 @@ public class UserDetailsHelperTest {
 
   @Test
   public void getBlockedUserOnProduction() {
-    userDetailsHelper.setPreview(true);
+    deliveryConfigurationProperties.setPreviewMode(true);
     UserContext.clear();
 
     UserDetails details = userDetailsHelper.getUserDetails(requestContext, passwordPolicy, userName);
@@ -297,7 +304,7 @@ public class UserDetailsHelperTest {
 
   @Test
   public void getUnactivatedUserOnProduction() {
-    userDetailsHelper.setPreview(true);
+    deliveryConfigurationProperties.setPreviewMode(true);
     UserContext.clear();
 
     UserDetails details = userDetailsHelper.getUserDetails(requestContext, passwordPolicy, userName);

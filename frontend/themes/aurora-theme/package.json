@@ -7,10 +7,9 @@
     "deploy": "cm theme-importer deploy-theme",
     "start": "cm monitor",
     "theme-importer": "cm theme-importer",
-    "prettier": "prettier \"**/*\" --write"
+    "prettier": "prettier --write \"src/**/*.{js,json}\""
   },
   "dependencies": {
-    "@coremedia-examples/brick-tag-management": "^1.0.0",
     "@coremedia-examples/brick-360-spinner": "^1.0.0",
     "@coremedia-examples/brick-carousel-banner": "^1.0.0",
     "@coremedia-examples/brick-detail": "^1.0.0",
@@ -25,6 +24,7 @@
     "@coremedia-examples/brick-product-assets": "^1.0.0",
     "@coremedia-examples/brick-shoppable-video": "^1.0.0",
     "@coremedia-examples/brick-square-banner": "^1.0.0",
+    "@coremedia-examples/brick-tag-management": "^1.0.0",
     "@coremedia/brick-default-teaser": "^1.0.0",
     "@coremedia/brick-dynamic-include": "^1.0.0",
     "@coremedia/brick-image-maps": "^1.0.0",
@@ -39,7 +39,7 @@
     "webpack": "^4.0.0"
   },
   "devDependencies": {
-    "prettier": "^1.0.0"
+    "prettier": "^2.0.5"
   },
   "coremedia": {
     "type": "theme"

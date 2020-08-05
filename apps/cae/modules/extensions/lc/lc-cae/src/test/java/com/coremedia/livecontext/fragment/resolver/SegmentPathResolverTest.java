@@ -8,20 +8,25 @@ import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.livecontext.ecommerce.link.LinkService;
 import com.coremedia.livecontext.ecommerce.link.PreviewUrlService;
 import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.livecontext.fragment.FragmentParametersFactory;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
+import com.coremedia.objectserver.configuration.CaeConfigurationProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.inject.Inject;
 
@@ -32,8 +37,40 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {XmlRepoConfiguration.class, SegmentPathResolverTest.LocalConfig.class})
+@WebAppConfiguration
+@ContextConfiguration(classes = {SegmentPathResolverTest.LocalConfig.class})
 public class SegmentPathResolverTest {
+
+  @Configuration
+  @EnableConfigurationProperties({
+          DeliveryConfigurationProperties.class,
+          CaeConfigurationProperties.class
+  })
+  @Import({
+          XmlRepoConfiguration.class,
+  })
+  @ImportResource(value = {
+          "classpath:/framework/spring/blueprint-contentbeans.xml",
+          "classpath:/META-INF/coremedia/livecontext-resolver.xml"
+  },
+          reader = com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader.class)
+  public static class LocalConfig {
+
+    @Bean
+    public XmlUapiConfig xmlUapiConfig() {
+      return new XmlUapiConfig(SegmentPathResolverTest.CONTENT_REPOSITORY_URL);
+    }
+
+    @Bean
+    LinkService linkService() {
+      return mock(LinkService.class);
+    }
+
+    @Bean
+    PreviewUrlService previewUrlService() {
+      return mock(PreviewUrlService.class);
+    }
+  }
 
   private static final String CONTENT_REPOSITORY_URL = "classpath:/com/coremedia/livecontext/fragment/resolver/segmentpath-test-content.xml";
 
@@ -156,29 +193,5 @@ public class SegmentPathResolverTest {
   private static void checkResult(LinkableAndNavigation result, int expectedNavigation, int expectedContent) {
     assertEquals(expectedNavigation, IdHelper.parseContentId(result.getNavigation().getId()));
     assertEquals(expectedContent, IdHelper.parseContentId(result.getLinkable().getId()));
-  }
-
-  @Configuration
-  @ImportResource(value = {
-          "classpath:/framework/spring/blueprint-contentbeans.xml",
-          "classpath:/META-INF/coremedia/livecontext-resolver.xml"
-  },
-          reader = com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader.class)
-  public static class LocalConfig {
-
-    @Bean
-    public XmlUapiConfig xmlUapiConfig() {
-      return new XmlUapiConfig(SegmentPathResolverTest.CONTENT_REPOSITORY_URL);
-    }
-
-    @Bean
-    LinkService linkService() {
-      return mock(LinkService.class);
-    }
-
-    @Bean
-    PreviewUrlService previewUrlService() {
-      return mock(PreviewUrlService.class);
-    }
   }
 }

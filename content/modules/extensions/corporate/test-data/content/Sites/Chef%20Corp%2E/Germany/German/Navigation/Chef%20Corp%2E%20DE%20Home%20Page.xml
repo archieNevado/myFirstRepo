@@ -29,7 +29,7 @@
 <segment>corporate-de-de</segment>
 <title>Homepage</title>
 <htmlTitle></htmlTitle>
-<keywords>Coremedia, Corporate, Demo, Blaupause, Corporation, Blueprint</keywords>
+<keywords>CoreMedia, Corporate, Demo, Blaupause, Corporation, Blueprint</keywords>
 <htmlDescription>Chef Corp. ermöglicht Köche mit den besten Werkzeugen, um perfekte Mahlzeiten zubereiten können.</htmlDescription>
 <subjectTaxonomy>
 </subjectTaxonomy>
@@ -104,7 +104,7 @@
 <LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../Editorial/Personalization/Personalized%20Teaser.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Editorial/Personalization/Personalized%20Teaser"/>
 </Struct>
 <Struct>
-<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/Consumers/Consumers%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Navigation/Consumers/Consumers%20Page"/>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../Editorial/Homepage/Consumers/Consumers%20Page%20Skiplink.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Editorial/Homepage/Consumers/Consumers%20Page%20Skiplink"/>
 </Struct>
 <Struct>
 <LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/Company/Company%20Page.xml" cmexport:path="/Sites/Chef%20Corp%2E/Germany/German/Navigation/Company/Company%20Page"/>

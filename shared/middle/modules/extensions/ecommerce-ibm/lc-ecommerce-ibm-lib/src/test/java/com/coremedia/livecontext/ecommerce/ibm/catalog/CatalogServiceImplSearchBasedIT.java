@@ -137,6 +137,12 @@ public class CatalogServiceImplSearchBasedIT extends IbmCatalogServiceBaseTest {
 
   @Test
   @Override
+  public void testFindProductVariantWithoutParentByExternalId() throws Exception {
+    super.testFindProductVariantWithoutParentByExternalId();
+  }
+
+  @Test
+  @Override
   public void testFindProductBySeoSegment() throws Exception {
     super.testFindProductBySeoSegment();
   }
@@ -365,6 +371,12 @@ public class CatalogServiceImplSearchBasedIT extends IbmCatalogServiceBaseTest {
   @Override
   public void testFindCategoryMultiSEOByExternalTechId() throws Exception {
     super.testFindCategoryMultiSEOByExternalTechId();
+  }
+
+  @Test
+  @Override
+  public void testFindCategoryWithSpecialChars() throws Exception {
+    super.testFindCategoryWithSpecialChars();
   }
 
   @Test

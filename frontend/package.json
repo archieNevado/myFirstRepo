@@ -26,7 +26,10 @@
     "node": ">=12"
   },
   "dependencies": {
-    "lerna": "^3.0.0"
+    "lerna": "^3.22.1"
+  },
+  "resolutions": {
+    "dot-prop": "^5.2.0"
   },
   "coremedia": {
     "type": "workspace",

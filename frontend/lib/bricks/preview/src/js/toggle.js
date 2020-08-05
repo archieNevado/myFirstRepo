@@ -101,13 +101,13 @@ export function init(toggleItem) {
   // bind click-listener
   $toggleItem
     .find(".toggle-button")
-    .bind("click", function() {
+    .bind("click", function () {
       toggle(toggleItem);
       return false;
     })
     .removeClass("toggle-button--disabled");
   // bind toggleState-listener
-  $toggleItem.bind("toggleStateChanged", function(event, newState) {
+  $toggleItem.bind("toggleStateChanged", function (event, newState) {
     if (useStorage) {
       sessionStorage.setItem($toggleItem.data("id"), newState);
     }

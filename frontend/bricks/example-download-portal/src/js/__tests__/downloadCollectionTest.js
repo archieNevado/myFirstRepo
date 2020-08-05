@@ -3,12 +3,12 @@ import LocalStorageMock from "../__mocks__/LocalStorageMock";
 
 global.localStorage = new LocalStorageMock();
 
-describe("Test initialization of Download Collection", function() {
-  afterEach(function() {
+describe("Test initialization of Download Collection", function () {
+  afterEach(function () {
     localStorage.removeItem(downloadCollection.DOWNLOAD_COLLECTION_PROPERTY);
   });
 
-  it("There should be an empty download collection", function() {
+  it("There should be an empty download collection", function () {
     expect(downloadCollection.getDownloadCollection()).toBeNull();
 
     downloadCollection.initDownloadCollection();
@@ -17,20 +17,20 @@ describe("Test initialization of Download Collection", function() {
   });
 });
 
-describe("Test count of Download Collection", function() {
-  beforeEach(function() {
+describe("Test count of Download Collection", function () {
+  beforeEach(function () {
     downloadCollection.initDownloadCollection();
   });
 
-  afterEach(function() {
+  afterEach(function () {
     localStorage.removeItem(downloadCollection.DOWNLOAD_COLLECTION_PROPERTY);
   });
 
-  it("The download collection size should be 0", function() {
+  it("The download collection size should be 0", function () {
     expect(downloadCollection.getDownloadCollectionCount()).toEqual(0);
   });
 
-  it("The download collection size should be 3", function() {
+  it("The download collection size should be 3", function () {
     const collection = { 1: ["web", "original"], 2: ["web"] };
     localStorage.setItem(
       downloadCollection.DOWNLOAD_COLLECTION_PROPERTY,
@@ -40,8 +40,8 @@ describe("Test count of Download Collection", function() {
   });
 });
 
-describe("Test rendition name is in download collection", function() {
-  beforeEach(function() {
+describe("Test rendition name is in download collection", function () {
+  beforeEach(function () {
     downloadCollection.initDownloadCollection();
     const collection = { 1: ["web", "original"], 2: ["web"] };
     localStorage.setItem(
@@ -50,11 +50,11 @@ describe("Test rendition name is in download collection", function() {
     );
   });
 
-  afterEach(function() {
+  afterEach(function () {
     localStorage.removeItem(downloadCollection.DOWNLOAD_COLLECTION_PROPERTY);
   });
 
-  it("The download collection (does not) contains rendition", function() {
+  it("The download collection (does not) contains rendition", function () {
     expect(downloadCollection.isInDownloadCollection(2, "web")).toBeTruthy();
     expect(
       downloadCollection.isInDownloadCollection(2, "original")
@@ -62,8 +62,8 @@ describe("Test rendition name is in download collection", function() {
   });
 });
 
-describe("Test get/save/add/remove from/to download collection", function() {
-  beforeEach(function() {
+describe("Test get/save/add/remove from/to download collection", function () {
+  beforeEach(function () {
     downloadCollection.initDownloadCollection();
     const collection = { 1: ["web", "original"], 2: ["web"] };
     localStorage.setItem(
@@ -72,23 +72,23 @@ describe("Test get/save/add/remove from/to download collection", function() {
     );
   });
 
-  afterEach(function() {
+  afterEach(function () {
     localStorage.removeItem(downloadCollection.DOWNLOAD_COLLECTION_PROPERTY);
   });
 
-  it("The download collection returns its contents", function() {
+  it("The download collection returns its contents", function () {
     expect(downloadCollection.getDownloadCollection()).toEqual({
       1: ["web", "original"],
       2: ["web"],
     });
   });
 
-  it("After clear the download collection should be an empty object", function() {
+  it("After clear the download collection should be an empty object", function () {
     downloadCollection.clearDownloadCollection();
     expect(downloadCollection.getDownloadCollection()).toEqual({});
   });
 
-  it("Save should result in an updated download collection ", function() {
+  it("Save should result in an updated download collection ", function () {
     downloadCollection.saveDownloadCollection({
       3: ["web"],
       4: ["web", "original"],
@@ -100,20 +100,20 @@ describe("Test get/save/add/remove from/to download collection", function() {
   });
 });
 
-describe("Test initialization of default rendition selection", function() {
-  beforeEach(function() {
+describe("Test initialization of default rendition selection", function () {
+  beforeEach(function () {
     downloadCollection.clearDefaultRenditionSelection();
   });
 
-  afterEach(function() {
+  afterEach(function () {
     localStorage.removeItem(downloadCollection.RENDITION_SELECTION_PROPERTY);
   });
 
-  it("There should be an empty default rendition selection", function() {
+  it("There should be an empty default rendition selection", function () {
     expect(downloadCollection.getRenditionSelection()).toEqual([]);
   });
 
-  it("Update default rendition selection", function() {
+  it("Update default rendition selection", function () {
     downloadCollection.addDefaultRenditionSelection("web");
 
     expect(downloadCollection.getRenditionSelection()).toEqual(["web"]);
@@ -133,7 +133,7 @@ describe("Test initialization of default rendition selection", function() {
     ]);
   });
 
-  it("Clear default rendition selection", function() {
+  it("Clear default rendition selection", function () {
     downloadCollection.addDefaultRenditionSelection("web");
 
     expect(downloadCollection.getRenditionSelection()).toEqual(["web"]);
@@ -144,16 +144,16 @@ describe("Test initialization of default rendition selection", function() {
   });
 });
 
-describe("Add and remove renditions to/from download collection", function() {
-  beforeEach(function() {
+describe("Add and remove renditions to/from download collection", function () {
+  beforeEach(function () {
     downloadCollection.initDownloadCollection();
   });
 
-  afterEach(function() {
+  afterEach(function () {
     localStorage.removeItem(downloadCollection.DOWNLOAD_COLLECTION_PROPERTY);
   });
 
-  it("Add/remove rendition to download collection", function() {
+  it("Add/remove rendition to download collection", function () {
     downloadCollection.addRenditionToDownloadCollection(1, "web");
     expect(downloadCollection.isInDownloadCollection(1, "web")).toBeTruthy();
     expect(

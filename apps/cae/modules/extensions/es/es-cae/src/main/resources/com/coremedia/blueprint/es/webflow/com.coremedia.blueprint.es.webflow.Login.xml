@@ -7,9 +7,6 @@
   <input name="next"/>
 
   <on-start>
-    <!-- When CSRF prevention is enabled, this will force the creation of a CSRF user token,
-         in order to prevent Login-CSRF. Login POST requests must include this token in their form submit to succeed. -->
-    <evaluate expression="csrfTokenManagement.forceToken(flowRequestContext.externalContext.nativeRequest)"/>
     <set name="flowScope.nextUrl" value="webflowUrlHelper.getNextUrl(next, flowRequestContext, true)"/>
   </on-start>
 

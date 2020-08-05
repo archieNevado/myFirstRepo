@@ -1,9 +1,11 @@
 package com.coremedia.livecontext.fragment.links.transformers;
 
+import com.coremedia.blueprint.base.links.UriConstants;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
 import com.coremedia.blueprint.cae.layout.ContentBeanBackedPageGridPlacement;
 import com.coremedia.blueprint.cae.web.taglib.FindNavigationContext;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
+import com.coremedia.blueprint.common.contentbeans.CMDynamicList;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.Page;
@@ -13,11 +15,13 @@ import com.coremedia.blueprint.common.services.context.CurrentContextService;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.livecontext.fragment.links.transformers.resolvers.LiveContextLinkResolver;
-import com.coremedia.objectserver.view.ViewUtils;
+import com.coremedia.objectserver.request.RequestUtils;
 import com.coremedia.objectserver.web.links.LinkTransformer;
 import com.google.common.collect.ImmutableList;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,14 +29,12 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
 
-import static com.coremedia.livecontext.fragment.links.CommerceLedLinks.DUMMY_URI_STRING;
-import static com.coremedia.livecontext.fragment.links.CommerceLinkHelper.isFragmentRequest;
+import static com.coremedia.livecontext.fragment.links.CommerceLinkUtils.isFragmentRequest;
 import static com.coremedia.livecontext.fragment.links.transformers.LiveContextLinkTransformerOrderChecker.validateOrder;
+import static com.coremedia.objectserver.request.RequestUtils.PARAMETERS;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.left;
 import static org.apache.commons.lang3.StringUtils.remove;
@@ -44,6 +46,9 @@ import static org.apache.commons.lang3.StringUtils.remove;
  * - passing ShopController-Redirect Requests
  */
 public class LiveContextLinkTransformer implements LinkTransformer, ApplicationListener<ContextRefreshedEvent> {
+
+  // dummy URL meant to be replaced by the commerce link resolver later on
+  public static final String DUMMY_URI_STRING = "http://lc-generic-live.vm";
 
   protected static final Logger LOG = LoggerFactory.getLogger(LiveContextLinkTransformer.class);
 
@@ -65,7 +70,7 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
                           @NonNull HttpServletResponse response,
                           boolean forRedirect) {
 
-    if (!canHandle(cmsLink, bean, request)) {
+    if (!canHandle(cmsLink, bean, view, request)) {
       return cmsLink;
     }
 
@@ -83,7 +88,7 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
 
     String modifiableSource = removeBaseUri(cmsLink, request);
     modifiableSource = removeJSession(modifiableSource);
-    Object variant = ViewUtils.getParameters(request).get(VARIANT_PARAM);
+    Object variant = RequestUtils.getParameters(request, PARAMETERS).get(VARIANT_PARAM);
 
     Object content = getContent(bean);
     return transform(modifiableSource, content, variant, navigation, request);
@@ -92,7 +97,7 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
   /**
    * Check prerequisites of live context link transformers
    */
-  private boolean canHandle(@NonNull String cmsLink, @Nullable Object bean, @NonNull HttpServletRequest request) {
+  private boolean canHandle(@NonNull String cmsLink, @Nullable Object bean, String view, @NonNull HttpServletRequest request) {
     if (CurrentStoreContext.find().isEmpty()) {
       // not a commerce request at all
       return false;
@@ -109,7 +114,10 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
     }
 
     // transform ajax links in order to rewrite them to the ajax proxy on the commerce side
-    if (bean instanceof ContentBeanBackedPageGridPlacement || bean instanceof DynamizableContainer) {
+    if (bean instanceof ContentBeanBackedPageGridPlacement
+            || bean instanceof DynamizableContainer
+            // Dynamic Includes
+            || (bean instanceof CMDynamicList && UriConstants.Views.VIEW_FRAGMENT.equals(view))) {
       return true;
     }
 
@@ -151,7 +159,7 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
 
   @Nullable
   private static String removeBaseUri(@Nullable String source, @NonNull HttpServletRequest request) {
-    String baseUri = ViewUtils.getBaseUri(request);
+    String baseUri = RequestUtils.getBaseUri(request);
 
     if (source != null && source.startsWith(baseUri)) {
       return remove(source, baseUri);

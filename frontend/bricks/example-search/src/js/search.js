@@ -22,7 +22,7 @@ export function loadSearchResults(url, button) {
   $.ajax({
     url: url,
   })
-    .done(nextSearchResults => {
+    .done((nextSearchResults) => {
       log("Loaded search results successfully.");
       // delete the old spinner (the result has a new one)
       $spinner.remove();
@@ -58,14 +58,14 @@ export function loadSearchResultPage(
     $.ajax({
       url: link,
     })
-      .done(function(nextSearchResults) {
+      .done(function (nextSearchResults) {
         log("Loaded search result page successfully.");
         // append the new results to the the search result page
         updateTarget($searchResultPageId, $(nextSearchResults), true);
         //set new page url to browser history
         addToBrowserHistory(link, enableBrowserHistory);
       })
-      .fail(function() {
+      .fail(function () {
         $searchResultsContainer.removeClass("cm-search__results--loading");
         error("Could not load search result page.");
       });
@@ -78,9 +78,9 @@ export function loadSearchResultPage(
  * @param domElementOrJQueryResult
  * @param searchResultsContainerId
  */
-export default function(domElementOrJQueryResult, searchResultsContainerId) {
+export default function (domElementOrJQueryResult, searchResultsContainerId) {
   if (domElementOrJQueryResult instanceof $) {
-    $.each(domElementOrJQueryResult, function(index, item) {
+    $.each(domElementOrJQueryResult, function (index, item) {
       loadSearchResults(item, searchResultsContainerId);
     });
   } else {

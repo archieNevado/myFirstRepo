@@ -9,6 +9,10 @@
   <artifactId>studio-base-app</artifactId>
   <packaging>jangaroo-app</packaging>
 
+  <properties>
+    <studio-base-app.senchaJvmArgs>-Xms512m -Xmx2048m</studio-base-app.senchaJvmArgs>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>net.jangaroo</groupId>
@@ -41,6 +45,13 @@
     <dependency>
       <groupId>com.coremedia.ui.sdk</groupId>
       <artifactId>image-editor-components</artifactId>
+      <type>swc</type>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.ui.sdk</groupId>
+      <artifactId>external-preview-components</artifactId>
       <type>swc</type>
       <scope>runtime</scope>
     </dependency>
@@ -128,6 +139,7 @@
             <item>de</item>
             <item>ja</item>
           </additionalLocales>
+          <senchaJvmArgs>${studio-base-app.senchaJvmArgs}</senchaJvmArgs>
         </configuration>
       </plugin>
     </plugins>

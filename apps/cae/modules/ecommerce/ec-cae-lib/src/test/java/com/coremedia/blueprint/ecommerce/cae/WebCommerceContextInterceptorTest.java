@@ -9,6 +9,7 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,6 +50,7 @@ public class WebCommerceContextInterceptorTest {
   @Before
   public void setup() {
     testling = new WebCommerceContextInterceptor();
+    testling.setDeliveryConfigurationProperties(new DeliveryConfigurationProperties());
 
     CommerceConnection connection = mock(CommerceConnection.class);
 
@@ -63,7 +65,6 @@ public class WebCommerceContextInterceptorTest {
     testling.setSiteResolver(siteResolver);
     testling.setInitUserContext(false);
     testling.setCommerceConnectionInitializer(commerceConnectionInitializer);
-    testling.setPreview(false);
 
     request = new MockHttpServletRequest();
     response = new MockHttpServletResponse();

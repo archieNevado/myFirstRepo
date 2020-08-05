@@ -23,6 +23,7 @@ import org.mockito.Answers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.context.PropertyPlaceholderAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -42,6 +43,7 @@ import static org.mockito.Mockito.when;
         "repository.factoryClassName=com.coremedia.cap.xmlrepo.XmlCapConnectionFactory",
         "livecontext.cache.invalidation.enabled=false"
 }, classes = {
+        PropertyPlaceholderAutoConfiguration.class,
         OverrideGenericCommerceConnectionTest.LocalConfig.class,
 })
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

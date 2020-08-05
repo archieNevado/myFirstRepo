@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.ecommerce.cae;
 
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.blueprint.base.links.UriConstants;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
@@ -22,8 +23,8 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,8 +49,14 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
   private SiteResolver siteResolver;
   private CommerceConnectionInitializer commerceConnectionInitializer;
 
-  private boolean preview;
   private boolean initUserContext = false;
+
+  private DeliveryConfigurationProperties deliveryConfigurationProperties;
+
+  @Autowired
+  public void setDeliveryConfigurationProperties(DeliveryConfigurationProperties deliveryConfigurationProperties) {
+    this.deliveryConfigurationProperties = deliveryConfigurationProperties;
+  }
 
   // --- configure --------------------------------------------------
 
@@ -58,11 +65,6 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
    */
   public void setInitUserContext(boolean initUserContext) {
     this.initUserContext = initUserContext;
-  }
-
-  @Value("${cae.is.preview}")
-  public void setPreview(boolean preview) {
-    this.preview = preview;
   }
 
   @Required
@@ -155,7 +157,7 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
   }
 
   protected boolean isPreview() {
-    return preview;
+    return deliveryConfigurationProperties.isPreviewMode();
   }
 
   // --- basics, suitable for most extending classes ----------------
@@ -175,7 +177,7 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
       return Optional.empty();
     }
 
-    if (preview) {
+    if (deliveryConfigurationProperties.isPreviewMode()) {
       updateStoreContextForPreview(request, connection.get());
     }
 

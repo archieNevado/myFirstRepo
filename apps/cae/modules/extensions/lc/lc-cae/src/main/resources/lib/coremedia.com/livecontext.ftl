@@ -55,3 +55,23 @@
 <#function getLogoutUrl>
   <#return liveContextLoginFreemarkerFacade.getLogoutUrl()>
 </#function>
+
+<#-- AVAILABILITY -->
+<#macro availability product ifTrue="true" ifFalse="false" default=cm.UNDEFINED>
+  <#-- @ftlvariable name="product" type="com.coremedia.livecontext.ecommerce.catalog.Product" -->
+  <#-- written in a way that the compress directive does not strip whitespaces of the given variables -->
+  <#if !liveContextFreemarkerFacade.isFragmentRequest()>
+    <#if cm.isUndefined(default)>
+      <#local default=ifTrue />
+    </#if><@compress single_line=true>
+    </@compress>${default}<@compress single_line=true>
+  </@compress><#else>
+    <#-- feature is currently only implemented for salesforce -->
+    <#if ["sfra", "sfcc"]?seq_contains((liveContextFreemarkerFacade.vendorName!"")?lower_case)><@compress single_line=true>
+      </@compress><!--VTL $include.availability('${product.externalId}','${ifTrue?json_string}','${ifFalse?json_string}') VTL--><@compress single_line=true>
+    </@compress><#else><@compress single_line=true>
+      <#-- fall back to old behavior -->
+      </@compress>${liveContextFreemarkerFacade.isProductAvailable(product)?then(ifTrue, ifFalse)}<@compress single_line=true>
+    </@compress></#if>
+  </#if>
+</#macro>

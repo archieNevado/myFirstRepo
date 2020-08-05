@@ -24,7 +24,7 @@ export function addNotifications(container, messages) {
 
   // create a list of notification hooks by path
   const selector = "[data-" + NOTIFICATION_IDENTIFIER + "]";
-  findAndSelf($container, selector).each(function() {
+  findAndSelf($container, selector).each(function () {
     const $this = $(this);
     const config = $.extend({ path: "" }, $this.data(NOTIFICATION_IDENTIFIER));
     $notificationByPath[config.path] = $this;

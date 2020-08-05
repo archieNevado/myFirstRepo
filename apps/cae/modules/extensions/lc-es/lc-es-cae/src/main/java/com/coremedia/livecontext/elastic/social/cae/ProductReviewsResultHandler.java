@@ -181,10 +181,13 @@ public class ProductReviewsResultHandler extends AbstractReviewsResultHandler {
     if (product instanceof ProductVariant) {
       // we only use products as targets for reviews, no product variants (SKUs)
       // e.g. only store the review for PC_TSHIRT and not for PC_TSHIRT_BLUE_XXL
-      product = ((ProductVariant) product).getParent();
+      Product parentProduct = ((ProductVariant) product).getParent();
 
-      if (product != null && LOG.isDebugEnabled()) {
+      if (parentProduct != null) {
+        product = parentProduct;
         LOG.debug("productId {} is a ProductVariant using parent product {} instead", productTechId, product);
+      } else {
+        LOG.debug("productId {} is a ProductVariant without parent product", productTechId);
       }
     }
 

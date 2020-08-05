@@ -7,7 +7,7 @@ import com.coremedia.blueprint.caas.commerce.model.CommerceFacade;
 import com.coremedia.caas.model.adapter.ExtendedLinkListAdapterFactory;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.struct.Struct;
-import com.coremedia.cap.util.StructUtil;
+import com.coremedia.cap.util.CapStructUtil;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
@@ -56,16 +56,16 @@ public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
   }
 
   private int getMaxLength() {
-    Integer value = StructUtil.getInteger(getSettings(), STRUCT_KEY_PRODUCTLIST_MAX_LENGTH);
+    Integer value = CapStructUtil.getInteger(getSettings(), STRUCT_KEY_PRODUCTLIST_MAX_LENGTH);
     return !(value == null || value == 0) ? value : MAX_LENGTH_DEFAULT;
   }
 
   private String getOrderBy() {
-    return StructUtil.getString(getSettings(), STRUCT_KEY_PRODUCTLIST_ORDER_BY);
+    return CapStructUtil.getString(getSettings(), STRUCT_KEY_PRODUCTLIST_ORDER_BY);
   }
 
   private String getFacet() {
-    String facetSettingValue = StructUtil.getString(getSettings(), STRUCT_KEY_PRODUCTLIST_SELECT_FACET_VALUE);
+    String facetSettingValue = CapStructUtil.getString(getSettings(), STRUCT_KEY_PRODUCTLIST_SELECT_FACET_VALUE);
     String returnValue = "";
     if (facetSettingValue != null && !facetSettingValue.matches(DIGIT_PATTERN)) {
       returnValue = facetSettingValue;
@@ -121,7 +121,7 @@ public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
   }
 
   private int getProductOffset() {
-    int initialOffset = Optional.ofNullable(StructUtil.getInteger(getSettings(), STRUCT_KEY_PRODUCTLIST_OFFSET)).orElse(0);
+    int initialOffset = Optional.ofNullable(CapStructUtil.getInteger(getSettings(), STRUCT_KEY_PRODUCTLIST_OFFSET)).orElse(0);
     int productOffset = initialOffset;
     if (Optional.ofNullable(offset).isPresent()) {
       productOffset = initialOffset + PaginationHelper.dynamicOffset(getFixedItemsStructList(), offset, ANNOTATED_LINK_STRUCT_INDEX_PROPERTY_NAME);
@@ -130,7 +130,7 @@ public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
   }
 
   private Optional<String> getOverrideCategoryId() {
-    String value = StructUtil.getString(getSettings(), STRUCT_KEY_PRODUCTLIST_SELECT_FACET_VALUE);
+    String value = CapStructUtil.getString(getSettings(), STRUCT_KEY_PRODUCTLIST_SELECT_FACET_VALUE);
     if (value != null && value.matches(DIGIT_PATTERN)) {
       return Optional.of(value);
     }

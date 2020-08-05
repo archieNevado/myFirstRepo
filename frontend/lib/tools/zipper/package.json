@@ -1,22 +1,19 @@
 {
-  "author": {
-    "name": "CoreMedia",
-    "url": "http://www.coremedia.com"
-  },
   "name": "@coremedia/zipper",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=12"
+  },
   "dependencies": {
     "@coremedia/cm-logger": "^1.0.0",
     "archiver": "2.0.3"
   },
   "devDependencies": {
-    "prettier": "^1.0.0"
+    "prettier": "^2.0.5"
   },
   "scripts": {
-    "prettier": "prettier \"**/*\" --write"
+    "prettier": "prettier --write \"src/**/*.{js,json}\""
   },
-  "engines": {
-    "node": ">=10.12"
-  }
+  "main": "src/index.js"
 }

@@ -261,22 +261,22 @@ export function TimeZone(tz_info) {
   }
 }
 
-TimeZone.prototype.name = function() {
+TimeZone.prototype.name = function () {
   return this.timezone_name;
 };
 
-TimeZone.prototype.dst = function() {
+TimeZone.prototype.dst = function () {
   return this.uses_dst;
 };
 
-TimeZone.prototype.offset = function() {
+TimeZone.prototype.offset = function () {
   return this.utc_offset;
 };
 
 /**
  * Checks if it is possible that the timezone is ambiguous.
  */
-TimeZone.prototype.is_ambiguous = function() {
+TimeZone.prototype.is_ambiguous = function () {
   return typeof olson.ambiguity_list[this.name()] !== "undefined";
 };
 
@@ -289,7 +289,7 @@ TimeZone.prototype.is_ambiguous = function() {
  * This is done by checking known dates for when daylight savings start for different
  * timezones.
  */
-TimeZone.prototype.ambiguity_check = function() {
+TimeZone.prototype.ambiguity_check = function () {
   let ambiguity_list = olson.ambiguity_list[this.name()],
     length = ambiguity_list.length,
     i = 0,

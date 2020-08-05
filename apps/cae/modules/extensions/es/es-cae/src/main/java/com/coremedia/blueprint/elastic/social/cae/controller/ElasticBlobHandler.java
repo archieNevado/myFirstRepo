@@ -1,26 +1,27 @@
 package com.coremedia.blueprint.elastic.social.cae.controller;
 
-import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.blueprint.cae.handlers.HandlerBase;
-import com.coremedia.blueprint.cae.util.SecureHashCodeGeneratorStrategy;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.multisite.SiteHelper;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.elastic.core.api.blobs.Blob;
 import com.coremedia.elastic.core.api.blobs.BlobService;
+import com.coremedia.objectserver.web.SecureHashCodeGeneratorStrategy;
 import com.coremedia.objectserver.web.links.Link;
 import com.coremedia.transform.BlobTransformer;
 import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.springframework.beans.factory.annotation.Value;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 
@@ -86,8 +87,12 @@ public class ElasticBlobHandler extends HandlerBase {
   @Inject
   private BlobService blobService;
 
-  @Value("${cae.is.preview:false}")
-  private boolean isCaePreview;
+  private DeliveryConfigurationProperties deliveryConfigurationProperties;
+
+  @Autowired
+  public void setDeliveryConfigurationProperties(DeliveryConfigurationProperties deliveryConfigurationProperties) {
+    this.deliveryConfigurationProperties = deliveryConfigurationProperties;
+  }
 
   protected String getName(Blob o) {
     return o.getFileName();
@@ -231,7 +236,7 @@ public class ElasticBlobHandler extends HandlerBase {
 
     Blob blob = blobService.get(imageId);
 
-    if (blob == null || (!isCaePreview && blob.getOffline())) {
+    if (blob == null || (!deliveryConfigurationProperties.isPreviewMode() && blob.getOffline())) {
       return result;
     }
 

@@ -54,7 +54,7 @@
 -->
 <#assign tagManagers=bp.setting(self, "TagManagement", [])/>
 <#list tagManagers as tagManager>
-  <#if tagManager.head?has_content>
+  <#if !bp.isEmptyRichtext(tagManager.head!"")>
     <@cm.include self=tagManager.head view="script" />
   </#if>
 </#list>

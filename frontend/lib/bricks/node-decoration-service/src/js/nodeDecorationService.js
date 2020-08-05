@@ -1,5 +1,9 @@
 import $ from "jquery";
-import { findAndSelf } from "@coremedia/brick-utils";
+import {
+  findAndSelf,
+  pushTaskQueue,
+  popTaskQueue,
+} from "@coremedia/brick-utils";
 
 /**
  * specifies functionalities to be applied if decorateNode is called
@@ -13,18 +17,18 @@ const nodeDecorators = [];
  */
 const nodeUndecorators = [];
 
-const getSelectorFunction = function(selector, handler) {
-  return function($target) {
-    findAndSelf($target, selector).each(function() {
+const getSelectorFunction = function (selector, handler) {
+  return function ($target) {
+    findAndSelf($target, selector).each(function () {
       handler($(this));
     });
   };
 };
 
 function getDataFunction(baseConfig, identifier, handler) {
-  return function($target) {
+  return function ($target) {
     const selector = "[data-" + identifier + "]";
-    findAndSelf($target, selector).each(function() {
+    findAndSelf($target, selector).each(function () {
       const $this = $(this);
       const data = $this.data(identifier);
       const config = baseConfig ? $.extend({}, baseConfig, data) : data;
@@ -112,15 +116,17 @@ export function addNodeDecoratorByData(
  * @param {object|jQuery} node can be plain DOM-Node or JQuery Wrapped DOM-Node
  */
 export function decorateNode(node) {
+  pushTaskQueue();
   let $target;
   if (node instanceof $) {
     $target = node;
   } else {
     $target = $(node);
   }
-  nodeDecorators.forEach(function(functionality) {
+  nodeDecorators.forEach(function (functionality) {
     functionality($target);
   });
+  popTaskQueue();
 }
 
 /**
@@ -129,13 +135,15 @@ export function decorateNode(node) {
  * @param {object|jQuery} node can be plain DOM-Node or JQuery Wrapped DOM-Node
  */
 export function undecorateNode(node) {
+  pushTaskQueue();
   let $target;
   if (node instanceof $) {
     $target = node;
   } else {
     $target = $(node);
   }
-  nodeUndecorators.forEach(function(functionality) {
+  nodeUndecorators.forEach(function (functionality) {
     functionality($target);
   });
+  popTaskQueue();
 }

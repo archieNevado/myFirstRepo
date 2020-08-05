@@ -17,7 +17,7 @@ const { PKG_NAME } = require("../lib/constants");
 
 const command = "create-brick [name]";
 const desc = "Create a blank, minimal brick";
-const builder = yargs =>
+const builder = (yargs) =>
   yargs
     .option("verbose", {
       alias: "V",
@@ -27,7 +27,7 @@ const builder = yargs =>
     })
     .epilogue(args.docs);
 
-const handler = argv => {
+const handler = (argv) => {
   let brickName = "";
   let brickPath = "";
 
@@ -79,9 +79,7 @@ const handler = argv => {
       ])
       .then(({ chosenName }) => {
         if (!chosenName) {
-          log.error(
-            `The theme name must not be empty.`
-          );
+          log.error(`The theme name must not be empty.`);
           getName();
         } else {
           brickName = chosenName;

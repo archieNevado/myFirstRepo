@@ -14,9 +14,9 @@
       <div class="cm-caption__title"<@preview.metadata "properties.title"/>>${self.title!""}</div>
     </#if>
     <#-- media caption -->
-    <#if renderText && self.detailText?has_content>
+    <#if renderText && !bp.isEmptyRichtext(self.detailText!"")>
       <div class="cm-caption__text cm-richtext"<@preview.metadata "properties.detailText"/>>
-        <@cm.include self=self.detailText!cm.UNDEFINED />
+        <@cm.include self=self.detailText />
       </div>
     </#if>
   </div>

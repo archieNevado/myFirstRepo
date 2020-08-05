@@ -1,7 +1,7 @@
 import $ from "jquery";
 import { addNodeDecoratorBySelector } from "@coremedia/brick-node-decoration-service";
 
-addNodeDecoratorBySelector(".cm-hamburger-icon", $hamburgerIcon => {
+addNodeDecoratorBySelector(".cm-hamburger-icon", ($hamburgerIcon) => {
   const $multilevelDropdown = $(".multilevel-dropdown");
   const $modalBackground = $(".modal-background");
 

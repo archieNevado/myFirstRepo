@@ -25,7 +25,7 @@ try {
 
 const command = "monitor";
 const desc = `Watch file changes and update theme on ${monitorConfig.target} CAE.`;
-const builder = yargs =>
+const builder = (yargs) =>
   yargs
     .option("local", {
       describe: "Set developer mode to local CAE.",
@@ -40,7 +40,7 @@ const builder = yargs =>
     })
     .epilogue(args.docs);
 
-const handler = argv => {
+const handler = (argv) => {
   const logLevel = argv.verbose ? "debug" : "info";
   const log = cmLogger.getLogger({
     name: PKG_NAME,
@@ -98,15 +98,15 @@ const handler = argv => {
     log.info("Starting monitor using remote CAE.");
     themeImporter
       .whoami()
-      .then(user => {
+      .then((user) => {
         log.info(`You are logged in as user '${user.name}' (id=${user.id}).`);
-        if(argv.verbose) {
+        if (argv.verbose) {
           log.info(`Verbose logging is enabled.`);
         }
         log.info(`Creating initial theme build.`);
         startWebpackWatchMode();
       })
-      .catch(e => {
+      .catch((e) => {
         log.error(e.message);
         runLoginCmd();
         startWebpackWatchMode();

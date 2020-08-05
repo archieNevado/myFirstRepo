@@ -5,7 +5,7 @@
  * @param  {string} str
  * @return {string}
  */
-const titleCase = str => str.replace(str[0], str[0].toUpperCase());
+const titleCase = (str) => str.replace(str[0], str[0].toUpperCase());
 
 /**
  * returns content for .prettierrc

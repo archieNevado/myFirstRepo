@@ -19,7 +19,7 @@ describe("loggerFactory()", () => {
       log.debug("debug message");
       expect(global.console.log).toHaveBeenCalled();
     });
-    ["INFO", "WARN", "ERROR", "SILENT"].forEach(level => {
+    ["INFO", "WARN", "ERROR", "SILENT"].forEach((level) => {
       it(`suppresses a debug message when using level "${level.toLowerCase()}"`, () => {
         const log = loggerFactory({ level });
         log.debug("debug message");
@@ -33,7 +33,7 @@ describe("loggerFactory()", () => {
       log.info("info message");
       expect(global.console.info).toHaveBeenCalled();
     });
-    ["WARN", "ERROR", "SILENT"].forEach(level => {
+    ["WARN", "ERROR", "SILENT"].forEach((level) => {
       it(`suppresses an info message when using level "${level.toLowerCase()}"`, () => {
         const log = loggerFactory({ level });
         log.info("info message");
@@ -47,7 +47,7 @@ describe("loggerFactory()", () => {
       log.warn("warn message");
       expect(global.console.warn).toHaveBeenCalled();
     });
-    ["ERROR", "SILENT"].forEach(level => {
+    ["ERROR", "SILENT"].forEach((level) => {
       it(`suppresses a warning message when using level "${level.toLowerCase()}"`, () => {
         const log = loggerFactory({ level });
         log.warn("warning message");
@@ -87,8 +87,8 @@ describe("loggerFactory()", () => {
         level: "info",
         name: "LoggerName",
         prefix: {
-          level: opts => `[${opts.level}]`,
-          name: opts => opts.name,
+          level: (opts) => `[${opts.level}]`,
+          name: (opts) => opts.name,
           template: `[{{time}}] {{level}} `,
           time: () => {
             const date = new Date("2018-01-17T18:00:00");
@@ -105,8 +105,8 @@ describe("loggerFactory()", () => {
         level: "warn",
         name: "LoggerName",
         prefix: {
-          level: opts => `[${opts.level}]`,
-          name: opts => opts.name,
+          level: (opts) => `[${opts.level}]`,
+          name: (opts) => opts.name,
           template: `[{{time}}] {{level}} ｢{{name}}｣ {{unresolved}} `,
           time: () => {
             const date = new Date("2018-01-17T18:00:00");

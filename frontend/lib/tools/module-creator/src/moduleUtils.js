@@ -24,7 +24,7 @@ const sharedData = require("./sharedData");
  * @param  {string} moduleName
  * @return {string}
  */
-const convertModuleName = moduleName => {
+const convertModuleName = (moduleName) => {
   if (typeof moduleName !== "string") {
     return "";
   }
@@ -39,7 +39,7 @@ const convertModuleName = moduleName => {
  * @param  {string}  modulePath
  * @return {Boolean}
  */
-const isModuleNameInUse = modulePath => fs.existsSync(modulePath);
+const isModuleNameInUse = (modulePath) => fs.existsSync(modulePath);
 
 /**
  * Converts a given version to a caret version if it is valid according to semver.valid
@@ -47,7 +47,7 @@ const isModuleNameInUse = modulePath => fs.existsSync(modulePath);
  * @param version the version to change to a caret version
  * @returns {string} if a valid version was given the caret version otherwise the given version
  */
-const convertVersionToCaretVersion = version => {
+const convertVersionToCaretVersion = (version) => {
   if (!version || !valid(version)) {
     return version;
   }
@@ -59,8 +59,8 @@ const convertVersionToCaretVersion = version => {
  * Object containing a mapping of dependencyName => dependencyVersion
  * @param dependencies
  */
-const convertDependencyVersionsToCaretVersions = dependencies => {
-  return Object.keys(dependencies).reduce(function(aggregator, newValue) {
+const convertDependencyVersionsToCaretVersions = (dependencies) => {
+  return Object.keys(dependencies).reduce(function (aggregator, newValue) {
     aggregator[newValue] = convertVersionToCaretVersion(dependencies[newValue]);
     return aggregator;
   }, {});
@@ -88,7 +88,7 @@ const createThemeFolderStructure = (wsConfig, themePath, log) => {
       "com.coremedia.blueprint.common.contentbeans"
     ),
   ];
-  directories.forEach(dir => {
+  directories.forEach((dir) => {
     log.debug(
       `Create directory "themes/${path.relative(wsConfig.themesPath, dir)}"`
     );
@@ -118,7 +118,7 @@ const createBrickFolderStructure = (wsConfig, brickPath, log) => {
       "com.coremedia.blueprint.common.contentbeans"
     ),
   ];
-  directories.forEach(dir => {
+  directories.forEach((dir) => {
     log.debug(
       `Create directory "bricks/${path.relative(wsConfig.bricksPath, dir)}"`
     );
@@ -205,7 +205,7 @@ const createThemeFiles = (
       data: "",
     },
   ];
-  files.forEach(file => {
+  files.forEach((file) => {
     log.debug(`Create file "${file.path}"`);
     fs.writeFileSync(path.join(themePath, file.path), file.data);
   });
@@ -273,7 +273,7 @@ const createBrickFiles = (brickPath, brickName, log) => {
       data: brickData.initBrickPageBodyFtl(),
     },
   ];
-  files.forEach(file => {
+  files.forEach((file) => {
     log.debug(`Create file "${file.path}"`);
     fs.writeFileSync(path.join(brickPath, file.path), file.data);
   });
@@ -344,7 +344,7 @@ const ejectBrick = (oldPath, newPath, newNameByOldName, log) => {
     ignore: ["node_modules/**"],
   });
 
-  hits.forEach(hit => {
+  hits.forEach((hit) => {
     const sourceFile = path.join(oldPath, hit);
     const targetFile = path.join(newPath, hit);
 

@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.cae.view;
 
+import com.coremedia.objectserver.view.dynamic.DynamicIncludeRenderNodeDecoratorProvider;
 import com.coremedia.objectserver.web.HandlerHelper;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;

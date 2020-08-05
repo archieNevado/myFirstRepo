@@ -1,9 +1,6 @@
 package com.coremedia.livecontext.studio.asset;
 
 import com.coremedia.blueprint.base.livecontext.util.CommerceReferenceHelper;
-import com.coremedia.blueprint.common.contentbeans.CMDownload;
-import com.coremedia.blueprint.common.contentbeans.CMPicture;
-import com.coremedia.blueprint.common.contentbeans.CMVideo;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
@@ -11,9 +8,9 @@ import com.coremedia.cap.content.events.ContentEvent;
 import com.coremedia.cap.content.events.ContentRepositoryListenerBase;
 import com.coremedia.ecommerce.studio.rest.cache.CommerceCacheInvalidationSource;
 import com.coremedia.livecontext.ecommerce.common.Vendor;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.SmartLifecycle;
 
 import java.util.Collection;
@@ -53,6 +50,11 @@ class AssetInvalidationRepositoryListener extends ContentRepositoryListenerBase 
           ContentEvent.CONTENT_REVERTED,
           ContentEvent.CONTENT_UNDELETED
   );
+
+  @VisibleForTesting
+  static final String CMPICTURE = "CMPicture";
+  private static final String CMVIDEO = "CMVideo";
+  private static final String CMDOWNLOAD = "CMDownload";
 
   private final AtomicBoolean running = new AtomicBoolean(false);
 
@@ -132,8 +134,8 @@ class AssetInvalidationRepositoryListener extends ContentRepositoryListenerBase 
   private static boolean isRelevantType(@NonNull Content content) {
     ContentType contentType = content.getType();
 
-    return contentType.isSubtypeOf(CMPicture.NAME) ||
-            contentType.isSubtypeOf(CMVideo.NAME) ||
-            contentType.isSubtypeOf(CMDownload.NAME);
+    return contentType.isSubtypeOf(CMPICTURE) ||
+            contentType.isSubtypeOf(CMVIDEO) ||
+            contentType.isSubtypeOf(CMDOWNLOAD);
   }
 }

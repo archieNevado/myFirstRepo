@@ -9,14 +9,14 @@ const defaultLogger = loggerFactory({
 });
 const cache = { default: defaultLogger };
 
-const getCachedLogger = name => cache[name];
+const getCachedLogger = (name) => cache[name];
 
 const updateCache = (name, logger) => {
   cache[name] = logger;
 };
 
 const cmLogger = Object.assign(defaultLogger, {
-  getLogger: options => {
+  getLogger: (options) => {
     if (typeof options === "string") {
       options = { name: options };
     }
@@ -36,7 +36,7 @@ const cmLogger = Object.assign(defaultLogger, {
     }
     return logger;
   },
-  getLevelFromWebpackStats: stats => {
+  getLevelFromWebpackStats: (stats) => {
     const LEVEL = {
       verbose: "debug",
       normal: "info",

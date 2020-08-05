@@ -51,7 +51,12 @@
 
     <dependency>
       <groupId>com.coremedia.cms</groupId>
-      <artifactId>cae-contentbeanservices-api</artifactId>
+      <artifactId>cap-delivery-configuration</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>cae-contentbeanservices</artifactId>
     </dependency>
 
     <dependency>
@@ -82,7 +87,10 @@
       <groupId>com.coremedia.cms</groupId>
       <artifactId>coremedia-spring</artifactId>
     </dependency>
-
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot</artifactId>
+    </dependency>
 
     <!-- PROVIDED SCOPE -->
     <dependency>

@@ -4,6 +4,7 @@ import com.coremedia.blueprint.assets.contentbeans.AMAsset;
 import com.coremedia.blueprint.assets.contentbeans.AMAssetRendition;
 import com.coremedia.blueprint.cae.handlers.CapBlobHandler;
 import com.coremedia.objectserver.beans.ContentBean;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.objectserver.web.HandlerHelper;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,6 +52,7 @@ public class AssetRenditionBlobHandlerTest {
   @Before
   public void setUp() {
     when(capBlobHandler.handleRequest(any(ContentBean.class), nullable(String.class), anyString(), nullable(String.class), nullable(WebRequest.class), any())).thenReturn(modelAndView);
+    assetRenditionBlobHandler.setDeliveryConfigurationProperties(new DeliveryConfigurationProperties());
   }
 
 

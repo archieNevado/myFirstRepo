@@ -3,10 +3,13 @@ package com.coremedia.blueprint.cae.handlers;
 import com.coremedia.blueprint.cae.web.ExposeCurrentNavigationInterceptor;
 import com.coremedia.blueprint.cae.web.i18n.ResourceBundleInterceptor;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
+import com.coremedia.objectserver.configuration.CaeConfigurationProperties;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
@@ -14,6 +17,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.util.List;
@@ -25,10 +29,15 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = HandlerInterceptorsListTest.LocalConfig.class)
+@WebAppConfiguration
 @ActiveProfiles("HandlerInterceptorsListTest")
 public class HandlerInterceptorsListTest {
 
   @Configuration
+  @EnableConfigurationProperties({
+          DeliveryConfigurationProperties.class,
+          CaeConfigurationProperties.class
+  })
   @ImportResource(
           value = {
                   "classpath:/framework/spring/blueprint-handlers.xml",

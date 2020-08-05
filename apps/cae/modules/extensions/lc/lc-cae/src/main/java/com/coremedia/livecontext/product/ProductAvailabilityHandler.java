@@ -41,9 +41,13 @@ import static com.coremedia.blueprint.base.links.UriConstants.Views.VIEW_FRAGMEN
 /**
  * This handler generates and handles URLs to retrieve the availability of {@link Product} and {@link ProductVariant}
  * contained in a {@link ProductInSite}. The availability will be rendered as a fragment.
+ *
+ * @deprecated availability will is no longer part of commerce hub. Any stock related rendering in the should be
+ *  calculated corresponding commerce system.
  */
 @Link
 @RequestMapping
+@Deprecated(forRemoval = true, since = "2007.1")
 public class ProductAvailabilityHandler extends PageHandlerBase {
 
   private static final String PATH_VARIABLE_NAME_SHOP_NAME = "shopName";

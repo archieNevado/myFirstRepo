@@ -25,6 +25,7 @@ public abstract class CMTeaserBase extends CMTeasableImpl implements CMTeaser {
 
   static final String ANNOTATED_LINK_STRUCT_CTA_ENABLED_PROPERTY_NAME = "callToActionEnabled";
   static final String ANNOTATED_LINK_STRUCT_CTA_CUSTOM_TEXT_PROPERTY_NAME = "callToActionCustomText";
+  static final String ANNOTATED_LINK_STRUCT_CTA_HASH_PROPERTY_NAME = "callToActionHash";
 
   /**
    * Returns the value of the document property {@link #MASTER}.

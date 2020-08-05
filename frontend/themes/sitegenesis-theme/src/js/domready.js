@@ -14,10 +14,10 @@ import {
 function getElementNodes(nodeList) {
   return Array.prototype.slice
     .call(nodeList)
-    .filter(node => node.nodeType === Node.ELEMENT_NODE);
+    .filter((node) => node.nodeType === Node.ELEMENT_NODE);
 }
 
-$(function() {
+$(function () {
   "use strict";
 
   if (document.querySelector("[data-cm-developer-mode]")) {
@@ -28,13 +28,13 @@ $(function() {
   // Reinitialize the PDP-Asset-integration whenever the product-image-container is refreshed
   const productImageContainer = $("#pdpMain > .product-image-container")[0];
   if (productImageContainer) {
-    const mutationObserver = new MutationObserver(mutations => {
-      mutations.forEach(mutation => {
+    const mutationObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
         if (mutation.type === "childList") {
-          getElementNodes(mutation.removedNodes).forEach(removedNode => {
+          getElementNodes(mutation.removedNodes).forEach((removedNode) => {
             undecorateNode(removedNode);
           });
-          getElementNodes(mutation.addedNodes).forEach(addedNode => {
+          getElementNodes(mutation.addedNodes).forEach((addedNode) => {
             decorateNode(addedNode);
           });
         }

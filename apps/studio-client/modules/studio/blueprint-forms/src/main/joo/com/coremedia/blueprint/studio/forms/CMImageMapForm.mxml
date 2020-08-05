@@ -91,11 +91,8 @@
                     <bpforms:CallToActionConfigurationForm bindTo="{config.bindTo}"
                                                            collapsible="false"
                                                            ui="{PanelSkin.DEFAULT.getSkin()}"
-                                                           forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}">
-                      <bpforms:header>
-                        <Header padding="6 6 6 0"/>
-                      </bpforms:header>
-                    </bpforms:CallToActionConfigurationForm>
+                                                           header="{false}"
+                                                           forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
                   </ui:items>
                 </ui:AnnotatedLinkListWidget>
               </editor:rowWidget>

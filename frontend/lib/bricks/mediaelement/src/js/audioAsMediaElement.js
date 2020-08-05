@@ -19,14 +19,14 @@ function audioAsMediaElement(audioElement) {
     useDefaultControls: true,
 
     // events of audios
-    success: function(mediaElement) {
+    success: function (mediaElement) {
       const $mediaElement = $(mediaElement);
       // attach css class
       $mediaElement.addClass("cm-mediaelementwrapper");
       // audio loaded
       mediaElement.addEventListener(
         "loadedmetadata",
-        function() {
+        function () {
           utils.log("Audio " + mediaElement.src + " loaded.", $audio);
           $document.trigger(utils.EVENT_LAYOUT_CHANGED);
         },
@@ -36,7 +36,7 @@ function audioAsMediaElement(audioElement) {
       // audio started
       mediaElement.addEventListener(
         "playing",
-        function() {
+        function () {
           utils.log("Audio started with duration of " + me.duration + "ms.");
         },
         false
@@ -45,7 +45,7 @@ function audioAsMediaElement(audioElement) {
       // audio ended
       mediaElement.addEventListener(
         "ended",
-        function() {
+        function () {
           utils.log("Audio playback ended.");
         },
         false
@@ -58,9 +58,9 @@ function audioAsMediaElement(audioElement) {
  * default wrapper function to handle dom elements or jQuery selectors
  * @param domElementOrJQueryResult
  */
-export default function(domElementOrJQueryResult) {
+export default function (domElementOrJQueryResult) {
   if (domElementOrJQueryResult instanceof $) {
-    $.each(domElementOrJQueryResult, function(index, item) {
+    $.each(domElementOrJQueryResult, function (index, item) {
       audioAsMediaElement(item);
     });
   } else {

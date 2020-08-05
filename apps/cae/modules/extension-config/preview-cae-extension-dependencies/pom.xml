@@ -18,12 +18,6 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>external-preview-cae</artifactId>
-      <version>1-SNAPSHOT</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
       <artifactId>lc-p13n-preview-cae</artifactId>
       <version>1-SNAPSHOT</version>
       <scope>runtime</scope>

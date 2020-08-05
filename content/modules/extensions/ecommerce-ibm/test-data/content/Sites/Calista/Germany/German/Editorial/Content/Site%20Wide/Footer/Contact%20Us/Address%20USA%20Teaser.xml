@@ -29,7 +29,7 @@
 <contexts>
 </contexts>
 <teaserTitle>San Francisco, USA</teaserTitle>
-<teaserText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p> Coremedia Corporation, </p> <p> 114 Sansome Street, Suite 1300 </p> <p> San Francisco, CA 94104 </p> <p> USA </p> <p/> <p> +1.415.371.0400 </p> </div></teaserText>
+<teaserText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p> CoreMedia Corporation, </p> <p> 114 Sansome Street, Suite 1300 </p> <p> San Francisco, CA 94104 </p> <p> USA </p> <p/> <p> +1.415.371.0400 </p> </div></teaserText>
 <pictures>
 <link href="../../../../../Pictures/Sitewide%20Pictures/USA%20Map%20Picture.xml" path="/Sites/Calista/Germany/German/Pictures/Sitewide%20Pictures/USA%20Map%20Picture"/>
 </pictures>

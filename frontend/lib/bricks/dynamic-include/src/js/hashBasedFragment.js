@@ -38,7 +38,7 @@ export function stringToRequestParams(string, validParameters) {
   validParameters = validParameters || [];
   const requestParams = {};
   const hashParams = string.split("&");
-  $.each(hashParams, function(_, parameter) {
+  $.each(hashParams, function (_, parameter) {
     const keyValue = parameter.split("=", 2);
     const key = keyValue[0];
     const value = keyValue[1];

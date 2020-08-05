@@ -50,6 +50,10 @@
     <%- rest_servlet_url = "http://#{@server_cluster[rest_cluster_member]['host']}:#{@server_cluster[rest_cluster_member]['port']}" -%>
   <%- end -%>
 
+  <IfModule mod_headers.c>
+    Header set Content-Security-Policy "frame-ancestors 'self';"
+  </IfModule>
+
   # the trailing "e" is no typo
   Header add Set-Cookie "ROUTEID=.%{BALANCER_WORKER_ROUTE}e; path=/" env=BALANCER_ROUTE_CHANGED
 

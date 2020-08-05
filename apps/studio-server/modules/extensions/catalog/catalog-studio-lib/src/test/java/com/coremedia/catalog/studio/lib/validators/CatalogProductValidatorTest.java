@@ -6,6 +6,9 @@ import com.coremedia.rest.validation.Severity;
 import com.coremedia.rest.validators.NotEmptyValidator;
 import org.junit.Test;
 
+import java.util.Collections;
+import java.util.Set;
+
 import static com.coremedia.catalog.studio.lib.validators.CatalogProductValidator.CODE_ISSUE_NOT_IN_CATALOG;
 import static com.coremedia.catalog.studio.lib.validators.CatalogProductValidator.CONTEXTS_PROPERTY_NAME;
 import static java.util.Arrays.asList;
@@ -48,7 +51,7 @@ public class CatalogProductValidatorTest {
     validator.validate(content, issues);
 
     verify(issues).addIssue(any(Severity.class), eq(CONTEXTS_PROPERTY_NAME), eq(CODE_ISSUE_NOT_IN_CATALOG));
-    verify(issues).addIssue(any(Severity.class), eq(TEST_PROPERTY_NULL), eq(NotEmptyValidator.class.getSimpleName()));
+    verify(issues).addIssue(any(Set.class), any(Severity.class), eq(TEST_PROPERTY_NULL), eq(NotEmptyValidator.class.getSimpleName()));
     verify(issues, times(0)).addIssue(any(Severity.class), eq(TEST_PROPERTY_NONNULL), eq(NotEmptyValidator.class.getSimpleName()));
   }
 }

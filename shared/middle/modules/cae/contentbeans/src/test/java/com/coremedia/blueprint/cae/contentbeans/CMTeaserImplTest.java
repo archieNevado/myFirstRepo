@@ -3,7 +3,7 @@ package com.coremedia.blueprint.cae.contentbeans;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
 import com.coremedia.blueprint.common.contentbeans.CMTeaser;
-import com.coremedia.blueprint.testing.ContentBeanTestBase;
+import com.coremedia.blueprint.cae.contentbeans.testing.ContentBeanTestBase;
 import com.coremedia.cap.common.CapStructHelper;
 import com.coremedia.cap.struct.Struct;
 import org.junit.Before;

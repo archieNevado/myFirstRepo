@@ -42,15 +42,10 @@ public class P13NPlacementPredicateTest {
   }
 
   @Test
-  public void testInputNull() {
-    assertThat(testling.apply(null)).isFalse();
-  }
-
-  @Test
   public void testInputNotMatching() {
     RenderNode input = mock(RenderNode.class);
     when(input.getBean()).thenReturn(new Object());
-    assertThat(testling.apply(input)).isFalse();
+    assertThat(testling.test(input)).isFalse();
   }
 
   @Test
@@ -58,7 +53,7 @@ public class P13NPlacementPredicateTest {
     RenderNode input = mock(RenderNode.class);
     when(input.getBean()).thenReturn(mock(ContentBeanBackedPageGridPlacement.class));
     when(dynamicContainerStrategy.isDynamic(anyList())).thenReturn(false);
-    assertThat(testling.apply(input)).isFalse();
+    assertThat(testling.test(input)).isFalse();
   }
 
   @Test
@@ -66,28 +61,28 @@ public class P13NPlacementPredicateTest {
     RenderNode input = mock(RenderNode.class);
     when(input.getBean()).thenReturn(mock(ContentBeanBackedPageGridPlacement.class));
     when(input.getView()).thenReturn(null);
-    assertThat(testling.apply(input)).isTrue();
+    assertThat(testling.test(input)).isTrue();
   }
 
   @Test
   public void testInputMatchingAndFragmentPreviewSet() {
     RenderNode input = mock(RenderNode.class);
     when(input.getView()).thenReturn("fragmentPreview");
-    assertThat(testling.apply(input)).isFalse();
+    assertThat(testling.test(input)).isFalse();
   }
 
   @Test
   public void testInputMatchingAndMultiViewPreviewSet() {
     RenderNode input = mock(RenderNode.class);
     when(input.getView()).thenReturn("multiViewPreview");
-    assertThat(testling.apply(input)).isFalse();
+    assertThat(testling.test(input)).isFalse();
   }
 
   @Test
   public void testInputMatchingAndAsPreviewSet() {
     RenderNode input = mock(RenderNode.class);
     when(input.getView()).thenReturn("asPreview");
-    assertThat(testling.apply(input)).isFalse();
+    assertThat(testling.test(input)).isFalse();
   }
 
   @Test
@@ -95,6 +90,6 @@ public class P13NPlacementPredicateTest {
     RenderNode input = mock(RenderNode.class);
     when(input.getBean()).thenReturn(mock(ContentBeanBackedPageGridPlacement.class));
     when(input.getView()).thenReturn("any_view_except_fragmentPreview");
-    assertThat(testling.apply(input)).isTrue();
+    assertThat(testling.test(input)).isTrue();
   }
 }

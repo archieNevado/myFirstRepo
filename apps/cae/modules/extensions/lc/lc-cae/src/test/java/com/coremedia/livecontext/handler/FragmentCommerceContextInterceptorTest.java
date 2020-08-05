@@ -25,6 +25,7 @@ import com.coremedia.livecontext.fragment.FragmentParametersFactory;
 import com.coremedia.livecontext.fragment.links.context.Context;
 import com.coremedia.livecontext.fragment.links.context.ContextBuilder;
 import com.coremedia.livecontext.fragment.links.context.LiveContextContextHelper;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.junit.After;
 import org.junit.Before;
@@ -66,6 +67,8 @@ public class FragmentCommerceContextInterceptorTest {
 
   private static final String REQUEST_PATH_INFO = "/anyShop";
 
+  private DeliveryConfigurationProperties deliveryConfigurationProperties;
+
   @Spy
   @InjectMocks
   private FragmentCommerceContextInterceptor testling;
@@ -97,6 +100,9 @@ public class FragmentCommerceContextInterceptorTest {
 
   @Before
   public void setup() {
+    deliveryConfigurationProperties = new DeliveryConfigurationProperties();
+    deliveryConfigurationProperties.setPreviewMode(false);
+    testling.setDeliveryConfigurationProperties(deliveryConfigurationProperties);
     commerceConnection = new BaseCommerceConnection();
 
     storeContext = StoreContextBuilderImpl.from(commerceConnection, "any-site-id").build();
@@ -142,7 +148,7 @@ public class FragmentCommerceContextInterceptorTest {
   }
 
   private void runTestlingInPreviewMode(boolean previewMode) {
-    testling.setPreview(previewMode);
+    deliveryConfigurationProperties.setPreviewMode(previewMode);
     doReturn(previewMode).when(testling).isStudioPreviewRequest(request);
   }
 

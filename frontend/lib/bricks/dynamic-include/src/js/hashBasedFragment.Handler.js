@@ -100,10 +100,8 @@ export default class {
     const $subHandlers = $fragmentContainer.find(
       ":data(" + STATE_DATA_ATTRIBUTE_NAME + ")"
     );
-    $subHandlers.each(function() {
-      $(this)
-        .data(STATE_DATA_ATTRIBUTE_NAME)
-        .instance.disable();
+    $subHandlers.each(function () {
+      $(this).data(STATE_DATA_ATTRIBUTE_NAME).instance.disable();
     });
     const requestConfig = {
       url: this._config.baseUrl,
@@ -114,12 +112,12 @@ export default class {
       $fragmentContainer,
       requestConfig,
       false,
-      function(jqXHR) {
+      function (jqXHR) {
         if (jqXHR.status === 200) {
           // only handle modified parameters if header prefix is given
           if (that._config.modifiedParametersHeaderPrefix) {
             let requestChanged = false;
-            $.each(that._config.validParameters, function(_, validParameter) {
+            $.each(that._config.validParameters, function (_, validParameter) {
               const modifierParameter = jqXHR.getResponseHeader(
                 that._config.modifiedParametersHeaderPrefix + validParameter
               );
@@ -140,10 +138,8 @@ export default class {
             }
           }
         } else {
-          $subHandlers.each(function() {
-            $(this)
-              .data(STATE_DATA_ATTRIBUTE_NAME)
-              .instance.enable();
+          $subHandlers.each(function () {
+            $(this).data(STATE_DATA_ATTRIBUTE_NAME).instance.enable();
           });
         }
       }
@@ -171,7 +167,7 @@ export default class {
     this._handleHashChange(hash);
 
     const that = this;
-    this._windowListener = function() {
+    this._windowListener = function () {
       that._handleHashChange(window.location.hash);
     };
     $window.on("hashchange", this._windowListener);

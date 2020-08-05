@@ -3,7 +3,7 @@ import * as downloadCollection from "./downloadCollection";
 import * as nodeDecorationService from "@coremedia/brick-node-decoration-service";
 import { updateTargetWithAjaxResponse } from "@coremedia/brick-dynamic-include";
 
-$(function() {
+$(function () {
   const $window = $(window);
 
   function updateLeftBadgeIcon($badgeIconLeft, hasRenditions) {
@@ -24,18 +24,15 @@ $(function() {
       assetId: undefined,
     },
     "am-picture-box__badge-icon-left",
-    function($badgeIconLeft, config) {
+    function ($badgeIconLeft, config) {
       const hasRenditions = downloadCollection.hasRenditionInDownloadCollection(
         config.assetId
       );
       updateLeftBadgeIcon($badgeIconLeft, hasRenditions);
 
-      $badgeIconLeft.on("click", function(event) {
+      $badgeIconLeft.on("click", function (event) {
         event.preventDefault();
-        $(this)
-          .closest(".am-asset-teaser")
-          .find(".am-overlay")
-          .show();
+        $(this).closest(".am-asset-teaser").find(".am-overlay").show();
 
         let hasRenditions = downloadCollection.hasRenditionInDownloadCollection(
           config.assetId
@@ -71,7 +68,7 @@ $(function() {
           .find(".am-overlay--content")
           .find(":checkbox");
         let checkboxSelected = false;
-        checkboxes.each(function() {
+        checkboxes.each(function () {
           const json = this.attributes.getNamedItem("data-am-overlay__checkbox")
             .nodeValue;
           const data = JSON.parse(json);
@@ -106,13 +103,10 @@ $(function() {
   // overlay close button
   nodeDecorationService.addNodeDecoratorBySelector(
     ".am-overlay__close-button",
-    function($closeButton) {
-      $closeButton.on("click", function(event) {
+    function ($closeButton) {
+      $closeButton.on("click", function (event) {
         event.preventDefault();
-        $(this)
-          .closest(".am-asset-teaser")
-          .find(".am-overlay")
-          .hide();
+        $(this).closest(".am-asset-teaser").find(".am-overlay").hide();
         $(this)
           .closest(".am-asset-teaser")
           .find(".am-picture-box__badge-icon-left")
@@ -131,8 +125,8 @@ $(function() {
       assetId: undefined,
     },
     "am-overlay__update-button",
-    function($addToDownloadCollectionBtn, config) {
-      $addToDownloadCollectionBtn.on("click", function(event) {
+    function ($addToDownloadCollectionBtn, config) {
+      $addToDownloadCollectionBtn.on("click", function (event) {
         event.preventDefault();
 
         if (!$(this).attr("disabled")) {
@@ -144,10 +138,8 @@ $(function() {
             downloadCollection.clearDefaultRenditionSelection();
           }
 
-          const checkboxes = $(this)
-            .closest(".am-overlay")
-            .find(":checkbox");
-          checkboxes.each(function() {
+          const checkboxes = $(this).closest(".am-overlay").find(":checkbox");
+          checkboxes.each(function () {
             const json = this.attributes.getNamedItem(
               "data-am-overlay__checkbox"
             ).nodeValue;
@@ -172,10 +164,7 @@ $(function() {
               }
             }
           });
-          $(this)
-            .closest(".am-asset-teaser")
-            .find(".am-overlay")
-            .hide();
+          $(this).closest(".am-asset-teaser").find(".am-overlay").hide();
           $(this)
             .closest(".am-asset-teaser")
             .find(".am-picture-box__badge-icon-left")
@@ -205,8 +194,8 @@ $(function() {
       assetId: undefined,
     },
     "am-overlay__checkbox",
-    function($checkbox, config) {
-      $checkbox.on("click", function() {
+    function ($checkbox, config) {
+      $checkbox.on("click", function () {
         let hasRenditions = downloadCollection.hasRenditionInDownloadCollection(
           config.assetId
         );
@@ -215,7 +204,7 @@ $(function() {
             .closest(".am-overlay__checkboxes")
             .find(":checkbox");
           let buttonEnabled = false;
-          checkboxes.each(function() {
+          checkboxes.each(function () {
             if (this.checked) {
               buttonEnabled = true;
             }
@@ -240,9 +229,9 @@ $(function() {
       rendition: undefined,
     },
     "am-download-collection-rendition-control",
-    function($renditionControl, config, state) {
+    function ($renditionControl, config, state) {
       $.extend(state, {
-        windowListener: function() {
+        windowListener: function () {
           downloadCollection.updateRenditionLinkTextState(
             $renditionControl,
             config
@@ -258,7 +247,7 @@ $(function() {
         config
       );
 
-      $renditionControl.on("click", function() {
+      $renditionControl.on("click", function () {
         downloadCollection.addOrRemoveRenditionFromDownloadCollection(
           config.assetId,
           config.rendition
@@ -269,7 +258,7 @@ $(function() {
         ); // TODO: get button and counter
       });
     },
-    function($renditionControl, config, state) {
+    function ($renditionControl, config, state) {
       state.windowListener &&
         $window.off(downloadCollection.EVENT_UPDATED, state.windowListener);
     }
@@ -278,9 +267,9 @@ $(function() {
   nodeDecorationService.addNodeDecoratorByData(
     {},
     "am-download-collection-counter",
-    function($counter, config, state) {
+    function ($counter, config, state) {
       $.extend(state, {
-        windowListener: function() {
+        windowListener: function () {
           downloadCollection.updateDownloadCollectionCounterState($counter);
         },
       });
@@ -288,7 +277,7 @@ $(function() {
       // init
       downloadCollection.updateDownloadCollectionCounterState($counter);
     },
-    function($counter, config, state) {
+    function ($counter, config, state) {
       state.windowListener &&
         $window.off(downloadCollection.EVENT_UPDATED, state.windowListener);
     }
@@ -300,16 +289,16 @@ $(function() {
       rendition: undefined,
     },
     "am-rendition-collection-item",
-    function($collectionItem, config, state) {
+    function ($collectionItem, config, state) {
       $.extend(state, {
-        windowListener: function() {
+        windowListener: function () {
           if (
             !downloadCollection.isInDownloadCollection(
               config.assetId,
               config.rendition
             )
           ) {
-            $collectionItem.fadeOut(800, function() {
+            $collectionItem.fadeOut(800, function () {
               if ($collectionItem) {
                 $collectionItem.remove();
               }
@@ -319,7 +308,7 @@ $(function() {
       });
       $window.on(downloadCollection.EVENT_UPDATED, state.windowListener);
     },
-    function($collectionItem, config, state) {
+    function ($collectionItem, config, state) {
       state.windowListener &&
         $window.off(downloadCollection.EVENT_UPDATED, state.windowListener);
     }
@@ -331,7 +320,7 @@ $(function() {
       downloadUrl: undefined,
     },
     "am-download-collection-trigger",
-    function($downloadCollection, config) {
+    function ($downloadCollection, config) {
       const $button = $downloadCollection.find(
         ".am-download-collection__button"
       );
@@ -342,7 +331,7 @@ $(function() {
 
       downloadCollection.updateDownloadCollectionButtonState($button, $counter);
 
-      $buttons.on("click", function(event) {
+      $buttons.on("click", function (event) {
         event.preventDefault();
 
         const downloadCollectionString = JSON.stringify(
@@ -358,7 +347,7 @@ $(function() {
           url: config.prepareUrl,
           data: { "download-collection-data": downloadCollectionString },
         })
-          .done(function() {
+          .done(function () {
             $downloadCollection.removeClass("am-download-collection--loading");
 
             const downloadUrl = config.downloadUrl;
@@ -384,7 +373,7 @@ $(function() {
               $counter
             );
           })
-          .fail(function(response) {
+          .fail(function (response) {
             console.error(
               "Failed to prepare download: ",
               response.responseText
@@ -400,7 +389,7 @@ $(function() {
       url: undefined,
     },
     "am-download-collection-overview",
-    function($collectionOverview, config, state) {
+    function ($collectionOverview, config, state) {
       function refresh() {
         const requestParams = {
           "download-collection-data": JSON.stringify(
@@ -420,7 +409,7 @@ $(function() {
         );
       }
       $.extend(state, {
-        windowListener: function() {
+        windowListener: function () {
           if (downloadCollection.getDownloadCollectionCount() === 0) {
             refresh();
           }
@@ -429,7 +418,7 @@ $(function() {
       $window.on(downloadCollection.EVENT_UPDATED, state.windowListener);
       refresh();
     },
-    function($collectionOverview, config, state) {
+    function ($collectionOverview, config, state) {
       state.windowListener &&
         $window.off(downloadCollection.EVENT_UPDATED, state.windowListener);
     }

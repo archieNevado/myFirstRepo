@@ -2,7 +2,7 @@ package com.coremedia.blueprint.cae.test;
 
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
-import com.coremedia.objectserver.view.ViewUtils;
+import com.coremedia.objectserver.request.RequestUtils;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 import javax.servlet.ServletRequest;
@@ -44,6 +44,6 @@ public final class BlueprintMockRequestUtil {
    */
   public static void setRequestWithContext(@NotNull ServletRequest request, CMNavigation navigation, Map<String, ?> viewutilsParams) {
     request.setAttribute(NavigationLinkSupport.ATTR_NAME_CMNAVIGATION, navigation);
-    request.setAttribute(ViewUtils.PARAMETERS, viewutilsParams);
+    request.setAttribute(RequestUtils.PARAMETERS, viewutilsParams);
   }
 }

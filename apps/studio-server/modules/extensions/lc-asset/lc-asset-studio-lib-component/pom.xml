@@ -26,11 +26,6 @@
       <artifactId>lc-asset-services</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>contentbeans</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>com.coremedia.livecontext</groupId>
       <artifactId>lc-asset-api</artifactId>
     </dependency>

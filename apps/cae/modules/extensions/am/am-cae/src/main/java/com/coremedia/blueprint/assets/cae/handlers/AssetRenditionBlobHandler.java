@@ -2,12 +2,13 @@ package com.coremedia.blueprint.assets.cae.handlers;
 
 import com.coremedia.blueprint.assets.contentbeans.AMAsset;
 import com.coremedia.blueprint.assets.contentbeans.AMAssetRendition;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.blueprint.cae.handlers.CapBlobHandler;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.common.CapBlobRef;
 import com.coremedia.objectserver.web.links.Link;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,16 +59,16 @@ public class AssetRenditionBlobHandler {
           ".{" + SEGMENT_EXTENSION + ":" + PATTERN_EXTENSION + "}";
 
   private CapBlobHandler capBlobHandler;
-  private boolean isPreview;
+  private DeliveryConfigurationProperties deliveryConfigurationProperties;
+
+  @Autowired
+  public void setDeliveryConfigurationProperties(DeliveryConfigurationProperties deliveryConfigurationProperties) {
+    this.deliveryConfigurationProperties = deliveryConfigurationProperties;
+  }
 
   @Required
   public void setCapBlobHandler(CapBlobHandler capBlobHandler) {
     this.capBlobHandler = capBlobHandler;
-  }
-
-  @Value("${cae.is.preview:false}")
-  public void setPreview(boolean preview) {
-    this.isPreview = preview;
   }
 
   @GetMapping(value = ASSET_URI_PATTERN)
@@ -83,7 +84,7 @@ public class AssetRenditionBlobHandler {
 
     // for live CAE, check if requested blob is a published rendition
     // before delegating the handling to the default cap blob handler
-    List<AMAssetRendition> assetRenditions = isPreview
+    List<AMAssetRendition> assetRenditions = deliveryConfigurationProperties.isPreviewMode()
             ? asset.getRenditions()
             : asset.getPublishedRenditions();
     for (AMAssetRendition assetRendition : assetRenditions) {

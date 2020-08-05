@@ -23,27 +23,21 @@
   "displayOutOfStockLink": false
 } + cm.localParameters().overlay!{} />
 <#assign showTitle=self.teaserTitle?has_content && overlay.displayTitle />
-<#assign showTeaserText=self.teaserText?has_content && overlay.displayShortText />
-
-<div ${popupId?no_esc} class="cm-popup ${additionalClass}" <@preview.metadata self.content />>
+<#assign showTeaserText=!bp.isEmptyRichtext(self.teaserText!"") && overlay.displayShortText />
+<#assign availabilityCheck=self.product?has_content && !overlay.displayOutOfStockLink />
+<div ${popupId?no_esc} class="cm-popup ${additionalClass}<#if availabilityCheck><@lc.availability product=self.product ifTrue="" ifFalse=" cm-popup--hide-button" /></#if>"<@preview.metadata self.content />>
   <#-- image -->
   <#if overlay.displayPicture>
     <div class="cm-popup__container">
-      <#if (self.product?has_content && self.product.isAvailable()) || overlay.displayOutOfStockLink>
-        <a href="${cm.getLink(self.productInSite!(cm.UNDEFINED))}" class="cm-popup__picture-link">
-      </#if>
-        <#assign pictureParams={
-          "classBox": "cm-popup__picture-box",
-          "classMedia": "cm-popup__picture",
-          "metadata": ["properties.pictures"]
-        } />
-        <#if self.picture?has_content>
-          <@cm.include self=self.picture!cm.UNDEFINED view="media" params=pictureParams />
-        <#else>
-          <@cm.include self=(self.product.catalogPicture)!cm.UNDEFINED view="media" params=pictureParams />
-        </#if>
-      <#if (self.product?has_content && self.product.isAvailable()) || overlay.displayOutOfStockLink>
-        </a>
+      <#assign pictureParams={
+        "classBox": "cm-popup__picture-box",
+        "classMedia": "cm-popup__picture",
+        "metadata": ["properties.pictures"]
+      } />
+      <#if self.picture?has_content>
+        <@cm.include self=self.picture!cm.UNDEFINED view="media" params=pictureParams />
+      <#else>
+        <@cm.include self=(self.product.catalogPicture)!cm.UNDEFINED view="media" params=pictureParams />
       </#if>
     </div>
   </#if>
@@ -73,7 +67,7 @@
         </#if>
       </div>
       <#-- call to action button -->
-      <#if (self.product?has_content && self.product.isAvailable()) || overlay.displayOutOfStockLink>
+      <#if self.product?has_content>
         <@cm.include self=self view="_popupButton" />
       </#if>
     </div>

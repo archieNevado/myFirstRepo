@@ -602,6 +602,7 @@
         div {
           &:before {
             top: 4px;
+            overflow: hidden;
           }
         }
       }

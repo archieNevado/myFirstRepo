@@ -12,11 +12,13 @@ import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.elastic.core.api.tenant.TenantService;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
@@ -50,6 +52,22 @@ import static org.mockito.Mockito.when;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {FetchPageViewHistoryTaskTest.LocalConfig.class, XmlRepoConfiguration.class})
 public class FetchPageViewHistoryTaskTest {
+
+  @Configuration
+  @EnableConfigurationProperties({
+          DeliveryConfigurationProperties.class
+  })
+  @ImportResource(value = {
+          "classpath:/framework/spring/blueprint-contentbeans.xml"
+  },
+          reader = com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader.class)
+  public static class LocalConfig {
+    @Bean
+    public XmlUapiConfig xmlUapiConfig() {
+      return new XmlUapiConfig("classpath:/com/coremedia/testing/contenttest.xml");
+    }
+
+  }
 
   static final String UNKNOWN_SERVICE = "unknown";
   static final String NON_LINKABLE_CONTENT_ID = "404";
@@ -312,18 +330,5 @@ public class FetchPageViewHistoryTaskTest {
     verify(taskModelForRoot, never()).save();
     verify(taskModelForRoot, never()).setLastSaved(anyLong());
     verify(taskModelForRoot, never()).setLastSavedDate(any(Date.class));
-  }
-
-  @Configuration
-  @ImportResource(value = {
-          "classpath:/framework/spring/blueprint-contentbeans.xml"
-  },
-          reader = com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader.class)
-  public static class LocalConfig {
-    @Bean
-    public XmlUapiConfig xmlUapiConfig() {
-      return new XmlUapiConfig("classpath:/com/coremedia/testing/contenttest.xml");
-    }
-
   }
 }

@@ -14,6 +14,7 @@ public class ThemeDefinition {
   private StyleSheets styleSheets = new StyleSheets();
   private JavaScripts javaScripts = new JavaScripts();
   private JavaScriptLibraries javaScriptLibraries = new JavaScriptLibraries();
+  private String bundleEncoding;
   private ResourceBundles resourceBundles = new ResourceBundles();
   private TemplateSets templateSets = new TemplateSets();
   private Settings settings = new Settings();
@@ -88,6 +89,15 @@ public class ThemeDefinition {
   @XmlElement
   public void setJavaScriptLibraries(JavaScriptLibraries javaScriptLibraries) {
     this.javaScriptLibraries = javaScriptLibraries;
+  }
+
+  public String getBundleEncoding() {
+    return bundleEncoding;
+  }
+
+  @XmlElement
+  public void setBundleEncoding(String bundleEncoding) {
+    this.bundleEncoding = bundleEncoding;
   }
 
   public ResourceBundles getResourceBundles() {

@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.assets.cae;
 
 import com.coremedia.blueprint.assets.contentbeans.AMTaxonomy;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.blueprint.cae.search.Condition;
 import com.coremedia.blueprint.cae.search.SearchConstants;
 import com.coremedia.blueprint.cae.search.SearchQueryBean;
@@ -20,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -48,7 +50,7 @@ public class DownloadPortalSearchService implements InitializingBean {
 
   private ContentRepository contentRepository;
 
-  private boolean isPreview = false;
+  private DeliveryConfigurationProperties deliveryConfigurationProperties;
 
   private SearchResultFactory searchResultFactory;
 
@@ -61,6 +63,11 @@ public class DownloadPortalSearchService implements InitializingBean {
   public void afterPropertiesSet() throws Exception {
     // retrieve the list of concrete asset types
     assetTypes = AMUtils.getAssetSubtypes(contentRepository);
+  }
+
+  @Autowired
+  public void setDeliveryConfigurationProperties(DeliveryConfigurationProperties deliveryConfigurationProperties) {
+    this.deliveryConfigurationProperties = deliveryConfigurationProperties;
   }
 
   @Required
@@ -81,15 +88,6 @@ public class DownloadPortalSearchService implements InitializingBean {
   @Required
   public void setDataViewFactory(DataViewFactory dataViewFactory) {
     this.dataViewFactory = dataViewFactory;
-  }
-
-  /**
-   * Pass <code>true</code> to disable query caching for preview environments. Default is <code>false</code>.
-   *
-   * @param preview <code>true</code> to disable caching.
-   */
-  public void setPreview(boolean preview) {
-    this.isPreview = preview;
   }
 
   /**
@@ -193,7 +191,7 @@ public class DownloadPortalSearchService implements InitializingBean {
   @NonNull
   private SearchResultBean querySearchEngine(SearchQueryBean queryBean) {
     SearchResultBean searchResult;
-    if (isPreview) {
+    if (deliveryConfigurationProperties.isPreviewMode()) {
       searchResult = searchResultFactory.createSearchResultUncached(queryBean);
     } else {
       searchResult = searchResultFactory.createSearchResult(queryBean, cacheTimeInSecs);

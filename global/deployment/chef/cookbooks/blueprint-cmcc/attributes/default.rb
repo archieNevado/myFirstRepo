@@ -55,7 +55,7 @@ default['blueprint']['ibm-wcs']['application.properties']['livecontext.ibm.wcs.u
 default['blueprint']['ibm-wcs']['application.properties']['livecontext.ibm.wcs.store.name.aurora'] = 'AuroraESite'
 default['blueprint']['ibm-wcs']['application.properties']['livecontext.ibm.wcs.currency.aurora'] = 'USD'
 default['blueprint']['ibm-wcs']['application.properties']['livecontext.ibm.wcs.vendor.aurora'] = 'ibm'
-default['blueprint']['ibm-wcs']['application.properties']['cae.crossdomain.whitelist'] = "https://#{node['blueprint']['ibm-wcs']['host']}:8443"
+default['blueprint']['ibm-wcs']['application.properties']['cae.preview.crossdomain-whitelist'] = "https://#{node['blueprint']['ibm-wcs']['host']}:8443"
 
 # The following properties are derived from `livecontext.ibm.wcs.host`, if you need to set them explicitly comment in the lines below
 # default['blueprint']['ibm-wcs']['application.properties']['livecontext.ibm.wcs.url'] = "http://#{node['blueprint']['ibm-wcs']['host']}"

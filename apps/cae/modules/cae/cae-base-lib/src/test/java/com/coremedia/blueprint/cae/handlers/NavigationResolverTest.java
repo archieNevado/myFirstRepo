@@ -8,10 +8,13 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
+import com.coremedia.objectserver.configuration.CaeConfigurationProperties;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -21,6 +24,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.inject.Inject;
 import java.util.Arrays;
@@ -35,9 +39,14 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = NavigationResolverTest.LocalConfig.class)
+@WebAppConfiguration
 @ActiveProfiles(PROFILE)
 public class NavigationResolverTest {
   @Configuration
+  @EnableConfigurationProperties({
+          DeliveryConfigurationProperties.class,
+          CaeConfigurationProperties.class
+  })
   @ImportResource(
           value = {
                   "classpath:/framework/spring/blueprint-contentbeans.xml",

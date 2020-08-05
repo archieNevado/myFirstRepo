@@ -31,12 +31,12 @@ type ContentRoot {
   article(id: String!): CMArticle @fetch(from: "getContent(#id, 'CMArticle')")
   picture(id: String!): CMPicture @fetch(from: "getContent(#id, 'CMPicture')")
   page(id: String!): CMChannel
-  pageByPath(path: String!): CMChannel @fetch(from: "@pageByPathAdapter.to().getPageByPath(#path)")
+  pageByPath(path: String!): CMChannel @fetch(from: "@pageByPathAdapter.to().getPageByPath(#path, #context['caasViewName'])")
   queryList(id: String!): CMQueryList
   site(siteId: String, id: String  @deprecated(reason: "Arg 'id' is deprecated. Use 'siteId' instead.")): Site
   sites: [Site]!
-  search(query: String!, offset: Int, limit: Int, docTypes: [String], sortFields: [SortFieldWithOrder], siteId: String): SearchResult
-    @fetch(from: "@searchServiceAdapter.to().search(#query, #offset, #limit, #docTypes, #sortFields, #siteId)")
+  search(query: String!, offset: Int, limit: Int, docTypes: [String], sortFields: [SortFieldWithOrder], siteId: String, includeSubTypes: Boolean): SearchResult
+    @fetch(from: "@searchServiceAdapter.to().search(#query, #offset, #limit, #docTypes, #sortFields, #siteId, #includeSubTypes)")
 }
 
 type Site {
@@ -45,6 +45,7 @@ type Site {
   locale: String!
   crops: [Crop] @fetch(from: "@imageVariantsAdapter.to(#root).crops")
   root: CMNavigation @fetch(from: "siteRootDocument")
+  repositoryPath: String! @fetch(from: "#root.getSiteRootFolder().getPath()")
 }
 
 type SearchResult {
@@ -53,12 +54,20 @@ type SearchResult {
 }
 
 enum SortFieldWithOrder {
-  EXTERNALLY_DISPPLAYED_DATE_ASC
-  EXTERNALLY_DISPPLAYED_DATE_DESC
   CREATION_DATE_ASC
   CREATION_DATE_DESC
+  DOCUMENTTYPE_ASC
+  DOCUMENTTYPE_DESC
+  EXTERNALLY_DISPLAYED_DATE_ASC
+  EXTERNALLY_DISPLAYED_DATE_DESC
+  ID_ASC
+  ID_DESC
   MODIFICATION_DATE_ASC
   MODIFICATION_DATE_DESC
+  TEASER_TITLE_ASC
+  TEASER_TITLE_DESC
+  TITLE_ASC
+  TITLE_DESC
 }
 
 interface Content_ {
@@ -67,6 +76,7 @@ interface Content_ {
   modificationDate: String!
   name: String!
   type: String!
+  repositoryPath: String!
 }
 
 interface CMArticle @inherit(from: ["CMTeasable"]) {
@@ -257,7 +267,6 @@ type CMChannelImpl implements CMChannel @inherit(from: ["CMNavigationImpl"]) {
 
 type CMCollectionImpl implements CMCollection @inherit(from: ["CMTeasableImpl"]) {
   items: [CollectionItem]
-  teaserTargets: [ExtendedTeaserTarget] @fetch(from: "{{target: #root, callToActionEnabled: !@settingsAdapter.to(#root).get({'callToActionDisabled'}, false), callToActionCustomText: @settingsAdapter.to(#root).get({'callToActionCustomText'}, '')}}")
   teasableItems: [CMTeasable] @fetch(from: "#this.items")
   bannerItems: [Banner] @fetch(from: "#this.items")
   detailItems: [Detail] @fetch(from: "#this.items")
@@ -289,7 +298,7 @@ type CMImageMapImpl implements CMImageMap @inherit(from: ["CMTeaserImpl"]) {
 }
 
 type CMLinkableImpl implements CMLinkable @inherit(from: ["CMLocalizedImpl"]) {
-  settings(paths: [[String!]!]!): JSON @fetch(from: "@settingsAdapter.to(#root).getWrappedInStruct(#paths)")
+  settings(paths: [[String!]!]!): JSON @fetch(from: "@settingsAdapter.to(#root).getWrappedInMap(#paths)")
   context: CMNavigation @fetch(from: "@navigationAdapter.to(#root).findContext()")
   extDisplayedDate: String
   link: Link @fetch(from: "@graphQlLinkComposer.apply(#root)")
@@ -373,7 +382,7 @@ type CMPersonImpl implements CMPerson @inherit(from: ["CMTeasableImpl"]) {
 
 type CMSettingsImpl implements CMSettings @inherit(from: ["CMLocalizedImpl"]) {
   id: ID! @fetch(from: "@graphQlLinkComposer.apply(#root).orElse(null)?.id")
-  settings(paths: [[String]]): JSON @fetch(from: "#paths == null ? #this.settings : @structAdapter.to(#root).getWrappedInStruct('settings',#paths, null)")
+  settings(paths: [[String]]): JSON @fetch(from: "#paths == null ? #this.settings : @structAdapter.to(#root).getWrappedInMap('settings',#paths, null)")
   identifier: String @fetch(from: "#this.identifier?:#this.name")
 }
 
@@ -399,7 +408,7 @@ type CMResourceBundleImpl implements CMResourceBundle @inherit(from: ["CMLocaliz
 type CMSiteImpl implements CMSite @inherit(from: ["CMLocalizedImpl"]) {
   id: ID!
   root: CMNavigation
-  settings(paths: [[String!]!]!): JSON @fetch(from: "@settingsAdapter.to(#root).getWrappedInStruct(#paths)")
+  settings(paths: [[String!]!]!): JSON @fetch(from: "@settingsAdapter.to(#root).getWrappedInMap(#paths)")
 }
 
 type CMTeasableImpl implements CMTeasable @inherit(from: ["CMLinkableImpl"]) {
@@ -407,11 +416,11 @@ type CMTeasableImpl implements CMTeasable @inherit(from: ["CMLinkableImpl"]) {
   detailText(view: String): String @fetch(from: "detailText?.view(#view?:'default')")
   detailTextAsTree(view: String): RichTextTree @fetch(from: "detailText?.view(#view?:'default')")
   related: [CMTeasable]
-  teaserOverlaySettings: TeaserOverlaySettings @fetch(from: "localSettings?.teaserOverlay?:{enabled: false}")
+  teaserOverlaySettings: TeaserOverlaySettings @fetch(from: "#root")
   teaserTarget: CMLinkable @fetch(from: "#root")
-  teaserTargets: [ExtendedTeaserTarget] @fetch(from: "{{target: #root, callToActionEnabled: !@settingsAdapter.to(#root).get({'callToActionDisabled'}, false), callToActionCustomText: @settingsAdapter.to(#root).get({'callToActionCustomText'}, '')}}")
-  teaserText(view: String): String  @fetch(from: "(teaserText?.nullIfEmpty()?:(localSettings?.teaserOverlay?.enabled == true) ? null : detailText)?.view(#view?:'simplified')")
-  teaserTextAsTree(view: String): RichTextTree @fetch(from: "(teaserText?.nullIfEmpty()?:(localSettings?.teaserOverlay?.enabled == true) ? null : detailText)?.view(#view?:'simplified')")
+  teaserTargets: [ExtendedTeaserTarget] @fetch(from: "{{target: #root, callToActionHash: '',callToActionEnabled: !@settingsAdapter.to(#root).get({'callToActionDisabled'}, false), callToActionCustomText: @settingsAdapter.to(#root).get({'callToActionCustomText'}, '')}}")
+  teaserText(view: String): String  @fetch(from: "(teaserText?.nullIfEmpty()?:(@settingsAdapter.to(#root).get({'teaserOverlay', 'enabled'}, false) == true) ? null : detailText)?.view(#view?:'simplified')")
+  teaserTextAsTree(view: String): RichTextTree @fetch(from: "(teaserText?.nullIfEmpty()?:(@settingsAdapter.to(#root).get({'teaserOverlay', 'enabled'}, false) == true) ? null : detailText)?.view(#view?:'simplified')")
   teaserTitle: String @fetch(from:"teaserTitle?:title")
 
   media: [CMMedia] @fetch(from: "@mediaLinkListAdapter.to(#root).list()")
@@ -468,6 +477,7 @@ type Content_Impl implements Content_ {
   modificationDate: String!
   name: String!
   type: String!
+  repositoryPath: String! @fetch(from: "#root.getParent().getPath()")
 }
 
 type Crop {
@@ -486,6 +496,7 @@ type Dimension {
 type ExtendedTeaserTarget {
   callToActionEnabled: Boolean @fetch(from: "getOrDefault('callToActionEnabled',false)")
   callToActionText: String @fetch(from: "getOrDefault('callToActionCustomText','')")
+  callToActionHash: String @fetch(from: "getOrDefault('callToActionHash','')")
   target: CMLinkable
 }
 
@@ -511,14 +522,14 @@ type Link {
 
 type PageGrid {
   cssClassName: String
-  rows: [PageGridRow]
+  rows: [PageGridRow!]
 
   # retrieves the page grid placements as a flat list, optionally filtered by name
   placements(names: [String]) :[PageGridPlacement]  @fetch(from: "getPlacements(#names)")
 }
 
 type PageGridRow {
-  placements: [PageGridPlacement]
+  placements: [PageGridPlacement!]
 }
 
 type PageGridPlacement {
@@ -527,7 +538,7 @@ type PageGridPlacement {
   colspan: Int!
   width: Int!
   viewtype: String
-  items: [CMLinkable]!
+  items: [CMLinkable!]!
 }
 
 type Point {
@@ -536,11 +547,11 @@ type Point {
 }
 
 type TeaserOverlaySettings {
-  enabled: Boolean @fetch(from: "enabled?:false")
-  positionX: Int @fetch(from: "positionX?:0")
-  positionY: Int @fetch(from: "positionY?:0")
-  style: MapOfString @fetch(from: "style?.settings?.style?:{:}")
-  width: Int @fetch(from: "width?:50")
+  enabled: Boolean @fetch(from: "@settingsAdapter.to(#root).get({'teaserOverlay','enabled'}, false)")
+  positionX: Int @fetch(from: "@settingsAdapter.to(#root).get({'teaserOverlay','positionX'}, 0)")
+  positionY: Int @fetch(from: "@settingsAdapter.to(#root).get({'teaserOverlay','positionY'}, 0)")
+  width: Int @fetch(from: "@settingsAdapter.to(#root).get({'teaserOverlay','width'}, 50)")
+  style: JSON @fetch(from: "@settingsAdapter.to(#root).get({'teaserOverlay','style'}) == null ? null : @structAdapter.to(@settingsAdapter.to(#root).get({'teaserOverlay','style'})).getStructValue('settings', {'style'}, null)")
 }
 
 type TimeLine {

@@ -72,7 +72,7 @@ describe("cmLogger", () => {
         none: "silent",
       };
 
-      Object.keys(LEVEL).forEach(stat => {
+      Object.keys(LEVEL).forEach((stat) => {
         expect(cmLogger.getLevelFromWebpackStats(stat)).toEqual(LEVEL[stat]);
       });
     });

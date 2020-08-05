@@ -53,15 +53,10 @@ public class P13NIncludePredicateTest {
   }
 
   @Test
-  public void testInputNull() {
-    assertFalse(testling.apply(null));
-  }
-
-  @Test
   public void testInputNotMatching() {
     RenderNode input = mock(RenderNode.class);
     when(input.getBean()).thenReturn(new Object());
-    assertFalse(testling.apply(input));
+    assertFalse(testling.test(input));
   }
 
   @Test
@@ -70,7 +65,7 @@ public class P13NIncludePredicateTest {
     when(input.getBean()).thenReturn(selectionRules);
     when(input.getView()).thenReturn(null);
     p13nSettings(true, true);
-    assertTrue(testling.apply(input));
+    assertTrue(testling.test(input));
   }
 
   @Test
@@ -78,7 +73,7 @@ public class P13NIncludePredicateTest {
     RenderNode input = mock(RenderNode.class);
     when(input.getBean()).thenReturn(mock(CMP13NSearch.class));
     when(input.getView()).thenReturn("fragmentPreview");
-    assertFalse(testling.apply(input));
+    assertFalse(testling.test(input));
   }
 
   @Test
@@ -87,7 +82,7 @@ public class P13NIncludePredicateTest {
     when(input.getBean()).thenReturn(selectionRules);
     when(input.getView()).thenReturn("any_view_except_fragmentPreview");
     p13nSettings(true, true);
-    assertTrue(testling.apply(input));
+    assertTrue(testling.test(input));
   }
 
   @Test
@@ -96,7 +91,7 @@ public class P13NIncludePredicateTest {
     when(input.getBean()).thenReturn(selectionRules);
     when(input.getView()).thenReturn(null);
     p13nSettings(null, true);
-    assertFalse(testling.apply(input));
+    assertFalse(testling.test(input));
   }
 
   @Test
@@ -105,7 +100,7 @@ public class P13NIncludePredicateTest {
     when(input.getBean()).thenReturn(selectionRules);
     when(input.getView()).thenReturn(null);
     p13nSettings(true, null);
-    assertFalse(testling.apply(input));
+    assertFalse(testling.test(input));
   }
 
   @Test
@@ -114,7 +109,7 @@ public class P13NIncludePredicateTest {
     when(input.getBean()).thenReturn(selectionRules);
     when(input.getView()).thenReturn(null);
     p13nSettings(false, true);
-    assertFalse(testling.apply(input));
+    assertFalse(testling.test(input));
   }
 
   @Test
@@ -123,7 +118,7 @@ public class P13NIncludePredicateTest {
     when(input.getBean()).thenReturn(selectionRules);
     when(input.getView()).thenReturn(null);
     p13nSettings(false, false);
-    assertFalse(testling.apply(input));
+    assertFalse(testling.test(input));
   }
 
   private void p13nSettings(Boolean enabled, Boolean perItem) {

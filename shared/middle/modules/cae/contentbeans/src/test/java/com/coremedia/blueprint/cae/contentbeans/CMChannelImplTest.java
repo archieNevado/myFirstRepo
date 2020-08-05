@@ -8,7 +8,7 @@ import com.coremedia.blueprint.common.contentbeans.CMJavaScript;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.blueprint.common.feeds.FeedFormat;
 import com.coremedia.blueprint.common.navigation.Linkable;
-import com.coremedia.blueprint.testing.ContentBeanTestBase;
+import com.coremedia.blueprint.cae.contentbeans.testing.ContentBeanTestBase;
 import com.coremedia.cap.struct.Struct;
 import org.junit.Assert;
 import org.junit.Before;

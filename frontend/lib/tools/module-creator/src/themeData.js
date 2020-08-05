@@ -103,6 +103,7 @@ const initThemeConfigJson = (themeName, usingBricks) => {
       },
     ],
     l10n: {
+      bundleEncoding: "UTF-8",
       bundleNames: [
         sharedData.titleCase(themeName),
         ...(usingBricks ? ["Bricks"] : []),
@@ -117,7 +118,7 @@ const initThemeConfigJson = (themeName, usingBricks) => {
  * @param  {string} themeName
  * @return {string}
  */
-const initThemeSass = themeName => `/*! Theme ${themeName} */
+const initThemeSass = (themeName) => `/*! Theme ${themeName} */
 // ### VARIABLES ###
 
 // Own variables (need to be loaded first, so default values can be overridden)
@@ -155,7 +156,9 @@ const initVariablesSass = () => `// Own variable imports first
  * @param  {string} themeName
  * @return {string}
  */
-const initPreviewSass = themeName => `/*! Theme ${themeName}: Preview Styles */
+const initPreviewSass = (
+  themeName
+) => `/*! Theme ${themeName}: Preview Styles */
 // ### VARIABLES ###
 
 // Own variables (need to be loaded first, so default values can be overridden)
@@ -187,7 +190,7 @@ const initPreviewSass = themeName => `/*! Theme ${themeName}: Preview Styles */
  * @param  {string} themeName
  * @return {string}
  */
-const initThemeIndexJs = themeName => `/*! Theme ${themeName} */
+const initThemeIndexJs = (themeName) => `/*! Theme ${themeName} */
 import "./${themeName}.js";
 `;
 
@@ -207,7 +210,7 @@ const initThemePrettierignore = () => `/*
  * @param  {string} themeName
  * @return {string}
  */
-const initThemeJs = themeName => `//import $ from "jquery";
+const initThemeJs = (themeName) => `//import $ from "jquery";
 //import * as utils from "@coremedia/brick-utils";
 
 // --- JQUERY DOCUMENT READY -------------------------------------------------------------------------------------------
@@ -222,7 +225,7 @@ const initThemeJs = themeName => `//import $ from "jquery";
  * @param  {string} themeName
  * @return {string}
  */
-const initPreviewJs = themeName => `/*! Theme ${themeName}: Preview JS */
+const initPreviewJs = (themeName) => `/*! Theme ${themeName}: Preview JS */
 // add preview specific code here...
 `;
 

@@ -13,6 +13,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.elastic.core.api.models.Model;
 import com.coremedia.elastic.core.api.models.Query;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.google.common.collect.ImmutableMap;
 import org.junit.After;
 import org.junit.Before;
@@ -20,6 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -67,6 +69,9 @@ import static org.mockito.Mockito.when;
         "tenant.default=tenant",
         "mongodb.models.create-indexes=false",
         "elastic.solr.lazyIndexCreation=true"
+})
+@EnableConfigurationProperties({
+        DeliveryConfigurationProperties.class
 })
 public class EsAlxRetrievalApplicationContextTest {
 

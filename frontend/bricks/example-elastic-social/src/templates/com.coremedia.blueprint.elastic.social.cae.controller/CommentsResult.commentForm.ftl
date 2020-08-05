@@ -1,5 +1,5 @@
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.elastic.social.cae.controller.CommentsResult" -->
-<#-- @ftlvariable name="_CSRFToken" type="java.lang.String" -->
+<#-- @ftlvariable name="_csrf" type="org.springframework.security.web.csrf.CsrfToken" -->
 
 <#import "*/node_modules/@coremedia/brick-utils/src/freemarkerLibs/components.ftl" as components />
 <#import "../../freemarkerLibs/elastic-social.ftl" as elasticSocial />
@@ -8,7 +8,7 @@
   <form method="post" enctype="multipart/form-data" class="cm-new-comment__form cm-form" action="${cm.getLink(self)}" data-cm-es-ajax-form=''>
     <@elasticSocial.notification type="inactive" text="" additionalClasses=["cm-form__notification"] attr={"data-cm-notification": '{"path": ""}'} />
 
-    <input type="hidden" name="_CSRFToken" value="${_CSRFToken!""}">
+    <#if _csrf?has_content><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"></#if>
     <input type="hidden" name="replyTo" value="">
     <fieldset class="cm-form__fieldset cm-fieldset">
       <div class="cm-fieldset__item cm-field cm-field--detail">

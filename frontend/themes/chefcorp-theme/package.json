@@ -6,7 +6,7 @@
     "build": "webpack",
     "deploy": "cm theme-importer deploy-theme",
     "start": "cm monitor",
-    "prettier": "prettier \"**/*\" --write",
+    "prettier": "prettier --write \"src/**/*.{js,json}\"",
     "theme-importer": "cm theme-importer"
   },
   "dependencies": {
@@ -19,7 +19,7 @@
     "webpack": "^4.0.0"
   },
   "devDependencies": {
-    "prettier": "^1.0.0"
+    "prettier": "^2.0.5"
   },
   "main": "src/js/index.js",
   "coremedia": {

@@ -1,22 +1,15 @@
 <#-- @ftlvariable name="self" type="com.coremedia.livecontext.contentbeans.LiveContextProductTeasable" -->
-<#-- @ftlvariable name="_CSRFToken" type="java.lang.String" -->
+<#-- @ftlvariable name="_csrf" type="org.springframework.security.web.csrf.CsrfToken" -->
 
 <#import "../../freemarkerLibs/cart.ftl" as cart />
 
-<#assign overlay={
-  "displayTitle": false,
-  "displayShortText": false,
-  "displayPicture": false,
-  "displayDefaultPrice": false,
-  "displayDiscountedPrice": false,
-  "displayOutOfStockLink": false
-} + cm.localParameters().overlay!{} />
-
-<#-- add-to-cart button -->
-<div class="cm-popup__button cm-button-group">
-  <@cart.addToCartButton product=self.product!cm.UNDEFINED
-                         token=_CSRFToken!""
-                         withLink=cm.getLink(self.productInSite!(cm.UNDEFINED))
-                         enableShopNow=self.isShopNowEnabled(cmpage.context)
-                         attr={"classes": ["cm-button-group__button", "cm-button--popup"]} />
-</div>
+<#if self.product?has_content>
+  <#-- add-to-cart button -->
+  <div class="cm-popup__button cm-button-group">
+    <@cart.addToCartButton product=self.product
+                           csrf=_csrf
+                           withLink=cm.getLink(self.productInSite!(cm.UNDEFINED))
+                           enableShopNow=self.isShopNowEnabled(cmpage.context)
+                           attr={"classes": ["cm-button-group__button", "cm-button--popup"]} />
+  </div>
+</#if>

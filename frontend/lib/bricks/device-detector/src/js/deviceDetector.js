@@ -92,12 +92,12 @@ export function init() {
   $window.on(
     "resize",
     {},
-    debounce(function() {
+    debounce(function () {
       update();
     })
   );
   // delay initial update after all other document ready functions have been called
-  setTimeout(function() {
+  setTimeout(function () {
     update();
   }, 1);
 }

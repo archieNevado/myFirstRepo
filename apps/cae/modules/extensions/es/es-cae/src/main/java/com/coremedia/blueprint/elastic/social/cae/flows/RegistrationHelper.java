@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.webflow.execution.RequestContext;
 import org.springframework.webflow.execution.RequestContextHolder;
 
@@ -98,7 +98,7 @@ public class RegistrationHelper {
    * @return true if registering the user succeeded, false otherwise.
    */
   public CommunityUser register(Registration registration, RequestContext context,
-                                CommonsMultipartFile userProfileImage, Map<String, Object> additionalProperties) {
+                                MultipartFile userProfileImage, Map<String, Object> additionalProperties) {
     if (context.getMessageContext().hasErrorMessages()) {
       return null;
     }
@@ -165,8 +165,8 @@ public class RegistrationHelper {
    * @param file         the user's profile image
    * @return true if registering the user succeeded, false otherwise.
    */
-  public boolean register(Registration registration, RequestContext context, CommonsMultipartFile file) {
-    return register(registration, context, file, new HashMap<String, Object>()) != null;
+  public boolean register(Registration registration, RequestContext context, MultipartFile file) {
+    return register(registration, context, file, new HashMap<>()) != null;
   }
 
   private boolean isAutomaticActivationEnabled(@NonNull RequestContext context) {
@@ -181,7 +181,7 @@ public class RegistrationHelper {
     return automaticActivationEnabled;
   }
 
-  private void saveProfileImage(@NonNull RequestContext context, CommonsMultipartFile file,
+  private void saveProfileImage(@NonNull RequestContext context, MultipartFile file,
                                 @NonNull CommunityUser user) {
     if (file != null && file.getSize() > 0) {
       ElasticSocialConfiguration elasticSocialConfiguration = getElasticSocialConfiguration(context);

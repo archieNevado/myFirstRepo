@@ -18,15 +18,15 @@
     "@coremedia/module-creator": "^1.0.0",
     "@coremedia/theme-importer": "^1.0.0",
     "@coremedia/tool-utils": "^1.0.0",
-    "inquirer": "^7.0.3",
+    "inquirer": "^7.3.0",
     "yargs": "^15.1.0"
   },
   "devDependencies": {
-    "jest": "^24.0.0",
-    "prettier": "^1.0.0"
+    "jest": "^26.1.0",
+    "prettier": "^2.0.5"
   },
   "scripts": {
-    "prettier": "prettier \"**/*\" --write",
+    "prettier": "prettier --write \"src/**/*.{js,json}\"",
     "test": "jest"
   }
 }

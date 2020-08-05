@@ -313,8 +313,15 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
 
   @Override
   public boolean isVariant() {
-    return DataMapHelper.findString(getDelegate(), "parentCatalogEntryID")
-            .isPresent();
+    return hasProductParent() || isSKU();
+  }
+
+  private boolean hasProductParent() {
+    return DataMapHelper.findString(getDelegate(), "parentCatalogEntryID").isPresent();
+  }
+
+  private boolean isSKU() {
+    return "ItemBean".equals(getStringValue(getDelegate(), "catalogEntryTypeCode"));
   }
 
   @NonNull

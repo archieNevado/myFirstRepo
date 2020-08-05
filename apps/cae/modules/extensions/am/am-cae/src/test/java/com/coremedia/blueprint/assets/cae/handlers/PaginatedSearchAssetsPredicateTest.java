@@ -5,6 +5,8 @@ import com.coremedia.blueprint.cae.view.HashBasedFragmentHandler;
 import com.coremedia.objectserver.view.RenderNode;
 import org.junit.Test;
 
+import java.util.function.Predicate;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -20,8 +22,8 @@ public class PaginatedSearchAssetsPredicateTest {
     when(node.getBean()).thenReturn(overview);
     when(node.getView()).thenReturn(DownloadPortalHandler.ASSETS_VIEW);
 
-    PaginatedSearchAssetsPredicate predicate = new PaginatedSearchAssetsPredicate();
-    assertTrue(predicate.apply(node));
+    Predicate<RenderNode> predicate = new PaginatedSearchAssetsPredicate();
+    assertTrue(predicate.test(node));
   }
 
   @Test
@@ -31,8 +33,8 @@ public class PaginatedSearchAssetsPredicateTest {
     when(node.getBean()).thenReturn(overview);
     when(node.getView()).thenReturn("anyView");
 
-    PaginatedSearchAssetsPredicate predicate = new PaginatedSearchAssetsPredicate();
-    assertFalse(predicate.apply(node));
+    Predicate<RenderNode> predicate = new PaginatedSearchAssetsPredicate();
+    assertFalse(predicate.test(node));
   }
 
   @Test
@@ -43,5 +45,5 @@ public class PaginatedSearchAssetsPredicateTest {
     assertTrue(handler.getValidParameters().contains(DownloadPortalHandler.SEARCH_REQUEST_PARAMETER_NAME));
     assertTrue(handler.getValidParameters().contains(DownloadPortalHandler.PAGE_REQUEST_PARAMETER_NAME));
   }
-  
+
 }

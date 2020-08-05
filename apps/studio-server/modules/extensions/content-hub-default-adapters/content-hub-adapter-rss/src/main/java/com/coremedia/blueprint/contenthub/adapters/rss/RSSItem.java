@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.contenthub.adapters.rss;
 
 
+import com.coremedia.blueprint.contenthub.adapters.rss.imageurlextractor.FeedImageExtractor;
 import com.coremedia.common.util.WordAbbreviator;
 import com.coremedia.contenthub.api.ContentHubBlob;
 import com.coremedia.contenthub.api.ContentHubObjectId;
@@ -25,10 +26,12 @@ class RSSItem extends RSSHubObject implements Item {
   private static final WordAbbreviator ABBREVIATOR = new WordAbbreviator();
   private static final int BLOB_SIZE_LIMIT = 10000000;
   private final SyndEntry rssEntry;
+  private transient final FeedImageExtractor feedImageExtractor;
 
-  RSSItem(ContentHubObjectId id, SyndFeed feed, @NonNull SyndEntry rssEntry) {
+  RSSItem(@NonNull FeedImageExtractor feedImageExtractor, ContentHubObjectId id, SyndFeed feed, @NonNull SyndEntry rssEntry) {
     super(id, feed);
     this.rssEntry = rssEntry;
+    this.feedImageExtractor = feedImageExtractor;
   }
 
   SyndEntry getRssEntry() {
@@ -101,7 +104,7 @@ class RSSItem extends RSSHubObject implements Item {
 
   @NonNull
   private List<String> getImageUrls() {
-    return FeedImageExtractor.extractImageUrls(rssEntry);
+    return feedImageExtractor.extractImageUrls(rssEntry);
   }
 
   @Nullable

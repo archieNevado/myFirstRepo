@@ -105,18 +105,18 @@ class Zoom {
     this.imagePreload = document.createElement("img");
 
     // events
-    this._boundOnWheel = event => this._onWheel(event);
+    this._boundOnWheel = (event) => this._onWheel(event);
     this.target.addEventListener("wheel", this._boundOnWheel, {
       passive: false,
     });
-    this._boundMouseEnter = event => this._onMouseEnter(event);
+    this._boundMouseEnter = (event) => this._onMouseEnter(event);
     this.target.addEventListener("mouseenter", this._boundMouseEnter);
-    this._boundMouseMove = event => this._onMouseMove(event);
+    this._boundMouseMove = (event) => this._onMouseMove(event);
     this.target.addEventListener("mousemove", this._boundMouseMove);
-    this._boundMouseLeave = event => this._onMouseLeave(event);
+    this._boundMouseLeave = (event) => this._onMouseLeave(event);
     this.target.addEventListener("mouseleave", this._boundMouseLeave);
 
-    this._boundLoad = event => this._onLoad(event);
+    this._boundLoad = (event) => this._onLoad(event);
     this.imagePreload.addEventListener("load", this._boundLoad);
 
     this.imageLink = imageLink;

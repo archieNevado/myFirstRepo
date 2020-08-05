@@ -44,7 +44,7 @@ public class Wcs9UrlProviderTest extends WcsUrlProviderTest {
     Map<String, Object> params = new HashMap<>();
     params.put(WcsUrlProvider.URL_TEMPLATE, "{language}/{storeName}/{seoSegment}");
     params.put(WcsUrlProvider.SEO_SEGMENT, SEO_SEGMENT);
-    testling.setPreview(true);
+    deliveryConfigurationProperties.setPreviewMode(true);
 
     StoreContext storeContextWithContractIds = IbmStoreContextBuilder
             .from(storeContext)

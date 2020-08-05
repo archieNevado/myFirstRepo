@@ -8,29 +8,32 @@ import com.coremedia.blueprint.common.preview.PreviewDateFormatter;
 import com.coremedia.blueprint.common.services.validation.AbstractValidator;
 import com.coremedia.blueprint.common.util.ContextAttributes;
 import com.coremedia.cache.Cache;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.google.common.annotations.VisibleForTesting;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import org.apache.commons.lang3.time.FastDateFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * This validator checks if an item is an instance of {@link ValidityPeriod} and, if so, it is also within the preview date, if any.
  */
+@DefaultAnnotation(NonNull.class)
 public class ValidityPeriodValidator extends AbstractValidator<ValidityPeriod> implements SearchFilterProvider<Condition> {
 
   private static final Logger LOG = LoggerFactory.getLogger(ValidityPeriodValidator.class);
@@ -39,13 +42,14 @@ public class ValidityPeriodValidator extends AbstractValidator<ValidityPeriod> i
   public static final String REQUEST_ATTRIBUTE_PREVIEW_DATE = "previewDateObj";
 
   private static final int INTERVAL = 5;
-  private boolean preview;
 
-  // --- spring config -------------------------------------------------------------------------------------------------
+  private final DeliveryConfigurationProperties deliveryConfigurationProperties;
+  private final Iterable<ValidUntilConsumer> validUntilConsumers;
 
-  @org.springframework.beans.factory.annotation.Value("${cae.is.preview}")
-  public void setPreview(boolean preview) {
-    this.preview = preview;
+  public ValidityPeriodValidator(DeliveryConfigurationProperties deliveryConfigurationProperties,
+                                 ObjectProvider<ValidUntilConsumer> validUntilConsumersProvider) {
+    this.deliveryConfigurationProperties = deliveryConfigurationProperties;
+    this.validUntilConsumers = validUntilConsumersProvider.stream().collect(Collectors.toList());
   }
 
   /**
@@ -67,22 +71,14 @@ public class ValidityPeriodValidator extends AbstractValidator<ValidityPeriod> i
       return;
     }
 
-    if (preview) {
+    if (deliveryConfigurationProperties.isPreviewMode()) {
       // we don't want to cache anything in preview if somewhere a validation period is used
       // (the reason is: it could influence the validity decision at any time if later a previewdate is used)
       Cache.uncacheable();
     } else {
       Calendar validTime = getPreviewDate();
       Optional<Calendar> validUntil = findNearestDate(result, validTime);
-      if (validUntil.isPresent()) {
-        // set a timed dependency if a date is available (the minimal time that the list could be cached)
-        Date validUntilTime = validUntil.get().getTime();
-        Cache.cacheUntil(validUntilTime);
-        if (LOG.isDebugEnabled()) {
-          String chosenDateStr = FastDateFormat.getInstance("dd.MM.yyyy HH:mm:ss.SSS").format(validUntilTime);
-          LOG.debug("Caching these items: '{}' until '{}'", result, chosenDateStr);
-        }
-      }
+      validUntil.ifPresent(cal -> validUntilConsumers.forEach(c -> c.accept(cal.toInstant())));
     }
   }
 

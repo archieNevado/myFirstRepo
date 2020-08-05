@@ -6,14 +6,15 @@ import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.ibm.catalog.ProductVariantImpl;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractIbmService;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.inventory.AvailabilityInfo;
 import com.coremedia.livecontext.ecommerce.inventory.AvailabilityService;
-import org.apache.commons.lang3.StringUtils;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -108,4 +109,15 @@ public class AvailabilityServiceImpl extends AbstractIbmService implements Avail
         this.commerceBeanFactory = commerceBeanFactory;
     }
 
+  @Override
+  public float getQuantityAvailable(@NonNull ProductVariant variant) {
+    if (!(variant instanceof ProductVariantImpl)) {
+      throw new IllegalArgumentException("Unable to compute availability for product variant of type " + variant.getClass());
+    }
+    ProductVariantImpl productVariant = (ProductVariantImpl) variant;
+    if (!productVariant.isBuyable()) {
+      return 0.0F;
+    }
+    return AvailabilityService.super.getQuantityAvailable(variant);
+  }
 }

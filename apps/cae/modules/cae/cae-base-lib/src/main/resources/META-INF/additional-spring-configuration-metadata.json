@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "cae.hashing.backward-compatibility",
+      "description": "If enabled the com.coremedia.blueprint.cae.util.DefaultSecureHashCodeGeneratorStrategy will be used for securing blob transformation. If set to false the com.coremedia.blueprint.cae.util.MD5SecureHashCodeGeneratorStrategy will be used."
+    }
+  ]
+}

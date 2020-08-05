@@ -1,5 +1,5 @@
 FROM mongo:4.0.13
-COPY initdb.d/* /docker-entrypoint-initdb.d/
+COPY --chown=mongodb:mongodb initdb.d/* /docker-entrypoint-initdb.d/
 ENV MONGO_INITDB_ROOT_USERNAME=root
 ENV MONGO_INITDB_ROOT_PASSWORD=root
 CMD ["mongod", "--wiredTigerCacheSizeGB=1"]

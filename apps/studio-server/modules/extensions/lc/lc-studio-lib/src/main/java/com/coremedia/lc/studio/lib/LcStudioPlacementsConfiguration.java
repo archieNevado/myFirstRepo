@@ -15,8 +15,7 @@ import org.springframework.context.annotation.ImportResource;
 @Configuration
 @Import({CapRestServiceConfiguration.class})
 @ImportResource(value = {
-        "classpath:/com/coremedia/cap/common/uapi-services.xml",
-        "classpath:/com/coremedia/blueprint/base/pagegrid/bpbase-pagegrid-configuration.xml"
+        "classpath:/com/coremedia/blueprint/base/pagegrid/impl/bpbase-pagegrid-services.xml",
 }, reader = ResourceAwareXmlBeanDefinitionReader.class)
 public class LcStudioPlacementsConfiguration {
 

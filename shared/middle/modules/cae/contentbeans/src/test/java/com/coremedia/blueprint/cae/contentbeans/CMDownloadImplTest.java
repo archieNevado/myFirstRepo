@@ -2,10 +2,9 @@ package com.coremedia.blueprint.cae.contentbeans;
 
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.contentbeans.CMDownload;
-import com.coremedia.blueprint.testing.ContentBeanTestBase;
+import com.coremedia.blueprint.cae.contentbeans.testing.ContentBeanTestBase;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.struct.Struct;
-import com.coremedia.cap.struct.StructBuilder;
 import com.coremedia.objectserver.beans.ContentBean;
 import org.junit.Assert;
 import org.junit.Before;

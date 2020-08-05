@@ -2,9 +2,9 @@ import $ from "jquery";
 import { decorateNode } from "./nodeDecorationService";
 
 // --- DOCUMENT READY --------------------------------------------------------------------------------------------------
-$(function() {
+$(function () {
   // append to dom ready (will be executed after all dom ready functions have finished)
-  $(function() {
+  $(function () {
     decorateNode(document);
   });
 });

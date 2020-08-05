@@ -20,7 +20,6 @@ import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {TenantInitializerTest.LocalConfig.class,
@@ -54,10 +53,5 @@ public class TenantHelperTest {
     public XmlUapiConfig xmlUapiConfig() {
       return new XmlUapiConfig("classpath:/com/coremedia/testing/contenttest.xml");
     }
-    @Bean
-    public SitesService sitesService() {
-      return mock(SitesService.class);
-    }
-
   }
 }

@@ -1025,7 +1025,7 @@ interface HasPageGrid {
 }
 
 interface Product {
-  available: Boolean!
+  available: Boolean! @deprecated(reason: "stock information is not supported anymore by commerce hub")
   catalogPicture: CatalogPicture
   category: Category
   currency: String
@@ -1054,14 +1054,14 @@ interface Product {
   storefrontUrl: String
   thumbnailUrl: String
   title: String
-  totalStockCount: Float!
+  totalStockCount: Float! @deprecated(reason: "stock information is not supported anymore by commerce hub")
   variant: Boolean!
   variants: [ProductVariant]!
   visuals: [CMVisual]!
 }
 
 interface ProductVariant {
-  available: Boolean!
+  available: Boolean! @deprecated(reason: "stock information is not supported anymore by commerce hub")
   catalogPicture: CatalogPicture
   category: Category
   currency: String
@@ -1091,7 +1091,7 @@ interface ProductVariant {
   storefrontUrl: String
   thumbnailUrl: String
   title: String
-  totalStockCount: Float!
+  totalStockCount: Float! @deprecated(reason: "stock information is not supported anymore by commerce hub")
   variant: Boolean!
   variants: [ProductVariant]!
   visuals: [CMVisual]!
@@ -2235,7 +2235,7 @@ type ProductAttribute {
 }
 
 type ProductImpl implements Banner & CollectionItem & CommerceBean & HasPageGrid & Product {
-  available: Boolean!
+  available: Boolean! @deprecated(reason: "stock information is not supported anymore by commerce hub")
   catalogPicture: CatalogPicture!
   category: Category
   currency: String
@@ -2266,14 +2266,14 @@ type ProductImpl implements Banner & CollectionItem & CommerceBean & HasPageGrid
   teaserTitle: String
   thumbnailUrl: String
   title: String
-  totalStockCount: Float!
+  totalStockCount: Float! @deprecated(reason: "stock information is not supported anymore by commerce hub")
   variant: Boolean!
   variants: [ProductVariant]!
   visuals: [CMVisual]!
 }
 
 type ProductVariantImpl implements Banner & CollectionItem & CommerceBean & HasPageGrid & Product & ProductVariant {
-  available: Boolean!
+  available: Boolean! @deprecated(reason: "stock information is not supported anymore by commerce hub")
   catalogPicture: CatalogPicture!
   category: Category
   currency: String
@@ -2305,7 +2305,7 @@ type ProductVariantImpl implements Banner & CollectionItem & CommerceBean & HasP
   teaserTitle: String
   thumbnailUrl: String
   title: String
-  totalStockCount: Float!
+  totalStockCount: Float! @deprecated(reason: "stock information is not supported anymore by commerce hub")
   variant: Boolean!
   variants: [ProductVariant]!
   visuals: [CMVisual]!

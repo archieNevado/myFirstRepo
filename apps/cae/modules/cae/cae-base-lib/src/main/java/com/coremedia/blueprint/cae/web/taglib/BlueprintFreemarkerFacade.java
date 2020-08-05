@@ -598,6 +598,16 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
   }
 
   /**
+   * Checks if the given richtext is empty without the richtext grammar.
+   *
+   * @param richtext the richtext to check
+   * @return true if the given richtext is empty, otherwise false.
+   */
+  public boolean isEmptyRichtext(Markup richtext) {
+    return MarkupUtil.isEmptyRichtext(richtext, true);
+  }
+
+  /**
    * Retrieves the URL path that belongs to a theme resource (image, webfont, etc.) defined by its path within the
    * theme folder. The path must not contain any <strong>..</strong>
    * descending path segments.

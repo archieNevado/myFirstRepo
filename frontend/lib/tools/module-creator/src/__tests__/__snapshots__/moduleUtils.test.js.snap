@@ -294,6 +294,7 @@ Object {
     }
   ],
   \\"l10n\\": {
+    \\"bundleEncoding\\": \\"UTF-8\\",
     \\"bundleNames\\": [
       \\"Newest\\"
     ]
@@ -449,6 +450,7 @@ Object {
     }
   ],
   \\"l10n\\": {
+    \\"bundleEncoding\\": \\"UTF-8\\",
     \\"bundleNames\\": [
       \\"Newest\\",
       \\"Bricks\\"
@@ -598,6 +600,7 @@ Object {
     }
   ],
   \\"l10n\\": {
+    \\"bundleEncoding\\": \\"UTF-8\\",
     \\"bundleNames\\": [
       \\"Newest\\",
       \\"Bricks\\"

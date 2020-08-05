@@ -33,7 +33,6 @@
     <property name="contentBeanFactory" ref="contentBeanFactory"/>
     <property name="dataViewFactory" ref="dataViewFactory"/>
     <property name="cacheTimeInSecs" value="60"/>
-    <property name="preview" value="${cae.is.preview}"/>
   </bean>
 
   <!-- register link handler for asset download portal -->
@@ -44,6 +43,8 @@
     <property name="contentRepository" ref="contentRepository"/>
     <property name="contentBeanFactory" ref="contentBeanFactory"/>
   </bean>
+
+  <bean class="com.coremedia.blueprint.assets.cae.handlers.DownloadPortalCsrfIgnoringRequestMatcher"/>
 
   <bean id="amValidationService" class="com.coremedia.blueprint.cae.services.validation.ValidationServiceImpl">
     <property name="validators" ref="amValidatorsList" />

@@ -2,9 +2,11 @@ package com.coremedia.livecontext.cae;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoStoreContextAvailable;
 import com.coremedia.blueprint.cae.exception.handler.SimpleExceptionHandler;
+import com.coremedia.cae.security.CaeCsrfIgnoringRequestMatcher;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.fragment.FragmentContextProvider;
 import com.coremedia.livecontext.hybrid.CookieLevelerFilter;
+import com.coremedia.livecontext.search.CommerceSearchCsrfIgnoringRequestMatcher;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -22,7 +24,6 @@ import org.springframework.core.annotation.Order;
         "classpath:/META-INF/coremedia/calista-handler.xml",
         "classpath:/META-INF/coremedia/livecontext-cae-services.xml",
         "classpath:/META-INF/coremedia/livecontext-contentbeans.xml",
-        "classpath:/META-INF/coremedia/livecontext-contentbeans-settings.xml",
         "classpath:/META-INF/coremedia/livecontext-fragment.xml",
         "classpath:/META-INF/coremedia/livecontext-freemarker-views.xml",
         "classpath:/META-INF/coremedia/livecontext-handler-interceptors.xml",
@@ -70,4 +71,8 @@ public class LcCaeAutoConfiguration {
     return exceptionHandler;
   }
 
+  @Bean
+  CaeCsrfIgnoringRequestMatcher caeCsrfIgnoringRequestMatcher() {
+    return new CommerceSearchCsrfIgnoringRequestMatcher();
+  }
 }

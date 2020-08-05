@@ -7,7 +7,6 @@
         xmlns:livecontext="exml:com.coremedia.livecontext.studio.config">
   <fx:Script><![CDATA[
     import com.coremedia.cms.editor.sdk.preview.PreviewContextMenu;
-    import com.coremedia.cms.editor.sdk.preview.PreviewPanelBase;
     import com.coremedia.cms.editor.sdk.preview.metadata.MetadataTreeModel;
     import com.coremedia.ui.data.ValueExpression;
 
@@ -19,9 +18,6 @@
 
     [Bindable]
     public var bindTo:ValueExpression;
-
-    [Bindable]
-    public var metadataTreeValueExpression:ValueExpression;
     ]]></fx:Script>
 
 

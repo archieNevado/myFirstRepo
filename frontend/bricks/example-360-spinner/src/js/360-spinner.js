@@ -43,7 +43,7 @@ function threeSixtySpinner(spinner) {
     logger.log("Initialize 360° Spinner with " + totalFrames + " frames");
 
     // Inititialize frames (array of image objects)
-    images.each(function() {
+    images.each(function () {
       frames.push($(this));
     });
 
@@ -58,7 +58,7 @@ function threeSixtySpinner(spinner) {
     /**
      * Adds the jQuery "mousedown" and "touchstart" event to the image slider wrapper.
      */
-    $container.on("mousedown touchstart", function(event) {
+    $container.on("mousedown touchstart", function (event) {
       // leftclick
       if (event.type === "mousedown" && event.which === 1) {
         ready = true;
@@ -84,7 +84,7 @@ function threeSixtySpinner(spinner) {
     /**
      * Add the jQuery "mousemove" and "touchmove" event handler, if started dragging inside the $container.
      */
-    $document.on("mousemove touchmove", function(event) {
+    $document.on("mousemove touchmove", function (event) {
       if (ready) {
         dragging = true;
 
@@ -98,7 +98,7 @@ function threeSixtySpinner(spinner) {
     /**
      * Adds the jQuery "mouseup" event to the document for stopping, if started dragging inside the $container.
      */
-    $document.on("mouseup touchend", function(event) {
+    $document.on("mouseup touchend", function (event) {
       ready = false;
       if (dragging) {
         dragging = false;
@@ -108,7 +108,7 @@ function threeSixtySpinner(spinner) {
       }
     });
 
-    $container.on("click touch", function(event) {
+    $container.on("click touch", function (event) {
       // avoid that surrounding links will be activated if 360 spinner was used
       event.preventDefault();
       event.stopPropagation(); //w3c
@@ -118,7 +118,7 @@ function threeSixtySpinner(spinner) {
     /**
      * Adds the jQuery "keydown" event to the document. You can move the spinner by pressing left or right on the keyboard.
      */
-    $document.on("keydown", function(event) {
+    $document.on("keydown", function (event) {
       // only if spinner is visible
       if ($container.css("visibility") !== "hidden") {
         const key = event.keyCode || event.which;
@@ -279,9 +279,9 @@ function threeSixtySpinner(spinner) {
   }
 }
 
-export default function(domElementOrJQueryResult) {
+export default function (domElementOrJQueryResult) {
   if (domElementOrJQueryResult instanceof $) {
-    $.each(domElementOrJQueryResult, function(index, item) {
+    $.each(domElementOrJQueryResult, function (index, item) {
       threeSixtySpinner(item);
     });
   } else {

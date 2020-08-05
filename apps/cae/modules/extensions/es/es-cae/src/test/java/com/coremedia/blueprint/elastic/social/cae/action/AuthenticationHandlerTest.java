@@ -5,16 +5,20 @@ import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.testing.ContentTestHelper;
-import com.coremedia.objectserver.view.ViewUtils;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
+import com.coremedia.objectserver.request.RequestUtils;
+import com.coremedia.objectserver.configuration.CaeConfigurationProperties;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.HttpError;
 import com.coremedia.objectserver.web.links.LinkFormatter;
 import com.google.common.collect.ImmutableMap;
-import org.assertj.core.groups.Tuple;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ContextConfiguration;
@@ -40,8 +44,17 @@ import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = AuthenticationHandlerTestConfiguration.class)
+@ContextConfiguration(classes = AuthenticationHandlerTest.LocalConfig.class)
 public class AuthenticationHandlerTest {
+
+  @Configuration
+  @EnableConfigurationProperties({
+          DeliveryConfigurationProperties.class,
+          CaeConfigurationProperties.class
+  })
+  @Import({AuthenticationHandlerTestConfiguration.class})
+  static class LocalConfig {
+  }
 
   private AuthenticationState authenticationState;
   private CMAction action;
@@ -123,7 +136,7 @@ public class AuthenticationHandlerTest {
   private String formatLink(Object bean, Map<String, Object> parameters) {
     MockHttpServletRequest request = new MockHttpServletRequest("GET", "/");
     request.setCharacterEncoding("UTF-8");
-    request.setAttribute(ViewUtils.PARAMETERS, parameters);
+    request.setAttribute(RequestUtils.PARAMETERS, parameters);
     return linkFormatter.formatLink(bean, null, request, new MockHttpServletResponse(), false);
   }
 

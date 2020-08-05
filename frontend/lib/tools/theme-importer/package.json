@@ -17,10 +17,10 @@
     "request": "^2.88.2"
   },
   "devDependencies": {
-    "prettier": "^1.0.0"
+    "prettier": "^2.0.5"
   },
   "scripts": {
-    "prettier": "prettier \"**/*\" --write"
+    "prettier": "prettier --write \"src/**/*.{js,json}\""
   },
   "main": "src/index.js"
 }

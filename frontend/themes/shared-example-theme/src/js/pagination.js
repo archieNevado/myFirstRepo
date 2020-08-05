@@ -13,7 +13,7 @@ function loadPage(url) {
     $.ajax({
       url: url,
     })
-      .done(nextSearchResults => {
+      .done((nextSearchResults) => {
         log("Loaded next page successfully.");
         resolve(nextSearchResults);
       })
@@ -24,14 +24,19 @@ function loadPage(url) {
   });
 }
 
-export function initPagination($loadMoreButton, $spinner, url, newPageCallback) {
+export function initPagination(
+  $loadMoreButton,
+  $spinner,
+  url,
+  newPageCallback
+) {
   log("Initialize pagination", $loadMoreButton, url);
   $loadMoreButton.on("click touch", () => {
     log("Load more search results via ajax.", $loadMoreButton, url);
     $loadMoreButton.hide();
     $spinner.show();
     loadPage(url)
-      .then(nextSearchResults => {
+      .then((nextSearchResults) => {
         newPageCallback(nextSearchResults);
       })
       .catch(() => {

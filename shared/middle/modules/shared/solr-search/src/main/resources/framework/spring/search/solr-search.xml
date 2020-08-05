@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+                             http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 
   <description>
     Search specific bean definitions
   </description>
-
-  <context:property-placeholder location="classpath:/framework/spring/search/solr-search-defaults.properties"
-                                ignore-unresolvable="true" local-override="false"/>
 
   <!-- import bean "contentRepository" -->
   <import resource="classpath:/com/coremedia/cae/uapi-services.xml"/>
@@ -25,14 +22,13 @@
   </bean>
 
   <bean id="solrSearchQueryBuilder" class="com.coremedia.blueprint.cae.search.solr.SolrSearchQueryBuilder">
-    <property name="preview" value="${cae.is.preview}"/>
     <property name="searchFilterProviders" ref="solrSearchFilters"/>
   </bean>
 
   <bean id="resultFactory" class="com.coremedia.blueprint.cae.search.solr.SolrSearchResultFactory">
     <property name="contentRepository" ref="contentRepository"/>
     <property name="solrClient" ref="solrClient"/>
-    <property name="collection" value="${solr.collection.cae}"/>
+    <property name="collection" value="${solr.collection.cae:}"/>
     <property name="queryBuilder" ref="solrSearchQueryBuilder"/>
     <property name="representationMapper" ref="representationMapper"/>
     <property name="facetFieldLabelFunctions" ref="facetFieldLabelFunctions"/>

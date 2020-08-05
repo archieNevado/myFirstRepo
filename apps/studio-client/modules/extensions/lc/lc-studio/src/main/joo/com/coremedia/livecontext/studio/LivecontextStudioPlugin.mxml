@@ -118,7 +118,8 @@
     <bpforms:CMTeaserForm>
       <bpforms:plugins>
         <ui:AddItemsPlugin applyTo="{function(cont:Container):Container {
-                                        return cont.queryById('validTo').ownerCt;
+                                        var cmp:Component = cont.queryById('validTo');
+                                        return cmp ? cmp.ownerCt : null;
                                         }}">
           <ui:items>
             <editor:BooleanPropertyField propertyName="localSettings.useTeaserTargetValidity"

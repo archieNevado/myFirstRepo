@@ -6,7 +6,7 @@
     This template is used for JS files if
     - ieExpression (conditional comments for IE) is set
     - js includes an external css file
-    - cae.use.local.resources or cae.developer.mode are set to true
+    - delivery.local-resources or delivery.developer-mode are set to true
     Otherwise MergableResources.asJSLink.ftl is used.
 -->
 

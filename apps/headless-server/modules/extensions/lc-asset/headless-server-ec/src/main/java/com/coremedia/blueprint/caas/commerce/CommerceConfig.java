@@ -12,6 +12,7 @@ import com.coremedia.blueprint.caas.commerce.adapter.CommerceBeanPageGridAdapter
 import com.coremedia.blueprint.caas.commerce.adapter.ProductListAdapterFactory;
 import com.coremedia.blueprint.caas.commerce.model.CommerceFacade;
 import com.coremedia.blueprint.caas.commerce.wiring.CommerceInstrumentation;
+import com.coremedia.caas.config.CaasSearchConfigurationProperties;
 import com.coremedia.caas.model.adapter.ExtendedLinkListAdapterFactory;
 import com.coremedia.caas.search.solr.SolrQueryBuilder;
 import com.coremedia.caas.search.solr.SolrSearchResultFactory;
@@ -133,12 +134,11 @@ public class CommerceConfig {
   }
 
   @Bean
-  public CaasAssetSearchService caasAssetSearchService(@Qualifier("searchResultFactory") SolrSearchResultFactory searchResultFactory,
+  public CaasAssetSearchService caasAssetSearchService(CaasSearchConfigurationProperties caasSearchConfigurationProperties, @Qualifier("searchResultFactory") SolrSearchResultFactory searchResultFactory,
                                                        ContentRepository contentRepository,
                                                        List<IdScheme> idSchemes,
-                                                       @Qualifier("dynamicContentSolrQueryBuilder") SolrQueryBuilder solrQueryBuilder,
-                                                       @Value("${caas.search.cache.seconds}") Integer cacheForSeconds) {
-    return new CaasAssetSearchService(searchResultFactory, contentRepository, idSchemes, solrQueryBuilder, cacheForSeconds);
+                                                       @Qualifier("dynamicContentSolrQueryBuilder") SolrQueryBuilder solrQueryBuilder) {
+    return new CaasAssetSearchService(caasSearchConfigurationProperties, searchResultFactory, contentRepository, idSchemes, solrQueryBuilder);
   }
 
   @Bean

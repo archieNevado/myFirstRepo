@@ -18,23 +18,23 @@ function getOrientation() {
  * @param {Element|jQuery} container
  * @param {Object} config slick configuration (orientation enhanced)
  */
-export default function(container, config) {
+export default function (container, config) {
   const $carousel = $(container);
   log("Initialize slickCarousel", $carousel);
 
   const hasOrientationSpecificOptions =
     config.responsive &&
     config.responsive.some(
-      config => [PORTRAIT, LANDSCAPE].indexOf(config.orientation) !== -1
+      (config) => [PORTRAIT, LANDSCAPE].indexOf(config.orientation) !== -1
     );
 
   if (hasOrientationSpecificOptions) {
     const responsiveConfigByOrientation = {
       [PORTRAIT]: config.responsive.filter(
-        config => !config.orientation || config.orientation === PORTRAIT
+        (config) => !config.orientation || config.orientation === PORTRAIT
       ),
       [LANDSCAPE]: config.responsive.filter(
-        config => !config.orientation || config.orientation === LANDSCAPE
+        (config) => !config.orientation || config.orientation === LANDSCAPE
       ),
     };
 

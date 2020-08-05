@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.webflow.config.FlowDefinitionResource;
 import org.springframework.webflow.config.FlowDefinitionResourceFactory;
 import org.springframework.webflow.core.collection.LocalAttributeMap;
@@ -65,7 +65,7 @@ public class UserDetailsFlowExecutionTest extends AbstractXmlFlowExecutionTests 
     userDetails.setEmailAddress("abcd@defg.hi");
     getFlowScope().put("bpUserDetails", userDetails);
     getFlowScope().put("authorName", null);
-    when(userDetailsHelper.save(eq(userDetails), any(RequestContext.class), nullable(CommonsMultipartFile.class))).thenReturn(true);
+    when(userDetailsHelper.save(eq(userDetails), any(RequestContext.class), nullable(MultipartFile.class))).thenReturn(true);
 
     MockExternalContext context = new MockExternalContext();
     context.setEventId("saveUser");

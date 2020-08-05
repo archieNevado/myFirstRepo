@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.cae.search.solr;
 
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.blueprint.cae.search.Condition;
 import com.coremedia.blueprint.cae.search.SearchConstants;
 import com.coremedia.blueprint.cae.search.SearchFilterProvider;
@@ -11,6 +12,7 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 import java.util.Collection;
@@ -29,7 +31,12 @@ public class SolrSearchQueryBuilder implements SolrQueryBuilder {
   private SearchPreprocessor<SearchQueryBean> searchPreprocessor;
   private List<SearchFilterProvider> searchFilterProviders;
 
-  private boolean preview = false;
+  private DeliveryConfigurationProperties deliveryConfigurationProperties;
+
+  @Autowired
+  public void setDeliveryConfigurationProperties(DeliveryConfigurationProperties deliveryConfigurationProperties) {
+    this.deliveryConfigurationProperties = deliveryConfigurationProperties;
+  }
 
   public void setSearchPreprocessor(SearchPreprocessor<SearchQueryBean> searchPreprocessor) {
     this.searchPreprocessor = searchPreprocessor;
@@ -281,10 +288,6 @@ public class SolrSearchQueryBuilder implements SolrQueryBuilder {
 
   @Override
   public boolean isPreview() {
-    return preview;
-  }
-
-  public void setPreview(boolean preview) {
-    this.preview = preview;
+    return deliveryConfigurationProperties.isPreviewMode();
   }
 }
