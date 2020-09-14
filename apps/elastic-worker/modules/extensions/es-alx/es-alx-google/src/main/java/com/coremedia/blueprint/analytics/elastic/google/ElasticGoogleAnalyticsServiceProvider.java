@@ -17,7 +17,6 @@ import com.google.api.client.util.SecurityUtils;
 import com.google.api.services.analytics.Analytics;
 import com.google.api.services.analytics.AnalyticsScopes;
 import com.google.api.services.analytics.model.GaData;
-import com.google.common.base.Defaults;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -55,7 +54,7 @@ public class ElasticGoogleAnalyticsServiceProvider implements AnalyticsServicePr
 
   static final Map<String, Object> DEFAULT_RETRIEVAL_SETTINGS = ImmutableMap.<String, Object>builder()
           .putAll(RetrievalUtil.DEFAULT_RETRIEVAL_SETTINGS)
-          .put(GoogleAnalyticsQuery.KEY_PID, Defaults.defaultValue(int.class))
+          .put(GoogleAnalyticsQuery.KEY_PID, 0)
           .put(APPLICATION_NAME, "")
           .put(SERVICE_ACCOUNT_EMAIL, "")
           .put(P12_FILE, new Object())

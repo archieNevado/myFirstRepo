@@ -3,6 +3,9 @@
 <#import "*/node_modules/@coremedia/brick-utils/src/freemarkerLibs/utils.ftl" as utils />
 
 <#assign imageMapArea=cm.localParameter("imageMapArea", {}) />
+<#assign overlay={
+  "hideOutOfStockProducts": false
+} + cm.localParameter("overlay", {}) />
 <#assign additionalAttributes=cm.localParameter("additionalAttributes", {}) />
 <#assign shape=imageMapArea.shape!"default" />
 <#assign coords=imageMapArea.coords!cm.UNDEFINED />
@@ -17,5 +20,5 @@
       target="${target}"
       rel="${rel}"
       <#if coords?has_content><@cm.dataAttribute name="data-coords" data=bp.responsiveImageMapAreaData(coords) /></#if>
-      <#if self.product?has_content>data-disabled="<@lc.availability product=self.product!cm.UNDEFINED ifTrue="false" ifFalse="true" />"</#if>
+      <#if overlay.hideOutOfStockProducts && self.product?has_content>data-disabled="<@lc.availability product=self.product!cm.UNDEFINED ifTrue="false" ifFalse="true" />"</#if>
       <@utils.renderAttr attr=additionalAttributes />>

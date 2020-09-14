@@ -9,6 +9,9 @@
   <fx:Script><![CDATA[
     import com.coremedia.ui.data.ValueExpressionFactory;
 
+    import ext.Component;
+    import ext.dom.Element;
+
     public static const xtype:String = "com.coremedia.blueprint.studio.config.taxonomy.locationTaxonomyConditionEditor";
 
     private var config:LocationTaxonomyConditionEditor;
@@ -29,7 +32,13 @@
                                             forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
                                             labelSeparator=":"
                                             anchor="100%"
-                                            propertyName="localSettings.fq.locationtaxonomy">
+                                            propertyName="localSettings.fq.locationtaxonomy"
+                                            taxonomyLinkListSideButtonVerticalAdjustment="{-12}"
+                                            taxonomyLinkListSideButtonHorizontalAdjustment="{-6}"
+                                            taxonomyLinkListSideButtonRenderToFunction="{function(host:Component):Element {
+                                              var parrentContainer:LocationTaxonomyConditionEditor = host.findParentByType(LocationTaxonomyConditionEditor) as LocationTaxonomyConditionEditor;
+                                              return parrentContainer.el;
+                                            }}">
       <taxonomy:plugins exml:mode="append">
         <editor:BindDisablePlugin bindTo="{config.bindTo}"
                                   forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>

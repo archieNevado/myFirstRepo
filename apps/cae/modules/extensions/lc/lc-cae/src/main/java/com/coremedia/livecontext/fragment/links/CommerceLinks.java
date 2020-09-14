@@ -71,7 +71,7 @@ public class CommerceLinks {
                                                   HttpServletRequest request) {
     return commerceLinkHelper.createCategoryLinkDispatcher(request)
             .dispatch(
-                    Optional::empty,
+                    () -> commerceStudioLinks.buildLinkForCategory(bean.getCategory(), linkParameters, request),
                     () -> commerceContentLedLinks.buildLinkForCategory(bean.getCategory())
             );
   }
@@ -87,7 +87,7 @@ public class CommerceLinks {
                                                                  HttpServletRequest request) {
     return commerceLinkHelper.createCategoryLinkDispatcher(request)
             .dispatch(
-                    Optional::empty,
+                    () -> commerceStudioLinks.buildLinkForCategory(bean.getCategory(), linkParameters, request),
                     () -> commerceContentLedLinks.buildLinkForLiveContextCategoryNavigation(bean)
             );
   }
@@ -136,7 +136,7 @@ public class CommerceLinks {
                                                  HttpServletRequest request) {
     return commerceLinkHelper.createProductLinkDispatcher(request)
             .dispatch(
-                    Optional::empty,
+                    () -> commerceStudioLinks.buildLinkForProduct(bean.getProduct(), linkParameters, request),
                     () -> commerceContentLedLinks.buildLinkForProduct(bean.getProduct())
             );
   }
@@ -156,7 +156,7 @@ public class CommerceLinks {
     }
     return commerceLinkHelper.createProductLinkDispatcher(request)
             .dispatch(
-                    Optional::empty,
+                    () -> commerceStudioLinks.buildLinkForProduct(productInSite.getProduct(), linkParameters, request),
                     () -> commerceContentLedLinks.buildLinkForProduct(productInSite.getProduct())
             );
   }

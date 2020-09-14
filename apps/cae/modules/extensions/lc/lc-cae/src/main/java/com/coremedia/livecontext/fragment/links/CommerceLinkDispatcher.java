@@ -19,34 +19,41 @@ class CommerceLinkDispatcher {
   private final boolean fragmentRequest;
   private final boolean useCommerceLinks;
   private final boolean studioPreviewRequest;
+  private final boolean isFragmentPreview;
 
-  CommerceLinkDispatcher(boolean fragmentRequest, boolean useCommerceLinks, boolean studioPreviewRequest) {
+  CommerceLinkDispatcher(boolean fragmentRequest, boolean useCommerceLinks, boolean studioPreviewRequest, boolean isFragmentPreview) {
     this.fragmentRequest = fragmentRequest;
     this.useCommerceLinks = useCommerceLinks;
     this.studioPreviewRequest = studioPreviewRequest;
+    this.isFragmentPreview = isFragmentPreview;
   }
 
   @Nullable
   UriComponents dispatch(Supplier<Optional<UriComponents>> studioLinkSupplier,
-                         Supplier<Optional<UriComponents>> commerceLedLinkSupplier) {
+                         Supplier<Optional<UriComponents>> contentLedLinkSupplier) {
     // commerce led
     if (fragmentRequest && useCommerceLinks) {
       return DUMMY_URI_TO_BE_REPLACED;
     }
 
     // studio
-    Optional<UriComponents> uriComponents = Optional.empty();
     if (studioPreviewRequest && useCommerceLinks) {
-      uriComponents = studioLinkSupplier.get();
+      return studioLinkSupplier.get().orElse(null);
     }
 
-    return uriComponents.or(() -> {
-      // content led
-      if (!fragmentRequest && useCommerceLinks) {
-        return commerceLedLinkSupplier.get();
-      }
-      return Optional.empty();
-    }).orElse(null);
+    // content led
+    if (!fragmentRequest && useCommerceLinks) {
+      return contentLedLinkSupplier.get()
+              .orElseGet(() -> {
+                // fallback to studioLinkSupplier, if Studio fragment preview and no content-led link available
+                if (isFragmentPreview) {
+                  return studioLinkSupplier.get().orElse(null);
+                }
+                return null;
+              });
+    }
+
+    return null;
   }
 
 }

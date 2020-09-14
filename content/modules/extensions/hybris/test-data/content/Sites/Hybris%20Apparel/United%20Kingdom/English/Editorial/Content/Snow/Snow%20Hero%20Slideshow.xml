@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMCollection folder="/Sites/Hybris Apparel/United Kingdom/English/Editorial/Content/Snow" name="Snow Hero Slideshow" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
+<CMCollection folder="/Sites/Hybris Apparel/United Kingdom/English/Editorial/Content/Snow" name="Snow Hero Slideshow">
 <externalRefId></externalRefId>
 <locale>en-GB</locale>
 <master>
@@ -10,7 +10,7 @@
 </linkedSettings>
 <resourceBundles2>
 </resourceBundles2>
-<validFrom format="dd.MM.yyyy HH:mm:ss Z">28.08.2016 00:00:00 +0200</validFrom>
+<validFrom format="dd.MM.yyyy HH:mm:ss Z VV">28.08.2016 00:00:00 +0200 Europe/Berlin</validFrom>
 <segment></segment>
 <title></title>
 <htmlTitle></htmlTitle>

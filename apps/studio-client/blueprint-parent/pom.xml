@@ -29,7 +29,7 @@
 
     <customer>Blueprint</customer>
 
-    <cm.studio-client.core.version>2007.1</cm.studio-client.core.version>
+    <cm.studio-client.core.version>2007.2</cm.studio-client.core.version>
     <jangaroo.version>4.0.70</jangaroo.version>
     <jooUnitWebDriverBrowser>chrome</jooUnitWebDriverBrowser>
 
@@ -81,12 +81,12 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.36</tomcat.embed.version>
+    <tomcat.embed.version>9.0.37</tomcat.embed.version>
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.studio-client.core.version>2007.1</cm.studio-client.core.version>
-    <cm.common.core.version>2007.1</cm.common.core.version>
+    <cm.studio-client.core.version>2007.2</cm.studio-client.core.version>
+    <cm.common.core.version>2007.2</cm.common.core.version>
     <maven-surefire-plugin.version>3.0.0-M4</maven-surefire-plugin.version>
 
     <showDeprecation>true</showDeprecation>

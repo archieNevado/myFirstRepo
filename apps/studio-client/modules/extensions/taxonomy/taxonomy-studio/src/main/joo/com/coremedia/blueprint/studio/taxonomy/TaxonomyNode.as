@@ -10,6 +10,8 @@ import mx.resources.ResourceManager;
 
 [ResourceBundle('com.coremedia.blueprint.studio.TaxonomyStudioPluginSettings')]
 public class TaxonomyNode {
+  public static const AUTO_COMMIT:Boolean = true;
+
   public static const PROPERTY_PATH:String = "path";
   public static const PROPERTY_HTML:String = "html";//property used to store HTML of search combo
   public static const PROPERTY_NAME:String = "name";
@@ -218,8 +220,10 @@ public class TaxonomyNode {
    * @param callback
    */
   public function commitNode(callback:Function = null):void {
-    var url:String = "taxonomies/commit?" + toNodeQuery();
-    executeNodeOperation(url, callback);
+    if(AUTO_COMMIT) {
+      var url:String = "taxonomies/commit?" + toNodeQuery();
+      executeNodeOperation(url, callback);
+    }
   }
 
   /**

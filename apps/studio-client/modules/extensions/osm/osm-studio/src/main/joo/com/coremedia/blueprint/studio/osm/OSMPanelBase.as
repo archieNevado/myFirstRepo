@@ -248,5 +248,12 @@ public class OSMPanelBase extends Panel {
     );
     return latLng;
   }
+
+
+  override protected function onRemoved(destroying:Boolean):void {
+    latLngExpression && latLngExpression.removeChangeListener(setMarker);
+
+    super.onRemoved(destroying);
+  }
 }
 }

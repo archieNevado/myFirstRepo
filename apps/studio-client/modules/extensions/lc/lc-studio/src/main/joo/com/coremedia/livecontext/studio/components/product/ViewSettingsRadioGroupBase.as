@@ -1,6 +1,5 @@
 package com.coremedia.livecontext.studio.components.product {
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
@@ -127,6 +126,13 @@ public class ViewSettingsRadioGroupBase extends RadioGroup {
     else {
       radioGroupExpression.setValue(defaultSetting);
     }
+  }
+
+  override protected function onRemoved(destroying:Boolean):void {
+    getRadioGroupValueExpression().removeChangeListener(radioGroupChanged);
+    propertyValueExpression.removeChangeListener(propertyValueChanged);
+
+    super.onRemoved(destroying);
   }
 }
 }

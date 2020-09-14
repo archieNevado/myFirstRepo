@@ -8,6 +8,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.premular.fields.LinkListDropArea;
 import com.coremedia.cms.editor.sdk.util.ILinkListWrapper;
 import com.coremedia.ui.data.ValueExpression;
+import com.coremedia.ui.mixins.ISideButtonMixin;
 import com.coremedia.ui.mixins.IValidationStateMixin;
 import com.coremedia.ui.mixins.ValidationState;
 import com.coremedia.ui.mixins.ValidationStateMixin;
@@ -16,9 +17,9 @@ import com.coremedia.ui.util.EventUtil;
 import com.coremedia.ui.util.createComponentSelector;
 
 import ext.Component;
-import ext.EventManager;
 import ext.Ext;
 import ext.StringUtil;
+import ext.button.Button;
 import ext.dd.DropTarget;
 import ext.dd.ScrollManager;
 import ext.grid.GridPanel;
@@ -36,7 +37,7 @@ import js.KeyEvent;
  */
 [ResourceBundle('com.coremedia.cms.editor.Editor')]
 [ResourceBundle('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin')]
-public class TaxonomyLinkListGridPanelBase extends GridPanel implements IValidationStateMixin {
+public class TaxonomyLinkListGridPanelBase extends GridPanel implements IValidationStateMixin, ISideButtonMixin {
 
   [Bindable]
   public var linkListWrapper:ILinkListWrapper;
@@ -81,6 +82,7 @@ public class TaxonomyLinkListGridPanelBase extends GridPanel implements IValidat
   public function TaxonomyLinkListGridPanelBase(config:TaxonomyLinkListGridPanelBase = null) {
     super(config);
     initValidationStateMixin();
+    initSideButtonMixin();
     this.addListener("afterlayout", refreshLinkList);
     on("validationStateChanged", onValidationChanged);
     on("validationMessageChanged", onValidationChanged);
@@ -229,5 +231,41 @@ public class TaxonomyLinkListGridPanelBase extends GridPanel implements IValidat
   /** @inheritDoc */
   [Bindable]
   public native function get validationMessage():String;
+
+  /** @inheritDoc */
+  public native function initSideButtonMixin():void;
+
+  /** @private */
+  [ExtConfig(create=false)]
+  [Bindable]
+  public native function set sideButtonCfg(newSideButton:Button):void;
+
+  /** @private */
+  [Bindable]
+  public native function get sideButton():Button;
+
+  /** @private */
+  [Bindable]
+  public native function set sideButtonDisabled(disabled:Boolean):void;
+
+  /** @private */
+  [Bindable]
+  public native function set sideButtonSticky(sticky:Boolean):void;
+
+  /** @private */
+  [Bindable]
+  public native function set sideButtonDisableAdjustOnHiddenLabel(disableAdjust:Boolean):void;
+
+  /** @private */
+  [Bindable]
+  public native function set sideButtonVerticalAdjustment(position:Number):void;
+
+  /** @private */
+  [Bindable]
+  public native function set sideButtonHorizontalAdjustment(position:Number):void;
+
+  /** @private */
+  [Bindable]
+  public native function set sideButtonRenderToFunction(renderTo:Function):void;
 }
 }

@@ -139,7 +139,7 @@ public abstract class FragmentHandler extends PageHandlerBase implements Predica
 
   @NonNull
    static ModelAndView createPlacementUnresolvableError(@NonNull CMLinkable cmLinkable, @NonNull String placementName) {
-    LOG.error("No placement named {} found for {}.", placementName, cmLinkable.getContent().getPath());
+    LOG.info("No placement named {} found for {}.", placementName, cmLinkable.getContent().getPath());
 
     ModelAndView modelAndView = notFound("No placement found for name '" + placementName + "'");
     modelAndView.setViewName(UNRESOLVABLE_PLACEMENT_VIEW_NAME);

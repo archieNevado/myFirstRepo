@@ -15,6 +15,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
+import static com.coremedia.blueprint.base.links.UriConstants.RequestParameters.VIEW_PARAMETER;
+import static com.coremedia.blueprint.cae.handlers.HandlerBase.FRAGMENT_PREVIEW;
+import static com.coremedia.blueprint.cae.handlers.PreviewHandler.isStudioPreviewRequest;
 import static com.coremedia.livecontext.handler.ExternalNavigationHandler.LIVECONTEXT_POLICY_COMMERCE_CATEGORY_LINKS;
 import static com.coremedia.livecontext.product.ProductPageHandler.LIVECONTEXT_POLICY_COMMERCE_PRODUCT_LINKS;
 
@@ -44,9 +47,10 @@ class CommerceLinkHelper {
   }
 
   CommerceLinkDispatcher createCommerceLinkDispatcher(HttpServletRequest request, boolean useCommerceLinks) {
-    boolean fragmentRequest = CommerceLinkUtils.isFragmentOrDynamicRequest(request);
-    boolean studioPreviewRequest = CommerceLinkUtils.isStudioPreviewRequest(request);
-    return new CommerceLinkDispatcher(fragmentRequest, useCommerceLinks, studioPreviewRequest);
+    boolean fragmentRequest = CommerceLinkUtils.isFragmentRequest(request);
+    boolean studioPreviewRequest = isStudioPreviewRequest(request);
+    boolean studioFragmentPreviewRequest = FRAGMENT_PREVIEW.equals(request.getParameter(VIEW_PARAMETER));
+    return new CommerceLinkDispatcher(fragmentRequest, useCommerceLinks, studioPreviewRequest, studioFragmentPreviewRequest);
   }
 
   boolean useCommerceProductLinks(ServletRequest request) {

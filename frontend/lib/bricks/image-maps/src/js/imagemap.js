@@ -217,8 +217,12 @@ export function update($imagemap, newRatio) {
   // iterate over all areas having shape and data-coords set
   $areas.find("area[data-coords][shape]").each(function () {
     const $area = $(this);
-    // ignore disabled areas
+    const $hotzoneIndicator = $area.next(".cm-imagemap__hotzone");
+    // do not process disabled areas
     if ($area.data("disabled")) {
+      $area.addClass("cm-imagemap__area--disabled");
+      $hotzoneIndicator.removeClass("cm-imagemap__hotzone--loading");
+      $hotzoneIndicator.addClass("cm-imagemap__hotzone--disabled");
       return;
     }
     let coords = $area.data("current-coords");
@@ -268,7 +272,6 @@ export function update($imagemap, newRatio) {
         x: (hotzoneBox.x1 + hotzoneBox.x2) / 2,
         y: (hotzoneBox.y1 + hotzoneBox.y2) / 2,
       };
-      const $hotzoneIndicator = $area.next(".cm-imagemap__hotzone");
       const hotzoneIndicatorWidth = Math.abs($hotzoneIndicator.width());
       const hotzoneIndicatorHeight = Math.abs($hotzoneIndicator.height());
       const hotzoneIndicatorBox = {

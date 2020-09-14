@@ -68,7 +68,7 @@ class ZipperWebpackPlugin {
     zipper(this.patterns, {
       filepath: this.options.filepath,
       context: this.context,
-      debug: this._logLevel,
+      logLevel: this._logLevel,
     })
       .then((count) => {
         this._log.debug(`Compressed ${count} files`);

@@ -34,9 +34,8 @@
   </fx:Declarations>
 
   <editor:items>
-    <editor:DocumentForm
-            title="{resourceManager.getString('com.coremedia.blueprint.base.queryeditor.QueryEditor', 'DCQE_label_conditions')}"
-            itemId="contentQueryDocumentForm">
+    <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.base.queryeditor.QueryEditor', 'DCQE_label_conditions')}"
+                         itemId="contentQueryDocumentForm">
       <editor:items>
         <dcqe:ContentQueryForm bindTo="{config.bindTo}"
                                itemId="contentQueryForm"
@@ -106,9 +105,8 @@
         </dcqe:ContentQueryForm>
       </editor:items>
     </editor:DocumentForm>
-    <editor:DocumentForm
-            title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}"
-            itemId="contentTab">
+    <editor:DocumentForm title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_content_title')}"
+                         itemId="contentTab">
       <editor:items>
         <bpforms:TeaserDocumentForm/>
         <bpforms:FixedIndexItemsForm/>

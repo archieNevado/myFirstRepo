@@ -12,6 +12,7 @@
 <#assign isTopLevel=cm.localParameters().isTopLevel!false/>
 <#assign showNavigationLabel=cm.localParameters().showNavigationLabel!false/>
 <#assign depth=cm.localParameters().depth!0/>
+<#assign maxDepth=cm.localParameters().maxDepth!0/>
 <#assign showPicturesInNavigation=cm.localParameters().showPicturesInNavigation!true/>
 
 <#-- check if navigation has visible children and max tree depth isn't reached yet -->
@@ -34,7 +35,8 @@
         "isTopLevel": isTopLevel,
         "depth": depth,
         "showPicturesInNavigation": showPicturesInNavigation,
-        "showNavigationLabel": isTopLevel
+        "showNavigationLabel": isTopLevel,
+        "maxDepth": maxDepth
       } />
     </#list>
   </ul>

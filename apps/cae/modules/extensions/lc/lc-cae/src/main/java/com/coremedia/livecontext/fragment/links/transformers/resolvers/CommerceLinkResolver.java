@@ -21,6 +21,7 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.link.LinkService;
 import com.coremedia.livecontext.ecommerce.link.QueryParam;
 import com.coremedia.livecontext.ecommerce.link.StorefrontRef;
+import com.coremedia.livecontext.ecommerce.order.Cart;
 import com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.ExternalSeoSegmentBuilder;
 import com.coremedia.objectserver.beans.ContentBean;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
@@ -141,12 +142,19 @@ public class CommerceLinkResolver implements LiveContextLinkResolver {
       CMLinkable cmLinkable = (CMLinkable) bean;
       String seoPath = seoSegmentBuilder.asSeoSegment(navigation, cmLinkable);
       return Optional.of(linkService.getContentLink(seoPath, storeContext, linkParameters, request));
-    } else if (bean instanceof ContentBeanBackedPageGridPlacement || bean instanceof DynamizableContainer) {
+    } else if (bean instanceof ContentBeanBackedPageGridPlacement || bean instanceof DynamizableContainer || bean instanceof Cart) {
       String relativeLink = deabsolutizeLink(source);
-      return Optional.of(linkService.getAjaxLink(relativeLink, storeContext, request));
-    } else {
-      return Optional.empty();
+      //we only want to wrap CAE Ajax calls into commerce Ajax calls
+      //make sure we only translate dynamic CAE links
+      if(isDynamicCaeLink(relativeLink)){
+        return Optional.of(linkService.getAjaxLink(relativeLink, storeContext, request));
+      }
     }
+    return Optional.empty();
+  }
+
+  private static boolean isDynamicCaeLink(String relativeLink) {
+    return relativeLink.startsWith("/dynamic/");
   }
 
   @Nullable

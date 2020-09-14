@@ -136,7 +136,8 @@ interface CMLinkable @inherit(from: ["CMLocalized", "CollectionItem"]) {
 
 interface CMLocalized @inherit(from: ["CMObject"]) {
   ignoreUpdates: Int
-  languageId: String
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
 }
 
 interface CMMedia @inherit(from: ["CMTeasable"]) {
@@ -315,7 +316,8 @@ type CMLinkableImpl implements CMLinkable @inherit(from: ["CMLocalizedImpl"]) {
 
 type CMLocalizedImpl implements CMLocalized @inherit(from: ["CMObjectImpl"]) {
   ignoreUpdates: Int
-  languageId: String
+  languageId: String @fetch(from: "#this.locale")
+  locale: String
 }
 
 type CMMediaImpl implements CMMedia @inherit(from: ["CMTeasableImpl"]) {

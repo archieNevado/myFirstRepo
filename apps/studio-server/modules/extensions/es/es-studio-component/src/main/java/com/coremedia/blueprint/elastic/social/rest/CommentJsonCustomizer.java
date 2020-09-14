@@ -48,7 +48,7 @@ public class CommentJsonCustomizer implements JsonCustomizer<Comment> {
     } catch (IllegalArgumentException e) {
       LOG.warn("An exception '{}' occurred resolving the target reference for the comment with id {}", e, comment.getId());
     } catch (UnresolvableReferenceException e) {
-      LOG.debug("Could not resolve target reference for the comment with id {}: {}", comment.getId(), e);
+      LOG.debug("Could not resolve target reference for the comment with id {}", comment.getId(), e);
     } catch (RuntimeException e) {
       LOG.warn("An exception '{}' occurred resolving the target reference for the comment with id {}", e, comment.getId());
     }

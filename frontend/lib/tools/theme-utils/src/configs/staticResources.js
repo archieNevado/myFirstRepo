@@ -108,7 +108,8 @@ function createPatternsCopyOverPaths(baseFolder, paths) {
       from: themePath,
       to: path.relative(baseFolder, themePath),
       force: true,
-      cache: true,
+      cacheTransform: true,
+      noErrorOnMissing: true,
     }));
 }
 
@@ -127,7 +128,7 @@ function getPatternsForCopyResources() {
     from: path.join(themeConfig.path, from),
     to: mappingFromTo[from],
     force: true,
-    cache: true,
+    cacheTransform: true,
   }));
 }
 
@@ -232,6 +233,21 @@ module.exports = () => (config) => {
     mappings: [new ViewRepositoryMapping(themeConfig.name)],
   });
 
+  const additionalCopyPatterns = [
+    getPatternForThemeDescriptor(),
+    ...getPatternsForCopyResources(),
+    // remove null patterns
+  ].filter((descriptor) => !!descriptor);
+
+  let additionalCopyPlugins = [];
+  if (additionalCopyPatterns.length > 0) {
+    additionalCopyPlugins.push(
+      new CopyWebpackPlugin({
+        patterns: additionalCopyPatterns,
+      })
+    );
+  }
+
   return deepMerge(config, {
     entry: {
       ...viewRepositoryPlugin.getEntry(),
@@ -302,29 +318,26 @@ module.exports = () => (config) => {
       // configure for themes
       ...themePaths.map(
         (themePath) =>
-          new CopyWebpackPlugin([
-            ...createPatternsCopyOverPaths(path.join(themePath, "src"), [
-              "css",
-              "fonts",
-              "img",
-              "images",
-              "vendor",
-              path.relative(
-                themeConfig.themeTargetPath,
-                themeConfig.resourceBundleTargetPath
-              ),
-            ]),
-          ])
+          new CopyWebpackPlugin({
+            patterns: [
+              ...createPatternsCopyOverPaths(path.join(themePath, "src"), [
+                "css",
+                "fonts",
+                "img",
+                "images",
+                "vendor",
+                path.relative(
+                  themeConfig.themeTargetPath,
+                  themeConfig.resourceBundleTargetPath
+                ),
+              ]),
+            ],
+          })
       ),
       joinSettingsWebpackPlugin,
+      // additional files via themeConfig
+      ...additionalCopyPlugins,
       // theme descriptor
-      new CopyWebpackPlugin(
-        [
-          getPatternForThemeDescriptor(),
-          ...getPatternsForCopyResources(),
-          // remove null patterns
-        ].filter((descriptor) => !!descriptor)
-      ),
       new ThemeDescriptorPlugin(themeConfig),
       new ZipperWebpackPlugin(
         [
@@ -341,8 +354,9 @@ module.exports = () => (config) => {
           },
           // also zip the freemarkerLibs into the theme again otherwise the Frontend Developer Workflow will not be able
           // to properly handle importing from a theme template to a brick freemarker lib
+          //outdated?
           {
-            source: "bricks/freemarkerLibs",
+            source: path.normalize("bricks/freemarkerLibs"),
             prefix: path.join(
               "META-INF/resources/WEB-INF/templates",
               themeConfig.name
@@ -361,6 +375,7 @@ module.exports = () => (config) => {
           compilerEvent: "after-emit",
         }
       ),
+      //outdated?
       new ZipperWebpackPlugin(
         [
           {

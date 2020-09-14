@@ -61,7 +61,7 @@ const zipper = (patterns, options = {}) => {
         );
       }
 
-      // Defaults context tp process.cwd()
+      // Defaults context to process.cwd()
       options.context = options.context || process.cwd();
 
       let fileCount = 0;
@@ -74,14 +74,9 @@ const zipper = (patterns, options = {}) => {
       const output = fs.createWriteStream(options.filepath);
       const archive = archiver("zip");
 
-      output.on("close", () => {
-        log.debug(`Compressed ${fileCount} files.`);
-        resolve(fileCount);
-      });
-
       archive.on("entry", (file) => {
         log.debug(
-          `Archived ${options.filepath}${path.sep}${path.normalize(file.name)}`
+          "Archived", file.name
         );
         fileCount++;
       });
@@ -115,22 +110,20 @@ const zipper = (patterns, options = {}) => {
           const sourcePath = path.resolve(pattern.context, pattern.source);
           const stats = maybeStat(sourcePath);
           if (!stats) {
-            log.debug(`Unable to stat path ${sourcePath}`);
+            log.debug(`Skip non existing path ${sourcePath}.`);
             return;
           }
           if (stats.isDirectory()) {
-            const name = path.normalize(
+            const destPath = path.normalize(
               (pattern.prefix ? pattern.prefix + path.sep : "") + pattern.source
             );
-            log.debug(`Adding directory to archive: ${sourcePath}`);
-            archive.directory(sourcePath, name, {
-              stats,
-            });
+            log.debug(`Adding directory "${sourcePath}" to archive as "${destPath}"`);
+            archive.directory(sourcePath, destPath);
           } else if (stats.isFile()) {
             const name = path.normalize(
               (pattern.prefix ? pattern.prefix + path.sep : "") + pattern.source
             );
-            log.debug(`Adding file to archive: ${sourcePath}`);
+            log.debug(`Adding file "${sourcePath}" to archive as "${name}"`);
             archive.file(sourcePath, {
               name,
               stats,
@@ -139,7 +132,15 @@ const zipper = (patterns, options = {}) => {
         }
       });
 
-      log.debug("Finalizing archive");
+      output.on("close", () => {
+        log.debug(`Compressed ${fileCount} files.`);
+        resolve(fileCount);
+      });
+
+      output.on("finish", () => {
+        log.debug("Finalizing archive:", options.filepath);
+      });
+
       archive.finalize();
     } catch (e) {
       log.debug("Error: ", e);

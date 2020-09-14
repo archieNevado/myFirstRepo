@@ -2,7 +2,6 @@ package com.coremedia.blueprint.caas.commerce;
 
 import com.coremedia.blueprint.base.caas.model.adapter.SearchResult;
 import com.coremedia.blueprint.base.caas.model.util.SearchHelper;
-import com.coremedia.caas.config.CaasSearchConfigurationProperties;
 import com.coremedia.caas.search.solr.SearchQueryHelper;
 import com.coremedia.caas.search.solr.SolrQueryBuilder;
 import com.coremedia.caas.search.solr.SolrSearchResultFactory;
@@ -33,15 +32,15 @@ public class CaasAssetSearchService implements AssetSearchService {
 
   private static final String COMMERCE_ITEMS_FIELD = "commerceitems";
 
-  private final CaasSearchConfigurationProperties caasSearchConfigurationProperties;
+  private final CaasAssetSearchServiceConfigProperties caasAssetSearchServiceConfigProperties;
   private final ContentRepository contentRepository;
   private final List<IdScheme> idSchemes;
   private final SolrSearchResultFactory searchResultFactory;
 
   private SolrQueryBuilder solrQueryBuilder;
 
-  CaasAssetSearchService(CaasSearchConfigurationProperties caasSearchConfigurationProperties, SolrSearchResultFactory searchResultFactory, ContentRepository contentRepository, List<IdScheme> idSchemes, SolrQueryBuilder solrQueryBuilder) {
-    this.caasSearchConfigurationProperties = caasSearchConfigurationProperties;
+  CaasAssetSearchService(CaasAssetSearchServiceConfigProperties caasAssetSearchServiceConfigProperties, SolrSearchResultFactory searchResultFactory, ContentRepository contentRepository, List<IdScheme> idSchemes, SolrQueryBuilder solrQueryBuilder) {
+    this.caasAssetSearchServiceConfigProperties = caasAssetSearchServiceConfigProperties;
     this.searchResultFactory = searchResultFactory;
     this.contentRepository = contentRepository;
     this.idSchemes = idSchemes;
@@ -64,13 +63,13 @@ public class CaasAssetSearchService implements AssetSearchService {
     String query = SearchQueryHelper.exactQuery(COMMERCE_ITEMS_FIELD, '"' + externalId + '"');
 
     // create solr query
-    SolrQuery solrQuery = solrQueryBuilder.createSearchQuery(query, site.getSiteRootDocument(), caasSearchConfigurationProperties.getSeconds(), 0, filterQueries, emptyMap(), true);
+    SolrQuery solrQuery = solrQueryBuilder.createSearchQuery(query, site.getSiteRootDocument(), caasAssetSearchServiceConfigProperties.getLimit(), 0, filterQueries, emptyMap(), true);
 
     // search
     QueryResponse rawSearchResult = searchResultFactory.createSearchResult(solrQuery);
 
     // transform result
-    SearchResult searchServiceResult = SearchHelper.getSearchServiceResult(rawSearchResult, caasSearchConfigurationProperties.getSeconds(), solrQueryBuilder, idSchemes);
+    SearchResult searchServiceResult = SearchHelper.getSearchServiceResult(rawSearchResult, caasAssetSearchServiceConfigProperties.getLimit(), solrQueryBuilder, idSchemes);
     return searchServiceResult.getResult();
   }
 

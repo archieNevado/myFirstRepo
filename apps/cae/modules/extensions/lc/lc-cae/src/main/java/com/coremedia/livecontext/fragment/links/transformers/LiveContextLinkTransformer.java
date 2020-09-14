@@ -14,14 +14,13 @@ import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.common.services.context.CurrentContextService;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SiteHelper;
+import com.coremedia.livecontext.ecommerce.order.Cart;
 import com.coremedia.livecontext.fragment.links.transformers.resolvers.LiveContextLinkResolver;
 import com.coremedia.objectserver.request.RequestUtils;
 import com.coremedia.objectserver.web.links.LinkTransformer;
 import com.google.common.collect.ImmutableList;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +28,8 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
 
@@ -116,6 +117,7 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
     // transform ajax links in order to rewrite them to the ajax proxy on the commerce side
     if (bean instanceof ContentBeanBackedPageGridPlacement
             || bean instanceof DynamizableContainer
+            || bean instanceof Cart
             // Dynamic Includes
             || (bean instanceof CMDynamicList && UriConstants.Views.VIEW_FRAGMENT.equals(view))) {
       return true;

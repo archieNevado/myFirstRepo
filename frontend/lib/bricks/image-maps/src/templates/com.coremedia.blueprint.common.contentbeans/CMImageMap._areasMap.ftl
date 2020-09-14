@@ -9,6 +9,7 @@
 
 <#--imagemap with areas -->
 <map <@utils.renderAttr attr={ "name": imageMapId, "classes": ["cm-imagemap__areas"] } /><@preview.metadata "properties.imageMapAreas" />>
+  <#assign overlay=bp.setting(self, "overlay", {}) />
   <#-- show hotzones as areas with inline overlay or as icon -->
   <#list imageMapAreas![] as imageMapArea>
     <#if imageMapArea.linkedContent?has_content>
@@ -17,7 +18,8 @@
 
       <#-- hot zones as areas -->
       <@cm.include self=linkedContent!cm.UNDEFINED view="asImageMapArea" params={
-        "imageMapArea": imageMapArea
+        "imageMapArea": imageMapArea,
+        "overlay": overlay
       } />
 
       <#-- inline overlay -->
@@ -31,7 +33,7 @@
         <div class="cm-imagemap__hotzone cm-imagemap__hotzone--text">
           <@cm.include self=linkedContent!cm.UNDEFINED view="asImageMapInlineOverlay" params={
             "classOverlay": classOverlay,
-            "overlay": bp.setting(self, "overlay", {})
+            "overlay": overlay
           } />
         </div>
 
@@ -44,6 +46,8 @@
 
   <#-- add area for default target if no hotzones are available -->
   <#else>
-    <@cm.include self=self view="asImageMapArea" />
+    <@cm.include self=self view="asImageMapArea" params={
+      "overlay": overlay
+    } />
   </#list>
 </map>

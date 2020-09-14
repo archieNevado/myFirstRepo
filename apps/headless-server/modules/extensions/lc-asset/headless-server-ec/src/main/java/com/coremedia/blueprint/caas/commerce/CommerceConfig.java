@@ -12,7 +12,6 @@ import com.coremedia.blueprint.caas.commerce.adapter.CommerceBeanPageGridAdapter
 import com.coremedia.blueprint.caas.commerce.adapter.ProductListAdapterFactory;
 import com.coremedia.blueprint.caas.commerce.model.CommerceFacade;
 import com.coremedia.blueprint.caas.commerce.wiring.CommerceInstrumentation;
-import com.coremedia.caas.config.CaasSearchConfigurationProperties;
 import com.coremedia.caas.model.adapter.ExtendedLinkListAdapterFactory;
 import com.coremedia.caas.search.solr.SolrQueryBuilder;
 import com.coremedia.caas.search.solr.SolrSearchResultFactory;
@@ -33,6 +32,7 @@ import com.coremedia.livecontext.pagegrid.ContentAugmentedProductPageGridService
 import com.coremedia.livecontext.tree.ExternalChannelContentTreeRelation;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -48,6 +48,9 @@ import static com.coremedia.blueprint.base.pagegrid.PageGridContentKeywords.PAGE
 import static com.coremedia.blueprint.caas.commerce.adapter.CommerceBeanPageGridAdapterFactory.PDP_PAGEGRID_PROPERTY_NAME;
 
 @Configuration
+@EnableConfigurationProperties({
+        CaasAssetSearchServiceConfigProperties.class
+})
 @ComponentScan({
         "com.coremedia.blueprint.base.livecontext.augmentation",
         "com.coremedia.livecontext.asset.impl",
@@ -134,11 +137,11 @@ public class CommerceConfig {
   }
 
   @Bean
-  public CaasAssetSearchService caasAssetSearchService(CaasSearchConfigurationProperties caasSearchConfigurationProperties, @Qualifier("searchResultFactory") SolrSearchResultFactory searchResultFactory,
+  public CaasAssetSearchService caasAssetSearchService(CaasAssetSearchServiceConfigProperties caasAssetSearchServiceConfigProperties, @Qualifier("searchResultFactory") SolrSearchResultFactory searchResultFactory,
                                                        ContentRepository contentRepository,
                                                        List<IdScheme> idSchemes,
                                                        @Qualifier("dynamicContentSolrQueryBuilder") SolrQueryBuilder solrQueryBuilder) {
-    return new CaasAssetSearchService(caasSearchConfigurationProperties, searchResultFactory, contentRepository, idSchemes, solrQueryBuilder);
+    return new CaasAssetSearchService(caasAssetSearchServiceConfigProperties, searchResultFactory, contentRepository, idSchemes, solrQueryBuilder);
   }
 
   @Bean

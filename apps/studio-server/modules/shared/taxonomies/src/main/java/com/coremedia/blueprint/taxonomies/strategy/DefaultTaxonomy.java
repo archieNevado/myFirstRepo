@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -395,7 +396,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
   public TaxonomyNode createChild(@NonNull final TaxonomyNode parentNode,
                                   @Nullable final String defaultName) {
     Content parent = (parentNode.isRoot()) ? null : asContent(parentNode);
-    ContentType type = parent == null ? taxonomyContentType : parent.getType();
+    ContentType type = calculateTaxonomyType(parent);
     Content folder = rootFolder;
 
     //check if the corresponding parent folder is used
@@ -442,20 +443,20 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
           String newNodeName = getTaxonomyDocumentName(content);
           if (!node.getName().equals(newNodeName)) {
             LOG.info("Ignoring taxonomy renaming of {} to {}", content.getName(), newNodeName);
-            return node;
           }
+          else {
+            //check out document and...
+            if (!content.isCheckedOut()) {
+              content.checkOut();
+            }
 
-          //check out document and...
-          if (!content.isCheckedOut()) {
-            content.checkOut();
-          }
-
-          //...check if we have checked out it with our session
-          if (content.isCheckedOutByCurrentSession()) {
-            // rename content
-            String name = content.getString(VALUE);
-            if (!StringUtils.isEmpty(name)) {
-              content.rename(StringUtils.trim(newNodeName));
+            //...check if we have checked out it with our session
+            if (content.isCheckedOutByCurrentSession()) {
+              // rename content
+              String name = content.getString(VALUE);
+              if (!StringUtils.isEmpty(name)) {
+                content.rename(StringUtils.trim(newNodeName));
+              }
             }
           }
         }
@@ -806,6 +807,29 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
 
     return content.getLinksFulfilling(CHILDREN, query);
   }
+
+  /**
+   * Calculates the type of this taxonomy.
+   * Since there must be at least 1x node to create this class, we know that there is always
+   * another content to derive the type from
+   * @param parent the parent node
+   * @return the concrete type of this taxonomy
+   */
+  private ContentType calculateTaxonomyType(Content parent) {
+    if(parent == null) {
+      Set<Content> children = rootFolder.getChildren();
+      for (Content child : children) {
+        if (child.getType().isSubtypeOf(taxonomyContentType)) {
+          return child.getType();
+        }
+      }
+
+      return taxonomyContentType;
+    }
+
+    return parent.getType();
+  }
+
 
   /**
    * Creates a list of top level nodes.

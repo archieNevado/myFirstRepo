@@ -22,6 +22,15 @@
 
     public static const xtype:String = "com.coremedia.blueprint.studio.config.taxonomy.taxonomyLinkListPropertyField";
 
+    [ExtConfig]
+    public var taxonomyLinkListSideButtonVerticalAdjustment:Number;
+
+    [ExtConfig]
+    public var taxonomyLinkListSideButtonHorizontalAdjustment:Number;
+
+    [ExtConfig]
+    public var taxonomyLinkListSideButtonRenderToFunction:Function;
+
     private var config:TaxonomyLinkListPropertyField;
 
     public native function TaxonomyLinkListPropertyField(config:TaxonomyLinkListPropertyField = null);
@@ -71,7 +80,10 @@
                                         bindTo="{config.bindTo}"
                                         selectedPositionsExpression="{getSelectedPositionsVE()}"
                                         selectedValuesExpression="{getSelectedValuesVE()}"
-                                        readOnlyValueExpression="{PropertyEditorUtil.createReadOnlyValueExpression(config.bindTo, config.forceReadOnlyValueExpression)}">
+                                        readOnlyValueExpression="{PropertyEditorUtil.createReadOnlyValueExpression(config.bindTo, config.forceReadOnlyValueExpression)}"
+                                        sideButtonHorizontalAdjustment="{config.taxonomyLinkListSideButtonHorizontalAdjustment}"
+                                        sideButtonVerticalAdjustment="{config.taxonomyLinkListSideButtonVerticalAdjustment}"
+                                        sideButtonRenderToFunction="{config.taxonomyLinkListSideButtonRenderToFunction}">
       <taxonomy:plugins exml:mode="append">
         <editor:ShowIssuesPlugin bindTo="{config.bindTo}"
                                  ifUndefined=""
