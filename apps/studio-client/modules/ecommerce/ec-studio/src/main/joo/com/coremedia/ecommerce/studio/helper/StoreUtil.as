@@ -1,7 +1,7 @@
 package com.coremedia.ecommerce.studio.helper {
 
 import com.coremedia.cms.editor.sdk.editorContext;
-import com.coremedia.cms.editor.sdk.sites.Site;
+import com.coremedia.cms.studio.multisite.models.sites.Site;
 import com.coremedia.ecommerce.studio.catalogHelper;
 import com.coremedia.ecommerce.studio.model.Catalog;
 import com.coremedia.ecommerce.studio.model.Category;

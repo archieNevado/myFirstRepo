@@ -15,7 +15,7 @@ public class DeleteKeywordActionBase extends Action {
   private var selectionExpression:ValueExpression;
   internal native function get items():Array;
 
-  public function DeleteKeywordActionBase(config:CutKeywordAction = null) {
+  public function DeleteKeywordActionBase(config:DeleteKeywordAction = null) {
     config.handler = deleteNodes;
     config.disabled = true;
     config.text = ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyExplorerPanel_delete_button_label');

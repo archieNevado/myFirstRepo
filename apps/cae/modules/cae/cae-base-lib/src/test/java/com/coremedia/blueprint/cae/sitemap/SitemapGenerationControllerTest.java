@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.cae.sitemap;
 
 import com.coremedia.blueprint.base.multisite.cae.SiteResolver;
+import com.coremedia.blueprint.cae.config.BlueprintCaeSitemapConfigurationProperties;
 import com.coremedia.blueprint.cae.common.predicates.ValidContentPredicate;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
@@ -8,10 +9,10 @@ import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.common.util.Predicate;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
-import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.objectserver.web.links.LinkFormatter;
 import com.coremedia.objectserver.web.links.LinkScheme;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
@@ -70,7 +71,8 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
 public class SitemapGenerationControllerTest {
   @Configuration
   @EnableConfigurationProperties({
-          DeliveryConfigurationProperties.class
+          BlueprintCaeSitemapConfigurationProperties.class,
+          DeliveryConfigurationProperties.class,
   })
   @ImportResource(
           value = {
@@ -114,6 +116,9 @@ public class SitemapGenerationControllerTest {
   @Inject
   private SiteResolver siteResolver;
 
+  @Inject
+  private BlueprintCaeSitemapConfigurationProperties properties;
+
   private ValidationService validationServiceAlwaysTrue = new ValidationService() {
     @Override
     public List filterList(List source) {
@@ -142,7 +147,7 @@ public class SitemapGenerationControllerTest {
     urlGenerator.setPredicates(predicates);
     urlGenerator.setValidationService(validationServiceAlwaysTrue);
 
-    SitemapSetup sitemapSetup = new SitemapSetup();
+    SitemapSetup sitemapSetup = new SitemapSetup(properties);
     sitemapSetup.setSitemapRendererFactory(new PlainSitemapRendererFactory());
     sitemapSetup.setUrlGenerators(singletonList(urlGenerator));
     SpringBasedSitemapSetupFactory setupFactory = new SpringBasedSitemapSetupFactory();

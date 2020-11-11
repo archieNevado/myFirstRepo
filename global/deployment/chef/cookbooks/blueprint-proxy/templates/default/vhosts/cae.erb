@@ -75,7 +75,7 @@
 <%- if @cluster.size > 1 -%>
   # the trailing "e" is no typo
   Header add Set-Cookie "ROUTEID=.%{BALANCER_WORKER_ROUTE}e; path=/" env=BALANCER_ROUTE_CHANGED
-  <%- servlet_url = "balancer://cae-cluster" -%>
+  <%- servlet_url = "balancer://cae-cluster/#{@servlet_context}" -%>
   <Proxy <%= servlet_url %>>
     <%- @cluster.keys.sort.each do |member| -%>
     BalancerMember <%= protocol %>://<%= @cluster[member]['host'] %>:<%= @cluster[member]['port'].to_s %> route=<%= member %><%- if @cluster[member]['params'] -%><%- @cluster[member]['params'].keys.sort.each do |k| -%> <%= "#{k}=#{@cluster[member]['params'][k]}" %> <%- end -%><%- end -%>

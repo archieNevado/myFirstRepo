@@ -1,0 +1,17 @@
+extend type Query {
+  metadata: MetadataRoot
+}
+
+type MetadataRoot {
+  types: [MetadataType] @fetch(from: "types()")
+}
+
+type MetadataType {
+    name: String
+    fields: [MetadataField]
+}
+
+type MetadataField {
+  name: String
+  metadata: JSON
+}

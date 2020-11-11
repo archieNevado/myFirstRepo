@@ -1,5 +1,7 @@
 FROM nginx:1.15.12-alpine
 ENV COMMERCE_MOCK_ENABLED=false \
+    COMMERCE_COMMERCETOOLS_ENABLED=false \
+    COMMERCE_COMMERCETOOLS_HOST="" \
     COMMERCE_SFCC_ENABLED=false \
     COMMERCE_SFCC_HOST="" \
     COMMERCE_HYBRIS_ENABLED=false \
@@ -8,7 +10,7 @@ ENV COMMERCE_MOCK_ENABLED=false \
     COMMERCE_WCS_HOST="" \
     COMMERCE_WCS_VERSION="8.0" \
     STUDIO_PACKAGES_PROXY_ENABLED=false \
-    PWA_ENABLED=false
+    HEADLESS_CLIENT_ENABLED=false
 COPY entrypoint.sh /entrypoint.sh
 RUN apk add --update \
       curl \

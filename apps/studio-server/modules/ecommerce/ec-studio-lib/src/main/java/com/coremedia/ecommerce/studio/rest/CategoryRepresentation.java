@@ -28,7 +28,7 @@ public class CategoryRepresentation extends CommerceBeanRepresentation {
   private List<CommerceBean> children;
   private List<Content> pictures;
   private List<Content> downloads;
-  private Map<String, ChildRepresentation> childrenByName;
+  private List<ChildRepresentation> childrenData;
   private Store store;
   private Catalog catalog;
   private String displayName;
@@ -93,8 +93,8 @@ public class CategoryRepresentation extends CommerceBeanRepresentation {
     this.products = products;
   }
 
-  public Map<String, ChildRepresentation> getChildrenByName() {
-    return childrenByName;
+  public List<ChildRepresentation> getChildrenData() {
+    return childrenData;
   }
 
   public void setPictures(List<Content> pictures) {
@@ -115,8 +115,8 @@ public class CategoryRepresentation extends CommerceBeanRepresentation {
     return downloads;
   }
 
-  public void setChildrenByName(Map<String, ChildRepresentation> childrenByName) {
-    this.childrenByName = childrenByName;
+  public void setChildrenData(List<ChildRepresentation> childrenData) {
+    this.childrenData = childrenData;
   }
 
   @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)

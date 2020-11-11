@@ -21,9 +21,13 @@ import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreCon
 
 /**
  * A catalog {@link Contract} object as a RESTful resource.
+ *
+ * @deprecated This class is part of the commerce integration "b2b support" that is not
+ * supported by the Commerce Hub architecture. It will be removed or changed in the future.
  */
 @RestController
 @RequestMapping(value = "livecontext/contract/{siteId}/{workspaceId}/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+@Deprecated
 public class ContractResource extends AbstractCatalogResource<Contract> {
 
   @Autowired

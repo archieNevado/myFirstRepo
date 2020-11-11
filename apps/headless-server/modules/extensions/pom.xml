@@ -13,6 +13,8 @@
 
   <modules>
     <module>lc-asset</module>
+    <module>p13n</module>
+    <module>catalog</module>
   </modules>
 
 </project>

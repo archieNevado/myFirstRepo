@@ -9,6 +9,11 @@ import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 
+/**
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
+@Deprecated
 public class SearchFacetImpl implements SearchFacet {
 
   protected Map<String, Object> delegate;

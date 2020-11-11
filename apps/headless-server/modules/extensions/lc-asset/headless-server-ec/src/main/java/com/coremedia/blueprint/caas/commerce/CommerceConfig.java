@@ -15,6 +15,7 @@ import com.coremedia.blueprint.caas.commerce.wiring.CommerceInstrumentation;
 import com.coremedia.caas.model.adapter.ExtendedLinkListAdapterFactory;
 import com.coremedia.caas.search.solr.SolrQueryBuilder;
 import com.coremedia.caas.search.solr.SolrSearchResultFactory;
+import com.coremedia.caas.web.CaasServiceConfigurationProperties;
 import com.coremedia.caas.wiring.ProvidesTypeNameResolver;
 import com.coremedia.caas.wiring.TypeNameResolver;
 import com.coremedia.cache.Cache;
@@ -30,6 +31,7 @@ import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.pagegrid.ContentAugmentedPageGridServiceImpl;
 import com.coremedia.livecontext.pagegrid.ContentAugmentedProductPageGridServiceImpl;
 import com.coremedia.livecontext.tree.ExternalChannelContentTreeRelation;
+import org.apache.solr.client.solrj.SolrClient;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -137,7 +139,18 @@ public class CommerceConfig {
   }
 
   @Bean
-  public CaasAssetSearchService caasAssetSearchService(CaasAssetSearchServiceConfigProperties caasAssetSearchServiceConfigProperties, @Qualifier("searchResultFactory") SolrSearchResultFactory searchResultFactory,
+  public SolrSearchResultFactory caasAssetSearchServiceSearchResultFactory(@Qualifier("solrClient") SolrClient solrClient,
+                                                                           ContentRepository contentRepository,
+                                                                           CaasServiceConfigurationProperties caasServiceConfigurationProperties,
+                                                                           CaasAssetSearchServiceConfigProperties caasAssetSearchServiceConfigProperties) {
+    SolrSearchResultFactory solrSearchResultFactory = new SolrSearchResultFactory(contentRepository, solrClient, caasServiceConfigurationProperties.getSolr().getCollection());
+    solrSearchResultFactory.setCacheForSeconds(caasAssetSearchServiceConfigProperties.getCacheSeconds());
+    return solrSearchResultFactory;
+  }
+
+  @Bean
+  public CaasAssetSearchService caasAssetSearchService(CaasAssetSearchServiceConfigProperties caasAssetSearchServiceConfigProperties,
+                                                       @Qualifier("caasAssetSearchServiceSearchResultFactory") SolrSearchResultFactory searchResultFactory,
                                                        ContentRepository contentRepository,
                                                        List<IdScheme> idSchemes,
                                                        @Qualifier("dynamicContentSolrQueryBuilder") SolrQueryBuilder solrQueryBuilder) {

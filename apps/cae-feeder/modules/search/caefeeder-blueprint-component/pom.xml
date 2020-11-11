@@ -53,11 +53,6 @@
       <artifactId>bpbase-multisite</artifactId>
       <scope>runtime</scope>
     </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-uapi-client</artifactId>
-      <scope>runtime</scope>
-    </dependency>
 
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>

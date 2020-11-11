@@ -11,6 +11,8 @@ import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.objectserver.web.links.TokenResolverHelper;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,8 +21,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
@@ -46,8 +46,12 @@ import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFI
  * tokens (like {storeId}, {locale} or {catalogId}) which will be replaced. As site
  * identifier the "vanity" site name (like "aurora" or the "real" site name (like
  * "Aurora Augmentation")can be used in configuration.
+ *
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
  */
 @RequestMapping
+@Deprecated
 public class StaticTestUrlsHandler {
 
   private static final Logger LOG = LoggerFactory.getLogger(StaticTestUrlsHandler.class);

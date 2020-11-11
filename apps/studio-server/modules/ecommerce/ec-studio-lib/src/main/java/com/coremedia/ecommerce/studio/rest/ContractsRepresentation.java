@@ -7,7 +7,11 @@ import java.util.Collections;
 
 /**
  * Contracts representation for JSON.
+ *
+ * @deprecated This class is part of the commerce integration "b2b support" that is not
+ * supported by the Commerce Hub architecture. It will be removed or changed in the future.
  */
+@Deprecated
 public class ContractsRepresentation extends AbstractCatalogRepresentation {
 
   private Collection<Contract> contracts = Collections.emptyList();

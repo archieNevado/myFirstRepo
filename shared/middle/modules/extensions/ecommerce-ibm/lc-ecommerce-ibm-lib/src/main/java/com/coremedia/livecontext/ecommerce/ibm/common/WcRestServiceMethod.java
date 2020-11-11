@@ -1,10 +1,14 @@
 package com.coremedia.livecontext.ecommerce.ibm.common;
 
-import org.springframework.http.HttpMethod;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.springframework.http.HttpMethod;
 
+/**
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
+@Deprecated
 public class WcRestServiceMethod<T, P> {
 
   private final HttpMethod method;

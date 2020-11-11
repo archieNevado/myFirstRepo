@@ -5,9 +5,13 @@ import org.springframework.context.annotation.PropertySource;
 
 /**
  * expose the library's default configuration
+ *
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
  */
 @Configuration
 @PropertySource("classpath:framework/spring/lc-ecommerce-ibm.properties")
+@Deprecated
 class LcEcommerce_IBM_Configuration {
 
 }

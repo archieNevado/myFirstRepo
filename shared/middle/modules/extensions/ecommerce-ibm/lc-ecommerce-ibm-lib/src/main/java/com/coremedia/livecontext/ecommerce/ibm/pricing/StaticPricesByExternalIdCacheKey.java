@@ -10,6 +10,11 @@ import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
+/**
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
+@Deprecated
 public class StaticPricesByExternalIdCacheKey extends AbstractCommerceCacheKey<WcPrices> {
 
   private WcCatalogWrapperService wrapperService;

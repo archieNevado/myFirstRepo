@@ -39,7 +39,7 @@
                 renderer="{taxonomyRenderer}"/>
   </local:columns>
   <local:selModel>
-    <selection_RowModel mode="MULTI"/>
+    <selection_RowModel mode="{config.selectionMode || 'MULTI'}"/>
   </local:selModel>
   <local:view>
     <ui:StatefulTableView ui="{TableViewSkin.LARGE_CELLS.getSkin()}"

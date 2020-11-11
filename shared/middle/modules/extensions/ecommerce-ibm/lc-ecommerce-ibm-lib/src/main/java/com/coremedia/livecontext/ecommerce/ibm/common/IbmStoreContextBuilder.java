@@ -19,7 +19,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
 @DefaultAnnotation(NonNull.class)
+@Deprecated
 public class IbmStoreContextBuilder implements StoreContextBuilder {
 
   private StoreContextBuilderImpl builder;

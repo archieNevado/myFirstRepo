@@ -11,7 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ROOT;
 import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_INTERNAL;
 
+/**
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
 @RequestMapping
+@Deprecated
 public class WcsCalistaSitemapGenerationHandler extends SitemapGenerationController {
   private static final String WCS_CALISTA = "index-wcs-calista";
 

@@ -1,7 +1,6 @@
 package com.coremedia.blueprint.studio {
 
 import com.coremedia.blueprint.base.components.sites.SiteAwareFeatureUtil;
-import com.coremedia.blueprint.base.components.util.UserUtil;
 import com.coremedia.blueprint.studio.util.ContentInitializer;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
@@ -14,6 +13,7 @@ import com.coremedia.cms.editor.sdk.plugins.TabExpandPlugin;
 import com.coremedia.cms.editor.sdk.premular.Premular;
 import com.coremedia.cms.editor.sdk.util.MetaStyleService;
 import com.coremedia.cms.editor.sdk.util.ThumbnailResolverFactory;
+import com.coremedia.cms.editor.sdk.util.UserUtil;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.dependencies.DependencyTracker;

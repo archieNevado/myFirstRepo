@@ -6,10 +6,10 @@ import com.coremedia.livecontext.ecommerce.ibm.common.AbstractWcWrapperService;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestServiceMethod;
 import com.coremedia.livecontext.ecommerce.ibm.user.UserContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
-import org.springframework.http.HttpMethod;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.springframework.http.HttpMethod;
+
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +18,11 @@ import static java.util.Collections.singletonList;
 
 /**
  * A service that uses the catalog getRestConnector() to get cart wrappers.
+ *
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
  */
+@Deprecated
 public class WcCartWrapperService extends AbstractWcWrapperService {
 
   private static final WcRestServiceMethod<WcCart, Void> GET_CART = WcRestServiceMethod

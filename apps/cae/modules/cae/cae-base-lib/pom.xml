@@ -207,6 +207,12 @@
       <artifactId>spring-context</artifactId>
     </dependency>
     <dependency>
+      <!-- generate spring-configuration-metadata.json during build -->
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-configuration-processor</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
       <groupId>org.springframework.webflow</groupId>
       <artifactId>spring-webflow</artifactId>
     </dependency>

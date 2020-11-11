@@ -37,7 +37,11 @@ import static java.util.stream.Stream.of;
 
 /**
  * Invalidates studio commerce remote beans based on incoming {@link InvalidationEvent} events.
+ *
+ * @deprecated This class is part of the "commerce cache invalidation" implementation that
+ * will be re-implemented by the Commerce Hub architecture and replaced in future releases.
  */
+@Deprecated
 public class CommerceCacheInvalidationSource extends SimpleInvalidationSource implements InvalidationPropagator {
 
   private static final Logger LOG = LoggerFactory.getLogger(CommerceCacheInvalidationSource.class);

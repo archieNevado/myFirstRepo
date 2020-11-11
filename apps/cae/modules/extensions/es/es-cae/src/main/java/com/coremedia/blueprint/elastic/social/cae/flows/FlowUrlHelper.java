@@ -3,9 +3,9 @@ package com.coremedia.blueprint.elastic.social.cae.flows;
 import com.coremedia.blueprint.cae.constants.RequestAttributeConstants;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Navigation;
+import com.coremedia.blueprint.elastic.social.cae.configuration.ElasticSocialCaeConfigurationProperties;
 import com.coremedia.objectserver.web.links.LinkFormatter;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.webflow.execution.RequestContext;
 
 import javax.inject.Inject;
@@ -18,11 +18,14 @@ import static com.coremedia.blueprint.base.links.UriConstants.Links.ABSOLUTE_URI
 @Named("webflowUrlHelper")
 public class FlowUrlHelper {
 
+  private final ElasticSocialCaeConfigurationProperties elasticSocialCaeConfigurationProperties;
+
+  public FlowUrlHelper(ElasticSocialCaeConfigurationProperties elasticSocialCaeConfigurationProperties) {
+    this.elasticSocialCaeConfigurationProperties = elasticSocialCaeConfigurationProperties;
+  }
+
   @Inject
   private LinkFormatter linkFormatter;
-
-  @Value("${keep.https.after.logout}")
-  private boolean keepHttpsAfterLogout;
 
   public String getNextUrl(String nextParameter, RequestContext context) {
     return getNextUrl(nextParameter, context, false);
@@ -48,7 +51,7 @@ public class FlowUrlHelper {
     try {
       request.setAttribute(ABSOLUTE_URI_KEY, true);
       String rootPageUrl = getRootPageUrl(context);
-      if(!keepHttpsAfterLogout) {
+      if(!elasticSocialCaeConfigurationProperties.isKeepHttpsAfterLogout()) {
         return forceHttpScheme(rootPageUrl);
       }
       return rootPageUrl;

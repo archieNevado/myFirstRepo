@@ -2,12 +2,17 @@ package com.coremedia.livecontext.ecommerce.ibm.inventory;
 
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import com.coremedia.livecontext.ecommerce.inventory.AvailabilityInfo;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
+@Deprecated
 public class AvailabilityInfoImpl implements AvailabilityInfo {
 
   private final Map<String, Object> delegate;

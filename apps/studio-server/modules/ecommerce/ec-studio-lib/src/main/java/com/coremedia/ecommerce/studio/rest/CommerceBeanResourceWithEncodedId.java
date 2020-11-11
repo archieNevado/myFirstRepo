@@ -30,17 +30,10 @@ public class CommerceBeanResourceWithEncodedId {
   static final String URI_PATH
           = "livecontext/{" + PATH_RESOURCE_TYPE + "}/{" + PATH_SITE_ID + "}/{" + PATH_CATALOG_ALIAS + "}/{" + PATH_WORKSPACE_ID + "}";
 
-  private final CategoryResource categoryResource;
-  private final ProductResource productResource;
-  private final ProductVariantResource productVariantResource;
-
   private final Map<String, CommerceBeanResource> resourceMap;
 
-  public CommerceBeanResourceWithEncodedId(CategoryResource categoryResource, ProductResource productResource, ProductVariantResource productVariantResource) {
-    this.categoryResource = categoryResource;
-    this.productResource = productResource;
-    this.productVariantResource = productVariantResource;
-
+  public CommerceBeanResourceWithEncodedId(CategoryResource categoryResource, ProductResource productResource,
+                                           ProductVariantResource productVariantResource) {
     this.resourceMap = Map.of(
             CategoryResource.PATH_TYPE, categoryResource,
             ProductResource.PATH_TYPE, productResource,

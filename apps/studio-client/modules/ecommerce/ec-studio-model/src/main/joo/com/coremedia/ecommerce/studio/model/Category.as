@@ -15,11 +15,11 @@ public interface Category extends CatalogObject, Previewable {
   function getChildren():Array/* Vector.<CatalogObject> */;
 
   /**
-   * Return a mapping of the name of child categories/products to the child catalog objects themselves.
+   * Return a list of objects that hold {@link CategoryChildData}
    *
-   * @see CatalogObjectPropertyNames#CHILDREN_BY_NAME
+   * @see CatalogObjectPropertyNames#CHILDREN_DATA
    */
-  function getChildrenByName():Object;
+  function getChildrenData():Array/* Vector.<CategoryChildData> */;
 
   /**
    * Return list of child categories, sorted by name (case insensitive)

@@ -1,0 +1,14 @@
+
+version: "3.4"
+
+services:
+  commerce-adapter-commercetools:
+    labels:
+      traefik.enable: "true"
+      traefik.actuator.port: "8081"
+      traefik.actuator.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/commerce-adapter-commercetools;AddPrefix:/actuator
+
+  overview:
+    environment:
+      COMMERCE_COMMERCETOOLS_ENABLED: "true"
+      COMMERCE_COMMERCETOOLS_HOST: ${COMMERCETOOLS_HOST}

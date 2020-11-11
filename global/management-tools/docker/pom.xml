@@ -37,7 +37,7 @@
     |
     | For the tools, we use the jdk type of the image here to enable the JShell integration.
     -->
-    <docker.tools-base-image.tag>2.2.0-openjdk-11-jdk</docker.tools-base-image.tag>
+    <docker.tools-base-image.tag>2.2.1-openjdk-11-jdk</docker.tools-base-image.tag>
 
     <application-plugin.version>2.8.3</application-plugin.version>
   </properties>

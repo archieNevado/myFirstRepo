@@ -18,8 +18,6 @@ import ext.Component;
 import ext.StringUtil;
 import ext.plugin.AbstractPlugin;
 
-import js.Event;
-
 import mx.resources.ResourceManager;
 
 [ResourceBundle('com.coremedia.livecontext.studio.LivecontextStudioPlugin')]

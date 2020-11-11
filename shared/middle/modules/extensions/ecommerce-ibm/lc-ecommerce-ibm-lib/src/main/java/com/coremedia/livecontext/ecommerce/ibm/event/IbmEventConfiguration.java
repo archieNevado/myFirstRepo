@@ -10,11 +10,16 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
+/**
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
 @Configuration
 @ImportResource(value = {
         "classpath:/framework/spring/livecontext-services.xml"
 }, reader = ResourceAwareXmlBeanDefinitionReader.class)
 @ComponentScan
+@Deprecated
 class IbmEventConfiguration {
 
   @Value("${livecontext.ibm.wcs.cache.invalidation.maxWaitInMilliseconds:0}")

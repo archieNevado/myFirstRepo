@@ -16,6 +16,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Currency;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -71,7 +73,13 @@ public class ProductVariantResource extends CommerceBeanResource<ProductVariant>
     AbstractCommerceBean.getCatalog(entity).ifPresent(representation::setCatalog);
     representation.setOfferPrice(entity.getOfferPrice());
     representation.setListPrice(entity.getListPrice());
-    representation.setCurrency(entity.getCurrency().getSymbol(entity.getLocale()));
+
+    Currency currency = entity.getCurrency();
+    Locale locale = entity.getLocale();
+    if (currency != null && locale != null) {
+      representation.setCurrency(currency.getSymbol(locale));
+    }
+
     representation.setPictures(entity.getPictures());
     representation.setDownloads(entity.getDownloads());
     representation.setDefiningAttributes(entity.getDefiningAttributes());

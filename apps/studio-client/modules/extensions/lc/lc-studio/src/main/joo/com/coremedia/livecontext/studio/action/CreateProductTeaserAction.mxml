@@ -7,15 +7,15 @@
         contentType="CMProductTeaser"
         catalogObjectType="{ProductImpl}">
   <fx:Script><![CDATA[
-    import com.coremedia.cms.editor.sdk.quickcreate.QuickCreateDialog;
     import com.coremedia.cap.common.SESSION;
     import com.coremedia.cap.content.Content;
     import com.coremedia.cap.content.ContentRepository;
     import com.coremedia.cap.content.ContentType;
     import com.coremedia.cms.editor.sdk.editorContext;
+    import com.coremedia.cms.editor.sdk.quickcreate.QuickCreateDialog;
     import com.coremedia.cms.editor.sdk.quickcreate.processing.ProcessingData;
-    import com.coremedia.cms.editor.sdk.sites.Site;
     import com.coremedia.cms.editor.sdk.util.ContentCreationUtil;
+    import com.coremedia.cms.studio.multisite.models.sites.Site;
     import com.coremedia.ecommerce.studio.model.CatalogObject;
     import com.coremedia.ecommerce.studio.model.Product;
     import com.coremedia.ecommerce.studio.model.ProductImpl;

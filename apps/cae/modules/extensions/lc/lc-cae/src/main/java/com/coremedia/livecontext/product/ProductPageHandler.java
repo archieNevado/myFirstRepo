@@ -136,9 +136,13 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
    * WCS links which have no handler counterpart in the CAE.
    * In !wcsProductLinks mode buildLinkFor builds CAE links
    * which are handled by {@link #handleRequest(String, String, String, HttpServletRequest)}.
+   *
+   * @deprecated This link scheme is no longer needed and has been replaced by
+   * {@link com.coremedia.livecontext.fragment.links.CommerceLinks#buildLinkForProductInSite(ProductInSite, Map, HttpServletRequest)}
    */
   @Nullable
   @Link(type = ProductInSite.class)
+  @Deprecated
   public UriComponents buildLinkFor(ProductInSite productInSite, String viewName, Map<String, Object> linkParameters,
                                     HttpServletRequest request) {
     Site site = productInSite.getSite();
@@ -154,9 +158,13 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
   /**
    * This link is built when the product teaser is inside a rich text.
    * We use the ProductInPage link building logic here.
+   *
+   * @deprecated This link scheme is no longer needed and has been replaced by
+   * {@link com.coremedia.livecontext.fragment.links.CommerceLinks#buildLinkForProductTeaser(CMProductTeaser, Map, HttpServletRequest)}
    */
   @Nullable
   @Link(type = CMProductTeaser.class, view = HandlerHelper.VIEWNAME_DEFAULT)
+  @Deprecated
   public UriComponents buildLinkFor(CMProductTeaser productTeaser, String viewName, Map<String, Object> linkParameters,
                                     HttpServletRequest request) {
     ProductInSite productInSite = productTeaser.getProductInSite();

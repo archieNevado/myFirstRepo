@@ -109,7 +109,10 @@ class BlueprintWorkflowServerAutoConfiguration {
             new DefaultAutoMergeStructListMapKey("CMExternalProduct", "pdpPagegrid.placements", "section"),
             new DefaultAutoMergeStructListMapKey("CMExternalProduct", "pdpPagegrid.placements.extendedItems", "target"),
             new DefaultAutoMergeStructListMapKey("CMAbstractCategory", "pdpPagegrid.placements", "section"),
-            new DefaultAutoMergeStructListMapKey("CMAbstractCategory", "pdpPagegrid.placements.extendedItems", "target")
+            new DefaultAutoMergeStructListMapKey("CMAbstractCategory", "pdpPagegrid.placements.extendedItems", "target"),
+            new DefaultAutoMergeStructListMapKey("CMCollection", "extendedItems.links", "target"),
+            new DefaultAutoMergeStructListMapKey("CMTeaser", "targets.links", "target")
+
     );
   }
 

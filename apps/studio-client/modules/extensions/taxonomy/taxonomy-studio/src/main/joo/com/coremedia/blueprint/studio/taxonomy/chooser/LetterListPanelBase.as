@@ -2,19 +2,23 @@ package com.coremedia.blueprint.studio.taxonomy.chooser {
 import com.coremedia.blueprint.studio.taxonomy.TaxonomyNode;
 import com.coremedia.blueprint.studio.taxonomy.TaxonomyNodeList;
 import com.coremedia.blueprint.studio.taxonomy.TaxonomyUtil;
-import com.coremedia.blueprint.studio.taxonomy.rendering.TaxonomyRenderFactory;
-import com.coremedia.blueprint.studio.taxonomy.rendering.TaxonomyRenderer;
-import com.coremedia.cap.content.Content;
 import com.coremedia.ui.data.Bean;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
+import com.coremedia.ui.models.bem.BEMBlock;
+import com.coremedia.ui.models.bem.BEMElement;
+import com.coremedia.ui.skins.LoadMaskSkin;
 import com.coremedia.ui.store.BeanRecord;
-import com.coremedia.ui.util.EventUtil;
 
+import ext.LoadMask;
+import ext.Template;
+import ext.XTemplate;
 import ext.container.Container;
-import ext.data.Model;
-import ext.grid.GridPanel;
+import ext.event.Event;
+import ext.view.DataView;
+
+import js.HTMLElement;
 
 /**
  * Displays the active taxonomy node sorted alphabetically.
@@ -22,22 +26,65 @@ import ext.grid.GridPanel;
 public class LetterListPanelBase extends Container {
   public const ITEMS_CONTAINER_ITEM_ID:String = "itemsContainer";
 
-  private var selectedValuesExpression:ValueExpression;
+  /**
+   * Contains the row that children should be displayed next.
+   */
+  [Bindable]
+  public var nodePathExpression:ValueExpression;
+
+  protected static const LIST_BLOCK:BEMBlock = new BEMBlock("widget-content-list");
+
+  protected static const LIST_ELEMENT_ENTRY:BEMElement = LIST_BLOCK.createElement("entry");
+
+  [Bindable]
+  public var loadingExpression:ValueExpression;
+
   private var listValuesExpression:ValueExpression;
   private var activeLetters:ValueExpression;
   private var selectedLetter:ValueExpression;
   private var selectionExpression:ValueExpression;
-
-  private var selectedNodeId:ValueExpression;
   private var selectedNodeList:ValueExpression;
 
   private var taxonomyId:String;
   private var activeNodeList:TaxonomyNodeList;
 
+
   //used for skipping letter column rendering
   private var letter2NodeMap:Bean;
 
   private var singleSelection:Boolean;
+
+  protected static const TEMPLATE:Template = new XTemplate(
+          '<table class="' + LIST_BLOCK + '">',
+          '  <tpl for=".">',
+          '    <tr class="' + LIST_ELEMENT_ENTRY + ' cm-taxonomy-row">',
+          '      <td style="font-weight:bold; width: 30px; text-align: center;"><b>{letter}</b>',
+          '      </td>',
+          '      <td>',
+          '        <span class="cm-taxonomy-node {customCss}" style="cursor:pointer;">',
+          '           <span class="cm-taxonomy-node__box">',
+          '             <span class="cm-taxonomy-node__name">',
+          '               <tpl if="!leaf"><b>{name:htmlEncode}</b></tpl>',
+          '               <tpl if="leaf">{name:htmlEncode}</tpl>',
+          '             </span>',
+          '             <tpl if="renderControl">',
+          '               <tpl if="!added"><span class="cm-taxonomy-node__control cm-core-icons cm-core-icons--add-special-size" data-ref="{ref}"></span></tpl>',
+          '               <tpl if="added"><span class="cm-taxonomy-node__control cm-core-icons cm-core-icons--remove-small" data-ref="{ref}"></span></tpl>',
+          '             </tpl>',
+          '           </span>',
+          '         </span>',
+          '      </td>',
+          '      <td style="width:16px;">',
+          '        <tpl if="!leaf"><span style="cursor:pointer;" width="16" height="16" class="cm-core-icons cm-core-icons--arrow-right"></span></tpl>',
+          '      </td>',
+          '      <td style="width:16px;">',
+          '      </td>',
+          '    </tr>',
+          '  </tpl>',
+          '</table>'
+  ).compile();
+
+  private var loadMask:LoadMask;
 
   public function LetterListPanelBase(config:LetterListPanel = null) {
     super(config);
@@ -47,27 +94,64 @@ public class LetterListPanelBase extends Container {
     activeLetters = config.activeLetters;
 
     selectionExpression = config.selectionExpression;
-    selectionExpression.addChangeListener(updateAll);
 
-    selectedNodeId = config.selectedNodeId;
     selectedNodeList = config.selectedNodeList;
     selectedNodeList.addChangeListener(updateUI);
 
     selectedLetter = config.selectedLetter;
     selectedLetter.addChangeListener(updateSelectedLetter);
+
+    config.loadingExpression.addChangeListener(loadingChanged);
   }
 
+  private function loadingChanged(ve:ValueExpression):void {
+    var loading:Boolean = ve.getValue();
+    if (loading) {
+      loadMask.show();
+    }
+    else {
+      loadMask.hide();
+    }
+  }
 
   override protected function afterRender():void {
     super.afterRender();
-    selectedNodeId.setValue(taxonomyId); //lets start with the root level to show
+    nodePathExpression.setValue(taxonomyId); //lets start with the root level to show
+
+    // listen to click events
+    getDataView().on("itemclick", listEntryClicked);
+
+    loadMask = createLoadMask();
   }
 
-  protected function getSelectedValuesExpression():ValueExpression {
-    if (!selectedValuesExpression) {
-      selectedValuesExpression = ValueExpressionFactory.create("values", beanFactory.createLocalBean());
+  private function createLoadMask():LoadMask {
+    var loadMaskConfig:LoadMask = LoadMask({});
+    loadMaskConfig.ui = LoadMaskSkin.LIGHT.getSkin();
+    loadMaskConfig.msg = resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyExplorerColumn_emptyText_loading');
+    loadMaskConfig.target = this.up();
+    loadMaskConfig.baseCls = "cm-thread-load-mask";
+    loadMaskConfig.style = "background:rgba(0,0,0,0.65);opacity:1;z-index:1001";
+    var loadMask:LoadMask = new LoadMask(loadMaskConfig);
+    return loadMask;
+  }
+
+  private function listEntryClicked(dataView:DataView, record:BeanRecord, node:HTMLElement, index:Number, e:Event):void {
+    // make sure only text element can be clicked
+    if (e.getTarget(".cm-taxonomy-node__name", null, true)) {
+      var bean:Bean = record.getBean();
+      var ref:String = bean.get('ref');
+      nodeClicked(ref);
     }
-    return selectedValuesExpression;
+    else if (e.getTarget(".cm-taxonomy-node__control", null, true)) {
+      var childBean:Bean = record.getBean();
+      var childRef:String = childBean.get('ref');
+      plusMinusClicked(childRef);
+    }
+    else if (e.getTarget(".cm-core-icons--arrow-right", null, true)) {
+      var pathBean:Bean = record.getBean();
+      var pathRef:String = pathBean.get('ref');
+      updateSelection(pathRef);
+    }
   }
 
   protected function getListValuesExpression():ValueExpression {
@@ -83,13 +167,12 @@ public class LetterListPanelBase extends Container {
   private function updateSelectedLetter():void {
     var letter:String = selectedLetter.getValue().toLowerCase();
     if (letter) {
-      var itemsContainer:Container = queryById(ITEMS_CONTAINER_ITEM_ID) as Container;
-      for(var i:int = 0; i<itemsContainer.itemCollection.length; i++) {
-        var item:LetterListItemPanel = itemsContainer.itemCollection.getAt(i) as LetterListItemPanel;
-        var itemLetter:String = letterRenderer(item.content).toLowerCase();
-        if(itemLetter === letter) {
-          var height:Number = item.getHeight();
-          this.el.dom.scrollTop = height*i;
+      for (var i:int = 0; i < activeNodeList.getNodes().length; i++) {
+        var node:TaxonomyNode = activeNodeList.getNodes()[i];
+        var itemLetter:String = letterRenderer(node).toLowerCase();
+        if (itemLetter === letter) {
+          var table:* = this.el.query(LIST_BLOCK.getCSSSelector())[0];
+          table.firstElementChild.children[i].scrollIntoView();
           break;
         }
       }
@@ -99,16 +182,52 @@ public class LetterListPanelBase extends Container {
   /**
    * Refresh the path and list and button column.
    */
-  private function updateUI():void {
+  public function updateUI():void {
     var list:TaxonomyNodeList = selectedNodeList.getValue();
     if (list) {
-      activeNodeList = list;
-      letter2NodeMap = beanFactory.createLocalBean();
-      updateLetterList(list);
-      convertNodeListToContentList();
+      doUpdate();
     }
   }
 
+  private function doUpdate():void {
+    loadingExpression.setValue(true);
+    //give the load mask some time to appear, otherwise the dialog may look stuck
+    window.setTimeout(function ():void {
+      var list:TaxonomyNodeList = selectedNodeList.getValue();
+      if (list) {
+        activeNodeList = list;
+        letter2NodeMap = beanFactory.createLocalBean();
+        updateLetterList(list);
+
+        var nodes:Array = activeNodeList.getNodes();
+        var result:Array = [];
+        for each(var node:TaxonomyNode in nodes) {
+          var bean:Bean = beanFactory.createLocalBean({});
+          var letter:String = letterRenderer(node);
+          bean.set('letter', letter);
+          bean.set('name', node.getName());
+          bean.set('leaf', node.isLeaf());
+          bean.set('ref', node.getRef());
+
+          var selection:Array = selectionExpression.getValue();
+          var added:Boolean = TaxonomyUtil.isInSelection(selection, node.getRef());
+          bean.set('added', added);
+          if (added) {
+            bean.set('customCss', "cm-taxonomy-node--leaf");
+          }
+
+          bean.set('renderControl', added || (singleSelection && selection.length === 0) || !singleSelection);
+          result.push(bean);
+        }
+        getListValuesExpression().setValue(result);
+        loadingExpression.setValue(false);
+      }
+    }, 50);
+  }
+
+  private function getDataView():DataView {
+    return queryById(ITEMS_CONTAINER_ITEM_ID) as DataView;
+  }
 
   /**
    * Fills the letter value expression with an array of the active letters.
@@ -129,95 +248,35 @@ public class LetterListPanelBase extends Container {
    * Fired when the user double clicks a row.
    * The next taxonomy child level of the selected node is entered then.
    */
-  private function updateSelection(contentId:String):void {
-    if (contentId) {
-      var id:String = TaxonomyUtil.getRestIdFromCapId(contentId);
-      if (!activeNodeList.getNode(id).isLeaf()) {
+  private function updateSelection(ref:String):void {
+    if (ref) {
+      var id:String = TaxonomyUtil.getRestIdFromCapId(ref);
+      if (activeNodeList && !activeNodeList.getNode(id).isLeaf()) {
         //fire event for path update
-        selectedNodeId.setValue(id);
+        nodePathExpression.setValue(id);
       }
     }
-  }
-
-  private function convertNodeListToContentList():void {
-    var contents:Bean = beanFactory.createLocalBean();
-    var count:int = activeNodeList.getNodes().length;
-    for (var i:int = 0; i < activeNodeList.getNodes().length; i++) {
-      var item:TaxonomyNode = activeNodeList.getNodes()[i];
-      var child:Content = beanFactory.getRemoteBean(item.getRef()) as Content;
-      child.load(function (bean:Content):void {
-        var id:String = TaxonomyUtil.parseRestId(bean);
-        contents.set(id, bean);
-        count--;
-        if (count === 0) {
-          sortAndApplyContentList(contents);
-        }
-      });
-    }
-  }
-
-  /**
-   * We do sort by the name of the node, not by the content!!!!!!
-   * @param contents
-   */
-  private function sortAndApplyContentList(contents:Bean):void {
-    var sortedContentArray:Array = [];
-    var nodes:Array = activeNodeList.getNodes();
-    for (var i:int = 0; i < nodes.length; i++) {
-      var c:Content = contents.get(nodes[i].getRef());
-      sortedContentArray.push(c);
-    }
-    getListValuesExpression().setValue(sortedContentArray);
-  }
-
-
-  //noinspection JSUnusedLocalSymbols
-  /**
-   * Displays each name of a taxonomy
-   */
-  public function taxonomyRenderer(content:Content):String {
-    var list:TaxonomyNodeList = selectedNodeList.getValue();
-    var node:TaxonomyNode = list.getNode(TaxonomyUtil.getRestIdFromCapId(content.getId()));
-
-    var selected:Boolean = isInSelection(node.getRef());
-    var selectionExists:Boolean = selectionExpression.getValue() && (selectionExpression.getValue() as Array).length === 1;
-
-    var renderer:TaxonomyRenderer = null;
-    if (singleSelection) {
-      renderer = TaxonomyRenderFactory.createSingleSelectionListRenderer(node, getId(), selected, selectionExists);
-    }
-    else {
-      renderer = TaxonomyRenderFactory.createSelectionListRenderer(node, getId(), selected);
-    }
-
-    renderer.doRender();
-    var html:String = renderer.getHtml();
-    return html;
   }
 
   //noinspection JSUnusedLocalSymbols
   /**
    * Displays each letter of a taxonomy
    */
-  public function letterRenderer(content:Content):String {
-    var list:TaxonomyNodeList = selectedNodeList.getValue();
-    var node:TaxonomyNode = list.getNode(TaxonomyUtil.getRestIdFromCapId(content.getId()));
+  public function letterRenderer(node:TaxonomyNode):String {
     var letter:String = node.getName().substr(0, 1).toUpperCase();
-
     var html:String = '';
     if (!letter2NodeMap.get(letter) || letter2NodeMap.get(letter).getRef() === node.getRef()) {
       html = letter;
       letter2NodeMap.set(letter, node);
     }
-
     return html;
   }
 
   /**
    * Handler executed when the node text is clicked on.
    */
-  public function nodeClicked(contentId:String):void {
-    updateSelection(contentId); //has the same behaviour like when double clicking a row.
+  public function nodeClicked(ref:String):void {
+    updateSelection(ref); //has the same behaviour like when double clicking a row.
   }
 
   /**
@@ -225,45 +284,8 @@ public class LetterListPanelBase extends Container {
    * Used in TaxonomyRenderer#plusMinusClicked$static
    */
   public function plusMinusClicked(nodeRef:String):void {
-    var alreadySelected:Boolean = !isInSelection(nodeRef);
-    if (alreadySelected) {
-      //add to cache so that after the reload of the current level, the node is marked as not addable.
-      TaxonomyUtil.addNodeToSelection(selectionExpression, nodeRef);
-    }
-    else {
-      TaxonomyUtil.removeNodeFromSelection(selectionExpression, nodeRef);
-    }
-  }
-
-  /**
-   * Utility method that checks if the given node is already part of the active selection list.
-   * @param contentId
-   */
-  public function isInSelection(contentId:String):Boolean {
-    var selection:Array = selectionExpression.getValue();
-    if (selection) {
-      for (var i:int = 0; i < selection.length; i++) {
-        var selectedContent:Content = selection[i];
-        var restId:String = TaxonomyUtil.parseRestId(selectedContent);
-        if (restId === contentId) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  /**
-   * Executes a commit on all records.
-   */
-  private function updateAll():void {
-    var values:Array = getListValuesExpression().getValue();
-    if(values) {
-      getListValuesExpression().setValue([]);
-      EventUtil.invokeLater(function():void {
-        getListValuesExpression().setValue(values);
-      });
-    }
+    var parent:TaxonomySelectionWindow = findParentByType(TaxonomySelectionWindow.xtype) as TaxonomySelectionWindow;
+    parent.updateSelection(nodeRef, true, true);
   }
 }
 }

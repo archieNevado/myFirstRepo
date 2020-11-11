@@ -61,6 +61,12 @@ public class TaxonomyLinkListPropertyFieldBase extends FieldContainer {
   [Bindable]
   public var forceReadOnlyValueExpression:ValueExpression;
 
+  /**
+   * Optional custom link list wrapper to allow a different persistence logic for this link list.
+   */
+  [Bindable]
+  public var taxonomyLinkListWrapper:ILinkListWrapper;
+
   private var linkListWrapper:ILinkListWrapper;
   private var searchResultExpression:ValueExpression;
   private var siteSelectionExpression:ValueExpression;
@@ -82,6 +88,11 @@ public class TaxonomyLinkListPropertyFieldBase extends FieldContainer {
 
   protected function getLinkListWrapper(config:TaxonomyLinkListPropertyFieldBase):ILinkListWrapper {
     if (!linkListWrapper) {
+      if(config.taxonomyLinkListWrapper) {
+        linkListWrapper = config.taxonomyLinkListWrapper;
+        return linkListWrapper;
+      }
+
       var linkListWrapperCfg:ContentLinkListWrapper = ContentLinkListWrapper({});
       linkListWrapperCfg.bindTo = config.bindTo;
       linkListWrapperCfg.propertyName = config.propertyName;

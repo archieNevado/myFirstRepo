@@ -14,6 +14,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
@@ -42,10 +43,20 @@ public class RootCategoryInvalidationSource extends SimpleInvalidationSource imp
   @Autowired
   private CmsCatalogService catalogService;
 
-  private CacheKey<Collection<Category>> categoryCacheKey = new RootCategoriesCacheKey(this);
+  private final CacheKey<Collection<Category>> categoryCacheKey = new RootCategoriesCacheKey(this);
+  private final ApplicationContext applicationContext;
+
+  public RootCategoryInvalidationSource(ApplicationContext applicationContext) {
+    this.applicationContext = applicationContext;
+  }
 
   @Override
   public void onApplicationEvent(ContextRefreshedEvent event) {
+    if (!Objects.equals(applicationContext, event.getApplicationContext())) {
+      // not my application context
+      return;
+    }
+
     // pull root categories into cache
     getRootCategories();
   }

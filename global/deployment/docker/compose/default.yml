@@ -216,6 +216,7 @@ services:
       traefik.api.frontend.rule: Host:studio.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/api
       traefik.login.frontend.rule: Host:studio.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/login
       traefik.logout.frontend.rule: Host:studio.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/logout
+      traefik.cspInfo.frontend.rule: Host:studio.${ENVIRONMENT_FQDN:-docker.localhost};Path:/cspInfo.html
       traefik.rest.frontend.rule: Host:studio.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/rest
     command:
       - wait-for-content-management-server
@@ -229,16 +230,12 @@ services:
     logging: *default-logging
     networks:
       - backend
-    healthcheck:
-      test: ["CMD-SHELL", "wget --quiet --tries=1 --spider http://localhost || exit 1"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
     labels:
       traefik.enable: "true"
       traefik.port: "80"
       traefik.frontend.entryPoints: http,https
       traefik.frontend.headers.SSLRedirect: "true"
+      traefik.protocol: h2c
       traefik.studio-client.frontend.rule: Host:studio.${ENVIRONMENT_FQDN:-docker.localhost}
       # this priority is required so that the client backend rules are prioritized first
       traefik.priority: "10"
@@ -267,7 +264,7 @@ services:
       # needed for static resources because of delivery.standalone needs to be true in the preview
       traefik.preview-static-files.frontend.rule: Host:preview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/blueprint
       traefik.preview-landing.frontend.rule: Host:preview.${ENVIRONMENT_FQDN:-docker.localhost};Path:/;AddPrefix:/blueprint/servlet/corporate
-      traefik.preview-servlets.frontend.rule: Host:preview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/preview,/previewurl,/assets,/service,/dynamic,/resource,/corporate,/corporate-de-de,/styleguide;AddPrefix:/blueprint/servlet
+      traefik.preview-servlets.frontend.rule: Host:preview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/preview,/previewurl,/assets,/service,/dynamic,/resource,/corporate,/corporate-de-de,/corporate-en-gb,/corporate-en-ca,/styleguide;AddPrefix:/blueprint/servlet
     command:
       - wait-for-content-management-server
       - application
@@ -294,9 +291,11 @@ services:
       # service rules
       traefik.corporate-landing.frontend.rule: Host:corporate.${ENVIRONMENT_FQDN:-docker.localhost};Path:/;AddPrefix:/blueprint/servlet/corporate
       traefik.corporate-de-landing.frontend.rule: Host:corporate-de.${ENVIRONMENT_FQDN:-docker.localhost};Path:/;AddPrefix:/blueprint/servlet/corporate-de-de
+      traefik.corporate-ca-landing.frontend.rule: Host:corporate-gb.${ENVIRONMENT_FQDN:-docker.localhost};Path:/;AddPrefix:/blueprint/servlet/corporate-en-gb
+      traefik.corporate-gb-landing.frontend.rule: Host:corporate-ca.${ENVIRONMENT_FQDN:-docker.localhost};Path:/;AddPrefix:/blueprint/servlet/corporate-en-ca
       # needed for elastic social logout (/blueprint/logout)
       traefik.corporate-es-logout.frontend.rule: HostRegexp:{subdomain:corporate-?[de]*}.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/blueprint/logout
-      traefik.corporate-servlets.frontend.rule: HostRegexp:{subdomain:corporate-?[de]*}.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/assets,/dynamic,/service,/resource,/corporate,/corporate-de-de;AddPrefix:/blueprint/servlet
+      traefik.corporate-servlets.frontend.rule: HostRegexp:{subdomain:corporate-?[de]*}.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/assets,/dynamic,/service,/resource,/corporate,/corporate-de-de,/corporate-en-gb,/corporate-en-ca;AddPrefix:/blueprint/servlet
       # Corporate sitemap rules
       # abffe57734feeee is the sitemap id of the corporate site
       # 1cc6f00b7e1b77a49caf7e72f5fe10c0 is the sitemap id of the corporate-de site
@@ -305,6 +304,8 @@ services:
       traefik.corporate-robots.frontend.rule: HostRegexp:{subdomain:corporate-?[de]*}.${ENVIRONMENT_FQDN:-docker.localhost};PathStrip:/robots.txt;AddPrefix:/blueprint/servlet/service/robots/corporate
       traefik.corporate-sitemap.frontend.rule: Host:corporate.${ENVIRONMENT_FQDN:-docker.localhost};Path:/sitemap_index.xml,/{file:sitemap(.*).xml.gz};AddPrefix:/blueprint/servlet/service/sitemap/abffe57734feeee
       traefik.corporate-de-sitemap.frontend.rule: Host:corporate-de.${ENVIRONMENT_FQDN:-docker.localhost};Path:/sitemap_index.xml,/{file:sitemap(.*).xml.gz};AddPrefix:/blueprint/servlet/service/sitemap/1cc6f00b7e1b77a49caf7e72f5fe10c0
+      traefik.corporate-gb-sitemap.frontend.rule: Host:corporate-gb.${ENVIRONMENT_FQDN:-docker.localhost};Path:/sitemap_index.xml,/{file:sitemap(.*).xml.gz};AddPrefix:/blueprint/servlet/service/sitemap/7046b7710b1b23b899097b1f3eeee3fa
+      traefik.corporate-ca-sitemap.frontend.rule: Host:corporate-ca.${ENVIRONMENT_FQDN:-docker.localhost};Path:/sitemap_index.xml,/{file:sitemap(.*).xml.gz};AddPrefix:/blueprint/servlet/service/sitemap/b5becc0a3864a58d7e5c8052a6c5dd22
     command:
       - wait-for-replication-live-server
       - enable-sitemap-generation

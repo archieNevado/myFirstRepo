@@ -14,7 +14,6 @@ import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cache.Cache;
-import com.coremedia.cache.CacheCapacityConfigurer;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.asset.ProductAssetsHandler;
@@ -53,9 +52,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.annotation.Order;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Configuration
 @ImportResource(value = {
@@ -377,20 +374,6 @@ public class LcCaeFragmentConfiguration {
             searchTermExternalReferenceResolver,
             segmentPathResolver,
             breadcrumbExternalReferenceResolver);
-  }
-
-  @Bean(initMethod = "init")
-  public CacheCapacityConfigurer searchTermExternalReferenceResolverCacheCapacityConfigurer(@Value("${searchTermExternalReferenceResolver.cacheCapacity:10000}") Long cacheCapacity,
-                                                                                            Cache cache) {
-    CacheCapacityConfigurer configurer = new CacheCapacityConfigurer();
-
-    configurer.setCache(cache);
-
-    Map<String, Long> capacities = new HashMap<>(1);
-    capacities.put(SearchTermExternalReferenceResolver.CACHE_CLASS, cacheCapacity);
-    configurer.setCapacities(capacities);
-
-    return configurer;
   }
 
   @Bean

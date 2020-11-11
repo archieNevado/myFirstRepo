@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.coremedia.blueprint.caas.p13n.P13nConfig \
+

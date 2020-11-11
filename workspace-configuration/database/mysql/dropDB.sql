@@ -3,6 +3,7 @@ drop database if exists cm_caefeeder;
 drop database if exists cm_master;
 drop database if exists cm_mcaefeeder;
 drop database if exists cm_replication;
+drop database if exists cm_editorial_comments;
 
 drop user cm_management@localhost;
 drop user cm_caefeeder@localhost;

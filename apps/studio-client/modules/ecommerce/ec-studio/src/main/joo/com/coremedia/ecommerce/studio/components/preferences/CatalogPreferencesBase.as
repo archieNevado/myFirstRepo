@@ -1,7 +1,7 @@
 package com.coremedia.ecommerce.studio.components.preferences {
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.preferences.PreferencePanel;
-import com.coremedia.cms.editor.sdk.util.PreferencesUtil;
+import com.coremedia.cms.studio.startup.models.preferences.PreferencesUtil;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 
@@ -20,21 +20,23 @@ public class CatalogPreferencesBase extends Panel implements PreferencePanel {
 
   protected function getShowCatalogValueExpression():ValueExpression {
     if(!showCatalogValueExpression) {
-      showCatalogValueExpression = ValueExpressionFactory.create(PREFERENCE_SHOW_CATALOG_KEY, editorContext.getPreferences());
+      var enabled:Boolean = ValueExpressionFactory.create(PREFERENCE_SHOW_CATALOG_KEY, editorContext.getPreferences()).getValue();
+      showCatalogValueExpression = ValueExpressionFactory.createFromValue(enabled);
     }
     return showCatalogValueExpression;
   }
 
   protected function getSortCategoriesByNameExpression():ValueExpression {
     if(!sortCategoriesByNameExpression) {
-      sortCategoriesByNameExpression = ValueExpressionFactory.create(SORT_CATEGORIES_BY_NAME_KEY, editorContext.getPreferences());
+      var enabled:String = ValueExpressionFactory.create(SORT_CATEGORIES_BY_NAME_KEY, editorContext.getPreferences()).getValue();
+      sortCategoriesByNameExpression = ValueExpressionFactory.createFromValue(enabled);
     }
     return sortCategoriesByNameExpression;
   }
 
   public function updatePreferences():void {
-    var showCatalogValue:String = getShowCatalogValueExpression().getValue();
-    var sortCategoriesByNameValue:String = getSortCategoriesByNameExpression().getValue();
+    var showCatalogValue:Boolean = getShowCatalogValueExpression().getValue();
+    var sortCategoriesByNameValue:Boolean = getSortCategoriesByNameExpression().getValue();
     PreferencesUtil.updatePreferencesJSONProperty(showCatalogValue, PREFERENCE_SHOW_CATALOG_KEY);
     PreferencesUtil.updatePreferencesJSONProperty(sortCategoriesByNameValue, SORT_CATEGORIES_BY_NAME_KEY);
   }

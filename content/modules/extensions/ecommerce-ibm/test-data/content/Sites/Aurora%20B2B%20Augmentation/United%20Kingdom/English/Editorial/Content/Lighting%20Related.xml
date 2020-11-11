@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMCollection folder="/Sites/Aurora B2B Augmentation/United Kingdom/English/Editorial/Content" name="Lighting Related" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
+<externalRefId></externalRefId>
+<locale>en-GB</locale>
+<master>
+<link href="../../../../United%20States/English/Editorial/Content/Lighting%20Related.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Editorial/Content/Lighting%20Related"/>
+</master>
+<viewtype>
+</viewtype>
+<linkedSettings>
+</linkedSettings>
+<resourceBundles2>
+</resourceBundles2>
+<segment></segment>
+<title></title>
+<htmlTitle></htmlTitle>
+<keywords></keywords>
+<htmlDescription></htmlDescription>
+<subjectTaxonomy>
+</subjectTaxonomy>
+<locationTaxonomy>
+</locationTaxonomy>
+<contexts>
+</contexts>
+<teaserTitle>Lighting Related</teaserTitle>
+<pictures>
+</pictures>
+<related>
+</related>
+<authors>
+</authors>
+<items>
+<link href="../Personalization/Contract-Specific%20Call-To-Action%20Teaser.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20Kingdom/English/Editorial/Personalization/Contract-Specific%20Call-To-Action%20Teaser"/>
+<link href="Microsites/The%20Guide%20To%20Perfect%20Lighta87f78d7.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20Kingdom/English/Editorial/Content/Microsites/The%20Guide%20To%20Perfect%20Lighting/The%20Guide%20to%20Perfect%20Lighting%20Article"/>
+<link href="Decorating/Lighting/Decorating%20Lighting%20C959c3fb2.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20Kingdom/English/Editorial/Content/Decorating/Lighting/Decorating%20Lighting%20Category%20Teaser"/>
+</items>
+</CMCollection>

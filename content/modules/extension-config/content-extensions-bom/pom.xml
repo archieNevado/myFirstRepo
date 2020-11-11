@@ -20,6 +20,13 @@
       </dependency>
       <dependency>
         <groupId>com.coremedia.blueprint</groupId>
+        <artifactId>commercetools-test-data</artifactId>
+        <version>1-SNAPSHOT</version>
+        <classifier>content</classifier>
+        <type>zip</type>
+      </dependency>
+      <dependency>
+        <groupId>com.coremedia.blueprint</groupId>
         <artifactId>corporate-test-data</artifactId>
         <version>1-SNAPSHOT</version>
         <classifier>content</classifier>

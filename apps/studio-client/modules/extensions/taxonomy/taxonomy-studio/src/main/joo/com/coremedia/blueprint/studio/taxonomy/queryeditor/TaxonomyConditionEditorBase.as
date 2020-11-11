@@ -11,6 +11,10 @@ public class TaxonomyConditionEditorBase extends ConditionEditor {
     // form is shown (even if no context is specified) or not.
     var structPropertyName:String = propertyName.substring(propertyName.lastIndexOf(".")+1, propertyName.length);
     applyBaseStruct(bindTo, contentType, structPropertyName);
+
+    if(!config.taxonomyId) {
+      throw new Error('TaxonomyCondition for property "' + propertyName + '" must set config parameter "taxonomyId"');
+    }
   }
 }
 }

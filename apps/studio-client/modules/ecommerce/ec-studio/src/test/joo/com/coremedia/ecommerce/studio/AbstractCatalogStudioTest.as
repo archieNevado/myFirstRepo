@@ -16,6 +16,7 @@ public class AbstractCatalogStudioTest extends AbstractCatalogTest {
   protected static const MARKETING_ID:String = "livecontext/marketing/" + STORE_CONTEXT_ID;
   protected static const TOP_CATEGORY_ID:String = "livecontext/category/" + STORE_CATALOG_CONTEXT_ID + "/Grocery";
   protected static const LEAF_CATEGORY_ID:String = "livecontext/category/" + STORE_CATALOG_CONTEXT_ID + "/Fruit";
+  protected static const LINK_CATEGORY_ID:String = "livecontext/category/" + STORE_CATALOG_CONTEXT_ID + "/Link";
   protected static const STORE_NAME:String = "PerfectChefESite";
   protected static const TOP_CATEGORY_EXTERNAL_ID:String = "Grocery";
   protected static const LEAF_CATEGORY_EXTERNAL_ID:String = "Grocery Fruit";

@@ -6,6 +6,8 @@ import com.coremedia.ecommerce.studio.CatalogModel;
 import com.coremedia.ecommerce.studio.augmentation.augmentationService;
 import com.coremedia.ecommerce.studio.catalogHelper;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
+import com.coremedia.ecommerce.studio.model.Category;
+import com.coremedia.ecommerce.studio.model.CategoryChildData;
 import com.coremedia.ui.data.RemoteBean;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
@@ -101,6 +103,33 @@ public class AugmentationUtil {
     return ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', catalogType + '_label');
   }
 
+  public static function getIconFunctionWithLink(selectedParentNodeValueExpression:ValueExpression):Function {
+    return function (catalogObject:CatalogObject):String {
+      var isVirtual:Boolean = calculateIfVirtual(catalogObject, selectedParentNodeValueExpression);
+      var catalogType:String = catalogHelper.getType(catalogObject);
+      //if a catalog object is augmented show a different icon
+      if (augmentationService.getContent(catalogObject)) {
+        if (catalogType === CatalogModel.TYPE_CATEGORY) {
+          if (isVirtual) {
+            var augmentedLinkIcon:String = ResourceManager.getInstance().getString('com.coremedia.icons.CoreIcons', 'augmented_link');
+            return augmentedLinkIcon;
+          } else {
+            var augmentedCategoryIcon:String = ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'AugmentedCategory_icon');
+            return augmentedCategoryIcon;
+          }
+        } else if (catalogType === CatalogModel.TYPE_PRODUCT) {
+          var augmentedProductIcon:String = ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'AugmentedProduct_icon');
+          return augmentedProductIcon;
+        }
+      }
+      if (isVirtual) {
+        return ResourceManager.getInstance().getString('com.coremedia.icons.CoreIcons', 'link');
+      } else {
+        return ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', catalogType + '_icon');
+      }
+    };
+  }
+
   public static function getTypeCls(catalogObject:CatalogObject):String {
     var catalogType:String = catalogHelper.getType(catalogObject);
     //if a catalog object is augmented show a different icon
@@ -112,6 +141,23 @@ public class AugmentationUtil {
       }
     }
     return ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', catalogType + '_icon');
+  }
+
+  public static function calculateIfVirtual(catalogObject:CatalogObject, selectedNodeValueExpression:ValueExpression):Boolean {
+    var category:Category = catalogObject as Category;
+    if (category) {
+      var isVirtual:Boolean = null;
+      var parent:Category = selectedNodeValueExpression.getValue() as Category;
+      if (parent) {
+        var childrenData:Array = parent.getChildrenData();
+        childrenData && childrenData.forEach(function (childData:CategoryChildData):void {
+          if (childData.child.getId() === category.getId()) {
+            isVirtual = childData.isVirtual;
+          }
+        });
+      }
+      return isVirtual;
+    }
   }
 }
 }

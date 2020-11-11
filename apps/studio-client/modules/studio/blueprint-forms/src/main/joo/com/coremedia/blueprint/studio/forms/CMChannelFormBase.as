@@ -2,7 +2,7 @@ package com.coremedia.blueprint.studio.forms {
 import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.premular.DocumentTabPanel;
-import com.coremedia.cms.editor.sdk.sites.Site;
+import com.coremedia.cms.studio.multisite.models.sites.Site;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 
@@ -12,7 +12,7 @@ public class CMChannelFormBase extends DocumentTabPanel {
    * A value expression that evaluates to an object mapping
    * ids of root channels to site structure infos.
    *
-   * @see com.coremedia.cms.editor.sdk.sites.Site
+   * @see com.coremedia.cms.studio.multisite.models.sites.Site
    */
   private static var rootChannelsExpression:ValueExpression;
 
@@ -26,7 +26,7 @@ public class CMChannelFormBase extends DocumentTabPanel {
    *
    * @return the root channels expression
    *
-   * @see com.coremedia.cms.editor.sdk.sites.Site
+   * @see com.coremedia.cms.studio.multisite.models.sites.Site
    */
   public static function getRootChannelsExpression():ValueExpression {
     if (!rootChannelsExpression) {

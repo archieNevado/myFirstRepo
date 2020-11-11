@@ -1,0 +1,10 @@
+@if $cm-include-taxonomy-selection-window {
+
+  .taxonomy-search-field-selector {
+    margin-left: -20px;
+  }
+
+  .taxonomy-search-field-selector input {
+    padding-left: 20px;
+  }
+}

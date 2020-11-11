@@ -55,7 +55,7 @@ public class TaxonomyNode {
    * @return
    */
   public function getName():String {
-    return TaxonomyUtil.escapeHTML(json.name);
+    return json.name;
   }
 
   /**

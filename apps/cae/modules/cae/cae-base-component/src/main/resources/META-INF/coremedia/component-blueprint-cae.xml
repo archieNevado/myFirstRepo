@@ -22,21 +22,6 @@
   <import resource="classpath:/framework/spring/blueprint-sitemap.xml"/>
 
   <bean class="com.coremedia.blueprint.component.cae.CaeBaseComponentConfiguration"/>
-
-  <!-- ================== Data views cache capacity configuration ================== -->
-
-  <bean id="blueprintDataviewsCacheCapacityConfigurer" class="com.coremedia.cache.CacheCapacityConfigurer" init-method="init">
-    <property name="cache" ref="cache"/>
-    <property name="capacities">
-      <map>
-        <entry key="com.coremedia.objectserver.dataviews.AssumesIdentity" value="${assumesIdentity.cache.capacity}"/>
-        <entry key="com.coremedia.blueprint.common.contentbeans.Page" value="${page.cache.capacity}"/>
-        <entry key="com.coremedia.blueprint.cae.layout.PageGridImpl" value="${pageGridImpl.cache.capacity}"/>
-        <entry key="com.coremedia.blueprint.cae.layout.ContentBeanBackedPageGridPlacement" value="${contentBeanBackedPageGridPlacement.cache.capacity}"/>
-        <entry key="com.coremedia.cae.aspect.Aspect" value="${aspect.cache.capacity}"/>
-      </map>
-    </property>
-  </bean>
   
   <beans profile="dev">
     <!-- only expose com.coremedia.blueprint.cae.sitemap.TestUrlsGenerationHandler in development mode -->

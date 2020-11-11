@@ -20,7 +20,9 @@
   <fx:Script><![CDATA[
     import com.coremedia.blueprint.studio.BlueprintFormsStudioPluginBase;
     import com.coremedia.blueprint.studio.forms.CMVideoForm;
-    import com.coremedia.ecommerce.studio.library.EcCatalogTreeFilter;
+    import com.coremedia.cms.editor.sdk.editorContext;
+    import com.coremedia.ecommerce.studio.components.preferences.CatalogPreferencesBase;
+    import com.coremedia.ui.data.ValueExpressionFactory;
 
     import mx.resources.ResourceManager;
 
@@ -156,8 +158,8 @@
             destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.sdk.actions.Actions')}"
             source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.catalog.studio.actions.CatalogActions')}"/>
 
-    <editor:RegisterLibraryTreeFilter filter="{new EcCatalogTreeFilter('Products')}"/>
-    <editor:RegisterLibraryTreeFilter filter="{new DeletedContentCatalogTreeFilter()}"/>
+    <editor:RegisterLibraryTreeFilter path="Products"
+                                      disabledExpression="{ValueExpressionFactory.create(CatalogPreferencesBase.PREFERENCE_SHOW_CATALOG_KEY, editorContext.getPreferences())}"/>
 
   </local:configuration>
 

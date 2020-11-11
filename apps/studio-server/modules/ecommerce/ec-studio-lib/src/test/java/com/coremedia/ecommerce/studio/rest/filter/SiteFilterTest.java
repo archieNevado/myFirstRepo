@@ -102,6 +102,12 @@ public class SiteFilterTest {
     assertThat(siteId).hasValue("2338907623496");
   }
 
+  @Test
+  public void checkRegexWithPrefixIsAcceptable() {
+    Optional<String> siteId = extractSiteId("/livecontext/previews/store/2338907623496/abcd");
+    assertThat(siteId).hasValue("2338907623496");
+  }
+
   private MockHttpServletRequest buildRequest(String pathInfo) {
     MockHttpServletRequest request = new MockHttpServletRequest();
     request.setPathInfo(pathInfo);

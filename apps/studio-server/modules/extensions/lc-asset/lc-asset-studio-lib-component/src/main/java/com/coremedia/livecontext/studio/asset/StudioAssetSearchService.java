@@ -2,6 +2,7 @@ package com.coremedia.livecontext.studio.asset;
 
 import com.coremedia.cache.Cache;
 import com.coremedia.cache.CacheKey;
+import com.coremedia.cache.config.CacheConfigurationProperties;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
@@ -11,10 +12,10 @@ import com.coremedia.rest.cap.content.search.SearchService;
 import com.coremedia.rest.cap.content.search.SearchServiceResult;
 import com.google.common.collect.ImmutableList;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -22,35 +23,23 @@ public class StudioAssetSearchService implements AssetSearchService {
 
   private static final Logger LOG = LoggerFactory.getLogger(StudioAssetSearchService.class);
 
-  private static final int DEFAULT_CAPACITY = 10000;
-
   private final SearchService searchService;
   private final ContentRepository contentRepository;
   private final Cache cache;
 
-  private long cacheForInSeconds = 300;
+  private long cacheForInSeconds;
 
-  StudioAssetSearchService(SearchService searchService, ContentRepository contentRepository, Cache cache) {
+  StudioAssetSearchService(SearchService searchService, ContentRepository contentRepository, Cache cache, CacheConfigurationProperties properties) {
     this.searchService = searchService;
     this.contentRepository = contentRepository;
     this.cache = cache;
+    this.cacheForInSeconds = properties.getTimeoutSeconds().getOrDefault(SolrQueryCacheKey.CACHE_CLASS, 300L);
   }
 
   @NonNull
   @Override
   public List<Content> searchAssets(@NonNull String contentType, @NonNull String externalId, @NonNull Site site) {
     return cache.get(new SolrQueryCacheKey(contentType, externalId, site, cacheForInSeconds));
-  }
-
-  @PostConstruct
-  void initialize() {
-    long capacity = cache.getCapacity(SolrQueryCacheKey.CACHE_CLASS);
-
-    if (capacity < 10) {
-      LOG.info("configuring default capacity {} for cache key {} (must be at least 10 to avoid warnings)",
-              DEFAULT_CAPACITY, SolrQueryCacheKey.CACHE_CLASS);
-      cache.setCapacity(SolrQueryCacheKey.CACHE_CLASS, DEFAULT_CAPACITY);
-    }
   }
 
   @NonNull
@@ -77,6 +66,7 @@ public class StudioAssetSearchService implements AssetSearchService {
     return ct != null ? ImmutableList.of(ct) : ImmutableList.of();
   }
 
+  @Deprecated(since = "2010")
   public void setCacheForInSeconds(long cacheForInSeconds) {
     this.cacheForInSeconds = cacheForInSeconds;
   }

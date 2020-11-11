@@ -34,7 +34,11 @@ import static com.coremedia.blueprint.base.livecontext.ecommerce.common.Commerce
 
 /**
  * Service interface to logon to the IBM WCS catalog.
+ *
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
  */
+@Deprecated
 public class LoginServiceImpl implements LoginService, InitializingBean, DisposableBean {
 
   private static final Logger LOG = LoggerFactory.getLogger(LoginServiceImpl.class);

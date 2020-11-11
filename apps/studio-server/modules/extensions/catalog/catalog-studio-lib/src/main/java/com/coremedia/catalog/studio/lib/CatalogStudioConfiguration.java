@@ -9,6 +9,7 @@ import com.coremedia.cap.util.ContentStringPropertyIndex;
 import com.coremedia.catalog.studio.lib.validators.RootCategoryInvalidationSource;
 import com.coremedia.rest.cap.config.StudioConfigurationProperties;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -44,8 +45,8 @@ public class CatalogStudioConfiguration {
   }
 
   @Bean
-  RootCategoryInvalidationSource rootCategoryInvalidationSource(StudioConfigurationProperties studioConfigurationProperties) {
-    RootCategoryInvalidationSource rootCategoryInvalidationSource = new RootCategoryInvalidationSource();
+  RootCategoryInvalidationSource rootCategoryInvalidationSource(StudioConfigurationProperties studioConfigurationProperties, ApplicationContext applicationContext) {
+    RootCategoryInvalidationSource rootCategoryInvalidationSource = new RootCategoryInvalidationSource(applicationContext);
     rootCategoryInvalidationSource.setCapacity(studioConfigurationProperties.getRest().getCatalogStudioCache().getCapacity());
     return rootCategoryInvalidationSource;
   }

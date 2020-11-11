@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static org.springframework.web.util.HtmlUtils.htmlUnescape;
+
 class YouTubeItem extends YouTubeHubObject implements Item {
 
   private final String name;
@@ -67,8 +69,8 @@ class YouTubeItem extends YouTubeHubObject implements Item {
     if (snippet == null) {
       throw new IllegalArgumentException("PlayListItem " + searchResult + " has no snippet.  Cannot handle.");
     }
-    name = titleToName(snippet.getTitle());
-    description = snippet.getDescription();
+    name = htmlUnescape(titleToName(snippet.getTitle()));
+    description = htmlUnescape(snippet.getDescription());
     lastModified = snippet.getPublishedAt();
     thumbnails = snippet.getThumbnails();
     videoId = searchResult.getId().getVideoId();

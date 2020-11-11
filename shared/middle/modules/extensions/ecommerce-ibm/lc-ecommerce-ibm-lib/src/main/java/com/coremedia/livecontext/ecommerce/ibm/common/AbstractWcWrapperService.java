@@ -19,6 +19,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
 
+/**
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
+@Deprecated
 public abstract class AbstractWcWrapperService {
 
   private static final String PARAM_CATALOG_ID = "catalogId";

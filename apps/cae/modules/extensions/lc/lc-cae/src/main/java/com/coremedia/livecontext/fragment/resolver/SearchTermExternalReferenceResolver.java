@@ -12,6 +12,7 @@ import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cache.Cache;
 import com.coremedia.cache.CacheKey;
+import com.coremedia.cache.config.CacheConfigurationProperties;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
@@ -21,22 +22,21 @@ import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.CharMatcher;
-import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
-import com.google.common.collect.FluentIterable;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -44,7 +44,7 @@ import java.util.concurrent.TimeUnit;
  * External Content resolver for 'externalRef' value that specifies a search term.
  *
  * <p>The implementation uses a search engine to find matching content for the search term. The search engine is
- * configured in {@link #setSearchResultFactory(com.coremedia.blueprint.cae.search.SearchResultFactory)}.
+ * configured in {@link #setSearchResultFactory(SearchResultFactory)}.
  */
 public class SearchTermExternalReferenceResolver extends ExternalReferenceResolverBase implements InitializingBean {
   private static final Logger LOG = LoggerFactory.getLogger(SearchTermExternalReferenceResolver.class);
@@ -61,7 +61,7 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
   private String segmentPath = "";
   private String contentType;
   private String field;
-  private int cacheForSeconds = 60;
+  private final long cacheForSeconds;
 
   private Iterable<String> segments;
   private Collection<String> escapedContentTypes;
@@ -70,8 +70,9 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
    * Constructor initializes this external reference resolver with a prefix to enable the resolver
    * to match on a request.
    */
-  public SearchTermExternalReferenceResolver() {
+  public SearchTermExternalReferenceResolver(CacheConfigurationProperties cacheConfigurationProperties) {
     super(PREFIX);
+    this.cacheForSeconds = cacheConfigurationProperties.getTimeoutSeconds().getOrDefault(CACHE_CLASS,60L);
   }
 
   // --- configuration ----------------------------------------------
@@ -79,10 +80,8 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
   /**
    * Sets the cache to use for caching external reference resolution.
    *
-   * <p>Caching can be disabled by setting {@link #setCacheForSeconds(int)} to 0.
-   *
    * <p>If caching is not disabled, a cache capacity for cache class {@link #CACHE_CLASS} needs to be configured at
-   * the given cache..
+   * the given cache.
    *
    * @param cache cache
    */
@@ -93,7 +92,7 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
   }
 
   /**
-   * Sets the {@link com.coremedia.blueprint.base.tree.TreeRelation} to find the navigation with the configured
+   * Sets the {@link TreeRelation} to find the navigation with the configured
    * {@link #setSegmentPath(String)} in the navigation tree for a site.
    *
    * @param navigationTreeRelation navigation tree relation
@@ -105,9 +104,9 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
   }
 
   /**
-   * Sets the {@link com.coremedia.blueprint.cae.search.SearchResultFactory}.
+   * Sets the {@link SearchResultFactory}.
    *
-   * @param searchResultFactory the {@link com.coremedia.blueprint.cae.search.SearchResultFactory}
+   * @param searchResultFactory the {@link SearchResultFactory}
    */
   @Required
   public void setSearchResultFactory(@NonNull SearchResultFactory searchResultFactory) {
@@ -118,7 +117,7 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
   /**
    * Sets the segment path of the navigation context below which this resolver searches for matching content.
    *
-   * <p>The path is relative to the {@link com.coremedia.cap.multisite.Site#getSiteRootDocument() site's root document}
+   * <p>The path is relative to the {@link Site#getSiteRootDocument() site's root document}
    * and must not start with a slash. The first path segment identifies a direct child of the site's root document.
    * Further path segments are separated by slashes.
    *
@@ -128,7 +127,7 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
    * considered.
    *
    * @param segmentPath segment path relative to site root folder
-   * @throws java.lang.IllegalArgumentException if the path starts with a slash
+   * @throws IllegalArgumentException if the path starts with a slash
    */
   public void setSegmentPath(@NonNull String segmentPath) {
     Objects.requireNonNull(segmentPath);
@@ -164,17 +163,6 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
     this.field = field;
   }
 
-  /**
-   * Sets the time in seconds to cache the result.
-   *
-   * <p>The default is 60 seconds.
-   *
-   * @param cacheForSeconds time to cache the result or 0 for no caching
-   */
-  public void setCacheForSeconds(int cacheForSeconds) {
-    this.cacheForSeconds = cacheForSeconds;
-  }
-
   @Override
   public void afterPropertiesSet() {
     ContentType type = contentRepository.getContentType(contentType);
@@ -200,7 +188,7 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
     Content linkable = resolveLinkable(referenceInfo, site);
 
     // If linkable is a nav element, return (ctx:linkable,content:linkable)
-    if (asBean(linkable) instanceof Navigation) {
+    if (linkable != null && asBean(linkable) instanceof Navigation) {
       if (LOG.isDebugEnabled()) {
         LOG.debug("SearchTerm externalRef resolved context");
       }
@@ -236,7 +224,7 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
     query.setQuery(field + ':' + escapeLiteralForSearch(searchTerm));
 
     SearchResultBean searchResult = searchResultFactory.createSearchResultUncached(query);
-    Optional<ContentBean> result = FluentIterable.from(searchResult.getHits()).filter(ContentBean.class).first();
+    Optional<ContentBean> result = searchResult.getHits().stream().filter(ContentBean.class::isInstance).map(ContentBean.class::cast).findFirst();
     if (result.isPresent()) {
       return result.get().getContent();
     }
@@ -247,7 +235,7 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
 
   /**
    * Returns the navigation context configured with {@link #setSegmentPath(String)} relative to the
-   * {@link com.coremedia.cap.multisite.Site#getSiteRootDocument() root document} of the given site.
+   * {@link Site#getSiteRootDocument() root document} of the given site.
    *
    * @param site site
    * @return navigation, null if not found
@@ -275,19 +263,19 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
    * search term or null for no fallback.
    *
    * <p>The default implementation returns the given site's
-   * {@link com.coremedia.cap.multisite.Site#getSiteRootDocument() root document}.
+   * {@link Site#getSiteRootDocument() root document}.
    *
    * @param site the site to resolve the reference in
    * @return fallback linkable or null
    */
   @Nullable
   @VisibleForTesting
-  Content getFallbackLinkable(Site site) {
+  static Content getFallbackLinkable(Site site) {
     return site.getSiteRootDocument();
   }
 
   /**
-   * Creates a search {@link com.coremedia.blueprint.cae.search.Condition} to find content beans below a context.
+   * Creates a search {@link Condition} to find content beans below a context.
    *
    * @param context the navigation context
    * @return search condition
@@ -304,7 +292,7 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
   }
 
   @NonNull
-  private static String escapeLiteralForSearch(@NonNull String literal) {
+  private static String escapeLiteralForSearch(@NonNull CharSequence literal) {
     return '"' + CharMatcher.is('"').replaceFrom(literal, "\\\"") + '"';
   }
 
@@ -313,12 +301,12 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
     private final SearchTermExternalReferenceResolver resolver;
     private final String searchTerm;
     private final Site site;
-    private final int cacheForSeconds;
+    private final long cacheForSeconds;
 
     public ResolveLinkableKey(@NonNull SearchTermExternalReferenceResolver resolver,
                               @NonNull String searchTerm,
                               @NonNull Site site,
-                              int cacheForSeconds) {
+                              long cacheForSeconds) {
       Preconditions.checkArgument(cacheForSeconds > 0);
       this.resolver = resolver;
       this.searchTerm = searchTerm;
@@ -326,6 +314,7 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
       this.cacheForSeconds = cacheForSeconds;
     }
 
+    @Nullable
     @Override
     public Content evaluate(Cache cache) {
       // we're using a timed dependency here because real dependencies are not available for search engine queries

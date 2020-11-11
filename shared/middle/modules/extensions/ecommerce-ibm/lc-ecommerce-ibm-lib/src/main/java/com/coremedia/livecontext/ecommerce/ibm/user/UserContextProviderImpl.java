@@ -18,8 +18,12 @@ import static java.util.function.Predicate.not;
 
 /**
  * Provides access to the current {@link UserContext}. The handling itself is delegated to the {@link UserContextHelper}.
+ *
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
  */
 @DefaultAnnotation(NonNull.class)
+@Deprecated
 public class UserContextProviderImpl implements UserContextProvider {
 
   private static final String STUDIO_PREVIEW_TEST_PARAM = "p13n_test";

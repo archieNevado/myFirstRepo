@@ -18,7 +18,6 @@ node.default_unless['blueprint']['apps'][service_name]['application.properties']
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['repository.blobStreamingSizeThreshold'] = -1
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['repository.blobStreamingThreads'] = -1
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['repository.maxCachedBlobSize'] = -1
-node.default_unless['blueprint']['apps'][service_name]['application.properties']['preview.urlservice.headlessPreviewHost'] = "//headless-server-preview.#{node['blueprint']['hostname']}"
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['studio.previewUrlPrefix'] = "//preview.#{node['blueprint']['hostname']}"
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['studio.previewUrlWhitelist'] = "*.#{node['blueprint']['hostname']}"
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['es.cae.http.host'] = node['blueprint']['hostname']

@@ -4,6 +4,11 @@ import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 
 import java.util.Map;
 
+/**
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
+@Deprecated
 public class WcPrice {
   protected String priceDescription;
   protected String priceUsage;

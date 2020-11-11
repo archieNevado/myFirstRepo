@@ -11,7 +11,7 @@
        that you fully re-index after changing this setting as it can
        affect both how text is indexed and queried.
   -->
-  <luceneMatchVersion>8.4.1</luceneMatchVersion>
+  <luceneMatchVersion>8.6.3</luceneMatchVersion>
 
   <!-- Data Directory
 
@@ -287,9 +287,12 @@
 
     <!-- Solr Internal Query Caches
 
-         There are two implementations of cache available for Solr,
-         LRUCache, based on a synchronized LinkedHashMap, and
-         FastLRUCache, based on a ConcurrentHashMap.
+         There are four implementations of cache available for Solr:
+         LRUCache, based on a synchronized LinkedHashMap,
+         LFUCache and FastLRUCache, based on a ConcurrentHashMap, and CaffeineCache -
+         a modern and robust cache implementation. Note that in Solr 9.0
+         only CaffeineCache will be available, other implementations are now
+         deprecated.
 
          FastLRUCache has faster gets and slower puts in single
          threaded operation and thus is generally faster than LRUCache
@@ -614,7 +617,7 @@
        The SolrReplicationHandler supports replicating indexes from a
        "master" used for indexing and "slaves" used for queries.
 
-       https://lucene.apache.org/solr/guide/8_4/index-replication.html
+       https://lucene.apache.org/solr/guide/8_6/index-replication.html
 
     -->
   <requestHandler name="/replication" class="solr.ReplicationHandler">
@@ -801,7 +804,7 @@
 
   <!-- Query Parsers
 
-       https://lucene.apache.org/solr/guide/8_4/query-syntax-and-parsing.html
+       https://lucene.apache.org/solr/guide/8_6/query-syntax-and-parsing.html
 
        Multiple QParserPlugins can be registered by name, and then
        used in either the "defType" param for the QueryComponent (used

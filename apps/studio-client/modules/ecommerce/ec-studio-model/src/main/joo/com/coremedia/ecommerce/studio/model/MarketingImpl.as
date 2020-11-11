@@ -6,8 +6,8 @@ public class MarketingImpl extends CatalogObjectImpl implements Marketing {
   }
 
 
-  public function getChildrenByName():Object {
-    return get(CatalogObjectPropertyNames.CHILDREN_BY_NAME);
+  public function getChildrenData():Array {
+    return get(CatalogObjectPropertyNames.CHILDREN_DATA);
   }
 
   public function getMarketingSpots():Array {

@@ -2,7 +2,6 @@ package com.coremedia.livecontext.ecommerce.ibm.common;
 
 import com.coremedia.cache.Cache;
 import com.coremedia.cache.CacheKey;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +11,11 @@ import java.util.concurrent.TimeUnit;
 
 import static java.lang.invoke.MethodHandles.lookup;
 
+/**
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
+@Deprecated
 class LanguageMappingCacheKey extends CacheKey<Map<String, String>> {
 
   private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());

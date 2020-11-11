@@ -8,6 +8,11 @@ import com.coremedia.livecontext.ecommerce.ibm.login.LoginService;
 import com.coremedia.livecontext.ecommerce.ibm.login.WcCredentials;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
+/**
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
+@Deprecated
 class PreviewUserCacheKey extends AbstractCommerceCacheKey<WcCredentials> {
 
   private final String username;

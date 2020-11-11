@@ -46,6 +46,7 @@ type Site {
   crops: [Crop] @fetch(from: "@imageVariantsAdapter.to(#root).crops")
   root: CMNavigation @fetch(from: "siteRootDocument")
   repositoryPath: String! @fetch(from: "#root.getSiteRootFolder().getPath()")
+  derivedSites: [Site!]! @fetch(from: "@localizedVariantsAdapterFactory.to().getDerivedSites(#root)")
 }
 
 type SearchResult {
@@ -138,6 +139,8 @@ interface CMLocalized @inherit(from: ["CMObject"]) {
   ignoreUpdates: Int
   languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
   locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
 }
 
 interface CMMedia @inherit(from: ["CMTeasable"]) {
@@ -204,13 +207,6 @@ interface CMSettings @inherit(from: ["CMLocalized"]) {
   id: ID!
   settings(paths: [[String]]): JSON
   identifier: String
-}
-
-interface CMProduct @inherit(from: ["CMTeasable"]) {
-  downloads: [CMDownload]
-  price: Float
-  productCode: String
-  productName: String
 }
 
 interface CMQueryList @inherit(from: ["CMDynamicList"]) {
@@ -295,7 +291,7 @@ type CMImageMapImpl implements CMImageMap @inherit(from: ["CMTeaserImpl"]) {
   displayShortText: Boolean @fetch(from: "localSettings?.overlay?.get('displayShortText')")
   displayTitle: Boolean @fetch(from: "localSettings?.overlay?.get('displayTitle')")
   hotZones: [Hotzone] @fetch(from: "localSettings?.get('image-map')")
-  transformedHotZones: [TransformedHotZone] @fetch(from: "@hotZonesAdapter.to(#root).transformedHotZones.?[linkedContent != null]")
+  transformedHotZones: [TransformedHotZone] @fetch(from: "@hotZonesAdapter.to(#root).transformedHotZones")
 }
 
 type CMLinkableImpl implements CMLinkable @inherit(from: ["CMLocalizedImpl"]) {
@@ -318,6 +314,8 @@ type CMLocalizedImpl implements CMLocalized @inherit(from: ["CMObjectImpl"]) {
   ignoreUpdates: Int
   languageId: String @fetch(from: "#this.locale")
   locale: String
+  localizedVariants: [CMLocalized!]! @fetch(from: "@localizedVariantsAdapterFactory.to().getLocalizations(#root)")
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized @fetch(from: "@localizedVariantsAdapterFactory.to().getLocalizationForLocale(#root, #language, #country, #variant)")
 }
 
 type CMMediaImpl implements CMMedia @inherit(from: ["CMTeasableImpl"]) {
@@ -386,13 +384,6 @@ type CMSettingsImpl implements CMSettings @inherit(from: ["CMLocalizedImpl"]) {
   id: ID! @fetch(from: "@graphQlLinkComposer.apply(#root).orElse(null)?.id")
   settings(paths: [[String]]): JSON @fetch(from: "#paths == null ? #this.settings : @structAdapter.to(#root).getWrappedInMap('settings',#paths, null)")
   identifier: String @fetch(from: "#this.identifier?:#this.name")
-}
-
-type CMProductImpl implements CMProduct @inherit(from: ["CMTeasableImpl"]) {
-  downloads: [CMDownload]
-  price: Float @fetch(from: "localSettings?.price")
-  productCode: String
-  productName: String
 }
 
 type CMQueryListImpl implements CMQueryList @inherit(from: ["CMDynamicListImpl"]) {
@@ -528,10 +519,13 @@ type PageGrid {
 
   # retrieves the page grid placements as a flat list, optionally filtered by name
   placements(names: [String]) :[PageGridPlacement]  @fetch(from: "getPlacements(#names)")
+  id: ID @fetch(from: "@graphQlLinkComposer.apply(#root.navigation).orElse(null)?.id")
 }
 
 type PageGridRow {
   placements: [PageGridPlacement!]
+  id: ID @fetch(from: "@graphQlLinkComposer.apply(#root.navigation).orElse(null)?.id")
+  rowId: Int!
 }
 
 type PageGridPlacement {
@@ -541,6 +535,7 @@ type PageGridPlacement {
   width: Int!
   viewtype: String
   items: [CMLinkable!]!
+  id: ID @fetch(from: "@graphQlLinkComposer.apply(#root.navigation).orElse(null)?.id")
 }
 
 type Point {
@@ -562,9 +557,8 @@ type TimeLine {
 }
 
 type TimeLineEntry {
-  position: Int
   startTimeMillis: Int
-  target: CMTeasable
+  link: CMTeasable
 }
 
 type TransformedHotZone {

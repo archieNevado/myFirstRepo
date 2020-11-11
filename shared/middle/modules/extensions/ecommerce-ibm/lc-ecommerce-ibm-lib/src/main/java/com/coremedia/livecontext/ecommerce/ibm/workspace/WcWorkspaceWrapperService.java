@@ -15,7 +15,11 @@ import static java.util.Collections.singletonList;
 
 /**
  * A service that uses the rest connector to get workspaces from ibm wcs.
+ *
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
  */
+@Deprecated
 public class WcWorkspaceWrapperService extends AbstractWcWrapperService {
 
   private static final WcRestServiceMethod<Map, Void> FIND_ALL_WORKSPACES = WcRestServiceMethod

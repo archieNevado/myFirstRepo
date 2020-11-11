@@ -37,6 +37,11 @@ import static com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper.findS
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.util.Collections.emptyList;
 
+/**
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
+@Deprecated
 public class CategoryImpl extends AbstractIbmCommerceBean implements Category, CommerceObject {
 
   private static final Logger LOG = LoggerFactory.getLogger(CategoryImpl.class);

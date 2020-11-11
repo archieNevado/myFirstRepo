@@ -25,9 +25,9 @@ This is an application cookbook. It provides recipes to install:
 
 # Attributes
 
-* `node['blueprint']['solr']['version']` - define solr version to use. Defaults to `8.4.1`.
+* `node['blueprint']['solr']['version']` - define solr version to use. Defaults to `8.6.3`.
 * `node['blueprint']['solr']['url']` - define solr download url. Defaults to `http://archive.apache.org/dist/lucene/solr/#{node['blueprint']['solr']['version']}/solr-#{node['blueprint']['solr']['version']}.tgz`.
-* `node['blueprint']['solr']['checksum']` - define artifact checksum. Defaults to `ec39e1e024b2e37405149de41e39e875a39bf11a53f506d07d96b47b8d2a4301`.
+* `node['blueprint']['solr']['checksum']` - define artifact checksum. Defaults to `c24925f3e8103673c2fceaaff4a04d6f1ab12b4ffd67da36fbbd2aa9aaaa6b55`.
 * `node['blueprint']['solr']['solr_home']` - define solr home. Defaults to `/opt/coremedia/solr-home`.
 * `node['blueprint']['solr']['clean_solr_home_on_update']` - clean solr home on update. Defaults to `true`.
 * `node['blueprint']['solr']['solr_data_dir']` - define solr index data directory. Defaults to `/var/coremedia/solr-data`.

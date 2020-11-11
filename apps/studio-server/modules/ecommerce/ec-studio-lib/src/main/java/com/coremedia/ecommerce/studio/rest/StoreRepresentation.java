@@ -8,14 +8,11 @@ import com.coremedia.ecommerce.studio.rest.model.Workspaces;
 import com.coremedia.livecontext.ecommerce.catalog.Catalog;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.rest.linking.RemoteBeanLink;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
+
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
@@ -62,7 +59,7 @@ public class StoreRepresentation extends AbstractCatalogRepresentation {
     return context.getStoreId();
   }
 
-  // The entries correspond to those of #getChildrenByName()
+  // The entries correspond to those of #getChildrenData()
   public List<Object> getTopLevel() {
     List<Object> topLevel = new ArrayList<>();
 
@@ -85,11 +82,11 @@ public class StoreRepresentation extends AbstractCatalogRepresentation {
   }
 
   // The entries correspond to those of #getTopLevel()
-  public Map<String, ChildRepresentation> getChildrenByName() {
-    Map<String, ChildRepresentation> result = new LinkedHashMap<>();
+  public List<ChildRepresentation> getChildrenData() {
+    List<ChildRepresentation> result = new ArrayList<>();
 
     if (isMarketingEnabled()) {
-      result.put("store-marketing", new ChildRepresentation("store-marketing", getMarketing()));
+      result.add(new ChildRepresentation("store-marketing", getMarketing()));
     }
 
     List<Catalog> catalogs = getCatalogs();
@@ -97,10 +94,10 @@ public class StoreRepresentation extends AbstractCatalogRepresentation {
       for (Catalog catalog : catalogs) {
         String catalogName = catalog.getName().value();
         //let the root category of the catalog represent it as the root category can be augmented etc.
-        result.put(catalogName, new ChildRepresentation(catalogName, catalog.getRootCategory()));
+        result.add(new ChildRepresentation(catalogName, catalog.getRootCategory()));
       }
     } else {
-      result.put("root-category", new ChildRepresentation("root-category", rootCategory));
+      result.add(new ChildRepresentation("root-category", rootCategory));
     }
 
     return result;

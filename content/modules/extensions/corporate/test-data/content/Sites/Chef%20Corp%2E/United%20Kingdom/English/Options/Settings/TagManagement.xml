@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMSettings folder="/Sites/Chef Corp./United Kingdom/English/Options/Settings" name="TagManagement" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
+<externalRefId></externalRefId>
+<locale>en-GB</locale>
+<master>
+<link href="../../../../United%20States/English/Options/Settings/TagManagement.xml" path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/TagManagement"/>
+</master>
+<settings>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StructListProperty Name="TagManagement">
+<Struct>
+<MarkupProperty Name="head" RequiredGrammar="coremedia-richtext-1.0" Grammar="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p>&lt;!-- Insert Tag Manager head script here --&gt;</p></div></MarkupProperty>
+<MarkupProperty Name="bodyStart" RequiredGrammar="coremedia-richtext-1.0" Grammar="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p>&lt;!-- Insert Tag Manager body script here --&gt;</p></div></MarkupProperty>
+<MarkupProperty Name="bodyEnd" RequiredGrammar="coremedia-richtext-1.0" Grammar="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p>&lt;!-- Insert Tag Manager body script here --&gt;</p></div></MarkupProperty>
+</Struct>
+</StructListProperty>
+</Struct>
+</settings>
+<identifier></identifier>
+</CMSettings>

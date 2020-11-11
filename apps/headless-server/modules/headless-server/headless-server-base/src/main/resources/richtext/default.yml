@@ -21,7 +21,7 @@ handlerSets:
       eventMatcher:  !Matcher {qname: *sub}
       outputHandler: !ElementWriter {writeElement: true, writeCharacters: true}
     - !Handler
-      eventMatcher:  !Matcher {qname: *sub}
+      eventMatcher:  !Matcher {qname: *sup}
       outputHandler: !ElementWriter {writeElement: true, writeCharacters: true}
     - !Handler
       eventMatcher:  !Matcher {qname: *em}

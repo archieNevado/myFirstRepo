@@ -23,13 +23,10 @@
     "bricks/*"
   ],
   "engines": {
-    "node": ">=12"
+    "node": ">=14"
   },
   "dependencies": {
     "lerna": "^3.22.1"
-  },
-  "resolutions": {
-    "dot-prop": "^5.2.0"
   },
   "coremedia": {
     "type": "workspace",

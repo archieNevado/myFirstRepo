@@ -3,8 +3,8 @@ import com.coremedia.blueprint.personalization.editorplugin.plugin.AddSiteSpecif
 import com.coremedia.cms.editor.configuration.StudioPlugin;
 import com.coremedia.cms.editor.sdk.IEditorContext;
 import com.coremedia.cms.editor.sdk.editorContext;
-import com.coremedia.cms.editor.sdk.sites.Site;
-import com.coremedia.cms.editor.sdk.sites.SitesService;
+import com.coremedia.cms.studio.multisite.models.sites.Site;
+import com.coremedia.cms.studio.multisite.models.sites.SitesService;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ecommerce.studio.model.CatalogObjectPropertyNames;
 import com.coremedia.ecommerce.studio.model.Contracts;

@@ -13,7 +13,10 @@ import mx.resources.ResourceManager;
 /**
  * This action is intended to be used from within EXML, only.
  *
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
  */
+[Deprecated]
 [ResourceBundle('com.coremedia.livecontext.studio.LivecontextStudioPlugin')]
 public class OpenInManagementCenterActionBase extends LiveContextCatalogObjectAction {
 

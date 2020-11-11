@@ -26,7 +26,11 @@ import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreCon
 
 /**
  * Provides commerce storefront links
+ *
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
  */
+@Deprecated
 public class PreviewTokenService implements InitializingBean {
 
   private static final Logger LOG = LoggerFactory.getLogger(PreviewTokenService.class);

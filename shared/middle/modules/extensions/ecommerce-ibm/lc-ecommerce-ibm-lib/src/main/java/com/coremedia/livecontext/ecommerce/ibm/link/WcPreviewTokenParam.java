@@ -5,7 +5,11 @@ import com.coremedia.livecontext.ecommerce.ibm.login.LoginServiceImpl;
 /**
  * Parameter model for REST-PreviewToken
  * @see LoginServiceImpl
+ *
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
  */
+@Deprecated
 public class WcPreviewTokenParam {
 
   private String workspaceId;

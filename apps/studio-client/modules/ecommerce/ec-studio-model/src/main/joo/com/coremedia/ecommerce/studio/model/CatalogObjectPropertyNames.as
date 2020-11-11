@@ -145,10 +145,10 @@ public class CatalogObjectPropertyNames {
   public static const WORKSPACES:String = 'workspaces';
 
   /**
-   * @eventType childrenByName
-   * @see Category#getChildrenByName()
+   * @eventType childrenData
+   * @see Category#getChildrenData()
    */
-  public static const CHILDREN_BY_NAME:String = 'childrenByName';
+  public static const CHILDREN_DATA:String = 'childrenData';
 
   /**
    * @eventType subCategories
@@ -201,6 +201,11 @@ public class CatalogObjectPropertyNames {
    * Name of the facets attribute
    */
   public static const FACETS:String = 'facets';
+
+  /**
+   * Multi Preview Support
+   */
+  public static const PREVIEWS:String = 'previews';
 
   /**
    * @private

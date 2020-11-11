@@ -1,6 +1,5 @@
 package com.coremedia.catalog.studio {
 
-import com.coremedia.blueprint.base.components.util.UserUtil;
 import com.coremedia.blueprint.studio.util.ContentInitializer;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
@@ -21,19 +20,19 @@ import com.coremedia.cms.editor.sdk.collectionview.tree.RepositoryTreeDragDropMo
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.preferences.PreferenceWindow;
 import com.coremedia.cms.editor.sdk.premular.ReferrerListPanel;
-import com.coremedia.cms.editor.sdk.sites.Site;
-import com.coremedia.cms.editor.sdk.util.MessageBoxUtilInternal;
 import com.coremedia.cms.editor.sdk.util.MetaStyleService;
+import com.coremedia.cms.editor.sdk.util.UserUtil;
+import com.coremedia.cms.studio.multisite.models.sites.Site;
 import com.coremedia.ecommerce.studio.catalogHelper;
 import com.coremedia.ecommerce.studio.components.preferences.CatalogPreferencesBase;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.helper.StoreUtil;
 import com.coremedia.ecommerce.studio.model.Category;
 import com.coremedia.ecommerce.studio.model.Store;
-import com.coremedia.ui.data.RemoteBean;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
+import com.coremedia.ui.messagebox.MessageBoxUtilInternal;
 import com.coremedia.ui.util.EventUtil;
 
 import ext.Ext;

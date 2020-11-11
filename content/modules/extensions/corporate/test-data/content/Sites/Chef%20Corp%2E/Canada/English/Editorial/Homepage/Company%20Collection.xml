@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMCollection folder="/Sites/Chef Corp./Canada/English/Editorial/Homepage" name="Company Collection" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
+<externalRefId></externalRefId>
+<locale>en-CA</locale>
+<master>
+<link href="../../../../United%20Kingdom/English/Editorial/Homepage/Company%20Collection.xml" path="/Sites/Chef%20Corp%2E/United%20Kingdom/English/Editorial/Homepage/Company%20Collection"/>
+</master>
+<viewtype>
+<link href="../../Options/Viewtypes/CMChannel/square.xml" path="/Sites/Chef%20Corp%2E/Canada/English/Options/Viewtypes/CMChannel/square"/>
+</viewtype>
+<linkedSettings>
+</linkedSettings>
+<resourceBundles2>
+</resourceBundles2>
+<segment></segment>
+<title></title>
+<htmlTitle></htmlTitle>
+<keywords></keywords>
+<htmlDescription></htmlDescription>
+<subjectTaxonomy>
+</subjectTaxonomy>
+<locationTaxonomy>
+</locationTaxonomy>
+<contexts>
+</contexts>
+<teaserTitle>Company</teaserTitle>
+<pictures>
+</pictures>
+<related>
+</related>
+<authors>
+</authors>
+<items>
+<link href="../../Navigation/Company/Company%20Page.xml" path="/Sites/Chef%20Corp%2E/Canada/English/Navigation/Company/Company%20Page"/>
+<link href="../../Navigation/Company/About/About%20Page.xml" path="/Sites/Chef%20Corp%2E/Canada/English/Navigation/Company/About/About%20Page"/>
+<link href="../../Navigation/Company/Careers/Careers%20Page.xml" path="/Sites/Chef%20Corp%2E/Canada/English/Navigation/Company/Careers/Careers%20Page"/>
+<link href="../../Navigation/Company/Press/Press%20Page.xml" path="/Sites/Chef%20Corp%2E/Canada/English/Navigation/Company/Press/Press%20Page"/>
+<link href="../../Navigation/Company/Investor%20Relations/Investor%20Relations%20Page.xml" path="/Sites/Chef%20Corp%2E/Canada/English/Navigation/Company/Investor%20Relations/Investor%20Relations%20Page"/>
+</items>
+</CMCollection>

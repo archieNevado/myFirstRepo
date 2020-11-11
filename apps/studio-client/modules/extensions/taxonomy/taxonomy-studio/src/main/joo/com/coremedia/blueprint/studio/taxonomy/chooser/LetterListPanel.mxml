@@ -5,7 +5,6 @@
                            xmlns="exml:ext.config"
                            xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
                            xmlns:ui="exml:com.coremedia.ui.config"
-                           itemId="{config.selectedNodeId}"
                            scrollable="true">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.icons.CoreIcons')]
@@ -14,6 +13,7 @@
     import com.coremedia.ui.data.ValueExpression;
 
     public static const xtype:String = "com.coremedia.blueprint.studio.config.taxonomy.letterListPanel";
+    public static const ITEM_ID:String = "letterListPanel";
 
     private var config:LetterListPanel;
 
@@ -36,12 +36,6 @@
      */
     [Bindable]
     public var selectedNodeList:ValueExpression;
-
-    /**
-     * Contains the row that children should be displayed next.
-     */
-    [Bindable]
-    public var selectedNodeId:ValueExpression;
 
     /**
      * The value expression that contains the active selected site by this combo.
@@ -68,19 +62,29 @@
                               forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
   </local:plugins>
   <local:items>
-    <Container flex="1" autoScroll="true" itemId="{ITEMS_CONTAINER_ITEM_ID}">
-      <plugins>
-        <ui:BindComponentsPlugin valueExpression="{getListValuesExpression()}"
-                                 configBeanParameterName="content"
-                                 clearBeforeUpdate="true"
-                                 reuseComponents="false">
-          <ui:template>
-            <local:LetterListItemPanel selectedNodeList="{config.selectedNodeList}"
-                                       letterListPanel="{this}"
-                                       singleSelection="{config.singleSelection}"/>
-          </ui:template>
-        </ui:BindComponentsPlugin>
-      </plugins>
+    <Container flex="1" autoScroll="true">
+      <items>
+        <DataView itemSelector="{LIST_ELEMENT_ENTRY.getCSSSelector()}"
+                  itemId="{ITEMS_CONTAINER_ITEM_ID}"
+                  singleSelect="true"
+                  multiSelect="false"
+                  deferEmptyText="true"
+                  tpl="{TEMPLATE}">
+          <plugins>
+            <ui:BindListPlugin bindTo="{getListValuesExpression()}">
+              <ui:fields>
+                <ui:DataField name="letter"/>
+                <ui:DataField name="name"/>
+                <ui:DataField name="leaf"/>
+                <ui:DataField name="ref"/>
+                <ui:DataField name="added"/>
+                <ui:DataField name="renderControl"/>
+                <ui:DataField name="customCss" ifUnreadable=""/>
+              </ui:fields>
+            </ui:BindListPlugin>
+          </plugins>
+        </DataView>
+      </items>
       <layout>
         <layout_Anchor/>
       </layout>

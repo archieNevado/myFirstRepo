@@ -8,6 +8,11 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 
 import java.util.Map;
 
+/**
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
+@Deprecated
 public class AvailabilityByIdsCacheKey extends AbstractCommerceCacheKey<Map<String, Object>> {
 
   private WcAvailabilityWrapperService wrapperService;

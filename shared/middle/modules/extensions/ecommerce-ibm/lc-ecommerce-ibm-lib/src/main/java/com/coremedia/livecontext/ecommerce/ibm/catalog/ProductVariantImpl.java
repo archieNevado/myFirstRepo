@@ -11,19 +11,21 @@ import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
-import com.coremedia.livecontext.ecommerce.ibm.inventory.AvailabilityInfoImpl;
-import com.coremedia.livecontext.ecommerce.inventory.AvailabilityInfo;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static org.springframework.util.Assert.notNull;
 
+/**
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
+@Deprecated
 public class ProductVariantImpl extends ProductBase implements ProductVariant {
 
   @NonNull
@@ -69,23 +71,6 @@ public class ProductVariantImpl extends ProductBase implements ProductVariant {
       return (Product) getCommerceBeanFactory().createBeanFor(commerceId, getContext());
     }
     return null;
-  }
-
-  @Override
-  @Nullable
-  public AvailabilityInfo getAvailabilityInfo() {
-    Map<ProductVariant, AvailabilityInfo> availabilityMap = getAvailabilityMap();
-    for (final Map.Entry<ProductVariant, AvailabilityInfo> productVariantAvailabilityInfoEntry : availabilityMap.entrySet()) {
-      if (productVariantAvailabilityInfoEntry.getKey().getExternalId().equals(getExternalId())) {
-        return productVariantAvailabilityInfoEntry.getValue();
-      }
-    }
-    // fallback if no availability information were found.
-    Map<String, Object> wcInfo = new HashMap<>(1);
-    wcInfo.put("availableQuantity", 0.0F);
-    wcInfo.put("unitOfMeasure", "C62");
-    wcInfo.put("inventoryStatus", "Unavailable");
-    return new AvailabilityInfoImpl(wcInfo);
   }
 
   @Override

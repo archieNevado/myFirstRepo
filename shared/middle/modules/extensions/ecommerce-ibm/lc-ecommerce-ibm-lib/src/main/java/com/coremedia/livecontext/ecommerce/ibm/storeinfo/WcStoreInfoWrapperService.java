@@ -3,11 +3,11 @@ package com.coremedia.livecontext.ecommerce.ibm.storeinfo;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractWcWrapperService;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestServiceMethod;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collections;
 import java.util.Map;
 
@@ -16,7 +16,11 @@ import static java.util.Collections.emptyMap;
 
 /**
  * A service that uses the getRestConnector() to get all store infos in wcs.
+ *
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
  */
+@Deprecated
 class WcStoreInfoWrapperService extends AbstractWcWrapperService {
 
   private static final Logger LOG = LoggerFactory.getLogger(WcStoreInfoWrapperService.class);

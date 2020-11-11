@@ -1,5 +1,7 @@
 package com.coremedia.blueprint.studio.taxonomy.chooser {
 
+import com.coremedia.blueprint.studio.taxonomy.TaxonomyUtil;
+
 import ext.button.Button;
 
 /**
@@ -9,7 +11,7 @@ public class TextLinkButtonBase extends Button {
 
   public function TextLinkButtonBase(config:TextLinkButton = null) {
     if(config.node) {
-      var name:String = config.node.getName();
+      var name:String = TaxonomyUtil.escapeHTML(config.node.getName());
       if(config.weight) {
         name = name + " (" + config.weight + ")";
       }

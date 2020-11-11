@@ -2,7 +2,6 @@ package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceBean;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
-import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
 import com.coremedia.ecommerce.studio.rest.model.ChildRepresentation;
 import com.coremedia.ecommerce.studio.rest.model.Facets;
 import com.coremedia.ecommerce.studio.rest.model.Store;
@@ -11,6 +10,7 @@ import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.xml.Markup;
@@ -22,10 +22,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * A catalog {@link Category} object as a RESTful resource.
@@ -64,8 +65,17 @@ public class CategoryResource extends CommerceBeanResource<Category> {
     }
     representation.setThumbnailUrl(RepresentationHelper.modifyAssetImageUrl(entity.getThumbnailUrl(), getContentRepositoryResource().getContentRepository()));
     representation.setParent(entity.getParent());
-    representation.setSubCategories(entity.getChildren());
+
+    // all subcategories must be loaded because later we test whether they are virtual (by reading their parent)
+    // only loadable categories should be taken
+    List<Category> subCategories = entity.getChildren().stream()
+            .map(this::ensureCategoryIsLoadable)
+            .flatMap(Optional::stream)
+            .collect(toList());
+
+    representation.setSubCategories(subCategories);
     representation.setProducts(entity.getProducts());
+
     representation.setStore(new Store(entity.getContext()));
     AbstractCommerceBean.getCatalog(entity).ifPresent(representation::setCatalog);
     representation.setDisplayName(entity.getDisplayName());
@@ -77,14 +87,19 @@ public class CategoryResource extends CommerceBeanResource<Category> {
     representation.setPictures(entity.getPictures());
     representation.setDownloads(entity.getDownloads());
 
-    Map<String, ChildRepresentation> result = new LinkedHashMap<>();
+    List<ChildRepresentation> result = new ArrayList<>();
     for (CommerceBean child : children) {
       ChildRepresentation childRepresentation = new ChildRepresentation();
       childRepresentation.setChild(child);
       childRepresentation.setDisplayName(child.getExternalId());
-      result.put(CommerceIdFormatterHelper.format(child.getId()), childRepresentation);
+      if (child instanceof Category) {
+        Category childParent = ((Category)child).getParent();
+        // isVirtual is true if the child means to belong to another parent than me
+        childRepresentation.setIsVirtual(childParent != null && !entity.getExternalId().equals(childParent.getExternalId()));
+      }
+      result.add(childRepresentation);
     }
-    representation.setChildrenByName(result);
+    representation.setChildrenData(result);
 
     representation.setContent(getContent(params));
 
@@ -121,5 +136,15 @@ public class CategoryResource extends CommerceBeanResource<Category> {
   @Qualifier("categoryAugmentationService")
   public void setAugmentationService(AugmentationService augmentationService) {
     super.setAugmentationService(augmentationService);
+  }
+
+  private Optional<Category> ensureCategoryIsLoadable(Category category) {
+    try {
+      category.load();
+    } catch (CommerceException e) {
+      LOG.warn("Cannot load category with id '{}' ({})", category.getId(), e.getMessage());
+      return Optional.empty();
+    }
+    return Optional.of(category);
   }
 }

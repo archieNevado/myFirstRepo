@@ -60,6 +60,11 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static org.apache.commons.collections4.map.LazyMap.lazyMap;
 
+/**
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
+@Deprecated
 public class CatalogServiceImpl extends AbstractIbmService implements CatalogService {
 
   private static final Logger LOG = LoggerFactory.getLogger(CatalogServiceImpl.class);

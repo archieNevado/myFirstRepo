@@ -35,4 +35,12 @@
     <a href="https://{{ getv "/commerce/sfcc/host" }}/on/demandware.store/Sites-Site/default/ViewApplication-DisplayWelcomePage" target="_blank" data-cm-test="">Salesforce Business Manager</a></li>
 </ul>
 {{ end }}
+
+{{ if eq (getv "/commerce/commercetools/enabled" "true") "true" }}
+<h3>Commercetools</h3>
+<ul>
+  <li>
+    <a href="https://mc.{{ getv "/commerce/commercetools/host" }}" target="_blank" data-cm-test="">Commercetools Merchant Center</a></li>
+</ul>
+{{ end }}
 </div>

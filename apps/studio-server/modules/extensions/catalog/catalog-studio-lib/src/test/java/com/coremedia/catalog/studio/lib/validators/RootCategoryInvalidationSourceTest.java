@@ -23,6 +23,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
@@ -191,8 +192,8 @@ public class RootCategoryInvalidationSourceTest {
     }
 
     @Bean
-    RootCategoryInvalidationSource testling() {
-      RootCategoryInvalidationSource rootCategoryInvalidationSource = new RootCategoryInvalidationSource();
+    RootCategoryInvalidationSource testling(ApplicationContext applicationContext) {
+      RootCategoryInvalidationSource rootCategoryInvalidationSource = new RootCategoryInvalidationSource(applicationContext);
       rootCategoryInvalidationSource.setCapacity(3);
       return rootCategoryInvalidationSource;
     }

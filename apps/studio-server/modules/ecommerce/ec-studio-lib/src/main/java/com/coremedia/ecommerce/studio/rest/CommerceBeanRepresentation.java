@@ -17,6 +17,7 @@ public abstract class CommerceBeanRepresentation extends AbstractCatalogRepresen
   private Map<String, Object> customAttributes;
   private String previewUrl;
   private List<Content> visuals;
+  private CommerceBeanPreviews previews;
 
   /*
     non-null if content backed commerce object
@@ -71,5 +72,13 @@ public abstract class CommerceBeanRepresentation extends AbstractCatalogRepresen
   @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
   public List<Content> getVisuals() {
     return visuals;
+  }
+
+  public void setPreviews(CommerceBeanPreviews commerceBeanPreviews) {
+    this.previews = commerceBeanPreviews;
+  }
+
+  public CommerceBeanPreviews getPreviews() {
+    return previews;
   }
 }

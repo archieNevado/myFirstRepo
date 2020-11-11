@@ -17,8 +17,12 @@ import java.util.stream.Collectors;
  * This class encapsulates convenience methods to transform data maps
  * retrieved by the good old BOD handlers for categories and products
  * to the new leading search handler format.
+ *
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
  */
 @DefaultAnnotation(NonNull.class)
+@Deprecated
 public class DataMapTransformationHelper {
   private static final Map<String, String> bodKeyMappings = ImmutableMap.<String, String>builder()
           .put("productType", "catalogEntryTypeCode")

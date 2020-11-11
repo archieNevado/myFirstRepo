@@ -14,10 +14,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
+/**
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
 @Configuration
 @ImportResource(
         value = "classpath:/framework/spring/livecontext-services.xml",
         reader = ResourceAwareXmlBeanDefinitionReader.class)
+@Deprecated
 public class StoreFrontConfiguration {
 
   @Value("${livecontext.ibm.wcs.default.url}")

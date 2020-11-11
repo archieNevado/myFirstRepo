@@ -263,6 +263,22 @@
   </tr>
   {{ end }}
 
+  {{ if eq (getv "/commerce/commercetools/enabled" "true") "true" }}
+  <tr>
+    <td><a href="http://{{ getv "/environment/fqdn" }}:44481/actuator" data-cm-test="">Commerce Adapter Commercetools</a></td>
+    <td>
+      <a href="/commerce-adapter-commercetools/info" target="_blank">Info</a> ·
+      <a href="/commerce-adapter-commercetools/logfile" target="_blank">Logfile</a> ·
+      <a href="/commerce-adapter-commercetools/env" target="_blank">Environment</a> ·
+      <a href="/commerce-adapter-commercetools/configprops" target="_blank">Config</a> ·
+      <a href="/commerce-adapter-commercetools/health" target="_blank" class="health_check">Health</a>
+    </td>
+    <td>
+      <span class="check_unknown">Unknown</span>
+    </td>
+  </tr>
+  {{ end }}
+
   </tbody>
 </table>
 </div>

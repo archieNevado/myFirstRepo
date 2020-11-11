@@ -136,11 +136,11 @@ public class SitemapTriggerImpl implements SitemapTrigger, ServletContextAware {
   }
 
   /**
-   * Defaults to 49080, must be the port of this particular servlet container.
+   * Must be the port of this particular servlet container.
    * No proxy, because we run "/internal" requests which are blocked by proxies.
    */
-  public void setMyOwnPort(String myOwnPort) {
-    this.myOwnPort = Integer.parseInt(myOwnPort);
+  public void setMyOwnPort(int myOwnPort) {
+    this.myOwnPort = myOwnPort;
   }
 
   @Override

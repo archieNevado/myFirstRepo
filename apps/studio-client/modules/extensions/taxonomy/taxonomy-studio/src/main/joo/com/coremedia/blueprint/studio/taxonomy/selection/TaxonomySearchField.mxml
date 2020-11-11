@@ -18,8 +18,8 @@
                                matchFieldWidth="false"
                                pageSize="0"
                                selectOnFocus="true"
-                               emptyText="{getEmptyTextText(config.bindTo)}"
-                               ariaLabel="{getEmptyTextText(config.bindTo)}"
+                               emptyText="{getEmptyTextText(config)}"
+                               ariaLabel="{getEmptyTextText(config)}"
                                displayField="{'name'}"
                                validator="{tagPrefixValidValidator}">
   <fx:Metadata>

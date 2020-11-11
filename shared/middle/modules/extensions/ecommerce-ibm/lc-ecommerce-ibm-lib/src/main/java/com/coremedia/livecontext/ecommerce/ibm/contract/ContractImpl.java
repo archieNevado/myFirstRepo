@@ -13,6 +13,11 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
+@Deprecated
 public class ContractImpl extends AbstractIbmCommerceBean implements Contract {
 
   private Map<String, Object> delegate;

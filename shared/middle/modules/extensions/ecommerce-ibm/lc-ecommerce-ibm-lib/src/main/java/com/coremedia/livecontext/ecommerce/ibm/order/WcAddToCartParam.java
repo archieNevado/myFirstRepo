@@ -4,7 +4,11 @@ import java.util.List;
 
 /**
  * Parameter model for REST update shopping cart call
+ *
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
  */
+@Deprecated
 public class WcAddToCartParam {
 
   private List<OrderItem> orderItem;

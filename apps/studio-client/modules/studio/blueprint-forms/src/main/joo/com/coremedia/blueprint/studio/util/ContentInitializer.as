@@ -5,8 +5,8 @@ import com.coremedia.cap.content.ContentProperties;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.util.TeaserOverlayManager;
-import com.coremedia.cms.editor.sdk.sites.Site;
-import com.coremedia.cms.editor.sdk.sites.SitesService;
+import com.coremedia.cms.studio.multisite.models.sites.Site;
+import com.coremedia.cms.studio.multisite.models.sites.SitesService;
 
 import ext.Ext;
 

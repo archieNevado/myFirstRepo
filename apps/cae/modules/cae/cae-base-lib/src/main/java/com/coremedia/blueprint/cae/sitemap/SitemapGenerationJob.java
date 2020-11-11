@@ -20,7 +20,7 @@ public class SitemapGenerationJob implements SmartLifecycle {
 
   private static final int DAILY = 24 * 60;
 
-  // formats of the blueprint.sitemap.starttime property value
+  // formats of the cae.sitemap.starttime property value
   private static final String STARTTIME_DISABLE = "-";
   private static final String STARTTIME_RELATIVE_PREFIX = "+";
   private static final String STARTTIME_TIME_OF_DAY_FORMAT = "HH:mm";

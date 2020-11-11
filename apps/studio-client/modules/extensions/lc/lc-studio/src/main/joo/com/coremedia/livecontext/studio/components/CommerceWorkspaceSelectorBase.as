@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.studio.components {
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.cms.editor.sdk.editorContext;
-import com.coremedia.cms.editor.sdk.sites.Site;
+import com.coremedia.cms.studio.multisite.models.sites.Site;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.model.Store;
 import com.coremedia.ecommerce.studio.model.Workspace;
@@ -14,6 +14,11 @@ import ext.form.field.IField;
 
 import mx.resources.ResourceManager;
 
+/**
+ * @deprecated This class is part of the commerce integration "workspaces support" that is not
+ * supported by the Commerce Hub architecture. It will be removed or changed in the future.
+ */
+[Deprecated]
 [ResourceBundle('com.coremedia.livecontext.studio.LivecontextStudioPlugin')]
 public class CommerceWorkspaceSelectorBase extends LocalComboBox{
 

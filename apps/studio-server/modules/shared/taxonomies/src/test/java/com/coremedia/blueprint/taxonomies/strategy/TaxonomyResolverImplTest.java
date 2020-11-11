@@ -4,11 +4,13 @@ import com.coremedia.blueprint.taxonomies.Taxonomy;
 import com.coremedia.blueprint.taxonomies.TaxonomyNode;
 import com.coremedia.blueprint.taxonomies.TaxonomyResolver;
 import com.coremedia.blueprint.taxonomies.cycleprevention.TaxonomyCycleValidator;
+import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.rest.cap.content.search.SearchService;
+import com.coremedia.rest.cap.content.search.SearchServiceResult;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +26,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -31,6 +34,11 @@ import static com.coremedia.blueprint.taxonomies.strategy.TaxonomyCreator.CM_TAX
 import static com.coremedia.blueprint.taxonomies.strategy.TaxonomyCreator.GLOBAL_CONFIG_PATH;
 import static com.coremedia.blueprint.taxonomies.strategy.TaxonomyCreator.SITE_CONFIG_PATH;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 
 /**
@@ -43,6 +51,10 @@ class TaxonomyResolverImplTest {
   private final SitesService sitesService;
   private final ContentRepository contentRepository;
   private final TaxonomyCreator taxonomyCreator;
+
+  private TaxonomyResolver resolver;
+  private Content content;
+  private SearchService searchService;
 
   private String testMethodName;
   private Site site1;
@@ -92,10 +104,24 @@ class TaxonomyResolverImplTest {
   @SpringJUnitConfig(classes = StrategyTestConfiguration.class)
   class GetTaxonomiesMethod {
 
-    private TaxonomyResolver resolver;
-
     @BeforeEach
     void setUp() {
+      searchService = Mockito.mock(SearchService.class);
+      SearchServiceResult result = Mockito.mock(SearchServiceResult.class);
+      content = Mockito.mock(Content.class);
+      when(content.getId()).thenReturn(IdHelper.formatContentId(123));
+      when(result.getHits()).thenReturn(Collections.singletonList(content));
+
+      when(searchService.search(any(), anyInt(),
+              anyList(),
+              any(Content.class),
+              anyBoolean(),
+              anyList(),
+              anyBoolean(),
+              anyList(),
+              anyList(),
+              anyList())).thenReturn(result);
+
       resolver = createResolver(Map.of());
     }
 
@@ -108,6 +134,7 @@ class TaxonomyResolverImplTest {
     @Test
     void shouldReturnGlobalTaxonomies() {
       String taxonomyName = "global_" + testMethodName;
+      when(content.getName()).thenReturn(taxonomyName);
       taxonomyCreator.createGlobalSubjectTaxonomy(taxonomyName);
       Collection<Taxonomy> taxonomies = resolver.getTaxonomies();
       assertThat(taxonomies)
@@ -125,6 +152,8 @@ class TaxonomyResolverImplTest {
     @Test
     void shouldReturnSiteSpecificTaxonomies() {
       String taxonomyName = "site1_" + testMethodName;
+      when(content.getName()).thenReturn(taxonomyName);
+
       taxonomyCreator.createSiteSpecificSubjectTaxonomy(site1, taxonomyName);
       Collection<Taxonomy> taxonomies = resolver.getTaxonomies();
       assertThat(taxonomies)
@@ -266,10 +295,11 @@ class TaxonomyResolverImplTest {
   }
 
   private TaxonomyResolver createResolver(Map<String, String> aliasMapping) {
+
     return new TaxonomyResolverImpl(
             sitesService,
             contentRepository,
-            Mockito.mock(SearchService.class),
+            searchService,
             Mockito.mock(TaxonomyCycleValidator.class),
             aliasMapping,
             CM_TAXONOMY,

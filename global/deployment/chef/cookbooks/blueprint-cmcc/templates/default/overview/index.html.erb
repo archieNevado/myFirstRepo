@@ -5,6 +5,7 @@
 <%- wcs_version = node['blueprint']['ibm-wcs']['version'].to_s -%>
 <%- hybris_host = node['blueprint']['sap-hybris']['host'] -%>
 <%- sfcc_host = node['blueprint']['sfcc']['host'] -%>
+<%- commercetools_host = node['blueprint']['commercetools']['host'] -%>
 <head>
   <meta charset="UTF-8"/>
   <title>CoreMedia Content Cloud</title>
@@ -212,12 +213,12 @@
           <td rowspan="2">Storefront Reference Architecture</td>
           <td>Web</td>
           <td>
-            <a href="https://shop-preview-sfcc.<%= host %>/s/RefArchGlobal/home?preview=true" target="_blank" data-cm-test="cae">English</a> ·
-            <a href="https://shop-preview-sfcc.<%= host %>/s/RefArchGlobal/home?preview=true&lang=fr_FR" target="_blank" data-cm-test="cae">French</a>
+            <a href="https://shop-preview-sfcc.<%= host %>/on/demandware.store/Sites-RefArchGlobal-Site/en_GB?preview=true" target="_blank" data-cm-test="cae">English</a> ·
+            <a href="https://shop-preview-sfcc.<%= host %>/on/demandware.store/Sites-RefArchGlobal-Site/fr_FR?preview=true" target="_blank" data-cm-test="cae">French</a>
           </td>
           <td>
-            <a href="https://shop-sfcc.<%= host %>/s/RefArchGlobal/home" target="_blank" data-cm-test="cae">English</a> ·
-            <a href="https://shop-sfcc.<%= host %>/s/RefArchGlobal/home?lang=fr_FR" target="_blank" data-cm-test="cae">French</a>
+            <a href="https://shop-sfcc.<%= host %>/on/demandware.store/Sites-RefArchGlobal-Site/en_GB" target="_blank" data-cm-test="cae">English</a> ·
+            <a href="https://shop-sfcc.<%= host %>/on/demandware.store/Sites-RefArchGlobal-Site/fr_FR" target="_blank" data-cm-test="cae">French</a>
           </td>
         </tr>
         <tr>
@@ -235,12 +236,12 @@
           <td rowspan="2">SiteGenesis</td>
           <td>Web</td>
           <td>
-            <a href="https://shop-preview-sfcc.<%= host %>/s/SiteGenesisGlobal/home?preview=true" target="_blank" data-cm-test="cae">English</a> ·
-            <a href="https://shop-preview-sfcc.<%= host %>/s/SiteGenesisGlobal/home?preview=true&lang=fr_FR" target="_blank" data-cm-test="cae">French</a>
+            <a href="https://shop-preview-sfcc.<%= host %>/on/demandware.store/Sites-SiteGenesisGlobal-Site/en_GB?preview=true" target="_blank" data-cm-test="cae">English</a> ·
+            <a href="https://shop-preview-sfcc.<%= host %>/on/demandware.store/Sites-SiteGenesisGlobal-Site/fr_FR?preview=true" target="_blank" data-cm-test="cae">French</a>
           </td>
           <td>
-            <a href="https://shop-sfcc.<%= host %>/s/SiteGenesisGlobal/home" target="_blank" data-cm-test="cae">English</a> ·
-            <a href="https://shop-sfcc.<%= host %>/s/SiteGenesisGlobal/home?lang=fr_FR" target="_blank" data-cm-test="cae">French</a>
+            <a href="https://shop-sfcc.<%= host %>/on/demandware.store/Sites-SiteGenesisGlobal-Site/en_GB" target="_blank" data-cm-test="cae">English</a> ·
+            <a href="https://shop-sfcc.<%= host %>/on/demandware.store/Sites-SiteGenesisGlobal-Site/fr_FR" target="_blank" data-cm-test="cae">French</a>
           </td>
         </tr>
         <tr>
@@ -252,6 +253,34 @@
           <td>
             <a href="https://headless-server-live.<%= host %>/sitegenesis-en-gb/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">English</a> ·
             <a href="https://headless-server-live.<%= host %>/sitegenesis-en-gb-fr-fr/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">French</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <% end %>
+
+      <% if node['blueprint']['commercetools']['enabled'] %>
+      <h3>Commercetools</h3>
+      <table class="sites">
+        <thead>
+        <tr>
+          <th></th>
+          <th></th>
+          <th>Preview</th>
+          <th>Live</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td rowspan="2">Commercetools Sunrise</td>
+          <td>GraphQL</td>
+          <td>
+            <a href="https://headless-server-preview.<%= host %>/commercetools-en-us/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">English</a> ·
+            <a href="https://headless-server-preview.<%= host %>/commercetools-de/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">German</a>
+          </td>
+          <td>
+            <a href="https://headless-server-live.<%= host %>/commercetools-en-us/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">English</a> ·
+            <a href="https://headless-server-live.<%= host %>/commercetools-de/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank">German</a>
           </td>
         </tr>
         </tbody>
@@ -297,6 +326,13 @@
       <h3>Salesforce Commerce Cloud</h3>
       <ul>
         <li><a href="https://<%= sfcc_host %>/on/demandware.store/Sites-Site/default/ViewApplication-DisplayWelcomePage" target="_blank" data-cm-test="">Salesforce Business Manager</a></li>
+      </ul>
+      <% end %>
+
+      <% if node['blueprint']['commercetools']['enabled'] %>
+      <h3>Commercetools</h3>
+      <ul>
+        <li><a href="https://mc.<%= commercetools_host %>" target="_blank" data-cm-test="">Commercetools Merchant Center</a></li>
       </ul>
       <% end %>
 

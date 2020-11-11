@@ -9,10 +9,7 @@ import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public class RepresentationHelper {
 
@@ -22,19 +19,14 @@ public class RepresentationHelper {
     return copy;
   }
 
-  public static Map<String, ChildRepresentation> sortChildren(Map<String, ChildRepresentation> map) {
-    List<Map.Entry<String, ChildRepresentation>> list = new LinkedList<>(map.entrySet());
-    Collections.sort(list, new Comparator<Map.Entry<String, ChildRepresentation>>() {
-      public int compare(Map.Entry<String, ChildRepresentation> o1, Map.Entry<String, ChildRepresentation> o2) {
-        return (o1.getValue().getDisplayName()).compareTo(o2.getValue().getDisplayName());
+  public static List<ChildRepresentation> sortChildren(List<ChildRepresentation> list) {
+    List<ChildRepresentation> listCopy = new ArrayList<>(list);
+    Collections.sort(listCopy, new Comparator<ChildRepresentation>() {
+      public int compare(ChildRepresentation o1, ChildRepresentation o2) {
+        return (o1.getDisplayName()).compareTo(o2.getDisplayName());
       }
     });
-
-    Map<String, ChildRepresentation> result = new LinkedHashMap<>();
-    for (Map.Entry<String, ChildRepresentation> entry : list) {
-      result.put(entry.getKey(), entry.getValue());
-    }
-    return result;
+    return listCopy;
   }
 
   public static class IdComparator implements Comparator<Object> {

@@ -6,6 +6,11 @@ import org.springframework.scheduling.TaskScheduler;
 import java.util.Date;
 import java.util.concurrent.ScheduledFuture;
 
+/**
+ * @deprecated This class is part of the "push" implementation that is not supported by the
+ * Commerce Hub architecture. It will be removed or changed in the future.
+ */
+@Deprecated
 class ProgressRunnable implements Runnable {
   private JobContext jobContext;
   private ScheduledFuture<?> scheduledFuture;

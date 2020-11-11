@@ -7,6 +7,11 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
+/**
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
+@Deprecated
 public class CommerceUserIsLoggedInCacheKey extends AbstractCommerceCacheKey<Boolean> {
 
   private WcLoginWrapperService wrapperService;

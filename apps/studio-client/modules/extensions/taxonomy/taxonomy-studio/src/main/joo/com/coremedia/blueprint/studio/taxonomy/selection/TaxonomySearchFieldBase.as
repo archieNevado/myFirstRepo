@@ -208,8 +208,12 @@ public class TaxonomySearchFieldBase extends StatefulComboBox {
 
   //not static
   //noinspection JSMethodCanBeStatic
-  public function getEmptyTextText(ve:ValueExpression):String {
-    if (ve) {
+  public function getEmptyTextText(config:TaxonomySearchField):String {
+    if(config.emptyText) {
+      return emptyText;
+    }
+
+    if (config.bindTo) {
       return resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomySearch_empty_linklist_text');
     }
     return resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomySearch_empty_search_text');

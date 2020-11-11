@@ -9,15 +9,19 @@ import com.coremedia.livecontext.ecommerce.event.InvalidationEvent;
 import com.coremedia.livecontext.ecommerce.p13n.MarketingSpot;
 import com.coremedia.livecontext.ecommerce.p13n.Segment;
 import com.google.common.collect.ImmutableMap;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
+
 import java.util.Map;
 import java.util.Optional;
 
 /**
  * Mapping of invalidation event types and commerce bean types to commerce bean classes for
  * Studio REST resource linking.
+ *
+ * @deprecated This class is part of the "commerce cache invalidation" implementation that
+ * will be re-implemented by the Commerce Hub architecture and replaced in future releases.
  */
+@Deprecated
 class InvalidationEventTypeMapping {
 
   private static final Map<String, Class<? extends CommerceBean>> MAPPING = ImmutableMap.<String, Class<? extends CommerceBean>>builder()

@@ -5,7 +5,11 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  * Generates sitemap xml for a Commerce Search Crawler
+ *
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
  */
+@Deprecated
 class WcsCrawlSitemapRenderer extends AbstractSitemapRenderer {
   private static final String OPENING = "<urlset>";
   private static final String CLOSING = "</urlset>";

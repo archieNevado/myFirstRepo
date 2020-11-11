@@ -2,7 +2,11 @@ package com.coremedia.livecontext.ecommerce.ibm.login;
 
 /**
  * Commerce credentials for a registered user.
+ *
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
  */
+@Deprecated
 public class SimpleCommerceCredentials implements WcCredentials {
 
   private String  storeId;

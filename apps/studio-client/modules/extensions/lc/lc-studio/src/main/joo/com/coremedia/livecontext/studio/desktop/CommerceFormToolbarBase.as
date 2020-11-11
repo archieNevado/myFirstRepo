@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.studio.desktop {
 import com.coremedia.cms.editor.sdk.editorContext;
-import com.coremedia.cms.editor.sdk.sites.Site;
+import com.coremedia.cms.studio.multisite.models.sites.Site;
 import com.coremedia.ecommerce.studio.helper.AugmentationUtil;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ui.components.IconDisplayField;

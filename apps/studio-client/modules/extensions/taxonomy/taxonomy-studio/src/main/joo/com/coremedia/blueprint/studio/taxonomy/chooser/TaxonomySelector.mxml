@@ -7,7 +7,6 @@
         xmlns="exml:ext.config">
   <fx:Script><![CDATA[
     import com.coremedia.ui.data.ValueExpression;
-    import com.coremedia.ui.skins.ContainerSkin;
     import com.coremedia.ui.skins.ToolbarSkin;
 
     public static const xtype:String = "com.coremedia.blueprint.studio.config.taxonomy.taxonomySelector";
@@ -54,11 +53,12 @@
         <taxonomy:LetterListPanel activeLetters="{getActiveLettersExpression()}"
                                   selectedLetter="{getSelectedLetterExpression()}"
                                   selectedNodeList="{getSelectedNodeListValueExpression()}"
+                                  loadingExpression="{config.loadingExpression}"
                                   selectionExpression="{config.selectionExpression}"
                                   singleSelection="{config.singleSelection}"
-                                  selectedNodeId="{getSelectedNodeIdValueExpression()}"
+                                  nodePathExpression="{config.nodePathExpression}"
                                   taxonomyId="{config.taxonomyIdExpression.getValue()}"
-                                  itemId="letterpanel"
+                                  itemId="{LetterListPanel.ITEM_ID}"
                                   flex="1"
                                   forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
         <!--Selectable Letter List-->

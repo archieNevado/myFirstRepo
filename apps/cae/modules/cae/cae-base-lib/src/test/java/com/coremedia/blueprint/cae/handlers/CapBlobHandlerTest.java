@@ -92,8 +92,9 @@ public class CapBlobHandlerTest {
   @Test
   public void testLinkCMDownloadWithFilename() {
     String link = formatLink(contentTestHelper.getContentBean(24));
-    assertThat(link).isEqualTo("/resource/blob/24/0e0839ed3b4062cd4e0b8c3966137751/a-file%2520%3Fa%26b%20n.a%3Bm%3De.xyz");
+    assertThat(link).isEqualTo("/resource/blob/24/0e0839ed3b4062cd4e0b8c3966137751/a-file%20?a&b n.a;m=e.xyz");
   }
+
 
   /**
    * Tests link generation for CMDownload w/o blob

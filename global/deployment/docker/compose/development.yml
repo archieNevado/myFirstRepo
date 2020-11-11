@@ -416,6 +416,7 @@ services:
       traefik.backend: overview
       traefik.enable: "true"
       traefik.port: "80"
+      traefik.protocol: h2c
       traefik.frontend.entryPoints: http,https
       traefik.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost}
 

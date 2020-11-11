@@ -3,8 +3,9 @@ package com.coremedia.blueprint.studio.taxonomy.administration {
 import com.coremedia.blueprint.studio.taxonomy.TaxonomyNode;
 import com.coremedia.blueprint.studio.taxonomy.TaxonomyNodeFactory;
 import com.coremedia.blueprint.studio.taxonomy.TaxonomyNodeList;
+import com.coremedia.blueprint.studio.taxonomy.TaxonomyUtil;
 import com.coremedia.cms.editor.sdk.editorContext;
-import com.coremedia.cms.editor.sdk.sites.Site;
+import com.coremedia.cms.studio.multisite.models.sites.Site;
 import com.coremedia.ui.data.Bean;
 import com.coremedia.ui.data.Locale;
 import com.coremedia.ui.data.ValueExpression;
@@ -75,7 +76,7 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
       ddPlugin.dragZone['getDragText'] = getDragText;
       //DnD is causing focus issues, so we skip the focus handling here and simply call the parent
       ddPlugin.dragZone['onValidDrop'] = function (target:*, e:*, id:*):void {
-        this.callParent([target, e, id]);
+        ddPlugin.dragZone['callParent']([target, e, id]);
       };
       ddPlugin.dropZone.addToGroup('taxonomies');
       ddPlugin.dropZone.onNodeOver = taxonomyExplorerColumnDropTarget.notifyOnNodeOver;
@@ -220,7 +221,7 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
     for (var i:int = 0; i < nodeStore.getCount(); i++) {
       var nodeRecord:Model = nodeStore.getAt(i);
       if (nodeRecord.data.ref === node.getRef()) {
-        nodeRecord.data.name = node.getName();
+        nodeRecord.data.name = TaxonomyUtil.escapeHTML(node.getName());
         nodeRecord.data.type = node.getType();
         nodeRecord.data.root = node.isRoot();
         nodeRecord.data.extendable = node.isExtendable();
@@ -263,7 +264,7 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
     var selection:Array = globalSelectedNodeExpression.getValue();
     var names:Array = [];
     for each(var node:TaxonomyNode in selection) {
-      names.push(node.getName());
+      names.push(TaxonomyUtil.escapeHTML(node.getName()));
     }
     var text:String = names.join(", ");
     if (text.length > 100) {

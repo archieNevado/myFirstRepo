@@ -1,0 +1,29 @@
+query CommerceQuery($commerceId: String!, $siteId: String!) {
+  commerce {
+    commerceBean(commerceId: $commerceId, siteId: $siteId) {
+      externalId
+      __typename
+      locale
+      ...GridFragment
+    }
+  }
+}
+
+fragment GridFragment on HasPageGrid {
+  grid {
+    placements(names: ["header", "additional"]) {
+      name
+      items {
+        name type
+      }}
+    rows {
+      placements {
+        name
+        items {
+          name
+          type
+        }
+      }
+    }
+  }
+}

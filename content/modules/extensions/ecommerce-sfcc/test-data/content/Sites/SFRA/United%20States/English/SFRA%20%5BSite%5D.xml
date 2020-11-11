@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMSite folder="/Sites/SFRA/United States/English" name="SFRA [Site]" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
+<externalRefId></externalRefId>
+<locale>en-US</locale>
+<master>
+<link href="../../United%20Kingdom/English/SFRA%20%5BSite%5D.xml" path="/Sites/SFRA/United%20Kingdom/English/SFRA%20%5BSite%5D"/>
+</master>
+<id>cb7d13785a78602bd07ba5add8c5ee7e</id>
+<name>SFRA</name>
+<root>
+<link href="Navigation/SFRA.xml" path="/Sites/SFRA/United%20States/English/Navigation/SFRA"/>
+</root>
+<siteManagerGroup>manager-sfra-en-GB,administratoren</siteManagerGroup>
+<linkedSettings>
+<link href="Options/Settings/SiteSettings.xml" path="/Sites/SFRA/United%20States/English/Options/Settings/SiteSettings"/>
+</linkedSettings>
+</CMSite>

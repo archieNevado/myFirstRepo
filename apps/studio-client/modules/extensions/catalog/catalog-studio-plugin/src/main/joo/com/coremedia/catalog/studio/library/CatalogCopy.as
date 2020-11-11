@@ -1,6 +1,6 @@
 package com.coremedia.catalog.studio.library {
 import com.coremedia.cap.content.Content;
-import com.coremedia.cms.editor.sdk.util.MessageBoxUtilInternal;
+import com.coremedia.ui.messagebox.MessageBoxUtilInternal;
 
 import ext.StringUtil;
 

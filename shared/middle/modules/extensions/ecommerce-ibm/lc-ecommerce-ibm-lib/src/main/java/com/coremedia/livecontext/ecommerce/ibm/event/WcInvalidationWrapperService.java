@@ -4,9 +4,9 @@ import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractWcWrapperService;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestServiceMethod;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.http.HttpMethod;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +15,11 @@ import static java.util.Collections.emptyMap;
 
 /**
  * A service that uses the getRestConnector() to poll invalidation events.
+ *
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
  */
+@Deprecated
 class WcInvalidationWrapperService extends AbstractWcWrapperService {
 
   private static final WcRestServiceMethod<Map, Void> GET_CACHE_INVALIDATION = WcRestServiceMethod

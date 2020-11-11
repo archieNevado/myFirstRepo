@@ -220,9 +220,8 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
   public boolean isProductAvailable(@NonNull Product product) {
     // a product is available if at least one product variant is available
     return product.getContext().getConnection().getAvailabilityService()
-            .map(service -> quantitiesAvailable(product, service))
-            .orElseGet(Stream::empty)
-            .anyMatch(d -> d > 0.0);
+            .map(service -> quantitiesAvailable(product, service).anyMatch(d -> d > 0.0))
+            .orElse(true);
   }
 
   private static Stream<Float> quantitiesAvailable(@NonNull Product product,

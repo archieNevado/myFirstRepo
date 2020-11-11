@@ -24,8 +24,6 @@ import ext.dd.DropTarget;
 import ext.dd.ScrollManager;
 import ext.grid.GridPanel;
 
-import js.KeyEvent;
-
 /**
  * @private
  *
@@ -72,6 +70,12 @@ public class TaxonomyLinkListGridPanelBase extends GridPanel implements IValidat
   [Bindable]
   public var taxonomyIdExpression:ValueExpression;
 
+  [Bindable]
+  public var selectionMode:String;
+
+  [Bindable]
+  public var removeCallback:Function;
+
   private var dropTarget:DropTarget;
 
   /**
@@ -89,7 +93,6 @@ public class TaxonomyLinkListGridPanelBase extends GridPanel implements IValidat
     onValidationChanged();
   }
 
-
   override protected function afterRender():void {
     super.afterRender();
 
@@ -98,6 +101,14 @@ public class TaxonomyLinkListGridPanelBase extends GridPanel implements IValidat
 
       this.addListener("beforedestroy", onBeforeDestroy, this, {single: true});
     }
+
+    if(readOnlyValueExpression) {
+      readOnlyValueExpression.addChangeListener(readOnlyChanged);
+    }
+  }
+
+  private function readOnlyChanged():void {
+    refreshLinkList(true);
   }
 
   private function onValidationChanged():void {
@@ -121,6 +132,10 @@ public class TaxonomyLinkListGridPanelBase extends GridPanel implements IValidat
   }
 
   private function onBeforeDestroy():void {
+    if(readOnlyValueExpression) {
+      readOnlyValueExpression.removeChangeListener(readOnlyChanged);
+    }
+
     // if we previously registered with the scroll manager, unregister
     // it (if we don't, it will lead to problems in IE)
     ScrollManager.unregister(getScrollerDom());
@@ -191,9 +206,13 @@ public class TaxonomyLinkListGridPanelBase extends GridPanel implements IValidat
   /**
    * Executes after layout, we have to refresh the HTML too.
    */
-  private function refreshLinkList():void {
+  private function refreshLinkList(forceCommit:Boolean = false):void {
+    this.removeListener("afterlayout", refreshLinkList);
     for (var i:int = 0; i < getStore().getCount(); i++) {
       getStore().getAt(i).data.html = null;
+      if(forceCommit) {
+        getStore().getAt(i).commit(false);
+      }
     }
   }
 
@@ -204,7 +223,7 @@ public class TaxonomyLinkListGridPanelBase extends GridPanel implements IValidat
    */
   public function plusMinusClicked(nodeRef:String):void {
     if (isWritable()) {
-      TaxonomyUtil.removeNodeFromSelection(linkListWrapper.getVE(), nodeRef);
+      TaxonomyUtil.removeNodeFromSelection(linkListWrapper.getVE(), nodeRef, removeCallback);
     }
   }
 

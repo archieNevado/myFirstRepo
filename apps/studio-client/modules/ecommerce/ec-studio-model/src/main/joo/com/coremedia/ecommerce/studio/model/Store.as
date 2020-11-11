@@ -33,9 +33,9 @@ public interface Store extends CatalogObject {
   /**
    * Return a mapping of the name of top level categories to the categories themselves
    *
-   * @see CatalogObjectPropertyNames#CHILDREN_BY_NAME
+   * @see CatalogObjectPropertyNames#CHILDREN_DATA
    */
-  function getChildrenByName():Object;
+  function getChildrenData():Array;
 
   function getStoreId():String;
 

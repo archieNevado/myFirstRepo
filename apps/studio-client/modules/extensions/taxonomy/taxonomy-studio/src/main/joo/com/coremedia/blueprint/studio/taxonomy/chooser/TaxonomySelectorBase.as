@@ -10,8 +10,8 @@ import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
 import com.coremedia.ui.skins.IconDisplayFieldSkin;
-import com.coremedia.ui.util.EventUtil;
 
+import ext.Ext;
 import ext.button.Button;
 import ext.container.Container;
 
@@ -22,11 +22,17 @@ import js.Event;
  */
 [ResourceBundle('com.coremedia.icons.CoreIcons')]
 public class TaxonomySelectorBase extends Container {
+
+  [Bindable]
+  public var loadingExpression:ValueExpression;
+
+  [Bindable]
+  public var nodePathExpression:ValueExpression;
+
   private var ALPHABET:Array;
 
   private var activeLettersVE:ValueExpression;
   private var selectedLetterVE:ValueExpression;
-  private var selectedNodeIdVE:ValueExpression;
   private var selectedNodeListVE:ValueExpression;
 
   [Bindable]
@@ -86,6 +92,8 @@ public class TaxonomySelectorBase extends Container {
       alphabetPanel.add(alphaButton);
       buttonCache.push(alphaButton);
     }
+
+    nodePathExpression.addChangeListener(updateLevel);
   }
 
   /**
@@ -121,18 +129,6 @@ public class TaxonomySelectorBase extends Container {
   }
 
   /**
-   * Creates the value expression that contains the taxonomy node that should be added to the selection link list.
-   * @return
-   */
-  protected function getSelectedNodeIdValueExpression():ValueExpression {
-    if (!selectedNodeIdVE) {
-      selectedNodeIdVE = ValueExpressionFactory.create("nodeRef", beanFactory.createLocalBean());
-      selectedNodeIdVE.addChangeListener(updateLevel);
-    }
-    return selectedNodeIdVE;
-  }
-
-  /**
    * Creates the value expression that contains the taxonomy node list
    * @return
    */
@@ -158,7 +154,8 @@ public class TaxonomySelectorBase extends Container {
    * Fire when the user double clicked a node, so that the next sub-level/children are shown.
    */
   private function updateLevel():void {
-    var ref:String = getSelectedNodeIdValueExpression().getValue();
+    loadingExpression.setValue(true);
+    var ref:String = nodePathExpression.getValue();
     if (ref) {
       var content:Content = WorkArea.ACTIVE_CONTENT_VALUE_EXPRESSION.getValue();
       var siteId:String = editorContext.getSitesService().getSiteIdFor(content);
@@ -171,7 +168,7 @@ public class TaxonomySelectorBase extends Container {
           });
         });
         //we do not have to build the path for the root taxonomy, since this only exists of the taxonomy id value.
-        updatePathPanel(null);
+        updatePathPanel(null, null);
       }
       else {
         //update the list with a regular child
@@ -186,24 +183,28 @@ public class TaxonomySelectorBase extends Container {
           newSelection = activePathList.getNode(ref);
         }
         if (!newSelection.isLeaf()) {//do not show children of leafs, which are empty of course).
-          newSelection.loadChildren( false,function (list:TaxonomyNodeList):void {
-            getSelectedNodeListValueExpression().setValue(list);
-          });
+
+          //update the path of the current selection, this will build the path above the list
+          TaxonomyNodeFactory.loadPath(taxonomyId, ref, siteId,
+                  function (list:TaxonomyNodeList):void {
+                    updatePathPanel(list, function ():void {
+                      newSelection.loadChildren(false, function (list:TaxonomyNodeList):void {
+                        getSelectedNodeListValueExpression().setValue(list);
+                      });
+                    });
+                  });
         }
-        //update the path of the current selection, this will build the path above the list
-        TaxonomyNodeFactory.loadPath(taxonomyId, ref, siteId,
-                function (list:TaxonomyNodeList):void {
-                  updatePathPanel(list);
-                });
       }
     }
   }
 
   /**
    * Displays the current path selection.
-   * @param list
+   * @param list the node list to render the path for
+   * @param callback the optional callback called after update
    */
-  private function updatePathPanel(list:TaxonomyNodeList):void {
+  private function updatePathPanel(list:TaxonomyNodeList, callback:Function):void {
+    Ext.suspendLayouts();
     activePathList = list;
     var pathPanel:Container = getPathPanel();
     pathPanel.removeAll(true);
@@ -225,7 +226,9 @@ public class TaxonomySelectorBase extends Container {
 
     //add each level incl. root
     if (activePathList && activePathList.getNodes()) {
-      activePathList.getNodes().forEach(function (node:TaxonomyNode, index:int):void {
+      var nodes:Array = activePathList.getNodes();
+      var index:int = 0;
+      for each(var node:TaxonomyNode in nodes) {
         if (index > 0) {
           var ref:String = node.getRef().replace("/", "-").replace(/\s+/g, '');//format valid itemId
           if(index == activePathList.getNodes().length-1) {
@@ -250,17 +253,26 @@ public class TaxonomySelectorBase extends Container {
           // add root
           pathPanel.add(root);
         }
-      });
+
+        index++;
+      }
     }
     else {
       // add root
       pathPanel.add(root);
     }
 
+
+    Ext.resumeLayouts(true);
+
     //refresh the layout
     pathPanel.updateLayout();
     //scroll right
-    pathPanel.layout.overflowHandler.scrollTo(4000,true)
+    pathPanel.layout.overflowHandler.scrollTo(4000,true);
+
+    if(callback) {
+      callback();
+    }
   }
 
   //noinspection JSUnusedLocalSymbols
@@ -269,7 +281,7 @@ public class TaxonomySelectorBase extends Container {
    */
   private function doSetLevel(button:TextLinkButton, e:Event):void {
     var nodeRef:String = button.node.getRef();
-    getSelectedNodeIdValueExpression().setValue(nodeRef);
+    nodePathExpression.setValue(nodeRef);
   }
 
   /**

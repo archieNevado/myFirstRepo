@@ -30,6 +30,7 @@ user node['blueprint']['solr']['user'] do
   shell '/bin/bash'
   home extract_path
   gid node['blueprint']['solr']['group']
+  notifies :stop, 'service[solr]', :before
 end
 
 user_ulimit node['blueprint']['solr']['user'] do

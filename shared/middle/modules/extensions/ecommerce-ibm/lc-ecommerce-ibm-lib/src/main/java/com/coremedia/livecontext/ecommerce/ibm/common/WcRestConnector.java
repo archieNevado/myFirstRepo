@@ -87,6 +87,11 @@ import static org.apache.http.client.utils.HttpClientUtils.closeQuietly;
 
 // make the service call once
 
+/**
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
+@Deprecated
 public class WcRestConnector {
 
   private static final String ERROR_KEY_INVALID_COOKIE = "_ERR_INVALID_COOKIE";

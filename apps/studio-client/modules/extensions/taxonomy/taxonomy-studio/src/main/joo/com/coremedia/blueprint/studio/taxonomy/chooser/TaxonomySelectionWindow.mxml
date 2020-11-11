@@ -4,14 +4,15 @@
         xmlns:local="com.coremedia.blueprint.studio.taxonomy.chooser.*"
         xmlns:exml="http://www.jangaroo.net/exml/0.8"
         xmlns:taxonomy="exml:com.coremedia.blueprint.studio.config.taxonomy"
-        xmlns="exml:ext.config" xmlns:ui="exml:com.coremedia.ui.config"
+        xmlns="exml:ext.config"
+        xmlns:ui="exml:com.coremedia.ui.config"
         xmlns:editor="com.coremedia.cms.editor.sdk.util.*"
         id_="taxonomySelectionDialog"
-        stateId="taxonomySelectionWindowState"
+        stateId="taxonomySelectionState"
         stateful="true"
-        title="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'taxonomy_selection_dialog_title')}"
+        title="{resolveTitle(config)}"
         width="510"
-        height="450"
+        height="550"
         modal="true"
         constrainHeader="true"
         ui="{WindowSkin.GRID_200.getSkin()}">
@@ -24,6 +25,7 @@
     import com.coremedia.ui.bem.SpacingBEMEntities;
     import com.coremedia.ui.data.ValueExpression;
     import com.coremedia.ui.skins.ButtonSkin;
+    import com.coremedia.ui.skins.TextfieldSkin;
     import com.coremedia.ui.skins.WindowSkin;
 
     public static const xtype:String = "com.coremedia.blueprint.studio.config.taxonomy.taxonomySelectionWindow";
@@ -56,6 +58,27 @@
     <layout_VBox align="stretch"/>
   </local:layout>
   <local:items>
+    <Container>
+      <items>
+        <ui:IconDisplayField iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'search')}" />
+        <taxonomy:TaxonomySearchField searchResultExpression="{getSearchResultExpression()}"
+                                      taxonomyIdExpression="{config.taxonomyIdExpression}"
+                                      resetOnBlur="true"
+                                      cls="taxonomy-search-field-selector"
+                                      flex="1"
+                                      emptyText="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyChooser_search_tag_emptyText')}"
+                                      ui="{TextfieldSkin.DEFAULT.getSkin()}"
+                                      itemId="taxonomySearchField">
+          <taxonomy:plugins exml:mode="append">
+            <ui:BindPropertyPlugin componentProperty="disabled" bindTo="{getLoadingExpression()}" />
+          </taxonomy:plugins>
+        </taxonomy:TaxonomySearchField>
+      </items>
+      <layout>
+        <layout_HBox align="stretch"/>
+      </layout>
+    </Container>
+
     <FieldContainer labelAlign="top"
                     labelSeparator=""
                     fieldLabel="{resolveSelectionTitle(config.singleSelection)}"
@@ -66,8 +89,11 @@
       <items>
         <taxonomy:TaxonomyLinkListGridPanel id_="selectedTaxonomies"
                                             scrollable="true"
+                                            selectionMode="SINGLE"
                                             bindTo="{config.bindTo}"
+                                            removeCallback="{removedFromLinkListCallback}"
                                             taxonomyIdExpression="{config.taxonomyIdExpression}"
+                                            readOnlyValueExpression="{getLoadingExpression()}"
                                             emptyText="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyLinkList_empty_chooser_text')}">
           <taxonomy:linkListWrapper>
             <editor:MemoryLinkListWrapper linksVE="{getSelectionExpression()}"
@@ -87,6 +113,8 @@
         <taxonomy:TaxonomySelector selectionExpression="{getSelectionExpression()}"
                                    singleSelection="{config.singleSelection}"
                                    taxonomyIdExpression="{config.taxonomyIdExpression}"
+                                   loadingExpression="{getLoadingExpression()}"
+                                   nodePathExpression="{getNodePathExpression()}"
                                    forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
       </items>
     </FieldContainer>
@@ -100,11 +128,15 @@
         <Button ui="{ButtonSkin.FOOTER_PRIMARY.getSkin()}"
                 scale="small"
                 text="{resourceManager.getString('com.coremedia.cms.editor.Editor', 'btn_ok')}"
-                handler="{okPressed}"/>
+                handler="{okPressed}">
+          <plugins>
+            <ui:BindPropertyPlugin componentProperty="disabled" bindTo="{getLoadingExpression()}" />
+          </plugins>
+        </Button>
         <Button ui="{ButtonSkin.FOOTER_SECONDARY.getSkin()}"
                 scale="small"
                 text="{resourceManager.getString('com.coremedia.cms.editor.Editor', 'dialog_defaultCancelButton_text')}"
-                handler="{ function():void { cancelPressed(); }}"/>
+                handler="{ function():void { cancelPressed(); }}" />
       </items>
     </Toolbar>
   </local:fbar>

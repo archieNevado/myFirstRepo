@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.cae.sitemap;
 
+import com.coremedia.blueprint.cae.config.BlueprintCaeSitemapConfigurationProperties;
 import org.springframework.beans.factory.annotation.Required;
 
 import java.util.List;
@@ -15,8 +16,12 @@ import java.util.List;
 public class SitemapSetup {
   private List<SitemapUrlGenerator> urlGenerators;
   private SitemapRendererFactory sitemapRendererFactory;
-  private String protocol;
 
+  private final BlueprintCaeSitemapConfigurationProperties blueprintCaeSitemapConfigurationProperties;
+
+  public SitemapSetup(BlueprintCaeSitemapConfigurationProperties blueprintCaeSitemapConfigurationProperties) {
+    this.blueprintCaeSitemapConfigurationProperties = blueprintCaeSitemapConfigurationProperties;
+  }
 
   // --- configuration ----------------------------------------------
 
@@ -30,14 +35,6 @@ public class SitemapSetup {
     this.sitemapRendererFactory = sitemapRendererFactory;
   }
 
-  /**
-   * The protocol of the site URLs (should be http or https)
-   */
-  public void setProtocol(String protocol) {
-    this.protocol = protocol;
-  }
-
-
   // --- features ---------------------------------------------------
 
   List<SitemapUrlGenerator> getUrlGenerators() {
@@ -49,6 +46,6 @@ public class SitemapSetup {
   }
 
   String getProtocol() {
-    return protocol;
+    return blueprintCaeSitemapConfigurationProperties.getProtocol();
   }
 }

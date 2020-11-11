@@ -121,3 +121,9 @@ default['blueprint']['sap-hybris']['virtual_host']['shop']['rewrite_log_level'] 
 
 # set this to true to disable SSLProxyVerify, SSLProxyCheckPeerCN, SSLProxyCheckPeerName
 default['blueprint']['sap-hybris']['ssl_proxy_verify'] = true
+
+# commercetools
+#<> Convenience property to set the hostname of commercetools. Do not use or set this attribute in recipes, use the concrete attributes instead.
+default['blueprint']['commercetools']['host'] = 'localhost'
+#<> Set to true to activate the commercetools integration
+default['blueprint']['commercetools']['enabled'] = false

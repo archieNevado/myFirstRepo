@@ -51,7 +51,8 @@
   <%- end -%>
 
   <IfModule mod_headers.c>
-    Header set Content-Security-Policy "frame-ancestors 'self';"
+    SetEnvIf Request_URI "/cspInfo.html" is_csp_info
+    Header set Content-Security-Policy "frame-ancestors 'self';" env=!is_csp_info
   </IfModule>
 
   # the trailing "e" is no typo
@@ -62,6 +63,7 @@
 
   ProxyPass /login <%= rest_servlet_url %>/login <%= rest_proxy_params || '' %>
   ProxyPass /logout <%= rest_servlet_url %>/logout <%= rest_proxy_params || '' %>
+  ProxyPass /cspInfo.html <%= rest_servlet_url %>/cspInfo.html <%= rest_proxy_params || '' %>
 
   DocumentRoot <%= @client_dir %>
   <Directory <%= @client_dir %>>

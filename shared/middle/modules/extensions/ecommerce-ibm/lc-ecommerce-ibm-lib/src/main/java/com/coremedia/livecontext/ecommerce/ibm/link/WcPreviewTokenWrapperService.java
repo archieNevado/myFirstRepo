@@ -14,6 +14,11 @@ import static com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper.
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonList;
 
+/**
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
+@Deprecated
 public class WcPreviewTokenWrapperService extends AbstractWcWrapperService {
 
   private static final WcRestServiceMethod<WcPreviewToken, WcPreviewTokenParam> PREVIEW_TOKEN = WcRestServiceMethod

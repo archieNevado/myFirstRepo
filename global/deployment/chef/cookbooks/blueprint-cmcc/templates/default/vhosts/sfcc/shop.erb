@@ -79,7 +79,11 @@
   # replace all hostnames of the real sandbox with our virtual server host
   # Substitute "s|<%= @sfcc_host %>|<%= @server_name %>|n"
 
-  ProxyPass / https://<%= @sfcc_host %>/ timeout=600
+  # Avoid a 502 proxy error due to a race condition if the client request is the initial request.
+  # Seems to happen occasionally in long distant connections to a backend system.
+  SetEnv proxy-initial-not-pooled
+
+  ProxyPass / https://<%= @sfcc_host %>/ timeout=600 retry=0
   ProxyPassReverse / https://<%= @sfcc_host %>/
 
   #####################

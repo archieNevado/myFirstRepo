@@ -12,12 +12,6 @@
     <constructor-arg index="1" name="settingsService" ref="settingsService"/>
   </bean>
 
-  <!--
-  A handler which only redirects to the given URL given as path parameter. Prevents third party systems from truncating
-  by hand over the redirect to the CMS.
-  -->
-  <bean id="nextURLRedirectHandler" class="com.coremedia.livecontext.handler.NextURLRedirectHandler"/>
-
   <bean id="cartHandler" class="com.coremedia.livecontext.handler.CartHandler" parent="ecommerceHandlerBase">
     <property name="resolveContextStrategy" ref="resolveLivecontextContextStrategy"/>
     <property name="liveContextNavigationFactory" ref="liveContextNavigationFactory"/>

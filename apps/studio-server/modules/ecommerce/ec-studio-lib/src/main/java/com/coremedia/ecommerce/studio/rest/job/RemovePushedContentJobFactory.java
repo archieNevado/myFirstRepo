@@ -5,7 +5,12 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 
 import javax.inject.Named;
 
+/**
+ * @deprecated This class is part of the "push" implementation that is not supported by the
+ * Commerce Hub architecture. It will be removed or changed in the future.
+ */
 @Named
+@Deprecated
 public class RemovePushedContentJobFactory extends AbstractPushContentJobFactory {
 
   public boolean accepts(@NonNull String jobType) {

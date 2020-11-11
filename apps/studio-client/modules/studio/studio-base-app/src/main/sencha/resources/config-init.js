@@ -62,8 +62,8 @@ joo = {
           } else {
             failure();
           }
-        }
-        xhr.open('GET', coremediaRemoteServiceUri + '../index.html' + (document.location.search || ""));
+        };
+        xhr.open('GET', coremediaRemoteServiceUri + '../cspInfo.html' + (document.location.search || ""));
         xhr.send();
       } else {
         failure();
@@ -98,7 +98,7 @@ joo = {
   }
 
   var pathname = window.location.pathname;
-  var isDevelopmentMode = pathname.indexOf("/target/app/") >= 0;
+  var isDevelopmentMode = pathname.indexOf("/target/app/") >= 0 || pathname.indexOf("/target/apps/") >= 0;
   var uriPrefix = isDevelopmentMode ? '/' : '';
 
   probeRestApiThenLoadScripts(uriPrefix + 'rest/api/',

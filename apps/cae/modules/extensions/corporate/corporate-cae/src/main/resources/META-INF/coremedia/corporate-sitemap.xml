@@ -62,7 +62,6 @@
   </bean>
 
   <bean id="corporateSitemapConfiguration" class="com.coremedia.blueprint.cae.sitemap.SitemapSetup">
-    <property name="protocol" value="${blueprint.sitemap.protocol}"/>
     <property name="sitemapRendererFactory" ref="sitemapIndexRendererFactory"/>
     <property name="urlGenerators">
       <list>

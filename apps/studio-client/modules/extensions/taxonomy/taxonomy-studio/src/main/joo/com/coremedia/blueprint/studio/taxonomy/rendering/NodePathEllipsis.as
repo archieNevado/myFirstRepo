@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.studio.taxonomy.rendering {
 import ext.Component;
 import ext.Ext;
+import ext.dom.Element;
 
 import js.Event;
 import js.HTMLElement;
@@ -96,7 +97,11 @@ public class NodePathEllipsis {
    * As a workaround we calculate the width of this node.
    */
   private function getNodeWidth(node:HTMLElement):Number {
-    return Ext.fly(node).getWidth();
+    var element:Element = Ext.fly(node);
+    if(element) {
+      return element.getWidth();
+    }
+    return 0;
   }
 
   /**
@@ -168,9 +173,11 @@ public class NodePathEllipsis {
   private static function enableEllipsis(node:HTMLElement):void {
     var nodeSpan:HTMLElement = getTaxonomyNode(node);
     var textSpan:HTMLElement = getNameNode(node);
-    var width:String = Ext.fly(textSpan).getAttribute("data-width");
-    Ext.fly(nodeSpan).addCls(TaxonomyBEMEntities.NODE_MODIFIER_ELLIPSIS.getCSSClass());
-    Ext.fly(textSpan).setStyle("width", width + "px");
+    if(nodeSpan && textSpan) {
+      var width:String = Ext.fly(textSpan).getAttribute("data-width");
+      Ext.fly(nodeSpan).addCls(TaxonomyBEMEntities.NODE_MODIFIER_ELLIPSIS.getCSSClass());
+      Ext.fly(textSpan).setStyle("width", width + "px");
+    }
   }
 
   /**
@@ -181,8 +188,10 @@ public class NodePathEllipsis {
   private static function disableEllipsis(node:HTMLElement):void {
     var nodeSpan:HTMLElement = getTaxonomyNode(node);
     var textSpan:HTMLElement = getNameNode(node);
-    Ext.fly(textSpan).setStyle("width");
-    Ext.fly(nodeSpan).removeCls(TaxonomyBEMEntities.NODE_MODIFIER_ELLIPSIS.getCSSClass());
+    if(nodeSpan && textSpan) {
+      Ext.fly(textSpan).setStyle("width");
+      Ext.fly(nodeSpan).removeCls(TaxonomyBEMEntities.NODE_MODIFIER_ELLIPSIS.getCSSClass());
+    }
   }
 
   /**
@@ -192,11 +201,14 @@ public class NodePathEllipsis {
    * @return
    */
   private static function getNameNode(selection:*):* {
-    var textSpan:* = selection.getElementsByClassName(TaxonomyBEMEntities.NODE_ELEMENT_NAME)[0];
-    if (!textSpan) {
-      textSpan = selection;
+    if(selection is HTMLElement) {
+      var textSpan:* = selection.getElementsByClassName(TaxonomyBEMEntities.NODE_ELEMENT_NAME)[0];
+      if (!textSpan) {
+        textSpan = selection;
+      }
+      return textSpan;
     }
-    return textSpan;
+    return null;
   }
 
   /**
@@ -206,7 +218,11 @@ public class NodePathEllipsis {
    * @return
    */
   private static function getTaxonomyNode(selection:*):* {
-    return Ext.fly(selection).up(TaxonomyBEMEntities.NODE_BLOCK.getCSSSelector()) || selection;
+    var element:Element = Ext.fly(selection);
+    if(element) {
+      return element.up(TaxonomyBEMEntities.NODE_BLOCK.getCSSSelector()) || selection;
+    }
+    return selection;
   }
 
   /**

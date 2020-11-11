@@ -11,6 +11,11 @@ import org.springframework.scheduling.TaskScheduler;
 
 import javax.inject.Inject;
 
+/**
+ * @deprecated This class is part of the "push" implementation that is not supported by the
+ * Commerce Hub architecture. It will be removed or changed in the future.
+ */
+@Deprecated
 abstract class AbstractPushContentJobFactory implements JobFactory {
 
   @Inject

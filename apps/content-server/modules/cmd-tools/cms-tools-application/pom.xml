@@ -85,4 +85,21 @@
   <build>
     <finalName>cms-tools</finalName>
   </build>
+
+  <profiles>
+    <profile>
+      <id>cm-enforcer</id>
+      <activation>
+        <property>
+          <name>!skipCmEnforcer</name>
+          <value>!true</value>
+        </property>
+      </activation>
+      <properties>
+        <!-- Required for com.opencsv:opencsv -->
+        <bannedDependenciesIncludes>commons-beanutils:commons-beanutils</bannedDependenciesIncludes>
+      </properties>
+    </profile>
+  </profiles>
+
 </project>

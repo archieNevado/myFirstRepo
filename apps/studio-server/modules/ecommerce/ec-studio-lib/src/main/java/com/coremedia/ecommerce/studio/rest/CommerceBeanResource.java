@@ -54,6 +54,9 @@ public abstract class CommerceBeanResource<Entity extends CommerceBean> extends 
     // set preview url
     representation.setPreviewUrl(computePreviewUrl(params));
 
+    //multi preview support
+    representation.setPreviews(new CommerceBeanPreviews(commerceBean));
+
     setVisuals(representation, commerceBean);
   }
 

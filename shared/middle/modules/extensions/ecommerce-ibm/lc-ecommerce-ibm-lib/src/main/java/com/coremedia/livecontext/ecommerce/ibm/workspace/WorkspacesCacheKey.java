@@ -9,6 +9,11 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 
 import java.util.Map;
 
+/**
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
+@Deprecated
 public class WorkspacesCacheKey extends AbstractCommerceCacheKey<Map> {
 
   public static final String DEPENDENCY_ALL_WORKSPACES = "invalidate-all-workspaces-event";

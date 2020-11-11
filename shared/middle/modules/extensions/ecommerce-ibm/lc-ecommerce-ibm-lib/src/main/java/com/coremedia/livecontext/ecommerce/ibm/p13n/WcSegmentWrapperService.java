@@ -28,7 +28,11 @@ import static java.util.Collections.singletonList;
 
 /**
  * A service that uses the rest connector to get segment information from IBM WebSphere Commerce.
+ *
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
  */
+@Deprecated
 public class WcSegmentWrapperService extends AbstractWcWrapperService {
 
   private static final Logger LOG = LoggerFactory.getLogger(WcSegmentWrapperService.class);

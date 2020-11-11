@@ -11,7 +11,6 @@ import com.coremedia.cap.content.ContentRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Required;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,16 +26,13 @@ public class NameMatchingStrategy implements SemanticStrategy, InitializingBean 
   private ContentRepository contentRepository;
   private String serviceId;
 
-  @Required
   public void setServiceId(String serviceId) {
     this.serviceId = serviceId;
   }
 
-  @Required
   public void setContentRepository(ContentRepository contentRepository) {
     this.contentRepository = contentRepository;
   }
-
 
   @Override
   public Suggestions suggestions(Taxonomy<?> taxonomy, String capId) {
@@ -77,6 +73,7 @@ public class NameMatchingStrategy implements SemanticStrategy, InitializingBean 
    * @param formattedText The formatted content text to evaluate.
    */
   private void findMatches(Map<String, TaxonomyNode> nameMapping, Content content, Suggestions items, String formattedText) {
+    long l = System.currentTimeMillis();
     for (Map.Entry<String, TaxonomyNode> taxonomy : nameMapping.entrySet()) {
       if (formattedText.contains(taxonomy.getKey())) {
         TaxonomyNode match = nameMapping.get(taxonomy.getKey());
@@ -86,6 +83,9 @@ public class NameMatchingStrategy implements SemanticStrategy, InitializingBean 
         }
       }
     }
+
+    long duration = System.currentTimeMillis() - l;
+    LOG.debug("Taxonomy matching took {} ms", duration);
   }
 
   /**

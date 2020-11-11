@@ -7,6 +7,11 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 
+/**
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
+@Deprecated
 public class WcPriceParam {
   WcQuery query;
 

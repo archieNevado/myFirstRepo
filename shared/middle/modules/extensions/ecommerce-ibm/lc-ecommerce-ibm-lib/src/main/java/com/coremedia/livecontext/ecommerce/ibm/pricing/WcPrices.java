@@ -9,6 +9,11 @@ import java.util.Map;
 
 import static java.util.Collections.emptyMap;
 
+/**
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
+@Deprecated
 public class WcPrices {
 
   protected Map<String, WcPrice> prices = emptyMap();

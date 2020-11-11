@@ -27,6 +27,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * @deprecated This class is part of the "push" implementation that is not supported by the
+ * Commerce Hub architecture. It will be removed or changed in the future.
+ */
+@Deprecated
 public abstract class AbstractPushedContentJob implements Job {
 
   public static final String PUSH_STATE_RESOURCE_BASE_URI = "livecontext/pushState/";

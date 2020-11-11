@@ -12,6 +12,7 @@ import com.coremedia.ui.components.IconButton;
 import com.coremedia.ui.components.StatefulNumberField;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
+import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
 import com.coremedia.ui.plugins.HorizontalSpacingPlugin;
 
@@ -165,7 +166,7 @@ public class AbstractTaxonomyConditionBase extends AbstractCondition {
    */
   public function addTaxonomyButton():void {
     var openChooserAction:OpenTaxonomyChooserAction = new OpenTaxonomyChooserAction(OpenTaxonomyChooserAction({
-      taxonomyId:TaxonomyConditionUtil.getTaxonomyId4Chooser(propertyPrefix),
+      taxonomyIdExpression:ValueExpressionFactory.createFromValue(TaxonomyConditionUtil.getTaxonomyId4Chooser(propertyPrefix)),
       singleSelection:true,
       tooltip:resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'Taxonomy_action_tooltip'),
       propertyValueExpression:taxonomySelectionExpr

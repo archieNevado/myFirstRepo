@@ -42,8 +42,12 @@ import static org.springframework.util.StringUtils.isEmpty;
 
 /**
  * WCS-specific implementation for the LiveContextUrlProvider
+ *
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
  */
 @ForVendor("ibm")
+@Deprecated
 public class WcsUrlProvider implements LiveContextUrlProvider {
 
   protected static final String PARAM_STORE_ID = "storeId";

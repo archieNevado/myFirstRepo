@@ -12,7 +12,19 @@
   <dependencies>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>headless-server-catalog</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
       <artifactId>headless-server-ec</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>headless-server-p13n</artifactId>
       <version>1-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>

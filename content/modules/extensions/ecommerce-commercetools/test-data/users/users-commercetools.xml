@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<repository xmlns="http://www.coremedia.com/2005/contentserver/userrepository">
+  <group id="staff" name="staff" contentgroup="true" livegroup="false" administrative="false">
+    <!-- Global group, no corporate specific rules here! -->
+    <members>
+      <group id="global-manager" name="global-manager" contentgroup="true" livegroup="false" administrative="false">
+        <!-- Global group, no corporate specific rules here! -->
+        <members>
+          <group id="global-site-manager-commercetools" name="global-site-manager-commercetools" contentgroup="true" livegroup="false" administrative="false">
+            <rule content="/Sites/Commercetools Sunrise" type="CMObject" rights="RMDAPS"/>
+            <rule content="/Sites/Commercetools Sunrise" type="Folder_" rights="RMDAPS"/>
+            <!-- in order to define topic pages, global site managers need write access to taxonomies. -->
+            <rule content="/Settings/Taxonomies" type="CMTaxonomy" rights="RMDAP"/>
+            <members>
+              <user id="conny" name="Conny" home="/Home/Conny"/>
+            </members>
+          </group>
+        </members>
+      </group> <!-- global-manager -->
+      <group id="local-manager" name="local-manager" contentgroup="true" livegroup="false" administrative="false">
+        <!-- Global group, no corporate specific rules here! -->
+        <members>
+          <group id="local-site-manager-commercetools" name="local-site-manager-commercetools" contentgroup="true" livegroup="false" administrative="false">
+            <!-- all local site managers can read the global master site. -->
+            <rule content="/Sites/Commercetools Sunrise/United States/English" type="CMObject" rights="R"/>
+            <rule content="/Sites/Commercetools Sunrise/United States/English" type="Folder_" rights="R"/>
+            <!-- in order to define topic pages, local site managers need write access to taxonomies. -->
+            <rule content="/Settings/Taxonomies" type="CMTaxonomy" rights="RMDAP"/>
+            <members>
+              <group name="manager-commercetools-en-US" contentgroup="true" livegroup="false" administrative="false">
+                <rule content="/Sites/Commercetools Sunrise/United States/English" type="CMObject" rights="RMDAP"/>
+                <rule content="/Sites/Commercetools Sunrise/United States/English" type="Folder_" rights="RMDAP"/>
+                <members>
+                  <userref id="conny"/>
+                </members>
+              </group>
+              <group name="manager-commercetools-de-DE" contentgroup="true" livegroup="false" administrative="false">
+                <rule content="/Sites/Commercetools Sunrise/Germany/German" type="CMObject" rights="RMDAP"/>
+                <rule content="/Sites/Commercetools Sunrise/Germany/German" type="Folder_" rights="RMDAP"/>
+              </group>
+            </members>
+          </group> <!-- local-site-manager-commercetools -->
+        </members>
+      </group> <!-- local-manager -->
+    </members>
+  </group> <!-- staff -->
+</repository>

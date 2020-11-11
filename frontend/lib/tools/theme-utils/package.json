@@ -4,7 +4,7 @@
   "private": true,
   "version": "3.0.0",
   "engines": {
-    "node": ">=12"
+    "node": ">=14"
   },
   "dependencies": {
     "@babel/core": "^7.0.0",

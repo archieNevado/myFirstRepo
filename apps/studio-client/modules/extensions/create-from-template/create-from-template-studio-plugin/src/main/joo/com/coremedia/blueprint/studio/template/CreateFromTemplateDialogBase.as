@@ -9,10 +9,11 @@ import com.coremedia.cms.editor.sdk.components.StudioDialog;
 import com.coremedia.cms.editor.sdk.components.folderprompt.FolderCreationResult;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.folderchooser.FolderChooserListView;
-import com.coremedia.cms.editor.sdk.sites.Site;
 import com.coremedia.cms.editor.sdk.util.ContentCreationUtil;
 import com.coremedia.cms.editor.sdk.util.MessageBoxUtil;
 import com.coremedia.cms.editor.sdk.util.StudioConfigurationUtil;
+import com.coremedia.cms.editor.sdk.util.UserUtil;
+import com.coremedia.cms.studio.multisite.models.sites.Site;
 import com.coremedia.ui.components.StatefulTextField;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
@@ -21,7 +22,6 @@ import com.coremedia.ui.mixins.IValidationStateMixin;
 import com.coremedia.ui.mixins.ValidationState;
 
 import ext.Ext;
-
 import ext.StringUtil;
 
 import mx.resources.ResourceManager;
@@ -221,7 +221,7 @@ public class CreateFromTemplateDialogBase extends StudioDialog {
       parent.invalidate(function ():void {
         if (parent.isCheckedOutByOther()) {
           parent.getEditor().load(function (user:User):void {
-            var msg:String = StringUtil.format(resourceManager.getString('com.coremedia.blueprint.base.components.navigationlink.NavigationLinkField', 'layout_error_msg'), user.getName());
+            var msg:String = StringUtil.format(resourceManager.getString('com.coremedia.blueprint.base.components.navigationlink.NavigationLinkField', 'layout_error_msg'), UserUtil.convertDisplayName(user));
             MessageBoxUtil.showError(resourceManager.getString('com.coremedia.blueprint.base.components.navigationlink.NavigationLinkField', 'layout_error'), msg);
           })
         } else {

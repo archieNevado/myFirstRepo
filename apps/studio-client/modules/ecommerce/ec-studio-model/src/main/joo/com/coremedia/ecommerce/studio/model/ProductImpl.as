@@ -25,11 +25,11 @@ public class ProductImpl extends CatalogObjectImpl implements Product {
   }
 
   public function hasMultiPreviews():Boolean {
-    return false;
+    return true;
   }
 
   public function getPreviews():Previews {
-    return null;
+    return get(CatalogObjectPropertyNames.PREVIEWS);
   }
 
   public function getOfferPrice():Number {

@@ -12,13 +12,13 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.tree.ExternalChannelContentTreeRelation;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -31,6 +31,7 @@ public class ContentAugmentedProductPageGridServiceImpl extends ContentBackedPag
   private static final Logger LOG = LoggerFactory.getLogger(ContentAugmentedProductPageGridServiceImpl.class);
 
   private static final String CM_EXTERNAL_PRODUCT = "CMExternalProduct";
+  private static final String CM_EXTERNAL_CHANNEL = "CMExternalChannel";
   private static final String EXTERNAL_ID = "externalId";
 
   private ContentAugmentedPageGridServiceImpl augmentedCategoryPageGridService;
@@ -90,6 +91,11 @@ public class ContentAugmentedProductPageGridServiceImpl extends ContentBackedPag
 
   @Nullable
   private Content getParentExternalChannelContent(@NonNull Content content) {
+    // return content itself if already subtype of external channel
+    if (content.getType().isSubtypeOf(CM_EXTERNAL_CHANNEL)){
+      return content;
+    }
+
     Site site = getSitesService().getContentSiteAspect(content).getSite();
     if (site == null) {
       LOG.warn("Content '{}' has no site, cannot determine parent content.", content.getPath());

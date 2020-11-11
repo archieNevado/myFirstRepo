@@ -104,19 +104,19 @@ default['blueprint']['apps']['headless-server-live']['version'] = node['blueprin
 
 default['blueprint']['apps']['commerce-adapter-mock']['group_id'] = 'com.coremedia.commerce.adapter.base'
 default['blueprint']['apps']['commerce-adapter-mock']['artifact_id'] = 'adapter-mock-app'
-default['blueprint']['apps']['commerce-adapter-mock']['version'] = '1.3.8'
+default['blueprint']['apps']['commerce-adapter-mock']['version'] = '1.4.5'
 
 default['blueprint']['apps']['commerce-adapter-hybris']['group_id'] = 'com.coremedia.commerce.adapter.hybris'
 default['blueprint']['apps']['commerce-adapter-hybris']['artifact_id'] = 'adapter-hybris-app'
-default['blueprint']['apps']['commerce-adapter-hybris']['version'] = '1.1.15'
+default['blueprint']['apps']['commerce-adapter-hybris']['version'] = '1.2.4'
 
 default['blueprint']['apps']['commerce-adapter-sfcc']['group_id'] = 'com.coremedia.commerce.adapter.sfcc'
 default['blueprint']['apps']['commerce-adapter-sfcc']['artifact_id'] = 'adapter-sfcc-app'
-default['blueprint']['apps']['commerce-adapter-sfcc']['version'] = '1.1.19'
+default['blueprint']['apps']['commerce-adapter-sfcc']['version'] = '1.2.0'
 
 default['blueprint']['apps']['commerce-adapter-wcs']['group_id'] = 'com.coremedia.commerce.adapter.wcs'
 default['blueprint']['apps']['commerce-adapter-wcs']['artifact_id'] = 'adapter-wcs-app'
-default['blueprint']['apps']['commerce-adapter-wcs']['version'] = '1.3.13'
+default['blueprint']['apps']['commerce-adapter-wcs']['version'] = '1.4.1'
 
 default['blueprint']['solr']['config_zip_version'] = node['blueprint']['default_version']
 
@@ -152,12 +152,19 @@ default['blueprint']['tools']['theme-importer']['version'] = node['blueprint']['
 ##################
 ## JAAS CONFIG  ##
 ##################
-#LDAP
+# LDAP
 default['blueprint']['jaas']['ldap']['enabled'] = false
 default['blueprint']['jaas']['ldap']['host'] = 'my.ldap.host'
 default['blueprint']['jaas']['ldap']['port'] = 1212
 default['blueprint']['jaas']['ldap']['domain'] = 'mydomain'
-#CAS
+# if LDAP is activated, you need to set these attributes:
+# default['blueprint']['apps']['content-management-server']['application.properties']['cap.server.userproviders[0].provider-class']
+# default['blueprint']['apps']['content-management-server']['application.properties']['cap.server.userproviders[0].java.naming.security.principal']
+# default['blueprint']['apps']['content-management-server']['application.properties']['cap.server.userproviders[0].java.naming.security.credentials']
+# default['blueprint']['apps']['content-management-server']['application.properties']['cap.server.userproviders[0].ldap.host']
+# default['blueprint']['apps']['content-management-server']['application.properties']['cap.server.userproviders[0].ldap.base-distinguished-names[0]']
+
+# CAS
 default['blueprint']['jaas']['cas']['enabled'] = false
 default['blueprint']['jaas']['cas']['validator_url'] = 'http://'
 default['blueprint']['jaas']['cas']['cap_service_url'] = 'http://'

@@ -318,6 +318,8 @@ $(function () {
     {
       prepareUrl: undefined,
       downloadUrl: undefined,
+      csrf_name: undefined,
+      csrf_value: undefined
     },
     "am-download-collection-trigger",
     function ($downloadCollection, config) {
@@ -345,7 +347,7 @@ $(function () {
         $.ajax({
           method: "POST",
           url: config.prepareUrl,
-          data: { "download-collection-data": downloadCollectionString },
+          data: { "download-collection-data": downloadCollectionString, [config.csrf_name]: config.csrf_value },
         })
           .done(function () {
             $downloadCollection.removeClass("am-download-collection--loading");
@@ -361,6 +363,12 @@ $(function () {
             $input.attr("name", "download-collection-data");
             $input.val(downloadCollectionDataString);
             $form.append($input);
+
+            const $input2 = $("<input>");
+            $input2.attr("name", config.csrf_name);
+            $input2.val(config.csrf_value);
+            $form.append($input2);
+
             $downloadCollection.append($form);
             $form.attr("action", downloadUrl);
             $form.attr("method", "POST");

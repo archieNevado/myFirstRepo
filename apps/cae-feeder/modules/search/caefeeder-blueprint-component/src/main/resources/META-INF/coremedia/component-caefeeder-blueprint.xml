@@ -11,8 +11,5 @@
   <!-- Service Registry for the CAEFeeder -->
   <import resource="caefeeder-services.xml"/>
 
-  <!-- Capacities for CacheKeys used within ContentBean code -->
-  <import resource="caefeeder-cache.xml"/>
-
 </beans>
 

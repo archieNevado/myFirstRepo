@@ -22,6 +22,11 @@ import static com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvid
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
+/**
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
+@Deprecated
 public class WorkspaceServiceImpl implements WorkspaceService {
 
   private WcWorkspaceWrapperService workspaceWrapperService;

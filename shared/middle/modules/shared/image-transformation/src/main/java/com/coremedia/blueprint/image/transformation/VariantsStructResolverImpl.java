@@ -56,8 +56,9 @@ class VariantsStructResolverImpl implements VariantsStructResolver {
     return setting;
   }
 
+  @Override
   @NonNull
-  private Optional<Struct> getGlobalVariants() {
+  public Optional<Struct> getGlobalVariants() {
     Content settings = contentRepository.getChild(GLOBAL_VARIANTS_SETTINGS);
 
     if (settings == null) {

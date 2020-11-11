@@ -6,6 +6,7 @@ import com.coremedia.ecommerce.studio.components.preferences.CatalogPreferencesB
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ecommerce.studio.model.Category;
+import com.coremedia.ecommerce.studio.model.CategoryChildData;
 import com.coremedia.ecommerce.studio.model.Marketing;
 import com.coremedia.ecommerce.studio.model.MarketingSpot;
 import com.coremedia.ecommerce.studio.model.Product;
@@ -16,8 +17,6 @@ import com.coremedia.ui.data.beanFactory;
 import com.coremedia.ui.models.LazyLoadingTreeModel;
 import com.coremedia.ui.models.NodeChildren;
 
-import ext.data.TreeModel;
-
 import mx.resources.ResourceManager;
 
 [ResourceBundle('com.coremedia.ecommerce.studio.ECommerceStudioPlugin')]
@@ -26,6 +25,9 @@ public class CatalogTreeModel implements CompoundChildTreeModel, LazyLoadingTree
   private var enabled:Boolean = true;
   public static const ID_PREFIX:String = "livecontext/";
   public static const CATALOG_TREE_ID:String = "catalogTreeId";
+
+  public static const HYPERLINK_PREFIX:String = "hyperlink:";
+  public static const HYPERLINK_SEPARATOR:String = "##";
 
   public function CatalogTreeModel() {
   }
@@ -111,7 +113,10 @@ public class CatalogTreeModel implements CompoundChildTreeModel, LazyLoadingTree
 
     if (CatalogHelper.getInstance().isStoreId(nodeId)) {
       var store:Store = getNodeModel(nodeId) as Store;
-      return getChildrenFor(store.getTopLevel(), store.getChildrenByName(), ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Category_icon'));
+      return getChildrenFor(store.getTopLevel(),
+              store.getChildrenData(),
+              ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Category_icon'),
+              nodeId);
     }
     if (CatalogHelper.isMarketingSpot(nodeId)) {
       return new NodeChildren([], {}, {});
@@ -119,6 +124,10 @@ public class CatalogTreeModel implements CompoundChildTreeModel, LazyLoadingTree
     if (CatalogHelper.isMarketing(nodeId)) {
       return new NodeChildren([], {}, {});
     }
+    return getCategoryChildren(nodeId);
+  }
+
+  private function getCategoryChildren(nodeId:String):NodeChildren {
     var category:Category = getNodeModel(nodeId) as Category;
     var subCategories:Array = categoryTreeRelation.getChildrenOf(category);
 
@@ -131,20 +140,28 @@ public class CatalogTreeModel implements CompoundChildTreeModel, LazyLoadingTree
       if (!preloadChildren(subCategories)) {
         return undefined;
       }
-      //don't change the original list of sub categories.
-      subCategories = subCategories.slice();
-      subCategories = subCategories.sort(
-              function (a:Category, b:Category):int {
-                var aDisplayName:String = a.getDisplayName();
-                //todo: in tests somehow displayName is undefined...
-                if (!aDisplayName) {
-                  return -1;
-                }
-                return aDisplayName.localeCompare(b.getDisplayName());
-              });
+      subCategories = sortSubcategories(subCategories);
     }
 
-    return getChildrenFor(subCategories, category.getChildrenByName(), ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Category_icon'));
+    return getChildrenFor(subCategories,
+            category.getChildrenData(),
+            ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Category_icon'),
+            nodeId);
+  }
+
+  private function sortSubcategories(subCategories:Array):Array {
+    //don't change the original list of sub categories.
+    subCategories = subCategories.slice();
+    subCategories = subCategories.sort(
+            function (a:Category, b:Category):int {
+              var aDisplayName:String = a.getDisplayName();
+              //todo: in tests somehow displayName is undefined...
+              if (!aDisplayName) {
+                return -1;
+              }
+              return aDisplayName.localeCompare(b.getDisplayName());
+            });
+    return subCategories;
   }
 
   /**
@@ -162,63 +179,128 @@ public class CatalogTreeModel implements CompoundChildTreeModel, LazyLoadingTree
     });
   }
 
-  protected function getChildrenFor(children:Array, childrenByName:Object, iconCls:String):NodeChildren {
+  protected function getChildrenFor(children:Array, childData:Array, iconCls:String, parentNodeId:String):NodeChildren {
     if (!children) {
       return undefined;
     }
-    if (!childrenByName) {
+    if (!childData) {
       return undefined;
     }
 
-    var nameByChildId:Object = computeNameByChildId(childrenByName);
+    var childDataById:Object = computeDataByChildId(childData);
     var childIds:Array = [];
     var namesById:Object = {};
     var iconById:Object = {};
-    for (var i:uint = 0; i < children.length; i++) {
-      var child:RemoteBean = children[i];
-      var childId:String = getNodeId(child);
+
+    children.forEach(function (child:RemoteBean):void {
+      var childData:CategoryChildData = childDataById[child];
+
+      var childId:String = calculateChildId(childData, parentNodeId);
+
       childIds.push(childId);
+
       if (child.isLoaded()) {
-        namesById[childId] = nameByChildId[childId];
+        namesById[childId] = childData.displayName;
         iconById[childId] = computeIconCls(childId, iconCls);
       } else {
         setEmptyNodeChildData(childId, namesById, iconById, null, null, null);
       }
-    }
+    });
+
     return new NodeChildren(childIds, namesById, iconById);
   }
 
+
+  /**
+   * Some Catalog Trees (Hybris) have duplicate nodes. This is solved by a "hyperlink" concept.
+   * <p>When we ask a node for its children and we detect a duplicate "hyperlink" via the property
+   * {@code isVirtual} we add the node with a hyperlink prefix. Like that we ensure that we only have unique
+   * node ids.
+   * When clicking on a hyperlink the selection jumps to the original node (see {@link com.coremedia.ui.plugins.BindTreeSelectionPluginBase#treeSelectionChanged}).
+   * @param childData for the child that will be created
+   * @return the Id that either has the hyperlink prefix or not, depending if the child is marked as "virtual"
+   */
+  private function calculateChildId(childData:CategoryChildData, parentId:String):String {
+    var nodeId:String = getNodeId(childData.child);
+    if (childData.hasOwnProperty("isVirtual") && childData.isVirtual) {
+      return getHyperLinkId(nodeId, parentId);
+    }
+    return nodeId;
+  }
+
+  /**
+   * Use this method to add a hyperlink prefix, including the parent id to your id.
+   * Like that you get a unique id for your hyperlink node. Use {@link CatalogTreeModel#removeHyperLinkId}
+   * to receive the target id from your hyperlink ID.
+   * @param childId to add the hyperlink prefix to
+   * @return a unique hyperlink id, that still holds the information about the target node.
+   */
+  private static function getHyperLinkId(childId:String, parentId:String):String {
+    return HYPERLINK_PREFIX + parentId + HYPERLINK_SEPARATOR + childId;
+  }
+
+  /**
+   * Method that removes the hyperlink prefix and returns the id where the hyperlink points to
+   * @param id to remove the hyperlink prefix.
+   * @return the target id where the hyperlink points to.
+   */
+  private static function removeHyperLinkId(id:String):String {
+    var i:int = id.indexOf(HYPERLINK_SEPARATOR);
+    if (i !== -1) {
+      return id.substring(i + HYPERLINK_SEPARATOR.length)
+    }
+    return id;
+  }
+
+  /**
+   * @param id to check for the HYPERLINK_PREFIX
+   * @return true whether the id is a hyperlink id
+   */
+  private static function isHyperLinkId(id:String):Boolean {
+    return id.indexOf(HYPERLINK_PREFIX) !== -1;
+  }
+
   private function computeIconCls(childId:String, defaultIconCls:String):String {
-    if (CatalogHelper.isMarketing(childId)) {
+
+    if (CatalogHelper.isMarketing(removeHyperLinkId(childId))) {
       return ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Marketing_icon');
     }
-    if (childId == getRootId()) {
+    if (removeHyperLinkId(childId) == getRootId()) {
       return ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Store_icon');
     }
-    var child:RemoteBean = beanFactory.getRemoteBean(childId);
-    if (child.isLoaded()) {
-      //is the child an augmented category?
-      if (child is Category && augmentationService.getContent(Category(child))) {
-        return ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'AugmentedCategory_icon');
+    var child:RemoteBean = beanFactory.getRemoteBean(removeHyperLinkId(childId));
+    if (child is Category) {
+      if (child.isLoaded()) {
+        //is the child an augmented category?
+        if (augmentationService.getContent(Category(child))) {
+          if(isHyperLinkId(childId)){
+            return ResourceManager.getInstance().getString('com.coremedia.icons.CoreIcons', 'augmented_link');
+          }
+          return ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'AugmentedCategory_icon');
+        }
+      }
+
+      if(isHyperLinkId(childId)){
+          return ResourceManager.getInstance().getString('com.coremedia.icons.CoreIcons', 'link');
       }
     }
     return defaultIconCls;
   }
 
-  private function computeNameByChildId(childrenByIds:Object):Object {
-    var nameByUriPath:Object = {};
-    for (var childId:String in childrenByIds) {
-      var child:CatalogObject = childrenByIds[childId].child as CatalogObject;
+  private function computeDataByChildId(childData:Array):Object {
+    var childDataByNodeId:Object = {};
+    childData.forEach(function (childData:CategoryChildData):void {
+      var child:CatalogObject = childData.child as CatalogObject;
       if (child is Marketing) {
-        nameByUriPath[getNodeId(child)] = ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'StoreTree_marketing_root');
+        childData.displayName = ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'StoreTree_marketing_root');
       } else if (child is Category) {
-        nameByUriPath[getNodeId(child)] = getCategoryName(Category(child));
-      } else if (child) {
-        nameByUriPath[getNodeId(child)] = childrenByIds[childId].displayName;
+        childData.displayName = getCategoryName(Category(child));
       }
-    }
-    return nameByUriPath;
+      childDataByNodeId[childData.child] = childData;
+    });
+    return childDataByNodeId;
   }
+
 
 
   /**
@@ -296,6 +378,7 @@ public class CatalogTreeModel implements CompoundChildTreeModel, LazyLoadingTree
   }
 
   public function getNodeModel(nodeId:String):Object {
+    nodeId = removeHyperLinkId(nodeId);
     if (!nodeId || nodeId.indexOf(ID_PREFIX) != 0) {
       return null;
     }

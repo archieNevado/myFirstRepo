@@ -27,10 +27,12 @@
     import com.coremedia.blueprint.studio.forms.CMImageMapForm;
     import com.coremedia.cms.editor.sdk.desktop.ActionsToolbar;
     import com.coremedia.cms.editor.sdk.desktop.HeaderToolbarUserMenu;
+    import com.coremedia.cms.editor.sdk.editorContext;
+    import com.coremedia.ecommerce.studio.components.preferences.CatalogPreferencesBase;
     import com.coremedia.ecommerce.studio.helper.CatalogHelper;
-    import com.coremedia.ecommerce.studio.library.EcCatalogTreeFilter;
     import com.coremedia.ecommerce.studio.model.Category;
     import com.coremedia.ecommerce.studio.model.Product;
+    import com.coremedia.ui.data.ValueExpressionFactory;
 
     import ext.container.Container;
 
@@ -325,7 +327,8 @@
     <editor:ConfigureDocumentTypes names="{CONTENT_TYPE_MARKETING_SPOT}"
                                    includeSubtypes="true"
                                    mayCreate="{mayCreateESpot}"/>
-    <editor:RegisterLibraryTreeFilter filter="{new EcCatalogTreeFilter('Augmentation')}"/>
+    <editor:RegisterLibraryTreeFilter path="Augmentation"
+                                      disabledExpression="{ValueExpressionFactory.create(CatalogPreferencesBase.PREFERENCE_SHOW_CATALOG_KEY, editorContext.getPreferences())}"/>
     <editor:ConfigureDocumentTypes names="CMMarketingSpot"
                                    preview="false"/>
   </local:configuration>

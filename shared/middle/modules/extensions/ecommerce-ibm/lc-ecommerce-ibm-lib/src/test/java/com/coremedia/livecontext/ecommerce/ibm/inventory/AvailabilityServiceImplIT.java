@@ -75,6 +75,5 @@ public class AvailabilityServiceImplIT extends IbmServiceTestBase {
 
     //test identity of Availability
     assertEquals(availabilityInfo, testling.getAvailabilityInfo(productVariant2));
-    assertEquals(availabilityInfo, productVariant2.getAvailabilityInfo());
   }
 }

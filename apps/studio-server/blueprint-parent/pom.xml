@@ -30,12 +30,13 @@
     <google.api.client.version>1.30.6</google.api.client.version>
     <google.oauth.client.version>1.31.0</google.oauth.client.version>
     <google.http.client.version>1.36.0</google.http.client.version>
+    <opencensus.version>0.27.1</opencensus.version>
 
     <customer>Blueprint</customer>
 
-    <cm.studio-server.core.version>2007.2</cm.studio-server.core.version>
+    <cm.studio-server.core.version>2010.1</cm.studio-server.core.version>
 
-    <spring.boot.version>2.2.8.RELEASE</spring.boot.version>
+    <spring.boot.version>2.2.10.RELEASE</spring.boot.version>
     <application-plugin.version>2.8.3</application-plugin.version>
 
     <!--
@@ -80,16 +81,16 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.37</tomcat.embed.version>
+    <tomcat.embed.version>9.0.38</tomcat.embed.version>
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.studio-server.core.version>2007.2</cm.studio-server.core.version>
-    <cm.common.core.version>2007.2</cm.common.core.version>
+    <cm.studio-server.core.version>2010.1</cm.studio-server.core.version>
+    <cm.common.core.version>2010.1</cm.common.core.version>
     <cm.common.bp.version>1-SNAPSHOT</cm.common.bp.version>
-    <cm.middle.core.version>2007.2</cm.middle.core.version>
+    <cm.middle.core.version>2010.1</cm.middle.core.version>
     <cm.middle.bp.version>1-SNAPSHOT</cm.middle.bp.version>
-    <maven-surefire-plugin.version>3.0.0-M4</maven-surefire-plugin.version>
+    <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
 
     <showDeprecation>true</showDeprecation>
     <showWarnings>true</showWarnings>
@@ -157,7 +158,7 @@
               <dependency>
                 <groupId>com.coremedia.maven</groupId>
                 <artifactId>coremedia-enforcer-rules</artifactId>
-                <version>1.1.18</version>
+                <version>1.2.1</version>
               </dependency>
               <dependency>
                 <groupId>com.coremedia.cms</groupId>
@@ -332,11 +333,13 @@
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>
           </exclusion>
-          <exclusion>
-            <groupId>io.opencensus</groupId>
-            <artifactId>opencensus-api</artifactId>
-          </exclusion>
         </exclusions>
+      </dependency>
+
+      <dependency>
+        <groupId>io.opencensus</groupId>
+        <artifactId>opencensus-api</artifactId>
+        <version>${opencensus.version}</version>
       </dependency>
 
       <dependency>

@@ -28,7 +28,7 @@
   <bean id="resultFactory" class="com.coremedia.blueprint.cae.search.solr.SolrSearchResultFactory">
     <property name="contentRepository" ref="contentRepository"/>
     <property name="solrClient" ref="solrClient"/>
-    <property name="collection" value="${solr.collection.cae:}"/>
+    <property name="collection" value="${solr.cae.collection:${solr.collection.cae:}}"/>
     <property name="queryBuilder" ref="solrSearchQueryBuilder"/>
     <property name="representationMapper" ref="representationMapper"/>
     <property name="facetFieldLabelFunctions" ref="facetFieldLabelFunctions"/>
@@ -55,21 +55,6 @@
   <bean id="segmentResolver" class="com.coremedia.blueprint.cae.search.solr.SolrSegmentResolver">
     <property name="searchResultFactory" ref="resultFactory"/>
     <property name="cacheForSeconds" value="10"/>
-  </bean>
-
-  <bean id="solrCacheCapacityConfigurer" class="com.coremedia.cache.CacheCapacityConfigurer" init-method="init">
-    <property name="cache" ref="cache"/>
-    <property name="capacities">
-      <map>
-        <!--
-          every CacheKey implementation must return a String constant in #cacheclass. ("java.lang.Object" is the default
-           if #cacheclass is not overwritten)
-
-          This constant *must* be configured with a capacity, otherwise the CacheKey will not be cached (!)
-        -->
-        <entry key="com.coremedia.blueprint.cae.search.solr.SolrQueryCacheKey" value="100"/>
-      </map>
-    </property>
   </bean>
 
 </beans>

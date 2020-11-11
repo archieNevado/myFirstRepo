@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.studio.template {
 import com.coremedia.blueprint.base.components.localization.ContentLocalizationUtil;
-import com.coremedia.blueprint.base.components.util.UserUtil;
 import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
@@ -9,6 +8,7 @@ import com.coremedia.cms.editor.sdk.components.BeanListChooser;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.util.ImageUtil;
 import com.coremedia.cms.editor.sdk.util.PathFormatter;
+import com.coremedia.cms.editor.sdk.util.UserUtil;
 import com.coremedia.ui.data.Bean;
 import com.coremedia.ui.data.Blob;
 import com.coremedia.ui.data.ValueExpression;

@@ -1,0 +1,11 @@
+{
+  "properties": [
+    {
+      "name": "coremedia.blueprint.project.directory",
+      "deprecation": {
+        "level": "warning",
+        "replacement": "themes.project-directory"
+      }
+    }
+  ]
+}

@@ -15,7 +15,12 @@ import java.util.concurrent.TimeUnit;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceCacheKey.CONFIG_KEY_STORE_INFO;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceCacheKey.INVALIDATE_ALL_EVENT;
 
+/**
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
 @DefaultAnnotation(NonNull.class)
+@Deprecated
 public class StoreInfoCacheKey extends CacheKey<Map<String, Object>> {
 
   private static final Logger LOG = LoggerFactory.getLogger(StoreInfoCacheKey.class);

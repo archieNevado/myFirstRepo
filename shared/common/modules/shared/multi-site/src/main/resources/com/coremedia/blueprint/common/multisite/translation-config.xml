@@ -24,6 +24,7 @@
   <customize:append id="blueprint.translate.xliff.translatableExpressions" bean="translate.xliff.translatableExpressions">
     <list>
       <value>CMLinkable.localSettings.callToActionCustomText</value>
+      <value>CMTeaser.targets.links.callToActionCustomText</value>
     </list>
   </customize:append>
 </beans>

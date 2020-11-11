@@ -426,7 +426,7 @@ public class TaxonomyExplorerPanelBase extends Panel {
     //update the node name without reloading the complete node.
     var selections:Array = getSelectedValueExpression().getValue();
     var node:TaxonomyNode = selections[0];
-    if (node && node.getName() !== newName) {
+    if (node && node.getName() !== newName && newName && newName.length > 0) {
       node.setName(newName);
       var column:TaxonomyExplorerColumn = getColumnContainer(node);
       column.updateNode(node);

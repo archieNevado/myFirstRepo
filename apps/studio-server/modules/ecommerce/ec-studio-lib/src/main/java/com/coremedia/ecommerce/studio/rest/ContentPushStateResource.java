@@ -20,9 +20,13 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.coremedia.ecommerce.studio.rest.ContentPushStateResource.URI_PATH;
-
+/**
+ * @deprecated This class is part of the "push" implementation that is not supported by the
+ * Commerce Hub architecture. It will be removed or changed in the future.
+ */
 @RestController
 @RequestMapping(value = URI_PATH, produces = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
+@Deprecated
 public class ContentPushStateResource implements EntityController<PushState> {
 
   private static final String PATH_PARAM_CAP_ID = "id";

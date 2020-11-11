@@ -8,7 +8,7 @@
 
   <h2>Databases</h2>
   <ul>
-      <li>MongoDB <code>{{ getv "/environment/fqdn" }}:3306</code></li>
+      <li>MongoDB <code>{{ getv "/environment/fqdn" }}:27017</code></li>
       <li>Content Management Server <code>jdbc:mysql://{{ getv "/environment/fqdn" }}:3306/cm_management</code></li>
       <li>Master Live Server <code>jdbc:mysql://{{ getv "/environment/fqdn" }}:3306/cm_master</code></li>
   </ul>

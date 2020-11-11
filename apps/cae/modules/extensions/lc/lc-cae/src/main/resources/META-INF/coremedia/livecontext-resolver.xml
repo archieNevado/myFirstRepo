@@ -45,7 +45,6 @@
     <property name="segmentPath" value="${livecontext.slp.segmentPath:livecontext-search-landing-pages}" />
     <property name="contentType" value="${searchTermExternalReferenceResolver.contentType:CMChannel}"/>
     <property name="field" value="${searchTermExternalReferenceResolver.field:keywords}"/>
-    <property name="cacheForSeconds" value="${searchTermExternalReferenceResolver.cacheTime:60}"/>
   </bean>
   <bean id="breadcrumbExternalReferenceResolver" parent="externalReferenceResolverBase"
         class="com.coremedia.livecontext.fragment.resolver.BreadcrumbExternalReferenceResolver">

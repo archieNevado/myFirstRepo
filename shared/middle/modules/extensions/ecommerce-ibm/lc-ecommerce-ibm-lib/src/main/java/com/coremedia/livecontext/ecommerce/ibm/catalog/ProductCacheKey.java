@@ -18,6 +18,11 @@ import java.util.Objects;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.SKU;
 
+/**
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
+@Deprecated
 class ProductCacheKey extends AbstractIbmDocumentCacheKey<Map<String, Object>> {
 
   private static final String UNIQUE_ID = "uniqueID";

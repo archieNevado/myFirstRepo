@@ -22,8 +22,7 @@ Use this cookbook with care and only put things in here if they don't fit anywhe
 
 ## Cookbooks:
 
-* ulimit (~> 1.0.0)
-* java_se (~> 8.0) (Suggested but not required)
+* [ulimit](https://github.com/bmhatfield/chef-ulimit) (~> 1.0.0)
 
 # Attributes
 
@@ -93,12 +92,9 @@ Use this cookbook with care and only put things in here if they don't fit anywhe
 * `node['blueprint']['apps']['studio-server']['group_id']` -  Defaults to `com.coremedia.blueprint.boot`.
 * `node['blueprint']['apps']['studio-server']['artifact_id']` -  Defaults to `studio-server-app`.
 * `node['blueprint']['apps']['studio-server']['version']` -  Defaults to `node['blueprint']['default_version']`.
-* `node['blueprint']['apps']['studio-client']['base_app_group_id']` -  Defaults to `com.coremedia.blueprint`.
-* `node['blueprint']['apps']['studio-client']['base_app_artifact_id']` -  Defaults to `studio-base-app`.
-* `node['blueprint']['apps']['studio-client']['base_app_version']` -  Defaults to `node['blueprint']['default_version']`.
-* `node['blueprint']['apps']['studio-client']['app_group_id']` -  Defaults to `com.coremedia.blueprint`.
-* `node['blueprint']['apps']['studio-client']['app_artifact_id']` -  Defaults to `studio-app`.
-* `node['blueprint']['apps']['studio-client']['app_version']` -  Defaults to `node['blueprint']['default_version']`.
+* `node['blueprint']['apps']['studio-client']['group_id']` -  Defaults to `com.coremedia.blueprint`.
+* `node['blueprint']['apps']['studio-client']['artifact_id']` -  Defaults to `studio-resources`.
+* `node['blueprint']['apps']['studio-client']['version']` -  Defaults to `node['blueprint']['default_version']`.
 * `node['blueprint']['apps']['headless-server-preview']['group_id']` -  Defaults to `com.coremedia.blueprint.boot`.
 * `node['blueprint']['apps']['headless-server-preview']['artifact_id']` -  Defaults to `headless-server-app`.
 * `node['blueprint']['apps']['headless-server-preview']['version']` -  Defaults to `node['blueprint']['default_version']`.
@@ -107,16 +103,16 @@ Use this cookbook with care and only put things in here if they don't fit anywhe
 * `node['blueprint']['apps']['headless-server-live']['version']` -  Defaults to `node['blueprint']['default_version']`.
 * `node['blueprint']['apps']['commerce-adapter-mock']['group_id']` -  Defaults to `com.coremedia.commerce.adapter.base`.
 * `node['blueprint']['apps']['commerce-adapter-mock']['artifact_id']` -  Defaults to `adapter-mock-app`.
-* `node['blueprint']['apps']['commerce-adapter-mock']['version']` -  Defaults to `1.3.8`.
+* `node['blueprint']['apps']['commerce-adapter-mock']['version']` -  Defaults to `1.4.5`.
 * `node['blueprint']['apps']['commerce-adapter-hybris']['group_id']` -  Defaults to `com.coremedia.commerce.adapter.hybris`.
 * `node['blueprint']['apps']['commerce-adapter-hybris']['artifact_id']` -  Defaults to `adapter-hybris-app`.
-* `node['blueprint']['apps']['commerce-adapter-hybris']['version']` -  Defaults to `1.1.15`.
+* `node['blueprint']['apps']['commerce-adapter-hybris']['version']` -  Defaults to `1.2.4`.
 * `node['blueprint']['apps']['commerce-adapter-sfcc']['group_id']` -  Defaults to `com.coremedia.commerce.adapter.sfcc`.
 * `node['blueprint']['apps']['commerce-adapter-sfcc']['artifact_id']` -  Defaults to `adapter-sfcc-app`.
-* `node['blueprint']['apps']['commerce-adapter-sfcc']['version']` -  Defaults to `1.1.19`.
+* `node['blueprint']['apps']['commerce-adapter-sfcc']['version']` -  Defaults to `1.2.0`.
 * `node['blueprint']['apps']['commerce-adapter-wcs']['group_id']` -  Defaults to `com.coremedia.commerce.adapter.wcs`.
 * `node['blueprint']['apps']['commerce-adapter-wcs']['artifact_id']` -  Defaults to `adapter-wcs-app`.
-* `node['blueprint']['apps']['commerce-adapter-wcs']['version']` -  Defaults to `1.3.13`.
+* `node['blueprint']['apps']['commerce-adapter-wcs']['version']` -  Defaults to `1.4.1`.
 * `node['blueprint']['solr']['config_zip_version']` -  Defaults to `node['blueprint']['default_version']`.
 * `node['blueprint']['tools']['content-management-server']['group_id']` -  Defaults to `com.coremedia.blueprint`.
 * `node['blueprint']['tools']['content-management-server']['artifact_id']` -  Defaults to `cms-tools-application`.

@@ -26,13 +26,6 @@
     </dependency>
 
     <dependency>
-      <groupId>com.coremedia.ui.sdk</groupId>
-      <artifactId>dashboard-app-studio-plugin</artifactId>
-      <type>swc</type>
-      <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>studio-client-dynamic-extension-dependencies</artifactId>
       <version>${project.version}</version>
@@ -70,6 +63,14 @@
       <properties>
         <jooProxyTargetUri>https://studio.${installation.host}</jooProxyTargetUri>
       </properties>
+    </profile>
+
+    <profile>
+      <id>with-studio-apps</id>
+
+      <dependencies>
+        <!-- Put any dependencies here that are only for a Studio with apps-->
+      </dependencies>
     </profile>
   </profiles>
 </project>

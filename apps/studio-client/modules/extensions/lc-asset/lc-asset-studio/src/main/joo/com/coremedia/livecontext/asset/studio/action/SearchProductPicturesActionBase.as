@@ -3,7 +3,7 @@ import com.coremedia.cms.editor.sdk.actions.ActionConfigUtil;
 import com.coremedia.cms.editor.sdk.collectionview.CollectionViewConstants;
 import com.coremedia.cms.editor.sdk.collectionview.SearchState;
 import com.coremedia.cms.editor.sdk.editorContext;
-import com.coremedia.cms.editor.sdk.sites.Site;
+import com.coremedia.cms.studio.multisite.models.sites.Site;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ecommerce.studio.model.Product;
 import com.coremedia.livecontext.studio.action.LiveContextCatalogObjectAction;

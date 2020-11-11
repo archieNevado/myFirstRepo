@@ -38,6 +38,22 @@ public class TaxonomyUtil {
     latestAdminSelection = node;
   }
 
+  /**
+   * Utility method that checks if the given node is already part of the active selection list.
+   */
+  public static function isInSelection(selection:Array, ref:String):Boolean {
+    if (selection) {
+      for (var i:int = 0; i < selection.length; i++) {
+        var selectedContent:Content = selection[i];
+        var restId:String = TaxonomyUtil.parseRestId(selectedContent);
+        if (restId === ref) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   public static function decodeHTML(xml:String):String {
     while (xml.indexOf('&nbsp;') !== -1) {
       xml = xml.replace('&nbsp;', ' ');
@@ -47,8 +63,6 @@ public class TaxonomyUtil {
 
 
   public static function escapeHTML(xml:String):String {
-    xml = xml.replace(/&/g, "&amp;");
-
     while (xml.indexOf('>') !== -1) {
       xml = xml.replace('>', '&gt;');
     }
@@ -133,10 +147,10 @@ public class TaxonomyUtil {
       siteId = editorContext.getSitesService().getSiteIdFor(content);
     }
     var url:String = 'taxonomies/path?' + Ext.urlEncode({
-              taxonomyId: taxonomyId,
-              nodeRef: parseRestId(bean),
-              site: siteId
-            });
+      taxonomyId: taxonomyId,
+      nodeRef: parseRestId(bean),
+      site: siteId
+    });
     var taxRemoteBean:RemoteBean = beanFactory.getRemoteBean(url);
     taxRemoteBean.load(function ():void {
       EventUtil.invokeLater(function ():void {
@@ -196,7 +210,7 @@ public class TaxonomyUtil {
     }, function (result:Object):void {
       Ext.getCmp(EditorMainView.ID).getEl().setStyle('cursor', 'default');
       var message:String = ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyEditor_deletion_failed_text');
-      message =  StringUtil.format(message, result.getResponseJSON());
+      message = StringUtil.format(message, result.getResponseJSON());
       var title:String = ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyEditor_deletion_failed_title');
       MessageBoxUtil.showInfo(title, message);
     });
@@ -257,8 +271,9 @@ public class TaxonomyUtil {
    * selection expression.
    * @param selectionExpression the current selection
    * @param contentId The id of the node to add to the selection.
+   * @param callback An optional callback called after selection update
    */
-  public static function addNodeToSelection(selectionExpression:ValueExpression, contentId:String):void {
+  public static function addNodeToSelection(selectionExpression:ValueExpression, contentId:String, callback:Function = undefined):void {
     var newSelection:Array = [];
 
     var child:Content = beanFactory.getRemoteBean(contentId) as Content;
@@ -269,6 +284,10 @@ public class TaxonomyUtil {
         newSelection = selection.concat(newSelection);
       }
       selectionExpression.setValue(newSelection);
+
+      if(callback) {
+        callback(contentId);
+      }
     });
   }
 
@@ -277,8 +296,9 @@ public class TaxonomyUtil {
    * selection expression.
    * @param selectionExpression the current selection
    * @param contentId The node to remove from the selection.
+   * @param callback An optional callback called after selection update
    */
-  public static function removeNodeFromSelection(selectionExpression:ValueExpression, contentId:String):void {
+  public static function removeNodeFromSelection(selectionExpression:ValueExpression, contentId:String, callback:Function = undefined):void {
     var selection:Array = selectionExpression.getValue();
     var newSelection:Array = [];
     if (selection) {
@@ -292,6 +312,9 @@ public class TaxonomyUtil {
       }
     }
     selectionExpression.setValue(newSelection);
+    if(callback) {
+      callback(contentId);
+    }
   }
 
   /**
@@ -300,7 +323,7 @@ public class TaxonomyUtil {
    * @return
    */
   public static function getRestIdFromCapId(ref:String):String {
-    if(ref.indexOf('/') !== -1) {
+    if (ref.indexOf('/') !== -1) {
       return 'content/' + ref.substr(ref.lastIndexOf('/') + 1, ref.length);
     }
 

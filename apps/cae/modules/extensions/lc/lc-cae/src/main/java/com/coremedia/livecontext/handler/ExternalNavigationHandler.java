@@ -125,8 +125,13 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
     return modelAndView;
   }
 
+  /**
+   * @deprecated This link scheme is no longer needed and has been replaced by
+   * {@link com.coremedia.livecontext.fragment.links.CommerceLinks#buildLinkForExternalChannel(LiveContextExternalChannel, Map, HttpServletRequest)}
+   */
   @Nullable
   @Link(type = LiveContextExternalChannel.class)
+  @Deprecated
   public UriComponents buildLinkForExternalChannel(LiveContextExternalChannel navigation, String viewName,
                                                    Map<String, Object> linkParameters,
                                                    @NonNull HttpServletRequest request) {
@@ -138,16 +143,26 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
     return buildCatalogLink(navigation, viewName, linkParameters, request).orElse(null);
   }
 
+  /**
+   * @deprecated This link scheme is no longer needed and has been replaced by
+   * {@link com.coremedia.livecontext.fragment.links.CommerceLinks#buildLinkForLiveContextCategoryNavigation(LiveContextCategoryNavigation, Map, HttpServletRequest)}
+   */
   @Nullable
   @Link(type = LiveContextCategoryNavigation.class)
+  @Deprecated
   public UriComponents buildLinkForCategoryImpl(LiveContextCategoryNavigation navigation, String viewName,
                                                 Map<String, Object> linkParameters,
                                                 @NonNull HttpServletRequest request) {
     return buildCatalogLink(navigation, viewName, linkParameters, request).orElse(null);
   }
 
+  /**
+   * @deprecated This link scheme is no longer needed and has been replaced by
+   * {@link com.coremedia.livecontext.fragment.links.CommerceLinks#buildLinkForCategoryInSite(CategoryInSite, Map, HttpServletRequest)}
+   */
   @Nullable
   @Link(type = CategoryInSite.class)
+  @Deprecated
   public UriComponents buildLinkFor(CategoryInSite categoryInSite, String viewName, Map<String, Object> linkParameters,
                                     @NonNull HttpServletRequest request) {
     LiveContextNavigation navigation = getLiveContextNavigationFactory()

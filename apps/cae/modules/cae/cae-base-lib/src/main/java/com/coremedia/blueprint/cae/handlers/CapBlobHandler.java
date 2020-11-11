@@ -235,7 +235,7 @@ public class CapBlobHandler extends HandlerBase {
       String extension = getExtension(bean.getContentType(), BLOB_DEFAULT_EXTENSION);
       effectiveFilename = name + "-" + propertyName + "." + extension;
     } else {
-      effectiveFilename = encode(filename, UTF_8.name());
+      effectiveFilename = filename;
     }
 
     return UriComponentsBuilder.newInstance()

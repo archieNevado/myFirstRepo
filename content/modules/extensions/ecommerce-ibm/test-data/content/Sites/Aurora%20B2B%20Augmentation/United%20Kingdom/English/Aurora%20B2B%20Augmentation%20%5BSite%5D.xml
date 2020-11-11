@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMSite folder="/Sites/Aurora B2B Augmentation/United Kingdom/English" name="Aurora B2B Augmentation [Site]" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
+<externalRefId></externalRefId>
+<locale>en-GB</locale>
+<master>
+<link href="../../United%20States/English/Aurora%20B2B%20Augmentation%20%5BSite%5D.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20States/English/Aurora%20B2B%20Augmentation%20%5BSite%5D"/>
+</master>
+<id>50b963caa99e2e6cc601663c5d9dfab3</id>
+<name>Aurora B2B Augmentation</name>
+<root>
+<link href="Navigation/Fragments/Aurora%20B2B%20Homepage/Aurora%20B2B%20Augmentation.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20Kingdom/English/Navigation/Fragments/Aurora%20B2B%20Homepage/Aurora%20B2B%20Augmentation"/>
+</root>
+<siteManagerGroup>manager-b2b-en-US,administratoren</siteManagerGroup>
+<linkedSettings>
+<link href="Options/Settings/SiteSettings.xml" path="/Sites/Aurora%20B2B%20Augmentation/United%20Kingdom/English/Options/Settings/SiteSettings"/>
+</linkedSettings>
+</CMSite>

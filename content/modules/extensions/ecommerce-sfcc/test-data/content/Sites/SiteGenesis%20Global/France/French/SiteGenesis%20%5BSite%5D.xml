@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMSite folder="/Sites/SiteGenesis Global/France/French" name="SiteGenesis [Site]" translationState="up-to-date">
+<CMSite folder="/Sites/SiteGenesis Global/France/French" name="SiteGenesis [Site]" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <externalRefId></externalRefId>
 <locale>fr-FR</locale>
 <master>
@@ -10,7 +10,7 @@
 <root>
 <link href="Navigation/SiteGenesis.xml" path="/Sites/SiteGenesis%20Global/France/French/Navigation/SiteGenesis"/>
 </root>
-<siteManagerGroup>manager-sf-fr-FR</siteManagerGroup>
+<siteManagerGroup>manager-sf-fr-FR,administratoren</siteManagerGroup>
 <linkedSettings>
 <link href="Options/Settings/SiteSettings.xml" path="/Sites/SiteGenesis%20Global/France/French/Options/Settings/SiteSettings"/>
 </linkedSettings>

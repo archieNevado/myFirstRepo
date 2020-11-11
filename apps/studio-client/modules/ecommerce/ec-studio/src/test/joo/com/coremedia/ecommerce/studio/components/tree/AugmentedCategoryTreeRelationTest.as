@@ -2,7 +2,7 @@ package com.coremedia.ecommerce.studio.components.tree {
 import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.EditorContextImpl;
 import com.coremedia.cms.editor.sdk.editorContext;
-import com.coremedia.cms.editor.sdk.sites.SitesService;
+import com.coremedia.cms.studio.multisite.models.sites.SitesService;
 import com.coremedia.ecommerce.studio.AbstractCatalogStudioTest;
 import com.coremedia.ecommerce.studio.model.CategoryImpl;
 import com.coremedia.ecommerce.studio.tree.augmentedCategoryTreeRelation;

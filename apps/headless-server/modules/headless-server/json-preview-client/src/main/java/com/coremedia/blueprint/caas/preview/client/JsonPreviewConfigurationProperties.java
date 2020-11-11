@@ -3,14 +3,12 @@ package com.coremedia.blueprint.caas.preview.client;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
 @ConfigurationProperties(prefix = "previewclient")
-@PropertySource("classpath:json-preview-client.properties")
 public class JsonPreviewConfigurationProperties {
   /**
    * Caas server endpoint for the JSON Preview Client

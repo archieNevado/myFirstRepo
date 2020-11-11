@@ -27,6 +27,11 @@ import java.util.List;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Links.ABSOLUTE_URI_KEY;
 
+/**
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
+@Deprecated
 public class CatalogSitemapUrlGenerator implements SitemapUrlGenerator {
 
   private static final Logger LOG = LoggerFactory.getLogger(CatalogSitemapUrlGenerator.class);

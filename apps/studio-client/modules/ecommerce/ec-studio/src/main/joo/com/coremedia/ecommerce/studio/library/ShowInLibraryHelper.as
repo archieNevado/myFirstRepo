@@ -4,7 +4,7 @@ import com.coremedia.cms.editor.sdk.collectionview.CollectionViewConstants;
 import com.coremedia.cms.editor.sdk.collectionview.tree.CompoundChildTreeModel;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.preferences.PreferenceWindow;
-import com.coremedia.cms.editor.sdk.util.MessageBoxUtilInternal;
+import com.coremedia.ui.messagebox.MessageBoxUtilInternal;
 import com.coremedia.ecommerce.studio.catalogHelper;
 import com.coremedia.ecommerce.studio.components.preferences.CatalogPreferencesBase;
 import com.coremedia.ui.data.ValueExpression;

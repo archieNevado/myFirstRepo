@@ -2,7 +2,11 @@ package com.coremedia.livecontext.ecommerce.ibm.login;
 
 /**
  * The user credentials for the WCS.
+ *
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
  */
+@Deprecated
 public class WcSession {
   public final static String HTTP_SESSION_VARIABLE_NAME = "wcsSession";
 

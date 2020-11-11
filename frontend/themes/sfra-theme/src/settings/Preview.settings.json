@@ -30,6 +30,12 @@
   },
 
   "fragmentPreview": {
+    "CMSpinner": [
+      {
+        "titleKey": "preview_label_default",
+        "viewName": "DEFAULT"
+      }
+    ],
     "CMArticle": [
       {
         "titleKey": "preview_label_default",
