@@ -35,7 +35,7 @@
         <configuration>
           <jooProxyPathSpec>${jooProxyPathSpec}</jooProxyPathSpec>
           <jooProxyTargetUri>${jooProxyTargetUri}</jooProxyTargetUri>
-          <rootApp>com.coremedia.blueprint:studio-app</rootApp>
+          <rootApp>${project.groupId}:studio-app</rootApp>
         </configuration>
       </plugin>
     </plugins>

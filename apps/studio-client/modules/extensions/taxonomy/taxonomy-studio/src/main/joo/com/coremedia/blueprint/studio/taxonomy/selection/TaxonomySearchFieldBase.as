@@ -6,6 +6,7 @@ import com.coremedia.blueprint.studio.taxonomy.rendering.TaxonomyRenderFactory;
 import com.coremedia.blueprint.studio.taxonomy.rendering.TaxonomyRenderer;
 import com.coremedia.blueprint.studio.taxonomy.rendering.TaxonomySearchComboRenderer;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cms.editor.sdk.util.ILinkListWrapper;
 import com.coremedia.ui.components.StatefulComboBox;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.beanFactory;
@@ -41,14 +42,19 @@ public class TaxonomySearchFieldBase extends StatefulComboBox {
           '<tpl for="."><div style="width:' + TaxonomySearchComboRenderer.LIST_WIDTH + 'px;padding: 2px 0px; ">{' + 'html' + '}</div></tpl>'
   );
 
+  [Bindable]
+  public var taxonomyIdExpression:ValueExpression;
+
+  /**
+   * Optional list of contents to be excluded from the search suggestion result.
+   */
+  [ExtConfig]
+  public var linkListWrapper:ILinkListWrapper;
+
   private var searchResultExpression:ValueExpression;
 
   private var showSelectionPath:Boolean;
 
-  [Bindable]
-  public var taxonomyIdExpression:ValueExpression;
-
-  // It is assumed that cachedValue always corresponds to a valid tag.
   // Consequently its always originates from onNodeSelection().
   private var cachedValue:*;
 
@@ -78,6 +84,8 @@ public class TaxonomySearchFieldBase extends StatefulComboBox {
 
 
     getStore().addListener('datachanged', validate);
+    config.linkListWrapper && getStore().getFilters().add(getFilterFn(config.linkListWrapper));
+
     addListener("afterrender", validate);
     addListener('focus', doFocus);
     addListener('select', onNodeSelection);
@@ -107,7 +115,7 @@ public class TaxonomySearchFieldBase extends StatefulComboBox {
     return httpProxy;
   }
 
-  private function getTaxonomyId(config:TaxonomySearchField):String {
+  private static function getTaxonomyId(config:TaxonomySearchField):String {
     if(config.taxonomyIdExpression === undefined) {
       return "";
     }
@@ -132,7 +140,7 @@ public class TaxonomySearchFieldBase extends StatefulComboBox {
   protected static function renderHTML(component:*, record:Model):String {
     if(record.data.path) {
       var nodes:Array = record.data.path.nodes;
-      var renderer:TaxonomyRenderer = TaxonomyRenderFactory.createSearchComboRenderer(nodes, record.data.ref);
+      var renderer:TaxonomyRenderer = TaxonomyRenderFactory.createSearchComboRenderer(nodes, record.data[TaxonomyNode.PROPERTY_REF]);
       renderer.doRender();
       var html:String = renderer.getHtml();
       return html;
@@ -237,6 +245,15 @@ public class TaxonomySearchFieldBase extends StatefulComboBox {
       searchResultExpression.setValue(path);
       setValue("");
     });
+  }
+
+  protected function getFilterFn(linkListWrapper:ILinkListWrapper):Function {
+    return function(record:Model):Boolean {
+      var componentId:String = record.data[TaxonomyNode.PROPERTY_REF];
+      return linkListWrapper.getLinks().every(function(content:Content):Boolean {
+        return componentId !== content.getUriPath();
+      });
+    }
   }
 }
 }

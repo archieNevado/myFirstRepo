@@ -202,6 +202,13 @@ public class TaxonomyRenderer {
     return html;
   }
 
+  protected function createAriaLabel(nodes:Array):String {
+    return nodes.reduce(function(result:String, node:Object):String {
+      var taxNode:TaxonomyNode = new TaxonomyNode(node);
+      return result + taxNode.getRawName() + " ";
+    }, "");
+  }
+
   // ------------------------------ Concrete Rendering ------------------------------------------------------------
 
   /**

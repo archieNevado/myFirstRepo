@@ -118,8 +118,7 @@ if [ "${SOLR_SLAVE}" = "true" ]; then
     for CORE in ${CORES_TO_REPLICATE}; do
       CORE_DIR=/var/solr/data/${CORE}
       if [ ! -f ${CORE_DIR}/core.json ]; then
-        INSTANCE_DIR=$(jq --raw-output ".status.\"${CORE}\".instanceDir" /tmp/cores.json)
-        CONFIG_SET=${INSTANCE_DIR##*/}
+        CONFIG_SET=$(jq --raw-output ".status.\"${CORE}\".configSet" /tmp/cores.json)
         echo "[DOCKER ENTRYPOINT] - creating core ${CORE} with configSet ${CONFIG_SET}"
         mkdir -p ${CORE_DIR}
         cat << EOF > ${CORE_DIR}/core.properties

@@ -194,6 +194,7 @@
                                           resetOnBlur="true"
                                           showSelectionPath="false"
                                           taxonomyIdExpression="{config.taxonomyIdExpression}"
+                                          linkListWrapper="{getLinkListWrapper(config)}"
                                           bindTo="{config.bindTo}"
                                           forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
                                           propertyName="{config.propertyName}"

@@ -1,16 +1,18 @@
 package com.coremedia.blueprint.cae.handlers;
 
+import com.coremedia.blueprint.common.contentbeans.CMPicture;
 import com.coremedia.blueprint.testing.ContentTestHelper;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.transform.TransformImageService;
+import com.coremedia.objectserver.configuration.CaeConfigurationProperties;
 import com.coremedia.objectserver.request.RequestUtils;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.HttpError;
 import com.coremedia.objectserver.web.links.LinkFormatter;
-import com.coremedia.transform.NamedTransformBeanBlobTransformer;
 import com.coremedia.transform.TransformedBeanBlob;
 import com.google.common.collect.ImmutableMap;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,13 +23,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
-import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -57,12 +59,9 @@ import static org.mockito.Mockito.when;
 public class TransformedBlobHandlerTest {
 
   private TransformedBeanBlob transformedBlob;
-  private Blob transformedBlobObject;
 
   @MockBean
   private TransformImageService transformImageService;
-  @MockBean
-  private NamedTransformBeanBlobTransformer namedTransformBeanBlobTransformer;
 
   @Inject
   private MockMvc mockMvc;
@@ -70,6 +69,8 @@ public class TransformedBlobHandlerTest {
   private LinkFormatter linkFormatter;
   @Inject
   private ContentTestHelper contentTestHelper;
+  @Inject
+  private CaeConfigurationProperties properties;
 
   //----
   private static final String DIGEST = "digest";
@@ -79,13 +80,14 @@ public class TransformedBlobHandlerTest {
 
   @Before
   public void setUp() {
+    properties.setSingleNode(false);
     transformedBlob = mock(TransformedBeanBlob.class);
-    transformedBlobObject = mock(Blob.class);
-    when(transformedBlobObject.getETag()).thenReturn(DIGEST);
     when(transformedBlob.getETag()).thenReturn(DIGEST);
     when(transformedBlob.getTransformName()).thenReturn(TRANSFORM_NAME);
+    when(transformImageService.getTransformationOperations(any(Content.class), anyString()))
+            .thenReturn(Map.of(TRANSFORM_NAME, TRANSFORM_NAME));
 
-    when(transformImageService.transformWithDimensions(any(Content.class), anyString(), anyString(), anyInt(), anyInt())).thenReturn(Optional.of(transformedBlobObject));
+    when(transformImageService.transformWithDimensions(any(Content.class), anyString(), anyString(), anyInt(), anyInt())).thenReturn(Optional.of(transformedBlob));
   }
 
   /**
@@ -94,20 +96,44 @@ public class TransformedBlobHandlerTest {
    */
   @Test
   public void testBean() throws Exception {
-    when(transformedBlob.getBean()).thenReturn(contentTestHelper.getContentBean(16));
-    when(transformedBlob.getOriginal()).thenReturn(contentTestHelper.getContent(16).getBlobRef("data"));
-
-    assertModel(handleRequest("/resource/image/16/transformName/100/100/digest/tw/nae-me-jpg.jpg"), transformedBlobObject);
+    assertModel(handleRequest("/resource/image/16/transformName/100/100/4d1b8ae7b7c0102fbdd80b5ea41b45c5/uY/nae-me-jpg.jpg"), transformedBlob);
   }
 
   @Test
   public void acceptUrlWithOriginalExtensionInsteadOfTransformedExtension() throws Exception {
     // in this test case, the original JPEG is transformed to a PNG
     when(transformedBlob.getContentType()).thenReturn(new MimeType("image/png"));
-    when(transformedBlob.getBean()).thenReturn(contentTestHelper.getContentBean(16));
-    when(transformedBlob.getOriginal()).thenReturn(contentTestHelper.getContent(16).getBlobRef("data"));
 
-    assertModel(handleRequest("/resource/image/16/transformName/100/100/digest/tw/nae-me-jpg.jpg"), transformedBlobObject);
+    assertModel(handleRequest("/resource/image/16/transformName/100/100/4d1b8ae7b7c0102fbdd80b5ea41b45c5/uY/nae-me-jpg.jpg"), transformedBlob);
+  }
+
+  @Test
+  public void acceptUrlWithWrongDigest() throws Exception {
+    performMockRequest("/resource/image/16/transformName/100/100/dunno/TM/nae-me-jpg.jpg")
+            .andExpect(
+                    mvcResult -> {
+                      assertModel(mvcResult.getModelAndView(), transformedBlob);
+                      assertThat(mvcResult.getResponse().getHeader("Cache-Control")).isEqualTo("no-store");
+                    }
+            );
+  }
+
+  @Test
+  public void acceptUrlWithWrongDigestSingleNode() throws Exception {
+    properties.setSingleNode(true);
+
+    Blob ratioBlob = contentTestHelper.<CMPicture>getContentBean(16)
+            .getTransformedData(TRANSFORM_NAME);
+
+    performMockRequest("/resource/image/16/transformName/100/100/dunno/TM/nae-me-jpg.jpg")
+            .andExpect(
+                    mvcResult -> {
+                      assertThat(mvcResult.getModelAndView()).returns("redirect:DEFAULT", ModelAndView::getViewName);
+                      // link building does not take the final transformed blob into account
+                      assertModel(mvcResult.getModelAndView(), ratioBlob);
+                      assertThat(mvcResult.getResponse().getHeader("Cache-Control")).isNull();
+                    }
+            );
   }
 
   /**
@@ -120,17 +146,14 @@ public class TransformedBlobHandlerTest {
     // the segment will be encoded in UTF-8, requiring three bytes per character.
     // The UTF-8, URL encoded segment equivalent to these four characters, is "%E8%A9%A6%E9%A8%93%E7%94%BB%E5%83%8F".
     String japaneseName = "\u8A66\u9A13\u753B\u50CF-jpg";
-    String url = "/resource/image/20/transformName/100/100/digest/dw/" + japaneseName + ".jpg";
+    String url = "/resource/image/20/transformName/100/100/91d18d69d55180b2649f48647c7000ed/pu/" + japaneseName + ".jpg";
 
-    when(transformedBlob.getBean()).thenReturn(contentTestHelper.getContentBean(20));
-    when(transformedBlob.getOriginal()).thenReturn(contentTestHelper.getContent(20).getBlobRef("data"));
-    String link = formatLink(transformedBlob, null, false, ImmutableMap.of(
-            TransformedBlobHandler.WIDTH_SEGMENT, WIDTH,
-            TransformedBlobHandler.HEIGHT_SEGMENT, HEIGHT
-    ));
+    CMPicture picture = contentTestHelper.getContentBean(20);
+    when(transformedBlob.getBean()).thenReturn(picture);
+    when(transformedBlob.getOriginal()).thenReturn(picture.getContent().getBlobRef("data"));
 
     ModelAndView modelAndView = handleRequest(url);
-    assertModel(modelAndView, transformedBlobObject);
+    assertModel(modelAndView, transformedBlob);
   }
 
   /**
@@ -141,13 +164,13 @@ public class TransformedBlobHandlerTest {
   public void testMessingWithProtectedURLParts() throws Exception {
     when(transformedBlob.getBean()).thenReturn(contentTestHelper.getContentBean(16));
     when(transformedBlob.getOriginal()).thenReturn(contentTestHelper.getContent(16).getBlobRef("data"));
-    assertNotFound("extension", handleRequest("/resource/image/16/transformName/100/100/digest/tw/nae-me-jpg.png"));
-    assertNotFound("name", handleRequest("/resource/image/16/transformName/100/100/digest/tw/nae-me-jpg-broken.jpg"));
+    assertNotFound("extension", handleRequest("/resource/image/16/transformName/100/100/4d1b8ae7b7c0102fbdd80b5ea41b45c5/uY/nae-me-jpg.png"));
+    assertNotFound("name", handleRequest("/resource/image/16/transformName/100/100/4d1b8ae7b7c0102fbdd80b5ea41b45c5/uY/nae-me-jpg-broken.jpg"));
     assertNotFound("digest", handleRequest("/resource/image/16/transformName/100/100/digest/xxxxx/nae-me-jpg.jpg"));
-    assertNotFound("width", handleRequest("/resource/image/16/transformName/101/100/digest/tw/nae-me-jpg.jpg"));
-    assertNotFound("height", handleRequest("/resource/image/16/transformName/100/101/digest/tw/nae-me-jpg.jpg"));
-    assertNotFound("transform", handleRequest("/resource/image/16/invalid/100/100/digest/tw/nae-me-jpg.jpg"));
-    assertNotFound("id", handleRequest("/resource/image/18/transformName/100/100/digest/tw/nae-me-jpg.jpg"));
+    assertNotFound("width", handleRequest("/resource/image/16/transformName/101/100/4d1b8ae7b7c0102fbdd80b5ea41b45c5/uY/nae-me-jpg.jpg"));
+    assertNotFound("height", handleRequest("/resource/image/16/transformName/100/101/4d1b8ae7b7c0102fbdd80b5ea41b45c5/uY/nae-me-jpg.jpg"));
+    assertNotFound("transform", handleRequest("/resource/image/16/invalid/100/100/4d1b8ae7b7c0102fbdd80b5ea41b45c5/uY/nae-me-jpg.jpg"));
+    assertNotFound("id", handleRequest("/resource/image/18/transformName/100/100/4d1b8ae7b7c0102fbdd80b5ea41b45c5/uY/nae-me-jpg.jpg"));
     assertNotFound("hash", handleRequest("/resource/image/16/transformName/100/100/digest/XXX/nae-me-jpg.jpg"));
 
     verify(transformImageService, never()).transformWithDimensions(any(Content.class), anyString(), anyString(), anyInt(), anyInt());
@@ -159,14 +182,16 @@ public class TransformedBlobHandlerTest {
    */
   @Test
   public void testGenerateLink() {
-    when(transformedBlob.getBean()).thenReturn(contentTestHelper.getContentBean(16));
-    when(transformedBlob.getOriginal()).thenReturn(contentTestHelper.getContent(16).getBlobRef("data"));
+    CMPicture picture = contentTestHelper.getContentBean(16);
+    Blob transformedData = picture.getTransformedData(TRANSFORM_NAME);
+    when(transformedBlob.getBean()).thenReturn(picture);
+    when(transformedBlob.getOriginal()).thenReturn(picture.getContent().getBlobRef("data"));
 
-    String link = formatLink(transformedBlob, null, false, ImmutableMap.of(
+    String link = formatLink(transformedData, null, false, ImmutableMap.of(
             TransformedBlobHandler.WIDTH_SEGMENT, WIDTH,
             TransformedBlobHandler.HEIGHT_SEGMENT, HEIGHT
     ));
-    assertThat(link).isEqualTo("/resource/image/16/transformName/100/100/digest/tw/nae-me-jpg.jpg");
+    assertThat(link).isEqualTo("/resource/image/16/transformName/100/100/4d1b8ae7b7c0102fbdd80b5ea41b45c5/uY/nae-me-jpg.jpg");
   }
 
   /**
@@ -207,15 +232,17 @@ public class TransformedBlobHandlerTest {
   // --- internal ---------------------------------------------------
 
   private ModelAndView handleRequest(String path) throws Exception {
+    return performMockRequest(path)
+            .andExpect(mvcResult -> assertThat(mvcResult.getResponse().getHeader("Cache-Control")).isNull())
+            .andReturn().getModelAndView();
+  }
+
+  private ResultActions performMockRequest(String path) throws Exception {
     MockHttpServletRequestBuilder req = MockMvcRequestBuilders
             .get(path)
             .requestAttr(ATTR_NAME_CMNAVIGATION, contentTestHelper.getContentBean(4))
             .characterEncoding("UTF-8");
-    return handleRequest(req);
-  }
-
-  private ModelAndView handleRequest(MockHttpServletRequestBuilder req) throws Exception {
-    return mockMvc.perform(req).andReturn().getModelAndView();
+    return mockMvc.perform(req);
   }
 
   private void assertNotFound(@NonNull String message, ModelAndView modelAndView) {

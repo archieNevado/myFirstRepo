@@ -101,6 +101,7 @@ import com.coremedia.link.uri.UriLinkComposer;
 import com.coremedia.objectserver.urlservice.UrlServiceRequestParams;
 import com.coremedia.search.solr.client.SolrClientConfiguration;
 import com.coremedia.springframework.customizer.Customize;
+import com.coremedia.springframework.customizer.CustomizerConfiguration;
 import com.coremedia.xml.Markup;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.collect.ImmutableList;
@@ -214,7 +215,8 @@ import static java.util.Collections.emptyList;
 })
 @Import({
         ImageTransformationConfiguration.class,
-        SolrClientConfiguration.class
+        SolrClientConfiguration.class,
+        CustomizerConfiguration.class
 })
 public class CaasConfig implements WebMvcConfigurer {
 
@@ -713,9 +715,13 @@ public class CaasConfig implements WebMvcConfigurer {
     return new DataFetcherMappingInstrumentation((dataFetcher, parameters) ->
             new ConvertingDataFetcher(
                     new FilteringDataFetcher(
-                            new ViewBySiteFilterDataFetcher(dataFetcher, sitesService), filterPredicates),
+                            new ViewBySiteFilterDataFetcher(dataFetcher, sitesService, caasServiceConfigurationProperties),
+                            filterPredicates
+                    ),
                     conversionService,
-                    conversionTypeMap));
+                    conversionTypeMap
+            )
+    );
   }
 
   @Bean

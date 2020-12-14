@@ -84,7 +84,9 @@
               targetSiteIdVariable="targetSiteId"/>
       <Action class="com.coremedia.translate.workflow.FilterDerivedContentsAction"
               masterContentObjectsVariable="masterContentObjects"
-              derivedContentsVariable="derivedContents"/>
+              derivedContentsVariable="derivedContents"
+              ignoreContentStateIgnoreUpdates="true"
+      />
     </AutomatedTask>
 
     <If name="CheckIfDerivedContentsEmpty">
@@ -144,7 +146,9 @@
                    derivedContentsVariable="derivedContents"
                    masterContentObjectsVariable="masterContentObjects"
                    resultVariable="autoMergeConflicts"
-                   performerVariable="performer"/>
+                   performerVariable="performer"
+                   ignoreContentStateIgnoreUpdates="true"
+      />
 
       <Assignment>
         <Reads variable="subject"/>
@@ -181,7 +185,9 @@
                    derivedContentsVariable="derivedContents"
                    masterContentObjectsVariable="masterContentObjects"
                    resultVariable="autoMergeConflicts"
-                   performerVariable="performer"/>
+                   performerVariable="performer"
+                   ignoreContentStateIgnoreUpdates="true"
+      />
 
       <Assignment>
         <Reads variable="subject"/>

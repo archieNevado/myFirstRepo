@@ -10,22 +10,26 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentObject;
 import com.coremedia.cap.transform.TransformImageService;
 import com.coremedia.objectserver.beans.ContentBean;
+import com.coremedia.objectserver.request.RequestUtils;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.SecureHashCodeGeneratorStrategy;
 import com.coremedia.objectserver.web.links.Link;
 import com.coremedia.transform.TransformedBeanBlob;
 import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import javax.activation.MimeType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.activation.MimeType;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 import java.util.Optional;
 
@@ -100,7 +104,8 @@ public class TransformedBlobHandler extends HandlerBase {
                                     @PathVariable(SECHASH_SEGMENT) String secHash,
                                     @PathVariable(SEGMENT_NAME) String name,
                                     @PathVariable(SEGMENT_EXTENSION) String extension,
-                                    WebRequest webRequest) {
+                                    WebRequest webRequest,
+                                    HttpServletResponse response) {
     if (!(contentBean instanceof CMMedia)) {
       return HandlerHelper.notFound();
     }
@@ -125,15 +130,41 @@ public class TransformedBlobHandler extends HandlerBase {
       if (secureHashCodeGeneratorStrategy.matches(parameters, secHash)) {
         //request is valid, resolve blob and return model
         Blob transformedBlob = transformedData(media, transformationName, extension, width, height);
-        if (webRequest.checkNotModified(transformedBlob.getETag())) {
+        String blobETag = transformedBlob.getETag();
+        if (webRequest.checkNotModified(blobETag)) {
           // shortcut exit - no further processing necessary
           return null;
         }
+
+        // note that links are generated for the variants without width and height
+        Blob variant = media.getTransformedData(transformationName);
+        boolean isUpToDate = digest.equals(variant.getETag());
+        if (!isUpToDate) {
+          // the handler detected that the link wasn't generated for this CAE's latest version of the given bean
+          if (isSingleNode()) {
+            // redirect to latest version
+            Map<String, Integer> params = Map.of(HEIGHT_SEGMENT, height, WIDTH_SEGMENT, width);
+            return redirectIfPossible(webRequest, variant, params);
+          } else {
+            // serve current bean but prevent caching
+            applyCacheSeconds(response, 0);
+          }
+        }
+
         return HandlerHelper.createModel(transformedBlob);
       }
     }
 
     return HandlerHelper.notFound();
+  }
+
+  private ModelAndView redirectIfPossible(WebRequest webRequest, Blob transformedBlob, Map<String, Integer> params) {
+    if (!(transformedBlob instanceof TransformedBeanBlob)) {
+      // not suitable for link building - transformation disabled?
+      return HandlerHelper.createModel(transformedBlob);
+    }
+    webRequest.setAttribute(RequestUtils.PARAMETERS, params, RequestAttributes.SCOPE_REQUEST);
+    return HandlerHelper.redirectTo(transformedBlob, null, HttpStatus.SEE_OTHER);
   }
 
   // --- LinkSchemes ---------------------------------------------------------------------------------------------------

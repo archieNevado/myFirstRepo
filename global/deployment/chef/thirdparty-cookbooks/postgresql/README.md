@@ -416,7 +416,7 @@ NOTE: Be sure to merge the latest from "upstream" before making a pull request!
 
 ## License
 
-Copyright 2010-2017, Chef Software, Inc.
+Copyright 1-SNAPSHOT017, Chef Software, Inc.
 
 ```text
 Licensed under the Apache License, Version 2.0 (the "License");

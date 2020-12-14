@@ -294,14 +294,14 @@ services:
       traefik.corporate-ca-landing.frontend.rule: Host:corporate-gb.${ENVIRONMENT_FQDN:-docker.localhost};Path:/;AddPrefix:/blueprint/servlet/corporate-en-gb
       traefik.corporate-gb-landing.frontend.rule: Host:corporate-ca.${ENVIRONMENT_FQDN:-docker.localhost};Path:/;AddPrefix:/blueprint/servlet/corporate-en-ca
       # needed for elastic social logout (/blueprint/logout)
-      traefik.corporate-es-logout.frontend.rule: HostRegexp:{subdomain:corporate-?[de]*}.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/blueprint/logout
-      traefik.corporate-servlets.frontend.rule: HostRegexp:{subdomain:corporate-?[de]*}.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/assets,/dynamic,/service,/resource,/corporate,/corporate-de-de,/corporate-en-gb,/corporate-en-ca;AddPrefix:/blueprint/servlet
+      traefik.corporate-es-logout.frontend.rule: HostRegexp:{subdomain:corporate-?[(de|gb|ca)]*}.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/blueprint/logout
+      traefik.corporate-servlets.frontend.rule: HostRegexp:{subdomain:corporate-?[(de|gb|ca)]*}.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/assets,/dynamic,/service,/resource,/corporate,/corporate-de-de,/corporate-en-gb,/corporate-en-ca;AddPrefix:/blueprint/servlet
       # Corporate sitemap rules
       # abffe57734feeee is the sitemap id of the corporate site
       # 1cc6f00b7e1b77a49caf7e72f5fe10c0 is the sitemap id of the corporate-de site
       # TODO: sitemap routing here should be dynamic, it should not be necessary to define the id's here
       # to enable sitemap generation set environment variable  GENERATE_SITEMAP to "true"
-      traefik.corporate-robots.frontend.rule: HostRegexp:{subdomain:corporate-?[de]*}.${ENVIRONMENT_FQDN:-docker.localhost};PathStrip:/robots.txt;AddPrefix:/blueprint/servlet/service/robots/corporate
+      traefik.corporate-robots.frontend.rule: HostRegexp:{subdomain:corporate-?[(de|gb|ca)]*}.${ENVIRONMENT_FQDN:-docker.localhost};PathStrip:/robots.txt;AddPrefix:/blueprint/servlet/service/robots/corporate
       traefik.corporate-sitemap.frontend.rule: Host:corporate.${ENVIRONMENT_FQDN:-docker.localhost};Path:/sitemap_index.xml,/{file:sitemap(.*).xml.gz};AddPrefix:/blueprint/servlet/service/sitemap/abffe57734feeee
       traefik.corporate-de-sitemap.frontend.rule: Host:corporate-de.${ENVIRONMENT_FQDN:-docker.localhost};Path:/sitemap_index.xml,/{file:sitemap(.*).xml.gz};AddPrefix:/blueprint/servlet/service/sitemap/1cc6f00b7e1b77a49caf7e72f5fe10c0
       traefik.corporate-gb-sitemap.frontend.rule: Host:corporate-gb.${ENVIRONMENT_FQDN:-docker.localhost};Path:/sitemap_index.xml,/{file:sitemap(.*).xml.gz};AddPrefix:/blueprint/servlet/service/sitemap/7046b7710b1b23b899097b1f3eeee3fa

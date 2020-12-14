@@ -100,7 +100,7 @@
   </tr>
   {{end}}
   <tr>
-    <td rowspan="{{ if eq (getv "/headless/client/enabled" "true") "true" }}3{{ else }}2{{ end }}">Aurora B2B</td>
+    <td rowspan="2">Aurora B2B</td>
     <td>Web</td>
     <td>
       <a href="https://shop-preview-production-ibm.{{ getv "/environment/fqdn" }}/wcs/shop/en/aurorab2besite" target="_blank" data-cm-test="cae">English</a> ·
@@ -122,20 +122,6 @@
       <a href="https://headless-server-live.{{ getv "/environment/fqdn" }}/aurorab2b-de-de/graphql?query=%7Bcontent%20%7Bsites%20%7Bname%20id%7D%7D%7D" target="_blank" data-cm-test="headless">German</a>
     </td>
   </tr>
-  {{ if eq (getv "/headless/client/enabled" "true") "true" }}
-  <tr>
-    <td>Spark App</td>
-    <td>
-      <a href="https://headless-client-preview.{{ getv "/environment/fqdn" }}/aurorab2b" target="_blank" data-cm-test="">English</a> ·
-      <a href="https://headless-client-preview.{{ getv "/environment/fqdn" }}/aurorab2b-de-de" target="_blank" data-cm-test="">German</a>
-    </td>
-    <td>
-       <a href="https:///headless-client-live.{{ getv "/environment/fqdn" }}/aurorab2b" target="_blank" data-cm-test="">English</a> ·
-       <a href="https:///headless-client-live.{{ getv "/environment/fqdn" }}/aurorab2b-de-de" target="_blank" data-cm-test="">German</a>
-    </td>
-  </tr>
-  </tr>
-  {{end}}
   <tr>
     <td rowspan="{{ if eq (getv "/headless/client/enabled" "true") "true" }}3{{ else }}2{{ end }}">Calista</td>
     <td>Web</td>
