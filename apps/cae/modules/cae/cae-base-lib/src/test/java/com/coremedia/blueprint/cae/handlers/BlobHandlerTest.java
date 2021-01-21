@@ -43,7 +43,7 @@ import static org.junit.Assert.assertTrue;
 @ActiveProfiles(PROFILE)
 public class BlobHandlerTest {
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @Profile(PROFILE)
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class,

@@ -215,7 +215,7 @@ public class FetchPublicationsHistoryTaskTest {
     verify(queryService, never()).poseVersionQuery(anyString(), anyString(), any(Calendar.class), any(Content.class));
   }
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @Import(XmlRepoConfiguration.class)
   public static class LocalConfig {
 

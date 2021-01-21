@@ -25,6 +25,7 @@ import com.coremedia.caas.filter.ValidityDateFilterPredicate;
 import com.coremedia.caas.link.GraphQLLink;
 import com.coremedia.caas.media.ResponsiveMediaAdapterFactory;
 import com.coremedia.caas.model.ContentRoot;
+import com.coremedia.caas.model.adapter.CMGrammarRichTextAdapterFactory;
 import com.coremedia.caas.model.adapter.ContentBlobAdapterFactory;
 import com.coremedia.caas.model.adapter.ExtendedLinkListAdapterFactory;
 import com.coremedia.caas.model.adapter.LinkListAdapter;
@@ -32,9 +33,10 @@ import com.coremedia.caas.model.adapter.LinkListAdapterFactory;
 import com.coremedia.caas.model.adapter.RemoteServiceAdapterFactory;
 import com.coremedia.caas.model.adapter.RichTextAdapter;
 import com.coremedia.caas.model.adapter.RichTextAdapterFactory;
+import com.coremedia.caas.model.adapter.RichTextAdapterRegistry;
+import com.coremedia.caas.model.converter.CMGrammarRichTextToMapConverter;
 import com.coremedia.caas.model.converter.MapToNestedMapsConverter;
 import com.coremedia.caas.model.converter.RichTextToStringConverter;
-import com.coremedia.caas.model.converter.RichTextToTreeConverter;
 import com.coremedia.caas.model.converter.StructToNestedMapsConverter;
 import com.coremedia.caas.model.mapper.CompositeModelMapper;
 import com.coremedia.caas.model.mapper.FilteringModelMapper;
@@ -45,8 +47,6 @@ import com.coremedia.caas.richtext.RichtextTransformerReader;
 import com.coremedia.caas.richtext.RichtextTransformerRegistry;
 import com.coremedia.caas.richtext.config.loader.ClasspathConfigResourceLoader;
 import com.coremedia.caas.richtext.config.loader.ConfigResourceLoader;
-import com.coremedia.caas.richtext.stax.writer.transfer.ElementRepresentation;
-import com.coremedia.caas.schema.CoercingBigDecimal;
 import com.coremedia.caas.schema.CoercingMap;
 import com.coremedia.caas.schema.CoercingRichTextTree;
 import com.coremedia.caas.schema.SchemaParser;
@@ -86,6 +86,7 @@ import com.coremedia.caas.wiring.ProvidesTypeNameResolver;
 import com.coremedia.caas.wiring.RemoteLinkWiringFactory;
 import com.coremedia.caas.wiring.TypeNameResolver;
 import com.coremedia.caas.wiring.TypeNameResolverWiringFactory;
+import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
@@ -135,6 +136,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
@@ -182,14 +184,16 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.coremedia.caas.web.CaasWebConfig.ATTRIBUTE_NAMES_TO_GQL_CONTEXT;
 import static com.coremedia.caas.web.CaasWebConfig.FORWARD_HEADER_MAP;
+import static java.lang.invoke.MethodHandles.lookup;
 import static java.util.Collections.emptyList;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties({
         CaasServiceConfigurationProperties.class,
         CaasGraphqlConfigurationProperties.class,
@@ -220,7 +224,7 @@ import static java.util.Collections.emptyList;
 })
 public class CaasConfig implements WebMvcConfigurer {
 
-  private static final Logger LOG = LoggerFactory.getLogger(CaasConfig.class);
+  private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
   private static final String OPTIONAL_QUERY_ROOT_BEAN_NAME_PREFIX = "query-root:";
   private static final int TWENTY_FOUR_HOURS = 24 * 60 * 60;
   private static final int CORS_RESPONSE_MAX_AGE = TWENTY_FOUR_HOURS;
@@ -337,6 +341,11 @@ public class CaasConfig implements WebMvcConfigurer {
   public LinkComposer<Content, UriLinkBuilder> contentUriLinkComposer() {
     return content -> Optional.of(new UriLinkBuilderImpl(
             UriComponentsBuilder.fromUriString(content.getId()).build()));
+  }
+
+  @Bean
+  public Function<Content, String> contentIdProvider() {
+    return content -> String.valueOf(IdHelper.parseContentId(content.getId()));
   }
 
   /**
@@ -532,9 +541,24 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public ModelMapper<Markup, RichTextAdapter> richTextModelMapper(ContentRepository contentRepository, ResponsiveMediaAdapterFactory mediaResource, RichtextTransformerRegistry richtextTransformerRegistry, LinkComposer<Object, String> uriLinkComposer, LinkComposer<Object, GraphQLLink> graphqlLinkComposer) {
-    RichTextAdapterFactory richTextAdapterFactory = new RichTextAdapterFactory(contentRepository, mediaResource, richtextTransformerRegistry, uriLinkComposer, graphqlLinkComposer);
-    return richTextAdapterFactory::to;
+  public CMGrammarRichTextAdapterFactory cmGrammarRichTextFactory(
+          ContentRepository contentRepository,
+          ResponsiveMediaAdapterFactory mediaResource,
+          RichtextTransformerRegistry richtextTransformerRegistry,
+          LinkComposer<Object, String> uriLinkComposer,
+          LinkComposer<Object, GraphQLLink> graphqlLinkComposer,
+          StaxContextConfigurationProperties staxContextConfigurationProperties) {
+    return new CMGrammarRichTextAdapterFactory(contentRepository, mediaResource, richtextTransformerRegistry, uriLinkComposer, graphqlLinkComposer, staxContextConfigurationProperties);
+  }
+
+  @Bean
+  public RichTextAdapterRegistry richTextAdapterRegistry(List<RichTextAdapterFactory<?>> richTextAdapterFactories) {
+    return new RichTextAdapterRegistry(richTextAdapterFactories);
+  }
+
+  @Bean
+  public ModelMapper<Markup, RichTextAdapter> richTextModelMapper(RichTextAdapterRegistry richTextAdapterRegistry) {
+    return richTextAdapterRegistry::get;
   }
 
   @Bean
@@ -599,19 +623,19 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public RichTextToTreeConverter richTextToTreeConverter() {
-    return new RichTextToTreeConverter();
+  public CMGrammarRichTextToMapConverter cmGrammarRichTextToMapConverter() {
+    return new CMGrammarRichTextToMapConverter();
   }
 
   @Bean
-  public Converter<Map<String, Object>, Map> mapToNestedMapsConverter(ModelMapper<Markup, RichTextAdapter> richTextModelMapper,
-                                                                      ContentBlobAdapterFactory contentBlobAdapterFactory,
-                                                                      LinkComposer<Object, String> uriLinkComposer) {
+  public Converter<Map<String, Object>, Map<String, Object>> mapToNestedMapsConverter(ModelMapper<Markup, RichTextAdapter> richTextModelMapper,
+                                                                                      ContentBlobAdapterFactory contentBlobAdapterFactory,
+                                                                                      LinkComposer<Object, String> uriLinkComposer) {
     return new MapToNestedMapsConverter(richTextModelMapper, contentBlobAdapterFactory, uriLinkComposer, RichTextAdapter.DEFAULT_VIEW);
   }
 
   @Bean
-  public Converter<Struct, Map> structToNestedMapsConverter(MapToNestedMapsConverter mapToNestedMapsConverter) {
+  public Converter<Struct, Map<String, Object>> structToNestedMapsConverter(MapToNestedMapsConverter mapToNestedMapsConverter) {
     return new StructToNestedMapsConverter(mapToNestedMapsConverter);
   }
 
@@ -725,30 +749,27 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
+  @ConditionalOnProperty(prefix = "caas.graphql", name = "max-execution-timeout")
   public ExecutionTimeoutInstrumentation executionTimeoutInstrumentation() {
-    if (caasGraphqlConfigurationProperties.getMaxExecutionTimeout() > 0) {
-      LOG.info("caas.graphql.max-execution-timeout: {} ms", caasGraphqlConfigurationProperties.getMaxExecutionTimeout());
-      return new ExecutionTimeoutInstrumentation(caasGraphqlConfigurationProperties.getMaxExecutionTimeout());
-    }
-    return null;
+    long maxExecutionTimeout = caasGraphqlConfigurationProperties.getMaxExecutionTimeout().toMillis();
+    LOG.info("caas.graphql.max-execution-timeout: {} ms", maxExecutionTimeout);
+    return new ExecutionTimeoutInstrumentation(maxExecutionTimeout);
   }
 
   @Bean
+  @ConditionalOnExpression("#{T(Integer).valueOf(${caas.graphql.max-query-depth:30}) > 0}")
   public MaxQueryDepthInstrumentation maxQueryDepthInstrumentation() {
-    if (caasGraphqlConfigurationProperties.getMaxQueryDepth() > 0) {
-      LOG.info("caas.graphql.max-query-depth: {}", caasGraphqlConfigurationProperties.getMaxQueryDepth());
-      return new MaxQueryDepthInstrumentation(caasGraphqlConfigurationProperties.getMaxQueryDepth());
-    }
-    return null;
+    int maxQueryDepth = caasGraphqlConfigurationProperties.getMaxQueryDepth();
+    LOG.info("caas.graphql.max-query-depth: {}", maxQueryDepth);
+    return new MaxQueryDepthInstrumentation(maxQueryDepth);
   }
 
   @Bean
+  @ConditionalOnExpression("#{T(Integer).valueOf(${caas.graphql.max-query-complexity:0}) > 0}")
   public MaxQueryComplexityInstrumentation maxQueryComplexityInstrumentation() {
-    if (caasGraphqlConfigurationProperties.getMaxQueryComplexity() > 0) {
-      LOG.info("caas.graphql.max-query-complexity: {}", caasGraphqlConfigurationProperties.getMaxQueryComplexity());
-      return new MaxQueryComplexityInstrumentation(caasGraphqlConfigurationProperties.getMaxQueryComplexity());
-    }
-    return null;
+    int maxQueryComplexity = caasGraphqlConfigurationProperties.getMaxQueryComplexity();
+    LOG.info("caas.graphql.max-query-complexity: {}", maxQueryComplexity);
+    return new MaxQueryComplexityInstrumentation(maxQueryComplexity);
   }
 
   public List<String> getAdditionalSchemaLocations() {
@@ -790,6 +811,7 @@ public class CaasConfig implements WebMvcConfigurer {
 
   @Bean
   public GraphQLSchema graphQLSchema(Map<String, SchemaDirectiveWiring> directiveWirings,
+                                     TypeDefinitionRegistry typeRegistry,
                                      @Qualifier("rootModelMapper") ModelMapper<Object, Object> modelMapper,
                                      List<WiringFactory> wiringFactories)
           throws IOException {
@@ -798,11 +820,9 @@ public class CaasConfig implements WebMvcConfigurer {
             .wiringFactory(wiringFactory);
     directiveWirings.forEach(builder::directive);
     RuntimeWiring wiring = builder.build();
-    TypeDefinitionRegistry typeRegistry = typeDefinitionRegistry();
     SchemaGenerator schemaGenerator = new SchemaGenerator();
     return schemaGenerator.makeExecutableSchema(typeRegistry, wiring);
   }
-
 
   @Bean
   public GraphQL graphQL(GraphQLSchema graphQLSchema,
@@ -811,7 +831,6 @@ public class CaasConfig implements WebMvcConfigurer {
             .instrumentation(new ChainedInstrumentation(instrumentations))
             .build();
   }
-
 
   @Bean
   @Qualifier("conversionTypeMap")
@@ -824,11 +843,10 @@ public class CaasConfig implements WebMvcConfigurer {
             .put("MapOfLong", Map.class)
             .put("MapOfFloat", Map.class)
             .put("MapOfBoolean", Map.class)
-            .put("RichTextTree", ElementRepresentation.class)
+            .put("RichTextTree", Map.class)
             .put("JSON", Map.class)
             .put("BigDecimal", BigDecimal.class)
             .build();
-
   }
 
   @Bean
@@ -868,7 +886,7 @@ public class CaasConfig implements WebMvcConfigurer {
 
   @Bean
   public GraphQLScalarType BigDecimal() {
-    return GraphQLScalarType.newScalar().name("BigDecimal").description("java.math.BigDecimal").coercing(new CoercingBigDecimal()).build();
+    return ExtendedScalars.GraphQLBigDecimal;
   }
 
   private Map<String, Object> renameQueryRootsWithOptionalPrefix(Map<String, Object> queryRoots) {
@@ -888,11 +906,9 @@ public class CaasConfig implements WebMvcConfigurer {
 
   @Bean
   public DataLoaderRegistry dataLoaderRegistry(Map<String, DataLoader<String, Try<String>>> dataLoaders) {
-
     DataLoaderRegistry registry = new DataLoaderRegistry();
     dataLoaders.forEach(registry::register);
     return registry;
-
   }
 
   @Bean
@@ -925,7 +941,6 @@ public class CaasConfig implements WebMvcConfigurer {
       LOG.warn("No configuration for caffeine cache '{}' found. Caching disabled!", CacheInstances.REMOTE_LINKS);
     }
     return DataLoader.newDataLoader(batchLoader, options);
-
   }
 
 }

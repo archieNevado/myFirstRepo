@@ -61,7 +61,7 @@ import java.util.Map;
 /**
  * Blueprint specific definitions of the CAE View layer.
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ComponentScan(
         basePackages = {
                 "com.coremedia.cap.util.configuration",

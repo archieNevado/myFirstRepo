@@ -10,6 +10,7 @@ ENV COMMERCE_MOCK_ENABLED=false \
     COMMERCE_WCS_HOST="" \
     COMMERCE_WCS_VERSION="8.0" \
     STUDIO_PACKAGES_PROXY_ENABLED=false \
+    USER_CHANGES_ENABLED=true \
     HEADLESS_CLIENT_ENABLED=false
 COPY entrypoint.sh /entrypoint.sh
 RUN apk add --update \

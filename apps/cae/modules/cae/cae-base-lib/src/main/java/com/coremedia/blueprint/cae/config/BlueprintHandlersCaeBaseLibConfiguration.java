@@ -38,8 +38,11 @@ import com.coremedia.cae.webflow.FlowRunner;
 import com.coremedia.cap.common.CapConnection;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.transform.TransformImageService;
+import com.coremedia.cap.transform.TransformImageServiceConfiguration;
 import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
+import com.coremedia.id.IdServicesConfiguration;
 import com.coremedia.mimetype.MimeTypeService;
+import com.coremedia.mimetype.MimeTypeServiceConfiguration;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
@@ -80,27 +83,23 @@ import static org.springframework.web.context.request.RequestAttributes.SCOPE_RE
 /**
  * LinkSchemes and Controllers.
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ImportResource(value = {
         "classpath:/com/coremedia/cae/contentbean-services.xml",
         "classpath:/com/coremedia/cae/dataview-services.xml",
-        "classpath:/com/coremedia/cae/uapi-services.xml",
         "classpath:/com/coremedia/cae/handler-services.xml",
-        "classpath:/com/coremedia/mimetype/mimetype-service.xml",
-        "classpath:/com/coremedia/transform/blob-transformer.xml",
-        "classpath:/com/coremedia/id/id-services.xml",
-        "classpath:/com/coremedia/cache/cache-services.xml",
         "classpath:/com/coremedia/cae/webflow/webflow-services.xml",
         "classpath:/com/coremedia/blueprint/base/links/bpbase-links-services.xml",
         "classpath:/com/coremedia/blueprint/base/links/bpbase-links-postprocessors.xml",
         "classpath:/framework/spring/blueprint-services.xml",
         "classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml",
         "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
-        "classpath:/com/coremedia/cap/transform/transform-services.xml",
-        "classpath:/com/coremedia/cap/multisite/multisite-services.xml"
 }, reader = ResourceAwareXmlBeanDefinitionReader.class)
 @Import({BlueprintSearchCaeBaseLibConfiguration.class,
         CustomizerConfiguration.class,
+        IdServicesConfiguration.class,
+        MimeTypeServiceConfiguration.class,
+        TransformImageServiceConfiguration.class,
 })
 @ComponentScan(
         basePackages = {

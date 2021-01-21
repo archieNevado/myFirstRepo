@@ -24,7 +24,7 @@ import com.coremedia.ui.data.beanFactory;
 import com.coremedia.ui.data.impl.BeanFactoryImpl;
 import com.coremedia.ui.data.impl.RemoteBeanCache;
 import com.coremedia.ui.data.test.AbstractRemoteTest;
-import com.coremedia.ui.data.test.MockAjax;
+import com.coremedia.ui.data.test.MockFetch;
 import com.coremedia.ui.data.test.Step;
 import com.coremedia.ui.util.EventUtil;
 import com.coremedia.ui.util.RequestCounter;
@@ -215,7 +215,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
 
   override public function tearDown():void {
     super.tearDown();
-    MockAjax.destroyMock();
+    MockFetch.destroyMock();
     RequestCounter.reset();
     RemoteBeanCache.disposeAll();
   }

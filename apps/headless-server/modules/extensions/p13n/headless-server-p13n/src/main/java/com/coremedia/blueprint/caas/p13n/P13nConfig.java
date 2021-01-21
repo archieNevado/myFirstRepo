@@ -6,7 +6,7 @@ import com.coremedia.blueprint.base.caas.p13n.adapter.PersonalizationRulesAdapte
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class P13nConfig {
 
   @Bean

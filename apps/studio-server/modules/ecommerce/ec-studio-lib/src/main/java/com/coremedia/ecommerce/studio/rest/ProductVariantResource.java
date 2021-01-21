@@ -46,12 +46,12 @@ public class ProductVariantResource extends CommerceBeanResource<ProductVariant>
   }
 
   private void fillRepresentation(@NonNull Map<String, String> params, ProductVariantRepresentation representation) {
-    super.fillRepresentation(params, representation);
     ProductVariant entity = getEntity(params);
-
     if (entity == null) {
-      throw new CatalogBeanNotFoundRestException("Could not load " + PATH_TYPE + " bean");
+      String errorMessage = String.format("Could not load product variant with id '%s'.", params.get(PATH_ID));
+      throw new CatalogBeanNotFoundRestException(errorMessage);
     }
+    super.fillRepresentation(params, entity, representation);
 
     representation.setId(CommerceIdFormatterHelper.format(entity.getId()));
     representation.setName(entity.getName());

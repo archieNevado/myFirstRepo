@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.ArrayList;
 import java.util.List;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ConfigurationProperties(prefix = "previewclient")
 public class JsonPreviewConfigurationProperties {
   /**

@@ -5,22 +5,22 @@ extend type Query {
 }
 
 type CommerceRoot {
-  catalogs(siteId:String): [Catalog] @fetch(from: "@commerceFacade.getCatalogs(#siteId)")
-  catalog(catalogId:String, siteId: String): Catalog @fetch(from: "@commerceFacade.getCatalog(#catalogId, #siteId)")
-  catalogByAlias(catalogAlias: String, siteId: String): Catalog @fetch(from: "@commerceFacade.getCatalogByAlias(#catalogAlias, #siteId)")
+  catalogs(siteId:String): [Catalog] @fetch(from: "@commerceFacade.getCatalogs(#siteId)") @deprecated(reason: "Will be removed in a future AEP. Retrieve commerce data directly from the commerce system or create a combined custom schema via schema federation or schema stitching instead.")
+  catalog(catalogId:String, siteId: String): Catalog @fetch(from: "@commerceFacade.getCatalog(#catalogId, #siteId)") @deprecated(reason: "Will be removed in a future AEP. Retrieve commerce data directly from the commerce system or create a combined custom schema via schema federation or schema stitching instead.")
+  catalogByAlias(catalogAlias: String, siteId: String): Catalog @fetch(from: "@commerceFacade.getCatalogByAlias(#catalogAlias, #siteId)") @deprecated(reason: "Will be removed in a future AEP. Retrieve commerce data directly from the commerce system or create a combined custom schema via schema federation or schema stitching instead.")
 
   #returns a category or null if the category does not exist. The externalId can either be formatted (e.g commerce://category/categoryId) or plain (e.g. categoryId)
-  category(categoryId: String!, siteId: String): Category @fetch(from: "@commerceFacade.getCategory(#categoryId, #siteId)")
-  categoryBySeoSegment(seoSegment: String!, siteId: String): Category @fetch(from: "@commerceFacade.findCategoryBySeoSegment(#seoSegment, #siteId)")
+  category(categoryId: String!, siteId: String): Category @fetch(from: "@commerceFacade.getCategory(#categoryId, #siteId)") @deprecated(reason: "Will be removed in a future AEP. Retrieve commerce data directly from the commerce system or create a combined custom schema via schema federation or schema stitching instead.")
+  categoryBySeoSegment(seoSegment: String!, siteId: String): Category @fetch(from: "@commerceFacade.findCategoryBySeoSegment(#seoSegment, #siteId)") @deprecated(reason: "Will be removed in a future AEP. Retrieve commerce data directly from the commerce system or create a combined custom schema via schema federation or schema stitching instead.")
 
-  commerceBean(commerceId: String!, siteId: String!): CommerceBean @fetch(from: "@commerceFacade.getCommerceBean(#commerceId, #siteId)")
+  commerceBean(commerceId: String!, siteId: String!): CommerceBean @fetch(from: "@commerceFacade.getCommerceBean(#commerceId, #siteId)") @deprecated(reason: "Will be removed in a future AEP. Retrieve commerce data directly from the commerce system or create a combined custom schema via schema federation or schema stitching instead.")
 
   #returns a product or null if the product does not exist. The externalId can either be formatted (e.g commerce://product/productId) or plain (e.g. productId)
-  product(externalId: String!, siteId: String): Product @fetch(from: "@commerceFacade.getProduct(#externalId, #siteId)")
-  productByTechId(techId: String!, siteId: String): Product @fetch(from: "@commerceFacade.getProductByTechId(#techId, #siteId)")
-  productBySeoSegment(seoSegment: String!, siteId: String): Product @fetch(from: "@commerceFacade.findProductBySeoSegment(#seoSegment, #siteId)")
+  product(externalId: String!, siteId: String): Product @fetch(from: "@commerceFacade.getProduct(#externalId, #siteId)") @deprecated(reason: "Will be removed in a future AEP. Retrieve commerce data directly from the commerce system or create a combined custom schema via schema federation or schema stitching instead.")
+  productByTechId(techId: String!, siteId: String): Product @fetch(from: "@commerceFacade.getProductByTechId(#techId, #siteId)") @deprecated(reason: "Will be removed in a future AEP. Retrieve commerce data directly from the commerce system or create a combined custom schema via schema federation or schema stitching instead.")
+  productBySeoSegment(seoSegment: String!, siteId: String): Product @fetch(from: "@commerceFacade.findProductBySeoSegment(#seoSegment, #siteId)") @deprecated(reason: "Will be removed in a future AEP. Retrieve commerce data directly from the commerce system or create a combined custom schema via schema federation or schema stitching instead.")
 
-  productVariant(externalId: String!, siteId: String): ProductVariant @fetch(from: "@commerceFacade.getProductVariant(#externalId, #siteId)")
+  productVariant(externalId: String!, siteId: String): ProductVariant @fetch(from: "@commerceFacade.getProductVariant(#externalId, #siteId)") @deprecated(reason: "Will be removed in a future AEP. Retrieve commerce data directly from the commerce system or create a combined custom schema via schema federation or schema stitching instead.")
 
   externalPage(externalId: String!, siteId: String): CMExternalPage
     @fetch(from: "@externalPageAugmentationService.getContentByExternalId(#externalId, @sitesService.getSite(#siteId))")
@@ -30,6 +30,7 @@ extend type ContentRoot {
   productList(id: String!): CMProductList @fetch(from: "#this.getContent(#id, 'CMProductList')")
 }
 
+"**Deprecated:** Will be removed in a future AEP. Commerce data should be retrieved directly from the commerce system, instead."
 interface CommerceBean {
   id: ID!
   externalId: String
@@ -38,6 +39,7 @@ interface CommerceBean {
   locale: String
 }
 
+"**Deprecated:** Will be removed in a future AEP. Commerce data should be retrieved directly from the commerce system, instead."
 interface Catalog @inherit(from: ["CommerceBean"]) {
   name: String
   rootCategory: Category
@@ -45,6 +47,7 @@ interface Catalog @inherit(from: ["CommerceBean"]) {
   masterCatalog: Boolean
 }
 
+"**Deprecated:** Will be removed in a future AEP. Commerce data should be retrieved directly from the commerce system, instead."
 interface Category @inherit(from: ["CommerceBean"]) {
   name: String
   shortDescription: String
@@ -67,6 +70,7 @@ interface Category @inherit(from: ["CommerceBean"]) {
   productList: CMProductList
 }
 
+"**Deprecated:** Will be removed in a future AEP. Commerce data should be retrieved directly from the commerce system, instead."
 interface Product @inherit(from: ["CommerceBean"]) {
   name: String
   title: String
@@ -107,6 +111,7 @@ interface Product @inherit(from: ["CommerceBean"]) {
   downloads: [CMDownload]!
 }
 
+"**Deprecated:** Will be removed in a future AEP. Commerce data should be retrieved directly from the commerce system, instead."
 interface ProductVariant @inherit(from: ["Product"]) {
   parent: Product
 }
@@ -119,7 +124,7 @@ interface CMAbstractCategory @inherit(from: ["CMChannel"]) {
 
 interface CMProductList @inherit(from: ["CMQueryList"]) {
   category: Category
-  productItems: [Product]
+  productItems: [Product] @deprecated(reason: "Will be removed in a future AEP. Retrieve commerce data directly from the commerce system or create a combined custom schema via schema federation or schema stitching instead.")
   externalId: String
 }
 
@@ -130,7 +135,7 @@ interface CMExternalPage  @inherit(from: ["CMChannel"]) {
 
 interface CMProductTeaser @inherit(from: ["CMTeasable"]) {
   externalId: String
-  product: Product
+  product: Product @deprecated(reason: "Will be removed in a future AEP. Retrieve commerce data directly from the commerce system or create a combined custom schema via schema federation or schema stitching instead.")
 }
 
 interface CMExternalProduct @inherit(from: ["CMTeasable"]) {
@@ -139,9 +144,10 @@ interface CMExternalProduct @inherit(from: ["CMTeasable"]) {
 }
 
 interface CMExternalChannel @inherit(from: ["CMAbstractCategory"]) {
-  category: Category
+  category: Category @deprecated(reason: "Will be removed in a future AEP. Retrieve commerce data directly from the commerce system or create a combined custom schema via schema federation or schema stitching instead.")
 }
 
+"**Deprecated:** Will be removed in a future AEP. Commerce data should be retrieved directly from the commerce system, instead."
 type CommerceBeanImpl implements CommerceBean {
   id: ID! @fetch(from: "@commerceFacade.getExternalId(#this)")
   externalId: String @fetch(from: "@commerceFacade.getExternalId(#this)")
@@ -150,7 +156,8 @@ type CommerceBeanImpl implements CommerceBean {
   locale: String
 }
 
-type CatalogImpl implements Catalog @inherit(from: ["CommerceBeanImpl"]) {
+"**Deprecated:** Will be removed in a future AEP. Commerce data should be retrieved directly from the commerce system, instead."
+type CatalogImpl implements Catalog @inherit(from: ["CommerceBeanImpl"])  {
   name: String
   rootCategory: Category
 
@@ -158,6 +165,7 @@ type CatalogImpl implements Catalog @inherit(from: ["CommerceBeanImpl"]) {
   masterCatalog: Boolean
 }
 
+"**Deprecated:** Will be removed in a future AEP. Commerce data should be retrieved directly from the commerce system, instead."
 type CategoryImpl implements Category, HasPageGrid @inherit(from: ["CommerceBeanImpl"]) {
   name: String
   shortDescription: String
@@ -177,6 +185,7 @@ type CategoryImpl implements Category, HasPageGrid @inherit(from: ["CommerceBean
   grid: PageGrid  @fetch(from: "@categoryPageGridAdapter.to(#this)")
 }
 
+"**Deprecated:** Will be removed in a future AEP. Commerce data should be retrieved directly from the commerce system, instead."
 type ProductImpl implements Product, Banner, CollectionItem, HasPageGrid @inherit(from: ["CommerceBeanImpl"]) {
   name: String @fetch(from: "getName()")
   title: String @fetch(from: "getTitle()")
@@ -221,10 +230,12 @@ type ProductImpl implements Product, Banner, CollectionItem, HasPageGrid @inheri
   remoteLink(siteId:String, context:String): String!
 }
 
+"**Deprecated:** Will be removed in a future AEP. Commerce data should be retrieved directly from the commerce system, instead."
 type ProductVariantImpl implements ProductVariant @inherit(from: ["ProductImpl"]) {
   parent: Product
 }
 
+"**Deprecated:** Will be removed in a future AEP. Commerce data should be retrieved directly from the commerce system, instead."
 type ProductAttribute {
   id: String
   displayName: String
@@ -237,6 +248,7 @@ type ProductAttribute {
   defining: Boolean!
 }
 
+"**Deprecated:** Will be removed in a future AEP. Commerce data should be retrieved directly from the commerce system, instead."
 type CatalogPicture {
   url: String
   picture: CMPicture
@@ -252,8 +264,8 @@ type CMProductListImpl implements CMProductList @inherit(from: ["CMQueryListImpl
   items: [CollectionItem] @fetch(from: "@productListAdapter.to(#root).getItems()")
   teasableItems: [CMTeasable] @fetch(from: "@productListAdapter.to(#root).getFixedItems()")
   bannerItems: [Banner]  @fetch(from: "@productListAdapter.to(#root).getItems()")
-  category: Category @fetch(from: "@commerceFacade.getCategory(#this.externalId, @sitesService.getContentSiteAspect(#this).site?.id)")
-  productItems: [Product] @fetch(from: "@productListAdapter.to(#root,#null).getProducts()")
+  category: Category @fetch(from: "@commerceFacade.getCategory(#this.externalId, @sitesService.getContentSiteAspect(#this).site?.id)") @deprecated(reason: "Will be removed in a future AEP. Retrieve commerce data directly from the commerce system or create a combined custom schema via schema federation or schema stitching instead.")
+  productItems: [Product] @fetch(from: "@productListAdapter.to(#root,#null).getProducts()") @deprecated(reason: "Will be removed in a future AEP. Retrieve commerce data directly from the commerce system or create a combined custom schema via schema federation or schema stitching instead.")
 }
 
 type CMExternalPageImpl implements CMExternalPage @inherit(from: ["CMChannelImpl"]) {
@@ -263,7 +275,7 @@ type CMExternalPageImpl implements CMExternalPage @inherit(from: ["CMChannelImpl
 
 type CMProductTeaserImpl implements CMProductTeaser @inherit(from: ["CMTeasableImpl"]) {
   externalId: String
-  product: Product @fetch(from: "@commerceFacade.getProduct(#this.externalId, @sitesService.getContentSiteAspect(#this).site?.id)")
+  product: Product @fetch(from: "@commerceFacade.getProduct(#this.externalId, @sitesService.getContentSiteAspect(#this).site?.id)") @deprecated(reason: "Will be removed in a future AEP. Retrieve commerce data directly from the commerce system or create a combined custom schema via schema federation or schema stitching instead.")
   teaserTitle: String @fetch(from: "teaserTitle?:@commerceFacade.getProduct(#this.externalId, @sitesService.getContentSiteAspect(#this).site?.id)?.getData()?.name")
   teaserText(view: String): String @fetch(from: "teaserText?.nullIfEmpty()?.view(#view?:'simplified')?:@commerceFacade.getProduct(#this.externalId, @sitesService.getContentSiteAspect(#this).site?.id)?.getData()?.shortDescription")
 }
@@ -271,10 +283,10 @@ type CMProductTeaserImpl implements CMProductTeaser @inherit(from: ["CMTeasableI
 type CMExternalProductImpl implements CMExternalProduct @inherit(from: ["CMTeasableImpl"]) {
   externalId: String
   pdpPagegrid :PageGrid @fetch(from: "@pageGridAdapter.to(#root,'pdpPagegrid')")
-  product: Product @fetch(from: "@commerceFacade.getProduct(#this.externalId, @sitesService.getContentSiteAspect(#this).site?.id)")
+  product: Product @fetch(from: "@commerceFacade.getProduct(#this.externalId, @sitesService.getContentSiteAspect(#this).site?.id)") @deprecated(reason: "Will be removed in a future AEP. Retrieve commerce data directly from the commerce system or create a combined custom schema via schema federation or schema stitching instead.")
 }
 
 type CMExternalChannelImpl implements CMExternalChannel @inherit(from: ["CMAbstractCategoryImpl"]) {
   externalId: String
-  category: Category @fetch(from: "@commerceFacade.getCategory(#this.externalId, @sitesService.getContentSiteAspect(#this).site?.id)")
+  category: Category @fetch(from: "@commerceFacade.getCategory(#this.externalId, @sitesService.getContentSiteAspect(#this).site?.id)") @deprecated(reason: "Will be removed in a future AEP. Retrieve commerce data directly from the commerce system or create a combined custom schema via schema federation or schema stitching instead.")
 }

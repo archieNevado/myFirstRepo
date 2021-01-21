@@ -34,8 +34,13 @@ import java.util.Optional;
 
 /**
  * A simple facade for commerce queries by site id.
+ * @deprecated This class is part of the "commerce catalog integration" implementation that won't be supported anymore in near future.
+ * Instead commerce catalog data should be provided by the commerce system directly.
+ * Commerce and Content entities still remain linked and reference each other, but the commerce data itself should be retrieved from the commerce system
+ * and NOT from the CoreMedia Headless Server.
  */
 @DefaultAnnotation(NonNull.class)
+@Deprecated(since = "2101")
 public class CommerceFacade {
 
   private static final Logger LOG = LoggerFactory.getLogger(CommerceFacade.class);

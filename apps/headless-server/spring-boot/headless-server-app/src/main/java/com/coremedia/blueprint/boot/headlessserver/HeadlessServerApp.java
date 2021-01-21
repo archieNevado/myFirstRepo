@@ -11,7 +11,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * Main entry point for the headless server application.
  */
-@SpringBootApplication(scanBasePackages = "com.coremedia.blueprint.headlessserver")
+@SpringBootApplication(scanBasePackages = {
+        "com.coremedia.blueprint.headlessserver",
+}, excludeName = {
+        "net.devh.boot.grpc.client.autoconfigure.GrpcClientAutoConfiguration",
+        "net.devh.boot.grpc.client.autoconfigure.GrpcClientHealthAutoConfiguration",
+        "net.devh.boot.grpc.client.autoconfigure.GrpcClientMetricAutoConfiguration",
+})
 public class HeadlessServerApp {
 
   private static final Logger LOG = LoggerFactory.getLogger(HeadlessServerApp.class);

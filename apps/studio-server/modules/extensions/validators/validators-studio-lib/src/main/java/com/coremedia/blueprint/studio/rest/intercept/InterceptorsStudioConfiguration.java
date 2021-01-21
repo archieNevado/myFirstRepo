@@ -12,6 +12,7 @@ import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.SiteModel;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.themeimporter.ThemeImporter;
+import com.coremedia.cap.transform.TransformImageServiceConfiguration;
 import com.coremedia.image.ImageDimensionsExtractor;
 import com.coremedia.rest.cap.configuration.ConfigurationPublisher;
 import com.coremedia.rest.cap.intercept.BlobFilenameWriteInterceptor;
@@ -28,16 +29,17 @@ import org.springframework.context.annotation.ImportResource;
 
 import java.util.List;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ImportResource(
         value = {
                 "classpath:/com/coremedia/blueprint/base/links/bpbase-links-services.xml",
                 "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
-                "classpath:/com/coremedia/cap/transform/transform-services.xml",
-                "classpath:/com/coremedia/cap/multisite/multisite-services.xml"
         },
         reader = ResourceAwareXmlBeanDefinitionReader.class)
-@Import({TaxonomyConfiguration.class})
+@Import({
+        TaxonomyConfiguration.class,
+        TransformImageServiceConfiguration.class,
+})
 class InterceptorsStudioConfiguration {
 
   @Bean

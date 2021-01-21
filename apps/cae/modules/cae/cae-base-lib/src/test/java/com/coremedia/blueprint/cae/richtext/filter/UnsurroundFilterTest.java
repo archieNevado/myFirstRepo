@@ -39,7 +39,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
 @ContextConfiguration(classes = UnsurroundFilterTest.LocalConfig.class)
 @ActiveProfiles(PROFILE)
 public class UnsurroundFilterTest {
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })

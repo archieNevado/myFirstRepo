@@ -179,7 +179,7 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
 
   @Nullable
   @VisibleForTesting
-  Product findProductByExternalTechId(@NonNull String externalTechId, @NonNull StoreContext storeContext) {
+  public Product findProductByExternalTechId(@NonNull String externalTechId, @NonNull StoreContext storeContext) {
     CatalogAlias catalogAlias = storeContext.getCatalogAlias();
     CommerceId commerceId = commerceId(PRODUCT)
             .withCatalogAlias(catalogAlias)

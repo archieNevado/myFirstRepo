@@ -19,3 +19,4 @@ ENV PROTOCOL=http2
 HEALTHCHECK --start-period=10s --interval=30s --timeout=3s CMD CURL_ARG=$(test "$PROTOCOL" = "http2" && echo "--http2-prior-knowledge" || echo "") && curl ${CURL_ARG} -f http://localhost || exit 1
 COPY --from=builder /tmp/merged/META-INF/resources /usr/share/nginx/html
 COPY nginx-templates /etc/nginx/templates
+RUN mkdir -p /coremedia/additional-packages

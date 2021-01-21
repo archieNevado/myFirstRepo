@@ -44,7 +44,7 @@ public class LocalizationServiceTest {
   private static final Locale HAMBURG_LOCALE = new Locale("de", "DE", "hamburg");
   private static final Locale OTHER_LOCALE = new Locale("lv");
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })

@@ -62,6 +62,7 @@
       <span class="check_unknown">Unknown</span>
     </td>
   </tr>
+  {{ if eq (getv "/user/changes/enabled" "true") "true" }}
   <tr>
     <td><a href="http://{{ getv "/environment/fqdn" }}:40581/actuator" data-cm-test="">User Changes</a></td>
     <td>
@@ -75,6 +76,7 @@
       <span class="check_unknown">Unknown</span>
     </td>
   </tr>
+  {{ end }}
   <tr>
     <td><a href="http://{{ getv "/environment/fqdn" }}:40681/actuator" data-cm-test="">Elastic Worker</a></td>
     <td>

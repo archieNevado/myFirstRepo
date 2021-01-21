@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Scope;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ImportResource(
         value = "classpath:/framework/spring/blueprint-contentbeans.xml",
         reader = com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader.class

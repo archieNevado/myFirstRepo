@@ -28,7 +28,7 @@ import java.util.Locale;
 @ContextConfiguration(classes = {ContextStrategyTest.LocalConfig.class, XmlRepoConfiguration.class})
 public class ContextStrategyTest {
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })

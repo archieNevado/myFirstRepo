@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @Import({YouTubeSearchConfiguration.class,
          PlayListServiceConfiguration.class,
          VideoServiceConfiguration.class})

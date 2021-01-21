@@ -52,8 +52,13 @@ public class CategoryResource extends CommerceBeanResource<Category> {
   }
 
   protected void fillRepresentation(@NonNull Map<String, String> params, CategoryRepresentation representation) {
-    super.fillRepresentation(params, representation);
     Category entity = getEntity(params);
+    if (entity == null) {
+      String errorMessage = String.format("Could not load category with id '%s'.", params.get(PATH_ID));
+      throw new CatalogBeanNotFoundRestException(errorMessage);
+    }
+    super.fillRepresentation(params, entity, representation);
+
     representation.setName(entity.getName());
     Markup shortDescription = entity.getShortDescription();
     if (shortDescription != null) {
@@ -101,7 +106,7 @@ public class CategoryResource extends CommerceBeanResource<Category> {
     }
     representation.setChildrenData(result);
 
-    representation.setContent(getContent(params));
+    representation.setContent(getContent(entity));
 
     Facets facets = new Facets(entity.getContext());
     facets.setId(entity.getExternalId());

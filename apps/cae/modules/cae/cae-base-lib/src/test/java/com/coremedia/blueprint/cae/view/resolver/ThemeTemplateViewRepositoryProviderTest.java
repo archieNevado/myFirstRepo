@@ -36,7 +36,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles(ThemeTemplateViewRepositoryProviderTest.LocalConfig.PROFILE)
 public class ThemeTemplateViewRepositoryProviderTest {
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })

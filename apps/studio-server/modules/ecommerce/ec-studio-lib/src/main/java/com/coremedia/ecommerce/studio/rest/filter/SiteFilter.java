@@ -9,7 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -22,6 +21,8 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.lang.invoke.MethodHandles.lookup;
+
 /**
  * Inject site into request context.
  * <p>
@@ -29,13 +30,15 @@ import java.util.regex.Pattern;
  */
 public class SiteFilter implements Filter {
 
-  private static final Logger LOG = LoggerFactory.getLogger(SiteFilter.class);
+  private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
 
   private static final Pattern SITE_ID_URL_PATTERN = Pattern.compile(".*?/livecontext/(?:previews/)?.+?/(?<siteId>.+?)((/.*)|$)");
 
-  @Inject
-  @SuppressWarnings("squid:S3306") //squid:S3306 Constructor injection should be used instead of field injection
-  private SitesService sitesService;
+  private final SitesService sitesService;
+
+  public SiteFilter(SitesService sitesService) {
+    this.sitesService = sitesService;
+  }
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {

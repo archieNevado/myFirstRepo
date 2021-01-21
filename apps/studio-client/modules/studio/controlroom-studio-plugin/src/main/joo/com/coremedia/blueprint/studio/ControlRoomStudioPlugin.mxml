@@ -13,6 +13,7 @@
   </fx:Metadata>
   <fx:Script><![CDATA[
     import com.coremedia.cms.editor.controlroom.workflow.WorkflowUtils;
+    import com.coremedia.ui.data.ValueExpressionFactory;
 
     import mx.resources.ResourceManager;
 

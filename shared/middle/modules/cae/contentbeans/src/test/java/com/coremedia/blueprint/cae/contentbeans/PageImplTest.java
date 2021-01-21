@@ -38,7 +38,7 @@ import static org.junit.Assert.assertTrue;
 @ContextConfiguration(classes = PageImplTest.PageImplTestConfiguration.class)
 public class PageImplTest {
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })

@@ -8,9 +8,9 @@ import com.coremedia.cms.editor.configuration.StudioPlugin;
 import com.coremedia.cms.editor.sdk.IEditorContext;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.preview.PreviewURI;
-import com.coremedia.cms.editor.sdk.util.StringHelper;
 import com.coremedia.cms.editor.sdk.util.UserUtil;
 import com.coremedia.ui.data.ValueExpressionFactory;
+import com.coremedia.ui.util.StringHelper;
 
 public class TaxonomyStudioPluginBase extends StudioPlugin {
 

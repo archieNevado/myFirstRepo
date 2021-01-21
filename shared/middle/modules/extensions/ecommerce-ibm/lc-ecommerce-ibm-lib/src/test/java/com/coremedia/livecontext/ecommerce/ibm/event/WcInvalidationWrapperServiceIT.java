@@ -50,7 +50,7 @@ public class WcInvalidationWrapperServiceIT extends IbmServiceTestBase {
   private static long TIME_STAMP = 1399641181799L;
   static final String PROFILE = "WcCacheWrapperServiceIT";
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   static class LocalConfig {
 
     @Bean

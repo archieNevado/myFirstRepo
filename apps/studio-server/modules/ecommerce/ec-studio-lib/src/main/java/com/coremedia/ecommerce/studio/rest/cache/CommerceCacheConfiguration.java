@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Import;
  * @deprecated This class is part of the "commerce cache invalidation" implementation that
  * will be re-implemented by the Commerce Hub architecture and replaced in future releases.
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @Import({
         BaseCommerceServicesAutoConfiguration.class
 })

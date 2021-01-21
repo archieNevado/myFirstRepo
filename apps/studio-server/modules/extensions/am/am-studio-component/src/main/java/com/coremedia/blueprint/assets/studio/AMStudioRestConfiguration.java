@@ -21,7 +21,7 @@ import org.springframework.context.annotation.ImportResource;
 
 import java.util.Collections;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ImportResource(value = {"classpath:/com/coremedia/cap/common/uapi-services.xml"},
         reader = ResourceAwareXmlBeanDefinitionReader.class)
 @Import({BlueprintBaseStudioRestConfiguration.class})

@@ -49,7 +49,7 @@ import java.util.stream.Stream;
 import static com.coremedia.blueprint.base.pagegrid.PageGridContentKeywords.PAGE_GRID_STRUCT_PROPERTY;
 import static com.coremedia.blueprint.caas.commerce.adapter.CommerceBeanPageGridAdapterFactory.PDP_PAGEGRID_PROPERTY_NAME;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties({
         CaasAssetSearchServiceConfigProperties.class
 })
@@ -59,6 +59,10 @@ import static com.coremedia.blueprint.caas.commerce.adapter.CommerceBeanPageGrid
 })
 @ImportResource("classpath:/META-INF/coremedia/lc-services.xml")
 public class CommerceConfig {
+  /**
+   * @deprecated The headless server won't handle catalog data in near future anymore.
+   */
+  @Deprecated(since = "2101")
   private static final Set<String> COMMERCE_BEAN_CLASS_NAMES = Stream.of(
           CommerceBean.class.getSimpleName(),
           Catalog.class.getSimpleName(),

@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.assets.studio.search {
 
 import com.coremedia.cms.editor.sdk.collectionview.search.*;
-import com.coremedia.cms.studio.startup.components.util.format.FormatUtil;
+import com.coremedia.cms.studio.base.cap.models.format.FormatUtil;
 
 public class ExpirationDateFilterPanelBase extends FilterPanel {
   public static const KEY:String = 'key';

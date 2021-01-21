@@ -39,13 +39,8 @@ public abstract class CommerceBeanResource<Entity extends CommerceBean> extends 
   }
 
   protected void fillRepresentation(@NonNull Map<String, String> params,
+                                    @NonNull CommerceBean commerceBean,
                                     @NonNull CommerceBeanRepresentation representation) {
-    CommerceBean commerceBean = getEntity(params);
-    if (commerceBean == null) {
-      String errorMessage = String.format("Could not load commerce bean with id '%s'.", params.get(PATH_ID));
-      throw new CatalogBeanNotFoundRestException(errorMessage);
-    }
-
     representation.setId(CommerceIdFormatterHelper.format(commerceBean.getId()));
     representation.setExternalId(commerceBean.getExternalId());
     representation.setExternalTechId(commerceBean.getExternalTechId());
@@ -105,12 +100,10 @@ public abstract class CommerceBeanResource<Entity extends CommerceBean> extends 
    * @return the augmenting content which links to this commerce resource
    */
   @Nullable
-  protected Content getContent(@NonNull Map<String, String> params) {
+  protected Content getContent(Entity entity) {
     if (augmentationService == null) {
       return null;
     }
-
-    Entity entity = getEntity(params);
 
     String siteId = entity.getContext().getSiteId();
 

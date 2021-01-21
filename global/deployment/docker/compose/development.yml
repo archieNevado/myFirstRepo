@@ -245,8 +245,6 @@ services:
       - 40905:5005
     environment:
       << : *development-boot-envs
-      # this is necessary for the candy sharing setup
-      LIVECONTEXT_CROSSDOMAIN_WHITELIST: "*"
       HEAP_DUMP_FILENAME: cae-preview-heapdump
     labels:
       # only for the dev system
@@ -276,8 +274,6 @@ services:
       - 42105:5005
     environment:
       << : *development-boot-envs
-      # this is necessary for the candy sharing setup
-      LIVECONTEXT_CROSSDOMAIN_WHITELIST: "*"
       # enables the sitemap generation
       GENERATE_SITEMAP: "true"
       # in the dev setup we connect the cae-live to the master as there is no replication-live-server, make sure

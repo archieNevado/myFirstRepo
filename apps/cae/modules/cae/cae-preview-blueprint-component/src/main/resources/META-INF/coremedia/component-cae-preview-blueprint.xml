@@ -67,9 +67,6 @@
     <property name="sitesService" ref="sitesService"/>
   </bean>
 
-  <customize:append id="customCaeCorsConfiguration" bean="caeCorsConfiguration"
-                    property="allowedHeaders" custom-value="x-requested-with,X-CSRF-Token"/>
-
   <bean id="channelValidityInterceptor"
         class="com.coremedia.blueprint.cae.web.ChannelValidityInterceptor" >
     <property name="treeRelation" ref="navigationTreeRelation"/>

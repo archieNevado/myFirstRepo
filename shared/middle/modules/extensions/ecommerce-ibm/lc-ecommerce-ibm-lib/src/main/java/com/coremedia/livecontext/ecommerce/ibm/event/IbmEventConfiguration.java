@@ -14,7 +14,7 @@ import org.springframework.context.annotation.ImportResource;
  * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
  * in favour of the Commerce Hub integration.
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ImportResource(value = {
         "classpath:/framework/spring/livecontext-services.xml"
 }, reader = ResourceAwareXmlBeanDefinitionReader.class)

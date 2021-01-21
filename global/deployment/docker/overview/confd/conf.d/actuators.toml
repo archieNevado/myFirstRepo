@@ -4,11 +4,10 @@ dest  = "/usr/share/nginx/html/assets/actuators.html"
 keys  = [
         "/environment/fqdn",
         "/studio/packages/proxy/enabled",
+        "/user/changes/enabled",
         "/commerce/mock/enabled",
         "/commerce/commercetools/enabled",
         "/commerce/sfcc/enabled",
         "/commerce/hybris/enabled",
         "/commerce/wcs/enabled",
-
-
 ]

@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ComponentScan("com.coremedia.cap.common.xml")
 @Import(XmlRepoConfiguration.class)
 @TestPropertySource(properties = {

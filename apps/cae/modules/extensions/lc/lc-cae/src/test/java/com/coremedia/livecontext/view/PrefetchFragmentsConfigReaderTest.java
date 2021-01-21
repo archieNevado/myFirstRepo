@@ -43,7 +43,7 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration(classes = {PrefetchFragmentsConfigReaderTest.LocalConfig.class})
 public class PrefetchFragmentsConfigReaderTest {
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class,
           CaeConfigurationProperties.class

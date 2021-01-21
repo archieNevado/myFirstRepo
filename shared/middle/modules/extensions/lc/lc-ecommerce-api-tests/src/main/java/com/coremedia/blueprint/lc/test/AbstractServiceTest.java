@@ -8,20 +8,19 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.user.UserContextProvider;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.TestPropertySource;
-
-import javax.inject.Inject;
 
 @TestPropertySource(properties = "livecontext.cache.invalidation.enabled:false")
 public abstract class AbstractServiceTest {
 
-  @Inject
+  @Autowired
   protected UserContextProvider userContextProvider;
 
-  @Inject
+  @Autowired
   protected TestConfig testConfig;
 
-  @Inject
+  @Autowired
   protected CommerceCache commerceCache;
 
   protected CommerceConnection connection;
@@ -36,7 +35,6 @@ public abstract class AbstractServiceTest {
     connection.setInitialStoreContext(storeContext);
     CurrentStoreContext.set(connection.getStoreContext());
 
-    commerceCache.setEnabled(false);
     commerceCache.getCache().clear();
   }
 

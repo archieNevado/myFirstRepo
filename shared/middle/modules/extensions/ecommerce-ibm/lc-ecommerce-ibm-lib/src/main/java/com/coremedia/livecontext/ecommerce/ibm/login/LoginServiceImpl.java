@@ -75,7 +75,7 @@ public class LoginServiceImpl implements LoginService, InitializingBean, Disposa
    * sets the lifetime for generated preview tokens in seconds.
    * Value might be overriden by {@link PreviewTokenCacheKey#CONFIG_KEY_PREVIEW_TOKEN} cache duration.
    * {@link #afterPropertiesSet} ensures that {@link #previewTokenLifeTimeInSeconds} is at least twice as long as
-   * {@link PreviewTokenCacheKey#CONFIG_KEY_PREVIEW_TOKEN} cache setting in {@link CommerceCache#setCacheTimesInSeconds(Map)}
+   * {@link PreviewTokenCacheKey#CONFIG_KEY_PREVIEW_TOKEN} cache setting
    * to avoid outdated previewToken in cache.
    *
    * @param previewTokenLifeTimeInSeconds (default is 3 hours, might be increased by higher cache duration times)

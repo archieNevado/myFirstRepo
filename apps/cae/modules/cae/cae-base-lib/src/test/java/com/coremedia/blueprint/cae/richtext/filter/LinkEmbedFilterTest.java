@@ -54,7 +54,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
 @ContextConfiguration(classes = LinkEmbedFilterTest.LocalConfig.class)
 @ActiveProfiles(PROFILE)
 public class LinkEmbedFilterTest {
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })

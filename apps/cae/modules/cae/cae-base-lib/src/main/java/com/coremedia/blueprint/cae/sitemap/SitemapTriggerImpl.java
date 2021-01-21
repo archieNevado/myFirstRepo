@@ -6,6 +6,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.google.common.annotations.VisibleForTesting;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -28,13 +29,21 @@ public class SitemapTriggerImpl implements SitemapTrigger, ServletContextAware {
 
   private static final Logger LOG = LoggerFactory.getLogger(SitemapTriggerImpl.class);
 
-  private SitemapHelper sitemapHelper;
-  private UrlPathFormattingHelper urlPathFormattingHelper;
-  private SitesService sitesService;
+  private final SitemapHelper sitemapHelper;
+  private final UrlPathFormattingHelper urlPathFormattingHelper;
+  private final SitesService sitesService;
 
   private static final String LOCALHOST = "localhost";
   private int myOwnPort = 49080;
   private ServletContext servletContext;
+
+  public SitemapTriggerImpl(@NonNull SitemapHelper sitemapHelper,
+                            @NonNull UrlPathFormattingHelper urlPathFormattingHelper,
+                            @NonNull SitesService sitesService) {
+    this.sitemapHelper = sitemapHelper;
+    this.urlPathFormattingHelper = urlPathFormattingHelper;
+    this.sitesService = sitesService;
+  }
 
   public void generateSitemaps() {
     Set<Site> sites = sitesService.getSites();
@@ -119,21 +128,6 @@ public class SitemapTriggerImpl implements SitemapTrigger, ServletContextAware {
   }
 
   // --- configuration ----------------------------------------------
-
-  @Required
-  public void setSitesService(SitesService sitesService) {
-    this.sitesService = sitesService;
-  }
-
-  @Required
-  public void setSitemapHelper(SitemapHelper sitemapHelper) {
-    this.sitemapHelper = sitemapHelper;
-  }
-
-  @Required
-  public void setUrlPathFormattingHelper(UrlPathFormattingHelper urlPathFormattingHelper) {
-    this.urlPathFormattingHelper = urlPathFormattingHelper;
-  }
 
   /**
    * Must be the port of this particular servlet container.

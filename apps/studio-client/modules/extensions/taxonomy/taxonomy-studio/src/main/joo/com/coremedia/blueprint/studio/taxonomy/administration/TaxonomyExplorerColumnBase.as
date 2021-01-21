@@ -11,9 +11,9 @@ import com.coremedia.ui.data.Locale;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
-import com.coremedia.ui.data.dependencies.DependencyTracker;
 import com.coremedia.ui.models.bem.BEMBlock;
 import com.coremedia.ui.models.bem.BEMModifier;
+import com.coremedia.ui.util.ObservableUtil;
 
 import ext.Component;
 import ext.Ext;
@@ -188,7 +188,7 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
   private function doSelect(callback:Function = undefined):void {
     ValueExpressionFactory.createFromFunction(function ():Boolean {
       if (!getStore().isLoaded()) {
-        DependencyTracker.dependOnObservable(getStore(), "load");
+        ObservableUtil.dependOn(getStore(), "load");
         return undefined;
       }
       return true;

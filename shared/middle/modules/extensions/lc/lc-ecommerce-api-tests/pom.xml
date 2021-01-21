@@ -27,6 +27,10 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
+      <artifactId>bpbase-lc-settings</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-settings-api</artifactId>
     </dependency>
     <dependency>

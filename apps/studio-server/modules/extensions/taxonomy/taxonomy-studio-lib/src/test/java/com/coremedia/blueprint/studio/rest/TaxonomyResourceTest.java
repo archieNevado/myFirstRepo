@@ -57,7 +57,7 @@ public class TaxonomyResourceTest {
     }
   }
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @Import({RestCoreLinkingConfiguration.class, TaxonomyConfiguration.class})
   static class LocalConfig {
     @Bean

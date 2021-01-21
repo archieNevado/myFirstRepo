@@ -12,25 +12,32 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.PropertySource;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@Configuration
+import static java.lang.invoke.MethodHandles.lookup;
+
+@Configuration(proxyBeanMethods = false)
 @PropertySource("classpath:/framework/spring/lc-asset-services.properties")
 class AssetConfiguration implements SmartLifecycle {
 
   static final String LICENSE_KEY_LC_ASSET_MANAGEMENT = "asset-management";
-  private static final Logger LOG = LoggerFactory.getLogger(AssetConfiguration.class);
+  private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
 
   private final AtomicBoolean running = new AtomicBoolean(false);
 
-  @Inject
-  private CapLicenseInfo capLicenseInfo;
-  @Inject
-  private ContentRepository contentRepository;
+  private final AssetChanges assetChanges = new AssetChanges();
+  private final AssetChangesRepositoryListener assetChangesRepositoryListener;
+  private final CapLicenseInfo capLicenseInfo;
+  private final ContentRepository contentRepository;
 
   private boolean licensed = false;
   private boolean preview = false;
+
+  public AssetConfiguration(CapLicenseInfo capLicenseInfo, ContentRepository contentRepository) {
+    this.capLicenseInfo = capLicenseInfo;
+    this.contentRepository = contentRepository;
+    assetChangesRepositoryListener = new AssetChangesRepositoryListener(contentRepository, assetChanges);
+  }
 
   @Bean
   AssetServiceImpl assetService() {
@@ -49,15 +56,8 @@ class AssetConfiguration implements SmartLifecycle {
   }
 
   @Bean
-  @Lazy
-  AssetChangesRepositoryListener assetChangesRepositoryListener() {
-    return new AssetChangesRepositoryListener();
-  }
-
-  @Bean
-  @Lazy
   AssetChanges assetChanges() {
-    return new AssetChanges();
+    return assetChanges;
   }
 
   @Override
@@ -76,7 +76,7 @@ class AssetConfiguration implements SmartLifecycle {
     if(!running.getAndSet(true)) {
       if(isFeatureActive()) {
         LOG.info("activating repository event listener for asset changes");
-        assetChangesRepositoryListener().start();
+        assetChangesRepositoryListener.start();
       } else {
         LOG.warn("asset management is not active: disabling asset change events");
       }
@@ -86,7 +86,7 @@ class AssetConfiguration implements SmartLifecycle {
   @Override
   public void stop() {
     if(running.getAndSet(false)) {
-      assetChangesRepositoryListener().stop();
+      assetChangesRepositoryListener.stop();
       LOG.info("disabled repository event listener for asset changes");
     }
   }

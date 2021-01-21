@@ -1,0 +1,26 @@
+{
+  "cmServiceShortcuts": [
+    {
+      "cmKey": "cmWcsManagementCenter",
+      "name": "WCS Management",
+      "url": "",
+      "cmCategory": "External",
+      "icons": [
+        {
+          "src": "packages/com.coremedia.blueprint__lc-ecommerce-ibm-studio/appIcons/wcs-management_24.svg",
+          "sizes": "24x24",
+          "type": "image/svg"
+        },
+        {
+          "src": "packages/com.coremedia.blueprint__lc-ecommerce-ibm-studio/appIcons/wcs-management_192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ],
+      "cmService": {
+        "name": "launchSubAppService",
+        "method": "launchSubApp"
+      }
+    }
+  ]
+}

@@ -156,7 +156,7 @@ public class CodeResourcesImplTest {
 
   //====================================================================================================================
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @Import(XmlRepoConfiguration.class)
   @ImportResource(value = {
           "classpath:/com/coremedia/cap/common/xml/uapi-xml-services.xml"

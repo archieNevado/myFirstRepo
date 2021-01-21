@@ -214,7 +214,7 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-lc-client</artifactId>
+      <artifactId>bpbase-lc-settings</artifactId>
     </dependency>
   </dependencies>
 

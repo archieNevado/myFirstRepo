@@ -18,7 +18,7 @@ import org.springframework.context.annotation.ImportResource;
 
 import static java.util.Arrays.asList;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ImportResource(value = {
         "classpath:/com/coremedia/blueprint/base/links/bpbase-urlpathformatting.xml"
 }, reader = ResourceAwareXmlBeanDefinitionReader.class)

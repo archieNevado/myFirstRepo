@@ -44,7 +44,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
 @ContextConfiguration(classes = BlueprintViewRepositoryNameProviderTest.LocalConfig.class)
 @ActiveProfiles(PROFILE)
 public class BlueprintViewRepositoryNameProviderTest {
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })

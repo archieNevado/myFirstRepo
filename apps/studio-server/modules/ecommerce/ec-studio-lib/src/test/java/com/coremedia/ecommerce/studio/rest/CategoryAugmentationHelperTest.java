@@ -209,7 +209,7 @@ public class CategoryAugmentationHelperTest {
     assertThat(layoutPalcement).isEqualTo(layoutFromSiteRoot);
   }
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @ImportResource(value = {
           "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
   }, reader = ResourceAwareXmlBeanDefinitionReader.class)

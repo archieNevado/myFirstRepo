@@ -68,7 +68,7 @@ import static org.mockito.Mockito.when;
 @ActiveProfiles(PROFILE)
 public class PageSearchActionHandlerTest {
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })

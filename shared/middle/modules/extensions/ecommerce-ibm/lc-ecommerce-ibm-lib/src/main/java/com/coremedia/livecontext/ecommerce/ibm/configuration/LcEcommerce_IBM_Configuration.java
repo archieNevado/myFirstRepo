@@ -9,11 +9,9 @@ import org.springframework.context.annotation.PropertySource;
  * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
  * in favour of the Commerce Hub integration.
  */
-@Configuration
-@PropertySource("classpath:framework/spring/lc-ecommerce-ibm.properties")
+@Configuration(proxyBeanMethods = false)
 @Deprecated
+@PropertySource("classpath:framework/spring/lc-ecommerce-ibm.properties")
 class LcEcommerce_IBM_Configuration {
 
 }
-
-

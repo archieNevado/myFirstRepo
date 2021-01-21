@@ -48,7 +48,7 @@ const initPackageJson = (
       webpack: "^4.0.0",
     },
     devDependencies: {
-      prettier: "^1.0.0",
+      prettier: "^2.0.5",
     },
     main: mainJSFile,
     coremedia: {
@@ -199,7 +199,6 @@ import "./${themeName}.js";
  * @return {string}
  */
 const initThemePrettierignore = () => `/*
-/*
 !/src
 /src/*
 !/src/js

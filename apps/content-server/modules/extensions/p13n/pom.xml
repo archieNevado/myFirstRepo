@@ -12,6 +12,7 @@
   <packaging>pom</packaging>
 
   <modules>
+    <module>p13n-cms-tools</module>
     <module>p13n-server</module>
   </modules>
 

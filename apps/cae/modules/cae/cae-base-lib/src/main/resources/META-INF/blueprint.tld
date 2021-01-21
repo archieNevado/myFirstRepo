@@ -56,30 +56,6 @@
 
   <function>
     <description>
-      offers access to one value of the merged settings map
-    </description>
-    <name>setting</name>
-    <function-class>com.coremedia.blueprint.cae.web.taglib.SettingsFunction</function-class>
-    <function-signature>
-      java.lang.Object
-      setting(com.coremedia.blueprint.base.settings.SettingsService, java.lang.Object, java.lang.String)
-    </function-signature>
-  </function>
-
-  <function>
-    <description>
-      offers access to one value of the merged settings map or return the default value
-    </description>
-    <name>settingWithDefault</name>
-    <function-class>com.coremedia.blueprint.cae.web.taglib.SettingsFunction</function-class>
-    <function-signature>
-      java.lang.Object
-      setting(com.coremedia.blueprint.base.settings.SettingsService, java.lang.Object, java.lang.String, java.lang.Object)
-    </function-signature>
-  </function>
-
-  <function>
-    <description>
       Get an unique Id within a request with the default prefix.
     </description>
     <name>generateId</name>

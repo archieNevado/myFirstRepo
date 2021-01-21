@@ -55,7 +55,7 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration(classes={PageGridImplTest.LocalConfig.class, XmlRepoConfiguration.class})
 public class PageGridImplTest {
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })

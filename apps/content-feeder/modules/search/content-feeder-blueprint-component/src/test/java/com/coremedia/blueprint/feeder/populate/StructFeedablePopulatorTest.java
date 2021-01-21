@@ -36,7 +36,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
 @ActiveProfiles(PROFILE)
 public class StructFeedablePopulatorTest {
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @Import(XmlRepoConfiguration.class)
   @Profile(PROFILE)
   public static class LocalConfig {

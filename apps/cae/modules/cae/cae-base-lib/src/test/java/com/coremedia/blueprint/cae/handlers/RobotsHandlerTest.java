@@ -61,7 +61,7 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER
 @TestPropertySource(properties = "delivery.standalone=false")
 public class RobotsHandlerTest {
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })

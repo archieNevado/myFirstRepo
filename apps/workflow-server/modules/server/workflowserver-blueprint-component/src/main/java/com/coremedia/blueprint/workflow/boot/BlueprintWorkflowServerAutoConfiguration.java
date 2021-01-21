@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 /**
  * Configuration class to be loaded when no customer spring context manager is configured.
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @Import({
         WorkflowServerElasticProcessArchiveConfiguration.class,
         WorkflowServerMemoryProcessArchiveConfiguration.class,
@@ -128,7 +128,7 @@ class BlueprintWorkflowServerAutoConfiguration {
     return new CopyOver();
   }
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @EnableScheduling
   static class BlueprintWorkflowServerSchedulingConfiguration {
     private final CleanInTranslation cleanInTranslation;

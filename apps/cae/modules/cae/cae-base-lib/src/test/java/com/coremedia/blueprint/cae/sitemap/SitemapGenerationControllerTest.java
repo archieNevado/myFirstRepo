@@ -69,7 +69,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
 @ContextConfiguration(classes = SitemapGenerationControllerTest.LocalConfig.class)
 @ActiveProfiles(PROFILE)
 public class SitemapGenerationControllerTest {
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @EnableConfigurationProperties({
           BlueprintCaeSitemapConfigurationProperties.class,
           DeliveryConfigurationProperties.class,
@@ -153,9 +153,7 @@ public class SitemapGenerationControllerTest {
     SpringBasedSitemapSetupFactory setupFactory = new SpringBasedSitemapSetupFactory();
     setupFactory.setSitemapSetup(sitemapSetup);
 
-    testling = new SitemapGenerationController();
-    testling.setSiteResolver(siteResolver);
-    testling.setSitemapSetupFactory(setupFactory);
+    testling = new SitemapGenerationController(siteResolver, setupFactory);
 
     request.setPathInfo("/internal/theSiteSegment/sitemap-org");
   }
@@ -322,40 +320,4 @@ public class SitemapGenerationControllerTest {
     baos.close();
     return asList(new String(baos.toByteArray(), StandardCharsets.UTF_8));
   }
-
-  /**
-   * Delegates the mocked Servlet output stream to a byte array output stream.
-   */
-  class SimpleServletOutputStream extends ServletOutputStream {
-    private ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-    @Override
-    public void write(int b) throws IOException {
-      out.write(b);
-    }
-
-    @Override
-    public void write(byte[] b) throws IOException {
-      out.write(b);
-    }
-
-    public String toString() {
-      return new String(out.toByteArray());
-    }
-
-    public byte[] toByteArray() {
-      return out.toByteArray();
-    }
-
-    @Override
-    public boolean isReady() {
-      return false;
-    }
-
-    @Override
-    public void setWriteListener(WriteListener writeListener) {
-
-    }
-  }
-
 }

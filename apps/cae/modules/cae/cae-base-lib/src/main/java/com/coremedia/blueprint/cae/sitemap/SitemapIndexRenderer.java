@@ -13,12 +13,13 @@ import java.io.FileFilter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.zip.GZIPOutputStream;
 
-import static org.apache.commons.lang3.StringEscapeUtils.escapeXml;
+import static org.apache.commons.text.StringEscapeUtils.escapeXml11;
 
 class SitemapIndexRenderer extends AbstractSitemapRenderer {
   private static final Logger LOG = LoggerFactory.getLogger(SitemapIndexRenderer.class);
@@ -35,7 +36,6 @@ class SitemapIndexRenderer extends AbstractSitemapRenderer {
   private File targetDir;  // The base dir, configured internally
   private File outputDir;  // targetDir/siteId
   private String absoluteUrlPrefix;  // same as the site's url prefix, need it for the sitemap index entries
-  private boolean prependBaseUri = true;
 
   // Delegate renderer for the sitemap fragment currently in progress
   private SitemapXmlRenderer sitemapXmlRenderer;
@@ -57,10 +57,6 @@ class SitemapIndexRenderer extends AbstractSitemapRenderer {
 
   public void setSitemapHelper(SitemapHelper sitemapHelper) {
     this.sitemapHelper = sitemapHelper;
-  }
-
-  public void setPrependBaseUri(boolean prependBaseUri) {
-    this.prependBaseUri = prependBaseUri;
   }
 
 
@@ -202,7 +198,9 @@ class SitemapIndexRenderer extends AbstractSitemapRenderer {
   private String writeSitemapFile() throws IOException {
     String sitemap = sitemapXmlRenderer.getResponse();
     File sitemapFile = new File(outputDir, SitemapHelper.FILE_PREFIX + ++filenameIndex + ".xml.gz");
-    writeAndClose(sitemap, new GZIPOutputStream(new FileOutputStream(sitemapFile)));
+    try (OutputStream outputStream = new GZIPOutputStream(new FileOutputStream(sitemapFile))) {
+      IOUtils.write(sitemap, outputStream, StandardCharsets.UTF_8);
+    }
     return sitemapFile.getName();
   }
 
@@ -215,7 +213,9 @@ class SitemapIndexRenderer extends AbstractSitemapRenderer {
   private String writeSitemapIndexFile() throws IOException {
     String sitemapIndex = super.getResponse();
     File sitemapIndexFile = new File(outputDir, SitemapHelper.SITEMAP_INDEX_FILENAME);
-    writeAndClose(sitemapIndex, new FileOutputStream(sitemapIndexFile));
+    try (OutputStream outputStream = new FileOutputStream(sitemapIndexFile)) {
+      IOUtils.write(sitemapIndex, outputStream, StandardCharsets.UTF_8);
+    }
     if (FileUtils.sizeOf(sitemapIndexFile)>SITEMAP_INDEX_MAX_SIZE) {
       deleteSitemap();
       throw new IllegalStateException("Sitemap index would exceed 10MB, abort!");
@@ -242,7 +242,7 @@ class SitemapIndexRenderer extends AbstractSitemapRenderer {
     //NOSONAR : All the following Strings are not "magic".
     println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");  //NOSONAR
     print("<!-- Generated: ");  //NOSONAR
-    print(escapeXml(new SimpleDateFormat().format(new Date())));
+    print(escapeXml11(new SimpleDateFormat().format(new Date())));
     println(" -->");  //NOSONAR
     println("<sitemapindex xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">");  //NOSONAR
   }
@@ -253,13 +253,12 @@ class SitemapIndexRenderer extends AbstractSitemapRenderer {
    * @param sitemapFilename the filename of the sitemap
    */
   private void printIndexEntry(String sitemapFilename) {
-    sitemapHelper.setPrependBaseUri(prependBaseUri);
     println("  <sitemap>");  //NOSONAR
     print("    <loc>");  //NOSONAR
-    print(escapeXml(sitemapHelper.sitemapIndexEntryUrl(getSite(), sitemapFilename)));
+    print(escapeXml11(sitemapHelper.sitemapIndexEntryUrl(getSite(), sitemapFilename)));
     println("</loc>");  //NOSONAR
     print("    <lastmod>");  //NOSONAR
-    print(escapeXml(nowAsISO8601()));
+    print(escapeXml11(nowAsISO8601()));
     println("</lastmod>");  //NOSONAR
     println("  </sitemap>");  //NOSONAR
   }
@@ -283,14 +282,6 @@ class SitemapIndexRenderer extends AbstractSitemapRenderer {
       FileUtils.forceMkdir(file);
     }
     return file;
-  }
-
-  private static void writeAndClose(String data, OutputStream outputStream) throws IOException {
-    try {
-      IOUtils.write(data, outputStream, "UTF-8");
-    } finally {
-      IOUtils.closeQuietly(outputStream);
-    }
   }
 
   private void backupSitemap() throws IOException {

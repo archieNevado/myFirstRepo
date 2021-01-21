@@ -60,7 +60,7 @@ import static org.mockito.Mockito.when;
         "classpath:/com/coremedia/blueprint/base/navigation/context/bpbase-default-contextstrategy.xml",
         "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml"
 })
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ComponentScan("com.coremedia.cap.common.xml")
 @TestPropertySource(properties = {
         "elastic.core.persistence=memory",

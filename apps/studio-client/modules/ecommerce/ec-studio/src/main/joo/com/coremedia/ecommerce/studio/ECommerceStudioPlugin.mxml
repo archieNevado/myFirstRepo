@@ -7,6 +7,7 @@
         xmlns:local="com.coremedia.ecommerce.studio.*"
         xmlns:exml="http://www.jangaroo.net/exml/0.8"
         xmlns="exml:ext.config"
+        xmlns:frame="exml:com.coremedia.cms.studio.frame.components.config"
         xmlns:ui="exml:com.coremedia.ui.config"
         xmlns:ec="exml:com.coremedia.ecommerce.studio.config"
         xmlns:editor="exml:com.coremedia.cms.editor.sdk.config">
@@ -83,6 +84,7 @@
      */
     public static const COPY_TO_CLIPBOARD_ITEM_ID:String = "copyToClipboard";
 
+    //noinspection JSUnusedLocalSymbols
     private var config:ECommerceStudioPlugin;
 
     public native function ECommerceStudioPlugin(config:ECommerceStudioPlugin = null);
@@ -153,11 +155,11 @@
       </editor:plugins>
     </editor:HeaderToolbarUserMenu>
 
-    <editor:PreferenceWindow>
-      <editor:plugins>
+    <frame:PreferenceWindow>
+      <frame:plugins>
         <ec:CatalogPreferenceWindowPlugin/>
-      </editor:plugins>
-    </editor:PreferenceWindow>
+      </frame:plugins>
+    </frame:PreferenceWindow>
 
   </local:rules>
 

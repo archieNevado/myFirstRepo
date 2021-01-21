@@ -20,11 +20,11 @@ public class OpenAnalyticsUrlButtonBase extends Button {
   public function OpenAnalyticsUrlButtonBase(config:OpenAnalyticsUrlButtonBase = null) {
     super(config);
     setHandler(_handler);
+    initUrlValueExpression();
     on('afterrender', onAfterRender);
   }
 
   private function onAfterRender():void {
-    initUrlValueExpression();
     bindDisable(urlValueExpression, this);
   }
 
@@ -41,7 +41,9 @@ public class OpenAnalyticsUrlButtonBase extends Button {
   }
 
   private function _handler():void {
-    window.open(urlValueExpression.getValue(), windowName, WINDOW_FEATURES);
+    urlValueExpression.loadValue(function ():void {
+      window.open(urlValueExpression.getValue(), windowName, WINDOW_FEATURES);
+    });
   }
 
   /**

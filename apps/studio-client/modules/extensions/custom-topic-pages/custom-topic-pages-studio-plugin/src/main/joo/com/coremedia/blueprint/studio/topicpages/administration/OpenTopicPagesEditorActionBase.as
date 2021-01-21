@@ -6,9 +6,9 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.desktop.WorkArea;
 import com.coremedia.cms.editor.sdk.desktop.WorkAreaTabType;
 import com.coremedia.cms.editor.sdk.editorContext;
-import com.coremedia.cms.editor.sdk.util.StringHelper;
 import com.coremedia.cms.editor.sdk.util.UserUtil;
 import com.coremedia.ui.data.Bean;
+import com.coremedia.ui.util.StringHelper;
 
 import ext.Action;
 import ext.Component;

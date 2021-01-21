@@ -6,6 +6,8 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentUserCont
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontConnector;
 import com.coremedia.blueprint.base.livecontext.service.StoreFrontResponse;
+import com.coremedia.cache.Cache;
+import com.coremedia.cache.config.CacheConfigurationProperties;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
@@ -25,6 +27,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -115,9 +118,8 @@ public class UserSessionServiceImplTest {
 
     testling.setUserService(userService);
 
-    CommerceCache commerceCache = new CommerceCache();
-    commerceCache.setEnabled(false);
-    commerceCache.setCacheTimesInSeconds(emptyMap());
+    CommerceCache commerceCache = new CommerceCache(mock(Cache.class), false, mock(ApplicationContext.class),
+            mock(CacheConfigurationProperties.class));
     testling.setCommerceCache(commerceCache);
 
     when(storeFrontConnector.executeGet(contains("Logon"), any(Map.class), any(HttpServletRequest.class))).thenReturn(storeFrontResponse);

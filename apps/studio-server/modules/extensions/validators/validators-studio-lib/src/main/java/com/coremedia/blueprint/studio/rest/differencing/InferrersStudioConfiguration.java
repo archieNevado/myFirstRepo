@@ -4,20 +4,18 @@ import com.coremedia.blueprint.base.rest.propertyinferrer.CallToActionConfigurat
 import com.coremedia.cap.common.CapConnection;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.transform.TransformImageService;
+import com.coremedia.cap.transform.TransformImageServiceConfiguration;
 import com.coremedia.rest.cap.content.imagevariants.ImageVariantsPropertiesInferrer;
 import com.coremedia.rest.cap.differencing.ZeroDefaultValuePropertyInferrer;
-import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.Import;
 
-@Configuration
-@ImportResource(
-        value = {
-                "classpath:/com/coremedia/cap/transform/transform-services.xml"
-        },
-        reader = ResourceAwareXmlBeanDefinitionReader.class)
+@Configuration(proxyBeanMethods = false)
+@Import({
+        TransformImageServiceConfiguration.class,
+})
 class InferrersStudioConfiguration {
 
   @Bean

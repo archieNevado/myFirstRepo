@@ -18,7 +18,7 @@ import org.springframework.context.annotation.ImportResource;
 
 import java.io.File;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ImportResource(
         value = {
                 "classpath:/com/coremedia/cap/multisite/multisite-services.xml"

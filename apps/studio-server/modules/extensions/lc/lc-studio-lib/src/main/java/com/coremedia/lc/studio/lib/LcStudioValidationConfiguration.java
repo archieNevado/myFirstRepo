@@ -20,7 +20,7 @@ import static com.coremedia.livecontext.augmentation.config.LcAugmentationLegacy
 import static com.coremedia.livecontext.augmentation.config.LcAugmentationLegacyAutoConfiguration.CM_EXTERNAL_PAGE;
 import static com.coremedia.livecontext.augmentation.config.LcAugmentationLegacyAutoConfiguration.EXTERNAL_ID;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ConditionalOnProperty(
         name = "livecontext.augmentation.backward-compatibility",
         havingValue = "false",

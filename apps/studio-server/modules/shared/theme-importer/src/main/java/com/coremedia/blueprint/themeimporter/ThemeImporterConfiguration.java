@@ -7,19 +7,16 @@ import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.struct.StructService;
 import com.coremedia.cap.themeimporter.ThemeImporter;
 import com.coremedia.mimetype.MimeTypeService;
-import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
+import com.coremedia.mimetype.MimeTypeServiceConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.ImportResource;
 
-@Configuration
-@Import(LocalizationServiceConfiguration.class)
-@ImportResource(
-        value = {
-                "classpath:/com/coremedia/mimetype/mimetype-service.xml"
-        },
-        reader = ResourceAwareXmlBeanDefinitionReader.class)
+@Configuration(proxyBeanMethods = false)
+@Import({
+        LocalizationServiceConfiguration.class,
+        MimeTypeServiceConfiguration.class,
+})
 public class ThemeImporterConfiguration {
 
   @Bean

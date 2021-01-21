@@ -1,11 +1,14 @@
 package com.coremedia.blueprint.component.cae;
 
 import com.coremedia.blueprint.base.multisite.cae.SiteResolver;
+import com.coremedia.blueprint.cae.filter.PreviewViewFilter;
 import com.coremedia.blueprint.cae.filter.SiteFilter;
 import com.coremedia.blueprint.cae.filter.UnknownMimetypeCharacterEncodingFilter;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.web.servlet.ConditionalOnMissingFilterBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.filter.OrderedRequestContextFilter;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +19,10 @@ import org.springframework.web.filter.RequestContextFilter;
 
 import java.nio.charset.StandardCharsets;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
+@EnableConfigurationProperties({
+        DeliveryConfigurationProperties.class,
+})
 public class CaeBaseComponentConfiguration {
 
   public static final int ORDER_SITE_FILTER = 100;
@@ -49,5 +55,13 @@ public class CaeBaseComponentConfiguration {
     registrationBean.setOrder(ORDER_SITE_FILTER);
     registrationBean.addUrlPatterns("/servlet/*");
     return registrationBean;
+  }
+
+  /**
+   * Rejects preview specific requests on Live CAEs.
+   */
+  @Bean
+  public PreviewViewFilter previewViewFilter(DeliveryConfigurationProperties properties) {
+    return new PreviewViewFilter(!properties.isPreviewMode());
   }
 }

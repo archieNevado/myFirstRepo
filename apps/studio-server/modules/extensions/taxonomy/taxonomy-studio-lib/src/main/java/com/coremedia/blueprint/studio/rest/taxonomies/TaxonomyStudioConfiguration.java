@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Scope;
 
 import java.util.List;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @Import({
         CapRestServiceConfiguration.class,
         TaxonomyConfiguration.class,

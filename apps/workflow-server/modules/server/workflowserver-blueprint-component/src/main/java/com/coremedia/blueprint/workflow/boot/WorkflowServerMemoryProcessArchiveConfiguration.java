@@ -13,7 +13,7 @@ import javax.annotation.PostConstruct;
 /**
  * Configuration class to optionally include cap list configuration XML.
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ConditionalOnProperty(name = "elastic.core.persistence", havingValue = "memory")
 @Import(MemoryProcessArchiveConfiguration.class)
 public class WorkflowServerMemoryProcessArchiveConfiguration {

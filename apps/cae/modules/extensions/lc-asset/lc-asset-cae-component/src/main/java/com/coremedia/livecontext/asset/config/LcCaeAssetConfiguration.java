@@ -29,7 +29,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import java.util.HashMap;
 import java.util.Map;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ImportResource(value = {
         "classpath:/framework/spring/blueprint-handlers.xml",
         "classpath:/META-INF/coremedia/livecontext-site-services.xml",

@@ -1,8 +1,8 @@
 package com.coremedia.livecontext.ecommerce.ibm.cae.storefront;
 
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
-import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
-import com.coremedia.livecontext.ecommerce.ibm.catalog.CatalogServiceImplBodBasedIT;
+import com.coremedia.livecontext.ecommerce.ibm.cae.testbase.IbmServiceTestBase;
+import com.coremedia.livecontext.ecommerce.ibm.cae.testbase.CatalogServiceImplBodBasedIT;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -17,7 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
         StoreFrontConfiguration.class,
         CatalogServiceImplBodBasedIT.LocalConfig.class})
 public class B2BCatalogServiceBodBasedIT extends AbstractB2BCatalogServiceIT {
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @Import(XmlRepoConfiguration.class)
   @Profile(IbmServiceTestBase.LocalConfig.PROFILE)
   public static class LocalConfig {

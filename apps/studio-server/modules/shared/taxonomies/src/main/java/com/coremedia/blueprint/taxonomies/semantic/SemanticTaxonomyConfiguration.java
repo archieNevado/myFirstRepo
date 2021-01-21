@@ -11,6 +11,7 @@ import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.undoc.common.spring.CapRepositoriesConfiguration;
 import com.coremedia.rest.cap.CapRestServiceSearchConfiguration;
 import com.coremedia.rest.cap.content.search.SearchService;
+import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,12 +24,14 @@ import org.springframework.context.annotation.ImportResource;
 import java.util.List;
 import java.util.Map;
 
-@Configuration
-@ImportResource(locations = {"classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml",
-                             "classpath:/com/coremedia/cache/cache-services.xml",
-                             "classpath:/com/coremedia/cap/multisite/multisite-services.xml"})
-@Import({CapRepositoriesConfiguration.class,
-         CapRestServiceSearchConfiguration.class
+@Configuration(proxyBeanMethods = false)
+@ImportResource(locations = {
+        "classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml",
+        "classpath:/com/coremedia/cap/multisite/multisite-services.xml",
+}, reader = ResourceAwareXmlBeanDefinitionReader.class)
+@Import({
+        CapRepositoriesConfiguration.class,
+        CapRestServiceSearchConfiguration.class,
 })
 public class SemanticTaxonomyConfiguration {
 

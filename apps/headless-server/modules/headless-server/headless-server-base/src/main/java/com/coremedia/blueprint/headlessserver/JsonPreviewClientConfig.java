@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * This configuration enables the json preview client depending on the property "caas.preview"
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ConditionalOnProperty(name = "caas.preview", havingValue = "true")
 @ComponentScan("com.coremedia.blueprint.caas.preview")
 public class JsonPreviewClientConfig {

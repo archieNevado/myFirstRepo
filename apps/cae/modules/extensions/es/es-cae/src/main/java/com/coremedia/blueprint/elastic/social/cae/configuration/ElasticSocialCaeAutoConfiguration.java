@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * A Spring hook to enable the {@link ElasticSocialCaeConfigurationProperties}
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties({ElasticSocialCaeConfigurationProperties.class})
 public class ElasticSocialCaeAutoConfiguration {
 }

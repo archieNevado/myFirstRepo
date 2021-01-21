@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
 @DefaultAnnotation(NonNull.class)
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class JsonPreviewApplication {
 
   @Bean

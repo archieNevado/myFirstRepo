@@ -10,6 +10,20 @@ server {
     index  index.html index.htm;
   }
 
+  location ~ /packages/(.+)$ {
+    try_files $uri /additional-packages/plugins/$1;
+  }
+
+  location ~ /additional-packages/([^/]+/)?$ {
+    root   /coremedia;
+    autoindex on;
+    autoindex_format json;
+  }
+
+  location /additional-packages/plugins/ {
+    root   /coremedia;
+  }
+
   # Allow POST requests on /blank.html for browser form autocompletion
   location /blank.html {
     error_page 405 =200 $uri;

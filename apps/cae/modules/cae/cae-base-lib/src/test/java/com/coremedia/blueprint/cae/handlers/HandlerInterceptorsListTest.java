@@ -33,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("HandlerInterceptorsListTest")
 public class HandlerInterceptorsListTest {
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class,
           CaeConfigurationProperties.class

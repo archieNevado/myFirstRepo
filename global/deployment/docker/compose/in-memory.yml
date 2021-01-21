@@ -21,3 +21,7 @@ services:
   user-changes:
     restart: "no"
     entrypoint: /bin/true
+
+  overview:
+    environment:
+      USER_CHANGES_ENABLED: "false"

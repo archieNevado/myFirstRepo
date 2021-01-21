@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @DefaultAnnotation(NonNull.class)
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class Application {
 
   @Bean

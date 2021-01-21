@@ -53,8 +53,8 @@
   </bean>
 
   <bean id="testUrlsController" class="com.coremedia.blueprint.cae.sitemap.TestUrlsGenerationHandler">
-    <property name="siteResolver" ref="siteResolver"/>
-    <property name="sitemapSetupFactory" ref="testSitemapSetupFactory"/>
+    <constructor-arg name="siteResolver" ref="siteResolver"/>
+    <constructor-arg name="sitemapSetupFactory" ref="testSitemapSetupFactory"/>
   </bean>
 
   <bean id="testSitemapSetupFactory" class="com.coremedia.blueprint.cae.sitemap.SpringBasedSitemapSetupFactory">

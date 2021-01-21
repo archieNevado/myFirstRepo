@@ -5,6 +5,7 @@
                                 xmlns="exml:ext.config"
                                 xmlns:ui="exml:com.coremedia.ui.config"
                                 xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+                                xmlns:frame="exml:com.coremedia.cms.studio.frame.components.config"
                                 xmlns:bpforms="exml:com.coremedia.blueprint.studio.config"
                                 xmlns:taxonomy="exml:com.coremedia.blueprint.studio.config.taxonomy">
   <fx:Metadata>
@@ -12,6 +13,9 @@
     [ResourceBundle('com.coremedia.icons.CoreIcons')]
   </fx:Metadata>
   <fx:Script><![CDATA[
+    import com.coremedia.cms.editor.sdk.IEditorContext;
+    import com.coremedia.cms.studio.appcontext.models.apps.StudioAppsImpl;
+    import com.coremedia.cms.studio.appcontext.models.apps.studioApps;
     import com.coremedia.ui.data.ValueExpressionFactory;
     import com.coremedia.ui.skins.ButtonSkin;
 
@@ -21,12 +25,18 @@
     public static const TAXONOMY_EDITOR_BUTTON_ID:String = "btn-taxonomy-editor";
     public static const NEW_KEYWORD_SELECTOR_ITEM_ID:String = "newKeywordTypeSelector";
 
-    private var config:TaxonomyStudioPlugin;
-
-
     public static var TAXONOMY_SEMANTIC_CALAIS_KEY:String = "semantic";
     public static var TAXONOMY_NAME_MATCHING_KEY:String = "nameMatching";
     public static var DEFAULT_SUGGESTION_KEY:String = TAXONOMY_NAME_MATCHING_KEY;
+
+    override public function init(editorContext:IEditorContext):void {
+      super.init(editorContext);
+
+      StudioAppsImpl(studioApps).getSubAppLauncherRegistry().registerSubAppLauncher("cmTaxonomy", function ():void {
+        var openTagsAction:OpenTaxonomyEditorAction = new OpenTaxonomyEditorAction();
+        openTagsAction.execute();
+      });
+    }
 
     public native function TaxonomyStudioPlugin(config:TaxonomyStudioPlugin = null);
     ]]></fx:Script>
@@ -53,13 +63,13 @@
 
     <bpforms:CMTaxonomyForm>
       <bpforms:plugins exml:mode="append">
-        <taxonomy:TaxonomyChangePlugin />
+        <taxonomy:TaxonomyChangePlugin/>
       </bpforms:plugins>
     </bpforms:CMTaxonomyForm>
 
     <bpforms:CMLocTaxonomyForm>
       <bpforms:plugins exml:mode="append">
-        <taxonomy:TaxonomyChangePlugin />
+        <taxonomy:TaxonomyChangePlugin/>
       </bpforms:plugins>
     </bpforms:CMLocTaxonomyForm>
 
@@ -67,28 +77,31 @@
       <bpforms:plugins>
         <ui:AddItemsPlugin>
           <ui:items>
-            <editor:PropertyFieldGroup title="{ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Subject_label')}"
-                                       expandOnValues="subjectTaxonomy"
-                                       itemId="subjectTaxonomyItemId">
+            <editor:PropertyFieldGroup
+                    title="{ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Subject_label')}"
+                    expandOnValues="subjectTaxonomy"
+                    itemId="subjectTaxonomyItemId">
               <editor:items>
                 <taxonomy:TaxonomyPropertyField propertyName="subjectTaxonomy"
                                                 hideLabel="true"
                                                 taxonomyIdExpression="{ValueExpressionFactory.createFromValue('Subject')}"/>
               </editor:items>
             </editor:PropertyFieldGroup>
-            <editor:PropertyFieldGroup title="{ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Free_Keywords_label')}"
-                                       expandOnValues="keywords"
-                                       itemId="freeKeywordsForm"
-                                       collapsed="true">
+            <editor:PropertyFieldGroup
+                    title="{ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Free_Keywords_label')}"
+                    expandOnValues="keywords"
+                    itemId="freeKeywordsForm"
+                    collapsed="true">
               <editor:items>
                 <editor:InputChipsField propertyName="keywords"
                                         hideLabel="true"/>
               </editor:items>
             </editor:PropertyFieldGroup>
-            <editor:PropertyFieldGroup title="{ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Location_label')}"
-                                       expandOnValues="locationTaxonomy"
-                                       itemId="locationTaxonomyForm"
-                                       collapsed="true">
+            <editor:PropertyFieldGroup
+                    title="{ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Location_label')}"
+                    expandOnValues="locationTaxonomy"
+                    itemId="locationTaxonomyForm"
+                    collapsed="true">
               <editor:items>
                 <taxonomy:TaxonomyPropertyField itemId="locTaxonomyItemId"
                                                 hideLabel="true"
@@ -101,11 +114,11 @@
       </bpforms:plugins>
     </bpforms:CategoryDocumentForm>
 
-    <editor:PreferenceWindow>
-      <editor:plugins>
+    <frame:PreferenceWindow>
+      <frame:plugins>
         <taxonomy:TaxonomyPreferenceWindowPlugin/>
-      </editor:plugins>
-    </editor:PreferenceWindow>
+      </frame:plugins>
+    </frame:PreferenceWindow>
 
     <editor:WorkArea>
       <editor:plugins>
@@ -153,8 +166,10 @@
   </local:rules>
 
   <local:configuration>
-    <taxonomy:AddTaggingStrategyPlugin serviceId="{TAXONOMY_NAME_MATCHING_KEY}" label="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyPreferences_value_nameMatching_text')}" />
-    <taxonomy:AddTaggingStrategyPlugin serviceId="{TAXONOMY_SEMANTIC_CALAIS_KEY}" label="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyPreferences_value_semantic_opencalais_text')}" />
+    <taxonomy:AddTaggingStrategyPlugin serviceId="{TAXONOMY_NAME_MATCHING_KEY}"
+                                       label="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyPreferences_value_nameMatching_text')}"/>
+    <taxonomy:AddTaggingStrategyPlugin serviceId="{TAXONOMY_SEMANTIC_CALAIS_KEY}"
+                                       label="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyPreferences_value_semantic_opencalais_text')}"/>
   </local:configuration>
 
 </local:TaxonomyStudioPluginBase>

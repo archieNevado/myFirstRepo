@@ -57,7 +57,7 @@
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="placements_2">
 <Struct>
-<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_"/>
+<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Layouts/Two%20Column%20Layout.xml" cmexport:path="/Sites/Calista/United%20States/English/Options/Settings/Pagegrid/Layouts/Two%20Column%20Layout"/>
 <StructProperty Name="placements">
 <Struct>
 </Struct>
@@ -66,17 +66,23 @@
 </StructProperty>
 <StructListProperty Name="placements">
 <Struct>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../../../Navigation/Fragments/Aurora%20Categories/Apparel/Men/Men%20Casual%20Teaser.xml" cmexport:path="/Sites/Calista/United%20States/English/Navigation/Fragments/Aurora%20Categories/Apparel/Men/Men%20Casual%20Teaser"/>
-<Link xlink:href="coremedia:///cap/resources/../../../Navigation/Fragments/Aurora%20Categories/Apparel/Men/Men%20Suits%20Teaser.xml" cmexport:path="/Sites/Calista/United%20States/English/Navigation/Fragments/Aurora%20Categories/Apparel/Men/Men%20Suits%20Teaser"/>
-</LinkListProperty>
+<StructListProperty Name="extendedItems">
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../../../Navigation/Fragments/Aurora%20Categories/Apparel/Men/Men%20Casual%20Teaser.xml" cmexport:path="/Sites/Calista/United%20States/English/Navigation/Fragments/Aurora%20Categories/Apparel/Men/Men%20Casual%20Teaser"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../../../Navigation/Fragments/Aurora%20Categories/Apparel/Men/Men%20Suits%20Teaser.xml" cmexport:path="/Sites/Calista/United%20States/English/Navigation/Fragments/Aurora%20Categories/Apparel/Men/Men%20Suits%20Teaser"/>
+</Struct>
+</StructListProperty>
 <LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../../../Options/Viewtypes/CMChannel/hero.xml" cmexport:path="/Sites/Calista/United%20States/English/Options/Viewtypes/CMChannel/hero"/>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/main.xml" cmexport:path="/Sites/Calista/United%20States/English/Options/Settings/Pagegrid/Placements/main"/>
 </Struct>
 <Struct>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Startpage/Personalized%20Recommendation.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Startpage/Personalized%20Recommendation"/>
-</LinkListProperty>
+<StructListProperty Name="extendedItems">
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Startpage/Personalized%20Recommendation.xml" cmexport:path="/Sites/Calista/United%20States/English/Editorial/Content/Startpage/Personalized%20Recommendation"/>
+</Struct>
+</StructListProperty>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/sidebar.xml" cmexport:path="/Sites/Calista/United%20States/English/Options/Settings/Pagegrid/Placements/sidebar"/>
 </Struct>
 </StructListProperty>
@@ -86,5 +92,20 @@
 </header>
 <footer>
 </footer>
+<pdpPagegrid>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StructProperty Name="placements_2">
+<Struct>
+<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Layouts/Fragment%20PDP.xml" cmexport:path="/Sites/Calista/United%20States/English/Options/Settings/Pagegrid/Layouts/Fragment%20PDP"/>
+<StructProperty Name="placements">
+<Struct>
+</Struct>
+</StructProperty>
+</Struct>
+</StructProperty>
+<StructListProperty Name="placements">
+</StructListProperty>
+</Struct>
+</pdpPagegrid>
 <externalId>ibm:///catalog/category/Men</externalId>
 </CMExternalChannel>

@@ -56,7 +56,7 @@ public class TenantInitializerTest {
     return myTenantServiceListenerBase.tenants.contains(tenant);
   }
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @ImportResource(value = {"classpath:META-INF/coremedia/component-elastic-worker.xml",
           "classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml"},
           reader = ResourceAwareXmlBeanDefinitionReader.class)

@@ -66,7 +66,7 @@ import static org.junit.Assert.fail;
         "repository.params.contentxml=classpath:/com/coremedia/blueprint/cae/action/search/searchservice/content.xml",
 })
 public class SearchServiceTest {
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })

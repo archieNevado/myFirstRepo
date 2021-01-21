@@ -2,11 +2,9 @@ package com.coremedia.blueprint.cae.sitemap;
 
 import com.coremedia.blueprint.base.links.UrlPrefixResolver;
 import com.coremedia.blueprint.base.settings.SettingsService;
-import com.coremedia.blueprint.links.BlueprintUriConstants;
 import com.coremedia.cap.multisite.Site;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -27,27 +25,11 @@ public class SitemapHelper implements ServletContextAware {
   static final String FILE_PREFIX = "sitemap";
   static final String SITEMAP_INDEX_FILENAME = FILE_PREFIX + "_index.xml";
 
-  private SettingsService settingsService;
-  private UrlPrefixResolver urlPrefixResolver;
-  private Map<String, SitemapSetup> sitemapConfigurations;
-  private boolean prependBaseUri = true;
-  private ServletContext servletContext;
-
-
-  // --- configuration ----------------------------------------------
-
-  @Required
-  public void setSettingsService(SettingsService settingsService) {
-    this.settingsService = settingsService;
-  }
-
-  @Required
-  public void setUrlPrefixResolver(UrlPrefixResolver urlPrefixResolver) {
-    this.urlPrefixResolver = urlPrefixResolver;
-  }
+  private final SettingsService settingsService;
+  private final UrlPrefixResolver urlPrefixResolver;
 
   /**
-   * Set the configurations for different sites.
+   * The configurations for different sites.
    * <p>
    * Each site must specify its suitable sitemap configuration by a setting
    * "sitemapOrgConfiguration" whose value is one of the keys of this map.
@@ -57,9 +39,28 @@ public class SitemapHelper implements ServletContextAware {
    *
    * @param sitemapConfigurations a map of configurations
    */
-  @Required
-  public void setSitemapConfigurations(Map<String, SitemapSetup> sitemapConfigurations) {
+  private final Map<String, SitemapSetup> sitemapConfigurations;
+
+  private final boolean prependBaseUri;
+  private ServletContext servletContext;
+
+
+  // --- construct and configure ------------------------------------
+
+
+  public SitemapHelper(@NonNull Map<String, SitemapSetup> sitemapConfigurations,
+                       @NonNull SettingsService settingsService,
+                       @NonNull UrlPrefixResolver urlPrefixResolver,
+                       boolean prependBaseUri) {
     this.sitemapConfigurations = sitemapConfigurations;
+    this.settingsService = settingsService;
+    this.urlPrefixResolver = urlPrefixResolver;
+    this.prependBaseUri = prependBaseUri;
+  }
+
+  @Override
+  public void setServletContext(ServletContext servletContext) {
+    this.servletContext = servletContext;
   }
 
 
@@ -122,22 +123,9 @@ public class SitemapHelper implements ServletContextAware {
       sb.append(servletContext.getContextPath());
       sb.append("/servlet");
     }
-    sb.append("/");
-    sb.append(BlueprintUriConstants.Prefixes.PREFIX_SERVICE);
-    sb.append("/");
-    sb.append(SitemapHandler.ACTION_NAME);
-    sb.append("/");
+    sb.append(SitemapHandler.SERVICE_SITEMAP_PREFIX);
     sb.append(site.getId());
-    sb.append("/");
+    sb.append("-");
     return sb;
-  }
-
-  public void setPrependBaseUri(boolean prependBaseUri) {
-    this.prependBaseUri = prependBaseUri;
-  }
-
-  @Override
-  public void setServletContext(ServletContext servletContext) {
-    this.servletContext = servletContext;
   }
 }

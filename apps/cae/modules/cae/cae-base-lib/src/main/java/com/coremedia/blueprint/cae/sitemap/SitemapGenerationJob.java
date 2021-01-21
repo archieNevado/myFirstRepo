@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.cae.sitemap;
 
 import com.google.common.annotations.VisibleForTesting;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -32,10 +33,14 @@ public class SitemapGenerationJob implements SmartLifecycle {
   private long periodMinutes = DAILY;
   private long counter = 0;
 
-  private SitemapTrigger sitemapTrigger;
+  private final SitemapTrigger sitemapTrigger;
 
 
-  // --- configuration ----------------------------------------------
+  // --- construct and configure ------------------------------------
+
+  public SitemapGenerationJob(@NonNull SitemapTrigger sitemapTrigger) {
+    this.sitemapTrigger = sitemapTrigger;
+  }
 
   /**
    * Initial time of day to start sitemap generation.
@@ -66,11 +71,6 @@ public class SitemapGenerationJob implements SmartLifecycle {
       throw new IllegalArgumentException("periodMinutes must be > 0.");
     }
     this.periodMinutes = periodMinutes;
-  }
-
-  @Required
-  public void setSitemapTrigger(SitemapTrigger sitemapTrigger) {
-    this.sitemapTrigger = sitemapTrigger;
   }
 
 

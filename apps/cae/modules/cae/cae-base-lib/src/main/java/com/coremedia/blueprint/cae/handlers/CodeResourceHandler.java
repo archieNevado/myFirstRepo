@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.cae.handlers;
 
-import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.blueprint.cae.contentbeans.MergeableResourcesImpl;
 import com.coremedia.blueprint.coderesources.CodeResourcesCacheKey;
 import com.coremedia.blueprint.coderesources.CodeResourcesModel;
@@ -15,6 +14,7 @@ import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.Version;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.user.User;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
@@ -371,6 +371,9 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
     int latestVersion = getLatestVersion(cmAbstractCode.getContent());
     boolean isUpToDate = version == latestVersion;
     if (isUpToDate  || !isSingleNode()) {
+      if (!isUpToDate) {
+        applyCacheSeconds(response, 0);
+      }
       response.setContentType(cmAbstractCode.getContentType());
       return createModelWithView(markup, MARKUP_PROGRAMMED_VIEW_NAME);
     } else if (version > 0 && version < latestVersion) {

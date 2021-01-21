@@ -33,7 +33,7 @@ import static org.junit.Assert.assertNotNull;
 @ContextConfiguration(classes = CMTeasableImplTest.TestConfiguration.class)
 public class CMTeasableImplTest {
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })

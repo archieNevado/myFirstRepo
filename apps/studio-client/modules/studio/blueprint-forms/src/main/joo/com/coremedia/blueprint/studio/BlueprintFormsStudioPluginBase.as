@@ -20,6 +20,7 @@ import com.coremedia.ui.data.dependencies.DependencyTracker;
 import com.coremedia.ui.data.validation.Issue;
 import com.coremedia.ui.data.validation.Issues;
 import com.coremedia.ui.plugins.BindPropertyPlugin;
+import com.coremedia.ui.util.ObservableUtil;
 
 import ext.Ext;
 import ext.button.Button;
@@ -89,7 +90,7 @@ public class BlueprintFormsStudioPluginBase extends StudioPlugin {
   public static function calculateQuickCreateFolder():String {
     var libToggleBtn:Button = Ext.getCmp(MainNavigationToolbar.LIBRARY_BUTTON_ITEM_ID) as Button;
     if (libToggleBtn) {
-      DependencyTracker.dependOnObservable(libToggleBtn, "toggle");
+      ObservableUtil.dependOn(libToggleBtn, "toggle");
     }
     var collectionView:CollectionView = Ext.getCmp(CollectionView.COLLECTION_VIEW_ID) as CollectionView;
     if (collectionView && collectionView.isVisible(true)) {

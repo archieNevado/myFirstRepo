@@ -107,6 +107,11 @@ interface CMSpinner @inherit(from: ["CMVisual"]) {
 interface CMDynamicList @inherit(from: ["CMCollection"]) {
 }
 
+interface CMExternalLink @inherit(from: ["CMTeasable"]) {
+  url: String
+  openInNewTab: Boolean
+}
+
 interface CMImage @inherit(from: ["CMLocalized"]) {
   data: Blob
   description: String
@@ -204,7 +209,6 @@ interface CMPerson @inherit(from: ["CMTeasable"]) {
 }
 
 interface CMSettings @inherit(from: ["CMLocalized"]) {
-  id: ID!
   settings(paths: [[String]]): JSON
   identifier: String
 }
@@ -236,6 +240,7 @@ interface CMTeasable @inherit(from: ["CMLinkable", "Detail", "Banner"]) {
 }
 
 interface CMTeaser @inherit(from: ["CMTeasable"]) {
+  target: CMLinkable
 }
 
 interface CMVideo @inherit(from: ["CMVisual"]) {
@@ -279,6 +284,11 @@ type CMDownloadImpl implements CMDownload @inherit(from: ["CMTeasableImpl"]) {
 }
 
 type CMDynamicListImpl implements CMDynamicList @inherit(from: ["CMCollectionImpl"]) {
+}
+
+type CMExternalLinkImpl implements CMExternalLink @inherit(from: ["CMTeasableImpl"]) {
+  url: String
+  openInNewTab: Boolean @fetch(from:"openInNewTab?:false")
 }
 
 type CMImageImpl implements CMImage @inherit(from: ["CMLocalizedImpl"]) {
@@ -381,7 +391,6 @@ type CMPersonImpl implements CMPerson @inherit(from: ["CMTeasableImpl"]) {
 }
 
 type CMSettingsImpl implements CMSettings @inherit(from: ["CMLocalizedImpl"]) {
-  id: ID! @fetch(from: "@graphQlLinkComposer.apply(#root).orElse(null)?.id")
   settings(paths: [[String]]): JSON @fetch(from: "#paths == null ? #this.settings : @structAdapter.to(#root).getWrappedInMap('settings',#paths, null)")
   identifier: String @fetch(from: "#this.identifier?:#this.name")
 }
@@ -465,7 +474,7 @@ type Blob {
 }
 
 type Content_Impl implements Content_ {
-  id: ID! @fetch(from: "@graphQlLinkComposer.apply(#root).orElse(null)?.id")
+  id: ID! @fetch(from: "@contentIdProvider.apply(#root)")
   creationDate: String!
   modificationDate: String!
   name: String!
@@ -518,13 +527,13 @@ type PageGrid {
   rows: [PageGridRow!]
 
   # retrieves the page grid placements as a flat list, optionally filtered by name
-  placements(names: [String]) :[PageGridPlacement]  @fetch(from: "getPlacements(#names)")
-  id: ID @fetch(from: "@graphQlLinkComposer.apply(#root.navigation).orElse(null)?.id")
+  placements(names: [String], excludeNames: [String]) :[PageGridPlacement]  @fetch(from: "getPlacements(#names, #excludeNames)")
+  id: ID! @fetch(from: "@contentIdProvider.apply(#root.navigation)")
 }
 
 type PageGridRow {
   placements: [PageGridPlacement!]
-  id: ID @fetch(from: "@graphQlLinkComposer.apply(#root.navigation).orElse(null)?.id")
+  id: ID! @fetch(from: "@contentIdProvider.apply(#root.navigation)")
   rowId: Int!
 }
 
@@ -535,7 +544,7 @@ type PageGridPlacement {
   width: Int!
   viewtype: String
   items: [CMLinkable!]!
-  id: ID @fetch(from: "@graphQlLinkComposer.apply(#root.navigation).orElse(null)?.id")
+  id: ID @fetch(from: "@contentIdProvider.apply(#root.navigation)")
 }
 
 type Point {

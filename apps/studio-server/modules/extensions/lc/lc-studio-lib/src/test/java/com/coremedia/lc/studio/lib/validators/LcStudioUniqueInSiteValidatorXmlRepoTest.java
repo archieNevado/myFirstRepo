@@ -72,7 +72,7 @@ public class LcStudioUniqueInSiteValidatorXmlRepoTest {
     return (Iterable<Issue>) issues.getByProperty().get(PROPERTY_NAME);
   }
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @Import(LcStudioValidationConfiguration.class)
   public static class LocalConfig {
 

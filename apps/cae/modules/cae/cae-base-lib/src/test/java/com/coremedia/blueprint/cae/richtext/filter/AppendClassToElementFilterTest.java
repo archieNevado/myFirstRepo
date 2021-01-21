@@ -37,7 +37,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
 @ActiveProfiles(PROFILE)
 public class AppendClassToElementFilterTest {
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })

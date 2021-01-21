@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @Import({SFMCContextConfiguration.class,
          SFMCDataExtensionConfiguration.class})
 @ImportResource("classpath:/com/coremedia/cae/contentbean-services.xml")

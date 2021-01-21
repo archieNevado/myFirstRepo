@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.cae.view;
 
 import com.coremedia.blueprint.base.tree.TreeRelation;
+import com.coremedia.blueprint.base.tree.TreeRelationServicesConfiguration;
 import com.coremedia.blueprint.cae.contentbeans.MergeableResourcesImpl;
 import com.coremedia.blueprint.coderesources.CodeResources;
 import com.coremedia.blueprint.coderesources.CodeResourcesCacheKey;
@@ -8,11 +9,12 @@ import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.MergeableResources;
 import com.coremedia.blueprint.testing.ContentTestConfiguration;
 import com.coremedia.blueprint.testing.ContentTestHelper;
+import com.coremedia.cache.config.CacheConfiguration;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
-import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
+import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
@@ -51,7 +53,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
 @ContextConfiguration(classes = MergedCssResourcesViewTest.LocalConfig.class)
 @ActiveProfiles(PROFILE)
 public class MergedCssResourcesViewTest {
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })
@@ -59,13 +61,16 @@ public class MergedCssResourcesViewTest {
           value = {
                   CONTENT_BEAN_FACTORY,
                   "classpath:/framework/spring/blueprint-contentbeans.xml",
-                  "classpath:/com/coremedia/cache/cache-services.xml",
                   "classpath:spring/test/dummy-views.xml",
-                  "classpath:/com/coremedia/blueprint/base/tree/bpbase-treerelation-services.xml",
           },
           reader = ResourceAwareXmlBeanDefinitionReader.class
   )
-  @Import({XmlRepoConfiguration.class, ContentTestConfiguration.class})
+  @Import({
+          CacheConfiguration.class,
+          ContentTestConfiguration.class,
+          TreeRelationServicesConfiguration.class,
+          XmlRepoConfiguration.class,
+  })
   @Profile(PROFILE)
   public static class LocalConfig {
     public static final String PROFILE = "MergedCssResourcesViewTest";

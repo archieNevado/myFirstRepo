@@ -52,10 +52,9 @@
       <scope>runtime</scope>
     </dependency>
 
-    <!-- This dependency includes grammars which are defined by extensions -->
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>content-server-extension-dependencies</artifactId>
+      <artifactId>cms-tools-extension-dependencies</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
       <scope>runtime</scope>

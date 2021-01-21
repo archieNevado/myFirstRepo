@@ -14,7 +14,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
  * Configuration for handler tests. Requires test class to be annotated with
  * {@link org.springframework.test.context.web.WebAppConfiguration}.
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ImportResource(
         value = {
                 "classpath:/framework/spring/blueprint-handlers.xml",

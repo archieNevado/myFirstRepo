@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.ecommerce.ibm.cae.storefront;
 
 import com.coremedia.blueprint.lc.test.SwitchableHoverflyExtension;
-import com.coremedia.livecontext.ecommerce.ibm.IbmServiceTestBase;
+import com.coremedia.livecontext.ecommerce.ibm.cae.testbase.IbmServiceTestBase;
 import com.coremedia.livecontext.ecommerce.ibm.cae.WcsUrlProvider;
 import io.specto.hoverfly.junit5.api.HoverflyConfig;
 import io.specto.hoverfly.junit5.api.HoverflySimulate;

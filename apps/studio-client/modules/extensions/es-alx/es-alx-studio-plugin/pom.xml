@@ -35,6 +35,12 @@
       <type>swc</type>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.coremedia.sencha</groupId>
+      <artifactId>ext-js-pkg</artifactId>
+      <type>pkg</type>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>

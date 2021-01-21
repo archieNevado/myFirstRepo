@@ -50,7 +50,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
 @ContextConfiguration(classes = ContentBeanTestBase.LocalConfig.class)
 @ActiveProfiles(ContentBeanTestBase.LocalConfig.PROFILE)
 public abstract class ContentBeanTestBase {
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })

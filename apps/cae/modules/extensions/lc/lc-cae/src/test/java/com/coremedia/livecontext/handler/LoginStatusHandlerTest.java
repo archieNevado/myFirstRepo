@@ -20,7 +20,6 @@ import org.mockito.Mock;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
-import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.annotation.DirtiesContext;
@@ -191,19 +190,17 @@ public class LoginStatusHandlerTest {
     );
   }
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @EnableWebMvc
   @ImportResource(
           locations = {"classpath:/com/coremedia/cae/link-services.xml"},
           reader = ResourceAwareXmlBeanDefinitionReader.class)
   static class LocalConfig {
 
-    @Inject
-    private GenericConversionService conversionService;
-
     @Bean
-    LoginStatusHandler loginStatusHandler() {
-      return new LoginStatusHandler(liveContextSiteResolver(), commerceConnectionInitializer());
+    LoginStatusHandler loginStatusHandler(LiveContextSiteResolver liveContextSiteResolver,
+                                          CommerceConnectionInitializer commerceConnectionInitializer) {
+      return new LoginStatusHandler(liveContextSiteResolver, commerceConnectionInitializer);
     }
 
     @Bean

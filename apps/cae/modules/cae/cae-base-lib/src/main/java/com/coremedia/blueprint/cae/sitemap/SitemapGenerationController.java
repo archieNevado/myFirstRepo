@@ -31,20 +31,17 @@ import java.util.zip.GZIPOutputStream;
 public class SitemapGenerationController {
   private static final Logger LOG = LoggerFactory.getLogger(SitemapGenerationController.class);
 
-  private SiteResolver siteResolver;
-  private SitemapSetupFactory sitemapSetupFactory;
+  private final SiteResolver siteResolver;
+  private final SitemapSetupFactory sitemapSetupFactory;
 
-  // --- configuration ----------------------------------------------
 
-  @Required
-  public void setSiteResolver(SiteResolver siteResolver) {
+  // --- construct and configure ------------------------------------
+
+  public SitemapGenerationController(SiteResolver siteResolver, SitemapSetupFactory sitemapSetupFactory) {
     this.siteResolver = siteResolver;
-  }
-
-  @Required
-  public void setSitemapSetupFactory(SitemapSetupFactory sitemapSetupFactory) {
     this.sitemapSetupFactory = sitemapSetupFactory;
   }
+
 
   // --- features ---------------------------------------------------
 

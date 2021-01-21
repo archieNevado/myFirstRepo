@@ -45,7 +45,7 @@ import java.util.Collections;
 })
 public class TaxonomyInterceptorTest {
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @ImportResource(value = {
           "classpath:/com/coremedia/cae/contentbean-services.xml",
           "classpath:/com/coremedia/cae/dataview-services.xml",

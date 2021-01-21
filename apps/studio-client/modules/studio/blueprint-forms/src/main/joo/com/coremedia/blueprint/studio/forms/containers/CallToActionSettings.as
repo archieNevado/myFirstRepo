@@ -78,11 +78,11 @@ public class CallToActionSettings extends PropertiesWithDefaultsAdapterBase {
     setProperty(CALL_TO_ACTION_HASH_PROPERTY_NAME, value);
   }
 
-  override public function destroy(...params):void {
+  override public function destroy():void {
     if (legacy) {
       removeListener(CALL_TO_ACTION_DISABLED_PROPERTY_NAME, ctaDisabledUpdated);
     }
-    super.destroy(params);
+    super.destroy();
   }
 }
 }

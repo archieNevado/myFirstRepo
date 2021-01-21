@@ -24,7 +24,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * @deprecated The adapter will change its behavior since commerce data won't be served by the CoreMedia Headless Server anymore in future AEPs.
+ * Whenever there is commerce data provided by this adapter, it will be replaced by a reference to the corresponding commerce item in future.
+ * These references then need to be resolved by the commerce system.
+ */
 @DefaultAnnotation(NonNull.class)
+@Deprecated(since = "2101")
 public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
   public static final String STRUCT_KEY_EXTERNAL_ID = "externalId";
   public static final String STRUCT_KEY_PRODUCTLIST = "productList";
@@ -73,6 +79,20 @@ public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
     return returnValue;
   }
 
+  /**
+   * @deprecated The headless server won't serve catalog data anymore in future AEP release.
+   * Instead a list of reference ids is going to be returned instead.
+   */
+  @Override
+  public List getItems() {
+    return super.getItems();
+  }
+
+  /**
+   * @deprecated The headless server won't serve catalog data in future AEP release.
+   * Instead a list of reference ids is going to be returned instead.
+   */
+  @Deprecated(since = "2101")
   public List<Product> getProducts() {
     SearchResult<Product> productSearchResult = commerceFacade.searchProducts(ALL_QUERY, getSearchParams(), siteId);
     return productSearchResult != null ? productSearchResult.getSearchResult() : Collections.emptyList();

@@ -42,11 +42,11 @@
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="placements_2">
 <Struct>
+<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../../../../Options/Settings/Pagegrid/Layouts/PagegridNavigation.xml" cmexport:path="/Sites/Calista/United%20Kingdom/English/Options/Settings/Pagegrid/Layouts/PagegridNavigation"/>
 <StructProperty Name="placements">
 <Struct>
 </Struct>
 </StructProperty>
-<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_"/>
 </Struct>
 </StructProperty>
 <StructListProperty Name="placements">

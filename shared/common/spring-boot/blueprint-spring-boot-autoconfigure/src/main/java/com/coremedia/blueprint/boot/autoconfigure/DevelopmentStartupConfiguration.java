@@ -15,7 +15,7 @@ import java.util.Objects;
 /**
  * prints the application URL at startup
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @Profile("local")
 public class DevelopmentStartupConfiguration {
 

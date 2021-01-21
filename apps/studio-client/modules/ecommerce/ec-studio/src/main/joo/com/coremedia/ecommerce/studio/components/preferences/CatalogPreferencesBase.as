@@ -1,7 +1,7 @@
 package com.coremedia.ecommerce.studio.components.preferences {
 import com.coremedia.cms.editor.sdk.editorContext;
-import com.coremedia.cms.editor.sdk.preferences.PreferencePanel;
-import com.coremedia.cms.studio.startup.models.preferences.PreferencesUtil;
+import com.coremedia.cms.editor.sdk.util.PreferencesUtil;
+import com.coremedia.cms.studio.frame.components.preferences.PreferencePanel;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 

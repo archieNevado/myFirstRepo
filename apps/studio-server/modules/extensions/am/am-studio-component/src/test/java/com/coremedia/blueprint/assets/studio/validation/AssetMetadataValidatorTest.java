@@ -160,7 +160,7 @@ public class AssetMetadataValidatorTest {
     assertThat(metadataIssues, Matchers.empty());
 
     assertThat(issuesByProperty.values(), Matchers.hasSize(channels.size() + regions.size() + 1));
-    
+
     for (String channel : channels) {
       assertThat(issuesByProperty.get("metadata.channels." + channel).iterator().next().getCode(),
               Matchers.is(AssetMetadataValidator.ISSUE_CODE_UNKNOWN_CHANNEL));
@@ -198,7 +198,7 @@ public class AssetMetadataValidatorTest {
   }
 
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @Import(XmlRepoConfiguration.class)
   public static class LocalConfig {
     @Bean

@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Scope;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ImportResource(
         value = {
                 "classpath:/com/coremedia/cap/common/uapi-services.xml",

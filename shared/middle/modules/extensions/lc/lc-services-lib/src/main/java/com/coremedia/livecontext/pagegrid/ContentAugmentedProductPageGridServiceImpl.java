@@ -8,6 +8,7 @@ import com.coremedia.blueprint.base.pagegrid.impl.ContentBackedPageGridServiceIm
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
+import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -120,13 +121,17 @@ public class ContentAugmentedProductPageGridServiceImpl extends ContentBackedPag
       return null;
     }
 
-    CommerceConnection commerceConnection = commerceConnectionOpt.get();
-
-    StoreContext storeContext = commerceConnection.getStoreContext();
-    Product product = (Product) commerceConnection.getCommerceBeanFactory().createBeanFor(commerceId, storeContext);
-
     ExternalChannelContentTreeRelation treeRelation = (ExternalChannelContentTreeRelation) getTreeRelation();
-    return treeRelation.getNearestContentForCategory(product.getCategory(), site);
+
+    CommerceConnection commerceConnection = commerceConnectionOpt.get();
+    StoreContext storeContext = commerceConnection.getStoreContext();
+    CommerceBean commerceBean = commerceConnection.getCommerceBeanFactory().createBeanFor(commerceId, storeContext);
+    if (commerceBean instanceof Product) {
+      return treeRelation.getNearestContentForCategory(((Product)commerceBean).getCategory(), site);
+    }
+
+    LOG.warn("Unexpected commerce type '{}' found in '{}' from site {}.", commerceId, content, site);
+    return null;
   }
 
   @Autowired

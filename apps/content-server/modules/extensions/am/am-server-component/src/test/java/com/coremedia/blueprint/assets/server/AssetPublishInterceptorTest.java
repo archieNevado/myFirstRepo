@@ -176,7 +176,7 @@ public class AssetPublishInterceptorTest {
     assertNull(properties.get(rendition));
   }
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @Import(XmlRepoConfiguration.class)
   @ImportResource(
           value = "classpath:/META-INF/coremedia/component-am-server.xml",

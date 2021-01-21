@@ -199,7 +199,7 @@ public class UpdateAssetMetadataWriteInterceptorTest {
             testAsset.getType(), properties, null);
   }
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @Import(XmlRepoConfiguration.class)
   @Profile(LocalConfig.PROFILE)
   public static class LocalConfig {

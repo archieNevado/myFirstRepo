@@ -1,6 +1,4 @@
 [mysqld]
-wait_timeout = 7200
+wait_timeout = 15000
 innodb_buffer_pool_size = 512m
 
-# avoid SSL Warning during startup
-skip_ssl

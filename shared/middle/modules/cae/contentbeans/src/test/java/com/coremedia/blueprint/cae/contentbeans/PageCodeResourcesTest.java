@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
 import com.coremedia.blueprint.base.tree.TreeRelation;
+import com.coremedia.blueprint.base.tree.TreeRelationServicesConfiguration;
 import com.coremedia.blueprint.common.contentbeans.CMAbstractCode;
 import com.coremedia.blueprint.common.contentbeans.CMJavaScript;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
@@ -12,8 +13,8 @@ import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
-import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
+import com.coremedia.objectserver.beans.ContentBeanFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,17 +41,19 @@ import static org.junit.Assume.assumeTrue;
 public class PageCodeResourcesTest {
   private static final String CONTENT_REPOSITORY_URL = "classpath:/com/coremedia/blueprint/cae/contentbeans/pagecoderesources/pagecoderesources-content.xml";
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })
-  @Import(XmlRepoConfiguration.class)
+  @Import({
+          TreeRelationServicesConfiguration.class,
+          XmlRepoConfiguration.class,
+  })
   @ImportResource(value = {
           "classpath:/com/coremedia/cap/common/xml/uapi-xml-services.xml",
           "classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml",
           "classpath:/framework/spring/blueprint-contentbeans.xml",
           "classpath:/framework/spring/blueprint-contentbeans-settings.xml",
-          "classpath:/com/coremedia/blueprint/base/tree/bpbase-treerelation-services.xml"
   }, reader = com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader.class)
   static class PageCodeResourcesTestConfiguration {
     @Bean

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg enable-background="new 0 0 24 24" version="1.1" viewBox="0 0 24 24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+<g fill="#3F3F3F">
+  <path d="m19 9h-2v3h2s1 0.03 1-1.5c0-1.47-1-1.5-1-1.5z"/>
+  <polygon points="4.86 14 7.14 14 6 10"/>
+  <path d="m19 13h-2v3h2s1 0.06 1-1.5c0-1.5-1-1.5-1-1.5z"/>
+  <path d="m1 3v18h22v-18h-22zm7 14-0.57-2h-2.86l-0.57 2h-2l3-9h2l3 9h-2zm5 2h-2v-13h2v13zm8.5-4.5c0 2.55-2.5 2.5-2.5 2.5h-4v-9h4s2.5 0 2.5 2.5c0 1.05-0.43 1.66-0.93 2.01 0.5 0.36 0.93 0.96 0.93 1.99zm0.5-6.5-4-4h4v4z"/>
+</g>
+</svg>

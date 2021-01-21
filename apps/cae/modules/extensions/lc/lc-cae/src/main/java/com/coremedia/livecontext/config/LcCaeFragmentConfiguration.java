@@ -42,19 +42,16 @@ import com.coremedia.livecontext.fragment.resolver.SegmentPathResolver;
 import com.coremedia.mimetype.MimeTypeService;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
-import com.coremedia.springframework.customizer.Customize;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
-import org.springframework.core.annotation.Order;
 
 import java.util.List;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ImportResource(value = {
         "classpath:/com/coremedia/cae/uapi-services.xml",
         "classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml",
@@ -395,13 +392,6 @@ public class LcCaeFragmentConfiguration {
     placementResolver.setDataViewFactory(dataViewFactory);
 
     return placementResolver;
-  }
-
-  @Bean(autowireCandidate = false)
-  @Customize(value = "caeCorsConfiguration.allowedOrigins", mode = Customize.Mode.APPEND)
-  @Order(10000)
-  public List<String> liveContextCaeCorsConfiguration(@Value("${livecontext.crossdomain.whitelist}") List<String> allowedOrigins) {
-    return allowedOrigins;
   }
 
   @Bean

@@ -317,23 +317,28 @@ module.exports = () => (config) => {
       joinWebpackPlugin,
       // configure for themes
       ...themePaths.map(
-        (themePath) =>
-          new CopyWebpackPlugin({
-            patterns: [
-              ...createPatternsCopyOverPaths(path.join(themePath, "src"), [
-                "css",
-                "fonts",
-                "img",
-                "images",
-                "vendor",
-                path.relative(
-                  themeConfig.themeTargetPath,
-                  themeConfig.resourceBundleTargetPath
-                ),
-              ]),
-            ],
-          })
-      ),
+        (themePath) => {
+          const patterns = [
+            ...createPatternsCopyOverPaths(path.join(themePath, "src"), [
+              "css",
+              "fonts",
+              "img",
+              "images",
+              "vendor",
+              path.relative(
+                themeConfig.themeTargetPath,
+                themeConfig.resourceBundleTargetPath
+              ),
+            ]),
+          ];
+          if (patterns.length > 0) {
+            return new CopyWebpackPlugin({
+              patterns: patterns,
+            })
+          }
+          return null;
+        }
+      ).filter(copyPlugin => !!copyPlugin),
       joinSettingsWebpackPlugin,
       // additional files via themeConfig
       ...additionalCopyPlugins,

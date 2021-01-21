@@ -59,7 +59,7 @@ public class AssetHelperTest {
   private Content content;
 
   @Import(XmlRepoConfiguration.class)
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @ImportResource(
           value = {
                   "classpath:/com/coremedia/cap/common/xml/uapi-xml-services.xml",

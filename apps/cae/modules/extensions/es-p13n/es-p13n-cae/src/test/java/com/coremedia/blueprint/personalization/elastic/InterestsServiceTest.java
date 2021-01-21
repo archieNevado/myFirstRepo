@@ -52,7 +52,7 @@ import static org.mockito.Mockito.mock;
 })
 public class InterestsServiceTest {
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   @ImportResource({
           "classpath:/com/coremedia/cae/contentbean-services.xml",
           "classpath:/com/coremedia/cae/dataview-services.xml",

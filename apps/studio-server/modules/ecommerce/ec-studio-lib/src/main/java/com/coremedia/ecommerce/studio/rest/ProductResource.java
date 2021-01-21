@@ -44,7 +44,11 @@ public class ProductResource extends CommerceBeanResource<Product> {
 
   protected void fillRepresentation(@NonNull Map<String, String> params, ProductRepresentation representation) {
     Product product = getEntity(params);
-    super.fillRepresentation(params, representation);
+    if (product == null) {
+      String errorMessage = String.format("Could not load product with id '%s'.", params.get(PATH_ID));
+      throw new CatalogBeanNotFoundRestException(errorMessage);
+    }
+    super.fillRepresentation(params, product, representation);
 
     representation.setName(product.getName());
     Markup shortDescription = product.getShortDescription();
@@ -74,7 +78,7 @@ public class ProductResource extends CommerceBeanResource<Product> {
     representation.setPictures(product.getPictures());
     representation.setDownloads(product.getDownloads());
     representation.setDescribingAttributes(product.getDescribingAttributes());
-    representation.setContent(getContent(params));
+    representation.setContent(getContent(product));
   }
 
   @Override

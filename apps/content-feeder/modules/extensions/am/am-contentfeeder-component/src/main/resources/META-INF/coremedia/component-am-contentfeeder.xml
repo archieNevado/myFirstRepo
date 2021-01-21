@@ -13,8 +13,6 @@
   <!-- import beans "contentRepository", "index", "contentFeederRepositoryListeners", "contentFeederOperations",
                     "contentFeederBackgroundFeeds" -->
   <import resource="classpath:/framework/spring/feeder/feeder.xml"/>
-  <!-- import bean "childrenTreeRelation" -->
-  <import resource="classpath:/com/coremedia/blueprint/base/tree/bpbase-treerelation-services.xml"/>
   <!-- import bean "mbeanRegistry" -->
   <import resource="classpath:/com/coremedia/jmx/mbean-services.xml"/>
 
@@ -105,7 +103,8 @@
     <constructor-arg index="4" name="feedableAspect" ref="assetTaxonomyAspect"/>
   </bean>
 
-  <bean id="assetTaxonomyTreeRelation" parent="childrenTreeRelation">
+  <bean id="assetTaxonomyTreeRelation" class="com.coremedia.blueprint.base.tree.ChildrenLinkListContentTreeRelation">
+    <property name="childrenPropertyName" value="children"/>
     <property name="contentTypeName" value="AMTaxonomy"/>
   </bean>
 

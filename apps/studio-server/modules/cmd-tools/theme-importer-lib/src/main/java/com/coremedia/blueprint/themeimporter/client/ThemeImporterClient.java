@@ -31,7 +31,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * <tr><td>-url &lt;ior url&gt;</td><td>Content Server IOR URL to connect to</td></tr>
  * </table>
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 public class ThemeImporterClient extends AbstractThemeImporterClient {
   private static final ThemeImporterCommandLineParser CMD_LINE_PARSER = new ThemeImporterCommandLineParser();
