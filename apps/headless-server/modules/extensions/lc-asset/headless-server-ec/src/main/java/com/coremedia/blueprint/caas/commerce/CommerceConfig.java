@@ -31,6 +31,7 @@ import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.pagegrid.ContentAugmentedPageGridServiceImpl;
 import com.coremedia.livecontext.pagegrid.ContentAugmentedProductPageGridServiceImpl;
 import com.coremedia.livecontext.tree.ExternalChannelContentTreeRelation;
+import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.apache.solr.client.solrj.SolrClient;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,7 +58,9 @@ import static com.coremedia.blueprint.caas.commerce.adapter.CommerceBeanPageGrid
         "com.coremedia.blueprint.base.livecontext.augmentation",
         "com.coremedia.livecontext.asset.impl",
 })
-@ImportResource("classpath:/META-INF/coremedia/lc-services.xml")
+@ImportResource(value = {
+        "classpath:/META-INF/coremedia/lc-services.xml"
+}, reader = ResourceAwareXmlBeanDefinitionReader.class)
 public class CommerceConfig {
   /**
    * @deprecated The headless server won't handle catalog data in near future anymore.

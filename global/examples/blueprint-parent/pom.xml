@@ -29,7 +29,7 @@
 
     <customer>Blueprint</customer>
 
-    <cm.examples.core.version>2101.1</cm.examples.core.version>
+    <cm.examples.core.version>2101.2</cm.examples.core.version>
 
     <spring.boot.version>2.2.10.RELEASE</spring.boot.version>
     <application-plugin.version>2.8.3</application-plugin.version>
@@ -80,22 +80,22 @@
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.examples.core.version>2101.1</cm.examples.core.version>
-    <cm.common.core.version>2101.1</cm.common.core.version>
+    <cm.examples.core.version>2101.2</cm.examples.core.version>
+    <cm.common.core.version>2101.2</cm.common.core.version>
     <cm.common.bp.version>1-SNAPSHOT</cm.common.bp.version>
-    <cm.middle.core.version>2101.1</cm.middle.core.version>
+    <cm.middle.core.version>2101.2</cm.middle.core.version>
     <cm.middle.bp.version>1-SNAPSHOT</cm.middle.bp.version>
-    <cm.cae.core.version>2101.1</cm.cae.core.version>
+    <cm.cae.core.version>2101.2</cm.cae.core.version>
     <cm.cae.bp.version>1-SNAPSHOT</cm.cae.bp.version>
-    <cm.content-feeder.core.version>2101.1</cm.content-feeder.core.version>
+    <cm.content-feeder.core.version>2101.2</cm.content-feeder.core.version>
     <cm.content-feeder.bp.version>1-SNAPSHOT</cm.content-feeder.bp.version>
-    <cm.cae-feeder.core.version>2101.1</cm.cae-feeder.core.version>
+    <cm.cae-feeder.core.version>2101.2</cm.cae-feeder.core.version>
     <cm.cae-feeder.bp.version>1-SNAPSHOT</cm.cae-feeder.bp.version>
-    <cm.content-server.core.version>2101.1</cm.content-server.core.version>
+    <cm.content-server.core.version>2101.2</cm.content-server.core.version>
     <cm.content-server.bp.version>1-SNAPSHOT</cm.content-server.bp.version>
-    <cm.workflow-server.core.version>2101.1</cm.workflow-server.core.version>
+    <cm.workflow-server.core.version>2101.2</cm.workflow-server.core.version>
     <cm.workflow-server.bp.version>1-SNAPSHOT</cm.workflow-server.bp.version>
-    <cm.studio-server.core.version>2101.1</cm.studio-server.core.version>
+    <cm.studio-server.core.version>2101.2</cm.studio-server.core.version>
     <cm.studio-server.bp.version>1-SNAPSHOT</cm.studio-server.bp.version>
     <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
 

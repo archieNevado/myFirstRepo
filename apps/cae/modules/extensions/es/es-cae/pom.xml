@@ -115,11 +115,11 @@
       <groupId>com.coremedia.elastic.core</groupId>
       <artifactId>core-api</artifactId>
     </dependency>
-    <dependency>
-      <groupId>com.coremedia.elastic.core</groupId>
-      <artifactId>core-test</artifactId>
-      <scope>test</scope>
-    </dependency>
+    <dependency>	
+      <groupId>com.coremedia.elastic.core</groupId>	
+      <artifactId>core-test</artifactId>	
+      <scope>test</scope>	
+    </dependency>    
     <dependency>
       <groupId>com.coremedia.elastic.social</groupId>
       <artifactId>social-api</artifactId>

@@ -34,11 +34,6 @@ public class HandlerInfoJsonViewTest extends AbstractJsonViewTest {
 
   private StringWriter writer = new StringWriter();
 
-  @Before
-  public void setup() {
-    GuidCookieHandler.setCurrentGuid("123");
-  }
-
   @Test
   public void comment() {
     HandlerInfo handlerInfo = new HandlerInfo();

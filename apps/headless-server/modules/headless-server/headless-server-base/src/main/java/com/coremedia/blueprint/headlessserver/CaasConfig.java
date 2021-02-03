@@ -103,6 +103,7 @@ import com.coremedia.objectserver.urlservice.UrlServiceRequestParams;
 import com.coremedia.search.solr.client.SolrClientConfiguration;
 import com.coremedia.springframework.customizer.Customize;
 import com.coremedia.springframework.customizer.CustomizerConfiguration;
+import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import com.coremedia.xml.Markup;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.collect.ImmutableList;
@@ -210,13 +211,13 @@ import static java.util.Collections.emptyList;
         "com.coremedia.blueprint.base.caas",
         "com.coremedia.cap.undoc.common.spring"
 })
-@ImportResource({
+@ImportResource(value = {
         "classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml",
         "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
         "classpath:/com/coremedia/blueprint/base/pagegrid/impl/bpbase-pagegrid-services.xml",
         "classpath:/com/coremedia/blueprint/base/navigation/context/bpbase-default-contextstrategy.xml",
         "classpath:/com/coremedia/blueprint/base/links/bpbase-urlpathformatting.xml"
-})
+}, reader = ResourceAwareXmlBeanDefinitionReader.class)
 @Import({
         ImageTransformationConfiguration.class,
         SolrClientConfiguration.class,

@@ -16,7 +16,6 @@ import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.blueprint.elastic.social.cae.ElasticSocialService;
 import com.coremedia.blueprint.elastic.social.cae.controller.ContributionMessageKeys;
 import com.coremedia.blueprint.elastic.social.cae.controller.HandlerInfo;
-import com.coremedia.blueprint.elastic.social.cae.guid.GuidCookieHandler;
 import com.coremedia.blueprint.elastic.social.cae.user.ElasticSocialUserHelper;
 import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
 import com.coremedia.cap.common.IdHelper;
@@ -46,6 +45,9 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriTemplate;
@@ -132,7 +134,6 @@ public class ProductReviewsResultHandlerTest {
   @Mock
   private UriTemplate uriTemplate;
 
-  @Mock
   private HttpServletRequest request;
 
   @Mock
@@ -158,6 +159,10 @@ public class ProductReviewsResultHandlerTest {
 
   @Before
   public void setup() {
+    request = new MockHttpServletRequest();
+    ServletRequestAttributes servletRequestAttributes = new ServletRequestAttributes(request);
+    RequestContextHolder.setRequestAttributes(servletRequestAttributes);
+
     handler.setElasticSocialUserHelper(new ElasticSocialUserHelper(communityUserService));
     handler.setContextHelper(contextHelper);
     handler.setElasticSocialPlugin(elasticSocialPlugin);
@@ -169,9 +174,9 @@ public class ProductReviewsResultHandlerTest {
     FragmentParameters fragmentParameters = FragmentParametersFactory.create(url);
     fragmentContext.setParameters(fragmentParameters);
     fragmentContext.setFragmentRequest(true);
-    when(request.getAttribute("CM_FRAGMENT_CONTEXT")).thenReturn(fragmentContext);
+    setAttribute("CM_FRAGMENT_CONTEXT", fragmentContext);
 
-    GuidCookieHandler.setCurrentGuid("1234+5678");
+    setAttribute("guid", "1234+5");
     when(communityUserService.getUserById("1234")).thenReturn(user);
 
     when(contentRepository.getContent(IdHelper.formatContentId(contextId))).thenReturn(navigationContent);
@@ -189,7 +194,7 @@ public class ProductReviewsResultHandlerTest {
 
     when(catalogService.findProductById(any(), any(StoreContext.class))).thenReturn(product);
 
-    when(request.getAttribute(SiteHelper.SITE_KEY)).thenReturn(site);
+    setAttribute(SiteHelper.SITE_KEY, site);
 
     BaseCommerceIdProvider idProvider = TestVendors.getIdProvider("vendor");
 
@@ -202,10 +207,15 @@ public class ProductReviewsResultHandlerTest {
     CurrentStoreContext.set(storeContext);
   }
 
+  public void setAttribute(String key, Object value) {
+    request.setAttribute(key, value);
+  }
+
   @After
   public void cleanUp() {
     UserContext.clear();
     CurrentStoreContext.remove();
+    RequestContextHolder.resetRequestAttributes();
   }
 
   @Test

@@ -99,7 +99,7 @@ public class AMStudioRestConfiguration {
   @Bean
   ContentTypeValidator amAssetValidator(ConfigurationService configurationService,
                                         CapConnection connection,
-                                        StudioConfigurationProperties studioConfigurationProperties) {
+                                        AssetManagementConfiguration assetManagementConfiguration) {
     ContentTypeValidator contentTypeValidator = new ContentTypeValidator();
     contentTypeValidator.setConnection(connection);
     contentTypeValidator.setContentType("AMAsset");
@@ -108,7 +108,7 @@ public class AMStudioRestConfiguration {
     AssetMetadataValidator assetMetadataValidator = new AssetMetadataValidator();
     assetMetadataValidator.setMetadataProperty("metadata");
     assetMetadataValidator.setConfigurationService(configurationService);
-    assetMetadataValidator.setAssetManagementConfiguration(assetManagementConfiguration(studioConfigurationProperties));
+    assetMetadataValidator.setAssetManagementConfiguration(assetManagementConfiguration);
     contentTypeValidator.setValidators(Collections.singletonList(assetMetadataValidator));
 
     return contentTypeValidator;
@@ -119,10 +119,10 @@ public class AMStudioRestConfiguration {
    * editorContext.getConfiguration().assetManagement.
    */
   @Bean
-  ConfigurationPublisher assetManagementConfigurationPublisher(StudioConfigurationProperties studioConfigurationProperties) {
+  ConfigurationPublisher assetManagementConfigurationPublisher(AssetManagementConfiguration assetManagementConfiguration) {
     ConfigurationPublisher configurationPublisher = new ConfigurationPublisher();
     configurationPublisher.setName("assetManagement");
-    configurationPublisher.setConfiguration(assetManagementConfiguration(studioConfigurationProperties));
+    configurationPublisher.setConfiguration(assetManagementConfiguration);
     return configurationPublisher;
   }
 
