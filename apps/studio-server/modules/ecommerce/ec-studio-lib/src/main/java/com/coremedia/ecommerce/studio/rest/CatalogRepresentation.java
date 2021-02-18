@@ -1,12 +1,15 @@
 package com.coremedia.ecommerce.studio.rest;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
 import com.coremedia.ecommerce.studio.rest.model.ChildRepresentation;
 import com.coremedia.ecommerce.studio.rest.model.Store;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Catalog representation for JSON.
@@ -29,14 +32,14 @@ public class CatalogRepresentation extends AbstractCatalogRepresentation {
   }
 
   @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-  public List<ChildRepresentation> getChildrenData() {
-    List<ChildRepresentation> result = new ArrayList<>();
+  public Map<String, ChildRepresentation> getChildrenByName() {
+    Map<String, ChildRepresentation> result = new LinkedHashMap<>();
     List<Category> subCategories = new ArrayList<>(topCategories);
     for (Category child : subCategories) {
       ChildRepresentation childRepresentation = new ChildRepresentation();
       childRepresentation.setChild(child);
       childRepresentation.setDisplayName(child.getDisplayName());
-      result.add(childRepresentation);
+      result.put(CommerceIdFormatterHelper.format(child.getId()), childRepresentation);
     }
     return result;
   }

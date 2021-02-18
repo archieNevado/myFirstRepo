@@ -7,11 +7,7 @@ import edu.umd.cs.findbugs.annotations.Nullable;
  * Helper class to build an "IBM WCS conform" user context.
  * You do not have to know the exact keys if you use the helper method.
  * Use this class as static import.
- *
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
  */
-@Deprecated
 public class UserContextHelper {
 
   private UserContextHelper() {

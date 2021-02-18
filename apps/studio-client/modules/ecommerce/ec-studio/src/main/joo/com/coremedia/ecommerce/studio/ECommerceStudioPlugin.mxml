@@ -7,7 +7,6 @@
         xmlns:local="com.coremedia.ecommerce.studio.*"
         xmlns:exml="http://www.jangaroo.net/exml/0.8"
         xmlns="exml:ext.config"
-        xmlns:frame="exml:com.coremedia.cms.studio.frame.components.config"
         xmlns:ui="exml:com.coremedia.ui.config"
         xmlns:ec="exml:com.coremedia.ecommerce.studio.config"
         xmlns:editor="exml:com.coremedia.cms.editor.sdk.config">
@@ -18,11 +17,12 @@
   </fx:Metadata>
   <fx:Script><![CDATA[
     import com.coremedia.cms.editor.sdk.collectionview.CollectionViewModel;
+    import com.coremedia.cms.editor.sdk.desktop.HeaderToolbarUserMenu;
     import com.coremedia.ecommerce.studio.model.Catalog;
     import com.coremedia.ecommerce.studio.model.CatalogImpl;
+    import com.coremedia.ecommerce.studio.model.CatalogObject;
     import com.coremedia.ecommerce.studio.model.Category;
     import com.coremedia.ecommerce.studio.model.CategoryImpl;
-    import com.coremedia.ecommerce.studio.model.CommerceBeanPreviewsImpl;
     import com.coremedia.ecommerce.studio.model.ContractImpl;
     import com.coremedia.ecommerce.studio.model.ContractsImpl;
     import com.coremedia.ecommerce.studio.model.FacetsImpl;
@@ -84,7 +84,6 @@
      */
     public static const COPY_TO_CLIPBOARD_ITEM_ID:String = "copyToClipboard";
 
-    //noinspection JSUnusedLocalSymbols
     private var config:ECommerceStudioPlugin;
 
     public native function ECommerceStudioPlugin(config:ECommerceStudioPlugin = null);
@@ -155,11 +154,11 @@
       </editor:plugins>
     </editor:HeaderToolbarUserMenu>
 
-    <frame:PreferenceWindow>
-      <frame:plugins>
+    <editor:PreferenceWindow>
+      <editor:plugins>
         <ec:CatalogPreferenceWindowPlugin/>
-      </frame:plugins>
-    </frame:PreferenceWindow>
+      </editor:plugins>
+    </editor:PreferenceWindow>
 
   </local:rules>
 
@@ -170,10 +169,6 @@
     <editor:CopyResourceBundleProperties
             destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.sdk.validation.Validators')}"
             source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.ecommerce.studio.ECommerceStudioPlugin')}"/>
-    <editor:CopyResourceBundleProperties
-            destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.Editor')}"
-            source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.ecommerce.studio.ECommerceStudioPlugin')}"/>
-
 
     <editor:RegisterRestResource beanClass="{CategoryImpl}"/>
     <editor:RegisterRestResource beanClass="{StoreImpl}"/>
@@ -189,7 +184,6 @@
     <editor:RegisterRestResource beanClass="{MarketingSpotImpl}"/>
     <editor:RegisterRestResource beanClass="{MarketingImpl}"/>
     <editor:RegisterRestResource beanClass="{FacetsImpl}"/>
-    <editor:RegisterRestResource beanClass="{CommerceBeanPreviewsImpl}"/>
   </local:configuration>
 
 

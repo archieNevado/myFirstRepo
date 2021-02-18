@@ -9,7 +9,7 @@ import javax.servlet.Filter;
 
 import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 public class EsCaeFilters {
   private static final String SERVLET = "/servlet/*";
   private static final String SERVLET_DYNAMIC = "/servlet/dynamic/*";

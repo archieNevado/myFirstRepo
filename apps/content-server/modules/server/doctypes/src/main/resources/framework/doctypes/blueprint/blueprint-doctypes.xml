@@ -153,7 +153,7 @@
   <DocType Name="CMTeaser" Parent="CMTeasable">
     <LinkListProperty Name="master" Max="1" LinkType="CMTeaser" Override="true" extensions:weakLink="true"/>
     <LinkListProperty Name="target" Max="1" LinkType="CMLinkable"/>
-    <XmlProperty Name="targets" Grammar="coremedia-struct-2008"/>
+    <XmlProperty Name="targets" Grammar="coremedia-struct-2008" extensions:translatable="true"/>
   </DocType>
 
 
@@ -245,7 +245,7 @@
   <DocType Name="CMCollection" Parent="CMTeasable">
     <LinkListProperty Name="master" Max="1" LinkType="CMCollection" Override="true" extensions:weakLink="true"/>
     <LinkListProperty Name="items" LinkType="CMTeasable"/>
-    <XmlProperty Name="extendedItems" Grammar="coremedia-struct-2008"/>
+    <XmlProperty Name="extendedItems" Grammar="coremedia-struct-2008" extensions:translatable="true"/>
   </DocType>
 
   <!-- Dynamic content -->

@@ -54,13 +54,6 @@
         <directory>src/main/sencha</directory>
         <targetPath>../packages/${project.groupId}__${project.artifactId}</targetPath>
       </resource>
-      <resource>
-        <directory>.</directory>
-        <targetPath>../packages/${project.groupId}__${project.artifactId}</targetPath>
-        <includes>
-          <include>app-manifest-fragment*.json</include>
-        </includes>
-      </resource>
     </resources>
 
     <plugins>

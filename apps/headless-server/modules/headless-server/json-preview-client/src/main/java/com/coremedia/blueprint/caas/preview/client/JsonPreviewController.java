@@ -1,12 +1,12 @@
 package com.coremedia.blueprint.caas.preview.client;
 
-import com.coremedia.cap.content.ContentRepository;
-import com.coremedia.cap.multisite.SitesService;
+import com.google.common.base.Charsets;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import io.micrometer.core.annotation.Timed;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -43,12 +43,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toMap;
 
 @RestController
 @Api(value = "/previewurl", tags = "Json Preview Client")
@@ -64,82 +59,44 @@ public class JsonPreviewController {
 
   private static final String PREVIEW_PATH = "/preview";
   private static final String PARAM_NUMERIC_ID = "numericId";
-  private static final String PARAM_ID = "id";
   private static final String PARAM_TYPE = "type";
-  private static final String PARAM_SITE_ID = "siteId";
-  private static final String PARAM_COMMERCE_ID = "commerceId";
 
   private static final String TEMPLATE_PATH = "html/previewJson.html";
   private static final String TEMPLATE_VAR_PREVIEW_JSON = "previewJson";
   private static final String TEMPLATE_VAR_ERROR = "error";
-  private static final String QUERY_CONTENT = "content";
-  private static final String QUERY_COMMERCE = "commerce";
 
-  private final HttpClient httpClient;
-  private final ITemplateEngine templateEngine;
+  private HttpClient httpClient;
+  private ITemplateEngine templateEngine;
 
   private final JsonPreviewConfigurationProperties jsonPreviewConfigurationProperties;
 
-  private final PersistentPreviewQueries persistentPreviewQueries = new PersistentPreviewQueries(Stream.of(QUERY_CONTENT, QUERY_COMMERCE));
-  private final ContentRepository contentRepository;
-  private final SitesService sitesService;
-
   public JsonPreviewController(HttpClient httpClient,
-                               @Qualifier("htmlTemplateEngine") TemplateEngine templateEngine, ContentRepository contentRepository,
-                               SitesService sitesService,
+                               @Qualifier("htmlTemplateEngine") TemplateEngine templateEngine,
                                JsonPreviewConfigurationProperties jsonPreviewConfigurationProperties) {
     this.httpClient = httpClient;
-    this.contentRepository = contentRepository;
-    this.sitesService = sitesService;
     this.templateEngine = templateEngine;
     this.jsonPreviewConfigurationProperties = jsonPreviewConfigurationProperties;
   }
 
   @GetMapping(PREVIEW_PATH + "/{" + PARAM_NUMERIC_ID + "}/{" + PARAM_TYPE + "}")
   @Timed
-  public ResponseEntity<String> previewContent(HttpServletRequest request,
+  public ResponseEntity<String> preview(HttpServletRequest request,
                                         @ApiParam(value = "The id of the item", required = true) @PathVariable String numericId,
                                         @ApiParam(value = "The type of the item", required = true) @PathVariable String type,
                                         @ApiParam(value = "The preview date") @RequestParam(required = false, name = "previewDate") String previewDate) {
 
-    Optional<AugmentedObject> augmentedObject = AugmentedObject.of(numericId, contentRepository, sitesService);
-    if (augmentedObject.isPresent()) {
-      // it's an augmented commerce object - serve the commerce preview
-      AugmentedObject commerceObject = augmentedObject.get();
-      return previewCommerceBean(request, commerceObject.getExternalId(), commerceObject.getSiteId(), previewDate);
-    }
-
-    // serve the content preview
-    Map<String, String> previewRequestParams = Map.of(PARAM_ID, numericId, PARAM_TYPE, type);
-    return executePreviewRequest(request, previewDate, previewRequestParams, QUERY_CONTENT);
-  }
-
-  @GetMapping(PREVIEW_PATH)
-  @Timed
-  public ResponseEntity<String> previewCommerceBean(HttpServletRequest request,
-                                        @RequestParam(value = PARAM_COMMERCE_ID, required = true) String commerceId,
-                                        @RequestParam(value = PARAM_SITE_ID, required = true) String siteId,
-                                        @ApiParam(value = "The preview date") @RequestParam(required = false, name = "previewDate") String previewDate) {
-    Map<String, String> previewRequestParams = Map.of(PARAM_SITE_ID, siteId, PARAM_COMMERCE_ID, commerceId);
-    return executePreviewRequest(request, previewDate, previewRequestParams, QUERY_COMMERCE);
-  }
-
-  private ResponseEntity<String> executePreviewRequest(HttpServletRequest request, String previewDate, Map<String, String> previewRequestParams, String queryName) {
     Context ctx = new Context();
 
-    Optional<String> persistedQuery = persistentPreviewQueries.getPreviewQuery(queryName);
-    if (persistedQuery.isEmpty()) {
+    String query;
+    try {
+      query = IOUtils.resourceToString("/previewclient/graphql/content.graphql", Charsets.UTF_8);
+    } catch (IOException e) {
       return getResponseEntity(ctx, TEMPLATE_VAR_ERROR, ERROR_MSG_NO_QUERY_DEFINITION);
     }
-    String query = persistedQuery.get();
 
     HttpResponse response;
     try {
-      response = executePostRequest(request, jsonPreviewConfigurationProperties.getForwardHeaderNames(),
-              jsonPreviewConfigurationProperties.isForwardCookies(),
-              jsonPreviewConfigurationProperties.getCaasserverEndpoint(),
-              previewRequestParams, query, previewDate, httpClient);
-
+      response = executePostRequest(request, jsonPreviewConfigurationProperties.getForwardHeaderNames(), jsonPreviewConfigurationProperties.isForwardCookies(), jsonPreviewConfigurationProperties.getCaasserverEndpoint(), numericId, type, query, previewDate, httpClient);
     } catch (IOException e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
@@ -149,12 +106,12 @@ public class JsonPreviewController {
     }
 
     try (
-            InputStream is = response.getEntity().getContent();
-            JsonParser parser = Json.createParser(is)) {
+        InputStream is = response.getEntity().getContent();
+        JsonParser parser = Json.createParser(is)) {
       parser.next();
       JsonObject jsonObject = parser.getObject();
       return getResponseEntity(ctx, TEMPLATE_VAR_PREVIEW_JSON, jsonObject.toString());
-    } catch (IOException|IllegalStateException| JsonException | NoSuchElementException e) {
+    } catch (IOException|IllegalStateException| JsonException|NoSuchElementException e) {
       return getResponseEntity(ctx, TEMPLATE_VAR_ERROR, e.getMessage());
     }
   }
@@ -169,18 +126,11 @@ public class JsonPreviewController {
     return templateEngine.process(TEMPLATE_PATH, ctx);
   }
 
-  private static HttpResponse executePostRequest(HttpServletRequest request, List<String> forwardHeaderNames,
-                                                 boolean forwardCookies, String caasServerEndpoint,
-                                                 Map<String, String> variables, String query, String previewDate,
-                                                 HttpClient httpClient) throws IOException {
+  private static HttpResponse executePostRequest(HttpServletRequest request, List<String> forwardHeaderNames, boolean forwardCookies, String caasServerEndpoint, String id, String type, String query, String previewDate, HttpClient httpClient) throws IOException {
     URI uri = getCaasServerUri(caasServerEndpoint);
 
     JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
-    Map<String, Object> variableMap = variables.entrySet().stream().collect(toMap(
-            Map.Entry::getKey,
-            Map.Entry::getValue
-    ));
-    objectBuilder = objectBuilder.add("variables", Json.createObjectBuilder(variableMap).build());
+    objectBuilder = objectBuilder.add("variables", Json.createObjectBuilder().add("id", id).add("type", type).build());
     objectBuilder = objectBuilder.add("query", query);
 
     StringEntity entity = new StringEntity(objectBuilder.build().toString());

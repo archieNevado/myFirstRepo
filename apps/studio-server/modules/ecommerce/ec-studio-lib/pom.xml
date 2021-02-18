@@ -12,10 +12,6 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>preview-url-service</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.coremedia.livecontext</groupId>
       <artifactId>lc-ecommerce-api</artifactId>
     </dependency>
@@ -214,7 +210,7 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-lc-settings</artifactId>
+      <artifactId>bpbase-lc-client</artifactId>
     </dependency>
   </dependencies>
 

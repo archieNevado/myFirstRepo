@@ -78,8 +78,8 @@ public class SearchValidatorBase extends AbstractPlugin {
    *
    * @param event the 'previewUrl changed' event
    */
-  public function onPreviewUrlChange(oldValue:String, newValue:String):void {
-    if (newValue) {
+  public function onPreviewUrlChange(event:PropertyChangeEvent):void {
+    if (event.newValue) {
       // retrieve the search message from the preview
       var targetWindow:Window = PreviewIFrame(prevPanel.down(createComponentSelector()._xtype(PreviewIFrame.xtype).build())).getContentWindow();
       var messageBody:Object = {dataAttributeName: P13N_SEARCHSTATUS_DATA_ATTRIBUTE};

@@ -8,11 +8,7 @@ import com.coremedia.common.util.Predicate;
 /**
  * Returns true iff the object in question is a Content instance of a resource
  * to be indexed into the WCS search.
- *
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
  */
-@Deprecated
 public class WcsAasCrawlSitemapPredicate implements Predicate {
 
   // --- Predicate --------------------------------------------------

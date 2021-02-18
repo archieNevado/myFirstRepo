@@ -42,11 +42,6 @@ import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERS
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
-/**
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
- */
-@Deprecated
 public class UserSessionServiceImpl extends IbmStoreFrontService implements UserSessionService {
 
   private static final Logger LOG = LoggerFactory.getLogger(UserSessionServiceImpl.class);

@@ -45,7 +45,7 @@ import static org.mockito.Mockito.when;
 @TestPropertySource(properties = "cache.capacities.java.lang.Object=50")
 public class PrefetchFragmentsConfigReaderTest {
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class,
           CaeConfigurationProperties.class

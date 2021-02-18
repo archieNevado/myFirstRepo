@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @Import(YouTubeConnectorConfiguration.class)
 public class YouTubeConfiguration {
   @Bean

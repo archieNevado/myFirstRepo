@@ -3,19 +3,15 @@ package com.coremedia.blueprint.boot.autoconfigure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
-
 /**
- * prints the application URL at startup
+ * This configuration class can be used to add directories outside of the maven module/spring-boot jar at runtime
  */
-@Configuration(proxyBeanMethods = false)
+@Component
 @Profile("local")
 public class DevelopmentStartupConfiguration {
 
@@ -27,19 +23,8 @@ public class DevelopmentStartupConfiguration {
   @Value("http://localhost:${server.port:8080}${server.servlet.context-path:}")
   private String url;
 
-  private final ApplicationContext applicationContext;
-
-  public DevelopmentStartupConfiguration(ApplicationContext applicationContext) {
-    this.applicationContext = applicationContext;
-  }
-
   @EventListener
   public void handleContextRefresh(ContextRefreshedEvent event) {
-    if (!Objects.equals(applicationContext, event.getApplicationContext())) {
-      // not my application context
-      return;
-    }
-
     LOG.info("{} successfully started at {}", applicationName, url);
   }
 

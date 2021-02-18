@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.elastic.social.cae.flows;
 
-import com.coremedia.blueprint.elastic.social.cae.configuration.ElasticSocialCaeConfigurationProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,10 +23,9 @@ public class FlowUrlHelperTest {
 
   private FlowUrlHelper flowUrlHelper;
 
-  private ElasticSocialCaeConfigurationProperties elasticSocialCaeConfigurationProperties;
-
   @Mock
   private RequestContext requestContext;
+
 
   @Mock
   private ExternalContext externalContext;
@@ -35,10 +33,10 @@ public class FlowUrlHelperTest {
   @Mock
   private HttpServletRequest request;
 
+
   @Before
   public void setup() {
-    elasticSocialCaeConfigurationProperties = new ElasticSocialCaeConfigurationProperties();
-    flowUrlHelper = new FlowUrlHelper(elasticSocialCaeConfigurationProperties);
+    flowUrlHelper = new FlowUrlHelper();
     when(requestContext.getExternalContext()).thenReturn(externalContext);
     when(externalContext.getNativeRequest()).thenReturn(request);
     when(request.getRequestURL()).thenReturn(new StringBuffer(REQUEST_URL));

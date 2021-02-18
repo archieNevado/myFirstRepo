@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.studio.taxonomy.preferences {
 import com.coremedia.blueprint.studio.TaxonomyStudioPlugin;
 import com.coremedia.cms.editor.sdk.editorContext;
-import com.coremedia.cms.studio.frame.components.preferences.PreferencePanel;
+import com.coremedia.cms.editor.sdk.preferences.PreferencePanel;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 

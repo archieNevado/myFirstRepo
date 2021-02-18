@@ -28,11 +28,6 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 import static java.lang.Boolean.parseBoolean;
 
-/**
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
- */
-@Deprecated
 public class WcsAasContentUrlGenerator extends ContentUrlGenerator {
 
   private static final Logger LOG = LoggerFactory.getLogger(WcsAasContentUrlGenerator.class);

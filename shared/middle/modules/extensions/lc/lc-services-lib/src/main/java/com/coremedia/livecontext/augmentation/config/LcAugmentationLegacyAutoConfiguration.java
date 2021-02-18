@@ -1,11 +1,11 @@
 package com.coremedia.livecontext.augmentation.config;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AugmentationServiceImpl;
+import com.coremedia.cap.util.CacheableContentStringPropertyIndex;
+import com.coremedia.cap.util.ContentStringPropertyIndex;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.SitesService;
-import com.coremedia.cap.util.CacheableContentStringPropertyIndex;
-import com.coremedia.cap.util.ContentStringPropertyIndex;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @ConditionalOnProperty(
         name = "livecontext.augmentation.backward-compatibility",
         havingValue = "true"

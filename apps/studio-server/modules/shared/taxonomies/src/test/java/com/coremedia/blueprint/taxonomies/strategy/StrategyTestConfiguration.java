@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Scope;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SINGLETON;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @Import(XmlRepoConfiguration.class)
 @ImportResource(
         value = "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",

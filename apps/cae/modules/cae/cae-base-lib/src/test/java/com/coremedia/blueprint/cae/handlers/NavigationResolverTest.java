@@ -42,7 +42,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
 @WebAppConfiguration
 @ActiveProfiles(PROFILE)
 public class NavigationResolverTest {
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class,
           CaeConfigurationProperties.class

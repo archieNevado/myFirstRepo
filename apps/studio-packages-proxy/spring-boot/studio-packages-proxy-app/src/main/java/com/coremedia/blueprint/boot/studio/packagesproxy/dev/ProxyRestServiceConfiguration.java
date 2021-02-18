@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Profile;
 
 import java.util.Map;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @Profile("local")
 public class ProxyRestServiceConfiguration {
 

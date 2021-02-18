@@ -54,7 +54,7 @@ class SFMCContentBuilderPicturesPushServiceTest {
   @Qualifier("picturesSFMCContentBuilderPushService")
   private SFMCContentBuilderPushService testling;
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @Profile("test")
   static class LocalConfig {
 

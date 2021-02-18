@@ -20,9 +20,6 @@ import java.util.Optional;
 
 /**
  * Link Scheme for ibm content led scenario in live cae.
- *
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
  */
 @Link
 @DefaultAnnotation(NonNull.class)

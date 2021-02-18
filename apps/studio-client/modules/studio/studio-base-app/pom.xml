@@ -115,7 +115,6 @@
       <scope>runtime</scope>
     </dependency>
 
-
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>blueprint-studio-theme</artifactId>
@@ -124,24 +123,9 @@
       <scope>runtime</scope>
     </dependency>
 
-    <dependency>
-      <groupId>com.coremedia.sencha</groupId>
-      <artifactId>ext-js-pkg</artifactId>
-      <type>pkg</type>
-      <scope>runtime</scope>
-    </dependency>
   </dependencies>
 
   <build>
-    <resources>
-      <resource>
-        <directory>.</directory>
-        <targetPath>../app</targetPath>
-        <includes>
-          <include>app-manifest-fragment*.json</include>
-        </includes>
-      </resource>
-    </resources>
     <plugins>
       <plugin>
         <groupId>net.jangaroo</groupId>

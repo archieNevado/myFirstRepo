@@ -2,13 +2,14 @@ package com.coremedia.blueprint.cae.sitemap;
 
 import com.coremedia.blueprint.cae.web.IllegalRequestException;
 import com.coremedia.cap.multisite.Site;
-import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Required;
 
 public class ContentBasedSitemapSetupFactory implements SitemapSetupFactory {
-  private final SitemapHelper sitemapHelper;
 
-  public ContentBasedSitemapSetupFactory(@NonNull SitemapHelper sitemapHelper) {
+  private SitemapHelper sitemapHelper;
+
+  @Required
+  public void setSitemapHelper(SitemapHelper sitemapHelper) {
     this.sitemapHelper = sitemapHelper;
   }
 

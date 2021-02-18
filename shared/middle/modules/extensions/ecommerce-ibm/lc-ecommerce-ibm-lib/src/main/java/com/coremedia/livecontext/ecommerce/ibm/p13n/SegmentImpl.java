@@ -12,11 +12,6 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 
 import java.util.Map;
 
-/**
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
- */
-@Deprecated
 public class SegmentImpl extends AbstractIbmCommerceBean implements Segment {
 
   private Map<String, Object> delegate;

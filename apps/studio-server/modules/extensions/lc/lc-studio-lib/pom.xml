@@ -32,10 +32,6 @@
       <artifactId>cap-multisite</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>coremedia-cache</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.coremedia.ui</groupId>
       <artifactId>cap-rest-service</artifactId>
     </dependency>

@@ -1,6 +1,5 @@
 package com.coremedia.ecommerce.studio.rest.filter;
 
-import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.springframework.boot.web.servlet.RegistrationBeanBuilder;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -11,19 +10,24 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import javax.servlet.Filter;
 import java.util.List;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 public class EcStudioFilters {
 
   private static final String SITE_FILTER = "siteFilter";
 
   @Bean
-  public FilterRegistrationBean siteFilterRegistration(SitesService sitesService) {
+  public FilterRegistrationBean siteFilterRegistration() {
     return RegistrationBeanBuilder
-            .forFilter(new SiteFilter(sitesService))
+            .forFilter(siteFilter())
             .name(SITE_FILTER)
             .urlPatterns("/api/livecontext/*")
             .order(900)
             .build();
+  }
+
+  @Bean
+  public Filter siteFilter() {
+    return new SiteFilter();
   }
 
   @Bean

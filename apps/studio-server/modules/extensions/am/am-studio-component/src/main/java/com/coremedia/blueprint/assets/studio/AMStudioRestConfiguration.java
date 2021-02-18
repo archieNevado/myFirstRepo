@@ -21,7 +21,7 @@ import org.springframework.context.annotation.ImportResource;
 
 import java.util.Collections;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @ImportResource(value = {"classpath:/com/coremedia/cap/common/uapi-services.xml"},
         reader = ResourceAwareXmlBeanDefinitionReader.class)
 @Import({BlueprintBaseStudioRestConfiguration.class})
@@ -99,7 +99,7 @@ public class AMStudioRestConfiguration {
   @Bean
   ContentTypeValidator amAssetValidator(ConfigurationService configurationService,
                                         CapConnection connection,
-                                        AssetManagementConfiguration assetManagementConfiguration) {
+                                        StudioConfigurationProperties studioConfigurationProperties) {
     ContentTypeValidator contentTypeValidator = new ContentTypeValidator();
     contentTypeValidator.setConnection(connection);
     contentTypeValidator.setContentType("AMAsset");
@@ -108,7 +108,7 @@ public class AMStudioRestConfiguration {
     AssetMetadataValidator assetMetadataValidator = new AssetMetadataValidator();
     assetMetadataValidator.setMetadataProperty("metadata");
     assetMetadataValidator.setConfigurationService(configurationService);
-    assetMetadataValidator.setAssetManagementConfiguration(assetManagementConfiguration);
+    assetMetadataValidator.setAssetManagementConfiguration(assetManagementConfiguration(studioConfigurationProperties));
     contentTypeValidator.setValidators(Collections.singletonList(assetMetadataValidator));
 
     return contentTypeValidator;
@@ -119,10 +119,10 @@ public class AMStudioRestConfiguration {
    * editorContext.getConfiguration().assetManagement.
    */
   @Bean
-  ConfigurationPublisher assetManagementConfigurationPublisher(AssetManagementConfiguration assetManagementConfiguration) {
+  ConfigurationPublisher assetManagementConfigurationPublisher(StudioConfigurationProperties studioConfigurationProperties) {
     ConfigurationPublisher configurationPublisher = new ConfigurationPublisher();
     configurationPublisher.setName("assetManagement");
-    configurationPublisher.setConfiguration(assetManagementConfiguration);
+    configurationPublisher.setConfiguration(assetManagementConfiguration(studioConfigurationProperties));
     return configurationPublisher;
   }
 

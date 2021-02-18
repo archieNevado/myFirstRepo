@@ -3,9 +3,9 @@ package com.coremedia.livecontext.ecommerce.ibm.inventory;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.common.AbstractWcWrapperService;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcRestServiceMethod;
-import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.http.HttpMethod;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -16,11 +16,7 @@ import static java.util.Collections.emptyMap;
 
 /**
  * A service that uses the getRestConnector() to get inventory wrappers by certain search queries.
- *
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
  */
-@Deprecated
 public class WcAvailabilityWrapperService extends AbstractWcWrapperService {
 
   private static final WcRestServiceMethod<Map, Void> GET_AVAILABILITY_FOR_PRODUCT_VARIANTS = WcRestServiceMethod

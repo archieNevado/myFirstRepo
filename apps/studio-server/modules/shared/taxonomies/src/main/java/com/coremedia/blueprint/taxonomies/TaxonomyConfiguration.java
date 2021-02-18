@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Import;
 
 import java.util.Map;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @Import({
         TaxonomyCyclePreventionConfiguration.class,
         SemanticTaxonomyConfiguration.class,

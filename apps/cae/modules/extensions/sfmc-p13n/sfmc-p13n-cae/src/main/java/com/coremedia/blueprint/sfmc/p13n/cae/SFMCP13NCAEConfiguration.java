@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @Import({JourneySegmentsConfiguration.class,
          JourneyEMailResolverConfiguration.class})
 @ImportResource("classpath:/framework/spring/personalization-plugin/personalization-context.xml")

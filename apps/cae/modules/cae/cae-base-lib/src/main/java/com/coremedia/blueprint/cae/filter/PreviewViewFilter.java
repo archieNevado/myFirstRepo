@@ -1,10 +1,12 @@
 package com.coremedia.blueprint.cae.filter;
 
 import com.coremedia.blueprint.base.links.UriConstants;
+import com.coremedia.cap.content.ContentRepository;
 import com.google.common.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -22,16 +24,20 @@ public class PreviewViewFilter extends OncePerRequestFilter implements Initializ
   private static final Logger LOG = LoggerFactory.getLogger(PreviewViewFilter.class);
   private static final String PREVIEW = "Preview";
 
-  private final boolean isLive;
+  private ContentRepository contentRepository;
+  private boolean isLive = true;
 
-  public PreviewViewFilter(boolean isLive) {
-    this.isLive = isLive;
+
+  // --- configuration ----------------------------------------------
+
+  @Required
+  public void setContentRepository(ContentRepository contentRepository) {
+    this.contentRepository = contentRepository;
   }
-
-// --- configuration ----------------------------------------------
 
   @Override
   public void afterPropertiesSet() {
+    isLive = contentRepository.isLiveServer();
     if (isLive) {
       LOG.info("Activated PreviewViewFilter for this Live CAE.  Requests for preview views will be denied.");
     }

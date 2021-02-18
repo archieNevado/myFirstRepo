@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @ImportResource(
         value = {"classpath:/META-INF/coremedia/livecontext-fragment.xml",
                 "classpath:/META-INF/coremedia/livecontext-links.xml",

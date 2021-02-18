@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
  * <p>
  * Do not use this in production yet
  */
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @ConditionalOnClass({Http2Protocol.class})
 public class Http2ProtocolConfiguration {
 

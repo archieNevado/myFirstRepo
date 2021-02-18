@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @ImportResource(reader = ResourceAwareXmlBeanDefinitionReader.class,
                 value = {
                         "classpath:/com/coremedia/cae/contentbean-services.xml",

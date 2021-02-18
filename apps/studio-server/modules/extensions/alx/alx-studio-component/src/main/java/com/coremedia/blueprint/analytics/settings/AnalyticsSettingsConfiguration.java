@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
 @SuppressWarnings("UtilityClassWithoutPrivateConstructor")
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @ComponentScan(basePackages = "com.coremedia.blueprint.analytics.settings")
 @Import({CapRestServiceConfiguration.class})
 @ImportResource(value = {

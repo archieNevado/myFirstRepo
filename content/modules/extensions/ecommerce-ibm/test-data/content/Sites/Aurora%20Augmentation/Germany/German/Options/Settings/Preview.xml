@@ -8,7 +8,7 @@
 <settings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <LinkListProperty Name="fragmentPreviewCss" LinkType="coremedia:///cap/contenttype/CMCSS">
-<Link xlink:href="coremedia:///cap/resources/aurora-cmc%2Ecss.xml" cmexport:path="/Sites/Aurora%20Augmentation/Germany/German/Options/Settings/aurora-cmc%2Ecss"/>
+<Link xlink:href="coremedia:///cap/resources/aurora-common1_1%2Ecss.xml" cmexport:path="/Sites/Aurora%20Augmentation/Germany/German/Options/Settings/aurora-common1_1%2Ecss"/>
 <Link xlink:href="coremedia:///cap/resources/aurora-styles%2Ecss.xml" cmexport:path="/Sites/Aurora%20Augmentation/Germany/German/Options/Settings/aurora-styles%2Ecss"/>
 </LinkListProperty>
 </Struct>

@@ -64,15 +64,6 @@
   </dependencies>
 
   <build>
-    <resources>
-      <resource>
-        <directory>.</directory>
-        <targetPath>../packages/${project.groupId}__${project.artifactId}</targetPath>
-        <includes>
-          <include>app-manifest-fragment*.json</include>
-        </includes>
-      </resource>
-    </resources>
     <plugins>
       <plugin>
         <groupId>net.jangaroo</groupId>

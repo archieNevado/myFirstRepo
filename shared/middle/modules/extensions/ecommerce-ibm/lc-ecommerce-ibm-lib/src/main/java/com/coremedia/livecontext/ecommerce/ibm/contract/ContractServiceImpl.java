@@ -30,11 +30,6 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 
-/**
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
- */
-@Deprecated
 public class ContractServiceImpl implements ContractService {
 
   private static final Logger LOG = LoggerFactory.getLogger(ContractServiceImpl.class);

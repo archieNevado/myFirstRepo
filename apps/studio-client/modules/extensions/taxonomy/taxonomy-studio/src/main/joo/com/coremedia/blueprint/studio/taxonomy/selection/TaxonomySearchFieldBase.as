@@ -12,6 +12,7 @@ import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.beanFactory;
 import com.coremedia.ui.data.impl.RemoteService;
 import com.coremedia.ui.logging.Logger;
+import com.coremedia.ui.util.AbortingAjaxProxy;
 
 import ext.Ext;
 import ext.XTemplate;

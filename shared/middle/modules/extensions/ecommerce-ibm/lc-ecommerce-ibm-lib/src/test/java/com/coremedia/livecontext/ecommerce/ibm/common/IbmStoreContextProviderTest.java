@@ -51,7 +51,7 @@ public class IbmStoreContextProviderTest {
   private static final Currency CURRENCY_EUR = Currency.getInstance("EUR");
   private static final Currency CURRENCY_USD = Currency.getInstance("USD");
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })

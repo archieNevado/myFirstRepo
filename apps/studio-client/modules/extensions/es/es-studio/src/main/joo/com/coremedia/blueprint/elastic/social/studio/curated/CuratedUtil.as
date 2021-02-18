@@ -46,7 +46,7 @@ public class CuratedUtil {
    * @param response the RemoteServiceMethodResponse which is provided at the request
    */
   private static function openOnSuccessfullyCreatedArticle(response:RemoteServiceMethodResponse):void {
-    var id:String = response.text;
+    var id:String = response.response.responseText;
     var content:Content = ContentUtil.getContent(id);
     content.invalidate(function ():void {
       editorContext.getContentTabManager().openDocument(content);

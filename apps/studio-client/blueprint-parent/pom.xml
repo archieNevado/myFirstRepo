@@ -25,11 +25,12 @@
 
     <google.api.services.analytics.version>v3-rev99-1.19.0</google.api.services.analytics.version>
     <google.api.services.youtube.version>v3-rev152-1.19.0</google.api.services.youtube.version>
+    <google.api.client.version>1.19.0</google.api.client.version>
 
     <customer>Blueprint</customer>
 
-    <cm.studio-client.core.version>2101.2</cm.studio-client.core.version>
-    <jangaroo.version>4.0.76</jangaroo.version>
+    <cm.studio-client.core.version>2007.3</cm.studio-client.core.version>
+    <jangaroo.version>4.0.70</jangaroo.version>
     <jooUnitWebDriverBrowser>chrome</jooUnitWebDriverBrowser>
 
     <spring.boot.version>2.2.10.RELEASE</spring.boot.version>
@@ -84,9 +85,9 @@
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.studio-client.core.version>2101.2</cm.studio-client.core.version>
-    <cm.common.core.version>2101.2</cm.common.core.version>
-    <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
+    <cm.studio-client.core.version>2007.3</cm.studio-client.core.version>
+    <cm.common.core.version>2007.3</cm.common.core.version>
+    <maven-surefire-plugin.version>3.0.0-M4</maven-surefire-plugin.version>
 
     <showDeprecation>true</showDeprecation>
     <showWarnings>true</showWarnings>
@@ -187,6 +188,48 @@
           <exclusion>
             <groupId>com.google.guava</groupId>
             <artifactId>guava-jdk5</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
+      <dependency>
+        <groupId>com.google.api-client</groupId>
+        <artifactId>google-api-client</artifactId>
+        <version>${google.api.client.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava-jdk5</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
+      <dependency>
+        <groupId>com.google.http-client</groupId>
+        <artifactId>google-http-client-jackson2</artifactId>
+        <version>${google.api.client.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.google.http-client</groupId>
+        <artifactId>google-http-client</artifactId>
+        <version>${google.api.client.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
+      <dependency>
+        <groupId>com.google.oauth-client</groupId>
+        <artifactId>google-oauth-client</artifactId>
+        <version>${google.api.client.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
           </exclusion>
         </exclusions>
       </dependency>
@@ -370,9 +413,6 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-source-plugin</artifactId>
           <version>3.0.1</version>
-          <configuration>
-            <excludeResources>true</excludeResources>
-          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>

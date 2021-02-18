@@ -2,20 +2,15 @@ package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
 import com.coremedia.livecontext.ecommerce.catalog.ProductAttribute;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
+
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import static java.util.stream.Collectors.toList;
 
-/**
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
- */
-@Deprecated
 class ProductAttributeImpl implements ProductAttribute {
 
   private Map<String, Object> delegate;

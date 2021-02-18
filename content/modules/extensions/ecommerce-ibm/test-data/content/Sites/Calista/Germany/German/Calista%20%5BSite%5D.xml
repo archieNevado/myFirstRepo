@@ -10,7 +10,7 @@
 <root>
 <link href="Navigation/Calista.xml" path="/Sites/Calista/Germany/German/Navigation/Calista"/>
 </root>
-<siteManagerGroup>manager-calista-de-DE,administratoren</siteManagerGroup>
+<siteManagerGroup>manager-calista-de-DE</siteManagerGroup>
 <linkedSettings>
 <link href="Options/Settings/SiteSettings.xml" path="/Sites/Calista/Germany/German/Options/Settings/SiteSettings"/>
 </linkedSettings>

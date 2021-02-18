@@ -15,25 +15,11 @@
     [ResourceBundle('com.coremedia.icons.CoreIcons')]
   </fx:Metadata>
   <fx:Script><![CDATA[
-    import com.coremedia.cms.editor.sdk.IEditorContext;
-    import com.coremedia.cms.studio.appcontext.models.apps.StudioAppsImpl;
-    import com.coremedia.cms.studio.appcontext.models.apps.studioApps;
-
     import mx.resources.ResourceManager;
 
     public static const xtype:String = "com.coremedia.blueprint.studio.config.googleanalytics.googleAnalyticsStudioPlugin";
 
-    override public function init(editorContext:IEditorContext):void {
-      super.init(editorContext);
-
-      var buttonCfg:OpenAnalyticsHomeUrlButton = OpenAnalyticsHomeUrlButton({});
-      buttonCfg.serviceName = "googleAnalytics";
-      var button:OpenAnalyticsHomeUrlButton = new OpenAnalyticsHomeUrlButton(buttonCfg);
-
-      StudioAppsImpl(studioApps).getSubAppLauncherRegistry().registerSubAppLauncher("cmGoogleAnalytics", function ():void {
-        button.handler();
-      });
-    }
+    private var config:GoogleAnalyticsStudioPlugin;
 
     public native function GoogleAnalyticsStudioPlugin(config:GoogleAnalyticsStudioPlugin = null);
     ]]></fx:Script>

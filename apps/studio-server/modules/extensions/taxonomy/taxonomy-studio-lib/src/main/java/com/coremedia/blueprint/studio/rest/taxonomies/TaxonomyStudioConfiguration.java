@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Import;
 
 import java.util.List;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @Import({
         CapRestServiceConfiguration.class,
         TaxonomyConfiguration.class,

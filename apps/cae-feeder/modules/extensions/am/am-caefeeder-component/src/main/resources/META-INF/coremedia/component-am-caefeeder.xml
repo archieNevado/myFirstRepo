@@ -37,8 +37,8 @@
     </map>
   </customize:append>
 
-  <bean id="assetTaxonomyTreeRelation" class="com.coremedia.blueprint.base.tree.ChildrenLinkListContentTreeRelation">
-    <property name="childrenPropertyName" value="children"/>
+  <bean id="assetTaxonomyTreeRelation" class="com.coremedia.blueprint.base.tree.ChildrenLinkListContentTreeRelation"
+        parent="childrenTreeRelation">
     <property name="contentTypeName" value="AMTaxonomy"/>
   </bean>
 

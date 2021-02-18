@@ -19,15 +19,16 @@ import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.PropertySource;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @ImportResource(value = {
         "classpath:/com/coremedia/cae/uapi-services.xml",
         "classpath:/com/coremedia/cae/contentbean-services.xml",
@@ -38,43 +39,53 @@ import java.util.Map;
         "classpath:/com/coremedia/blueprint/base/links/bpbase-urlpathformatting.xml",
         "classpath:/framework/spring/blueprint-services.xml"
 }, reader = ResourceAwareXmlBeanDefinitionReader.class)
-@EnableConfigurationProperties({
-        BlueprintCaeSitemapConfigurationProperties.class,
-        DeliveryConfigurationProperties.class,
-})
+@PropertySource("classpath:/framework/spring/blueprint-sitemap.properties")
 public class BlueprintSitemapCaeBaseLibConfiguration {
 
   /**
    * Shared sitemap related features.
    */
   @Bean
-  public SitemapHelper sitemapHelper(DeliveryConfigurationProperties configurationProperties,
+  public SitemapHelper sitemapHelper(DeliveryConfigurationProperties deliveryConfigurationProperties,
                                      SettingsService settingsService,
                                      UrlPrefixResolver ruleUrlPrefixResolver,
                                      @Qualifier("sitemapConfigurations") Map<String, SitemapSetup> sitemapConfigurations) {
-    return new SitemapHelper(sitemapConfigurations, settingsService, ruleUrlPrefixResolver, configurationProperties.isStandalone());
+    SitemapHelper sitemapHelper = new SitemapHelper();
+
+    sitemapHelper.setPrependBaseUri(deliveryConfigurationProperties.isStandalone());
+    sitemapHelper.setSettingsService(settingsService);
+    sitemapHelper.setUrlPrefixResolver(ruleUrlPrefixResolver);
+    sitemapHelper.setSitemapConfigurations(sitemapConfigurations);
+
+    return sitemapHelper;
   }
 
   /**
    * Utility bean, suitable for most sitemap configurations.
    */
   @Bean
-  public SitemapIndexRendererFactory sitemapIndexRendererFactory(BlueprintCaeSitemapConfigurationProperties blueprintCaeSitemapConfigurationProperties,
+  public SitemapIndexRendererFactory sitemapIndexRendererFactory(@Value("${blueprint.sitemap.target.root}") String targetRoot,
+                                                                 DeliveryConfigurationProperties deliveryConfigurationProperties,
                                                                  UrlPrefixResolver ruleUrlPrefixResolver,
                                                                  ObjectProvider<SitemapHelper> sitemapHelperProvider) {
-    return new SitemapIndexRendererFactory(
-            blueprintCaeSitemapConfigurationProperties.getTargetRoot(),
+    return new SitemapIndexRendererFactory(targetRoot,
             ruleUrlPrefixResolver,
-            sitemapHelperProvider);
+            sitemapHelperProvider,
+            deliveryConfigurationProperties.isStandalone());
   }
 
   /**
    * The handler that serves the (generated) sitemaps.
    */
   @Bean
-  public SitemapHandler sitemapHandler(BlueprintCaeSitemapConfigurationProperties configurationProperties,
+  public SitemapHandler sitemapHandler(@Value("${blueprint.sitemap.target.root}") String targetRoot,
                                        CapConnection connection) {
-    return new SitemapHandler(connection, configurationProperties.getTargetRoot());
+    SitemapHandler sitemapHandler = new SitemapHandler();
+
+    sitemapHandler.setSitemapDirectory(targetRoot);
+    sitemapHandler.setCapConnection(connection);
+
+    return sitemapHandler;
   }
 
   /**
@@ -83,7 +94,12 @@ public class BlueprintSitemapCaeBaseLibConfiguration {
   @Bean
   public SitemapGenerationHandler sitemapGenerationHandler(SiteResolver siteResolver,
                                                            ContentBasedSitemapSetupFactory contentBasedSitemapSetupFactory) {
-    return new SitemapGenerationHandler(siteResolver, contentBasedSitemapSetupFactory);
+    SitemapGenerationHandler generationHandler = new SitemapGenerationHandler();
+
+    generationHandler.setSiteResolver(siteResolver);
+    generationHandler.setSitemapSetupFactory(contentBasedSitemapSetupFactory);
+
+    return generationHandler;
   }
 
   /**
@@ -91,7 +107,11 @@ public class BlueprintSitemapCaeBaseLibConfiguration {
    */
   @Bean
   public ContentBasedSitemapSetupFactory contentBasedSitemapSetupFactory(SitemapHelper sitemapHelper) {
-    return new ContentBasedSitemapSetupFactory(sitemapHelper);
+    ContentBasedSitemapSetupFactory setupFactory = new ContentBasedSitemapSetupFactory();
+
+    setupFactory.setSitemapHelper(sitemapHelper);
+
+    return setupFactory;
   }
 
   /**
@@ -106,11 +126,15 @@ public class BlueprintSitemapCaeBaseLibConfiguration {
    * Template for "cronjobs".
    */
   @Bean
-  public SitemapGenerationJob sitemapGenerationJobParent(SitemapTrigger sitemapTrigger,
-                                                         BlueprintCaeSitemapConfigurationProperties properties) {
-    SitemapGenerationJob generationJob = new SitemapGenerationJob(sitemapTrigger);
-    generationJob.setStartTime(properties.getStarttime());
-    generationJob.setPeriodMinutes(properties.getPeriodMinutes());
+  public SitemapGenerationJob sitemapGenerationJobParent(@Value("${blueprint.sitemap.starttime:-}") String startTime,
+                                                         @Value("${blueprint.sitemap.period:1440}") long periodMinutes,
+                                                         SitemapTrigger sitemapTrigger) {
+    SitemapGenerationJob generationJob = new SitemapGenerationJob();
+
+    generationJob.setStartTime(startTime);
+    generationJob.setPeriodMinutes(periodMinutes);
+    generationJob.setSitemapTrigger(sitemapTrigger);
+
     return generationJob;
   }
 
@@ -118,12 +142,17 @@ public class BlueprintSitemapCaeBaseLibConfiguration {
    * Triggers a Sitemap by sending a request to the cae by using the HttpClient.
    */
   @Bean
-  public SitemapTriggerImpl sitemapTrigger(SitesService sitesService,
+  public SitemapTriggerImpl sitemapTrigger(@Value("${blueprint.sitemap.cae.port}") String myOwnPort,
+                                           SitesService sitesService,
                                            UrlPathFormattingHelper urlPathFormattingHelper,
-                                           SitemapHelper sitemapHelper,
-                                           BlueprintCaeSitemapConfigurationProperties blueprintCaeSitemapConfigurationProperties) {
-    SitemapTriggerImpl trigger = new SitemapTriggerImpl(sitemapHelper, urlPathFormattingHelper, sitesService);
-    trigger.setMyOwnPort(blueprintCaeSitemapConfigurationProperties.getCaePort());
+                                           SitemapHelper sitemapHelper) {
+    SitemapTriggerImpl trigger = new SitemapTriggerImpl();
+
+    trigger.setMyOwnPort(myOwnPort);
+    trigger.setSitesService(sitesService);
+    trigger.setUrlPathFormattingHelper(urlPathFormattingHelper);
+    trigger.setSitemapHelper(sitemapHelper);
+
     return trigger;
   }
 }

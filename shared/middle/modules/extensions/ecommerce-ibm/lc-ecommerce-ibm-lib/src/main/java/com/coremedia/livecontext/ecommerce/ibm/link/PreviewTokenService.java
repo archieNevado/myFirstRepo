@@ -17,6 +17,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 import java.util.Optional;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
@@ -25,11 +26,7 @@ import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreCon
 
 /**
  * Provides commerce storefront links
- *
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
  */
-@Deprecated
 public class PreviewTokenService implements InitializingBean {
 
   private static final Logger LOG = LoggerFactory.getLogger(PreviewTokenService.class);
@@ -131,7 +128,7 @@ public class PreviewTokenService implements InitializingBean {
    * sets the lifetime for generated preview tokens in seconds.
    * Value might be overriden by {@link PreviewTokenCacheKey#CONFIG_KEY_PREVIEW_TOKEN} cache duration.
    * {@link #afterPropertiesSet} ensures that {@link #previewTokenLifeTimeInSeconds} is at least twice as long as
-   * {@link PreviewTokenCacheKey#CONFIG_KEY_PREVIEW_TOKEN} cache setting
+   * {@link PreviewTokenCacheKey#CONFIG_KEY_PREVIEW_TOKEN} cache setting in {@link CommerceCache#setCacheTimesInSeconds(Map)}
    * to avoid outdated previewToken in cache.
    *
    * @param previewTokenLifeTimeInSeconds (default is 3 hours, might be increased by higher cache duration times)

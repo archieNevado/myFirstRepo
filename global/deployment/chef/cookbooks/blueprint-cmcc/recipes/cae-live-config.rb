@@ -18,7 +18,7 @@ if node['blueprint']['ibm-wcs']['enabled']
   node['blueprint']['ibm-wcs']['virtual_host']['shop']['server_aliases'].each do |s|
     cors_hosts << "https://#{s}"
   end
-  node.default['blueprint']['apps']['cae-live']['application.properties']['cae.cors.allowed-origins-for-url-pattern[{path\:.*}]'] = cors_hosts.join(',')
+  node.default['blueprint']['apps']['cae-live']['application.properties']['livecontext.crossdomain.whitelist'] = cors_hosts.join(',')
 
   # inject wcs configuration
   if node['blueprint']['ibm-wcs']['application.properties']
@@ -44,5 +44,5 @@ if node['blueprint']['sap-hybris']['enabled']
   end
 end
 
-node.default['blueprint']['apps']['cae-live']['application.properties']['cae.cors.allowed-origins-for-url-pattern[{path\:.*}]'] = cors_hosts.join(',')
+node.default['blueprint']['apps']['cae-live']['application.properties']['livecontext.crossdomain.whitelist'] = cors_hosts.join(',')
 

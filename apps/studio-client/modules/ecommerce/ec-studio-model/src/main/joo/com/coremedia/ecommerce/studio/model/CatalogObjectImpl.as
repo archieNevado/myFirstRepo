@@ -63,7 +63,7 @@ public class CatalogObjectImpl extends RemoteBeanImpl implements CatalogObject, 
   }
 
   override public function invalidate(callback:Function = null):void {
-    if (!hasListeners()) {
+    if (!hasAnyListener()) {
       super.invalidate();
       return;
     }

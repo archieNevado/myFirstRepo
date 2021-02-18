@@ -40,7 +40,7 @@ import static org.junit.Assert.assertTrue;
 @ContextConfiguration(classes = ContentBeanSettingsFinderTest.CMLinkableBeanSettingsFinderTestConfiguration .class)
 public class ContentBeanSettingsFinderTest {
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })

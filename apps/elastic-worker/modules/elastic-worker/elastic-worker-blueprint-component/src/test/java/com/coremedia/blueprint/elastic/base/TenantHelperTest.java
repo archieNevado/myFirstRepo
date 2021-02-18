@@ -44,7 +44,7 @@ public class TenantHelperTest {
     assertThat(strings, CoreMatchers.hasItems("tenant", "testTenant"));
   }
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @ImportResource(value = {"classpath:META-INF/coremedia/component-elastic-worker.xml",
           "classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml"},
           reader = ResourceAwareXmlBeanDefinitionReader.class)

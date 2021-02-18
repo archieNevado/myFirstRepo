@@ -1,7 +1,6 @@
 package com.coremedia.blueprint.cae.sitemap;
 
 import com.coremedia.blueprint.base.multisite.cae.SiteResolver;
-import com.coremedia.blueprint.cae.config.BlueprintCaeSitemapConfigurationProperties;
 import com.coremedia.blueprint.cae.common.predicates.ValidContentPredicate;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
@@ -9,10 +8,10 @@ import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
-import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.common.util.Predicate;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.objectserver.web.links.LinkFormatter;
 import com.coremedia.objectserver.web.links.LinkScheme;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
@@ -69,10 +68,9 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
 @ContextConfiguration(classes = SitemapGenerationControllerTest.LocalConfig.class)
 @ActiveProfiles(PROFILE)
 public class SitemapGenerationControllerTest {
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @EnableConfigurationProperties({
-          BlueprintCaeSitemapConfigurationProperties.class,
-          DeliveryConfigurationProperties.class,
+          DeliveryConfigurationProperties.class
   })
   @ImportResource(
           value = {
@@ -116,9 +114,6 @@ public class SitemapGenerationControllerTest {
   @Inject
   private SiteResolver siteResolver;
 
-  @Inject
-  private BlueprintCaeSitemapConfigurationProperties properties;
-
   private ValidationService validationServiceAlwaysTrue = new ValidationService() {
     @Override
     public List filterList(List source) {
@@ -147,13 +142,15 @@ public class SitemapGenerationControllerTest {
     urlGenerator.setPredicates(predicates);
     urlGenerator.setValidationService(validationServiceAlwaysTrue);
 
-    SitemapSetup sitemapSetup = new SitemapSetup(properties);
+    SitemapSetup sitemapSetup = new SitemapSetup();
     sitemapSetup.setSitemapRendererFactory(new PlainSitemapRendererFactory());
     sitemapSetup.setUrlGenerators(singletonList(urlGenerator));
     SpringBasedSitemapSetupFactory setupFactory = new SpringBasedSitemapSetupFactory();
     setupFactory.setSitemapSetup(sitemapSetup);
 
-    testling = new SitemapGenerationController(siteResolver, setupFactory);
+    testling = new SitemapGenerationController();
+    testling.setSiteResolver(siteResolver);
+    testling.setSitemapSetupFactory(setupFactory);
 
     request.setPathInfo("/internal/theSiteSegment/sitemap-org");
   }
@@ -320,4 +317,40 @@ public class SitemapGenerationControllerTest {
     baos.close();
     return asList(new String(baos.toByteArray(), StandardCharsets.UTF_8));
   }
+
+  /**
+   * Delegates the mocked Servlet output stream to a byte array output stream.
+   */
+  class SimpleServletOutputStream extends ServletOutputStream {
+    private ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+    @Override
+    public void write(int b) throws IOException {
+      out.write(b);
+    }
+
+    @Override
+    public void write(byte[] b) throws IOException {
+      out.write(b);
+    }
+
+    public String toString() {
+      return new String(out.toByteArray());
+    }
+
+    public byte[] toByteArray() {
+      return out.toByteArray();
+    }
+
+    @Override
+    public boolean isReady() {
+      return false;
+    }
+
+    @Override
+    public void setWriteListener(WriteListener writeListener) {
+
+    }
+  }
+
 }

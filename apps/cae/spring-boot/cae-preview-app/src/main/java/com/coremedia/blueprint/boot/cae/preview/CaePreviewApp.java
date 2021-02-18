@@ -1,5 +1,9 @@
 package com.coremedia.blueprint.boot.cae.preview;
 
+import com.coremedia.objectserver.configuration.CaeConfigurationProperties;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration;
@@ -8,7 +12,14 @@ import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguratio
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * we need to exclude some autoconfigurations:
@@ -16,15 +27,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
  * - FMAC because otherwise we have conflicting FreemarkerConfiguration beans
  *  for CAE and studio for server also exclude JDBC
  */
-@SpringBootApplication(exclude = {
-        WebMvcAutoConfiguration.class,
-        FreeMarkerAutoConfiguration.class,
-        MongoAutoConfiguration.class,
-}, excludeName = {
-        "net.devh.boot.grpc.client.autoconfigure.GrpcClientAutoConfiguration",
-        "net.devh.boot.grpc.client.autoconfigure.GrpcClientHealthAutoConfiguration",
-        "net.devh.boot.grpc.client.autoconfigure.GrpcClientMetricAutoConfiguration",
-})
+@SpringBootApplication(exclude = {WebMvcAutoConfiguration.class, FreeMarkerAutoConfiguration.class, MongoAutoConfiguration.class})
 public class CaePreviewApp {
 
   // ... Bean definitions
@@ -49,4 +52,39 @@ public class CaePreviewApp {
   WebServerFactoryCustomizer<TomcatServletWebServerFactory> indexHtmlConfigurer() {
     return container -> container.addContextCustomizers(context -> context.addWelcomeFile("index.html"));
   }
+
+  /**
+   * Workaround to allow CORS also for fonts
+   */
+  @Bean
+  public BeanPostProcessor corsCustomizer(@Value("${livecontext.crossdomain.whitelist}") String[] crossDomainWhiteList, CaeConfigurationProperties caeConfigurationProperties) {
+    return new BeanPostProcessor() {
+      @Override
+      public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+        if ("requestMappingHandlerMapping".equals(beanName) && bean instanceof RequestMappingHandlerMapping) {
+          CorsConfiguration corsConfiguration = new CorsConfiguration();
+          List<String> allowedOrigins = new ArrayList<>();
+          allowedOrigins.addAll(Arrays.asList(crossDomainWhiteList));
+          allowedOrigins.addAll(caeConfigurationProperties.getPreview().getCrossdomainWhitelist());
+          corsConfiguration.setAllowedOrigins(allowedOrigins);
+          // to get the ratings via /dynamic
+          corsConfiguration.setAllowedHeaders(Arrays.asList("x-requested-with","X-CSRF-Token"));
+          // to create ratings
+          corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST"));
+          corsConfiguration.setAllowCredentials(true);
+
+          ((RequestMappingHandlerMapping) bean).setCorsConfigurations(
+                  Collections.singletonMap("{path:.*}", corsConfiguration));
+        }
+
+        return bean;
+      }
+
+      @Override
+      public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        return bean;
+      }
+    };
+  }
+
 }

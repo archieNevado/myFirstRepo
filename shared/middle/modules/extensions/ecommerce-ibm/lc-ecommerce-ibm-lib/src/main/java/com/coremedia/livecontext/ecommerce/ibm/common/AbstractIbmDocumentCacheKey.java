@@ -9,11 +9,6 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper.format;
 
-/**
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
- */
-@Deprecated
 public abstract class AbstractIbmDocumentCacheKey<T> extends AbstractCommerceCacheKey<T> {
 
   private final CommerceId commerceId;

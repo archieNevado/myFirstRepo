@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 /**
  * Configuration class to be loaded when no customer spring context manager is configured.
  */
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @Import({
         WorkflowServerElasticProcessArchiveConfiguration.class,
         WorkflowServerMemoryProcessArchiveConfiguration.class,
@@ -109,10 +109,7 @@ class BlueprintWorkflowServerAutoConfiguration {
             new DefaultAutoMergeStructListMapKey("CMExternalProduct", "pdpPagegrid.placements", "section"),
             new DefaultAutoMergeStructListMapKey("CMExternalProduct", "pdpPagegrid.placements.extendedItems", "target"),
             new DefaultAutoMergeStructListMapKey("CMAbstractCategory", "pdpPagegrid.placements", "section"),
-            new DefaultAutoMergeStructListMapKey("CMAbstractCategory", "pdpPagegrid.placements.extendedItems", "target"),
-            new DefaultAutoMergeStructListMapKey("CMCollection", "extendedItems.links", "target"),
-            new DefaultAutoMergeStructListMapKey("CMTeaser", "targets.links", "target")
-
+            new DefaultAutoMergeStructListMapKey("CMAbstractCategory", "pdpPagegrid.placements.extendedItems", "target")
     );
   }
 
@@ -128,7 +125,7 @@ class BlueprintWorkflowServerAutoConfiguration {
     return new CopyOver();
   }
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @EnableScheduling
   static class BlueprintWorkflowServerSchedulingConfiguration {
     private final CleanInTranslation cleanInTranslation;

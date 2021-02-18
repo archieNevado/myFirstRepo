@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Profile;
 /**
  * This configuration class can be used to add directories outside of the maven module/spring-boot jar at runtime
  */
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @ConditionalOnClass({WebResourceRoot.class})
 @Profile("local")
 public class DevelopmentResourcesConfiguration {

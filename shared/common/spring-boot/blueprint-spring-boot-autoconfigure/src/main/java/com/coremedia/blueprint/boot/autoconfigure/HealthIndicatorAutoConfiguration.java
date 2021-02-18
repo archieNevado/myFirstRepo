@@ -23,14 +23,14 @@ import org.springframework.util.unit.DataSize;
 import javax.inject.Named;
 import java.io.File;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 public class HealthIndicatorAutoConfiguration {
 
   // by using the @Named annotation we can prevent spring from prefixing the json key in the health servlet with the
   // surrounding class name, i.e. 'contentRepository' instead of
   // 'com.coremedia.blueprint.boot.autoconfigure.HealthIndicatorAutoConfiguration$contentRepository'
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @ConditionalOnBean(CapConnection.class)
   @ConditionalOnClass(CapConnection.class)
   @ConditionalOnEnabledHealthIndicator("contentRepository")
@@ -60,7 +60,7 @@ public class HealthIndicatorAutoConfiguration {
     }
   }
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @ConditionalOnBean(MongoDbSettings.class)
   @ConditionalOnClass(MongoDbSettings.class)
   @ConditionalOnEnabledHealthIndicator("mongoDb")
@@ -93,7 +93,7 @@ public class HealthIndicatorAutoConfiguration {
     }
   }
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @ConditionalOnBean(name = "elasticCoreSolrClient", value = SolrClient.class)
   @ConditionalOnClass({SolrClient.class, SearchService.class})
   @ConditionalOnEnabledHealthIndicator("elasticSolr")
@@ -106,7 +106,7 @@ public class HealthIndicatorAutoConfiguration {
     }
   }
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @ConditionalOnBean(name = "solrClient", value = SolrClient.class)
   @ConditionalOnClass(SolrClient.class)
   @ConditionalOnEnabledHealthIndicator("contentSolr")
@@ -119,7 +119,7 @@ public class HealthIndicatorAutoConfiguration {
     }
   }
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @ConditionalOnBean(name = "connection", value = CapConnection.class)
   @ConditionalOnClass(CapConnection.class)
   @ConditionalOnEnabledHealthIndicator("blobCacheDiskSpace")

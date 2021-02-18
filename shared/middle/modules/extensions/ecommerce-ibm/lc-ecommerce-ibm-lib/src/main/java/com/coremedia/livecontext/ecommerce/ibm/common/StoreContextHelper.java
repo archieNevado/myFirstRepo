@@ -23,11 +23,7 @@ import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreCon
  * Helper class to build an "IBM WCS conform" store context.
  * You do not have to know the exact keys if you use the helper method.
  * Use this class as static import.
- *
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
  */
-@Deprecated
 public class StoreContextHelper {
 
   private static final String CREDENTIALS = "credentials";

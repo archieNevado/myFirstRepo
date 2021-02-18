@@ -53,7 +53,7 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration(classes = {FetchPageViewHistoryTaskTest.LocalConfig.class, XmlRepoConfiguration.class})
 public class FetchPageViewHistoryTaskTest {
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })

@@ -11,8 +11,8 @@ public interface Marketing extends CatalogObject{
   /**
    * Return a mapping of the name of marketing spots to themselves
    *
-   * @see CatalogObjectPropertyNames#CHILDREN_DATA
+   * @see CatalogObjectPropertyNames#CHILDREN_BY_NAME
    */
-  function getChildrenData():Array;
+  function getChildrenByName():Object;
 }
 }

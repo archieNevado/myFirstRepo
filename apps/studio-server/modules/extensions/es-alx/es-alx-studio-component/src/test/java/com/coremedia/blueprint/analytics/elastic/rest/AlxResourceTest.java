@@ -245,7 +245,7 @@ public class AlxResourceTest {
     alxResource.getPublicationData("123456", null);
   }
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @ImportResource(
           value = "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
           reader = ResourceAwareXmlBeanDefinitionReader.class

@@ -1,7 +1,6 @@
 package com.coremedia.blueprint.cae.handlers;
 
 import com.coremedia.blueprint.base.tree.TreeRelation;
-import com.coremedia.blueprint.base.tree.TreeRelationServicesConfiguration;
 import com.coremedia.blueprint.cae.contentbeans.CMCSSImpl;
 import com.coremedia.blueprint.cae.contentbeans.CMNavigationBase;
 import com.coremedia.blueprint.cae.contentbeans.MergeableResourcesImpl;
@@ -29,6 +28,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.test.annotation.DirtiesContext;
@@ -69,15 +69,18 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER
 @DirtiesContext(classMode = AFTER_CLASS)
 public class CodeResourceHandlerTest {
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class,
-          CaeConfigurationProperties.class,
+          CaeConfigurationProperties.class
   })
-  @Import({
-          HandlerTestConfiguration.class,
-          TreeRelationServicesConfiguration.class,
-  })
+  @Import(HandlerTestConfiguration.class)
+  @ImportResource(
+          value = {
+                  "classpath:/com/coremedia/blueprint/base/tree/bpbase-treerelation-services.xml",
+          },
+          reader = com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader.class
+  )
   @Profile(PROFILE)
   public static class LocalConfig {
     public static final String PROFILE = "CodeResourceHandlerTest";

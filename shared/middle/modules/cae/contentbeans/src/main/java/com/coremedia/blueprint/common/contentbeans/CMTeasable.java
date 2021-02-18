@@ -176,7 +176,6 @@ public interface CMTeasable extends CMHasContexts {
    * Returns the value of the document property {@link #NOT_SEARCHABLE}.
    *
    * @return the value of the document property {@link #NOT_SEARCHABLE}
-   * @cm.template.api
    */
   boolean isNotSearchable();
 
@@ -197,7 +196,6 @@ public interface CMTeasable extends CMHasContexts {
    * Returns the {@link CMTeasable}s referring to this {@link CMTeasable} in their {@link #RELATED} property.
    *
    * @return a list of {@link CMTeasable} objects
-   * @cm.template.api
    */
   List<? extends CMTeasable> getRelatedByReferrers();
 
@@ -206,7 +204,6 @@ public interface CMTeasable extends CMHasContexts {
    * linked.
    *
    * @return a list of {@link CMTeasable} objects
-   * @cm.template.api
    */
   List<? extends CMTeasable> getRelatedBySimilarTaxonomies();
 
@@ -215,7 +212,6 @@ public interface CMTeasable extends CMHasContexts {
    * {@link CMTeasable#getRelatedByReferrers()}, {@link CMTeasable#getRelatedBySimilarTaxonomies()}.
    *
    * @return a list of {@link CMTeasable} objects
-   * @cm.template.api
    */
   List<? extends CMTeasable> getRelatedAll();
 
@@ -243,7 +239,6 @@ public interface CMTeasable extends CMHasContexts {
    * related to this object.
    *
    * @return a Map of String to Lists of CMTeasable
-   * @cm.template.api
    * @see #getRelatedImplicitly()
    */
   Map<String, List<CMTeasable>> getRelatedImplicitlyByType();

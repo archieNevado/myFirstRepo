@@ -156,14 +156,13 @@ a start or a restart action but not both.
 
 * blueprint-base
 * coremedia_maven (~> 3.0.1)
-* [chef-sugar](https://github.com/chef/chef-sugar) (~> 5.0.4)
+* chef-sugar (~> 5.0.1)
 
 # Attributes
 
 * `node['blueprint']['spring-boot']['java_home']` - Global path to the java home, can be overridden using  a more specific hash  i.e. default['blueprint']['spring-boot']['workflow-server']['java_home']. Defaults to `/usr/lib/jvm/java`.
 * `node['blueprint']['spring-boot']['java_opts']['network']` - Global jvm network system properties, the defaults disable IPv4 because IPv6 loopback over localhost currently does not work behind an apache. Defaults to `-Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses`.
 * `node['blueprint']['spring-boot']['java_opts']['oom_handling']` - Global jvm opt to exit on out of memory errors. Defaults to `-XX:+ExitOnOutOfMemoryError`.
-* `node['blueprint']['spring-boot']['java_opts']['use_parallel_gc']` - Use ParallelGC in favor of G1GC. In case of multi service deployments on the same node, you may want to set the maximum threads on a service level, i.e. default['blueprint']['spring-boot']['cae-live']['java_opts']['parallel_gc_threads'] = "-XX:ParallelGCThreads=4". Defaults to `-XX:+UseParallelGC`.
 * `node['blueprint']['spring-boot']['boot_opts']` - Global Spring Boot opts. This map will be transformed into --<key>=<value> on the command-line, can be overridden using  a more specific hash  i.e. default['blueprint']['spring-boot']['workflow-server']['boot_opts'] = {}. Defaults to `{ ... }`.
 * `node['blueprint']['spring-boot']['start_service']` - Start Services can be overridden using a more specific key, i.e. default['blueprint']['spring-boot']['workflow-server']['start_service'] = false. Defaults to `true`.
 * `node['blueprint']['spring-boot']['debug']` - Global remote debugging toggle. Can be overridden for each service, i.e. default['blueprint']['spring-boot']['workflow-server']['debug'] = true. Defaults to `false`.
@@ -203,9 +202,9 @@ a start or a restart action but not both.
 * `node['blueprint']['spring-boot']['studio-server']['boot_opts']` -  Defaults to `{ ... }`.
 * `node['blueprint']['spring-boot']['studio-client']['heap']` -  Defaults to `128m`.
 * `node['blueprint']['spring-boot']['studio-client']['boot_opts']` -  Defaults to `{ ... }`.
-* `node['blueprint']['spring-boot']['headless-server-preview']['heap']` -  Defaults to `1024m`.
+* `node['blueprint']['spring-boot']['headless-server-preview']['heap']` -  Defaults to `512m`.
 * `node['blueprint']['spring-boot']['headless-server-preview']['boot_opts']` -  Defaults to `{ ... }`.
-* `node['blueprint']['spring-boot']['headless-server-live']['heap']` -  Defaults to `1024m`.
+* `node['blueprint']['spring-boot']['headless-server-live']['heap']` -  Defaults to `512m`.
 * `node['blueprint']['spring-boot']['headless-server-live']['boot_opts']` -  Defaults to `{ ... }`.
 * `node['blueprint']['spring-boot']['commerce-adapter-mock']['heap']` -  Defaults to `64m`.
 * `node['blueprint']['spring-boot']['commerce-adapter-mock']['boot_opts']` -  Defaults to `{ ... }`.
@@ -228,7 +227,7 @@ a start or a restart action but not both.
 * blueprint-spring-boot::commerce-adapter-sfcc
 * blueprint-spring-boot::commerce-adapter
 * blueprint-spring-boot::content-feeder
-* [blueprint-spring-boot::content-management-server](#blueprint-spring-bootcontent-management-server) - This recipe installst the content-management-server.
+* blueprint-spring-boot::content-management-server
 * blueprint-spring-boot::elastic-worker
 * blueprint-spring-boot::headless-server-live
 * blueprint-spring-boot::headless-server-preview
@@ -238,36 +237,6 @@ a start or a restart action but not both.
 * blueprint-spring-boot::studio-server
 * blueprint-spring-boot::user-changes
 * blueprint-spring-boot::workflow-server
-
-## blueprint-spring-boot::content-management-server
-
-This recipe installst the content-management-server.
-
-
-### Userprovider
-
-To configure either LDAP or CAS as user provider, you need to set one of the following flags to true:
-
-* `default['blueprint']['jaas']['ldap']['enabled']`
-* `default['blueprint']['jaas']['cas']['enabled']`
-
-then you need to configure the corresponding filter tokens for the jaas.conf template, please take a look at the
-blueprint-base `attributes/default.rb` at the bottom.
-
-The properties to configure the provider class implementation can be set as standard application properties.
-For `com.coremedia.ldap.LdapUserProvider` based user providers, the mandatory properties are:
-```
-['blueprint']['apps']['content-management-server']['application.properties']['cap.server.userproviders[0].provider-class']
-['blueprint']['apps']['content-management-server']['application.properties']['cap.server.userproviders[0].java.naming.security.principal']
-['blueprint']['apps']['content-management-server']['application.properties']['cap.server.userproviders[0].java.naming.security.credentials']
-['blueprint']['apps']['content-management-server']['application.properties']['cap.server.userproviders[0].ldap.host']
-['blueprint']['apps']['content-management-server']['application.properties']['cap.server.userproviders[0].ldap.base-distinguished-names[0]']
-```
-
-If your user provider needs custom properties, you can set them by the generic Map-valued `properties` property, like:
-```
-['blueprint']['apps']['content-management-server']['application.properties']['cap.server.userproviders[0].properties[my.property.key]']
-```
 
 # Definitions
 
@@ -380,9 +349,6 @@ blueprint_dev_tooling_content '/some/path/to/a/content/dir' do
  action [:import_content, :import_user]
 end
 ```
-
-# Libraries
-
 
 # Author
 

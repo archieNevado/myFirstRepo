@@ -36,7 +36,7 @@ import static org.junit.Assert.assertNotNull;
 @ContextConfiguration(classes = CMPersonImplTest.PageImplTestConfiguration.class)
 public class CMPersonImplTest {
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })

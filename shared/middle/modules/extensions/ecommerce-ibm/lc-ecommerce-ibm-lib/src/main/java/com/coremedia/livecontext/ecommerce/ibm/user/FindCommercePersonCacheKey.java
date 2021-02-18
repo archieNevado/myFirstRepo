@@ -11,11 +11,6 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 
 import java.util.Map;
 
-/**
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
- */
-@Deprecated
 public class FindCommercePersonCacheKey extends AbstractCommerceCacheKey<Map<String, Object>> {
 
   private WcPersonWrapperService wrapperService;

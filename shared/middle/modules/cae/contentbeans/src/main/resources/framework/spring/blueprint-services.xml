@@ -4,6 +4,7 @@
 
   <import resource="classpath:/framework/spring/blueprint-contextstrategy.xml"/>
   <import resource="classpath:/com/coremedia/cae/dataview-services.xml"/>
+  <import resource="blueprint-cache.xml" />
   <import resource="classpath:/com/coremedia/blueprint/base/pagegrid/impl/bpbase-pagegrid-services.xml"/>
   <import resource="classpath:/framework/spring/search/solr-search.xml"/>
 

@@ -99,20 +99,6 @@ public class CatalogTreeModelTest extends AbstractCatalogStudioTest {
     );
 
   }
-  public function testIdsAreConcatinatedWithLinkPrefix():void {
-    waitUntil("wait for top category children",
-      function():Boolean {
-        return catalogTreeModel.getChildren(LINK_CATEGORY_ID);
-      },
-      function():void {
-        var nodeChildren:NodeChildren = catalogTreeModel.getChildren(LINK_CATEGORY_ID);
-        assertEquals( 1, nodeChildren.getChildIds().length);
-        assertEquals( CatalogTreeModel.HYPERLINK_PREFIX + LINK_CATEGORY_ID + CatalogTreeModel.HYPERLINK_SEPARATOR + LEAF_CATEGORY_ID, nodeChildren.getChildIds()[0]);
-      }
-
-    );
-
-  }
 
   public function testGetLeafCategoryChildren():void {
     waitUntil("wait for leaf category children",

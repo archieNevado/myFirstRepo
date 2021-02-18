@@ -3,11 +3,7 @@ package com.coremedia.livecontext.ecommerce.ibm.user;
 /**
  * Duplicate all IBM Preview Cookies returned by the shop preview to default cookies
  * since some rest calls support ibm preview cookies and others support default cookies.
- *
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
  */
-@Deprecated
 public class WcCookieHelper {
 
   private static final String COOKIE_PREFIX_PREVIEW = "WCP_";

@@ -31,14 +31,19 @@
      */
     public static const MANAGEMENT_CENTER_FRAME_ID:String = "managementCenterFrame";
 
-    //noinspection JSUnusedLocalSymbols
     private var config:ManagementCenterWindow;
 
     public native function ManagementCenterWindow(config:ManagementCenterWindow = null);
     ]]></fx:Script>
 
+  <defaults>
+    <fx:Object stateful="true"
+               stateEvents="{['collapse', 'expand', 'resize', 'move']}"
+               getState="{function():Object {return {visible: this.visible, collapsed: this.collapsed, height : this.getHeight(), width : this.getWidth(), x : this.x, y : this.y}}}"/>
+  </defaults>
   <items>
-    <mgmt:ManagementCenterFrame id_="{MANAGEMENT_CENTER_FRAME_ID}"/>
+    <mgmt:ManagementCenterFrame id_="{MANAGEMENT_CENTER_FRAME_ID}"
+                                stateful="false"/>
   </items>
 
 </Window>

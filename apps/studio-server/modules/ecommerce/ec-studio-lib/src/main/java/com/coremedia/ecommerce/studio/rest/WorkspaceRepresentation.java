@@ -4,11 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Workspace representation for JSON.
- *
- * @deprecated This class is part of the commerce integration "workspaces support" that is not
- * supported by the Commerce Hub architecture. It will be removed or changed in the future.
  */
-@Deprecated
 public class WorkspaceRepresentation extends AbstractCatalogRepresentation {
 
   private String name;

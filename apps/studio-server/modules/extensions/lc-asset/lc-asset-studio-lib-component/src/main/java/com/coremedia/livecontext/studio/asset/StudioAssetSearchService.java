@@ -2,7 +2,6 @@ package com.coremedia.livecontext.studio.asset;
 
 import com.coremedia.cache.Cache;
 import com.coremedia.cache.CacheKey;
-import com.coremedia.cache.config.CacheConfigurationProperties;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
@@ -12,7 +11,6 @@ import com.coremedia.rest.cap.content.search.SearchService;
 import com.coremedia.rest.cap.content.search.SearchServiceResult;
 import com.google.common.collect.ImmutableList;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,13 +25,12 @@ public class StudioAssetSearchService implements AssetSearchService {
   private final ContentRepository contentRepository;
   private final Cache cache;
 
-  private long cacheForInSeconds;
+  private long cacheForInSeconds = 300;
 
-  StudioAssetSearchService(SearchService searchService, ContentRepository contentRepository, Cache cache, CacheConfigurationProperties properties) {
+  StudioAssetSearchService(SearchService searchService, ContentRepository contentRepository, Cache cache) {
     this.searchService = searchService;
     this.contentRepository = contentRepository;
     this.cache = cache;
-    this.cacheForInSeconds = properties.getTimeoutSeconds().getOrDefault(SolrQueryCacheKey.CACHE_CLASS, 300L);
   }
 
   @NonNull
@@ -66,7 +63,6 @@ public class StudioAssetSearchService implements AssetSearchService {
     return ct != null ? ImmutableList.of(ct) : ImmutableList.of();
   }
 
-  @Deprecated(since = "2010")
   public void setCacheForInSeconds(long cacheForInSeconds) {
     this.cacheForInSeconds = cacheForInSeconds;
   }

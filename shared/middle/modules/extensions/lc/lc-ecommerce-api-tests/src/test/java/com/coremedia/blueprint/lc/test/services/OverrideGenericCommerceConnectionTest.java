@@ -49,7 +49,7 @@ import static org.mockito.Mockito.when;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class OverrideGenericCommerceConnectionTest {
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @Import({
           BaseCommerceServicesAutoConfiguration.class,
           CommerceAdapterClientAutoConfiguration.class

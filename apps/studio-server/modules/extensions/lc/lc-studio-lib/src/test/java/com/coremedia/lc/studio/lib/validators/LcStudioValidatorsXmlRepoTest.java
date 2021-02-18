@@ -297,7 +297,7 @@ public class LcStudioValidatorsXmlRepoTest {
   }
 
   @SuppressWarnings("NewClassNamingConvention")
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @Import({LcStudioValidatorsConfiguration.class})
   public static class LocalConfig {
 

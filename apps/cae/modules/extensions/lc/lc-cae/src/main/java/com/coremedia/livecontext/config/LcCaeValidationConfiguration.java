@@ -16,7 +16,7 @@ import org.springframework.core.annotation.Order;
 
 import java.util.List;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @ImportResource(value = {
         "classpath:/framework/spring/blueprint-services.xml"
 }, reader = ResourceAwareXmlBeanDefinitionReader.class)

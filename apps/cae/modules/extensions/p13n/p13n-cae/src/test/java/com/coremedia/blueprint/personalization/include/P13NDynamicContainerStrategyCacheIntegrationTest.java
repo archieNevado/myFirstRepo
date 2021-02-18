@@ -52,7 +52,7 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration(classes = {XmlRepoConfiguration.class, P13NDynamicContainerStrategyCacheIntegrationTest.LocalConfig.class})
 public class P13NDynamicContainerStrategyCacheIntegrationTest {
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })

@@ -20,7 +20,7 @@ node.default_unless['blueprint']['apps'][base_service_name]['application.propert
 node.default_unless['blueprint']['apps'][base_service_name]['application.properties']['repository.blobStreamingThreads'] = -1
 node.default_unless['blueprint']['apps'][base_service_name]['application.properties']['repository.maxCachedBlobSize'] = -1
 node.default_unless['blueprint']['apps'][base_service_name]['application.properties']['delivery.standalone'] = false
-node.default_unless['blueprint']['apps'][base_service_name]['application.properties']['cae.sitemap.target-root'] = "#{node['blueprint']['cache_dir']}/sitemap"
+node.default_unless['blueprint']['apps'][base_service_name]['application.properties']['blueprint.sitemap.target.root'] = "#{node['blueprint']['cache_dir']}/sitemap"
 node.default_unless['blueprint']['apps'][base_service_name]['application.properties']['link.urlPrefixType'] = 'live'
 node.default_unless['blueprint']['apps'][base_service_name]['application.properties']['spring.http.encoding.force'] = true
 
@@ -81,8 +81,8 @@ end
 
   if node.deep_fetch('blueprint', 'spring-boot', service_name, 'sitemap', 'enabled')
     start_time = node.deep_fetch('blueprint', 'spring-boot', service_name, 'sitemap', 'start_time')
-    node.default_unless['blueprint']['apps'][service_name]['application.properties']['cae.sitemap.starttime'] = start_time.nil? ? '+200' : start_time
-    node.default_unless['blueprint']['apps'][service_name]['application.properties']['cae.sitemap.cae-port'] = service_port.to_s
+    node.default_unless['blueprint']['apps'][service_name]['application.properties']['blueprint.sitemap.starttime'] = start_time.nil? ? '+200' : start_time
+    node.default_unless['blueprint']['apps'][service_name]['application.properties']['blueprint.sitemap.cae.port'] = service_port.to_s
   end
 
   blueprint_service_user service_user do

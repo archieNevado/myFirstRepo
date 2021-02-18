@@ -1,4 +1,4 @@
-FROM traefik:1.7.26-alpine
+FROM traefik:1.7.14-alpine
 COPY docker.localhost.crt /etc/traefik/traefik.crt
 COPY docker.localhost.key /etc/traefik/traefik.key
 ENV ENVIRONMENT_FQDN=docker.localhost

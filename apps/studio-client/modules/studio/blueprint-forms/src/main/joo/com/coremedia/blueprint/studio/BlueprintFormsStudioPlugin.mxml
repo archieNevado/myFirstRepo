@@ -248,13 +248,13 @@
     <editor:ConfigureDefaultRichTextImageDocumentType defaultRichTextImageType="CMPicture"/>
 
     <!-- exclude DocTypes from the create new documents menu -->
-    <editor:ConfigureDocumentTypes names="Dictionary,Preferences,Query,CMDynamicList,CMVisual,EditorPreferences,EditorProfile"
+    <editor:ConfigureDocumentTypes names="Dictionary,Preferences,Query,CMDynamicList,CMVisual,EditorPreferences"
                                    exclude="true"
                                    excludeFromSearch="true"/>
 
     <!-- there is no preview available for these DocTypes -->
     <editor:ConfigureDocumentTypes names="CMAction,CMCSS,CMFolderProperties,CMImage,CMInteractive,CMJavaScript,
-                                            CMPlaceholder,CMResourceBundle,CMSettings,CMSite,CMSymbol,EditorPreferences,EditorProfile,
+                                            CMPlaceholder,CMResourceBundle,CMSettings,CMSite,CMSymbol,EditorPreferences,
                                             CMTemplateSet,CMViewtype,CMTaxonomy,CMLocTaxonomy"
                                    preview="false"/>
     <!-- there may be no preview available for these DocTypes -->
@@ -321,8 +321,6 @@
     </editor:ConfigureDashboardPlugin>
 
     <editor:ReusableDocumentFormTabsPlugin defaultLimit="2"/>
-
-    <editor:RegisterLibraryTreeFilter path="/Home/$USER/EditorProfile" />
   </local:configuration>
 
 

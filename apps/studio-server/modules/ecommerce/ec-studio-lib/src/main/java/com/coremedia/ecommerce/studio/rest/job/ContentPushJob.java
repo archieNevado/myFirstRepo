@@ -17,11 +17,7 @@ import org.springframework.scheduling.TaskScheduler;
 
 import java.util.Optional;
 
-/**
- * @deprecated This class is part of the "push" implementation that is not supported by the
- * Commerce Hub architecture. It will be removed or changed in the future.
- */
-@Deprecated
+
 public class ContentPushJob extends AbstractPushedContentJob{
 
   ContentPushJob(@NonNull LinkResolver linkResolver, @NonNull CommerceConnectionSupplier commerceConnectionSupplier, SimpleInvalidationSource pushStateInvalidationSource, Linker linker, CommerceConnectionInitializer commerceConnectionInitializer, SitesService sitesService, TaskScheduler taskScheduler) {

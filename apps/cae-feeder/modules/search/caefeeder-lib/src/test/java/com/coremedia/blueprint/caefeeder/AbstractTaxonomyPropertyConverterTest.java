@@ -42,7 +42,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
 @ContextConfiguration(classes = AbstractTaxonomyPropertyConverterTest.LocalConfig.class)
 @ActiveProfiles(PROFILE)
 public abstract class AbstractTaxonomyPropertyConverterTest {
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })

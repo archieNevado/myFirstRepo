@@ -18,13 +18,9 @@ import java.util.Optional;
 
 /**
  * A catalog {@link com.coremedia.livecontext.ecommerce.p13n.Segment} object as a RESTful resource.
- *
- * @deprecated This class is part of the commerce integration "workspaces support" that is not
- * supported by the Commerce Hub architecture. It will be removed or changed in the future.
  */
 @RestController
 @RequestMapping(value = "livecontext/workspace/{" + AbstractCatalogResource.PATH_SITE_ID + "}/{" + AbstractCatalogResource.PATH_ID + "}", produces = MediaType.APPLICATION_JSON_VALUE)
-@Deprecated
 public class WorkspaceResource extends AbstractCatalogResource<Workspace> {
 
   @Autowired

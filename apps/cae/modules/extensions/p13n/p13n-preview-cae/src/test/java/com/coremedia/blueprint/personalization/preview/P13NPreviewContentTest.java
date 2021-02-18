@@ -46,7 +46,7 @@ import java.util.List;
 })
 public class P13NPreviewContentTest {
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @ImportResource(value = {
           "classpath:/com/coremedia/cae/contentbean-services.xml",
           "classpath:/com/coremedia/cae/dataview-services.xml",

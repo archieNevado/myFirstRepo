@@ -8,11 +8,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 
 /**
  * Caches preview token requests. CacheKey duration configuration also impacts WcPreviewTokenParam#tokenLife.
- *
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
  */
-@Deprecated
 public class PreviewTokenCacheKey extends AbstractCommerceCacheKey<WcPreviewToken> {
 
   private WcPreviewTokenParam previewTokenParam;

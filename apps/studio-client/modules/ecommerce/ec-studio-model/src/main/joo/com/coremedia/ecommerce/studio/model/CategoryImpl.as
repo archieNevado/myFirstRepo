@@ -7,15 +7,11 @@ public class CategoryImpl extends CatalogObjectImpl implements Category {
     super(uri);
   }
 
-  public function getChildrenData():Array {
-    var childrenDataRaw:Array = get(CatalogObjectPropertyNames.CHILDREN_DATA) as Array;
-    if(!childrenDataRaw){
-      return childrenDataRaw;
-    }
-    return childrenDataRaw.map(function (childDataRaw:Object):CategoryChildData {
-      return new CategoryChildData(childDataRaw);
-    });
+
+  public function getChildrenByName():Object {
+    return get(CatalogObjectPropertyNames.CHILDREN_BY_NAME);
   }
+
 
   public function getChildren():Array {
     return get(CatalogObjectPropertyNames.CHILDREN);
@@ -34,11 +30,11 @@ public class CategoryImpl extends CatalogObjectImpl implements Category {
   }
 
   public function hasMultiPreviews():Boolean {
-    return true;
+    return false;
   }
 
   public function getPreviews():Previews {
-    return get(CatalogObjectPropertyNames.PREVIEWS);
+    return null;
   }
 
   public function getParent():Category {

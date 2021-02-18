@@ -31,7 +31,6 @@ services:
       SFCC_HOST: ${SFCC_HOST}
       SFCC_CLIENTID: ${SFCC_CLIENTID}
       SFCC_CLIENTPASSWORD: ${SFCC_CLIENTPASSWORD}
-      SPRING_PROFILES: ${SPRING_PROFILES:-dev-sfcc}
       LIVECONTEXT_SFCC_STOREFRONT_URL: https://shop-preview-sfcc.${ENVIRONMENT_FQDN:-docker.localhost}/on/demandware.store
     labels:
       traefik.sfcc-servlets.frontend.rule: Host:preview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/assets,/dynamic,/service,/resource,/catalogimage,/sitegenesishomepage;AddPrefix:/blueprint/servlet
@@ -41,7 +40,6 @@ services:
       SFCC_HOST: ${SFCC_HOST}
       SFCC_CLIENTID: ${SFCC_CLIENTID}
       SFCC_CLIENTPASSWORD: ${SFCC_CLIENTPASSWORD}
-      SPRING_PROFILES: ${SPRING_PROFILES:-dev-sfcc}
       LIVECONTEXT_SFCC_STOREFRONT_URL: https://shop-sfcc.${ENVIRONMENT_FQDN:-docker.localhost}/on/demandware.store
     labels:
       traefik.sfcc-servlets.frontend.rule: HostRegexp:{subdomain:(sitegenesis|sfra)}.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/assets,/dynamic,/service,/resource,/catalogimage,/sitegenesishomepage;AddPrefix:/blueprint/servlet

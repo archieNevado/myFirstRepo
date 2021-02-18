@@ -5,7 +5,7 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImp
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType;
 import com.coremedia.livecontext.ecommerce.contract.Contract;
-import com.coremedia.livecontext.ecommerce.ibm.cae.testbase.IbmCatalogServiceBaseTest;
+import com.coremedia.livecontext.ecommerce.ibm.catalog.IbmCatalogServiceBaseTest;
 import com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.user.UserContext;

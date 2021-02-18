@@ -7,7 +7,7 @@ import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.content.publication.PublicationService;
 import com.coremedia.cms.editor.sdk.ContentTreeRelation;
-import com.coremedia.ui.messagebox.MessageBoxUtilInternal;
+import com.coremedia.cms.editor.sdk.util.MessageBoxUtilInternal;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ui.logging.Logger;
 

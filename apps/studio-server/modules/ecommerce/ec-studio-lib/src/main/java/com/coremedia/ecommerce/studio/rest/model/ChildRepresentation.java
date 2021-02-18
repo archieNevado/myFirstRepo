@@ -3,7 +3,6 @@ package com.coremedia.ecommerce.studio.rest.model;
 public class ChildRepresentation {
   private String displayName;
   private Object child;
-  private boolean isVirtual = false;
 
   public ChildRepresentation(){
   }
@@ -21,19 +20,11 @@ public class ChildRepresentation {
     return child;
   }
 
-  public boolean getIsVirtual() {
-    return isVirtual;
-  }
-
   public void setDisplayName(String displayName) {
     this.displayName = displayName;
   }
 
   public void setChild(Object child) {
     this.child = child;
-  }
-
-  public void setIsVirtual(boolean isVirtual) {
-    this.isVirtual = isVirtual;
   }
 }

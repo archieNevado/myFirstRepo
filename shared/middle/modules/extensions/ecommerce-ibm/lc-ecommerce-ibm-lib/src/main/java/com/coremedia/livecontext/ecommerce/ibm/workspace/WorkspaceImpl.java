@@ -5,11 +5,6 @@ import com.coremedia.livecontext.ecommerce.workspace.Workspace;
 
 import java.util.Map;
 
-/**
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
- */
-@Deprecated
 public class WorkspaceImpl extends AbstractIbmCommerceBean implements Workspace {
 
   private Map delegate;

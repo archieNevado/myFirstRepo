@@ -67,7 +67,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 })
 public class LiveContextExternalChannelImplLegacyTest {
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })

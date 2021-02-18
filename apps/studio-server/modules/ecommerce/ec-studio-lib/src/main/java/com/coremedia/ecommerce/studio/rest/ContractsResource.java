@@ -20,13 +20,9 @@ import static java.util.stream.Collectors.toList;
 /**
  * The resource handles the top level store node "Contracts".
  * It is not showed in the catalog tree but used to invalidate the list of available commerce contracts
- *
- * @deprecated This class is part of the commerce integration "b2b support" that is not
- * supported by the Commerce Hub architecture. It will be removed or changed in the future.
  */
 @RestController
 @RequestMapping(value = "livecontext/contracts/{siteId}/{workspaceId}", produces = MediaType.APPLICATION_JSON_VALUE)
-@Deprecated
 public class ContractsResource extends AbstractCatalogResource<Contracts> {
 
   @Autowired

@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @Import(CapRepositoriesConfiguration.class)
 @ImportResource(value = {
         "classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml",

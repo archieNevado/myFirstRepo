@@ -1,11 +1,13 @@
 package com.coremedia.ecommerce.studio.rest;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
 import com.coremedia.ecommerce.studio.rest.model.ChildRepresentation;
 import com.coremedia.livecontext.ecommerce.p13n.MarketingSpot;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Marketing representation for JSON.
@@ -22,13 +24,13 @@ public class MarketingRepresentation extends AbstractCatalogRepresentation {
     this.marketingSpots = RepresentationHelper.sort(marketingSpots);
   }
 
-  public List<ChildRepresentation> getChildrenData() {
-    List<ChildRepresentation> result = new ArrayList<>();
+  public Map<String, ChildRepresentation> getChildrenByName() {
+    Map<String, ChildRepresentation> result = new LinkedHashMap<>();
     for (MarketingSpot child : marketingSpots) {
       ChildRepresentation childRepresentation = new ChildRepresentation();
       childRepresentation.setChild(child);
       childRepresentation.setDisplayName(child.getExternalId());
-      result.add(childRepresentation);
+      result.put(CommerceIdFormatterHelper.format(child.getId()), childRepresentation);
     }
     return RepresentationHelper.sortChildren(result);
   }

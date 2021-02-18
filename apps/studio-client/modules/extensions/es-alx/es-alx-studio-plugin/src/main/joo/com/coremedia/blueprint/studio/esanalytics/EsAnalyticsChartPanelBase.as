@@ -5,7 +5,7 @@ import com.coremedia.cms.editor.sdk.desktop.WorkArea;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.premular.DocumentTabPanel;
 import com.coremedia.cms.editor.sdk.premular.PropertyFieldGroup;
-import com.coremedia.cms.studio.multisite.models.sites.Site;
+import com.coremedia.cms.editor.sdk.sites.Site;
 import com.coremedia.ui.data.RemoteBean;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;

@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.Filter;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 public class EsP13nCaeConfiguration {
 
   // user filter is initially registered in com.coremedia.blueprint.elastic.social.cae.EsCaeFilters with order 130

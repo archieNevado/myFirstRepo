@@ -14,11 +14,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.TimeZone;
 
-/**
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
- */
-@Deprecated
 public class StoreInfoService {
 
   private WcStoreInfoWrapperService wrapperService;

@@ -77,6 +77,7 @@
   </bean>
 
   <bean id="livecontextSitemapConfiguration" class="com.coremedia.blueprint.cae.sitemap.SitemapSetup">
+    <property name="protocol" value="${blueprint.sitemap.protocol}"/>
     <property name="sitemapRendererFactory" ref="sitemapIndexRendererFactory"/>
     <property name="urlGenerators">
       <list>
@@ -126,8 +127,8 @@
   </bean>
 
   <bean id="sitemapWcsAasController" class="com.coremedia.livecontext.ecommerce.ibm.cae.sitemap.WcsAasSitemapGenerationHandler">
-    <constructor-arg name="siteResolver" ref="siteResolver"/>
-    <constructor-arg name="sitemapSetupFactory" ref="sitemapWcsAasSetupFactory"/>
+    <property name="siteResolver" ref="siteResolver"/>
+    <property name="sitemapSetupFactory" ref="sitemapWcsAasSetupFactory"/>
   </bean>
 
   <bean id="sitemapWcsAasSetupFactory" class="com.coremedia.blueprint.cae.sitemap.SpringBasedSitemapSetupFactory">
@@ -168,8 +169,8 @@
   </bean>
 
   <bean id="sitemapWcsCalistaController" class="com.coremedia.livecontext.ecommerce.ibm.cae.sitemap.WcsCalistaSitemapGenerationHandler">
-    <constructor-arg name="siteResolver" ref="siteResolver"/>
-    <constructor-arg name="sitemapSetupFactory" ref="sitemapWcsCalistaSetupFactory"/>
+    <property name="siteResolver" ref="siteResolver"/>
+    <property name="sitemapSetupFactory" ref="sitemapWcsCalistaSetupFactory"/>
   </bean>
 
   <bean id="sitemapWcsCalistaSetupFactory" class="com.coremedia.blueprint.cae.sitemap.SpringBasedSitemapSetupFactory">

@@ -46,7 +46,6 @@ query ContentQuery($id: String!, $type: String) {
       ... on CMCollection {
         items {
           ... Reference
-          ... CommerceReference
         }
       }
     }
@@ -171,25 +170,6 @@ fragment Video on CMVideo {
     uri
   }
   dataUrl
-}
-
-fragment CommerceReference on CommerceBean {
-  externalId
-  __typename
-  locale
-  ... on Product {
-    externalProduct {
-      name
-    }
-  }
-  ... on Category {
-    breadcrumb {
-      name
-    }
-    externalChannel {
-      name
-    }
-  }
 }
 
 

@@ -10,6 +10,7 @@ node.default_unless['blueprint']['apps'][service_name]['application.properties']
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['solr.url'] = 'http://localhost:40080/solr'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['solr.collection.cae'] = 'preview'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['repository.blobCachePath'] = "#{node['blueprint']['cache_dir']}/#{service_name}"
+node.default_unless['blueprint']['apps'][service_name]['application.properties']['solr.collection.cae'] = 'preview'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['spring.application.name'] = 'cae-feeder-preview'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['server.port'] = 40780
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['management.server.port'] = 40781

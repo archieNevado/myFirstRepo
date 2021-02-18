@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * Set up filter proxy for commerce connection filter
  */
-@Configuration(proxyBeanMethods = false)
+@Configuration
 public class LcCommonWebApplicationFiltersAutoConfiguration {
 
   private static final String COMMERCE_CONNECTION_FILTER = "commerceConnectionFilter";

@@ -8,49 +8,55 @@ import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.struct.StructService;
 import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
+import javax.annotation.Resource;
+import javax.inject.Inject;
 import java.io.File;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @ImportResource(
         value = {
                 "classpath:/com/coremedia/cap/multisite/multisite-services.xml"
         },
         reader = ResourceAwareXmlBeanDefinitionReader.class)
-@EnableConfigurationProperties({ThemesConfigurationProperties.class})
 public class LocalizationServiceConfiguration {
   private static final Logger LOG = LoggerFactory.getLogger(LocalizationServiceConfiguration.class);
 
-  private final StructService structService;
-  private final SitesService sitesService;
+  private StructService structService;
+  private SitesService sitesService;
 
-  private final File blueprintDir;
+  private File blueprintDir;
 
-  public LocalizationServiceConfiguration(StructService structService,
-                                          SitesService sitesService,
-                                          ThemesConfigurationProperties properties){
-    this.structService = structService;
-    this.sitesService = sitesService;
-    blueprintDir = initializeBlueprintDir(properties);
-  }
-
-  @Nullable
-  private static File initializeBlueprintDir(ThemesConfigurationProperties properties) {
-    File file = null;
-    if (!properties.getProjectDirectory().isEmpty()) {
-      file = new File(properties.getProjectDirectory());
-      if (!file.exists() || !file.isDirectory() || !file.canRead()) {
-        throw new IllegalArgumentException("blueprintPath \"" + properties.getProjectDirectory() + "\" is no suitable directory.");
+  /**
+   * Set the file path to the local blueprint workspace, excl. the modules
+   * directory.
+   * <p>
+   * Required if property delivery.local-resources is true.
+   */
+  @Value("${coremedia.blueprint.project.directory:}")
+  public void setBlueprintPath(String blueprintPath) {
+    if (!blueprintPath.isEmpty()) {
+      blueprintDir = new File(blueprintPath);
+      if (!blueprintDir.exists() || !blueprintDir.isDirectory() || !blueprintDir.canRead()) {
+        throw new IllegalArgumentException("blueprintPath \"" + blueprintPath + "\" is no suitable directory.");
       }
     }
-    return file;
+  }
+
+  @Inject
+  public void setStructService(StructService structService) {
+    this.structService = structService;
+  }
+
+  @Resource(name="sitesService")
+  public void setSitesService(SitesService sitesService) {
+    this.sitesService = sitesService;
   }
 
   @Bean(name="localizationService")

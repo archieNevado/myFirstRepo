@@ -12,11 +12,6 @@ import org.springframework.beans.factory.annotation.Required;
 
 import java.util.Locale;
 
-/**
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
- */
-@Deprecated
 public abstract class AbstractIbmCommerceBean extends AbstractCommerceBean {
 
   private CommerceCache commerceCache;

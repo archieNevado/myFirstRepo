@@ -37,12 +37,8 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * Provides commerce storefront links
- *
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
  */
 @DefaultAnnotation(NonNull.class)
-@Deprecated
 public class LinkServiceImpl implements LinkService, InitializingBean {
 
   private static final Logger LOG = LoggerFactory.getLogger(LinkServiceImpl.class);

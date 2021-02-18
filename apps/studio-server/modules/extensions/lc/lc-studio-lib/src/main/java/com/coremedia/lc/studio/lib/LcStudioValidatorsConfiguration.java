@@ -6,7 +6,6 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnect
 import com.coremedia.blueprint.base.rest.validators.ChannelNavigationValidator;
 import com.coremedia.blueprint.base.rest.validators.ChannelReferrerValidator;
 import com.coremedia.blueprint.base.rest.validators.ChannelSegmentValidator;
-import com.coremedia.cache.config.CacheConfiguration;
 import com.coremedia.cap.common.CapConnection;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.lc.studio.lib.validators.CatalogLinkValidator;
@@ -23,13 +22,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
-@Configuration(proxyBeanMethods = false)
-@Import({
-        BaseCommerceServicesAutoConfiguration.class,
-        CacheConfiguration.class,
-})
+@Configuration
+@Import({BaseCommerceServicesAutoConfiguration.class})
 @ImportResource(value = {
         "classpath:/META-INF/coremedia/lc-services.xml",
+        "classpath:/com/coremedia/cache/cache-services.xml",
         "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
         "classpath:/com/coremedia/blueprint/base/links/bpbase-urlpathformatting.xml"
 }, reader = ResourceAwareXmlBeanDefinitionReader.class)

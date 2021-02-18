@@ -12,9 +12,7 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>catalog</module>
     <module>lc-asset</module>
-    <module>p13n</module>
   </modules>
 
 </project>

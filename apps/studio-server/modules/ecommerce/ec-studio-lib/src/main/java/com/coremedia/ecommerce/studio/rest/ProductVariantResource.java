@@ -16,8 +16,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Currency;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -46,12 +44,12 @@ public class ProductVariantResource extends CommerceBeanResource<ProductVariant>
   }
 
   private void fillRepresentation(@NonNull Map<String, String> params, ProductVariantRepresentation representation) {
+    super.fillRepresentation(params, representation);
     ProductVariant entity = getEntity(params);
+
     if (entity == null) {
-      String errorMessage = String.format("Could not load product variant with id '%s'.", params.get(PATH_ID));
-      throw new CatalogBeanNotFoundRestException(errorMessage);
+      throw new CatalogBeanNotFoundRestException("Could not load " + PATH_TYPE + " bean");
     }
-    super.fillRepresentation(params, entity, representation);
 
     representation.setId(CommerceIdFormatterHelper.format(entity.getId()));
     representation.setName(entity.getName());
@@ -73,13 +71,7 @@ public class ProductVariantResource extends CommerceBeanResource<ProductVariant>
     AbstractCommerceBean.getCatalog(entity).ifPresent(representation::setCatalog);
     representation.setOfferPrice(entity.getOfferPrice());
     representation.setListPrice(entity.getListPrice());
-
-    Currency currency = entity.getCurrency();
-    Locale locale = entity.getLocale();
-    if (currency != null && locale != null) {
-      representation.setCurrency(currency.getSymbol(locale));
-    }
-
+    representation.setCurrency(entity.getCurrency().getSymbol(entity.getLocale()));
     representation.setPictures(entity.getPictures());
     representation.setDownloads(entity.getDownloads());
     representation.setDefiningAttributes(entity.getDefiningAttributes());

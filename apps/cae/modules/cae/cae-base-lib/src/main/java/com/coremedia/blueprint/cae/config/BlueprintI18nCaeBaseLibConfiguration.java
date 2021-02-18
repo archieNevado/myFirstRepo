@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * Internationalization (i18n) features
  */
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @ImportResource(value = {
         "classpath:/com/coremedia/cae/handler-services.xml",
         "classpath:/com/coremedia/cache/cache-services.xml",

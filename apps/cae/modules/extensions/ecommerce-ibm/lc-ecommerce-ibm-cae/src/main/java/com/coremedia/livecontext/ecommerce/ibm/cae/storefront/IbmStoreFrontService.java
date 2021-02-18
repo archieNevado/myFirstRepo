@@ -31,11 +31,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  * in the commerce system are represented by cookies, which the CAE needs to pass through to the browser. This is
  * necessary to allow a user to request pages from the CAE as well as from the commerce system while both
  * systems share the same set of commerce cookies.
- *
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
  */
-@Deprecated
 public abstract class IbmStoreFrontService extends StoreFrontService {
 
   /**

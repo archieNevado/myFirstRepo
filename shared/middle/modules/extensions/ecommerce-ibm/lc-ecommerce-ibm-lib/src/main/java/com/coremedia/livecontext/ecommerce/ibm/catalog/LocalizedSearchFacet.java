@@ -1,18 +1,14 @@
 package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
 import com.coremedia.livecontext.ecommerce.search.SearchFacet;
-import edu.umd.cs.findbugs.annotations.NonNull;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Helper class for localized search facets.
- *
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
  */
-@Deprecated
 class LocalizedSearchFacet implements SearchFacet {
 
   private final SearchFacet delegate;

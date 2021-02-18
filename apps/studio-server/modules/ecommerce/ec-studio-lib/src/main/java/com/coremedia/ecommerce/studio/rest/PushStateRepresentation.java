@@ -1,16 +1,11 @@
 package com.coremedia.ecommerce.studio.rest;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Date;
 
-/**
- * @deprecated This class is part of the "push" implementation that is not supported by the
- * Commerce Hub architecture. It will be removed or changed in the future.
- */
-@Deprecated
 public class PushStateRepresentation {
 
   private final String state;

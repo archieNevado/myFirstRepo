@@ -39,7 +39,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
 @ContextConfiguration(classes = P2TagFilterTest.LocalConfig.class)
 @ActiveProfiles(PROFILE)
 public class P2TagFilterTest {
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })

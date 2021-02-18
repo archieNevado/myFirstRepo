@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.cae.filter;
 
+import com.coremedia.cap.content.ContentRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -25,6 +26,9 @@ public class PreviewViewFilterTest {
   private static final boolean REJECT = false;
 
   @Mock
+  private ContentRepository contentRepository;
+
+  @Mock
   private HttpServletRequest request;
 
   @Mock
@@ -35,11 +39,12 @@ public class PreviewViewFilterTest {
 
   private PreviewViewFilter testling;
 
+
   // --- tests ------------------------------------------------------
 
   @Test
   public void testViewPattern() {
-    testling = new PreviewViewFilter(true);
+    testling = new PreviewViewFilter();
     assertTrue(testling.isLiveView("Foo"));
 
     // case sensitive
@@ -64,6 +69,7 @@ public class PreviewViewFilterTest {
     runTest(LIVE_CAE, "foo", ACCEPT);
   }
 
+
   // --- internal ---------------------------------------------------
 
   private void runTest(boolean live, String view, boolean accept) throws ServletException, IOException {
@@ -77,8 +83,10 @@ public class PreviewViewFilterTest {
   }
 
   private void setup(boolean live, String view) {
+    when(contentRepository.isLiveServer()).thenReturn(live);
     when(request.getParameter("view")).thenReturn(view);
-    testling = new PreviewViewFilter(live);
+    testling = new PreviewViewFilter();
+    testling.setContentRepository(contentRepository);
     testling.afterPropertiesSet();
   }
 

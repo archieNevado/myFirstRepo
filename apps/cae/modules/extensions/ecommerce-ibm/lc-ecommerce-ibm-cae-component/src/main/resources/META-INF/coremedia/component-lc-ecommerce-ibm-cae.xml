@@ -33,10 +33,5 @@
     <property name="urlPattern" value="${livecontext.ibm.wcs.checkout-redirect.url}"/>
   </bean>
 
-  <!--
-  A handler which only redirects to the given URL given as path parameter. Prevents third party systems from truncating
-  by hand over the redirect to the CMS.
-  -->
-  <bean id="nextURLRedirectHandler" class="com.coremedia.livecontext.ecommerce.ibm.cae.handler.NextURLRedirectHandler"/>
 
 </beans>

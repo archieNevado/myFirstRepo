@@ -5,7 +5,7 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.ibm.catalog.CatalogServiceImpl;
 import com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreContextBuilder;
-import com.coremedia.livecontext.ecommerce.ibm.cae.testbase.IbmTestConfig;
+import com.coremedia.livecontext.ecommerce.ibm.common.IbmTestConfig;
 import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion;
 import com.coremedia.objectserver.web.links.TokenResolverHelper;

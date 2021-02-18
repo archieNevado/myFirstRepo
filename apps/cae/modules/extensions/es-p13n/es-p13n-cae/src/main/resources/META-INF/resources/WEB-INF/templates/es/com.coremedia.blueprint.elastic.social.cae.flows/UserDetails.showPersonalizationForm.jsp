@@ -4,6 +4,7 @@
 <%--@elvariable id="self" type="com.coremedia.blueprint.cae.action.webflow.WebflowActionState"--%>
 <%--@elvariable id="cmpage" type="com.coremedia.blueprint.common.contentbeans.Page"--%>
 <%--@elvariable id="settingsService" type="com.coremedia.blueprint.base.settings.SettingsService"--%>
+<c:if test="${bp:settingWithDefault(settingsService, cmpage, 'userDetails.interests.enabled', true)}">
 
 <%--
  Display "Explicit Interests" form.
@@ -39,3 +40,4 @@ request.setAttribute("form", new com.coremedia.blueprint.personalization.forms.P
   intentionally left empty, form will be rendered here.
   --%>
 </div>
+</c:if>

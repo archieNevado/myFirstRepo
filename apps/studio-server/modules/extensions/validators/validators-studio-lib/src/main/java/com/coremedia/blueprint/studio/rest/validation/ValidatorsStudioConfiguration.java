@@ -58,17 +58,18 @@ import org.springframework.context.annotation.ImportResource;
 import java.util.Arrays;
 import java.util.Collections;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @ImportResource(
         value = {
+                "classpath:com/coremedia/cap/common/uapi-services.xml",
+                "classpath:com/coremedia/mimetype/mimetype-service.xml",
                 "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
                 "classpath:/com/coremedia/blueprint/base/links/bpbase-links-services.xml",
+                "classpath:/com/coremedia/cap/transform/transform-services.xml",
                 "classpath:/com/coremedia/blueprint/base/pagegrid/impl/bpbase-pagegrid-services.xml"
         },
         reader = ResourceAwareXmlBeanDefinitionReader.class)
-@Import({
-        CapRestServiceConfiguration.class,
-})
+@Import(CapRestServiceConfiguration.class)
 @EnableConfigurationProperties(StudioConfigurationProperties.class)
 class ValidatorsStudioConfiguration {
 

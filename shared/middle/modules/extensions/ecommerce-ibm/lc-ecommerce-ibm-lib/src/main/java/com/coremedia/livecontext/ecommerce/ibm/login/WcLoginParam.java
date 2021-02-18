@@ -3,11 +3,7 @@ package com.coremedia.livecontext.ecommerce.ibm.login;
 /**
  * Parameter model for REST-Login
  * @see LoginServiceImpl
- *
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
  */
-@Deprecated
 public class WcLoginParam {
   private String logonId;
   private String logonPassword;

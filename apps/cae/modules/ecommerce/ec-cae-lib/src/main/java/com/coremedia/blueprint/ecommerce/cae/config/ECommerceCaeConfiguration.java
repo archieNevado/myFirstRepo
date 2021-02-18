@@ -21,7 +21,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.util.List;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @ImportResource(value = {
         "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
         "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-cae-services.xml",

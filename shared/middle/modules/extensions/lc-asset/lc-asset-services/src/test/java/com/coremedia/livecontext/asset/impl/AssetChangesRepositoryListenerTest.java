@@ -20,7 +20,7 @@ public class AssetChangesRepositoryListenerTest {
   private static final String CMVISUAL_DOCTYPE_NAME = "CMVisual";
 
   @InjectMocks
-  private AssetChangesRepositoryListener testling;
+  private AssetChangesRepositoryListener testling = new AssetChangesRepositoryListener();
 
   @Mock
   private ContentRepository repository;
@@ -35,6 +35,8 @@ public class AssetChangesRepositoryListenerTest {
 
   @Before
   public void setUp() throws Exception {
+    testling.setRepository(repository);
+    testling.setAssetChanges(assetChanges);
     testling.start();
     when(event.getContent()).thenReturn(content);
     when(content.getType()).thenReturn(cmPictureType);

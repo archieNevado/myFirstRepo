@@ -11,9 +11,10 @@
     [ResourceBundle('com.coremedia.icons.CoreIcons')]
   </fx:Metadata>
   <fx:Script><![CDATA[
+    import com.coremedia.ui.skins.ButtonSkin;
+
     public static const xtype:String = "com.coremedia.blueprint.studio.config.taxonomy.taxonomyPreferences";
 
-    //noinspection JSUnusedLocalSymbols
     private var config:TaxonomyPreferences;
 
     public native function TaxonomyPreferences(config:TaxonomyPreferences = null);
@@ -27,8 +28,7 @@
                               hideEmptyLabel="true"
                               displayField="name"
                               store="{getStore()}"
-                              flex="1"
-                              helpIconText="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyPreferences_settings_tooltip')}">
+                              flex="1">
           <editor:plugins exml:mode="append">
             <ui:BindPropertyPlugin componentEvent="change"
                                    componentProperty="value"
@@ -39,6 +39,12 @@
             <BoundList/>
           </editor:listConfig>
         </editor:LocalComboBox>
+        <TbSpacer width="6"/>
+        <ui:IconDisplayField iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'help')}">
+          <ui:tooltip>
+            <ui:StatefulQuickTip text="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyPreferences_settings_tooltip')}"/>
+          </ui:tooltip>
+        </ui:IconDisplayField>
       </items>
       <layout>
         <layout_HBox align="middle"/>

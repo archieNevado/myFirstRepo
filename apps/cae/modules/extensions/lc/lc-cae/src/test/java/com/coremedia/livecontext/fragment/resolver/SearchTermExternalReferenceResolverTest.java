@@ -10,7 +10,6 @@ import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.cache.Cache;
 import com.coremedia.cache.CacheKey;
-import com.coremedia.cache.config.CacheConfigurationProperties;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
@@ -21,24 +20,25 @@ import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.livecontext.fragment.FragmentParametersFactory;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import edu.umd.cs.findbugs.annotations.NonNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import static com.coremedia.blueprint.cae.search.SearchConstants.FIELDS.DOCUMENTTYPE;
 import static com.coremedia.blueprint.cae.search.SearchConstants.FIELDS.NAVIGATION_PATHS;
 import static com.coremedia.blueprint.cae.search.SearchQueryBean.SEARCH_HANDLER.DYNAMICCONTENT;
-import static com.coremedia.livecontext.fragment.resolver.SearchTermExternalReferenceResolver.CACHE_CLASS;
 import static com.coremedia.livecontext.fragment.resolver.SearchTermExternalReferenceResolver.PREFIX;
 import static com.coremedia.livecontext.fragment.resolver.SearchTermExternalReferenceResolver.QUERY_NAVIGATION_WITH_SEGMENT;
 import static org.junit.Assert.assertEquals;
@@ -51,7 +51,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -64,7 +64,6 @@ public class SearchTermExternalReferenceResolverTest {
   private static final int ROOT_CONTEXT_ID = 42;
   private static final int CONTEXT_ID = 48;
   private static final String SEARCH_TERM = "horse name";
-  private static final long DEFAULT_TIMEOUT_SECONDS = 60L;
 
   @Mock
   private ContentRepository contentRepository;
@@ -84,12 +83,8 @@ public class SearchTermExternalReferenceResolverTest {
   @Mock
   private Content context;
 
-  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-  private CacheConfigurationProperties cacheConfigurationProperties;
-
   @Before
   public void setUp() {
-    when(cacheConfigurationProperties.getTimeoutSeconds().getOrDefault(CACHE_CLASS, DEFAULT_TIMEOUT_SECONDS)).thenReturn(DEFAULT_TIMEOUT_SECONDS);
     // mock content type without additional subtypes
     ContentType contentType = mock(ContentType.class, CONTENT_TYPE);
     when(contentType.getName()).thenReturn(CONTENT_TYPE);
@@ -102,7 +97,6 @@ public class SearchTermExternalReferenceResolverTest {
     // mock that there's one channel below the site's root channel which has the configured segment
     Set<Content> contextSet = Collections.singleton(context);
     Content root = site.getSiteRootDocument();
-    assertNotNull(root);
     when(navigationTreeRelation.getChildrenOf(root)).thenReturn(contextSet);
     when(navigationTreeRelation.pathToRoot(context)).thenReturn(ImmutableList.of(root, context));
     when(navigationTreeRelation.pathToRoot(root)).thenReturn(ImmutableList.of(root));
@@ -112,11 +106,17 @@ public class SearchTermExternalReferenceResolverTest {
     when(context.getId()).thenReturn(IdHelper.formatContentId(CONTEXT_ID));
 
     // mock a cache by just calling evaluate directly
-    when(cache.get(any(CacheKey.class))).thenAnswer(invocation -> ((CacheKey) invocation.getArguments()[0]).evaluate(cache));
+    when(cache.get(any(CacheKey.class))).thenAnswer(new Answer<Object>() {
+      @Override
+      public Object answer(InvocationOnMock invocation) throws Throwable {
+        return ((CacheKey) invocation.getArguments()[0]).evaluate(cache);
+      }
+    });
+
   }
 
   private SearchTermExternalReferenceResolver resolver() {
-    SearchTermExternalReferenceResolver resolver = new SearchTermExternalReferenceResolver(cacheConfigurationProperties);
+    SearchTermExternalReferenceResolver resolver = new SearchTermExternalReferenceResolver();
     configureResolver(resolver);
     resolver.afterPropertiesSet();
     return resolver;
@@ -138,7 +138,7 @@ public class SearchTermExternalReferenceResolverTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testIllegalSegmentPath() {
-    new SearchTermExternalReferenceResolver(cacheConfigurationProperties).setSegmentPath("/absolute");
+    new SearchTermExternalReferenceResolver().setSegmentPath("/absolute");
   }
 
   @Test(expected = IllegalStateException.class)
@@ -146,7 +146,7 @@ public class SearchTermExternalReferenceResolverTest {
     String unknownType = "unknown";
     when(contentRepository.getContentType(unknownType)).thenReturn(null);
 
-    SearchTermExternalReferenceResolver resolver = new SearchTermExternalReferenceResolver(cacheConfigurationProperties);
+    SearchTermExternalReferenceResolver resolver = new SearchTermExternalReferenceResolver();
     configureResolver(resolver);
     resolver.setContentType(unknownType);
     resolver.afterPropertiesSet();
@@ -154,8 +154,8 @@ public class SearchTermExternalReferenceResolverTest {
 
   @Test(expected = IllegalStateException.class)
   public void testNotInitialized() {
-    SearchTermExternalReferenceResolver resolver = new SearchTermExternalReferenceResolver(cacheConfigurationProperties);
-    FragmentParameters params = parametersFor(PREFIX + SEARCH_TERM);
+    SearchTermExternalReferenceResolver resolver = new SearchTermExternalReferenceResolver();
+    FragmentParameters params = parametersFor(site, PREFIX + SEARCH_TERM);
     resolver.resolveExternalRef(params, site);
   }
 
@@ -167,7 +167,7 @@ public class SearchTermExternalReferenceResolverTest {
   @Test
   public void testWithoutExternalRef() {
     SearchTermExternalReferenceResolver resolver = resolver();
-    FragmentParameters parameters = parametersFor(null);
+    FragmentParameters parameters = parametersFor(site, null);
     assertFalse(resolver.include(parameters));
     assertNull(resolver.resolveExternalRef(parameters, site));
   }
@@ -175,20 +175,20 @@ public class SearchTermExternalReferenceResolverTest {
   @Test
   public void testOtherPrefix() {
     SearchTermExternalReferenceResolver resolver = resolver();
-    FragmentParameters parameters = parametersFor("something");
+    FragmentParameters parameters = parametersFor(site, "something");
     assertFalse(resolver.include(parameters));
     assertNull(resolver.resolveExternalRef(parameters, site));
   }
 
   @Test
   public void testResolveUncached() {
-    when(cacheConfigurationProperties.getTimeoutSeconds().getOrDefault(CACHE_CLASS, DEFAULT_TIMEOUT_SECONDS)).thenReturn(0L);
     Content result = mock(Content.class);
     mockSearchResult(result);
 
     SearchTermExternalReferenceResolver resolver = resolver();
+    resolver.setCacheForSeconds(0);
     assertResolve(resolver, result);
-    verifyNoInteractions(cache);
+    verifyZeroInteractions(cache);
     verifyQueryBelowNavigationPath("\\/" + ROOT_CONTEXT_ID + "\\/" + CONTEXT_ID);
   }
 
@@ -214,7 +214,7 @@ public class SearchTermExternalReferenceResolverTest {
 
   @Test
   public void testResolveNoContext() {
-    SearchTermExternalReferenceResolver resolver = new SearchTermExternalReferenceResolver(cacheConfigurationProperties);
+    SearchTermExternalReferenceResolver resolver = new SearchTermExternalReferenceResolver();
     configureResolver(resolver);
     resolver.setSegmentPath("");
     resolver.afterPropertiesSet();
@@ -227,26 +227,22 @@ public class SearchTermExternalReferenceResolverTest {
 
   @Test
   public void testResolveContextNotFoundNoContextsBelowRoot() {
-    Content siteRootDocument = site.getSiteRootDocument();
-    assertNotNull(siteRootDocument);
-    when(navigationTreeRelation.getChildrenOf(siteRootDocument)).thenReturn(Collections.emptySet());
+    when(navigationTreeRelation.getChildrenOf(site.getSiteRootDocument())).thenReturn(Collections.<Content>emptySet());
     Content result = mock(Content.class);
     mockSearchResult(result);
-    assertResolve(resolver(), siteRootDocument);
+    assertResolve(resolver(), site.getSiteRootDocument());
   }
 
   @Test
   public void testResolveContextNotFoundSegmentNotFound() {
-    Content siteRootDocument = site.getSiteRootDocument();
-    assertNotNull(siteRootDocument);
-    SearchTermExternalReferenceResolver resolver = new SearchTermExternalReferenceResolver(cacheConfigurationProperties);
+    SearchTermExternalReferenceResolver resolver = new SearchTermExternalReferenceResolver();
     configureResolver(resolver);
     resolver.setSegmentPath(SEGMENT_PATH + "/foo/bar");
     resolver.afterPropertiesSet();
 
     Content result = mock(Content.class);
     mockSearchResult(result);
-    assertResolve(resolver, siteRootDocument);
+    assertResolve(resolver, site.getSiteRootDocument());
   }
 
   @Test
@@ -254,7 +250,7 @@ public class SearchTermExternalReferenceResolverTest {
     when(site.getSiteRootDocument()).thenReturn(null);
     Content result = mock(Content.class);
     mockSearchResult(result);
-    FragmentParameters params = parametersFor(PREFIX + SEARCH_TERM);
+    FragmentParameters params = parametersFor(site, PREFIX + SEARCH_TERM);
     assertNull(resolver().resolveExternalRef(params, site));
   }
 
@@ -266,12 +262,12 @@ public class SearchTermExternalReferenceResolverTest {
 
   @Test
   public void testResolveNotFoundFallback() {
-    SearchTermExternalReferenceResolver resolver = spy(new SearchTermExternalReferenceResolver(cacheConfigurationProperties));
+    SearchTermExternalReferenceResolver resolver = spy(new SearchTermExternalReferenceResolver());
     configureResolver(resolver);
     resolver.afterPropertiesSet();
     mockSearchResult();
 
-    FragmentParameters params = parametersFor(PREFIX + SEARCH_TERM);
+    FragmentParameters params = parametersFor(site, PREFIX + SEARCH_TERM);
     LinkableAndNavigation linkableAndNavigation = resolver.resolveExternalRef(params, site);
     assertNotNull(linkableAndNavigation);
     assertEquals(context, linkableAndNavigation.getLinkable());
@@ -280,7 +276,7 @@ public class SearchTermExternalReferenceResolverTest {
   // ---------------------------------------------------------------------- helper methods
 
   private void assertResolve(@NonNull SearchTermExternalReferenceResolver resolver, @NonNull Content expectedLinkable) {
-    FragmentParameters params = parametersFor(PREFIX + SEARCH_TERM);
+    FragmentParameters params = parametersFor(site, PREFIX + SEARCH_TERM);
     assertTrue(resolver.include(params));
     LinkableAndNavigation linkableAndNavigation = resolver.resolveExternalRef(params, site);
     assertNotNull(linkableAndNavigation);
@@ -288,7 +284,7 @@ public class SearchTermExternalReferenceResolverTest {
     assertEquals(expectedLinkable, linkableAndNavigation.getLinkable());
   }
 
-  private static FragmentParameters parametersFor(String ref) {
+  private static FragmentParameters parametersFor(Site site, String ref) {
     String url = "http://localhost:40081/blueprint/servlet/service/fragment/10001/en-US/params;";
     FragmentParameters params = FragmentParametersFactory.create(url);
     params.setExternalReference(ref);
@@ -303,8 +299,8 @@ public class SearchTermExternalReferenceResolverTest {
     assertEquals(DYNAMICCONTENT, query.getSearchHandler());
     assertEquals(FIELD + ":\"" + SEARCH_TERM + '"', query.getQuery());
     assertEquals(ImmutableSet.of(
-            Condition.is(DOCUMENTTYPE, Value.anyOf(Collections.singleton('"' + CONTENT_TYPE + '"'))),
-            Condition.is(NAVIGATION_PATHS, Value.exactly(navigationPath))),
+                    Condition.is(DOCUMENTTYPE, Value.anyOf(Collections.singleton('"' + CONTENT_TYPE + '"'))),
+                    Condition.is(NAVIGATION_PATHS, Value.exactly(navigationPath))),
             ImmutableSet.copyOf(query.getFilters()));
   }
 
@@ -312,8 +308,8 @@ public class SearchTermExternalReferenceResolverTest {
     SearchResultBean searchResultBean = mock(SearchResultBean.class);
     when(searchResultFactory.createSearchResultUncached(any(SearchQueryBean.class))).thenReturn(searchResultBean);
 
-    Collection<CMLinkable> hits = new ArrayList<>();
-    for (Content result : results) {
+    List<CMLinkable> hits = new ArrayList<>();
+    for (Content result: results) {
       CMLinkable linkableBean = mock(CMLinkable.class);
       when(linkableBean.getContent()).thenReturn(result);
       hits.add(linkableBean);

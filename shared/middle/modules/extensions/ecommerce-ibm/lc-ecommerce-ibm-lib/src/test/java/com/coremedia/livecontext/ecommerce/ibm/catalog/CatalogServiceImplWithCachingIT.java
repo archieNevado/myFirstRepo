@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCache;
 import com.coremedia.blueprint.lc.test.SwitchableHoverflyExtension;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
@@ -19,14 +20,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.inject.Inject;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.coremedia.blueprint.lc.test.HoverflyTestHelper.useTapes;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
 import static com.coremedia.livecontext.ecommerce.ibm.catalog.IbmCatalogServiceBaseTest.IBM_TEST_URL;
 import static org.junit.Assert.assertEquals;
@@ -52,7 +54,6 @@ import static org.mockito.Mockito.verify;
 )
 @ContextConfiguration(classes = IbmServiceTestBase.LocalConfig.class)
 @ActiveProfiles(IbmServiceTestBase.LocalConfig.PROFILE)
-@TestPropertySource(properties = "livecontext.cache.invalidation.enabled:true")
 public class CatalogServiceImplWithCachingIT extends IbmServiceTestBase {
 
   //Rest response values
@@ -76,6 +77,8 @@ public class CatalogServiceImplWithCachingIT extends IbmServiceTestBase {
   @Override
   public void setup() {
     super.setup();
+    testling.getCommerceCache().setEnabled(true);
+    commerceCache.setEnabled(true);
   }
 
   @Test
@@ -91,6 +94,42 @@ public class CatalogServiceImplWithCachingIT extends IbmServiceTestBase {
     Map<String, Object> productWrapper1 = (Map<String, Object>) getNotAccessibleMethodValue(product1, "getDelegate");
     Map<String, Object> productWrapper2 = (Map<String, Object>) getNotAccessibleMethodValue(product2, "getDelegate");
     assertSame("product delegates should be equal because of they are cached", productWrapper1, productWrapper2);
+  }
+
+  /**
+   * Attention: This test runs to long hence it is not intended to run in the hoverfly mode
+   * (that is used form the master pipeline). We should only run it when we test against the
+   * real backend system (because it takes longer anyway).
+   * To achieve this we test if the "hoverfly.ignoreTapes" Java property is set to "true".
+   */
+  @Test
+  void testProductCacheEntryIsCorrectlyTimedOut() {
+    if (useTapes()) {
+      return;
+    }
+
+    CommerceCache commerceCache = testling.getCommerceCache();
+    commerceCache.clear();
+
+    // Reduce cache duration of products for testing.
+    Map<String, Long> origCacheTimesInSeconds = commerceCache.getCacheTimesInSeconds();
+    Map<String, Long> tempCacheTimesInSeconds = new HashMap<>(origCacheTimesInSeconds);
+    tempCacheTimesInSeconds.put("Product", 3L);
+    commerceCache.setCacheTimesInSeconds(tempCacheTimesInSeconds);
+
+    try {
+      Product product1 = getTestProduct(storeContext);
+      assertEquals(PRODUCT_CODE, product1.getExternalId());
+      Map<String, Object> productWrapper1 = (Map<String, Object>) getNotAccessibleMethodValue(product1, "getDelegate");
+      // we assume a cache duration time of 30 seconds or lesser
+      sleepForSeconds(5);
+      Product product2 = getTestProduct(storeContext);
+      Map<String, Object> productWrapper2 = (Map<String, Object>) getNotAccessibleMethodValue(product2, "getDelegate");
+      assertEquals(PRODUCT_CODE, product2.getExternalId());
+      assertNotSame("the first cache entry should be timed out in the meantime", productWrapper1, productWrapper2);
+    } finally {
+      commerceCache.setCacheTimesInSeconds(origCacheTimesInSeconds);
+    }
   }
 
   @Test

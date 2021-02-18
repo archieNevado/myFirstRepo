@@ -18,12 +18,8 @@ import java.util.regex.Pattern;
  * This class is meant to simplify access to values deep inside nested lists
  * and maps without having to worry about {@code NullPointerException}s while
  * providing automatic type conversion.
- *
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
  */
 @DefaultAnnotation(NonNull.class)
-@Deprecated
 public class DataMapHelper {
 
   private static final Splitter KEY_PATH_SPLITTER = Splitter.on('.');
@@ -126,4 +122,3 @@ public class DataMapHelper {
             .orElseGet(Collections::emptyMap);
   }
 }
-

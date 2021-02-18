@@ -47,7 +47,7 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration(classes = AuthenticationHandlerTest.LocalConfig.class)
 public class AuthenticationHandlerTest {
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class,
           CaeConfigurationProperties.class

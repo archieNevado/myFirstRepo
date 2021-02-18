@@ -58,11 +58,7 @@ import static java.util.stream.Collectors.toList;
  * A service that uses the catalog getRestConnector() to get catalog maps by certain search queries.
  * The catalog maps are {@link java.util.Map} or lists of them and contain the JSON response
  * of the REST services called.
- *
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
  */
-@Deprecated
 public class WcCatalogWrapperService extends AbstractWcWrapperService {
 
   private static final String SEARCH_QUERY_PARAM_PAGENUMBER = "pageNumber";

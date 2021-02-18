@@ -2,20 +2,19 @@ package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
 import com.coremedia.livecontext.ecommerce.search.SearchFacet;
 import com.google.common.annotations.VisibleForTesting;
-import edu.umd.cs.findbugs.annotations.NonNull;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 
 /**
  * This class encapsulates a method to transform offer price facets
  * delivered by IBM to a more readable format to display in studio.
- *
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
  */
-@Deprecated
 class OfferPriceFormattingHelper {
 
   private static String REGEX_OFFERPRICE_START = "^\\(+\\{+\\*+\\s+[0-9]*+\\}+\\s+[0-9]*+\\)";

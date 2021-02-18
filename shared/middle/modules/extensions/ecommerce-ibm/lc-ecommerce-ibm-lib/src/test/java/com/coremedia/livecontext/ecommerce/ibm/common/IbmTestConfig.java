@@ -152,11 +152,7 @@ public class IbmTestConfig implements TestConfig {
     return replacements;
   }
 
-  /**
-   * @deprecated can be removed in future releases
-   */
   @NonNull
-  @Deprecated
   public StoreContextImpl getStoreContextWithWorkspace(@NonNull CommerceConnection connection) {
     return IbmStoreContextBuilder
             .from(getStoreContext(connection))

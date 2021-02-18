@@ -2,7 +2,7 @@ package com.coremedia.blueprint.studio.esanalytics {
 import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.dashboard.WidgetWrapper;
 import com.coremedia.cms.editor.sdk.editorContext;
-import com.coremedia.cms.studio.multisite.models.sites.Site;
+import com.coremedia.cms.editor.sdk.sites.Site;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;

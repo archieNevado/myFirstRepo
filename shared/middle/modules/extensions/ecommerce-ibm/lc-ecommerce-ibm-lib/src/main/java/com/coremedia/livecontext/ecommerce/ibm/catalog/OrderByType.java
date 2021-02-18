@@ -3,11 +3,7 @@ package com.coremedia.livecontext.ecommerce.ibm.catalog;
 /**
  * This enumeration is used to transform human readable string from studio
  * to IBM specific four default sort property fields.
- *
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
  */
-@Deprecated
 enum OrderByType {
 
   ORDER_BY_TYPE_BRAND_ASC("1"),

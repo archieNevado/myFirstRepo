@@ -40,7 +40,7 @@
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="placements_2">
 <Struct>
-<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../../../../Options/Settings/Pagegrid/Layouts/Two%20Column%20Layout.xml" cmexport:path="/Sites/Calista/United%20States/English/Options/Settings/Pagegrid/Layouts/Two%20Column%20Layout"/>
+<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_"/>
 <StructProperty Name="placements">
 <Struct>
 </Struct>
@@ -60,14 +60,12 @@
 <StructProperty Name="placements_2">
 <Struct>
 <LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../../../../Options/Settings/Pagegrid/Layouts/Fragment%20PDP.xml" cmexport:path="/Sites/Calista/United%20States/English/Options/Settings/Pagegrid/Layouts/Fragment%20PDP"/>
-<StructProperty Name="placements">
+<StructListProperty Name="placements">
 <Struct>
 </Struct>
-</StructProperty>
+</StructListProperty>
 </Struct>
 </StructProperty>
-<StructListProperty Name="placements">
-</StructListProperty>
 </Struct>
 </pdpPagegrid>
 <externalId>ibm:///catalog/category/Men Suits</externalId>

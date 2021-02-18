@@ -20,10 +20,8 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 /**
  * Provides commerce image urls
  *
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
+ * @deprecated use #LinkServiseImpl instead
  */
-@Deprecated
 public class AssetUrlProviderImpl implements AssetUrlProvider {
   private static final Logger LOG = LoggerFactory.getLogger(AssetUrlProviderImpl.class);
 

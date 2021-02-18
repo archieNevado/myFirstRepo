@@ -15,6 +15,7 @@ import com.coremedia.livecontext.ecommerce.link.StorefrontRefKey;
 import com.coremedia.livecontext.ecommerce.order.Cart;
 import com.coremedia.livecontext.handler.ExternalNavigationHandler;
 import com.coremedia.livecontext.navigation.LiveContextCategoryNavigation;
+import com.coremedia.livecontext.product.ProductAvailabilityHandler;
 import com.coremedia.livecontext.product.ProductPageHandler;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
@@ -125,7 +126,8 @@ public class CommerceLinks {
 
   /**
    * Link scheme that takes precedence over
-   * {@link ProductPageHandler#buildLinkFor(com.coremedia.livecontext.commercebeans.ProductInSite, java.lang.String, java.util.Map, javax.servlet.http.HttpServletRequest)}
+   * {@link ProductPageHandler#buildLinkFor(com.coremedia.livecontext.commercebeans.ProductInSite, java.lang.String, java.util.Map, javax.servlet.http.HttpServletRequest)} and
+   * {@link ProductAvailabilityHandler#buildLinkFor(com.coremedia.livecontext.commercebeans.ProductInSite, org.springframework.web.util.UriTemplate, java.util.Map)}
    */
   @Link(type = ProductInSite.class, order = 1)
   @Nullable

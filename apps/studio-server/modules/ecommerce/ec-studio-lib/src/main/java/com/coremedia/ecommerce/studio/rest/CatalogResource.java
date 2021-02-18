@@ -83,6 +83,7 @@ public class CatalogResource extends AbstractCatalogResource<Catalog> {
     StoreContextProvider storeContextProvider = storeContext.getConnection().getStoreContextProvider();
     StoreContextBuilder clonedContextBuilder = storeContextProvider.buildContext(storeContext);
 
+    String siteId = params.get(PATH_SITE_ID);
     CatalogId catalogId = getCatalogId(params);
     CatalogAlias catalogAlias = CatalogAlias.ofNullable(params.get(PATH_CATALOG_ALIAS)).orElse(null);
 

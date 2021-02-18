@@ -6,7 +6,7 @@ import com.coremedia.xml.DelegatingSaxHandler;
 import com.coremedia.xml.XmlUtil5;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.text.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,13 +14,14 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import javax.servlet.ServletContext;
 import javax.xml.XMLConstants;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOError;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.zip.GZIPInputStream;
 
 import static org.junit.Assert.assertFalse;
@@ -39,7 +40,7 @@ public class SitemapIndexRendererTest {
   private static final String SITEMAP_ENTRY_URL_3 = URL_PREFIX + "service/sitemap/thesiteid/" + SITEMAP_ENTRY_FILENAME_3;
 
   private static final String A_URL = URL_PREFIX + "path?foo=bar&bla=blub";
-  private static final String XML_ESCAPED_URL = StringEscapeUtils.escapeXml11(A_URL);
+  private static final String XML_ESCAPED_URL = StringEscapeUtils.escapeXml(A_URL);
 
   private static final String FILENAME = "sitemap";
   private static final String SITEMAP_INDEX_FILENAME = "sitemap_index.xml";
@@ -56,6 +57,9 @@ public class SitemapIndexRendererTest {
   @Mock
   SitemapHelper sitemapHelper;
 
+  @Mock
+  ServletContext servletContext;
+
   private SitemapIndexRenderer testling;
 
   @Before
@@ -69,9 +73,10 @@ public class SitemapIndexRendererTest {
     testling.setTargetDirectory(getTargetDir().getAbsolutePath());
     testling.setUrlPrefixResolver(urlPrefixResolver);
     testling.setSitemapHelper(sitemapHelper);
+    testling.setPrependBaseUri(false);  // test short apache urls, the relevant case
     testling.setSite(site);
   }
-
+/*
   @After
   public void deleteTargetDir() {
     File targetDir = getTargetDir();
@@ -82,7 +87,7 @@ public class SitemapIndexRendererTest {
         throw new IOError(e);
       }
     }
-  }
+  }*/
 
 
   @Test
@@ -105,7 +110,7 @@ public class SitemapIndexRendererTest {
   }
 
   @Test
-  public void testSplitSitemap() {
+  public void testSplitSitemap() throws FileNotFoundException{
     when(sitemapHelper.sitemapIndexEntryUrl(site, SITEMAP_ENTRY_FILENAME_1)).thenReturn(SITEMAP_ENTRY_URL_1);
     when(sitemapHelper.sitemapIndexEntryUrl(site, SITEMAP_ENTRY_FILENAME_2)).thenReturn(SITEMAP_ENTRY_URL_2);
     when(sitemapHelper.sitemapIndexEntryUrl(site, SITEMAP_ENTRY_FILENAME_3)).thenReturn(SITEMAP_ENTRY_URL_3);
@@ -156,19 +161,25 @@ public class SitemapIndexRendererTest {
 
   private String fileToString(File file) {
     try {
-      return IOUtils.toString(file.toURI().toURL(), StandardCharsets.UTF_8);
+      return IOUtils.toString(file.toURI().toURL(), "UTF-8");
     } catch (IOException e) {
       // Must not happen, escalate
       throw new IOError(e);
     }
   }
 
-  private String gzipToString(File file) {
-    try (GZIPInputStream gzipInputStream = new GZIPInputStream(new FileInputStream(file))) {
-      return IOUtils.toString(gzipInputStream, StandardCharsets.UTF_8);
+  private String gzipToString(File file) throws FileNotFoundException {
+    FileInputStream fileInputStream = new FileInputStream(file);
+    GZIPInputStream gzipInputStream = null;
+    try {
+      gzipInputStream = new GZIPInputStream(fileInputStream);
+      return IOUtils.toString(gzipInputStream, "UTF-8");
     } catch (IOException e) {
       // Must not happen, escalate
       throw new IOError(e);
+    } finally {
+      IOUtils.closeQuietly(gzipInputStream);
+      IOUtils.closeQuietly(fileInputStream);
     }
   }
 
@@ -187,9 +198,12 @@ public class SitemapIndexRendererTest {
       xmlutil.registerSchema("http://www.sitemaps.org/schemas/sitemap/0.9",
               XMLConstants.W3C_XML_SCHEMA_NS_URI,
               new String[]{"http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd"});
-      try (InputStream inputStream = new FileInputStream(sitemapIndex)) {
+      InputStream inputStream = new FileInputStream(sitemapIndex);
+      try {
         // DelegatingSaxHandler for strict validation
         xmlutil.saxParse(inputStream, new DelegatingSaxHandler(null, null, null), null, "http://www.sitemaps.org/schemas/sitemap/0.9");
+      } finally {
+        IOUtils.closeQuietly(inputStream);
       }
     } catch (Exception e) {
       throw new RuntimeException("Sitemap validation failed", e);

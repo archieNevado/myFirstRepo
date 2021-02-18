@@ -30,7 +30,7 @@ public class AMTestBase {
     return contentTestHelper.getContentBean(id);
   }
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })

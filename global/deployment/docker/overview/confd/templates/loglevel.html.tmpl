@@ -14,9 +14,7 @@
       <option value="cae-preview">
       <option value="studio-server">
       <option value="elastic-worker">
-      {{ if eq (getv "/user/changes/enabled" "true") "true" }}
       <option value="user-changes">
-      {{end}}
       <option value="headless-server-preview">
       <option value="headless-server-live">
       {{ if eq (getv "/studio/packages/proxy/enabled" "true") "true" }}

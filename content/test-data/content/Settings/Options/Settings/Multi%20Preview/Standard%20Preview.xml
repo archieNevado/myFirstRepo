@@ -3,8 +3,7 @@
 <externalRefId></externalRefId>
 <locale>en-US</locale>
 <master/>
-<settings>
-<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<settings><Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructListProperty Name="previews">
 <Struct>
 <StringProperty Name="id">caePreview</StringProperty>
@@ -12,22 +11,7 @@
 <StringProperty Name="displayName">CAE Preview</StringProperty>
 <BooleanProperty Name="enabled">false</BooleanProperty>
 </Struct>
-<Struct>
-<StringProperty Name="id">localhostPreview</StringProperty>
-<StringProperty Name="providerId">genericStudioPreviewProvider</StringProperty>
-<StringProperty Name="displayName">Localhost:3000 Preview</StringProperty>
-<BooleanProperty Name="enabled">false</BooleanProperty>
-<StringListProperty Name="userGroupAllowList">
-<String>developer</String>
-</StringListProperty>
-<StructProperty Name="config">
-<Struct>
-<StringProperty Name="uriTemplate">http://localhost:3000/preview/{numericContentId}/{previewDateRFC1123}</StringProperty>
-</Struct>
-</StructProperty>
-</Struct>
 </StructListProperty>
-</Struct>
-</settings>
+</Struct></settings>
 <identifier></identifier>
 </CMSettings>

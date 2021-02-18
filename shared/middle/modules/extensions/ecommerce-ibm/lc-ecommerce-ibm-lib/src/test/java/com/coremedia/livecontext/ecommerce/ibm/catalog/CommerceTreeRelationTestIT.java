@@ -43,7 +43,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles(IbmServiceTestBase.LocalConfig.PROFILE)
 public class CommerceTreeRelationTestIT extends IbmServiceTestBase {
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @Profile(IbmServiceTestBase.LocalConfig.PROFILE)
   public static class LocalConfig {
     @Bean

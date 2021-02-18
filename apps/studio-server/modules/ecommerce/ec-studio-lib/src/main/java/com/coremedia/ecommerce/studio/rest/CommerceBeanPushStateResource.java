@@ -34,13 +34,8 @@ import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CA
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.SKU;
 
-/**
- * @deprecated This class is part of the "push" implementation that is not supported by the
- * Commerce Hub architecture. It will be removed or changed in the future.
- */
 @RestController
 @RequestMapping(value = URI_PATH, produces = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
-@Deprecated
 public class CommerceBeanPushStateResource implements EntityController<PushState> {
 
   private static final String PATH_TYPE = "type";

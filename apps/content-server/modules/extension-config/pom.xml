@@ -18,8 +18,8 @@
     <enforcer.skip>true</enforcer.skip>
   </properties>
 
+
   <modules>
-    <module>cms-tools-extension-dependencies</module>
     <module>content-server-extension-dependencies</module>
     <module>content-server-extensions-bom</module>
   </modules>

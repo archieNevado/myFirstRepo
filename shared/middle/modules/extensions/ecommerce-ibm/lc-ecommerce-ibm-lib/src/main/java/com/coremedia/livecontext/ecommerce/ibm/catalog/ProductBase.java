@@ -45,11 +45,7 @@ import static java.util.Collections.emptyList;
 
 /**
  * Base class for product and product variant implementation.
- *
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
  */
-@Deprecated
 abstract class ProductBase extends AbstractIbmCommerceBean implements Product, CommerceObject {
 
   private static final Logger LOG = LoggerFactory.getLogger(ProductBase.class);

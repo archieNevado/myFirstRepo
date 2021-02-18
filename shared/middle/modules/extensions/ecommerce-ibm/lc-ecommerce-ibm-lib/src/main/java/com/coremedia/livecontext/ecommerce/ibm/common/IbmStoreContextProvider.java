@@ -29,12 +29,7 @@ import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreCon
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-/**
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
- */
 @DefaultAnnotation(NonNull.class)
-@Deprecated
 public class IbmStoreContextProvider extends AbstractStoreContextProvider {
 
   private static final Logger LOG = LoggerFactory.getLogger(IbmStoreContextProvider.class);

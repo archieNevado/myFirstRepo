@@ -15,17 +15,21 @@
   },
   "workspaces": [
     "lib/bricks/*",
+    "lib/helpers/*",
+    "lib/js/*",
+    "lib/sass/*",
     "lib/tools/*",
     "themes/*",
     "bricks/*"
   ],
   "engines": {
-    "node": ">=14"
+    "node": ">=12"
   },
   "dependencies": {
     "lerna": "^3.22.1"
   },
   "coremedia": {
-    "type": "workspace"
+    "type": "workspace",
+    "version": "1-SNAPSHOT"
   }
 }

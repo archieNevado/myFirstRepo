@@ -14,6 +14,7 @@ import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cache.Cache;
+import com.coremedia.cache.CacheCapacityConfigurer;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.asset.ProductAssetsHandler;
@@ -42,16 +43,21 @@ import com.coremedia.livecontext.fragment.resolver.SegmentPathResolver;
 import com.coremedia.mimetype.MimeTypeService;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
+import com.coremedia.springframework.customizer.Customize;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.core.annotation.Order;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @ImportResource(value = {
         "classpath:/com/coremedia/cae/uapi-services.xml",
         "classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml",
@@ -373,6 +379,20 @@ public class LcCaeFragmentConfiguration {
             breadcrumbExternalReferenceResolver);
   }
 
+  @Bean(initMethod = "init")
+  public CacheCapacityConfigurer searchTermExternalReferenceResolverCacheCapacityConfigurer(@Value("${searchTermExternalReferenceResolver.cacheCapacity:10000}") Long cacheCapacity,
+                                                                                            Cache cache) {
+    CacheCapacityConfigurer configurer = new CacheCapacityConfigurer();
+
+    configurer.setCache(cache);
+
+    Map<String, Long> capacities = new HashMap<>(1);
+    capacities.put(SearchTermExternalReferenceResolver.CACHE_CLASS, cacheCapacity);
+    configurer.setCapacities(capacities);
+
+    return configurer;
+  }
+
   @Bean
   public DefaultPageGridPlacementResolver defaultPageGridPlacementResolver() {
     return new DefaultPageGridPlacementResolver();
@@ -392,6 +412,13 @@ public class LcCaeFragmentConfiguration {
     placementResolver.setDataViewFactory(dataViewFactory);
 
     return placementResolver;
+  }
+
+  @Bean(autowireCandidate = false)
+  @Customize(value = "caeCorsConfiguration.allowedOrigins", mode = Customize.Mode.APPEND)
+  @Order(10000)
+  public List<String> liveContextCaeCorsConfiguration(@Value("${livecontext.crossdomain.whitelist}") List<String> allowedOrigins) {
+    return allowedOrigins;
   }
 
   @Bean

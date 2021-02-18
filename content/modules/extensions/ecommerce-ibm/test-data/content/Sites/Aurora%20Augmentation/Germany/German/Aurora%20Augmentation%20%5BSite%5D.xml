@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMSite folder="/Sites/Aurora Augmentation/Germany/German" name="Aurora Augmentation [Site]" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
+<CMSite folder="/Sites/Aurora Augmentation/Germany/German" name="Aurora Augmentation [Site]"
+        translationState="up-to-date">
 <externalRefId></externalRefId>
 <locale>de-DE</locale>
 <master>
@@ -10,7 +11,7 @@
 <root>
 <link href="Navigation/Aurora%20Augmentation.xml" path="/Sites/Aurora%20Augmentation/Germany/German/Navigation/Aurora%20Augmentation"/>
 </root>
-<siteManagerGroup>manager-de-DE,administratoren</siteManagerGroup>
+<siteManagerGroup>manager-de-DE</siteManagerGroup>
 <linkedSettings>
 <link href="Options/Settings/SiteSettings.xml" path="/Sites/Aurora%20Augmentation/Germany/German/Options/Settings/SiteSettings"/>
 </linkedSettings>

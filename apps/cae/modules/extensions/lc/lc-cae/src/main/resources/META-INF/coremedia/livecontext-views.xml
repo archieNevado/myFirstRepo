@@ -18,6 +18,7 @@
   <customize:append id="addDynamicPredicates" bean="dynamicIncludePredicates">
     <list>
       <bean id="cartPredicate" class="com.coremedia.livecontext.view.CartDynamicIncludePredicate"/>
+      <bean id="availabilityInfoDynamicIncludePredicate" class="com.coremedia.livecontext.product.ProductAvailabilityDynamicIncludePredicate"/>
       <bean id="productAssetsPredicate" class="com.coremedia.livecontext.asset.ProductAssetsDynamicIncludePredicate"/>
     </list>
   </customize:append>

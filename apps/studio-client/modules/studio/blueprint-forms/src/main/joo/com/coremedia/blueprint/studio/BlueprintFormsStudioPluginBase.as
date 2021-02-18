@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.studio {
 
 import com.coremedia.blueprint.base.components.sites.SiteAwareFeatureUtil;
+import com.coremedia.blueprint.base.components.util.UserUtil;
 import com.coremedia.blueprint.studio.util.ContentInitializer;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
@@ -13,14 +14,12 @@ import com.coremedia.cms.editor.sdk.plugins.TabExpandPlugin;
 import com.coremedia.cms.editor.sdk.premular.Premular;
 import com.coremedia.cms.editor.sdk.util.MetaStyleService;
 import com.coremedia.cms.editor.sdk.util.ThumbnailResolverFactory;
-import com.coremedia.cms.editor.sdk.util.UserUtil;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.dependencies.DependencyTracker;
 import com.coremedia.ui.data.validation.Issue;
 import com.coremedia.ui.data.validation.Issues;
 import com.coremedia.ui.plugins.BindPropertyPlugin;
-import com.coremedia.ui.util.ObservableUtil;
 
 import ext.Ext;
 import ext.button.Button;
@@ -90,7 +89,7 @@ public class BlueprintFormsStudioPluginBase extends StudioPlugin {
   public static function calculateQuickCreateFolder():String {
     var libToggleBtn:Button = Ext.getCmp(MainNavigationToolbar.LIBRARY_BUTTON_ITEM_ID) as Button;
     if (libToggleBtn) {
-      ObservableUtil.dependOn(libToggleBtn, "toggle");
+      DependencyTracker.dependOnObservable(libToggleBtn, "toggle");
     }
     var collectionView:CollectionView = Ext.getCmp(CollectionView.COLLECTION_VIEW_ID) as CollectionView;
     if (collectionView && collectionView.isVisible(true)) {

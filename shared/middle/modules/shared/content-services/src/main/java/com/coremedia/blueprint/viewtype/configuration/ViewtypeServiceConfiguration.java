@@ -4,7 +4,7 @@ import com.coremedia.blueprint.viewtype.ViewtypeService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 public class ViewtypeServiceConfiguration {
   @Bean(name="viewtypeService")
   public ViewtypeService viewtypeService() {

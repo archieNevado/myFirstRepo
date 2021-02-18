@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.annotation.Order;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @ComponentScan(basePackages = {
         "com.coremedia.livecontext.web",
 })

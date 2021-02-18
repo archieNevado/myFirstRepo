@@ -22,7 +22,7 @@ import javax.inject.Inject;
 @ActiveProfiles({IbmServiceTestBase.LocalConfig.PROFILE})
 @TestPropertySource(properties = "livecontext.cache.invalidation.enabled:false")
 public abstract class AbstractWrapperServiceTestCase {
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })

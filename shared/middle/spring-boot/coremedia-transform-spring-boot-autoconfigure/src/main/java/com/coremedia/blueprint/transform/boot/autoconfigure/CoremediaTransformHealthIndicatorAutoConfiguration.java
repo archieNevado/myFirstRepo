@@ -13,10 +13,10 @@ import org.springframework.util.unit.DataSize;
 
 import java.io.File;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 public class CoremediaTransformHealthIndicatorAutoConfiguration {
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @ConditionalOnBean(name = "transformedBlobCache", value = TransformedBlobCache.class)
   @ConditionalOnClass(TransformedBlobCache.class)
   @ConditionalOnEnabledHealthIndicator("transformedBlobCacheDiskSpace")

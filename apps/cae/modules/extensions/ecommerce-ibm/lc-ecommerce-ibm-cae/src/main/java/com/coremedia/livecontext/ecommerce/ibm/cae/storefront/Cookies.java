@@ -13,11 +13,6 @@ import java.util.Map;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
-/**
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
- */
-@Deprecated
 class Cookies {
 
   private static final Logger LOG = LoggerFactory.getLogger(Cookies.class);

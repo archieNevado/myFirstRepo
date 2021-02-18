@@ -25,11 +25,11 @@ public class ProductImpl extends CatalogObjectImpl implements Product {
   }
 
   public function hasMultiPreviews():Boolean {
-    return true;
+    return false;
   }
 
   public function getPreviews():Previews {
-    return get(CatalogObjectPropertyNames.PREVIEWS);
+    return null;
   }
 
   public function getOfferPrice():Number {
@@ -69,7 +69,7 @@ public class ProductImpl extends CatalogObjectImpl implements Product {
   }
 
   override public function invalidate(callback:Function = null):void {
-    if (!hasListeners()) {
+    if (!hasAnyListener()) {
       super.invalidate();
       return;
     }

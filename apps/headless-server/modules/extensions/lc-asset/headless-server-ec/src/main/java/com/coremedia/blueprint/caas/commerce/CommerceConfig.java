@@ -15,7 +15,6 @@ import com.coremedia.blueprint.caas.commerce.wiring.CommerceInstrumentation;
 import com.coremedia.caas.model.adapter.ExtendedLinkListAdapterFactory;
 import com.coremedia.caas.search.solr.SolrQueryBuilder;
 import com.coremedia.caas.search.solr.SolrSearchResultFactory;
-import com.coremedia.caas.web.CaasServiceConfigurationProperties;
 import com.coremedia.caas.wiring.ProvidesTypeNameResolver;
 import com.coremedia.caas.wiring.TypeNameResolver;
 import com.coremedia.cache.Cache;
@@ -31,8 +30,6 @@ import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.pagegrid.ContentAugmentedPageGridServiceImpl;
 import com.coremedia.livecontext.pagegrid.ContentAugmentedProductPageGridServiceImpl;
 import com.coremedia.livecontext.tree.ExternalChannelContentTreeRelation;
-import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
-import org.apache.solr.client.solrj.SolrClient;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -50,7 +47,7 @@ import java.util.stream.Stream;
 import static com.coremedia.blueprint.base.pagegrid.PageGridContentKeywords.PAGE_GRID_STRUCT_PROPERTY;
 import static com.coremedia.blueprint.caas.commerce.adapter.CommerceBeanPageGridAdapterFactory.PDP_PAGEGRID_PROPERTY_NAME;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @EnableConfigurationProperties({
         CaasAssetSearchServiceConfigProperties.class
 })
@@ -58,14 +55,8 @@ import static com.coremedia.blueprint.caas.commerce.adapter.CommerceBeanPageGrid
         "com.coremedia.blueprint.base.livecontext.augmentation",
         "com.coremedia.livecontext.asset.impl",
 })
-@ImportResource(value = {
-        "classpath:/META-INF/coremedia/lc-services.xml"
-}, reader = ResourceAwareXmlBeanDefinitionReader.class)
+@ImportResource("classpath:/META-INF/coremedia/lc-services.xml")
 public class CommerceConfig {
-  /**
-   * @deprecated The headless server won't handle catalog data in near future anymore.
-   */
-  @Deprecated(since = "2101")
   private static final Set<String> COMMERCE_BEAN_CLASS_NAMES = Stream.of(
           CommerceBean.class.getSimpleName(),
           Catalog.class.getSimpleName(),
@@ -146,18 +137,7 @@ public class CommerceConfig {
   }
 
   @Bean
-  public SolrSearchResultFactory caasAssetSearchServiceSearchResultFactory(@Qualifier("solrClient") SolrClient solrClient,
-                                                                           ContentRepository contentRepository,
-                                                                           CaasServiceConfigurationProperties caasServiceConfigurationProperties,
-                                                                           CaasAssetSearchServiceConfigProperties caasAssetSearchServiceConfigProperties) {
-    SolrSearchResultFactory solrSearchResultFactory = new SolrSearchResultFactory(contentRepository, solrClient, caasServiceConfigurationProperties.getSolr().getCollection());
-    solrSearchResultFactory.setCacheForSeconds(caasAssetSearchServiceConfigProperties.getCacheSeconds());
-    return solrSearchResultFactory;
-  }
-
-  @Bean
-  public CaasAssetSearchService caasAssetSearchService(CaasAssetSearchServiceConfigProperties caasAssetSearchServiceConfigProperties,
-                                                       @Qualifier("caasAssetSearchServiceSearchResultFactory") SolrSearchResultFactory searchResultFactory,
+  public CaasAssetSearchService caasAssetSearchService(CaasAssetSearchServiceConfigProperties caasAssetSearchServiceConfigProperties, @Qualifier("searchResultFactory") SolrSearchResultFactory searchResultFactory,
                                                        ContentRepository contentRepository,
                                                        List<IdScheme> idSchemes,
                                                        @Qualifier("dynamicContentSolrQueryBuilder") SolrQueryBuilder solrQueryBuilder) {

@@ -10,7 +10,7 @@
 <root>
 <link href="Navigation/SFRA.xml" path="/Sites/SFRA/France/French/Navigation/SFRA"/>
 </root>
-<siteManagerGroup>manager-sfra-fr-FR,administratoren</siteManagerGroup>
+<siteManagerGroup>manager-sfra-fr-FR</siteManagerGroup>
 <linkedSettings>
 <link href="Options/Settings/SiteSettings.xml" path="/Sites/SFRA/France/French/Options/Settings/SiteSettings"/>
 </linkedSettings>

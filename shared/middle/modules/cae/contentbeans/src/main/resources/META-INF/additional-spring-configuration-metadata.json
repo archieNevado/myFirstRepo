@@ -1,10 +1,10 @@
 {
   "properties": [
     {
-      "name": "contentbeans.merge-code-resources",
+      "name": "cae.mergeCodeResources",
       "deprecation": {
-        "level": "warning",
-        "replacement": "cae.merge-code-resources"
+        "level": "error",
+        "replacement": "contentbeans.merge-code-resources"
       }
     }
   ]

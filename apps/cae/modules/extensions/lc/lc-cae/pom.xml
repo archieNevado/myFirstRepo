@@ -210,7 +210,7 @@
     </dependency>
     <dependency>
       <groupId>org.mongodb</groupId>
-      <artifactId>mongodb-driver-legacy</artifactId>
+      <artifactId>mongo-java-driver</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>

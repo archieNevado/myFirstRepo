@@ -14,11 +14,6 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 
 import java.util.Map;
 
-/**
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
- */
-@Deprecated
 public class ContractCacheKey extends AbstractIbmDocumentCacheKey<Map<String, Object>> {
 
   public static final String DEPENDENCY_ALL_CONTRACTS = "invalidate-all-contracts-event";

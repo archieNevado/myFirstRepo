@@ -2,6 +2,7 @@ package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceBean;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
 import com.coremedia.ecommerce.studio.rest.model.ChildRepresentation;
 import com.coremedia.ecommerce.studio.rest.model.Facets;
 import com.coremedia.ecommerce.studio.rest.model.Store;
@@ -10,7 +11,6 @@ import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.xml.Markup;
@@ -22,11 +22,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import static java.util.stream.Collectors.toList;
 
 /**
  * A catalog {@link Category} object as a RESTful resource.
@@ -52,13 +51,8 @@ public class CategoryResource extends CommerceBeanResource<Category> {
   }
 
   protected void fillRepresentation(@NonNull Map<String, String> params, CategoryRepresentation representation) {
+    super.fillRepresentation(params, representation);
     Category entity = getEntity(params);
-    if (entity == null) {
-      String errorMessage = String.format("Could not load category with id '%s'.", params.get(PATH_ID));
-      throw new CatalogBeanNotFoundRestException(errorMessage);
-    }
-    super.fillRepresentation(params, entity, representation);
-
     representation.setName(entity.getName());
     Markup shortDescription = entity.getShortDescription();
     if (shortDescription != null) {
@@ -70,17 +64,8 @@ public class CategoryResource extends CommerceBeanResource<Category> {
     }
     representation.setThumbnailUrl(RepresentationHelper.modifyAssetImageUrl(entity.getThumbnailUrl(), getContentRepositoryResource().getContentRepository()));
     representation.setParent(entity.getParent());
-
-    // all subcategories must be loaded because later we test whether they are virtual (by reading their parent)
-    // only loadable categories should be taken
-    List<Category> subCategories = entity.getChildren().stream()
-            .map(this::ensureCategoryIsLoadable)
-            .flatMap(Optional::stream)
-            .collect(toList());
-
-    representation.setSubCategories(subCategories);
+    representation.setSubCategories(entity.getChildren());
     representation.setProducts(entity.getProducts());
-
     representation.setStore(new Store(entity.getContext()));
     AbstractCommerceBean.getCatalog(entity).ifPresent(representation::setCatalog);
     representation.setDisplayName(entity.getDisplayName());
@@ -92,21 +77,16 @@ public class CategoryResource extends CommerceBeanResource<Category> {
     representation.setPictures(entity.getPictures());
     representation.setDownloads(entity.getDownloads());
 
-    List<ChildRepresentation> result = new ArrayList<>();
+    Map<String, ChildRepresentation> result = new LinkedHashMap<>();
     for (CommerceBean child : children) {
       ChildRepresentation childRepresentation = new ChildRepresentation();
       childRepresentation.setChild(child);
       childRepresentation.setDisplayName(child.getExternalId());
-      if (child instanceof Category) {
-        Category childParent = ((Category)child).getParent();
-        // isVirtual is true if the child means to belong to another parent than me
-        childRepresentation.setIsVirtual(childParent != null && !entity.getExternalId().equals(childParent.getExternalId()));
-      }
-      result.add(childRepresentation);
+      result.put(CommerceIdFormatterHelper.format(child.getId()), childRepresentation);
     }
-    representation.setChildrenData(result);
+    representation.setChildrenByName(result);
 
-    representation.setContent(getContent(entity));
+    representation.setContent(getContent(params));
 
     Facets facets = new Facets(entity.getContext());
     facets.setId(entity.getExternalId());
@@ -141,15 +121,5 @@ public class CategoryResource extends CommerceBeanResource<Category> {
   @Qualifier("categoryAugmentationService")
   public void setAugmentationService(AugmentationService augmentationService) {
     super.setAugmentationService(augmentationService);
-  }
-
-  private Optional<Category> ensureCategoryIsLoadable(Category category) {
-    try {
-      category.load();
-    } catch (CommerceException e) {
-      LOG.warn("Cannot load category with id '{}' ({})", category.getId(), e.getMessage());
-      return Optional.empty();
-    }
-    return Optional.of(category);
   }
 }

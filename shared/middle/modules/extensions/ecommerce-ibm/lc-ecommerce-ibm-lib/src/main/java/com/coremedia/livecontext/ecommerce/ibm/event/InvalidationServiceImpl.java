@@ -35,11 +35,7 @@ import static java.util.stream.Collectors.toList;
 /**
  * Service bean for polling invalidations from WCS.
  * All invalidation events are propagated to a list of {@link InvalidationPropagator}
- *
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
  */
-@Deprecated
 class InvalidationServiceImpl extends AbstractIbmService implements InvalidationService {
 
   private static final Logger LOG = LoggerFactory.getLogger(InvalidationServiceImpl.class);

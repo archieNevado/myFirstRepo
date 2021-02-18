@@ -2,8 +2,8 @@ package com.coremedia.catalog.studio.library {
 import com.coremedia.cap.content.Content;
 import com.coremedia.catalog.studio.CatalogStudioPluginBase;
 import com.coremedia.cms.editor.sdk.editorContext;
-import com.coremedia.cms.studio.multisite.models.sites.Site;
-import com.coremedia.cms.studio.multisite.models.sites.SitesService;
+import com.coremedia.cms.editor.sdk.sites.Site;
+import com.coremedia.cms.editor.sdk.sites.SitesService;
 import com.coremedia.ecommerce.studio.library.ShowInLibraryHelper;
 import com.coremedia.ui.util.EventUtil;
 

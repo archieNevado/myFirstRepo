@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.studio.rest.intercept;
 
-import com.coremedia.blueprint.themeimporter.MapToStructAdapter;
 import com.coremedia.blueprint.themeimporter.SettingsJsonToMapAdapter;
+import com.coremedia.blueprint.themeimporter.MapToStructAdapter;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;

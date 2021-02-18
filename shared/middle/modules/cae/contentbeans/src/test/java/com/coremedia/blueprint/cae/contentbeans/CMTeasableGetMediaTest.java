@@ -36,7 +36,7 @@ import static org.junit.Assume.assumeTrue;
 @ContextConfiguration(classes = CMTeasableGetMediaTest.TestConfiguration.class)
 public class CMTeasableGetMediaTest {
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })

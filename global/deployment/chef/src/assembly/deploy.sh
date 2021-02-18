@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -e
 SCRIPT=$(readlink -f $0)
 SCRIPTPATH=`dirname $SCRIPT`
 
@@ -39,5 +38,5 @@ CHEF_CMD+=" --json-attributes ${SCRIPTPATH}/chef-repo/nodes/${CHEF_NODE_CONFIG}.
 
 echo "Starting Chef Solo with environment ${CHEF_ENV} from node configuration ${CHEF_NODE_CONFIG}"
 ${CHEF_CMD}
-rm -rf /tmp/maven-repo /tmp/content-users.zip
+rm -f /tmp/maven-repo /tmp/content-users.zip
 echo "Open http://overview.${HOSTNAME} in your browser to visit the overview"

@@ -9,13 +9,6 @@ x-development-boot-envs:
   DEBUG_ENTRYPOINT: "${DEBUG_ENTRYPOINT:-}"
 
 services:
-  # disable HTTP2 in this scenario. The packages proxy is not able to talk http2
-  studio-client:
-    environment:
-      PROTOCOL: ""
-    labels:
-      traefik.protocol: http
-
   studio-packages-proxy:
     ports:
       - 43080:8080

@@ -35,7 +35,6 @@ public interface CMTaxonomy extends CMTeasable {
    * Returns the parent taxonomy or {@code null} if this taxonomy has no parent taxonomy.
    *
    * @return parent taxonomy or {@code null} for the root taxonomy node.
-   * @cm.template.api
    */
   CMTaxonomy getParent();
 
@@ -48,7 +47,6 @@ public interface CMTaxonomy extends CMTeasable {
    * Returns the value of the document property {@link #CHILDREN}.
    *
    * @return the value of the document property {@link #CHILDREN}
-   * @cm.template.api
    */
   List<? extends CMTaxonomy> getChildren();
 
@@ -61,7 +59,6 @@ public interface CMTaxonomy extends CMTeasable {
    * Returns the value of the document property {@link #EXTERNAL_REFERENCE}.
    *
    * @return the value of the document property {@link #EXTERNAL_REFERENCE}
-   * @cm.template.api
    */
   String getExternalReference();
 

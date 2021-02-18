@@ -43,7 +43,7 @@ public class CatalogServiceImplBodBasedIT extends IbmCatalogServiceBaseTest {
 
   private static final String ROOT_CATEGORY_ID = "ROOT";
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @ImportResource(
           value = {
                   "classpath:/com.coremedia.livecontext.ecommerce.ibm.service/test-commerce-services-bod-customizers.xml"

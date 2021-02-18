@@ -18,12 +18,7 @@ import java.util.Set;
 
 import static java.util.Collections.singleton;
 
-/**
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
- */
 @DefaultAnnotation(NonNull.class)
-@Deprecated
 public class PreviewUrlServiceImpl implements PreviewUrlService {
 
   private static final String PREVIEW_TOKEN_PARAM = "previewToken";

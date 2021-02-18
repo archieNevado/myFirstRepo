@@ -64,7 +64,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 @TestPropertySource(properties = {"livecontext.cache.invalidation.enabled=false"})
 public class LiveContextExternalChannelImplTest {
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })

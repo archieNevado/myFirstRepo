@@ -6,8 +6,8 @@ import com.coremedia.cap.content.search.SearchParameters;
 import com.coremedia.cap.content.search.SearchResult;
 import com.coremedia.cap.content.search.SearchService;
 import com.coremedia.cms.editor.sdk.editorContext;
+import com.coremedia.cms.editor.sdk.sites.Site;
 import com.coremedia.cms.editor.sdk.util.MessageBoxUtil;
-import com.coremedia.cms.studio.multisite.models.sites.Site;
 import com.coremedia.ui.data.ValueExpressionFactory;
 
 import ext.StringUtil;

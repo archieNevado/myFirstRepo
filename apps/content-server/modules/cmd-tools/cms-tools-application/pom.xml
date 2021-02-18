@@ -52,9 +52,10 @@
       <scope>runtime</scope>
     </dependency>
 
+    <!-- This dependency includes grammars which are defined by extensions -->
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>cms-tools-extension-dependencies</artifactId>
+      <artifactId>content-server-extension-dependencies</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
       <scope>runtime</scope>
@@ -84,21 +85,4 @@
   <build>
     <finalName>cms-tools</finalName>
   </build>
-
-  <profiles>
-    <profile>
-      <id>cm-enforcer</id>
-      <activation>
-        <property>
-          <name>!skipCmEnforcer</name>
-          <value>!true</value>
-        </property>
-      </activation>
-      <properties>
-        <!-- Required for com.opencsv:opencsv -->
-        <bannedDependenciesIncludes>commons-beanutils:commons-beanutils</bannedDependenciesIncludes>
-      </properties>
-    </profile>
-  </profiles>
-
 </project>

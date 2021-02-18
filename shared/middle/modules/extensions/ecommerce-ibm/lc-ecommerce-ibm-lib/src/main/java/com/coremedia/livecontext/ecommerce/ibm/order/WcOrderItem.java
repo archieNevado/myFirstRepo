@@ -1,12 +1,7 @@
 package com.coremedia.livecontext.ecommerce.ibm.order;
 
-/**
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
- */
-@Deprecated
 public class WcOrderItem {
-
+  
   private String contractId;
   private String currency;
   private String offerID;

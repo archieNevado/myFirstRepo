@@ -3,7 +3,7 @@ package com.coremedia.livecontext.studio.asset;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceServicesAutoConfiguration;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.cache.Cache;
-import com.coremedia.cache.config.CacheConfigurationProperties;
+import com.coremedia.cache.CacheCapacityConfigurer;
 import com.coremedia.cap.common.CapConnection;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
@@ -20,7 +20,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
-@Configuration(proxyBeanMethods = false)
+import java.util.Collections;
+import java.util.Map;
+
+@Configuration
 @Import({
         CapRestServiceSearchConfiguration.class,
         BaseCommerceServicesAutoConfiguration.class
@@ -182,11 +185,21 @@ public class LcAssetConfiguration {
 
   @SuppressWarnings("MethodMayBeStatic")
   @Bean
-  StudioAssetSearchService studioAssetSearchService(SearchService searchService,
-                                                    ContentRepository contentRepository,
-                                                    Cache cache,
-                                                    CacheConfigurationProperties properties) {
-   return new StudioAssetSearchService(searchService, contentRepository, cache, properties);
+  StudioAssetSearchService studioAssetSearchService(SearchService searchService, ContentRepository contentRepository, Cache cache) {
+    StudioAssetSearchService service = new StudioAssetSearchService(searchService, contentRepository, cache);
+    service.setCacheForInSeconds(300);
+    return service;
   }
 
+  @SuppressWarnings("MethodMayBeStatic")
+  @Bean
+  CacheCapacityConfigurer studioAssetCacheCapacityConfigurer(Cache cache) {
+    CacheCapacityConfigurer configurer = new CacheCapacityConfigurer();
+    configurer.setCache(cache);
+
+    String key = "com.coremedia.livecontext.studio.asset.StudioAssetSearchService.SolrQueryCacheKey";
+    Map<String, Long> map = Collections.singletonMap(key, 100L);
+    configurer.setCapacities(map);
+    return configurer;
+  }
 }

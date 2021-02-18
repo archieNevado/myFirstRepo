@@ -19,11 +19,6 @@ import java.util.Map;
 
 import static com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvider.commerceId;
 
-/**
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
- */
-@Deprecated
 public class UserServiceImpl implements UserService {
 
   private WcPersonWrapperService personWrapperService;

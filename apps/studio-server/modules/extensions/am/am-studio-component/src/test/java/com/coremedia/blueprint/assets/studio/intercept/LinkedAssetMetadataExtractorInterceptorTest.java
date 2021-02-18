@@ -120,7 +120,7 @@ public class LinkedAssetMetadataExtractorInterceptorTest {
   }
 
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @Import(XmlRepoConfiguration.class)
   @Profile(LocalConfig.PROFILE)
   public static class LocalConfig {

@@ -15,13 +15,9 @@ import java.util.Map;
 /**
  * The resource handles the top level store node "Segments".
  * It is not showed in the catalog tree but used to invalidate the list of available commerce segments
- *
- * @deprecated This class is part of the commerce integration "workspaces support" that is not
- * supported by the Commerce Hub architecture. It will be removed or changed in the future.
  */
 @RestController
 @RequestMapping(value = "livecontext/workspaces/{" + AbstractCatalogResource.PATH_SITE_ID + "}", produces = MediaType.APPLICATION_JSON_VALUE)
-@Deprecated
 public class WorkspacesResource extends AbstractCatalogResource<Workspaces> {
 
   @Autowired

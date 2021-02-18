@@ -20,7 +20,7 @@ public class SitemapGenerationJobTest {
 
   @Test
   public void testStarttimeDisabled() {
-    SitemapGenerationJob testling = new SitemapGenerationJob(new DummySitemapTrigger());
+    SitemapGenerationJob testling = new SitemapGenerationJob();
     testling.setStartTime("-");
     int initialDelay = testling.initialDelayMinutes();
     assertEquals(-1, initialDelay);
@@ -28,24 +28,24 @@ public class SitemapGenerationJobTest {
 
   @Test
   public void testStarttimeRelative() {
-    SitemapGenerationJob testling = new SitemapGenerationJob(new DummySitemapTrigger());
+    SitemapGenerationJob testling = new SitemapGenerationJob();
     testling.setStartTime("+42");
     int initialDelay = testling.initialDelayMinutes();
     assertEquals(42, initialDelay);
   }
 
   @Test
-  public void testStarttimeAbsolute() {
-    SitemapGenerationJob testling = new SitemapGenerationJob(new DummySitemapTrigger());
+  public void testStarttimeAbsolute() throws ParseException {
+    SitemapGenerationJob testling = new SitemapGenerationJob();
     testling.setStartTime("01:30");
-    int initialDelay = testling.initialDelayMinutes();
+    int initialDelay = testling.initialDelayMinutes();;
     // Cannot check more concrete, since we cannot control the current time.
     assertTrue(initialDelay >= 0);
   }
 
   @Test
   public void testStarttimeAbsoluteToday() throws ParseException {
-    SitemapGenerationJob testling = new SitemapGenerationJob(new DummySitemapTrigger());
+    SitemapGenerationJob testling = new SitemapGenerationJob();
     testling.setStartTime("23:45");
     int initialDelay = testling.minutesUntilStarttime(timeOfDay1121);
     assertEquals(744, initialDelay);
@@ -53,7 +53,7 @@ public class SitemapGenerationJobTest {
 
   @Test
   public void testStarttimeAbsoluteTomorrow() throws ParseException {
-    SitemapGenerationJob testling = new SitemapGenerationJob(new DummySitemapTrigger());
+    SitemapGenerationJob testling = new SitemapGenerationJob();
     testling.setStartTime("01:30");
     int initialDelay = testling.minutesUntilStarttime(timeOfDay1121);
     assertEquals(849, initialDelay);
@@ -61,7 +61,7 @@ public class SitemapGenerationJobTest {
 
   @Test
   public void testStarttimeAbsoluteMidnight() throws ParseException {
-    SitemapGenerationJob testling = new SitemapGenerationJob(new DummySitemapTrigger());
+    SitemapGenerationJob testling = new SitemapGenerationJob();
     testling.setStartTime("00:00");
     int initialDelay = testling.minutesUntilStarttime(timeOfDay1121);
     assertEquals(759, initialDelay);
@@ -69,19 +69,9 @@ public class SitemapGenerationJobTest {
 
   @Test
   public void testStarttimeRobustness() {
-    SitemapGenerationJob testling = new SitemapGenerationJob(new DummySitemapTrigger());
+    SitemapGenerationJob testling = new SitemapGenerationJob();
     testling.setStartTime("bullshit");
     int initialDelay = testling.initialDelayMinutes();
     assertEquals(-2, initialDelay);
-  }
-
-
-  // --- inner classes ----------------------------------------------
-
-  private static class DummySitemapTrigger implements SitemapTrigger {
-    @Override
-    public void generateSitemaps() {
-      throw new UnsupportedOperationException("Not needed for these tests");
-    }
   }
 }

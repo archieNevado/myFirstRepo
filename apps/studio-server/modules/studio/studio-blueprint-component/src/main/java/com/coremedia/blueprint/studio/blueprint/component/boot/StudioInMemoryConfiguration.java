@@ -12,7 +12,7 @@ import org.springframework.context.annotation.ImportResource;
 
 import javax.annotation.PostConstruct;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @ConditionalOnProperty(name = "elastic.core.persistence", havingValue = "memory")
 @ImportResource(value = {
         "classpath:/META-INF/coremedia/studio-in-memory-cap-list.xml"

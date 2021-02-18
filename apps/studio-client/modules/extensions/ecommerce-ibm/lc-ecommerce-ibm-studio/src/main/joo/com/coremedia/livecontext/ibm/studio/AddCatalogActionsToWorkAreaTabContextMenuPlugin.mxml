@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!---
- @deprecated This plugin is part of the legacy Blueprint commerce integration and has been deprecated
- in favour of the Commerce Hub integration.
--->
 <ui:AddItemsPlugin xmlns:fx="http://ns.adobe.com/mxml/2009"
                    xmlns="exml:ext.config"
                    xmlns:ui="exml:com.coremedia.ui.config"
                    xmlns:livecontext="exml:com.coremedia.livecontext.ibm.studio.config">
-  <fx:Metadata>
-    [Deprecated]
-  </fx:Metadata>
 <fx:Script><![CDATA[
   import com.coremedia.cms.editor.sdk.desktop.reusability.WorkAreaTabProxiesContextMenu;
 

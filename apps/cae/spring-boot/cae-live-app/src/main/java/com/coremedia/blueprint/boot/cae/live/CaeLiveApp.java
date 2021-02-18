@@ -24,15 +24,7 @@ import java.util.Collections;
  * - FMAC because otherwise we have conflicting FreemarkerConfiguration beans
  *  for CAE and studio for server also exclude JDBC
  */
-@SpringBootApplication(exclude = {
-        WebMvcAutoConfiguration.class,
-        FreeMarkerAutoConfiguration.class,
-        MongoAutoConfiguration.class,
-}, excludeName = {
-        "net.devh.boot.grpc.client.autoconfigure.GrpcClientAutoConfiguration",
-        "net.devh.boot.grpc.client.autoconfigure.GrpcClientHealthAutoConfiguration",
-        "net.devh.boot.grpc.client.autoconfigure.GrpcClientMetricAutoConfiguration",
-})
+@SpringBootApplication(exclude = {WebMvcAutoConfiguration.class, FreeMarkerAutoConfiguration.class, MongoAutoConfiguration.class})
 public class CaeLiveApp {
 
   // ... Bean definitions
@@ -57,4 +49,36 @@ public class CaeLiveApp {
   WebServerFactoryCustomizer<TomcatServletWebServerFactory> indexHtmlConfigurer() {
     return container -> container.addContextCustomizers(context -> context.addWelcomeFile("index.html"));
   }
+
+  /**
+   * Workaround to allow CORS also for fonts
+   */
+  @Bean
+  public BeanPostProcessor corsCustomizer(@Value("${livecontext.crossdomain.whitelist}") String[] crossDomainWhiteList) {
+    return new BeanPostProcessor() {
+      @Override
+      public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+        if ("requestMappingHandlerMapping".equals(beanName) && bean instanceof RequestMappingHandlerMapping) {
+          CorsConfiguration corsConfiguration = new CorsConfiguration();
+          corsConfiguration.setAllowedOrigins(Arrays.asList(crossDomainWhiteList));
+          // to get the ratings via /dynamic
+          corsConfiguration.setAllowedHeaders(Collections.singletonList("x-requested-with"));
+          // to create ratings
+          corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST"));
+          corsConfiguration.setAllowCredentials(true);
+
+          ((RequestMappingHandlerMapping) bean).setCorsConfigurations(
+                  Collections.singletonMap("{path:.*}", corsConfiguration));
+        }
+
+        return bean;
+      }
+
+      @Override
+      public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        return bean;
+      }
+    };
+  }
+
 }

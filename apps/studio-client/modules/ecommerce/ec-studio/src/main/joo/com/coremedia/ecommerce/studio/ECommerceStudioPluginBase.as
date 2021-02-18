@@ -1,5 +1,6 @@
 package com.coremedia.ecommerce.studio {
 
+import com.coremedia.blueprint.base.components.util.UserUtil;
 import com.coremedia.blueprint.base.pagegrid.PageGridUtil;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
@@ -7,14 +8,16 @@ import com.coremedia.cms.editor.configuration.StudioPlugin;
 import com.coremedia.cms.editor.sdk.IEditorContext;
 import com.coremedia.cms.editor.sdk.collectionview.CollectionViewManagerInternal;
 import com.coremedia.cms.editor.sdk.editorContext;
-import com.coremedia.cms.editor.sdk.util.UserUtil;
+import com.coremedia.cms.editor.sdk.sites.Site;
 import com.coremedia.ecommerce.studio.augmentation.augmentationService;
 import com.coremedia.ecommerce.studio.components.preferences.CatalogPreferencesBase;
 import com.coremedia.ecommerce.studio.components.tree.impl.CatalogTreeDragDropModel;
 import com.coremedia.ecommerce.studio.components.tree.impl.CatalogTreeModel;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
+import com.coremedia.ecommerce.studio.helper.StoreUtil;
 import com.coremedia.ecommerce.studio.library.ECommerceCollectionViewExtension;
 import com.coremedia.ecommerce.studio.model.Catalog;
+import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ecommerce.studio.model.CatalogObjectPropertyNames;
 import com.coremedia.ecommerce.studio.model.Category;
 import com.coremedia.ecommerce.studio.model.Store;

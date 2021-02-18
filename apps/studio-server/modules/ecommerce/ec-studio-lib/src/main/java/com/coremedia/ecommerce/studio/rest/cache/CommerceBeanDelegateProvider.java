@@ -21,11 +21,7 @@ import java.util.Map;
 /**
  * Helper class to provide maps that can be used as delegates for commerce beans satisfying the needs of
  * Studio REST resource linker.
- *
- * @deprecated This class is part of the "commerce cache invalidation" implementation that
- * will be re-implemented by the Commerce Hub architecture and replaced in future releases.
  */
-@Deprecated
 class CommerceBeanDelegateProvider {
 
   private static final String SITE_ID = "{siteId:.*}";

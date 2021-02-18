@@ -1,7 +1,6 @@
 package com.coremedia.blueprint.cae.sitemap;
 
 import com.coremedia.blueprint.base.links.UrlPrefixResolver;
-import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.beans.factory.ObjectProvider;
 
 public final class SitemapIndexRendererFactory implements SitemapRendererFactory {
@@ -9,13 +8,13 @@ public final class SitemapIndexRendererFactory implements SitemapRendererFactory
   private final String targetDirectory;
   private final UrlPrefixResolver urlPrefixResolver;
   private final ObjectProvider<SitemapHelper> sitemapHelperProvider;
+  private final boolean prependBaseUri;
 
-  public SitemapIndexRendererFactory(@NonNull String targetDirectory,
-                                     @NonNull UrlPrefixResolver urlPrefixResolver,
-                                     @NonNull ObjectProvider<SitemapHelper> sitemapHelperProvider) {
+  public SitemapIndexRendererFactory(String targetDirectory, UrlPrefixResolver urlPrefixResolver, ObjectProvider<SitemapHelper> sitemapHelperProvider, boolean prependBaseUri) {
     this.targetDirectory = targetDirectory;
     this.urlPrefixResolver = urlPrefixResolver;
     this.sitemapHelperProvider = sitemapHelperProvider;
+    this.prependBaseUri = prependBaseUri;
   }
 
   // --- SitemapRendererFactory -------------------------------------
@@ -26,6 +25,7 @@ public final class SitemapIndexRendererFactory implements SitemapRendererFactory
     sitemapIndexRenderer.setTargetDirectory(targetDirectory);
     sitemapIndexRenderer.setUrlPrefixResolver(urlPrefixResolver);
     sitemapIndexRenderer.setSitemapHelper(sitemapHelperProvider.getObject());
+    sitemapIndexRenderer.setPrependBaseUri(prependBaseUri);
     return sitemapIndexRenderer;
   }
 

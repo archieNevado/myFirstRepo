@@ -24,6 +24,8 @@ import ext.dd.DropTarget;
 import ext.dd.ScrollManager;
 import ext.grid.GridPanel;
 
+import js.KeyEvent;
+
 /**
  * @private
  *

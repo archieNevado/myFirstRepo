@@ -17,11 +17,7 @@ import static java.util.Arrays.asList;
 
 /**
  * Wrapper query and result format of the IBM rest search service.
- *
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
  */
-@Deprecated
 public class WcSearchWrapperService extends AbstractWcWrapperService {
 
   private static final WcRestServiceMethod<WcSuggestionViews, Void> GET_KEYWORD_SUGGESTIONS = WcRestServiceMethod

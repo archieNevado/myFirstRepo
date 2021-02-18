@@ -55,7 +55,7 @@ default['blueprint']['ibm-wcs']['application.properties']['livecontext.ibm.wcs.u
 default['blueprint']['ibm-wcs']['application.properties']['livecontext.ibm.wcs.store.name.aurora'] = 'AuroraESite'
 default['blueprint']['ibm-wcs']['application.properties']['livecontext.ibm.wcs.currency.aurora'] = 'USD'
 default['blueprint']['ibm-wcs']['application.properties']['livecontext.ibm.wcs.vendor.aurora'] = 'ibm'
-default['blueprint']['ibm-wcs']['application.properties']['cae.cors.allowed-origins-for-url-pattern[{path\:.*}]'] = "https://#{node['blueprint']['ibm-wcs']['host']}:8443"
+default['blueprint']['ibm-wcs']['application.properties']['cae.preview.crossdomain-whitelist'] = "https://#{node['blueprint']['ibm-wcs']['host']}:8443"
 
 # The following properties are derived from `livecontext.ibm.wcs.host`, if you need to set them explicitly comment in the lines below
 # default['blueprint']['ibm-wcs']['application.properties']['livecontext.ibm.wcs.url'] = "http://#{node['blueprint']['ibm-wcs']['host']}"
@@ -121,9 +121,3 @@ default['blueprint']['sap-hybris']['virtual_host']['shop']['rewrite_log_level'] 
 
 # set this to true to disable SSLProxyVerify, SSLProxyCheckPeerCN, SSLProxyCheckPeerName
 default['blueprint']['sap-hybris']['ssl_proxy_verify'] = true
-
-# commercetools
-#<> Convenience property to set the hostname of commercetools. Do not use or set this attribute in recipes, use the concrete attributes instead.
-default['blueprint']['commercetools']['host'] = 'localhost'
-#<> Set to true to activate the commercetools integration
-default['blueprint']['commercetools']['enabled'] = false

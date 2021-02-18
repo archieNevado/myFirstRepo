@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.studio.library {
 import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.editorContext;
-import com.coremedia.cms.studio.multisite.models.sites.SitesService;
+import com.coremedia.cms.editor.sdk.sites.SitesService;
 import com.coremedia.ecommerce.studio.augmentation.augmentationService;
 import com.coremedia.ecommerce.studio.components.tree.impl.CatalogTreeModel;
 import com.coremedia.ecommerce.studio.library.ShowInLibraryHelper;

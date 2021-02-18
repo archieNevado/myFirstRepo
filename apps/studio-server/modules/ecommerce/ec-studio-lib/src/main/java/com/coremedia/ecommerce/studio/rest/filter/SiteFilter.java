@@ -1,14 +1,15 @@
 package com.coremedia.ecommerce.studio.rest.filter;
 
-import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SiteHelper;
+import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.google.common.annotations.VisibleForTesting;
-import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
+import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -21,8 +22,6 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static java.lang.invoke.MethodHandles.lookup;
-
 /**
  * Inject site into request context.
  * <p>
@@ -30,15 +29,13 @@ import static java.lang.invoke.MethodHandles.lookup;
  */
 public class SiteFilter implements Filter {
 
-  private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
+  private static final Logger LOG = LoggerFactory.getLogger(SiteFilter.class);
 
-  private static final Pattern SITE_ID_URL_PATTERN = Pattern.compile(".*?/livecontext/(?:previews/)?.+?/(?<siteId>.+?)((/.*)|$)");
+  private static final Pattern SITE_ID_URL_PATTERN = Pattern.compile(".*?/livecontext/.+?/(?<siteId>.+?)((/.*)|$)");
 
-  private final SitesService sitesService;
-
-  public SiteFilter(SitesService sitesService) {
-    this.sitesService = sitesService;
-  }
+  @Inject
+  @SuppressWarnings("squid:S3306") //squid:S3306 Constructor injection should be used instead of field injection
+  private SitesService sitesService;
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {

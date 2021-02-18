@@ -27,9 +27,10 @@
 
     <google.api.services.analytics.version>v3-rev99-1.19.0</google.api.services.analytics.version>
     <google.api.services.youtube.version>v3-rev152-1.19.0</google.api.services.youtube.version>
+    <google.api.client.version>1.19.0</google.api.client.version>
 
     <customer>Blueprint</customer>
-    <cm.headless-server.core.version>2101.2</cm.headless-server.core.version>
+    <cm.headless-server.core.version>2007.3</cm.headless-server.core.version>
     <personalization.version>${project.version}</personalization.version>
     <elastic.version>${project.version}</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
     <studio.version>${project.version}</studio.version>
@@ -84,11 +85,11 @@
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.headless-server.core.version>2101.2</cm.headless-server.core.version>
+    <cm.headless-server.core.version>2007.3</cm.headless-server.core.version>
     <cm.common.bp.version>1-SNAPSHOT</cm.common.bp.version>
     <cm.middle.bp.version>1-SNAPSHOT</cm.middle.bp.version>
-    <cm.common.core.version>2101.2</cm.common.core.version>
-    <cm.middle.core.version>2101.2</cm.middle.core.version>
+    <cm.common.core.version>2007.3</cm.common.core.version>
+    <cm.middle.core.version>2007.3</cm.middle.core.version>
 
     <!-- headless-server-base -->
     <caffeine.version>2.8.5</caffeine.version>
@@ -97,7 +98,7 @@
     <jboss-logging.version>3.3.2.Final</jboss-logging.version>
     <spring.version>5.2.9.RELEASE</spring.version>
     <graphiql-spring-boot-starter.version>5.6.0</graphiql-spring-boot-starter.version>
-    <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
+    <maven-surefire-plugin.version>3.0.0-M4</maven-surefire-plugin.version>
 
     <showDeprecation>true</showDeprecation>
     <showWarnings>true</showWarnings>
@@ -184,6 +185,7 @@
                 <id>enforce-onerepo-rules</id>
                 <configuration>
                   <rules>
+                    <myCustomRule implementation="com.coremedia.maven.enforcer.OneRepoEnforcerRule" />
                     <myCustomRule implementation="com.coremedia.maven.enforcer.ModularOneRepoEnforcerRule" />
                     <myCustomRule implementation="com.coremedia.maven.enforcer.BannedDependenciesRule">
                       <configurationFile>/com/coremedia/cms/maven/enforcer/bannedDependencies.xml</configurationFile>
@@ -292,23 +294,9 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>com.coremedia.cms</groupId>
-        <artifactId>middle-core-bom</artifactId>
-        <version>${cm.middle.core.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
         <groupId>com.coremedia.blueprint</groupId>
         <artifactId>middle-blueprint-bom</artifactId>
         <version>${cm.middle.bp.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>com.coremedia.cms</groupId>
-        <artifactId>common-core-bom</artifactId>
-        <version>${cm.common.core.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -346,6 +334,48 @@
           <exclusion>
             <groupId>com.google.guava</groupId>
             <artifactId>guava-jdk5</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
+      <dependency>
+        <groupId>com.google.api-client</groupId>
+        <artifactId>google-api-client</artifactId>
+        <version>${google.api.client.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava-jdk5</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
+      <dependency>
+        <groupId>com.google.http-client</groupId>
+        <artifactId>google-http-client-jackson2</artifactId>
+        <version>${google.api.client.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.google.http-client</groupId>
+        <artifactId>google-http-client</artifactId>
+        <version>${google.api.client.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
+      <dependency>
+        <groupId>com.google.oauth-client</groupId>
+        <artifactId>google-oauth-client</artifactId>
+        <version>${google.api.client.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
           </exclusion>
         </exclusions>
       </dependency>

@@ -148,7 +148,7 @@ public class ProductAugmentationHelperTest {
     testling.initializeLayoutSettings(product, Collections.emptyMap());
   }
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @ImportResource(value = {
           "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
   }, reader = com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader.class)

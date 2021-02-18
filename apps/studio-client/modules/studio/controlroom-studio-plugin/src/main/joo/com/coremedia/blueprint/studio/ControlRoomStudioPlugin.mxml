@@ -9,11 +9,10 @@
         xmlns:project="exml:com.coremedia.blueprint.studio.config.controlroom">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.blueprint.studio.BlueprintProcessDefinitions')]
-    [ResourceBundle('com.coremedia.cms.studio.workflow.components.ProcessDefinitions')]
+    [ResourceBundle('com.coremedia.cms.editor.ProcessDefinitions')]
   </fx:Metadata>
   <fx:Script><![CDATA[
     import com.coremedia.cms.editor.controlroom.workflow.WorkflowUtils;
-    import com.coremedia.ui.data.ValueExpressionFactory;
 
     import mx.resources.ResourceManager;
 
@@ -114,7 +113,7 @@
     </collab:AddTranslationWorkflowPlugin>
 
     <editor:CopyResourceBundleProperties
-            destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.studio.workflow.components.ProcessDefinitions')}"
+            destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.ProcessDefinitions')}"
             source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.studio.BlueprintProcessDefinitions')}"/>
   </editor:configuration>
 

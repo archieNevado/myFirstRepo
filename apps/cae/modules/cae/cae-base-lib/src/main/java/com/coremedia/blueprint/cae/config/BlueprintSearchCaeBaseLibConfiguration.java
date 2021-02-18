@@ -22,7 +22,7 @@ import java.util.function.Function;
 /**
  * Search specific bean definitions.
  */
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @ImportResource(value = {
         "classpath:/framework/spring/search/solr-search.xml",
         "classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml",

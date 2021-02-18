@@ -5,17 +5,26 @@ import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.model.Category;
 import com.coremedia.ecommerce.studio.model.Store;
 import com.coremedia.livecontext.studio.AbstractLiveContextStudioTest;
+import com.coremedia.ui.data.Bean;
 import com.coremedia.ui.data.beanFactory;
 
 public class ShowInCatalogTreeHelperTest extends AbstractLiveContextStudioTest {
 
   public static var PREFERENCE_SHOW_CATALOG_KEY:String = "showCatalogContent";
 
+  private var preferences:Bean;
   private var entities:Array;
   private var treeModel:CompoundChildTreeModel;
   private var showInCatalogTreeHelper:ShowInCatalogTreeHelper;
   private var category:Category;
   private var functionArguments:Array;
+
+
+  override public function setUp():void {
+    super.setUp();
+    preferences = beanFactory.createLocalBean();
+    editorContext['setPreferences'](preferences);
+  }
 
   private function setUpCatalog():void {
     category = beanFactory.getRemoteBean("livecontext/category/HeliosSiteId/catalog/NO_WS/Fruit") as Category;

@@ -4,7 +4,7 @@ import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.premular.DocumentTabPanel;
-import com.coremedia.cms.studio.multisite.models.sites.SitesService;
+import com.coremedia.cms.editor.sdk.sites.SitesService;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 

@@ -3,7 +3,6 @@ package com.coremedia.blueprint.caas.commerce.model;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
-import com.coremedia.blueprint.caas.commerce.error.CommerceConnectionUnavailable;
 import com.coremedia.caas.model.error.SiteIdUndefined;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
@@ -34,18 +33,13 @@ import java.util.Optional;
 
 /**
  * A simple facade for commerce queries by site id.
- * @deprecated This class is part of the "commerce catalog integration" implementation that won't be supported anymore in near future.
- * Instead commerce catalog data should be provided by the commerce system directly.
- * Commerce and Content entities still remain linked and reference each other, but the commerce data itself should be retrieved from the commerce system
- * and NOT from the CoreMedia Headless Server.
  */
 @DefaultAnnotation(NonNull.class)
-@Deprecated(since = "2101")
 public class CommerceFacade {
 
   private static final Logger LOG = LoggerFactory.getLogger(CommerceFacade.class);
 
-  private final CommerceConnectionInitializer commerceConnectionInitializer;
+  private CommerceConnectionInitializer commerceConnectionInitializer;
   private final SitesService sitesService;
 
   public CommerceFacade(CommerceConnectionInitializer commerceConnectionInitializer, SitesService sitesService) {
@@ -53,57 +47,22 @@ public class CommerceFacade {
     this.sitesService = sitesService;
   }
 
-  @SuppressWarnings("unused") // it is being used by within commerce-schema.graphql
-  @Nullable
-  public DataFetcherResult<CommerceBean> getCommerceBean(String commerceId, String siteId) {
-    DataFetcherResult.Builder<CommerceBean> builder = DataFetcherResult.newResult();
-    if (siteId == null) {
-      return builder.error(SiteIdUndefined.getInstance()).build();
-    }
-    return builder.data(parseId(commerceId, siteId, CommerceBean.class)).build();
-  }
-
   public DataFetcherResult<Product> getProduct(String externalId, String siteId) {
-    DataFetcherResult.Builder<Product> builder = DataFetcherResult.newResult();
+    DataFetcherResult.Builder<Product> builder = DataFetcherResult.<Product>newResult();
     if (siteId == null) {
       return builder.error(SiteIdUndefined.getInstance()).build();
     }
-    CommerceConnection connection = getCommerceConnection(siteId);
-    if (connection == null) {
-      return builder.error(CommerceConnectionUnavailable.getInstance()).build();
-    }
-
-    CommerceId commerceId = getProductId(externalId, connection);
-    CommerceBean bean = connection.getCommerceBeanFactory().createBeanFor(commerceId, connection.getStoreContext());
-    return builder.data(loadBean(Product.class, bean)).build();
-  }
-
-  /**
-   * Ensures that the id is in the long format, which is required by subsequent calls:
-   *
-   * Example: <code>vendor:///summer_catalog/product/foo-1</code> or <code>vendor:///catalog/product/foo-1</code>
-   *
-   * @param productId the external id
-   * @param connection the commerce connection to be used
-   * @return id in the long format
-   */
-
-  @NonNull
-  private CommerceId getProductId(String productId, CommerceConnection connection) {
-    CommerceIdProvider idProvider = connection.getIdProvider();
-    CatalogAlias catalogAlias = connection.getStoreContext().getCatalogAlias();
-    Optional<CommerceId> commerceIdOptional = CommerceIdParserHelper.parseCommerceId(productId);
-    return commerceIdOptional.orElseGet(() -> idProvider.formatProductId(catalogAlias, productId));
+    return builder.data(parseId(externalId, siteId, Product.class)).build();
   }
 
   public DataFetcherResult<Product> getProductByTechId(String techId, String siteId) {
-    DataFetcherResult.Builder<Product> builder = DataFetcherResult.newResult();
+    DataFetcherResult.Builder<Product> builder = DataFetcherResult.<Product>newResult();
     if (siteId == null) {
       return builder.error(SiteIdUndefined.getInstance()).build();
     }
     CommerceConnection connection = getCommerceConnection(siteId);
     if (connection == null) {
-      return builder.error(CommerceConnectionUnavailable.getInstance()).build();
+      return builder.build();
     }
     StoreContext storeContext = connection.getStoreContext();
     CommerceId productCommerceId = connection.getIdProvider().formatProductTechId(storeContext.getCatalogAlias(), techId);
@@ -118,13 +77,13 @@ public class CommerceFacade {
   }
 
   public DataFetcherResult<Catalog> getCatalog(String catalogId, String siteId) {
-    DataFetcherResult.Builder<Catalog> builder = DataFetcherResult.newResult();
+    DataFetcherResult.Builder<Catalog> builder = DataFetcherResult.<Catalog>newResult();
     if (siteId == null) {
       return builder.error(SiteIdUndefined.getInstance()).build();
     }
     CommerceConnection connection = getCommerceConnection(siteId);
     if (connection == null) {
-      return builder.error(CommerceConnectionUnavailable.getInstance()).build();
+      return builder.build();
     }
     if (catalogId == null) {
       return builder.data(getDefaultCatalog(siteId)).build();
@@ -133,13 +92,13 @@ public class CommerceFacade {
   }
 
   public DataFetcherResult<List<Catalog>> getCatalogs(String siteId) {
-    DataFetcherResult.Builder<List<Catalog>> builder = DataFetcherResult.newResult();
+    DataFetcherResult.Builder<List<Catalog>> builder = DataFetcherResult.<List<Catalog>>newResult();
     if (siteId == null) {
       return builder.error(SiteIdUndefined.getInstance()).build();
     }
     CommerceConnection connection = getCommerceConnection(siteId);
     if (connection == null) {
-      return builder.error(CommerceConnectionUnavailable.getInstance()).build();
+      return builder.build();
     }
 
     try {
@@ -152,45 +111,21 @@ public class CommerceFacade {
   }
 
   public DataFetcherResult<Category> getCategory(String categoryId, String siteId) {
-    DataFetcherResult.Builder<Category> builder = DataFetcherResult.newResult();
+    DataFetcherResult.Builder<Category> builder = DataFetcherResult.<Category>newResult();
     if (siteId == null) {
       return builder.error(SiteIdUndefined.getInstance()).build();
     }
-    CommerceConnection connection = getCommerceConnection(siteId);
-    if (connection == null) {
-      return builder.error(CommerceConnectionUnavailable.getInstance()).build();
-    }
-    CommerceId commerceId = getCategoryId(categoryId, connection);
-    CommerceBean bean = connection.getCommerceBeanFactory().createBeanFor(commerceId, connection.getStoreContext());
-    return builder.data(loadBean(Category.class, bean)).build();
-  }
-
-  /**
-   * Ensures that the id is in the long format, which is required by subsequent calls:
-   *
-   * Example: <code>vendor:///summer_catalog/category/men</code> or <code>vendor:///catalog/category/men</code>
-   *
-   * @param categoryId the external id
-   * @param connection the commerce connection to be used
-   * @return id in the long format
-   */
-
-  @NonNull
-  private CommerceId getCategoryId(String categoryId, CommerceConnection connection) {
-    CommerceIdProvider idProvider = connection.getIdProvider();
-    CatalogAlias catalogAlias = connection.getStoreContext().getCatalogAlias();
-    Optional<CommerceId> commerceIdOptional = CommerceIdParserHelper.parseCommerceId(categoryId);
-    return commerceIdOptional.orElseGet(() -> idProvider.formatCategoryId(catalogAlias, categoryId));
+    return builder.data(parseId(categoryId, siteId, Category.class)).build();
   }
 
   public DataFetcherResult<Product> findProductBySeoSegment(String seoSegment, String siteId) {
-    DataFetcherResult.Builder<Product> builder = DataFetcherResult.newResult();
+    DataFetcherResult.Builder<Product> builder = DataFetcherResult.<Product>newResult();
     if (siteId == null) {
       return builder.error(SiteIdUndefined.getInstance()).build();
     }
     CommerceConnection connection = getCommerceConnection(siteId);
     if (connection == null) {
-      return builder.error(CommerceConnectionUnavailable.getInstance()).build();
+      return builder.build();
     }
     StoreContext storeContext = connection.getStoreContext();
     try {
@@ -204,21 +139,21 @@ public class CommerceFacade {
 
   @SuppressWarnings("unused")
   public DataFetcherResult<ProductVariant> getProductVariant(String productVariantId, String siteId) {
-    DataFetcherResult.Builder<ProductVariant> builder = DataFetcherResult.newResult();
-    if (siteId == null) {
+    DataFetcherResult.Builder<ProductVariant> builder = DataFetcherResult.<ProductVariant>newResult();
+    if(siteId == null) {
       return builder.error(SiteIdUndefined.getInstance()).build();
     }
     return builder.data(parseId(productVariantId, siteId, ProductVariant.class)).build();
   }
 
   public DataFetcherResult<Category> findCategoryBySeoSegment(String seoSegment, String siteId) {
-    DataFetcherResult.Builder<Category> builder = DataFetcherResult.newResult();
+    DataFetcherResult.Builder<Category> builder = DataFetcherResult.<Category>newResult();
     if (siteId == null) {
       return builder.error(SiteIdUndefined.getInstance()).build();
     }
     CommerceConnection connection = getCommerceConnection(siteId);
     if (connection == null) {
-      return builder.error(CommerceConnectionUnavailable.getInstance()).build();
+      return builder.build();
     }
     StoreContext storeContext = connection.getStoreContext();
 
@@ -289,13 +224,13 @@ public class CommerceFacade {
   }
 
   public DataFetcherResult<Catalog> getCatalogByAlias(String catalogAlias, String siteId) {
-    DataFetcherResult.Builder<Catalog> builder = DataFetcherResult.newResult();
+    DataFetcherResult.Builder<Catalog> builder = DataFetcherResult.<Catalog>newResult();
     if (siteId == null) {
       return builder.error(SiteIdUndefined.getInstance()).build();
     }
     CommerceConnection connection = getCommerceConnection(siteId);
     if (connection == null) {
-      return builder.error(CommerceConnectionUnavailable.getInstance()).build();
+      return builder.build();
     }
     StoreContext storeContext = connection.getStoreContext();
 
@@ -350,7 +285,6 @@ public class CommerceFacade {
     }
   }
 
-  @SuppressWarnings("unused") // it is being used by within commerce-schema.graphql as @fetch(from: "@commerceFacade.getExternalId(#this)")
   @Nullable
   public String getExternalId(CommerceBean commerceBean) {
     return CommerceIdFormatterHelper.format(commerceBean.getId());
@@ -377,11 +311,6 @@ public class CommerceFacade {
       return null;
     }
     CommerceBean bean = parseId(id, connection);
-    return loadBean(expectedType, bean);
-  }
-
-  @Nullable
-  private <T extends CommerceBean> T loadBean(Class<T> expectedType, CommerceBean bean) {
     if (bean == null || !expectedType.isAssignableFrom(bean.getClass())) {
       return null;
     }
@@ -390,7 +319,7 @@ public class CommerceFacade {
       //noinspection unchecked
       return (T) bean;
     } catch (CommerceException e) {
-      LOG.warn("Could not retrieve product for {}", bean, e);
+      LOG.warn("Could not retrieve product for id {}", id, e);
       return null;
     }
   }

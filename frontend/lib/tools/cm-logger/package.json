@@ -7,7 +7,7 @@
   "private": true,
   "version": "1.0.0",
   "engines": {
-    "node": ">=14"
+    "node": ">=12"
   },
   "dependencies": {
     "chalk": "^4.1.0",

@@ -1,33 +1,3 @@
-=begin
-#<
-This recipe installst the content-management-server.
-
-@section Userprovider
-
-To configure either LDAP or CAS as user provider, you need to set one of the following flags to true:
-
-* `default['blueprint']['jaas']['ldap']['enabled']`
-* `default['blueprint']['jaas']['cas']['enabled']`
-
-then you need to configure the corresponding filter tokens for the jaas.conf template, please take a look at the
-blueprint-base `attributes/default.rb` at the bottom.
-
-The properties to configure the provider class implementation can be set as standard application properties.
-For `com.coremedia.ldap.LdapUserProvider` based user providers, the mandatory properties are:
-```
-['blueprint']['apps']['content-management-server']['application.properties']['cap.server.userproviders[0].provider-class']
-['blueprint']['apps']['content-management-server']['application.properties']['cap.server.userproviders[0].java.naming.security.principal']
-['blueprint']['apps']['content-management-server']['application.properties']['cap.server.userproviders[0].java.naming.security.credentials']
-['blueprint']['apps']['content-management-server']['application.properties']['cap.server.userproviders[0].ldap.host']
-['blueprint']['apps']['content-management-server']['application.properties']['cap.server.userproviders[0].ldap.base-distinguished-names[0]']
-```
-
-If your user provider needs custom properties, you can set them by the generic Map-valued `properties` property, like:
-```
-['blueprint']['apps']['content-management-server']['application.properties']['cap.server.userproviders[0].properties[my.property.key]']
-```
-#>
-=end
 include_recipe 'blueprint-spring-boot::_base'
 
 service_name = 'content-management-server'
@@ -53,15 +23,18 @@ node.default_unless['blueprint']['apps'][service_name]['application.properties']
 jaas_conf = {}
 if node.deep_fetch('blueprint', 'jaas', 'ldap', 'enabled')
   # if ldap, set defaults if none are set. To override the following two properties in your node.json file
-  node.default_unless['blueprint']['apps'][service_name]['application.properties']['cap.server.userproviders[0].provider-class'] = 'com.coremedia.ldap.ad.SimpleActiveDirectoryUserProvider'
+  node.default_unless['blueprint']['apps'][service_name]['application.properties']['cap.server.ldap[0].providerClass'] = 'com.coremedia.ldap.ad.ActiveDirectoryUserProvider'
+  node.default_unless['blueprint']['apps'][service_name]['application.properties']['cap.server.ldap[0].properties'] = "#{service_dir}/jndi-ad.properties"
   jaas_conf = { ldap: { host: node['blueprint']['jaas']['ldap']['host'], port: node['blueprint']['jaas']['ldap']['port'], domain: node['blueprint']['jaas']['ldap']['domain'] } }
 elsif node.deep_fetch('blueprint', 'jaas', 'cas', 'enabled')
   # if cas, override the following two properties in your node.json file
-  node.default_unless['blueprint']['apps'][service_name]['application.properties']['cap.server.userproviders[0].provider-class'] = ''
+  node.default_unless['blueprint']['apps'][service_name]['application.properties']['cap.server.ldap[0].providerClass'] = ''
+  node.default_unless['blueprint']['apps'][service_name]['application.properties']['cap.server.ldap[0].properties'] = ''
   jaas_conf = { cas: { validator_url: node['blueprint']['jaas']['cas']['validator_url'], cap_service_url: node['blueprint']['jaas']['cas']['cap_service_url'] } }
 else
   # disable any of the above
-  node.default_unless['blueprint']['apps'][service_name]['application.properties']['cap.server.userproviders[0].provider-class'] = ''
+  node.default['blueprint']['apps'][service_name]['application.properties']['cap.server.ldap[0].providerClass'] = ''
+  node.default['blueprint']['apps'][service_name]['application.properties']['cap.server.ldap[0].properties'] = ''
 end
 
 blueprint_service_user service_user do

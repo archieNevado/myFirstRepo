@@ -5,15 +5,15 @@ import com.coremedia.blueprint.studio.taxonomy.TaxonomyNodeFactory;
 import com.coremedia.blueprint.studio.taxonomy.TaxonomyNodeList;
 import com.coremedia.blueprint.studio.taxonomy.TaxonomyUtil;
 import com.coremedia.cms.editor.sdk.editorContext;
-import com.coremedia.cms.studio.multisite.models.sites.Site;
+import com.coremedia.cms.editor.sdk.sites.Site;
 import com.coremedia.ui.data.Bean;
 import com.coremedia.ui.data.Locale;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
+import com.coremedia.ui.data.dependencies.DependencyTracker;
 import com.coremedia.ui.models.bem.BEMBlock;
 import com.coremedia.ui.models.bem.BEMModifier;
-import com.coremedia.ui.util.ObservableUtil;
 
 import ext.Component;
 import ext.Ext;
@@ -76,7 +76,7 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
       ddPlugin.dragZone['getDragText'] = getDragText;
       //DnD is causing focus issues, so we skip the focus handling here and simply call the parent
       ddPlugin.dragZone['onValidDrop'] = function (target:*, e:*, id:*):void {
-        ddPlugin.dragZone['callParent']([target, e, id]);
+        this.callParent([target, e, id]);
       };
       ddPlugin.dropZone.addToGroup('taxonomies');
       ddPlugin.dropZone.onNodeOver = taxonomyExplorerColumnDropTarget.notifyOnNodeOver;
@@ -188,7 +188,7 @@ public class TaxonomyExplorerColumnBase extends GridPanel {
   private function doSelect(callback:Function = undefined):void {
     ValueExpressionFactory.createFromFunction(function ():Boolean {
       if (!getStore().isLoaded()) {
-        ObservableUtil.dependOn(getStore(), "load");
+        DependencyTracker.dependOnObservable(getStore(), "load");
         return undefined;
       }
       return true;

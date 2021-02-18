@@ -18,8 +18,8 @@ public class StoreImpl extends CatalogObjectImpl implements Store {
     super(uri);
   }
 
-  public function getChildrenData():Array {
-    return get(CatalogObjectPropertyNames.CHILDREN_DATA);
+  public function getChildrenByName():Object {
+    return get(CatalogObjectPropertyNames.CHILDREN_BY_NAME);
   }
 
   public function getStoreId():String {

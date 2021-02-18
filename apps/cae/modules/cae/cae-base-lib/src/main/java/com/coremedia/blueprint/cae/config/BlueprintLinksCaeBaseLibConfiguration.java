@@ -18,7 +18,7 @@ import org.springframework.context.annotation.ImportResource;
 /**
  * Link transformation
  */
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @ImportResource(value = {
         "classpath:/com/coremedia/cap/multisite/multisite-services.xml",
         "classpath:/com/coremedia/cae/link-services.xml",

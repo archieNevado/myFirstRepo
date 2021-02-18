@@ -23,11 +23,6 @@ import static com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvid
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 
-/**
- * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
- * in favour of the Commerce Hub integration.
- */
-@Deprecated
 public class SegmentServiceImpl implements SegmentService {
 
   private WcSegmentWrapperService segmentWrapperService;

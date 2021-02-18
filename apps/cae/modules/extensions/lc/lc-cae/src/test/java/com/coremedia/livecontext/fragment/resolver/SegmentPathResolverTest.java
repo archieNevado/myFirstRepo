@@ -41,7 +41,7 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration(classes = {SegmentPathResolverTest.LocalConfig.class})
 public class SegmentPathResolverTest {
 
-  @Configuration(proxyBeanMethods = false)
+  @Configuration
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class,
           CaeConfigurationProperties.class
