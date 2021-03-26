@@ -28,7 +28,7 @@
     <google.api.services.youtube.version>v3-rev152-1.19.0</google.api.services.youtube.version>
 
     <customer>Blueprint</customer>
-    <cm.management-tools.core.version>2010.2</cm.management-tools.core.version>
+    <cm.management-tools.core.version>2010.3</cm.management-tools.core.version>
 
     <spring.boot.version>2.2.10.RELEASE</spring.boot.version>
     <application-plugin.version>2.8.3</application-plugin.version>
@@ -75,22 +75,22 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.38</tomcat.embed.version>
+    <tomcat.embed.version>9.0.43</tomcat.embed.version>
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.management-tools.core.version>2010.2</cm.management-tools.core.version>
-    <cm.common.core.version>2010.2</cm.common.core.version>
+    <cm.management-tools.core.version>2010.3</cm.management-tools.core.version>
+    <cm.common.core.version>2010.3</cm.common.core.version>
     <cm.common.bp.version>1-SNAPSHOT</cm.common.bp.version>
-    <cm.middle.core.version>2010.2</cm.middle.core.version>
+    <cm.middle.core.version>2010.3</cm.middle.core.version>
     <cm.middle.bp.version>1-SNAPSHOT</cm.middle.bp.version>
-    <cm.cae-feeder.core.version>2010.2</cm.cae-feeder.core.version>
+    <cm.cae-feeder.core.version>2010.3</cm.cae-feeder.core.version>
     <cm.cae-feeder.bp.version>1-SNAPSHOT</cm.cae-feeder.bp.version>
-    <cm.content-server.core.version>2010.2</cm.content-server.core.version>
+    <cm.content-server.core.version>2010.3</cm.content-server.core.version>
     <cm.content-server.bp.version>1-SNAPSHOT</cm.content-server.bp.version>
-    <cm.workflow-server.core.version>2010.2</cm.workflow-server.core.version>
+    <cm.workflow-server.core.version>2010.3</cm.workflow-server.core.version>
     <cm.workflow-server.bp.version>1-SNAPSHOT</cm.workflow-server.bp.version>
-    <cm.studio-server.core.version>2010.2</cm.studio-server.core.version>
+    <cm.studio-server.core.version>2010.3</cm.studio-server.core.version>
     <cm.studio-server.bp.version>1-SNAPSHOT</cm.studio-server.bp.version>
     <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
 
@@ -227,7 +227,7 @@
                     <!-- Add <arg>-Awarns</arg> to not let the build fail but just show warnings -->
                     <arg>-AcheckPersonalData=true</arg>
                     <arg>-ArequirePrefixInWarningSuppressions</arg>
-                    <arg>-Anocheckjdk</arg>
+                    <arg>-ApermitMissingJdk</arg>
                   </compilerArgs>
                 </configuration>
               </execution>
@@ -249,6 +249,10 @@
                   -->
                 <ignoredUsedUndeclaredDependency>com.coremedia.cms:coremedia-personal-data</ignoredUsedUndeclaredDependency>
               </ignoredUsedUndeclaredDependencies>
+              <ignoredUnusedDeclaredDependencies combine.children="append">
+                <!-- Ignore provided dependency to checker framework, that was added as dependency above -->
+                <ignoredUnusedDeclaredDependency>org.checkerframework:checker</ignoredUnusedDeclaredDependency>
+              </ignoredUnusedDeclaredDependencies>
             </configuration>
           </plugin>
         </plugins>
@@ -312,7 +316,7 @@
       <dependency>
         <groupId>org.codehaus.groovy</groupId>
         <artifactId>groovy-all</artifactId>
-        <version>2.4.16</version>
+        <version>2.4.21</version>
         <classifier>indy</classifier>
       </dependency>
 
@@ -600,7 +604,7 @@
                 <X-Compile-Target-JDK>${maven.compiler.release}</X-Compile-Target-JDK>
                 <!-- Configure WebSphere to not scan ASM jars in the WAR, because they contain Java 9 module-info.class
                      files and cause exceptions in WebSphere. See CMS-12354 -->
-                <Ignore-Scanning-Archives>asm-analysis-8.0.1.jar,asm-8.0.1.jar,asm-commons-8.0.1.jar,asm-tree-8.0.1.jar</Ignore-Scanning-Archives>
+                <Ignore-Scanning-Archives>asm-analysis-9.0.jar,asm-9.0.jar,asm-commons-9.0.jar,asm-tree-9.0.jar</Ignore-Scanning-Archives>
               </manifestEntries>
             </archive>
             <failOnMissingWebXml>false</failOnMissingWebXml>

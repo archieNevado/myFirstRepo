@@ -11,6 +11,7 @@ import com.coremedia.rest.validation.Severity;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A Validator for the metadata struct of assets.
@@ -57,8 +58,12 @@ public class AssetMetadataValidator implements PropertyValidator {
     }
 
     StructConfiguration structMaps = configurationService.getStructMaps(null, assetManagementConfiguration.getSettingsDocument(), "settings");
-    List<String> settingsChannels = (List<String>) structMaps.getGlobalStructs().get(AssetConstants.METADATA_CHANNELS_PROPERTY_NAME);
-    List<String> settingsRegions = (List<String>) structMaps.getGlobalStructs().get(AssetConstants.METADATA_REGIONS_PROPERTY_NAME);
+    Map<String, Object> globalStructs = structMaps.getGlobalStructs();
+    if (globalStructs == null) {
+      return;
+    }
+    List<String> settingsChannels = (List<String>) globalStructs.get(AssetConstants.METADATA_CHANNELS_PROPERTY_NAME);
+    List<String> settingsRegions = (List<String>) globalStructs.get(AssetConstants.METADATA_REGIONS_PROPERTY_NAME);
     if (settingsChannels == null || settingsRegions == null) {
       return;
     }

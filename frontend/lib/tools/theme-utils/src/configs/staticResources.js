@@ -23,7 +23,7 @@ const { ThemeDescriptorPlugin } = require("../plugins/ThemeDescriptorPlugin");
 const { ZipperWebpackPlugin } = require("../plugins/ZipperWebpackPlugin");
 const deepMerge = require("./utils/deepMerge");
 
-const PROPERTIES_REG_EXP = /_([^_]+_[^_]+|[^_]+)\.properties$/;
+const PROPERTIES_REG_EXP = /_([^_/\\]+_[^_/\\]+|[^_/\\]+)\.properties$/;
 const PROPERTIES_GLOB = "*_*.properties";
 const SETTINGS_REG_EXP = /([^/\\]+)\.settings\.json$/;
 const SETTINGS_GLOB = "*.settings.json";
@@ -145,7 +145,7 @@ function getPatternForThemeDescriptor() {
           path.dirname(themeConfig.descriptorTargetPath)
         ),
         force: true,
-        cache: true,
+        cacheTransform: true,
       }
     : null;
 }
@@ -317,23 +317,28 @@ module.exports = () => (config) => {
       joinWebpackPlugin,
       // configure for themes
       ...themePaths.map(
-        (themePath) =>
-          new CopyWebpackPlugin({
-            patterns: [
-              ...createPatternsCopyOverPaths(path.join(themePath, "src"), [
-                "css",
-                "fonts",
-                "img",
-                "images",
-                "vendor",
-                path.relative(
-                  themeConfig.themeTargetPath,
-                  themeConfig.resourceBundleTargetPath
-                ),
-              ]),
-            ],
-          })
-      ),
+        (themePath) => {
+          const patterns = [
+            ...createPatternsCopyOverPaths(path.join(themePath, "src"), [
+              "css",
+              "fonts",
+              "img",
+              "images",
+              "vendor",
+              path.relative(
+                themeConfig.themeTargetPath,
+                themeConfig.resourceBundleTargetPath
+              ),
+            ]),
+          ];
+          if (patterns.length > 0) {
+            return new CopyWebpackPlugin({
+              patterns: patterns,
+            })
+          }
+          return null;
+        }
+      ).filter(copyPlugin => !!copyPlugin),
       joinSettingsWebpackPlugin,
       // additional files via themeConfig
       ...additionalCopyPlugins,

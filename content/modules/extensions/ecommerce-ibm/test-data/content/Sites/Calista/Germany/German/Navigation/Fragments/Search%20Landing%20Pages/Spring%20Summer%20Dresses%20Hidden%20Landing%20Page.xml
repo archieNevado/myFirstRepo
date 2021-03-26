@@ -45,7 +45,7 @@
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructProperty Name="placements_2">
 <Struct>
-<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_"/>
+<LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/Document_" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Layouts/PagegridNavigation.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Settings/Pagegrid/Layouts/PagegridNavigation"/>
 <StructProperty Name="placements">
 <Struct>
 </Struct>
@@ -54,10 +54,14 @@
 </StructProperty>
 <StructListProperty Name="placements">
 <Struct>
-<LinkListProperty Name="items" LinkType="coremedia:///cap/contenttype/CMTeasable">
-<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Blog/Fashion%20Trends/Fashions%20fade%2C%20style%20is%20eternal.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Blog/Fashion%20Trends/Fashions%20fade%2C%20style%20is%20eternal"/>
-<Link xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Blog/Fashion%20Trends/The%20difference%20between%20style%20and%20fashion.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Blog/Fashion%20Trends/The%20difference%20between%20style%20and%20fashion"/>
-</LinkListProperty>
+<StructListProperty Name="extendedItems">
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Blog/Fashion%20Trends/Fashions%20fade%2C%20style%20is%20eternal.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Blog/Fashion%20Trends/Fashions%20fade%2C%20style%20is%20eternal"/>
+</Struct>
+<Struct>
+<LinkProperty Name="target" LinkType="coremedia:///cap/contenttype/CMTeasable" xlink:href="coremedia:///cap/resources/../../../Editorial/Content/Blog/Fashion%20Trends/The%20difference%20between%20style%20and%20fashion.xml" cmexport:path="/Sites/Calista/Germany/German/Editorial/Content/Blog/Fashion%20Trends/The%20difference%20between%20style%20and%20fashion"/>
+</Struct>
+</StructListProperty>
 <LinkProperty Name="viewtype" LinkType="coremedia:///cap/contenttype/CMViewtype" xlink:href="coremedia:///cap/resources/../../../Options/Viewtypes/CMChannel/portrait.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Viewtypes/CMChannel/portrait"/>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../../../Options/Settings/Pagegrid/Placements/main.xml" cmexport:path="/Sites/Calista/Germany/German/Options/Settings/Pagegrid/Placements/main"/>
 </Struct>

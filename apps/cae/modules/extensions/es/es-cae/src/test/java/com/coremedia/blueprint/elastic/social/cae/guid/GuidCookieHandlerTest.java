@@ -5,10 +5,14 @@ import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.elastic.core.api.settings.Settings;
 import com.coremedia.objectserver.beans.ContentBeanIdConverter;
 import org.junit.Before;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -21,7 +25,6 @@ import java.util.Arrays;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
 import static com.coremedia.blueprint.elastic.social.cae.guid.GuidCookieHandler.GUID_COOKIE_PREFIX;
 import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_SERVICE;
-import static com.coremedia.elastic.core.test.Injection.inject;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -54,10 +57,9 @@ public class GuidCookieHandlerTest {
     testling = new GuidCookieHandler(settings);
   }
 
-  @Test
-  public void setGuid() {
-    GuidCookieHandler.setCurrentGuid("4711");
-    assertEquals("4711", GuidCookieHandler.getCurrentGuid());
+  @After
+  public void cleanUp() {
+    RequestContextHolder.resetRequestAttributes();
   }
 
   @Test
@@ -76,15 +78,14 @@ public class GuidCookieHandlerTest {
     assertTrue(testling.validateGuid(guid2));
   }
 
-  @Test(expected = RuntimeException.class)
-  public void testGetCurrentGuidInvalidKeys() throws NoSuchAlgorithmException {
-    Settings settings = mock(Settings.class);
-    when(settings.getString("signCookie.privateKey")).thenReturn("error");
-
-    GuidCookieHandler handler = new GuidCookieHandler(settings);
-    inject(handler, settings);
-
-    handler.createGuid();
+  @Test
+  public void getCurrentGuid() {
+    HttpServletRequest request = new MockHttpServletRequest();
+    ServletRequestAttributes servletRequestAttributes = new ServletRequestAttributes(request);
+    servletRequestAttributes.setAttribute("guid", "1234+5", ServletRequestAttributes.SCOPE_REQUEST);
+    RequestContextHolder.setRequestAttributes(servletRequestAttributes);
+    String guid = GuidCookieHandler.getCurrentGuid();
+    assertEquals("1234+5", guid);
   }
 
   /**

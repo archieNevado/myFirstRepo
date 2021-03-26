@@ -13,6 +13,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
 /**
@@ -56,12 +57,16 @@ class RSAKeyPair {
           X509EncodedKeySpec pubKeySpec = new X509EncodedKeySpec(publicKeyBytes);
           KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);
           PublicKey pubKey = keyFactory.generatePublic(pubKeySpec);
-          // IBM JDK requires private key of type RSAPrivateKey
+
+          // This is for the legacy case.
+          // In earlier versions the PrivateExponent and the Modulus of the Private Key was added to the key separated by #.
           if (split.length == 3) {
             return new RSAKeyPair(new RSAPrivateKeyFromBytes(privateKeyBytes, new BigInteger(split[1]), new BigInteger(split[2])), pubKey);
           }
-          // oracle JDK can do with private key of type PrivateKey
-          return new RSAKeyPair(new PrivateKeyFromBytes(privateKeyBytes), pubKey);
+
+          PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
+          PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
+          return new RSAKeyPair(privateKey, pubKey);
         } catch (Exception e) {
           LOGGER.warn("Failed to initialize RSA key pair from 'signCookie' settings: {}", e.getMessage(), e);
         }
@@ -101,15 +106,6 @@ class RSAKeyPair {
       sb.append("Please add the following newly generated key values to the settings of all existing CAEs: ")
               .append("signCookie.privateKey=")
               .append(Base64.encodeBase64String(privateKey.getEncoded()));
-
-      // should always be a RSAPrivateKey, just to make it really safe here
-      if (privateKey instanceof RSAPrivateKey) {
-        final RSAPrivateKey rsaPrivateKey = (RSAPrivateKey) kp.getPrivate();
-        sb.append('#')
-                .append(rsaPrivateKey.getPrivateExponent())
-                .append('#')
-                .append(rsaPrivateKey.getModulus());
-      }
 
       sb.append(" , signCookie.publicKey=")
               .append(Base64.encodeBase64String(publicKey.getEncoded()));

@@ -79,9 +79,12 @@ class RSSContentHubAdapter implements ContentHubAdapter {
         feed = input.build(reader);
       }
     } catch (Exception e) {
-      String plainXML = getFeedXML(url);
-      String msg = "Error reading RSS stream '" + url + "': " + e.getMessage() + ", feed XML:\n" + plainXML;
-      LOGGER.error(msg);
+      String msg = "Error reading RSS stream '" + url + "': " + e.getMessage();
+      LOGGER.error("{}, see DEBUG log for details.", msg);
+      if (LOGGER.isDebugEnabled()) {
+        String plainXML = getFeedXML(url);
+        LOGGER.debug("{}, feed XML:\n{}", msg, plainXML, e);
+      }
       throw new ContentHubException(msg);
     }
   }

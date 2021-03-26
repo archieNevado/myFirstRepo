@@ -123,7 +123,7 @@
 
     <!-- begin java-11-dependencies -->
     <dependency>
-      <!-- this is also a replacement for bind-api's and jaxb-runtime's excluded transitive activation-api dependency -->
+      <!-- this is also a replacement for bind-api's excluded transitive activation-api dependency -->
       <groupId>com.sun.activation</groupId>
       <artifactId>jakarta.activation</artifactId>
     </dependency>
@@ -142,13 +142,6 @@
       <groupId>org.glassfish.jaxb</groupId>
       <artifactId>jaxb-runtime</artifactId>
       <scope>runtime</scope>
-      <exclusions>
-        <!-- exclude activation-api, we use jakarta.activation as defined separately, it also contains the API part -->
-        <exclusion>
-          <groupId>jakarta.activation</groupId>
-          <artifactId>jakarta.activation-api</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <!-- end java-11-dependencies -->
   </dependencies>

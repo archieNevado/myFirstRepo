@@ -18,10 +18,12 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.inject.Inject;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,6 +39,7 @@ import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DY
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ID;
 import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_SERVICE;
 import static java.lang.String.format;
+import static java.lang.invoke.MethodHandles.lookup;
 
 /**
  * Handler capable of setting "guid" cookie for elastic social, if ES is activated in settings on the root channel.
@@ -48,19 +51,12 @@ import static java.lang.String.format;
 @RequestMapping
 public class GuidCookieHandler {
 
-  private static final Logger LOG = LoggerFactory.getLogger(GuidCookieHandler.class);
+  private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
 
   /**
    * The name of hte cookie set by this handler. The name is not configurable.
    */
-  private String cookieName = "guid";
-
-  /**
-   * Public/private key pair used to generate GUID cookie
-   */
-  private final RSAKeyPair rsaKeyPair;
-
-  private static final ThreadLocal<String> GUID_THREAD_LOCAL = new ThreadLocal<>();
+  private static final String COOKIE_NAME = "guid";
 
   /**
    * URI segment indicating the links to be processed with the given handler
@@ -80,7 +76,11 @@ public class GuidCookieHandler {
 
   private ContentBeanIdConverter contentBeanIdConverter;
 
-  @Inject
+  /**
+   * Public/private key pair used to generate GUID cookie
+   */
+  private final RSAKeyPair rsaKeyPair;
+
   public GuidCookieHandler(Settings settings) throws NoSuchAlgorithmException {
     this.rsaKeyPair = RSAKeyPair.createFrom(settings);
   }
@@ -95,8 +95,8 @@ public class GuidCookieHandler {
    */
   @GetMapping(URI_PATTERN)
   public void handleRequest(@PathVariable(SEGMENT_ID) CMNavigation channel,
-                                    HttpServletRequest request,
-                                    HttpServletResponse response) {
+                                    @NonNull HttpServletRequest request,
+                                    @NonNull HttpServletResponse response) {
 
     Boolean esOn = settingsService.nestedSetting(Arrays.asList("elasticSocial", "enabled"), Boolean.class, channel);
 
@@ -128,21 +128,18 @@ public class GuidCookieHandler {
   }
 
   private void setCookie(HttpServletRequest request, HttpServletResponse response){
-    String guid = null;
-    if (request != null) {
-      guid = extractGuid(request);
-    }
+    String guid = extractGuid(request);
 
     if (guid == null || !validateGuid(guid)) {
       guid = createGuid();
       if (response != null) {
-        Cookie cookie = new Cookie(cookieName, guid); // NOSONAR rule 'Cookies should be "secure"', but we need it anyway
+        Cookie cookie = new Cookie(COOKIE_NAME, guid); // NOSONAR rule 'Cookies should be "secure"', but we need it anyway
         cookie.setPath("/");
         response.addCookie(cookie);
       }
     }
 
-    setCurrentGuid(guid);
+    request.setAttribute(COOKIE_NAME, guid);
   }
 
   private String getNumericId(ContentBean source){
@@ -177,11 +174,11 @@ public class GuidCookieHandler {
     return false;
   }
 
-  private String extractGuid(HttpServletRequest request) {
+  private static String extractGuid(HttpServletRequest request) {
     Cookie[] cookies = request.getCookies();
     if (cookies != null) {
       for (Cookie cookie : cookies) {
-        if (cookieName.equals(cookie.getName())) {
+        if (COOKIE_NAME.equals(cookie.getName())) {
           return cookie.getValue();
         }
       }
@@ -209,11 +206,21 @@ public class GuidCookieHandler {
 
   @Nullable
   public static String getCurrentGuid() {
-    return GUID_THREAD_LOCAL.get();
-  }
+    RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
 
-  public static void setCurrentGuid(String guid) {
-    GUID_THREAD_LOCAL.set(guid);
+    if (requestAttributes != null) {
+      Object guid = requestAttributes.getAttribute(COOKIE_NAME, RequestAttributes.SCOPE_REQUEST);
+      if (guid instanceof String) {
+        return (String) guid;
+      }
+
+      if (requestAttributes instanceof ServletRequestAttributes) {
+        HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
+        return extractGuid(request);
+      }
+    }
+
+    return null;
   }
 
   public static String extractUuidFromGuid(String guid) {

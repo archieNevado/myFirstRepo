@@ -245,6 +245,26 @@ class ThemeDescriptorPlugin {
           ? JSON.parse(previewAsset._value)
           : {};
 
+        let previewCss = {};
+        if(filesToLoadByEntryPoint["preview"].find((filename) =>
+          /preview.css$/.test(filename)
+        ) !== undefined) {
+          previewCss = {
+            previewCss: [
+              {
+                $Link: getXmlPath(
+                  path.relative(
+                    relativePreviewSettingsFolder,
+                    filesToLoadByEntryPoint["preview"].find((filename) =>
+                      /preview.css$/.test(filename)
+                    )
+                  )
+                ),
+              },
+            ]
+          }
+        }
+
         const previewSettings = JSON.stringify(
           deepMerge(previewAssetJson, {
             previewJs: [
@@ -259,18 +279,7 @@ class ThemeDescriptorPlugin {
                 ),
               },
             ],
-            previewCss: [
-              {
-                $Link: getXmlPath(
-                  path.relative(
-                    relativePreviewSettingsFolder,
-                    filesToLoadByEntryPoint["preview"].find((filename) =>
-                      /preview.css$/.test(filename)
-                    )
-                  )
-                ),
-              },
-            ],
+            ...previewCss,
           }),
           null,
           2

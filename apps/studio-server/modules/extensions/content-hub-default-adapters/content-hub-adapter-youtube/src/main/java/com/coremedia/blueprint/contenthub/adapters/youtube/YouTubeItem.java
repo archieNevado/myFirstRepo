@@ -13,6 +13,7 @@ import com.google.api.services.youtube.model.PlaylistItem;
 import com.google.api.services.youtube.model.PlaylistItemSnippet;
 import com.google.api.services.youtube.model.SearchResult;
 import com.google.api.services.youtube.model.SearchResultSnippet;
+import com.google.api.services.youtube.model.Thumbnail;
 import com.google.api.services.youtube.model.ThumbnailDetails;
 import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoSnippet;
@@ -21,6 +22,7 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.springframework.web.util.HtmlUtils.htmlUnescape;
@@ -106,7 +108,7 @@ class YouTubeItem extends YouTubeHubObject implements Item {
   @NonNull
   @Override
   public List<DetailsSection> getDetails() {
-    ContentHubBlob blob = new UrlBlobBuilder(this, "classifier").withUrl(getDefaultThumbnailUrl()).build();
+    ContentHubBlob blob = getBlob("classifier");
     return List.of(new DetailsSection("main", List.of(
             new DetailsElement<>(getName(), false, Objects.requireNonNullElse(blob, SHOW_TYPE_ICON))
             ), false, false, false),
@@ -121,11 +123,26 @@ class YouTubeItem extends YouTubeHubObject implements Item {
   @Nullable
   @Override
   public ContentHubBlob getBlob(String classifier) {
-    return new UrlBlobBuilder(this, classifier).withUrl(getDefaultThumbnailUrl()).build();
+    Optional<String> defaultThumbnailUrl = getDefaultThumbnailUrl();
+    if (defaultThumbnailUrl.isEmpty()) {
+      return null;
+    }
+
+    return new UrlBlobBuilder(this, classifier).withUrl(defaultThumbnailUrl.get()).build();
   }
 
-  private String getDefaultThumbnailUrl() {
-    return getThumbnails().getDefault().getUrl();
+  @NonNull
+  private Optional<String> getDefaultThumbnailUrl() {
+    ThumbnailDetails thumbnails = getThumbnails();
+    if (thumbnails == null) {
+      return Optional.empty();
+    }
+
+    Thumbnail defaultThumbnail = thumbnails.getDefault();
+    if (defaultThumbnail == null) {
+      return Optional.empty();
+    }
+    return Optional.ofNullable(defaultThumbnail.getUrl());
   }
 
   // --- more features ----------------------------------------------

@@ -10,6 +10,7 @@ node.default_unless['blueprint']['apps'][service_name]['application.properties']
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['solr.collection.content'] = 'studio'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['server.port'] = 40480
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['management.server.port'] = 40481
+node.default_unless['blueprint']['apps'][service_name]['application.properties']['repository.blobCachePath'] = "#{node['blueprint']['cache_dir']}/#{service_name}"
 
 application_config_hash = Mash.new
 # legacy compatibility step. Here we merge the defaults from old node.json files
@@ -20,6 +21,13 @@ application_config_hash = Chef::Mixin::DeepMerge.hash_only_merge!(application_co
 blueprint_service_user service_user do
   home service_dir
   group service_group
+  notifies :create, "ruby_block[restart_#{service_name}]", :immediately
+end
+
+directory node['blueprint']['apps'][service_name]['application.properties']['repository.blobCachePath'] do
+  owner service_name
+  group service_group
+  recursive true
   notifies :create, "ruby_block[restart_#{service_name}]", :immediately
 end
 

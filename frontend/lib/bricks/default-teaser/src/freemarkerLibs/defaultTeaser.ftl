@@ -157,7 +157,6 @@
     </#if>
 
     <#-- cta -->
-    <@cta.render buttons=ctaButtons
-                 additionalClass="${teaserBlockClass}__cta" />
+    <@cta.render buttons=ctaButtons additionalClass="${teaserBlockClass}__cta" metadata="properties.targets" />
   </div>
 </#macro>

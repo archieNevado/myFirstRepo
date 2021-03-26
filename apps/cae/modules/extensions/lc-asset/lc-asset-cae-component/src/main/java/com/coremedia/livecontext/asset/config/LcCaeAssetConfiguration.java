@@ -17,8 +17,8 @@ import com.coremedia.mimetype.MimeTypeService;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.objectserver.web.MappedInterceptor;
 import com.coremedia.springframework.customizer.Customize;
+import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import com.google.common.collect.Lists;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -34,7 +34,7 @@ import java.util.Map;
         "classpath:/framework/spring/blueprint-handlers.xml",
         "classpath:/META-INF/coremedia/livecontext-site-services.xml",
         "classpath:/META-INF/coremedia/livecontext-handler-interceptors.xml"
-})
+}, reader = ResourceAwareXmlBeanDefinitionReader.class)
 @ComponentScan(
         basePackages = {
                 // needed for com.coremedia.support.licensemanager.core.packager.LicensePackager.java

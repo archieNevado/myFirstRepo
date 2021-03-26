@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.component.cae;
 
 import com.coremedia.blueprint.base.multisite.cae.SiteResolver;
+import com.coremedia.blueprint.cae.filter.RequestRejectedExceptionFilter;
 import com.coremedia.blueprint.cae.filter.SiteFilter;
 import com.coremedia.blueprint.cae.filter.UnknownMimetypeCharacterEncodingFilter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -48,6 +49,14 @@ public class CaeBaseComponentConfiguration {
     var registrationBean = new FilterRegistrationBean<>(siteFilter);
     registrationBean.setOrder(ORDER_SITE_FILTER);
     registrationBean.addUrlPatterns("/servlet/*");
+    return registrationBean;
+  }
+
+  @Bean
+  public FilterRegistrationBean<RequestRejectedExceptionFilter> requestRejectedExceptionFilterRegistration() {
+    var requestRejectedExceptionFilter = new RequestRejectedExceptionFilter();
+    var registrationBean = new FilterRegistrationBean<>(requestRejectedExceptionFilter);
+    registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
     return registrationBean;
   }
 }

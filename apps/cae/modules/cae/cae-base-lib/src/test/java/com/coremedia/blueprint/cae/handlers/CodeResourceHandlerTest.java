@@ -11,9 +11,9 @@ import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.MergeableResources;
 import com.coremedia.blueprint.testing.ContentTestHelper;
 import com.coremedia.cap.common.Blob;
-import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.configuration.CaeConfigurationProperties;
 import com.coremedia.objectserver.view.ViewUtils;
@@ -34,9 +34,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.activation.MimeType;
@@ -44,7 +44,6 @@ import javax.annotation.Resource;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Map;
 
 import static com.coremedia.blueprint.cae.handlers.CodeResourceHandler.MARKUP_PROGRAMMED_VIEW_NAME;
@@ -68,7 +67,6 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER
 @ContextConfiguration(classes = CodeResourceHandlerTest.LocalConfig.class)
 @ActiveProfiles(PROFILE)
 @DirtiesContext(classMode = AFTER_CLASS)
-@TestPropertySource(properties = "cae.single-node=true")
 public class CodeResourceHandlerTest {
 
   @Configuration
@@ -125,7 +123,6 @@ public class CodeResourceHandlerTest {
 
   private CMNavigation codeCarryingBean;
   private CMAbstractCode abstractCodeBean;
-  private Map<String, Object> requestAttributes = new HashMap<>();
 
   @Inject
   private LinkFormatterTestHelper linkFormatterTestHelper;
@@ -142,11 +139,14 @@ public class CodeResourceHandlerTest {
   @Resource(name="navigationTreeRelation")
   private TreeRelation<Content> treeRelation;
 
+  @Inject
+  private CaeConfigurationProperties caeConfigurationProperties;
 
   // --- Setup ------------------------------------------------------
 
   @Before
   public void setup() {
+    caeConfigurationProperties.setSingleNode(true);
     codeCarryingBean = contentTestHelper.getContentBean(4);
     abstractCodeBean = contentTestHelper.getContentBean(40);
 
@@ -211,6 +211,18 @@ public class CodeResourceHandlerTest {
   public void testHandleSingleContentLinkWithOldVersion() throws Exception {
     ModelAndView mav = requestTestHelper.request(LINK_TO_SINGLE_CONTENT_RESOURCE_OLD_VERSION);
     checkView(mav, REDIRECT_DEFAULT_VIEW);
+  }
+
+  /**
+   * A request to a merged content resource url with an old version expects a redirect.
+   */
+  @Test
+  public void testHandleSingleContentLinkWithOldVersionNonSingleNode() throws Exception {
+    caeConfigurationProperties.setSingleNode(false);
+    MvcResult mvcResult = requestTestHelper.requestMvcResult(LINK_TO_SINGLE_CONTENT_RESOURCE_OLD_VERSION,
+            null, null, null);
+    assertEquals("no-store", mvcResult.getResponse().getHeader("Cache-Control"));
+    checkView(mvcResult.getModelAndView(), "script");
   }
 
   // --- Handling content from the application context ---

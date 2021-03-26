@@ -26,6 +26,7 @@ import com.coremedia.blueprint.cae.handlers.StaticUrlHandler;
 import com.coremedia.blueprint.cae.handlers.ThemeHandler;
 import com.coremedia.blueprint.cae.handlers.TransformedBlobHandler;
 import com.coremedia.blueprint.cae.util.DefaultSecureHashCodeGeneratorStrategy;
+import com.coremedia.blueprint.cae.util.DefaultToMd5MigrationSecureHashCodeGeneratorStrategy;
 import com.coremedia.blueprint.cae.web.ContentValidityInterceptor;
 import com.coremedia.blueprint.cae.web.ExposeCurrentNavigationInterceptor;
 import com.coremedia.blueprint.cae.web.i18n.ResourceBundleInterceptor;
@@ -43,6 +44,7 @@ import com.coremedia.mimetype.MimeTypeService;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
+import com.coremedia.objectserver.view.dynamic.MD5SecureHashCodeGeneratorStrategy;
 import com.coremedia.objectserver.web.SecureHashCodeGeneratorStrategy;
 import com.coremedia.objectserver.web.cachecontrol.CacheControlStrategy;
 import com.coremedia.springframework.customizer.Customize;
@@ -52,6 +54,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -59,6 +62,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.convert.converter.GenericConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -674,9 +678,18 @@ public class BlueprintHandlersCaeBaseLibConfiguration {
   }
 
   @Bean
-  @ConditionalOnProperty("cae.hashing.backward-compatibility")
+  @ConditionalOnExpression("${cae.hashing.backward-compatibility:false} || ${cae.hashing.migration-mode:false}")
   public DefaultSecureHashCodeGeneratorStrategy secureHashCodeGeneratorStrategy() {
     return new DefaultSecureHashCodeGeneratorStrategy();
+  }
+
+  @Bean
+  @Primary
+  @ConditionalOnProperty("cae.hashing.migration-mode")
+  public DefaultToMd5MigrationSecureHashCodeGeneratorStrategy defaultToMd5MigrationSecureHashCodeGeneratorStrategy(
+          DefaultSecureHashCodeGeneratorStrategy defaultSecureHashCodeGeneratorStrategy,
+          MD5SecureHashCodeGeneratorStrategy md5SecureHashCodeGeneratorStrategy) {
+    return new DefaultToMd5MigrationSecureHashCodeGeneratorStrategy(defaultSecureHashCodeGeneratorStrategy, md5SecureHashCodeGeneratorStrategy);
   }
 
   @Bean

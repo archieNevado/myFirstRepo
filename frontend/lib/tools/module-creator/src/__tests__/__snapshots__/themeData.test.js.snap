@@ -25,7 +25,7 @@ exports[`initPackageJson() returns data for package.json 1`] = `
     \\"webpack\\": \\"^4.0.0\\"
   },
   \\"devDependencies\\": {
-    \\"prettier\\": \\"^1.0.0\\"
+    \\"prettier\\": \\"^2.0.5\\"
   },
   \\"main\\": \\"src/js/index.js\\",
   \\"coremedia\\": {
@@ -120,7 +120,6 @@ exports[`initThemeJs() returns data for <themeName>.js 1`] = `
 
 exports[`initThemePrettierignore() returns data for .prettierignore 1`] = `
 "/*
-/*
 !/src
 /src/*
 !/src/js

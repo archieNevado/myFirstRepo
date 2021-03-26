@@ -8,6 +8,6 @@
 <ieExpression></ieExpression>
 <include>
 </include>
-<dataUrl>//{aurora.host}/wcsstore/AuroraStorefrontAssetStore/css/styles.css</dataUrl>
+<dataUrl>//{aurora.host}/wcsstore/AuroraStorefrontAssetStore/css/store.css</dataUrl>
 <media></media>
 </CMCSS>

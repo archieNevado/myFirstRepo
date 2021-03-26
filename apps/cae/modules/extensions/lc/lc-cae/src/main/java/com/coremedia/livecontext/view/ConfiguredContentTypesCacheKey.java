@@ -1,27 +1,36 @@
 package com.coremedia.livecontext.view;
 
-import com.coremedia.blueprint.common.contentbeans.Page;
+import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cache.Cache;
 import com.coremedia.cache.CacheKey;
+import com.coremedia.cap.multisite.Site;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
-@DefaultAnnotation(NonNull.class)
-class ConfiguredContentTypesCacheKey extends CacheKey<Collection<String>> {
-  private final PrefetchConfigContentTypeDispatcher contentTypeDispatcher;
-  private final Page page;
+import static com.google.common.collect.ImmutableSortedMap.toImmutableSortedMap;
+import static java.lang.invoke.MethodHandles.lookup;
 
-  ConfiguredContentTypesCacheKey(PrefetchConfigContentTypeDispatcher contentTypeDispatcher, Page page) {
-    this.contentTypeDispatcher = contentTypeDispatcher;
-    this.page = page;
+@DefaultAnnotation(NonNull.class)
+class ConfiguredContentTypesCacheKey extends CacheKey<PrefetchConfigContentTypeDispatcher> {
+
+  private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
+
+  private final Site site;
+  private final SettingsService settingsService;
+
+  public ConfiguredContentTypesCacheKey(Site site, SettingsService settingsService) {
+    this.site = site;
+    this.settingsService = settingsService;
   }
 
   @Override
-  public boolean equals(@Nullable Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -29,19 +38,36 @@ class ConfiguredContentTypesCacheKey extends CacheKey<Collection<String>> {
       return false;
     }
     ConfiguredContentTypesCacheKey that = (ConfiguredContentTypesCacheKey) o;
-    return Objects.equals(contentTypeDispatcher, that.contentTypeDispatcher) &&
-      Objects.equals(page, that.page);
+    return site.equals(that.site) &&
+            settingsService.equals(that.settingsService);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(contentTypeDispatcher, page);
+    return Objects.hash(site, settingsService);
   }
 
   @Override
-  public Collection<String> evaluate(Cache cache) throws Exception {
-    //reset lookup cache of NoArgDispatcher when settings changed
-    contentTypeDispatcher.reset();
-    return contentTypeDispatcher.prefetchFragmentsConfigReader.getConfiguredContentTypes(page);
+  public PrefetchConfigContentTypeDispatcher evaluate(Cache cache)  {
+    Map<String, List<String>> viewsByType = getPrefetchedViews().stream()
+            .filter(view -> Objects.nonNull(view.getType()) && Objects.nonNull(view.getPrefetchedViews()))
+            .collect(toImmutableSortedMap(
+                    String::compareTo,
+                    LiveContextContentTypeView::getType,
+                    LiveContextContentTypeView::getPrefetchedViews));
+    LOG.info("Prefetch config for site '{}' is: {}", site.getName(), viewsByType);
+    return new PrefetchConfigContentTypeDispatcher(viewsByType);
+  }
+
+  private List<LiveContextContentTypeView> getPrefetchedViews() {
+    var struct = PrefetchFragmentsConfigReader.getLiveContextFragments(site, settingsService);
+    if (struct == null) {
+      return List.of();
+    }
+    var views = PrefetchFragmentsConfigReader.getLiveContextFragments(struct, settingsService).getPrefetchedViews();
+    if (views == null) {
+      return List.of();
+    }
+    return LiveContextPrefetchedViews.contentTypes(views, settingsService);
   }
 }
