@@ -23,12 +23,22 @@
         <plugin>
           <groupId>com.coremedia.maven</groupId>
           <artifactId>extensions-maven-plugin</artifactId>
-          <version>4.1.0</version>
+          <version>4.2.1</version>
           <configuration>
             <projectRoot>../..</projectRoot>
             <extensionsPath>modules/extensions</extensionsPath>
             <extensionPointsPath>modules/extension-config</extensionPointsPath>
           </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>3.0.0-M1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>3.0.0-M1</version>
         </plugin>
       </plugins>
     </pluginManagement>

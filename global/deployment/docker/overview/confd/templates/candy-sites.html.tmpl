@@ -33,6 +33,7 @@
       <a href="https://candy-shop-ibm.{{ getv "/environment/fqdn" }}/wcs/shop/de/auroraesite" target="_blank">German</a>
     </td>
   </tr>
+  {{ if eq (getv "/aurora/b2b/enabled" "true") "true" }}
   <tr>
     <td>Aurora B2B</td>
     <td>
@@ -44,6 +45,7 @@
       <a href="https://candy-shop-ibm.{{ getv "/environment/fqdn" }}/wcs/shop/de/aurorab2besite" target="_blank">German</a>
     </td>
   </tr>
+  {{ end }}
   </tbody>
 </table>
 {{ end }}

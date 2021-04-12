@@ -21,7 +21,7 @@ node.default_unless['blueprint']['apps'][service_name]['application.properties']
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['themeImporter.themeDeveloperGroups'] = 'developer'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['spring.http.encoding.force'] = "true"
 # make sure that the preview when used behind an apache using http proxying does use https
-node.default_unless['blueprint']['apps'][service_name]['application.properties']['server.use-forward-headers'] = 'true'
+node.default_unless['blueprint']['apps'][service_name]['application.properties']['server.forward-headers-strategy'] = 'native'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['repository.blobCachePath'] = "#{node['blueprint']['cache_dir']}/#{service_name}"
 # The path where the transformed blobs should be saved persistently. If not set, then the feature is deactivated,
 # and all transformed blobs are saved in memory

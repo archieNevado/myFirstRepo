@@ -5,6 +5,6 @@
 <master>
 </master>
 <contexts>
-  <link href="Navigation/Emerald%20Homepage.xml" path="/Sites/Emerald/United%20States/English/Navigation/Emerald%20Homepage"/>
+<link href="Navigation/Emerald%20Homepage.xml" path="/Sites/Emerald/United%20States/English/Navigation/Emerald%20Homepage"/>
 </contexts>
 </CMFolderProperties>

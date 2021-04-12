@@ -28,6 +28,7 @@
 
       var buttonCfg:OpenAnalyticsHomeUrlButton = OpenAnalyticsHomeUrlButton({});
       buttonCfg.serviceName = "googleAnalytics";
+      buttonCfg.ariaLabel = "ignored";
       var button:OpenAnalyticsHomeUrlButton = new OpenAnalyticsHomeUrlButton(buttonCfg);
 
       StudioAppsImpl(studioApps).getSubAppLauncherRegistry().registerSubAppLauncher("cmGoogleAnalytics", function ():void {

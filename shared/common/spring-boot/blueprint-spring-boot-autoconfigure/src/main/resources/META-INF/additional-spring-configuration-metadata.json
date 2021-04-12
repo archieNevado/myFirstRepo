@@ -1,0 +1,11 @@
+{
+  "properties": [
+    {
+      "name": "management.health.contentRepository.enabled",
+      "deprecation": {
+        "level": "warning",
+        "replacement": "management.health.uapiConnectionReadiness.enabled"
+      }
+    }
+  ]
+}

@@ -2,6 +2,7 @@ package com.coremedia.blueprint.component.cae;
 
 import com.coremedia.blueprint.base.multisite.cae.SiteResolver;
 import com.coremedia.blueprint.cae.filter.PreviewViewFilter;
+import com.coremedia.blueprint.cae.filter.RequestRejectedExceptionFilter;
 import com.coremedia.blueprint.cae.filter.SiteFilter;
 import com.coremedia.blueprint.cae.filter.UnknownMimetypeCharacterEncodingFilter;
 import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
@@ -63,5 +64,13 @@ public class CaeBaseComponentConfiguration {
   @Bean
   public PreviewViewFilter previewViewFilter(DeliveryConfigurationProperties properties) {
     return new PreviewViewFilter(!properties.isPreviewMode());
+  }
+
+  @Bean
+  public FilterRegistrationBean<RequestRejectedExceptionFilter> requestRejectedExceptionFilterRegistration() {
+    var requestRejectedExceptionFilter = new RequestRejectedExceptionFilter();
+    var registrationBean = new FilterRegistrationBean<>(requestRejectedExceptionFilter);
+    registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+    return registrationBean;
   }
 }

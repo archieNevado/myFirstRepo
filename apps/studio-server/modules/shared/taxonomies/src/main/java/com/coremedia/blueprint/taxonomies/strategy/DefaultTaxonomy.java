@@ -435,25 +435,24 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     try {
       if (!content.isDeleted()) {
         //test if renaming is required
-        if (!node.getName().equals(content.getName())) {
-          String newNodeName = getTaxonomyDocumentName(content);
-          if (!node.getName().equals(newNodeName)) {
-            LOG.info("Ignoring taxonomy renaming of {} to {}", content.getName(), newNodeName);
+        String contentName = content.getName();
+        String newName = getTaxonomyDocumentName(content, node.getName());
+        if (!contentName.equals(newName)) {
+          //check out document and...
+          if (!content.isCheckedOut()) {
+            content.checkOut();
+          }
+
+          //...check if we have checked out it with our session
+          if (content.isCheckedOutByCurrentSession()) {
+            // rename content
+            String name = content.getString(VALUE);
+            if (!StringUtils.isEmpty(name)) {
+              content.rename(StringUtils.trim(newName));
+            }
           }
           else {
-            //check out document and...
-            if (!content.isCheckedOut()) {
-              content.checkOut();
-            }
-
-            //...check if we have checked out it with our session
-            if (content.isCheckedOutByCurrentSession()) {
-              // rename content
-              String name = content.getString(VALUE);
-              if (!StringUtils.isEmpty(name)) {
-                content.rename(StringUtils.trim(newNodeName));
-              }
-            }
+            LOG.info("Skipped renaming taxonomy node, because it's checkout out by another user.");
           }
         }
 
@@ -632,22 +631,28 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
    * Returns the name that is used after a taxonomy has been renamed.
    * The new value of the "value" field will be used as document name too.
    *
-   * @param content The content to rename.
-   * @return The new document name or the original one if the "value" field is empty.
+   * @param content  The content to rename.
+   * @param nodeName The name of the node we rename for
+   * @return The new document name or the original one if the nodeName is not set.
    */
   @NonNull
-  private String getTaxonomyDocumentName(@NonNull Content content) {
-    // rename content
-    String name = content.getString(VALUE);
-    if (!StringUtils.isEmpty(name)) {
-      name = name.replace('/', '_');
-      String formattingName = name;
+  private String getTaxonomyDocumentName(@NonNull Content content, @Nullable String nodeName) {
+    if (!StringUtils.isEmpty(nodeName)) {
+      String formattedName = nodeName.replace('/', '_');
       int renamingIndex = 0;
-      while (content.getParent() != null && content.getParent().getChildDocumentsByName().containsKey(formattingName)) {
-        renamingIndex++;
-        formattingName = name + "(" + renamingIndex + ")";
+      //run duplicate check
+      while (content.getParent() != null && content.getParent().getChildDocumentsByName().containsKey(formattedName)) {
+        Content child = content.getParent().getChild(formattedName);
+        //increase counter for all children that have the same name, exclude active content
+        if (!child.getId().equals(content.getId())) {
+          renamingIndex++;
+          formattedName = formattedName + "(" + renamingIndex + ")";
+        }
+        else {
+          break;
+        }
       }
-      return formattingName;
+      return formattedName;
     }
     return content.getName();
   }
@@ -888,7 +893,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
    * Recursively collects the nodes from the taxonomy that have no parent
    *
    * @param folder  The folder to lookup keywords in.
-   * @param matches  The list of to fill up with matches.
+   * @param matches The list of to fill up with matches.
    */
   private void findAll(@NonNull Content folder, @NonNull List<Content> matches) {
     SearchServiceResult search = searchService.search(null, -1,

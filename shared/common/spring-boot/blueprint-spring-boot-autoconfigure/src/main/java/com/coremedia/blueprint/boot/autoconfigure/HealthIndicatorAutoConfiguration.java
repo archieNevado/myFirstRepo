@@ -1,6 +1,12 @@
 package com.coremedia.blueprint.boot.autoconfigure;
 
 import com.coremedia.cap.common.CapConnection;
+import com.coremedia.cap.common.events.CapConnectionListener;
+import com.coremedia.cap.common.events.ConnectionAvailableEvent;
+import com.coremedia.cap.common.events.ConnectionDisruptedEvent;
+import com.coremedia.cap.common.events.ConnectionUnavailableEvent;
+import com.coremedia.cap.common.events.ConnectionWillBeUnavailableEvent;
+import com.coremedia.cap.common.events.ConnectionWillNotBeUnavailableEvent;
 import com.coremedia.elastic.core.api.search.SearchService;
 import com.coremedia.elastic.core.mongodb.settings.MongoDbSettings;
 import com.mongodb.MongoClient;
@@ -27,36 +33,92 @@ import java.io.File;
 public class HealthIndicatorAutoConfiguration {
 
   // by using the @Named annotation we can prevent spring from prefixing the json key in the health servlet with the
-  // surrounding class name, i.e. 'contentRepository' instead of
-  // 'com.coremedia.blueprint.boot.autoconfigure.HealthIndicatorAutoConfiguration$contentRepository'
-
+  // surrounding class name, i.e. 'uapiConnection' instead of
+  // 'com.coremedia.blueprint.boot.autoconfigure.HealthIndicatorAutoConfiguration$uapiConnection'
   @Configuration(proxyBeanMethods = false)
   @ConditionalOnBean(CapConnection.class)
   @ConditionalOnClass(CapConnection.class)
-  @ConditionalOnEnabledHealthIndicator("contentRepository")
-  @Named("contentRepositoryHealthIndicator")
-  @ConditionalOnMissingBean(name = "contentRepositoryHealthIndicator")
-  public static class ContentRepositoryHealthIndicator implements HealthIndicator {
+  @ConditionalOnEnabledHealthIndicator("uapiConnection")
+  @Named("uapiConnectionHealthIndicator")
+  @ConditionalOnMissingBean(name = "uapiConnectionHealthIndicator")
+  public static class UapiConnectionHealthIndicator implements HealthIndicator {
 
     private final CapConnection connection;
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
-    public ContentRepositoryHealthIndicator(CapConnection connection) {
+    public UapiConnectionHealthIndicator(CapConnection connection) {
       this.connection = connection;
     }
 
     @Override
     public Health health() {
-      if (connection.isContentRepositoryAvailable()) {
-        Health.Builder builder = Health.up().withDetail("contentServer", "OK");
+      if (!connection.isContentRepositoryAvailable()) {
+        return Health.down().withDetail("content repository", "offline").build();
+      } else {
+        Health.Builder builder = Health.up().withDetail("content repository", "OK");
+        if (connection.getManager().isCapListRepositoryRequired()) {
+          builder.withDetail("list repository", connection.getManager().isCapListRepositoryAvailable() ? "OK" : "offline");
+        }
         if (connection.getManager().isWorkflowRepositoryRequired()) {
-          builder.withDetail("workflowServer", connection.isWorkflowRepositoryAvailable() ? "OK" : "offline");
+          builder.withDetail("workflow repository", connection.getManager().isWorkflowRepositoryAvailable() ? "OK" : "offline");
         }
         return builder.build();
-      } else {
-        return Health.down().withDetail("repository", "offline").build();
       }
+    }
+  }
+
+  @Configuration(proxyBeanMethods = false)
+  @ConditionalOnBean(CapConnection.class)
+  @ConditionalOnClass(CapConnection.class)
+  @ConditionalOnEnabledHealthIndicator("uapiConnectionReadiness")
+  @Named("uapiConnectionReadinessHealthIndicator")
+  @ConditionalOnMissingBean(name = "uapiConnectionReadinessHealthIndicator")
+  public static class UapiConnectionReadinessHealthIndicator implements HealthIndicator {
+
+    private Health connectionHealth;
+
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+    public UapiConnectionReadinessHealthIndicator(CapConnection connection) {
+      if (connection.isContentRepositoryAvailable()) {
+        connectionHealth = Health.up().withDetail("content repository", "OK").build();
+      } else {
+        connectionHealth = Health.down().withDetail("content repository", "offline").build();
+      }
+      connection.addCapConnectionListener(
+              new CapConnectionListener() {
+
+                @Override
+                public void connectionUnavailable(ConnectionUnavailableEvent event) {
+                  connectionHealth = Health.down().withDetail("content repository", "offline").build();
+                }
+
+                @Override
+                public void connectionAvailable(ConnectionAvailableEvent event) {
+                  connectionHealth = Health.up().withDetail("content repository", "OK").build();
+                }
+
+                @Override
+                public void connectionWillBeUnavailable(ConnectionWillBeUnavailableEvent event) {
+                  connectionHealth = Health.down().withDetail("content repository", "will be offline soon").build();
+                }
+
+                @Override
+                public void connectionWillNotBeUnavailable(ConnectionWillNotBeUnavailableEvent event) {
+                  connectionHealth = Health.down().withDetail("content repository", "will be available again soon").build();
+                }
+
+                @Override
+                public void connectionDisrupted(ConnectionDisruptedEvent event) {
+                  connectionHealth = Health.down().withDetail("content repository", "disrupted").build();
+                }
+              }
+      );
+    }
+
+    @Override
+    public Health health() {
+      return connectionHealth;
     }
   }
 
@@ -78,7 +140,7 @@ public class HealthIndicatorAutoConfiguration {
     @Override
     public Health health() {
       MongoClient client = null;
-      Health health = Health.down().withDetail("mongo", "offline").build();;
+      Health health = Health.down().withDetail("mongo", "offline").build();
       try {
         client = new MongoClient(mongoDbSettings.getMongoClientURI());
         health = Health.up().withDetail("mongo", "OK").build();

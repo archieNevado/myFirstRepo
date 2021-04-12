@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMViewtype folder="/Sites/Emerald/United States/English/Options/Viewtypes/CMChannel" name="left-right">
+<CMViewtype folder="/Sites/Emerald/United States/English/Options/Viewtypes/CMChannel" name="left-right" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
 <externalRefId></externalRefId>
 <locale>en-US</locale>
 <master>

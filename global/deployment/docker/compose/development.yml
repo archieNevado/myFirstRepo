@@ -53,6 +53,8 @@ services:
       SQL_STORE_USER: cm_management
       SQL_STORE_PASSWORD: cm_management
       HEAP_DUMP_FILENAME: content-management-server-heapdump
+      # enables the runlevel endpoint. When enabling it, the management port and actuators should be secured.
+      MANAGEMENT_ENDPOINT_RUNLEVEL_ENABLED: "true"
     labels:
       traefik.enable: "true"
       traefik.actuator.port: "8081"
@@ -76,6 +78,8 @@ services:
       SQL_STORE_USER: cm_master
       SQL_STORE_PASSWORD: cm_master
       HEAP_DUMP_FILENAME: master-live-server-heapdump
+      # enables the runlevel endpoint. When enabling it, the management port and actuators should be secured.
+      MANAGEMENT_ENDPOINT_RUNLEVEL_ENABLED: "true"
     labels:
       traefik.enable: "true"
       traefik.actuator.port: "8081"
@@ -246,6 +250,10 @@ services:
     environment:
       << : *development-boot-envs
       HEAP_DUMP_FILENAME: cae-preview-heapdump
+      # enables the health check that will switch to down immediately when the content-server signals
+      # that it will be unavailable soon. Traefik will remove the service from loadbalancing before the connection
+      # will be lost and errors may occur
+      MANAGEMENT_HEALTH_UAPICONNECTIONREADINESS_ENABLED: "true"
     labels:
       # only for the dev system
       traefik.frontend.headers.SSLRedirect: "false"
@@ -279,6 +287,10 @@ services:
       # in the dev setup we connect the cae-live to the master as there is no replication-live-server, make sure
       # this file is listed after the compose/default.yml in the COMPOSE_FILE environment variable
       REPOSITORY_URL: http://master-live-server:8080/ior
+      # enables the health check that will switch to down immediately when the content-server signals
+      # that it will be unavailable soon. Traefik will remove the service from loadbalancing before the connection
+      # will be lost and errors may occur
+      MANAGEMENT_HEALTH_UAPICONNECTIONREADINESS_ENABLED: "true"
       HEAP_DUMP_FILENAME: cae-live-heapdump
     labels:
       # only for the dev system
@@ -351,6 +363,10 @@ services:
       HEAP_DUMP_FILENAME: headless-server-preview-heapdump
       COMMERCE_HUB_DATA_CUSTOMENTITYPARAMS_CATALOGVERSION: Staged
       COMMERCE_HUB_DATA_CUSTOMENTITYPARAMS_ENVIRONMENT: preview
+      # enables the health check that will switch to down immediately when the content-server signals
+      # that it will be unavailable soon. Traefik will remove the service from loadbalancing before the connection
+      # will be lost and errors may occur
+      MANAGEMENT_HEALTH_UAPICONNECTIONREADINESS_ENABLED: "true"
     labels:
       traefik.enable: "true"
       traefik.actuator.port: "8081"
@@ -381,6 +397,10 @@ services:
       BLUEPRINT_SITE_MAPPING_SFRA: //sfra.${ENVIRONMENT_FQDN:-docker.localhost}
       HEAP_DUMP_FILENAME: headless-server-live-heapdump
       COMMERCE_HUB_DATA_CUSTOMENTITYPARAMS_ENVIRONMENT: live
+      # enables the health check that will switch to down immediately when the content-server signals
+      # that it will be unavailable soon. Traefik will remove the service from loadbalancing before the connection
+      # will be lost and errors may occur
+      MANAGEMENT_HEALTH_UAPICONNECTIONREADINESS_ENABLED: "true"
     labels:
       traefik.enable: "true"
       traefik.actuator.port: "8081"

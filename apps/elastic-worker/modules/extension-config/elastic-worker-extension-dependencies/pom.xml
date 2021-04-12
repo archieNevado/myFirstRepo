@@ -9,6 +9,7 @@
   </parent>
   <artifactId>elastic-worker-extension-dependencies</artifactId>
   <packaging>pom</packaging>
+
   <dependencies>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>

@@ -4,7 +4,7 @@ This recipe installs and configures the CoreMedia Blueprint Preview CAE.
 #>
 =end
 
-cors_hosts = []
+cors_hosts = ["https://studio.#{node['blueprint']['hostname']}"]
 
 if node['blueprint']['sfcc']['enabled']
   cors_hosts << "https://#{node['blueprint']['sfcc']['virtual_host']['shop-preview']['server_name']}"

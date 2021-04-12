@@ -13,6 +13,7 @@
     <coremedia.project.extension.type>zip</coremedia.project.extension.type>
     <coremedia.project.extension.classifier>content</coremedia.project.extension.classifier>
   </properties>
+
   <dependencies>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>

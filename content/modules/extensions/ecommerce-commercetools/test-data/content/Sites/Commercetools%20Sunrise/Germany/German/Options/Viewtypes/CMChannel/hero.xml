@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMViewtype folder="/Sites/Commercetools Sunrise/Germany/German/Options/Viewtypes/CMChannel" name="hero"
-            translationState="up-to-date">
+<CMViewtype folder="/Sites/Commercetools Sunrise/Germany/German/Options/Viewtypes/CMChannel" name="hero" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
 <externalRefId></externalRefId>
 <locale>de-DE</locale>
 <master>

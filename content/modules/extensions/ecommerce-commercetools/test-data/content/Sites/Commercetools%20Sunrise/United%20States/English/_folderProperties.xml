@@ -5,6 +5,6 @@
 <master>
 </master>
 <contexts>
-  <link href="Navigation/Commercetools%20Sunrise.xml" path="/Sites/Commercetools%20Sunrise/United%20States/English/Navigation/Commercetools%20Sunrise"/>
+<link href="Navigation/Commercetools%20Sunrise.xml" path="/Sites/Commercetools%20Sunrise/United%20States/English/Navigation/Commercetools%20Sunrise"/>
 </contexts>
 </CMFolderProperties>

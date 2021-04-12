@@ -101,6 +101,7 @@ services:
       SPRING_APPLICATION_NAME: 'replication-live-server'
       CAP_SERVER_LICENSE: "${RLS_LICENSE_URL:-/coremedia/licenses/rls-license.zip}"
       COM_COREMEDIA_CORBA_SERVER_HOST: replication-live-server
+      MANAGEMENT_HEALTH_REPLICATOR_ENABLED: "true"
     command:
       - set-corem-home
       - application

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<CMSettings folder="/Sites/Emerald/United States/English/Options/Settings/Multi Preview" name="Standard Preview">
+<CMSettings folder="/Sites/Emerald/United States/English/Options/Settings/Multi Preview" name="Standard Preview" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
 <externalRefId></externalRefId>
 <locale>en-US</locale>
 <master>
 </master>
 <settings>
-  <Struct xmlns="http://www.coremedia.com/2008/struct">
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <StructListProperty Name="previews">
 <Struct>
 <StringProperty Name="id">headlessPreview</StringProperty>

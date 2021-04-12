@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
+import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.link.UrlUtil.getQueryParamList;
 import static com.coremedia.livecontext.fragment.links.transformers.resolvers.AbstractLiveContextLinkResolver.deabsolutizeLink;
 
@@ -43,6 +44,8 @@ import static com.coremedia.livecontext.fragment.links.transformers.resolvers.Ab
 public class CommerceLinkResolver implements LiveContextLinkResolver {
 
   private static final Logger LOG = LoggerFactory.getLogger(CommerceLinkResolver.class);
+
+  private static final String PATTERN_DYNAMIC = "/" + PREFIX_DYNAMIC + "/";
 
   private final ExternalSeoSegmentBuilder seoSegmentBuilder;
 
@@ -154,7 +157,7 @@ public class CommerceLinkResolver implements LiveContextLinkResolver {
   }
 
   private static boolean isDynamicCaeLink(String relativeLink) {
-    return relativeLink.startsWith("/dynamic/");
+    return relativeLink.contains(PATTERN_DYNAMIC);
   }
 
   @Nullable

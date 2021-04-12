@@ -145,7 +145,7 @@ function getPatternForThemeDescriptor() {
           path.dirname(themeConfig.descriptorTargetPath)
         ),
         force: true,
-        cache: true,
+        cacheTransform: true,
       }
     : null;
 }

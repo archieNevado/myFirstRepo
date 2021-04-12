@@ -64,7 +64,7 @@
           <plugin>
             <groupId>org.owasp</groupId>
             <artifactId>dependency-check-maven</artifactId>
-            <version>6.0.5</version>
+            <version>6.1.5</version>
             <configuration>
               <skipArtifactType>pom|coremedia-application</skipArtifactType>
               <skipProvidedScope>true</skipProvidedScope>
@@ -88,6 +88,11 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-deploy-plugin</artifactId>
+          <version>3.0.0-M1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-install-plugin</artifactId>
           <version>3.0.0-M1</version>
         </plugin>
         <plugin>

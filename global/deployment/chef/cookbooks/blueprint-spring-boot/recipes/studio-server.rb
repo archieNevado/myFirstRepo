@@ -39,7 +39,7 @@ node.default_unless['blueprint']['apps'][service_name]['application.properties']
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['repository.blobCachePath'] = "#{node['blueprint']['cache_dir']}/#{service_name}"
 
 # make sure that the preview when used behind an apache using http proxying does use https
-node.default_unless['blueprint']['apps'][service_name]['application.properties']['server.use-forward-headers'] = 'true'
+node.default_unless['blueprint']['apps'][service_name]['application.properties']['server.forward-headers-strategy'] = 'native'
 
 application_config_hash = Mash.new
 # legacy compatibility step. Here we merge the defaults from old node.json files
