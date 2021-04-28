@@ -1,5 +1,6 @@
 package com.coremedia.lc.studio.lib;
 
+import com.coremedia.lc.studio.lib.validators.LcStudioValidatorsConfiguration;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

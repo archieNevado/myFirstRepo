@@ -721,7 +721,8 @@ public class ThemeImporterImpl implements ThemeImporter {
         if (!StringUtils.isEmpty(suffix)) {
           LOGGER.info("Ignoring link suffix {} of {}, no reasonable way to deal with.", suffix, path);
         }
-        if ("css".equals(extension(linkPath))) {
+        String linkExtension = extension(linkPath);
+        if ("css".equals(linkExtension) || "js".equals(linkExtension)) {
           return toRichtextHref(linkImportId.toString(), path);
         } else {
           return toRichtextImg(linkImportId);

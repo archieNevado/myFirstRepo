@@ -7,19 +7,12 @@ import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.content.publication.PublicationService;
 import com.coremedia.cms.editor.sdk.ContentTreeRelation;
-import com.coremedia.ui.messagebox.MessageBoxUtilInternal;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ui.logging.Logger;
-
-import ext.StringUtil;
-import ext.window.MessageBoxWindow;
-
-import mx.resources.ResourceManager;
 
 /**
  * Intercepts the new content creation and updates the calculateDisabled/hidden state for catalog document types.
  */
-[ResourceBundle('com.coremedia.cms.editor.EditorErrors')]
 public class CatalogTreeRelation implements ContentTreeRelation {
 
   public static const PROPERTY_CONTEXTS:String = "contexts";
@@ -306,19 +299,27 @@ public class CatalogTreeRelation implements ContentTreeRelation {
   }
 
   public function rename(content:Content, newName:String, callback:Function = null):void {
-    content.getParent().getParent().getChild(newName, function (duplicateChild:Content, absolutePath:String = null):void {
-      if (duplicateChild === null) {
-        if (isFolderNode(content)) {
-          content.getParent().rename(newName);
+    if (isFolderNode(content)) {
+      // for categories the content and its parent folder need to be renamed
+      // start with the parent folder
+      var parent:Content = content.getParent();
+      var oldName:String = parent.getName();
+      parent.rename(newName, function (): void {
+        // only rename content if parent could be renamed
+        if (parent.getName() === newName) {
+          content.rename(newName, function (): void {
+            // if content could not be renamed revert renaming of parent
+            if (content.getName() === newName) {
+              callback();
+            } else {
+              parent.rename(oldName, callback);
+            }
+          });
         }
-        content.rename(newName, callback);
-      }
-      else {
-        MessageBoxUtilInternal.show(ResourceManager.getInstance().getString('com.coremedia.cms.editor.EditorErrors', 'duplicateName_title'),
-                StringUtil.format(ResourceManager.getInstance().getString('com.coremedia.cms.editor.EditorErrors', 'duplicateName_message'), content.getName()),
-                MessageBoxWindow.ERROR, MessageBoxWindow.OK, callback, true, true);
-      }
-    });
+      });
+    } else {
+      content.rename(newName, callback);
+    }
   }
 
   /**
@@ -357,10 +358,5 @@ public class CatalogTreeRelation implements ContentTreeRelation {
     var repository:ContentRepository = SESSION.getConnection().getContentRepository();
     repository.getPublicationService().withdrawAllFromTree(contents, CONTENT_TYPE_CATEGORY, PROPERTY_CHILDREN, callback);
   }
-
-  public function showInTree(contents:Array, view:String = null, treeModelId:String = null):void {
-    new ShowInCatalogTreeHelper(contents).showItems(treeModelId);
-  }
-
 }
 }

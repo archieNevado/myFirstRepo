@@ -15,9 +15,11 @@ import java.util.List;
 
 /**
  * A {@link TokenResolver} that resolves tokens against the {@link SettingsService}.
+ * @deprecated use {@link org.springframework.web.util.UriComponentsBuilder} instead to resolve link variables
  */
 @Named
 @Order(10)
+@Deprecated(since = "2104.1", forRemoval = true)
 public class SettingsTokenResolver implements TokenResolver {
 
   // --- construct and configure ------------------------------------

@@ -22,7 +22,7 @@ x-logging:
 
 services:
   commerce-adapter-sfcc:
-    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-sfcc:${COMMERCE_ADAPTER_SFCC_VERSION:-1.2.0}
+    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-sfcc:${COMMERCE_ADAPTER_SFCC_VERSION:-1.3.4}
     container_name: commerce-adapter-sfcc
     restart: always
     logging: *default-logging
@@ -56,5 +56,8 @@ services:
     environment:
       COMMERCE_HUB_DATA_ENDPOINTS_SFCC: ${COMMERCE_HUB_DATA_ENDPOINTS_SFCC:-commerce-adapter-sfcc:6565}
   headless-server-live:
+    environment:
+      COMMERCE_HUB_DATA_ENDPOINTS_SFCC: ${COMMERCE_HUB_DATA_ENDPOINTS_SFCC:-commerce-adapter-sfcc:6565}
+  content-feeder:
     environment:
       COMMERCE_HUB_DATA_ENDPOINTS_SFCC: ${COMMERCE_HUB_DATA_ENDPOINTS_SFCC:-commerce-adapter-sfcc:6565}

@@ -13,6 +13,11 @@
   </properties>
   <dependencies>
     <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>headless-server-search</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>com.coremedia.caas</groupId>
       <artifactId>headless-server-core</artifactId>
     </dependency>
@@ -133,6 +138,10 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-autoconfigure</artifactId>
     </dependency>
     <!-- scope test -->
     <dependency>

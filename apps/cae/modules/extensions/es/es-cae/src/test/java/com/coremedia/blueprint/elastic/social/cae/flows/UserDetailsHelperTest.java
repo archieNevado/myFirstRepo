@@ -4,7 +4,6 @@ import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialCo
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
-import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.elastic.core.api.blobs.Blob;
 import com.coremedia.elastic.core.api.blobs.BlobException;
@@ -20,11 +19,13 @@ import com.coremedia.elastic.social.api.ratings.RatingService;
 import com.coremedia.elastic.social.api.reviews.ReviewService;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.elastic.social.api.users.CommunityUserService;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.verification.VerificationMode;
 import org.springframework.binding.message.DefaultMessageContext;
@@ -44,7 +45,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
-import static com.coremedia.elastic.core.test.Injection.inject;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -75,6 +75,7 @@ public class UserDetailsHelperTest {
   private Map<String, Object> params = new HashMap<>();
   private UserDetails details = new UserDetails();
 
+  @Spy
   private DeliveryConfigurationProperties deliveryConfigurationProperties;
 
   @InjectMocks
@@ -109,9 +110,6 @@ public class UserDetailsHelperTest {
 
   @Mock
   private DefaultMessageContext messageContext;
-
-  @Mock
-  private ContentRepository contentRepository;
 
   @Mock
   private Blob blob;
@@ -155,8 +153,6 @@ public class UserDetailsHelperTest {
   @Before
   @SuppressWarnings("unchecked")
   public void setUp() throws IOException {
-    deliveryConfigurationProperties = new DeliveryConfigurationProperties();
-    deliveryConfigurationProperties.setPreviewMode(false);
     Map<String, Object> properties = getProperties();
     when(communityUser.getEmail()).thenReturn(emailAddress);
     when(communityUser.getProperties()).thenReturn(properties);
@@ -199,22 +195,11 @@ public class UserDetailsHelperTest {
 
     params.put("name", communityUser.getName());
     details = getUserDetails();
+  }
 
-    userDetailsHelper = new UserDetailsHelper();
-    userDetailsHelper.setDeliveryConfigurationProperties(deliveryConfigurationProperties);
-
-    inject(userDetailsHelper, commentService);
-    inject(userDetailsHelper, ratingService);
-    inject(userDetailsHelper, likeService);
-    inject(userDetailsHelper, communityUserService);
-    inject(userDetailsHelper, contentRepository);
-    inject(userDetailsHelper, mailTemplateService);
-    inject(userDetailsHelper, stagingService);
-    inject(userDetailsHelper, blobService);
-    inject(userDetailsHelper, mailTemplateService);
-    inject(userDetailsHelper, flowUrlHelper);
-    inject(userDetailsHelper, elasticSocialPlugin);
-    inject(userDetailsHelper, reviewService);
+  @After
+  public void reset() {
+    UserContext.clear();
   }
 
   @Test
@@ -238,8 +223,7 @@ public class UserDetailsHelperTest {
 
   @Test
   public void testUserDetailsForPreview() {
-    UserContext.clear();
-    deliveryConfigurationProperties.setPreviewMode(true);
+    when(deliveryConfigurationProperties.isPreviewMode()).thenReturn(true);
 
     UserDetails details = userDetailsHelper.getUserDetails(requestContext, passwordPolicy, userName);
     assertNotNull(details);
@@ -282,8 +266,7 @@ public class UserDetailsHelperTest {
 
   @Test
   public void getIgnoredUserOnProduction() {
-    deliveryConfigurationProperties.setPreviewMode(true);
-    UserContext.clear();
+    when(deliveryConfigurationProperties.isPreviewMode()).thenReturn(true);
 
     UserDetails details = userDetailsHelper.getUserDetails(requestContext, passwordPolicy, userName);
     assertNotNull(details);
@@ -293,8 +276,7 @@ public class UserDetailsHelperTest {
 
   @Test
   public void getBlockedUserOnProduction() {
-    deliveryConfigurationProperties.setPreviewMode(true);
-    UserContext.clear();
+    when(deliveryConfigurationProperties.isPreviewMode()).thenReturn(true);
 
     UserDetails details = userDetailsHelper.getUserDetails(requestContext, passwordPolicy, userName);
     assertNotNull(details);
@@ -304,8 +286,7 @@ public class UserDetailsHelperTest {
 
   @Test
   public void getUnactivatedUserOnProduction() {
-    deliveryConfigurationProperties.setPreviewMode(true);
-    UserContext.clear();
+    when(deliveryConfigurationProperties.isPreviewMode()).thenReturn(true);
 
     UserDetails details = userDetailsHelper.getUserDetails(requestContext, passwordPolicy, userName);
     assertNotNull(details);
@@ -337,7 +318,6 @@ public class UserDetailsHelperTest {
 
   @Test
   public void testUserDetailsForNonExistentUserFromContextNotLoggedIn() {
-    UserContext.clear();
     when(communityUserService.getUserByName(userName)).thenReturn(null);
 
     UserDetails details = userDetailsHelper.getUserDetails(requestContext, passwordPolicy, userName);
@@ -745,7 +725,6 @@ public class UserDetailsHelperTest {
 
   @Test
   public void noRedirectUserNotLoggedInAuthorNameNotNull() {
-    UserContext.clear();
     userDetailsHelper.redirectOnLogout(requestContext, userName);
     verify(externalContext, never()).requestExternalRedirect("contextRelative:");
   }

@@ -23,6 +23,8 @@
   <fx:Declarations>
     <fx:String id="tabItemId"/>
 
+    <fx:String id="afterItemId"/>
+
     <fx:String id="title"/>
   </fx:Declarations>
 
@@ -43,6 +45,9 @@
               </editor:items>
             </editor:PropertyFieldGroup>
           </ui:items>
+          <ui:after>
+            <Component itemId="{config.afterItemId}"/>
+          </ui:after>
         </ui:AddItemsPlugin>
       </editor:plugins>
     </editor:DocumentForm>

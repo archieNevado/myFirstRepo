@@ -26,6 +26,10 @@
       <artifactId>lc-asset-services</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>lc-asset-validators</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.coremedia.livecontext</groupId>
       <artifactId>lc-asset-api</artifactId>
     </dependency>
@@ -161,6 +165,7 @@
     <dependency>
       <groupId>com.sun.activation</groupId>
       <artifactId>jakarta.activation</artifactId>
+      <scope>test</scope>
     </dependency>
     <!-- end java-11-dependencies -->
   </dependencies>

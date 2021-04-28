@@ -25,6 +25,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @deprecated
+ * The preview-url calculation for the json-preview in studio was moved into the studio server as part of the new multi preview feature.
+ * This controller will be removed with the next major release CM11
+ */
+@Deprecated(since = "2104.1")
 @CrossOrigin
 @RestController
 @Api(value = "/previewurl", tags = "Preview Url")

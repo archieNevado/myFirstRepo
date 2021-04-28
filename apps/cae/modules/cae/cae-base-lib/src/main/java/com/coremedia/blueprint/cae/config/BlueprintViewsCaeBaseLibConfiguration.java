@@ -21,8 +21,10 @@ import com.coremedia.blueprint.cae.view.viewtype.ViewTypeRenderNodeDecoratorProv
 import com.coremedia.blueprint.coderesources.ThemeService;
 import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.cache.Cache;
+import com.coremedia.cache.config.CacheConfiguration;
 import com.coremedia.cap.common.CapConnection;
 import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.cap.multisite.impl.MultiSiteConfiguration;
 import com.coremedia.cap.util.JarBlobResourceLoader;
 import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.id.IdProvider;
@@ -35,11 +37,12 @@ import com.coremedia.objectserver.view.ViewDecorator;
 import com.coremedia.objectserver.view.ViewEngine;
 import com.coremedia.objectserver.view.XmlFilterFactory;
 import com.coremedia.objectserver.view.XmlMarkupView;
+import com.coremedia.objectserver.view.config.CaeViewErrorServicesConfiguration;
+import com.coremedia.objectserver.view.config.CaeViewServicesConfiguration;
 import com.coremedia.objectserver.view.dynamic.DynamicIncludePredicate;
 import com.coremedia.objectserver.view.dynamic.DynamicIncludeRenderNodeDecorator;
 import com.coremedia.objectserver.view.dynamic.DynamicIncludeRenderNodeDecoratorProvider;
 import com.coremedia.objectserver.view.events.ViewHookEventView;
-import com.coremedia.objectserver.view.resolver.ViewRepositoryNameProvider;
 import com.coremedia.objectserver.web.links.LinkFormatter;
 import com.coremedia.springframework.core.io.CompoundResourceLoader;
 import com.coremedia.springframework.customizer.Customize;
@@ -50,6 +53,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.annotation.Order;
 
@@ -70,34 +74,24 @@ import java.util.Map;
         lazyInit = true
 )
 @ImportResource(value = {
-        "classpath:/com/coremedia/cache/cache-services.xml",
         "classpath:/com/coremedia/cae/dataview-services.xml",
-        "classpath:/com/coremedia/cae/view-services.xml",
         "classpath:/com/coremedia/cae/view-services-lifecycle.xml",
-        "classpath:/com/coremedia/cae/view-error-services.xml",
         "classpath:/com/coremedia/cap/common/uapi-services.xml",
-        "classpath:/com/coremedia/cap/multisite/multisite-services.xml",
         "classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml",
-        "classpath:/framework/spring/blueprint-richtextfilters.xml",
         "classpath:/framework/spring/blueprint-services.xml",
         "classpath:/framework/spring/blueprint-handlers.xml",
         "classpath:/framework/spring/blueprint-sitemap.xml",
         "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
         "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-cae-services.xml",
 }, reader = ResourceAwareXmlBeanDefinitionReader.class)
+@Import({
+        BlueprintRichtextFiltersConfiguration.class,
+        CacheConfiguration.class,
+        CaeViewServicesConfiguration.class,
+        CaeViewErrorServicesConfiguration.class,
+        MultiSiteConfiguration.class,
+})
 public class BlueprintViewsCaeBaseLibConfiguration {
-
-  //--- Programmed Views
-
-  /**
-   * Register the Blueprint programmed view for CoreMedia richtext.
-   */
-  @Bean(autowireCandidate = false)
-  @Customize(value = "richtextMarkupView", mode = Customize.Mode.REPLACE)
-  @Order(10000)
-  public XmlMarkupView richtextMarkupViewCustomizer(XmlMarkupView blueprintRichtextMarkupView) {
-    return blueprintRichtextMarkupView;
-  }
 
   /**
    * The CAE default RichtextToHtmlFilterFactory providing the default set of richtext filters (not the Blueprint
@@ -240,7 +234,7 @@ public class BlueprintViewsCaeBaseLibConfiguration {
   @Bean
   @Customize(value = "programmedViews", mode = Customize.Mode.REPLACE)
   @Order(10000)
-  public Map<String, View> blueprintProgrammedViews(XmlMarkupView blueprintRichtextMarkupView,
+  public Map<String, View> blueprintProgrammedViews(XmlMarkupView richtextMarkupView,
                                                     XmlMarkupView htmlMarkupView,
                                                     MultiRangeBlobView blobView,
                                                     ViewHookEventView viewHookEventView,
@@ -255,7 +249,7 @@ public class BlueprintViewsCaeBaseLibConfiguration {
                                                     FeedView feedView) {
     Map<String, View> viewMap = new HashMap();
 
-    viewMap.put("com.coremedia.xml.Markup", blueprintRichtextMarkupView);
+    viewMap.put("com.coremedia.xml.Markup", richtextMarkupView);
     viewMap.put("com.coremedia.xml.Markup#html", htmlMarkupView);
     viewMap.put("com.coremedia.cap.common.Blob", blobView);
     viewMap.put("com.coremedia.objectserver.view.events.ViewHookEvent", viewHookEventView);
@@ -292,15 +286,10 @@ public class BlueprintViewsCaeBaseLibConfiguration {
   }
 
   @Bean
-  public ArrayList<FeedItemDataProvider> feedItemDataProviders(PictureFeedItemDataProvider pictureFeedItemDataProvider,
-                                                               TeasableFeedItemDataProvider teasableFeedItemDataProvider) {
-    ArrayList arrayList = new ArrayList(2);
-
+  public List<FeedItemDataProvider> feedItemDataProviders(PictureFeedItemDataProvider pictureFeedItemDataProvider,
+                                                          TeasableFeedItemDataProvider teasableFeedItemDataProvider) {
     // order: from special to generic
-    arrayList.add(pictureFeedItemDataProvider);
-    arrayList.add(teasableFeedItemDataProvider);
-
-    return arrayList;
+    return List.of(pictureFeedItemDataProvider, teasableFeedItemDataProvider);
   }
 
   //--- View Dispatcher
@@ -314,7 +303,9 @@ public class BlueprintViewsCaeBaseLibConfiguration {
    * The resulting repository names are later matched to view repositories by a CAE ViewRespositoryProvider.
    */
   @Bean
-  public BlueprintViewRepositoryNameProvider blueprintViewRepositoryNameProvider(@Qualifier("viewRepositories") List viewRepositories,
+  @Customize(value = "viewRepositoryNameProviders", mode = Customize.Mode.PREPEND)
+  @Order(10_000)
+  public BlueprintViewRepositoryNameProvider blueprintViewRepositoryNameProvider(@Qualifier("viewRepositories") List<String> viewRepositories,
                                                                                  SettingsService settingsService,
                                                                                  ThemeTemplateViewRepositoryProvider themeTemplateViewRepositoryProvider) {
     BlueprintViewRepositoryNameProvider nameProvider = new BlueprintViewRepositoryNameProvider();
@@ -332,7 +323,7 @@ public class BlueprintViewsCaeBaseLibConfiguration {
    */
   @Bean
   public List<String> viewRepositories() {
-    return new ArrayList();
+    return new ArrayList<>();
   }
 
   @Bean
@@ -349,19 +340,6 @@ public class BlueprintViewsCaeBaseLibConfiguration {
     return "error";
   }
 
-  /**
-   * Exclude these interfaces in ViewLookups (otherwise, all Interfaces would be used).
-   */
-  /*
-  @Bean(autowireCandidate = false)
-  @Customize(value = "viewLookupPredicate.excludes", mode = Customize.Mode.APPEND)
-  @ConditionalOnProperty(name = "cae.view.filter-lookup-by-predicate", matchIfMissing = true)
-  public List<String> addViewlookupExcludes(XmlMarkupView blueprintRichtextMarkupView) {
-    return Lists.newArrayList("com.coremedia.blueprint.common.contentbeans.BelowRootNavigation",
-            "com.coremedia.blueprint.common.contentbeans.HasViewtype",
-            "com.coremedia.blueprint.common.datevalidation.ValidityPeriod");
-  }
-*/
   //--- View Type specific customizations
 
   /**
@@ -381,7 +359,6 @@ public class BlueprintViewsCaeBaseLibConfiguration {
     DynamicIncludeRenderNodeDecoratorProvider dynamicIncludeProvider
             = new DynamicIncludeRenderNodeDecoratorProvider(dynamicIncludeDecorator, dynamicIncludePredicates);
 
-
     return Lists.newArrayList(viewTypeProvider, dynamicIncludeProvider);
   }
 
@@ -395,21 +372,13 @@ public class BlueprintViewsCaeBaseLibConfiguration {
   }
 
   /**
-   * Creates a ViewLookupTraversal considering viewtypes.
+   * Creates and registers a ViewLookupTraversal considering viewtypes.
    */
   @Bean
-  public BlueprintViewLookupTraversal blueprintViewLookupTraversal() {
-    return new BlueprintViewLookupTraversal();
-  }
-
-  /**
-   * Registers the ViewLookupTraversal for viewtypes.
-   */
-  @Bean(autowireCandidate = false)
   @Customize(value = "modelAwareViewResolver.viewLookupTraversal", mode = Customize.Mode.REPLACE)
   @Order(10000)
-  public BlueprintViewLookupTraversal customizeModelAwareViewResolver(BlueprintViewLookupTraversal blueprintViewLookupTraversal) {
-    return blueprintViewLookupTraversal;
+  public BlueprintViewLookupTraversal blueprintViewLookupTraversal() {
+    return new BlueprintViewLookupTraversal();
   }
 
   //--- View Repository and resolving
@@ -448,6 +417,8 @@ public class BlueprintViewsCaeBaseLibConfiguration {
   }
 
   @Bean
+  @Customize(value = "viewRepositoryProviders", mode = Customize.Mode.PREPEND)
+  @Order(10000)
   public ThemeTemplateViewRepositoryProvider themeTemplateViewRepositoryProvider(DeliveryConfigurationProperties deliveryConfigurationProperties,
                                                                                  @Qualifier("viewDecorators") List<ViewDecorator> viewDecorators,
                                                                                  @Qualifier("viewEngines") Map<String, ViewEngine> viewEngines,
@@ -470,23 +441,6 @@ public class BlueprintViewsCaeBaseLibConfiguration {
     repositoryProvider.setUseLocalResources(deliveryConfigurationProperties.isLocalResources());
 
     return repositoryProvider;
-  }
-
-  @Bean(autowireCandidate = false)
-  @Customize(value = "viewRepositoryProviders", mode = Customize.Mode.PREPEND)
-  @Order(10000)
-  public ThemeTemplateViewRepositoryProvider addThemeViewRepositoryProvider(ThemeTemplateViewRepositoryProvider themeTemplateViewRepositoryProvider) {
-    return themeTemplateViewRepositoryProvider;
-  }
-
-  /**
-   * Register the Blueprint ViewRepositoryNameProvider.
-   */
-  @Bean(autowireCandidate = false)
-  @Customize(value = "viewRepositoryNameProviders", mode = Customize.Mode.REPLACE)
-  @Order(10000)
-  public List<ViewRepositoryNameProvider> setBlueprintViewRepositoryNameProvider(BlueprintViewRepositoryNameProvider blueprintViewRepositoryNameProvider) {
-    return Lists.newArrayList(blueprintViewRepositoryNameProvider);
   }
 
   /**

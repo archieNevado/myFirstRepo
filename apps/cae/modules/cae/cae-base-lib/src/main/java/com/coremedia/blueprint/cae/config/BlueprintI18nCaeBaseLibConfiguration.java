@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.cae.config;
 
-import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.blueprint.cae.web.i18n.LinklistPageResourceBundleFactory;
 import com.coremedia.blueprint.cae.web.i18n.RequestLocaleResolver;
 import com.coremedia.blueprint.cae.web.i18n.RequestMessageSource;
@@ -10,18 +9,15 @@ import com.coremedia.blueprint.localization.LocalizationService;
 import com.coremedia.blueprint.localization.configuration.LocalizationServiceConfiguration;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.springframework.customizer.Customize;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
-import com.google.common.collect.Lists;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.annotation.Order;
-import org.springframework.web.servlet.HandlerInterceptor;
-
-import java.util.List;
 
 /**
  * Internationalization (i18n) features
@@ -61,26 +57,18 @@ public class BlueprintI18nCaeBaseLibConfiguration {
 
   /**
    * Makes a Page's resource bundle available to &lt;spring:message&gt; and &lt;fmt:message&gt;
+   *
+   * This interceptor's #postHandle method should be invoked
+   * quite early so that other interceptors can make use of the registered message source. This
+   * can be achieved by putting the other interceptors IN FRONT of this one, i.e by prepending them.
    */
   @Bean
+  @Customize(value = "handlerInterceptors", mode = Customize.Mode.APPEND)
+  @Order(10000)
   public ResourceBundleInterceptor pageResourceBundlesInterceptor(LinklistPageResourceBundleFactory pageResourceBundleFactory) {
     ResourceBundleInterceptor interceptor = new ResourceBundleInterceptor();
     interceptor.setResourceBundleFactory(pageResourceBundleFactory);
     return interceptor;
-  }
-
-  /**
-   * Registers pageResourceBundlesInterceptor. This interceptor's #postHandle method should be invoked
-   * quite early so that other interceptors can make use of the registered message source. This
-   * can be achieved by putting the other interceptors IN FRONT of this one, i.e by prepending them.
-   *
-   * Depends on the UserVariantHandlerInterceptor.
-   */
-  @Bean(autowireCandidate = false)
-  @Customize(value = "handlerInterceptors", mode = Customize.Mode.APPEND)
-  @Order(10000)
-  public List<HandlerInterceptor> i18nInterceptors(ResourceBundleInterceptor pageResourceBundlesInterceptor) {
-    return Lists.newArrayList(pageResourceBundlesInterceptor);
   }
 
   /**

@@ -26,8 +26,8 @@
                 title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMJavaScript_text')}"
                 itemId="cmJavaScriptDataForm">
           <editor:items>
-            <editor:StringPropertyField propertyName="dataUrl"/>
-            <editor:RichTextPropertyField propertyName="code"/>
+            <editor:StringPropertyField propertyName="dataUrl" itemId="dataUrl"/>
+            <editor:RichTextPropertyField itemId="code" propertyName="code"/>
             <editor:BooleanPropertyField bindTo="{config.bindTo}"
                                          propertyName="inHead"/>
           </editor:items>

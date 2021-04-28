@@ -152,16 +152,20 @@
                                         return cont.queryById(CMImageMapForm.OVERLAY_CONFIG_ITEMID) as Container;
                                         }}">
           <ui:items>
-            <editor:BooleanPropertyField propertyName="localSettings.overlay.displayDefaultPrice"
+            <editor:BooleanPropertyField itemId="displayDefaultPrice"
+                                         propertyName="localSettings.overlay.displayDefaultPrice"
                                          hideLabel="true"
                                          dontTransformToInteger="true"/>
-            <editor:BooleanPropertyField propertyName="localSettings.overlay.displayDiscountedPrice"
+            <editor:BooleanPropertyField itemId="displayDiscountedPrice"
+                                         propertyName="localSettings.overlay.displayDiscountedPrice"
                                          hideLabel="true"
                                          dontTransformToInteger="true"/>
-            <editor:BooleanPropertyField propertyName="localSettings.overlay.displayOutOfStockLink"
+            <editor:BooleanPropertyField itemId="displayOutOfStockLink"
+                                         propertyName="localSettings.overlay.displayOutOfStockLink"
                                          hideLabel="true"
                                          dontTransformToInteger="true"/>
-            <editor:BooleanPropertyField propertyName="localSettings.overlay.hideOutOfStockProducts"
+            <editor:BooleanPropertyField itemId="hideOutOfStockProducts"
+                                         propertyName="localSettings.overlay.hideOutOfStockProducts"
                                          hideLabel="true"
                                          dontTransformToInteger="true"/>
           </ui:items>

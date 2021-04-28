@@ -1,12 +1,13 @@
 package com.coremedia.ecommerce.studio.library {
 import com.coremedia.cap.content.ContentTypeNames;
 import com.coremedia.cap.content.search.SearchParameters;
-import com.coremedia.cms.editor.sdk.ContentTreeRelation;
-import com.coremedia.cms.editor.sdk.collectionview.*;
+import com.coremedia.cms.editor.sdk.collectionview.CollectionViewExtension;
+import com.coremedia.cms.editor.sdk.collectionview.CollectionViewModel;
 import com.coremedia.cms.editor.sdk.collectionview.sort.RepositoryListSorter;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.upload.UploadSettings;
-import com.coremedia.ecommerce.studio.*;
+import com.coremedia.ecommerce.studio.CatalogModel;
+import com.coremedia.ecommerce.studio.catalogHelper;
 import com.coremedia.ecommerce.studio.components.repository.CatalogRepositoryListContainer;
 import com.coremedia.ecommerce.studio.components.repository.CatalogRepositoryToolbarContainer;
 import com.coremedia.ecommerce.studio.components.search.CatalogSearchListContainer;
@@ -36,19 +37,7 @@ public class ECommerceCollectionViewExtension implements CollectionViewExtension
     icon: ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'Product_icon')
   };
 
-  /**
-   * Since this is a common extension to be extended, it is not applicable, only subclasses of it.
-   */
-  public function isApplicable(model:Object):Boolean {
-    return false;
-  }
-
-  /**
-   * Not based on content, therefore no ContentTreeRelation.
-   * @return
-   */
-  public function getContentTreeRelation():ContentTreeRelation {
-    return null;
+  public function ECommerceCollectionViewExtension() {
   }
 
   public function search(searchParameters:SearchParameters, callback:Function):void {
@@ -170,6 +159,10 @@ public class ECommerceCollectionViewExtension implements CollectionViewExtension
     }
     namePath.push(store.getName());
     return '/' + namePath.reverse().join('/');
+  }
+
+  public function showInTree(contents:Array, view:String = null, treeModelId:String = null):void {
+    // noop
   }
 }
 }

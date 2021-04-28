@@ -16,6 +16,11 @@
       </dependency>
       <dependency>
         <groupId>com.coremedia.blueprint</groupId>
+        <artifactId>am-validators</artifactId>
+        <version>1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.coremedia.blueprint</groupId>
         <artifactId>catalog-content-services</artifactId>
         <version>1-SNAPSHOT</version>
       </dependency>
@@ -31,7 +36,17 @@
       </dependency>
       <dependency>
         <groupId>com.coremedia.blueprint</groupId>
+        <artifactId>catalog-validators</artifactId>
+        <version>1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.coremedia.blueprint</groupId>
         <artifactId>lc-asset-services</artifactId>
+        <version>1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.coremedia.blueprint</groupId>
+        <artifactId>lc-asset-validators</artifactId>
         <version>1-SNAPSHOT</version>
       </dependency>
       <dependency>
@@ -67,6 +82,16 @@
       <dependency>
         <groupId>com.coremedia.blueprint</groupId>
         <artifactId>lc-services-lib</artifactId>
+        <version>1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.coremedia.blueprint</groupId>
+        <artifactId>lc-validators</artifactId>
+        <version>1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>com.coremedia.blueprint</groupId>
+        <artifactId>middle.validators</artifactId>
         <version>1-SNAPSHOT</version>
       </dependency>
     </dependencies>

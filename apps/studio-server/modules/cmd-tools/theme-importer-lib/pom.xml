@@ -20,6 +20,24 @@
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
       <artifactId>content-services</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>com.coremedia.cms</groupId>
+          <artifactId>cae-contentbeanservices</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.coremedia.cms</groupId>
+          <artifactId>cae-handlerservices</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.coremedia.cms</groupId>
+          <artifactId>cae-linkservices</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.coremedia.cms</groupId>
+          <artifactId>cae-viewservices</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>

@@ -43,7 +43,7 @@ public class SolrSegmentTaxonomies implements SearchFunction {
   public static final String SEGMENT_CONTENT_TYPE = "CMSegment";
 
   private static final String CMSEGMENT_CONDITIONS = "conditions";
-  private static final String DEFAULT_SEARCH_TERM = "1:2";
+  private static final String MATCH_NOTHING_SOLR_QUERY = "(-*:*)";
 
   private ContentRepository contentRepository;
   private String defaultField;
@@ -83,7 +83,7 @@ public class SolrSegmentTaxonomies implements SearchFunction {
     @SuppressWarnings("PersonalData")
     final String searchTerm = getTaxonomySearchString(contextCollection.getContext(contextName, PropertyProvider.class));
 
-    return StringUtils.isBlank(searchTerm) ? DEFAULT_SEARCH_TERM : searchTerm;
+    return StringUtils.isBlank(searchTerm) ? MATCH_NOTHING_SOLR_QUERY : searchTerm;
   }
 
   private String getTaxonomySearchString(PropertyProvider segmentContext) {

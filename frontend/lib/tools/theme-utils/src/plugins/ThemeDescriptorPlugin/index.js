@@ -112,6 +112,19 @@ class ThemeDescriptorPlugin {
         if (themeConfig.scripts.length > 0) {
           const javaScripts = root.ele("javaScripts");
           const alreadyAddedScripts = new Set();
+          // load chunk mapping first if it exists
+          if (compilation.assets[themeConfig.buildConfig.chunkMappingPath]) {
+            javaScripts.ele(
+              "javaScript",
+              getXmlPath(themeConfig.buildConfig.chunkMappingPath),
+              {
+                inHead: true,
+                disableCompress: true,
+                notLinked: false,
+              }
+            );
+          }
+
           themeConfig.scripts.forEach((scripts) => {
             // avoid windows path separators!
             getTargets(scripts, filesToLoadByEntryPoint, /\.js$/)
@@ -246,9 +259,11 @@ class ThemeDescriptorPlugin {
           : {};
 
         let previewCss = {};
-        if(filesToLoadByEntryPoint["preview"].find((filename) =>
-          /preview.css$/.test(filename)
-        ) !== undefined) {
+        if (
+          filesToLoadByEntryPoint["preview"].find((filename) =>
+            /preview.css$/.test(filename)
+          ) !== undefined
+        ) {
           previewCss = {
             previewCss: [
               {
@@ -261,8 +276,8 @@ class ThemeDescriptorPlugin {
                   )
                 ),
               },
-            ]
-          }
+            ],
+          };
         }
 
         const previewSettings = JSON.stringify(

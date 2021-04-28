@@ -35,8 +35,9 @@
                 title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Details_label')}"
                 itemId="categoryDetailsForm">
           <editor:items>
-            <editor:StringPropertyField propertyName="title"/>
+            <editor:StringPropertyField itemId="title" propertyName="title"/>
             <editor:RichTextPropertyField bindTo="{config.bindTo}"
+                                          itemId="detailText"
                                           propertyName="detailText"
                                           initialHeight="200"/>
             <editor:PropertyFieldGroup

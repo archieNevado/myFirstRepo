@@ -4,7 +4,10 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractStoreCo
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionFinder;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoCommerceConnectionAvailable;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.SiteToStoreContextCacheKeyWithTimeout;
+import com.coremedia.blueprint.base.settings.SettingsService;
+import com.coremedia.cache.Cache;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogName;
 import com.coremedia.livecontext.ecommerce.common.CommerceConfigKeys;
@@ -44,7 +47,8 @@ public class IbmStoreContextProvider extends AbstractStoreContextProvider {
   @Nullable
   private StoreInfoService storeInfoService;
 
-  public IbmStoreContextProvider(CommerceConnectionFinder commerceConnectionFinder) {
+  public IbmStoreContextProvider(CommerceConnectionFinder commerceConnectionFinder, SettingsService settingsService, SitesService sitesService, Cache cache) {
+    super(settingsService, sitesService, cache);
     this.commerceConnectionFinder = commerceConnectionFinder;
   }
 

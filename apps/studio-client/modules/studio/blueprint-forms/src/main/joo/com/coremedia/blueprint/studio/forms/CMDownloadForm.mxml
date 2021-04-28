@@ -31,7 +31,7 @@
             <editor:BlobPropertyField bindTo="{config.bindTo}"
                                       hideLabel="true"
                                       propertyName="data"/>
-            <editor:StringPropertyField propertyName="filename"/>
+            <editor:StringPropertyField propertyName="filename" itemId="filename"/>
           </editor:items>
         </editor:PropertyFieldGroup>
         <bpforms:MediaDocumentForm collapsed="true"

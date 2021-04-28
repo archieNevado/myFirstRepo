@@ -17,6 +17,7 @@ import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.search.SearchFacet;
+import com.coremedia.livecontext.ecommerce.search.SearchQuery;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,9 +30,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.SKU;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.refEq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -80,12 +86,6 @@ public class CommerceFacadeTest {
 
   @Mock
   private Catalog catalog;
-
-  @Mock
-  private SearchResult<ProductVariant> productVariantSearchResult;
-
-  @Mock
-  private SearchResult<Product> productSearchResult;
 
   @Mock
   private ProductVariant productVariant;
@@ -201,13 +201,15 @@ public class CommerceFacadeTest {
   }
 
   @Test
+  @SuppressWarnings({"ConstantConditions", "unchecked"})
   public void searchProducts() {
     String searchTerm = "test";
-    when(catalogService.searchProducts(searchTerm, Collections.emptyMap(), storeContext)).thenReturn(productSearchResult);
-    SearchResult searchResult = commerceFacade.searchProducts(searchTerm, Collections.emptyMap(), SITE_ID);
+    SearchQuery searchQuery = SearchQuery.builder(searchTerm, PRODUCT).build();
+    when(catalogService.search(refEq(searchQuery), eq(storeContext))).thenReturn(mock(SearchResult.class));
+    SearchResult searchResult = commerceFacade.searchProducts(searchTerm, Map.of(), SITE_ID);
 
     assertNotNull(searchResult);
-    verify(catalogService).searchProducts(searchTerm, Collections.emptyMap(), storeContext);
+    verify(catalogService).search(refEq(searchQuery), eq(storeContext));
   }
 
   @Test
@@ -224,13 +226,14 @@ public class CommerceFacadeTest {
   }
 
   @Test
+  @SuppressWarnings({"ConstantConditions", "unchecked"})
   public void searchProductVariants() {
     String searchTerm = "test";
-    Map<String, String> searchParams = Collections.emptyMap();
-    when(catalogService.searchProductVariants(searchTerm, searchParams, storeContext)).thenReturn(productVariantSearchResult);
-    SearchResult searchResult = commerceFacade.searchProductVariants(searchTerm, searchParams, SITE_ID);
+    SearchQuery searchQuery = SearchQuery.builder(searchTerm, SKU).build();
+    when(catalogService.search(refEq(searchQuery), eq(storeContext))).thenReturn(mock(SearchResult.class));
+    SearchResult searchResult = commerceFacade.searchProductVariants(searchTerm, Map.of(), SITE_ID);
 
     assertNotNull(searchResult);
-    verify(catalogService).searchProductVariants(searchTerm, searchParams, storeContext);
+    verify(catalogService).search(refEq(searchQuery), eq(storeContext));
   }
 }

@@ -37,6 +37,7 @@
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-navigation-api</artifactId>
+      <scope>test</scope>
     </dependency>
 
     <dependency>
@@ -52,6 +53,7 @@
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>cap-delivery-configuration</artifactId>
+      <scope>test</scope>
     </dependency>
 
     <dependency>
@@ -82,14 +84,17 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>coremedia-spring</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot</artifactId>
+      <scope>test</scope>
     </dependency>
 
     <!-- PROVIDED SCOPE -->
@@ -175,4 +180,19 @@
     </dependency>
   </dependencies>
 
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <configuration>
+          <ignoredDependencies combine.children="append">
+            <!-- Transitive compile *AND* direct test dependencies. -->
+            <ignoredDependency>com.coremedia.cms:cap-persistentcache</ignoredDependency>
+          </ignoredDependencies>
+          <failOnWarning>true</failOnWarning>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

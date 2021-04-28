@@ -9,6 +9,8 @@
       <StringProperty Name="groupId">imagga</StringProperty>
       <StringProperty Name="contentType">CMPicture</StringProperty>
       <BooleanProperty Name="enabled">false</BooleanProperty>
+      <StringProperty Name="reloadMode">manual</StringProperty>
+      <StringProperty Name="observedProperties">data</StringProperty>
       <StringProperty Name="targetProperty">keywords</StringProperty>
       <StructProperty Name="settings">
         <Struct>

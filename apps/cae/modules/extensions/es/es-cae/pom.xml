@@ -18,6 +18,7 @@
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>cae-configuration</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.elastic.core</groupId>
@@ -90,6 +91,7 @@
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>cae-request-util</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.cms</groupId>
@@ -106,6 +108,7 @@
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>coremedia-spring</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.cms</groupId>
@@ -115,11 +118,6 @@
       <groupId>com.coremedia.elastic.core</groupId>
       <artifactId>core-api</artifactId>
     </dependency>
-    <dependency>	
-      <groupId>com.coremedia.elastic.core</groupId>	
-      <artifactId>core-test</artifactId>	
-      <scope>test</scope>	
-    </dependency>    
     <dependency>
       <groupId>com.coremedia.elastic.social</groupId>
       <artifactId>social-api</artifactId>
@@ -144,6 +142,7 @@
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpcore</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>javax.inject</groupId>

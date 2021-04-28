@@ -11,8 +11,6 @@
 
   <bean id="liveContextSiteResolver" class="com.coremedia.livecontext.handler.util.LiveContextSiteResolverImpl">
     <constructor-arg index="0" ref="siteResolver"/>
-    <constructor-arg index="1" ref="sitesService"/>
-    <constructor-arg index="2" ref="commerceConnectionInitializer"/>
-    <constructor-arg index="3" ref="cache"/>
+    <constructor-arg index="1" ref="commerceSiteFinder"/>
   </bean>
 </beans>

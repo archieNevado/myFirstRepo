@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.cae.action.search;
 
+import com.coremedia.blueprint.cae.config.BlueprintSearchCaeBaseLibConfiguration;
 import com.coremedia.blueprint.cae.contentbeans.PageImpl;
 import com.coremedia.blueprint.cae.search.Condition;
 import com.coremedia.blueprint.cae.search.SearchConstants;
@@ -21,7 +22,6 @@ import com.coremedia.blueprint.testing.ContentTestHelper;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
-import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -29,10 +29,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -46,9 +44,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.coremedia.blueprint.cae.action.search.SearchServiceTest.LocalConfig.PROFILE;
-import static com.coremedia.cap.test.xmlrepo.XmlRepoResources.CACHE;
-import static com.coremedia.cap.test.xmlrepo.XmlRepoResources.CONTENT_BEAN_FACTORY;
-import static com.coremedia.cap.test.xmlrepo.XmlRepoResources.ID_PROVIDER;
 import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -63,6 +58,7 @@ import static org.junit.Assert.fail;
 @ContextConfiguration(classes = SearchServiceTest.LocalConfig.class)
 @ActiveProfiles(PROFILE)
 @TestPropertySource(properties = {
+        "repository.factoryClassName=com.coremedia.cap.xmlrepo.XmlCapConnectionFactory",
         "repository.params.contentxml=classpath:/com/coremedia/blueprint/cae/action/search/searchservice/content.xml",
 })
 public class SearchServiceTest {
@@ -70,19 +66,10 @@ public class SearchServiceTest {
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })
-  @ComponentScan("com.coremedia.cap.common.xml")
-  @ImportResource(
-          value = {
-                  CACHE,
-                  CONTENT_BEAN_FACTORY,
-                  ID_PROVIDER,
-                  "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
-                  "classpath:/framework/spring/blueprint-search.xml",
-                  "classpath:/framework/spring/blueprint-contentbeans.xml"
-          },
-          reader = ResourceAwareXmlBeanDefinitionReader.class
-  )
-  @Import({ContentTestConfiguration.class})
+  @Import({
+          BlueprintSearchCaeBaseLibConfiguration.class,
+          ContentTestConfiguration.class
+  })
   @Profile(PROFILE)
   public static class LocalConfig {
     public static final String PROFILE = "SearchServiceTest";

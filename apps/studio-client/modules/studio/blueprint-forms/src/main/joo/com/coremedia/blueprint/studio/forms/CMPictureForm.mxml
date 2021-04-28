@@ -60,8 +60,8 @@
                                    title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_Description_label')}"
                                    forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}">
           <editor:items>
-            <editor:StringPropertyField propertyName="alt"/>
-            <editor:StringPropertyField propertyName="copyright"/>
+            <editor:StringPropertyField propertyName="alt" itemId="alt"/>
+            <editor:StringPropertyField propertyName="copyright" itemId="copyright"/>
           </editor:items>
         </editor:PropertyFieldGroup>
         <media:MetaDataDocumentForm propertyName="data"

@@ -12,6 +12,7 @@
   }/>
 <#elseif self.url?has_content>
   <div class="${classBox}">
-    <img class="${classMedia} cm-media cm-media--uncropped" src="${self.url!""}" alt="">
+    <#assign commerceImageLink=cm.getLink(self)/>
+    <img class="${classMedia} cm-media cm-media--uncropped" src="${commerceImageLink!""}" alt="">
   </div>
 </#if>

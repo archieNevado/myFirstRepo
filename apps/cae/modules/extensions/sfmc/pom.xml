@@ -12,7 +12,6 @@
 
   <artifactId>sfmc-cae</artifactId>
 
-
   <properties>
     <coremedia.project.extension.for>cae</coremedia.project.extension.for>
   </properties>
@@ -45,6 +44,10 @@
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>cap-multisite</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>coremedia-spring</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>

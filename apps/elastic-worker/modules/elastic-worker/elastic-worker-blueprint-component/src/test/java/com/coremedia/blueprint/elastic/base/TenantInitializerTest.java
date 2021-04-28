@@ -9,13 +9,13 @@ import com.coremedia.elastic.core.api.tenant.TenantServiceListenerBase;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -30,12 +30,8 @@ import static org.junit.Assert.assertTrue;
 })
 public class TenantInitializerTest {
 
-  @Inject
+  @Autowired
   private MyTenantServiceListenerBase myTenantServiceListenerBase;
-
-  @Inject
-  private SettingsService settingsService;
-
 
   @Test
   public void tenantsRegistered() throws InterruptedException {

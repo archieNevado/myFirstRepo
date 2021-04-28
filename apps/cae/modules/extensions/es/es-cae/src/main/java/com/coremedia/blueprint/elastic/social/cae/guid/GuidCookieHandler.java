@@ -3,18 +3,14 @@ package com.coremedia.blueprint.elastic.social.cae.guid;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.elastic.core.api.settings.Settings;
-import com.coremedia.objectserver.beans.ContentBean;
-import com.coremedia.objectserver.beans.ContentBeanIdConverter;
 import com.coremedia.objectserver.web.links.Link;
 import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +28,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
 import java.security.SignatureException;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.UUID;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_NUMBER;
@@ -72,17 +69,15 @@ public class GuidCookieHandler {
       "/"+ GUID_COOKIE_PREFIX +
       "/{" + SEGMENT_ID + ":" + PATTERN_NUMBER + "}";
 
-  private SettingsService settingsService;
-
-  private ContentBeanIdConverter contentBeanIdConverter;
-
   /**
    * Public/private key pair used to generate GUID cookie
    */
   private final RSAKeyPair rsaKeyPair;
+  private final SettingsService settingsService;
 
-  public GuidCookieHandler(Settings settings) throws NoSuchAlgorithmException {
+  public GuidCookieHandler(Settings settings, SettingsService settingsService) throws NoSuchAlgorithmException {
     this.rsaKeyPair = RSAKeyPair.createFrom(settings);
+    this.settingsService = settingsService;
   }
 
   /**
@@ -121,9 +116,7 @@ public class GuidCookieHandler {
     //we always generate link on the root channel
     channel = channel.isRoot() ? channel : channel.getRootNavigation();
 
-    ImmutableMap<String, String> uriVariables = ImmutableMap.of(
-      SEGMENT_ID, getNumericId(channel));
-
+    Map<String, ?> uriVariables = Map.of(SEGMENT_ID, channel.getContentId());
     return UriComponentsBuilder.newInstance().replacePath(URI_PATTERN).buildAndExpand(uriVariables);
   }
 
@@ -140,10 +133,6 @@ public class GuidCookieHandler {
     }
 
     request.setAttribute(COOKIE_NAME, guid);
-  }
-
-  private String getNumericId(ContentBean source){
-    return contentBeanIdConverter.convert(source);
   }
 
   boolean validateGuid(String guid) {
@@ -237,15 +226,6 @@ public class GuidCookieHandler {
       throw new IllegalArgumentException("Not a valid guid: " + guid);
     }
     return guid.substring(index + 1);
-  }
-
-  public void setContentBeanIdConverter(ContentBeanIdConverter contentBeanIdConverter) {
-    this.contentBeanIdConverter = contentBeanIdConverter;
-  }
-
-  @Required
-  public void setSettingsService(SettingsService settingsService) {
-    this.settingsService = settingsService;
   }
 
 }

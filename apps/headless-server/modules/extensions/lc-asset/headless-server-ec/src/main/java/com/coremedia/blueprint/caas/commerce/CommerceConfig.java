@@ -12,6 +12,7 @@ import com.coremedia.blueprint.caas.commerce.adapter.CommerceBeanPageGridAdapter
 import com.coremedia.blueprint.caas.commerce.adapter.ProductListAdapterFactory;
 import com.coremedia.blueprint.caas.commerce.model.CommerceFacade;
 import com.coremedia.blueprint.caas.commerce.wiring.CommerceInstrumentation;
+import com.coremedia.blueprint.caas.search.HeadlessSearchConfiguration;
 import com.coremedia.caas.model.adapter.ExtendedLinkListAdapterFactory;
 import com.coremedia.caas.search.solr.SolrQueryBuilder;
 import com.coremedia.caas.search.solr.SolrSearchResultFactory;
@@ -35,11 +36,14 @@ import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.apache.solr.client.solrj.SolrClient;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.PropertySource;
 
 import java.util.List;
 import java.util.Optional;
@@ -51,6 +55,7 @@ import static com.coremedia.blueprint.base.pagegrid.PageGridContentKeywords.PAGE
 import static com.coremedia.blueprint.caas.commerce.adapter.CommerceBeanPageGridAdapterFactory.PDP_PAGEGRID_PROPERTY_NAME;
 
 @Configuration(proxyBeanMethods = false)
+@ConditionalOnProperty(prefix = "caas.commerce", name = "enabled", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties({
         CaasAssetSearchServiceConfigProperties.class
 })
@@ -58,9 +63,11 @@ import static com.coremedia.blueprint.caas.commerce.adapter.CommerceBeanPageGrid
         "com.coremedia.blueprint.base.livecontext.augmentation",
         "com.coremedia.livecontext.asset.impl",
 })
+@Import(HeadlessSearchConfiguration.class)
 @ImportResource(value = {
         "classpath:/META-INF/coremedia/lc-services.xml"
 }, reader = ResourceAwareXmlBeanDefinitionReader.class)
+@PropertySource("classpath:/META-INF/coremedia/headless-server-ec-defaults.properties")
 public class CommerceConfig {
   /**
    * @deprecated The headless server won't handle catalog data in near future anymore.

@@ -72,6 +72,13 @@
 
     <dependency>
       <groupId>com.coremedia.ui.sdk</groupId>
+      <artifactId>hideservice-components</artifactId>
+      <type>swc</type>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.ui.sdk</groupId>
       <artifactId>usermanager-components</artifactId>
       <type>swc</type>
       <scope>runtime</scope>

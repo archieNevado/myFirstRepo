@@ -2,11 +2,11 @@ package com.coremedia.blueprint.elastic.social.cae.action;
 
 import com.coremedia.blueprint.base.links.ContentLinkBuilder;
 import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
+import com.coremedia.blueprint.cae.configuration.BlueprintPageCaeContentBeansConfiguration;
 import com.coremedia.blueprint.cae.handlers.NavigationSegmentsUriHelper;
 import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.blueprint.testing.ContentTestConfiguration;
 import com.coremedia.cap.multisite.SitesService;
-import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import org.springframework.beans.factory.BeanFactory;
@@ -17,17 +17,20 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration(proxyBeanMethods = false)
 @ImportResource(
         value = {
-                "classpath:/framework/spring/blueprint-contentbeans.xml",
                 "classpath:/framework/spring/blueprint-handlers.xml",
-                "classpath:/framework/spring/blueprint-page.xml"
         },
         reader = com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader.class
 )
-@Import({XmlRepoConfiguration.class, ContentTestConfiguration.class})
+@Import({
+        BlueprintPageCaeContentBeansConfiguration.class,
+        ContentTestConfiguration.class,
+})
+@EnableWebMvc
 class AuthenticationHandlerTestConfiguration {
 
   @Bean

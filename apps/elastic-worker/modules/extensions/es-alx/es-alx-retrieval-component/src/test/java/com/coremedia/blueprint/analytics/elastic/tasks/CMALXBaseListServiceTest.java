@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-import static com.coremedia.elastic.core.test.Injection.inject;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
@@ -36,13 +35,11 @@ public class CMALXBaseListServiceTest {
     contentRepository = mock(ContentRepository.class);
     when(contentRepository.getContentType(TYPE_NAME)).thenReturn(contentType);
 
-    cmalxBaseListService = new CMALXBaseListService();
-    inject(cmalxBaseListService, contentRepository);
+    cmalxBaseListService = new CMALXBaseListService(contentRepository, elasticSocialPlugin);
   }
 
   @Test
   public void testGetCMALXBaseLists() throws Exception {
-    inject(cmalxBaseListService, elasticSocialPlugin);
     cmalxBaseListService.initialize();
     verify(contentRepository).getContentType(TYPE_NAME);
 

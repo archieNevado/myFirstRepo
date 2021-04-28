@@ -1,9 +1,6 @@
 package com.coremedia.ecommerce.studio.components.link {
-import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentType;
 import com.coremedia.cms.editor.sdk.editorContext;
-import com.coremedia.cms.editor.sdk.util.IContentAwareLinkListWrapper;
 import com.coremedia.cms.editor.sdk.util.LinkListWrapperBase;
 import com.coremedia.cms.studio.multisite.models.sites.Site;
 import com.coremedia.ecommerce.studio.augmentation.augmentationService;
@@ -13,11 +10,14 @@ import com.coremedia.ui.data.Bean;
 import com.coremedia.ui.data.BeanState;
 import com.coremedia.ui.data.PropertyChangeEvent;
 import com.coremedia.ui.data.RemoteBean;
+import com.coremedia.ui.data.RemoteBeanUtil;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.logging.Logger;
 
-public class CatalogLinkListWrapper extends LinkListWrapperBase implements IContentAwareLinkListWrapper {
+import js.Promise;
+
+public class CatalogLinkListWrapper extends LinkListWrapperBase {
 
   [Bindable]
   public var bindTo:ValueExpression;
@@ -99,9 +99,12 @@ public class CatalogLinkListWrapper extends LinkListWrapperBase implements ICont
     return maxCardinality - catalogItems.length;
   }
 
-  override public function acceptsLinks(links:Array):Boolean {
+  override public function acceptsLinks(links:Array, replaceLinks:Boolean = false):Boolean {
+    if (links.length > (replaceLinks ? getTotalCapacity() : getFreeCapacity())) {
+      return false;
+    }
     var targetSiteId:String = getTargetSiteId();
-    return links.every(function(link:Object):Boolean {
+    return links.every(function (link:Object):Boolean {
       var catalogObject:CatalogObject = getCatalogObject(link);
       if (!catalogObject) {
         return false;
@@ -110,7 +113,7 @@ public class CatalogLinkListWrapper extends LinkListWrapperBase implements ICont
         return false;
       }
 
-      return linkTypeNames.some(function(linkTypeName:String):Boolean {
+      return linkTypeNames.some(function (linkTypeName:String):Boolean {
         return CatalogHelper.getInstance().isSubType(catalogObject, linkTypeName);
       });
     });
@@ -154,25 +157,19 @@ public class CatalogLinkListWrapper extends LinkListWrapperBase implements ICont
     return getVE().getValue();
   }
 
-  override public function setLinks(links:Array):void {
-    if (createStructFunction) {
-      createStructFunction.apply();
-    }
-    var myLinks:Array = links.map(getCatalogObject);
-    //are some links yet not loaded?
-    //noinspection JSMismatchedCollectionQueryUpdate
-    var notLoadedLinks:Array = myLinks.filter(function(myLink:CatalogObject):Boolean {
-      return !myLink.isLoaded();
+  override public function setLinks(links:Array):Promise {
+    return new Promise(function (resolve:Function):void {
+      if (createStructFunction) {
+        createStructFunction.apply();
+      }
+      var myLinks:Array = links.map(getCatalogObject);
+      //are some links yet not loaded?
+      //noinspection JSMismatchedCollectionQueryUpdate
+      RemoteBeanUtil.loadAll(function ():void {
+        getVE().setValue(myLinks);
+        resolve(myLinks);
+      }, myLinks);
     });
-    if (!notLoadedLinks || notLoadedLinks.length === 0) {
-      getVE().setValue(myLinks);
-    } else {
-      notLoadedLinks.every(function(notLoadedLink:CatalogObject):void {
-        notLoadedLink.load(function():void {
-          setLinks(myLinks);
-        });
-      });
-    }
   }
 
   override public function isReadOnly():Boolean {
@@ -232,29 +229,6 @@ public class CatalogLinkListWrapper extends LinkListWrapperBase implements ICont
       }
     }
     return maxCardinality === 1 ? "" : [];
-  }
-
-  public function isAccepted(contentType:ContentType):Boolean {
-    var allowedContentTypes:Array = getAllowedContentTypes();
-    return allowedContentTypes.some(function (allowedContentType: ContentType): Boolean {
-      return contentType.isSubtypeOf(allowedContentType);
-    });
-  }
-
-  private function getAllowedContentTypes(): Array {
-    var allowedContentTypes: Array = [];
-
-    for (var contentTypeName: String in linkTypeNames) {
-      var contentType:ContentType = SESSION.getConnection().getContentRepository().getContentType(contentTypeName);
-      if (contentType) {
-        allowedContentTypes.push(contentType);
-      }
-    }
-    return allowedContentTypes;
-  }
-
-  public function getOwnerContent():Content {
-    return bindTo.getValue() as Content;
   }
 }
 }

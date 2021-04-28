@@ -15,6 +15,7 @@
     <module>catalog-content-services</module>
     <module>catalog-contentbeans-api</module>
     <module>catalog-contentbeans-lib</module>
+    <module>catalog-validators</module>
   </modules>
 
   <build>

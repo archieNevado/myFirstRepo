@@ -1,9 +1,9 @@
 package com.coremedia.blueprint.elastic.social.cae.user;
 
-import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.elastic.social.api.users.CommunityUserService;
 import com.coremedia.elastic.social.springsecurity.UserPrincipal;
@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.coremedia.elastic.core.test.Injection.inject;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -80,10 +79,7 @@ public class UserFilterTest {
     when(elasticSocialConfiguration.isFeedbackEnabled()).thenReturn(true);
 
     filterChain = new LoggedInUserFilterChain();
-    filter = new UserFilter();
-
-    inject(filter, communityUserService);
-    inject(filter, elasticSocialPlugin);
+    filter = new UserFilter(communityUserService, elasticSocialPlugin);
   }
 
   @Test
@@ -165,7 +161,7 @@ public class UserFilterTest {
     NotLoggedInUserFilterChain filterChain = new NotLoggedInUserFilterChain();
     UserContext.clear();
 
-    Filter filter = new UserFilter();
+    Filter filter = new UserFilter(communityUserService, elasticSocialPlugin);
 
     filter.init(null);
     filter.doFilter(servletRequest, response, filterChain);
@@ -179,7 +175,7 @@ public class UserFilterTest {
     NotLoggedInUserFilterChain filterChain = new NotLoggedInUserFilterChain();
     UserContext.clear();
 
-    Filter filter = new UserFilter();
+    Filter filter = new UserFilter(communityUserService, elasticSocialPlugin);
 
     filter.init(null);
     filter.doFilter(servletRequest, servletResponse, filterChain);

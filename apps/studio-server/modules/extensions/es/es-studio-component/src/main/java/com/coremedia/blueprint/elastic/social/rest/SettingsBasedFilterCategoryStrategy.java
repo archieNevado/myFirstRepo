@@ -1,16 +1,15 @@
 package com.coremedia.blueprint.elastic.social.rest;
 
-import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.base.elastic.tenant.TenantSiteMapping;
+import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.elastic.core.api.tenant.TenantService;
 import com.coremedia.elastic.social.rest.api.CategoryKeyAndDisplay;
 import com.coremedia.elastic.social.rest.api.FilterCategoryStrategy;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,18 +30,17 @@ public class SettingsBasedFilterCategoryStrategy implements FilterCategoryStrate
   static final String FILTER_CATEGORIES_PROPERTY = "filterCategories";
   public static final String ELASTIC_SOCIAL_STRUCT_NAME = "elasticSocial";
 
-  @Inject
-  private SettingsService settingsService;
+  private final SettingsService settingsService;
+  private final TenantService tenantService;
+  private final TenantSiteMapping tenantSiteMapping;
+  private final List<CategoryResolver> categoryResolvers;
 
-  @Inject
-  private TenantService tenantService;
-
-  @Inject
-  private TenantSiteMapping tenantSiteMapping;
-
-  @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-  @Inject
-  private List<CategoryResolver> categoryResolvers;
+  public SettingsBasedFilterCategoryStrategy(SettingsService settingsService, TenantService tenantService, TenantSiteMapping tenantSiteMapping, List<CategoryResolver> categoryResolvers) {
+    this.settingsService = settingsService;
+    this.tenantService = tenantService;
+    this.tenantSiteMapping = tenantSiteMapping;
+    this.categoryResolvers = categoryResolvers;
+  }
 
   @Override
   public List<CategoryKeyAndDisplay> getCategoryList() {

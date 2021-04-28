@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.cae.action.search;
 
+import com.coremedia.blueprint.cae.configuration.BlueprintPageCaeContentBeansConfiguration;
 import com.coremedia.blueprint.cae.contentbeans.PageImpl;
 import com.coremedia.blueprint.cae.handlers.HandlerTestConfiguration;
 import com.coremedia.blueprint.cae.handlers.LinkFormatterTestHelper;
@@ -14,14 +15,12 @@ import com.coremedia.blueprint.testing.ContentTestHelper;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
-import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -69,18 +68,16 @@ import static org.mockito.Mockito.when;
 public class PageSearchActionHandlerTest {
 
   @Configuration(proxyBeanMethods = false)
-  @EnableConfigurationProperties({
-          DeliveryConfigurationProperties.class
-  })
   @ImportResource(
           value = {
-                  "classpath:/framework/spring/blueprint-page.xml",
-                  "classpath:/framework/spring/blueprint-search.xml",
                   "classpath:/framework/spring/errorhandling.xml"
           },
           reader = ResourceAwareXmlBeanDefinitionReader.class
   )
-  @Import(HandlerTestConfiguration.class)
+  @Import({
+          BlueprintPageCaeContentBeansConfiguration.class,
+          HandlerTestConfiguration.class
+  })
   @Profile(PROFILE)
   public static class LocalConfig {
     public static final String PROFILE = "PageSearchActionHandlerTest";

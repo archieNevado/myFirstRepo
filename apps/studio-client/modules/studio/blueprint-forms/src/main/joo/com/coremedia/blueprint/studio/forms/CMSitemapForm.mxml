@@ -27,8 +27,10 @@
                 title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMSitemap_text')}"
                 itemId="cmSitemapTitleForm">
           <editor:items>
-            <editor:StringPropertyField propertyName="title"/>
-            <editor:LinkListPropertyField propertyName="root"/>
+            <editor:StringPropertyField propertyName="title"
+                                        itemId="title"/>
+            <editor:LinkListPropertyField propertyName="root"
+                                          itemId="root"/>
             <editor:IntegerPropertyField propertyName="localSettings.sitemap_depth"
                                          itemId="cmSitemapDepthForm"
                                          fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMSitemap_localSettings_sitemap_depth_text')}"/>

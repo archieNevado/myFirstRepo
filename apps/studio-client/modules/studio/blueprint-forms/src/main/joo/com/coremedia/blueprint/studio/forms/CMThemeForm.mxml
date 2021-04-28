@@ -22,8 +22,8 @@
                 title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMTheme_javaScriptGroup_text')}"
                 itemId="cmThemeJavaScriptLibsForm">
           <editor:items>
-            <editor:LinkListPropertyField propertyName="javaScriptLibs"/>
-            <editor:LinkListPropertyField propertyName="javaScripts"/>
+            <editor:LinkListPropertyField propertyName="javaScriptLibs" itemId="javaScriptLibs"/>
+            <editor:LinkListPropertyField propertyName="javaScripts" itemId="javaScripts"/>
           </editor:items>
         </editor:PropertyFieldGroup>
         <editor:PropertyFieldGroup
@@ -31,6 +31,7 @@
                 itemId="cmThemeCssForm">
           <editor:items>
             <editor:LinkListPropertyField propertyName="css"
+                                          itemId="css"
                                           hideLabel="true"/>
           </editor:items>
         </editor:PropertyFieldGroup>
@@ -39,6 +40,7 @@
                 itemId="cmThemeTemplateSetsForm">
           <editor:items>
             <editor:LinkListPropertyField propertyName="templateSets"
+                                          itemId="templateSets"
                                           hideLabel="true"/>
           </editor:items>
         </editor:PropertyFieldGroup>
@@ -53,8 +55,9 @@
                 itemId="detailsDocumentForm"
                 collapsed="false">
           <editor:items>
-            <editor:StringPropertyField propertyName="description"/>
-            <editor:RichTextPropertyField propertyName="detailText"
+            <editor:StringPropertyField propertyName="description" itemId="description"/>
+            <editor:RichTextPropertyField itemId="detailText"
+                                          propertyName="detailText"
                                           initialHeight="200"/>
             <Component height="6"/>
             <editor:BlobPropertyField propertyName="icon"/>

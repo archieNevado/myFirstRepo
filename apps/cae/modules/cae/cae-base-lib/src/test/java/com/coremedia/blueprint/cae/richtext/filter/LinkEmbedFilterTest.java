@@ -1,15 +1,14 @@
 package com.coremedia.blueprint.cae.richtext.filter;
 
+import com.coremedia.blueprint.cae.config.BlueprintRichtextFiltersConfiguration;
 import com.coremedia.blueprint.testing.ContentTestConfiguration;
 import com.coremedia.blueprint.testing.ContentTestHelper;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.objectserver.view.TextView;
 import com.coremedia.objectserver.view.ViewDispatcher;
 import com.coremedia.objectserver.view.ViewUtils;
-import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import com.coremedia.xml.ExtendedContentHandler;
 import com.coremedia.xml.Filter;
 import com.coremedia.xml.Markup;
@@ -22,7 +21,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -58,15 +56,10 @@ public class LinkEmbedFilterTest {
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })
-  @ImportResource(
-          value = {
-              "classpath:framework/spring/blueprint-richtextfilters.xml",
-              "classpath:/com/coremedia/cae/contentbean-services.xml",
-              "classpath:/com/coremedia/cae/dataview-services.xml",
-          },
-          reader = ResourceAwareXmlBeanDefinitionReader.class
-  )
-  @Import({XmlRepoConfiguration.class, ContentTestConfiguration.class})
+  @Import({
+          BlueprintRichtextFiltersConfiguration.class,
+          ContentTestConfiguration.class,
+  })
   @Profile(PROFILE)
   public static class LocalConfig {
     public static final String PROFILE = "LinkEmbedFilterTest";

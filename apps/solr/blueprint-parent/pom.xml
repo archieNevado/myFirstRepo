@@ -28,9 +28,9 @@
 
     <customer>Blueprint</customer>
 
-    <cm.solr.core.version>2101.3</cm.solr.core.version>
+    <cm.solr.core.version>2104.1</cm.solr.core.version>
 
-    <spring.boot.version>2.2.10.RELEASE</spring.boot.version>
+    <spring.boot.version>2.3.9.RELEASE</spring.boot.version>
     <application-plugin.version>2.8.3</application-plugin.version>
 
     <!--
@@ -60,15 +60,6 @@
 
     <caplist>com.coremedia.cotopaxi.list.elastic.mongodb.MongoCapListConnectorFactory</caplist>
 
-    <!--
-     | The base directory to persist transformed blobs, when starting CAE or Studio during development using the tomcat7-maven-plugin.
-     | The path defined here will be suffixed with the artifactId of the module starting the tomcat plugin to prevent cache conflicts
-     | between two processes when this property is set to a common value for all modules. With the default set to
-     | project.build.directory, the transformed blobs will be available until the next mvn clean is called.
-     | Set this property to a path outside the workspace to keep the transformed blobs permanently.
-     -->
-    <development.blobCache.basePath>${project.build.directory}/blobcache</development.blobCache.basePath>
-
     <skip-unit-tests>${skipTests}</skip-unit-tests>
     <skip-sfcc-tests>true</skip-sfcc-tests>
     <skip-ibm-tests>true</skip-ibm-tests>
@@ -79,7 +70,7 @@
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.solr.core.version>2101.3</cm.solr.core.version>
+    <cm.solr.core.version>2104.1</cm.solr.core.version>
     <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
 
     <showDeprecation>true</showDeprecation>
@@ -238,7 +229,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-assembly-plugin</artifactId>
-          <version>3.1.0</version>
+          <version>3.3.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>

@@ -17,7 +17,6 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -39,7 +38,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import static com.coremedia.blueprint.base.analytics.elastic.ReportModel.REPORT_DATE_FORMAT;
-import static com.coremedia.elastic.core.test.Injection.inject;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -55,8 +53,7 @@ public class AlxResourceTest {
 
   public static final String DEFAULT_SERVICE_PROVIDER = "googleAnalytics";
 
-  @InjectMocks
-  private AlxResource alxResource = new AlxResource();
+  private AlxResource alxResource;
 
   @Mock
   private PageViewReportModelService pageViewReportModelService;
@@ -88,18 +85,13 @@ public class AlxResourceTest {
   @Mock
   private PublicationReportModelService publicationReportModelService;
 
-  @SuppressWarnings("SpringJavaAutowiringInspection")
   @Inject
   private ContentRepository contentRepository;
 
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-
-    inject(alxResource, contentRepository);
-    inject(alxResource, publicationReportModelService);
-    inject(alxResource, pageViewReportModelService);
-    inject(alxResource, settingsService);
+    alxResource = new AlxResource(contentRepository, settingsService, pageViewReportModelService, publicationReportModelService, contentContextStrategy);
 
     when(settingsService.setting(eq(RetrievalUtil.DOCUMENT_PROPERTY_ANALYTICS_PROVIDER), eq(String.class), anyObject())).thenReturn("");
 

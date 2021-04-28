@@ -3,8 +3,6 @@ package com.coremedia.blueprint.cae.handlers;
 import com.coremedia.blueprint.cae.contentbeans.BlobFromContentBeanSetting;
 import com.coremedia.blueprint.testing.ContentTestHelper;
 import com.coremedia.cap.common.Blob;
-import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
-import com.coremedia.objectserver.configuration.CaeConfigurationProperties;
 import com.coremedia.cap.common.UrlBlob;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.objectserver.web.HandlerHelper;
@@ -14,7 +12,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -45,12 +42,10 @@ public class BlobHandlerTest {
 
   @Configuration(proxyBeanMethods = false)
   @Profile(PROFILE)
-  @EnableConfigurationProperties({
-          DeliveryConfigurationProperties.class,
-          CaeConfigurationProperties.class
+  @Import({
+          HandlerTestConfiguration.class,
   })
-  @Import({HandlerTestConfiguration.class})
-  static class LocalConfig extends AbstractHandlerTestConfiguration {
+  static class LocalConfig {
     public static final String PROFILE = "BlobHandlerTest";
     @Bean
     public XmlUapiConfig xmlUapiConfig() {

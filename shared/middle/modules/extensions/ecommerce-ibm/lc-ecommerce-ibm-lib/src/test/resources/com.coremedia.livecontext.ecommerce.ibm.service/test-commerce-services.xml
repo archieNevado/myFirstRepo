@@ -55,11 +55,11 @@
   </util:map>
 
   <bean id="testStoreContextProvider" class="com.coremedia.livecontext.ecommerce.ibm.common.IbmStoreContextProvider">
-    <constructor-arg index="0" name="commerceConnectionFinder" ref="defaultCommerceConnectionFinder"/>
-    <property name="sitesService" ref="sitesService"/>
-    <property name="settingsService" ref="settingsService"/>
+    <constructor-arg name="commerceConnectionFinder" ref="defaultCommerceConnectionFinder"/>
+    <constructor-arg name="sitesService" ref="sitesService"/>
+    <constructor-arg name="settingsService" ref="settingsService"/>
+    <constructor-arg name="cache" ref="cache"/>
     <property name="storeConfigurations" ref="testStoreConfigurations"/>
-    <property name="cache" ref="cache"/>
   </bean>
 
   <util:map id="anAlternativeStoreConfig">

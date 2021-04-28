@@ -66,6 +66,18 @@
               <!-- <markupProperty name="placement" url="10placement.xml" grammar="coremedia-struct-2008"/> -->
             </version>
           </document>
+
+          <document id="200" type="CMProductList" name="cmProductListSingleFacet">
+            <version number="1">
+              <markupProperty name="localSettings" url="200localsettings.xml" grammar="coremedia-struct-2008"/>
+            </version>
+          </document>
+          <document id="202" type="CMProductList" name="cmProductListMultiFacets">
+            <version number="1">
+              <markupProperty name="localSettings" url="202localsettings.xml" grammar="coremedia-struct-2008"/>
+            </version>
+          </document>
+
         </folder>
       </folder>
     </folder>

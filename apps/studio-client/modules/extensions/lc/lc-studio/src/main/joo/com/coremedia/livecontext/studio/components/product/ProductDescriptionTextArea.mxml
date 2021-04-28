@@ -10,7 +10,6 @@
                      readOnly="true">
   <fx:Script><![CDATA[
     import com.coremedia.cms.editor.sdk.util.RichTextPlainTextTransformer;
-    import com.coremedia.ecommerce.studio.helper.CatalogHelper;
     import com.coremedia.ecommerce.studio.model.ProductPropertyNames;
     import com.coremedia.ui.data.ValueExpression;
     import com.coremedia.ui.data.ValueExpressionFactory;

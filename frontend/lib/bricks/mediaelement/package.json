@@ -7,7 +7,8 @@
     "@coremedia/brick-node-decoration-service": "^1.0.0",
     "@coremedia/brick-utils": "^1.0.0",
     "jquery": "^3.0.0",
-    "mediaelement": "^4.0.0"
+    "mediaelement": "^4.0.0",
+    "promise-polyfill": "^8.2.0"
   },
   "devDependencies": {
     "prettier": "^2.0.5"

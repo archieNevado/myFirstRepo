@@ -35,7 +35,7 @@
                 title="{resourceManager.getString('com.coremedia.blueprint.elastic.social.studio.ElasticSocialStudioPlugin', 'CMMail_text')}"
                 itemId="cmMailTextForm">
           <editor:items>
-            <editor:StringPropertyField propertyName="subject"/>
+            <editor:StringPropertyField propertyName="subject" itemId="subject"/>
             <editor:TextBlobPropertyField propertyName="text"
                                           height="300"/>
             <Container layout="hbox">

@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiConsumer;
 
 class MutableFeedableImpl implements MutableFeedable {
 
@@ -129,5 +130,11 @@ class MutableFeedableImpl implements MutableFeedable {
   @Override
   public Collection<Object> getTriggers() {
     return Collections.emptySet();
+  }
+
+  @Override
+  public <T> void setNestedFeedables(@Nullable String name,
+                                     @NonNull Collection<T> values,
+                                     @NonNull BiConsumer<? super MutableFeedable, ? super T> nestedFeedablePopulator) {
   }
 }

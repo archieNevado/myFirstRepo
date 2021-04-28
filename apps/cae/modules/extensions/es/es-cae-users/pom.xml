@@ -18,11 +18,6 @@
       <artifactId>bpbase-es-common</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.elastic.core</groupId>
-      <artifactId>core-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>com.coremedia.elastic.social</groupId>
       <artifactId>social-api</artifactId>
     </dependency>
@@ -39,10 +34,6 @@
       <groupId>com.github.spotbugs</groupId>
       <artifactId>spotbugs-annotations</artifactId>
       <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>javax.inject</groupId>
-      <artifactId>javax.inject</artifactId>
     </dependency>
     <dependency>
       <groupId>jakarta.servlet</groupId>

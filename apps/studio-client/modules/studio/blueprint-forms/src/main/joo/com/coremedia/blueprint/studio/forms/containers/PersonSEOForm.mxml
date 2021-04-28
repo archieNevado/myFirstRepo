@@ -26,12 +26,14 @@
 
   <editor:items>
     <editor:StringPropertyField bindTo="{config.bindTo}"
-                                propertyName="segment">
+                                propertyName="segment"
+                                itemId="segment">
       <editor:plugins exml:mode="append">
         <editor:SEOStringPropertyFieldDelegatePlugin delegatePropertyNames="{config.delegatePropertyNames}"/>
       </editor:plugins>
     </editor:StringPropertyField>
-    <editor:StringPropertyField propertyName="htmlTitle">
+    <editor:StringPropertyField propertyName="htmlTitle"
+                                itemId="htmlTitle">
       <editor:plugins exml:mode="append">
         <editor:SEOStringPropertyFieldDelegatePlugin delegatePropertyNames="{config.delegatePropertyNames}"/>
       </editor:plugins>
@@ -39,7 +41,8 @@
     <editor:TextAreaStringPropertyField changeBuffer="1000"
                                         minHeight="100"
                                         bindTo="{config.bindTo}"
-                                        propertyName="htmlDescription"/>
+                                        propertyName="htmlDescription"
+                                        itemId="htmlDescription"/>
   </editor:items>
 
 </editor:PropertyFieldGroup>

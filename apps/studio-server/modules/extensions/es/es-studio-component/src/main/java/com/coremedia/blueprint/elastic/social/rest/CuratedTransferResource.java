@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -74,17 +73,17 @@ public class CuratedTransferResource {
   private static final String IMAGE_PROPERTY_TITLE = "title";
   private static final String IMAGE_PROPERTY_BLOB = "data";
 
-  @Inject
-  private ContentRepository contentRepository;
+  private final ContentRepository contentRepository;
+  private final CommentService commentService;
+  private final ReviewService reviewService;
+  private final BlobConverter blobConverter;
 
-  @Inject
-  private CommentService commentService;
-
-  @Inject
-  private ReviewService reviewService;
-
-  @Inject
-  private BlobConverter blobConverter;
+  public CuratedTransferResource(ContentRepository contentRepository, CommentService commentService, ReviewService reviewService, BlobConverter blobConverter) {
+    this.contentRepository = contentRepository;
+    this.commentService = commentService;
+    this.reviewService = reviewService;
+    this.blobConverter = blobConverter;
+  }
 
   /**
    * <p>Copies {@link Comment comments} into a single {@link Content}.</p>

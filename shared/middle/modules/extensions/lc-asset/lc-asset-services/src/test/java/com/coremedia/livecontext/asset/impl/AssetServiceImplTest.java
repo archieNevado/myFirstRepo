@@ -5,6 +5,7 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBui
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.ecommerce.test.TestVendors;
@@ -22,13 +23,13 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper.parseCommerceIdOrThrow;
 import static com.google.common.collect.ImmutableList.of;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -55,13 +56,9 @@ public class AssetServiceImplTest {
   private static final String URL_WITH_EXTERNAL_ID_OF_SKU
           = "http://localhost:40081/blueprint/servlet/catalogimage/product/10202/en_US/full/" + EXTERNAL_ID_SKU + ".jpg";
 
-  private static final String NOT_LINKED_URL
-          = "http://localhost:40081/blueprint/servlet/catalogimage/product/10202/en_US/full/anyID.jpg";
-
-  private static final String COMMERCE_URL
-          = "http://shop-preview-production-helios.blueprint-box.vagrant/wcsstore/ExtendedSitesCatalogAssetStore/images/catalog/apparel/boys/bcl014_tops/646x1000/bcl014_1417.jpg";
-
   private static final String CMPICTURE_DOCTYPE_NAME = "CMPicture";
+  private static final String CMVISUAL_DOCTYPE_NAME = "CMVisual";
+  private static final String CMDOWNLOAD_DOCTYPE_NAME = "CMDownload";
 
   @InjectMocks
   @Spy
@@ -88,7 +85,7 @@ public class AssetServiceImplTest {
 
     StoreContextImpl storeContext = StoreContextBuilderImpl.from(commerceConnection, "site-1").build();
 
-    when(commerceConnection.getIdProvider()).thenReturn(TestVendors.getIdProvider("vendor"));
+
     when(commerceConnection.getLinkService()).thenReturn(Optional.of(linkService));
 
     CurrentStoreContext.set(storeContext);
@@ -106,22 +103,10 @@ public class AssetServiceImplTest {
 
   @SuppressWarnings("Duplicates")
   @Test
-  public void testGetCatalogPicture() {
-    when(sitesService.findSite(anyString())).thenReturn(Optional.of(site1));
-    Content picture = mock(Content.class);
-    when(assetResolvingStrategy.findAssets(CMPICTURE_DOCTYPE_NAME, COMMERCE_ID, site1)).thenReturn(of(picture));
-
-    CatalogPicture catalogPicture = testling.getCatalogPicture(URL_WITH_EXTERNAL_ID_1);
-    assertNotNull(catalogPicture);
-    assertEquals(picture, catalogPicture.getPicture());
-  }
-
-  @SuppressWarnings("Duplicates")
-  @Test
   public void testGetCatalogPictureFromCommerceId() {
-    when(sitesService.findSite(anyString())).thenReturn(Optional.of(site1));
     Content picture = mock(Content.class);
     when(assetResolvingStrategy.findAssets(CMPICTURE_DOCTYPE_NAME, COMMERCE_ID, site1)).thenReturn(of(picture));
+    when(sitesService.getSite(anyString())).thenReturn(site1);
 
     CatalogPicture catalogPicture = testling.getCatalogPicture(URL_WITH_EXTERNAL_ID_1, COMMERCE_ID);
     assertNotNull(catalogPicture);
@@ -130,22 +115,10 @@ public class AssetServiceImplTest {
 
   @SuppressWarnings("Duplicates")
   @Test
-  public void testGetCatalogPictureSKU() {
-    when(sitesService.findSite(anyString())).thenReturn(Optional.of(site1));
-    Content picture = mock(Content.class);
-    when(assetResolvingStrategy.findAssets(CMPICTURE_DOCTYPE_NAME, COMMERCE_ID_SKU_AS_PRODUCT, site1)).thenReturn(of(picture));
-
-    CatalogPicture catalogPicture = testling.getCatalogPicture(URL_WITH_EXTERNAL_ID_OF_SKU);
-    assertNotNull(catalogPicture);
-    assertEquals(picture, catalogPicture.getPicture());
-  }
-
-  @SuppressWarnings("Duplicates")
-  @Test
   public void testGetCatalogPictureSKUFromCommerceId() {
-    when(sitesService.findSite(anyString())).thenReturn(Optional.of(site1));
     Content picture = mock(Content.class);
     when(assetResolvingStrategy.findAssets(CMPICTURE_DOCTYPE_NAME, COMMERCE_ID_SKU_AS_PRODUCT, site1)).thenReturn(of(picture));
+    when(sitesService.getSite(anyString())).thenReturn(site1);
 
     CatalogPicture catalogPicture = testling.getCatalogPicture(URL_WITH_EXTERNAL_ID_OF_SKU, COMMERCE_ID_SKU_AS_PRODUCT);
     assertNotNull(catalogPicture);
@@ -153,34 +126,58 @@ public class AssetServiceImplTest {
   }
 
   @Test
-  public void testGetCatalogPicture2() {
-    CatalogPicture catalogPicture = testling.getCatalogPicture(COMMERCE_URL);
-    assertNotNull(catalogPicture);
-    assertNull(catalogPicture.getPicture());
-    assertNotNull(catalogPicture.getUrl());
-  }
-
-  @Test
-  public void testGetCatalogPictureSiteDefault() {
-    when(sitesService.findSite(anyString())).thenReturn(Optional.of(site1));
-    StoreContext storeContext = CurrentStoreContext.get();
-    when(linkService.getImageUrl(NOT_LINKED_URL, storeContext)).thenReturn(Optional.of(NOT_LINKED_URL));
-
-    CatalogPicture catalogPicture = testling.getCatalogPicture(NOT_LINKED_URL);
-    assertNull(catalogPicture.getPicture());
-    assertEquals(NOT_LINKED_URL, catalogPicture.getUrl());
-  }
-
-  @Test
   public void testDefaultPicture() {
     Content defaultPicture = mock(Content.class);
+    Content siteRootDocument = mock(Content.class);
 
-    when(settingsService.getSetting(anyString(), eq(Content.class), nullable(Content.class)))
+    when(settingsService.getSetting(anyString(), eq(Content.class), nullable(Site.class)))
             .thenReturn(Optional.of(defaultPicture));
-    when(sitesService.findSite(anyString())).thenReturn(Optional.of(site1));
+    when(sitesService.getSite(anyString())).thenReturn(site1);
 
     assertEquals(defaultPicture, testling.findPictures(COMMERCE_ID).iterator().next());
     assertEquals(defaultPicture, testling.findPictures(COMMERCE_ID, true).iterator().next());
+    assertEquals(defaultPicture, testling.findPictures(COMMERCE_ID, true, "site-1").iterator().next());
     assertTrue(testling.findPictures(COMMERCE_ID, false).isEmpty());
+  }
+
+  @Test
+  public void testFindPictures() {
+    Content picture = mock(Content.class);
+    when(assetResolvingStrategy.findAssets(CMPICTURE_DOCTYPE_NAME, COMMERCE_ID, site1)).thenReturn(of(picture));
+    when(sitesService.getSite(anyString())).thenReturn(site1);
+    assertEquals(picture, testling.findPictures(COMMERCE_ID, false).iterator().next());
+    assertEquals(picture, testling.findPictures(COMMERCE_ID, false, "site-1").iterator().next());
+  }
+
+  @Test
+  public void testFindVisuals() {
+    Content visual = mock(Content.class);
+    ContentType type = mock(ContentType.class);
+    when(assetResolvingStrategy.findAssets(CMVISUAL_DOCTYPE_NAME, COMMERCE_ID, site1)).thenReturn(of(visual));
+    when(sitesService.getSite(anyString())).thenReturn(site1);
+    when(visual.getType()).thenReturn(type);
+    when(type.isSubtypeOf(anyString())).thenReturn(false);
+    assertEquals(visual, testling.findVisuals(COMMERCE_ID, false).iterator().next());
+    assertEquals(visual, testling.findVisuals(COMMERCE_ID, false, "site-1").iterator().next());
+  }
+
+  @Test
+  public void testFindDownloads() {
+    Content download = mock(Content.class);
+    when(assetResolvingStrategy.findAssets(CMDOWNLOAD_DOCTYPE_NAME, COMMERCE_ID, site1)).thenReturn(of(download));
+    when(sitesService.findSite(anyString())).thenReturn(Optional.of(site1));
+    assertEquals(download, testling.findDownloads(COMMERCE_ID).iterator().next());
+    assertEquals(download, testling.findDownloads(COMMERCE_ID, "site-1").iterator().next());
+  }
+
+  @Test
+  public void testFindPicturesWithSiteId() {
+    Content picture = mock(Content.class);
+    when(assetResolvingStrategy.findAssets(CMPICTURE_DOCTYPE_NAME, COMMERCE_ID, site1)).thenReturn(of(picture));
+    when(sitesService.getSite(anyString())).thenReturn(site1);
+
+    List<Content> pictures = testling.findPictures(COMMERCE_ID, false, "site-1");
+    assertNotNull(pictures);
+    assertEquals(picture, testling.findPictures(COMMERCE_ID).iterator().next());
   }
 }

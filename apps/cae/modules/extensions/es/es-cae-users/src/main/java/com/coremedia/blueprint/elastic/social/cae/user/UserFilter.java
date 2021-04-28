@@ -7,12 +7,11 @@ import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.elastic.social.api.users.CommunityUserService;
 import com.coremedia.elastic.social.springsecurity.UserPrincipal;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
-import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -24,11 +23,13 @@ import java.io.IOException;
 
 public class UserFilter implements Filter {
 
-  @Inject
-  private CommunityUserService communityUserService;
+  private final CommunityUserService communityUserService;
+  private final ElasticSocialPlugin elasticSocialPlugin;
 
-  @Inject
-  private ElasticSocialPlugin elasticSocialPlugin;
+  public UserFilter(CommunityUserService communityUserService, ElasticSocialPlugin elasticSocialPlugin) {
+    this.communityUserService = communityUserService;
+    this.elasticSocialPlugin = elasticSocialPlugin;
+  }
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {

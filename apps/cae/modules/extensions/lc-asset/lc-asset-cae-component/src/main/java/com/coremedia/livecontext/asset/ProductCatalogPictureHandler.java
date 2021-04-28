@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Optional;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_EXTENSION;
@@ -28,7 +26,6 @@ import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_E
 @RequestMapping
 public class ProductCatalogPictureHandler extends CatalogPictureHandlerBase {
 
-  //TODO: mbi siehe unten
   private static final String SAP_HYBRIS_VENDOR_ID = "hybris";
 
   /**
@@ -55,15 +52,14 @@ public class ProductCatalogPictureHandler extends CatalogPictureHandlerBase {
                   "/{" + PART_NUMBER + "}" +
                   ".{" + SEGMENT_EXTENSION + ":" + PATTERN_EXTENSION + "}";
 
-  @GetMapping(value = IMAGE_URI_PATTERN_FOR_CATALOG)
+  @GetMapping(IMAGE_URI_PATTERN_FOR_CATALOG)
   public ModelAndView handleRequestWidthHeightForProductWithCatalog(@PathVariable(STORE_ID) String storeId,
                                                                     @PathVariable(LOCALE) String locale,
                                                                     @PathVariable(FORMAT_NAME) String formatName,
                                                                     @PathVariable(PART_NUMBER) String partNumber,
                                                                     @PathVariable(SEGMENT_EXTENSION) String extension,
                                                                     @PathVariable(CATALOG_ID) String catalogId,
-                                                                    WebRequest request,
-                                                                    HttpServletResponse response) throws IOException {
+                                                                    WebRequest request) {
     //the given partnumber can be of a product or of a sku but we need the correct reference id
     //so ask catalog service we will give us a sku instance if the partnumber belongs to a sku
 
@@ -85,29 +81,29 @@ public class ProductCatalogPictureHandler extends CatalogPictureHandlerBase {
       return null;
     }
 
+    //SAP Hybris specific logic
     if (HandlerHelper.isNotFound(modelAndView)
             && SAP_HYBRIS_VENDOR_ID.equals(connection.getVendorName())
             && productOrSkuOpt.isPresent()) {
-      response.sendRedirect(productOrSkuOpt.get().getCatalogPicture().getUrl());
+      return HandlerHelper.redirectTo(productOrSkuOpt.get().getCatalogPicture());
     }
 
     return modelAndView;
   }
 
-  @GetMapping(value = IMAGE_URI_PATTERN)
+  @GetMapping(IMAGE_URI_PATTERN)
   public ModelAndView handleRequestWidthHeightForProduct(@PathVariable(STORE_ID) String storeId,
                                                          @PathVariable(LOCALE) String locale,
                                                          @PathVariable(FORMAT_NAME) String formatName,
                                                          @PathVariable(PART_NUMBER) String partNumber,
                                                          @PathVariable(SEGMENT_EXTENSION) String extension,
-                                                         WebRequest request,
-                                                         HttpServletResponse response) throws IOException {
+                                                         WebRequest request) {
     StoreContext storeContext = CurrentStoreContext.get();
 
     String catalogId = storeContext.getCatalogId().map(CatalogId::value).orElse(null);
 
     return handleRequestWidthHeightForProductWithCatalog(storeId, locale, formatName, partNumber, extension, catalogId,
-            request, response);
+            request);
   }
 
   private static Optional<Product> loadProductOrVariant(CatalogAlias catalogAlias, String partNumber,

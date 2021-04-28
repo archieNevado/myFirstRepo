@@ -30,6 +30,7 @@
     import com.coremedia.ecommerce.studio.model.MarketingSpotImpl;
     import com.coremedia.ecommerce.studio.model.ProductImpl;
     import com.coremedia.ecommerce.studio.model.ProductVariantImpl;
+    import com.coremedia.ecommerce.studio.model.SearchFacetsImpl;
     import com.coremedia.ecommerce.studio.model.SegmentImpl;
     import com.coremedia.ecommerce.studio.model.SegmentsImpl;
     import com.coremedia.ecommerce.studio.model.Store;
@@ -136,6 +137,7 @@
         <ui:AddItemsPlugin>
           <ui:items>
             <DisplayField
+                    margin="0 4 0 4"
                     fieldLabel="{ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'HeaderToolbar_commerceStore_label')}"
                     labelAlign="top"
                     labelSeparator="">
@@ -189,6 +191,7 @@
     <editor:RegisterRestResource beanClass="{MarketingSpotImpl}"/>
     <editor:RegisterRestResource beanClass="{MarketingImpl}"/>
     <editor:RegisterRestResource beanClass="{FacetsImpl}"/>
+    <editor:RegisterRestResource beanClass="{SearchFacetsImpl}"/>
     <editor:RegisterRestResource beanClass="{CommerceBeanPreviewsImpl}"/>
   </local:configuration>
 

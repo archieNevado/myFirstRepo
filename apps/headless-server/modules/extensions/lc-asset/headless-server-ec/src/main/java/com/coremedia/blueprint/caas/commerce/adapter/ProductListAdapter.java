@@ -141,7 +141,11 @@ public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
   }
 
   private int getProductOffset() {
-    int initialOffset = Optional.ofNullable(CapStructUtil.getInteger(getSettings(), STRUCT_KEY_PRODUCTLIST_OFFSET)).orElse(0);
+    // The UI (and thus productList settings) work with an offset based
+    // on 1, whereas the API works with a technical offset based on 0.
+    int initialOffset = Optional.ofNullable(CapStructUtil.getInteger(getSettings(), STRUCT_KEY_PRODUCTLIST_OFFSET))
+            .map(o -> o - 1)
+            .orElse(0);
     int productOffset = initialOffset;
     if (Optional.ofNullable(offset).isPresent()) {
       productOffset = initialOffset + PaginationHelper.dynamicOffset(getFixedItemsStructList(), offset, ANNOTATED_LINK_STRUCT_INDEX_PROPERTY_NAME);

@@ -9,6 +9,7 @@ import com.coremedia.livecontext.contentbeans.CMExternalPage;
 import com.coremedia.livecontext.contentbeans.CMProductTeaser;
 import com.coremedia.livecontext.contentbeans.LiveContextExternalChannel;
 import com.coremedia.livecontext.contentbeans.LiveContextExternalProduct;
+import com.coremedia.livecontext.ecommerce.asset.CatalogPicture;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.link.StorefrontRefKey;
@@ -228,6 +229,27 @@ public class CommerceLinks {
     return CurrentStoreContext.find()
             .flatMap(context -> getUriComponents(context, storefrontRefKey))
             .orElse(null);
+  }
+
+  /**
+   * Handles commerce urls for CatalogPictures.
+   * CatalogPictures with linked CMPicture documents are not handled here.
+   *
+   * @param catalogPicture
+   * @return the commerce picture url.
+   * null if a CMPicture document is linked.
+   * "#", if picture and url are null.
+   */
+  @Nullable
+  @Link(type = CatalogPicture.class)
+  public String buildCatalogPictureCommerceUrl(CatalogPicture catalogPicture) {
+    //do not handle CMPictures
+    if (catalogPicture.getPicture() != null) {
+      return null;
+    }
+
+    String pictureUrl = catalogPicture.getUrl();
+    return pictureUrl != null ? pictureUrl : "#";
   }
 
 }

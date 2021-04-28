@@ -1,11 +1,6 @@
 import $ from "jquery";
 import * as utils from "@coremedia/brick-utils";
-
-import "mediaelement/full";
-import "mediaelement/build/renderers/dailymotion";
-import "mediaelement/build/renderers/twitch";
-import "mediaelement/build/renderers/vimeo";
-import "mediaelement/build/renderers/facebook";
+import "promise-polyfill/src/polyfill";
 
 /**
  * @event "videoStart" triggered to start the video
@@ -34,6 +29,7 @@ export const EVENT_VIDEO_TIME_UPDATED = "videoTimeUpdated";
  * See renderers for supported external videos
  *
  * @param videoElement
+ * @return a Promise which resolves when the media element is initialized
  */
 function videoAsMediaElement(videoElement) {
   const $video = $(videoElement);
@@ -48,99 +44,114 @@ function videoAsMediaElement(videoElement) {
     $video.attr("type", "video/vimeo");
   }
 
-  // mediaElement object of the video
-  // eslint-disable-next-line no-undef
-  const me = new MediaElement(
-    videoElement,
-    {
-      renderers: [
-        "html5",
-        "youtube_iframe",
-        "vimeo_iframe",
-        //"dailymotion_iframe", // not tested yet
-        //"facebook", // not tested yet
-      ],
-      stretching: "fill",
-      fakeNodeName: "cm-mediaelementwrapper",
-      useDefaultControls: true,
+  return import("mediaelement/full")
+    .then(() =>
+      Promise.all([
+        import("mediaelement/build/renderers/dailymotion"),
+        import("mediaelement/build/renderers/twitch"),
+        import("mediaelement/build/renderers/vimeo"),
+        import("mediaelement/build/renderers/facebook"),
+      ])
+    )
+    .then(() => {
+      // mediaElement object of the video
+      // eslint-disable-next-line no-undef
+      const me = new MediaElement(
+        videoElement,
+        {
+          renderers: [
+            "html5",
+            "youtube_iframe",
+            "vimeo_iframe",
+            //"dailymotion_iframe", // not tested yet
+            //"facebook", // not tested yet
+          ],
+          stretching: "fill",
+          fakeNodeName: "cm-mediaelementwrapper",
+          useDefaultControls: true,
 
-      // events of videos
-      success: function (mediaElement) {
-        const $mediaElement = $(mediaElement);
-        // attach css class
-        $mediaElement.addClass("cm-mediaelementwrapper");
-        // video loaded
-        mediaElement.addEventListener(
-          "loadedmetadata",
-          function () {
-            utils.log(
-              "Video " +
-                mediaElement.src +
-                " (" +
-                (mediaElement.muted ? "muted, " : "") +
-                (mediaElement.loop ? "looped, " : "") +
-                (mediaElement.autoplay ? "autoplay, " : "") +
-                (mediaElement.controls !== false ? "controls" : "no-controls") +
-                ") loaded.",
-              $video
+          // events of videos
+          success: function (mediaElement) {
+            const $mediaElement = $(mediaElement);
+            // attach css class
+            $mediaElement.addClass("cm-mediaelementwrapper");
+            // video loaded
+            mediaElement.addEventListener(
+              "loadedmetadata",
+              function () {
+                utils.log(
+                  "Video " +
+                    mediaElement.src +
+                    " (" +
+                    (mediaElement.muted ? "muted, " : "") +
+                    (mediaElement.loop ? "looped, " : "") +
+                    (mediaElement.autoplay ? "autoplay, " : "") +
+                    (mediaElement.controls !== false
+                      ? "controls"
+                      : "no-controls") +
+                    ") loaded.",
+                  $video
+                );
+                $document.trigger(utils.EVENT_LAYOUT_CHANGED);
+              },
+              false
             );
-            $document.trigger(utils.EVENT_LAYOUT_CHANGED);
+
+            // video started
+            mediaElement.addEventListener(
+              "playing",
+              function () {
+                utils.log(
+                  "Video started with duration of " + me.duration + "ms."
+                );
+              },
+              false
+            );
+
+            // video ended
+            // delegate to own event, so the implementation does not rely on MediaElement Plugin
+            // additionally youtube/vimeo/.. players could be able to trigger videoEnded event
+            mediaElement.addEventListener(
+              "ended",
+              function () {
+                utils.log("Video playback ended.");
+                $video.trigger(EVENT_VIDEO_ENDED);
+              },
+              false
+            );
+
+            // track position of video and trigger EVENT_VIDEO_TIME_UPDATED
+            // used in shoppable video
+            mediaElement.addEventListener(
+              "timeupdate",
+              function (event) {
+                let currentTime = event.detail.target.currentTime;
+                $video.trigger(EVENT_VIDEO_TIME_UPDATED, {
+                  position: Math.floor(currentTime) * 1000,
+                });
+              },
+              false
+            );
           },
-          false
-        );
-
-        // video started
-        mediaElement.addEventListener(
-          "playing",
-          function () {
-            utils.log("Video started with duration of " + me.duration + "ms.");
+          error: function (mediaElement) {
+            utils.error("Error: Could not load video.", mediaElement.src);
           },
-          false
-        );
+        },
+        null
+      );
 
-        // video ended
-        // delegate to own event, so the implementation does not rely on MediaElement Plugin
-        // additionally youtube/vimeo/.. players could be able to trigger videoEnded event
-        mediaElement.addEventListener(
-          "ended",
-          function () {
-            utils.log("Video playback ended.");
-            $video.trigger(EVENT_VIDEO_ENDED);
-          },
-          false
-        );
+      // start video, triggered by EVENT_VIDEO_START from outside, like in shoppable video or pdp
+      $video.on(EVENT_VIDEO_START, function () {
+        utils.log("Video started by EVENT_VIDEO_START");
+        me.play();
+      });
 
-        // track position of video and trigger EVENT_VIDEO_TIME_UPDATED
-        // used in shoppable video
-        mediaElement.addEventListener(
-          "timeupdate",
-          function (event) {
-            let currentTime = event.detail.target.currentTime;
-            $video.trigger(EVENT_VIDEO_TIME_UPDATED, {
-              position: Math.floor(currentTime) * 1000,
-            });
-          },
-          false
-        );
-      },
-      error: function (mediaElement) {
-        utils.error("Error: Could not load video.", mediaElement.src);
-      },
-    },
-    null
-  );
-
-  // start video, triggered by EVENT_VIDEO_START from outside, like in shoppable video or pdp
-  $video.on(EVENT_VIDEO_START, function () {
-    utils.log("Video started by EVENT_VIDEO_START");
-    me.play();
-  });
-
-  // stop video, triggered by EVENT_VIDEO_STOP from outside, like in popup
-  $video.on(EVENT_VIDEO_STOP, function () {
-    utils.log("Video stopped by EVENT_VIDEO_STOP");
-    me.pause();
-  });
+      // stop video, triggered by EVENT_VIDEO_STOP from outside, like in popup
+      $video.on(EVENT_VIDEO_STOP, function () {
+        utils.log("Video stopped by EVENT_VIDEO_STOP");
+        me.pause();
+      });
+    });
 }
 
 /**

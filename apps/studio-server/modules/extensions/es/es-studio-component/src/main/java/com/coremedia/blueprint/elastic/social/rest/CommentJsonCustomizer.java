@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.List;
 import java.util.Map;
@@ -28,8 +27,11 @@ public class CommentJsonCustomizer implements JsonCustomizer<Comment> {
 
   private static final String CURATED_CONTENTS = "curatedContents";
 
-  @Inject
-  ContentRepositoryResource contentRepositoryResource;
+  private final ContentRepositoryResource contentRepositoryResource;
+
+  public CommentJsonCustomizer(ContentRepositoryResource contentRepositoryResource) {
+    this.contentRepositoryResource = contentRepositoryResource;
+  }
 
   @Override
   public void customize(Comment comment, @PersonalData Map<String, Object> serializedObject) {

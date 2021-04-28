@@ -9,11 +9,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
 @Configuration(proxyBeanMethods = false)
-@ImportResource(reader = ResourceAwareXmlBeanDefinitionReader.class,
-                value = {
-                        "classpath:/com/coremedia/cae/contentbean-services.xml",
-                }
-)
+@ImportResource(value = {
+        "classpath:/com/coremedia/cae/contentbean-services.xml",
+}, reader = ResourceAwareXmlBeanDefinitionReader.class)
 public class SFMCP13NPreviewCAEConfiguration {
 
   @Bean

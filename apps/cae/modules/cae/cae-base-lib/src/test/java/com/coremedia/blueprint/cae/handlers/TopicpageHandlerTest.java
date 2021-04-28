@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.cae.handlers;
 
+import com.coremedia.blueprint.cae.configuration.BlueprintPageCaeContentBeansConfiguration;
 import com.coremedia.blueprint.cae.test.BlueprintMockRequestUtil;
 import com.coremedia.blueprint.common.contentbeans.CMCSS;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
@@ -9,19 +10,14 @@ import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
 import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.blueprint.common.services.context.CurrentContextService;
 import com.coremedia.blueprint.testing.ContentTestHelper;
-import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
-import com.coremedia.objectserver.configuration.CaeConfigurationProperties;
 import com.coremedia.objectserver.web.links.LinkFormatter;
-import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -51,17 +47,10 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
 public class TopicpageHandlerTest {
 
   @Configuration(proxyBeanMethods = false)
-  @EnableConfigurationProperties({
-          DeliveryConfigurationProperties.class,
-          CaeConfigurationProperties.class
+  @Import({
+          BlueprintPageCaeContentBeansConfiguration.class,
+          HandlerTestConfiguration.class
   })
-  @ImportResource(
-          value = {
-                  "classpath:/framework/spring/blueprint-page.xml",
-          },
-          reader = ResourceAwareXmlBeanDefinitionReader.class
-  )
-  @Import(HandlerTestConfiguration.class)
   @Profile(PROFILE)
   public static class LocalConfig {
     public static final String PROFILE = "TopicpageHandlerTest";

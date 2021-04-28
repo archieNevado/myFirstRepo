@@ -1,17 +1,18 @@
 package com.coremedia.blueprint.cae.handlers;
 
+import com.coremedia.blueprint.base.links.UrlPrefixResolver;
 import com.coremedia.blueprint.base.settings.SettingsService;
+import com.coremedia.blueprint.cae.sitemap.SitemapHelper;
 import com.coremedia.blueprint.cae.view.RobotsView;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.robots.RobotsBean;
 import com.coremedia.blueprint.common.robots.RobotsEntry;
-import com.coremedia.blueprint.testing.ContentTestConfiguration;
 import com.coremedia.blueprint.testing.ContentTestHelper;
-import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.objectserver.web.HttpError;
+import com.coremedia.objectserver.web.links.LinkFormatter;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,7 +44,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.coremedia.blueprint.cae.handlers.RobotsHandlerTest.LocalConfig.PROFILE;
-import static com.coremedia.cap.test.xmlrepo.XmlRepoResources.LINK_FORMATTER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -67,16 +67,12 @@ public class RobotsHandlerTest {
   })
   @ImportResource(
           value = {
-                  LINK_FORMATTER,
-                  "classpath:/framework/spring/blueprint-contentbeans.xml",
                   "classpath:/com/coremedia/cae/view-error-services.xml",
                   "classpath:/spring/test/dummy-views.xml",
-                  "classpath:/framework/spring-test/blueprint-robots-test.xml",
-                  "classpath:/framework/spring/blueprint-handlers.xml"
           },
           reader = ResourceAwareXmlBeanDefinitionReader.class
   )
-  @Import({XmlRepoConfiguration.class, ContentTestConfiguration.class})
+  @Import({HandlerTestConfiguration.class})
   @Profile(PROFILE)
   public static class LocalConfig {
     public static final String PROFILE = "RobotsHandlerTest";
@@ -86,6 +82,19 @@ public class RobotsHandlerTest {
     @Scope(SCOPE_SINGLETON)
     public XmlUapiConfig xmlUapiConfig() {
       return new XmlUapiConfig(CONTENT_REPOSITORY);
+    }
+
+    @Bean
+    public RobotsView robotsView(LinkFormatter linkFormatter, SitemapHelper sitemapHelper) {
+      RobotsView robotsView = new RobotsView();
+      robotsView.setLinkFormatter(linkFormatter);
+      robotsView.setSitemapHelper(sitemapHelper);
+      return robotsView;
+    }
+
+    @Bean
+    SitemapHelper sitemapHelper(SettingsService settingsService, UrlPrefixResolver ruleUrlPrefixResolver) {
+      return new SitemapHelper(Map.of(), settingsService, ruleUrlPrefixResolver, true);
     }
 
   }

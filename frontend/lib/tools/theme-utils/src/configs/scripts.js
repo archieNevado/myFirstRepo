@@ -16,6 +16,9 @@ const {
   dependencies: { getFlattenedDependencies },
 } = require("@coremedia/tool-utils");
 const deepMerge = require("./utils/deepMerge");
+const {
+  CoreMediaChunkMappingPlugin,
+} = require("../plugins/CoreMediaChunkMappingPlugin");
 
 const themeConfig = getThemeConfig();
 
@@ -148,11 +151,13 @@ themeConfig.scripts.push({
   entryPointName: PREVIEW_ENTRY_NAME,
   smartImport: "preview",
   include: false,
+  runtime: COMMONS_CHUNK_NAME,
   ieExpression: null,
   defer: true,
 });
 
 const linkedChunks = [];
+const runtimeChunkByEntryPoint = {};
 const entry = themeConfig.scripts
   .filter((script) => script.type === "webpack")
   .reduce((entries, script) => {
@@ -165,15 +170,15 @@ const entry = themeConfig.scripts
     if (script.include) {
       linkedChunks.push(chunkName);
     }
+    runtimeChunkByEntryPoint[chunkName] = script.runtime;
     return entries;
   }, {});
-
 const additionalConfig = {};
 if (linkedChunks.length > 0) {
   additionalConfig.optimization = {
     runtimeChunk: {
       // share the same runtime between chunks (otherwise theme and preview have different module instances)
-      name: COMMONS_CHUNK_NAME,
+      name: (chunk) => runtimeChunkByEntryPoint[chunk.name] || COMMONS_CHUNK_NAME,
     },
     splitChunks: {
       cacheGroups: {
@@ -228,6 +233,11 @@ module.exports = ({ include, exclude, dependencyCheckPlugin, mode }) => (
         ...getShimLoaderConfig(),
       ],
     },
-    plugins: [dependencyCheckPlugin],
+    plugins: [
+      dependencyCheckPlugin,
+      new CoreMediaChunkMappingPlugin({
+        chunkMappingPath: themeConfig.buildConfig.chunkMappingPath,
+      }),
+    ],
     ...additionalConfig,
   });

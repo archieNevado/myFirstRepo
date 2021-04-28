@@ -29,8 +29,9 @@
     ]]></fx:Script>
 
   <editor:items>
-    <editor:StringPropertyField propertyName="title"/>
+    <editor:StringPropertyField itemId="title" propertyName="title"/>
     <editor:RichTextPropertyField bindTo="{config.bindTo}"
+                                  itemId="detailText"
                                   propertyName="detailText"
                                   initialHeight="200"/>
   </editor:items>

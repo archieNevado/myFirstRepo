@@ -45,7 +45,8 @@
   </fx:Declarations>
 
   <local:items>
-    <editor:LinkListPropertyField propertyName="{config.picturePropertyName}"
+    <editor:LinkListPropertyField itemId="{config.picturePropertyName}"
+                                  propertyName="{config.picturePropertyName}"
                                   linkType="{config.contentType}"
                                   hideLabel="true"
                                   showThumbnails="true"

@@ -54,7 +54,10 @@
     <property name="contentBeanFactory" ref="contentBeanFactory"/>
   </bean>
 
-  <bean id="livecontextSitemapContentUrlGenerator" class="com.coremedia.blueprint.cae.sitemap.ContentUrlGenerator" parent="abstractContentUrlGenerator">
+  <bean id="livecontextSitemapContentUrlGenerator" class="com.coremedia.blueprint.cae.sitemap.ContentUrlGenerator">
+    <property name="contentBeanFactory" ref="contentBeanFactory"/>
+    <property name="linkFormatter" ref="linkFormatter"/>
+    <property name="validationService" ref="validationService"/>
     <property name="exclusionPaths">
       <list>
         <value>Options</value>
@@ -98,7 +101,9 @@
   <bean id="wcsAasCrawlSitemapPredicate" class="com.coremedia.livecontext.ecommerce.ibm.cae.sitemap.WcsAasCrawlSitemapPredicate">
   </bean>
 
-  <bean id="wcsAasContentUrlGenerator" class="com.coremedia.livecontext.ecommerce.ibm.cae.sitemap.WcsAasContentUrlGenerator" parent="abstractContentUrlGenerator">
+  <bean id="wcsAasContentUrlGenerator" class="com.coremedia.livecontext.ecommerce.ibm.cae.sitemap.WcsAasContentUrlGenerator">
+    <property name="contentBeanFactory" ref="contentBeanFactory"/>
+    <property name="validationService" ref="validationService"/>
     <property name="predicates">
       <list>
         <ref bean="livecontextSitemapValidityPredicate"/>
@@ -146,7 +151,10 @@
     </property>
   </bean>
 
-  <bean id="wcsCalistaContentUrlGenerator" class="com.coremedia.livecontext.ecommerce.ibm.cae.sitemap.WcsCalistaContentUrlGenerator" parent="abstractContentUrlGenerator">
+  <bean id="wcsCalistaContentUrlGenerator" class="com.coremedia.livecontext.ecommerce.ibm.cae.sitemap.WcsCalistaContentUrlGenerator">
+    <property name="contentBeanFactory" ref="contentBeanFactory"/>
+    <property name="linkFormatter" ref="linkFormatter"/>
+    <property name="validationService" ref="validationService"/>
     <property name="predicates">
       <list>
         <ref bean="livecontextSitemapValidityPredicate"/>

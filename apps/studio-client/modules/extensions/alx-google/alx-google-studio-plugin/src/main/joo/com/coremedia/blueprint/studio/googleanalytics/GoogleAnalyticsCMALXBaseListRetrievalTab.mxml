@@ -5,6 +5,7 @@
         xmlns="exml:ext.config"
         xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
         xmlns:google="exml:com.coremedia.blueprint.studio.config.googleanalytics"
+        itemId="googleanalytics"
         title="{resourceManager.getString('com.coremedia.blueprint.studio.googleanalytics.GoogleAnalyticsStudioPlugin', 'SpacerTitle_googleanalytics')}">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.blueprint.studio.googleanalytics.GoogleAnalyticsStudioPlugin')]

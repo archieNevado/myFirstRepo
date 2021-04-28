@@ -1,0 +1,3920 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+interface Augmentation {
+  id: ID!
+  commerceRef: CommerceRef!
+  content: Content_
+  grid: PageGrid!
+  picture: CMPicture
+  pictures: [CMPicture]!
+  visuals: [CMVisual]!
+  downloads: [CMDownload]!
+}
+
+type AugmentationImpl implements Augmentation & HasPageGrid {
+  id: ID!
+  commerceRef: CommerceRef!
+  content: Content_
+  grid: PageGrid!
+  picture: CMPicture
+  pictures: [CMPicture]!
+  visuals: [CMVisual]!
+  downloads: [CMDownload]!
+  media: [CMMedia]
+  remoteLink(siteId: String, context: String): String!
+}
+
+interface Banner {
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+}
+
+type Base64Image {
+  cropName: String!
+  base64: String
+}
+
+"""java.math.BigDecimal"""
+scalar BigDecimal
+
+type Blob {
+  contentType: String!
+  size: Int!
+  eTag: String!
+  uri: String
+}
+
+interface CMAbstractCategory {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  grid: PageGrid
+  children: [CMLinkable]
+  hidden: Boolean
+  hiddenInSitemap: Boolean
+  parent: CMNavigation
+  header: [CMLinkable]
+  footer: [CMLinkable]
+  externalId: String
+  pdpPagegrid: PageGrid
+}
+
+type CMAbstractCategoryImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & HasPageGrid & CMNavigation & CMChannel & CMAbstractCategory {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  children: [CMLinkable]
+  grid: PageGrid
+  hidden: Boolean
+  hiddenInSitemap: Boolean
+  parent: CMNavigation
+  header: [CMLinkable]
+  footer: [CMLinkable]
+  externalId: String
+  categoryRef: CategoryRef
+  pdpPagegrid: PageGrid
+}
+
+"""Models the properties of an article content object."""
+interface CMArticle {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+}
+
+type CMArticleImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & CMArticle {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+}
+
+interface CMAudio {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  alt: String
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  copyright: String
+  data: Blob
+  dataUrl: String
+}
+
+type CMAudioImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & CMMedia & CMAudio {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  alt: String
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  copyright: String
+  data: Blob
+  dataUrl: String
+}
+
+"""Models the properties of a page content object."""
+interface CMChannel {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  grid: PageGrid
+  children: [CMLinkable]
+  hidden: Boolean
+  hiddenInSitemap: Boolean
+  parent: CMNavigation
+  header: [CMLinkable]
+  footer: [CMLinkable]
+}
+
+type CMChannelImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & HasPageGrid & CMNavigation & CMChannel {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  children: [CMLinkable]
+  grid: PageGrid
+  hidden: Boolean
+  hiddenInSitemap: Boolean
+  parent: CMNavigation
+  header: [CMLinkable]
+  footer: [CMLinkable]
+}
+
+interface CMCollection {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  items: [CollectionItem]
+  teasableItems: [CMTeasable]
+  bannerItems: [Banner]
+  detailItems: [Detail]
+}
+
+type CMCollectionImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & CMCollection {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  items: [CollectionItem]
+  teasableItems: [CMTeasable]
+  bannerItems: [Banner]
+  detailItems: [Detail]
+}
+
+interface CMDownload {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  data: Blob
+  filename: String
+}
+
+type CMDownloadImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & CMDownload {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  data: Blob
+  filename: String
+}
+
+interface CMDynamicList {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  items: [CollectionItem]
+  teasableItems: [CMTeasable]
+  bannerItems: [Banner]
+  detailItems: [Detail]
+}
+
+type CMDynamicListImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & CMCollection & CMDynamicList {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  items: [CollectionItem]
+  teasableItems: [CMTeasable]
+  bannerItems: [Banner]
+  detailItems: [Detail]
+}
+
+interface CMExternalChannel {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  grid: PageGrid
+  children: [CMLinkable]
+  hidden: Boolean
+  hiddenInSitemap: Boolean
+  parent: CMNavigation
+  header: [CMLinkable]
+  footer: [CMLinkable]
+  externalId: String
+  pdpPagegrid: PageGrid
+  categoryRef: CategoryRef
+}
+
+type CMExternalChannelImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & HasPageGrid & CMNavigation & CMChannel & CMAbstractCategory & CMExternalChannel {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  children: [CMLinkable]
+  grid: PageGrid
+  hidden: Boolean
+  hiddenInSitemap: Boolean
+  parent: CMNavigation
+  header: [CMLinkable]
+  footer: [CMLinkable]
+  externalId: String
+  categoryRef: CategoryRef
+  pdpPagegrid: PageGrid
+}
+
+interface CMExternalLink {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  url: String
+  openInNewTab: Boolean
+}
+
+type CMExternalLinkImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & CMExternalLink {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  url: String
+  openInNewTab: Boolean
+}
+
+interface CMExternalPage {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  grid: PageGrid
+  children: [CMLinkable]
+  hidden: Boolean
+  hiddenInSitemap: Boolean
+  parent: CMNavigation
+  header: [CMLinkable]
+  footer: [CMLinkable]
+  externalId: String
+  externalUriPath: String
+}
+
+type CMExternalPageImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & HasPageGrid & CMNavigation & CMChannel & CMExternalPage {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  children: [CMLinkable]
+  grid: PageGrid
+  hidden: Boolean
+  hiddenInSitemap: Boolean
+  parent: CMNavigation
+  header: [CMLinkable]
+  footer: [CMLinkable]
+  externalId: String
+  externalUriPath: String
+}
+
+interface CMExternalProduct {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  externalId: String
+  productRef: ProductRef
+  pdpPagegrid: PageGrid
+}
+
+type CMExternalProductImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & CMExternalProduct {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  externalId: String
+  productRef: ProductRef
+  pdpPagegrid: PageGrid
+}
+
+interface CMGallery {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  items: [CollectionItem]
+  teasableItems: [CMTeasable]
+  bannerItems: [Banner]
+  detailItems: [Detail]
+  mediaItems: [CMMedia]
+}
+
+type CMGalleryImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & CMCollection & CMGallery {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  items: [CollectionItem]
+  teasableItems: [CMTeasable]
+  bannerItems: [Banner]
+  detailItems: [Detail]
+  mediaItems: [CMMedia]
+}
+
+interface CMHTML {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  alt: String
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  copyright: String
+  data: Blob
+  description: String
+  html: String
+}
+
+type CMHTMLImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & CMMedia & CMHTML {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  alt: String
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  copyright: String
+  data: Blob
+  description: String
+  html: String
+}
+
+interface CMImage {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  data: Blob
+  description: String
+}
+
+type CMImageImpl implements Content_ & CMObject & CMLocalized & CMImage {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  data: Blob
+  description: String
+}
+
+interface CMImageMap {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  target: CMLinkable
+  displayPicture: Boolean
+  displayShortText: Boolean
+  displayTitle: Boolean
+  hotZones: [Hotzone]
+  transformedHotZones: [TransformedHotZone]
+}
+
+type CMImageMapImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & CMTeaser & CMImageMap {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  target: CMLinkable
+  displayPicture: Boolean
+  displayShortText: Boolean
+  displayTitle: Boolean
+  hotZones: [Hotzone]
+  transformedHotZones: [TransformedHotZone]
+}
+
+interface CMInteractive {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  alt: String
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  copyright: String
+  data: Blob
+  dataUrl: String
+  height: Int
+  width: Int
+}
+
+type CMInteractiveImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & CMMedia & CMVisual & CMInteractive {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  alt: String
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  copyright: String
+  data: Blob
+  dataUrl: String
+  height: Int
+  width: Int
+}
+
+interface CMLinkable {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+}
+
+type CMLinkableImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+}
+
+interface CMLocTaxonomy {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  value: String
+  externalReference: String
+  children: [CMTaxonomy]
+  parent: CMTaxonomy
+  pathToRoot: [CMTaxonomy]
+  postcode: String
+  latitudeLongitude: String
+  locChildren: [CMLocTaxonomy]
+}
+
+type CMLocTaxonomyImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & CMTaxonomy & CMLocTaxonomy {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  value: String
+  externalReference: String
+  children: [CMTaxonomy]
+  parent: CMTaxonomy
+  pathToRoot: [CMTaxonomy]
+  postcode: String
+  latitudeLongitude: String
+  locChildren: [CMLocTaxonomy]
+}
+
+interface CMLocalized {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+}
+
+type CMLocalizedImpl implements Content_ & CMObject & CMLocalized {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+}
+
+interface CMMedia {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  alt: String
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  copyright: String
+  data: Blob
+}
+
+type CMMediaImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & CMMedia {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  alt: String
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  copyright: String
+  data: Blob
+}
+
+interface CMNavigation {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  grid: PageGrid
+  children: [CMLinkable]
+  hidden: Boolean
+  hiddenInSitemap: Boolean
+  parent: CMNavigation
+}
+
+type CMNavigationImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & HasPageGrid & CMNavigation {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  children: [CMLinkable]
+  grid: PageGrid
+  hidden: Boolean
+  hiddenInSitemap: Boolean
+  parent: CMNavigation
+}
+
+interface CMObject {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+}
+
+type CMObjectImpl implements Content_ & CMObject {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+}
+
+interface CMPerson {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  firstName: String
+  lastName: String
+  displayName: String
+  eMail: String
+  organization: String
+  jobTitle: String
+}
+
+type CMPersonImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & CMPerson {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  firstName: String
+  lastName: String
+  displayName: String
+  eMail: String
+  organization: String
+  jobTitle: String
+}
+
+"""Models the properties of a picture content object."""
+interface CMPicture {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  alt: String
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  copyright: String
+  data: Blob
+  dataUrl: String
+  height: Int
+  width: Int
+  base64Images(cropNames: [String!]): [Base64Image]!
+  crops: [Crop!]!
+  uriTemplate: String
+}
+
+type CMPictureImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & CMMedia & CMVisual & CMPicture {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  alt: String
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  copyright: String
+  data: Blob
+  dataUrl: String
+  height: Int
+  width: Int
+  base64Images(cropNames: [String!]): [Base64Image]!
+  crops: [Crop!]!
+  uriTemplate: String!
+}
+
+interface CMPlaceholder {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+}
+
+type CMPlaceholderImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & CMPlaceholder {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+}
+
+interface CMProduct {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  downloads: [CMDownload]
+  price: Float
+  productCode: String
+  productName: String
+}
+
+type CMProductImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & CMProduct {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  downloads: [CMDownload]
+  price: Float
+  productCode: String
+  productName: String
+}
+
+interface CMProductList {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  items: [CollectionItem]
+  teasableItems: [CMTeasable]
+  bannerItems: [Banner]
+  detailItems: [Detail]
+  pagedItems(offset: Int): [CollectionItem]
+  externalId: String
+  categoryRef: CategoryRef
+  limit: Int
+  start: Int
+  productOffset: Int
+  orderBy: String
+  facet: String
+  facets: [String]
+  productItems: [ProductRef]
+}
+
+type CMProductListImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & CMCollection & CMDynamicList & CMQueryList & CMProductList {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  items: [CollectionItem]
+  teasableItems: [CMTeasable]
+  bannerItems: [Banner]
+  detailItems: [Detail]
+  pagedItems(offset: Int): [CollectionItem]
+  externalId: String
+  categoryRef: CategoryRef
+  limit: Int
+  start: Int
+  productOffset: Int
+  orderBy: String
+  facet: String
+  facets: [String]
+  productItems: [ProductRef]
+}
+
+interface CMProductTeaser {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  externalId: String
+  productRef: ProductRef
+}
+
+type CMProductTeaserImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & CMProductTeaser {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  externalId: String
+  productRef: ProductRef
+}
+
+interface CMQueryList {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  items: [CollectionItem]
+  teasableItems: [CMTeasable]
+  bannerItems: [Banner]
+  detailItems: [Detail]
+  pagedItems(offset: Int): [CollectionItem]
+}
+
+type CMQueryListImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & CMCollection & CMDynamicList & CMQueryList {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  items: [CollectionItem]
+  teasableItems: [CMTeasable]
+  bannerItems: [Banner]
+  detailItems: [Detail]
+  pagedItems(offset: Int): [CollectionItem]
+}
+
+interface CMResourceBundle {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  localizations: MapOfString
+}
+
+type CMResourceBundleImpl implements Content_ & CMObject & CMLocalized & CMResourceBundle {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  localizations: MapOfString
+}
+
+interface CMSelectionRules {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  items: [CollectionItem]
+  teasableItems: [CMTeasable]
+  bannerItems: [Banner]
+  detailItems: [Detail]
+  defaultContent: [CMTeasable!]!
+  rules: [PersonalizationRule!]!
+}
+
+type CMSelectionRulesImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & CMCollection & CMDynamicList & CMSelectionRules {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  items: [CollectionItem]
+  teasableItems: [CMTeasable]
+  bannerItems: [Banner]
+  detailItems: [Detail]
+  defaultContent: [CMTeasable!]!
+  rules: [PersonalizationRule!]!
+}
+
+interface CMSettings {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String]]): JSON
+  identifier: String
+}
+
+type CMSettingsImpl implements Content_ & CMObject & CMLocalized & CMSettings {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String]]): JSON
+  identifier: String
+}
+
+interface CMSite {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  root: CMNavigation
+  settings(paths: [[String!]!]!): JSON
+}
+
+type CMSiteImpl implements Content_ & CMObject & CMLocalized & CMSite {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  root: CMNavigation
+  settings(paths: [[String!]!]!): JSON
+}
+
+interface CMSpinner {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  alt: String
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  copyright: String
+  data: Blob
+  dataUrl: String
+  height: Int
+  width: Int
+  sequence: [CMPicture]
+}
+
+type CMSpinnerImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & CMMedia & CMVisual & CMSpinner {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  alt: String
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  copyright: String
+  data: Blob
+  dataUrl: String
+  height: Int
+  width: Int
+  sequence: [CMPicture]
+}
+
+interface CMTaxonomy {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  value: String
+  externalReference: String
+  children: [CMTaxonomy]
+  parent: CMTaxonomy
+  pathToRoot: [CMTaxonomy]
+}
+
+type CMTaxonomyImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & CMTaxonomy {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  value: String
+  externalReference: String
+  children: [CMTaxonomy]
+  parent: CMTaxonomy
+  pathToRoot: [CMTaxonomy]
+}
+
+interface CMTeasable {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+}
+
+type CMTeasableImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+}
+
+interface CMTeaser {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  target: CMLinkable
+}
+
+type CMTeaserImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & CMTeaser {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  target: CMLinkable
+}
+
+interface CMVideo {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  alt: String
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  copyright: String
+  data: Blob
+  dataUrl: String
+  height: Int
+  width: Int
+  timeLine: TimeLine
+}
+
+type CMVideoImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & CMMedia & CMVisual & CMVideo {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  alt: String
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  copyright: String
+  data: Blob
+  dataUrl: String
+  height: Int
+  width: Int
+  timeLine: TimeLine
+}
+
+interface CMVisual {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  remoteLink(siteId: String, context: String): String!
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  authors: [CMTeasable]
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserTextAsTree(view: String): RichTextTree
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  root: CMNavigation
+  alt: String
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  copyright: String
+  data: Blob
+  dataUrl: String
+  height: Int
+  width: Int
+}
+
+type CMVisualImpl implements Content_ & CMObject & CMLocalized & CollectionItem & CMLinkable & Detail & Banner & CMTeasable & CMMedia & CMVisual {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+  ignoreUpdates: Int
+  languageId: String
+  locale: String
+  localizedVariants: [CMLocalized!]!
+  localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  settings(paths: [[String!]!]!): JSON
+  context: CMNavigation
+  extDisplayedDate: String
+  link: Link
+  navigationPath: [CMLinkable]
+  segment: String
+  title: String
+  validFrom: String
+  validTo: String
+  viewtype: String
+  remoteLink(siteId: String, context: String): String!
+  subjectTaxonomy: [CMTaxonomy]
+  locationTaxonomy: [CMLocTaxonomy]
+  authors: [CMTeasable]
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  related: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): String
+  teaserTextAsTree(view: String): RichTextTree
+  teaserTitle: String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  video: CMVideo
+  videos: [CMVideo]
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  root: CMNavigation
+  alt: String
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  copyright: String
+  data: Blob
+  dataUrl: String
+  height: Int
+  width: Int
+}
+
+interface CategoryAugmentation {
+  id: ID!
+  commerceRef: CommerceRef!
+  content: Content_
+  grid: PageGrid!
+  picture: CMPicture
+  pictures: [CMPicture]!
+  visuals: [CMVisual]!
+  downloads: [CMDownload]!
+}
+
+type CategoryAugmentationImpl implements Augmentation & CategoryAugmentation {
+  id: ID!
+  commerceRef: CommerceRef!
+  content: Content_
+  grid: PageGrid!
+  picture: CMPicture
+  pictures: [CMPicture]!
+  visuals: [CMVisual]!
+  downloads: [CMDownload]!
+  media: [CMMedia]
+  remoteLink(siteId: String, context: String): String!
+
+  """
+  content: CMExternalChannel
+  pdpPagegrid:  PageGrid! @fetch(from: "@productPageGridAdapter.to(#this.externalId)")
+  """
+  children: [CommerceRef]!
+}
+
+type CategoryRef implements CommerceRef {
+  id: ID!
+  externalId: String!
+  catalogId: String!
+  storeId: String!
+  locale: String!
+  siteId: String!
+  internalLink: String!
+}
+
+interface CollectionItem {
+  remoteLink(siteId: String, context: String): String!
+}
+
+interface CommerceRef {
+  id: ID!
+  externalId: String!
+  catalogId: String!
+  storeId: String!
+  locale: String!
+  siteId: String!
+  internalLink: String!
+}
+
+type CommerceRoot {
+  externalPage(externalId: String!, siteId: String!): CMExternalPage
+  productAugmentationBySite(externalId: String!, catalogId: String, siteId: String!): ProductAugmentation
+  productAugmentationByStore(externalId: String!, catalogId: String, storeId: String!, locale: String!): ProductAugmentation
+  categoryAugmentationBySite(externalId: String!, catalogId: String, siteId: String!): CategoryAugmentation
+  categoryAugmentationByStore(externalId: String!, catalogId: String, storeId: String!, locale: String!): CategoryAugmentation
+  augmentationForCommerceIdBySite(commerceId: String!, siteId: String!): Augmentation
+}
+
+"""
+The type `ContentRoot` combines access to all content, non commerce related queries.
+"""
+type ContentRoot {
+  """
+  The `content` query returns any known content object from the content repository by its content `id`.
+  """
+  content(
+    """
+    The content id as `integer` or formatted as *coremedia:///cap/content/<id>*.
+    """
+    id: String!
+
+    """The expected content type, e.g. `CMArticle`."""
+    type: String
+  ): Content_
+
+  """
+  Dedicated `article` query, returning a content object of type `CMArticle`, matching the given id.
+  """
+  article(
+    """
+    The content id as `integer` or formatted as *coremedia:///cap/content/<id>*.
+    """
+    id: String!
+  ): CMArticle
+
+  """
+  Dedicated `picture` query, returning a content object of type `CMPicture`, matching the given id.
+  """
+  picture(
+    """
+    The content id as `integer` or formatted as *coremedia:///cap/content/<id>*.
+    """
+    id: String!
+  ): CMPicture
+
+  """
+  Dedicated `page` query, returning a content object of type `CMChannel`, matching the given id.
+  """
+  page(
+    """
+    The content id as `integer` or formatted as *coremedia:///cap/content/<id>*.
+    """
+    id: String!
+  ): CMChannel
+
+  """
+  The `pageByPath` query with return type `CMChannel` provides access to any page content by its navigation path.
+  """
+  pageByPath(
+    """
+    The navigation path to the requested page. A navigation path is a concatenation of segments, separated by '/'.
+    """
+    path: String!
+  ): CMChannel
+
+  """
+  Dedicated `queryList` query, returning a content object of type `CMQueryList`, matching the given id.
+  """
+  queryList(
+    """
+    The content id as `integer` or formatted as *coremedia:///cap/content/<id>*.
+    """
+    id: String!
+  ): CMQueryList
+
+  """
+  Dedicated `site` query, returning a content object of type `Site`, matching the given site id.
+  """
+  site(
+    """The site id of the requested site (of type `String`)."""
+    siteId: String
+
+    """
+    Deprecated! Functionally identical to `id` but badly named for `id` is already used by content objects.
+    A site id is not the same as a content id!
+    """
+    id: String
+  ): Site
+
+  """
+  The `sites` query delivers an array of type `Site` of all known sites in the content repository w/o any parameter necessary.
+  """
+  sites: [Site]!
+
+  """The `search` query provides access to a solr based full text search."""
+  search(
+    """
+    The search expression. Supports the operators '+' (mandatory) and '-' (prohibited) to mark terms respectively.
+    Quotes may be used to combine several words into a phrase, which would otherwise be treated as single terms.
+    Any odd (unbalanced) number of quotes are treated as non existent!
+    The wildcard '*' is supported to find partial terms.
+    """
+    query: String!
+
+    """Offset within the search result."""
+    offset: Int
+
+    """Limits the size of the search result."""
+    limit: Int
+
+    """
+    Content types to restrict the search result to. Misspelled content types are ignored.
+    When passing an abstract content type along with the parameter `includeSubTypes` = `true`, the subtypes are also retrieved.
+    The search result does not contain abstract document types.
+    """
+    docTypes: [String]
+
+    """
+    An array of sort fields, concatenated with their sort order by '_', in upper case, e.g. `ID_ASC`.
+
+    The possible values are defined in the enum `SortFieldWithOrder`.
+
+    Possible sort orders are: `ASC`, `DESC`
+    """
+    sortFields: [SortFieldWithOrder]
+
+    """The `siteId` can be passed as parameter to restrict search per site."""
+    siteId: String
+
+    """
+    Flag to include the sub types of the given doc types in the search. Defaults to `false`.
+    """
+    includeSubTypes: Boolean
+  ): SearchResult
+  productList(id: String!): CMProductList
+}
+
+interface Content_ {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+}
+
+type Content_Impl implements Content_ {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+}
+
+type Crop {
+  aspectRatio: Dimension!
+  name: String!
+  minWidth: Int!
+  minHeight: Int!
+  sizes: [Dimension]!
+}
+
+interface Detail {
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+}
+
+type Dimension {
+  height: Float!
+  width: Float!
+}
+
+type ExtendedTeaserTarget {
+  callToActionEnabled: Boolean
+  callToActionText: String
+  callToActionHash: String
+  target: CMLinkable
+}
+
+interface HasPageGrid {
+  grid: PageGrid
+}
+
+type Hotzone {
+  alt: String
+  coords: String!
+  displayAsInlineOverlay: Boolean
+  inlineOverlayTheme: String
+  linkedContent: CMLinkable
+  shape: String!
+  target: String
+}
+
+type ImageMapCrop {
+  name: String!
+  coords: [Point]!
+}
+
+"""A JSON scalar"""
+scalar JSON
+
+type Link {
+  id: ID!
+  type: String
+}
+
+"""Built-in map of scalar type"""
+scalar MapOfString
+
+type MetadataField {
+  name: String
+  metadata: JSON
+}
+
+type MetadataRoot {
+  types: [MetadataType]
+}
+
+type MetadataType {
+  name: String
+  fields: [MetadataField]
+}
+
+type PageGrid {
+  cssClassName: String
+  rows: [PageGridRow!]
+
+  """ retrieves the page grid placements as a flat list, optionally filtered by name
+  """
+  placements(names: [String], excludeNames: [String]): [PageGridPlacement]
+  id: ID!
+}
+
+type PageGridPlacement {
+  name: String!
+  column: Int!
+  colspan: Int!
+  width: Int!
+  viewtype: String
+  items: [CMLinkable!]!
+  id: ID
+}
+
+type PageGridRow {
+  placements: [PageGridPlacement!]
+  id: ID!
+  rowId: Int!
+}
+
+type PersonalizationRule {
+  rule: String
+  target: CMTeasable
+  referencedContent: [CMLocalized!]!
+}
+
+type Point {
+  x: Float
+  y: Float
+}
+
+interface ProductAugmentation {
+  id: ID!
+  commerceRef: CommerceRef!
+  content: Content_
+  grid: PageGrid!
+  picture: CMPicture
+  pictures: [CMPicture]!
+  visuals: [CMVisual]!
+  downloads: [CMDownload]!
+
+  """content: CMExternalProduct"""
+  pdpPagegrid: PageGrid!
+}
+
+type ProductAugmentationImpl implements Augmentation & ProductAugmentation {
+  id: ID!
+  commerceRef: CommerceRef!
+  content: Content_
+  grid: PageGrid!
+  picture: CMPicture
+  pictures: [CMPicture]!
+  visuals: [CMVisual]!
+  downloads: [CMDownload]!
+  media: [CMMedia]
+  remoteLink(siteId: String, context: String): String!
+
+  """content: CMExternalProduct"""
+  pdpPagegrid: PageGrid!
+}
+
+type ProductRef implements CommerceRef & CollectionItem {
+  id: ID!
+  externalId: String!
+  catalogId: String!
+  storeId: String!
+  locale: String!
+  siteId: String!
+  internalLink: String!
+  remoteLink(siteId: String, context: String): String!
+}
+
+"""The top query root"""
+type Query {
+  """The content root."""
+  content: ContentRoot
+  metadata: MetadataRoot
+  commerce: CommerceRoot
+}
+
+"""Built-in rich text object tree"""
+scalar RichTextTree
+
+"""
+Result type of the `search` query, containing metadata of the search result set and the result set itself.
+"""
+type SearchResult {
+  numFound: Int!
+  result: [Content_]
+}
+
+"""Models the properties of a site object."""
+type Site {
+  id: ID!
+  name: String!
+  locale: String!
+  crops: [Crop]
+  root: CMNavigation
+  repositoryPath: String!
+  derivedSites: [Site!]!
+}
+
+"""Enum of sort types for the `search` query."""
+enum SortFieldWithOrder {
+  CREATION_DATE_ASC
+  CREATION_DATE_DESC
+  DOCUMENTTYPE_ASC
+  DOCUMENTTYPE_DESC
+  EXTERNALLY_DISPLAYED_DATE_ASC
+  EXTERNALLY_DISPLAYED_DATE_DESC
+  ID_ASC
+  ID_DESC
+  MODIFICATION_DATE_ASC
+  MODIFICATION_DATE_DESC
+  TEASER_TITLE_ASC
+  TEASER_TITLE_DESC
+  TITLE_ASC
+  TITLE_DESC
+}
+
+type TeaserOverlaySettings {
+  enabled: Boolean
+  positionX: Int
+  positionY: Int
+  width: Int
+  style: JSON
+}
+
+type TimeLine {
+  defaultTarget: CMTeasable
+  sequences: [TimeLineEntry]
+}
+
+type TimeLineEntry {
+  startTimeMillis: Int
+  link: CMTeasable
+}
+
+type TransformedHotZone {
+  alt: String
+  crops: [ImageMapCrop]
+  displayAsInlineOverlay: Boolean
+  inlineOverlayTheme: String
+  linkedContent: CMLinkable
+  points: [Point]
+  shape: String
+  target: String
+}

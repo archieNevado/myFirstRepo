@@ -1,6 +1,8 @@
 package com.coremedia.blueprint.assets.studio.actions {
 
 import com.coremedia.blueprint.assets.studio.AssetConstants;
+import com.coremedia.cms.editor.sdk.actions.ActionConfigUtil;
+import com.coremedia.cms.editor.sdk.actions.ContentAction;
 import com.coremedia.cms.editor.sdk.quickcreate.QuickCreateDialog;
 import com.coremedia.cap.common.CapPropertyDescriptor;
 import com.coremedia.cap.common.SESSION;
@@ -10,7 +12,6 @@ import com.coremedia.cap.content.ContentCreateResult;
 import com.coremedia.cap.content.ContentProperties;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.struct.Struct;
-import com.coremedia.cms.editor.sdk.actions.*;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.quickcreate.processing.ProcessingData;
 import com.coremedia.ui.data.Blob;

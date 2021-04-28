@@ -19,15 +19,21 @@
     ]]></fx:Script>
 
   <local:items>
-    <editor:StringPropertyField propertyName="localSettings.googleAnalytics.applicationName"/>
-    <editor:StringPropertyField propertyName="localSettings.googleAnalytics.serviceAccountEmail"/>
-    <editor:SingleLinkEditor linkContentType="CMDownload"
+    <editor:StringPropertyField itemId="applicationName"
+                                propertyName="localSettings.googleAnalytics.applicationName"/>
+    <editor:StringPropertyField itemId="serviceAccountEmail"
+                                propertyName="localSettings.googleAnalytics.serviceAccountEmail"/>
+    <editor:SingleLinkEditor itemId="p12file"
+                             linkContentType="CMDownload"
                              bindTo="{getP12FileVE()}"
                              parentContentValueExpression="{config.bindTo}"
                              linkListLabel="{resourceManager.getString('com.coremedia.blueprint.studio.googleanalytics.GoogleAnalyticsStudioPlugin', 'googleanalytics_p12file')}"/>
-    <editor:IntegerPropertyField propertyName="localSettings.googleAnalytics.pid"/>
-    <editor:IntegerPropertyField propertyName="localSettings.googleAnalytics.limit"/>
-    <editor:IntegerPropertyField propertyName="localSettings.googleAnalytics.interval"/>
+    <editor:IntegerPropertyField itemId="pid"
+                                 propertyName="localSettings.googleAnalytics.pid"/>
+    <editor:IntegerPropertyField itemId="limit"
+                                 propertyName="localSettings.googleAnalytics.limit"/>
+    <editor:IntegerPropertyField itemId="interval"
+                                 propertyName="localSettings.googleAnalytics.interval"/>
   </local:items>
 
 </local:GoogleAnalyticsRetrievalFieldsBase>

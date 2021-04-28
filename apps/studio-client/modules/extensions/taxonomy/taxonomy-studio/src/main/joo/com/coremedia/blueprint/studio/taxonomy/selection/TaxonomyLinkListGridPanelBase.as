@@ -8,6 +8,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.premular.fields.LinkListDropArea;
 import com.coremedia.cms.editor.sdk.util.ILinkListWrapper;
 import com.coremedia.ui.data.ValueExpression;
+import com.coremedia.ui.mixins.IHidableMixin;
 import com.coremedia.ui.mixins.ISideButtonMixin;
 import com.coremedia.ui.mixins.IValidationStateMixin;
 import com.coremedia.ui.mixins.ValidationState;
@@ -35,7 +36,7 @@ import ext.grid.GridPanel;
  */
 [ResourceBundle('com.coremedia.cms.editor.Editor')]
 [ResourceBundle('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin')]
-public class TaxonomyLinkListGridPanelBase extends GridPanel implements IValidationStateMixin, ISideButtonMixin {
+public class TaxonomyLinkListGridPanelBase extends GridPanel implements IValidationStateMixin, ISideButtonMixin, IHidableMixin {
 
   [Bindable]
   public var linkListWrapper:ILinkListWrapper;
@@ -286,5 +287,26 @@ public class TaxonomyLinkListGridPanelBase extends GridPanel implements IValidat
   /** @private */
   [Bindable]
   public native function set sideButtonRenderToFunction(renderTo:Function):void;
+
+  /** @private */
+  [Bindable]
+  public function set hideText(newHideText:String):void {
+    // The hideText is determined by the getter. Nothing to do.
+  }
+
+  /** @inheritDoc */
+  [Bindable]
+  public function get hideText():String {
+    return getTitle();
+  }
+
+  /** @private */
+  [Bindable]
+  public native function set hideId(newHideId:String):void;
+
+  /** @inheritDoc */
+  [Bindable]
+  public native function get hideId():String;
+
 }
 }

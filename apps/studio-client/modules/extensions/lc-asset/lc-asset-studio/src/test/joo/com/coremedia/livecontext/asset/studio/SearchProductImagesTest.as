@@ -3,7 +3,6 @@ import com.coremedia.cap.content.impl.ContentImpl;
 import com.coremedia.cms.editor.sdk.collectionview.CollectionView;
 import com.coremedia.cms.editor.sdk.collectionview.CollectionViewConstants;
 import com.coremedia.cms.editor.sdk.collectionview.CollectionViewContainer;
-import com.coremedia.cms.editor.sdk.collectionview.CollectionViewExtension;
 import com.coremedia.cms.editor.sdk.collectionview.CollectionViewManagerInternal;
 import com.coremedia.cms.editor.sdk.collectionview.CollectionViewModel;
 import com.coremedia.cms.editor.sdk.collectionview.tree.LibraryTree;
@@ -12,6 +11,7 @@ import com.coremedia.cms.editor.sdk.desktop.sidepanel.SidePanelManagerImpl;
 import com.coremedia.cms.editor.sdk.desktop.sidepanel.SidePanelStudioPlugin;
 import com.coremedia.cms.editor.sdk.desktop.sidepanel.sidePanelManager;
 import com.coremedia.cms.editor.sdk.editorContext;
+import com.coremedia.cms.studio.base.cap.models.content.contentTreeRelationRegistry;
 import com.coremedia.ecommerce.studio.ECommerceStudioPlugin;
 import com.coremedia.ecommerce.studio.components.repository.CatalogRepositoryContextMenu;
 import com.coremedia.ecommerce.studio.components.repository.CatalogRepositoryList;
@@ -21,8 +21,10 @@ import com.coremedia.ecommerce.studio.components.tree.impl.CatalogTreeModel;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.library.ECommerceCollectionViewExtension;
 import com.coremedia.ecommerce.studio.model.Store;
+import com.coremedia.livecontext.studio.LivecontextStudioPluginBase;
 import com.coremedia.livecontext.studio.library.LivecontextCollectionViewActionsPlugin;
 import com.coremedia.livecontext.studio.library.LivecontextCollectionViewExtension;
+import com.coremedia.livecontext.studio.library.LivecontextContentTreeRelation;
 import com.coremedia.ui.components.SwitchingContainer;
 import com.coremedia.ui.data.Bean;
 import com.coremedia.ui.data.RemoteBean;
@@ -52,7 +54,6 @@ import mx.resources.ResourceManager;
 [ResourceBundle('com.coremedia.ecommerce.studio.ECommerceStudioPlugin')]
 public class SearchProductImagesTest extends AbstractCatalogAssetTest {
 
-  private var viewport:SearchProductImagesTestView;
   private var testling:CollectionView;
   private var catalogTree:LibraryTree;
   private var searchProductPicturesContextMenuItem:Item;
@@ -99,13 +100,14 @@ public class SearchProductImagesTest extends AbstractCatalogAssetTest {
 
     collectionViewManagerInternal.addTreeModel(catalogTreeModel, new CatalogTreeDragDropModel(catalogTreeModel));
 
-    var extension:CollectionViewExtension = new ECommerceCollectionViewExtension();
-    editorContext.getCollectionViewExtender().addExtension(extension);
+    var isApplicable:Function = function ():Boolean { return false; };
+    editorContext.getCollectionViewExtender().addExtension(new ECommerceCollectionViewExtension(), isApplicable);
 
-    var lcExtension:CollectionViewExtension = new LivecontextCollectionViewExtension();
-    editorContext.getCollectionViewExtender().addExtension(lcExtension);
+    var lcContentTreeRelation:LivecontextContentTreeRelation = new LivecontextContentTreeRelation();
+    contentTreeRelationRegistry.addExtension(lcContentTreeRelation, LivecontextStudioPluginBase.getIsExtensionApplicable(lcContentTreeRelation));
+    editorContext.getCollectionViewExtender().addExtension(new LivecontextCollectionViewExtension(), LivecontextStudioPluginBase.getIsExtensionApplicable(lcContentTreeRelation));
 
-    viewport = new SearchProductImagesTestView();
+    var viewport:SearchProductImagesTestView = new SearchProductImagesTestView();
 
     var cvContainer:CollectionViewContainer = viewport.getComponent(CollectionViewContainer.ID) as CollectionViewContainer;
     SidePanelManagerImpl(sidePanelManager).registerItem(cvContainer);
@@ -418,7 +420,7 @@ public class SearchProductImagesTest extends AbstractCatalogAssetTest {
       getTarget: function():HTMLElement {
         return TableUtil.getCellAsDom(grid, row, 1);
       },
-      type: ContextMenuEventAdapter.EVENT_NAME
+      "type": ContextMenuEventAdapter.EVENT_NAME
     };
     grid.fireEvent("rowcontextmenu", grid, null, null, row, event);
   }

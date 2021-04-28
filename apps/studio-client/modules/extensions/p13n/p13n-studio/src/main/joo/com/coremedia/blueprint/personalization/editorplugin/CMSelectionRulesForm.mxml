@@ -62,7 +62,8 @@
         <editor:PropertyFieldGroup itemId="cmSelectionRulesConditionsForm"
                                    title="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationDocTypes', 'CMSelectionRules_rules_text')}">
           <editor:items>
-            <perso:SelectionRulesField propertyName="rules"
+            <perso:SelectionRulesField itemId="rules"
+                                       propertyName="rules"
                                        hideLabel="true"
                                        allowedContentType="CMTeasable">
               <perso:conditionItems>

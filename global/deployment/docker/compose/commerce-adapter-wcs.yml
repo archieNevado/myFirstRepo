@@ -23,7 +23,7 @@ x-logging:
 
 services:
   commerce-adapter-wcs:
-    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-wcs:${COMMERCE_ADAPTER_WCS_VERSION:-1.4.1}
+    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-wcs:${COMMERCE_ADAPTER_WCS_VERSION:-1.5.3}
     container_name: commerce-adapter-wcs
     restart: always
     logging: *default-logging
@@ -56,5 +56,8 @@ services:
     environment:
       COMMERCE_HUB_DATA_ENDPOINTS_WCS: ${COMMERCE_HUB_DATA_ENDPOINTS_WCS:-commerce-adapter-wcs:6565}
   headless-server-live:
+    environment:
+      COMMERCE_HUB_DATA_ENDPOINTS_WCS: ${COMMERCE_HUB_DATA_ENDPOINTS_WCS:-commerce-adapter-wcs:6565}
+  content-feeder:
     environment:
       COMMERCE_HUB_DATA_ENDPOINTS_WCS: ${COMMERCE_HUB_DATA_ENDPOINTS_WCS:-commerce-adapter-wcs:6565}

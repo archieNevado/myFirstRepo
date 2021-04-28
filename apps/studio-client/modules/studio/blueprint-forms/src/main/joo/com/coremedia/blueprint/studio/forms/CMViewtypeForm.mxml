@@ -26,8 +26,8 @@
                 title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMViewtype_text')}"
                 itemId="cmViewtypeLayoutForm">
           <editor:items>
-            <editor:StringPropertyField propertyName="layout"/>
-            <editor:StringPropertyField propertyName="description"/>
+            <editor:StringPropertyField propertyName="layout" itemId="layout"/>
+            <editor:StringPropertyField propertyName="description" itemId="description"/>
           </editor:items>
         </editor:PropertyFieldGroup>
         <editor:PropertyFieldGroup

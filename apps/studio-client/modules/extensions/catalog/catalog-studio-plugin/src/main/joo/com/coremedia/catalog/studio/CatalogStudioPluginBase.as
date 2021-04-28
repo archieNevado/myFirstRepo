@@ -21,6 +21,7 @@ import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.premular.ReferrerListPanel;
 import com.coremedia.cms.editor.sdk.util.MetaStyleService;
 import com.coremedia.cms.editor.sdk.util.UserUtil;
+import com.coremedia.cms.studio.base.cap.models.content.contentTreeRelationRegistry;
 import com.coremedia.cms.studio.frame.components.preferences.PreferenceWindow;
 import com.coremedia.cms.studio.multisite.models.sites.Site;
 import com.coremedia.ecommerce.studio.catalogHelper;
@@ -76,7 +77,33 @@ public class CatalogStudioPluginBase extends StudioPlugin {
     collectionViewManagerInternal.addTreeModel(treeModel, new RepositoryTreeDragDropModel(treeModel));
 
     //add extension for custom search document types
-    editorContext.getCollectionViewExtender().addExtension(new CatalogCollectionViewExtension(), 799);
+    var catalogTreeRelation:CatalogTreeRelation = new CatalogTreeRelation();
+    var isApplicable:Function = function (model:Object):Boolean {
+      var isCmStore:Boolean = CatalogHelper.getInstance().isActiveCoreMediaStore();
+      if (!isCmStore) {
+        return false;
+      }
+
+      var content:Content = model as Content;
+      if (!content) {
+        return false;
+      }
+
+      var contentType:ContentType = content.getType();
+      if (!contentType) {
+        return undefined;
+      }
+
+      var contentTypeName:String = contentType.getName();
+      if (!contentTypeName) {
+        return undefined;
+      }
+
+      return contentTypeName === catalogTreeRelation.folderNodeType()
+              || contentTypeName === catalogTreeRelation.leafNodeType();
+    };
+    contentTreeRelationRegistry.addExtension(catalogTreeRelation, isApplicable, 799);
+    editorContext.getCollectionViewExtender().addExtension(new CatalogCollectionViewExtension(), isApplicable, 799);
   }
 
   /**

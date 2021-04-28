@@ -1,16 +1,16 @@
 package com.coremedia.blueprint.elastic.social.rest;
 
-import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.base.elastic.tenant.TenantSiteMapping;
+import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.elastic.core.api.tenant.TenantService;
 import com.coremedia.elastic.social.rest.api.CategoryKeyAndDisplay;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.coremedia.elastic.core.test.Injection.inject;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -34,14 +33,11 @@ public class SettingsBasedFilterCategoryStrategyTest {
   private static final String TAXONOMY_NAME = "taxonomyName";
   private static final String TENANT_NAME = "tenant";
 
-  @InjectMocks
-  private SettingsBasedFilterCategoryStrategy settingsBasedFilterCategoryStrategy = new SettingsBasedFilterCategoryStrategy();
-
   @Mock
   private TenantService tenantService;
 
   @Mock
-  private TenantSiteMapping tenantSiteMappingHelper;
+  private TenantSiteMapping tenantSiteMapping;
 
   @Mock
   private SettingsService settingsService;
@@ -73,8 +69,13 @@ public class SettingsBasedFilterCategoryStrategyTest {
   @Mock
   private ContentType articleContentType;
 
+  private SettingsBasedFilterCategoryStrategy settingsBasedFilterCategoryStrategy;
+  private final List<CategoryResolver> categoryResolvers = new ArrayList<>();
+
   @Before
   public void setup() {
+    settingsBasedFilterCategoryStrategy = new SettingsBasedFilterCategoryStrategy(settingsService, tenantService, tenantSiteMapping, categoryResolvers);
+
     when(channelContent.getType()).thenReturn(channelContentType);
     when(channelContentType.isSubtypeOf("CMChannel")).thenReturn(true);
     when(channelContent.getString("segment")).thenReturn(CHANNEL_SEGMENT);
@@ -85,12 +86,12 @@ public class SettingsBasedFilterCategoryStrategyTest {
     when(articleContent.getType()).thenReturn(articleContentType);
 
     when(tenantService.getCurrent()).thenReturn(TENANT_NAME);
-    when(tenantSiteMappingHelper.getTenantSiteMap()).thenReturn(tenantSiteMap);
+    when(tenantSiteMapping.getTenantSiteMap()).thenReturn(tenantSiteMap);
   }
 
   @Test
   public void testSettingsBasedFilterStrategyOneChannel() {
-    getCategoryResolvers(new CMChannelCategoryResolver(), new CMTaxonomyCategoryResolver());
+    configureCategoryResolvers(new CMChannelCategoryResolver(), new CMTaxonomyCategoryResolver());
     List<Content> rootChannels = getRootChannels(rootChannel1);
     when(tenantSiteMap.get(TENANT_NAME)).thenReturn(rootChannels);
     Map<String, Object> settings = getFilterCategorySettings(channelContent, taxonomyContent, articleContent);
@@ -102,9 +103,14 @@ public class SettingsBasedFilterCategoryStrategyTest {
     Assert.assertTrue(categoriesContainCategory(categories, new CategoryKeyAndDisplay(TAXONOMY_NAME, TAXONOMY_NAME)));
   }
 
+  @After
+  public void cleanup() {
+    categoryResolvers.clear();
+  }
+
   @Test
   public void testSettingsBasedFilterStrategyTwoChannels() {
-    getCategoryResolvers(new CMChannelCategoryResolver(), new CMTaxonomyCategoryResolver());
+    configureCategoryResolvers(new CMChannelCategoryResolver(), new CMTaxonomyCategoryResolver());
     List<Content> rootChannels = getRootChannels(rootChannel1, rootChannel2);
     when(tenantSiteMap.get(TENANT_NAME)).thenReturn(rootChannels);
     Map<String, Object> settings = getFilterCategorySettings(channelContent);
@@ -135,10 +141,8 @@ public class SettingsBasedFilterCategoryStrategyTest {
     return rootChannels;
   }
 
-  private void getCategoryResolvers(CategoryResolver... resolvers) {
-    List<CategoryResolver> categoryResolvers = new ArrayList<>();
+  private void configureCategoryResolvers(CategoryResolver... resolvers) {
     categoryResolvers.addAll(Arrays.asList(resolvers));
-    inject(settingsBasedFilterCategoryStrategy, categoryResolvers);
   }
 
   private Map<String, Object> getFilterCategorySettings(Content... contents) {

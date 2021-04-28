@@ -25,7 +25,7 @@
 
   <local:items>
 
-    <editor:StringPropertyField propertyName="teaserTitle">
+    <editor:StringPropertyField itemId="teaserTitle" propertyName="teaserTitle">
       <editor:plugins exml:mode="append">
         <editor:StringPropertyFieldDelegatePlugin delegatePropertyName="title"/>
       </editor:plugins>

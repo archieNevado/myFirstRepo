@@ -4,32 +4,14 @@ import com.coremedia.blueprint.base.links.ContentLinkBuilder;
 import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
 import com.coremedia.blueprint.coderesources.ThemeService;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
-import com.coremedia.blueprint.testing.ContentTestConfiguration;
-import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
-import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.mimetype.MimeTypeService;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
-import com.coremedia.objectserver.configuration.CaeConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.ImportResource;
 
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties({
-        DeliveryConfigurationProperties.class,
-        CaeConfigurationProperties.class
-})
-@ImportResource(
-        value = {
-                "classpath:/framework/spring/blueprint-page.xml",
-        },
-        reader = com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader.class
-)
-@Import({XmlRepoConfiguration.class, ContentTestConfiguration.class})
 class CapBlobHandlerTestConfiguration extends AbstractHandlerTestConfiguration {
 
   @Bean

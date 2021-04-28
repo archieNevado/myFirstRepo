@@ -50,11 +50,11 @@ import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.objectserver.view.dynamic.MD5SecureHashCodeGeneratorStrategy;
 import com.coremedia.objectserver.web.SecureHashCodeGeneratorStrategy;
 import com.coremedia.objectserver.web.cachecontrol.CacheControlStrategy;
+import com.coremedia.objectserver.web.config.CaeHandlerServicesConfiguration;
 import com.coremedia.springframework.customizer.Customize;
 import com.coremedia.springframework.customizer.CustomizerConfiguration;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
@@ -67,19 +67,14 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
-import org.springframework.core.convert.converter.GenericConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping;
 
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static com.coremedia.blueprint.common.datevalidation.ValidUntilConsumer.DISABLE_VALIDITY_RECORDING_ATTRIBUTE;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
@@ -89,9 +84,6 @@ import static org.springframework.web.context.request.RequestAttributes.SCOPE_RE
  */
 @Configuration(proxyBeanMethods = false)
 @ImportResource(value = {
-        "classpath:/com/coremedia/cae/contentbean-services.xml",
-        "classpath:/com/coremedia/cae/dataview-services.xml",
-        "classpath:/com/coremedia/cae/handler-services.xml",
         "classpath:/com/coremedia/cae/webflow/webflow-services.xml",
         "classpath:/com/coremedia/blueprint/base/links/bpbase-links-services.xml",
         "classpath:/com/coremedia/blueprint/base/links/bpbase-links-postprocessors.xml",
@@ -99,7 +91,9 @@ import static org.springframework.web.context.request.RequestAttributes.SCOPE_RE
         "classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml",
         "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
 }, reader = ResourceAwareXmlBeanDefinitionReader.class)
-@Import({BlueprintSearchCaeBaseLibConfiguration.class,
+@Import({
+        BlueprintSearchCaeBaseLibConfiguration.class,
+        CaeHandlerServicesConfiguration.class,
         CustomizerConfiguration.class,
         IdServicesConfiguration.class,
         MimeTypeServiceConfiguration.class,
@@ -632,33 +626,6 @@ public class BlueprintHandlersCaeBaseLibConfiguration {
   }
 
   /**
-   * Register a converter for converting an numeric id (e.g. "1234") to a generic ContentBean (e.g. CMArticle) and
-   * vice versa. This converter will be used for all binding (e.g. in handlers) then.
-   */
-  @Bean(autowireCandidate = false)
-  @Customize(value = "bindingConverters", mode = Customize.Mode.APPEND)
-  @Order(10000)
-  public Set registerIdToContentBeanConverter(GenericConverter idGenericContentBeanConverter) {
-    return Sets.newHashSet(idGenericContentBeanConverter);
-  }
-
-  /**
-   * Registers additional HttpMessageConverters.
-   */
-  @Bean(autowireCandidate = false)
-  @Customize(value = "httpMessageConverters", mode = Customize.Mode.APPEND)
-  @Order(10000)
-  public List registerHttpMessageConverters() {
-    // converts request/response bodies from/to XML
-    Jaxb2RootElementHttpMessageConverter jaxbConverter = new Jaxb2RootElementHttpMessageConverter();
-
-    // converts request/response bodies from/to JSON
-    MappingJackson2HttpMessageConverter jacksonConverter = new MappingJackson2HttpMessageConverter();
-
-    return Lists.newArrayList(jaxbConverter, jacksonConverter);
-  }
-
-  /**
    * Generate URI path from a navigation and vice versa.
    */
   @Bean
@@ -692,6 +659,8 @@ public class BlueprintHandlersCaeBaseLibConfiguration {
   }
 
   @Bean
+  @Customize(value = "handlerInterceptors", mode = Customize.Mode.APPEND)
+  @Order(9999997)
   public ContentValidityInterceptor contentValidityInterceptor(ValidationService<Object> validationService) {
     ContentValidityInterceptor validityInterceptor = new ContentValidityInterceptor();
     validityInterceptor.setValidationService(validationService);
@@ -699,16 +668,10 @@ public class BlueprintHandlersCaeBaseLibConfiguration {
   }
 
   @Bean
-  public ExposeCurrentNavigationInterceptor exposeCurrentNavigationInterceptor() {
-    return new ExposeCurrentNavigationInterceptor();
-  }
-
-  @Bean(autowireCandidate = false)
   @Customize(value = "handlerInterceptors", mode = Customize.Mode.APPEND)
   @Order(9999998)
-  public List<HandlerInterceptor> blueprintControllerInterceptors(ContentValidityInterceptor contentValidityInterceptor,
-                                                                  ExposeCurrentNavigationInterceptor exposeCurrentNavigationInterceptor) {
-    return Lists.newArrayList(contentValidityInterceptor, exposeCurrentNavigationInterceptor);
+  public ExposeCurrentNavigationInterceptor exposeCurrentNavigationInterceptor() {
+    return new ExposeCurrentNavigationInterceptor();
   }
 
   @Bean

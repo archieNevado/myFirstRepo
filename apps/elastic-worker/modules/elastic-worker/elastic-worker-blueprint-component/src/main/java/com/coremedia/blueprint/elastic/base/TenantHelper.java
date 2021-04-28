@@ -9,9 +9,8 @@ import com.coremedia.cap.multisite.SitesService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -22,18 +21,20 @@ import static org.apache.commons.lang3.StringUtils.join;
 /**
  * Helper bean to compute the configured tenants (from root navigation settings)
  */
-@Named
+@Component
 public class TenantHelper {
 
   private static final Logger LOG = LoggerFactory.getLogger(TenantHelper.class);
 
   public static final String SETTINGS_STRUCT = "elasticSocial";
 
-  @Inject
-  private SitesService sitesService;
+  private final SitesService sitesService;
+  private final SettingsService settingsService;
 
-  @Inject
-  private SettingsService settingsService;
+  public TenantHelper(SitesService sitesService, SettingsService settingsService) {
+    this.sitesService = sitesService;
+    this.settingsService = settingsService;
+  }
 
   public Collection<String> readTenantsFromContent() {
     Collection<String> tenants = new HashSet<>();

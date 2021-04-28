@@ -14,8 +14,8 @@ import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.Vendor;
-import com.coremedia.livecontext.ecommerce.event.InvalidationService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -68,7 +68,7 @@ class OverrideCommerceServiceTest {
           TestCommerceService.class,
           RequiresGenericCommerceConnection.class
   })
-  private InvalidationService testInvalidationService;
+  private CommerceIdProvider testCommerceIdProvider;
 
   @Autowired
   private GenericCommerceConnectionFactory connectionFactory;
@@ -114,7 +114,7 @@ class OverrideCommerceServiceTest {
               assertThat(genericCommerceConnection).returns(testCatalogService, CommerceConnection::getCatalogService);
 
               // the custom invalidation service was asked to provide a new instance
-              verify(((RequiresGenericCommerceConnection) testInvalidationService), times(1))
+              verify(((RequiresGenericCommerceConnection) testCommerceIdProvider), times(1))
                       .setGenericCommerceConnection(genericCommerceConnection);
             });
   }

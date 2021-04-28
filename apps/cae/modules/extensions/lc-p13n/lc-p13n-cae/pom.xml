@@ -45,6 +45,7 @@
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>coremedia-cache</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.cms</groupId>
@@ -154,4 +155,21 @@
       <artifactId>bpbase-lc-common</artifactId>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <configuration>
+          <ignoredDependencies combine.children="append">
+            <!-- Transitive compile *AND* direct test dependencies. -->
+            <ignoredDependency>com.coremedia.cms:cae-viewservices</ignoredDependency>
+            <ignoredDependency>com.coremedia.cms:cae-contentbeanservices</ignoredDependency>
+          </ignoredDependencies>
+          <failOnWarning>true</failOnWarning>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

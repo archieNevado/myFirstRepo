@@ -30,7 +30,8 @@
                 collapsible="false"
                 itemId="cmSegmentsDescriptionForm">
           <editor:items>
-            <editor:RichTextPropertyField propertyName="description"
+            <editor:RichTextPropertyField itemId="description"
+                                          propertyName="description"
                                           hideLabel="true"/>
           </editor:items>
         </editor:PropertyFieldGroup>

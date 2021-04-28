@@ -16,7 +16,11 @@ import com.coremedia.xml.Markup;
 import com.google.common.base.Preconditions;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatcher;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,11 +30,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static com.coremedia.elastic.core.test.Injection.inject;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -38,6 +41,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class CuratedTransferResourceTest {
   private static final String VALID_CONTENT_ID = "coremedia:///cap/content/42";
   private static final String IMAGE_GALLERY_DEFAULT_PARENTFOLDER_CONTENT_ID = "coremedia:///cap/content/666";
@@ -52,11 +56,24 @@ public class CuratedTransferResourceTest {
   private static final String DEFAULT_DATE_STRING = "10.10.2010-12:42";
   private static final String IMAGE_PROPERTY_BLOB = "data";
 
+  @Mock
+  private ContentRepository contentRepository;
+
+  @Mock
+  private CommentService commentService;
+
+  @Mock
+  private ReviewService reviewService;
+
+  @Mock
+  private BlobConverter blobConverter;
+
+  @InjectMocks
   private CuratedTransferResource curatedTransferResource;
 
   @Before
   public void setUp() throws Exception {
-    curatedTransferResource = new CuratedTransferResource();
+    curatedTransferResource = new CuratedTransferResource(contentRepository, commentService, reviewService, blobConverter);
   }
 
   // --- CuratedTransfer: Comments -------------------------------------------------------------------------------------
@@ -78,7 +95,6 @@ public class CuratedTransferResourceTest {
 
   @Test(expected = ContentException.class)
   public void postProcess_articleToCopyToDoesNotExist() throws Exception {
-    ContentRepository contentRepository = mockAndInjectInto(ContentRepository.class, curatedTransferResource);
     when(contentRepository.getContent(VALID_CONTENT_ID)).thenThrow(ContentException.class);
 
     curatedTransferResource.postProcess(VALID_CONTENT_ID, VALID_COMMENT_IDS);
@@ -91,10 +107,6 @@ public class CuratedTransferResourceTest {
     String commentText = "fooBar42";
     final String commentAuthorName = "Dilbert";
     String articleName = "test";
-
-    // Mock services
-    CommentService commentService = mockAndInjectInto(CommentService.class, curatedTransferResource);
-    ContentRepository contentRepository = mockAndInjectInto(ContentRepository.class, curatedTransferResource);
 
     Content articleToCopyTo = mockContent();
     when(articleToCopyTo.getName()).thenReturn(articleName);
@@ -120,18 +132,12 @@ public class CuratedTransferResourceTest {
     final String reviewAuthorName = "Dilbert";
     String articleName = "test";
 
-    // Mock services
-    CommentService commentService = mockAndInjectInto(CommentService.class, curatedTransferResource);
-    ReviewService reviewService = mockAndInjectInto(ReviewService.class, curatedTransferResource);
-    ContentRepository contentRepository = mockAndInjectInto(ContentRepository.class, curatedTransferResource);
-
     Content articleToCopyTo = mockContent();
     when(articleToCopyTo.getName()).thenReturn(articleName);
     when(contentRepository.getContent(articleContentId)).thenReturn(articleToCopyTo);
 
     Review review = mockReview(reviewId, reviewText, reviewAuthorName, dateFromString("21.09.2012-16:23"));
     when(commentService.getComment(review.getId())).thenReturn(review);
-    when(reviewService.getReview(review.getId())).thenReturn(review);
 
     // Actual computation
     curatedTransferResource.postProcess(articleContentId, reviewId);
@@ -149,10 +155,6 @@ public class CuratedTransferResourceTest {
     String commentText = "fooBar42";
     final String commentAuthorName = null;
     String articleName = "test";
-
-    // Mock services
-    CommentService commentService = mockAndInjectInto(CommentService.class, curatedTransferResource);
-    ContentRepository contentRepository = mockAndInjectInto(ContentRepository.class, curatedTransferResource);
 
     Content articleToCopyTo = mockContent();
     when(articleToCopyTo.getName()).thenReturn(articleName);
@@ -182,10 +184,6 @@ public class CuratedTransferResourceTest {
     when(author.isAnonymous()).thenReturn(false);
     when(author.getName()).thenReturn(commentAuthorName);
 
-    // Mock services
-    CommentService commentService = mockAndInjectInto(CommentService.class, curatedTransferResource);
-    ContentRepository contentRepository = mockAndInjectInto(ContentRepository.class, curatedTransferResource);
-
     Content articleToCopyTo = mockContent();
     when(articleToCopyTo.getName()).thenReturn(articleName);
     when(contentRepository.getContent(articleContentId)).thenReturn(articleToCopyTo);
@@ -213,10 +211,6 @@ public class CuratedTransferResourceTest {
     String commentText = "fooBar42";
     String secondCommentText = "3000";
     String articleName = "test";
-
-    // Mock services
-    CommentService commentService = mockAndInjectInto(CommentService.class, curatedTransferResource);
-    ContentRepository contentRepository = mockAndInjectInto(ContentRepository.class, curatedTransferResource);
 
     Content articleToCopyTo = mockContent();
     when(articleToCopyTo.getName()).thenReturn(articleName);
@@ -246,20 +240,9 @@ public class CuratedTransferResourceTest {
   public void postProcess_commentNotFound() throws ParseException {
     String articleContentId = VALID_CONTENT_ID;
     String commentId = "42";
-    String articleName = "test";
-
-    // Mock services
-    CommentService commentService = mockAndInjectInto(CommentService.class, curatedTransferResource);
-    ReviewService reviewService = mockAndInjectInto(ReviewService.class, curatedTransferResource);
-    ContentRepository contentRepository = mockAndInjectInto(ContentRepository.class, curatedTransferResource);
 
     Content articleToCopyTo = mockContent();
-    when(articleToCopyTo.getName()).thenReturn(articleName);
     when(contentRepository.getContent(articleContentId)).thenReturn(articleToCopyTo);
-
-    //No comment or review found
-    when(commentService.getComment(commentId)).thenReturn(null);
-    when(reviewService.getReview(commentId)).thenReturn(null);
 
     // Actual computation
     curatedTransferResource.postProcess(articleContentId, commentId);
@@ -282,7 +265,6 @@ public class CuratedTransferResourceTest {
 
   @Test(expected = ContentException.class)
   public void postProcessImages_galleryToCopyToDoesNotExist() throws Exception {
-    ContentRepository contentRepository = mockAndInjectInto(ContentRepository.class, curatedTransferResource);
     when(contentRepository.getContent(VALID_CONTENT_ID)).thenThrow(ContentException.class);
 
     curatedTransferResource.postProcess(VALID_CONTENT_ID, VALID_COMMENT_IDS);
@@ -295,10 +277,6 @@ public class CuratedTransferResourceTest {
     String imageGalleryName = "test";
     String commentId = "42";
 
-    // Mock services
-    CommentService commentService = mockAndInjectInto(CommentService.class, curatedTransferResource);
-    ContentRepository contentRepository = mockAndInjectInto(ContentRepository.class, curatedTransferResource);
-
     // Mock comment
     Comment commentWithoutImageAttachment = mockComment(commentId, "dummy", "dummy", createDefaultDate());
     when(commentService.getComment(commentWithoutImageAttachment.getId())).thenReturn(commentWithoutImageAttachment);
@@ -306,7 +284,6 @@ public class CuratedTransferResourceTest {
     // Mock image gallery (including the containing folder)
     Content imageGalleryFolder = mockFolder();
 
-    when(contentRepository.getContent(imageGalleryParentContentId)).thenReturn(imageGalleryFolder);
     Content imageGallery = mockContent();
     when(imageGallery.getParent()).thenReturn(imageGalleryFolder);
     when(imageGallery.getName()).thenReturn(imageGalleryName);
@@ -335,14 +312,8 @@ public class CuratedTransferResourceTest {
     String commentId = "42";
     final String commentText = "I am a very nice dummy text!";
 
-    // Mock services
-    BlobConverter blobConverter = mockAndInjectInto(BlobConverter.class, curatedTransferResource);
-    CommentService commentService = mockAndInjectInto(CommentService.class, curatedTransferResource);
-    ContentRepository contentRepository = mockAndInjectInto(ContentRepository.class, curatedTransferResource);
-
     // Mock image gallery (including the containing folder)
     Content imageGalleryFolder = mockFolder();
-    when(contentRepository.getContent(imageGalleryParentContentId)).thenReturn(imageGalleryFolder);
     Content imageGallery = mockContent();
     when(imageGallery.getName()).thenReturn(imageGalleryName);
     when(imageGallery.getParent()).thenReturn(imageGalleryFolder);
@@ -393,14 +364,8 @@ public class CuratedTransferResourceTest {
     String commentId = "42";
     String attachmentFileName = "attachment-42.jpg";
 
-    // Mock services
-    BlobConverter blobConverter = mockAndInjectInto(BlobConverter.class, curatedTransferResource);
-    CommentService commentService = mockAndInjectInto(CommentService.class, curatedTransferResource);
-    ContentRepository contentRepository = mockAndInjectInto(ContentRepository.class, curatedTransferResource);
-
     // Mock image gallery (including the containing folder)
     Content imageGalleryFolder = mockFolder();
-    when(contentRepository.getContent(imageGalleryParentContentId)).thenReturn(imageGalleryFolder);
     Content imageGallery = mockContent();
     when(imageGallery.getParent()).thenReturn(imageGalleryFolder);
     when(contentRepository.getContent(imageGalleryContentId)).thenReturn(imageGallery);
@@ -454,16 +419,9 @@ public class CuratedTransferResourceTest {
     String attachmentFileName = "attachment-42.jpg";
     String attachmentFileNameWithoutType = "attachment-42";
 
-
-    // Mock services
-    BlobConverter blobConverter = mockAndInjectInto(BlobConverter.class, curatedTransferResource);
-    CommentService commentService = mockAndInjectInto(CommentService.class, curatedTransferResource);
-    ContentRepository contentRepository = mockAndInjectInto(ContentRepository.class, curatedTransferResource);
-
     // Mock image gallery (including the containing folder)
     Content imageGalleryFolder = mockFolder();
     when(imageGalleryFolder.getPath()).thenReturn(imageGalleryParentPath);
-    when(contentRepository.getContent(imageGalleryParentContentId)).thenReturn(imageGalleryFolder);
     Content imageGallery = mockContent();
     when(imageGallery.getParent()).thenReturn(imageGalleryFolder);
     when(contentRepository.getContent(imageGalleryContentId)).thenReturn(imageGallery);
@@ -510,10 +468,6 @@ public class CuratedTransferResourceTest {
     CommunityUser author = mock(CommunityUser.class);
     when(author.isAnonymous()).thenThrow(new ModelException("No delegate for model"));
 
-    // Mock services
-    CommentService commentService = mockAndInjectInto(CommentService.class, curatedTransferResource);
-    ContentRepository contentRepository = mockAndInjectInto(ContentRepository.class, curatedTransferResource);
-
     Content articleToCopyTo = mockContent();
     when(contentRepository.getContent(articleContentId)).thenReturn(articleToCopyTo);
 
@@ -546,12 +500,6 @@ public class CuratedTransferResourceTest {
 
   private Content mockContent() {
     return mock(Content.class);
-  }
-
-  private <T> T mockAndInjectInto(Class<T> targetClass, Object injectionTarget) {
-    T blobConverter = mock(targetClass);
-    inject(injectionTarget, blobConverter);
-    return blobConverter;
   }
 
   private Comment mockComment(String commentId, String commentText, String commentAuthorName, Date commentDate) throws ParseException {

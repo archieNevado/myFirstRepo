@@ -5,11 +5,12 @@ import com.coremedia.blueprint.taxonomies.cycleprevention.TaxonomyCycleValidator
 import com.coremedia.blueprint.taxonomies.semantic.SemanticTaxonomyConfiguration;
 import com.coremedia.blueprint.taxonomies.strategy.TaxonomyResolverImpl;
 import com.coremedia.cap.content.ContentRepository;
+import com.coremedia.cap.content.spring.ContentConfigurationProperties;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.undoc.common.spring.CapRepositoriesConfiguration;
 import com.coremedia.rest.cap.CapRestServiceSearchConfiguration;
-import com.coremedia.rest.cap.config.StudioConfigurationProperties;
 import com.coremedia.rest.cap.content.search.SearchService;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -23,6 +24,7 @@ import java.util.Map;
         CapRestServiceSearchConfiguration.class,
         CapRepositoriesConfiguration.class,
 })
+@EnableConfigurationProperties(ContentConfigurationProperties.class)
 public class TaxonomyConfiguration {
 
   /*
@@ -33,8 +35,8 @@ public class TaxonomyConfiguration {
                                         SitesService sitesService,
                                         SearchService searchService,
                                         TaxonomyCycleValidator taxonomyCycleValidator,
-                                        StudioConfigurationProperties studioConfigurationProperties) {
-    String globalConfigurationPath = studioConfigurationProperties.getGlobalConfigurationPath();
+                                        ContentConfigurationProperties contentConfigurationProperties) {
+    String globalConfigurationPath = contentConfigurationProperties.getGlobalConfigurationPath();
     return new TaxonomyResolverImpl(sitesService,
             contentRepository,
             searchService,

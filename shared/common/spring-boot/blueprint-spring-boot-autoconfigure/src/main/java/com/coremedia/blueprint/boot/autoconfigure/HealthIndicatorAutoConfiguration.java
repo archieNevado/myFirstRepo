@@ -1,12 +1,6 @@
 package com.coremedia.blueprint.boot.autoconfigure;
 
 import com.coremedia.cap.common.CapConnection;
-import com.coremedia.cap.common.events.CapConnectionListener;
-import com.coremedia.cap.common.events.ConnectionAvailableEvent;
-import com.coremedia.cap.common.events.ConnectionDisruptedEvent;
-import com.coremedia.cap.common.events.ConnectionUnavailableEvent;
-import com.coremedia.cap.common.events.ConnectionWillBeUnavailableEvent;
-import com.coremedia.cap.common.events.ConnectionWillNotBeUnavailableEvent;
 import com.coremedia.elastic.core.api.search.SearchService;
 import com.coremedia.elastic.core.mongodb.settings.MongoDbSettings;
 import com.mongodb.MongoClient;
@@ -76,49 +70,23 @@ public class HealthIndicatorAutoConfiguration {
   @ConditionalOnMissingBean(name = "uapiConnectionReadinessHealthIndicator")
   public static class UapiConnectionReadinessHealthIndicator implements HealthIndicator {
 
-    private Health connectionHealth;
+    private final CapConnection connection;
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public UapiConnectionReadinessHealthIndicator(CapConnection connection) {
-      if (connection.isContentRepositoryAvailable()) {
-        connectionHealth = Health.up().withDetail("content repository", "OK").build();
-      } else {
-        connectionHealth = Health.down().withDetail("content repository", "offline").build();
-      }
-      connection.addCapConnectionListener(
-              new CapConnectionListener() {
-
-                @Override
-                public void connectionUnavailable(ConnectionUnavailableEvent event) {
-                  connectionHealth = Health.down().withDetail("content repository", "offline").build();
-                }
-
-                @Override
-                public void connectionAvailable(ConnectionAvailableEvent event) {
-                  connectionHealth = Health.up().withDetail("content repository", "OK").build();
-                }
-
-                @Override
-                public void connectionWillBeUnavailable(ConnectionWillBeUnavailableEvent event) {
-                  connectionHealth = Health.down().withDetail("content repository", "will be offline soon").build();
-                }
-
-                @Override
-                public void connectionWillNotBeUnavailable(ConnectionWillNotBeUnavailableEvent event) {
-                  connectionHealth = Health.down().withDetail("content repository", "will be available again soon").build();
-                }
-
-                @Override
-                public void connectionDisrupted(ConnectionDisruptedEvent event) {
-                  connectionHealth = Health.down().withDetail("content repository", "disrupted").build();
-                }
-              }
-      );
+      this.connection = connection;
     }
 
     @Override
     public Health health() {
-      return connectionHealth;
+      Health connectionHealth;
+      if (!connection.isContentRepositoryAvailable()) {
+        return Health.down().withDetail("content repository", "offline").build();
+      } else if (connection.isContentRepositoryToBeUnavailable()) {
+        return Health.down().withDetail("content repository", "will be offline soon").build();
+      } else {
+        return Health.up().withDetail("content repository", "OK").build();
+      }
     }
   }
 

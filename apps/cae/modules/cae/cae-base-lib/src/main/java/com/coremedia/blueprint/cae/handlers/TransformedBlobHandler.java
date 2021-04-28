@@ -219,7 +219,7 @@ public class TransformedBlobHandler extends HandlerBase {
    * transformed blob, esp. if transformed blobs are cached by a CDN.
    */
   public Blob getTransformedBlob(CMMedia media, String transformName, String extension, Integer width, Integer height) {
-    Optional<Blob> data = transformImageService.transformWithDimensions(media.getContent(), CMMedia.DATA, transformName, width, height);
+    Optional<Blob> data = transformImageService.transformWithDimensions(media.getContent(), CMMedia.DATA, transformName, width, height, extension);
     return data.orElse(null);
   }
 

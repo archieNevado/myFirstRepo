@@ -18,14 +18,22 @@
     ]]></fx:Script>
 
   <editor:items>
-    <editor:StringPropertyField propertyName="localSettings.webtrends.accountName"/>
-    <editor:StringPropertyField propertyName="localSettings.webtrends.userName"/>
-    <editor:StringPropertyField propertyName="localSettings.webtrends.password"/>
-    <editor:IntegerPropertyField propertyName="localSettings.webtrends.profileId"/>
-    <editor:StringPropertyField propertyName="localSettings.webtrends.reportId"/>
-    <editor:StringPropertyField propertyName="localSettings.webtrends.sortByMeasure"/>
-    <editor:IntegerPropertyField propertyName="localSettings.webtrends.limit"/>
-    <editor:IntegerPropertyField propertyName="localSettings.webtrends.interval"/>
+    <editor:StringPropertyField propertyName="localSettings.webtrends.accountName"
+                                itemId="accountName"/>
+    <editor:StringPropertyField propertyName="localSettings.webtrends.userName"
+                                itemId="userName"/>
+    <editor:StringPropertyField propertyName="localSettings.webtrends.password"
+                                itemId="password"/>
+    <editor:IntegerPropertyField propertyName="localSettings.webtrends.profileId"
+                                 itemId="profileId"/>
+    <editor:StringPropertyField propertyName="localSettings.webtrends.reportId"
+                                itemId="reportId"/>
+    <editor:StringPropertyField propertyName="localSettings.webtrends.sortByMeasure"
+                                itemId="sortByMeasure"/>
+    <editor:IntegerPropertyField propertyName="localSettings.webtrends.limit"
+                                 itemId="limit"/>
+    <editor:IntegerPropertyField propertyName="localSettings.webtrends.interval"
+                                 itemId="interval"/>
   </editor:items>
 
 </editor:PropertyFieldGroup>

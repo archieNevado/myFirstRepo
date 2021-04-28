@@ -316,8 +316,8 @@ module.exports = () => (config) => {
       viewRepositoryPlugin,
       joinWebpackPlugin,
       // configure for themes
-      ...themePaths.map(
-        (themePath) => {
+      ...themePaths
+        .map((themePath) => {
           const patterns = [
             ...createPatternsCopyOverPaths(path.join(themePath, "src"), [
               "css",
@@ -334,11 +334,11 @@ module.exports = () => (config) => {
           if (patterns.length > 0) {
             return new CopyWebpackPlugin({
               patterns: patterns,
-            })
+            });
           }
           return null;
-        }
-      ).filter(copyPlugin => !!copyPlugin),
+        })
+        .filter((copyPlugin) => !!copyPlugin),
       joinSettingsWebpackPlugin,
       // additional files via themeConfig
       ...additionalCopyPlugins,

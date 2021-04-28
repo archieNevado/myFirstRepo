@@ -9,6 +9,7 @@ import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -32,7 +33,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * </table>
  */
 @Configuration(proxyBeanMethods = false)
-@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
+@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class, MongoAutoConfiguration.class})
 public class ThemeImporterClient extends AbstractThemeImporterClient {
   private static final ThemeImporterCommandLineParser CMD_LINE_PARSER = new ThemeImporterCommandLineParser();
 

@@ -7,14 +7,11 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
 import com.coremedia.livecontext.ecommerce.asset.CatalogPicture;
-import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
-import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collections;
@@ -36,13 +33,6 @@ public class AssetServiceImpl implements AssetService {
   private AssetResolvingStrategy assetResolvingStrategy;
 
   @NonNull
-  public CatalogPicture getCatalogPicture(String url) {
-    return computeReferenceIdFromUrl(url)
-            .map(referenceIdFromUrl -> getCatalogPicture(url, referenceIdFromUrl))
-            .orElseGet(() -> new CatalogPicture(url, null));
-  }
-
-  @NonNull
   @Override
   public CatalogPicture getCatalogPicture(@NonNull String url, @NonNull CommerceId commerceId) {
     StoreContext storeContext = CurrentStoreContext.get();
@@ -57,21 +47,23 @@ public class AssetServiceImpl implements AssetService {
     String imageUrl = linkService.getImageUrl(url, storeContext).orElse(null);
 
     // try to find assets related to the given commerce id
-    List<Content> pictures = findPictures(commerceId, false);
+    List<Content> pictures = findPictures(commerceId, false, storeContext.getSiteId());
     Content picture = pictures.stream().findFirst().orElse(null);
     return new CatalogPicture(imageUrl, picture);
   }
 
   @NonNull
   @Override
-  public List<Content> findPictures(@NonNull CommerceId commerceId) {
-    return findPictures(commerceId, true);
+  public List<Content> findPictures(@NonNull CommerceId commerceId, boolean withDefault) {
+    return findCurrentSiteId()
+            .map(siteId -> findPictures(commerceId, withDefault, siteId))
+            .orElseGet(Collections::emptyList);
   }
 
   @NonNull
   @Override
-  public List<Content> findPictures(@NonNull CommerceId commerceId, boolean withDefault) {
-    Site site = findSite().orElse(null);
+  public List<Content> findPictures(@NonNull CommerceId commerceId, boolean withDefault, String siteId) {
+    Site site = sitesService.getSite(siteId);
     if (site == null) {
       return emptyList();
     }
@@ -93,14 +85,16 @@ public class AssetServiceImpl implements AssetService {
 
   @NonNull
   @Override
-  public List<Content> findVisuals(@NonNull CommerceId id) {
-    return findVisuals(id, true);
+  public List<Content> findVisuals(@NonNull CommerceId commerceId, boolean withDefault) {
+    return findCurrentSiteId()
+            .map(siteId -> findVisuals(commerceId, withDefault, siteId))
+            .orElseGet(Collections::emptyList);
   }
 
   @NonNull
   @Override
-  public List<Content> findVisuals(@NonNull CommerceId commerceId, boolean withDefault) {
-    Site site = findSite().orElse(null);
+  public List<Content> findVisuals(@NonNull CommerceId commerceId, boolean withDefault, String siteId) {
+    Site site = sitesService.getSite(siteId);
     if (site == null) {
       return emptyList();
     }
@@ -142,71 +136,30 @@ public class AssetServiceImpl implements AssetService {
   @NonNull
   @Override
   public List<Content> findDownloads(@NonNull CommerceId commerceId) {
-    return findSite()
+    return findCurrentSiteId()
+            .map(siteId -> findDownloads(commerceId, siteId))
+            .orElseGet(Collections::emptyList);
+  }
+
+  @NonNull
+  @Override
+  public List<Content> findDownloads(@NonNull CommerceId commerceId, String siteId) {
+    return sitesService.findSite(siteId)
             .map(site -> assetResolvingStrategy.findAssets("CMDownload", commerceId, site))
             .orElseGet(Collections::emptyList);
   }
 
   @NonNull
-  private Optional<Site> findSite() {
+  private Optional<String> findCurrentSiteId() {
     return CurrentStoreContext.find()
-            .map(StoreContext::getSiteId)
-            .flatMap(sitesService::findSite);
+            .map(StoreContext::getSiteId);
   }
 
   @Nullable
   @Override
   public Content getDefaultPicture(@NonNull Site site) {
-    return settingsService.getSetting(CONFIG_KEY_DEFAULT_PICTURE, Content.class, site.getSiteRootDocument())
+    return settingsService.getSetting(CONFIG_KEY_DEFAULT_PICTURE, Content.class, site)
             .orElse(null);
-  }
-
-  @NonNull
-  private static Optional<CommerceId> computeReferenceIdFromUrl(@Nullable String url) {
-    if (StringUtils.isBlank(url)) {
-      return Optional.empty();
-    }
-
-    StoreContext storeContext = CurrentStoreContext.get();
-    CommerceConnection connection = storeContext.getConnection();
-
-    CommerceIdProvider idProvider = connection.getIdProvider();
-
-    String partNumber = parsePartNumberFromUrl(url).orElse(null);
-    if (partNumber == null) {
-      return Optional.empty();
-    }
-
-    CatalogAlias catalogAlias = storeContext.getCatalogAlias();
-
-    if (url.contains(CATEGORY_URI_PREFIX)) {
-      CommerceId categoryId = idProvider.formatCategoryId(catalogAlias, partNumber);
-      return Optional.of(categoryId);
-    }
-
-    if (url.contains(PRODUCT_URI_PREFIX)) {
-      CommerceId productId = idProvider.formatProductId(catalogAlias, partNumber);
-      return Optional.of(productId);
-    }
-
-    return Optional.empty();
-  }
-
-  @NonNull
-  private static Optional<String> parsePartNumberFromUrl(@NonNull String urlStr) {
-    int index = urlStr.lastIndexOf('.');
-    if (index < 0) {
-      return Optional.empty();
-    }
-
-    String fileName = urlStr.substring(0, index);
-    index = fileName.lastIndexOf('/');
-    if (index < 0) {
-      return Optional.empty();
-    }
-
-    String partNumber = fileName.substring(index + 1);
-    return Optional.of(partNumber);
   }
 
   @Autowired

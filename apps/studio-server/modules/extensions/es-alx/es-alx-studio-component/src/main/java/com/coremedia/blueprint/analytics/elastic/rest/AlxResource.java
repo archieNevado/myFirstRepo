@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -55,22 +54,23 @@ public class AlxResource {
   public static final String PARAM_TIME_RANGE = "timeRange";
   private static final String GOOGLE_ALX = "googleAnalytics";
 
-  @Inject
-  private ContentRepository contentRepository;
+  private final ContentRepository contentRepository;
+  private final SettingsService settingsService;
+  private final PageViewReportModelService pageViewReportModelService;
+  private final PublicationReportModelService publicationReportModelService;
+  private final ContextStrategy<Content, Content> contextStrategy;
 
-  @Inject
-  private SettingsService settingsService;
-
-  @Inject
-  private PageViewReportModelService pageViewReportModelService;
-
-  @Inject
-  @Named("publicationReportModelService")
-  private PublicationReportModelService publicationReportModelService;
-
-  @Inject
-  @Qualifier("contentContextStrategy")
-  private ContextStrategy<Content, Content> contextStrategy;
+  public AlxResource(ContentRepository contentRepository,
+                     SettingsService settingsService,
+                     PageViewReportModelService pageViewReportModelService,
+                     PublicationReportModelService publicationReportModelService,
+                     @Qualifier("contentContextStrategy") ContextStrategy<Content, Content> contextStrategy) {
+    this.contentRepository = contentRepository;
+    this.settingsService = settingsService;
+    this.pageViewReportModelService = pageViewReportModelService;
+    this.publicationReportModelService = publicationReportModelService;
+    this.contextStrategy = contextStrategy;
+  }
 
   @GetMapping("/pageviews/{id}")
   public ReportResult getAlxData(@PathVariable(PARAM_ID) String id, @RequestParam(PARAM_TIME_RANGE) Integer timeRange) {

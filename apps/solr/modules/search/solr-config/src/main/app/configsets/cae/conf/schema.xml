@@ -14,9 +14,19 @@
        ===================================================================== -->
 
   <!--
-    Solr internal field - used for optimistic locking, transaction log and real-time get.
+    Solr internal field for optimistic locking, transaction log and real-time get.
   -->
   <field name="_version_" type="plong" indexed="false" stored="false"/>
+
+  <!--
+    Solr internal field for nested documents: the value of the top/parent ID.
+  -->
+  <field name="_root_" type="string" indexed="true" stored="false" docValues="true" />
+
+  <!--
+    Solr internal field for nested documents: the path of the document in the hierarchy for non-root documents
+  -->
+  <field name="_nest_path_" type="_nest_path_" /><fieldType name="_nest_path_" class="solr.NestPathField" />
 
   <!--
     The ID of the document.
@@ -40,6 +50,7 @@
      PARTIAL:  Denotes a partially indexed document which is caused
                by a partial update on a non-existing document.
                See field feederinfo for a description of the error.
+     NESTED:   Denotes a nested Solr document.
   -->
   <field name="feederstate" type="string" indexed="true" stored="true" required="true"/>
 
@@ -53,7 +64,7 @@
     The time when the document was created or updated by the Feeder.
     This field is required for the CAE Feeder.
   -->
-  <field name="feedertime" type="pdate" indexed="true" stored="false" required="true"/>
+  <field name="feedertime" type="pdate" indexed="true" stored="false"/>
 
   <!--
     A date field that represents the freshness of the document.
@@ -179,8 +190,13 @@
   -->
   <field name="textbody" type="text_general" indexed="true" stored="false" multiValued="true"/>
 
-  <!-- Field to not make solr throw errors if field to index does not exist in schema -->
-  <dynamicField name="*" type="ignored" />
+  <!--
+    Field without any data, that can still be used in queries without errors
+
+    DEPRECATED: Don't use this field. It's just kept for backwards-compatibility with old CAE applications, that use
+                it in a query condition to not match anything. Such a condition can be replaced with "(-*:*)".
+  -->
+  <field name="1" type="ignored" />
 
   <!-- =====================================================================
        FIELD TYPES

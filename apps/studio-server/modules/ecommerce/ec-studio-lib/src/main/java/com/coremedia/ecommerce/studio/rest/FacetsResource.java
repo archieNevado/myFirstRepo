@@ -20,13 +20,14 @@ import java.util.List;
 import java.util.Map;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.WORKSPACE_ID_NONE;
-import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
 /**
  * A facets object as a RESTful resource.
+ * @deprecated use {@link SearchFacetsResource} instead
  */
+@Deprecated(since = "2104.1", forRemoval = true)
 @RestController
 @RequestMapping(value = "livecontext/facets/{" + AbstractCatalogResource.PATH_SITE_ID + "}/{" + AbstractCatalogResource.PATH_CATALOG_ALIAS + "}/{" + AbstractCatalogResource.PATH_WORKSPACE_ID + "}/{" + AbstractCatalogResource.PATH_ID + ":.+}", produces = MediaType.APPLICATION_JSON_VALUE)
 public class FacetsResource extends AbstractCatalogResource<Facets> {

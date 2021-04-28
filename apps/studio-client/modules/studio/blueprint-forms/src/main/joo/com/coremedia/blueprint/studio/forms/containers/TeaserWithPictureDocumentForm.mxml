@@ -30,7 +30,8 @@
     ]]></fx:Script>
 
   <editor:items>
-    <editor:StringPropertyField propertyName="teaserTitle">
+    <editor:StringPropertyField itemId="teaserTitle"
+                                propertyName="teaserTitle">
       <editor:plugins exml:mode="append">
         <editor:StringPropertyFieldDelegatePlugin delegatePropertyName="title"/>
       </editor:plugins>
@@ -43,6 +44,7 @@
                                        styleDescriptorFolderPaths="{TeaserOverlayConstants.DEFAULT_STYLE_DESCRIPTOR_FOLDER_PATHS}"/>
     <bpforms:TeaserSettingsPropertyFieldGroup/>
     <editor:LinkListPropertyField propertyName="{PICTURE_PROPERTY_NAME}"
+                                  itemId="{PICTURE_PROPERTY_NAME}"
                                   showThumbnails="true">
       <editor:additionalToolbarItems>
         <TbSeparator/>

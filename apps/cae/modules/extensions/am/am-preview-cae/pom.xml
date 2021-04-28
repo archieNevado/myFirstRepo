@@ -119,4 +119,19 @@
     </dependency>
   </dependencies>
 
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <configuration>
+          <ignoredDependencies combine.children="append">
+            <!-- Transitive compile *AND* direct test dependencies. -->
+            <ignoredDependency>org.springframework:spring-core</ignoredDependency>
+          </ignoredDependencies>
+          <failOnWarning>true</failOnWarning>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

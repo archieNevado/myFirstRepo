@@ -27,9 +27,9 @@ class PersistentPreviewQuery {
     return query;
   }
 
-  static Optional<PersistentPreviewQuery> of(String name) {
+  static Optional<PersistentPreviewQuery> of(String lookupPath, String name) {
     try {
-      String query = IOUtils.resourceToString("/previewclient/graphql/" + name + ".graphql", StandardCharsets.UTF_8);
+      String query = IOUtils.resourceToString(lookupPath + name + ".graphql", StandardCharsets.UTF_8);
       return Optional.of(new PersistentPreviewQuery(name, query));
     } catch (IOException ignored) {
       return Optional.empty();

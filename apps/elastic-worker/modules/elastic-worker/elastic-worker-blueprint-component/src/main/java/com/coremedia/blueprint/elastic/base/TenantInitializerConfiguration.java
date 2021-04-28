@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.elastic.base;
 
+import com.coremedia.elastic.core.api.tenant.TenantService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -8,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 class TenantInitializerConfiguration {
   @Bean
-  TenantInitializer tenantInitializer(){
-    return new TenantInitializer();
+  TenantInitializer tenantInitializer(TenantService tenantService, TenantHelper tenantHelper){
+    return new TenantInitializer(tenantService, tenantHelper);
   }
 }

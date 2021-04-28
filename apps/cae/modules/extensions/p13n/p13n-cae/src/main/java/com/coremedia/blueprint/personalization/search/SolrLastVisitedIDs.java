@@ -35,6 +35,8 @@ public class SolrLastVisitedIDs implements SearchFunction {
    */
   public static final String CONTEXT_NAME_PARAMETER = "context";
 
+  private static final String MATCH_NOTHING_SOLR_QUERY = "(-*:*)";
+
   private String defaultField;
   private String defaultContextName;
 
@@ -91,7 +93,7 @@ public class SolrLastVisitedIDs implements SearchFunction {
     } else {
       LOG.debug("cannot handle context of type {}", contextObject != null ? contextObject.getClass() : null);
     }
-    return builder.append("1:2").toString();
+    return builder.append(MATCH_NOTHING_SOLR_QUERY).toString();
   }
 
   private String initializeContextName(SearchFunctionArguments args) {

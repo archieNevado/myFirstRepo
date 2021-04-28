@@ -7,21 +7,14 @@ import com.coremedia.blueprint.testing.ContentTestConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.cap.transform.TransformImageService;
-import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.mimetype.MimeTypeService;
-import com.coremedia.objectserver.configuration.CaeConfigurationProperties;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties({
-        DeliveryConfigurationProperties.class,
-        CaeConfigurationProperties.class
-})
 @ImportResource(
         value = {
                 "classpath:/framework/spring/blueprint-page.xml",

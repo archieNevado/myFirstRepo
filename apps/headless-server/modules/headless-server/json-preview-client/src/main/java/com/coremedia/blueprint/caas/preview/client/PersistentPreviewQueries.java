@@ -14,9 +14,9 @@ class PersistentPreviewQueries {
 
   private final Map<String, String> persistedPreviewQueries;
 
-  PersistentPreviewQueries(Stream<String> persistedQueryNames) {
+  PersistentPreviewQueries(String lookupPath, Stream<String> persistedQueryNames) {
     persistedPreviewQueries = persistedQueryNames
-            .map(PersistentPreviewQuery::of)
+            .map(queryName -> PersistentPreviewQuery.of(lookupPath, queryName))
             .flatMap(Optional::stream)
             .collect(
                     toMap(

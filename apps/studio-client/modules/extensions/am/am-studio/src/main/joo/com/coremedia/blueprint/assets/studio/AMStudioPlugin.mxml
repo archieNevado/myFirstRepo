@@ -25,6 +25,7 @@
     import com.coremedia.blueprint.studio.BlueprintFormsStudioPluginBase;
     import com.coremedia.blueprint.studio.forms.CMPictureForm;
     import com.coremedia.blueprint.studio.forms.CMVideoForm;
+    import com.coremedia.blueprint.studio.forms.containers.SEOForm;
     import com.coremedia.cms.editor.sdk.collectionview.search.TranslationStatusFilterPanel;
     import com.coremedia.cms.editor.sdk.collectionview.search.TranslationStatusFilterPanel;
     import com.coremedia.cms.editor.sdk.editorContext;
@@ -117,6 +118,7 @@
     <bpforms:CMPictureForm>
       <bpforms:plugins>
         <am:AddAssetLinkPlugin tabItemId="{CMPictureForm.EXTRAS_TAB_ITEM_ID}"
+                               afterItemId="{SEOForm.SEO_FORM_ITEM_ID}"
                                title="{ResourceManager.getInstance().getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'PropertyGroup_asset_label')}"/>
       </bpforms:plugins>
     </bpforms:CMPictureForm>
@@ -124,6 +126,7 @@
     <bpforms:CMVideoForm>
       <bpforms:plugins>
         <am:AddAssetLinkPlugin tabItemId="{CMVideoForm.EXTRAS_TAB_ITEM_ID}"
+                               afterItemId="{SEOForm.SEO_FORM_ITEM_ID}"
                                title="{ResourceManager.getInstance().getString('com.coremedia.blueprint.assets.studio.AMStudioPlugin', 'PropertyGroup_asset_label')}"/>
       </bpforms:plugins>
     </bpforms:CMVideoForm>

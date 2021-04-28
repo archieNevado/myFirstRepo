@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.studio.topicpages.rest;
 
-import com.coremedia.blueprint.base.rest.config.ConfigurationService;
-import com.coremedia.blueprint.base.rest.config.StructConfiguration;
+import com.coremedia.blueprint.base.config.ConfigurationService;
+import com.coremedia.blueprint.base.config.StructConfiguration;
 import com.coremedia.blueprint.taxonomies.Taxonomy;
 import com.coremedia.blueprint.taxonomies.TaxonomyNode;
 import com.coremedia.blueprint.taxonomies.TaxonomyResolver;

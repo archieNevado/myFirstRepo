@@ -1,12 +1,15 @@
 package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdBuilder;
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdUtils;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
-import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
+import com.coremedia.livecontext.ecommerce.common.CommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.p13n.MarketingSpotService;
+import com.coremedia.livecontext.ecommerce.search.SearchQuery;
+import com.coremedia.livecontext.ecommerce.search.SearchQueryBuilder;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 import com.coremedia.rest.cap.common.represent.SuggestionResultRepresentation;
@@ -21,12 +24,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService.DEFAULT_CATALOG_ALIAS;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.WORKSPACE_ID_NONE;
-import static java.util.Collections.emptyList;
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CATEGORY;
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.MARKETING_SPOT;
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.SKU;
 
 /**
  * Catalog configuration helpter as a RESTful resource.
@@ -79,30 +83,43 @@ public class CatalogServiceResource {
             .withWorkspaceId(workspaceId != null ? WorkspaceId.of(workspaceId) : WORKSPACE_ID_NONE)
             .build();
 
-    Map<String, String> params = getParams(category, catalogAlias, newStoreContextForSite, limit);
-    SearchResult<? extends CommerceBean> searchResult = search(query, searchType, newStoreContextForSite, params);
+    SearchQuery searchQuery = buildSearchQuery(query, searchType, category, catalogAlias, limit, newStoreContextForSite);
+    SearchResult<? extends CommerceBean> searchResult = search(searchQuery, newStoreContextForSite);
 
-    return new CatalogSearchResultRepresentation(searchResult.getSearchResult(), searchResult.getTotalCount());
+    return new CatalogSearchResultRepresentation(searchResult.getItems(), searchResult.getTotalCount());
   }
 
   @NonNull
-  private Map<String, String> getParams(String category, String catalogAlias, @NonNull StoreContext storeContext,
-                                        int limit) {
-    Map<String, String> params = new HashMap<>();
+  private static SearchQuery buildSearchQuery(String query, String searchType, String category, String catalogAlias,
+                                              int limit, @NonNull StoreContext storeContext) {
+    SearchQueryBuilder searchQueryBuilder = SearchQuery.builder(query, fromSearchType(searchType)).setLimit(limit);
 
     if (!StringUtils.isEmpty(category) && !isRootCategory(category, catalogAlias, storeContext)) {
-      params.put(CatalogService.SEARCH_PARAM_CATEGORYID, category);
+      CommerceIdBuilder categoryIdBuilder = CommerceIdUtils.builder(CATEGORY, storeContext)
+              .withTechId(category);
+      if (!StringUtils.isEmpty(catalogAlias)) {
+        categoryIdBuilder.withCatalogAlias(CatalogAlias.of(catalogAlias));
+      }
+      searchQueryBuilder.setCategoryId(categoryIdBuilder.build());
     }
 
-    if (!StringUtils.isEmpty(catalogAlias)) {
-      params.put(CatalogService.SEARCH_PARAM_CATALOG_ALIAS, catalogAlias);
-    }
+    return searchQueryBuilder.build();
+  }
 
-    if (limit > 0) {
-      params.put(CatalogService.SEARCH_PARAM_PAGESIZE, String.valueOf(limit));
+  @SuppressWarnings({"SwitchStatementWithoutDefaultBranch", "java:S131"})
+  private static CommerceBeanType fromSearchType(String searchType) {
+    if (searchType != null) {
+      switch (searchType) {
+        case SEARCH_TYPE_PRODUCT_VARIANT:
+          return SKU;
+        case SEARCH_TYPE_CATEGORY:
+          return CATEGORY;
+        case SEARCH_TYPE_MARKETING_SPOTS:
+          return MARKETING_SPOT;
+      }
     }
-
-    return params;
+    // default: Product
+    return PRODUCT;
   }
 
   private static boolean isRootCategory(@NonNull String categoryParam, String catalogAlias,
@@ -117,30 +134,28 @@ public class CatalogServiceResource {
     return categoryParam.equals(rootCategoryId);
   }
 
-  private SearchResult<? extends CommerceBean> search(String query, String searchType,
-                                                      @NonNull StoreContext newStoreContextForSite,
-                                                      @NonNull Map<String, String> params) {
+  @SuppressWarnings("SSBasedInspection")
+  private static SearchResult<? extends CommerceBean> search(@NonNull SearchQuery searchQuery,
+                                                             @NonNull StoreContext newStoreContextForSite) {
     CommerceConnection commerceConnection = newStoreContextForSite.getConnection();
 
-    if (searchType != null && searchType.equals(SEARCH_TYPE_PRODUCT_VARIANT)) {
+    CommerceBeanType searchType = searchQuery.getType();
+    if (searchType.equals(PRODUCT)) {
       return commerceConnection.getCatalogService()
-              .searchProductVariants(query, params, newStoreContextForSite);
-    } else if (searchType != null && searchType.equals(SEARCH_TYPE_CATEGORY)) {
+              .search(searchQuery, newStoreContextForSite);
+    } else if (searchType.equals(SKU)) {
       return commerceConnection.getCatalogService()
-              .searchCategories(query, params, newStoreContextForSite);
-    } else if (searchType != null && searchType.equals(SEARCH_TYPE_MARKETING_SPOTS)) {
-      MarketingSpotService marketingSpotService = commerceConnection.getMarketingSpotService().orElse(null);
-      if (marketingSpotService == null) {
-        SearchResult<? extends CommerceBean> searchResult = new SearchResult<>();
-        searchResult.setSearchResult(emptyList());
-        searchResult.setTotalCount(0);
-        return searchResult;
-      } else {
-        return marketingSpotService.searchMarketingSpots(query, params, newStoreContextForSite);
-      }
-    } else {// default: Product
+              .search(searchQuery, newStoreContextForSite);
+    } else if (searchType.equals(CATEGORY)) {
       return commerceConnection.getCatalogService()
-              .searchProducts(query, params, newStoreContextForSite);
+              .search(searchQuery, newStoreContextForSite);
+    } else if (searchType.equals(MARKETING_SPOT)) {
+      return commerceConnection.getMarketingSpotService()
+              .map(marketingSpotService -> marketingSpotService
+                      .searchMarketingSpots(searchQuery, newStoreContextForSite))
+              .orElse(SearchResult.emptySearchResult());
+    } else {
+      throw new IllegalArgumentException("Unsupported commerce bean type " + searchType);
     }
   }
 
@@ -155,7 +170,7 @@ public class CatalogServiceResource {
           @RequestParam(value = SEARCH_PARAM_CATEGORY, required = false) String category,
           @RequestParam(SEARCH_PARAM_WORKSPACE_ID) String workspaceId
   ) {
-    //TODO not supported yet
+    // not supported
     return new SuggestionResultRepresentation(new ArrayList<>());
   }
 }

@@ -128,6 +128,8 @@ services:
       SOLR_URL: http://solr:8983/solr
       SOLR_COLLECTION_CONTENT: studio
       HEAP_DUMP_FILENAME: content-feeder-heapdump
+      COMMERCE_HUB_DATA_CUSTOMENTITYPARAMS_CATALOGVERSION: Staged
+      COMMERCE_HUB_DATA_CUSTOMENTITYPARAMS_ENVIRONMENT: preview
     labels:
       traefik.enable: "true"
       traefik.actuator.port: "8081"
@@ -351,6 +353,7 @@ services:
       - 41105:5005
     environment:
       <<: *development-boot-envs
+      JAVA_HEAP: '2048m'
       CAAS_CONTEXT_TRACE_ENABLED: "false"
       CAASSERVER_ENDPOINT: http://${ENVIRONMENT_FQDN:-docker.localhost}:41180/graphql
       # only used in the test content
@@ -387,6 +390,7 @@ services:
       - 41205:5005
     environment:
       <<: *development-boot-envs
+      JAVA_HEAP: '2048m'
       REPOSITORY_URL: http://master-live-server:8080/ior
       # only used in the test content
       BLUEPRINT_SITE_MAPPING_CORPORATE: //corporate.${ENVIRONMENT_FQDN:-docker.localhost}

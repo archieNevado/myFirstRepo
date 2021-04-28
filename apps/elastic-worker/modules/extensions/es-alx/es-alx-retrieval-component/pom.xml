@@ -21,6 +21,7 @@
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>cap-delivery-configuration</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.cms</groupId>
@@ -89,6 +90,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -136,11 +138,6 @@
     <dependency>
       <groupId>com.coremedia.elastic.core</groupId>
       <artifactId>core-memory</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.elastic.core</groupId>
-      <artifactId>core-test</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

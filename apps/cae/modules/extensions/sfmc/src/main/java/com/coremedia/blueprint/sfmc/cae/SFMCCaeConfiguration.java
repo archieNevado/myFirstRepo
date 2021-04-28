@@ -6,6 +6,7 @@ import com.coremedia.blueprint.base.sfmc.libservices.dataextensions.SFMCDataExte
 import com.coremedia.blueprint.base.sfmc.libservices.dataextensions.SFMCDataExtensionService;
 import com.coremedia.blueprint.sfmc.cae.dataextension.handler.SFMCFormHandler;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
+import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,9 +14,13 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
 @Configuration(proxyBeanMethods = false)
-@Import({SFMCContextConfiguration.class,
-         SFMCDataExtensionConfiguration.class})
-@ImportResource("classpath:/com/coremedia/cae/contentbean-services.xml")
+@Import({
+        SFMCContextConfiguration.class,
+        SFMCDataExtensionConfiguration.class,
+})
+@ImportResource(value = {
+        "classpath:/com/coremedia/cae/contentbean-services.xml"
+}, reader = ResourceAwareXmlBeanDefinitionReader.class)
 public class SFMCCaeConfiguration {
   @Bean
   @NonNull

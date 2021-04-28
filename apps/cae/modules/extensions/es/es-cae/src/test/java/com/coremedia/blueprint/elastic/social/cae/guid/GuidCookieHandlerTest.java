@@ -3,23 +3,20 @@ package com.coremedia.blueprint.elastic.social.cae.guid;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.elastic.core.api.settings.Settings;
-import com.coremedia.objectserver.beans.ContentBeanIdConverter;
-import org.junit.Before;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
@@ -37,9 +34,10 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class GuidCookieHandlerTest {
 
+  @InjectMocks
   private GuidCookieHandler testling;
 
   @Mock
@@ -49,13 +47,7 @@ public class GuidCookieHandlerTest {
   private SettingsService settingsService;
 
   @Mock
-  private ContentBeanIdConverter contentBeanIdConverter;
-
-  @Before
-  public void initializeGuid() throws NoSuchAlgorithmException {
-    Settings settings = mock(Settings.class);
-    testling = new GuidCookieHandler(settings);
-  }
+  private Settings settings;
 
   @After
   public void cleanUp() {
@@ -93,19 +85,14 @@ public class GuidCookieHandlerTest {
    */
   @Test
   public void buildLink() {
-    testling.setContentBeanIdConverter(contentBeanIdConverter);
-
-    int DEFAULT_CONTENT_ID = 42;
-
-    when(contentBeanIdConverter.convert(rootChannelBean)).thenReturn(Integer.toString(DEFAULT_CONTENT_ID));
+    when(rootChannelBean.getContentId()).thenReturn(42);
     when(rootChannelBean.isRoot()).thenReturn(true);
-    when(rootChannelBean.getRootNavigation()).thenReturn(rootChannelBean);
 
     UriComponents uriComponents = testling.buildGUIDLink(rootChannelBean);
 
     assertNotNull(uriComponents);
 
-    String expectedURI = "/" + PREFIX_DYNAMIC + "/" + PREFIX_SERVICE + "/" + GUID_COOKIE_PREFIX + "/" + DEFAULT_CONTENT_ID;
+    String expectedURI = "/" + PREFIX_DYNAMIC + "/" + PREFIX_SERVICE + "/" + GUID_COOKIE_PREFIX + "/" + 42;
     assertEquals(expectedURI, uriComponents.toUriString());
   }
 
@@ -114,7 +101,6 @@ public class GuidCookieHandlerTest {
   */
   @Test
   public void handlerSetsCookie() {
-    testling.setSettingsService(settingsService);
     when(settingsService.nestedSetting(Arrays.asList("elasticSocial", "enabled"), Boolean.class, rootChannelBean)).thenReturn(true);
 
     HttpServletRequest request = mock(HttpServletRequest.class);
@@ -133,7 +119,6 @@ public class GuidCookieHandlerTest {
    */
   @Test
   public void handlerExtractsExistingCookie() {
-    testling.setSettingsService(settingsService);
     when(settingsService.nestedSetting(Arrays.asList("elasticSocial", "enabled"), Boolean.class, rootChannelBean)).thenReturn(true);
 
     HttpServletRequest request = mock(HttpServletRequest.class);
@@ -153,13 +138,10 @@ public class GuidCookieHandlerTest {
    */
   @Test
   public void handlerESisOFF() {
-    testling.setSettingsService(settingsService);
     when(settingsService.nestedSetting(Arrays.asList("elasticSocial", "enabled"), Boolean.class, rootChannelBean)).thenReturn(false);
 
     HttpServletRequest request = mock(HttpServletRequest.class);
     HttpServletResponse response = mock(HttpServletResponse.class);
-
-    when(request.getCookies()).thenReturn(new Cookie[0]);
 
     testling.handleRequest(rootChannelBean, request, response);
 

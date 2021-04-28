@@ -29,8 +29,8 @@
                 itemId="cmPlaceholderIdForm">
           <editor:items>
             <bpb:ViewtypePropertyField/>
-            <editor:StringPropertyField propertyName="title"/>
-            <editor:StringPropertyField propertyName="id"/>
+            <editor:StringPropertyField propertyName="title" itemId="title"/>
+            <editor:StringPropertyField propertyName="id" itemId="id"/>
           </editor:items>
         </editor:PropertyFieldGroup>
       </editor:items>

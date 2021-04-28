@@ -3,6 +3,7 @@ package com.coremedia.ecommerce.studio.rest;
 import com.coremedia.cap.content.Content;
 import com.coremedia.ecommerce.studio.rest.model.ChildRepresentation;
 import com.coremedia.ecommerce.studio.rest.model.Facets;
+import com.coremedia.ecommerce.studio.rest.model.SearchFacets;
 import com.coremedia.ecommerce.studio.rest.model.Store;
 import com.coremedia.livecontext.ecommerce.catalog.Catalog;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
@@ -11,7 +12,6 @@ import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Category representation for JSON.
@@ -33,6 +33,7 @@ public class CategoryRepresentation extends CommerceBeanRepresentation {
   private Catalog catalog;
   private String displayName;
   private Facets facets;
+  private SearchFacets searchFacets;
 
   @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
   public String getName() {
@@ -155,11 +156,29 @@ public class CategoryRepresentation extends CommerceBeanRepresentation {
     this.longDescription = longDescription;
   }
 
+  /**
+   * @return the facets
+   * @deprecated use {@link #getSearchFacets()} instead
+   */
+  @Deprecated(since = "2104.1", forRemoval = true)
   public Facets getFacets() {
     return facets;
   }
 
+  /**
+   * @param facets the facets
+   * @deprecated use {@link #setSearchFacets(SearchFacets)} instead
+   */
+  @Deprecated(since = "2104.1", forRemoval = true)
   public void setFacets(Facets facets) {
     this.facets = facets;
+  }
+
+  public void setSearchFacets(SearchFacets searchFacets) {
+    this.searchFacets = searchFacets;
+  }
+
+  public SearchFacets getSearchFacets() {
+    return searchFacets;
   }
 }

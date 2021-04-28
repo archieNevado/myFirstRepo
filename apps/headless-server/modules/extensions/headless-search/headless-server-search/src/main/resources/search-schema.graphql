@@ -1,0 +1,92 @@
+extend type ContentRoot {
+  """
+  The `search` query provides access to a solr based full text search.
+  """
+  search(
+    """
+    The search expression. Supports the operators '+' (mandatory) and '-' (prohibited) to mark terms respectively.
+    Quotes may be used to combine several words into a phrase, which would otherwise be treated as single terms.
+    Any odd (unbalanced) number of quotes are treated as non existent!
+    The wildcard '*' is supported to find partial terms.
+    """
+    query: String!,
+    """
+    Offset within the search result.
+    """
+    offset: Int,
+    """
+    Limits the size of the search result.
+    """
+    limit: Int,
+    """
+    Content types to restrict the search result to. Misspelled content types are ignored.
+    When passing an abstract content type along with the parameter `includeSubTypes` = `true`, the subtypes are also retrieved.
+    The search result does not contain abstract document types.
+    """
+    docTypes: [String],
+    """
+    An array of sort fields, concatenated with their sort order by '_', in upper case, e.g. `ID_ASC`.
+
+    The possible values are defined in the enum `SortFieldWithOrder`.
+
+    Possible sort orders are: `ASC`, `DESC`
+    """
+    sortFields: [SortFieldWithOrder],
+    """
+    The `siteId` can be passed as parameter to restrict search per site.
+    """
+    siteId: String,
+    """
+    Flag to include the sub types of the given doc types in the search. Defaults to `false`.
+    """
+    includeSubTypes: Boolean): SearchResult @fetch(from: "@searchServiceAdapter.to().search(#query, #offset, #limit, #docTypes, #sortFields, #siteId, #includeSubTypes)")
+
+  """
+  Dedicated `queryList` query, returning a content object of type `CMQueryList`, matching the given id.
+  """
+  queryList(
+    """
+    The content id as `integer` or formatted as *coremedia:///cap/content/<id>*.
+    """
+    id: String!): CMQueryList
+}
+
+interface CMQueryList @inherit(from: ["CMDynamicList"]) {
+  pagedItems(offset: Int): [CollectionItem]
+}
+
+type CMQueryListImpl implements CMQueryList @inherit(from: ["CMDynamicListImpl"]) {
+  items: [CollectionItem] @fetch(from: "@queryListAdapter.to(#root, null).getItems()")
+  pagedItems(offset: Int): [CollectionItem] @fetch(from: "@queryListAdapter.to(#root, #offset).getItems()")
+  teasableItems: [CMTeasable] @fetch(from: "@queryListAdapter.to(#root, null).getItems()")
+  bannerItems: [Banner]  @fetch(from: "@queryListAdapter.to(#root, null).getItems()")
+  detailItems: [Detail]  @fetch(from: "@queryListAdapter.to(#root, null).getItems()")
+}
+
+"""
+Result type of the `search` query, containing metadata of the search result set and the result set itself.
+"""
+type SearchResult {
+  numFound: Int!
+  result: [Content_]
+}
+
+"""
+Enum of sort types for the `search` query.
+"""
+enum SortFieldWithOrder {
+  CREATION_DATE_ASC
+  CREATION_DATE_DESC
+  DOCUMENTTYPE_ASC
+  DOCUMENTTYPE_DESC
+  EXTERNALLY_DISPLAYED_DATE_ASC
+  EXTERNALLY_DISPLAYED_DATE_DESC
+  ID_ASC
+  ID_DESC
+  MODIFICATION_DATE_ASC
+  MODIFICATION_DATE_DESC
+  TEASER_TITLE_ASC
+  TEASER_TITLE_DESC
+  TITLE_ASC
+  TITLE_DESC
+}

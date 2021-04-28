@@ -69,7 +69,12 @@ public interface Category extends CatalogObject, Previewable {
 
   function getDownloads():Array;
 
+  /**
+   * @deprecated use getSearchFacets instead
+   */
+  [Deprecated]
   function getFacets():Facets;
 
+  function getSearchFacets():SearchFacets;
 }
 }

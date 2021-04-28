@@ -22,7 +22,7 @@ node.default_unless['blueprint']['apps'][base_service_name]['application.propert
 node.default_unless['blueprint']['apps'][base_service_name]['application.properties']['delivery.standalone'] = false
 node.default_unless['blueprint']['apps'][base_service_name]['application.properties']['cae.sitemap.target-root'] = "#{node['blueprint']['cache_dir']}/sitemap"
 node.default_unless['blueprint']['apps'][base_service_name]['application.properties']['link.urlPrefixType'] = 'live'
-node.default_unless['blueprint']['apps'][base_service_name]['application.properties']['spring.http.encoding.force'] = true
+node.default_unless['blueprint']['apps'][base_service_name]['application.properties']['server.servlet.encoding.force'] = true
 
 # merge application properties
 application_config_hash = Mash.new

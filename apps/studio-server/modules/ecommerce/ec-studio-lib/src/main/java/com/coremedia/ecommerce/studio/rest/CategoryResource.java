@@ -4,6 +4,7 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerc
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.ecommerce.studio.rest.model.ChildRepresentation;
 import com.coremedia.ecommerce.studio.rest.model.Facets;
+import com.coremedia.ecommerce.studio.rest.model.SearchFacets;
 import com.coremedia.ecommerce.studio.rest.model.Store;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
@@ -81,7 +82,8 @@ public class CategoryResource extends CommerceBeanResource<Category> {
     representation.setSubCategories(subCategories);
     representation.setProducts(entity.getProducts());
 
-    representation.setStore(new Store(entity.getContext()));
+    StoreContext storeContext = entity.getContext();
+    representation.setStore(new Store(storeContext));
     AbstractCommerceBean.getCatalog(entity).ifPresent(representation::setCatalog);
     representation.setDisplayName(entity.getDisplayName());
 
@@ -93,6 +95,7 @@ public class CategoryResource extends CommerceBeanResource<Category> {
     representation.setDownloads(entity.getDownloads());
 
     List<ChildRepresentation> result = new ArrayList<>();
+    String myExternalId = entity.getExternalId();
     for (CommerceBean child : children) {
       ChildRepresentation childRepresentation = new ChildRepresentation();
       childRepresentation.setChild(child);
@@ -100,7 +103,7 @@ public class CategoryResource extends CommerceBeanResource<Category> {
       if (child instanceof Category) {
         Category childParent = ((Category)child).getParent();
         // isVirtual is true if the child means to belong to another parent than me
-        childRepresentation.setIsVirtual(childParent != null && !entity.getExternalId().equals(childParent.getExternalId()));
+        childRepresentation.setIsVirtual(childParent != null && !myExternalId.equals(childParent.getExternalId()));
       }
       result.add(childRepresentation);
     }
@@ -108,9 +111,10 @@ public class CategoryResource extends CommerceBeanResource<Category> {
 
     representation.setContent(getContent(entity));
 
-    Facets facets = new Facets(entity.getContext());
-    facets.setId(entity.getExternalId());
+    Facets facets = new Facets(storeContext);
+    facets.setId(myExternalId);
     representation.setFacets(facets);
+    representation.setSearchFacets(new SearchFacets(storeContext, myExternalId));
   }
 
   @Override

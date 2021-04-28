@@ -11,6 +11,8 @@ node.default_unless['blueprint']['apps'][service_name]['application.properties']
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['server.port'] = 40480
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['management.server.port'] = 40481
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['repository.blobCachePath'] = "#{node['blueprint']['cache_dir']}/#{service_name}"
+node.default_unless['blueprint']['apps'][service_name]['application.properties']['commerce.hub.data.customEntityParams.catalogversion'] = 'Staged'
+node.default_unless['blueprint']['apps'][service_name]['application.properties']['commerce.hub.data.customEntityParams.environment'] = 'preview'
 
 application_config_hash = Mash.new
 # legacy compatibility step. Here we merge the defaults from old node.json files

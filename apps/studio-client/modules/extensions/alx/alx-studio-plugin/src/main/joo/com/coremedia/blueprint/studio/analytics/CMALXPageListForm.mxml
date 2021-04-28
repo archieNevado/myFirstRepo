@@ -65,7 +65,8 @@
           <editor:items>
             <alx:FilteringContentTypeStringPropertyField propertyName="documentType"
                                                          baseType="CMLinkable"/>
-            <editor:LinkListPropertyField propertyName="baseChannel">
+            <editor:LinkListPropertyField propertyName="baseChannel"
+                                          itemId="baseChannel">
               <editor:additionalToolbarItems>
                 <TbSeparator/>
                 <quickcreate:QuickCreateToolbarButton bindTo="{config.bindTo}"
@@ -74,8 +75,10 @@
               </editor:additionalToolbarItems>
             </editor:LinkListPropertyField>
             <editor:SpinnerPropertyField propertyName="maxLength"
+                                         itemId="maxLength"
                                          minValue="1"/>
             <editor:SpinnerPropertyField propertyName="timeRange"
+                                         itemId="timeRange"
                                          minValue="1"/>
             <alx:AnalyticsProviderComboBox propertyName="analyticsProvider"/>
           </editor:items>

@@ -14,7 +14,7 @@
        ===================================================================== -->
 
   <!--
-    Solr internal field - used for optimistic locking, transaction log and real-time get.
+    Solr internal field for optimistic locking, transaction log and real-time get.
   -->
   <field name="_version_" type="plong" indexed="false" stored="false"/>
 

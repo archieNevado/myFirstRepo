@@ -1,9 +1,7 @@
 package com.coremedia.livecontext.studio.library {
 import com.coremedia.cap.content.ContentTypeNames;
-import com.coremedia.cms.editor.sdk.ContentTreeRelation;
 import com.coremedia.ecommerce.studio.CatalogModel;
 import com.coremedia.ecommerce.studio.catalogHelper;
-import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.library.ECommerceCollectionViewExtension;
 import com.coremedia.ecommerce.studio.model.Catalog;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
@@ -15,8 +13,6 @@ import mx.resources.ResourceManager;
 
 [ResourceBundle('com.coremedia.ecommerce.studio.ECommerceStudioPlugin')]
 public class LivecontextCollectionViewExtension extends ECommerceCollectionViewExtension {
-  private var treeRelation:LivecontextContentTreeRelation = new LivecontextContentTreeRelation();
-
   protected static const DEFAULT_TYPE_MARKETING_SPOT_RECORD:Object = {
     name: ContentTypeNames.CONTENT,
     label: ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'MarketingSpot_label'),
@@ -41,19 +37,8 @@ public class LivecontextCollectionViewExtension extends ECommerceCollectionViewE
     icon: ResourceManager.getInstance().getString('com.coremedia.ecommerce.studio.ECommerceStudioPlugin', 'MarketingSpot_icon')
   };
 
-  override public function isApplicable(model:Object):Boolean {
-    if (model is CatalogObject) {
-      var activeStore:Boolean = CatalogHelper.getInstance().isActiveCoreMediaStore();
-      if (activeStore === undefined) {
-        return undefined;
-      }
-      return !activeStore;
-    }
-    return false;
-  }
-
-  override public function getContentTreeRelation():ContentTreeRelation {
-    return treeRelation;
+  public function LivecontextCollectionViewExtension() {
+    super();
   }
 
   override public function getAvailableSearchTypes(folder:Object):Array {
@@ -76,6 +61,10 @@ public class LivecontextCollectionViewExtension extends ECommerceCollectionViewE
       return availableSearchTypes;
     }
     return null;
+  }
+
+  override public function showInTree(contents:Array, view:String = null, treeModelId:String = null):void {
+    new ShowInCatalogTreeHelper(contents).showItems(treeModelId);
   }
 }
 }

@@ -1,7 +1,6 @@
 package com.coremedia.blueprint.personalization.sources;
 
 import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
-import com.coremedia.elastic.core.test.Injection;
 import com.coremedia.elastic.social.api.comments.CommentService;
 import com.coremedia.elastic.social.api.ratings.LikeService;
 import com.coremedia.elastic.social.api.ratings.RatingService;
@@ -9,6 +8,7 @@ import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.context.ContextCollectionImpl;
 import com.coremedia.personalization.context.PropertyProvider;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,17 +42,18 @@ public class ElasticSocialUserInfoContextSourceTest {
   @Before
   public void setUp() {
     contextCollection = new ContextCollectionImpl();
-    elasticSocialUserInfoContextSource = new ElasticSocialUserInfoContextSource();
+    elasticSocialUserInfoContextSource = new ElasticSocialUserInfoContextSource(commentService, ratingService, likeService);
     elasticSocialUserInfoContextSource.setContextName("es_check");
     UserContext.setUser(communityUser);
 
     when(commentService.getNumberOfApprovedComments(communityUser)).thenReturn(10L);
     when(ratingService.getNumberOfRatingsFromUser(communityUser)).thenReturn(10L);
-    Injection.inject(elasticSocialUserInfoContextSource, commentService);
-    Injection.inject(elasticSocialUserInfoContextSource, ratingService);
-    Injection.inject(elasticSocialUserInfoContextSource, likeService);
   }
 
+  @After
+  public void cleanup() {
+    UserContext.clear();
+  }
 
   @Test
   public void testPreHandle() throws Exception {

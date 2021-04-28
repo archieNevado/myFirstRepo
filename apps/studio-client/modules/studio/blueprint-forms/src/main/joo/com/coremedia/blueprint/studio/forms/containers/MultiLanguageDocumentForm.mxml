@@ -26,11 +26,14 @@
             itemId="localizationForm"
             collapsed="false">
       <editor:items>
-        <editor:AvailableLocalesPropertyField propertyName="locale"/>
-        <editor:LinkListPropertyField propertyName="master" showThumbnails="true"/>
-        <editor:MasterVersionPropertyField propertyName="masterVersion"/>
-        <editor:SynchronizationPropertyField propertyName="{editorContext.getSitesService().getSiteModel().getIgnoreUpdatesProperty()}"/>
-        <editor:DerivedContentsList showThumbnails="true"/>
+        <editor:AvailableLocalesPropertyField itemId="locale"
+                                              propertyName="locale"/>
+        <editor:LinkListPropertyField itemId="master" propertyName="master" showThumbnails="true"/>
+        <editor:MasterVersionPropertyField itemId="masterVersion" propertyName="masterVersion"/>
+        <editor:SynchronizationPropertyField itemId="synchorn"
+                propertyName="{editorContext.getSitesService().getSiteModel().getIgnoreUpdatesProperty()}"/>
+        <editor:DerivedContentsList itemId="derivedContentsList"
+                                    showThumbnails="true"/>
       </editor:items>
     </editor:PropertyFieldGroup>
   </editor:items>

@@ -77,12 +77,6 @@
       </dependency>
       <dependency>
         <groupId>com.coremedia.blueprint</groupId>
-        <artifactId>feedback-hub-imagga-studio</artifactId>
-        <version>1-SNAPSHOT</version>
-        <type>swc</type>
-      </dependency>
-      <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
         <artifactId>lc-asset-studio</artifactId>
         <version>1-SNAPSHOT</version>
         <type>swc</type>

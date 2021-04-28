@@ -21,6 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -28,7 +29,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -65,15 +65,15 @@ public class InterestsServiceTest {
   static class LocalConfig {
   }
 
-  @Inject
+  @Autowired
   private InterestsService interestsService;
-  @Inject
+  @Autowired
   private InterestsConfiguration interestsConfiguration;
-  @Inject
+  @Autowired
   private ContentBeanFactory contentBeanFactory;
-  @Inject
+  @Autowired
   private ContentRepository contentRepository;
-  @Inject
+  @Autowired
   private ContextCollection contextCollection;
 
   @Before

@@ -2,11 +2,14 @@ package com.coremedia.livecontext.studio {
 
 import com.coremedia.blueprint.studio.CMChannelExtension;
 import com.coremedia.blueprint.studio.util.ContentInitializer;
+import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentProperties;
+import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.struct.StructType;
 import com.coremedia.cms.editor.configuration.StudioPlugin;
+import com.coremedia.cms.editor.sdk.ContentTreeRelation;
 import com.coremedia.cms.editor.sdk.EditorContextImpl;
 import com.coremedia.cms.editor.sdk.IEditorContext;
 import com.coremedia.cms.editor.sdk.desktop.TabTooltipEntry;
@@ -17,6 +20,8 @@ import com.coremedia.cms.editor.sdk.quickcreate.QuickCreate;
 import com.coremedia.cms.editor.sdk.quickcreate.processing.ProcessingData;
 import com.coremedia.cms.editor.sdk.util.MetaStyleService;
 import com.coremedia.cms.editor.sdk.util.ThumbnailResolverFactory;
+import com.coremedia.cms.studio.base.cap.models.content.contentTreeRelationRegistry;
+import com.coremedia.cms.studio.base.cap.models.converter.itemConverterRegistry;
 import com.coremedia.cms.studio.multisite.models.sites.Site;
 import com.coremedia.ecommerce.studio.CatalogModel;
 import com.coremedia.ecommerce.studio.components.link.CatalogLinkPropertyField;
@@ -29,7 +34,11 @@ import com.coremedia.ecommerce.studio.model.CatalogObjectPropertyNames;
 import com.coremedia.ecommerce.studio.model.Category;
 import com.coremedia.ecommerce.studio.model.Product;
 import com.coremedia.ecommerce.studio.model.Store;
+import com.coremedia.livecontext.studio.converter.CatalogItemsToToContentConverter;
+import com.coremedia.livecontext.studio.forms.facets.CategoryFacetsPropertyField;
+import com.coremedia.livecontext.studio.forms.facets.CategoryFacetsPropertyFieldBase;
 import com.coremedia.livecontext.studio.library.LivecontextCollectionViewExtension;
+import com.coremedia.livecontext.studio.library.LivecontextContentTreeRelation;
 import com.coremedia.livecontext.studio.library.ShowInCatalogTreeHelper;
 import com.coremedia.livecontext.studio.pbe.StoreNodeRenderer;
 import com.coremedia.ui.data.Bean;
@@ -51,7 +60,6 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
   internal static const EXTERNAL_ID_PROPERTY:String = 'externalId';
 
   internal static const LOCAL_SETTINGS_STRUCT_NAME:String = 'localSettings';
-  internal static const PRODUCT_LIST_STRUCT_NAME:String = 'productList';
   internal static const OFFSET_NAME:String = 'offset';
   internal static const MAX_LENGTH_NAME:String = 'maxLength';
 
@@ -66,13 +74,49 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
       delete config['configuration'];
     }
     super(config);
+
+    itemConverterRegistry.registerConverter(new CatalogItemsToToContentConverter());
   }
 
+  /** VisibleForTesting */
+  public static function getIsExtensionApplicable(treeRelation: ContentTreeRelation): Function {
+    return function (model:Object):Boolean {
+      var isCmStore:Boolean = CatalogHelper.getInstance().isActiveCoreMediaStore();
+      if (isCmStore === undefined) {
+        return undefined;
+      }
+      if (isCmStore) {
+        return false;
+      }
+      if (model is CatalogObject) {
+        return true;
+      }
+      var content:Content = model as Content;
+      if (!content) {
+        return false;
+      }
+
+      var contentType:ContentType = content.getType();
+      if (!contentType) {
+        return undefined;
+      }
+      var contentTypeName:String = contentType.getName();
+      if (!contentTypeName) {
+        return undefined;
+      }
+
+      return contentTypeName === treeRelation.folderNodeType()
+              || contentTypeName === treeRelation.leafNodeType();
+    }
+  }
 
   override public function init(editorContext:IEditorContext):void {
     super.init(editorContext);
 
-    editorContext.getCollectionViewExtender().addExtension(new LivecontextCollectionViewExtension());
+    var lcContentTreeRelation:LivecontextContentTreeRelation = new LivecontextContentTreeRelation();
+    contentTreeRelationRegistry.addExtension(lcContentTreeRelation, getIsExtensionApplicable(lcContentTreeRelation));
+    var lcCollectionViewExtension:LivecontextCollectionViewExtension = new LivecontextCollectionViewExtension();
+    editorContext.getCollectionViewExtender().addExtension(lcCollectionViewExtension, getIsExtensionApplicable(lcContentTreeRelation));
 
     //forward the workspaceId (configured by the hash param) to the preview url.
     editorContext.registerPreviewUrlTransformer(function (uri:PreviewURI, callback:Function):void {
@@ -241,15 +285,20 @@ public class LivecontextStudioPluginBase extends StudioPlugin {
 
   private static function initProductList(content:Content):void {
     var localSettings:Struct = content.getProperties().get(LOCAL_SETTINGS_STRUCT_NAME);
-    if (!localSettings.get(PRODUCT_LIST_STRUCT_NAME)) {
-      localSettings.getType().addStructProperty(PRODUCT_LIST_STRUCT_NAME);
+    if (!localSettings.get(CategoryFacetsPropertyFieldBase.PRODUCT_LIST_STRUCT_NAME)) {
+      localSettings.getType().addStructProperty(CategoryFacetsPropertyFieldBase.PRODUCT_LIST_STRUCT_NAME);
     }
-    var productListStruct:Struct = localSettings.get(PRODUCT_LIST_STRUCT_NAME);
+
+    var productListStruct:Struct = localSettings.get(CategoryFacetsPropertyFieldBase.PRODUCT_LIST_STRUCT_NAME);
     if (!productListStruct.get(OFFSET_NAME)) {
       productListStruct.getType().addIntegerProperty(OFFSET_NAME, 1);
     }
     if (!productListStruct.get(MAX_LENGTH_NAME)) {
       productListStruct.getType().addIntegerProperty(MAX_LENGTH_NAME, 10);
+    }
+
+    if (!productListStruct.get(CategoryFacetsPropertyFieldBase.MULTI_FACETS_STRUCT_NAME)) {
+      productListStruct.getType().addStructProperty(CategoryFacetsPropertyFieldBase.MULTI_FACETS_STRUCT_NAME);
     }
     ContentInitializer.initCMLinkable(content);
     ContentInitializer.initCMLocalized(content);

@@ -29,13 +29,13 @@
     <google.api.services.youtube.version>v3-rev152-1.19.0</google.api.services.youtube.version>
 
     <customer>Blueprint</customer>
-    <cm.headless-server.core.version>2101.3</cm.headless-server.core.version>
+    <cm.headless-server.core.version>2104.1</cm.headless-server.core.version>
     <personalization.version>${project.version}</personalization.version>
     <elastic.version>${project.version}</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
     <studio.version>${project.version}</studio.version>
     <livecontext.version>${project.version}</livecontext.version>
 
-    <spring.boot.version>2.2.10.RELEASE</spring.boot.version>
+    <spring.boot.version>2.3.9.RELEASE</spring.boot.version>
     <application-plugin.version>2.8.3</application-plugin.version>
 
     <!--
@@ -65,15 +65,6 @@
 
     <caplist>com.coremedia.cotopaxi.list.elastic.mongodb.MongoCapListConnectorFactory</caplist>
 
-    <!--
-     | The base directory to persist transformed blobs, when starting CAE or Studio during development using the tomcat7-maven-plugin.
-     | The path defined here will be suffixed with the artifactId of the module starting the tomcat plugin to prevent cache conflicts
-     | between two processes when this property is set to a common value for all modules. With the default set to
-     | project.build.directory, the transformed blobs will be available until the next mvn clean is called.
-     | Set this property to a path outside the workspace to keep the transformed blobs permanently.
-     -->
-    <development.blobCache.basePath>${project.build.directory}/blobcache</development.blobCache.basePath>
-
     <skip-unit-tests>${skipTests}</skip-unit-tests>
     <skip-sfcc-tests>true</skip-sfcc-tests>
     <skip-ibm-tests>true</skip-ibm-tests>
@@ -84,19 +75,19 @@
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.headless-server.core.version>2101.3</cm.headless-server.core.version>
+    <cm.headless-server.core.version>2104.1</cm.headless-server.core.version>
     <cm.common.bp.version>1-SNAPSHOT</cm.common.bp.version>
     <cm.middle.bp.version>1-SNAPSHOT</cm.middle.bp.version>
-    <cm.common.core.version>2101.3</cm.common.core.version>
-    <cm.middle.core.version>2101.3</cm.middle.core.version>
+    <cm.common.core.version>2104.1</cm.common.core.version>
+    <cm.middle.core.version>2104.1</cm.middle.core.version>
 
     <!-- headless-server-base -->
-    <caffeine.version>2.8.5</caffeine.version>
+    <caffeine.version>2.8.8</caffeine.version>
     <graphql-java-spring-boot-starter.version>1.0</graphql-java-spring-boot-starter.version>
     <javassist.version>3.21.0-GA</javassist.version>
     <jboss-logging.version>3.3.2.Final</jboss-logging.version>
-    <spring.version>5.2.9.RELEASE</spring.version>
-    <graphiql-spring-boot-starter.version>5.6.0</graphiql-spring-boot-starter.version>
+    <spring.version>5.2.13.RELEASE</spring.version>
+    <graphiql-spring-boot-starter.version>11.0.0</graphiql-spring-boot-starter.version>
     <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
 
     <showDeprecation>true</showDeprecation>
@@ -448,7 +439,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-assembly-plugin</artifactId>
-          <version>3.1.0</version>
+          <version>3.3.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>

@@ -16,5 +16,6 @@
     <module>lc-feeder-lib</module>
     <module>lc-services-api</module>
     <module>lc-services-lib</module>
+    <module>lc-validators</module>
   </modules>
 </project>

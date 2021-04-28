@@ -10,7 +10,6 @@ import com.coremedia.personalization.context.PropertyProvider;
 import com.coremedia.personalization.context.collector.AbstractContextSource;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -37,14 +36,15 @@ public class ElasticSocialUserInfoContextSource extends AbstractContextSource {
 
   private static final List<String> VIRTUAL_PROPERTIES = Arrays.asList(NUMBER_OF_COMMENTS, NUMBER_OF_RATINGS, NUMBER_OF_LIKES, USER_LOGGED_IN);
 
-  @Inject
-  private CommentService commentService;
+  private final CommentService commentService;
+  private final RatingService ratingService;
+  private final LikeService likeService;
 
-  @Inject
-  private RatingService ratingService;
-
-  @Inject
-  private LikeService likeService;
+  public ElasticSocialUserInfoContextSource(CommentService commentService, RatingService ratingService, LikeService likeService) {
+    this.commentService = commentService;
+    this.ratingService = ratingService;
+    this.likeService = likeService;
+  }
 
   @Override
   public void preHandle(final HttpServletRequest request, final HttpServletResponse response,

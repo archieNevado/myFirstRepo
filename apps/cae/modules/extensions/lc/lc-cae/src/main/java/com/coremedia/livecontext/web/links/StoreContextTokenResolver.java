@@ -8,8 +8,12 @@ import org.springframework.core.annotation.Order;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * @deprecated use {@link org.springframework.web.util.UriComponentsBuilder} instead to resolve link variables
+ */
 @Named
 @Order(50)
+@Deprecated(forRemoval = true, since = "2104.1")
 public class StoreContextTokenResolver implements TokenResolver {
 
   @Override

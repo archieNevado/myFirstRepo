@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +25,13 @@ class CMALXBaseListService {
 
   private ContentType cmAlxBaseListType;
 
-  @Inject
-  private ContentRepository contentRepository;
+  private final ContentRepository contentRepository;
+  private final ElasticSocialPlugin elasticSocialPlugin;
 
-  @Inject
-  private ElasticSocialPlugin elasticSocialPlugin;
+  CMALXBaseListService(ContentRepository contentRepository, ElasticSocialPlugin elasticSocialPlugin) {
+    this.contentRepository = contentRepository;
+    this.elasticSocialPlugin = elasticSocialPlugin;
+  }
 
   @PostConstruct
   public void initialize() {

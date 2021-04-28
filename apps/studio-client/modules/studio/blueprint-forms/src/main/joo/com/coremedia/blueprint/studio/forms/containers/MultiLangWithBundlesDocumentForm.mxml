@@ -27,11 +27,16 @@
             itemId="localizationForm"
             collapsed="false">
       <editor:items>
-        <editor:AvailableLocalesPropertyField propertyName="locale"/>
-        <editor:LinkListPropertyField propertyName="master"/>
-        <editor:MasterVersionPropertyField propertyName="masterVersion"/>
-        <editor:SynchronizationPropertyField propertyName="ignoreUpdates"/>
-        <editor:DerivedContentsList showThumbnails="true"/>
+        <editor:AvailableLocalesPropertyField itemId="locale"
+                                              propertyName="locale"/>
+        <editor:LinkListPropertyField itemId="master"
+                                      propertyName="master"/>
+        <editor:MasterVersionPropertyField itemId="masterVersion"
+                                           propertyName="masterVersion"/>
+        <editor:SynchronizationPropertyField itemId="ignoreUpdates"
+                                             propertyName="ignoreUpdates"/>
+        <editor:DerivedContentsList itemId="derivedContentsList"
+                                    showThumbnails="true"/>
       </editor:items>
     </editor:PropertyFieldGroup>
     <editor:PropertyFieldGroup

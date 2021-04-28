@@ -1,18 +1,16 @@
 package com.coremedia.blueprint.cae.view.resolver;
 
+import com.coremedia.blueprint.cae.config.BlueprintViewsCaeBaseLibConfiguration;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
-import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -29,6 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = ThemeTemplateViewRepositoryProviderTest.LocalConfig.class)
 @TestPropertySource(properties = {
+        "repository.factoryClassName=com.coremedia.cap.xmlrepo.XmlCapConnectionFactory",
         "repository.params.contentxml=classpath:com/coremedia/blueprint/cae/view/resolver/content.xml",
         "repository.params.contentschemaxml=classpath:com/coremedia/blueprint/cae/view/resolver/test-doctypes.xml"
 })
@@ -40,14 +39,10 @@ public class ThemeTemplateViewRepositoryProviderTest {
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })
-  @ComponentScan("com.coremedia.cap.common.xml")
-  @ImportResource(
-          value = {
-                  "classpath:/framework/spring/blueprint-views.xml",
-          },
-          reader = ResourceAwareXmlBeanDefinitionReader.class
-  )
-  @Import({XmlRepoConfiguration.class})
+  @Import({
+          BlueprintViewsCaeBaseLibConfiguration.class,
+          XmlRepoConfiguration.class,
+  })
   @Profile(LocalConfig.PROFILE)
   public static class LocalConfig {
 

@@ -51,6 +51,7 @@
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>coremedia-xml</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.cms</groupId>
@@ -77,6 +78,7 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
+      <scope>test</scope>
     </dependency>
 
     <!-- SCOPE: PROVIDED -->

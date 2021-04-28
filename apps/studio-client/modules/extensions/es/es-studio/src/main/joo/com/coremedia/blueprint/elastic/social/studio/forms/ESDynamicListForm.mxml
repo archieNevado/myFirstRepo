@@ -36,6 +36,7 @@
                 itemId="esDynamicListConfigForm">
           <editor:items>
             <ui:LocalComboBox name="{'properties.aggregationType'}"
+                              itemId="aggregationType"
                               fieldLabel="{resourceManager.getString('com.coremedia.blueprint.elastic.social.studio.ElasticSocialStudioPlugin', 'ESDynamicList_aggregationType_text')}"
                               anchor="100%"
                               store="{[
@@ -58,6 +59,7 @@
               </ui:plugins>
             </ui:LocalComboBox>
             <ui:LocalComboBox name="{'properties.interval'}"
+                              itemId="interval"
                               fieldLabel="{resourceManager.getString('com.coremedia.blueprint.elastic.social.studio.ElasticSocialStudioPlugin', 'ESDynamicList_interval_text')}"
                               anchor="100%"
                               store="{[
@@ -77,7 +79,7 @@
                                        bidirectional="true"/>
               </ui:plugins>
             </ui:LocalComboBox>
-            <editor:LinkListPropertyField propertyName="channel">
+            <editor:LinkListPropertyField propertyName="channel" itemId="channel">
               <editor:additionalToolbarItems>
                 <TbSeparator itemId="{EXTENDED_LINK_LIST_PROPERTY_SEP_ITEM_ID}"/>
                 <quickcreate:QuickCreateToolbarButton bindTo="{config.bindTo}"
@@ -86,6 +88,7 @@
               </editor:additionalToolbarItems>
             </editor:LinkListPropertyField>
             <editor:SpinnerPropertyField propertyName="maxLength"
+                                         itemId="maxLength"
                                          minValue="1"/>
           </editor:items>
         </editor:PropertyFieldGroup>

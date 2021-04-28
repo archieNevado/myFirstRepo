@@ -13,8 +13,10 @@
 
   <modules>
     <module>catalog</module>
+    <module>ec-augmentation</module>
     <module>lc-asset</module>
     <module>p13n</module>
+    <module>headless-search</module>
   </modules>
 
 </project>

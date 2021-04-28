@@ -2,5 +2,6 @@
 src   = "development.html.tmpl"
 dest  = "/usr/share/nginx/html/assets/development.html"
 keys  = [
-         "/environment/fqdn"
+         "/environment/fqdn",
+         "/headless/client/enabled",
 ]

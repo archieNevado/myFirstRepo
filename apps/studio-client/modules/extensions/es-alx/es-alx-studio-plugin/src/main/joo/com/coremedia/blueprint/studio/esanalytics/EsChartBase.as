@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.studio.esanalytics {
 import com.coremedia.ui.components.SwitchingContainer;
 import com.coremedia.ui.data.ValueExpression;
+import com.coremedia.ui.mixins.IHidableMixin;
 
 import ext.Ext;
 import ext.form.FieldContainer;
@@ -10,7 +11,7 @@ import ext.util.Format;
 import mx.resources.ResourceManager;
 
 [ResourceBundle('com.coremedia.blueprint.studio.esanalytics.EsAnalyticsStudioPlugin')]
-public class EsChartBase extends FieldContainer {
+public class EsChartBase extends FieldContainer implements IHidableMixin {
 
   [Bindable]
   public var bindTo:ValueExpression;
@@ -172,5 +173,26 @@ public class EsChartBase extends FieldContainer {
       return ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.esanalytics.EsAnalyticsStudioPlugin', 'chart_time_stamp_unavailable');
     }
   }
+
+  /** @private */
+  [Bindable]
+  public function set hideText(newHideText:String):void {
+    // The hideText is determined by the getter. Nothing to do.
+  }
+
+  /** @inheritDoc */
+  [Bindable]
+  public function get hideText():String {
+    return getFieldLabel();
+  }
+
+  /** @private */
+  /** @inheritDoc */
+  [Bindable]
+  public native function set hideId(newHideId:String):void;
+
+  /** @inheritDoc */
+  [Bindable]
+  public native function get hideId():String;
 }
 }

@@ -46,7 +46,10 @@
     <property name="contentBeanFactory" ref="contentBeanFactory"/>
   </bean>
 
-  <bean id="corporateSitemapContentUrlGenerator" class="com.coremedia.blueprint.cae.sitemap.ContentUrlGenerator" parent="abstractContentUrlGenerator">
+  <bean id="corporateSitemapContentUrlGenerator" class="com.coremedia.blueprint.cae.sitemap.ContentUrlGenerator">
+    <property name="contentBeanFactory" ref="contentBeanFactory"/>
+    <property name="linkFormatter" ref="linkFormatter"/>
+    <property name="validationService" ref="validationService"/>
     <property name="exclusionPaths">
       <list>
         <value>Options</value>

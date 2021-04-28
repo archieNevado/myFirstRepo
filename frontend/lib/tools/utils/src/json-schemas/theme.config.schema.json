@@ -50,13 +50,16 @@
     },
     "smartImport": {
       "description": "Defines the smart import behaviour (automatically activated dependencies). Defaults to 'default'.",
-      "$ref": "types.schema.json#/definitions/nonEmptyStringOrNull",
-      "enum": ["default", "preview", null]
+      "$ref": "types.schema.json#/definitions/nonEmptyStringOrNull"
     },
     "entryPointName": {
       "$ref": "types.schema.json#/definitions/nonEmptyStringOrNull",
       "pattern": "^[^/\\\\]*$",
       "description": "If provided you can specify the name of the webpack entry point that is used as a base name for the resulting target filename. This value defaults to the base name of the first given src or the theme name if src is an empty array."
+    },
+    "runtime": {
+      "$ref": "types.schema.json#/definitions/nonEmptyString",
+      "description": "Defines where the webpack runtime is stored. Only entries with the same runtime configuration can share module instances."
     },
     "bundleEncoding": {
       "description": "The encoding of the resource bundle.",
@@ -80,6 +83,11 @@
           "minimum": -1,
           "default": 10000,
           "description": "Defines a threshold in bytes until images are embedded into a referencing file rather than being linked. Set this value to -1 to disable embedding images entirely."
+        },
+        "chunkMappingPath": {
+          "$ref": "#/definitions/targetFilePath",
+          "default": "js/chunkPathById.js",
+          "description": "If code-splitting is used this value defines where the chunk path mapping is stored."
         }
       },
       "additionalProperties": false,
@@ -299,6 +307,10 @@
             "defer": {
               "$ref": "#/definitions/defer",
               "default": false
+            },
+            "runtime": {
+              "$ref": "#/definitions/runtime",
+              "default": "commons"
             }
           },
           "required": ["type", "src"],

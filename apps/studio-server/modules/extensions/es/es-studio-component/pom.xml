@@ -81,11 +81,6 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.elastic.core</groupId>
-      <artifactId>core-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.elastic.core</groupId>
       <artifactId>core-users</artifactId>
       <scope>runtime</scope>
     </dependency>

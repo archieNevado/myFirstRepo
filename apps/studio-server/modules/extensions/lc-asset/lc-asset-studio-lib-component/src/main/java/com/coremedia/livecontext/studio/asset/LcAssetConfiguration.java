@@ -11,6 +11,7 @@ import com.coremedia.ecommerce.studio.rest.cache.CommerceCacheInvalidationSource
 import com.coremedia.livecontext.asset.util.AssetHelper;
 import com.coremedia.livecontext.asset.util.AssetReadSettingsHelper;
 import com.coremedia.livecontext.asset.util.AssetWriteSettingsHelper;
+import com.coremedia.livecontext.studio.asset.validators.LcAssetValidatorsConfiguration;
 import com.coremedia.livecontext.studio.asset.validators.SpinnerSequenceAssetValidator;
 import com.coremedia.rest.cap.CapRestServiceSearchConfiguration;
 import com.coremedia.rest.cap.content.search.SearchService;
@@ -23,7 +24,8 @@ import org.springframework.context.annotation.ImportResource;
 @Configuration(proxyBeanMethods = false)
 @Import({
         CapRestServiceSearchConfiguration.class,
-        BaseCommerceServicesAutoConfiguration.class
+        BaseCommerceServicesAutoConfiguration.class,
+        LcAssetValidatorsConfiguration.class
 })
 @ImportResource(value = {
         "classpath:/framework/spring/lc-asset-helpers.xml",
@@ -35,16 +37,6 @@ public class LcAssetConfiguration {
   private static final String CMPICTURE_NAME = "CMPicture";
   private static final String CMSPINNER_NAME = "CMSpinner";
   private static final String CMVIDEO_NAME = "CMVideo";
-
-  @SuppressWarnings("MethodMayBeStatic")
-  @Bean
-  SpinnerSequenceAssetValidator spinnerSequenceAssetValidator(AssetReadSettingsHelper assetHelper,
-                                                              CapConnection connection) {
-    SpinnerSequenceAssetValidator assetValidator = new SpinnerSequenceAssetValidator(assetHelper, connection);
-    assetValidator.setContentType(CMSPINNER_NAME);
-    assetValidator.setValidatingSubtypes(true);
-    return assetValidator;
-  }
 
   @SuppressWarnings("MethodMayBeStatic")
   @Bean

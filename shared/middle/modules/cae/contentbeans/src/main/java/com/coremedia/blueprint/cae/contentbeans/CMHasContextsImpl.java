@@ -13,6 +13,7 @@ public class CMHasContextsImpl extends CMHasContextsBase {
 
   private DataViewFactory dataViewFactory;
 
+  @Deprecated(since = "2104.1", forRemoval = true)
   public DataViewFactory getDataViewFactory() {
     return dataViewFactory;
   }

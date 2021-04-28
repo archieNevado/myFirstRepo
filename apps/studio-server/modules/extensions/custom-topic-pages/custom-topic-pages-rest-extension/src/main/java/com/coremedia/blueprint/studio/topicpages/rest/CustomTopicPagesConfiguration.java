@@ -1,13 +1,14 @@
 package com.coremedia.blueprint.studio.topicpages.rest;
 
 import com.coremedia.blueprint.base.rest.BlueprintBaseStudioRestConfiguration;
-import com.coremedia.blueprint.base.rest.config.ConfigurationService;
+import com.coremedia.blueprint.base.config.ConfigurationService;
 import com.coremedia.blueprint.taxonomies.TaxonomyConfiguration;
 import com.coremedia.blueprint.taxonomies.TaxonomyResolver;
 import com.coremedia.cap.common.CapConnection;
+import com.coremedia.cap.content.spring.ContentConfigurationProperties;
 import com.coremedia.cap.multisite.SitesService;
-import com.coremedia.rest.cap.config.StudioConfigurationProperties;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -24,6 +25,7 @@ import org.springframework.context.annotation.Scope;
         BlueprintBaseStudioRestConfiguration.class,
         TaxonomyConfiguration.class,
 })
+@EnableConfigurationProperties(ContentConfigurationProperties.class)
 public class CustomTopicPagesConfiguration {
 
   @Bean
@@ -32,14 +34,14 @@ public class CustomTopicPagesConfiguration {
                                         ConfigurationService configurationService,
                                         SitesService sitesService,
                                         TaxonomyResolver strategyResolver,
-                                        StudioConfigurationProperties studioConfigurationProperties) {
+                                        ContentConfigurationProperties contentConfigurationProperties) {
 
     TopicPagesResource topicPagesResource = new TopicPagesResource(connection,
             configurationService,
             strategyResolver,
             sitesService,
-            studioConfigurationProperties.getSiteConfigurationPath(),
-            studioConfigurationProperties.getGlobalConfigurationPath());
+            contentConfigurationProperties.getSiteConfigurationPath(),
+            contentConfigurationProperties.getGlobalConfigurationPath());
     topicPagesResource.setIgnoredTaxonomies("Asset Download Portal");
 
     return topicPagesResource;

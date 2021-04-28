@@ -154,7 +154,8 @@ public class CMCatalogPictureHandlerTest {
 
   private void prepareSuccessRequest() {
     when(siteResolver.findSiteFor(anyString(), any(Locale.class))).thenReturn(Optional.of(site));
-    when(assetService.findPictures(PRODUCT_REFERENCE, true)).thenReturn(newArrayList(pictureContent));
+    when(site.getId()).thenReturn("site-1");
+    when(assetService.findPictures(PRODUCT_REFERENCE, true, "site-1")).thenReturn(newArrayList(pictureContent));
     when(transformImageService.transformWithDimensions(any(Content.class), eq("data"), anyString(), anyInt(), anyInt()))
             .thenReturn(Optional.of(mock(Blob.class)));
   }

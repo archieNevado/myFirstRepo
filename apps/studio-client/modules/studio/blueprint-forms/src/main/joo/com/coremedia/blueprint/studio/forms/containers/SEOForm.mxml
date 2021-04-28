@@ -5,13 +5,15 @@
                            xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
                            title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_SearchEngineOptimization_label')}"
                            collapsed="false"
-                           itemId="seoForm">
+                           itemId="{SEO_FORM_ITEM_ID}">
 
   <fx:Metadata>
     [ResourceBundle('com.coremedia.blueprint.studio.CustomLabels')]
   </fx:Metadata>
   <fx:Script><![CDATA[
     public static const xtype:String = "com.coremedia.blueprint.studio.config.seoForm";
+
+    public static const SEO_FORM_ITEM_ID:String = "seoForm";
 
     private var config:SEOForm;
 
@@ -26,12 +28,14 @@
 
   <editor:items>
     <editor:StringPropertyField bindTo="{config.bindTo}"
+                                itemId="segment"
                                 propertyName="segment">
       <editor:plugins exml:mode="append">
         <editor:StringPropertyFieldDelegatePlugin delegatePropertyName="{config.delegatePropertyName}"/>
       </editor:plugins>
     </editor:StringPropertyField>
-    <editor:StringPropertyField propertyName="htmlTitle">
+    <editor:StringPropertyField itemId="htmlTitle"
+                                propertyName="htmlTitle">
       <editor:plugins exml:mode="append">
         <editor:StringPropertyFieldDelegatePlugin delegatePropertyName="{config.delegatePropertyName}"/>
       </editor:plugins>
@@ -39,6 +43,7 @@
     <editor:TextAreaStringPropertyField changeBuffer="1000"
                                         minHeight="100"
                                         bindTo="{config.bindTo}"
+                                        itemId="htmlDescription"
                                         propertyName="htmlDescription"/>
   </editor:items>
 

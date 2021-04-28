@@ -71,9 +71,11 @@
                                                    linkType="CMTeasable"
                                                    forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
             <editor:LinkListPropertyField propertyName="searchContext"
+                                          itemId="searchContext"
                                           bindTo="{config.bindTo}"
                                           forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
             <editor:SpinnerPropertyField propertyName="maxLength"
+                                         itemId="maxLength"
                                          minValue="1"/>
           </editor:items>
         </editor:PropertyFieldGroup>

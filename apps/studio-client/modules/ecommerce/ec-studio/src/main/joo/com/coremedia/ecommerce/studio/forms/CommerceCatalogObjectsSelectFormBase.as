@@ -5,13 +5,14 @@ import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ecommerce.studio.model.Store;
 import com.coremedia.ui.data.Bean;
 import com.coremedia.ui.data.ValueExpression;
+import com.coremedia.ui.mixins.IHidableMixin;
 import com.coremedia.ui.store.BeanRecord;
 
 import ext.Component;
 import ext.container.Container;
 import ext.form.FieldContainer;
 
-public class CommerceCatalogObjectsSelectFormBase extends FieldContainer{
+public class CommerceCatalogObjectsSelectFormBase extends FieldContainer implements IHidableMixin {
 
   [Bindable]
   public var bindTo:ValueExpression;
@@ -116,5 +117,25 @@ public class CommerceCatalogObjectsSelectFormBase extends FieldContainer{
     getComponent(CommerceCatalogObjectsSelectForm.NO_STORE_LABEL).setVisible(!store);
   }
 
+  /** @private */
+  [Bindable]
+  public function set hideText(newHideText:String):void {
+    // The hideText is determined by the getter. Nothing to do.
+  }
+
+  /** @inheritDoc */
+  [Bindable]
+  public function get hideText():String {
+    return getFieldLabel();
+  }
+
+  /** @private */
+  /** @inheritDoc */
+  [Bindable]
+  public native function set hideId(newHideId:String):void;
+
+  /** @inheritDoc */
+  [Bindable]
+  public native function get hideId():String;
 }
 }

@@ -58,7 +58,7 @@ public class SolrSegmentTaxonomiesTest {
     iut.setDefaultContextName("testContext");
     iut.setDefaultField("myField");
     final ContextCollection contextCollection = new ContextCollectionImpl();
-    Assert.assertEquals("1:2", iut.evaluate(contextCollection, new SearchFunctionArguments()));
+    Assert.assertEquals("(-*:*)", iut.evaluate(contextCollection, new SearchFunctionArguments()));
 
     final MapPropertyMaintainer segment32Active = new MapPropertyMaintainer(Collections.singletonMap(IdHelper.formatContentId(32), true));
     contextCollection.setContext("segment", segment32Active);

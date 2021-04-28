@@ -16,6 +16,7 @@ import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.preview.PreviewPanel;
 import com.coremedia.cms.editor.sdk.util.MetaStyleService;
 import com.coremedia.cms.editor.sdk.util.ThumbnailResolverFactory;
+import com.coremedia.cms.studio.base.cap.models.content.contentTreeRelationRegistry;
 
 import mx.resources.ResourceManager;
 
@@ -55,7 +56,7 @@ public class AMStudioPluginBase extends StudioPlugin {
               }
             });
 
-    addAssetCollectionViewExtension();
+    addAssetExtensions();
     removeAssetDoctypesByDefault();
 
     // Colorful Studio type
@@ -69,8 +70,26 @@ public class AMStudioPluginBase extends StudioPlugin {
     }
   }
 
-  private static function addAssetCollectionViewExtension():void {
-    editorContext.getCollectionViewExtender().addExtension(new AssetCollectionViewExtension(), 500);
+  private static function addAssetExtensions():void {
+    var isApplicable:Function = function (model:Object):Boolean {
+      var content:Content = model as Content;
+      if (!content) {
+        return false;
+      }
+
+      var path:String = content.getPath();
+      if (path === undefined) {
+        return undefined;
+      }
+
+      if (path) {
+        return path.indexOf(AssetConstants.ASSET_LIBRARY_PATH) === 0;
+      }
+
+      return false;
+    };
+    contentTreeRelationRegistry.addExtension(new AssetTreeRelation(),  isApplicable, 500);
+    editorContext.getCollectionViewExtender().addExtension(new AssetCollectionViewExtension(), isApplicable, 500);
   }
 
   private static function removeAssetDoctypesByDefault():void {

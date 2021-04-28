@@ -12,12 +12,13 @@ import com.coremedia.ui.bem.LinkListBEMEntities;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
+import com.coremedia.ui.mixins.IHidableMixin;
 
 import ext.form.FieldContainer;
 
 [ResourceBundle('com.coremedia.cms.editor.Editor')]
 [ResourceBundle('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin')]
-public class TaxonomyLinkListPropertyFieldBase extends FieldContainer {
+public class TaxonomyLinkListPropertyFieldBase extends FieldContainer implements IHidableMixin {
 
   protected static const GRID_PANEL_ITEM_ID:String = "gridPanel";
   protected static const DELETE_BUTTON_ITEM_ID:String = "delete";
@@ -216,5 +217,26 @@ public class TaxonomyLinkListPropertyFieldBase extends FieldContainer {
     }
     return null;
   }
+  /** @private */
+  [Bindable]
+  public function set hideText(newHideText:String):void {
+    // The hideText is determined by the getter. Nothing to do.
+  }
+
+  /** @inheritDoc */
+  [Bindable]
+  public function get hideText():String {
+    return getFieldLabel();
+  }
+
+  /** @private */
+  /** @inheritDoc */
+  [Bindable]
+  public native function set hideId(newHideId:String):void;
+
+  /** @inheritDoc */
+  [Bindable]
+  public native function get hideId():String;
+
 }
 }

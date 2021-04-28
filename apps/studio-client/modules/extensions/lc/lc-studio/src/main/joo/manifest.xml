@@ -39,6 +39,11 @@
   <component class="com.coremedia.livecontext.studio.forms.CMProductListForm"/>
   <component class="com.coremedia.livecontext.studio.forms.CMProductTeaserForm"/>
   <component class="com.coremedia.livecontext.studio.forms.CommerceAugmentedCategoryStructureForm"/>
+  <component class="com.coremedia.livecontext.studio.forms.facets.CategoryFacetsPropertyField"/>
+  <component class="com.coremedia.livecontext.studio.forms.facets.CategoryFacetField"/>
+  <component class="com.coremedia.livecontext.studio.forms.facets.CategoryFacetTagField"/>
+  <component class="com.coremedia.livecontext.studio.forms.facets.CategoryFacetsFieldGroup"/>
+  <component class="com.coremedia.livecontext.studio.forms.facets.SingleCategoryFacetsFieldGroup"/>
   <component class="com.coremedia.livecontext.studio.forms.ProductAssignmentField"/>
   <component class="com.coremedia.livecontext.studio.forms.ProductTeaserDocumentForm"/>
   <component class="com.coremedia.livecontext.studio.library.LivecontextCollectionViewActionsPlugin"/>

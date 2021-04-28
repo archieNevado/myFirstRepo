@@ -1,4 +1,4 @@
-FROM mongo:4.0.13
+FROM mongo:4.4.4
 COPY --chown=mongodb:mongodb initdb.d/* /docker-entrypoint-initdb.d/
 ENV MONGO_INITDB_ROOT_USERNAME=root
 ENV MONGO_INITDB_ROOT_PASSWORD=root

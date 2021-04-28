@@ -13,7 +13,9 @@ import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
+import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
+import com.coremedia.livecontext.ecommerce.common.CommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
@@ -26,6 +28,7 @@ import com.coremedia.livecontext.ecommerce.ibm.common.StoreContextHelper;
 import com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion;
 import com.coremedia.livecontext.ecommerce.ibm.storeinfo.StoreInfoService;
 import com.coremedia.livecontext.ecommerce.search.SearchFacet;
+import com.coremedia.livecontext.ecommerce.search.SearchQuery;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.google.common.annotations.VisibleForTesting;
@@ -51,6 +54,7 @@ import java.util.Optional;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CATALOG;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CATEGORY;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.SKU;
 import static com.coremedia.livecontext.ecommerce.ibm.common.IbmCommerceIdProvider.commerceId;
 import static com.coremedia.livecontext.ecommerce.ibm.common.WcsVersion.WCS_VERSION_7_8;
 import static com.google.common.collect.Maps.newHashMap;
@@ -302,6 +306,33 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
     List<Map<String, Object>> wcCategories = commerceCache.get(cacheKey);
 
     return createCategoryBeansFor(wcCategories, catalogAlias, storeContext);
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public <T extends CommerceBean> SearchResult<T> search(SearchQuery searchQuery, StoreContext storeContext) {
+    String searchTerm = searchQuery.getSearchTerm();
+
+    HashMap<String, String> searchParams = new HashMap<>();
+    searchParams.put(CatalogService.SEARCH_PARAM_OFFSET, String.valueOf(searchQuery.getOffset()));
+    searchParams.put(CatalogService.SEARCH_PARAM_TOTAL, String.valueOf(searchQuery.getLimit()));
+    searchParams.put(CatalogService.SEARCH_PARAM_FACET_SUPPORT, String.valueOf(searchQuery.isIncludeResultFacets()));
+    searchQuery.getFilterFacets().stream().findFirst().ifPresent(facet -> searchParams.put(CatalogService.SEARCH_PARAM_FACET, facet.value()));
+    searchQuery.getOrderBy().ifPresent(orderBy -> searchParams.put(CatalogService.SEARCH_PARAM_ORDERBY, orderBy.value()));
+    searchQuery.getCategoryId()
+            .flatMap(commerceId -> commerceId.getTechId().or(commerceId::getExternalId))
+            .ifPresent(value -> searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, value));
+
+    CommerceBeanType searchType = searchQuery.getType();
+    if (searchType.equals(PRODUCT)) {
+      return (SearchResult<T>) searchProducts(searchTerm, searchParams, storeContext);
+    } else if (searchType.equals(SKU)) {
+      return (SearchResult<T>) searchProductVariants(searchTerm, searchParams, storeContext);
+    } else if (searchType.equals(CATEGORY)) {
+      return (SearchResult<T>) searchCategories(searchTerm, searchParams, storeContext);
+    } else {
+      throw new UnsupportedOperationException("Search for type " + searchType + " is not supported");
+    }
   }
 
   /**

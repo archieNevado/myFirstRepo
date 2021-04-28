@@ -200,6 +200,11 @@ public class CatalogObjectPropertyNames {
   /**
    * Name of the facets attribute
    */
+  public static const SEARCH_FACETS:String = 'searchFacets';
+
+  /**
+   * Name of the facets attribute
+   */
   public static const FACETS:String = 'facets';
 
   /**

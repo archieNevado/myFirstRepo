@@ -9,6 +9,7 @@ import com.coremedia.blueprint.elastic.social.cae.controller.CommentsResult;
 import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.elastic.core.api.SortOrder;
 import com.coremedia.elastic.core.api.blobs.Blob;
 import com.coremedia.elastic.core.api.staging.StagingService;
@@ -16,7 +17,6 @@ import com.coremedia.elastic.core.cms.ContentWithSite;
 import com.coremedia.elastic.social.api.ContributionType;
 import com.coremedia.elastic.social.api.ModerationType;
 import com.coremedia.elastic.social.api.comments.Comment;
-import com.coremedia.elastic.social.api.comments.CommentService;
 import com.coremedia.elastic.social.api.comments.SortHelper;
 import com.coremedia.elastic.social.api.ratings.Like;
 import com.coremedia.elastic.social.api.ratings.LikeService;
@@ -28,13 +28,13 @@ import com.coremedia.elastic.social.api.reviews.ReviewService;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.elastic.social.api.users.CommunityUserService;
 import com.coremedia.elastic.social.impl.comments.CommentServiceImpl;
-import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Collection;
@@ -48,7 +48,6 @@ import static com.coremedia.blueprint.elastic.social.cae.ElasticSocialService.CO
 import static com.coremedia.blueprint.elastic.social.cae.ElasticSocialService.REVIEW_FETCH_LIMIT;
 import static com.coremedia.elastic.core.api.SortOrder.ASCENDING;
 import static com.coremedia.elastic.core.api.users.UserService.USERS_COLLECTION;
-import static com.coremedia.elastic.core.test.Injection.inject;
 import static com.coremedia.elastic.social.api.comments.CommentService.COMMENTS_COLLECTION;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singleton;
@@ -73,6 +72,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class ElasticSocialServiceTest {
 
+  @Spy
   private DeliveryConfigurationProperties deliveryConfigurationProperties;
 
   @InjectMocks
@@ -112,7 +112,7 @@ public class ElasticSocialServiceTest {
   private CommunityUserService communityUserService;
 
   @Mock
-  private CommentService commentService;
+  private CommentServiceImpl commentService;
 
   @Mock
   private ReviewService reviewService;
@@ -149,9 +149,7 @@ public class ElasticSocialServiceTest {
 
   @Before
   public void setUp() {
-    deliveryConfigurationProperties = new DeliveryConfigurationProperties();
-    deliveryConfigurationProperties.setPreviewMode(false);
-    elasticSocialService.setDeliveryConfigurationProperties(deliveryConfigurationProperties);
+    when(deliveryConfigurationProperties.isPreviewMode()).thenReturn(false);
 
     String id1 = "4711";
     String id2 = "42";
@@ -211,7 +209,6 @@ public class ElasticSocialServiceTest {
     int value = 7;
     when(rating.getValue()).thenReturn(value);
     when(ratingService.getRatingForUser(eq(communityUser), any())).thenReturn(rating);
-    inject(elasticSocialService, ratingService);
 
     int result = elasticSocialService.getRating(communityUser, target);
 
@@ -298,14 +295,11 @@ public class ElasticSocialServiceTest {
     when(replyTo1_1.getListToRoot()).thenReturn(asList(replyTo1_1, replyTo1, root1)).thenReturn(asList(replyTo1_1, replyTo1, root1)).thenReturn(asList(replyTo1_1, replyTo1, root1)).thenReturn(asList(replyTo1_1, replyTo1, root1)).thenReturn(asList(replyTo1_1, replyTo1, root1));
     when(replyTo2.getListToRoot()).thenReturn(asList(replyTo2, root2)).thenReturn(asList(replyTo2, root2)).thenReturn(asList(replyTo2, root2)).thenReturn(asList(replyTo2, root2)).thenReturn(asList(replyTo2, root2));
 
-    CommentServiceImpl commentServiceImpl = mock(CommentServiceImpl.class);
-
-    inject(elasticSocialService, commentServiceImpl);
-    when(commentServiceImpl.getOnlineComments(any(ContentWithSite.class), isNull(), eq(ASCENDING), eq(COMMENT_FETCH_LIMIT)))
+    when(commentService.getOnlineComments(any(ContentWithSite.class), isNull(), eq(ASCENDING), eq(COMMENT_FETCH_LIMIT)))
             .thenReturn(new LinkedList<>(asList(root1, replyTo1, replyTo1_1)));
-    when(commentServiceImpl.getComments(any(ContentWithSite.class), eq(communityUser), eq(ASCENDING), eq(COMMENT_FETCH_LIMIT)))
+    when(commentService.getComments(any(ContentWithSite.class), eq(communityUser), eq(ASCENDING), eq(COMMENT_FETCH_LIMIT)))
             .thenReturn(asList(root2, replyTo2));
-    doCallRealMethod().when(commentServiceImpl).sortThreadedDiscussion(any(), eq(ASCENDING));
+    doCallRealMethod().when(commentService).sortThreadedDiscussion(any(), eq(ASCENDING));
 
     List<Comment> result = elasticSocialService.getOnlineOrOwnComments(teasable, communityUser);
 
@@ -314,20 +308,17 @@ public class ElasticSocialServiceTest {
 
   @Test
   public void testGetOnlineOrOwnCommentsWithDuplicates() {
-    CommentServiceImpl commentServiceImpl = mock(CommentServiceImpl.class);
-
-    inject(elasticSocialService, commentServiceImpl);
-    when(commentServiceImpl.getOnlineComments(any(ContentWithSite.class), isNull(), eq(ASCENDING), eq(COMMENT_FETCH_LIMIT)))
+    when(commentService.getOnlineComments(any(ContentWithSite.class), isNull(), eq(ASCENDING), eq(COMMENT_FETCH_LIMIT)))
             .thenReturn(new LinkedList<>(asList(comment1, comment2)));
-    when(commentServiceImpl.getComments(any(ContentWithSite.class), eq(communityUser), eq(ASCENDING), eq(COMMENT_FETCH_LIMIT)))
+    when(commentService.getComments(any(ContentWithSite.class), eq(communityUser), eq(ASCENDING), eq(COMMENT_FETCH_LIMIT)))
             .thenReturn(asList(comment2));
-    doCallRealMethod().when(commentServiceImpl).sortThreadedDiscussion(any(), eq(ASCENDING));
+    doCallRealMethod().when(commentService).sortThreadedDiscussion(any(), eq(ASCENDING));
 
     List<Comment> result = elasticSocialService.getOnlineOrOwnComments(teasable, communityUser);
 
     assertEquals(asList(comment2, comment1), result);
-    verify(commentServiceImpl).getOnlineComments(any(ContentWithSite.class), isNull(), eq(ASCENDING), eq(COMMENT_FETCH_LIMIT));
-    verify(commentServiceImpl).getComments(any(ContentWithSite.class), eq(communityUser), eq(ASCENDING), eq(COMMENT_FETCH_LIMIT));
+    verify(commentService).getOnlineComments(any(ContentWithSite.class), isNull(), eq(ASCENDING), eq(COMMENT_FETCH_LIMIT));
+    verify(commentService).getComments(any(ContentWithSite.class), eq(communityUser), eq(ASCENDING), eq(COMMENT_FETCH_LIMIT));
   }
 
   @SuppressWarnings({"unchecked"})
@@ -539,7 +530,7 @@ public class ElasticSocialServiceTest {
 
   @Test
   public void getCommentsResultPreview() {
-    deliveryConfigurationProperties.setPreviewMode(true);
+    when(deliveryConfigurationProperties.isPreviewMode()).thenReturn(true);
     when(commentService.getCommentsForPreview(any(ContentWithSite.class), eq(ASCENDING), eq(COMMENT_FETCH_LIMIT)))
             .thenReturn(asList(comment1, comment2));
     sortThreadedDiscussion();
@@ -564,7 +555,7 @@ public class ElasticSocialServiceTest {
     List<Review> reviews = Collections.singletonList(review);
     when(reviewService.getReviewsForPreview(contentWithSite, ASCENDING, REVIEW_FETCH_LIMIT)).thenReturn(reviews);
     when(contributionTargetHelper.getTarget(contentWithSite)).thenReturn(contentWithSite);
-    deliveryConfigurationProperties.setPreviewMode(true);
+    when(deliveryConfigurationProperties.isPreviewMode()).thenReturn(true);
 
     List<Review> reviewsResult = elasticSocialService.getReviews(contentWithSite, communityUser);
 
@@ -587,15 +578,12 @@ public class ElasticSocialServiceTest {
     assertEquals(review, reviewsResult.get(0));
   }
 
-
   @Test
   public void getNotIgnoredComments() {
-    CommentServiceImpl commentServiceImpl = mock(CommentServiceImpl.class);
 
-    inject(elasticSocialService, commentServiceImpl);
-    when(commentServiceImpl.getCommentsForPreview(any(ContentWithSite.class), eq(ASCENDING), eq(COMMENT_FETCH_LIMIT)))
+    when(commentService.getCommentsForPreview(any(ContentWithSite.class), eq(ASCENDING), eq(COMMENT_FETCH_LIMIT)))
             .thenReturn(asList(comment1, comment2));
-    doCallRealMethod().when(commentServiceImpl).sortThreadedDiscussion(any(), eq(ASCENDING));
+    doCallRealMethod().when(commentService).sortThreadedDiscussion(any(), eq(ASCENDING));
 
     List<Comment> notIgnoredComments = elasticSocialService.getNotIgnoredComments(teasable);
     assertNotNull(notIgnoredComments);

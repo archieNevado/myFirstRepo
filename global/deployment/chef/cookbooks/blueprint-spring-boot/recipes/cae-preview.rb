@@ -19,7 +19,7 @@ node.default_unless['blueprint']['apps'][service_name]['application.properties']
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['repository.maxCachedBlobSize'] = -1
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['link.urlPrefixType'] = 'preview'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['themeImporter.themeDeveloperGroups'] = 'developer'
-node.default_unless['blueprint']['apps'][service_name]['application.properties']['spring.http.encoding.force'] = "true"
+node.default_unless['blueprint']['apps'][service_name]['application.properties']['server.servlet.encoding.force'] = "true"
 # make sure that the preview when used behind an apache using http proxying does use https
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['server.forward-headers-strategy'] = 'native'
 node.default_unless['blueprint']['apps'][service_name]['application.properties']['repository.blobCachePath'] = "#{node['blueprint']['cache_dir']}/#{service_name}"

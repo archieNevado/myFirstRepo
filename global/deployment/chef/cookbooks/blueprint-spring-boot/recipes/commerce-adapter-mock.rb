@@ -14,6 +14,7 @@ node.default_unless['blueprint']['apps']['cae-preview']['application.properties'
 node.default_unless['blueprint']['apps']['cae-live']['application.properties']['commerce.hub.data.endpoints.mock'] = 'localhost:44065'
 node.default_unless['blueprint']['apps']['headless-server-preview']['application.properties']['commerce.hub.data.endpoints.mock'] = 'localhost:44065'
 node.default_unless['blueprint']['apps']['headless-server-live']['application.properties']['commerce.hub.data.endpoints.mock'] = 'localhost:44065'
+node.default_unless['blueprint']['apps']['content-feeder']['application.properties']['commerce.hub.data.endpoints.mock'] = 'localhost:44065'
 
 application_config_hash = Mash.new
 # legacy compatibility step. Here we merge the defaults from old node.json files

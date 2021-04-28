@@ -36,7 +36,8 @@
 
   </local:plugins>
   <local:items>
-    <ui:BoundRadioGroup width="auto"
+    <ui:BoundRadioGroup itemId="externallyVisibleDate"
+                        width="auto"
                         columns="1"
                         hideLabel="true"
                         toValue="{toValue}"

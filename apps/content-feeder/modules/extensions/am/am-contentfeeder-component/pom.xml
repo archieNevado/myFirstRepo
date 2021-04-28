@@ -15,6 +15,12 @@
   </properties>
 
   <dependencies>
+
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>am-validators</artifactId>
+      <scope>runtime</scope>
+    </dependency>
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>cap-feeder-api</artifactId>

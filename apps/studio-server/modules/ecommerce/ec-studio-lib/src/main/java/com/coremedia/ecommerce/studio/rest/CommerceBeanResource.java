@@ -80,7 +80,7 @@ public abstract class CommerceBeanResource<Entity extends CommerceBean> extends 
     entity.getContext()
             .getConnection()
             .getAssetService()
-            .map(assetService -> assetService.findVisuals(entity.getReference(), false))
+            .map(assetService -> assetService.findVisuals(entity.getReference(), false, entity.getContext().getSiteId()))
             .ifPresent(representation::setVisuals);
   }
 

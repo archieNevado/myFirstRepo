@@ -200,6 +200,45 @@
       <span class="check_unknown">Unknown</span>
     </td>
   </tr>
+  {{ if eq (getv "/headless/client/enabled" "true") "true" }}
+  <tr>
+    <td><a href="http://{{ getv "/environment/fqdn" }}:43181/actuator" data-cm-test="">Headless Commerce</a></td>
+    <td>
+      <a href="/headless-server-commerce/info" target="_blank">Info</a> ·
+      <a href="/headless-server-commerce/logfile" target="_blank">Logfile</a> ·
+      <a href="/headless-server-commerce/env" target="_blank">Environment</a> ·
+      <a href="/headless-server-commerce/configprops" target="_blank">Config</a> ·
+      <a href="/headless-server-commerce/health" target="_blank" class="health_check">Health</a>
+    </td>
+    <td>
+      <span class="check_unknown">Unknown</span>
+    </td>
+  </tr>
+  <tr>
+    <td><a href="http://{{ getv "/environment/fqdn" }}:4180/actuator/info" data-cm-test="">Headless Stitching Preview</a></td>
+    <td>
+      <a href="/headless-server-stitching-preview/info" target="_blank">Info</a> ·
+      <a href="/headless-server-stitching-preview/logfile" target="_blank">Logfile</a> ·
+      <a href="/headless-server-stitching-preview/env" target="_blank">Environment</a> ·
+      <a href="/headless-server-stitching-preview/health" target="_blank" class="health_check">Health</a>
+    </td>
+    <td>
+      <span class="check_unknown">Unknown</span>
+    </td>
+  </tr>
+  <tr>
+    <td><a href="http://{{ getv "/environment/fqdn" }}:4280/actuator/info" data-cm-test="">Headless Stitching Live</a></td>
+    <td>
+      <a href="/headless-server-stitching-live/info" target="_blank">Info</a> ·
+      <a href="/headless-server-stitching-live/logfile" target="_blank">Logfile</a> ·
+      <a href="/headless-server-stitching-preview/env" target="_blank">Environment</a> ·
+      <a href="/headless-server-stitching-live/health" target="_blank" class="health_check">Health</a>
+    </td>
+    <td>
+      <span class="check_unknown">Unknown</span>
+    </td>
+  </tr>
+  {{ end }}
 
   {{ if eq (getv "/commerce/mock/enabled" "true") "true" }}
   <tr>

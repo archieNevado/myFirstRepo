@@ -3,7 +3,6 @@ package com.coremedia.livecontext.studio.collectionview {
 import com.coremedia.cms.editor.sdk.collectionview.CollectionView;
 import com.coremedia.cms.editor.sdk.collectionview.CollectionViewConstants;
 import com.coremedia.cms.editor.sdk.collectionview.CollectionViewContainer;
-import com.coremedia.cms.editor.sdk.collectionview.CollectionViewExtension;
 import com.coremedia.cms.editor.sdk.collectionview.CollectionViewManagerInternal;
 import com.coremedia.cms.editor.sdk.collectionview.CollectionViewModel;
 import com.coremedia.cms.editor.sdk.collectionview.SearchState;
@@ -14,6 +13,7 @@ import com.coremedia.cms.editor.sdk.desktop.sidepanel.SidePanelStudioPlugin;
 import com.coremedia.cms.editor.sdk.desktop.sidepanel.sidePanelManager;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.util.ThumbnailResolverFactory;
+import com.coremedia.cms.studio.base.cap.models.content.contentTreeRelationRegistry;
 import com.coremedia.ecommerce.studio.CatalogModel;
 import com.coremedia.ecommerce.studio.ECommerceStudioPlugin;
 import com.coremedia.ecommerce.studio.components.repository.CatalogRepositoryContextMenu;
@@ -32,8 +32,10 @@ import com.coremedia.livecontext.studio.AbstractLiveContextStudioTest;
 import com.coremedia.livecontext.studio.CatalogTeaserThumbnailResolver;
 import com.coremedia.livecontext.studio.CatalogThumbnailResolver;
 import com.coremedia.livecontext.studio.LivecontextStudioPlugin;
+import com.coremedia.livecontext.studio.LivecontextStudioPluginBase;
 import com.coremedia.livecontext.studio.library.LivecontextCollectionViewActionsPlugin;
 import com.coremedia.livecontext.studio.library.LivecontextCollectionViewExtension;
+import com.coremedia.livecontext.studio.library.LivecontextContentTreeRelation;
 import com.coremedia.ui.components.SwitchingContainer;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
@@ -191,11 +193,12 @@ public class CatalogCollectionViewTest extends AbstractLiveContextStudioTest {
     var catalogTreeModel:CatalogTreeModel = new CatalogTreeModel();
     collectionViewManagerInternal.addTreeModel(catalogTreeModel, new CatalogTreeDragDropModel(catalogTreeModel));
 
-    var extension:CollectionViewExtension = new ECommerceCollectionViewExtension();
-    editorContext.getCollectionViewExtender().addExtension(extension);
+    var isApplicable:Function = function ():Boolean { return false; };
+    editorContext.getCollectionViewExtender().addExtension(new ECommerceCollectionViewExtension(), isApplicable);
 
-    var lcExtension:CollectionViewExtension = new LivecontextCollectionViewExtension();
-    editorContext.getCollectionViewExtender().addExtension(lcExtension);
+    var lcContentTreeRelation:LivecontextContentTreeRelation = new LivecontextContentTreeRelation();
+    contentTreeRelationRegistry.addExtension(lcContentTreeRelation, LivecontextStudioPluginBase.getIsExtensionApplicable(lcContentTreeRelation));
+    editorContext.getCollectionViewExtender().addExtension(new LivecontextCollectionViewExtension(), LivecontextStudioPluginBase.getIsExtensionApplicable(lcContentTreeRelation));
 
     var cvContainer:CollectionViewContainer = sidePanelManager.getOrCreateComponent(CollectionViewContainer.ID) as CollectionViewContainer;
     var viewportConfig:Viewport = Viewport({});
@@ -338,7 +341,7 @@ public class CatalogCollectionViewTest extends AbstractLiveContextStudioTest {
 
   private function getActiveToolbarViewSwitch():Container {
     var itemId:String = getCollectionModesContainer().getActiveItem().getItemId();
-    var container:Container = undefined;
+    var container:Container;
     if(itemId === "repository") {
       container = Container(testling.queryById("toolbarSwitchingContainer")).queryById("catalogRepositoryToolbar") as Container;
     }
@@ -555,7 +558,7 @@ public class CatalogCollectionViewTest extends AbstractLiveContextStudioTest {
       getTarget: function():HTMLElement {
         return TableUtil.getCellAsDom(grid, row, 1);
       },
-      type: ContextMenuEventAdapter.EVENT_NAME
+      "type": ContextMenuEventAdapter.EVENT_NAME
     });
     grid.fireEvent("rowcontextmenu", grid, null, null, row, event);
   }

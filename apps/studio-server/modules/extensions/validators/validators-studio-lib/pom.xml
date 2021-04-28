@@ -18,18 +18,14 @@
   <dependencies>
 
     <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>middle.validators</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-studio-rest</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-navigation-api</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-pagegrid-api</artifactId>
     </dependency>
 
     <dependency>
@@ -69,17 +65,13 @@
 
     <dependency>
       <groupId>com.coremedia.cms</groupId>
-      <artifactId>coremedia-rest-plugins</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>com.coremedia.ui</groupId>
-      <artifactId>coremedia-rest-core</artifactId>
+      <artifactId>middle.coremedia-validation</artifactId>
     </dependency>
 
     <dependency>
       <groupId>javax.inject</groupId>
       <artifactId>javax.inject</artifactId>
+      <scope>test</scope>
     </dependency>
 
     <dependency>
@@ -97,18 +89,12 @@
     <dependency>
       <groupId>com.coremedia.ui</groupId>
       <artifactId>cap-rest-service</artifactId>
-      <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-pagegrid-impl</artifactId>
+      <artifactId>bpbase-links-impl</artifactId>
       <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-pagegrid-rest-extension</artifactId>
     </dependency>
 
     <dependency>
@@ -172,11 +158,6 @@
     </dependency>
 
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot</artifactId>
-    </dependency>
-
-    <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-test-util</artifactId>
       <scope>test</scope>
@@ -212,6 +193,7 @@
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>cap-unified-api-boot</artifactId>
+      <scope>test</scope>
     </dependency>
 
     <dependency>

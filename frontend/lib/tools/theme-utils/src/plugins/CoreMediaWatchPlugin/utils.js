@@ -51,7 +51,7 @@ const openBrowser = () => {
   try {
     const { studioClientUrl, previewUrl, openBrowser } = getEnv();
     if (openBrowser) {
-      const url = previewUrl || studioClientUrl;
+      const url = previewUrl || studioClientUrl || "";
       open(url).catch(() => {}); // Prevent `unhandledRejection` error.
     }
   } catch (err) {

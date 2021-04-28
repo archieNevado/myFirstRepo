@@ -87,7 +87,7 @@ public class TransformedBlobHandlerTest {
     when(transformImageService.getTransformationOperations(any(Content.class), anyString()))
             .thenReturn(Map.of(TRANSFORM_NAME, TRANSFORM_NAME));
 
-    when(transformImageService.transformWithDimensions(any(Content.class), anyString(), anyString(), anyInt(), anyInt())).thenReturn(Optional.of(transformedBlob));
+    when(transformImageService.transformWithDimensions(any(Content.class), anyString(), anyString(), anyInt(), anyInt(), anyString())).thenReturn(Optional.of(transformedBlob));
   }
 
   /**
@@ -173,7 +173,7 @@ public class TransformedBlobHandlerTest {
     assertNotFound("id", handleRequest("/resource/image/18/transformName/100/100/4d1b8ae7b7c0102fbdd80b5ea41b45c5/uY/nae-me-jpg.jpg"));
     assertNotFound("hash", handleRequest("/resource/image/16/transformName/100/100/digest/XXX/nae-me-jpg.jpg"));
 
-    verify(transformImageService, never()).transformWithDimensions(any(Content.class), anyString(), anyString(), anyInt(), anyInt());
+    verify(transformImageService, never()).transformWithDimensions(any(Content.class), anyString(), anyString(), anyInt(), anyInt(), anyString());
   }
 
   /**

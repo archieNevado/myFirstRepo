@@ -6,6 +6,7 @@
                                             xmlns:u="exml:untyped"
                                             xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
                                             xmlns:ui="exml:com.coremedia.ui.config"
+                                            xmlns:fields="com.coremedia.cms.editor.sdk.premular.fields.*"
                                             hideHeaders="true">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin')]
@@ -78,8 +79,9 @@
                 text="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'TaxonomyLinkList_suggestions_add_all')}"
                 handler="{addAllKeywordsHandler}">
           <plugins>
-            <editor:BindDisablePlugin forceReadOnlyValueExpression="{getAddAllDisabledVE(config.forceReadOnlyValueExpression)}"
-                                      bindTo="{config.bindTo}"/>
+            <editor:BindDisablePlugin
+                    forceReadOnlyValueExpression="{getAddAllDisabledVE(config.forceReadOnlyValueExpression)}"
+                    bindTo="{config.bindTo}"/>
           </plugins>
         </Button>
       </items>
@@ -115,7 +117,7 @@
         <plugin_GridViewDragDrop ddGroup="ContentLinkDD"
                                  enableDrop="false">
           <dragZone>
-            <editor:LinkListViewDragZone/>
+            <fields:LinkListViewDragZone/>
           </dragZone>
         </plugin_GridViewDragDrop>
         <editor:BindReadOnlyPlugin bindTo="{config.bindTo}"

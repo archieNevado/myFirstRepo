@@ -2,16 +2,13 @@ package com.coremedia.catalog.studio.library {
 
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.content.ContentTypeNames;
 import com.coremedia.cap.content.search.SearchParameters;
 import com.coremedia.catalog.studio.repository.RepositoryCatalogSearchListContainer;
-import com.coremedia.cms.editor.sdk.ContentTreeRelation;
 import com.coremedia.cms.editor.sdk.collectionview.RepositoryCollectionViewExtension;
 import com.coremedia.cms.editor.sdk.collectionview.search.SearchQueryUtil;
 import com.coremedia.cms.editor.sdk.collectionview.sort.RepositoryListSorter;
 import com.coremedia.cms.editor.sdk.editorContext;
-import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 
 import mx.resources.ResourceManager;
 
@@ -20,11 +17,6 @@ public class CatalogCollectionViewExtension extends RepositoryCollectionViewExte
   public static const CATALOG_FOLDER_CONTAINER_ITEM_ID:String = "catalogFolderContent";
 
   private var repositoryListSorter:CatalogRepositoryListSorter;
-  private var catalogContentTreeRelation:CatalogTreeRelation = new CatalogTreeRelation();
-
-  public function CatalogCollectionViewExtension() {
-    repositoryListSorter = new CatalogRepositoryListSorter(this);
-  }
 
   protected static const ALL_TYPE_RECORD:Object = {
     name: ContentTypeNames.CONTENT,
@@ -44,30 +36,9 @@ public class CatalogCollectionViewExtension extends RepositoryCollectionViewExte
     icon: ResourceManager.getInstance().getString('com.coremedia.catalog.studio.CatalogStudioPlugin', 'CMCategory_icon')
   };
 
-  override public function isApplicable(model:Object):Boolean {
-    var content:Content = model as Content;
-    if (!content) {
-      return false;
-    }
-
-    var contentType:ContentType = content.getType();
-    if (!contentType) {
-      return undefined;
-    }
-
-    var isCmStore:Boolean = CatalogHelper.getInstance().isActiveCoreMediaStore();
-    var contentTypeName:String = contentType.getName();
-    if (!contentTypeName) {
-      return undefined;
-    }
-
-    return isCmStore &&
-            (contentTypeName === CatalogTreeRelation.CONTENT_TYPE_CATEGORY ||
-            contentTypeName === CatalogTreeRelation.CONTENT_TYPE_PRODUCT);
-  }
-
-  override public function getContentTreeRelation():ContentTreeRelation {
-    return catalogContentTreeRelation;
+  public function CatalogCollectionViewExtension() {
+    super();
+    repositoryListSorter = new CatalogRepositoryListSorter(this);
   }
 
   override public function getAvailableSearchTypes(folder:Object):Array {
@@ -89,7 +60,7 @@ public class CatalogCollectionViewExtension extends RepositoryCollectionViewExte
             });
 
     var excludeDoctypesQuery:String = SearchQueryUtil.buildExcludeContentTypesQuery(docTypeExclusions);
-    searchParameters.filterQuery = [filterQueryFragments.join(" AND ")];
+    searchParameters.filterQuery = Array.from(filterQueryFragments);
     searchParameters.filterQuery.push(excludeDoctypesQuery);
 
     return searchParameters;
@@ -109,6 +80,10 @@ public class CatalogCollectionViewExtension extends RepositoryCollectionViewExte
 
   override public function isUploadDisabledFor(folder:Object):Boolean {
     return true;
+  }
+
+  override public function showInTree(contents:Array, view:String = null, treeModelId:String = null):void {
+    new ShowInCatalogTreeHelper(contents).showItems(treeModelId);
   }
 }
 }

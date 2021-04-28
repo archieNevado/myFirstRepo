@@ -30,11 +30,12 @@
                 title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMSite_text')}"
                 itemId="cmSiteRootForm">
           <editor:items>
-            <editor:LinkListPropertyField propertyName="root"/>
+            <editor:LinkListPropertyField propertyName="root" itemId="root"/>
             <editor:StringPropertyField propertyName="id"
+                                        itemId="id"
                                         disabled="{config.forceReadOnlyValueExpression.getValue()}"
                                         forceReadOnlyValueExpression="{ValueExpressionFactory.createFromValue(!isAdministrator())}"/>
-            <editor:StringPropertyField propertyName="name"/>
+            <editor:StringPropertyField propertyName="name" itemId="name"/>
           </editor:items>
         </editor:PropertyFieldGroup>
         <bpforms:CollapsibleStringPropertyForm propertyName="siteManagerGroup"

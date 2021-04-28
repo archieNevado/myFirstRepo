@@ -3,6 +3,7 @@ package com.coremedia.blueprint.caas.commerce.model;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdUtils;
 import com.coremedia.blueprint.caas.commerce.error.CommerceConnectionUnavailable;
 import com.coremedia.caas.model.error.SiteIdUndefined;
 import com.coremedia.cap.multisite.Site;
@@ -14,13 +15,19 @@ import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
+import com.coremedia.livecontext.ecommerce.common.CommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.search.OrderBy;
 import com.coremedia.livecontext.ecommerce.search.SearchFacet;
+import com.coremedia.livecontext.ecommerce.search.SearchQuery;
+import com.coremedia.livecontext.ecommerce.search.SearchQueryBuilder;
+import com.coremedia.livecontext.ecommerce.search.SearchQueryFacet;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
+import com.google.common.base.Strings;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -31,6 +38,9 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.SKU;
 
 /**
  * A simple facade for commerce queries by site id.
@@ -239,9 +249,11 @@ public class CommerceFacade {
     }
     StoreContext storeContext = connection.getStoreContext();
 
+    SearchQuery searchQuery = buildSearchQuery(PRODUCT, searchTerm, searchParams, storeContext);
+
     try {
       CatalogService catalogService = connection.getCatalogService();
-      return catalogService.searchProducts(searchTerm, searchParams, storeContext);
+      return catalogService.search(searchQuery, storeContext);
     } catch (CommerceException e) {
       LOG.warn("Could not search products with searchTerm {}", searchTerm, e);
       return null;
@@ -279,9 +291,11 @@ public class CommerceFacade {
     }
     StoreContext storeContext = connection.getStoreContext();
 
+    SearchQuery searchQuery = buildSearchQuery(SKU, searchTerm, searchParams, storeContext);
+
     try {
       CatalogService catalogService = connection.getCatalogService();
-      return catalogService.searchProductVariants(searchTerm, searchParams, storeContext);
+      return catalogService.search(searchQuery, storeContext);
     } catch (CommerceException e) {
       LOG.warn("Could not search product variants with searchTerm {}", searchTerm, e);
       return null;
@@ -327,6 +341,38 @@ public class CommerceFacade {
       LOG.warn("Could not retrieve default catalog", e);
       return null;
     }
+  }
+
+  @SuppressWarnings("OverlyComplexMethod")
+  private static SearchQuery buildSearchQuery(CommerceBeanType commerceBeanType, String searchTerm,
+                                              Map<String, String> searchParams, StoreContext storeContext) {
+    SearchQueryBuilder builder = SearchQuery.builder(searchTerm, commerceBeanType);
+
+    if (!Strings.isNullOrEmpty(searchParams.get(CatalogService.SEARCH_PARAM_CATEGORYID))) {
+      builder.setCategoryId(CommerceIdUtils.builder(commerceBeanType, storeContext)
+              .withTechId(searchParams.get(CatalogService.SEARCH_PARAM_CATEGORYID))
+              .build());
+    }
+
+    if (searchParams.containsKey(CatalogService.SEARCH_PARAM_FACET_SUPPORT)) {
+      builder.setIncludeResultFacets(Boolean.parseBoolean(searchParams.get(CatalogService.SEARCH_PARAM_FACET_SUPPORT)));
+    }
+
+    String facet = searchParams.get(CatalogService.SEARCH_PARAM_FACET);
+    if (facet != null) {
+      builder.setFilterFacets(List.of(SearchQueryFacet.of(facet)));
+    }
+    if (searchParams.containsKey(CatalogService.SEARCH_PARAM_ORDERBY)) {
+      builder.setOrderBy(OrderBy.of(searchParams.get(CatalogService.SEARCH_PARAM_ORDERBY)));
+    }
+    if (searchParams.containsKey(CatalogService.SEARCH_PARAM_OFFSET)) {
+      builder.setOffset(Integer.parseInt(searchParams.get(CatalogService.SEARCH_PARAM_OFFSET)));
+    }
+    if (searchParams.containsKey(CatalogService.SEARCH_PARAM_TOTAL)) {
+      builder.setLimit(Integer.parseInt(searchParams.get(CatalogService.SEARCH_PARAM_TOTAL)));
+    }
+
+    return builder.build();
   }
 
   @Nullable

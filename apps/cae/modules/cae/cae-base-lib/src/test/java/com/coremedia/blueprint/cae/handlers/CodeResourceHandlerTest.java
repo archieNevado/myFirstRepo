@@ -14,7 +14,6 @@ import com.coremedia.blueprint.testing.ContentTestHelper;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
-import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.configuration.CaeConfigurationProperties;
 import com.coremedia.objectserver.view.ViewUtils;
@@ -25,7 +24,6 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -70,10 +68,6 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER
 public class CodeResourceHandlerTest {
 
   @Configuration(proxyBeanMethods = false)
-  @EnableConfigurationProperties({
-          DeliveryConfigurationProperties.class,
-          CaeConfigurationProperties.class,
-  })
   @Import({
           HandlerTestConfiguration.class,
           TreeRelationServicesConfiguration.class,

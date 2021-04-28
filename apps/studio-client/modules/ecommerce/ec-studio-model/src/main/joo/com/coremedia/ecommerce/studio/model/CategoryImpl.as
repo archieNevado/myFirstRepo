@@ -72,5 +72,9 @@ public class CategoryImpl extends CatalogObjectImpl implements Category {
   public function getFacets():Facets {
     return get(CatalogObjectPropertyNames.FACETS);
   }
+
+  public function getSearchFacets():SearchFacets {
+    return get(CatalogObjectPropertyNames.SEARCH_FACETS);
+  }
 }
 }

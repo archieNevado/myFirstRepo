@@ -6,11 +6,9 @@ import graphql.execution.AbortExecutionException;
 import graphql.spring.web.servlet.ExecutionResultHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import java.util.concurrent.CompletableFuture;
 
-@Component
 public class CaasExecutionResultHandler implements ExecutionResultHandler {
 
   private static final Logger LOG = LoggerFactory.getLogger(CaasExecutionResultHandler.class);

@@ -116,6 +116,7 @@
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>cap-unified-api</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>javax.inject</groupId>
@@ -185,4 +186,22 @@
       <artifactId>commons-lang3</artifactId>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <configuration>
+          <ignoredDependencies combine.children="append">
+            <!-- Transitive compile *AND* direct test dependencies. -->
+            <ignoredDependency>org.springframework:spring-context</ignoredDependency>
+            <!-- main non-standard-build/runtime *AND* test compile dependencies. -->
+            <ignoredDependency>com.coremedia.cms:cae-contentbeanservices</ignoredDependency>
+          </ignoredDependencies>
+          <failOnWarning>true</failOnWarning>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

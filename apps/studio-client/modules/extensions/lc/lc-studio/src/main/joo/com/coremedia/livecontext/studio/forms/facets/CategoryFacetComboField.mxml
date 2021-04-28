@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<local:CategoryFacetComboFieldBase xmlns:fx="http://ns.adobe.com/mxml/2009"
+                                   xmlns:exml="http://www.jangaroo.net/exml/0.8"
+                                   xmlns:ui="exml:com.coremedia.ui.config"
+                                   xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+                                   xmlns:local="com.coremedia.livecontext.studio.forms.facets.*"
+                                   fieldLabel="{FacetUtil.localizeFacetLabel(config.facet.getLabel())}"
+                                   emptyText="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'CMProductList_localSettings.productList.facetValue.emptyText')}"
+                                   labelAlign="top"
+                                   labelSeparator=""
+                                   valueField="{QUERY}"
+                                   displayField="{LABEL}"
+                                   anchor="100%">
+  <fx:Metadata>
+    [ResourceBundle('com.coremedia.livecontext.studio.LivecontextStudioPlugin')]
+  </fx:Metadata>
+
+  <fx:Script><![CDATA[
+    public static const xtype:String = "com.coremedia.livecontext.studio.config.categoryFacetComboField";
+
+    private var config:CategoryFacetComboField;
+
+    public native function CategoryFacetComboField(config:CategoryFacetComboField = null);
+    ]]></fx:Script>
+
+  <local:plugins exml:mode="append">
+    <ui:BindListPlugin bindTo="{getComboValuesExpression(config)}"
+                       ifUndefined="{[]}"
+                       sortDirection="ASC"
+                       sortField="{LABEL}">
+      <ui:fields>
+        <ui:DataField name="{LABEL}" encode="false"/>
+        <ui:DataField name="{QUERY}" encode="false"/>
+      </ui:fields>
+    </ui:BindListPlugin>
+    <editor:ShowIssuesPlugin bindTo="{config.bindTo}"
+                             ifUndefined=""
+                             propertyName="{config.structPropertyName + '.' + CategoryFacetsPropertyFieldBase.PRODUCT_LIST_STRUCT_NAME + '.' + CategoryFacetsPropertyFieldBase.MULTI_FACETS_STRUCT_NAME + '.' + config.facet.getKey()}"/>
+    <editor:BindReadOnlyPlugin forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
+                               bindTo="{config.bindTo}"/>
+    <editor:PropertyFieldPlugin
+            propertyName="{config.structPropertyName + '.' + CategoryFacetsPropertyFieldBase.PRODUCT_LIST_STRUCT_NAME + '.' + CategoryFacetsPropertyFieldBase.MULTI_FACETS_STRUCT_NAME + '.' + config.facet.getKey()}"/>
+  </local:plugins>
+</local:CategoryFacetComboFieldBase>

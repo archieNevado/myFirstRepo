@@ -6,16 +6,21 @@ import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.cache.Cache;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.common.NoSuchPropertyDescriptorException;
+import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
-import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
+import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.search.OrderBy;
+import com.coremedia.livecontext.ecommerce.search.SearchQuery;
+import com.coremedia.livecontext.ecommerce.search.SearchQueryBuilder;
+import com.coremedia.livecontext.ecommerce.search.SearchQueryFacet;
 import com.coremedia.livecontext.navigation.ProductInSiteImpl;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -25,14 +30,15 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdBuilder.buildCopyOf;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper.parseCommerceId;
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
 import static java.util.stream.Collectors.toList;
 
 public class CMProductListImpl extends CMQueryListImpl implements CMProductList {
@@ -43,10 +49,14 @@ public class CMProductListImpl extends CMQueryListImpl implements CMProductList 
 
   public static final int MAX_LENGTH_DEFAULT = 10;
   public static final int OFFSET_DEFAULT = 0;
-  public static final String DIGIT_PATTERN = "[0-9]*";
-  public static final String EMPTY_STRING = "";
-  public static final String ALL_QUERY = "*";
-  public static final String CATALOG_SERVICE_NOT_AVAILABLE = "catalog service not available";
+  private static final String DIGIT_PATTERN = "[0-9]*";
+  private static final String ALL_QUERY = "*";
+  private static final String PROP_ORDER_BY = "orderBy";
+  private static final String PROP_OFFSET = "offset";
+  private static final String PROP_MAX_LENGTH = "maxLength";
+  private static final String PROP_SELECTED_FACET_VALUE = "selectedFacetValue";
+  private static final String SETTING_PRODUCT_LIST = "productList";
+  private static final String SETTING_FILTER_FACETS = "filterFacets";
 
   private String overrideCategoryId;
 
@@ -102,13 +112,13 @@ public class CMProductListImpl extends CMQueryListImpl implements CMProductList 
   public Category getCategory() {
     Optional<CommerceId> categoryIdOptional = parseCommerceId(getExternalId());
 
-    if (!categoryIdOptional.isPresent()) {
+    if (categoryIdOptional.isEmpty()) {
       return null;
     }
 
     Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnection(getContent());
 
-    if (!commerceConnection.isPresent()) {
+    if (commerceConnection.isEmpty()) {
       return null;
     }
 
@@ -121,7 +131,8 @@ public class CMProductListImpl extends CMQueryListImpl implements CMProductList 
       return connection.getCatalogService()
               .findCategoryById(commerceId, storeContext);
     } catch (CommerceException e) {
-      LOG.warn("Could not retrieve category for Product List {}.", this, e);
+      LOG.warn("Could not retrieve category for Product List {}.", this);
+      LOG.debug("Could not retrieve category for Product List {}.", this, e);
       return null;
     }
   }
@@ -134,58 +145,58 @@ public class CMProductListImpl extends CMQueryListImpl implements CMProductList 
     return mergeFixedItems(fixedItemsStructList, products, getMaxLength());
   }
 
-
   public String getOrderBy() {
-    Object value = getProductListSettings().get("orderBy");
+    Object value = getProductListSettings().get(PROP_ORDER_BY);
     return value instanceof String ? value.toString() : null;
   }
 
   public int getOffset() {
-    Object value = getProductListSettings().get("offset");
-    return value instanceof String ? Integer.parseInt((String) value) : OFFSET_DEFAULT;
+    Object value = getProductListSettings().get(PROP_OFFSET);
+    // The UI (and thus productList settings) work with an offset based
+    // on 1, whereas the API works with a technical offset based on 0.
+    return value instanceof Integer ? (Integer) value - 1 : OFFSET_DEFAULT;
   }
 
   @Override
   public int getMaxLength() {
-    Object value = getProductListSettings().get("maxLength");
-    return value instanceof String ? Integer.parseInt((String)value) : MAX_LENGTH_DEFAULT;
+    Object value = getProductListSettings().get(PROP_MAX_LENGTH);
+    return value instanceof Integer ? (Integer) value : MAX_LENGTH_DEFAULT;
   }
 
   public List<ProductInSite> getProducts() {
-    Site site = getSitesService().getSiteAspect(getContent()).getSite();
+    Content content = getContent();
+    Site site = getSitesService().getSiteAspect(content).getSite();
     if (site == null) {
-      LOG.debug("Site not found for content: " + getContent());
-      return Collections.emptyList();
+      LOG.debug("Site not found for content: {}", content);
+      return List.of();
     }
 
-    String facet = getFacet();
-    Category category = getCategory();
-    CatalogAlias catalogAlias = category != null ? category.getReference().getCatalogAlias() : null;
+    Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnection(content);
 
-    Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnection(getContent());
-
-    if (!commerceConnection.isPresent()) {
-      return Collections.emptyList();
+    if (commerceConnection.isEmpty()) {
+      return List.of();
     }
 
     CommerceConnection connection = commerceConnection.get();
     StoreContext storeContext = connection.getStoreContext();
 
-    Map<String, String> searchParams = getSearchParams(category, catalogAlias, getOrderBy(), getMaxLength(),
-            getOffset(), facet);
+    Category category = getCategory();
+    CatalogAlias catalogAlias = category != null ? category.getReference().getCatalogAlias() : null;
+    CommerceId categoryId = getCategoryIdForSearchQuery(category, catalogAlias, storeContext);
+    SearchQuery searchQuery = buildProductSearchQuery(categoryId);
 
     return connection.getCatalogService()
-            .searchProducts(getQuery(), searchParams, storeContext)
-            .getSearchResult()
+            .search(searchQuery, storeContext)
+            .getItems()
             .stream()
-            .map(product -> new ProductInSiteImpl(product, site))
+            .map(product -> new ProductInSiteImpl((Product) product, site))
             .collect(toList());
   }
 
   @Override
   public String getFacet() {
-    Object value = getProductListSettings().get("selectedFacetValue");
-    String strValue = EMPTY_STRING;
+    Object value = getProductListSettings().get(PROP_SELECTED_FACET_VALUE);
+    String strValue = "";
     if (value != null) {
       strValue = (String) value;
       if (strValue.matches(DIGIT_PATTERN)) {
@@ -203,58 +214,84 @@ public class CMProductListImpl extends CMQueryListImpl implements CMProductList 
 
   @Override
   public Map<String, Object> getProductListSettings() {
-    Map<String, Object> result = new HashMap<>();
     try {
-      Struct localAndLinkedSettings = getLocalAndLinkedSettings();
-      if (localAndLinkedSettings != null) {
-        Map<String, Object> structMap = localAndLinkedSettings.getStruct("productList").getProperties();
-        //copy struct because it may be cached and the cache MUST NEVER be modified.
-        for (Map.Entry<String, Object> entry : structMap.entrySet()) {
-          if (entry.getValue() != null) {
-            result.put(entry.getKey(), entry.getValue().toString());
-          }
-        }
+      Struct localSettings = getLocalSettings();
+      if (localSettings == null) {
+        return Map.of();
       }
+      Struct productList = localSettings.getStruct(SETTING_PRODUCT_LIST);
+      if (productList == null) {
+        return Map.of();
+      }
+      //copy struct because it may be cached and the cache MUST NEVER be modified.
+      return Map.copyOf(productList.toNestedMaps());
     } catch (NoSuchPropertyDescriptorException e) {
       //no struct configured for current content, empty map will be returned.
     }
-    return result;
+    return Map.of();
+  }
+
+  List<SearchQueryFacet> getFilterFacetQueries() {
+    // return raw filter queries ignoring the override category
+    return getFilterFacets().values().stream()
+            .flatMap(m -> m.values().stream())
+            .flatMap(List::stream)
+            .filter(s -> !s.isBlank())
+            .map(SearchQueryFacet::of)
+            .collect(Collectors.toUnmodifiableList());
+  }
+
+  private Map<String, Map<String, List<String>>> getFilterFacets() {
+    Object o = getProductListSettings().get(SETTING_FILTER_FACETS);
+    //noinspection unchecked
+    return o instanceof Map ? (Map<String, Map<String, List<String>>>) o : Map.of();
   }
 
   @NonNull
-  private Map<String, String> getSearchParams(@Nullable Category category, @Nullable CatalogAlias catalogAlias,
-                                              String orderBy, int limit, int offset, String facet) {
-    Map<String, String> params = new HashMap<>();
+  private SearchQuery buildProductSearchQuery(@Nullable CommerceId categoryId) {
+    SearchQueryBuilder searchQueryBuilder = SearchQuery.builder(getQuery(), PRODUCT)
+            .setLimit(getMaxLength())
+            .setOffset(getOffset())
+            .setIncludeResultFacets(true); //if necessary use the api which supports the facet search
 
-    //if necessary use the api which supports the facet search
-    params.put(CatalogService.SEARCH_PARAM_FACET_SUPPORT, "true");
-
-    if (!StringUtils.isEmpty(overrideCategoryId)) {
-      params.put(CatalogService.SEARCH_PARAM_CATEGORYID, overrideCategoryId);
-    } else if (category != null && !category.isRoot()) {
-      params.put(CatalogService.SEARCH_PARAM_CATEGORYID, category.getExternalTechId());
+    if (categoryId != null) {
+      searchQueryBuilder.setCategoryId(categoryId);
     }
 
-    if (catalogAlias != null && !StringUtils.isEmpty(catalogAlias.value())) {
-      params.put(CatalogService.SEARCH_PARAM_CATALOG_ALIAS, catalogAlias.value());
-    }
-
+    String orderBy = getOrderBy();
     if (!StringUtils.isEmpty(orderBy)) {
-      params.put(CatalogService.SEARCH_PARAM_ORDERBY, orderBy);
+      searchQueryBuilder.setOrderBy(OrderBy.of(orderBy));
     }
 
-    if (limit >= 0) {
-      params.put(CatalogService.SEARCH_PARAM_TOTAL, String.valueOf(limit));
+    List<SearchQueryFacet> filterFacetQueries = getFilterFacetQueries();
+    if (!filterFacetQueries.isEmpty()) {
+      // new format detected - override category is ignored
+      searchQueryBuilder.setFilterFacets(filterFacetQueries);
+    } else {
+      // legacy format detected
+      String facet = getFacet();
+      if (StringUtils.isNotEmpty(facet)) {
+        searchQueryBuilder.setFilterFacets(List.of(SearchQueryFacet.of(facet)));
+      }
     }
 
-    if (offset > 0) {
-      params.put(CatalogService.SEARCH_PARAM_OFFSET, String.valueOf(offset));
-    }
+    return searchQueryBuilder.build();
+  }
 
-    if (StringUtils.isNotEmpty(facet)) {
-      params.put(CatalogService.SEARCH_PARAM_FACET, facet);
+  @Nullable
+  @SuppressWarnings("IfStatementWithTooManyBranches")
+  private CommerceId getCategoryIdForSearchQuery(@Nullable Category category,
+                                                 @Nullable CatalogAlias catalogAlias,
+                                                 StoreContext storeContext) {
+    if (!StringUtils.isEmpty(overrideCategoryId)) {
+      return storeContext.getConnection().getIdProvider()
+              .formatCategoryTechId(catalogAlias, overrideCategoryId);
+    } else if (category != null && !category.isRoot()) {
+      return buildCopyOf(category.getId())
+              .withTechId(category.getExternalTechId())
+              .build();
+    } else {
+      return null;
     }
-
-    return params;
   }
 }

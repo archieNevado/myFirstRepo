@@ -114,13 +114,16 @@
             <editor:PropertyFieldPlugin propertyName="localSettings.overlay"/>
           </editor:plugins>
           <editor:items>
-            <editor:BooleanPropertyField propertyName="localSettings.overlay.displayTitle"
+            <editor:BooleanPropertyField itemId="displayTitle"
+                                         propertyName="localSettings.overlay.displayTitle"
                                          hideLabel="true"
                                          dontTransformToInteger="true"/>
-            <editor:BooleanPropertyField propertyName="localSettings.overlay.displayShortText"
+            <editor:BooleanPropertyField itemId="displayShortText"
+                                         propertyName="localSettings.overlay.displayShortText"
                                          hideLabel="true"
                                          dontTransformToInteger="true"/>
-            <editor:BooleanPropertyField propertyName="localSettings.overlay.displayPicture"
+            <editor:BooleanPropertyField itemId="displayPicture"
+                                         propertyName="localSettings.overlay.displayPicture"
                                          hideLabel="true"
                                          dontTransformToInteger="true"/>
           </editor:items>

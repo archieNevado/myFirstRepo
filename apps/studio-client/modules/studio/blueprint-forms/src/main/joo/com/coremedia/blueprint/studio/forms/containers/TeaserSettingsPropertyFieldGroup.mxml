@@ -27,7 +27,7 @@
     ]]></fx:Script>
 
   <editor:items>
-    <ui:StatefulCheckbox>
+    <ui:StatefulCheckbox itemId="renderLinkToDetailPage">
       <ui:plugins>
         <editor:SetPropertyLabelPlugin bindTo="{config.bindTo}"
                                        labelProperty="boxLabel"

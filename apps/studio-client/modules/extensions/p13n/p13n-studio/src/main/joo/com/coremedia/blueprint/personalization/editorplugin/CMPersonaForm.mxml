@@ -56,7 +56,7 @@ HOW TO STRUCTURE:
             title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintTabs', 'Tab_standard_title')}"
             itemId="contentTab">
       <editor:items>
-        <perso:PersonaMainContainer profileSettingsExpression="{config.bindTo.extendBy('properties.profileSettings')}">
+        <perso:PersonaMainContainer itemId="profileSettings" profileSettingsExpression="{config.bindTo.extendBy('properties.profileSettings')}">
           <perso:items>
             <!--Persona Image-->
             <editor:PropertyFieldGroup itemId="{PERSONA_IMAGE_ITEM_ID}"
@@ -78,41 +78,50 @@ HOW TO STRUCTURE:
               </editor:plugins>
               <editor:items>
                 <perso:PersonaStringPropertyField
+                        itemId="givenname"
                         fieldLabel="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationContext', 'p13n_context_testuser_profile_givenname')}"
                         propertyName="givenname"
                         propertyContext="personal"
                         emptyText="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationContext', 'p13n_context_testuser_profile_givenname_emptyText')}">
                 </perso:PersonaStringPropertyField>
                 <perso:PersonaStringPropertyField
+                        itemId="familyname"
                         fieldLabel="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationContext', 'p13n_context_testuser_profile_name')}"
                         propertyName="familyname"
                         propertyContext="personal"
                         emptyText="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationContext', 'p13n_context_testuser_profile_name_emptyText')}"/>
                 <perso:PersonaDatePropertyField
+                        itemId="dateofbirth"
                         fieldLabel="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationContext', 'p13n_context_testuser_profile_birthday')}"
                         propertyName="dateofbirth"
                         propertyContext="personal"/>
                 <perso:PersonaStringPropertyField
+                        itemId="emailaddress"
                         fieldLabel="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationContext', 'p13n_context_testuser_profile_email')}"
                         propertyName="emailaddress"
                         propertyContext="personal"/>
                 <perso:PersonaStringPropertyField
+                        itemId="numberOfComments"
                         fieldLabel="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'con_number_of_comments')}"
                         propertyName="numberOfComments"
                         propertyContext="es_check"/>
                 <perso:PersonaStringPropertyField
+                        itemId="numberOfRatings"
                         fieldLabel="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'con_number_of_ratings')}"
                         propertyName="numberOfRatings"
                         propertyContext="es_check"/>
                 <perso:PersonaStringPropertyField
+                        itemId="numberOfLikes"
                         fieldLabel="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'con_number_of_likes')}"
                         propertyName="numberOfLikes"
                         propertyContext="es_check"/>
                 <perso:PersonaStringPropertyField
+                        itemId="numberOfExplicitInterests"
                         fieldLabel="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'con_number_of_explicit_interests')}"
                         propertyName="numberOfExplicitInterests"
                         propertyContext="explicit"/>
                 <p13n:CMPersonaFormComboBoxField
+                        itemId="gender"
                         fieldLabel="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationContext', 'p13n_context_gender')}"
                         propertyName="gender"
                         propertyContext="socialuser"
@@ -120,6 +129,7 @@ HOW TO STRUCTURE:
                                                             ['male', resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'con_gender_male')],
                                                             ['female', resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'con_gender_female')]]}"/>
                 <p13n:CMPersonaFormCheckboxField
+                        itemId="userLoggedIn"
                         fieldLabel="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationPlugIn', 'con_social_background_login')}"
                         propertyName="userLoggedIn"
                         propertyContext="es_check"/>
@@ -133,6 +143,7 @@ HOW TO STRUCTURE:
               </editor:plugins>
               <editor:items>
                 <p13n:CMPersonaFormComboBoxField
+                        itemId="city"
                         fieldLabel="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationContext', 'p13n_context_location_city')}"
                         propertyName="city"
                         propertyContext="location"
@@ -151,11 +162,13 @@ HOW TO STRUCTURE:
               </editor:plugins>
               <editor:items>
                 <perso:PersonaStringPropertyField
+                        itemId="url"
                         fieldLabel="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationContext', 'p13n_context_referrer')}"
                         propertyName="url"
                         propertyContext="referrer"
                         emptyText="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationContext', 'p13n_context_referrer_emptyText')}"/>
                 <p13n:CMPersonaFormComboBoxField
+                        itemId="searchengine"
                         fieldLabel="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationContext', 'p13n_context_referrer_searchengine')}"
                         propertyName="searchengine"
                         propertyContext="referrer"
@@ -176,6 +189,7 @@ HOW TO STRUCTURE:
               <editor:items>
                 <perso:PersonaDateTimeProperty
                         fieldLabel="{resourceManager.getString('com.coremedia.blueprint.personalization.editorplugin.PersonalizationContext', 'p13n_context_testuser_profile_date_and_time')}"
+                        itemId="dateTime"
                         propertyName="dateTime"
                         propertyContext="system"/>
               </editor:items>

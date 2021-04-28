@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.coremedia.lc.studio.lib.validators.LcStudioValidationConfiguration,\
+com.coremedia.lc.studio.lib.validators.LcStudioValidatorsConfiguration,\
+com.coremedia.lc.studio.lib.validators.LcStudioValidationLegacyConfiguration
+

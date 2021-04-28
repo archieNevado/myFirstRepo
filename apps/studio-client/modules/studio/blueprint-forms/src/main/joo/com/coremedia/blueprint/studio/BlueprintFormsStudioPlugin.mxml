@@ -7,6 +7,7 @@
         xmlns="exml:ext.config"
         xmlns:ui="exml:com.coremedia.ui.config"
         xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+        xmlns:library="com.coremedia.cms.editor.sdk.collectionview.*"
         xmlns:bpforms="exml:com.coremedia.blueprint.studio.config"
         xmlns:pm="exml:com.coremedia.blueprint.base.pagegrid.config"
         xmlns:bpb-components="exml:com.coremedia.blueprint.base.components.config"
@@ -52,10 +53,12 @@
      */
     public static const ACTIONS_TOOLBAR_SEP_FIRST_ITEM_ID:String = "actionsToolbarSepFirst";
 
+    //noinspection JSUnusedLocalSymbols
     private var config:BlueprintFormsStudioPlugin;
     private var root:Content;
 
     // called by generated constructor code
+    //noinspection JSUnusedLocalSymbols
     private function __initialize__(config:BlueprintFormsStudioPlugin):void {
       root = SESSION.getConnection().getContentRepository().getRoot();
     }
@@ -301,18 +304,18 @@
         <editor:FixedSearchWidgetType id_="{EDITED_BY_ME_TYPE}"
                                       name="{ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.BlueprintStudio', 'Dashboard_standardConfiguration_lastEdited')}">
           <editor:search>
-            <editor:SearchState lastEditedBy="me"/>
+            <library:SearchState lastEditedBy="me"/>
           </editor:search>
         </editor:FixedSearchWidgetType>
 
         <editor:FixedSearchWidgetType id_="{EDITED_BY_OTHERS_TYPE}"
                                       name="{ResourceManager.getInstance().getString('com.coremedia.blueprint.studio.BlueprintStudio', 'Dashboard_standardConfiguration_editedByOthers')}">
           <editor:search>
-            <editor:SearchState editedByOthers="true"
-                                editedByMe="false"
-                                notEdited="false"
-                                approved="false"
-                                published="false"/>
+            <library:SearchState editedByOthers="true"
+                                 editedByMe="false"
+                                 notEdited="false"
+                                 approved="false"
+                                 published="false"/>
           </editor:search>
         </editor:FixedSearchWidgetType>
 

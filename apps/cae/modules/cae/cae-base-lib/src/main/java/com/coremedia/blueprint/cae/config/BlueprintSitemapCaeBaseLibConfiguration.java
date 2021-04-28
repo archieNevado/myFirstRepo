@@ -31,7 +31,6 @@ import java.util.Map;
 @ImportResource(value = {
         "classpath:/com/coremedia/cae/uapi-services.xml",
         "classpath:/com/coremedia/cae/contentbean-services.xml",
-        "classpath:/com/coremedia/cae/link-services.xml",
         "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
         "classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml",
         "classpath:/com/coremedia/blueprint/base/links/bpbase-links-services.xml",

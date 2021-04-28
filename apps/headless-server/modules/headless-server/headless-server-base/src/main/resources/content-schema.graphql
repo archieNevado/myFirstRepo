@@ -22,67 +22,117 @@ scalar RichTextTree
 
 scalar JSON
 
+"""
+The top query root
+"""
 type Query {
+  """
+  The content root.
+  """
   content: ContentRoot
 }
 
+"""
+The type `ContentRoot` combines access to all content, non commerce related queries.
+"""
 type ContentRoot {
-  content(id: String!, type: String): Content_ @fetch(from: "getContent(#id,#type)")
-  article(id: String!): CMArticle @fetch(from: "getContent(#id, 'CMArticle')")
-  picture(id: String!): CMPicture @fetch(from: "getContent(#id, 'CMPicture')")
-  page(id: String!): CMChannel
-  pageByPath(path: String!): CMChannel @fetch(from: "@pageByPathAdapter.to().getPageByPath(#path, #context['caasViewName'])")
-  queryList(id: String!): CMQueryList
-  site(siteId: String, id: String  @deprecated(reason: "Arg 'id' is deprecated. Use 'siteId' instead.")): Site
+
+  """
+  The `content` query returns any known content object from the content repository by its content `id`.
+  """
+  content(
+    """
+    The content id as `integer` or formatted as *coremedia:///cap/content/<id>*.
+    """
+    id: String!,
+    """
+    The expected content type, e.g. `CMArticle`.
+    """
+    type: String): Content_ @fetch(from: "getContent(#id,#type)")
+
+  """
+  Dedicated `article` query, returning a content object of type `CMArticle`, matching the given id.
+  """
+  article(
+    """
+    The content id as `integer` or formatted as *coremedia:///cap/content/<id>*.
+    """
+    id: String!): CMArticle @fetch(from: "getContent(#id, 'CMArticle')")
+
+  """
+  Dedicated `picture` query, returning a content object of type `CMPicture`, matching the given id.
+  """
+  picture(
+    """
+    The content id as `integer` or formatted as *coremedia:///cap/content/<id>*.
+    """
+    id: String!): CMPicture @fetch(from: "getContent(#id, 'CMPicture')")
+
+  """
+  Dedicated `page` query, returning a content object of type `CMChannel`, matching the given id.
+  """
+  page(
+    """
+    The content id as `integer` or formatted as *coremedia:///cap/content/<id>*.
+    """
+    id: String!): CMChannel
+
+  """
+  The `pageByPath` query with return type `CMChannel` provides access to any page content by its navigation path.
+  """
+  pageByPath(
+    """
+    The navigation path to the requested page. A navigation path is a concatenation of segments, separated by '/'.
+    """
+    path: String!): CMChannel @fetch(from: "@byPathAdapter.to().getPageByPath(#path, #context['caasViewName'])")
+
+  """
+  Dedicated `site` query, returning a content object of type `Site`, matching the given site id.
+  """
+  site(
+    """
+    The site id of the requested site (of type `String`).
+    """
+    siteId: String,
+    """
+    The root segment of the requested site (of type `String`).
+    """
+    rootSegment: String,
+    """
+    Deprecated! Functionally identical to `id` but badly named for `id` is already used by content objects.
+    A site id is not the same as a content id!
+    """
+    id: String  @deprecated(reason: "Arg 'id' is deprecated. Use 'siteId' instead.")): Site @fetch(from: "@byPathAdapter.to().getSite(#siteId, #rootSegment, #id)")
+
+  """
+  The `sites` query delivers an array of type `Site` of all known sites in the content repository w/o any parameter necessary.
+  """
   sites: [Site]!
-  search(query: String!, offset: Int, limit: Int, docTypes: [String], sortFields: [SortFieldWithOrder], siteId: String, includeSubTypes: Boolean): SearchResult
-    @fetch(from: "@searchServiceAdapter.to().search(#query, #offset, #limit, #docTypes, #sortFields, #siteId, #includeSubTypes)")
 }
 
-type Site {
-  id: ID!
-  name: String!
-  locale: String!
-  crops: [Crop] @fetch(from: "@imageVariantsAdapter.to(#root).crops")
-  root: CMNavigation @fetch(from: "siteRootDocument")
-  repositoryPath: String! @fetch(from: "#root.getSiteRootFolder().getPath()")
-  derivedSites: [Site!]! @fetch(from: "@localizedVariantsAdapterFactory.to().getDerivedSites(#root)")
+# interfaces alphabetically
+
+interface Banner {
+  teaserTitle: String
+  teaserText(view: String): String
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
 }
 
-type SearchResult {
-  numFound: Int!
-  result: [Content_]
-}
-
-enum SortFieldWithOrder {
-  CREATION_DATE_ASC
-  CREATION_DATE_DESC
-  DOCUMENTTYPE_ASC
-  DOCUMENTTYPE_DESC
-  EXTERNALLY_DISPLAYED_DATE_ASC
-  EXTERNALLY_DISPLAYED_DATE_DESC
-  ID_ASC
-  ID_DESC
-  MODIFICATION_DATE_ASC
-  MODIFICATION_DATE_DESC
-  TEASER_TITLE_ASC
-  TEASER_TITLE_DESC
-  TITLE_ASC
-  TITLE_DESC
-}
-
-interface Content_ {
-  id: ID!
-  creationDate: String!
-  modificationDate: String!
-  name: String!
-  type: String!
-  repositoryPath: String!
-}
-
+"""
+Models the properties of an article content object.
+"""
 interface CMArticle @inherit(from: ["CMTeasable"]) {
 }
 
+interface CMAudio @inherit(from: ["CMMedia"]) {
+  dataUrl: String
+}
+
+"""
+Models the properties of a page content object.
+"""
 interface CMChannel @inherit(from: ["CMNavigation"]) {
   header: [CMLinkable]
   footer: [CMLinkable]
@@ -100,16 +150,21 @@ interface CMDownload @inherit(from: ["CMTeasable"]) {
   filename: String
 }
 
-interface CMSpinner @inherit(from: ["CMVisual"]) {
-  sequence: [CMPicture]
-}
-
 interface CMDynamicList @inherit(from: ["CMCollection"]) {
 }
 
 interface CMExternalLink @inherit(from: ["CMTeasable"]) {
   url: String
   openInNewTab: Boolean
+}
+
+interface CMGallery @inherit(from: ["CMCollection"]) {
+  mediaItems: [CMMedia]
+}
+
+interface CMHTML @inherit(from: ["CMMedia"]) {
+  description: String
+  html: String
 }
 
 interface CMImage @inherit(from: ["CMLocalized"]) {
@@ -124,6 +179,8 @@ interface CMImageMap @inherit(from: ["CMTeaser"]) {
   hotZones: [Hotzone]
   transformedHotZones: [TransformedHotZone]
 }
+
+interface CMInteractive @inherit(from: ["CMVisual"]) {}
 
 interface CMLinkable @inherit(from: ["CMLocalized", "CollectionItem"]) {
   settings(paths: [[String!]!]!): JSON
@@ -148,10 +205,17 @@ interface CMLocalized @inherit(from: ["CMObject"]) {
   localizedVariant(language: String!, country: String, variant: String): CMLocalized
 }
 
+interface CMLocTaxonomy @inherit(from: ["CMTaxonomy"]) {
+  postcode: String
+  latitudeLongitude: String
+  locChildren: [CMLocTaxonomy]
+}
+
 interface CMMedia @inherit(from: ["CMTeasable"]) {
   alt: String
   caption(view: String): String
   captionAsTree(view: String): RichTextTree
+  captionReferencedContent(view: String): [Content_!]
   copyright: String
   data: Blob
 }
@@ -161,42 +225,10 @@ interface CMNavigation @inherit(from: ["CMTeasable", "HasPageGrid"]) {
   grid: PageGrid
   hidden: Boolean
   hiddenInSitemap: Boolean
+  parent: CMNavigation
 }
 
 interface CMObject @inherit(from: ["Content_"]) {
-}
-
-interface CMPicture @inherit(from: ["CMVisual"]) {
-  base64Images(cropNames: [String!]): [Base64Image]!
-  crops: [Crop!]!
-  uriTemplate: String
-}
-
-interface CMAudio @inherit(from: ["CMMedia"]) {
-  dataUrl: String
-}
-
-interface CMInteractive @inherit(from: ["CMVisual"]) {}
-
-interface CMTaxonomy @inherit(from: ["CMTeasable"]) {
-  value: String
-  externalReference: String
-  children: [CMTaxonomy]
-  parent: CMTaxonomy
-  pathToRoot: [CMTaxonomy]
-}
-
-interface CMLocTaxonomy @inherit(from: ["CMTaxonomy"]) {
-  postcode: String
-  latitudeLongitude: String
-  locChildren: [CMLocTaxonomy]
-}
-
-interface CMPlaceholder @inherit(from: ["CMTeasable"]) {
-}
-
-interface CMGallery @inherit(from: ["CMCollection"]) {
-  mediaItems: [CMMedia]
 }
 
 interface CMPerson @inherit(from: ["CMTeasable"]) {
@@ -208,23 +240,43 @@ interface CMPerson @inherit(from: ["CMTeasable"]) {
   jobTitle: String
 }
 
-interface CMSettings @inherit(from: ["CMLocalized"]) {
-  settings(paths: [[String]]): JSON
-  identifier: String
+"""
+Models the properties of a picture content object.
+"""
+interface CMPicture @inherit(from: ["CMVisual"]) {
+  base64Images(cropNames: [String!]): [Base64Image]!
+  crops: [Crop!]!
+  uriTemplate(imageFormat: ImageFormat): String
 }
 
-interface CMQueryList @inherit(from: ["CMDynamicList"]) {
-  pagedItems(offset: Int): [CollectionItem]
+interface CMPlaceholder @inherit(from: ["CMTeasable"]) {
 }
 
 interface CMResourceBundle @inherit(from: ["CMLocalized"]) {
   localizations: MapOfString
 }
 
+interface CMSettings @inherit(from: ["CMLocalized"]) {
+  settings(paths: [[String]]): JSON
+  identifier: String
+}
+
 interface CMSite @inherit(from: ["CMLocalized"]) {
   id: ID!
   root: CMNavigation
   settings(paths: [[String!]!]!): JSON
+}
+
+interface CMSpinner @inherit(from: ["CMVisual"]) {
+  sequence: [CMPicture]
+}
+
+interface CMTaxonomy @inherit(from: ["CMTeasable"]) {
+  value: String
+  externalReference: String
+  children: [CMTaxonomy]
+  parent: CMTaxonomy
+  pathToRoot: [CMTaxonomy]
 }
 
 interface CMTeasable @inherit(from: ["CMLinkable", "Detail", "Banner"]) {
@@ -234,13 +286,14 @@ interface CMTeasable @inherit(from: ["CMLinkable", "Detail", "Banner"]) {
   teaserTarget: CMLinkable
   teaserTargets: [ExtendedTeaserTarget]
   teaserTextAsTree(view: String): RichTextTree
+  teaserTextReferencedContent(view: String): [Content_!]
   video: CMVideo
   videos: [CMVideo]
   spinner: CMSpinner
+  root: CMNavigation
 }
 
 interface CMTeaser @inherit(from: ["CMTeasable"]) {
-  target: CMLinkable
 }
 
 interface CMVideo @inherit(from: ["CMVisual"]) {
@@ -253,7 +306,48 @@ interface CMVisual @inherit(from: ["CMMedia"]) {
   width: Int
 }
 
+interface CollectionItem {
+  remoteLink(siteId:String, context:String): String!
+}
+
+interface Content_ {
+  id: ID!
+  creationDate: String!
+  modificationDate: String!
+  name: String!
+  type: String!
+  repositoryPath: String!
+}
+
+interface Detail {
+  detailText(view: String): String
+  detailTextAsTree(view: String): RichTextTree
+  detailTextReferencedContent(view: String): [Content_!]
+}
+
+interface HasPageGrid {
+  grid: PageGrid
+}
+
+# types alphabetically
+
+type Base64Image {
+  cropName: String!
+  base64: String
+}
+
+type Blob {
+  contentType: String!
+  size: Int!
+  eTag: String!
+  uri: String @fetch(from: "@uriLinkComposer.apply(#root)")
+}
+
 type CMArticleImpl implements CMArticle @inherit(from: ["CMTeasableImpl"]) {
+}
+
+type CMAudioImpl implements CMAudio @inherit(from: ["CMMediaImpl"]) {
+  dataUrl: String
 }
 
 type CMChannelImpl implements CMChannel @inherit(from: ["CMNavigationImpl"]) {
@@ -274,10 +368,6 @@ type CMCollectionImpl implements CMCollection @inherit(from: ["CMTeasableImpl"])
   detailItems: [Detail] @fetch(from: "#this.items")
 }
 
-type CMSpinnerImpl implements CMSpinner @inherit(from: ["CMVisualImpl"]) {
-  sequence: [CMPicture]
-}
-
 type CMDownloadImpl implements CMDownload @inherit(from: ["CMTeasableImpl"]) {
   data: Blob @fetch(from: "@contentBlobAdapter.to(#root, 'data')")
   filename: String
@@ -289,6 +379,15 @@ type CMDynamicListImpl implements CMDynamicList @inherit(from: ["CMCollectionImp
 type CMExternalLinkImpl implements CMExternalLink @inherit(from: ["CMTeasableImpl"]) {
   url: String
   openInNewTab: Boolean @fetch(from:"openInNewTab?:false")
+}
+
+type CMGalleryImpl implements CMGallery @inherit(from: ["CMCollectionImpl"]) {
+  mediaItems: [CMMedia] @fetch(from: "#this.items")
+}
+
+type CMHTMLImpl implements CMHTML @inherit(from: ["CMMediaImpl"]) {
+  description: String
+  html: String @fetch(from: "@htmlAdapterFactory.to().toHtml(#this, 'data')")
 }
 
 type CMImageImpl implements CMImage @inherit(from: ["CMLocalizedImpl"]) {
@@ -303,6 +402,8 @@ type CMImageMapImpl implements CMImageMap @inherit(from: ["CMTeaserImpl"]) {
   hotZones: [Hotzone] @fetch(from: "localSettings?.get('image-map')")
   transformedHotZones: [TransformedHotZone] @fetch(from: "@hotZonesAdapter.to(#root).transformedHotZones")
 }
+
+type CMInteractiveImpl implements CMInteractive @inherit(from: ["CMVisualImpl"]) {}
 
 type CMLinkableImpl implements CMLinkable @inherit(from: ["CMLocalizedImpl"]) {
   settings(paths: [[String!]!]!): JSON @fetch(from: "@settingsAdapter.to(#root).getWrappedInMap(#paths)")
@@ -328,10 +429,17 @@ type CMLocalizedImpl implements CMLocalized @inherit(from: ["CMObjectImpl"]) {
   localizedVariant(language: String!, country: String, variant: String): CMLocalized @fetch(from: "@localizedVariantsAdapterFactory.to().getLocalizationForLocale(#root, #language, #country, #variant)")
 }
 
+type CMLocTaxonomyImpl implements CMLocTaxonomy @inherit(from: ["CMTaxonomyImpl"]) {
+  postcode: String
+  latitudeLongitude: String
+  locChildren: [CMLocTaxonomy] @fetch(from: "#this.children")
+}
+
 type CMMediaImpl implements CMMedia @inherit(from: ["CMTeasableImpl"]) {
   alt: String
   caption(view: String): String
   captionAsTree(view: String): RichTextTree @fetch(from: "caption?.view(#view?:'default')")
+  captionReferencedContent(view: String): [Content_!] @fetch(from: "caption?.view(#view?:'default')?.getReferencedContent()")
   copyright: String
   data: Blob @fetch(from: "@contentBlobAdapter.to(#root, 'data')")
 }
@@ -341,44 +449,11 @@ type CMNavigationImpl implements CMNavigation @inherit(from: ["CMTeasableImpl"])
   grid: PageGrid @fetch(from: "@pageGridAdapter.to(#root,'placement')")
   hidden: Boolean
   hiddenInSitemap: Boolean
+  parent: CMNavigation @fetch(from: "@navigationAdapter.to(#root).parent")
+  root: CMNavigation @fetch(from: "@navigationAdapter.to(#root).root")
 }
 
 type CMObjectImpl implements CMObject @inherit(from: ["Content_Impl"]) {
-}
-
-type CMPictureImpl implements CMPicture @inherit(from: ["CMVisualImpl"]) {
-  base64Images(cropNames: [String!]): [Base64Image]!  @fetch(from: "@responsiveMediaAdapter.to(#root, 'data').base64Images(#cropNames)")
-  crops: [Crop!]!  @fetch(from:"@responsiveMediaAdapter.to(#root, 'data').crops" )
-  picture: CMPicture @fetch(from: "#root")
-  pictures: [CMPicture] @fetch(from: "{#root}")
-  uriTemplate: String! @fetch(from: "@uriLinkComposer.apply(@responsiveMediaAdapter.to(#root, 'data'))")
-}
-
-type CMAudioImpl implements CMAudio @inherit(from: ["CMMediaImpl"]) {
-  dataUrl: String
-}
-
-type CMInteractiveImpl implements CMInteractive @inherit(from: ["CMVisualImpl"]) {}
-
-type CMTaxonomyImpl implements CMTaxonomy @inherit(from: ["CMTeasableImpl"]) {
-  value: String
-  externalReference: String
-  children: [CMTaxonomy]
-  parent: CMTaxonomy @fetch(from: "@navigationAdapter.to(#this).getParent()")
-  pathToRoot: [CMTaxonomy] @fetch(from: "@navigationAdapter.to(#this).getPathToRoot()")
-}
-
-type CMLocTaxonomyImpl implements CMLocTaxonomy @inherit(from: ["CMTaxonomyImpl"]) {
-  postcode: String
-  latitudeLongitude: String
-  locChildren: [CMLocTaxonomy] @fetch(from: "#this.children")
-}
-
-type CMPlaceholderImpl implements CMPlaceholder @inherit(from: ["CMTeasableImpl"]) {
-}
-
-type CMGalleryImpl implements CMGallery @inherit(from: ["CMCollectionImpl"]) {
-  mediaItems: [CMMedia] @fetch(from: "#this.items")
 }
 
 type CMPersonImpl implements CMPerson @inherit(from: ["CMTeasableImpl"]) {
@@ -390,21 +465,24 @@ type CMPersonImpl implements CMPerson @inherit(from: ["CMTeasableImpl"]) {
   jobTitle: String
 }
 
-type CMSettingsImpl implements CMSettings @inherit(from: ["CMLocalizedImpl"]) {
-  settings(paths: [[String]]): JSON @fetch(from: "#paths == null ? #this.settings : @structAdapter.to(#root).getWrappedInMap('settings',#paths, null)")
-  identifier: String @fetch(from: "#this.identifier?:#this.name")
+type CMPictureImpl implements CMPicture @inherit(from: ["CMVisualImpl"]) {
+  base64Images(cropNames: [String!]): [Base64Image]!  @fetch(from: "@responsiveMediaAdapter.to(#root, 'data').base64Images(#cropNames)")
+  crops: [Crop!]!  @fetch(from:"@responsiveMediaAdapter.to(#root, 'data').crops" )
+  picture: CMPicture @fetch(from: "#root")
+  pictures: [CMPicture] @fetch(from: "{#root}")
+  uriTemplate(imageFormat: ImageFormat): String! @fetch(from: "@uriLinkComposer.apply(@responsiveMediaAdapter.to(#root, 'data', #imageFormat))")
 }
 
-type CMQueryListImpl implements CMQueryList @inherit(from: ["CMDynamicListImpl"]) {
-  items: [CollectionItem] @fetch(from: "@queryListAdapter.to(#root, null).getItems()")
-  pagedItems(offset: Int): [CollectionItem] @fetch(from: "@queryListAdapter.to(#root, #offset).getItems()")
-  teasableItems: [CMTeasable] @fetch(from: "@queryListAdapter.to(#root, null).getItems()")
-  bannerItems: [Banner]  @fetch(from: "@queryListAdapter.to(#root, null).getItems()")
-  detailItems: [Detail]  @fetch(from: "@queryListAdapter.to(#root, null).getItems()")
+type CMPlaceholderImpl implements CMPlaceholder @inherit(from: ["CMTeasableImpl"]) {
 }
 
 type CMResourceBundleImpl implements CMResourceBundle @inherit(from: ["CMLocalizedImpl"]) {
   localizations: MapOfString
+}
+
+type CMSettingsImpl implements CMSettings @inherit(from: ["CMLocalizedImpl"]) {
+  settings(paths: [[String]]): JSON @fetch(from: "#paths == null ? #this.settings : @structAdapter.to(#root).getWrappedInMap('settings',#paths, null)")
+  identifier: String @fetch(from: "#this.identifier?:#this.name")
 }
 
 type CMSiteImpl implements CMSite @inherit(from: ["CMLocalizedImpl"]) {
@@ -413,16 +491,31 @@ type CMSiteImpl implements CMSite @inherit(from: ["CMLocalizedImpl"]) {
   settings(paths: [[String!]!]!): JSON @fetch(from: "@settingsAdapter.to(#root).getWrappedInMap(#paths)")
 }
 
+type CMSpinnerImpl implements CMSpinner @inherit(from: ["CMVisualImpl"]) {
+  sequence: [CMPicture]
+}
+
+type CMTaxonomyImpl implements CMTaxonomy @inherit(from: ["CMTeasableImpl"]) {
+  value: String
+  externalReference: String
+  children: [CMTaxonomy]
+  parent: CMTaxonomy @fetch(from: "@navigationAdapter.to(#this).getParent()")
+  pathToRoot: [CMTaxonomy] @fetch(from: "@navigationAdapter.to(#this).getPathToRoot()")
+}
+
 type CMTeasableImpl implements CMTeasable @inherit(from: ["CMLinkableImpl"]) {
   authors: [CMTeasable]
   detailText(view: String): String @fetch(from: "detailText?.view(#view?:'default')")
   detailTextAsTree(view: String): RichTextTree @fetch(from: "detailText?.view(#view?:'default')")
+  detailTextReferencedContent(view: String): [Content_!] @fetch(from: "detailText?.view(#view?:'default')?.getReferencedContent()")
   related: [CMTeasable]
   teaserOverlaySettings: TeaserOverlaySettings @fetch(from: "#root")
   teaserTarget: CMLinkable @fetch(from: "#root")
   teaserTargets: [ExtendedTeaserTarget] @fetch(from: "{{target: #root, callToActionHash: '',callToActionEnabled: !@settingsAdapter.to(#root).get({'callToActionDisabled'}, false), callToActionCustomText: @settingsAdapter.to(#root).get({'callToActionCustomText'}, '')}}")
   teaserText(view: String): String  @fetch(from: "(teaserText?.nullIfEmpty()?:(@settingsAdapter.to(#root).get({'teaserOverlay', 'enabled'}, false) == true) ? null : detailText)?.view(#view?:'simplified')")
   teaserTextAsTree(view: String): RichTextTree @fetch(from: "(teaserText?.nullIfEmpty()?:(@settingsAdapter.to(#root).get({'teaserOverlay', 'enabled'}, false) == true) ? null : detailText)?.view(#view?:'simplified')")
+  teaserTextReferencedContent(view: String): [Content_!] @fetch(from: "(teaserText?.nullIfEmpty()?:(@settingsAdapter.to(#root).get({'teaserOverlay', 'enabled'}, false) == true) ? null : detailText)?.view(#view?:'simplified')?.getReferencedContent()")
+
   teaserTitle: String @fetch(from:"teaserTitle?:title")
 
   media: [CMMedia] @fetch(from: "@mediaLinkListAdapter.to(#root).list()")
@@ -435,10 +528,11 @@ type CMTeasableImpl implements CMTeasable @inherit(from: ["CMLinkableImpl"]) {
 
   spinner: CMSpinner @fetch(from: "@mediaLinkListAdapter.to(#root, 'CMSpinner').first()")
   spinners: [CMSpinner] @fetch(from: "@mediaLinkListAdapter.to(#root, 'CMSpinner').list()")
+
+  root: CMNavigation @fetch(from: "@navigationAdapter.to(#root).root")
 }
 
 type CMTeaserImpl implements CMTeaser @inherit(from: ["CMTeasableImpl"]) {
-  target: CMLinkable @fetch(from: "#first(targets?.links?:target)")
   teaserTarget: CMLinkable @fetch(from: "@teaserTargetsAdapter.to(#root).target")
   teaserTargets: [ExtendedTeaserTarget]  @fetch(from: "@teaserTargetsAdapter.to(#root).extendedTargets")
 
@@ -464,13 +558,6 @@ type CMVisualImpl implements CMVisual @inherit(from: ["CMMediaImpl"]) {
   dataUrl: String
   height: Int
   width: Int
-}
-
-type Blob {
-  contentType: String!
-  size: Int!
-  eTag: String!
-  uri: String @fetch(from: "@uriLinkComposer.apply(#root)")
 }
 
 type Content_Impl implements Content_ {
@@ -531,12 +618,6 @@ type PageGrid {
   id: ID! @fetch(from: "@contentIdProvider.apply(#root.navigation)")
 }
 
-type PageGridRow {
-  placements: [PageGridPlacement!]
-  id: ID! @fetch(from: "@contentIdProvider.apply(#root.navigation)")
-  rowId: Int!
-}
-
 type PageGridPlacement {
   name: String!
   column: Int!
@@ -547,9 +628,28 @@ type PageGridPlacement {
   id: ID @fetch(from: "@contentIdProvider.apply(#root.navigation)")
 }
 
+type PageGridRow {
+  placements: [PageGridPlacement!]
+  id: ID! @fetch(from: "@contentIdProvider.apply(#root.navigation)")
+  rowId: Int!
+}
+
 type Point {
   x: Float
   y: Float
+}
+
+"""
+Models the properties of a site object.
+"""
+type Site {
+  id: ID!
+  name: String!
+  locale: String!
+  crops: [Crop] @fetch(from: "@imageVariantsAdapter.to(#root).crops")
+  root: CMNavigation @fetch(from: "siteRootDocument")
+  repositoryPath: String! @fetch(from: "#root.getSiteRootFolder().getPath()")
+  derivedSites: [Site!]! @fetch(from: "@localizedVariantsAdapterFactory.to().getDerivedSites(#root)")
 }
 
 type TeaserOverlaySettings {
@@ -581,28 +681,11 @@ type TransformedHotZone {
   target: String
 }
 
-type Base64Image {
-  cropName: String!
-  base64: String
-}
+# enums alphabetically
 
-interface Detail {
-  detailText(view: String): String
-  detailTextAsTree(view: String): RichTextTree
-}
-
-interface CollectionItem {
-  remoteLink(siteId:String, context:String): String!
-}
-
-interface Banner {
-  teaserTitle: String
-  teaserText(view: String): String
-  media: [CMMedia]
-  picture: CMPicture
-  pictures: [CMPicture]
-}
-
-interface HasPageGrid {
-  grid: PageGrid
+enum ImageFormat {
+  JPG
+  JPEG
+  PNG
+  GIF
 }

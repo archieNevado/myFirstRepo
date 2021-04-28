@@ -13,5 +13,6 @@
 
   <modules>
     <module>am-contentbeans</module>
+    <module>am-validators</module>
   </modules>
 </project>

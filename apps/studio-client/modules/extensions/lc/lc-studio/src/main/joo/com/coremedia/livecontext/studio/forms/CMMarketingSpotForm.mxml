@@ -30,7 +30,8 @@
                 title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'CMMarketingSpot_text')}"
                 itemId="cmMarketingSpotExternalIdForm">
           <editor:items>
-            <ec:CatalogLinkPropertyField propertyName="externalId"
+            <ec:CatalogLinkPropertyField itemId="externalId"
+                                         propertyName="externalId"
                                          maxCardinality="1"
                                          replaceOnDrop="true"
                                          linkTypeNames="{[CatalogModel.TYPE_MARKETING_SPOT]}"

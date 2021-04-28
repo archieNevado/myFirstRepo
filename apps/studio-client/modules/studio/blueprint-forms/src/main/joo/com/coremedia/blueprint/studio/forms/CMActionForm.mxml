@@ -27,8 +27,10 @@
         <editor:PropertyFieldGroup itemId="cmActionIdForm"
                                    title="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMAction_text')}">
           <editor:items>
-            <editor:StringPropertyField propertyName="id"/>
-            <editor:StringPropertyField propertyName="type"/>
+            <editor:StringPropertyField propertyName="id"
+                                        itemId="id"/>
+            <editor:StringPropertyField propertyName="type"
+                                        itemId="type"/>
           </editor:items>
         </editor:PropertyFieldGroup>
         <bpforms:MediaDocumentForm/>

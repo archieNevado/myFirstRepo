@@ -36,7 +36,8 @@
   </fx:Declarations>
 
   <editor:items>
-    <editor:LinkListPropertyField propertyName="authors"
+    <editor:LinkListPropertyField itemId="authors"
+                                  propertyName="authors"
                                   hideLabel="true"
                                   showThumbnails="true">
       <editor:additionalToolbarItems>

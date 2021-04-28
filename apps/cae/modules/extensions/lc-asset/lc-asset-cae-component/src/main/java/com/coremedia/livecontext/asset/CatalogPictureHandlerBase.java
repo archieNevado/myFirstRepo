@@ -118,7 +118,7 @@ public class CatalogPictureHandlerBase extends HandlerBase {
       return Optional.empty();
     }
 
-    List<Content> pictures = assetService.findPictures(id, true);
+    List<Content> pictures = assetService.findPictures(id, true, site.getId());
 
     if (pictures.size() > 1) {
       LOG.debug("More than one CMPicture found for the catalog object with the id {} in the site {}", id,

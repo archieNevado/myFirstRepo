@@ -14,17 +14,7 @@
 
   <context:annotation-config />
 
-  <import resource="classpath:/com/coremedia/cache/cache-services.xml"/>
-
   <bean class="com.coremedia.blueprint.cae.config.BlueprintViewsCaeBaseLibConfiguration"/>
-
-  <bean id="mergedCodeResourcesViewBase" abstract="true">
-    <description>
-      Abstract super bean of merged code views.
-    </description>
-    <property name="xmlFilterFactory" ref="cmRichtextToHtmlFilterFactory"/>
-    <property name="cache" ref="cache"/>
-  </bean>
 
   <customize:append id="addViewlookupExcludes" bean="viewLookupPredicate" property="excludes"
                     enabled="${cae.view.filter-lookup-by-predicate:true}">

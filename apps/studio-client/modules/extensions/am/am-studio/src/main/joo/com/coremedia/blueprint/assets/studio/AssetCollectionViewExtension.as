@@ -8,9 +8,9 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.content.ContentTypeNames;
 import com.coremedia.cap.content.search.SearchParameters;
-import com.coremedia.cms.editor.sdk.ContentTreeRelation;
 import com.coremedia.cms.editor.sdk.collectionview.RepositoryCollectionViewExtension;
 import com.coremedia.cms.editor.sdk.collectionview.search.ContentTypeSelectorBase;
+import com.coremedia.cms.editor.sdk.collectionview.search.IssuesFilterPanel;
 import com.coremedia.cms.editor.sdk.collectionview.search.LastEditedFilterPanel;
 import com.coremedia.cms.editor.sdk.collectionview.search.SearchQueryUtil;
 import com.coremedia.cms.editor.sdk.collectionview.search.StatusFilterPanel;
@@ -21,37 +21,14 @@ public class AssetCollectionViewExtension extends RepositoryCollectionViewExtens
 
   [ArrayElementType("Object")]
   private var availableSearchTypes:Array;
-  private var assetTreeRelation:ContentTreeRelation;
 
   public function AssetCollectionViewExtension() {
+    super();
     this.availableSearchTypes = computeAvailableSearchTypes();
-    assetTreeRelation = new AssetTreeRelation();
   }
 
   override public function isUploadDisabledFor(folder:Object):Boolean {
     return true;
-  }
-
-  override public function getContentTreeRelation():ContentTreeRelation {
-    return assetTreeRelation;
-  }
-
-  override public function isApplicable(model:Object):Boolean {
-    var content:Content = model as Content;
-    if (!content) {
-      return false;
-    }
-
-    var path:String = content.getPath();
-    if (path === undefined) {
-      return undefined;
-    }
-
-    if (path) {
-      return path.indexOf(AssetConstants.ASSET_LIBRARY_PATH) === 0;
-    }
-
-    return false;
   }
 
   override public function getEnabledSearchFilterIds(model:Object):Array {
@@ -65,7 +42,8 @@ public class AssetCollectionViewExtension extends RepositoryCollectionViewExtens
       'Asset Download Portal',
       'rightsChannels',
       'rightsRegions',
-      ExpirationDateFilterPanel.FILTER_ID
+      ExpirationDateFilterPanel.FILTER_ID,
+      IssuesFilterPanel.FILTER_ID
     ];
   }
 
@@ -82,7 +60,7 @@ public class AssetCollectionViewExtension extends RepositoryCollectionViewExtens
             });
 
     var excludeDoctypesQuery:String = SearchQueryUtil.buildExcludeContentTypesQuery(docTypeExclusions);
-    searchParameters.filterQuery = [filterQueryFragments.join(" AND ")];
+    searchParameters.filterQuery = Array.from(filterQueryFragments);
     searchParameters.filterQuery.push(excludeDoctypesQuery);
 
     return searchParameters;

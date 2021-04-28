@@ -45,6 +45,7 @@
             <ec:CatalogLinkPropertyField bindTo="{config.bindTo}"
                                          maxCardinality="1"
                                          replaceOnDrop="true"
+                                         itemId="externalId"
                                          propertyName="externalId"
                                          linkTypeNames="{[CatalogModel.TYPE_PRODUCT]}"
                                          dropAreaText="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Product_Link_empty_text')}"/>
@@ -60,6 +61,7 @@
                                    title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'CMProductTeaser_localSettings.shopNow_text')}">
           <editor:items>
             <livecontext:ViewSettingsRadioGroup propertyName="localSettings.view.settings"
+                                                itemId="viewSettings"
                                                 hideLabel="true"/>
           </editor:items>
         </editor:PropertyFieldGroup>

@@ -30,11 +30,14 @@
                                    propertyNames="{['value','externalReference','postcode']}">
           <editor:items>
             <editor:StringPropertyField bindTo="{config.bindTo}"
-                                        propertyName="value"/>
+                                        propertyName="value"
+                                        itemId="value"/>
             <editor:StringPropertyField bindTo="{config.bindTo}"
-                                        propertyName="externalReference"/>
+                                        propertyName="externalReference"
+                                        itemId="externalReference"/>
             <editor:StringPropertyField bindTo="{config.bindTo}"
-                                        propertyName="postcode"/>
+                                        propertyName="postcode"
+                                        itemId="postcode"/>
           </editor:items>
         </editor:PropertyFieldGroup>
         <bpforms:CollapsibleStringPropertyForm propertyName="latitudeLongitude"

@@ -88,11 +88,6 @@
 
     <!-- TEST -->
     <dependency>
-      <groupId>com.coremedia.elastic.core</groupId>
-      <artifactId>core-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>cap-client-xml</artifactId>
       <scope>test</scope>

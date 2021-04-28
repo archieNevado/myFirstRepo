@@ -2,15 +2,17 @@ package com.coremedia.livecontext.studio.components.link {
 import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
-import com.coremedia.cms.editor.sdk.util.IContentAwareLinkListWrapper;
-import com.coremedia.cms.editor.sdk.util.LinkListUtil;
+import com.coremedia.cap.undoc.content.ContentUtil;
 import com.coremedia.cms.editor.sdk.util.LinkListWrapperBase;
 import com.coremedia.cms.editor.sdk.util.PropertyEditorUtil;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
+import com.coremedia.ecommerce.studio.model.Product;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 
-public class CatalogAssetsLinkListWrapper extends LinkListWrapperBase implements IContentAwareLinkListWrapper {
+import js.Promise;
+
+public class CatalogAssetsLinkListWrapper extends LinkListWrapperBase {
 
   [Bindable]
   public var bindTo:ValueExpression;
@@ -40,15 +42,18 @@ public class CatalogAssetsLinkListWrapper extends LinkListWrapperBase implements
     return linksVE;
   }
 
-  override public function acceptsLinks(links:Array):Boolean {
+  override public function acceptsLinks(links:Array, replaceLinks:Boolean = false):Boolean {
+    if (links.length > (replaceLinks ? getTotalCapacity() : getFreeCapacity())) {
+      return false;
+    }
     for each (var asset:Content in links) {
       if (!(asset is Content)) {
         return false;
       }
 
       //check the content type
-      var typeAccepted:Boolean = assetContentTypes.some(function(assetContentType:String):Boolean {
-        return LinkListUtil.containsContentNotMatchingType(getContentType(assetContentType), [asset]) === null;
+      var typeAccepted:Boolean = assetContentTypes.some(function (assetContentType:String):Boolean {
+        return ContentUtil.filterMatchingTypes(getContentType(assetContentType), [asset], true).length === 0;
       });
       if (!typeAccepted) {
         return false;
@@ -66,14 +71,25 @@ public class CatalogAssetsLinkListWrapper extends LinkListWrapperBase implements
     return value === undefined ? undefined : value as Array;
   }
 
-  override public function setLinks(links:Array):void {
+  override public function setLinks(links:Array):Promise {
     if (links) {
-      for each (var content:Content in links) {
-        if (!PropertyEditorUtil.isReadOnly(content)) {
-          CatalogHelper.getInstance().createOrUpdateProductListStructs(ValueExpressionFactory.createFromValue(content),
-                  bindTo.getValue());
+      return new Promise(function (resolve:Function):void {
+        var promises:Array = [];
+        for each (var content:Content in links) {
+          if (!PropertyEditorUtil.isReadOnly(content)) {
+            promises.push(CatalogHelper.getInstance().createOrUpdateProductListStructs(ValueExpressionFactory.createFromValue(content),
+                    bindTo.getValue()));
+          }
         }
-      }
+
+        Promise.all(promises).then(function (results:Array):void {
+          resolve(results.filter(function (product:Product):Boolean {
+            return product !== null;
+          }));
+        })
+      });
+    } else {
+      return Promise.resolve([]);
     }
   }
 
@@ -91,28 +107,6 @@ public class CatalogAssetsLinkListWrapper extends LinkListWrapperBase implements
 
   private static function getContentType(linkTypeName:String):ContentType {
     return SESSION.getConnection().getContentRepository().getContentType(linkTypeName) as ContentType;
-  }
-
-  public function isAccepted(contentType:ContentType):Boolean {
-    var allowedContentTypes:Array = getAllowedContentType(assetContentTypes);
-    return allowedContentTypes.some(function (allowedContentType: ContentType): Boolean {
-      return contentType.isSubtypeOf(allowedContentType);
-    });
-  }
-
-  public function getOwnerContent():Content {
-    return bindTo.getValue() as Content;
-  }
-
-  private static function getAllowedContentType(contentTypeNames: Array): Array {
-    var allowedContentTypes: Array = [];
-    for (var allowedContentType:String in contentTypeNames) {
-      var contentType:ContentType = getContentType(allowedContentType);
-      if(contentType) {
-        allowedContentTypes.push(contentType);
-      }
-    }
-    return allowedContentTypes;
   }
 }
 }

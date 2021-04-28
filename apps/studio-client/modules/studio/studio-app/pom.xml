@@ -64,13 +64,5 @@
         <jooProxyTargetUri>https://studio.${installation.host}</jooProxyTargetUri>
       </properties>
     </profile>
-
-    <profile>
-      <id>with-studio-apps</id>
-
-      <dependencies>
-        <!-- Put any dependencies here that are only for a Studio with apps-->
-      </dependencies>
-    </profile>
   </profiles>
 </project>

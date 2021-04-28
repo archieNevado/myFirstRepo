@@ -6,19 +6,16 @@ import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
-import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.configuration.CaeConfigurationProperties;
-import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.test.context.ActiveProfiles;
@@ -47,14 +44,7 @@ public class NavigationResolverTest {
           DeliveryConfigurationProperties.class,
           CaeConfigurationProperties.class
   })
-  @ImportResource(
-          value = {
-                  "classpath:/framework/spring/blueprint-contentbeans.xml",
-                  "classpath:/framework/spring/blueprint-handlers.xml",
-          },
-          reader = ResourceAwareXmlBeanDefinitionReader.class
-  )
-  @Import(XmlRepoConfiguration.class)
+  @Import(HandlerTestConfiguration.class)
   @Profile(PROFILE)
   public static class LocalConfig {
     public static final String PROFILE = "NavigationResolverTest";

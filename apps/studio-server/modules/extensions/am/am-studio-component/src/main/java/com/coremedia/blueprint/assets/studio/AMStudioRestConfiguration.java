@@ -1,16 +1,13 @@
 package com.coremedia.blueprint.assets.studio;
+import com.coremedia.blueprint.assets.AssetManagementConfigurationProperties;
 import com.coremedia.blueprint.assets.studio.intercept.LinkedAssetMetadataExtractorInterceptor;
 import com.coremedia.blueprint.assets.studio.intercept.UpdateAssetMetadataWriteInterceptor;
 import com.coremedia.blueprint.assets.studio.upload.AMDoctypeRewriteUploadInterceptor;
-import com.coremedia.blueprint.assets.studio.validation.AssetMetadataValidator;
+import com.coremedia.blueprint.assets.studio.validation.AssetValidatorsConfiguration;
 import com.coremedia.blueprint.base.rest.BlueprintBaseStudioRestConfiguration;
-import com.coremedia.blueprint.base.rest.config.ConfigurationService;
-import com.coremedia.cap.common.CapConnection;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
-import com.coremedia.rest.cap.config.StudioConfigurationProperties;
 import com.coremedia.rest.cap.configuration.ConfigurationPublisher;
-import com.coremedia.rest.cap.validation.ContentTypeValidator;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -19,14 +16,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
-import java.util.Collections;
-
 @Configuration(proxyBeanMethods = false)
 @ImportResource(value = {"classpath:/com/coremedia/cap/common/uapi-services.xml"},
         reader = ResourceAwareXmlBeanDefinitionReader.class)
-@Import({BlueprintBaseStudioRestConfiguration.class})
+@Import({
+        AssetValidatorsConfiguration.class,
+        BlueprintBaseStudioRestConfiguration.class
+})
 @EnableConfigurationProperties({
-        StudioConfigurationProperties.class
+        AssetManagementConfigurationProperties.class
 })
 public class AMStudioRestConfiguration {
 
@@ -86,42 +84,16 @@ public class AMStudioRestConfiguration {
     return linkedAssetMetadataExtractorInterceptor;
   }
 
-  @Bean
-  AssetManagementConfiguration assetManagementConfiguration(StudioConfigurationProperties studioConfigurationProperties) {
-    AssetManagementConfiguration assetManagementConfiguration = new AssetManagementConfiguration();
-    assetManagementConfiguration.setSettingsDocument(studioConfigurationProperties.getAssets().getSettingsDocument());
-    return assetManagementConfiguration;
-  }
-
-  /**
-   * Validator for AMAsset content.
-   */
-  @Bean
-  ContentTypeValidator amAssetValidator(ConfigurationService configurationService,
-                                        CapConnection connection,
-                                        AssetManagementConfiguration assetManagementConfiguration) {
-    ContentTypeValidator contentTypeValidator = new ContentTypeValidator();
-    contentTypeValidator.setConnection(connection);
-    contentTypeValidator.setContentType("AMAsset");
-    contentTypeValidator.setValidatingSubtypes(true);
-
-    AssetMetadataValidator assetMetadataValidator = new AssetMetadataValidator();
-    assetMetadataValidator.setMetadataProperty("metadata");
-    assetMetadataValidator.setConfigurationService(configurationService);
-    assetMetadataValidator.setAssetManagementConfiguration(assetManagementConfiguration);
-    contentTypeValidator.setValidators(Collections.singletonList(assetMetadataValidator));
-
-    return contentTypeValidator;
-  }
-
   /**
    * Makes the asset management configuration available on client at
    * editorContext.getConfiguration().assetManagement.
    */
   @Bean
-  ConfigurationPublisher assetManagementConfigurationPublisher(AssetManagementConfiguration assetManagementConfiguration) {
+  ConfigurationPublisher assetManagementConfigurationPublisher(AssetManagementConfigurationProperties assetManagementConfigurationProperties) {
     ConfigurationPublisher configurationPublisher = new ConfigurationPublisher();
     configurationPublisher.setName("assetManagement");
+    AssetManagementConfiguration assetManagementConfiguration = new AssetManagementConfiguration();
+    assetManagementConfiguration.setSettingsDocument(assetManagementConfigurationProperties.getSettingsDocument());
     configurationPublisher.setConfiguration(assetManagementConfiguration);
     return configurationPublisher;
   }

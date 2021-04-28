@@ -1,14 +1,15 @@
 package com.coremedia.blueprint.ecommerce.cae;
 
 import com.coremedia.blueprint.base.links.UriConstants;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractStoreContextProvider;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
 import com.coremedia.cap.multisite.Site;
-import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -40,8 +42,8 @@ public class AbstractCommerceContextInterceptorTest {
   @Spy
   private AbstractCommerceContextInterceptor testling;
 
-  @Spy
-  private AbstractStoreContextProvider storeContextProvider;
+  @Mock
+  private StoreContextProvider storeContextProvider;
 
   // --- setup ------------------------------------------------------
 
@@ -58,6 +60,11 @@ public class AbstractCommerceContextInterceptorTest {
     when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(commerceConnection));
 
     testling.setCommerceConnectionInitializer(commerceConnectionInitializer);
+
+    when(storeContextProvider.buildContext(any())).thenAnswer(invocationOnMock -> {
+      Object argument = invocationOnMock.getArgument(0);
+      return StoreContextBuilderImpl.from((StoreContextImpl) argument);
+    });
   }
 
   // --- tests ------------------------------------------------------

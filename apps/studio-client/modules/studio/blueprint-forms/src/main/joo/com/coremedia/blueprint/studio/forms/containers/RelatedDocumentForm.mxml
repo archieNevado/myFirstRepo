@@ -21,7 +21,8 @@
     ]]></fx:Script>
 
   <editor:items>
-    <editor:LinkListPropertyField propertyName="related"
+    <editor:LinkListPropertyField itemId="related"
+                                  propertyName="related"
                                   hideLabel="true"
                                   showThumbnails="true">
       <editor:additionalToolbarItems>

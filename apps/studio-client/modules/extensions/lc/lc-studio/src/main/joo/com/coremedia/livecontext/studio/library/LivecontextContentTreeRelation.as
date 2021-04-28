@@ -4,7 +4,7 @@ import com.coremedia.cap.content.ContentType;
 import com.coremedia.cms.editor.sdk.RepositoryContentTreeRelation;
 
 /**
- * Content Tree relation that cares only for augmented categories.
+ * Content Tree relation that cares only for augmented categories and products.
  */
 public class LivecontextContentTreeRelation extends RepositoryContentTreeRelation {
 
@@ -13,7 +13,7 @@ public class LivecontextContentTreeRelation extends RepositoryContentTreeRelatio
   }
 
   override public function leafNodeType():String {
-    return "CMExternalChannel";
+    return "CMExternalProduct";
   }
 
   override public function mayCopy(contents:Array, newParent:Content):Boolean {
@@ -27,10 +27,5 @@ public class LivecontextContentTreeRelation extends RepositoryContentTreeRelatio
   override public function mayCreate(folder:Content, contentType:ContentType):Boolean {
     return false;
   }
-
-  override public function showInTree(contents:Array, view:String = null, treeModelId:String = null):void {
-    new ShowInCatalogTreeHelper(contents).showItems(treeModelId);
-  }
-
 }
 }

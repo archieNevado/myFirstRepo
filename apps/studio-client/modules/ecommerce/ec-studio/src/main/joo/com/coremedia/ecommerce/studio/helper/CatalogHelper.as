@@ -29,6 +29,8 @@ import com.coremedia.ui.logging.Logger;
 
 import ext.StringUtil;
 
+import js.Promise;
+
 import mx.resources.ResourceManager;
 
 [ResourceBundle('com.coremedia.ecommerce.studio.ECommerceStudioPlugin')]
@@ -553,22 +555,25 @@ public class CatalogHelper {
     });
   }
 
-  public function createOrUpdateProductListStructs(bindTo:ValueExpression, product:Product = undefined):void {
-    var localSettingsStructExpression:ValueExpression = bindTo.extendBy(PROPERTIES, LOCAL_SETTINGS_STRUCT_NAME);
-    localSettingsStructExpression.loadValue(function():void {
-      var localSettingsStruct:Struct = localSettingsStructExpression.getValue();
-      RemoteBean(localSettingsStruct).load(function():void {
-        if (!localSettingsStruct.get(COMMERCE_STRUCT_NAME)) {
-          localSettingsStruct.getType().addStructProperty(COMMERCE_STRUCT_NAME);
-        }
-        var commerceStruct:Struct = localSettingsStruct.get(COMMERCE_STRUCT_NAME);
-        if (!commerceStruct.get(REFERENCES_LIST_NAME)) {
-          commerceStruct.getType().addStringListProperty(REFERENCES_LIST_NAME, 1000000);
-        }
-        //avoid duplicates
-        if (product && (commerceStruct.get(REFERENCES_LIST_NAME) as Array).indexOf(product.getId()) < 0) {
-          commerceStruct.addAt(REFERENCES_LIST_NAME, -1, product.getId());
-        }
+  public function createOrUpdateProductListStructs(bindTo:ValueExpression, product:Product = undefined):Promise {
+    return new Promise(function (resolve:Function):void {
+      var localSettingsStructExpression:ValueExpression = bindTo.extendBy(PROPERTIES, LOCAL_SETTINGS_STRUCT_NAME);
+      localSettingsStructExpression.loadValue(function():void {
+        var localSettingsStruct:Struct = localSettingsStructExpression.getValue();
+        RemoteBean(localSettingsStruct).load(function():void {
+          if (!localSettingsStruct.get(COMMERCE_STRUCT_NAME)) {
+            localSettingsStruct.getType().addStructProperty(COMMERCE_STRUCT_NAME);
+          }
+          var commerceStruct:Struct = localSettingsStruct.get(COMMERCE_STRUCT_NAME);
+          if (!commerceStruct.get(REFERENCES_LIST_NAME)) {
+            commerceStruct.getType().addStringListProperty(REFERENCES_LIST_NAME, 1000000);
+          }
+          //avoid duplicates
+          if (product && (commerceStruct.get(REFERENCES_LIST_NAME) as Array).indexOf(product.getId()) < 0) {
+            commerceStruct.addAt(REFERENCES_LIST_NAME, -1, product.getId());
+          }
+          resolve(product);
+        });
       });
     });
   }

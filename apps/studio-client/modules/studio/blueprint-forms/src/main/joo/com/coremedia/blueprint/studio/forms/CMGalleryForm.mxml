@@ -41,7 +41,8 @@
                                    title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_GalleryPictures_label')}">
           <editor:items>
             <editor:LinkListPropertyField showThumbnails="true"
-                                          propertyName="{ITEMS_PROPERTY_NAME}">
+                                          propertyName="{ITEMS_PROPERTY_NAME}"
+                                          itemId="{ITEMS_PROPERTY_NAME}">
 
               <editor:additionalToolbarItems>
                 <TbSeparator/>
@@ -65,7 +66,8 @@
             </editor:LinkListPropertyField>
             <editor:LinkListPropertyField linkType="CMPicture"
                                           showThumbnails="true"
-                                          propertyName="{PICTURE_PROPERTY_NAME}">
+                                          propertyName="{PICTURE_PROPERTY_NAME}"
+                                          itemId="{PICTURE_PROPERTY_NAME}">
               <editor:additionalToolbarItems>
                 <TbSeparator/>
                 <quickcreate:QuickCreateToolbarButton contentType="CMPicture"

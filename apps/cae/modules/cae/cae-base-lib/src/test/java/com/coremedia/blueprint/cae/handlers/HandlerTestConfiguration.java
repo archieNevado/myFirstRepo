@@ -1,10 +1,7 @@
 package com.coremedia.blueprint.cae.handlers;
 
-import com.coremedia.blueprint.testing.ContentTestConfiguration;
-import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Scope;
 
@@ -21,7 +18,6 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
         },
         reader = com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader.class
 )
-@Import({XmlRepoConfiguration.class, ContentTestConfiguration.class})
 public class HandlerTestConfiguration extends AbstractHandlerTestConfiguration {
 
   @Bean

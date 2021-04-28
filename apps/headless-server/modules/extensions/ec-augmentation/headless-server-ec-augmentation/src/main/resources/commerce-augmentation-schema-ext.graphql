@@ -1,0 +1,46 @@
+extend type CommerceRoot {
+  productAugmentationBySite(externalId: String!, catalogId: String, siteId: String!):ProductAugmentation @fetch(from: "@augmentationFacade.getProductAugmentationBySite(#externalId, #catalogId, #siteId)")
+  productAugmentationByStore(externalId: String!, catalogId: String, storeId: String!, locale: String!):ProductAugmentation @fetch(from: "@augmentationFacade.getProductAugmentationByStore(#externalId, #catalogId, #storeId, #locale)")
+  categoryAugmentationBySite(externalId: String!, catalogId: String, siteId: String!):CategoryAugmentation @fetch(from: "@augmentationFacade.getCategoryAugmentationBySite(#externalId, #catalogId, #siteId)")
+  categoryAugmentationByStore(externalId: String!, catalogId: String, storeId: String!, locale: String!):CategoryAugmentation @fetch(from: "@augmentationFacade.getCategoryAugmentationByStore(#externalId, #catalogId, #storeId, #locale)")
+  augmentationForCommerceIdBySite(commerceId: String!, siteId: String!):Augmentation @fetch(from: "@augmentationFacade.getAugmentationBySite(#commerceId, #siteId)")
+}
+
+interface Augmentation {
+  id: ID!
+  commerceRef: CommerceRef!
+  content: Content_
+  grid: PageGrid!
+  picture: CMPicture
+  pictures: [CMPicture]!
+  visuals: [CMVisual]!
+  downloads: [CMDownload]!
+}
+
+interface ProductAugmentation @inherit(from: ["Augmentation"]) {
+  pdpPagegrid: PageGrid!
+}
+
+interface CategoryAugmentation @inherit(from: ["Augmentation"]){
+}
+
+type AugmentationImpl implements Augmentation, HasPageGrid {
+  id: ID!
+  commerceRef: CommerceRef!
+  grid: PageGrid!  @fetch(from: "@categoryPageGridAdapter.to(#this.commerceRef)")
+  content: Content_
+  picture: CMPicture @fetch(from: "@assetFacade.getPicture(#this.commerceRef)")
+  pictures: [CMPicture]! @fetch(from: "@assetFacade.getPictures(#this.commerceRef)")
+  visuals: [CMVisual]! @fetch(from: "@assetFacade.getVisuals(#this.commerceRef)")
+  downloads: [CMDownload]! @fetch(from: "@assetFacade.getDownloads(#this.commerceRef)")
+  media: [CMMedia] @fetch(from: "visuals")
+  remoteLink(siteId:String, context:String): String!
+}
+
+type ProductAugmentationImpl implements ProductAugmentation @inherit(from: ["AugmentationImpl"]){
+  pdpPagegrid: PageGrid! @fetch(from: "@productPageGridAdapter.to(#this.commerceRef)")
+}
+
+type CategoryAugmentationImpl implements CategoryAugmentation @inherit(from: ["AugmentationImpl"]){
+  children: [CommerceRef]!
+}

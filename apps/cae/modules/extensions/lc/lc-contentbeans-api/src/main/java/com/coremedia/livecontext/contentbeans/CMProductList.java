@@ -18,7 +18,6 @@ import java.util.Map;
  * <p>
  * This content bean represents documents of that type within the CAE.
  * </p>
- *
  */
 public interface CMProductList extends CMQueryList {
   /**
@@ -55,7 +54,6 @@ public interface CMProductList extends CMQueryList {
    * prefix which identifies the plugin provider.
    *
    * @return a {@code Map} from aspectIDs to {@code Aspect}s
-   *
    * @deprecated since 1907.1; Implement optional features as extensions.
    */
   @Deprecated
@@ -67,7 +65,6 @@ public interface CMProductList extends CMQueryList {
    * PlugIns that are registered to this content bean.
    *
    * @return a list of {@link Aspect}
-   *
    * @deprecated since 1907.1; Implement optional features as extensions.
    */
   @Deprecated
@@ -75,46 +72,60 @@ public interface CMProductList extends CMQueryList {
   List<? extends Aspect<? extends CMProductList>> getAspects();
 
   /**
-   * Returns an external primary key representing the category.
+   * Returns an external id representing the category.
    *
-   * @return an external primary key
+   * @return an external id
+   * @deprecated use {@link #getProducts()} instead
    */
+  @Deprecated(since = "2104.1", forRemoval = true)
   String getExternalId();
 
   /**
    * Returns the category.
    *
    * @return the category
+   * @deprecated use {@link #getProducts()} instead
    */
+  @Deprecated(since = "2104.1", forRemoval = true)
   Category getCategory();
 
   /**
-   * @return list of products sorted by the sortedBy policy
+   * @return list of products
    */
   List<ProductInSite> getProducts();
 
-    /**
-     * @return string constant that determines the sorting of the list
-     */
+  /**
+   * @return string that determines the sorting of the list
+   * @deprecated use {@link #getProducts()} instead
+   */
+  @Deprecated(since = "2104.1", forRemoval = true)
   String getOrderBy();
 
   /**
-   * @return string constant that determines a facet search param
+   * @return string that determines a facet search param
+   * @deprecated use {@link #getProducts()} instead
    */
+  @Deprecated(since = "2104.1", forRemoval = true)
   String getFacet();
 
   /**
-   * @return string constant that determines a search query string
+   * @return string that determines a search query string
+   * @deprecated use {@link #getProducts()} instead
    */
+  @Deprecated(since = "2104.1", forRemoval = true)
   String getQuery();
 
   /**
    * @return the offset in the original product list where the rendering should start
+   * @deprecated use {@link #getProducts()} instead
    */
+  @Deprecated(since = "2104.1", forRemoval = true)
   int getOffset();
 
   /**
    * @return the sub struct "productList" of localSettings converted to a map
+   * @deprecated use {@link #getProducts()} instead
    */
+  @Deprecated(since = "2104.1", forRemoval = true)
   Map<String, Object> getProductListSettings();
 }

@@ -2,7 +2,6 @@ package com.coremedia.blueprint.lc.test.services;
 
 import com.coremedia.blueprint.base.livecontext.client.common.GenericCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.client.common.GenericCommerceConnectionFactory;
-import com.coremedia.blueprint.base.livecontext.client.common.RequiresGenericCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.client.config.CommerceAdapterClientAutoConfiguration;
 import com.coremedia.blueprint.base.livecontext.client.data.DataClient;
 import com.coremedia.blueprint.base.livecontext.client.data.DataClientFactory;
@@ -12,10 +11,10 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceSer
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.multisite.Site;
-import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.ecommerce.common.Vendor;
-import com.coremedia.livecontext.ecommerce.event.InvalidationService;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,12 +29,17 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Scope;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Locale;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
@@ -46,7 +50,7 @@ import static org.mockito.Mockito.when;
         PropertyPlaceholderAutoConfiguration.class,
         OverrideGenericCommerceConnectionTest.LocalConfig.class,
 })
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestInstance(TestInstance.Lifecycle.PER_METHOD)
 class OverrideGenericCommerceConnectionTest {
 
   @Configuration(proxyBeanMethods = false)
@@ -57,8 +61,18 @@ class OverrideGenericCommerceConnectionTest {
   static class LocalConfig {
 
     @Bean
+    @Scope("prototype")
     TestOverrideGenericCommerceConnection myOverrideConnection() {
-      return new TestOverrideGenericCommerceConnection();
+      return spy(TestOverrideGenericCommerceConnection.class);
+    }
+
+    @Bean
+    @Scope("prototype")
+    TestOverrideGenericCommerceConnection brokenConnection() {
+      TestOverrideGenericCommerceConnection spy = spy(TestOverrideGenericCommerceConnection.class);
+      // return a custom store context provider here
+      doReturn(mock(StoreContextProvider.class)).when(spy).getStoreContextProvider();
+      return spy;
     }
   }
 
@@ -70,17 +84,6 @@ class OverrideGenericCommerceConnectionTest {
 
   @MockBean
   private CatalogAliasTranslationService catalogAliasTranslationService;
-
-  @MockBean(extraInterfaces = {
-          TestCommerceService.class,
-  })
-  private CatalogService testCatalogService;
-
-  @MockBean(extraInterfaces = {
-          TestCommerceService.class,
-          RequiresGenericCommerceConnection.class
-  })
-  private InvalidationService testInvalidationService;
 
   @Autowired
   private GenericCommerceConnectionFactory connectionFactory;
@@ -99,25 +102,36 @@ class OverrideGenericCommerceConnectionTest {
 
   private GenericCommerceConnection connection;
 
-  @BeforeAll
+  @BeforeEach
   void setup() {
-    when(site.getId()).thenReturn("siteId");
-    when(site.getLocale()).thenReturn(Locale.CANADA_FRENCH);
-
     when(settingsService.createProxy(CommerceSettingsProvider.class, site)).thenReturn(commerceSettingsProvider);
     when(commerceSettingsProvider.getCommerce()).thenReturn(commerceSettings);
 
     when(commerceSettings.getEndpoint()).thenReturn("testEndpoint");
-    when(commerceSettings.getCatalogConfig().getId()).thenReturn("testCatalogId");
     when(dataClientFactory.createDataClient("testEndpoint")).thenReturn(Optional.of(dataClient));
 
     when(dataClient.getMetadata().getVendor()).thenReturn(Vendor.of("test"));
-    connection = connectionFactory.createConnection(site).orElseThrow(IllegalStateException::new);
+  }
+
+  @Test()
+  void broken() {
+    when(commerceSettings.getConnectionQualifier()).thenReturn("brokenConnection");
+    assertThatThrownBy(() -> connectionFactory.createConnection(site)).isInstanceOf(IllegalStateException.class);
   }
 
   @Test
   void testOverride() {
-    assertThat(connection).isInstanceOf(RequiresGenericCommerceConnection.class);
+    when(site.getId()).thenReturn("siteId");
+    when(site.getLocale()).thenReturn(Locale.CANADA_FRENCH);
+    when(commerceSettings.getCatalogConfig().getId()).thenReturn("testCatalogId");
+    when(commerceSettings.getConnectionQualifier()).thenReturn("myOverrideConnection");
+
+    connection = connectionFactory.createConnection(site).orElseThrow(IllegalStateException::new);
+    assertThat(connection).isInstanceOf(TestOverrideGenericCommerceConnection.class);
+    assertThat(connection.getStoreContext())
+            .isNotNull()
+            // the store context must reference the custom connection instance
+            .returns(connection, StoreContext::getConnection);
   }
 
 }

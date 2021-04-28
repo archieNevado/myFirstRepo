@@ -229,7 +229,7 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
       Navigation currentNavigation = FindNavigationContext.getNavigation(request);
       return !currentNavigation.getRootNavigation().equals(targetRootNavigation);
     } catch (Exception e) {
-      LOG.error("Cannot determine whether the given content belongs to a different site: " + e.getMessage(), e);
+      LOG.info("Cannot determine whether the given content belongs to a different site '{}'.", e.getMessage());
       return false;
     }
   }

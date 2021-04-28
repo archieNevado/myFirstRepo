@@ -88,10 +88,6 @@
     </list>
   </customize:append>
 
-  <bean id="setGuidCookieHandler" class="com.coremedia.blueprint.elastic.social.cae.guid.GuidCookieHandler">
-    <property name="settingsService" ref="settingsService"/>
-    <property name="contentBeanIdConverter" ref="contentBeanIdConverter"/>
-  </bean>
+  <bean id="guidCookieHandler" class="com.coremedia.blueprint.elastic.social.cae.guid.GuidCookieHandler"/>
 
-  <bean id="contentBeanIdConverter" class="com.coremedia.objectserver.beans.ContentBeanIdConverter"/>
 </beans>

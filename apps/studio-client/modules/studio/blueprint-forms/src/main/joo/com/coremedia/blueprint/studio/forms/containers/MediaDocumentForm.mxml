@@ -38,7 +38,8 @@
   </fx:Declarations>
 
   <editor:items>
-    <editor:LinkListPropertyField propertyName="{config.mediaPropertyName}"
+    <editor:LinkListPropertyField itemId="{config.mediaPropertyName}"
+                                  propertyName="{config.mediaPropertyName}"
                                   showThumbnails="true"
                                   hideLabel="true"
                                   maxCardinality="{config.maxCardinality}">

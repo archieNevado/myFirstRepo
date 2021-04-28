@@ -1,13 +1,12 @@
 package com.coremedia.livecontext.studio.components.product {
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.struct.Struct;
+import com.coremedia.ui.components.StatefulRadioGroup;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 
-import ext.form.RadioGroup;
-
 [ResourceBundle('com.coremedia.livecontext.studio.LivecontextStudioPlugin')]
-public class ViewSettingsRadioGroupBase extends RadioGroup {
+public class ViewSettingsRadioGroupBase extends StatefulRadioGroup {
   private static var radioButtonFormName:int = 0;
   private static const LOCAL_SETTINGS_PROPERTY:String = "localSettings";
   private static const SHOP_NOW_PROPERTY:String = "shopNow";

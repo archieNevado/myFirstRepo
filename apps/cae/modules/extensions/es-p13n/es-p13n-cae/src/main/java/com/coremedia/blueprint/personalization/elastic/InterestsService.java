@@ -23,10 +23,9 @@ import com.coremedia.personalization.context.PropertyProfile;
 import com.coremedia.personalization.context.PropertyProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -36,7 +35,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 @SuppressWarnings("UnusedDeclaration") // service methods are called from within JSP
-@Named
+@Component
 public class InterestsService {
 
   private static final Logger LOG = LoggerFactory.getLogger(InterestsService.class);
@@ -46,23 +45,23 @@ public class InterestsService {
   public static final String EXPLICIT_PERSONALIZATION = "explicit.personalization";
   private static final double TAXONOMY_ACCEPTED_THRESHOLD = 0.5;
 
-  @Inject
-  private ContextCollection contextCollection;
+  private final ContextCollection contextCollection;
+  private final InterestsConfiguration interestsConfiguration;
+  private final ContentRepository contentRepository;
+  private final DataViewFactory dataViewFactory;
+  private final ContentBeanFactory contentBeanFactory;
+  private final SettingsService settingsService;
 
-  @Inject
-  private InterestsConfiguration interestsConfiguration;
-
-  @Inject
-  private ContentRepository contentRepository;
-
-  @Inject
-  private DataViewFactory dataViewFactory;
-
-  @Inject
-  private ContentBeanFactory contentBeanFactory;
-
-  @Inject
-  private SettingsService settingsService;
+  public InterestsService(ContextCollection contextCollection, InterestsConfiguration interestsConfiguration,
+                          ContentRepository contentRepository, DataViewFactory dataViewFactory,
+                          ContentBeanFactory contentBeanFactory, SettingsService settingsService) {
+    this.contextCollection = contextCollection;
+    this.interestsConfiguration = interestsConfiguration;
+    this.contentRepository = contentRepository;
+    this.dataViewFactory = dataViewFactory;
+    this.contentBeanFactory = contentBeanFactory;
+    this.settingsService = settingsService;
+  }
 
   /**
    * @return Provides an {@link Interests} bean based on an action

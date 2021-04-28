@@ -3,6 +3,7 @@ package com.coremedia.blueprint.studio.osm {
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.premular.TabbedDocumentFormDispatcher;
 import com.coremedia.ui.data.ValueExpression;
+import com.coremedia.ui.mixins.IHidableMixin;
 
 import ext.Ext;
 import ext.panel.Panel;
@@ -13,7 +14,7 @@ import ext.panel.Panel;
  *
  * Note that the implementation is based on the OpenLayers API.
  */
-public class OSMPanelBase extends Panel {
+public class OSMPanelBase extends Panel implements IHidableMixin {
   private static const MARKER_Z_INDEX:int = 1000;
 
   private var zoom:int = 5;
@@ -255,5 +256,26 @@ public class OSMPanelBase extends Panel {
 
     super.onRemoved(destroying);
   }
+
+  /** @private */
+  [Bindable]
+  public function set hideText(newHideText:String):void {
+    // The hideText is determined by the getter. Nothing to do.
+  }
+
+  /** @inheritDoc */
+  [Bindable]
+  public function get hideText():String {
+    return getTitle();
+  }
+
+  /** @private */
+  [Bindable]
+  public native function set hideId(newHideId:String):void;
+
+  /** @inheritDoc */
+  [Bindable]
+  public native function get hideId():String;
+
 }
 }

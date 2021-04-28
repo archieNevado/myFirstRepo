@@ -10,18 +10,7 @@
     for a site of the blueprint, e.g.
     http://localhost:49080/blueprint/servlet/internal/perfectchef/sitemap-org
   -->
-  <import resource="classpath:/com/coremedia/cae/contentbean-services.xml"/>
-  <import resource="classpath:/com/coremedia/cae/link-services.xml"/>
-  <import resource="classpath:/framework/spring/blueprint-services.xml"/>
 
   <bean class="com.coremedia.blueprint.cae.config.BlueprintSitemapCaeBaseLibConfiguration"/>
 
-  <!--
-  Abstract parent bean for content url generators.
--->
-  <bean id="abstractContentUrlGenerator" abstract="true" class="com.coremedia.blueprint.cae.sitemap.ContentUrlGenerator">
-    <property name="contentBeanFactory" ref="contentBeanFactory"/>
-    <property name="linkFormatter" ref="linkFormatter"/>
-    <property name="validationService" ref="validationService"/>
-  </bean>
 </beans>

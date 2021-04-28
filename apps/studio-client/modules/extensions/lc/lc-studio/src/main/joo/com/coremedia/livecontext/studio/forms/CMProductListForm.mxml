@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<local:CMProductListFormBase
-        xmlns:fx="http://ns.adobe.com/mxml/2009"
-        xmlns:local="com.coremedia.livecontext.studio.forms.*"
-        xmlns:exml="http://www.jangaroo.net/exml/0.8"
-        xmlns="exml:ext.config"
-        xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
-        xmlns:bpforms="exml:com.coremedia.blueprint.studio.config"
-        xmlns:ec="exml:com.coremedia.ecommerce.studio.config"
-        xmlns:bpb-components="exml:com.coremedia.blueprint.base.components.config"
-        xmlns:ui="exml:com.coremedia.ui.config"
-        xmlns:lc-components="com.coremedia.livecontext.studio.components.*">
+<local:CMProductListFormBase xmlns:fx="http://ns.adobe.com/mxml/2009"
+                             xmlns:local="com.coremedia.livecontext.studio.forms.*"
+                             xmlns:exml="http://www.jangaroo.net/exml/0.8"
+                             xmlns="exml:ext.config"
+                             xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+                             xmlns:bpforms="exml:com.coremedia.blueprint.studio.config"
+                             xmlns:ec="exml:com.coremedia.ecommerce.studio.config"
+                             xmlns:facets="com.coremedia.livecontext.studio.forms.facets.*">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.blueprint.studio.BlueprintDocumentTypes')]
     [ResourceBundle('com.coremedia.blueprint.studio.BlueprintTabs')]
@@ -34,11 +31,13 @@
             title="{resourceManager.getString('com.coremedia.blueprint.base.queryeditor.QueryEditor', 'DCQE_label_conditions')}"
             itemId="conditionsTab">
       <editor:items>
+
         <editor:PropertyFieldGroup
                 title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'CMProductList_category_text')}"
                 itemId="cmProductListCategoryFieldGroup">
           <editor:items>
-            <ec:CatalogLinkPropertyField propertyName="externalId"
+            <ec:CatalogLinkPropertyField itemId="externalId"
+                                         propertyName="externalId"
                                          maxCardinality="1"
                                          replaceOnDrop="true"
                                          linkTypeNames="{[CatalogModel.TYPE_CATEGORY]}"
@@ -46,28 +45,28 @@
                                          dropAreaText="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'Category_Link_empty_text')}"/>
           </editor:items>
         </editor:PropertyFieldGroup>
-        <local:CategoryFacetsFieldGroup
-                title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'CMProductList_facets_text')}"
-                itemId="cmProductListFacetsFieldGroup"
-                facetNamePropertyName="localSettings.productList.selectedFacet"
-                facetValuePropertyName="localSettings.productList.selectedFacetValue"
+
+        <facets:CategoryFacetsPropertyField
+                bindTo="{config.bindTo}"
                 externalIdPropertyName="externalId"
-        />
+                structPropertyName="localSettings"
+                forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>
+
         <editor:PropertyFieldGroup
                 title="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'CMProductList_searchRefinement_text')}"
                 itemId="cmProductListSearchRefinementFieldGroup"
                 manageHeight="{false}">
           <editor:items>
             <editor:ComboBoxStringPropertyField itemId="{'cmProductListOrderByField'}"
-                                      ui="{LabelableSkin.PLAIN_LABEL.getSkin()}"
-                                      propertyName="localSettings.productList.orderBy"
-                                      fieldWidth="200"
-                                      fieldLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'CMProductList_localSettings.productList.orderBy_text')}"
-                                      emptyText="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'CMProductList_localSettings.productList.orderBy_emptyText')}"
-                                      valueField="id"
-                                      displayField="value"
-                                      reverseTransformer="{function(value:*):* {return value === null ? '' : value;}}">
-            <editor:store>
+                                                ui="{LabelableSkin.PLAIN_LABEL.getSkin()}"
+                                                propertyName="localSettings.productList.orderBy"
+                                                fieldWidth="200"
+                                                fieldLabel="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'CMProductList_localSettings.productList.orderBy_text')}"
+                                                emptyText="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'CMProductList_localSettings.productList.orderBy_emptyText')}"
+                                                valueField="id"
+                                                displayField="value"
+                                                reverseTransformer="{function(value:*):* {return value === null ? '' : value;}}">
+              <editor:store>
                 <store_Json
                         fields="{['id', 'value']}"
                         data="{[

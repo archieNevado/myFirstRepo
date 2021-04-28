@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import javax.inject.Inject;
 import java.util.Collection;
 
 import static com.google.common.base.Predicates.in;
@@ -22,11 +21,13 @@ public class TenantInitializer {
   private static final String DELAY_PATTERN = "${tenant.recomputation.interval:60000}";
   private static final String INTERNAL_TENANT = "internal";
 
-  @Inject
-  private TenantService tenantService;
+  private final TenantService tenantService;
+  private final TenantHelper tenantHelper;
 
-  @Inject
-  private TenantHelper tenantHelper;
+  public TenantInitializer(TenantService tenantService, TenantHelper tenantHelper) {
+    this.tenantService = tenantService;
+    this.tenantHelper = tenantHelper;
+  }
 
   private void registerTenantsFromContent() {
     final Collection<String> configuredTenants = tenantHelper.readTenantsFromContent();

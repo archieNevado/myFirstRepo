@@ -21,7 +21,6 @@ import org.springframework.context.annotation.ImportResource;
 @Configuration(proxyBeanMethods = false)
 @ImportResource(value = {
         "classpath:/com/coremedia/cap/multisite/multisite-services.xml",
-        "classpath:/com/coremedia/cae/link-services.xml",
         "classpath:/com/coremedia/blueprint/base/links/bpbase-links-services.xml",
 }, reader = ResourceAwareXmlBeanDefinitionReader.class)
 @ComponentScan(

@@ -34,6 +34,7 @@
                               helpText="{config.helpText}"/>
     <Component height="6"/>
     <editor:StringPropertyField propertyName="dataUrl"
+                                itemId="dataUrl"
                                 fieldLabel="{config.dataUrlLabel}"/>
   </editor:items>
 

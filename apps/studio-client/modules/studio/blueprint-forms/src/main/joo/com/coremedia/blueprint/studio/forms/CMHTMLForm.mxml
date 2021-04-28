@@ -28,8 +28,8 @@
                 itemId="detailsDocumentForm"
                 propertyNames="{['teaserTitle','description']}">
           <editor:items>
-            <editor:StringPropertyField propertyName="teaserTitle"/>
-            <editor:StringPropertyField propertyName="description"/>
+            <editor:StringPropertyField propertyName="teaserTitle" itemId="teaserTitle"/>
+            <editor:StringPropertyField propertyName="description" itemId="description"/>
           </editor:items>
         </editor:PropertyFieldGroup>
         <editor:PropertyFieldGroup

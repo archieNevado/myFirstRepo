@@ -7,6 +7,7 @@ import com.coremedia.elastic.social.api.users.CommunityUser;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.binding.message.DefaultMessageContext;
@@ -16,7 +17,6 @@ import org.springframework.webflow.execution.RequestContext;
 
 import java.util.Locale;
 
-import static com.coremedia.elastic.core.test.Injection.inject;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -30,6 +30,8 @@ import static org.mockito.Mockito.when;
 public class PasswordResetHelperTest {
   private static final String TOKEN = "1234321";
   private static final String PASSWORD = "secret";
+
+  @InjectMocks
   private PasswordResetHelper helper;
 
   @Mock
@@ -53,8 +55,6 @@ public class PasswordResetHelperTest {
     when(requestContext.getExternalContext()).thenReturn(externalContext);
     CommunityUser user = mock(CommunityUser.class);
     when(registrationService.getUserByToken(TOKEN)).thenReturn(user);
-    helper = new PasswordResetHelper();
-    inject(helper, registrationService);
   }
 
   @Test

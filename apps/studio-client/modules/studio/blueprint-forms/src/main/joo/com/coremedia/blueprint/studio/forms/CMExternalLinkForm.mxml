@@ -27,6 +27,7 @@
                 itemId="urlForm">
           <editor:items>
             <editor:StringPropertyField propertyName="url"
+                                        itemId="url"
                                         hideLabel="true"/>
             <editor:BooleanPropertyField propertyName="openInNewTab" hideLabel="true"/>
           </editor:items>

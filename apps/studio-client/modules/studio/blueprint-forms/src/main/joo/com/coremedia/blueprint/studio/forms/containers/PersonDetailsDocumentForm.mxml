@@ -21,24 +21,27 @@
     ]]></fx:Script>
 
   <editor:items>
-    <editor:StringPropertyField propertyName="firstName"/>
-    <editor:StringPropertyField propertyName="lastName"/>
+    <editor:StringPropertyField propertyName="firstName" itemId="firstName"/>
+    <editor:StringPropertyField propertyName="lastName" itemId="lastName"/>
     <editor:StringPropertyField bindTo="{config.bindTo}"
-                                propertyName="displayName">
+                                propertyName="displayName"
+                                itemId="displayName">
       <editor:plugins exml:mode="append">
         <editor:StringPropertyFieldMultipleDelegatePlugin delegatePropertyNames="{['firstName','lastName']}"/>
       </editor:plugins>
     </editor:StringPropertyField>
-    <editor:StringPropertyField propertyName="organization"/>
-    <editor:StringPropertyField propertyName="jobTitle"/>
-    <editor:StringPropertyField propertyName="eMail"/>
+    <editor:StringPropertyField propertyName="organization" itemId="organization"/>
+    <editor:StringPropertyField propertyName="jobTitle" itemId="jobTitle"/>
+    <editor:StringPropertyField propertyName="eMail" itemId="eMail"/>
 
     <editor:RichTextPropertyField bindTo="{config.bindTo}"
+                                  itemId="detailText"
                                   propertyName="detailText"
                                   initialHeight="200"/>
     <editor:TextAreaPropertyField bindTo="{config.bindTo}"
                                   fieldLabel="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMPerson_teaserText_text')}"
                                   propertyName="teaserText"
+                                  itemId="teaserText"
                                   changeBuffer="1000"
                                   forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}">
       <editor:plugins exml:mode="append">

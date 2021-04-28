@@ -32,9 +32,11 @@ public class ECommerceStudioPluginBase extends StudioPlugin {
   override public function init(editorContext:IEditorContext):void {
     super.init(editorContext);
 
+    var isApplicable:Function = function ():Boolean { return false; };
+    editorContext.getCollectionViewExtender().addExtension(new ECommerceCollectionViewExtension(), isApplicable);
+
     var collectionViewManagerInternal:CollectionViewManagerInternal =
             ((editorContext.getCollectionViewManager()) as CollectionViewManagerInternal);
-    editorContext.getCollectionViewExtender().addExtension(new ECommerceCollectionViewExtension());
 
     var catalogTreeModel:CatalogTreeModel = new CatalogTreeModel();
     collectionViewManagerInternal.addTreeModel(catalogTreeModel,
