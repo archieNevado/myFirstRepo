@@ -50,15 +50,15 @@
                                  bindTo="{config.bindTo}"
                                  statefulSubComponentsFunction="{function():Array {
                                          return [
-                                            queryById('publicationDate'),
-                                            queryById('ownDate')]
+                                            queryById(PUBLICATION_DATE_RADIO_ITEM_ID),
+                                            queryById(OWN_DATE_RADIO_ITEM_ID)]
                                        }}"/>
       </ui:plugins>
       <ui:items>
-        <ui:StatefulRadio itemId="publicationDate"
+        <ui:StatefulRadio itemId="{PUBLICATION_DATE_RADIO_ITEM_ID}"
                           inputValue="publicationDate"
                           boxLabel="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMLinkable_externally_visible_date_use_publication_date_text')}"/>
-        <ui:StatefulRadio itemId="ownDate"
+        <ui:StatefulRadio itemId="{OWN_DATE_RADIO_ITEM_ID}"
                           inputValue="ownDate"
                           boxLabel="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMLinkable_externally_visible_date_use_custom_date_text')}"/>
       </ui:items>

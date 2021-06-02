@@ -29,7 +29,7 @@
 
     <customer>Blueprint</customer>
 
-    <cm.common.core.version>2104.1</cm.common.core.version>
+    <cm.common.core.version>2104.2</cm.common.core.version>
     <cm.common.bp.version>${project.version}</cm.common.bp.version>
 
     <spring.boot.version>2.3.9.RELEASE</spring.boot.version>
@@ -73,7 +73,7 @@
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.common.core.version>2104.1</cm.common.core.version>
+    <cm.common.core.version>2104.2</cm.common.core.version>
     <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
 
     <showDeprecation>true</showDeprecation>

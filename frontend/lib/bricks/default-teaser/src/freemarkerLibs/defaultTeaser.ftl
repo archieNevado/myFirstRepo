@@ -116,21 +116,23 @@
   <div class="${teaserBlockClass}__caption">
 
     <#if externallyDisplayedDate?has_content || authors?has_content>
-    <p class="${teaserBlockClass}__editorial" <@preview.metadata "properties.authors"/>>
+    <p class="${teaserBlockClass}__editorial">
+      <#-- date -->
       <#if externallyDisplayedDate?has_content>
-        <#-- date -->
         <span class="${teaserBlockClass}__time">
-          <@utils.renderDate date=externallyDisplayedDate.time/>
+          <@utils.renderDate date=externallyDisplayedDate.time metadata=["properties.extDisplayedDate"]/>
         </span>
       </#if>
 
+      <#-- authors -->
       <#if authors?has_content>
-        <#-- authors -->
+        <span class="${teaserBlockClass}__authors" <@preview.metadata "properties.authors"/>>
         <#list authors![] as author>
-        <span>
+          <span>
           <a href="${cm.getLink(author)}" class="${teaserBlockClass}__author" <@preview.metadata author.content/>>${author.displayName!""}</a>
         </span>
         </#list>
+        </span>
       </#if>
     </p>
     </#if>

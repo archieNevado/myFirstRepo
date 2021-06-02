@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication(exclude = {
         FreeMarkerAutoConfiguration.class,
@@ -16,6 +17,7 @@ import org.springframework.context.annotation.Bean;
         "net.devh.boot.grpc.client.autoconfigure.GrpcClientHealthAutoConfiguration",
         "net.devh.boot.grpc.client.autoconfigure.GrpcClientMetricAutoConfiguration",
 })
+@EnableScheduling
 public class CaeLiveApp {
 
   // ... Bean definitions

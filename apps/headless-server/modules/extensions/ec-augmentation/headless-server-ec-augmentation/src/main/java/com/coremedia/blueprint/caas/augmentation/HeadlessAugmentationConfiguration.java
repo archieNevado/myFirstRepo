@@ -60,7 +60,7 @@ import static com.coremedia.blueprint.base.pagegrid.PageGridContentKeywords.PAGE
 import static com.coremedia.blueprint.caas.augmentation.adapter.CommerceBeanPageGridAdapterFactory.PDP_PAGEGRID_PROPERTY_NAME;
 
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnProperty(prefix = "caas.commerce", name = "enabled", havingValue = "false", matchIfMissing = false)
+@ConditionalOnProperty(prefix = "caas.commerce", name = "enabled", havingValue = "false", matchIfMissing = true)
 @EnableConfigurationProperties({
         CaasAssetSearchServiceConfigProperties.class
 })

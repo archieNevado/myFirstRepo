@@ -90,6 +90,12 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>feedback-hub-imagga-studio-lib</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
       <artifactId>lc-asset-studio-lib-component</artifactId>
       <version>1-SNAPSHOT</version>
       <scope>runtime</scope>

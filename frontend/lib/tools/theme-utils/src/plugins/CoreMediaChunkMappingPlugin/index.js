@@ -74,9 +74,39 @@ function jsonpScriptSrc(chunkId) {
       compilation.assets[
         this.options.chunkMappingPath
       ] = new RawSource(`(function () {
+  function getOrigin(anchor) {
+    return anchor.protocol + "//" + anchor.host;
+  }
 
+  function getAbsoluteUrl(url, baseUrl) {
+    // catch error if URL API is not supported (URL still exists in that case)
+    try {
+      return new URL(url, baseUrl);
+    } catch (e) {
+      // ignore
+    }
+    var anchor = document.createElement("a");
+    anchor.href = url;
+    var anchorBase = document.createElement("a");
+    anchorBase.href = baseUrl;
+    if (getOrigin(anchor) === getOrigin(anchorBase)) {
+      return anchor.href;
+    }
+    var absoluteUrl = anchorBase.protocol + "//" + anchorBase.host + "/" + anchor.pathname;
+    if (anchor.search) {
+      absoluteUrl += "?" + anchor.search;
+    }
+    if (anchor.hash) {
+      absoluteUrl += "#" + anchor.hash;
+    }
+    return absoluteUrl;
+  }
+
+  // attempt to find the path of the currently executed script (=this file)
+  var currentScript = document.currentScript || Array.prototype.slice.call(document.getElementsByTagName('script'), -1)[0];
+  var baseUrl = currentScript ? currentScript.src : window.location.href;
   var parse = function (url) {
-    return url.substr(4, url.length - 5);
+    return getAbsoluteUrl(url.substr(4, url.length - 5), baseUrl).toString();
   };
 
   var chunkPathById = {

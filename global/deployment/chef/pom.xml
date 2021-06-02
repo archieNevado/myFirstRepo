@@ -9,9 +9,9 @@
 
   <properties>
     <application-plugin.version>2.8.3</application-plugin.version>
-    <commerce-adapter-mock.version>1.5.7</commerce-adapter-mock.version>
+    <commerce-adapter-mock.version>1.5.8</commerce-adapter-mock.version>
     <commerce-adapter-hybris.version>1.3.4</commerce-adapter-hybris.version>
-    <commerce-adapter-sfcc.version>1.3.4</commerce-adapter-sfcc.version>
+    <commerce-adapter-sfcc.version>1.3.5</commerce-adapter-sfcc.version>
     <commerce-adapter-wcs.version>1.5.3</commerce-adapter-wcs.version>
   </properties>
 

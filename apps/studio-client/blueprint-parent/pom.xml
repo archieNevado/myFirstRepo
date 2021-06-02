@@ -28,7 +28,7 @@
 
     <customer>Blueprint</customer>
 
-    <cm.studio-client.core.version>2104.1</cm.studio-client.core.version>
+    <cm.studio-client.core.version>2104.2</cm.studio-client.core.version>
     <jangaroo.version>4.0.77</jangaroo.version>
     <jooUnitWebDriverBrowser>chrome</jooUnitWebDriverBrowser>
 
@@ -75,8 +75,8 @@
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.studio-client.core.version>2104.1</cm.studio-client.core.version>
-    <cm.common.core.version>2104.1</cm.common.core.version>
+    <cm.studio-client.core.version>2104.2</cm.studio-client.core.version>
+    <cm.common.core.version>2104.2</cm.common.core.version>
     <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
 
     <showDeprecation>true</showDeprecation>

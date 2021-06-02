@@ -13,7 +13,6 @@ import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
 import com.coremedia.ui.store.BeanRecord;
 
-import ext.EventManager;
 import ext.LoadMask;
 import ext.container.Container;
 import ext.grid.GridPanel;
@@ -83,7 +82,7 @@ public class TaxonomySuggestionsLinkListPanelBase extends GridPanel {
 
     updateSuggestions(true);
 
-    EventManager.on(getEl(), 'keyup', function (evt:KeyEvent, t:*, o:*):void {
+    getEl().addListener('keyup', function (evt:KeyEvent):void {
       if(evt.keyCode === KeyEvent.DOM_VK_ENTER || evt.keyCode === KeyEvent.DOM_VK_RETURN) {
         var values:Array = getSelectedValuesExpression().getValue();
         if(values.length > 0) {

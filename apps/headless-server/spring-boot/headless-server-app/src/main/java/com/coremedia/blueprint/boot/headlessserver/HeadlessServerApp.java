@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Main entry point for the headless server application.
@@ -18,6 +19,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         "net.devh.boot.grpc.client.autoconfigure.GrpcClientHealthAutoConfiguration",
         "net.devh.boot.grpc.client.autoconfigure.GrpcClientMetricAutoConfiguration",
 })
+@EnableScheduling
 public class HeadlessServerApp {
 
   private static final Logger LOG = LoggerFactory.getLogger(HeadlessServerApp.class);

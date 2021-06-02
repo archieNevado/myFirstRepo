@@ -1,3 +1,30 @@
+/**
+ * @see Element#matches
+ * @param {Element} element
+ * @param {string} selectors
+ * @returns {boolean}
+ */
+function matches(element, selectors) {
+  return element.matches ? element.matches(selectors) : element["msMatchesSelector"](selectors);
+}
+
+/**
+ * @see Element#closest
+ * @param {Element} element
+ * @param {string} selectors
+ * @returns {Element | null}
+ */
+function closest(element, selectors) {
+  if (element.closest) {
+    return element.closest(selectors);
+  }
+  do {
+    if (matches(element, selectors)) return element;
+    element = element.parentElement || element.parentNode;
+  } while (element !== null && element.nodeType === 1);
+  return null;
+}
+
 class Point {
   /**
    * @param {Number} left
@@ -167,7 +194,7 @@ class Zoom {
     if (this.imageLink && cursorPosition) {
       const image = this.target;
       const imageRect = getRect(image);
-      const container = image.closest(this.containerSelector) || document.body;
+      const container = closest(image, this.containerSelector) || document.body;
       const containerRect = getRect(container);
 
       // calculate dimensions of the zoom window

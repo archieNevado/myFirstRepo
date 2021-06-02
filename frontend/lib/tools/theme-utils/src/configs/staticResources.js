@@ -268,7 +268,7 @@ module.exports = () => (config) => {
           exclude: /\.param\.svg$/, // do not double load svg files with injected parameters
           options: {
             name: "[name].[ext]",
-            limit: imageEmbedThreshold,
+            limit: imageEmbedThreshold > 0 ? imageEmbedThreshold : imageEmbedThreshold === 0,
             outputPath: "img/",
           },
         },

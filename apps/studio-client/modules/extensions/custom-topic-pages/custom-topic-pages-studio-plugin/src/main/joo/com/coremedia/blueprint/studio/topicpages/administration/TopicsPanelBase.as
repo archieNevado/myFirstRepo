@@ -19,7 +19,6 @@ import com.coremedia.ui.data.beanFactory;
 import com.coremedia.ui.util.EventUtil;
 import com.coremedia.ui.util.QtipUtil;
 
-import ext.EventManager;
 import ext.Ext;
 import ext.MessageBox;
 import ext.StringUtil;
@@ -84,7 +83,7 @@ public class TopicsPanelBase extends Panel {
    */
   private function addKeyMap():void {
     getGrid().removeListener('afterlayout', addKeyMap);
-    EventManager.on(getGrid().getEl(), 'keyup', function (evt:Event, t:*, o:*):void {
+    getGrid().getEl().addListener('keyup', function (evt:Event):void {
       if (!evt.shiftKey && !evt.ctrlKey && !evt.altKey) {
         var code:Number = evt.getCharCode();
         var character:String = String.fromCharCode(code).toLowerCase();

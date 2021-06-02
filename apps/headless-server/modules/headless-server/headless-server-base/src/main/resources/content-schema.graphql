@@ -610,6 +610,7 @@ type Link {
 }
 
 type PageGrid {
+  name: String
   cssClassName: String
   rows: [PageGridRow!]
 

@@ -89,7 +89,7 @@ public class JsonPreviewController {
                                @Qualifier("htmlTemplateEngine") TemplateEngine templateEngine, ContentRepository contentRepository,
                                SitesService sitesService,
                                JsonPreviewConfigurationProperties jsonPreviewConfigurationProperties,
-                               @Value("${caas.commerce.enabled:true}") boolean isCommerceEnabled) {
+                               @Value("${caas.commerce.enabled:false}") boolean isCommerceEnabled) {
     this.httpClient = httpClient;
     this.contentRepository = contentRepository;
     this.sitesService = sitesService;

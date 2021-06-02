@@ -455,6 +455,9 @@ public class CreateFromTemplateDialogBase extends StudioDialog {
 
   protected static function getFolderFallback(docType:String):String {
     var folder:Content = StudioConfigurationUtil.getConfiguration("Content Creation", "paths." + docType);
+    if (folder === undefined) {
+      return undefined;
+    }
     if (folder) {
       return folder.getPath();
     }
@@ -464,7 +467,7 @@ public class CreateFromTemplateDialogBase extends StudioDialog {
       return site.getSiteRootFolder().getPath();
     }
 
-    return folder === null ? null : undefined; // null or undefined
+    return null;
   }
 
   internal function getFolderValueExpression():ValueExpression {

@@ -54,7 +54,7 @@
   &__editorial {
     margin-bottom: 10px;
 
-    span + span {
+    span + span > span {
       :before {
         content: "•";
         margin: 0 5px 0 2px;

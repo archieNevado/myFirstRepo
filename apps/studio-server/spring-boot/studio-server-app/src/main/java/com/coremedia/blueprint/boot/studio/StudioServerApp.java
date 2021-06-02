@@ -5,12 +5,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 /**
  * we need to exclude the autoconfiguration for the default springSecurityFilterChain to enable ours
  */
-@EnableWebSecurity
 @SpringBootApplication(exclude = {
         FreeMarkerAutoConfiguration.class,
         MongoAutoConfiguration.class,
@@ -23,6 +23,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
         "net.devh.boot.grpc.client.autoconfigure.GrpcClientHealthAutoConfiguration",
         "net.devh.boot.grpc.client.autoconfigure.GrpcClientMetricAutoConfiguration",
 })
+@EnableScheduling
+@EnableWebSecurity
 public class StudioServerApp {
 
   // ... Bean definitions

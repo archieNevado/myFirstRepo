@@ -114,7 +114,7 @@
   Example:
   <@renderDate date=self.externallyDisplayedDate.time
                cssClass="cm-detail__time"
-               metadata=["properties.externallyDisplayedDate"] />
+               metadata=["properties.extDisplayedDate"] />
 -->
 <#macro renderDate date cssClass="" metadata=[]>
   <#if date?has_content>
