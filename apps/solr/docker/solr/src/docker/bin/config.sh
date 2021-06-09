@@ -65,7 +65,7 @@ if [ "${SOLR_SLAVE}" = "true" ]; then
     sleep 10
   done
 
-  solr_config_append SOLR_OPTS "\$SOLR_OPTS -Dsolr.master=false -Dsolr.slave=true -Dsolr.master.url=${SOLR_MASTER_URL}"
+  solr_config_append SOLR_OPTS "\$SOLR_OPTS -Dsolr.master=false -Dsolr.slave=true -Dsolr.master.url=${SOLR_MASTER_URL} -Dsolr.shardsWhitelist=${SOLR_MASTER_URL}"
 
   # automatically replicate all cores of the master
   if [ "${SOLR_SLAVE_AUTOCREATE_CORES}" = "true" ]; then

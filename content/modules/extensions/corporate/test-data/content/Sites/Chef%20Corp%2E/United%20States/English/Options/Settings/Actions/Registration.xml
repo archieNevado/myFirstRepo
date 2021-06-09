@@ -8,7 +8,6 @@
 </viewtype>
 <localSettings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
-<LinkProperty Name="flow.next" LinkType="coremedia:///cap/contenttype/CMAction" xlink:href="coremedia:///cap/resources/ActivateRegistration.xml" cmexport:path="/Sites/Chef%20Corp%2E/United%20States/English/Options/Settings/Actions/ActivateRegistration"/>
 </Struct>
 </localSettings>
 <linkedSettings>

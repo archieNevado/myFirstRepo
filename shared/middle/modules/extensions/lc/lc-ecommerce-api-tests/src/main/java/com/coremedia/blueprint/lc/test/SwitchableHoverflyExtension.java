@@ -5,8 +5,13 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 
 /**
  * Simple Wrapper to disable hoverly extension for tests against the real system.
- * see {@link HoverflyTestHelper#ignoreTapes}
+ * see {@link HoverflyTestHelper#useTapes()}
+ *
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
  */
+@Deprecated(since = "2101.4", forRemoval = true)
+@SuppressWarnings("removal")
 public class SwitchableHoverflyExtension extends HoverflyExtension {
 
   @Override

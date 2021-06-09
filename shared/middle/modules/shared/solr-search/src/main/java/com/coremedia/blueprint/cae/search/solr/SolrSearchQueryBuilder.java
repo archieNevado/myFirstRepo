@@ -239,7 +239,7 @@ public class SolrSearchQueryBuilder implements SolrQueryBuilder {
    *
    * @param query the query string
    * @return the escaped query string
-   * @see <a href="https://lucene.apache.org/solr/guide/8_6/local-parameters-in-queries.html">
+   * @see <a href="https://solr.apache.org/guide/8_8/local-parameters-in-queries.html">
    *   Solr Reference Guide: Local Parameters in Queries</a>
    */
   private static String escapeLocalParamsQueryString(String query) {

@@ -34,6 +34,14 @@ import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogA
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Abstract base class for LiveContext tests.
+ *
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
+@Deprecated(since = "2101.4", forRemoval = true)
+@SuppressWarnings("removal")
 @TestPropertySource(properties = "livecontext.sfcc.ocapi.shopBasePath=/s/{storeId}/dw/shop/")
 public abstract class CatalogServiceBaseTest extends AbstractServiceTest {
 

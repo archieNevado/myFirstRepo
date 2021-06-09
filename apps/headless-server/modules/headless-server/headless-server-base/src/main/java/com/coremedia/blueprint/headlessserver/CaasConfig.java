@@ -64,6 +64,7 @@ import com.coremedia.caas.web.CaasPersistedQueryConfigurationProperties;
 import com.coremedia.caas.web.CaasServiceConfigurationProperties;
 import com.coremedia.caas.web.CaasWebConfig;
 import com.coremedia.caas.web.GraphiqlConfigurationProperties;
+import com.coremedia.caas.web.filter.HSTSResponseHeaderFilter;
 import com.coremedia.caas.web.metadata.MetadataConfigurationProperties;
 import com.coremedia.caas.web.metadata.MetadataProvider;
 import com.coremedia.caas.web.metadata.MetadataRoot;
@@ -305,6 +306,11 @@ public class CaasConfig implements WebMvcConfigurer {
     filter.setIncludeQueryString(true);
     filter.setIncludePayload(false);
     return filter;
+  }
+
+  @Bean
+  public Filter hstsResponseHeaderFilter(CaasServiceConfigurationProperties caasServiceConfigurationProperties) {
+    return new HSTSResponseHeaderFilter(caasServiceConfigurationProperties);
   }
 
   @Bean("cacheManager")

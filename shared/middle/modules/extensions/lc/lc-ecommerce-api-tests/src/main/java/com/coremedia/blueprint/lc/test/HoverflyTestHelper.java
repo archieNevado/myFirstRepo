@@ -2,6 +2,14 @@ package com.coremedia.blueprint.lc.test;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
 
+/**
+ * Helper class used by {@link SwitchableHoverflyExtension}.
+ *
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
+ */
+@Deprecated(since = "2101.4", forRemoval = true)
+@SuppressWarnings("removal")
 public class HoverflyTestHelper {
 
   private HoverflyTestHelper() {

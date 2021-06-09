@@ -15,8 +15,6 @@ import com.coremedia.ui.data.beanFactory;
 import com.coremedia.ui.store.BeanRecord;
 import com.coremedia.ui.util.createComponentSelector;
 
-import ext.EventManager;
-
 import ext.StringUtil;
 import ext.grid.GridPanel;
 
@@ -84,7 +82,7 @@ public class TaxonomyFilterPanelBase extends FilterPanel {
   private function addKeyListener():void {
     removeListener('afterlayout', addKeyListener);
     var grid:GridPanel = query(createComponentSelector().itemId(TAXONOMY_NODE_GRID_ITEM_ID).build())[0] as GridPanel;
-    EventManager.on(grid.getEl(), 'keyup', function (evt:KeyEvent, t:*, o:*):void {
+    grid.getEl().addListener('keyup', function (evt:KeyEvent):void {
       if (evt.keyCode === KeyEvent.DOM_VK_DELETE ||
               evt.keyCode === KeyEvent.DOM_VK_ENTER ||
               evt.keyCode === KeyEvent.DOM_VK_RETURN ||

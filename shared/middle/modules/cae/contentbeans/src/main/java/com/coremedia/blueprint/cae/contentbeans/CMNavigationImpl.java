@@ -8,6 +8,7 @@ import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.content.Content;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -101,6 +102,9 @@ public abstract class CMNavigationImpl extends CMNavigationBase {
   @Override
   public CMNavigation getRootNavigation() {
     List<? extends Linkable> linkables = treeRelation.pathToRoot(this);
+    if (CollectionUtils.isEmpty(linkables)) {
+      throw new IllegalStateException("Cannot determine root navigation for channel: " + this);
+    }
     return (CMNavigation) linkables.get(0);
   }
 

@@ -1,4 +1,5 @@
 add_header Content-Security-Policy "frame-ancestors 'self';";
+add_header X-Content-Type-Options "nosniff";
 
 server {
   listen       80 ${PROTOCOL};

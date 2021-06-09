@@ -1,9 +1,9 @@
 package com.coremedia.blueprint.lc.test.beans;
 
-import com.coremedia.blueprint.base.livecontext.client.common.GenericStoreContext;
 import com.coremedia.blueprint.base.livecontext.client.beans.ClientCommerceBean;
 import com.coremedia.blueprint.base.livecontext.client.beans.ClientCommerceBeanFactory;
 import com.coremedia.blueprint.base.livecontext.client.beans.ClientCommerceBeanFactoryMethodRegistry;
+import com.coremedia.blueprint.base.livecontext.client.common.GenericStoreContext;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdBuilder;
 import com.coremedia.commerce.adapter.base.entities.Product;
@@ -15,6 +15,7 @@ import com.coremedia.livecontext.ecommerce.common.Vendor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Answers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -28,7 +29,7 @@ class CustomCommerceBeanTest {
   @Mock
   private CatalogAliasTranslationService catalogAliasTranslationService;
 
-  @Mock
+  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
   private GenericStoreContext storeContext;
   private ClientCommerceBeanFactory commerceBeanFactory;
 

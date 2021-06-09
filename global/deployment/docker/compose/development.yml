@@ -351,6 +351,7 @@ services:
       - 41105:5005
     environment:
       <<: *development-boot-envs
+      JAVA_HEAP: '2048m'
       CAAS_CONTEXT_TRACE_ENABLED: "false"
       CAASSERVER_ENDPOINT: http://${ENVIRONMENT_FQDN:-docker.localhost}:41180/graphql
       # only used in the test content
@@ -387,6 +388,7 @@ services:
       - 41205:5005
     environment:
       <<: *development-boot-envs
+      JAVA_HEAP: '2048m'
       REPOSITORY_URL: http://master-live-server:8080/ior
       # only used in the test content
       BLUEPRINT_SITE_MAPPING_CORPORATE: //corporate.${ENVIRONMENT_FQDN:-docker.localhost}
