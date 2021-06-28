@@ -181,25 +181,30 @@ public class OSMPanelBase extends Panel implements IHidableMixin {
    * Will create and place the marker, set the zoom level and center the map.
    */
   private function setMarker():void {
-    if(latLngExpression.getValue()) {
-      var lon = getLongitude();
-      var lat = getLatitude();
-      var lonLat:* = getLatLon(lat, lon);
+    //the fallback coord.
+    var lat:Number = 53.5492;
+    var lon:Number = 9.9803;
 
-      //skip zoom change if the marker was moved!
-      if(!skipCalcZoomLevel) {
-        calcZoomLevel();
-      }
-      skipCalcZoomLevel = false;
-
-      if(marker) {
-        vectorLayer.removeAllFeatures();
-      }
-      marker = new OpenLayers['Feature'].Vector(new OpenLayers['Geometry'].Point(lonLat.lon, lonLat.lat));
-      map.zoomIn(zoom);
-      vectorLayer.addFeatures([marker]);
-      map.setCenter(lonLat, zoom);
+    if (latLngExpression.getValue()) {
+      lon = getLongitude();
+      lat = getLatitude();
     }
+
+    var lonLat:* = getLatLon(lat, lon);
+
+    //skip zoom change if the marker was moved!
+    if (!skipCalcZoomLevel) {
+      calcZoomLevel();
+    }
+    skipCalcZoomLevel = false;
+
+    if (marker) {
+      vectorLayer.removeAllFeatures();
+    }
+    marker = new OpenLayers['Feature'].Vector(new OpenLayers['Geometry'].Point(lonLat.lon, lonLat.lat));
+    map.zoomIn(zoom);
+    vectorLayer.addFeatures([marker]);
+    map.setCenter(lonLat, zoom);
   }
 
   /**

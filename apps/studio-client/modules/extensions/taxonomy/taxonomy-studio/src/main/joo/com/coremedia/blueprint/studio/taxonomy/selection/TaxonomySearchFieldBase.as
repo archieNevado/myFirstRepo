@@ -96,7 +96,6 @@ public class TaxonomySearchFieldBase extends StatefulComboBox {
 
   internal function getSearchSuggestionsDataProxy(config:TaxonomySearchField):AjaxProxy {
     if(!httpProxy) {
-      this.siteSelectionExpression = siteSelectionExpression;
       var reader:JsonReader = JsonReader({});
       reader.rootProperty = NODES;
 
@@ -106,7 +105,7 @@ public class TaxonomySearchFieldBase extends StatefulComboBox {
           Logger.info('Taxonomy search request failed:' + response.responseText);
         },
         method: "GET",
-        url: RemoteService.calculateRequestURI('taxonomies/find?' + getTaxonomyIdParam(getTaxonomyId(config)) + getSiteParam()),
+        url: RemoteService.calculateRequestURI('taxonomies/find?' + getTaxonomyIdParam(getTaxonomyId(config)) + getSiteParam(config.siteSelectionExpression)),
         reader: reader
       });
     }
@@ -129,7 +128,7 @@ public class TaxonomySearchFieldBase extends StatefulComboBox {
       taxonomyId = taxonomyIdExpression.getValue();
     }
 
-    ((getStore() as JsonStore).proxy as AjaxProxy).setUrl(RemoteService.calculateRequestURI('taxonomies/find?' + getTaxonomyIdParam(taxonomyId) + getSiteParam()));
+    ((getStore() as JsonStore).proxy as AjaxProxy).setUrl(RemoteService.calculateRequestURI('taxonomies/find?' + getTaxonomyIdParam(taxonomyId) + getSiteParam(siteSelectionExpression)));
   }
 
   //noinspection JSUnusedLocalSymbols
@@ -193,9 +192,9 @@ public class TaxonomySearchFieldBase extends StatefulComboBox {
    * Returns the site param if there is a site selected.
    * @return
    */
-  private function getSiteParam():String {
-    if (siteSelectionExpression && siteSelectionExpression.getValue()) {
-      return '&site=' + siteSelectionExpression.getValue();
+  private function getSiteParam(siteVE:ValueExpression):String {
+    if (siteVE && siteVE.getValue()) {
+      return '&site=' + siteVE.getValue();
     }
     return '';
   }

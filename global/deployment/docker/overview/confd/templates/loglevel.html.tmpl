@@ -22,6 +22,9 @@
       {{ if eq (getv "/studio/packages/proxy/enabled" "true") "true" }}
       <option value="studio-packages-proxy">
       {{end}}
+      {{ if eq (getv "/commerce/commercetools/enabled" "true") "true" }}
+      <option value="commerce-adapter-commercetools">
+      {{end}}
       {{ if eq (getv "/commerce/sfcc/enabled" "true") "true" }}
       <option value="commerce-adapter-sfcc">
       {{end}}

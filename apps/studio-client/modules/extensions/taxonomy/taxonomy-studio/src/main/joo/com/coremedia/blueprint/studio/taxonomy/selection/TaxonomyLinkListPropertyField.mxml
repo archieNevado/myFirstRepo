@@ -65,6 +65,7 @@
                                         tooltip="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'Taxonomy_action_tooltip')}"
                                         iconCls="{resourceManager.getString('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin', 'Taxonomy_action_icon')}"
                                         bindTo="{config.bindTo}"
+                                        siteSelectionExpression="{getSiteSelectionExpression(config.bindTo)}"
                                         forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
                                         propertyValueExpression="{config.bindTo.extendBy('properties.' + config.propertyName)}"
                                         taxonomyIdExpression="{config.taxonomyIdExpression}"/>

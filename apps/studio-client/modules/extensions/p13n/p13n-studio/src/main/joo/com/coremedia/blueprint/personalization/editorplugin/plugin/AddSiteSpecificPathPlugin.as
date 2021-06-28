@@ -4,7 +4,7 @@ import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentPropertyNames;
 import com.coremedia.cms.editor.sdk.util.PathFormatter;
-import com.coremedia.personalization.ui.persona.selector.PersonaSelectorBase;
+import com.coremedia.personalization.ui.persona.selector.PersonaSelector;
 import com.coremedia.ui.data.ValueExpression;
 
 import ext.Component;
@@ -14,12 +14,12 @@ import ext.plugin.AbstractPlugin;
 import joo.debug;
 
 /**
- * Plugin that adds a site specific path containing a placeholder to a {@link PersonaSelectorBase}.
+ * Plugin that adds a site specific path containing a placeholder to a {@link PersonaSelector}.
  */
 public class AddSiteSpecificPathPlugin extends AbstractPlugin {
   private var groupHeaderLabel:String;
   private var path:String;
-  private var personaSelector:PersonaSelectorBase = null;
+  private var personaSelector:PersonaSelector = null;
   private var entityExpression:ValueExpression = null;
 
   private static var sitePathFormatters:Array/*<Function>*/ = [formatSitePathFromContent];
@@ -42,16 +42,24 @@ public class AddSiteSpecificPathPlugin extends AbstractPlugin {
     sitePathFormatters = sitePathFormatters.concat(sitePathFormatter);
   }
 
-  override public function init(component:Component):void {
-    if (!(component is PersonaSelectorBase)) {
-      throw Error("plugin is only applicable to components of type 'PersonaSelectorBase'");
+  override public function init(component: Component): void {
+    if (!(component is PersonaSelector)) {
+      throw Error("plugin is only applicable to components of type 'PersonaSelector'");
     }
-    personaSelector = component as PersonaSelectorBase;
-    personaSelector.mon(personaSelector, 'afterrender', function():void {
-      for each (var sitePathFormatter:Function in sitePathFormatters) {
-        sitePathFormatter.call(null, path, entityExpression, doLoadPersonas);
-      }
+    personaSelector = component as PersonaSelector;
+    personaSelector.mon(personaSelector, 'afterrender', function (): void {
+      personaSelector.contentValueExpression.addChangeListener(loadPersonasFromSitePath);
     });
+
+    personaSelector.addListener('beforedestroy', function () {
+      personaSelector.contentValueExpression && personaSelector.contentValueExpression.removeChangeListener(loadPersonasFromSitePath)
+    })
+  }
+
+  private function loadPersonasFromSitePath(): void {
+    for each (var sitePathFormatter: Function in sitePathFormatters) {
+      sitePathFormatter.call(null, path, entityExpression, doLoadPersonas);
+    }
   }
 
   private static function formatSitePathFromContent(path:String, entityExpression:ValueExpression, callback:Function):void {
@@ -59,19 +67,22 @@ public class AddSiteSpecificPathPlugin extends AbstractPlugin {
       if (entity is Content) {
         entityExpression.extendBy(ContentPropertyNames.PATH).loadValue(function():void {
           var selectedSitePath:String = PathFormatter.formatSitePath(path, Content(entity));
-          callback.call(null, selectedSitePath);
+          callback.call(null, selectedSitePath, entity);
         });
       }
     });
   }
 
-  private function doLoadPersonas(selectedSitePath:String):void {
+  private function doLoadPersonas(selectedSitePath:String, currentContent:Content):void {
     if (selectedSitePath) {
       SESSION.getConnection().getContentRepository().getRoot().getChild(selectedSitePath, function (content:Content, cPath:String):void {
         if (content && personaSelector) {
-          personaSelector.addPath(selectedSitePath, groupHeaderLabel);
-          if (debug) {
-            trace("[INFO]", "added persona lookup path", selectedSitePath, "with label", groupHeaderLabel);
+          if (currentContent && personaSelector.contentValueExpression && personaSelector.contentValueExpression.getValue() && currentContent.getId() === personaSelector.contentValueExpression.getValue().getId()) {
+            personaSelector.clearSiteSpecificPaths();
+            personaSelector.addSiteSpecificPath(selectedSitePath, groupHeaderLabel);
+            if (debug) {
+              trace("[INFO]", "added persona lookup path", selectedSitePath, "with label", groupHeaderLabel);
+            }
           }
         } else if (debug) {
           trace("[INFO]", "no lookup path for persona added. no folder available at path", selectedSitePath);
@@ -81,8 +92,5 @@ public class AddSiteSpecificPathPlugin extends AbstractPlugin {
       trace("[INFO]", "no lookup path for persona added. selected site path is null");
     }
   }
-
-
 }
-
 }

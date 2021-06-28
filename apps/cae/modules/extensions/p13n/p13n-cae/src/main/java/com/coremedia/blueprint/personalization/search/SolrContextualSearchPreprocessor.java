@@ -5,6 +5,7 @@ import com.coremedia.blueprint.cae.search.solr.SearchPreprocessor;
 import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.search.SearchFunctionPreprocessor;
 import com.coremedia.personalization.search.SearchFunctionUnknownException;
+import org.owasp.esapi.ESAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -49,7 +50,9 @@ public class SolrContextualSearchPreprocessor implements SearchPreprocessor<Sear
     try {
       query = searchPreprocessor.process(sqb.getQuery(), contextCollection);
     } catch (SearchFunctionUnknownException ex) {
-      LOG.warn("Cannot evaluate searchfunction in query: " + query, ex);
+      if (LOG.isWarnEnabled()) {
+        LOG.warn("Cannot evaluate searchfunction in query: {}", ESAPI.encoder().encodeForHTML(query), ex);
+      }
     }
     sqb.setQuery(query);
   }

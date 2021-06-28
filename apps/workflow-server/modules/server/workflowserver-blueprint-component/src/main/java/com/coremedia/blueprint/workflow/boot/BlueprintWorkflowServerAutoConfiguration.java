@@ -6,6 +6,7 @@ import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import com.coremedia.translate.TranslatablePredicate;
 import com.coremedia.translate.workflow.AllMergeablePropertiesPredicateFactory;
 import com.coremedia.translate.workflow.CleanInTranslation;
+import com.coremedia.translate.workflow.WorkflowAutoMergeConfigurationProperties;
 import com.coremedia.translate.workflow.synchronization.CopyOver;
 import com.coremedia.translate.workflow.DefaultAutoMergePredicateFactory;
 import com.coremedia.translate.workflow.DefaultAutoMergeStructListMapKey;
@@ -15,6 +16,7 @@ import com.coremedia.translate.workflow.TranslationWorkflowDerivedContentsStrate
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -32,6 +34,7 @@ import java.util.stream.Collectors;
  * Configuration class to be loaded when no customer spring context manager is configured.
  */
 @Configuration(proxyBeanMethods = false)
+@EnableConfigurationProperties(WorkflowAutoMergeConfigurationProperties.class)
 @Import({
         WorkflowServerElasticProcessArchiveConfiguration.class,
         WorkflowServerMemoryProcessArchiveConfiguration.class,
@@ -65,8 +68,11 @@ class BlueprintWorkflowServerAutoConfiguration {
   }
 
   @Bean
-  DefaultAutoMergePredicateFactory defaultAutoMergePredicateFactory(TranslatablePredicate translatablePredicate) {
-    return new DefaultAutoMergePredicateFactory(translatablePredicate);
+  DefaultAutoMergePredicateFactory defaultAutoMergePredicateFactory(TranslatablePredicate translatablePredicate,
+                                                                    WorkflowAutoMergeConfigurationProperties autoMerge) {
+    return autoMerge.isTranslatable()
+            ? new DefaultAutoMergePredicateFactory(true)
+            : new DefaultAutoMergePredicateFactory(translatablePredicate);
   }
 
   @Bean

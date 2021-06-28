@@ -43,6 +43,9 @@
     [Bindable]
     public var bindTo:ValueExpression;
 
+    [ExtConfig]
+    public var siteSelectionExpression:ValueExpression;
+
     /**
      * An optional ValueExpression which makes the component read-only if it is evaluated to true.
      */
@@ -62,6 +65,7 @@
       <items>
         <ui:IconDisplayField iconCls="{resourceManager.getString('com.coremedia.icons.CoreIcons', 'search')}" />
         <taxonomy:TaxonomySearchField searchResultExpression="{getSearchResultExpression()}"
+                                      siteSelectionExpression="{config.siteSelectionExpression}"
                                       taxonomyIdExpression="{config.taxonomyIdExpression}"
                                       resetOnBlur="true"
                                       cls="taxonomy-search-field-selector"

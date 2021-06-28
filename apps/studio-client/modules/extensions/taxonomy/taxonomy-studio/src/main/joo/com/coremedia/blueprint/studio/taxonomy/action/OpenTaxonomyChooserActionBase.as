@@ -17,6 +17,9 @@ public class OpenTaxonomyChooserActionBase extends DependencyTrackedAction {
   public var forceReadOnlyValueExpression:ValueExpression;
 
   [Bindable]
+  public var siteSelectionExpression:ValueExpression;
+
+  [Bindable]
   public var taxonomyIdExpression:ValueExpression;
 
   /**
@@ -27,6 +30,7 @@ public class OpenTaxonomyChooserActionBase extends DependencyTrackedAction {
     singleSelection = config.singleSelection;
     bindTo = config.bindTo;
     forceReadOnlyValueExpression = config.forceReadOnlyValueExpression;
+    siteSelectionExpression = config.siteSelectionExpression;
     taxonomyIdExpression = config.taxonomyIdExpression;
     config.handler = showChooser;
     super(config);
@@ -43,6 +47,7 @@ public class OpenTaxonomyChooserActionBase extends DependencyTrackedAction {
   private function showChooser():void {
     var taxChooser:TaxonomySelectionWindow = new TaxonomySelectionWindow(TaxonomySelectionWindow({
       taxonomyIdExpression: taxonomyIdExpression,
+      siteSelectionExpression: siteSelectionExpression,
       singleSelection: singleSelection,
       bindTo: bindTo,
       propertyValueExpression: propertyValueExpression

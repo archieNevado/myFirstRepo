@@ -19,14 +19,22 @@
   <field name="_version_" type="plong" indexed="false" stored="false"/>
 
   <!--
-    Solr internal field for nested documents: the value of the top/parent ID.
-  -->
-  <field name="_root_" type="string" indexed="true" stored="false" docValues="true" />
+    Solr internal fields for nested documents.
 
-  <!--
-    Solr internal field for nested documents: the path of the document in the hierarchy for non-root documents
+    _root_       - the value of the top/parent ID.
+    _nest_path_  - the path of the document in the hierarchy for non-root documents
+
+    By default, these fields are disabled, because they must not be added to existing indexes.
+    When adding or removing these fields, the index must be recreated from scratch to avoid inconsistencies.
+    It's not sufficient to reindex all documents in an existing index.
+
+    The fields must be added, if custom code uses nested documents in the CAE Feeder by calling Java API method
+    com.coremedia.cap.feeder.MutableFeedable#setNestedFeedables.
   -->
-  <field name="_nest_path_" type="_nest_path_" /><fieldType name="_nest_path_" class="solr.NestPathField" />
+  <!--
+    <field name="_root_" type="string" indexed="true" stored="false" docValues="true" />
+    <field name="_nest_path_" type="_nest_path_" /><fieldType name="_nest_path_" class="solr.NestPathField" />
+  -->
 
   <!--
     The ID of the document.

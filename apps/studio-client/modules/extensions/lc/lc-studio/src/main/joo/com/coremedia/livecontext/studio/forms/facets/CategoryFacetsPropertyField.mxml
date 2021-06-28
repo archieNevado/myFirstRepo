@@ -36,6 +36,7 @@
         </DisplayField>
         <Button hidden="true"
                 ui="{ButtonSkin.LINK.getSkin()}"
+                margin="0 0 0 -2"
                 handler="{autoFixFormat}"
                 itemId="{FIX_BUTTON_ITEM_ID}"
                 text="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'CMProductList_facets_remove_invalid_values')}">
@@ -52,6 +53,7 @@
         </DisplayField>
         <Button text="{resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'CMProductList_facets_mode_switch')}"
                 handler="{toggleFacetMode}"
+                margin="0 0 0 -2"
                 itemId="{SWITCH_BUTTON_ITEM_ID}"
                 ui="{ButtonSkin.LINK.getSkin()}">
           <plugins>
@@ -62,7 +64,7 @@
         </Button>
       </items>
       <layout>
-        <layout_HBox align="stretch" pack="start" />
+        <layout_VBox />
       </layout>
     </Container>
     <ui:SwitchingContainer activeItemValueExpression="{getActiveEditorExpression(config)}">

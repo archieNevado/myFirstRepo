@@ -32,7 +32,6 @@ import com.coremedia.livecontext.ecommerce.search.SearchQuery;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.collections4.Transformer;
@@ -44,12 +43,14 @@ import javax.annotation.PostConstruct;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CATALOG;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CATEGORY;
@@ -69,9 +70,12 @@ import static org.apache.commons.collections4.map.LazyMap.lazyMap;
  * in favour of the Commerce Hub integration.
  */
 @Deprecated
+@SuppressWarnings("removal")
 public class CatalogServiceImpl extends AbstractIbmService implements CatalogService {
 
   private static final Logger LOG = LoggerFactory.getLogger(CatalogServiceImpl.class);
+
+  private static final String FACET_EXTENDED_DATA_KEY_FNAME = "fname";
 
   private WcCatalogWrapperService catalogWrapperService;
   private StoreInfoService storeInfoService;
@@ -313,15 +317,23 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
   public <T extends CommerceBean> SearchResult<T> search(SearchQuery searchQuery, StoreContext storeContext) {
     String searchTerm = searchQuery.getSearchTerm();
 
+    // SearchQuery#offset is zero-based, whereas the legacy LC3 implementation works with one-based offset.
+    int offset = searchQuery.getOffset() + 1;
+
     HashMap<String, String> searchParams = new HashMap<>();
-    searchParams.put(CatalogService.SEARCH_PARAM_OFFSET, String.valueOf(searchQuery.getOffset()));
-    searchParams.put(CatalogService.SEARCH_PARAM_TOTAL, String.valueOf(searchQuery.getLimit()));
+    searchParams.put(CatalogService.SEARCH_PARAM_OFFSET, String.valueOf(offset));
     searchParams.put(CatalogService.SEARCH_PARAM_FACET_SUPPORT, String.valueOf(searchQuery.isIncludeResultFacets()));
     searchQuery.getFilterFacets().stream().findFirst().ifPresent(facet -> searchParams.put(CatalogService.SEARCH_PARAM_FACET, facet.value()));
     searchQuery.getOrderBy().ifPresent(orderBy -> searchParams.put(CatalogService.SEARCH_PARAM_ORDERBY, orderBy.value()));
     searchQuery.getCategoryId()
-            .flatMap(commerceId -> commerceId.getTechId().or(commerceId::getExternalId))
+            .flatMap(commerceId -> commerceId.getTechId()
+                    .or(() -> resolveCategoryExternalTechId(commerceId, storeContext)))
             .ifPresent(value -> searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, value));
+
+    int limit = searchQuery.getLimit();
+    if (limit >= 0) {
+      searchParams.put(CatalogService.SEARCH_PARAM_TOTAL, String.valueOf(limit));
+    }
 
     CommerceBeanType searchType = searchQuery.getType();
     if (searchType.equals(PRODUCT)) {
@@ -333,6 +345,16 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
     } else {
       throw new UnsupportedOperationException("Search for type " + searchType + " is not supported");
     }
+  }
+
+  @NonNull
+  private Optional<String> resolveCategoryExternalTechId(@NonNull CommerceId commerceId,
+                                                         @NonNull StoreContext storeContext) {
+    Category category = findCategoryById(commerceId, storeContext);
+    if (category == null) {
+      return Optional.empty();
+    }
+    return Optional.ofNullable(category.getExternalTechId());
   }
 
   /**
@@ -372,7 +394,11 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
 
     searchResult = processOffset(searchParams, searchResult, startNumber);
 
-    SearchResult<Product> result = new SearchResult<>();
+    // Start with the builder as it's the only way to set the resultFacets without changing non-deprecated code just
+    // to fix an error in this deprecated class. But we rather leave the rest of the SearchResult creation untouched.
+    SearchResult<Product> result = SearchResult.<Product>builder()
+            .setResultFacets(toSearchResultFacets(wcSearchResult.getFacets()))
+            .build();
     result.setSearchResult(createProductBeansFor(searchResult, catalogAlias, storeContext));
     result.setTotalCount(wcSearchResult.getTotalCount());
     result.setPageNumber(startNumber);
@@ -381,15 +407,51 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
     return result;
   }
 
+  private static List<SearchResult.Facet> toSearchResultFacets(Collection<SearchFacet> facets) {
+    if (facets == null) {
+      return List.of();
+    }
+    return facets.stream()
+            .map(CatalogServiceImpl::toSearchResultFacet)
+            .collect(Collectors.toList());
+  }
+
+  private static SearchResult.Facet toSearchResultFacet(SearchFacet wcSearchFacet) {
+    String facetQuery = wcSearchFacet.getQuery();
+    return SearchResult.Facet.builder(getLocalizedFacetLabel(wcSearchFacet), facetQuery)
+            .setValues(wcSearchFacet.getChildFacets().stream()
+                    .map(OfferPriceFormattingHelper::tryFormatOfferPrice)
+                    .map(CatalogServiceImpl::toSearchResultFacetValue)
+                    .collect(toList()))
+            .setMultiSelect(false) // not supported in legacy LC3 implementation
+            .build();
+  }
+
+  private static SearchResult.FacetValue toSearchResultFacetValue(SearchFacet childFacet) {
+    return SearchResult.FacetValue.builder(getLocalizedFacetLabel(childFacet), childFacet.getQuery())
+            .setHitCount(childFacet.getCount())
+            .setSelected(childFacet.isSelected())
+            .build();
+  }
+
+  private static String getLocalizedFacetLabel(SearchFacet wcSearchFacet) {
+    return wcSearchFacet.getExtendedData()
+            .getOrDefault(FACET_EXTENDED_DATA_KEY_FNAME, wcSearchFacet.getLabel())
+            .toString();
+  }
+
   @NonNull
   @Override
   public Map<String, List<SearchFacet>> getFacetsForProductSearch(@NonNull Category category,
                                                                   @NonNull StoreContext storeContext) {
+    Map<String, String> searchParams = new HashMap<>();
+    searchParams.put(CatalogService.SEARCH_PARAM_PAGESIZE, "1");
+    searchParams.put(CatalogService.SEARCH_PARAM_PAGENUMBER, "1");
+
     String categoryId = category.getExternalTechId();
-    Map<String, String> searchParams = ImmutableMap.of(
-            CatalogService.SEARCH_PARAM_CATEGORYID, categoryId,
-            CatalogService.SEARCH_PARAM_PAGESIZE, "1",
-            CatalogService.SEARCH_PARAM_PAGENUMBER, "1");
+    if (!CategoryImpl.ROOT_CATEGORY_ROLE_ID.equals(categoryId)) {
+      searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, categoryId);
+    }
 
     SearchResult<Product> searchResult = searchProducts("*", searchParams, storeContext);
 
