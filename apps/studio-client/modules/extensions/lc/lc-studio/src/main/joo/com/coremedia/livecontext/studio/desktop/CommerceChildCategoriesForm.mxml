@@ -21,7 +21,7 @@
     /**
      * A ValueExpression that indicates whether the property fields should be read only
      */
-    [Bindable]
+    [ExtConfig]
     public var forceReadOnlyValueExpression:ValueExpression;
     public static const xtype:String = "com.coremedia.livecontext.studio.config.commerceChildCategoriesForm";
 
@@ -30,13 +30,9 @@
     public static const SELECTED_CATEGORIES_ITEM_ID:String = "selectedCategories";
 
     private var config:CommerceChildCategoriesForm;
-    private var stringToBoolean:Function;
 
-    // called by generated constructor code
-    private function __initialize__():void {
-      stringToBoolean = function (value:String):Boolean {
-        return value === 'selectChildrenRadioButton'
-      };
+    private static function stringToBoolean(value:String):Boolean {
+      return value === 'selectChildrenRadioButton'
     }
 
     public native function CommerceChildCategoriesForm(config:CommerceChildCategoriesForm = null);

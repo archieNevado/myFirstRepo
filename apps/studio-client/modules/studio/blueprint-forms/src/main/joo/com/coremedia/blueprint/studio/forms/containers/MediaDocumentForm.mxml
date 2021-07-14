@@ -19,21 +19,28 @@
     private var config:MediaDocumentForm;
 
     public native function MediaDocumentForm(config:MediaDocumentForm = null);
+
+    /** Maximum amount of items in the list */
+    [ExtConfig]
+    public var maxCardinality:int;
+
+
+    /**
+     * The content property name of the list to bind the newly created content to.
+     * Defaults to pictures.
+     */
+    [ExtConfig]
+    public var mediaPropertyName:String;
+
+    /**
+     * The content types for the QuickCreate menu.
+     * Default is CMPicture,CMVideo,CMSpinner.
+     */
+    [ExtConfig]
+    public var quickCreateTypes:String;
     ]]></fx:Script>
   <fx:Declarations>
-    <!--- Maximum amount of items in the list -->
-    <fx:int id="maxCardinality"/>
-
-    <!---
-     The content property name of the list to bind the newly created content to.
-     Defaults to pictures.
-    -->
     <fx:String id="mediaPropertyName">pictures</fx:String>
-
-    <!---
-     The content types for the QuickCreate menu.
-     Default is CMPicture,CMVideo,CMSpinner.
-    -->
     <fx:String id="quickCreateTypes">CMPicture,CMVideo,CMSpinner</fx:String>
   </fx:Declarations>
 

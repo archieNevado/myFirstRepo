@@ -78,7 +78,7 @@ class AssetInvalidationRepositoryListener extends ContentRepositoryListenerBase 
       return;
     }
 
-    commerceCacheInvalidationSource.invalidateReferences(newHashSet(getReferences(event, content)));
+    commerceCacheInvalidationSource.invalidateReferences(newHashSet(getReferences(event, content)), null);
   }
 
   @NonNull

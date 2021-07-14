@@ -10,6 +10,7 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.search.SearchQuery;
 import com.coremedia.livecontext.ecommerce.search.SearchQueryBuilder;
+import com.coremedia.livecontext.ecommerce.search.SearchQueryFacet;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 import com.coremedia.rest.cap.common.represent.SuggestionResultRepresentation;
@@ -24,6 +25,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService.DEFAULT_CATALOG_ALIAS;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.WORKSPACE_ID_NONE;
@@ -48,6 +52,7 @@ public class CatalogServiceResource {
   private static final String SEARCH_PARAM_QUERY = "query";
   private static final String SEARCH_PARAM_LIMIT = "limit";
   private static final String SEARCH_PARAM_ORDER_BY = "orderBy";
+  private static final String SEARCH_FILTER_QUERY = "filterQuery";
   private static final String SEARCH_PARAM_WORKSPACE_ID = "workspaceId";
 
   private static final String SEARCH_PARAM_SEARCH_TYPE = "searchType";
@@ -63,9 +68,10 @@ public class CatalogServiceResource {
           @RequestParam(value = SEARCH_PARAM_LIMIT, defaultValue = DEFAULT_SEARCH_LIMIT) int limit,
           @RequestParam(value = SEARCH_PARAM_ORDER_BY, required = false) String orderBy,
           @RequestParam(SEARCH_PARAM_SEARCH_TYPE) String searchType,
+          @RequestParam(value = SEARCH_FILTER_QUERY, required = false) final List<String> filterQueries,
           @RequestParam(value = SEARCH_PARAM_CATEGORY, required = false) String category,
           @RequestParam(value = SEARCH_PARAM_CATALOG_ALIAS, required = false) String catalogAlias,
-          @RequestParam(SEARCH_PARAM_WORKSPACE_ID) String workspaceId
+          @RequestParam(value = SEARCH_PARAM_WORKSPACE_ID, required = false) String workspaceId
   ) {
     // The site ID in the URL is ignored here, but the `SiteFilter`
     // should have picked it up so the `CommerceConnectionFilter`
@@ -83,27 +89,40 @@ public class CatalogServiceResource {
             .withWorkspaceId(workspaceId != null ? WorkspaceId.of(workspaceId) : WORKSPACE_ID_NONE)
             .build();
 
-    SearchQuery searchQuery = buildSearchQuery(query, searchType, category, catalogAlias, limit, newStoreContextForSite);
+    SearchQuery searchQuery = buildSearchQuery(query, searchType, category, catalogAlias, filterQueries, limit, newStoreContextForSite);
     SearchResult<? extends CommerceBean> searchResult = search(searchQuery, newStoreContextForSite);
 
     return new CatalogSearchResultRepresentation(searchResult.getItems(), searchResult.getTotalCount());
   }
 
   @NonNull
-  private static SearchQuery buildSearchQuery(String query, String searchType, String category, String catalogAlias,
-                                              int limit, @NonNull StoreContext storeContext) {
+  private static SearchQuery buildSearchQuery(String query,
+                                              String searchType,
+                                              String category,
+                                              String catalogAlias,
+                                              List<String> filterQueries,
+                                              int limit,
+                                              @NonNull StoreContext storeContext) {
     SearchQueryBuilder searchQueryBuilder = SearchQuery.builder(query, fromSearchType(searchType)).setLimit(limit);
 
-    if (!StringUtils.isEmpty(category) && !isRootCategory(category, catalogAlias, storeContext)) {
+    if (!StringUtils.isEmpty(category)) {
       CommerceIdBuilder categoryIdBuilder = CommerceIdUtils.builder(CATEGORY, storeContext)
               .withTechId(category);
       if (!StringUtils.isEmpty(catalogAlias)) {
         categoryIdBuilder.withCatalogAlias(CatalogAlias.of(catalogAlias));
       }
       searchQueryBuilder.setCategoryId(categoryIdBuilder.build());
+      searchQueryBuilder.setFilterFacets(toFilterFacets(filterQueries));
     }
 
     return searchQueryBuilder.build();
+  }
+
+  private static List<SearchQueryFacet> toFilterFacets(List<String> filterQueries) {
+    if(filterQueries != null) {
+      return filterQueries.stream().map(SearchQueryFacet::of).collect(Collectors.toList());
+    }
+    return Collections.emptyList();
   }
 
   @SuppressWarnings({"SwitchStatementWithoutDefaultBranch", "java:S131"})
@@ -120,18 +139,6 @@ public class CatalogServiceResource {
     }
     // default: Product
     return PRODUCT;
-  }
-
-  private static boolean isRootCategory(@NonNull String categoryParam, String catalogAlias,
-                                        @NonNull StoreContext storeContext) {
-    // check if it is the actual id of the root category
-    // (depends on the commerce implementation)
-    CatalogAlias myAlias = StringUtils.isEmpty(catalogAlias) ? DEFAULT_CATALOG_ALIAS : CatalogAlias.of(catalogAlias);
-    String rootCategoryId = storeContext.getConnection()
-            .getCatalogService()
-            .findRootCategory(myAlias, storeContext)
-            .getExternalId();
-    return categoryParam.equals(rootCategoryId);
   }
 
   @SuppressWarnings("SSBasedInspection")
@@ -166,6 +173,7 @@ public class CatalogServiceResource {
           @RequestParam(SEARCH_PARAM_QUERY) String query,
           @RequestParam(value = SEARCH_PARAM_LIMIT, defaultValue = DEFAULT_SUGGESTIONS_LIMIT) int limit,
           @RequestParam(SEARCH_PARAM_SEARCH_TYPE) String searchType,
+          @RequestParam(value = SEARCH_FILTER_QUERY, required = false) final List<String> filterQueries,
           @RequestParam(SEARCH_PARAM_SITE_ID) String siteId,
           @RequestParam(value = SEARCH_PARAM_CATEGORY, required = false) String category,
           @RequestParam(SEARCH_PARAM_WORKSPACE_ID) String workspaceId

@@ -18,11 +18,14 @@
     private var config:SEOForm;
 
     public native function SEOForm(config:SEOForm = null);
+
+    /**
+     * The name of the first fallback property
+     */
+    [ExtConfig]
+    public var delegatePropertyName:String;
     ]]></fx:Script>
   <fx:Declarations>
-    <!---
-     The name of the first fallback property
-    -->
     <fx:String id="delegatePropertyName">title</fx:String>
   </fx:Declarations>
 

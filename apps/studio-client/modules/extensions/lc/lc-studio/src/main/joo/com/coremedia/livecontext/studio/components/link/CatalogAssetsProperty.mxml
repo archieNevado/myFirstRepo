@@ -22,25 +22,28 @@
      * A property path expression leading to the Bean whose property is edited.
      * This property editor assumes that this bean has a property 'properties'.
      */
-    [Bindable]
+    [ExtConfig]
     public var bindTo:ValueExpression;
+
+    /**
+     * The name of the sting property of the Bean to bind in this field.
+     * The string property holds the id of the catalog product
+     */
+    [ExtConfig]
+    public var propertyName:String;
+
+    [ExtConfig]
+    public var assetContentTypes:Array;
+
+    [ExtConfig]
+    public var maxCardinality:Number;
+
+    /**
+     * Text shown when the property is empty
+     */
+    [ExtConfig]
+    public var emptyText:String;
     ]]></fx:Script>
-  <fx:Declarations>
-    <!---
-     The name of the sting property of the Bean to bind in this field.
-     The string property holds the id of the catalog product
-    -->
-    <fx:String id="propertyName"/>
-
-    <fx:Array id="assetContentTypes"/>
-
-    <fx:Number id="maxCardinality"/>
-
-    <!---
-     Text shown when the property is empty
-    -->
-    <fx:String id="emptyText"/>
-  </fx:Declarations>
 
   <local:items>
     <editor:LinkListGridPanel itemId="{CATALOG_ASSET_PROPERTY_ITEM_ID}"

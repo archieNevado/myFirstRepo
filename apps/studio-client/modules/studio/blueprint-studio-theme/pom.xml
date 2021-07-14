@@ -21,6 +21,10 @@
       <resource>
         <directory>src/main/sencha</directory>
         <targetPath>../packages/${project.groupId}__${project.artifactId}</targetPath>
+        <excludes>
+          <exclude>sass/var/**</exclude>
+          <exclude>sass/src/**</exclude>
+        </excludes>
       </resource>
     </resources>
 
@@ -31,7 +35,8 @@
         <extensions>true</extensions>
         <configuration>
           <packageType>theme</packageType>
-          <theme>com.coremedia.ui__studio-theme</theme>
+          <theme>com.coremedia.ui:studio-theme</theme>
+          <extNamespace>.</extNamespace>
         </configuration>
       </plugin>
     </plugins>

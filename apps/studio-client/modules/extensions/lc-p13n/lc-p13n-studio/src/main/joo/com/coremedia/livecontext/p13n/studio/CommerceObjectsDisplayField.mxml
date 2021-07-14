@@ -17,16 +17,18 @@
     /**
      * The content (document) of the persona
      */
-    [Bindable]
+    [ExtConfig]
     public var personaContent:Content;
+
+    [ExtConfig]
+    public var catalogObjectIdListName:String;
+
+    [ExtConfig]
+    public var invalidMessage:String;
+
+    [ExtConfig]
+    public var emptyMessage:String;
     ]]></fx:Script>
-  <fx:Declarations>
-    <fx:String id="catalogObjectIdListName"/>
-
-    <fx:String id="invalidMessage"/>
-
-    <fx:String id="emptyMessage"/>
-  </fx:Declarations>
 
   <local:plugins>
     <ui:BindPropertyPlugin componentProperty="value"

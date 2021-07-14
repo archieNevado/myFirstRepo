@@ -4,7 +4,7 @@ import com.coremedia.blueprint.base.caas.model.adapter.AbstractDynamicListAdapte
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.blueprint.base.querylist.PaginationHelper;
 import com.coremedia.blueprint.base.settings.SettingsService;
-import com.coremedia.blueprint.caas.augmentation.model.AugmentationFacade;
+import com.coremedia.blueprint.caas.augmentation.CommerceEntityHelper;
 import com.coremedia.blueprint.caas.augmentation.model.CommerceRef;
 import com.coremedia.caas.model.adapter.ExtendedLinkListAdapterFactory;
 import com.coremedia.cap.common.NoSuchPropertyDescriptorException;
@@ -56,7 +56,7 @@ public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
   public static final String ALL_QUERY = "*";
 
   private final SettingsService settingsService;
-  private final AugmentationFacade augmentationFacade;
+  private final CommerceEntityHelper commerceEntityHelper;
   private final CommerceSearchFacade commerceSearchFacade;
   private final Site site;
   private final Integer offset;
@@ -64,13 +64,13 @@ public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
   public ProductListAdapter(ExtendedLinkListAdapterFactory extendedLinkListAdapterFactory,
                             Content content,
                             SettingsService settingsService,
-                            AugmentationFacade augmentationFacade,
+                            CommerceEntityHelper commerceEntityHelper,
                             CommerceSearchFacade commerceSearchFacade,
                             Site site,
                             Integer offset) {
     super(extendedLinkListAdapterFactory, content);
     this.settingsService = settingsService;
-    this.augmentationFacade = augmentationFacade;
+    this.commerceEntityHelper = commerceEntityHelper;
     this.commerceSearchFacade = commerceSearchFacade;
     this.site = site;
     this.offset = offset;
@@ -152,7 +152,7 @@ public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
     CommerceId commerceId = CommerceIdParserHelper.parseCommerceId(commerceIdStr).orElse(null);
     if (commerceId != null) {
       catalogAlias = commerceId.getCatalogAlias();
-      CommerceBean categoryBean = augmentationFacade.getCommerceBean(commerceId, siteId);
+      CommerceBean categoryBean = commerceEntityHelper.getCommerceBean(commerceId, siteId);
       if (categoryBean != null) {
         categoryId = categoryBean.getExternalTechId();
       }

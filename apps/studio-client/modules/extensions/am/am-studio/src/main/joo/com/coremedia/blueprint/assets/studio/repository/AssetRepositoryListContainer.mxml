@@ -21,7 +21,7 @@
 
     public native function AssetRepositoryListContainer(config:AssetRepositoryListContainer = null);
 
-    [Bindable]
+    [ExtConfig]
     public var selectionHolder:ICollectionView;
     ]]></fx:Script>
 

@@ -18,7 +18,7 @@
 
     private var config:CatalogSearchToolbarContainer;
 
-    [Bindable]
+    [ExtConfig]
     public var selectedSearchItemsValueExpression:ValueExpression;
 
     public native function CatalogSearchToolbarContainer(config:CatalogSearchToolbarContainer = null);

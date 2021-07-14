@@ -23,7 +23,7 @@
     /**
      * The bean value expression pointing to a product teaser.
      */
-    [Bindable]
+    [ExtConfig]
     public var bindTo:ValueExpression;
     ]]></fx:Script>
 

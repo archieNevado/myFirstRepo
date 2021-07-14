@@ -23,20 +23,20 @@
     /**
      * value expression for the selected folder in the library tree
      */
-    [Bindable]
+    [ExtConfig]
     public var selectedFolderValueExpression:ValueExpression;
 
     /**
      * value expression that acts as a model for informing a view of a newly created content object.
      */
-    [Bindable]
+    [ExtConfig]
     public var createdContentValueExpression:ValueExpression;
 
     /**
      * value expression for the selected items, either in the list view, or - if the selection there is empty - the
      * selected folder in the tree view.
      */
-    [Bindable]
+    [ExtConfig]
     public var selectedItemsValueExpression:ValueExpression;
     ]]></fx:Script>
 

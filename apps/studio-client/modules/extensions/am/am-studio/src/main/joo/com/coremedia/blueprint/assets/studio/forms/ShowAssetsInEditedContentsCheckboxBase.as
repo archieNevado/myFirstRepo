@@ -1,8 +1,8 @@
 package com.coremedia.blueprint.assets.studio.forms {
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.list.impl.CapListRepositoryImpl;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.util.PreferencesUtil;
-import com.coremedia.collaboration.controlroom.rest.CapListRepositoryImpl;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.util.ObjectUtils;

@@ -21,26 +21,25 @@
     private var filterFunction:Function;
     private var storeFilterer:Function;
 
-    // called by generated constructor code
-    private function __initialize__(config:FilteringContentTypeStringPropertyField):void {
-      contentType = SESSION.getConnection().getContentRepository().getContentType(config.baseType);
-      filterFunction = function (record:Model):* {
-        return SESSION.getConnection().getContentRepository().getContentType(String(record.get('name'))).isSubtypeOf(contentType)
-      };
-      storeFilterer = function ():void {
-        var store:Store = Store(getStore());
-        store.suspendEvents(false);
-        store.filterBy(filterFunction);
-        store.resumeEvents()
-      };
-    }
+    /**
+     * The name of the base content type to restrict the combo box to
+     */
+    [ExtConfig]
+    public var baseType:String;
 
     public native function FilteringContentTypeStringPropertyField(config:FilteringContentTypeStringPropertyField = null);
     ]]></fx:Script>
   <fx:Declarations>
-    <!---
-     The name of the base content type to restrict the combo box to
-    -->
+    <fx:Object id="contentType">{SESSION.getConnection().getContentRepository().getContentType(config.baseType)}</fx:Object>
+    <fx:Function id="filterFunction">{function (record:Model):* {
+      return SESSION.getConnection().getContentRepository().getContentType(String(record.get('name'))).isSubtypeOf(contentType)
+    }}</fx:Function>
+    <fx:Function id="storeFilterer">{function ():void {
+      var store:Store = Store(getStore());
+      store.suspendEvents(false);
+      store.filterBy(filterFunction);
+      store.resumeEvents()
+    }}</fx:Function>
     <fx:String id="baseType">_Document</fx:String>
   </fx:Declarations>
 

@@ -28,26 +28,27 @@
     /**
      * The content bean value expression.
      */
-    [Bindable]
+    [ExtConfig]
     public var bindTo:ValueExpression;
 
     /**
      * An optional ValueExpression which makes the component read-only if it is evaluated to true.
      */
-    [Bindable]
+    [ExtConfig]
     public var forceReadOnlyValueExpression:ValueExpression;
-    ]]></fx:Script>
-  <fx:Declarations>
-    <!---
-     The property name of the content that should contains the taxonomy to display.
-    -->
-    <fx:String id="propertyName"/>
 
-    <!---
-     If true, suggestions field is not shown, default is false.
-    -->
-    <fx:Boolean id="disableSuggestions"/>
-  </fx:Declarations>
+    /**
+     * The property name of the content that should contains the taxonomy to display.
+     */
+    [ExtConfig]
+    public var propertyName:String;
+
+    /**
+     * If true, suggestions field is not shown, default is false.
+     */
+    [ExtConfig]
+    public var disableSuggestions:Boolean;
+    ]]></fx:Script>
 
   <local:plugins>
     <editor:BindDisablePlugin forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"
@@ -87,7 +88,7 @@
       </items>
     </Toolbar>
     <Toolbar dock="bottom"
-             u:focusableContainer="false"
+             focusableContainer="false"
              maskOnDisable="false"
              ui="{ToolbarSkin.EMBEDDED_FOOTER.getSkin()}">
       <items>

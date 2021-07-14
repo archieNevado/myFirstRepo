@@ -21,12 +21,10 @@
     private var catalogLinkPropertyField:CatalogLinkPropertyField;
 
     public native function AddCatalogLinkActionsPlugin(config:AddCatalogLinkActionsPlugin = null);
-
-    // called by generated constructor code
-    private function __initialize__(config:AddCatalogLinkActionsPlugin):void {
-      catalogLinkPropertyField = CatalogLinkPropertyField(config.cmp);
-    }
     ]]></fx:Script>
+  <fx:Declarations>
+    <fx:Object id="catalogLinkPropertyField">{CatalogLinkPropertyField(config.cmp)}</fx:Object>
+  </fx:Declarations>
 
   <ui:rules>
     <ec:CatalogLinkToolbar>

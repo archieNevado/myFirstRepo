@@ -6,10 +6,10 @@ import ext.panel.Panel;
 
 public class EsAnalyticsChartBase extends Panel implements IHidableMixin {
 
-  [Bindable]
+  [ExtConfig]
   public var bindTo:ValueExpression;
 
-  [Bindable]
+  [ExtConfig]
   public var timeRangeValueExpression:ValueExpression;
 
   private var chartPanel:EsChart;

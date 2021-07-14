@@ -16,11 +16,11 @@
     private var config:OSMPropertyField;
 
     public native function OSMPropertyField(config:OSMPropertyField = null);
+
+    /** the property of the Bean to bind in this field */
+    [ExtConfig]
+    public var propertyName:String;
     ]]></fx:Script>
-  <fx:Declarations>
-    <!--- the property of the Bean to bind in this field -->
-    <fx:String id="propertyName"/>
-  </fx:Declarations>
 
   <editor:items>
     <osm:OSMPanel latLngExpression="{config.bindTo.extendBy('properties', config.propertyName)}">

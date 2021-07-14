@@ -11,6 +11,10 @@
 
   <properties>
     <studio-base-app.senchaJvmArgs>-Xms512m -Xmx2048m</studio-base-app.senchaJvmArgs>
+    <!-- Proxy spec when running mvn jangaroo:run-->
+    <jooProxyPathSpec>/rest/*</jooProxyPathSpec>
+    <!-- Proxy all rest request to a locally started studio-server-app-->
+    <jooProxyTargetUri>http://localhost:41080</jooProxyTargetUri>
   </properties>
 
   <dependencies>
@@ -151,10 +155,18 @@
     </resources>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <configuration>
+          <overwrite>true</overwrite>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>net.jangaroo</groupId>
         <artifactId>jangaroo-maven-plugin</artifactId>
         <extensions>true</extensions>
         <configuration>
+          <extNamespace>.</extNamespace>
           <jooProxyPathSpec>/rest/*</jooProxyPathSpec>
           <theme>${project.groupId}:blueprint-studio-theme</theme>
           <applicationClass>com.coremedia.cms.editor.StudioApplication</applicationClass>
@@ -167,4 +179,23 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>remote-studio-server</id>
+      <!--
+       | This profile will be activated if you set -Dinstallation.host=<FQDN> on your command-line. The jangaroo-plugin
+       | proxy servlet will then route all REST calls to the defined remote studio rest service
+       -->
+      <activation>
+        <property>
+          <name>installation.host</name>
+        </property>
+      </activation>
+      <properties>
+        <jooProxyTargetUri>https://studio.${installation.host}</jooProxyTargetUri>
+      </properties>
+    </profile>
+
+  </profiles>
 </project>

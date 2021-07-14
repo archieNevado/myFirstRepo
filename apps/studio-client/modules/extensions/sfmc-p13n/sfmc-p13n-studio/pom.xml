@@ -32,6 +32,26 @@
       <artifactId>editor-components</artifactId>
       <type>swc</type>
     </dependency>
+    <dependency>
+      <groupId>com.coremedia.ui.toolkit</groupId>
+      <artifactId>core-icons</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.personalization</groupId>
+      <artifactId>cap-personalization-ui</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.ui.toolkit</groupId>
+      <artifactId>ui-components</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>net.jangaroo</groupId>
+      <artifactId>ext-as</artifactId>
+      <type>swc</type>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -41,6 +61,7 @@
         <version>${jangaroo.version}</version> <!-- explicit version for IDEA! -->
         <extensions>true</extensions>
         <configuration>
+          <extNamespace>com.coremedia.blueprint.sfmc.p13n.studio</extNamespace>
           <skip>false</skip>
           <namespaces>
             <namespace>

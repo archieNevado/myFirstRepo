@@ -12,6 +12,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.coremedia.ui.toolkit</groupId>
+      <artifactId>client-core</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
       <groupId>com.coremedia.ui.sdk</groupId>
       <artifactId>cap-rest-client</artifactId>
       <type>swc</type>
@@ -57,6 +62,7 @@
         <version>${jangaroo.version}</version> <!-- explicit version for IDEA! -->
         <extensions>true</extensions>
         <configuration>
+          <extNamespace>com.coremedia.ecommerce.studio</extNamespace>
           <skip>false</skip>
           <testSuite>com.coremedia.ecommerce.studio.TestSuite</testSuite>
           <jooUnitTestExecutionTimeout>120000</jooUnitTestExecutionTimeout>

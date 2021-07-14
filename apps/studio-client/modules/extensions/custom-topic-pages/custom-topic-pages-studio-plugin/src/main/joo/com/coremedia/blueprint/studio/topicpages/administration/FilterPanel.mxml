@@ -18,10 +18,10 @@
     private var config:FilterPanel;
 
     public native function FilterPanel(config:FilterPanel = null);
+
+    [ExtConfig]
+    public var emptyText:String;
     ]]></fx:Script>
-  <fx:Declarations>
-    <fx:String id="emptyText"/>
-  </fx:Declarations>
 
   <local:items>
     <TextField itemId="filterTextField"

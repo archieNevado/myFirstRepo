@@ -17,18 +17,14 @@
     private var component:WorkAreaTabProxiesContextMenu;
     private var componentConfig:WorkAreaTabProxiesContextMenu;
 
-    // called by generated constructor code
-    //noinspection JSUnusedLocalSymbols
-    private function __initialize__(config:AddCatalogObjectActionsToWorkAreaTabProxiesContextMenu):void {
-      component = WorkAreaTabProxiesContextMenu(config.cmp);
-      componentConfig = WorkAreaTabProxiesContextMenu(config.cmp.initialConfig);
-    }
-
-    //noinspection JSUnusedLocalSymbols
     private var config:AddCatalogObjectActionsToWorkAreaTabProxiesContextMenu;
 
     public native function AddCatalogObjectActionsToWorkAreaTabProxiesContextMenu(config:AddCatalogObjectActionsToWorkAreaTabProxiesContextMenu = null);
     ]]></fx:Script>
+  <fx:Declarations>
+    <fx:Object id="component">{WorkAreaTabProxiesContextMenu(config.cmp)}</fx:Object>
+    <fx:Object id="componentConfig">{WorkAreaTabProxiesContextMenu(config.cmp.initialConfig)}</fx:Object>
+  </fx:Declarations>
 
   <ui:items>
     <MenuSeparator/>

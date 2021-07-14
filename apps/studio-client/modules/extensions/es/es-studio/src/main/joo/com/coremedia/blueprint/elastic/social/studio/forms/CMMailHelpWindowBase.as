@@ -22,7 +22,7 @@ public class CMMailHelpWindowBase extends Window {
   internal static const KEY_PREFIX:String = "cmmail_help_window_value_";
   internal static const KEY_PATTERN:String = KEY_PREFIX + "(.+)";
 
-  public function CMMailHelpWindowBase(config:* = undefined) {
+  public function CMMailHelpWindowBase(config:CMMailHelpWindowBase = null) {
     super(config);
     applyTemplate();
   }

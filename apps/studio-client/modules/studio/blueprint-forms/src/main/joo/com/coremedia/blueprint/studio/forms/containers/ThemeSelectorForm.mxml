@@ -16,12 +16,15 @@
     private var config:ThemeSelectorForm;
 
     public native function ThemeSelectorForm(config:ThemeSelectorForm = null);
+
+    /**
+     * An array of strings that specify absolute paths to folders in the
+     * repository where to look for themes (CMTheme documents).
+     */
+    [ExtConfig]
+    public var themesFolderPaths:Array;
     ]]></fx:Script>
   <fx:Declarations>
-    <!---
-     An array of strings that specify absolute paths to folders in the
-     repository where to look for themes (CMTheme documents).
-    -->
     <fx:Array id="themesFolderPaths">{ThemeSelectorFormBase.DEFAULT_PATHS}</fx:Array>
   </fx:Declarations>
 
@@ -43,5 +46,5 @@
                     mapping=""
                     convert_="{ThemeSelectorFormBase.getThumbnailTooltip}"/>
   </local:fields>
-  
+
 </local:ThemeSelectorFormBase>

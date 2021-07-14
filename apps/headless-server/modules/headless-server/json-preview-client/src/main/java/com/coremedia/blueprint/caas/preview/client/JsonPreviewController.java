@@ -17,7 +17,6 @@ import org.apache.http.entity.StringEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -88,18 +87,13 @@ public class JsonPreviewController {
   public JsonPreviewController(HttpClient httpClient,
                                @Qualifier("htmlTemplateEngine") TemplateEngine templateEngine, ContentRepository contentRepository,
                                SitesService sitesService,
-                               JsonPreviewConfigurationProperties jsonPreviewConfigurationProperties,
-                               @Value("${caas.commerce.enabled:false}") boolean isCommerceEnabled) {
+                               JsonPreviewConfigurationProperties jsonPreviewConfigurationProperties) {
     this.httpClient = httpClient;
     this.contentRepository = contentRepository;
     this.sitesService = sitesService;
     this.templateEngine = templateEngine;
     this.jsonPreviewConfigurationProperties = jsonPreviewConfigurationProperties;
-
-    // Can be removed again, when caas.commerce.enabled is obsolete
-    this.persistentPreviewQueries = isCommerceEnabled ?
-            new PersistentPreviewQueries("/previewclient/graphql/", Stream.of(QUERY_CONTENT, QUERY_COMMERCE))
-            : new PersistentPreviewQueries("/previewclient-stitching/graphql/", Stream.of(QUERY_CONTENT, QUERY_COMMERCE));
+    this.persistentPreviewQueries = new PersistentPreviewQueries("/previewclient/graphql/", Stream.of(QUERY_CONTENT, QUERY_COMMERCE));
   }
 
   @GetMapping(PREVIEW_PATH + "/{" + PARAM_NUMERIC_ID + "}/{" + PARAM_TYPE + "}")

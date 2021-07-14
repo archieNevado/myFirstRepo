@@ -23,22 +23,24 @@
     /**
      * property path expression leading to the Content to use for the property field
      */
-    [Bindable]
+    [ExtConfig]
     public var bindTo:ValueExpression;
 
-    [Bindable]
+    [ExtConfig]
     public var forceReadOnlyValueExpression:ValueExpression;
+
+    /** the context of the Bean-property to bind in this field */
+    [ExtConfig]
+    public var propertyContext:String;
+
+    /** the property of the Bean to bind in this field */
+    [ExtConfig]
+    public var propertyName:String;
+
+    /** the values of the Bean to bind in this field */
+    [ExtConfig]
+    public var values:Object;
     ]]></fx:Script>
-  <fx:Declarations>
-    <!--- the context of the Bean-property to bind in this field -->
-    <fx:String id="propertyContext"/>
-
-    <!--- the property of the Bean to bind in this field -->
-    <fx:String id="propertyName"/>
-
-    <!--- the values of the Bean to bind in this field -->
-    <fx:Object id="values"/>
-  </fx:Declarations>
 
   <p13n:plugins>
     <ui:BindPropertyPlugin

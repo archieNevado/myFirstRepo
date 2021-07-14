@@ -1,6 +1,7 @@
 package com.coremedia.ecommerce.studio.rest.cache;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCacheInvalidationEvent;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.base.settings.impl.MapEntrySettingsFinder;
@@ -11,9 +12,14 @@ import com.coremedia.ecommerce.studio.rest.CategoryResource;
 import com.coremedia.ecommerce.studio.rest.MarketingResource;
 import com.coremedia.ecommerce.studio.rest.MarketingSpotResource;
 import com.coremedia.ecommerce.studio.rest.ProductResource;
+import com.coremedia.ecommerce.studio.rest.ProductVariantResource;
 import com.coremedia.ecommerce.studio.rest.SegmentResource;
 import com.coremedia.ecommerce.studio.rest.SegmentsResource;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
+import com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType;
+import com.coremedia.livecontext.ecommerce.common.CommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.event.InvalidationEvent;
 import com.coremedia.rest.invalidations.InvalidationSource;
 import com.coremedia.rest.linking.EntityResourceLinker;
@@ -21,6 +27,9 @@ import com.coremedia.rest.linking.TypeBasedResourceClassFinder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -31,11 +40,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Collections.singleton;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -75,6 +86,7 @@ class CommerceCacheInvalidationSourceTest {
             MarketingSpotResource.class,
             MarketingResource.class,
             ProductResource.class,
+            ProductVariantResource.class,
             SegmentResource.class,
             SegmentsResource.class
     ));
@@ -95,6 +107,9 @@ class CommerceCacheInvalidationSourceTest {
     ProductResource productResource = new ProductResource(catalogAliasTranslationService);
     when(context.getBean(ProductResource.class)).thenReturn(productResource);
 
+    ProductVariantResource productVariantResource = new ProductVariantResource(catalogAliasTranslationService);
+    when(context.getBean(ProductVariantResource.class)).thenReturn(productVariantResource);
+
     SegmentResource segmentResource = new SegmentResource(catalogAliasTranslationService);
     when(context.getBean(SegmentResource.class)).thenReturn(segmentResource);
 
@@ -109,6 +124,61 @@ class CommerceCacheInvalidationSourceTest {
     testling.setSettingsService(settingsService);
     testling.setCapacity(10);
     testling.afterPropertiesSet();
+  }
+
+  @SuppressWarnings({"DuplicateStringLiteralInspection", "unused"})
+  static Stream<Arguments> testInvalidateCommerceCacheInvalidationEvent() {
+    return Stream.of(
+            Arguments.of("mySite", "myCatalogAlias", null, "test:///catalog/category/42",
+                    List.of("livecontext/category/mySite/{catalogAlias:.*}/{workspaceId:.*}/42")),
+            Arguments.of("mySite", "myCatalogAlias", null, "test:///catalog/product/42",
+                    List.of("livecontext/product/mySite/{catalogAlias:.*}/{workspaceId:.*}/42",
+                            "livecontext/sku/mySite/{catalogAlias:.*}/{workspaceId:.*}/42")),
+            Arguments.of("mySite", "myCatalogAlias", null, "test:///catalog/sku/42",
+                    List.of("livecontext/sku/mySite/{catalogAlias:.*}/{workspaceId:.*}/42")),
+            Arguments.of("mySite", "myCatalogAlias", BaseCommerceBeanType.CATEGORY, null,
+                    List.of("livecontext/category/mySite/{catalogAlias:.*}/{workspaceId:.*}/{id:.*}")),
+            Arguments.of("mySite", "myCatalogAlias", BaseCommerceBeanType.PRODUCT, null,
+                    List.of("livecontext/product/mySite/{catalogAlias:.*}/{workspaceId:.*}/{id:.*}")),
+            Arguments.of("mySite", "myCatalogAlias", BaseCommerceBeanType.SKU, null,
+                    List.of("livecontext/sku/mySite/{catalogAlias:.*}/{workspaceId:.*}/{id:.*}")),
+            Arguments.of("mySite", "myCatalogAlias", BaseCommerceBeanType.CATALOG, null,
+                    List.of("livecontext/catalog/mySite/{id:.*}")),
+            Arguments.of("mySite", "myCatalogAlias", BaseCommerceBeanType.MARKETING_SPOT, null,
+                    List.of("livecontext/marketingspot/mySite/{workspaceId:.*}/{id:.*}")),
+            Arguments.of("mySite", "myCatalogAlias", BaseCommerceBeanType.SEGMENT, null,
+                    List.of("livecontext/segment/mySite/{workspaceId:.*}/{id:.*}")),
+            Arguments.of("mySite", "myCatalogAlias", null, null,
+                    List.of("livecontext/{type:.*}/mySite/{id:.*}",
+                            "livecontext/{type:.*}/mySite/{workspaceId:.*}/{id:.*}",
+                            "livecontext/{type:.*}/mySite/{workspaceId:.*}",
+                            "livecontext/facets/mySite/{catalogAlias:.*}/{workspaceId:.*}/{id:.*}",
+                            "livecontext/searchfacets/mySite/{catalogAlias:.*}/{workspaceId:.*}/{id:.*}",
+                            "livecontext/workspaces/mySite"))
+    );
+  }
+
+  @ParameterizedTest
+  @MethodSource
+  void testInvalidateCommerceCacheInvalidationEvent(String siteId,
+                                                    String catalogAlias,
+                                                    CommerceBeanType commerceBeanType,
+                                                    String commerceIdString,
+                                                    Iterable<String> expectedInvalidations) throws InterruptedException {
+    StoreContext storeContext = mock(StoreContext.class);
+    when(storeContext.getSiteId()).thenReturn(siteId);
+    when(storeContext.getCatalogAlias()).thenReturn(CatalogAlias.of(catalogAlias));
+
+    CommerceId commerceId = commerceIdString == null ? null :
+            CommerceIdParserHelper.parseCommerceIdOrThrow(commerceIdString);
+    CommerceCacheInvalidationEvent commerceCacheInvalidationEvent =
+            new CommerceCacheInvalidationEvent(storeContext, "insignificant", null, commerceBeanType, commerceId);
+
+    testling.invalidate(commerceCacheInvalidationEvent);
+
+    InvalidationSource.Invalidations invalidations = testling.getInvalidations("0");
+
+    assertThat(invalidations.getInvalidations()).containsExactlyInAnyOrderElementsOf(expectedInvalidations);
   }
 
   @Test
@@ -175,14 +245,14 @@ class CommerceCacheInvalidationSourceTest {
   @Test
   void toCommerceBeanUriWithPartnumber() {
     Optional<CommerceId> commerceIdOptional = CommerceIdParserHelper.parseCommerceId("test:///catalog/category/partNumber");
-    assertThat(commerceIdOptional).flatMap(id -> testling.toCommerceBeanUri(id))
+    assertThat(commerceIdOptional).flatMap(id -> testling.toCommerceBeanUri(id, null))
             .contains("livecontext/category/{siteId:.*}/{catalogAlias:.*}/{workspaceId:.*}/partNumber");
   }
 
   @Test
   void toCommerceBeanUriWithTechId() {
     Optional<CommerceId> commerceIdOptional = CommerceIdParserHelper.parseCommerceId("test:///catalog/category/techId:42");
-    assertThat(commerceIdOptional).flatMap(id -> testling.toCommerceBeanUri(id))
+    assertThat(commerceIdOptional).flatMap(id -> testling.toCommerceBeanUri(id, null))
             .contains("livecontext/category/{siteId:.*}/{catalogAlias:.*}/{workspaceId:.*}/{id:.*}");
   }
 }

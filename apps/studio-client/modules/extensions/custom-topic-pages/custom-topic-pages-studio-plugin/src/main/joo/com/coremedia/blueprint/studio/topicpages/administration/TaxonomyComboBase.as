@@ -20,10 +20,10 @@ public class TaxonomyComboBase extends LocalComboBox {
   /**
    * Contains the selected taxonomy
    */
-  [Bindable]
+  [ExtConfig]
   public var selectionExpression:ValueExpression;
 
-  [Bindable]
+  [ExtConfig]
   public var filterExpression:ValueExpression;
 
   private var taxonomiesExpression:ValueExpression;

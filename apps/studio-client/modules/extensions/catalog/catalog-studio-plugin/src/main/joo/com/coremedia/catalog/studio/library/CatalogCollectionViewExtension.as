@@ -4,6 +4,7 @@ import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentTypeNames;
 import com.coremedia.cap.content.search.SearchParameters;
+import com.coremedia.catalog.studio.collectionview.search.CatalogSearchFilters;
 import com.coremedia.catalog.studio.repository.RepositoryCatalogSearchListContainer;
 import com.coremedia.cms.editor.sdk.collectionview.RepositoryCollectionViewExtension;
 import com.coremedia.cms.editor.sdk.collectionview.search.SearchQueryUtil;
@@ -76,6 +77,10 @@ public class CatalogCollectionViewExtension extends RepositoryCollectionViewExte
 
   override public function getSearchViewItemId():String {
     return RepositoryCatalogSearchListContainer.VIEW_CONTAINER_ITEM_ID;
+  }
+
+  override public function getSearchFiltersItemId():String {
+    return CatalogSearchFilters.ITEM_ID;
   }
 
   override public function isUploadDisabledFor(folder:Object):Boolean {

@@ -23,7 +23,7 @@ public class CallToActionConfigurationFormBase extends PropertyFieldGroup implem
   /**
    * If TRUE legacy CTA settings (described in {@link CallToActionSettings}) are used.
    */
-  [Bindable]
+  [ExtConfig]
   public var useLegacyCTASettings:Boolean;
 
   private var _ctaSettings:CallToActionSettings;

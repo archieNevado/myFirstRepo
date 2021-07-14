@@ -15,34 +15,34 @@
     /**
      * Document form content.
      */
-    [Bindable]
+    [ExtConfig]
     public var bindTo:ValueExpression;
 
     /**
      * An optional ValueExpression which makes the action read-only if it is evaluated to true.
      */
-    [Bindable]
+    [ExtConfig]
     public var forceReadOnlyValueExpression:ValueExpression;
 
     /**
      * An optional ValueExpression for the inherit flag. When specified the action will operate on this expression
      * instead of on the expression pointing to the inherit struct of the content
      */
-    [Bindable]
+    [ExtConfig]
     public var inheritExpression:ValueExpression;
 
     /**
      * An optional ValueExpression for the catalog object references. When specified the action will operate on this expression
      * instead of on the expression pointing to the catalog object struct list of the content
      */
-    [Bindable]
+    [ExtConfig]
     public var referencesExpression:ValueExpression;
 
     /**
      * An optional ValueExpression for the origin catalog object references. When specified the action will operate on this expression
      * instead of on the expression pointing to the origin catalog object struct list of the content
      */
-    [Bindable]
+    [ExtConfig]
     public var originReferencesExpression:ValueExpression;
     ]]></fx:Script>
 

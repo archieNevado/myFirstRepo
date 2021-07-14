@@ -7,6 +7,7 @@ import com.coremedia.blueprint.taxonomies.TaxonomyNodeList;
 import com.coremedia.blueprint.taxonomies.TaxonomyResolver;
 import com.coremedia.blueprint.taxonomies.cycleprevention.TaxonomyCycleValidator;
 import com.coremedia.blueprint.taxonomies.strategy.TaxonomyResolverImpl;
+import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
@@ -77,7 +78,8 @@ public class TaxonomyResourceTest {
     TaxonomyResolverImpl strategyResolver(ContentRepository contentRepository,
                                           SitesService sitesService,
                                           SolrSearchService solrSearchService,
-                                          TaxonomyCycleValidator taxonomyCycleValidator) {
+                                          TaxonomyCycleValidator taxonomyCycleValidator,
+                                          Cache cache) {
       return new TaxonomyResolverImpl(sitesService,
               contentRepository,
               solrSearchService,
@@ -85,7 +87,9 @@ public class TaxonomyResourceTest {
               Map.of("Query", "Subject", "QueryLocation", "Location"),
               "CMTaxonomy",
               "Settings/Options",
-              "/");
+              "/",
+              0,
+              cache);
     }
 
   }

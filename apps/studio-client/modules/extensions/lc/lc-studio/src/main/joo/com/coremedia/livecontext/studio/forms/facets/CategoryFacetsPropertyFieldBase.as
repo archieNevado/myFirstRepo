@@ -2,6 +2,7 @@ package com.coremedia.livecontext.studio.forms.facets {
 import com.coremedia.cap.content.ContentPropertyNames;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.cms.editor.sdk.premular.PropertyFieldGroup;
+import com.coremedia.ecommerce.studio.components.search.filters.FacetUtil;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.model.Category;
 import com.coremedia.ecommerce.studio.model.Facet;
@@ -26,10 +27,10 @@ public class CategoryFacetsPropertyFieldBase extends PropertyFieldGroup {
   public static var MULTI_FACETS_STRUCT_NAME:String = "filterFacets";
   public static var MULTI_FACETS_QUERIES_STRUCT_NAME:String = 'queries';
 
-  [Bindable]
+  [ExtConfig]
   public var externalIdPropertyName:String;
 
-  [Bindable]
+  [ExtConfig]
   public var structPropertyName:String;
 
   private var activeEditorExpression:ValueExpression;
@@ -300,7 +301,7 @@ public class CategoryFacetsPropertyFieldBase extends PropertyFieldGroup {
     parentStruct.getType().addStructProperty(MULTI_FACETS_STRUCT_NAME);
     var facetQuery:String = parentStruct.get(SINGLE_FACET_VALUE);
     if (facetQuery) {
-      var facetId:String = FacetUtil.findFacetIdForValue(searchFacets.getFacets(), facetQuery);
+      var facetId:String = FacetUtil.findFacetIdForQuery(searchFacets.getFacets(), facetQuery);
       if (facetId) {
         productListStructExpression
                 .extendBy(CategoryFacetsPropertyFieldBase.MULTI_FACETS_STRUCT_NAME)

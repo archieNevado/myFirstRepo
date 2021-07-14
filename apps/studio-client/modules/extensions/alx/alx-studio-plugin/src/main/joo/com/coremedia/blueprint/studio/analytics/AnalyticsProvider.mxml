@@ -8,17 +8,18 @@
     private var config:AnalyticsProvider;
 
     public native function AnalyticsProvider(config:AnalyticsProvider = null);
-    ]]></fx:Script>
-  <fx:Declarations>
-    <!---
-     The provider name of the analytics service provider
-    -->
-    <fx:String id="providerName"/>
 
-    <!---
-     The localized provider name of the analytics service provider
-    -->
-    <fx:String id="localizedProviderName"/>
-  </fx:Declarations>
+    /**
+     * The provider name of the analytics service provider
+     */
+    [ExtConfig]
+    public var providerName:String;
+
+    /**
+     * The localized provider name of the analytics service provider
+     */
+    [ExtConfig]
+    public var localizedProviderName:String;
+    ]]></fx:Script>
 
 </local:AnalyticsProviderBase>

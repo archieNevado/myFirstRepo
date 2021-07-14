@@ -25,25 +25,25 @@
     /**
      * Contains the active selected site, selected by site chooser component.
      */
-    [Bindable]
+    [ExtConfig]
     public var siteSelectionExpression:ValueExpression;
 
     /**
      * The clipboard for cut and paste
      */
-    [Bindable]
+    [ExtConfig]
     public var clipboardValueExpression:ValueExpression;
 
     /**
      * Contains the active selected node.
      */
-    [Bindable]
+    [ExtConfig]
     public var selectedNodeExpression:ValueExpression;
 
     /**
      * Contains the parent node.
      */
-    [Bindable]
+    [ExtConfig]
     public var parentNode:TaxonomyNode;
     ]]></fx:Script>
 

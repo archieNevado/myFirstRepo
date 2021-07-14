@@ -34,10 +34,10 @@
     private var config:TaxonomyLinkListPropertyField;
 
     public native function TaxonomyLinkListPropertyField(config:TaxonomyLinkListPropertyField = null);
+
+    [ExtConfig]
+    public var hideIssues:Boolean;
     ]]></fx:Script>
-  <fx:Declarations>
-    <fx:Boolean id="hideIssues"/>
-  </fx:Declarations>
   <local:layout>
     <layout_VBox align="stretch"/>
   </local:layout>

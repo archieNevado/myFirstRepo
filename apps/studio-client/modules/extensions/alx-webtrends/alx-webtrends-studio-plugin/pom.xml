@@ -17,6 +17,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>studio-client.app-context-models</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>alx-studio-plugin</artifactId>
       <version>${project.version}</version>
@@ -30,6 +35,11 @@
     <dependency>
       <groupId>com.coremedia.ui.sdk</groupId>
       <artifactId>editor-components</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>studio-client.cap-base-models</artifactId>
       <type>swc</type>
     </dependency>
     <dependency>
@@ -61,6 +71,7 @@
         <version>${jangaroo.version}</version>
         <extensions>true</extensions>
         <configuration>
+          <extNamespace>com.coremedia.blueprint.studio.webtrends</extNamespace>
           <namespaces>
             <namespace>
               <uri>exml:com.coremedia.blueprint.studio.config.webtrends</uri>

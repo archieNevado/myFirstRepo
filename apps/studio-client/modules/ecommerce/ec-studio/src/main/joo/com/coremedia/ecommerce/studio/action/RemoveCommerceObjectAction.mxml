@@ -10,16 +10,17 @@
 
     public native function RemoveCommerceObjectAction(config:RemoveCommerceObjectAction = null);
 
-    [Bindable]
+    [ExtConfig]
     public var commerceObject:CatalogObject;
 
-    [Bindable]
+    [ExtConfig]
     public var catalogObjectIdsExpression:ValueExpression;
-    ]]></fx:Script>
-  <fx:Declarations>
-    <fx:String id="catalogObjectIdListName"/>
 
-    <fx:String id="actionName"/>
-  </fx:Declarations>
+    [ExtConfig]
+    public var catalogObjectIdListName:String;
+
+    [ExtConfig]
+    public var actionName:String;
+    ]]></fx:Script>
 
 </local:RemoveCommerceObjectActionBase>

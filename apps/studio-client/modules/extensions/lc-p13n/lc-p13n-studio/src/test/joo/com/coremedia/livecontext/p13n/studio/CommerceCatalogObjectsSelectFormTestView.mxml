@@ -19,16 +19,16 @@
 
     public native function CommerceCatalogObjectsSelectFormTestView(config:CommerceCatalogObjectsSelectFormTestView = null);
 
-    [Bindable]
+    [ExtConfig]
     public var content:Content;
 
-    [Bindable]
+    [ExtConfig]
     public var bindTo:ValueExpression;
 
-    [Bindable]
+    [ExtConfig]
     public var forceReadOnlyValueExpression:ValueExpression;
 
-    [Bindable]
+    [ExtConfig]
     public var catalogObjectIdsExpression:ValueExpression;
     ]]></fx:Script>
 

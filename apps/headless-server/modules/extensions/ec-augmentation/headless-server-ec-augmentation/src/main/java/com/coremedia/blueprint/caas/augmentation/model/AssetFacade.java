@@ -1,6 +1,6 @@
 package com.coremedia.blueprint.caas.augmentation.model;
 
-import com.coremedia.blueprint.caas.augmentation.CommerceEntityHelper;
+import com.coremedia.blueprint.caas.augmentation.CommerceRefHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
@@ -21,11 +21,11 @@ public class AssetFacade {
   private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
   private final AssetService assetService;
-  private final CommerceEntityHelper commerceEntityHelper;
+  private final CommerceRefHelper commerceRefHelper;
 
-  public AssetFacade(AssetService assetService, CommerceEntityHelper commerceEntityHelper) {
+  public AssetFacade(AssetService assetService, CommerceRefHelper commerceRefHelper) {
     this.assetService = assetService;
-    this.commerceEntityHelper = commerceEntityHelper;
+    this.commerceRefHelper = commerceRefHelper;
   }
 
   @Nullable
@@ -56,7 +56,7 @@ public class AssetFacade {
 
   private Optional<CommerceId> createCommerceId(CommerceRef commerceRef) {
     try {
-      return Optional.of(commerceEntityHelper.getCommerceId(commerceRef));
+      return Optional.of(commerceRefHelper.getCommerceId(commerceRef));
     } catch (Exception e) {
       LOG.warn("Cannot create commerce id from {} ", commerceRef);
       return Optional.empty();

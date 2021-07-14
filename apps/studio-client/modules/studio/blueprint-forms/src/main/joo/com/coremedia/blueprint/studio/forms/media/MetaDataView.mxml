@@ -16,7 +16,7 @@
 
     public native function MetaDataView(config:MetaDataView = null);
 
-    [Bindable]
+    [ExtConfig]
     public var metaDataSection:MetaDataSection;
     ]]></fx:Script>
 

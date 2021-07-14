@@ -27,11 +27,17 @@
 
     public native function EsAnalyticsChart(config:EsAnalyticsChart = null);
 
-    [Bindable]
+    [ExtConfig]
     public var timeStampValueExpression:ValueExpression;
+
+    [ExtConfig]
+    public var chartTitle:String;
+
+
+    [ExtConfig]
+    public var chartHeight:Number;
     ]]></fx:Script>
   <fx:Declarations>
-    <fx:String id="chartTitle"/>
 
     <fx:Number id="chartHeight">250</fx:Number>
   </fx:Declarations>

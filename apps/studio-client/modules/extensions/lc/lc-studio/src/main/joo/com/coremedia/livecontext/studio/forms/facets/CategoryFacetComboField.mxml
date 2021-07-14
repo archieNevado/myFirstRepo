@@ -16,6 +16,8 @@
   </fx:Metadata>
 
   <fx:Script><![CDATA[
+    import com.coremedia.ecommerce.studio.components.search.filters.FacetUtil;
+
     public static const xtype:String = "com.coremedia.livecontext.studio.config.categoryFacetComboField";
 
     private var config:CategoryFacetComboField;

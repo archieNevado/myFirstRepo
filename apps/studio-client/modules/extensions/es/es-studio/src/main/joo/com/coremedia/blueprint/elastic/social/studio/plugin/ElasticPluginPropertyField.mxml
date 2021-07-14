@@ -13,10 +13,10 @@
     private var config:ElasticPluginPropertyField;
 
     public native function ElasticPluginPropertyField(config:ElasticPluginPropertyField = null);
+
+    [ExtConfig]
+    public var expression:String;
     ]]></fx:Script>
-  <fx:Declarations>
-    <fx:String id="expression"/>
-  </fx:Declarations>
 
   <local:plugins>
     <ui:BindPropertyPlugin bidirectional="true">

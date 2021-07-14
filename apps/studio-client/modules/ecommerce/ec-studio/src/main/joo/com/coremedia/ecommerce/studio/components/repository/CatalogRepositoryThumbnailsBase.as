@@ -9,10 +9,10 @@ public class CatalogRepositoryThumbnailsBase extends Container{
   /**
    * value expression for the selected folder in the library tree
    */
-  [Bindable]
+  [ExtConfig]
   public var selectedFolderValueExpression:ValueExpression;
 
-  [Bindable]
+  [ExtConfig]
   public var selectedItemsValueExpression:ValueExpression;
 
   public function CatalogRepositoryThumbnailsBase(config:CatalogRepositoryThumbnails = null) {

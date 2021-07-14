@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -93,6 +94,7 @@ public class AugmentationFacade {
     return builder.data(new ProductAugmentation(commerceRef, content)).build();
   }
 
+
   @SuppressWarnings("unused")
   public DataFetcherResult<CategoryAugmentation> getCategoryAugmentationByStore(String externalId, @Nullable String catalogId, String storeId, String locale) {
 
@@ -106,6 +108,7 @@ public class AugmentationFacade {
   }
 
   @Nullable
+  @SuppressWarnings("unused")
   public DataFetcherResult<CategoryAugmentation> getCategoryAugmentationBySite(String externalId, @Nullable String catalogId, String siteId) {
     DataFetcherResult.Builder<CategoryAugmentation> builder = DataFetcherResult.newResult();
     CommerceConnection connection = commerceEntityHelper.getCommerceConnection(siteId);
@@ -129,6 +132,7 @@ public class AugmentationFacade {
   }
 
   @Nullable
+  @SuppressWarnings("unused")
   public DataFetcherResult<? extends Augmentation> getAugmentationBySite(String commerceIdStr, String siteId) {
     DataFetcherResult.Builder<Augmentation> builder = DataFetcherResult.newResult();
     Optional<CommerceId> commerceIdOptional = CommerceIdParserHelper.parseCommerceId(commerceIdStr);
@@ -146,6 +150,7 @@ public class AugmentationFacade {
   }
 
   @Nullable
+  @SuppressWarnings("unused")
   private DataFetcherResult<? extends Augmentation> getDataForCommerceId(CommerceId commerceId, CommerceConnection connection, String siteId) {
     String externalId = commerceId.getExternalId()
             .orElseGet(() ->
@@ -191,7 +196,6 @@ public class AugmentationFacade {
     return connection.getCommerceBeanFactory().createBeanFor(commerceId, connection.getStoreContext());
   }
 
-  @SuppressWarnings("unused") // it is being used by within commerce-reference-schema.graphql as @fetch(from: "@commerceFacade.getCommerceRef(#this)")
   @Nullable
   public CommerceRef getCommerceRef(Content content, String externalReferencePropertyName){
     String commerceIdStr = content.getString(externalReferencePropertyName);
@@ -218,7 +222,7 @@ public class AugmentationFacade {
     CatalogId catalogId = catalogAliasTranslationService.getCatalogIdForAlias(commerceId.getCatalogAlias(), storeContext)
             .orElse(null);
 
-    return CommerceRefFactory.from(commerceId, catalogId, storeContext.getStoreId(), site)
+    return CommerceRefFactory.from(commerceId, catalogId, storeContext.getStoreId(), site, List.of())
             .orElse(null);
   }
 }

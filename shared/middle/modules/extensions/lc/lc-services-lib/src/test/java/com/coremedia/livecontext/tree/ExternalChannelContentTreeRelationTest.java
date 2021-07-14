@@ -15,13 +15,15 @@ import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,8 +36,9 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class ExternalChannelContentTreeRelationTest {
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
+class ExternalChannelContentTreeRelationTest {
 
   private static final String EXTERNAL_ID_ROOT_CATEGORY = "ROOT_CATEGORY_ID";
   private static final String REFERENCE_PREFIX = "ibm:///catalog/category/";
@@ -85,7 +88,7 @@ public class ExternalChannelContentTreeRelationTest {
   @InjectMocks
   private ExternalChannelContentTreeRelation testling;
 
-  @Before
+  @BeforeEach
   public void setup() {
     BaseCommerceConnection commerceConnection = new BaseCommerceConnection();
 
@@ -102,13 +105,13 @@ public class ExternalChannelContentTreeRelationTest {
     initCategoryTreeMock();
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     CurrentStoreContext.remove();
   }
 
   @Test
-  public void testGetParentOf() {
+  void testGetParentOf() {
     // direct parent
     assertThat(testling.getParentOf(leafContent)).isEqualTo(childContent);
 
@@ -120,7 +123,7 @@ public class ExternalChannelContentTreeRelationTest {
   }
 
   @Test
-  public void testPathToRoot() {
+  void testPathToRoot() {
     List<Content> path = testling.pathToRoot(leafContent);
     assertThat(path).hasSize(4);
     assertThat(path.get(0)).isEqualTo(siteRootChannel);
@@ -139,7 +142,7 @@ public class ExternalChannelContentTreeRelationTest {
   }
 
   @Test
-  public void testGetNearestContentForCategory() {
+  void testGetNearestContentForCategory() {
     assertThat(testling.getNearestContentForCategory(childCategory, site)).isEqualTo(childContent);
     assertThat(testling.getNearestContentForCategory(topCategory, site)).isEqualTo(catalogRootContent);
 
@@ -148,7 +151,7 @@ public class ExternalChannelContentTreeRelationTest {
   }
 
   @Test
-  public void testIsApplicable() {
+  void testIsApplicable() {
     //test valid external channel contents
     assertThat(testling.isApplicable(leafContent)).isTrue();
     assertThat(testling.isApplicable(siteRootChannel)).isFalse();

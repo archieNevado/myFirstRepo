@@ -18,7 +18,7 @@ public class CommerceChildCategoriesFormBase extends Container{
   private static const SELECT_CHILDREN_NAME:String = 'selectChildren';
   public static const CHILDREN_PROPERTY_NAME:String = LOCAL_SETTINGS_STRUCT_NAME + '.' + COMMERCE_STRUCT_NAME + '.' + CHILDREN_LIST_NAME;
   public static const SELECT_CHILDREN_PROPERTY_NAME:String = LOCAL_SETTINGS_STRUCT_NAME + '.' + COMMERCE_STRUCT_NAME + '.' + SELECT_CHILDREN_NAME;
-  [Bindable]
+  [ExtConfig]
   public var bindTo:ValueExpression;
 
   private var selectChildrenExpression:ValueExpression;

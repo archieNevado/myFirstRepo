@@ -10,11 +10,18 @@
 <StructProperty Name="commerce">
 <Struct>
 <StringProperty Name="endpoint">${commerce.hub.data.endpoints.wcs}</StringProperty>
+<StringProperty Name="vendor">ibm</StringProperty>
 <StringProperty Name="currency">EUR</StringProperty>
 <StringProperty Name="locale">de-DE</StringProperty>
 <StructProperty Name="storeConfig">
 <Struct>
+<StringProperty Name="id">1</StringProperty>
 <StringProperty Name="name">AuroraESite</StringProperty>
+</Struct>
+</StructProperty>
+<StructProperty Name="catalogId">
+<Struct>
+<StringProperty Name="id">10502</StringProperty>
 </Struct>
 </StructProperty>
 </Struct>

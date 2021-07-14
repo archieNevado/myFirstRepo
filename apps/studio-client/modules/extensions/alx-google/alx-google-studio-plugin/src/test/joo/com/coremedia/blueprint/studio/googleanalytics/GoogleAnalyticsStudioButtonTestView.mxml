@@ -12,9 +12,8 @@
 
     public native function GoogleAnalyticsStudioButtonTestView(config:GoogleAnalyticsStudioButtonTestView = null);
 
-    [Bindable]
+    [ExtConfig]
     public var contentValueExpression:ValueExpression;
-
     ]]></fx:Script>
 
   <items>

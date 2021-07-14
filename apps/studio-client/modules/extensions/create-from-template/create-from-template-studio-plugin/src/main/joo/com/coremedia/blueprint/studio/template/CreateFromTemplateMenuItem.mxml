@@ -22,13 +22,13 @@
     /**
      * Contains the active content.
      */
-    [Bindable]
+    [ExtConfig]
     public var bindTo:ValueExpression;
+
+    /** The content property name of the list to bind the newly created content to. */
+    [ExtConfig]
+    public var propertyName:String;
     ]]></fx:Script>
-  <fx:Declarations>
-    <!--- The content property name of the list to bind the newly created content to. -->
-    <fx:String id="propertyName"/>
-  </fx:Declarations>
 
   <baseAction>
     <ui:OpenDialogAction

@@ -14,17 +14,24 @@
         xmlns:fx="http://ns.adobe.com/mxml/2009"
         xmlns:local="com.coremedia.livecontext.studio.action.*">
   <fx:Script><![CDATA[
+    import ext.Action;
+
     private var config:MetadataToEntitiesActionAdapter;
 
     public native function MetadataToEntitiesActionAdapter(config:MetadataToEntitiesActionAdapter = null);
+
+    [ExtConfig]
+    public var backingAction:ext.Action;
+
+
+    /**
+     * The name of the backing action's function to pass the resolved metadata beans to.
+     * Defaults to ContentAction#setContents.
+     */
+    [ExtConfig]
+    public var setEntities:String;
     ]]></fx:Script>
   <fx:Declarations>
-    <Action id="backingAction"/>
-
-    <!---
-     The name of the backing action's function to pass the resolved metadata beans to.
-     Defaults to ContentAction#setContents.
-    -->
     <fx:String id="setEntities">setContents</fx:String>
   </fx:Declarations>
 

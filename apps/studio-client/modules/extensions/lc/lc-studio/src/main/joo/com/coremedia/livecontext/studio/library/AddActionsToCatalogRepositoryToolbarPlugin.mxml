@@ -11,13 +11,11 @@
   private var config:AddActionsToCatalogRepositoryToolbarPlugin;
   private var componentConfig:CatalogRepositoryToolbar;
 
-  // called by generated constructor code
-  private function __initialize__(config:AddActionsToCatalogRepositoryToolbarPlugin):void {
-    componentConfig = CatalogRepositoryToolbar(config.cmp.initialConfig);
-  }
-
   public native function AddActionsToCatalogRepositoryToolbarPlugin(config:AddActionsToCatalogRepositoryToolbarPlugin = null);
   ]]></fx:Script>
+  <fx:Declarations>
+    <fx:Object id="componentConfig">{CatalogRepositoryToolbar(config.cmp.initialConfig)}</fx:Object>
+  </fx:Declarations>
   <ui:items>
     <TbSeparator itemId="searchProductVariantsSeparator"/>
     <ui:IconButton itemId="{LivecontextStudioPlugin.SEARCH_PRODUCT_VARIANTS_BUTTON_ITEM_ID}">

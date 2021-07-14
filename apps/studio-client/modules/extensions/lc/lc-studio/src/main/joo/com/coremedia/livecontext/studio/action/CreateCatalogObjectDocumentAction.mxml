@@ -6,19 +6,22 @@
     private var config:CreateCatalogObjectDocumentAction;
 
     public native function CreateCatalogObjectDocumentAction(config:CreateCatalogObjectDocumentAction = null);
+
+    [ExtConfig]
+    public var actionName:String;
+
+    [ExtConfig]
+    public var contentType:String;
+
+    [ExtConfig]
+    public var catalogObjectType:Class;
+
+    /**
+     * Optional: if set to false the property editors will not be inherited from the super document types.
+     * Default is true, i.e. the property editors are inherited.
+     */
+    [ExtConfig]
+    public var inheritEditors:Boolean;
     ]]></fx:Script>
-  <fx:Declarations>
-    <fx:String id="actionName"/>
-
-    <fx:String id="contentType"/>
-
-    <fx:Class id="catalogObjectType"/>
-
-    <!---
-     Optional: if set to false the property editors will not be inherited from the super document types.
-     Default is true, i.e. the property editors are inherited.
-    -->
-    <fx:Boolean id="inheritEditors"/>
-  </fx:Declarations>
 
 </local:CreateCatalogObjectDocumentActionBase>

@@ -29,7 +29,7 @@ services:
       traefik.shop-ibm.frontend.rule: Host:shop-ibm.${ENVIRONMENT_FQDN:-docker.localhost}
       traefik.shop-preview.frontend.rule: Host:shop-preview-ibm.${ENVIRONMENT_FQDN:-docker.localhost}
       traefik.shop-preview-production.frontend.rule: Host:shop-preview-production-ibm.${ENVIRONMENT_FQDN:-docker.localhost}
-      # candy rulez!!!
+      # Candy URLs: deprecated, will be removed with CMCC11
       traefik.candy-shop-preview.frontend.rule: Host:candy-shop-preview-ibm.${ENVIRONMENT_FQDN:-docker.localhost}
       traefik.candy-shop.frontend.rule: Host:candy-shop-ibm.${ENVIRONMENT_FQDN:-docker.localhost}
       traefik.candy-shop-preview-production.frontend.rule: Host:candy-shop-preview-production-ibm.${ENVIRONMENT_FQDN:-docker.localhost}

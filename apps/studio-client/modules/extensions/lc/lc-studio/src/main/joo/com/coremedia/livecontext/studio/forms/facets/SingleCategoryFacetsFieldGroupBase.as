@@ -12,19 +12,19 @@ import ext.panel.Panel;
 
 public class SingleCategoryFacetsFieldGroupBase extends Panel {
 
-  [Bindable]
+  [ExtConfig]
   public var bindTo:ValueExpression;
 
-  [Bindable]
+  [ExtConfig]
   public var forceReadOnlyValueExpression:ValueExpression;
 
-  [Bindable]
+  [ExtConfig]
   public var facetNamePropertyName:String;
 
-  [Bindable]
+  [ExtConfig]
   public var facetValuePropertyName:String;
 
-  [Bindable]
+  [ExtConfig]
   public var facetsExpression:ValueExpression;
 
   private var facetNameExpression:ValueExpression;

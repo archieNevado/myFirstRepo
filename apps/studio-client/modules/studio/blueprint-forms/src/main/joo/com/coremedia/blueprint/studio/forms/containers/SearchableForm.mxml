@@ -17,11 +17,10 @@
     private var config:SearchableForm;
 
     public native function SearchableForm(config:SearchableForm = null);
-    ]]></fx:Script>
 
-  <fx:Declarations>
-    <fx:String id="contentType"/>
-  </fx:Declarations>
+    [ExtConfig]
+    public var contentType:String;
+    ]]></fx:Script>
 
   <editor:items>
     <editor:BooleanPropertyField bindTo="{config.bindTo}"

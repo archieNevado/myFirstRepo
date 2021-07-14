@@ -18,9 +18,50 @@
 
   <dependencies>
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>blueprint-forms</artifactId>
-      <version>${project.version}</version>
+      <groupId>com.coremedia.ui.toolkit</groupId>
+      <artifactId>client-core</artifactId>
+      <type>swc</type>
+    </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>studio-client.cap-base-components</artifactId>
+      <type>swc</type>
+    </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.ui.sdk</groupId>
+      <artifactId>cap-rest-client</artifactId>
+      <type>swc</type>
+    </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.blueprint.base</groupId>
+      <artifactId>bpbase-studio-components</artifactId>
+      <type>swc</type>
+    </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.ui.toolkit</groupId>
+      <artifactId>client-core-impl</artifactId>
+      <type>swc</type>
+    </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>studio-client.cap-base-models</artifactId>
+      <type>swc</type>
+    </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>studio-client.base-components</artifactId>
+      <type>swc</type>
+    </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>studio-client.multi-site-models</artifactId>
       <type>swc</type>
     </dependency>
 
@@ -48,6 +89,10 @@
       <resource>
         <directory>src/main/sencha</directory>
         <targetPath>../packages/local/package</targetPath>
+        <excludes>
+          <exclude>sass/var/**</exclude>
+          <exclude>sass/src/**</exclude>
+        </excludes>
       </resource>
     </resources>
 
@@ -58,6 +103,7 @@
         <version>${jangaroo.version}</version>
         <extensions>true</extensions>
         <configuration>
+          <extNamespace>com.coremedia.blueprint.studio.template</extNamespace>
           <namespaces>
             <namespace>
               <uri>exml:com.coremedia.blueprint.studio.template.config</uri>

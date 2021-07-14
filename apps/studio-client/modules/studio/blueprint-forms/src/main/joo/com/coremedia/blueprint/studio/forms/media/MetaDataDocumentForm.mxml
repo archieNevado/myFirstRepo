@@ -14,13 +14,20 @@
     private var config:MetaDataDocumentForm;
 
     public native function MetaDataDocumentForm(config:MetaDataDocumentForm = null);
+
+    [ExtConfig]
+    public var propertyName:String;
+
+    [ExtConfig]
+    public var label:String;
+
+
+    [ExtConfig]
+    public var metadataSectionName:String;
     ]]></fx:Script>
   <fx:Declarations>
-    <fx:String id="propertyName"/>
 
     <fx:String id="metadataSectionName">id3</fx:String>
-
-    <fx:String id="label"/>
   </fx:Declarations>
 
   <media:plugins exml:mode="append">

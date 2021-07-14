@@ -133,4 +133,14 @@ public class CommerceEntityHelper {
     Optional<CommerceId> commerceIdOptional = CommerceIdParserHelper.parseCommerceId(productId);
     return commerceIdOptional.orElseGet(() -> idProvider.formatProductId(catalogAlias, productId));
   }
+
+  @Nullable
+  public CommerceBean getCommerceBean(CommerceId commerceId, String siteId) {
+    CommerceConnection connection = getCommerceConnection(siteId);
+    if (connection == null) {
+      return null;
+    }
+    return connection.getCommerceBeanFactory().createBeanFor(commerceId, connection.getStoreContext());
+  }
+
 }

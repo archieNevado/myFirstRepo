@@ -18,20 +18,20 @@
     /**
      * The value expression that contains the active selected site by this combo.
      */
-    [Bindable]
+    [ExtConfig]
     public var selectionExpression:ValueExpression;
 
     /**
      * An optional ValueExpression which makes the component read-only if it is evaluated to true.
      */
-    [Bindable]
+    [ExtConfig]
     public var forceReadOnlyValueExpression:ValueExpression;
-    ]]></fx:Script>
-  <fx:Declarations>
 
-    <!--- If true, only one item can be selected from the list. -->
-    <fx:String id="singleSelection"/>
-  </fx:Declarations>
+
+    /** If true, only one item can be selected from the list. */
+    [ExtConfig]
+    public var singleSelection:String;
+    ]]></fx:Script>
 
   <local:layout>
     <layout_VBox align="stretch"/>

@@ -11,10 +11,10 @@
     private var config:ElasticPluginLabel;
 
     public native function ElasticPluginLabel(config:ElasticPluginLabel = null);
+
+    [ExtConfig]
+    public var expression:String;
     ]]></fx:Script>
-  <fx:Declarations>
-    <fx:String id="expression"/>
-  </fx:Declarations>
 
   <plugins>
     <ui:BindPropertyPlugin>

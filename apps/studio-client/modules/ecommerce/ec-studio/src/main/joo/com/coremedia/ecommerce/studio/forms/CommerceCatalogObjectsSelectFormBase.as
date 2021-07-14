@@ -14,9 +14,9 @@ import ext.form.FieldContainer;
 
 public class CommerceCatalogObjectsSelectFormBase extends FieldContainer implements IHidableMixin {
 
-  [Bindable]
+  [ExtConfig]
   public var bindTo:ValueExpression;
-  [Bindable]
+  [ExtConfig]
   public var forceReadOnlyValueExpression:ValueExpression;
 
   private var storeForContentExpression:ValueExpression;

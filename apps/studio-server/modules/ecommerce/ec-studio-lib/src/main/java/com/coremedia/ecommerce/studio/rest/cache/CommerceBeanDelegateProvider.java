@@ -13,6 +13,7 @@ import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.web.util.UriUtils;
 
 import java.nio.charset.StandardCharsets;
@@ -66,8 +67,14 @@ class CommerceBeanDelegateProvider {
   }
 
   @NonNull
-  static String postProcess(@NonNull String commerceBeanUri) {
-    return commerceBeanUri.replace(CATALOG_ALIAS_TEMPLATE_VAR.value(), CATALOG_ALIAS);
+  static String postProcess(@NonNull String commerceBeanUri, @Nullable StoreContext storeContext) {
+    StoreContext context = storeContext != null ? storeContext : createStoreContext();
+
+    String workspaceId = WORKSPACE_ID.value();
+    return commerceBeanUri
+            .replace(CATALOG_ALIAS_TEMPLATE_VAR.value(), CATALOG_ALIAS)
+            .replace(SITE_ID, context.getSiteId())
+            .replace(workspaceId, context.getWorkspaceId().map(WorkspaceId::value).orElse(workspaceId));
   }
 
   @NonNull

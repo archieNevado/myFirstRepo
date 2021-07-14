@@ -19,10 +19,10 @@
 
     public native function CatalogSearchListContainer(config:CatalogSearchListContainer = null);
 
-    [Bindable]
+    [ExtConfig]
     public var searchResultHitsValueExpression:ValueExpression;
 
-    [Bindable]
+    [ExtConfig]
     public var selectedItemsValueExpression:ValueExpression;
     ]]></fx:Script>
 

@@ -7,17 +7,13 @@
 
     private var componentConfig:Object;
 
-    // called by generated constructor code
-    //noinspection JSUnusedLocalSymbols
-    private function __initialize__(config:AddCommerceSegmentConditionPlugin):void {
-      componentConfig = config.cmp.initialConfig;
-    }
-
-    //noinspection JSUnusedLocalSymbols
     private var config:AddCommerceSegmentConditionPlugin;
 
     public native function AddCommerceSegmentConditionPlugin(config:AddCommerceSegmentConditionPlugin = null);
     ]]></fx:Script>
+  <fx:Declarations>
+    <fx:Object id="componentConfig">{config.cmp.initialConfig}</fx:Object>
+  </fx:Declarations>
   <perso:items>
     <!-- livecontext perso commerce conditions -->
     <lc-p13n:CommerceSegmentCondition

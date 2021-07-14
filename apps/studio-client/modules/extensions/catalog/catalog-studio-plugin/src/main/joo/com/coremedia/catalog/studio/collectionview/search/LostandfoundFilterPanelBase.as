@@ -49,6 +49,18 @@ public class LostandfoundFilterPanelBase extends ConditionalFilterPanel {
   /**
    * @inheritDoc
    */
+  override public function getActiveFilterCount():Number {
+    var stateBean:Bean = getStateBean();
+    var lostandfoundActive:Boolean = stateBean.get(LOSTANDFOUND_CHECKBOX_SELECTED);
+    if (lostandfoundActive) {
+      return 1;
+    }
+    return 0;
+  }
+
+  /**
+   * @inheritDoc
+   */
   override public function getDefaultState():Object {
     return DEFAULT_STATE;
   }

@@ -1,4 +1,6 @@
 package com.coremedia.ecommerce.studio {
+
+[Rename("com.coremedia.ecommerce.studio.model.CatalogModel")]
 public class CatalogModel {
 
   public static const NO_WS:String = "NO_WS";

@@ -12,7 +12,7 @@
 
     public native function ProductAttributeLabel(config:ProductAttributeLabel = null);
 
-    [Bindable]
+    [ExtConfig]
     public var productAttribute:ProductAttribute;
 
     /** @private */

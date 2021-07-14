@@ -13,13 +13,11 @@
     private var config:AMCollectionViewPlugin;
     private var selectionHolder:ICollectionView;
 
-    // called by generated constructor code
-    private function __initialize__(config:AMCollectionViewPlugin):void {
-      selectionHolder = config.cmp as ICollectionView;
-    }
-
     public native function AMCollectionViewPlugin(config:AMCollectionViewPlugin = null);
     ]]></fx:Script>
+  <fx:Declarations>
+    <fx:Object id="selectionHolder">{config.cmp as ICollectionView}</fx:Object>
+  </fx:Declarations>
 
   <ui:rules>
     <editor:FolderContentSwitchingContainer>
@@ -152,6 +150,16 @@
         </ui:AddItemsPlugin>
       </editor:plugins>
     </editor:SearchToolbar>
+
+    <editor:SearchFiltersSwitchingContainer>
+      <editor:plugins exml:mode="append">
+        <ui:AddItemsPlugin>
+          <ui:items>
+            <am:AssetSearchFilters itemId="{AssetSearchFilters.ITEM_ID}"/>
+          </ui:items>
+        </ui:AddItemsPlugin>
+      </editor:plugins>
+    </editor:SearchFiltersSwitchingContainer>
   </ui:rules>
 
 </ui:NestedRulesPlugin>

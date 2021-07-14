@@ -42,13 +42,13 @@ public class TaxonomyFilterPanelBase extends FilterPanel {
   /**
    *  The taxonomy id to use for the selection.
    */
-  [Bindable]
+  [ExtConfig]
   public var taxonomyId:String;
 
   /**
    * The name of the SOLR field to apply the search for.
    */
-  [Bindable]
+  [ExtConfig]
   public var propertyName:String;
 
   /**
@@ -204,6 +204,15 @@ public class TaxonomyFilterPanelBase extends FilterPanel {
       }
       return queryTerms.join(" OR ");
     }
+  }
+
+  /**
+   * @inheritDoc
+   */
+  override public function getActiveFilterCount():Number {
+    var stateBean:Bean = getStateBean();
+    var keywords:Array = stateBean.get(TAXONOMIES_PROPERTY) || [];
+    return keywords.length;
   }
 
   /**

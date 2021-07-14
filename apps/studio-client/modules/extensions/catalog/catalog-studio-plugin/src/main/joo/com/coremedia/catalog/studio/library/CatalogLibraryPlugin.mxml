@@ -10,10 +10,9 @@
     [ResourceBundle('com.coremedia.ecommerce.studio.ECommerceStudioPlugin')]
   </fx:Metadata>
   <fx:Script><![CDATA[
+    import com.coremedia.catalog.studio.collectionview.search.CatalogSearchFilters;
     import com.coremedia.cms.editor.sdk.collectionview.AbstractContextMenu;
     import com.coremedia.cms.editor.sdk.collectionview.ICollectionView;
-
-    import mx.resources.ResourceManager;
 
     /**
      * The itemId of the delete menu item.
@@ -28,13 +27,11 @@
     private var config:CatalogLibraryPlugin;
     private var selectionHolder:ICollectionView;
 
-    // called by generated constructor code
-    private function __initialize__(config:CatalogLibraryPlugin):void {
-      selectionHolder = config.cmp as ICollectionView;
-    }
-
     public native function CatalogLibraryPlugin(config:CatalogLibraryPlugin = null);
     ]]></fx:Script>
+  <fx:Declarations>
+    <fx:Object id="selectionHolder">{config.cmp as ICollectionView}</fx:Object>
+  </fx:Declarations>
 
 
   <ui:rules>
@@ -101,6 +98,16 @@
         </ui:AddItemsPlugin>
       </editor:plugins>
     </editor:CollectionRepositoryContextMenu>
+
+    <editor:SearchFiltersSwitchingContainer>
+      <editor:plugins exml:mode="append">
+        <ui:AddItemsPlugin>
+          <ui:items>
+            <cat:CatalogSearchFilters itemId="{CatalogSearchFilters.ITEM_ID}"/>
+          </ui:items>
+        </ui:AddItemsPlugin>
+      </editor:plugins>
+    </editor:SearchFiltersSwitchingContainer>
 
   </ui:rules>
 

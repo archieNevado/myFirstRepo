@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -32,11 +33,29 @@
     </dependency>
 
     <dependency>
+      <groupId>com.coremedia.ui.toolkit</groupId>
+      <artifactId>core-icons</artifactId>
+      <type>swc</type>
+    </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>studio-client.app-context-models</artifactId>
+      <type>swc</type>
+    </dependency>
+
+    <dependency>
+      <groupId>net.jangaroo</groupId>
+      <artifactId>jangaroo-browser</artifactId>
+      <type>swc</type>
+    </dependency>
+
+    <dependency>
       <groupId>net.jangaroo</groupId>
       <artifactId>ext-as</artifactId>
       <type>swc</type>
     </dependency>
-   </dependencies>
+  </dependencies>
 
   <build>
     <resources>
@@ -55,6 +74,7 @@
         <version>${jangaroo.version}</version>
         <extensions>true</extensions>
         <configuration>
+          <extNamespace>com.coremedia.blueprint.studio</extNamespace>
           <namespaces>
             <namespace>
               <uri>exml:com.coremedia.blueprint.studio.config.optimizely</uri>

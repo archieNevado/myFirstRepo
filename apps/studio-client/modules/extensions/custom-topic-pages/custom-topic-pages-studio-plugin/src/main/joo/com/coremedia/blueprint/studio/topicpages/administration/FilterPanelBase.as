@@ -10,10 +10,10 @@ import ext.form.field.Field;
  */
 public class FilterPanelBase extends Container {
 
-  [Bindable]
+  [ExtConfig]
   public var filterExpression:ValueExpression;
 
-  [Bindable]
+  [ExtConfig]
   public var applyFilterFunction:Function;
 
   public function FilterPanelBase(config:FilterPanelBase = null) {

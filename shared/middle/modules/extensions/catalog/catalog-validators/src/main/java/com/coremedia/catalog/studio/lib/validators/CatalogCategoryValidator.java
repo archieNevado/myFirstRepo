@@ -23,7 +23,7 @@ public class CatalogCategoryValidator extends ContentTypeValidatorBase {
   public void validate(Content content, Issues issues) {
     Set<Content> parentCategories = content.getReferrersWithDescriptor(getContentType(), CHILDREN_PROPERTY_NAME);
     if(parentCategories.isEmpty() && !isRootCategory(content)){
-      issues.addIssue(Severity.WARN, null, CODE_ISSUE_NOT_IN_CATALOG);
+      issues.addIssue(getCategories(), Severity.WARN, null, CODE_ISSUE_NOT_IN_CATALOG);
     }
   }
 

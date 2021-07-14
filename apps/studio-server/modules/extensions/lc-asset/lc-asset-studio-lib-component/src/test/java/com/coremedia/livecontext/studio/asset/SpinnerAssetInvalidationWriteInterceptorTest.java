@@ -14,7 +14,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -286,7 +285,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
   public void testInvalidateExternalReferences() {
     testling.invalidateExternalReferences(content, emptyMap(), emptyMap());
 
-    verify(invalidationSource, times(1)).invalidateReferences(emptySet());
+    verify(invalidationSource, times(1)).invalidateReferences(emptySet(), null);
   }
 
   @Test
@@ -297,7 +296,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
 
     testling.invalidateExternalReferences(content, oldLocalSettings, emptyMap());
 
-    verify(invalidationSource, times(1)).invalidateReferences(argThat(oldSettingsInvalidation::containsAll));
+    verify(invalidationSource, times(1)).invalidateReferences(argThat(oldSettingsInvalidation::containsAll), any());
   }
 
   @Test
@@ -308,7 +307,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
 
     testling.invalidateExternalReferences(content, emptyMap(), newLocalSettings);
 
-    verify(invalidationSource, times(1)).invalidateReferences(argThat(newSettingsInvalidation::containsAll));
+    verify(invalidationSource, times(1)).invalidateReferences(argThat(newSettingsInvalidation::containsAll), any());
   }
 
   @Test
@@ -325,7 +324,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
 
     testling.invalidateExternalReferences(content, oldLocalSettings, newLocalSettings);
 
-    verify(invalidationSource, times(1)).invalidateReferences(argThat(expected::containsAll));
+    verify(invalidationSource, times(1)).invalidateReferences(argThat(expected::containsAll), any());
   }
 
   @Test

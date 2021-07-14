@@ -13,13 +13,13 @@ import mx.resources.ResourceManager;
 [ResourceBundle('com.coremedia.blueprint.studio.esanalytics.EsAnalyticsStudioPlugin')]
 public class EsChartBase extends FieldContainer implements IHidableMixin {
 
-  [Bindable]
+  [ExtConfig]
   public var bindTo:ValueExpression;
 
-  [Bindable]
+  [ExtConfig]
   public var color:String;
 
-  [Bindable]
+  [ExtConfig]
   public var chartLabelName:String;
 
   private var lineChart:Object;
@@ -33,8 +33,6 @@ public class EsChartBase extends FieldContainer implements IHidableMixin {
   private const DEFAULT_COLOR:String = "#4189DD";
   private const CHART_VALUE_NAMES:Array = ['value'];
   private const CHART_LABEL_NAMES:Array = [resourceManager.getString('com.coremedia.blueprint.studio.esanalytics.EsAnalyticsStudioPlugin', 'chart_label_page_views')];
-
-  public native function get chartHeight():Number;
 
   public function EsChartBase(config:EsChartBase = null) {
     super(config);

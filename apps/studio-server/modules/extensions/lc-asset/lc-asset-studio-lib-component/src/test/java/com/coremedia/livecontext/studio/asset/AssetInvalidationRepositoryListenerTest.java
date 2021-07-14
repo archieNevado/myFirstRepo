@@ -66,6 +66,6 @@ public class AssetInvalidationRepositoryListenerTest {
     testling.handleContentEvent(event);
 
     // then all products and product variants should be invalidated.
-    verify(invalidationSource).invalidateReferences(newHashSet(externalReferences));
+    verify(invalidationSource).invalidateReferences(newHashSet(externalReferences), null);
   }
 }

@@ -2,7 +2,7 @@ package com.coremedia.blueprint.caas.augmentation.adapter;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.blueprint.base.settings.SettingsService;
-import com.coremedia.blueprint.caas.augmentation.model.AugmentationFacade;
+import com.coremedia.blueprint.caas.augmentation.CommerceEntityHelper;
 import com.coremedia.blueprint.caas.augmentation.model.CommerceRef;
 import com.coremedia.blueprint.caas.augmentation.model.CommerceRefFactory;
 import com.coremedia.caas.model.adapter.ExtendedLinkListAdapter;
@@ -12,6 +12,7 @@ import com.coremedia.cap.common.CapType;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.struct.Struct;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -61,7 +63,7 @@ class ProductListAdapterTest {
   private SettingsService settingsService;
 
   @Mock
-  private AugmentationFacade augmentationFacade;
+  private CommerceEntityHelper commerceEntityHelper;
 
   @Mock
   private CommerceSearchFacade commerceSearchFacade;
@@ -93,7 +95,7 @@ class ProductListAdapterTest {
   @Mock
   private Site site;
 
-  private Map<String, Object> PRODUCT_LIST_STRUCT_DEFAULTS = Map.of(
+  private final Map<String, Object> PRODUCT_LIST_STRUCT_DEFAULTS = Map.of(
           STRUCT_KEY_PRODUCTLIST_SELECT_FACET_VALUE, "true",
           STRUCT_KEY_PRODUCTLIST_ORDER_BY, "priceDesc");
 
@@ -107,38 +109,38 @@ class ProductListAdapterTest {
   public void setup() {
     dynamicTarget1 = CommerceRefFactory.from(
             CommerceIdParserHelper.parseCommerceId("ibm:///catalog/product/4711").orElseThrow(),
-            "catalogId",
+            CatalogId.of("catalogId"),
             "storeId",
-            "en-US",
+            Locale.US,
             "siteId");
     dynamicTarget2 = CommerceRefFactory.from(
             CommerceIdParserHelper.parseCommerceId("ibm:///catalog/product/4712").orElseThrow(),
-            "catalogId",
+            CatalogId.of("catalogId"),
             "storeId",
-            "en-US",
+            Locale.US,
             "siteId");
     dynamicTarget3 = CommerceRefFactory.from(
             CommerceIdParserHelper.parseCommerceId("ibm:///catalog/product/4713").orElseThrow(),
-            "catalogId",
+            CatalogId.of("catalogId"),
             "storeId",
-            "en-US",
+            Locale.US,
             "siteId");
     dynamicTarget4 = CommerceRefFactory.from(
             CommerceIdParserHelper.parseCommerceId("ibm:///catalog/product/4714").orElseThrow(),
-            "catalogId",
+            CatalogId.of("catalogId"),
             "storeId",
-            "en-US",
+            Locale.US,
             "siteId");
 
     productSearchResult = Stream.of(dynamicTarget1, dynamicTarget2, dynamicTarget3).collect(Collectors.toList());
     lenient().when(commerceSearchFacade.searchProducts(eq(ProductListAdapter.ALL_QUERY), anyMap(), eq(site))).thenReturn(productSearchResult);
     lenient().when(site.getId()).thenReturn("sideId");
 
-    productListAdapter = new ProductListAdapter(extendedLinkListAdapterFactory, productList, settingsService, augmentationFacade, commerceSearchFacade, site, 0);
+    productListAdapter = new ProductListAdapter(extendedLinkListAdapterFactory, productList, settingsService, commerceEntityHelper, commerceSearchFacade, site, 0);
     when(settingsService.setting(STRUCT_KEY_PRODUCTLIST, Struct.class, productList)).thenReturn(struct);
     when(struct.toNestedMaps()).thenReturn(PRODUCT_LIST_STRUCT_DEFAULTS);
     lenient().when(productListAdapter.getContent().getString(ProductListAdapter.STRUCT_KEY_EXTERNAL_ID)).thenReturn(EXTERNAL_ID_PROPERTY_VALUE);
-    lenient().when(augmentationFacade.getCommerceBean(CommerceIdParserHelper.parseCommerceId(EXTERNAL_ID_PROPERTY_VALUE).orElseThrow(), "sideId")).thenReturn(category);
+    lenient().when(commerceEntityHelper.getCommerceBean(CommerceIdParserHelper.parseCommerceId(EXTERNAL_ID_PROPERTY_VALUE).orElseThrow(), "sideId")).thenReturn(category);
   }
 
   private static Map<String, Object> getFixedItemMap(Content target, int index) {
@@ -320,7 +322,7 @@ class ProductListAdapterTest {
 
   @Test
   void useTotalOffset() {
-    productListAdapter = new ProductListAdapter(extendedLinkListAdapterFactory, productList, settingsService, augmentationFacade, commerceSearchFacade, site, 2);
+    productListAdapter = new ProductListAdapter(extendedLinkListAdapterFactory, productList, settingsService, commerceEntityHelper, commerceSearchFacade, site, 2);
     List<Map<String, Object>> fixedItems = new ArrayList<>();
     fixedItems.add(getFixedItemMap(fixedTarget1, 1));
     fixedItems.add(getFixedItemMap(fixedTarget2, 3));

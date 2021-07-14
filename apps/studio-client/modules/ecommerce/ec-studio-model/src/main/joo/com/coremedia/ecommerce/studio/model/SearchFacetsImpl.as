@@ -14,6 +14,10 @@ public class SearchFacetsImpl extends CatalogObjectImpl implements Facets {
         return undefined;
       }
 
+      if(facetObjects === null) {
+        return [];
+      }
+
       facets = [];
       for each (var facet:Object in facetObjects) {
         facets.push(new Facet(facet));

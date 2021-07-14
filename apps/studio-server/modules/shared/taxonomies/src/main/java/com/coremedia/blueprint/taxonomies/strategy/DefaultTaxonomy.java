@@ -13,6 +13,7 @@ import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.content.Version;
 import com.coremedia.cap.content.authorization.AccessControl;
 import com.coremedia.cap.content.publication.PublicationService;
+import com.coremedia.cap.content.query.QueryService;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.rest.cap.content.search.SearchService;
 import com.coremedia.rest.cap.content.search.SearchServiceResult;
@@ -30,6 +31,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 /**
@@ -61,9 +64,10 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
   private final Content rootFolder;
 
   private final SearchService searchService;
+  private int maxDocumentsPerFolder = 0;
 
   public DefaultTaxonomy(Content rootFolder, String siteId, ContentType type, ContentRepository contentRepository,
-                         SearchService searchService, TaxonomyCycleValidator taxonomyCycleValidator) {
+                         SearchService searchService, TaxonomyCycleValidator taxonomyCycleValidator, int documentsPerFolder) {
     super(rootFolder.getName(), siteId);
 
     this.rootFolder = rootFolder;
@@ -81,6 +85,8 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     root.setRef(TaxonomyUtil.getRestIdFromCapId(rootFolder.getId()));
     root.setType(ROOT_TYPE);
     root.setLevel(0);
+
+    setMaxDocumentsPerFolder(documentsPerFolder);
   }
 
   @Override
@@ -133,21 +139,23 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
   @Override
   @NonNull
   public TaxonomyNodeList getChildren(@NonNull TaxonomyNode node, int offset, int count) {
-    if (node.isRoot()) {
-      return getTopLevel();
-    }
+    List<Content> children = getRoot().equals(node) ? getTopLevelNodes() : getChildren(asContent(node));
+    long skip = Math.max(offset, 0);
+    long limit = count == -1 ? children.size() : count;
 
-    Content content = asContent(node);
-    return asNodeList(getValidChildren(content), offset, count, false);
+    List<TaxonomyNode> nodes = children.stream()
+            .skip(skip)
+            .limit(limit)
+            .map(c -> asNode(c, true))
+            .collect(Collectors.toList());
+
+    return new TaxonomyNodeList(nodes);
   }
 
   @Override
   @NonNull
   public TaxonomyNode getPath(@NonNull TaxonomyNode node) {
-    Content content = asContent(node);
-    List<Content> path = new ArrayList<>();
-    buildPathRecursively(content, path);
-
+    List<Content> path = getPath(asContent(node));
     TaxonomyNodeList list = asNodeList(path, -1, -1, true);
     node.setPath(list);
     return node;
@@ -215,9 +223,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
       if (match.isDeleted() || taxonomyCycleValidator.isCyclic(match, taxonomyContentType)) {
         continue;
       }
-
-      if (StringUtils.containsIgnoreCase(match.getName(), text) ||
-              StringUtils.containsIgnoreCase(match.getString(VALUE), text)) {
+      if (shouldMatchBeDisplayed(match, text)) {
         TaxonomyNode hit = asNode(match);
         hit.setPath(getPath(hit).getPath());
         hits.add(hit);
@@ -225,6 +231,20 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     }
     list.setNodes(hits);
     return list;
+  }
+
+  /**
+   * This method filters the search results for valid hits
+   *
+   * @param match the possible match
+   * @param text  the entered search term
+   * @return true if the match should be displayed
+   */
+  protected boolean shouldMatchBeDisplayed(@NonNull Content match, @NonNull String text) {
+    String nodeName = getNodeName(match);
+    return StringUtils.containsIgnoreCase(match.getName(), text) ||
+            StringUtils.containsIgnoreCase(match.getString(VALUE), text) ||
+            StringUtils.containsIgnoreCase(nodeName, text);
   }
 
   @Override
@@ -257,22 +277,28 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
 
     //remove child relation in the parent
     if (parent != null) {
-      List<Content> children = new ArrayList<>(getValidChildren(parent));
+      List<Content> children = Collections.synchronizedList(new ArrayList<>());
+      children.addAll(getChildren(parent));
       children.remove(nodeContent);
       parent.set(CHILDREN, children);
+    } else {
+      //no parent? Then remove it from the settings
+      List<Content> rootNodes = getTopLevelNodes();
+      rootNodes.remove(nodeContent);
+      updateRootNodeSettings(rootNodes);
     }
 
     //now move the content to the new target by appending as child (we do not set the parent relation anymore!)
     if (targetContent.isDocument()) { // NOSONAR //target can be the root folder too!!!
-      List<Content> targetChildren = new ArrayList<>(getValidChildren(targetContent));
+      List<Content> targetChildren = Collections.synchronizedList(new ArrayList<>());
+      targetChildren.addAll(getChildren(targetContent));
       targetChildren.add(nodeContent);
       targetContent.set(CHILDREN, targetChildren);
-    }
-    else {
-      List<Content> rootNodesFromSettings = getRootNodesFromSettings();
-      if (!rootNodesFromSettings.isEmpty()) {
-        rootNodesFromSettings.add(nodeContent);
-        updateRootNodeSettings(rootNodesFromSettings);
+    } else {
+      List<Content> rootNodes = getTopLevelNodes();
+      if (!rootNodes.isEmpty()) {
+        rootNodes.add(nodeContent);
+        updateRootNodeSettings(rootNodes);
       }
     }
 
@@ -314,7 +340,6 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     deleteChildren(allChildren);
 
     unlinkFromParent(deleteMe, parent);
-
     return (parent == null) ? root : asNode(parent);
   }
 
@@ -324,7 +349,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
       return ImmutableList.of(node);
     }
 
-    List<Content> taxonomies = new ArrayList<>();
+    List<Content> taxonomies = Collections.synchronizedList(new ArrayList<>());
     collectChildren(node, taxonomies);
     return taxonomies;
   }
@@ -334,7 +359,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
    */
   private void collectChildren(Content node, List<Content> allChildren) {
     allChildren.add(node);
-    List<Content> children = getValidChildren(node);
+    List<Content> children = getChildren(node);
     allChildren.addAll(children);
     for (Content child : children) {
       collectChildren(child, allChildren);
@@ -370,19 +395,19 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
       if (!parent.isCheckedOut()) {
         parent.checkOut();
       }
-      List<Content> children = new ArrayList<>(getValidChildren(parent));
+      List<Content> children = Collections.synchronizedList(new ArrayList<>());
+      children.addAll(getChildren(parent));
       children.remove(child);
       parent.set(CHILDREN, children);
       parent.checkIn();
       if (contentRepository.getPublicationService().isPublished(parent)) {
         approveAndPublish(parent);
       }
-    }
-    else {
-      List<Content> rootNodesFromSettings = getRootNodesFromSettings();
-      if (!rootNodesFromSettings.isEmpty()) {
-        rootNodesFromSettings.remove(child);
-        updateRootNodeSettings(rootNodesFromSettings);
+    } else {
+      List<Content> rootNodes = getTopLevelNodes();
+      if (!rootNodes.isEmpty()) {
+        rootNodes.remove(child);
+        updateRootNodeSettings(rootNodes);
       }
     }
   }
@@ -393,12 +418,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
                                   @Nullable final String defaultName) {
     Content parent = (parentNode.isRoot()) ? null : asContent(parentNode);
     ContentType type = calculateTaxonomyType(parent);
-    Content folder = rootFolder;
-
-    //check if the corresponding parent folder is used
-    if (parent != null && parent.isDocument()) {
-      folder = parent.getParent();
-    }
+    Content folder = getTargetForNewChild(parent);
 
     String defaultNameNonNull = Strings.isNullOrEmpty(defaultName) ? NEW_KEYWORD : defaultName;
     Content content = type.createByTemplate(folder, NEW_KEYWORD, "{3} ({1})", Collections.emptyMap());
@@ -411,16 +431,16 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
       if (!parent.isCheckedOut()) {
         parent.checkOut();
       }
-      List<Content> children = new ArrayList<>(getValidChildren(parent));
+      List<Content> children = Collections.synchronizedList(new ArrayList<>());
+      children.addAll(getChildren(parent));
       children.add(content);
       parent.set(CHILDREN, children);
       parent.checkIn();
-    }
-    else {
-      List<Content> rootNodesFromSettings = getRootNodesFromSettings();
-      if (!rootNodesFromSettings.isEmpty()) {
-        rootNodesFromSettings.add(content);
-        updateRootNodeSettings(rootNodesFromSettings);
+    } else {
+      List<Content> rootNodes = getTopLevelNodes();
+      if (!rootNodes.isEmpty()) {
+        rootNodes.add(content);
+        updateRootNodeSettings(rootNodes);
       }
     }
 
@@ -450,8 +470,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
             if (!StringUtils.isEmpty(name)) {
               content.rename(StringUtils.trim(newName));
             }
-          }
-          else {
+          } else {
             LOG.info("Skipped renaming taxonomy node, because it's checkout out by another user.");
           }
         }
@@ -493,7 +512,6 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     return allChildren;
   }
 
-
   @Override
   public String getKeywordType() {
     return taxonomyContentType.getName();
@@ -501,7 +519,79 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
 
   // === HELPER ========================================================================================================
 
-  private List<Content> getRootNodesFromSettings() {
+  /**
+   * Calculates the target folder when new nodes are created.
+   *
+   * @param parent the optional parent node
+   * @return the target folder for the child to create
+   */
+  protected Content getTargetForNewChild(Content parent) {
+    Content folder = rootFolder;
+
+    //check if the corresponding parent folder is used
+    if (parent != null && parent.isDocument()) {
+      folder = parent.getParent();
+    }
+
+    if (maxDocumentsPerFolder > 0) {
+      QueryService queryService = folder.getRepository().getQueryService();
+      Collection<Content> children = queryService.getContentsFulfilling(folder.getChildDocuments(), "TYPE " + taxonomyContentType.getName() + ": BELOW ?0 AND isInProduction ORDER BY id DESC", rootFolder);
+      if(children.size() < maxDocumentsPerFolder) {
+        return folder;
+      }
+
+      Content folderWithFreeCapacity = findFolderWithFreeCapacity();
+      if (folderWithFreeCapacity == null) {
+        folderWithFreeCapacity = contentRepository.createSubfolders(rootFolder, UUID.randomUUID().toString());
+      }
+      folder = folderWithFreeCapacity;
+    }
+
+    return folder;
+  }
+
+  private Content findFolderWithFreeCapacity() {
+    Collection<Content> subFolders = rootFolder.getChildrenFulfilling("TYPE Folder_");
+    for (Content subFolder : subFolders) {
+      int size = subFolder.getChildrenFulfilling("TYPE " + taxonomyContentType.getName()).size();
+      if (size < maxDocumentsPerFolder) {
+        return subFolder;
+      }
+    }
+    return null;
+  }
+
+  private List<Content> getPath(Content content) {
+    List<Content> path = new ArrayList<>();
+
+    Content parent = content;
+    while (parent != null) {
+      path.add(0, parent);
+      parent = getParent(parent);
+    }
+    return path;
+  }
+
+  private List<Content> getTopLevelNodes() {
+    List<Content> nodesFromSettings = getTopLevelNodesFromSettings();
+    if (!nodesFromSettings.isEmpty()) {
+      return nodesFromSettings;
+    }
+
+    List<Content> allNodes = new ArrayList<>();
+    findAll(rootFolder, allNodes);
+
+    List<Content> matches = new ArrayList<>();
+    for (Content child : allNodes) {
+      if (child.getReferrerWithDescriptorFulfilling(taxonomyContentType.getName(), CHILDREN, "isInProduction") == null
+              && !rootFolder.getRepository().getPublicationService().isToBeDeleted(child)) { //NOSONAR
+        matches.add(child);
+      }
+    }
+    return matches;
+  }
+
+  private List<Content> getTopLevelNodesFromSettings() {
     Content rootSettings = rootFolder.getChild(ROOT_SETTINGS_DOCUMENT);
     if (rootSettings != null && rootSettings.getType().getName().equals(TYPE_SETTINGS)) {
       Struct settings = rootSettings.getStruct(SETTINGS_STRUCT);
@@ -540,8 +630,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
         if (links.contains(linkedContent) && !linkPropertyDescriptor.isWeakLink()) {
           return false;
         }
-      }
-      else if (descriptor.getType().equals(CapPropertyDescriptorType.STRUCT)) {
+      } else if (descriptor.getType().equals(CapPropertyDescriptorType.STRUCT)) {
         Struct struct = linkingContent.getStruct(descriptor.getName());
         if (struct != null && containsLink(struct, linkedContent)) {
           return false;
@@ -575,14 +664,12 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
       if (value instanceof Map) {
         Map<String, Object> nestedMap = (Map<String, Object>) value;
         collectStructReferences(nestedMap, linkedContent, result);
-      }
-      else if (value instanceof List) {
+      } else if (value instanceof List) {
         List<Object> list = (List<Object>) value;
         for (Object listItem : list) {
           if (listItem instanceof Map) {
             collectStructReferences((Map<String, Object>) listItem, linkedContent, result);
-          }
-          else if (listItem instanceof Content) {
+          } else if (listItem instanceof Content) {
             if (listItem.equals(linkedContent)) {
               result.add((Content) listItem);
             }
@@ -636,7 +723,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
    * @return The new document name or the original one if the nodeName is not set.
    */
   @NonNull
-  private String getTaxonomyDocumentName(@NonNull Content content, @Nullable String nodeName) {
+  protected String getTaxonomyDocumentName(@NonNull Content content, @Nullable String nodeName) {
     if (!StringUtils.isEmpty(nodeName)) {
       String formattedName = nodeName.replace('/', '_');
       int renamingIndex = 0;
@@ -647,8 +734,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
         if (!child.getId().equals(content.getId())) {
           renamingIndex++;
           formattedName = formattedName + "(" + renamingIndex + ")";
-        }
-        else {
+        } else {
           break;
         }
       }
@@ -697,14 +783,6 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     }
   }
 
-  private void buildPathRecursively(@NonNull Content content, @NonNull List<Content> path) {
-    path.add(0, content);
-    Content parent = getParent(content);
-    if (parent != null && !path.contains(parent)) {
-      buildPathRecursively(parent, path);
-    }
-  }
-
   /**
    * Returns the first referrer of the given content to determine the path
    * of a taxonomy node.
@@ -713,7 +791,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
    * @return parent content
    */
   @Nullable
-  private Content getParent(@NonNull Content content) {
+  protected Content getParent(@NonNull Content content) {
     return content.getReferrerWithDescriptorFulfilling(taxonomyContentType.getName(), CHILDREN, "isInProduction");
   }
 
@@ -774,23 +852,28 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
   @NonNull
   protected TaxonomyNode asNode(@NonNull Content content, boolean buildPathInfo) {
     TaxonomyNode node = createEmptyNode();
-    node.setName(content.getString(VALUE));
-    if (Strings.isNullOrEmpty(node.getName())) {
-      node.setName(content.getName());
-    }
+    node.setName(getNodeName(content));
     node.setRef(TaxonomyUtil.asNodeRef(content.getId()));
     node.setExtendable(true);
     node.setSiteId(getSiteId());
     node.setType(taxonomyContentType.getName());
 
     if (buildPathInfo) {
-      node.setLeaf(getValidChildren(content, 1).isEmpty());
-      List<Content> path = new ArrayList<>();
-      buildPathRecursively(content, path);
-      node.setLevel(path.size());
+      List<Content> children = getChildren(content);
+      node.setLeaf(children.isEmpty());
+      node.setLevel(getPath(content).size());
     }
 
     return node;
+  }
+
+  @NonNull
+  protected String getNodeName(@NonNull Content content) {
+    String name = content.getString(VALUE);
+    if (Strings.isNullOrEmpty(name)) {
+      name = content.getName();
+    }
+    return name;
   }
 
   @NonNull
@@ -802,26 +885,21 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     return content;
   }
 
-  /**
-   * Filters deleted or destroyed children of the taxonomy.
-   *
-   * @param content given content
-   * @return valid children
-   */
-  @NonNull
-  private List<Content> getValidChildren(@NonNull Content content) {
-    return getValidChildren(content, 0);
-  }
 
-  @NonNull
-  private List<Content> getValidChildren(@NonNull Content content, int limit) {
-    String query = "TYPE " + taxonomyContentType.getName() + " :isInProduction";
-    if (limit > 0) {
-      query = query + " LIMIT " + limit;
+  private void setMaxDocumentsPerFolder(int max) {
+    this.maxDocumentsPerFolder = max;
+
+    if (maxDocumentsPerFolder > 0) {
+      int size = rootFolder.getChildrenFulfilling("TYPE " + taxonomyContentType.getName()).size();
+      if (size > maxDocumentsPerFolder) {
+        this.maxDocumentsPerFolder = ((size + 99) / 100) * 100;
+        LOG.warn("Cannot apply a value maxDocumentsPerFolder=" + maxDocumentsPerFolder
+                + " on " + this.getClass().getSimpleName() + " for taxonomy folder "
+                + rootFolder.getPath() + ", since there are already more documents in this folder. The value was auto-corrected to " + maxDocumentsPerFolder);
+      }
     }
-
-    return content.getLinksFulfilling(CHILDREN, query);
   }
+
 
   /**
    * Calculates the type of this taxonomy.
@@ -846,56 +924,13 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     return parent.getType();
   }
 
-
-  /**
-   * Creates a list of top level nodes.
-   *
-   * @return list of top level nodes
-   */
-  @NonNull
-  private TaxonomyNodeList getTopLevel() {
-    List<TaxonomyNode> list = new ArrayList<>();
-    List<Content> topLevelContent = findRootNodes(rootFolder);
-    for (Content c : topLevelContent) {
-      if (TaxonomyUtil.isTaxonomy(c, taxonomyContentType)) {
-        list.add(asNode(c));
-      }
-    }
-    return new TaxonomyNodeList(list);
-  }
-
-  /**
-   * Recursively collects the nodes from the taxonomy that have no parent
-   *
-   * @param folder The folder to lookup keywords in.
-   * @return List<Content>
-   */
-  @NonNull
-  private List<Content> findRootNodes(@NonNull Content folder) {
-    List<Content> rootNodesFromSettings = getRootNodesFromSettings();
-    if (!rootNodesFromSettings.isEmpty()) {
-      return rootNodesFromSettings;
-    }
-
-    String query = "TYPE " + taxonomyContentType.getName() + " :isInProduction";
-    Collection<Content> nodes = folder.getChildrenFulfilling(query);
-    List<Content> matches = new ArrayList<>();
-    for (Content child : nodes) {
-      if (getParent(child) == null
-              && !contentRepository.getPublicationService().isToBeDeleted(child)) { //NOSONAR
-        matches.add(child);
-      }
-    }
-    return matches;
-  }
-
   /**
    * Recursively collects the nodes from the taxonomy that have no parent
    *
    * @param folder  The folder to lookup keywords in.
    * @param matches The list of to fill up with matches.
    */
-  private void findAll(@NonNull Content folder, @NonNull List<Content> matches) {
+  protected void findAll(@NonNull Content folder, @NonNull List<Content> matches) {
     SearchServiceResult search = searchService.search(null, -1,
             new ArrayList<>(),
             folder,
@@ -907,5 +942,15 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
             new ArrayList<>());
     List<Content> hits = search.getHits();
     matches.addAll(hits);
+  }
+
+  /**
+   * Cached reading of children.
+   * The getContentsFulfilling takes care that the result is cached on the client.
+   */
+  protected List<Content> getChildren(Content taxonomy) {
+    QueryService queryService = taxonomy.getRepository().getQueryService();
+    Collection<Content> children = queryService.getContentsFulfilling(taxonomy.getLinks("children"), "TYPE " + taxonomyContentType.getName() + ": BELOW ?0 AND isInProduction ORDER BY id DESC", rootFolder);
+    return new ArrayList<>(children);
   }
 }

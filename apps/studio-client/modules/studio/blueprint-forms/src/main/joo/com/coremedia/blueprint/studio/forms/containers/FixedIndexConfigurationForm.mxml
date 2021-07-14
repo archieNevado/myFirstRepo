@@ -28,11 +28,11 @@
     private var config:FixedIndexConfigurationForm;
 
     public native function FixedIndexConfigurationForm(config:FixedIndexConfigurationForm = null);
+
+    /** the property of the Bean to bind in this field */
+    [ExtConfig]
+    public var propertyName:String;
     ]]></fx:Script>
-  <fx:Declarations>
-    <!--- the property of the Bean to bind in this field -->
-    <fx:String id="propertyName"/>
-  </fx:Declarations>
 
   <local:plugins exml:mode="append">
     <ui:Binding source="indexSettings.index"

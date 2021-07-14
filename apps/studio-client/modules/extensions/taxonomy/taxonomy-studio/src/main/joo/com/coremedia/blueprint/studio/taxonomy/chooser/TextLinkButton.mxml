@@ -16,13 +16,11 @@
 
     public native function TextLinkButton(config:TextLinkButton = null);
 
-    [Bindable]
+    [ExtConfig]
     public var node:TaxonomyNode;
-    ]]></fx:Script>
-  <fx:Declarations>
-    <fx:Boolean id="addable"/>
 
-    <fx:String id="weight"/>
-  </fx:Declarations>
+    [ExtConfig]
+    public var addable:Boolean;
+    ]]></fx:Script>
 
 </local:TextLinkButtonBase>

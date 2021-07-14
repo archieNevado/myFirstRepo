@@ -9,6 +9,10 @@ import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.caas.config.CaasSearchConfigurationProperties;
 import com.coremedia.caas.model.adapter.ExtendedLinkListAdapterFactory;
 import com.coremedia.caas.search.id.CaasContentBeanIdScheme;
+import com.coremedia.caas.search.model.FilterQueryArg;
+import com.coremedia.caas.search.schema.CoercingFilterQueryArg;
+import com.coremedia.caas.search.solr.SearchConstants;
+import com.coremedia.caas.search.solr.SearchQueryHelper;
 import com.coremedia.caas.search.solr.SolrCaeQueryBuilder;
 import com.coremedia.caas.search.solr.SolrQueryBuilder;
 import com.coremedia.caas.search.solr.SolrSearchResultFactory;
@@ -19,6 +23,8 @@ import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.id.IdScheme;
 import com.coremedia.search.solr.client.SolrClientConfiguration;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
+import graphql.GraphqlErrorException;
+import graphql.schema.GraphQLScalarType;
 import org.apache.solr.client.solrj.SolrClient;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -27,9 +33,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
+import java.time.ZonedDateTime;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties({
@@ -61,18 +71,48 @@ public class HeadlessSearchConfiguration {
                                                           @Qualifier("settingsService") SettingsService settingsService,
                                                           SitesService sitesService,
                                                           List<IdScheme> idSchemes,
-                                                          @Qualifier("caeSolrQueryBuilder") SolrQueryBuilder solrQueryBuilder) {
-    return new SearchServiceAdapterFactory(searchResultFactory, contentRepository, settingsService, sitesService, idSchemes, solrQueryBuilder);
+                                                          @Qualifier("caeSolrQueryBuilder") SolrQueryBuilder solrQueryBuilder,
+                                                          @Qualifier("customStaticFilterQueries") List<List<FilterQueryArg>> customStaticFilterQueries) {
+    List<FilterQueryArg> customStaticFilterQueriesList = customStaticFilterQueries.stream()
+            .flatMap(List::stream)
+            .collect(Collectors.toList());
+    return new SearchServiceAdapterFactory(searchResultFactory, contentRepository, settingsService, sitesService, idSchemes, solrQueryBuilder, customStaticFilterQueriesList);
   }
 
   @Bean
-  public SolrQueryBuilder caeSolrQueryBuilder() {
-    return new SolrCaeQueryBuilder("/cmdismax");
+  public SolrQueryBuilder caeSolrQueryBuilder(@Qualifier("filterQueryDefinitionMap") List<Map<String, Function<List<String>, String>>> filterQueryDefinitionMaps,
+                                              @Qualifier("customSolrFields") List<Map<String, String>> customFields) {
+    Map<String, Function<List<String>, String>> filterQueryDefinitionMap = filterQueryDefinitionMaps
+            .stream()
+            .flatMap(map -> map.entrySet().stream())
+            .collect(Collectors.toMap(
+                    Map.Entry::getKey,
+                    Map.Entry::getValue));
+    Map<String, String> customFieldsMap = customFields
+            .stream()
+            .flatMap(map -> map.entrySet().stream())
+            .collect(Collectors.toMap(
+                    Map.Entry::getKey,
+                    Map.Entry::getValue));
+    return new SolrCaeQueryBuilder("/cmdismax", filterQueryDefinitionMap, customFieldsMap);
   }
 
   @Bean
-  public SolrQueryBuilder dynamicContentSolrQueryBuilder() {
-    return new SolrCaeQueryBuilder("/select");
+  public SolrQueryBuilder dynamicContentSolrQueryBuilder(@Qualifier("filterQueryDefinitionMap") List<Map<String, Function<List<String>, String>>> filterQueryDefinitionMaps,
+                                                         @Qualifier("customSolrFields") List<Map<String, String>> customFields) {
+    Map<String, Function<List<String>, String>> filterQueryDefinitionMap = filterQueryDefinitionMaps
+            .stream()
+            .flatMap(map -> map.entrySet().stream())
+            .collect(Collectors.toMap(
+                    Map.Entry::getKey,
+                    Map.Entry::getValue));
+    Map<String, String> customFieldsMap = customFields
+            .stream()
+            .flatMap(map -> map.entrySet().stream())
+            .collect(Collectors.toMap(
+                    Map.Entry::getKey,
+                    Map.Entry::getValue));
+    return new SolrCaeQueryBuilder("/select", filterQueryDefinitionMap, customFieldsMap);
   }
 
   @Bean
@@ -84,8 +124,12 @@ public class HeadlessSearchConfiguration {
                                                   List<IdScheme> idSchemes,
                                                   @Qualifier("dynamicContentSolrQueryBuilder") SolrQueryBuilder solrQueryBuilder,
                                                   @Qualifier("collectionExtendedItemsAdapter") ExtendedLinkListAdapterFactory collectionExtendedItemsAdapter,
-                                                  @Qualifier("navigationAdapter") NavigationAdapterFactory navigationAdapterFactory) {
-    return new QueryListAdapterFactory(searchResultFactory, contentRepository, settingsService, sitesService, idSchemes, solrQueryBuilder, collectionExtendedItemsAdapter, navigationAdapterFactory);
+                                                  @Qualifier("navigationAdapter") NavigationAdapterFactory navigationAdapterFactory,
+                                                  @Qualifier("customStaticFilterQueries") List<List<FilterQueryArg>> customStaticFilterQueries) {
+    List<FilterQueryArg> customStaticFilterQueriesList = customStaticFilterQueries.stream()
+            .flatMap(List::stream)
+            .collect(Collectors.toList());
+    return new QueryListAdapterFactory(searchResultFactory, contentRepository, settingsService, sitesService, idSchemes, solrQueryBuilder, collectionExtendedItemsAdapter, navigationAdapterFactory, customStaticFilterQueriesList);
   }
 
   @Bean
@@ -126,5 +170,60 @@ public class HeadlessSearchConfiguration {
   @Bean
   public List<IdScheme> idSchemes(IdScheme caasContentBeanIdScheme) {
     return Collections.singletonList(caasContentBeanIdScheme);
+  }
+
+  @Bean
+  public GraphQLScalarType FilterQueryArg() {
+    return GraphQLScalarType.newScalar().name("FilterQueryArg").description("Built-in type for a custom search filter query argument").coercing(new CoercingFilterQueryArg()).build();
+  }
+
+  @Bean
+  @Qualifier("filterQueryDefinitionMap")
+  public Map<String, Function<List<String>, String>> solrFilterQueryDefinitionMap() {
+    Map<String, Function<List<String>, String>> filterQueryDefinitionMap = new HashMap<>();
+    filterQueryDefinitionMap.put("TITLE_OR", HeadlessSearchConfiguration::getTitleQuery);
+    filterQueryDefinitionMap.put("EXCLUDE_IDS", HeadlessSearchConfiguration::getExcludeIdsQuery);
+    filterQueryDefinitionMap.put("FRESHNESS", HeadlessSearchConfiguration::getFreshnessQuery);
+    return filterQueryDefinitionMap;
+  }
+
+  @Bean
+  @Qualifier("customStaticFilterQueries")
+  public List<FilterQueryArg> customStaticFilterQueries() {
+    return Collections.emptyList();
+  }
+
+  @Bean
+  @Qualifier("customSolrFields")
+  public Map<String, String> customSolrFields() {
+    return Collections.emptyMap();
+  }
+
+  private static String getTitleQuery(List<String> values) {
+    if (values.size() == 1) {
+      return SearchQueryHelper.exactQuery(SearchConstants.FIELDS.TITLE.toString(), "\"" + values.get(0) + "\"");
+    } else {
+      List<String> titles = values.stream().map(s -> "\"" + s + "\"").collect(Collectors.toList());
+      return SearchQueryHelper.orQuery(SearchConstants.FIELDS.TITLE.toString(), titles);
+    }
+  }
+
+  private static String getExcludeIdsQuery(List<String> values) {
+    List<String> ids = values.stream()
+            .map(val -> "\"contentbean:" + val + "\"")
+            .collect(Collectors.toList());
+    return SearchQueryHelper.negatedQuery(SearchQueryHelper.orQuery(SearchConstants.FIELDS.ID.toString(), ids));
+  }
+
+  private static String getFreshnessQuery(List<String> values) {
+    if (values.size() == 2) {
+      if ("*".equals(values.get(0))) {
+        return SearchQueryHelper.validFromPastToValueQuery(SearchConstants.FIELDS.MODIFICATION_DATE.toString(), ZonedDateTime.parse(values.get(1)));
+      }
+      if ("*".equals(values.get(1))) {
+        return SearchQueryHelper.validFromValueToFutureQuery(SearchConstants.FIELDS.MODIFICATION_DATE.toString(), ZonedDateTime.parse(values.get(0)));
+      }
+    }
+    throw GraphqlErrorException.newErrorException().message(String.format("Cannot apply values %s to custom filter query.", values)).build();
   }
 }

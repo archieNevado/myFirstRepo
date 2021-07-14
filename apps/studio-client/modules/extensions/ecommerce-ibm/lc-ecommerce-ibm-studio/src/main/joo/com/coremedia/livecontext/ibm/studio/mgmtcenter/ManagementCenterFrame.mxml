@@ -13,11 +13,12 @@
     private var config:ManagementCenterFrame;
 
     public native function ManagementCenterFrame(config:ManagementCenterFrame = null);
-    ]]></fx:Script>
-  <fx:Declarations>
-    <fx:String id="src"/>
 
-    <fx:String id="tooltip"/>
-  </fx:Declarations>
+    [ExtConfig]
+    public var src:String;
+
+    [ExtConfig]
+    public var tooltip:String;
+    ]]></fx:Script>
 
 </local:ManagementCenterFrameBase>

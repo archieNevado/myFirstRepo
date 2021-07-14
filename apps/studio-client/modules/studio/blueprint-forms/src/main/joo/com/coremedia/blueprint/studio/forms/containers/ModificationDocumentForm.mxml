@@ -12,10 +12,10 @@
 
     public native function ModificationDocumentForm(config:ModificationDocumentForm = null);
 
-    [Bindable]
+    [ExtConfig]
     public var bindTo:ValueExpression;
 
-    [Bindable]
+    [ExtConfig]
     public var forceReadOnlyValueExpression:ValueExpression;
     ]]></fx:Script>
 

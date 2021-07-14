@@ -14,23 +14,13 @@
     private var config:StringListCheckboxFilterPanel;
 
     public native function StringListCheckboxFilterPanel(config:StringListCheckboxFilterPanel = null);
+
+    /**
+     * The filter ID for this filter. It is used as itemId and identifier in saved searches.
+     */
+    [ExtConfig]
+    public var filterId:String;
     ]]></fx:Script>
-  <fx:Declarations>
-    <!---
-     The filter ID for this filter. It is used as itemId and identifier in saved searches.
-    -->
-    <fx:String id="filterId"/>
-
-    <!---
-     The solr field to pose the query against. If not set the filterId is used.
-    -->
-    <fx:String id="solrField"/>
-
-    <!---
-     The property in the metadata struct of the Asset. If not set the filterId is used.
-    -->
-    <fx:String id="propertyName"/>
-  </fx:Declarations>
 
   <local:items>
     <Container itemId="checkboxContainer">

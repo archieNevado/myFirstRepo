@@ -23,7 +23,7 @@ public class TaxonomySelectionWindowBase extends StudioDialog {
   private var nodePathExpression:ValueExpression;
   private var singleSelection:Boolean;
 
-  [Bindable]
+  [ExtConfig]
   public var taxonomyIdExpression:ValueExpression;
 
   public function TaxonomySelectionWindowBase(config:TaxonomySelectionWindow = null) {

@@ -18,6 +18,31 @@
   <dependencies>
     <dependency>
       <groupId>com.coremedia.ui.sdk</groupId>
+      <artifactId>cap-rest-client-impl</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.ui.toolkit</groupId>
+      <artifactId>client-core</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.ui.sdk</groupId>
+      <artifactId>cap-rest-client</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.ui.toolkit</groupId>
+      <artifactId>client-core-impl</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>studio-client.multi-site-models</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.ui.sdk</groupId>
       <artifactId>editor-components</artifactId>
       <type>swc</type>
     </dependency>
@@ -35,6 +60,7 @@
         <artifactId>jangaroo-maven-plugin</artifactId>
         <extensions>true</extensions>
         <configuration>
+          <extNamespace>com.coremedia.ecommerce.studio</extNamespace>
           <verbose>true</verbose>
           <jooUnitSeleniumBrowserStartCommand>${jooUnitSeleniumBrowserStartCommand}</jooUnitSeleniumBrowserStartCommand>
           <jooUnitSeleniumRCHost>${selenium.host}</jooUnitSeleniumRCHost>

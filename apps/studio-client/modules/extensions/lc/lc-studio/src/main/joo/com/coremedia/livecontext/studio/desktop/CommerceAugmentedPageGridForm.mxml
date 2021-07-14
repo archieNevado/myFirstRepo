@@ -22,17 +22,19 @@
     private var config:CommerceAugmentedPageGridForm;
 
     public native function CommerceAugmentedPageGridForm(config:CommerceAugmentedPageGridForm = null);
+
+    /**
+     * Set true to display the inheritance information even if bindTo is considered to be the source of the local pagegrid. Default: false.
+     */
+    [ExtConfig]
+    public var showLocal:Boolean;
+
+    [ExtConfig]
+    public var pageGridPropertyName:String;
+
+    [ExtConfig]
+    public var fallbackPageGridPropertyName:String;
     ]]></fx:Script>
-  <fx:Declarations>
-    <!---
-     Set true to display the inheritance information even if bindTo is considered to be the source of the local pagegrid. Default: false.
-    -->
-    <fx:Boolean id="showLocal"/>
-
-    <fx:String id="pageGridPropertyName"/>
-
-    <fx:String id="fallbackPageGridPropertyName"/>
-  </fx:Declarations>
 
   <editor:plugins exml:mode="append">
     <ui:AddQuickTipPlugin

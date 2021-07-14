@@ -62,7 +62,8 @@ public class TaxonomyStrategiesCacheKey extends CacheKey<Map<String, Taxonomy<Co
                                     TaxonomyCycleValidator taxonomyCycleValidator,
                                     String contentType,
                                     String siteConfigPath,
-                                    String globalConfigPath) {
+                                    String globalConfigPath,
+                                    int documentsPerFolder) {
     this(
             contentRepository,
             sitesService,
@@ -75,7 +76,8 @@ public class TaxonomyStrategiesCacheKey extends CacheKey<Map<String, Taxonomy<Co
                     type,
                     contentRepository,
                     searchService,
-                    taxonomyCycleValidator
+                    taxonomyCycleValidator,
+                    documentsPerFolder
             )
     );
   }

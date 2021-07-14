@@ -16,25 +16,25 @@ public class CatalogLinkPropertyFieldBase extends LinkListGridPanel {
 
   private var _localWrapper:ILinkListWrapper;
 
-  [Bindable]
+  [ExtConfig]
   public var bindTo:ValueExpression;
 
-  [Bindable]
+  [ExtConfig]
   public var model:Bean;
 
-  [Bindable]
+  [ExtConfig]
   public var propertyName:String;
 
-  [Bindable]
+  [ExtConfig]
   public var maxCardinality:Number;
 
-  [Bindable]
+  [ExtConfig]
   public var createStructFunction:Function;
 
-  [Bindable]
+  [ExtConfig]
   public var linkTypeNames:Array;
 
-  [Bindable]
+  [ExtConfig]
   public var forceReadOnlyValueExpression:ValueExpression;
 
   public function CatalogLinkPropertyFieldBase(config:CatalogLinkPropertyField = null) {

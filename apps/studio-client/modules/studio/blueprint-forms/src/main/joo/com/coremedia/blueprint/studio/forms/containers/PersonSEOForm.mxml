@@ -16,13 +16,13 @@
     private var config:PersonSEOForm;
 
     public native function PersonSEOForm(config:PersonSEOForm = null);
+
+    /**
+     * The name of the first fallback property
+     */
+    [ExtConfig]
+    public var delegatePropertyNames:Array;
     ]]></fx:Script>
-  <fx:Declarations>
-    <!---
-     The name of the first fallback property
-    -->
-    <fx:Array id="delegatePropertyNames"/>
-  </fx:Declarations>
 
   <editor:items>
     <editor:StringPropertyField bindTo="{config.bindTo}"

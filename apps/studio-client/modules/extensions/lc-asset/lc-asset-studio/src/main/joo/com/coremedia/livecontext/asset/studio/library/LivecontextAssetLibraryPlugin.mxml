@@ -15,13 +15,11 @@
     private var config:LivecontextAssetLibraryPlugin;
     private var selectionHolder:ICollectionView;
 
-    // called by generated constructor code
-    private function __initialize__(config:LivecontextAssetLibraryPlugin):void {
-      selectionHolder = config.cmp as ICollectionView;
-    }
-
     public native function LivecontextAssetLibraryPlugin(config:LivecontextAssetLibraryPlugin = null);
     ]]></fx:Script>
+  <fx:Declarations>
+    <fx:Object id="selectionHolder">{config.cmp as ICollectionView}</fx:Object>
+  </fx:Declarations>
 
 
   <ui:rules>

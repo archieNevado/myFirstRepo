@@ -38,7 +38,7 @@ public class TopicsPanelBase extends Panel {
   /**
    * The value expression that contains the selected topic record.
    */
-  [Bindable]
+  [ExtConfig]
   public var selectionExpression:ValueExpression;
 
   private static const COMPONENT_ID:String = "topicsPanel";

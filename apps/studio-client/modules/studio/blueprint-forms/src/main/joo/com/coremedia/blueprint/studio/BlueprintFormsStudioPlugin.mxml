@@ -57,14 +57,11 @@
     private var config:BlueprintFormsStudioPlugin;
     private var root:Content;
 
-    // called by generated constructor code
-    //noinspection JSUnusedLocalSymbols
-    private function __initialize__(config:BlueprintFormsStudioPlugin):void {
-      root = SESSION.getConnection().getContentRepository().getRoot();
-    }
-
     public native function BlueprintFormsStudioPlugin(config:BlueprintFormsStudioPlugin = null);
     ]]></fx:Script>
+  <fx:Declarations>
+    <fx:Object id="root">{SESSION.getConnection().getContentRepository().getRoot()}</fx:Object>
+  </fx:Declarations>
 
   <local:rules>
 
@@ -225,7 +222,9 @@
     <editor:CopyResourceBundleProperties
             destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.base.pagegrid.PageGridLayouts')}"
             source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.blueprint.studio.BlueprintPageGridLayouts')}"/>
-
+    <editor:CopyResourceBundleProperties
+            destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.sdk.collectionview.search.IssueCategories')}"
+            source="{ResourceManager.getInstance().getResourceBundle(null,'com.coremedia.blueprint.studio.BlueprintIssueCategories')}"/>
     <!-- enable studio shortcuts, override Shortcut.properties to specify different shortcut keys -->
     <editor:AddShortcutsPlugin/>
 

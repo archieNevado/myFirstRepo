@@ -163,6 +163,11 @@
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
+
     <!-- to embed GraphiQL tool -->
     <dependency>
       <groupId>com.graphql-java-kickstart</groupId>

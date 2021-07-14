@@ -26,13 +26,11 @@
     private var config:CMTemplateSetForm;
     private var metadata:ValueExpression;
 
-    // called by generated constructor code
-    private function __initialize__(config:CMTemplateSetForm):void {
-      metadata = config.bindTo.extendBy('properties.archive.metadata');
-    }
-
     public native function CMTemplateSetForm(config:CMTemplateSetForm = null);
     ]]></fx:Script>
+  <fx:Declarations>
+    <fx:Object id="metadata">{config.bindTo.extendBy('properties.archive.metadata')}</fx:Object>
+  </fx:Declarations>
 
   <editor:items>
     <editor:DocumentForm
@@ -83,7 +81,7 @@
               </plugins>
               <columns>
                 <TreeColumn dataIndex="name"
-                            u:flex="1"
+                            flex="1"
                             width="300"
                             header="{resourceManager.getString('com.coremedia.blueprint.studio.BlueprintDocumentTypes', 'CMTemplateSet_metadata_files_nameHeader_text')}"
                             renderer="{BlobMetadataUtil.fileNameRenderer}"/>

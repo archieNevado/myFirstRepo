@@ -16,14 +16,29 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-studio-components</artifactId>
+      <groupId>com.coremedia.ui.sdk</groupId>
+      <artifactId>cap-rest-client</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.ui.toolkit</groupId>
+      <artifactId>client-core-impl</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.ui.toolkit</groupId>
+      <artifactId>core-icons</artifactId>
       <type>swc</type>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>blueprint-forms</artifactId>
       <version>${project.version}</version>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.elastic.social</groupId>
+      <artifactId>es-models</artifactId>
       <type>swc</type>
     </dependency>
     <dependency>
@@ -42,6 +57,11 @@
       <type>swc</type>
     </dependency>
     <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>studio-client.cap-base-models</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
       <groupId>net.jangaroo</groupId>
       <artifactId>ext-as</artifactId>
       <type>swc</type>
@@ -53,6 +73,10 @@
       <resource>
         <directory>src/main/sencha</directory>
         <targetPath>../packages/${project.groupId}__${project.artifactId}</targetPath>
+        <excludes>
+          <exclude>sass/var/**</exclude>
+          <exclude>sass/src/**</exclude>
+        </excludes>
       </resource>
     </resources>
     <plugins>
@@ -62,6 +86,7 @@
         <version>${jangaroo.version}</version>
         <extensions>true</extensions>
         <configuration>
+          <extNamespace>com.coremedia.blueprint.elastic.social.studio</extNamespace>
           <namespaces>
             <namespace>
               <uri>exml:com.coremedia.blueprint.elastic.social.studio.config</uri>

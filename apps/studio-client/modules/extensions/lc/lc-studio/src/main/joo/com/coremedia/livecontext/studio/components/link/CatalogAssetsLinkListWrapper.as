@@ -14,19 +14,19 @@ import js.Promise;
 
 public class CatalogAssetsLinkListWrapper extends LinkListWrapperBase {
 
-  [Bindable]
+  [ExtConfig]
   public var bindTo:ValueExpression;
 
-  [Bindable]
+  [ExtConfig]
   public var linksVE:ValueExpression;
 
-  [Bindable]
+  [ExtConfig]
   public var assetContentTypes:Array;
 
-  [Bindable]
+  [ExtConfig]
   public var maxCardinality:int;
 
-  [Bindable]
+  [ExtConfig]
   public var readOnlyVE:ValueExpression;
 
   public function CatalogAssetsLinkListWrapper(config:CatalogAssetsLinkListWrapper = null) {

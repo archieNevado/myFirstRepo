@@ -26,10 +26,10 @@
 
     public native function CatalogSearchThumbnails(config:CatalogSearchThumbnails = null);
 
-    [Bindable]
+    [ExtConfig]
     public var selectedItemsValueExpression:ValueExpression;
 
-    [Bindable]
+    [ExtConfig]
     public var searchResultHitsValueExpression:ValueExpression;
     ]]></fx:Script>
 

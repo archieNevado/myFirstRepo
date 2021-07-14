@@ -21,18 +21,18 @@ public class ProductInformationContainerBase extends Container {
   protected static const TARGET_BUTTON_ICON_ITEM_ID:String = "cm-elastic-social-target-icon";
   private static const ICON_CLS:String = ResourceManager.getInstance().getString('com.coremedia.icons.CoreIcons', 'type_product');
 
-  private var moderationContributionAdministrationImpl:AbstractContributionAdministration;
   private var targetIconDisplayField:IconDisplayField;
   private var targetLabel:DisplayField;
   private var displayedContributionValueExpression:ValueExpression;
 
-  public function ProductInformationContainerBase(config:ContentInformationContainer = null) {
-    moderationContributionAdministrationImpl = config.contributionAdministration as AbstractContributionAdministration;
+  [ExtConfig]
+  public var contributionAdministration:AbstractContributionAdministration;
+
+  public function ProductInformationContainerBase(config:ProductInformationContainerBase = null) {
+    super(config);
 
     displayedContributionValueExpression = ValueExpressionFactory.create(
-            ContributionAdministrationPropertyNames.DISPLAYED, moderationContributionAdministrationImpl);
-
-    super(config);
+            ContributionAdministrationPropertyNames.DISPLAYED, contributionAdministration);
   }
 
   override protected function afterRender():void {
@@ -44,7 +44,7 @@ public class ProductInformationContainerBase extends Container {
   }
 
   private function toggleTarget():void {
-    var contribution:Contribution = moderationContributionAdministrationImpl.getDisplayed();
+    var contribution:Contribution = contributionAdministration.getDisplayed();
     if (contribution && contribution.getTarget()) {
       getTargetIcon().show();
       getTargetLabel().show();
@@ -56,8 +56,8 @@ public class ProductInformationContainerBase extends Container {
   }
 
   private function setContentTypeIconCssClass():void {
-    if (moderationContributionAdministrationImpl) {
-      var displayed:Contribution = moderationContributionAdministrationImpl.getDisplayed();
+    if (contributionAdministration) {
+      var displayed:Contribution = contributionAdministration.getDisplayed();
       if (displayed && displayed.getTarget) {
           displayed.getTarget(function (target:*):void {
             //

@@ -12,7 +12,7 @@
 
     public native function ProductTeaserDocumentFormTestView(config:ProductTeaserDocumentFormTestView = null);
 
-    [Bindable]
+    [ExtConfig]
     public var bindTo:ValueExpression;
     ]]></fx:Script>
 

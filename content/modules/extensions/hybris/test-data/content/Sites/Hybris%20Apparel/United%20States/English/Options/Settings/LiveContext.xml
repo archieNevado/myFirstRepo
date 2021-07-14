@@ -10,6 +10,7 @@
 <StructProperty Name="commerce">
 <Struct>
 <StringProperty Name="endpoint">${commerce.hub.data.endpoints.hybris}</StringProperty>
+<StringProperty Name="vendor">hybris</StringProperty>
 <StringProperty Name="currency">GBP</StringProperty>
 <StringProperty Name="locale">en-GB</StringProperty>
 <StructProperty Name="storeConfig">

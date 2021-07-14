@@ -12,7 +12,7 @@ public class TaxonomySearchComboRenderer extends TaxonomyRenderer {
 
   public function TaxonomySearchComboRenderer(nodes:Array, componentId:String) {
     super(nodes, null);
-    this.wrapperId = componentId + "-wrapper-" + nodes[nodes.length - 1].ref;
+    this.wrapperId = (componentId + "-wrapper-" + nodes[nodes.length - 1].ref).replace(/\//g,'-');
   }
 
   override protected function doRenderInternal(nodes:Array, callback:Function):void {

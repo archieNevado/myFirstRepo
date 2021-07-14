@@ -66,14 +66,14 @@ public class AssetInvalidationWriteInterceptor extends ContentWriteInterceptorBa
 
     Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnection(content);
 
-    if (!commerceConnection.isPresent()) {
+    if (commerceConnection.isEmpty()) {
       LOG.debug("Commerce connection not available, will not invalidate references.");
       return;
     }
 
     //we delegate the invaliations to the write post processor
     //as the write interceptor has too old sequence number
-    commerceCacheInvalidationSource.invalidateReferences(references);
+    commerceCacheInvalidationSource.invalidateReferences(references, commerceConnection.get().getInitialStoreContext());
   }
 
   @NonNull

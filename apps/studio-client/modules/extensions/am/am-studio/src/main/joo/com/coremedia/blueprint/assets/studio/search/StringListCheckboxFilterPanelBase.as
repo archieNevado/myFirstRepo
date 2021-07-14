@@ -30,12 +30,20 @@ public class StringListCheckboxFilterPanelBase extends FilterPanel {
    * The checkbox label is localized in the file AMStudioPlugin.properties with the following pattern:
    * 'Asset_metadata_[propertyName]_[value]_text'.
    */
-  [Bindable]
+  [ExtConfig]
   public var availableValuesValueExpression:ValueExpression;
 
-  internal native function get solrField():String;
+  /**
+   * The solr field to pose the query against. If not set the filterId is used.
+   */
+  [ExtConfig]
+  public var solrField:String;
 
-  internal native function get propertyName():String;
+  /**
+   * The property in the metadata struct of the Asset. If not set the filterId is used.
+   */
+  [ExtConfig]
+  public var propertyName:String;
 
   override public function buildQuery():String {
     var selectedValues:Array = getStateBean().get(getFilterId());
@@ -94,6 +102,18 @@ public class StringListCheckboxFilterPanelBase extends FilterPanel {
       return [].concat(selectedCheckboxes[getFilterId()]);
     }
     return undefined;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  override public function getActiveFilterCount():Number {
+    var selectedValues:Array = getStateBean().get(getFilterId());
+    if (!selectedValues || selectedValues.length === 0) {
+      return 0;
+    }
+
+    return selectedValues.length;
   }
 }
 }

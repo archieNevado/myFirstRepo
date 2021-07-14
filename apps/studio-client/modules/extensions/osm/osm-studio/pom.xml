@@ -18,6 +18,18 @@
 
   <dependencies>
     <dependency>
+      <groupId>net.jangaroo</groupId>
+      <artifactId>jangaroo-browser</artifactId>
+      <type>swc</type>
+    </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.ui.toolkit</groupId>
+      <artifactId>client-core</artifactId>
+      <type>swc</type>
+    </dependency>
+
+    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>blueprint-forms</artifactId>
       <version>${project.version}</version>
@@ -37,11 +49,17 @@
     </dependency>
 
     <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>studio-client.cap-base-models</artifactId>
+      <type>swc</type>
+    </dependency>
+
+    <dependency>
       <groupId>net.jangaroo</groupId>
       <artifactId>ext-as</artifactId>
       <type>swc</type>
     </dependency>
-   </dependencies>
+  </dependencies>
 
   <build>
     <plugins>
@@ -51,13 +69,14 @@
         <version>${jangaroo.version}</version>
         <extensions>true</extensions>
         <configuration>
-            <additionalCssNonBundle>
-              <value>resources/css/osm-ui.css</value>
-            </additionalCssNonBundle>
-            <additionalJsNonBundle>
-              <value>resources/osm/OpenLayers.js</value>
-              <value>resources/osm/OpenStreetMap.js</value>
-            </additionalJsNonBundle>
+          <extNamespace>com.coremedia.blueprint.studio.osm</extNamespace>
+          <additionalCssNonBundle>
+            <value>resources/css/osm-ui.css</value>
+          </additionalCssNonBundle>
+          <additionalJsNonBundle>
+            <value>resources/osm/OpenLayers.js</value>
+            <value>resources/osm/OpenStreetMap.js</value>
+          </additionalJsNonBundle>
           <namespaces>
             <namespace>
               <uri>exml:com.coremedia.blueprint.studio.osm.config</uri>

@@ -4,6 +4,9 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.util.AccessControlUtil;
 import com.coremedia.ui.actions.DependencyTrackedAction;
 import com.coremedia.ui.data.ValueExpression;
+import com.coremedia.ui.util.EventUtil;
+
+import ext.Ext;
 
 /**
  * Shows the dialog for choosing taxonomies for a linklist property.
@@ -16,10 +19,10 @@ public class OpenTaxonomyChooserActionBase extends DependencyTrackedAction {
   public var bindTo:ValueExpression;
   public var forceReadOnlyValueExpression:ValueExpression;
 
-  [Bindable]
+  [ExtConfig]
   public var siteSelectionExpression:ValueExpression;
 
-  [Bindable]
+  [ExtConfig]
   public var taxonomyIdExpression:ValueExpression;
 
   /**
@@ -38,21 +41,27 @@ public class OpenTaxonomyChooserActionBase extends DependencyTrackedAction {
 
 
   override protected function calculateDisabled():Boolean {
-    if(bindTo && bindTo.getValue() is Content && forceReadOnlyValueExpression) {
+    if (bindTo && bindTo.getValue() is Content && forceReadOnlyValueExpression) {
       return (bindTo.getValue() as Content).isCheckedOutByOther() || AccessControlUtil.isReadOnly(bindTo.getValue()) || forceReadOnlyValueExpression.getValue();
     }
     return false;
   }
 
   private function showChooser():void {
-    var taxChooser:TaxonomySelectionWindow = new TaxonomySelectionWindow(TaxonomySelectionWindow({
-      taxonomyIdExpression: taxonomyIdExpression,
-      siteSelectionExpression: siteSelectionExpression,
-      singleSelection: singleSelection,
-      bindTo: bindTo,
-      propertyValueExpression: propertyValueExpression
-    }));
-    taxChooser.show();
+    var dialog:TaxonomySelectionWindow = Ext.getCmp(TaxonomySelectionWindow.ID) as TaxonomySelectionWindow;
+    if (dialog && dialog.rendered) {
+      dialog.focus();
+    }
+    else {
+      var taxChooser:TaxonomySelectionWindow = new TaxonomySelectionWindow(TaxonomySelectionWindow({
+        taxonomyIdExpression: taxonomyIdExpression,
+        siteSelectionExpression: siteSelectionExpression,
+        singleSelection: singleSelection,
+        bindTo: bindTo,
+        propertyValueExpression: propertyValueExpression
+      }));
+      taxChooser.show();
+    }
   }
 
 }

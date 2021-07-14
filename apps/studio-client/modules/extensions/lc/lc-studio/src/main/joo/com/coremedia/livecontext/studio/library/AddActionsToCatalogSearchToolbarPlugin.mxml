@@ -11,13 +11,11 @@
   private var config:AddActionsToCatalogSearchToolbarPlugin;
   private var componentConfig:CatalogSearchToolbar;
 
-  // called by generated constructor code
-  private function __initialize__(config:AddActionsToCatalogSearchToolbarPlugin):void {
-    componentConfig = CatalogSearchToolbar(config.cmp.initialConfig);
-  }
-
   public native function AddActionsToCatalogSearchToolbarPlugin(config:AddActionsToCatalogSearchToolbarPlugin = null);
   ]]></fx:Script>
+  <fx:Declarations>
+    <fx:Object id="componentConfig">{CatalogSearchToolbar(config.cmp.initialConfig)}</fx:Object>
+  </fx:Declarations>
   <ui:items>
     <ui:IconButton itemId="{LivecontextStudioPlugin.SEARCH_PRODUCT_VARIANTS_BUTTON_ITEM_ID}">
       <ui:baseAction>

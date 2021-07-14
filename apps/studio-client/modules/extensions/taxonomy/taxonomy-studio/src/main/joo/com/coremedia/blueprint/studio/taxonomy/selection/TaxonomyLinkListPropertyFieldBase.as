@@ -28,16 +28,16 @@ public class TaxonomyLinkListPropertyFieldBase extends FieldContainer implements
   /**
    * the id of the taxonomy whose tree is used to add items from.
    */
-  [Bindable]
+  [ExtConfig]
   public var taxonomyIdExpression:ValueExpression;
 
-  [Bindable]
+  [ExtConfig]
   public var bindTo:ValueExpression;
 
   /**
    * The property name that is edited
    */
-  [Bindable]
+  [ExtConfig]
   public var propertyName:String;
 
 
@@ -45,7 +45,7 @@ public class TaxonomyLinkListPropertyFieldBase extends FieldContainer implements
    * Optional. The maximum cardinality that the link list property should hold.
    If not specified the maximum cardinality of the property descriptor of the link list property will be applied.
    */
-  [Bindable]
+  [ExtConfig]
   public var maxCardinality:int;
 
   /**
@@ -53,19 +53,19 @@ public class TaxonomyLinkListPropertyFieldBase extends FieldContainer implements
    * but to override this or provide an initial value for link properties in Structs that are created by this
    * property field, you may specify a custom link type.
    */
-  [Bindable]
+  [ExtConfig]
   public var linkType:String;
 
   /**
    * An optional ValueExpression which makes the component read-only if it is evaluated to true.
    */
-  [Bindable]
+  [ExtConfig]
   public var forceReadOnlyValueExpression:ValueExpression;
 
   /**
    * Optional custom link list wrapper to allow a different persistence logic for this link list.
    */
-  [Bindable]
+  [ExtConfig]
   public var taxonomyLinkListWrapper:ILinkListWrapper;
 
   private var linkListWrapper:ILinkListWrapper;

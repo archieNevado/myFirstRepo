@@ -20,10 +20,10 @@
     private var config:CommerceReferencesForm;
 
     public native function CommerceReferencesForm(config:CommerceReferencesForm = null);
+
+    [ExtConfig]
+    public var additionalToolbarItems:Array;
     ]]></fx:Script>
-  <fx:Declarations>
-    <fx:Array id="additionalToolbarItems"/>
-  </fx:Declarations>
 
   <local:plugins exml:mode="append">
     <ui:BindVisibilityPlugin bindTo="{getShopExpression(config)}"/>

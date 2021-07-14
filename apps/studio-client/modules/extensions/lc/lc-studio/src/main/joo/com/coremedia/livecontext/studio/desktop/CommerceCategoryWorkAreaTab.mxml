@@ -23,18 +23,17 @@
 
     public static const PDP_PAGEGRID_TAB_ITEM_ID:String = "pdpPageGridTab";
 
+    //noinspection JSUnusedLocalSymbols
     private var config:CommerceCategoryWorkAreaTab;
     private var augmentedCategoryExpression:ValueExpression;
 
-    // called by generated constructor code
-    private function __initialize__(config:CommerceCategoryWorkAreaTab):void {
-      augmentedCategoryExpression = ValueExpressionFactory.createFromFunction(function ():* {
-        return augmentedCategoryTreeRelation.getParentUnchecked(getEntityExpression().getValue());
-      });
-    }
-
     public native function CommerceCategoryWorkAreaTab(config:CommerceCategoryWorkAreaTab = null);
     ]]></fx:Script>
+  <fx:Declarations>
+    <fx:Object id="augmentedCategoryExpression">{ValueExpressionFactory.createFromFunction(function ():* {
+      return augmentedCategoryTreeRelation.getParentUnchecked(getEntityExpression().getValue());
+    })}</fx:Object>
+  </fx:Declarations>
 
   <livecontext:subTabs>
     <livecontext:CommerceCategoryContentForm itemId="{CONTENT_TAB_ITEM_ID}"

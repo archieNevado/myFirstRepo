@@ -21,21 +21,21 @@
 
     public native function CatalogLinkContextMenu(config:CatalogLinkContextMenu = null);
 
-    [Bindable]
+    [ExtConfig]
     public var linkListWrapper:ILinkListWrapper;
 
-    ]]></fx:Script>
-  <fx:Declarations>
-    <!---
-     Set to true if the open in tab menu item should be hidden. Default is false
-    -->
-    <fx:Boolean id="hideOpenInTab"/>
+    /**
+     * Set to true if the open in tab menu item should be hidden. Default is false
+     */
+    [ExtConfig]
+    public var hideOpenInTab:Boolean;
 
-    <!---
-     Set to true if the remove menu item should be hidden. Default is false
-    -->
-    <fx:Boolean id="hideRemove"/>
-  </fx:Declarations>
+    /**
+     * Set to true if the remove menu item should be hidden. Default is false
+     */
+    [ExtConfig]
+    public var hideRemove:Boolean;
+    ]]></fx:Script>
 
   <plugins>
     <ui:HideObsoleteSeparatorsPlugin/>

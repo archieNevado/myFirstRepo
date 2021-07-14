@@ -16,13 +16,11 @@
   private var config:AddCatalogActionsToWorkAreaTabContextMenuPlugin;
   private var componentConfig:WorkAreaTabProxiesContextMenu;
 
-  // called by generated constructor code
-  private function __initialize__(config:AddCatalogActionsToWorkAreaTabContextMenuPlugin):void {
-    componentConfig = WorkAreaTabProxiesContextMenu(config.cmp.initialConfig);
-  }
-
   public native function AddCatalogActionsToWorkAreaTabContextMenuPlugin(config:AddCatalogActionsToWorkAreaTabContextMenuPlugin = null);
   ]]></fx:Script>
+  <fx:Declarations>
+    <fx:Object id="componentConfig">{WorkAreaTabProxiesContextMenu(config.cmp.initialConfig)}</fx:Object>
+  </fx:Declarations>
   <ui:items>
     <MenuSeparator/>
     <MenuItem itemId="{EcommerceIbmStudioPlugin.OPEN_IN_MCENTER_MENU_ITEM_ID}">

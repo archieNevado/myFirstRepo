@@ -17,12 +17,13 @@
     private var config:CommerceWorkAreaTab;
 
     public native function CommerceWorkAreaTab(config:CommerceWorkAreaTab = null);
-    ]]></fx:Script>
-  <fx:Declarations>
-    <fx:Array id="subTabs"/>
 
-    <fx:Object id="object"/>
-  </fx:Declarations>
+    [ExtConfig]
+    public var subTabs:Array;
+
+    [ExtConfig]
+    public var object:Object;
+    ]]></fx:Script>
 
   <local:layout>
     <layout_HBox align="stretch"/>

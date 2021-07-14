@@ -20,13 +20,13 @@
     private var config:AssetDetailsBlobPropertyField;
 
     public native function AssetDetailsBlobPropertyField(config:AssetDetailsBlobPropertyField = null);
+
+    /**
+     * An optional property name, which marks this blob's renditions as visible.
+     */
+    [ExtConfig]
+    public var visiblePropertyName:String;
     ]]></fx:Script>
-  <fx:Declarations>
-    <!---
-     An optional property name, which marks this blob's renditions as visible.
-    -->
-    <fx:String id="visiblePropertyName"/>
-  </fx:Declarations>
 
   <local:plugins exml:mode="append">
     <ui:AddItemsPlugin applyTo="{findBlobDetailsContainer}">

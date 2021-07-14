@@ -50,7 +50,8 @@ public class CatalogProductValidatorTest {
     validator.setValidators(asList(notEmptyValidatorOnNull, notEmptyValidatorOnNonnull));
     validator.validate(content, issues);
 
-    verify(issues).addIssue(any(Severity.class), eq(CONTEXTS_PROPERTY_NAME), eq(CODE_ISSUE_NOT_IN_CATALOG));
+    //noinspection unchecked
+    verify(issues).addIssue(any(Set.class), any(Severity.class), eq(CONTEXTS_PROPERTY_NAME), eq(CODE_ISSUE_NOT_IN_CATALOG));
     verify(issues).addIssue(any(Set.class), any(Severity.class), eq(TEST_PROPERTY_NULL), eq(NotEmptyValidator.class.getSimpleName()));
     verify(issues, times(0)).addIssue(any(Severity.class), eq(TEST_PROPERTY_NONNULL), eq(NotEmptyValidator.class.getSimpleName()));
   }

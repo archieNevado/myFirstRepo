@@ -15,10 +15,10 @@
     private var config:LocalSettingsForm;
 
     public native function LocalSettingsForm(config:LocalSettingsForm = null);
+
+    [ExtConfig]
+    public var contentType:String;
     ]]></fx:Script>
-  <fx:Declarations>
-    <fx:String id="contentType"/>
-  </fx:Declarations>
 
   <editor:items>
     <editor:StructPropertyField propertyName="localSettings"

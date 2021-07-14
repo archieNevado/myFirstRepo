@@ -50,9 +50,12 @@ import static com.coremedia.livecontext.fragment.links.CommerceLinkTemplateTypes
 
 /**
  * Handler gets search suggestions from shop search service.
+ * @deprecated This class is part of the legacy Blueprint commerce integration and has been deprecated
+ * in favour of the Commerce Hub integration.
  */
 @RequestMapping
 @Link
+@Deprecated(since = "2107.1", forRemoval = true)
 public class CommerceSearchHandler extends PageHandlerBase {
 
   private static final String ACTION_NAME = "shopsearch";

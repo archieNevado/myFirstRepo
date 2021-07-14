@@ -9,13 +9,13 @@
 
     public native function CutKeywordAction(config:CutKeywordAction = null);
 
-    [Bindable]
+    [ExtConfig]
     public var bindTo:ValueExpression;
 
-    [Bindable]
+    [ExtConfig]
     public var clipboardValueExpression:ValueExpression;
 
-    [Bindable]
+    [ExtConfig]
     public var selectionExpression:ValueExpression;
     ]]></fx:Script>
 

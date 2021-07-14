@@ -39,6 +39,12 @@
     </dependency>
 
     <dependency>
+      <groupId>com.coremedia.ui.toolkit</groupId>
+      <artifactId>core-icons</artifactId>
+      <type>swc</type>
+    </dependency>
+
+    <dependency>
       <groupId>com.coremedia.ui.sdk</groupId>
       <artifactId>feedback-hub-editor-components</artifactId>
       <type>swc</type>
@@ -59,6 +65,8 @@
         <version>${jangaroo.version}</version>
         <extensions>true</extensions>
         <configuration>
+          <extNamespace>com.coremedia.blueprint.studio.feedbackhub.imagga</extNamespace>
+          <skip>false</skip>
           <namespaces>
             <namespace>
               <uri>exml:com.coremedia.blueprint.studio.feedback-hub.imagga.config</uri>

@@ -17,12 +17,6 @@
   <fx:Metadata>
     [ResourceBundle('com.coremedia.ecommerce.studio.ECommerceStudioPlugin')]
   </fx:Metadata>
-  <fx:Declarations>
-    <fx:Array id="additionalToolbarItems"/>
-    <fx:Boolean id="hideOpenInTab"/>
-    <fx:Boolean id="hideRemove"/>
-    <fx:Boolean id="hideCatalog"/>
-  </fx:Declarations>
   <fx:Script><![CDATA[
     import com.coremedia.ecommerce.studio.dragdrop.CatalogDragDropVisualFeedback;
     import com.coremedia.ecommerce.studio.helper.CatalogHelper;
@@ -34,6 +28,15 @@
     private var config:CatalogLinkPropertyField;
 
     public native function CatalogLinkPropertyField(config:CatalogLinkPropertyField = null);
+
+    [ExtConfig]
+    public var additionalToolbarItems:Array;
+    [ExtConfig]
+    public var hideOpenInTab:Boolean;
+    [ExtConfig]
+    public var hideRemove:Boolean;
+    [ExtConfig]
+    public var hideCatalog:Boolean;
     ]]></fx:Script>
 
   <local:actionList>

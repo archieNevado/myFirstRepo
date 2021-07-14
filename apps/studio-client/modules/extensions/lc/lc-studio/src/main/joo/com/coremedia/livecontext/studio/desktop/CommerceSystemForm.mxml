@@ -19,13 +19,11 @@
 
     private var catalogNameExpression:ValueExpression;
 
-    // called by generated constructor code
-    private function __initialize__(config:CommerceSystemForm):void {
-      catalogNameExpression = config.bindTo.extendBy(CatalogObjectPropertyNames.CATALOG + '.name');
-    }
-
     public native function CommerceSystemForm(config:CommerceSystemForm = null);
     ]]></fx:Script>
+  <fx:Declarations>
+    <fx:Object id="catalogNameExpression">{config.bindTo.extendBy(CatalogObjectPropertyNames.CATALOG + '.name')}</fx:Object>
+  </fx:Declarations>
 
   <editor:items>
     <editor:PropertyFieldGroup

@@ -15,7 +15,7 @@ import ext.Plugin;
 
 public class TaxonomyChangePluginBase implements Plugin {
 
-  [Bindable]
+  [ExtConfig]
   public var properties:String;
 
   private var content:Content;

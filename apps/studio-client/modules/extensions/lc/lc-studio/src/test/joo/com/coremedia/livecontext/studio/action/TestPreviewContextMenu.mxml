@@ -16,7 +16,7 @@
 
     public native function TestPreviewContextMenu(config:TestPreviewContextMenu = null);
 
-    [Bindable]
+    [ExtConfig]
     public var bindTo:ValueExpression;
     ]]></fx:Script>
 

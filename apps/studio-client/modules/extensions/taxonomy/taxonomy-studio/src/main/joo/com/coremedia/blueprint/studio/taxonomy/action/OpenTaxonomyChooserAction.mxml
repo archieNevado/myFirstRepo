@@ -13,10 +13,10 @@
 
     public native function OpenTaxonomyChooserAction(config:OpenTaxonomyChooserAction = null);
 
-    [Bindable]
+    [ExtConfig]
     public var propertyValueExpression:ValueExpression;
+
+    [ExtConfig]
+    public var singleSelection:Boolean;
     ]]></fx:Script>
-  <fx:Declarations>
-    <fx:Boolean id="singleSelection"/>
-  </fx:Declarations>
 </local:OpenTaxonomyChooserActionBase>

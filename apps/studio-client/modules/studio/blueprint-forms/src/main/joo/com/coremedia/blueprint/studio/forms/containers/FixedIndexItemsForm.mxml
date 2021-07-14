@@ -43,13 +43,14 @@
       }
       return structContentLinkListWrapper;
     }
+
+    /** the property of the Bean to bind in this field - defaults to "extendedItems" */
+    [ExtConfig]
+    public var propertyName:String;
+    /* The allowed type of links - default to "CMTeasable" */
+    [ExtConfig]
+    public var linkType:String;
     ]]></fx:Script>
-  <fx:Declarations>
-    <!--- the property of the Bean to bind in this field - defaults to "extendedItems" -->
-    <fx:String id="propertyName"/>
-    <!-- The allowed type of links - default to "CMTeasable" -->
-    <fx:String id="linkType"/>
-  </fx:Declarations>
 
   <editor:items>
     <editor:LinkListPropertyField propertyName="{config.propertyName || ITEMS_PROPERTY_NAME}"

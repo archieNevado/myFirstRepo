@@ -84,13 +84,13 @@ public class SegmentFormatValidator extends ContentTypeValidatorBase {
     String replacedValue = PATTERN.matcher(propertyValue).replaceAll(SEPARATOR);
     if (replacedValue.contains(RESERVED_SEPARATOR)) {
       //... but two sequential special characters could then be the reserved separator  "--"
-      issues.addIssue(Severity.ERROR, propertyName, getContentType() + '_' + codeReservedChars, RESERVED_SEPARATOR, replacedValue);
+      issues.addIssue(getCategories(), Severity.ERROR, propertyName, getContentType() + '_' + codeReservedChars, RESERVED_SEPARATOR, replacedValue);
     }
     if (replacedValue.startsWith(SEPARATOR)) {
-      issues.addIssue(Severity.ERROR, propertyName, getContentType() + '_' + codePrefix, SEPARATOR, replacedValue);
+      issues.addIssue(getCategories(), Severity.ERROR, propertyName, getContentType() + '_' + codePrefix, SEPARATOR, replacedValue);
     }
     if (replacedValue.endsWith(SEPARATOR)) {
-      issues.addIssue(Severity.ERROR, propertyName, getContentType() + '_' + codeSuffix, SEPARATOR, replacedValue);
+      issues.addIssue(getCategories(), Severity.ERROR, propertyName, getContentType() + '_' + codeSuffix, SEPARATOR, replacedValue);
     }
 
   }

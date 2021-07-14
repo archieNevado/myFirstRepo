@@ -15,13 +15,13 @@
 
     public native function CatalogLinkPropertyFieldTestView(config:CatalogLinkPropertyFieldTestView = null);
 
-    [Bindable]
+    [ExtConfig]
     public var bindTo:ValueExpression;
 
     /**
      * An optional ValueExpression which makes the component read-only if it is evaluated to true.
      */
-    [Bindable]
+    [ExtConfig]
     public var forceReadOnlyValueExpression:ValueExpression;
     ]]></fx:Script>
 

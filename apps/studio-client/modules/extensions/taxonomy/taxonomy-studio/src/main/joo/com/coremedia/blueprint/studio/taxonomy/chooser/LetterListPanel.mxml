@@ -22,40 +22,41 @@
     /**
      * Contains an array of letters that are active for the current level.
      */
-    [Bindable]
+    [ExtConfig]
     public var activeLetters:ValueExpression;
 
     /**
      * Contains the letter the user has clicked.
      */
-    [Bindable]
+    [ExtConfig]
     public var selectedLetter:ValueExpression;
 
     /**
      * Contains node list of the selected parent.
      */
-    [Bindable]
+    [ExtConfig]
     public var selectedNodeList:ValueExpression;
 
     /**
      * The value expression that contains the active selected site by this combo.
      */
-    [Bindable]
+    [ExtConfig]
     public var selectionExpression:ValueExpression;
 
     /**
      * An optional ValueExpression which makes the component read-only if it is evaluated to true.
      */
-    [Bindable]
+    [ExtConfig]
     public var forceReadOnlyValueExpression:ValueExpression;
-    ]]></fx:Script>
-  <fx:Declarations>
-    <!--- the id of the taxonomy that's tree is used to add items from. -->
-    <fx:String id="taxonomyId"/>
 
-    <!--- If true, only one item can be selected from the list. -->
-    <fx:String id="singleSelection"/>
-  </fx:Declarations>
+    /** the id of the taxonomy that's tree is used to add items from. */
+    [ExtConfig]
+    public var taxonomyId:String;
+
+    /** If true, only one item can be selected from the list. */
+    [ExtConfig]
+    public var singleSelection:String;
+    ]]></fx:Script>
 
   <local:plugins>
     <editor:BindDisablePlugin bindTo="{getListValuesExpression()}"

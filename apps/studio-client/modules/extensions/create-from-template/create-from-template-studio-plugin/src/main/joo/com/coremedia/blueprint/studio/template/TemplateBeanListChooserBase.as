@@ -190,7 +190,7 @@ public class TemplateBeanListChooserBase extends BeanListChooser {
     if (content && content.getProperties()) {
       var imageBlob:Blob = content.getProperties().get('icon');
       if (imageBlob) {
-        var size:String = CreateFromTemplateStudioPluginSettings_properties.INSTANCE.template_icon_size;
+        var size:String = resourceManager.getString('com.coremedia.blueprint.studio.template.CreateFromTemplateStudioPluginSettings', 'template_icon_size');
         return editorContext.getThumbnailUri(content, ImageUtil.getCroppingOperation(Number(size), Number(size)));
       }
     }

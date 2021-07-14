@@ -18,7 +18,7 @@
     /**
      * Value expression that holds the latitude and longitude values.
      */
-    [Bindable]
+    [ExtConfig]
     public var latLngExpression:ValueExpression;
     ]]></fx:Script>
 

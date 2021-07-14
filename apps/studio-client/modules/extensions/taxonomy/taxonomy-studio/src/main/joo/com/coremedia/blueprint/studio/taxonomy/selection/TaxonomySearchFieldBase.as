@@ -41,7 +41,7 @@ public class TaxonomySearchFieldBase extends StatefulComboBox {
           '<tpl for="."><div style="width:' + TaxonomySearchComboRenderer.LIST_WIDTH + 'px;padding: 2px 0px; ">{' + 'html' + '}</div></tpl>'
   );
 
-  [Bindable]
+  [ExtConfig]
   public var taxonomyIdExpression:ValueExpression;
 
   /**

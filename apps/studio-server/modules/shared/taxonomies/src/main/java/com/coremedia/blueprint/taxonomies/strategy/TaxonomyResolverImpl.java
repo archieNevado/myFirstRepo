@@ -3,6 +3,7 @@ package com.coremedia.blueprint.taxonomies.strategy;
 import com.coremedia.blueprint.taxonomies.Taxonomy;
 import com.coremedia.blueprint.taxonomies.TaxonomyResolver;
 import com.coremedia.blueprint.taxonomies.cycleprevention.TaxonomyCycleValidator;
+import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.SitesService;
@@ -31,6 +32,8 @@ public class TaxonomyResolverImpl implements TaxonomyResolver {
   private final String contentType;
   private final String siteConfigPath;
   private final String globalConfigPath;
+  private int maxDocumentsPerFolder;
+  private final Cache cache;
 
   @SuppressWarnings({"ConstructorWithTooManyParameters", "squid:S00107"})
   public TaxonomyResolverImpl(@NonNull SitesService sitesService,
@@ -40,7 +43,9 @@ public class TaxonomyResolverImpl implements TaxonomyResolver {
                               @NonNull Map<String, String> aliasMapping,
                               @NonNull String contentType,
                               @NonNull String siteConfigPath,
-                              @NonNull String globalConfigPath) {
+                              @NonNull String globalConfigPath,
+                              int maxDocumentsPerFolder,
+                              @NonNull Cache cache) {
     this.sitesService = sitesService;
     this.contentRepository = contentRepository;
     this.searchService = searchService;
@@ -49,6 +54,8 @@ public class TaxonomyResolverImpl implements TaxonomyResolver {
     this.contentType = contentType;
     this.siteConfigPath = siteConfigPath;
     this.globalConfigPath = globalConfigPath;
+    this.maxDocumentsPerFolder = maxDocumentsPerFolder;
+    this.cache = cache;
   }
 
   @SuppressWarnings("rawtypes")
@@ -65,7 +72,8 @@ public class TaxonomyResolverImpl implements TaxonomyResolver {
             taxonomyCycleValidator,
             contentType,
             siteConfigPath,
-            globalConfigPath
+            globalConfigPath,
+            maxDocumentsPerFolder
     );
     return contentRepository.getConnection().getCache().get(cacheKey);
   }

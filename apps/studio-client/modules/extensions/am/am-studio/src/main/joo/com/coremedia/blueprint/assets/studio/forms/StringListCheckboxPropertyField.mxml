@@ -25,22 +25,9 @@
 
     public native function StringListCheckboxPropertyField(config:StringListCheckboxPropertyField = null);
 
-    [Bindable]
+    [ExtConfig]
     public var forceReadOnlyValueExpression:ValueExpression;
     ]]></fx:Script>
-  <fx:Declarations>
-    <!---
-     The name of the struct property.
-    -->
-    <fx:String id="structName"/>
-
-    <!---
-     The name of the property inside the struct.
-    -->
-    <fx:String id="propertyName"/>
-
-    <fx:Boolean id="hideIssues"/>
-  </fx:Declarations>
 
   <local:plugins>
     <editor:PropertyFieldPlugin propertyName="{config.structName + '.' + config.propertyName}"/>

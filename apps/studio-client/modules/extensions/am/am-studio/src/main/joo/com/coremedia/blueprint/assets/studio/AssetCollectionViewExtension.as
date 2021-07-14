@@ -2,7 +2,7 @@ package com.coremedia.blueprint.assets.studio {
 
 import com.coremedia.blueprint.assets.studio.repository.AssetRepositoryListContainer;
 import com.coremedia.blueprint.assets.studio.repository.AssetSearchListContainer;
-import com.coremedia.blueprint.assets.studio.search.ExpirationDateFilterPanel;
+import com.coremedia.blueprint.assets.studio.search.AssetSearchFilters;
 import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
@@ -10,10 +10,7 @@ import com.coremedia.cap.content.ContentTypeNames;
 import com.coremedia.cap.content.search.SearchParameters;
 import com.coremedia.cms.editor.sdk.collectionview.RepositoryCollectionViewExtension;
 import com.coremedia.cms.editor.sdk.collectionview.search.ContentTypeSelectorBase;
-import com.coremedia.cms.editor.sdk.collectionview.search.IssuesFilterPanel;
-import com.coremedia.cms.editor.sdk.collectionview.search.LastEditedFilterPanel;
 import com.coremedia.cms.editor.sdk.collectionview.search.SearchQueryUtil;
-import com.coremedia.cms.editor.sdk.collectionview.search.StatusFilterPanel;
 import com.coremedia.cms.editor.sdk.editorContext;
 
 public class AssetCollectionViewExtension extends RepositoryCollectionViewExtension {
@@ -29,22 +26,6 @@ public class AssetCollectionViewExtension extends RepositoryCollectionViewExtens
 
   override public function isUploadDisabledFor(folder:Object):Boolean {
     return true;
-  }
-
-  override public function getEnabledSearchFilterIds(model:Object):Array {
-    return [
-      StatusFilterPanel.FILTER_ID,
-      LastEditedFilterPanel.FILTER_ID,
-      'datefilter-panel-modificationdate',
-      'datefilter-panel-publicationdate',
-      'Location',
-      'Subject',
-      'Asset Download Portal',
-      'rightsChannels',
-      'rightsRegions',
-      ExpirationDateFilterPanel.FILTER_ID,
-      IssuesFilterPanel.FILTER_ID
-    ];
   }
 
   override public function getAvailableSearchTypes(folder:Object):Array {
@@ -68,6 +49,10 @@ public class AssetCollectionViewExtension extends RepositoryCollectionViewExtens
 
   override public function getFolderContainerItemId():String {
     return AssetRepositoryListContainer.ITEM_ID;
+  }
+
+  override public function getSearchFiltersItemId():String {
+    return AssetSearchFilters.ITEM_ID;
   }
 
   override public function getSearchViewItemId():String {

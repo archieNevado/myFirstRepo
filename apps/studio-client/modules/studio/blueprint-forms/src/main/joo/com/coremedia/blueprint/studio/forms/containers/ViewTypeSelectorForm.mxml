@@ -18,12 +18,17 @@
     private var config:ViewTypeSelectorForm;
 
     public native function ViewTypeSelectorForm(config:ViewTypeSelectorForm = null);
+
+    /** Optional param to add folder for a static viewtype lookup (without adding the content type). */
+    [ExtConfig]
+    public var paths:Array;
+
+
+    /** If the view type combobox only contains 1x entry, the combo box will be hidden */
+    [ExtConfig]
+    public var hideForSingleChoice:Boolean;
     ]]></fx:Script>
   <fx:Declarations>
-    <!--- Optional param to add folder for a static viewtype lookup (without adding the content type). -->
-    <fx:Array id="paths"/>
-
-    <!--- If the view type combobox only contains 1x entry, the combo box will be hidden -->
     <fx:Boolean id="hideForSingleChoice">true</fx:Boolean>
   </fx:Declarations>
 

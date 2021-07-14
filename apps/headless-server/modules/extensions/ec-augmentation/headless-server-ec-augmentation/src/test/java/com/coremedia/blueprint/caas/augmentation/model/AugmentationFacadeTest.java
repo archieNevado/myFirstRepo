@@ -10,7 +10,6 @@ import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
-import com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
@@ -246,72 +245,6 @@ class AugmentationFacadeTest {
     assertThat(productAugmentation).isNotNull();
     assertThat(productAugmentation.getErrors()).isNotEmpty();
     assertThat(productAugmentation.getData()).isNull();
-  }
-
-  @Test
-  void getCommerceRef(){
-    String propertyName = "propertyName";
-    Content content = mock(Content.class);
-    when(content.getString(propertyName)).thenReturn(PRODUCT_ID);
-    when(sitesService.getContentSiteAspect(content).getSite()).thenReturn(aSite);
-
-    CommerceRef commerceRef = testling.getCommerceRef(content, propertyName);
-
-    assertThat(commerceRef).satisfies(ref -> {
-      assertThat(ref.getType()).isEqualTo(BaseCommerceBeanType.PRODUCT);
-      assertThat(ref.getLocale()).isEqualTo(US.toLanguageTag());
-      assertThat(ref.getCatalogId()).isEqualTo("catalog");
-      assertThat(ref.getSiteId()).isEqualTo(aSite.getId());
-      assertThat(ref.getExternalId()).isEqualTo(EXTERNAL_PRODUCT_ID);
-      assertThat(ref.getStoreId()).isEqualTo(STORE_ID);
-      assertThat(ref.getId()).isEqualTo(SITE_ID + ":" + EXTERNAL_PRODUCT_ID);
-    });
-  }
-
-  @Test
-  void getCommerceRefForContentWithNoSite(){
-    Content content = mock(Content.class);
-    when(content.getString(PROPERTY_NAME)).thenReturn(PRODUCT_ID);
-    when(sitesService.getContentSiteAspect(content).getSite()).thenReturn(null);
-
-    CommerceRef commerceRef = testling.getCommerceRef(content, PROPERTY_NAME);
-
-    assertThat(commerceRef).isNull();
-  }
-
-  @Test
-  void getCommerceRefForContentWithNoCommerceConnection(){
-    Content content = mock(Content.class);
-    when(content.getString(PROPERTY_NAME)).thenReturn(PRODUCT_ID);
-    when(sitesService.getContentSiteAspect(content).getSite()).thenReturn(aSite);
-    when(commerceEntityHelper.getCommerceConnection(SITE_ID)).thenReturn(null);
-
-    CommerceRef commerceRef = testling.getCommerceRef(content, PROPERTY_NAME);
-
-    assertThat(commerceRef).isNull();
-  }
-
-  @Test
-  void getCommerceRefForContentWithNoExternalReference(){
-    Content content = mock(Content.class);
-    when(content.getString(PROPERTY_NAME)).thenReturn(null);
-    when(sitesService.getContentSiteAspect(content).getSite()).thenReturn(aSite);
-    when(commerceEntityHelper.getCommerceConnection(SITE_ID)).thenReturn(null);
-
-    CommerceRef commerceRef = testling.getCommerceRef(content, PROPERTY_NAME);
-
-    assertThat(commerceRef).isNull();
-  }
-
-  @Test
-  void getCommerceRefForContentWithInvalidExternalReference(){
-    Content content = mock(Content.class);
-    when(content.getString(PROPERTY_NAME)).thenReturn("an://invalid/commerce/id");
-    when(sitesService.getContentSiteAspect(content).getSite()).thenReturn(aSite);
-
-    CommerceRef commerceRef = testling.getCommerceRef(content, PROPERTY_NAME);
-
-    assertThat(commerceRef).isNull();
   }
 
   @Test

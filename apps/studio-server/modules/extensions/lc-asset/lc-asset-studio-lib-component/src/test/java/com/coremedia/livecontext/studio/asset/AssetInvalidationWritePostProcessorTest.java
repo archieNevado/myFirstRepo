@@ -89,6 +89,6 @@ public class AssetInvalidationWritePostProcessorTest {
 
     testling.postProcess(report);
 
-    verify(invalidationSource).invalidateReferences(newHashSet(references));
+    verify(invalidationSource).invalidateReferences(newHashSet(references), null);
   }
 }

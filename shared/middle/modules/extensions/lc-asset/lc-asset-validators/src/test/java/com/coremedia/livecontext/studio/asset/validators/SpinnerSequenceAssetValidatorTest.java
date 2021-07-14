@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.NAME_LOCAL_SETTINGS;
 import static org.mockito.ArgumentMatchers.any;
@@ -131,6 +132,7 @@ public class SpinnerSequenceAssetValidatorTest {
     when(assetHelper.getCommerceReferences(contentProperties1)).thenReturn(Arrays.asList("prod1", "prod2"));
     when(assetHelper.getCommerceReferences(contentProperties2)).thenReturn(Collections.singletonList("prod1"));
     testling.validate(spinner, issues);
-    verify(issues, atLeastOnce()).addIssue(any(Severity.class), any(String.class), any(String.class));
+    //noinspection unchecked
+    verify(issues, atLeastOnce()).addIssue(any(Set.class), any(Severity.class), any(String.class), any(String.class));
   }
 }

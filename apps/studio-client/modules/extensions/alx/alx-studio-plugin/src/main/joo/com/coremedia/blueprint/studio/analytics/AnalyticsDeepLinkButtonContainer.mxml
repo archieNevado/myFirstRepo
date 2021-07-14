@@ -11,9 +11,8 @@
 
     public native function AnalyticsDeepLinkButtonContainer(config:AnalyticsDeepLinkButtonContainer = null);
 
-    [Bindable]
+    [ExtConfig]
     public var bindTo:ValueExpression;
-
     ]]></fx:Script>
 
   <local:defaults>

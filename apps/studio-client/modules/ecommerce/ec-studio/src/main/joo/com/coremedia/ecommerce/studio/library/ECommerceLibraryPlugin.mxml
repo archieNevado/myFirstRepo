@@ -12,13 +12,11 @@
     private var config:ECommerceLibraryPlugin;
     private var selectionHolder:ICollectionView;
 
-    // called by generated constructor code
-    private function __initialize__(config:ECommerceLibraryPlugin):void {
-      selectionHolder = config.cmp as ICollectionView;
-    }
-
     public native function ECommerceLibraryPlugin(config:ECommerceLibraryPlugin = null);
     ]]></fx:Script>
+  <fx:Declarations>
+    <fx:Object id="selectionHolder">{config.cmp as ICollectionView}</fx:Object>
+  </fx:Declarations>
 
 
   <ui:rules>
@@ -48,6 +46,16 @@
         </ui:AddItemsPlugin>
       </editor:plugins>
     </editor:SearchSwitchingContainer>
+
+    <editor:SearchFiltersSwitchingContainer>
+      <editor:plugins exml:mode="append">
+        <ui:AddItemsPlugin>
+          <ui:items>
+            <ec:CatalogSearchFilters itemId="{CatalogSearchFilters.ITEM_ID}" />
+          </ui:items>
+        </ui:AddItemsPlugin>
+      </editor:plugins>
+    </editor:SearchFiltersSwitchingContainer>
 
     <editor:RepositoryToolbarSwitchingContainer>
       <editor:plugins>

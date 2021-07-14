@@ -19,25 +19,25 @@ import js.Promise;
 
 public class CatalogLinkListWrapper extends LinkListWrapperBase {
 
-  [Bindable]
+  [ExtConfig]
   public var bindTo:ValueExpression;
 
-  [Bindable]
+  [ExtConfig]
   public var propertyName:String;
 
-  [Bindable]
+  [ExtConfig]
   public var linkTypeNames:Array;
 
-  [Bindable]
+  [ExtConfig]
   public var maxCardinality:int;
 
-  [Bindable]
+  [ExtConfig]
   public var model:Bean;
 
-  [Bindable]
+  [ExtConfig]
   public var createStructFunction:Function;
 
-  [Bindable]
+  [ExtConfig]
   public var readOnlyVE:ValueExpression;
 
   private var linksVE:ValueExpression;

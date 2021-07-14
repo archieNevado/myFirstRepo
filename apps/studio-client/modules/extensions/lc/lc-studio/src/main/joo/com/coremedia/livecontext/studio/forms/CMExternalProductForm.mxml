@@ -16,11 +16,8 @@
   <fx:Script><![CDATA[
     import com.coremedia.ecommerce.studio.helper.AugmentationUtil;
     import com.coremedia.ecommerce.studio.model.CatalogObjectPropertyNames;
-    import com.coremedia.ecommerce.studio.model.Product;
-    import com.coremedia.ecommerce.studio.tree.augmentedCategoryTreeRelation;
     import com.coremedia.livecontext.studio.CatalogThumbnailResolver;
     import com.coremedia.ui.data.ValueExpression;
-    import com.coremedia.ui.data.ValueExpressionFactory;
 
     public static const xtype:String = "com.coremedia.livecontext.studio.config.cmExternalProductForm";
     public static const CONTENT_TAB_ITEM_ID:String = "contentTab";
@@ -28,23 +25,12 @@
 
     private var config:CMExternalProductForm;
     private var catalogObjectExpression:ValueExpression;
-    private var augmentedCategoryExpression:ValueExpression;
-
-    // called by generated constructor code
-    private function __initialize__(config:CMExternalProductForm):void {
-      catalogObjectExpression = AugmentationUtil.getCatalogObjectExpression(config.bindTo);
-      augmentedCategoryExpression = ValueExpressionFactory.createFromFunction(function ():* {
-        return augmentedCategoryTreeRelation.getParentUnchecked(catalogObjectExpression.extendBy('category').getValue());
-      });
-    }
-
-    private function isPriceEnabled():Boolean {
-      var product:Product = catalogObjectExpression.getValue() as Product;
-      return null != product.getListPrice();
-    }
 
     public native function CMExternalProductForm(config:CMExternalProductForm = null);
     ]]></fx:Script>
+  <fx:Declarations>
+    <fx:Object id="catalogObjectExpression">{AugmentationUtil.getCatalogObjectExpression(config.bindTo)}</fx:Object>
+  </fx:Declarations>
 
   <editor:items>
     <editor:DocumentForm

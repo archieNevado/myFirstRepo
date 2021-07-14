@@ -24,7 +24,7 @@ public class CommerceFormToolbarBase extends Toolbar {
   /**
    * a value expression to the Commerce Object to create this toolbar for
    */
-  [Bindable]
+  [ExtConfig]
   public var bindTo:ValueExpression;
 
   protected function getCatalogObject():CatalogObject {

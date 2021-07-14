@@ -35,18 +35,19 @@
       }
       return structContentLinkListWrapper;
     }
-    ]]></fx:Script>
-  <fx:Declarations>
-    <!---
-     The content type to fill the tree with.
-    -->
-    <fx:String id="contentType"/>
 
-    <!---
-     The comma separated folder values to read the content from.
-    -->
-    <fx:String id="folders"/>
-  </fx:Declarations>
+    /**
+     * The content type to fill the tree with.
+     */
+    [ExtConfig]
+    public var contentType:String;
+
+    /**
+     * The comma separated folder values to read the content from.
+     */
+    [ExtConfig]
+    public var folders:String;
+    ]]></fx:Script>
 
   <editor:items>
     <editor:DocumentForm

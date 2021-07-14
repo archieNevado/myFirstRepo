@@ -35,13 +35,11 @@
     private var config:CMExternalChannelForm;
     private var catalogObjectExpression:ValueExpression;
 
-    // called by generated constructor code
-    private function __initialize__(config:CMExternalChannelForm):void {
-      catalogObjectExpression = AugmentationUtil.getCatalogObjectExpression(config.bindTo);
-    }
-
     public native function CMExternalChannelForm(config:CMExternalChannelForm = null);
     ]]></fx:Script>
+  <fx:Declarations>
+    <fx:Object id="catalogObjectExpression">{AugmentationUtil.getCatalogObjectExpression(config.bindTo)}</fx:Object>
+  </fx:Declarations>
 
   <editor:items>
     <editor:DocumentForm

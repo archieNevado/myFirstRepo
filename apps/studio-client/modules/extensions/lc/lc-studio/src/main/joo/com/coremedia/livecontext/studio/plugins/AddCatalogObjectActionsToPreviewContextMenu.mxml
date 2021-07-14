@@ -9,17 +9,13 @@
 
     private var componentConfig:PreviewContextMenu;
 
-    // called by generated constructor code
-    //noinspection JSUnusedLocalSymbols
-    private function __initialize__(config:AddCatalogObjectActionsToPreviewContextMenu):void {
-      componentConfig = PreviewContextMenu(config.cmp.initialConfig);
-    }
-
-    //noinspection JSUnusedLocalSymbols
     private var config:AddCatalogObjectActionsToPreviewContextMenu;
 
     public native function AddCatalogObjectActionsToPreviewContextMenu(config:AddCatalogObjectActionsToPreviewContextMenu = null);
     ]]></fx:Script>
+  <fx:Declarations>
+    <fx:Object id="componentConfig">{PreviewContextMenu(config.cmp.initialConfig)}</fx:Object>
+  </fx:Declarations>
 
   <ui:items>
     <livecontext:OpenCreateExternalPageMenuItem metadataValueExpression="{componentConfig.selectedNodeValueExpression}"/>

@@ -11,69 +11,80 @@
     private var config:CreateContentFromAssetAction;
 
     public native function CreateContentFromAssetAction(config:CreateContentFromAssetAction = null);
+
+    /**
+     * The name of the ContentType of the asset.
+     */
+    [ExtConfig]
+    public var assetContentType:String;
+
+    /**
+     * The name of the ContentType to be used for creating the content.
+     * The created content items will be placed in the home folder configured for the targetContentType in the
+     * properties of the QuickCreateSettings resource bundle.
+     */
+    [ExtConfig]
+    public var targetContentType:String;
+
+    /**
+     * The name of the property where the rendition blob is stored in the asset.
+     */
+    [ExtConfig]
+    public var sourceRenditionProperty:String;
+
+    /**
+     * The name of the property that should store the link to the rendition blob in the created content.
+     */
+    [ExtConfig]
+    public var targetRenditionProperty:String;
+
+    /**
+     * The name of the property that should store the link to the source asset in the created content.
+     */
+    [ExtConfig]
+    public var targetAssetLinkProperty:String;
+
+    /**
+     * The name of the property that should store the copyright information in the created content.
+     */
+    [ExtConfig]
+    public var targetCopyrightProperty:String;
+
+    /**
+     * The name of the property that should store the valid to date in the created content.
+     */
+    [ExtConfig]
+    public var targetValidToProperty:String;
+
+    /**
+     * The content type of the thumbnail document created on the fly and saved alongside the created content.
+     */
+    [ExtConfig]
+    public var targetThumbnailContentType:String;
+
+    /**
+     * The name of the property that should store the thumbnail blob in the thumbnail document.
+     */
+    [ExtConfig]
+    public var targetThumbnailProperty:String;
+
+    /**
+     * The name of the property that stores the thumbnail in the asset.
+     */
+    [ExtConfig]
+    public var sourceThumbnailProperty:String;
+
+    /**
+     * The name of the property that stores a link to the thumbnail document in the created content.
+     */
+    [ExtConfig]
+    public var targetLinkedThumbnailProperty:String;
+
+    /**
+     * The name of the property that stores a link from the thumbnail document back to the asset.
+     */
+    [ExtConfig]
+    public var targetThumbnailAssetLinkProperty:String;
     ]]></fx:Script>
-  <fx:Declarations>
-    <!---
-     The name of the ContentType of the asset.
-    -->
-    <fx:String id="assetContentType"/>
-
-    <!---
-     The name of the ContentType to be used for creating the content.
-     The created content items will be placed in the home folder configured for the targetContentType in the
-     properties of the QuickCreateSettings resource bundle.
-    -->
-    <fx:String id="targetContentType"/>
-
-    <!---
-     The name of the property where the rendition blob is stored in the asset.
-    -->
-    <fx:String id="sourceRenditionProperty"/>
-
-    <!---
-     The name of the property that should store the link to the rendition blob in the created content.
-    -->
-    <fx:String id="targetRenditionProperty"/>
-
-    <!---
-     The name of the property that should store the link to the source asset in the created content.
-    -->
-    <fx:String id="targetAssetLinkProperty"/>
-
-    <!---
-     The name of the property that should store the copyright information in the created content.
-    -->
-    <fx:String id="targetCopyrightProperty"/>
-
-    <!---
-     The name of the property that should store the valid to date in the created content.
-    -->
-    <fx:String id="targetValidToProperty"/>
-
-    <!---
-     The content type of the thumbnail document created on the fly and saved alongside the created content.
-    -->
-    <fx:String id="targetThumbnailContentType"/>
-
-    <!---
-     The name of the property that should store the thumbnail blob in the thumbnail document.
-    -->
-    <fx:String id="targetThumbnailProperty"/>
-
-    <!---
-     The name of the property that stores the thumbnail in the asset.
-    -->
-    <fx:String id="sourceThumbnailProperty"/>
-
-    <!---
-     The name of the property that stores a link to the thumbnail document in the created content.
-    -->
-    <fx:String id="targetLinkedThumbnailProperty"/>
-
-    <!---
-     The name of the property that stores a link from the thumbnail document back to the asset.
-    -->
-    <fx:String id="targetThumbnailAssetLinkProperty"/>
-  </fx:Declarations>
 
 </local:CreateContentFromAssetActionBase>

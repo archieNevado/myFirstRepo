@@ -35,7 +35,7 @@ public class IsLiveContextTypeValidator extends ContentTypeValidatorBase {
             .filter(c -> !"coremedia".equals(c.getVendorName()))
             .isPresent();
     if (!isLiveContextConnectionPresent) {
-      issues.addIssue(Severity.ERROR, null, getContentType() + "_" + CODE_ISSUE_DOC_TYPE_NOT_SUPPORTED, getContentType());
+      issues.addIssue(getCategories(), Severity.ERROR, null, getContentType() + "_" + CODE_ISSUE_DOC_TYPE_NOT_SUPPORTED, getContentType());
     }
   }
 }

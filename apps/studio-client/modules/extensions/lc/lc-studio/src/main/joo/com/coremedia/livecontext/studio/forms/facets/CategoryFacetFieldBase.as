@@ -8,16 +8,16 @@ import ext.container.Container;
 
 public class CategoryFacetFieldBase extends Container {
 
-  [Bindable]
+  [ExtConfig]
   public var facet:Facet;
 
-  [Bindable]
+  [ExtConfig]
   public var bindTo:ValueExpression;
 
-  [Bindable]
+  [ExtConfig]
   public var forceReadOnlyValueExpression:ValueExpression;
 
-  [Bindable]
+  [ExtConfig]
   public var structPropertyName:String;
 
   public function CategoryFacetFieldBase(config:CategoryFacetField = null) {

@@ -17,7 +17,7 @@ public class CatalogProductValidator extends ContentTypeValidator {
     super.validate(content, issues);
     List<Content> parentCategories = content.getLinks(CONTEXTS_PROPERTY_NAME);
     if(parentCategories.isEmpty()){
-      issues.addIssue(Severity.ERROR, CONTEXTS_PROPERTY_NAME, CODE_ISSUE_NOT_IN_CATALOG);
+      issues.addIssue(getCategories(), Severity.ERROR, CONTEXTS_PROPERTY_NAME, CODE_ISSUE_NOT_IN_CATALOG);
     }
   }
 }

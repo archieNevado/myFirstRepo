@@ -42,21 +42,30 @@ public class StringListCheckboxPropertyFieldBase extends AdvancedFieldContainer 
     initValidationStateMixin();
   }
 
-  internal native function get structName():String;
+  /**
+   * The name of the struct property.
+   */
+  [ExtConfig]
+  public var structName:String;
 
-  internal native function get propertyName():String;
+  /**
+   * The name of the property inside the struct.
+   */
+  [ExtConfig]
+  public var propertyName:String;
 
   /**
    * A value expression evaluating to a list of strings. For each string one checkbox is rendered.
    * The checkbox label is localized in the file AMStudioPlugin.properties with the following pattern:
    * 'Asset_[structName]_[propertyName]_[value]_text'.
    */
-  [Bindable]
+  [ExtConfig]
   public var availableValuesValueExpression:ValueExpression;
-  [Bindable]
+  [ExtConfig]
   public var bindTo:ValueExpression;
 
-  internal native function get hideIssues():Boolean;
+  [ExtConfig]
+  public var hideIssues:Boolean;
 
   private function getPropertyValueExpression():ValueExpression {
     if (!propertyValueExpression) {

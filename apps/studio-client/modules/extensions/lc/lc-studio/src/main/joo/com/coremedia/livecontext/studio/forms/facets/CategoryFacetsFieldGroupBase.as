@@ -6,25 +6,25 @@ import ext.panel.Panel;
 
 public class CategoryFacetsFieldGroupBase extends Panel {
 
-  [Bindable]
+  [ExtConfig]
   public var bindTo:ValueExpression;
 
-  [Bindable]
+  [ExtConfig]
   public var forceReadOnlyValueExpression:ValueExpression;
 
-  [Bindable]
+  [ExtConfig]
   public var hideIssues:Boolean;
 
-  [Bindable]
+  [ExtConfig]
   public var externalIdPropertyName:String;
 
-  [Bindable]
+  [ExtConfig]
   public var structPropertyName:String;
 
-  [Bindable]
+  [ExtConfig]
   public var facetsExpression:ValueExpression;
 
-  [Bindable]
+  [ExtConfig]
   public var facetValuePropertyName:String;
 
   public function CategoryFacetsFieldGroupBase(config:CategoryFacetsFieldGroup = null) {

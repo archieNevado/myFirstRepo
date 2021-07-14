@@ -30,8 +30,8 @@ public class TaxonomySuggestionsLinkListPanelBase extends GridPanel {
 
   private var propertyValueExpression:ValueExpression;
 
-  [Bindable]
-  private var taxonomyIdExpression:ValueExpression;
+  [ExtConfig]
+  public var taxonomyIdExpression:ValueExpression;
 
   private var loadMask:LoadMask;
   private var cache:TaxonomyCache;

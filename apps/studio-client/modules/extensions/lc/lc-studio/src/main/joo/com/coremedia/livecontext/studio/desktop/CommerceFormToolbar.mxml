@@ -25,12 +25,11 @@
     private var config:CommerceFormToolbar;
 
     public native function CommerceFormToolbar(config:CommerceFormToolbar = null);
-    ]]></fx:Script>
 
-  <fx:Declarations>
-    <!--- The function that will be called on collapse -->
-    <fx:Function id="collapseHandler"/>
-  </fx:Declarations>
+    /** The function that will be called on collapse */
+    [ExtConfig]
+    public var collapseHandler:Function;
+    ]]></fx:Script>
   <local:items>
     <TbSpacer width="12"/>
     <!--Locale name-->

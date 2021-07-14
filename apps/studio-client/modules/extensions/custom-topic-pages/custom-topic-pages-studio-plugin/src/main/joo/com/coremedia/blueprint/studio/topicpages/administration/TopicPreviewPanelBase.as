@@ -15,7 +15,7 @@ public class TopicPreviewPanelBase extends Panel {
   /**
    * The value expression that contains the selected topic record.
    */
-  [Bindable]
+  [ExtConfig]
   public var selectionExpression:ValueExpression;
 
   protected static const PREVIEW_FRAME:String = "topicPagesPreviewFrame";

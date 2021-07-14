@@ -194,15 +194,22 @@ public class TaxonomyResource {
     try {
       Taxonomy strategy = getTaxonomy(siteId, taxonomyId);
       TaxonomyNode parent = null;
+      TaxonomyNode node = null;
       String[] nodeReferences = refs.split(",");
       for (String nodeReference : nodeReferences) {
-        TaxonomyNode node = strategy.getNodeByRef(nodeReference);
+        node = strategy.getNodeByRef(nodeReference);
         if (node == null) {
           LOG.warn("Can't remove taxonomy node with reference {} because it couldn't be resolved", nodeReference);
           continue;
         }
+
         parent = strategy.delete(node);
       }
+
+      if(node != null) {
+        waitUntilNotSearchable(parent, node);
+      }
+
       return parent;
     } catch (TaxonomyResourceException e) {
       throw e;
@@ -459,10 +466,35 @@ public class TaxonomyResource {
    */
   private void waitUntilSearchable(TaxonomyNode node) throws InterruptedException {
     TaxonomyNode root = getRoot(node.getSiteId(), node.getTaxonomyId());
-    int attempts = 0;
     TaxonomyNodeList list = getChildren(node.getSiteId(), node.getTaxonomyId(), root.getRef(), null, null);
+
+    int attempts = 0;
     while (!list.contains(node)) {
       list = getChildren(node.getSiteId(), node.getTaxonomyId(), root.getRef(), null, null);
+      // These numbers are not "magic"
+      Thread.sleep(500);  //NOSONAR
+      attempts++;
+      if (attempts == 20) {  //NOSONAR
+        break;
+      }
+    }
+  }
+
+  /**
+   * Waits until the given node is not searchable anymore.
+   *
+   * @param node The node to wait for.
+   */
+  private void waitUntilNotSearchable(TaxonomyNode parent, TaxonomyNode node) throws InterruptedException {
+    if(parent == null) {
+      Taxonomy strategy = getTaxonomy(node.getSiteId(), node.getTaxonomyId());
+      parent = strategy.getRoot();
+    }
+
+    TaxonomyNodeList list = getChildren(parent.getSiteId(), parent.getTaxonomyId(), parent.getRef(), null, null);
+    int attempts = 0;
+    while (list.contains(node)) {
+      list = getChildren(parent.getSiteId(), parent.getTaxonomyId(), parent.getRef(), null, null);
       // These numbers are not "magic"
       Thread.sleep(500);  //NOSONAR
       attempts++;

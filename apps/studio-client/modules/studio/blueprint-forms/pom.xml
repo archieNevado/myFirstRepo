@@ -14,8 +14,68 @@
 
   <dependencies>
     <dependency>
+      <groupId>net.jangaroo</groupId>
+      <artifactId>jangaroo-browser</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.ui.sdk</groupId>
+      <artifactId>cap-rest-client</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.ui.toolkit</groupId>
+      <artifactId>client-core</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.ui.toolkit</groupId>
+      <artifactId>client-core-impl</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>studio-client.link-list-models</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>studio-client.cap-base-components</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>studio-client.multi-site-models</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>studio-client.content-link-list-models</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>studio-client.errors-validation-components</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-studio-dynamic-query-list</artifactId>
+      <artifactId>bpbase-studio-components</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>studio-client.library-services-api</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>studio-client.cap-base-models</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>studio-client.content-link-list-components</artifactId>
       <type>swc</type>
     </dependency>
     <dependency>
@@ -49,25 +109,9 @@
       <type>swc</type>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.ui.sdk</groupId>
-      <artifactId>feedback-hub-editor-components</artifactId>
-      <type>swc</type>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.ui.sdk</groupId>
-      <artifactId>hideservice-components</artifactId>
-      <type>swc</type>
-    </dependency>
-    <dependency>
       <groupId>net.jangaroo</groupId>
       <artifactId>ext-as</artifactId>
       <type>swc</type>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.ui</groupId>
-      <artifactId>studio-theme</artifactId>
-      <type>swc</type>
-      <scope>provided</scope>
     </dependency>
   </dependencies>
 
@@ -76,6 +120,10 @@
       <resource>
         <directory>src/main/sencha</directory>
         <targetPath>../packages/${project.groupId}__${project.artifactId}</targetPath>
+        <excludes>
+          <exclude>sass/var/**</exclude>
+          <exclude>sass/src/**</exclude>
+        </excludes>
       </resource>
     </resources>
     <plugins>
@@ -85,6 +133,7 @@
         <extensions>true</extensions>
         <version>${jangaroo.version}</version>
         <configuration>
+          <extNamespace>com.coremedia.blueprint.studio</extNamespace>
           <publicApiViolations>warn</publicApiViolations>
           <namespaces>
             <namespace>

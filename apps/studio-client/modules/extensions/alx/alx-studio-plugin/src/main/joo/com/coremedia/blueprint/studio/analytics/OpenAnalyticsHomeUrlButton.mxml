@@ -19,12 +19,5 @@
 
     public native function OpenAnalyticsHomeUrlButton(config:OpenAnalyticsHomeUrlButton = null);
     ]]></fx:Script>
-  <fx:Declarations>
-    <!--- The name of the window to open. -->
-    <fx:String id="windowName"/>
-
-    <!--- The name of the service that this button is bound to -->
-    <fx:String id="serviceName"/>
-  </fx:Declarations>
 
 </local:OpenAnalyticsUrlButtonBase>

@@ -9,10 +9,10 @@
 
     public native function DeleteKeywordAction(config:DeleteKeywordAction = null);
 
-    [Bindable]
+    [ExtConfig]
     public var bindTo:ValueExpression;
 
-    [Bindable]
+    [ExtConfig]
     public var selectionExpression:ValueExpression;
     ]]></fx:Script>
 

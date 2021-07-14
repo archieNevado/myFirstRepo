@@ -63,7 +63,7 @@ public class PreviewControllerTest {
     config.setUrl("http://localhost:8080");
     config.setCaasserverEndpoint("http://caasServer.com:8080/graphql");
     MockitoAnnotations.initMocks(this);
-    previewController = new JsonPreviewController(httpClient, htmlTemplateEngine, contentRepository, sitesService, config, true);
+    previewController = new JsonPreviewController(httpClient, htmlTemplateEngine, contentRepository, sitesService, config);
   }
 
   @Test

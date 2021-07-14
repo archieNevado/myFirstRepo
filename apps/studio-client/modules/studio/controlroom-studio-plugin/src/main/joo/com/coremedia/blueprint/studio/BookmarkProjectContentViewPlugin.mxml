@@ -14,13 +14,11 @@
     private var config:BookmarkProjectContentViewPlugin;
     private var projectContentContainer:ProjectContentContainer;
 
-    // called by generated constructor code
-    private function __initialize__(config:BookmarkProjectContentViewPlugin):void {
-      projectContentContainer = config.cmp as ProjectContentContainer;
-    }
-
     public native function BookmarkProjectContentViewPlugin(config:BookmarkProjectContentViewPlugin = null);
     ]]></fx:Script>
+  <fx:Declarations>
+    <fx:Object id="projectContentContainer">{config.cmp as ProjectContentContainer}</fx:Object>
+  </fx:Declarations>
 
   <ui:rules>
     <collab:ProjectContentContextMenu>

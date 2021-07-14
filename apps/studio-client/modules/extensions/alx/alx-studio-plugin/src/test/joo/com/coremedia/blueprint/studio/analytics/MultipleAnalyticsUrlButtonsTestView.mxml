@@ -10,7 +10,7 @@
 
     private var config:MultipleAnalyticsUrlButtonsTestView;
 
-    [Bindable]
+    [ExtConfig]
     public var contentValueExpression:ValueExpression;
 
     public native function MultipleAnalyticsUrlButtonsTestView(config:MultipleAnalyticsUrlButtonsTestView = null);

@@ -10,12 +10,12 @@
     private var config:CMPersonaFormComboBox;
 
     public native function CMPersonaFormComboBox(config:CMPersonaFormComboBox = null);
+
+    /**
+     * the enumeration of possible properties and their display names. See below
+     */
+    [ExtConfig]
+    public var properties:Object;
     ]]></fx:Script>
-  <fx:Declarations>
-    <!---
-     the enumeration of possible properties and their display names. See below
-    -->
-    <fx:Object id="properties"/>
-  </fx:Declarations>
 
 </local:CMPersonaFormComboBoxBase>

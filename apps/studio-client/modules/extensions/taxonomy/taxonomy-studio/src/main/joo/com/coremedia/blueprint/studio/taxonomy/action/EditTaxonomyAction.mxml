@@ -11,11 +11,11 @@
 
     public native function EditTaxonomyAction(config:EditTaxonomyAction = null);
 
-    [Bindable]
+    [ExtConfig]
     public var bindTo:ValueExpression;
+
+    [ExtConfig]
+    public var taxonomyId:String;
     ]]></fx:Script>
-  <fx:Declarations>
-    <fx:String id="taxonomyId"/>
-  </fx:Declarations>
 
 </local:EditTaxonomyActionBase>

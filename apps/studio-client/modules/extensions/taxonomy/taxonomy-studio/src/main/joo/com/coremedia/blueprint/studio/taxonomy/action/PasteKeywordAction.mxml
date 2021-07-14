@@ -9,10 +9,10 @@
 
     public native function PasteKeywordAction(config:PasteKeywordAction = null);
 
-    [Bindable]
+    [ExtConfig]
     public var clipboardValueExpression:ValueExpression;
 
-    [Bindable]
+    [ExtConfig]
     public var selectionExpression:ValueExpression;
     ]]></fx:Script>
 

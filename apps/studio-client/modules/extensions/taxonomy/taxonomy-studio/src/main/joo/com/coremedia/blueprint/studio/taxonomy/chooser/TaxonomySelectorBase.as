@@ -23,10 +23,10 @@ import js.Event;
 [ResourceBundle('com.coremedia.icons.CoreIcons')]
 public class TaxonomySelectorBase extends Container {
 
-  [Bindable]
+  [ExtConfig]
   public var loadingExpression:ValueExpression;
 
-  [Bindable]
+  [ExtConfig]
   public var nodePathExpression:ValueExpression;
 
   private var ALPHABET:Array;
@@ -35,7 +35,7 @@ public class TaxonomySelectorBase extends Container {
   private var selectedLetterVE:ValueExpression;
   private var selectedNodeListVE:ValueExpression;
 
-  [Bindable]
+  [ExtConfig]
   public var taxonomyIdExpression:ValueExpression;
 
   private var activePathList:TaxonomyNodeList;

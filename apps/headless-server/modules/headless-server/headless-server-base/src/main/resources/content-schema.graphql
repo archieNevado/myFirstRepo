@@ -184,6 +184,8 @@ interface CMInteractive @inherit(from: ["CMVisual"]) {}
 
 interface CMLinkable @inherit(from: ["CMLocalized", "CollectionItem"]) {
   settings(paths: [[String!]!]!): JSON
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
   context: CMNavigation
   extDisplayedDate: String
   link: Link
@@ -195,6 +197,9 @@ interface CMLinkable @inherit(from: ["CMLocalized", "CollectionItem"]) {
   viewtype: String
   subjectTaxonomy: [CMTaxonomy]
   locationTaxonomy: [CMLocTaxonomy]
+  htmlTitle: String
+  htmlDescription: String
+  keywords: String
 }
 
 interface CMLocalized @inherit(from: ["CMObject"]) {
@@ -218,6 +223,7 @@ interface CMMedia @inherit(from: ["CMTeasable"]) {
   captionReferencedContent(view: String): [Content_!]
   copyright: String
   data: Blob
+  fullyQualifiedUrl: String!
 }
 
 interface CMNavigation @inherit(from: ["CMTeasable", "HasPageGrid"]) {
@@ -405,8 +411,15 @@ type CMImageMapImpl implements CMImageMap @inherit(from: ["CMTeaserImpl"]) {
 
 type CMInteractiveImpl implements CMInteractive @inherit(from: ["CMVisualImpl"]) {}
 
+type LinkedContentEntry {
+  key: String
+  value: [CMObject]
+}
+
 type CMLinkableImpl implements CMLinkable @inherit(from: ["CMLocalizedImpl"]) {
   settings(paths: [[String!]!]!): JSON @fetch(from: "@settingsAdapter.to(#root).getWrappedInMap(#paths)")
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry] @fetch(from: "@settingsAdapter.to(#root).getList(#paths)")
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry] @fetch(from: "@structAdapter.to(#root).getList(#paths)")
   context: CMNavigation @fetch(from: "@navigationAdapter.to(#root).findContext()")
   extDisplayedDate: String
   link: Link @fetch(from: "@graphQlLinkComposer.apply(#root)")
@@ -419,6 +432,9 @@ type CMLinkableImpl implements CMLinkable @inherit(from: ["CMLocalizedImpl"]) {
   remoteLink(siteId:String, context:String): String!
   subjectTaxonomy: [CMTaxonomy]
   locationTaxonomy: [CMLocTaxonomy]
+  htmlTitle: String
+  htmlDescription: String
+  keywords: String
 }
 
 type CMLocalizedImpl implements CMLocalized @inherit(from: ["CMObjectImpl"]) {
@@ -442,6 +458,7 @@ type CMMediaImpl implements CMMedia @inherit(from: ["CMTeasableImpl"]) {
   captionReferencedContent(view: String): [Content_!] @fetch(from: "caption?.view(#view?:'default')?.getReferencedContent()")
   copyright: String
   data: Blob @fetch(from: "@contentBlobAdapter.to(#root, 'data')")
+  fullyQualifiedUrl: String! @fetch(from: "@uriLinkComposer.apply(@filenameBlobAdapter.to(@contentBlobAdapter.to(#root, 'data')))")
 }
 
 type CMNavigationImpl implements CMNavigation @inherit(from: ["CMTeasableImpl"]) {

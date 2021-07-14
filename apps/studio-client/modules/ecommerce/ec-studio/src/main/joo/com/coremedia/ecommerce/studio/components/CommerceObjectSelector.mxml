@@ -16,19 +16,21 @@
 
     public native function CommerceObjectSelector(config:CommerceObjectSelector = null);
 
-    [Bindable]
+    [ExtConfig]
     public var contentValueExpression:ValueExpression;
 
-    [Bindable]
+    [ExtConfig]
     public var selectedCatalogObjectsExpression:ValueExpression;
+
+    [ExtConfig]
+    public var quote:Boolean;
+
+    [ExtConfig]
+    public var getCommerceObjectsFunction:Function;
+
+    [ExtConfig]
+    public var noStoreMessage:String;
     ]]></fx:Script>
-  <fx:Declarations>
-    <fx:Boolean id="quote"/>
-
-    <fx:Function id="getCommerceObjectsFunction"/>
-
-    <fx:String id="noStoreMessage"/>
-  </fx:Declarations>
 
   <local:plugins>
     <ui:BindListPlugin bindTo="{getSelectableCatalogObjectsExpression(config)}">

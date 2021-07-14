@@ -3,6 +3,7 @@ import com.coremedia.cap.content.ContentTypeNames;
 import com.coremedia.cap.content.search.SearchParameters;
 import com.coremedia.cms.editor.sdk.collectionview.CollectionViewExtension;
 import com.coremedia.cms.editor.sdk.collectionview.CollectionViewModel;
+import com.coremedia.cms.editor.sdk.collectionview.search.SearchFilter;
 import com.coremedia.cms.editor.sdk.collectionview.sort.RepositoryListSorter;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.upload.UploadSettings;
@@ -10,8 +11,10 @@ import com.coremedia.ecommerce.studio.CatalogModel;
 import com.coremedia.ecommerce.studio.catalogHelper;
 import com.coremedia.ecommerce.studio.components.repository.CatalogRepositoryListContainer;
 import com.coremedia.ecommerce.studio.components.repository.CatalogRepositoryToolbarContainer;
+import com.coremedia.ecommerce.studio.components.search.CatalogSearchFilters;
 import com.coremedia.ecommerce.studio.components.search.CatalogSearchListContainer;
 import com.coremedia.ecommerce.studio.components.search.CatalogSearchToolbarContainer;
+import com.coremedia.ecommerce.studio.components.search.filters.FacetsFilterPanel;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ecommerce.studio.model.Category;
@@ -43,7 +46,7 @@ public class ECommerceCollectionViewExtension implements CollectionViewExtension
   public function search(searchParameters:SearchParameters, callback:Function):void {
     var store:Store = CatalogHelper.getInstance().getActiveStoreExpression().getValue();
 
-    if(store) {
+    if (store) {
       var catalogSearch:RemoteServiceMethod = new RemoteServiceMethod("livecontext/search/" + store.getSiteId(), "GET");
 
       //to object conversion
@@ -61,7 +64,7 @@ public class ECommerceCollectionViewExtension implements CollectionViewExtension
     }
   }
 
-  public function getSearchOrSearchSuggestionsParameters(filters:Object, mainStateBean:Bean):SearchParameters {
+  public function getSearchOrSearchSuggestionsParameters(filters:Array, mainStateBean:Bean):SearchParameters {
     var searchText:String = mainStateBean.get(CollectionViewModel.SEARCH_TEXT_PROPERTY);
     var catalogType:String = mainStateBean.get(CollectionViewModel.CONTENT_TYPE_PROPERTY);
 
@@ -86,6 +89,25 @@ public class ECommerceCollectionViewExtension implements CollectionViewExtension
     searchParameters['searchType'] = catalogType;
     searchParameters['siteId'] = editorContext.getSitesService().getPreferredSiteId();
     searchParameters['workspaceId'] = CatalogHelper.getInstance().getExtractedWorkspaceId();
+
+    if (filters && filters.length > 0) {
+      var facetFilterPanel:FacetsFilterPanel = filters[0];
+      var filterValues:Object = facetFilterPanel.getStateBean().toObject();
+      var filterQueryFragments:Array = [];
+
+      for (var facetId:String in filterValues) {
+        if (filterValues[facetId] !== undefined) {
+          var queries:Array = filterValues[facetId];
+          if (queries && queries.length > 0) {
+            filterQueryFragments = filterQueryFragments.concat(queries);
+          }
+        }
+      }
+
+      searchParameters.filterQuery = Array.from(filterQueryFragments);
+    }
+
+
     return searchParameters;
   }
 
@@ -95,6 +117,10 @@ public class ECommerceCollectionViewExtension implements CollectionViewExtension
 
   public function getSearchViewItemId():String {
     return CatalogSearchListContainer.VIEW_CONTAINER_ITEM_ID;
+  }
+
+  public function getSearchFiltersItemId():String {
+    return CatalogSearchFilters.ITEM_ID;
   }
 
   public function getAvailableSearchTypes(folder:Object):Array {
@@ -123,10 +149,6 @@ public class ECommerceCollectionViewExtension implements CollectionViewExtension
 
   public function getSearchToolbarItemId():String {
     return CatalogSearchToolbarContainer.CATALOG_SEARCH_TOOLBAR_ITEM_ID;
-  }
-
-  public function getEnabledSearchFilterIds(model:Object):Array {
-    return null;
   }
 
   public function getFolderContainerItemId():String {

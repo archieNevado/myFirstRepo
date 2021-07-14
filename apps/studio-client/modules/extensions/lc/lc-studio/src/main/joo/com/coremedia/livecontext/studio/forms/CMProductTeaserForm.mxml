@@ -25,13 +25,10 @@
     public native function CMProductTeaserForm(config:CMProductTeaserForm = null);
 
     private var catalogObjectExpression:ValueExpression;
-
-    // called by generated constructor code
-    private function __initialize__(config:CMProductTeaserForm):void {
-      catalogObjectExpression = CatalogHelper.getInstance().getCatalogExpression(config.bindTo);
-    }
-
     ]]></fx:Script>
+  <fx:Declarations>
+    <fx:Object id="catalogObjectExpression">{CatalogHelper.getInstance().getCatalogExpression(config.bindTo)}</fx:Object>
+  </fx:Declarations>
 
   <local:items>
     <editor:DocumentForm

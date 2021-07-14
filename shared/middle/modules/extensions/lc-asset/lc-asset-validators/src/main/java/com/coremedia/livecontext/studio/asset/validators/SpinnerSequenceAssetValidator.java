@@ -58,7 +58,7 @@ public class SpinnerSequenceAssetValidator extends ContentTypeValidatorBase {
           // compare the lists regardless of order and duplicates
           boolean sameSets = references.containsAll(commerceReferences) && commerceReferences.containsAll(references);
           if (!sameSets) {
-            issues.addIssue(Severity.WARN, SEQUENCE_PROPERTY, ISSUE_CODE_DIFFERENT_PICTURE_ASSETS);
+            issues.addIssue(getCategories(), Severity.WARN, SEQUENCE_PROPERTY, ISSUE_CODE_DIFFERENT_PICTURE_ASSETS);
             return;
           }
         }

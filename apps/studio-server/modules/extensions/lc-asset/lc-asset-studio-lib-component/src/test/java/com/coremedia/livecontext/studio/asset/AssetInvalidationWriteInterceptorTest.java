@@ -12,7 +12,6 @@ import com.coremedia.rest.cap.intercept.ContentWriteRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -89,7 +88,7 @@ public class AssetInvalidationWriteInterceptorTest {
     testling.intercept(contentWriteRequest);
 
     Set<String> expected = newHashSet("d", "e", "b", "a");
-    verify(invalidationSource, times(1)).invalidateReferences(argThat(expected::containsAll));
+    verify(invalidationSource, times(1)).invalidateReferences(argThat(expected::containsAll), any());
   }
 
   @Test
@@ -103,6 +102,6 @@ public class AssetInvalidationWriteInterceptorTest {
     testling.intercept(contentWriteRequest);
 
     Set<String> expected = newHashSet("a", "b", "c");
-    verify(invalidationSource, times(1)).invalidateReferences(argThat(expected::containsAll));
+    verify(invalidationSource, times(1)).invalidateReferences(argThat(expected::containsAll), any());
   }
 }

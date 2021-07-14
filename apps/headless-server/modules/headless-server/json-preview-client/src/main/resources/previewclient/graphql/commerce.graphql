@@ -1,28 +1,44 @@
 query CommerceQuery($commerceId: String!, $siteId: String!) {
   commerce {
-    commerceBean(commerceId: $commerceId, siteId: $siteId) {
-      externalId
+    augmentationForCommerceIdBySite(commerceId: $commerceId, siteId: $siteId) {
+      commerceRef {
+        externalId
+        siteId
+        locale
+      }
       __typename
-      locale
-      ...GridFragment
+      ...ProductAugmentationGridFragment
+      ...CategoryAugmentationGridFragment
     }
   }
 }
 
-fragment GridFragment on HasPageGrid {
+fragment ProductAugmentationGridFragment on ProductAugmentation {
+  pdpPagegrid {
+    ...GridFragment
+  }
+}
+
+fragment CategoryAugmentationGridFragment on CategoryAugmentation {
   grid {
-    placements(names: ["header", "additional"]) {
+    ...GridFragment
+  }
+}
+
+fragment GridFragment on PageGrid {
+  placements(names: ["header", "additional"]) {
+    name
+    items {
+      name
+      type
+    }
+  }
+  rows {
+    placements {
       name
       items {
-        name type
-      }}
-    rows {
-      placements {
         name
-        items {
-          name
-          type
-        }
+        type
       }
     }
   }

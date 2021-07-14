@@ -29,14 +29,14 @@ public class LetterListPanelBase extends Container {
   /**
    * Contains the row that children should be displayed next.
    */
-  [Bindable]
+  [ExtConfig]
   public var nodePathExpression:ValueExpression;
 
   protected static const LIST_BLOCK:BEMBlock = new BEMBlock("widget-content-list");
 
   protected static const LIST_ELEMENT_ENTRY:BEMElement = LIST_BLOCK.createElement("entry");
 
-  [Bindable]
+  [ExtConfig]
   public var loadingExpression:ValueExpression;
 
   private var listValuesExpression:ValueExpression;
@@ -64,8 +64,8 @@ public class LetterListPanelBase extends Container {
           '        <span class="cm-taxonomy-node {customCss}" style="cursor:pointer;">',
           '           <span class="cm-taxonomy-node__box">',
           '             <span class="cm-taxonomy-node__name">',
-          '               <tpl if="!leaf"><b>{name:htmlEncode}</b></tpl>',
-          '               <tpl if="leaf">{name:htmlEncode}</tpl>',
+          '               <tpl if="!leaf"><b>{name}</b></tpl>',
+          '               <tpl if="leaf">{name}</tpl>',
           '             </span>',
           '             <tpl if="renderControl">',
           '               <tpl if="!added"><span class="cm-taxonomy-node__control cm-core-icons cm-core-icons--add-special-size" data-ref="{ref}"></span></tpl>',

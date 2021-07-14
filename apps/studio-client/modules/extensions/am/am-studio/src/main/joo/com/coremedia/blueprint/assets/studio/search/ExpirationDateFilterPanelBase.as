@@ -2,6 +2,7 @@ package com.coremedia.blueprint.assets.studio.search {
 
 import com.coremedia.cms.editor.sdk.collectionview.search.*;
 import com.coremedia.cms.studio.base.cap.models.format.FormatUtil;
+import com.coremedia.ui.data.Bean;
 
 public class ExpirationDateFilterPanelBase extends FilterPanel {
   public static const KEY:String = 'key';
@@ -45,6 +46,18 @@ public class ExpirationDateFilterPanelBase extends FilterPanel {
     }
 
     return FormatUtil.format(queryFormat, SOLR_FIELD);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  override public function getActiveFilterCount():Number {
+    var key:String = getStateBean().get(KEY);
+    if (!key || key === 'any') {
+      return 0;
+    }
+
+    return 1;
   }
 
   override public function getDefaultState():Object {

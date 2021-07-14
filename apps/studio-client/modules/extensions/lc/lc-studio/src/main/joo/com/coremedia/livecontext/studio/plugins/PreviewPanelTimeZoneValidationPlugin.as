@@ -26,10 +26,10 @@ public class PreviewPanelTimeZoneValidationPlugin extends AbstractPlugin {
   /**
    * The model for the date, time and timezone
    */
-  [Bindable]
+  [ExtConfig]
   public var model:Bean;
 
-  [Bindable]
+  [ExtConfig]
   public var previewPanel:PreviewPanel;
 
   private var timeZoneIdValueExpression:ValueExpression;

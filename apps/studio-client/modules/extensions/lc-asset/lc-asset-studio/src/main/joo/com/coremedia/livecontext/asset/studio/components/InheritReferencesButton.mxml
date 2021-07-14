@@ -17,13 +17,13 @@
     /**
      * Document form content.
      */
-    [Bindable]
+    [ExtConfig]
     public var bindTo:ValueExpression;
 
     /**
      * An optional ValueExpression which makes the action read-only if it is evaluated to true.
      */
-    [Bindable]
+    [ExtConfig]
     public var forceReadOnlyValueExpression:ValueExpression;
     ]]></fx:Script>
 

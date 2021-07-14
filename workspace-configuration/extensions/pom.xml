@@ -7,6 +7,10 @@
   <version>1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
+  <properties>
+    <extensions-maven-plugin.version>4.4.0</extensions-maven-plugin.version>
+  </properties>
+
   <pluginRepositories>
     <pluginRepository>
       <snapshots>
@@ -23,7 +27,7 @@
         <plugin>
           <groupId>com.coremedia.maven</groupId>
           <artifactId>extensions-maven-plugin</artifactId>
-          <version>4.2.1</version>
+          <version>${extensions-maven-plugin.version}</version>
           <configuration>
             <projectRoot>../..</projectRoot>
             <extensionsPath>modules/extensions</extensionsPath>

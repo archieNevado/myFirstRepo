@@ -23,4 +23,5 @@
   <component class="com.coremedia.blueprint.assets.studio.search.ExpirationDateFilterPanel"/>
   <component class="com.coremedia.blueprint.assets.studio.search.ExpirationDateSelector"/>
   <component class="com.coremedia.blueprint.assets.studio.search.StringListCheckboxFilterPanel"/>
+  <component class="com.coremedia.blueprint.assets.studio.search.AssetSearchFilters"/>
 </componentPackage>

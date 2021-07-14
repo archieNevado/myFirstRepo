@@ -14,7 +14,7 @@ public class OpenAnalyticsDeepLinkUrlButtonBase extends OpenAnalyticsUrlButtonBa
 
   internal static const NO_PREVIEW_TYPES:Array = editorContext.getDocumentTypesWithoutPreview();
 
-  [Bindable]
+  [ExtConfig]
   public var contentExpression:ValueExpression;
 
   private var uriExpression:ValueExpression;

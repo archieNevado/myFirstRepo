@@ -7,6 +7,8 @@
         xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
         xmlns:facets="com.coremedia.livecontext.studio.forms.facets.*">
   <fx:Script><![CDATA[
+    import com.coremedia.ecommerce.studio.components.search.filters.FacetUtil;
+
     public static const xtype:String = "com.coremedia.livecontext.studio.config.singleCategoryFacetsFieldGroup";
 
     private var config:SingleCategoryFacetsFieldGroup;

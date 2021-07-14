@@ -1,8 +1,8 @@
 package com.coremedia.blueprint.headlessserver;
 
+import com.coremedia.blueprint.base.caas.model.adapter.ByPathAdapterFactory;
 import com.coremedia.blueprint.base.caas.model.adapter.LocalizedVariantsAdapterFactory;
 import com.coremedia.blueprint.base.caas.model.adapter.NavigationAdapterFactory;
-import com.coremedia.blueprint.base.caas.model.adapter.ByPathAdapterFactory;
 import com.coremedia.blueprint.base.caas.model.adapter.PageGridAdapterFactory;
 import com.coremedia.blueprint.base.caas.model.adapter.SettingsAdapterFactory;
 import com.coremedia.blueprint.base.caas.model.adapter.StructAdapterFactory;
@@ -22,6 +22,8 @@ import com.coremedia.caas.filter.ValidityDateFilterPredicate;
 import com.coremedia.caas.link.ContentLink;
 import com.coremedia.caas.link.ContentLinkComposer;
 import com.coremedia.caas.link.GraphQLLink;
+import com.coremedia.caas.media.FilenameBlobAdapter;
+import com.coremedia.caas.media.FilenameBlobAdapterFactory;
 import com.coremedia.caas.media.ResponsiveMediaAdapter;
 import com.coremedia.caas.media.ResponsiveMediaAdapterFactory;
 import com.coremedia.caas.model.ContentRoot;
@@ -63,6 +65,7 @@ import com.coremedia.caas.web.CaasWebConfig;
 import com.coremedia.caas.web.GraphiqlConfigurationProperties;
 import com.coremedia.caas.web.filter.HSTSResponseHeaderFilter;
 import com.coremedia.caas.web.link.ContentBlobLinkComposer;
+import com.coremedia.caas.web.link.FilenameBlobLinkComposer;
 import com.coremedia.caas.web.link.ResponsiveMediaLinkComposer;
 import com.coremedia.caas.web.metadata.MetadataConfigurationProperties;
 import com.coremedia.caas.web.metadata.MetadataProvider;
@@ -105,6 +108,7 @@ import com.coremedia.springframework.customizer.Customize;
 import com.coremedia.springframework.customizer.CustomizerConfiguration;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import com.coremedia.xml.Markup;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -345,6 +349,11 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
+  public LinkComposer<FilenameBlobAdapter, UriLinkBuilder> filenameBlobLinkComposer() {
+    return filenameBlobAdapter -> new FilenameBlobLinkComposer().apply(filenameBlobAdapter);
+  }
+
+  @Bean
   public LinkComposer<ResponsiveMediaAdapter, UriLinkBuilder> responsiveMediaLinkComposer(MimeTypeService mimeTypeService, UrlPathFormater urlPathFormater) {
     return responsiveMediaAdapter -> new ResponsiveMediaLinkComposer(mimeTypeService, urlPathFormater).apply(responsiveMediaAdapter);
   }
@@ -454,6 +463,11 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
+  public FilenameBlobAdapterFactory filenameBlobAdapter(MimeTypeService mimeTypeService, UrlPathFormater urlPathFormater) {
+    return new FilenameBlobAdapterFactory(mimeTypeService, urlPathFormater);
+  }
+
+  @Bean
   public ExtendedLinkListAdapterFactory teaserTargetsAdapter() {
     return new ExtendedLinkListAdapterFactory("targets", "links", "target", "CMLinkable", "target");
   }
@@ -469,8 +483,8 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public StructAdapterFactory structAdapter(StructService structService, SettingsService settingsService) {
-    return new StructAdapterFactory(structService, settingsService);
+  public StructAdapterFactory structAdapter() {
+    return new StructAdapterFactory();
   }
 
   @Bean
@@ -479,8 +493,8 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public RemoteServiceAdapterFactory remoteServiceAdapter(RemoteServiceConfiguration remoteServiceConfiguration) {
-    return new RemoteServiceAdapterFactory(remoteServiceConfiguration);
+  public RemoteServiceAdapterFactory remoteServiceAdapter(RemoteServiceConfiguration remoteServiceConfiguration, ObjectMapper objectMapper) {
+    return new RemoteServiceAdapterFactory(remoteServiceConfiguration, objectMapper);
   }
 
   @Bean
@@ -505,8 +519,9 @@ public class CaasConfig implements WebMvcConfigurer {
           RichtextTransformerRegistry richtextTransformerRegistry,
           LinkComposer<Object, String> uriLinkComposer,
           LinkComposer<Object, GraphQLLink> graphqlLinkComposer,
-          StaxContextConfigurationProperties staxContextConfigurationProperties) {
-    return new CMGrammarRichTextAdapterFactory(contentRepository, mediaResource, richtextTransformerRegistry, uriLinkComposer, graphqlLinkComposer, staxContextConfigurationProperties);
+          StaxContextConfigurationProperties staxContextConfigurationProperties,
+          ContentBlobAdapterFactory contentBlobAdapterFactory) {
+    return new CMGrammarRichTextAdapterFactory(contentRepository, mediaResource, richtextTransformerRegistry, uriLinkComposer, graphqlLinkComposer, staxContextConfigurationProperties, contentBlobAdapterFactory);
   }
 
   @Bean
@@ -524,15 +539,18 @@ public class CaasConfig implements WebMvcConfigurer {
     return gregorianCalendar -> Optional.of(gregorianCalendar.toZonedDateTime());
   }
 
-
   @Bean
   public ConfigResourceLoader richTextConfigResourceLoader() {
     return new ClasspathConfigResourceLoader("/");
   }
 
   @Bean
-  public RichtextTransformerRegistry richtextTransformerRegistry(@Qualifier("richTextConfigResourceLoader") ConfigResourceLoader resourceLoader, @Qualifier("cacheManager") CacheManager cacheManager, StaxContextConfigurationProperties staxContextConfigurationProperties) throws IOException {
-    return new RichtextTransformerReader(resourceLoader, cacheManager, staxContextConfigurationProperties).read();
+  public RichtextTransformerRegistry richtextTransformerRegistry(
+          @Qualifier("richTextConfigResourceLoader") ConfigResourceLoader resourceLoader,
+          @Qualifier("cacheManager") CacheManager cacheManager,
+          StaxContextConfigurationProperties staxContextConfigurationProperties,
+          List<Resource> pluginRichtextYmlResources) {
+    return new RichtextTransformerReader(resourceLoader, pluginRichtextYmlResources, cacheManager, staxContextConfigurationProperties).read();
   }
 
   @Bean
@@ -581,8 +599,8 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public CMGrammarRichTextToMapConverter cmGrammarRichTextToMapConverter() {
-    return new CMGrammarRichTextToMapConverter();
+  public CMGrammarRichTextToMapConverter cmGrammarRichTextToMapConverter(ObjectMapper objectMapper) {
+    return new CMGrammarRichTextToMapConverter(objectMapper);
   }
 
   @Bean
@@ -670,11 +688,13 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public PersistedQueriesLoader persistedQueriesLoader() {
+  public PersistedQueriesLoader persistedQueriesLoader(List<Resource> pluginPersistedQueryResources, ObjectMapper objectMapper) {
     return new DefaultPersistedQueriesLoader(caasPersistedQueryConfigurationProperties.getQueryResourcesPattern(),
             caasPersistedQueryConfigurationProperties.getApolloQueryMapResourcesPattern(),
             caasPersistedQueryConfigurationProperties.getRelayQueryMapResourcesPattern(),
-            caasPersistedQueryConfigurationProperties.getExcludeFileNamePattern());
+            caasPersistedQueryConfigurationProperties.getExcludeFileNamePattern(),
+            pluginPersistedQueryResources,
+            objectMapper);
   }
 
   @Bean
@@ -731,7 +751,7 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public TypeDefinitionRegistry typeDefinitionRegistry()
+  public TypeDefinitionRegistry typeDefinitionRegistry(List<Resource> pluginGraphqlSchemaResources)
           throws IOException {
     SchemaParser schemaParser = new SchemaParser();
     PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
@@ -753,8 +773,10 @@ public class CaasConfig implements WebMvcConfigurer {
       }
     }
 
+    allResources.addAll(pluginGraphqlSchemaResources);
+
     for (Resource resource : allResources) {
-      LOG.info("merging GraphQL schema {}", resource.getURI());
+      LOG.info("Merging GraphQL schema {}", resource.getURI());
       try (InputStreamReader in = new InputStreamReader(resource.getInputStream())) {
         stringBuilder.append(IOUtils.toString(in));
       } catch (IOException e) {
@@ -867,9 +889,9 @@ public class CaasConfig implements WebMvcConfigurer {
       String name = rootEntry.getKey();
       if (name.startsWith(OPTIONAL_QUERY_ROOT_BEAN_NAME_PREFIX)) {
         name = name.substring(OPTIONAL_QUERY_ROOT_BEAN_NAME_PREFIX.length());
-        LOG.info("adding GraphQL query root {} (renamed from {})", name, rootEntry.getKey());
+        LOG.info("Adding GraphQL query root {}. (renamed from {})", name, rootEntry.getKey());
       } else {
-        LOG.info("adding GraphQL query root {}", name);
+        LOG.info("Adding GraphQL query root {}.", name);
       }
       renamedQueryRoots.put(name, rootEntry.getValue());
     }

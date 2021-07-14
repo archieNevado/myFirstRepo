@@ -11,10 +11,10 @@
 
     public static const xtype:String = "com.coremedia.blueprint.studio.config.taxonomy.taxonomyStandAloneDocumentView";
 
-    [Bindable]
+    [ExtConfig]
     public var bindTo:ValueExpression;
 
-    [Bindable]
+    [ExtConfig]
     public var forceReadOnlyValueExpression:ValueExpression;
 
     private var config:TaxonomyStandAloneDocumentView;

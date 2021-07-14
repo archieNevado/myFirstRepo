@@ -78,7 +78,7 @@ class StAXBlockElementPaginator extends AbstractPaginator { // NOSONAR  cyclomat
       String currentBlockName = elementName(currentEvent);
       level += depth(currentEvent);
 
-      if (level == 0 &&
+      if (level == 1 &&
               null != delimitingPagingRule &&
               null != currentBlockName &&
               !blockElements.isEmpty() &&

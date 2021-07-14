@@ -59,8 +59,6 @@ public class CatalogStudioPluginBase extends StudioPlugin {
 
     initCatalogPreferences();
 
-    addSearchFilters(editorContext);
-
     // Colorful Studio styles
     MetaStyleService.setDefaultStyleForMetaData(MetaStyleService.STYLE_GROUP_TURQUOISE, [CatalogTreeRelation.CONTENT_TYPE_PRODUCT]);
     MetaStyleService.setDefaultStyleForMetaData(MetaStyleService.STYLE_GROUP_PURPLE, [CatalogTreeRelation.CONTENT_TYPE_CATEGORY]);
@@ -132,10 +130,6 @@ public class CatalogStudioPluginBase extends StudioPlugin {
       cmInternal.getCollectionView().getSelectedFolderValueExpression().setValue(home);
       cmInternal.getCollectionView().getSelectedFolderValueExpression().setValue(selection);
     });
-  }
-
-  private static function addSearchFilters(editorContext:IEditorContext):void {
-    editorContext.getEnabledSearchFilterIds().push(LostandfoundFilterPanel.FILTER_ID);
   }
 
   private static function applySearchSettings(showCatalogContent:Boolean):void {

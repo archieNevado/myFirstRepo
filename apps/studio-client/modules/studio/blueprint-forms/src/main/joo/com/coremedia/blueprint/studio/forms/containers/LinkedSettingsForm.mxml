@@ -16,12 +16,13 @@
     private var config:LinkedSettingsForm;
 
     public native function LinkedSettingsForm(config:LinkedSettingsForm = null);
-    ]]></fx:Script>
-  <fx:Declarations>
-    <fx:String id="folders"/>
 
-    <fx:String id="contentType"/>
-  </fx:Declarations>
+    [ExtConfig]
+    public var folders:String;
+
+    [ExtConfig]
+    public var contentType:String;
+    ]]></fx:Script>
 
   <editor:items>
     <editor:LinkListPropertyField propertyName="linkedSettings" hideLabel="true"/>

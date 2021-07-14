@@ -17,19 +17,20 @@
     /**
      * A value expression evaluating to the active Content of the preview panel.
      */
-    [Bindable]
+    [ExtConfig]
     public var activeContentValueExpression:ValueExpression;
-    ]]></fx:Script>
-  <fx:Declarations>
-    <!---
-     path containing a placeholder for the site that will be added to a 'PersonaSelector'
-    -->
-    <fx:String id="path"/>
 
-    <!---
-     optional header label that will visible inside the PersonaSelector
-    -->
-    <fx:String id="groupHeaderLabel"/>
-  </fx:Declarations>
+    /**
+     * path containing a placeholder for the site that will be added to a 'PersonaSelector'
+     */
+    [ExtConfig]
+    public var path:String;
+
+    /**
+     * optional header label that will visible inside the PersonaSelector
+     */
+    [ExtConfig]
+    public var groupHeaderLabel:String;
+    ]]></fx:Script>
 
 </local:AddSiteSpecificPathPlugin>

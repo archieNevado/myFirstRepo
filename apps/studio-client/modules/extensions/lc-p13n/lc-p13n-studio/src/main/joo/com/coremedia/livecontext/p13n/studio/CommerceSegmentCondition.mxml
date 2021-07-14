@@ -12,17 +12,18 @@
 
     private var config:CommerceSegmentCondition;
 
-    [Bindable]
+    [ExtConfig]
     public var bindTo:ValueExpression;
 
 
     public native function CommerceSegmentCondition(config:CommerceSegmentCondition = null);
-    ]]></fx:Script>
-  <fx:Declarations>
-    <fx:String id="conditionName"/>
 
-    <fx:String id="propertyPrefix"/>
-  </fx:Declarations>
+    [ExtConfig]
+    public var conditionName:String;
+
+    [ExtConfig]
+    public var propertyPrefix:String;
+    ]]></fx:Script>
 
   <local:layout>
     <layout_HBox/>

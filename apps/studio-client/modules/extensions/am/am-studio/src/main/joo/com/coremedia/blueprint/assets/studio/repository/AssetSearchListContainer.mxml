@@ -18,13 +18,13 @@
 
     private var config:AssetSearchListContainer;
 
-    [Bindable]
+    [ExtConfig]
     public var searchResultHitsValueExpression:ValueExpression;
 
     /**
      * A value expression that specifies the selected items. This is mandatory.
      */
-    [Bindable]
+    [ExtConfig]
     public var selectedItemsValueExpression:ValueExpression;
 
     public native function AssetSearchListContainer(config:AssetSearchListContainer = null);

@@ -13,6 +13,41 @@
 
   <dependencies>
     <dependency>
+      <groupId>net.jangaroo</groupId>
+      <artifactId>jangaroo-browser</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.ui.toolkit</groupId>
+      <artifactId>ui-components</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>studio-client.content-link-list-components</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>studio-client.cap-base-models</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>studio-client.cap-base-components</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.ui.toolkit</groupId>
+      <artifactId>client-core</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.ui.sdk</groupId>
+      <artifactId>cap-rest-client</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
       <groupId>com.coremedia.ui.toolkit</groupId>
       <artifactId>core-icons</artifactId>
       <type>swc</type>
@@ -33,19 +68,24 @@
 
     <dependency>
       <groupId>net.jangaroo</groupId>
+      <artifactId>ext-as</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>net.jangaroo</groupId>
       <artifactId>joounit</artifactId>
       <type>swc</type>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.ui.toolkit</groupId>
-      <artifactId>client-core-impl</artifactId>
+      <artifactId>client-core-test-helper</artifactId>
       <type>swc</type>
-      <!--<scope>test</scope> cannot be used here, because it would override the transitive compile dependency -->
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.ui.toolkit</groupId>
-      <artifactId>client-core-test-helper</artifactId>
+      <artifactId>client-core-impl</artifactId>
       <type>swc</type>
       <scope>test</scope>
     </dependency>
@@ -59,6 +99,7 @@
         <version>${jangaroo.version}</version> <!-- explicit version for IDEA! -->
         <extensions>true</extensions>
         <configuration>
+          <extNamespace>com.coremedia.blueprint.studio.analytics</extNamespace>
           <skip>false</skip>
           <namespaces>
             <namespace>

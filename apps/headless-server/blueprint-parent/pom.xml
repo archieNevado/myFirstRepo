@@ -16,7 +16,9 @@
   </organization>
 
   <properties>
-    <buildNumber />
+
+    <!-- This is an arbitrary date for reproducible builds, should be set by the release pipeline only-->
+    <project.build.outputTimestamp>2021-03-23T09:00:00Z</project.build.outputTimestamp>
     <failOnWarning>true</failOnWarning>
     <coremedia.enforcer.fail>true</coremedia.enforcer.fail>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -29,14 +31,14 @@
     <google.api.services.youtube.version>v3-rev152-1.19.0</google.api.services.youtube.version>
 
     <customer>Blueprint</customer>
-    <cm.headless-server.core.version>2104.3</cm.headless-server.core.version>
+    <cm.headless-server.core.version>2107.1</cm.headless-server.core.version>
     <personalization.version>${project.version}</personalization.version>
     <elastic.version>${project.version}</elastic.version><!-- Note: Keep in sync with (intentionally) duplicated property in internal/coremedia-bom/pom.xml! -->
     <studio.version>${project.version}</studio.version>
     <livecontext.version>${project.version}</livecontext.version>
 
     <spring.boot.version>2.3.11.RELEASE</spring.boot.version>
-    <application-plugin.version>2.8.3</application-plugin.version>
+    <application-plugin.version>3.0.0</application-plugin.version>
 
     <!--
     | the following *.host properties are defined here for convenience, so that they can be overridden
@@ -75,11 +77,11 @@
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.headless-server.core.version>2104.3</cm.headless-server.core.version>
+    <cm.headless-server.core.version>2107.1</cm.headless-server.core.version>
     <cm.common.bp.version>1-SNAPSHOT</cm.common.bp.version>
     <cm.middle.bp.version>1-SNAPSHOT</cm.middle.bp.version>
-    <cm.common.core.version>2104.3</cm.common.core.version>
-    <cm.middle.core.version>2104.3</cm.middle.core.version>
+    <cm.common.core.version>2107.1</cm.common.core.version>
+    <cm.middle.core.version>2107.1</cm.middle.core.version>
 
     <!-- headless-server-base -->
     <caffeine.version>2.8.8</caffeine.version>
@@ -497,7 +499,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>3.1.0</version>
+          <version>3.2.0</version>
           <configuration>
             <archive>
               <addMavenDescriptor>true</addMavenDescriptor>
@@ -505,7 +507,7 @@
               <manifestEntries>
                 <Built-By>${customer}</Built-By>
                 <Build-Jdk>${java.version}</Build-Jdk>
-                <Implementation-Build>revision: ${buildNumber} - ${maven.build.timestamp}</Implementation-Build>
+
                 <Implementation-Title>${project.artifactId}</Implementation-Title>
                 <Implementation-Vendor>${customer}</Implementation-Vendor>
                 <Implementation-Version>${project.version}</Implementation-Version>
@@ -523,15 +525,16 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.1.1</version>
+          <version>3.2.0</version>
           <configuration>
             <doclint>none</doclint>
+            <notimestamp>true</notimestamp>
           </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-resources-plugin</artifactId>
-          <version>3.1.0</version>
+          <version>3.2.0</version>
           <configuration>
             <includeEmptyDirs>true</includeEmptyDirs>
           </configuration>
@@ -554,7 +557,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-source-plugin</artifactId>
-          <version>3.0.1</version>
+          <version>3.2.1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -585,7 +588,7 @@
               <manifestEntries>
                 <Built-By>${customer}</Built-By>
                 <Build-Jdk>${java.version}</Build-Jdk>
-                <Implementation-Build>revision: ${buildNumber} - ${maven.build.timestamp}</Implementation-Build>
+
                 <Implementation-Title>${project.artifactId}</Implementation-Title>
                 <Implementation-Vendor>${customer}</Implementation-Vendor>
                 <Implementation-Version>${project.version}</Implementation-Version>

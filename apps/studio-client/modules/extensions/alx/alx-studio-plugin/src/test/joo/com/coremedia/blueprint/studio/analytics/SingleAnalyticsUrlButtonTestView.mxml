@@ -10,7 +10,7 @@
 
     private var config:SingleAnalyticsUrlButtonTestView;
 
-    [Bindable]
+    [ExtConfig]
     public var contentValueExpression:ValueExpression;
 
     public native function SingleAnalyticsUrlButtonTestView(config:SingleAnalyticsUrlButtonTestView = null);

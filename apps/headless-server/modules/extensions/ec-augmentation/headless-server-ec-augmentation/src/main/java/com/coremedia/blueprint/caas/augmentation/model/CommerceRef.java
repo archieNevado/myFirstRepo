@@ -5,7 +5,10 @@ import com.coremedia.livecontext.ecommerce.common.CommerceBeanTypeRegistry;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
+import java.util.List;
 import java.util.Locale;
+
+import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService.DEFAULT_CATALOG_ALIAS;
 
 @DefaultAnnotation(NonNull.class)
 public class CommerceRef {
@@ -17,8 +20,10 @@ public class CommerceRef {
   private final String locale;
   private final String siteId;
   private final String internalLink;
+  private final List<String> breadcrumb;
+  private final String catalogAlias;
 
-  public CommerceRef(String externalId, CommerceBeanType type, String catalogId, String storeId, String locale, String siteId, String internalLink) {
+  CommerceRef(String externalId, CommerceBeanType type, String catalogId, String storeId, String locale, String siteId, String internalLink, List<String> breadcrumb, String catalogAlias) {
     this.externalId = externalId;
     this.type = type;
     this.catalogId = catalogId;
@@ -26,10 +31,16 @@ public class CommerceRef {
     this.locale = locale;
     this.siteId = siteId;
     this.internalLink = internalLink;
+    this.breadcrumb = breadcrumb;
+    this.catalogAlias = catalogAlias;
+  }
+
+  public CommerceRef(String externalId, String type, String storeId, Locale locale, String siteId, List<String> breadcrumb) {
+    this(externalId, CommerceBeanTypeRegistry.valueOf(type), "catalog", storeId, locale.toLanguageTag(), siteId, "dummy", breadcrumb, DEFAULT_CATALOG_ALIAS.value());
   }
 
   public CommerceRef(String externalId, String type, String storeId, Locale locale, String siteId) {
-    this(externalId, CommerceBeanTypeRegistry.valueOf(type), "catalog", storeId, locale.toLanguageTag(), siteId, "dummy");
+    this(externalId, CommerceBeanTypeRegistry.valueOf(type), "catalog", storeId, locale.toLanguageTag(), siteId, "dummy", List.of(), DEFAULT_CATALOG_ALIAS.value());
   }
 
   public String getExternalId() {
@@ -62,5 +73,13 @@ public class CommerceRef {
 
   public String getId(){
     return getSiteId() + ":" + getExternalId();
+  }
+
+  public List<String> getBreadcrumb() {
+    return breadcrumb;
+  }
+
+  public String getCatalogAlias() {
+    return catalogAlias;
   }
 }

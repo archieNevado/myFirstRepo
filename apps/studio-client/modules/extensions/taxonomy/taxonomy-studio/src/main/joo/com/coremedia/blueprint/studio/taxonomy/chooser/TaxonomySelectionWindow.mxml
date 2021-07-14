@@ -7,7 +7,7 @@
         xmlns="exml:ext.config"
         xmlns:ui="exml:com.coremedia.ui.config"
         xmlns:editor="com.coremedia.cms.editor.sdk.util.*"
-        id_="taxonomySelectionDialog"
+        id_="{ID}"
         stateId="taxonomySelectionState"
         stateful="true"
         title="{resolveTitle(config)}"
@@ -29,6 +29,7 @@
     import com.coremedia.ui.skins.WindowSkin;
 
     public static const xtype:String = "com.coremedia.blueprint.studio.config.taxonomy.taxonomySelectionWindow";
+    public static const ID:String = "taxonomySelectionDialog";
 
     private var config:TaxonomySelectionWindow;
 
@@ -37,10 +38,10 @@
     /**
      * the property expression to bind in this field
      */
-    [Bindable]
+    [ExtConfig]
     public var propertyValueExpression:ValueExpression;
 
-    [Bindable]
+    [ExtConfig]
     public var bindTo:ValueExpression;
 
     [ExtConfig]
@@ -49,13 +50,13 @@
     /**
      * An optional ValueExpression which makes the component read-only if it is evaluated to true.
      */
-    [Bindable]
+    [ExtConfig]
     public var forceReadOnlyValueExpression:ValueExpression;
+
+    /** If true, only one item can be selected from the list. */
+    [ExtConfig]
+    public var singleSelection:String;
     ]]></fx:Script>
-  <fx:Declarations>
-    <!--- If true, only one item can be selected from the list. -->
-    <fx:String id="singleSelection"/>
-  </fx:Declarations>
 
   <local:layout>
     <layout_VBox align="stretch"/>

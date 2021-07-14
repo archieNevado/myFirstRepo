@@ -13,6 +13,8 @@ import com.coremedia.ecommerce.studio.components.preferences.CatalogPreferencesB
 import com.coremedia.ecommerce.studio.components.tree.impl.CatalogTreeDragDropModel;
 import com.coremedia.ecommerce.studio.components.tree.impl.CatalogTreeModel;
 import com.coremedia.ecommerce.studio.helper.CatalogHelper;
+import com.coremedia.ecommerce.studio.library.CommerceCategoryCollectionViewStateInterceptor;
+import com.coremedia.ecommerce.studio.library.CommerceCollectionViewStateInterceptor;
 import com.coremedia.ecommerce.studio.library.ECommerceCollectionViewExtension;
 import com.coremedia.ecommerce.studio.model.Catalog;
 import com.coremedia.ecommerce.studio.model.CatalogObjectPropertyNames;
@@ -34,6 +36,8 @@ public class ECommerceStudioPluginBase extends StudioPlugin {
 
     var isApplicable:Function = function ():Boolean { return false; };
     editorContext.getCollectionViewExtender().addExtension(new ECommerceCollectionViewExtension(), isApplicable);
+    editorContext.registerCollectionViewStateInterceptor(new CommerceCategoryCollectionViewStateInterceptor());
+    editorContext.registerCollectionViewStateInterceptor(new CommerceCollectionViewStateInterceptor());
 
     var collectionViewManagerInternal:CollectionViewManagerInternal =
             ((editorContext.getCollectionViewManager()) as CollectionViewManagerInternal);

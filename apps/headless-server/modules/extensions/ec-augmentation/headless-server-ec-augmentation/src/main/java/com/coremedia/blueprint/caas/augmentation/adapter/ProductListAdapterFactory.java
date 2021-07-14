@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.caas.augmentation.adapter;
 
 import com.coremedia.blueprint.base.settings.SettingsService;
-import com.coremedia.blueprint.caas.augmentation.model.AugmentationFacade;
+import com.coremedia.blueprint.caas.augmentation.CommerceEntityHelper;
 import com.coremedia.caas.model.adapter.ExtendedLinkListAdapterFactory;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.SitesService;
@@ -15,18 +15,18 @@ public class ProductListAdapterFactory {
   private final SettingsService settingsService;
   private final SitesService sitesService;
   private final ExtendedLinkListAdapterFactory extendedLinkListAdapterFactory;
-  private final AugmentationFacade augmentationFacade;
+  private final CommerceEntityHelper commerceEntityHelper;
   private final CommerceSearchFacade commerceSearchFacade;
 
   public ProductListAdapterFactory(SettingsService settingsService,
                                    SitesService sitesService,
                                    ExtendedLinkListAdapterFactory extendedLinkListAdapterFactory,
-                                   AugmentationFacade augmentationFacade,
+                                   CommerceEntityHelper commerceEntityHelper,
                                    CommerceSearchFacade commerceSearchFacade) {
     this.settingsService = settingsService;
     this.sitesService = sitesService;
     this.extendedLinkListAdapterFactory = extendedLinkListAdapterFactory;
-    this.augmentationFacade = augmentationFacade;
+    this.commerceEntityHelper = commerceEntityHelper;
     this.commerceSearchFacade = commerceSearchFacade;
   }
 
@@ -35,7 +35,7 @@ public class ProductListAdapterFactory {
   }
 
   public ProductListAdapter to(Content productList, Integer offset) {
-    return new ProductListAdapter(extendedLinkListAdapterFactory, productList, settingsService, augmentationFacade,
+    return new ProductListAdapter(extendedLinkListAdapterFactory, productList, settingsService, commerceEntityHelper,
             commerceSearchFacade, Objects.requireNonNull(sitesService.getContentSiteAspect(productList).getSite()), offset);
   }
 }

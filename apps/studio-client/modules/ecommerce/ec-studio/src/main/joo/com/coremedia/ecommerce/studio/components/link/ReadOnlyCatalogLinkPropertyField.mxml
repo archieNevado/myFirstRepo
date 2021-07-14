@@ -20,26 +20,28 @@
      * A property path expression leading to the Bean whose property is edited.
      * This property editor assumes that this bean has a property 'properties'.
      */
-    [Bindable]
+    [ExtConfig]
     public var bindTo:ValueExpression;
+
+    /**
+     * The name of the sting property of the Bean to bind in this field.
+     * The string property holds the id of the catalog product
+     */
+    [ExtConfig]
+    public var propertyName:String;
+
+    /**
+     * Text shown when the property is empty
+     */
+    [ExtConfig]
+    public var emptyText:String;
+
+    /**
+     * Set to false to hide the thumbnail of the entries. Default is true
+     */
+    [ExtConfig]
+    public var showThumbnails:Boolean;
     ]]></fx:Script>
-  <fx:Declarations>
-    <!---
-     The name of the sting property of the Bean to bind in this field.
-     The string property holds the id of the catalog product
-    -->
-    <fx:String id="propertyName"/>
-
-    <!---
-     Text shown when the property is empty
-    -->
-    <fx:String id="emptyText"/>
-
-    <!---
-     Set to false to hide the thumbnail of the entries. Default is true
-    -->
-    <fx:Boolean id="showThumbnails"/>
-  </fx:Declarations>
 
   <local:items>
     <ec:CatalogLinkPropertyField itemId="{READ_ONLY_CATALOG_LINK_ITEM_ID}"

@@ -22,15 +22,13 @@
     private var config:CommerceCategoryContentForm;
     private var augmentedCategoryExpression:ValueExpression;
 
-    // called by generated constructor code
-    private function __initialize__(config:CommerceCategoryContentForm):void {
-      augmentedCategoryExpression = ValueExpressionFactory.createFromFunction(function ():* {
-        return augmentedCategoryTreeRelation.getParentUnchecked(config.bindTo.getValue());
-      });
-    }
-
     public native function CommerceCategoryContentForm(config:CommerceCategoryContentForm = null);
     ]]></fx:Script>
+  <fx:Declarations>
+    <fx:Object id="augmentedCategoryExpression">{ValueExpressionFactory.createFromFunction(function ():* {
+      return augmentedCategoryTreeRelation.getParentUnchecked(config.bindTo.getValue());
+    })}</fx:Object>
+  </fx:Declarations>
 
   <editor:items>
     <livecontext:CommerceDetailsForm itemId="categoryDetails"/>

@@ -10,7 +10,7 @@ import ext.Ext;
 
 public class CommerceDetailsFormBase extends PropertyFieldGroup {
 
-  [Bindable]
+  [ExtConfig]
   public var contentBindTo:ValueExpression;
 
   public function CommerceDetailsFormBase(config:CommerceDetailsForm = null) {

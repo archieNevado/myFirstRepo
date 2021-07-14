@@ -7,6 +7,7 @@
         title="{resourceManager.getString('com.coremedia.blueprint.studio.CustomLabels', 'PropertyGroup_tags_label')}"
         expandOnValues="subjectTaxonomy,locationTaxonomy,keywords"
         itemId="subjectTaxonomyDocumentForm"
+        propertyNames="{['subjectTaxonomy','locationTaxonomy','keywords']}"
         collapsed="{config.collapsed === undefined || config.collapsed === true}">
   <fx:Metadata>
     [ResourceBundle('com.coremedia.blueprint.studio.CustomLabels')]

@@ -1,11 +1,16 @@
 package com.coremedia.ecommerce.studio.rest.cache;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCacheInvalidationEvent;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.ProductCommerceIdAdjuster;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.ecommerce.studio.rest.model.Marketing;
 import com.coremedia.ecommerce.studio.rest.model.Segments;
+import com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
+import com.coremedia.livecontext.ecommerce.common.CommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.event.InvalidationEvent;
 import com.coremedia.livecontext.ecommerce.event.InvalidationPropagator;
 import com.coremedia.livecontext.ecommerce.p13n.MarketingSpot;
@@ -13,9 +18,12 @@ import com.coremedia.livecontext.ecommerce.p13n.Segment;
 import com.coremedia.rest.invalidations.SimpleInvalidationSource;
 import com.coremedia.rest.linking.Linker;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 
@@ -25,6 +33,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -46,6 +55,14 @@ public class CommerceCacheInvalidationSource extends SimpleInvalidationSource im
 
   private static final Logger LOG = LoggerFactory.getLogger(CommerceCacheInvalidationSource.class);
 
+  private static final Set<String> GENERIC_INVALIDATION_URI_PATTERNS = Set.of(
+          "livecontext/facets/{siteId:.*}/{catalogAlias:.*}/{workspaceId:.*}/{id:.*}",
+          "livecontext/searchfacets/{siteId:.*}/{catalogAlias:.*}/{workspaceId:.*}/{id:.*}",
+          "livecontext/{type:.*}/{siteId:.*}/{id:.*}",
+          "livecontext/{type:.*}/{siteId:.*}/{workspaceId:.*}",
+          "livecontext/{type:.*}/{siteId:.*}/{workspaceId:.*}/{id:.*}",
+          "livecontext/workspaces/{siteId:.*}");
+
   private static final String INVALIDATE_ALL_URI_PATTERN = "livecontext/{suffix:.*}";
 
   private static final long DELAY = 1000L;
@@ -62,6 +79,42 @@ public class CommerceCacheInvalidationSource extends SimpleInvalidationSource im
       LOG.info("creating single threaded task scheduler for delayed invalidations");
       taskScheduler = new ConcurrentTaskScheduler();
     }
+  }
+
+  @EventListener(CommerceCacheInvalidationEvent.class)
+  @Order(1)
+  public void invalidate(@NonNull CommerceCacheInvalidationEvent event) {
+    Set<String> changes = getCommerceCacheInvalidationUris(event);
+    addInvalidations(changes);
+  }
+
+  private Set<String> getCommerceCacheInvalidationUris(CommerceCacheInvalidationEvent event) {
+    StoreContext storeContext = event.getStoreContext();
+
+    Optional<CommerceId> commerceIdOpt = event.getCommerceId();
+    if (commerceIdOpt.isPresent()) {
+      CommerceId commerceId = commerceIdOpt.get();
+
+      Set<String> invalidationUris = new HashSet<>();
+      invalidationUris.add(toCommerceBeanUri(commerceId, storeContext).orElseThrow());
+
+      if (commerceId.getCommerceBeanType().equals(BaseCommerceBeanType.PRODUCT)) {
+        CommerceId commerceIdSku = ProductCommerceIdAdjuster.adjustCommerceId(commerceId, BaseCommerceBeanType.SKU);
+        invalidationUris.add(toCommerceBeanUri(commerceIdSku, storeContext).orElseThrow());
+      }
+
+      return invalidationUris;
+    }
+
+    Optional<CommerceBeanType> commerceBeanType = event.getCommerceBeanType();
+    if (commerceBeanType.isPresent()) {
+      String commerceBeanTypeString = commerceBeanType.get().type();
+      return Set.of(toCommerceBeanUri(commerceBeanTypeString, storeContext).orElseThrow());
+    }
+
+    return GENERIC_INVALIDATION_URI_PATTERNS.stream()
+            .map(link -> CommerceBeanDelegateProvider.postProcess(link, storeContext))
+            .collect(toSet());
   }
 
   @Override
@@ -95,22 +148,23 @@ public class CommerceCacheInvalidationSource extends SimpleInvalidationSource im
 
   @NonNull
   private Stream<String> link(@NonNull Class<? extends CommerceBean> aClass) {
-    String entityLink = createLink(aClass);
+    StoreContext storeContext = createStoreContext();
+    String entityLink = createLink(aClass, storeContext);
 
     if (MarketingSpot.class.equals(aClass)) {
-      Marketing resourceObject = new Marketing(createStoreContext());
+      Marketing resourceObject = new Marketing(storeContext);
       return of(entityLink, createLink(resourceObject));
     } else if (Segment.class.equals(aClass)) {
-      Segments resourceObject = new Segments(createStoreContext());
+      Segments resourceObject = new Segments(storeContext);
       return of(entityLink, createLink(resourceObject));
     }
     return of(entityLink);
   }
 
   @NonNull
-  private String createLink(@NonNull Class<? extends CommerceBean> aClass) {
+  private String createLink(@NonNull Class<? extends CommerceBean> aClass, @Nullable StoreContext storeContext) {
     Object commerceBeanProxy = settingsService.createProxy(aClass, CommerceBeanDelegateProvider.get());
-    return CommerceBeanDelegateProvider.postProcess(createLink(commerceBeanProxy));
+    return CommerceBeanDelegateProvider.postProcess(createLink(commerceBeanProxy), storeContext);
   }
 
   @NonNull
@@ -127,11 +181,11 @@ public class CommerceCacheInvalidationSource extends SimpleInvalidationSource im
     }
   }
 
-  public void invalidateReferences(@NonNull Set<String> references) {
+  public void invalidateReferences(@NonNull Set<String> references, @Nullable StoreContext storeContext) {
     Set<String> changes = references.stream()
             .map(CommerceIdParserHelper::parseCommerceId)
             .flatMap(Optional::stream)
-            .map(this::toCommerceBeanUri)
+            .map(commerceId -> toCommerceBeanUri(commerceId, storeContext))
             .flatMap(Optional::stream)
             .collect(Collectors.toSet());
 
@@ -143,12 +197,17 @@ public class CommerceCacheInvalidationSource extends SimpleInvalidationSource im
    * all entities of the commerce id's bean type are invalidated.
    */
   @NonNull
-  public Optional<String> toCommerceBeanUri(@NonNull CommerceId commerceId) {
+  public Optional<String> toCommerceBeanUri(@NonNull CommerceId commerceId, @Nullable StoreContext storeContext) {
     String commerceBeanTypeString = commerceId.getCommerceBeanType().type();
-    Optional<Class<? extends CommerceBean>> beanTypeOptional = InvalidationEventTypeMapping.get(commerceBeanTypeString);
-    return beanTypeOptional
-            .map(this::createLink)
+    return toCommerceBeanUri(commerceBeanTypeString, storeContext)
             .map(s -> CommerceBeanDelegateProvider.forEncodedExternalId(s, commerceId));
+  }
+
+  @NonNull
+  private Optional<String> toCommerceBeanUri(@NonNull String commerceBeanTypeString,
+                                             @Nullable StoreContext storeContext) {
+    return InvalidationEventTypeMapping.get(commerceBeanTypeString)
+            .map(aClass -> createLink(aClass, storeContext));
   }
 
   /**

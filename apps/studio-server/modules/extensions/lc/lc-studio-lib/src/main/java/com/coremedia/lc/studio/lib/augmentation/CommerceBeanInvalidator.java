@@ -1,7 +1,7 @@
 package com.coremedia.lc.studio.lib.augmentation;
 
-import com.coremedia.cap.util.ContentStringPropertyValueChangeEvent;
 import com.coremedia.cap.common.CapPropertyDescriptor;
+import com.coremedia.cap.util.ContentStringPropertyValueChangeEvent;
 import com.coremedia.ecommerce.studio.rest.cache.CommerceCacheInvalidationSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@ class CommerceBeanInvalidator implements ApplicationListener<ContentStringProper
     if (isApplicable(event)) {
       String propertyValue = event.getValue();
       String commerceBeanUri = parseCommerceId(propertyValue)
-              .flatMap(commerceInvalidationSource::toCommerceBeanUri).orElse(null);
+              .flatMap(commerceId -> commerceInvalidationSource.toCommerceBeanUri(commerceId, null)).orElse(null);
       if (commerceBeanUri != null) {
         commerceInvalidationSource.addInvalidations(singleton(commerceBeanUri));
       } else {

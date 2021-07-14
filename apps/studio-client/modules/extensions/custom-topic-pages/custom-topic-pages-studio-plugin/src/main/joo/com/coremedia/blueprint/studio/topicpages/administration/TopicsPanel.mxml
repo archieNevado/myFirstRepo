@@ -96,7 +96,7 @@
                         sortable="false"
                         width="200"
                         dataIndex="name"
-                        u:listeners="{{'click': onPageColumnClick}}"
+                        listeners="{{'click': onPageColumnClick}}"
                         renderer="{pageRenderer}"/>
           </columns>
           <selModel>

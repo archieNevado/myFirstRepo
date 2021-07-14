@@ -34,6 +34,7 @@
 <StructProperty Name="commerce">
 <Struct>
 <StringProperty Name="endpoint">${commerce.hub.data.endpoints.sfcc}</StringProperty>
+<StringProperty Name="vendor">sfcc</StringProperty>
 <StringProperty Name="currency">GBP</StringProperty>
 <StringProperty Name="locale">en-GB</StringProperty>
 <StructProperty Name="storeConfig">

@@ -20,7 +20,7 @@ public class EsAnalyticsChartWidgetBase extends Container {
   /**
    * The content id of the root channel to show.
    */
-  [Bindable]
+  [ExtConfig]
   public var content:Content;
 
   private var tenantVE:ValueExpression;

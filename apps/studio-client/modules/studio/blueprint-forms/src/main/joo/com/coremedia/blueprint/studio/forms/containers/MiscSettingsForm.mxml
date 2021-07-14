@@ -15,10 +15,10 @@
     private var config:LocalSettingsForm;
 
     public native function MiscSettingsForm(config:MiscSettingsForm = null);
+
+    [ExtConfig]
+    public var contentType:String;
     ]]></fx:Script>
-  <fx:Declarations>
-    <fx:String id="contentType"/>
-  </fx:Declarations>
 
   <editor:items>
     <editor:StructPropertyField propertyName="misc"

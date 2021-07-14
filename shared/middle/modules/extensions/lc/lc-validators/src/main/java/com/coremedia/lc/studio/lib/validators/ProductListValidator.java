@@ -122,7 +122,7 @@ public class ProductListValidator extends ContentTypeValidatorBase {
     if (properties.containsKey(PROPERTY_SELECTED_LEGACY_FACET_NAME)) {
       String facetName = (String) properties.get(PROPERTY_SELECTED_LEGACY_FACET_NAME);
       if (!StringUtils.isEmpty(facetName) && !legacyFacets.containsKey(facetName)) {
-        issues.addIssue(Severity.ERROR, structPropertyName + "." + PROPERTY_PRODUCT_LIST + "." + PROPERTY_SELECTED_LEGACY_FACET_NAME, getContentType() + '_' + ISSUE_INVALID_LEGACY_NAME, facetName);
+        issues.addIssue(getCategories(), Severity.ERROR, structPropertyName + "." + PROPERTY_PRODUCT_LIST + "." + PROPERTY_SELECTED_LEGACY_FACET_NAME, getContentType() + '_' + ISSUE_INVALID_LEGACY_NAME, facetName);
       }
     }
 
@@ -139,50 +139,7 @@ public class ProductListValidator extends ContentTypeValidatorBase {
               .findFirst();
 
       if (match.isEmpty()) {
-        issues.addIssue(Severity.ERROR, structPropertyName + "." + PROPERTY_PRODUCT_LIST + "." + PROPERTY_SELECTED_LEGACY_FACET_VALUE, getContentType() + '_' + ISSUE_INVALID_LEGACY_QUERY, facetValue, facetName);
-      }
-    }
-  }
-
-  /**
-   * Takes the the values from the legacy format and validates the against the new facet API.
-   *
-   * @param issues            the list of issues
-   * @param productListStruct the product list content
-   * @param resultFacets      the multi facets to validate against
-   */
-  private void validateLegacyValuesWithMultiFacets(Issues issues, Struct productListStruct, List<SearchResult.Facet> resultFacets) {
-    Map<String, Object> properties = productListStruct.toNestedMaps();
-    String facetName = (String) properties.get(PROPERTY_SELECTED_LEGACY_FACET_NAME);
-
-    //validate name field: it's not critical if it's wrong since this will only affect the UI, the query might still be o.k.
-    //we keep the severity 'error' anyway since this may not be transparent for the user
-    if (properties.containsKey(PROPERTY_SELECTED_LEGACY_FACET_NAME)) {
-      if (!StringUtils.isEmpty(facetName)) {
-        Optional<SearchResult.Facet> result = resultFacets.stream()
-                .filter(f -> f.getLabel().equals(facetName))
-                .findFirst();
-        if (result.isEmpty()) {
-          issues.addIssue(Severity.ERROR, structPropertyName + "." + PROPERTY_PRODUCT_LIST + "." + PROPERTY_SELECTED_LEGACY_FACET_NAME, getContentType() + '_' + ISSUE_INVALID_LEGACY_NAME, facetName);
-        }
-      }
-    }
-
-    //validate the stored query string
-    if (properties.containsKey(PROPERTY_SELECTED_LEGACY_FACET_VALUE)) {
-      String facetValue = (String) properties.get(PROPERTY_SELECTED_LEGACY_FACET_VALUE);
-      if (!StringUtils.isEmpty(facetValue)) {
-        //find a facet that has a matching query value
-        for (SearchResult.Facet resultFacet : resultFacets) {
-          List<SearchResult.FacetValue> facetValues = resultFacet.getValues();
-          Optional<SearchResult.FacetValue> result = facetValues.stream()
-                  .filter(f -> f.getQuery().equals(facetValue))
-                  .findFirst();
-          if (result.isPresent()) {
-            return;
-          }
-        }
-        issues.addIssue(Severity.ERROR, structPropertyName + "." + PROPERTY_PRODUCT_LIST + "." + PROPERTY_SELECTED_LEGACY_FACET_VALUE, getContentType() + '_' + ISSUE_INVALID_LEGACY_QUERY, facetValue, facetName);
+        issues.addIssue(getCategories(), Severity.ERROR, structPropertyName + "." + PROPERTY_PRODUCT_LIST + "." + PROPERTY_SELECTED_LEGACY_FACET_VALUE, getContentType() + '_' + ISSUE_INVALID_LEGACY_QUERY, facetValue, facetName);
       }
     }
   }
@@ -203,12 +160,13 @@ public class ProductListValidator extends ContentTypeValidatorBase {
     Map<String, Object> properties = filterFacetsStruct.toNestedMaps();
     Set<Map.Entry<String, Object>> entries = properties.entrySet();
     for (Map.Entry<String, Object> entry : entries) {
-      String facetId = entry.getKey();
+      //we can't have a dot notation stored, see also Facet.as
+      String facetId = entry.getKey().replaceAll("\\.", "_");
 
       //validate if the struct itself has a valid facet id
-      Optional<SearchResult.Facet> facetValue = resultFacets.stream().filter(f -> f.getKey().equals(facetId)).findFirst();
+      Optional<SearchResult.Facet> facetValue = resultFacets.stream().filter(f -> f.getKey().replaceAll("\\.", "_").equals(facetId)).findFirst();
       if (facetValue.isEmpty()) {
-        issues.addIssue(Severity.ERROR, structPropertyName + "." + PROPERTY_PRODUCT_LIST, getContentType() + '_' + ISSUE_INVALID_MULTI_FACET, facetId);
+        issues.addIssue(getCategories(), Severity.ERROR, structPropertyName + "." + PROPERTY_PRODUCT_LIST, getContentType() + '_' + ISSUE_INVALID_MULTI_FACET, facetId);
         continue;
       }
 
@@ -226,7 +184,7 @@ public class ProductListValidator extends ContentTypeValidatorBase {
                 .filter(f -> f.getQuery().equals(query))
                 .findFirst();
         if (result.isEmpty()) {
-          issues.addIssue(Severity.ERROR, structPropertyName + "." + PROPERTY_PRODUCT_LIST + "." + PROPERTY_FILTER_FACETS + "." + facetId, getContentType() + '_' + ISSUE_INVALID_MULTI_FACET_QUERY, query, facet.getLabel());
+          issues.addIssue(getCategories(), Severity.ERROR, structPropertyName + "." + PROPERTY_PRODUCT_LIST + "." + PROPERTY_FILTER_FACETS + "." + facetId, getContentType() + '_' + ISSUE_INVALID_MULTI_FACET_QUERY, query, facet.getLabel());
         }
       }
     }

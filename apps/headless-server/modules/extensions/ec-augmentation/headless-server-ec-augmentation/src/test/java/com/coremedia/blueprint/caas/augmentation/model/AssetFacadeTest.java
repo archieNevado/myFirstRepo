@@ -1,9 +1,10 @@
 package com.coremedia.blueprint.caas.augmentation.model;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
-import com.coremedia.blueprint.caas.augmentation.CommerceEntityHelper;
+import com.coremedia.blueprint.caas.augmentation.CommerceRefHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import org.mockito.quality.Strictness;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -32,7 +34,7 @@ class AssetFacadeTest {
   private AssetService assetService;
 
   @Mock
-  private CommerceEntityHelper commerceEntityHelper;
+  private CommerceRefHelper commerceEntityHelper;
 
   @Mock
   private Content asset1;
@@ -45,9 +47,9 @@ class AssetFacadeTest {
   public void init() {
     commerceRef = CommerceRefFactory.from(
             CommerceIdParserHelper.parseCommerceId(CATEGORY_ID).orElseThrow(),
-            "catalogId",
+            CatalogId.of("catalogId"),
             "storeId",
-            "en-US",
+            Locale.US,
             SITE_ID);
     testling = new AssetFacade(assetService, commerceEntityHelper);
   }

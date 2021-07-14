@@ -304,7 +304,9 @@ class TaxonomyResolverImplTest {
             aliasMapping,
             CM_TAXONOMY,
             SITE_CONFIG_PATH,
-            GLOBAL_CONFIG_PATH
+            GLOBAL_CONFIG_PATH,
+            0,
+            null
     );
   }
 

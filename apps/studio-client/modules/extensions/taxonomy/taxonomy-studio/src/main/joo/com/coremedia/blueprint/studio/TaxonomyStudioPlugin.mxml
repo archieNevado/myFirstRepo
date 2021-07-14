@@ -14,6 +14,7 @@
   </fx:Metadata>
   <fx:Script><![CDATA[
     import com.coremedia.cms.editor.sdk.IEditorContext;
+    import com.coremedia.cms.editor.sdk.collectionview.search.SearchFilters;
     import com.coremedia.cms.studio.appcontext.models.apps.StudioAppsImpl;
     import com.coremedia.cms.studio.appcontext.models.apps.studioApps;
     import com.coremedia.ui.data.ValueExpressionFactory;

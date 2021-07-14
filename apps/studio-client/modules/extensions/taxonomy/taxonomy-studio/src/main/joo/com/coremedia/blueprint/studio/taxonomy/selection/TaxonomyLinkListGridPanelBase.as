@@ -38,17 +38,17 @@ import ext.grid.GridPanel;
 [ResourceBundle('com.coremedia.blueprint.studio.taxonomy.TaxonomyStudioPlugin')]
 public class TaxonomyLinkListGridPanelBase extends GridPanel implements IValidationStateMixin, ISideButtonMixin, IHidableMixin {
 
-  [Bindable]
+  [ExtConfig]
   public var linkListWrapper:ILinkListWrapper;
 
-  [Bindable]
+  [ExtConfig]
   public var readOnlyValueExpression:ValueExpression;
 
   /**
    * A ValueExpression whose value is set to the array of indexes of selected items.
    * The array is empty if nothing is selected. The change of the value doesn't update the selection of the grid.
    */
-  [Bindable]
+  [ExtConfig]
   public var selectedPositionsExpression:ValueExpression;
 
   /**
@@ -56,25 +56,25 @@ public class TaxonomyLinkListGridPanelBase extends GridPanel implements IValidat
    * The array is empty if nothing is selected.
    * The selection is updated by changing the value of this expression.
    */
-  [Bindable]
+  [ExtConfig]
   public var selectedValuesExpression:ValueExpression;
 
   /**
    * The premular content ValueExpression
    */
-  [Bindable]
+  [ExtConfig]
   public var bindTo:ValueExpression;
 
   /**
    * The taxonomy identifier configured on the server side.
    */
-  [Bindable]
+  [ExtConfig]
   public var taxonomyIdExpression:ValueExpression;
 
-  [Bindable]
+  [ExtConfig]
   public var selectionMode:String;
 
-  [Bindable]
+  [ExtConfig]
   public var removeCallback:Function;
 
   private var dropTarget:DropTarget;

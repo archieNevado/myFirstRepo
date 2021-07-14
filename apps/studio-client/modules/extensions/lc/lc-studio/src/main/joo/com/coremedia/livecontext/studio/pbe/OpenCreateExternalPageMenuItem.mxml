@@ -19,7 +19,7 @@
 
     private var config:OpenCreateExternalPageMenuItem;
 
-    [Bindable]
+    [ExtConfig]
     public var metadataValueExpression:ValueExpression;
 
     public native function OpenCreateExternalPageMenuItem(config:OpenCreateExternalPageMenuItem = null);

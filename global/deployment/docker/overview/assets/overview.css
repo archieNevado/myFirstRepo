@@ -19,7 +19,7 @@ body {
   margin: 0;
   padding: 34px 8px 0 8px;
   text-rendering: optimizeLegibility;
-  font-family: "Simplon Norm Regular", "Lucida Sans", "Lucida Sans Unicode", "Lucida Grande", Arial, Helvetica, sans-serif;
+  font-family: "DM Sans", "Lucida Sans", "Lucida Sans Unicode", "Lucida Grande", Arial, Helvetica, sans-serif;
   font-size: 18px;
   line-height: 1.333334;
   color: #666;
@@ -32,25 +32,39 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Core Light", "Simplon Norm Regular", "Lucida Sans", "Lucida Sans Unicode", "Lucida Grande", Arial, Helvetica, sans-serif;
-  text-transform: uppercase;
+  font-family: "DM Sans", "Lucida Sans", "Lucida Sans Unicode", "Lucida Grande", Arial, Helvetica, sans-serif;
+  text-transform: none;
   position: relative;
-  font-weight: 400;
+  font-weight: 700;
   line-height: 1.2;
 }
 
 @font-face {
-  font-family: "Core Light";
-  font-weight: 500;
+  font-family: "DM Sans";
+  font-weight: 400;
   font-style: normal;
-  src: url("core-light.woff2") format("woff2"), url("core-light.woff") format("woff");
+  src: url("dmsans-regular.woff2") format("woff2");
 }
 
 @font-face {
-  font-family: "Simplon Norm Regular";
+  font-family: "DM Sans";
+  font-weight: 400;
+  font-style: italic;
+  src: url("dmsans-italic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "DM Sans";
   font-weight: 500;
   font-style: normal;
-  src: url("simplonnorm-regular-webxl.woff2") format("woff2"), url("simplonnorm-regular-webxl.woff") format("woff");
+  src: url("dmsans-medium.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "DM Sans";
+  font-weight: 700;
+  font-style: normal;
+  src: url("dmsans-bold.woff2") format("woff2");
 }
 
 @font-face {
@@ -116,7 +130,7 @@ i {
 /* grid */
 .cm-grid {
   background-color: #efefef;
-  padding-top: 110px;
+  padding-top: 36px;
   max-width: 1184px;
   margin: 0 auto;
 }
@@ -147,15 +161,15 @@ i {
   right: 50%;
   transform: translateX(50%);
   border: 8px solid #fff;
-  border-top: 34px solid #fff;
+  border-top: none;
   border-bottom: none;
   width: 100%;
   z-index: 3;
 }
 
 .cm-header__container {
-  background-color: #6fc3b8;
-  height: 110px;
+  background-color: #363936;
+  height: 70px;
   padding: 0 20px;
   display: flex;
   align-items: center;
@@ -212,7 +226,7 @@ svg:not(:root) {
 
 .cm-hero__content h1 {
   font-size: 30px;
-  font-weight: 300;
+  font-weight: 700;
   color: #ffffff;
   margin: 0;
 }
@@ -372,7 +386,8 @@ table.sites td:nth-child(n+2) {
 
 .cm-footer__copyright {
   color: #000;
-  font-size: 18px;
+  opacity: 0.5;
+  font-size: 12px;
   margin: 0;
   padding: 0;
 }
@@ -490,7 +505,7 @@ span.check_ok {
     align-self: flex-start;
     margin-bottom: 0;
     margin-top: 20px;
-    text-transform: uppercase;
+    text-transform: none;
     white-space: normal;
     min-width: 9em;
     border-width: 0;
@@ -498,36 +513,10 @@ span.check_ok {
     text-shadow: none;
   }
 
-  .cm-hero__button::before,
-  .cm-hero__button::after {
-    border-style: solid;
-    border-color: transparent;
-    border-bottom-color: transparent;
-    border-width: 6px;
-    content: "";
-    display: block;
-    left: 0;
-    position: absolute;
-    width: 100%;
-    border-width: 0;
-    height: calc(100% - -12px);
-    width: 6px;
-    background-image: linear-gradient(to right, #fff 0, #fff 100%), linear-gradient(135deg, transparent 3px, #fff 4px, #fff 5px, transparent 6px), linear-gradient(45deg, transparent 3px, #fff 4px, #fff 5px, transparent 6px);
-    background-size: 2px calc(100% - 12px), 6px 6px, 6px 6px;
-    background-position: 0 6px, 0 top, 0 bottom;
-    background-repeat: no-repeat;
-    top: -6px;
-  }
-
-  .cm-hero__button::after {
-    -ms-transform: rotate(180deg);
-    transform: rotate(180deg);
-    right: 0;
-    left: auto;
-  }
-
   .cm-hero__button:hover {
     color: #672779;
+    background-color: white;
+    border-color: #672779;
   }
 
   .cm-hero__button:hover::before,
@@ -556,6 +545,12 @@ span.check_ok {
 
   .cm-hero__button {
     margin-top: 48px;
+    border: 3px solid #fff;
+    border-radius: 99px;
+    padding: 10px 35px;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 24px;
   }
 
   .cm-details h2 {
@@ -573,6 +568,7 @@ span.check_ok {
     background: #fff;
     padding: 10px 20px;
     margin: 0 -20px;
+    border-radius: 5px;
   }
 
   .cm-details ul {

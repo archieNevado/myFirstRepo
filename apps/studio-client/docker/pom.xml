@@ -33,7 +33,7 @@
     <docker.nginx-base-image.repo>nginx</docker.nginx-base-image.repo>
     <prometheus-agent.version>0.3.1</prometheus-agent.version>
 
-    <application-plugin.version>2.8.3</application-plugin.version>
+    <application-plugin.version>3.0.0</application-plugin.version>
   </properties>
 
   <modules>

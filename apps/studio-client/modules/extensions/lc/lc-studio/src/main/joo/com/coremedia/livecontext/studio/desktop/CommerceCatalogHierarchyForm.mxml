@@ -18,7 +18,7 @@
 
     public static const xtype:String = "com.coremedia.livecontext.studio.config.commerceCatalogHierarchyForm";
 
-    [Bindable]
+    [ExtConfig]
     public var bindTo:ValueExpression;
 
     private var config:CommerceCatalogHierarchyForm;

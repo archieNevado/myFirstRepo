@@ -12,6 +12,7 @@
 <StructProperty Name="commerce">
 <Struct>
 <StringProperty Name="endpoint">${commerce.hub.data.endpoints.commercetools}</StringProperty>
+<StringProperty Name="vendor">ct</StringProperty>
 <StringProperty Name="currency">EUR</StringProperty>
 <StringProperty Name="locale">de-DE</StringProperty>
 <StructProperty Name="storeConfig">

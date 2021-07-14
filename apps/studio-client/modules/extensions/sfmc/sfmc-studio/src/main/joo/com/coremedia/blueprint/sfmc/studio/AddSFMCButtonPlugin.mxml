@@ -12,12 +12,10 @@
     private var toolbarConfig:ProjectContentToolbar;
 
     public native function AddSFMCButtonPlugin(config:AddSFMCButtonPlugin = null);
-
-    // called by generated constructor code
-    private function __initialize__(config:AddSFMCButtonPlugin):void {
-      toolbarConfig = ProjectContentToolbar(config.cmp.initialConfig);
-    }
     ]]></fx:Script>
+  <fx:Declarations>
+    <fx:Object id="toolbarConfig">{ProjectContentToolbar(config.cmp.initialConfig)}</fx:Object>
+  </fx:Declarations>
   <ui:rules>
     <collab:ProjectContentControlsToolbar>
       <collab:plugins>

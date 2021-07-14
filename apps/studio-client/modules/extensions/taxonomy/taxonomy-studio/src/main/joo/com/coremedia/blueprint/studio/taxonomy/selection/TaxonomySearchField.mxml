@@ -38,42 +38,44 @@
     /**
      * Contains a list of hits that match with the current search value.
      */
-    [Bindable]
+    [ExtConfig]
     public var searchResultExpression:ValueExpression;
 
     /**
      * Contains the name of the site that should be included.
      */
-    [Bindable]
+    [ExtConfig]
     public var siteSelectionExpression:ValueExpression;
 
     /**
      * The value expression that contains the editors content.
      */
-    [Bindable]
+    [ExtConfig]
     public var bindTo:ValueExpression;
 
     /**
      * An optional ValueExpression which makes the component read-only if it is evaluated to true.
      */
-    [Bindable]
+    [ExtConfig]
     public var forceReadOnlyValueExpression:ValueExpression;
+
+    /**
+     * The property name that is edited
+     */
+    [ExtConfig]
+    public var propertyName:String;
+
+    /**
+     * If true, the path of the selected node is shown as plain string in the textfield, empty string otherwise.
+     * Default is true.
+     */
+    [ExtConfig]
+    public var showSelectionPath:Boolean;
+
+    /** True, if the search field is used for the taxonomy administration, defaults to false. */
+    [ExtConfig]
+    public var resetOnBlur:Boolean;
     ]]></fx:Script>
-  <fx:Declarations>
-    <!---
-     The property name that is edited
-    -->
-    <fx:String id="propertyName"/>
-
-    <!---
-     If true, the path of the selected node is shown as plain string in the textfield, empty string otherwise.
-     Default is true.
-    -->
-    <fx:Boolean id="showSelectionPath"/>
-
-    <!--- True, if the search field is used for the taxonomy administration, defaults to false. -->
-    <fx:Boolean id="resetOnBlur"/>
-  </fx:Declarations>
   <local:plugins>
     <editor:BindDisablePlugin bindTo="{config.bindTo}"
                               forceReadOnlyValueExpression="{config.forceReadOnlyValueExpression}"/>

@@ -39,22 +39,27 @@
      * A property path expression leading to the Bean whose property is edited.
      * This property editor assumes that this bean has a property 'properties'.
      */
-    [Bindable]
+    [ExtConfig]
     public var bindTo:ValueExpression;
 
-    [Bindable]
+    [ExtConfig]
     public var forceReadOnlyValueExpression:ValueExpression;
+
+
+    /*label of the first radio button.
+    Default is resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'CMProductTeaser_settings_inherit')  */
+    [ExtConfig]
+    public var inheritLabel:String;
+
+    /**
+     * The name of the sting property of the Bean to bind in this field.
+     * The string property holds the id of the catalog product
+     */
+    [ExtConfig]
+    public var propertyName:String;
     ]]></fx:Script>
   <fx:Declarations>
-    <!---
-     The name of the sting property of the Bean to bind in this field.
-     The string property holds the id of the catalog product
-    -->
     <fx:String id="propertyName">localSettings.shopNow</fx:String>
-
-    <!--label of the first radio button.
-    Default is resourceManager.getString('com.coremedia.livecontext.studio.LivecontextStudioPlugin', 'CMProductTeaser_settings_inherit') -->
-    <fx:String id="inheritLabel"/>
   </fx:Declarations>
 
   <local:plugins>

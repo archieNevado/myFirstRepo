@@ -1,14 +1,12 @@
 query ContentQuery($id: String!, $type: String) {
-
   content {
     content(id: $id, type: $type) {
-
-      ... Reference
-      ... Teasable
+      ...Reference
+      ...Teasable
       ... on CMQueryList {
         name
         items {
-          ... Reference
+          ...Reference
           ... on CMTeasable {
             title
             teaserTitle
@@ -24,12 +22,12 @@ query ContentQuery($id: String!, $type: String) {
               name
               viewtype
               items {
-                ... Teasable
-                ... ImageMap
+                ...Teasable
+                ...ImageMap
                 ... on CMCollection {
                   viewtype
                   items {
-                    ... Teasable
+                    ...Teasable
                   }
                 }
               }
@@ -40,13 +38,13 @@ query ContentQuery($id: String!, $type: String) {
       ... on CMLinkable {
         modificationDate
         navigationPath {
-          ... Reference
+          ...Reference
         }
       }
       ... on CMCollection {
         items {
-          ... Reference
-          ... CommerceReference
+          ...Reference
+          ...CommerceReference
         }
       }
     }
@@ -59,7 +57,7 @@ fragment ContentInfo on Content_ {
 }
 
 fragment Reference on CMLinkable {
-  ... ContentInfo
+  ...ContentInfo
   title
   segment
   link {
@@ -90,8 +88,8 @@ fragment ImageMap on CMImageMap {
     displayAsInlineOverlay
     inlineOverlayTheme
     linkedContent {
-      ... Reference
-      ... QuickInfo
+      ...Reference
+      ...QuickInfo
     }
   }
 }
@@ -100,11 +98,11 @@ fragment Teasable on CMTeasable {
   teaserTitle
   teaserText
   teaserTarget {
-    ... Reference
+    ...Reference
   }
   teaserTargets {
     target {
-      ... Reference
+      ...Reference
     }
     callToActionEnabled
     callToActionText
@@ -117,34 +115,32 @@ fragment Teasable on CMTeasable {
     width
   }
   picture {
-    ... Picture
+    ...Picture
   }
   video {
-    ... Video
+    ...Video
   }
   pictures {
-    ... Picture
+    ...Picture
   }
   videos {
-    ... Video
+    ...Video
   }
   context {
-    ... Reference
+    ...Reference
   }
 }
 
 fragment QuickInfo on CMTeasable {
-  # the following should included if displayAsInlineOverlay is false:
   teaserTitle
   teaserText
   picture {
-    ... Picture
+    ...Picture
   }
 }
 
 fragment Picture on CMPicture {
-  ... ContentInfo
-
+  ...ContentInfo
   title
   alt
   link {
@@ -159,8 +155,7 @@ fragment Picture on CMPicture {
 }
 
 fragment Video on CMVideo {
-  ... ContentInfo
-
+  ...ContentInfo
   title
   alt
   link {
@@ -173,23 +168,11 @@ fragment Video on CMVideo {
   dataUrl
 }
 
-fragment CommerceReference on CommerceBean {
+fragment CommerceReference on CommerceRef {
   externalId
-  __typename
+  storeId
   locale
-  ... on Product {
-    externalProduct {
-      name
-    }
-  }
-  ... on Category {
-    breadcrumb {
-      name
-    }
-    externalChannel {
-      name
-    }
-  }
+  siteId
+  catalogId
+  __typename
 }
-
-

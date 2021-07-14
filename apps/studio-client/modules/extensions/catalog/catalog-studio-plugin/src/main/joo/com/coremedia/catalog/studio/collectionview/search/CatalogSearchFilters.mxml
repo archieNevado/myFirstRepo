@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editor:SearchFiltersBase xmlns:fx="http://ns.adobe.com/mxml/2009"
+                          xmlns:editor="exml:com.coremedia.cms.editor.sdk.config"
+                          xmlns:exml="http://www.jangaroo.net/exml/0.8"
+                          xmlns:cat="exml:com.coremedia.blueprint.studio.config.catalog"
+                          xmlns:taxonomy="exml:com.coremedia.blueprint.studio.config.taxonomy"
+                          xmlns="exml:ext.config"
+                          xmlns:ui="com.coremedia.ui.plugins.*"
+                          ui="{ContainerSkin.GRID_200}">
+  <fx:Metadata>[PublicApi]</fx:Metadata>
+  <fx:Script><![CDATA[
+    import com.coremedia.ui.bem.SpacingBEMEntities;
+    import com.coremedia.ui.skins.ContainerSkin;
+
+    public static const xtype:String = "com.coremedia.blueprint.assets.studio.config.contentCatalogSearchFilters";
+
+    public static const ITEM_ID:String = "contentCatalogSearchFilters";
+
+    private var config:CatalogSearchFilters;
+
+    public native function CatalogSearchFilters(config:CatalogSearchFilters = null);
+    ]]></fx:Script>
+
+  <editor:items>
+    <editor:StatusFilterPanel/>
+    <editor:LastEditedFilterPanel/>
+    <taxonomy:TaxonomyFilterPanel taxonomyId="Subject"
+                                  filterId="Subject"
+                                  propertyName="subjecttaxonomy"/>
+    <taxonomy:TaxonomyFilterPanel taxonomyId="Location"
+                                  filterId="Location"
+                                  propertyName="locationtaxonomy"/>
+    <editor:SiteFilterPanel/>
+    <editor:RelativeDateFilterPanel dateFieldName="modificationdate"/>
+    <editor:RelativeDateFilterPanel dateFieldName="publicationdate"/>
+    <editor:TranslationStatusFilterPanel/>
+    <cat:LostandfoundFilterPanel/>
+  </editor:items>
+  <editor:layout>
+    <layout_Anchor/>
+  </editor:layout>
+  <editor:plugins>
+    <ui:VerticalSpacingPlugin modifier="{SpacingBEMEntities.VERTICAL_SPACING_MODIFIER_200}"/>
+  </editor:plugins>
+</editor:SearchFiltersBase>

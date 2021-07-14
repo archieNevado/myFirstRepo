@@ -22,6 +22,11 @@
       <artifactId>editor-components</artifactId>
       <type>swc</type>
     </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>studio-client.errors-validation-components</artifactId>
+      <type>swc</type>
+    </dependency>
   </dependencies>
 
   <build>
@@ -32,6 +37,7 @@
         <version>${jangaroo.version}</version> <!-- explicit version for IDEA! -->
         <extensions>true</extensions>
         <configuration>
+          <extNamespace>com.coremedia.blueprint.validators.studio</extNamespace>
           <skip>false</skip>
           <namespaces>
             <namespace>

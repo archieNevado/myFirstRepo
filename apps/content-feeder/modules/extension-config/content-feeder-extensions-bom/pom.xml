@@ -48,7 +48,6 @@
     </dependencies>
   </dependencyManagement>
 
-
   <build>
     <pluginManagement>
       <plugins>

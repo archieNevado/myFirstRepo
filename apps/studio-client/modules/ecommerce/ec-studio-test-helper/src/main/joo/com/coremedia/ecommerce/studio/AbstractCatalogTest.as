@@ -930,7 +930,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
     },
 
     {
-      "request": { "uri": "livecontext/search/HeliosSiteId?query=Oranges&searchType=Product&siteId=HeliosSiteId&workspaceId=NO_WS&limit=-1", "method": "GET" },
+      "request": { "uri": "livecontext/search/HeliosSiteId?query=Oranges&searchType=Product&siteId=HeliosSiteId&workspaceId=NO_WS&filterQuery=&limit=-1", "method": "GET" },
       "response": { "body": {
         "hits": [
           {
@@ -946,7 +946,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
     },
 
     {
-      "request":{ "uri":"livecontext/search/HeliosSiteId?workspaceId=NO_WS&siteId=HeliosSiteId&category=10006&catalogAlias=catalog&query=AuroraWMDRS-1&searchType=ProductVariant&limit=-1", "method":"GET" },
+      "request":{ "uri":"livecontext/search/HeliosSiteId?category=10006&catalogAlias=catalog&query=AuroraWMDRS-1&searchType=ProductVariant&siteId=HeliosSiteId&workspaceId=NO_WS&filterQuery=&limit=-1", "method":"GET" },
       "response":{ "body":{
         "hits": [
           {
@@ -962,7 +962,7 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
     },
 
     {
-      "request": { "uri": "livecontext/search/HeliosSiteId?query=Oranges&searchType=ProductVariant&siteId=HeliosSiteId&workspaceId=NO_WS&limit=-1", "method": "GET" },
+      "request": { "uri": "livecontext/search/HeliosSiteId?query=Oranges&searchType=ProductVariant&siteId=HeliosSiteId&workspaceId=NO_WS&filterQuery=&limit=-1", "method": "GET" },
       "response": { "body": {
         "hits": [
           {

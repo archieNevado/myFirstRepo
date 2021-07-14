@@ -12,8 +12,10 @@
 
   <import resource="classpath:/framework/spring/blueprint-contentbeans.xml"/>
 
-  <context:component-scan base-package="com.coremedia.elastic.core.freemarker,
-                                        com.coremedia.elastic.social"/>
+  <context:component-scan base-package="com.coremedia.elastic.core.freemarker"/>
+  <context:component-scan base-package="com.coremedia.elastic.social">
+    <context:exclude-filter type="regex" expression="com\.coremedia\.elastic\.social\.springsecurity\..+"/>
+  </context:component-scan>
 
   <bean name="contentBeanFactory:CMMail"
         class="com.coremedia.blueprint.elastic.social.contentbeans.CMMailImpl"

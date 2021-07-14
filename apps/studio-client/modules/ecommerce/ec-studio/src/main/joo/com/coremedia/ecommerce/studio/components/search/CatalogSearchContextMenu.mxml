@@ -15,7 +15,7 @@
     import com.coremedia.ecommerce.studio.ECommerceStudioPlugin;
     import com.coremedia.ui.data.ValueExpression;
 
-    [Bindable]
+    [ExtConfig]
     public var selectedSearchItemsValueExpression:ValueExpression;
 
     public static const xtype:String = "com.coremedia.ecommerce.studio.config.catalogSearchContextMenu";

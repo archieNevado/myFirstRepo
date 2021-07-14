@@ -19,19 +19,23 @@
     private var config:AuthorLinkListDocumentForm;
 
     public native function AuthorLinkListDocumentForm(config:AuthorLinkListDocumentForm = null);
+
+    /**
+     * The content property name of the list to bind the newly created content to.
+     * Defaults to authors.
+     */
+    [ExtConfig]
+    public var authorPropertyName:String;
+
+    /**
+     * The content types for the QuickCreate menu.
+     * Defaults to CMPerson.
+     */
+    [ExtConfig]
+    public var quickCreateTypes:String;
     ]]></fx:Script>
   <fx:Declarations>
-
-    <!---
-     The content property name of the list to bind the newly created content to.
-     Defaults to authors.
-    -->
     <fx:String id="authorPropertyName">authors</fx:String>
-
-    <!---
-     The content types for the QuickCreate menu.
-     Defaults to CMPerson.
-    -->
     <fx:String id="quickCreateTypes">CMPerson</fx:String>
   </fx:Declarations>
 

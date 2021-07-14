@@ -1,3 +1,10 @@
+extend type ContentRoot {
+  categoryAugmentationBySite(externalId: String!, breadcrumb: [String]!, catalogAlias: String, siteId: String!):CategoryAugmentation @fetch(from: "@augmentationFacadeCmsOnly.getCategoryAugmentationBySite(#externalId, #breadcrumb, #catalogAlias, #siteId)")
+  categoryAugmentationBySegment(externalId: String!, breadcrumb: [String]!, catalogAlias: String, rootSegment: String!):CategoryAugmentation @fetch(from: "@augmentationFacadeCmsOnly.getCategoryAugmentationBySegment(#externalId, #breadcrumb, #catalogAlias, #rootSegment)")
+  productAugmentationBySite(externalId: String!, breadcrumb: [String]!, catalogAlias: String, siteId: String!):ProductAugmentation @fetch(from: "@augmentationFacadeCmsOnly.getProductAugmentationBySite(#externalId, #breadcrumb, #catalogAlias, #siteId)")
+  productAugmentationBySegment(externalId: String!, breadcrumb: [String]!, catalogAlias: String, rootSegment: String!):ProductAugmentation @fetch(from: "@augmentationFacadeCmsOnly.getProductAugmentationBySegment(#externalId, #breadcrumb, #catalogAlias, #rootSegment)")
+}
+
 extend type CommerceRoot {
   productAugmentationBySite(externalId: String!, catalogId: String, siteId: String!):ProductAugmentation @fetch(from: "@augmentationFacade.getProductAugmentationBySite(#externalId, #catalogId, #siteId)")
   productAugmentationByStore(externalId: String!, catalogId: String, storeId: String!, locale: String!):ProductAugmentation @fetch(from: "@augmentationFacade.getProductAugmentationByStore(#externalId, #catalogId, #storeId, #locale)")
@@ -27,7 +34,7 @@ interface CategoryAugmentation @inherit(from: ["Augmentation"]){
 type AugmentationImpl implements Augmentation, HasPageGrid {
   id: ID!
   commerceRef: CommerceRef!
-  grid: PageGrid!  @fetch(from: "@categoryPageGridAdapter.to(#this.commerceRef)")
+  grid: PageGrid!  @fetch(from: "@categoryPageGridAdapter.to(#this)")
   content: Content_
   picture: CMPicture @fetch(from: "@assetFacade.getPicture(#this.commerceRef)")
   pictures: [CMPicture]! @fetch(from: "@assetFacade.getPictures(#this.commerceRef)")
@@ -38,7 +45,7 @@ type AugmentationImpl implements Augmentation, HasPageGrid {
 }
 
 type ProductAugmentationImpl implements ProductAugmentation @inherit(from: ["AugmentationImpl"]){
-  pdpPagegrid: PageGrid! @fetch(from: "@productPageGridAdapter.to(#this.commerceRef)")
+  pdpPagegrid: PageGrid! @fetch(from: "@productPageGridAdapter.to(#this)")
 }
 
 type CategoryAugmentationImpl implements CategoryAugmentation @inherit(from: ["AugmentationImpl"]){

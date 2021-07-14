@@ -11,7 +11,7 @@ public class TaxonomyLinkListRenderer extends TaxonomyRenderer {
 
   public function TaxonomyLinkListRenderer(nodes:Array, componentId:String) {
     super(nodes, componentId);
-    this.wrapperId = componentId + "-wrapper-" + nodes[nodes.length - 1].ref.replace('/','-');
+    this.wrapperId = (componentId + "-wrapper-" + nodes[nodes.length - 1].ref).replace(/\//g,'-');
   }
 
   override protected function doRenderInternal(nodes:Array, callback:Function):void {

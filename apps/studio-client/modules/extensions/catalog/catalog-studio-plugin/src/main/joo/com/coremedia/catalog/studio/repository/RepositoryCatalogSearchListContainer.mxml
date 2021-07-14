@@ -15,10 +15,10 @@
 
     public static const VIEW_CONTAINER_ITEM_ID:String = "repositoryCatalogSearchContainer";
 
-    [Bindable]
+    [ExtConfig]
     public var searchResultHitsValueExpression:ValueExpression;
 
-    [Bindable]
+    [ExtConfig]
     public var selectedItemsValueExpression:ValueExpression;
 
     private var config:RepositoryCatalogSearchListContainer;

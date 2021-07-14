@@ -23,32 +23,39 @@
     /**
      * The content bean value expression.
      */
-    [Bindable]
+    [ExtConfig]
     public var bindTo:ValueExpression;
 
     /**
      * An optional ValueExpression which makes the component read-only if it is evaluated to true.
      */
-    [Bindable]
+    [ExtConfig]
     public var forceReadOnlyValueExpression:ValueExpression;
+
+    /**
+     * The property name of the content that should contains the taxonomy to display.
+     */
+    [ExtConfig]
+    public var propertyName:String;
+
+    /**
+     * The taxonomy identifier configured on the server side.
+     */
+    [ExtConfig]
+    public var taxonomyId:String;
+
+    /** a value expression to calculate the taxonomyId in case the field 'taxonomyId' has not been set */
+    [ExtConfig]
+    public var taxonomyIdExpression:Object;
+
+
+    /**
+     * If true, suggestions field is not shown, default is false.
+     */
+    [ExtConfig]
+    public var disableSuggestions:Boolean;
     ]]></fx:Script>
   <fx:Declarations>
-    <!---
-     The property name of the content that should contains the taxonomy to display.
-    -->
-    <fx:String id="propertyName"/>
-
-    <!---
-     The taxonomy identifier configured on the server side.
-    -->
-    <fx:String id="taxonomyId"/>
-
-    <!--- a value expression to calculate the taxonomyId in case the field 'taxonomyId' has not been set -->
-    <fx:Object id="taxonomyIdExpression"/>
-
-    <!---
-     If true, suggestions field is not shown, default is false.
-    -->
     <fx:Boolean id="disableSuggestions">false</fx:Boolean>
   </fx:Declarations>
 

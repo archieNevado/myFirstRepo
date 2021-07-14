@@ -16,7 +16,7 @@
 
     public native function UnlinkAction(config:UnlinkAction = null);
 
-    [Bindable]
+    [ExtConfig]
     public var folderValueExpression:ValueExpression;
     ]]></fx:Script>
 

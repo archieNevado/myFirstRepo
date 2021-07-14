@@ -13,6 +13,24 @@
   <dependencies>
 
     <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>studio-client.workflow-components</artifactId>
+      <type>swc</type>
+    </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>studio-client.cap-base-components</artifactId>
+      <type>swc</type>
+    </dependency>
+
+    <dependency>
+      <groupId>com.coremedia.ui.sdk</groupId>
+      <artifactId>cap-rest-client</artifactId>
+      <type>swc</type>
+    </dependency>
+
+    <dependency>
       <groupId>com.coremedia.ui.toolkit</groupId>
       <artifactId>core-icons</artifactId>
       <type>swc</type>
@@ -21,12 +39,6 @@
     <dependency>
       <groupId>com.coremedia.ui.toolkit</groupId>
       <artifactId>ui-components</artifactId>
-      <type>swc</type>
-    </dependency>
-
-    <dependency>
-      <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-studio-components</artifactId>
       <type>swc</type>
     </dependency>
 
@@ -54,6 +66,10 @@
       <resource>
         <directory>src/main/sencha</directory>
         <targetPath>../packages/${project.groupId}__${project.artifactId}</targetPath>
+        <excludes>
+          <exclude>sass/var/**</exclude>
+          <exclude>sass/src/**</exclude>
+        </excludes>
       </resource>
     </resources>
     <plugins>
@@ -63,6 +79,7 @@
         <version>${jangaroo.version}</version>
         <extensions>true</extensions>
         <configuration>
+          <extNamespace>com.coremedia.blueprint.studio</extNamespace>
           <namespaces>
             <namespace>
               <uri>exml:com.coremedia.blueprint.studio.config.controlroom</uri>

@@ -21,23 +21,24 @@
 
     public native function CommerceObjectField(config:CommerceObjectField = null);
 
-    [Bindable]
+    [ExtConfig]
     public var commerceObject:CatalogObject;
 
-    [Bindable]
+    [ExtConfig]
     public var catalogObjectIdsExpression:ValueExpression;
 
-    [Bindable]
+    [ExtConfig]
     public var contentValueExpression:ValueExpression;
 
-    [Bindable]
+    [ExtConfig]
     public var forceReadOnlyValueExpression:ValueExpression;
-    ]]></fx:Script>
-  <fx:Declarations>
-    <fx:String id="catalogObjectIdListName"/>
 
-    <fx:String id="removeActionName"/>
-  </fx:Declarations>
+    [ExtConfig]
+    public var catalogObjectIdListName:String;
+
+    [ExtConfig]
+    public var removeActionName:String;
+    ]]></fx:Script>
   <layout>
     <layout_HBox/>
   </layout>

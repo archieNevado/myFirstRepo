@@ -11,16 +11,17 @@
 
     public native function AddKeywordAction(config:AddKeywordAction = null);
 
-    [Bindable]
+    [ExtConfig]
     public var bindTo:ValueExpression;
 
-    [Bindable]
+    [ExtConfig]
     public var selectionExpression:ValueExpression;
-    ]]></fx:Script>
-  <fx:Declarations>
-    <fx:String id="propertyName"/>
 
-    <fx:String id="taxonomyId"/>
-  </fx:Declarations>
+    [ExtConfig]
+    public var propertyName:String;
+
+    [ExtConfig]
+    public var taxonomyId:String;
+    ]]></fx:Script>
 
 </local:AddKeywordActionBase>

@@ -17,6 +17,36 @@
 
   <dependencies>
     <dependency>
+      <groupId>net.jangaroo</groupId>
+      <artifactId>ext-as</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.ui.toolkit</groupId>
+      <artifactId>ui-components</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.ui.sdk</groupId>
+      <artifactId>cap-rest-client</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.ui.toolkit</groupId>
+      <artifactId>client-core</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.ui.toolkit</groupId>
+      <artifactId>client-core-impl</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>studio-client.multi-site-models</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
       <groupId>com.coremedia.ui.sdk</groupId>
       <artifactId>editor-components</artifactId>
       <type>swc</type>
@@ -48,6 +78,10 @@
       <resource>
         <directory>src/main/sencha</directory>
         <targetPath>../packages/${project.groupId}__${project.artifactId}</targetPath>
+        <excludes>
+          <exclude>sass/var/**</exclude>
+          <exclude>sass/src/**</exclude>
+        </excludes>
       </resource>
     </resources>
     <plugins>
@@ -58,15 +92,16 @@
         <version>${jangaroo.version}</version> <!-- explicit version for IDEA! -->
         <extensions>true</extensions>
         <configuration>
-            <additionalCssNonBundle>
-              <value>resources/joo/resources/css/morris.css</value>
-            </additionalCssNonBundle>
-            <additionalJsNonBundle>
-              <value>resources/joo/resources/js/raphael.js</value>
-              <value>resources/joo/resources/js/jquery-3.5.0.min.js</value>
-              <value>resources/joo/resources/js/morris.js</value>
-              <value>resources/joo/resources/js/morris.esalx-plugin.js</value>
-            </additionalJsNonBundle>
+          <extNamespace>com.coremedia.blueprint.studio.esanalytics</extNamespace>
+          <additionalCssNonBundle>
+            <value>resources/joo/resources/css/morris.css</value>
+          </additionalCssNonBundle>
+          <additionalJsNonBundle>
+            <value>resources/joo/resources/js/raphael.js</value>
+            <value>resources/joo/resources/js/jquery-3.5.0.min.js</value>
+            <value>resources/joo/resources/js/morris.js</value>
+            <value>resources/joo/resources/js/morris.esalx-plugin.js</value>
+          </additionalJsNonBundle>
           <skip>false</skip>
           <namespaces>
             <namespace>

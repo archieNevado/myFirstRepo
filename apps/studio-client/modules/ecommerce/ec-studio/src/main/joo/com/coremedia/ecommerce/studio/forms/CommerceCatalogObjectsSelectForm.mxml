@@ -22,23 +22,27 @@
 
     public native function CommerceCatalogObjectsSelectForm(config:CommerceCatalogObjectsSelectForm = null);
 
-    [Bindable]
+    [ExtConfig]
     public var catalogObjectIdsExpression:ValueExpression;
 
+    [ExtConfig]
+    public var catalogObjectIdListName:String;
+
+    [ExtConfig]
+    public var invalidMessage:String;
+
+    [ExtConfig]
+    public var emptyText:String;
+
+    [ExtConfig]
+    public var removeActionName:String;
+
+    [ExtConfig]
+    public var getCommerceObjectsFunction:Function;
+
+    [ExtConfig]
+    public var noStoreMessage:String;
     ]]></fx:Script>
-  <fx:Declarations>
-    <fx:String id="catalogObjectIdListName"/>
-
-    <fx:String id="invalidMessage"/>
-
-    <fx:String id="emptyText"/>
-
-    <fx:String id="removeActionName"/>
-
-    <fx:Function id="getCommerceObjectsFunction"/>
-
-    <fx:String id="noStoreMessage"/>
-  </fx:Declarations>
 
   <local:layout>
     <layout_VBox align="stretch"/>

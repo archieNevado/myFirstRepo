@@ -13,7 +13,7 @@
      * A value expression evaluating to a catalog object to be processed
      * or to an array of catalog objects to be processed.
      */
-    [Bindable]
+    [ExtConfig]
     public var catalogObjectExpression:ValueExpression;
     ]]></fx:Script>
 </local:CatalogObjectActionBase>

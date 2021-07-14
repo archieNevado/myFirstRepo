@@ -16,7 +16,7 @@
      */
     public static const LC_OPEN_IN_BACKGROUND_TAB_MENU_ITEM_ID:String = "lcOpenInBackgroundTab";
 
-    [Bindable]
+    [ExtConfig]
     public var metadataValueExpression:ValueExpression;
 
     private var config:ShopPageOpenInBackgroundMenuItem;

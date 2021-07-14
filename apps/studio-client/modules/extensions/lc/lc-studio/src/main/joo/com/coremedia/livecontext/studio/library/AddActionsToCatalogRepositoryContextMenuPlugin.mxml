@@ -11,13 +11,11 @@
   private var config:AddActionsToCatalogRepositoryContextMenuPlugin;
   private var componentConfig:CatalogRepositoryContextMenu;
 
-  // called by generated constructor code
-  private function __initialize__(config:AddActionsToCatalogRepositoryContextMenuPlugin):void {
-    componentConfig = CatalogRepositoryContextMenu(config.cmp.initialConfig);
-  }
-
   public native function AddActionsToCatalogRepositoryContextMenuPlugin(config:AddActionsToCatalogRepositoryContextMenuPlugin = null);
   ]]></fx:Script>
+  <fx:Declarations>
+    <fx:Object id="componentConfig">{CatalogRepositoryContextMenu(config.cmp.initialConfig)}</fx:Object>
+  </fx:Declarations>
   <ui:items>
     <MenuItem itemId="{LivecontextStudioPlugin.SEARCH_PRODUCT_VARIANTS_MENU_ITEM_ID}">
       <baseAction>

@@ -65,6 +65,8 @@
             <executable>false</executable>
             <!-- select the artifact layout; JAR is the default; ZIP allows custom extensions -->
             <layout>${spring-boot-maven-plugin.layout}</layout>
+            <!-- disable build time in build info to make build reproducible -->
+            <time>off</time><!-- disable build time in build info to make build reproducible -->
             <!-- common main class -->
             <addResources>true</addResources>
             <profiles>

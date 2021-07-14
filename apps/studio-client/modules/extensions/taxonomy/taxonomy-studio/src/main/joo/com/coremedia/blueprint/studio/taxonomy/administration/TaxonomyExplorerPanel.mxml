@@ -43,13 +43,13 @@
     /**
      * Contains the active selected site, selected by site chooser component.
      */
-    [Bindable]
+    [ExtConfig]
     public var siteSelectionExpression:ValueExpression;
 
     /**
      * Contains a node list with the path of the of the selected node.
      */
-    [Bindable]
+    [ExtConfig]
     public var searchResultExpression:ValueExpression;
     ]]></fx:Script>
 

@@ -8,9 +8,9 @@
     private var config:OpenTaxonomyEditorAction;
 
     public native function OpenTaxonomyEditorAction(config:OpenTaxonomyEditorAction = null);
+
+    [ExtConfig]
+    public var taxonomyId:String;
     ]]></fx:Script>
-  <fx:Declarations>
-    <fx:String id="taxonomyId"/>
-  </fx:Declarations>
 
 </local:OpenTaxonomyEditorActionBase>

@@ -6,7 +6,7 @@ import ext.container.Container;
 
 public class ContentProvidingTestContainerBase extends Container {
 
-  [Bindable]
+  [ExtConfig]
   public var contentValueExpression:ValueExpression;
 
   public function ContentProvidingTestContainerBase(config:Container = null) {

@@ -9,16 +9,16 @@ public class CategoryFacetTagFieldBase extends InputChipsFieldBase {
   public static const LABEL:String = "label";
   public static const QUERY:String = "query";
 
-  [Bindable]
+  [ExtConfig]
   public var facet:Facet;
 
-  [Bindable]
+  [ExtConfig]
   public var bindTo:ValueExpression;
 
-  [Bindable]
+  [ExtConfig]
   public var forceReadOnlyValueExpression:ValueExpression;
 
-  [Bindable]
+  [ExtConfig]
   public var structPropertyName:String;
 
   private var facetTagsExpression:ValueExpression;

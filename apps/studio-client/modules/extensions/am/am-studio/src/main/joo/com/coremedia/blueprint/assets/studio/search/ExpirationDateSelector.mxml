@@ -15,19 +15,17 @@
     private var config:ExpirationDateSelector;
 
     public native function ExpirationDateSelector(config:ExpirationDateSelector = null);
+
+    /**
+     * The list of keys selectable in the combobox.
+     * The display values can be localized in the file AMStudioPlugin.properties using the following pattern:
+     * 'Filter_ExpirationDate_[key]_text'
+     */
+    [ExtConfig]
+    public var availableKeys:Array;
     ]]></fx:Script>
   <fx:Declarations>
-    <!---
-     The list of keys selectable in the combobox.
-     The display values can be localized in the file AMStudioPlugin.properties using the following pattern:
-     'Filter_ExpirationDate_[key]_text'
-    -->
     <fx:Array id="availableKeys">{['any', 'inOneDay', 'inOneWeek', 'inTwoWeeks', 'inOneMonth', 'byDate']}</fx:Array>
-
-    <!---
-     The key that triggers the datefield visibility.
-    -->
-    <fx:String id="dateKey">byDate</fx:String>
   </fx:Declarations>
 
   <local:items>

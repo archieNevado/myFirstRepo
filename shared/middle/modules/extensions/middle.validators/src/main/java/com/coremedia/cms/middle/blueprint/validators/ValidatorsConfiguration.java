@@ -46,6 +46,7 @@ import com.coremedia.rest.cap.validators.SiteManagerGroupValidator;
 import com.coremedia.rest.cap.validators.SiteNameValidator;
 import com.coremedia.rest.cap.validators.StructLinkListIndexValidator;
 import com.coremedia.rest.cap.validators.StructLinkListMaxLengthValidator;
+import com.coremedia.rest.validation.Issues;
 import com.coremedia.rest.validation.Severity;
 import com.coremedia.rest.validators.EmailValidator;
 import com.coremedia.rest.validators.ListMinLengthValidator;
@@ -62,6 +63,7 @@ import org.springframework.context.annotation.ImportResource;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Set;
 
 /**
  * Spring Configuration for Validators.
@@ -116,6 +118,7 @@ public class ValidatorsConfiguration {
 
     LinkListMaxLengthValidator linkListMaxLengthValidator = new LinkListMaxLengthValidator();
     linkListMaxLengthValidator.setProperty("master");
+    linkListMaxLengthValidator.setCategories(Set.of(Issues.LOCALIZATION_ISSUE_CATEGORY));
     cmLocalizedValidator.setValidators(Collections.singletonList(
             linkListMaxLengthValidator
     ));

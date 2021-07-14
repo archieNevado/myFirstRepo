@@ -15,18 +15,15 @@
     private var config:DataDocumentForm;
 
     public native function DataDocumentForm(config:DataDocumentForm = null);
+
+    /** The title to apply to the URL string property */
+    [ExtConfig]
+    public var dataUrlLabel:String;
+
+    /** The helptext that is shown next to the upload button  */
+    [ExtConfig]
+    public var helpText:String;
     ]]></fx:Script>
-  <fx:Declarations>
-    <!--- The title to apply to the collapsible group -->
-    <fx:String id="title"/>
-
-    <!--- The title to apply to the URL string property -->
-    <fx:String id="dataUrlLabel"/>
-
-    <!--- The helptext that is shown next to the upload button  -->
-    <fx:String id="helpText"/>
-
-  </fx:Declarations>
 
   <editor:items>
     <editor:BlobPropertyField propertyName="data"

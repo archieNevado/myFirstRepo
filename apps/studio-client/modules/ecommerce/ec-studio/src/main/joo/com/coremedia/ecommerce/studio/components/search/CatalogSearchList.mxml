@@ -33,20 +33,17 @@
     private var catalogHelper:CatalogHelper;
     private var lastClickedCellVE:ValueExpression;
 
-    // called by generated constructor code
-    //noinspection JSUnusedLocalSymbols
-    private function __initialize__():void {
-      catalogHelper = CatalogHelper.getInstance();
-      lastClickedCellVE = ValueExpressionFactory.createFromValue();
-    }
-
     private var config:CatalogSearchList;
 
     public native function CatalogSearchList(config:CatalogSearchList = null);
 
-    [Bindable]
+    [ExtConfig]
     public var searchResultHitsValueExpression:ValueExpression;
     ]]></fx:Script>
+  <fx:Declarations>
+    <fx:Object id="catalogHelper">{CatalogHelper.getInstance()}</fx:Object>
+    <fx:Object id="lastClickedCellVE">{ValueExpressionFactory.createFromValue()}</fx:Object>
+  </fx:Declarations>
 
   <ec:plugins exml:mode="prepend">
     <ui:BindListPlugin lazy="true"

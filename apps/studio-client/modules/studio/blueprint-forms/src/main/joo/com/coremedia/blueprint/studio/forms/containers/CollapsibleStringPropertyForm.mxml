@@ -12,14 +12,11 @@
     private var config:CollapsibleStringPropertyForm;
 
     public native function CollapsibleStringPropertyForm(config:CollapsibleStringPropertyForm = null);
-    ]]></fx:Script>
-  <fx:Declarations>
-    <!--- The name to bind the string property editor to. -->
-    <fx:String id="propertyName"/>
 
-    <!--- The title to apply. -->
-    <fx:String id="title"/>
-  </fx:Declarations>
+    /** The name to bind the string property editor to. */
+    [ExtConfig]
+    public var propertyName:String;
+    ]]></fx:Script>
 
   <editor:items>
     <editor:StringPropertyField bindTo="{config.bindTo}"

@@ -6,6 +6,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.ecommerce.studio.rest.cache.CommerceCacheInvalidationSource;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.rest.cap.intercept.ContentWritePostprocessorBase;
 import com.coremedia.rest.intercept.WriteReport;
 import com.google.common.annotations.VisibleForTesting;
@@ -65,11 +66,12 @@ public class AssetInvalidationWritePostProcessor extends ContentWritePostprocess
 
     Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnection(content);
 
-    if (!commerceConnection.isPresent()) {
+    if (commerceConnection.isEmpty()) {
       LOG.debug("Commerce connection not available, will not invalidate references.");
       return;
     }
 
-    commerceCacheInvalidationSource.invalidateReferences(productReferences);
+    StoreContext storeContext = commerceConnection.get().getInitialStoreContext();
+    commerceCacheInvalidationSource.invalidateReferences(productReferences, storeContext);
   }
 }

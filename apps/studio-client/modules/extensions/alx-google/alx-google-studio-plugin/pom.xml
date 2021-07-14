@@ -17,6 +17,26 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.coremedia.ui.toolkit</groupId>
+      <artifactId>client-core</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.ui.sdk</groupId>
+      <artifactId>cap-rest-client</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>studio-client.cap-base-models</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>studio-client.app-context-models</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>alx-studio-plugin</artifactId>
       <version>${project.version}</version>
@@ -37,6 +57,7 @@
       <artifactId>core-icons</artifactId>
       <type>swc</type>
     </dependency>
+
     <dependency>
       <groupId>net.jangaroo</groupId>
       <artifactId>ext-as</artifactId>
@@ -50,10 +71,10 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.ui.toolkit</groupId>
-      <artifactId>client-core-impl</artifactId>
+      <groupId>net.jangaroo</groupId>
+      <artifactId>jangaroo-browser</artifactId>
       <type>swc</type>
-      <!--<scope>test</scope> cannot be used here, because it would override the transitive compile dependency -->
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.ui.toolkit</groupId>
@@ -80,6 +101,7 @@
         <version>${jangaroo.version}</version> <!-- explicit version for IDEA! -->
         <extensions>true</extensions>
         <configuration>
+          <extNamespace>com.coremedia.blueprint.studio.googleanalytics</extNamespace>
           <skip>false</skip>
           <namespaces>
             <namespace>

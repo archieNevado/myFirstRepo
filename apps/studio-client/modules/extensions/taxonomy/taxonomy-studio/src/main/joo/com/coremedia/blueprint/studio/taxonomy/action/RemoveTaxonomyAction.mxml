@@ -11,17 +11,17 @@
 
     public native function RemoveTaxonomyAction(config:RemoveTaxonomyAction = null);
 
-    [Bindable]
+    [ExtConfig]
     public var selectedValuesExpression:ValueExpression;
 
-    [Bindable]
+    [ExtConfig]
     public var selectedPositionsExpression:ValueExpression;
 
-    [Bindable]
+    [ExtConfig]
     public var bindTo:ValueExpression;
+
+    [ExtConfig]
+    public var propertyName:String;
     ]]></fx:Script>
-  <fx:Declarations>
-    <fx:String id="propertyName"/>
-  </fx:Declarations>
 
 </local:RemoveTaxonomyActionBase>

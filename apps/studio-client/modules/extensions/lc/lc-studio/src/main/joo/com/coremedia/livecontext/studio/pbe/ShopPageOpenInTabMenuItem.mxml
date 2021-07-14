@@ -16,7 +16,7 @@
      */
     public static const LC_OPEN_IN_TAB_MENU_ITEM_ID:String = "lcOpenInTab";
 
-    [Bindable]
+    [ExtConfig]
     public var metadataValueExpression:ValueExpression;
 
     private var config:ShopPageOpenInTabMenuItem;

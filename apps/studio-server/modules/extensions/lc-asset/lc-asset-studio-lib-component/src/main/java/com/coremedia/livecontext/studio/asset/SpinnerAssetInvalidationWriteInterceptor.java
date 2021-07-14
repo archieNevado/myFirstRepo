@@ -9,6 +9,7 @@ import com.coremedia.ecommerce.studio.rest.cache.CommerceCacheInvalidationSource
 import com.coremedia.livecontext.asset.util.AssetReadSettingsHelper;
 import com.coremedia.livecontext.asset.util.AssetWriteSettingsHelper;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.rest.cap.intercept.ContentWriteInterceptorBase;
 import com.coremedia.rest.cap.intercept.ContentWriteRequest;
 import com.google.common.annotations.VisibleForTesting;
@@ -161,12 +162,13 @@ public class SpinnerAssetInvalidationWriteInterceptor extends ContentWriteInterc
 
     Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnection(content);
 
-    if (!commerceConnection.isPresent()) {
+    if (commerceConnection.isEmpty()) {
       LOG.debug("Commerce connection not available, will not invalidate references.");
       return;
     }
 
-    commerceCacheInvalidationSource.invalidateReferences(newHashSet(allReferences));
+    StoreContext storeContext = commerceConnection.get().getInitialStoreContext();
+    commerceCacheInvalidationSource.invalidateReferences(newHashSet(allReferences), storeContext);
   }
 
   @NonNull

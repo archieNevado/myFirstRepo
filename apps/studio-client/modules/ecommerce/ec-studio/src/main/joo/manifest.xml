@@ -20,11 +20,11 @@
   <component class="com.coremedia.ecommerce.studio.components.repository.CatalogRepositoryToolbar"/>
   <component class="com.coremedia.ecommerce.studio.components.repository.CatalogRepositoryToolbarContainer"/>
   <component class="com.coremedia.ecommerce.studio.components.search.CatalogSearchContextMenu"/>
-  <component class="com.coremedia.ecommerce.studio.components.search.CatalogSearchFiltersPanel"/>
   <component class="com.coremedia.ecommerce.studio.components.search.CatalogSearchList"/>
   <component class="com.coremedia.ecommerce.studio.components.search.CatalogSearchListContainer"/>
   <component class="com.coremedia.ecommerce.studio.components.search.CatalogSearchThumbnails"/>
   <component class="com.coremedia.ecommerce.studio.components.search.CatalogSearchToolbar"/>
+  <component class="com.coremedia.ecommerce.studio.components.search.CatalogSearchFilters"/>
   <component class="com.coremedia.ecommerce.studio.components.search.CatalogSearchToolbarContainer"/>
   <component class="com.coremedia.ecommerce.studio.components.thumbnail.CatalogThumbDataView"/>
   <component class="com.coremedia.ecommerce.studio.forms.CommerceCatalogObjectsSelectForm"/>

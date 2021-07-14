@@ -20,48 +20,50 @@
 
     public native function CatalogLinkToolbar(config:CatalogLinkToolbar = null);
 
-    [Bindable]
+    [ExtConfig]
     public var linkListWrapper:ILinkListWrapper;
 
     /**
      * A property path expression leading to the Bean whose property is edited.
      * This property editor assumes that this bean has a property 'properties'.
      */
-    [Bindable]
+    [ExtConfig]
     public var bindTo:ValueExpression;
 
     /**
      * ValueExpression which makes the component read-only if it is evaluated to true.
      */
-    [Bindable]
+    [ExtConfig]
     public var forceReadOnlyValueExpression:ValueExpression;
 
     /**
      * ValueExpression which makes the delete button read-only if it is evaluated to true.
      */
-    [Bindable]
+    [ExtConfig]
     public var readOnlyValueExpression:ValueExpression;
 
+    /**
+     * The name of the sting property of the Bean to bind in this field.
+     * The string property holds the id of the catalog product
+     */
+    [ExtConfig]
+    public var propertyName:String;
+
+    /**
+     * Set to true if the open in tab button should be hidden. Default is false
+     */
+    [ExtConfig]
+    public var hideOpenInTab:Boolean;
+
+    /**
+     * Set to true if the remove button should be hidden. Default is false
+     */
+    [ExtConfig]
+    public var hideRemove:Boolean;
+
+    [ExtConfig]
+    public var additionalToolbarItems:Array;
     ]]></fx:Script>
-  <fx:Declarations>
-    <!---
-     The name of the sting property of the Bean to bind in this field.
-     The string property holds the id of the catalog product
-    -->
-    <fx:String id="propertyName"/>
-
-    <!---
-     Set to true if the open in tab button should be hidden. Default is false
-    -->
-    <fx:Boolean id="hideOpenInTab"/>
-
-    <!---
-     Set to true if the remove button should be hidden. Default is false
-    -->
-    <fx:Boolean id="hideRemove"/>
-
-    <fx:Array id="additionalToolbarItems"/>
-  </fx:Declarations>
 
   <plugins>
     <ui:AddItemsPlugin items="{config.additionalToolbarItems}"/>

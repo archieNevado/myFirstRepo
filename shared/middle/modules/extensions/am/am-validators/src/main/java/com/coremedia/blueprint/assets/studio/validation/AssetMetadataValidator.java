@@ -11,6 +11,7 @@ import com.coremedia.rest.validation.Severity;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * A Validator for the metadata struct of assets.
@@ -27,6 +28,7 @@ public class AssetMetadataValidator implements PropertyValidator {
   private String metadataProperty;
   private ConfigurationService configurationService;
   private String settingsDocument;
+  private Set<String> categories = Collections.emptySet();
 
   public void setMetadataProperty(String metadataProperty) {
     this.metadataProperty = metadataProperty;
@@ -52,7 +54,7 @@ public class AssetMetadataValidator implements PropertyValidator {
     }
 
     if (!(value instanceof Struct)) {
-      issues.addIssue(Severity.ERROR, getProperty(), ISSUE_CODE_METADATA_PROPERTY_NOT_OF_TYPE_STRUCT, metadataProperty);
+      issues.addIssue(categories, Severity.ERROR, getProperty(), ISSUE_CODE_METADATA_PROPERTY_NOT_OF_TYPE_STRUCT, metadataProperty);
       return;
     }
 
@@ -73,7 +75,7 @@ public class AssetMetadataValidator implements PropertyValidator {
 
     for (String channel : actualChannels) {
       if (!settingsChannels.contains(channel)) {
-        issues.addIssue(Severity.WARN,
+        issues.addIssue(categories, Severity.WARN,
                 metadataProperty + "." + AssetConstants.METADATA_CHANNELS_PROPERTY_NAME + "." + channel,
                 ISSUE_CODE_UNKNOWN_CHANNEL,
                 channel);
@@ -82,7 +84,7 @@ public class AssetMetadataValidator implements PropertyValidator {
 
     for (String region : actualRegions) {
       if (!settingsRegions.contains(region)) {
-        issues.addIssue(Severity.WARN,
+        issues.addIssue(categories, Severity.WARN,
                 metadataProperty + "." + AssetConstants.METADATA_REGIONS_PROPERTY_NAME + "." + region,
                 ISSUE_CODE_UNKNOWN_REGION,
                 region);
@@ -94,5 +96,15 @@ public class AssetMetadataValidator implements PropertyValidator {
     return struct.getType().getDescriptor(property) != null
             ? struct.getStrings(property)
             : Collections.<String>emptyList();
+  }
+
+  /**
+   * Set the categories to use for invalid values. Use the constants {@link Issues#CONTENT_ISSUE_CATEGORY} and
+   * {@link Issues#LOCALIZATION_ISSUE_CATEGORY} as category values.
+   *
+   * @param categories the categories
+   */
+  protected void setCategories(Set<String> categories) {
+    this.categories = categories == null ? Collections.emptySet() : Collections.unmodifiableSet(categories);
   }
 }

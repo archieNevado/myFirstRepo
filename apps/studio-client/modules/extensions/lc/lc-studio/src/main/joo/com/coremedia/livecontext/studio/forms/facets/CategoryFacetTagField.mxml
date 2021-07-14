@@ -16,7 +16,7 @@
                                   triggerAction="all"
                                   publishes="{LABEL}"
                                   multiSelect="{config.facet.isMultiSelect()}"
-                                  u:ariaRole="combobox"
+                                  ariaRole="textbox"
                                   forceSelection="true"
                                   anchor="100%">
   <fx:Metadata>
@@ -24,6 +24,7 @@
   </fx:Metadata>
 
   <fx:Script><![CDATA[
+    import com.coremedia.ecommerce.studio.components.search.filters.FacetUtil;
     import com.coremedia.ui.data.ValueExpressionFactory;
 
     public static const xtype:String = "com.coremedia.livecontext.studio.config.categoryFacetTagField";

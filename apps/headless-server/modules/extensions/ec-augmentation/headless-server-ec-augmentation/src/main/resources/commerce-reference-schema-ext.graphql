@@ -82,13 +82,13 @@ interface CMExternalChannel @inherit(from: ["CMAbstractCategory"]) {
 
 type CMAbstractCategoryImpl implements CMAbstractCategory @inherit(from: ["CMChannelImpl"]) {
   externalId: String
-  categoryRef : CategoryRef @fetch(from: "@augmentationFacade.getCommerceRef(#this, 'externalId')")
+  categoryRef : CategoryRef @fetch(from: "@commerceRefAdapter.getCommerceRef(#this, 'externalId')")
   pdpPagegrid: PageGrid @fetch(from: "@pageGridAdapter.to(#root,'pdpPagegrid')")
 }
 
 type CMProductListImpl implements CMProductList @inherit(from: ["CMQueryListImpl"]) {
   externalId: String
-  categoryRef : CategoryRef @fetch(from: "@augmentationFacade.getCommerceRef(#this, 'externalId')")
+  categoryRef : CategoryRef @fetch(from: "@commerceRefAdapter.getCommerceRef(#this, 'externalId')")
   limit: Int @fetch(from: "@productListAdapter.to(#root).getLimit()")
   start: Int @fetch(from: "@productListAdapter.to(#root).getStart()")
   productOffset: Int @fetch(from: "@productListAdapter.to(#root).getProductOffset()")
@@ -107,16 +107,16 @@ type CMExternalPageImpl implements CMExternalPage @inherit(from: ["CMChannelImpl
 
 type CMProductTeaserImpl implements CMProductTeaser @inherit(from: ["CMTeasableImpl"]) {
   externalId: String
-  productRef: ProductRef @fetch(from: "@augmentationFacade.getCommerceRef(#this, 'externalId')")
+  productRef: ProductRef @fetch(from: "@commerceRefAdapter.getCommerceRef(#this, 'externalId')")
 }
 
 type CMExternalProductImpl implements CMExternalProduct @inherit(from: ["CMTeasableImpl"]) {
   externalId: String
-  productRef: ProductRef @fetch(from: "@augmentationFacade.getCommerceRef(#this, 'externalId')")
+  productRef: ProductRef @fetch(from: "@commerceRefAdapter.getCommerceRef(#this, 'externalId')")
   pdpPagegrid: PageGrid @fetch(from: "@pageGridAdapter.to(#root,'pdpPagegrid')")
 }
 
 type CMExternalChannelImpl implements CMExternalChannel @inherit(from: ["CMAbstractCategoryImpl"]) {
   externalId: String
-  categoryRef : CategoryRef @fetch(from: "@augmentationFacade.getCommerceRef(#this, 'externalId')")
+  categoryRef : CategoryRef @fetch(from: "@commerceRefAdapter.getCommerceRef(#this, 'externalId')")
 }

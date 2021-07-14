@@ -16,7 +16,6 @@
     [ResourceBundle('com.coremedia.livecontext.studio.LivecontextStudioPlugin')]
   </fx:Metadata>
   <fx:Script><![CDATA[
-    import com.coremedia.blueprint.studio.forms.CMChannelFormBase;
     import com.coremedia.ecommerce.studio.helper.AugmentationUtil;
     import com.coremedia.livecontext.studio.LivecontextStudioPluginBase;
     import com.coremedia.ui.data.ValueExpression;
@@ -28,13 +27,11 @@
     private var config:CommerceAugmentedCategoryStructureForm;
     private var catalogObjectExpression:ValueExpression;
 
-    // called by generated constructor code
-    private function __initialize__(config:CommerceAugmentedCategoryStructureForm):void {
-      catalogObjectExpression = AugmentationUtil.getCatalogObjectExpression(config.bindTo);
-    }
-
     public native function CommerceAugmentedCategoryStructureForm(config:CommerceAugmentedCategoryStructureForm = null);
     ]]></fx:Script>
+  <fx:Declarations>
+    <fx:Object id="catalogObjectExpression">{AugmentationUtil.getCatalogObjectExpression(config.bindTo)}</fx:Object>
+  </fx:Declarations>
 
   <editor:items>
     <editor:PropertyFieldGroup

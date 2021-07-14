@@ -25,14 +25,11 @@
     private var config:EcommerceIbmCollectionViewActionsPlugin;
     private var selectionHolder:ICollectionView;
 
-    // called by generated constructor code
-
-    private function __initialize__(config:EcommerceIbmCollectionViewActionsPlugin):void {
-      selectionHolder = config.cmp as ICollectionView;
-    }
-
     public native function EcommerceIbmCollectionViewActionsPlugin(config:EcommerceIbmCollectionViewActionsPlugin = null);
     ]]></fx:Script>
+  <fx:Declarations>
+    <fx:Object id="selectionHolder">{config.cmp as ICollectionView}</fx:Object>
+  </fx:Declarations>
 
   <ui:rules>
     <ec:CatalogRepositoryToolbar>

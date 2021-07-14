@@ -14,28 +14,28 @@ public class CatalogLinkListColumnBase extends IconColumnBase {
   /**
    * The icon css class to use for the catalog icon.
    */
-  [Bindable]
+  [ExtConfig]
   public var catalogIconCls:String;
 
   /**
    * An additional text describing the catalog icon.
    */
-  [Bindable]
+  [ExtConfig]
   public var catalogIconText:String;
 
   /**
    * A tooltip to display when hoving the catalog block of the column.
    */
-  [Bindable]
+  [ExtConfig]
   public var catalogToolTipText:String;
 
   /**
    * If true the catalog info will be hidden. Default is false.
    */
-  [Bindable]
+  [ExtConfig]
   public var hideCatalog:Boolean;
 
-  public function CatalogLinkListColumnBase(config:IconColumn = null) {
+  public function CatalogLinkListColumnBase(config:CatalogLinkListColumnBase = null) {
     super(config);
   }
 
@@ -44,7 +44,7 @@ public class CatalogLinkListColumnBase extends IconColumnBase {
    *
    * @see ext.grid.column.Column.dataIndex
    */
-  [Bindable]
+  [ExtConfig]
   public var catalogObjectIdDataIndex:String;
 
   /**
@@ -52,7 +52,7 @@ public class CatalogLinkListColumnBase extends IconColumnBase {
    *
    * @see ext.grid.column.Column.dataIndex
    */
-  [Bindable]
+  [ExtConfig]
   public var catalogObjectNameDataIndex:String;
 
   /**
@@ -60,10 +60,10 @@ public class CatalogLinkListColumnBase extends IconColumnBase {
    *
    * @see ext.grid.column.Column.dataIndex
    */
-  [Bindable]
+  [ExtConfig]
   public var catalogNameDataIndex:String;
 
-  [Bindable]
+  [ExtConfig]
   public var multiCatalogDataIndex:String;
 
   private static const MODIFIER_SECOND_ITEM:BEMModifier = IconWithTextBEMEntities.BLOCK.createModifier("second-item");

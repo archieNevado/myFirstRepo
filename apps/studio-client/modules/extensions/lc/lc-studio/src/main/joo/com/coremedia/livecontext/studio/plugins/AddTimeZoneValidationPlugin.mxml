@@ -13,13 +13,11 @@
     private var config:AddTimeZoneValidationPlugin;
     private var myPreviewDateSelector:PreviewDateSelector;
 
-    // called by generated constructor code
-    private function __initialize__(config:AddTimeZoneValidationPlugin):void {
-      myPreviewDateSelector = config.cmp as PreviewDateSelector;
-    }
-
     public native function AddTimeZoneValidationPlugin(config:AddTimeZoneValidationPlugin = null);
     ]]></fx:Script>
+  <fx:Declarations>
+    <fx:Object id="myPreviewDateSelector">{config.cmp as PreviewDateSelector}</fx:Object>
+  </fx:Declarations>
   <ui:rules>
     <editor:DateTimePropertyField itemId="{PreviewDateSelector.DATE_TIME_FIELD_ITEM_ID}">
       <editor:plugins>

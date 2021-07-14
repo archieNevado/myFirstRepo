@@ -17,7 +17,7 @@ public class CatalogRepositoryListBase extends AbstractCatalogList {
   /**
    * value expression for the selected node in the library tree
    */
-  [Bindable]
+  [ExtConfig]
   public var selectedNodeValueExpression:ValueExpression;
 
   private var sortInfo:Object = {};

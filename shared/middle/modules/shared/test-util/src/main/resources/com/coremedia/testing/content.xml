@@ -821,6 +821,11 @@
     <!--Taxonomy testing-->
     <folder id="201" name="Taxonomies">
       <folder id="203" name="subject">
+        <document id="208" name="_root" type="CMSettings">
+          <version number="1">
+            <markupProperty name="settings" url="208settings.xml" grammar="coremedia-struct-2008"/>
+          </version>
+        </document>
         <document id="202" name="Sport" type="CMTaxonomy">
           <version number="1">
             <stringProperty name="value" value="Sport"/>

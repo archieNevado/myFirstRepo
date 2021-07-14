@@ -21,7 +21,7 @@
 
     public static const VISIBLE_TO_ITEM_ID:String = "visibleTo";
 
-    [Bindable]
+    [ExtConfig]
     public var propertyName:String;
 
     private var config:VisibilityConfigurationForm;

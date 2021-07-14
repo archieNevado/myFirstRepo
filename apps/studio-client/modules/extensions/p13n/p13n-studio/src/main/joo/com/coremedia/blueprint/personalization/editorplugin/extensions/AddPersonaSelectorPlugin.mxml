@@ -19,14 +19,12 @@
     private var myPreviewPanel:PreviewPanel;
     private var previewPanelConfig:PreviewPanel;
 
-    // called by generated constructor code
-    private function __initialize__(config:AddPersonaSelectorPlugin):void {
-      myPreviewPanel = config.cmp as PreviewPanel;
-      previewPanelConfig = PreviewPanel(myPreviewPanel.initialConfig);
-    }
-
     public native function AddPersonaSelectorPlugin(config:AddPersonaSelectorPlugin = null);
     ]]></fx:Script>
+  <fx:Declarations>
+    <fx:Object id="myPreviewPanel">{config.cmp as PreviewPanel}</fx:Object>
+    <fx:Object id="previewPanelConfig">{PreviewPanel(myPreviewPanel.initialConfig)}</fx:Object>
+  </fx:Declarations>
 
   <ui:rules>
     <editor:PreviewPanelToolbar>

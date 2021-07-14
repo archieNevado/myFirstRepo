@@ -5,10 +5,14 @@ import com.coremedia.ui.data.ValueExpression;
 
 import ext.container.Container;
 
+import net.jangaroo.ext.Exml;
+
 [ResourceBundle('com.coremedia.blueprint.assets.studio.AMStudioPlugin')]
 public class ExpirationDateSelectorBase extends Container {
-  public function ExpirationDateSelectorBase(config:ExpirationDateSelector = null) {
-    super(config);
+  public function ExpirationDateSelectorBase(config:ExpirationDateSelectorBase = null) {
+    var defaults: ExpirationDateSelectorBase = ExpirationDateSelectorBase({});
+    defaults.dateKey = "byDate";
+    super(Exml.apply(defaults, config));
 
     var dateField:StatefulDateField = StatefulDateField(down('datefield'));
     dateField.on('select', doChange);
@@ -18,18 +22,22 @@ public class ExpirationDateSelectorBase extends Container {
   }
 
   /**
+   * The key that triggers the datefield visibility.
+   */
+  [ExtConfig]
+  public var dateKey:String;
+
+  /**
    * A value expression that will be bound to the selected combo box entry.
    */
-  [Bindable]
+  [ExtConfig]
   public var selectedKeyValueExpression:ValueExpression;
 
   /**
    * A value expression that will be bound to the selected date or null if no datefield is displayed.
    */
-  [Bindable]
+  [ExtConfig]
   public var selectedDateValueExpression:ValueExpression;
-
-  internal native function get dateKey():ValueExpression;
 
   private function onSelectedKeyChange(source:ValueExpression):void {
     if (source.getValue() === dateKey) {

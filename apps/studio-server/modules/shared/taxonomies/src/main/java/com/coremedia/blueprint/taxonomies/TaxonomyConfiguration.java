@@ -4,12 +4,14 @@ import com.coremedia.blueprint.taxonomies.cycleprevention.TaxonomyCyclePreventio
 import com.coremedia.blueprint.taxonomies.cycleprevention.TaxonomyCycleValidator;
 import com.coremedia.blueprint.taxonomies.semantic.SemanticTaxonomyConfiguration;
 import com.coremedia.blueprint.taxonomies.strategy.TaxonomyResolverImpl;
+import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.spring.ContentConfigurationProperties;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.undoc.common.spring.CapRepositoriesConfiguration;
 import com.coremedia.rest.cap.CapRestServiceSearchConfiguration;
 import com.coremedia.rest.cap.content.search.SearchService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +29,9 @@ import java.util.Map;
 @EnableConfigurationProperties(ContentConfigurationProperties.class)
 public class TaxonomyConfiguration {
 
+  @Value("${taxonomies.maxDocumentsPerFolder:1000}")
+  private int maxDocumentsPerFolder;
+
   /*
    * The CM taxonomy node strategy beans working on folders with parent and child properties on the CMTaxonomy content type.
    */
@@ -35,7 +40,8 @@ public class TaxonomyConfiguration {
                                         SitesService sitesService,
                                         SearchService searchService,
                                         TaxonomyCycleValidator taxonomyCycleValidator,
-                                        ContentConfigurationProperties contentConfigurationProperties) {
+                                        ContentConfigurationProperties contentConfigurationProperties,
+                                        Cache cache) {
     String globalConfigurationPath = contentConfigurationProperties.getGlobalConfigurationPath();
     return new TaxonomyResolverImpl(sitesService,
             contentRepository,
@@ -44,7 +50,9 @@ public class TaxonomyConfiguration {
             Map.of("Query", "Subject", "QueryLocation", "Location"),
             "CMTaxonomy",
             "Options/",
-            globalConfigurationPath);
+            globalConfigurationPath,
+            maxDocumentsPerFolder,
+            cache);
   }
 
 }

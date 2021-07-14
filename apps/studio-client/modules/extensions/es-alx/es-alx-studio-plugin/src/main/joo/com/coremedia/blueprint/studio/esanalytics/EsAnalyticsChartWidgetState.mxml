@@ -15,14 +15,14 @@
     /**
      * The content
      */
-    [Bindable]
+    [ExtConfig]
     public var content:Content;
+
+    /**
+     * The name
+     */
+    [ExtConfig]
+    public var name:String;
     ]]></fx:Script>
-  <fx:Declarations>
-    <!---
-     The name
-    -->
-    <fx:String id="name"/>
-  </fx:Declarations>
 
 </editor:WidgetState>

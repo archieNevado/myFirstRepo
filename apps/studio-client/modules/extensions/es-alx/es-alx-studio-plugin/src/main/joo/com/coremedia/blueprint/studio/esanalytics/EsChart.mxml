@@ -24,8 +24,11 @@
 
     public native function EsChart(config:EsChart = null);
 
-    [Bindable]
+    [ExtConfig]
     public var timeStampValueExpression:ValueExpression;
+
+    [ExtConfig]
+    public var chartHeight:Number;
     ]]></fx:Script>
   <fx:Declarations>
     <fx:Number id="chartHeight">250</fx:Number>

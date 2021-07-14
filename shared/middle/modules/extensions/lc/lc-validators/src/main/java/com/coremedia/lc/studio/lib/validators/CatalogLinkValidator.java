@@ -81,7 +81,7 @@ public class CatalogLinkValidator extends ContentTypeValidatorBase {
    * @param arguments optional argument describing the issue, for example indicating a illegally linked object
    */
   protected void addIssue(Issues issues, Severity severity, String code, Object... arguments) {
-    issues.addIssue(severity, getPropertyName(), getContentType() + '_' + code, arguments);
+    issues.addIssue(getCategories(), severity, getPropertyName(), getContentType() + '_' + code, arguments);
   }
 
   protected void emptyPropertyValue(@NonNull Content content, @NonNull Issues issues) {

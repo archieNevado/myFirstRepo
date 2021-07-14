@@ -7,8 +7,5 @@
 
     public native function TaxonomyChangePlugin(config:TaxonomyChangePlugin= null);
     ]]></fx:Script>
-  <fx:Declarations>
-
-  </fx:Declarations>
 
 </local:TaxonomyChangePluginBase>

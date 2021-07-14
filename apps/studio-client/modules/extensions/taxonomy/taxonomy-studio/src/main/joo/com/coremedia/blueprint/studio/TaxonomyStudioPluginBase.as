@@ -6,7 +6,6 @@ import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.configuration.StudioPlugin;
 import com.coremedia.cms.editor.sdk.IEditorContext;
-import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.preview.PreviewURI;
 import com.coremedia.cms.editor.sdk.util.UserUtil;
 import com.coremedia.ui.data.ValueExpressionFactory;
@@ -31,8 +30,6 @@ public class TaxonomyStudioPluginBase extends StudioPlugin {
               }
       );
     });
-
-    addSearchFilters();
   }
 
   /**
@@ -55,10 +52,6 @@ public class TaxonomyStudioPluginBase extends StudioPlugin {
         callback.call(null, false);
       }
     });
-  }
-
-  private static function addSearchFilters():void {
-    editorContext.getEnabledSearchFilterIds().push('Location', 'Subject');
   }
 }
 }

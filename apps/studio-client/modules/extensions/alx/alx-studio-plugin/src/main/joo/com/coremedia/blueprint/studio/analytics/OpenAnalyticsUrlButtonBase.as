@@ -13,8 +13,14 @@ public class OpenAnalyticsUrlButtonBase extends Button {
 
   private static const HOME_URL:String = "homeUrl";
 
-  internal native function get serviceName():String;
-  internal native function get windowName():String;
+  /** The name of the window to open. */
+  [ExtConfig]
+  public var windowName:String;
+
+  /** The name of the service that this button is bound to */
+  [ExtConfig]
+  public var serviceName:String;
+
   internal native function get urlValueExpression():ValueExpression;
 
   public function OpenAnalyticsUrlButtonBase(config:OpenAnalyticsUrlButtonBase = null) {
