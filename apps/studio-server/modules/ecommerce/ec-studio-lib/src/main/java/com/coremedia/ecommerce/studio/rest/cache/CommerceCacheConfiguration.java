@@ -7,10 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-/**
- * @deprecated This class is part of the "commerce cache invalidation" implementation that
- * will be re-implemented by the Commerce Hub architecture and replaced in future releases.
- */
 @Configuration(proxyBeanMethods = false)
 @Import({
         BaseCommerceServicesAutoConfiguration.class
@@ -18,10 +14,8 @@ import org.springframework.context.annotation.Import;
 @EnableConfigurationProperties({
         StudioConfigurationProperties.class
 })
-@Deprecated
 public class CommerceCacheConfiguration {
 
-  @SuppressWarnings("MethodMayBeStatic")
   @Bean
   CommerceCacheInvalidationSource commerceCacheInvalidationSource(StudioConfigurationProperties studioConfigurationProperties) {
     CommerceCacheInvalidationSource commerceCacheInvalidationSource = new CommerceCacheInvalidationSource();

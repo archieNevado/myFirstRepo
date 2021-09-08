@@ -32,11 +32,9 @@
 
     <customer>Blueprint</customer>
 
-    <cm.studio-packages-proxy.core.version>2107.1</cm.studio-packages-proxy.core.version>
+    <cm.studio-packages-proxy.core.version>2107.2</cm.studio-packages-proxy.core.version>
 
     <spring.boot.version>2.3.11.RELEASE</spring.boot.version>
-    <application-plugin.version>3.0.0</application-plugin.version>
-
     <!--
     | the following *.host properties are defined here for convenience, so that they can be overridden
     | via a profile in the settings.xml.
@@ -70,12 +68,12 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.46</tomcat.embed.version>
+    <tomcat.embed.version>9.0.48</tomcat.embed.version>
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.studio-packages-proxy.core.version>2107.1</cm.studio-packages-proxy.core.version>
-    <cm.common.core.version>2107.1</cm.common.core.version>
+    <cm.studio-packages-proxy.core.version>2107.2</cm.studio-packages-proxy.core.version>
+    <cm.common.core.version>2107.2</cm.common.core.version>
     <cm.common.bp.version>1-SNAPSHOT</cm.common.bp.version>
     <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
 
@@ -548,13 +546,6 @@
           <artifactId>groovy-maven-plugin</artifactId>
           <version>2.1</version>
         </plugin>
-
-        <plugin>
-          <groupId>com.coremedia.maven</groupId>
-          <artifactId>coremedia-application-maven-plugin</artifactId>
-          <version>${application-plugin.version}</version>
-        </plugin>
-
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>build-helper-maven-plugin</artifactId>
@@ -673,13 +664,6 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>com.coremedia.maven</groupId>
-        <artifactId>coremedia-application-maven-plugin</artifactId>
-        <version>${application-plugin.version}</version>
-        <extensions>true</extensions>
       </plugin>
     </plugins>
   </build>

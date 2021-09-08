@@ -134,7 +134,7 @@
     </editor:CollectionView>
 
     <editor:SearchFilters>
-      <editor:plugins exml:mode="append">
+      <editor:plugins>
         <ui:AddItemsPlugin>
           <ui:items>
             <cat:LostandfoundFilterPanel/>

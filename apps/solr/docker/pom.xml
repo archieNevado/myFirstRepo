@@ -31,7 +31,7 @@
     <docker.solr-base-image.repo>solr</docker.solr-base-image.repo>
     <prometheus-agent.version>0.3.1</prometheus-agent.version>
 
-    <application-plugin.version>3.0.0</application-plugin.version>
+    <application-plugin.version>3.0.1</application-plugin.version>
   </properties>
 
   <modules>

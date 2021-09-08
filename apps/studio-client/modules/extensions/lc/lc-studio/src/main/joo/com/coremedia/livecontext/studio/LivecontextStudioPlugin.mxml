@@ -220,7 +220,7 @@
     </editor:HeaderToolbarUserMenu>
     <!--Reload frame when changing the workspace-->
     <editor:PreviewPanel>
-      <editor:plugins exml:mode="append">
+      <editor:plugins>
         <ui:BindPlugin bindTo="{CatalogHelper.getInstance().getCommerceWorkspaceExpression()}"
                        boundValueChanged="{reloadPreview}"/>
       </editor:plugins>
@@ -288,12 +288,12 @@
       </editor:plugins>
     </editor:ActionsToolbar>
     <editor:PreviewContextMenu>
-      <editor:plugins exml:mode="append">
+      <editor:plugins>
         <livecontext:AddCatalogObjectActionsToPreviewContextMenu/>
       </editor:plugins>
     </editor:PreviewContextMenu>
     <editor:BreadcrumbElement>
-      <editor:plugins exml:mode="append">
+      <editor:plugins>
         <livecontext:DisableStoreNodePlugin/>
       </editor:plugins>
     </editor:BreadcrumbElement>

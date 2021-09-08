@@ -13,7 +13,7 @@ RUN mkdir /tmp/studio-resources-exploded && \
 
 # copy static studio client files from builder stage
 FROM ${NGINX_BASE_IMAGE_REPO}:${NGINX_BASE_IMAGE_TAG}
-LABEL maintainer="CoreMedia AG <support@coremedia.com>"
+LABEL maintainer="CoreMedia GmbH <support@coremedia.com>"
 # set this empty for http/1.1
 ENV PROTOCOL=http2
 HEALTHCHECK --start-period=10s --interval=30s --timeout=3s CMD CURL_ARG=$(test "$PROTOCOL" = "http2" && echo "--http2-prior-knowledge" || echo "") && curl ${CURL_ARG} -f http://localhost || exit 1

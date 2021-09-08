@@ -8,11 +8,10 @@
   <version>1-SNAPSHOT</version>
 
   <properties>
-    <application-plugin.version>3.0.0</application-plugin.version>
-    <commerce-adapter-mock.version>1.6.7</commerce-adapter-mock.version>
-    <commerce-adapter-hybris.version>1.4.2</commerce-adapter-hybris.version>
-    <commerce-adapter-sfcc.version>1.4.4</commerce-adapter-sfcc.version>
-    <commerce-adapter-wcs.version>1.6.2</commerce-adapter-wcs.version>
+    <commerce-adapter-mock.version>1.6.11</commerce-adapter-mock.version>
+    <commerce-adapter-hybris.version>1.4.5</commerce-adapter-hybris.version>
+    <commerce-adapter-sfcc.version>1.4.8</commerce-adapter-sfcc.version>
+    <commerce-adapter-wcs.version>1.6.5</commerce-adapter-wcs.version>
   </properties>
 
   <!--
@@ -252,13 +251,6 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>com.coremedia.maven</groupId>
-        <artifactId>coremedia-application-maven-plugin</artifactId>
-        <version>${application-plugin.version}</version>
-        <extensions>true</extensions>
       </plugin>
     </plugins>
   </build>

@@ -48,7 +48,7 @@
     </editor:SearchSwitchingContainer>
 
     <editor:SearchFiltersSwitchingContainer>
-      <editor:plugins exml:mode="append">
+      <editor:plugins>
         <ui:AddItemsPlugin>
           <ui:items>
             <ec:CatalogSearchFilters itemId="{CatalogSearchFilters.ITEM_ID}" />

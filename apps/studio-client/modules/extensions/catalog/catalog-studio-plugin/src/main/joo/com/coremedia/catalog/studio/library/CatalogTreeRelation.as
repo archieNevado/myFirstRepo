@@ -7,7 +7,6 @@ import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.content.publication.PublicationService;
 import com.coremedia.cms.editor.sdk.ContentTreeRelation;
-import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ui.logging.Logger;
 
 /**
@@ -15,11 +14,11 @@ import com.coremedia.ui.logging.Logger;
  */
 public class CatalogTreeRelation implements ContentTreeRelation {
 
-  public static const PROPERTY_CONTEXTS:String = "contexts";
-  public static const PROPERTY_CHILDREN:String = "children";
+  public static const PROPERTY_CONTEXTS:String = CatalogTreeRelationHelper.PROPERTY_CONTEXTS;
+  public static const PROPERTY_CHILDREN:String = CatalogTreeRelationHelper.PROPERTY_CHILDREN;
 
-  public static const CONTENT_TYPE_CATEGORY:String = CatalogHelper.CONTENT_TYPE_CM_CATEGORY;
-  public static const CONTENT_TYPE_PRODUCT:String = CatalogHelper.CONTENT_TYPE_CM_PRODUCT;
+  public static const CONTENT_TYPE_CATEGORY:String = CatalogTreeRelationHelper.CONTENT_TYPE_CATEGORY;
+  public static const CONTENT_TYPE_PRODUCT:String = CatalogTreeRelationHelper.CONTENT_TYPE_PRODUCT;
 
   private var linkListContainers:Object;
   private var linkListParents:Object;

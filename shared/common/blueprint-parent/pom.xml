@@ -31,12 +31,12 @@
 
     <customer>Blueprint</customer>
 
-    <cm.common.core.version>2107.1</cm.common.core.version>
+    <cm.common.core.version>2107.2</cm.common.core.version>
     <cm.common.bp.version>${project.version}</cm.common.bp.version>
 
     <spring.boot.version>2.3.11.RELEASE</spring.boot.version>
     <micrometer.version>1.5.14</micrometer.version>
-    <application-plugin.version>3.0.0</application-plugin.version>
+    <application-plugin.version>3.0.1</application-plugin.version>
 
     <!--
     | the following *.host properties are defined here for convenience, so that they can be overridden
@@ -71,11 +71,11 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.46</tomcat.embed.version>
+    <tomcat.embed.version>9.0.48</tomcat.embed.version>
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.common.core.version>2107.1</cm.common.core.version>
+    <cm.common.core.version>2107.2</cm.common.core.version>
     <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
 
     <showDeprecation>true</showDeprecation>

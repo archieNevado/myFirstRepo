@@ -142,7 +142,7 @@ public abstract class AbstractUrlHandler extends IdRedirectHandlerBase {
     storeNavigationContext(request, navContext);
   }
 
-  private static void storeNavigationContext(HttpServletRequest request, Navigation navContext) {
+  private static void storeNavigationContext(HttpServletRequest request, @Nullable Navigation navContext) {
     if (navContext != null) {
       request.setAttribute(NavigationLinkSupport.ATTR_NAME_CMNAVIGATION, navContext);
     }

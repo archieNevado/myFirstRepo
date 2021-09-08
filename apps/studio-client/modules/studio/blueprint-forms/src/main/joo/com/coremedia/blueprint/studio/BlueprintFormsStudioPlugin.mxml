@@ -96,7 +96,7 @@
     </editor:PreviewPanel>
 
     <editor:PreviewIFrameToolbar>
-      <editor:plugins exml:mode="append">
+      <editor:plugins>
         <bpb-components:AddPlacementHighlightButtonPlugin/>
       </editor:plugins>
     </editor:PreviewIFrameToolbar>
@@ -126,7 +126,7 @@
     </editor:FavoritesToolbar>
 
     <editor:EditorMainView>
-      <editor:plugins exml:mode="append">
+      <editor:plugins>
         <editor:AddDefaultFolderChooserEntry lookup="{calculateQuickCreateFolder}"/>
       </editor:plugins>
     </editor:EditorMainView>
@@ -173,11 +173,11 @@
     </editor:TabbedDocumentFormDispatcher>
 
     <editor:DocumentTabPanel>
-      <editor:plugins exml:mode="append">
+      <editor:plugins>
         <ui:NestedRulesPlugin>
           <ui:rules>
             <ui:LocalComboBox>
-              <ui:plugins exml:mode="append">
+              <ui:plugins>
                 <editor:SyncComboBoxValueWithStorePlugin/>
               </ui:plugins>
             </ui:LocalComboBox>

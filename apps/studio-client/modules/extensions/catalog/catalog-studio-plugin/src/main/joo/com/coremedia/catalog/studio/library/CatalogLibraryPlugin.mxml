@@ -100,7 +100,7 @@
     </editor:CollectionRepositoryContextMenu>
 
     <editor:SearchFiltersSwitchingContainer>
-      <editor:plugins exml:mode="append">
+      <editor:plugins>
         <ui:AddItemsPlugin>
           <ui:items>
             <cat:CatalogSearchFilters itemId="{CatalogSearchFilters.ITEM_ID}"/>

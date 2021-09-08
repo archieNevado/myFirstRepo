@@ -10,6 +10,8 @@ import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
+import com.coremedia.livecontext.ecommerce.catalog.Product;
+import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
@@ -48,6 +50,10 @@ class AugmentationFacadeTest {
   public static final String EXTERNAL_PRODUCT_ID = "myExternalProductId";
   private static final String PRODUCT_ID = "acme:///catalog/product/" + EXTERNAL_PRODUCT_ID;
   public static final CommerceId PRODUCT_COMMERCE_ID = CommerceIdParserHelper.parseCommerceId(PRODUCT_ID).orElseThrow();
+
+  public static final String EXTERNAL_SKU_ID = "myExternalSkuId";
+  private static final String SKU_ID = "acme:///catalog/sku/" + EXTERNAL_PRODUCT_ID;
+  public static final CommerceId SKU_COMMERCE_ID = CommerceIdParserHelper.parseCommerceId(SKU_ID).orElseThrow();
 
   public static final String EXTERNAL_CATEGORY_ID = "myExternalCategoryId";
   private static final String CATEGORY_ID = "acme:///catalog/category/" + EXTERNAL_CATEGORY_ID;
@@ -99,6 +105,7 @@ class AugmentationFacadeTest {
     when(aSite.getLocale()).thenReturn(US);
     when(commerceEntityHelper.getCommerceConnection(SITE_ID)).thenReturn(aConnection);
     when(aConnection.getStoreContext()).thenReturn(aStoreContext);
+    when(aConnection.getInitialStoreContext()).thenReturn(aStoreContext);
     when(aConnection.getIdProvider()).thenReturn(commerceIdProvider);
     when(aConnection.getCommerceBeanFactory()).thenReturn(commerceBeanFactory);
     when(aStoreContext.getCatalogAlias()).thenReturn(CATALOG_ALIAS);
@@ -208,6 +215,32 @@ class AugmentationFacadeTest {
 
     DataFetcherResult<? extends Augmentation> productAugmentation = testling.getAugmentationBySite(PRODUCT_ID, SITE_ID);
 
+    assertProductAugmentation(productAugmentation);
+  }
+
+  @Test
+  void getAugmentationForCommerceIdSku() {
+    when(commerceIdProvider.formatProductVariantId(CATALOG_ALIAS, EXTERNAL_SKU_ID))
+            .thenReturn(SKU_COMMERCE_ID);
+    when(commerceIdProvider.formatProductId(CATALOG_ALIAS, EXTERNAL_PRODUCT_ID))
+            .thenReturn(PRODUCT_COMMERCE_ID);
+
+    ProductVariant productVariant = mock(ProductVariant.class);
+    when(commerceBeanFactory.createBeanFor(SKU_COMMERCE_ID, aStoreContext))
+            .thenReturn(productVariant);
+
+    Product parentProduct = mock(Product.class);
+    when(productVariant.getParent()).thenReturn(parentProduct);
+    when(parentProduct.getExternalId()).thenReturn(EXTERNAL_PRODUCT_ID);
+
+    when(augmentationService.getContentByExternalId(PRODUCT_ID, aSite)).thenReturn(augmentingContent);
+
+    DataFetcherResult<? extends Augmentation> productAugmentation = testling.getAugmentationBySite(SKU_ID, SITE_ID);
+
+    assertProductAugmentation(productAugmentation);
+  }
+
+  private static void assertProductAugmentation(DataFetcherResult<? extends Augmentation> productAugmentation) {
     assertThat(productAugmentation).isNotNull();
     assertThat(productAugmentation.getData()).isInstanceOf(ProductAugmentation.class);
     assertThat(productAugmentation.getErrors()).isEmpty();

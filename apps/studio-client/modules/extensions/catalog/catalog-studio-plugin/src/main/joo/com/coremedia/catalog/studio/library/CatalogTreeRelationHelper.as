@@ -5,6 +5,7 @@ import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.results.BulkOperationResult;
 import com.coremedia.cap.content.results.CopyResult;
 import com.coremedia.cms.editor.sdk.util.ContentLocalizationUtil;
+import com.coremedia.ecommerce.studio.helper.CatalogHelper;
 import com.coremedia.ui.logging.Logger;
 
 import ext.MessageBox;
@@ -17,11 +18,11 @@ import mx.resources.ResourceManager;
  */
 [ResourceBundle('com.coremedia.catalog.studio.CatalogStudioPlugin')]
 public class CatalogTreeRelationHelper {
-  public static const PROPERTY_CONTEXTS:String = CatalogTreeRelation.PROPERTY_CONTEXTS;
-  public static const PROPERTY_CHILDREN:String = CatalogTreeRelation.PROPERTY_CHILDREN;
+  public static const PROPERTY_CONTEXTS:String = "contexts";
+  public static const PROPERTY_CHILDREN:String = "children";
 
-  public static const CONTENT_TYPE_CATEGORY:String = CatalogTreeRelation.CONTENT_TYPE_CATEGORY;
-  public static const CONTENT_TYPE_PRODUCT:String = CatalogTreeRelation.CONTENT_TYPE_PRODUCT;
+  public static const CONTENT_TYPE_CATEGORY:String = CatalogHelper.CONTENT_TYPE_CM_CATEGORY;
+  public static const CONTENT_TYPE_PRODUCT:String = CatalogHelper.CONTENT_TYPE_CM_PRODUCT;
 
 
   public static function showCheckoutError(target:Content):void {

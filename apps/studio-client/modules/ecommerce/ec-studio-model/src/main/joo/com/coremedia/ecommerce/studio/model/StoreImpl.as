@@ -13,9 +13,9 @@ public class StoreImpl extends CatalogObjectImpl implements Store {
   private const URL_INVALIDATION_INTERVAL:int = 5000;
 
   public function StoreImpl(uri:String, vars:Object) {
+    super(uri);
     siteId = vars['siteId'];
     workspaceId = vars['workspaceId'];
-    super(uri);
   }
 
   public function getChildrenData():Array {

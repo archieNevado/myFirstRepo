@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
-import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.blueprint.base.querylist.QueryListHelper;
 import com.coremedia.blueprint.cae.search.Condition;
 import com.coremedia.blueprint.cae.search.SearchConstants;
@@ -12,8 +11,9 @@ import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.blueprint.common.layout.Pagination;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.util.ContentBeanSolrSearchFormatHelper;
-import com.coremedia.blueprint.common.util.SettingsStructToSearchQueryConverter;
+import com.coremedia.blueprint.common.util.SettingsStructToSearchQueryConverterFactory;
 import com.coremedia.cache.Cache;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.google.common.annotations.VisibleForTesting;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -46,9 +46,21 @@ public class CMQueryListImpl extends CMQueryListBase {
 
   private DeliveryConfigurationProperties deliveryConfigurationProperties;
 
+  private SettingsStructToSearchQueryConverterFactory converterClassFactory = new SettingsStructToSearchQueryConverterFactory();
+
   @Autowired
   public void setDeliveryConfigurationProperties(DeliveryConfigurationProperties deliveryConfigurationProperties) {
     this.deliveryConfigurationProperties = deliveryConfigurationProperties;
+  }
+
+  /**
+   * Set the SettingsStructToSearchQueryConverterFactory.
+   *
+   * @param converterClassFactory the {@link SettingsStructToSearchQueryConverterFactory}.
+   */
+  @Autowired(required = false)
+  public void setConverterClassFactory(SettingsStructToSearchQueryConverterFactory converterClassFactory) {
+    this.converterClassFactory = converterClassFactory;
   }
 
   // --- classic Container ------------------------------------------
@@ -126,15 +138,20 @@ public class CMQueryListImpl extends CMQueryListBase {
     searchQuery.addFilter(Condition.isNot(SearchConstants.FIELDS.ID.toString(), Value.anyOf(ids)));
   }
 
-  private SearchQueryBean getSearchQuery(boolean unlimited) {
-    SettingsStructToSearchQueryConverter converter = new SettingsStructToSearchQueryConverter(
-      this,
-      getSitesService(),
-      getSettingsService(),
-      getContent().getRepository(),
-      getContentBeanFactory(),
-      unlimited);
-    return converter.convert();
+  /**
+   * Get the SearchQueryBean.
+   *
+   * @param unlimited true to ignore limit (default limit will be applied)
+   * @return the SearchQueryBean
+   */
+  protected SearchQueryBean getSearchQuery(boolean unlimited) {
+    return converterClassFactory.newInstance(
+            this,
+            getSitesService(),
+            getSettingsService(),
+            getContent().getRepository(),
+            getContentBeanFactory(),
+            unlimited).convert();
   }
 
   /**

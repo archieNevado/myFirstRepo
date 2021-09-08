@@ -3,11 +3,13 @@ package com.coremedia.blueprint.lc.test.services;
 import com.coremedia.blueprint.base.livecontext.client.common.GenericCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.client.common.GenericCommerceConnectionFactory;
 import com.coremedia.blueprint.base.livecontext.client.common.RequiresGenericCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.client.common.RequiresServiceDelegate;
 import com.coremedia.blueprint.base.livecontext.client.config.CommerceAdapterClientAutoConfiguration;
 import com.coremedia.blueprint.base.livecontext.client.data.DataClient;
 import com.coremedia.blueprint.base.livecontext.client.data.DataClientFactory;
 import com.coremedia.blueprint.base.livecontext.client.settings.CommerceSettings;
 import com.coremedia.blueprint.base.livecontext.client.settings.CommerceSettingsProvider;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdProvider;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceServicesAutoConfiguration;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.blueprint.base.settings.SettingsService;
@@ -21,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +69,8 @@ class OverrideCommerceServiceTest {
 
   @MockBean(extraInterfaces = {
           TestCommerceService.class,
-          RequiresGenericCommerceConnection.class
+          RequiresGenericCommerceConnection.class,
+          RequiresServiceDelegate.class
   })
   private CommerceIdProvider testCommerceIdProvider;
 
@@ -113,9 +117,12 @@ class OverrideCommerceServiceTest {
               // custom catalog service instance was found
               assertThat(genericCommerceConnection).returns(testCatalogService, CommerceConnection::getCatalogService);
 
-              // the custom invalidation service was asked to provide a new instance
+              // the commerce connection was injected
               verify(((RequiresGenericCommerceConnection) testCommerceIdProvider), times(1))
                       .setGenericCommerceConnection(genericCommerceConnection);
+              // the built-in service instance was injected
+              verify(((RequiresServiceDelegate) testCommerceIdProvider), times(1))
+                      .setDelegate(ArgumentMatchers.isA(BaseCommerceIdProvider.class));
             });
   }
 

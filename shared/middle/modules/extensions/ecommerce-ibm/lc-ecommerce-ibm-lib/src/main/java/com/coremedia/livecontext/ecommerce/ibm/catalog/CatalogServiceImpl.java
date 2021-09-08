@@ -76,6 +76,7 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
   private static final Logger LOG = LoggerFactory.getLogger(CatalogServiceImpl.class);
 
   private static final String FACET_EXTENDED_DATA_KEY_FNAME = "fname";
+  private static final String ROOT_CATEGORY_ID = "ROOT";
 
   private WcCatalogWrapperService catalogWrapperService;
   private StoreInfoService storeInfoService;
@@ -330,6 +331,10 @@ public class CatalogServiceImpl extends AbstractIbmService implements CatalogSer
                     .or(() -> resolveCategoryExternalTechId(commerceId, storeContext)))
             .ifPresent(value -> searchParams.put(CatalogService.SEARCH_PARAM_CATEGORYID, value));
 
+    String catalogId = searchParams.get(CatalogService.SEARCH_PARAM_CATEGORYID);
+    if (ROOT_CATEGORY_ID.equals(catalogId)) {
+      searchParams.remove(CatalogService.SEARCH_PARAM_CATEGORYID);
+    }
     int limit = searchQuery.getLimit();
     if (limit >= 0) {
       searchParams.put(CatalogService.SEARCH_PARAM_TOTAL, String.valueOf(limit));

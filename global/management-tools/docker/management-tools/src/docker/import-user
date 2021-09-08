@@ -11,7 +11,7 @@ fi
 # do not remove '< /dev/null 2> /dev/null | grep -v groovy\:' - this ensures groovysh exit and only value printing
 IMPORTED=$(./tools/bin/cm groovysh /coremedia/getSystemTableProperty.groovy -q -DpropKey=users-imported < /dev/null 2> /dev/null | grep -v groovy\:)
 
-if [ -d ${IMPORT_USERS_DIR} ]; then
+if [ "$(find ${IMPORT_USERS_DIR} -name "*.xml" -print)" != "" ]; then
   echo "[DOCKER ENTRYPOINT] - importing user files from ${IMPORT_USERS_DIR}:"
   for user_file in ${IMPORT_USERS_DIR}/*.xml; do
     echo "[DOCKER ENTRYPOINT] - * importing ${user_file}"

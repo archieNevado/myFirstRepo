@@ -29,7 +29,12 @@ class CommerceBeanInvalidator implements ApplicationListener<ContentStringProper
     if (isApplicable(event)) {
       String propertyValue = event.getValue();
       String commerceBeanUri = parseCommerceId(propertyValue)
-              .flatMap(commerceId -> commerceInvalidationSource.toCommerceBeanUri(commerceId, null)).orElse(null);
+              .flatMap(commerceId -> {
+                var beanType = commerceId.getCommerceBeanType();
+                var externalId = commerceId.getExternalId().orElse(null);
+                return commerceInvalidationSource.toCommerceBeanUri(beanType, externalId, null);
+              })
+              .orElse(null);
       if (commerceBeanUri != null) {
         commerceInvalidationSource.addInvalidations(singleton(commerceBeanUri));
       } else {

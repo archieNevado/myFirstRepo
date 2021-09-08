@@ -137,7 +137,7 @@
     </editor:CollectionView>
 
     <editor:PreviewPanel>
-      <editor:plugins exml:mode="append">
+      <editor:plugins>
         <ui:BindPlugin bindTo="{editorContext.getSitesService().getPreferredSiteIdExpression()}"
                        boundValueChanged="{reloadAssetPreview}"/>
       </editor:plugins>

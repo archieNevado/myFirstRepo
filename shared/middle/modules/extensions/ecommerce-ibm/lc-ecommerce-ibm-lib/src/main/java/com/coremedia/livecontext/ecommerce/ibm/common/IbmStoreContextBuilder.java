@@ -28,30 +28,22 @@ import java.util.Map;
 public class IbmStoreContextBuilder implements StoreContextBuilder {
 
   private StoreContextBuilderImpl builder;
-  private final CommerceConnection connection;
   @Nullable
   private WcsVersion wcsVersion;
   private boolean dynamicPricingEnabled = false;
 
-  private IbmStoreContextBuilder(StoreContextBuilderImpl builder, CommerceConnection connection) {
+  private IbmStoreContextBuilder(StoreContextBuilderImpl builder) {
     this.builder = builder;
-    this.connection = connection;
   }
 
   public static IbmStoreContextBuilder from(CommerceConnection connection, String siteId) {
     StoreContextBuilderImpl builder = StoreContextBuilderImpl.from(connection, siteId);
-    return new IbmStoreContextBuilder(builder, connection);
+    return new IbmStoreContextBuilder(builder);
   }
 
-  @SuppressWarnings(
-          // Suppress until connection can be obtained from store context.
-          "findbugs:NP_NULL_PARAM_DEREF_NONVIRTUAL"
-  )
   public static IbmStoreContextBuilder from(StoreContextImpl storeContext) {
-    CommerceConnection connection = null;
-
     StoreContextBuilderImpl builder = StoreContextBuilderImpl.from(storeContext);
-    return new IbmStoreContextBuilder(builder, connection);
+    return new IbmStoreContextBuilder(builder);
   }
 
   @Override

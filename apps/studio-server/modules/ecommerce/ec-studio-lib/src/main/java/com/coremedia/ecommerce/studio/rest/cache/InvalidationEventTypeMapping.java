@@ -21,7 +21,8 @@ import java.util.Optional;
  * @deprecated This class is part of the "commerce cache invalidation" implementation that
  * will be re-implemented by the Commerce Hub architecture and replaced in future releases.
  */
-@Deprecated
+@Deprecated(since = "2010.1", forRemoval = true)
+@SuppressWarnings({"removal", "java:S1133" /* Deprecated code should be removed */})
 class InvalidationEventTypeMapping {
 
   private static final Map<String, Class<? extends CommerceBean>> MAPPING = ImmutableMap.<String, Class<? extends CommerceBean>>builder()

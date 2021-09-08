@@ -23,6 +23,9 @@ import com.coremedia.livecontext.ecommerce.common.Vendor;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import graphql.ErrorType;
+import graphql.GraphQLError;
+import graphql.GraphqlErrorBuilder;
 import graphql.execution.DataFetcherResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -211,7 +214,6 @@ public class AugmentationFacadeCmsOnly {
             .orElse(null);
   }
 
-  @Nullable
   private DataFetcherResult<? extends Augmentation> getDataForCommerceId(CommerceId commerceId, String[] breadcrumbs, String catalogAlias, Site site) {
     DataFetcherResult.Builder<Augmentation> builder = DataFetcherResult.newResult();
 
@@ -226,8 +228,15 @@ public class AugmentationFacadeCmsOnly {
     } else if (commerceBeanType.equals(CATEGORY)) {
       return getCategoryAugmentationForSiteInternal(externalId.get(), breadcrumbs, catalogAlias, site);
     }
+    //in contrast to AugmentationFacade#getDataForCommerceId SKUs are not supported without underlying commerce connection
 
-    return null;
+    LOG.debug("Type {} is not supported.", commerceBeanType);
+    GraphQLError error = GraphqlErrorBuilder.newError()
+            .message("Type {} is not supported.", commerceBeanType)
+            .errorType(ErrorType.DataFetchingException)
+            .build();
+
+    return builder.error(error).build();
   }
 
   CommerceRef getCommerceRef(CommerceId commerceId, List<String> breadcrumb, @Nullable String catalogId, Site site) {

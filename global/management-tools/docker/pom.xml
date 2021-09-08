@@ -39,7 +39,7 @@
     -->
     <docker.tools-base-image.tag>2.2.1-openjdk-11-jdk</docker.tools-base-image.tag>
 
-    <application-plugin.version>3.0.0</application-plugin.version>
+    <application-plugin.version>3.0.1</application-plugin.version>
   </properties>
 
   <modules>

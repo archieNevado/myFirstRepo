@@ -8,7 +8,6 @@ import com.coremedia.cms.editor.sdk.collectionview.CollectionViewModel;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.util.MessageBoxUtil;
 import com.coremedia.ecommerce.studio.CatalogModel;
-import com.coremedia.ecommerce.studio.catalogHelper;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ecommerce.studio.model.Category;
 import com.coremedia.ecommerce.studio.model.Marketing;
@@ -25,7 +24,6 @@ import com.coremedia.ui.data.beanFactory;
 import com.coremedia.ui.data.error.NotExistsError;
 import com.coremedia.ui.data.error.RemoteError;
 import com.coremedia.ui.data.impl.RemoteErrorHandlerRegistryImpl;
-import com.coremedia.ui.logging.Logger;
 
 import ext.StringUtil;
 
@@ -35,6 +33,8 @@ import mx.resources.ResourceManager;
 
 [ResourceBundle('com.coremedia.ecommerce.studio.ECommerceStudioPlugin')]
 public class CatalogHelper {
+
+  private static var instance:CatalogHelper;
 
   private static const PROFILE_EXTENSIONS:String = 'profileExtensions';
   private static const PROPERTIES:String = 'properties';
@@ -82,7 +82,10 @@ public class CatalogHelper {
   }
 
   public static function getInstance():CatalogHelper {
-    return catalogHelper;
+    if (!instance) {
+      instance = new CatalogHelper();
+    }
+    return instance;
   }
 
   public function openCatalog():void {

@@ -49,7 +49,7 @@ public class LivecontextCollectionViewExtension extends ECommerceCollectionViewE
       var availableSearchTypes:Array = [DEFAULT_TYPE_PRODUCT_RECORD, PRODUCT_VARIANT_TYPE_RECORD];
       if (folder is Store) {
         var store:Store = catalogHelper.getActiveStoreExpression().getValue();
-        if (store.isMarketingEnabled()) {
+        if (store && store.isMarketingEnabled()) {
           availableSearchTypes.push(MARKETING_SPOT_TYPE_RECORD);
         }
       }

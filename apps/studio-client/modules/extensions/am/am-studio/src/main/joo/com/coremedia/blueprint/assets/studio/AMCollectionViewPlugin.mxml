@@ -152,7 +152,7 @@
     </editor:SearchToolbar>
 
     <editor:SearchFiltersSwitchingContainer>
-      <editor:plugins exml:mode="append">
+      <editor:plugins>
         <ui:AddItemsPlugin>
           <ui:items>
             <am:AssetSearchFilters itemId="{AssetSearchFilters.ITEM_ID}"/>
