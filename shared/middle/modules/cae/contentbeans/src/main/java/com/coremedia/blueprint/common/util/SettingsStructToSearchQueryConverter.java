@@ -132,6 +132,7 @@ public class SettingsStructToSearchQueryConverter {
       applyKeywords(fqStruct, KEY_LOCATION_TAXONOMY, SearchConstants.FIELDS.LOCATION_TAXONOMY, searchQuery);
       applyContextKeywords(fqStruct, KEY_CONTEXT_TAXONOMIES, searchQuery);
       applyModificationDate(fqStruct, searchQuery);
+      applyCustomFilter(fqStruct, searchQuery);
     }
 
     return searchQuery;
@@ -139,9 +140,9 @@ public class SettingsStructToSearchQueryConverter {
 
   /**
    * Applies the order by param to the query if set.
-   * @param searchQuery
+   * @param searchQuery the SearchQueryBean
    */
-  private void applyOrder(SearchQueryBean searchQuery) {
+  protected void applyOrder(SearchQueryBean searchQuery) {
     List<String> searchConstants = Stream.of(SearchConstants.FIELDS.values()).map(SearchConstants.FIELDS::toString).collect(Collectors.toList());
     String orderBy = settingsService.setting(KEY_ORDER, String.class, queryList.getContent());
     List<String> sortFields = getSortFields(orderBy, searchConstants);
@@ -153,9 +154,10 @@ public class SettingsStructToSearchQueryConverter {
   /**
    * Applies the number of items.
    *
-   * @param searchQuery
+   * @param searchQuery the SearchQueryBean
    */
-  private void applyLimit(SearchQueryBean searchQuery) {
+
+  protected void applyLimit(SearchQueryBean searchQuery) {
     Integer limit = settingsService.setting(KEY_LIMIT, Integer.class, queryList.getContent());
     if (limit!=null && limit>0) {
       searchQuery.setLimit(limit);
@@ -166,8 +168,11 @@ public class SettingsStructToSearchQueryConverter {
    * Applies the publication date to the query.
    * Be aware that the publication date can be entered without formatting
    * using the expert mode of the Studio!
+   *
+   * @param fqStruct the filter query struct
+   * @param searchQuery the SearchQueryBean
    */
-  private void applyModificationDate(Struct fqStruct, SearchQueryBean searchQuery) {
+  protected void applyModificationDate(Struct fqStruct, SearchQueryBean searchQuery) {
     String dateString = CapStructUtil.getString(fqStruct, KEY_MODIFICATION_DATE);
     Optional<String> formattedString = getModificationDate(dateString);
     formattedString.ifPresent(formatted -> searchQuery.addFilter(Condition.greaterThan(SearchConstants.FIELDS.MODIFICATION_DATE, Value.exactly(formatted))));
@@ -176,8 +181,11 @@ public class SettingsStructToSearchQueryConverter {
   /**
    * Takes the documents from the query (channel documents)
    * add them as navigation criteria to the query.
+   *
+   * @param fqStruct the filter query struct
+   * @param searchQuery the SearchQueryBean
    */
-  private void applyContexts(Struct fqStruct, SearchQueryBean searchQuery) {
+  protected void applyContexts(Struct fqStruct, SearchQueryBean searchQuery) {
     List<Content> docs = CapStructUtil.getLinks(fqStruct, KEY_DOCUMENTS);
     if (!docs.isEmpty()) {
       List<CMNavigation> navigations = contentBeanFactory.createBeansFor(docs, CMNavigation.class);
@@ -190,8 +198,11 @@ public class SettingsStructToSearchQueryConverter {
   /**
    * Takes the authors from the query (person documents) and
    * add them as authors criteria to the query.
+   *
+   * @param fqStruct the filter query struct
+   * @param searchQuery the SearchQueryBean
    */
-  private void applyAuthors(Struct fqStruct, SearchQueryBean searchQuery) {
+  protected void applyAuthors(Struct fqStruct, SearchQueryBean searchQuery) {
     List<Content> personContents = CapStructUtil.getLinks(fqStruct, KEY_AUTHORS);
     if (!personContents.isEmpty()) {
       List<CMPerson> personBeans = contentBeanFactory.createBeansFor(personContents, CMPerson.class);
@@ -205,19 +216,23 @@ public class SettingsStructToSearchQueryConverter {
   /**
    * Parses the documents types, retrieves the concrete instances from
    * the repository and adds them to the query list.
+   *
+   * @param fqStruct the filter query struct
+   * @param searchQuery the SearchQueryBean
    */
-  private void applyDocumentType(Struct fqStruct, SearchQueryBean searchQuery) {
+  protected void applyDocumentType(Struct fqStruct, SearchQueryBean searchQuery) {
     String docTypes = CapStructUtil.getString(fqStruct, KEY_DOCUMENT_TYPE);
     SearchQueryUtil.addDocumentTypeFilter(searchQuery, docTypes, contentRepository);
   }
 
   /**
    * Parsing keywords and applying them to the query.
-   *  @param fqId  the struct field used to load the selected keywords
+   * @param  fqStruct the filter query struct
+   * @param fqId  the struct field used to load the selected keywords
    * @param field the solr field used to store the information
-   * @param searchQuery
+   * @param searchQuery the SearchQueryBean
    */
-  private void applyKeywords(Struct fqStruct, String fqId, SearchConstants.FIELDS field, SearchQueryBean searchQuery) {
+  protected void applyKeywords(Struct fqStruct, String fqId, SearchConstants.FIELDS field, SearchQueryBean searchQuery) {
     List<Content> docs = CapStructUtil.getLinks(fqStruct, fqId);
     if (!docs.isEmpty()) {
       List<CMTaxonomy> taxonomies = contentBeanFactory.createBeansFor(docs, CMTaxonomy.class);
@@ -230,10 +245,11 @@ public class SettingsStructToSearchQueryConverter {
   /**
    * Parsing related keywords and applying them to the query.
    *
+   * @param fqStruct the filter query struct
    * @param fqId  the struct field used to load the selected keywords
-   * @param searchQuery
+   * @param searchQuery the SearchQueryBean
    */
-  private void applyContextKeywords(Struct fqStruct, String fqId, SearchQueryBean searchQuery) {
+  protected void applyContextKeywords(Struct fqStruct, String fqId, SearchQueryBean searchQuery) {
     boolean useContextTaxonomies = CapStructUtil.getBoolean(fqStruct, fqId);
     if (useContextTaxonomies) {
       Content taxonomy = getCurrentTaxonomy().orElse(null);
@@ -247,6 +263,17 @@ public class SettingsStructToSearchQueryConverter {
         }
       }
     }
+  }
+
+
+  /**
+   * Apply a custom filter to the search query.
+   * Override this method to apply a custom filter to the searchQuery.
+   * @param fqStruct the filter query struct
+   * @param searchQuery the SearchQueryBean
+   */
+  protected void applyCustomFilter(Struct fqStruct, SearchQueryBean searchQuery) {
+    // override to apply a custom filter to the search query
   }
 
   private Optional<Content> getCurrentTaxonomy() {

@@ -19,9 +19,11 @@ import org.mockito.Answers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @ExtendWith({MockitoExtension.class})
 class CustomCommerceBeanTest {
@@ -36,6 +38,8 @@ class CustomCommerceBeanTest {
   @BeforeEach
   void setUp() {
     commerceBeanFactory = new ClientCommerceBeanFactory(catalogAliasTranslationService, (bean) -> Optional.empty());
+    when(storeContext.getContractIds()).thenReturn(List.of());
+    when(storeContext.getContractIdsForPreview()).thenReturn(List.of());
   }
 
   @Test

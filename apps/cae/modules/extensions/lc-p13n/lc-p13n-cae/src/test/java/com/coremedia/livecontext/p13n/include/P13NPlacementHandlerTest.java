@@ -178,8 +178,9 @@ public class P13NPlacementHandlerTest {
 
     UriComponents uriComponents = testling.buildLink(headerPlacement, uriTemplate, linkParameters);
 
-    assertThat(uriComponents.getPath()).isEqualTo('/' + PREFIX_DYNAMIC + '/' + SEGMENTS_PLACEMENT + "/p13n/helios/4711/pagegrid/header")
-            .withFailMessage("Expected link does not match built link.");
+    assertThat(uriComponents.getPath())
+            .withFailMessage("Expected link does not match built link.")
+            .isEqualTo('/' + PREFIX_DYNAMIC + '/' + SEGMENTS_PLACEMENT + "/p13n/helios/4711/pagegrid/header");
   }
 
   private void configureContext(String context, Navigation navigation) {

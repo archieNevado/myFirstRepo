@@ -3,6 +3,7 @@ package com.coremedia.blueprint.cae.sitemap;
 
 import com.coremedia.blueprint.base.links.UrlPrefixResolver;
 import com.coremedia.cap.multisite.Site;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -35,6 +36,7 @@ class SitemapIndexRenderer extends AbstractSitemapRenderer {
   private int filenameIndex;
   private File targetDir;  // The base dir, configured internally
   private File outputDir;  // targetDir/siteId
+  private File tmpDir; //targetDir/SiteId/sitemap.tmp, used for creation of the sitemap before replacing the old one.
   private String absoluteUrlPrefix;  // same as the site's url prefix, need it for the sitemap index entries
 
   // Delegate renderer for the sitemap fragment currently in progress
@@ -83,8 +85,8 @@ class SitemapIndexRenderer extends AbstractSitemapRenderer {
     }
     try {
       super.startUrlList();
+      tmpDir = getSitemapTmpDir();
       backupSitemap();
-      deleteSitemap();
       filenameIndex = 0;
       printOpening();
       sitemapXmlRenderer = new SitemapXmlRenderer(absoluteUrlPrefix);
@@ -120,14 +122,25 @@ class SitemapIndexRenderer extends AbstractSitemapRenderer {
       printClosing();
       super.endUrlList();
       writeSitemapIndexFile();
+      replaceOldSitemap();
     } catch (IOException e) {
       try {
         deleteSitemap();
+        FileUtils.forceDelete(tmpDir);
       } catch (IOException e1) {
         throw new IllegalStateException("Cannot create sitemap, and cannot even cleanup!", e);
       }
       throw new IllegalStateException("Cannot create sitemap", e);
     }
+  }
+
+  private void replaceOldSitemap() throws IOException{
+    deleteSitemap();
+    File[] files = listSitemapFiles(tmpDir);
+    for (File file : files) {
+      FileUtils.moveFileToDirectory(file, outputDir, false);
+    }
+    FileUtils.forceDelete(tmpDir);
   }
 
   @Override
@@ -167,7 +180,7 @@ class SitemapIndexRenderer extends AbstractSitemapRenderer {
       // Finish the current sitemap and start a new one.
       endCurrentSitemap();
       if (currentCount()>=SITEMAP_INDEX_MAX_ENTRIES) {
-        deleteSitemap();
+        FileUtils.forceDelete(tmpDir);
         throw new IllegalStateException("Too many entries in sitemap index file. Abort.");
       }
       sitemapXmlRenderer = new SitemapXmlRenderer(absoluteUrlPrefix);
@@ -197,7 +210,7 @@ class SitemapIndexRenderer extends AbstractSitemapRenderer {
    */
   private String writeSitemapFile() throws IOException {
     String sitemap = sitemapXmlRenderer.getResponse();
-    File sitemapFile = new File(outputDir, SitemapHelper.FILE_PREFIX + ++filenameIndex + ".xml.gz");
+    File sitemapFile = new File(getSitemapTmpDir(), SitemapHelper.FILE_PREFIX + ++filenameIndex + ".xml.gz");
     try (OutputStream outputStream = new GZIPOutputStream(new FileOutputStream(sitemapFile))) {
       IOUtils.write(sitemap, outputStream, StandardCharsets.UTF_8);
     }
@@ -207,20 +220,18 @@ class SitemapIndexRenderer extends AbstractSitemapRenderer {
   /**
    * Write the sitemap index file.
    *
-   * @return  the name of the sitemap file
    * @throws IOException
    */
-  private String writeSitemapIndexFile() throws IOException {
+  private void writeSitemapIndexFile() throws IOException {
     String sitemapIndex = super.getResponse();
-    File sitemapIndexFile = new File(outputDir, SitemapHelper.SITEMAP_INDEX_FILENAME);
+    File sitemapIndexFile = new File(getSitemapTmpDir(), SitemapHelper.SITEMAP_INDEX_FILENAME);
     try (OutputStream outputStream = new FileOutputStream(sitemapIndexFile)) {
       IOUtils.write(sitemapIndex, outputStream, StandardCharsets.UTF_8);
     }
     if (FileUtils.sizeOf(sitemapIndexFile)>SITEMAP_INDEX_MAX_SIZE) {
-      deleteSitemap();
+      FileUtils.forceDelete(getSitemapTmpDir());
       throw new IllegalStateException("Sitemap index would exceed 10MB, abort!");
     }
-    return sitemapIndexFile.getName();
   }
 
   /**
@@ -295,9 +306,19 @@ class SitemapIndexRenderer extends AbstractSitemapRenderer {
       }
       FileUtils.forceMkdir(backup);
       for (File file : currentSitemapFiles) {
-        FileUtils.moveFileToDirectory(file, backup, false);
+        FileUtils.copyFileToDirectory(file, backup, false);
       }
     }
+  }
+
+  @NonNull
+  private File getSitemapTmpDir() throws IOException {
+    File sitemapTmpDir = new File(outputDir, SitemapHelper.FILE_PREFIX + ".tmp");
+    if (sitemapTmpDir.exists()) {
+      return sitemapTmpDir;
+    }
+    FileUtils.forceMkdir(sitemapTmpDir);
+    return sitemapTmpDir;
   }
 
   private void deleteSitemap() throws IOException {
@@ -306,13 +327,19 @@ class SitemapIndexRenderer extends AbstractSitemapRenderer {
     }
   }
 
+  @NonNull
   private File[] listSitemapFiles() throws IOException {
     if (outputDir ==null) {
       throw new IllegalStateException("Output dir not set");
     }
-    File[] files = outputDir.listFiles(new SitemapFileFilter());
-    if (files==null) {
-      throw new IOException("Bad target directory " + outputDir.getAbsolutePath());
+    return listSitemapFiles(outputDir);
+  }
+
+  @NonNull
+  private File[] listSitemapFiles(@NonNull File folder) throws IOException {
+    File[] files = folder.listFiles(new SitemapFileFilter());
+    if (files == null) {
+      throw new IOException("Bad target directory " + folder.getAbsolutePath());
     }
     return files;
   }

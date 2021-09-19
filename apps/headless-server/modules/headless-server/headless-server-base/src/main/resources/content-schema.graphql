@@ -195,6 +195,9 @@ interface CMLinkable @inherit(from: ["CMLocalized", "CollectionItem"]) {
   viewtype: String
   subjectTaxonomy: [CMTaxonomy]
   locationTaxonomy: [CMLocTaxonomy]
+  htmlTitle: String
+  htmlDescription: String
+  keywords: String
 }
 
 interface CMLocalized @inherit(from: ["CMObject"]) {
@@ -419,6 +422,9 @@ type CMLinkableImpl implements CMLinkable @inherit(from: ["CMLocalizedImpl"]) {
   remoteLink(siteId:String, context:String): String!
   subjectTaxonomy: [CMTaxonomy]
   locationTaxonomy: [CMLocTaxonomy]
+  htmlTitle: String
+  htmlDescription: String
+  keywords: String
 }
 
 type CMLocalizedImpl implements CMLocalized @inherit(from: ["CMObjectImpl"]) {

@@ -22,7 +22,7 @@ x-logging:
 
 services:
   commerce-adapter-commercetools:
-    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-commercetools:${COMMERCE_ADAPTER_COMMERCETOOLS_VERSION:-1.1.3}
+    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-commercetools:${COMMERCE_ADAPTER_COMMERCETOOLS_VERSION:-1.1.5}
     container_name: commerce-adapter-commercetools
     restart: always
     logging: *default-logging

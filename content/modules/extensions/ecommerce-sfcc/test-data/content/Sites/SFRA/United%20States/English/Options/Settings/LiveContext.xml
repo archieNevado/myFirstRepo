@@ -34,8 +34,8 @@
 <StructProperty Name="commerce">
 <Struct>
 <StringProperty Name="endpoint">${commerce.hub.data.endpoints.sfcc}</StringProperty>
-<StringProperty Name="currency">GBP</StringProperty>
-<StringProperty Name="locale">en-GB</StringProperty>
+<StringProperty Name="currency">USD</StringProperty>
+<StringProperty Name="locale">en-US</StringProperty>
 <StructProperty Name="storeConfig">
 <Struct>
 <StringProperty Name="name">SFRA Global Shop</StringProperty>

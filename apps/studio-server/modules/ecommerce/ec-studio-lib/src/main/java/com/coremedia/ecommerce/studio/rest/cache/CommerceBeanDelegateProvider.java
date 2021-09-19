@@ -21,28 +21,24 @@ import java.util.Map;
 /**
  * Helper class to provide maps that can be used as delegates for commerce beans satisfying the needs of
  * Studio REST resource linker.
- *
- * @deprecated This class is part of the "commerce cache invalidation" implementation that
- * will be re-implemented by the Commerce Hub architecture and replaced in future releases.
  */
-@Deprecated
 class CommerceBeanDelegateProvider {
 
   private static final String SITE_ID = "{siteId:.*}";
   private static final WorkspaceId WORKSPACE_ID = WorkspaceId.of("{workspaceId:.*}");
-  private static final String ID = "{id:.*}";
+  private static final String EXTERNAL_ID = "{id:.*}";
   private static final CatalogAlias CATALOG_ALIAS_TEMPLATE_VAR = CatalogAlias.of("CATALOG_ALIAS_TEMPLATE_VAR");
   private static final String CATALOG_ALIAS = "{catalogAlias:.*}";
 
   private static final CommerceId TEMPLATE_COMMERCE_ID = CommerceIdBuilder
           .builder(Vendor.of("none"), "none", BaseCommerceBeanType.CATALOG)
-          .withExternalId(ID)
+          .withExternalId(EXTERNAL_ID)
           .withCatalogAlias(CATALOG_ALIAS_TEMPLATE_VAR)
           .build();
 
   private static final ImmutableMap<String, Object> COMMERCE_BEAN_DELEGATE = ImmutableMap.of(
           "id", TEMPLATE_COMMERCE_ID,
-          "externalId", ID
+          "externalId", EXTERNAL_ID
   );
 
   private CommerceBeanDelegateProvider() {
@@ -74,7 +70,7 @@ class CommerceBeanDelegateProvider {
   static String forEncodedExternalId(@NonNull String commerceBeanUri, @NonNull CommerceId commerceId) {
     return commerceId.getExternalId()
             .map(CommerceBeanDelegateProvider::encodePartNumber)
-            .map(encodedPartNumber -> commerceBeanUri.replace(ID, encodedPartNumber))
+            .map(encodedPartNumber -> commerceBeanUri.replace(EXTERNAL_ID, encodedPartNumber))
             .orElse(commerceBeanUri);
   }
 

@@ -12,6 +12,8 @@ import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
+import com.coremedia.livecontext.ecommerce.catalog.Product;
+import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
@@ -21,6 +23,9 @@ import com.coremedia.livecontext.ecommerce.common.StoreContextBuilder;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import graphql.ErrorType;
+import graphql.GraphQLError;
+import graphql.GraphqlErrorBuilder;
 import graphql.execution.DataFetcherResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +38,7 @@ import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogA
 import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper.format;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CATEGORY;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.SKU;
 
 @DefaultAnnotation(NonNull.class)
 public class AugmentationFacade {
@@ -145,7 +151,6 @@ public class AugmentationFacade {
             .orElse(null);
   }
 
-  @Nullable
   private DataFetcherResult<? extends Augmentation> getDataForCommerceId(CommerceId commerceId, CommerceConnection connection, String siteId) {
     String externalId = commerceId.getExternalId()
             .orElseGet(() ->
@@ -159,8 +164,21 @@ public class AugmentationFacade {
       return getProductAugmentationBySite(externalId, catalogId, siteId);
     } else if (commerceBeanType.equals(CATEGORY)) {
       return getCategoryAugmentationBySite(externalId, catalogId, siteId);
+    } else if (commerceBeanType.equals(SKU)){
+      CommerceBean commerceBean = connection.getCommerceBeanFactory().createBeanFor(commerceId, connection.getInitialStoreContext());
+      Product parent = ((ProductVariant) commerceBean).getParent();
+      if (parent != null){
+        return getProductAugmentationBySite(parent.getExternalId(), catalogId, siteId);
+      }
     }
-    return null;
+
+    LOG.debug( "Type {} is not supported.", commerceBeanType);
+    GraphQLError error = GraphqlErrorBuilder.newError()
+            .message("Type '%s' is not supported.", commerceBeanType)
+            .errorType(ErrorType.DataFetchingException)
+            .build();
+
+    return DataFetcherResult.<Augmentation>newResult().error(error).build();
   }
 
   @Nullable

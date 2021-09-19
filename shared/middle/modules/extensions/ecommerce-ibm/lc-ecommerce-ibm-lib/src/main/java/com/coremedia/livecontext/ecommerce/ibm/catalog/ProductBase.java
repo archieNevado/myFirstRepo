@@ -297,7 +297,7 @@ abstract class ProductBase extends AbstractIbmCommerceBean implements Product, C
             .orElseGet(Collections::emptyList);
   }
 
-  @Nullable
+  @NonNull
   @Override
   public Category getCategory() {
     return doGetCategory();

@@ -67,26 +67,26 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.46</tomcat.embed.version>
+    <tomcat.embed.version>9.0.48</tomcat.embed.version>
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
     <cm.examples.core.version>${project.version}</cm.examples.core.version>
-    <cm.common.core.version>2104.3</cm.common.core.version>
+    <cm.common.core.version>2104.4</cm.common.core.version>
     <cm.common.bp.version>1-SNAPSHOT</cm.common.bp.version>
-    <cm.middle.core.version>2104.3</cm.middle.core.version>
+    <cm.middle.core.version>2104.4</cm.middle.core.version>
     <cm.middle.bp.version>1-SNAPSHOT</cm.middle.bp.version>
-    <cm.cae.core.version>2104.3</cm.cae.core.version>
+    <cm.cae.core.version>2104.4</cm.cae.core.version>
     <cm.cae.bp.version>1-SNAPSHOT</cm.cae.bp.version>
-    <cm.content-feeder.core.version>2104.3</cm.content-feeder.core.version>
+    <cm.content-feeder.core.version>2104.4</cm.content-feeder.core.version>
     <cm.content-feeder.bp.version>1-SNAPSHOT</cm.content-feeder.bp.version>
-    <cm.cae-feeder.core.version>2104.3</cm.cae-feeder.core.version>
+    <cm.cae-feeder.core.version>2104.4</cm.cae-feeder.core.version>
     <cm.cae-feeder.bp.version>1-SNAPSHOT</cm.cae-feeder.bp.version>
-    <cm.content-server.core.version>2104.3</cm.content-server.core.version>
+    <cm.content-server.core.version>2104.4</cm.content-server.core.version>
     <cm.content-server.bp.version>1-SNAPSHOT</cm.content-server.bp.version>
-    <cm.workflow-server.core.version>2104.3</cm.workflow-server.core.version>
+    <cm.workflow-server.core.version>2104.4</cm.workflow-server.core.version>
     <cm.workflow-server.bp.version>1-SNAPSHOT</cm.workflow-server.bp.version>
-    <cm.studio-server.core.version>2104.3</cm.studio-server.core.version>
+    <cm.studio-server.core.version>2104.4</cm.studio-server.core.version>
     <cm.studio-server.bp.version>1-SNAPSHOT</cm.studio-server.bp.version>
     <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
 

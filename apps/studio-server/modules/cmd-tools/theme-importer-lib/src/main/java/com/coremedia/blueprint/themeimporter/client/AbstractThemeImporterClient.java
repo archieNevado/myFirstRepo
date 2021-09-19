@@ -108,11 +108,11 @@ public abstract class AbstractThemeImporterClient implements CommandLineRunner, 
   }
 
   private List<String> getThemes() {
-    return env.getProperty(THEMEIMPORTER_THEMES, List.class);
+    return env.getRequiredProperty(THEMEIMPORTER_THEMES, List.class);
   }
 
   private AtomicInteger getExitCode() {
-    return env.getProperty(THEMEIMPORTER_EXITCODE, AtomicInteger.class);
+    return env.getRequiredProperty(THEMEIMPORTER_EXITCODE, AtomicInteger.class);
   }
 
 
