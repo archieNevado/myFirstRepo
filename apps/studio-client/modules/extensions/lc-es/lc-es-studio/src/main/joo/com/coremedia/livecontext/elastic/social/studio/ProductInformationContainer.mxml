@@ -5,13 +5,11 @@
         xmlns:exml="http://www.jangaroo.net/exml/0.8"
         xmlns="exml:ext.config"
         xmlns:ui="exml:com.coremedia.ui.config"
-        itemId="com-coremedia-ecommerce-studio-model-ProductImpl"
         ui="{ContainerSkin.CARD_200}">
   <fx:Script><![CDATA[
     import com.coremedia.cms.editor.sdk.util.RichTextPlainTextTransformer;
     import com.coremedia.elastic.social.studio.model.ContributionAdministrationPropertyNames;
     import com.coremedia.elastic.social.studio.model.ContributionPropertyNames;
-    import com.coremedia.elastic.social.studio.model.impl.AbstractContributionAdministration;
     import com.coremedia.elastic.social.studio.model.utils.ValueExpressionUtil;
     import com.coremedia.ui.skins.ContainerSkin;
 

@@ -1,6 +1,6 @@
 self.importScripts(
   "./resources/com.coremedia.cms__studio-client.rxjs/rxjs/6.5.4/rxjs.umd.min.js",
-  "./resources/com.coremedia.ui__service-agent/@coremedia/studio-apps-service-agent/0.0.27/cmApps.js"
+  "./resources/com.coremedia.ui__service-agent/@coremedia/studio-apps-service-agent/0.0.33/cmApps.js"
 );
 
 class ClipboardServiceImpl {

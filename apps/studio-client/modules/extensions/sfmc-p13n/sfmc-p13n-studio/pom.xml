@@ -38,6 +38,11 @@
       <type>swc</type>
     </dependency>
     <dependency>
+      <groupId>com.coremedia.ui.toolkit</groupId>
+      <artifactId>client-core-impl</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
       <groupId>com.coremedia.personalization</groupId>
       <artifactId>cap-personalization-ui</artifactId>
       <type>swc</type>

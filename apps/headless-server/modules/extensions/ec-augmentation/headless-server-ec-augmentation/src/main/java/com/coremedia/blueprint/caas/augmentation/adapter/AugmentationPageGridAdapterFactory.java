@@ -17,10 +17,15 @@ import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.tree.ExternalChannelContentTreeRelation;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static java.lang.invoke.MethodHandles.lookup;
 
 @DefaultAnnotation(NonNull.class)
 public class AugmentationPageGridAdapterFactory extends PageGridAdapterFactory {
 
+  private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
   public static final String PDP_PAGEGRID_PROPERTY_NAME = "pdpPagegrid";
 
   private final ExternalChannelContentTreeRelation externalChannelContentTreeRelation;
@@ -69,7 +74,7 @@ public class AugmentationPageGridAdapterFactory extends PageGridAdapterFactory {
             CommerceBean.class);
   }
 
-  private String getSiteId(CommerceBean commerceBean) {
+  private static String getSiteId(CommerceBean commerceBean) {
     return commerceBean.getContext().getSiteId();
   }
 
@@ -77,6 +82,7 @@ public class AugmentationPageGridAdapterFactory extends PageGridAdapterFactory {
     return sitesService.getSite(getSiteId(commerceBean));
   }
 
+  @SuppressWarnings("OverlyComplexMethod")
   private Content getContent(CommerceBean commerceBean) {
     Content content = augmentationService.getContent(commerceBean);
     if (content != null) {
@@ -89,14 +95,24 @@ public class AugmentationPageGridAdapterFactory extends PageGridAdapterFactory {
       return content;
     }
     Category category = commerceBean instanceof Category
-            ? (Category)commerceBean
+            ? (Category) commerceBean
             : commerceBean instanceof Product
             ? ((Product) commerceBean).getCategory()
             : illegalState(commerceBean);
-    content = externalChannelContentTreeRelation.getNearestContentForCategory(category, getSite(commerceBean));
+
+    Site site = getSite(commerceBean);
+    content = externalChannelContentTreeRelation.getNearestContentForCategory(category, site);
     if (content != null) {
       return content;
     }
+
+    //if no parent available, fallback to site root
+    content = site.getSiteRootDocument();
+    if (content != null) {
+      LOG.debug("Falling back to page grid of site root for {}.", commerceBean.getId());
+      return content;
+    }
+
     return illegalState("cannot find content for " + commerceBean);
   }
 

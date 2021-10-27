@@ -28,7 +28,6 @@ public class ExternalBreadcrumbContentTreeRelation implements TreeRelation<Conte
   //local variables to avoid contentbean dependency
   private static final String EXTERNAL_ID = "externalId";
   private static final String CM_EXTERNAL_CHANNEL = "CMExternalChannel";
-  public static final String ROOT_CATEGORY_ID = "root";
 
   private final AugmentationService augmentationService;
   private final ObjectProvider<ExternalBreadcrumbTreeRelation> breadcrumbTreeRelationProvider;
@@ -73,15 +72,6 @@ public class ExternalBreadcrumbContentTreeRelation implements TreeRelation<Conte
     String parentCategoryId = breadcrumbTreeRelationProvider.getObject().getParentOf(CommerceIdFormatterHelper.format(childCategoryId));
     if (parentCategoryId != null) {
       return getParentContent(CommerceIdParserHelper.parseCommerceIdOrThrow(parentCategoryId), site);
-    }
-
-    Optional<String> externalIdOpt = childCategoryId.getExternalId();
-    if (externalIdOpt.isPresent() && externalIdOpt.get().equals(ROOT_CATEGORY_ID)) {
-      // avoid infinite loop when called with site root document
-      Content siteRoot = site.getSiteRootDocument();
-      if (!child.equals(siteRoot)) {
-        return siteRoot;
-      }
     }
 
     return null;

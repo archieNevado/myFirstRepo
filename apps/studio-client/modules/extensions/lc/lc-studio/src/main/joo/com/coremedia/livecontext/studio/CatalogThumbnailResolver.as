@@ -10,6 +10,8 @@ import com.coremedia.ui.data.ValueExpressionFactory;
 
 public class CatalogThumbnailResolver implements ThumbnailResolver {
 
+  public static const EXTERNAL_ID_PROPERTY:String = "externalId";
+
   private var docType:String;
 
   public function CatalogThumbnailResolver(docType:String):void {
@@ -42,7 +44,7 @@ public class CatalogThumbnailResolver implements ThumbnailResolver {
   protected function renderLiveContextPreview(content:Content):Object {
     var blob:String = undefined;
     var contentExpression:ValueExpression = ValueExpressionFactory.createFromValue(content);
-    var externalIdExpression:ValueExpression = contentExpression.extendBy('properties.' + LivecontextStudioPlugin.EXTERNAL_ID_PROPERTY);
+    var externalIdExpression:ValueExpression = contentExpression.extendBy('properties.' + CatalogThumbnailResolver.EXTERNAL_ID_PROPERTY);
     catalogHelper.getStoreForContentExpression(contentExpression).loadValue(function():void{
       var catalogObject:CatalogObject = catalogHelper.getCatalogObject(externalIdExpression.getValue(), contentExpression) as CatalogObject;
       var urlString = catalogHelper.getImageUrl(catalogObject);

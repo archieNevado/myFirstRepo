@@ -5,13 +5,11 @@ import com.coremedia.cap.common.JobExecutionError;
 import com.coremedia.cap.common.SESSION;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
+import com.coremedia.cms.editor.sdk.actions.ShowInRepositoryAction;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.jobs.BackgroundJob;
 import com.coremedia.cms.editor.sdk.util.ContentCreationUtil;
-import com.coremedia.cms.studio.library.services.api.LibraryService;
-import com.coremedia.cms.studio.library.services.api.LibraryServiceDescriptor;
 import com.coremedia.cms.studio.multisite.models.sites.Site;
-import com.coremedia.cms.studio.serviceagent.global.serviceAgent;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ecommerce.studio.model.Product;
 import com.coremedia.ecommerce.studio.model.ProductVariant;
@@ -96,10 +94,10 @@ public class AugmentationJob implements Job, BackgroundJob {
 
   public function getSuccessHandler():Function {
     return function ():void {
-      var libraryServiceDescriptor:LibraryServiceDescriptor = new LibraryServiceDescriptor();
-      serviceAgent.fetchService(libraryServiceDescriptor).then(function (service:LibraryService):void {
-        service.showEntityInRepository(augmentedObject.getUriPath());
-      });
+      var showInRepositoryAction:ShowInRepositoryAction = new ShowInRepositoryAction(ShowInRepositoryAction({
+        contentValueExpression: ValueExpressionFactory.createFromValue(augmentedObject)
+      }));
+      showInRepositoryAction.execute();
     }
   }
 

@@ -9,8 +9,17 @@
         xmlns:asset="exml:com.coremedia.livecontext.asset.studio.config">
   <fx:Script><![CDATA[
     import com.coremedia.cms.editor.sdk.collectionview.ICollectionView;
-    import com.coremedia.livecontext.asset.studio.LivecontextAssetStudioPlugin;
     import com.coremedia.livecontext.studio.LivecontextStudioPlugin;
+
+    /**
+     * The itemId of the search product pictures button item.
+     */
+    public static const SEARCH_PRODUCT_PICTURES_BUTTON_ITEM_ID:String = "searchProductPictures";
+
+    /**
+     * The itemId of the search product pictures menu item.
+     */
+    public static const SEARCH_PRODUCT_PICTURES_MENU_ITEM_ID:String = "searchProductPictures";
 
     private var config:LivecontextAssetLibraryPlugin;
     private var selectionHolder:ICollectionView;
@@ -29,7 +38,7 @@
       <ec:plugins>
         <ui:AddItemsPlugin>
           <ui:items>
-            <ui:IconButton itemId="{LivecontextAssetStudioPlugin.SEARCH_PRODUCT_PICTURES_BUTTON_ITEM_ID}">
+            <ui:IconButton itemId="{LivecontextAssetLibraryPlugin.SEARCH_PRODUCT_PICTURES_BUTTON_ITEM_ID}">
               <ui:baseAction>
                 <asset:SearchProductPicturesAction
                         catalogObjectExpression="{selectionHolder.getSelectedSearchItemsValueExpression()}"/>
@@ -47,7 +56,7 @@
       <ec:plugins>
         <ui:AddItemsPlugin>
           <ui:items>
-            <MenuItem itemId="{LivecontextAssetStudioPlugin.SEARCH_PRODUCT_PICTURES_MENU_ITEM_ID}">
+            <MenuItem itemId="{LivecontextAssetLibraryPlugin.SEARCH_PRODUCT_PICTURES_MENU_ITEM_ID}">
               <baseAction>
                 <asset:SearchProductPicturesAction
                         catalogObjectExpression="{selectionHolder.getSelectedRepositoryItemsValueExpression()}"/>
@@ -65,7 +74,7 @@
       <ec:plugins>
         <ui:AddItemsPlugin>
           <ui:items>
-            <MenuItem itemId="{LivecontextAssetStudioPlugin.SEARCH_PRODUCT_PICTURES_MENU_ITEM_ID}">
+            <MenuItem itemId="{LivecontextAssetLibraryPlugin.SEARCH_PRODUCT_PICTURES_MENU_ITEM_ID}">
               <baseAction>
                 <asset:SearchProductPicturesAction
                         catalogObjectExpression="{selectionHolder.getSelectedSearchItemsValueExpression()}"/>
@@ -83,7 +92,7 @@
       <ec:plugins>
         <ui:AddItemsPlugin>
           <ui:items>
-            <ui:IconButton itemId="{LivecontextAssetStudioPlugin.SEARCH_PRODUCT_PICTURES_BUTTON_ITEM_ID}">
+            <ui:IconButton itemId="{LivecontextAssetLibraryPlugin.SEARCH_PRODUCT_PICTURES_BUTTON_ITEM_ID}">
               <ui:baseAction>
                 <asset:SearchProductPicturesAction
                         catalogObjectExpression="{selectionHolder.getSelectedRepositoryItemsValueExpression()}"/>
@@ -101,7 +110,7 @@
       <editor:plugins>
         <ui:AddItemsPlugin>
           <ui:items>
-            <MenuItem itemId="{LivecontextAssetStudioPlugin.SEARCH_PRODUCT_PICTURES_MENU_ITEM_ID}">
+            <MenuItem itemId="{LivecontextAssetLibraryPlugin.SEARCH_PRODUCT_PICTURES_MENU_ITEM_ID}">
               <baseAction>
                 <asset:SearchProductPicturesAction
                         catalogObjectExpression="{selectionHolder.getSelectedFolderValueExpression()}"/>

@@ -40,9 +40,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.ui.toolkit</groupId>
-      <artifactId>client-core-test-helper</artifactId>
-      <type>swc</type>
+      <groupId>com.coremedia.sencha</groupId>
+      <artifactId>ext-js-pkg</artifactId>
+      <type>pkg</type>
       <scope>test</scope>
     </dependency>
     <dependency>

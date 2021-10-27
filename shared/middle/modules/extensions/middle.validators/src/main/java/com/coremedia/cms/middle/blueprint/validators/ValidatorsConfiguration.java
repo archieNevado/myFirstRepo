@@ -217,6 +217,18 @@ public class ValidatorsConfiguration {
   }
 
   @Bean
+  ContentTypeValidator cmViewtype(CapConnection connection) {
+    NotEmptyValidator layoutNotEmpty = new NotEmptyValidator();
+    layoutNotEmpty.setProperty("layout");
+
+    ContentTypeValidator cmViewtypeValidator = new ContentTypeValidator();
+    cmViewtypeValidator.setContentType("CMViewtype");
+    cmViewtypeValidator.setValidatingSubtypes(true);
+    cmViewtypeValidator.setValidators(Collections.singletonList(layoutNotEmpty));
+    return cmViewtypeValidator;
+  }
+
+  @Bean
   ChannelSegmentValidator cmChannelSegmentValidator(UrlPathFormattingHelper urlPathFormattingHelper,
                                                     CapConnection connection) {
     ChannelSegmentValidator cmChannelSegmentValidator = new ChannelSegmentValidator(urlPathFormattingHelper);

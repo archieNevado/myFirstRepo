@@ -94,6 +94,15 @@ class RSSItem extends RSSHubObject implements Item {
   }
 
   @Nullable
+  @Override
+  public ContentHubBlob getThumbnailBlob() {
+    List<String> imageUrls = getImageUrls();
+    return imageUrls.isEmpty() ?
+            null :
+            new UrlBlobBuilder(this, ContentHubBlob.THUMBNAIL_BLOB_CLASSIFIER).withUrl(imageUrls.get(0)).withEtag().build();
+  }
+
+  @Nullable
   private ContentHubBlob firstImageReference() {
     List<String> imageUrls = getImageUrls();
     // The particular classifier value is irrelevant here, since #getBlob does not consider it.

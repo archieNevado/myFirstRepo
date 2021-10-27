@@ -31,14 +31,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper.format;
-import static com.coremedia.blueprint.caas.augmentation.tree.ExternalBreadcrumbContentTreeRelation.ROOT_CATEGORY_ID;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CATEGORY;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
 import static java.lang.invoke.MethodHandles.lookup;
@@ -98,7 +96,7 @@ public class AugmentationFacadeCmsOnly {
     return getProductAugmentationForSiteInternal(externalId, breadcrumb, catalogAlias, site);
   }
 
-  private DataFetcherResult<ProductAugmentationCmsOnly> getProductAugmentationForSiteInternal(String externalId, String[] breadcrumb, String catalogAlias, Site site) {
+  private DataFetcherResult<ProductAugmentationCmsOnly> getProductAugmentationForSiteInternal(String externalId, String[] breadcrumb, @Nullable String catalogAlias, Site site) {
     DataFetcherResult.Builder<ProductAugmentationCmsOnly> builder = DataFetcherResult.newResult();
     CommerceIdBuilder idBuilder = CommerceIdBuilder.builder(Vendor.of(commerceSettingsHelper.getVendor(site)), CATALOG, PRODUCT)
             .withExternalId(externalId);
@@ -112,7 +110,7 @@ public class AugmentationFacadeCmsOnly {
     Content content = productAugmentationService.getContentByExternalId(format(productId), site);
 
     //initialize tree relation
-    initializeBreadcrumbTreeRelation(breadcrumb, Vendor.of(commerceSettingsHelper.getVendor(site)));
+    initializeBreadcrumbTreeRelation(breadcrumb, Vendor.of(commerceSettingsHelper.getVendor(site)), catalogAlias != null ? CatalogAlias.of(catalogAlias) : null);
 
     CommerceRef commerceRef = getCommerceRef(productId, Arrays.asList(breadcrumb), catalogAlias, site);
 
@@ -156,7 +154,7 @@ public class AugmentationFacadeCmsOnly {
 
     Content content = categoryAugmentationService.getContentByExternalId(format(categoryId), site);
 
-    initializeBreadcrumbTreeRelation(breadcrumb, vendor);
+    initializeBreadcrumbTreeRelation(breadcrumb, vendor, catalogAlias != null ? CatalogAlias.of(catalogAlias) : null);
 
     CommerceRef commerceRef = getCommerceRef(categoryId, Arrays.asList(breadcrumb), null, site);
 
@@ -177,17 +175,15 @@ public class AugmentationFacadeCmsOnly {
    * @param breadcrumb array of external ids
    * @param vendor commerce vendor for the current site
    */
-  void initializeBreadcrumbTreeRelation(String[] breadcrumb, Vendor vendor) {
+  void initializeBreadcrumbTreeRelation(String[] breadcrumb, Vendor vendor, @Nullable CatalogAlias catalogAlias) {
     //set breadcrumb in treerelation, which is a request scoped bean
     if (breadcrumb.length > 0) {
-      List<String> extendedBreadcrumb = new ArrayList();
-      //check if first element is root category, otherwise add (possibly virtual) root
-      if (!breadcrumb[0].equals(ROOT_CATEGORY_ID)) {
-        extendedBreadcrumb.add(ROOT_CATEGORY_ID);
-      }
-      extendedBreadcrumb.addAll(Arrays.asList(breadcrumb));
+      List<String> extendedBreadcrumb = Arrays.asList(breadcrumb);
 
       CommerceIdBuilder categoryIdBuilder = CommerceIdBuilder.builder(vendor, CATALOG, CATEGORY);
+      if (catalogAlias != null){
+        categoryIdBuilder.withCatalogAlias(catalogAlias);
+      }
       List<String> listOfCommerceIdStrings = extendedBreadcrumb.stream()
               .map(bc -> categoryIdBuilder.withExternalId(bc).build())
               .map(CommerceIdFormatterHelper::format)

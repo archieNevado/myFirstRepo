@@ -15,11 +15,9 @@ import com.coremedia.livecontext.studio.job.AugmentationJob;
 
 import ext.Ext;
 
-import joo.JavaScriptObject;
-
 import js.Promise;
 
-public class CatalogItemsToToContentConverter extends JavaScriptObject implements ItemConverter {
+public class CatalogItemsToToContentConverter implements ItemConverter {
 
   public static const ID:String = "catalogItemsToContentConverter";
 

@@ -34,6 +34,10 @@ import static com.coremedia.blueprint.caas.augmentation.adapter.CommerceSearchFa
 import static com.coremedia.blueprint.caas.augmentation.adapter.CommerceSearchFacade.SEARCH_PARAM_FACET_SUPPORT;
 import static com.coremedia.blueprint.caas.augmentation.adapter.CommerceSearchFacade.SEARCH_PARAM_ORDERBY;
 import static com.coremedia.blueprint.caas.augmentation.adapter.CommerceSearchFacade.SEARCH_PARAM_TOTAL;
+import static com.coremedia.blueprint.caas.augmentation.adapter.ProductListAdapter.FILTER_FACET_DEFAULT;
+import static com.coremedia.blueprint.caas.augmentation.adapter.ProductListAdapter.MAX_LENGTH_DEFAULT;
+import static com.coremedia.blueprint.caas.augmentation.adapter.ProductListAdapter.OFFSET_DEFAULT;
+import static com.coremedia.blueprint.caas.augmentation.adapter.ProductListAdapter.ORDER_BY_DEFAULT;
 import static com.coremedia.blueprint.caas.augmentation.adapter.ProductListAdapter.STRUCT_KEY_PRODUCTLIST;
 import static com.coremedia.blueprint.caas.augmentation.adapter.ProductListAdapter.STRUCT_KEY_PRODUCTLIST_FILTER_FACET_QUERIES;
 import static com.coremedia.blueprint.caas.augmentation.adapter.ProductListAdapter.STRUCT_KEY_PRODUCTLIST_MAX_LENGTH;
@@ -148,6 +152,34 @@ class ProductListAdapterTest {
     map.put("target", target);
     map.put("index", index);
     return map;
+  }
+
+  @Test
+  void setEmptyOffsetAndLimit() {
+    //Given
+    Map<String, Object> structMap = getDefaultStructMap();
+    structMap.put(STRUCT_KEY_PRODUCTLIST_OFFSET, null);
+    structMap.put(STRUCT_KEY_PRODUCTLIST_MAX_LENGTH, null);
+    structMap.put(STRUCT_KEY_PRODUCTLIST_FILTER_FACET_QUERIES, null);
+    structMap.put(STRUCT_KEY_PRODUCTLIST_ORDER_BY, null);
+    when(struct.toNestedMaps()).thenReturn(structMap);
+    when(extendedLinkListAdapterFactory.to(productList)).thenReturn(extendedLinkListAdapter);
+
+    //When
+    Map<String, Object> productListSettings = productListAdapter.getProductListSettings();
+
+    //Then
+    assertThat(productListSettings)
+            .hasSize(5)
+            .containsKey(STRUCT_KEY_PRODUCTLIST_OFFSET)
+            .containsKey(STRUCT_KEY_PRODUCTLIST_MAX_LENGTH)
+            .containsKey(STRUCT_KEY_PRODUCTLIST_FILTER_FACET_QUERIES)
+            .containsKey(STRUCT_KEY_PRODUCTLIST_ORDER_BY);
+    assertThat(productListAdapter)
+            .returns(OFFSET_DEFAULT, ProductListAdapter::getProductOffset)
+            .returns(MAX_LENGTH_DEFAULT, ProductListAdapter::getLimit)
+            .returns(ORDER_BY_DEFAULT, ProductListAdapter::getOrderBy)
+            .returns(FILTER_FACET_DEFAULT, ProductListAdapter::getFilterFacets);
   }
 
   @Test

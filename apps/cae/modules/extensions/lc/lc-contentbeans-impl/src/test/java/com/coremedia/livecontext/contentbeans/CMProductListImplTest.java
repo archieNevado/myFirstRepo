@@ -22,7 +22,16 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
+import java.util.Map;
 
+import static com.coremedia.livecontext.contentbeans.CMProductListImpl.FILTER_FACETS_DEFAULT;
+import static com.coremedia.livecontext.contentbeans.CMProductListImpl.MAX_LENGTH_DEFAULT;
+import static com.coremedia.livecontext.contentbeans.CMProductListImpl.OFFSET_DEFAULT;
+import static com.coremedia.livecontext.contentbeans.CMProductListImpl.ORDER_BY_DEFAULT;
+import static com.coremedia.livecontext.contentbeans.CMProductListImpl.PROP_MAX_LENGTH;
+import static com.coremedia.livecontext.contentbeans.CMProductListImpl.PROP_OFFSET;
+import static com.coremedia.livecontext.contentbeans.CMProductListImpl.PROP_ORDER_BY;
+import static com.coremedia.livecontext.contentbeans.CMProductListImpl.SETTING_FILTER_FACETS;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
@@ -54,6 +63,28 @@ class CMProductListImplTest {
   private CMProductListImpl getProductListBeanForContentId(int contentId) {
     Content content = contentRepository.getContent(IdHelper.formatContentId(contentId));
     return contentBeanFactory.createBeanFor(content, CMProductListImpl.class);
+  }
+
+  @Test
+  void productListSettingsGetterWithNullValues() {
+    // GIVEN
+    CMProductListImpl productListWithNullValues = getProductListBeanForContentId(666);
+
+    // WHEN
+    Map<String, Object> productListSettings = productListWithNullValues.getProductListSettings();
+
+    //THEN
+    assertThat(productListSettings)
+            .hasSize(4)
+            .containsEntry(PROP_ORDER_BY, "")
+            .containsEntry(PROP_OFFSET, null)
+            .containsEntry(PROP_MAX_LENGTH, null)
+            .containsEntry(SETTING_FILTER_FACETS, null);
+    assertThat(productListWithNullValues)
+            .returns(OFFSET_DEFAULT, CMProductListImpl::getOffset)
+            .returns(ORDER_BY_DEFAULT, CMProductListImpl::getOrderBy)
+            .returns(MAX_LENGTH_DEFAULT, CMProductListImpl::getMaxLength)
+            .returns(FILTER_FACETS_DEFAULT, CMProductListImpl::getFilterFacets);
   }
 
   @Test

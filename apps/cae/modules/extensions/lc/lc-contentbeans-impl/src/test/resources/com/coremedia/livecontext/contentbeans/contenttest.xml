@@ -77,6 +77,11 @@
               <markupProperty name="localSettings" url="202localsettings.xml" grammar="coremedia-struct-2008"/>
             </version>
           </document>
+          <document id="666" type="CMProductList" name="cmProductListWithNullValues">
+            <version number="1">
+              <markupProperty name="localSettings" url="666localsettings.xml" grammar="coremedia-struct-2008"/>
+            </version>
+          </document>
 
         </folder>
       </folder>

@@ -7,8 +7,6 @@ import com.coremedia.ui.data.test.AbstractRemoteTest;
 import ext.Ext;
 import ext.container.Viewport;
 
-import joo.getOrCreatePackage;
-
 public class OpenAnalyticsDeepLinkUrlButtonTest extends AbstractRemoteTest {
 
   private static const DRILLDOWN_URL:String = "http://host.domain.net/my/drilldown";
@@ -23,7 +21,6 @@ public class OpenAnalyticsDeepLinkUrlButtonTest extends AbstractRemoteTest {
     window_open = window.open;
     window.open = function (... myArgs) : void { args = myArgs;};
 
-    delete getOrCreatePackage("com.coremedia.cms.editor.sdk")['editorContext'];
     EditorContextImpl.initEditorContext();
 
     button = Ext.create(OpenAnalyticsDeepLinkUrlButton, {

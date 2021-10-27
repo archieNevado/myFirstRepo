@@ -3,6 +3,7 @@
   <group id="staff" name="staff" contentgroup="true" livegroup="false" administrative="false">
     <rule content="/Home" type="Document_" rights="RMDS"/>
     <rule content="/Home" type="EditorProfile" rights="R"/>
+    <rule content="/Home" type="EditorPreferences" rights="RM"/>
     <rule content="/Home" type="Folder_" rights="RMDS"/>
     <rule content="/Settings" type="Document_" rights="R"/>
     <rule content="/Settings" type="Folder_" rights="R"/>

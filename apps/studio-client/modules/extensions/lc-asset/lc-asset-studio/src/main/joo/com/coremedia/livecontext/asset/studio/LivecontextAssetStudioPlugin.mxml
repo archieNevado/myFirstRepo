@@ -23,15 +23,9 @@
 
     public static const xtype:String = "com.coremedia.livecontext.asset.studio.config.livecontextAssetStudioPlugin";
 
-    /**
-     * The itemId of the search product pictures button item.
-     */
-    public static const SEARCH_PRODUCT_PICTURES_BUTTON_ITEM_ID:String = "searchProductPictures";
+    public static const SEARCH_PRODUCT_PICTURES_BUTTON_ITEM_ID:String = LivecontextAssetLibraryPlugin.SEARCH_PRODUCT_PICTURES_BUTTON_ITEM_ID;
 
-    /**
-     * The itemId of the search product pictures menu item.
-     */
-    public static const SEARCH_PRODUCT_PICTURES_MENU_ITEM_ID:String = "searchProductPictures";
+    public static const SEARCH_PRODUCT_PICTURES_MENU_ITEM_ID:String = LivecontextAssetLibraryPlugin.SEARCH_PRODUCT_PICTURES_MENU_ITEM_ID;
 
     //noinspection JSUnusedLocalSymbols
     private var config:LivecontextAssetStudioPlugin;

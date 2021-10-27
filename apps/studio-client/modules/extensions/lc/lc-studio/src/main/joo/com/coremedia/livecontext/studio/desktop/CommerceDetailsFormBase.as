@@ -3,10 +3,10 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.sdk.editorContext;
 import com.coremedia.cms.editor.sdk.premular.PropertyFieldGroup;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
+import com.coremedia.ecommerce.studio.model.Category;
+import com.coremedia.ecommerce.studio.model.Product;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
-
-import ext.Ext;
 
 public class CommerceDetailsFormBase extends PropertyFieldGroup {
 
@@ -41,8 +41,13 @@ public class CommerceDetailsFormBase extends PropertyFieldGroup {
       }
     }
     var catalogObject:CatalogObject = config.bindTo.getValue() as CatalogObject;
-    if (catalogObject) {
-      return Ext.getClassName(catalogObject).replace(/\./g, "_");
+    if (catalogObject is Category) {
+      // legacy name
+      return "com_coremedia_ecommerce_studio_model_CategoryImpl";
+    }
+    if (catalogObject is Product) {
+      // legacy name
+      return "com_coremedia_ecommerce_studio_model_ProductImpl";
     }
     return null;
   }

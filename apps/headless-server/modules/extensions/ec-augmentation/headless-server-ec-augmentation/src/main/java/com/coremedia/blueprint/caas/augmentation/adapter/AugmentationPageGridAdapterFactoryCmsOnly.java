@@ -65,6 +65,7 @@ public class AugmentationPageGridAdapterFactoryCmsOnly extends PageGridAdapterFa
     return commerceEntityHelper.getCommerceId(commerceRef);
   }
 
+  @SuppressWarnings("OverlyComplexMethod")
   private Content getContent(CommerceRef commerceRef, Site site) {
     CommerceId id = getCommerceId(commerceRef);
     Content content = augmentationService.getContentByExternalId(CommerceIdFormatterHelper.format(id), site);
@@ -85,6 +86,7 @@ public class AugmentationPageGridAdapterFactoryCmsOnly extends PageGridAdapterFa
         String lastCategoryExternalId = breadcrumb.get(breadcrumb.size() - 1);
         CommerceId categoryId = CommerceIdBuilder.builder(Vendor.of(commerceSettingsHelper.getVendor(site)), CATALOG, CATEGORY)
                 .withExternalId(lastCategoryExternalId)
+                .withCatalogAlias(id.getCatalogAlias())
                 .build();
 
         id = categoryId;
@@ -96,10 +98,17 @@ public class AugmentationPageGridAdapterFactoryCmsOnly extends PageGridAdapterFa
       return content;
     }
 
+    //if no parent available, fallback to site root
+    content = site.getSiteRootDocument();
+    if (content != null) {
+      LOG.debug("Falling back to page grid of site root for {}", commerceRef.getId());
+      return content;
+    }
+
     throw new IllegalArgumentException("cannot find content for " + id);
   }
 
-  private boolean isCommerceBeanTypSupported(CommerceBeanType commerceBeanType) {
+  private static boolean isCommerceBeanTypSupported(CommerceBeanType commerceBeanType) {
     return commerceBeanType.equals(PRODUCT) || commerceBeanType.equals(CATEGORY);
   }
 }

@@ -63,6 +63,11 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.cms</groupId>
+      <artifactId>studio-client.content-link-list-models</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
       <artifactId>studio-client.library-services-toolkit</artifactId>
       <type>swc</type>
     </dependency>
@@ -89,11 +94,6 @@
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>studio-client.library-services-api</artifactId>
-      <type>swc</type>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.ui</groupId>
-      <artifactId>service-agent</artifactId>
       <type>swc</type>
     </dependency>
     <dependency>

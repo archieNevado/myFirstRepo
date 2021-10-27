@@ -22,6 +22,7 @@ import com.coremedia.livecontext.ecommerce.search.SearchQuery;
 import com.coremedia.livecontext.ecommerce.search.SearchQueryBuilder;
 import com.coremedia.livecontext.ecommerce.search.SearchQueryFacet;
 import com.coremedia.livecontext.navigation.ProductInSiteImpl;
+import com.google.common.annotations.VisibleForTesting;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -51,12 +53,15 @@ public class CMProductListImpl extends CMQueryListImpl implements CMProductList 
   public static final int OFFSET_DEFAULT = 0;
   private static final String DIGIT_PATTERN = "[0-9]*";
   private static final String ALL_QUERY = "*";
-  private static final String PROP_ORDER_BY = "orderBy";
-  private static final String PROP_OFFSET = "offset";
-  private static final String PROP_MAX_LENGTH = "maxLength";
+  static final String ORDER_BY_DEFAULT = "";
+  static final Map<String, Map<String, List<String>>> FILTER_FACETS_DEFAULT = Map.of();
+
+  static final String PROP_ORDER_BY = "orderBy";
+  static final String PROP_OFFSET = "offset";
+  static final String PROP_MAX_LENGTH = "maxLength";
   private static final String PROP_SELECTED_FACET_VALUE = "selectedFacetValue";
   private static final String SETTING_PRODUCT_LIST = "productList";
-  private static final String SETTING_FILTER_FACETS = "filterFacets";
+  static final String SETTING_FILTER_FACETS = "filterFacets";
 
   private String overrideCategoryId;
 
@@ -147,7 +152,7 @@ public class CMProductListImpl extends CMQueryListImpl implements CMProductList 
 
   public String getOrderBy() {
     Object value = getProductListSettings().get(PROP_ORDER_BY);
-    return value instanceof String ? value.toString() : null;
+    return value instanceof String ? value.toString() : ORDER_BY_DEFAULT;
   }
 
   public int getOffset() {
@@ -224,7 +229,7 @@ public class CMProductListImpl extends CMQueryListImpl implements CMProductList 
         return Map.of();
       }
       //copy struct because it may be cached and the cache MUST NEVER be modified.
-      return Map.copyOf(productList.toNestedMaps());
+      return new HashMap<>(productList.toNestedMaps());
     } catch (NoSuchPropertyDescriptorException e) {
       //no struct configured for current content, empty map will be returned.
     }
@@ -241,10 +246,11 @@ public class CMProductListImpl extends CMQueryListImpl implements CMProductList 
             .collect(Collectors.toUnmodifiableList());
   }
 
-  private Map<String, Map<String, List<String>>> getFilterFacets() {
+  @VisibleForTesting
+  Map<String, Map<String, List<String>>> getFilterFacets() {
     Object o = getProductListSettings().get(SETTING_FILTER_FACETS);
     //noinspection unchecked
-    return o instanceof Map ? (Map<String, Map<String, List<String>>>) o : Map.of();
+    return o instanceof Map ? (Map<String, Map<String, List<String>>>) o : FILTER_FACETS_DEFAULT;
   }
 
   @NonNull

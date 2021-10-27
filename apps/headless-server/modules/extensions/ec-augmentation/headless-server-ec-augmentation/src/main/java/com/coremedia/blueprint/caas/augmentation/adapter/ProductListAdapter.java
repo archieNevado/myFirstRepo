@@ -14,6 +14,7 @@ import com.coremedia.cap.struct.Struct;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -42,18 +43,20 @@ public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
 
   private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
 
-  public static final String STRUCT_KEY_EXTERNAL_ID = "externalId";
-  public static final String STRUCT_KEY_PRODUCTLIST = "productList";
-  public static final String STRUCT_KEY_PRODUCTLIST_SELECT_FACET_VALUE = "selectedFacetValue";
-  public static final String STRUCT_KEY_PRODUCTLIST_OFFSET = "offset";
-  public static final String STRUCT_KEY_PRODUCTLIST_MAX_LENGTH = "maxLength";
-  public static final String STRUCT_KEY_PRODUCTLIST_ORDER_BY = "orderBy";
-  public static final String STRUCT_KEY_PRODUCTLIST_FILTER_FACET_QUERIES = "filterFacets";
+  static final String STRUCT_KEY_EXTERNAL_ID = "externalId";
+  static final String STRUCT_KEY_PRODUCTLIST = "productList";
+  static final String STRUCT_KEY_PRODUCTLIST_SELECT_FACET_VALUE = "selectedFacetValue";
+  static final String STRUCT_KEY_PRODUCTLIST_OFFSET = "offset";
+  static final String STRUCT_KEY_PRODUCTLIST_MAX_LENGTH = "maxLength";
+  static final String STRUCT_KEY_PRODUCTLIST_ORDER_BY = "orderBy";
+  static final String STRUCT_KEY_PRODUCTLIST_FILTER_FACET_QUERIES = "filterFacets";
 
-  public static final int MAX_LENGTH_DEFAULT = 10;
-  public static final int OFFSET_DEFAULT = 0;
-  public static final String DIGIT_PATTERN = "[0-9]*";
-  public static final String ALL_QUERY = "*";
+  static final String ORDER_BY_DEFAULT = "";
+  static final Map<String, Map<String, List<String>>> FILTER_FACET_DEFAULT = Map.of();
+  static final int MAX_LENGTH_DEFAULT = 10;
+  static final int OFFSET_DEFAULT = 0;
+  private static final String DIGIT_PATTERN = "[0-9]*";
+  static final String ALL_QUERY = "*";
 
   private final SettingsService settingsService;
   private final CommerceEntityHelper commerceEntityHelper;
@@ -90,7 +93,7 @@ public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
 
   public String getOrderBy() {
     Object value = getProductListSettings().get(STRUCT_KEY_PRODUCTLIST_ORDER_BY);
-    return value instanceof String ? value.toString() : "";
+    return value instanceof String ? value.toString() : ORDER_BY_DEFAULT;
   }
 
   /**
@@ -137,6 +140,7 @@ public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
 
   /**
    * In real life scenario the search should be executed on the commerce system and not in the CoreMedia headless server.
+   *
    * @return commerce references, which need to be resolved externally
    */
   @Deprecated
@@ -225,20 +229,22 @@ public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
             .collect(toList());
   }
 
-  private Map<String, Map<String, List<String>>> getFilterFacets() {
+  @VisibleForTesting
+  Map<String, Map<String, List<String>>> getFilterFacets() {
     Object o = getProductListSettings().get(STRUCT_KEY_PRODUCTLIST_FILTER_FACET_QUERIES);
     //noinspection unchecked
-    return o instanceof Map ? (Map<String, Map<String, List<String>>>) o : Map.of();
+    return o instanceof Map ? (Map<String, Map<String, List<String>>>) o : FILTER_FACET_DEFAULT;
   }
 
-  private Map<String, Object> getProductListSettings() {
+  @VisibleForTesting
+  Map<String, Object> getProductListSettings() {
     try {
       Struct productList = settingsService.setting(STRUCT_KEY_PRODUCTLIST, Struct.class, getContent());
       if (productList == null) {
         return Map.of();
       }
       //copy struct because it may be cached and the cache MUST NEVER be modified.
-      return Map.copyOf(productList.toNestedMaps());
+      return new HashMap<>(productList.toNestedMaps());
     } catch (NoSuchPropertyDescriptorException e) {
       //no struct configured for current content, empty map will be returned.
     }

@@ -1,21 +1,11 @@
 package com.coremedia.livecontext.studio {
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.impl.ContentImpl;
-import com.coremedia.cap.content.impl.ContentStructRemoteBeanImpl;
-import com.coremedia.cap.content.impl.ContentTypeImpl;
 import com.coremedia.cms.editor.sdk.util.PropertyEditorUtil;
 import com.coremedia.ecommerce.studio.AbstractCatalogTest;
-import com.coremedia.ecommerce.studio.model.CategoryImpl;
-import com.coremedia.ecommerce.studio.model.MarketingImpl;
-import com.coremedia.ecommerce.studio.model.MarketingSpotImpl;
-import com.coremedia.ecommerce.studio.model.ProductImpl;
-import com.coremedia.ecommerce.studio.model.ProductVariantImpl;
-import com.coremedia.ecommerce.studio.model.StoreImpl;
 import com.coremedia.ui.data.RemoteBean;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
-import com.coremedia.ui.data.impl.BeanFactoryImpl;
 import com.coremedia.ui.data.test.Step;
 
 /**
@@ -32,9 +22,6 @@ public class AbstractProductTeaserComponentsTest extends AbstractCatalogTest {
     super.setUp();
 
     resetCatalogHelper();
-
-    BeanFactoryImpl(beanFactory).registerRemoteBeanClasses(ContentTypeImpl, ContentImpl, ContentStructRemoteBeanImpl,
-            StoreImpl, CategoryImpl, MarketingImpl, ProductImpl, MarketingSpotImpl, ProductVariantImpl);
 
     createPlugin();
 

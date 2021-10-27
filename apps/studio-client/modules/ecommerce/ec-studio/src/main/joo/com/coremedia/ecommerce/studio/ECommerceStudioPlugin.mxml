@@ -19,24 +19,8 @@
   <fx:Script><![CDATA[
     import com.coremedia.cms.editor.sdk.collectionview.CollectionViewModel;
     import com.coremedia.ecommerce.studio.model.Catalog;
-    import com.coremedia.ecommerce.studio.model.CatalogImpl;
     import com.coremedia.ecommerce.studio.model.Category;
-    import com.coremedia.ecommerce.studio.model.CategoryImpl;
-    import com.coremedia.ecommerce.studio.model.CommerceBeanPreviewsImpl;
-    import com.coremedia.ecommerce.studio.model.ContractImpl;
-    import com.coremedia.ecommerce.studio.model.ContractsImpl;
-    import com.coremedia.ecommerce.studio.model.FacetsImpl;
-    import com.coremedia.ecommerce.studio.model.MarketingImpl;
-    import com.coremedia.ecommerce.studio.model.MarketingSpotImpl;
-    import com.coremedia.ecommerce.studio.model.ProductImpl;
-    import com.coremedia.ecommerce.studio.model.ProductVariantImpl;
-    import com.coremedia.ecommerce.studio.model.SearchFacetsImpl;
-    import com.coremedia.ecommerce.studio.model.SegmentImpl;
-    import com.coremedia.ecommerce.studio.model.SegmentsImpl;
     import com.coremedia.ecommerce.studio.model.Store;
-    import com.coremedia.ecommerce.studio.model.StoreImpl;
-    import com.coremedia.ecommerce.studio.model.WorkspaceImpl;
-    import com.coremedia.ecommerce.studio.model.WorkspacesImpl;
     import com.coremedia.ui.data.Bean;
 
     import ext.StringUtil;
@@ -175,24 +159,6 @@
     <editor:CopyResourceBundleProperties
             destination="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.cms.editor.Editor')}"
             source="{ResourceManager.getInstance().getResourceBundle(null, 'com.coremedia.ecommerce.studio.ECommerceStudioPlugin')}"/>
-
-
-    <editor:RegisterRestResource beanClass="{CategoryImpl}"/>
-    <editor:RegisterRestResource beanClass="{StoreImpl}"/>
-    <editor:RegisterRestResource beanClass="{CatalogImpl}"/>
-    <editor:RegisterRestResource beanClass="{ProductImpl}"/>
-    <editor:RegisterRestResource beanClass="{ProductVariantImpl}"/>
-    <editor:RegisterRestResource beanClass="{SegmentImpl}"/>
-    <editor:RegisterRestResource beanClass="{SegmentsImpl}"/>
-    <editor:RegisterRestResource beanClass="{ContractImpl}"/>
-    <editor:RegisterRestResource beanClass="{ContractsImpl}"/>
-    <editor:RegisterRestResource beanClass="{WorkspaceImpl}"/>
-    <editor:RegisterRestResource beanClass="{WorkspacesImpl}"/>
-    <editor:RegisterRestResource beanClass="{MarketingSpotImpl}"/>
-    <editor:RegisterRestResource beanClass="{MarketingImpl}"/>
-    <editor:RegisterRestResource beanClass="{FacetsImpl}"/>
-    <editor:RegisterRestResource beanClass="{SearchFacetsImpl}"/>
-    <editor:RegisterRestResource beanClass="{CommerceBeanPreviewsImpl}"/>
   </local:configuration>
 
 

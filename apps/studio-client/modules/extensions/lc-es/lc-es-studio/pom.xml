@@ -17,6 +17,12 @@
 
   <dependencies>
     <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>ec-studio-model</artifactId>
+      <version>${project.version}</version>
+      <type>swc</type>
+    </dependency>
+    <dependency>
       <groupId>com.coremedia.ui.toolkit</groupId>
       <artifactId>core-icons</artifactId>
       <type>swc</type>

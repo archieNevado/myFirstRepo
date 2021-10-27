@@ -6,10 +6,8 @@ import com.coremedia.ui.data.impl.BeanFactoryImpl;
 import com.coremedia.ui.data.test.AbstractRemoteTest;
 
 import ext.Ext;
-
 import ext.container.Viewport;
 
-import joo.getOrCreatePackage;
 import joo.getQualifiedObject;
 
 public class OpenAnalyticsHomeUrlButtonTest extends AbstractRemoteTest {
@@ -31,7 +29,6 @@ public class OpenAnalyticsHomeUrlButtonTest extends AbstractRemoteTest {
 
     BeanFactoryImpl.initBeanFactory();
 
-    delete getOrCreatePackage("com.coremedia.cms.editor.sdk")['editorContext'];
     EditorContextImpl.initEditorContext();
 
     AnalyticsStudioPluginBase['SETTINGS'] = ValueExpressionFactory.create('testSettings');

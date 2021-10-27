@@ -1,23 +1,13 @@
 package com.coremedia.livecontext.p13n.studio {
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.impl.ContentImpl;
-import com.coremedia.cap.content.impl.ContentStructRemoteBeanImpl;
-import com.coremedia.cap.content.impl.ContentTypeImpl;
 import com.coremedia.cms.editor.sdk.util.PropertyEditorUtil;
 import com.coremedia.ecommerce.studio.AbstractCatalogTest;
 import com.coremedia.ecommerce.studio.components.CommerceObjectField;
 import com.coremedia.ecommerce.studio.components.CommerceObjectSelector;
 import com.coremedia.ecommerce.studio.forms.CommerceCatalogObjectsSelectForm;
-import com.coremedia.ecommerce.studio.model.CategoryImpl;
-import com.coremedia.ecommerce.studio.model.ContractImpl;
-import com.coremedia.ecommerce.studio.model.ContractsImpl;
-import com.coremedia.ecommerce.studio.model.ProductImpl;
-import com.coremedia.ecommerce.studio.model.StoreImpl;
-import com.coremedia.ui.data.RemoteBean;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
-import com.coremedia.ui.data.impl.BeanFactoryImpl;
 import com.coremedia.ui.data.test.Step;
 import com.coremedia.ui.util.createComponentSelector;
 
@@ -39,9 +29,6 @@ public class CommerceCatalogObjectsSelectFormTest extends AbstractCatalogTest {
   override public function setUp():void {
     super.setUp();
     resetCatalogHelper();
-    BeanFactoryImpl(beanFactory).registerRemoteBeanClasses(ContentTypeImpl, ContentImpl, ContentStructRemoteBeanImpl,
-            StoreImpl, CategoryImpl, ContractsImpl, ContractImpl, ProductImpl);
-
 
     persona = beanFactory.getRemoteBean('content/300') as Content;
     //we need to mock the write access

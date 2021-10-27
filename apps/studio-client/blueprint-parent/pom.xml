@@ -31,8 +31,10 @@
 
     <customer>Blueprint</customer>
 
-    <cm.studio-client.core.version>2107.2</cm.studio-client.core.version>
-    <jangaroo.version>4.1.4</jangaroo.version>
+    <cm.studio-client.core.version>2107.3</cm.studio-client.core.version>
+    <jangaroo.version>4.1.8</jangaroo.version>
+    <jangaroo.blueprintSuffix/>
+    <jangaroo.relativeNpmProjectExtensionWorkspacePath>apps/main${jangaroo.blueprintSuffix}</jangaroo.relativeNpmProjectExtensionWorkspacePath>
     <jooUnitWebDriverBrowser>chrome</jooUnitWebDriverBrowser>
 
     <spring.boot.version>2.3.11.RELEASE</spring.boot.version>
@@ -72,12 +74,12 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.48</tomcat.embed.version>
+    <tomcat.embed.version>9.0.54</tomcat.embed.version>
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.studio-client.core.version>2107.2</cm.studio-client.core.version>
-    <cm.common.core.version>2107.2</cm.common.core.version>
+    <cm.studio-client.core.version>2107.3</cm.studio-client.core.version>
+    <cm.common.core.version>2107.3</cm.common.core.version>
     <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
 
     <showDeprecation>true</showDeprecation>
@@ -517,6 +519,61 @@
             <jooUnitWebDriverBrowser>${jooUnitWebDriverBrowser}</jooUnitWebDriverBrowser>
             <jooUnitJettyPortLowerBound>11000</jooUnitJettyPortLowerBound>
             <jooUnitJettyPortUpperBound>12000</jooUnitJettyPortUpperBound>
+            <npmDependencyOverrides>
+              <npmDependencyOverride>
+                <search>^(@jangaroo/.*):.*$</search>
+                <replace>$1:^1.0.0-alpha</replace>
+              </npmDependencyOverride>
+            </npmDependencyOverrides>
+            <relativeNpmProjectExtensionWorkspacePath>${jangaroo.relativeNpmProjectExtensionWorkspacePath}</relativeNpmProjectExtensionWorkspacePath>
+            <npmPackageNameReplacers>
+              <npmPackageNameReplacer>
+                <search>^com[.]coremedia[.]blueprint__studio-base-app$</search>
+                <replace>@coremedia-blueprint/studio-client.main.base-app</replace>
+              </npmPackageNameReplacer>
+              <npmPackageNameReplacer>
+                <search>^com[.]coremedia[.]blueprint__studio-app$</search>
+                <replace>@coremedia-blueprint/studio-client.main.app</replace>
+              </npmPackageNameReplacer>
+              <npmPackageNameReplacer>
+                <search>^com[.]coremedia[.]blueprint__studio-client-extension-dependencies$</search>
+                <replace>@coremedia-blueprint/studio-client.main.static-extension-dependencies</replace>
+              </npmPackageNameReplacer>
+              <npmPackageNameReplacer>
+                <search>^com[.]coremedia[.]blueprint__studio-client-dynamic-extension-dependencies$</search>
+                <replace>@coremedia-blueprint/studio-client.main.extension-dependencies</replace>
+              </npmPackageNameReplacer>
+              <npmPackageNameReplacer>
+                <search>^com[.]coremedia[.]blueprint__studio-resources$</search>
+                <replace>@coremedia-blueprint/studio-client.studio</replace>
+              </npmPackageNameReplacer>
+              <npmPackageNameReplacer>
+                <search>^com[.]coremedia[.](blueprint|blueprint[.]content-hub)__(.+)$</search>
+                <replace>@coremedia-blueprint/studio-client.main.$2</replace>
+              </npmPackageNameReplacer>
+            </npmPackageNameReplacers>
+            <npmPackageFolderNameReplacers>
+              <npmPackageFolderNameReplacer>
+                <search>^${jangaroo.relativeNpmProjectExtensionWorkspacePath}/extensions/(content-hub-default|lc)/@coremedia-blueprint/studio-client[.]main[.](.+)$</search>
+                <replace>${jangaroo.relativeNpmProjectExtensionWorkspacePath}/extensions/$1/$2</replace>
+              </npmPackageFolderNameReplacer>
+              <npmPackageFolderNameReplacer>
+                <search>^${jangaroo.relativeNpmProjectExtensionWorkspacePath}/extensions/([^/]+)/@coremedia-blueprint/studio-client[.]main[.](.+)$</search>
+                <replace>${jangaroo.relativeNpmProjectExtensionWorkspacePath}/extensions/$1</replace>
+              </npmPackageFolderNameReplacer>
+              <npmPackageFolderNameReplacer>
+                <search>^${jangaroo.relativeNpmProjectExtensionWorkspacePath}/(extensions|extension-config)/@coremedia-blueprint/studio-client[.]main[.](.+)$</search>
+                <replace>${jangaroo.relativeNpmProjectExtensionWorkspacePath}/$1/$2</replace>
+              </npmPackageFolderNameReplacer>
+              <npmPackageFolderNameReplacer>
+                <search>^@coremedia-blueprint/studio-client[.]main[.](.+)$</search>
+                <replace>${jangaroo.relativeNpmProjectExtensionWorkspacePath}/$1</replace>
+              </npmPackageFolderNameReplacer>
+              <npmPackageFolderNameReplacer>
+                <search>^@coremedia-blueprint/studio-client[.](studio)$</search>
+                <replace>global/$1${jangaroo.blueprintSuffix}</replace>
+              </npmPackageFolderNameReplacer>
+            </npmPackageFolderNameReplacers>
           </configuration>
         </plugin>
         <plugin>

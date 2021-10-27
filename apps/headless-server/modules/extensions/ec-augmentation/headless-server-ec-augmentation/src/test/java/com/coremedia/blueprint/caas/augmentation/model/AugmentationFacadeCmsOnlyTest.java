@@ -9,6 +9,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
@@ -172,11 +173,12 @@ class AugmentationFacadeCmsOnlyTest {
 
   @Test
   void initializeBreadcrumbTreeRelation() {
-    testling.initializeBreadcrumbTreeRelation(new String[]{"a", "b", "c"}, Vendor.of("vendor"));
+    testling.initializeBreadcrumbTreeRelation(new String[]{"a", "b", "c"}, Vendor.of("vendor"), CatalogAlias.of("aCatalog"));
     List<String> breadcrumb = externalBreadcrumbTreeRelation.getBreadcrumb();
-    assertThat(breadcrumb).hasSize(4);
-    assertThat(breadcrumb).first().isEqualTo("vendor:///catalog/category/root");
-    assertThat(breadcrumb).allMatch(s -> s.startsWith("vendor:///catalog/category/"));
+    assertThat(breadcrumb)
+            .hasSize(3)
+            .allMatch(s -> s.startsWith("vendor:///catalog/category/"))
+            .allMatch(s -> s.contains("/catalog:aCatalog;"));
   }
 
   @Test

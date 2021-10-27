@@ -147,6 +147,7 @@ interface CMCollection @inherit(from: ["CMTeasable"]) {
 
 interface CMDownload @inherit(from: ["CMTeasable"]) {
   data: Blob
+  fullyQualifiedUrl: String
   filename: String
 }
 
@@ -223,7 +224,7 @@ interface CMMedia @inherit(from: ["CMTeasable"]) {
   captionReferencedContent(view: String): [Content_!]
   copyright: String
   data: Blob
-  fullyQualifiedUrl: String!
+  fullyQualifiedUrl: String
 }
 
 interface CMNavigation @inherit(from: ["CMTeasable", "HasPageGrid"]) {
@@ -376,6 +377,7 @@ type CMCollectionImpl implements CMCollection @inherit(from: ["CMTeasableImpl"])
 
 type CMDownloadImpl implements CMDownload @inherit(from: ["CMTeasableImpl"]) {
   data: Blob @fetch(from: "@contentBlobAdapter.to(#root, 'data')")
+  fullyQualifiedUrl: String @fetch(from: "#this.data == null ? null : @uriLinkComposer.apply(@filenameBlobAdapter.to(@contentBlobAdapter.to(#root, 'data')))")
   filename: String
 }
 
@@ -458,7 +460,7 @@ type CMMediaImpl implements CMMedia @inherit(from: ["CMTeasableImpl"]) {
   captionReferencedContent(view: String): [Content_!] @fetch(from: "caption?.view(#view?:'default')?.getReferencedContent()")
   copyright: String
   data: Blob @fetch(from: "@contentBlobAdapter.to(#root, 'data')")
-  fullyQualifiedUrl: String! @fetch(from: "@uriLinkComposer.apply(@filenameBlobAdapter.to(@contentBlobAdapter.to(#root, 'data')))")
+  fullyQualifiedUrl: String @fetch(from: "#this.data == null ? null : @uriLinkComposer.apply(@filenameBlobAdapter.to(@contentBlobAdapter.to(#root, 'data')))")
 }
 
 type CMNavigationImpl implements CMNavigation @inherit(from: ["CMTeasableImpl"]) {

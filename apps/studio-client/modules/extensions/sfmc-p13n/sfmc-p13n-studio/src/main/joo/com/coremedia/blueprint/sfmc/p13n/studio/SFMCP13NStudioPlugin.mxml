@@ -14,8 +14,6 @@
     [ResourceBundle('com.coremedia.blueprint.sfmc.p13n.studio.SFMCP13NStudioPlugin')]
   </fx:Metadata>
   <fx:Script><![CDATA[
-    import com.coremedia.blueprint.base.sfmc.p13n.studio.model.JourneyImpl;
-    import com.coremedia.blueprint.base.sfmc.p13n.studio.model.JourneysImpl;
 
     public static const xtype:String = "com.coremedia.blueprint.sfmc.p13n.studio.config.sFMCP13NStudioPlugin";
 
@@ -48,9 +46,5 @@
       </p13n:plugins>
     </p13n:CMPersonaForm>
   </editor:rules>
-  <editor:configuration>
-    <editor:RegisterRestResource beanClass="{JourneyImpl}"/>
-    <editor:RegisterRestResource beanClass="{JourneysImpl}"/>
-  </editor:configuration>
 
 </editor:StudioPlugin>

@@ -1,12 +1,11 @@
 package com.coremedia.livecontext.studio.action {
-import com.coremedia.cms.editor.sdk.quickcreate.QuickCreateDialog;
 import com.coremedia.cms.editor.sdk.actions.ActionConfigUtil;
+import com.coremedia.cms.editor.sdk.quickcreate.QuickCreateDialog;
 import com.coremedia.cms.editor.sdk.quickcreate.processing.ProcessingData;
 import com.coremedia.ecommerce.studio.augmentation.augmentationService;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
 
 import ext.ComponentManager;
-import ext.Ext;
 import ext.window.Window;
 
 import mx.resources.ResourceManager;
@@ -56,7 +55,7 @@ public class CreateCatalogObjectDocumentActionBase extends LiveContextCatalogObj
   }
 
   protected function isCorrectType(catalogObject:CatalogObject):Boolean {
-    return Ext.getClassName(catalogObject) === Ext.getClassName(catalogObjectType);
+    return Object.getPrototypeOf(catalogObject) === catalogObjectType.prototype;
   }
 
   protected function myHandler():void {

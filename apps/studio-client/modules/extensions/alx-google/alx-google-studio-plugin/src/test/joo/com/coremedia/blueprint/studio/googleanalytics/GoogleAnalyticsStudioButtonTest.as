@@ -7,8 +7,6 @@ import com.coremedia.ui.util.createComponentSelector;
 
 import ext.container.Viewport;
 
-import joo.getOrCreatePackage;
-
 public class GoogleAnalyticsStudioButtonTest extends AbstractRemoteTest {
 
   private var viewPort:Viewport;
@@ -19,7 +17,6 @@ public class GoogleAnalyticsStudioButtonTest extends AbstractRemoteTest {
   override public function setUp():void {
     super.setUp();
 
-    delete getOrCreatePackage("com.coremedia.cms.editor.sdk")['editorContext'];
     EditorContextImpl.initEditorContext();
 
     viewPort = new GoogleAnalyticsStudioButtonTestView(

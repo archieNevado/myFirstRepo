@@ -8,6 +8,8 @@
         xmlns:es="exml:com.coremedia.elastic.social.studio.config"
         xmlns:lces="exml:com.coremedia.livecontext.elastic.social.studio.config">
   <fx:Script><![CDATA[
+    import com.coremedia.ecommerce.studio.model.Product;
+    import com.coremedia.elastic.social.studio.model.Contribution;
     import com.coremedia.elastic.social.studio.moderation.shared.details.comments.CommentMetaDataPanel;
 
     import ext.Component;
@@ -15,9 +17,17 @@
 
     public static const xtype:String = "com.coremedia.livecontext.elastic.social.studio.config.lcElasticSocialStudioPlugin";
 
+    private static const PRODUCT_INFORMATION_CONTAINER_ITEM_ID:String = "com-coremedia-ecommerce-studio-model-ProductImpl";
+
     private var config:LcElasticSocialStudioPlugin;
 
     public native function LcElasticSocialStudioPlugin(config:LcElasticSocialStudioPlugin = null);
+
+    private function __initialize__(config:LcElasticSocialStudioPlugin):void {
+      CommentMetaDataPanel.registerContributionToItemIdPredicate(LcElasticSocialStudioPlugin.PRODUCT_INFORMATION_CONTAINER_ITEM_ID, function (contribution:Contribution):Boolean {
+        return contribution is Product;
+      });
+    }
     ]]></fx:Script>
 
   <editor:rules>
@@ -26,7 +36,7 @@
         <ui:AddLazyItemsPlugin
                 applyTo="{function(container:Container):Component { return container.queryById(CommentMetaDataPanel.TARGET_INFORMATION_CONTAINER_ITEM_ID);}}">
           <ui:items>
-            <lces:ProductInformationContainer itemId="com-coremedia-ecommerce-studio-model-ProductImpl"/>
+            <lces:ProductInformationContainer itemId="{LcElasticSocialStudioPlugin.PRODUCT_INFORMATION_CONTAINER_ITEM_ID}"/>
           </ui:items>
         </ui:AddLazyItemsPlugin>
       </es:plugins>

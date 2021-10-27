@@ -1,8 +1,9 @@
 package com.coremedia.ecommerce.studio.model {
+import com.coremedia.ecommerce.studio.AbstractCatalogTest;
 import com.coremedia.ui.data.RemoteBean;
 import com.coremedia.ui.data.beanFactory;
 
-public class CatalogObjectTest extends AbstractCatalogModelTest {
+public class CatalogObjectTest extends AbstractCatalogTest {
 
   private var catalogObject:CatalogObject;
 

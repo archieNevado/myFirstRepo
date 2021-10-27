@@ -1,4 +1,3 @@
-
 package com.coremedia.ecommerce.studio {
 import com.coremedia.cap.common.CapSession;
 import com.coremedia.cap.common.SESSION;
@@ -69,7 +68,6 @@ public class AbstractCatalogTest extends AbstractRemoteTest {
     RequestCounter.reset();
     BeanFactoryImpl.initBeanFactory();
     CapPropertyDescriptorUtil.registerResolver();
-    BeanFactoryImpl(beanFactory).registerRemoteBeanClasses(ContentRepositoryImpl);
     contentRepository = beanFactory.getRemoteBean("content") as ContentRepositoryImpl;
     contentRepository.getRoot = function ():Content {
       return CONTENT_ROOT;

@@ -81,17 +81,16 @@ public class EsAnalyticsChartWidgetEditorTest extends TestCase {
     site2 = new SiteImpl(ID_2, null, null, null, mockContent({id: ID_2, name: NAME_2}), NAME_2, new Locale({'displayName': 'locale2'}), null, true, false);
   }
 
-  private static const MOCK_CONTENT_PROTOTYPE:Object = {
-    addPropertyChangeListener: Ext.emptyFn,
-    "get": function(prop:String):* {
-      return this[prop];
-    },
-    getUriPath: function():String {
-      return this.id;
-    }
-  };
   private static function mockContent(props:Object):Content {
-    return Content(Ext.apply(Object.create(MOCK_CONTENT_PROTOTYPE), props));
+    return Object.assign(Content({
+      addPropertyChangeListener: Ext.emptyFn,
+      "get": function(prop:String):* {
+        return this[prop];
+      },
+      getUriPath: function():String {
+        return this.id;
+      }
+    }), props);
   }
 }
 }

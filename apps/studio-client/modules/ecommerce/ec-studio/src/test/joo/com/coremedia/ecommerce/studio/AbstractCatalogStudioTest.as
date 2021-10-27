@@ -1,11 +1,4 @@
 package com.coremedia.ecommerce.studio {
-import com.coremedia.cap.content.impl.ContentImpl;
-import com.coremedia.cap.content.impl.ContentStructRemoteBeanImpl;
-import com.coremedia.cap.content.impl.ContentTypeImpl;
-import com.coremedia.ecommerce.studio.model.*;
-import com.coremedia.ui.data.beanFactory;
-import com.coremedia.ui.data.impl.BeanFactoryImpl;
-
 public class AbstractCatalogStudioTest extends AbstractCatalogTest {
 
   protected static const HELIOS_SITE_ID:String = "HeliosSiteId";
@@ -29,8 +22,6 @@ public class AbstractCatalogStudioTest extends AbstractCatalogTest {
   override public function setUp():void {
     super.setUp();
     resetCatalogHelper();
-    BeanFactoryImpl(beanFactory).registerRemoteBeanClasses(ContentTypeImpl, ContentImpl, ContentStructRemoteBeanImpl,
-            StoreImpl, CategoryImpl, MarketingImpl, ContractsImpl, ContractImpl, ProductImpl, MarketingSpotImpl, ProductVariantImpl);
   }
 }
 }
