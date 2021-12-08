@@ -14,17 +14,4 @@
   <context:annotation-config />
 
   <bean class="com.coremedia.blueprint.cae.config.BlueprintI18nCaeBaseLibConfiguration"/>
-
-<!--
-  Activate this and set it as pageResourceBundleFactory alias only if you keep
-  your resource bundles mixed with the linked settings, rather than moving
-  them to the new resourceBundles property.
-
-  <bean id="settingsPageResourceBundleFactory" class="com.coremedia.blueprint.cae.web.i18n.SettingsPageResourceBundleFactory">
-    <description>
-      Settings based ResourceBundleFactory
-    </description>
-    <property name="cache" ref="cache"/>
-  </bean>
--->
 </beans>

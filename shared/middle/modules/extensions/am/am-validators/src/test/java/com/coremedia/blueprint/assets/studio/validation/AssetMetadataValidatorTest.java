@@ -8,7 +8,6 @@ import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.cms.assets.AssetConstants;
 import com.coremedia.rest.validation.impl.Issue;
 import com.coremedia.rest.validation.impl.IssuesImpl;
-import com.google.common.collect.ImmutableList;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -37,10 +36,10 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration(classes = AssetMetadataValidatorTest.LocalConfig.class)
 public class AssetMetadataValidatorTest {
   public static final String METADATA_PROPERTY = "metadata";
-  private static final ImmutableList<String> DEFAULT_CHANNELS =
-          ImmutableList.<String>builder().add("channel1", "channel2", "channel3").build();
-  private static final ImmutableList<String> DEFAULT_REGIONS =
-          ImmutableList.<String>builder().add("region1", "region2", "region3").build();
+  private static final List<String> DEFAULT_CHANNELS =
+          List.of("channel1", "channel2", "channel3");
+  private static final List<String> DEFAULT_REGIONS =
+          List.of("region1", "region2", "region3");
 
   @Inject
   private CapConnection connection;
@@ -93,9 +92,9 @@ public class AssetMetadataValidatorTest {
   public void testNoIssueForSubgroupOfChannelsOrRegions() throws Exception {
     Object entity = connection.getStructService().createStructBuilder()
             .declareStrings(AssetConstants.METADATA_CHANNELS_PROPERTY_NAME, 10,
-                    ImmutableList.<String>builder().add("channel1", "channel3").build())
+                    List.of("channel1", "channel3"))
             .declareStrings(AssetConstants.METADATA_REGIONS_PROPERTY_NAME, 10,
-                    ImmutableList.<String>builder().add("region2").build())
+                    List.of("region2"))
             .build();
 
     testling.validate(entity, issues);
@@ -107,21 +106,21 @@ public class AssetMetadataValidatorTest {
   public void testIssueForNotConfiguredChannel() throws Exception {
     Object entity = connection.getStructService().createStructBuilder()
             .declareStrings(AssetConstants.METADATA_CHANNELS_PROPERTY_NAME, 10,
-                    ImmutableList.<String>builder().add("channel4").build())
+                    List.of("channel4"))
             .build();
 
     testling.validate(entity, issues);
 
-    assertIssuesContainChannelsOrRegions(issues, Collections.singletonList("channel4"), Collections.<String>emptyList());
+    assertIssuesContainChannelsOrRegions(issues, Collections.singletonList("channel4"), Collections.emptyList());
   }
 
   @Test
   public void testIssueForNotConfiguredChannelOrRegion() throws Exception {
     Object entity = connection.getStructService().createStructBuilder()
             .declareStrings(AssetConstants.METADATA_CHANNELS_PROPERTY_NAME, 10,
-                    ImmutableList.<String>builder().add("channel1", "channel4", "channel5").build())
+                    List.of("channel1", "channel4", "channel5"))
             .declareStrings(AssetConstants.METADATA_REGIONS_PROPERTY_NAME, 10,
-                    ImmutableList.<String>builder().add("region4").build())
+                    List.of("region4"))
             .build();
 
     testling.validate(entity, issues);

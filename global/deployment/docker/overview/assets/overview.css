@@ -235,6 +235,10 @@ svg:not(:root) {
   display: none;
 }
 
+.cm-hero__version {
+  color: #ffffff;
+}
+
 /* content */
 .cm-container {
   padding: 10px;
@@ -323,6 +327,16 @@ table.sites td:nth-child(n+2) {
   border-radius: 2px;
   font-size: 14px;
   cursor: copy;
+  transition: 0.1s ease-in-out;
+}
+
+.cm-details code:hover {
+  background: #d0d0d0;
+}
+
+.cm-details code.selected {
+  color: #fff;
+  background: #006cae;
 }
 
 .cm-details button {

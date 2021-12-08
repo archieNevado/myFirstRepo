@@ -104,19 +104,3 @@
   <#return blueprintFreemarkerFacade.getBlobLink(target, filename)>
 </#function>
 
-<#-- --- DEPRECATED/UNUSED ----------------------------------------------------------------------------------------- -->
-
-<#-- DEPRECATED -->
-<#function createBeanFor content>
-  <#return blueprintFreemarkerFacade.createBeanFor(content)>
-</#function>
-
-<#-- DEPRECATED -->
-<#function createBeansFor contents>
-  <#return blueprintFreemarkerFacade.createBeansFor(contents)>
-</#function>
-
-<#-- DEPRECATED, use getDisplayFileSize instead -->
-<#function getDisplaySize size>
-  <#return blueprintFreemarkerFacade.getDisplaySize(size) />
-</#function>

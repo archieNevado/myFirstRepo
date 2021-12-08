@@ -6,8 +6,6 @@ import com.coremedia.serialization.cap.ParameterBasedLinkableSerializer;
 import javax.inject.Named;
 import java.util.Map;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.WORKSPACE_ID_NONE;
-
 /**
  * The StoreSerializer uses {@link com.fasterxml.jackson.databind.ObjectMapper} (and
  * other chained {@link com.fasterxml.jackson.databind.JsonSerializer}s too) to serialize objects of
@@ -19,7 +17,7 @@ import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreCon
 @Named
 public class PbeStoreSerializer extends ParameterBasedLinkableSerializer<StoreContext> {
 
-  public static final String STORE_URI_TEMPLATE = "livecontext/store/{siteId}/{workspaceId}";
+  public static final String STORE_URI_TEMPLATE = "livecontext/store/{siteId}";
 
   public PbeStoreSerializer() {
     setUriTemplate(STORE_URI_TEMPLATE);
@@ -28,7 +26,6 @@ public class PbeStoreSerializer extends ParameterBasedLinkableSerializer<StoreCo
   @Override
   public void fillLinkParameters(StoreContext storeContext, Map<String, String> params) {
     params.put("siteId", storeContext.getSiteId());
-    params.put("workspaceId", storeContext.getWorkspaceId().orElse(WORKSPACE_ID_NONE).value());
   }
 
   @Override

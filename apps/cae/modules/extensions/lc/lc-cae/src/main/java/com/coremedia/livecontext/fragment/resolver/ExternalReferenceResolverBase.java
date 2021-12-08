@@ -9,12 +9,12 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Objects;
 
 /**
@@ -41,7 +41,7 @@ public abstract class ExternalReferenceResolverBase implements ExternalReference
   }
 
   @Override
-  public boolean include(@Nullable FragmentParameters fragmentParameters) {
+  public boolean test(@Nullable FragmentParameters fragmentParameters) {
     if (fragmentParameters == null) {
       return false;
     }
@@ -89,7 +89,7 @@ public abstract class ExternalReferenceResolverBase implements ExternalReference
   @Override
   @Nullable
   public LinkableAndNavigation resolveExternalRef(@NonNull FragmentParameters fragmentParameters, @NonNull Site site) {
-    if (!include(fragmentParameters)) {
+    if (!test(fragmentParameters)) {
       return null;
     }
     String referenceInfo = stripPrefixFromExternalReference(fragmentParameters);

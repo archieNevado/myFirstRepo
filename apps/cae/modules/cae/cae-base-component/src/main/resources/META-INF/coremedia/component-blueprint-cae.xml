@@ -18,13 +18,7 @@
   <import resource="classpath:/framework/spring/blueprint-links.xml"/>
   <import resource="classpath:/framework/spring/blueprint-freemarker-views.xml"/>
   <import resource="classpath:/framework/spring/errorhandling.xml"/>
-  <import resource="classpath:/framework/spring/blueprint-sitemap.xml"/>
 
   <bean class="com.coremedia.blueprint.component.cae.CaeBaseComponentConfiguration"/>
-
-  <beans profile="dev">
-    <!-- only expose com.coremedia.blueprint.cae.sitemap.TestUrlsGenerationHandler in development mode -->
-    <import resource="classpath:/framework/spring/blueprint-testUrls.xml"/>
-  </beans>
 
 </beans>

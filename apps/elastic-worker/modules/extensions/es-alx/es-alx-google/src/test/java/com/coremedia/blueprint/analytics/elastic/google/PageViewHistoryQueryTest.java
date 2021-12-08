@@ -5,7 +5,6 @@ import com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil;
 import com.coremedia.blueprint.base.analytics.elastic.util.SettingsUtil;
 import com.google.api.services.analytics.Analytics;
 import com.google.api.services.analytics.model.GaData;
-import com.google.common.collect.ImmutableMap;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -104,7 +103,7 @@ public final class PageViewHistoryQueryTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testCreateInvalidQuery() {
-    ImmutableMap<String, Object> settings = ImmutableMap.of();
+    Map<String, Object> settings = Map.of();
     PageViewHistoryQuery query = new PageViewHistoryQuery(SettingsUtil.createProxy(GoogleAnalyticsSettings.class, settings).getPid(), 10, 0);
     fail(query + " should not exist");
   }
@@ -114,9 +113,7 @@ public final class PageViewHistoryQueryTest {
     int profileId = 1234;
     int timeRange = 20;
 
-    ImmutableMap<String, Object> settings = ImmutableMap.<String, Object>of(
-            GoogleAnalyticsQuery.KEY_PID, profileId
-    );
+    Map<String, Object> settings = Map.of(GoogleAnalyticsQuery.KEY_PID, profileId);
     PageViewHistoryQuery query = new PageViewHistoryQuery(SettingsUtil.createProxy(GoogleAnalyticsSettings.class, settings).getPid(), timeRange, 0);
     assertEquals(profileId, query.getProfileId());
     assertEquals(PageViewHistoryQuery.DEFAULT_MAX_RESULTS, query.getMaxResults());
@@ -125,7 +122,7 @@ public final class PageViewHistoryQueryTest {
   }
 
   private PageViewHistoryQuery createDefaultQuery() {
-    ImmutableMap<String, Object> settings = ImmutableMap.<String, Object>of(
+    Map<String, Object> settings = Map.of(
             RetrievalUtil.KEY_LIMIT, 20,
             RetrievalUtil.DOCUMENT_PROPERTY_TIME_RANGE, TIME_RANGE,
             GoogleAnalyticsQuery.KEY_PID, PROFILE_ID

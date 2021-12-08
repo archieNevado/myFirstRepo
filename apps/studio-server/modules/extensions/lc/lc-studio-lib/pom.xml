@@ -69,10 +69,6 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
@@ -115,12 +111,28 @@
     </dependency>
     <dependency>
       <groupId>com.coremedia.cms</groupId>
+      <artifactId>cap-client-base</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>cap-rest-plugins</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
       <artifactId>coremedia-spring</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>middle.coremedia-validation</artifactId>
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
       <artifactId>ec-test-util</artifactId>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

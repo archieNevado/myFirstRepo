@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.elastic.social.cae.controller;
 
-import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.navigation.Navigation;
@@ -9,17 +8,18 @@ import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.cap.user.User;
 import com.coremedia.elastic.core.cms.ContentWithSite;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.UserVariantHelper;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
@@ -88,8 +88,12 @@ public class ElasticContentHandler<T extends ContributionResult> extends Elastic
     return contentRepository.getContent(IdHelper.formatContentId(targetId));
   }
 
-  protected Object getContributionTarget(String targetId, Site site) {
-    return getContentWithSite(targetId, site);
+  protected Object getContributionTarget(String targetId, HttpServletRequest request) {
+    var siteFromRequest = SiteHelper.getSiteFromRequest(request);
+    if (siteFromRequest == null) {
+      return null;
+    }
+    return getContentWithSite(targetId, siteFromRequest);
   }
 
   protected ContentWithSite getContentWithSite(String targetId, Site site) {
@@ -112,7 +116,7 @@ public class ElasticContentHandler<T extends ContributionResult> extends Elastic
 
   protected Object fetchContributionTarget(HttpServletRequest request, String targetId) {
     return SiteHelper.findSite(request)
-            .map(site -> getContributionTarget(targetId, site))
+            .map(site -> getContributionTarget(targetId, request))
             .orElse(null);
   }
 

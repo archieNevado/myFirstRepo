@@ -21,7 +21,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -73,7 +72,7 @@ public class LiveContextNavigationTreeRelationTest {
     Category categoryChild1 = mock(Category.class);
     Category categoryChild2 = mock(Category.class);
 
-    List<Category> categoryChildren = newArrayList(categoryChild1, categoryChild2);
+    List<Category> categoryChildren = List.of(categoryChild1, categoryChild2);
 
     when(augmentedCategory.getChildren()).thenReturn(categoryChildren);
 

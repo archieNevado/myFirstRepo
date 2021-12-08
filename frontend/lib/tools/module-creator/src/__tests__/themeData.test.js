@@ -4,7 +4,6 @@ const {
   initPackageJson,
   initWebpackConfigJs,
   initThemeConfigJson,
-  initThemePrettierignore,
   initThemeSass,
   initPreviewSass,
   initThemeIndexJs,
@@ -25,12 +24,6 @@ describe("initPackageJson()", () => {
         }
       )
     ).toMatchSnapshot();
-  });
-});
-
-describe("initThemePrettierignore()", () => {
-  it("returns data for .prettierignore", () => {
-    expect(initThemePrettierignore()).toMatchSnapshot();
   });
 });
 

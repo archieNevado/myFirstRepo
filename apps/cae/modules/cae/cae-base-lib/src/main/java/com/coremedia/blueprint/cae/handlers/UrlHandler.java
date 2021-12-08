@@ -41,7 +41,7 @@ public class UrlHandler extends AbstractUrlHandler {
 
   /**
    * Uri pattern for CAE URLs.
-   * e.g. /url?id=123
+   * e.g. /internal/service/url?id=123
    */
   public static final String URI_PATTERN =
           '/' + PREFIX_INTERNAL +

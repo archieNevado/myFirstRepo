@@ -34,7 +34,7 @@
         <div class="cm-form-group">
           <label><@cm.message "userDetails_profileImage" /></label>
           <#assign link=cm.getLink(userDetails.profileImage {"transform":true, "width":elasticSocialConfiguration.userImageWidth!100?int, "height": elasticSocialConfiguration.userImageHeight!100?int})/>
-          <img class="cm-form__image" src="${link}" title="" alt="userimage">
+          <img class="cm-form__image" src="${link}" loading="lazy" title="" alt="userimage">
         </div>
       </#if>
 

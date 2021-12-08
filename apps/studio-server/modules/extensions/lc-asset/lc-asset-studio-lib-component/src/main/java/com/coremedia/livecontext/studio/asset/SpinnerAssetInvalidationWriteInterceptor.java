@@ -29,7 +29,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.NAME_LOCAL_SETTINGS;
-import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Collections.emptySet;
 import static java.util.stream.Collectors.toSet;
 
@@ -168,7 +167,7 @@ public class SpinnerAssetInvalidationWriteInterceptor extends ContentWriteInterc
     }
 
     StoreContext storeContext = commerceConnection.get().getInitialStoreContext();
-    commerceCacheInvalidationSource.invalidateReferences(newHashSet(allReferences), storeContext);
+    commerceCacheInvalidationSource.invalidateReferences(new HashSet<>(allReferences), storeContext);
   }
 
   @NonNull

@@ -28,8 +28,7 @@
 
   &__video,
   &__content {
-    //noinspection CssRedundantUnit IE11 fix (percentage and full definition)
-      flex: 1 1 0%;
+      flex: 1 1 0;
   }
 
   // hide shoppable video teasers by default
@@ -64,7 +63,6 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
-      height: 0; // IE11 needs a height value, to calculate vertical flex-grow of its children, even if it's not used
       min-height: 35%;
       padding: 15px;
 
@@ -84,8 +82,7 @@
     }
 
     &__text {
-      //noinspection CssRedundantUnit IE11 fix (percentage and full definition)
-      flex: 1 1 0%;
+      flex: 1 1 0;
     }
 
     &__shop-now {
@@ -124,8 +121,7 @@
   @include breakpoints(("sm", landscape) "lg-and-up") {
     &__video,
     &__content {
-      //noinspection CssRedundantUnit IE11 fix (percentage and full definition)
-      flex: 3 1 0%;
+      flex: 3 1 0;
     }
 
     &__video {
@@ -134,8 +130,7 @@
 
     &__teasers {
       display: block;
-      //noinspection CssRedundantUnit IE11 fix (percentage and full definition)
-      flex: 1 1 0%;
+      flex: 1 1 0;
       margin-left: 10px;
     }
 

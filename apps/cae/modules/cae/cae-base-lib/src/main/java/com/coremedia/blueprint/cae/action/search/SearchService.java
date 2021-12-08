@@ -22,23 +22,21 @@ import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.util.CollectionUtils;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.coremedia.blueprint.cae.search.SearchConstants.FIELDS.LOCATION_TAXONOMY;
 import static com.coremedia.blueprint.cae.search.SearchConstants.FIELDS.SUBJECT_TAXONOMY;
@@ -202,17 +200,17 @@ public class SearchService {
     // 1) search for all taxonomy documents matching the query from the search form
     //    and create a map from numeric content ID to these candidate taxonomy content beans
     List<?> hits = searchTaxonomies(searchForm, taxonomyDocumentTypes);
-    ImmutableMap<String, CMLinkable> candidateTaxonomiesByNumericId = FluentIterable.from(hits)
-            .filter(CMLinkable.class)
-            .uniqueIndex(new Function<CMLinkable, String>() {
-              @Override
-              public String apply(@Nullable CMLinkable hit) {
-                if (hit == null) {
-                  throw new AssertionError();
-                }
-                return String.valueOf(hit.getContentId());
-              }
-            });
+    Map<String, CMLinkable> candidateTaxonomiesByNumericId = hits.stream()
+            .filter(CMLinkable.class::isInstance)
+            .map(CMLinkable.class::cast)
+            .collect(Collectors.toMap(
+                    cmLinkable -> String.valueOf(cmLinkable.getContentId()),
+                    Function.identity(),
+                    (k, v) -> {
+                      throw new IllegalStateException(String.format("Duplicate key %s", k));
+                    },
+                    LinkedHashMap::new));
+
     if (candidateTaxonomiesByNumericId.isEmpty()) {
       return null;
     }
@@ -223,8 +221,8 @@ public class SearchService {
     //    The default index fields with taxonomy IDs are for subject and location taxonomies, but may be set
     //    differently by the caller to match the used taxonomy document types
     List<String> indexFields = topicIndexFields == null || topicIndexFields.isEmpty()
-            ? ImmutableList.of(SUBJECT_TAXONOMY.toString(), LOCATION_TAXONOMY.toString())
-            : ImmutableList.copyOf(topicIndexFields);
+            ? List.of(SUBJECT_TAXONOMY.toString(), LOCATION_TAXONOMY.toString())
+            : List.copyOf(topicIndexFields);
 
     SearchQueryBean query = new SearchQueryBean();
     int rootChannelId = navigation.getRootNavigation().getContentId();
@@ -235,14 +233,10 @@ public class SearchService {
     query.setLimit(0); // just interested in faceting results
 
     // restrict the query to candidate taxonomies, e.g "subjecttaxonomy:(42 OR 44) OR locationtaxonomy:(42 OR 44)"
-    Joiner orJoiner = Joiner.on(" OR ");
-    final String taxonomyIds = orJoiner.join(candidateTaxonomiesByNumericId.keySet());
-    query.setQuery(FluentIterable.from(indexFields).transform(new Function<String, String>() {
-      @Override
-      public String apply(@Nullable String indexField) {
-        return indexField + ":(" + taxonomyIds + ')';
-      }
-    }).join(orJoiner));
+    final String taxonomyIds = String.join(" OR ", candidateTaxonomiesByNumericId.keySet());
+    query.setQuery(indexFields.stream()
+            .map(indexField -> indexField + ":(" + taxonomyIds + ')')
+            .collect(Collectors.joining(" OR ")));
 
     // perform a faceted search and get the actually used taxonomies of the candidate taxonomies
     SearchResultBean searchResult = resultFactory.createSearchResultUncached(query);
@@ -274,7 +268,7 @@ public class SearchService {
    */
   private List<?> searchTaxonomies(SearchFormBean searchForm, @Nullable Collection<String> taxonomyDocumentTypes) {
     if (StringUtils.isEmpty(searchForm.getQuery()) || CollectionUtils.isEmpty(taxonomyDocumentTypes)) {
-      return ImmutableList.of();
+      return Collections.emptyList();
     }
 
     SearchQueryBean searchQuery = new SearchQueryBean();

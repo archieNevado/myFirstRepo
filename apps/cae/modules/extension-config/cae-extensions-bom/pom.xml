@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.coremedia</groupId>
+    <artifactId>cms-blueprint-parent</artifactId>
+    <version>1.0.0</version>
+    <relativePath />
+  </parent>
 
   <groupId>com.coremedia.blueprint</groupId>
   <artifactId>cae-extensions-bom</artifactId>
@@ -10,168 +16,150 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>alx-cae</artifactId>
-        <version>1-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>alx-google-cae</artifactId>
-        <version>1-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>alx-google-templates</artifactId>
-        <version>1-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>alx-p13n-cae</artifactId>
-        <version>1-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>alx-webtrends-cae</artifactId>
-        <version>1-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>am-cae</artifactId>
-        <version>1-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>am-preview-cae</artifactId>
-        <version>1-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>corporate-cae</artifactId>
-        <version>1-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>ecommerce-adapter-cae</artifactId>
-        <version>1-SNAPSHOT</version>
+        <version>${project.version}</version>
         <type>pom</type>
       </dependency>
       <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>es-alx-cae</artifactId>
-        <version>1-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>es-cae-users</artifactId>
-        <version>1-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>es-cae</artifactId>
-        <version>1-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>es-contentbeans</artifactId>
-        <version>1-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
-        <artifactId>es-p13n-cae</artifactId>
-        <version>1-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>lc-asset-cae-component</artifactId>
-        <version>1-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>lc-cae</artifactId>
-        <version>1-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>lc-contentbeans-api</artifactId>
-        <version>1-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>lc-contentbeans-impl</artifactId>
-        <version>1-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
-        <artifactId>lc-ecommerce-ibm-cae-component</artifactId>
-        <version>1-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
-        <artifactId>lc-ecommerce-ibm-cae</artifactId>
-        <version>1-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>lc-es-cae</artifactId>
-        <version>1-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>lc-p13n-cae</artifactId>
-        <version>1-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>lc-p13n-preview-cae</artifactId>
-        <version>1-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>lc-preview-cae</artifactId>
-        <version>1-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
-        <artifactId>optimizely-cae</artifactId>
-        <version>1-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
-        <artifactId>optimizely-templates</artifactId>
-        <version>1-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>p13n-cae</artifactId>
-        <version>1-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>p13n-preview-cae</artifactId>
-        <version>1-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.coremedia.blueprint</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>p13n-test-content</artifactId>
-        <version>1-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
 
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-deploy-plugin</artifactId>
-          <version>3.0.0-M1</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-install-plugin</artifactId>
-          <version>3.0.0-M1</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
+  <repositories>
+    <repository>
+      <id>coremedia.external.releases</id>
+      <name>CoreMedia CMS</name>
+      <url>https://repository.coremedia.com/nexus/content/groups/cms/</url>
+      <layout>default</layout>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>coremedia.external.releases</id>
+      <name>CoreMedia CMS</name>
+      <url>https://repository.coremedia.com/nexus/content/groups/cms/</url>
+      <layout>default</layout>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
 </project>

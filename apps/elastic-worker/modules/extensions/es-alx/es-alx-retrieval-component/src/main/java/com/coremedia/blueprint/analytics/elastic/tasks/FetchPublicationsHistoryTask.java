@@ -4,12 +4,11 @@ import com.coremedia.blueprint.base.analytics.elastic.PublicationReportModelServ
 import com.coremedia.blueprint.base.analytics.elastic.ReportModel;
 import com.coremedia.blueprint.base.analytics.elastic.util.DaysBack;
 import com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil;
-import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.base.elastic.tenant.TenantSiteMapping;
+import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.SitesService;
-import com.google.common.collect.ImmutableMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +23,6 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import static com.coremedia.blueprint.base.analytics.elastic.util.DateUtil.getDateWithoutTime;
-import static com.google.common.collect.Maps.newHashMap;
 
 /**
  * A task to aggregate all publications below root channel paths.
@@ -83,7 +81,7 @@ public class FetchPublicationsHistoryTask implements Runnable {
       Map<String, Long> newPublications = publicationsAggregator.aggregatePublications();
 
       // make last publications modifiable
-      HashMap<String, Long> allPublications = newHashMap(publicationReportModel.getReportMap());
+      HashMap<String, Long> allPublications = new HashMap<>(publicationReportModel.getReportMap());
       allPublications.putAll(newPublications);
       publicationReportModel.setReportMap(allPublications);
 
@@ -91,7 +89,7 @@ public class FetchPublicationsHistoryTask implements Runnable {
       // this property is used for ttl feature
       publicationReportModel.setLastSavedDate(currentDate);
       publicationReportModel.setLastSaved(currentDate.getTime());
-      publicationReportModel.setSettings(ImmutableMap.<String, Object>of(PUBLICATION_HISTORY_DOCUMENT_TYPE_KEY, documentType));
+      publicationReportModel.setSettings(Map.of(PUBLICATION_HISTORY_DOCUMENT_TYPE_KEY, documentType));
       publicationReportModel.save();
     }
   }

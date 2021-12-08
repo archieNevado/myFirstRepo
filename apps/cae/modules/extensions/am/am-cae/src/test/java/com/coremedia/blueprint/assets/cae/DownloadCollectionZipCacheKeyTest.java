@@ -23,11 +23,11 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -126,7 +126,7 @@ public class DownloadCollectionZipCacheKeyTest {
     when(amAssetRenditionInvalidId.getAsset()).thenReturn(assetInvalid);
     when(amAssetRenditionInvalidId.getBlob()).thenReturn(renditionBlob);
 
-    renditions = newArrayList(amAssetRendition);
+    renditions = List.of(amAssetRendition);
 
     cacheKey = new DownloadCollectionZipCacheKey(renditions, contentRepository, mimeTypeService);
   }
@@ -146,7 +146,7 @@ public class DownloadCollectionZipCacheKeyTest {
 
   @Test
   public void testEqualsFail() throws Exception {
-    List<AMAssetRendition> renditionsOther = newArrayList(amAssetRendition, amAssetRenditionInvalidId);
+    List<AMAssetRendition> renditionsOther = List.of(amAssetRendition, amAssetRenditionInvalidId);
     DownloadCollectionZipCacheKey cacheKeyOther = newDownloadCollectionZipCacheKeyWithRenditions(renditionsOther);
 
     assertThat(cacheKey).isNotEqualTo(cacheKeyOther);
@@ -156,7 +156,7 @@ public class DownloadCollectionZipCacheKeyTest {
 
   @Test
   public void testNotEquals() throws Exception {
-    List<AMAssetRendition> renditionsOther = newArrayList();
+    List<AMAssetRendition> renditionsOther = List.of();
     DownloadCollectionZipCacheKey cacheKeyOther = new DownloadCollectionZipCacheKey(renditionsOther,
             contentRepositoryAnother, mimeTypeService);
 
@@ -191,7 +191,7 @@ public class DownloadCollectionZipCacheKeyTest {
 
   @Test
   public void testCreateDownloadCollectionZipBlobNull() throws Exception {
-    List<AMAssetRendition> renditions = newArrayList(amAssetRenditionNoBlob);
+    List<AMAssetRendition> renditions = List.of(amAssetRenditionNoBlob);
     DownloadCollectionZipCacheKey cacheKey = newDownloadCollectionZipCacheKeyWithRenditions(renditions);
 
     File evaluatedZipFile = cacheKey.evaluate(cache);
@@ -202,7 +202,7 @@ public class DownloadCollectionZipCacheKeyTest {
 
   @Test
   public void testCreateDownloadCollectionZipInvalidId() throws Exception {
-    List<AMAssetRendition> renditions = newArrayList(amAssetRenditionInvalidId);
+    List<AMAssetRendition> renditions = List.of(amAssetRenditionInvalidId);
     DownloadCollectionZipCacheKey cacheKey = newDownloadCollectionZipCacheKeyWithRenditions(renditions);
 
     File evaluatedZipFile = cacheKey.evaluate(cache);
@@ -243,7 +243,7 @@ public class DownloadCollectionZipCacheKeyTest {
    * @param zipFile input zip file
    */
   private List<String> unZipIt(File zipFile) {
-    List<String> filenames = newArrayList();
+    List<String> filenames = new ArrayList<>();
 
     try (ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile))) {
       // Get the zipped file list entries.

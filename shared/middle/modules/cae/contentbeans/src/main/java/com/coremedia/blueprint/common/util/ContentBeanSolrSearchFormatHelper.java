@@ -3,10 +3,9 @@ package com.coremedia.blueprint.common.util;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.objectserver.beans.ContentBeanIdScheme;
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class ContentBeanSolrSearchFormatHelper {
 
@@ -39,27 +38,25 @@ public final class ContentBeanSolrSearchFormatHelper {
   }
 
   public static List<String> cmObjectsToIds(List<? extends CMObject> cmObjects) {
-    return Lists.transform(cmObjects, new Function<CMObject, String>() {
-      @Override
-      public String apply(CMObject input) {
-        if (input==null) {
-          throw new IllegalArgumentException("input must not be null");
-        }
-        return cmObjectToId(input);
-      }
-    });
+    return cmObjects.stream()
+            .map(input -> {
+              if (input == null) {
+                throw new IllegalArgumentException("input must not be null");
+              }
+              return cmObjectToId(input);
+            })
+            .collect(Collectors.toList());
   }
 
   public static List<String> cmNavigationsToId(List<? extends CMNavigation> navigations) {
-    return Lists.transform(navigations, new Function<CMNavigation, String>() {
-      @Override
-      public String apply(CMNavigation input) {
-        if (input==null) {
-          throw new IllegalArgumentException("input must not be null");
-        }
-        return cmNavigationToId(input);
-      }
-    });
+    return navigations.stream()
+            .map(input -> {
+              if (input==null) {
+                throw new IllegalArgumentException("input must not be null");
+              }
+              return cmNavigationToId(input);
+            })
+            .collect(Collectors.toList());
   }
 
   public static String cmNavigationToId(CMNavigation navigation) {

@@ -42,7 +42,7 @@ public class ReviewsResultHandler extends AbstractReviewsResultHandler {
                                  @PathVariable(ID) String targetId,
                                  @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,
                                  HttpServletRequest request) {
-    return handleGetReviews(SiteHelper.getSiteFromRequest(request), contextId, targetId, view);
+    return handleGetReviews(contextId, targetId, view, request);
   }
 
   @PostMapping(value = DYNAMIC_PATTERN_REVIEWS)

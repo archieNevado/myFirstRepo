@@ -64,6 +64,7 @@
     <dependency>
       <groupId>javax.ws.rs</groupId>
       <artifactId>jsr311-api</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>javax.inject</groupId>
@@ -175,8 +176,8 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-test-util</artifactId>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>test-util</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

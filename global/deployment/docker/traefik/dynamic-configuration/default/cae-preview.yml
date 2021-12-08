@@ -1,0 +1,45 @@
+http:
+  routers:
+    # load corporate site, if no path is given
+    # traefik v1: traefik.preview-landing.frontend.rule: Host:preview.${ENVIRONMENT_FQDN:-docker.localhost};Path:/;AddPrefix:/blueprint/servlet/corporate
+    cae-preview-landing:
+      # this needs a higher prio than the servlet rule
+      priority: 50
+      entrypoints:
+        - web-access-secure
+        - web-access-insecure
+      rule: Host(`preview.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && Path(`/`)
+      service: cae-preview
+      middlewares:
+        - add-blueprint-servlet-corporate@file
+    # needed for static resources
+    # traefik v1: traefik.preview-static-files.frontend.rule: Host:preview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/blueprint
+    cae-preview-static-files:
+      # need a lower priority than any landing page route but higher than the servlet rule
+      priority: 40
+      entrypoints:
+        - web-access-secure
+        - web-access-insecure
+      rule: Host(`preview.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && PathPrefix(`/static`)
+      service: cae-preview
+      middlewares:
+        - add-blueprint@file
+    # traefik v1: traefik.preview-servlets.frontend.rule: Host:preview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/preview,/previewurl,/assets,/service,/dynamic,/resource,/corporate,/corporate-de-de,/corporate-en-gb,/corporate-en-ca,/styleguide;AddPrefix:/blueprint/servlet
+    cae-preview-servlets:
+      # need a lower priority than any landing page route
+      # because this is the last catch-all, we also remove all incoming prefixes before adding the correct servlet paths
+      priority: 30
+      entrypoints:
+        - web-access-secure
+        - web-access-insecure
+      rule: Host(`preview.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && PathPrefix(`/`)
+      service: cae-preview
+      middlewares:
+        - remove-cae-prefixes@file
+        - add-blueprint-servlet@file
+
+  services:
+    cae-preview:
+      loadBalancer:
+        servers:
+          - url: http://cae-preview:8080

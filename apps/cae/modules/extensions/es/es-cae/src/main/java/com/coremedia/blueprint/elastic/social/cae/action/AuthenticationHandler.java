@@ -13,7 +13,6 @@ import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.coremedia.objectserver.web.links.LinkFormatter;
-import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -133,7 +132,7 @@ public class AuthenticationHandler extends WebflowHandlerBase {
     Navigation context = getNavigation(action.getAction());
     UriComponentsBuilder result = UriComponentsBuilder.fromPath(uriPattern.toString());
     result = addLinkParametersAsQueryParameters(result, linkParameters);
-    return result.buildAndExpand(ImmutableMap.of(
+    return result.buildAndExpand(Map.of(
             SEGMENTS_FRAGMENT, view == null ? FRAGMENT_DEFAULT_VALUE : view,
             SEGMENTS_NAVIGATION, joinPath(getPathSegments(context)),
             SEGMENT_ID, getId(action.getAction()),

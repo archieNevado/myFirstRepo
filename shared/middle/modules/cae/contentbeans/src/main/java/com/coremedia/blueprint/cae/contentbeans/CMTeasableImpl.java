@@ -22,15 +22,14 @@ import com.coremedia.blueprint.common.util.ContentBeanSolrSearchFormatHelper;
 import com.coremedia.blueprint.common.util.ParagraphHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.xml.Markup;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -188,7 +187,7 @@ public class CMTeasableImpl extends CMTeasableBase {
     allRelated.addAll(getRelated());
     allRelated.addAll(getRelatedByReferrers());
     allRelated.addAll(getRelatedBySimilarTaxonomies());
-    return Lists.newArrayList(allRelated);
+    return new ArrayList<>(allRelated);
   }
 
   @Override
@@ -205,7 +204,7 @@ public class CMTeasableImpl extends CMTeasableBase {
     Set<CMTeasable> allRelated = new HashSet<>();
     allRelated.addAll(getRelatedByReferrers());
     allRelated.addAll(getRelatedBySimilarTaxonomies());
-    return Lists.newArrayList(allRelated);
+    return new ArrayList<>(allRelated);
   }
 
   @Override
@@ -267,15 +266,15 @@ public class CMTeasableImpl extends CMTeasableBase {
     CMLinkable target = getTarget();
     boolean enabled = !getSettingsService().settingWithDefault(LEGACY_STRUCT_CTA_DISABLED_PROPERTY_NAME, boolean.class, false, this);
     if (target != null && enabled) {
-      ImmutableMap.Builder<String, Object> mapBuilder = ImmutableMap.builder();
-      mapBuilder.put("target", target);
-      mapBuilder.put("hash", "");
-      mapBuilder.put("text", getSettingsService().settingWithDefault(LEGACY_STRUCT_CTA_CUSTOM_TEXT_PROPERTY_NAME, String.class, "", this));
-      mapBuilder.put("openInNewTab", target.isOpenInNewTab());
-      mapBuilder.put("metadata", ImmutableList.of("properties.localSettings"));
-      return ImmutableList.of(getSettingsService().createProxy(CallToActionButtonSettings.class, mapBuilder.build()));
+      Map<String, Object> map = new LinkedHashMap<>();
+      map.put("target", target);
+      map.put("hash", "");
+      map.put("text", getSettingsService().settingWithDefault(LEGACY_STRUCT_CTA_CUSTOM_TEXT_PROPERTY_NAME, String.class, "", this));
+      map.put("openInNewTab", target.isOpenInNewTab());
+      map.put("metadata", List.of("properties.localSettings"));
+      return List.of(getSettingsService().createProxy(CallToActionButtonSettings.class, Collections.unmodifiableMap(map)));
     }
-    return ImmutableList.of();
+    return List.of();
   }
 
   // --- internal ---------------------------------------------------

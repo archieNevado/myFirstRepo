@@ -44,7 +44,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @SpringBootTest(properties = {
         "repository.factoryClassName=com.coremedia.cap.xmlrepo.XmlCapConnectionFactory",
-        "livecontext.cache.invalidation.enabled=false",
 }, classes = {
         PropertyPlaceholderAutoConfiguration.class,
         BaseCommerceServicesAutoConfiguration.class,

@@ -97,7 +97,6 @@ public class AssetMetadataValidator implements PropertyValidator {
             ? struct.getStrings(property)
             : Collections.<String>emptyList();
   }
-
   /**
    * Set the categories to use for invalid values. Use the constants {@link Issues#CONTENT_ISSUE_CATEGORY} and
    * {@link Issues#LOCALIZATION_ISSUE_CATEGORY} as category values.

@@ -15,7 +15,6 @@ import com.coremedia.elastic.social.api.comments.CommentService;
 import com.coremedia.elastic.social.api.reviews.ReviewService;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.xml.Markup;
-import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -169,9 +168,14 @@ public class CuratedTransferResource {
     // the list of created curated contents from a comment is not personal data
     @SuppressWarnings("PersonalData")
     List<?> existingCurated = comment.getProperty(COMMENT_PROPERTY_CURATED_CONTENTS, List.class);
-    List<Object> curated = existingCurated == null
-            ? ImmutableList.of(content)
-            : ImmutableList.builder().addAll(existingCurated).add(content).build();
+    List<Object> curated;
+    if (existingCurated == null) {
+      curated = List.of(content);
+    } else {
+      curated = new ArrayList<>(existingCurated);
+      curated.add(content);
+      curated = Collections.unmodifiableList(curated);
+    }
     comment.setProperty(COMMENT_PROPERTY_CURATED_CONTENTS, curated);
     comment.save();
   }

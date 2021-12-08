@@ -1,0 +1,2 @@
+org.springframework.boot.actuate.autoconfigure.web.ManagementContextConfiguration=\
+  com.coremedia.blueprint.component.cae.management.corporate.CorporateManagementConfiguration

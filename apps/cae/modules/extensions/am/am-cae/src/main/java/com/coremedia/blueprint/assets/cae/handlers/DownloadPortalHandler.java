@@ -29,14 +29,12 @@ import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.view.ViewUtils;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -292,7 +290,7 @@ public class DownloadPortalHandler {
     PaginatedAssets paginatedCategoryAssets = downloadPortalFactory.createPaginatedCategoryAssets(
             categoryBean, navigation, page);
     if (null != categoryBean) {
-      paginatedCategoryAssets.setBaseRequestParams(ImmutableMap.of(CATEGORY_REQUEST_PARAMETER_NAME, Integer.toString(categoryBean.getContentId())));
+      paginatedCategoryAssets.setBaseRequestParams(Map.of(CATEGORY_REQUEST_PARAMETER_NAME, Integer.toString(categoryBean.getContentId())));
     }
 
     return handlePaginatedAssetsRequest(page, paginatedCategoryAssets, navigation, response);
@@ -314,7 +312,7 @@ public class DownloadPortalHandler {
                                                           HttpServletResponse response) {
     PaginatedAssets paginatedSubjectAssets = downloadPortalFactory.createPaginatedSubjectAssets(
             subjectBean, navigation, page);
-    paginatedSubjectAssets.setBaseRequestParams(ImmutableMap.of(SUBJECT_REQUEST_PARAMETER_NAME, Integer.toString(subjectBean.getContentId())));
+    paginatedSubjectAssets.setBaseRequestParams(Map.of(SUBJECT_REQUEST_PARAMETER_NAME, Integer.toString(subjectBean.getContentId())));
 
     return handlePaginatedAssetsRequest(page, paginatedSubjectAssets, navigation, response);
   }
@@ -340,14 +338,14 @@ public class DownloadPortalHandler {
       Notification notification = new Notification(
               Notification.NotificationType.WARNING,
               AMLocalizationKeys.SEARCH_NOTIFICATION_QUERY_TOO_SHORT,
-              ImmutableList.of(query.trim())
+              List.of(query.trim())
       );
       paginatedSearchAssets.setNotification(notification);
     } else {
       paginatedSearchAssets = downloadPortalFactory.createPaginatedSearchAssets(query, navigation, page);
       addSearchNotification(paginatedSearchAssets, query);
     }
-    paginatedSearchAssets.setBaseRequestParams(ImmutableMap.of(SEARCH_REQUEST_PARAMETER_NAME, query));
+    paginatedSearchAssets.setBaseRequestParams(Map.of(SEARCH_REQUEST_PARAMETER_NAME, query));
     return handlePaginatedAssetsRequest(page, paginatedSearchAssets, navigation, response);
   }
 
@@ -560,19 +558,19 @@ public class DownloadPortalHandler {
       notification = new Notification(
               Notification.NotificationType.WARNING,
               AMLocalizationKeys.SEARCH_NOTIFICATION_NO_RESULTS,
-              ImmutableList.of(query)
+              List.of(query)
       );
     } else if (paginatedAssets.getTotalCount() == 1) {
       notification = new Notification(
               Notification.NotificationType.SUCCESS,
               AMLocalizationKeys.SEARCH_NOTIFICATION_ONE_RESULT,
-              ImmutableList.of(query)
+              List.of(query)
       );
     } else {
       notification = new Notification(
               Notification.NotificationType.SUCCESS,
               AMLocalizationKeys.SEARCH_NOTIFICATION_RESULTS,
-              ImmutableList.of(paginatedAssets.getTotalCount(), query)
+              List.of(paginatedAssets.getTotalCount(), query)
       );
     }
     paginatedAssets.setNotification(notification);

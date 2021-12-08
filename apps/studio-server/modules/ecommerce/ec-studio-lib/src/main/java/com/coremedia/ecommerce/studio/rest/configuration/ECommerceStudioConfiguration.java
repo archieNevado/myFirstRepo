@@ -1,6 +1,6 @@
 package com.coremedia.ecommerce.studio.rest.configuration;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceServicesAutoConfiguration;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceServicesConfiguration;
 import com.coremedia.ecommerce.studio.preview.CommerceHeadlessPreviewProvider;
 import com.coremedia.ecommerce.studio.rest.filter.EcStudioFilters;
 import com.coremedia.rest.cap.CapRestServiceConfiguration;
@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Import;
 @Import({
         EcStudioFilters.class,
         CapRestServiceConfiguration.class,
-        BaseCommerceServicesAutoConfiguration.class
+        BaseCommerceServicesConfiguration.class
 })
 @ComponentScan(basePackages = "com.coremedia.ecommerce.studio.rest")
 public class ECommerceStudioConfiguration {

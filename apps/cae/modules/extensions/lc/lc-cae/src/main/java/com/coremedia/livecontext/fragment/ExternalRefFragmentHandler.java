@@ -1,6 +1,5 @@
 package com.coremedia.livecontext.fragment;
 
-import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.blueprint.cae.constants.RequestAttributeConstants;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
@@ -10,6 +9,7 @@ import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.user.User;
 import com.coremedia.livecontext.fragment.resolver.ExternalReferenceResolver;
@@ -44,7 +44,7 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
   // --- FragmentHandler --------------------------------------------
 
   @Override
-  public boolean include(FragmentParameters params) {
+  public boolean test(FragmentParameters params) {
     return !Strings.isNullOrEmpty(params.getExternalRef());
   }
 
@@ -239,7 +239,7 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
   @Nullable
   private ExternalReferenceResolver findReferenceResolver(FragmentParameters params) {
     for (ExternalReferenceResolver resolver : externalReferenceResolvers) {
-      if (resolver.include(params)) {
+      if (resolver.test(params)) {
         return resolver;
       }
     }

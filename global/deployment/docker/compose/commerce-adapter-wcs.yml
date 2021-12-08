@@ -1,6 +1,14 @@
 version: "3.4"
 
-# default environment variables for all spring-boot services
+# default environment variables
+x-default-boot-envs:
+  &default-boot-envs
+  # extracts the app at startup to speed up the annotation and property scanning of the classpath. The startup improvements
+  # are around 2-3x faster. It is also the recommended way by Spring. With Spring-Boot 2.3 the spring-maven-plugin will
+  # be able to build images with exploded layout.
+  SPRING_BOOT_EXPLODED_APP: "${SPRING_BOOT_EXPLODED_APP:-true}"
+
+# default environment variables for development
 x-development-boot-envs:
   &development-boot-envs
   DEVELOPMENT_SETUP: "${DEVELOPMENT_SETUP:-false}"
@@ -8,18 +16,21 @@ x-development-boot-envs:
   JAVA_DEBUG_SUSPEND: "${JAVA_DEBUG_SUSPEND:-false}"
   # enable entrypoint debugging i.e. set -x
   DEBUG_ENTRYPOINT: "${DEBUG_ENTRYPOINT:-false}"
-  JAVA_HEAP: '128m'
   # writes heapdumps to /coremedia/heapdumps on oom exceptions. restart the container or mount a volume to
   # that directory to inspect the heapdumps
   HEAP_DUMP_ON_OOM: "${HEAP_DUMP_ON_OOM:-true}"
-  # extracts the app at startup to speed up the annotation and property scanning of the classpath. The startup improvements
-  # are around 2-3x faster. It is also the recommended way by Spring. With Spring-Boot 2.3 the spring-maven-plugin will
-  # be able to build images with exploded layout.
-  SPRING_BOOT_EXPLODED_APP: "${SPRING_BOOT_EXPLODED_APP:-true}"
+
+x-default-boot-healthcheck:
+  &default-boot-healthcheck
+  test: [ "CMD", "curl", "-Lf", "http://localhost:8081/actuator/health" ]
+  interval: 30s
+  timeout: 10s
+  retries: 3
+  start_period: 40s
 
 # default logging configuration
 x-logging:
-        &default-logging
+  &default-logging
   options:
     max-size: '12m'
     max-file: '5'
@@ -27,7 +38,7 @@ x-logging:
 
 services:
   commerce-adapter-wcs:
-    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-wcs:${COMMERCE_ADAPTER_WCS_VERSION:-1.6.5}
+    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-wcs:${COMMERCE_ADAPTER_WCS_VERSION:-2.0.4}
     container_name: commerce-adapter-wcs
     restart: always
     logging: *default-logging
@@ -38,14 +49,18 @@ services:
       - 44381:8081
       - 44305:5005
     environment:
-      << : *development-boot-envs
+      <<: *default-boot-envs
+      <<: *development-boot-envs
       WCS_HOST: ${WCS_HOST}
-      WCS_LINK_STOREFRONT_HOST: ${WCS_LINK_STOREFRONT_HOST}
       WCS_LINK_PRODUCT_MAX_URL_SEGMENTS: ${WCS_LINK_PRODUCT_MAX_URL_SEGMENTS:-7}
       WCS_USERNAME: ${WCS_USERNAME}
       WCS_PASSWORD: ${WCS_PASSWORD}
       SPRING_PROFILES: ${SPRING_PROFILES:-wcs-9.0}
+      # required by the CAE to substitute the '{aurora.host}' replacement tokens in the 'Aurora Augmentation' demo site
+      METADATA_REPLACEMENTTOKENS_AURORA_HOST: ${METADATA_REPLACEMENTTOKENS_AURORA_HOST}
       MANAGEMENT_HEALTH_STORES_ENABLED: ${MANAGEMENT_HEALTH_STORES_ENABLED:-true}
+      JAVA_HEAP: '128m'
+    healthcheck: *default-boot-healthcheck
 
   studio-server:
     environment:

@@ -79,7 +79,7 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>lc-contentbeans-api</artifactId>
       <version>${project.version}</version>
     </dependency>

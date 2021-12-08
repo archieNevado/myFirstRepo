@@ -26,7 +26,12 @@
     <property name="linkFormatter" ref="linkFormatter" />
   </bean>
 
-  <bean id="developerModeAppendingLinkTransformer" class="com.coremedia.blueprint.component.cae.preview.DeveloperModeParameterAppendingLinkTransformer"/>
+  <bean id="developerModeAppendingLinkTransformer" class="com.coremedia.objectserver.web.links.ParameterAppendingLinkTransformer">
+    <description>
+      LinkTransformer that adds the request parameters for developer mode to links.
+    </description>
+    <property name="parameterName" value="userVariant"/>
+  </bean>
 
   <customize:prepend id="previewLinkTransformerCustomizer" bean="linkTransformers">
     <list>
@@ -34,38 +39,6 @@
       <ref bean="developerModeAppendingLinkTransformer"/>
     </list>
   </customize:prepend>
-
-  <bean id="previewUrlHandler" class="com.coremedia.blueprint.cae.handlers.PreviewUrlHandler">
-    <description>
-      Preview Url Controller
-    </description>
-    <property name="contentBeanFactory" ref="contentBeanFactory"/>
-    <property name="dataViewFactory">
-      <description>
-        Don't use dataviews here because we will run into trouble with non-contentbean generated classes otherwise
-      </description>
-      <null/>
-    </property>
-    <property name="idProvider" ref="idProvider"/>
-    <property name="linkFormatter" ref="linkFormatter"/>
-    <property name="sitesService" ref="sitesService"/>
-  </bean>
-
-  <bean id="urlHandler" class="com.coremedia.blueprint.cae.handlers.UrlHandler">
-    <description>
-      Url Handler
-    </description>
-    <property name="contentBeanFactory" ref="contentBeanFactory"/>
-    <property name="dataViewFactory">
-      <description>
-        Don't use dataviews here because we will run into trouble with non-contentbean generated classes otherwise
-      </description>
-      <null/>
-    </property>
-    <property name="idProvider" ref="idProvider"/>
-    <property name="linkFormatter" ref="linkFormatter"/>
-    <property name="sitesService" ref="sitesService"/>
-  </bean>
 
   <bean id="channelValidityInterceptor"
         class="com.coremedia.blueprint.cae.web.ChannelValidityInterceptor" >

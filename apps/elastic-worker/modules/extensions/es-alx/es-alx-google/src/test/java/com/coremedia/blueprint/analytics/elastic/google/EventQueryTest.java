@@ -5,7 +5,6 @@ import com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil;
 import com.coremedia.blueprint.base.analytics.elastic.util.SettingsUtil;
 import com.google.api.services.analytics.Analytics;
 import com.google.api.services.analytics.model.GaData;
-import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
@@ -16,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -75,9 +75,7 @@ public class EventQueryTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testCreateInvalidQuery() {
-    ImmutableMap<String, Object> settings = ImmutableMap.<String, Object>of(
-            RetrievalUtil.DOCUMENT_PROPERTY_TIME_RANGE, 30
-    );
+    Map<String, Object> settings = Map.of(RetrievalUtil.DOCUMENT_PROPERTY_TIME_RANGE, 30);
     EventQuery query = new EventQuery(SettingsUtil.createProxy(GoogleAnalyticsSettings.class, settings));
     fail(query + " should not exist");
   }
@@ -98,7 +96,7 @@ public class EventQueryTest {
   }
 
   private EventQuery createDefaultQuery() {
-    ImmutableMap<String, Object> settings = ImmutableMap.<String, Object>of(
+    Map<String, Object> settings = Map.of(
             RetrievalUtil.KEY_LIMIT, 20,
             RetrievalUtil.DOCUMENT_PROPERTY_TIME_RANGE, 30,
             RetrievalUtil.DOCUMENT_PROPERTY_ACTION, "myAction",

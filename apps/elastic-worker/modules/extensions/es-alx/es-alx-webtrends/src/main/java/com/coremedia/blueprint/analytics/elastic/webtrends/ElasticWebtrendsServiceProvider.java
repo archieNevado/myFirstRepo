@@ -4,8 +4,6 @@ import com.coremedia.blueprint.analytics.elastic.retrieval.AnalyticsServiceProvi
 import com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.content.Content;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -27,9 +25,11 @@ import java.io.InputStreamReader;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
 import static org.apache.commons.lang3.StringUtils.join;
@@ -61,15 +61,7 @@ public class ElasticWebtrendsServiceProvider implements AnalyticsServiceProvider
   private static final String SORT_BY_MEASURE = "sortByMeasure";
   private static final String DEFAULT_SORT_BY_MEASURE = "Hits";
 
-  static final Map<String, Object> DEFAULT_RETRIEVAL_SETTINGS = ImmutableMap.<String,Object>builder()
-          .putAll(RetrievalUtil.DEFAULT_RETRIEVAL_SETTINGS)
-          .put(SORT_BY_MEASURE, DEFAULT_SORT_BY_MEASURE)
-          .put(REPORT_ID, "")
-          .put(PROFILE_ID, 0)
-          .put(USER_NAME, "")
-          .put(ACCOUNT_NAME, "")
-          .put(KEY_PASSWORD, "")
-          .build();
+  static final Map<String, Object> DEFAULT_RETRIEVAL_SETTINGS = createDefaultRetrievalSettings();
 
   @Override
   public List<String> fetchDataFor(Content cmalxBaseList, Map<String, Object> effectiveSettings) throws Exception {
@@ -161,7 +153,9 @@ public class ElasticWebtrendsServiceProvider implements AnalyticsServiceProvider
           }
 
           Collections.sort(reportEntries, Collections.reverseOrder());
-          return Lists.transform(reportEntries, new ReportEntryTransformer());
+          return reportEntries.stream()
+                  .map(ReportEntry::getValue)
+                  .collect(Collectors.toList());
         } else {
           LOG.trace("report data is empty");
         }
@@ -181,5 +175,17 @@ public class ElasticWebtrendsServiceProvider implements AnalyticsServiceProvider
   @Override
   public Map<String, Object> computeEffectiveRetrievalSettings(Content cmalxBaseList, Content rootNavigation) {
     return RetrievalUtil.computeEffectiveRetrievalSettings(WEBTRENDS_SERVICE_KEY, DEFAULT_RETRIEVAL_SETTINGS, cmalxBaseList, rootNavigation, settingsService);
+  }
+
+  private static Map<String, Object> createDefaultRetrievalSettings() {
+    Map<String, Object> map = new HashMap<>(RetrievalUtil.DEFAULT_RETRIEVAL_SETTINGS);
+    map.putAll(RetrievalUtil.DEFAULT_RETRIEVAL_SETTINGS);
+    map.put(SORT_BY_MEASURE, DEFAULT_SORT_BY_MEASURE);
+    map.put(REPORT_ID, "");
+    map.put(PROFILE_ID, 0);
+    map.put(USER_NAME, "");
+    map.put(ACCOUNT_NAME, "");
+    map.put(KEY_PASSWORD, "");
+    return Collections.unmodifiableMap(map);
   }
 }

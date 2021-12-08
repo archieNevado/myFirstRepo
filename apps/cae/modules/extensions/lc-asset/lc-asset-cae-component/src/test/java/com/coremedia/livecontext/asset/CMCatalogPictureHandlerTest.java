@@ -13,7 +13,6 @@ import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
 import com.coremedia.objectserver.web.HttpError;
-import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,12 +23,12 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService.DEFAULT_CATALOG_ALIAS;
-import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -68,10 +67,9 @@ public class CMCatalogPictureHandlerTest {
 
   @Before
   public void setUp() {
-    Map<String, String> pictureFormats = ImmutableMap.<String, String>builder()
-            .put("thumbnail", "portrait_ratio20x31/200/310")
-            .put("full", "portrait_ratio20x31/646/1000")
-            .build();
+    Map<String, String> pictureFormats = Map.of(
+            "thumbnail", "portrait_ratio20x31/200/310",
+            "full", "portrait_ratio20x31/646/1000");
     testling.setPictureFormats(pictureFormats);
 
     testling.setTransformImageService(transformImageService);
@@ -126,14 +124,13 @@ public class CMCatalogPictureHandlerTest {
 
   @Test
   public void testHandleRequestSuccessCached() {
-    WebRequest request = mock(WebRequest.class);
-    when(request.checkNotModified(nullable(String.class))).thenReturn(true);
+    WebRequest webRequest = mock(WebRequest.class);
+    when(webRequest.checkNotModified(nullable(String.class))).thenReturn(true);
 
     prepareSuccessRequest();
 
     ModelAndView result = testling.handleRequestWidthHeight(
-            "10201", "en_US", "full", PRODUCT_REFERENCE, "jpg", request
-    );
+            "10201", "en_US", "full", PRODUCT_REFERENCE, "jpg", webRequest);
 
     assert304(result);
   }
@@ -155,7 +152,7 @@ public class CMCatalogPictureHandlerTest {
   private void prepareSuccessRequest() {
     when(siteResolver.findSiteFor(anyString(), any(Locale.class))).thenReturn(Optional.of(site));
     when(site.getId()).thenReturn("site-1");
-    when(assetService.findPictures(PRODUCT_REFERENCE, true, "site-1")).thenReturn(newArrayList(pictureContent));
+    when(assetService.findPictures(PRODUCT_REFERENCE, true, "site-1")).thenReturn(List.of(pictureContent));
     when(transformImageService.transformWithDimensions(any(Content.class), eq("data"), anyString(), anyInt(), anyInt()))
             .thenReturn(Optional.of(mock(Blob.class)));
   }

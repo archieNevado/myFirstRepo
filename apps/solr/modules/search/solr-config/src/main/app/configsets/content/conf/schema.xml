@@ -28,18 +28,16 @@
     _root_       - the value of the top/parent ID.
     _nest_path_  - the path of the document in the hierarchy for non-root documents
 
-    By default, these fields are disabled, because they must not be added to existing indexes.
     When adding or removing these fields, the index must be recreated from scratch to avoid inconsistencies.
     It's not sufficient to reindex all documents in an existing index.
 
-    The fields must be added, if the Content Feeder is configured to index validation issues (configuration property
-    feeder.content.issues.index=true), or if custom code uses nested documents by calling Java API method
+    The fields are used, if the Content Feeder is configured to index validation issues
+    (true by default, see configuration property feeder.content.issues.index),
+    or if custom code uses nested documents by calling Java API method
     com.coremedia.cap.feeder.MutableFeedable#setNestedFeedables.
   -->
-  <!--
-    <field name="_root_" type="string" indexed="true" stored="false" docValues="true" />
-    <field name="_nest_path_" type="_nest_path_" /><fieldType name="_nest_path_" class="solr.NestPathField" />
-  -->
+  <field name="_root_" type="string" indexed="true" stored="false" docValues="true" />
+  <field name="_nest_path_" type="_nest_path_" /><fieldType name="_nest_path_" class="solr.NestPathField" />
 
   <!--
     The ID of the index document. For indexed CoreMedia content this is the numeric content ID.
@@ -360,10 +358,9 @@
     The following fields with names starting with "issue" (singular) are used in nested Solr documents
     under the field name "issues" and store validation issues of the content.
 
-    Issues are only indexed if enabled for the Content Feeder with configuration property
-    feeder.content.issues.index=true. It also requires adding the Solr fields _root_ and _nest_path_
-    (see their commented out definition in this file). The issue* fields are enabled in any case,
-    to avoid query errors.
+    The Content Feeder indexes issues by default, if not disabled with configuration property
+    feeder.content.issues.index=false. The fields _root_ and _nest_path_ must also be defined
+    to index nested documents.
   -->
   <!-- Issue categories. The field is used by Studio. -->
   <field name="issueCategories" type="string" indexed="true" stored="true" multiValued="true"/>

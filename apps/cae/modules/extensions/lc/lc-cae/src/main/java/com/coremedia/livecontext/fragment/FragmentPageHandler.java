@@ -1,9 +1,7 @@
 package com.coremedia.livecontext.fragment;
 
-import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextHelper;
 import com.coremedia.blueprint.cae.handlers.PageHandlerBase;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.contentbeans.Page;
@@ -11,11 +9,11 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.cap.user.User;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
-import com.google.common.collect.ImmutableList;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
@@ -85,7 +83,7 @@ public class FragmentPageHandler extends PageHandlerBase {
                                      @NonNull @PathVariable(SEGMENT_LOCALE) Locale locale,
                                      @NonNull HttpServletRequest request,
                                      @NonNull HttpServletResponse response) {
-    StoreContext storeContext = CurrentStoreContext.find().orElse(null);
+    StoreContext storeContext = CurrentStoreContext.find(request).orElse(null);
     if (storeContext == null) {
       return HandlerHelper.badRequest("Store context not initialized for fragment call " + request.getRequestURI());
     }
@@ -113,9 +111,7 @@ public class FragmentPageHandler extends PageHandlerBase {
               .withCatalogId(catalogId)
               .withCatalogAlias(catalogAlias.orElse(null))
               .build();
-      CurrentStoreContext.set(updatedStoreContext);
-
-      StoreContextHelper.setStoreContextToRequest(updatedStoreContext, request);
+      CurrentStoreContext.set(updatedStoreContext, request);
     });
 
     ModelAndView modelAndView;
@@ -139,7 +135,7 @@ public class FragmentPageHandler extends PageHandlerBase {
 
   @Required
   public void setFragmentHandlers(@NonNull List<FragmentHandler> fragmentHandlers) {
-    this.fragmentHandlers = ImmutableList.copyOf(fragmentHandlers);
+    this.fragmentHandlers = List.copyOf(fragmentHandlers);
   }
 
   @Required
@@ -156,7 +152,7 @@ public class FragmentPageHandler extends PageHandlerBase {
   @Nullable
   private FragmentHandler selectFragmentHandler(@NonNull FragmentParameters fragmentParameters) {
     return fragmentHandlers.stream()
-            .filter(handler -> handler.include(fragmentParameters))
+            .filter(handler -> handler.test(fragmentParameters))
             .findFirst()
             .orElse(null);
   }

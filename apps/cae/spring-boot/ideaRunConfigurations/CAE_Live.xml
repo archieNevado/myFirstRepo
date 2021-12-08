@@ -28,11 +28,6 @@
         <option name="name" value="solr.host" />
         <option name="value" value="SET_ME" />
       </param>
-      <param>
-        <option name="enabled" value="false" />
-        <option name="name" value="wcs.host" />
-        <option name="value" value="SET_ME" />
-      </param>
     </additionalParameters>
     <method v="2">
       <option name="Make" enabled="true" />

@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.coremedia.blueprint.cae.sitemap.CaeSitemapAutoConfiguration
+org.springframework.boot.actuate.autoconfigure.web.ManagementContextConfiguration=\
+  com.coremedia.blueprint.cae.sitemap.CaeSitemapManagementConfiguration

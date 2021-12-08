@@ -10,19 +10,16 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.HashSet;
 import java.util.List;
 
-import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Sets.newHashSet;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(CommerceReferenceHelper.class)
+@RunWith(MockitoJUnitRunner.class)
 public class AssetInvalidationRepositoryListenerTest {
 
   @Mock
@@ -46,13 +43,10 @@ public class AssetInvalidationRepositoryListenerTest {
   public void setUp() {
     testling = new AssetInvalidationRepositoryListener(invalidationSource, repository);
 
-    mockStatic(CommerceReferenceHelper.class);
-
     testling.start();
 
     when(event.getType()).thenReturn(ContentEvent.CONTENT_CREATED);
     when(event.getContent()).thenReturn(content);
-    when(content.getRepository()).thenReturn(repository);
     when(content.getType()).thenReturn(cmPictureType);
     when(cmPictureType.isSubtypeOf(AssetInvalidationRepositoryListener.CMPICTURE)).thenReturn(true);
   }
@@ -60,12 +54,14 @@ public class AssetInvalidationRepositoryListenerTest {
   @Test
   public void testHandleContentEvent() {
     // content has any external references
-    List<String> externalReferences = newArrayList("vendor:///catalog/product/what", "vendor:///catalog/product/ever");
-    when(CommerceReferenceHelper.getExternalReferences(content)).thenReturn(externalReferences);
+    List<String> externalReferences = List.of("vendor:///catalog/product/what", "vendor:///catalog/product/ever");
 
-    testling.handleContentEvent(event);
+    try (var mocked = mockStatic(CommerceReferenceHelper.class)) {
+      mocked.when(() -> CommerceReferenceHelper.getExternalReferences(content)).thenReturn(externalReferences);
+      testling.handleContentEvent(event);
+    }
 
     // then all products and product variants should be invalidated.
-    verify(invalidationSource).invalidateReferences(newHashSet(externalReferences), null);
+    verify(invalidationSource).invalidateReferences(new HashSet<>(externalReferences), null);
   }
 }

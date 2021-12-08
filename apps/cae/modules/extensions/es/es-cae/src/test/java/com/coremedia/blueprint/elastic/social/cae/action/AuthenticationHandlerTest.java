@@ -6,12 +6,11 @@ import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.testing.ContentTestHelper;
 import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
-import com.coremedia.objectserver.request.RequestUtils;
 import com.coremedia.objectserver.configuration.CaeConfigurationProperties;
+import com.coremedia.objectserver.request.RequestUtils;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.HttpError;
 import com.coremedia.objectserver.web.links.LinkFormatter;
-import com.google.common.collect.ImmutableMap;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -97,7 +96,7 @@ public class AuthenticationHandlerTest {
   @Test
   public void testGenerateActionLink() {
     setAction(24);
-    assertThat(formatLink(authenticationState, ImmutableMap.of("action", "login")))
+    assertThat(formatLink(authenticationState, Map.of("action", "login")))
             .isEqualTo("/dynamic/auth/--/root/24/login");
   }
 

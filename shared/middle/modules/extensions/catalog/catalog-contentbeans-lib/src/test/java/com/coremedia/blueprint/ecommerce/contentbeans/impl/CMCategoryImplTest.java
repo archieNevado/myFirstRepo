@@ -10,7 +10,6 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
-import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +19,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -49,26 +48,26 @@ public class CMCategoryImplTest {
 
   @Test
   public void testGetSubcategoriesNoCmsCategoryFound() {
-    assertEquals(ImmutableList.of(), ImmutableList.copyOf(category.getSubcategories()));
+    assertEquals(List.of(), List.copyOf(category.getSubcategories()));
   }
 
   @Test
   public void testGetSubcategories() {
     Content contentChild1 = mock(Content.class, "child1");
     Content contentChild2 = mock(Content.class, "child2");
-    ImmutableList<Content> contentChildren = ImmutableList.of(contentChild1, contentChild2);
+    List<Content> contentChildren = List.of(contentChild1, contentChild2);
 
     CmsCategory cmsCategory = mock(CmsCategory.class);
     when(catalogService.findCategoryByContent(content)).thenReturn(cmsCategory);
 
     CmsCategory cmsCategoryChild1 = mockCmsCommerceBean(contentChild1, CmsCategory.class);
     CmsCategory cmsCategoryChild2 = mockCmsCommerceBean(contentChild2, CmsCategory.class);
-    ImmutableList<Category> cmsCategoryChildren = ImmutableList.<Category>of(cmsCategoryChild1, cmsCategoryChild2);
+    List<Category> cmsCategoryChildren = List.of(cmsCategoryChild1, cmsCategoryChild2);
     when(cmsCategory.getChildren()).thenReturn(cmsCategoryChildren);
 
     CMCategory cmCategory1 = mock(CMCategory.class);
     CMCategory cmCategory2 = mock(CMCategory.class);
-    List<CMCategory> expectedChildren = ImmutableList.of(cmCategory1, cmCategory2);
+    List<CMCategory> expectedChildren = List.of(cmCategory1, cmCategory2);
     when(contentBeanFactory.createBeansFor(contentChildren, CMCategory.class)).thenReturn(expectedChildren);
 
     assertEquals(expectedChildren, category.getSubcategories());
@@ -76,26 +75,26 @@ public class CMCategoryImplTest {
 
   @Test
   public void testGetProductsNoCmsCategoryFound() {
-    assertEquals(ImmutableList.of(), ImmutableList.copyOf(category.getProducts()));
+    assertEquals(List.of(), List.copyOf(category.getProducts()));
   }
 
   @Test
   public void testGetProducts() {
     Content contentChild1 = mock(Content.class, "child1");
     Content contentChild2 = mock(Content.class, "child2");
-    ImmutableList<Content> contentChildren = ImmutableList.of(contentChild1, contentChild2);
+    List<Content> contentChildren = List.of(contentChild1, contentChild2);
 
     CmsCategory cmsCategory = mock(CmsCategory.class);
     when(catalogService.findCategoryByContent(content)).thenReturn(cmsCategory);
 
     CmsProduct cmsProductChild1 = mockCmsCommerceBean(contentChild1, CmsProduct.class);
     CmsProduct cmsProductChild2 = mockCmsCommerceBean(contentChild2, CmsProduct.class);
-    ImmutableList<Product> cmsProductChildren = ImmutableList.<Product>of(cmsProductChild1, cmsProductChild2);
+    List<Product> cmsProductChildren = List.of(cmsProductChild1, cmsProductChild2);
     when(cmsCategory.getProducts()).thenReturn(cmsProductChildren);
 
     CMProduct cmProduct1 = mock(CMProduct.class);
     CMProduct cmProduct2 = mock(CMProduct.class);
-    List<CMProduct> expectedChildren = ImmutableList.of(cmProduct1, cmProduct2);
+    List<CMProduct> expectedChildren = List.of(cmProduct1, cmProduct2);
     when(contentBeanFactory.createBeansFor(contentChildren, CMProduct.class)).thenReturn(expectedChildren);
 
     assertEquals(expectedChildren, category.getProducts());

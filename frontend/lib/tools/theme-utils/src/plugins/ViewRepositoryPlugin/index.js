@@ -96,7 +96,7 @@ class ViewRepositoryPlugin {
 
   getLoaderConfig() {
     return {
-      loader: "file-loader",
+      loader: require.resolve("file-loader"),
       options: {
         name: (resourcePath) => {
           const packageJsonPath = closestPackage.sync(resourcePath);

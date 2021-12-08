@@ -2,9 +2,11 @@ package com.coremedia.livecontext.fragment.links;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.settings.SettingsService;
+import com.coremedia.livecontext.fragment.links.transformers.StoreContextTokenReplacingLinkTransformer;
 import com.coremedia.livecontext.fragment.links.transformers.resolvers.CommerceLinkResolver;
 import com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.ExternalSeoSegmentBuilder;
 import com.coremedia.livecontext.logictypes.CommerceLedLinkBuilderHelper;
+import com.coremedia.springframework.customizer.Customize;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -41,4 +43,9 @@ public class CommerceLinkConfiguration {
     return new CommerceLinks(commerceLinkHelper, commerceStudioLinks, commerceContentLedLinks);
   }
 
+  @Bean
+  @Customize(value = "linkTransformers", mode = Customize.Mode.PREPEND)
+  StoreContextTokenReplacingLinkTransformer storeContextTokenReplacingLinkTransformer() {
+    return new StoreContextTokenReplacingLinkTransformer();
+  }
 }

@@ -3,7 +3,7 @@ const path = require("path");
 const {
   workspace: { getThemeConfig },
 } = require("@coremedia/tool-utils");
-const { ZipperWebpackPlugin } = require("../plugins/ZipperWebpackPlugin");
+const ZipperWebpackPlugin = require("../plugins/ZipperWebpackPlugin");
 
 const themeConfig = getThemeConfig();
 

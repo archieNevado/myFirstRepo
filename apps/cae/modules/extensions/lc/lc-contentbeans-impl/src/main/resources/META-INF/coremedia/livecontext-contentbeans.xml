@@ -52,7 +52,6 @@
     <property name="liveContextNavigationFactory" ref="liveContextNavigationFactory"/>
     <property name="pageGridService" ref="extCategoryPageGridService"/>
     <property name="pdpPageGridService" ref="pdpPageGridService"/>
-    <property name="commerceConnectionInitializer" ref="commerceConnectionInitializer"/>
     <property name="commerceConnectionSupplier" ref="commerceConnectionSupplier"/>
 
   </bean>

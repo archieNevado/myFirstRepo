@@ -18,7 +18,6 @@ import com.coremedia.livecontext.ecommerce.order.Cart;
 import com.coremedia.livecontext.fragment.links.transformers.resolvers.LiveContextLinkResolver;
 import com.coremedia.objectserver.request.RequestUtils;
 import com.coremedia.objectserver.web.links.LinkTransformer;
-import com.google.common.collect.ImmutableList;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
@@ -99,7 +98,7 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
    * Check prerequisites of live context link transformers
    */
   private boolean canHandle(@NonNull String cmsLink, @Nullable Object bean, String view, @NonNull HttpServletRequest request) {
-    if (CurrentStoreContext.find().isEmpty()) {
+    if (CurrentStoreContext.find(request).isEmpty()) {
       // not a commerce request at all
       return false;
     }
@@ -236,7 +235,7 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
 
   @Required
   public void setLiveContextLinkResolverList(List<LiveContextLinkResolver> liveContextLinkResolverList) {
-    this.liveContextLinkResolverList = ImmutableList.copyOf(liveContextLinkResolverList);
+    this.liveContextLinkResolverList = List.copyOf(liveContextLinkResolverList);
   }
 
   public void setRemoveJSession(boolean removeJSession) {

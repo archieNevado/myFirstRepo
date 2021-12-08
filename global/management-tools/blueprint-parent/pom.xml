@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.coremedia</groupId>
+    <artifactId>cms-blueprint-parent</artifactId>
+    <version>1.0.0</version>
+    <relativePath />
+  </parent>
 
   <!--
       You will need to change the groupId in all modules
@@ -16,7 +22,7 @@
   </organization>
 
   <properties>
-
+    <buildNumber />
     <failOnWarning>true</failOnWarning>
     <coremedia.enforcer.fail>true</coremedia.enforcer.fail>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -28,9 +34,9 @@
     <google.api.services.youtube.version>v3-rev152-1.19.0</google.api.services.youtube.version>
 
     <customer>Blueprint</customer>
-    <cm.management-tools.core.version>2107.3</cm.management-tools.core.version>
+    <cm.management-tools.core.version>2110.1</cm.management-tools.core.version>
 
-    <spring.boot.version>2.3.11.RELEASE</spring.boot.version>
+    <spring.boot.version>2.5.6</spring.boot.version>
     <application-plugin.version>3.0.1</application-plugin.version>
 
     <!--
@@ -51,7 +57,6 @@
     <cae-live.host>${installation.host}</cae-live.host>
     <db.host>${installation.host}</db.host>
     <mongodb.host>${installation.host}</mongodb.host>
-    <wcs.host>commerce-wcs-host</wcs.host>
     <proxy.host>${installation.host}</proxy.host>
 
     <!-- logback appender for maven tomcat plugin start -->
@@ -67,21 +72,18 @@
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
     <tomcat.embed.version>9.0.54</tomcat.embed.version>
-    <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
-    <!-- keep this version in sync with this poms parent version -->
-    <blueprint.version>${project.version}</blueprint.version>
-    <cm.management-tools.core.version>2107.3</cm.management-tools.core.version>
-    <cm.common.core.version>2107.3</cm.common.core.version>
+    <cm.management-tools.core.version>2110.1</cm.management-tools.core.version>
+    <cm.common.core.version>2110.1</cm.common.core.version>
     <cm.common.bp.version>1-SNAPSHOT</cm.common.bp.version>
-    <cm.middle.core.version>2107.3</cm.middle.core.version>
+    <cm.middle.core.version>2110.1</cm.middle.core.version>
     <cm.middle.bp.version>1-SNAPSHOT</cm.middle.bp.version>
-    <cm.cae-feeder.core.version>2107.3</cm.cae-feeder.core.version>
+    <cm.cae-feeder.core.version>2110.1</cm.cae-feeder.core.version>
     <cm.cae-feeder.bp.version>1-SNAPSHOT</cm.cae-feeder.bp.version>
-    <cm.content-server.core.version>2107.3</cm.content-server.core.version>
+    <cm.content-server.core.version>2110.1</cm.content-server.core.version>
     <cm.content-server.bp.version>1-SNAPSHOT</cm.content-server.bp.version>
-    <cm.workflow-server.core.version>2107.3</cm.workflow-server.core.version>
+    <cm.workflow-server.core.version>2110.1</cm.workflow-server.core.version>
     <cm.workflow-server.bp.version>1-SNAPSHOT</cm.workflow-server.bp.version>
-    <cm.studio-server.core.version>2107.3</cm.studio-server.core.version>
+    <cm.studio-server.core.version>2110.1</cm.studio-server.core.version>
     <cm.studio-server.bp.version>1-SNAPSHOT</cm.studio-server.bp.version>
     <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
 
@@ -138,8 +140,8 @@
         </property>
       </activation>
       <properties>
-        <bannedDependenciesIncludes/>
-        <bannedDependenciesExcludes/>
+        <bannedDependenciesIncludes />
+        <bannedDependenciesExcludes />
       </properties>
       <build>
         <plugins>
@@ -434,18 +436,7 @@
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-antrun-plugin</artifactId>
-          <version>1.8</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-assembly-plugin</artifactId>
-          <version>3.3.0</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-clean-plugin</artifactId>
-          <version>3.1.0</version>
           <configuration>
             <filesets>
               <fileset>
@@ -469,16 +460,6 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-dependency-plugin</artifactId>
-          <version>3.1.2</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-deploy-plugin</artifactId>
-          <version>3.0.0-M1</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>
           <version>3.0.0-M2</version>
         </plugin>
@@ -492,11 +473,6 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-install-plugin</artifactId>
-          <version>3.0.0-M1</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
           <version>3.2.0</version>
           <configuration>
@@ -506,7 +482,6 @@
               <manifestEntries>
                 <Built-By>${customer}</Built-By>
                 <Build-Jdk>${java.version}</Build-Jdk>
-
                 <Implementation-Title>${project.artifactId}</Implementation-Title>
                 <Implementation-Vendor>${customer}</Implementation-Vendor>
                 <Implementation-Version>${project.version}</Implementation-Version>
@@ -514,6 +489,7 @@
                 <X-Compile-Target-JDK>${maven.compiler.release}</X-Compile-Target-JDK>
               </manifestEntries>
             </archive>
+            <skipIfEmpty>true</skipIfEmpty>
           </configuration>
         </plugin>
         <plugin>
@@ -524,7 +500,6 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.1.1</version>
           <configuration>
             <doclint>none</doclint>
           </configuration>
@@ -554,11 +529,6 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-source-plugin</artifactId>
-          <version>3.0.1</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>${maven-surefire-plugin.version}</version>
           <configuration>
@@ -578,7 +548,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-war-plugin</artifactId>
-          <version>3.2.2</version>
+          <version>3.3.2</version>
           <configuration>
             <archive>
               <addMavenDescriptor>false</addMavenDescriptor>
@@ -586,7 +556,6 @@
               <manifestEntries>
                 <Built-By>${customer}</Built-By>
                 <Build-Jdk>${java.version}</Build-Jdk>
-
                 <Implementation-Title>${project.artifactId}</Implementation-Title>
                 <Implementation-Vendor>${customer}</Implementation-Vendor>
                 <Implementation-Version>${project.version}</Implementation-Version>
@@ -594,7 +563,7 @@
                 <X-Compile-Target-JDK>${maven.compiler.release}</X-Compile-Target-JDK>
                 <!-- Configure WebSphere to not scan ASM jars in the WAR, because they contain Java 9 module-info.class
                      files and cause exceptions in WebSphere. See CMS-12354 -->
-                <Ignore-Scanning-Archives>asm-analysis-9.1.jar,asm-9.1.jar,asm-commons-9.1.jar,asm-tree-9.1.jar</Ignore-Scanning-Archives>
+                <Ignore-Scanning-Archives>asm-analysis-9.2.jar,asm-9.2.jar,asm-commons-9.2.jar,asm-tree-9.2.jar</Ignore-Scanning-Archives>
               </manifestEntries>
             </archive>
             <failOnMissingWebXml>false</failOnMissingWebXml>

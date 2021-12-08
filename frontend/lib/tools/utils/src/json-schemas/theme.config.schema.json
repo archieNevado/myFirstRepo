@@ -34,11 +34,8 @@
     },
     "ieExpression": {
       "$ref": "types.schema.json#/definitions/nonEmptyStringOrNull",
-      "description": "If set the attribute specifies if the generated script tag will be wrapped by a conditional expression evaluated by the Internet Explorer. The value of the attribute represents the expression to use."
-    },
-    "disableServerSideCompression": {
-      "type": "boolean",
-      "description": "If true the script file will never be compressed in the CAE. This property does not have any effect if no minifier is configured for the CAE. If this is the case, set this flag if the file is already compressed or if it is not compatible with the used minifier. Files with a suffix '.min.js' and '.min.css' (based on the 'target' configuration) and bundled files will never be compressed."
+      "description": "If set the attribute specifies if the generated script tag will be wrapped by a conditional expression evaluated by the Internet Explorer. The value of the attribute represents the expression to use.",
+      "deprecated": true
     },
     "inHead": {
       "type": "boolean",
@@ -178,10 +175,6 @@
               "ieExpression": {
                 "$ref": "#/definitions/ieExpression",
                 "default": null
-              },
-              "disableServerSideCompression": {
-                "$ref": "#/definitions/disableServerSideCompression",
-                "default": false
               }
             },
             "required": ["type", "src", "target"],
@@ -227,9 +220,6 @@
         "properties": {
           "type": {
             "$ref": "#/definitions/resourceType"
-          },
-          "disableServerSideCompression": {
-            "$ref": "#/definitions/disableServerSideCompression"
           },
           "include": {
             "$ref": "#/definitions/include",
@@ -350,10 +340,6 @@
               "defer": {
                 "$ref": "#/definitions/defer",
                 "default": false
-              },
-              "disableServerSideCompression": {
-                "$ref": "#/definitions/disableServerSideCompression",
-                "default": false
               }
             },
             "required": ["type", "src", "target"],
@@ -407,9 +393,6 @@
         "properties": {
           "type": {
             "$ref": "#/definitions/resourceType"
-          },
-          "disableServerSideCompression": {
-            "$ref": "#/definitions/disableServerSideCompression"
           },
           "include": {
             "$ref": "#/definitions/include",

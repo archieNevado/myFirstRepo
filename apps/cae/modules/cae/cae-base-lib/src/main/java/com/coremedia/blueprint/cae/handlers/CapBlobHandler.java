@@ -16,7 +16,6 @@ import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
-import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
@@ -49,7 +48,6 @@ import static com.coremedia.objectserver.web.HandlerHelper.createModel;
 import static com.coremedia.objectserver.web.HandlerHelper.notFound;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.web.util.UriUtils.decode;
-import static org.springframework.web.util.UriUtils.encode;
 
 /**
  * Handler and LinkScheme for {@link com.coremedia.cap.common.CapBlobRef blobs}.
@@ -143,7 +141,7 @@ public class CapBlobHandler extends HandlerBase {
   }
 
   @GetMapping(value = URI_PATTERN)
-  public ModelAndView handleRequest(@PathVariable(SEGMENT_ID) ContentBean contentBean,
+  public ModelAndView handleRequest(@org.springframework.lang.Nullable @PathVariable(SEGMENT_ID) ContentBean contentBean,
                                     @PathVariable(SEGMENT_ETAG) String eTag,
                                     WebRequest webRequest,
                                     HttpServletRequest request,
@@ -258,13 +256,12 @@ public class CapBlobHandler extends HandlerBase {
    */
   public Map<String, String> linkParameters(CapBlobRef bean) {
     String etag = bean.getETag();
-    return ImmutableMap.<String, String>builder()
-            .put(SEGMENT_ID, String.valueOf(IdHelper.parseContentId(bean.getCapObject().getId())))
-            .put(SEGMENT_ETAG, etag != null ? etag : EMPTY_ETAG)
-            .put(SEGMENT_NAME, getName(bean))
-            .put(SEGMENT_PROPERTY, bean.getPropertyName())
-            .put(SEGMENT_EXTENSION, getExtension(bean.getContentType(), BLOB_DEFAULT_EXTENSION))
-            .build();
+    return Map.of(
+            SEGMENT_ID, String.valueOf(IdHelper.parseContentId(bean.getCapObject().getId())),
+            SEGMENT_ETAG, etag != null ? etag : EMPTY_ETAG,
+            SEGMENT_NAME, getName(bean),
+            SEGMENT_PROPERTY, bean.getPropertyName(),
+            SEGMENT_EXTENSION, getExtension(bean.getContentType(), BLOB_DEFAULT_EXTENSION));
   }
 
 

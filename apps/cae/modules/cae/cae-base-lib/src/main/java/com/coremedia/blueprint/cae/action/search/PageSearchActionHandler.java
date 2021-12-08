@@ -16,7 +16,6 @@ import com.coremedia.objectserver.view.substitution.SubstitutionRegistry;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
-import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -188,7 +187,7 @@ public class PageSearchActionHandler extends PageHandlerBase {
     }
     UriComponentsBuilder uri = UriComponentsBuilder.fromPath(uriTemplate.toString());
     UriComponentsBuilder result = addLinkParametersAsQueryParameters(uri, linkParameters);
-    return result.buildAndExpand(ImmutableMap.of(
+    return result.buildAndExpand(Map.of(
             SEGMENT_ID, getId(action.getAction()),
             SEGMENT_ROOT, getPathSegments(page.getNavigation()).get(0)));
   }

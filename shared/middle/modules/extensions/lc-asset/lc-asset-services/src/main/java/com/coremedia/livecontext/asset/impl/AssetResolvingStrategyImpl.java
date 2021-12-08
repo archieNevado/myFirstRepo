@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.asset.impl;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.util.CommerceReferenceHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
@@ -31,7 +31,7 @@ public class AssetResolvingStrategyImpl implements AssetResolvingStrategy {
 
   private static final Logger LOG = LoggerFactory.getLogger(AssetResolvingStrategyImpl.class);
 
-  private CommerceConnectionInitializer commerceConnectionInitializer;
+  private CommerceConnectionSupplier commerceConnectionSupplier;
 
   private AssetChanges assetChanges;
   private AssetSearchService assetSearchService;
@@ -144,13 +144,13 @@ public class AssetResolvingStrategyImpl implements AssetResolvingStrategy {
   private List<Content> findFallbackForProductVariant(@NonNull CommerceId id,
                                                       @NonNull Site site,
                                                       @NonNull String contentType) {
-    CommerceConnection commerceConnection = commerceConnectionInitializer.findConnectionForSite(site).orElse(null);
+    CommerceConnection commerceConnection = commerceConnectionSupplier.findConnection(site).orElse(null);
     if (commerceConnection == null) {
       return emptyList();
     }
 
     Product product = commerceConnection.getCatalogService()
-            .findProductById(id, commerceConnection.getStoreContext());
+            .findProductById(id, commerceConnection.getInitialStoreContext());
     if (!(product instanceof ProductVariant)) {
       return emptyList();
     }
@@ -174,8 +174,8 @@ public class AssetResolvingStrategyImpl implements AssetResolvingStrategy {
   }
 
   @Autowired
-  public void setCommerceConnectionInitializer(CommerceConnectionInitializer commerceConnectionInitializer) {
-    this.commerceConnectionInitializer = commerceConnectionInitializer;
+  public void setCommerceConnectionSupplier(CommerceConnectionSupplier commerceConnectionSupplier) {
+    this.commerceConnectionSupplier = commerceConnectionSupplier;
   }
 
   @Autowired

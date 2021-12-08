@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.navigation;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
@@ -12,7 +12,6 @@ import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -29,6 +28,7 @@ public class LiveContextNavigationFactory {
   private ContentBeanFactory contentBeanFactory;
   private AugmentationService augmentationService;
   private ValidationService<LiveContextNavigation> validationService;
+  private CommerceConnectionSupplier commerceConnectionSupplier;
 
   /**
    * Creates a new live context navigation from the given category.
@@ -59,20 +59,16 @@ public class LiveContextNavigationFactory {
    */
   @NonNull
   public LiveContextNavigation createNavigationBySeoSegment(@NonNull Content parentChannel, @NonNull String seoSegment) {
-    CommerceConnection commerceConnection = CurrentStoreContext.get().getConnection();
+    Site site = sitesService.getContentSiteAspect(parentChannel).findSite()
+            .orElseThrow(() -> new IllegalArgumentException("No site found for " + parentChannel));
 
-    StoreContext storeContext = commerceConnection
-            .getStoreContextProvider()
-            .findContextByContent(parentChannel)
-            .orElseThrow(() -> new IllegalArgumentException("No store context found for " + parentChannel.getName()));
+    CommerceConnection commerceConnection = commerceConnectionSupplier.findConnection(site)
+            .orElseThrow(() -> new IllegalArgumentException("No commerce connection found for " + site));
 
     Category category = commerceConnection
             .getCatalogService()
-            .findCategoryBySeoSegment(seoSegment, storeContext);
+            .findCategoryBySeoSegment(seoSegment, commerceConnection.getInitialStoreContext());
     notNull(category, "No category found for seo segment: " + seoSegment);
-
-    Site site = sitesService.getContentSiteAspect(parentChannel).findSite()
-            .orElseThrow(() -> new IllegalArgumentException("No site found for " + parentChannel));
 
     return createNavigation(category, site);
   }
@@ -127,5 +123,9 @@ public class LiveContextNavigationFactory {
   @Required
   public void setValidationService(ValidationService<LiveContextNavigation> validationService) {
     this.validationService = validationService;
+  }
+
+  public void setCommerceConnectionSupplier(CommerceConnectionSupplier commerceConnectionSupplier) {
+    this.commerceConnectionSupplier = commerceConnectionSupplier;
   }
 }

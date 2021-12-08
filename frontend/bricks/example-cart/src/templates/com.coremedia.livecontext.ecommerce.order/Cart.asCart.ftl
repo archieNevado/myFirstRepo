@@ -40,7 +40,7 @@
               <#if item.product.defaultImageUrl?has_content>
                   <div class="cm-cart-item__image-box">
                       <a href="${cm.getLink(productInSite)}">
-                          <img class="cm-cart-item__image cm-media cm-media--uncropped" src="${item.product.defaultImageUrl}" alt="${item.product.defaultImageAlt!""}">
+                          <img class="cm-cart-item__image cm-media cm-media--uncropped" src="${item.product.defaultImageUrl}" loading="lazy" alt="${item.product.defaultImageAlt!""}">
                       </a>
                   </div>
               </#if>

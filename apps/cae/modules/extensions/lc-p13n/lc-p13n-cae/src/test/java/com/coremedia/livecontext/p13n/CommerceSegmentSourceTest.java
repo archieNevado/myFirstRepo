@@ -1,7 +1,5 @@
 package com.coremedia.livecontext.p13n;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentUserContext;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.ecommerce.test.TestVendors;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
@@ -12,7 +10,6 @@ import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.context.ContextCollectionImpl;
 import com.coremedia.personalization.context.MapPropertyMaintainer;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +22,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper.parseCommerceIdOrThrow;
-import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -44,13 +40,6 @@ public class CommerceSegmentSourceTest {
   @Mock
   private CommerceConnection commerceConnection;
 
-  @Mock
-  private StoreContext storeContext;
-
-  private MockHttpServletRequest request;
-
-  private MockHttpServletResponse response;
-
   private ContextCollection contextCollection;
 
   @Mock
@@ -61,28 +50,11 @@ public class CommerceSegmentSourceTest {
     testling = new CommerceSegmentSource();
     testling.setContextName("commerce");
 
-    UserContext userContext = UserContext.builder()
-            .withUserId(USER1_ID)
-            .withUserName(USER1_NAME)
-            .build();
-
     when(commerceConnection.getIdProvider()).thenReturn(TestVendors.getIdProvider("vendor"));
     when(commerceConnection.getSegmentService()).thenReturn(Optional.of(segmentService));
 
-    when(storeContext.getConnection()).thenReturn(commerceConnection);
-
-    CurrentStoreContext.set(storeContext);
-    CurrentUserContext.set(userContext);
-
-    request = new MockHttpServletRequest();
-    response = new MockHttpServletResponse();
     contextCollection = new ContextCollectionImpl();
-  }
 
-  @After
-  public void teardown() {
-    CurrentStoreContext.remove();
-    CurrentUserContext.remove();
   }
 
   @Test
@@ -90,28 +62,39 @@ public class CommerceSegmentSourceTest {
     Segment seg1 = mockSegment("vendor:///catalog/segment/id1");
     Segment seg2 = mockSegment("vendor:///catalog/segment/id2");
 
-    List<Segment> segmentList = newArrayList(seg1, seg2);
-    when(segmentService.findSegmentsForCurrentUser(any(StoreContext.class))).thenReturn(segmentList);
+    List<Segment> segmentList = List.of(seg1, seg2);
+    when(segmentService.findSegmentsForCurrentUser(any(StoreContext.class), any(UserContext.class))).thenReturn(segmentList);
 
-    StoreContext storeContext = StoreContextBuilderImpl.from(commerceConnection, "any-site-id").build();
-    when(commerceConnection.getStoreContext()).thenReturn(storeContext);
+    var storeContext = StoreContextBuilderImpl.from(commerceConnection, "any-site-id").build();
+    var userContext = UserContext.builder()
+            .withUserId(USER1_ID)
+            .withUserName(USER1_NAME)
+            .build();
+    var request = new MockHttpServletRequest();
+    request.setAttribute(StoreContext.class.getName(), storeContext);
+    request.setAttribute(UserContext.class.getName(), userContext);
 
-    testling.preHandle(request, response, contextCollection);
+    testling.preHandle(request, new MockHttpServletResponse(), contextCollection);
 
     verifyThatProfileContainsSegments();
   }
 
   @Test
   public void testPreHandleFromUserContext() {
-    StoreContext storeContext = StoreContextBuilderImpl.from(commerceConnection, "any-site-id")
+    var storeContext = StoreContextBuilderImpl.from(commerceConnection, "any-site-id")
             .withUserSegments("id1,id2")
             .build();
-    CurrentStoreContext.set(storeContext);
 
-    testling.preHandle(request, response, contextCollection);
+    var dummyUserContext = UserContext.builder().build();
+
+    var request = new MockHttpServletRequest();
+    request.setAttribute(StoreContext.class.getName(), storeContext);
+    request.setAttribute(UserContext.class.getName(), dummyUserContext);
+
+    testling.preHandle(request, new MockHttpServletResponse(), contextCollection);
 
     verifyThatProfileContainsSegments();
-    verify(segmentService, times(0)).findSegmentsForCurrentUser(storeContext);
+    verify(segmentService, times(0)).findSegmentsForCurrentUser(storeContext, dummyUserContext);
   }
 
   // --------------- Helper ----------------------

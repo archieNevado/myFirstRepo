@@ -7,7 +7,6 @@ Array [
   "/path/to/brick/newest-brick/src/sass/partials",
   "/path/to/brick/newest-brick/src/sass/variables",
   "/path/to/brick/newest-brick/src/img",
-  "/path/to/brick/newest-brick/src/fonts",
   "/path/to/brick/newest-brick/src/l10n",
   "/path/to/brick/newest-brick/src/templates/com.coremedia.blueprint.common.contentbeans",
 ]
@@ -16,29 +15,20 @@ Array [
 exports[`createBrick() creates folder structure and files of a new brick 2`] = `
 Object {
   "/path/to/brick/newest-brick": Object {
-    ".prettierignore": "/*
-!/src
-/src/*
-!/src/js
-",
-    ".prettierrc": "{
-  \\"trailingComma\\": \\"es5\\"
-}
-",
     "package.json": "{
   \\"name\\": \\"@coremedia/brick-newest\\",
   \\"version\\": \\"1.0.0\\",
   \\"private\\": true,
   \\"scripts\\": {
-    \\"prettier\\": \\"prettier \\\\\\"**/*\\\\\\" --write\\"
+    \\"prettier\\": \\"prettier --write \\\\\\"src/**/*.{js,json}\\\\\\"\\"
   },
   \\"devDependencies\\": {
-    \\"prettier\\": \\"^1.0.0\\"
+    \\"prettier\\": \\"^2.4.1\\"
   },
   \\"__comment__dependencies__\\": {
     \\"__comment__\\": \\"List of dependencies for the commented out example code. In order to add a dependency, move the entry to 'dependencies'\\",
-    \\"@coremedia/brick-utils\\": \\"^1.0.0\\",
-    \\"jquery\\": \\"^3.0.0\\"
+    \\"@coremedia/brick-utils\\": \\"workspace:*\\",
+    \\"jquery\\": \\"^3.6.0\\"
   },
   \\"dependencies\\": {},
   \\"main\\": \\"src/js/index.js\\",
@@ -114,29 +104,20 @@ $custom-text-color: #FF0000 !default;
 exports[`createBrickFiles() creates files of a new brick 1`] = `
 Object {
   "/path/to/brick/newest-brick": Object {
-    ".prettierignore": "/*
-!/src
-/src/*
-!/src/js
-",
-    ".prettierrc": "{
-  \\"trailingComma\\": \\"es5\\"
-}
-",
     "package.json": "{
   \\"name\\": \\"@coremedia/brick-newest\\",
   \\"version\\": \\"1.0.0\\",
   \\"private\\": true,
   \\"scripts\\": {
-    \\"prettier\\": \\"prettier \\\\\\"**/*\\\\\\" --write\\"
+    \\"prettier\\": \\"prettier --write \\\\\\"src/**/*.{js,json}\\\\\\"\\"
   },
   \\"devDependencies\\": {
-    \\"prettier\\": \\"^1.0.0\\"
+    \\"prettier\\": \\"^2.4.1\\"
   },
   \\"__comment__dependencies__\\": {
     \\"__comment__\\": \\"List of dependencies for the commented out example code. In order to add a dependency, move the entry to 'dependencies'\\",
-    \\"@coremedia/brick-utils\\": \\"^1.0.0\\",
-    \\"jquery\\": \\"^3.0.0\\"
+    \\"@coremedia/brick-utils\\": \\"workspace:*\\",
+    \\"jquery\\": \\"^3.6.0\\"
   },
   \\"dependencies\\": {},
   \\"main\\": \\"src/js/index.js\\",
@@ -216,7 +197,6 @@ Array [
   "/path/to/bricks/newest-brick/src/sass/partials",
   "/path/to/bricks/newest-brick/src/sass/variables",
   "/path/to/bricks/newest-brick/src/img",
-  "/path/to/bricks/newest-brick/src/fonts",
   "/path/to/bricks/newest-brick/src/l10n",
   "/path/to/bricks/newest-brick/src/templates/com.coremedia.blueprint.common.contentbeans",
 ]
@@ -231,6 +211,7 @@ Array [
   "/path/to/themes/newest-theme/src/img",
   "/path/to/themes/newest-theme/src/fonts",
   "/path/to/themes/newest-theme/src/l10n",
+  "/path/to/themes/newest-theme/src/settings",
   "/path/to/themes/newest-theme/src/templates/com.coremedia.blueprint.common.contentbeans",
 ]
 `;
@@ -238,15 +219,6 @@ Array [
 exports[`createTheme() creates folder structure and files of a new empty theme 2`] = `
 Object {
   "/path/to/themes/newest-theme": Object {
-    ".prettierignore": "/*
-!/src
-/src/*
-!/src/js
-",
-    ".prettierrc": "{
-  \\"trailingComma\\": \\"es5\\"
-}
-",
     "package.json": "{
   \\"name\\": \\"@coremedia/newest-theme\\",
   \\"version\\": \\"1.0.0\\",
@@ -255,16 +227,16 @@ Object {
     \\"build\\": \\"webpack\\",
     \\"deploy\\": \\"cm theme-importer deploy-theme\\",
     \\"start\\": \\"cm monitor\\",
-    \\"prettier\\": \\"prettier \\\\\\"**/*\\\\\\" --write\\",
+    \\"prettier\\": \\"prettier --write \\\\\\"src/**/*.{js,json}\\\\\\"\\",
     \\"theme-importer\\": \\"cm theme-importer\\"
   },
   \\"dependencies\\": {
-    \\"@coremedia/cm-cli\\": \\"^2.0.0\\",
-    \\"@coremedia/theme-utils\\": \\"^3.0.0\\",
-    \\"webpack\\": \\"^4.0.0\\"
+    \\"@coremedia/cm-cli\\": \\"workspace:*\\",
+    \\"@coremedia/theme-utils\\": \\"workspace:*\\",
+    \\"webpack\\": \\"^4.46.0\\"
   },
   \\"devDependencies\\": {
-    \\"prettier\\": \\"^2.0.5\\"
+    \\"prettier\\": \\"^2.4.1\\"
   },
   \\"main\\": \\"src/js/index.js\\",
   \\"coremedia\\": {
@@ -274,8 +246,7 @@ Object {
   \\"browserslist\\": [
     \\"last 1 Chrome version\\",
     \\"last 1 Firefox version\\",
-    \\"last 1 Edge version\\",
-    \\"Explorer >= 11\\"
+    \\"last 1 Edge version\\"
   ]
 }",
     "theme.config.json": "{
@@ -350,7 +321,7 @@ import \\"./newest.js\\";
 // ### VARIABLES ###
 
 // Own variables (need to be loaded first, so default values can be overridden)
-// @see http://sass-lang.com/documentation/file.SASS_REFERENCE.html#Variable_Defaults___default
+// @see https://sass-lang.com/documentation/file.SASS_REFERENCE.html#Variable_Defaults___default
 
 //@import \\"variables/...\\";
 
@@ -385,6 +356,7 @@ Array [
   "/path/to/themes/newest-theme/src/img",
   "/path/to/themes/newest-theme/src/fonts",
   "/path/to/themes/newest-theme/src/l10n",
+  "/path/to/themes/newest-theme/src/settings",
   "/path/to/themes/newest-theme/src/templates/com.coremedia.blueprint.common.contentbeans",
 ]
 `;
@@ -392,15 +364,6 @@ Array [
 exports[`createTheme() with parent theme creates folder structure and files of a new theme 2`] = `
 Object {
   "/path/to/themes/newest-theme": Object {
-    ".prettierignore": "/*
-!/src
-/src/*
-!/src/js
-",
-    ".prettierrc": "{
-  \\"trailingComma\\": \\"es5\\"
-}
-",
     "package.json": "{
   \\"name\\": \\"@coremedia/newest-theme\\",
   \\"version\\": \\"1.0.0\\",
@@ -409,17 +372,17 @@ Object {
     \\"build\\": \\"webpack\\",
     \\"deploy\\": \\"cm theme-importer deploy-theme\\",
     \\"start\\": \\"cm monitor\\",
-    \\"prettier\\": \\"prettier \\\\\\"**/*\\\\\\" --write\\",
+    \\"prettier\\": \\"prettier --write \\\\\\"src/**/*.{js,json}\\\\\\"\\",
     \\"theme-importer\\": \\"cm theme-importer\\"
   },
   \\"dependencies\\": {
     \\"parent-theme\\": \\"^1.0.0\\",
-    \\"@coremedia/cm-cli\\": \\"^2.0.0\\",
-    \\"@coremedia/theme-utils\\": \\"^3.0.0\\",
-    \\"webpack\\": \\"^4.0.0\\"
+    \\"@coremedia/cm-cli\\": \\"workspace:*\\",
+    \\"@coremedia/theme-utils\\": \\"workspace:*\\",
+    \\"webpack\\": \\"^4.46.0\\"
   },
   \\"devDependencies\\": {
-    \\"prettier\\": \\"^2.0.5\\"
+    \\"prettier\\": \\"^2.4.1\\"
   },
   \\"main\\": \\"src/js/index.js\\",
   \\"coremedia\\": {
@@ -429,8 +392,7 @@ Object {
   \\"browserslist\\": [
     \\"last 1 Chrome version\\",
     \\"last 1 Firefox version\\",
-    \\"last 1 Edge version\\",
-    \\"Explorer >= 11\\"
+    \\"last 1 Edge version\\"
   ]
 }",
     "theme.config.json": "{
@@ -506,7 +468,7 @@ import \\"./newest.js\\";
 // ### VARIABLES ###
 
 // Own variables (need to be loaded first, so default values can be overridden)
-// @see http://sass-lang.com/documentation/file.SASS_REFERENCE.html#Variable_Defaults___default
+// @see https://sass-lang.com/documentation/file.SASS_REFERENCE.html#Variable_Defaults___default
 
 //@import \\"variables/...\\";
 
@@ -535,15 +497,6 @@ import \\"./newest.js\\";
 exports[`createThemeFiles() creates files of a new theme including bricks 1`] = `
 Object {
   "/path/to/themes/newest-theme": Object {
-    ".prettierignore": "/*
-!/src
-/src/*
-!/src/js
-",
-    ".prettierrc": "{
-  \\"trailingComma\\": \\"es5\\"
-}
-",
     "package.json": "{
   \\"name\\": \\"@coremedia/newest-theme\\",
   \\"version\\": \\"1.0.0\\",
@@ -552,23 +505,23 @@ Object {
     \\"build\\": \\"webpack\\",
     \\"deploy\\": \\"cm theme-importer deploy-theme\\",
     \\"start\\": \\"cm monitor\\",
-    \\"prettier\\": \\"prettier \\\\\\"**/*\\\\\\" --write\\",
+    \\"prettier\\": \\"prettier --write \\\\\\"src/**/*.{js,json}\\\\\\"\\",
     \\"theme-importer\\": \\"cm theme-importer\\"
   },
   \\"__comment__dependencies__\\": {
     \\"__comment__\\": \\"List of all brick dependencies. In order to add a dependency, move the entry to 'dependencies'\\",
     \\"some-brick\\": \\"^1.0.0\\",
     \\"@coremedia/brick-utils\\": \\"^1.0.0\\",
-    \\"jquery\\": \\"^3.0.0\\"
+    \\"jquery\\": \\"^3.6.0\\"
   },
   \\"dependencies\\": {
     \\"active-brick\\": \\"^1.0.0\\",
-    \\"@coremedia/cm-cli\\": \\"^2.0.0\\",
-    \\"@coremedia/theme-utils\\": \\"^3.0.0\\",
-    \\"webpack\\": \\"^4.0.0\\"
+    \\"@coremedia/cm-cli\\": \\"workspace:*\\",
+    \\"@coremedia/theme-utils\\": \\"workspace:*\\",
+    \\"webpack\\": \\"^4.46.0\\"
   },
   \\"devDependencies\\": {
-    \\"prettier\\": \\"^2.0.5\\"
+    \\"prettier\\": \\"^2.4.1\\"
   },
   \\"main\\": \\"src/js/index.js\\",
   \\"coremedia\\": {
@@ -578,8 +531,7 @@ Object {
   \\"browserslist\\": [
     \\"last 1 Chrome version\\",
     \\"last 1 Firefox version\\",
-    \\"last 1 Edge version\\",
-    \\"Explorer >= 11\\"
+    \\"last 1 Edge version\\"
   ]
 }",
     "theme.config.json": "{
@@ -655,7 +607,7 @@ import \\"./newest.js\\";
 // ### VARIABLES ###
 
 // Own variables (need to be loaded first, so default values can be overridden)
-// @see http://sass-lang.com/documentation/file.SASS_REFERENCE.html#Variable_Defaults___default
+// @see https://sass-lang.com/documentation/file.SASS_REFERENCE.html#Variable_Defaults___default
 
 //@import \\"variables/...\\";
 
@@ -690,6 +642,7 @@ Array [
   "/path/to/themes/newest-theme/src/img",
   "/path/to/themes/newest-theme/src/fonts",
   "/path/to/themes/newest-theme/src/l10n",
+  "/path/to/themes/newest-theme/src/settings",
   "/path/to/themes/newest-theme/src/templates/com.coremedia.blueprint.common.contentbeans",
 ]
 `;

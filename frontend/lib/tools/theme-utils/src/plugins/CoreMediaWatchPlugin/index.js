@@ -92,9 +92,6 @@ class CoreMediaWatchPlugin {
     if (file.includes(this.options.themeConfig.themeTemplatesTargetPath)) {
       return this.options.themeConfig.themeTemplatesJarTargetPath;
     }
-    if (file.includes(this.options.themeConfig.brickTemplatesTargetPath)) {
-      return this.options.themeConfig.brickTemplatesJarTargetPath;
-    }
     return fallback;
   }
 
@@ -207,6 +204,7 @@ class CoreMediaWatchPlugin {
         // update of the template archives (which then is updated instead)
         // noinspection JSUnusedLocalSymbols
         const [
+          // eslint-disable-next-line no-unused-vars
           filesToDelete,
           changedTemplateArchivesFromDeletions,
         ] = removedFiles.reduce(

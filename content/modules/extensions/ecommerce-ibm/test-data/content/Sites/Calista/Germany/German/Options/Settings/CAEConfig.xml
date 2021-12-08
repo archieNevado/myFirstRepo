@@ -10,7 +10,6 @@
 <IntProperty Name="authorShortBiographyMaxLength">200</IntProperty>
 <IntProperty Name="teaser.max.length">140</IntProperty>
 <BooleanProperty Name="breadcrumbHideLastElement">true</BooleanProperty>
-<StringProperty Name="sitemapOrgConfiguration">livecontext</StringProperty>
 </Struct>
 </settings>
 <identifier></identifier>

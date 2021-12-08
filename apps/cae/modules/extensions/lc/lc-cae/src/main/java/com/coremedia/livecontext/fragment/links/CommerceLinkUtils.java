@@ -1,7 +1,6 @@
 package com.coremedia.livecontext.fragment.links;
 
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.link.PreviewUrlService;
 import com.coremedia.livecontext.ecommerce.link.StorefrontRef;
 import com.coremedia.livecontext.ecommerce.link.StorefrontRefKey;
 import com.coremedia.livecontext.fragment.FragmentContext;
@@ -18,10 +17,6 @@ import java.util.Optional;
 public class CommerceLinkUtils {
 
   private CommerceLinkUtils() {
-  }
-
-  static Optional<PreviewUrlService> getPreviewUrlService(StoreContext storeContext) {
-    return storeContext.getConnection().getPreviewUrlService();
   }
 
   public static boolean isFragmentRequest(@NonNull HttpServletRequest request) {

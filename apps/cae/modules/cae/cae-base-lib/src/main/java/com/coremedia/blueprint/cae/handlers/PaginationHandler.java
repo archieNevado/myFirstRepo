@@ -8,7 +8,6 @@ import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
-import com.google.common.collect.ImmutableMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -77,7 +76,7 @@ public class PaginationHandler extends PageHandlerBase {
     UriComponentsBuilder uri = UriComponentsBuilder.fromPath(uriTemplate.toString());
     uri = addLinkParametersAsQueryParameters(uri, linkParameters);
     CMNavigation navigation = getContextHelper().contextFor(pagination.linkable());
-    return uri.buildAndExpand(ImmutableMap.of(
+    return uri.buildAndExpand(Map.of(
             SEGMENT_ID, getId(pagination.linkable()),
             SEGMENT_ROOT, navigation.getRootNavigation().getSegment()));
   }

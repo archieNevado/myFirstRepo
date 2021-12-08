@@ -1,7 +1,7 @@
-const closestPackage = require("closest-package");
 const fs = require("fs");
 const path = require("path");
 const nodeSass = require("node-sass");
+const closestPackage = require("closest-package");
 
 const {
   workspace: { getThemeConfig, getIsSmartImportModuleFor },
@@ -12,21 +12,19 @@ const {
     getDependentsFirstLoadOrder,
   },
 } = require("@coremedia/tool-utils");
-
-const { resolveScss } = require("./utils");
+const { resolveScssByNameExpander } = require("./utils");
 
 const REGEX = /(~(.+))?\?smart-import-(variables|partials)/;
-
 const SASS_PATHS = ["src/sass", "src"];
 
 const themeConfig = getThemeConfig();
 
-function getSmartImportPath(dependency, varsOrPartials, prev) {
+function getSmartImportPath(dependency, varsOrPartials) {
   const candidates = SASS_PATHS.map((sassPath) =>
-    path.join(dependency.getName(), sassPath, varsOrPartials)
+    path.join(path.dirname(dependency.getPkgPath()), sassPath, varsOrPartials)
   )
-    .map((url) => `~${url.replace(/\\/g, "/")}`)
-    .filter((url) => fs.existsSync(resolveScss(url, prev)));
+    .map((candidate) => `${candidate.replace(/\\/g, "/")}`)
+    .filter((candidate) => fs.existsSync(resolveScssByNameExpander(candidate)));
   return candidates.length > 0 ? candidates[0] : null;
 }
 
@@ -43,6 +41,21 @@ function getVariant(prev) {
   return styleEntryPoint ? styleEntryPoint.smartImport : null;
 }
 
+/**
+ * @param dependencyPathsByPackageName
+ * @param {Array<NodeModule>} dependencies
+ * @returns {Record<string, string>}
+ */
+function collectDependencyPathsByPackageName(dependencyPathsByPackageName, dependencies) {
+  dependencies.forEach(dependency => {
+    if (!dependencyPathsByPackageName.hasOwnProperty(dependency.getName())) {
+      dependencyPathsByPackageName[dependency.getName()] = dependency.getPkgPath();
+      collectDependencyPathsByPackageName(dependencyPathsByPackageName, dependency.getDependencies());
+    }
+  });
+  return dependencyPathsByPackageName;
+}
+
 function calculateSmartImport(prev) {
   const variant = getVariant(prev);
   const themeDependencies = getDependencies(
@@ -52,6 +65,7 @@ function calculateSmartImport(prev) {
   return {
     root: prev,
     variant: variant,
+    dependencyPathsByPackageName: collectDependencyPathsByPackageName({}, themeDependencies),
     dependentsFirstLoadOrder: getDependentsFirstLoadOrder(
       themeDependencies,
       themeConfig.packageName
@@ -79,7 +93,7 @@ module.exports = function (url, prev, done) {
     let pkgJson;
     if (providedPackageName) {
       packageName = providedPackageName;
-      pkgJson = packages.getFilePathByPackageName(providedPackageName);
+      pkgJson = this._sassSmartImport.dependencyPathsByPackageName[providedPackageName];
     } else {
       pkgJson = closestPackage.sync(prev);
       packageName = packages.getJsonByFilePath(pkgJson).name;
@@ -102,7 +116,7 @@ module.exports = function (url, prev, done) {
     const sassPaths = dependenciesToImport.map((dependency) => {
       const includeParts =
         whiteList.includes(dependency.getName()) &&
-        getSmartImportPath(dependency, varsOrPartials, pkgJson);
+        getSmartImportPath(dependency, varsOrPartials);
       return includeParts
         ? includeParts
         : `~${dependency.getName()}?smart-import-${varsOrPartials}`;

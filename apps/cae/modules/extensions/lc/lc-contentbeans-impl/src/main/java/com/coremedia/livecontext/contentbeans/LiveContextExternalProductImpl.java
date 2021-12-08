@@ -89,7 +89,7 @@ public class LiveContextExternalProductImpl extends CMExternalProductBase implem
     CommerceConnection connection = commerceConnection.get();
 
     CommerceId commerceId = CommerceIdParserHelper.parseCommerceIdOrThrow(productId);
-    return (Product) connection.getCommerceBeanFactory().createBeanFor(commerceId, connection.getStoreContext());
+    return (Product) connection.getCommerceBeanFactory().createBeanFor(commerceId, connection.getInitialStoreContext());
   }
 
   @Override

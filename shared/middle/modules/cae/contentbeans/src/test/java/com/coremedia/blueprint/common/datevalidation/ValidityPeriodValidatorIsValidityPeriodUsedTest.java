@@ -15,7 +15,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -38,27 +37,27 @@ class ValidityPeriodValidatorIsValidityPeriodUsedTest {
   private static Stream<Arguments> provideIsValidityPeriodUsedData() {
     return Stream.of(
             Arguments.of(
-                    newArrayList(),
+                    List.of(),
                     false
             ),
             Arguments.of(
-                    newArrayList(new Object()),
+                    List.of(new Object()),
                     false
             ),
             Arguments.of(
-                    newArrayList(createLinkable(false, false)),
+                    List.of(createLinkable(false, false)),
                     false
             ),
             Arguments.of(
-                    newArrayList(createLinkable(true, false)),
+                    List.of(createLinkable(true, false)),
                     true
             ),
             Arguments.of(
-                    newArrayList(createLinkable(false, true)),
+                    List.of(createLinkable(false, true)),
                     true
             ),
             Arguments.of(
-                    newArrayList(createLinkable(true, true)),
+                    List.of(createLinkable(true, true)),
                     true
             )
     );

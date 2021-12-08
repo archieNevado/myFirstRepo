@@ -16,7 +16,6 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
-import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -153,7 +152,7 @@ public class FetchPublicationsHistoryTaskTest {
 
   @Test
   public void getPublicationsTest() {
-    when(reportModel.getSettings()).thenReturn(ImmutableMap.of(PUBLICATION_HISTORY_DOCUMENT_TYPE_KEY, PUBLICATION_HISTORY_DOCUMENT_TYPE));
+    when(reportModel.getSettings()).thenReturn(Map.of(PUBLICATION_HISTORY_DOCUMENT_TYPE_KEY, PUBLICATION_HISTORY_DOCUMENT_TYPE));
     Calendar startTime = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     startTime.setTime(referenceDate);
 
@@ -188,7 +187,7 @@ public class FetchPublicationsHistoryTaskTest {
     String documentType = "CMArticle";
     when(settingsService.settingWithDefault(eq(PUBLICATION_HISTORY_DOCUMENT_TYPE_KEY), eq(String.class), eq(PUBLICATION_HISTORY_DOCUMENT_TYPE), any(Content.class))).thenReturn(documentType);
     when(reportModel.getLastSaved()).thenReturn(System.currentTimeMillis());
-    when(reportModel.getSettings()).thenReturn(ImmutableMap.of(PUBLICATION_HISTORY_DOCUMENT_TYPE_KEY, PUBLICATION_HISTORY_DOCUMENT_TYPE));
+    when(reportModel.getSettings()).thenReturn(Map.of(PUBLICATION_HISTORY_DOCUMENT_TYPE_KEY, PUBLICATION_HISTORY_DOCUMENT_TYPE));
 
     Calendar startTime = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     Date startDate = getDateWithoutTime(new DaysBack(30).getStartDate());

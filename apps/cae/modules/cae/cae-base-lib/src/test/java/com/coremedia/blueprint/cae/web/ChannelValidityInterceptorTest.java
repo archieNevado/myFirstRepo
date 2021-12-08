@@ -1,6 +1,6 @@
 package com.coremedia.blueprint.cae.web;
 
-import com.coremedia.blueprint.base.tree.TreeRelation;
+import com.coremedia.blueprint.base.tree.NavigationLinkListContentTreeRelation;
 import com.coremedia.blueprint.cae.exception.InvalidContentException;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.contentbeans.Page;
@@ -36,7 +36,7 @@ public class ChannelValidityInterceptorTest {
   private ChannelValidityInterceptor interceptor;
 
   @Mock
-  private TreeRelation<Content> treeRelation;
+  private NavigationLinkListContentTreeRelation treeRelation;
 
   @Mock
   private Page page;

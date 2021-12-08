@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.personalization;
 
+import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.blueprint.personalization.contentbeans.CMSelectionRulesImpl;
 import com.coremedia.cap.common.IdHelper;
@@ -15,7 +16,6 @@ import com.coremedia.personalization.context.PropertyProfile;
 import com.coremedia.personalization.context.util.SegmentUtil;
 import com.coremedia.personalization.rulelang.ConditionsProcessor;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
-import com.google.common.base.Function;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -31,8 +31,7 @@ import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import static com.google.common.collect.Lists.transform;
+import java.util.stream.Collectors;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {
@@ -142,14 +141,10 @@ public class P13NContentTest {
   @Test
   public void testDefaultContent(){
     final List<CMTeasable> itemsUnfiltered = personalizedContent_2.getItemsUnfiltered();
-    final Integer[] contentIds = new Integer[itemsUnfiltered.size()];
-    transform(itemsUnfiltered, new Function<CMTeasable, Integer>() {
-      @Override
-      public Integer apply(CMTeasable input) {
-        return input.getContentId();
-      }
-    }).toArray(contentIds);
-    Assert.assertArrayEquals(new Integer[]{26, 28}, contentIds);
+    List<Integer> contentIds = itemsUnfiltered.stream()
+            .map(CMObject::getContentId)
+            .collect(Collectors.toList());
+    Assert.assertEquals(List.of(26, 28), contentIds);
   }
 
   @Test

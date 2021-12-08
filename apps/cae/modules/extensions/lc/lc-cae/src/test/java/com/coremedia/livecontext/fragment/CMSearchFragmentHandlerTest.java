@@ -13,7 +13,6 @@ import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.user.User;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -75,11 +74,6 @@ public class CMSearchFragmentHandlerTest extends FragmentHandlerTestBase<CMSearc
     when(searchService.search(same(page), any(SearchFormBean.class), anyCollection())).thenReturn(resultBean);
   }
 
-  @After
-  public void defaultTeardown() {
-    super.defaultTeardown();
-  }
-
   @Test
   public void testCreateModelAndView() {
     FragmentParameters params = getFragmentParameters();
@@ -106,19 +100,19 @@ public class CMSearchFragmentHandlerTest extends FragmentHandlerTestBase<CMSearc
   public void testTruePredicate() {
     FragmentParameters  params = getFragmentParameters();
     params.setExternalReference("cm-search");
-    assertTrue(getTestling().include(params));
+    assertTrue(getTestling().test(params));
   }
 
   @Test
   public void testFalsePredicate() {
     FragmentParameters  params = getFragmentParameters();
     params.setExternalReference("cm-search-wrong");
-    assertFalse(getTestling().include(params));
+    assertFalse(getTestling().test(params));
   }
 
   @Test
   public void testNoSite() {
-    when(request.getAttribute(SITE_ATTRIBUTE_NAME)).thenReturn(null);
+    request.setAttribute(SITE_ATTRIBUTE_NAME, null);
 
     FragmentParameters  params = getFragmentParameters();
     ModelAndView modelAndView = getTestling().createModelAndView(params, request);

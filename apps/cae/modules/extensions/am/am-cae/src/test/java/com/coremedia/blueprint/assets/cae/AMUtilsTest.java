@@ -6,8 +6,6 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.Site;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -80,7 +78,7 @@ public class AMUtilsTest {
 
     when(contentRepository.getContentType(eq(AMAsset.NAME))).thenReturn(assetBaseType);
 
-    Set<ContentType> subTypes = ImmutableSet.of(contentType1, contentType2);
+    Set<ContentType> subTypes = Set.of(contentType1, contentType2);
     when(assetBaseType.getSubtypes()).thenReturn(subTypes);
 
     when(contentType1.isConcrete()).thenReturn(true);
@@ -88,7 +86,7 @@ public class AMUtilsTest {
 
     when(contentType2.isConcrete()).thenReturn(false);
 
-    List<String> expectedAssetSubtypes = ImmutableList.of("Test1");
+    List<String> expectedAssetSubtypes = List.of("Test1");
 
     List<String> actualAssetSubtypes = AMUtils.getAssetSubtypes(contentRepository);
     assertEquals("Asset subtypes are different", expectedAssetSubtypes, actualAssetSubtypes);

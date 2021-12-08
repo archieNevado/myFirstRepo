@@ -35,6 +35,11 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
+      <artifactId>cae-sitemap</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
       <artifactId>link-services</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -128,16 +133,6 @@
       <groupId>com.coremedia.cms</groupId>
       <artifactId>cae-viewservices</artifactId>
     </dependency>
-    <!--
-      | The pbe taglib is deactivated by default. This dependency only adds the ability to use the taglib.
-      | When enabled, the taglib will render the studio specific pbe integration.
-    -->
-    <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>cap-editing-pbe-taglib-component</artifactId>
-      <type>jar</type>
-      <scope>runtime</scope>
-    </dependency>
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>coremedia-transform</artifactId>
@@ -182,6 +177,7 @@
     <dependency>
       <groupId>javax.inject</groupId>
       <artifactId>javax.inject</artifactId>
+      <scope>test</scope>
     </dependency>
 
     <dependency>
@@ -286,14 +282,7 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpcore</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -308,16 +297,13 @@
       <artifactId>commons-lang3</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-text</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.rometools</groupId>
       <artifactId>rome</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -337,12 +323,6 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-test-util</artifactId>
       <scope>test</scope>
     </dependency>
 

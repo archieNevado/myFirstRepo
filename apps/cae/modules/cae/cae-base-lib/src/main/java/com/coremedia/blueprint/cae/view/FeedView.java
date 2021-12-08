@@ -13,7 +13,6 @@ import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.view.ServletView;
 import com.coremedia.objectserver.web.links.LinkFormatter;
-import com.google.common.collect.ImmutableMap;
 import com.rometools.modules.mediarss.MediaEntryModule;
 import com.rometools.modules.mediarss.types.MediaContent;
 import com.rometools.rome.feed.synd.SyndEnclosure;
@@ -49,10 +48,9 @@ public class FeedView implements ServletView {
 
   public static final String RSS_LIMIT = "RSS.limit";
   private static final String DEFAULT_ENCODING = "UTF-8";
-  private static final Map<FeedFormat, String> FEED_FORMAT_MAPPING = ImmutableMap.<FeedFormat, String>builder()
-          .put(FeedFormat.Rss_2_0, "rss_2.0")
-          .put(FeedFormat.Atom_1_0, "atom_1.0")
-          .build();
+  private static final Map<FeedFormat, String> FEED_FORMAT_MAPPING = Map.of(
+          FeedFormat.Rss_2_0, "rss_2.0",
+          FeedFormat.Atom_1_0, "atom_1.0");
 
   private SitesService sitesService;
   private LinkFormatter linkFormatter;

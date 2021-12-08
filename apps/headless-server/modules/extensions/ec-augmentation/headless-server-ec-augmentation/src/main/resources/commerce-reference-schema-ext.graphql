@@ -22,7 +22,7 @@ interface CommerceRef {
   internalLink: String!
 }
 
-type ProductRef implements CommerceRef, CollectionItem {
+type ProductRef implements CommerceRef & CollectionItem {
   id: ID!
   externalId: String!
   catalogId: String!
@@ -97,7 +97,9 @@ type CMProductListImpl implements CMProductList @inherit(from: ["CMQueryListImpl
   facets: [String] @fetch(from: "@productListAdapter.to(#root).getFacets()")
   productItems: [ProductRef] @fetch(from: "@productListAdapter.to(#root,#null).getProductRefs()")
   items: [CollectionItem] @fetch(from: "@productListAdapter.to(#root).getItems()")
+  itemsPaged(offset: Int, limit: Int): CollectionItemPaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, @productListAdapter.to(#root).getItems())")
   teasableItems: [CMTeasable] @fetch(from: "@productListAdapter.to(#root).getFixedItems()")
+  teasableItemsPaged(offset: Int, limit: Int): CMTeasablePaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, @productListAdapter.to(#root).getFixedItems())")
 }
 
 type CMExternalPageImpl implements CMExternalPage @inherit(from: ["CMChannelImpl"]) {
@@ -108,6 +110,8 @@ type CMExternalPageImpl implements CMExternalPage @inherit(from: ["CMChannelImpl
 type CMProductTeaserImpl implements CMProductTeaser @inherit(from: ["CMTeasableImpl"]) {
   externalId: String
   productRef: ProductRef @fetch(from: "@commerceRefAdapter.getCommerceRef(#this, 'externalId')")
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
 }
 
 type CMExternalProductImpl implements CMExternalProduct @inherit(from: ["CMTeasableImpl"]) {

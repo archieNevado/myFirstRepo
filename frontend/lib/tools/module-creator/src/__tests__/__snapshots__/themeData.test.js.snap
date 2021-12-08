@@ -9,7 +9,7 @@ exports[`initPackageJson() returns data for package.json 1`] = `
     \\"build\\": \\"webpack\\",
     \\"deploy\\": \\"cm theme-importer deploy-theme\\",
     \\"start\\": \\"cm monitor\\",
-    \\"prettier\\": \\"prettier \\\\\\"**/*\\\\\\" --write\\",
+    \\"prettier\\": \\"prettier --write \\\\\\"src/**/*.{js,json}\\\\\\"\\",
     \\"theme-importer\\": \\"cm theme-importer\\"
   },
   \\"__comment__dependencies__\\": {
@@ -17,15 +17,15 @@ exports[`initPackageJson() returns data for package.json 1`] = `
     \\"some-brick\\": \\"^1.0.0\\",
     \\"some-other-brick\\": \\"^1.0.0\\",
     \\"@coremedia/brick-utils\\": \\"^1.0.0\\",
-    \\"jquery\\": \\"^3.0.0\\"
+    \\"jquery\\": \\"^3.6.0\\"
   },
   \\"dependencies\\": {
-    \\"@coremedia/cm-cli\\": \\"^2.0.0\\",
-    \\"@coremedia/theme-utils\\": \\"^3.0.0\\",
-    \\"webpack\\": \\"^4.0.0\\"
+    \\"@coremedia/cm-cli\\": \\"workspace:*\\",
+    \\"@coremedia/theme-utils\\": \\"workspace:*\\",
+    \\"webpack\\": \\"^4.46.0\\"
   },
   \\"devDependencies\\": {
-    \\"prettier\\": \\"^2.0.5\\"
+    \\"prettier\\": \\"^2.4.1\\"
   },
   \\"main\\": \\"src/js/index.js\\",
   \\"coremedia\\": {
@@ -35,8 +35,7 @@ exports[`initPackageJson() returns data for package.json 1`] = `
   \\"browserslist\\": [
     \\"last 1 Chrome version\\",
     \\"last 1 Firefox version\\",
-    \\"last 1 Edge version\\",
-    \\"Explorer >= 11\\"
+    \\"last 1 Edge version\\"
   ]
 }"
 `;
@@ -52,7 +51,7 @@ exports[`initPreviewSass() returns data for preview.sass 1`] = `
 // ### VARIABLES ###
 
 // Own variables (need to be loaded first, so default values can be overridden)
-// @see http://sass-lang.com/documentation/file.SASS_REFERENCE.html#Variable_Defaults___default
+// @see https://sass-lang.com/documentation/file.SASS_REFERENCE.html#Variable_Defaults___default
 
 //@import \\"variables/...\\";
 
@@ -115,14 +114,6 @@ exports[`initThemeJs() returns data for <themeName>.js 1`] = `
 //$(function () {
 //  utils.log(\\"Theme test is used.\\");
 //});
-"
-`;
-
-exports[`initThemePrettierignore() returns data for .prettierignore 1`] = `
-"/*
-!/src
-/src/*
-!/src/js
 "
 `;
 

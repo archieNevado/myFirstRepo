@@ -1,11 +1,11 @@
 package com.coremedia.lc.studio.lib.validators;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.rest.validation.Issues;
 import com.coremedia.rest.validation.Severity;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 public class ExternalChannelValidator extends CatalogLinkValidator {
@@ -13,10 +13,12 @@ public class ExternalChannelValidator extends CatalogLinkValidator {
   private static final String CODE_ISSUE_CATEGORY_EMPTY = "EmptyCategory";
 
   @SuppressWarnings("WeakerAccess")
-  public ExternalChannelValidator(CommerceConnectionInitializer commerceConnectionInitializer,
+  public ExternalChannelValidator(@NonNull ContentType type,
+                                  boolean isValidatingSubtypes,
+                                  CommerceConnectionSupplier commerceConnectionSupplier,
                                   SitesService sitesService,
                                   String propertyName) {
-    super(commerceConnectionInitializer, sitesService, propertyName);
+    super(type, isValidatingSubtypes, commerceConnectionSupplier, sitesService, propertyName);
   }
 
   @Override

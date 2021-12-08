@@ -1,6 +1,14 @@
 version: "3.4"
 
-# default environment variables for all spring-boot services
+# default environment variables
+x-default-boot-envs:
+  &default-boot-envs
+  # extracts the app at startup to speed up the annotation and property scanning of the classpath. The startup improvements
+  # are around 2-3x faster. It is also the recommended way by Spring. With Spring-Boot 2.3 the spring-maven-plugin will
+  # be able to build images with exploded layout.
+  SPRING_BOOT_EXPLODED_APP: "${SPRING_BOOT_EXPLODED_APP:-true}"
+
+# default environment variables for development
 x-development-boot-envs:
   &development-boot-envs
   DEVELOPMENT_SETUP: "${DEVELOPMENT_SETUP:-false}"
@@ -11,10 +19,15 @@ x-development-boot-envs:
   # writes heapdumps to /coremedia/heapdumps on oom exceptions. restart the container or mount a volume to
   # that directory to inspect the heapdumps
   HEAP_DUMP_ON_OOM: "${HEAP_DUMP_ON_OOM:-true}"
-  # extracts the app at startup to speed up the annotation and property scanning of the classpath. The startup improvements
-  # are around 2-3x faster. It is also the recommended way by Spring. With Spring-Boot 2.3 the spring-maven-plugin will
-  # be able to build images with exploded layout.
-  SPRING_BOOT_EXPLODED_APP: "${SPRING_BOOT_EXPLODED_APP:-true}"
+  JAVA_OPTS: "-Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses -XX:MetaspaceSize=64m -XX:MaxMetaspaceSize=192m -XX:TieredStopAtLevel=1"
+
+x-default-boot-healthcheck:
+  &default-boot-healthcheck
+  test: [ "CMD", "curl", "-Lf", "http://localhost:8081/actuator/health" ]
+  interval: 30s
+  timeout: 10s
+  retries: 3
+  start_period: 40s
 
 # default logging configuration
 x-logging:
@@ -26,7 +39,7 @@ x-logging:
 
 services:
   commerce-adapter-sfcc:
-    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-sfcc:${COMMERCE_ADAPTER_SFCC_VERSION:-1.4.9}
+    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-sfcc:${COMMERCE_ADAPTER_SFCC_VERSION:-2.0.5}
     container_name: commerce-adapter-sfcc
     restart: always
     logging: *default-logging
@@ -37,15 +50,20 @@ services:
       - 44181:8081
       - 44105:5005
     environment:
-      << : *development-boot-envs
+      <<: *default-boot-envs
+      <<: *development-boot-envs
       SFCC_OCAPI_HOST: ${SFCC_OCAPI_HOST}
       SFCC_OCAPI_SANDBOX: ${SFCC_OCAPI_SANDBOX}
       SFCC_OAUTH_CLIENTID: ${SFCC_OAUTH_CLIENTID}
       SFCC_OAUTH_CLIENTPASSWORD: ${SFCC_OAUTH_CLIENTPASSWORD}
-      SFCC_LINK_STOREFRONT_HOST: ${SFCC_LINK_STOREFRONT_HOST}
       SFCC_LINK_STOREFRONT_URL: ${SFCC_LINK_STOREFRONT_URL}
+      # required by the CAE to substitute the '{sfra.host}' replacement tokens in the 'SFRA' demo site
+      METADATA_REPLACEMENTTOKENS_SFRA_HOST: ${METADATA_REPLACEMENTTOKENS_SFRA_HOST}
+      # required by the CAE to substitute the '{sitegenesis.host}' replacement tokens in the 'SiteGenesis Global' demo site
+      METADATA_REPLACEMENTTOKENS_SITEGENESIS_HOST: ${METADATA_REPLACEMENTTOKENS_SITEGENESIS_HOST}
       MANAGEMENT_HEALTH_CATALOGS_ENABLED: ${MANAGEMENT_HEALTH_CATALOGS_ENABLED:-true}
       MANAGEMENT_HEALTH_STORES_ENABLED: ${MANAGEMENT_HEALTH_STORES_ENABLED:-true}
+    healthcheck: *default-boot-healthcheck
 
   studio-server:
     environment:

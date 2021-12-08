@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.pagegrid;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGrid;
 import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGridPlacement;
@@ -36,7 +36,7 @@ public class ContentAugmentedProductPageGridServiceImpl extends ContentBackedPag
   private static final String EXTERNAL_ID = "externalId";
 
   private ContentAugmentedPageGridServiceImpl augmentedCategoryPageGridService;
-  private CommerceConnectionInitializer commerceConnectionInitializer;
+  private CommerceConnectionSupplier commerceConnectionSupplier;
 
   @NonNull
   @Override
@@ -114,7 +114,7 @@ public class ContentAugmentedProductPageGridServiceImpl extends ContentBackedPag
 
     CommerceId commerceId = commerceIdOptional.get();
 
-    Optional<CommerceConnection> commerceConnectionOpt = commerceConnectionInitializer.findConnectionForSite(site);
+    Optional<CommerceConnection> commerceConnectionOpt = commerceConnectionSupplier.findConnection(site);
 
     if (!commerceConnectionOpt.isPresent()) {
       LOG.debug("Commerce connection is not available for site '{}'; not looking up parent content.", site.getName());
@@ -124,7 +124,7 @@ public class ContentAugmentedProductPageGridServiceImpl extends ContentBackedPag
     ExternalChannelContentTreeRelation treeRelation = (ExternalChannelContentTreeRelation) getTreeRelation();
 
     CommerceConnection commerceConnection = commerceConnectionOpt.get();
-    StoreContext storeContext = commerceConnection.getStoreContext();
+    StoreContext storeContext = commerceConnection.getInitialStoreContext();
     CommerceBean commerceBean = commerceConnection.getCommerceBeanFactory().createBeanFor(commerceId, storeContext);
     if (commerceBean instanceof Product) {
       return treeRelation.getNearestContentForCategory(((Product)commerceBean).getCategory(), site);
@@ -141,7 +141,7 @@ public class ContentAugmentedProductPageGridServiceImpl extends ContentBackedPag
   }
 
   @Autowired
-  public void setCommerceConnectionInitializer(CommerceConnectionInitializer commerceConnectionInitializer) {
-    this.commerceConnectionInitializer = commerceConnectionInitializer;
+  public void setCommerceConnectionSupplier(CommerceConnectionSupplier commerceConnectionSupplier) {
+    this.commerceConnectionSupplier = commerceConnectionSupplier;
   }
 }

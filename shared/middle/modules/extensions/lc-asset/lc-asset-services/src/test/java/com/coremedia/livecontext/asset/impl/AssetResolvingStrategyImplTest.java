@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.asset.impl;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper.parseCommerceIdOrThrow;
-import static com.google.common.collect.ImmutableList.of;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -59,7 +58,7 @@ public class AssetResolvingStrategyImplTest {
   private Site site;
 
   @Mock
-  private CommerceConnectionInitializer commerceConnectionInitializer;
+  private CommerceConnectionSupplier commerceConnectionSupplier;
 
   @Mock
   private CatalogService catalogService;
@@ -71,10 +70,10 @@ public class AssetResolvingStrategyImplTest {
     CommerceConnection commerceConnection = mock(CommerceConnection.class);
     storeContext = StoreContextBuilderImpl.from(commerceConnection, "any-site-id").build();
 
-    when(commerceConnection.getStoreContext()).thenReturn(storeContext);
+    when(commerceConnection.getInitialStoreContext()).thenReturn(storeContext);
     when(commerceConnection.getCatalogService()).thenReturn(catalogService);
 
-    when(commerceConnectionInitializer.findConnectionForSite(any(Site.class)))
+    when(commerceConnectionSupplier.findConnection(any(Site.class)))
             .thenReturn(Optional.of(commerceConnection));
   }
 
@@ -82,8 +81,8 @@ public class AssetResolvingStrategyImplTest {
   public void noCacheOneIndexedInSolrButNotUpToDate() {
     Content picture = createPictureMock("picture");
 
-    List<Content> indexedAssets = of(picture);
-    List<Content> cachedAssets = of();
+    List<Content> indexedAssets = List.of(picture);
+    List<Content> cachedAssets = List.of();
 
     returnIndexedAssets(EXTERNAL_ID, indexedAssets);
     returnCachedAssets(COMMERCE_ID_REF, site, cachedAssets);
@@ -99,9 +98,9 @@ public class AssetResolvingStrategyImplTest {
     Content pictureUpToDate = createPictureMock(upToDatePictureName);
     Content otherPicture = createPictureMock("not up to date in cache");
 
-    List<Content> indexedAssets = of(otherPicture, pictureUpToDate);
-    List<Content> cachedAssets = of(otherPicture, pictureUpToDate);
-    List<String> referencedOnContent = of(EXTERNAL_ID);
+    List<Content> indexedAssets = List.of(otherPicture, pictureUpToDate);
+    List<Content> cachedAssets = List.of(otherPicture, pictureUpToDate);
+    List<String> referencedOnContent = List.of(EXTERNAL_ID);
 
     returnIndexedAssets(EXTERNAL_ID, indexedAssets);
     returnCachedAssets(EXTERNAL_ID, site, cachedAssets);
@@ -119,9 +118,9 @@ public class AssetResolvingStrategyImplTest {
     String pictureName = "picture";
     Content picture = createPictureMock(pictureName);
 
-    List<Content> indexedAssets = of();
-    List<Content> cachedAssets = of(picture);
-    List<String> externalIdsOnContent = of(EXTERNAL_ID);
+    List<Content> indexedAssets = List.of();
+    List<Content> cachedAssets = List.of(picture);
+    List<String> externalIdsOnContent = List.of(EXTERNAL_ID);
 
     returnIndexedAssets(EXTERNAL_ID, indexedAssets);
     returnCachedAssets(EXTERNAL_ID, site, cachedAssets);
@@ -141,9 +140,9 @@ public class AssetResolvingStrategyImplTest {
     Content aPicture = createPictureMock(aPicturesName);
     Content anotherPicture = createPictureMock(anotherPicturesName);
 
-    List<Content> indexedAssets = of(aPicture);
-    List<Content> cachedAssets = of(aPicture, anotherPicture);
-    List<String> externalIdsOnContent = of(EXTERNAL_ID);
+    List<Content> indexedAssets = List.of(aPicture);
+    List<Content> cachedAssets = List.of(aPicture, anotherPicture);
+    List<String> externalIdsOnContent = List.of(EXTERNAL_ID);
 
     returnIndexedAssets(EXTERNAL_ID, indexedAssets);
     returnCachedAssets(EXTERNAL_ID, site, cachedAssets);
@@ -164,9 +163,9 @@ public class AssetResolvingStrategyImplTest {
   @Test
   public void findProductAssetsOneIndexedAndCachedAndReferenced() {
     Content picture = createPictureMock("picture");
-    List<Content> indexedAssets = of(picture);
-    List<Content> cachedAssets = of(picture);
-    List<String> externalIdsOnContent = of(EXTERNAL_ID);
+    List<Content> indexedAssets = List.of(picture);
+    List<Content> cachedAssets = List.of(picture);
+    List<String> externalIdsOnContent = List.of(EXTERNAL_ID);
 
     returnIndexedAssets(EXTERNAL_ID, indexedAssets);
     returnCachedAssets(EXTERNAL_ID, site, cachedAssets);
@@ -179,8 +178,8 @@ public class AssetResolvingStrategyImplTest {
 
   @Test
   public void findProductAssetsNonInCacheOrIndexed() {
-    List<Content> indexedAssets = of();
-    List<Content> cachedAssets = of();
+    List<Content> indexedAssets = List.of();
+    List<Content> cachedAssets = List.of();
 
     returnIndexedAssets(EXTERNAL_ID, indexedAssets);
     returnCachedAssets(EXTERNAL_ID, site, cachedAssets);
@@ -194,10 +193,10 @@ public class AssetResolvingStrategyImplTest {
     Content variantPicture = createPictureMock("variant picture");
     Content productPicture = createPictureMock("product picture");
 
-    List<Content> indexedVariantAssets = of(variantPicture);
-    List<Content> indexedProductAssets = of(productPicture);
-    List<Content> cachedProductAssets = of(productPicture);
-    List<String> referencedOnProductContent = of(EXTERNAL_ID);
+    List<Content> indexedVariantAssets = List.of(variantPicture);
+    List<Content> indexedProductAssets = List.of(productPicture);
+    List<Content> cachedProductAssets = List.of(productPicture);
+    List<String> referencedOnProductContent = List.of(EXTERNAL_ID);
 
     returnProductVariantWithProduct(COMMERCE_ID_SKU, COMMERCE_ID_REF);
     returnIndexedAssets(EXTERNAL_ID_SKU, indexedVariantAssets);
@@ -216,10 +215,10 @@ public class AssetResolvingStrategyImplTest {
     Content variantPicture = createPictureMock("variant picture");
     Content productPicture = createPictureMock("product picture");
 
-    List<Content> indexedVariantAssets = of(variantPicture);
-    List<Content> cachedProductAssets = of(productPicture);
-    List<Content> indexedProductAssets = of(productPicture);
-    List<String> referencedOnContent = of(EXTERNAL_ID);
+    List<Content> indexedVariantAssets = List.of(variantPicture);
+    List<Content> cachedProductAssets = List.of(productPicture);
+    List<Content> indexedProductAssets = List.of(productPicture);
+    List<String> referencedOnContent = List.of(EXTERNAL_ID);
 
     returnProductVariantWithProduct(COMMERCE_ID_SKU, COMMERCE_ID_REF);
     returnIndexedAssets(EXTERNAL_ID_SKU, indexedVariantAssets);

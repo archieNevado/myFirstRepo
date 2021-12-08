@@ -1,0 +1,35 @@
+{
+  "name": "@coremedia-blueprint/studio-client.workflow.extension-dependencies",
+  "author": "CoreMedia GmbH",
+  "version": "1.0.0-SNAPSHOT",
+  "license": "CoreMedia Open Source License",
+  "private": true,
+  "dependencies": {
+    "@coremedia-blueprint/studio-client.workflow.alx": "1.0.0-SNAPSHOT",
+    "@coremedia-blueprint/studio-client.workflow.alx-google": "1.0.0-SNAPSHOT",
+    "@coremedia-blueprint/studio-client.workflow.alx-webtrends": "1.0.0-SNAPSHOT",
+    "@coremedia-blueprint/studio-client.workflow.am": "1.0.0-SNAPSHOT",
+    "@coremedia-blueprint/studio-client.workflow.catalog": "1.0.0-SNAPSHOT",
+    "@coremedia-blueprint/studio-client.workflow.es": "1.0.0-SNAPSHOT",
+    "@coremedia-blueprint/studio-client.workflow.lc": "1.0.0-SNAPSHOT",
+    "@coremedia-blueprint/studio-client.workflow.p13n": "1.0.0-SNAPSHOT"
+  },
+  "devDependencies": {
+    "@jangaroo/build": "^1.0.0",
+    "@jangaroo/core": "^1.0.0",
+    "@jangaroo/publish": "^1.0.0",
+    "rimraf": "^3.0.2"
+  },
+  "scripts": {
+    "clean": "rimraf ./dist && rimraf ./build",
+    "build": "jangaroo build",
+    "watch": "jangaroo watch",
+    "publish": "jangaroo publish"
+  },
+  "coremedia": {
+    "projectExtensionPoint": "studio-client.workflow"
+  },
+  "publishConfig": {
+    "directory": "dist"
+  }
+}

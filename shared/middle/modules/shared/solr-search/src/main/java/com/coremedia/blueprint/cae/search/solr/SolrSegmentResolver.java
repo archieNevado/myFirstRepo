@@ -5,12 +5,10 @@ import com.coremedia.blueprint.cae.search.SearchResultBean;
 import com.coremedia.blueprint.cae.search.SearchResultFactory;
 import com.coremedia.blueprint.cae.search.SegmentResolver;
 import com.google.common.base.CharMatcher;
-import com.google.common.base.Optional;
-import com.google.common.collect.FluentIterable;
-import org.springframework.beans.factory.annotation.Required;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Required;
+
 import java.util.Objects;
 
 import static com.coremedia.blueprint.cae.search.SearchConstants.FIELDS.CONTEXTS;
@@ -61,8 +59,9 @@ public class SolrSegmentResolver implements SegmentResolver {
     queryBean.setQuery(query);
 
     SearchResultBean searchResult = searchResultFactory.createSearchResult(queryBean, cacheForSeconds);
-    Optional<T> result = FluentIterable.from(searchResult.getHits()).filter(resultClass).first();
-    return result.isPresent() ? result.get() : null;
+    return searchResult.getHits().stream()
+            .filter(resultClass::isInstance).map(resultClass::cast)
+            .findFirst().orElse(null);
   }
 
 }

@@ -108,4 +108,4 @@ class ZipperWebpackPlugin {
   }
 }
 
-module.exports = { ZipperWebpackPlugin };
+module.exports = ZipperWebpackPlugin;

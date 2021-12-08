@@ -1,6 +1,6 @@
 package com.coremedia.blueprint.caas.augmentation;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.blueprint.caas.augmentation.model.CommerceRef;
 import com.coremedia.cap.multisite.Site;
@@ -32,16 +32,16 @@ public class CommerceEntityHelper {
   private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
 
   private final SitesService sitesService;
-  private final CommerceConnectionInitializer commerceConnectionInitializer;
+  private final CommerceConnectionSupplier commerceConnectionSupplier;
 
-  public CommerceEntityHelper(SitesService sitesService, CommerceConnectionInitializer commerceConnectionInitializer) {
+  public CommerceEntityHelper(SitesService sitesService, CommerceConnectionSupplier commerceConnectionSupplier) {
     this.sitesService = sitesService;
-    this.commerceConnectionInitializer = commerceConnectionInitializer;
+    this.commerceConnectionSupplier = commerceConnectionSupplier;
   }
 
   @Nullable
   public static CommerceBean createCommerceBean(CommerceId commerceId, CommerceConnection commerceConnection) {
-    StoreContext storeContext = commerceConnection.getStoreContext();
+    StoreContext storeContext = commerceConnection.getInitialStoreContext();
     return commerceConnection.getCommerceBeanFactory().createBeanFor(commerceId, storeContext);
   }
 
@@ -66,7 +66,7 @@ public class CommerceEntityHelper {
         LOG.info("Cannot find site for siteId {}.", siteId);
         return null;
       }
-      CommerceConnection connection = commerceConnectionInitializer.findConnectionForSite(site).orElse(null);
+      CommerceConnection connection = commerceConnectionSupplier.findConnection(site).orElse(null);
 
       if (connection == null) {
         LOG.warn("Cannot find commerce connection for siteId {}", siteId);
@@ -86,7 +86,7 @@ public class CommerceEntityHelper {
       throw new IllegalArgumentException(erroMsg + commerceRef);
     }
 
-    CatalogAlias catalogAlias = commerceConnection.getStoreContext().getCatalogAlias();
+    CatalogAlias catalogAlias = CatalogAlias.of(commerceRef.getCatalogAlias());
     CommerceIdProvider idProvider = commerceConnection.getIdProvider();
     CommerceBeanType type = commerceRef.getType();
     String externalId = commerceRef.getExternalId();
@@ -108,12 +108,12 @@ public class CommerceEntityHelper {
    * Example: <code>vendor:///summer_catalog/category/men</code> or <code>vendor:///catalog/category/men</code>
    *
    * @param categoryId the external id
+   * @param catalogAlias the catalog alias
    * @param connection the commerce connection to be used
    * @return id in the long format
    */
-  public static CommerceId getCategoryId(String categoryId, CommerceConnection connection) {
+  public static CommerceId getCategoryId(String categoryId, CatalogAlias catalogAlias, CommerceConnection connection) {
     CommerceIdProvider idProvider = connection.getIdProvider();
-    CatalogAlias catalogAlias = connection.getStoreContext().getCatalogAlias();
     Optional<CommerceId> commerceIdOptional = CommerceIdParserHelper.parseCommerceId(categoryId);
     return commerceIdOptional.orElseGet(() -> idProvider.formatCategoryId(catalogAlias, categoryId));
   }
@@ -124,12 +124,12 @@ public class CommerceEntityHelper {
    * Example: <code>vendor:///summer_catalog/product/foo-1</code> or <code>vendor:///catalog/product/foo-1</code>
    *
    * @param productId the external id
+   * @param catalogAlias the catalog alias
    * @param connection the commerce connection to be used
    * @return id in the long format
    */
-  public static CommerceId getProductId(String productId, CommerceConnection connection) {
+  public static CommerceId getProductId(String productId, CatalogAlias catalogAlias, CommerceConnection connection) {
     CommerceIdProvider idProvider = connection.getIdProvider();
-    CatalogAlias catalogAlias = connection.getStoreContext().getCatalogAlias();
     Optional<CommerceId> commerceIdOptional = CommerceIdParserHelper.parseCommerceId(productId);
     return commerceIdOptional.orElseGet(() -> idProvider.formatProductId(catalogAlias, productId));
   }
@@ -140,7 +140,7 @@ public class CommerceEntityHelper {
     if (connection == null) {
       return null;
     }
-    return connection.getCommerceBeanFactory().createBeanFor(commerceId, connection.getStoreContext());
+    return connection.getCommerceBeanFactory().createBeanFor(commerceId, connection.getInitialStoreContext());
   }
 
 }

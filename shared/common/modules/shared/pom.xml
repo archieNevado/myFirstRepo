@@ -16,7 +16,6 @@
 
   <modules>
     <module>database-drivers</module>
-    <module>logging</module>
     <module>multi-site</module>
   </modules>
 </project>

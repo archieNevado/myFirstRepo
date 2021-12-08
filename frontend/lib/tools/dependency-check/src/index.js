@@ -61,7 +61,7 @@ function getMissingDependencyErrorMessage(sourceFile, requiredFile) {
   let requiredPackageVersion = getPkgVersion(requiredFile);
 
   if (semver.valid(requiredPackageVersion)) {
-    // our new pattern is to only use the major version and let the yarn.lock decide, reflect this in the suggestion
+    // our new pattern is to only use the major version and let the lock file decide, reflect this in the suggestion
     requiredPackageVersion = `^${semver.major(requiredPackageVersion)}.0.0`;
   }
   const sourcePackageJsonPath = closestPackage.sync(sourceFile);

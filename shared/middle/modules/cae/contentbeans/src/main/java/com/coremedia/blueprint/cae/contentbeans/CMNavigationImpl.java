@@ -1,24 +1,31 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
+import com.coremedia.blueprint.base.tree.CycleInTreeRelationException;
 import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.feeds.FeedFormat;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.multisite.Site;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
-import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import static java.lang.invoke.MethodHandles.lookup;
+
 /**
  * Generated extension class for immutable beans of document type "CMNavigation".
  */
 public abstract class CMNavigationImpl extends CMNavigationBase {
+
+  private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
 
   protected TreeRelation<Linkable> treeRelation;
   private TreeRelation<Content> codeResourcesTreeRelation;
@@ -91,7 +98,12 @@ public abstract class CMNavigationImpl extends CMNavigationBase {
 
   @Override
   public List<? extends Linkable> getNavigationPathList() {
-    return treeRelation.pathToRoot(this);
+    try {
+      return treeRelation.pathToRoot(this);
+    } catch (CycleInTreeRelationException e) {
+      LOG.warn("Navigation '{}' is part of a cycle, unable to compute children: {}.", this, e.getMessage());
+      return List.of();
+    }
   }
 
   @Override
@@ -101,11 +113,24 @@ public abstract class CMNavigationImpl extends CMNavigationBase {
 
   @Override
   public CMNavigation getRootNavigation() {
-    List<? extends Linkable> linkables = treeRelation.pathToRoot(this);
-    if (CollectionUtils.isEmpty(linkables)) {
-      throw new IllegalStateException("Cannot determine root navigation for channel: " + this);
+    try {
+      return treeRelation.pathToRoot(this).stream()
+              .filter(CMNavigation.class::isInstance)
+              .map(CMNavigation.class::cast)
+              .findFirst()
+              .orElseGet(this::getSiteRootDocument);
+    } catch (CycleInTreeRelationException e) {
+      LOG.warn("Navigation '{}' is part of a cycle: {}. Falling back to site root document.", this, e.getMessage());
+      return getSiteRootDocument();
     }
-    return (CMNavigation) linkables.get(0);
+  }
+
+  CMNavigation getSiteRootDocument() {
+    return getSitesService().getContentSiteAspect(getContent()).findSite()
+            .map(Site::getSiteRootDocument)
+            .map(c -> createBeanFor(c, CMNavigation.class))
+            .orElseThrow(() -> new IllegalStateException("Unable to determine site root document for navigation " +
+                    "with ID " + getContentId()));
   }
 
   @Override
@@ -115,7 +140,12 @@ public abstract class CMNavigationImpl extends CMNavigationBase {
 
   @Override
   public Navigation getParentNavigation() {
-    return (Navigation) treeRelation.getParentOf(this);
+    try {
+      return (Navigation) treeRelation.getParentOf(this);
+    } catch (CycleInTreeRelationException e) {
+      LOG.warn("Navigation '{}' is part of a cycle, unable to compute parent: {}.", this, e.getMessage());
+      return null;
+    }
   }
 
   @Override

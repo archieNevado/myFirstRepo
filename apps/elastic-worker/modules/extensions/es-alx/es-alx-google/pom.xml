@@ -36,11 +36,6 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.elastic.core</groupId>
-      <artifactId>core-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>cap-unified-api</artifactId>
     </dependency>
@@ -88,18 +83,8 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.powermock</groupId>
-      <artifactId>powermock-api-mockito2</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.powermock</groupId>
-      <artifactId>powermock-module-junit4</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.powermock</groupId>
-      <artifactId>powermock-core</artifactId>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-inline</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -120,10 +105,6 @@
           <artifactId>jetty</artifactId>
         </exclusion>
       </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
     </dependency>
     <dependency>
       <groupId>com.google.http-client</groupId>

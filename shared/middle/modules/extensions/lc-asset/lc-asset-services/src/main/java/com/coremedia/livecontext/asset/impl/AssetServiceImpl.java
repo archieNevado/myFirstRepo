@@ -1,22 +1,17 @@
 package com.coremedia.livecontext.asset.impl;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.asset.AssetService;
-import com.coremedia.livecontext.ecommerce.asset.CatalogPicture;
-import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import static java.util.Collections.emptyList;
@@ -31,34 +26,6 @@ public class AssetServiceImpl implements AssetService {
   private SitesService sitesService;
   private SettingsService settingsService;
   private AssetResolvingStrategy assetResolvingStrategy;
-
-  @NonNull
-  @Override
-  public CatalogPicture getCatalogPicture(@NonNull String url, @NonNull CommerceId commerceId) {
-    StoreContext storeContext = CurrentStoreContext.get();
-    CommerceConnection connection = storeContext.getConnection();
-
-    com.coremedia.livecontext.ecommerce.link.LinkService linkService = connection.getLinkService().orElse(null);
-    if (linkService == null) {
-      return new CatalogPicture(url, null);
-    }
-
-    // Rewrite a given commerce url (make absolute and replace `{cmsHost}`)
-    String imageUrl = linkService.getImageUrl(url, storeContext).orElse(null);
-
-    // try to find assets related to the given commerce id
-    List<Content> pictures = findPictures(commerceId, false, storeContext.getSiteId());
-    Content picture = pictures.stream().findFirst().orElse(null);
-    return new CatalogPicture(imageUrl, picture);
-  }
-
-  @NonNull
-  @Override
-  public List<Content> findPictures(@NonNull CommerceId commerceId, boolean withDefault) {
-    return findCurrentSiteId()
-            .map(siteId -> findPictures(commerceId, withDefault, siteId))
-            .orElseGet(Collections::emptyList);
-  }
 
   @NonNull
   @Override
@@ -81,14 +48,6 @@ public class AssetServiceImpl implements AssetService {
     }
 
     return emptyList();
-  }
-
-  @NonNull
-  @Override
-  public List<Content> findVisuals(@NonNull CommerceId commerceId, boolean withDefault) {
-    return findCurrentSiteId()
-            .map(siteId -> findVisuals(commerceId, withDefault, siteId))
-            .orElseGet(Collections::emptyList);
   }
 
   @NonNull
@@ -135,24 +94,10 @@ public class AssetServiceImpl implements AssetService {
 
   @NonNull
   @Override
-  public List<Content> findDownloads(@NonNull CommerceId commerceId) {
-    return findCurrentSiteId()
-            .map(siteId -> findDownloads(commerceId, siteId))
-            .orElseGet(Collections::emptyList);
-  }
-
-  @NonNull
-  @Override
   public List<Content> findDownloads(@NonNull CommerceId commerceId, String siteId) {
     return sitesService.findSite(siteId)
             .map(site -> assetResolvingStrategy.findAssets("CMDownload", commerceId, site))
             .orElseGet(Collections::emptyList);
-  }
-
-  @NonNull
-  private Optional<String> findCurrentSiteId() {
-    return CurrentStoreContext.find()
-            .map(StoreContext::getSiteId);
   }
 
   @Nullable

@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
+    "lib": [
+      "ES6",
+      "DOM",
+      "ES2015.Promise"
+    ],
+    "module": "commonJS",
+    "moduleResolution": "Node",
+    "newLine": "LF",
+    "removeComments": true,
+    "alwaysStrict": true,
+    "strictNullChecks": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "ES6",
+    "composite": true,
+    "incremental": true,
+    "types": [
+      "@ckeditor/ckeditor5-editor-classic"
+    ],
+    "baseUrl": ".",
+    "rootDir": ".",
+    "outDir": "../dist",
+    "declaration": true,
+    "declarationMap": true,
+    "paths": {
+      "@coremedia/studio-client.ckeditor-constants/*": [
+        "../node_modules/@coremedia/studio-client.ckeditor-constants/src/*"
+      ],
+      "@coremedia/ckeditor5-studio-essentials/*": [
+        "../node_modules/@coremedia/ckeditor5-studio-essentials/dist/*"
+      ],
+      "@coremedia/ckeditor5-symbol-on-paste-mapper/*": [
+        "../node_modules/@coremedia/ckeditor5-symbol-on-paste-mapper/dist/*"
+      ]
+    }
+  }
+}

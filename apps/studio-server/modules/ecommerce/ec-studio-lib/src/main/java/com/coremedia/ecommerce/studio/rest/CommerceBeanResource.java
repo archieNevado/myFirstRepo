@@ -18,7 +18,6 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.WORKSPACE_ID_NONE;
 import static java.text.MessageFormat.format;
 
 /**
@@ -92,7 +91,6 @@ public abstract class CommerceBeanResource<Entity extends CommerceBean> extends 
     params.put(PATH_ID, entity.getExternalId());
     params.put(PATH_CATALOG_ALIAS, entity.getId().getCatalogAlias().value());
     params.put(PATH_SITE_ID, context.getSiteId());
-    params.put(PATH_WORKSPACE_ID, context.getWorkspaceId().orElse(WORKSPACE_ID_NONE).value());
     return params;
   }
 

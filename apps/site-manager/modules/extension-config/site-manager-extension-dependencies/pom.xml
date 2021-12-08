@@ -16,9 +16,9 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>p13n-editor-lib</artifactId>
-      <version>1-SNAPSHOT</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>

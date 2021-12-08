@@ -1,9 +1,7 @@
 package com.coremedia.ecommerce.studio.rest;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceBean;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.ecommerce.studio.rest.model.ChildRepresentation;
-import com.coremedia.ecommerce.studio.rest.model.Facets;
 import com.coremedia.ecommerce.studio.rest.model.SearchFacets;
 import com.coremedia.ecommerce.studio.rest.model.Store;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
@@ -27,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.coremedia.blueprint.base.livecontext.util.CommerceBeanUtils.getCatalog;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -38,7 +37,7 @@ public class CategoryResource extends CommerceBeanResource<Category> {
 
   static final String PATH_TYPE = "category";
   static final String URI_PATH
-          = "livecontext/" + PATH_TYPE + "/{" + PATH_SITE_ID + "}/{" + PATH_CATALOG_ALIAS + "}/{" + PATH_WORKSPACE_ID + "}/{id:.+}";
+          = "livecontext/" + PATH_TYPE + "/{" + PATH_SITE_ID + "}/{" + PATH_CATALOG_ALIAS + "}/{id:.+}";
 
   @Autowired
   public CategoryResource(CatalogAliasTranslationService catalogAliasTranslationService) {
@@ -84,7 +83,7 @@ public class CategoryResource extends CommerceBeanResource<Category> {
 
     StoreContext storeContext = entity.getContext();
     representation.setStore(new Store(storeContext));
-    AbstractCommerceBean.getCatalog(entity).ifPresent(representation::setCatalog);
+    getCatalog(entity).ifPresent(representation::setCatalog);
     representation.setDisplayName(entity.getDisplayName());
 
     List<CommerceBean> children = new ArrayList<>();
@@ -110,10 +109,6 @@ public class CategoryResource extends CommerceBeanResource<Category> {
     representation.setChildrenData(result);
 
     representation.setContent(getContent(entity));
-
-    Facets facets = new Facets(storeContext);
-    facets.setId(myExternalId);
-    representation.setFacets(facets);
     representation.setSearchFacets(new SearchFacets(storeContext, myExternalId));
   }
 

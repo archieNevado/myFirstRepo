@@ -13,7 +13,7 @@ import com.coremedia.cache.Cache;
 import com.coremedia.cache.CacheKey;
 import com.coremedia.cache.EvaluationException;
 import com.coremedia.cap.content.ContentRepository;
-import com.google.common.collect.ImmutableMap;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -127,20 +128,23 @@ public class SolrSearchResultFactory implements SearchResultFactory, Initializin
     return hits;
   }
 
-  protected FacetResult translateFacets(SearchQueryBean searchInput,
-                                        QueryResponse response) {
-    ImmutableMap.Builder<String, Collection<FacetValue>> builder = ImmutableMap.builder();
+  protected FacetResult translateFacets(SearchQueryBean searchInput, QueryResponse response) {
+    Map<String, Collection<FacetValue>> map = new LinkedHashMap<>();
     for (FacetField facetField : response.getFacetFields()) {
-      String facet = facetField.getName();
       if (facetField.getValues() != null) {
-        List<FacetValue> values = facetField.getValues().stream()
-          .map(count -> createFacetValue(searchInput, facet, count))
-          .filter(Objects::nonNull)
-          .collect(Collectors.toList());
-        builder.put(facet, values);
+        map.put(facetField.getName(), createFacetValues(searchInput, facetField));
       }
     }
-    return new FacetResult(builder.build());
+
+    return new FacetResult(Collections.unmodifiableMap(map));
+  }
+
+  @NonNull
+  private List<FacetValue> createFacetValues(SearchQueryBean searchInput, FacetField facetField) {
+    return facetField.getValues().stream()
+            .map(count -> createFacetValue(searchInput, facetField.getName(), count))
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
   }
 
   @Nullable

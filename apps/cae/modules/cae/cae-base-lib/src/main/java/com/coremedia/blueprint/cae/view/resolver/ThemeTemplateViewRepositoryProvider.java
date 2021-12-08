@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.cae.view.resolver;
 
-import com.coremedia.cap.util.PairCacheKey;
 import com.coremedia.blueprint.coderesources.ThemeService;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.common.CapConnection;
@@ -8,19 +7,20 @@ import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.user.User;
 import com.coremedia.cap.util.JarBlobResourceLoader;
+import com.coremedia.cap.util.PairCacheKey;
 import com.coremedia.objectserver.view.ViewRepository;
 import com.coremedia.objectserver.view.resolver.AbstractTemplateViewRepositoryProvider;
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.Collections2;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -193,7 +193,9 @@ public class ThemeTemplateViewRepositoryProvider extends AbstractTemplateViewRep
   private Collection<String> templatesRoots(Content templateSet) {
     String location = jarBlobResourceLoader.toLocation(templateSet, CM_TEMPLATESET_ARCHIVE, TEMPLATES_PATH_PREFIX);
     Collection<String> paths = jarBlobResourceLoader.getChildren(location, false, false, true);
-    return Collections2.transform(paths, (String s) -> jarBlobResourceLoader.toLocation(templateSet, CM_TEMPLATESET_ARCHIVE, s));
+    return paths.stream()
+            .map(s -> jarBlobResourceLoader.toLocation(templateSet, CM_TEMPLATESET_ARCHIVE, s))
+            .collect(Collectors.toList());
   }
 
 

@@ -73,7 +73,7 @@ class CommerceRefAdapterTest {
 
     //init commerce connection
     when(commerceEntityHelper.getCommerceConnection(SITE_ID)).thenReturn(aConnection);
-    when(aConnection.getStoreContext()).thenReturn(aStoreContext);
+    when(aConnection.getInitialStoreContext()).thenReturn(aStoreContext);
     when(aStoreContext.getStoreId()).thenReturn(STORE_ID);
 
     //init catalogAliasTranslation service

@@ -16,6 +16,7 @@
 <#assign attr=self.htmlAttributes />
 <#assign ignore=["src"] />
 
+<#-- deprecated since 2110, ieExpression will be removed -->
 <#if self.ieExpression?has_content>
   <!--[if ${self.ieExpression}]><script src="${jsLink}"<@utils.renderAttr attr=attr ignore=ignore /><@preview.metadata self.content />></script><![endif]-->
 <#else>

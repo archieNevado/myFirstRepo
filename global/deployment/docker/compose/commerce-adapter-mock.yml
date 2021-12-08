@@ -1,6 +1,14 @@
 version: "3.4"
 
-# default environment variables for all spring-boot services
+# default environment variables
+x-default-boot-envs:
+  &default-boot-envs
+  # extracts the app at startup to speed up the annotation and property scanning of the classpath. The startup improvements
+  # are around 2-3x faster. It is also the recommended way by Spring. With Spring-Boot 2.3 the spring-maven-plugin will
+  # be able to build images with exploded layout.
+  SPRING_BOOT_EXPLODED_APP: "${SPRING_BOOT_EXPLODED_APP:-true}"
+
+# default environment variables for development
 x-development-boot-envs:
   &development-boot-envs
   DEVELOPMENT_SETUP: "${DEVELOPMENT_SETUP:-false}"
@@ -11,10 +19,15 @@ x-development-boot-envs:
   # writes heapdumps to /coremedia/heapdumps on oom exceptions. restart the container or mount a volume to
   # that directory to inspect the heapdumps
   HEAP_DUMP_ON_OOM: "${HEAP_DUMP_ON_OOM:-true}"
-  # extracts the app at startup to speed up the annotation and property scanning of the classpath. The startup improvements
-  # are around 2-3x faster. It is also the recommended way by Spring. With Spring-Boot 2.3 the spring-maven-plugin will
-  # be able to build images with exploded layout.
-  SPRING_BOOT_EXPLODED_APP: "${SPRING_BOOT_EXPLODED_APP:-true}"
+  JAVA_OPTS: "-Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses -XX:MetaspaceSize=64m -XX:MaxMetaspaceSize=192m -XX:TieredStopAtLevel=1"
+
+x-default-boot-healthcheck:
+  &default-boot-healthcheck
+  test: [ "CMD", "curl", "-Lf", "http://localhost:8081/actuator/health" ]
+  interval: 30s
+  timeout: 10s
+  retries: 3
+  start_period: 40s
 
 # default logging configuration
 x-logging:
@@ -26,7 +39,7 @@ x-logging:
 
 services:
   commerce-adapter-mock:
-    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-mock:${COMMERCE_ADAPTER_MOCK_VERSION:-1.6.11}
+    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-mock:${COMMERCE_ADAPTER_MOCK_VERSION:-2.0.4}
     container_name: commerce-adapter-mock
     restart: always
     logging: *default-logging
@@ -37,13 +50,16 @@ services:
       - 44081:8081
       - 44005:5005
     environment:
-      << : *development-boot-envs
+      <<: *default-boot-envs
+      <<: *development-boot-envs
     labels:
-      # this is a workaround to allow the ajax health check in the overview. Because the mock adapter is a
-      # development only feature, we can define the labels here
-      traefik.enable: "true"
-      traefik.actuator.port: "8081"
-      traefik.actuator.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/commerce-adapter-mock;AddPrefix:/actuator
+      traefik.enable: true
+    healthcheck: *default-boot-healthcheck
+
+  traefik:
+    environment:
+      # Because the mock adapter is a development only feature, we can activate the actuator here
+      ACTUATOR_COMMERCE_ADAPTER_MOCK: 'commerce-adapter-mock'
 
   studio-server:
     environment:

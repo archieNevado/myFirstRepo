@@ -26,7 +26,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
@@ -43,7 +42,6 @@ import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.CAT
 import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.CATEGORY_PRODUCT_PAGEGRID_STRUCT_PROPERTY;
 import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.SEGMENT;
 import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.TITLE;
-import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -56,7 +54,6 @@ import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {XmlRepoConfiguration.class, CategoryAugmentationHelperTest.LocalConfig.class})
-@TestPropertySource(properties = {"livecontext.cache.invalidation.enabled=false"})
 public class CategoryAugmentationHelperTest {
 
   private static final String CATEGORY_EXTERNALID = "leafCategory";
@@ -117,7 +114,7 @@ public class CategoryAugmentationHelperTest {
     when(leafCategory.getDisplayName()).thenReturn(CATEGORY_DISPLAY_NAME);
     when(leafCategory.getExternalId()).thenReturn(CATEGORY_EXTERNALID);
     when(leafCategory.getId()).thenReturn(CommerceIdParserHelper.parseCommerceIdOrThrow(CATEGORY_ID));
-    List<Category> breadcrumb = newArrayList(rootCategory, topCategory, leafCategory);
+    List<Category> breadcrumb = List.of(rootCategory, topCategory, leafCategory);
     when(leafCategory.getBreadcrumb()).thenReturn(breadcrumb);
     when(leafCategory.getContext().getSiteId()).thenReturn("theSiteId");
     doReturn(Optional.of(catalog)).when(testling).getCatalog(leafCategory);

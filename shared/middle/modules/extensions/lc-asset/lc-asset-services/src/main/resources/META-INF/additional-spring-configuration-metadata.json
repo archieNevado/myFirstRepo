@@ -1,0 +1,28 @@
+{
+  "properties": [
+    {
+      "name": "livecontext.assetService.changeEvents.maximumSize",
+      "type": "java.lang.Integer",
+      "description": "Maximum number of asset related content change events that are hold in-memory to follow asset changes.",
+      "defaultValue": 1000
+    },
+    {
+      "name": "livecontext.assetService.changeEvents.expireAfterWriteInSeconds",
+      "type": "java.lang.Integer",
+      "description": "That is the time that a Solr index can lag behind without there being a gap for the AssetService.",
+      "defaultValue": 3600
+    },
+    {
+      "name": "livecontext.assetService.searchCacheDurationInSeconds",
+      "type": "java.lang.Integer",
+      "description": "The time in seconds a asset Solr query is cached in-memory in a cache key.",
+      "defaultValue": 300
+    },
+    {
+      "name": "livecontext.assetService.resultLimit",
+      "type": "java.lang.Integer",
+      "description": "The maximum possibly found assets per query. If set to a low value it can happen that some assets are not found.",
+      "defaultValue": 500
+    }
+  ]
+}

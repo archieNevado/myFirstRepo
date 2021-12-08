@@ -94,7 +94,7 @@ public class RobotsHandlerTest {
 
     @Bean
     SitemapHelper sitemapHelper(SettingsService settingsService, UrlPrefixResolver ruleUrlPrefixResolver) {
-      return new SitemapHelper(Map.of(), settingsService, ruleUrlPrefixResolver, true);
+      return new SitemapHelper(settingsService, ruleUrlPrefixResolver, "", "https");
     }
 
   }

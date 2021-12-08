@@ -10,9 +10,7 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.asset.AssetSearchService;
 import com.coremedia.rest.cap.content.search.SearchService;
 import com.coremedia.rest.cap.content.search.SearchServiceResult;
-import com.google.common.collect.ImmutableList;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +42,7 @@ public class StudioAssetSearchService implements AssetSearchService {
 
   @NonNull
   private List<Content> doSearch(@NonNull String contentType, @NonNull String externalId, @NonNull Site site) {
-    ImmutableList<String> none = ImmutableList.of();
+    List<String> none = List.of();
 
     SearchServiceResult result = searchService.search(
             /* query */              "",
@@ -52,7 +50,7 @@ public class StudioAssetSearchService implements AssetSearchService {
             /* sortCriteria */       none,
             /* folder */             site.getSiteRootFolder(), true,
             /* contentTypes */       contentTypes(contentType), true,
-            /* filterQueries */      ImmutableList.of("commerceitems:\"" + externalId + '"', "isdeleted:false"),
+            /* filterQueries */      List.of("commerceitems:\"" + externalId + '"', "isdeleted:false"),
             /* facetFieldCriteria */ none,
             /* facetQueries */       none
     );
@@ -61,9 +59,9 @@ public class StudioAssetSearchService implements AssetSearchService {
   }
 
   @NonNull
-  private ImmutableList<ContentType> contentTypes(@NonNull String contentType) {
+  private List<ContentType> contentTypes(@NonNull String contentType) {
     ContentType ct = contentRepository.getContentType(contentType);
-    return ct != null ? ImmutableList.of(ct) : ImmutableList.of();
+    return ct != null ? List.of(ct) : List.of();
   }
 
   @Deprecated(since = "2010")

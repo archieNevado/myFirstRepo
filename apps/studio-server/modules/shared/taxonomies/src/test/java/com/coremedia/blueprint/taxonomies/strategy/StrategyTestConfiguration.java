@@ -25,7 +25,7 @@ class StrategyTestConfiguration {
   public XmlUapiConfig xmlUapiConfig() {
     return XmlUapiConfig
             .builder()
-            .withSchema("classpath:com/coremedia/blueprint/base/testing/blueprint-doctypes-xmlrepo.xml")
+            .withSchema("classpath:com/coremedia/testing/blueprint-doctypes-xmlrepo.xml")
             .build();
   }
 

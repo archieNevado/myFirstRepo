@@ -1,11 +1,11 @@
 package com.coremedia.lc.studio.lib.validators;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.rest.validation.Issues;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
@@ -15,10 +15,12 @@ public class ExternalPageValidator extends CatalogLinkValidator {
 
   private static final String CODE_ISSUE_EXTERNAL_PAGE_ID_EMPTY = "EmptyExternalPageId";
 
-  public ExternalPageValidator(CommerceConnectionInitializer commerceConnectionInitializer,
+  public ExternalPageValidator(@NonNull ContentType type,
+                               boolean isValidatingSubtypes,
+                               CommerceConnectionSupplier commerceConnectionSupplier,
                                SitesService sitesService,
                                String propertyName) {
-    super(commerceConnectionInitializer, sitesService, propertyName);
+    super(type, isValidatingSubtypes, commerceConnectionSupplier, sitesService, propertyName);
   }
 
   @Override

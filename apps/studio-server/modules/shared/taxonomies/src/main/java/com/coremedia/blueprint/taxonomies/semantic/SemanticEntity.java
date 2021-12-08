@@ -2,8 +2,8 @@ package com.coremedia.blueprint.taxonomies.semantic;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.common.collect.Maps;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -13,7 +13,7 @@ public class SemanticEntity {
   public static final String ID = "id";
   public static final String NAME = "name";
   public static final String TYPE = "type";
-  private Map<String, String> delegate = Maps.newHashMap();
+  private Map<String, String> delegate = new HashMap<>();
 
   @JsonIgnore
   public String getId() {

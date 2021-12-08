@@ -10,17 +10,15 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.livecontext.ecommerce.asset.CatalogPicture;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.objectserver.beans.ContentBean;
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -151,12 +149,8 @@ public class CMProductImpl extends CMTeasableImpl implements CMProduct {
   // --- internal ---------------------------------------------------
 
   private static List<CatalogPicture> contentbeansAsCatalogPictures(List<? extends ContentBean> productPictures) {
-    return Lists.transform(productPictures, new Function<ContentBean, CatalogPicture>() {
-      @Nullable
-      @Override
-      public CatalogPicture apply(ContentBean input) {
-        return input != null ? new CatalogPicture(null, input.getContent()) : null;
-      }
-    });
+    return productPictures.stream()
+            .map(input -> new CatalogPicture(null, input.getContent()))
+            .collect(Collectors.toList());
   }
 }

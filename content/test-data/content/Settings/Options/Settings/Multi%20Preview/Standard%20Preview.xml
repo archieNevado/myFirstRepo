@@ -22,7 +22,7 @@
 </StringListProperty>
 <StructProperty Name="config">
 <Struct>
-<StringProperty Name="uriTemplate">http://localhost:3000/preview/{numericContentId}/{previewDateRFC1123}</StringProperty>
+<StringProperty Name="uriTemplate">http://localhost:3000/preview/{rootSegment}/{numericContentId}</StringProperty>
 </Struct>
 </StructProperty>
 </Struct>

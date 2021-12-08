@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.handler;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentUserContext;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
@@ -14,7 +15,6 @@ import com.coremedia.objectserver.view.substitution.Substitution;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.http.HttpStatus;
@@ -47,6 +47,7 @@ import static com.coremedia.blueprint.base.links.UriConstants.Views.VIEW_FRAGMEN
 import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_SERVICE;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonList;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Handler for Commerce carts.
@@ -84,15 +85,16 @@ public class CartHandler extends LiveContextPageHandlerBase {
   private static final String EXTERNAL_ID = "externalId";
 
   @Substitution("cart")
-  public Cart getCart() {
-    return new LazyCart();
+  public Cart getCart(@NonNull HttpServletRequest request) {
+    return new LazyCart(request);
   }
 
   // --- Handlers ------------------------------------------------------------------------------------------------------
 
   @GetMapping(value = DYNAMIC_URI_PATTERN)
   public ModelAndView handleFragmentRequest(@PathVariable(SEGMENT_ROOT) String context,
-                                            @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view) {
+                                            @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,
+                                            HttpServletRequest request) {
     // If no context is available: return "not found".
 
     Navigation navigation = getNavigation(context);
@@ -100,7 +102,7 @@ public class CartHandler extends LiveContextPageHandlerBase {
       return HandlerHelper.notFound();
     }
 
-    Cart cart = resolveCart();
+    Cart cart = resolveCart(request);
     if (cart == null) {
       return HandlerHelper.notFound();
     }
@@ -127,7 +129,7 @@ public class CartHandler extends LiveContextPageHandlerBase {
 
   @NonNull
   private Object handleRemoveOrderItem(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response) {
-    Cart cart = resolveCart();
+    Cart cart = resolveCart(request);
     if (cart == null) {
       return emptyMap();
     }
@@ -138,7 +140,7 @@ public class CartHandler extends LiveContextPageHandlerBase {
       throw new NotFoundException("Cannot remove order item with ID '" + orderItemId + "' from cart.");
     }
 
-    UserContext updatedUserContext = deleteCartOrderItem(orderItemId);
+    UserContext updatedUserContext = deleteCartOrderItem(orderItemId, request);
     updatedUserContext.getCookies().forEach(c -> addCookie(c, response));
 
     return emptyMap();
@@ -146,9 +148,9 @@ public class CartHandler extends LiveContextPageHandlerBase {
 
   @NonNull
   private Object handleAddOrderItem(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response) {
-    String externalId = request.getParameter(EXTERNAL_ID);
+    var externalId = request.getParameter(EXTERNAL_ID);
 
-    UserContext updatedUserContext = addCartOrderItem(externalId);
+    var updatedUserContext = addCartOrderItem(externalId, request);
     updatedUserContext.getCookies().forEach(c -> addCookie(c, response));
 
     return emptyMap();
@@ -159,28 +161,34 @@ public class CartHandler extends LiveContextPageHandlerBase {
     response.addCookie(cookie);
   }
 
-  private UserContext deleteCartOrderItem(@NonNull String orderItemId) {
-    StoreContext storeContext = CurrentStoreContext.get();
+  private UserContext deleteCartOrderItem(@NonNull String orderItemId, HttpServletRequest request) {
+    StoreContext storeContext = CurrentStoreContext.get(request);
     CommerceConnection commerceConnection = storeContext.getConnection();
 
     CartService cartService = getCartService(commerceConnection);
+    var userContext = get(request);
 
-    return cartService.deleteCartOrderItem(orderItemId, null, storeContext);
+    return cartService.deleteCartOrderItem(orderItemId, null, storeContext, userContext);
   }
 
-  private UserContext addCartOrderItem(String skuId) {
+  private UserContext addCartOrderItem(String skuId, HttpServletRequest request) {
     BigDecimal quantity = BigDecimal.valueOf(1);
     //we do not know the order item id yet. we may simply pass the sku id instead
     OrderItemParam orderItem = new OrderItemParam(skuId, skuId, quantity);
 
     List<OrderItemParam> orderItems = singletonList(orderItem);
 
-    StoreContext storeContext = CurrentStoreContext.get();
-    CommerceConnection commerceConnection = storeContext.getConnection();
+    var storeContext = CurrentStoreContext.get(request);
+    var commerceConnection = storeContext.getConnection();
+    var cartService = getCartService(commerceConnection);
+    var userContext = get(request);
 
-    CartService cartService = getCartService(commerceConnection);
+    return cartService.addToCart(orderItems, storeContext, userContext);
+  }
 
-    return cartService.addToCart(orderItems, storeContext);
+  private static UserContext get(HttpServletRequest request) {
+    return CurrentUserContext.find(request)
+            .orElseThrow(() -> new IllegalStateException("UserContext not available."));
   }
 
   private static boolean orderItemExist(@NonNull Cart cart, @Nullable String orderItemId) {
@@ -223,7 +231,7 @@ public class CartHandler extends LiveContextPageHandlerBase {
     Navigation context = getContextHelper().currentSiteContext();
     String firstNavigationPathSegment = getPathSegments(context).get(0);
 
-    Map<String, String> uriVariables = ImmutableMap.of(SEGMENT_ROOT, firstNavigationPathSegment);
+    Map<String, String> uriVariables = Map.of(SEGMENT_ROOT, firstNavigationPathSegment);
 
     UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromPath(uriPattern.toString());
     uriBuilder = addLinkParametersAsQueryParameters(uriBuilder, linkParameters);
@@ -231,12 +239,20 @@ public class CartHandler extends LiveContextPageHandlerBase {
   }
 
   @Nullable
-  private static Cart resolveCart() {
-    StoreContext storeContext = CurrentStoreContext.get();
+  private static Cart resolveCart(HttpServletRequest request) {
+    var storeContext = CurrentStoreContext.find(request).orElse(null);
+    if (storeContext == null) {
+      return null;
+    }
+
+    var userContext = CurrentUserContext.find(request).orElse(null);
+    if (userContext == null) {
+      return null;
+    }
 
     return storeContext.getConnection()
             .getCartService()
-            .map(cartService -> cartService.getCart(storeContext))
+            .map(cartService -> cartService.getCart(storeContext, userContext))
             .orElse(null);
   }
 
@@ -249,10 +265,15 @@ public class CartHandler extends LiveContextPageHandlerBase {
   private class LazyCart implements Cart {
 
     private Cart delegate;
+    private final HttpServletRequest request;
+
+    public LazyCart(HttpServletRequest request) {
+      this.request = request;
+    }
 
     public Cart getDelegate() {
       if (delegate == null) {
-        delegate = resolveCart();
+        delegate = requireNonNull(resolveCart(request));
       }
       return delegate;
     }

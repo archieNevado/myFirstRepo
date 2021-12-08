@@ -1,8 +1,7 @@
 package com.coremedia.livecontext.tree;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.cap.content.Content;
@@ -15,7 +14,6 @@ import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -80,7 +78,7 @@ class ExternalChannelContentTreeRelationTest {
   private Content leafContent;
 
   @Mock
-  private CommerceConnectionInitializer commerceConnectionInitializer;
+  private CommerceConnectionSupplier commerceConnectionSupplier;
 
   @Mock
   private CommerceBeanFactory commerceBeanFactory;
@@ -97,17 +95,10 @@ class ExternalChannelContentTreeRelationTest {
     commerceConnection.setCommerceBeanFactory(commerceBeanFactory);
     commerceConnection.setInitialStoreContext(storeContext);
 
-    CurrentStoreContext.set(storeContext);
-
-    when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(commerceConnection));
+    when(commerceConnectionSupplier.findConnection(site)).thenReturn(Optional.of(commerceConnection));
 
     initContentMock();
     initCategoryTreeMock();
-  }
-
-  @AfterEach
-  public void tearDown() {
-    CurrentStoreContext.remove();
   }
 
   @Test
@@ -232,7 +223,7 @@ class ExternalChannelContentTreeRelationTest {
   }
 
   private CommerceBeanFactory getCommerceBeanFactory() {
-    return CurrentStoreContext.get().getConnection().getCommerceBeanFactory();
+    return commerceBeanFactory;
   }
 
   public interface CMExternalChannel {

@@ -2,7 +2,6 @@
 src   = "loglevel.html.tmpl"
 dest  = "/usr/share/nginx/html/assets/loglevel.html"
 keys  = [
-        "/studio/packages/proxy/enabled",
         "/user/changes/enabled",
         "/commerce/mock/enabled",
         "/commerce/commercetools/enabled",

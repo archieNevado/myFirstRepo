@@ -6,17 +6,17 @@
     "prettier": "prettier --write \"src/**/*.{js,json}\""
   },
   "devDependencies": {
-    "prettier": "^2.0.5"
+    "prettier": "^2.4.1"
   },
   "dependencies": {
-    "@coremedia/brick-default-teaser": "^1.0.0",
-    "@coremedia/brick-image-maps": "^1.0.0",
-    "@coremedia/brick-magnific-popup": "^1.0.0",
-    "@coremedia/brick-media": "^1.0.0",
-    "@coremedia/brick-mediaelement": "^1.0.0",
-    "@coremedia/brick-node-decoration-service": "^1.0.0",
-    "@coremedia/brick-utils": "^1.0.0",
-    "jquery": "^3.0.0",
+    "@coremedia/brick-default-teaser": "workspace:*",
+    "@coremedia/brick-image-maps": "workspace:*",
+    "@coremedia/brick-magnific-popup": "workspace:*",
+    "@coremedia/brick-media": "workspace:*",
+    "@coremedia/brick-mediaelement": "workspace:*",
+    "@coremedia/brick-node-decoration-service": "workspace:*",
+    "@coremedia/brick-utils": "workspace:*",
+    "jquery": "^3.6.0",
     "magnific-popup": "1.1.0"
   },
   "main": "src/js/index.js",

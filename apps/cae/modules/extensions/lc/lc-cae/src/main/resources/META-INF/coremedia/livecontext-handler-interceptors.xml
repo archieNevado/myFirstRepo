@@ -44,7 +44,6 @@
     <property name="catalogAliasTranslationService" ref="catalogAliasTranslationService"/>
     <property name="fragmentContextAccessor" ref="liveContextContextAccessor"/>
     <property name="liveContextSiteResolver" ref="liveContextSiteResolver"/>
-    <property name="contractsProcessingEnabled" value="${lc.contracts.processing.enabled}"/>
   </bean>
 
   <bean class="com.coremedia.livecontext.fragment.links.context.accessors.LiveContextContextAccessor" id="liveContextContextAccessor" />

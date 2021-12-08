@@ -20,8 +20,8 @@
 </linkedSettings>
 <resourceBundles2>
 </resourceBundles2>
-<segment>catalog-root-page</segment>
-<title>Aurora Catalog Root Page</title>
+<segment>default-catalog-root</segment>
+<title>Aurora Master Catalog Root Category</title>
 <htmlTitle></htmlTitle>
 <keywords>CoreMedia,Perfect Chef,PerfectChef,Demo,Blueprint,LiveContext,CoreMedia LiveContext 3.0 for IBM WebSphere Commerce</keywords>
 <htmlDescription></htmlDescription>

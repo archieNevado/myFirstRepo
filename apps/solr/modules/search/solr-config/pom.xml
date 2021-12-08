@@ -19,7 +19,7 @@
     Prerequisites:
 
     - Download the official Solr distribution,
-      for example from http://archive.apache.org/dist/lucene/solr/8.8.2/solr-8.8.2.tgz
+      for example from http://archive.apache.org/dist/lucene/solr/8.10.1/solr-8.10.1.tgz
     - Extract it into a directory of your choice
     - Set the environment variable SOLR_SCRIPT to point to the Solr start/stop script
       in the extracted directory. Choose "bin/solr" for Unix or "bin/solr.cmd" for a Windows shell.
@@ -30,9 +30,10 @@
       mvn exec:exec@start-solr
       mvn exec:exec@stop-solr
 
-    You can additionally start and stop a Solr Slave, with its admin interface available at http://localhost:40081/solr
-      mvn exec:exec@start-solr-slave
-      mvn exec:exec@stop-solr-slave
+    You can additionally start and stop a Solr follower,
+    with its admin interface available at http://localhost:40081/solr
+      mvn exec:exec@start-solr-follower
+      mvn exec:exec@stop-solr-follower
 
     Alternatively, you can start a single-node SolrCloud instance with embedded Zookeeper:
       mvn exec:exec@start-solr-cloud
@@ -46,12 +47,12 @@
 
   <properties>
     <solr.port>40080</solr.port>
-    <solr.slavePort>40081</solr.slavePort>
+    <solr.followerPort>40081</solr.followerPort>
     <solr.stopPort>40090</solr.stopPort>
-    <solr.stopSlavePort>40091</solr.stopSlavePort>
+    <solr.stopFollowerPort>40091</solr.stopFollowerPort>
     <solr.embeddedZookeeperPort>40085</solr.embeddedZookeeperPort>
     <solr.coreRootDirectory>${project.build.directory}/cores</solr.coreRootDirectory>
-    <solr.slaveCoreRootDirectory>${project.build.directory}/slave-cores</solr.slaveCoreRootDirectory>
+    <solr.followerCoreRootDirectory>${project.build.directory}/follower-cores</solr.followerCoreRootDirectory>
     <solr.tooling.srcConfigsets>${project.basedir}/src/main/app/configsets</solr.tooling.srcConfigsets>
     <solr.tooling.extensions>${project.build.directory}/extension-configsets</solr.tooling.extensions>
     <solr.tooling.targetConfigsets>${project.build.directory}/${project.build.finalName}/configsets</solr.tooling.targetConfigsets>
@@ -165,7 +166,7 @@
               <target>
                 <!-- must create empty directories to store Solr cores for "mvn exec:exec@start-..." to avoid errors in log -->
                 <mkdir dir="${solr.coreRootDirectory}" />
-                <mkdir dir="${solr.slaveCoreRootDirectory}" />
+                <mkdir dir="${solr.followerCoreRootDirectory}" />
                 <!-- write Zookeeper configuration for SolrCloud -->
                 <echo file="${project.build.directory}/solr-config/zoo.cfg" append="true">
 clientPort=${solr.embeddedZookeeperPort}
@@ -199,7 +200,7 @@ dataDir=${project.build.directory}/zoo_data
               <commandlineArgs>start -s ${project.build.directory}/solr-config</commandlineArgs>
               <environmentVariables>
                 <SOLR_LOGS_DIR>${project.build.directory}/logs</SOLR_LOGS_DIR>
-                <SOLR_OPTS>-DcoreRootDirectory=${solr.coreRootDirectory} -Dsolr.master=true</SOLR_OPTS>
+                <SOLR_OPTS>-DcoreRootDirectory=${solr.coreRootDirectory} -Dsolr.leader=true</SOLR_OPTS>
                 <SOLR_PORT>${solr.port}</SOLR_PORT>
                 <STOP_PORT>${solr.stopPort}</STOP_PORT>
               </environmentVariables>
@@ -219,30 +220,30 @@ dataDir=${project.build.directory}/zoo_data
             </configuration>
           </execution>
           <execution>
-            <id>start-solr-slave</id>
+            <id>start-solr-follower</id>
             <goals>
               <goal>exec</goal>
             </goals>
             <configuration>
               <commandlineArgs>start -s ${project.build.directory}/solr-config</commandlineArgs>
               <environmentVariables>
-                <SOLR_LOGS_DIR>${project.build.directory}/slave-logs</SOLR_LOGS_DIR>
-                <SOLR_OPTS>-DcoreRootDirectory=${solr.slaveCoreRootDirectory} -Dsolr.slave=true -Dsolr.master.url=http://localhost:${solr.port}/solr -Dsolr.disable.shardsWhitelist=true</SOLR_OPTS>
-                <SOLR_PORT>${solr.slavePort}</SOLR_PORT>
-                <STOP_PORT>${solr.stopSlavePort}</STOP_PORT>
+                <SOLR_LOGS_DIR>${project.build.directory}/follower-logs</SOLR_LOGS_DIR>
+                <SOLR_OPTS>-DcoreRootDirectory=${solr.followerCoreRootDirectory} -Dsolr.follower=true -Dsolr.leader.url=http://localhost:${solr.port}/solr -Dsolr.disable.shardsWhitelist=true</SOLR_OPTS>
+                <SOLR_PORT>${solr.followerPort}</SOLR_PORT>
+                <STOP_PORT>${solr.stopFollowerPort}</STOP_PORT>
               </environmentVariables>
             </configuration>
           </execution>
           <execution>
-            <id>stop-solr-slave</id>
+            <id>stop-solr-follower</id>
             <goals>
               <goal>exec</goal>
             </goals>
             <configuration>
               <commandlineArgs>stop</commandlineArgs>
               <environmentVariables>
-                <SOLR_PORT>${solr.slavePort}</SOLR_PORT>
-                <STOP_PORT>${solr.stopSlavePort}</STOP_PORT>
+                <SOLR_PORT>${solr.followerPort}</SOLR_PORT>
+                <STOP_PORT>${solr.stopFollowerPort}</STOP_PORT>
               </environmentVariables>
             </configuration>
           </execution>

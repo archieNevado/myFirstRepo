@@ -15,7 +15,6 @@ import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.user.User;
-import com.coremedia.common.util.Predicate;
 import com.coremedia.livecontext.fragment.pagegrid.PageGridPlacementResolver;
 import com.coremedia.objectserver.web.HandlerHelper;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -24,6 +23,7 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.function.Predicate;
 
 import static com.coremedia.blueprint.cae.view.DynamicIncludeHelper.createDynamicIncludeRootDelegateModelAndView;
 import static com.coremedia.objectserver.web.HandlerHelper.notFound;

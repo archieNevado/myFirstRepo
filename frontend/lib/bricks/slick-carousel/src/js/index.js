@@ -61,15 +61,5 @@ export default function (container, config) {
     config.responsive = responsiveConfigByOrientation[currentOrientation];
   }
 
-  // add transitioning css class during slide changes (currently only used for an IE11 fix)
-  // events should be attached before initilization
-  $carousel.on("beforeChange", () => {
-    $carousel.addClass("cm-slick-carousel--transitioning");
-  });
-
-  $carousel.on("afterChange", () => {
-    $carousel.removeClass("cm-slick-carousel--transitioning");
-  });
-
   $carousel.slick(config);
 }

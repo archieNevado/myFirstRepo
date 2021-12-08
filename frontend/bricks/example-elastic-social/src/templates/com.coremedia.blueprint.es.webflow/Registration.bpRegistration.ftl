@@ -87,7 +87,7 @@
         <#if registration?has_content && bpRegistration.profileImage?has_content>
           <#assign imageUrl=cm.getLink(bpRegistration.profileImage)/>
           <div>
-            <img src="${imageUrl!""}" alt="userimage"><br>
+            <img src="${imageUrl!""}" alt="userimage" loading="lazy"><br>
             <@spring.formCheckbox cm.getMessage("registration_deleteProfileImage") />
             <label for="deleteProfileImage"><@cm.message "registration_deleteProfileImage" /></label>
           </div>

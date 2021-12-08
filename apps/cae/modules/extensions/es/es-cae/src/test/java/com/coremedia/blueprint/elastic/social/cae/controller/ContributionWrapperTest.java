@@ -1,7 +1,6 @@
 package com.coremedia.blueprint.elastic.social.cae.controller;
 
 import com.coremedia.elastic.social.api.comments.Comment;
-import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 
 import java.util.List;
@@ -15,7 +14,7 @@ public class ContributionWrapperTest {
   public void testWrapper() {
     ContributionWrapper<Comment, CommentWrapper> subContributionWrapper1 = mock(ContributionWrapper.class);
     ContributionWrapper<Comment, CommentWrapper> subContributionWrapper2 = mock(ContributionWrapper.class);
-    List<ContributionWrapper<Comment, CommentWrapper>> subContributionWrappers = ImmutableList.of(subContributionWrapper1, subContributionWrapper2);
+    List<ContributionWrapper<Comment, CommentWrapper>> subContributionWrappers = List.of(subContributionWrapper1, subContributionWrapper2);
 
     Comment comment = mock(Comment.class);
 

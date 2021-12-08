@@ -98,12 +98,12 @@
       <artifactId>workflow-notifications-lib</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.content-hub</groupId>
+      <groupId>com.coremedia.cms</groupId>
       <artifactId>content-hub-rest-component</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.content-hub</groupId>
+      <groupId>com.coremedia.cms</groupId>
       <artifactId>content-hub-adapter-mock</artifactId>
       <scope>runtime</scope>
     </dependency>
@@ -150,11 +150,6 @@
       <artifactId>studio-server-extension-dependencies</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>logging-config</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>

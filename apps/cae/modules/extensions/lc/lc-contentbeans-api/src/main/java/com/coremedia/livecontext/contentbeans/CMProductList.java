@@ -1,9 +1,7 @@
 package com.coremedia.livecontext.contentbeans;
 
 import com.coremedia.blueprint.common.contentbeans.CMQueryList;
-import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
-import com.coremedia.livecontext.ecommerce.catalog.Category;
 
 import java.util.Collection;
 import java.util.List;
@@ -50,82 +48,7 @@ public interface CMProductList extends CMQueryList {
   Collection<? extends CMProductList> getLocalizations();
 
   /**
-   * Returns a {@code Map} from aspectIDs to Aspects. AspectIDs consists of an aspect name with a
-   * prefix which identifies the plugin provider.
-   *
-   * @return a {@code Map} from aspectIDs to {@code Aspect}s
-   * @deprecated since 1907.1; Implement optional features as extensions.
-   */
-  @Deprecated
-  @Override
-  Map<String, ? extends Aspect<? extends CMProductList>> getAspectByName();
-
-  /**
-   * Returns a list of all  {@code Aspect}s from all availiable
-   * PlugIns that are registered to this content bean.
-   *
-   * @return a list of {@link Aspect}
-   * @deprecated since 1907.1; Implement optional features as extensions.
-   */
-  @Deprecated
-  @Override
-  List<? extends Aspect<? extends CMProductList>> getAspects();
-
-  /**
-   * Returns an external id representing the category.
-   *
-   * @return an external id
-   * @deprecated use {@link #getProducts()} instead
-   */
-  @Deprecated(since = "2104.1", forRemoval = true)
-  String getExternalId();
-
-  /**
-   * Returns the category.
-   *
-   * @return the category
-   * @deprecated use {@link #getProducts()} instead
-   */
-  @Deprecated(since = "2104.1", forRemoval = true)
-  Category getCategory();
-
-  /**
    * @return list of products
    */
   List<ProductInSite> getProducts();
-
-  /**
-   * @return string that determines the sorting of the list
-   * @deprecated use {@link #getProducts()} instead
-   */
-  @Deprecated(since = "2104.1", forRemoval = true)
-  String getOrderBy();
-
-  /**
-   * @return string that determines a facet search param
-   * @deprecated use {@link #getProducts()} instead
-   */
-  @Deprecated(since = "2104.1", forRemoval = true)
-  String getFacet();
-
-  /**
-   * @return string that determines a search query string
-   * @deprecated use {@link #getProducts()} instead
-   */
-  @Deprecated(since = "2104.1", forRemoval = true)
-  String getQuery();
-
-  /**
-   * @return the offset in the original product list where the rendering should start
-   * @deprecated use {@link #getProducts()} instead
-   */
-  @Deprecated(since = "2104.1", forRemoval = true)
-  int getOffset();
-
-  /**
-   * @return the sub struct "productList" of localSettings converted to a map
-   * @deprecated use {@link #getProducts()} instead
-   */
-  @Deprecated(since = "2104.1", forRemoval = true)
-  Map<String, Object> getProductListSettings();
 }

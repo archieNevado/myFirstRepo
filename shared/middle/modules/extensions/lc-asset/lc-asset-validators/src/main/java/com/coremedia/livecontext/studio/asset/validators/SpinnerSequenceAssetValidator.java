@@ -1,19 +1,20 @@
 package com.coremedia.livecontext.studio.asset.validators;
 
-import com.coremedia.cap.common.CapConnection;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.content.ContentType;
 import com.coremedia.livecontext.asset.util.AssetReadSettingsHelper;
-import com.coremedia.rest.cap.validation.ContentTypeValidatorBase;
+import com.coremedia.rest.cap.validation.AbstractContentTypeValidator;
 import com.coremedia.rest.validation.Issues;
 import com.coremedia.rest.validation.Severity;
 import com.google.common.annotations.VisibleForTesting;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import java.util.List;
 
 /**
  * Check spinner pictures for consistency.
  */
-public class SpinnerSequenceAssetValidator extends ContentTypeValidatorBase {
+public class SpinnerSequenceAssetValidator extends AbstractContentTypeValidator {
   @VisibleForTesting
   static final String SEQUENCE_PROPERTY = "sequence";
 
@@ -21,9 +22,11 @@ public class SpinnerSequenceAssetValidator extends ContentTypeValidatorBase {
 
   private final AssetReadSettingsHelper assetHelper;
 
-  public SpinnerSequenceAssetValidator(AssetReadSettingsHelper assetHelper, CapConnection connection) {
+  public SpinnerSequenceAssetValidator(@NonNull ContentType type,
+                                       boolean isValidatingSubtypes,
+                                       @NonNull AssetReadSettingsHelper assetHelper) {
+    super(type, isValidatingSubtypes);
     this.assetHelper = assetHelper;
-    setConnection(connection);
   }
 
   /**

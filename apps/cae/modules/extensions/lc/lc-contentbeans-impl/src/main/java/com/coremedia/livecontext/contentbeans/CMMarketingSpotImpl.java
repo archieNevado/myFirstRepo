@@ -117,7 +117,7 @@ public class CMMarketingSpotImpl extends CMDynamicListImpl implements CMMarketin
 
   @Nullable
   private MarketingSpot doGetMarketingSpot(CommerceConnection connection, String marketingSpotId) {
-    StoreContext storeContext = connection.getStoreContext();
+    StoreContext storeContext = connection.getInitialStoreContext();
     CommerceId commerceId = CommerceIdParserHelper.parseCommerceIdOrThrow(marketingSpotId);
 
     return connection.getMarketingSpotService()

@@ -55,7 +55,7 @@ public class ExternalReferenceResolverTest {
     testling.setContextHelper(contextHelper);
 
     FragmentParameters params = parametersFor(ref);
-    assertTrue(testling.include(params));
+    assertTrue(testling.test(params));
     LinkableAndNavigation linkableAndNavigation = testling.resolveExternalRef(params, site);
     assertNotNull(linkableAndNavigation);
     assertNotNull(linkableAndNavigation.getLinkable());
@@ -73,7 +73,7 @@ public class ExternalReferenceResolverTest {
     testling.setContextHelper(contextHelper);
 
     FragmentParameters params = parametersFor(ref);
-    assertTrue(testling.include(params));
+    assertTrue(testling.test(params));
     LinkableAndNavigation linkableAndNavigation = testling.resolveExternalRef(params, site);
     assertNotNull(linkableAndNavigation);
     assertNotNull(linkableAndNavigation.getLinkable());
@@ -92,7 +92,7 @@ public class ExternalReferenceResolverTest {
     testling.setContextHelper(contextHelper);
 
     FragmentParameters params = parametersFor(ref);
-    assertTrue(testling.include(params));
+    assertTrue(testling.test(params));
     LinkableAndNavigation linkableAndNavigation = testling.resolveExternalRef(params, site);
     assertNotNull(linkableAndNavigation);
     assertEquals(linkable, linkableAndNavigation.getLinkable());
@@ -111,7 +111,7 @@ public class ExternalReferenceResolverTest {
     testling.setContextHelper(contextHelper);
 
     FragmentParameters params = parametersFor(ref);
-    assertTrue(testling.include(params));
+    assertTrue(testling.test(params));
     LinkableAndNavigation linkableAndNavigation = testling.resolveExternalRef(params, site);
     assertNotNull(linkableAndNavigation);
     assertEquals(linkable, linkableAndNavigation.getLinkable());
@@ -131,7 +131,7 @@ public class ExternalReferenceResolverTest {
     testling.setContextHelper(contextHelper);
 
     FragmentParameters params = parametersFor(ref);
-    assertTrue(testling.include(params));
+    assertTrue(testling.test(params));
     LinkableAndNavigation linkableAndNavigation = testling.resolveExternalRef(params, site);
     assertNotNull(linkableAndNavigation);
     assertNull(linkableAndNavigation.getLinkable());
@@ -147,7 +147,7 @@ public class ExternalReferenceResolverTest {
     testling.setContextHelper(contextHelper);
 
     FragmentParameters params = parametersFor(ref);
-    assertFalse(testling.include(params));
+    assertFalse(testling.test(params));
   }
 
   @Test
@@ -159,7 +159,7 @@ public class ExternalReferenceResolverTest {
     testling.setContextHelper(contextHelper);
 
     FragmentParameters params = parametersFor(ref);
-    assertFalse(testling.include(params));
+    assertFalse(testling.test(params));
   }
 
   @Test
@@ -174,7 +174,7 @@ public class ExternalReferenceResolverTest {
     testling.setContextHelper(contextHelper);
 
     FragmentParameters params = parametersFor(ref);
-    assertTrue(testling.include(params));
+    assertTrue(testling.test(params));
     LinkableAndNavigation linkableAndNavigation = testling.resolveExternalRef(params, site);
     assertNotNull(linkableAndNavigation);
     assertNotNull(linkableAndNavigation.getLinkable());

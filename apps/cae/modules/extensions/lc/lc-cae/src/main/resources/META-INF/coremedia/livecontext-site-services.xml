@@ -7,7 +7,7 @@
   <import resource="classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-cae-services.xml"/>
 
-  <bean class="com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceServicesAutoConfiguration"/>
+  <bean class="com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceServicesConfiguration"/>
 
   <bean id="liveContextSiteResolver" class="com.coremedia.livecontext.handler.util.LiveContextSiteResolverImpl">
     <constructor-arg index="0" ref="siteResolver"/>

@@ -5,7 +5,7 @@
 Install this into your workspace and you'll have access to the `theme-utils`.
 
 ```shell
-yarn add @coremedia/theme-utils
+pnpm add @coremedia/theme-utils
 ```
 
 ## Usage

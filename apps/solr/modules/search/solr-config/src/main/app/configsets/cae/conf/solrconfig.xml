@@ -11,7 +11,7 @@
        that you fully re-index after changing this setting as it can
        affect both how text is indexed and queried.
   -->
-  <luceneMatchVersion>8.8.2</luceneMatchVersion>
+  <luceneMatchVersion>8.10.1</luceneMatchVersion>
 
   <!-- Data Directory
 
@@ -683,38 +683,39 @@
   <!-- Solr Replication
 
        The SolrReplicationHandler supports replicating indexes from a
-       "master" used for indexing and "slaves" used for queries.
+       "leader node" used for indexing to "follower nodes" used for queries.
 
-       https://solr.apache.org/guide/8_8/index-replication.html
+       https://solr.apache.org/guide/8_10/index-replication.html
 
     -->
   <requestHandler name="/replication" class="solr.ReplicationHandler">
-    <lst name="master">
-      <str name="enable">${solr.master:false}</str>
+    <lst name="leader">
+      <str name="enable">${solr.leader:false}</str>
       <str name="replicateAfter">startup</str>
       <str name="replicateAfter">commit</str>
     </lst>
 
-    <lst name="slave">
-      <str name="enable">${solr.slave:false}</str>
-      <!-- fully qualified url for the replication handler of master. It is
+    <lst name="follower">
+      <str name="enable">${solr.follower:false}</str>
+      <!-- fully qualified url for the replication handler of leader. It is
            possible to pass on this as a request param for the fetchindex command -->
-      <str name="masterUrl">${solr.master.url:http://localhost/solr}/${solr.core.name}</str>
+      <str name="leaderUrl">${solr.leader.url:http://localhost/solr}/${solr.core.name}</str>
 
-      <!-- Interval in which the slave should poll master.  Format is HH:mm:ss .
-           If this is absent slave does not poll automatically.
+      <!-- Interval in which the follower should poll leader.  Format is HH:mm:ss .
+           If this is absent follower does not poll automatically.
 
            But a fetchindex can be triggered from the admin or the http API -->
       <str name="pollInterval">00:00:20</str>
 
-      <!-- The following values are used when the slave connects to the master to
+      <!-- The following values are used when the follower connects to the leader to
            download the index files.  Default values implicitly set as 5000ms and
            10000ms respectively. The user DOES NOT need to specify these unless the
            bandwidth is extremely low or if there is an extremely high latency -->
       <str name="httpConnTimeout">5000</str>
       <str name="httpReadTimeout">10000</str>
 
-      <!-- If HTTP Basic authentication is enabled on the master, then the slave can be configured with the following
+      <!-- If HTTP Basic authentication is enabled on the leader, then the follower
+           can be configured with the following -->
       <str name="httpBasicAuthUser">username</str>
       <str name="httpBasicAuthPassword">password</str>
       -->
@@ -1000,7 +1001,7 @@
 
   <!-- Query Parsers
 
-       https://solr.apache.org/guide/8_8/query-syntax-and-parsing.html
+       https://solr.apache.org/guide/8_10/query-syntax-and-parsing.html
 
        Multiple QParserPlugins can be registered by name, and then
        used in either the "defType" param for the QueryComponent (used

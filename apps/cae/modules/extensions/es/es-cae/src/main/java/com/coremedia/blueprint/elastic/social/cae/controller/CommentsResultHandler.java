@@ -2,10 +2,9 @@ package com.coremedia.blueprint.elastic.social.cae.controller;
 
 import com.coremedia.blueprint.base.elastic.common.ImageHelper;
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
-import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.navigation.Navigation;
-import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.cap.user.User;
 import com.coremedia.elastic.core.api.blobs.Blob;
 import com.coremedia.elastic.core.api.blobs.BlobService;
@@ -73,16 +72,11 @@ public class CommentsResultHandler extends ElasticContentHandler<CommentsResult>
                                   @PathVariable("id") String targetId,
                                   @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,
                                   HttpServletRequest request) {
-    Navigation navigation = getNavigation(contextId);
-
-    Site site = SiteHelper.getSiteFromRequest(request);
-    if (site == null) {
-      return HandlerHelper.notFound();
-    }
-    Object contributionTarget = getContributionTarget(targetId, site);
+    Object contributionTarget = getContributionTarget(targetId, request);
     if (contributionTarget == null) {
       return HandlerHelper.notFound();
     }
+    var navigation = getNavigation(contextId);
     Object[] beans = getBeansForSettings(contributionTarget, navigation).toArray();
 
     ElasticSocialConfiguration elasticSocialConfiguration = getElasticSocialConfiguration(beans);
@@ -111,16 +105,12 @@ public class CommentsResultHandler extends ElasticContentHandler<CommentsResult>
                                     @RequestParam(value = "authorName", required = false) String authorName,
                                     @RequestParam(value = "replyTo", required = false) String replyToId,
                                     HttpServletRequest request) {
-    Navigation navigation = getNavigation(contextId);
 
-    Site site = SiteHelper.getSiteFromRequest(request);
-    if (site == null) {
-      return HandlerHelper.notFound();
-    }
-    Object contributionTarget = getContributionTarget(targetId, site);
+    Object contributionTarget = getContributionTarget(targetId, request);
     if( contributionTarget == null ) {
       return HandlerHelper.notFound();
     }
+    Navigation navigation = getNavigation(contextId);
     Object[] beans = getBeansForSettings(contributionTarget, navigation).toArray();
 
     ElasticSocialConfiguration elasticSocialConfiguration = getElasticSocialConfiguration(beans);

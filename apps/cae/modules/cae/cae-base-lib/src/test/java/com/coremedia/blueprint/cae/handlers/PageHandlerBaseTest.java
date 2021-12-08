@@ -11,7 +11,6 @@ import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.objectserver.beans.ContentBeanIdConverter;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.HttpError;
-import com.google.common.collect.ImmutableList;
 import org.mockito.Mock;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriTemplate;
@@ -27,7 +26,6 @@ import static com.coremedia.blueprint.cae.web.links.NavigationLinkSupport.ATTR_N
 import static com.coremedia.blueprint.common.services.context.ContextHelper.ATTR_NAME_PAGE;
 import static com.coremedia.objectserver.web.HandlerHelper.MODEL_ROOT;
 import static com.coremedia.objectserver.web.HandlerHelper.VIEWNAME_DEFAULT;
-import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
@@ -43,10 +41,10 @@ public abstract class PageHandlerBaseTest<T extends PageHandlerBase> {
     testling.setPermittedLinkParameterNames(PERMITTED_LINK_PARAMETER_NAMES);
     testling.setSitesService(sitesService);
 
-    defaultContexts = ImmutableList.of(defaultNavigation);
+    defaultContexts = List.of(defaultNavigation);
 
     when(defaultActionBean.getSegment()).thenReturn(DEFAULT_ACTION);
-    when(navigationSegmentsUriHelper.parsePath(asList(DEFAULT_CONTEXT))).thenReturn(defaultNavigation);
+    when(navigationSegmentsUriHelper.parsePath(List.of(DEFAULT_CONTEXT))).thenReturn(defaultNavigation);
     when(navigationSegmentsUriHelper.getPathList(defaultNavigation)).thenReturn(DEFAULT_PATH_LIST);
     when(defaultActionBean.getContentId()).thenReturn(DEFAULT_CONTENT_ID);
     when(defaultActionBean.getTitle()).thenReturn(DEFAULT_TITLE);

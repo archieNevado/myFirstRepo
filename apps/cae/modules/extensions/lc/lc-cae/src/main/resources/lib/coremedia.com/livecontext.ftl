@@ -75,3 +75,11 @@
     </@compress></#if>
   </#if>
 </#macro>
+
+<#function createBeansFor contents>
+    <#return liveContextFreemarkerFacade.createBeansFor(contents)>
+</#function>
+
+<#function createBeanFor content>
+    <#return liveContextFreemarkerFacade.createBeanFor(content)>
+</#function>

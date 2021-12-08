@@ -12,16 +12,16 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>es-controlroom-user-changes</artifactId>
-      <version>1-SNAPSHOT</version>
+      <version>${project.version}</version>
       <type>pom</type>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>notification-elastic-user-changes</artifactId>
-      <version>1-SNAPSHOT</version>
+      <version>${project.version}</version>
       <type>pom</type>
       <scope>runtime</scope>
     </dependency>

@@ -12,8 +12,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.coremedia.blueprint.base</groupId>
-      <artifactId>bpbase-test-util</artifactId>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>test-util</artifactId>
       <scope>runtime</scope>
     </dependency>
   </dependencies>
@@ -28,7 +28,10 @@
         </property>
       </activation>
       <properties>
-        <bannedDependenciesIncludes>com.coremedia.blueprint.base:bpbase-test-util</bannedDependenciesIncludes>
+        <bannedDependenciesIncludes>
+          com.coremedia.blueprint:test-util,
+          org.mockito:mockito-core
+        </bannedDependenciesIncludes>
       </properties>
     </profile>
   </profiles>

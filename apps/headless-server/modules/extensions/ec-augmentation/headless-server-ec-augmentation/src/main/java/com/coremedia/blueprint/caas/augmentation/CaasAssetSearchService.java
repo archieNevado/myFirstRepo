@@ -12,7 +12,6 @@ import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.id.IdScheme;
 import com.coremedia.livecontext.asset.AssetSearchService;
-import com.google.common.base.CharMatcher;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -51,13 +50,8 @@ public class CaasAssetSearchService implements AssetSearchService {
   @Override
   public List<Content> searchAssets(@NonNull String contentType, @NonNull String externalId, @NonNull Site site) {
 
-    // Collect all filter queries
-    List<String> filterQueries = new ArrayList<>();
-
-    filterQueries.add(SearchQueryHelper.validFromQuery(solrQueryBuilder.getValidFromFieldName()));
-    filterQueries.add(SearchQueryHelper.validToQuery(solrQueryBuilder.getValidToFieldName()));
-
     // Content type filter
+    List<String> filterQueries = new ArrayList<>();
     docTypeFilterQuery(contentType).ifPresent(filterQueries::add);
 
     String query = SearchQueryHelper.exactQuery(COMMERCE_ITEMS_FIELD, '"' + externalId + '"');
@@ -87,10 +81,5 @@ public class CaasAssetSearchService implements AssetSearchService {
             emptyList(),
             solrQueryBuilder.getDocumentTypeFieldName(),
             contentRepository);
-  }
-
-  @NonNull
-  private String escapeLiteralForSearch(@NonNull String literal) {
-    return '"' + CharMatcher.is('"').replaceFrom(literal, "\\\"") + '"';
   }
 }

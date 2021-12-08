@@ -15,9 +15,11 @@ import com.coremedia.objectserver.web.HandlerHelper;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.handler.DispatcherServletWebRequest;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_EXTENSION;
@@ -59,11 +61,12 @@ public class ProductCatalogPictureHandler extends CatalogPictureHandlerBase {
                                                                     @PathVariable(PART_NUMBER) String partNumber,
                                                                     @PathVariable(SEGMENT_EXTENSION) String extension,
                                                                     @PathVariable(CATALOG_ID) String catalogId,
-                                                                    WebRequest request) {
+                                                                    HttpServletRequest request,
+                                                                    HttpServletResponse response) {
     //the given partnumber can be of a product or of a sku but we need the correct reference id
     //so ask catalog service we will give us a sku instance if the partnumber belongs to a sku
 
-    StoreContext storeContext = CurrentStoreContext.get();
+    var storeContext = CurrentStoreContext.get(request);
     CommerceConnection connection = storeContext.getConnection();
 
     CatalogAlias catalogAlias = resolveCatalogAliasFromId(CatalogId.of(catalogId), storeContext);
@@ -75,7 +78,7 @@ public class ProductCatalogPictureHandler extends CatalogPictureHandlerBase {
             .map(CommerceBean::getReference)
             .orElse(productId);
 
-    ModelAndView modelAndView = handleRequestWidthHeight(storeId, locale, formatName, lookupId, extension, request);
+    var modelAndView = handleRequestWidthHeight(storeId, locale, formatName, lookupId, extension, new DispatcherServletWebRequest(request, response));
     if (modelAndView == null) {
       // not modified
       return null;
@@ -97,13 +100,13 @@ public class ProductCatalogPictureHandler extends CatalogPictureHandlerBase {
                                                          @PathVariable(FORMAT_NAME) String formatName,
                                                          @PathVariable(PART_NUMBER) String partNumber,
                                                          @PathVariable(SEGMENT_EXTENSION) String extension,
-                                                         WebRequest request) {
-    StoreContext storeContext = CurrentStoreContext.get();
+                                                         HttpServletRequest request,
+                                                         HttpServletResponse response) {
+    var storeContext = CurrentStoreContext.get(request);
 
     String catalogId = storeContext.getCatalogId().map(CatalogId::value).orElse(null);
 
-    return handleRequestWidthHeightForProductWithCatalog(storeId, locale, formatName, partNumber, extension, catalogId,
-            request);
+    return handleRequestWidthHeightForProductWithCatalog(storeId, locale, formatName, partNumber, extension, catalogId, request, response);
   }
 
   private static Optional<Product> loadProductOrVariant(CatalogAlias catalogAlias, String partNumber,

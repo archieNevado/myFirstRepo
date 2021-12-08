@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
-
 import com.coremedia.blueprint.common.contentbeans.CMAbstractCode;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.content.Content;
@@ -95,20 +94,18 @@ public abstract class CMAbstractCodeBase extends CMLocalizedImpl implements CMAb
   }
 
   /**
-   * Returns the value of the document property {@link #IE_EXPRESSION}.
-   *
-   * @return the value of the document property {@link #IE_EXPRESSION}
+   * @deprecated since 2110.1, Old Internet Explorer (IE) is not supported anymore.
    */
+  @Deprecated(since = "2110.1")
   @Override
   public String getIeExpression() {
     return getContent().getString(IE_EXPRESSION);
   }
 
   /**
-   * Returns the value of the document property {@link #IE_REVEALED}.
-   *
-   * @return the value of the document property {@link #IE_REVEALED}
+   * @deprecated since 2110.1, Old Internet Explorer (IE) is not supported anymore.
    */
+  @Deprecated(since = "2110.1")
   @Override
   public boolean isIeRevealed() {
     return getContent().getBoolean(IE_REVEALED);
@@ -125,11 +122,4 @@ public abstract class CMAbstractCodeBase extends CMLocalizedImpl implements CMAb
     Struct struct = getContent().getStruct(HTML_ATTRIBUTES);
     return struct != null ? struct.toNestedMaps() : Collections.emptyMap();
   }
-
-  @Override
-  @Deprecated
-  public boolean isCompressionDisabled() {
-    return getContent().getBoolean(DISABLE_COMPRESSION);
-  }
 }
-  

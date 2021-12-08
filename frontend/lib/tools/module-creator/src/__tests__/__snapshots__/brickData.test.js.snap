@@ -66,14 +66,6 @@ exports[`initBrickPartialsScss() returns data for _partials.scss 1`] = `
 "
 `;
 
-exports[`initBrickPrettierignore() returns data for .prettierignore 1`] = `
-"/*
-!/src
-/src/*
-!/src/js
-"
-`;
-
 exports[`initBrickVariablesScss() returns data for _variables.scss 1`] = `
 "// make sure to import variables sass files in _variables.scss
 @import \\"variables/test\\";
@@ -88,15 +80,15 @@ exports[`initPackageJson() returns data for package.json 1`] = `
   \\"version\\": \\"1.0.0\\",
   \\"private\\": true,
   \\"scripts\\": {
-    \\"prettier\\": \\"prettier \\\\\\"**/*\\\\\\" --write\\"
+    \\"prettier\\": \\"prettier --write \\\\\\"src/**/*.{js,json}\\\\\\"\\"
   },
   \\"devDependencies\\": {
-    \\"prettier\\": \\"^1.0.0\\"
+    \\"prettier\\": \\"^2.4.1\\"
   },
   \\"__comment__dependencies__\\": {
     \\"__comment__\\": \\"List of dependencies for the commented out example code. In order to add a dependency, move the entry to 'dependencies'\\",
-    \\"@coremedia/brick-utils\\": \\"^1.0.0\\",
-    \\"jquery\\": \\"^3.0.0\\"
+    \\"@coremedia/brick-utils\\": \\"workspace:*\\",
+    \\"jquery\\": \\"^3.6.0\\"
   },
   \\"dependencies\\": {},
   \\"main\\": \\"src/js/index.js\\",

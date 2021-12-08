@@ -46,10 +46,10 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import org.mockito.Answers;
 import org.mockito.Mock;
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Currency;
 import java.util.HashSet;
 import java.util.Locale;
@@ -170,9 +170,6 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
   protected CMLinkable linkableBean;
 
   @Mock
-  protected HttpServletRequest request;
-
-  @Mock
   protected ContentCapIdExternalReferenceResolver contentCapIdExternalReferenceResolver;
 
   @Mock
@@ -202,6 +199,8 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
 
   protected final Cache cache = new Cache("test");
 
+  protected final MockHttpServletRequest request = new MockHttpServletRequest();
+
   protected void defaultSetup() {
     testling = createTestling();
     testling.setPageGridPlacementResolver(pageGridPlacementResolver);
@@ -211,7 +210,7 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
     testling.setBeanFactory(beanFactory);
     when(beanFactory.getBean("cmPage", PageImpl.class)).thenReturn(new PageImpl(false, sitesService, cache, null, null, null));
 
-    when(request.getAttribute(FragmentContextProvider.FRAGMENT_CONTEXT_ATTRIBUTE)).thenReturn(fragmentContext);
+    request.setAttribute(FragmentContextProvider.FRAGMENT_CONTEXT_ATTRIBUTE, fragmentContext);
 
     Set<Site> sites = new HashSet<>();
     sites.add(site);
@@ -220,7 +219,7 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
     when(site.getLocale()).thenReturn(LOCALE);
     when(site.getSiteRootDocument()).thenReturn(rootChannel);
     when(sitesService.getSites()).thenReturn(sites);
-    when(request.getAttribute(SITE_ATTRIBUTE_NAME)).thenReturn(site);
+    request.setAttribute(SITE_ATTRIBUTE_NAME, site);
 
     when(fragmentParameters.getExternalRef()).thenReturn(EXTERNAL_REF);
     when(fragmentParameters.getStoreId()).thenReturn(STORE_ID);
@@ -271,22 +270,21 @@ public abstract class FragmentHandlerTestBase<T extends FragmentHandler> {
     when(contentRepository.getContentType("CMExternalChannel")).thenReturn(externalChannelContentType);
 
     connection = mockCommerceConnection();
+    CurrentStoreContext.set(connection.getInitialStoreContext(), request);
   }
 
   protected void defaultTeardown() {
-    CurrentStoreContext.remove();
+    request.clearAttributes();
   }
 
   private CommerceConnection mockCommerceConnection() {
     CommerceConnection connection = mock(CommerceConnection.class);
-
     StoreContextImpl storeContext = createStoreContext(connection);
+    when(connection.getInitialStoreContext()).thenReturn(storeContext);
 
     when(connection.getIdProvider()).thenReturn(TestVendors.getIdProvider("vendor"));
     when(connection.getCatalogService()).thenReturn(catalogService);
     when(connection.getCommerceBeanFactory()).thenReturn(commerceBeanFactory);
-
-    CurrentStoreContext.set(storeContext);
 
     return connection;
   }

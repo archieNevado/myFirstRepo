@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <style type="text/css">
+    @media screen {
+      #small {
+        display: initial;
+      }
+      #medium, #large {
+        display: none;
+      }
+    }
+    @media screen and (min-width: 24px) {
+      #small {
+        display: none;
+      }
+      #medium {
+        display: initial;
+      }
+    }
+    @media screen and (min-width: 32px) {
+      #medium {
+        display: none;
+      }
+      #large {
+        display: initial;
+      }
+    }
+  </style>
+  <svg id="small" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  	 viewBox="0 0 16 16" enable-background="new 0 0 16 16">
+  <g>
+  	<path fill="#3D4242" d="M14,2c0,0-6,0-6,3c0-3-6-3-6-3s0,7,0,9c6,0,6,3,6,3s0-3,6-3C14,9,14,2,14,2z"/>
+  	<path fill="#3D4242" d="M6,13c-1,0-4,0-4,0v-1H1v2h6C7,14,7,13,6,13z"/>
+  	<path fill="#3D4242" d="M14,12v1c0,0-3,0-4,0s-1,1-1,1h6v-2H14z"/>
+  </g>
+  </svg>
+  
+  <svg id="medium" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  	 viewBox="0 0 24 24" enable-background="new 0 0 24 24">
+  <g>
+  	<path fill="#3D4242" d="M22,17c0-4,0-14,0-14S12,2,12,8C12,2,2,3,2,3s0,10,0,14c10,0,10,5,10,5S12,17,22,17z"/>
+  	<path fill="#3D4242" d="M9,20c-2,0-6,0-6,0v-2H1v4h2h8C11,22,11,20,9,20z"/>
+  	<path fill="#3D4242" d="M21,18v2c0,0-4,0-6,0s-2,2-2,2h10v-4H21z"/>
+  </g>
+  </svg>
+  
+  <svg id="large" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  	 viewBox="0 0 32 32" enable-background="new 0 0 32 32">
+  <g>
+  	<path fill="#3D4242" d="M29,3c0,0-13,0-13,7C16,3,3,3,3,3s0,15,0,20c13,0,13,6,13,6s0-6,13-6C29,18,29,3,29,3z"/>
+  	<path fill="#3D4242" d="M12,27c-2,0-9,0-9,0v-2H1v4h13C14,29,14,27,12,27z"/>
+  	<path fill="#3D4242" d="M29,25v2c0,0-7,0-9,0s-2,2-2,2h13v-4H29z"/>
+  </g>
+  </svg>
+  
+</svg>

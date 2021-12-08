@@ -19,9 +19,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.coremedia.livecontext.fragment.links.CommerceLinkTemplateTypes.CM_CONTENT;
-import static com.coremedia.livecontext.fragment.links.CommerceLinkTemplateTypes.EXTERNAL_PAGE_NON_SEO;
-import static com.coremedia.livecontext.fragment.links.CommerceLinkTemplateTypes.EXTERNAL_PAGE_SEO;
+import static com.coremedia.blueprint.base.livecontext.util.CommerceLinkTemplatePlaceholders.ALTERNATIVE_URI_PATH;
+import static com.coremedia.blueprint.base.livecontext.util.CommerceLinkTemplatePlaceholders.PAGE_ID;
+import static com.coremedia.blueprint.base.livecontext.util.CommerceLinkTemplatePlaceholders.SEO_SEGMENT;
+import static com.coremedia.livecontext.ecommerce.link.CommerceLinkTemplateTypes.CM_CONTENT_URL;
+import static com.coremedia.livecontext.ecommerce.link.CommerceLinkTemplateTypes.EXTERNAL_PAGE_NON_SEO_URL;
+import static com.coremedia.livecontext.ecommerce.link.CommerceLinkTemplateTypes.EXTERNAL_PAGE_SEO_URL;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 @DefaultAnnotation(NonNull.class)
@@ -45,7 +48,7 @@ class CommerceContentLedLinks {
             .findFirst()
             .map(cmContext -> seoSegmentBuilder.asSeoSegment(cmContext, cmLinkable))
             .filter(segment -> !segment.isBlank())
-            .flatMap(segment -> buildLink(connection, CM_CONTENT, Map.of("seoSegment", segment)));
+            .flatMap(segment -> buildLink(connection, CM_CONTENT_URL, Map.of(SEO_SEGMENT, segment)));
   }
 
   Optional<UriComponents> buildLinkForCategory(Category category) {
@@ -78,20 +81,19 @@ class CommerceContentLedLinks {
     String externalUriPath = externalPage.getExternalUriPath();
 
     if (!isNullOrEmpty(externalUriPath)) {
-      return buildLink(commerceConnection, EXTERNAL_PAGE_NON_SEO, Map.of("uriPath", externalUriPath));
+      return buildLink(commerceConnection, EXTERNAL_PAGE_NON_SEO_URL, Map.of(ALTERNATIVE_URI_PATH, externalUriPath));
     }
 
     String segment = externalPage.getSegment();
-    return buildLink(commerceConnection, EXTERNAL_PAGE_SEO, Map.of("seoSegment", segment));
+    return buildLink(commerceConnection, EXTERNAL_PAGE_SEO_URL, Map.of(PAGE_ID, segment));
   }
 
   private static Optional<UriComponents> buildLink(CommerceConnection commerceConnection,
                                                    StorefrontRefKey templateKey,
                                                    Map<String, String> replacements) {
-    StoreContext storeContext = commerceConnection.getStoreContext();
+    StoreContext storeContext = commerceConnection.getInitialStoreContext();
     return commerceConnection.getLinkService()
-            .flatMap(linkService -> linkService.getStorefrontRef(templateKey, storeContext))
-            .map(storefrontRef -> storefrontRef.replace(replacements))
+            .flatMap(linkService -> linkService.getStorefrontRef(templateKey, storeContext, replacements))
             .map(StorefrontRef::toLink)
             .map(UriComponentsBuilder::fromUriString)
             .map(UriComponentsBuilder::build);

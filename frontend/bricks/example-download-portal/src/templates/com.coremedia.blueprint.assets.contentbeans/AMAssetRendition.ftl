@@ -8,7 +8,7 @@
 
 <#-- image -->
 <#if self.blob?has_content && bp.isDisplayableImage(self.blob)>
-  <img <@preview.metadata data=[self.asset.content, "properties." + self.name]/> src="${cm.getLink(self)}" style="max-width: 100%">
+  <img <@preview.metadata data=[self.asset.content, "properties." + self.name]/> src="${cm.getLink(self)}" loading="lazy" style="max-width: 100%">
 
 <#-- video -->
 <#elseif self.blob?has_content && bp.isDisplayableVideo(self.blob)>

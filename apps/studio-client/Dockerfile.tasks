@@ -1,0 +1,85 @@
+# syntax=docker/dockerfile:1.3
+
+ARG STUDIO_CLIENT_TOOLING_IMAGE_TAG=16.13.0-6.16.1
+ARG STUDIO_CLIENT_TOOLING_IMAGE_REPO=cm/studio-client-tooling
+ARG STUDIO_CLIENT_TOOLING_IMAGE="${STUDIO_CLIENT_TOOLING_IMAGE_REPO}:${STUDIO_CLIENT_TOOLING_IMAGE_TAG}"
+# See https://github.com/moby/moby/issues/38379
+ARG STUDIO_CLIENT_BUILD_IMAGE=build-task
+
+FROM ${STUDIO_CLIENT_TOOLING_IMAGE} as build-task
+WORKDIR /ws-root/apps/studio-client
+COPY . /ws-root/apps/studio-client
+
+# extensions
+ARG EXTENSIONS_ZIP
+RUN if [ -n "${EXTENSIONS_ZIP}" ] ; then \
+    mkdir -p extensions/ && \
+    sed -i 's#../../modules/extensions/#extensions/#g' /ws-root/apps/studio-client/pnpm-workspace.yaml  && \
+    sed -i 's#../../modules/extensions/#extensions/#g' /ws-root/apps/studio-client/pnpm-lock.yaml && \
+    unzip -oqq /ws-root/apps/studio-client/${EXTENSIONS_ZIP} -d extensions/ ; \
+    fi
+
+# install
+ARG SKIP_GENERATE_LOCK_FILE=true
+RUN --mount=type=secret,mode=0644,id=npmrc,target=/ws-root/apps/studio-client/.npmrc pnpm install --frozen-lockfile=${SKIP_GENERATE_LOCK_FILE}
+## set build version
+ARG BUILD_VERSION
+RUN if [ -n "${BUILD_VERSION}" ] ; then pnpm run set-version -- ${BUILD_VERSION} ; else echo 'Skip set version.' ; fi
+# build
+RUN pnpm -r run build
+
+
+FROM ${STUDIO_CLIENT_BUILD_IMAGE} as test-task
+WORKDIR /ws-root/apps/studio-client
+RUN mkdir -p /junit-files
+ARG SKIP_TESTS
+RUN if [ "${SKIP_TESTS:-false}" = "true" ] ; then echo "Skip tests." ; else pnpm -r --no-bail test || true; fi
+RUN find /ws-root/apps/studio-client -name "node_modules" -type d -prune -exec rm -rf {} \;
+RUN cd /ws-root/apps/studio-client && find . -type f -name 'junit.xml'  -exec cp --parent -R {} /junit-files \;
+
+
+FROM scratch as test-only-stage
+COPY --from=test-task /junit-files/ /junit-files/
+
+
+FROM ${STUDIO_CLIENT_BUILD_IMAGE} as package-task
+WORKDIR /ws-root/apps/studio-client
+RUN pnpm -r run package --filter @coremedia-blueprint/studio-client.studio
+RUN cp $(pnpm -r --filter @coremedia-blueprint/studio-client.studio exec pwd)/build/studio-client.studio-*.zip /tmp/studio-client.studio.zip
+
+
+FROM scratch as package-only-stage
+COPY --from=package-task /tmp/studio-client.studio.zip /studio-client.studio.zip
+
+
+FROM ${STUDIO_CLIENT_BUILD_IMAGE} as publish-task
+WORKDIR /ws-root/apps/studio-client
+ARG NPM_PUBLISH_REGISTRY
+ENV JANGAROO_PUBLISH_REGISTRY=${NPM_PUBLISH_REGISTRY:-}
+ARG SECURE_NPM_PUBLISH_REGISTRY
+ENV JANGAROO_PUBLISH_STRICT_SSL=${SECURE_NPM_PUBLISH_REGISTRY}
+RUN if [ -n "${NPM_PUBLISH_REGISTRY}" ] ; then pnpm -r run publish > /tmp/publish.log ; else echo 'Skip publish.' > /tmp/publish.log ; fi
+
+
+FROM scratch as publish-only-stage
+COPY --from=publish-task /tmp/publish.log /publish.log
+
+
+FROM ${STUDIO_CLIENT_TOOLING_IMAGE} as audit-task
+WORKDIR /ws-root/apps/studio-client
+COPY . /ws-root/apps/studio-client
+RUN echo '' > /tmp/audit.log
+RUN echo '' > /tmp/audit.json
+ARG AUDIT_LEVEL=high
+RUN pnpm audit --audit-level=${AUDIT_LEVEL} > /tmp/audit.log || pnpm audit --json --audit-level=${AUDIT_LEVEL} > /tmp/audit.json || true
+
+
+FROM scratch as audit-stage
+COPY --from=audit-task /tmp/audit.log /audit/audit.log
+COPY --from=audit-task /tmp/audit.json /audit/audit.json
+
+
+FROM scratch as final-stage
+COPY --from=test-task /junit-files/ /junit-files/
+COPY --from=package-task /tmp/studio-client.studio.zip /studio-client.studio.zip
+COPY --from=publish-task /tmp/publish.log /publish.log

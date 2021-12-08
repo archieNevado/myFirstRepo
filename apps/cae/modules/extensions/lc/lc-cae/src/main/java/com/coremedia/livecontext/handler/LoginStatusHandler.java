@@ -1,13 +1,8 @@
 package com.coremedia.livecontext.handler;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentUserContext;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.user.UserContext;
-import com.coremedia.livecontext.ecommerce.user.UserSessionService;
 import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
 import com.coremedia.objectserver.web.links.Link;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
@@ -24,7 +19,6 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
-import javax.security.auth.login.CredentialExpiredException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
 import java.util.Map;
@@ -44,13 +38,13 @@ public class LoginStatusHandler {
   private static final String STATUS = '/' + PREFIX_DYNAMIC + "/loginstatus";
 
   private final LiveContextSiteResolver liveContextSiteResolver;
-  private final CommerceConnectionInitializer commerceConnectionInitializer;
+  private final CommerceConnectionSupplier commerceConnectionSupplier;
 
   @SuppressWarnings("WeakerAccess") // used in Spring XML
   public LoginStatusHandler(LiveContextSiteResolver liveContextSiteResolver,
-                            CommerceConnectionInitializer commerceConnectionInitializer) {
+                            CommerceConnectionSupplier commerceConnectionSupplier) {
     this.liveContextSiteResolver = requireNonNull(liveContextSiteResolver);
-    this.commerceConnectionInitializer = requireNonNull(commerceConnectionInitializer);
+    this.commerceConnectionSupplier = requireNonNull(commerceConnectionSupplier);
   }
 
   @GetMapping(value = STATUS, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -63,54 +57,29 @@ public class LoginStatusHandler {
     }
 
     try {
-      CurrentStoreContext.set(connection.getStoreContext());
-      initUserContext(connection, request);
-
-      boolean loggedIn = CurrentUserContext.get().isLoggedIn();
+      boolean loggedIn = connection.getUserContextProvider().createContext(request).isLoggedIn();
       //either the new implementation login status can be resolved via the generic client
       // or the legacy implementation will be used.
-      Map<String, Object> body = singletonMap("loggedIn", loggedIn || isLoggedIn(connection));
+      Map<String, Object> body = singletonMap("loggedIn", loggedIn);
       return new ResponseEntity<>(body, HttpStatus.OK);
     } finally {
       CurrentStoreContext.remove();
     }
   }
 
-  private static boolean isLoggedIn(CommerceConnection connection) {
-    Optional<UserSessionService> userSessionService = connection.getUserSessionService();
-    if (userSessionService.isEmpty()) {
-      return false;
-    }
-
-    try {
-      return userSessionService.get().isLoggedIn();
-    } catch (CredentialExpiredException e) {
-      return false;
-    }
-  }
-
-  private static void initUserContext(CommerceConnection commerceConnection, HttpServletRequest request) {
-    try {
-      UserContext userContext = commerceConnection.getUserContextProvider().createContext(request);
-      CurrentUserContext.set(userContext);
-    } catch (CommerceException e) {
-      LOG.warn("Error creating commerce user context: {}", e.getMessage(), e);
-    }
-  }
-
   private Optional<CommerceConnection> findConnection(String storeId, Locale locale) {
     return liveContextSiteResolver.findSiteFor(storeId, locale)
-            .flatMap(commerceConnectionInitializer::findConnectionForSite);
+            .flatMap(commerceConnectionSupplier::findConnection);
   }
 
   // --- Link building ----------------------------------------------------------------------
 
   @Link(type = LinkType.class, uri = STATUS)
-  public UriComponents buildLink(LinkType linkType, UriTemplate uriTemplate) {
+  public UriComponents buildLink(LinkType linkType, UriTemplate uriTemplate, HttpServletRequest request) {
     UriComponentsBuilder builder = UriComponentsBuilder.fromPath(uriTemplate.toString());
-    StoreContext storeContext = CurrentStoreContext.get();
-    String storeId = storeContext.getStoreId();
-    Locale locale = storeContext.getLocale();
+    var storeContext = CurrentStoreContext.get(request);
+    var storeId = storeContext.getStoreId();
+    var locale = storeContext.getLocale();
     builder.queryParam("storeId", storeId);
     builder.queryParam("locale", locale.toLanguageTag());
     return builder.build();

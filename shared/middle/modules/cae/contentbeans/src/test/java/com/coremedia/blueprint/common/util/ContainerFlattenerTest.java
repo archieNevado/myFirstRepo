@@ -2,7 +2,6 @@ package com.coremedia.blueprint.common.util;
 
 import com.coremedia.blueprint.common.contentbeans.CMGallery;
 import com.coremedia.blueprint.common.layout.Container;
-import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -52,33 +51,33 @@ public class ContainerFlattenerTest {
 
   @Test
   public void testSimpleCollection() {
-    when(outerCollection.getItems()).thenReturn(ImmutableList.of("foo", "bar"));
+    when(outerCollection.getItems()).thenReturn(List.of("foo", "bar"));
     List<String> result = ContainerFlattener.flatten(outerCollection, String.class);
-    assertEquals(ImmutableList.of("foo", "bar"), result);
+    assertEquals(List.of("foo", "bar"), result);
   }
 
   @Test
   public void testBadTypedCollection() {
-    when(outerCollection.getItems()).thenReturn(ImmutableList.of("foo", 1, 2, "bar"));
+    when(outerCollection.getItems()).thenReturn(List.of("foo", 1, 2, "bar"));
     List<String> strings = ContainerFlattener.flatten(outerCollection, String.class);
-    assertEquals(ImmutableList.of("foo", "bar"), strings);
+    assertEquals(List.of("foo", "bar"), strings);
     List<Integer> ints = ContainerFlattener.flatten(outerCollection, Integer.class);
-    assertEquals(ImmutableList.of(1, 2), ints);
+    assertEquals(List.of(1, 2), ints);
   }
 
   @Test
   public void testSimpleNestedCollections() {
-    when(outerCollection.getItems()).thenReturn(ImmutableList.of("foo", innerCollection, "bar"));
-    when(innerCollection.getItems()).thenReturn(ImmutableList.of("inner1", "inner2"));
+    when(outerCollection.getItems()).thenReturn(List.of("foo", innerCollection, "bar"));
+    when(innerCollection.getItems()).thenReturn(List.of("inner1", "inner2"));
     List<String> result = ContainerFlattener.flatten(outerCollection, String.class);
-    assertEquals(ImmutableList.of("foo", "inner1", "inner2", "bar"), result);
+    assertEquals(List.of("foo", "inner1", "inner2", "bar"), result);
   }
 
   @Test
   public void testCyclesAndDuplicatesAndTypes() {
-    when(outerCollection.getItems()).thenReturn(ImmutableList.of(outerCollection, "1", 11, innerCollection, "7", "3", "8", outerCollection, "9", innerCollection, "10"));
-    when(innerCollection.getItems()).thenReturn(ImmutableList.of(innerCollection, 11, outerCollection, "2", "3", "1", "4", true, outerCollection, "5", innerCollection, "6"));
+    when(outerCollection.getItems()).thenReturn(List.of(outerCollection, "1", 11, innerCollection, "7", "3", "8", outerCollection, "9", innerCollection, "10"));
+    when(innerCollection.getItems()).thenReturn(List.of(innerCollection, 11, outerCollection, "2", "3", "1", "4", true, outerCollection, "5", innerCollection, "6"));
     List<String> result = ContainerFlattener.flatten(outerCollection, String.class);
-    assertEquals(ImmutableList.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), result);
+    assertEquals(List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), result);
   }
 }

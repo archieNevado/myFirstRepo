@@ -2,23 +2,23 @@ package com.coremedia.ecommerce.common;
 
 import com.adobe.internal.xmp.properties.XMPPropertyInfo;
 import com.coremedia.cap.common.Blob;
-import com.coremedia.common.util.Predicate;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.activation.MimeType;
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static java.util.Collections.emptyList;
 
@@ -41,7 +41,7 @@ public class ProductIdExtractor {
           .atProperty(ARTWORK_NODE)
           .filteredBy(new Predicate<XMPPropertyInfo>() {
             @Override
-            public boolean include(XMPPropertyInfo o) {
+            public boolean test(XMPPropertyInfo o) {
               return !Strings.isNullOrEmpty(o.getValue()) && o.getPath().endsWith(INVENTORY_INFO);
             }
           }).build();

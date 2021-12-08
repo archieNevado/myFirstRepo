@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.coremedia.blueprint</groupId>
+    <artifactId>site-manager.blueprint-parent</artifactId>
+    <version>1-SNAPSHOT</version>
+    <relativePath>../blueprint-parent/pom.xml</relativePath>
+  </parent>
+
+  <artifactId>site-manager-image</artifactId>
+  <packaging>jar</packaging>
+
+  <properties>
+    <!--skips execution, to enable activate jib-compat profile-->
+    <jib.skip>true</jib.skip>
+    <!--set to build to use without docker being installed but then you need a registry configured in jib.repository-->
+    <jib.goal>dockerBuild</jib.goal>
+    <application.image-prefix>coremedia</application.image-prefix>
+    <application.image-suffix>site-manager</application.image-suffix>
+    <application.image-tag>${project.version}</application.image-tag>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>editor</artifactId>
+      <version>${project.version}</version>
+      <type>zip</type>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!--  We need to use packaging type -->
+      <!-- skip the jar generation. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>default-jar</id>
+            <phase>none</phase>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- skip installing docker images or anything else. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-install-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+
+      <!-- skip deploying docker images or anything else. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+
+      <!-- The real image build process-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-zip</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <includeGroupIds>${project.groupId}</includeGroupIds>
+              <includeArtifactIds>editor</includeArtifactIds>
+              <includeTypes>zip</includeTypes>
+              <stripVersion>true</stripVersion>
+              <outputDirectory>${project.build.directory}/nginx/html</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>rename-zip</id>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <phase>package</phase>
+            <configuration>
+              <target>
+                <move file="target/nginx/html/editor.zip" tofile="target/nginx/html/site-manager.zip"
+                      preservelastmodified="true"/>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.google.cloud.tools</groupId>
+        <artifactId>jib-maven-plugin</artifactId>
+        <version>3.1.4</version>
+        <configuration>
+          <from>
+            <image>nginx:1.15.12-alpine</image>
+          </from>
+          <to>
+            <image>${application.image-prefix}/${application.image-suffix}</image>
+            <tags>
+              <tag>${application.image-tag}</tag>
+            </tags>
+          </to>
+          <container>
+            <entrypoint>INHERIT</entrypoint>
+            <ports>
+              <port>80</port>
+            </ports>
+          </container>
+          <extraDirectories>
+            <paths>
+              <path>src/main/image</path>
+              <path>
+                <from>target/nginx/html</from>
+                <into>/usr/share/nginx/html</into>
+              </path>
+            </paths>
+            <permissions>
+              <permission>
+                <file>/usr/share/nginx/html/*</file>
+                <mode>644</mode>
+              </permission>
+            </permissions>
+          </extraDirectories>
+        </configuration>
+        <executions>
+          <execution>
+            <id>jib</id>
+            <goals>
+              <goal>${jib.goal}</goal>
+            </goals>
+            <phase>install</phase>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>default-image</id>
+      <properties>
+        <jib.skip>false</jib.skip>
+      </properties>
+    </profile>
+  </profiles>
+</project>

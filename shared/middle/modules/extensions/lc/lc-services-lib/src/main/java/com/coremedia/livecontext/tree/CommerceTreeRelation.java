@@ -40,11 +40,6 @@ public class CommerceTreeRelation implements TreeRelation<Category> {
   }
 
   @Override
-  public boolean isRoot(Category item) {
-    return getParentOf(item) == null;
-  }
-
-  @Override
   public boolean isApplicable(Category item) {
     return true;
   }

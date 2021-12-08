@@ -1,0 +1,17 @@
+node_modules
+**/node_modules
+build
+**/build
+**/dist
+.git
+**/*.log
+
+.dockerignore
+.npmrc
+*.iml
+**/.eslintrc.json
+**/.DS_Store
+**/.gitignore
+**/*.md
+Dockerfile
+target

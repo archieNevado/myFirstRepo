@@ -2,11 +2,9 @@ package com.coremedia.blueprint.elastic.social.cae.controller;
 
 
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
-import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.elastic.social.cae.tags.ElasticSocialFunctions;
-import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.user.User;
 import com.coremedia.common.logging.PersonalDataLogger;
 import com.coremedia.elastic.social.api.ContributionType;
@@ -16,10 +14,10 @@ import com.coremedia.elastic.social.api.reviews.Review;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 
 import static com.coremedia.common.logging.BaseMarker.UNCLASSIFIED_PERSONAL_DATA;
@@ -39,24 +37,18 @@ public abstract class AbstractReviewsResultHandler extends ElasticContentHandler
                                             String title,
                                             Integer rating,
                                             HttpServletRequest request) {
-    Navigation navigation = getNavigation(contextId);
-    Site site = SiteHelper.getSiteFromRequest(request);
-    User developer = UserVariantHelper.getUser(request);
-
-    if (site == null) {
-      return HandlerHelper.notFound();
-    }
-
-    Object contributionTarget = getContributionTarget(targetId, site);
+    var contributionTarget = getContributionTarget(targetId, request);
     if (contributionTarget == null) {
       return HandlerHelper.notFound();
     }
-    Object[] beans = getBeansForSettings(contributionTarget, navigation).toArray();
 
+    var navigation = getNavigation(contextId);
+    Object[] beans = getBeansForSettings(contributionTarget, navigation).toArray();
     ElasticSocialConfiguration elasticSocialConfiguration = getElasticSocialConfiguration(beans);
 
     CommunityUser author = getElasticSocialUserHelper().getCurrentUser();
 
+    var developer = UserVariantHelper.getUser(request);
     HandlerInfo result = new HandlerInfo();
     validateReview(result, author, rating, title, text, navigation, developer, request, beans);
 
@@ -87,16 +79,14 @@ public abstract class AbstractReviewsResultHandler extends ElasticContentHandler
     return HandlerHelper.createModel(result);
   }
 
-  protected ModelAndView handleGetReviews(Site site, String contextId, String targetId, String view) {
-    Navigation navigation = getNavigation(contextId);
-    if (site == null) {
-      return HandlerHelper.notFound();
-    }
-
-    Object contributionTarget = getContributionTarget(targetId, site);
+  protected ModelAndView handleGetReviews(String contextId, String targetId, String view, HttpServletRequest request) {
+    Object contributionTarget = getContributionTarget(targetId, request);
     if (contributionTarget == null) {
       return HandlerHelper.notFound();
     }
+
+    var navigation = getNavigation(contextId);
+
     Object[] beans = getBeansForSettings(contributionTarget, navigation).toArray();
 
     // if elastic social plugin is disabled, go no further

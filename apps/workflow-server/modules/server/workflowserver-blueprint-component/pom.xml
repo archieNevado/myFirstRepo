@@ -18,11 +18,6 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>logging-config</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>base-component</artifactId>
       <scope>runtime</scope>

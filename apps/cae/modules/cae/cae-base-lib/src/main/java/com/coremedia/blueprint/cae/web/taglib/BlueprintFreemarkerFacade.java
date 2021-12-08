@@ -35,17 +35,12 @@ import com.coremedia.cap.transform.Transformation;
 import com.coremedia.common.util.WordAbbreviator;
 import com.coremedia.image.ImageDimensionsExtractor;
 import com.coremedia.mimetype.MimeTypeService;
-import com.coremedia.objectserver.beans.ContentBean;
-import com.coremedia.objectserver.beans.ContentBeanFactory;
-import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.objectserver.util.RequestServices;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.LinkFormatter;
 import com.coremedia.objectserver.web.taglib.MetadataTagSupport;
 import com.coremedia.xml.Markup;
 import com.coremedia.xml.MarkupUtil;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,7 +61,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.google.common.collect.ImmutableList.of;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 /**
@@ -85,18 +79,12 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
   private static final int DISPLAYABLE_VIDEO_MAX_SIZE = 1073741824; // 1 GB
   private static final String DISPLAYABLE_IMAGE_PRIMARY_MIMETYPE = "image";
   private static final String DISPLAYABLE_VIDEO_PRIMARY_MIMETYPE = "video";
-  private static final List<String> DISPLAYABLE_IMAGE_SUB_MIMETYPES = Lists.newArrayList(
-          "jpg",
-          "jpeg",
-          "png"
-  );
+  private static final List<String> DISPLAYABLE_IMAGE_SUB_MIMETYPES = List.of("jpg", "jpeg", "png");
 
   static final String HAS_ITEMS = "hasItems";
   static final String PLACEMENT_NAME = "placementName";
   static final String IS_IN_LAYOUT = "isInLayout";
 
-  private ContentBeanFactory contentBeanFactory;
-  private DataViewFactory dataViewFactory;
   private SettingsService settingsService;
   private ImageDimensionsExtractor imageDimensionsExtractor;
   private ThemeResourceLinkBuilder themeResourceLinkBuilder;
@@ -110,16 +98,6 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
   private final ViewHookEventNamesFreemarker viewHookEventNames = new ViewHookEventNamesFreemarker();
 
   // --- spring config -------------------------------------------------------------------------------------------------
-
-  @Autowired
-  public void setContentBeanFactory(ContentBeanFactory contentBeanFactory) {
-    this.contentBeanFactory = contentBeanFactory;
-  }
-
-  @Autowired
-  public void setDataViewFactory(DataViewFactory dataViewFactory) {
-    this.dataViewFactory = dataViewFactory;
-  }
 
   @Autowired
   public void setSettingsService(SettingsService settingsService) {
@@ -168,24 +146,8 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
 
   // --- functionality -------------------------------------------------------------------------------------------------
 
-  /**
-   * @deprecated since 1910, do not create beans in views
-   */
-  @Deprecated(since = "1910", forRemoval = true)
-  public ContentBean createBeanFor(Content content) {
-    return dataViewFactory.loadCached(contentBeanFactory.createBeanFor(content, ContentBean.class), null);
-  }
-
   public List<Transformation> getTransformations(Content content) {
     return transformImageService.getTransformations(content);
-  }
-
-  /**
-   * @deprecated since 1910, do not create beans in views
-   */
-  @Deprecated(since = "1910", forRemoval = true)
-  public List createBeansFor(Iterable<? extends Content> contents) {
-    return dataViewFactory.loadAllCached(contentBeanFactory.createBeansFor(contents, ContentBean.class), null);
   }
 
   public Object setting(Object self, String key) {
@@ -299,7 +261,7 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
             false,
             FreemarkerEnvironment.getCurrentRequest(),
             FreemarkerEnvironment.getCurrentResponse());
-    return link==null ? "" : link;
+    return link == null ? "" : link;
   }
 
   public String getLinkForBiggestImageWithRatio(CMPicture picture, Page page, String aspectRatio) {
@@ -376,25 +338,6 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
   }
 
   /**
-   * @param container The container the metadata should be determined for
-   * @return The metadata that was determined as list
-   * @deprecated since 2004, use {@link Container#getContainerMetadata()} instead.
-   */
-  @Deprecated(since="2004")
-  public Object getContainerMetadata(Container container) {
-    if (container instanceof ContainerWithViewTypeName) {
-      return getContainerMetadata(((ContainerWithViewTypeName) container).getBaseContainer());
-    }
-    if (container instanceof CMCollection) {
-      return of(((CMCollection) container).getContent(), "properties.items");
-    }
-    if (container instanceof PageGridPlacement) {
-      return of(getPlacementPropertyName((PageGridPlacement) container));
-    }
-    return Collections.emptyList();
-  }
-
-  /**
    * Utility function to allow rendering of containers with custom items, e.g. partial containers with a subset of
    * the items the original container had.
    *
@@ -454,17 +397,6 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
     HttpServletRequest currentRequest = FreemarkerEnvironment.getCurrentRequest();
     return currentRequest.getRequestURL().toString().contains(UriConstants.Segments.PREFIX_DYNAMIC)
             && currentRequest.getParameterMap().containsKey(BlueprintFlowUrlHandler.FLOW_EXECUTION_KEY_PARAMETER);
-  }
-
-  /**
-   *
-   * @param size for file size format
-   * @return a human readable file size
-   * @deprecated since 1910, use {@link #getDisplayFileSize(int, Locale)} instead.
-   */
-  @Deprecated(since="1910")
-  public String getDisplaySize(int size) {
-    return getDisplayFileSize(size, DEFAULT_LOCALE);
   }
 
   /**
@@ -631,7 +563,7 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
   public String getBlobLink(Blob blob, String filename) {
     HttpServletRequest request = FreemarkerEnvironment.getCurrentRequest();
     LinkFormatter linkFormatter = (LinkFormatter) request.getAttribute(RequestServices.LINK_FORMATTER);
-    if( linkFormatter == null ) {
+    if (linkFormatter == null) {
       throw new IllegalStateException("No LinkFormatter available");
     }
     Object oldFilename = request.getAttribute(BlobHandler.ATTRIBUTE_FILENAME);
@@ -741,12 +673,10 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
     boolean hasItems = hasItems(placement, isInLayout);
 
     List<Object> metaDataList = new LinkedList<>();
-    ImmutableMap.Builder<String, Object> builder = ImmutableMap.builder();
-    builder.put(IS_IN_LAYOUT, isInLayout);
-    builder.put(HAS_ITEMS, hasItems);
-    builder.put(PLACEMENT_NAME, placementName);
-    metaDataList.add(builder.build());
-
+    metaDataList.add(Map.of(
+            IS_IN_LAYOUT, isInLayout,
+            HAS_ITEMS, hasItems,
+            PLACEMENT_NAME, placementName));
     return Collections.singletonMap("placementRequest", metaDataList);
   }
 

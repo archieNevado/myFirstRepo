@@ -1,6 +1,5 @@
 package com.coremedia.livecontext.fragment;
 
-import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.action.search.SearchActionState;
 import com.coremedia.blueprint.cae.action.search.SearchFormBean;
@@ -11,6 +10,7 @@ import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -81,7 +81,7 @@ public class CMSearchFragmentHandler extends FragmentHandler {
   }
 
   @Override
-  public boolean include(@NonNull FragmentParameters params) {
+  public boolean test(@NonNull FragmentParameters params) {
     String externalRef = params.getExternalRef();
     return (externalRef != null && externalRef.equals(EXTERNAL_REF_FOR_SEARCH_RESULTS_FRAGMENT));
   }

@@ -8,17 +8,20 @@ import com.coremedia.blueprint.base.rest.validators.ChannelReferrerValidator;
 import com.coremedia.blueprint.base.rest.validators.ChannelSegmentValidator;
 import com.coremedia.blueprint.base.rest.validators.UniqueInSiteStringValidator;
 import com.coremedia.cap.content.ContentRepository;
+import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.util.ContentStringPropertyIndex;
 import com.coremedia.rest.validators.NotEmptyValidator;
 import com.coremedia.rest.validators.RegExpValidator;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
-import static java.util.Arrays.asList;
+import java.util.List;
+import java.util.Objects;
 
 @Configuration(proxyBeanMethods = false)
 @Import({
@@ -39,82 +42,69 @@ public class CatalogValidatorsConfiguration {
                                                                    CmsCatalogTypes cmsCatalogTypes,
                                                                    ContentStringPropertyIndex cmsProductCodeIndex,
                                                                    SitesService sitesService) {
-    UniqueInSiteStringValidator uniqueInSiteStringValidator =
-            new UniqueInSiteStringValidator(contentRepository,
-                    cmsCatalogTypes.getProductContentType(),
-                    cmsCatalogTypes.getProductCodeProperty(),
-                    cmsProductCodeIndex.createContentsByValueFunction(),
-                    sitesService);
-    uniqueInSiteStringValidator.setValidatingSubtypes(true);
-    return uniqueInSiteStringValidator;
+    return new UniqueInSiteStringValidator(type(contentRepository, cmsCatalogTypes.getProductContentType()),
+                                           true,
+                                           cmsCatalogTypes.getProductCodeProperty(),
+                                           cmsProductCodeIndex.createContentsByValueFunction(),
+                                           sitesService);
   }
 
   @Bean
   NotEmptyValidator notEmptyValidatorProductName() {
-    NotEmptyValidator validator = new NotEmptyValidator();
-    validator.setProperty("productName");
-    return validator;
+    return new NotEmptyValidator("productName");
   }
 
   @Bean
   NotEmptyValidator notEmptyValidatorProductCode() {
-    NotEmptyValidator validator = new NotEmptyValidator();
-    validator.setProperty("productCode");
-    return validator;
+    return new NotEmptyValidator("productCode");
   }
 
   @Bean
   RegExpValidator regExpValidatorProductCode() {
-    RegExpValidator validator = new RegExpValidator();
-    validator.setProperty("productCode");
-    validator.setRegExp("[^:/\\s]*");
+    return new RegExpValidator("productCode", "[^:/\\s]*");
+  }
+
+  @Bean
+  CatalogProductValidator catalogProductValidator(ContentRepository repository,
+                                                  NotEmptyValidator notEmptyValidatorProductName,
+                                                  NotEmptyValidator notEmptyValidatorProductCode,
+                                                  RegExpValidator regExpValidatorProductCode) {
+    return new CatalogProductValidator(type(repository, "CMProduct"),
+                                       false,
+                                       List.of(notEmptyValidatorProductName,
+                                               notEmptyValidatorProductCode,
+                                               regExpValidatorProductCode));
+  }
+
+  @Bean
+  CatalogCategoryValidator catalogCategoryValidator(ContentRepository repository) {
+    return new CatalogCategoryValidator(type(repository, "CMCategory"), false, "LiveContext");
+  }
+
+  @Bean
+  ChannelSegmentValidator cmCategorySegmentValidator(ContentRepository repository,
+                                                     UrlPathFormattingHelper urlPathFormattingHelper) {
+    ChannelSegmentValidator validator = new ChannelSegmentValidator(type(repository, "CMCategory"), false);
+    validator.setUrlPathFormattingHelper(urlPathFormattingHelper);
     return validator;
   }
 
   @Bean
-  CatalogProductValidator catalogProductValidator(NotEmptyValidator notEmptyValidatorProductName,
-                                                  NotEmptyValidator notEmptyValidatorProductCode,
-                                                  RegExpValidator regExpValidatorProductCode) {
-    CatalogProductValidator catalogProductValidator = new CatalogProductValidator();
-    catalogProductValidator.setContentType("CMProduct");
-
-    catalogProductValidator.setValidators(asList(
-            notEmptyValidatorProductName,
-            notEmptyValidatorProductCode,
-            regExpValidatorProductCode
-    ));
-
-    return catalogProductValidator;
-  }
-
-  @Bean
-  CatalogCategoryValidator catalogCategoryValidator() {
-    CatalogCategoryValidator catalogCategoryValidator = new CatalogCategoryValidator();
-    catalogCategoryValidator.setContentType("CMCategory");
-    catalogCategoryValidator.setLiveContextSettingName("LiveContext");
-    return catalogCategoryValidator;
-  }
-
-  @Bean
-  ChannelSegmentValidator cmCategorySegmentValidator(UrlPathFormattingHelper urlPathFormattingHelper) {
-    ChannelSegmentValidator channelSegmentValidator = new ChannelSegmentValidator(urlPathFormattingHelper);
-    channelSegmentValidator.setContentType("CMCategory");
-    return channelSegmentValidator;
-  }
-
-  @Bean
-  ChannelNavigationValidator cmCategoryNavigationValidator() {
-    ChannelNavigationValidator channelNavigationValidator = new ChannelNavigationValidator();
-    channelNavigationValidator.setContentType("CMCategory");
+  ChannelNavigationValidator cmCategoryNavigationValidator(ContentRepository repository) {
+    ChannelNavigationValidator channelNavigationValidator = new ChannelNavigationValidator(type(repository, "CMCategory"), false);
     channelNavigationValidator.setChannelLoopCode("category_loop");
     return channelNavigationValidator;
   }
 
   @Bean
-  ChannelReferrerValidator cmCategoryReferrerValidator() {
-    ChannelReferrerValidator channelReferrerValidator = new ChannelReferrerValidator();
-    channelReferrerValidator.setContentType("CMCategory");
+  ChannelReferrerValidator cmCategoryReferrerValidator(ContentRepository repository) {
+    ChannelReferrerValidator channelReferrerValidator = new ChannelReferrerValidator(type(repository, "CMCategory"), false);
     channelReferrerValidator.setDuplicateReferrerCode("duplicate_category_parent");
     return channelReferrerValidator;
+  }
+
+  @NonNull
+  private static ContentType type(@NonNull ContentRepository repository, @NonNull String typeStr) {
+    return Objects.requireNonNull(repository.getContentType(typeStr));
   }
 }

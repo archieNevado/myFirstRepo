@@ -5,7 +5,6 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.contentbeans.CMExternalChannel;
-import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -75,7 +74,7 @@ public class CMExternalChannelBySiteCacheKeyTest {
     when(content2.getString(CMExternalChannel.EXTERNAL_ID)).thenReturn("ho");
     channelsFulfilling(asList(content1, content2));
 
-    Map<String, Object> expected = ImmutableMap.of("hi", content1, "ho", content2);
+    Map<String, Object> expected = Map.of("hi", content1, "ho", content2);
     assertEquals(expected, cache.get(new CMExternalPageBySiteCacheKey(site)));
     assertEquals(expected, cache.get(new CMExternalPageBySiteCacheKey(site)));
   }

@@ -26,7 +26,6 @@ import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.view.ViewUtils;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.HttpError;
-import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,10 +40,11 @@ import org.springframework.web.util.UriTemplate;
 
 import java.net.URI;
 import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import static com.coremedia.blueprint.assets.cae.handlers.DownloadPortalHandler.CATEGORY_REQUEST_PARAMETER_NAME;
 import static com.coremedia.blueprint.assets.cae.handlers.DownloadPortalHandler.SUBJECT_REQUEST_PARAMETER_NAME;
-import static com.google.common.collect.ImmutableMap.of;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -376,7 +376,7 @@ public class DownloadPortalHandlerTest {
     assertEquals(paginatedAssets, modelAndView.getModel().get("self"));
     assertEquals(navigation, modelAndView.getModel().get(NavigationLinkSupport.ATTR_NAME_CMNAVIGATION));
     assertEquals(ViewUtils.DEFAULT_VIEW, modelAndView.getViewName());
-    verify(paginatedAssets).setBaseRequestParams(of(CATEGORY_REQUEST_PARAMETER_NAME, Integer.toString(taxonomy.getContentId())));
+    verify(paginatedAssets).setBaseRequestParams(Map.of(CATEGORY_REQUEST_PARAMETER_NAME, Integer.toString(taxonomy.getContentId())));
     verify(factory).createPaginatedCategoryAssets(taxonomy, navigation, 2);
   }
 
@@ -389,7 +389,7 @@ public class DownloadPortalHandlerTest {
     assertEquals(paginatedAssets, modelAndView.getModel().get("self"));
     assertEquals(navigation, modelAndView.getModel().get(NavigationLinkSupport.ATTR_NAME_CMNAVIGATION));
     assertEquals(ViewUtils.DEFAULT_VIEW, modelAndView.getViewName());
-    verify(paginatedAssets).setBaseRequestParams(of(SUBJECT_REQUEST_PARAMETER_NAME, Integer.toString(taxonomy.getContentId())));
+    verify(paginatedAssets).setBaseRequestParams(Map.of(SUBJECT_REQUEST_PARAMETER_NAME, Integer.toString(taxonomy.getContentId())));
     verify(factory).createPaginatedSubjectAssets(taxonomy, navigation, 3);
   }
 
@@ -476,7 +476,7 @@ public class DownloadPortalHandlerTest {
   @Test
   public void testDownloadCollectionOverview() throws Exception {
     when(factory.createDownloadCollectionOverview(anyList())).thenReturn(downloadCollectionOverview);
-    ImmutableList<AMAssetRendition> assetRenditions = ImmutableList.of(assetRendition);
+    List<AMAssetRendition> assetRenditions = List.of(assetRendition);
     when(asset.getPublishedRenditions()).thenReturn(assetRenditions);
     when(assetRendition.getName()).thenReturn("original");
 

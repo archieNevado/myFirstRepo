@@ -1,10 +1,10 @@
 package com.coremedia.livecontext.preview;
 
-import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.link.PreviewUrlService;
+import com.coremedia.livecontext.ecommerce.link.LinkService;
 import com.coremedia.objectserver.web.links.LinkTransformer;
 import com.coremedia.objectserver.web.links.ParameterAppendingLinkTransformer;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Set;
+import java.util.List;
 
 /**
  * LinkTransformer implementation that adds preview request parameters to links.
@@ -33,19 +33,14 @@ public class PreviewParametersAppendingLinkTransformer implements LinkTransforme
       return source;
     }
 
-    PreviewUrlService previewUrlService = CurrentStoreContext.find()
+    var previewParameterNames = CurrentStoreContext.find(request)
             .map(StoreContext::getConnection)
-            .flatMap(CommerceConnection::getPreviewUrlService)
-            .orElse(null);
-
-    if (previewUrlService == null) {
-      return source;
-    }
-
-    Set<String> parameterNames = previewUrlService.getParameterNames();
+            .flatMap(CommerceConnection::getLinkService)
+            .map(LinkService::getPreviewParameterNames)
+            .orElseGet(List::of);
 
     String transformed = source;
-    for (String parameterName : parameterNames) {
+    for (String parameterName : previewParameterNames) {
       transformed = appendParameter(transformed, parameterName, bean, view, request, response, forRedirect);
     }
 

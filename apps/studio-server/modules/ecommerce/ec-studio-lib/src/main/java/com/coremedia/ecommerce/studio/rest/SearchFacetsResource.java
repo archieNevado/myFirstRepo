@@ -20,13 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.WORKSPACE_ID_NONE;
-
 /**
  * A search facets object as a RESTful resource.
  */
 @RestController
-@RequestMapping(value = "livecontext/searchfacets/{" + AbstractCatalogResource.PATH_SITE_ID + "}/{" + AbstractCatalogResource.PATH_CATALOG_ALIAS + "}/{" + AbstractCatalogResource.PATH_WORKSPACE_ID + "}/{" + AbstractCatalogResource.PATH_ID + ":.+}", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "livecontext/searchfacets/{" + AbstractCatalogResource.PATH_SITE_ID + "}/{" + AbstractCatalogResource.PATH_CATALOG_ALIAS + "}/{" + AbstractCatalogResource.PATH_ID + ":.+}", produces = MediaType.APPLICATION_JSON_VALUE)
 public class SearchFacetsResource extends AbstractCatalogResource<SearchFacets> {
 
   @Autowired
@@ -60,11 +58,11 @@ public class SearchFacetsResource extends AbstractCatalogResource<SearchFacets> 
     Category category = catalogService.findCategoryById(commerceId, storeContext);
 
     if (category != null) {
-        SearchQuery query = SearchQuery.builder("*", BaseCommerceBeanType.PRODUCT)
-                .setCategoryId(category.getId())
-                .setLimit(0)
-                .setIncludeResultFacets(true)
-                .build();
+      SearchQuery query = SearchQuery.builder("*", BaseCommerceBeanType.PRODUCT)
+              .setCategoryId(category.getId())
+              .setLimit(0)
+              .setIncludeResultFacets(true)
+              .build();
       List<SearchResult.Facet> resultFacets = catalogService.search(query, storeContext).getResultFacets();
 
       representation.setFacets(resultFacets);
@@ -85,8 +83,7 @@ public class SearchFacetsResource extends AbstractCatalogResource<SearchFacets> 
     return Map.of(
             PATH_ID, facets.getCategoryId(),
             PATH_SITE_ID, context.getSiteId(),
-            PATH_CATALOG_ALIAS, context.getCatalogAlias().value(),
-            PATH_WORKSPACE_ID, WORKSPACE_ID_NONE.value());
+            PATH_CATALOG_ALIAS, context.getCatalogAlias().value());
   }
 
 }

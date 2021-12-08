@@ -9,7 +9,7 @@
     <relativePath>../blueprint-parent/pom.xml</relativePath>
   </parent>
 
-  <groupId>com.coremedia.blueprint.boot</groupId>
+  <groupId>com.coremedia.blueprint</groupId>
   <artifactId>cae.spring-boot</artifactId>
   <packaging>pom</packaging>
 
@@ -33,13 +33,6 @@
           <groupId>pl.project13.maven</groupId>
           <artifactId>git-commit-id-plugin</artifactId>
           <version>2.2.6</version>
-          <executions>
-            <execution>
-              <goals>
-                <goal>revision</goal>
-              </goals>
-            </execution>
-          </executions>
           <configuration>
             <failOnNoGitDirectory>false</failOnNoGitDirectory>
             <verbose>false</verbose>
@@ -49,9 +42,20 @@
           </configuration>
         </plugin>
         <plugin>
+          <groupId>com.google.cloud.tools</groupId>
+          <artifactId>jib-maven-plugin</artifactId>
+          <version>3.1.4</version>
+          <dependencies>
+            <dependency>
+              <groupId>com.google.cloud.tools</groupId>
+              <artifactId>jib-ownership-extension-maven</artifactId>
+              <version>0.1.0</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+        <plugin>
           <groupId>org.springframework.boot</groupId>
           <artifactId>spring-boot-maven-plugin</artifactId>
-          <version>${spring.boot.version}</version>
           <executions>
             <execution>
               <goals>
@@ -76,8 +80,8 @@
             <addResources>true</addResources>
             <profiles>
               <!-- spring profile for local development, activates application-local.properties -->
-              <profile>local</profile>
               <profile>dev</profile>
+              <profile>local</profile>
               <profile>disableDataViews</profile>
             </profiles>
             <!--
@@ -99,15 +103,6 @@
         </plugin>
       </plugins>
     </pluginManagement>
-    <plugins>
-      <plugin>
-        <groupId>pl.project13.maven</groupId>
-        <artifactId>git-commit-id-plugin</artifactId>
-        <configuration>
-          <skip>${skipGitCommitIdPlugin}</skip>
-        </configuration>
-      </plugin>
-    </plugins>
   </build>
 
   <profiles>
@@ -127,12 +122,6 @@
                 </goals>
               </execution>
             </executions>
-            <configuration>
-              <verbose>false</verbose>
-              <dateFormat>yyyy-MM-dd'T'HH:mm:ssZ</dateFormat>
-              <generateGitPropertiesFile>true</generateGitPropertiesFile>
-              <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
-            </configuration>
           </plugin>
         </plugins>
       </build>

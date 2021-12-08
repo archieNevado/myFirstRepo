@@ -4,17 +4,22 @@ import com.coremedia.blueprint.cae.search.Condition;
 import com.coremedia.blueprint.cae.search.Value;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
-import com.google.common.collect.ImmutableSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -67,8 +72,8 @@ class SearchQueryUtilTest {
     assertSame(Condition.Operators.IS, condition.getOp());
     assertSame(Value.Operators.OR, condition.getValue().getOp());
 
-    ImmutableSet<String> expected = ImmutableSet.of("t1a", "t1b", "t2a", "top3", "middle1");
-    assertEquals(expected, ImmutableSet.copyOf(condition.getValue().getValue()));
+    Set<String> expected = Set.of("t1a", "t1b", "t2a", "top3", "middle1");
+    assertEquals(expected, Set.copyOf(condition.getValue().getValue()));
   }
 
   private ContentType mockType(String name, boolean concrete, ContentType... children) {
@@ -77,12 +82,13 @@ class SearchQueryUtilTest {
     when(type.isConcrete()).thenReturn(concrete);
     when(repository.getContentType(name)).thenReturn(type);
 
-    ImmutableSet.Builder<ContentType> subtypesBuilder = ImmutableSet.builder();
-    subtypesBuilder.add(type);
-    for (ContentType child : children) {
-      subtypesBuilder.addAll(child.getSubtypes());
-    }
-    when(type.getSubtypes()).thenReturn(subtypesBuilder.build());
+    Set<ContentType> subtypes = new HashSet<>();
+    subtypes.add(type);
+    subtypes.addAll(Arrays.stream(children)
+                    .flatMap(child -> child.getSubtypes().stream())
+                    .collect(Collectors.toUnmodifiableSet()));
+
+    when(type.getSubtypes()).thenReturn(subtypes);
     return type;
   }
 

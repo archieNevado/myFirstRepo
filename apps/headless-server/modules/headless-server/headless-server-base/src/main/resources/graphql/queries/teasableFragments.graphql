@@ -2,7 +2,9 @@ fragment Teasable on CMTeasable {
   ... Reference
 
   teaserTitle
-  teaserText
+  teaserText {
+    text
+  }
   teaserTarget {
     ... Reference
   }

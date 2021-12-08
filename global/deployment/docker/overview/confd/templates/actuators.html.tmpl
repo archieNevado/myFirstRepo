@@ -135,7 +135,6 @@
     <td>
       <a href="/studio-server/info" target="_blank">Info</a> ·
       <a href="/studio-server/logfile" target="_blank">Logfile</a> ·
-      <a href="/studio-server/studioConsole" target="_blank">Console Log</a> ·
       <a href="/studio-server/env" target="_blank">Environment</a> ·
       <a href="/studio-server/configprops" target="_blank">Config</a> ·
       <a href="/studio-server/health" target="_blank" class="health_check">Health</a>
@@ -144,22 +143,6 @@
       <span class="check_unknown">Unknown</span>
     </td>
   </tr>
-
-  {{ if eq (getv "/studio/packages/proxy/enabled" "true") "true" }}
-  <tr>
-    <td><a href="http://{{ getv "/environment/fqdn" }}:43081/actuator" data-cm-test="">Studio Packages Proxy</a></td>
-    <td>
-      <a href="/studio-packages-proxy/info" target="_blank">Info</a> ·
-      <a href="/studio-packages-proxy/logfile" target="_blank">Logfile</a> ·
-      <a href="/studio-packages-proxy/env" target="_blank">Environment</a> ·
-      <a href="/studio-packages-proxy/configprops" target="_blank">Config</a> ·
-      <a href="/studio-packages-proxy/health" target="_blank" class="health_check">Health</a>
-    </td>
-    <td>
-      <span class="check_unknown">Unknown</span>
-    </td>
-  </tr>
-  {{ end }}
 
   <tr>
     <td><a href="http://{{ getv "/environment/fqdn" }}:42181/actuator" data-cm-test="">CAE Live</a></td>

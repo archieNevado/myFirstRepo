@@ -17,7 +17,7 @@
 <#assign metadataMedia=cm.localParameters().metadataMedia![]/>
 <#assign additionalAttr=cm.localParameters().additionalAttr!{}/>
 
-<div class="${classBox}"<@preview.metadata data=metadata + [self.content]/>>
+<picture class="${classBox}"<@preview.metadata data=metadata + [self.content]/>>
   <#if self.data?has_content>
     <#-- adding an 1x1px transparent png as default to avoid a broken image icon in chrome -->
     <#assign imageLink="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="/>
@@ -51,4 +51,4 @@
                           metadata=metadataMedia + ["properties.data"]
                           additionalAttributes=additionalAttr />
   </#if>
-</div>
+</picture>

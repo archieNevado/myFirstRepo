@@ -1,12 +1,12 @@
 package com.coremedia.livecontext.studio.asset;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoCommerceConnectionAvailable;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.struct.Struct;
+import com.coremedia.cap.util.StructUtil;
 import com.coremedia.ecommerce.common.ProductIdExtractor;
 import com.coremedia.livecontext.asset.util.AssetHelper;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
@@ -84,20 +84,14 @@ public class BlobUploadXmpDataInterceptor extends ContentWriteInterceptorBase {
         return;
       }
 
-      // Stand back, this gets ugly: Explicitly set the commerce
-      // connection on the respective thread-local because the catalog
-      // service needs it for now (and the commerce filter doesn't apply
-      // in this upload scenario).
-      CurrentStoreContext.set(commerceConnection.getStoreContext());
+      List<String> productIds = getProductIds(commerceConnection, request, blob);
 
-      List<String> productIds;
-      try {
-        productIds = getProductIds(commerceConnection, request, blob);
-      } finally {
-        CurrentStoreContext.remove();
+      Struct localSettings = assetHelper.updateCMPictureForExternalIds(request.getEntity(), productIds);
+      if (properties.containsKey(NAME_LOCAL_SETTINGS)) {
+        Struct struct = (Struct) properties.get(NAME_LOCAL_SETTINGS);
+        localSettings = StructUtil.mergeStructs(localSettings,struct);
       }
-
-      properties.put(NAME_LOCAL_SETTINGS, assetHelper.updateCMPictureForExternalIds(request.getEntity(), productIds));
+      properties.put(NAME_LOCAL_SETTINGS, localSettings);
     } else if (value == null) {
       // delete blob action
       Struct result = assetHelper.updateCMPictureOnBlobDelete(request.getEntity());
@@ -156,7 +150,7 @@ public class BlobUploadXmpDataInterceptor extends ContentWriteInterceptorBase {
   Product retrieveProductOrVariant(String externalId, @NonNull CommerceConnection commerceConnection) {
     CommerceIdProvider idProvider = commerceConnection.getIdProvider();
     CatalogService catalogService = commerceConnection.getCatalogService();
-    StoreContext storeContext = commerceConnection.getStoreContext();
+    StoreContext storeContext = commerceConnection.getInitialStoreContext();
 
     if (storeContext == null) {
       LOG.warn("Store context not available in commerce connection {}", commerceConnection);

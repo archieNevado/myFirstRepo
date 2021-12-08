@@ -9,22 +9,21 @@ import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.fragment.FragmentParameters;
-import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class SegmentPathResolver extends ExternalReferenceResolverBase {
 
   public static final String SEGMENTPATH_PARAM_PREFIX = "cm-segmentpath:";
 
   private static final String SEGMENT_PATH_SEPARATOR = "!";
-  private static final Splitter SEGMENT_PATH_SPLITTER = Splitter.on(SEGMENT_PATH_SEPARATOR).omitEmptyStrings();
 
   private NavigationSegmentsUriHelper navigationSegmentsUriHelper;
   private SegmentResolver segmentResolver;
@@ -62,9 +61,10 @@ public class SegmentPathResolver extends ExternalReferenceResolverBase {
 
   // --- internal ---------------------------------------------------
 
-  private static List<String> splitSegmentPath(CharSequence segmentPath) {
-    Iterable<String> splittedSegment = SEGMENT_PATH_SPLITTER.split(segmentPath);
-    return ImmutableList.copyOf(splittedSegment);
+  private static List<String> splitSegmentPath(String segmentPath) {
+    return Arrays.stream(segmentPath.split(SEGMENT_PATH_SEPARATOR))
+            .filter(s -> !s.isEmpty())
+            .collect(Collectors.toUnmodifiableList());
   }
 
   private LinkableAndNavigation findContentBySegment(@NonNull List<String> segments) {

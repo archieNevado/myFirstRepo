@@ -15,7 +15,7 @@ export NEW_GROUP_ID=$1
 
 # \x27 is the UTF-8 encoding for escaped single quote
 echo "replace groupId $OLD_GROUP_ID with $NEW_GROUP_ID in:"
-find ${BASE_PATH} -type f \( -name pom.xml -or -name "*.rb" -or -name "*.md" -or -name "*.json" \) \
+find ${BASE_PATH} -type f \( -name pom.xml -or -name "*.md" -or -name "*.json" \) \
  -and -not \( -path "*/.git/*" -or -path "*/node_modules/*" \) \
  -exec sh -c '
  grep -l "<groupId>${OLD_GROUP_ID}\|\"${OLD_GROUP_ID}\"\|\x27${OLD_GROUP_ID}\x27" "$0"

@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@coremedia/brick-default-teaser": "^1.0.0",
-    "@coremedia/brick-node-decoration-service": "^1.0.0",
-    "@coremedia/brick-utils": "^1.0.0"
+    "@coremedia/brick-default-teaser": "workspace:*",
+    "@coremedia/brick-node-decoration-service": "workspace:*",
+    "@coremedia/brick-utils": "workspace:*"
   },
   "devDependencies": {
-    "prettier": "^2.0.5"
+    "prettier": "^2.4.1"
   },
   "scripts": {
     "prettier": "prettier --write \"src/**/*.{js,json}\""

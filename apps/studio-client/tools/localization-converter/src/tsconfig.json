@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "esnext",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "newLine": "LF",
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "useDefineForClassFields": true,
+    "moduleResolution": "Node",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "es5",
+      "esnext"
+    ],
+    "incremental": true,
+    "composite": true,
+    "rootDir": ".",
+    "outDir": "../dist",
+    "types": [
+      "fs-extra",
+      "node",
+      "yargs"
+    ]
+  }
+}

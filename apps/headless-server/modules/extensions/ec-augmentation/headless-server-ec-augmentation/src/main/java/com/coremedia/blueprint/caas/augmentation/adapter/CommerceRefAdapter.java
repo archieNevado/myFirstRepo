@@ -61,7 +61,7 @@ public class CommerceRefAdapter {
       return null;
     }
 
-    StoreContext storeContext = commerceConnection.getStoreContext();
+    StoreContext storeContext = commerceConnection.getInitialStoreContext();
     CatalogId catalogId = catalogAliasTranslationService.getCatalogIdForAlias(commerceId.getCatalogAlias(), storeContext)
             .orElse(null);
 

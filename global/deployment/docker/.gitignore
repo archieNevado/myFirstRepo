@@ -22,3 +22,5 @@ overlays/
 # docker
 /docker-compose*.yml
 /.env
+/plugin-descriptors
+/plugins

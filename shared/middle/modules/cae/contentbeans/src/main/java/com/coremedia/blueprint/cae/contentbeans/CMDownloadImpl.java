@@ -3,10 +3,10 @@ package com.coremedia.blueprint.cae.contentbeans;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.navigation.Linkable;
-import com.google.common.collect.Lists;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -37,9 +37,10 @@ public class CMDownloadImpl extends CMDownloadBase {
     navigationContexts.add(this);
     if (!CollectionUtils.isEmpty(contexts)) {
       for (CMContext context : contexts) {
-        List<? extends Linkable> navigationPathList = context.getNavigationPathList();
         // reverse list vor correct channel hierarchy from download to root page
-        navigationContexts.addAll(Lists.reverse(navigationPathList));
+        List<? extends Linkable> reverseNavigationPathList = new ArrayList<>(context.getNavigationPathList());
+        Collections.reverse(reverseNavigationPathList);
+        navigationContexts.addAll(reverseNavigationPathList);
       }
     }
     return navigationContexts.toArray();

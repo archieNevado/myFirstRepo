@@ -13,6 +13,9 @@
 // }
 //
 @mixin aspect-ratio-box($x, $y, $overflow: hidden, $position: relative) {
+  @if ($overflow and $position) {
+    display: block;
+  }
   position: $position;
   overflow: $overflow;
 

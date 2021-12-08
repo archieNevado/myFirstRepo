@@ -13,8 +13,6 @@
 <IntProperty Name="offset">1</IntProperty>
 <IntProperty Name="maxLength">5</IntProperty>
 <StringProperty Name="orderBy">ORDER_BY_TYPE_PRICE_DSC</StringProperty>
-<StringProperty Name="selectedFacet">ManufacturerName</StringProperty>
-<StringProperty Name="selectedFacetValue"/>
 </Struct>
 </StructProperty>
 <BooleanProperty Name="callToActionDisabled">true</BooleanProperty>

@@ -1,1 +1,0 @@
-This is an application cookbook, it provides recipes to set up a webserver (apache httpd) for the CoreMedia Blueprint stack.

@@ -1,0 +1,501 @@
+:toc: macro
+:toclevels: 2
+
+= Studio Client Workspace
+
+This README file describes how you get started with the CoreMedia Studio
+client workspace.This workspace is based on TypeScript and the package
+manager pnpm.The following sections describe how to build and develop
+with it.
+
+toc::[]
+
+== Required Tools
+
+You have to install the following tools in order to build the workspace:
+
+=== node.js
+
+You need Node.js 16 (current LTS) in order to build the studio-client
+workspace. See https://nodejs.org/en/
+
+=== pnpm
+
+Pnpm is an alternative package manager for node.js we are using. See
+https://pnpm.io/installation for details or install it via npm:
+
+[source,shell]
+----
+npm install -g pnpm
+----
+
+== Configuration
+
+To tell pnpm from where to download CoreMedia modules, add a npm
+registry to the npm configuration:
+
+[source,shell]
+----
+pnpm config set @coremedia:registry https://npm.coremedia.io
+pnpm config set @jangaroo:registry https://npm.coremedia.io
+----
+
+To be able to download the artifacts from https://npm.coremedia.io, you need to log in first
+
+[source,bash]
+----
+npm login --registry=https://npm.coremedia.io
+> User: GITHUB_USER_NAME
+> Password: GITHUB_TOKEN
+----
+
+The https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token[GITHUB_TOKEN] needs to be generated with following rights:
+
+* `read:org`
+* `read:user`
+* `read:packages`
+
+== Building the Workspace
+
+Once the required tools are installed and configured, the
+`studio-client` module can be build. Invoke the following commands from
+the `apps/studio-client` folder of your Blueprint workspace:
+
+[source,shell]
+----
+pnpm install
+pnpm -r run build
+----
+
+
+The development turnaround is based on the pnpm watch task. If this
+watch task misses some changes or the workspace throws some unexpected
+JavaScript errors during runtime, execute these commands again. It will
+show you more details about errors in your workspace. See also section
+<<Development Turnaround>>.
+
+
+== Building the Studio Client Image
+
+See section <<_build_the_studio_client_image>>
+
+== Development Turnaround
+
+Once build, the development round trip for the Studio client is based on
+the pnpm watch task which detects file changes and automatically
+compiles the modified files. To start this watch task, go to the folder
+`./apps/studio-client/global/studio/blueprint` and execute:
+
+[source,shell]
+----
+pnpm run watch -- --recursive --skipInitialBuild
+----
+
+This will watch the package and its dependencies. The `skipInitialBuild`
+flag ensures that the sources will not be build again before watching.
+
+On Linux based system, the system limit for watched files may lead to an
+error. To solve this issue, modify the number of system monitoring
+files:
+[source,shell]
+----
+sudo gedit /etc/sysctl.conf
+----
+
+Add a line at the bottom `fs.inotify.max_user_watches=524288` Then save and exit!
+[source,shell]
+----
+sudo sysctl -p
+----
+
+
+Both `run` and `watch` currently cannot handle any changes made in the
+`jangaroo.config.js` or `package.json`. If you made changes here please
+restart the `run` / `watch` task. Also note that - just like in the
+Maven tooling - this kind of change usually requires building the app(s)
+again. Changing dependencies or other configuration tasks might affect
+the load order, thus requires rebuilding.
+
+== Code Style and Formatting
+
+The workspace uses the code style that comes with pnpm. The *lint* task
+fixes the code formatting and also some type errors. It can be invoked
+with:
+
+[source,shell]
+----
+pnpm -r run lint --no-bail
+----
+
+== npm Packages
+
+=== Structure
+
+Like Maven modules, npm packages consists of source files and
+generated output files. This section gives you a brief overview of what
+files and folders to find inside a Studio npm package:
+
+`src` folder:
+
+* `./package.json` Like a `pom.xml` file in Maven, it contains the
+package name and dependencies to other packages.
+* `./jangaroo.config.js` The formerly named `jangaroo-maven-plugin`
+`<configuration>` element which contains the name of the main class of
+the Studio plugin and the plugin name.
+* `./src/\*[.d].ts` Formerly `.as`, `.mxml` and `*.properties` files, now all
+based on TypeScript.
+* `./src/tsconfig.json` This file is generated from package.json during
+the jangaroo build task, therefore, it shouldn’t be modified manually.
+* `./sencha/src|overrides|resources|sass` Custom overrides, images and
+SCSS based styling for ExtJS components.
+* `./joounit/\*.ts` Formerly test _.as, _.mxml and `*.properties` files.
+* `./jest/\*.ts` This folder gives you the option to write new tests with
+https://jestjs.io/docs/getting-started[Jest].
+* `./generated/src/\*[.d].ts` The formerly named `target/generated-sources`
+folder.
+* `./generated/sencha` The formerly named `target/generated-sencha`
+folder.
+
+*dist* folder:
+
+* `./dist` Contains the publishable artifacts.
+* `./build` Contains generated files that are not meant to be published,
+for example for tests.
+
+=== Scripts
+
+In addition to the dependencies, the `package.json` file of a npm
+package also defines a list of scripts that can be invoked by `pnpm`.
+These vary depending on the type of the package. The following table
+gives an overview of available scripts.
+
+[width="100%",cols="11%,32%,57%",options="header",]
+|===
+|Script Name            |Invokes                                        |Description
+|`clean`                |`rimraf ./dist && rimraf ./build`              |`rimraf` is like the UNIX command `rm -rf` for node. It removes the `dist` and `build` folders.
+
+|`build`                |`jangaroo build`                               |Compiles the code and tests to the `dist` folder.
+
+|`test`                 |`jangaroo joounit`                             |Builds and executed the Jangaroo "test app".
+
+|`start`                |`jangaroo run`                                 |Available for apps, it starts the app-overlay proxy; like `jangaroo:run`.
+
+|`publish`              |`jangaroo publish dist`                        |Like `mvn deploy` task, it creates a deployable artifact from the generated sources of the `dist` folder.
+
+|`package`              |`jangaroo package`                             | for app, app-overlay, apps, code; build a package archive containing the whole package (to be usable by a  webserver, for instance)
+
+|`lint`                 | `eslint --fix 'src/\*/*.ts' 'joounit/* /*.ts'`  |Formats the code and can also fix some problems automatically.
+
+|`watch`                |`jangaroo watch`                               |Starts the watch task to listen for code changes.
+|===
+
+*Examples*
+
+[width="100%",cols="43%,57%",options="header",]
+|===
+|Command |Description
+|`pnpm -r run build` |Runs the build script for all packages.
+|`pnpm -r run start --filter @coremedia-blueprint/studio-client.studio` |Runs the start script for studio-resources, similar to: `mvn jangaroo:run -pl :studio-resources`
+|`pnpm -r run test --filter "@coremedia/*"` |The option `filter` can utilize glob patterns matched against the package name. It runs the tests of all core modules (as their name starts with `@coremedia/`). In this particular case similar to `mvn test -f core`.
+|`pnpm -r run build --filter @coremedia/studio-client.ext.ui-components...` |Builds `ui-components` and its dependencies, similar to `mvn package -am -pl :ui-components`.
+|`pnpm -r run build --filter ...@coremedia-blueprint/studio-client.main.studio-base-app` |Builds the `studio-base-app` and all packages depending on it, similar to `mvn package -amd -pl :studio-base-app`.
+|`pnpm -r run build --filter=!@coremedia/studio-client.studio` |In some shells the `!` needs to be escaped: `!`. It builds everything in the workspace except for `studio-resources` and is similar to `mvn package -pl !:studio-resources`.
+|`pnpm -r run build --filter=!@coremedia-blueprint/studio-client.main.blueprint-forms^...` |In some shells the `!` needs to be escaped: `!` builds everything in the workspace except for the dependencies of `blueprint-forms` similar to `mvn package -rf :blueprint-forms`
+|===
+
+For more details see also https://pnpm.io/filtering.
+
+== Troubleshooting
+
+=== On Windows/PowerShell NPM Commands with Arguments Fail
+
+*Example*
+
+[source,shell]
+----
+pnpm run start -- --proxyTargetUri=https://studio.some-host.com/
+----
+
+This will fail with:
+
+[source,shell]
+----
+Missing dependent arguments:
+ proxyPathSpec -> proxyTargetUri
+----
+
+*Solution*
+
+In PowerShell, you need to quote many arguments. In the example above, this will work:
+
+[source,shell]
+----
+pnpm run start "--" "--proxyTargetUri=https://studio.some-host.com/"
+----
+
+=== The workspace does not build on macOS
+
+The possible root cause may vary, so here are some general hints that may help:
+
+* When using brew, make sure you did `brew upgrade` before.
+* Reinstall the command line tools (do NOT use `softwareupdate –all –install –force`),
+instead remove and reinstall CTL manually.
+* Execute compaudit, to find `insecure` folders and fix them using this
+pattern for all listed folders:
+
+[source,shell]
+----
+sudo chown -R user:root /insecure/folder
+sudo chmod -R 755 /insecure/folder
+----
+
+=== Resolving merge conflicts in pnpm-lock.yaml
+
+Do not attempt to resolve merge conflicts in the `pnpm-lock.yaml` file
+yourself. Just resolve all other conflicts ( especially in
+`package.json` files) and run `pnpm install`. pnpm will resolve merge
+conflicts automatically.
+
+== Additional Resources
+
+See also: link:./Studio-TypeScript-Handbook.md[Studio Typescript Handbook].
+
+== Building with Docker
+
+The Studio client workspace can now be built with a multi-stage Dockerfile using Docker
+https://docs.docker.com/develop/develop-images/build_enhancements/[BuildKit]
+- as well as the Studio client image itself.
+
+At least https://docs.docker.com/engine/api/[Docker v19.03] is required.
+
+=== Dockerfiles
+
+The Studio client workspace contains three Dockerfiles which can be used
+to build and test the Studio client.
+
+==== Tooling
+
+The `Dockerfile.tooling` contains all necessary tools required to build,
+test, package, and publish the Studio client workspace.
+
+One of the tools is Sencha Command. The default download URL is
+https://cdn.sencha.com/cmd/7.2.0.84/no-jre/SenchaCmd-7.2.0.84-linux-amd64.sh.zip
+- we recommend using a proxy if possible. The path to the zip can be
+passed as `--build arg SENCHA_COMMAND_SH_ZIP_DOWNLOAD_URL_DIRECTIVE`.
+
+_Recommendation_ Build this image only if there are changes in the
+`Dockerfile.tooling` file and store it in your local Docker registry.
+
+==== Tasks
+
+The `Dockerfile.tasks` provides different stages defining single tasks:
+
+* `build-task`: Build Studio client
+* `test-task`: Execute Studio client tests
+* `package-task`: Packages the build results
+* `publish-task`: Publish Studio client build artifacts
+
+==== Default
+
+The `Dockerfile` builds the Studio client image. See section <<_build_the_studio_client_image>> and <<_build_the_studio_client_workspace_and_image>>.
+
+=== Prerequisites
+
+==== Caching proxy
+
+We recommend to proxy the following endpoints to avoid hitting download rate limits.
+
+* https://registry-1.docker.io
+* https://cdn.sencha.com/cmd/7.2.0.84/no-jre/SenchaCmd-7.2.0.84-linux-amd64.sh.zip
+* https://npm.coremedia.io
+
+==== Npm Auth Token
+
+To build the Studio client you need an `<NPM_AUTH_TOKEN>`. To generate one,
+you need to create a
+https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token[GitHub Token]
+with following rights first:
+
+* `read:org`
+* `read:user`
+* `read:packages`
+
+The `<NPM_AUTH_TOKEN>` itself is an *expiring* token which needs to be
+generated regulary (currently the token expires after a month) and can
+be obtained by calling:
+
+[source,bash]
+----
+GH_USER_NAME=<GITHUB_USER_NAME>
+GH_TOKEN=<GITHUB_TOKEN>
+curl -s -H "Accept: application/json" -H "Content-Type:application/json" \
+  -X PUT --data '{"name": "'${GH_USER_NAME}'", "password": "'${GH_TOKEN}'"}' \
+  https://npm.coremedia.io/-/user/org.couchdb.user:${GH_USER_NAME} | jq -r .token
+----
+
+*Note:* Please replace `<GITHUB_USER_NAME>` with your GitHub username
+and `<GITHUB_TOKEN>` with your GitHub token. To easily extract the token
+from the curl result, we recommend installing the cli tool `jq`.
+
+==== .npmrc
+
+To build the Studio client workspace, you also need to provide a
+`.npmrc` file with the following contents:
+
+[source,bash]
+----
+cd apps/studio-client
+
+cat <<EOF > .npmrc
+@coremedia:registry=https://npm.coremedia.io
+@jangaroo:registry=https://npm.coremedia.io
+# https://github.com/pnpm/pnpm/issues/1069
+unsafe-perm=true
+//npm.coremedia.io/:_authToken=<NPM_AUTH_TOKEN>
+EOF
+----
+
+To keep image layers clean from secrets, we pass the authentication
+token `<NPM_AUTH_TOKEN>` for https://npm.coremedia.io via the local
+`.npmrc` file which is mounted as secret.
+
+*Note:* Keep in mind that this file now contains a secret which needs to
+be updated regularly.
+
+==== The Tooling Image
+
+To build the Studio client you need to provide the tooling as image.
+
+[source,bash]
+----
+cd apps/studio-client
+
+STUDIO_CLIENT_TOOLING_IMAGE="cm/studio-client-tooling:latest"
+
+docker build -f Dockerfile.tooling . --no-cache --tag ${STUDIO_CLIENT_TOOLING_IMAGE} \
+  --build-arg SENCHA_COMMAND_SH_ZIP_DOWNLOAD_URL_DIRECTIVE=https://cdn.sencha.com/cmd/7.2.0.84/no-jre/SenchaCmd-7.2.0.84-linux-amd64.sh.zip
+----
+
+[#_build_the_studio_client_image]
+=== Build the Studio Client Image
+
+If you already created the Studio client zip file, call the following to
+build the Studio client image.
+
+*Notice* You can omit `--build-arg STUDIO_CLIENT_PACKAGE_PATH` if the Studio client zip file is
+located here: `apps/studio-client/global/studio/build/studio-client.studio-*.zip`
+
+*Notice* If you want to specify `--build-arg STUDIO_CLIENT_PACKAGE_PATH` make sure that the zip file
+is located below `app/studio-client`.
+
+[source,bash]
+----
+cd apps/studio-client
+
+STUDIO_CLIENT_PACKAGE_PATH=<relative/path/to/the/studio-client/zip>
+
+DOCKER_BUILDKIT=1 docker build . \
+  --tag coremedia/studio-client:latest \
+  --build-arg STUDIO_CLIENT_PACKAGE_PATH="${STUDIO_CLIENT_PACKAGE_PATH}"
+----
+
+[#_build_the_studio_client_workspace_and_image]
+=== Build the Studio Client Workspace and Image
+
+If you need to build the Studio client workspace as well as the image,
+execute the following snippet.
+
+*Notice* You can specify a custom version by setting `--build-arg BUILD_VERSION="1.0.0-SNAPSHOT"`.
+
+[source,bash]
+----
+cd apps/studio-client
+
+DOCKER_BUILDKIT=1 docker build . \
+  --tag coremedia/studio-client:latest \
+  --secret id=npmrc,src=.npmrc \
+  --build-arg TYPE="build" \
+  --build-arg STUDIO_CLIENT_TOOLING_IMAGE="cm/studio-client-tooling:latest"
+----
+
+=== Extended Examples
+
+==== Build with Extensions
+
+To include extensions - activated via the extension tool and thus located in `modules/extensions` - you need to zip the
+folder `modules/extensions` first and pass it to the Studio build process afterwards.
+
+The zip file needs to be located below `apps/studio-client`.
+
+[source,bash]
+-----
+cd modules/extensions
+mkdir -p ../../apps/studio-client/target
+zip -qr ../../apps/studio-client/target/extensions.zip ./*
+cd ../../apps/studio-client
+DOCKER_BUILDKIT=1 docker build . \
+  --tag coremedia/studio-client:latest \
+  --secret id=npmrc,src=.npmrc \
+  --build-arg TYPE="build" \
+  --build-arg EXTENSIONS_ZIP="target/extensions.zip" \
+  --build-arg STUDIO_CLIENT_TOOLING_IMAGE="cm/studio-client-tooling:latest"
+----
+
+==== Test the Studio Client workspace
+
+[source,bash]
+----
+cd apps/studio-client
+
+BUILD_TARGET_FOLDER="target"
+rm -rf "${BUILD_TARGET_FOLDER}" && mkdir -p "${BUILD_TARGET_FOLDER}"
+
+DOCKER_BUILDKIT=1 docker build -f Dockerfile.tasks . --target test-only-stage \
+  -o "${BUILD_TARGET_FOLDER}"  \
+  --secret id=npmrc,src=.npmrc
+----
+
+The tests result can be found in the `${BUILD_TARGET_FOLDER}` folder.
+
+==== Separate Build and Test
+
+[source,bash]
+----
+cd apps/studio-client
+
+BUILD_TARGET_FOLDER="target"
+rm -rf "${BUILD_TARGET_FOLDER}" && mkdir -p "${BUILD_TARGET_FOLDER}"
+
+# First: Build the Studio client
+# You can specify a custom version by setting `--build-arg BUILD_VERSION="1.0.0-SNAPSHOT"`.
+DOCKER_BUILDKIT=1 docker build -f Dockerfile.tasks . --target build-task \
+  --tag "tmp/studio-client-build:latest" --secret id=npmrc,src=.npmrc \
+  --build-arg STUDIO_CLIENT_TOOLING_IMAGE="cm/studio-client-tooling:latest"
+
+# Second: Test the Studio client
+DOCKER_BUILDKIT=1 docker build -f Dockerfile.tasks . --target test-only-stage \
+  -o "${BUILD_TARGET_FOLDER}"  \
+  --build-arg STUDIO_CLIENT_BUILD_IMAGE="tmp/studio-client-build:latest"
+----
+
+=== Docker Build Troubleshooting
+
+==== studio-client.studio-1.0.0-SNAPSHOT.zip not found
+
+If you want to <<_build_the_studio_client_image>> with the option `STUDIO_CLIENT_PACKAGE_PATH` but get an error message similar to this one:
+
+failed to compute cache key: `/target/studio-client.studio-1.0.0-SNAPSHOT.zip` not found
+
+Then it is likely that the zip file is not located below `apps/studio-client`.
+
+==== Unkown flag
+
+If you encounter an error message like
+
+Error response from daemon: Dockerfile parse error line xxx: Unknown flag: mount
+
+You need to prefix your `docker build` call with `DOCKER_BUILDKIT=1 docker build`.
+
+==== Debug Mode
+
+If you need a plain output of the Docker build add `--progress plain` to the `docker build` command.

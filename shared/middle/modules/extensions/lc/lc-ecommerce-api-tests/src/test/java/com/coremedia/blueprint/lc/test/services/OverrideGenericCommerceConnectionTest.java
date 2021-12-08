@@ -45,7 +45,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @SpringBootTest(properties = {
         "repository.factoryClassName=com.coremedia.cap.xmlrepo.XmlCapConnectionFactory",
-        "livecontext.cache.invalidation.enabled=false"
 }, classes = {
         PropertyPlaceholderAutoConfiguration.class,
         OverrideGenericCommerceConnectionTest.LocalConfig.class,
@@ -128,7 +127,7 @@ class OverrideGenericCommerceConnectionTest {
 
     connection = connectionFactory.createConnection(site).orElseThrow(IllegalStateException::new);
     assertThat(connection).isInstanceOf(TestOverrideGenericCommerceConnection.class);
-    assertThat(connection.getStoreContext())
+    assertThat(connection.getInitialStoreContext())
             .isNotNull()
             // the store context must reference the custom connection instance
             .returns(connection, StoreContext::getConnection);

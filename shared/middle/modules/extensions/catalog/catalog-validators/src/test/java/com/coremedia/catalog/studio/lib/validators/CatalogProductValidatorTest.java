@@ -1,12 +1,12 @@
 package com.coremedia.catalog.studio.lib.validators;
 
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.content.ContentType;
 import com.coremedia.rest.validation.Issues;
 import com.coremedia.rest.validation.Severity;
 import com.coremedia.rest.validators.NotEmptyValidator;
 import org.junit.Test;
 
-import java.util.Collections;
 import java.util.Set;
 
 import static com.coremedia.catalog.studio.lib.validators.CatalogProductValidator.CODE_ISSUE_NOT_IN_CATALOG;
@@ -33,24 +33,20 @@ public class CatalogProductValidatorTest {
   public void validate() {
     Issues issues = mock(Issues.class);
 
+    ContentType type = mock(ContentType.class);
     Content content = mock(Content.class);
     when(content.getLinks(CONTEXTS_PROPERTY_NAME)).thenReturn(emptyList());
     when(content.get(TEST_PROPERTY_NULL)).thenReturn(null);
     when(content.get(TEST_PROPERTY_NULL)).thenReturn(null);
     when(content.get(TEST_PROPERTY_NONNULL)).thenReturn("nonnull");
 
-    NotEmptyValidator notEmptyValidatorOnNull = new NotEmptyValidator();
-    notEmptyValidatorOnNull.setProperty(TEST_PROPERTY_NULL);
+    NotEmptyValidator notEmptyValidatorOnNull = new NotEmptyValidator(TEST_PROPERTY_NULL);
+    NotEmptyValidator notEmptyValidatorOnNonnull = new NotEmptyValidator(TEST_PROPERTY_NONNULL);
 
-    NotEmptyValidator notEmptyValidatorOnNonnull = new NotEmptyValidator();
-    notEmptyValidatorOnNonnull.setProperty(TEST_PROPERTY_NONNULL);
-
-    CatalogProductValidator validator = new CatalogProductValidator();
-    validator.setContentType(TEST_CONTENT_TYPE);
-    validator.setValidators(asList(notEmptyValidatorOnNull, notEmptyValidatorOnNonnull));
+    CatalogProductValidator validator =
+            new CatalogProductValidator(type, false, asList(notEmptyValidatorOnNull, notEmptyValidatorOnNonnull));
     validator.validate(content, issues);
 
-    //noinspection unchecked
     verify(issues).addIssue(any(Set.class), any(Severity.class), eq(CONTEXTS_PROPERTY_NAME), eq(CODE_ISSUE_NOT_IN_CATALOG));
     verify(issues).addIssue(any(Set.class), any(Severity.class), eq(TEST_PROPERTY_NULL), eq(NotEmptyValidator.class.getSimpleName()));
     verify(issues, times(0)).addIssue(any(Severity.class), eq(TEST_PROPERTY_NONNULL), eq(NotEmptyValidator.class.getSimpleName()));

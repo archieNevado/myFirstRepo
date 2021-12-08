@@ -22,8 +22,10 @@ import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
+import com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
+import com.coremedia.livecontext.ecommerce.common.CommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
@@ -33,13 +35,14 @@ import com.coremedia.objectserver.web.UserVariantHelper;
 import com.google.common.base.Splitter;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Locale;
 
@@ -49,10 +52,10 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 /**
  * A fragment handler that handles all fragment requests that within the context of a given product. It will fall back
  * to the sites root channel if no context could be found for the given category.
- * The parameter productId can be
- * {@link com.coremedia.livecontext.ecommerce.catalog.Category#getExternalTechId() external technical id} or
- * {@link com.coremedia.livecontext.ecommerce.catalog.Category#getExternalId()} () external id}.
- * Also see {@link ProductFragmentHandler#setUseStableIds}.
+ *
+ * The entity parameters should contain {@link CommerceId#getExternalId() external ids}.
+ * If there are only {@link CommerceId#getTechId()}  external technical ids} available,
+ * the {@link CommerceIdProvider#format(CommerceBeanType, CatalogAlias, String)} needs to handle this.
  */
 public class ProductFragmentHandler extends FragmentHandler {
 
@@ -62,7 +65,6 @@ public class ProductFragmentHandler extends FragmentHandler {
   private static final String PDP_PAGE_ID = "pdpPage";
 
   private ResolveContextStrategy contextStrategy;
-  private boolean useStableIds = false;
   private boolean useContentPagegrid = false;
   private AugmentationService productAugmentationService;
 
@@ -83,20 +85,20 @@ public class ProductFragmentHandler extends FragmentHandler {
       throw buildExceptionForMissingNavigation(params);
     }
 
-    String externalTechId = params.getProductId();
+    String productIdParam = params.getProductId();
     String view = params.getView();
     String placement = params.getPlacement();
-    String categoryTechId = params.getCategoryId();
+    String categoryIdParam = params.getCategoryId();
 
-    LiveContextNavigation navigation = getLiveContextNavigation(params, site, externalTechId, categoryTechId);
+    LiveContextNavigation navigation = getLiveContextNavigation(params, site, productIdParam, categoryIdParam, request);
 
     Content rootChannelContent = site.getSiteRootDocument();
     CMChannel rootChannel = getContentBeanFactory().createBeanFor(rootChannelContent, CMChannel.class);
     User developer = UserVariantHelper.getUser(request);
 
     if (!isNullOrEmpty(placement)) {
-      return createFragmentModelAndViewForPlacementAndView(navigation, externalTechId, placement, view, rootChannel,
-              developer);
+      return createFragmentModelAndViewForPlacementAndView(navigation, productIdParam, placement, view, rootChannel,
+              developer, request);
     }
 
     if (view != null && view.equals(AS_ASSETS_VIEW)) {
@@ -105,14 +107,14 @@ public class ProductFragmentHandler extends FragmentHandler {
       String orientation = extractParameterValue(parameter, ORIENTATION_PARAM_NAME);
       String types = extractParameterValue(parameter, TYPES_PARAM_NAME);
 
-      return createModelAndViewForProductPage(navigation, externalTechId, view, orientation, types, developer);
+      return createModelAndViewForProductPage(navigation, productIdParam, view, orientation, types, developer, request);
     }
 
-    return createModelAndViewForProductPage(navigation, externalTechId, view, null, null, developer);
+    return createModelAndViewForProductPage(navigation, productIdParam, view, null, null, developer, request);
   }
 
-  private LiveContextNavigation getLiveContextNavigation(@NonNull FragmentParameters params, Site site, String externalTechId, String categoryTechId) {
-    StoreContext storeContext = CurrentStoreContext.get();
+  private LiveContextNavigation getLiveContextNavigation(@NonNull FragmentParameters params, Site site, String productId, String categoryId, HttpServletRequest request) {
+    StoreContext storeContext = CurrentStoreContext.get(request);
     CommerceConnection connection = storeContext.getConnection();
 
     CatalogService catalogService = connection.getCatalogService();
@@ -120,10 +122,10 @@ public class ProductFragmentHandler extends FragmentHandler {
 
     CommerceBean commerceBean;
     CatalogAlias catalogAlias = storeContext.getCatalogAlias();
-    if (StringUtils.isNotEmpty(categoryTechId)) {
-      commerceBean = catalogService.findCategoryById(idProvider.formatCategoryTechId(catalogAlias, categoryTechId), storeContext);
+    if (StringUtils.isNotEmpty(categoryId)) {
+      commerceBean = catalogService.findCategoryById(idProvider.format(BaseCommerceBeanType.CATEGORY, catalogAlias, categoryId), storeContext);
     } else {
-      commerceBean = catalogService.findProductById(idProvider.formatProductTechId(catalogAlias, externalTechId), storeContext);
+      commerceBean = catalogService.findProductById(idProvider.format(BaseCommerceBeanType.PRODUCT, catalogAlias, productId), storeContext);
     }
 
     if (commerceBean == null) {
@@ -151,8 +153,9 @@ public class ProductFragmentHandler extends FragmentHandler {
                                                                        @NonNull String placement,
                                                                        @Nullable String view,
                                                                        @NonNull CMChannel rootChannel,
-                                                                       @Nullable User developer) {
-    Product product = getProductFromId(productId);
+                                                                       @Nullable User developer,
+                                                                       @NonNull ServletRequest request) {
+    Product product = getProductFromId(productId, request);
     Content externalProductContent = getAugmentedProductContent(product);
     if (externalProductContent == null) {
       return createFragmentModelAndViewForPlacementAndView(navigation, placement, view, rootChannel, developer);
@@ -205,8 +208,9 @@ public class ProductFragmentHandler extends FragmentHandler {
 
   @NonNull
   protected ModelAndView createModelAndViewForProductPage(Navigation navigation, String productId, String view,
-                                                          String orientation, String types, @Nullable User developer) {
-    Product product = getProductFromId(productId);
+                                                          String orientation, String types, @Nullable User developer,
+                                                          @NonNull ServletRequest request) {
+    Product product = getProductFromId(productId, request);
     Content augmentedProductContent = getAugmentedProductContent(product);
 
     ModelAndView modelAndView = HandlerHelper.createModelWithView(product, view);
@@ -225,29 +229,25 @@ public class ProductFragmentHandler extends FragmentHandler {
   }
 
   @Nullable
-  private Product getProductFromId(@Nullable String productId) {
+  private Product getProductFromId(@Nullable String productId, ServletRequest request) {
     if (isNullOrEmpty(productId)) {
       return null;
     }
 
-    StoreContext storeContext = CurrentStoreContext.get();
+    StoreContext storeContext = CurrentStoreContext.get(request);
     CommerceConnection connection = storeContext.getConnection();
 
     CommerceIdProvider idProvider = connection.getIdProvider();
 
     CatalogAlias catalogAlias = storeContext.getCatalogAlias();
 
-    CommerceId commerceId = useStableIds
-            ? idProvider.formatProductId(catalogAlias, productId)
-            : idProvider.formatProductTechId(catalogAlias, productId);
+    CommerceId commerceId = idProvider.format(BaseCommerceBeanType.PRODUCT, catalogAlias, productId);
 
     CommerceBeanFactory commerceBeanFactory = connection.getCommerceBeanFactory();
     Product product = (Product) commerceBeanFactory.createBeanFor(commerceId, storeContext);
 
     if (product.isVariant()) {
-      commerceId = useStableIds
-              ? idProvider.formatProductVariantId(catalogAlias, productId)
-              : idProvider.formatProductVariantTechId(catalogAlias, productId);
+      commerceId = idProvider.format(BaseCommerceBeanType.SKU, catalogAlias, productId);
 
       return (ProductVariant) commerceBeanFactory.createBeanFor(commerceId, storeContext);
     }
@@ -291,7 +291,7 @@ public class ProductFragmentHandler extends FragmentHandler {
   }
 
   @Override
-  public boolean include(@NonNull FragmentParameters params) {
+  public boolean test(@NonNull FragmentParameters params) {
     return !isNullOrEmpty(params.getProductId())
             && (isNullOrEmpty(params.getExternalRef()) || !params.getExternalRef().startsWith("cm-"));
   }
@@ -301,10 +301,6 @@ public class ProductFragmentHandler extends FragmentHandler {
   @Required
   public void setContextStrategy(ResolveContextStrategy contextStrategy) {
     this.contextStrategy = contextStrategy;
-  }
-
-  public void setUseStableIds(boolean useStableIds) {
-    this.useStableIds = useStableIds;
   }
 
   /**

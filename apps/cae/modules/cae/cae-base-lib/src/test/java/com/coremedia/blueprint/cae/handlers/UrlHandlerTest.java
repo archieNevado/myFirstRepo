@@ -11,7 +11,6 @@ import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.urlservice.UrlServiceRequestParams;
 import com.coremedia.objectserver.urlservice.UrlServiceResponse;
 import com.coremedia.objectserver.web.links.LinkFormatter;
-import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -83,10 +82,10 @@ public class UrlHandlerTest {
   private static final String siteRootDocId = "coremedia:///cap/content/10";
   private static final String contextId = "coremedia:///cap/content/12";
 
-  private List<UrlServiceRequestParams> idOnly = Lists.newArrayList(UrlServiceRequestParams.create(id, null, null));
-  private List<UrlServiceRequestParams> idWithSite = Lists.newArrayList(UrlServiceRequestParams.create(id, siteId, null));
-  private List<UrlServiceRequestParams> idWithContext = Lists.newArrayList(UrlServiceRequestParams.create(id, null, contextId));
-  private List<UrlServiceRequestParams> idWithSiteAndContext = Lists.newArrayList(UrlServiceRequestParams.create(id, siteId, contextId));
+  private final List<UrlServiceRequestParams> idOnly = List.of(UrlServiceRequestParams.create(id, null, null));
+  private final List<UrlServiceRequestParams> idWithSite = List.of(UrlServiceRequestParams.create(id, siteId, null));
+  private final List<UrlServiceRequestParams> idWithContext = List.of(UrlServiceRequestParams.create(id, null, contextId));
+  private final List<UrlServiceRequestParams> idWithSiteAndContext = List.of(UrlServiceRequestParams.create(id, siteId, contextId));
 
   @Before
   public void setup() {

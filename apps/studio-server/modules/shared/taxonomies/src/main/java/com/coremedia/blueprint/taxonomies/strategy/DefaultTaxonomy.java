@@ -18,7 +18,6 @@ import com.coremedia.cap.struct.Struct;
 import com.coremedia.rest.cap.content.search.SearchService;
 import com.coremedia.rest.cap.content.search.SearchServiceResult;
 import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableList;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
@@ -346,7 +345,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
   @NonNull
   private List<Content> collectAllTaxonomiesBelow(@NonNull Content node, boolean recursively) {
     if (!recursively) {
-      return ImmutableList.of(node);
+      return List.of(node);
     }
 
     List<Content> taxonomies = Collections.synchronizedList(new ArrayList<>());

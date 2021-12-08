@@ -1,10 +1,8 @@
 package com.coremedia.blueprint.elastic.social.cae.controller;
 
-
-import com.google.common.collect.ImmutableList;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -27,6 +25,6 @@ public class ContributionWrapper<T, K> {
   }
 
   List<K> getSubContributions() {
-    return subContributions == null ? Collections.<K>emptyList() : ImmutableList.copyOf(subContributions);
+    return subContributions == null ? Collections.<K>emptyList() : List.copyOf(subContributions);
   }
 }

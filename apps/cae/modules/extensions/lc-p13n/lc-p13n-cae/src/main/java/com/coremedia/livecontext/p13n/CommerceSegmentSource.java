@@ -3,9 +3,7 @@ package com.coremedia.livecontext.p13n;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentUserContext;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
-import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
-import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.p13n.Segment;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
@@ -13,7 +11,6 @@ import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.context.MapPropertyMaintainer;
 import com.coremedia.personalization.context.collector.AbstractContextSource;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +20,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper.format;
-import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -45,24 +41,26 @@ public class CommerceSegmentSource extends AbstractContextSource {
 
   @Override
   public void preHandle(HttpServletRequest request, HttpServletResponse response, ContextCollection contextCollection) {
-    StoreContext storeContext = CurrentStoreContext.find().orElse(null);
+    var storeContext = CurrentStoreContext.find(request).orElse(null);
     if (storeContext == null) {
       return;
     }
 
-    UserContext userContext = CurrentUserContext.find().orElse(null);
+    var userContext = CurrentUserContext.find(request).orElse(null);
     if (userContext == null) {
       return;
     }
 
-    String userSegments = storeContext.getUserSegments().orElse(null);
+    var userSegments = storeContext.getUserSegments()
+            .map(str -> Arrays.asList(str.split(",")))
+            .orElse(Collections.emptyList());
 
-    if (isNullOrEmpty(userSegments) && isEmpty(userContext)) {
+    if (userSegments.isEmpty() && isEmpty(userContext)) {
       return;
     }
 
-    List<String> segmentIds = getSegmentIds(storeContext.getConnection(), userSegments);
-    String segmentIdsJoinedStr = joinSegmentIds(segmentIds);
+    var segmentIds = getSegmentIds(storeContext, userContext, userSegments);
+    var segmentIdsJoinedStr = joinSegmentIds(segmentIds);
 
     MapPropertyMaintainer segmentContext = new MapPropertyMaintainer();
     segmentContext.setProperty(SEGMENT_ID_LIST_CONTEXT_KEY, segmentIdsJoinedStr);
@@ -77,20 +75,15 @@ public class CommerceSegmentSource extends AbstractContextSource {
   }
 
   @NonNull
-  private static List<String> getSegmentIds(@NonNull CommerceConnection commerceConnection,
-                                            @Nullable String userSegments) {
-    List<String> segmentIdList = null;
-
-    // UserSegments provided by LiveContext Fragment Connector
-    if (userSegments != null && !userSegments.isEmpty()) {
-      segmentIdList = Arrays.asList(userSegments.split(","));
+  private static List<String> getSegmentIds(@NonNull StoreContext storeContext,
+                                            @NonNull UserContext userContext,
+                                            @NonNull List<String> userSegments) {
+    var segmentIdList = userSegments;
+    if (segmentIdList.isEmpty()) {
+      segmentIdList = readSegmentIdListFromCommerceSystem(storeContext, userContext);
     }
 
-    if (segmentIdList == null) {
-      segmentIdList = readSegmentIdListFromCommerceSystem(commerceConnection);
-    }
-
-    CommerceIdProvider commerceIdProvider = commerceConnection.getIdProvider();
+    var commerceIdProvider = storeContext.getConnection().getIdProvider();
 
     return segmentIdList.stream()
             .map(segment -> format(commerceIdProvider.formatSegmentId(segment)))
@@ -98,11 +91,11 @@ public class CommerceSegmentSource extends AbstractContextSource {
   }
 
   @NonNull
-  private static List<String> readSegmentIdListFromCommerceSystem(@NonNull CommerceConnection commerceConnection) {
-    StoreContext storeContext = commerceConnection.getStoreContext();
-
+  private static List<String> readSegmentIdListFromCommerceSystem(@NonNull StoreContext storeContext,
+                                                                  @NonNull UserContext userContext) {
+    var commerceConnection = storeContext.getConnection();
     return commerceConnection.getSegmentService()
-            .map(segmentService -> segmentService.findSegmentsForCurrentUser(storeContext))
+            .map(segmentService -> segmentService.findSegmentsForCurrentUser(storeContext, userContext))
             .map(CommerceSegmentSource::getExternalIds)
             .orElseGet(Collections::emptyList);
   }

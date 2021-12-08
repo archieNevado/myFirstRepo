@@ -13,14 +13,6 @@
   <import resource="classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml"/>
   <import resource="classpath:/META-INF/coremedia/livecontext-handlers.xml"/>
 
-  <bean id="microSiteHandler" class="com.coremedia.livecontext.handler.LiveContextChannelLinkBuilder"
-        parent="ecommerceHandlerBase">
-    <property name="resolveContextStrategy" ref="resolveLivecontextContextStrategy"/>  <!-- ## actually not needed -->
-    <property name="commerceLedLinkBuilderHelper" ref="commerceLedLinkBuilderHelper"/>
-    <property name="searchLandingPagesLinkBuilderHelper" ref="searchLandingPagesLinkBuilderHelper"/>
-    <property name="commerceConnectionInitializer" ref="commerceConnectionInitializer"/>
-  </bean>
-
   <!--
   The com.coremedia.livecontext.fragment.links.transformers.LiveContextLinkTransformer
   must be the last one in the chain as it needs to pick up the query parameters added by other link transformers
@@ -29,7 +21,6 @@
   <customize:append id="livecontextLinkTransformerCustomizer" bean="linkTransformers" order="100000000">
     <list>
       <ref bean="fragmentParamsAppendingLinkTransformer"/>
-      <bean class="com.coremedia.livecontext.handler.LiveContextLinkTransformer"/>
       <ref bean="lcLinkTransformer"/>
     </list>
   </customize:append>

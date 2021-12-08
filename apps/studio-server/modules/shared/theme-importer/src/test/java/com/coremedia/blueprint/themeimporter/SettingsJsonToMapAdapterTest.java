@@ -3,8 +3,6 @@ package com.coremedia.blueprint.themeimporter;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.PathHelper;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
@@ -37,24 +36,24 @@ public class SettingsJsonToMapAdapterTest {
 
   @Test
   public void emptyJson() {
-    assertEquals(ImmutableMap.of(), adapter.getMap(null));
+    assertEquals(Map.of(), adapter.getMap(null));
   }
 
   @Test
   public void invalidJson() {
-    assertEquals(ImmutableMap.of(), adapter.getMap("{"));
+    assertEquals(Map.of(), adapter.getMap("{"));
   }
 
   @Test
   public void testNumber() {
     Map<String, Object> actual = adapter.getMap("{ \"number\": 1.0}");
-    assertEquals(ImmutableMap.of("number", 1), actual);
+    assertEquals(Map.of("number", 1), actual);
   }
 
   @Test
   public void testNumberList() {
     Map<String, Object> actual = adapter.getMap("{ \"numbers\": [ 1.0, 3.9, 5 ]}");
-    assertEquals(ImmutableMap.of("numbers", ImmutableList.of(1, 3, 5)), actual);
+    assertEquals(Map.of("numbers", List.of(1, 3, 5)), actual);
   }
 
   @Test
@@ -62,7 +61,7 @@ public class SettingsJsonToMapAdapterTest {
     final String path = "/some folder/some content";
     when(contentRepository.getChild(path)).thenReturn(content);
     Map<String, Object> actual = adapter.getMap("{ \"link\": { \"$Link\": \"" + path + "\" }}");
-    assertEquals(ImmutableMap.of("link", content), actual);
+    assertEquals(Map.of("link", content), actual);
   }
 
   @Test
@@ -70,7 +69,7 @@ public class SettingsJsonToMapAdapterTest {
     final String path = "/some folder/some content";
     when(contentRepository.getChild(path)).thenReturn(content);
     Map<String, Object> actual = adapter.getMap("{ \"links\": [ { \"$Link\": \"" + path + "\" }, { \"$Link\": \"" + path + "\" } ]}");
-    assertEquals(ImmutableMap.of("links", ImmutableList.of(content, content)), actual);
+    assertEquals(Map.of("links", List.of(content, content)), actual);
   }
 
   @Test
@@ -80,7 +79,7 @@ public class SettingsJsonToMapAdapterTest {
 
     when(contentRepository.getChild(PathHelper.join(basePath, subPath))).thenReturn(content);
     Map<String, Object> actual = adapter.getMap("{ \"link\": { \"$Link\": \"" + subPath + "\" }}", basePath);
-    assertEquals(ImmutableMap.of("link", content), actual);
+    assertEquals(Map.of("link", content), actual);
   }
 
   @Test
@@ -89,7 +88,7 @@ public class SettingsJsonToMapAdapterTest {
 
     when(contentRepository.getChild(subPath)).thenReturn(content);
     Map<String, Object> actual = adapter.getMap("{ \"link\": { \"$Link\": \"" + subPath + "\" }}", "/some folder/");
-    assertEquals(ImmutableMap.of("link", content), actual);
+    assertEquals(Map.of("link", content), actual);
   }
 
   @Test
@@ -106,7 +105,7 @@ public class SettingsJsonToMapAdapterTest {
     calendar.set(Calendar.MILLISECOND, 0);
     String dateAsString = DateFormatUtils.format(calendar, DateFormatUtils.ISO_8601_EXTENDED_DATETIME_TIME_ZONE_FORMAT.getPattern());
     Map<String, Object> actual = adapter.getMap("{ \"date\": { \"$Date\": \"" + dateAsString + "\" }}");
-    assertEquals(ImmutableMap.of("date", calendar), actual);
+    assertEquals(Map.of("date", calendar), actual);
   }
 
   @Test
@@ -116,7 +115,7 @@ public class SettingsJsonToMapAdapterTest {
     calendar.set(Calendar.MILLISECOND, 0);
     String dateAsString = DateFormatUtils.format(calendar, DateFormatUtils.ISO_8601_EXTENDED_DATETIME_TIME_ZONE_FORMAT.getPattern());
     Map<String, Object> actual = adapter.getMap("{ \"links\": [ { \"$Date\": \"" + dateAsString + "\" }, { \"$Date\": \"" + dateAsString + "\" } ]}");
-    assertEquals(ImmutableMap.of("links", ImmutableList.of(calendar, calendar)), actual);
+    assertEquals(Map.of("links", List.of(calendar, calendar)), actual);
   }
 
   @Test

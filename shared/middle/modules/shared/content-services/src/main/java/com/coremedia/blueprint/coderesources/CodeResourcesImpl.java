@@ -99,6 +99,10 @@ class CodeResourcesImpl implements CodeResources {
     return mergeableResources;
   }
 
+  /**
+   * @deprecated since 2110.1, Old Internet Explorer (IE) is not supported anymore.
+   */
+  @Deprecated(since = "2110.1")
   List<Content> getIeExcludes() {
     return ieExcludes;
   }

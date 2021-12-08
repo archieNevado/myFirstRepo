@@ -6,10 +6,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import java.util.Collection;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
-import static com.google.common.base.Predicates.in;
-import static com.google.common.base.Predicates.not;
-import static com.google.common.collect.Collections2.filter;
 
 /**
  * This bean registers the tenants configured in content repository (via root channel settings).
@@ -37,7 +36,9 @@ public class TenantInitializer {
   }
 
   private void registerTenants(Collection<String> configuredTenants, Collection<String> registeredTenants) {
-    final Collection<String> tenantsToAdd = filter(configuredTenants, not(in(registeredTenants)));
+    final Collection<String> tenantsToAdd = configuredTenants.stream()
+            .filter(Predicate.not(registeredTenants::contains))
+            .collect(Collectors.toList());
     if(!tenantsToAdd.isEmpty()) {
       LOG.debug("registering tenants {}", tenantsToAdd);
       tenantService.registerAll(tenantsToAdd);
@@ -45,7 +46,9 @@ public class TenantInitializer {
   }
 
   private void deregisterTenants(Collection<String> configuredTenants, Collection<String> registeredTenants) {
-    final Collection<String> tenantsToRemove = filter(registeredTenants, not(in(configuredTenants)));
+    final Collection<String> tenantsToRemove = registeredTenants.stream()
+            .filter(Predicate.not(configuredTenants::contains))
+            .collect(Collectors.toList());
     // The internal tenant must not be deregistered
     tenantsToRemove.remove(INTERNAL_TENANT);
     if(!tenantsToRemove.isEmpty()) {

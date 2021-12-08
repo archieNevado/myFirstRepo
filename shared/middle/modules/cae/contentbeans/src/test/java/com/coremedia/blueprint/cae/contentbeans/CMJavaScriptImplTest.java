@@ -1,11 +1,12 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
-import com.coremedia.blueprint.common.contentbeans.CMJavaScript;
 import com.coremedia.blueprint.cae.contentbeans.testing.ContentBeanTestBase;
-import com.google.common.collect.ImmutableMap;
+import com.coremedia.blueprint.common.contentbeans.CMJavaScript;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Map;
 
 public class CMJavaScriptImplTest extends ContentBeanTestBase {
 
@@ -78,6 +79,6 @@ public class CMJavaScriptImplTest extends ContentBeanTestBase {
 
   @Test
   public void testHtmlAttributes() throws Exception {
-    Assert.assertEquals(ImmutableMap.of("defer", true), contentBean.getHtmlAttributes());
+    Assert.assertEquals(Map.of("defer", true), contentBean.getHtmlAttributes());
   }
 }

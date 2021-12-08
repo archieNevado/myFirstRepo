@@ -1,6 +1,6 @@
 package com.coremedia.lc.studio.lib.augmentation;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.cap.content.Content;
@@ -11,13 +11,14 @@ import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -29,8 +30,7 @@ import static org.mockito.Mockito.when;
 public class PbeShopUrlTargetResolverImplTest {
 
   @InjectMocks
-  private
-  PbeShopUrlTargetResolverImpl testling;
+  private PbeShopUrlTargetResolverImpl testling;
 
   @Mock
   private CommerceConnection commerceConnection;
@@ -47,11 +47,15 @@ public class PbeShopUrlTargetResolverImplTest {
   @Mock
   private Site site;
 
+  @Mock
+  private CommerceConnectionSupplier commerceConnectionSupplier;
+
   private StoreContextImpl storeContext;
 
   @Before
   public void setup() {
     when(sitesService.getSite("theSiteId")).thenReturn(site);
+    when(commerceConnectionSupplier.findConnection(site)).thenReturn(Optional.of(commerceConnection));
     when(catalogService.findCategoryBySeoSegment(anyString(), any(StoreContext.class))).thenReturn(null);
 
     storeContext = StoreContextBuilderImpl.from(commerceConnection, "theSiteId")
@@ -59,14 +63,7 @@ public class PbeShopUrlTargetResolverImplTest {
             .build();
 
     when(commerceConnection.getCatalogService()).thenReturn(catalogService);
-    when(commerceConnection.getStoreContext()).thenReturn(storeContext);
-
-    CurrentStoreContext.set(storeContext);
-  }
-
-  @After
-  public void tearDown() {
-    CurrentStoreContext.remove();
+    when(commerceConnection.getInitialStoreContext()).thenReturn(storeContext);
   }
 
   @Test

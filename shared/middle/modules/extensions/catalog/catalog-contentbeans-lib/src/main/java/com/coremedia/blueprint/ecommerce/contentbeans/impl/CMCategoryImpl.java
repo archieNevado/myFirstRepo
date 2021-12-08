@@ -8,17 +8,15 @@ import com.coremedia.blueprint.ecommerce.contentbeans.CMCategory;
 import com.coremedia.blueprint.ecommerce.contentbeans.CMProduct;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.content.Content;
-import com.coremedia.livecontext.ecommerce.catalog.Category;
-import com.coremedia.livecontext.ecommerce.catalog.Product;
-import com.google.common.collect.ImmutableList;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class CMCategoryImpl extends CMAbstractCategoryImpl implements CMCategory {
   private CmsCatalogService catalogService;
@@ -78,13 +76,13 @@ public class CMCategoryImpl extends CMAbstractCategoryImpl implements CMCategory
       return Collections.emptyList();
     }
 
-    ImmutableList.Builder<Content> builder = ImmutableList.builder();
-    for (Category child : category.getChildren()) {
-      if (child instanceof CmsCategory) {
-        builder.add(((CmsCategory) child).getContent());
-      }
-    }
-    return createBeansFor(builder.build(), CMCategory.class);
+    List<Content> result = category.getChildren().stream()
+            .filter(CmsCategory.class::isInstance)
+            .map(CmsCategory.class::cast)
+            .map(CmsCategory::getContent)
+            .collect(Collectors.toUnmodifiableList());
+
+    return createBeansFor(result, CMCategory.class);
   }
 
   @NonNull
@@ -95,13 +93,13 @@ public class CMCategoryImpl extends CMAbstractCategoryImpl implements CMCategory
       return Collections.emptyList();
     }
 
-    ImmutableList.Builder<Content> builder = ImmutableList.builder();
-    for (Product product : category.getProducts()) {
-      if (product instanceof CmsProduct) {
-        builder.add(((CmsProduct) product).getContent());
-      }
-    }
-    return createBeansFor(builder.build(), CMProduct.class);
+    List<Content> result = category.getProducts().stream()
+            .filter(CmsProduct.class::isInstance)
+            .map(CmsProduct.class::cast)
+            .map(CmsProduct::getContent)
+            .collect(Collectors.toUnmodifiableList());
+
+    return createBeansFor(result, CMProduct.class);
   }
 
   // --- Features ---------------------------------------------------

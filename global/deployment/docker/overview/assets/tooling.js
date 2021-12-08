@@ -31,6 +31,8 @@ $(function() {
 
   // copy code to clipboard
   $("code").on("click", function() {
+    var $codeBlock = $(this);
+    $codeBlock.addClass("selected");
     var el = document.createElement("textarea");
     el.value = this.innerText;
     el.setAttribute("readonly", "");
@@ -45,6 +47,7 @@ $(function() {
       document.getSelection().removeAllRanges();
       document.getSelection().addRange(selected);
     }
+    setTimeout(function() { $codeBlock.removeClass("selected"); }, 100);
   });
 
   // fix docker links, if not set by confd

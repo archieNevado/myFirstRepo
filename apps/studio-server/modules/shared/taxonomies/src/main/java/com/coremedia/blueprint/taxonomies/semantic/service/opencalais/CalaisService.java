@@ -1,17 +1,16 @@
 package com.coremedia.blueprint.taxonomies.semantic.service.opencalais;
 
 import com.coremedia.blueprint.base.settings.SettingsService;
-import com.coremedia.blueprint.taxonomies.semantic.service.AbstractSemanticService;
 import com.coremedia.blueprint.taxonomies.semantic.ContentSerializer;
 import com.coremedia.blueprint.taxonomies.semantic.SemanticContext;
 import com.coremedia.blueprint.taxonomies.semantic.SemanticEntity;
+import com.coremedia.blueprint.taxonomies.semantic.service.AbstractSemanticService;
 import com.coremedia.cache.Cache;
 import com.coremedia.cache.CacheKey;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +18,7 @@ import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -71,7 +71,7 @@ public class CalaisService extends AbstractSemanticService {
         // noinspection unchecked
         List<Map<String, Object>> entities = (List<Map<String, Object>>) response.get("entities");
         for (Map<String, Object> entity : entities) {
-          Map<String, String> map = Maps.newHashMap();
+          Map<String, String> map = new HashMap<>();
           for (String semanticProperty : getSemanticProperties().keySet()) {
             String key = getSemanticProperties().get(semanticProperty);
             map.put(semanticProperty, String.valueOf(entity.get(key)));

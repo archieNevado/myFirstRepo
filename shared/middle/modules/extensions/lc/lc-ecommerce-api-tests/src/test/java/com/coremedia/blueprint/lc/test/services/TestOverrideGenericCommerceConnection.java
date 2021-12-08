@@ -2,7 +2,7 @@ package com.coremedia.blueprint.lc.test.services;
 
 import com.coremedia.blueprint.base.livecontext.client.common.GenericCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.client.common.RequiresGenericCommerceConnection;
-import com.coremedia.blueprint.base.livecontext.client.data.Metadata;
+import com.coremedia.blueprint.base.livecontext.client.data.DataClient;
 import com.coremedia.livecontext.ecommerce.common.ForVendor;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
@@ -22,8 +22,8 @@ abstract class TestOverrideGenericCommerceConnection implements GenericCommerceC
   }
 
   @Override
-  public Metadata getMetadata() {
-    return delegate.getMetadata();
+  public DataClient getDataClient() {
+    return delegate.getDataClient();
   }
 
   @Override
@@ -33,8 +33,8 @@ abstract class TestOverrideGenericCommerceConnection implements GenericCommerceC
   }
 
   @Override
-  public StoreContext getStoreContext() {
-    return delegate.getStoreContext();
+  public StoreContext getInitialStoreContext() {
+    return delegate.getInitialStoreContext();
   }
 
   @Override

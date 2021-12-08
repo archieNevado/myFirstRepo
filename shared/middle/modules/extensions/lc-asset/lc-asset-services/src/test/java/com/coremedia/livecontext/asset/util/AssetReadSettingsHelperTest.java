@@ -2,7 +2,6 @@ package com.coremedia.livecontext.asset.util;
 
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.struct.Struct;
-import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -29,7 +28,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public class AssetReadSettingsHelperTest {
 
   private AssetReadSettingsHelper testling;
-  private List<String> PATHLIST = ImmutableList.of(NAME_LOCAL_SETTINGS, NAME_COMMERCE);
+  private List<String> PATHLIST = List.of(NAME_LOCAL_SETTINGS, NAME_COMMERCE);
   @Mock
   private Map<String, Object> contentProperties;
 

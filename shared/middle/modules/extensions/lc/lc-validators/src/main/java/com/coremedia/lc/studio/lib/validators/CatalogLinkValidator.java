@@ -1,9 +1,10 @@
 package com.coremedia.lc.studio.lib.validators;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoCommerceConnectionAvailable;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.ContentSiteAspect;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
@@ -18,10 +19,7 @@ import com.coremedia.livecontext.ecommerce.common.InvalidContextException;
 import com.coremedia.livecontext.ecommerce.common.InvalidIdException;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
-import com.coremedia.livecontext.ecommerce.workspace.Workspace;
-import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
-import com.coremedia.rest.cap.validation.ContentTypeValidatorBase;
+import com.coremedia.rest.cap.validation.AbstractContentTypeValidator;
 import com.coremedia.rest.validation.Issues;
 import com.coremedia.rest.validation.Severity;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -29,11 +27,8 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.WORKSPACE_ID_NONE;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper.format;
 import static com.coremedia.rest.validation.Severity.ERROR;
 import static com.coremedia.rest.validation.Severity.INFO;
@@ -44,7 +39,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
  * Checks if catalog object can be loaded from catalog link property.
  * see also CatalogLink.as and CatalogLinkPropertyField.as
  */
-public class CatalogLinkValidator extends ContentTypeValidatorBase {
+public class CatalogLinkValidator extends AbstractContentTypeValidator {
 
   private static final Logger LOG = LoggerFactory.getLogger(CatalogLinkValidator.class);
 
@@ -57,17 +52,20 @@ public class CatalogLinkValidator extends ContentTypeValidatorBase {
   private static final String CODE_ISSUE_CATALOG_NOT_FOUND = "CatalogNotFoundError";
 
   private final SitesService sitesService;
-  private final CommerceConnectionInitializer commerceConnectionInitializer;
+  private final CommerceConnectionSupplier commerceConnectionSupplier;
 
   private final String propertyName;
 
   private boolean isOptional = false;
 
-  public CatalogLinkValidator(CommerceConnectionInitializer commerceConnectionInitializer,
+  public CatalogLinkValidator(@NonNull ContentType type,
+                              boolean isValidatingSubtypes,
+                              CommerceConnectionSupplier commerceConnectionSupplier,
                               SitesService sitesService,
                               String propertyName) {
+    super(type, isValidatingSubtypes);
     this.sitesService = sitesService;
-    this.commerceConnectionInitializer = commerceConnectionInitializer;
+    this.commerceConnectionSupplier = commerceConnectionSupplier;
     this.propertyName = propertyName;
   }
 
@@ -114,6 +112,9 @@ public class CatalogLinkValidator extends ContentTypeValidatorBase {
 
   @Override
   public void validate(Content content, Issues issues) {
+
+    // Todo lc-ibm: check if workspace removal has any impact
+
     if (content == null || !content.isInProduction()) {
       return;
     }
@@ -143,7 +144,7 @@ public class CatalogLinkValidator extends ContentTypeValidatorBase {
       return;
     }
 
-    StoreContext storeContext = commerceConnection.getStoreContext();
+    StoreContext storeContext = commerceConnection.getInitialStoreContext();
 
     Optional<CommerceId> commerceIdOptional = CommerceIdParserHelper.parseCommerceId(commerceBeanId);
     if (!commerceIdOptional.isPresent()) {
@@ -160,7 +161,6 @@ public class CatalogLinkValidator extends ContentTypeValidatorBase {
       StoreContext storeContextWithoutWorkspaceId = commerceConnection
               .getStoreContextProvider()
               .buildContext(storeContext)
-              .withWorkspaceId(null)
               .build();
 
       boolean commerceBeanWithoutWorkspaceExists = hasCommerceBean(commerceBeanFactory, commerceId,
@@ -177,16 +177,6 @@ public class CatalogLinkValidator extends ContentTypeValidatorBase {
       }
 
       String externalId = externalIdOptional.get();
-
-      // No commerce bean found that belongs to no workspace.
-      // Search all workspaces for one with a commerce bean.
-      Workspace workspace = findWorkspaceWithExistingCommerceBean(commerceConnection, storeContext,
-              commerceBeanFactory, commerceId);
-      if (workspace != null) {
-        validOnlyInWorkspace(issues, externalId, storeContext.getStoreName(), workspace.getName());
-        return;
-      }
-
       // commerce bean not found even in workspaces
       LOG.debug("id: {} not found in the store {}", commerceBeanId, storeContext.getStoreName());
       invalidExternalId(issues, externalId, storeContext.getStoreName());
@@ -209,54 +199,9 @@ public class CatalogLinkValidator extends ContentTypeValidatorBase {
 
   @NonNull
   private CommerceConnection getCommerceConnection(@NonNull Site site) {
-    return commerceConnectionInitializer.findConnectionForSite(site)
+    return commerceConnectionSupplier.findConnection(site)
             .orElseThrow(() -> new NoCommerceConnectionAvailable(
                     String.format("No commerce connection available for site '%s'.", site.getName())));
-  }
-
-  /**
-   * Return the first workspace for which a commerce bean exists.
-   */
-  @Nullable
-  private static Workspace findWorkspaceWithExistingCommerceBean(@NonNull CommerceConnection commerceConnection,
-                                                                 StoreContext storeContext,
-                                                                 CommerceBeanFactory commerceBeanFactory,
-                                                                 CommerceId commerceId) {
-    StoreContextProvider storeContextProvider = commerceConnection.getStoreContextProvider();
-
-    StoreContext storeContextToObtainAllWorkspacesFrom = storeContextProvider.buildContext(storeContext).build();
-    List<Workspace> allWorkspaces = getWorkspaces(commerceConnection, storeContextToObtainAllWorkspacesFrom);
-
-    for (Workspace workspace : allWorkspaces) {
-      WorkspaceId workspaceId = getWorkspaceId(workspace);
-      StoreContext storeContextWithWorkspaceId = storeContextProvider
-              .buildContext(storeContextToObtainAllWorkspacesFrom)
-              .withWorkspaceId(workspaceId)
-              .build();
-
-      boolean commerceBeanWithWorkspaceExists = hasCommerceBean(commerceBeanFactory, commerceId,
-              storeContextWithWorkspaceId);
-      if (commerceBeanWithWorkspaceExists) {
-        return workspace;
-      }
-    }
-
-    return null;
-  }
-
-  @NonNull
-  private static List<Workspace> getWorkspaces(@NonNull CommerceConnection commerceConnection,
-                                               @NonNull StoreContext storeContextClone) {
-    return commerceConnection.getWorkspaceService()
-            .map(workspaceService -> workspaceService.findAllWorkspaces(storeContextClone))
-            .orElseGet(Collections::emptyList);
-  }
-
-  @NonNull
-  private static WorkspaceId getWorkspaceId(@NonNull Workspace workspace) {
-    return Optional.ofNullable(workspace.getExternalTechId())
-            .map(WorkspaceId::of)
-            .orElse(WORKSPACE_ID_NONE);
   }
 
   @Nullable

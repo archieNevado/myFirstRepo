@@ -17,10 +17,9 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
-import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
+import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
-import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -71,7 +70,7 @@ public class PageGridImplTest {
 
   private static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_DATE_TIME;
 
-  private static final List<String> PREVIEW_DATES = ImmutableList.of(
+  private static final List<String> PREVIEW_DATES = List.of(
                   "1963-01-01T01:00:00+01:00", // 0
                   "1963-11-19T06:00:00+01:00", // 1
                   "1974-07-01T03:00:00+01:00", // 2
@@ -81,7 +80,7 @@ public class PageGridImplTest {
                   "2025-01-01T03:00:00+01:00"  // 6
           );
 
-  private static final List<Integer> EXPECTED_ITEM_COUNTS = ImmutableList.of(
+  private static final List<Integer> EXPECTED_ITEM_COUNTS = List.of(
           0,
           0,
           3,

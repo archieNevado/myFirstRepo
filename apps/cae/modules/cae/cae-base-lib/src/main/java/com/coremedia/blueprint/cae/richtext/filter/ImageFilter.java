@@ -23,7 +23,7 @@ import java.util.Map;
  * <p>
  * In case of an IMG tag, resolve the content reference and render the image.
  */
-public class ImageFilter extends PDivUntanglingFilter implements FilterFactory {
+public class ImageFilter extends EmbeddingFilter implements FilterFactory {
   private static final String CLASS = "class";
   private static final String HEIGHT = "height";
   private static final String WIDTH = "width";
@@ -64,16 +64,11 @@ public class ImageFilter extends PDivUntanglingFilter implements FilterFactory {
   }
 
 
-  // --- PDivUntanglingFilter ---------------------------------------
+  // --- EmbeddingFilter ---------------------------------------
 
   @Override
   protected boolean mustEmbed(String tag, Attributes atts) {
     return IMG_ELEMENT_NAME.equalsIgnoreCase(tag);
-  }
-
-  @Override
-  protected boolean hasBlockLevel(String tag, Attributes atts) {
-    return true;
   }
 
   @Override

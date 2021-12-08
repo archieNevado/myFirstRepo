@@ -42,7 +42,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
 public class BlueprintViewRepositoryNameProviderTest {
   @Configuration(proxyBeanMethods = false)
   @EnableConfigurationProperties({
-          DeliveryConfigurationProperties.class
+          DeliveryConfigurationProperties.class,
   })
   @Import({
           BlueprintViewsCaeBaseLibConfiguration.class,

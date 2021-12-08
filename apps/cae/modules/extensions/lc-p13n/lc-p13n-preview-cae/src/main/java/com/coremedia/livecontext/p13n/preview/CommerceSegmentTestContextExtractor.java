@@ -1,12 +1,10 @@
 package com.coremedia.livecontext.p13n.preview;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextHelper;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.blueprint.personalization.contentbeans.CMUserProfile;
 import com.coremedia.cap.content.Content;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.personalization.context.ContextCollection;
@@ -21,7 +19,10 @@ import org.springframework.beans.InvalidPropertyException;
 import org.springframework.beans.PropertyAccessException;
 import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.ServletRequest;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,23 +70,26 @@ public class CommerceSegmentTestContextExtractor implements TestContextExtractor
   }
 
   private void addUserSegmentsToStoreContext(@NonNull List<String> userSegmentList) {
-    StoreContext storeContext = CurrentStoreContext.find().orElse(null);
+    Optional.ofNullable(RequestContextHolder.getRequestAttributes())
+            .filter(ServletRequestAttributes.class::isInstance)
+            .map(ServletRequestAttributes.class::cast)
+            .map(ServletRequestAttributes::getRequest)
+            .ifPresent(request -> addUserSegmentsToStoreContext(userSegmentList, request));
+  }
 
+  private void addUserSegmentsToStoreContext(@NonNull List<String> userSegmentList, @NonNull ServletRequest request) {
+    var storeContext = CurrentStoreContext.find(request).orElse(null);
     if (storeContext == null) {
       LOG.debug("Store context is null; cannot add user segments to store context.");
       return;
     }
 
-    String segmentIdsStr = assembleSegmentIdsString(userSegmentList);
-
-    StoreContext updatedStoreContext = storeContext.getConnection()
+    var storeContextWithSegments = storeContext.getConnection()
             .getStoreContextProvider()
             .buildContext(storeContext)
-            .withUserSegments(segmentIdsStr)
+            .withUserSegments(assembleSegmentIdsString(userSegmentList))
             .build();
-    CurrentStoreContext.set(updatedStoreContext);
-
-    StoreContextHelper.setStoreContextToRequest(updatedStoreContext);
+    CurrentStoreContext.set(storeContextWithSegments, request);
   }
 
   @NonNull

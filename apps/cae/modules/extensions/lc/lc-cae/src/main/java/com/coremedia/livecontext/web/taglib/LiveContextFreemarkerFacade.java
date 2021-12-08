@@ -17,22 +17,24 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.inventory.AvailabilityService;
 import com.coremedia.livecontext.fragment.FragmentContext;
 import com.coremedia.livecontext.fragment.FragmentContextProvider;
 import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
+import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
+import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.objectserver.web.taglib.MetadataTagSupport;
-import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Required;
 
+import java.util.Collections;
 import java.util.Currency;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static com.google.common.base.Strings.nullToEmpty;
 import static java.util.Collections.emptyMap;
@@ -58,6 +60,7 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
 
   private SitesService sitesService;
   private ContentBeanFactory contentBeanFactory;
+  private DataViewFactory dataViewFactory;
 
   public AugmentationService getCategoryAugmentationService() {
     return categoryAugmentationService;
@@ -88,7 +91,7 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
   }
 
   public ProductInSite createProductInSite(Product product) {
-    StoreContext storeContext = CurrentStoreContext.get();
+    var storeContext = CurrentStoreContext.get(FreemarkerEnvironment.getCurrentRequest());
     return liveContextNavigationFactory.createProductInSite(product, storeContext.getSiteId());
   }
 
@@ -113,24 +116,24 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
     }
 
     FragmentParameters parameters = fragmentContext().getParameters();
-    StoreContext storeContext = CurrentStoreContext.get();
+    var storeContext = CurrentStoreContext.get(FreemarkerEnvironment.getCurrentRequest());
 
-    ImmutableMap.Builder<String, Object> builder = ImmutableMap.<String, Object>builder()
-            .put(CATALOG_ID, parameters.getCatalogId()
-                    .orElseGet(() -> storeContext.getCatalogId().get())
-                    .value())
-            .put(LANG_ID, "" + storeContext.getLocale())
-            .put(SITE_ID, storeContext.getSiteId())
-            .put(STORE_ID, parameters.getStoreId());
+    Map<String, Object> map = new HashMap<>();
+    map.put(CATALOG_ID, parameters.getCatalogId()
+            .orElseGet(() -> storeContext.getCatalogId().get())
+            .value());
+    map.put(LANG_ID, "" + storeContext.getLocale());
+    map.put(SITE_ID, storeContext.getSiteId());
+    map.put(STORE_ID, parameters.getStoreId());
 
     boolean isAugmentedPage = isAugmentedPage(parameters);
 
     if (isAugmentedPage) {
-      builder.put(PAGE_ID, nullToEmpty(parameters.getPageId()))
-              .put(STORE_REF, storeContext);
+      map.put(PAGE_ID, nullToEmpty(parameters.getPageId()));
+      map.put(STORE_REF, storeContext);
     }
 
-    return builder.build();
+    return Collections.unmodifiableMap(map);
   }
 
   /**
@@ -144,7 +147,7 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
   }
 
   public boolean isAugmentedContent() {
-    StoreContext storeContext = CurrentStoreContext.get();
+    var storeContext = CurrentStoreContext.get(FreemarkerEnvironment.getCurrentRequest());
     CommerceConnection connection = storeContext.getConnection();
 
     CommerceIdProvider idProvider = connection.getIdProvider();
@@ -201,15 +204,27 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
     this.contentBeanFactory = contentBeanFactory;
   }
 
+  public void setDataViewFactory(DataViewFactory dataViewFactory) {
+    this.dataViewFactory = dataViewFactory;
+  }
+
+  public ContentBean createBeanFor(Content content) {
+    return dataViewFactory.loadCached(contentBeanFactory.createBeanFor(content, ContentBean.class), null);
+  }
+
+  public List createBeansFor(Iterable<? extends Content> contents) {
+    return dataViewFactory.loadAllCached(contentBeanFactory.createBeansFor(contents, ContentBean.class), null);
+  }
+
   public String getVendorName() {
-    return CurrentStoreContext.find()
+    return CurrentStoreContext.find(FreemarkerEnvironment.getCurrentRequest())
             .map(StoreContext::getConnection)
             .map(CommerceConnection::getVendorName)
             .orElse(null);
   }
 
   public CMChannel getHomePage() {
-    StoreContext storeContext = CurrentStoreContext.get();
+    var storeContext = CurrentStoreContext.get(FreemarkerEnvironment.getCurrentRequest());
     String siteId = storeContext.getSiteId();
     return Optional.ofNullable(sitesService.getSite(siteId))
             .map(Site::getSiteRootDocument)
@@ -218,15 +233,8 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
   }
 
   public boolean isProductAvailable(@NonNull Product product) {
-    // a product is available if at least one product variant is available
-    return product.getContext().getConnection().getAvailabilityService()
-            .map(service -> quantitiesAvailable(product, service).anyMatch(d -> d > 0.0))
-            .orElse(true);
-  }
-
-  private static Stream<Float> quantitiesAvailable(@NonNull Product product,
-                                                   @NonNull AvailabilityService service) {
-    return product.getVariants().stream().map(service::getQuantityAvailable);
+    // return always true because this function isn't available in Commerce Hub
+    return true;
   }
 
 }

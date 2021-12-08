@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.coremedia</groupId>
+    <artifactId>cms-blueprint-parent</artifactId>
+    <version>1.0.0</version>
+    <relativePath />
+  </parent>
 
   <groupId>com.coremedia.blueprint</groupId>
   <artifactId>blueprint</artifactId>
@@ -22,8 +26,6 @@
     <module>apps/workflow-server</module>
     <module>apps/site-manager</module>
     <module>apps/solr</module>
-    <module>apps/studio-client</module>
-    <module>apps/studio-packages-proxy</module>
     <module>apps/studio-server</module>
     <module>apps/user-changes</module>
 
@@ -31,6 +33,30 @@
 
     <module>global/management-tools</module>
   </modules>
+
+  <repositories>
+    <repository>
+      <id>coremedia.external.releases</id>
+      <name>CoreMedia CMS</name>
+      <url>https://repository.coremedia.com/nexus/content/groups/cms/</url>
+      <layout>default</layout>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>coremedia.external.releases</id>
+      <name>CoreMedia CMS</name>
+      <url>https://repository.coremedia.com/nexus/content/groups/cms/</url>
+      <layout>default</layout>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
 
   <profiles>
     <profile>
@@ -47,24 +73,13 @@
     </profile>
 
     <profile>
-      <id>with-chef</id>
-      <!--
-       | This profile creates the deployment archive containing the chef setup, the deployment artifacts
-       | (spring-boot apps, tools and some jars) and the content.
-       -->
-      <modules>
-        <module>global/deployment/chef</module>
-      </modules>
-    </profile>
-
-    <profile>
       <id>check-dependencies-owasp</id>
       <build>
         <plugins>
           <plugin>
             <groupId>org.owasp</groupId>
             <artifactId>dependency-check-maven</artifactId>
-            <version>6.4.1</version>
+            <version>6.5.0</version>
             <configuration>
               <skipArtifactType>pom|coremedia-application</skipArtifactType>
               <skipProvidedScope>true</skipProvidedScope>
@@ -81,35 +96,4 @@
       </build>
     </profile>
   </profiles>
-
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-deploy-plugin</artifactId>
-          <version>3.0.0-M1</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-install-plugin</artifactId>
-          <version>3.0.0-M1</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.1.1</version>
-          <configuration>
-            <doclint>none</doclint>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-source-plugin</artifactId>
-          <version>3.0.1</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
-
 </project>

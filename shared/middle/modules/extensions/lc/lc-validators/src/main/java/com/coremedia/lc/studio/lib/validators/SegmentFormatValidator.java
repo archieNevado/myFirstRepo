@@ -1,13 +1,15 @@
 package com.coremedia.lc.studio.lib.validators;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
-import com.coremedia.rest.cap.validation.ContentTypeValidatorBase;
+import com.coremedia.rest.cap.validation.AbstractContentTypeValidator;
 import com.coremedia.rest.validation.Issues;
 import com.coremedia.rest.validation.Severity;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -18,7 +20,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
  * Checks if the segment uses special characters or internally reserved keywords and
  * if the segment starts or ends with '-'
  */
-public class SegmentFormatValidator extends ContentTypeValidatorBase {
+public class SegmentFormatValidator extends AbstractContentTypeValidator {
 
   private static final String CODE_ISSUE_SEGMENT_RESERVED_CHARS_FOUND = "SegmentReservedCharsFound";
   private static final String CODE_ISSUE_SEGMENT_RESERVED_PREFIX = "SegmentReservedPrefix";
@@ -34,15 +36,20 @@ public class SegmentFormatValidator extends ContentTypeValidatorBase {
   private final String propertyName;
   private String fallbackPropertyName;
 
-  private final CommerceConnectionInitializer commerceConnectionInitializer;
+  private final CommerceConnectionSupplier commerceConnectionSupplier;
   private final SitesService sitesService;
 
   //allow only numbers, letters and '-'
   private static final Pattern PATTERN = Pattern.compile("[^\\p{L}\\p{N}\\-]");
 
-  public SegmentFormatValidator(CommerceConnectionInitializer commerceConnectionInitializer, SitesService sitesService, String propertyName) {
+  public SegmentFormatValidator(@NonNull ContentType type,
+                                boolean isValidatingSubtypes,
+                                CommerceConnectionSupplier commerceConnectionSupplier,
+                                SitesService sitesService,
+                                String propertyName) {
+    super(type, isValidatingSubtypes);
     this.propertyName = propertyName;
-    this.commerceConnectionInitializer = commerceConnectionInitializer;
+    this.commerceConnectionSupplier = commerceConnectionSupplier;
     this.sitesService = sitesService;
   }
 
@@ -54,7 +61,7 @@ public class SegmentFormatValidator extends ContentTypeValidatorBase {
 
     //check if the content belongs to a livecontext site
     Optional<Site> site = sitesService.getContentSiteAspect(content).findSite();
-    Optional<CommerceConnection> commerceConnection = site.flatMap(commerceConnectionInitializer::findConnectionForSite);
+    Optional<CommerceConnection> commerceConnection = site.flatMap(commerceConnectionSupplier::findConnection);
     if (commerceConnection.isEmpty()) {
       return;
     }

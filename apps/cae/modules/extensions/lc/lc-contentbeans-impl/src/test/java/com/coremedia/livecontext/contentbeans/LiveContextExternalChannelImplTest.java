@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.contentbeans;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceServicesAutoConfiguration;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.common.navigation.Linkable;
@@ -12,7 +13,7 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
-import com.coremedia.livecontext.augmentation.config.LcAugmentationLegacyAutoConfiguration;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
@@ -21,8 +22,8 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
-import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
+import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,7 +37,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -61,19 +61,20 @@ import static org.mockito.MockitoAnnotations.initMocks;
         XmlRepoConfiguration.class,
         LiveContextExternalChannelImplTest.LocalConfig.class
 })
-@TestPropertySource(properties = {"livecontext.cache.invalidation.enabled=false"})
 public class LiveContextExternalChannelImplTest {
 
   @Configuration(proxyBeanMethods = false)
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })
-  @ImportResource({
+  @ImportResource(value = {
           "classpath:/framework/spring/blueprint-contentbeans.xml",
           "classpath:META-INF/coremedia/livecontext-contentbeans.xml",
-  })
+  }, reader = ResourceAwareXmlBeanDefinitionReader.class)
   @ComponentScan("com.coremedia.blueprint.base.livecontext.augmentation")
-  @Import(LcAugmentationLegacyAutoConfiguration.class)
+  @Import({
+          BaseCommerceServicesAutoConfiguration.class,
+  })
   static class LocalConfig {
 
     @Bean
@@ -106,7 +107,7 @@ public class LiveContextExternalChannelImplTest {
   private StoreContext storeContext;
 
   @Mock
-  private CommerceConnectionInitializer commerceConnectionInitializer;
+  private CommerceConnectionSupplier commerceConnectionSupplier;
 
   @Inject
   private ContentRepository contentRepository;
@@ -150,17 +151,17 @@ public class LiveContextExternalChannelImplTest {
     when(catalogService.findCategoryById(any(), any(StoreContext.class))).thenReturn(category);
 
     CommerceConnection commerceConnection = mock(CommerceConnection.class);
-    when(commerceConnection.getStoreContext()).thenReturn(storeContext);
+    when(commerceConnection.getInitialStoreContext()).thenReturn(storeContext);
     when(commerceConnection.getCatalogService()).thenReturn(catalogService);
 
-    when(commerceConnectionInitializer.findConnectionForSite(any(Site.class)))
+    when(commerceConnectionSupplier.findConnection(any(Site.class)))
             .thenReturn(Optional.of(commerceConnection));
 
     when(liveContextNavigationFactory.createNavigation(any(Category.class), any(Site.class)))
             .thenReturn(mock(LiveContextNavigation.class));
 
     testling.setLiveContextNavigationFactory(liveContextNavigationFactory);
-    testling.setCommerceConnectionInitializer(commerceConnectionInitializer);
+    testling.setCommerceConnectionSupplier(commerceConnectionSupplier);
   }
 
   @After

@@ -12,8 +12,6 @@ import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.tree.ExternalChannelContentTreeRelation;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
@@ -24,8 +22,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import static com.google.common.collect.Lists.newLinkedList;
 import static java.util.Collections.emptyList;
 
 /**
@@ -101,7 +100,7 @@ public class LiveContextNavigationTreeRelation implements TreeRelation<Linkable>
   @NonNull
   public List<Linkable> pathToRoot(final Linkable child) {
     if (child instanceof LiveContextNavigation) {
-      LinkedList<Linkable> result = newLinkedList();
+      LinkedList<Linkable> result = new LinkedList<>();
 
       LiveContextNavigation navigation = (LiveContextNavigation) child;
       final Site site = navigation.getSite();
@@ -114,16 +113,13 @@ public class LiveContextNavigationTreeRelation implements TreeRelation<Linkable>
       }
 
       List<Category> breadcrumb = category.getBreadcrumb();
-      result.addAll(Lists.transform(breadcrumb, new CategoryToLiveContextNavigationTransformer(site)));
+      result.addAll(breadcrumb.stream()
+              .map(new CategoryToLiveContextNavigationTransformer(site))
+              .collect(Collectors.toList()));
       LOGGER.trace("path to root for {}: {}", child, result);
       return result;
     }
     return emptyList();
-  }
-
-  @Override
-  public boolean isRoot(Linkable item) {
-    return getParentOf(item) == null;
   }
 
   @Override

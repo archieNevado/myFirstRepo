@@ -1,0 +1,21 @@
+{
+  "properties": [
+    {
+      "name": "livecontext.max-category-segments",
+      "type": "java.lang.Integer",
+      "description": "The maximum number of seo segments that should be used for product urls.",
+      "defaultValue": 2
+    },
+    {
+      "name": "livecontext.cookie.domain",
+      "type": "java.lang.String",
+      "description": "The cookie domain under which the cae should deliver fragments."
+    },
+    {
+      "name": "livecontext.slp.segmentPath",
+      "type": "java.lang.String",
+      "description": "Segment path root for search landing pages (SLPs). SLPs contents are resolved below this path..",
+      "defaultValue": "livecontext-search-landing-pages"
+    }
+  ]
+}

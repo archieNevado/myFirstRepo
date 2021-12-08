@@ -10,7 +10,6 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.objectserver.beans.ContentBean;
-import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -63,7 +62,7 @@ public class CaeAssetSearchServiceTest {
     doReturn(VALID_SITE_ID).when(testling).getSiteRootDocumentId(any(Site.class));
     doReturn(queryBean).when(testling).createQueryBean();
     //Do not test method getSubTypesOf here. It should have an extra test.
-    doReturn(ImmutableList.of(SEARCHABLE_DOCTYPE)).when(testling).getSubTypesOf(SEARCHABLE_DOCTYPE);
+    doReturn(List.of(SEARCHABLE_DOCTYPE)).when(testling).getSubTypesOf(SEARCHABLE_DOCTYPE);
   }
 
   @Test
@@ -128,7 +127,7 @@ public class CaeAssetSearchServiceTest {
     verify(queryBean).setSearchHandler(SearchQueryBean.SEARCH_HANDLER.DYNAMICCONTENT);
     verify(queryBean).setNotSearchableFlagIgnored(true);
     verify(queryBean).addFilter(eq(Condition.is(SearchConstants.FIELDS.NAVIGATION_PATHS, Value.exactly(ABSOLUTE_ESCAPED_VALID_SITE_ID))));
-    verify(queryBean).addFilter(eq(Condition.is(SearchConstants.FIELDS.DOCUMENTTYPE, Value.anyOf(ImmutableList.of(SEARCHABLE_DOCTYPE)))));
+    verify(queryBean).addFilter(eq(Condition.is(SearchConstants.FIELDS.DOCUMENTTYPE, Value.anyOf(List.of(SEARCHABLE_DOCTYPE)))));
     verify(queryBean).setQuery("commerceitems:\"" + externalId + "\"");
   }
 }

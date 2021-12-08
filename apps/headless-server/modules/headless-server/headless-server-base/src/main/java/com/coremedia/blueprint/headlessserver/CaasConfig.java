@@ -6,6 +6,7 @@ import com.coremedia.blueprint.base.caas.model.adapter.NavigationAdapterFactory;
 import com.coremedia.blueprint.base.caas.model.adapter.PageGridAdapterFactory;
 import com.coremedia.blueprint.base.caas.model.adapter.SettingsAdapterFactory;
 import com.coremedia.blueprint.base.caas.model.adapter.StructAdapterFactory;
+import com.coremedia.blueprint.base.caas.model.adapter.TaxonomyAdapterFactory;
 import com.coremedia.blueprint.base.caas.segments.CMLinkableSegmentStrategy;
 import com.coremedia.blueprint.base.links.ContentSegmentStrategy;
 import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
@@ -15,10 +16,16 @@ import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.blueprint.image.transformation.ImageTransformationConfiguration;
 import com.coremedia.caas.config.CaasGraphqlConfigurationProperties;
-import com.coremedia.caas.config.RemoteServiceConfiguration;
+import com.coremedia.caas.config.RemoteServiceConfigurationProperties;
 import com.coremedia.caas.config.StaxContextConfigurationProperties;
 import com.coremedia.caas.filter.InProductionFilterPredicate;
 import com.coremedia.caas.filter.ValidityDateFilterPredicate;
+import com.coremedia.caas.headless_server.plugin_support.PluginSupport;
+import com.coremedia.caas.headless_server.plugin_support.extensionpoints.CaasWiringFactory;
+import com.coremedia.caas.headless_server.plugin_support.extensionpoints.CopyToContextParameter;
+import com.coremedia.caas.headless_server.plugin_support.extensionpoints.FilterPredicate;
+import com.coremedia.caas.headless_server.plugin_support.extensionpoints.GrapQLLinkComposer;
+import com.coremedia.caas.headless_server.plugin_support.extensionpoints.UriLinkComposer;
 import com.coremedia.caas.link.ContentLink;
 import com.coremedia.caas.link.ContentLinkComposer;
 import com.coremedia.caas.link.GraphQLLink;
@@ -30,6 +37,8 @@ import com.coremedia.caas.model.ContentRoot;
 import com.coremedia.caas.model.adapter.CMGrammarRichTextAdapterFactory;
 import com.coremedia.caas.model.adapter.ContentBlobAdapter;
 import com.coremedia.caas.model.adapter.ContentBlobAdapterFactory;
+import com.coremedia.caas.model.adapter.ContentMarkupAdapter;
+import com.coremedia.caas.model.adapter.ContentMarkupAdapterFactory;
 import com.coremedia.caas.model.adapter.ExtendedLinkListAdapterFactory;
 import com.coremedia.caas.model.adapter.HtmlAdapterFactory;
 import com.coremedia.caas.model.adapter.LinkListAdapterFactory;
@@ -46,26 +55,27 @@ import com.coremedia.caas.model.mapper.FilteringModelMapper;
 import com.coremedia.caas.model.mapper.ModelMapper;
 import com.coremedia.caas.model.mapper.ModelMappingPropertyAccessor;
 import com.coremedia.caas.model.mapper.ModelMappingWiringFactory;
+import com.coremedia.caas.model.paging.PagingHelper;
 import com.coremedia.caas.richtext.RichtextTransformerReader;
 import com.coremedia.caas.richtext.RichtextTransformerRegistry;
 import com.coremedia.caas.richtext.config.loader.ClasspathConfigResourceLoader;
 import com.coremedia.caas.richtext.config.loader.ConfigResourceLoader;
 import com.coremedia.caas.schema.CoercingMap;
 import com.coremedia.caas.schema.CoercingRichTextTree;
+import com.coremedia.caas.schema.QueryArgumentName;
 import com.coremedia.caas.schema.SchemaParser;
 import com.coremedia.caas.service.cache.CacheInstances;
-import com.coremedia.caas.service.cache.CacheMapWrapper;
 import com.coremedia.caas.service.cache.Weighted;
 import com.coremedia.caas.spel.SpelDirectiveWiring;
 import com.coremedia.caas.spel.SpelEvaluationStrategy;
 import com.coremedia.caas.spel.SpelFunctions;
 import com.coremedia.caas.web.CaasPersistedQueryConfigurationProperties;
 import com.coremedia.caas.web.CaasServiceConfigurationProperties;
-import com.coremedia.caas.web.CaasWebConfig;
 import com.coremedia.caas.web.GraphiqlConfigurationProperties;
 import com.coremedia.caas.web.filter.HSTSResponseHeaderFilter;
 import com.coremedia.caas.web.link.ContentBlobLinkComposer;
 import com.coremedia.caas.web.link.FilenameBlobLinkComposer;
+import com.coremedia.caas.web.link.ContentMarkupLinkComposer;
 import com.coremedia.caas.web.link.ResponsiveMediaLinkComposer;
 import com.coremedia.caas.web.metadata.MetadataConfigurationProperties;
 import com.coremedia.caas.web.metadata.MetadataProvider;
@@ -80,7 +90,6 @@ import com.coremedia.caas.wiring.CapStructPropertyAccessor;
 import com.coremedia.caas.wiring.CompositeTypeNameResolver;
 import com.coremedia.caas.wiring.CompositeTypeNameResolverProvider;
 import com.coremedia.caas.wiring.ContentRepositoryWiringFactory;
-import com.coremedia.caas.wiring.ContextInstrumentation;
 import com.coremedia.caas.wiring.ConvertingDataFetcher;
 import com.coremedia.caas.wiring.DataFetcherMappingInstrumentation;
 import com.coremedia.caas.wiring.ExecutionTimeoutInstrumentation;
@@ -94,14 +103,14 @@ import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
+import com.coremedia.cap.content.spring.ContentConfigurationProperties;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.struct.Struct;
-import com.coremedia.cap.struct.StructService;
+import com.coremedia.cap.undoc.common.spring.CapRepositoriesConfiguration;
 import com.coremedia.link.CompositeLinkComposer;
 import com.coremedia.link.LinkComposer;
 import com.coremedia.link.uri.UriLinkBuilder;
 import com.coremedia.link.uri.UriLinkBuilderImpl;
-import com.coremedia.link.uri.UriLinkComposer;
 import com.coremedia.mimetype.MimeTypeService;
 import com.coremedia.objectserver.urlservice.UrlServiceRequestParams;
 import com.coremedia.springframework.customizer.Customize;
@@ -110,8 +119,7 @@ import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import com.coremedia.xml.Markup;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import graphql.ExecutionInput;
 import graphql.GraphQL;
@@ -133,12 +141,14 @@ import graphql.schema.idl.WiringFactory;
 import graphql.spring.web.servlet.ExecutionResultHandler;
 import graphql.spring.web.servlet.GraphQLInvocation;
 import org.apache.commons.io.IOUtils;
-import org.dataloader.BatchLoaderEnvironment;
 import org.dataloader.BatchLoaderWithContext;
+import org.dataloader.CacheMap;
 import org.dataloader.DataLoader;
+import org.dataloader.DataLoaderFactory;
 import org.dataloader.DataLoaderOptions;
 import org.dataloader.DataLoaderRegistry;
 import org.dataloader.Try;
+import org.dataloader.impl.DefaultCacheMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
@@ -151,7 +161,6 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.caffeine.CaffeineCache;
 import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
@@ -162,6 +171,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.expression.BeanResolver;
 import org.springframework.expression.PropertyAccessor;
 import org.springframework.expression.spel.support.ReflectivePropertyAccessor;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -183,6 +193,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -190,32 +201,35 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import static com.coremedia.caas.headless_server.plugin_support.PluginSupport.QUALIFIER_CAAS_COPY_TO_CONTEXT_PARAMETER;
+import static com.coremedia.caas.headless_server.plugin_support.PluginSupport.QUALIFIER_CAAS_FILTER_PREDICATE;
+import static com.coremedia.caas.headless_server.plugin_support.PluginSupport.QUALIFIER_CAAS_WIRING_FACTORY;
+import static com.coremedia.caas.headless_server.plugin_support.PluginSupport.QUALIFIER_PLUGIN_COPY_TO_CONTEXT_PARAMETERS;
+import static com.coremedia.caas.headless_server.plugin_support.PluginSupport.QUALIFIER_PLUGIN_FILTER_PREDICATE;
+import static com.coremedia.caas.headless_server.plugin_support.PluginSupport.QUALIFIER_PLUGIN_LINK_COMPOSERS_GRAPHQL;
+import static com.coremedia.caas.headless_server.plugin_support.PluginSupport.QUALIFIER_PLUGIN_LINK_COMPOSERS_URI;
+import static com.coremedia.caas.headless_server.plugin_support.PluginSupport.QUALIFIER_PLUGIN_WIRING_FACTORIES;
 import static com.coremedia.caas.web.CaasWebConfig.ATTRIBUTE_NAMES_TO_GQL_CONTEXT;
 import static com.coremedia.caas.web.CaasWebConfig.FORWARD_HEADER_MAP;
 import static java.lang.invoke.MethodHandles.lookup;
-import static java.util.Collections.emptyList;
 
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties({
         CaasServiceConfigurationProperties.class,
         CaasGraphqlConfigurationProperties.class,
         CaasPersistedQueryConfigurationProperties.class,
-        RemoteServiceConfiguration.class,
+        RemoteServiceConfigurationProperties.class,
         GraphiqlConfigurationProperties.class,
         StaxContextConfigurationProperties.class,
-        MetadataConfigurationProperties.class
+        MetadataConfigurationProperties.class,
+        ContentConfigurationProperties.class,
 })
 @EnableWebMvc
-@ComponentScan({
-        "com.coremedia.caas",
-        "com.coremedia.blueprint.base.caas",
-        "com.coremedia.cap.undoc.common.spring"
-})
 @ImportResource(value = {
         "classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml",
         "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
@@ -225,7 +239,8 @@ import static java.util.Collections.emptyList;
 }, reader = ResourceAwareXmlBeanDefinitionReader.class)
 @Import({
         ImageTransformationConfiguration.class,
-        CustomizerConfiguration.class
+        CustomizerConfiguration.class,
+        CapRepositoriesConfiguration.class,
 })
 public class CaasConfig implements WebMvcConfigurer {
 
@@ -239,17 +254,20 @@ public class CaasConfig implements WebMvcConfigurer {
   private final CaasPersistedQueryConfigurationProperties caasPersistedQueryConfigurationProperties;
   private final GraphiqlConfigurationProperties graphiqlConfigurationProperties;
   private final MetadataConfigurationProperties metadataConfigurationProperties;
+  private final ContentConfigurationProperties contentConfigurationProperties;
 
   public CaasConfig(CaasServiceConfigurationProperties caasServiceConfigurationProperties,
                     CaasGraphqlConfigurationProperties caasGraphqlConfigurationProperties,
                     CaasPersistedQueryConfigurationProperties caasPersistedQueryConfigurationProperties,
                     GraphiqlConfigurationProperties graphiqlConfigurationProperties,
-                    MetadataConfigurationProperties metadataConfigurationProperties) {
+                    MetadataConfigurationProperties metadataConfigurationProperties,
+                    ContentConfigurationProperties contentConfigurationProperties) {
     this.caasServiceConfigurationProperties = caasServiceConfigurationProperties;
     this.caasGraphqlConfigurationProperties = caasGraphqlConfigurationProperties;
     this.caasPersistedQueryConfigurationProperties = caasPersistedQueryConfigurationProperties;
     this.graphiqlConfigurationProperties = graphiqlConfigurationProperties;
     this.metadataConfigurationProperties = metadataConfigurationProperties;
+    this.contentConfigurationProperties = contentConfigurationProperties;
   }
 
   @Override
@@ -260,7 +278,7 @@ public class CaasConfig implements WebMvcConfigurer {
   @Override
   public void addCorsMappings(CorsRegistry registry) {
     registry.addMapping("/**")
-            .allowedOrigins("*")
+            .allowedOriginPatterns("*")
             .allowedMethods("GET", "POST", "OPTIONS")
             .allowCredentials(true)
             .maxAge(CORS_RESPONSE_MAX_AGE);
@@ -272,11 +290,6 @@ public class CaasConfig implements WebMvcConfigurer {
     List<String> resourceLocations = new ArrayList<>();
     if (graphiqlConfigurationProperties.isEnabled()) {
       resources.add("/graphiql/static/**");
-    }
-    if (caasServiceConfigurationProperties.getSwagger().isEnabled()) {
-      resources.add("swagger-ui.html");
-      resources.add("/webjars/**");
-      resourceLocations.add("classpath:/META-INF/resources/webjars/");
     }
     if (caasServiceConfigurationProperties.isPreview()) {
       resourceLocations.add("classpath:/static/");
@@ -313,34 +326,55 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean("cacheManager")
-  @SuppressWarnings("unchecked")
   public CacheManager cacheManager() {
-    ImmutableList.Builder<org.springframework.cache.Cache> builder = ImmutableList.builder();
-    caasServiceConfigurationProperties.getCacheSpecs().forEach((cacheName, cacheSpec) -> {
-      com.github.benmanes.caffeine.cache.Cache cache = Caffeine.from(cacheSpec)
-              .weigher((key, value) -> {
-                if (value instanceof Weighted) {
-                  return ((Weighted) value).getWeight();
-                }
-                return String.valueOf(value).length();
-              })
-              .build();
-      builder.add(new CaffeineCache(cacheName, cache));
-    });
+    List<org.springframework.cache.Cache> list = caasServiceConfigurationProperties.getCacheSpecs().entrySet().stream()
+            .map(entry -> createCache(entry.getKey(), entry.getValue()))
+            .collect(Collectors.toUnmodifiableList());
     SimpleCacheManager cacheManager = new SimpleCacheManager();
-    cacheManager.setCaches(builder.build());
+    cacheManager.setCaches(list);
     return cacheManager;
   }
 
-  @Bean
-  public LinkComposer<Object, GraphQLLink> graphQlLinkComposer(List<LinkComposer<?, ? extends GraphQLLink>> linkComposers) {
-    return new CompositeLinkComposer<>(linkComposers, emptyList());
+  @NonNull
+  private CaffeineCache createCache(String cacheName, String cacheSpec) {
+    com.github.benmanes.caffeine.cache.Cache<Object, Object> cache = Caffeine.from(cacheSpec)
+            .weigher((key, value) -> {
+              if (value instanceof Weighted) {
+                return ((Weighted) value).getWeight();
+              }
+              return String.valueOf(value).length();
+            })
+            .build();
+    return new CaffeineCache(cacheName, cache);
   }
 
   @Bean
-  public LinkComposer<Object, String> uriLinkComposer(List<LinkComposer<?, ? extends UriLinkBuilder>> linkComposers) {
-    return new UriLinkComposer<>(
-            new CompositeLinkComposer<>(linkComposers, emptyList()));
+  public LinkComposer<Object, GraphQLLink> graphQlLinkComposer(List<LinkComposer<?, ? extends GraphQLLink>> linkComposers,
+                                                               @Qualifier(QUALIFIER_PLUGIN_LINK_COMPOSERS_GRAPHQL) List<GrapQLLinkComposer<?>> pluginLinkComposers) {
+    List<LinkComposer<?, ? extends GraphQLLink>> mergedList = Stream.concat(linkComposers.stream(),
+            pluginLinkComposers.stream()
+                    .map(lc -> (LinkComposer<?, ? extends GraphQLLink>) lc))
+            .collect(Collectors.toList());
+
+    return new CompositeLinkComposer<>(mergedList, List.of());
+  }
+
+  @Bean
+  public LinkComposer<Object, String> uriLinkComposer(List<LinkComposer<?, ? extends UriLinkBuilder>> linkComposers,
+                                                      @Qualifier(QUALIFIER_PLUGIN_LINK_COMPOSERS_URI) List<UriLinkComposer<?>> pluginLinkComposers) {
+
+    List<LinkComposer<?, ? extends UriLinkBuilder>> mergedList = Stream.concat(linkComposers.stream(),
+                    pluginLinkComposers.stream()
+                            .map(lc -> (LinkComposer<?, ? extends UriLinkBuilder>) lc))
+            .collect(Collectors.toList());
+
+    return new com.coremedia.link.uri.UriLinkComposer(
+            new CompositeLinkComposer<>(mergedList, List.of()));
+  }
+
+  @Bean
+  public LinkComposer<ContentMarkupAdapter, UriLinkBuilder> contentMarkupLinkComposer() {
+    return contentMarkupAdapter -> new ContentMarkupLinkComposer().apply(contentMarkupAdapter);
   }
 
   @Bean
@@ -419,6 +453,7 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
+  @Qualifier(QUALIFIER_CAAS_WIRING_FACTORY)
   public TypeNameResolverWiringFactory typeNameResolverWiringFactory(
           @Qualifier("compositeProvidesTypeNameResolver") ProvidesTypeNameResolver providesTypeNameResolver,
           @Qualifier("compositeTypeNameResolver") TypeNameResolver<Object> typeNameResolver) {
@@ -437,19 +472,24 @@ public class CaasConfig implements WebMvcConfigurer {
 
   @Bean
   public LinkListAdapterFactory teaserMediaLinkListAdapter(@Qualifier("teaserTargetsAdapter") ExtendedLinkListAdapterFactory teaserTargetsAdapter) {
-    return new LinkListAdapterFactory("pictures",
-            content -> teaserTargetsAdapter.to(content).getTargets().stream()
-                    .flatMap(target -> target.getLinks("pictures").stream()
-                    ));
+    return new LinkListAdapterFactory(
+            "pictures",
+            (content, dataFetchingEnvironment) -> teaserTargetsAdapter.to(content)
+                    .getTargets()
+                    .stream()
+                    .flatMap(target -> target.getLinks("pictures").stream()));
   }
 
   @Bean
   public LinkListAdapterFactory channelMediaLinkListAdapter(@Qualifier("pageGridAdapter") PageGridAdapterFactory pageGridAdapter,
                                                             @Qualifier("mediaLinkListAdapter") LinkListAdapterFactory mediaLinkListAdapter,
                                                             @Qualifier("teaserMediaLinkListAdapter") LinkListAdapterFactory teaserMediaLinkListAdapter) {
-    return new LinkListAdapterFactory("pictures",
-            content -> pageGridAdapter.to(content, "placement").getPlacements(null, Arrays.asList("header", "footer")).stream()
-                    .flatMap(placement -> placement.getItems().stream())
+    return new LinkListAdapterFactory(
+            "pictures",
+            (content, dataFetchingEnvironment) -> pageGridAdapter.to(content, "placement", dataFetchingEnvironment)
+                    .getPlacements(null, Arrays.asList("header", "footer"))
+                    .stream()
+                    .flatMap(placement -> placement.getItems(dataFetchingEnvironment).stream())
                     .map(teasable -> {
                       if (teasable.getType().isSubtypeOf("CMTeaser")) {
                         return teaserMediaLinkListAdapter.to(teasable, "CMMedia").first();
@@ -488,13 +528,25 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
+  public TaxonomyAdapterFactory taxonomyAdapter(ContentRepository contentRepository, SitesService sitesService) {
+    return new TaxonomyAdapterFactory(contentRepository, sitesService,
+            contentConfigurationProperties.getGlobalConfigurationPath() + "/Taxonomies",
+            contentConfigurationProperties.getSiteConfigurationPath() + "/Taxonomies");
+  }
+
+  @Bean
+  public ContentMarkupAdapterFactory contentMarkupAdapter() {
+    return new ContentMarkupAdapterFactory();
+  }
+
+  @Bean
   public ContentBlobAdapterFactory contentBlobAdapter() {
     return new ContentBlobAdapterFactory();
   }
 
   @Bean
-  public RemoteServiceAdapterFactory remoteServiceAdapter(RemoteServiceConfiguration remoteServiceConfiguration, ObjectMapper objectMapper) {
-    return new RemoteServiceAdapterFactory(remoteServiceConfiguration, objectMapper);
+  public RemoteServiceAdapterFactory remoteServiceAdapter(RemoteServiceConfigurationProperties remoteServiceConfigurationProperties, ObjectMapper objectMapper) {
+    return new RemoteServiceAdapterFactory(remoteServiceConfigurationProperties, objectMapper);
   }
 
   @Bean
@@ -539,6 +591,7 @@ public class CaasConfig implements WebMvcConfigurer {
     return gregorianCalendar -> Optional.of(gregorianCalendar.toZonedDateTime());
   }
 
+
   @Bean
   public ConfigResourceLoader richTextConfigResourceLoader() {
     return new ClasspathConfigResourceLoader("/");
@@ -570,15 +623,18 @@ public class CaasConfig implements WebMvcConfigurer {
 
   @Bean
   @Qualifier("propertyAccessors")
-  public List<PropertyAccessor> propertyAccessors(List<PropertyAccessor> propertyAccessors, ModelMapper<Object, Object> modelMapper) {
+  public List<PropertyAccessor> propertyAccessors(List<PropertyAccessor> propertyAccessors, @Qualifier("rootModelMapper") FilteringModelMapper modelMapper) {
     return propertyAccessors.stream()
             .map(propertyAccessor -> new ModelMappingPropertyAccessor(propertyAccessor, modelMapper))
             .collect(Collectors.toList());
   }
 
   @Bean
-  public SpelEvaluationStrategy spelEvaluationStrategy(BeanFactory beanFactory, @Qualifier("propertyAccessors") List<PropertyAccessor> propertyAccessors) {
-    return new SpelEvaluationStrategy(beanFactory, propertyAccessors);
+  public SpelEvaluationStrategy spelEvaluationStrategy(
+          BeanFactory beanFactory,
+          @Qualifier("propertyAccessors") List<PropertyAccessor> propertyAccessors,
+          @Qualifier(PluginSupport.QUALIFIER_PLUGIN_SCHEMA_ADAPTER_RESOLVER) BeanResolver beanResolver) {
+    return new SpelEvaluationStrategy(beanFactory, propertyAccessors, beanResolver);
   }
 
   @Bean
@@ -623,31 +679,45 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
+  @Qualifier(QUALIFIER_CAAS_WIRING_FACTORY)
   public ContentRepositoryWiringFactory contentRepositoryWiringFactory(Map<String, GraphQLScalarType> builtinScalars,
+                                                                       @Qualifier(PluginSupport.QUALIFIER_PLUGIN_CUSTOM_SCALARS) Map<String, GraphQLScalarType> pluginScalars,
                                                                        ContentRepository repository) {
-    return new ContentRepositoryWiringFactory(repository, builtinScalars);
+    Map<String, GraphQLScalarType> map = new HashMap<>();
+    map.putAll(builtinScalars);
+    map.putAll(pluginScalars);
+    return new ContentRepositoryWiringFactory(repository, map);
   }
 
   @Bean
-  public RemoteLinkWiringFactory remoteLinkWiringFactory() {
-    return new RemoteLinkWiringFactory();
+  @Qualifier(QUALIFIER_CAAS_WIRING_FACTORY)
+  public RemoteLinkWiringFactory remoteLinkWiringFactory(@Qualifier("remoteLinkDataLoader") DataLoader<String, Try<String>> remoteLinkDataLoader) {
+    return new RemoteLinkWiringFactory(remoteLinkDataLoader);
   }
 
   @Bean
-  @Qualifier("filterPredicate")
-  public Predicate<Object> validityDateFilterPredicate() {
+  @Qualifier(QUALIFIER_CAAS_FILTER_PREDICATE)
+  public FilterPredicate<Object> validityDateFilterPredicate() {
     return new ValidityDateFilterPredicate();
   }
 
   @Bean
-  @Qualifier("filterPredicate")
-  public Predicate<Object> inProductionFilterPredicate() {
+  @Qualifier(QUALIFIER_CAAS_FILTER_PREDICATE)
+  public FilterPredicate<Object> inProductionFilterPredicate() {
     return new InProductionFilterPredicate();
   }
 
   @Bean
-  public ModelMapper<Object, Object> rootModelMapper(List<ModelMapper<?, ?>> modelMappers, @Qualifier("filterPredicate") List<Predicate<Object>> predicates) {
-    return new FilteringModelMapper(new CompositeModelMapper<>(modelMappers), predicates);
+  public List<FilterPredicate<Object>> caasFilterPredicates(
+          @Qualifier(QUALIFIER_CAAS_FILTER_PREDICATE) List<FilterPredicate<Object>> predicates,
+          @Qualifier(QUALIFIER_PLUGIN_FILTER_PREDICATE) List<FilterPredicate<Object>> pluginFilterPredicates
+  ) {
+    return Stream.concat(predicates.stream(), pluginFilterPredicates.stream()).collect(Collectors.toList());
+  }
+
+  @Bean
+  public FilteringModelMapper rootModelMapper(List<ModelMapper<?, ?>> modelMappers, @Qualifier("caasFilterPredicates") List<FilterPredicate<Object>> caasFilterPredicates) {
+    return new FilteringModelMapper(new CompositeModelMapper<>(modelMappers), caasFilterPredicates);
   }
 
   @Bean
@@ -670,11 +740,34 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
+  public List<CopyToContextParameter<Object, Object>> copyToContextParameterList(
+          @Qualifier(QUALIFIER_CAAS_COPY_TO_CONTEXT_PARAMETER) List<CopyToContextParameter<?, ?>> caasCopyToContextParameter,
+          @Qualifier(QUALIFIER_PLUGIN_COPY_TO_CONTEXT_PARAMETERS) List<CopyToContextParameter<Object, Object>> pluginCopyToContextParameters
+  ) {
+    List<CopyToContextParameter<Object, Object>> copyToContextParameterList = new ArrayList<>();
+    copyToContextParameterList.addAll(caasCopyToContextParameter.stream()
+            .map(ctcp -> (CopyToContextParameter<Object, Object>) ctcp)
+            .collect(Collectors.toList()));
+    copyToContextParameterList.addAll(pluginCopyToContextParameters);
+    return copyToContextParameterList;
+  }
+
+  @Bean
   public GraphQLInvocation graphQLInvocation(GraphQL graphQL,
                                              @Qualifier("queryRoot") Map<String, Object> queryRoots,
-                                             DataLoaderRegistry dataLoaderRegistry, CaasServiceConfigurationProperties caasServiceConfigurationProperties,
-                                             @Qualifier(ATTRIBUTE_NAMES_TO_GQL_CONTEXT) Set<String> requestAttributeNamesToGraphqlContext) {
-    return new GraphQLInvocationImpl(graphQL, renameQueryRootsWithOptionalPrefix(queryRoots), dataLoaderRegistry, caasServiceConfigurationProperties, requestAttributeNamesToGraphqlContext);
+                                             DataLoaderRegistry dataLoaderRegistry,
+                                             CaasServiceConfigurationProperties caasServiceConfigurationProperties,
+                                             @Qualifier(ATTRIBUTE_NAMES_TO_GQL_CONTEXT) Set<String> requestAttributeNamesToGraphqlContext,
+                                             @Qualifier("copyToContextParameterList") List<CopyToContextParameter<Object, Object>> copyToContextParameterList
+  ) {
+    return new GraphQLInvocationImpl(
+            graphQL,
+            renameQueryRootsWithOptionalPrefix(queryRoots),
+            dataLoaderRegistry,
+            caasServiceConfigurationProperties,
+            requestAttributeNamesToGraphqlContext,
+            copyToContextParameterList
+    );
   }
 
   @Bean
@@ -703,13 +796,8 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public ContextInstrumentation contextInstrumentation() {
-    return new ContextInstrumentation();
-  }
-
-  @Bean
   public DataFetcherMappingInstrumentation dataFetchingInstrumentation(SpelEvaluationStrategy spelEvaluationStrategy,
-                                                                       @Qualifier("filterPredicate") List<Predicate<Object>> filterPredicates,
+                                                                       @Qualifier("caasFilterPredicates") List<FilterPredicate<Object>> caasFilterPredicates,
                                                                        @Qualifier("graphQlConversionService") ConversionService conversionService,
                                                                        @Qualifier("conversionTypeMap") Map<String, Class<?>> conversionTypeMap,
                                                                        SitesService sitesService
@@ -718,7 +806,7 @@ public class CaasConfig implements WebMvcConfigurer {
             new ConvertingDataFetcher(
                     new FilteringDataFetcher(
                             new ViewBySiteFilterDataFetcher(dataFetcher, sitesService, caasServiceConfigurationProperties),
-                            filterPredicates
+                            caasFilterPredicates
                     ),
                     conversionService,
                     conversionTypeMap
@@ -787,11 +875,19 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
+  @Qualifier("caasWiringFactories")
+  public List<WiringFactory> caasWiringFactories(
+          @Qualifier(QUALIFIER_CAAS_WIRING_FACTORY) List<WiringFactory> wiringFactories,
+          @Qualifier(QUALIFIER_PLUGIN_WIRING_FACTORIES) List<CaasWiringFactory> pluginWiringFactories
+  ) {
+    return Stream.concat(wiringFactories.stream(), pluginWiringFactories.stream()).collect(Collectors.toList());
+  }
+
+  @Bean
   public GraphQLSchema graphQLSchema(Map<String, SchemaDirectiveWiring> directiveWirings,
                                      TypeDefinitionRegistry typeRegistry,
-                                     @Qualifier("rootModelMapper") ModelMapper<Object, Object> modelMapper,
-                                     List<WiringFactory> wiringFactories)
-          throws IOException {
+                                     @Qualifier("rootModelMapper") FilteringModelMapper modelMapper,
+                                     @Qualifier("caasWiringFactories") List<WiringFactory> wiringFactories) {
     WiringFactory wiringFactory = new ModelMappingWiringFactory(modelMapper, wiringFactories);
     RuntimeWiring.Builder builder = RuntimeWiring.newRuntimeWiring()
             .wiringFactory(wiringFactory);
@@ -831,16 +927,16 @@ public class CaasConfig implements WebMvcConfigurer {
   public Map<String, Class<?>> conversionTypeMap() {
 
     /* add corresponding custom scalar types from content-schema.graphql here */
-    return new ImmutableMap.Builder<String, Class<?>>()
-            .put("MapOfString", Map.class)
-            .put("MapOfInt", Map.class)
-            .put("MapOfLong", Map.class)
-            .put("MapOfFloat", Map.class)
-            .put("MapOfBoolean", Map.class)
-            .put("RichTextTree", Map.class)
-            .put("JSON", Map.class)
-            .put("BigDecimal", BigDecimal.class)
-            .build();
+    return Map.of(
+            "MapOfString", Map.class,
+            "MapOfInt", Map.class,
+            "MapOfLong", Map.class,
+            "MapOfFloat", Map.class,
+            "MapOfBoolean", Map.class,
+            "RichTextTree", Map.class,
+            "JSON", Map.class,
+            "BigDecimal", BigDecimal.class,
+            "Long", Long.class);
   }
 
   @Bean
@@ -883,15 +979,20 @@ public class CaasConfig implements WebMvcConfigurer {
     return ExtendedScalars.GraphQLBigDecimal;
   }
 
+  @Bean
+  public GraphQLScalarType Long() {
+    return ExtendedScalars.GraphQLLong;
+  }
+
   private Map<String, Object> renameQueryRootsWithOptionalPrefix(Map<String, Object> queryRoots) {
     Map<String, Object> renamedQueryRoots = new LinkedHashMap<>(queryRoots.size());
     for (var rootEntry : queryRoots.entrySet()) {
       String name = rootEntry.getKey();
       if (name.startsWith(OPTIONAL_QUERY_ROOT_BEAN_NAME_PREFIX)) {
         name = name.substring(OPTIONAL_QUERY_ROOT_BEAN_NAME_PREFIX.length());
-        LOG.info("Adding GraphQL query root {}. (renamed from {})", name, rootEntry.getKey());
+        LOG.info("Adding GraphQL query root '{}'. (renamed from {})", name, rootEntry.getKey());
       } else {
-        LOG.info("Adding GraphQL query root {}.", name);
+        LOG.info("Adding GraphQL query root '{}'.", name);
       }
       renamedQueryRoots.put(name, rootEntry.getValue());
     }
@@ -905,36 +1006,40 @@ public class CaasConfig implements WebMvcConfigurer {
     return registry;
   }
 
-  @Bean
-  public DataLoader<String, Try<String>> remoteLinkDataLoader(RemoteServiceAdapterFactory rsa, CacheManager cacheManager) {
 
-    BatchLoaderWithContext<String, Try<String>> batchLoader = new BatchLoaderWithContext<String, Try<String>>() {
-      @Override
-      public CompletionStage<List<Try<String>>> load(List<String> keys, BatchLoaderEnvironment environment) {
-
-        environment.getKeyContexts().put(FORWARD_HEADER_MAP, CaasWebConfig.getForwardHeaderMap());
-        return CompletableFuture.supplyAsync(() -> {
-          return rsa.to().formatLinks(keys.stream().map(key -> {
-            return UrlServiceRequestParams.create(
-                    key,
-                    (String) ((Map) environment.getKeyContexts().get(key)).get("siteId"),
-                    (String) ((Map) environment.getKeyContexts().get(key)).get("context")
-            );
-          }).collect(Collectors.toList()), (Map<String, String>) environment.getKeyContexts().get(FORWARD_HEADER_MAP));
-        });
-
-      }
-    };
-
-    org.springframework.cache.Cache remoteLinkCache = cacheManager.getCache(CacheInstances.REMOTE_LINKS);
-    DataLoaderOptions options;
-    if (remoteLinkCache != null) {
-      options = DataLoaderOptions.newOptions().setCacheMap(new CacheMapWrapper(remoteLinkCache));
-    } else {
-      options = DataLoaderOptions.newOptions().setCachingEnabled(false);
-      LOG.warn("No configuration for caffeine cache '{}' found. Caching disabled!", CacheInstances.REMOTE_LINKS);
+  @Bean("remoteLinkCacheMap")
+  public CacheMap<Object, Object> remoteLinkCacheMap(CacheManager cacheManager, @Qualifier("springCacheMapFactory") Function<Cache, CacheMap<Object, Object>> springCacheMapFactory) {
+    Optional<org.springframework.cache.Cache> remoteLinkCacheOptional = Optional.ofNullable(cacheManager.getCache(CacheInstances.REMOTE_LINKS));
+    if (remoteLinkCacheOptional.isEmpty()) {
+      LOG.warn("No configuration for cache '{}' found, creating DefaultCacheMap instead! Check application property 'caas.cacheSpecs'.", CacheInstances.REMOTE_LINKS);
     }
-    return DataLoader.newDataLoader(batchLoader, options);
+    return remoteLinkCacheOptional.map(springCacheMapFactory).orElseGet(DefaultCacheMap::new);
   }
 
+  @Bean
+  public DataLoader<String, Try<String>> remoteLinkDataLoader(RemoteServiceAdapterFactory rsa, @Qualifier("remoteLinkCacheMap") CacheMap<Object, Object> remoteLinkCacheMap) {
+    BatchLoaderWithContext<String, Try<String>> batchLoader = (keys, environment) -> {
+      AtomicReference<Map<String, String>> fwdHeaderMapRef = new AtomicReference<>();
+      List<UrlServiceRequestParams> requestParams = keys
+              .stream()
+              .map(key -> {
+                Map<String, Object> keyContext = (Map<String, Object>) environment.getKeyContexts().get(key);
+                fwdHeaderMapRef.set((Map<String, String>) keyContext.get(FORWARD_HEADER_MAP));
+                return UrlServiceRequestParams.create(
+                        key,
+                        (String) keyContext.get(QueryArgumentName.SITE_ID.toString()),
+                        (String) keyContext.get(QueryArgumentName.CONTEXT.toString())
+                );
+              }).collect(Collectors.toList());
+      Map<String, String> fwdHeaderMap = fwdHeaderMapRef.get() != null ? fwdHeaderMapRef.get() : new HashMap<>();
+      return CompletableFuture.supplyAsync(() -> rsa.to().formatLinks(requestParams, fwdHeaderMap));
+    };
+    DataLoaderOptions options = DataLoaderOptions.newOptions().setCacheMap(remoteLinkCacheMap);
+    return DataLoaderFactory.newDataLoader(batchLoader, options);
+  }
+
+  @Bean
+  public PagingHelper pagingHelper() {
+    return new PagingHelper();
+  }
 }

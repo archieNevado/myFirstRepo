@@ -12,11 +12,10 @@ import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.mimetype.MimeTypeService;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
-import com.google.common.collect.ImmutableList;
-import org.springframework.beans.factory.annotation.Required;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Required;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,14 +39,11 @@ public class DownloadPortalFactory {
   // package private access for testing purposes
   static final int ASSETS_PER_PAGE_DEFAULT = 12;
 
-  private static final Comparator<AMAssetRendition> ASSET_RENDITION_COMPARATOR = new Comparator<AMAssetRendition>() {
-    @Override
-    public int compare(AMAssetRendition rendition1, AMAssetRendition rendition2) {
-      if (rendition1.getAsset().equals(rendition2.getAsset())) {
-        return rendition1.getName().compareTo(rendition2.getName());
-      }
-      return rendition1.getAsset().getTitle().compareTo(rendition2.getAsset().getTitle());
+  private static final Comparator<AMAssetRendition> ASSET_RENDITION_COMPARATOR = (rendition1, rendition2) -> {
+    if (rendition1.getAsset().equals(rendition2.getAsset())) {
+      return rendition1.getName().compareTo(rendition2.getName());
     }
+    return rendition1.getAsset().getTitle().compareTo(rendition2.getAsset().getTitle());
   };
 
   private ContentRepository contentRepository;
@@ -188,7 +184,7 @@ public class DownloadPortalFactory {
    */
   @Nullable
   private List<String> getMetadataWhiteList(@NonNull CMChannel navigation) {
-    ImmutableList<String> metadataHierarchy = ImmutableList.of(AMSettingKeys.ASSET_MANAGEMENT,
+    List<String> metadataHierarchy = List.of(AMSettingKeys.ASSET_MANAGEMENT,
             AMSettingKeys.ASSET_MANAGEMENT_DOWNLOAD_PORTAL,
             AMSettingKeys.ASSET_MANAGEMENT_DOWNLOAD_PORTAL_METADATA_PROPERTIES);
     //noinspection unchecked
@@ -204,7 +200,7 @@ public class DownloadPortalFactory {
    */
   @NonNull
   private Integer getAssetsPerPage(@NonNull CMChannel navigation) {
-    ImmutableList<String> assetsPerPageInSettings = ImmutableList.of(AMSettingKeys.ASSET_MANAGEMENT,
+    List<String> assetsPerPageInSettings = List.of(AMSettingKeys.ASSET_MANAGEMENT,
             AMSettingKeys.ASSET_MANAGEMENT_DOWNLOAD_PORTAL,
             AMSettingKeys.ASSET_MANAGEMENT_DOWNLOAD_PORTAL_ASSETS_PER_PAGE);
     Integer assetsPerPage = settingsService.nestedSetting(assetsPerPageInSettings, Integer.class, navigation);

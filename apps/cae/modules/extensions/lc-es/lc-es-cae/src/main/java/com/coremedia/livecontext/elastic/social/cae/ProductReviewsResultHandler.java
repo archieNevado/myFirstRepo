@@ -80,7 +80,7 @@ public class ProductReviewsResultHandler extends AbstractReviewsResultHandler {
                                  @RequestParam(value = PRODUCT_ID, required = true) String productId,
                                  @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,
                                  HttpServletRequest request) {
-    return handleGetReviews(SiteHelper.getSiteFromRequest(request), contextId, productId, view);
+    return handleGetReviews(contextId, productId, view, request);
   }
 
   @PostMapping(value = DYNAMIC_PATTERN_PRODUCT_REVIEWS)
@@ -130,7 +130,7 @@ public class ProductReviewsResultHandler extends AbstractReviewsResultHandler {
         if (StringUtils.isNotBlank(productId)) {
           Site site = SiteHelper.getSiteFromRequest(request);
           if (site != null) {
-            Product product = getProduct(productId, site, catalogId.orElse(null));
+            Product product = getProduct(request, productId, site, catalogId.orElse(null));
             if (product == null) {
               LOG.warn("Product with ID '{}' for Site '{}' could not be resolved", productId, site);
               throw new NotFoundException(
@@ -151,24 +151,25 @@ public class ProductReviewsResultHandler extends AbstractReviewsResultHandler {
   }
 
   @Override
-  protected Object getContributionTarget(String productId, Site site) {
+  protected Object getContributionTarget(String productId, HttpServletRequest request) {
     CommerceId commerceId = parseCommerceIdOrThrow(productId);
-
-    StoreContext storeContext = CurrentStoreContext.get();
+    StoreContext storeContext = CurrentStoreContext.get(request);
     CommerceConnection connection = storeContext.getConnection();
 
     Product product = connection.getCatalogService().findProductById(commerceId, storeContext);
     if (product == null) {
+      var site = SiteHelper.getSiteFromRequest(request);
       LOG.warn("Product with ID '{}' for Site '{}' could not be resolved", productId, site);
+      var siteId = SiteHelper.findSite(request).map(Site::getId).orElse(null);
       throw new NotFoundException(
-              "Product with ID " + productId + " for Site with ID " + site.getId() + " + could not be resolved");
+              "Product with ID " + productId + " for Site with ID " + siteId + " + could not be resolved");
     }
 
     return product;
   }
 
-  private Product getProduct(@NonNull String productTechId, @NonNull Site site, @Nullable CatalogId catalogId) {
-    StoreContext storeContext = CurrentStoreContext.get();
+  private Product getProduct(@NonNull HttpServletRequest request, @NonNull String productTechId, @NonNull Site site, @Nullable CatalogId catalogId) {
+    StoreContext storeContext = CurrentStoreContext.get(request);
     CommerceConnection connection = storeContext.getConnection();
 
     CatalogAlias catalogAlias = Optional.ofNullable(catalogId)

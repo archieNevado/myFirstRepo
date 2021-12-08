@@ -10,7 +10,6 @@ import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
-import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -124,7 +123,7 @@ public class DownloadPortalFactoryTest {
 
   @Test
   public void testCreateCategoryOverview() {
-    ImmutableList<AMTaxonomy> subCategories = ImmutableList.of(subTaxonomy1);
+    List<AMTaxonomy> subCategories = List.of(subTaxonomy1);
     doReturn(subCategories).when(downloadPortalSearchService).getSubCategories(category);
 
     CategoryOverview categoryOverview = factory.createCategoryOverview(category);

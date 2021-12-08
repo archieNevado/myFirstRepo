@@ -24,7 +24,7 @@ import java.util.Map;
  * {@link #hasBlockLevel(String tag, org.xml.sax.Attributes)} method matches your
  * project templates.
  */
-public class LinkEmbedFilter extends PDivUntanglingFilter {
+public class LinkEmbedFilter extends EmbeddingFilter {
   private static final Logger LOG = LoggerFactory.getLogger(LinkEmbedFilter.class);
 
   private static final String LINK_EMBED_ROLE = "linkEmbedRole";
@@ -44,21 +44,11 @@ public class LinkEmbedFilter extends PDivUntanglingFilter {
   private Map<String, String> mappings;
 
 
-  // --- PDivUntanglingFilter ---------------------------------------
+  // --- EmbeddingFilter ---------------------------------------
 
   @Override
   protected boolean mustEmbed(String tag, Attributes atts) {
     return A_ELEMENT_NAME.equalsIgnoreCase(tag) && mustEmbedLink(atts);
-  }
-
-  /**
-   * This implementation matches the Blueprint's default asRichtextEmbed
-   * templates.  If you change the asRichtextEmbed template family, you must
-   * adjust this method accordingly.
-   */
-  @Override
-  protected boolean hasBlockLevel(String tag, Attributes atts) {
-    return true;
   }
 
   @Override

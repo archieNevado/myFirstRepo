@@ -14,14 +14,9 @@
     <property name="contentBeanFactory" ref="contentBeanFactory"/>
   </bean>
 
-  <bean id="commerceContractIdTestContextExtractor" class="com.coremedia.livecontext.p13n.preview.CommerceContractIdTestContextExtractor">
-    <property name="contentBeanFactory" ref="contentBeanFactory"/>
-  </bean>
-
   <customize:append id="addTestContextExtractors" bean="testContextExtractors" order="20001">
     <list>
       <ref bean="commerceSegmentTestContextExtractor"/>
-      <ref bean="commerceContractIdTestContextExtractor"/>
     </list>
   </customize:append>
 

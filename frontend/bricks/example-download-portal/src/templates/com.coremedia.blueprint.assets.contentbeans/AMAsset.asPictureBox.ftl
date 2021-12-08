@@ -18,7 +18,7 @@
 <div class="am-picture-box ${emptyModifierClass} ${scaleModifierClass} ${classBox}"<@preview.metadata data=metadata + ["properties.thumbnail"] />>
   <#if self.thumbnail?has_content>
     <#assign imageSrc=cm.getLink(self.thumbnail)!"" />
-    <img src="${imageSrc}" alt="${(self.title)!""}" class="am-picture-box__picture ${classImage}">
+    <img class="am-picture-box__picture ${classImage}" src="${imageSrc}" loading="lazy" alt="${(self.title)!""}">
   <#else>
     <div class="am-picture-box__picture ${classImage}"></div>
   </#if>

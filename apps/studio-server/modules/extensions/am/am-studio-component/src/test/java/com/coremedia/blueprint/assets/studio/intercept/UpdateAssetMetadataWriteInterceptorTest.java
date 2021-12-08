@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = UpdateAssetMetadataWriteInterceptorTest.LocalConfig.class)

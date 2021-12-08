@@ -3,7 +3,6 @@ package com.coremedia.blueprint.caefeeder;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
-import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,7 +31,7 @@ public class NavigationPathPropertyConverterTest {
 
   @Test
   public void testConvertNull() {
-    assertEquals(ImmutableList.of(), testling.convertValue(null));
+    assertEquals(List.of(), testling.convertValue(null));
   }
 
   @Test
@@ -47,9 +46,9 @@ public class NavigationPathPropertyConverterTest {
     when(bean.getContent()).thenReturn(content);
 
     Content root = content(40);
-    when(treePathKeyFactory.getPath(content)).thenReturn(ImmutableList.of(root, content));
+    when(treePathKeyFactory.getPath(content)).thenReturn(List.of(root, content));
 
-    assertEquals(ImmutableList.of("/40/42"), testling.convertValue(ImmutableList.of(bean)));
+    assertEquals(List.of("/40/42"), testling.convertValue(List.of(bean)));
   }
 
   private static Content content(int id) {

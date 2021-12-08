@@ -3,7 +3,6 @@ package com.coremedia.blueprint.elastic.social.cae.controller;
 import com.coremedia.blueprint.elastic.social.cae.ElasticSocialService;
 import com.coremedia.elastic.social.api.ContributionType;
 import com.coremedia.elastic.social.api.users.CommunityUser;
-import com.google.common.collect.ImmutableList;
 
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +29,7 @@ public abstract class ListContributionResult<T> extends ContributionResult {
 
   public List<T> getContributions() {
     ensureLoaded();
-    return contributions == null ? Collections.<T>emptyList() : ImmutableList.copyOf(contributions);
+    return contributions == null ? Collections.<T>emptyList() : List.copyOf(contributions);
   }
 
   /**
@@ -41,7 +40,7 @@ public abstract class ListContributionResult<T> extends ContributionResult {
     if (rootContributions == null) {
       rootContributions = findRootContributions();
     }
-    return rootContributions == null ? Collections.<T>emptyList() : ImmutableList.copyOf(rootContributions);
+    return rootContributions == null ? Collections.<T>emptyList() : List.copyOf(rootContributions);
   }
 
   /**

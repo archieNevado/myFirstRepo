@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <style type="text/css">
+    @media screen {
+      #small {
+        display: initial;
+      }
+      #medium, #large {
+        display: none;
+      }
+    }
+    @media screen and (min-width: 24px) {
+      #small {
+        display: none;
+      }
+      #medium {
+        display: initial;
+      }
+    }
+    @media screen and (min-width: 32px) {
+      #medium {
+        display: none;
+      }
+      #large {
+        display: initial;
+      }
+    }
+  </style>
+  <svg id="small" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  	 viewBox="0 0 16 16" enable-background="new 0 0 16 16">
+  <path fill="#3D4242" d="M1,3v10h14V3H1z M3,11H2v-1h1V11z M3,9H2V8h1V9z M3,7H2V6h1V7z M3,5H2V4h1V5z M12,12H4V4h8V12z M14,11h-1v-1
+  	h1V11z M14,9h-1V8h1V9z M14,7h-1V6h1V7z M14,5h-1V4h1V5z"/>
+  <rect x="4" y="7" fill="#3D4242" width="8" height="2"/>
+  </svg>
+  
+  <svg id="medium" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  	 viewBox="0 0 24 24" enable-background="new 0 0 24 24">
+  <path fill="#3D4242" d="M1,4v16h22V4H1z M4,17H2v-2h2V17z M4,13H2v-2h2V13z M4,9H2V7h2V9z M19,19H5V5h14V19z M22,17h-2v-2h2V17z
+  	 M22,13h-2v-2h2V13z M22,9h-2V7h2V9z"/>
+  <rect x="5" y="11" fill="#3D4242" width="14" height="2"/>
+  </svg>
+  
+  <svg id="large" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  	 viewBox="0 0 32 32" enable-background="new 0 0 32 32">
+  <path fill="#3D4242" d="M1,5v22h30V5H1z M5,24H3v-2h2V24z M5,19H3v-2h2V19z M5,14H3v-2h2V14z M5,9H3V7h2V9z M25,25H7v-8h18V25z
+  	 M25,15H7V7h18V15z M29,24h-2v-2h2V24z M29,19h-2v-2h2V19z M29,14h-2v-2h2V14z M29,9h-2V7h2V9z"/>
+  </svg>
+  
+</svg>

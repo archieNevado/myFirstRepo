@@ -50,7 +50,7 @@ public class ExternalRefFragmentHandlerTest extends FragmentHandlerTestBase<Exte
   @Test
   public void testResolverReturnsNull() {
     FragmentParameters params = getFragmentParametersWithExternalRef(EXTERNAL_REF);
-    when(contentCapIdExternalReferenceResolver.include(params)).thenReturn(true);
+    when(contentCapIdExternalReferenceResolver.test(params)).thenReturn(true);
 
     ModelAndView result = getTestling().createModelAndView(params, request);
     assertErrorPage(result, HttpServletResponse.SC_NOT_FOUND);
@@ -60,7 +60,7 @@ public class ExternalRefFragmentHandlerTest extends FragmentHandlerTestBase<Exte
   @Test
   public void testResolverReturnsNoLinkable() {
     FragmentParameters params = getFragmentParametersWithExternalRef(EXTERNAL_REF);
-    when(contentCapIdExternalReferenceResolver.include(params)).thenReturn(true);
+    when(contentCapIdExternalReferenceResolver.test(params)).thenReturn(true);
     when(contentCapIdExternalReferenceResolver.resolveExternalRef(params, site)).thenReturn(new LinkableAndNavigation(null, null));
 
     ModelAndView result = getTestling().createModelAndView(params, request);
@@ -72,7 +72,7 @@ public class ExternalRefFragmentHandlerTest extends FragmentHandlerTestBase<Exte
   public void testResolverReturnsNotALinkable() {
     FragmentParameters params = getFragmentParametersWithExternalRef(EXTERNAL_REF);
     when(linkableAndNavigation.getNavigation()).thenReturn(null);
-    when(contentCapIdExternalReferenceResolver.include(params)).thenReturn(true);
+    when(contentCapIdExternalReferenceResolver.test(params)).thenReturn(true);
     when(contentCapIdExternalReferenceResolver.resolveExternalRef(params, site)).thenReturn(linkableAndNavigation);
 
     ModelAndView result = getTestling().createModelAndView(params, request);
@@ -83,7 +83,7 @@ public class ExternalRefFragmentHandlerTest extends FragmentHandlerTestBase<Exte
   @Test
   public void testSiteCheckFails() {
     FragmentParameters params = getFragmentParametersWithExternalRef(EXTERNAL_REF);
-    when(contentCapIdExternalReferenceResolver.include(params)).thenReturn(true);
+    when(contentCapIdExternalReferenceResolver.test(params)).thenReturn(true);
     when(contentCapIdExternalReferenceResolver.resolveExternalRef(params, site)).thenReturn(linkableAndNavigation);
     when(contentBeanFactory.createBeanFor(linkable, Navigation.class)).thenReturn(getRootChannelBean());
     when(getSitesService().getContentSiteAspect(linkable)).thenReturn(contentSiteAspect);
@@ -98,7 +98,7 @@ public class ExternalRefFragmentHandlerTest extends FragmentHandlerTestBase<Exte
   @Test
   public void testResolverReturnsLinkable() {
     FragmentParameters params = getFragmentParametersWithExternalRef(EXTERNAL_REF);
-    when(contentCapIdExternalReferenceResolver.include(params)).thenReturn(true);
+    when(contentCapIdExternalReferenceResolver.test(params)).thenReturn(true);
     when(contentCapIdExternalReferenceResolver.resolveExternalRef(params, site)).thenReturn(linkableAndNavigation);
     when(contentBeanFactory.createBeanFor(linkable, Navigation.class)).thenReturn(getRootChannelBean());
     when(getSitesService().getContentSiteAspect(linkable)).thenReturn(contentSiteAspect);
@@ -113,7 +113,7 @@ public class ExternalRefFragmentHandlerTest extends FragmentHandlerTestBase<Exte
   @Test
   public void testResolverReturnsInvalidLinkable() {
     FragmentParameters params = getFragmentParametersWithExternalRef(EXTERNAL_REF);
-    when(contentCapIdExternalReferenceResolver.include(params)).thenReturn(true);
+    when(contentCapIdExternalReferenceResolver.test(params)).thenReturn(true);
     when(contentCapIdExternalReferenceResolver.resolveExternalRef(params, site)).thenReturn(linkableAndNavigation);
     when(contentBeanFactory.createBeanFor(linkable, Navigation.class)).thenReturn(getRootChannelBean());
     when(getSitesService().getContentSiteAspect(linkable)).thenReturn(contentSiteAspect);
@@ -131,7 +131,7 @@ public class ExternalRefFragmentHandlerTest extends FragmentHandlerTestBase<Exte
   @Test
   public void testIgnorePlacementIfTheLinkableIsDifferentThanTheNavigation() {
     FragmentParameters params = getFragmentParametersWithExternalRef(EXTERNAL_REF);
-    when(contentCapIdExternalReferenceResolver.include(params)).thenReturn(true);
+    when(contentCapIdExternalReferenceResolver.test(params)).thenReturn(true);
     when(contentCapIdExternalReferenceResolver.resolveExternalRef(params, site)).thenReturn(linkableAndNavigation);
     when(getSitesService().isContentInSite(site, navigationDoc)).thenReturn(true);
     when(getSitesService().isContentInSite(site, linkable)).thenReturn(true);
@@ -145,7 +145,7 @@ public class ExternalRefFragmentHandlerTest extends FragmentHandlerTestBase<Exte
   public void testIgnorePlacementIfTheLinkableIsDifferentThanTheNavigationDefaultViewGiven() {
     FragmentParameters params = getFragmentParametersWithExternalRef(EXTERNAL_REF);
     params.setView("default");
-    when(contentCapIdExternalReferenceResolver.include(params)).thenReturn(true);
+    when(contentCapIdExternalReferenceResolver.test(params)).thenReturn(true);
     when(contentCapIdExternalReferenceResolver.resolveExternalRef(params, site)).thenReturn(linkableAndNavigation);
     when(getSitesService().isContentInSite(site, navigationDoc)).thenReturn(true);
     when(getSitesService().isContentInSite(site, linkable)).thenReturn(true);

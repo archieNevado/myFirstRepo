@@ -5,12 +5,12 @@ import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.elastic.social.cae.controller.BlobRefImpl;
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.binding.message.DefaultMessageContext;
 import org.springframework.binding.message.MessageResolver;
 import org.springframework.binding.validation.ValidationContext;
@@ -21,7 +21,6 @@ import org.springframework.webflow.execution.RequestContextHolder;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 import java.util.TimeZone;
 
 import static org.junit.Assert.assertEquals;
@@ -35,10 +34,8 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({RequestContextHolder.class})
+@RunWith(MockitoJUnitRunner.class)
 public class RegistrationTest {
   @Mock
   RequestContext requestContext;
@@ -56,21 +53,13 @@ public class RegistrationTest {
   private DefaultMessageContext messageContext;
 
   @Mock
-  private LocalizationContext localizationContext;
-  
-  @Mock
   private Page page;
 
-
   @Before
-  @SuppressWarnings("unchecked")
   public void setup() {
-    mockStatic(RequestContextHolder.class);
-    when(RequestContextHolder.getRequestContext()).thenReturn(requestContext);
     when(validationContext.getMessageContext()).thenReturn(messageContext);
     when(requestContext.getExternalContext()).thenReturn(externalContext);
     when(externalContext.getNativeRequest()).thenReturn(request);
-    when(request.getAttribute(javax.servlet.jsp.jstl.core.Config.FMT_LOCALIZATION_CONTEXT)).thenReturn(localizationContext);
 
     // make WebApplicationContextUtils happy
     ServletContext servletContext = mock(ServletContext.class);
@@ -83,6 +72,13 @@ public class RegistrationTest {
 
     when(request.getServletContext()).thenReturn(servletContext);
     when(RequestAttributeConstants.getPage(request)).thenReturn(page);
+
+    RequestContextHolder.setRequestContext(requestContext);
+  }
+
+  @After
+  public void tearDown() {
+    RequestContextHolder.setRequestContext(null);
   }
 
   @Test
@@ -165,7 +161,6 @@ public class RegistrationTest {
   @Test
   public void testValidateResetFormFailure() {
     PasswordPolicy passwordPolicy = mock(PasswordPolicy.class);
-    when(passwordPolicy.verify("")).thenReturn(false);
     Registration registration = new Registration();
     registration.setUsername("");
     registration.setGivenname("");

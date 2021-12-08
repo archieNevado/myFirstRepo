@@ -11,10 +11,6 @@
   <artifactId>search-api</artifactId>
 
   <dependencies>
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-    </dependency>
     <!-- PROVIDED -->
     <dependency>
       <groupId>com.github.spotbugs</groupId>

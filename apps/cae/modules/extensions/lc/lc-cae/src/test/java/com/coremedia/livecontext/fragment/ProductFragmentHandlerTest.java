@@ -59,7 +59,7 @@ public class ProductFragmentHandlerTest extends FragmentHandlerTestBase<ProductF
   @Test(expected = IllegalStateException.class)
   public void handleProductViewFragmentNoSitesFound() {
     FragmentParameters params = getFragmentParameters4Product();
-    when(request.getAttribute(SITE_ATTRIBUTE_NAME)).thenReturn(null);
+    request.setAttribute(SITE_ATTRIBUTE_NAME, null);
     getTestling().createModelAndView(params, request);
   }
 

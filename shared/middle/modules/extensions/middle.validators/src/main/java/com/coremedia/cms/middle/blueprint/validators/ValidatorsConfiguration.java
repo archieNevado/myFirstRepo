@@ -22,6 +22,7 @@ import com.coremedia.blueprint.base.rest.validators.ValidityValidator;
 import com.coremedia.blueprint.base.rest.validators.VisibilityValidator;
 import com.coremedia.cap.common.CapConnection;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.SiteModel;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.transform.TransformImageService;
@@ -54,7 +55,10 @@ import com.coremedia.rest.validators.NotEmptyValidator;
 import com.coremedia.rest.validators.RegExpValidator;
 import com.coremedia.rest.validators.UrlValidator;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -63,6 +67,8 @@ import org.springframework.context.annotation.ImportResource;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -93,6 +99,7 @@ public class ValidatorsConfiguration {
   private static final String CM_LOCALIZED = "CMLocalized";
 
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.available-locales-validator.available-locales", matchIfMissing = true)
   AvailableLocalesValidator availableLocalesValidator(AvailableLocalesConfigurationProperties availableLocalesConfigurationProperties) {
     return new AvailableLocalesValidator(
             availableLocalesConfigurationProperties.getContentPath(),
@@ -102,102 +109,62 @@ public class ValidatorsConfiguration {
 
   @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.site-manager-group-validator.site-manager-group", matchIfMissing = true)
   SiteManagerGroupValidator siteManagerGroupValidator(CapConnection connection,
                                                       SiteModel siteModel) {
-    SiteManagerGroupValidator validator = new SiteManagerGroupValidator();
-    validator.setConnection(connection);
-    validator.setSiteModel(siteModel);
-    return validator;
+    return new SiteManagerGroupValidator(connection, siteModel);
   }
 
   @Bean
-  ContentTypeValidator cmLocalizedValidator() {
-    ContentTypeValidator cmLocalizedValidator = new ContentTypeValidator();
-    cmLocalizedValidator.setContentType(CM_LOCALIZED);
-    cmLocalizedValidator.setValidatingSubtypes(true);
-
-    LinkListMaxLengthValidator linkListMaxLengthValidator = new LinkListMaxLengthValidator();
-    linkListMaxLengthValidator.setProperty("master");
-    linkListMaxLengthValidator.setCategories(Set.of(Issues.LOCALIZATION_ISSUE_CATEGORY));
-    cmLocalizedValidator.setValidators(Collections.singletonList(
-            linkListMaxLengthValidator
-    ));
-    return cmLocalizedValidator;
+  @ConditionalOnProperty(name = "validator.enabled.content-type-validator.cm-localized-master-length", matchIfMissing = true)
+  ContentTypeValidator cmLocalizedValidator(CapConnection connection) {
+    return new ContentTypeValidator(type(connection, CM_LOCALIZED),
+                                    true,
+                                    List.of(new LinkListMaxLengthValidator("master", Set.of(Issues.LOCALIZATION_ISSUE_CATEGORY))));
   }
 
   @Bean
-  ContentTypeValidator cmTeaserValidator() {
-    ContentTypeValidator cmTeaserValidator = new ContentTypeValidator();
-    cmTeaserValidator.setContentType("CMTeaser");
-    cmTeaserValidator.setValidatingSubtypes(false);
-
-    StructLinkListMaxLengthValidator structLinkListMaxLengthValidator = new StructLinkListMaxLengthValidator();
-    structLinkListMaxLengthValidator.setProperty("targets");
-    structLinkListMaxLengthValidator.setListPropertyName("links");
-    cmTeaserValidator.setValidators(Collections.singletonList(
-            structLinkListMaxLengthValidator
-    ));
-    return cmTeaserValidator;
+  @ConditionalOnProperty(name = "validator.enabled.content-type-validator.cm-teaser-targets-length", matchIfMissing = true)
+  ContentTypeValidator cmTeaserValidator(CapConnection connection) {
+    return new ContentTypeValidator(type(connection, "CMTeaser"),
+                                    false,
+                                    List.of(new StructLinkListMaxLengthValidator("targets", "links")));
   }
 
   @Bean
-  ContentTypeValidator cmPictureValidator() {
-    ContentTypeValidator cmPictureValidator = new ContentTypeValidator();
-    cmPictureValidator.setContentType("CMPicture");
-    cmPictureValidator.setValidatingSubtypes(true);
-
-    NotEmptyValidator notEmptyValidator = new NotEmptyValidator();
-    notEmptyValidator.setProperty("data");
-    cmPictureValidator.setValidators(Collections.singletonList(
-            notEmptyValidator
-    ));
-    return cmPictureValidator;
+  @ConditionalOnProperty(name = "validator.enabled.content-type-validator.cm-picture-data-not-empty", matchIfMissing = true)
+  ContentTypeValidator cmPictureValidator(CapConnection connection) {
+    return new ContentTypeValidator(type(connection, "CMPicture"), true, List.of(new NotEmptyValidator("data")));
   }
 
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.image-map-areas-validator.cm-image-map", matchIfMissing = true)
   ImageMapAreasValidator cmImageMapAreasValidator(CapConnection connection) {
-    ImageMapAreasValidator cmImageMapAreasValidator = new ImageMapAreasValidator();
-    cmImageMapAreasValidator.setConnection(connection);
-    cmImageMapAreasValidator.setContentType("CMImageMap");
-    cmImageMapAreasValidator.setValidatingSubtypes(true);
-    cmImageMapAreasValidator.setImagePropertyPath("pictures.data");
-    cmImageMapAreasValidator.setStructProperty("localSettings");
-    return cmImageMapAreasValidator;
+    return new ImageMapAreasValidator(type(connection, "CMImageMap"), true, "localSettings", "pictures.data");
   }
 
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.image-map-overlay-configuration-validator.cm-image-map", matchIfMissing = true)
   ImageMapOverlayConfigurationValidator cmImageMapOverlayConfigurationValidator(CapConnection connection) {
-    ImageMapOverlayConfigurationValidator cmImageMapOverlayConfigurationValidator = new ImageMapOverlayConfigurationValidator();
-    cmImageMapOverlayConfigurationValidator.setConnection(connection);
-    cmImageMapOverlayConfigurationValidator.setContentType("CMImageMap");
-    cmImageMapOverlayConfigurationValidator.setValidatingSubtypes(true);
-    cmImageMapOverlayConfigurationValidator.setStructProperty("localSettings");
-    return cmImageMapOverlayConfigurationValidator;
+    return new ImageMapOverlayConfigurationValidator(type(connection, "CMImageMap"), true, "localSettings");
   }
 
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.self-referring-link-list-validator.cm-linkable", matchIfMissing = true)
   SelfReferringLinkListValidator cmLinkListValidator(CapConnection connection) {
-    SelfReferringLinkListValidator cmLinkListValidator = new SelfReferringLinkListValidator();
-    cmLinkListValidator.setConnection(connection);
-    cmLinkListValidator.setContentType("CMLinkable");
-    cmLinkListValidator.setValidatingSubtypes(true);
-    return cmLinkListValidator;
+    return new SelfReferringLinkListValidator(type(connection, "CMLinkable"), true);
   }
 
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.self-referring-struct-link-list-validator.cm-linkable", matchIfMissing = true)
   SelfReferringStructLinkListValidator cmStructLinkListValidator(CapConnection connection) {
-    SelfReferringStructLinkListValidator cmStructLinkListValidator = new SelfReferringStructLinkListValidator();
-    cmStructLinkListValidator.setConnection(connection);
-    cmStructLinkListValidator.setContentType("CMLinkable");
-    cmStructLinkListValidator.setValidatingSubtypes(true);
-    return cmStructLinkListValidator;
+    return new SelfReferringStructLinkListValidator(type(connection, "CMLinkable"), true);
   }
 
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.struct-link-list-index-validator.cm-query-list", matchIfMissing = true)
   StructLinkListIndexValidator cmQueryListIndexValidator(CapConnection connection) {
-    StructLinkListIndexValidator cmQueryListIndexValidator = new StructLinkListIndexValidator();
-    cmQueryListIndexValidator.setConnection(connection);
-    cmQueryListIndexValidator.setContentType("CMQueryList");
+    StructLinkListIndexValidator cmQueryListIndexValidator = new StructLinkListIndexValidator(type(connection, "CMQueryList"), false);
     cmQueryListIndexValidator.setPropertyName("extendedItems");
     cmQueryListIndexValidator.setListPropertyName("links");
     cmQueryListIndexValidator.setIndexPropertyName("index");
@@ -207,74 +174,62 @@ public class ValidatorsConfiguration {
   }
 
   @Bean
-  ContentTypeValidator cmChannelValidator() {
-    ContentTypeValidator cmChannelValidator = new ContentTypeValidator();
-    cmChannelValidator.setContentType("CMChannel");
-    cmChannelValidator.setValidatingSubtypes(true);
-
-    cmChannelValidator.setValidators(Collections.singletonList(getTitleNotEmptyValidator()));
-    return cmChannelValidator;
+  @ConditionalOnProperty(name = "validator.enabled.content-type-validator.cm-channel-title-not-empty", matchIfMissing = true)
+  ContentTypeValidator cmChannelValidator(CapConnection connection) {
+    return new ContentTypeValidator(type(connection, "CMChannel"),
+                                    true,
+                                    List.of(new NotEmptyValidator("title")));
   }
 
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.content-type-validator.cm-viewtype-layout-not-empty", matchIfMissing = true)
   ContentTypeValidator cmViewtype(CapConnection connection) {
-    NotEmptyValidator layoutNotEmpty = new NotEmptyValidator();
-    layoutNotEmpty.setProperty("layout");
-
-    ContentTypeValidator cmViewtypeValidator = new ContentTypeValidator();
-    cmViewtypeValidator.setContentType("CMViewtype");
-    cmViewtypeValidator.setValidatingSubtypes(true);
-    cmViewtypeValidator.setValidators(Collections.singletonList(layoutNotEmpty));
-    return cmViewtypeValidator;
+    return new ContentTypeValidator(type(connection, "CMViewtype"),
+                                    true,
+                                    List.of(new NotEmptyValidator("layout")));
   }
 
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.channel-segment-validator.cm-channel", matchIfMissing = true)
   ChannelSegmentValidator cmChannelSegmentValidator(UrlPathFormattingHelper urlPathFormattingHelper,
                                                     CapConnection connection) {
-    ChannelSegmentValidator cmChannelSegmentValidator = new ChannelSegmentValidator(urlPathFormattingHelper);
-    cmChannelSegmentValidator.setConnection(connection);
-    cmChannelSegmentValidator.setContentType("CMChannel");
-    return cmChannelSegmentValidator;
+    ChannelSegmentValidator validator = new ChannelSegmentValidator(type(connection, "CMChannel"), false);
+    validator.setUrlPathFormattingHelper(urlPathFormattingHelper);
+    return validator;
   }
 
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.root-channel-segment-validator.cm-channel", matchIfMissing = true)
   RootChannelSegmentValidator cmChannelRootSegmentValidator(UrlPathFormattingHelper urlPathFormattingHelper,
                                                             SitesService sitesService,
                                                             CapConnection connection) {
-    RootChannelSegmentValidator cmChannelRootSegmentValidator = new RootChannelSegmentValidator(urlPathFormattingHelper, sitesService);
-    cmChannelRootSegmentValidator.setConnection(connection);
-    cmChannelRootSegmentValidator.setContentType("CMChannel");
-    cmChannelRootSegmentValidator.setValidatingSubtypes(true);
-    return cmChannelRootSegmentValidator;
+    RootChannelSegmentValidator validator = new RootChannelSegmentValidator(type(connection, "CMChannel"), true);
+    validator.setSitesService(sitesService);
+    validator.setUrlPathFormattingHelper(urlPathFormattingHelper);
+    return validator;
   }
 
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.archive-validator.cm-template-set", matchIfMissing = true)
   ArchiveValidator cmArchiveValidator(CapConnection connection) {
-    ArchiveValidator cmArchiveValidator = new ArchiveValidator();
-    cmArchiveValidator.setConnection(connection);
-    cmArchiveValidator.setContentType("CMTemplateSet");
-    cmArchiveValidator.setPropertyName("archive");
-    return cmArchiveValidator;
+    return new ArchiveValidator(type(connection, "CMTemplateSet"), false, "archive");
   }
 
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.validity-validator.document", matchIfMissing = true)
   ValidityValidator cmValidityValidator(CapConnection connection) {
-    ValidityValidator cmValidityValidator = new ValidityValidator();
-    cmValidityValidator.setConnection(connection);
+    ValidityValidator cmValidityValidator = new ValidityValidator(type(connection, null), true);
     cmValidityValidator.setPropertyValidFrom("validFrom");
     cmValidityValidator.setPropertyValidTo("validTo");
-    cmValidityValidator.setValidatingSubtypes(true);
     return cmValidityValidator;
   }
 
   @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.visibility-validator.cm-channel", matchIfMissing = true)
   VisibilityValidator cmVisibilityValidator(CapConnection connection,
                                             ContentBackedPageGridService contentBackedPageGridService) {
-    VisibilityValidator cmVisibilityValidator = new VisibilityValidator();
-    cmVisibilityValidator.setConnection(connection);
-    cmVisibilityValidator.setContentType("CMChannel");
-    cmVisibilityValidator.setValidatingSubtypes(true);
+    VisibilityValidator cmVisibilityValidator = new VisibilityValidator(type(connection, "CMChannel"), true);
     cmVisibilityValidator.setPageGridService(contentBackedPageGridService);
     cmVisibilityValidator.setPropertyValidFrom("validFrom");
     cmVisibilityValidator.setPropertyValidTo("validTo");
@@ -284,173 +239,129 @@ public class ValidatorsConfiguration {
   }
 
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.channel-navigation-validator.cm-channel", matchIfMissing = true)
   ChannelNavigationValidator cmChannelNavigationValidator(CapConnection connection) {
-    ChannelNavigationValidator cmChannelNavigationValidator = new ChannelNavigationValidator();
-    cmChannelNavigationValidator.setConnection(connection);
-    cmChannelNavigationValidator.setContentType("CMChannel");
-    return cmChannelNavigationValidator;
+    return new ChannelNavigationValidator(type(connection, "CMChannel"), false);
   }
 
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.channel-is-part-of-navigation-validator.cm-channel", matchIfMissing = true)
   ChannelIsPartOfNavigationValidator cmNotInNavigationValidator(CapConnection connection) {
-    ChannelIsPartOfNavigationValidator cmNotInNavigationValidator = new ChannelIsPartOfNavigationValidator();
-    cmNotInNavigationValidator.setConnection(connection);
-    cmNotInNavigationValidator.setContentType("CMChannel");
-    return cmNotInNavigationValidator;
+    return new ChannelIsPartOfNavigationValidator(type(connection, "CMChannel"), false);
   }
 
   @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.is-part-of-navigation-validator.cm-linkable", matchIfMissing = true)
   IsPartOfNavigationValidator cmNotPartOfNavigationValidator(CapConnection connection,
                                                              ContextStrategy<Content, Content> contentContextStrategy,
                                                              NavigationValidatorsConfigurationProperties navigationValidatorsConfigurationProperties) {
-    IsPartOfNavigationValidator cmNotPartOfNavigationValidator = new IsPartOfNavigationValidator();
-    cmNotPartOfNavigationValidator.setConnection(connection);
-    cmNotPartOfNavigationValidator.setValidatingSubtypes(true);
-    cmNotPartOfNavigationValidator.setContentType("CMLinkable");
+    IsPartOfNavigationValidator cmNotPartOfNavigationValidator =
+            new IsPartOfNavigationValidator(type(connection, "CMLinkable"), true);
     cmNotPartOfNavigationValidator.setContextStrategy(contentContextStrategy);
     cmNotPartOfNavigationValidator.setIgnorePaths(navigationValidatorsConfigurationProperties.getIgnorePath());
     return cmNotPartOfNavigationValidator;
   }
 
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.channel-referrer-validator.cm-channel", matchIfMissing = true)
   ChannelReferrerValidator cmChannelReferrerValidator(CapConnection connection) {
-    ChannelReferrerValidator cmChannelReferrerValidator = new ChannelReferrerValidator();
-    cmChannelReferrerValidator.setConnection(connection);
-    cmChannelReferrerValidator.setContentType("CMChannel");
-    return cmChannelReferrerValidator;
+    return new ChannelReferrerValidator(type(connection, "CMChannel"), false);
   }
 
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.abstract-code-validator.cm-abstract-code", matchIfMissing = true)
   AbstractCodeValidator cmAbstractCodeValidator(CapConnection connection) {
-    AbstractCodeValidator cmAbstractCodeValidator = new AbstractCodeValidator();
-    cmAbstractCodeValidator.setConnection(connection);
-    cmAbstractCodeValidator.setContentType("CMAbstractCode");
-    cmAbstractCodeValidator.setValidatingSubtypes(true);
-    return cmAbstractCodeValidator;
+    return new AbstractCodeValidator(type(connection, "CMAbstractCode"), true);
   }
 
   /**
    * All Document Types with title property not empty validation
    */
   @Bean
-  ContentTypeValidator cmArticleValidator() {
-    ContentTypeValidator cmArticleValidator = new ContentTypeValidator();
-    cmArticleValidator.setContentType("CMArticle");
-    cmArticleValidator.setValidatingSubtypes(true);
-
-    NotEmptyMarkupValidator notEmptyMarkupValidator = new NotEmptyMarkupValidator();
-    notEmptyMarkupValidator.setProperty("detailText");
-    cmArticleValidator.setValidators(Arrays.asList(
-            getTitleNotEmptyValidator(),
-            notEmptyMarkupValidator
-    ));
-    return cmArticleValidator;
+  @ConditionalOnProperty(name = "validator.enabled.content-type-validator.cm-article-not-empty", matchIfMissing = true)
+  ContentTypeValidator cmArticleValidator(CapConnection connection) {
+    return new ContentTypeValidator(type(connection, "CMArticle"),
+                                    true,
+                                    List.of(new NotEmptyValidator("title"),
+                                            new NotEmptyMarkupValidator("detailText")));
   }
 
   @Bean
-  ContentTypeValidator cmPersonValidator() {
-    ContentTypeValidator cmPersonValidator = new ContentTypeValidator();
-    cmPersonValidator.setContentType("CMPerson");
-    cmPersonValidator.setValidatingSubtypes(true);
-
-    NotEmptyValidator notEmptyValidatorFirstName = new NotEmptyValidator();
-    notEmptyValidatorFirstName.setProperty("firstName");
-    NotEmptyValidator notEmptyValidatorLastName = new NotEmptyValidator();
-    notEmptyValidatorLastName.setProperty("lastName");
-    EmailValidator emailValidator = new EmailValidator();
-    emailValidator.setProperty("eMail");
-    cmPersonValidator.setValidators(Arrays.asList(
-            notEmptyValidatorFirstName,
-            notEmptyValidatorLastName,
-            emailValidator
-    ));
-    return cmPersonValidator;
+  @ConditionalOnProperty(name = "validator.enabled.content-type-validator.cm-person", matchIfMissing = true)
+  ContentTypeValidator cmPersonValidator(CapConnection connection) {
+    return new ContentTypeValidator(type(connection, "CMPerson"),
+                                    true,
+                                    List.of(new NotEmptyValidator("firstName"),
+                                            new NotEmptyValidator("lastName"),
+                                            new EmailValidator("eMail")));
   }
 
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.master-version-updated-validator.cm-localized", matchIfMissing = true)
   MasterVersionUpdatedValidator masterVersionUpdatedValidator(CapConnection connection,
                                                               SitesService sitesService) {
-    MasterVersionUpdatedValidator masterVersionUpdatedValidator = new MasterVersionUpdatedValidator();
-    masterVersionUpdatedValidator.setConnection(connection);
-    masterVersionUpdatedValidator.setSitesService(sitesService);
-    masterVersionUpdatedValidator.setContentType(CM_LOCALIZED);
-    masterVersionUpdatedValidator.setValidatingSubtypes(true);
-    return masterVersionUpdatedValidator;
+    return new MasterVersionUpdatedValidator(type(connection, CM_LOCALIZED), true, sitesService);
   }
 
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.content-locale-matches-site-locale-validator.cm-localized", matchIfMissing = true)
   ContentLocaleMatchesSiteLocaleValidator contentLocaleMatchesSiteLocaleValidator(
           CapConnection connection,
           SitesService sitesService,
           @Value("${contentLocaleMatchesSiteLocaleValidator.severity:WARN}") Severity severity) {
-
     ContentLocaleMatchesSiteLocaleValidator validator
-            = new ContentLocaleMatchesSiteLocaleValidator(sitesService);
-    validator.setConnection(connection);
-    validator.setContentType(CM_LOCALIZED);
+            = new ContentLocaleMatchesSiteLocaleValidator(type(connection, CM_LOCALIZED), true, sitesService);
     validator.setSeverity(severity);
-    validator.setValidatingSubtypes(true);
     return validator;
   }
 
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.same-master-link-validator.cm-localized", matchIfMissing = true)
   SameMasterLinkValidator sameMasterLinkValidator(
           CapConnection connection,
           SitesService sitesService,
           @Value("${sameMasterLinkValidator.severity:WARN}") Severity severity) {
-
-    SameMasterLinkValidator validator
-            = new SameMasterLinkValidator(sitesService);
-    validator.setConnection(connection);
-    validator.setContentType(CM_LOCALIZED);
+    SameMasterLinkValidator validator = new SameMasterLinkValidator(type(connection, CM_LOCALIZED), true, sitesService);
     validator.setSeverity(severity);
-    validator.setValidatingSubtypes(true);
     return validator;
   }
 
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.duplicate-derived-in-site-validator.cm-localized", matchIfMissing = true)
   DuplicateDerivedInSiteValidator duplicateDerivedInSiteValidator(
           CapConnection connection,
           SitesService sitesService,
           @Value("${duplicateDerivedInSiteValidator.severity:WARN}") Severity severity) {
-
-    DuplicateDerivedInSiteValidator validator
-            = new DuplicateDerivedInSiteValidator(sitesService);
-    validator.setConnection(connection);
-    validator.setContentType(CM_LOCALIZED);
+    DuplicateDerivedInSiteValidator validator =
+            new DuplicateDerivedInSiteValidator(type(connection, CM_LOCALIZED), true, sitesService);
     validator.setSeverity(severity);
-    validator.setValidatingSubtypes(true);
     return validator;
   }
 
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.possibly-missing-master-reference-validator.cm-localized", matchIfMissing = true)
   PossiblyMissingMasterReferenceValidator possiblyMissingMasterReferenceValidator(
+          CapConnection connection,
           SitesService sitesService,
           @Value("${possiblyMissingMasterReferenceFromMasterValidator.severity:WARN}") Severity severity,
           @Value("${possiblyMissingMasterReferenceFromMasterValidator.maxIssues:20}") long maxIssues) {
-
-    PossiblyMissingMasterReferenceValidator validator = new PossiblyMissingMasterReferenceValidator(
-            sitesService,
-            severity,
-            maxIssues);
-    validator.setContentType(CM_LOCALIZED);
-    validator.setValidatingSubtypes(true);
-    return validator;
+    return new PossiblyMissingMasterReferenceValidator(type(connection, CM_LOCALIZED),
+                                                       true,
+                                                       sitesService,
+                                                       severity,
+                                                       maxIssues);
   }
 
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.cross-site-link-validator.cm-localized", matchIfMissing = true)
   CrossSiteLinkValidator crossSiteLinkValidator(CapConnection connection,
                                                 SitesService sitesService,
                                                 @Value("WARN") Severity defaultSeverity,
                                                 @Value("WARN") Severity severityCrossLocale,
                                                 @Value("WARN") Severity severityCrossSite,
                                                 @Value("WARN") Severity severityCrossSiteLocale) {
-    CrossSiteLinkValidator crossSiteLinkValidator = new CrossSiteLinkValidator();
-    crossSiteLinkValidator.setConnection(connection);
-    crossSiteLinkValidator.setSitesService(sitesService);
-    crossSiteLinkValidator.setContentType(CM_LOCALIZED);
-    crossSiteLinkValidator.setValidatingSubtypes(true);
+    CrossSiteLinkValidator crossSiteLinkValidator = new CrossSiteLinkValidator(type(connection, CM_LOCALIZED), true, sitesService);
     crossSiteLinkValidator.setExcludedProperties(Collections.singletonList("placement"));
     crossSiteLinkValidator.setDefaultSeverity(defaultSeverity);
     crossSiteLinkValidator.setSeverityCrossLocale(severityCrossLocale);
@@ -460,15 +371,17 @@ public class ValidatorsConfiguration {
   }
 
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.configurable-dead-link-validator.document", matchIfMissing = true)
   ConfigurableDeadLinkValidator configurableDeadLinkValidator(CapConnection connection) {
-    ConfigurableDeadLinkValidator configurableDeadLinkValidator = new ConfigurableDeadLinkValidator();
-    configurableDeadLinkValidator.setConnection(connection);
+    ConfigurableDeadLinkValidator configurableDeadLinkValidator =
+            new ConfigurableDeadLinkValidator(connection.getContentRepository().getDocumentContentType(), true);
     configurableDeadLinkValidator.setExcludedProperties(Collections.singletonList("placement"));
     return configurableDeadLinkValidator;
   }
 
   @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.placements-validator.cm-channel", matchIfMissing = true)
   PlacementsValidator placementsValidator(CapConnection connection,
                                           SitesService sitesService,
                                           ContentBackedPageGridService contentBackedPageGridService,
@@ -476,12 +389,9 @@ public class ValidatorsConfiguration {
                                           @Value("WARN") Severity severityCrossSite,
                                           @Value("WARN") Severity severityCrossSiteLocale,
                                           @Value("ERROR") Severity severityDeadLink) {
-    PlacementsValidator placementsValidator = new PlacementsValidator();
-    placementsValidator.setConnection(connection);
+    PlacementsValidator placementsValidator = new PlacementsValidator(type(connection, "CMChannel"), true);
     placementsValidator.setSitesService(sitesService);
     placementsValidator.setPageGridService(contentBackedPageGridService);
-    placementsValidator.setContentType("CMChannel");
-    placementsValidator.setValidatingSubtypes(true);
     placementsValidator.setSeverityCrossLocale(severityCrossLocale);
     placementsValidator.setSeverityCrossSite(severityCrossSite);
     placementsValidator.setSeverityCrossSiteLocale(severityCrossSiteLocale);
@@ -490,86 +400,50 @@ public class ValidatorsConfiguration {
   }
 
   @Bean
-  ContentTypeValidator cmAudioValidator() {
-    ContentTypeValidator cmAudioValidator = new ContentTypeValidator();
-    cmAudioValidator.setContentType("CMAudio");
-    cmAudioValidator.setValidatingSubtypes(true);
-
-    cmAudioValidator.setValidators(Collections.singletonList(
-            getTitleNotEmptyValidator()
-    ));
-    return cmAudioValidator;
+  @ConditionalOnProperty(name = "validator.enabled.content-type-validator.cm-audio-title-not-empty", matchIfMissing = true)
+  ContentTypeValidator cmAudioValidator(CapConnection connection) {
+    return new ContentTypeValidator(type(connection, "CMAudio"), true, List.of(new NotEmptyValidator("title")));
   }
 
   @SuppressWarnings("ProhibitedExceptionDeclared")
   @Bean
-  ContentTypeValidator cmDownloadValidator() throws Exception {
-    ContentTypeValidator cmDownloadValidator = new ContentTypeValidator();
-    cmDownloadValidator.setContentType("CMDownload");
-    cmDownloadValidator.setValidatingSubtypes(true);
-
-    NotEmptyValidator notEmptyValidator = new NotEmptyValidator();
-    notEmptyValidator.setProperty("data");
-    RegExpValidator regExpValidator = new RegExpValidator();
+  @ConditionalOnProperty(name = "validator.enabled.content-type-validator.cm-download", matchIfMissing = true)
+  ContentTypeValidator cmDownloadValidator(CapConnection connection) throws Exception {
+    RegExpValidator regExpValidator = new RegExpValidator("filename", "^[^\\\\/:*?\"<>|]*$");
     regExpValidator.setCode("FilenameValidator");
-    regExpValidator.setProperty("filename");
-    regExpValidator.setRegExp("^[^\\\\/:*?\"<>|]*$");
-    regExpValidator.afterPropertiesSet();
-
-    cmDownloadValidator.setValidators(Arrays.asList(
-            notEmptyValidator,
-            getTitleNotEmptyValidator(),
-            regExpValidator
-    ));
-    return cmDownloadValidator;
+    return new ContentTypeValidator(type(connection, "CMDownload"),
+                                    true,
+                                    List.of(new NotEmptyValidator("data"),
+                                            new NotEmptyValidator("title"),
+                                            regExpValidator));
   }
 
   @Bean
-  ContentTypeValidator cmExternalLinkValidator() {
-    ContentTypeValidator cmExternalLinkValidator = new ContentTypeValidator();
-    cmExternalLinkValidator.setContentType("CMExternalLink");
-    cmExternalLinkValidator.setValidatingSubtypes(true);
-
-    NotEmptyValidator notEmptyValidator = new NotEmptyValidator();
-    notEmptyValidator.setProperty("url");
-    UrlValidator urlValidator = new UrlValidator();
-    urlValidator.setProperty("url");
-    cmExternalLinkValidator.setValidators(Arrays.asList(
-            notEmptyValidator,
-            urlValidator
-    ));
-    return cmExternalLinkValidator;
+  @ConditionalOnProperty(name = "validator.enabled.content-type-validator.cm-external-link", matchIfMissing = true)
+  ContentTypeValidator cmExternalLinkValidator(CapConnection connection) {
+    return new ContentTypeValidator(type(connection, "CMExternalLink"),
+                                    true,
+                                    List.of(new NotEmptyValidator("url"),
+                                            new UrlValidator("url", null)));
   }
 
   @Bean
-  ContentTypeValidator cmGalleryValidator() {
-    ContentTypeValidator cmGalleryValidator = new ContentTypeValidator();
-    cmGalleryValidator.setContentType("CMGallery");
-    cmGalleryValidator.setValidatingSubtypes(true);
-
-    cmGalleryValidator.setValidators(Collections.singletonList(
-            getTitleNotEmptyValidator()
-    ));
-    return cmGalleryValidator;
+  @ConditionalOnProperty(name = "validator.enabled.content-type-validator.cm-gallery-title-not-empty", matchIfMissing = true)
+  ContentTypeValidator cmGalleryValidator(CapConnection connection) {
+    return new ContentTypeValidator(type(connection, "CMGallery"), true, List.of(new NotEmptyValidator("title")));
   }
 
   @Bean
-  ContentTypeValidator cmVideoValidator() {
-    ContentTypeValidator cmVideoValidator = new ContentTypeValidator();
-    cmVideoValidator.setContentType("CMVideo");
-    cmVideoValidator.setValidatingSubtypes(true);
-    cmVideoValidator.setValidators(Collections.singletonList(
-            getTitleNotEmptyValidator()
-    ));
-    return cmVideoValidator;
+  @ConditionalOnProperty(name = "validator.enabled.content-type-validator.cm-video-title-not-empty", matchIfMissing = true)
+  ContentTypeValidator cmVideoValidator(CapConnection connection) {
+    return new ContentTypeValidator(type(connection, "CMVideo"), true, List.of(new NotEmptyValidator("title")));
   }
 
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.at-least-one-not-empty-validator.cm-video", matchIfMissing = true)
   AtLeastOneNotEmptyValidator atLeastOneNotEmptyValidator(CapConnection connection) {
-    AtLeastOneNotEmptyValidator atLeastOneNotEmptyValidator = new AtLeastOneNotEmptyValidator();
-    atLeastOneNotEmptyValidator.setConnection(connection);
-    atLeastOneNotEmptyValidator.setContentType("CMVideo");
-    atLeastOneNotEmptyValidator.setValidatingSubtypes(true);
+    AtLeastOneNotEmptyValidator atLeastOneNotEmptyValidator =
+            new AtLeastOneNotEmptyValidator(type(connection, "CMVideo"), true);
     atLeastOneNotEmptyValidator.setShowIssueForProperty("data");
     atLeastOneNotEmptyValidator.setExactlyOneMustBeSet(true);
     atLeastOneNotEmptyValidator.setProperties(Arrays.asList("data", "dataUrl"));
@@ -578,58 +452,47 @@ public class ValidatorsConfiguration {
 
   @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
   @Bean
-  SiteNameValidator cmSiteValidator(SiteModel siteModel) {
-    SiteNameValidator cmSiteValidator = new SiteNameValidator();
-    cmSiteValidator.setContentType("CMSite");
-    cmSiteValidator.setValidatingSubtypes(true);
-    cmSiteValidator.setSiteModel(siteModel);
-    return cmSiteValidator;
+  @ConditionalOnProperty(name = "validator.enabled.site-name-validator.cm-site", matchIfMissing = true)
+  SiteNameValidator cmSiteValidator(CapConnection connection, SiteModel siteModel) {
+    return new SiteNameValidator(type(connection, "CMSite"), true, siteModel);
   }
 
   @Bean
-  ContentTypeValidator cmSpinnerValidator() {
-    ContentTypeValidator cmSpinnerValidator = new ContentTypeValidator();
-    cmSpinnerValidator.setContentType("CMSpinner");
-    cmSpinnerValidator.setValidatingSubtypes(true);
-
-    ListMinLengthValidator listMinLengthValidator = new ListMinLengthValidator();
-    listMinLengthValidator.setProperty("sequence");
+  @ConditionalOnProperty(name = "validator.enabled.content-type-validator.cm-spinner-sequence-length", matchIfMissing = true)
+  ContentTypeValidator cmSpinnerValidator(CapConnection connection) {
+    ListMinLengthValidator listMinLengthValidator = new ListMinLengthValidator("sequence");
     listMinLengthValidator.setMinLength(2);
-    cmSpinnerValidator.setValidators(Collections.singletonList(
-            listMinLengthValidator
-    ));
-    return cmSpinnerValidator;
+    return new ContentTypeValidator(type(connection, "CMSpinner"), true, List.of(listMinLengthValidator));
   }
 
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.time-line-validator.cm-video", matchIfMissing = true)
   TimelineValidator cmTimelineValidator(CapConnection connection) {
-    TimelineValidator cmTimelineValidator = new TimelineValidator();
-    cmTimelineValidator.setConnection(connection);
-    cmTimelineValidator.setContentType("CMVideo");
+    TimelineValidator cmTimelineValidator = new TimelineValidator(type(connection, "CMVideo"), true);
     cmTimelineValidator.setAllowSameStartTime(true);
-    cmTimelineValidator.setValidatingSubtypes(true);
     return cmTimelineValidator;
   }
 
   @Bean
+  @ConditionalOnProperty(name = "validator.enabled.image-crop-size-validator.cm-picture", matchIfMissing = true)
   ImageCropSizeValidator imageCropSizeValidator(CapConnection connection,
                                                 TransformImageService transformImageService,
                                                 ImageDimensionsExtractor imageDimensionsExtractor) {
-    ImageCropSizeValidator imageCropSizeValidator = new ImageCropSizeValidator();
-    imageCropSizeValidator.setConnection(connection);
-    imageCropSizeValidator.setContentType("CMPicture");
-    imageCropSizeValidator.setTransformImageService(transformImageService);
-    imageCropSizeValidator.setStructProperty("localSettings");
-    imageCropSizeValidator.setDataProperty("data");
-    imageCropSizeValidator.setTransformsStructProperty("transforms");
-    imageCropSizeValidator.setImageDimensionExtractor(imageDimensionsExtractor);
-    imageCropSizeValidator.setFocusAreaProperty("focusArea");
-    return imageCropSizeValidator;
+    ImageCropSizeValidator validator = new ImageCropSizeValidator(type(connection, "CMPicture"),
+            false,
+            "localSettings",
+            "transforms",
+            "data",
+            "focusArea");
+    validator.setTransformImageService(transformImageService);
+    validator.setImageDimensionsExtractor(imageDimensionsExtractor);
+    return validator;
   }
 
-  private NotEmptyValidator getTitleNotEmptyValidator() {
-    NotEmptyValidator notEmptyValidator = new NotEmptyValidator();
-    notEmptyValidator.setProperty("title");
-    return notEmptyValidator;
+  @NonNull
+  private static ContentType type(@NonNull CapConnection connection, @Nullable String typeStr) {
+    return Objects.requireNonNull(typeStr!=null ?
+            connection.getContentRepository().getContentType(typeStr) :
+            connection.getContentRepository().getDocumentContentType());
   }
 }

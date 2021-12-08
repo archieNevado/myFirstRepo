@@ -1,6 +1,6 @@
 package com.coremedia.lc.studio.lib.augmentation;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
@@ -9,8 +9,6 @@ import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.google.common.collect.Iterables;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
@@ -40,6 +38,9 @@ class PbeShopUrlTargetResolverImpl implements PbeShopUrlTargetResolver {
   private SitesService sitesService;
 
   @Inject
+  private CommerceConnectionSupplier commerceConnectionSupplier;
+
+  @Inject
   @Named("externalPageAugmentationService")
   private AugmentationService externalPageAugmentationService;
 
@@ -50,16 +51,19 @@ class PbeShopUrlTargetResolverImpl implements PbeShopUrlTargetResolver {
       return null;
     }
 
-    StoreContext storeContext = CurrentStoreContext.find().orElse(null);
-    if (storeContext == null) {
+    Site site = sitesService.getSite(siteId);
+    if (site == null) {
       return null;
     }
 
-    CommerceConnection commerceConnection = storeContext.getConnection();
+    CommerceConnection commerceConnection = commerceConnectionSupplier.findConnection(site).orElse(null);
+    if (commerceConnection == null) {
+      return null;
+    }
 
     // get potential partNumber from urlStr
     List<String> pathSegments = Arrays.asList(shopUrl.getPath().split("/"));
-    String externalId = Iterables.getLast(pathSegments, null);
+    String externalId = pathSegments.isEmpty() ? null : pathSegments.get(pathSegments.size() - 1);
 
     if (isSeoUrl(shopUrl) && !StringUtils.isBlank(externalId)) {
       // try to load category from partNumber
@@ -69,11 +73,8 @@ class PbeShopUrlTargetResolverImpl implements PbeShopUrlTargetResolver {
       }
 
       // root document is implicitly augmented
-      if (externalId.equalsIgnoreCase(commerceConnection.getStoreContext().getStoreName())) {
-        Site site = sitesService.getSite(siteId);
-        if (null != site) {
-          return site.getSiteRootDocument();
-        }
+      if (externalId.equalsIgnoreCase(commerceConnection.getInitialStoreContext().getStoreName())) {
+        return site.getSiteRootDocument();
       }
     }
 
@@ -99,7 +100,7 @@ class PbeShopUrlTargetResolverImpl implements PbeShopUrlTargetResolver {
   @Nullable
   private static Category getCategory(@NonNull CommerceConnection connection, @NonNull String externalId) {
     try {
-      return connection.getCatalogService().findCategoryBySeoSegment(externalId, connection.getStoreContext());
+      return connection.getCatalogService().findCategoryBySeoSegment(externalId, connection.getInitialStoreContext());
     } catch (CommerceException e) {
       LOGGER.warn("Cannot resolve category for SEO segment (external ID: {}).", externalId);
       return null;

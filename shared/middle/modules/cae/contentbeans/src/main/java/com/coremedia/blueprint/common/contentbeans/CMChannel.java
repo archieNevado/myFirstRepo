@@ -72,27 +72,37 @@ public interface CMChannel extends CMContext, KnowsVanityUrls {
 
   /**
    * Name of the document property 'header'.
+   *
+   * @deprecated since 2110; The property 'header' is not used any longer, so this constant is obsolete.
    */
+  @Deprecated
   String HEADER = "header";
 
   /**
    * Returns the value of the document property {@link #HEADER}.
    *
    * @return a list of {@link CMLinkable} objects
+   *
+   * @deprecated since 2110; Obsolete, all contents of a page are controlled in the page grid meanwhile.
    */
+  @Deprecated
   List<? extends Linkable> getHeader();
 
   /**
    * Name of the document property 'footer'.
+   *
+   * @deprecated since 2110; The property 'footer' is not used any longer, so this constant is obsolete.
    */
+  @Deprecated
   String FOOTER = "footer";
 
   /**
    * Returns the value of the document property {@link #FOOTER}.
    *
    * @return a list of {@link CMLinkable} objects
+   *
+   * @deprecated since 2110; Obsolete, all contents of a page are controlled in the page grid meanwhile.
    */
+  @Deprecated
   List<? extends Linkable> getFooter();
-
-
 }

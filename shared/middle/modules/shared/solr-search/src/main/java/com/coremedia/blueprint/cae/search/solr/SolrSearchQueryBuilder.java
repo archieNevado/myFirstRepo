@@ -1,13 +1,12 @@
 package com.coremedia.blueprint.cae.search.solr;
 
-import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.blueprint.cae.search.Condition;
 import com.coremedia.blueprint.cae.search.SearchConstants;
 import com.coremedia.blueprint.cae.search.SearchFilterProvider;
 import com.coremedia.blueprint.cae.search.SearchQueryBean;
 import com.coremedia.blueprint.cae.search.Value;
 import com.coremedia.blueprint.cae.search.facet.FacetFilters;
-import com.google.common.collect.ImmutableMap;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.slf4j.Logger;
@@ -186,7 +185,7 @@ public class SolrSearchQueryBuilder implements SolrQueryBuilder {
             .collect(Collectors.joining(SolrQueryBuilder.OR, "(", ")"));
 
           String tag = "f" + tagId++;
-          String filterLocalParams = SolrSearchFormatHelper.formatLocalParameters(ImmutableMap.of("tag", tag));
+          String filterLocalParams = SolrSearchFormatHelper.formatLocalParameters(Map.of("tag", tag));
           String fq = String.format("%s%s:%s", filterLocalParams, ClientUtils.escapeQueryChars(facetField), filter);
           q.addFilterQuery(fq);
           facetFieldLocalParams.put("ex", tag);
@@ -239,7 +238,7 @@ public class SolrSearchQueryBuilder implements SolrQueryBuilder {
    *
    * @param query the query string
    * @return the escaped query string
-   * @see <a href="https://solr.apache.org/guide/8_8/local-parameters-in-queries.html">
+   * @see <a href="https://solr.apache.org/guide/8_10/local-parameters-in-queries.html">
    *   Solr Reference Guide: Local Parameters in Queries</a>
    */
   private static String escapeLocalParamsQueryString(String query) {

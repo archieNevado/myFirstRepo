@@ -18,7 +18,6 @@ import com.coremedia.livecontext.ecommerce.catalog.VariantFilter;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -51,7 +50,6 @@ import java.util.Set;
 import static com.coremedia.blueprint.base.links.UriConstants.ContentTypes.CONTENT_TYPE_HTML;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
-import static java.lang.String.format;
 
 /**
  * Handle dynamic product asset requests.
@@ -107,7 +105,7 @@ public class ProductAssetsHandler extends PageHandlerBase {
           @RequestParam(value = REQUEST_PARAM_ATTRIBUTES, required = false) String attributes,
           HttpServletRequest request,
           HttpServletResponse response) {
-    StoreContext storeContext = CurrentStoreContext.find().orElse(null);
+    var storeContext = CurrentStoreContext.find(request).orElse(null);
 
     if (storeContext == null) {
       LOG.warn("Commerce connection not properly initialized.");
@@ -156,7 +154,7 @@ public class ProductAssetsHandler extends PageHandlerBase {
       return null;
     }
 
-    StoreContext storeContext = CurrentStoreContext.find().orElse(null);
+    var storeContext = CurrentStoreContext.find(request).orElse(null);
 
     if (storeContext == null) {
       LOG.warn("Commerce connection not properly initialized.");

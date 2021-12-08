@@ -1,6 +1,5 @@
 package com.coremedia.livecontext.contentbeans;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.blueprint.common.layout.PageGrid;
@@ -39,7 +38,6 @@ public class LiveContextExternalChannelImpl extends CMExternalChannelBase implem
   private Site site;
   private PageGridService pdpPageGridService;
   private CommerceConnectionSupplier commerceConnectionSupplier;
-  private CommerceConnectionInitializer commerceConnectionInitializer;
 
   @Override
   public Category getCategory() {
@@ -54,7 +52,7 @@ public class LiveContextExternalChannelImpl extends CMExternalChannelBase implem
     Content content = getContent();
     String externalId = getExternalId();
 
-    StoreContext storeContext = connection.getStoreContext();
+    StoreContext storeContext = connection.getInitialStoreContext();
 
     Optional<CommerceId> commerceIdOptional = CommerceIdParserHelper.parseCommerceId(externalId);
     if (!commerceIdOptional.isPresent()) {
@@ -100,10 +98,10 @@ public class LiveContextExternalChannelImpl extends CMExternalChannelBase implem
   @Override
   protected List<Linkable> getExternalChildren(Site site) {
     if (isCommerceChildrenSelected()) {
-      Optional<CommerceConnection> commerceConnection = commerceConnectionInitializer.findConnectionForSite(site);
+      Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnection(site);
       if (commerceConnection.isPresent()) {
         CommerceConnection connection = commerceConnection.get();
-        StoreContext storeContext = connection.getStoreContext();
+        StoreContext storeContext = connection.getInitialStoreContext();
         CatalogService catalogService = connection.getCatalogService();
 
         return getCommerceChildrenIds().stream()
@@ -143,11 +141,6 @@ public class LiveContextExternalChannelImpl extends CMExternalChannelBase implem
   @Required
   public void setCommerceConnectionSupplier(CommerceConnectionSupplier commerceConnectionSupplier) {
     this.commerceConnectionSupplier = commerceConnectionSupplier;
-  }
-
-  @Required
-  public void setCommerceConnectionInitializer(CommerceConnectionInitializer commerceConnectionInitializer) {
-    this.commerceConnectionInitializer = commerceConnectionInitializer;
   }
 
   @Override

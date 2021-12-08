@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@coremedia-examples/brick-popup": "^1.0.0",
-    "@coremedia/brick-media": "^1.0.0",
-    "@coremedia/brick-node-decoration-service": "^1.0.0",
-    "@coremedia/brick-utils": "^1.0.0",
-    "jquery": "^3.0.0"
+    "@coremedia-examples/brick-popup": "workspace:*",
+    "@coremedia/brick-media": "workspace:*",
+    "@coremedia/brick-node-decoration-service": "workspace:*",
+    "@coremedia/brick-utils": "workspace:*",
+    "jquery": "^3.6.0"
   },
   "devDependencies": {
-    "prettier": "^2.0.5"
+    "prettier": "^2.4.1"
   },
   "scripts": {
     "prettier": "prettier --write \"src/**/*.{js,json}\""

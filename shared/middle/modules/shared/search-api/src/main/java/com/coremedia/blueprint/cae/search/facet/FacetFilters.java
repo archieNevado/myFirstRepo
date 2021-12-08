@@ -1,12 +1,13 @@
 package com.coremedia.blueprint.cae.search.facet;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -69,9 +70,9 @@ public class FacetFilters {
    */
   public static Map<String, List<String>> parse(@Nullable String facetFilters) {
     if (facetFilters == null) {
-      return ImmutableMap.of();
+      return Map.of();
     }
-    ImmutableMap.Builder<String, List<String>> result = ImmutableMap.builder();
+    Map<String, List<String>> result = new LinkedHashMap<>();
     for (String facetWithValues : split(facetFilters, FACETS_SEPARATOR)) {
       List<String> split = split(facetWithValues, FACET_VALUES_SEPARATOR, 2);
       if (split.size() == 2) {
@@ -82,11 +83,11 @@ public class FacetFilters {
           .map(FacetFilters::unescape)
           .collect(Collectors.toList());
         if (!values.isEmpty()) {
-          result.put(unescape(facetPart), ImmutableList.copyOf(values));
+          result.put(unescape(facetPart), List.copyOf(values));
         }
       }
     }
-    return result.build();
+    return Collections.unmodifiableMap(result);
   }
 
   static List<String> split(String s, char separator) {
@@ -96,7 +97,7 @@ public class FacetFilters {
     if (separator == ESCAPE_CHAR) {
       throw new IllegalArgumentException("must not use escape character " + ESCAPE_CHAR + " as separator");
     }
-    ImmutableList.Builder<String> result = ImmutableList.builder();
+    List<String> result = new ArrayList<>();
     int start = 0;
     boolean escaped = false;
     int size = 1;
@@ -115,7 +116,7 @@ public class FacetFilters {
     if (start < s.length()) {
       result.add(s.substring(start));
     }
-    return result.build();
+    return Collections.unmodifiableList(result);
   }
 
   private static String unescape(String s) {

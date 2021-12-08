@@ -8,13 +8,13 @@ import com.coremedia.livecontext.fragment.FragmentContextProvider;
 import com.coremedia.livecontext.hybrid.CookieLevelerFilter;
 import com.coremedia.livecontext.search.CommerceSearchCsrfIgnoringRequestMatcher;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
 
 @Configuration(proxyBeanMethods = false)
 @ComponentScan(basePackages = {
@@ -36,12 +36,6 @@ import org.springframework.core.annotation.Order;
 }, reader = ResourceAwareXmlBeanDefinitionReader.class)
 public class LcCaeAutoConfiguration {
 
-  @Value("${livecontext.http.commerce-exception-status:500}")
-  private final int commerceExceptionStatus = 500;
-
-  @Value("${livecontext.http.no-store-context-available-status:503}")
-  private int noStoreContextAvailableStatus = 503;
-
   @Bean
   FragmentContextProvider fragmentContextProvider() {
     return new FragmentContextProvider();
@@ -58,7 +52,7 @@ public class LcCaeAutoConfiguration {
   SimpleExceptionHandler<NoStoreContextAvailable> noStoreContextAvailableSimpleExceptionHandler() {
     SimpleExceptionHandler<NoStoreContextAvailable> exceptionHandler = new SimpleExceptionHandler<>();
     exceptionHandler.setExceptionType(NoStoreContextAvailable.class);
-    exceptionHandler.setStatusCode(noStoreContextAvailableStatus);
+    exceptionHandler.setStatusCode(HttpStatus.SERVICE_UNAVAILABLE.value());
     return exceptionHandler;
   }
 
@@ -67,7 +61,7 @@ public class LcCaeAutoConfiguration {
   SimpleExceptionHandler<CommerceException> commerceExceptionSimpleExceptionHandler() {
     SimpleExceptionHandler<CommerceException> exceptionHandler = new SimpleExceptionHandler<>();
     exceptionHandler.setExceptionType(CommerceException.class);
-    exceptionHandler.setStatusCode(commerceExceptionStatus);
+    exceptionHandler.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
     return exceptionHandler;
   }
 

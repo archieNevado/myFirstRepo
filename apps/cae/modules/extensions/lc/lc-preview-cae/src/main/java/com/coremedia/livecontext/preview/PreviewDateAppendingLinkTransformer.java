@@ -26,7 +26,7 @@ public class PreviewDateAppendingLinkTransformer implements LinkTransformer {
   @Override
   public String transform(String source, Object bean, String view, @NonNull HttpServletRequest request,
                           @NonNull HttpServletResponse response, boolean forRedirect) {
-    findPreviewDate()
+    findPreviewDate(request)
             .map(PreviewDateFormatter::format)
             .ifPresent(previewDateText -> request.setAttribute(REQUEST_PARAMETER_PREVIEW_DATE, previewDateText));
 
@@ -34,8 +34,8 @@ public class PreviewDateAppendingLinkTransformer implements LinkTransformer {
   }
 
   @NonNull
-  private static Optional<ZonedDateTime> findPreviewDate() {
-    return CurrentStoreContext.find()
+  private static Optional<ZonedDateTime> findPreviewDate(HttpServletRequest request) {
+    return CurrentStoreContext.find(request)
             .flatMap(StoreContext::getPreviewDate);
   }
 }

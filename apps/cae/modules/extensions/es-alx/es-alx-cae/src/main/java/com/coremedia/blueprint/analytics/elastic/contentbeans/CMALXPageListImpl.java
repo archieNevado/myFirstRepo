@@ -1,13 +1,9 @@
 package com.coremedia.blueprint.analytics.elastic.contentbeans;
 
-
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
-import com.google.common.collect.Iterables;
 
 import java.util.List;
-
-import static com.google.common.base.Predicates.instanceOf;
-import static com.google.common.collect.ImmutableList.copyOf;
+import java.util.stream.Collectors;
 
 /**
  * The bean corresponding to the <code>CMALXPageList</code> document type. It selects its list of
@@ -24,16 +20,22 @@ public class CMALXPageListImpl extends CMALXPageListBase {
   public List<CMLinkable> getItemsUnfiltered() {
     int maxLength = getMaxLength();
 
-    final Iterable trackedLinkables = Iterables.filter(getTrackedItemsUnfiltered(), instanceOf(CMLinkable.class));
-    @SuppressWarnings("unchecked") // we've just removed the non-linkables!
-    List<CMLinkable> result = copyOf(trackedLinkables).subList(0,  Math.min(Iterables.size(trackedLinkables), maxLength));
+    List<CMLinkable> trackedLinkables = filterLinkables(getTrackedItemsUnfiltered(), maxLength);
+
 
     // default content
-    if (result.isEmpty()) {
-      List<CMLinkable> defaultContentLinks = getDefaultContent();
-      final Iterable<CMLinkable> filteredDefaultContent = Iterables.filter(defaultContentLinks, instanceOf(CMLinkable.class));
-      result = copyOf(filteredDefaultContent).subList(0, Math.min(Iterables.size(filteredDefaultContent), maxLength));
+    if (trackedLinkables.isEmpty()) {
+      trackedLinkables = filterLinkables(getDefaultContent(), maxLength);
     }
-    return result;
+    return trackedLinkables;
+  }
+
+
+  private List<CMLinkable> filterLinkables(List<? extends Object> contentBeans, int maxLength) {
+    return contentBeans.stream()
+            .filter(CMLinkable.class::isInstance)
+            .map(CMLinkable.class::cast)
+            .limit(maxLength)
+            .collect(Collectors.toUnmodifiableList());
   }
 }

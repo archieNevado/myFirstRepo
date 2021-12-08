@@ -14,7 +14,6 @@ import com.coremedia.elastic.social.api.ratings.RatingService;
 import com.coremedia.elastic.social.api.ratings.ShareService;
 import com.coremedia.elastic.social.api.reviews.ReviewService;
 import com.coremedia.objectserver.beans.ContentBean;
-import com.google.common.collect.ImmutableList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -118,7 +117,7 @@ public class ESDynamicListImpl extends ESDynamicListBase {
         for (CountTargetPredicate countTargetPredicate : countTargetPredicates) {
           if (countTargetPredicate.getType().isInstance(target)) {
             //noinspection unchecked
-            if (!countTargetPredicate.apply(target)) {
+            if (!countTargetPredicate.test(target)) {
               return false;
             }
           }
@@ -197,6 +196,6 @@ public class ESDynamicListImpl extends ESDynamicListBase {
           target = getContentBeanFactory().createBeanFor(content, ContentBean.class);
         }
         return new Count(count, target);
-      }).collect(ImmutableList.toImmutableList());
+      }).collect(Collectors.toUnmodifiableList());
   }
 }

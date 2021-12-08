@@ -1,6 +1,5 @@
 package com.coremedia.livecontext.product;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.common.contentbeans.Page;
@@ -14,18 +13,15 @@ import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -43,9 +39,6 @@ public class ProductListSubstitutionServiceTest {
   private CommerceConnection connection;
 
   private List<Product> listOfTablets;
-
-  @Mock
-  private HttpServletRequest httpRequest;
 
   @Mock
   private Page page;
@@ -71,15 +64,14 @@ public class ProductListSubstitutionServiceTest {
   @Before
   public void defaultSetup() {
     StoreContextImpl storeContext = StoreContextBuilderImpl.from(connection, "any-site-id").build();
+    when(tablets.getContext()).thenReturn(storeContext);
 
     testling = new ProductListSubstitutionService();
     testling.setLiveContextNavigationFactory(new LiveContextNavigationFactory());
 
-    listOfTablets = newArrayList(product1, product2, product3, product4);
+    listOfTablets = List.of(product1, product2, product3, product4);
 
     when(connection.getCatalogService()).thenReturn(catalogService);
-
-    CurrentStoreContext.set(storeContext);
 
     when(page.getNavigation()).thenReturn(liveContextNavigation);
     when(liveContextNavigation.getCategory()).thenReturn(tablets);
@@ -88,16 +80,11 @@ public class ProductListSubstitutionServiceTest {
     when(connection.getCatalogService().findProductsByCategory(tablets)).thenReturn(listOfTablets);
   }
 
-  @After
-  public void tearDown() {
-    CurrentStoreContext.remove();
-  }
-
   @Test
   public void getProductListPagesNavigationIsNoNoLiveContextNavigation() {
     when(page.getNavigation()).thenReturn(noLiveContextNavigation);
 
-    ProductList result = testling.getProductList(page, httpRequest);
+    ProductList result = testling.getProductList(page);
 
     assertNull(result);
     verify(page, times(1)).getNavigation();
@@ -107,13 +94,6 @@ public class ProductListSubstitutionServiceTest {
   public void getProductListNoLiveContextNavigation() {
     ProductList result = testling.getProductList(null, 0, 10);
     assertNull(result);
-  }
-
-  @Test(expected = RuntimeException.class)
-  public void getProductListNoDefaultStoreContextSet() {
-    CurrentStoreContext.remove();
-
-    testling.getProductList(liveContextNavigation, 0, 10);
   }
 
   @Test
@@ -161,14 +141,14 @@ public class ProductListSubstitutionServiceTest {
 
   @Test
   public void getProductListNoPageProvided() {
-    ProductList result = testling.getProductList(null, httpRequest);
+    ProductList result = testling.getProductList(null);
     assertNull(result);
   }
 
   @SuppressWarnings("ConstantConditions")
   @Test
   public void getProductListSuccessfully() {
-    ProductList result = testling.getProductList(page, httpRequest);
+    ProductList result = testling.getProductList(page);
     checkListItems(listOfTablets, result);
   }
 

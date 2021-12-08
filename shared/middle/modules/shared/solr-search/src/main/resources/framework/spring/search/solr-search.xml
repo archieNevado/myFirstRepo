@@ -28,7 +28,7 @@
   <bean id="resultFactory" class="com.coremedia.blueprint.cae.search.solr.SolrSearchResultFactory">
     <property name="contentRepository" ref="contentRepository"/>
     <property name="solrClient" ref="solrClient"/>
-    <property name="collection" value="${solr.cae.collection:${solr.collection.cae:}}"/>
+    <property name="collection" value="${solr.cae.collection:}"/>
     <property name="queryBuilder" ref="solrSearchQueryBuilder"/>
     <property name="representationMapper" ref="representationMapper"/>
     <property name="facetFieldLabelFunctions" ref="facetFieldLabelFunctions"/>

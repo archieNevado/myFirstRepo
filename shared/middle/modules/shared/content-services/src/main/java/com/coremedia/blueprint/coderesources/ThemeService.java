@@ -1,13 +1,15 @@
 package com.coremedia.blueprint.coderesources;
 
+import com.coremedia.blueprint.base.tree.CycleInTreeRelationException;
 import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.user.User;
 import com.coremedia.cap.util.DeveloperPaths;
-import com.google.common.collect.Lists;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -52,7 +54,14 @@ public class ThemeService {
     // the tree relation, which would not make sense.
     // Better make the contract obvious, and accept only CMNavigation.
     checkIsA(content, CM_NAVIGATION);
-    Content theme = directTheme(Lists.reverse(treeRelation.pathToRoot(content)), null);
+    List<Content> reversePath;
+    try {
+      reversePath = new ArrayList<>(treeRelation.pathToRoot(content));
+      Collections.reverse(reversePath);
+    } catch (CycleInTreeRelationException ignored) {
+      reversePath = List.of(content);
+    }
+    Content theme = directTheme(reversePath, null);
     return developer==null || theme==null ? theme : new DeveloperPaths(developer).substitute(theme);
   }
 

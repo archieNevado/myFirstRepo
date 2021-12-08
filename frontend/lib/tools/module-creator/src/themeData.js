@@ -24,7 +24,7 @@ const initPackageJson = (
           "List of all brick dependencies. In order to add a dependency, move the entry to 'dependencies'",
         ...dependenciesToCommentOut,
         "@coremedia/brick-utils": "^1.0.0",
-        jquery: "^3.0.0",
+        jquery: "^3.6.0",
       },
     };
   }
@@ -37,18 +37,18 @@ const initPackageJson = (
       build: "webpack",
       deploy: "cm theme-importer deploy-theme",
       start: "cm monitor",
-      prettier: 'prettier "**/*" --write',
+      prettier: "prettier --write \"src/**/*.{js,json}\"",
       "theme-importer": "cm theme-importer",
     },
     ...commentDependencies,
     dependencies: {
       ...dependenciesToActivate,
-      "@coremedia/cm-cli": "^2.0.0",
-      "@coremedia/theme-utils": "^3.0.0",
-      webpack: "^4.0.0",
+      "@coremedia/cm-cli": "workspace:*",
+      "@coremedia/theme-utils": "workspace:*",
+      webpack: "^4.46.0",
     },
     devDependencies: {
-      prettier: "^2.0.5",
+      prettier: "^2.4.1",
     },
     main: mainJSFile,
     coremedia: {
@@ -58,8 +58,7 @@ const initPackageJson = (
     browserslist: [
       "last 1 Chrome version",
       "last 1 Firefox version",
-      "last 1 Edge version",
-      "Explorer >= 11",
+      "last 1 Edge version"
     ],
   };
   return JSON.stringify(content, null, 2);
@@ -162,7 +161,7 @@ const initPreviewSass = (
 // ### VARIABLES ###
 
 // Own variables (need to be loaded first, so default values can be overridden)
-// @see http://sass-lang.com/documentation/file.SASS_REFERENCE.html#Variable_Defaults___default
+// @see https://sass-lang.com/documentation/file.SASS_REFERENCE.html#Variable_Defaults___default
 
 //@import "variables/...";
 
@@ -195,16 +194,6 @@ import "./${themeName}.js";
 `;
 
 /**
- * returns content for .prettierignore
- * @return {string}
- */
-const initThemePrettierignore = () => `/*
-!/src
-/src/*
-!/src/js
-`;
-
-/**
  * returns content for <themeName>.js
  * @param  {string} themeName
  * @return {string}
@@ -230,7 +219,6 @@ const initPreviewJs = (themeName) => `/*! Theme ${themeName}: Preview JS */
 
 module.exports = {
   initPackageJson,
-  initThemePrettierignore,
   initWebpackConfigJs,
   initThemeConfigJson,
   initPartialsSass,

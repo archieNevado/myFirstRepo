@@ -3,8 +3,6 @@ package com.coremedia.blueprint.analytics.elastic.webtrends;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,10 +14,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.coremedia.blueprint.analytics.elastic.webtrends.ElasticWebtrendsServiceProvider.WEBTRENDS_SERVICE_KEY;
 import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.DOCTYPE_EVENTLIST;
 import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.DOCTYPE_PAGELIST;
 import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.DOCUMENT_PROPERTY_TIME_RANGE;
-import static com.coremedia.blueprint.analytics.elastic.webtrends.ElasticWebtrendsServiceProvider.WEBTRENDS_SERVICE_KEY;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static org.junit.Assert.assertEquals;
@@ -87,21 +85,21 @@ public class ElasticWebtrendsServiceProviderTest {
     serviceSettings.put("reportId", "report");
     serviceSettings.put("password", "pass");
     when(settingsService.mergedSettingAsMap(eq(WEBTRENDS_SERVICE_KEY), eq(String.class), eq(Object.class), any(Content.class), any(Content.class))).thenReturn(serviceSettings);
-    ImmutableMap<Object, Object> effectiveSettings = ImmutableMap.builder()
-            .put("accountName", "account")
-            .put("userName", "user")
-            .put("profileId", "profile")
-            .put("reportId", "report")
-            .put("password", "pass")
-            .put("limit", 1000)
-            .put("documentType", "")
-            .put("timeRange", 30)
-            .put("interval", 1440)
-            .put("sortByMeasure", "Hits")
-            .put("category", "")
-            .put("maxLength", 10)
-            .put("action", "")
-            .put("baseChannel", emptyList()).build();
+    Map<Object, Object> effectiveSettings = Map.ofEntries(
+            Map.entry("accountName", "account"),
+            Map.entry("userName", "user"),
+            Map.entry("profileId", "profile"),
+            Map.entry("reportId", "report"),
+            Map.entry("password", "pass"),
+            Map.entry("limit", 1000),
+            Map.entry("documentType", ""),
+            Map.entry("timeRange", 30),
+            Map.entry("interval", 1440),
+            Map.entry("sortByMeasure", "Hits"),
+            Map.entry("category", ""),
+            Map.entry("maxLength", 10),
+            Map.entry("action", ""),
+            Map.entry("baseChannel", emptyList()));
     assertEquals(effectiveSettings, provider.computeEffectiveRetrievalSettings(cmalxBaseList, mock(Content.class)));
     assertEquals(Collections.emptyList(), provider.fetchDataFor(cmalxBaseList, serviceSettings));
   }
@@ -112,21 +110,21 @@ public class ElasticWebtrendsServiceProviderTest {
     serviceSettings.put("reportId", "report");
     when(settingsService.mergedSettingAsMap(eq(WEBTRENDS_SERVICE_KEY), eq(String.class), eq(Object.class), any(Content.class), any(Content.class))).thenReturn(serviceSettings);
 
-    ImmutableMap<Object, Object> effectiveSettings = ImmutableMap.builder()
-            .put("accountName", "")
-            .put("userName", "")
-            .put("profileId", "profile")
-            .put("reportId", "report")
-            .put("password", "")
-            .put("limit", 1000)
-            .put("documentType", "")
-            .put("timeRange", 30)
-            .put("interval", 1440)
-            .put("sortByMeasure", "Hits")
-            .put("category", "")
-            .put("maxLength", 10)
-            .put("action", "")
-            .put("baseChannel", emptyList()).build();
+    Map<Object, Object> effectiveSettings = Map.ofEntries(
+            Map.entry("accountName", ""),
+            Map.entry("userName", ""),
+            Map.entry("profileId", "profile"),
+            Map.entry("reportId", "report"),
+            Map.entry("password", ""),
+            Map.entry("limit", 1000),
+            Map.entry("documentType", ""),
+            Map.entry("timeRange", 30),
+            Map.entry("interval", 1440),
+            Map.entry("sortByMeasure", "Hits"),
+            Map.entry("category", ""),
+            Map.entry("maxLength", 10),
+            Map.entry("action", ""),
+            Map.entry("baseChannel", emptyList()));
     assertEquals(effectiveSettings, provider.computeEffectiveRetrievalSettings(cmalxBaseList, mock(Content.class)));
     assertEquals(Collections.emptyList(), provider.fetchDataFor(cmalxBaseList, serviceSettings));
   }
@@ -138,14 +136,12 @@ public class ElasticWebtrendsServiceProviderTest {
     Map<String, Object> effectiveSettings = provider.computeEffectiveRetrievalSettings(cmAlxPageList, mock(Content.class));
 
     // expect empty settings when called with empty map
-    assertEquals("maps shoudn't differ: " + Maps.difference(Collections.EMPTY_MAP, effectiveSettings),
-            Collections.EMPTY_MAP,
-            effectiveSettings);
+    assertEquals(Collections.EMPTY_MAP, effectiveSettings);
   }
 
   @Test
   public void computeEffectiveSettingsWithUnimportantSettings() {
-    when(settingsService.mergedSettingAsMap(eq(WEBTRENDS_SERVICE_KEY), eq(String.class), eq(Object.class), any(Content.class), any(Content.class))).thenReturn(ImmutableMap.<String, Object>of("unused", "does not matter"));
+    when(settingsService.mergedSettingAsMap(eq(WEBTRENDS_SERVICE_KEY), eq(String.class), eq(Object.class), any(Content.class), any(Content.class))).thenReturn(Map.of("unused", "does not matter"));
 
     Map<String, Object> effectiveSettings = provider.computeEffectiveRetrievalSettings(cmAlxPageList, mock(Content.class));
 
@@ -153,9 +149,7 @@ public class ElasticWebtrendsServiceProviderTest {
     Map<String, Object> expectedEffectiveSettings = new HashMap<>();
     expectedEffectiveSettings.putAll(getEmptyEffectiveSettings());
 
-    assertEquals("maps shoudn't differ: " + Maps.difference(expectedEffectiveSettings, effectiveSettings),
-            expectedEffectiveSettings,
-            effectiveSettings);
+    assertEquals(expectedEffectiveSettings, effectiveSettings);
   }
 
   @Test
@@ -170,9 +164,7 @@ public class ElasticWebtrendsServiceProviderTest {
     expectedEffectiveSettings.putAll(getEmptyEffectiveSettings());
     expectedEffectiveSettings.put(DOCUMENT_PROPERTY_TIME_RANGE, TIME_RANGE);
 
-    assertEquals("maps shoudn't differ: " + Maps.difference(expectedEffectiveSettings, effectiveSettings),
-            expectedEffectiveSettings,
-            effectiveSettings);
+    assertEquals(expectedEffectiveSettings, effectiveSettings);
   }
 
   @Test
@@ -187,9 +179,7 @@ public class ElasticWebtrendsServiceProviderTest {
     expectedEffectiveSettings.putAll(getEmptyEffectiveSettings());
     expectedEffectiveSettings.putAll(serviceSettings);
 
-    assertEquals("maps shoudn't differ: " + Maps.difference(expectedEffectiveSettings, effectiveSettings),
-            expectedEffectiveSettings,
-            effectiveSettings);
+    assertEquals(expectedEffectiveSettings, effectiveSettings);
   }
 
   private void initChangedDefaultSettings() {
@@ -206,8 +196,6 @@ public class ElasticWebtrendsServiceProviderTest {
   }
 
   private Map<String, Object> getEmptyEffectiveSettings() {
-    Map<String, Object> settings = new HashMap<>();
-    settings.putAll(ElasticWebtrendsServiceProvider.DEFAULT_RETRIEVAL_SETTINGS);
-    return settings;
+    return new HashMap<>(ElasticWebtrendsServiceProvider.DEFAULT_RETRIEVAL_SETTINGS);
   }
 }

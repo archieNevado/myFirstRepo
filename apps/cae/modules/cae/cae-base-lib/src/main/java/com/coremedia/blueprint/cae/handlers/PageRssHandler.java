@@ -10,9 +10,9 @@ import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
-import com.google.common.collect.ImmutableMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -73,7 +73,7 @@ public class PageRssHandler extends PageHandlerBase {
    * @see com.coremedia.blueprint.cae.view.FeedView
    */
   @GetMapping(value = URI_PATTERN_RSS)
-  public ModelAndView handleRss(@PathVariable(SEGMENT_ID) ContentBean contentBean,
+  public ModelAndView handleRss(@Nullable @PathVariable(SEGMENT_ID) ContentBean contentBean,
                                 @PathVariable(SEGMENT_ROOT) String rootSegment) {
     if (isSuitableFeedSource(contentBean)) {
       CMLinkable feedSource = (CMLinkable) contentBean;
@@ -92,8 +92,8 @@ public class PageRssHandler extends PageHandlerBase {
    * The first number is the ID of the topic page, the second is the id of the taxonomy.
    */
   @GetMapping(value = URI_PATTERN_RSS_TOPICPAGE)
-  public ModelAndView handleRssTopicPage(@PathVariable(SEGMENT_ID) ContentBean contentBean,
-                                         @PathVariable(SEGMENT_TAXONOMY_ID) ContentBean taxonomyBean,
+  public ModelAndView handleRssTopicPage(@Nullable @PathVariable(SEGMENT_ID) ContentBean contentBean,
+                                         @Nullable @PathVariable(SEGMENT_TAXONOMY_ID) ContentBean taxonomyBean,
                                          @PathVariable(SEGMENT_ROOT) String rootSegment) {
     if (isSuitableFeedSource(contentBean) && taxonomyBean != null) {
       CMLinkable feedSource = (CMLinkable) contentBean;
@@ -120,7 +120,7 @@ public class PageRssHandler extends PageHandlerBase {
       CMNavigation context = (CMNavigation) getNavigation(source);
       String rootSegment = getRootSegment(context);
       if (rootSegment != null) {
-        return ImmutableMap.of(SEGMENT_ID, getId(source), SEGMENT_ROOT, rootSegment);
+        return Map.of(SEGMENT_ID, getId(source), SEGMENT_ROOT, rootSegment);
       }
     }
     return null;
@@ -135,7 +135,7 @@ public class PageRssHandler extends PageHandlerBase {
     if (isSuitableFeedSource(context)) {
       String rootSegment = getRootSegment(context);
       if (rootSegment != null) {
-        return ImmutableMap.of(SEGMENT_ID, getId(context), SEGMENT_ROOT, rootSegment, SEGMENT_TAXONOMY_ID, getId(taxonomy));
+        return Map.of(SEGMENT_ID, getId(context), SEGMENT_ROOT, rootSegment, SEGMENT_TAXONOMY_ID, getId(taxonomy));
       }
     }
     LOG.error("Content has no navigation context, cannot build link for {}", taxonomy);

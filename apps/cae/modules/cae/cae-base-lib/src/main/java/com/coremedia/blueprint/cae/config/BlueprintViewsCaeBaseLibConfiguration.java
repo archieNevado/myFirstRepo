@@ -47,7 +47,7 @@ import com.coremedia.objectserver.web.links.LinkFormatter;
 import com.coremedia.springframework.core.io.CompoundResourceLoader;
 import com.coremedia.springframework.customizer.Customize;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
-import com.google.common.collect.Lists;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -80,7 +80,6 @@ import java.util.Map;
         "classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml",
         "classpath:/framework/spring/blueprint-services.xml",
         "classpath:/framework/spring/blueprint-handlers.xml",
-        "classpath:/framework/spring/blueprint-sitemap.xml",
         "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
         "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-cae-services.xml",
 }, reader = ResourceAwareXmlBeanDefinitionReader.class)
@@ -168,7 +167,7 @@ public class BlueprintViewsCaeBaseLibConfiguration {
   public BlueprintHttpErrorView blueprintHttpErrorView() {
     BlueprintHttpErrorView errorView = new BlueprintHttpErrorView();
 
-    errorView.setErrorsRendered(Lists.newArrayList(400, 404));
+    errorView.setErrorsRendered(List.of(400, 404));
 
     return errorView;
   }
@@ -191,11 +190,11 @@ public class BlueprintViewsCaeBaseLibConfiguration {
    */
   @Bean
   public RobotsView robotsView(LinkFormatter linkFormatter,
-                               SitemapHelper sitemapHelper) {
+                               ObjectProvider<SitemapHelper> sitemapHelperProvider) {
     RobotsView robotsView = new RobotsView();
 
     robotsView.setLinkFormatter(linkFormatter);
-    robotsView.setSitemapHelper(sitemapHelper);
+    sitemapHelperProvider.ifAvailable(robotsView::setSitemapHelper);
 
     return robotsView;
   }
@@ -359,7 +358,7 @@ public class BlueprintViewsCaeBaseLibConfiguration {
     DynamicIncludeRenderNodeDecoratorProvider dynamicIncludeProvider
             = new DynamicIncludeRenderNodeDecoratorProvider(dynamicIncludeDecorator, dynamicIncludePredicates);
 
-    return Lists.newArrayList(viewTypeProvider, dynamicIncludeProvider);
+    return List.of(viewTypeProvider, dynamicIncludeProvider);
   }
 
   /**
@@ -390,7 +389,7 @@ public class BlueprintViewsCaeBaseLibConfiguration {
   @Customize(value = "viewLookupTypeTriggers", mode = Customize.Mode.APPEND)
   @Order(10000)
   public List<String> addViewLookupTypeTriggers() {
-    return Lists.newArrayList("CMTemplateSet", "CMTheme");
+    return List.of("CMTemplateSet", "CMTheme");
   }
 
   /**
@@ -400,7 +399,7 @@ public class BlueprintViewsCaeBaseLibConfiguration {
   @Customize(value = "templateLocationPatterns", mode = Customize.Mode.REPLACE)
   @Order(0)
   public List<String> customizeTemplateLocationPatterns() {
-    return Lists.newArrayList("/WEB-INF/templates/%s");
+    return List.of("/WEB-INF/templates/%s");
   }
 
   /**
@@ -465,13 +464,13 @@ public class BlueprintViewsCaeBaseLibConfiguration {
   @Customize(value = "previewResourcesCssList", mode = Customize.Mode.APPEND)
   @Order(10000)
   public String addPreviewCss() {
-    return "/com/coremedia/cae/css/coremedia.preview.blueprint.css";
+    return "/static/preview/coremedia.preview.blueprint.css";
   }
 
   @Bean(autowireCandidate = false)
   @Customize(value = "previewResourcesJsList", mode = Customize.Mode.APPEND)
   @Order(10000)
   public String addPreviewJs() {
-    return "/com/coremedia/cae/js/coremedia.preview.blueprint.js";
+    return "/static/preview/coremedia.preview.blueprint.js";
   }
 }

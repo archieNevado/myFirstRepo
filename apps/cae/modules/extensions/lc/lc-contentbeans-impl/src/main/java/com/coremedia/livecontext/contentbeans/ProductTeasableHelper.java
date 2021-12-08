@@ -13,13 +13,13 @@ import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
 import com.coremedia.xml.Markup;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Optional;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper.parseCommerceId;
@@ -90,7 +90,7 @@ public class ProductTeasableHelper {
 
     CommerceConnection connection = commerceConnection.get();
 
-    StoreContext storeContext = connection.getStoreContext();
+    StoreContext storeContext = connection.getInitialStoreContext();
     CommerceId commerceId = productIdOptional.get();
 
     try {

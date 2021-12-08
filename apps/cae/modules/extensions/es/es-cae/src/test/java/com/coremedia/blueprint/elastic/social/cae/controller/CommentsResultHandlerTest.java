@@ -3,7 +3,6 @@ package com.coremedia.blueprint.elastic.social.cae.controller;
 import com.coremedia.blueprint.base.elastic.social.common.ContributionTargetHelper;
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
-import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.blueprint.cae.handlers.NavigationSegmentsUriHelper;
 import com.coremedia.blueprint.cae.web.i18n.PageResourceBundleFactory;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
@@ -18,6 +17,7 @@ import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.cap.user.User;
 import com.coremedia.elastic.core.cms.ContentWithSite;
 import com.coremedia.elastic.social.api.ModerationType;
@@ -25,7 +25,6 @@ import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.HttpError;
-import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -288,7 +287,7 @@ public class CommentsResultHandlerTest {
   public void buildCommentInfoLink() throws URISyntaxException {
     String notPermittedParamName = "not permitted";
     String paramValue = "value";
-    Map<String, Object> linkParameters = ImmutableMap.<String, Object>of(permittedParamName, paramValue, notPermittedParamName, paramValue);
+    Map<String, Object> linkParameters = Map.of(permittedParamName, paramValue, notPermittedParamName, paramValue);
     CommentsResult commentsResult = new CommentsResult(contentWithSite);
     UriComponents result = handler.buildCommentInfoLink(commentsResult, uriTemplate, linkParameters, request);
 
@@ -304,7 +303,7 @@ public class CommentsResultHandlerTest {
   public void buildFragmentLink() throws URISyntaxException {
     String notPermittedParamName = "not permitted";
     String paramValue = "value";
-    Map<String, Object> linkParameters = ImmutableMap.<String, Object>of(permittedParamName, paramValue, notPermittedParamName, paramValue);
+    Map<String, Object> linkParameters = Map.of(permittedParamName, paramValue, notPermittedParamName, paramValue);
     CommentsResult commentsResult = new CommentsResult(contentWithSite);
     UriComponents result = handler.buildFragmentLink(commentsResult, uriTemplate, linkParameters, request);
 

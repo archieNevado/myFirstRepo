@@ -22,7 +22,6 @@ import com.coremedia.cache.util.ObjectCacheKey;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.user.User;
-import com.google.common.collect.Lists;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
@@ -51,8 +50,11 @@ public class CMChannelImpl extends CMChannelBase {
 
   /**
    * If the header is empty, fallback to parent channel.
+   *
+   * @deprecated since 2110; see {@link CMChannel#getHeader()} for reasons
    */
   @Override
+  @Deprecated
   public List<? extends Linkable> getHeader() {
     List<? extends Linkable> headers = filterItems(getHeaderUnfiltered());
     if (!headers.isEmpty()) {
@@ -64,15 +66,21 @@ public class CMChannelImpl extends CMChannelBase {
 
   /**
    * public for dataview caching only //todo check alternatives
+   *
+   * @deprecated since 2110; together with {@link #getHeader()}
    */
+  @Deprecated
   public List <? extends Linkable> getHeaderUnfiltered(){
     return super.getHeader();
   }
 
   /**
    * If the footer is empty, fallback to parent channel.
+   *
+   * @deprecated since 2110; see {@link CMChannel#getFooter()} for reasons
    */
   @Override
+  @Deprecated
   public List<? extends Linkable> getFooter() {
     List<? extends Linkable> footers = filterItems(getFooterUnfiltered());
     if (!footers.isEmpty()) {
@@ -84,7 +92,10 @@ public class CMChannelImpl extends CMChannelBase {
 
   /**
    * public for dataview caching only //todo check alternatives
+   *
+   * @deprecated since 2110; together with {@link #getFooter()}
    */
+  @Deprecated
   public List <? extends Linkable> getFooterUnfiltered(){
     return super.getFooter();
   }
@@ -131,9 +142,18 @@ public class CMChannelImpl extends CMChannelBase {
 
     // ... but this is more convenient for developers,
     // it works also for alternative TreeRelations and thus spares overriding:
-    List<Linkable> beans = Lists.reverse(treeRelation.pathToRoot(this));
-    List<Content> contents = Lists.transform(beans, (Linkable l) -> l instanceof CMNavigation ? ((CMNavigation) l).getContent() : null);
-    return createBeanFor(themeService.directTheme(contents, developer), CMTheme.class);
+    var visited = new HashSet<Linkable>();
+    Linkable linkable = this;
+    var navigations = new ArrayList<Content>();
+    while (linkable != null && visited.add(linkable)) {
+      if (linkable instanceof CMNavigation) {
+        navigations.add(((CMNavigation)linkable).getContent());
+      }
+      // avoid CycleInTreeRelationException
+      linkable = treeRelation.getParentUnchecked(linkable);
+    }
+
+    return createBeanFor(themeService.directTheme(navigations, developer), CMTheme.class);
   }
 
 

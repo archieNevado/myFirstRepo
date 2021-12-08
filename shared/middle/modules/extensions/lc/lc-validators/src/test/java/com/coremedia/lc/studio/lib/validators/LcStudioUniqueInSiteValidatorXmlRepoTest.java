@@ -9,6 +9,7 @@ import com.coremedia.rest.validation.impl.IssuesImpl;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -18,8 +19,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-
-import javax.inject.Inject;
 
 import java.util.List;
 
@@ -36,17 +35,16 @@ import static org.hamcrest.core.IsCollectionContaining.hasItem;
 @TestPropertySource(properties = {
         "repository.factoryClassName=com.coremedia.cap.xmlrepo.XmlCapConnectionFactory",
         "repository.params.contentxml=classpath:/com/coremedia/lc/studio/lib/validators/lc-studio-lib-test-content.xml",
-        "livecontext.augmentation.backward-compatibility=false"
 })
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class LcStudioUniqueInSiteValidatorXmlRepoTest {
 
   private static final String PROPERTY_NAME = "externalId";
 
-  @Inject
+  @Autowired
   private ContentRepository contentRepository;
 
-  @Inject
+  @Autowired
   private ApplicationContextCapTypeValidators testling;
 
   @Test
@@ -71,7 +69,7 @@ public class LcStudioUniqueInSiteValidatorXmlRepoTest {
   }
 
   @Configuration(proxyBeanMethods = false)
-  @Import(LcStudioValidationConfiguration.class)
+  @Import(LcUniqueInSiteValidatorsConfiguration.class)
   public static class LocalConfig {
 
     @Bean

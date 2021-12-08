@@ -8,7 +8,6 @@ import com.coremedia.blueprint.cae.contentbeans.PageImpl;
 import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.Content;
-import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +23,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static java.util.Arrays.asList;
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -73,7 +71,7 @@ public class DefaultPageHandlerTest extends PageHandlerBaseTest<DefaultPageHandl
   public void testHandleRequestInternalChannelWithDashAndNumber() {
     when(navigationSegmentsUriHelper.parsePath(Arrays.asList(DEFAULT_CONTEXT, "segment-2014")))
             .thenReturn(defaultNavigation);
-    assertNavigationPage(testling.handleRequestInternal(null, "2014", Arrays.asList(DEFAULT_CONTEXT), "segment", null, servletRequest));
+    assertNavigationPage(testling.handleRequestInternal(null, "2014", List.of(DEFAULT_CONTEXT), "segment", null, servletRequest));
   }
 
   @Test
@@ -86,7 +84,7 @@ public class DefaultPageHandlerTest extends PageHandlerBaseTest<DefaultPageHandl
   @Test
   public void handleRequestInternalForTaxonomyWithTwoPathSegmentsNoRootChannelFound() {
     when(contentLinkBuilder.getVanityName(defaultTaxonomyContent)).thenReturn(DEFAULT_VANITY_NAME);
-    List<String> expectedNavigationPath = ImmutableList.of(DEFAULT_CONTEXT, ADDITIONAL_SEGMENT);
+    List<String> expectedNavigationPath = List.of(DEFAULT_CONTEXT, ADDITIONAL_SEGMENT);
     when(navigationSegmentsUriHelper.lookupRootSegment(DEFAULT_CONTEXT)).thenReturn(null);
     assertNotFound("Should not be found.", testling.handleRequestInternal(defaultTaxonomy, DEFAULT_CONTENT_ID_STR,
             expectedNavigationPath, DEFAULT_VANITY_NAME, null, servletRequest));
@@ -95,7 +93,7 @@ public class DefaultPageHandlerTest extends PageHandlerBaseTest<DefaultPageHandl
   @Test
   public void handleRequestInternalForTaxonomyWithTwoPathSegmentsInvalidNavigationPath() {
     when(contentLinkBuilder.getVanityName(defaultTaxonomyContent)).thenReturn(DEFAULT_VANITY_NAME);
-    List<String> expectedNavigationPath = ImmutableList.of(DEFAULT_CONTEXT, ADDITIONAL_SEGMENT);
+    List<String> expectedNavigationPath = List.of(DEFAULT_CONTEXT, ADDITIONAL_SEGMENT);
     assertNotFound("Should not be found.", testling.handleRequestInternal(defaultTaxonomy, DEFAULT_CONTENT_ID_STR,
             expectedNavigationPath, DEFAULT_VANITY_NAME, null, servletRequest));
   }
@@ -103,7 +101,7 @@ public class DefaultPageHandlerTest extends PageHandlerBaseTest<DefaultPageHandl
   @Test
   public void handleVanityRequestInternalEmptyNavigationPathProvided() {
     assertNotFound("Should not be found.", testling.handleRequestInternal(null, null, servletRequest));
-    assertNotFound("Should not be found.", testling.handleRequestInternal(Collections.<String>emptyList(), null, servletRequest));
+    assertNotFound("Should not be found.", testling.handleRequestInternal(Collections.emptyList(), null, servletRequest));
   }
 
   @Test
@@ -119,20 +117,20 @@ public class DefaultPageHandlerTest extends PageHandlerBaseTest<DefaultPageHandl
 
   @Test
   public void handleVanityRequestInternalWithMultiplePathSegmentsVanitySegmentDoesNotMatchAnySegment() {
-    List<String> expectedPathList = ImmutableList.of(DEFAULT_CONTEXT, ADDITIONAL_SEGMENT);
+    List<String> expectedPathList = List.of(DEFAULT_CONTEXT, ADDITIONAL_SEGMENT);
     when(contextHelper.findAndSelectContextFor(defaultNavigation, defaultNavigation)).thenReturn(null);
     assertNotFound("Should not be found", testling.handleRequestInternal(expectedPathList, null, servletRequest));
   }
 
   @Test
   public void handleVanityRequestInternalSuccessfullyWithMultiplePathSegmentsVanitySegment() {
-    List<String> expectedPathList = ImmutableList.of(DEFAULT_CONTEXT, ADDITIONAL_SEGMENT);
+    List<String> expectedPathList = List.of(DEFAULT_CONTEXT, ADDITIONAL_SEGMENT);
     assertNavigationPage(testling.handleRequestInternal(expectedPathList, null, servletRequest));
   }
 
   @Test
   public void handleVanityRequestInternalSuccessfullyWithMultiplePathSegmentsVanitySegmentDoesNotMatchAnySegmentButFallbackWorks() {
-    List<String> expectedPathList = ImmutableList.of(DEFAULT_CONTEXT, ADDITIONAL_SEGMENT);
+    List<String> expectedPathList = List.of(DEFAULT_CONTEXT, ADDITIONAL_SEGMENT);
     when(contextHelper.findAndSelectContextFor(defaultNavigation, defaultNavigation)).thenReturn(null);
     when(navigationSegmentsUriHelper.parsePath(expectedPathList)).thenReturn(defaultNavigation);
     assertNavigationPage(testling.handleRequestInternal(expectedPathList, null, servletRequest));
@@ -208,7 +206,7 @@ public class DefaultPageHandlerTest extends PageHandlerBaseTest<DefaultPageHandl
     doNothing().when(navigationResolver).setPageModelToRequestConstants(defaultTaxonomy);
 
     testling.setBeanFactory(beanFactory);
-    testling.setViewToBean(Collections.<String, Class>emptyMap());
+    testling.setViewToBean(Collections.emptyMap());
     testling.setTopicPageContextFinder(topicpageContextFinder);
     testling.setContentLinkBuilder(contentLinkBuilder);
     testling.setNavigationResolver(navigationResolver);
@@ -257,7 +255,7 @@ public class DefaultPageHandlerTest extends PageHandlerBaseTest<DefaultPageHandl
   @Mock
   private UrlPathFormattingHelper urlPathFormattingHelper;
 
-  private static final List<String> DEFAULT_NAVIGATION_PATH = asList(DEFAULT_CONTEXT);
+  private static final List<String> DEFAULT_NAVIGATION_PATH = List.of(DEFAULT_CONTEXT);
   private static final String DEFAULT_VANITY_NAME = DEFAULT_ACTION;
   private static final String ADDITIONAL_SEGMENT = "Crisis Inducer";
 }

@@ -4,13 +4,20 @@ import javax.xml.bind.annotation.XmlAttribute;
 
 public abstract class Code extends Resource {
   private String ieExpression;
-  private boolean disableCompress;
   private boolean notLinked;
 
+  /**
+   * @deprecated since 2110.1, Old Internet Explorer (IE) is not supported anymore.
+   */
+  @Deprecated(since = "2110.1")
   public String getIeExpression() {
     return ieExpression;
   }
 
+  /**
+   * @deprecated since 2110.1, Old Internet Explorer (IE) is not supported anymore.
+   */
+  @Deprecated(since = "2110.1")
   @XmlAttribute
   public void setIeExpression(String ieExpression) {
     this.ieExpression = ieExpression;
@@ -23,20 +30,5 @@ public abstract class Code extends Resource {
   @XmlAttribute
   public void setNotLinked(boolean notLinked) {
     this.notLinked = notLinked;
-  }
-
-  /**
-   * @return if compression is disabled
-   */
-  public boolean isDisableCompress() {
-    return disableCompress;
-  }
-
-  /**
-   * @param disableCompress TRUE to disable compression, otherwise FALSE
-   */
-  @XmlAttribute
-  public void setDisableCompress(boolean disableCompress) {
-    this.disableCompress = disableCompress;
   }
 }

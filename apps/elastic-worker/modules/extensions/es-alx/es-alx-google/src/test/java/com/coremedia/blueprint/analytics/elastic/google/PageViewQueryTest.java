@@ -5,7 +5,6 @@ import com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil;
 import com.coremedia.blueprint.base.analytics.elastic.util.SettingsUtil;
 import com.google.api.services.analytics.Analytics;
 import com.google.api.services.analytics.model.GaData;
-import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
@@ -16,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -77,7 +77,7 @@ public class PageViewQueryTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testCreateInvalidQuery() {
-    ImmutableMap<String, Object> settings = ImmutableMap.<String, Object>of(
+    Map<String, Object> settings = Map.of(
             RetrievalUtil.KEY_LIMIT, 20,
             RetrievalUtil.DOCUMENT_PROPERTY_TIME_RANGE, 30
     );
@@ -102,7 +102,7 @@ public class PageViewQueryTest {
   }
 
   private PageViewQuery createDefaultQuery() {
-    ImmutableMap<String, Object> settings = ImmutableMap.<String, Object>of(
+    Map<String, Object> settings = Map.of(
             RetrievalUtil.KEY_LIMIT, 20,
             RetrievalUtil.DOCUMENT_PROPERTY_TIME_RANGE, 30,
             GoogleAnalyticsQuery.KEY_PID, 1234

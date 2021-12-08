@@ -1,34 +1,6 @@
 {
   "properties": [
     {
-      "name": "blueprint.sitemap.period",
-      "deprecation": {
-        "level": "warning",
-        "replacement": "cae.sitemap.period-minutes"
-      }
-    },
-    {
-      "name": "blueprint.sitemap.protocol",
-      "deprecation": {
-        "level": "warning",
-        "replacement": "cae.sitemap.protocol"
-      }
-    },
-    {
-      "name": "blueprint.sitemap.cae.port",
-      "deprecation": {
-        "level": "warning",
-        "replacement": "cae.sitemap.cae-port"
-      }
-    },
-    {
-      "name": "blueprint.sitemap.target.root",
-      "deprecation": {
-        "level": "warning",
-        "replacement": "cae.sitemap.target-root"
-      }
-    },
-    {
       "name": "cae.hashing.backward-compatibility",
       "description": "If enabled the deprecated com.coremedia.blueprint.cae.util.DefaultSecureHashCodeGeneratorStrategy will be used for securing blob transformation. If set to false the com.coremedia.blueprint.cae.util.MD5SecureHashCodeGeneratorStrategy will be used."
     },

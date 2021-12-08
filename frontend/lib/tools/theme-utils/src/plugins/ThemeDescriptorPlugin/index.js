@@ -19,7 +19,7 @@ function getXmlPath(path) {
 function getTargets(code, filesToLoadByEntryPoint, entryPointFilesFilter) {
   const targets = [];
   switch (code.type) {
-    case "webpack":
+    case "webpack": {
       const filesToLoad = filesToLoadByEntryPoint[code.entryPointName] || [];
       const jsFilesToLoad = filesToLoad.filter(
         (filename) =>
@@ -27,6 +27,7 @@ function getTargets(code, filesToLoadByEntryPoint, entryPointFilesFilter) {
       );
       targets.push(...jsFilesToLoad);
       break;
+    }
     case "copy":
       targets.push(code.target);
       break;
@@ -101,7 +102,6 @@ class ThemeDescriptorPlugin {
                   ...(style.ieExpression !== null
                     ? { ieExpression: style.ieExpression }
                     : {}),
-                  disableCompress: style.disableServerSideCompression !== false,
                   notLinked: style.include !== true,
                 });
               });
@@ -119,7 +119,6 @@ class ThemeDescriptorPlugin {
               getXmlPath(themeConfig.buildConfig.chunkMappingPath),
               {
                 inHead: true,
-                disableCompress: true,
                 notLinked: false,
               }
             );
@@ -138,8 +137,6 @@ class ThemeDescriptorPlugin {
                   ...(scripts.inHead !== undefined
                     ? { inHead: scripts.inHead }
                     : {}),
-                  disableCompress:
-                    scripts.disableServerSideCompression !== false,
                   ...(scripts.defer === true ? { defer: true } : {}),
                   notLinked: scripts.include !== true,
                 });
@@ -326,6 +323,4 @@ class ThemeDescriptorPlugin {
   }
 }
 
-module.exports = {
-  ThemeDescriptorPlugin,
-};
+module.exports = ThemeDescriptorPlugin;

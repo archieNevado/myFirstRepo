@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.taxonomies.semantic;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 
 import java.util.Collection;
@@ -21,7 +20,7 @@ public class SemanticContext {
   }
 
   public Map<String, Collection<SemanticEntity>> getEntities() {
-    return ImmutableMap.copyOf(properties.asMap());
+    return Map.copyOf(properties.asMap());
   }
 
   @Override

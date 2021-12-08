@@ -4,23 +4,22 @@ import com.adobe.internal.xmp.XMPException;
 import com.adobe.internal.xmp.XMPMeta;
 import com.adobe.internal.xmp.options.IteratorOptions;
 import com.adobe.internal.xmp.properties.XMPPropertyInfo;
-import com.coremedia.common.util.Predicate;
-import com.coremedia.common.util.Predicates;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.xmp.XmpDirectory;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Iterators;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
-import static java.util.Optional.ofNullable;
+import static java.util.Objects.requireNonNullElse;
 
 /**
  * <p>
@@ -151,7 +150,7 @@ public class XmpImageMetadataExtractor implements Function<Metadata, Map<String,
    */
   @NonNull
   private Predicate<XMPPropertyInfo> getFilterPredicate() {
-    return ofNullable(filterPredicate).orElse(Predicates.alwaysTrue());
+    return requireNonNullElse(filterPredicate, o -> true);
   }
 
   /**
@@ -178,7 +177,7 @@ public class XmpImageMetadataExtractor implements Function<Metadata, Map<String,
       Iterator<XMPPropertyInfo> iterator = xmpPropertyIterator(directory);
       while (iterator.hasNext()) {
         XMPPropertyInfo next = iterator.next();
-        if (predicate.include(next)) {
+        if (predicate.test(next)) {
           result.put(next.getPath(), convert.apply(next));
         }
       }

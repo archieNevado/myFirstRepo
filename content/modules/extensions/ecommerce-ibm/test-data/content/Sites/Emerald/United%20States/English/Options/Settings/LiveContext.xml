@@ -12,12 +12,6 @@
 <BooleanProperty Name="livecontext.policy.commerce-page-links">false</BooleanProperty>
 <BooleanProperty Name="livecontext.policy.commerce-microsite-links">false</BooleanProperty>
 <BooleanProperty Name="livecontext.manageNavigation">true</BooleanProperty>
-<StructProperty Name="livecontext.catalogAliases">
-<Struct>
-<StringProperty Name="catalog">EmeraldCAS Home Sales Catalog</StringProperty>
-<StringProperty Name="master">EmeraldCAS</StringProperty>
-</Struct>
-</StructProperty>
 <StructProperty Name="commerce">
 <Struct>
 <StringProperty Name="endpoint">${commerce.hub.data.endpoints.wcs91}</StringProperty>
@@ -32,9 +26,16 @@
 </StructProperty>
 <StructProperty Name="catalogConfig">
 <Struct>
+<StringProperty Name="name">EmeraldCAS Home Sales Catalog</StringProperty>
 <StringProperty Name="id">11501</StringProperty>
 </Struct>
 </StructProperty>
+<StructListProperty Name="additionalCatalogConfigs">
+<Struct>
+<StringProperty Name="alias">master</StringProperty>
+<StringProperty Name="name">EmeraldCAS</StringProperty>
+</Struct>
+</StructListProperty>
 </Struct>
 </StructProperty>
 </Struct>

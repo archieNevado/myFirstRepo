@@ -102,7 +102,6 @@ public class LinkEmbedFilterTest {
     request.setAttribute(ViewUtils.VIEWDISPATCHER, viewDispatcher);
 
     testling = (LinkEmbedFilter) linkEmbedFilter.getInstance(request, response);
-    testling.strictNestedPCheck = true;
     newXmlFilters.add(testling);
   }
 
@@ -115,69 +114,6 @@ public class LinkEmbedFilterTest {
             EMBEDDED_BLOCK +
             FOOTER;
     assertEquals("testBlockIntoDiv", expected, result);
-  }
-
-  @Test
-  public void testBlockIntoOpenP() {
-    String result = getResult(240);
-    String expected = HEADER +
-            "<p class=\"orig\">foo </p>" +
-            EMBEDDED_BLOCK +
-            "<p class=\"orig\"> bar</p>" +
-            FOOTER;
-    assertEquals("testBlockIntoOpenP", expected, result);
-  }
-
-  @Test
-  public void testBlockIntoDelayedP() {
-    String result = getResult(246);
-    String expected = HEADER +
-            EMBEDDED_BLOCK +
-            "<p class=\"orig\"> behind</p>" +
-            FOOTER;
-    assertEquals("testBlockIntoDelayedP", expected, result);
-  }
-
-  @Test
-  public void testBlockIntoEndOfP() {
-    String result = getResult(264);
-    String expected = HEADER +
-            "<p class=\"orig\">foo </p>" +
-            EMBEDDED_BLOCK +
-            FOOTER;
-    assertEquals("testBlockIntoOpenP", expected, result);
-  }
-
-  @Test
-  public void testBlockIntoEmptyP() {
-    String result = getResult(266);
-    String expected = HEADER +
-            EMBEDDED_BLOCK +
-            FOOTER;
-    assertEquals("testBlockIntoEmptyP", expected, result);
-  }
-
-  @Test
-  public void testBlockIntoOpenSpan() {
-    String result = getResult(244);
-    String expected = HEADER +
-            "<p class=\"orig\">bla <span class=\"spanclass\"> before </span></p>" +
-            EMBEDDED_BLOCK +
-            "<p class=\"orig\"><span class=\"spanclass\"> behind</span> blub</p>" +
-            FOOTER;
-    assertEquals("testBlockIntoOpenSpan", expected, result);
-  }
-
-  /**
-   * Ensure that a p which has become empty by link embedding is omitted.
-   */
-  @Test
-  public void testDropEmptiedP() {
-    String result = getResult(258);
-    String expected = HEADER +
-            EMBEDDED_BLOCK +
-            FOOTER;
-    assertEquals("testDropEmptyP", expected, result);
   }
 
   /**
@@ -204,27 +140,6 @@ public class LinkEmbedFilterTest {
     assertEquals("testFlowIntoDiv", expected, result);
   }
 
-  @Test
-  public void testFlowIntoOpenP() {
-    String result = getResult(254);
-    String expected = HEADER +
-            "<p class=\"orig\">foo </p>" +
-            EMBEDDED_FLOW +
-            "<p class=\"orig\"> bar</p>" +
-            FOOTER;
-    assertEquals("testBlockIntoOpenP", expected, result);
-  }
-
-  @Test
-  public void testFlowIntoDelayedP() {
-    String result = getResult(256);
-    String expected = HEADER +
-            EMBEDDED_FLOW +
-            "<p class=\"orig\"> behind</p>" +
-            FOOTER;
-    assertEquals("testBlockIntoDelayedP", expected, result);
-  }
-
   /**
    * Regression test for CMS-343:
    * This shows that the question of short tags is not subject of the LinkEmbedFilter
@@ -243,16 +158,6 @@ public class LinkEmbedFilterTest {
     assertEquals("regressionTestCMS-343", expected, result);
   }
 
-  /**
-   * Regression test for CMS-1673:
-   * Reopening a p after embedding a link corrupted the element stack.
-   */
-  @Test
-  public void regressionTestCMS1673() {
-    assertTrue("No strictNestedPCheck, not a bug, but this test is meaningless.", testling.strictNestedPCheck);
-    String result = getResult(268);
-    // No need for checks, we are happy if no assertion failed so far.
-  }
 
   // --- internal ---------------------------------------------------
 

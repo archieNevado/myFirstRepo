@@ -9,7 +9,6 @@ import com.coremedia.livecontext.ecommerce.common.InvalidIdException;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
 import com.coremedia.livecontext.ecommerce.common.UnauthorizedException;
 import com.coremedia.rest.cap.util.ResponseUtil;
-import com.google.common.collect.ImmutableMap;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -32,16 +31,13 @@ public class CommerceExceptionMapper {
   // Attention: use only status codes that causes no other error handling on the client side
   // the 4xx status codes have proven to be working, so we use consistent 410 (GONE).
   // only the error codes (LC-xxxx) will be evaluated in the corresponding catalog error handler
-  private static final Map<Class, ResultCodes> EXCEPTION_CLASSES_TO_RESULT_CODES = ImmutableMap
-          .<Class, ResultCodes>builder()
-          // alphabetic order of exception classes
-          .put(CommerceAugmentationException.class, new ResultCodes(CatalogRestErrorCodes.ROOT_CATEGORY_NOT_AUGMENTED, GONE))
-          .put(CommerceRemoteException.class, new ResultCodes(CatalogRestErrorCodes.CATALOG_INTERNAL_ERROR, GONE))
-          .put(InvalidCatalogException.class, new ResultCodes(CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG, GONE))
-          .put(InvalidIdException.class, new ResultCodes(CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, GONE))
-          .put(NotFoundException.class, new ResultCodes(CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, GONE))
-          .put(UnauthorizedException.class, new ResultCodes(CatalogRestErrorCodes.UNAUTHORIZED, GONE))
-          .build();
+  private static final Map<Class, ResultCodes> EXCEPTION_CLASSES_TO_RESULT_CODES = Map.of(
+          CommerceAugmentationException.class, new ResultCodes(CatalogRestErrorCodes.ROOT_CATEGORY_NOT_AUGMENTED, GONE),
+          CommerceRemoteException.class, new ResultCodes(CatalogRestErrorCodes.CATALOG_INTERNAL_ERROR, GONE),
+          InvalidCatalogException.class, new ResultCodes(CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG, GONE),
+          InvalidIdException.class, new ResultCodes(CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, GONE),
+          NotFoundException.class, new ResultCodes(CatalogRestErrorCodes.COULD_NOT_FIND_CATALOG_BEAN, GONE),
+          UnauthorizedException.class, new ResultCodes(CatalogRestErrorCodes.UNAUTHORIZED, GONE));
 
   private static final ResultCodes RESULT_CODES_FALLBACK = new ResultCodes(CatalogRestErrorCodes.CATALOG_UNAVAILABLE, GONE);
 

@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.coremedia.blueprint.assets.studio.upload.AMDoctypeRewriteUploadInterceptor.ASSET_ROOT_FOLDER;
@@ -19,9 +20,7 @@ import static com.coremedia.blueprint.assets.studio.upload.AMDoctypeRewriteUploa
 import static com.coremedia.blueprint.assets.studio.upload.AMDoctypeRewriteUploadInterceptor.ORIGINAL_ATTRIBUTE;
 import static com.coremedia.rest.cap.intercept.InterceptorControlAttributes.DO_NOTHING;
 import static com.coremedia.rest.cap.intercept.InterceptorControlAttributes.UPLOADED_DOCUMENTS;
-import static com.google.common.collect.ImmutableList.of;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -125,6 +124,6 @@ public class AMDoctypeRewriteUploadInterceptorTest {
 
   private void verifyCreated(@NonNull ContentWriteRequest request, @NonNull Content newCreatedContent) {
     verify(request, times(1)).setAttribute(DO_NOTHING, true);
-    verify(request, times(1)).setAttribute(eq(UPLOADED_DOCUMENTS), eq(of(newCreatedContent)));
+    verify(request, times(1)).setAttribute(UPLOADED_DOCUMENTS, List.of(newCreatedContent));
   }
 }

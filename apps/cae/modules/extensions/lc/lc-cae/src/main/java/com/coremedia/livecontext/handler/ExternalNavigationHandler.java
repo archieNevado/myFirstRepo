@@ -9,24 +9,17 @@ import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
-import com.coremedia.cap.user.User;
-import com.coremedia.livecontext.commercebeans.CategoryInSite;
-import com.coremedia.livecontext.contentbeans.LiveContextExternalChannel;
 import com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl;
 import com.coremedia.livecontext.context.LiveContextNavigation;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.navigation.LiveContextCategoryNavigation;
 import com.coremedia.livecontext.product.ProductList;
 import com.coremedia.livecontext.product.ProductListSubstitutionService;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
-import com.coremedia.objectserver.web.links.Link;
 import com.coremedia.objectserver.web.links.LinkPostProcessor;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,7 +43,6 @@ import static com.coremedia.blueprint.cae.constants.RequestAttributeConstants.se
 import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_SERVICE;
 import static org.springframework.util.Assert.hasText;
 
-@Link
 @RequestMapping
 @LinkPostProcessor
 public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
@@ -99,7 +91,7 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
     hasText(shopSegment, "No shop name provided.");
     hasText(segment, "No segment provided.");
 
-    return createLiveContextPage(shopSegment, segment, view, UserVariantHelper.getUser(request));
+    return createLiveContextPage(shopSegment, segment, view, request);
   }
 
   @GetMapping(value = REST_URI_PATTERN, produces = CONTENT_TYPE_HTML)
@@ -123,52 +115,6 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
     //we need to apply the navigation here, otherwise the template lookup can't decide which context to use
     NavigationLinkSupport.setNavigation(modelAndView, page.getNavigation().getRootNavigation());
     return modelAndView;
-  }
-
-  /**
-   * @deprecated This link scheme is no longer needed and has been replaced by
-   * {@link com.coremedia.livecontext.fragment.links.CommerceLinks#buildLinkForExternalChannel(LiveContextExternalChannel, Map, HttpServletRequest)}
-   */
-  @Nullable
-  @Link(type = LiveContextExternalChannel.class)
-  @Deprecated
-  public UriComponents buildLinkForExternalChannel(LiveContextExternalChannel navigation, String viewName,
-                                                   Map<String, Object> linkParameters,
-                                                   @NonNull HttpServletRequest request) {
-    // only responsible in non-preview mode
-    if (isPreview()) {
-      return null;
-    }
-
-    return buildCatalogLink(navigation, viewName, linkParameters, request).orElse(null);
-  }
-
-  /**
-   * @deprecated This link scheme is no longer needed and has been replaced by
-   * {@link com.coremedia.livecontext.fragment.links.CommerceLinks#buildLinkForLiveContextCategoryNavigation(LiveContextCategoryNavigation, Map, HttpServletRequest)}
-   */
-  @Nullable
-  @Link(type = LiveContextCategoryNavigation.class)
-  @Deprecated
-  public UriComponents buildLinkForCategoryImpl(LiveContextCategoryNavigation navigation, String viewName,
-                                                Map<String, Object> linkParameters,
-                                                @NonNull HttpServletRequest request) {
-    return buildCatalogLink(navigation, viewName, linkParameters, request).orElse(null);
-  }
-
-  /**
-   * @deprecated This link scheme is no longer needed and has been replaced by
-   * {@link com.coremedia.livecontext.fragment.links.CommerceLinks#buildLinkForCategoryInSite(CategoryInSite, Map, HttpServletRequest)}
-   */
-  @Nullable
-  @Link(type = CategoryInSite.class)
-  @Deprecated
-  public UriComponents buildLinkFor(CategoryInSite categoryInSite, String viewName, Map<String, Object> linkParameters,
-                                    @NonNull HttpServletRequest request) {
-    LiveContextNavigation navigation = getLiveContextNavigationFactory()
-            .createNavigation(categoryInSite.getCategory(), categoryInSite.getSite());
-
-    return buildCatalogLink(navigation, viewName, linkParameters, request).orElse(null);
   }
 
   @LinkPostProcessor(type = LiveContextExternalChannelImpl.class, order = PostProcessorPrecendences.MAKE_ABSOLUTE)
@@ -199,26 +145,6 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
   }
 
   @NonNull
-  private Optional<UriComponents> buildCatalogLink(@NonNull LiveContextNavigation navigation, String viewName,
-                                                   Map<String, Object> linkParameters,
-                                                   @NonNull HttpServletRequest request) {
-    Category category = findCategory(navigation).orElse(null);
-
-    if (category == null) {
-      return Optional.empty();
-    }
-
-    Site site = navigation.getSite();
-
-    // if it's commerce led the commerce link scheme is responsible to build the link
-    if (!useCommerceCategoryLinks(site)) {
-      return buildCaeLinkForCategory(navigation, viewName, linkParameters);
-    }
-
-    return Optional.empty();
-  }
-
-  @NonNull
   public static Optional<Category> findCategory(@NonNull LiveContextNavigation navigation) {
     try {
       return Optional.ofNullable(navigation.getCategory());
@@ -230,14 +156,14 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
 
   @NonNull
   private ModelAndView createLiveContextPage(@NonNull String shopSegment, @NonNull String segment, String view,
-                                             @Nullable User developer) {
+                                             @NonNull HttpServletRequest request) {
     Site site = getSiteResolver().findSiteBySegment(shopSegment);
 
-    StoreContext storeContext = CurrentStoreContext.get();
+    var storeContext = CurrentStoreContext.get(request);
     CommerceConnection commerceConnection = storeContext.getConnection();
 
     Category category = commerceConnection.getCatalogService()
-            .findCategoryBySeoSegment(segment, commerceConnection.getStoreContext());
+            .findCategoryBySeoSegment(segment, commerceConnection.getInitialStoreContext());
 
     Navigation context = getNavigationContext(site, category).orElse(null);
     if (context == null) {
@@ -245,7 +171,7 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
       return HandlerHelper.notFound("No such category");
     }
 
-    Page page = asPage(context, context, treeRelation, developer);
+    Page page = asPage(context, context, treeRelation, UserVariantHelper.getUser(request));
 
     ModelAndView modelAndView = createModelAndView(page, view);
     modelAndView.addObject(REQUEST_ATTRIBUTE_CATEGORY, context);

@@ -1,8 +1,0 @@
-{
-  "studioPlugins": [
-    {
-      "mainClass": "com.coremedia.livecontext.p13n.studio.LivecontextP13NStudioPlugin",
-      "name": "Livecontext P13N Extensions"
-    }
-  ]
-}

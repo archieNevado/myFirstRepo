@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.cae.view;
 
-import com.google.common.collect.ImmutableList;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -22,7 +21,7 @@ public class HashBasedFragmentHandler extends DynamicInclude {
 
   public HashBasedFragmentHandler(Object delegate, @Nullable String view, Collection<String> validParameters) {
     super(delegate, view);
-    this.validParameters = ImmutableList.copyOf(validParameters);
+    this.validParameters = List.copyOf(validParameters);
   }
 
   /**

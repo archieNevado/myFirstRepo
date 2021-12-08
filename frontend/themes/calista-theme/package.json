@@ -10,22 +10,22 @@
     "theme-importer": "cm theme-importer"
   },
   "dependencies": {
-    "@coremedia-examples/brick-cart": "^1.0.0",
-    "@coremedia-examples/brick-detail": "^1.0.0",
-    "@coremedia-examples/brick-fragment-scenario": "^1.0.0",
-    "@coremedia-examples/brick-product-assets": "^1.0.0",
-    "@coremedia-examples/shared-example-theme": "^1.0.0",
-    "@coremedia/brick-device-detector": "^1.0.0",
-    "@coremedia/brick-dynamic-include": "^1.0.0",
-    "@coremedia/brick-node-decoration-service": "^1.0.0",
-    "@coremedia/brick-utils": "^1.0.0",
-    "@coremedia/cm-cli": "^2.0.0",
-    "@coremedia/theme-utils": "^3.0.0",
-    "jquery": "^3.0.0",
-    "webpack": "^4.0.0"
+    "@coremedia-examples/brick-cart": "workspace:*",
+    "@coremedia-examples/brick-detail": "workspace:*",
+    "@coremedia-examples/brick-fragment-scenario": "workspace:*",
+    "@coremedia-examples/brick-product-assets": "workspace:*",
+    "@coremedia-examples/shared-example-theme": "workspace:*",
+    "@coremedia/brick-device-detector": "workspace:*",
+    "@coremedia/brick-dynamic-include": "workspace:*",
+    "@coremedia/brick-node-decoration-service": "workspace:*",
+    "@coremedia/brick-utils": "workspace:*",
+    "@coremedia/cm-cli": "workspace:*",
+    "@coremedia/theme-utils": "workspace:*",
+    "jquery": "^3.6.0",
+    "webpack": "^4.46.0"
   },
   "devDependencies": {
-    "prettier": "^2.0.5"
+    "prettier": "^2.4.1"
   },
   "main": "src/js/index.js",
   "coremedia": {
@@ -35,7 +35,6 @@
   "browserslist": [
     "last 1 Chrome version",
     "last 1 Firefox version",
-    "last 1 Edge version",
-    "Explorer >= 11"
+    "last 1 Edge version"
   ]
 }

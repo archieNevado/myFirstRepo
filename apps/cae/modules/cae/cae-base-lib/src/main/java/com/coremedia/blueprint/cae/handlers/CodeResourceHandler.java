@@ -23,7 +23,6 @@ import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.coremedia.xml.Markup;
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.ImmutableMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -31,6 +30,7 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,7 +70,7 @@ import static org.springframework.web.util.UriUtils.encodePathSegment;
 
 /**
  * Handler and LinkScheme for all CSS and JavaScript to the requested navigation object
- * supports usage of local resources (from file), minification and merging of resources
+ * supports usage of local resources (from file) and merging of resources
  */
 @Link
 @RequestMapping
@@ -110,14 +110,12 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
   public static final String CSS_PATTERN_BULK = PREFIX_CSS + URI_SUFFIX_BULK;
   public static final String JS_PATTERN_BULK = PREFIX_JS + URI_SUFFIX_BULK;
 
-  private static final Map<String, String> EXTENSION_TO_CODEPROPERTY = ImmutableMap.<String, String>builder()
-          .put(TYPE_CSS, CMNavigation.CSS)
-          .put(TYPE_JS, CMNavigation.JAVA_SCRIPT)
-          .build();
-  private static final Map<String, String> EXTENSION_TO_URLPATTERN = ImmutableMap.<String, String>builder()
-          .put(TYPE_CSS, CSS_PATTERN_BULK)
-          .put(TYPE_JS, JS_PATTERN_BULK)
-          .build();
+  private static final Map<String, String> EXTENSION_TO_CODEPROPERTY = Map.of(
+          TYPE_CSS, CMNavigation.CSS,
+          TYPE_JS, CMNavigation.JAVA_SCRIPT);
+  private static final Map<String, String> EXTENSION_TO_URLPATTERN = Map.of(
+          TYPE_CSS, CSS_PATTERN_BULK,
+          TYPE_JS, JS_PATTERN_BULK);
 
   /**
    * Link to a single resource
@@ -148,7 +146,7 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
   private ContentBeanFactory contentBeanFactory;
   private SitesService sitesService;
 
-  // --- settings for minification, merging and local resources ---
+  // --- settings for merging and local resources ---
   private boolean localResourcesEnabled = false;
   private boolean developerModeEnabled = false;
 
@@ -169,7 +167,7 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
   }
 
   /**
-   * CSS and JavaScript resources are generated as merged and minified if disabled.
+   * CSS and JavaScript resources are generated as merged if disabled.
    * <br/>
    * Must not be used with local resources.
    * <p/>
@@ -205,7 +203,7 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
   // --- Handlers ------------------------------------------------------------------------------------------------------
 
   /**
-   * Handles requests for merged and minified CSS/JS.
+   * Handles requests for merged CSS/JS.
    *
    * @param channelWithTheme The {@link com.coremedia.blueprint.common.contentbeans.CMNavigation} that carries the theme
    * @param channelWithCode The {@link com.coremedia.blueprint.common.contentbeans.CMNavigation} that carries code
@@ -214,8 +212,8 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
    * @return             The ModelAndView or 404 (not found).
    */
   @GetMapping(value = {JS_PATTERN_BULK,CSS_PATTERN_BULK})
-  public ModelAndView handleRequest(@PathVariable(SEGMENT_CHANNEL_WITH_THEME) CMContext channelWithTheme,
-                                    @PathVariable(SEGMENT_CHANNEL_WITH_CODE) CMContext channelWithCode,
+  public ModelAndView handleRequest(@Nullable @PathVariable(SEGMENT_CHANNEL_WITH_THEME) CMContext channelWithTheme,
+                                    @Nullable @PathVariable(SEGMENT_CHANNEL_WITH_CODE) CMContext channelWithCode,
                                     @PathVariable(SEGMENT_EXTENSION) String extension,
                                     @PathVariable(SEGMENT_HASH) String hash,
                                     @PathVariable(SEGMENT_MODE) String mode,
@@ -328,13 +326,12 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
   public UriComponents buildLink(MergeableResources mergeableResources) {
     CodeResourcesModel model = mergeableResources.getCodeResourceModel();
     String extension = model.getCodeType();
-    Map<String,Object> parameters = ImmutableMap.<String, Object>builder()
-            .put(SEGMENT_CHANNEL_WITH_THEME, segmentForCodeResourcesLink(model.getChannelWithTheme()))
-            .put(SEGMENT_CHANNEL_WITH_CODE, segmentForCodeResourcesLink(model.getChannelWithCode()))
-            .put(SEGMENT_HASH, model.getETag())
-            .put(SEGMENT_MODE, model.getHtmlMode())
-            .put(SEGMENT_EXTENSION, extension)
-            .build();
+    Map<String,Object> parameters = Map.of(
+            SEGMENT_CHANNEL_WITH_THEME, segmentForCodeResourcesLink(model.getChannelWithTheme()),
+            SEGMENT_CHANNEL_WITH_CODE, segmentForCodeResourcesLink(model.getChannelWithCode()),
+            SEGMENT_HASH, model.getETag(),
+            SEGMENT_MODE, model.getHtmlMode(),
+            SEGMENT_EXTENSION, extension);
     UriComponentsBuilder uriBuilder = UriComponentsBuilder.newInstance();
     uriBuilder.path(urlPattern(extension));
     return uriBuilder.buildAndExpand(parameters);

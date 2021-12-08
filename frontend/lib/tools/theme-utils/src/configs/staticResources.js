@@ -19,8 +19,8 @@ const {
   ViewRepositoryPlugin,
 } = require("../plugins/ViewRepositoryPlugin");
 const JoinWebpackPlugin = require("../plugins/JoinWebpackPlugin");
-const { ThemeDescriptorPlugin } = require("../plugins/ThemeDescriptorPlugin");
-const { ZipperWebpackPlugin } = require("../plugins/ZipperWebpackPlugin");
+const ThemeDescriptorPlugin = require("../plugins/ThemeDescriptorPlugin");
+const ZipperWebpackPlugin = require("../plugins/ZipperWebpackPlugin");
 const deepMerge = require("./utils/deepMerge");
 
 const PROPERTIES_REG_EXP = /_([^_/\\]+_[^_/\\]+|[^_/\\]+)\.properties$/;
@@ -97,7 +97,7 @@ function configureJoinWebpackPluginForResourceBundles(
  * Create patterns for the given paths relative to the given baseFolder to be used in the CopyWebpackPlugin. If a path
  * does not exists, no pattern will be generated for the path.
  *
- * @param baseFolder A basefolder to resolve the paths against
+ * @param baseFolder A base folder to resolve the paths against
  * @param paths {Array} The paths to configure
  */
 function createPatternsCopyOverPaths(baseFolder, paths) {
@@ -264,7 +264,7 @@ module.exports = () => (config) => {
         },
         {
           test: /\.(svg|jpg|jpeg|png|gif)$/,
-          loader: "url-loader",
+          loader:  require.resolve("url-loader"),
           exclude: /\.param\.svg$/, // do not double load svg files with injected parameters
           options: {
             name: "[name].[ext]",
@@ -274,7 +274,7 @@ module.exports = () => (config) => {
         },
         {
           test: /\.(woff|woff2|ttf|eot)$/,
-          loader: "file-loader",
+          loader:  require.resolve("file-loader"),
           options: {
             name: "[name].[ext]",
             outputPath: "fonts/",
@@ -295,7 +295,7 @@ module.exports = () => (config) => {
         },
         {
           test: /\.swf$/,
-          loader: "file-loader",
+          loader:  require.resolve("file-loader"),
           options: {
             name: "[name].[ext]",
             outputPath: "swf/",
@@ -339,11 +339,13 @@ module.exports = () => (config) => {
           return null;
         })
         .filter((copyPlugin) => !!copyPlugin),
+      // settings
       joinSettingsWebpackPlugin,
       // additional files via themeConfig
       ...additionalCopyPlugins,
       // theme descriptor
       new ThemeDescriptorPlugin(themeConfig),
+      // templates
       new ZipperWebpackPlugin(
         [
           {
@@ -376,29 +378,6 @@ module.exports = () => (config) => {
           filepath: path.relative(
             themeConfig.themeTargetPath,
             themeConfig.themeTemplatesJarTargetPath
-          ),
-          compilerEvent: "after-emit",
-        }
-      ),
-      //outdated?
-      new ZipperWebpackPlugin(
-        [
-          {
-            source: path.relative(
-              themeConfig.resourcesTargetPath,
-              themeConfig.brickTemplatesTargetPath
-            ),
-            prefix: path.normalize("META-INF/resources/"),
-            context: path.relative(
-              themeConfig.themeTargetPath,
-              themeConfig.resourcesTargetPath
-            ),
-          },
-        ],
-        {
-          filepath: path.relative(
-            themeConfig.themeTargetPath,
-            themeConfig.brickTemplatesJarTargetPath
           ),
           compilerEvent: "after-emit",
         }

@@ -33,7 +33,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.WORKSPACE_ID_NONE;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
@@ -41,7 +40,7 @@ import static java.util.stream.Collectors.toList;
  * A store {@link com.coremedia.ecommerce.studio.rest.model.Store} object as a RESTful resource.
  */
 @RestController
-@RequestMapping(value = "livecontext/store/{" + AbstractCatalogResource.PATH_SITE_ID + "}/{" + AbstractCatalogResource.PATH_WORKSPACE_ID + "}", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "livecontext/store/{" + AbstractCatalogResource.PATH_SITE_ID + "}", produces = MediaType.APPLICATION_JSON_VALUE)
 public class StoreResource extends AbstractCatalogResource<Store> {
 
   private static final Logger LOG = LoggerFactory.getLogger(StoreResource.class);
@@ -125,16 +124,14 @@ public class StoreResource extends AbstractCatalogResource<Store> {
     try {
       StoreContext context = entity.getContext();
       List<Catalog> configuredCatalogs = mappedCatalogsProvider.getConfiguredCatalogs(context);
-      CommerceConnection connection = context.getConnection();
+      var connection = context.getConnection();
 
       representation.setMarketingEnabled(hasMarketingSpots(connection, context));
       representation.setId(entity.getId());
-      representation.setVendorUrl(entity.getVendorUrl().orElse(null));
-      representation.setVendorName(entity.getVendorName().orElse(null));
-      representation.setVendorVersion(entity.getVendorVersion().orElse(null));
+      representation.setVendorName(connection.getVendorName());
       representation.setContext(context);
       representation.setMultiCatalog(configuredCatalogs.size() > 1);
-      representation.setDefaultCatalog(entity.getDefaultCatalog().orElse(null));
+      representation.setDefaultCatalog(entity.getDefaultCatalog(connection).orElse(null));
       representation.setCatalogs(configuredCatalogs);
       representation.setRootCategories(configuredCatalogs.stream()
               .map(Catalog::getRootCategory)
@@ -167,7 +164,6 @@ public class StoreResource extends AbstractCatalogResource<Store> {
     StoreContext storeContext = store.getContext();
     Map<String, String> params = new HashMap<>();
     params.put(PATH_SITE_ID, storeContext.getSiteId());
-    params.put(PATH_WORKSPACE_ID, storeContext.getWorkspaceId().orElse(WORKSPACE_ID_NONE).value());
     return params;
   }
 

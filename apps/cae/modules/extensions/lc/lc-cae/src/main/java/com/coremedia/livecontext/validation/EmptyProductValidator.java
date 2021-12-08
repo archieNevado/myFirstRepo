@@ -1,11 +1,9 @@
 package com.coremedia.livecontext.validation;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
 import com.coremedia.blueprint.common.services.validation.AbstractValidator;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.livecontext.contentbeans.CMProductTeaser;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,20 +45,13 @@ public class EmptyProductValidator extends AbstractValidator<CMProductTeaser> {
     @Override
     public boolean test(@Nullable CMProductTeaser productTeaser) {
       try {
-        return (deliveryConfigurationProperties.isPreviewMode() && !isInContextOfContracts()) ||
+        return (deliveryConfigurationProperties.isPreviewMode()) ||
                 (productTeaser != null && productTeaser.getProduct() != null);
       } catch (NotFoundException e) {
         LOG.warn("Could not find a product for teaser {}",
                 productTeaser != null && productTeaser.getContent() != null ? productTeaser.getContent().getPath() : "null");
         return false;
       }
-    }
-
-    private boolean isInContextOfContracts() {
-      StoreContext storeContext = CurrentStoreContext.find().orElse(null);
-
-      return storeContext != null
-              && (!storeContext.getContractIds().isEmpty() || !storeContext.getContractIdsForPreview().isEmpty());
     }
   }
 }

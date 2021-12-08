@@ -10,12 +10,21 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.converter.GenericConverter;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * We do not see any usecase for this class and will remove it after the deprecation period.
+ * If you really need it, please take it over into your project code.
+ * But be aware, that it uses non-public API (com.coremedia.cap.content.wrapper.*)
+ * which we do not guarantee to keep stable.
+ * We recommend to implement own solutions for the particular project requirements.
+ *
+ * @deprecated since 2110
+ */
+@Deprecated
 public class GenericIdToContentWrapperConverter implements GenericConverter {
   @Override
   public Set<ConvertiblePair> getConvertibleTypes() {

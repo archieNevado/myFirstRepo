@@ -7,8 +7,6 @@ import com.coremedia.livecontext.fragment.FragmentContextProvider;
 import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.objectserver.view.ViewUtils;
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
@@ -21,8 +19,10 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Strings.nullToEmpty;
 
@@ -82,18 +82,15 @@ public class PrefetchFragmentsViewUtils {
 
   @VisibleForTesting
   static String createPageKeyFromParameters(FragmentParameters parameters) {
-    // The ImmutableMap guarantees a deterministic iteration order and Null-hostility.
-    // For further information on guarantees @see com.google.common.collect.ImmutableCollection
-    Map<String, String> parameterMap = ImmutableMap.of(
-            "externalRef", nullToEmpty(parameters.getExternalRef()),
-            "categoryId", nullToEmpty(parameters.getCategoryId()),
-            "productId", nullToEmpty(parameters.getProductId()),
-            "pageId", nullToEmpty(parameters.getPageId())
-    );
+    Map<String, String> parameterMap = new LinkedHashMap<>();
+    parameterMap.put("externalRef", nullToEmpty(parameters.getExternalRef()));
+    parameterMap.put("categoryId", nullToEmpty(parameters.getCategoryId()));
+    parameterMap.put("productId", nullToEmpty(parameters.getProductId()));
+    parameterMap.put("pageId", nullToEmpty(parameters.getPageId()));
 
-    return Joiner.on(MATRIX_SEPERATOR)
-            .withKeyValueSeparator("=")
-            .join(parameterMap);
+    return parameterMap.entrySet().stream()
+            .map(entry -> String.join("=", entry.getKey(), entry.getValue()))
+            .collect(Collectors.joining(MATRIX_SEPERATOR));
   }
 
   /**

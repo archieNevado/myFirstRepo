@@ -14,11 +14,10 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-
-import static com.google.common.collect.Sets.newHashSet;
 
 /**
  * {@link com.coremedia.rest.cap.intercept.ContentWritePostprocessor}
@@ -62,7 +61,7 @@ public class AssetInvalidationWritePostProcessor extends ContentWritePostprocess
   private void invalidate(@NonNull Content content) {
     Struct localSettings = (Struct) content.get(STRUCT_PROPERTY_NAME);
 
-    Set<String> productReferences = newHashSet(CommerceReferenceHelper.getExternalReferences(localSettings));
+    Set<String> productReferences = new HashSet<>(CommerceReferenceHelper.getExternalReferences(localSettings));
 
     Optional<CommerceConnection> commerceConnection = commerceConnectionSupplier.findConnection(content);
 

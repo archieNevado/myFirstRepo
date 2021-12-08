@@ -75,7 +75,7 @@
 
               <#if userDetails.profileImage?has_content>
                 <#assign link=cm.getLink(userDetails.profileImage {"transform":true, "width":elasticSocialConfiguration.userImageWidth!60?int, "height": elasticSocialConfiguration.userImageHeight!60?int})/>
-                <img class="cm-form__image" src="${link}" title="" alt="userimage">
+                <img class="cm-form__image" src="${link}" loading="lazy" title="" alt="userimage">
 
                 <@spring.bind path="userDetails.deleteProfileImage"/>
                 <div class="checkbox">

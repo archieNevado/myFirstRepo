@@ -1,2 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.coremedia.blueprint.sfmc.p13n.cae.SFMCP13NCAEConfiguration

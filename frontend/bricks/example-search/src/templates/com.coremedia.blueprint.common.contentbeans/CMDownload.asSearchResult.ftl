@@ -24,7 +24,7 @@
     <#-- teaserTitle -->
     <h3 class="cm-search-result__title"<@preview.metadata "properties.teaserTitle" />>
       <a href="${cm.getLink(self.target!cm.UNDEFINED)}" ${target?no_esc} ${rel?no_esc}>
-        <i class="cm-search-result__download-icon" aria-hidden="true"></i> ${teaserTitle?no_esc} (${cm.getLink(self)?keep_after_last(".")?keep_before("?") + ", "} ${bp.getDisplaySize(self.data.size)})
+        <i class="cm-search-result__download-icon" aria-hidden="true"></i> ${teaserTitle?no_esc} (${cm.getLink(self)?keep_after_last(".")?keep_before("?") + ", "} ${bp.getDisplayFileSize(self.data.size)})
       </a>
     </h3>
 

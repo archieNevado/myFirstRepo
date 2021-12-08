@@ -9,7 +9,6 @@ const {
   initBrickVariablesScss,
   initBrickCustomPartialsScss,
   initBrickCustomVariablesScss,
-  initBrickPrettierignore,
   initBrickPageBodyFtl,
   initBrickDeProperties,
   initBrickEnProperties,
@@ -66,12 +65,6 @@ describe("initBrickCustomVariablesScss()", () => {
 describe("initBrickPageBodyFtl()", () => {
   it("returns data for Page._body.ftl", () => {
     expect(initBrickPageBodyFtl()).toMatchSnapshot();
-  });
-});
-
-describe("initBrickPrettierignore()", () => {
-  it("returns data for .prettierignore", () => {
-    expect(initBrickPrettierignore()).toMatchSnapshot();
   });
 });
 

@@ -5,10 +5,10 @@ import com.coremedia.cap.content.Content;
 import com.google.api.services.analytics.Analytics;
 import com.google.api.services.analytics.model.GaData;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.collect.Maps.newHashMap;
 import static org.apache.commons.lang3.StringUtils.join;
 
 public final class OverallPerformanceQuery extends GoogleAnalyticsQuery {
@@ -54,7 +54,7 @@ public final class OverallPerformanceQuery extends GoogleAnalyticsQuery {
   }
 
   public Map<String, Map<String, Long>> process(List<List<String>> dataEntries, List<GaData.ColumnHeaders> columnHeaders) {
-    final Map<String, Map<String, Long>> allContentsWithVisits = newHashMap();
+    final Map<String, Map<String, Long>> allContentsWithVisits = new HashMap<>();
     int indexTrackingDate = getColumnIndex(columnHeaders, OverallPerformanceQuery.TRACKING_DATE);
     int indexPagePath = getColumnIndex(columnHeaders, OverallPerformanceQuery.PAGE_PATH_LEVEL1);
     int indexPageViews = getColumnIndex(columnHeaders, OverallPerformanceQuery.METRIC_UNIQUE_PAGEVIEWS);
@@ -72,7 +72,7 @@ public final class OverallPerformanceQuery extends GoogleAnalyticsQuery {
         if (allContentsWithVisits.get(contentId) != null) {
           allContentsWithVisits.get(contentId).put(strVisitDate, uniquePageViews);
         } else {
-          Map<String, Long> visitsData = newHashMap();
+          Map<String, Long> visitsData = new HashMap<>();
           visitsData.put(strVisitDate, uniquePageViews);
           allContentsWithVisits.put(contentId, visitsData);
         }

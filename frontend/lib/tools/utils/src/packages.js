@@ -1,7 +1,6 @@
-const closestPackage = require("closest-package");
 const fs = require("fs");
-const { getInstalledPathSync } = require("get-installed-path");
 const path = require("path");
+const findUp = require("find-up")
 
 function normalizeFilePath(filePath) {
   const resolvedFilepath = path.resolve(filePath);
@@ -19,29 +18,17 @@ function normalizeFilePath(filePath) {
  * @param resolveFromFolder
  * @throws Error in case the installation path could not be found
  */
-function resolveFilePathFromPackageName(moduleName, resolveFromFolder) {
-  let nodeModulePaths = process.mainModule.paths;
-  if (resolveFromFolder) {
-    nodeModulePaths = [
-      path.join(
-        path.dirname(closestPackage.sync(resolveFromFolder)),
-        "node_modules"
-      ),
-    ].concat(nodeModulePaths);
-  }
-  try {
-    return path.join(
-      getInstalledPathSync(moduleName, { paths: nodeModulePaths }),
-      "package.json"
-    );
-  } catch (e) {
+function resolveDirPathFromPackageName(moduleName, resolveFromFolder) {
+  const modulePackageJson = findUp.sync(`node_modules/${moduleName}/package.json`, {
+    cwd: resolveFromFolder,
+  });
+  if (!modulePackageJson) {
     // could not find module
-    const error = new Error(
-      `Could not find installation folder for module '${moduleName}', searched in ${nodeModulePaths}`
+    throw new Error(
+      `Could not find installation folder for module '${moduleName}', searched up from ${resolveFromFolder}`
     );
-    error.stack += "\nCaused by: " + e.stack;
-    throw error;
   }
+  return path.dirname(modulePackageJson);
 }
 
 class Packages {
@@ -64,7 +51,7 @@ class Packages {
 
     if (!filePathByPackageName.has(packageName)) {
       const filePath = normalizeFilePath(
-        resolveFilePathFromPackageName(packageName, resolveFromFolder)
+        resolveDirPathFromPackageName(packageName, resolveFromFolder)
       );
       filePathByPackageName.set(packageName, filePath);
     }

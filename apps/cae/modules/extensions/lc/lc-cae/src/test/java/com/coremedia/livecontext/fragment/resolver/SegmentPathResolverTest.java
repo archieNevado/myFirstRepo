@@ -10,7 +10,6 @@ import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.livecontext.ecommerce.link.LinkService;
-import com.coremedia.livecontext.ecommerce.link.PreviewUrlService;
 import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.livecontext.fragment.FragmentParametersFactory;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
@@ -66,10 +65,6 @@ public class SegmentPathResolverTest {
       return mock(LinkService.class);
     }
 
-    @Bean
-    PreviewUrlService previewUrlService() {
-      return mock(PreviewUrlService.class);
-    }
   }
 
   private static final String CONTENT_REPOSITORY_URL = "classpath:/com/coremedia/livecontext/fragment/resolver/segmentpath-test-content.xml";
@@ -98,7 +93,7 @@ public class SegmentPathResolverTest {
   public void testInclude() {
     FragmentParameters parameters = createFragmentParameters();
     parameters.setExternalReference("cm-segmentpath:!achannel!asubchannel!alinkable");
-    assertTrue(testling.include(parameters));
+    assertTrue(testling.test(parameters));
   }
 
   @Test

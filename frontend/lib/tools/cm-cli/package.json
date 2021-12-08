@@ -8,22 +8,23 @@
   "private": true,
   "version": "2.0.0",
   "engines": {
-    "node": ">=14"
+    "node": ">=16"
   },
   "bin": {
     "cm": "./bin/cm-cli.js"
   },
   "dependencies": {
-    "@coremedia/cm-logger": "^1.0.0",
-    "@coremedia/module-creator": "^1.0.0",
-    "@coremedia/theme-importer": "^1.0.0",
-    "@coremedia/tool-utils": "^1.0.0",
-    "inquirer": "^8.0.0",
-    "yargs": "^15.1.0"
+    "@coremedia/cm-logger": "workspace:*",
+    "@coremedia/module-creator": "workspace:*",
+    "@coremedia/theme-importer": "workspace:*",
+    "@coremedia/tool-utils": "workspace:*",
+    "@coremedia/zipper": "workspace:*",
+    "inquirer": "^8.1.5",
+    "yargs": "^15.4.1"
   },
   "devDependencies": {
-    "jest": "^26.1.0",
-    "prettier": "^2.0.5"
+    "jest": "^27.2.3",
+    "prettier": "^2.4.1"
   },
   "scripts": {
     "prettier": "prettier --write \"src/**/*.{js,json}\"",

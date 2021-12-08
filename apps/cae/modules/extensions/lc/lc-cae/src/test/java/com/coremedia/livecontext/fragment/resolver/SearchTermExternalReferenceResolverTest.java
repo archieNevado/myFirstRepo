@@ -19,8 +19,6 @@ import com.coremedia.cap.content.query.QueryService;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.livecontext.fragment.FragmentParametersFactory;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,6 +31,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import static com.coremedia.blueprint.cae.search.SearchConstants.FIELDS.DOCUMENTTYPE;
@@ -104,8 +103,8 @@ public class SearchTermExternalReferenceResolverTest {
     Content root = site.getSiteRootDocument();
     assertNotNull(root);
     when(navigationTreeRelation.getChildrenOf(root)).thenReturn(contextSet);
-    when(navigationTreeRelation.pathToRoot(context)).thenReturn(ImmutableList.of(root, context));
-    when(navigationTreeRelation.pathToRoot(root)).thenReturn(ImmutableList.of(root));
+    when(navigationTreeRelation.pathToRoot(context)).thenReturn(List.of(root, context));
+    when(navigationTreeRelation.pathToRoot(root)).thenReturn(List.of(root));
     when(queryService.getContentFulfilling(contextSet, QUERY_NAVIGATION_WITH_SEGMENT, SEGMENT_PATH))
             .thenReturn(context);
     when(root.getId()).thenReturn(IdHelper.formatContentId(ROOT_CONTEXT_ID));
@@ -161,14 +160,14 @@ public class SearchTermExternalReferenceResolverTest {
 
   @Test
   public void testIncludeNull() {
-    assertFalse(resolver().include(null));
+    assertFalse(resolver().test(null));
   }
 
   @Test
   public void testWithoutExternalRef() {
     SearchTermExternalReferenceResolver resolver = resolver();
     FragmentParameters parameters = parametersFor(null);
-    assertFalse(resolver.include(parameters));
+    assertFalse(resolver.test(parameters));
     assertNull(resolver.resolveExternalRef(parameters, site));
   }
 
@@ -176,7 +175,7 @@ public class SearchTermExternalReferenceResolverTest {
   public void testOtherPrefix() {
     SearchTermExternalReferenceResolver resolver = resolver();
     FragmentParameters parameters = parametersFor("something");
-    assertFalse(resolver.include(parameters));
+    assertFalse(resolver.test(parameters));
     assertNull(resolver.resolveExternalRef(parameters, site));
   }
 
@@ -281,7 +280,7 @@ public class SearchTermExternalReferenceResolverTest {
 
   private void assertResolve(@NonNull SearchTermExternalReferenceResolver resolver, @NonNull Content expectedLinkable) {
     FragmentParameters params = parametersFor(PREFIX + SEARCH_TERM);
-    assertTrue(resolver.include(params));
+    assertTrue(resolver.test(params));
     LinkableAndNavigation linkableAndNavigation = resolver.resolveExternalRef(params, site);
     assertNotNull(linkableAndNavigation);
     assertNull(linkableAndNavigation.getNavigation());
@@ -302,10 +301,10 @@ public class SearchTermExternalReferenceResolverTest {
     assertTrue(query.isNotSearchableFlagIgnored());
     assertEquals(DYNAMICCONTENT, query.getSearchHandler());
     assertEquals(FIELD + ":\"" + SEARCH_TERM + '"', query.getQuery());
-    assertEquals(ImmutableSet.of(
+    assertEquals(Set.of(
             Condition.is(DOCUMENTTYPE, Value.anyOf(Collections.singleton('"' + CONTENT_TYPE + '"'))),
             Condition.is(NAVIGATION_PATHS, Value.exactly(navigationPath))),
-            ImmutableSet.copyOf(query.getFilters()));
+            Set.copyOf(query.getFilters()));
   }
 
   private void mockSearchResult(Content... results) {

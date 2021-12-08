@@ -185,7 +185,7 @@ Contains styling definitions for search including search field and resultpage.
       }
 
       &-heading {
-        flex: 1 1 auto; // use full flex definition because of different defaults in IE11
+        flex: 1 1 auto;
         margin-top: 0;
       }
 

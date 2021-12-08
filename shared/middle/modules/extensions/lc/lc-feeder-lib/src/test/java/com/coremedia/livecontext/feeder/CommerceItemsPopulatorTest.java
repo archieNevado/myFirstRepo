@@ -10,8 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,13 +20,12 @@ import static com.coremedia.livecontext.feeder.CommerceItemsPopulator.TYPE_LINKA
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({CommerceReferenceHelper.class})
+@RunWith(MockitoJUnitRunner.class)
 public class CommerceItemsPopulatorTest {
 
   @Mock
@@ -49,26 +47,29 @@ public class CommerceItemsPopulatorTest {
     when(content.getType()).thenReturn(contentType);
     when(contentType.getName()).thenReturn(TYPE_LINKABLE);
     when(contentType.isSubtypeOf(TYPE_LINKABLE)).thenReturn(true);
-
-    mockStatic(CommerceReferenceHelper.class);
   }
 
   @Test
   public void populateAndFeed() {
     //this is the positive case
     List<String> productsPartNumbers = Arrays.asList("PC_WINE_GLASS", "PC_EVENING_DRESS-RED-M");
-    when(CommerceReferenceHelper.getExternalIds(content)).thenReturn(productsPartNumbers);
 
-    testling.populate(feedable, content);
+    try (var mocked = mockStatic(CommerceReferenceHelper.class)) {
+      mocked.when(() -> CommerceReferenceHelper.getExternalIds(content)).thenReturn(productsPartNumbers);
+      testling.populate(feedable, content);
+    }
+
     verify(feedable).setElement(SearchConstants.FIELDS.COMMERCE_ITEMS.toString(), productsPartNumbers, TextParameters.NONE.asMap());
   }
 
   @Test
   public void populateDontFeed() {
     //test that nothing is feeded when the products are empty.
-    when(CommerceReferenceHelper.getExternalIds(content)).thenReturn(Collections.<String>emptyList());
+    try (var mocked = mockStatic(CommerceReferenceHelper.class)) {
+      mocked.when(() -> CommerceReferenceHelper.getExternalIds(content)).thenReturn(List.of());
+      testling.populate(feedable, content);
+    }
 
-    testling.populate(feedable, content);
     verify(feedable, never()).setElement(anyString(), any(), anyMap());
   }
 }

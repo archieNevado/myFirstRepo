@@ -11,27 +11,27 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>headless-server-catalog</artifactId>
-      <version>1-SNAPSHOT</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>headless-server-ec-augmentation</artifactId>
-      <version>1-SNAPSHOT</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>headless-server-p13n</artifactId>
-      <version>1-SNAPSHOT</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>headless-server-search</artifactId>
-      <version>1-SNAPSHOT</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>

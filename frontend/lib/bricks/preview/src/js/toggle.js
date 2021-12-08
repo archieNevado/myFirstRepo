@@ -29,10 +29,8 @@ export const STATE_OFF = "off";
  * @returns {string} "on" or "off"
  */
 export function getState(toggleItem) {
-  // if toggle-container is visible state is on otherwise off
-  return $(toggleItem)
-    .find(".toggle-container:first")
-    .hasClass("toggle-container-off")
+  // if toggle-item is visible state is on otherwise off
+  return $(toggleItem).hasClass("toggle-off")
     ? STATE_OFF
     : STATE_ON;
 }
@@ -44,10 +42,7 @@ export function getState(toggleItem) {
  */
 export function on(toggleItem) {
   const $toggleItem = $(toggleItem);
-  $toggleItem.find(".toggle-button:first").removeClass("toggle-off");
-  $toggleItem
-    .find(".toggle-container:first")
-    .removeClass("toggle-container-off");
+  $toggleItem.removeClass("toggle-off");
   $toggleItem.trigger("toggleStateChanged", [STATE_ON]);
 }
 
@@ -58,8 +53,7 @@ export function on(toggleItem) {
  */
 export function off(toggleItem) {
   const $toggleItem = $(toggleItem);
-  $toggleItem.find(".toggle-button:first").addClass("toggle-off");
-  $toggleItem.find(".toggle-container:first").addClass("toggle-container-off");
+  $toggleItem.addClass("toggle-off");
   $toggleItem.trigger("toggleStateChanged", [STATE_OFF]);
 }
 

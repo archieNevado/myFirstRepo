@@ -10,7 +10,6 @@ import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.SitesService;
-import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.fragment.pagegrid.PageGridPlacementResolver;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
@@ -32,7 +31,6 @@ import static com.coremedia.livecontext.fragment.FragmentHandler.UNRESOLVABLE_PL
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -139,17 +137,12 @@ public class FragmentHandlerTest {
 
   @Before
   public void setUp() {
-    CommerceConnection commerceConnection = mock(CommerceConnection.class);
-    when(storeContext.getConnection()).thenReturn(commerceConnection);
-
     testling = new ExternalPageFragmentHandler();
     testling.setBeanFactory(beanFactory);
     testling.setPageGridPlacementResolver(pageGridPlacementResolver);
     testling.setContentBeanFactory(contentBeanFactory);
     testling.setSitesService(sitesService);
     testling.setValidationService(validationService);
-
-    CurrentStoreContext.set(storeContext);
 
     when(beanFactory.getBean("cmPage", PageImpl.class)).thenReturn(new PageImpl(false, sitesService, cache, null, null, null));
     when(validationService.validate(any())).thenReturn(true);

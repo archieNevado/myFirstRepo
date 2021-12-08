@@ -22,12 +22,13 @@
       <artifactId>headless-server-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.caas</groupId>
-      <artifactId>headless-server-web</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-headless-server-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.caas</groupId>
+      <artifactId>headless-server.plugin-support</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>

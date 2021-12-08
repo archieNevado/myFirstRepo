@@ -3,17 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "console-polyfill": "0.3.0",
-    "jquery": "^3.0.0",
-    "object-fit-images": "^3.0.0",
-    "object-fit-videos": "^1.0.0"
+    "jquery": "^3.6.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
-    "babel-jest": "^26.1.0",
-    "jest": "^26.1.0",
-    "prettier": "^2.0.5"
+    "@babel/core": "^7.15.5",
+    "@babel/preset-env": "^7.15.6",
+    "babel-jest": "^27.2.4",
+    "jest": "^27.2.3",
+    "prettier": "^2.4.1"
   },
   "scripts": {
     "prettier": "prettier --write \"src/**/*.{js,json}\"",

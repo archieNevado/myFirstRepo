@@ -65,7 +65,7 @@
 
   <customize:append id="addCorporateSiteSpecificFeedablePopulatorPredicate"
                     bean="siteSpecificFeedablePopulatorPredicates">
-    <list value-type="com.coremedia.common.util.Predicate">
+    <list value-type="java.util.function.Predicate">
       <ref bean="corporateContentWithPageGridPredicate"/>
       <ref bean="corporatePageGridInlineContentTypePredicate"/>
     </list>

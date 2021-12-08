@@ -15,12 +15,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-
-import static com.google.common.collect.Sets.newHashSet;
 
 /**
  * {@link com.coremedia.rest.cap.intercept.ContentWriteInterceptor}
@@ -84,7 +83,7 @@ public class AssetInvalidationWriteInterceptor extends ContentWriteInterceptorBa
     List<String> oldIds = CommerceReferenceHelper.getExternalReferences(content);
 
     Collection<String> invalidationsCollection = CollectionUtils.disjunction(newIds, oldIds);
-    Set<String> invalidations = newHashSet(invalidationsCollection);
+    Set<String> invalidations = new HashSet<>(invalidationsCollection);
 
     //if the references aren't changed...
     if (invalidations.isEmpty()) {

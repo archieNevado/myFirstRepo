@@ -1,6 +1,6 @@
 package com.coremedia.ecommerce.studio.rest;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceBean;
+import com.coremedia.blueprint.base.livecontext.util.CommerceBeanUtils;
 import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGridService;
 import com.coremedia.blueprint.base.pagegrid.PageGridContentKeywords;
 import com.coremedia.cap.common.CapStructHelper;
@@ -28,22 +28,23 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 import static com.coremedia.cap.struct.StructBuilderMode.LOOSE;
-import static com.google.common.collect.Lists.newArrayList;
-import static java.util.stream.Collectors.joining;
 
 abstract class AugmentationHelperBase<T> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AugmentationHelperBase.class);
 
-  static final String DEFAULT_BASE_FOLDER_NAME = "Augmentation";
+  private static final String OTHER_CATALOGS_FOLDER_NAME = "_other_catalogs";
+
+  public static final String DEFAULT_BASE_FOLDER_NAME = "Augmentation";
 
   static final String EXTERNAL_ID = "externalId";
-  public static final String OTHER_CATALOGS_FOLDER_NAME = "_other_catalogs";
 
   protected ContentRepository contentRepository;
   protected AugmentationService augmentationService;
@@ -52,15 +53,20 @@ abstract class AugmentationHelperBase<T> {
   protected SitesService sitesService;
 
   private String baseFolderName;
-  protected ContentType contentType;
 
   @Nullable
   abstract Content augment(@NonNull T type);
 
   @Nullable
-  protected Content createContent(@NonNull Content parent, @NonNull String name, @NonNull Map<String, Object> properties) {
+  protected Content createContent(@NonNull String type, @NonNull Content parent, @NonNull String name, @NonNull Map<String, Object> properties) {
     // Create content (taking possible interceptors into consideration)
     ContentWriteRequest writeRequest = null;
+    ContentType contentType = contentRepository.getContentType(type);
+    if (contentType == null) {
+      LOGGER.error("Content type '{}' is not available.", type);
+      return null;
+    }
+
     if (interceptService != null) {
       writeRequest = interceptService.interceptCreate(parent, name, contentType, properties);
       interceptService.handleErrorIssues(writeRequest);
@@ -77,7 +83,7 @@ abstract class AugmentationHelperBase<T> {
     } catch (DuplicateNameException e) {
       LOGGER.debug("Ignored concurrent (redundant) augmentation request", e);
       content = parent.getChild(name);
-    } catch (Throwable t){
+    } catch (Throwable t) {
       LOGGER.error("An error occured while augmenting category", t);
       throw t;
     }
@@ -94,21 +100,22 @@ abstract class AugmentationHelperBase<T> {
     return content;
   }
 
-  @Nullable
-  protected String computeFolderPath(@NonNull CommerceBean commerceBean) {
-    Category category = getCategoryForCommerceBean(commerceBean);
+  @NonNull
+  public static String computeFolderPath(@NonNull CommerceBean commerceBean, @NonNull Site site, @NonNull String baseFolderName) {
+    return computerFolderPath(commerceBean, site, baseFolderName, CommerceBeanUtils::getCatalog);
+  }
 
-    Site site = sitesService.getSite(category.getContext().getSiteId());
-    if (site == null) {
-      return null;
-    }
+  @NonNull
+  public static String computerFolderPath(@NonNull CommerceBean commerceBean, @NonNull Site site, @NonNull String baseFolderName,
+                                          Function<CommerceBean, Optional<Catalog>> catalogExtractor) {
+    Category category = getCategoryForCommerceBean(commerceBean);
 
     String rootPath = site.getSiteRootFolder().getPath();
 
-    List<String> subPathsToJoin = newArrayList(rootPath, baseFolderName);
+    List<String> subPathsToJoin = new ArrayList<>(List.of(rootPath, baseFolderName));
 
     //Each catalog needs a separate folder. If not default catalog use the catalog alias as the basefolder.
-    Optional<Catalog> catalog = getCatalog(category);
+    Optional<Catalog> catalog = catalogExtractor.apply(category);
 
     //when catalog is empty then we assume that there is only the default catalog
     boolean isDefaultCatalog = catalog.map(Catalog::isDefaultCatalog).orElse(true);
@@ -122,17 +129,17 @@ abstract class AugmentationHelperBase<T> {
       subPathsToJoin.add(getEscapedDisplayName(breadcrumbCategory));
     }
 
-    return subPathsToJoin.stream().collect(joining("/"));
+    return String.join("/", subPathsToJoin);
   }
 
   @VisibleForTesting
   @NonNull
-  Optional<Catalog> getCatalog(Category category) {
-    return AbstractCommerceBean.getCatalog(category);
+  Optional<Catalog> getCatalog(@NonNull Category category) {
+    return CommerceBeanUtils.getCatalog(category);
   }
 
   @NonNull
-  protected static String getEscapedDisplayName(@NonNull Category category) {
+  public static String getEscapedDisplayName(@NonNull Category category) {
     // External ids of category can contain '/'. See CMS-5075
     return category.getDisplayName().replace('/', '_');
   }
@@ -155,6 +162,11 @@ abstract class AugmentationHelperBase<T> {
     }
 
     return currentCategory;
+  }
+
+  @Nullable
+  protected Site getSite(Category category) {
+    return this.sitesService.getSite(category.getContext().getSiteId());
   }
 
   @NonNull
@@ -224,4 +236,7 @@ abstract class AugmentationHelperBase<T> {
     this.pageGridService = pageGridService;
   }
 
+  public String getBaseFolderName() {
+    return baseFolderName;
+  }
 }

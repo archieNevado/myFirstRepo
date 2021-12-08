@@ -1,8 +1,8 @@
 package com.coremedia.blueprint.elastic.social.contentbeans;
 
-import com.google.common.base.Predicate;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
+
+import java.util.function.Predicate;
 
 /**
  * Used to filter {@link com.coremedia.blueprint.elastic.social.contentbeans.Count#getTarget()} in a ESDynamicList.

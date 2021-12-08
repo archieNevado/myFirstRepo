@@ -25,14 +25,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.coremedia.blueprint.base.livecontext.client.settings.SettingsUtils.getCommerceSettingsProvider;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.WORKSPACE_ID_NONE;
 
 /**
  * The resource handles the top level store node "Segments".
  * It is not showed in the catalog tree but used to invalidate the list of available commerce segments
  */
 @RestController
-@RequestMapping(value = "livecontext/segments/{siteId}/{workspaceId}", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "livecontext/segments/{siteId}", produces = MediaType.APPLICATION_JSON_VALUE)
 public class SegmentsResource extends AbstractCatalogResource<Segments> {
 
   private final SitesService sitesService;
@@ -98,7 +97,6 @@ public class SegmentsResource extends AbstractCatalogResource<Segments> {
 
     StoreContext context = segments.getContext();
     params.put(PATH_SITE_ID, context.getSiteId());
-    params.put(PATH_WORKSPACE_ID, context.getWorkspaceId().orElse(WORKSPACE_ID_NONE).value());
     return params;
   }
 }

@@ -19,6 +19,7 @@ config/
 # logs and configs
 .cmconfig.json
 .npm-debug.log*
+.npmrc
 
 # generated files
 API.md

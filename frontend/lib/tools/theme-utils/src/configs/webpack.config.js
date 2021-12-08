@@ -3,7 +3,8 @@ const path = require("path");
 const flow = require("lodash/fp/flow");
 const { DependencyCheckWebpackPlugin } = require("@coremedia/dependency-check");
 const {
-  workspace: { COREMEDIA_SCOPE, EXAMPLE_SCOPE, getThemeConfig },
+  workspace: { COREMEDIA_SCOPE, EXAMPLE_SCOPE, getThemeConfig, getIsSmartImportModuleFor },
+  dependencies: { getDependencies }
 } = require("@coremedia/tool-utils");
 
 const clean = require("./clean");
@@ -16,8 +17,8 @@ const styles = require("./styles");
 const staticResources = require("./staticResources");
 
 const themeConfig = getThemeConfig();
+const themeDependencies = getDependencies(themeConfig.pkgPath, getIsSmartImportModuleFor(null));
 
-const include = [path.resolve(".")];
 const PATH_SEP_ESCAPED = escapeStringRegexp(path.sep);
 const exclude = [
   // All modules but CoreMedia specific modules
@@ -49,7 +50,7 @@ module.exports = (env, { mode = "production" }) =>
     clean(),
     staticResources(),
     styles({ dependencyCheckPlugin, mode }),
-    scripts({ include, exclude, dependencyCheckPlugin, mode }),
+    scripts({ exclude, dependencyCheckPlugin }),
     exposeModules(),
     mode === "development" ? development() : production(),
     themeZip()
@@ -58,4 +59,10 @@ module.exports = (env, { mode = "production" }) =>
     output: {
       path: themeConfig.themeTargetPath,
     },
+    resolve: {
+      modules: [
+        "node_modules",
+        ...themeDependencies.map(dependency => path.join(path.dirname(dependency.getPkgPath()), "node_modules"))
+      ]
+    }
   });

@@ -19,7 +19,6 @@ import com.coremedia.objectserver.configuration.CaeConfigurationProperties;
 import com.coremedia.objectserver.view.ViewUtils;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.xml.Markup;
-import com.google.common.collect.ImmutableMap;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -253,9 +252,7 @@ public class CodeResourceHandlerTest {
 
   @Test
   public void testLinkForMergedContent() {
-    Map<String,Object> cmParams = ImmutableMap.<String,Object>builder()
-            .put("extension", "js")
-            .build();
+    Map<String,Object> cmParams = Map.of("extension", "js");
     CodeResources codeResources = new CodeResourcesCacheKey(codeCarryingBean.getContent(), CMNavigationBase.JAVA_SCRIPT, false, treeRelation, null).evaluate(null);
     MergeableResources mergeableResources = new MergeableResourcesImpl(codeResources.getModel("body"), contentBeanFactory, null);
     String url = linkFormatterTestHelper.formatLink(cmParams, mergeableResources, null, MERGED_JS_VIEW);

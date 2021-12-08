@@ -3,7 +3,7 @@ package com.coremedia.blueprint.caas.augmentation;
 import com.coremedia.blueprint.base.livecontext.augmentation.AugmentationAutoConfiguration;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceServicesAutoConfiguration;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceSiteFinder;
 import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGridService;
 import com.coremedia.blueprint.base.pagegrid.internal.PageGridConfiguration;
@@ -64,8 +64,8 @@ public class HeadlessAugmentationCommerceConfiguration {
 
   @Bean
   public CommerceEntityHelper commerceEntityHelper(SitesService siteService,
-                                                   CommerceConnectionInitializer commerceConnectionInitializer) {
-    return new CommerceEntityHelper(siteService, commerceConnectionInitializer);
+                                                   CommerceConnectionSupplier CommerceConnectionSupplier) {
+    return new CommerceEntityHelper(siteService, CommerceConnectionSupplier);
   }
 
   @Bean

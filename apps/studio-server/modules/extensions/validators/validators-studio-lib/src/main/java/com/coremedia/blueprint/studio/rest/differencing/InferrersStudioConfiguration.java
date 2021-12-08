@@ -77,21 +77,12 @@ class InferrersStudioConfiguration {
   }
 
   @Bean
+  @Deprecated(since = "2110.1")
   ZeroDefaultValuePropertyInferrer ieReleavedPropertiesInferrer(@Value("CMAbstractCode") ContentType contentType) {
     ZeroDefaultValuePropertyInferrer ieReleavedPropertiesInferrer = new ZeroDefaultValuePropertyInferrer();
     ieReleavedPropertiesInferrer.setType(contentType);
     ieReleavedPropertiesInferrer.setApplicableToSubtypes(true);
     ieReleavedPropertiesInferrer.setProperty("ieRevealed");
     return ieReleavedPropertiesInferrer;
-  }
-
-  @Bean
-  @Deprecated
-  ZeroDefaultValuePropertyInferrer disableCompressPropertiesInferrer(@Value("CMAbstractCode") ContentType contentType) {
-    ZeroDefaultValuePropertyInferrer disableCompressPropertiesInferrer = new ZeroDefaultValuePropertyInferrer();
-    disableCompressPropertiesInferrer.setType(contentType);
-    disableCompressPropertiesInferrer.setApplicableToSubtypes(true);
-    disableCompressPropertiesInferrer.setProperty("disableCompress");
-    return disableCompressPropertiesInferrer;
   }
 }

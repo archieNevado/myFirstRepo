@@ -1,5 +1,3 @@
-import "console-polyfill";
-
 /**
  * Logging Levels
  * The logging levels are cumulative. If you for example set the logging level to WARN all warnings, errors and fatals are logged.

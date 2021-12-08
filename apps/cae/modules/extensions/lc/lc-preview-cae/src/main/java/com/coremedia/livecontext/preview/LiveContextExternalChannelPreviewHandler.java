@@ -70,7 +70,7 @@ public class LiveContextExternalChannelPreviewHandler extends LiveContextPageHan
   @Nullable
   public UriComponents buildLinkForExternalChannel(@NonNull LiveContextExternalChannel navigation, String viewName,
                                                    Map<String, Object> linkParameters, HttpServletRequest request) {
-    Optional<StoreContext> storeContext = CurrentStoreContext.find();
+    Optional<StoreContext> storeContext = CurrentStoreContext.find(request);
     if (storeContext.isEmpty()) {
       // not responsible
       return null;

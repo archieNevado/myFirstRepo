@@ -3,7 +3,7 @@ package com.coremedia.blueprint.cae.handlers;
 import com.coremedia.blueprint.common.contentbeans.CMTheme;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
-import com.google.common.collect.ImmutableMap;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +12,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Map;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_NUMBER;
@@ -55,9 +54,7 @@ public class ThemeHandler extends HandlerBase {
       uriComponentsBuilder.queryParam(VIEW_PARAMETER, viewName);
     }
 
-    Map<String, Object> parameters = ImmutableMap.<String, Object>builder()
-            .put(SEGMENT_ID, bean.getContentId())
-            .build();
+    Map<String, Object> parameters = Map.of(SEGMENT_ID, bean.getContentId());
 
     return uriComponentsBuilder.buildAndExpand(parameters);
   }

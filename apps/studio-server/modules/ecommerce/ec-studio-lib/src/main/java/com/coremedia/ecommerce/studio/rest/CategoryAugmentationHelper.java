@@ -3,7 +3,6 @@ package com.coremedia.ecommerce.studio.rest;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.MappedCatalogsProvider;
 import com.coremedia.blueprint.base.pagegrid.PageGridContentKeywords;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
@@ -17,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.inject.Named;
 import java.util.HashMap;
@@ -33,7 +31,7 @@ import static java.util.Objects.requireNonNull;
  * A REST service to augment a category.
  */
 @Named
-class CategoryAugmentationHelper extends AugmentationHelperBase<Category> {
+public class CategoryAugmentationHelper extends AugmentationHelperBase<Category> {
   private static final Logger LOGGER = LoggerFactory.getLogger(CategoryAugmentationHelper.class);
 
   private static final String CM_EXTERNAL_CHANNEL = "CMExternalChannel";
@@ -49,8 +47,14 @@ class CategoryAugmentationHelper extends AugmentationHelperBase<Category> {
   @Override
   @Nullable
   Content augment(@NonNull Category category) {
+    Site site = getSite(category);
+    if (site == null) {
+      return null;
+    }
+
     // create folder hierarchy for category
-    Content categoryFolder = contentRepository.createSubfolders(computeFolderPath(category));
+    Content categoryFolder = contentRepository.createSubfolders(computerFolderPath(category, site, getBaseFolderName(),
+            (CommerceBean bean) -> this.getCatalog(category)));
 
     if (categoryFolder == null) {
       return null;
@@ -62,11 +66,12 @@ class CategoryAugmentationHelper extends AugmentationHelperBase<Category> {
       initializeLayoutSettings(category, properties);
     }
 
-    return createContent(categoryFolder, computeDocumentName(category), properties);
+    return createContent(CM_EXTERNAL_CHANNEL, categoryFolder, computeDocumentName(category), properties);
   }
 
+
   @NonNull
-  private static String computeDocumentName(@NonNull Category category) {
+  public static String computeDocumentName(@NonNull Category category) {
     return (getEscapedDisplayName(category) + " (" + category.getExternalId() + ")")
             .replace('/', '_');
   }
@@ -192,11 +197,6 @@ class CategoryAugmentationHelper extends AugmentationHelperBase<Category> {
   @Qualifier("categoryAugmentationService")
   public void setAugmentationService(AugmentationService augmentationService) {
     this.augmentationService = augmentationService;
-  }
-
-  @Value("${livecontext.augmentation.category.type:" + CM_EXTERNAL_CHANNEL + "}")
-  public void setAugmentedContentType(ContentType contentType) {
-    this.contentType = contentType;
   }
 
   @Autowired

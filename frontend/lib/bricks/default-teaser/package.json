@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@coremedia/brick-media": "^1.0.0",
-    "@coremedia/brick-utils": "^1.0.0"
+    "@coremedia/brick-media": "workspace:*",
+    "@coremedia/brick-utils": "workspace:*"
   },
   "coremedia": {
     "type": "brick"

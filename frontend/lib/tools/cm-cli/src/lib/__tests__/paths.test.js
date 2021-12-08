@@ -20,6 +20,13 @@ describe("PACKAGE_MANAGER_EXECUTABLE()", () => {
     const { PACKAGE_MANAGER_EXECUTABLE } = require("../paths");
     expect(PACKAGE_MANAGER_EXECUTABLE).toEqual("yarn");
   });
+  it("returns pnpm", () => {
+    process.env.npm_execpath = "/path/to/pnpm.cjs";
+    const constants = require("../constants");
+    constants.IS_WINDOWS = false;
+    const { PACKAGE_MANAGER_EXECUTABLE } = require("../paths");
+    expect(PACKAGE_MANAGER_EXECUTABLE).toEqual("pnpm");
+  });
   it("returns npm.cmd", () => {
     process.env.npm_execpath = "/path/to/npm-cli.js";
     const constants = require("../constants");
@@ -27,11 +34,18 @@ describe("PACKAGE_MANAGER_EXECUTABLE()", () => {
     const { PACKAGE_MANAGER_EXECUTABLE } = require("../paths");
     expect(PACKAGE_MANAGER_EXECUTABLE).toEqual("npm.cmd");
   });
-  it("returns yarn", () => {
+  it("returns yarn.cmd", () => {
     process.env.npm_execpath = "/path/to/yarn.js";
     const constants = require("../constants");
     constants.IS_WINDOWS = true;
     const { PACKAGE_MANAGER_EXECUTABLE } = require("../paths");
     expect(PACKAGE_MANAGER_EXECUTABLE).toEqual("yarn.cmd");
+  });
+  it("returns pnpm.cmd", () => {
+    process.env.npm_execpath = "/path/to/pnpm.cjs";
+    const constants = require("../constants");
+    constants.IS_WINDOWS = true;
+    const { PACKAGE_MANAGER_EXECUTABLE } = require("../paths");
+    expect(PACKAGE_MANAGER_EXECUTABLE).toEqual("pnpm.cmd");
   });
 });

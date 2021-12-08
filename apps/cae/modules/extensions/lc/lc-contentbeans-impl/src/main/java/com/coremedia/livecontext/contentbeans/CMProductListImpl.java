@@ -10,7 +10,6 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
-import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
@@ -51,7 +50,6 @@ public class CMProductListImpl extends CMQueryListImpl implements CMProductList 
 
   public static final int MAX_LENGTH_DEFAULT = 10;
   public static final int OFFSET_DEFAULT = 0;
-  private static final String DIGIT_PATTERN = "[0-9]*";
   private static final String ALL_QUERY = "*";
   static final String ORDER_BY_DEFAULT = "";
   static final Map<String, Map<String, List<String>>> FILTER_FACETS_DEFAULT = Map.of();
@@ -59,11 +57,8 @@ public class CMProductListImpl extends CMQueryListImpl implements CMProductList 
   static final String PROP_ORDER_BY = "orderBy";
   static final String PROP_OFFSET = "offset";
   static final String PROP_MAX_LENGTH = "maxLength";
-  private static final String PROP_SELECTED_FACET_VALUE = "selectedFacetValue";
   private static final String SETTING_PRODUCT_LIST = "productList";
   static final String SETTING_FILTER_FACETS = "filterFacets";
-
-  private String overrideCategoryId;
 
   @Inject
   private CommerceConnectionSupplier commerceConnectionSupplier;
@@ -109,11 +104,11 @@ public class CMProductListImpl extends CMQueryListImpl implements CMProductList 
     return (List<? extends Aspect<? extends CMProductList>>) super.getAspects();
   }
 
-  @Override
   public String getExternalId() {
     return getContent().getString(EXTERNAL_ID);
   }
 
+  @Nullable
   public Category getCategory() {
     Optional<CommerceId> categoryIdOptional = parseCommerceId(getExternalId());
 
@@ -129,7 +124,7 @@ public class CMProductListImpl extends CMQueryListImpl implements CMProductList 
 
     CommerceConnection connection = commerceConnection.get();
 
-    StoreContext storeContext = connection.getStoreContext();
+    StoreContext storeContext = connection.getInitialStoreContext();
     CommerceId commerceId = categoryIdOptional.get();
 
     try {
@@ -168,6 +163,7 @@ public class CMProductListImpl extends CMQueryListImpl implements CMProductList 
     return value instanceof Integer ? (Integer) value : MAX_LENGTH_DEFAULT;
   }
 
+  @Override
   public List<ProductInSite> getProducts() {
     Content content = getContent();
     Site site = getSitesService().getSiteAspect(content).getSite();
@@ -183,12 +179,9 @@ public class CMProductListImpl extends CMQueryListImpl implements CMProductList 
     }
 
     CommerceConnection connection = commerceConnection.get();
-    StoreContext storeContext = connection.getStoreContext();
+    StoreContext storeContext = connection.getInitialStoreContext();
 
-    Category category = getCategory();
-    CatalogAlias catalogAlias = category != null ? category.getReference().getCatalogAlias() : null;
-    CommerceId categoryId = getCategoryIdForSearchQuery(category, catalogAlias, storeContext);
-    SearchQuery searchQuery = buildProductSearchQuery(categoryId);
+    SearchQuery searchQuery = buildProductSearchQuery();
 
     return connection.getCatalogService()
             .search(searchQuery, storeContext)
@@ -198,26 +191,10 @@ public class CMProductListImpl extends CMQueryListImpl implements CMProductList 
             .collect(toList());
   }
 
-  @Override
-  public String getFacet() {
-    Object value = getProductListSettings().get(PROP_SELECTED_FACET_VALUE);
-    String strValue = "";
-    if (value != null) {
-      strValue = (String) value;
-      if (strValue.matches(DIGIT_PATTERN)) {
-        overrideCategoryId = strValue;
-        return "";
-      }
-    }
-    return strValue;
-  }
-
-  @Override
   public String getQuery() {
     return ALL_QUERY;
   }
 
-  @Override
   public Map<String, Object> getProductListSettings() {
     try {
       Struct localSettings = getLocalSettings();
@@ -254,13 +231,18 @@ public class CMProductListImpl extends CMQueryListImpl implements CMProductList 
   }
 
   @NonNull
-  private SearchQuery buildProductSearchQuery(@Nullable CommerceId categoryId) {
+  private SearchQuery buildProductSearchQuery() {
     SearchQueryBuilder searchQueryBuilder = SearchQuery.builder(getQuery(), PRODUCT)
+            .setFilterFacets(getFilterFacetQueries())
             .setLimit(getMaxLength())
             .setOffset(getOffset())
             .setIncludeResultFacets(true); //if necessary use the api which supports the facet search
 
-    if (categoryId != null) {
+    Category category = getCategory();
+    if (category != null && !category.isRoot()) {
+      CommerceId categoryId = buildCopyOf(category.getId())
+              .withTechId(category.getExternalTechId())
+              .build();
       searchQueryBuilder.setCategoryId(categoryId);
     }
 
@@ -269,35 +251,6 @@ public class CMProductListImpl extends CMQueryListImpl implements CMProductList 
       searchQueryBuilder.setOrderBy(OrderBy.of(orderBy));
     }
 
-    List<SearchQueryFacet> filterFacetQueries = getFilterFacetQueries();
-    if (!filterFacetQueries.isEmpty()) {
-      // new format detected - override category is ignored
-      searchQueryBuilder.setFilterFacets(filterFacetQueries);
-    } else {
-      // legacy format detected
-      String facet = getFacet();
-      if (StringUtils.isNotEmpty(facet)) {
-        searchQueryBuilder.setFilterFacets(List.of(SearchQueryFacet.of(facet)));
-      }
-    }
-
     return searchQueryBuilder.build();
-  }
-
-  @Nullable
-  @SuppressWarnings("IfStatementWithTooManyBranches")
-  private CommerceId getCategoryIdForSearchQuery(@Nullable Category category,
-                                                 @Nullable CatalogAlias catalogAlias,
-                                                 StoreContext storeContext) {
-    if (!StringUtils.isEmpty(overrideCategoryId)) {
-      return storeContext.getConnection().getIdProvider()
-              .formatCategoryTechId(catalogAlias, overrideCategoryId);
-    } else if (category != null && !category.isRoot()) {
-      return buildCopyOf(category.getId())
-              .withTechId(category.getExternalTechId())
-              .build();
-    } else {
-      return null;
-    }
   }
 }

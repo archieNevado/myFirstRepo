@@ -44,7 +44,7 @@
       <@cm.include self=self view="asLink" params={"cssClass" : "cm-navigation-item__title"}/>
       <#if showPicturesInNavigation && depth == 2>
         <#if self.category.picture?has_content>
-          <#assign picture=bp.createBeanFor(self.category.picture)/>
+          <#assign picture=lc.createBeanFor(self.category.picture)/>
         <#elseif self.category.catalogPicture?has_content>
           <#assign picture=self.category.catalogPicture/>
         <#elseif self.picture?has_content>

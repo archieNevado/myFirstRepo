@@ -3,7 +3,6 @@ package com.coremedia.blueprint.elastic.social.contentbeans;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.objectserver.beans.ContentBean;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
@@ -17,7 +16,7 @@ final class LinkableCountTargetPredicate implements CountTargetPredicate<Linkabl
   }
 
   @Override
-  public boolean apply(@Nullable Linkable input) {
+  public boolean test(@Nullable Linkable input) {
     boolean inProduction = true;
     if (input instanceof ContentBean) {
       final ContentBean contentBean = (ContentBean) input;

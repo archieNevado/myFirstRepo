@@ -10,8 +10,6 @@ import com.coremedia.objectserver.beans.ContentBeanIdConverter;
 import com.coremedia.objectserver.configuration.CaeConfigurationProperties;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.objectserver.web.HandlerHelper;
-import com.google.common.base.Joiner;
-import com.google.common.base.Splitter;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
@@ -25,20 +23,18 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.activation.MimeType;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
-import static com.google.common.collect.Lists.newArrayList;
+import java.util.stream.Collectors;
 
 /**
  * Base implementation for resources that are represented by request handler and link schemes
  */
 public abstract class HandlerBase extends WebContentGenerator {
 
-  private static final Splitter PATH_SPLITTER = Splitter.on('/').omitEmptyStrings();
-  private static final Joiner PATH_JOINER = Joiner.on('/');
-
+  protected static final String PATH_SEPARATOR = "/";
   public static final String FRAGMENT_PREVIEW = "fragmentPreview";
 
   protected static final Logger LOG = LoggerFactory.getLogger(HandlerBase.class);
@@ -190,11 +186,13 @@ public abstract class HandlerBase extends WebContentGenerator {
   }
 
   public List<String> splitPathInfo(String path) {
-    return newArrayList(PATH_SPLITTER.split(path));
+    return Arrays.stream(path.split(PATH_SEPARATOR))
+            .filter(s -> !s.isEmpty())
+            .collect(Collectors.toUnmodifiableList());
   }
 
   public String joinPath(List<String> nodes) {
-    return PATH_JOINER.join(nodes);
+    return String.join(PATH_SEPARATOR, nodes);
   }
 
   @Override

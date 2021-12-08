@@ -12,11 +12,9 @@ import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.struct.StructBuilder;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
-import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
+import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +62,7 @@ class CMQueryListImplPaginationTest {
     @Bean
     public XmlUapiConfig xmlUapiConfig() {
       return XmlUapiConfig.builder()
-              .withSchema("classpath:com/coremedia/blueprint/base/testing/blueprint-doctypes-xmlrepo.xml")
+              .withSchema("classpath:com/coremedia/testing/blueprint-doctypes-xmlrepo.xml")
               .build();
     }
   }
@@ -121,21 +119,21 @@ class CMQueryListImplPaginationTest {
   void testPagination() {
     Content testFolder = createTestContent();
     try {
-      List<Integer> fixedItemIndices = ImmutableList.of(0, 2, 3, 8, 13);
+      List<Integer> fixedItemIndices = List.of(0, 2, 3, 8, 13);
       CMQueryListImpl testling = new TestlingBuilder().withTestFolder(testFolder)
               .withPageSize(3)
               .withAvailableHits(9)
               .withFixedItemsAt(fixedItemIndices).build();
       checkPagination(testling, 3, 5, 14, fixedItemIndices);
 
-      fixedItemIndices = ImmutableList.of(0);
+      fixedItemIndices = List.of(0);
       testling = new TestlingBuilder().withTestFolder(testFolder)
               .withPageSize(3)
               .withAvailableHits(1)
               .withFixedItemsAt(fixedItemIndices).build();
       checkPagination(testling, 3, 1, 2, fixedItemIndices);
 
-      fixedItemIndices = ImmutableList.of(1);
+      fixedItemIndices = List.of(1);
       testling = new TestlingBuilder().withTestFolder(testFolder)
               .withPageSize(3)
               .withAvailableHits(1)
@@ -150,7 +148,7 @@ class CMQueryListImplPaginationTest {
   void testPaginationFixedItemsOnly() {
     Content testFolder = createTestContent();
     try {
-      List<Integer> fixedItemIndices = ImmutableList.of(0, 1, 2, 3, 4, 5);
+      List<Integer> fixedItemIndices = List.of(0, 1, 2, 3, 4, 5);
       CMQueryListImpl testling = new TestlingBuilder().withTestFolder(testFolder)
               .withPageSize(3)
               .withFixedItemsAt(fixedItemIndices).build();
@@ -175,11 +173,11 @@ class CMQueryListImplPaginationTest {
     Content testFolder = createTestContent();
     try {
       // 4 valid and many invalid search hits...
-      List<Integer> invalidItemIndices = ImmutableList.of(0, 1, 2, 4, 5, 9, 10);
+      List<Integer> invalidItemIndices = List.of(0, 1, 2, 4, 5, 9, 10);
       List<CMArticle> searchHits = createSearchHits(testFolder, 4, invalidItemIndices);
       SearchResultFactory searchResultFactory = new MockSearchResultFactory(searchHits, searchHits.size());
       // ... mixed with 4 fixed items
-      List<Integer> fixedItemIndices = ImmutableList.of(5, 6, 10, 14);
+      List<Integer> fixedItemIndices = List.of(5, 6, 10, 14);
       CMQueryListImpl testling = new TestlingBuilder().withTestFolder(testFolder)
               .withPageSize(3)
               .withSearchResultFactory(searchResultFactory)
@@ -206,7 +204,7 @@ class CMQueryListImplPaginationTest {
   void testPageSizes() {
     Content testFolder = createTestContent();
     try {
-      List<Integer> fixedItemIndices = ImmutableList.of(0, 2, 3, 8, 13);
+      List<Integer> fixedItemIndices = List.of(0, 2, 3, 8, 13);
 
       CMQueryListImpl testling = new TestlingBuilder().withTestFolder(testFolder)
               .withPageSize(1)
@@ -356,7 +354,7 @@ class CMQueryListImplPaginationTest {
     // to have invalid items in the search hits.  In a real world CAE, the
     // ValidationService has additional extension or custom validators which
     // consider other hits as invalid.
-    Map<String,?> pastFromTo = ImmutableMap.of("validFrom", calendar(42), "validTo", calendar(3600000));
+    Map<String,?> pastFromTo = Map.of("validFrom", calendar(42), "validTo", calendar(3600000));
     for (int i=0; i<10; ++i) {
       repository.createChild(testFolder, "invalid"+i, "CMArticle", pastFromTo);
     }

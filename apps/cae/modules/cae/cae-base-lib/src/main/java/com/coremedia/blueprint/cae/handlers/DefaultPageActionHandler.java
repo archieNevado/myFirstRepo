@@ -3,26 +3,21 @@ package com.coremedia.blueprint.cae.handlers;
 import com.coremedia.blueprint.cae.action.webflow.WebflowActionState;
 import com.coremedia.blueprint.common.contentbeans.CMAction;
 import com.coremedia.blueprint.common.navigation.Navigation;
-import com.coremedia.objectserver.beans.ContentBean;
-import com.google.common.collect.ImmutableMap;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_NAVIGATION;
-import static org.springframework.util.CollectionUtils.isEmpty;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ACTION;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ID;
-import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ROOT;
+import static org.springframework.util.CollectionUtils.isEmpty;
 
 @SuppressWarnings("LocalCanBeFinal")
 public class DefaultPageActionHandler extends WebflowHandlerBase {
@@ -44,7 +39,7 @@ public class DefaultPageActionHandler extends WebflowHandlerBase {
       throw new IllegalStateException("Could not calculate the path segments for " + context);
     }
 
-    return result.buildAndExpand(ImmutableMap.of(
+    return result.buildAndExpand(Map.of(
             SEGMENT_ID, getId(action),
             SEGMENTS_NAVIGATION, joinPath(getPathSegments(context)),
             SEGMENT_ACTION, actionName

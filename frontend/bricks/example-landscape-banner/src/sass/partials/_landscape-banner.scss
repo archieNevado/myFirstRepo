@@ -19,7 +19,7 @@ $_aspect-ratio-by-breakpoint: (
   flex-direction: column;
 
   &__caption {
-    flex: 1 1 auto; // use full flex definition because of different defaults in IE11
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
     padding: 10px;

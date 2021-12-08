@@ -40,7 +40,6 @@ function resolveScssByNameExpander(url) {
       break;
     }
   }
-
   return result;
 }
 
@@ -54,4 +53,5 @@ function resolveScss(url, prev) {
 
 module.exports = {
   resolveScss,
+  resolveScssByNameExpander
 };

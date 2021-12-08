@@ -15,7 +15,6 @@ public class CaasExecutionResultHandler implements ExecutionResultHandler {
 
   @Override
   public Object handleExecutionResult(CompletableFuture<ExecutionResult> completableFuture) {
-
     return completableFuture.exceptionally(exc -> {
 
       if (exc.getCause().getClass().isAssignableFrom(AbortExecutionException.class)) {

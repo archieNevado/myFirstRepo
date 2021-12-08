@@ -1,0 +1,19 @@
+http:
+  routers:
+    wcs-proxy:
+      entrypoints:
+        - web-access-secure
+        - web-access-insecure
+      # traefik v1: traefik.shop-ibm.frontend.rule: Host:shop-ibm.${ENVIRONMENT_FQDN:-docker.localhost}
+      # traefik v1: traefik.shop-preview.frontend.rule: Host:shop-preview-ibm.${ENVIRONMENT_FQDN:-docker.localhost}
+      # traefik v1: traefik.shop-preview-production.frontend.rule: Host:shop-preview-production-ibm.${ENVIRONMENT_FQDN:-docker.localhost}
+      rule: Host(`shop-ibm.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`,`shop-preview-ibm.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`,`shop-preview-production-ibm.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`)
+      service: wcs-proxy
+
+  services:
+    wcs-proxy:
+      loadBalancer:
+        # this makes sure the apache sees the virtualhost of the traefik and can find the right handler
+        passHostHeader: true
+        servers:
+          - url: http://wcs-proxy:80

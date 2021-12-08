@@ -1,6 +1,6 @@
 package com.coremedia.blueprint.livecontext.ecommerce.filter;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
 import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
@@ -21,10 +21,10 @@ import java.io.IOException;
 @SuppressWarnings("SpringJavaAutowiredMembersInspection")
 public class CommerceConnectionFilter implements Filter {
 
-  private final CommerceConnectionInitializer commerceConnectionInitializer;
+  private final CommerceConnectionSupplier commerceConnectionSupplier;
 
-  CommerceConnectionFilter(CommerceConnectionInitializer commerceConnectionInitializer) {
-    this.commerceConnectionInitializer = commerceConnectionInitializer;
+  CommerceConnectionFilter(CommerceConnectionSupplier commerceConnectionSupplier) {
+    this.commerceConnectionSupplier = commerceConnectionSupplier;
   }
 
   @Override
@@ -38,9 +38,9 @@ public class CommerceConnectionFilter implements Filter {
 
     try {
       SiteHelper.findSite(request)
-              .flatMap(commerceConnectionInitializer::findConnectionForSite)
-              .map(CommerceConnection::getStoreContext)
-              .ifPresent(CurrentStoreContext::set);
+              .flatMap(commerceConnectionSupplier::findConnection)
+              .map(CommerceConnection::getInitialStoreContext)
+              .ifPresent(context -> CurrentStoreContext.set(context, request));
       chain.doFilter(request, response);
     } finally {
       CurrentStoreContext.remove();

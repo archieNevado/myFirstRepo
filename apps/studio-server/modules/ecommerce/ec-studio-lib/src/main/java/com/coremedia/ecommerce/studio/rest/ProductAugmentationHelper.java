@@ -1,20 +1,19 @@
 package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
+import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.google.common.annotations.VisibleForTesting;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Named;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,9 +39,14 @@ public class ProductAugmentationHelper extends AugmentationHelperBase<Product> {
   @Nullable
   Content augment(@NonNull Product product) {
     Category parentCategory = product.getCategory();
+    var site = getSite(parentCategory);
+    if (site == null) {
+      return null;
+    }
 
     // create folder hierarchy for category
-    Content categoryFolder = contentRepository.createSubfolders(computeFolderPath(parentCategory));
+    Content categoryFolder = contentRepository.createSubfolders(computerFolderPath(parentCategory, site, getBaseFolderName(),
+            (CommerceBean bean) -> this.getCatalog(parentCategory)));
 
     if (categoryFolder == null) {
       return null;
@@ -54,7 +58,7 @@ public class ProductAugmentationHelper extends AugmentationHelperBase<Product> {
       initializeLayoutSettings(product, properties);
     }
 
-    return createContent(categoryFolder, computeDocumentName(product), properties);
+    return createContent(CM_EXTERNAL_PRODUCT, categoryFolder, computeDocumentName(product), properties);
   }
 
   @VisibleForTesting
@@ -103,7 +107,7 @@ public class ProductAugmentationHelper extends AugmentationHelperBase<Product> {
   }
 
   @NonNull
-  private static String computeDocumentName(@NonNull Product product) {
+  public static String computeDocumentName(@NonNull Product product) {
     return (product.getName() + " (" + product.getExternalId() + ")")
             .replace('/', '_');
   }
@@ -112,11 +116,6 @@ public class ProductAugmentationHelper extends AugmentationHelperBase<Product> {
   @Qualifier("productAugmentationService")
   public void setAugmentationService(AugmentationService augmentationService) {
     this.augmentationService = augmentationService;
-  }
-
-  @Value("${livecontext.augmentation.product.type:" + CM_EXTERNAL_PRODUCT + "}")
-  public void setAugmentedContentType(ContentType contentType) {
-    this.contentType = contentType;
   }
 
   @Autowired(required = false)

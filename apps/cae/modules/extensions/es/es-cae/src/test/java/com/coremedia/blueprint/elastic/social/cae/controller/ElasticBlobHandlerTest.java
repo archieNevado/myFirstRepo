@@ -4,8 +4,6 @@ import com.coremedia.elastic.core.api.blobs.Blob;
 import com.coremedia.elastic.core.api.blobs.BlobService;
 import com.coremedia.objectserver.web.SecureHashCodeGeneratorStrategy;
 import com.coremedia.transform.BlobTransformer;
-import com.google.common.collect.ImmutableMap;
-import javax.servlet.http.HttpServletRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -95,7 +94,7 @@ public class ElasticBlobHandlerTest {
 
   @Test
   public void buildLinkWithTransformation() {
-    Map<String, Object> params = ImmutableMap.<String, Object>of("width", 100, "height", 100, "transform", true);
+    Map<String, Object> params = Map.of("width", 100, "height", 100, "transform", true);
     Map<String, Object> expectedResult = getDefaultResultMap(100, 100);
 
     Map<String, ?> result = handler.buildLinkWithTransformation(blob, params, request);
@@ -105,7 +104,7 @@ public class ElasticBlobHandlerTest {
 
   @Test
   public void buildLinkWithTransformationWithDefaultHeight() {
-    Map<String, Object> params = ImmutableMap.<String, Object>of("height", 100, "transform", true);
+    Map<String, Object> params = Map.of("height", 100, "transform", true);
     Map<String, Object> expectedResult = getDefaultResultMap(48, 100);
 
     Map<String, ?> result = handler.buildLinkWithTransformation(blob, params, request);
@@ -115,7 +114,7 @@ public class ElasticBlobHandlerTest {
 
   @Test
   public void buildLinkWithTransformationWithDefaultWidth() {
-    Map<String, Object> params = ImmutableMap.<String, Object>of("width", 100, "transform", true);
+    Map<String, Object> params = Map.of("width", 100, "transform", true);
     Map<String, Object> expectedResult = getDefaultResultMap(100, 48);
 
     Map<String, ?> result = handler.buildLinkWithTransformation(blob, params, request);
@@ -125,7 +124,7 @@ public class ElasticBlobHandlerTest {
 
   @Test
   public void buildLinkWithTransformationWithWidthAndHeight() {
-    Map<String, Object> params = ImmutableMap.<String, Object>of("width", 100, "height", 100);
+    Map<String, Object> params = Map.of("width", 100, "height", 100);
     Map<String, Object> expectedResult = getDefaultResultMap(100, 100);
 
     Map<String, ?> result = handler.buildLinkWithWidthAndHeight(blob, params, request);
@@ -142,7 +141,7 @@ public class ElasticBlobHandlerTest {
 
   @Test
   public void buildLinkForRefWithTransformation() {
-    Map<String, Object> params = ImmutableMap.<String, Object>of("width", 100, "height", 100, "transform", true);
+    Map<String, Object> params = Map.of("width", 100, "height", 100, "transform", true);
     Map<String, Object> expectedResult = getDefaultResultMap(100, 100);
 
     Map<String, ?> result = handler.buildLinkWithTransformation(blobRef, params, request);
@@ -152,7 +151,7 @@ public class ElasticBlobHandlerTest {
 
   @Test
   public void buildLinkForRefWithTransformationWithDefaultHeight() {
-    Map<String, Object> params = ImmutableMap.<String, Object>of("height", 100, "transform", true);
+    Map<String, Object> params = Map.of("height", 100, "transform", true);
     Map<String, Object> expectedResult = getDefaultResultMap(48, 100);
 
     Map<String, ?> result = handler.buildLinkWithTransformation(blobRef, params, request);
@@ -162,7 +161,7 @@ public class ElasticBlobHandlerTest {
 
   @Test
   public void buildLinkForRefWithTransformationWithDefaultWidth() {
-    Map<String, Object> params = ImmutableMap.<String, Object>of("width", 100, "transform", true);
+    Map<String, Object> params = Map.of("width", 100, "transform", true);
     Map<String, Object> expectedResult = getDefaultResultMap(100, 48);
 
     Map<String, ?> result = handler.buildLinkWithTransformation(blobRef, params, request);
@@ -172,7 +171,7 @@ public class ElasticBlobHandlerTest {
 
   @Test
   public void buildLinkForRefWithTransformationWithWidthAndHeight() {
-    Map<String, Object> params = ImmutableMap.<String, Object>of("width", 100, "height", 100);
+    Map<String, Object> params = Map.of("width", 100, "height", 100);
     Map<String, Object> expectedResult = getDefaultResultMap(100, 100);
 
     Map<String, ?> result = handler.buildLinkWithWidthAndHeight(blobRef, params, request);

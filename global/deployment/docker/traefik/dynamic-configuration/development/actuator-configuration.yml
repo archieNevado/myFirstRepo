@@ -1,0 +1,55 @@
+{{ $services := list  "content-management-server" }}
+{{ $services := append $services "master-live-server" }}
+{{ $services := append $services "workflow-server" }}
+{{ $services := append $services "content-feeder" }}
+{{ $services := append $services "cae-feeder-preview" }}
+{{ $services := append $services "cae-feeder-live" }}
+{{ $services := append $services "user-changes" }}
+{{ $services := append $services "elastic-worker" }}
+{{ $services := append $services "studio-server" }}
+{{ $services := append $services "cae-preview" }}
+{{ $services := append $services "replication-live-server" }}
+{{ $services := append $services "cae-live" }}
+{{ $services := append $services "headless-server-preview" }}
+{{ $services := append $services "headless-server-live" }}
+{{ $services := append $services (env "ACTUATOR_COMMERCE_ADAPTER_MOCK" | default "ignore") }}
+{{ $services := append $services (env "ACTUATOR_COMMERCE_ADAPTER_TOOLS" | default "ignore") }}
+{{ $services := append $services (env "ACTUATOR_COMMERCE_ADAPTER_HYBRIS" | default "ignore") }}
+{{ $services := append $services (env "ACTUATOR_COMMERCE_ADAPTER_SFCC" | default "ignore") }}
+{{ $services := append $services (env "ACTUATOR_COMMERCE_ADAPTER_WCS" | default "ignore") }}
+http:
+  routers:
+    {{ range $index, $service := $services }}
+    {{ if (ne $service "ignore") }}
+    {{ $service }}-actuator:
+      entrypoints:
+        - web-access-secure
+        - web-access-insecure
+      rule: Host(`overview.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && PathPrefix(`/{{ $service }}`)
+      service: {{ $service }}-actuator@file
+      middlewares:
+        - {{ $service }}-actuator-strip-prefix@file
+        - actuator-add-prefix@file
+    {{ end }}
+    {{ end }}
+
+  services:
+    {{ range $index, $service := $services }}
+    {{ if (ne $service "ignore") }}
+    {{ $service }}-actuator:
+      loadBalancer:
+        servers:
+          - url: "http://{{ $service }}:8081/actuator"
+    {{ end }}
+    {{ end }}
+
+  middlewares:
+    {{ range $index, $service := $services }}
+    {{ $service }}-actuator-strip-prefix:
+      stripPrefix:
+        prefixes:
+          - "/{{ $service }}"
+    {{ end }}
+    actuator-add-prefix:
+      addPrefix:
+        prefix: "/actuator"

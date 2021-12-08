@@ -1,7 +1,6 @@
 package com.coremedia.blueprint.cae.search.solr;
 
 import com.coremedia.blueprint.cae.search.SearchQueryBean;
-import com.google.common.collect.ImmutableMap;
 import org.apache.solr.client.solrj.SolrQuery;
 
 import java.util.Map;
@@ -16,7 +15,7 @@ public interface SolrQueryBuilder {
   String SORT_ORDER_ASC = "ASC";
   String SORT_ORDER_DESC = "DESC";
 
-  Map<String, SolrQuery.ORDER> SORT_ORDER_MAPPING = ImmutableMap.of(
+  Map<String, SolrQuery.ORDER> SORT_ORDER_MAPPING = Map.of(
           SORT_ORDER_ASC, SolrQuery.ORDER.asc,
           SORT_ORDER_DESC, SolrQuery.ORDER.desc,
 

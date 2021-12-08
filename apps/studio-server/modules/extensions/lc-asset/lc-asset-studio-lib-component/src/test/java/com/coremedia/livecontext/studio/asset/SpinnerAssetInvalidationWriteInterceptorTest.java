@@ -9,7 +9,6 @@ import com.coremedia.livecontext.asset.util.AssetReadSettingsHelper;
 import com.coremedia.livecontext.asset.util.AssetWriteSettingsHelper;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.rest.cap.intercept.ContentWriteRequest;
-import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +16,7 @@ import org.mockito.Answers;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -107,8 +107,8 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
 
   @Test
   public void testAssignedProductsChangedEqualProductList() {
-    List<String> newProducts = ImmutableList.of("1", "2");
-    List<String> oldProducts = ImmutableList.of("1", "2");
+    List<String> newProducts = List.of("1", "2");
+    List<String> oldProducts = List.of("1", "2");
     when(assetReadSettingsHelper.hasCommerceStruct(newLocalSettings)).thenReturn(true);
     when(assetReadSettingsHelper.hasCommerceStruct(oldLocalSettings)).thenReturn(true);
     when(assetReadSettingsHelper.hasReferencesList(newLocalSettings)).thenReturn(true);
@@ -120,8 +120,8 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
 
   @Test
   public void testAssignedProductsChangedNotEqualProductList() {
-    List<String> newProducts = ImmutableList.of("1", "2");
-    List<String> oldProducts = ImmutableList.of("1", "3");
+    List<String> newProducts = List.of("1", "2");
+    List<String> oldProducts = List.of("1", "3");
     when(assetReadSettingsHelper.hasCommerceStruct(newLocalSettings)).thenReturn(true);
     when(assetReadSettingsHelper.hasCommerceStruct(oldLocalSettings)).thenReturn(true);
     when(assetReadSettingsHelper.hasReferencesList(newLocalSettings)).thenReturn(true);
@@ -290,7 +290,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
 
   @Test
   public void testInvalidateExternalReferencesNoNewSettings() {
-    List<String> oldSettingsInvalidation = ImmutableList.of("1ProductReference", "2ProductReference", "3ProductReference");
+    List<String> oldSettingsInvalidation = List.of("1ProductReference", "2ProductReference", "3ProductReference");
     when(assetReadSettingsHelper.getCommerceReferences(oldLocalSettings)).thenReturn(oldSettingsInvalidation);
     when(assetReadSettingsHelper.hasReferencesList(oldLocalSettings)).thenReturn(Boolean.TRUE);
 
@@ -301,7 +301,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
 
   @Test
   public void testInvalidateExternalReferencesNoOldSettings() {
-    List<String> newSettingsInvalidation = ImmutableList.of("1ProductReference", "2ProductReference", "3ProductReference");
+    List<String> newSettingsInvalidation = List.of("1ProductReference", "2ProductReference", "3ProductReference");
     when(assetReadSettingsHelper.getCommerceReferences(newLocalSettings)).thenReturn(newSettingsInvalidation);
     when(assetReadSettingsHelper.hasReferencesList(newLocalSettings)).thenReturn(Boolean.TRUE);
 
@@ -312,15 +312,15 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
 
   @Test
   public void testInvalidateExternalReferencesBothSettings() {
-    List<String> oldSettingsInvalidation = ImmutableList.of("1OldProductReference", "2OldProductReference");
+    List<String> oldSettingsInvalidation = List.of("1OldProductReference", "2OldProductReference");
     when(assetReadSettingsHelper.getCommerceReferences(oldLocalSettings)).thenReturn(oldSettingsInvalidation);
     when(assetReadSettingsHelper.hasReferencesList(oldLocalSettings)).thenReturn(Boolean.TRUE);
 
-    List<String> newSettingsInvalidation = ImmutableList.of("1ProductReference", "2ProductReference");
+    List<String> newSettingsInvalidation = List.of("1ProductReference", "2ProductReference");
     when(assetReadSettingsHelper.getCommerceReferences(newLocalSettings)).thenReturn(newSettingsInvalidation);
     when(assetReadSettingsHelper.hasReferencesList(newLocalSettings)).thenReturn(Boolean.TRUE);
 
-    List<String> expected = ImmutableList.of("1OldProductReference", "2OldProductReference", "1ProductReference", "2ProductReference");
+    List<String> expected = List.of("1OldProductReference", "2OldProductReference", "1ProductReference", "2ProductReference");
 
     testling.invalidateExternalReferences(content, oldLocalSettings, newLocalSettings);
 
@@ -375,7 +375,7 @@ public class SpinnerAssetInvalidationWriteInterceptorTest {
   private Map<String, Object> allSpinnerPicturesTestNewProperties(Content... pictures) {
     Map<String, Object> stringObjectHashMap = new HashMap<>();
     if (pictures != null && pictures.length > 0) {
-      List<Content> newPictures = ImmutableList.copyOf(pictures);
+      List<Content> newPictures = List.copyOf(Arrays.asList(pictures));
       stringObjectHashMap.put(SEQUENCE_SPINNER_PROPERTY, newPictures);
     }
     return stringObjectHashMap;

@@ -1,6 +1,6 @@
 package com.coremedia.blueprint.ecommerce.cae.config;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.multisite.cae.SiteResolver;
 import com.coremedia.blueprint.cae.handlers.PageActionHandler;
 import com.coremedia.blueprint.cae.handlers.PageHandler;
@@ -8,15 +8,12 @@ import com.coremedia.blueprint.cae.sitemap.SitemapGenerationHandler;
 import com.coremedia.blueprint.ecommerce.cae.AbstractCommerceContextInterceptor;
 import com.coremedia.blueprint.ecommerce.cae.WebCommerceContextInterceptor;
 import com.coremedia.objectserver.web.MappedInterceptor;
-import com.coremedia.springframework.customizer.Customize;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
-import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
-import org.springframework.core.annotation.Order;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.util.List;
@@ -37,7 +34,7 @@ public class ECommerceCaeConfiguration {
 
   @Bean
   public List<String> webCommerceContextInterceptorPatterns() {
-    return Lists.newArrayList(PageHandler.SEO_FRIENDLY_URI_PATTERN,
+    return List.of(PageHandler.SEO_FRIENDLY_URI_PATTERN,
             PageHandler.URI_PATTERN_VANITY,
             PageActionHandler.URI_PATTERN,
             SitemapGenerationHandler.URI_PATTERN);
@@ -45,12 +42,12 @@ public class ECommerceCaeConfiguration {
 
   @Bean
   public WebCommerceContextInterceptor webCommerceContextInterceptor(SiteResolver siteResolver,
-                                                                     CommerceConnectionInitializer commerceConnectionInitializer) {
+                                                                     CommerceConnectionSupplier commerceConnectionSupplier) {
     WebCommerceContextInterceptor contextInterceptor = new WebCommerceContextInterceptor();
 
     configureStoreContextInterceptor(contextInterceptor,
             siteResolver,
-            commerceConnectionInitializer);
+            commerceConnectionSupplier);
 
     contextInterceptor.setInitUserContext(true);
 
@@ -62,9 +59,9 @@ public class ECommerceCaeConfiguration {
    */
   public static void configureStoreContextInterceptor(AbstractCommerceContextInterceptor contextInterceptor,
                                                       SiteResolver siteResolver,
-                                                      CommerceConnectionInitializer commerceConnectionInitializer) {
+                                                      CommerceConnectionSupplier commerceConnectionSupplier) {
     contextInterceptor.setSiteResolver(siteResolver);
-    contextInterceptor.setCommerceConnectionInitializer(commerceConnectionInitializer);
+    contextInterceptor.setCommerceConnectionSupplier(commerceConnectionSupplier);
   }
 
   @Bean

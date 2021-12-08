@@ -12,27 +12,27 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>am-preview-cae</artifactId>
-      <version>1-SNAPSHOT</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>lc-p13n-preview-cae</artifactId>
-      <version>1-SNAPSHOT</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>lc-preview-cae</artifactId>
-      <version>1-SNAPSHOT</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>p13n-preview-cae</artifactId>
-      <version>1-SNAPSHOT</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>

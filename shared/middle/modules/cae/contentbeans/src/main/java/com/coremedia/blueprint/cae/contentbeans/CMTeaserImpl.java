@@ -7,19 +7,19 @@ import com.coremedia.blueprint.common.cta.CallToActionButtonSettings;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.struct.StructBuilder;
 import com.coremedia.cap.struct.StructBuilderMode;
-import com.google.common.base.Function;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Generated extension class for immutable beans of document type "CMTeaser".
@@ -107,25 +107,28 @@ public class CMTeaserImpl extends CMTeaserBase {
     if (targets != null) {
       List<Map<String, Object>> links = targets.get("links");
       return links.stream()
-              .map((Function<Map<String, Object>, CallToActionButtonSettings>) stringObjectMap -> {
-                        ImmutableMap.Builder<String, Object> mapBuilder = ImmutableMap.builder();
-                        CMLinkable target = getSettingsService().setting("target", CMLinkable.class, stringObjectMap);
-                        boolean enabled = getSettingsService().settingWithDefault(ANNOTATED_LINK_STRUCT_CTA_ENABLED_PROPERTY_NAME, boolean.class, false, stringObjectMap);
-                        String hash = getSettingsService().settingWithDefault(ANNOTATED_LINK_STRUCT_CTA_HASH_PROPERTY_NAME, String.class, "", stringObjectMap);
-                        if (target != null && enabled) {
-                          mapBuilder.put("target", target);
-                          mapBuilder.put("hash", hash);
-                          mapBuilder.put("text", getSettingsService().settingWithDefault(ANNOTATED_LINK_STRUCT_CTA_CUSTOM_TEXT_PROPERTY_NAME, String.class, "", stringObjectMap));
-                          mapBuilder.put("openInNewTab", target.isOpenInNewTab());
-                          mapBuilder.put("metadata", ImmutableList.of("properties." + TARGETS));
-                          return getSettingsService().createProxy(CallToActionButtonSettings.class, mapBuilder.build());
-                        }
-                        return null;
-                      }
-
-              ).filter(Objects::nonNull).collect(ImmutableList.toImmutableList());
+              .map(this::convertLink)
+              .filter(Objects::nonNull)
+              .collect(Collectors.toUnmodifiableList());
     }
-    return ImmutableList.of();
+    return Collections.emptyList();
+  }
+
+  @Nullable
+  private CallToActionButtonSettings convertLink(Map<String, Object> stringObjectMap) {
+    Map<String, Object> map = new HashMap<>();
+    CMLinkable target = getSettingsService().setting("target", CMLinkable.class, stringObjectMap);
+    boolean enabled = getSettingsService().settingWithDefault(ANNOTATED_LINK_STRUCT_CTA_ENABLED_PROPERTY_NAME, boolean.class, false, stringObjectMap);
+    String hash = getSettingsService().settingWithDefault(ANNOTATED_LINK_STRUCT_CTA_HASH_PROPERTY_NAME, String.class, "", stringObjectMap);
+    if (target != null && enabled) {
+      map.put("target", target);
+      map.put("hash", hash);
+      map.put("text", getSettingsService().settingWithDefault(ANNOTATED_LINK_STRUCT_CTA_CUSTOM_TEXT_PROPERTY_NAME, String.class, "", stringObjectMap));
+      map.put("openInNewTab", target.isOpenInNewTab());
+      map.put("metadata", List.of("properties." + TARGETS));
+      return getSettingsService().createProxy(CallToActionButtonSettings.class, Collections.unmodifiableMap(map));
+    }
+    return null;
   }
 }
 

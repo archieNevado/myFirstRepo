@@ -83,10 +83,10 @@ function getShimLoaderConfig() {
       const imports = shim.getImports();
       const exports = shim.getExports();
       if (Object.keys(imports).length) {
-        loaders.push("imports-loader?" + getLoaderParams(imports));
+        loaders.push(`${require.resolve("imports-loader")}?${getLoaderParams(imports)}`);
       }
       if (Object.keys(exports).length) {
-        loaders.push("exports-loader?" + getLoaderParams(exports));
+        loaders.push(`${require.resolve("exports-loader")}?${getLoaderParams(exports)}`);
       }
       return {
         test: require.resolve(shim.getTarget()),
@@ -124,7 +124,7 @@ If you want to use these themes in your project, please create a copy and change
 ${dependenciesToExampleBricks
   .map((nodeModule) => `- ${nodeModule.getName()}`)
   .join("\n")}
-If you want to use these bricks in your project, you need to eject them (e.g. by using "yarn run eject" from the workspace root). For more information, check the CoreMedia Frontend Developer Guide.`
+If you want to use these bricks in your project, you need to eject them (e.g. by using "pnpm run eject" from the workspace root). For more information, check the CoreMedia Frontend Developer Guide.`
       );
     }
   }
@@ -196,7 +196,7 @@ if (linkedChunks.length > 0) {
   };
 }
 
-module.exports = ({ include, exclude, dependencyCheckPlugin, mode }) => (
+module.exports = ({ exclude, dependencyCheckPlugin }) => (
   config
 ) =>
   deepMerge(config, {
@@ -208,19 +208,9 @@ module.exports = ({ include, exclude, dependencyCheckPlugin, mode }) => (
       rules: [
         {
           test: /\.js$/,
-          loader: "eslint-loader",
-          options: {
-            cache: true,
-          },
-          enforce: "pre",
-          include: include,
-          exclude: exclude,
-        },
-        {
-          test: /\.js$/,
           use: [
             {
-              loader: "babel-loader",
+              loader: require.resolve("babel-loader"),
               options: {
                 configFile: babelConfigFile,
                 // babel-loader specific options

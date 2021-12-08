@@ -1,2 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.coremedia.livecontext.augmentation.config.LcAugmentationLegacyAutoConfiguration

@@ -10,10 +10,9 @@ import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.cap.multisite.SitesService;
-import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
-import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.HttpError;
 import org.junit.After;
@@ -23,9 +22,10 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -34,8 +34,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -76,15 +74,13 @@ public class FragmentPageHandlerTest {
   private CMChannel channelBean;
 
   @Mock
-  private HttpServletResponse response;
-
-  @Mock
-  private HttpServletRequest request;
-
-  @Mock
   private CatalogAliasTranslationService catalogAliasTranslationService;
 
   private final Cache cache = new Cache("test");
+
+  private final HttpServletResponse response = new MockHttpServletResponse();
+
+  private final MockHttpServletRequest request = new MockHttpServletRequest();
 
   @Before
   public void setUp() {
@@ -100,10 +96,7 @@ public class FragmentPageHandlerTest {
 
     when(storeContext.getSiteId()).thenReturn(SITE_ID);
 
-    CommerceConnection commerceConnection = mock(CommerceConnection.class);
-    when(storeContext.getConnection()).thenReturn(commerceConnection);
-
-    CurrentStoreContext.set(storeContext);
+    CurrentStoreContext.set(storeContext, request);
 
     when(sitesService.getSite(SITE_ID)).thenReturn(site);
 
@@ -116,7 +109,7 @@ public class FragmentPageHandlerTest {
     String url = "http://localhost:40081/blueprint/servlet/service/fragment/10001/en-US/params;";
     this.fragmentParameters = FragmentParametersFactory.create(url);
     context.setParameters(this.fragmentParameters);
-    when(request.getAttribute(FragmentContextProvider.FRAGMENT_CONTEXT_ATTRIBUTE)).thenReturn(context);
+    request.setAttribute(FragmentContextProvider.FRAGMENT_CONTEXT_ATTRIBUTE, context);
 
     when(channelBean.getContent()).thenReturn(rootChannel);
     when(rootChannel.getType()).thenReturn(rootChannelType);
@@ -126,14 +119,14 @@ public class FragmentPageHandlerTest {
 
   @After
   public void teardown() {
-    CurrentStoreContext.remove();
+    request.clearAttributes();
   }
 
   @Test
   public void testDefault() {
     ModelAndView result = testling.handleFragment(STORE_ID, LOCALE, request, response);
     assertNotNull(result);
-    assertEquals(result.getViewName(), "DEFAULT");
+    assertEquals("DEFAULT", result.getViewName());
   }
 
   @Test
@@ -145,14 +138,14 @@ public class FragmentPageHandlerTest {
 
     // this one is important because the LinkAbsolutizer needs a site
     // to build absolute css links for fragments
-    verify(request).setAttribute(SITE_ATTRIBUTE_NAME, site);
+    assertEquals(site, request.getAttribute(SITE_ATTRIBUTE_NAME));
   }
 
   @Test
   public void noSiteInPreview() {
     deliveryConfigurationProperties.setPreviewMode(true);
 
-    CurrentStoreContext.remove();
+    request.clearAttributes();
 
     ModelAndView result = testling.handleFragment("unknown", LOCALE, request, response);
     assertNotNull(result);

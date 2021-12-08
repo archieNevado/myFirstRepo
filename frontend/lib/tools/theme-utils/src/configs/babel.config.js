@@ -32,7 +32,6 @@ module.exports = (api) => {
     // Do not use .babelrc file
     babelrc: false,
     comments: false,
-    plugins: ["@babel/transform-runtime"],
     presets: [
       [
         "@babel/preset-env",

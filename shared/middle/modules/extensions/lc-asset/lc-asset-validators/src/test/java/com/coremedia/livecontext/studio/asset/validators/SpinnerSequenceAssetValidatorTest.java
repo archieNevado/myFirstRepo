@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.studio.asset.validators;
 
-import com.coremedia.cap.common.CapConnection;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.livecontext.asset.util.AssetReadSettingsHelper;
 import com.coremedia.rest.validation.Issues;
@@ -26,6 +26,8 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 public class SpinnerSequenceAssetValidatorTest {
   @Mock
+  ContentType contentType;
+  @Mock
   Content pic1;
   @Mock
   Content pic2;
@@ -43,8 +45,6 @@ public class SpinnerSequenceAssetValidatorTest {
   AssetReadSettingsHelper assetHelper;
   @Mock
   Issues issues;
-  @Mock
-  CapConnection connection;
 
   SpinnerSequenceAssetValidator testling;
 
@@ -56,7 +56,7 @@ public class SpinnerSequenceAssetValidatorTest {
   public void setup() {
     initMocks(this);
 
-    testling = new SpinnerSequenceAssetValidator(assetHelper, connection);
+    testling = new SpinnerSequenceAssetValidator(contentType, false, assetHelper);
 
     contentProperties1 = new HashMap<>();
     contentProperties2 = new HashMap<>();

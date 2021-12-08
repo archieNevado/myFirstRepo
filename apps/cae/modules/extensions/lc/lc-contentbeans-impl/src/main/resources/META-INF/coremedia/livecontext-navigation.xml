@@ -27,6 +27,7 @@
     <property name="augmentationService" ref="categoryAugmentationService"/>
     <property name="contentBeanFactory" ref="contentBeanFactory"/>
     <property name="validationService" ref="validationService"/>
+    <property name="commerceConnectionSupplier" ref="commerceConnectionSupplier"/>
   </bean>
 
   <customize:append id="liveContextNavigationSettingsFinderCustomizer" bean="contentSettingsFinderHierarchies">

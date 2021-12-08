@@ -90,8 +90,7 @@ public interface CMLinkable extends Linkable, CMLocalized, BelowRootNavigation, 
    */
   CMViewtype getViewtype();
 
-  @Deprecated  // Obsolete with SettingsService
-          String LOCAL_SETTINGS = "localSettings";
+  String LOCAL_SETTINGS = "localSettings";
 
   /**
    * Name of the document property 'keywords'.

@@ -5,10 +5,10 @@ import com.coremedia.cap.content.ContentType;
 import com.coremedia.rest.cap.intercept.ContentWriteInterceptorBase;
 import com.coremedia.rest.cap.intercept.ContentWriteRequest;
 import com.coremedia.rest.cap.intercept.InterceptorControlAttributes;
-import com.google.common.collect.ImmutableList;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.coremedia.rest.cap.intercept.InterceptorControlAttributes.DO_NOTHING;
@@ -44,7 +44,7 @@ public class AMDoctypeRewriteUploadInterceptor extends ContentWriteInterceptorBa
     Content content = createContent(request);
 
     if (content != null) {
-      request.setAttribute(InterceptorControlAttributes.UPLOADED_DOCUMENTS, ImmutableList.of(content));
+      request.setAttribute(InterceptorControlAttributes.UPLOADED_DOCUMENTS, List.of(content));
       disableFurtherProcession(request);
     }
   }

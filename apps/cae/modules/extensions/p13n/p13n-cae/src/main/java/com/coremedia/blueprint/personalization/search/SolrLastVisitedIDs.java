@@ -8,14 +8,14 @@ import com.coremedia.personalization.context.PropertyProvider;
 import com.coremedia.personalization.search.ArgumentMissingException;
 import com.coremedia.personalization.search.SearchFunction;
 import com.coremedia.personalization.search.SearchFunctionArguments;
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Collection;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * A search function to use the context provided by {@link com.coremedia.blueprint.personalization.interceptors.LastVisitedInterceptor}
@@ -80,7 +80,9 @@ public class SolrLastVisitedIDs implements SearchFunction {
         @SuppressWarnings("unchecked")
         final Collection<Object> lastVisited = (Collection<Object>) contextProperty;
         if(!lastVisited.isEmpty()) {
-          final Collection<String> contentBeanIds = Collections2.transform(lastVisited, new ContentBeanIdFormattingFunction(lastVisited.size()));
+          final Collection<String> contentBeanIds = lastVisited.stream()
+                  .map(new ContentBeanIdFormattingFunction(lastVisited.size()))
+                  .collect(Collectors.toList());
           builder.append(field).append(":(");
           builder.append(StringUtils.join(contentBeanIds, " OR "));
           return builder.append(")").toString();

@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.tree;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.cap.content.Content;
@@ -12,13 +12,13 @@ import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -44,7 +44,7 @@ public class ExternalChannelContentTreeRelation implements TreeRelation<Content>
   private AugmentationService augmentationService;
   private CommerceTreeRelation commerceTreeRelation;
   private SitesService sitesService;
-  private CommerceConnectionInitializer commerceConnectionInitializer;
+  private CommerceConnectionSupplier commerceConnectionSupplier;
 
   @Override
   public Collection<Content> getChildrenOf(Content parent) {
@@ -64,27 +64,9 @@ public class ExternalChannelContentTreeRelation implements TreeRelation<Content>
       return null;
     }
 
-    Optional<CommerceId> childCommerceId = getCommerceIdFrom(child);
-    if (!childCommerceId.isPresent()) {
-      return null;
-    }
-
-    Optional<CommerceConnection> commerceConnectionOpt = commerceConnectionInitializer.findConnectionForSite(site);
-
-    if (!commerceConnectionOpt.isPresent()) {
-      LOG.debug("Commerce connection is not available for site '{}'; not looking up parent content.",
-              site.getName());
-      return null;
-    }
-
-    Optional<Category> childCategoryOpt = findCategoryFor(child);
-    if (!childCategoryOpt.isPresent()) {
-      return null;
-    }
-
-    Category childCategory = childCategoryOpt.get();
-
-    return getParentOf(childCategory, child, site);
+    return findCategoryFor(child)
+            .map(childCategory -> getParentOf(childCategory, child, site))
+            .orElse(null);
   }
 
   @Nullable
@@ -156,11 +138,6 @@ public class ExternalChannelContentTreeRelation implements TreeRelation<Content>
   }
 
   @Override
-  public boolean isRoot(Content item) {
-    return getParentOf(item) == null;
-  }
-
-  @Override
   public boolean isApplicable(Content item) {
     return item != null && item.getType().isSubtypeOf(CM_EXTERNAL_CHANNEL) && isLinkedCategoryValid(item);
   }
@@ -177,28 +154,23 @@ public class ExternalChannelContentTreeRelation implements TreeRelation<Content>
 
   @NonNull
   private Optional<Category> findCategoryFor(@NonNull Content content) {
-    Optional<CommerceConnection> optConnection = getSiteForContent(content)
-            .flatMap(site -> commerceConnectionInitializer.findConnectionForSite(site));
-
-    if (!optConnection.isPresent()) {
-      return Optional.empty();
-    }
-
     return getCommerceIdFrom(content)
-            .flatMap(commerceId -> findCategoryFor(optConnection.get(), commerceId));
+            .flatMap(commerceId -> findCategoryFor(content, commerceId));
+  }
+
+  @NonNull
+  private Optional<Category> findCategoryFor(@NonNull Content content, @NonNull CommerceId commerceId) {
+    return sitesService.getContentSiteAspect(content).findSite()
+            .flatMap(site -> commerceConnectionSupplier.findConnection(site))
+            .flatMap(connection -> findCategoryFor(connection, commerceId));
   }
 
   @NonNull
   private Optional<Category> findCategoryFor(@NonNull CommerceConnection connection, @NonNull CommerceId commerceId) {
-    StoreContext storeContext = requireNonNull(connection.getStoreContext(), "store context not available");
+    StoreContext storeContext = requireNonNull(connection.getInitialStoreContext(), "store context not available");
     CommerceBeanFactory commerceBeanFactory = connection.getCommerceBeanFactory();
 
     return Optional.ofNullable((Category) commerceBeanFactory.loadBeanFor(commerceId, storeContext));
-  }
-
-  @NonNull
-  private Optional<Site> getSiteForContent(@NonNull Content item) {
-    return sitesService.getContentSiteAspect(item).findSite();
   }
 
   @Autowired(required = false)
@@ -213,8 +185,8 @@ public class ExternalChannelContentTreeRelation implements TreeRelation<Content>
   }
 
   @Autowired
-  public void setCommerceConnectionInitializer(CommerceConnectionInitializer commerceConnectionInitializer) {
-    this.commerceConnectionInitializer = commerceConnectionInitializer;
+  public void setCommerceConnectionSupplier(CommerceConnectionSupplier commerceConnectionSupplier) {
+    this.commerceConnectionSupplier = commerceConnectionSupplier;
   }
 
   @Autowired

@@ -1,11 +1,10 @@
 package com.coremedia.blueprint.analytics.elastic.tasks;
 
 import com.coremedia.blueprint.analytics.elastic.retrieval.AnalyticsServiceProvider;
-import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.base.elastic.tenant.TenantSiteMapping;
+import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.elastic.core.api.tenant.TenantService;
-import com.google.common.collect.ImmutableList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +38,7 @@ public class RootContentProcessingTaskHelper {
     this.tenantService = tenantService;
     this.tenantSiteMapping = tenantSiteMapping;
     this.settingsService = settingsService;
-    this.analyticsServiceProviders = ImmutableList.copyOf(analyticsServiceProviders);
+    this.analyticsServiceProviders = List.copyOf(analyticsServiceProviders);
   }
 
   /**

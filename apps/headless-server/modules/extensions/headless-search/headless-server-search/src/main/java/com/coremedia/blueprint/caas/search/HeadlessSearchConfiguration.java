@@ -3,6 +3,8 @@ package com.coremedia.blueprint.caas.search;
 import com.coremedia.blueprint.base.caas.model.adapter.NavigationAdapterFactory;
 import com.coremedia.blueprint.base.caas.model.adapter.QueryListAdapterFactory;
 import com.coremedia.blueprint.base.caas.model.adapter.SearchServiceAdapterFactory;
+import com.coremedia.blueprint.base.caas.model.adapter.TaxonomyAdapterFactory;
+import com.coremedia.blueprint.base.caas.model.adapter.TaxonomyHelper;
 import com.coremedia.blueprint.base.navigation.context.ContextStrategy;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.base.tree.TreeRelation;
@@ -76,7 +78,7 @@ public class HeadlessSearchConfiguration {
     List<FilterQueryArg> customStaticFilterQueriesList = customStaticFilterQueries.stream()
             .flatMap(List::stream)
             .collect(Collectors.toList());
-    return new SearchServiceAdapterFactory(searchResultFactory, contentRepository, settingsService, sitesService, idSchemes, solrQueryBuilder, customStaticFilterQueriesList);
+    return new SearchServiceAdapterFactory(searchResultFactory, contentRepository, settingsService, sitesService, idSchemes, solrQueryBuilder, caasSearchConfigurationProperties, customStaticFilterQueriesList);
   }
 
   @Bean
@@ -135,9 +137,9 @@ public class HeadlessSearchConfiguration {
   @Bean
   public SolrSearchResultFactory queryListSearchResultFactory(@Qualifier("solrClient") SolrClient solrClient,
                                                               ContentRepository contentRepository) {
-    SolrSearchResultFactory solrSearchResultFactory = new SolrSearchResultFactory(contentRepository, solrClient, caasServiceConfigurationProperties.getSolr().getCollection());
+    SolrSearchResultFactory solrSearchResultFactory = new SolrSearchResultFactory(contentRepository, solrClient, caasSearchConfigurationProperties.getSolr().getCollection());
     if (!caasServiceConfigurationProperties.isPreview()) {
-      solrSearchResultFactory.setCacheForSeconds(this.caasServiceConfigurationProperties.getQuerylistSearchCacheForSeconds());
+      solrSearchResultFactory.setCacheForSeconds(this.caasSearchConfigurationProperties.getCache().getQuerylistSearchCacheForSeconds());
     }
     return solrSearchResultFactory;
   }
@@ -145,9 +147,9 @@ public class HeadlessSearchConfiguration {
   @Bean
   public SolrSearchResultFactory searchResultFactory(@Qualifier("solrClient") SolrClient solrClient,
                                                      ContentRepository contentRepository) {
-    SolrSearchResultFactory solrSearchResultFactory = new SolrSearchResultFactory(contentRepository, solrClient, caasServiceConfigurationProperties.getSolr().getCollection());
+    SolrSearchResultFactory solrSearchResultFactory = new SolrSearchResultFactory(contentRepository, solrClient, caasSearchConfigurationProperties.getSolr().getCollection());
     if (!caasServiceConfigurationProperties.isPreview()) {
-      solrSearchResultFactory.setCacheForSeconds(caasSearchConfigurationProperties.getSeconds());
+      solrSearchResultFactory.setCacheForSeconds(caasSearchConfigurationProperties.getCache().getSeconds());
     }
     return solrSearchResultFactory;
   }
@@ -179,11 +181,15 @@ public class HeadlessSearchConfiguration {
 
   @Bean
   @Qualifier("filterQueryDefinitionMap")
-  public Map<String, Function<List<String>, String>> solrFilterQueryDefinitionMap() {
+  public Map<String, Function<List<String>, String>> solrFilterQueryDefinitionMap(TaxonomyAdapterFactory taxonomyAdapterFactory) {
     Map<String, Function<List<String>, String>> filterQueryDefinitionMap = new HashMap<>();
     filterQueryDefinitionMap.put("TITLE_OR", HeadlessSearchConfiguration::getTitleQuery);
     filterQueryDefinitionMap.put("EXCLUDE_IDS", HeadlessSearchConfiguration::getExcludeIdsQuery);
     filterQueryDefinitionMap.put("FRESHNESS", HeadlessSearchConfiguration::getFreshnessQuery);
+
+    TaxonomyHelper taxonomyHelper = new TaxonomyHelper(taxonomyAdapterFactory);
+    filterQueryDefinitionMap.put("SUBJ_TAXONOMY_OR", taxonomyHelper::getSubjectTaxonomyQuery);
+    filterQueryDefinitionMap.put("LOC_TAXONOMY_OR", taxonomyHelper::getLocationTaxonomyQuery);
     return filterQueryDefinitionMap;
   }
 

@@ -10,7 +10,9 @@ query ContentQuery($id: String!, $type: String) {
           ... on CMTeasable {
             title
             teaserTitle
-            teaserText
+            teaserText {
+              text
+            }
           }
         }
       }
@@ -96,7 +98,16 @@ fragment ImageMap on CMImageMap {
 
 fragment Teasable on CMTeasable {
   teaserTitle
-  teaserText
+  teaserText {
+    text
+  }
+  ...on CMProductTeaser {
+    productRef {
+      externalId
+      siteId
+      locale
+    }
+  }
   teaserTarget {
     ...Reference
   }
@@ -133,7 +144,9 @@ fragment Teasable on CMTeasable {
 
 fragment QuickInfo on CMTeasable {
   teaserTitle
-  teaserText
+  teaserText {
+    text
+  }
   picture {
     ...Picture
   }

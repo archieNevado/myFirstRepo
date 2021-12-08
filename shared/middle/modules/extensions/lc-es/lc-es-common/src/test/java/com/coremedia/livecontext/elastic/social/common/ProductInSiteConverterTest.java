@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.elastic.social.common;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
@@ -42,7 +42,7 @@ public class ProductInSiteConverterTest {
   private ProductInSite productInSite;
 
   @Mock
-  private CommerceConnectionInitializer commerceConnectionInitializer;
+  private CommerceConnectionSupplier commerceConnectionSupplier;
 
   @Mock
   private Site site;
@@ -60,7 +60,7 @@ public class ProductInSiteConverterTest {
   @Before
   public void setup() {
     when(commerceConnection.getIdProvider()).thenReturn(idProvider);
-    when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(commerceConnection));
+    when(commerceConnectionSupplier.findConnection(site)).thenReturn(Optional.of(commerceConnection));
 
     when(commerceConnection.getCatalogService().findProductById(any(), any(StoreContext.class))).thenReturn(product);
 
@@ -75,7 +75,7 @@ public class ProductInSiteConverterTest {
 
     when(site.getId()).thenReturn(siteId);
 
-    converter = new ProductInSiteConverter(sitesService, commerceConnectionInitializer);
+    converter = new ProductInSiteConverter(sitesService, commerceConnectionSupplier);
   }
 
   @Test

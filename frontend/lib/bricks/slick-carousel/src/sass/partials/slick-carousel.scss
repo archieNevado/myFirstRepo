@@ -89,15 +89,4 @@
       }
     }
   }
-
-  // fixes flickering in IE11 if a video is played in an invisible slide
-  // because slick-current is set too early (before the transition is finished)
-  // we need to add a transitioning css class in JavaScript
-  .slick-slide:not(.slick-current) video {
-    visibility: hidden;
-  }
-
-  &--transitioning .slick-slide:not(.slick-current) video {
-    visibility: visible;
-  }
 }

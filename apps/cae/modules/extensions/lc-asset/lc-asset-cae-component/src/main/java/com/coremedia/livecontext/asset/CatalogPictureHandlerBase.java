@@ -48,13 +48,13 @@ public class CatalogPictureHandlerBase extends HandlerBase {
   protected static final String FORMAT_NAME = "formatName";
 
   /**
-   * handle picture request with the given store id, locale, picture format name, reference id and request
+   * handle the picture request based on the format for width and height
    * @param storeId the store id
    * @param locale the locale
    * @param formatName the picture format name
    * @param commerceId the reference id
    * @param extension the mime type extension
-   * @param request the request
+   * @param webRequest the web request
    */
   @Nullable
   protected ModelAndView handleRequestWidthHeight(@NonNull String storeId,
@@ -62,7 +62,7 @@ public class CatalogPictureHandlerBase extends HandlerBase {
                                                   @NonNull String formatName,
                                                   @NonNull CommerceId commerceId,
                                                   String extension,
-                                                  @NonNull WebRequest request) {
+                                                  @NonNull WebRequest webRequest) {
     Locale localeObj = LocaleHelper.parseLocaleFromString(locale).orElse(null);
     Optional<Site> site = siteResolver.findSiteFor(storeId, localeObj);
     if (!site.isPresent()) {
@@ -92,7 +92,7 @@ public class CatalogPictureHandlerBase extends HandlerBase {
       return HandlerHelper.notFound();
     }
 
-    if (request.checkNotModified(transformedBlob.get().getETag())) {
+    if (webRequest.checkNotModified(transformedBlob.get().getETag())) {
       // shortcut exit - no further processing necessary
       return null;
     }

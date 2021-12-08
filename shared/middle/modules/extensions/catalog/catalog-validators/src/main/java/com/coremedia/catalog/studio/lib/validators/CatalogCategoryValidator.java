@@ -1,20 +1,25 @@
 package com.coremedia.catalog.studio.lib.validators;
 
 import com.coremedia.cap.content.Content;
-import com.coremedia.rest.cap.validation.ContentTypeValidatorBase;
+import com.coremedia.cap.content.ContentType;
+import com.coremedia.rest.cap.validation.AbstractContentTypeValidator;
 import com.coremedia.rest.validation.Issues;
 import com.coremedia.rest.validation.Severity;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import java.util.Set;
 
-public class CatalogCategoryValidator extends ContentTypeValidatorBase {
+public class CatalogCategoryValidator extends AbstractContentTypeValidator {
   private static final String CODE_ISSUE_NOT_IN_CATALOG = "categoryIsNotLinkedInCatalog";
   private static final String SETTINGS_TYPE = "CMSettings";
   public static final String CHILDREN_PROPERTY_NAME = "children";
 
-  private String liveContextSettingName;
+  private final String liveContextSettingName;
 
-  public void setLiveContextSettingName(String liveContextSettingName) {
+  public CatalogCategoryValidator(@NonNull ContentType type,
+                                  boolean isValidatingSubtypes,
+                                  String liveContextSettingName) {
+    super(type, isValidatingSubtypes);
     this.liveContextSettingName = liveContextSettingName;
   }
 

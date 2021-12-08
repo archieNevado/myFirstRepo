@@ -14,7 +14,6 @@ import com.coremedia.cap.user.User;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
-import com.google.common.collect.Iterables;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
@@ -31,7 +30,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.coremedia.blueprint.base.links.UriConstants.RequestParameters.VIEW_PARAMETER;
-import static com.google.common.collect.Lists.newArrayList;
 
 /**
  * Controller and Linkscheme
@@ -168,7 +166,7 @@ public class DefaultPageHandler extends PageHandlerBase {
     }
 
     // build link: /root/taxonomychannel/taxonomy/id
-    List<String> navigationPath = newArrayList();
+    List<String> navigationPath = new ArrayList<>();
     Navigation rootNavigation = topicPageChannel.getRootNavigation();
     navigationPath.add(rootNavigation.getSegment());
     String segment = getDefaultTopicpageSegment(rootNavigation, taxonomy);
@@ -266,7 +264,7 @@ public class DefaultPageHandler extends PageHandlerBase {
                                         Map<String, Object> linkParameters) {
     UriComponentsBuilder uriBuilder = UriComponentsBuilder
             .newInstance()
-            .pathSegment(Iterables.toArray(navigationPath, String.class));
+            .pathSegment(navigationPath.toArray(new String[0]));
 
     addViewAndParameters(uriBuilder, viewName, linkParameters);
 

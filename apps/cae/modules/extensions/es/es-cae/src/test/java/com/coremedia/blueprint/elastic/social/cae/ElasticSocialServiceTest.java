@@ -28,7 +28,6 @@ import com.coremedia.elastic.social.api.reviews.ReviewService;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.elastic.social.api.users.CommunityUserService;
 import com.coremedia.elastic.social.impl.comments.CommentServiceImpl;
-import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -432,11 +431,11 @@ public class ElasticSocialServiceTest {
             .thenReturn(comment1);
     when(categoryExtractor.getCategories(any(Content.class), nullable(Content.class))).thenReturn(singleton("test"));
 
-    Comment result = elasticSocialService.createComment(communityUser, "Horst", teasable, null, text, ModerationType.NONE, null, ImmutableList.of(blob));
+    Comment result = elasticSocialService.createComment(communityUser, "Horst", teasable, null, text, ModerationType.NONE, null, List.of(blob));
 
     assertSame(comment1, result);
     verify(commentService).createComment(eq(communityUser), eq(text), any(ContentWithSite.class), eq(singleton("test")), isNull());
-    result.setAttachments(ImmutableList.of(blob));
+    result.setAttachments(List.of(blob));
   }
 
   @Test

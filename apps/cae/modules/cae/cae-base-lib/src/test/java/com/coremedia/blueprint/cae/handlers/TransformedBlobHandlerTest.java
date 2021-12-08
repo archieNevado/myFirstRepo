@@ -11,7 +11,6 @@ import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.HttpError;
 import com.coremedia.objectserver.web.links.LinkFormatter;
 import com.coremedia.transform.TransformedBeanBlob;
-import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,11 +33,11 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 import static com.coremedia.blueprint.cae.web.links.NavigationLinkSupport.ATTR_NAME_CMNAVIGATION;
-import static com.google.common.collect.Maps.newHashMap;
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.from;
@@ -187,7 +186,7 @@ public class TransformedBlobHandlerTest {
     when(transformedBlob.getBean()).thenReturn(picture);
     when(transformedBlob.getOriginal()).thenReturn(picture.getContent().getBlobRef("data"));
 
-    String link = formatLink(transformedData, null, false, ImmutableMap.of(
+    String link = formatLink(transformedData, null, false, Map.of(
             TransformedBlobHandler.WIDTH_SEGMENT, WIDTH,
             TransformedBlobHandler.HEIGHT_SEGMENT, HEIGHT
     ));
@@ -207,7 +206,7 @@ public class TransformedBlobHandlerTest {
     when(transformedBlob.getOriginal()).thenReturn(contentTestHelper.getContent(16).getBlobRef("data"));
 
     // expect extension .jpg, even though the transformed blob has a different extension
-    assertThat(formatLink(transformedBlob, null, false, ImmutableMap.of(
+    assertThat(formatLink(transformedBlob, null, false, Map.of(
             TransformedBlobHandler.WIDTH_SEGMENT, WIDTH,
             TransformedBlobHandler.HEIGHT_SEGMENT, HEIGHT
     ))).isEqualTo("/resource/image/16/transformName/100/100/digest/tw/nae-me-jpg.jpg");
@@ -262,7 +261,7 @@ public class TransformedBlobHandlerTest {
 
   protected String formatLink(Object bean, String viewName, boolean forRedirect, Map<String, Object> parameters) {
     MockHttpServletRequest request = newRequest(emptyMap());
-    request.setAttribute(RequestUtils.PARAMETERS, newHashMap(parameters));
+    request.setAttribute(RequestUtils.PARAMETERS, new HashMap<>(parameters));
     return linkFormatter.formatLink(bean, viewName, request, new MockHttpServletResponse(), forRedirect);
   }
 

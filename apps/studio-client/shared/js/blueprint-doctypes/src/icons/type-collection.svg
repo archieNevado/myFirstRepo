@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <style type="text/css">
+    @media screen {
+      #small {
+        display: initial;
+      }
+      #medium, #large {
+        display: none;
+      }
+    }
+    @media screen and (min-width: 24px) {
+      #small {
+        display: none;
+      }
+      #medium {
+        display: initial;
+      }
+    }
+    @media screen and (min-width: 32px) {
+      #medium {
+        display: none;
+      }
+      #large {
+        display: initial;
+      }
+    }
+  </style>
+  <svg id="small" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  	 viewBox="0 0 16 16" enable-background="new 0 0 16 16">
+  <g>
+  	<polygon fill="#3D4242" points="5,4 11,4 11,13 12,13 12,3 5,3 	"/>
+  	<polygon fill="#3D4242" points="7,1 7,2 13,2 13,11 14,11 14,1 	"/>
+  	<path fill="#3D4242" d="M3,15h7V5H3V15z M4,6h5v3H4V6z"/>
+  </g>
+  </svg>
+  
+  <svg id="medium" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  	 viewBox="0 0 24 24" enable-background="new 0 0 24 24">
+  <polygon fill="#3D4242" points="7,4 7,6 16,6 16,20 18,20 18,4 "/>
+  <polygon fill="#3D4242" points="10,1 10,3 19,3 19,17 21,17 21,1 "/>
+  <path fill="#3D4242" d="M4,7v16h11V7H4z M14,14H5V8h9V14z"/>
+  </svg>
+  
+  <svg id="large" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  	 viewBox="0 0 32 32" enable-background="new 0 0 32 32">
+  <polygon fill="#3D4242" points="8,5 8,7 22,7 22,27 24,27 24,5 "/>
+  <polygon fill="#3D4242" points="12,1 12,3 26,3 26,23 28,23 28,1 "/>
+  <path fill="#3D4242" d="M4,9v22h16V9H4z M18,18H6v-7h12V18z"/>
+  </svg>
+  
+</svg>

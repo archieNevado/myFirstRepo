@@ -1,0 +1,20 @@
+http:
+  routers:
+    # traefik v1: traefik.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost}
+    overview:
+      entrypoints:
+        - web-access-secure
+        - web-access-insecure
+      rule: Host(`overview.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`)
+      service: overview
+    overview-insecure:
+      entrypoints:
+        - web-access-insecure
+      rule: Host(`overview.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && Path(`/watf.properties`)
+      service: overview
+
+  services:
+    overview:
+      loadBalancer:
+        servers:
+          - url: h2c://overview:80

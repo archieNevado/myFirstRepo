@@ -11,16 +11,16 @@ const initPackageJson = (brickName) => {
     version: "1.0.0",
     private: true,
     scripts: {
-      prettier: 'prettier "**/*" --write',
+      prettier: "prettier --write \"src/**/*.{js,json}\"",
     },
     devDependencies: {
-      prettier: "^1.0.0",
+      prettier: "^2.4.1",
     },
     __comment__dependencies__: {
       __comment__:
         "List of dependencies for the commented out example code. In order to add a dependency, move the entry to 'dependencies'",
-      "@coremedia/brick-utils": "^1.0.0",
-      jquery: "^3.0.0",
+      "@coremedia/brick-utils": "workspace:*",
+      jquery: "^3.6.0",
     },
     dependencies: {},
     main: "src/js/index.js",
@@ -31,16 +31,6 @@ const initPackageJson = (brickName) => {
   };
   return JSON.stringify(content, null, 2);
 };
-
-/**
- * returns content for .prettierignore
- * @return {string}
- */
-const initBrickPrettierignore = () => `/*
-!/src
-/src/*
-!/src/js
-`;
 
 /**
  * returns content for index.js
@@ -155,7 +145,6 @@ module.exports = {
   initBrickVariablesScss,
   initBrickCustomPartialsScss,
   initBrickCustomVariablesScss,
-  initBrickPrettierignore,
   initBrickPageBodyFtl,
   initBrickDeProperties,
   initBrickEnProperties,

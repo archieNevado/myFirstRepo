@@ -9,7 +9,6 @@
     <relativePath>../blueprint-parent/pom.xml</relativePath>
   </parent>
 
-  <groupId>com.coremedia.blueprint.boot</groupId>
   <artifactId>middle.blueprint-spring-boot</artifactId>
   <packaging>pom</packaging>
 

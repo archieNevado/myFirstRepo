@@ -42,7 +42,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -60,9 +59,6 @@ import java.util.stream.Collectors;
 public class ThemeImporterImpl implements ThemeImporter {
   private static final Logger LOGGER = LoggerFactory.getLogger(ThemeImporterImpl.class);
 
-  private static final Integer INTEGER_TRUE = 1;
-
-  private static final String DISABLE_COMPRESS_PROPERTY = "disableCompress";
   private static final String IE_EXPRESSION_PROPERTY = "ieExpression";
   private static final String IN_HEAD_PROPERTY = "inHead";
   private static final String HTML_ATTRIBUTES_PROPERTY = "htmlAttributes";
@@ -86,7 +82,11 @@ public class ThemeImporterImpl implements ThemeImporter {
   private static final Pattern EMPTY_LINES_PATTERN = Pattern.compile(EMPTY_LINES_REGEX);
   private static final Pattern FIRST_PARAGRAPH_PATTERN = Pattern.compile("(?s)(.*?)"+EMPTY_LINES_REGEX);
   private static final Pattern WHITESPACE_PATTERN = Pattern.compile("(?s)\\s+");
-  private static final Pattern SETTINGS_JSON = Pattern.compile("(.+).settings.json$");
+
+  /**
+   * Settings in themes are always named as "*.settings.json".
+   */
+  static final Pattern SETTINGS_JSON = Pattern.compile("(.+).settings.json$");
 
   /**
    * Name of the metadata directory in a theme zip file.
@@ -109,7 +109,6 @@ public class ThemeImporterImpl implements ThemeImporter {
   private final LocalizationService localizationService;
   private final MapToStructAdapter mapToStructAdapter;
   private final SettingsJsonToMapAdapter settingsJsonToMapAdapter;
-
 
   // --- construct and configure ------------------------------------
 
@@ -223,11 +222,12 @@ public class ThemeImporterImpl implements ThemeImporter {
     processImages(importData, targetFolder, contentHelper);
     processResourceBundles(importData, targetFolder, contentHelper);
     processWebFonts(importData, targetFolder, contentHelper);
+    processStaticResources(importData, targetFolder, contentHelper);
     processInteractiveObjects(importData, targetFolder, contentHelper);
     processTemplates(importData, targetFolder, contentHelper);
     processJavaScripts(importData, targetFolder, contentHelper);
     processStyleSheets(importData, targetFolder, contentHelper);
-    // settings may reference all kind of aother resources, so they need to be processed last
+    // settings may reference all kind of another resources, so they need to be processed last
     processSettings(importData, targetFolder, contentHelper);
 
     // The theme descriptors are the last files to be processed.
@@ -238,7 +238,7 @@ public class ThemeImporterImpl implements ThemeImporter {
 
   private void processImages(ImportData importData, String targetFolder, ThemeImporterContentHelper contentHelper) {
     for (Map.Entry<String, Blob> image : importData.getImages().entrySet()) {
-      contentHelper.updateContent(CM_IMAGE_DOCTYPE, targetFolder, image.getKey(), Collections.singletonMap(DATA_PROPERTY, image.getValue()));
+      contentHelper.updateContent(CM_IMAGE_DOCTYPE, targetFolder, image.getKey(), Map.of(DATA_PROPERTY, image.getValue()));
     }
   }
 
@@ -253,21 +253,28 @@ public class ThemeImporterImpl implements ThemeImporter {
 
   private void processWebFonts(ImportData importData, String targetFolder, ThemeImporterContentHelper contentHelper) {
     for (Map.Entry<String, Blob> webFont : importData.getWebFonts().entrySet()) {
-      Map<String, Blob> properties = Collections.singletonMap(DATA_PROPERTY, webFont.getValue());
+      Map<String, Blob> properties = Map.of(DATA_PROPERTY, webFont.getValue());
       contentHelper.updateContent(CM_IMAGE_DOCTYPE, targetFolder, webFont.getKey(), properties);
+    }
+  }
+
+  private void processStaticResources(ImportData importData, String targetFolder, ThemeImporterContentHelper contentHelper) {
+    for (Map.Entry<String, Blob> staticResource : importData.getStaticResources().entrySet()) {
+      Map<String, Blob> properties = Map.of(DATA_PROPERTY, staticResource.getValue());
+      contentHelper.updateContent(CM_IMAGE_DOCTYPE, targetFolder, staticResource.getKey(), properties);
     }
   }
 
   private void processInteractiveObjects(ImportData importData, String targetFolder, ThemeImporterContentHelper contentHelper) {
     for (Map.Entry<String, Blob> interactive : importData.getInteractiveObjects().entrySet()) {
-      Map<String, Blob> properties = Collections.singletonMap(DATA_PROPERTY, interactive.getValue());
+      Map<String, Blob> properties = Map.of(DATA_PROPERTY, interactive.getValue());
       contentHelper.updateContent(CM_INTERACTIVE_DOCTYPE, targetFolder, interactive.getKey(), properties);
     }
   }
 
   private void processTemplates(ImportData importData, String targetFolder, ThemeImporterContentHelper contentHelper) {
     for (Map.Entry<String, Blob> templateSet : importData.getTemplateSets().entrySet()) {
-      Map<String, Blob> properties = Collections.singletonMap(ARCHIVE_PROPERTY, templateSet.getValue());
+      Map<String, Blob> properties = Map.of(ARCHIVE_PROPERTY, templateSet.getValue());
       contentHelper.updateContent(CM_TEMPLATE_SET_DOCTYPE, targetFolder, templateSet.getKey(), properties);
     }
   }
@@ -472,17 +479,6 @@ public class ThemeImporterImpl implements ThemeImporter {
                              String themeName,
                              ThemeImporterContentHelper contentHelper) {
     Map<String, Object> codeProperties = extractCssProperties(code);
-
-    // Adjust non-appropriate properties
-    if (!INTEGER_TRUE.equals(codeProperties.get(DISABLE_COMPRESS_PROPERTY)) && !isExternalLink(code.getLink())) {
-      // Flag not set in theme descriptor, i.e. the CSS code is supposed
-      // to be compressible.  Countercheck and possibly overrule:
-      String sourcePath = PathUtil.normalizePath(themeName + "/" + code.getLink());
-      if (!checkCompressibleCSS(sourcePath)) {
-        codeProperties.put(DISABLE_COMPRESS_PROPERTY, INTEGER_TRUE);
-      }
-    }
-
     return enhancedCodeToContent(code, baseFolder, CM_CSS_DOCTYPE, codeProperties, contentHelper);
   }
 
@@ -493,20 +489,6 @@ public class ThemeImporterImpl implements ThemeImporter {
                                     ThemeImporterContentHelper contentHelper,
                                     ImportData importData) {
     Map<String, Object> codeProperties = extractJavaScriptProperties(code);
-
-    // Adjust non-appropriate properties
-    if (!INTEGER_TRUE.equals(codeProperties.get(DISABLE_COMPRESS_PROPERTY)) && !isExternalLink(code.getLink())) {
-      // Flag not set in theme descriptor, i.e. the javascript code is supposed
-      // to be compressible.  Countercheck and possibly overrule:
-      String sourcePath = PathUtil.normalizePath(themeName + "/" + code.getLink());
-      String jsCode = importData.getJavaScripts().get(sourcePath);
-      // jsCode is supposed to be not null here. Do not warn however, because
-      // enhancedCodeToContent will complain about the missing content anyway.
-      if (jsCode!=null && !checkCompressibleJavaScript(jsCode, sourcePath)) {
-        codeProperties.put(DISABLE_COMPRESS_PROPERTY, INTEGER_TRUE);
-      }
-    }
-
     return enhancedCodeToContent(code, baseFolder, CM_JAVA_SCRIPT_DOCTYPE, codeProperties, contentHelper);
   }
 
@@ -554,7 +536,6 @@ public class ThemeImporterImpl implements ThemeImporter {
    */
   private Map<String, Object> extractCodeProperties(Code code) {
     Map<String, Object> codeProperties = new HashMap<>();
-    codeProperties.put(DISABLE_COMPRESS_PROPERTY, code.isDisableCompress() ? 1 : 0);
     String ieExpression = code.getIeExpression();
     codeProperties.put(IE_EXPRESSION_PROPERTY, ieExpression==null ? "" : ieExpression);
     String link = code.getLink();
@@ -618,22 +599,6 @@ public class ThemeImporterImpl implements ThemeImporter {
       }
     }
     return result;
-  }
-
-  private boolean checkCompressibleJavaScript(String jsCode, String name) {
-    if (name.endsWith(".min.js")) {
-      LOGGER.warn("The name {} indicates that the JavaScript is already minified and thus cannot be compressed significantly.", name);
-      return false;
-    }
-    return true;
-  }
-
-  private boolean checkCompressibleCSS(String name) {
-    if (name.endsWith(".min.css")) {
-      LOGGER.warn("The name {} indicates that the CSS is already minified and thus cannot be compressed significantly.", name);
-      return false;
-    }
-    return true;
   }
 
   private Markup createMarkup(String text, String fileName, String targetFolder, ThemeImporterContentHelper contentHelper) {
@@ -791,24 +756,6 @@ public class ThemeImporterImpl implements ThemeImporter {
     } catch (NoSuchAlgorithmException e) {
       throw new IllegalStateException("Illegal JVM, MessageDigest is required to support MD5.", e);
     }
-  }
-
-  /**
-   * Only for backward compatibility.
-   * <p>
-   * This method is buggy and works only for "nice" and "sufficiently unique"
-   * links that look pretty much like a file name, like
-   * http://example.org/path/mycode.js
-   * Otherwise it may fail with exceptions or may be not unique.
-   *
-   * @deprecated Use stringToDocumentName instead
-   */
-  @Deprecated
-  private static String legacyExternalLinkToDocumentName(String uri) {
-    String name = uri;
-    name = name.substring(name.lastIndexOf('/') + 1, name.length());
-    name = name.substring(0, name.lastIndexOf('.'));
-    return name + "." + extension(uri);
   }
 
   private static String normalize(@NonNull String folder) {

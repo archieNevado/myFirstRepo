@@ -176,6 +176,7 @@
     <property name="childrenUnfiltered" associationType="static"/>
     <property name="localSettings"/>
     <property name="css" associationType="static"/>
+    <!-- header and footer are unused and deprecated, only for backward compatibility: -->
     <property name="footerUnfiltered" associationType="static"/>
     <property name="headerUnfiltered" associationType="static"/>
     <property name="javaScript" associationType="static"/>

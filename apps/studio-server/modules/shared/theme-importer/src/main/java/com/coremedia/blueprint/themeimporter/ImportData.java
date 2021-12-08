@@ -37,8 +37,9 @@ import java.util.zip.ZipInputStream;
 class ImportData {
   private static final Logger LOG = LoggerFactory.getLogger(ImportData.class);
 
-  private static final String[] IMAGE_TYPES = new String[] {"jpeg", "png", "gif", "svg", "icon"};
+  private static final String[] IMAGE_TYPES = new String[] {"jpeg", "png", "gif", "svg", "icon", "webp", "avif"};
   private static final String[] WEBFONT_TYPES = new String[] {"fontobject", "ttf", "otf", "woff"};
+  private static final String[] STATIC_RESOURCES_TYPES = new String[] {"wasm", "json"};
 
   private final MimeTypeService mimeTypeService;
   private final CapConnection capConnection;
@@ -58,6 +59,7 @@ class ImportData {
   private final Map<String, Blob> interactiveObjects = createPathToObjectMap();
   private final Map<String, Blob> templateSets = createPathToObjectMap();
   private final Map<String, String> settings = createPathToObjectMap();
+  private final Map<String, Blob> staticResources = createPathToObjectMap();
 
   private final Map<String, byte[]> rawResourceBundles = new LinkedHashMap<>();
 
@@ -155,6 +157,10 @@ class ImportData {
     return settings;
   }
 
+  Map<String, Blob> getStaticResources() {
+    return staticResources;
+  }
+
   Set<String> getAffectedThemes() {
     Set<String> result = new HashSet<>();
     for (Map<String, ?> fileMap : allFileMaps) {
@@ -192,6 +198,8 @@ class ImportData {
       putBlob(stream, path, mimeType, webFonts);
     } else if (hasType(mimeTypeLC, IMAGE_TYPES)) {
       putBlob(stream, path, mimeType, images);
+    } else if (hasType(mimeTypeLC, STATIC_RESOURCES_TYPES) && !ThemeImporterImpl.SETTINGS_JSON.matcher(path).matches()) {
+      putBlob(stream, path, mimeType, staticResources);
     } else if (hasType(mimeTypeLC, "shockwave-flash")) {
       putBlob(stream, path, mimeType, interactiveObjects);
     } else if (hasType(mimeTypeLC, "java-archive")) {

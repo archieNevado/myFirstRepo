@@ -21,8 +21,16 @@
 <StructProperty Name="catalogConfig">
 <Struct>
 <StringProperty Name="id">10502</StringProperty>
+<StringProperty Name="alias">catalog</StringProperty>
+<StringProperty Name="name">Extended Sites Catalog Asset Store Consumer Direct</StringProperty>
 </Struct>
 </StructProperty>
+<StructListProperty Name="additionalCatalogConfigs">
+<Struct>
+<StringProperty Name="alias">master</StringProperty>
+<StringProperty Name="name">Extended Sites Catalog Asset Store</StringProperty>
+</Struct>
+</StructListProperty>
 </Struct>
 </StructProperty>
 <StructProperty Name="livecontext-fragments">
@@ -95,12 +103,6 @@
 <BooleanProperty Name="livecontext.policy.commerce-product-links">true</BooleanProperty>
 <BooleanProperty Name="livecontext.policy.commerce-category-links">true</BooleanProperty>
 <BooleanProperty Name="livecontext.policy.commerce-page-links">true</BooleanProperty>
-<StructProperty Name="livecontext.catalogAliases">
-<Struct>
-<StringProperty Name="catalog">Extended Sites Catalog Asset Store Consumer Direct</StringProperty>
-<StringProperty Name="master">Extended Sites Catalog Asset Store</StringProperty>
-</Struct>
-</StructProperty>
 </Struct>
 </settings>
 <identifier></identifier>

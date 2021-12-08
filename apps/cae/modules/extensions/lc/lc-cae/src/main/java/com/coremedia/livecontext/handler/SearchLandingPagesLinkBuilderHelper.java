@@ -23,7 +23,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.coremedia.livecontext.fragment.links.CommerceLinkTemplateTypes.SEARCH_REDIRECT;
+import static com.coremedia.livecontext.ecommerce.link.CommerceLinkTemplateTypes.SEARCH_REDIRECT_URL;
 import static com.coremedia.livecontext.search.CommerceSearchHandler.SEARCH_TERM_KEY;
 
 /**
@@ -45,18 +45,17 @@ class SearchLandingPagesLinkBuilderHelper {
 
   /**
    * Creates a search URL that points to the commerce system, including the search
-   * parameters that a read from a content property of the channel.
+   * parameters that read from a content property of the channel.
    */
   @NonNull
   Optional<UriComponents> createSearchLandingPageURLFor(@NonNull CMChannel channel,
                                                         @NonNull CommerceConnection commerceConnection) {
     Content content = channel.getContent();
     String term = content.getString(keywordsProperty);
-    StoreContext storeContext = commerceConnection.getStoreContext();
+    StoreContext storeContext = commerceConnection.getInitialStoreContext();
 
     return commerceConnection.getLinkService()
-            .flatMap(linkService -> linkService.getStorefrontRef(SEARCH_REDIRECT, storeContext))
-            .map(storefrontRef -> storefrontRef.replace(Map.of(SEARCH_TERM_KEY, term)))
+            .flatMap(linkService -> linkService.getStorefrontRef(SEARCH_REDIRECT_URL, storeContext, Map.of(SEARCH_TERM_KEY, term)))
             .map(StorefrontRef::toLink)
             .map(UriComponentsBuilder::fromUriString)
             .map(UriComponentsBuilder::build);

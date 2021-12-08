@@ -1,0 +1,45 @@
+# https://doc.traefik.io/traefik/reference/static-configuration/file/
+# 3 types: cli,file,env - mutually exclusive so you will need to pick one and stick with it.
+
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+
+entryPoints:
+  web-access-insecure:
+    address: :80
+    transport:
+      respondingTimeouts:
+        idleTimeout: 360
+  web-access-secure:
+    address: :443
+    http:
+      tls: true
+    transport:
+      respondingTimeouts:
+        idleTimeout: 360
+
+providers:
+  docker:
+    endpoint: unix:///var/run/docker.sock
+    exposedByDefault: false
+    defaultRule: Host(`{{env "ENVIRONMENT_FQDN"}}`)
+  file:
+    directory: /etc/traefik/dynamic/
+    watch: true
+
+metrics:
+  prometheus:
+    buckets:
+      - 0.1
+      - 0.3
+      - 1.2
+      - 5.0
+
+api:
+  dashboard: true
+  debug: true
+
+log:
+  level: "WARN"
+  format: "json"

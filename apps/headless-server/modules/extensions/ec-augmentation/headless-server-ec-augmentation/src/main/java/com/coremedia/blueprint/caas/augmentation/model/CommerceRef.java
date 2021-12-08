@@ -1,7 +1,6 @@
 package com.coremedia.blueprint.caas.augmentation.model;
 
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanType;
-import com.coremedia.livecontext.ecommerce.common.CommerceBeanTypeRegistry;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
@@ -36,11 +35,11 @@ public class CommerceRef {
   }
 
   public CommerceRef(String externalId, String type, String storeId, Locale locale, String siteId, List<String> breadcrumb) {
-    this(externalId, CommerceBeanTypeRegistry.valueOf(type), "catalog", storeId, locale.toLanguageTag(), siteId, "dummy", breadcrumb, DEFAULT_CATALOG_ALIAS.value());
+    this(externalId, CommerceBeanType.of(type), "catalog", storeId, locale.toLanguageTag(), siteId, "dummy", breadcrumb, DEFAULT_CATALOG_ALIAS.value());
   }
 
   public CommerceRef(String externalId, String type, String storeId, Locale locale, String siteId) {
-    this(externalId, CommerceBeanTypeRegistry.valueOf(type), "catalog", storeId, locale.toLanguageTag(), siteId, "dummy", List.of(), DEFAULT_CATALOG_ALIAS.value());
+    this(externalId, CommerceBeanType.of(type), "catalog", storeId, locale.toLanguageTag(), siteId, "dummy", List.of(), DEFAULT_CATALOG_ALIAS.value());
   }
 
   public String getExternalId() {

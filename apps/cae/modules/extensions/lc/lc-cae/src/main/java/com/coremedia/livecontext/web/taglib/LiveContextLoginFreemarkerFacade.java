@@ -1,7 +1,7 @@
 package com.coremedia.livecontext.web.taglib;
 
 import com.coremedia.blueprint.cae.web.FreemarkerEnvironment;
-import com.coremedia.livecontext.fragment.links.CommerceLinkTemplateTypes;
+import com.coremedia.livecontext.ecommerce.link.CommerceLinkTemplateTypes;
 import com.coremedia.livecontext.handler.LoginStatusHandler;
 import com.coremedia.objectserver.util.RequestServices;
 import com.coremedia.objectserver.web.links.LinkFormatter;
@@ -28,7 +28,7 @@ public class LiveContextLoginFreemarkerFacade {
    * @return absolute url to a formular of a commerce system.
    */
   public String getLoginFormUrl() {
-    return buildLink(CommerceLinkTemplateTypes.LOGIN);
+    return buildLink(CommerceLinkTemplateTypes.LOGIN_URL);
   }
 
   /**
@@ -37,7 +37,7 @@ public class LiveContextLoginFreemarkerFacade {
    * @return absolute url to logout the current user.
    */
   public String getLogoutUrl() {
-    return buildLink(CommerceLinkTemplateTypes.LOGOUT);
+    return buildLink(CommerceLinkTemplateTypes.LOGOUT_URL);
   }
 
   private static String buildLink(Object bean) {

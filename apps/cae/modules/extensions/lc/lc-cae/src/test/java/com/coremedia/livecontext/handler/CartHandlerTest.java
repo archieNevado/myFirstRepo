@@ -1,12 +1,12 @@
 package com.coremedia.livecontext.handler;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentUserContext;
 import com.coremedia.blueprint.cae.handlers.NavigationSegmentsUriHelper;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.link.LinkService;
 import com.coremedia.livecontext.ecommerce.order.Cart;
 import com.coremedia.livecontext.ecommerce.order.CartService;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
@@ -19,10 +19,11 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
@@ -48,36 +49,29 @@ public class CartHandlerTest {
   private NavigationSegmentsUriHelper navigationSegmentsUriHelper;
 
   @Mock
-  private HttpServletRequest request;
-
-  @Mock
-  private HttpServletResponse response;
-
-  @Mock
   private CartService cartService;
-
-  @Mock
-  private LinkService linkService;
-
-  @Mock
-  private CommerceConnection commerceConnection;
 
   @Mock
   private StoreContext storeContext;
 
+  @Mock
+  private UserContext userContext;
+
+  private final MockHttpServletRequest request = new MockHttpServletRequest();
+  private final MockHttpServletResponse response = new MockHttpServletResponse();
+
   @Before
   public void beforeEachTest() {
     CommerceConnection commerceConnection = mock(CommerceConnection.class);
-
-    when(commerceConnection.getStoreContext()).thenReturn(storeContext);
     when(storeContext.getConnection()).thenReturn(commerceConnection);
     when(commerceConnection.getCartService()).thenReturn(Optional.of(cartService));
-    CurrentStoreContext.set(storeContext);
+    CurrentStoreContext.set(storeContext, request);
+    CurrentUserContext.set(userContext, request);
   }
 
   @After
   public void tearDown() {
-    CurrentStoreContext.remove();
+    request.clearAttributes();
   }
 
   @Test
@@ -91,7 +85,7 @@ public class CartHandlerTest {
 
     String viewName = "viewName";
 
-    ModelAndView modelAndView = testling.handleFragmentRequest(CONTEXT_NAME, viewName);
+    ModelAndView modelAndView = testling.handleFragmentRequest(CONTEXT_NAME, viewName, request);
 
     checkCartServiceIsUsedCorrectly();
 
@@ -104,16 +98,16 @@ public class CartHandlerTest {
   public void testHandleFragmentRequestNoContext() {
     configureContext(null);
     String viewName = "viewName";
-    ModelAndView modelAndView = testling.handleFragmentRequest(CONTEXT_NAME, viewName);
+    ModelAndView modelAndView = testling.handleFragmentRequest(CONTEXT_NAME, viewName, request);
     checkSelfIsHttpError(modelAndView);
   }
 
   @Test
   public void testHandleAjaxRequestDeleteOrderItem() {
-    when(cartService.deleteCartOrderItem(any(), any(), any(StoreContext.class))).thenReturn(UserContext.builder().build());
+    when(cartService.deleteCartOrderItem(any(), any(), any(StoreContext.class), any(UserContext.class))).thenReturn(UserContext.builder().build());
 
     String orderItemId = "12";
-    configureRequestParameter(request, "orderItemId", orderItemId);
+    request.setParameter("orderItemId", orderItemId);
     Cart cart = mock(Cart.class);
     configureResolveCart(cart);
     Cart.OrderItem orderItem = mock(Cart.OrderItem.class);
@@ -131,7 +125,7 @@ public class CartHandlerTest {
   @Test(expected = CartHandler.NotFoundException.class)
   public void testHandleAjaxRequestNoOrderItemId() {
     String orderItemId = null;
-    configureRequestParameter(request, "orderItemId", orderItemId);
+    request.setParameter("orderItemId", orderItemId);
     Cart cart = mock(Cart.class);
     configureResolveCart(cart);
     Cart.OrderItem orderItem = mock(Cart.OrderItem.class);
@@ -147,7 +141,7 @@ public class CartHandlerTest {
   @Test(expected = CartHandler.NotFoundException.class)
   public void testHandleAjaxRequestNoOrderItem() {
     String orderItemId = "12";
-    configureRequestParameter(request, "orderItemId", orderItemId);
+    request.setParameter("orderItemId", orderItemId);
     Cart cart = mock(Cart.class);
     configureResolveCart(cart);
     Cart.OrderItem orderItem = null;
@@ -170,12 +164,8 @@ public class CartHandlerTest {
     when(cart.findOrderItemById(orderItemId)).thenReturn(orderItem);
   }
 
-  private void configureRequestParameter(HttpServletRequest request, String parameterKey, String parameterValue) {
-    when(request.getParameter(parameterKey)).thenReturn(parameterValue);
-  }
-
   private void configureResolveCart(Cart cart) {
-    when(cartService.getCart(any(StoreContext.class))).thenReturn(cart);
+    when(cartService.getCart(any(StoreContext.class), any(UserContext.class))).thenReturn(cart);
   }
 
   private void configureContext(Navigation navigation) {
@@ -200,7 +190,7 @@ public class CartHandlerTest {
   }
 
   private void checkCartServiceIsUsedCorrectly() {
-    verify(cartService, times(1)).getCart(storeContext);
+    verify(cartService, times(1)).getCart(storeContext, userContext);
   }
 
   private void checkSelfIsHttpError(ModelAndView modelAndView) {
@@ -208,6 +198,6 @@ public class CartHandlerTest {
   }
 
   private void verifyCartDeleteOrderItem(String orderItemId) {
-    verify(cartService, times(1)).deleteCartOrderItem(orderItemId, null, storeContext);
+    verify(cartService, times(1)).deleteCartOrderItem(orderItemId, null, storeContext, userContext);
   }
 }

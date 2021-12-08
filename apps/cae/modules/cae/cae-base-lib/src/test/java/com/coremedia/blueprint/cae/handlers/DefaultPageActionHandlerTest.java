@@ -9,7 +9,6 @@ import com.coremedia.cache.Cache;
 import com.coremedia.cae.webflow.FlowRunner;
 import com.coremedia.cae.webflow.ModelHelper;
 import com.coremedia.objectserver.view.substitution.SubstitutionRegistry;
-import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -102,7 +101,7 @@ public class DefaultPageActionHandlerTest extends PageHandlerBaseTest<DefaultPag
   @Test
   public void builLinkInternalTwoExtraParametersThatAreAllPermitted() {
     when(contentLinkBuilder.getVanityName(defaultActionContent)).thenReturn(DEFAULT_ACTION);
-    Map<String, Object> parameters = ImmutableMap.<String, Object>of(
+    Map<String, Object> parameters = Map.of(
             PARAM_MATTER_TRANSFERENCE_BEAMS, "1",
             PARAM_DOORS, "2"
     );
@@ -114,11 +113,11 @@ public class DefaultPageActionHandlerTest extends PageHandlerBaseTest<DefaultPag
   @Test
   public void builLinkInternalTwoExtraParametersWhereTheFirstIsNotPermitted() {
     when(contentLinkBuilder.getVanityName(defaultActionContent)).thenReturn(DEFAULT_ACTION);
-    Map<String, Object> providedParameters = ImmutableMap.<String, Object>of(
+    Map<String, Object> providedParameters = Map.of(
             PARAM_BUSINESS_END, "1",
             PARAM_DOORS, "2"
     );
-    Map<String, Object> expectedParameters = ImmutableMap.<String, Object>of(
+    Map<String, Object> expectedParameters = Map.of(
             PARAM_DOORS, "2"
     );
     UriComponents result = testling.buildLinkInternal(defaultActionBean, uriTemplate, providedParameters);
@@ -137,7 +136,7 @@ public class DefaultPageActionHandlerTest extends PageHandlerBaseTest<DefaultPag
     super.defaultSetup();
 
     defaultFlowOutCome = new ModelAndView();
-    Map<String, Object> webflowOutcomeModel = ImmutableMap.<String, Object>of(
+    Map<String, Object> webflowOutcomeModel = Map.of(
             ModelHelper.FLOWVIEWID_NAME, DEFAULT_FLOW_VIEW_ID
     );
     defaultFlowOutCome.addAllObjects(webflowOutcomeModel);

@@ -1,9 +1,7 @@
 package com.coremedia.blueprint.cae.view;
 
-import com.coremedia.cap.util.PairCacheKey;
 import com.coremedia.blueprint.cae.richtext.filter.ScriptFilter;
 import com.coremedia.blueprint.cae.richtext.filter.ScriptSerializer;
-import com.coremedia.blueprint.cae.view.processing.Minifier;
 import com.coremedia.blueprint.common.contentbeans.CMAbstractCode;
 import com.coremedia.blueprint.common.contentbeans.MergeableResources;
 import com.coremedia.cache.Cache;
@@ -20,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -33,7 +30,6 @@ public class MergeableResourcesView implements ServletView {
 
   private static final Logger LOG = LoggerFactory.getLogger(MergeableResourcesView.class);
 
-  private Minifier minifier;
   private XmlFilterFactory xmlFilterFactory;
   private Cache cache;
   private String contentType;
@@ -49,9 +45,7 @@ public class MergeableResourcesView implements ServletView {
   }
 
   /**
-   * If you set a cache, minified scripts will be cached.
-   * <p>
-   * If your minifier's results are not cacheable, do not set a cache.
+   * If you set a cache, merged scripts will be cached.
    */
   public void setCache(Cache cache) {
     this.cache = cache;
@@ -60,10 +54,6 @@ public class MergeableResourcesView implements ServletView {
   @Required
   public void setContentType(String contentType) {
     this.contentType = contentType;
-  }
-
-  public void setMinifier(Minifier minifier) {
-    this.minifier = minifier;
   }
 
   /**
@@ -128,15 +118,10 @@ public class MergeableResourcesView implements ServletView {
    */
   private void renderResource(HttpServletRequest request, HttpServletResponse response, CMAbstractCode code, Writer out) {
     String script = filterScriptMarkup(request, response, code);
-    if (minifier != null && !code.isCompressionDisabled()) {
-      String name = code.getContent().getName();
-      script = cache != null ? cache.get(new MinifierCacheKey(script, name)) : minify(script, name);
-    }
 
     try {
       out.write(script);
       out.append('\n');
-
     } catch (IOException e) {
       LOG.error("Unable to write Script to response.", e);
     }
@@ -157,27 +142,5 @@ public class MergeableResourcesView implements ServletView {
     ScriptSerializer handler = new ScriptSerializer(writer);
     unfilteredCode.writeOn(filters, handler);
     return writer.getBuffer().toString();
-  }
-
-  private String minify(String script, String name)  {
-    try {
-      StringWriter resultStringWriter = new StringWriter();
-      minifier.minify(resultStringWriter, new StringReader(script), name);
-      return resultStringWriter.getBuffer().toString();
-    } catch (Exception e) {
-      LOG.info("Could not minify file {}. Will write unminified version. Cause: {}", name, e.getMessage());
-      return script;
-    }
-  }
-
-  private class MinifierCacheKey extends PairCacheKey<String, String, String> {
-    MinifierCacheKey(String script, String name) {
-      super(script, name);
-    }
-
-    @Override
-    protected String evaluate(Cache cache, String script, String name) {
-      return minify(script, name);
-    }
   }
 }

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.coremedia.blueprint</groupId>
+    <artifactId>solr.blueprint-parent</artifactId>
+    <version>1-SNAPSHOT</version>
+    <relativePath>../blueprint-parent/pom.xml</relativePath>
+  </parent>
+
+  <artifactId>solr.blueprint-container-image</artifactId>
+  <packaging>jar</packaging>
+
+  <description>
+    = Container Image Build =
+    Image building is skipped by default. To build the image, activate the default-image maven profile.
+    In addition, you can set jib.goal to "build" to directly build the image in the registry without docker.
+    i.e. mvn clean install -Pdefault-image -Djib.goal=build
+  </description>
+
+  <properties>
+    <!--skips execution, to enable activate jib-compat profile-->
+    <jib.skip>true</jib.skip>
+    <!--set to build to use without docker being installed but then you need a registry configured in jib.repository-->
+    <jib.goal>dockerBuild</jib.goal>
+    <!--
+     | this property must always be set to the version of the solr because of the symlink filesystem
+     | structure in the base image
+    -->
+    <solr.version>8.10.1</solr.version>
+    <solr.image-base-tag>8.10.1</solr.image-base-tag>
+    <solr.image-base>coremedia/solr-base:${solr.image-base-tag}</solr.image-base>
+    <application.image-prefix>coremedia</application.image-prefix>
+    <application.image-suffix>solr</application.image-suffix>
+    <application.image-tag>${project.version}</application.image-tag>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>solr-config</artifactId>
+      <version>${project.version}</version>
+      <scope>runtime</scope>
+      <type>zip</type>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+     <!--  We need to use packaging type -->
+      <!-- skip the jar generation. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>default-jar</id>
+            <phase>none</phase>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- skip installing docker images or anything else. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-install-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+
+      <!-- skip deploying docker images or anything else. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+
+      <!-- The real image build process-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack-solr-config</id>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <phase>generate-resources</phase>
+            <configuration>
+              <excludeTransitive>true</excludeTransitive>
+              <outputDirectory>target/solr-home</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.google.cloud.tools</groupId>
+        <artifactId>jib-maven-plugin</artifactId>
+        <version>3.1.4</version>
+        <dependencies>
+          <dependency>
+            <groupId>com.google.cloud.tools</groupId>
+            <artifactId>jib-ownership-extension-maven</artifactId>
+            <version>0.1.0</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <from>
+            <image>${solr.image-base}</image>
+          </from>
+          <to>
+            <image>${application.image-prefix}/${application.image-suffix}</image>
+            <tags>
+              <tag>${application.image-tag}</tag>
+            </tags>
+          </to>
+          <container>
+            <user>solr</user>
+            <entrypoint>INHERIT</entrypoint>
+            <!--
+             | normally we would set it to /opt/solr-${solr.version} but then /opt/solr-${solr.version}/server/solr (SOLR_HOME)
+             | won't be writeable for the solr user
+             -->
+            <appRoot>/opt/solr-${solr.version}/solr-webapp</appRoot>
+            <environment>
+              <JAVA_HEAP>512m</JAVA_HEAP>
+            </environment>
+            <ports>
+              <port>8983</port>
+            </ports>
+          </container>
+          <extraDirectories>
+            <paths>
+              <path>src/main/image</path>
+              <path>
+                <from>target/solr-home</from>
+                <into>/opt/solr-${solr.version}/server/solr</into>
+              </path>
+            </paths>
+            <permissions>
+              <permission>
+                <file>/docker-entrypoint-initdb.d/*.sh</file>
+                <mode>755</mode>
+              </permission>
+            </permissions>
+          </extraDirectories>
+          <pluginExtensions>
+            <pluginExtension>
+              <implementation>com.google.cloud.tools.jib.maven.extension.ownership.JibOwnershipExtension</implementation>
+              <configuration implementation="com.google.cloud.tools.jib.maven.extension.ownership.Configuration">
+                <rules>
+                  <rule>
+                    <glob>/var/solr**</glob>
+                    <ownership>8983:8983</ownership>
+                  </rule>
+                  <rule>
+                    <glob>/opt/solr-${solr.version}/server/solr/**</glob>
+                    <ownership>8983:8983</ownership>
+                  </rule>
+                </rules>
+              </configuration>
+            </pluginExtension>
+          </pluginExtensions>
+        </configuration>
+        <executions>
+          <execution>
+            <id>jib</id>
+            <goals>
+              <goal>${jib.goal}</goal>
+            </goals>
+            <phase>install</phase>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>default-image</id>
+      <properties>
+        <jib.skip>false</jib.skip>
+      </properties>
+    </profile>
+  </profiles>
+
+</project>

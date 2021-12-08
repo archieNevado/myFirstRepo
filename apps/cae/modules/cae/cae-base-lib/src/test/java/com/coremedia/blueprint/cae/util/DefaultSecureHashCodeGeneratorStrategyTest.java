@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.cae.util;
 
-import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -56,7 +55,7 @@ public class DefaultSecureHashCodeGeneratorStrategyTest {
 
   @Test
   public void testEncodings() {
-    parameters = ImmutableMap.<String, Object>of("param1", "Kompabitilit\u00e4t");
+    parameters = Map.of("param1", "Kompabitilit\u00e4t");
 
     defaultSecureHashCodeGeneratorStrategy.setEncoding("UTF-8");
     assertEquals("generated checksum", "Yf", defaultSecureHashCodeGeneratorStrategy.generateSecureHashCode(parameters));

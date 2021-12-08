@@ -1,24 +1,28 @@
 package com.coremedia.lc.studio.lib.validators;
 
 import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceServicesAutoConfiguration;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceServicesConfiguration;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.rest.validators.ChannelNavigationValidator;
 import com.coremedia.blueprint.base.rest.validators.ChannelReferrerValidator;
 import com.coremedia.blueprint.base.rest.validators.ChannelSegmentValidator;
 import com.coremedia.cache.config.CacheConfiguration;
 import com.coremedia.cap.common.CapConnection;
+import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.rest.cap.validators.StructLinkListIndexValidator;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
+import java.util.Objects;
+
 @Configuration(proxyBeanMethods = false)
 @Import({
-        BaseCommerceServicesAutoConfiguration.class,
+        BaseCommerceServicesConfiguration.class,
         CacheConfiguration.class,
 })
 @ImportResource(value = {
@@ -33,51 +37,47 @@ public class LcStudioValidatorsConfiguration {
   private static final String EXTERNALID_PROPERTY = "externalId";
   private static final String CMPRODUCTLIST_STRUCT_PROPERTY = "localSettings";
 
-  private static CatalogLinkValidator createCatalogLinkValidator(CapConnection connection,
-                                                                 CommerceConnectionInitializer commerceConnectionInitializer,
+  private static CatalogLinkValidator createCatalogLinkValidator(@NonNull ContentType type,
+                                                                 CommerceConnectionSupplier commerceConnectionSupplier,
                                                                  SitesService sitesService) {
-    CatalogLinkValidator validator = new CatalogLinkValidator(commerceConnectionInitializer, sitesService, EXTERNALID_PROPERTY);
-    validator.setConnection(connection);
-    validator.setValidatingSubtypes(true);
-    return validator;
+    return new CatalogLinkValidator(type, true, commerceConnectionSupplier, sitesService, EXTERNALID_PROPERTY);
+  }
+
+  @NonNull
+  private static ContentType type(@NonNull CapConnection connection, @NonNull String typeStr) {
+    return Objects.requireNonNull(connection.getContentRepository().getContentType(typeStr));
   }
 
   @SuppressWarnings("MethodMayBeStatic")
   @Bean
-  ProductListValidator productListFormatValidator(CommerceConnectionInitializer commerceConnectionInitializer,
-                                            SitesService sitesService) {
-    ProductListValidator validator = new ProductListValidator(commerceConnectionInitializer, sitesService, CMPRODUCTLIST_STRUCT_PROPERTY, EXTERNALID_PROPERTY);
-    validator.setContentType(CMPRODUCTLIST_NAME);
-    return validator;
+  ProductListValidator productListFormatValidator(CapConnection connection,
+                                                  CommerceConnectionSupplier commerceConnectionSupplier,
+                                                  SitesService sitesService) {
+    return new ProductListValidator(type(connection, CMPRODUCTLIST_NAME), commerceConnectionSupplier, sitesService, CMPRODUCTLIST_STRUCT_PROPERTY, EXTERNALID_PROPERTY);
   }
 
   @SuppressWarnings("MethodMayBeStatic")
   @Bean
   CatalogLinkValidator productTeaserExternalIdValidator(CapConnection connection,
-                                                        CommerceConnectionInitializer commerceConnectionInitializer,
+                                                        CommerceConnectionSupplier commerceConnectionSupplier,
                                                         SitesService sitesService) {
-    CatalogLinkValidator validator = createCatalogLinkValidator(connection, commerceConnectionInitializer, sitesService);
-    validator.setContentType("CMProductTeaser");
-    return validator;
+    return createCatalogLinkValidator(type(connection, "CMProductTeaser"), commerceConnectionSupplier, sitesService);
   }
 
   @SuppressWarnings("MethodMayBeStatic")
   @Bean
   CatalogLinkValidator marketingSpotExternalIdValidator(CapConnection connection,
-                                                        CommerceConnectionInitializer commerceConnectionInitializer,
+                                                        CommerceConnectionSupplier commerceConnectionSupplier,
                                                         SitesService sitesService) {
-    CatalogLinkValidator validator = createCatalogLinkValidator(connection, commerceConnectionInitializer, sitesService);
-    validator.setContentType("CMMarketingSpot");
-    return validator;
+    return createCatalogLinkValidator(type(connection, "CMMarketingSpot"), commerceConnectionSupplier, sitesService);
   }
 
   @SuppressWarnings("MethodMayBeStatic")
   @Bean
   CatalogLinkValidator productListExternalIdValidator(CapConnection connection,
-                                                      CommerceConnectionInitializer commerceConnectionInitializer,
+                                                      CommerceConnectionSupplier commerceConnectionSupplier,
                                                       SitesService sitesService) {
-    CatalogLinkValidator validator = createCatalogLinkValidator(connection, commerceConnectionInitializer, sitesService);
-    validator.setContentType(CMPRODUCTLIST_NAME);
+    CatalogLinkValidator validator = createCatalogLinkValidator(type(connection, CMPRODUCTLIST_NAME), commerceConnectionSupplier, sitesService);
     validator.setOptional(true);
     return validator;
   }
@@ -85,57 +85,54 @@ public class LcStudioValidatorsConfiguration {
   @SuppressWarnings("MethodMayBeStatic")
   @Bean
   CatalogLinkValidator externalChannelExternalIdValidator(CapConnection connection,
-                                                          CommerceConnectionInitializer commerceConnectionInitializer,
+                                                          CommerceConnectionSupplier commerceConnectionSupplier,
                                                           SitesService sitesService) {
-    CatalogLinkValidator validator = new ExternalChannelValidator(commerceConnectionInitializer, sitesService, EXTERNALID_PROPERTY);
-    validator.setConnection(connection);
-    validator.setContentType(CMEXTERNALCHANNEL_NAME);
-    validator.setValidatingSubtypes(true);
-    return validator;
+    return new ExternalChannelValidator(type(connection, CMEXTERNALCHANNEL_NAME),
+            true,
+            commerceConnectionSupplier,
+            sitesService,
+            EXTERNALID_PROPERTY);
   }
 
   @SuppressWarnings("MethodMayBeStatic")
   @Bean
   CatalogLinkValidator externalProductExternalIdValidator(CapConnection connection,
-                                                          CommerceConnectionInitializer commerceConnectionInitializer,
+                                                          CommerceConnectionSupplier commerceConnectionSupplier,
                                                           SitesService sitesService) {
-    CatalogLinkValidator validator = new ExternalProductValidator(commerceConnectionInitializer, sitesService, EXTERNALID_PROPERTY);
-    validator.setConnection(connection);
-    validator.setContentType("CMExternalProduct");
-    validator.setValidatingSubtypes(true);
-    return validator;
+    return new ExternalProductValidator(type(connection, "CMExternalProduct"),
+            true,
+            commerceConnectionSupplier,
+            sitesService,
+            EXTERNALID_PROPERTY);
   }
 
   @SuppressWarnings("MethodMayBeStatic")
   @Bean
   CatalogLinkValidator externalPageExternalIdValidator(CapConnection connection,
-                                                       CommerceConnectionInitializer commerceConnectionInitializer,
+                                                       CommerceConnectionSupplier commerceConnectionSupplier,
                                                        SitesService sitesService) {
-    CatalogLinkValidator validator = new ExternalPageValidator(commerceConnectionInitializer, sitesService, EXTERNALID_PROPERTY);
-    validator.setConnection(connection);
-    validator.setContentType("CMExternalPage");
-    validator.setValidatingSubtypes(true);
-    return validator;
+    return new ExternalPageValidator(type(connection, "CMExternalPage"),
+            true,
+            commerceConnectionSupplier,
+            sitesService,
+            EXTERNALID_PROPERTY);
   }
 
   @SuppressWarnings("MethodMayBeStatic")
   @Bean
   IsLiveContextTypeValidator productListSupportedValidator(CapConnection connection,
-                                                           CommerceConnectionInitializer commerceConnectionInitializer,
+                                                           CommerceConnectionSupplier commerceConnectionSupplier,
                                                            SitesService sitesService) {
-    IsLiveContextTypeValidator validator = new IsLiveContextTypeValidator(commerceConnectionInitializer, sitesService);
-    validator.setConnection(connection);
-    validator.setContentType(CMPRODUCTLIST_NAME);
-    validator.setValidatingSubtypes(true);
-    return validator;
+    return new IsLiveContextTypeValidator(type(connection, CMPRODUCTLIST_NAME),
+            true,
+            commerceConnectionSupplier,
+            sitesService);
   }
 
   @SuppressWarnings("MethodMayBeStatic")
   @Bean
   StructLinkListIndexValidator productListIndexValidator(CapConnection connection) {
-    StructLinkListIndexValidator validator = new StructLinkListIndexValidator();
-    validator.setConnection(connection);
-    validator.setContentType(CMPRODUCTLIST_NAME);
+    StructLinkListIndexValidator validator = new StructLinkListIndexValidator(type(connection, CMPRODUCTLIST_NAME), false);
     validator.setListPropertyName("links");
     validator.setMaxLengthPropertyName("maxLength");
     validator.setPropertyName("extendedItems");
@@ -146,50 +143,41 @@ public class LcStudioValidatorsConfiguration {
   @Bean
   ExternalPagePartOfNavigationValidator externalPagePartOfNavigationValidator(CapConnection connection,
                                                                               SitesService sitesService) {
-    ExternalPagePartOfNavigationValidator validator = new ExternalPagePartOfNavigationValidator(sitesService);
-    validator.setConnection(connection);
-    validator.setContentType("CMExternalPage");
-    return validator;
+    return new ExternalPagePartOfNavigationValidator(type(connection, "CMExternalPage"), false, sitesService);
   }
 
   @SuppressWarnings("MethodMayBeStatic")
   @Bean
   ChannelSegmentValidator cmExternalChannelSegmentValidator(CapConnection connection,
                                                             UrlPathFormattingHelper urlPathFormattingHelper) {
-    ChannelSegmentValidator validator = new ChannelSegmentValidator(urlPathFormattingHelper);
-    validator.setConnection(connection);
-    validator.setContentType(CMEXTERNALCHANNEL_NAME);
+    ChannelSegmentValidator validator = new ChannelSegmentValidator(type(connection, CMEXTERNALCHANNEL_NAME), false);
+    validator.setUrlPathFormattingHelper(urlPathFormattingHelper);
     return validator;
   }
 
   @SuppressWarnings("MethodMayBeStatic")
   @Bean
   SegmentFormatValidator segmentFormatValidator(CapConnection connection,
-                                                CommerceConnectionInitializer commerceConnectionInitializer,
+                                                CommerceConnectionSupplier commerceConnectionSupplier,
                                                 SitesService sitesService) {
-    SegmentFormatValidator validator = new SegmentFormatValidator(commerceConnectionInitializer, sitesService, "segment");
-    validator.setConnection(connection);
-    validator.setContentType("CMChannel");
+    SegmentFormatValidator validator = new SegmentFormatValidator(type(connection, "CMChannel"),
+            true,
+            commerceConnectionSupplier,
+            sitesService,
+            "segment");
     validator.setFallbackPropertyName("title");
-    validator.setValidatingSubtypes(true);
     return validator;
   }
 
   @SuppressWarnings("MethodMayBeStatic")
   @Bean
   ChannelNavigationValidator cmExternalChannelNavigationValidator(CapConnection connection) {
-    ChannelNavigationValidator validator = new ChannelNavigationValidator();
-    validator.setConnection(connection);
-    validator.setContentType(CMEXTERNALCHANNEL_NAME);
-    return validator;
+    return new ChannelNavigationValidator(type(connection, CMEXTERNALCHANNEL_NAME), false);
   }
 
   @SuppressWarnings("MethodMayBeStatic")
   @Bean
   ChannelReferrerValidator cmExternalChannelReferrerValidator(CapConnection connection) {
-    ChannelReferrerValidator validator = new ChannelReferrerValidator();
-    validator.setConnection(connection);
-    validator.setContentType(CMEXTERNALCHANNEL_NAME);
-    return validator;
+    return new ChannelReferrerValidator(type(connection, CMEXTERNALCHANNEL_NAME), false);
   }
 }

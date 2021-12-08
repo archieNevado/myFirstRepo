@@ -8,7 +8,7 @@
 <div class="cm-product-assets" <@cm.dataAttribute name="data-cm-refreshable-fragment" data={"url": cm.getLink(self, 'asAssets')} />
                                <@cm.dataAttribute name="data-cm-product-assets" data=bp.setting(self, "productAssets", {}) />>
   <#if (types == 'all' || types == 'visuals') && orientation?has_content>
-    <#assign visuals=bp.createBeansFor(self.visuals)![] />
+    <#assign visuals=lc.createBeansFor(self.visuals)![] />
     <#if !visuals?has_content>
       <@cm.include self=self.catalogPicture view="asProductAsset" params={
         "orientation": orientation
@@ -49,7 +49,7 @@
 
   <#-- render download list -->
   <#if (types == 'all' || types == 'downloads') >
-    <#assign downloads=bp.createBeansFor(self.downloads) />
+    <#assign downloads=lc.createBeansFor(self.downloads) />
     <#if (downloads?size > 0)>
       <div class="cm-product-assets__downloads cm-product-assets-downloads">
         <h3 class="cm-product-assets-downloads__title">${cm.getMessage("product_assets_downloads")}</h3>

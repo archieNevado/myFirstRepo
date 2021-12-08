@@ -10,15 +10,12 @@ import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.user.User;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
-import com.coremedia.livecontext.contentbeans.CMProductTeaser;
 import com.coremedia.livecontext.contentbeans.ProductDetailPage;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.handler.LiveContextPageHandlerBase;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
-import com.coremedia.objectserver.web.links.Link;
 import com.coremedia.objectserver.web.links.LinkPostProcessor;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -30,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -41,7 +37,6 @@ import static com.coremedia.blueprint.base.links.UriConstants.RequestParameters.
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_REST;
 import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_SERVICE;
 
-@Link
 @RequestMapping
 @LinkPostProcessor
 public class ProductPageHandler extends LiveContextPageHandlerBase {
@@ -101,7 +96,7 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
       return HandlerHelper.notFound("No product path found");
     }
 
-    return createLiveContextPage(site, seoSegment, view, UserVariantHelper.getUser(request));
+    return createLiveContextPage(site, seoSegment, view, request);
   }
 
   @GetMapping(value = REST_URI_PATTERN, produces = CONTENT_TYPE_HTML)
@@ -109,7 +104,7 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
   public ModelAndView getProducts(@PathVariable(SITE_CHANNEL_ID) CMNavigation context,
                                   @PathVariable(PRODUCT_SEO_SEGMENT) String productId,
                                   HttpServletRequest request) {
-    StoreContext storeContext = CurrentStoreContext.get();
+    var storeContext = CurrentStoreContext.get(request);
     CommerceConnection connection = storeContext.getConnection();
 
     Product product = connection.getCatalogService()
@@ -130,50 +125,6 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
   }
 
   // --- Linkscheme -------------------------------------------------
-
-  /**
-   * In default mode (wcsProductLinks==true) buildLinkFor builds native
-   * WCS links which have no handler counterpart in the CAE.
-   * In !wcsProductLinks mode buildLinkFor builds CAE links
-   * which are handled by {@link #handleRequest(String, String, String, HttpServletRequest)}.
-   *
-   * @deprecated This link scheme is no longer needed and has been replaced by
-   * {@link com.coremedia.livecontext.fragment.links.CommerceLinks#buildLinkForProductInSite(ProductInSite, Map, HttpServletRequest)}
-   */
-  @Nullable
-  @Link(type = ProductInSite.class)
-  @Deprecated
-  public UriComponents buildLinkFor(ProductInSite productInSite, String viewName, Map<String, Object> linkParameters,
-                                    HttpServletRequest request) {
-    Site site = productInSite.getSite();
-
-    // build link only for content led, the commerce led case is handled by the commerce link scheme
-    if (!useCommerceProductLinks(site)) {
-      return buildCaeLinkFor(productInSite, viewName, linkParameters);
-    }
-
-    return null;
-  }
-
-  /**
-   * This link is built when the product teaser is inside a rich text.
-   * We use the ProductInPage link building logic here.
-   *
-   * @deprecated This link scheme is no longer needed and has been replaced by
-   * {@link com.coremedia.livecontext.fragment.links.CommerceLinks#buildLinkForProductTeaser(CMProductTeaser, Map, HttpServletRequest)}
-   */
-  @Nullable
-  @Link(type = CMProductTeaser.class, view = HandlerHelper.VIEWNAME_DEFAULT)
-  @Deprecated
-  public UriComponents buildLinkFor(CMProductTeaser productTeaser, String viewName, Map<String, Object> linkParameters,
-                                    HttpServletRequest request) {
-    ProductInSite productInSite = productTeaser.getProductInSite();
-    if (productInSite == null) {
-      return null;
-    }
-
-    return buildLinkFor(productInSite, viewName, linkParameters, request);
-  }
 
   @LinkPostProcessor(type = ProductInSite.class, order = PostProcessorPrecendences.MAKE_ABSOLUTE)
   public UriComponents makeAbsoluteUri(UriComponents originalUri, ProductInSite product,
@@ -210,8 +161,8 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
   }
 
   private ModelAndView createLiveContextPage(@NonNull Site site, @NonNull String seoSegment, String view,
-                                             @Nullable User developer) {
-    StoreContext storeContext = CurrentStoreContext.get();
+                                             @NonNull HttpServletRequest request) {
+    var storeContext = CurrentStoreContext.get(request);
     CommerceConnection connection = storeContext.getConnection();
 
     Product product = connection.getCatalogService()
@@ -223,28 +174,11 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
     Navigation context = getNavigationContext(site, product).orElse(null);
     ProductInSite productInSite = getLiveContextNavigationFactory().createProductInSite(product, site.getId());
 
-    PageImpl page = createPageImpl(productInSite, context, developer);
+    PageImpl page = createPageImpl(productInSite, context, UserVariantHelper.getUser(request));
     page.setTitle(product.getTitle());
     page.setDescription(product.getTitle());
     page.setKeywords(product.getMetaKeywords());
 
     return createModelAndView(page, view);
-  }
-
-  @NonNull
-  private UriComponents buildCaeLinkFor(ProductInSite productInSite, String viewName,
-                                        Map<String, Object> linkParameters) {
-    String siteSegment = getSiteSegment(productInSite.getSite());
-    String productSegment = productInSite.getProduct().getSeoSegment();
-
-    UriComponentsBuilder uriBuilder = UriComponentsBuilder
-            .newInstance()
-            .pathSegment(SEGMENT_PRODUCT)
-            .pathSegment(siteSegment)
-            .pathSegment(productSegment);
-
-    addViewAndParameters(uriBuilder, viewName, linkParameters);
-
-    return uriBuilder.build();
   }
 }

@@ -12,118 +12,94 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>alx-cae</artifactId>
-      <version>1-SNAPSHOT</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>alx-google-cae</artifactId>
-      <version>1-SNAPSHOT</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>alx-google-templates</artifactId>
-      <version>1-SNAPSHOT</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>alx-p13n-cae</artifactId>
-      <version>1-SNAPSHOT</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>alx-webtrends-cae</artifactId>
-      <version>1-SNAPSHOT</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>am-cae</artifactId>
-      <version>1-SNAPSHOT</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>corporate-cae</artifactId>
-      <version>1-SNAPSHOT</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>ecommerce-adapter-cae</artifactId>
-      <version>1-SNAPSHOT</version>
+      <version>${project.version}</version>
       <type>pom</type>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>es-alx-cae</artifactId>
-      <version>1-SNAPSHOT</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>es-cae</artifactId>
-      <version>1-SNAPSHOT</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>es-p13n-cae</artifactId>
-      <version>1-SNAPSHOT</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>lc-asset-cae-component</artifactId>
-      <version>1-SNAPSHOT</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>lc-cae</artifactId>
-      <version>1-SNAPSHOT</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>lc-ecommerce-ibm-cae-component</artifactId>
-      <version>1-SNAPSHOT</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>lc-es-cae</artifactId>
-      <version>1-SNAPSHOT</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>lc-p13n-cae</artifactId>
-      <version>1-SNAPSHOT</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>optimizely-cae</artifactId>
-      <version>1-SNAPSHOT</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
-      <artifactId>optimizely-templates</artifactId>
-      <version>1-SNAPSHOT</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>p13n-cae</artifactId>
-      <version>1-SNAPSHOT</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>

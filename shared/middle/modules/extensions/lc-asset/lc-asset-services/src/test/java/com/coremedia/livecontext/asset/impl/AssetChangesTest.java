@@ -12,8 +12,8 @@ import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Collection;
+import java.util.List;
 
-import static com.google.common.collect.ImmutableList.of;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doReturn;
@@ -45,7 +45,7 @@ public class AssetChangesTest {
   @Test
   public void test() {
     // test the assetChanges is correctly filled
-    doReturn(of("a", "b")).when(assetChanges).getExternalIds(content);
+    doReturn(List.of("a", "b")).when(assetChanges).getExternalIds(content);
     assetChanges.update(content);
     Collection<Content> contents = assetChanges.get("a", site);
     assertEquals(1, contents.size());
@@ -61,11 +61,11 @@ public class AssetChangesTest {
 
   @Test
   public void testMultipleUpdatesOnSameContent() {
-    doReturn(of("a", "b")).when(assetChanges).getExternalIds(content);
+    doReturn(List.of("a", "b")).when(assetChanges).getExternalIds(content);
     assetChanges.update(content);
-    doReturn(of("a")).when(assetChanges).getExternalIds(content);
+    doReturn(List.of("a")).when(assetChanges).getExternalIds(content);
     assetChanges.update(content);
-    doReturn(of()).when(assetChanges).getExternalIds(content);
+    doReturn(List.of()).when(assetChanges).getExternalIds(content);
     assetChanges.update(content);
 
     Collection<Content> a = assetChanges.get("a", site);

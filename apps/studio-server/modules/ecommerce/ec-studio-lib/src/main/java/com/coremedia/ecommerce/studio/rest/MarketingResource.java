@@ -12,15 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.WORKSPACE_ID_NONE;
-
 /**
  * The resource is just used for handling the top level store node "Marketing Spots".
  * It is not necessary for the commerce API. This ensures a unified handling
  * of tree nodes in the Studio library window.
  */
 @RestController
-@RequestMapping(value = "livecontext/marketing/{" + AbstractCatalogResource.PATH_SITE_ID + "}/{" + AbstractCatalogResource.PATH_WORKSPACE_ID + "}", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "livecontext/marketing/{" + AbstractCatalogResource.PATH_SITE_ID + "}", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MarketingResource extends AbstractCatalogResource<Marketing> {
 
   @Autowired
@@ -62,7 +60,6 @@ public class MarketingResource extends AbstractCatalogResource<Marketing> {
     StoreContext storeContext = marketing.getContext();
     Map<String, String> params = new HashMap<>();
     params.put(PATH_SITE_ID, storeContext.getSiteId());
-    params.put(PATH_WORKSPACE_ID, storeContext.getWorkspaceId().orElse(WORKSPACE_ID_NONE).value());
     return params;
   }
 }

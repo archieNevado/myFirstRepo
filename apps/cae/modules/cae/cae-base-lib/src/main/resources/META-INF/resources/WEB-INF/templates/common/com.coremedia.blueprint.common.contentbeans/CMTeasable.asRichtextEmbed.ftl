@@ -7,6 +7,7 @@
     programmed view (LinkEmbedFilter). Please check example brick "richtext-embedded" for a more detailed version.
 -->
 
+</p>
 <div class="cm-teasable cm-teasable--embedded">
   <h2 class="cm-teasable_title">${self.teaserTitle!""}</h2>
   <div class="cm-teasable__picture">
@@ -16,3 +17,4 @@
     <@cm.include self=self.teaserText!cm.UNDEFINED />
   </div>
 </div>
+<p>

@@ -6,10 +6,9 @@ import com.coremedia.cache.CacheKey;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.user.User;
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.Lists;
-
 import edu.umd.cs.findbugs.annotations.Nullable;
-import java.util.List;
+
+import java.util.HashSet;
 import java.util.Objects;
 
 /**
@@ -133,8 +132,14 @@ public class CodeResourcesCacheKey extends CacheKey<CodeResources> {
       cc.setCodeCarrier(content);
     }
     // Grab the nearest theme along the navigation hierarchy.
-    List<Content> path = Lists.reverse(treeRelation.pathToRoot(content));
-    cc.setThemeCarrier(path.stream().filter(CodeResourcesCacheKey::hasTheme).findFirst().orElse(null));
+    var visited = new HashSet<Content>();
+    var carrier = content;
+    while (carrier != null && visited.add(carrier) && !hasTheme(carrier)) {
+      // avoid CycleInTreeRelationException
+      carrier = treeRelation.getParentUnchecked(carrier);
+    }
+
+    cc.setThemeCarrier(carrier != null && hasTheme(carrier) ? carrier : null);
   }
 
   private static boolean hasDirectCode(Content content, String codePropertyName) {

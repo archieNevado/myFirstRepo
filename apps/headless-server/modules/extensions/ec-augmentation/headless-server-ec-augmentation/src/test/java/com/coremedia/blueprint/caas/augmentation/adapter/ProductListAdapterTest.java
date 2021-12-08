@@ -14,12 +14,15 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
+import graphql.GraphQLContext;
+import graphql.schema.DataFetchingEnvironment;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,8 +32,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.coremedia.blueprint.caas.augmentation.adapter.CommerceSearchFacade.SEARCH_PARAM_CATALOG_ALIAS;
-import static com.coremedia.blueprint.caas.augmentation.adapter.CommerceSearchFacade.SEARCH_PARAM_CATEGORYID;
-import static com.coremedia.blueprint.caas.augmentation.adapter.CommerceSearchFacade.SEARCH_PARAM_FACET;
 import static com.coremedia.blueprint.caas.augmentation.adapter.CommerceSearchFacade.SEARCH_PARAM_FACET_SUPPORT;
 import static com.coremedia.blueprint.caas.augmentation.adapter.CommerceSearchFacade.SEARCH_PARAM_ORDERBY;
 import static com.coremedia.blueprint.caas.augmentation.adapter.CommerceSearchFacade.SEARCH_PARAM_TOTAL;
@@ -43,7 +44,7 @@ import static com.coremedia.blueprint.caas.augmentation.adapter.ProductListAdapt
 import static com.coremedia.blueprint.caas.augmentation.adapter.ProductListAdapter.STRUCT_KEY_PRODUCTLIST_MAX_LENGTH;
 import static com.coremedia.blueprint.caas.augmentation.adapter.ProductListAdapter.STRUCT_KEY_PRODUCTLIST_OFFSET;
 import static com.coremedia.blueprint.caas.augmentation.adapter.ProductListAdapter.STRUCT_KEY_PRODUCTLIST_ORDER_BY;
-import static com.coremedia.blueprint.caas.augmentation.adapter.ProductListAdapter.STRUCT_KEY_PRODUCTLIST_SELECT_FACET_VALUE;
+import static com.coremedia.caas.headless_server.plugin_support.PluginSupport.CONTEXT_PARAMETER_NAME_PREVIEW_DATE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.eq;
@@ -99,8 +100,13 @@ class ProductListAdapterTest {
   @Mock
   private Site site;
 
+  @Mock
+  private DataFetchingEnvironment dataFetchingEnvironment;
+
+  @Mock
+  private GraphQLContext graphQLContext;
+
   private final Map<String, Object> PRODUCT_LIST_STRUCT_DEFAULTS = Map.of(
-          STRUCT_KEY_PRODUCTLIST_SELECT_FACET_VALUE, "true",
           STRUCT_KEY_PRODUCTLIST_ORDER_BY, "priceDesc");
 
   private CommerceRef dynamicTarget1;
@@ -139,6 +145,7 @@ class ProductListAdapterTest {
     productSearchResult = Stream.of(dynamicTarget1, dynamicTarget2, dynamicTarget3).collect(Collectors.toList());
     lenient().when(commerceSearchFacade.searchProducts(eq(ProductListAdapter.ALL_QUERY), anyMap(), eq(site))).thenReturn(productSearchResult);
     lenient().when(site.getId()).thenReturn("sideId");
+    lenient().when(graphQLContext.get(CONTEXT_PARAMETER_NAME_PREVIEW_DATE)).thenReturn(ZonedDateTime.now());
 
     productListAdapter = new ProductListAdapter(extendedLinkListAdapterFactory, productList, settingsService, commerceEntityHelper, commerceSearchFacade, site, 0);
     when(settingsService.setting(STRUCT_KEY_PRODUCTLIST, Struct.class, productList)).thenReturn(struct);
@@ -170,7 +177,6 @@ class ProductListAdapterTest {
 
     //Then
     assertThat(productListSettings)
-            .hasSize(5)
             .containsKey(STRUCT_KEY_PRODUCTLIST_OFFSET)
             .containsKey(STRUCT_KEY_PRODUCTLIST_MAX_LENGTH)
             .containsKey(STRUCT_KEY_PRODUCTLIST_FILTER_FACET_QUERIES)
@@ -191,7 +197,7 @@ class ProductListAdapterTest {
     when(extendedLinkListAdapterFactory.to(productList)).thenReturn(extendedLinkListAdapter);
     when(extendedLinkListAdapter.getExtendedTargets()).thenReturn(fixedItems);
 
-    List items = productListAdapter.getItems();
+    List items = productListAdapter.getItems().getData();
 
     assertThat(items).isNotEmpty();
     assertThat(items.size()).isEqualTo(6);
@@ -217,7 +223,7 @@ class ProductListAdapterTest {
     when(extendedLinkListAdapterFactory.to(productList)).thenReturn(extendedLinkListAdapter);
     when(extendedLinkListAdapter.getExtendedTargets()).thenReturn(fixedItems);
 
-    List items = productListAdapter.getItems();
+    List items = productListAdapter.getItems().getData();
 
     assertThat(items).isNotEmpty();
     assertThat(items.size()).isEqualTo(2);
@@ -239,7 +245,7 @@ class ProductListAdapterTest {
     when(extendedLinkListAdapterFactory.to(productList)).thenReturn(extendedLinkListAdapter);
     when(extendedLinkListAdapter.getExtendedTargets()).thenReturn(fixedItems);
 
-    List items = productListAdapter.getItems();
+    List items = productListAdapter.getItems().getData();
 
     assertThat(items).isNotEmpty();
     assertThat(items.size()).isEqualTo(3);
@@ -255,12 +261,10 @@ class ProductListAdapterTest {
     fixedItems.add(getFixedItemMap(fixedTarget2, 3));
     fixedItems.add(getFixedItemMap(fixedTarget3, 5));
     Map<String, Object> structMap = getDefaultStructMap();
-    structMap.put(STRUCT_KEY_PRODUCTLIST_SELECT_FACET_VALUE, "12TestSomethingf4cet");
     when(struct.toNestedMaps()).thenReturn(structMap);
 
     when(extendedLinkListAdapterFactory.to(productList)).thenReturn(extendedLinkListAdapter);
     Map<String, String> searchParams = getSearchParamsMap();
-    searchParams.put(SEARCH_PARAM_FACET, "12TestSomethingf4cet");
 
     when(commerceSearchFacade.searchProducts(eq(ProductListAdapter.ALL_QUERY), eq(searchParams), eq(site))).thenReturn(productSearchResult);
     when(category.getExternalTechId()).thenReturn(searchParams.get("categoryId"));
@@ -282,7 +286,6 @@ class ProductListAdapterTest {
     fixedItems.add(getFixedItemMap(fixedTarget3, 5));
 
     Map<String, Object> structMap = getDefaultStructMap();
-    structMap.put(STRUCT_KEY_PRODUCTLIST_SELECT_FACET_VALUE, "213971239123");
     when(struct.toNestedMaps()).thenReturn(structMap);
 
     Map<String, String> searchParams = getSearchParamsMap();
@@ -311,17 +314,6 @@ class ProductListAdapterTest {
   }
 
   @Test
-  void getFacetLegacy() {
-    Map<String, Object> structMap = getDefaultStructMap();
-    String facetQuery = "price=(20..50)";
-    structMap.put(STRUCT_KEY_PRODUCTLIST_SELECT_FACET_VALUE, facetQuery);
-    when(struct.toNestedMaps()).thenReturn(structMap);
-
-    assertThat(productListAdapter.getFacet()).isEqualTo(facetQuery);
-    assertThat(productListAdapter.getFacets()).contains(facetQuery);
-  }
-
-  @Test
   void useProductOffset() {
     List<Map<String, Object>> fixedItems = new ArrayList<>();
     fixedItems.add(getFixedItemMap(fixedTarget1, 1));
@@ -341,7 +333,7 @@ class ProductListAdapterTest {
     Map<String, String> searchParams = getSearchParamsMap();
     //searchParams.put(CatalogService.SEARCH_PARAM_OFFSET, String.valueOf(2));
 
-    List items = productListAdapter.getItems();
+    List items = productListAdapter.getItems().getData();
 
     assertThat(items).isNotEmpty();
     assertThat(items.size()).isEqualTo(5);
@@ -368,7 +360,7 @@ class ProductListAdapterTest {
     when(extendedLinkListAdapterFactory.to(productList)).thenReturn(extendedLinkListAdapter);
     when(extendedLinkListAdapter.getExtendedTargets()).thenReturn(fixedItems);
 
-    List items = productListAdapter.getItems();
+    List items = productListAdapter.getItems().getData();
 
     assertThat(items).isNotEmpty();
     assertThat(items.size()).isEqualTo(5);
@@ -389,7 +381,6 @@ class ProductListAdapterTest {
     searchParams.put(SEARCH_PARAM_FACET_SUPPORT, "true");
     searchParams.put(SEARCH_PARAM_TOTAL, "10");
     searchParams.put(SEARCH_PARAM_ORDERBY, "priceDesc");
-    searchParams.put(SEARCH_PARAM_CATEGORYID, "213971239123");
     return searchParams;
   }
 }

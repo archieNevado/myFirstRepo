@@ -1,10 +1,8 @@
 package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.ecommerce.studio.rest.model.ChildRepresentation;
-import com.coremedia.ecommerce.studio.rest.model.Contracts;
 import com.coremedia.ecommerce.studio.rest.model.Marketing;
 import com.coremedia.ecommerce.studio.rest.model.Segments;
-import com.coremedia.ecommerce.studio.rest.model.Workspaces;
 import com.coremedia.livecontext.ecommerce.catalog.Catalog;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -24,8 +22,6 @@ public class StoreRepresentation extends AbstractCatalogRepresentation {
 
   private StoreContext context;
 
-  private String vendorVersion;
-  private String vendorUrl;
   private String vendorName;
   private boolean multiCatalog;
   private List<Catalog> catalogs;
@@ -111,36 +107,12 @@ public class StoreRepresentation extends AbstractCatalogRepresentation {
     return new Segments(context);
   }
 
-  public Contracts getContracts() {
-    return new Contracts(context);
-  }
-
-  public Workspaces getWorkspaces() {
-    return new Workspaces(context);
-  }
-
-  public String getVendorUrl() {
-    return vendorUrl;
-  }
-
-  public void setVendorUrl(String vendorUrl) {
-    this.vendorUrl = vendorUrl;
-  }
-
-  public String getVendorVersion() {
-    return vendorVersion;
-  }
-
   public String getVendorName() {
     return vendorName;
   }
 
   public void setVendorName(String vendorName) {
     this.vendorName = vendorName;
-  }
-
-  public void setVendorVersion(String vendorVersion) {
-    this.vendorVersion = vendorVersion;
   }
 
   public boolean isMarketingEnabled() {

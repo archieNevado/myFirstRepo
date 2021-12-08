@@ -4,7 +4,7 @@ import com.coremedia.blueprint.base.links.RuleProvider;
 import com.coremedia.blueprint.base.links.impl.AbsoluteUrlPrefixRuleProvider;
 import com.coremedia.blueprint.base.links.impl.ApplicationPropertyReplacerFormatter;
 import com.coremedia.blueprint.base.links.impl.RuleUrlPrefixResolver;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.caas.augmentation.adapter.AugmentationPageGridAdapterFactory;
 import com.coremedia.blueprint.caas.augmentation.adapter.AugmentationPageGridAdapterFactoryCmsOnly;
@@ -22,6 +22,7 @@ import com.coremedia.blueprint.caas.augmentation.model.CommerceRef;
 import com.coremedia.blueprint.caas.augmentation.model.ProductAugmentation;
 import com.coremedia.blueprint.caas.augmentation.model.ProductAugmentationCmsOnly;
 import com.coremedia.blueprint.caas.search.HeadlessSearchConfiguration;
+import com.coremedia.caas.config.CaasSearchConfigurationProperties;
 import com.coremedia.caas.model.adapter.ExtendedLinkListAdapterFactory;
 import com.coremedia.caas.search.solr.SolrQueryBuilder;
 import com.coremedia.caas.search.solr.SolrSearchResultFactory;
@@ -126,16 +127,16 @@ public class HeadlessAugmentationConfiguration {
 
   @Bean
   public CommerceEntityHelper commerceEntityHelper(SitesService siteService,
-                                                   CommerceConnectionInitializer commerceConnectionInitializer) {
-    return new CommerceEntityHelper(siteService, commerceConnectionInitializer);
+                                                   CommerceConnectionSupplier commerceConnectionSupplier) {
+    return new CommerceEntityHelper(siteService, commerceConnectionSupplier);
   }
 
   @Bean
   public SolrSearchResultFactory caasAssetSearchServiceSearchResultFactory(@Qualifier("solrClient") SolrClient solrClient,
                                                                            ContentRepository contentRepository,
-                                                                           CaasServiceConfigurationProperties caasServiceConfigurationProperties,
+                                                                           CaasSearchConfigurationProperties caasSearchConfigurationProperties,
                                                                            CaasAssetSearchServiceConfigProperties caasAssetSearchServiceConfigProperties) {
-    SolrSearchResultFactory solrSearchResultFactory = new SolrSearchResultFactory(contentRepository, solrClient, caasServiceConfigurationProperties.getSolr().getCollection());
+    SolrSearchResultFactory solrSearchResultFactory = new SolrSearchResultFactory(contentRepository, solrClient, caasSearchConfigurationProperties.getSolr().getCollection());
     solrSearchResultFactory.setCacheForSeconds(caasAssetSearchServiceConfigProperties.getCacheSeconds());
     return solrSearchResultFactory;
   }

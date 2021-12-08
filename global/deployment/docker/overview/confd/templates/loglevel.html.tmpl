@@ -19,9 +19,6 @@
       {{end}}
       <option value="headless-server-preview">
       <option value="headless-server-live">
-      {{ if eq (getv "/studio/packages/proxy/enabled" "true") "true" }}
-      <option value="studio-packages-proxy">
-      {{end}}
       {{ if eq (getv "/commerce/commercetools/enabled" "true") "true" }}
       <option value="commerce-adapter-commercetools">
       {{end}}

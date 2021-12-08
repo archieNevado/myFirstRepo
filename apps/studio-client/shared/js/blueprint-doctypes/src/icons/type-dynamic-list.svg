@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <style type="text/css">
+    @media screen {
+      #small {
+        display: initial;
+      }
+      #medium, #large {
+        display: none;
+      }
+    }
+    @media screen and (min-width: 24px) {
+      #small {
+        display: none;
+      }
+      #medium {
+        display: initial;
+      }
+    }
+    @media screen and (min-width: 32px) {
+      #medium {
+        display: none;
+      }
+      #large {
+        display: initial;
+      }
+    }
+  </style>
+  <svg id="small" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  	 viewBox="0 0 16 16" enable-background="new 0 0 16 16">
+  <g>
+  	<rect x="1" y="3" fill="#3D4242" width="14" height="1"/>
+  	<polygon fill="#3D4242" points="8.8,5 1,5 1,6 7.3,6 	"/>
+  	<rect x="11" y="5" fill="#3D4242" width="4" height="1"/>
+  	<polygon fill="#3D4242" points="4.67,7.75 5.8,7 1,7 1,8 4.3,8 	"/>
+  	<path fill="#3D4242" d="M14.3,8H15V7h-2.33C13.3,7.26,13.84,7.6,14.3,8z"/>
+  	<polygon fill="#3D4242" points="2.8,9 1,9 1,10 4.3,10 	"/>
+  	<polygon fill="#3D4242" points="1,11 1,12 7.3,12 5.8,11 	"/>
+  	<path fill="#3D4242" d="M10,8V6L5.5,9l4.5,3v-2c0,0,3,0,3,3c1,0,2,0,2,0S15,8,10,8z"/>
+  </g>
+  </svg>
+  
+  <svg id="medium" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  	 viewBox="0 0 24 24" enable-background="new 0 0 24 24">
+  <g>
+  	<rect x="1" y="4" fill="#3D4242" width="22" height="2"/>
+  	<polygon fill="#3D4242" points="8.19,13.24 10.11,12 1,12 1,14 7,14 	"/>
+  	<path fill="#3D4242" d="M22.24,14H23v-2h-3.83C20.46,12.45,21.47,13.16,22.24,14z"/>
+  	<polygon fill="#3D4242" points="1,16 1,18 11.67,18 8.56,16 	"/>
+  	<polygon fill="#3D4242" points="15.19,8.74 16,8.22 16.34,8 1,8 1,10 13.23,10 	"/>
+  	<rect x="17" y="8" fill="#3D4242" width="6" height="2"/>
+  	<path fill="#3D4242" d="M16,13v-3l-7,4.5l7,4.5v-3c0,0,4,0,4,4c1,0,3,0,3,0S23,13,16,13z"/>
+  </g>
+  </svg>
+  
+  <svg id="large" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  	 viewBox="0 0 32 32" enable-background="new 0 0 32 32">
+  <g>
+  	<rect x="1" y="5" fill="#3D4242" width="30" height="2"/>
+  	<polygon fill="#3D4242" points="15.3,15 1,15 1,17 12.3,17 	"/>
+  	<path fill="#3D4242" d="M22,15.55c2.04,0.13,3.72,0.66,5.08,1.45H31v-2h-9V15.55z"/>
+  	<polygon fill="#3D4242" points="11.17,20.25 10.8,20 1,20 1,22 13.8,22 	"/>
+  	<polygon fill="#3D4242" points="20.17,26.25 18.3,25 1,25 1,27 21.26,27 21,26.8 	"/>
+  	<path fill="#3D4242" d="M22,25v2h3.5c0-0.8-0.13-1.46-0.36-2H22z"/>
+  	<polygon fill="#3D4242" points="1,12 19.8,12 20.17,11.75 21,11.2 22,10.61 22,12 31,12 31,10 1,10 	"/>
+  	<path fill="#3D4242" d="M21,17v-4l-9,6l9,6v-4c0,0,6,0,6,6c2,0,4,0,4,0S31,17,21,17z"/>
+  </g>
+  </svg>
+  
+</svg>

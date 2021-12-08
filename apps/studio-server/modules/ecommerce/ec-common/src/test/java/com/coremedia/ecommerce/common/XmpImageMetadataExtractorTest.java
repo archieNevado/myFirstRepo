@@ -1,25 +1,25 @@
 package com.coremedia.ecommerce.common;
 
 import com.adobe.internal.xmp.properties.XMPPropertyInfo;
-import com.coremedia.common.util.Predicate;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
 import com.google.common.base.Strings;
 import com.google.common.io.Resources;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Predicate;
 
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class XmpImageMetadataExtractorTest {
   private static final String IPTC_XMP_EXT_NS = "http://iptc.org/std/Iptc4xmpExt/2008-02-29/";
@@ -32,7 +32,7 @@ public class XmpImageMetadataExtractorTest {
   public void setUp() throws Exception {
     extractor = XmpImageMetadataExtractor.builder().atNameSpace(IPTC_XMP_EXT_NS).atProperty(ARTWORK_NODE).filteredBy(new Predicate<XMPPropertyInfo>() {
       @Override
-      public boolean include(XMPPropertyInfo o) {
+      public boolean test(XMPPropertyInfo o) {
         return !Strings.isNullOrEmpty(o.getValue()) && o.getPath().endsWith(INVENTORY_INFO);
       }
     }).build();

@@ -4,8 +4,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-  <bean class="com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceServicesAutoConfiguration"/>
-
   <bean id="commerceTreeRelation" class="com.coremedia.livecontext.tree.CommerceTreeRelation"/>
 
   <bean name="externalChannelContentTreeRelation"

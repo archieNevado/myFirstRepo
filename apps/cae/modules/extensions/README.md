@@ -13,13 +13,11 @@ functionality to their default features.
 - [Brand Blueprint Extension](corporate/README.md)
 - [Elastic Social](es/README.md)
 - [Elastic Analytics Cache Extension](es-alx/README.md)
-- [Elastic Social Personalization Extension](es-p13n/README.md)
 - [External Preview Extension](external-preview/README.md)
 - [LiveContext Extension](lc/README.md)
 - [LiveContext Asset Management Extension](lc-asset/README.md)
 - [LiveContext Elastic Social Extension](lc-es/README.md)
 - [LiveContext Personalization Extension](lc-p13n/README.md)
-- [Optimizely Extension](optimizely/README.md)
 - [Adaptive Personalization Extension](p13n/README.md)
 
 ## Documentation

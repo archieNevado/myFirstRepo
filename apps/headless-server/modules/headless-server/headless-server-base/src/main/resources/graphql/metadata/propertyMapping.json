@@ -13,9 +13,6 @@
     "displayTitle": "properties.localSettings.overlay.displayTitle",
     "hotZones": "properties.localSettings.image-map"
   },
-  "CMLocalized": {
-    "languageId": "properties.locale"
-  },
   "CMLocTaxonomy": {
     "locChildren": "properties.children"
   },

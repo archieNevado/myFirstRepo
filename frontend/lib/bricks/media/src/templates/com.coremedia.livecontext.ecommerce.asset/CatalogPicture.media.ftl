@@ -6,13 +6,13 @@
 <#assign classMedia=cm.localParameters().classMedia!"" />
 
 <#if self.picture?has_content>
-  <@cm.include self=bp.createBeanFor(self.picture) view="media" params={
+  <@cm.include self=lc.createBeanFor(self.picture) view="media" params={
     "classBox": classBox,
     "classMedia": classMedia
   }/>
 <#elseif self.url?has_content>
   <div class="${classBox}">
     <#assign commerceImageLink=cm.getLink(self)/>
-    <img class="${classMedia} cm-media cm-media--uncropped" src="${commerceImageLink!""}" alt="">
+    <img class="${classMedia} cm-media cm-media--uncropped" src="${commerceImageLink!""}" loading="lazy" alt="">
   </div>
 </#if>

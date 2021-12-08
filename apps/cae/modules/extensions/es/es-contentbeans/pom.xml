@@ -47,10 +47,6 @@
       <artifactId>bpbase-es-common</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.github.spotbugs</groupId>
       <artifactId>spotbugs-annotations</artifactId>
       <scope>provided</scope>

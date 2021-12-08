@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -43,17 +42,17 @@ class ValidityPeriodValidatorFindNearestDateTest {
   private static Stream<Arguments> provideFindNearestDateData() {
     return Stream.of(
             Arguments.of(
-                    newArrayList(),
+                    List.of(),
                     createCalendar(2018, 3, 24),
                     Optional.empty()
             ),
             Arguments.of(
-                    newArrayList(new Object()),
+                    List.of(new Object()),
                     createCalendar(2018, 3, 24),
                     Optional.empty()
             ),
             Arguments.of(
-                    newArrayList(
+                    List.of(
                             createLinkable(null, null),
                             createLinkable(null, null)
                     ),
@@ -61,7 +60,7 @@ class ValidityPeriodValidatorFindNearestDateTest {
                     Optional.empty()
             ),
             Arguments.of(
-                    newArrayList(
+                    List.of(
                             createLinkable(null, null),
                             createLinkable(null, createCalendar(2018, 3, 25)),
                             createLinkable(null, null)
@@ -70,7 +69,7 @@ class ValidityPeriodValidatorFindNearestDateTest {
                     Optional.of(createCalendar(2018, 3, 25))
             ),
             Arguments.of(
-                    newArrayList(
+                    List.of(
                             createLinkable(null, null),
                             createLinkable(createCalendar(2018, 3, 25), null),
                             createLinkable(null, null)
@@ -79,7 +78,7 @@ class ValidityPeriodValidatorFindNearestDateTest {
                     Optional.of(createCalendar(2018, 3, 25))
             ),
             Arguments.of(
-                    newArrayList(
+                    List.of(
                             createLinkable(null, null),
                             createLinkable(createCalendar(2018, 3, 27), null),
                             createLinkable(createCalendar(2018, 3, 26), null),
@@ -89,7 +88,7 @@ class ValidityPeriodValidatorFindNearestDateTest {
                     Optional.of(createCalendar(2018, 3, 26))
             ),
             Arguments.of(
-                    newArrayList(
+                    List.of(
                             createLinkable(null, null),
                             createLinkable(null, createCalendar(2018, 3, 27)),
                             createLinkable(null, createCalendar(2018, 3, 26)),
@@ -99,7 +98,7 @@ class ValidityPeriodValidatorFindNearestDateTest {
                     Optional.of(createCalendar(2018, 3, 26))
             ),
             Arguments.of(
-                    newArrayList(
+                    List.of(
                             createLinkable(null, null),
                             createLinkable(createCalendar(2018, 3, 27), null),
                             createLinkable(null, createCalendar(2018, 3, 26)),
@@ -109,7 +108,7 @@ class ValidityPeriodValidatorFindNearestDateTest {
                     Optional.of(createCalendar(2018, 3, 26))
             ),
             Arguments.of(
-                    newArrayList(
+                    List.of(
                             createLinkable(null, null),
                             createLinkable(null, createCalendar(2018, 3, 27)),
                             createLinkable(createCalendar(2018, 3, 26), null),

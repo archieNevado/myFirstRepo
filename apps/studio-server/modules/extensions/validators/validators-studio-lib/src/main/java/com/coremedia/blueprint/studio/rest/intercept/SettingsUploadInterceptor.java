@@ -11,12 +11,11 @@ import com.coremedia.rest.cap.intercept.ContentWriteInterceptorBase;
 import com.coremedia.rest.cap.intercept.ContentWriteRequest;
 import com.coremedia.rest.cap.intercept.InterceptorControlAttributes;
 import com.coremedia.rest.cap.intercept.UploadedBlob;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -77,11 +76,11 @@ public class SettingsUploadInterceptor extends ContentWriteInterceptorBase {
             throw new IllegalStateException(String.format("Cannot create settings document since there is no content type %s", settingsDocumentTypeName));
           }
 
-          Content content = type.createByTemplate(parentFolder, documentName, "{3} ({1})", ImmutableMap.of(settingsStructPropertyName, struct));
+          Content content = type.createByTemplate(parentFolder, documentName, "{3} ({1})", Map.of(settingsStructPropertyName, struct));
           // Do not check in content as otherwise the problem described in CMS-14075 will apply.
           // Knowing how the client is implemented, this will still cause the content to be checked in.
 
-          request.setAttribute(InterceptorControlAttributes.UPLOADED_DOCUMENTS, ImmutableList.of(content));
+          request.setAttribute(InterceptorControlAttributes.UPLOADED_DOCUMENTS, List.of(content));
         }
       }
     }

@@ -1,6 +1,6 @@
 package com.coremedia.blueprint.caas.augmentation;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.blueprint.caas.augmentation.model.CommerceRef;
 import com.coremedia.blueprint.caas.augmentation.model.CommerceRefFactory;
@@ -46,7 +46,7 @@ class CommerceEntityHelperTest {
   private SitesService sitesService;
 
   @Mock
-  private CommerceConnectionInitializer commerceConnectionInitializer;
+  private CommerceConnectionSupplier commerceConnectionSupplier;
 
   @Mock
   private Site aSite;
@@ -71,9 +71,9 @@ class CommerceEntityHelperTest {
     when(sitesService.getSite(SITE_ID)).thenReturn(aSite);
     when(aSite.getId()).thenReturn(SITE_ID);
     when(aSite.getLocale()).thenReturn(US);
-    when(commerceConnectionInitializer.findConnectionForSite(aSite)).thenReturn(Optional.of(aConnection));
+    when(commerceConnectionSupplier.findConnection(aSite)).thenReturn(Optional.of(aConnection));
     when(aConnection.getCommerceBeanFactory()).thenReturn(commerceBeanFactory);
-    when(aConnection.getStoreContext()).thenReturn(aStoreContext);
+    when(aConnection.getInitialStoreContext()).thenReturn(aStoreContext);
     when(aConnection.getIdProvider()).thenReturn(commerceIdProvider);
     when(aStoreContext.getCatalogAlias()).thenReturn(CATALOG_ALIAS);
     when(aStoreContext.getLocale()).thenReturn(US);

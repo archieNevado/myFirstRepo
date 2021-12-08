@@ -19,7 +19,6 @@ import java.util.Calendar;
 import java.util.List;
 
 import static com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE;
-import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -58,7 +57,7 @@ class ValidityPeriodValidatorTest {
 
   @BeforeEach
   void setUp() {
-    itemsUnfiltered = newArrayList(
+    itemsUnfiltered = List.of(
             mockLinkable(2000, 0, 1, 2005, 11, 31),
             mockLinkable(2001, 0, 1, 2006, 11, 31),
             mockLinkable(2002, 0, 1, 2007, 11, 31),
@@ -138,7 +137,7 @@ class ValidityPeriodValidatorTest {
   void testFilterListCase3() {
     preparePreviewDate(15, Calendar.MARCH, 2005);
 
-    List<CMLinkable> validItems = newArrayList(validator.filterList(itemsUnfiltered));
+    List<CMLinkable> validItems = validator.filterList(itemsUnfiltered);
 
     assertThat(validItems).hasSize(5);
   }
@@ -150,7 +149,7 @@ class ValidityPeriodValidatorTest {
   void testFilterListCase4() {
     preparePreviewDate(15, Calendar.MARCH, 2007);
 
-    List<CMLinkable> validItems = newArrayList(validator.filterList(itemsUnfiltered));
+    List<CMLinkable> validItems = validator.filterList(itemsUnfiltered);
 
     assertThat(validItems).hasSize(3);
   }

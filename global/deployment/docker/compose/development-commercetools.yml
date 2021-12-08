@@ -3,10 +3,14 @@ version: "3.4"
 
 services:
   commerce-adapter-commercetools:
+    environment:
+      SPRING_APPLICATION_NAME: 'commerce-adapter-commercetools'
     labels:
-      traefik.enable: "true"
-      traefik.actuator.port: "8081"
-      traefik.actuator.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/commerce-adapter-commercetools;AddPrefix:/actuator
+      traefik.enable: true
+
+  traefik:
+    environment:
+      ACTUATOR_COMMERCE_ADAPTER_TOOLS: 'commerce-adapter-commercetools'
 
   overview:
     environment:

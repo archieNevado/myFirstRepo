@@ -66,16 +66,20 @@ extend type ContentRoot {
 
 interface CMQueryList @inherit(from: ["CMDynamicList"]) {
   filteredItems(customFilterQueries: [FilterQueryArg]): [CollectionItem]
-  pagedItems(offset: Int): [CollectionItem]
-  filteredPagedItems(offset: Int, customFilterQueries: [FilterQueryArg]): [CollectionItem]
+  filteredItemsPaged(offset: Int, limit: Int, customFilterQueries: [FilterQueryArg]): CollectionItemPaginationResult
+  pagedItems(offset: Int): [CollectionItem] @deprecated(reason: "Use itemsPaged(offset: Int, limit: Int) instead")
+  filteredPagedItems(offset: Int, customFilterQueries: [FilterQueryArg]): [CollectionItem] @deprecated(reason: "Use filteredItemsPaged(offset: Int, limit: Int, customFilterQueries: [FilterQueryArg]) instead")
 }
 
 type CMQueryListImpl implements CMQueryList @inherit(from: ["CMDynamicListImpl"]) {
   items: [CollectionItem] @fetch(from: "@queryListAdapter.to(#root).getItems()")
+  itemsPaged(offset: Int, limit: Int): CollectionItemPaginationResult @fetch(from: "@queryListAdapter.to(#root).getPagingResult(#offset, #limit)")
   filteredItems(customFilterQueries: [FilterQueryArg]): [CollectionItem] @fetch(from: "@queryListAdapter.to(#root).getItems(#customFilterQueries)")
+  filteredItemsPaged(offset: Int, limit: Int, customFilterQueries: [FilterQueryArg]): CollectionItemPaginationResult @fetch(from: "@queryListAdapter.to(#root).getPagingResult(#offset, #limit, #customFilterQueries)")
   pagedItems(offset: Int): [CollectionItem] @fetch(from: "@queryListAdapter.to(#root, #offset).getItems()")
   filteredPagedItems(offset: Int, customFilterQueries: [FilterQueryArg]): [CollectionItem] @fetch(from: "@queryListAdapter.to(#root, #offset).getItems(#customFilterQueries)")
   teasableItems: [CMTeasable] @fetch(from: "@queryListAdapter.to(#root).getItems()")
+  teasableItemsPaged(offset: Int, limit: Int): CMTeasablePaginationResult @fetch(from: "@queryListAdapter.to(#root).getPagingResult(#offset, #limit)")
   bannerItems: [Banner]  @fetch(from: "@queryListAdapter.to(#root).getItems()")
   detailItems: [Detail]  @fetch(from: "@queryListAdapter.to(#root).getItems()")
 }

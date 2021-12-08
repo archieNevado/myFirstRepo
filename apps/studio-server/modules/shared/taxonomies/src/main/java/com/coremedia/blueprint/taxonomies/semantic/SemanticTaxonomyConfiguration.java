@@ -12,8 +12,6 @@ import com.coremedia.cap.undoc.common.spring.CapRepositoriesConfiguration;
 import com.coremedia.rest.cap.CapRestServiceSearchConfiguration;
 import com.coremedia.rest.cap.content.search.SearchService;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -79,7 +77,7 @@ public class SemanticTaxonomyConfiguration {
 
   @Bean
   Map<String, String> calaisSemanticProperties() {
-    return ImmutableMap.of(SemanticEntity.ID, "_uri",
+    return Map.of(SemanticEntity.ID, "_uri",
                            SemanticEntity.NAME, "name",
                            SemanticEntity.TYPE, "_type",
                            "typeRef", "_typeReference",
@@ -88,12 +86,12 @@ public class SemanticTaxonomyConfiguration {
 
   @Bean
   List<String> semanticDocumentProperties() {
-    return ImmutableList.of("title", "teaserTitle", "detailText", "teaserText");
+    return List.of("title", "teaserTitle", "detailText", "teaserText");
   }
 
   @Bean
   List<SemanticStrategy> semanticServiceStrategies(@Qualifier("nameMatching") SemanticStrategy nameMatchingStrategy,
                                                    @Qualifier("semanticService") SemanticStrategy semanticServiceStrategy) {
-    return ImmutableList.of(nameMatchingStrategy, semanticServiceStrategy);
+    return List.of(nameMatchingStrategy, semanticServiceStrategy);
   }
 }

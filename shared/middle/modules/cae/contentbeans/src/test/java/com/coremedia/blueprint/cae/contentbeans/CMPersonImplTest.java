@@ -7,11 +7,10 @@ import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.common.personaldata.PersonalData;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
-import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
-import com.google.common.collect.ImmutableMap;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -132,7 +131,7 @@ public class CMPersonImplTest {
   public void getFurtherDetailsMap() {
     @PersonalData Map<String, Object> miscMap = person1.getFurtherDetails();
     assertNotNull(miscMap);
-    Map<String, Object> expectedMap = ImmutableMap.of("stringProperty", "testString");
+    Map<String, Object> expectedMap = Map.of("stringProperty", "testString");
     assertEquals(expectedMap, miscMap);
     @PersonalData Map<String, Object> emptyMap = person2.getFurtherDetails();
     assertEquals(Collections.emptyMap(), emptyMap);

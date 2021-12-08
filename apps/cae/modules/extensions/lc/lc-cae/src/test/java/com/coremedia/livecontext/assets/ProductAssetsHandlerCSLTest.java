@@ -3,7 +3,6 @@ package com.coremedia.livecontext.assets;
 import com.coremedia.livecontext.asset.ProductAssetsHandler;
 import com.coremedia.livecontext.ecommerce.catalog.AxisFilter;
 import com.coremedia.livecontext.ecommerce.catalog.VariantFilter;
-import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -16,10 +15,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ProductAssetsHandlerCSLTest {
 
-  private final static List<VariantFilter> ONE_FILTER = ImmutableList.of(
+  private final static List<VariantFilter> ONE_FILTER = List.of(
           AxisFilter.on("a", "1"));
 
-  private final static List<VariantFilter> THREE_FILTERS = ImmutableList.of(
+  private final static List<VariantFilter> THREE_FILTERS = List.of(
           AxisFilter.on("a", "1"),
           AxisFilter.on("b", "2"),
           AxisFilter.on("c", "3"));

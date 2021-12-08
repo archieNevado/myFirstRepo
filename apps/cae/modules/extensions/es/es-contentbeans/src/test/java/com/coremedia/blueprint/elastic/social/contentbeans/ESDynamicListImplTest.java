@@ -1,8 +1,8 @@
 package com.coremedia.blueprint.elastic.social.contentbeans;
 
+import com.coremedia.blueprint.base.elastic.common.AggregationType;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
-import com.coremedia.blueprint.base.elastic.common.AggregationType;
 import com.coremedia.cap.common.CapType;
 import com.coremedia.cap.content.Content;
 import com.coremedia.elastic.core.api.counters.AverageCounter;
@@ -15,7 +15,6 @@ import com.coremedia.elastic.social.api.ratings.ShareService;
 import com.coremedia.elastic.social.api.reviews.ReviewService;
 import com.coremedia.objectserver.beans.ContentBeanDefinition;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
-import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -90,8 +89,8 @@ public class ESDynamicListImplTest {
   public void setup() throws IllegalAccessException {
     when(predicate1.getType()).thenReturn(CMTeasable.class);
     when(predicate2.getType()).thenReturn(CMTeasable.class);
-    when(predicate1.apply(any(CMTeasable.class))).thenReturn(true);
-    when(predicate2.apply(any(CMTeasable.class))).thenReturn(true);
+    when(predicate1.test(any(CMTeasable.class))).thenReturn(true);
+    when(predicate2.test(any(CMTeasable.class))).thenReturn(true);
 
     list = new ESDynamicListImpl();
     list.setRatingService(ratingService);
@@ -99,7 +98,7 @@ public class ESDynamicListImplTest {
     list.setCommentService(commentService);
     list.setReviewService(reviewService);
     list.setShareService(shareService);
-    list.setCountTargetPredicates(ImmutableList.of(predicate1, predicate2));
+    list.setCountTargetPredicates(List.of(predicate1, predicate2));
     FieldUtils.writeField(list, "content", content, true);
     when(content.isInProduction()).thenReturn(true);
     FieldUtils.writeField(list, "definition", definition, true);
@@ -275,7 +274,7 @@ public class ESDynamicListImplTest {
   @Test
   public void getItemsTopRatedInvalidTeasable() throws Exception {
     prepareConfiguration(AggregationType.TOP_RATED.name(), null, 5, null);
-    when(predicate2.apply(cmTeasable)).thenReturn(false);
+    when(predicate2.test(cmTeasable)).thenReturn(false);
     when(averageCounter.getTarget()).thenReturn(cmTeasable);
     when(ratingService.getTopRated(null, INFINITY, 5)).thenReturn(singletonList(averageCounter));
 

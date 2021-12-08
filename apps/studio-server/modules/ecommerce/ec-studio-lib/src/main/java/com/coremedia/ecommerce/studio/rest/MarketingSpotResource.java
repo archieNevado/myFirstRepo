@@ -20,13 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.WORKSPACE_ID_NONE;
-
 /**
  * A catalog {@link com.coremedia.livecontext.ecommerce.p13n.MarketingSpot} object as a RESTful resource.
  */
 @RestController
-@RequestMapping(value = "livecontext/marketingspot/{" + AbstractCatalogResource.PATH_SITE_ID + "}/{" + AbstractCatalogResource.PATH_WORKSPACE_ID + "}/{" + AbstractCatalogResource.PATH_ID + "}", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "livecontext/marketingspot/{" + AbstractCatalogResource.PATH_SITE_ID + "}/{" + AbstractCatalogResource.PATH_ID + "}", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MarketingSpotResource extends AbstractCatalogResource<MarketingSpot> {
 
 
@@ -95,7 +93,6 @@ public class MarketingSpotResource extends AbstractCatalogResource<MarketingSpot
     StoreContext storeContext = spot.getContext();
 
     params.put(PATH_SITE_ID, storeContext.getSiteId());
-    params.put(PATH_WORKSPACE_ID, storeContext.getWorkspaceId().orElse(WORKSPACE_ID_NONE).value());
     return params;
   }
 }

@@ -1,0 +1,156 @@
+http:
+  routers:
+    # traefik v1: traefik.corporate-landing.frontend.rule: Host:corporate.${ENVIRONMENT_FQDN:-docker.localhost};Path:/;AddPrefix:/blueprint/servlet/corporate
+    cae-live-landing:
+      priority: 50
+      entrypoints:
+        - web-access-secure
+        - web-access-insecure
+      rule: Host(`corporate.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && Path(`/`)
+      service: cae-live
+      middlewares:
+        - add-blueprint-servlet-corporate@file
+    # traefik v1: traefik.corporate-ca-landing.frontend.rule: Host:corporate-gb.${ENVIRONMENT_FQDN:-docker.localhost};Path:/;AddPrefix:/blueprint/servlet/corporate-en-gb
+    cae-live-landing-ca:
+      priority: 50
+      entrypoints:
+        - web-access-secure
+        - web-access-insecure
+      rule: Host(`corporate-ca.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && Path(`/`)
+      service: cae-live
+      middlewares:
+        - cae-live-servlet-corporate-ca-add-prefix@file
+    # traefik v1: traefik.corporate-de-landing.frontend.rule: Host:corporate-de.${ENVIRONMENT_FQDN:-docker.localhost};Path:/;AddPrefix:/blueprint/servlet/corporate-de-de
+    cae-live-landing-de:
+      priority: 50
+      entrypoints:
+        - web-access-secure
+        - web-access-insecure
+      rule: Host(`corporate-de.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && Path(`/`)
+      service: cae-live
+      middlewares:
+        - cae-live-servlet-corporate-de-add-prefix@file
+    # traefik v1: traefik.corporate-gb-landing.frontend.rule: Host:corporate-ca.${ENVIRONMENT_FQDN:-docker.localhost};Path:/;AddPrefix:/blueprint/servlet/corporate-en-ca
+    cae-live-landing-gb:
+      priority: 50
+      entrypoints:
+        - web-access-secure
+        - web-access-insecure
+      rule: Host(`corporate-gb.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && Path(`/`)
+      service: cae-live
+      middlewares:
+        - cae-live-servlet-corporate-gb-add-prefix@file
+    # needed for elastic social logout (/blueprint/logout)
+    # traefik v1: traefik.corporate-es-logout.frontend.rule: HostRegexp:{subdomain:corporate-?[(de|gb|ca)]*}.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/blueprint/logout
+    cae-live-es-logout:
+      # need a lower priority than any landing page route but higher than the servlet rule
+      priority: 40
+      entrypoints:
+        - web-access-secure
+        - web-access-insecure
+      rule: HostRegexp(`{subdomain:corporate-?[(de|gb|ca)]*}.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && PathPrefix(`/blueprint/logout`)
+      service: cae-live
+    # traefik v1: traefik.corporate-robots.frontend.rule: HostRegexp:{subdomain:corporate-?[(de|gb|ca)]*}.${ENVIRONMENT_FQDN:-docker.localhost};PathStrip:/robots.txt;AddPrefix:/blueprint/servlet/service/robots/corporate
+    cae-live-robots:
+      # need a lower priority than any landing page route but higher than the servlet rule
+      priority: 40
+      entrypoints:
+        - web-access-secure
+        - web-access-insecure
+      rule: HostRegexp(`{subdomain:corporate-?[(de|gb|ca)]*}.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && Path(`/robots.txt`)
+      service: cae-live
+      middlewares:
+        - replace-robots-txt@file
+        - cae-live-robots-add-prefix@file
+    # Corporate sitemap rules
+    # abffe57734feeee is the sitemap id of the corporate site
+    # 1cc6f00b7e1b77a49caf7e72f5fe10c0 is the sitemap id of the corporate-de site
+    # TODO: sitemap routing here should be dynamic, it should not be necessary to define the id's here
+    # to enable sitemap generation set environment variable  GENERATE_SITEMAP to "true"
+    # traefik v1: traefik.corporate-sitemap.frontend.rule: Host:corporate.${ENVIRONMENT_FQDN:-docker.localhost};Path:/sitemap_index.xml,/{file:sitemap(.*).xml.gz};AddPrefix:/blueprint/servlet/service/sitemap/abffe57734feeee
+    cae-live-sitemap:
+      # need a lower priority than any landing page route but higher than the servlet rule
+      priority: 40
+      entrypoints:
+        - web-access-secure
+        - web-access-insecure
+      rule: Host(`corporate.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && Path(`/sitemap_index.xml`, `/{file:sitemap(.*).xml.gz}`)
+      service: cae-live
+      middlewares:
+        - cae-live-sitemap-add-prefix@file
+    # traefik v1: traefik.corporate-ca-sitemap.frontend.rule: Host:corporate-ca.${ENVIRONMENT_FQDN:-docker.localhost};Path:/sitemap_index.xml,/{file:sitemap(.*).xml.gz};AddPrefix:/blueprint/servlet/service/sitemap/b5becc0a3864a58d7e5c8052a6c5dd22
+    cae-live-sitemap-ca:
+      # need a lower priority than any landing page route but higher than the servlet rule
+      priority: 40
+      entrypoints:
+        - web-access-secure
+        - web-access-insecure
+      rule: Host(`corporate-ca.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && Path(`/sitemap_index.xml`, `/{file:sitemap(.*).xml.gz}`)
+      service: cae-live
+      middlewares:
+        - cae-live-sitemap-ca-add-prefix@file
+    # traefik v1: traefik.corporate-de-sitemap.frontend.rule: Host:corporate-de.${ENVIRONMENT_FQDN:-docker.localhost};Path:/sitemap_index.xml,/{file:sitemap(.*).xml.gz};AddPrefix:/blueprint/servlet/service/sitemap/1cc6f00b7e1b77a49caf7e72f5fe10c0
+    cae-live-sitemap-de:
+      # need a lower priority than any landing page route but higher than the servlet rule
+      priority: 40
+      entrypoints:
+        - web-access-secure
+        - web-access-insecure
+      rule: Host(`corporate-de.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && Path(`/sitemap_index.xml`, `/{file:sitemap(.*).xml.gz}`)
+      service: cae-live
+      middlewares:
+        - cae-live-sitemap-de-add-prefix@file
+    # traefik v1: traefik.corporate-gb-sitemap.frontend.rule: Host:corporate-gb.${ENVIRONMENT_FQDN:-docker.localhost};Path:/sitemap_index.xml,/{file:sitemap(.*).xml.gz};AddPrefix:/blueprint/servlet/service/sitemap/7046b7710b1b23b899097b1f3eeee3fa
+    cae-live-sitemap-gb:
+      # need a lower priority than any landing page route but higher than the servlet rule
+      priority: 40
+      entrypoints:
+        - web-access-secure
+        - web-access-insecure
+      rule: Host(`corporate-gb.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && Path(`/sitemap_index.xml`, `/{file:sitemap(.*).xml.gz}`)
+      service: cae-live
+      middlewares:
+        - cae-live-sitemap-gb-add-prefix@file
+    # traefik v1: traefik.corporate-servlets.frontend.rule: HostRegexp:{subdomain:corporate-?[(de|gb|ca)]*}.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/assets,/dynamic,/service,/resource,/corporate,/corporate-de-de,/corporate-en-gb,/corporate-en-ca;AddPrefix:/blueprint/servlet
+    cae-live-servlets:
+      # need a lower priority than any landing page route
+      priority: 30
+      entrypoints:
+        - web-access-secure
+        - web-access-insecure
+      rule: HostRegexp(`{subdomain:(corporate-?[(de|gb|ca)]*|apparel|calista|helios|sfra|sitegenesis)}.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && PathPrefix(`/`)
+      service: cae-live
+      middlewares:
+        - add-blueprint-servlet@file
+
+  services:
+    cae-live:
+      loadBalancer:
+        servers:
+          - url: http://cae-live:8080
+
+  middlewares:
+    cae-live-servlet-corporate-ca-add-prefix:
+      addPrefix:
+        prefix: "/blueprint/servlet/corporate-en-ca"
+    cae-live-servlet-corporate-de-add-prefix:
+      addPrefix:
+        prefix: "/blueprint/servlet/corporate-de-de"
+    cae-live-servlet-corporate-gb-add-prefix:
+      addPrefix:
+        prefix: "/blueprint/servlet/corporate-en-gb"
+    cae-live-robots-add-prefix:
+      addPrefix:
+        prefix: "/blueprint/servlet/service/robots/corporate"
+    cae-live-sitemap-add-prefix:
+      addPrefix:
+        prefix: "/blueprint/servlet/service/sitemap/abffe57734feeee"
+    cae-live-sitemap-ca-add-prefix:
+      addPrefix:
+        prefix: "/blueprint/servlet/service/sitemap/b5becc0a3864a58d7e5c8052a6c5dd22"
+    cae-live-sitemap-de-add-prefix:
+      addPrefix:
+        prefix: "/blueprint/servlet/service/sitemap/1cc6f00b7e1b77a49caf7e72f5fe10c0"
+    cae-live-sitemap-gb-add-prefix:
+      addPrefix:
+        prefix: "/blueprint/servlet/service/sitemap/7046b7710b1b23b899097b1f3eeee3fa"

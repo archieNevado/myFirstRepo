@@ -15,17 +15,11 @@
 
   <h2>Headless Server</h2>
   <ul>
-    <li><a href="https://headless-server-preview.{{ getv "/environment/fqdn" }}/graphiql" target="_blank" data-cm-test="">Headless Server GraphiQL</a></li>
-    <li><a href="https://headless-server-preview.{{ getv "/environment/fqdn" }}/swagger-ui.html" target="_blank" data-cm-test="">Headless Server Swagger UI</a></li>
-    <li><a href="https://headless-server-preview.{{ getv "/environment/fqdn" }}/graphql">Headless Server GraphQL Endpoint URL Preview</a></li>
-    <li><a href="https://headless-server-live.{{ getv "/environment/fqdn" }}/graphql">Headless Server GraphQL Endpoint URL Live</a></li>
+    <li><a href="https://headless-server-preview.{{ getv "/environment/fqdn" }}/graphiql" target="_blank" data-cm-test="">Headless Server</a> <code>https://headless-server-preview.{{ getv "/environment/fqdn" }}/graphql</code></li>
     {{ if eq (getv "/headless/client/enabled" "true") "true" }}
-    <li><a href="https://headless-server-commerce.{{ getv "/environment/fqdn" }}/graphiql" target="_blank" data-cm-test="">Headless Commerce GraphiQL</a></li>
-    <li><a href="https://headless-server-commerce.{{ getv "/environment/fqdn" }}/swagger-ui.html" target="_blank" data-cm-test="">Headless Commerce Swagger UI</a></li>
-    <li><a href="https://headless-server-commerce.{{ getv "/environment/fqdn" }}/graphql">Headless Commerce GraphQL Endpoint URL</a></li>
-    <li><a href="https://headless-server-stitching-preview.{{ getv "/environment/fqdn" }}/graphiql?query=query%20%7B%0A%20%20content%20%7B%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20commerce%20%7B%0A%20%20%20%20__typename%0A%20%20%7D%0A%7D" target="_blank" data-cm-test="">Headless Stitching GraphiQL</a></li>
-    <li><a href="https://headless-server-stitching-preview.{{ getv "/environment/fqdn" }}/graphql">Headless Stitching GraphQL Endpoint URL Preview</a></li>
-    <li><a href="https://headless-server-stitching-live.{{ getv "/environment/fqdn" }}/graphql">Headless Stitching GraphQL Endpoint URL Live</a></li>
+    <li><a href="https://headless-server-commerce.{{ getv "/environment/fqdn" }}/graphiql" target="_blank" data-cm-test="">Headless Commerce Server</a><code>https://headless-server-commerce.{{ getv "/environment/fqdn" }}/graphql</code></li>
+    <li><a href="https://headless-server-stitching-preview.{{ getv "/environment/fqdn" }}/graphiql" target="_blank" data-cm-test="">Headless Stitching Server</a><code>https://headless-server-stitching-preview.{{ getv "/environment/fqdn" }}/graphql</code></li>
     {{end}}
+    <li><a href="https://headless-server-preview.{{ getv "/environment/fqdn" }}/swagger-ui/index.html" target="_blank" data-cm-test="">Headless Server Swagger UI</a></li>
   </ul>
 </div>

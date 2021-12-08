@@ -1,22 +1,14 @@
 package com.coremedia.blueprint.analytics.elastic.contentbeans;
 
 import com.coremedia.id.IdProvider;
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
-
-import static com.google.common.base.Predicates.instanceOf;
-import static com.google.common.base.Predicates.isNull;
-import static com.google.common.base.Predicates.not;
-import static com.google.common.base.Predicates.or;
-import static com.google.common.collect.ImmutableList.copyOf;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Extension class for beans of document type "CMALXBaseList".
@@ -66,27 +58,26 @@ public abstract class CMALXBaseListImpl<V> extends CMALXBaseListBase<V> {
    * @return The unmodified tracked events, which are custom Strings (depending on what you tracked)
    */
   protected final List<Object> getTrackedItemsUnfiltered() {
-    final Predicate<Object> notNullOrUnknown = not(or(isNull(), instanceOf(IdProvider.UnknownId.class)));
-    return copyOf(Iterables.filter(Lists.transform(getTrackedObjects(), new ParseUsingIdProvider()), notNullOrUnknown));
+    return getTrackedObjects().stream()
+            .map(this::parseId)
+            .filter(o -> !(Objects.isNull(o) || o instanceof IdProvider.UnknownId))
+            .collect(Collectors.toList());
+  }
+
+  @Nullable
+  private Object parseId(@Nullable String input) {
+    if (input != null) {
+      try {
+        return getIdProvider().parseId(input);
+      } catch (IllegalArgumentException e) {
+        LOG.warn("Could not parse id: " + input, e);
+        return null;
+      }
+    }
+    return null;
   }
 
   public IdProvider getIdProvider() {
     return idProvider;
-  }
-
-  private class ParseUsingIdProvider implements Function<String, Object> {
-    @Nullable
-    @Override
-    public Object apply(@Nullable String input) {
-      if (input != null) {
-        try {
-          return getIdProvider().parseId(input);
-        } catch (IllegalArgumentException e) {
-          LOG.warn("Could not parse id: " + input, e);
-          return null;
-        }
-      }
-      return null;
-    }
   }
 }

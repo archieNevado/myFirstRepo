@@ -20,7 +20,7 @@ for (let module of Object.keys(modulesToExpose)) {
     const path = resolveFrom(themeConfig.path, module);
     rules.push({
       test: path,
-      loader: `expose-loader?${globalVariableName}`,
+      loader: `${require.resolve("expose-loader")}?${globalVariableName}`,
     });
   } catch (e) {
     // module not found, nothing to expose

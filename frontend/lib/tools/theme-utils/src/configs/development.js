@@ -28,7 +28,7 @@ module.exports = () => (config) =>
       rules: [
         {
           test: /\.js$/,
-          use: ["source-map-loader"],
+          use: [require.resolve("source-map-loader")],
           enforce: "pre",
         },
       ],

@@ -1,10 +1,9 @@
 package com.coremedia.blueprint.cae.search;
 
 import com.coremedia.blueprint.cae.search.facet.FacetFilterBuilder;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +50,7 @@ public class SearchQueryBean {
   private List<String> sortFields = new ArrayList<>();
 
   // faceting support
-  private ImmutableMap<String, String> facetFields = ImmutableMap.of();
+  private Map<String, String> facetFields = Map.of();
   private String facetPrefix = "";
   private int facetMinCount = -1;
   private int facetLimit = DEFAULT_FACET_LIMIT;
@@ -207,7 +206,7 @@ public class SearchQueryBean {
    * @return immutable list of field names for which facets should be returned.
    */
   public List<String> getFacetFields() {
-    return ImmutableList.copyOf(facetFields.values());
+    return List.copyOf(facetFields.values());
   }
 
   /**
@@ -233,7 +232,7 @@ public class SearchQueryBean {
    * @since 1810
    */
   public void setFacetFieldsMap(Map<String, String> facetFields) {
-    this.facetFields = ImmutableMap.copyOf(facetFields);
+    this.facetFields = Collections.unmodifiableMap(new LinkedHashMap<>(facetFields));
   }
 
   /**

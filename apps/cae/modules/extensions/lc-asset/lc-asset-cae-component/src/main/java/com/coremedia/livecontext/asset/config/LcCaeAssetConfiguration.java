@@ -2,7 +2,7 @@ package com.coremedia.livecontext.asset.config;
 
 import com.coremedia.blueprint.base.links.ContentLinkBuilder;
 import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.multisite.cae.SiteResolver;
 import com.coremedia.blueprint.cae.config.BlueprintHandlersCaeBaseLibConfiguration;
 import com.coremedia.blueprint.ecommerce.cae.config.ECommerceCaeConfiguration;
@@ -18,7 +18,6 @@ import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.objectserver.web.MappedInterceptor;
 import com.coremedia.springframework.customizer.Customize;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
-import com.google.common.collect.Lists;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +26,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Configuration(proxyBeanMethods = false)
@@ -155,13 +155,13 @@ public class LcCaeAssetConfiguration {
 
   @Bean
   public AssetCommerceContextInterceptor assetCommerceContextInterceptor(SiteResolver siteResolver,
-                                                                         CommerceConnectionInitializer commerceConnectionInitializer,
+                                                                         CommerceConnectionSupplier commerceConnectionSupplier,
                                                                          LiveContextSiteResolver liveContextSiteResolver) {
     AssetCommerceContextInterceptor contextInterceptor = new AssetCommerceContextInterceptor();
 
     ECommerceCaeConfiguration.configureStoreContextInterceptor(contextInterceptor,
             siteResolver,
-            commerceConnectionInitializer);
+            commerceConnectionSupplier);
 
     contextInterceptor.setInitUserContext(false);
     contextInterceptor.setLiveContextSiteResolver(liveContextSiteResolver);
@@ -174,7 +174,7 @@ public class LcCaeAssetConfiguration {
     MappedInterceptor mappedInterceptor = new MappedInterceptor();
 
     mappedInterceptor.setInterceptor(assetCommerceContextInterceptor);
-    mappedInterceptor.setIncludePatterns(Lists.newArrayList(CategoryCatalogPictureHandler.IMAGE_URI_PATTERN,
+    mappedInterceptor.setIncludePatterns(List.of(CategoryCatalogPictureHandler.IMAGE_URI_PATTERN,
             CategoryCatalogPictureHandler.IMAGE_URI_PATTERN_FOR_CATALOG,
             ProductCatalogPictureHandler.IMAGE_URI_PATTERN,
             ProductCatalogPictureHandler.IMAGE_URI_PATTERN_FOR_CATALOG));

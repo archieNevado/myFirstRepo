@@ -2,7 +2,7 @@ package com.coremedia.livecontext.handler;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentUserContext;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoStoreContextAvailable;
@@ -11,21 +11,18 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImp
 import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
 import com.coremedia.blueprint.common.preview.PreviewDateFormatter;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
-import com.coremedia.livecontext.ecommerce.contract.Contract;
-import com.coremedia.livecontext.ecommerce.contract.ContractService;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
 import com.coremedia.livecontext.ecommerce.user.UserContextProvider;
-import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 import com.coremedia.livecontext.fragment.FragmentContext;
 import com.coremedia.livecontext.fragment.FragmentContextProvider;
 import com.coremedia.livecontext.fragment.FragmentParametersFactory;
 import com.coremedia.livecontext.fragment.links.context.Context;
 import com.coremedia.livecontext.fragment.links.context.ContextBuilder;
 import com.coremedia.livecontext.fragment.links.context.LiveContextContextHelper;
-import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.junit.After;
 import org.junit.Before;
@@ -46,17 +43,12 @@ import java.time.Month;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Optional;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -77,12 +69,9 @@ public class FragmentCommerceContextInterceptorTest {
   private Site site;
 
   @Mock
-  private CommerceConnectionInitializer commerceConnectionInitializer;
+  private CommerceConnectionSupplier commerceConnectionSupplier;
 
   private BaseCommerceConnection commerceConnection;
-
-  @Mock
-  private ContractService contractService;
 
   @SuppressWarnings("unused")
   @Mock
@@ -112,11 +101,10 @@ public class FragmentCommerceContextInterceptorTest {
     commerceConnection.setStoreContextProvider(storeContextProvider);
     commerceConnection.setUserContextProvider(userContextProvider);
     commerceConnection.setInitialStoreContext(storeContext);
-    commerceConnection.setContractService(contractService);
 
     when(storeContextProvider.buildContext(any())).thenReturn(StoreContextBuilderImpl.from(storeContext));
     when(userContextProvider.createContext(any())).thenReturn(userContext);
-    when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(commerceConnection));
+    when(commerceConnectionSupplier.findConnection(site)).thenReturn(Optional.of(commerceConnection));
 
     runTestlingInPreviewMode(false);
 
@@ -162,54 +150,10 @@ public class FragmentCommerceContextInterceptorTest {
 
     testling.initUserContext(commerceConnection, request);
 
-    UserContext userContext = CurrentUserContext.find().orElse(null);
+    UserContext userContext = CurrentUserContext.find(request).orElse(null);
     assertThat(userContext).isNotNull();
     assertThat(userContext.getUserId()).isEqualTo("userId");
     assertThat(userContext.getUserName()).isEqualTo("loginId");
-  }
-
-  @Test
-  public void testInitStoreContextWithContractIds() {
-    runTestlingInPreviewMode(true);
-
-    Collection<Contract> contracts = newArrayList(
-            mockContract("contract1"),
-            mockContract("contract2")
-    );
-    when(contractService.findContractIdsForUser(any(UserContext.class), any(StoreContext.class), nullable(String.class)))
-            .thenReturn(contracts);
-
-    Context fragmentContext = ContextBuilder.create()
-            .withValue("wc.user.id", "userId")
-            .withValue("wc.user.loginid", "loginId")
-            .withValue("wc.preview.contractIds", "contract1 contract2")
-            .build();
-    LiveContextContextHelper.setContext(request, fragmentContext);
-
-    configureFragmentContext(fragmentContext);
-
-    testling.initUserContext(commerceConnection, request);
-
-    assertThat(getStoreContext().getContractIds()).containsExactlyInAnyOrder("contract1", "contract2");
-  }
-
-  @Test
-  public void testInitStoreContextWithContractIdsButDisabledProcessing() throws IOException, ServletException {
-    runTestlingInPreviewMode(true);
-
-    testling.setContractsProcessingEnabled(false);
-
-    Context fragmentContext = ContextBuilder.create()
-            .withValue("wc.user.id", "userId")
-            .withValue("wc.user.loginid", "loginId")
-            .withValue("wc.preview.contractIds", "contract1 contract2")
-            .build();
-    configureFragmentContext(fragmentContext);
-
-    testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
-    testling.initUserContext(commerceConnection, request);
-    List<String> contractIdsInStoreContext = storeContext.getContractIds();
-    assertThat(contractIdsInStoreContext).isEmpty();
   }
 
   @Test
@@ -223,7 +167,6 @@ public class FragmentCommerceContextInterceptorTest {
             .withValue("wc.preview.memberGroups", "memberGroup1, memberGroup2")
             .withValue("wc.preview.timestamp", "2014-07-02 17:57:00.0")
             .withValue("wc.preview.timezone", "Europe/Berlin")
-            .withValue("wc.preview.workspaceId", "4711")
             .build();
     LiveContextContextHelper.setContext(request, fragmentContext);
     configureFragmentContext(fragmentContext);
@@ -231,7 +174,6 @@ public class FragmentCommerceContextInterceptorTest {
     StoreContext storeContext = getStoreContext();
 
     assertThat(storeContext.getUserSegments()).contains("memberGroup1, memberGroup2");
-    assertThat(storeContext.getWorkspaceId()).contains(WorkspaceId.of("4711"));
 
     Optional<ZonedDateTime> previewDate = storeContext.getPreviewDate();
     assertThat(previewDate).as("preview date in store context").contains(expectedPreviewDate);
@@ -280,7 +222,6 @@ public class FragmentCommerceContextInterceptorTest {
             .withValue("wc.preview.memberGroups", "memberGroup1, memberGroup2")
             .withValue("wc.preview.timestamp", "2014-07-02 17:57:00.0")
             .withValue("wc.preview.timezone", "Europe/Berlin")
-            .withValue("wc.preview.workspaceId", "4711")
             .build();
     LiveContextContextHelper.setContext(request, fragmentContext);
     configureFragmentContext(fragmentContext);
@@ -288,7 +229,6 @@ public class FragmentCommerceContextInterceptorTest {
     StoreContext storeContext = getStoreContext();
 
     assertThat(storeContext.getUserSegments()).contains("memberGroup1, memberGroup2");
-    assertThat(storeContext.getWorkspaceId()).contains(WorkspaceId.of("4711"));
 
     Optional<ZonedDateTime> previewDate = storeContext.getPreviewDate();
     assertThat(previewDate).as("preview date in store context").contains(expectedPreviewDate);
@@ -305,7 +245,6 @@ public class FragmentCommerceContextInterceptorTest {
     Context fragmentContext = ContextBuilder.create()
             .withValue("wc.preview.memberGroups", "memberGroup1, memberGroup2")
             .withValue("wc.preview.timestamp", "2014-07-02 17:57:00.0")
-            .withValue("wc.preview.workspaceId", "4711")
             .build();
     configureFragmentContext(fragmentContext);
 
@@ -313,23 +252,15 @@ public class FragmentCommerceContextInterceptorTest {
 
     assertThat(storeContext.getUserSegments()).isNotPresent();
     assertThat(storeContext.getPreviewDate()).isNotPresent();
-    assertThat(storeContext.getWorkspaceId()).isNotPresent();
     assertThat(request.getAttribute(ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE)).isNull();
   }
 
   @NonNull
   private StoreContext getStoreContext() {
-    return testling
-            .getCommerceConnectionWithConfiguredStoreContext(site, request)
-            .map(CommerceConnection::getStoreContext)
-            .orElseThrow(() -> new NoStoreContextAvailable("Store context not available on commerce connection."));
-  }
+    Optional<CommerceConnection> connection = testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
 
-  @NonNull
-  private static Contract mockContract(@NonNull String externalTechId) {
-    Contract contract = mock(Contract.class);
-    when(contract.getExternalTechId()).thenReturn(externalTechId);
-    return contract;
+    return CurrentStoreContext.find(request).orElseGet(() -> connection.map(CommerceConnection::getInitialStoreContext)
+            .orElseThrow(() -> new NoStoreContextAvailable("Store context not available on commerce connection.")));
   }
 
   @NonNull

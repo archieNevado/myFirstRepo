@@ -40,7 +40,7 @@
 
   <bean id="lcLoginStatusHandler" class="com.coremedia.livecontext.handler.LoginStatusHandler">
     <constructor-arg index="0" name="liveContextSiteResolver" ref="liveContextSiteResolver"/>
-    <constructor-arg index="1" name="commerceConnectionInitializer" ref="commerceConnectionInitializer"/>
+    <constructor-arg index="1" name="commerceConnectionSupplier" ref="commerceConnectionSupplier"/>
   </bean>
 
   <bean id="commerceSearchHandler" class="com.coremedia.livecontext.search.CommerceSearchHandler" parent="pageHandlerBase">
@@ -78,9 +78,6 @@
     <property name="keywordsProperty" value="keywords" />
     <property name="cache" ref="cache"/>
   </bean>
-
-  <bean id="legacyExternalSeoSegmentBuilder"
-        class="com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.LegacyExternalSeoSegmentBuilder"/>
 
   <bean id="externalSeoSegmentBuilder"
         class="com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.ExternalSeoSegmentBuilder">

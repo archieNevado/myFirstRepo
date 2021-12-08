@@ -24,7 +24,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -37,7 +36,6 @@ import static com.coremedia.ecommerce.studio.rest.AugmentationHelperBase.DEFAULT
 import static com.coremedia.ecommerce.studio.rest.AugmentationHelperBase.EXTERNAL_ID;
 import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.CATEGORY_PRODUCT_PAGEGRID_STRUCT_PROPERTY;
 import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.TITLE;
-import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -47,7 +45,6 @@ import static org.mockito.Mockito.when;
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {XmlRepoConfiguration.class, ProductAugmentationHelperTest.LocalConfig.class})
-@TestPropertySource(properties = {"livecontext.cache.invalidation.enabled=false"})
 public class ProductAugmentationHelperTest {
 
   private static final String PRODUCT_EXTERNAL_ID = "prodId";
@@ -105,7 +102,7 @@ public class ProductAugmentationHelperTest {
     doReturn(Optional.of(catalog)).when(testling).getCatalog(leafCategory);
     when(catalog.isDefaultCatalog()).thenReturn(true);
 
-    List<Category> breadcrumb = newArrayList(rootCategory, topCategory, leafCategory);
+    List<Category> breadcrumb = List.of(rootCategory, topCategory, leafCategory);
     when(leafCategory.getBreadcrumb()).thenReturn(breadcrumb);
     StoreContext storeContext = mock(StoreContext.class);
     when(leafCategory.getContext()).thenReturn(storeContext);

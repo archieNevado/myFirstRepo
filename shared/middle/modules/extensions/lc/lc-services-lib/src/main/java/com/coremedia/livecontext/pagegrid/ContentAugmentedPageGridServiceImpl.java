@@ -1,6 +1,6 @@
 package com.coremedia.livecontext.pagegrid;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoStoreContextAvailable;
 import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGridPlacement;
 import com.coremedia.blueprint.base.pagegrid.impl.ContentBackedPageGridServiceImpl;
@@ -30,6 +30,7 @@ public class ContentAugmentedPageGridServiceImpl extends ContentBackedPageGridSe
   static final String CM_EXTERNAL_CHANNEL = "CMExternalChannel";
 
   private AugmentationService augmentationService;
+  private CommerceConnectionSupplier commerceConnectionSupplier;
 
   @NonNull
   @Override
@@ -76,11 +77,15 @@ public class ContentAugmentedPageGridServiceImpl extends ContentBackedPageGridSe
 
   @Nullable
   private Content getRootCategoryContent(@NonNull Content content) {
+    return commerceConnectionSupplier.findConnection(content)
+            .map(connection -> getRootCategoryContent(content, connection))
+            .orElse(null);
+  }
+
+  @Nullable
+  private Content getRootCategoryContent(@NonNull Content content, @NonNull CommerceConnection commerceConnection) {
     try {
-      CommerceConnection commerceConnection = CurrentStoreContext.get().getConnection();
-
-      StoreContext storeContext = getStoreContextForContent(content, commerceConnection);
-
+      var storeContext = commerceConnection.getInitialStoreContext();
       Category rootCategory = commerceConnection.getCatalogService()
               .findRootCategory(storeContext.getCatalogAlias(), storeContext);
       return augmentationService.getContent(rootCategory);
@@ -104,4 +109,10 @@ public class ContentAugmentedPageGridServiceImpl extends ContentBackedPageGridSe
   public void setAugmentationService(AugmentationService augmentationService) {
     this.augmentationService = augmentationService;
   }
+
+  @Autowired
+  public void setCommerceConnectionSupplier(CommerceConnectionSupplier commerceConnectionSupplier) {
+    this.commerceConnectionSupplier = commerceConnectionSupplier;
+  }
+
 }

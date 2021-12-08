@@ -21,8 +21,7 @@
   }
 
   &__container {
-    //noinspection CssRedundantUnit IE11 fix (percentage and full definition)
-    flex: 1 1 0%;
+    flex: 1 1 0;
   }
 
   &__content {
@@ -46,8 +45,7 @@
   }
 
   &__text {
-    //noinspection CssRedundantUnit IE11 fix (percentage and full definition)
-    flex: 1 1 0%;
+    flex: 1 1 0;
   }
 
   &__picture-box {

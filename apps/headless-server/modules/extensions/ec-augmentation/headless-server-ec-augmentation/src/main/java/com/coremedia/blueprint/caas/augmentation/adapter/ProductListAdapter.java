@@ -11,15 +11,11 @@ import com.coremedia.cap.common.NoSuchPropertyDescriptorException;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.struct.Struct;
-import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
+import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
-import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Strings;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,23 +25,19 @@ import java.util.Optional;
 import static com.coremedia.blueprint.caas.augmentation.adapter.CommerceSearchFacade.FACETS_DELIMITER;
 import static com.coremedia.blueprint.caas.augmentation.adapter.CommerceSearchFacade.SEARCH_PARAM_CATALOG_ALIAS;
 import static com.coremedia.blueprint.caas.augmentation.adapter.CommerceSearchFacade.SEARCH_PARAM_CATEGORYID;
-import static com.coremedia.blueprint.caas.augmentation.adapter.CommerceSearchFacade.SEARCH_PARAM_FACET;
 import static com.coremedia.blueprint.caas.augmentation.adapter.CommerceSearchFacade.SEARCH_PARAM_FACETS;
 import static com.coremedia.blueprint.caas.augmentation.adapter.CommerceSearchFacade.SEARCH_PARAM_FACET_SUPPORT;
 import static com.coremedia.blueprint.caas.augmentation.adapter.CommerceSearchFacade.SEARCH_PARAM_OFFSET;
 import static com.coremedia.blueprint.caas.augmentation.adapter.CommerceSearchFacade.SEARCH_PARAM_ORDERBY;
 import static com.coremedia.blueprint.caas.augmentation.adapter.CommerceSearchFacade.SEARCH_PARAM_TOTAL;
-import static java.lang.invoke.MethodHandles.lookup;
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.util.stream.Collectors.toList;
 
 @DefaultAnnotation(NonNull.class)
 public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
 
-  private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
-
   static final String STRUCT_KEY_EXTERNAL_ID = "externalId";
   static final String STRUCT_KEY_PRODUCTLIST = "productList";
-  static final String STRUCT_KEY_PRODUCTLIST_SELECT_FACET_VALUE = "selectedFacetValue";
   static final String STRUCT_KEY_PRODUCTLIST_OFFSET = "offset";
   static final String STRUCT_KEY_PRODUCTLIST_MAX_LENGTH = "maxLength";
   static final String STRUCT_KEY_PRODUCTLIST_ORDER_BY = "orderBy";
@@ -55,7 +47,6 @@ public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
   static final Map<String, Map<String, List<String>>> FILTER_FACET_DEFAULT = Map.of();
   static final int MAX_LENGTH_DEFAULT = 10;
   static final int OFFSET_DEFAULT = 0;
-  private static final String DIGIT_PATTERN = "[0-9]*";
   static final String ALL_QUERY = "*";
 
   private final SettingsService settingsService;
@@ -96,31 +87,8 @@ public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
     return value instanceof String ? value.toString() : ORDER_BY_DEFAULT;
   }
 
-  /**
-   * @deprecated use {@link #getFacets()} instead
-   */
-  @Deprecated
-  public String getFacet() {
-    Object value = getProductListSettings().get(STRUCT_KEY_PRODUCTLIST_SELECT_FACET_VALUE);
-    String strValue = "";
-    if (value instanceof String) {
-      strValue = (String) value;
-      // if it matches we assume that it is a category facet, which is skipped
-      if (strValue.matches(DIGIT_PATTERN)) {
-        return "";
-      }
-    }
-    return strValue;
-  }
-
   public List<String> getFacets() {
-    List<String> facets = getFilterFacetQueries();
-    if (facets.isEmpty()) {
-      String legacyFacet = getFacet();
-      return !legacyFacet.isBlank() ? List.of(legacyFacet) : List.of();
-    }
-
-    return facets.stream()
+    return getFilterFacetQueries().stream()
             .filter(facet -> !facet.isBlank())
             .collect(toList());
   }
@@ -140,7 +108,6 @@ public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
 
   /**
    * In real life scenario the search should be executed on the commerce system and not in the CoreMedia headless server.
-   *
    * @return commerce references, which need to be resolved externally
    */
   @Deprecated
@@ -150,39 +117,29 @@ public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
 
   @SuppressWarnings("removal")
   private Map<String, String> getSearchParams(String siteId) {
-    String categoryId = null;
-    CatalogAlias catalogAlias = null;
-    String commerceIdStr = getContent().getString("externalId");
-    CommerceId commerceId = CommerceIdParserHelper.parseCommerceId(commerceIdStr).orElse(null);
-    if (commerceId != null) {
-      catalogAlias = commerceId.getCatalogAlias();
-      CommerceBean categoryBean = commerceEntityHelper.getCommerceBean(commerceId, siteId);
-      if (categoryBean != null) {
-        categoryId = categoryBean.getExternalTechId();
-      }
-    }
-
     Map<String, String> params = new HashMap<>();
+    String commerceIdStr = getContent().getString("externalId");
+    CommerceIdParserHelper.parseCommerceId(commerceIdStr)
+            .ifPresent(commerceId -> {
+              params.put(SEARCH_PARAM_CATALOG_ALIAS, commerceId.getCatalogAlias().value());
+              CommerceBean categoryBean = commerceEntityHelper.getCommerceBean(commerceId, siteId);
+              if (categoryBean instanceof Category && !((Category)categoryBean).isRoot()) {
+                var techId = categoryBean.getExternalTechId();
+                if (!isNullOrEmpty(techId)) {
+                  params.put(SEARCH_PARAM_CATEGORYID, techId);
+                }
+              }
+            });
+
     String orderBy = getOrderBy();
     int limit = getLimit();
     int productOffset = getProductOffset();
-    Optional<String> overrideCategoryId = getOverrideCategoryId();
     List<String> filterFacetQueries = getFilterFacetQueries();
 
     //if necessary use the api which supports the facet search
     params.put(SEARCH_PARAM_FACET_SUPPORT, "true");
 
-    if (overrideCategoryId.isPresent()) {
-      params.put(SEARCH_PARAM_CATEGORYID, overrideCategoryId.get());
-    } else if (categoryId != null && !"ROOT".equals(categoryId)) {
-      params.put(SEARCH_PARAM_CATEGORYID, categoryId);
-    }
-
-    if (catalogAlias != null && !Strings.isNullOrEmpty(catalogAlias.value())) {
-      params.put(SEARCH_PARAM_CATALOG_ALIAS, catalogAlias.value());
-    }
-
-    if (!Strings.isNullOrEmpty(orderBy)) {
+    if (!isNullOrEmpty(orderBy)) {
       params.put(SEARCH_PARAM_ORDERBY, orderBy);
     }
 
@@ -195,29 +152,10 @@ public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
     }
 
     if (!filterFacetQueries.isEmpty()) {
-      // new format detected - override category is ignored
       params.put(SEARCH_PARAM_FACETS, String.join(FACETS_DELIMITER, filterFacetQueries));
-    } else {
-      // legacy format detected
-      String facet = getFacet();
-      if (!facet.isEmpty()) {
-        params.put(SEARCH_PARAM_FACET, facet);
-      }
     }
 
     return params;
-  }
-
-  private Optional<String> getOverrideCategoryId() {
-    Object value = getProductListSettings().get(STRUCT_KEY_PRODUCTLIST_SELECT_FACET_VALUE);
-    String strValue = "";
-    if (value != null) {
-      strValue = (String) value;
-      if (strValue.matches(DIGIT_PATTERN)) {
-        return Optional.of(strValue);
-      }
-    }
-    return Optional.empty();
   }
 
   private List<String> getFilterFacetQueries() {

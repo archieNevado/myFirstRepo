@@ -13,10 +13,10 @@ import com.coremedia.blueprint.cae.search.solr.SolrQueryBuilder;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
-import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
+import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
-import com.google.common.collect.ImmutableList;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +25,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -38,9 +37,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
-import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -102,9 +101,9 @@ public class DownloadPortalSearchServiceTest {
     searchService.setCacheTimeInSecs(60);
     searchService.setDeliveryConfigurationProperties(new DeliveryConfigurationProperties());
 
-    when(facet.getCount()).thenReturn(2l);
+    when(facet.getCount()).thenReturn(2L);
     when(facet.getValue()).thenReturn("0/111");
-    when(facet2.getCount()).thenReturn(2l);
+    when(facet2.getCount()).thenReturn(2L);
     when(facet2.getValue()).thenReturn("0/112");
     when(contentRepository.getContent("111")).thenReturn(content);
     when(contentRepository.getContent("112")).thenReturn(content2);
@@ -145,7 +144,7 @@ public class DownloadPortalSearchServiceTest {
   @Test
   public void testGetSubCategoriesForRoot() {
     Map<String, Collection<FacetValue>> searchResult = new HashMap<>();
-    List<FacetValue> facets = ImmutableList.of(facet, facet2);
+    List<FacetValue> facets = List.of(facet, facet2);
     searchResult.put(DownloadPortalSearchService.ASSETHIERARCHY_SOLR_FIELD, facets);
     FacetResult facetResult = new FacetResult(searchResult);
     when(resultBean.getFacetResult()).thenReturn(facetResult);
@@ -165,7 +164,7 @@ public class DownloadPortalSearchServiceTest {
   @Test
   public void testGetSubCategoriesForCategory() {
     Map<String, Collection<FacetValue>> searchResult = new HashMap<>();
-    List<FacetValue> facets = ImmutableList.of(facet, facet2);
+    List<FacetValue> facets = List.of(facet, facet2);
     searchResult.put(DownloadPortalSearchService.ASSETHIERARCHY_SOLR_FIELD, facets);
     FacetResult facetResult = new FacetResult(searchResult);
     when(resultBean.getFacetResult()).thenReturn(facetResult);

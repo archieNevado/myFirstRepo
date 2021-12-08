@@ -5,9 +5,23 @@ query ArticleQuery($id: String!, $base64Crops: [String!]) {
 
       ... Reference
       title
-      detailText
+      detailTextLegacy
+      detailText {
+        text
+        textAsTree
+        textReferencedContent {
+          id
+        }
+      }
       teaserTitle
-      teaserText
+      teaserTextLegacy
+      teaserText {
+        text
+        textAsTree
+        textReferencedContent {
+          id
+        }
+      }
       pictures {
         ... ContentInfo
         title

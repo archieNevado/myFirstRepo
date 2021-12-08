@@ -27,6 +27,7 @@ import com.coremedia.objectserver.beans.ContentBean;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -37,7 +38,6 @@ import java.util.Optional;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.link.UrlUtil.getQueryParamList;
-import static com.coremedia.livecontext.fragment.links.transformers.resolvers.AbstractLiveContextLinkResolver.deabsolutizeLink;
 
 @Component
 @DefaultAnnotation(NonNull.class)
@@ -67,7 +67,7 @@ public class CommerceLinkResolver implements LiveContextLinkResolver {
 
   @Nullable
   private String buildLink(String source, Object bean, CMNavigation navigation, HttpServletRequest request) {
-    StoreContext storeContext = CurrentStoreContext.find().orElse(null);
+    var storeContext = CurrentStoreContext.find(request).orElse(null);
     if (storeContext == null) {
       return null;
     }
@@ -97,11 +97,11 @@ public class CommerceLinkResolver implements LiveContextLinkResolver {
         return Optional.empty();
       }
 
-      return Optional.of(linkService.getProductLink(product, null, linkParameters, request));
+      return CommerceLedLinkUtils.getProductLink(product, null, linkParameters, linkService);
     } else if (bean instanceof ProductInSite) {
       ProductInSite productInSite = (ProductInSite) bean;
       Product product = productInSite.getProduct();
-      return Optional.of(linkService.getProductLink(product, null, linkParameters, request));
+      return CommerceLedLinkUtils.getProductLink(product, null, linkParameters, linkService);
     } else if (bean instanceof LiveContextExternalProduct) {
       LiveContextExternalProduct externalProduct = (LiveContextExternalProduct) bean;
       Product product = externalProduct.getProduct();
@@ -112,45 +112,45 @@ public class CommerceLinkResolver implements LiveContextLinkResolver {
         return Optional.empty();
       }
 
-      return Optional.of(linkService.getProductLink(product, null, linkParameters, request));
+      return CommerceLedLinkUtils.getProductLink(product, null, linkParameters, linkService);
     } else if (bean instanceof Product) {
       Product product = (Product) bean;
-      return Optional.of(linkService.getProductLink(product, null, linkParameters, request));
+      return CommerceLedLinkUtils.getProductLink(product, null, linkParameters, linkService);
     } else if (bean instanceof CMExternalPage) {
       CMExternalPage externalPage = (CMExternalPage) bean;
       if (externalPage.isRoot()) {
-        return Optional.of(linkService.getExternalPageLink(null, null, storeContext, linkParameters, request));
+        return CommerceLedLinkUtils.getExternalPageLink(null, null, storeContext, linkParameters, linkService);
       }
       String seoPath = externalPage.getExternalId();
       String externalUriPath = externalPage.getExternalUriPath();
-      return Optional.of(linkService.getExternalPageLink(seoPath, externalUriPath, storeContext, linkParameters, request));
+      return CommerceLedLinkUtils.getExternalPageLink(seoPath, externalUriPath, storeContext, linkParameters, linkService);
     } else if (bean instanceof LiveContextNavigation) {
       LiveContextNavigation liveContextNavigation = (LiveContextNavigation) bean;
       Category category = liveContextNavigation.getCategory();
-      return Optional.of(linkService.getCategoryLink(category, linkParameters, request));
+      return CommerceLedLinkUtils.getCategoryLink(category, linkParameters, linkService);
     } else if (bean instanceof CategoryInSite) {
       CategoryInSite categoryInSite = (CategoryInSite) bean;
-      return Optional.of(linkService.getCategoryLink(categoryInSite.getCategory(), linkParameters, request));
+      return CommerceLedLinkUtils.getCategoryLink(categoryInSite.getCategory(), linkParameters, linkService);
     } else if (bean instanceof Category) {
       Category category = (Category) bean;
-      return Optional.of(linkService.getCategoryLink(category, linkParameters, request));
+      return CommerceLedLinkUtils.getCategoryLink(category, linkParameters, linkService);
     } else if (bean instanceof CMNavigation) {
       CMNavigation cmNavigation = (CMNavigation) bean;
       String seoPath = seoSegmentBuilder.asSeoSegment(navigation, cmNavigation);
-      return Optional.of(linkService.getContentLink(seoPath, storeContext, linkParameters, request));
+      return CommerceLedLinkUtils.getContentLink(seoPath, storeContext, linkParameters, linkService);
     } else if (bean instanceof CMDynamicList) {
       String relativeLink = deabsolutizeLink(source);
-      return Optional.of(linkService.getAjaxLink(relativeLink, storeContext, request));
+      return CommerceLedLinkUtils.getAjaxLink(relativeLink, storeContext, linkService);
     } else if (bean instanceof CMLinkable) {
       CMLinkable cmLinkable = (CMLinkable) bean;
       String seoPath = seoSegmentBuilder.asSeoSegment(navigation, cmLinkable);
-      return Optional.of(linkService.getContentLink(seoPath, storeContext, linkParameters, request));
+      return CommerceLedLinkUtils.getContentLink(seoPath, storeContext, linkParameters, linkService);
     } else if (bean instanceof ContentBeanBackedPageGridPlacement || bean instanceof DynamizableContainer || bean instanceof Cart) {
       String relativeLink = deabsolutizeLink(source);
       //we only want to wrap CAE Ajax calls into commerce Ajax calls
       //make sure we only translate dynamic CAE links
       if(isDynamicCaeLink(relativeLink)){
-        return Optional.of(linkService.getAjaxLink(relativeLink, storeContext, request));
+        return CommerceLedLinkUtils.getAjaxLink(relativeLink, storeContext, linkService);
       }
     }
     return Optional.empty();
@@ -176,11 +176,11 @@ public class CommerceLinkResolver implements LiveContextLinkResolver {
   public boolean isApplicable(Object bean, HttpServletRequest request) {
     // Only execute when link service is available and current request
     // is not the studio preview URL request (`/preview?id=xxx`).
-    return isLinkServiceAvailable() && !isStudioPreviewRequest(request);
+    return isLinkServiceAvailable(request) && !isStudioPreviewRequest(request);
   }
 
-  private static boolean isLinkServiceAvailable() {
-    return CurrentStoreContext.find()
+  private static boolean isLinkServiceAvailable(HttpServletRequest request) {
+    return CurrentStoreContext.find(request)
             .map(StoreContext::getConnection)
             .map(CommerceConnection::getLinkService)
             .isPresent();
@@ -188,5 +188,16 @@ public class CommerceLinkResolver implements LiveContextLinkResolver {
 
   private static boolean isStudioPreviewRequest(HttpServletRequest request) {
     return PreviewHandler.isStudioPreviewRequest(request);
+  }
+
+  static String deabsolutizeLink(String cmsLink) {
+    // example: https://preview.host.name/bla/servlet/dynamic/placement/p13n/sitegenesis-en-gb/130/main?targetView=%5Bcarousel%5D
+    if (cmsLink.startsWith("http") || cmsLink.startsWith("//")) {
+      int index = StringUtils.ordinalIndexOf(cmsLink, "/", 3);
+      if (index != -1) {
+        return cmsLink.substring(index);
+      }
+    }
+    return cmsLink;
   }
 }

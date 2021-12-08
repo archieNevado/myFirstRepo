@@ -9,11 +9,11 @@ import com.coremedia.cap.content.events.ContentRepositoryListenerBase;
 import com.coremedia.ecommerce.studio.rest.cache.CommerceCacheInvalidationSource;
 import com.coremedia.livecontext.ecommerce.common.Vendor;
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.ImmutableSet;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.context.SmartLifecycle;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -22,7 +22,6 @@ import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFo
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CATEGORY;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.SKU;
-import static com.google.common.collect.Sets.newHashSet;
 
 /**
  * A {@link com.coremedia.cap.content.events.ContentRepositoryListener}
@@ -36,13 +35,13 @@ class AssetInvalidationRepositoryListener extends ContentRepositoryListenerBase 
 
   private static final String ANY = "any";
   private static final Vendor ANY_VENDOR = Vendor.of(ANY);
-  private static final Set<String> INVALIDATION_ALL_REFERENCES = ImmutableSet.of(
+  private static final Set<String> INVALIDATION_ALL_REFERENCES = Set.of(
           format(commerceId(ANY_VENDOR, CATEGORY).withTechId(ANY).build()),
           format(commerceId(ANY_VENDOR, PRODUCT).withTechId(ANY).build()),
           format(commerceId(ANY_VENDOR, SKU).withTechId(ANY).build())
   );
 
-  private static final Set<String> EVENT_WHITELIST = ImmutableSet.of(
+  private static final Set<String> EVENT_WHITELIST = Set.of(
           ContentEvent.CONTENT_CREATED,
           ContentEvent.CONTENT_DELETED,
           ContentEvent.CONTENT_MOVED,
@@ -78,7 +77,7 @@ class AssetInvalidationRepositoryListener extends ContentRepositoryListenerBase 
       return;
     }
 
-    commerceCacheInvalidationSource.invalidateReferences(newHashSet(getReferences(event, content)), null);
+    commerceCacheInvalidationSource.invalidateReferences(new HashSet<>(getReferences(event, content)), null);
   }
 
   @NonNull

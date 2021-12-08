@@ -14,18 +14,4 @@
   <context:annotation-config />
 
   <bean class="com.coremedia.blueprint.cae.config.BlueprintLinksCaeBaseLibConfiguration"/>
-
-<!--
-  <import resource="classpath:/com/coremedia/blueprint/base/links/bpbase-links-legacy.xml"/>
-  <customize:replace id="ruleProviderSwitch" bean="ruleUrlPrefixResolver" property="ruleProviders" custom-ref="legacyRuleProviders">
-    <description>
-      Old mixed content/configuration url prefix lookup.
-      Activate this customizer if and only if you have not yet migrated the
-      url prefix rules to absoluteUrlPrefixes structs in the site indicator
-      documents.
-
-      For details consult the DXP8 Developer Manual, Appendix / Link Format / Link Post Processors / makeAbsoluteUri
-    </description>
-  </customize:replace>
--->
 </beans>

@@ -253,16 +253,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.powermock</groupId>
-      <artifactId>powermock-api-mockito2</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.powermock</groupId>
-      <artifactId>powermock-module-junit4</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>com.coremedia.blueprint</groupId>
       <artifactId>ec-test-util</artifactId>
       <scope>test</scope>
@@ -322,12 +312,16 @@
       <artifactId>spring-boot-test</artifactId>
       <scope>test</scope>
     </dependency>
-    <!-- begin java-11-dependencies -->
     <dependency>
-      <groupId>jakarta.annotation</groupId>
-      <artifactId>jakarta.annotation-api</artifactId>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <scope>test</scope>
     </dependency>
-    <!-- end java-11-dependencies -->
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>

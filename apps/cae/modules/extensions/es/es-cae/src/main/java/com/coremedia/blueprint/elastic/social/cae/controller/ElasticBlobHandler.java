@@ -10,19 +10,20 @@ import com.coremedia.elastic.core.api.blobs.BlobService;
 import com.coremedia.objectserver.web.SecureHashCodeGeneratorStrategy;
 import com.coremedia.objectserver.web.links.Link;
 import com.coremedia.transform.BlobTransformer;
-import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_NUMBER;
@@ -132,26 +133,25 @@ public class ElasticBlobHandler extends HandlerBase {
 
   protected Map<String, ?> buildLinkMap(Blob bean, HttpServletRequest request) {
 
-    /**
+    /*
      * create parameters map. This is more flexible than calling URI_TEMPLATE#expand with the parameters
      * since this way the parameter's sequence is not relevant and the URI_PATTERN can be changed easier
      */
     // Use content type of original blob, not of the transformed blob which may be different.
     // Requesting the transformed blob's content type forces the transformation to be performed, which is too
     // costly for link generation.
-    Map<String, Object> parameters = ImmutableMap.<String, Object>builder()
-            .put(SEGMENT_ID, bean.getId())
-            .put(SEGMENT_ETAG, bean.getMd5())
-            .put(SEGMENT_NAME, bean.getFileName())
-            .put(SEGMENT_SITE, getSiteId(request))
-            .build();
+    Map<String, Object> parameters = Map.of(
+            SEGMENT_ID, bean.getId(),
+            SEGMENT_ETAG, bean.getMd5(),
+            SEGMENT_NAME, bean.getFileName(),
+            SEGMENT_SITE, getSiteId(request));
 
     //generate secure hash from all parameters and add to map
     String secHash = getSecureHashCode(parameters);
 
-    return ImmutableMap.<String, Object>builder()
-            .putAll(parameters).put(SECHASH_SEGMENT, secHash)
-            .build();
+    HashMap<String, Object> result = new HashMap<>(parameters);
+    result.put(SECHASH_SEGMENT, secHash);
+    return Collections.unmodifiableMap(result);
   }
 
   private static String getSiteId(@NonNull HttpServletRequest request) {
@@ -187,29 +187,27 @@ public class ElasticBlobHandler extends HandlerBase {
       width = MAX_WIDTH;
     }
 
-    /**
+    /*
      * create parameters map. This is more flexible than calling URI_TEMPLATE#expand with the parameters
      * since this way the parameter's sequence is not relevant and the URI_PATTERN can be changed easier
      */
     // Use content type of original blob, not of the transformed blob which may be different.
     // Requesting the transformed blob's content type forces the transformation to be performed, which is too
     // costly for link generation.
-    Map<String, Object> parameters = ImmutableMap.<String, Object>builder()
-            .put(SEGMENT_ID, bean.getId())
-            .put(SEGMENT_ETAG, bean.getMd5())
-            .put(WIDTH_SEGMENT, width)
-            .put(HEIGHT_SEGMENT, height)
-            .put(SEGMENT_NAME, bean.getFileName())
-            .put(SEGMENT_SITE, getSiteId(request))
-            .build();
+    Map<String, Object> parameters = Map.of(
+            SEGMENT_ID, bean.getId(),
+            SEGMENT_ETAG, bean.getMd5(),
+            WIDTH_SEGMENT, width,
+            HEIGHT_SEGMENT, height,
+            SEGMENT_NAME, bean.getFileName(),
+            SEGMENT_SITE, getSiteId(request));
 
     //generate secure hash from all parameters and add to map
     String secHash = getSecureHashCode(parameters);
 
-    return ImmutableMap.<String, Object>builder()
-            .putAll(parameters)
-            .put(SECHASH_SEGMENT, secHash)
-            .build();
+    HashMap<String, Object> result = new HashMap<>(parameters);
+    result.put(SECHASH_SEGMENT, secHash);
+    return Collections.unmodifiableMap(result);
   }
 
 
@@ -247,12 +245,11 @@ public class ElasticBlobHandler extends HandlerBase {
     String mediaSegment = removeSpecialCharacters(blob.getFileName());
     if (name.equals(mediaSegment)) {
       //name matches, make sure that secHash matches given URL
-      Map<String, Object> parameters = ImmutableMap.<String, Object>builder()
-              .put(SEGMENT_ID, imageId)
-              .put(SEGMENT_ETAG, eTag)
-              .put(SEGMENT_NAME, name)
-              .put(SEGMENT_SITE, rootSegment)
-              .build();
+      Map<String, Object> parameters = Map.of(
+              SEGMENT_ID, imageId,
+              SEGMENT_ETAG, eTag,
+              SEGMENT_NAME, name,
+              SEGMENT_SITE, rootSegment);
 
       if (isValid(parameters, secHash)) {
         com.coremedia.cap.common.Blob resultBlob = new BlobAdapter(blob);
@@ -294,14 +291,13 @@ public class ElasticBlobHandler extends HandlerBase {
     String mediaSegment = removeSpecialCharacters(blob.getFileName());
     if (name.equals(mediaSegment)) {
       //name matches, make sure that secHash matches given URL
-      Map<String, Object> parameters = ImmutableMap.<String, Object>builder()
-              .put(SEGMENT_ID, imageId)
-              .put(SEGMENT_ETAG, eTag)
-              .put(WIDTH_SEGMENT, width)
-              .put(HEIGHT_SEGMENT, height)
-              .put(SEGMENT_NAME, name)
-              .put(SEGMENT_SITE, siteId)
-              .build();
+      Map<String, Object> parameters = Map.of(
+              SEGMENT_ID, imageId,
+              SEGMENT_ETAG, eTag,
+              WIDTH_SEGMENT, width,
+              HEIGHT_SEGMENT, height,
+              SEGMENT_NAME, name,
+              SEGMENT_SITE, siteId);
 
       if (isValid(parameters, secHash)) {
 

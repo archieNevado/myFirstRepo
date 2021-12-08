@@ -16,13 +16,8 @@ import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.common.CapStructHelper;
-import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.struct.Struct;
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
@@ -35,7 +30,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -103,12 +97,9 @@ public abstract class CMLinkableBase extends CMLocalizedImpl implements CMLinkab
   @Override
   protected <T extends CMLocalized> Map<Locale, T> getVariantsByLocale(Class<T> type) {
     Map<Locale, T> variantsByLocale = super.getVariantsByLocale(type);
-    return ImmutableMap.copyOf(Maps.filterValues(variantsByLocale, new Predicate<T>() {
-      @Override
-      public boolean apply(T variant) {
-        return variant instanceof Linkable && validationService.validate((Linkable) variant);
-      }
-    }));
+    return variantsByLocale.entrySet().stream()
+            .filter(e -> e.getValue() instanceof Linkable && validationService.validate((Linkable) e.getValue()))
+            .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
   }
 
   public Map<Locale, ? extends CMLinkable> getVariantsByLocaleUnfiltered() {

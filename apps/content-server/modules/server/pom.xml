@@ -13,7 +13,6 @@
 
   <modules>
     <module>contentserver-blueprint-component</module>
-    <module>content-server-blueprint-config</module>
     <module>doctypes</module>
   </modules>
 </project>

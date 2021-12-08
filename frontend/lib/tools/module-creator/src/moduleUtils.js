@@ -81,6 +81,7 @@ const createThemeFolderStructure = (wsConfig, themePath, log) => {
     path.join(themePath, "src", "img"),
     path.join(themePath, "src", "fonts"),
     path.join(themePath, "src", "l10n"),
+    path.join(themePath, "src", "settings"),
     path.join(
       themePath,
       "src",
@@ -109,7 +110,6 @@ const createBrickFolderStructure = (wsConfig, brickPath, log) => {
     path.join(brickPath, "src", "sass", "partials"),
     path.join(brickPath, "src", "sass", "variables"),
     path.join(brickPath, "src", "img"),
-    path.join(brickPath, "src", "fonts"),
     path.join(brickPath, "src", "l10n"),
     path.join(
       brickPath,
@@ -165,14 +165,6 @@ const createThemeFiles = (
       ),
     },
     {
-      path: ".prettierignore",
-      data: themeData.initThemePrettierignore(),
-    },
-    {
-      path: ".prettierrc",
-      data: sharedData.initPrettierrc(),
-    },
-    {
       path: "src/js/index.js",
       data: themeData.initThemeIndexJs(themeName),
     },
@@ -223,14 +215,6 @@ const createBrickFiles = (brickPath, brickName, log) => {
     {
       path: "package.json",
       data: brickData.initPackageJson(brickName),
-    },
-    {
-      path: ".prettierignore",
-      data: brickData.initBrickPrettierignore(),
-    },
-    {
-      path: ".prettierrc",
-      data: sharedData.initPrettierrc(),
     },
     {
       path: "src/js/index.js",

@@ -18,7 +18,6 @@
   <customize:prepend id="livecontextPreviewLinkTransformerCustomizer" bean="linkTransformers">
     <list>
       <bean class="com.coremedia.livecontext.preview.PreviewParametersAppendingLinkTransformer"/>
-      <bean class="com.coremedia.livecontext.handler.WorkspaceIdAppendingLinkTransformer"/>
     </list>
   </customize:prepend>
 

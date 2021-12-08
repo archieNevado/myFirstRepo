@@ -37,7 +37,7 @@ const handler = ({ verbose }) => {
         );
       } catch (e) {
         log.warn(
-          `Ignoring brick "${availableBrick}" as it was not installed. Consider using "yarn install".`
+          `Ignoring brick "${availableBrick}" as it was not installed. Consider using "pnpm install".`
         );
       }
       return aggregator;
@@ -107,7 +107,7 @@ const handler = ({ verbose }) => {
     });
 
     log.info(
-      `Use 'yarn install' to install the new bricks.`,
+      `Use 'pnpm install' to install the new bricks.`,
       `Please note that module imports within JavaScript, SCSS and Freemarker Files have not been transformed and might need to be adjusted accordingly.`
     );
   }

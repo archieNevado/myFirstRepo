@@ -14,9 +14,7 @@ import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.link.StorefrontRefKey;
 import com.coremedia.livecontext.ecommerce.order.Cart;
-import com.coremedia.livecontext.handler.ExternalNavigationHandler;
 import com.coremedia.livecontext.navigation.LiveContextCategoryNavigation;
-import com.coremedia.livecontext.product.ProductPageHandler;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
@@ -28,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.coremedia.livecontext.fragment.links.CommerceLinkTemplateTypes.CHECKOUT_REDIRECT;
+import static com.coremedia.livecontext.ecommerce.link.CommerceLinkTemplateTypes.CHECKOUT_REDIRECT_URL;
 import static com.coremedia.livecontext.fragment.links.CommerceLinkUtils.getUriComponents;
 import static com.coremedia.livecontext.handler.CartHandler.URI_PATTERN;
 
@@ -60,10 +58,6 @@ public class CommerceLinks {
             );
   }
 
-  /**
-   * Link scheme that takes precedence over
-   * {@link ExternalNavigationHandler#buildLinkFor(com.coremedia.livecontext.commercebeans.CategoryInSite, java.lang.String, java.util.Map, javax.servlet.http.HttpServletRequest)}
-   */
   @Link(type = CategoryInSite.class, order = 1)
   @Nullable
   public UriComponents buildLinkForCategoryInSite(CategoryInSite bean,
@@ -76,10 +70,6 @@ public class CommerceLinks {
             );
   }
 
-  /**
-   * Link scheme that takes precedence over
-   * {@link ExternalNavigationHandler#buildLinkForCategoryImpl(com.coremedia.livecontext.navigation.LiveContextCategoryNavigation, java.lang.String, java.util.Map, javax.servlet.http.HttpServletRequest)}
-   */
   @Link(type = LiveContextCategoryNavigation.class, order = 1)
   @Nullable
   public UriComponents buildLinkForLiveContextCategoryNavigation(LiveContextCategoryNavigation bean,
@@ -92,10 +82,6 @@ public class CommerceLinks {
             );
   }
 
-  /**
-   * Link scheme that takes precedence over
-   * {@link ExternalNavigationHandler#buildLinkForExternalChannel(com.coremedia.livecontext.contentbeans.LiveContextExternalChannel, java.lang.String, java.util.Map, javax.servlet.http.HttpServletRequest)}
-   */
   @Link(type = LiveContextExternalChannel.class, order = 1)
   @Nullable
   public UriComponents buildLinkForExternalChannel(LiveContextExternalChannel bean,
@@ -107,7 +93,9 @@ public class CommerceLinks {
     }
     return commerceLinkHelper.createCategoryLinkDispatcher(request)
             .dispatch(
-                    () -> commerceStudioLinks.buildLinkForCategory(category, linkParameters, request),
+                    category.isRoot() ?
+                            () -> commerceStudioLinks.buildLinkForAugmentedRootCategory(bean, linkParameters, request) :
+                            () -> commerceStudioLinks.buildLinkForCategory(category, linkParameters, request),
                     () -> commerceContentLedLinks.buildLinkForCategory(category)
             );
   }
@@ -124,10 +112,6 @@ public class CommerceLinks {
             );
   }
 
-  /**
-   * Link scheme that takes precedence over
-   * {@link ProductPageHandler#buildLinkFor(com.coremedia.livecontext.commercebeans.ProductInSite, java.lang.String, java.util.Map, javax.servlet.http.HttpServletRequest)}
-   */
   @Link(type = ProductInSite.class, order = 1)
   @Nullable
   public UriComponents buildLinkForProductInSite(ProductInSite bean,
@@ -140,10 +124,6 @@ public class CommerceLinks {
             );
   }
 
-  /**
-   * Link scheme that takes precedence over
-   * {@link ProductPageHandler#buildLinkFor(com.coremedia.livecontext.contentbeans.CMProductTeaser, java.lang.String, java.util.Map, javax.servlet.http.HttpServletRequest)}
-   */
   @Link(type = CMProductTeaser.class, view = HandlerHelper.VIEWNAME_DEFAULT, order = 1)
   @Nullable
   public UriComponents buildLinkForProductTeaser(CMProductTeaser bean,
@@ -189,10 +169,6 @@ public class CommerceLinks {
             );
   }
 
-  /**
-   * Link scheme that takes precedence over
-   * {@link com.coremedia.livecontext.handler.LiveContextChannelLinkBuilder#buildLinkForSearchLandingPage(com.coremedia.blueprint.common.contentbeans.CMChannel)}
-   */
   @Link(type = CMChannel.class, order = 1)
   @Nullable
   public UriComponents buildLinkForCMChannel(CMChannel bean,
@@ -220,13 +196,13 @@ public class CommerceLinks {
   @Link(type = Cart.class, uri = URI_PATTERN)
   @Nullable
   public UriComponents buildGoToCartLink(Cart cart) {
-    return getUriComponents(cart.getContext(), CHECKOUT_REDIRECT).orElse(null);
+    return getUriComponents(cart.getContext(), CHECKOUT_REDIRECT_URL).orElse(null);
   }
 
   @Nullable
   @Link(type = StorefrontRefKey.class)
-  public UriComponents buildContentLedUrl(StorefrontRefKey storefrontRefKey) {
-    return CurrentStoreContext.find()
+  public UriComponents buildContentLedUrl(StorefrontRefKey storefrontRefKey, HttpServletRequest request) {
+    return CurrentStoreContext.find(request)
             .flatMap(context -> getUriComponents(context, storefrontRefKey))
             .orElse(null);
   }

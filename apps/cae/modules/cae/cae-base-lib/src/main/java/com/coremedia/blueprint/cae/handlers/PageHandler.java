@@ -46,7 +46,7 @@ public class PageHandler extends DefaultPageHandler {
           "/{" + SEGMENTS_NAVIGATION + ":" + PATTERN_SEGMENTS + "}";
 
   @GetMapping(SEO_FRIENDLY_URI_PATTERN)
-  public ModelAndView handleRequest(@PathVariable(SEGMENT_ID) CMLinkable linkable,
+  public ModelAndView handleRequest(@org.springframework.lang.Nullable @PathVariable(SEGMENT_ID) CMLinkable linkable,
                                     @PathVariable(SEGMENT_ID) String segmentId,
                                     @PathVariable(SEGMENTS_NAVIGATION) List<String> navigationPath,
                                     @PathVariable(SEGMENT_NAME) String vanity,

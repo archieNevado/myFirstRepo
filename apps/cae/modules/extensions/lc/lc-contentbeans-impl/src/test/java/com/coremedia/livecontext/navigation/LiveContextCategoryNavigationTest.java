@@ -15,7 +15,6 @@ import org.mockito.Mock;
 import java.util.List;
 import java.util.Locale;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -73,8 +72,8 @@ public class LiveContextCategoryNavigationTest {
     Navigation navigation1 = mock(Navigation.class);
     Navigation navigation2 = mock(Navigation.class);
 
-    List<Linkable> children = newArrayList();
-    List<Linkable> otherChildren = newArrayList(navigation1, navigation2);
+    List<Linkable> children = List.of();
+    List<Linkable> otherChildren = List.of(navigation1, navigation2);
 
     when(treeRelation.getChildrenOf(testling)).thenReturn(children, otherChildren);
     List<? extends Linkable> actualChildren = testling.getChildren();
@@ -109,7 +108,7 @@ public class LiveContextCategoryNavigationTest {
 
   @Test
   public void testGetRootNavigation() throws Exception {
-    List<Linkable> navigations = newArrayList(rootNavigation, testling);
+    List<Linkable> navigations = List.of(rootNavigation, testling);
     when(treeRelation.pathToRoot(testling)).thenReturn(navigations);
     CMNavigation result = testling.getRootNavigation();
     assertThat(result).as("Wrong root navigation").isSameAs(rootNavigation);
@@ -117,7 +116,7 @@ public class LiveContextCategoryNavigationTest {
 
   @Test
   public void testGetRootNavigationNoRootFound() throws Exception {
-    List<Linkable> navigations = newArrayList();
+    List<Linkable> navigations = List.of();
     when(treeRelation.pathToRoot(testling)).thenReturn(navigations);
     assertThat(testling.getRootNavigation()).isNull();
   }
@@ -125,7 +124,7 @@ public class LiveContextCategoryNavigationTest {
   @Test
   public void testGetNavigationPathList() throws Exception {
     Navigation navigation1 = new LiveContextCategoryNavigation(category, site, treeRelation);
-    List<Linkable> pathToRoot = newArrayList(testling, navigation1);
+    List<Linkable> pathToRoot = List.of(testling, navigation1);
 
     when(treeRelation.pathToRoot(testling)).thenReturn(pathToRoot);
 
@@ -143,7 +142,7 @@ public class LiveContextCategoryNavigationTest {
   @Test
   public void testGetVisibleChildren() throws Exception {
     LiveContextCategoryNavigation testlingSpy = spy(testling);
-    doReturn(newArrayList()).when(testlingSpy).getChildren();
+    doReturn(List.of()).when(testlingSpy).getChildren();
     testlingSpy.getVisibleChildren();
     verify(testlingSpy, times(1)).getChildren();
   }
@@ -156,7 +155,7 @@ public class LiveContextCategoryNavigationTest {
   @Test
   public void testGetSitemapChildren() throws Exception {
     LiveContextCategoryNavigation testlingSpy = spy(testling);
-    doReturn(newArrayList()).when(testlingSpy).getChildren();
+    doReturn(List.of()).when(testlingSpy).getChildren();
     testlingSpy.getSitemapChildren();
     verify(testlingSpy, times(1)).getChildren();
   }

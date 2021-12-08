@@ -1,25 +1,30 @@
 package com.coremedia.lc.studio.lib.validators;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.SitesService;
-import com.coremedia.rest.cap.validation.ContentTypeValidatorBase;
+import com.coremedia.rest.cap.validation.AbstractContentTypeValidator;
 import com.coremedia.rest.validation.Issues;
 import com.coremedia.rest.validation.Severity;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 /**
- * Make ssure the content type can only be used in livecontext sites
+ * Make sure the content type can only be used in livecontext sites
  */
-public class IsLiveContextTypeValidator extends ContentTypeValidatorBase {
+public class IsLiveContextTypeValidator extends AbstractContentTypeValidator {
 
   private static final String CODE_ISSUE_DOC_TYPE_NOT_SUPPORTED = "DocTypeNotSupported";
 
-  private final CommerceConnectionInitializer commerceConnectionInitializer;
+  private final CommerceConnectionSupplier commerceConnectionSupplier;
   private final SitesService sitesService;
 
-  public IsLiveContextTypeValidator(CommerceConnectionInitializer commerceConnectionInitializer,
+  public IsLiveContextTypeValidator(@NonNull ContentType type,
+                                    boolean isValidatingSubtypes,
+                                    CommerceConnectionSupplier commerceConnectionSupplier,
                                     SitesService sitesService) {
-    this.commerceConnectionInitializer = commerceConnectionInitializer;
+    super(type, isValidatingSubtypes);
+    this.commerceConnectionSupplier = commerceConnectionSupplier;
     this.sitesService = sitesService;
   }
 
@@ -31,7 +36,7 @@ public class IsLiveContextTypeValidator extends ContentTypeValidatorBase {
 
     //check if the content belongs to a livecontext site
     boolean isLiveContextConnectionPresent = sitesService.getContentSiteAspect(content).findSite()
-            .flatMap(commerceConnectionInitializer::findConnectionForSite)
+            .flatMap(commerceConnectionSupplier::findConnection)
             .filter(c -> !"coremedia".equals(c.getVendorName()))
             .isPresent();
     if (!isLiveContextConnectionPresent) {

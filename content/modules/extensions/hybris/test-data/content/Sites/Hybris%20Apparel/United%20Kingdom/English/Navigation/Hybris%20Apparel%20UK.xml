@@ -44,6 +44,7 @@
 <authors>
 </authors>
 <children>
+<link href="../Augmentation/ROOT.xml" path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Augmentation/ROOT"/>
 <link href="../Augmentation/Categories%20-%20categories/Snowwear%20men%20-%20190000/Snowwear%20Men.xml" path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Augmentation/Categories%20-%20categories/Snowwear%20men%20-%20190000/Snowwear%20Men"/>
 <link href="../Augmentation/Categories%20-%20categories/Snowwear%20women%20-%20200000/Sno766d7b11.xml" path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Augmentation/Categories%20-%20categories/Snowwear%20women%20-%20200000/Snowwear%20Women"/>
 <link href="Action%20Goggles%20Microsite/Action%20Goggles%20Microsite.xml" path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Navigation/Action%20Goggles%20Microsite/Action%20Goggles%20Microsite"/>

@@ -1,8 +1,7 @@
 package com.coremedia.blueprint.cae.search;
 
-import com.google.common.collect.ImmutableList;
-
 import java.util.Collection;
+import java.util.List;
 
 /**
  * A value in a {@link Condition}. Allows to wrap multiple values connected with AND or OR in one object.
@@ -20,7 +19,7 @@ public class Value {
   private Operators op;
 
   protected Value(Collection<String> values, Operators op) {
-    this.values = ImmutableList.copyOf(values);
+    this.values = List.copyOf(values);
     this.op = op;
   }
 
@@ -54,7 +53,7 @@ public class Value {
    * @return new Value
    */
   public static Value exactly(String s) {
-    return new Value(ImmutableList.of(s), Operators.AND);
+    return new Value(List.of(s), Operators.AND);
   }
 
   /**

@@ -5,7 +5,6 @@ import com.coremedia.blueprint.elastic.social.cae.ElasticSocialService;
 import com.coremedia.elastic.social.api.comments.Comment;
 import com.coremedia.elastic.social.api.reviews.Review;
 import com.coremedia.elastic.social.api.users.CommunityUser;
-import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,13 +38,13 @@ public class ReviewsResultTest {
 
   @Before
   public void setup() {
-    List<Review> reviews = ImmutableList.of(createReview(3));
+    List<Review> reviews = List.of(createReview(3));
     when(elasticSocialService.getReviews(target, user)).thenReturn(reviews);
   }
 
   @Test
   public void testGetReviews() {
-    List<Review> reviews = ImmutableList.of(createReview(3));
+    List<Review> reviews = List.of(createReview(3));
     when(elasticSocialService.getReviews(target, user)).thenReturn(reviews);
 
     ReviewsResult result = new ReviewsResult(target, user, elasticSocialService, true, REGISTERED, elasticSocialConfiguration);
@@ -84,7 +83,7 @@ public class ReviewsResultTest {
     Review review2b = createReview(2);
     Review review3 = createReview(REJECTED, 3);
 
-    ImmutableList<Review> reviews = ImmutableList.of(review1, review2a, review2b, review3);
+    List<Review> reviews = List.of(review1, review2a, review2b, review3);
     when(elasticSocialService.getReviews(target, user)).thenReturn(reviews);
 
     ReviewsResult result = new ReviewsResult(target, user, elasticSocialService, true, REGISTERED, elasticSocialConfiguration);

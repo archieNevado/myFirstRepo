@@ -7,17 +7,17 @@
   "private": true,
   "version": "1.0.1",
   "engines": {
-    "node": ">=14"
+    "node": ">=16"
   },
   "dependencies": {
-    "@coremedia/cm-logger": "^1.0.0",
-    "@coremedia/tool-utils": "^1.0.0",
-    "@coremedia/zipper": "^1.0.0",
+    "@coremedia/cm-logger": "workspace:*",
+    "@coremedia/tool-utils": "workspace:*",
+    "@coremedia/zipper": "workspace:*",
     "amazon-cognito-identity-js": "1.23.0",
     "request": "^2.88.2"
   },
   "devDependencies": {
-    "prettier": "^2.0.5"
+    "prettier": "^2.4.1"
   },
   "scripts": {
     "prettier": "prettier --write \"src/**/*.{js,json}\""

@@ -9,7 +9,7 @@ The `cm` CLI provides a couple of commands which are helpful when working with t
 Install the CLI into your local workspace and you may use `cm` CLI in scripts:
 
 ```shell
-yarn add @coremedia/cm-cli
+pnpm add @coremedia/cm-cli
 ```
 
 Example of package.json:
@@ -29,13 +29,13 @@ Example of package.json:
 Run script:
 
 ```bash
-yarn test
+pnpm test
 ```
 
 Install the CLI globally and you'll have access to `cm` CLI from the command line:
 
 ```shell
-yarn global add @coremedia/cm-cli
+pnpm global add @coremedia/cm-cli
 ```
 
 Run `cm` CLI with `test` command from command line:

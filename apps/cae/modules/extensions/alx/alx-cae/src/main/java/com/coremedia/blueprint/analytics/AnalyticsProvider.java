@@ -5,15 +5,14 @@ import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Linkable;
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 public class AnalyticsProvider {
 
@@ -63,9 +62,9 @@ public class AnalyticsProvider {
    */
   protected String[] transformNavigationPath(Function<Linkable, String> transformer) {
     final List<? extends Linkable> navigationPath = getNavigationPath();
-    final String[] result = new String[navigationPath.size()];
-    Lists.transform(navigationPath, transformer).toArray(result);
-    return result;
+    return navigationPath.stream()
+            .map(transformer)
+            .toArray(String[]::new);
   }
 
   /**
@@ -168,7 +167,7 @@ public class AnalyticsProvider {
   private static class NavigationToNumericId implements Function<Linkable, String> {
     @Override
     public String apply(@Nullable Linkable input) {
-      if (input != null && input instanceof CMNavigation) {
+      if (input instanceof CMNavigation) {
         return String.valueOf(((CMNavigation) input).getContentId());
       }
       return null;

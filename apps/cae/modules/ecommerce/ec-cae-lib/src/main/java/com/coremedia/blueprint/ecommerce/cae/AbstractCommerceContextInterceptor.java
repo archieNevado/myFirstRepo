@@ -1,23 +1,21 @@
 package com.coremedia.blueprint.ecommerce.cae;
 
-import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.blueprint.base.links.UriConstants;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentUserContext;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextHelper;
 import com.coremedia.blueprint.base.multisite.cae.SiteResolver;
 import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
 import com.coremedia.blueprint.common.preview.PreviewDateFormatter;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SiteHelper;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextBuilder;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import com.coremedia.livecontext.ecommerce.user.UserContext;
-import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 import com.google.common.annotations.VisibleForTesting;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -39,15 +37,13 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
 
   private static final Logger LOG = LoggerFactory.getLogger(AbstractCommerceContextInterceptor.class);
 
-  public static final String QUERY_PARAMETER_WORKSPACE_ID = "workspaceId";
-
   private static final String DYNAMIC_FRAGMENT = "/" + UriConstants.Segments.PREFIX_DYNAMIC + "/";
 
   private static final String STORE_CONTEXT_INITIALIZED = AbstractCommerceContextInterceptor.class.getName()
           + "#storeContext.initialized";
 
   private SiteResolver siteResolver;
-  private CommerceConnectionInitializer commerceConnectionInitializer;
+  private CommerceConnectionSupplier commerceConnectionSupplier;
 
   private boolean initUserContext = false;
 
@@ -73,8 +69,8 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
   }
 
   @Required
-  public void setCommerceConnectionInitializer(CommerceConnectionInitializer commerceConnectionInitializer) {
-    this.commerceConnectionInitializer = commerceConnectionInitializer;
+  public void setCommerceConnectionSupplier(CommerceConnectionSupplier commerceConnectionSupplier) {
+    this.commerceConnectionSupplier = commerceConnectionSupplier;
   }
 
   // --- HandlerInterceptor -----------------------------------------
@@ -118,12 +114,14 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
         return;
       }
 
-      CurrentStoreContext.set(commerceConnection.getStoreContext());
-      request.setAttribute(STORE_CONTEXT_INITIALIZED, true);
-
       if (initUserContext) {
         initUserContext(commerceConnection, request);
       }
+      //if current hasn't been set already, set it
+      if (CurrentStoreContext.find(request).isEmpty()){
+        CurrentStoreContext.set(commerceConnection.getInitialStoreContext(), request);
+      }
+      request.setAttribute(STORE_CONTEXT_INITIALIZED, true);
     } catch (CommerceException e) {
       LOG.debug("No commerce connection found for site '{}'.", site.getName(), e);
     }
@@ -165,7 +163,7 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
   @NonNull
   protected Optional<CommerceConnection> getCommerceConnectionWithConfiguredStoreContext(
           @NonNull Site site, @NonNull HttpServletRequest request) {
-    Optional<CommerceConnection> connection = commerceConnectionInitializer.findConnectionForSite(site);
+    Optional<CommerceConnection> connection = commerceConnectionSupplier.findConnection(site);
 
     // The commerce connection is supposed to be prototype-scoped (i.e.
     // a new instance is created every time the bean is requested).
@@ -187,36 +185,23 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
   private static void updateStoreContextForPreview(@NonNull HttpServletRequest request,
                                                    @NonNull CommerceConnection connection) {
     StoreContextProvider storeContextProvider = connection.getStoreContextProvider();
-    StoreContext originalStoreContext = connection.getStoreContext();
+    StoreContext originalStoreContext = connection.getInitialStoreContext();
 
     StoreContextBuilder storeContextBuilder = storeContextProvider.buildContext(originalStoreContext);
 
     StoreContext clonedStoreContext = prepareStoreContextForPreview(request, storeContextBuilder)
             .build();
 
-    connection.setInitialStoreContext(clonedStoreContext);
-    CurrentStoreContext.set(clonedStoreContext);
-    StoreContextHelper.setStoreContextToRequest(clonedStoreContext, request);
+    CurrentStoreContext.set(clonedStoreContext, request);
   }
 
   @NonNull
   @SuppressWarnings("AssignmentToMethodParameter")
   private static StoreContextBuilder prepareStoreContextForPreview(@NonNull HttpServletRequest request,
                                                                    @NonNull StoreContextBuilder storeContextBuilder) {
-    WorkspaceId workspaceId = findWorkspaceId(request).orElse(null);
-    storeContextBuilder = storeContextBuilder.withWorkspaceId(workspaceId);
-
     ZonedDateTime previewDate = findPreviewDate(request).orElse(null);
     storeContextBuilder = storeContextBuilder.withPreviewDate(previewDate);
-
     return storeContextBuilder;
-  }
-
-  @NonNull
-  private static Optional<WorkspaceId> findWorkspaceId(@NonNull HttpServletRequest request) {
-    String workspaceIdStr = request.getParameter(QUERY_PARAMETER_WORKSPACE_ID);
-    return Optional.ofNullable(workspaceIdStr)
-            .map(WorkspaceId::of);
   }
 
   @NonNull
@@ -233,7 +218,7 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
   protected void initUserContext(@NonNull CommerceConnection commerceConnection, @NonNull HttpServletRequest request) {
     try {
       UserContext userContext = commerceConnection.getUserContextProvider().createContext(request);
-      CurrentUserContext.set(userContext);
+      CurrentUserContext.set(userContext, request);
     } catch (CommerceException e) {
       LOG.warn("Error creating commerce user context: {}", e.getMessage(), e);
     }

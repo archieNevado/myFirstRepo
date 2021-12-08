@@ -1,5 +1,3 @@
-const autoprefixer = require("autoprefixer");
-const postcssObjectFitImages = require("postcss-object-fit-images");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const fs = require("fs");
 const nodeSass = require("node-sass");
@@ -77,9 +75,9 @@ const jsToBeRemoved = possiblyEmptyJsFiles.filter(
 );
 
 class MiniCssExtractWithCleanupPlugin extends MiniCssExtractPlugin {
-  constructor(config) {
+  constructor(config, jsToRemove) {
     super(config);
-    this._jsToRemove = config.jsToRemove || [];
+    this._jsToRemove = jsToRemove || [];
   }
 
   apply(compiler) {
@@ -98,13 +96,15 @@ class MiniCssExtractWithCleanupPlugin extends MiniCssExtractPlugin {
 }
 
 const cssFileName = generateCssFileNameFromEntryPointName("[name]");
-const miniCssExtractPlugin = new MiniCssExtractWithCleanupPlugin({
-  filename: cssFileName,
-  // needs to be set in case chunk splitting is used (otherwise the name would contain an unstable id)
-  chunkFilename: cssFileName,
+const miniCssExtractPlugin = new MiniCssExtractWithCleanupPlugin(
+  {
+    filename: cssFileName,
+    // needs to be set in case chunk splitting is used (otherwise the name would contain an unstable id)
+    chunkFilename: cssFileName,
+  },
   // remove empty js files
-  jsToRemove: jsToBeRemoved,
-});
+  jsToBeRemoved
+);
 
 module.exports = ({ dependencyCheckPlugin, mode }) => (config) =>
   deepMerge(config, {
@@ -122,33 +122,20 @@ module.exports = ({ dependencyCheckPlugin, mode }) => (config) =>
               },
             },
             {
-              loader: "css-loader",
+              loader: require.resolve("css-loader"),
               options: {
                 sourceMap: mode === "development",
               },
             },
             {
-              loader: "postcss-loader",
-              options: {
-                sourceMap: mode === "development",
-                plugins: [
-                  autoprefixer({
-                    // enable css-grid for IE
-                    grid: true,
-                  }),
-                  postcssObjectFitImages,
-                ],
-              },
-            },
-            {
-              loader: "resolve-url-loader",
+              loader: require.resolve("resolve-url-loader"),
               options: {
                 sourceMap: mode === "development",
                 keepQuery: true,
               },
             },
             {
-              loader: "sass-loader",
+              loader: require.resolve("sass-loader"),
               options: {
                 sourceMap: true, // needed for resolve-url-loader, removed in css-loader
                 sassOptions: {

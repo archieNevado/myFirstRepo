@@ -54,7 +54,6 @@ import com.coremedia.objectserver.web.config.CaeHandlerServicesConfiguration;
 import com.coremedia.springframework.customizer.Customize;
 import com.coremedia.springframework.customizer.CustomizerConfiguration;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
-import com.google.common.collect.Lists;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
@@ -292,7 +291,7 @@ public class BlueprintHandlersCaeBaseLibConfiguration {
                                                          SettingsService settingsService) {
     PageSearchActionHandler actionHandler = new PageSearchActionHandler();
     actionHandler.setMinimalSearchQueryLength(3);
-    actionHandler.setPermittedLinkParameterNames(Lists.newArrayList("query", "pageNum", "channelId", "docType", "key", "view", "sortByDate", "facetFilters"));
+    actionHandler.setPermittedLinkParameterNames(List.of("query", "pageNum", "channelId", "docType", "key", "view", "sortByDate", "facetFilters"));
 
     configurePageHandlerBase(actionHandler,
             mimeTypeService,
@@ -430,7 +429,7 @@ public class BlueprintHandlersCaeBaseLibConfiguration {
                                            DataViewFactory dataViewFactory,
                                            ContentLinkBuilder contentLinkBuilder) {
     StaticUrlHandler staticUrlHandler = new StaticUrlHandler();
-    staticUrlHandler.setPermittedLinkParameterNames(Lists.newArrayList("width", "height", "imageId"));
+    staticUrlHandler.setPermittedLinkParameterNames(List.of("width", "height", "imageId"));
 
     configureHandlerBase(staticUrlHandler,
             mimeTypeService,
@@ -483,7 +482,7 @@ public class BlueprintHandlersCaeBaseLibConfiguration {
                                              SitesService sitesService,
                                              Cache cache) {
     PaginationHandler paginationHandler = new PaginationHandler();
-    paginationHandler.setPermittedLinkParameterNames(Lists.newArrayList("view", "pageNum"));
+    paginationHandler.setPermittedLinkParameterNames(List.of("view", "pageNum"));
 
     configurePageHandlerBase(paginationHandler,
             mimeTypeService,
@@ -570,7 +569,7 @@ public class BlueprintHandlersCaeBaseLibConfiguration {
             sitesService,
             cache);
 
-    defaultPageHandler.setPermittedLinkParameterNames(Lists.newArrayList("index"));
+    defaultPageHandler.setPermittedLinkParameterNames(List.of("index"));
     defaultPageHandler.setNavigationResolver(navigationResolver);
     defaultPageHandler.setTopicPageContextFinder(uapiTopicpageContextFinder);
     defaultPageHandler.setSettingsService(settingsService);
@@ -604,7 +603,7 @@ public class BlueprintHandlersCaeBaseLibConfiguration {
             sitesService,
             cache);
 
-    actionHandler.setPermittedLinkParameterNames(Lists.newArrayList("next", "userName"));  // required by elastic webflows
+    actionHandler.setPermittedLinkParameterNames(List.of("next", "userName"));  // required by elastic webflows
     actionHandler.setFlowRunner(flowRunner);
     actionHandler.setResourceBundleInterceptor(resourceBundleInterceptor);
   }

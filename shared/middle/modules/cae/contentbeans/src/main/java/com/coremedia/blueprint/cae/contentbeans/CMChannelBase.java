@@ -63,8 +63,11 @@ public abstract class CMChannelBase extends CMContextImpl implements CMChannel {
    * Returns the value of the document property {@link #HEADER}.
    *
    * @return a list of {@link com.coremedia.blueprint.common.contentbeans.CMLinkable} objects
+   *
+   * @deprecated since 2110; see {@link CMChannel#getHeader()} for reasons
    */
   @Override
+  @Deprecated
   public List<? extends Linkable> getHeader() {
     List<Content> contents = getContent().getLinks(CMChannel.HEADER);
     return createBeansFor(contents, CMLinkable.class);
@@ -74,8 +77,11 @@ public abstract class CMChannelBase extends CMContextImpl implements CMChannel {
    * Returns the value of the document property {@link #FOOTER}.
    *
    * @return a list of {@link com.coremedia.blueprint.common.contentbeans.CMLinkable} objects
+   *
+   * @deprecated since 2110; see {@link CMChannel#getFooter()} for reasons
    */
   @Override
+  @Deprecated
   public List<? extends Linkable> getFooter() {
     List<Content> contents = getContent().getLinks(CMChannel.FOOTER);
     return createBeansFor(contents, CMLinkable.class);

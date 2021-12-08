@@ -11,6 +11,8 @@ import com.coremedia.livecontext.context.ResolveContextStrategy;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
+import com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType;
+import com.coremedia.livecontext.ecommerce.common.CommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
@@ -30,12 +32,15 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * Handles fragment request that depend on a category id.
+ *
+ * The entity parameters should contain {@link CommerceId#getExternalId() external ids}.
+ * If there are only {@link CommerceId#getTechId() external technical ids} available,
+ * the {@link CommerceIdProvider#format(CommerceBeanType, CatalogAlias, String)} needs to handle this.
  */
 public class CategoryFragmentHandler extends FragmentHandler {
 
   private ResolveContextStrategy contextStrategy;
   private boolean useOriginalNavigationContext = false;
-  private boolean useStableIds = false;
 
   // --- FragmentHandler --------------------------------------------
 
@@ -44,6 +49,10 @@ public class CategoryFragmentHandler extends FragmentHandler {
    * If no context can be found for the category, the <code>view</code> of the root channel will be rendered. The site
    * is determined by the tuple <code>(storeId, locale)</code>, which must be unique across all sites. If the placement
    * value is passed as part of the fragment parameters, the model and view will be created for it.
+   *
+   * The parameter categoryId should be an {@link com.coremedia.livecontext.ecommerce.catalog.Category#getExternalId() external id}.
+   * If there is only a {@link com.coremedia.livecontext.ecommerce.catalog.Category#getExternalTechId() external technical id} available,
+   * the {@link CommerceIdProvider#format(CommerceBeanType, CatalogAlias, String)} needs to handle this.
    *
    * @param parameters All parameters that have been passed for the fragment call.
    * @return the {@link ModelAndView model and view} containing the {@link com.coremedia.blueprint.common.contentbeans.Page page}
@@ -60,7 +69,7 @@ public class CategoryFragmentHandler extends FragmentHandler {
 
     String categoryExtId = parameters.getCategoryId();
 
-    Category categoryById = findCategory(categoryExtId).orElse(null);
+    Category categoryById = findCategory(categoryExtId, request).orElse(null);
     if (categoryById == null) {
       return HandlerHelper.notFound(getClass().getName() + " did not find category for storeId \""
               + parameters.getStoreId() + "\", locale \"" + parameters.getLocale() + "\", category id \""
@@ -86,20 +95,22 @@ public class CategoryFragmentHandler extends FragmentHandler {
     return modelAndView;
   }
 
+  /**
+   * Finds a category for the given id string.
+   * @param categoryExtId Can be an external id or an external technical id. See {@link CommerceIdProvider#format(CommerceBeanType, CatalogAlias, String)}
+   */
   @NonNull
-  private Optional<Category> findCategory(@NonNull String categoryExtId) {
-    StoreContext storeContext = CurrentStoreContext.get();
+  private Optional<Category> findCategory(@NonNull String categoryExtId, HttpServletRequest request) {
+    StoreContext storeContext = CurrentStoreContext.get(request);
     CommerceConnection currentConnection = storeContext.getConnection();
 
     CatalogService catalogService = currentConnection.getCatalogService();
     CommerceIdProvider idProvider = currentConnection.getIdProvider();
 
     CatalogAlias catalogAlias = storeContext.getCatalogAlias();
-    CommerceId formatCategoryId = useStableIds
-            ? idProvider.formatCategoryId(catalogAlias, categoryExtId)
-            : idProvider.formatCategoryTechId(catalogAlias, categoryExtId);
+    CommerceId categoryId = idProvider.format(BaseCommerceBeanType.CATEGORY, catalogAlias, categoryExtId);
 
-    Category category = catalogService.findCategoryById(formatCategoryId, storeContext);
+    Category category = catalogService.findCategoryById(categoryId, storeContext);
     return Optional.ofNullable(category);
   }
 
@@ -119,7 +130,7 @@ public class CategoryFragmentHandler extends FragmentHandler {
   }
 
   @Override
-  public boolean include(@NonNull FragmentParameters params) {
+  public boolean test(@NonNull FragmentParameters params) {
     String categoryId = params.getCategoryId();
     String externalRef = params.getExternalRef();
 
@@ -149,9 +160,5 @@ public class CategoryFragmentHandler extends FragmentHandler {
    */
   public void setUseOriginalNavigationContext(boolean useOriginalNavigationContext) {
     this.useOriginalNavigationContext = useOriginalNavigationContext;
-  }
-
-  public void setUseStableIds(boolean useStableIds) {
-    this.useStableIds = useStableIds;
   }
 }

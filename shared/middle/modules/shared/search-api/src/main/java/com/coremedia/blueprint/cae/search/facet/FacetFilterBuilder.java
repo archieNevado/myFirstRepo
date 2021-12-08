@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.cae.search.facet;
 
-import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
@@ -26,7 +25,7 @@ public class FacetFilterBuilder {
    * Creates a new builder without any enabled filters.
    */
   public FacetFilterBuilder() {
-    this(ImmutableMap.of());
+    this(Map.of());
   }
 
   /**

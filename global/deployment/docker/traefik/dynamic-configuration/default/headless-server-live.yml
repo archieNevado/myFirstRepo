@@ -1,0 +1,15 @@
+http:
+  routers:
+    headless-server-live:
+      priority: 1
+      entrypoints:
+        - web-access-secure
+        - web-access-insecure
+      rule: Host(`headless-server-live.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && PathPrefix(`/graphql`,`/caas`)
+      service: headless-server-live
+
+  services:
+    headless-server-live:
+      loadBalancer:
+        servers:
+          - url: http://headless-server-live:8080

@@ -22,9 +22,6 @@ import com.coremedia.blueprint.testing.ContentTestHelper;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,6 +39,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static com.coremedia.blueprint.cae.action.search.SearchServiceTest.LocalConfig.PROFILE;
 import static java.util.Collections.singletonList;
@@ -143,7 +142,7 @@ public class SearchServiceTest {
   @Test
   public void testSearchTopics() {
     // as defined in content.xml
-    final List<String> taxonomyDocumentTypes = ImmutableList.of("CMTaxonomy", "CMLocTaxonomy");
+    final List<String> taxonomyDocumentTypes = List.of("CMTaxonomy", "CMLocTaxonomy");
     final CMTaxonomy subjectTaxonomy = contentTestHelper.getContentBean(130);
     final CMLocTaxonomy locTaxonomy = contentTestHelper.getContentBean(132);
     final String taxonomyQuery = "bar";
@@ -163,19 +162,19 @@ public class SearchServiceTest {
         if ((SearchConstants.FIELDS.TEASER_TITLE + ":" + taxonomyQuery).equals(searchInput.getQuery())) {
           // query for taxonomies matching the query string and doctypes returns subjectTaxonomy and locTaxonomy
           Condition typeCondition = Condition.is(SearchConstants.FIELDS.DOCUMENTTYPE, Value.anyOf(taxonomyDocumentTypes));
-          assertEquals(ImmutableList.of(typeCondition), ImmutableList.copyOf(searchInput.getFilters()));
-          result.setHits(ImmutableList.of(subjectTaxonomy, locTaxonomy));
+          assertEquals(List.of(typeCondition), List.copyOf(searchInput.getFilters()));
+          result.setHits(List.of(subjectTaxonomy, locTaxonomy));
           result.setNumHits(2);
         } else if ("subjecttaxonomy:(130 OR 132) OR locationtaxonomy:(130 OR 132)".equals(searchInput.getQuery())) {
           // only the subjectTaxonomy is actually used (in addition to some other taxonomies)
           Condition rootCondition = Condition.is(SearchConstants.FIELDS.NAVIGATION_PATHS, Value.exactly("\\/" + ROOT_NAVIGATION_ID));
-          assertEquals(ImmutableList.of(rootCondition), ImmutableList.copyOf(searchInput.getFilters()));
-          assertEquals(ImmutableSet.of("subjecttaxonomy", "locationtaxonomy"), ImmutableSet.copyOf(searchInput.getFacetFields()));
+          assertEquals(List.of(rootCondition), List.copyOf(searchInput.getFilters()));
+          assertEquals(Set.of("subjecttaxonomy", "locationtaxonomy"), Set.copyOf(searchInput.getFacetFields()));
           assertEquals(1, searchInput.getFacetMinCount());
           assertEquals(0, searchInput.getLimit());
-          result.setFacetResult(new FacetResult(ImmutableMap.of(
-                  "subjecttaxonomy", ImmutableList.of(new FacetValue("subjecttaxonomy", "130", 3), new FacetValue("subjecttaxonomy", "134", 1)),
-                  "locationtaxonomy", ImmutableList.of(new FacetValue("locationtaxonomy", "136", 1))
+          result.setFacetResult(new FacetResult(Map.of(
+                  "subjecttaxonomy", List.of(new FacetValue("subjecttaxonomy", "130", 3), new FacetValue("subjecttaxonomy", "134", 1)),
+                  "locationtaxonomy", List.of(new FacetValue("locationtaxonomy", "136", 1))
           )));
         } else {
           fail("unexpected query");
@@ -189,7 +188,7 @@ public class SearchServiceTest {
     search.setChannelId(String.valueOf(ROOT_NAVIGATION_ID));
     search.setQuery(taxonomyQuery);
     SearchResultBean searchResultBean = testling.searchTopics(navigation, search, taxonomyDocumentTypes, null);
-    assertEquals(ImmutableSet.of(subjectTaxonomy), ImmutableSet.copyOf(searchResultBean.getHits()));
+    assertEquals(Set.of(subjectTaxonomy), Set.copyOf(searchResultBean.getHits()));
     assertEquals(1, searchResultBean.getNumHits());
   }
 
@@ -272,7 +271,7 @@ public class SearchServiceTest {
       this.validator = validator;
 
       searchResultBean = new SearchResultBean();
-      searchResultBean.setFacetResult(new FacetResult(ImmutableMap.of(SearchConstants.FIELDS.TEXTBODY.toString(),
+      searchResultBean.setFacetResult(new FacetResult(Map.of(SearchConstants.FIELDS.TEXTBODY.toString(),
         singletonList(new FacetValue(SearchConstants.FIELDS.TEXTBODY.toString(), TERM_NAME, TERM_COUNT)))));
       searchResultBean.setAutocompleteSuggestions(singletonList(new ValueAndCount(TERM_NAME, TERM_COUNT)));
     }

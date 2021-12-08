@@ -21,7 +21,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +55,8 @@ public class CommerceSegmentTestContextExtractorTest {
   @Mock
   private StoreContextProvider storeContextProvider;
 
+  private final HttpServletRequest request = new MockHttpServletRequest();
+
   @Before
   public void setUp() {
     testling = new CommerceSegmentTestContextExtractor();
@@ -66,12 +72,13 @@ public class CommerceSegmentTestContextExtractorTest {
     commerceConnection.setIdProvider(idProvider);
     commerceConnection.setStoreContextProvider(storeContextProvider);
 
-    CurrentStoreContext.set(storeContext);
+    RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+    CurrentStoreContext.set(storeContext, request);
   }
 
   @After
   public void teardown() {
-    CurrentStoreContext.remove();
+    RequestContextHolder.resetRequestAttributes();
   }
 
   @Test
@@ -88,7 +95,7 @@ public class CommerceSegmentTestContextExtractorTest {
     testling.extractTestContextsFromContent(content, contextCollection);
 
     //assert the user segments in the store context
-    StoreContext storeContext = CurrentStoreContext.get();
+    StoreContext storeContext = CurrentStoreContext.get(request);
     assertEquals(userSegmentIds, storeContext.getUserSegments().orElse(null));
 
     //assert the user segments in the context collection

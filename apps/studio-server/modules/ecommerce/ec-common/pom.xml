@@ -13,10 +13,6 @@
   <dependencies>
     <dependency>
       <groupId>com.coremedia.cms</groupId>
-      <artifactId>coremedia-common</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.cms</groupId>
       <artifactId>cap-unified-api</artifactId>
     </dependency>
     <dependency>
@@ -67,12 +63,12 @@
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest-library</artifactId>
+      <artifactId>hamcrest-core</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-server</artifactId>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-library</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

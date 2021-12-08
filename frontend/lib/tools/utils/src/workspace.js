@@ -5,10 +5,11 @@ const fs = require("fs");
 const glob = require("glob");
 const closestPackage = require("closest-package");
 const selfsigned = require("selfsigned");
-const { getInstalledPathSync } = require("get-installed-path");
 const Ajv = require("ajv");
 const JSON5 = require("json5");
 const { mergeWith } = require("lodash");
+const yaml = require("js-yaml");
+const packages = require("./packages");
 
 const cmLogger = require("@coremedia/cm-logger");
 
@@ -333,6 +334,17 @@ function readJSONFromFilePath(filepath) {
 }
 
 /**
+ * Read YAML from file. Encoding is UTF-8.
+ *
+ * @param filepath {string} path to the YAML file
+ * @returns {any} the JSON parsed from the file
+ * @throws Error if the JSON file could not be read
+ */
+function readYAMLFromFilePath(filepath) {
+  return yaml.load(fs.readFileSync(filepath, "utf8"));
+}
+
+/**
  * Searches for $Link keys in a mutable json object and transforms the link via a transformer function.
  * The links will be changed directly in the json object. There is no return value.
  *
@@ -413,7 +425,7 @@ function parseSettings(filename, settings = undefined) {
   let settingsJson;
   try {
     if (settings === undefined) {
-      settings = fs.readFileSync(filepath, "utf8");
+      settings = fs.readFileSync(filename, "utf8");
     }
     settingsJson = JSON.parse(settings);
   } catch (err) {
@@ -499,10 +511,6 @@ function writeJSONToFilePath(filepath, content, additionalWriteOptions = {}) {
     encoding: "utf8",
     ...additionalWriteOptions,
   });
-}
-
-function isExternalLink(ref) {
-  return /^(http:|https:)?\/\//.test(ref);
 }
 
 function assertConfiguredPathExists(path) {
@@ -640,8 +648,6 @@ function getThemeConfig() {
       "WEB-INF/templates"
     );
 
-    const brickTemplatesTargetPath = path.join(templatesTargetPath, "bricks");
-
     const themeTemplatesTargetPath = path.join(
       templatesTargetPath,
       plainThemeConfig.name
@@ -650,11 +656,6 @@ function getThemeConfig() {
     const themeTemplatesJarTargetPath = path.join(
       themeTargetPath,
       `templates/${plainThemeConfig.name}-templates.jar`
-    );
-
-    const brickTemplatesJarTargetPath = path.join(
-      themeTargetPath,
-      "templates/bricks-templates.jar"
     );
 
     const resourceBundleTargetPath = path.join(themeTargetPath, "l10n");
@@ -684,10 +685,8 @@ function getThemeConfig() {
       descriptorTargetPath,
       themeTargetPath,
       templatesTargetPath,
-      brickTemplatesTargetPath,
       themeTemplatesTargetPath,
       themeTemplatesJarTargetPath,
-      brickTemplatesJarTargetPath,
       resourceBundleTargetPath,
       settingsTargetPath,
       themeContentTargetPath,
@@ -863,7 +862,7 @@ function getIsSmartImportModuleFor(variant = DEFAULT_VARIANT) {
 }
 
 /**
- * Finds the installation path of the given module name. Optionally a file path can be provided to indicate where to
+ * Finds the installation path of the given package name. Optionally a file path can be provided to indicate where to
  * start look from.
  *
  * @param moduleName
@@ -871,23 +870,7 @@ function getIsSmartImportModuleFor(variant = DEFAULT_VARIANT) {
  * @throws Error in case the installation path could not be found
  */
 function getInstallationPath(moduleName, relativeFrom) {
-  let nodeModulePaths = process.mainModule.paths;
-  if (relativeFrom) {
-    nodeModulePaths = [
-      path.join(
-        path.dirname(closestPackage.sync(relativeFrom)),
-        "node_modules"
-      ),
-    ].concat(nodeModulePaths);
-  }
-  try {
-    return getInstalledPathSync(moduleName, { paths: nodeModulePaths });
-  } catch (e) {
-    // could not find module
-    throw new Error(
-      `Could not find installation folder for module '${moduleName}', searched in ${nodeModulePaths}`
-    );
-  }
+  return packages.getFilePathByPackageName(moduleName, relativeFrom ? path.dirname(closestPackage.sync(relativeFrom)) : process.cwd());
 }
 
 /**
@@ -901,7 +884,7 @@ function getAvailableModules(moduleType) {
     return [];
   }
   const wsConfig = getWorkspaceConfig();
-  const wsPatterns = readJSONFromFilePath(wsConfig.pkgPath).workspaces || [];
+  const wsPatterns = readYAMLFromFilePath(path.join(wsConfig.path, "pnpm-workspace.yaml")).packages || [];
   const wsDirectories = wsPatterns
     .map((wsPattern) =>
       glob.sync(wsPattern, {

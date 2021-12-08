@@ -1,8 +1,8 @@
 package com.coremedia.blueprint.analytics.elastic.tasks;
 
+import com.coremedia.blueprint.analytics.elastic.retrieval.AnalyticsServiceProvider;
 import com.coremedia.blueprint.base.analytics.elastic.ReportModel;
 import com.coremedia.blueprint.base.analytics.elastic.TopNReportModelService;
-import com.coremedia.blueprint.analytics.elastic.retrieval.AnalyticsServiceProvider;
 import com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil;
 import com.coremedia.blueprint.base.analytics.elastic.util.SettingsUtil;
 import com.coremedia.blueprint.base.analytics.elastic.validation.ResultItemValidationService;
@@ -11,24 +11,22 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.elastic.core.api.tenant.TenantService;
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.KEY_INTERVAL;
 import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.needsUpdate;
 import static com.coremedia.blueprint.base.analytics.elastic.util.SettingsUtil.createProxy;
-import static com.google.common.collect.ImmutableList.copyOf;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.math.NumberUtils.isDigits;
 
@@ -181,8 +179,10 @@ public class FetchReportsTask extends AbstractRootContentProcessingTask {
    */
   private List<String> optimizeForRendering(List<String> rawResultItems, Content cmalxBaseListContent, RetrievalBaseSettings retrievalBaseSettings) {
     final int maxLength = retrievalBaseSettings.getMaxLength();
-    final List<String> validated = copyOf(resultItemValidatorService.filterValidResultItems(rawResultItems, cmalxBaseListContent, maxLength));
-    return Lists.transform(validated, new ContentIdToContentBeanIdTransformer());
+    Iterable<String> validated = resultItemValidatorService.filterValidResultItems(rawResultItems, cmalxBaseListContent, maxLength);
+    return StreamSupport.stream(validated.spliterator(), false)
+            .map(input -> IdHelper.isContentId(input) || isDigits(input) ? getContentBeanId(input) : input)
+            .collect(Collectors.toList());
   }
 
   private static String getContentBeanId(String contentId) {
@@ -200,13 +200,6 @@ public class FetchReportsTask extends AbstractRootContentProcessingTask {
     } catch (Exception e) {
       LOG.warn("ignoring exception while retrieving data for list ({}, {}): {}", cmalxBaseListContent, analyticsServiceProvider.getServiceKey(), e.getMessage());
       return Collections.emptyList();
-    }
-  }
-
-  private static class ContentIdToContentBeanIdTransformer implements Function<String, String> {
-    @Override
-    public String apply(@Nullable String input) {
-      return IdHelper.isContentId(input) || isDigits(input) ? getContentBeanId(input) : input;
     }
   }
 }

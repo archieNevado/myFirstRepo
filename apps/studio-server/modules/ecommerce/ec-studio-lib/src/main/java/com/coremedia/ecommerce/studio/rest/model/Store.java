@@ -1,6 +1,5 @@
 package com.coremedia.ecommerce.studio.rest.model;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
 import com.coremedia.livecontext.ecommerce.catalog.Catalog;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
@@ -8,12 +7,10 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceObject;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Function;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
@@ -34,35 +31,11 @@ public class Store implements CommerceObject {
     return context;
   }
 
-  /**
-   * @return Returns the web URL of the commerce system's management tool
-   */
   @NonNull
-  public Optional<String> getVendorUrl() {
-    return getConnectionAttribute(CommerceConnection::getVendorUrl);
-  }
+  public Optional<Catalog> getDefaultCatalog(@NonNull CommerceConnection commerceConnection) {
+    var catalogService = commerceConnection.getCatalogService();
 
-  @NonNull
-  public Optional<String> getVendorVersion() {
-    return getConnectionAttribute(CommerceConnection::getVendorVersion);
-  }
-
-  @NonNull
-  public Optional<String> getVendorName() {
-    return getConnectionAttribute(CommerceConnection::getVendorName);
-  }
-
-  @NonNull
-  private static Optional<String> getConnectionAttribute(Function<CommerceConnection, String> getter) {
-    return findConnection()
-            .map(getter);
-  }
-
-  @NonNull
-  public Optional<Catalog> getDefaultCatalog() {
-    CatalogService catalogService = getCatalogService();
-
-    if (catalogService == null || !hasStoreName()) {
+    if (!hasStoreName()) {
       return Optional.empty();
     }
 
@@ -70,10 +43,10 @@ public class Store implements CommerceObject {
   }
 
   @NonNull
-  public List<Catalog> getCatalogs() {
-    CatalogService catalogService = getCatalogService();
+  public List<Catalog> getCatalogs(@NonNull CommerceConnection commerceConnection) {
+    CatalogService catalogService = commerceConnection.getCatalogService();
 
-    if (catalogService == null || !hasStoreName()) {
+    if (!hasStoreName()) {
       return emptyList();
     }
 
@@ -81,10 +54,10 @@ public class Store implements CommerceObject {
   }
 
   @NonNull
-  public List<Category> getRootCategories() {
-    CatalogService catalogService = getCatalogService();
+  public List<Category> getRootCategories(@NonNull CommerceConnection commerceConnection) {
+    CatalogService catalogService = commerceConnection.getCatalogService();
 
-    if (catalogService == null || !hasStoreName()) {
+    if (!hasStoreName()) {
       return emptyList();
     }
 
@@ -92,19 +65,6 @@ public class Store implements CommerceObject {
             .map(Catalog::getRootCategory)
             .filter(Objects::nonNull)
             .collect(toList());
-  }
-
-  @Nullable
-  private static CatalogService getCatalogService() {
-    return findConnection()
-            .map(CommerceConnection::getCatalogService)
-            .orElse(null);
-  }
-
-  @NonNull
-  private static Optional<CommerceConnection> findConnection() {
-    return CurrentStoreContext.find()
-            .map(StoreContext::getConnection);
   }
 
   private boolean hasStoreName() {

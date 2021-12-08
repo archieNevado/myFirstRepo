@@ -1,7 +1,6 @@
 package com.coremedia.livecontext.elastic.social.common;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoCommerceConnectionAvailable;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.cap.multisite.Site;
@@ -33,12 +32,12 @@ public class ProductInSiteConverter extends AbstractTypeConverter<ProductInSite>
   protected static final String SITE_ID = "site";
 
   private final SitesService sitesService;
-  private final CommerceConnectionInitializer connectionInitializer;
+  private final CommerceConnectionSupplier connectionSupplier;
 
   @Inject
-  public ProductInSiteConverter(SitesService sitesService, CommerceConnectionInitializer connectionInitializer) {
+  public ProductInSiteConverter(SitesService sitesService, CommerceConnectionSupplier connectionSupplier) {
     this.sitesService = sitesService;
-    this.connectionInitializer = connectionInitializer;
+    this.connectionSupplier = connectionSupplier;
   }
 
   @Override
@@ -66,7 +65,7 @@ public class ProductInSiteConverter extends AbstractTypeConverter<ProductInSite>
 
   @NonNull
   private CommerceConnection getCommerceConnectionForSerialization(@NonNull Site site, String externalProductId) {
-    return connectionInitializer.findConnectionForSite(site)
+    return connectionSupplier.findConnection(site)
             .orElseThrow(() -> new NoCommerceConnectionAvailable(String.format(
                     "No commerce connection available for site '%s'; not serializing product with external id '%s'.",
                     site, externalProductId))
@@ -99,37 +98,18 @@ public class ProductInSiteConverter extends AbstractTypeConverter<ProductInSite>
 
   @Nullable
   private Product findProduct(@NonNull Site site, @NonNull String productId) {
-    Product product = null;
-
-    // `CommerceConnectionFilter` does not recognize Elastic Social
-    // Studio calls, so we have to setup the commerce connection.
-
-    CommerceConnection oldConnection = CurrentStoreContext.find()
-            .map(StoreContext::getConnection)
-            .orElse(null);
-
     try {
-      CommerceConnection myConnection = getCommerceConnectionForDeserialization(site, productId);
-
-      CurrentStoreContext.set(myConnection.getStoreContext());
-
-      product = findProduct(myConnection, productId);
+      CommerceConnection connection = getCommerceConnectionForDeserialization(site, productId);
+      return findProduct(connection, productId);
     } catch (RuntimeException exception) {
       throwUnresolvable(productId, site.getId(), exception);
-    } finally {
-      if (oldConnection != null) {
-        CurrentStoreContext.set(oldConnection.getStoreContext());
-      } else {
-        CurrentStoreContext.remove();
-      }
     }
-
-    return product;
+    return null;
   }
 
   @NonNull
   private CommerceConnection getCommerceConnectionForDeserialization(@NonNull Site site, String productId) {
-    return connectionInitializer.findConnectionForSite(site)
+    return connectionSupplier.findConnection(site)
             .orElseThrow(() -> new UnresolvableReferenceException(String.format(
                     "Cannot resolve product with ID '%s' and site '%s' (commerce connection unavailable for that site).",
                     productId, site)));
@@ -138,7 +118,7 @@ public class ProductInSiteConverter extends AbstractTypeConverter<ProductInSite>
   @Nullable
   private static Product findProduct(@NonNull CommerceConnection connection, @NonNull String productId) {
     CommerceId id = CommerceIdParserHelper.parseCommerceIdOrThrow(productId);
-    StoreContext storeContext = connection.getStoreContext();
+    StoreContext storeContext = connection.getInitialStoreContext();
 
     return connection.getCatalogService().findProductById(id, storeContext);
   }

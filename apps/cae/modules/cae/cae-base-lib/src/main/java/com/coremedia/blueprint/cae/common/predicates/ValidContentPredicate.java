@@ -3,13 +3,12 @@ package com.coremedia.blueprint.cae.common.predicates;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.datevalidation.ValidationPeriodPredicate;
 import com.coremedia.cap.content.Content;
-import com.coremedia.common.util.Predicate;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
 import java.util.Calendar;
+import java.util.function.Predicate;
 
 /**
  * This predicate checks if the given object is a content bean and if this content bean is valid.
@@ -18,12 +17,16 @@ import java.util.Calendar;
  */
 public class ValidContentPredicate implements Predicate<Content> {
 
-  private ContentBeanFactory contentBeanFactory;
+  private final ContentBeanFactory contentBeanFactory;
 
   private static final Logger LOG = LoggerFactory.getLogger(ValidContentPredicate.class);
 
+  public ValidContentPredicate(ContentBeanFactory contentBeanFactory) {
+    this.contentBeanFactory = contentBeanFactory;
+  }
+
   @Override
-  public boolean include(Content content) {
+  public boolean test(Content content) {
     if (content == null || content.isDestroyed() || !content.getType().isSubtypeOf("CMLinkable")) {
       return false;
     }
@@ -38,8 +41,4 @@ public class ValidContentPredicate implements Predicate<Content> {
     return result;
   }
 
-  @Required
-  public void setContentBeanFactory(ContentBeanFactory contentBeanFactory) {
-    this.contentBeanFactory = contentBeanFactory;
-  }
 }

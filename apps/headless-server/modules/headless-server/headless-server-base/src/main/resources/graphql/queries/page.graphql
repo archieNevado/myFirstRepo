@@ -5,7 +5,9 @@ query PageQuery($id: String!) {
       ... Reference
       title
       teaserTitle
-      teaserText
+      teaserText {
+        text
+      }
       ... on CollectionItem {
         remoteLink
       }

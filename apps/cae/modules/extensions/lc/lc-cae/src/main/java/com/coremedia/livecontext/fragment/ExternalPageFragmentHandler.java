@@ -1,21 +1,21 @@
 package com.coremedia.livecontext.fragment;
 
-import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.blueprint.base.navigation.context.ContextStrategy;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.cap.user.User;
 import com.coremedia.livecontext.contentbeans.CMExternalPage;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
@@ -99,7 +99,7 @@ public class ExternalPageFragmentHandler extends FragmentHandler {
   }
 
   @Override
-  public boolean include(@NonNull FragmentParameters params) {
+  public boolean test(@NonNull FragmentParameters params) {
     boolean isNotCatalogPage = params.getPageId() != null &&
             isNullOrEmpty(params.getProductId()) &&
             isNullOrEmpty(params.getCategoryId());

@@ -1,6 +1,4 @@
 import $ from "jquery";
-import objectFitImages from "object-fit-images";
-import objectFitVideos from "object-fit-videos";
 import { debounce } from "./debounce";
 import * as Logger from "./logger.js";
 import { EVENT_LAYOUT_CHANGED } from "./utils";
@@ -63,10 +61,6 @@ $(function () {
   ) {
     Logger.setLevel(Logger.LEVEL.ALL);
   }
-
-  // trigger polyfill for object fit on images and videos (will automatically detect newly attached DOM elements)
-  objectFitImages();
-  objectFitVideos();
 
   // trigger layout changed event if the size of the window changes using smartresize plugin
   $window.on(

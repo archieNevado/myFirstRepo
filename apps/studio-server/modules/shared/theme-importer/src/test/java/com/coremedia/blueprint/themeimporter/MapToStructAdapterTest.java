@@ -6,8 +6,6 @@ import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.struct.StructBuilder;
 import com.coremedia.cap.struct.StructService;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +14,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Calendar;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertSame;
@@ -51,10 +51,10 @@ public class MapToStructAdapterTest {
     when(structService.createStructBuilder()).thenReturn(structBuilder);
     when(structBuilder.build()).thenReturn(struct);
   }
-  
+
   @Test
   public void testGetStructWithEmptyMap() {
-    assertSame(struct, adapter.getStruct(ImmutableMap.of()));
+    assertSame(struct, adapter.getStruct(Map.of()));
 
     InOrder inOrder = inOrder(structBuilder);
     inOrder.verify(structBuilder).build();
@@ -65,13 +65,12 @@ public class MapToStructAdapterTest {
   public void testGetStructWithBasicTypes() {
     Content someContent = mock(Content.class);
     Calendar someDate = mock(Calendar.class);
-    Map<String, Object> json = ImmutableMap.of(
-            "string", "def",
-            "integer", 5,
-            "boolean", true,
-            "link", someContent,
-            "date", someDate
-    );
+    Map<String, Object> json = new LinkedHashMap<>();
+    json.put("string", "def");
+    json.put("integer", 5);
+    json.put("boolean", true);
+    json.put("link", someContent);
+    json.put("date", someDate);
 
     assertSame(struct, adapter.getStruct(json));
 
@@ -87,8 +86,8 @@ public class MapToStructAdapterTest {
 
   @Test
   public void testGetStructMultipleCalls() {
-    assertSame(struct, adapter.getStruct(ImmutableMap.of("string", "def")));
-    assertSame(struct, adapter.getStruct(ImmutableMap.of()));
+    assertSame(struct, adapter.getStruct(Map.of("string", "def")));
+    assertSame(struct, adapter.getStruct(Map.of()));
 
     InOrder inOrder = inOrder(structBuilder);
     inOrder.verify(structBuilder).declareString("string", Integer.MAX_VALUE, "def");
@@ -98,16 +97,9 @@ public class MapToStructAdapterTest {
 
   @Test
   public void testGetStructWithNestedObject() {
-    Map<String, Object> json = ImmutableMap.of(
-            "subJson", ImmutableMap.of(
-                    "string", "def"
-            ),
-            "subJson2", ImmutableMap.of(
-                    "subSubJson2", ImmutableMap.of(
-                            "integer", 5
-                    )
-            )
-    );
+    Map<String, Object> json = new LinkedHashMap<>();
+    json.put("subJson", Map.of("string", "def"));
+    json.put("subJson2", Map.of("subSubJson2", Map.of("integer", 5)));
 
     assertSame(struct, adapter.getStruct(json));
 
@@ -129,30 +121,29 @@ public class MapToStructAdapterTest {
     Content someOtherContent = mock(Content.class);
     Calendar someDate = mock(Calendar.class);
     Calendar someOtherDate = mock(Calendar.class);
-    Map<String, Object> json = ImmutableMap.of(
-            "stringList", ImmutableList.of("a", "b"),
-            "integerList", ImmutableList.of(1, 2),
-            "booleanList", ImmutableList.of(true, false),
-            "linkList", ImmutableList.of(someContent, someOtherContent),
-            "dateList", ImmutableList.of(someDate, someOtherDate)
-    );
+    Map<String, Object> json = new LinkedHashMap<>();
+    json.put("stringList", List.of("a", "b"));
+    json.put("integerList", List.of(1, 2));
+    json.put("booleanList", List.of(true, false));
+    json.put("linkList", List.of(someContent, someOtherContent));
+    json.put("dateList", List.of(someDate, someOtherDate));
 
     assertSame(struct, adapter.getStruct(json));
 
     InOrder inOrder = inOrder(structBuilder);
-    inOrder.verify(structBuilder).declareStrings("stringList", Integer.MAX_VALUE, ImmutableList.of());
+    inOrder.verify(structBuilder).declareStrings("stringList", Integer.MAX_VALUE, List.of());
     inOrder.verify(structBuilder).add("stringList", "a");
     inOrder.verify(structBuilder).add("stringList", "b");
-    inOrder.verify(structBuilder).declareIntegers("integerList", ImmutableList.of());
+    inOrder.verify(structBuilder).declareIntegers("integerList", List.of());
     inOrder.verify(structBuilder).add("integerList", 1);
     inOrder.verify(structBuilder).add("integerList", 2);
-    inOrder.verify(structBuilder).declareBooleans("booleanList", ImmutableList.of());
+    inOrder.verify(structBuilder).declareBooleans("booleanList", List.of());
     inOrder.verify(structBuilder).add("booleanList", true);
     inOrder.verify(structBuilder).add("booleanList", false);
-    inOrder.verify(structBuilder).declareLinks("linkList", contentType, ImmutableList.of());
+    inOrder.verify(structBuilder).declareLinks("linkList", contentType, List.of());
     inOrder.verify(structBuilder).add("linkList", someContent);
     inOrder.verify(structBuilder).add("linkList", someOtherContent);
-    inOrder.verify(structBuilder).declareDates("dateList", ImmutableList.of());
+    inOrder.verify(structBuilder).declareDates("dateList", List.of());
     inOrder.verify(structBuilder).add("dateList", someDate);
     inOrder.verify(structBuilder).add("dateList", someOtherDate);
     inOrder.verify(structBuilder).build();

@@ -6,7 +6,9 @@ import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import io.micrometer.core.annotation.Timed;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -51,7 +53,8 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toMap;
 
 @RestController
-@Api(value = "/previewurl", tags = "Json Preview Client")
+@OpenAPIDefinition(tags = @Tag(name = "Json Preview Client"))
+@Api(tags = "Json Preview Client")
 @DefaultAnnotation(NonNull.class)
 public class JsonPreviewController {
   static final String ERROR_MSG_NO_QUERY_DEFINITION = "No json preview query definition available for selected document type.";
@@ -62,7 +65,7 @@ public class JsonPreviewController {
   private static final Logger LOG = LoggerFactory.getLogger(JsonPreviewController.class);
   private static final DateTimeFormatter STUDIO_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm VV");
 
-  private static final String PREVIEW_PATH = "/preview";
+  public static final String PREVIEW_PATH = "/preview";
   private static final String PARAM_NUMERIC_ID = "numericId";
   private static final String PARAM_ID = "id";
   private static final String PARAM_TYPE = "type";
@@ -99,9 +102,9 @@ public class JsonPreviewController {
   @GetMapping(PREVIEW_PATH + "/{" + PARAM_NUMERIC_ID + "}/{" + PARAM_TYPE + "}")
   @Timed
   public ResponseEntity<String> previewContent(HttpServletRequest request,
-                                        @ApiParam(value = "The id of the item", required = true) @PathVariable String numericId,
-                                        @ApiParam(value = "The type of the item", required = true) @PathVariable String type,
-                                        @ApiParam(value = "The preview date") @RequestParam(required = false, name = "previewDate") String previewDate) {
+                                               @Parameter(description = "The id of the item", required = true) @PathVariable String numericId,
+                                               @Parameter(description = "The type of the item", required = true) @PathVariable String type,
+                                               @Parameter(description = "The preview date") @RequestParam(required = false, name = "previewDate") String previewDate) {
 
     Optional<AugmentedObject> augmentedObject = AugmentedObject.of(numericId, contentRepository, sitesService);
     if (augmentedObject.isPresent()) {
@@ -118,9 +121,9 @@ public class JsonPreviewController {
   @GetMapping(PREVIEW_PATH)
   @Timed
   public ResponseEntity<String> previewCommerceBean(HttpServletRequest request,
-                                        @RequestParam(value = PARAM_COMMERCE_ID, required = true) String commerceId,
-                                        @RequestParam(value = PARAM_SITE_ID, required = true) String siteId,
-                                        @ApiParam(value = "The preview date") @RequestParam(required = false, name = "previewDate") String previewDate) {
+                                                    @RequestParam(value = PARAM_COMMERCE_ID, required = true) String commerceId,
+                                                    @RequestParam(value = PARAM_SITE_ID, required = true) String siteId,
+                                                    @Parameter(description = "The preview date") @RequestParam(required = false, name = "previewDate") String previewDate) {
     Map<String, String> previewRequestParams = Map.of(PARAM_SITE_ID, siteId, PARAM_COMMERCE_ID, commerceId);
     return executePreviewRequest(request, previewDate, previewRequestParams, QUERY_COMMERCE);
   }
@@ -155,7 +158,7 @@ public class JsonPreviewController {
       parser.next();
       JsonObject jsonObject = parser.getObject();
       return getResponseEntity(ctx, TEMPLATE_VAR_PREVIEW_JSON, jsonObject.toString());
-    } catch (IOException|IllegalStateException| JsonException | NoSuchElementException e) {
+    } catch (IOException | IllegalStateException | JsonException | NoSuchElementException e) {
       return getResponseEntity(ctx, TEMPLATE_VAR_ERROR, e.getMessage());
     }
   }

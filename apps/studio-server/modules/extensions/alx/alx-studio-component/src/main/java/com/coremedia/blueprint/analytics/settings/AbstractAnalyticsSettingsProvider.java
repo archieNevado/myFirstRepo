@@ -4,8 +4,6 @@ import com.coremedia.blueprint.base.links.ContentLinkBuilder;
 import com.coremedia.blueprint.base.navigation.context.ContextStrategy;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.content.Content;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,6 +12,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Abstract implementation of an analytics settings provider.
@@ -27,7 +26,7 @@ public abstract class AbstractAnalyticsSettingsProvider implements AnalyticsSett
 
   private static final String DEFAULT_HIDDEN_TEXT = "XXXXXXXX";
   private static final String PASSWORD_KEY = "password"; // NOSONAR false positive: Credentials should not be hard-coded
-  private List<String> keysWithSensitiveData = ImmutableList.of(PASSWORD_KEY);
+  private final List<String> keysWithSensitiveData = List.of(PASSWORD_KEY);
 
   @Inject
   private ContentLinkBuilder pageHandler;
@@ -99,12 +98,9 @@ public abstract class AbstractAnalyticsSettingsProvider implements AnalyticsSett
   }
 
   private Map<String, Object> hideSensitiveData(Map<String, Object> settings) {
-    return Maps.transformEntries(settings, new Maps.EntryTransformer<String, Object, Object>() {
-      @Override
-      public Object transformEntry(String key, Object value) {
-         return keysWithSensitiveData.contains(key) ? DEFAULT_HIDDEN_TEXT : value;
-      }
-    });
+    return settings.entrySet().stream()
+            .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey,
+                    entry -> keysWithSensitiveData.contains(entry.getKey()) ? DEFAULT_HIDDEN_TEXT : entry.getValue()));
   }
 
 }

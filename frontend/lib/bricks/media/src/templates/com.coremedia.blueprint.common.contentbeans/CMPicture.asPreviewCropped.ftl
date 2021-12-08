@@ -4,5 +4,5 @@
 <#assign imageLink=bp.getBiggestImageLink(self, crop)!"" />
 
 <#if imageLink?has_content>
-  <img class="cm-preview-item__image" src="${imageLink}" alt="${cm.getMessage("preview_image_" + crop)}"<@preview.metadata "properties.data.${crop}" />>
+  <img class="cm-preview-item__image" src="${imageLink}" loading="lazy" alt="${cm.getMessage("preview_image_" + crop)}"<@preview.metadata "properties.data.${crop}" />>
 </#if>

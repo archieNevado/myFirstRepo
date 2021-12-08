@@ -14,7 +14,6 @@ import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
-import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Required;
@@ -91,12 +90,10 @@ public class P13NContainerHandler extends PageHandlerBase {
     Navigation context = getContextHelper().currentSiteContext();
     UriComponentsBuilder result = UriComponentsBuilder.fromPath(uriPattern.toString());
     result = addLinkParametersAsQueryParameters(result, linkParameters);
-    return result.buildAndExpand(
-            ImmutableMap.of(
-                    SEGMENT_ROOT, getPathSegments(context).get(0),
-                    ID_VARIABLE, container.getTeasable().getContentId(),
-                    PROPERTY_PATH_VARIABLE, container.getPropertyPath() != null ? container.getPropertyPath() : "items"
-            ));
+    return result.buildAndExpand(Map.of(
+            SEGMENT_ROOT, getPathSegments(context).get(0),
+            ID_VARIABLE, container.getTeasable().getContentId(),
+            PROPERTY_PATH_VARIABLE, container.getPropertyPath() != null ? container.getPropertyPath() : "items"));
   }
 
   @Required

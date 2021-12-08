@@ -45,7 +45,6 @@ public class CommerceSearchFacade {
   public static final String SEARCH_PARAM_ORDERBY = "orderBy";
   public static final String SEARCH_PARAM_OFFSET = "offset";
   public static final String SEARCH_PARAM_TOTAL = "total";
-  public static final String SEARCH_PARAM_FACET = "facet";
   public static final String SEARCH_PARAM_FACETS = "facets";
   public static final String SEARCH_PARAM_FACET_SUPPORT = "facetSupport";
   public static final String SEARCH_PARAM_CATALOG_ALIAS = "catalogAlias";
@@ -62,13 +61,13 @@ public class CommerceSearchFacade {
     if (connection == null) {
       return Collections.emptyList();
     }
-    StoreContext storeContext = connection.getStoreContext();
+    StoreContext storeContext = connection.getInitialStoreContext();
     try {
       CatalogService catalogService = connection.getCatalogService();
       SearchQuery searchQuery = buildSearchQuery(PRODUCT, searchTerm, searchParams, storeContext);
       SearchResult<Product> productSearchResult = catalogService.search(searchQuery, storeContext);
 
-      return productSearchResult.getSearchResult().stream()
+      return productSearchResult.getItems().stream()
               .map(product -> createCommerceRef(product, site))
               .filter(Objects::nonNull)
               .collect(Collectors.toList());
@@ -101,15 +100,11 @@ public class CommerceSearchFacade {
     }
 
     String facets = searchParams.get(SEARCH_PARAM_FACETS);
-    String facet = searchParams.get(SEARCH_PARAM_FACET);
     if (facets != null) {
       List<SearchQueryFacet> searchQueryFacets = Arrays.stream(facets.split(FACETS_DELIMITER))
               .map(SearchQueryFacet::of)
               .collect(Collectors.toList());
       builder.setFilterFacets(searchQueryFacets);
-    } else if (facet != null) {
-      //legacy
-      builder.setFilterFacets(List.of(SearchQueryFacet.of(facet)));
     }
 
     if (searchParams.containsKey(SEARCH_PARAM_ORDERBY)) {

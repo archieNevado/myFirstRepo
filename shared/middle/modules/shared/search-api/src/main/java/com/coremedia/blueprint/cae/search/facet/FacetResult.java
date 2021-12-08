@@ -1,12 +1,12 @@
 package com.coremedia.blueprint.cae.search.facet;
 
-import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -18,14 +18,14 @@ import java.util.Map;
 @DefaultAnnotation(NonNull.class)
 public class FacetResult {
 
-  private final ImmutableMap<String, Collection<FacetValue>> facets;
+  private final Map<String, Collection<FacetValue>> facets;
 
   public FacetResult() {
-    this(ImmutableMap.of());
+    this(Map.of());
   }
 
   public FacetResult(Map<String, Collection<FacetValue>> facets) {
-    this.facets = ImmutableMap.copyOf(facets);
+    this.facets = Collections.unmodifiableMap(new LinkedHashMap<>(facets));
   }
 
   /**

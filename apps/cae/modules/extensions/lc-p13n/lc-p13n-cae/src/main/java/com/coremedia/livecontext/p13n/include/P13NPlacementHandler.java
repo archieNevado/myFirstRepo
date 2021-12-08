@@ -15,7 +15,6 @@ import com.coremedia.livecontext.contentbeans.CMExternalChannel;
 import com.coremedia.livecontext.contentbeans.LiveContextExternalProduct;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
-import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Required;
@@ -90,13 +89,11 @@ public class P13NPlacementHandler extends PageHandlerBase {
     Navigation context = getContextHelper().currentSiteContext();
     UriComponentsBuilder result = UriComponentsBuilder.fromPath(uriPattern.toString());
     result = addLinkParametersAsQueryParameters(result, linkParameters);
-    return result.buildAndExpand(
-            ImmutableMap.of(
-                    SEGMENT_ROOT, getPathSegments(context).get(0),
-                    ID_VARIABLE, placement.getNavigation().getContentId(),
-                    PAGEGRID_VARIABLE, placement.getStructPropertyName(),
-                    PLACEMENT_VARIABLE, placement.getName()
-            ));
+    return result.buildAndExpand(Map.of(
+            SEGMENT_ROOT, getPathSegments(context).get(0),
+            ID_VARIABLE, placement.getNavigation().getContentId(),
+            PAGEGRID_VARIABLE, placement.getStructPropertyName(),
+            PLACEMENT_VARIABLE, placement.getName()));
   }
 
   @Required

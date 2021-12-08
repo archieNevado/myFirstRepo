@@ -113,11 +113,9 @@ public interface CMAbstractCode extends CMLocalized {
   String IE_EXPRESSION = "ieExpression";
 
   /**
-   * Returns the value of the document property {@link #IE_EXPRESSION}.
-   *
-   * @return the value of the document property {@link #IE_EXPRESSION}
-   * @cm.template.api
+   * @deprecated since 2110.1, Old Internet Explorer (IE) is not supported anymore.
    */
+  @Deprecated(since = "2110.1")
   String getIeExpression();
 
   /**
@@ -126,11 +124,9 @@ public interface CMAbstractCode extends CMLocalized {
   String IE_REVEALED = "ieRevealed";
 
   /**
-   * Returns the value of the document property {@link #IE_REVEALED}.
-   *
-   * @return the value of the document property {@link #IE_REVEALED}
-   * @cm.template.api
+   * @deprecated since 2110.1, Old Internet Explorer (IE) is not supported anymore.
    */
+  @Deprecated(since = "2110.1")
   boolean isIeRevealed();
 
   /**
@@ -156,18 +152,4 @@ public interface CMAbstractCode extends CMLocalized {
    */
   @NonNull
   Map<String, Object> getHtmlAttributes();
-
-  /**
-   * Name of the document property 'disableCompress'.
-   */
-  @Deprecated
-  String DISABLE_COMPRESSION = "disableCompress";
-
-  /**
-   * Returns the value of the document property {@link #DISABLE_COMPRESSION}.
-   *
-   * @return the value of the document property {@link #DISABLE_COMPRESSION}
-   */
-  @Deprecated
-  boolean isCompressionDisabled();
 }

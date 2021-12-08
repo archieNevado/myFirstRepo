@@ -3,11 +3,11 @@ package com.coremedia.blueprint.cae.contentbeans;
 import com.coremedia.blueprint.base.cae.web.taglib.ImageFunctions;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.common.imagemap.ImageMapAreaFilterable;
-import com.google.common.collect.ImmutableMap;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,27 +29,26 @@ public class CMImageMapImpl extends CMImageMapBase {
     final List<Map> imageMapConfiguration = settingsService.settingAsList(IMAGE_MAP, Map.class, this);
 
     if (!isEmpty(imageMapConfiguration)) {
-      //noinspection ConstantConditions
       for (Map areaSettings : imageMapConfiguration) {
 
         @SuppressWarnings("unchecked")
         final Map<String, Object> item = areaSettings != null ? (Map<String, Object>) areaSettings : Collections.<String, Object>emptyMap();
 
-        final ImmutableMap.Builder<String, Object> builder = ImmutableMap.builder();
+        final Map<String, Object> map = new LinkedHashMap<>();
 
         Object coords = item.get(ImageFunctions.COORDS);
         if (coords instanceof String) {
           String coordsAsString = ((String) coords).trim();
-          builder.put(ImageFunctions.COORDS, coordsAsString);
-          builder.put(ImageFunctions.COORDS_AS_POINTS, coordsAsList(coordsAsString));
+          map.put(ImageFunctions.COORDS, coordsAsString);
+          map.put(ImageFunctions.COORDS_AS_POINTS, coordsAsList(coordsAsString));
 
-          putIfNotNull(builder, ImageFunctions.SHAPE, item.get(ImageFunctions.SHAPE));
-          putIfNotNull(builder, ImageFunctions.TARGET, item.get(ImageFunctions.TARGET));
-          putIfNotNull(builder, ImageFunctions.ALT, item.get(ImageFunctions.ALT));
-          putIfNotNull(builder, ImageFunctions.LINKED_CONTENT, item.get(ImageFunctions.LINKED_CONTENT));
-          putIfNotNull(builder, DISPLAY_AS_INLINE_OVERLAY, item.get(DISPLAY_AS_INLINE_OVERLAY));
-          putIfNotNull(builder, AREA_INLINE_OVERLAY_THEME, item.get(AREA_INLINE_OVERLAY_THEME));
-          result.add(builder.build());
+          putIfNotNull(map, ImageFunctions.SHAPE, item.get(ImageFunctions.SHAPE));
+          putIfNotNull(map, ImageFunctions.TARGET, item.get(ImageFunctions.TARGET));
+          putIfNotNull(map, ImageFunctions.ALT, item.get(ImageFunctions.ALT));
+          putIfNotNull(map, ImageFunctions.LINKED_CONTENT, item.get(ImageFunctions.LINKED_CONTENT));
+          putIfNotNull(map, DISPLAY_AS_INLINE_OVERLAY, item.get(DISPLAY_AS_INLINE_OVERLAY));
+          putIfNotNull(map, AREA_INLINE_OVERLAY_THEME, item.get(AREA_INLINE_OVERLAY_THEME));
+          result.add(Collections.unmodifiableMap(map));
         }
       }
     }
@@ -65,9 +64,9 @@ public class CMImageMapImpl extends CMImageMapBase {
     return result;
   }
 
-  private static void putIfNotNull(ImmutableMap.Builder<String, Object> builder, String key, Object value) {
+  private static void putIfNotNull(Map<String, Object> map, String key, Object value) {
     if (value != null) {
-      builder.put(key, value);
+      map.put(key, value);
     }
   }
 

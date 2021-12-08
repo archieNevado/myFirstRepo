@@ -1,36 +1,31 @@
 {
   "name": "@coremedia/frontend",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "private": true,
   "scripts": {
-    "test": "lerna run test",
-    "build": "lerna run build",
+    "preinstall": "node ./lib/tools/pnpm-check/index.js",
+    "test": "pnpm -r test",
+    "build": "pnpm -r build",
     "build-frontend-zip": "node ./lib/tools/cm-cli/bin/cm-cli.js build-frontend-zip",
-    "deploy": "lerna run deploy",
+    "deploy": "pnpm -r deploy",
     "create-theme": "node ./lib/tools/cm-cli/bin/cm-cli.js create-theme",
     "create-brick": "node ./lib/tools/cm-cli/bin/cm-cli.js create-brick",
     "eject": "node ./lib/tools/cm-cli/bin/cm-cli.js eject",
-    "prettier": "lerna run prettier",
-    "lerna": "lerna"
+    "prettier": "pnpm -r prettier"
   },
-  "workspaces": [
-    "lib/bricks/*",
-    "lib/tools/*",
-    "themes/*",
-    "bricks/*"
-  ],
   "engines": {
-    "node": ">=14"
-  },
-  "dependencies": {
-    "lerna": "^4.0.0"
-  },
-  "resolutions": {
-    "**/ansi-regex": "^5.0.1",
-    "**/glob-parent": "^5.1.2",
-    "**/set-value": "^4.0.1"
+    "node": ">=16",
+    "pnpm": ">=6"
   },
   "coremedia": {
     "type": "workspace"
+  },
+  "pnpm": {
+    "overrides": {
+      "ansi-regex@>2.1.1 <5.0.1": ">=5.0.1",
+      "nth-check@<2.0.1": ">=2.0.1",
+      "set-value@<4.0.1": ">=4.0.1",
+      "glob-parent@<5.1.2": ">=5.1.2"
+    }
   }
 }

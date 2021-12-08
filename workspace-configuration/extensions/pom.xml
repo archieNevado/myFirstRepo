@@ -8,7 +8,7 @@
   <packaging>pom</packaging>
 
   <properties>
-    <extensions-maven-plugin.version>4.5.0</extensions-maven-plugin.version>
+    <extensions-maven-plugin.version>4.5.1</extensions-maven-plugin.version>
   </properties>
 
   <pluginRepositories>
@@ -29,20 +29,14 @@
           <artifactId>extensions-maven-plugin</artifactId>
           <version>${extensions-maven-plugin.version}</version>
           <configuration>
-            <projectRoot>../..</projectRoot>
+            <projectRoots>
+              <projectRoot>../..</projectRoot>
+              <projectRoot>../../apps/studio-client</projectRoot>
+            </projectRoots>
             <extensionsPath>modules/extensions</extensionsPath>
             <extensionPointsPath>modules/extension-config</extensionPointsPath>
+            <useProjectVariables>true</useProjectVariables>
           </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-deploy-plugin</artifactId>
-          <version>3.0.0-M1</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-install-plugin</artifactId>
-          <version>3.0.0-M1</version>
         </plugin>
       </plugins>
     </pluginManagement>

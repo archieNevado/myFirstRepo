@@ -16,8 +16,6 @@ import com.coremedia.cache.Cache;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -102,7 +100,7 @@ public class PageSearchActionHandlerTest {
   private static final int ROOT_NAVIGATION_ID = 4;
   private static final int SEARCH_PAGE_RESULT_ID = 24;
   private static final int ACTION_ID = 22;
-  private static final ImmutableMap<String, String> AUTOCOMPLETE_PARAMS = ImmutableMap.of(
+  private static final Map<String, String> AUTOCOMPLETE_PARAMS = Map.of(
           PARAMETER_ROOT_NAVIGATION_ID, String.valueOf(ROOT_NAVIGATION_ID),
           PARAMETER_QUERY, QUERY
   );
@@ -148,7 +146,7 @@ public class PageSearchActionHandlerTest {
   private void configureSearchActionService() {
     Suggestion suggestion = new Suggestion("a", "a", 1L);
     Suggestions result = new Suggestions();
-    result.addAll(ImmutableList.of(suggestion));
+    result.addAll(List.of(suggestion));
 
     List<String> searchDocTypes = Collections.singletonList("CMArticle");
     when(searchActionService.search(any(Page.class), any(SearchFormBean.class), eq(searchDocTypes)))
@@ -161,12 +159,11 @@ public class PageSearchActionHandlerTest {
    * Tests {@link PageSearchActionHandler#handleSearchAction} with a query that is long enough.
    * Expects a successful search.
    */
-  @SuppressWarnings("unchecked")
   @Test
   public void testSearch() throws Exception {
 
     //simulate the HTML search form, add to request
-    Map<String,String> parameters = ImmutableMap.of(PARAMETER_QUERY, LONG_QUERY);
+    Map<String,String> parameters = Map.of(PARAMETER_QUERY, LONG_QUERY);
     ModelAndView modelAndView = requestTestHelper.request(URI, parameters);
 
     checkPage(modelAndView, SEARCH_PAGE_RESULT_ID, SEARCH_PAGE_RESULT_ID);
@@ -187,7 +184,7 @@ public class PageSearchActionHandlerTest {
   public void testSearchWithShortQuery() throws Exception {
 
     //simulate the HTML search form, add to request
-    Map<String,String> parameters = ImmutableMap.of(PARAMETER_QUERY, SHORT_QUERY);
+    Map<String,String> parameters = Map.of(PARAMETER_QUERY, SHORT_QUERY);
 
     ModelAndView modelAndView = requestTestHelper.request(URI, parameters);
 
@@ -236,7 +233,7 @@ public class PageSearchActionHandlerTest {
   @Test
   public void testGenerateActionLink() {
 
-    Map<String, Object> parameters = ImmutableMap.of("action", ACTION_NAME, "page", page);
+    Map<String, Object> parameters = Map.of("action", ACTION_NAME, "page", page);
 
     String url = linkFormatterTestHelper.formatLink(parameters, searchActionState);
 

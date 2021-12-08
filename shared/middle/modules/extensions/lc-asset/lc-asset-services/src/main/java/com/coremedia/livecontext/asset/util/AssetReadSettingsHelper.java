@@ -1,11 +1,10 @@
 package com.coremedia.livecontext.asset.util;
 
 import com.coremedia.blueprint.base.settings.SettingsService;
-import com.google.common.collect.ImmutableList;
-import org.springframework.beans.factory.annotation.Required;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Required;
+
 import java.util.List;
 import java.util.Map;
 
@@ -137,7 +136,7 @@ public class AssetReadSettingsHelper {
       return null;
     }
 
-    List<String> commerce = ImmutableList.of(NAME_LOCAL_SETTINGS, NAME_COMMERCE);
+    List<String> commerce = List.of(NAME_LOCAL_SETTINGS, NAME_COMMERCE);
     Object commerceStruct = settingsService.nestedSetting(commerce, Object.class, contentProperties);
 
     if (commerceStruct == null) {

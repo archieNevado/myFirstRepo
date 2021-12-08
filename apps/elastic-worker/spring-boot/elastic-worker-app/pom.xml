@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>com.coremedia.blueprint.boot</groupId>
+    <groupId>com.coremedia.blueprint</groupId>
     <artifactId>elastic-worker.spring-boot</artifactId>
     <version>1-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
@@ -11,21 +11,38 @@
 
   <artifactId>elastic-worker-app</artifactId>
 
+  <description>
+    = Container Image Build =
+    Image building is skipped by default. To build the image, activate the default-image maven profile.
+    In addition, you can set jib.goal to "build" to directly build the image in the registry without docker.
+    i.e. mvn clean install -Pdefault-image -Djib.goal=build
+  </description>
+
+  <properties>
+    <jib.skip>true</jib.skip>
+    <jib.goal>dockerBuild</jib.goal>
+    <application.image-base>coremedia/java-application-base:2.4.0-corretto-11</application.image-base>
+    <application.image-prefix>coremedia</application.image-prefix>
+    <application.image-suffix>elastic-worker</application.image-suffix>
+    <application.image-tag>${project.version}</application.image-tag>
+
+  </properties>
+
   <dependencies>
     <dependency>
-      <groupId>com.coremedia.blueprint.boot</groupId>
+      <groupId>com.coremedia.blueprint</groupId>
       <artifactId>blueprint-spring-boot-autoconfigure</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint.boot</groupId>
+      <groupId>com.coremedia.blueprint</groupId>
       <artifactId>coremedia-transform-spring-boot-autoconfigure</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>${blueprint.groupId}</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>elastic-worker-blueprint-component</artifactId>
-      <version>${blueprint.version}</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -44,7 +61,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-tomcat</artifactId>
-      <scope>provided</scope>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
@@ -53,7 +70,12 @@
     <dependency>
       <groupId>org.apache.tomcat.embed</groupId>
       <artifactId>tomcat-embed-jasper</artifactId>
-      <scope>provided</scope>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>runtime</scope>
     </dependency>
   </dependencies>
 
@@ -64,9 +86,97 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
-          <mainClass>com.coremedia.blueprint.boot.elasticworker.ElasticWorkerApp</mainClass>
+          <mainClass>${spring-boot.mainClass}</mainClass>
+          <layers>
+            <enabled>true</enabled>
+          </layers>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.google.cloud.tools</groupId>
+        <artifactId>jib-maven-plugin</artifactId>
+        <configuration>
+          <from>
+            <image>${application.image-base}</image>
+          </from>
+          <to>
+            <image>${application.image-prefix}/${application.image-suffix}</image>
+            <tags>
+              <tag>${application.image-tag}</tag>
+            </tags>
+          </to>
+          <container>
+            <appRoot>/coremedia</appRoot>
+            <workingDirectory>/coremedia</workingDirectory>
+            <ports>
+              <!--Servlet Container Port -->
+              <port>8080</port>
+              <!--Actuator Port-->
+              <port>8081</port>
+            </ports>
+          </container>
+        </configuration>
+        <executions>
+          <execution>
+            <id>build-container-image</id>
+            <goals>
+              <goal>${jib.goal}</goal>
+            </goals>
+            <phase>install</phase>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>default-image</id>
+      <properties>
+        <jib.skip>false</jib.skip>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.google.cloud.tools</groupId>
+            <artifactId>jib-maven-plugin</artifactId>
+            <configuration>
+              <container>
+                <entrypoint>INHERIT</entrypoint>
+                <args>
+                  <arg>application</arg>
+                </args>
+                <user>coremedia:coremedia</user>
+                <environment>
+                  <JAVA_HEAP>196m</JAVA_HEAP>
+                  <JAVA_PARALLEL_GC>true</JAVA_PARALLEL_GC>
+                  <SPRING_BOOT_EXPLODED_APP>true</SPRING_BOOT_EXPLODED_APP>
+                  <SPRING_BOOT_EXPLODED_MAINCLASS>@jib-main-class-file</SPRING_BOOT_EXPLODED_MAINCLASS>
+                  <SPRING_BOOT_EXPLODED_CLASSPATH>@jib-classpath-file</SPRING_BOOT_EXPLODED_CLASSPATH>
+                </environment>
+                <ports>
+                  <!--Prometheus Agent Port-->
+                  <port>8199</port>
+                </ports>
+              </container>
+              <pluginExtensions>
+                <pluginExtension>
+                  <implementation>com.google.cloud.tools.jib.maven.extension.ownership.JibOwnershipExtension
+                  </implementation>
+                  <configuration implementation="com.google.cloud.tools.jib.maven.extension.ownership.Configuration">
+                    <rules>
+                      <rule>
+                        <glob>/coremedia**</glob>
+                        <ownership>1000:1000</ownership>
+                      </rule>
+                    </rules>
+                  </configuration>
+                </pluginExtension>
+              </pluginExtensions>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>

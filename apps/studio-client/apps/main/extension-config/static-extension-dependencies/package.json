@@ -1,0 +1,33 @@
+{
+  "name": "@coremedia-blueprint/studio-client.main.static-extension-dependencies",
+  "author": "CoreMedia GmbH",
+  "version": "1.0.0-SNAPSHOT",
+  "license": "CoreMedia Open Source License",
+  "private": true,
+  "dependencies": {
+    "@coremedia-blueprint/studio-client.main.create-from-template-studio-plugin": "1.0.0-SNAPSHOT",
+    "@coremedia-blueprint/studio-client.main.es-studio": "1.0.0-SNAPSHOT",
+    "@coremedia-blueprint/studio-client.main.lc-p13n-studio": "1.0.0-SNAPSHOT",
+    "@coremedia-blueprint/studio-client.main.osm-studio": "1.0.0-SNAPSHOT",
+    "@coremedia-blueprint/studio-client.main.p13n-studio": "1.0.0-SNAPSHOT",
+    "@coremedia-blueprint/studio-client.main.taxonomy-studio": "1.0.0-SNAPSHOT"
+  },
+  "devDependencies": {
+    "@jangaroo/build": "^1.0.0",
+    "@jangaroo/core": "^1.0.0",
+    "@jangaroo/publish": "^1.0.0",
+    "rimraf": "^3.0.2"
+  },
+  "scripts": {
+    "clean": "rimraf ./dist && rimraf ./build",
+    "build": "jangaroo build",
+    "watch": "jangaroo watch",
+    "publish": "jangaroo publish"
+  },
+  "coremedia": {
+    "projectExtensionPoint": "studio-client.main-static"
+  },
+  "publishConfig": {
+    "directory": "dist"
+  }
+}

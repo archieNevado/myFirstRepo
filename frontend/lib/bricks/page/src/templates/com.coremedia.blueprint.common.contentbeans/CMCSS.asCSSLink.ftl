@@ -16,6 +16,7 @@
 <#assign attr={ "rel": "stylesheet" } + self.htmlAttributes />
 <#assign ignore=["href"] />
 
+<#-- deprecated since 2110, ieExpression will be removed -->
 <#if self.ieExpression?has_content>
   <!--[if ${self.ieExpression}]><link href="${cssLink}"<@utils.renderAttr attr=attr ignore=ignore /><@preview.metadata self.content />><![endif]-->
 <#else>

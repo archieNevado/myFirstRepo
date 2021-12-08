@@ -13,6 +13,7 @@
 //
 
 @mixin aspect-ratio-box-by-breakpoint($aspect-ratio-by-breakpoint) {
+  display: block;
   position: relative;
   overflow: hidden;
 

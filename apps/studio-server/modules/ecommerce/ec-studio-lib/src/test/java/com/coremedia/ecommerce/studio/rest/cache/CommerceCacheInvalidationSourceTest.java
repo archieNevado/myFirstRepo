@@ -3,7 +3,6 @@ package com.coremedia.ecommerce.studio.rest.cache;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceCacheInvalidationEvent;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
-import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.base.settings.impl.MapEntrySettingsFinder;
 import com.coremedia.blueprint.base.settings.impl.SettingsServiceImpl;
 import com.coremedia.cap.multisite.SitesService;
@@ -18,10 +17,10 @@ import com.coremedia.ecommerce.studio.rest.SegmentsResource;
 import com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.event.InvalidationEvent;
+import com.coremedia.rest.controller.EntityController;
 import com.coremedia.rest.invalidations.InvalidationSource;
-import com.coremedia.rest.linking.EntityResourceLinker;
-import com.coremedia.rest.linking.TypeBasedResourceClassFinder;
+import com.coremedia.rest.linking.EntityControllerMappingImpl;
+import com.coremedia.rest.linking.EntityLinker;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,15 +28,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Answers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.scheduling.TaskScheduler;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Stream;
 
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CATALOG;
@@ -46,9 +46,6 @@ import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.MA
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.SEGMENT;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.SKU;
-import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Sets.newHashSet;
-import static java.util.Collections.singleton;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -56,76 +53,38 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class CommerceCacheInvalidationSourceTest {
-
-  @Mock
-  private ApplicationContext context;
-
   @Mock
   private CatalogAliasTranslationService catalogAliasTranslationService;
 
   @Mock
   private SitesService sitesService;
 
-  @Mock
-  private SettingsService settingsService;
+  @Mock(answer = Answers.CALLS_REAL_METHODS)
+  private ObjectProvider<TaskScheduler> taskScheduler;
 
   private CommerceCacheInvalidationSource testling;
 
-  private static final String CATALOG_PREFIX = "ibm:///catalog/";
-
-  private static final String ID1 = "12345";
-  private static final String ID2 = "67890";
-  private static final String ID3 = "abcde";
-  private static final String ID4 = "fghi";
-
   @BeforeEach
   void setUp() {
-    testling = new CommerceCacheInvalidationSource();
-    // prepare the basic Studio REST linking infrastructure beans
-    EntityResourceLinker linker = new EntityResourceLinker();
-    TypeBasedResourceClassFinder resourceClassFinder = new TypeBasedResourceClassFinder();
-    resourceClassFinder.setResourceClasses(newArrayList(
-            CatalogResource.class,
-            CategoryResource.class,
-            MarketingSpotResource.class,
-            MarketingResource.class,
-            ProductResource.class,
-            ProductVariantResource.class,
-            SegmentResource.class,
-            SegmentsResource.class
-    ));
-    linker.setResourceClassFinder(resourceClassFinder);
-
-    CatalogResource catalogResource = new CatalogResource(catalogAliasTranslationService);
-    when(context.getBean(CatalogResource.class)).thenReturn(catalogResource);
-
-    CategoryResource categoryResource = new CategoryResource(catalogAliasTranslationService);
-    when(context.getBean(CategoryResource.class)).thenReturn(categoryResource);
-
-    MarketingSpotResource marketingSpotResource = new MarketingSpotResource(catalogAliasTranslationService);
-    when(context.getBean(MarketingSpotResource.class)).thenReturn(marketingSpotResource);
-
-    MarketingResource marketingResource = new MarketingResource(catalogAliasTranslationService);
-    when(context.getBean(MarketingResource.class)).thenReturn(marketingResource);
-
-    ProductResource productResource = new ProductResource(catalogAliasTranslationService);
-    when(context.getBean(ProductResource.class)).thenReturn(productResource);
-
-    ProductVariantResource productVariantResource = new ProductVariantResource(catalogAliasTranslationService);
-    when(context.getBean(ProductVariantResource.class)).thenReturn(productVariantResource);
-
-    SegmentResource segmentResource = new SegmentResource(catalogAliasTranslationService);
-    when(context.getBean(SegmentResource.class)).thenReturn(segmentResource);
-
-    SegmentsResource segmentsResource = new SegmentsResource(catalogAliasTranslationService, sitesService, settingsService);
-    when(context.getBean(SegmentsResource.class)).thenReturn(segmentsResource);
-
-    linker.setApplicationContext(context);
-    testling.setLinker(linker);
-
     SettingsServiceImpl settingsService = new SettingsServiceImpl();
     settingsService.addSettingsFinder(Map.class, new MapEntrySettingsFinder());
-    testling.setSettingsService(settingsService);
+
+    // prepare the basic Studio REST linking infrastructure beans
+    List<EntityController<?>> resourceClasses = List.of(
+            new CatalogResource(catalogAliasTranslationService),
+            new CategoryResource(catalogAliasTranslationService),
+            new MarketingSpotResource(catalogAliasTranslationService),
+            new MarketingResource(catalogAliasTranslationService),
+            new ProductResource(catalogAliasTranslationService),
+            new ProductVariantResource(catalogAliasTranslationService),
+            new SegmentResource(catalogAliasTranslationService),
+            new SegmentsResource(catalogAliasTranslationService, sitesService, settingsService));
+    var entityControllerMapping = EntityControllerMappingImpl.create(resourceClasses);
+
+    var linker = new EntityLinker(entityControllerMapping);
+    var commerceBeanClassResolver = new CommerceBeanClassResolver();
+
+    testling = new CommerceCacheInvalidationSource(taskScheduler, linker, settingsService, commerceBeanClassResolver);
     testling.setCapacity(10);
     testling.afterPropertiesSet();
   }
@@ -134,32 +93,39 @@ class CommerceCacheInvalidationSourceTest {
   static Stream<Arguments> testInvalidate() {
     return Stream.of(
             createTestInvalidateArgs("mySite", null, "test:///catalog/category/42",
-                    List.of("livecontext/category/mySite/{catalogAlias:.*}/{workspaceId:.*}/42")),
+                    List.of("livecontext/category/mySite/{catalogAlias:.*}/42")),
             createTestInvalidateArgs("mySite", null, "test:///catalog/product/42",
-                    List.of("livecontext/product/mySite/{catalogAlias:.*}/{workspaceId:.*}/42",
-                            "livecontext/sku/mySite/{catalogAlias:.*}/{workspaceId:.*}/42")),
+                    List.of("livecontext/product/mySite/{catalogAlias:.*}/42",
+                            "livecontext/sku/mySite/{catalogAlias:.*}/42")),
             createTestInvalidateArgs("mySite", null, "test:///catalog/sku/42",
-                    List.of("livecontext/sku/mySite/{catalogAlias:.*}/{workspaceId:.*}/42")),
+                    List.of("livecontext/sku/mySite/{catalogAlias:.*}/42")),
             createTestInvalidateArgs("mySite", CATEGORY, null,
-                    List.of("livecontext/category/mySite/{catalogAlias:.*}/{workspaceId:.*}/{id:.*}")),
+                    List.of("livecontext/category/mySite/{catalogAlias:.*}/{id:.*}")),
+            createTestInvalidateArgs("site", PRODUCT, "ibm:///catalog/product/12345",
+                    List.of("livecontext/product/site/{catalogAlias:.*}/12345",
+                            "livecontext/sku/site/{catalogAlias:.*}/12345")),
+            createTestInvalidateArgs("site", PRODUCT, "ibm:///catalog/product/67890",
+                    List.of("livecontext/product/site/{catalogAlias:.*}/67890",
+                            "livecontext/sku/site/{catalogAlias:.*}/67890")),
             createTestInvalidateArgs("mySite", PRODUCT, null,
-                    List.of("livecontext/sku/mySite/{catalogAlias:.*}/{workspaceId:.*}/{id:.*}",
-                            "livecontext/product/mySite/{catalogAlias:.*}/{workspaceId:.*}/{id:.*}")),
+                    List.of("livecontext/sku/mySite/{catalogAlias:.*}/{id:.*}",
+                            "livecontext/product/mySite/{catalogAlias:.*}/{id:.*}")),
             createTestInvalidateArgs("mySite", SKU, null,
-                    List.of("livecontext/sku/mySite/{catalogAlias:.*}/{workspaceId:.*}/{id:.*}")),
+                    List.of("livecontext/sku/mySite/{catalogAlias:.*}/{id:.*}")),
             createTestInvalidateArgs("mySite", CATALOG, null,
                     List.of("livecontext/catalog/mySite/{id:.*}")),
+            createTestInvalidateArgs("site", MARKETING_SPOT, "ibm:///catalog/marketingspot/abcde",
+                    List.of("livecontext/marketingspot/site/abcde")),
             createTestInvalidateArgs("mySite", MARKETING_SPOT, null,
-                    List.of("livecontext/marketingspot/mySite/{workspaceId:.*}/{id:.*}")),
+                    List.of("livecontext/marketingspot/mySite/{id:.*}")),
+            createTestInvalidateArgs("site", SEGMENT, "ibm:///catalog/segment/fghi",
+                    List.of("livecontext/segment/site/fghi")),
             createTestInvalidateArgs("mySite", SEGMENT, null,
-                    List.of("livecontext/segment/mySite/{workspaceId:.*}/{id:.*}")),
+                    List.of("livecontext/segment/mySite/{id:.*}")),
             createTestInvalidateArgs("mySite", null, null,
                     List.of("livecontext/{type:.*}/mySite/{id:.*}",
-                            "livecontext/{type:.*}/mySite/{workspaceId:.*}/{id:.*}",
-                            "livecontext/{type:.*}/mySite/{workspaceId:.*}",
-                            "livecontext/facets/mySite/{catalogAlias:.*}/{workspaceId:.*}/{id:.*}",
-                            "livecontext/searchfacets/mySite/{catalogAlias:.*}/{workspaceId:.*}/{id:.*}",
-                            "livecontext/workspaces/mySite"))
+                            "livecontext/{type:.*}/mySite/{catalogAlias:.*}/{id:.*}",
+                            "livecontext/{type:.*}/mySite"))
     );
   }
 
@@ -191,76 +157,15 @@ class CommerceCacheInvalidationSourceTest {
   }
 
   @Test
-  void testInvalidateList() throws InterruptedException {
-    InvalidationEvent event1 = createEvent(CATALOG_PREFIX + "product/" + ID1, "product");
-    InvalidationEvent event2 = createEvent(CATALOG_PREFIX + "product/" + ID2, "product");
-    InvalidationEvent event3 = createEvent(CATALOG_PREFIX + "marketingspot/" + ID3, "marketingspot");
-    InvalidationEvent event4 = createEvent(CATALOG_PREFIX + "segment/" + ID4, "segment");
-
-    List<InvalidationEvent> cacheInvalidations = newArrayList(event1, event2, event3, event4);
-
-    testling.invalidate(cacheInvalidations);
-
-    InvalidationSource.Invalidations invalidations = testling.getInvalidations("0");
-
-    Set<String> expected = newHashSet(
-            "livecontext/product/{siteId:.*}/{catalogAlias:.*}/{workspaceId:.*}/{id:.*}",
-            "livecontext/marketing/{siteId:.*}/{workspaceId:.*}",
-            "livecontext/marketingspot/{siteId:.*}/{workspaceId:.*}/{id:.*}",
-            "livecontext/segment/{siteId:.*}/{workspaceId:.*}/{id:.*}",
-            "livecontext/segments/{siteId:.*}/{workspaceId:.*}"
-    );
-
-    assertThat(invalidations.getInvalidations()).isEqualTo(expected);
-  }
-
-  private InvalidationEvent createEvent(String id, String contentType) {
-    return new InvalidationEvent(id, contentType, 0L);
-  }
-
-  @Test
-  void testInvalidateClearAll() throws InterruptedException {
-    InvalidationEvent event1 = createEvent(CATALOG_PREFIX + "product/" + ID1, "product");
-    InvalidationEvent event2 = createEvent(null, "clearall");
-
-    List<InvalidationEvent> cacheInvalidations = newArrayList(event1, event2);
-
-    testling.invalidate(cacheInvalidations);
-
-    InvalidationSource.Invalidations invalidations = testling.getInvalidations("0");
-
-    Set<String> expected = newHashSet("livecontext/{suffix:.*}");
-
-    assertThat(invalidations.getInvalidations()).isEqualTo(expected);
-  }
-
-  @Test
-  void testInvalidateInvalidEvents() throws InterruptedException {
-    InvalidationEvent event1 = createEvent(CATALOG_PREFIX + "product/" + ID1, "product");
-    InvalidationEvent event2 = createEvent("blub", "unknown");
-    InvalidationEvent event3 = createEvent(null, null);
-
-    List<InvalidationEvent> cacheInvalidations = newArrayList(event1, event2, event3);
-
-    testling.invalidate(cacheInvalidations);
-
-    InvalidationSource.Invalidations invalidations = testling.getInvalidations("0");
-
-    Set<String> expected = singleton("livecontext/product/{siteId:.*}/{catalogAlias:.*}/{workspaceId:.*}/{id:.*}");
-
-    assertThat(invalidations.getInvalidations()).isEqualTo(expected);
-  }
-
-  @Test
   void toCommerceBeanUriWithPartnumber() {
     assertThat(testling.toCommerceBeanUri(BaseCommerceBeanType.CATEGORY, "partNumber", null))
-            .contains("livecontext/category/{siteId:.*}/{catalogAlias:.*}/{workspaceId:.*}/partNumber");
+            .contains("livecontext/category/{siteId:.*}/{catalogAlias:.*}/partNumber");
   }
 
   @Test
   void toCommerceBeanUriWithTechId() {
     assertThat(testling.toCommerceBeanUri(BaseCommerceBeanType.CATEGORY, null, null))
-            .contains("livecontext/category/{siteId:.*}/{catalogAlias:.*}/{workspaceId:.*}/{id:.*}");
+            .contains("livecontext/category/{siteId:.*}/{catalogAlias:.*}/{id:.*}");
   }
 
   @SuppressWarnings("SameParameterValue")

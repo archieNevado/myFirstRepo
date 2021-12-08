@@ -3,7 +3,7 @@ package com.coremedia.blueprint.cae.contentbeans;
 import com.coremedia.blueprint.common.contentbeans.CMMedia;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.transform.NamedTransformBeanBlobTransformer;
-import com.google.common.collect.Lists;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import java.util.List;
 
@@ -47,9 +47,10 @@ public abstract class CMMediaImpl extends CMMediaBase {
   }
 
 
+  @NonNull
   @Override
   public List<CMMedia> getMedia() {
     List<CMMedia> media = super.getMedia();
-    return isNotEmpty(media) ? media : Lists.newArrayList(this);
+    return isNotEmpty(media) ? media : List.of(this);
   }
 }

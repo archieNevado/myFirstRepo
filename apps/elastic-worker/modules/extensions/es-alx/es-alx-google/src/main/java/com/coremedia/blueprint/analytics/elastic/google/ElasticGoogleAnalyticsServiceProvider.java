@@ -17,13 +17,12 @@ import com.google.api.client.util.SecurityUtils;
 import com.google.api.services.analytics.Analytics;
 import com.google.api.services.analytics.AnalyticsScopes;
 import com.google.api.services.analytics.model.GaData;
-import com.google.common.collect.ImmutableMap;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
@@ -31,10 +30,9 @@ import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.security.PrivateKey;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.google.common.collect.Maps.newHashMap;
 
 /**
  * Implements data retrieval for Google Analytics backed by CoreMedia Elastic storage.
@@ -52,13 +50,7 @@ public class ElasticGoogleAnalyticsServiceProvider implements AnalyticsServicePr
   static final String P12_FILE = "p12File";
   static final String KEY_PASS = "notasecret";
 
-  static final Map<String, Object> DEFAULT_RETRIEVAL_SETTINGS = ImmutableMap.<String, Object>builder()
-          .putAll(RetrievalUtil.DEFAULT_RETRIEVAL_SETTINGS)
-          .put(GoogleAnalyticsQuery.KEY_PID, 0)
-          .put(APPLICATION_NAME, "")
-          .put(SERVICE_ACCOUNT_EMAIL, "")
-          .put(P12_FILE, new Object())
-          .build();
+  static final Map<String, Object> DEFAULT_RETRIEVAL_SETTINGS = createDefaultRetrievalSettings();
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ElasticGoogleAnalyticsServiceProvider.class);
 
@@ -188,7 +180,7 @@ public class ElasticGoogleAnalyticsServiceProvider implements AnalyticsServicePr
           Analytics analytics = initializeAnalytics(applicationName, serviceAccountEmail, privateKey);
           GaData gaData = call(analytics, query);
           if (gaData != null && gaData.getTotalResults() > 0) {
-            result = newHashMap(query.process(gaData.getRows(), gaData.getColumnHeaders()));
+            result = new HashMap<>(query.process(gaData.getRows(), gaData.getColumnHeaders()));
           }
           // process pageviews map for the root navigation node
           OverallPerformanceQuery overAllQuery = new OverallPerformanceQuery(content, googleAnalyticsSettings);
@@ -241,5 +233,14 @@ public class ElasticGoogleAnalyticsServiceProvider implements AnalyticsServicePr
   @Override
   public Map<String, Object> computeEffectiveRetrievalSettings(Content cmalxBaseList, Content rootNavigation) {
     return RetrievalUtil.computeEffectiveRetrievalSettings(GOOGLE_ANALYTICS_SERVICE_KEY, DEFAULT_RETRIEVAL_SETTINGS, cmalxBaseList, rootNavigation, settingsService);
+  }
+
+  private static Map<String, Object> createDefaultRetrievalSettings() {
+    Map<String, Object> map = new HashMap<>(RetrievalUtil.DEFAULT_RETRIEVAL_SETTINGS);
+    map.put(GoogleAnalyticsQuery.KEY_PID, 0);
+    map.put(APPLICATION_NAME, "");
+    map.put(SERVICE_ACCOUNT_EMAIL, "");
+    map.put(P12_FILE, new Object());
+    return Collections.unmodifiableMap(map);
   }
 }

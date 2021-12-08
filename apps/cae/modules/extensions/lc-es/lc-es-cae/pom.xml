@@ -55,10 +55,6 @@
       <artifactId>bpbase-lc-common</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.elastic.core</groupId>
-      <artifactId>core-api</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.coremedia.elastic.social</groupId>
       <artifactId>social-api</artifactId>
     </dependency>
@@ -85,6 +81,7 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>es-cae-users</artifactId>
       <version>${project.version}</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -95,10 +92,6 @@
     <dependency>
       <groupId>com.coremedia.cms</groupId>
       <artifactId>cae-viewservices</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.coremedia.cms</groupId>
-      <artifactId>coremedia-logging</artifactId>
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>

@@ -1,0 +1,59 @@
+http:
+  routers:
+    # here we only need to add a new landing rule
+    # traefik v1: traefik.calista-landing.frontend.rule: Host:calista.${ENVIRONMENT_FQDN:-docker.localhost};Path:/;AddPrefix:/blueprint/servlet/calista
+    cae-live-wcs-landing:
+      priority: 50
+      entrypoints:
+        - web-access-secure
+        - web-access-insecure
+      rule: Host(`calista.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && Path(`/`)
+      service: cae-live
+      middlewares:
+        - cae-live-add-blueprint-servlet-calista@file
+    # FIXME: catalogimage somehow creates an url with blueprint/servlet prefix, this should not be necessary
+    # only required for the coremedia internal dataload job, urls are being imported with "blueprint/servlet" during the dataload and the cae is only replacing the <host> part
+    # traefik v1: traefik.wcs-dataload.frontend.rule: Host:helios.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/blueprint/servlet
+    cae-live-dataload:
+      # need a lower priority than any landing page route but higher than the servlet rule
+      priority: 40
+      entrypoints:
+        - web-access-secure
+        - web-access-insecure
+      rule: Host(`helios.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && PathPrefix(`/blueprint/servlet`)
+      service: cae-live
+    # traefik v1: traefik.calista-robots.frontend.rule: HostRegexp:{subdomain:calista}.${ENVIRONMENT_FQDN:-docker.localhost};PathStrip:/robots.txt;AddPrefix:/blueprint/servlet/service/robots/calista
+    cae-live-robots-calista:
+      # need a lower priority than any landing page route but higher than the servlet rule
+      priority: 40
+      entrypoints:
+        - web-access-secure
+        - web-access-insecure
+      rule: Host(`calista.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && Path(`/robots.txt`)
+      service: cae-live
+      middlewares:
+        - replace-robots-txt@file
+        - cae-live-add-blueprint-servlet-service-robots-calista@file
+    # traefik v1: traefik.aurora-robots.frontend.rule: HostRegexp:{subdomain:helios}.${ENVIRONMENT_FQDN:-docker.localhost};PathStrip:/robots.txt;AddPrefix:/blueprint/servlet/service/robots/aurora
+    cae-live-robots-aurora:
+      # need a lower priority than any landing page route but higher than the servlet rule
+      priority: 40
+      entrypoints:
+        - web-access-secure
+        - web-access-insecure
+      rule: Host(`helios.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && Path(`/robots.txt`)
+      service: cae-live
+      middlewares:
+        - replace-robots-txt@file
+        - cae-live-add-blueprint-servlet-service-robots-aurora@file
+
+  middlewares:
+    cae-live-add-blueprint-servlet-calista:
+      addPrefix:
+        prefix: "/blueprint/servlet/calista"
+    cae-live-add-blueprint-servlet-service-robots-calista:
+      addPrefix:
+        prefix: "/blueprint/servlet/service/robots/calista"
+    cae-live-add-blueprint-servlet-service-robots-aurora:
+      addPrefix:
+        prefix: "/blueprint/servlet/service/robots/aurora"

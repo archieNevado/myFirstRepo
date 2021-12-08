@@ -2,13 +2,15 @@ package com.coremedia.blueprint.ecommerce.cae;
 
 import com.coremedia.blueprint.base.links.UriConstants;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionInitializer;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
 import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +20,6 @@ import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletRequest;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,10 +35,7 @@ public class AbstractCommerceContextInterceptorTest {
   private Site site;
 
   @Mock
-  private CommerceConnectionInitializer commerceConnectionInitializer;
-
-  @Mock
-  private HttpServletRequest request;
+  private CommerceConnectionSupplier commerceConnectionSupplier;
 
   @Spy
   private AbstractCommerceContextInterceptor testling;
@@ -57,9 +55,9 @@ public class AbstractCommerceContextInterceptorTest {
     commerceConnection.setStoreContextProvider(storeContextProvider);
     commerceConnection.setInitialStoreContext(StoreContextBuilderImpl.from(commerceConnection, "any-site-id").build());
 
-    when(commerceConnectionInitializer.findConnectionForSite(site)).thenReturn(Optional.of(commerceConnection));
+    when(commerceConnectionSupplier.findConnection(site)).thenReturn(Optional.of(commerceConnection));
 
-    testling.setCommerceConnectionInitializer(commerceConnectionInitializer);
+    testling.setCommerceConnectionSupplier(commerceConnectionSupplier);
 
     when(storeContextProvider.buildContext(any())).thenAnswer(invocationOnMock -> {
       Object argument = invocationOnMock.getArgument(0);
@@ -103,25 +101,33 @@ public class AbstractCommerceContextInterceptorTest {
     Optional<CommerceConnection> connection = testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
     assertThat(connection)
             .isNotEmpty()
-            .map(CommerceConnection::getStoreContext)
+            .map(CommerceConnection::getInitialStoreContext)
             .isNotEmpty();
   }
 
   @Test
   public void testInitStoreContextProviderWithPreviewParameters() {
-    when(request.getParameter(ValidityPeriodValidator.REQUEST_PARAMETER_PREVIEW_DATE)).thenReturn("12-06-2014 13:00 Europe/Berlin");
-    when(request.getParameter(AbstractCommerceContextInterceptor.QUERY_PARAMETER_WORKSPACE_ID)).thenReturn("aWorkspaceId");
+    MockHttpServletRequest request = new MockHttpServletRequest();
+    request.addParameter(ValidityPeriodValidator.REQUEST_PARAMETER_PREVIEW_DATE, "12-06-2014 13:00 Europe/Berlin");
     deliveryConfigurationProperties.setPreviewMode(true);
 
     Optional<CommerceConnection> connection = testling.getCommerceConnectionWithConfiguredStoreContext(site, request);
 
     assertThat(connection)
             .isNotEmpty()
-            .map(CommerceConnection::getStoreContext)
+            .map(CommerceConnection::getInitialStoreContext)
+            .hasValueSatisfying(
+                    context -> {
+                      assertThat(context.getPreviewDate()).isEmpty();
+                    }
+            );
+
+    Optional<StoreContext> updatedStoreContext = CurrentStoreContext.find(request);
+    assertThat(updatedStoreContext)
+            .isNotEmpty()
             .hasValueSatisfying(
                     context -> {
                       assertThat(context.getPreviewDate()).isPresent();
-                      assertThat(context.getWorkspaceId()).isPresent();
                     }
             );
   }

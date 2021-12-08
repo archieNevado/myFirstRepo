@@ -31,7 +31,7 @@
       <#if !isUserAnonymous && self.author.image?has_content>
         <#assign elasticSocialSettings=bp.setting(cmpage!cm.UNDEFINED, "elasticSocial")/>
         <#assign link=cm.getLink(self.author.image {"transform":true, "width":elasticSocialSettings.userImageThumbnailWidth!40?int, "height": elasticSocialSettings.userImageCommentThumbnailHeight!40?int})/>
-        <img src="${link}" class="cm-review__user-image">
+        <img class="cm-review__user-image" src="${link}" loading="lazy">
       <#else>
         <div class="cm-review__user-image cm-review__user-image--default"></div>
       </#if>

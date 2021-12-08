@@ -15,7 +15,6 @@ import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
-import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -92,11 +91,9 @@ public class P13NFragmentHandler extends PageHandlerBase {
     Navigation context = getContextHelper().currentSiteContext();
     UriComponentsBuilder result = UriComponentsBuilder.fromPath(uriPattern.toString());
     result = addLinkParametersAsQueryParameters(result, linkParameters);
-    return result.buildAndExpand(
-            ImmutableMap.of(
-                    SEGMENT_ROOT, getPathSegments(context).get(0),
-                    ID_VARIABLE, cmLinkable.getContentId()
-            ));
+    return result.buildAndExpand(Map.of(
+            SEGMENT_ROOT, getPathSegments(context).get(0),
+            ID_VARIABLE, cmLinkable.getContentId()));
   }
 
   @Required

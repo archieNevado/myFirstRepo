@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>com.coremedia.blueprint.boot</groupId>
+    <groupId>com.coremedia.blueprint</groupId>
     <artifactId>workflow-server.spring-boot</artifactId>
     <version>1-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
@@ -13,18 +13,33 @@
 
   <description>
     To start the workflow-server-app run: mvn spring-boot:run
+
+    = Container Image Build =
+    Image building is skipped by default. To build the image, activate the default-image maven profile.
+    In addition, you can set jib.goal to "build" to directly build the image in the registry without docker.
+    i.e. mvn clean install -Pdefault-image -Djib.goal=build
   </description>
+
+  <properties>
+    <jib.skip>true</jib.skip>
+    <jib.goal>dockerBuild</jib.goal>
+    <application.image-base>coremedia/java-application-base:2.4.0-corretto-11</application.image-base>
+    <application.image-prefix>coremedia</application.image-prefix>
+    <application.image-suffix>workflow-server</application.image-suffix>
+    <application.image-tag>${project.version}</application.image-tag>
+
+  </properties>
 
   <dependencies>
     <dependency>
-      <groupId>com.coremedia.blueprint.boot</groupId>
+      <groupId>com.coremedia.blueprint</groupId>
       <artifactId>blueprint-spring-boot-autoconfigure</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>${blueprint.groupId}</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>workflowserver-blueprint-component</artifactId>
-      <version>${blueprint.version}</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -43,11 +58,25 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-tomcat</artifactId>
-      <scope>provided</scope>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!--For the docker image-->
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>wfs-tools-application</artifactId>
+      <type>coremedia-application</type>
+      <version>${project.version}</version>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>runtime</scope>
     </dependency>
   </dependencies>
 
@@ -59,62 +88,134 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
-          <mainClass>com.coremedia.blueprint.boot.workflowserver.WorkflowServerApp</mainClass>
+          <mainClass>${spring-boot.mainClass}</mainClass>
+          <layers>
+            <enabled>true</enabled>
+          </layers>
         </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>extract-tools</id>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <phase>generate-resources</phase>
+            <configuration>
+              <includeGroupIds>${project.groupId}</includeGroupIds>
+              <includeArtifactIds>wfs-tools-application</includeArtifactIds>
+              <includeTypes>coremedia-application</includeTypes>
+              <excludeTransitive>true</excludeTransitive>
+              <outputDirectory>target/tools</outputDirectory>
+              <!--this is provided by the base image -->
+              <excludes>bin/pre-config.jpif,bin/groovysh.jpif,properties/corem/tools-logback.xml,properties/corem/capclient.properties</excludes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.google.cloud.tools</groupId>
+        <artifactId>jib-maven-plugin</artifactId>
+        <configuration>
+          <from>
+            <image>${application.image-base}</image>
+          </from>
+          <to>
+            <image>${application.image-prefix}/${application.image-suffix}</image>
+            <tags>
+              <tag>${application.image-tag}</tag>
+            </tags>
+          </to>
+          <container>
+            <appRoot>/coremedia</appRoot>
+            <workingDirectory>/coremedia</workingDirectory>
+            <ports>
+              <!--Servlet Container Port -->
+              <port>8080</port>
+              <!--Actuator Port-->
+              <port>8081</port>
+            </ports>
+          </container>
+        </configuration>
+        <executions>
+          <execution>
+            <id>build-container-image</id>
+            <goals>
+              <goal>${jib.goal}</goal>
+            </goals>
+            <phase>install</phase>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
 
   <profiles>
     <profile>
-      <id>dev</id>
+      <id>default-image</id>
+      <properties>
+        <jib.skip>false</jib.skip>
+      </properties>
       <build>
         <plugins>
           <plugin>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>unpack-corem-home</id>
-                <goals>
-                  <goal>unpack</goal>
-                </goals>
-                <phase>generate-resources</phase>
-                <configuration>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>${blueprint.groupId}</groupId>
-                      <artifactId>workflowserver-blueprint-config</artifactId>
-                      <version>${blueprint.version}</version>
-                      <type>coremedia-application</type>
-                    </artifactItem>
-                  </artifactItems>
-                  <outputDirectory>${project.build.directory}/corem-home</outputDirectory>
-                  <excludes>lib</excludes>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>properties-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>set-spring-boot-run-properties</id>
-                <goals>
-                  <goal>set-system-properties</goal>
-                </goals>
-                <phase>initialize</phase>
-                <configuration>
-                  <properties>
-                    <!--
-                     | we need corem.home to be set as a system property, and because of https://issues.apache.org/jira/browse/MNG-5951
-                     | not yet released, we cannot inherit and append a text element
-                     -->
-                    <corem.home>${project.build.directory}/corem-home</corem.home>
-                  </properties>
-                </configuration>
-              </execution>
-            </executions>
+            <groupId>com.google.cloud.tools</groupId>
+            <artifactId>jib-maven-plugin</artifactId>
+            <configuration>
+              <container>
+                <entrypoint>INHERIT</entrypoint>
+                <args>
+                  <arg>application</arg>
+                </args>
+                <user>coremedia:coremedia</user>
+                <environment>
+                  <JAVA_HEAP>384m</JAVA_HEAP>
+                  <JAVA_PARALLEL_GC>true</JAVA_PARALLEL_GC>
+                  <SPRING_BOOT_EXPLODED_APP>true</SPRING_BOOT_EXPLODED_APP>
+                  <SPRING_BOOT_EXPLODED_MAINCLASS>@jib-main-class-file</SPRING_BOOT_EXPLODED_MAINCLASS>
+                  <SPRING_BOOT_EXPLODED_CLASSPATH>@jib-classpath-file</SPRING_BOOT_EXPLODED_CLASSPATH>
+                </environment>
+                <ports>
+                  <!--Prometheus Agent Port-->
+                  <port>8199</port>
+                </ports>
+              </container>
+              <extraDirectories>
+                <paths>
+                  <path>src/main/image</path>
+                  <path>
+                    <from>target/tools</from>
+                    <into>/coremedia/tools</into>
+                  </path>
+                </paths>
+                <permissions>
+                  <permission>
+                    <file>/coremedia/workflowconverter</file>
+                    <mode>755</mode>
+                  </permission>
+                  <permission>
+                    <file>/coremedia/tools/bin/cm</file>
+                    <mode>755</mode>
+                  </permission>
+                </permissions>
+              </extraDirectories>
+              <pluginExtensions>
+                <pluginExtension>
+                  <implementation>com.google.cloud.tools.jib.maven.extension.ownership.JibOwnershipExtension
+                  </implementation>
+                  <configuration implementation="com.google.cloud.tools.jib.maven.extension.ownership.Configuration">
+                    <rules>
+                      <rule>
+                        <glob>/coremedia**</glob>
+                        <ownership>1000:1000</ownership>
+                      </rule>
+                    </rules>
+                  </configuration>
+                </pluginExtension>
+              </pluginExtensions>
+            </configuration>
           </plugin>
         </plugins>
       </build>

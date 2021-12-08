@@ -14,7 +14,6 @@ import java.util.Optional;
 import static com.coremedia.ecommerce.studio.rest.AbstractCatalogResource.PATH_CATALOG_ALIAS;
 import static com.coremedia.ecommerce.studio.rest.AbstractCatalogResource.PATH_ID;
 import static com.coremedia.ecommerce.studio.rest.AbstractCatalogResource.PATH_SITE_ID;
-import static com.coremedia.ecommerce.studio.rest.AbstractCatalogResource.PATH_WORKSPACE_ID;
 import static com.coremedia.ecommerce.studio.rest.AbstractCatalogResource.QUERY_ID;
 
 /**
@@ -28,7 +27,7 @@ import static com.coremedia.ecommerce.studio.rest.AbstractCatalogResource.QUERY_
 public class CommerceBeanResourceWithEncodedId {
   private static final String PATH_RESOURCE_TYPE = "resourceType";
   static final String URI_PATH
-          = "livecontext/{" + PATH_RESOURCE_TYPE + "}/{" + PATH_SITE_ID + "}/{" + PATH_CATALOG_ALIAS + "}/{" + PATH_WORKSPACE_ID + "}";
+          = "livecontext/{" + PATH_RESOURCE_TYPE + "}/{" + PATH_SITE_ID + "}/{" + PATH_CATALOG_ALIAS + "}";
 
   private final Map<String, CommerceBeanResource> resourceMap;
 

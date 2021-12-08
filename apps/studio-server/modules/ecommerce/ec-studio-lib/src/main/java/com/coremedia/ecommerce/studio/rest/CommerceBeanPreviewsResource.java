@@ -18,11 +18,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.WORKSPACE_ID_NONE;
 import static com.coremedia.ecommerce.studio.rest.AbstractCatalogResource.PATH_CATALOG_ALIAS;
 import static com.coremedia.ecommerce.studio.rest.AbstractCatalogResource.PATH_ID;
 import static com.coremedia.ecommerce.studio.rest.AbstractCatalogResource.PATH_SITE_ID;
-import static com.coremedia.ecommerce.studio.rest.AbstractCatalogResource.PATH_WORKSPACE_ID;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -30,7 +28,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class CommerceBeanPreviewsResource implements EntityController<CommerceBeanPreviews> {
   private static final String PATH_RESOURCE_TYPE = "resourceType";
   static final String PREVIEWS_URI_PATH
-          = "livecontext/previews/{" + PATH_RESOURCE_TYPE + "}/{" + PATH_SITE_ID + "}/{" + PATH_CATALOG_ALIAS + "}/{" + PATH_WORKSPACE_ID + "}/{" + PATH_ID + ":.+}";
+          = "livecontext/previews/{" + PATH_RESOURCE_TYPE + "}/{" + PATH_SITE_ID + "}/{" + PATH_CATALOG_ALIAS + "}/{" + PATH_ID + ":.+}";
 
   private final PreviewUrlService previewUrlService;
   private final Map<String, CommerceBeanResource> resourceMap;
@@ -76,11 +74,10 @@ public class CommerceBeanPreviewsResource implements EntityController<CommerceBe
     CommerceBean entity = previews.getCommerceBean();
     StoreContext context = entity.getContext();
     Map<String, String> params = new HashMap<>();
-    params.put(PATH_RESOURCE_TYPE, entity.getId().getCommerceBeanType().type());
+    params.put(PATH_RESOURCE_TYPE, entity.getId().getCommerceBeanType().value());
     params.put(PATH_ID, entity.getExternalId());
     params.put(PATH_CATALOG_ALIAS, entity.getId().getCatalogAlias().value());
     params.put(PATH_SITE_ID, context.getSiteId());
-    params.put(PATH_WORKSPACE_ID, context.getWorkspaceId().orElse(WORKSPACE_ID_NONE).value());
     return params;
   }
 

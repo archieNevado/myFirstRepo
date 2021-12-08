@@ -43,12 +43,12 @@ import com.coremedia.mimetype.MimeTypeService;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
-import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Configuration(proxyBeanMethods = false)
@@ -343,11 +343,11 @@ public class LcCaeFragmentConfiguration {
                                                 ExternalPageFragmentHandler externalPageFragmentHandler,
                                                 ProductFragmentHandler productFragmentHandler,
                                                 CategoryFragmentHandler categoryFragmentHandler) {
-    return Lists.newArrayList(cmSearchFragmentHandler,
+    return new ArrayList<>(List.of(cmSearchFragmentHandler,
             externalRefFragmentHandler,
             externalPageFragmentHandler,
             productFragmentHandler,
-            categoryFragmentHandler);
+            categoryFragmentHandler));
   }
 
   /**
@@ -363,14 +363,14 @@ public class LcCaeFragmentConfiguration {
                                                                       SearchTermExternalReferenceResolver searchTermExternalReferenceResolver,
                                                                       SegmentPathResolver segmentPathResolver,
                                                                       BreadcrumbExternalReferenceResolver breadcrumbExternalReferenceResolver) {
-    return Lists.newArrayList(contentCapIdExternalReferenceResolver,
+    return new ArrayList<>(List.of(contentCapIdExternalReferenceResolver,
             contentPathExternalReferenceResolver,
             contentNumericIdExternalReferenceResolver,
             contentNumericIdWithChannelIdExternalReferenceResolver,
             contentSeoSegmentExternalReferenceResolver,
             searchTermExternalReferenceResolver,
             segmentPathResolver,
-            breadcrumbExternalReferenceResolver);
+            breadcrumbExternalReferenceResolver));
   }
 
   @Bean
@@ -388,7 +388,7 @@ public class LcCaeFragmentConfiguration {
                                                                       DataViewFactory dataViewFactory) {
     CompositePageGridPlacementResolver placementResolver = new CompositePageGridPlacementResolver();
 
-    placementResolver.setResolvers(Lists.newArrayList(defaultPageGridPlacementResolver));
+    placementResolver.setResolvers(List.of(defaultPageGridPlacementResolver));
     placementResolver.setDataViewFactory(dataViewFactory);
 
     return placementResolver;

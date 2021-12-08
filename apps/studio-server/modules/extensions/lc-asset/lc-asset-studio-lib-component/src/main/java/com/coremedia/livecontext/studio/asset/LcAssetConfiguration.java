@@ -1,10 +1,9 @@
 package com.coremedia.livecontext.studio.asset;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceServicesAutoConfiguration;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceServicesConfiguration;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.cache.Cache;
 import com.coremedia.cache.config.CacheConfigurationProperties;
-import com.coremedia.cap.common.CapConnection;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.ecommerce.studio.rest.cache.CommerceCacheInvalidationSource;
@@ -12,7 +11,6 @@ import com.coremedia.livecontext.asset.util.AssetHelper;
 import com.coremedia.livecontext.asset.util.AssetReadSettingsHelper;
 import com.coremedia.livecontext.asset.util.AssetWriteSettingsHelper;
 import com.coremedia.livecontext.studio.asset.validators.LcAssetValidatorsConfiguration;
-import com.coremedia.livecontext.studio.asset.validators.SpinnerSequenceAssetValidator;
 import com.coremedia.rest.cap.CapRestServiceSearchConfiguration;
 import com.coremedia.rest.cap.content.search.SearchService;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
@@ -24,7 +22,7 @@ import org.springframework.context.annotation.ImportResource;
 @Configuration(proxyBeanMethods = false)
 @Import({
         CapRestServiceSearchConfiguration.class,
-        BaseCommerceServicesAutoConfiguration.class,
+        BaseCommerceServicesConfiguration.class,
         LcAssetValidatorsConfiguration.class
 })
 @ImportResource(value = {

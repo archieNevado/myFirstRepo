@@ -9,6 +9,8 @@
   <import resource="classpath:/com/coremedia/blueprint/base/navigation/context/bpbase-default-contextstrategy.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/links/bpbase-urlpathformatting.xml"/>
 
+  <bean class="com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceServicesConfiguration"/>
+
   <bean id="externalReferenceResolverBase" abstract="true" class="com.coremedia.livecontext.fragment.resolver.ExternalReferenceResolverBase" >
     <property name="contentRepository" ref="contentRepository"/>
     <property name="contentBeanFactory" ref="contentBeanFactory"/>
@@ -48,8 +50,6 @@
   </bean>
   <bean id="breadcrumbExternalReferenceResolver" parent="externalReferenceResolverBase"
         class="com.coremedia.livecontext.fragment.resolver.BreadcrumbExternalReferenceResolver">
-    <property name="storefrontUrl" value="${livecontext.storefront.url:}" />
-    <property name="lowerCaseSiteName" value="true"/>
   </bean>
 
   <bean id="segmentPathResolver" parent="externalReferenceResolverBase"

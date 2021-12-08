@@ -1,6 +1,5 @@
 package com.coremedia.ecommerce.studio.rest;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceBean;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.ecommerce.studio.rest.model.Store;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
@@ -20,6 +19,8 @@ import java.util.Currency;
 import java.util.Locale;
 import java.util.Map;
 
+import static com.coremedia.blueprint.base.livecontext.util.CommerceBeanUtils.getCatalog;
+
 /**
  * A catalog {@link Product} object as a RESTful resource.
  */
@@ -28,7 +29,7 @@ import java.util.Map;
 public class ProductResource extends CommerceBeanResource<Product> {
 
   static final String PATH_TYPE = "product";
-  static final String URI_PATH = "livecontext/" + PATH_TYPE + "/{" + PATH_SITE_ID + "}/{" + PATH_CATALOG_ALIAS + "}/{" + PATH_WORKSPACE_ID + "}/{id:.+}";
+  static final String URI_PATH = "livecontext/" + PATH_TYPE + "/{" + PATH_SITE_ID + "}/{" + PATH_CATALOG_ALIAS + "}/{id:.+}";
 
   @Autowired
   public ProductResource(CatalogAliasTranslationService catalogAliasTranslationService) {
@@ -64,7 +65,7 @@ public class ProductResource extends CommerceBeanResource<Product> {
             RepresentationHelper.modifyAssetImageUrl(thumbnailUrl, getContentRepositoryResource().getContentRepository()));
     representation.setCategory(product.getCategory());
     representation.setStore(new Store(product.getContext()));
-    AbstractCommerceBean.getCatalog(product).ifPresent(representation::setCatalog);
+    getCatalog(product).ifPresent(representation::setCatalog);
     representation.setOfferPrice(product.getOfferPrice());
     representation.setListPrice(product.getListPrice());
 

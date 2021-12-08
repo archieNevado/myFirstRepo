@@ -1,0 +1,34 @@
+version: "3.4"
+services:
+  studio-client:
+    volumes:
+      - ../plugins/studio-client.main:/coremedia/plugins/studio-client.main
+      - ../plugins/studio-client.workflow:/coremedia/plugins/studio-client.workflow
+
+  studio-server:
+    environment:
+      PLUGINS_DIRECTORIES_0_: /coremedia/bundled-plugins
+      PLUGINS_DIRECTORIES_1_: /coremedia/plugins
+    volumes:
+      - ../plugins/studio-server:/coremedia/plugins
+
+  headless-server-preview:
+    environment:
+      PLUGINS_DIRECTORIES_0_: /coremedia/bundled-plugins
+      PLUGINS_DIRECTORIES_1_: /coremedia/plugins
+    volumes:
+      - ../plugins/headless-server:/coremedia/plugins
+
+  headless-server-live:
+    environment:
+      PLUGINS_DIRECTORIES_0_: /coremedia/bundled-plugins
+      PLUGINS_DIRECTORIES_1_: /coremedia/plugins
+    volumes:
+      - ../plugins/headless-server:/coremedia/plugins
+
+  content-feeder:
+    environment:
+      PLUGINS_DIRECTORIES_0_: /coremedia/bundled-plugins
+      PLUGINS_DIRECTORIES_1_: /coremedia/plugins
+    volumes:
+      - ../plugins/content-feeder:/coremedia/plugins

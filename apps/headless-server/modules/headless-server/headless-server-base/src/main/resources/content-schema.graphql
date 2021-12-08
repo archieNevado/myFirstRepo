@@ -22,6 +22,8 @@ scalar RichTextTree
 
 scalar JSON
 
+scalar Long
+
 """
 The top query root
 """
@@ -84,7 +86,7 @@ type ContentRoot {
     """
     The navigation path to the requested page. A navigation path is a concatenation of segments, separated by '/'.
     """
-    path: String!): CMChannel @fetch(from: "@byPathAdapter.to().getPageByPath(#path, #context['caasViewName'])")
+    path: String!): CMChannel @fetch(from: "@byPathAdapter.to().getPageByPath(#path)")
 
   """
   Dedicated `site` query, returning a content object of type `Site`, matching the given site id.
@@ -97,27 +99,49 @@ type ContentRoot {
     """
     The root segment of the requested site (of type `String`).
     """
-    rootSegment: String,
-    """
-    Deprecated! Functionally identical to `id` but badly named for `id` is already used by content objects.
-    A site id is not the same as a content id!
-    """
-    id: String  @deprecated(reason: "Arg 'id' is deprecated. Use 'siteId' instead.")): Site @fetch(from: "@byPathAdapter.to().getSite(#siteId, #rootSegment, #id)")
+    rootSegment: String): Site @fetch(from: "@byPathAdapter.to().getSite(#siteId, #rootSegment)")
 
   """
   The `sites` query delivers an array of type `Site` of all known sites in the content repository w/o any parameter necessary.
   """
   sites: [Site]!
+
+  """
+  Get taxonomy by id, type match for subtypes
+  """
+  taxonomy(id:String): CMTaxonomy @fetch(from: "getContent(#id, 'CMTaxonomy')")
+
+  """
+  Get taxonomy by path segments
+  """
+  taxonomyByPath(
+    """
+    Path segments from root to taxonomy, including the taxonomy value, separated by '/'. Alternatively only the taxonomy value can be provided.
+    """
+    pathSegments:String,
+    """
+    Type of taxonomy: CMTaxonomy (default) or CMLocTaxonomy. Will be matched exactly.
+    """
+    type:String,
+    """
+    The site id for taxonomy lookup in the site root folder. If no site id is given, taxonomies retrieved from the global path (/Settings/Taxonomies).
+    """
+    siteId:String): CMTaxonomy @fetch(from: "@taxonomyAdapter.to().getByPath(#pathSegments, #type, #siteId)")
 }
 
 # interfaces alphabetically
 
 interface Banner {
   teaserTitle: String
-  teaserText(view: String): String
+  teaserText: RichText
+  teaserTextLegacy(view: String): String @deprecated(reason: "Replaced by new RichText type")
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason: "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason: "Replaced by new RichText type")
   media: [CMMedia]
+  mediaPaged(offset: Int, limit: Int): CMMediaPaginationResult
   picture: CMPicture
   pictures: [CMPicture]
+  picturesPaged(offset: Int, limit: Int): CMPicturePaginationResult
 }
 
 """
@@ -135,12 +159,16 @@ Models the properties of a page content object.
 """
 interface CMChannel @inherit(from: ["CMNavigation"]) {
   header: [CMLinkable]
+  headerPaged(offset: Int, limit: Int): CMLinkablePaginationResult
   footer: [CMLinkable]
+  footerPaged(offset: Int, limit: Int): CMLinkablePaginationResult
 }
 
 interface CMCollection @inherit(from: ["CMTeasable"]) {
   items: [CollectionItem]
+  itemsPaged(offset: Int, limit: Int): CollectionItemPaginationResult
   teasableItems: [CMTeasable]
+  teasableItemsPaged(offset: Int, limit: Int): CMTeasablePaginationResult
   bannerItems: [Banner]
   detailItems: [Detail]
 }
@@ -161,6 +189,7 @@ interface CMExternalLink @inherit(from: ["CMTeasable"]) {
 
 interface CMGallery @inherit(from: ["CMCollection"]) {
   mediaItems: [CMMedia]
+  mediaItemsPaged(offset: Int, limit: Int): CMMediaPaginationResult
 }
 
 interface CMHTML @inherit(from: ["CMMedia"]) {
@@ -186,7 +215,9 @@ interface CMInteractive @inherit(from: ["CMVisual"]) {}
 interface CMLinkable @inherit(from: ["CMLocalized", "CollectionItem"]) {
   settings(paths: [[String!]!]!): JSON
   contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInSettingPaged(paths: [[String!]!]!, offset: Int, limit: Int): LinkedContentEntryPaginationResult
   contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStructPaged(paths: [[String!]!]!, offset: Int, limit: Int): LinkedContentEntryPaginationResult
   context: CMNavigation
   extDisplayedDate: String
   link: Link
@@ -197,24 +228,29 @@ interface CMLinkable @inherit(from: ["CMLocalized", "CollectionItem"]) {
   validTo: String
   viewtype: String
   subjectTaxonomy: [CMTaxonomy]
+  subjectTaxonomyPaged(offset: Int, limit:Int): CMTaxonomyPaginationResult
   locationTaxonomy: [CMLocTaxonomy]
+  locationTaxonomyPaged(offset: Int, limit:Int): CMLocTaxonomyPaginationResult
   htmlTitle: String
   htmlDescription: String
   keywords: String
+  keywordsList: [String!]!
 }
 
 interface CMLocalized @inherit(from: ["CMObject"]) {
   ignoreUpdates: Int
-  languageId: String @deprecated(reason: "Property 'languageId' is deprecated. Use 'locale' instead.")
   locale: String
   localizedVariants: [CMLocalized!]!
   localizedVariant(language: String!, country: String, variant: String): CMLocalized
+  localizationRoot: CMLocalized!
+  master: [CMLocalized!]!
 }
 
 interface CMLocTaxonomy @inherit(from: ["CMTaxonomy"]) {
   postcode: String
   latitudeLongitude: String
   locChildren: [CMLocTaxonomy]
+  locChildrenPaged(offset: Int, limit: Int): CMLocTaxonomyPaginationResult
 }
 
 interface CMMedia @inherit(from: ["CMTeasable"]) {
@@ -229,6 +265,7 @@ interface CMMedia @inherit(from: ["CMTeasable"]) {
 
 interface CMNavigation @inherit(from: ["CMTeasable", "HasPageGrid"]) {
   children: [CMLinkable]
+  childrenPaged(offset: Int, limit: Int): CMLinkablePaginationResult
   grid: PageGrid
   hidden: Boolean
   hiddenInSitemap: Boolean
@@ -282,21 +319,26 @@ interface CMTaxonomy @inherit(from: ["CMTeasable"]) {
   value: String
   externalReference: String
   children: [CMTaxonomy]
+  childrenPaged(offset: Int, limit: Int): CMTaxonomyPaginationResult
   parent: CMTaxonomy
   pathToRoot: [CMTaxonomy]
 }
 
 interface CMTeasable @inherit(from: ["CMLinkable", "Detail", "Banner"]) {
   authors: [CMTeasable]
+  authorsPaged(offset: Int, limit: Int): CMTeasablePaginationResult
   related: [CMTeasable]
+  relatedPaged(offset: Int, limit: Int): CMTeasablePaginationResult
   teaserOverlaySettings: TeaserOverlaySettings
   teaserTarget: CMLinkable
   teaserTargets: [ExtendedTeaserTarget]
-  teaserTextAsTree(view: String): RichTextTree
-  teaserTextReferencedContent(view: String): [Content_!]
+  teaserTargetsPaged(offset: Int, limit: Int): ExtendedTeaserTargetPaginationResult
   video: CMVideo
   videos: [CMVideo]
+  videosPaged(offset: Int, limit: Int): CMVideoPaginationResult
   spinner: CMSpinner
+  spinners: [CMSpinner]
+  spinnersPaged(offset: Int, limit: Int): CMSpinnerPaginationResult
   root: CMNavigation
 }
 
@@ -327,9 +369,16 @@ interface Content_ {
 }
 
 interface Detail {
-  detailText(view: String): String
-  detailTextAsTree(view: String): RichTextTree
-  detailTextReferencedContent(view: String): [Content_!]
+  detailText: RichText
+  detailTextLegacy(view: String): String @deprecated(reason: "Replaced by new RichText type")
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason: "Included in the RichText-Type of the detailText field.")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason: "Included in the RichText-Type of the detailText field.")
+}
+
+type RichText {
+  text(view: String): String @fetch(from: "#this?.view(#view?:'default')")
+  textAsTree(view: String): RichTextTree @fetch(from: "#this?.view(#view?:'default')")
+  textReferencedContent(view: String): [Content_!] @fetch(from: "#this?.view(#view?:'default')?.getReferencedContent()")
 }
 
 interface HasPageGrid {
@@ -359,18 +408,24 @@ type CMAudioImpl implements CMAudio @inherit(from: ["CMMediaImpl"]) {
 
 type CMChannelImpl implements CMChannel @inherit(from: ["CMNavigationImpl"]) {
   header: [CMLinkable]
+  headerPaged(offset: Int, limit: Int): CMLinkablePaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, #this.header)")
   footer: [CMLinkable]
+  footerPaged(offset: Int, limit: Int): CMLinkablePaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, #this.footer)")
 
   picture: CMPicture @fetch(from: "@channelMediaLinkListAdapter.to(#this, 'CMPicture').first()")
   pictures: [CMPicture] @fetch(from: "@channelMediaLinkListAdapter.to(#this, 'CMPicture').list()")
+  picturesPaged(offset: Int, limit: Int): CMPicturePaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, @channelMediaLinkListAdapter.to(#this, 'CMPicture').list())")
 
   video: CMVideo @fetch(from: "@channelMediaLinkListAdapter.to(#this, 'CMVideo').first()")
   videos: [CMVideo] @fetch(from: "@channelMediaLinkListAdapter.to(#this, 'CMVideo').list()")
+  videosPaged(offset: Int, limit: Int): CMVideoPaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, @channelMediaLinkListAdapter.to(#this, 'CMVideo').list())")
 }
 
 type CMCollectionImpl implements CMCollection @inherit(from: ["CMTeasableImpl"]) {
   items: [CollectionItem]
+  itemsPaged(offset: Int, limit: Int): CollectionItemPaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, #this.items)")
   teasableItems: [CMTeasable] @fetch(from: "#this.items")
+  teasableItemsPaged(offset: Int, limit: Int): CMTeasablePaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, #this.items)")
   bannerItems: [Banner] @fetch(from: "#this.items")
   detailItems: [Detail] @fetch(from: "#this.items")
 }
@@ -391,9 +446,11 @@ type CMExternalLinkImpl implements CMExternalLink @inherit(from: ["CMTeasableImp
 
 type CMGalleryImpl implements CMGallery @inherit(from: ["CMCollectionImpl"]) {
   mediaItems: [CMMedia] @fetch(from: "#this.items")
+  mediaItemsPaged(offset: Int, limit: Int): CMMediaPaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, #this.items)")
 }
 
 type CMHTMLImpl implements CMHTML @inherit(from: ["CMMediaImpl"]) {
+  data: Blob @fetch(from: "@contentMarkupAdapter.to(#root,{'data'})")
   description: String
   html: String @fetch(from: "@htmlAdapterFactory.to().toHtml(#this, 'data')")
 }
@@ -421,7 +478,9 @@ type LinkedContentEntry {
 type CMLinkableImpl implements CMLinkable @inherit(from: ["CMLocalizedImpl"]) {
   settings(paths: [[String!]!]!): JSON @fetch(from: "@settingsAdapter.to(#root).getWrappedInMap(#paths)")
   contentInSetting(paths: [[String!]!]!): [LinkedContentEntry] @fetch(from: "@settingsAdapter.to(#root).getList(#paths)")
+  contentInSettingPaged(paths: [[String!]!]!, offset: Int, limit:Int): LinkedContentEntryPaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, @settingsAdapter.to(#root).getList(#paths))")
   contentInStruct(paths: [[String!]!]!): [LinkedContentEntry] @fetch(from: "@structAdapter.to(#root).getList(#paths)")
+  contentInStructPaged(paths: [[String!]!]!, offset: Int, limit:Int): LinkedContentEntryPaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, @structAdapter.to(#root).getList(#paths))")
   context: CMNavigation @fetch(from: "@navigationAdapter.to(#root).findContext()")
   extDisplayedDate: String
   link: Link @fetch(from: "@graphQlLinkComposer.apply(#root)")
@@ -433,24 +492,29 @@ type CMLinkableImpl implements CMLinkable @inherit(from: ["CMLocalizedImpl"]) {
   viewtype: String @fetch(from: "getLink('viewtype')?.layout")
   remoteLink(siteId:String, context:String): String!
   subjectTaxonomy: [CMTaxonomy]
+  subjectTaxonomyPaged(offset: Int, limit:Int): CMTaxonomyPaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, #this.subjectTaxonomy)")
   locationTaxonomy: [CMLocTaxonomy]
+  locationTaxonomyPaged(offset: Int, limit:Int): CMLocTaxonomyPaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, #this.locationTaxonomy)")
   htmlTitle: String
   htmlDescription: String
   keywords: String
+  keywordsList: [String!]! @fetch(from: "(#this.keywords == null || #this.keywords.isBlank()) ? {} : #this.keywords.split(',')")
 }
 
 type CMLocalizedImpl implements CMLocalized @inherit(from: ["CMObjectImpl"]) {
   ignoreUpdates: Int
-  languageId: String @fetch(from: "#this.locale")
-  locale: String
+  locale: String @fetch(from: "@content.getLocale(#root)")
   localizedVariants: [CMLocalized!]! @fetch(from: "@localizedVariantsAdapterFactory.to().getLocalizations(#root)")
   localizedVariant(language: String!, country: String, variant: String): CMLocalized @fetch(from: "@localizedVariantsAdapterFactory.to().getLocalizationForLocale(#root, #language, #country, #variant)")
+  localizationRoot: CMLocalized! @fetch(from: "@localizedVariantsAdapterFactory.to().getLocalizationRoot(#root)")
+  master: [CMLocalized!]!
 }
 
 type CMLocTaxonomyImpl implements CMLocTaxonomy @inherit(from: ["CMTaxonomyImpl"]) {
   postcode: String
   latitudeLongitude: String
   locChildren: [CMLocTaxonomy] @fetch(from: "#this.children")
+  locChildrenPaged(offset: Int, limit:Int): CMLocTaxonomyPaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, #this.children)")
 }
 
 type CMMediaImpl implements CMMedia @inherit(from: ["CMTeasableImpl"]) {
@@ -465,7 +529,8 @@ type CMMediaImpl implements CMMedia @inherit(from: ["CMTeasableImpl"]) {
 
 type CMNavigationImpl implements CMNavigation @inherit(from: ["CMTeasableImpl"]) {
   children: [CMLinkable] @fetch(from: "@navigationAdapter.to(#root).children")
-  grid: PageGrid @fetch(from: "@pageGridAdapter.to(#root,'placement')")
+  childrenPaged(offset: Int, limit:Int): CMLinkablePaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, @navigationAdapter.to(#root).children)")
+  grid: PageGrid @fetch(from: "@pageGridAdapter.to(#root,'placement', #dataFetchingEnvironment)")
   hidden: Boolean
   hiddenInSitemap: Boolean
   parent: CMNavigation @fetch(from: "@navigationAdapter.to(#root).parent")
@@ -489,6 +554,7 @@ type CMPictureImpl implements CMPicture @inherit(from: ["CMVisualImpl"]) {
   crops: [Crop!]!  @fetch(from:"@responsiveMediaAdapter.to(#root, 'data').crops" )
   picture: CMPicture @fetch(from: "#root")
   pictures: [CMPicture] @fetch(from: "{#root}")
+  picturesPaged(offset: Int, limit:Int): CMPicturePaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, {#root})")
   uriTemplate(imageFormat: ImageFormat): String! @fetch(from: "@uriLinkComposer.apply(@responsiveMediaAdapter.to(#root, 'data', #imageFormat))")
 }
 
@@ -518,35 +584,45 @@ type CMTaxonomyImpl implements CMTaxonomy @inherit(from: ["CMTeasableImpl"]) {
   value: String
   externalReference: String
   children: [CMTaxonomy]
+  childrenPaged(offset: Int, limit:Int): CMTaxonomyPaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, #this.children)")
   parent: CMTaxonomy @fetch(from: "@navigationAdapter.to(#this).getParent()")
   pathToRoot: [CMTaxonomy] @fetch(from: "@navigationAdapter.to(#this).getPathToRoot()")
 }
 
 type CMTeasableImpl implements CMTeasable @inherit(from: ["CMLinkableImpl"]) {
   authors: [CMTeasable]
-  detailText(view: String): String @fetch(from: "detailText?.view(#view?:'default')")
-  detailTextAsTree(view: String): RichTextTree @fetch(from: "detailText?.view(#view?:'default')")
-  detailTextReferencedContent(view: String): [Content_!] @fetch(from: "detailText?.view(#view?:'default')?.getReferencedContent()")
+  authorsPaged(offset: Int, limit:Int): CMTeasablePaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, #this.authors)")
+  detailText: RichText @fetch(from: "detailText")
+  detailTextLegacy(view: String): String @fetch(from: "detailText?.view(#view?:'default')") @deprecated(reason: "Replaced by new RichText type")
+  detailTextAsTree(view: String): RichTextTree @fetch(from: "detailText?.view(#view?:'default')") @deprecated(reason: "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @fetch(from: "detailText?.view(#view?:'default')?.getReferencedContent()") @deprecated(reason: "Replaced by new RichText type")
   related: [CMTeasable]
+  relatedPaged(offset: Int, limit:Int): CMTeasablePaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, #this.related)")
   teaserOverlaySettings: TeaserOverlaySettings @fetch(from: "#root")
   teaserTarget: CMLinkable @fetch(from: "#root")
   teaserTargets: [ExtendedTeaserTarget] @fetch(from: "{{target: #root, callToActionHash: '',callToActionEnabled: !@settingsAdapter.to(#root).get({'callToActionDisabled'}, false), callToActionCustomText: @settingsAdapter.to(#root).get({'callToActionCustomText'}, '')}}")
-  teaserText(view: String): String  @fetch(from: "(teaserText?.nullIfEmpty()?:(@settingsAdapter.to(#root).get({'teaserOverlay', 'enabled'}, false) == true) ? null : detailText)?.view(#view?:'simplified')")
-  teaserTextAsTree(view: String): RichTextTree @fetch(from: "(teaserText?.nullIfEmpty()?:(@settingsAdapter.to(#root).get({'teaserOverlay', 'enabled'}, false) == true) ? null : detailText)?.view(#view?:'simplified')")
-  teaserTextReferencedContent(view: String): [Content_!] @fetch(from: "(teaserText?.nullIfEmpty()?:(@settingsAdapter.to(#root).get({'teaserOverlay', 'enabled'}, false) == true) ? null : detailText)?.view(#view?:'simplified')?.getReferencedContent()")
+  teaserText: RichText @fetch(from: "(teaserText?.nullIfEmpty()?:(@settingsAdapter.to(#root).get({'teaserOverlay', 'enabled'}, false) == true) ? null : detailText)")
+  teaserTargetsPaged(offset: Int, limit:Int): ExtendedTeaserTargetPaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, {{target: #root, callToActionHash: '',callToActionEnabled: !@settingsAdapter.to(#root).get({'callToActionDisabled'}, false), callToActionCustomText: @settingsAdapter.to(#root).get({'callToActionCustomText'}, '')}}")
+  teaserTextLegacy(view: String): String  @fetch(from: "(teaserText?.nullIfEmpty()?:(@settingsAdapter.to(#root).get({'teaserOverlay', 'enabled'}, false) == true) ? null : detailText)?.view(#view?:'simplified')") @deprecated(reason: "Replaced by new RichText type")
+  teaserTextAsTree(view: String): RichTextTree @fetch(from: "(teaserText?.nullIfEmpty()?:(@settingsAdapter.to(#root).get({'teaserOverlay', 'enabled'}, false) == true) ? null : detailText)?.view(#view?:'simplified')") @deprecated(reason: "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @fetch(from: "(teaserText?.nullIfEmpty()?:(@settingsAdapter.to(#root).get({'teaserOverlay', 'enabled'}, false) == true) ? null : detailText)?.view(#view?:'simplified')?.getReferencedContent()") @deprecated(reason: "Replaced by new RichText type")
 
   teaserTitle: String @fetch(from:"teaserTitle?:title")
 
   media: [CMMedia] @fetch(from: "@mediaLinkListAdapter.to(#root).list()")
+  mediaPaged(offset: Int, limit:Int): CMMediaPaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, @mediaLinkListAdapter.to(#root).list())")
 
   picture: CMPicture @fetch(from: "@mediaLinkListAdapter.to(#root, 'CMPicture').first()")
   pictures: [CMPicture] @fetch(from: "@mediaLinkListAdapter.to(#root, 'CMPicture').list()")
+  picturesPaged(offset: Int, limit:Int): CMPicturePaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, @mediaLinkListAdapter.to(#root, 'CMPicture').list())")
 
   video: CMVideo @fetch(from: "@mediaLinkListAdapter.to(#root, 'CMVideo').first()")
   videos: [CMVideo] @fetch(from: "@mediaLinkListAdapter.to(#root, 'CMVideo').list()")
+  videosPaged(offset: Int, limit:Int): CMVideoPaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, @mediaLinkListAdapter.to(#root, 'CMVideo').list())")
 
   spinner: CMSpinner @fetch(from: "@mediaLinkListAdapter.to(#root, 'CMSpinner').first()")
   spinners: [CMSpinner] @fetch(from: "@mediaLinkListAdapter.to(#root, 'CMSpinner').list()")
+  spinnersPaged(offset: Int, limit:Int): CMSpinnerPaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, @mediaLinkListAdapter.to(#root, 'CMSpinner').list())")
 
   root: CMNavigation @fetch(from: "@navigationAdapter.to(#root).root")
 }
@@ -554,23 +630,29 @@ type CMTeasableImpl implements CMTeasable @inherit(from: ["CMLinkableImpl"]) {
 type CMTeaserImpl implements CMTeaser @inherit(from: ["CMTeasableImpl"]) {
   teaserTarget: CMLinkable @fetch(from: "@teaserTargetsAdapter.to(#root).target")
   teaserTargets: [ExtendedTeaserTarget]  @fetch(from: "@teaserTargetsAdapter.to(#root).extendedTargets")
+  teaserTargetsPaged(offset: Int, limit: Int): ExtendedTeaserTargetPaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, @teaserTargetsAdapter.to(#root).extendedTargets)")
 
   media: [CMMedia] @fetch(from: "@teaserMediaLinkListAdapter.to(#root).list()")
+  mediaPaged(offset: Int, limit: Int): CMMediaPaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, @teaserMediaLinkListAdapter.to(#root).list())")
 
   picture: CMPicture @fetch(from: "@teaserMediaLinkListAdapter.to(#root, 'CMPicture').first()")
   pictures: [CMPicture] @fetch(from: "@teaserMediaLinkListAdapter.to(#root, 'CMPicture').list()")
+  picturesPaged(offset: Int, limit: Int): CMPicturePaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, @teaserMediaLinkListAdapter.to(#root, 'CMPicture').list())")
 
   video: CMVideo @fetch(from: "@teaserMediaLinkListAdapter.to(#root, 'CMVideo').first()")
   videos: [CMVideo] @fetch(from: "@teaserMediaLinkListAdapter.to(#root, 'CMVideo').list()")
+  videosPaged(offset: Int, limit: Int): CMVideoPaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, @teaserMediaLinkListAdapter.to(#root, 'CMVideo').list())")
 
   spinner: CMSpinner @fetch(from: "@teaserMediaLinkListAdapter.to(#root, 'CMSpinner').first()")
   spinners: [CMSpinner] @fetch(from: "@teaserMediaLinkListAdapter.to(#root, 'CMSpinner').list()")
+  spinnersPaged(offset: Int, limit: Int): CMSpinnerPaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, @teaserMediaLinkListAdapter.to(#root, 'CMSpinner').list())")
 }
 
 type CMVideoImpl implements CMVideo @inherit(from: ["CMVisualImpl"]) {
   timeLine: TimeLine @fetch(from: "getLink('viewtype')?.layout == 'shoppable'? timeLine : null")
   video: CMVideo @fetch(from: "#root")
   videos: [CMVideo] @fetch(from: "{#root}")
+  videosPaged(offset: Int, limit: Int): CMVideoPaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, {#root})")
 }
 
 type CMVisualImpl implements CMVisual @inherit(from: ["CMMediaImpl"]) {
@@ -628,6 +710,70 @@ type Link {
   type: String
 }
 
+# Pagination result types
+
+type ExtendedTeaserTargetPaginationResult {
+  totalCount: Long
+  result: [ExtendedTeaserTarget]
+}
+
+type LinkedContentEntryPaginationResult {
+  totalCount: Long
+  result: [LinkedContentEntry]
+}
+
+type CMLinkablePaginationResult {
+  totalCount: Long
+  result: [CMLinkable]
+}
+
+type CMLocTaxonomyPaginationResult {
+  totalCount: Long
+  result: [CMLocTaxonomy]
+}
+
+type CMMediaPaginationResult {
+  totalCount: Long
+  result: [CMMedia]
+}
+
+type CMPicturePaginationResult {
+  totalCount: Long
+  result: [CMPicture]
+}
+
+type CMSpinnerPaginationResult {
+  totalCount: Long
+  result: [CMSpinner]
+}
+
+type CMTaxonomyPaginationResult {
+  totalCount: Long
+  result: [CMTaxonomy]
+}
+
+type CMTeasablePaginationResult {
+  totalCount: Long
+  result: [CMTeasable]
+}
+
+type CMVideoPaginationResult {
+  totalCount: Long
+  result: [CMVideo]
+}
+
+type CollectionItemPaginationResult {
+  totalCount: Long
+  result: [CollectionItem]
+}
+
+type ContentPaginationResult {
+  totalCount: Long
+  result: [Content_]
+}
+
+# Page Grid
+
 type PageGrid {
   name: String
   cssClassName: String
@@ -665,7 +811,7 @@ Models the properties of a site object.
 type Site {
   id: ID!
   name: String!
-  locale: String!
+  locale: String! @fetch(from: "locale?.toLanguageTag()")
   crops: [Crop] @fetch(from: "@imageVariantsAdapter.to(#root).crops")
   root: CMNavigation @fetch(from: "siteRootDocument")
   repositoryPath: String! @fetch(from: "#root.getSiteRootFolder().getPath()")

@@ -8,6 +8,7 @@
   <import resource="classpath:/framework/spring/blueprint-contentbeans.xml"/>
   <import resource="classpath:/framework/spring/bpbase-ec-cms-services.xml"/>
   <import resource="classpath:/framework/spring/bpbase-ec-cms-commercebeans.xml"/>
+  <import resource="classpath:/framework/spring/bpbase-ec-cms-connection.xml"/>
 
   <bean name="contentBeanFactory:CMCategory"
         scope="prototype"

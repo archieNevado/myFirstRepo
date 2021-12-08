@@ -2,11 +2,9 @@ package com.coremedia.blueprint.elastic.social.cae;
 
 import com.coremedia.blueprint.elastic.social.cae.controller.CommentWrapper;
 import com.coremedia.elastic.social.api.comments.Comment;
-import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.List;
@@ -26,7 +24,7 @@ public class WrapperHelperTest {
     Comment comment = mock(Comment.class);
     Comment subComment = mock(Comment.class);
     when(subComment.getReplyTo()).thenReturn(comment);
-    ImmutableList<Comment> comments = ImmutableList.of(comment, subComment);
+    List<Comment> comments = List.of(comment, subComment);
 
     List<CommentWrapper> commentWrappers = wrapperHelper.getCommentWrappers(comments);
 

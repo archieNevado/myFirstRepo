@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.coremedia.blueprint.boot</groupId>
+    <groupId>com.coremedia.blueprint</groupId>
     <artifactId>headless-server.spring-boot</artifactId>
     <version>1-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
@@ -18,23 +17,45 @@
 
     To start the live headless-server-app, run:
     mvn spring-boot:run -Plive
+
+    = Container Image Build =
+    Image building is skipped by default. To build the image, activate the default-image maven profile.
+    In addition, you can set jib.goal to "build" to directly build the image in the registry without docker.
+    i.e. mvn clean install -Pdefault-image -Djib.goal=build
   </description>
+
+  <properties>
+    <jib.skip>true</jib.skip>
+    <jib.goal>dockerBuild</jib.goal>
+    <application.image-base>coremedia/java-application-base:2.4.0-corretto-11</application.image-base>
+    <application.image-prefix>coremedia</application.image-prefix>
+    <application.image-suffix>headless-server</application.image-suffix>
+    <application.image-tag>${project.version}</application.image-tag>
+
+
+    <headless-server.spring.profiles>dev,local,preview-local</headless-server.spring.profiles>
+  </properties>
 
   <dependencies>
     <dependency>
-      <groupId>com.coremedia.blueprint.boot</groupId>
+      <groupId>com.coremedia.blueprint</groupId>
       <artifactId>blueprint-spring-boot-autoconfigure</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint.boot</groupId>
+      <groupId>com.coremedia.blueprint</groupId>
       <artifactId>coremedia-transform-spring-boot-autoconfigure</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>com.coremedia.cms</groupId>
+      <artifactId>common.plugin-framework-autoconfiguration</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
       <artifactId>headless-server-base</artifactId>
-      <version>${blueprint.version}</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -42,17 +63,27 @@
       <artifactId>headless-server-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>com.coremedia.caas</groupId>
+      <artifactId>headless-server.beans-for-plugins</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint.base</groupId>
+      <artifactId>middle.bpbase-lc-beans-for-plugins-autoconfiguration</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
       <artifactId>headless-server-extension-dependencies</artifactId>
-      <version>${blueprint.version}</version>
+      <version>${project.version}</version>
       <type>pom</type>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.coremedia.blueprint</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>json-preview-client</artifactId>
-      <version>${blueprint.version}</version>
-      <scope>provided</scope>
+      <version>${project.version}</version>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.cms</groupId>
@@ -62,7 +93,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-tomcat</artifactId>
-      <scope>provided</scope>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>com.github.spotbugs</groupId>
@@ -104,11 +135,65 @@
       <artifactId>spring-boot-starter-actuator</artifactId>
       <scope>runtime</scope>
     </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>runtime</scope>
+    </dependency>
   </dependencies>
 
-  <properties>
-    <headless-server.spring.profiles>dev,local,preview-local</headless-server.spring.profiles>
-  </properties>
+  <build>
+    <finalName>${project.artifactId}</finalName>
+
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <mainClass>${spring-boot.mainClass}</mainClass>
+          <profiles>${headless-server.spring.profiles}</profiles>
+          <layers>
+            <enabled>true</enabled>
+          </layers>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.google.cloud.tools</groupId>
+        <artifactId>jib-maven-plugin</artifactId>
+        <configuration>
+          <from>
+            <image>${application.image-base}</image>
+          </from>
+          <to>
+            <image>${application.image-prefix}/${application.image-suffix}</image>
+            <tags>
+              <tag>${application.image-tag}</tag>
+            </tags>
+          </to>
+          <container>
+            <appRoot>/coremedia</appRoot>
+            <workingDirectory>/coremedia</workingDirectory>
+            <ports>
+              <!--Servlet Container Port -->
+              <port>8080</port>
+              <!--Actuator Port-->
+              <port>8081</port>
+            </ports>
+          </container>
+        </configuration>
+        <executions>
+          <execution>
+            <id>build-container-image</id>
+            <goals>
+              <goal>${jib.goal}</goal>
+            </goals>
+            <phase>install</phase>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
   <profiles>
     <profile>
       <id>live</id>
@@ -116,19 +201,119 @@
         <headless-server.spring.profiles>dev,local,live-local</headless-server.spring.profiles>
       </properties>
     </profile>
-  </profiles>
 
-  <build>
-    <finalName>${project.artifactId}</finalName>
-    <plugins>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <configuration>
-          <mainClass>com.coremedia.blueprint.boot.headlessserver.HeadlessServerApp</mainClass>
-          <profiles>${headless-server.spring.profiles}</profiles>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+    <profile>
+      <id>download-plugins</id>
+      <activation>
+        <property>
+          <name>!withoutPlugins</name>
+          <value>!true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.gmaven</groupId>
+            <artifactId>groovy-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>execute</goal>
+                </goals>
+                <phase>generate-resources</phase>
+                <configuration>
+                  <source>
+                    import groovy.json.JsonSlurper
+                    import groovy.util.AntBuilder
+                    JsonSlurper jsonSlurper = new JsonSlurper()
+                    AntBuilder ant = new AntBuilder()
+                    File pluginsFile = new File(basedir, 'plugins.json')
+                    if (!pluginsFile.exists()) return
+                    File pluginsDownloadDir = new File(basedir, 'target/plugins')
+                    pluginsDownloadDir.mkdirs()
+                    List&lt;String> pluginUrls = jsonSlurper.parse(pluginsFile) as List&lt;String>
+                    pluginUrls.each {
+                      String zipName = it.split('/').last()
+                      File zipFile = new File(pluginsDownloadDir, zipName)
+                      File pluginFolder = new File(pluginsDownloadDir, zipName.replaceAll('\\.zip$', ''))
+                      if (!pluginFolder.exists()) {
+                        zipFile.bytes = new URL(it).bytes
+                        ant.unzip(src: zipFile, dest: pluginFolder, overwrite: true)
+                        zipFile.delete()
+                      }
+                    }
+                  </source>
+                </configuration>
+              </execution>
+            </executions>
+            <dependencies>
+              <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-json</artifactId>
+                <type>pom</type>
+                <version>3.0.8</version>
+              </dependency>
+            </dependencies>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>default-image</id>
+      <properties>
+        <jib.skip>false</jib.skip>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.google.cloud.tools</groupId>
+            <artifactId>jib-maven-plugin</artifactId>
+            <configuration>
+              <container>
+                <entrypoint>INHERIT</entrypoint>
+                <args>
+                  <arg>application</arg>
+                </args>
+                <user>coremedia:coremedia</user>
+                <environment>
+                  <JAVA_HEAP>1280m</JAVA_HEAP>
+                  <JAVA_PARALLEL_GC>true</JAVA_PARALLEL_GC>
+                  <SPRING_BOOT_EXPLODED_APP>true</SPRING_BOOT_EXPLODED_APP>
+                  <SPRING_BOOT_EXPLODED_MAINCLASS>@jib-main-class-file</SPRING_BOOT_EXPLODED_MAINCLASS>
+                  <SPRING_BOOT_EXPLODED_CLASSPATH>@jib-classpath-file</SPRING_BOOT_EXPLODED_CLASSPATH>
+                </environment>
+                <ports>
+                  <!--Prometheus Agent Port-->
+                  <port>8199</port>
+                </ports>
+              </container>
+              <extraDirectories>
+                <paths>
+                  <path>
+                    <from>target/plugins</from>
+                    <into>/coremedia/bundled-plugins</into>
+                  </path>
+                </paths>
+              </extraDirectories>
+              <pluginExtensions>
+                <pluginExtension>
+                  <implementation>com.google.cloud.tools.jib.maven.extension.ownership.JibOwnershipExtension
+                  </implementation>
+                  <configuration implementation="com.google.cloud.tools.jib.maven.extension.ownership.Configuration">
+                    <rules>
+                      <rule>
+                        <glob>/coremedia**</glob>
+                        <ownership>1000:1000</ownership>
+                      </rule>
+                    </rules>
+                  </configuration>
+                </pluginExtension>
+              </pluginExtensions>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>

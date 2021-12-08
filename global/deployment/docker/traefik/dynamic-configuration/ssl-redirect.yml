@@ -1,0 +1,25 @@
+http:
+  {{ if eq (env "SSL_REDIRECT" | default "true") "true" }}
+  routers:
+    web-access-insecure-redirect:
+      priority: 1401
+      rule: HostRegexp(`{any:.+}`)
+      entryPoints:
+        - web-access-insecure
+      middlewares:
+        - https_redirect
+      service: noop
+  {{ end }}
+
+  services:
+    # noop service, the URL will be never called
+    noop:
+      loadBalancer:
+        servers:
+          - url: http://192.168.0.1
+
+  middlewares:
+    https_redirect:
+      redirectScheme:
+        scheme: https
+        permanent: "true"

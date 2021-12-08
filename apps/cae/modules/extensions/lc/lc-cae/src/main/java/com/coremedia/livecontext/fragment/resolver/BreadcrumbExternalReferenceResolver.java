@@ -1,6 +1,5 @@
 package com.coremedia.livecontext.fragment.resolver;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
@@ -8,33 +7,22 @@ import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.livecontext.fragment.resolver.ContentSeoSegmentExternalReferenceResolver.Ids;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Required;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.invoke.MethodHandles;
 
 /**
  * Resolves the breadcrumb for full page layouts in the commerce led scenario.
  */
 public class BreadcrumbExternalReferenceResolver extends ExternalReferenceResolverBase {
+  private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
   private static final String PREFIX = "cm-breadcrumb";
 
   public BreadcrumbExternalReferenceResolver() {
     super(PREFIX);
   }
 
-  // --- properties --------------------------------------------------
-
-  private String storefrontUrl;
-  private boolean lowerCaseSiteName = true;
-
-  @Required
-  public void setStorefrontUrl(String storefrontUrl) {
-    this.storefrontUrl = storefrontUrl;
-  }
-
-  public void setLowerCaseSiteName(boolean lowerCaseSiteName) {
-    this.lowerCaseSiteName = lowerCaseSiteName;
-  }
-
-  // --- interface --------------------------------------------------
   @Override
   protected boolean include(@NonNull FragmentParameters fragmentParameters, @NonNull String referenceInfo) {
     return true;
@@ -54,6 +42,9 @@ public class BreadcrumbExternalReferenceResolver extends ExternalReferenceResolv
     //regular breadcrumb building using the SEO segment instead
     String parameter = fragmentParameters.getParameter();
     Ids ids = ContentSeoSegmentExternalReferenceResolver.parseExternalReferenceInfo(parameter);
+    if (ids == null) {
+      return null;
+    }
 
     String contentId = IdHelper.formatContentId(ids.contentId);
     Content linkable = contentRepository.getContent(contentId);
@@ -66,13 +57,7 @@ public class BreadcrumbExternalReferenceResolver extends ExternalReferenceResolv
       channel = linkable;
     }
 
-    //use the fragment parameters locale, not the one of the site
-    String storeName = CurrentStoreContext.get().getStoreName();
-    if (lowerCaseSiteName) {
-      storeName = storeName.toLowerCase(fragmentParameters.getLocale());
-    }
-    String homepageUrl = storefrontUrl + fragmentParameters.getLocale().getLanguage() + "/" + storeName;
-    fragmentParameters.setParameter(homepageUrl);
+    LOG.debug("Resolved breadcrumb '{}' to linkable '{}' and channel '{}'.", parameter, linkable, channel);
 
     return new LinkableAndNavigation(linkable, channel);
   }

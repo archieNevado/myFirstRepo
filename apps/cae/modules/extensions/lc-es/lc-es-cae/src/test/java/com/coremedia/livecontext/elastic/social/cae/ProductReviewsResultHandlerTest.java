@@ -204,7 +204,7 @@ public class ProductReviewsResultHandlerTest {
 
     when(storeContext.getConnection()).thenReturn(commerceConnection);
 
-    CurrentStoreContext.set(storeContext);
+    CurrentStoreContext.set(storeContext, request);
   }
 
   public void setAttribute(String key, Object value) {

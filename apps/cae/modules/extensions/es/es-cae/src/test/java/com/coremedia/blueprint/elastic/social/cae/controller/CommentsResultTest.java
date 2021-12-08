@@ -4,7 +4,6 @@ import com.coremedia.blueprint.elastic.social.cae.ElasticSocialService;
 import com.coremedia.elastic.social.api.ContributionType;
 import com.coremedia.elastic.social.api.comments.Comment;
 import com.coremedia.elastic.social.api.users.CommunityUser;
-import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,7 +38,7 @@ public class CommentsResultTest {
 
   @Before
   public void setup() {
-    comments = ImmutableList.of(mock(Comment.class));
+    comments = List.of(mock(Comment.class));
 
     when(elasticSocialService.getComments(target, user)).thenReturn(comments);
   }
@@ -208,8 +207,8 @@ public class CommentsResultTest {
     validateInput(false, false, false, false, false, false);
     List<CommentWrapper> comments = commentsResult.getComments();
     assertEquals(true, comments.isEmpty());
-  }  
-  
+  }
+
   @Test
   public void testRootComments() {
     Comment comment1 = mock(Comment.class);
@@ -217,7 +216,7 @@ public class CommentsResultTest {
     Comment comment3 = mock(Comment.class);
     when(comment2.getReplyTo()).thenReturn(comment1);
 
-    List<Comment> comments = ImmutableList.of(comment1, comment2, comment3);
+    List<Comment> comments = List.of(comment1, comment2, comment3);
     Object target = new Object();
     CommunityUser user = mock(CommunityUser.class);
 

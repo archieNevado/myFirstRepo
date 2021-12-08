@@ -13,8 +13,6 @@
 
   <modules>
     <module>workflowserver-blueprint-component</module>
-    <module>workflowserver-blueprint-config</module>
-
   </modules>
 </project>
 

@@ -1,29 +1,25 @@
 package com.coremedia.livecontext.product;
 
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.commercebeans.ProductInSite;
 import com.coremedia.livecontext.context.LiveContextNavigation;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
-import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
-import com.coremedia.livecontext.ecommerce.common.CommerceException;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
 import com.coremedia.objectserver.view.substitution.Substitution;
-import com.google.common.base.Function;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import static com.google.common.collect.Lists.transform;
 import static org.springframework.util.Assert.notNull;
 
 /**
@@ -41,7 +37,7 @@ public class ProductListSubstitutionService {
   @Substitution(PLACEHOLDER_ID)
   @SuppressWarnings("unused")
   @Nullable
-  public ProductList getProductList(@Nullable Page page, @Nullable HttpServletRequest request) {
+  public ProductList getProductList(@Nullable Page page) {
     if (page == null) {
       return null;
     }
@@ -71,23 +67,23 @@ public class ProductListSubstitutionService {
       return null;
     }
 
-    try {
-      StoreContext storeContext = CurrentStoreContext.get();
-      CommerceConnection connection = storeContext.getConnection();
-
-      Category category = navigation.getCategory();
-      List<Product> list = connection.getCatalogService().findProductsByCategory(category);
-      ProductList productList = new ProductList(navigation, startIndex, steps, list.size(),
-              liveContextNavigationFactory);
-
-      //apply the subset of products according to the passed parameters.
-      List<Product> subList = sublist(list, startIndex, steps);
-      List<ProductInSite> wrapped = transform(subList, new ProductListWrapper(navigation.getSite()));
-      productList.setLoadedProducts(wrapped);
-      return productList;
-    } catch (CommerceException e) {
-      throw new RuntimeException(e);
+    Category category = navigation.getCategory();
+    if (category == null) {
+      return null;
     }
+
+    CatalogService catalogService = category.getContext().getConnection().getCatalogService();
+    List<Product> list = catalogService.findProductsByCategory(category);
+    ProductList productList = new ProductList(navigation, startIndex, steps, list.size(),
+            liveContextNavigationFactory);
+
+    //apply the subset of products according to the passed parameters.
+    List<Product> subList = sublist(list, startIndex, steps);
+    List<ProductInSite> wrapped = subList.stream()
+            .map(new ProductListWrapper(navigation.getSite()))
+            .collect(Collectors.toList());
+    productList.setLoadedProducts(wrapped);
+    return productList;
   }
 
   private List<Product> sublist(List<Product> list, int startIndex, int steps) {

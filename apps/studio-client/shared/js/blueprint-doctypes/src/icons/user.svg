@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <style type="text/css">
+    @media screen {
+      #small {
+        display: initial;
+      }
+      #medium, #large {
+        display: none;
+      }
+    }
+    @media screen and (min-width: 24px) {
+      #small {
+        display: none;
+      }
+      #medium {
+        display: initial;
+      }
+    }
+    @media screen and (min-width: 32px) {
+      #medium {
+        display: none;
+      }
+      #large {
+        display: initial;
+      }
+    }
+  </style>
+  <svg id="small" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  	 viewBox="0 0 16 16" style="enable-background:new 0 0 16 16;">
+  <style type="text/css">
+  	.st0{fill:#3D4242;}
+  </style>
+  <g>
+  	<ellipse class="st0" cx="8" cy="5" rx="3.5" ry="4"/>
+  	<path class="st0" d="M9.66,9.34L9.66,9.34L8,11L6.34,9.34C4.4,10.16,3,12.38,3,15h2h0.05h0.48h4.94h0.48H11h2
+  		C13,12.38,11.6,10.16,9.66,9.34z"/>
+  </g>
+  </svg>
+  
+  <svg id="medium" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  	 viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;">
+  <style type="text/css">
+  	.st0{fill:#3D4242;}
+  </style>
+  <g>
+  	<ellipse class="st0" cx="12" cy="7.29" rx="5.5" ry="6.29"/>
+  	<path class="st0" d="M19.91,21.74c-0.02-0.21-0.06-0.41-0.09-0.61c-0.03-0.14-0.06-0.29-0.09-0.43c-0.66-3.07-2.58-5.55-5.07-6.59
+  		l-0.01,0.01c0,0-0.01,0-0.01-0.01l-2.64,2.6l-2.65-2.6c0,0,0,0-0.01,0l0,0c-0.22,0.09-0.43,0.22-0.64,0.33
+  		c-0.06,0.04-0.13,0.06-0.19,0.1c0,0,0,0,0,0c-2.1,1.2-3.67,3.44-4.25,6.16c-0.03,0.14-0.06,0.29-0.09,0.43
+  		c-0.03,0.2-0.07,0.4-0.09,0.61C4.03,22.15,4,22.57,4,23h4h0.64H9.5h5h0.86H16h4C20,22.57,19.97,22.15,19.91,21.74z"/>
+  </g>
+  </svg>
+  
+  <svg id="large" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  	 viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;">
+  <style type="text/css">
+  	.st0{fill:#3D4242;}
+  </style>
+  <g>
+  	<ellipse class="st0" cx="16" cy="9.57" rx="7.5" ry="8.57"/>
+  	<path class="st0" d="M26.91,29.4c-0.01-0.06-0.01-0.13-0.02-0.19c-0.06-0.54-0.16-1.06-0.28-1.57c0-0.01,0-0.01,0-0.02
+  		c-0.83-3.57-2.95-6.5-5.73-8.12c0,0,0,0,0-0.01c-0.1-0.06-0.21-0.12-0.31-0.17c-0.05-0.03-0.1-0.06-0.15-0.08
+  		c-0.25-0.13-0.5-0.26-0.77-0.37L16,22.43l-3.64-3.57c-0.27,0.11-0.52,0.24-0.77,0.37c-0.05,0.03-0.1,0.06-0.15,0.08
+  		c-0.1,0.06-0.21,0.11-0.31,0.17c0,0,0,0,0,0.01c-2.79,1.61-4.9,4.55-5.73,8.12c0,0.01,0,0.01,0,0.02
+  		c-0.12,0.51-0.21,1.04-0.28,1.57c-0.01,0.06-0.01,0.13-0.02,0.19C5.04,29.92,5,30.46,5,31h5h2.54h0.6h5.72h0.6H22h5
+  		C27,30.46,26.96,29.92,26.91,29.4z"/>
+  </g>
+  </svg>
+  
+</svg>

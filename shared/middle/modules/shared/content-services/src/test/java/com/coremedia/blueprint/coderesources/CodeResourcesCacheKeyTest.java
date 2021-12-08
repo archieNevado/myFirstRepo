@@ -11,8 +11,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Collections;
 
-import static java.util.Arrays.asList;
-import static java.util.Arrays.copyOfRange;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
@@ -77,6 +75,6 @@ public class CodeResourcesCacheKeyTest {
     Content[] cs = new Content[] {c0, c1, c2, c3, c4};
     for (int i=5; --i>=0; when(cs[i].getLinks("javaScript")).thenReturn(Collections.emptyList()));
     for (int i=5; --i>=0; when(cs[i].getType()).thenReturn(cmnavigation));
-    for (int i=5; --i>=0; when(treeRelation.pathToRoot(cs[i])).thenReturn(asList(copyOfRange(cs, 0, i+1))));
+    for (int i=5; --i>0; when(treeRelation.getParentUnchecked(cs[i])).thenReturn(cs[i-1]));
   }
 }

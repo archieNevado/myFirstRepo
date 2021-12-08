@@ -2,6 +2,7 @@ package com.coremedia.blueprint.caas.augmentation;
 
 import com.coremedia.blueprint.base.caas.model.adapter.ByPathAdapterFactory;
 import com.coremedia.blueprint.base.livecontext.augmentation.AugmentationAutoConfiguration;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasMappingProvider;
 import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGridService;
 import com.coremedia.blueprint.base.pagegrid.internal.PageGridConfiguration;
 import com.coremedia.blueprint.base.settings.SettingsService;
@@ -45,8 +46,8 @@ public class HeadlessAugmentationCmsOnlyConfiguration {
                                                              ObjectProvider<ExternalBreadcrumbTreeRelation> externalBreadcrumbTreeRelationProvider,
                                                              CommerceSettingsHelper commerceSettingsHelper,
                                                              ByPathAdapterFactory byPathAdapterFactory,
-                                                             ObjectProvider<AugmentationContext> augmentationContextProvider) {
-    return new AugmentationFacadeCmsOnly(categoryAugmentationService, productAugmentationService, sitesService, externalBreadcrumbTreeRelationProvider, commerceSettingsHelper, byPathAdapterFactory, augmentationContextProvider);
+                                                             ObjectProvider<AugmentationContext> augmentationContextProvider, CatalogAliasMappingProvider catalogAliasMappingProvider) {
+    return new AugmentationFacadeCmsOnly(categoryAugmentationService, productAugmentationService, sitesService, externalBreadcrumbTreeRelationProvider, commerceSettingsHelper, byPathAdapterFactory, augmentationContextProvider, catalogAliasMappingProvider);
   }
 
   @Bean

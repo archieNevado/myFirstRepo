@@ -13,8 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,16 +22,14 @@ import java.util.Optional;
 import java.util.Set;
 
 import static com.coremedia.livecontext.asset.util.AssetReadSettingsHelper.NAME_LOCAL_SETTINGS;
-import static com.google.common.collect.Sets.newHashSet;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(CommerceReferenceHelper.class)
+@RunWith(MockitoJUnitRunner.class)
 public class AssetInvalidationWriteInterceptorTest {
 
   @Mock
@@ -65,14 +62,12 @@ public class AssetInvalidationWriteInterceptorTest {
   public void setUp() throws Exception {
     testling = new AssetInvalidationWriteInterceptor(commerceConnectionSupplier, invalidationSource);
 
-    mockStatic(CommerceReferenceHelper.class);
     testling.setType(cmPictureType);
     testling.afterPropertiesSet();
 
     when(commerceConnectionSupplier.findConnection(any(Content.class))).thenReturn(Optional.of(commerceConnection));
 
     when(contentWriteRequest.getEntity()).thenReturn(content);
-    when(content.getRepository()).thenReturn(repository);
     Map<String, Object> properties = new HashMap<>();
     properties.put(NAME_LOCAL_SETTINGS, newLocalSettings);
     when(contentWriteRequest.getProperties()).thenReturn(properties);
@@ -80,28 +75,31 @@ public class AssetInvalidationWriteInterceptorTest {
 
   @Test
   public void testReferencesChange() {
-    //the old references
-    when(CommerceReferenceHelper.getExternalReferences(content)).thenReturn(Arrays.asList("a", "b", "c"));
-    //the new references
-    when(CommerceReferenceHelper.getExternalReferences(newLocalSettings)).thenReturn(Arrays.asList("c", "d", "e"));
+    try (var mocked = mockStatic(CommerceReferenceHelper.class)) {
+      //the old references
+      mocked.when(() -> CommerceReferenceHelper.getExternalReferences(content)).thenReturn(Arrays.asList("a", "b", "c"));
+      //the new references
+      mocked.when(() -> CommerceReferenceHelper.getExternalReferences(newLocalSettings)).thenReturn(Arrays.asList("c", "d", "e"));
+      testling.intercept(contentWriteRequest);
+    }
 
-    testling.intercept(contentWriteRequest);
-
-    Set<String> expected = newHashSet("d", "e", "b", "a");
+    Set<String> expected = Set.of("d", "e", "b", "a");
     verify(invalidationSource, times(1)).invalidateReferences(argThat(expected::containsAll), any());
   }
 
   @Test
   public void testLocalSettingsChange() {
-    //the references are not changed...
-    when(CommerceReferenceHelper.getExternalReferences(content)).thenReturn(Arrays.asList("a", "b", "c"));
-    when(CommerceReferenceHelper.getExternalReferences(newLocalSettings)).thenReturn(Arrays.asList("a", "b", "c"));
-    //but the local seetings are changed.
+    // the local settings are changed
     when(content.getStruct(AssetInvalidationWriteInterceptor.STRUCT_PROPERTY_NAME)).thenReturn(oldLocalSettings);
 
-    testling.intercept(contentWriteRequest);
+    try (var mocked = mockStatic(CommerceReferenceHelper.class)) {
+      // the references are not changed
+      mocked.when(() -> CommerceReferenceHelper.getExternalReferences(content)).thenReturn(Arrays.asList("a", "b", "c"));
+      mocked.when(() -> CommerceReferenceHelper.getExternalReferences(newLocalSettings)).thenReturn(Arrays.asList("a", "b", "c"));
+      testling.intercept(contentWriteRequest);
+    }
 
-    Set<String> expected = newHashSet("a", "b", "c");
+    Set<String> expected = Set.of("a", "b", "c");
     verify(invalidationSource, times(1)).invalidateReferences(argThat(expected::containsAll), any());
   }
 }
