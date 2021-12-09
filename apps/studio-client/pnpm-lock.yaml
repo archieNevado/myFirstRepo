@@ -4406,7 +4406,7 @@ packages:
     dev: false
 
   /@coremedia/studio-client.tools.svg-icon-merger/2110.1.0:
-    resolution: {integrity: sha512-AB7AUOlY+FLs4NRzZ81ZcjADxIF2P972sWPebhemrhzTfiPopLfXdK+Vj+grzEP4Z4pjD9BcY5eIktoAvM7FSw==}
+    resolution: {integrity: sha512-egzT5BQlyQTLgcZ+8opOPcUl6FveVWSy0xt9fLK0BUVZnh5sLTPQtV7D/rVMe7RkXgBNUw0FsbkG2+Glv5pdrQ==}
     dependencies:
       fs-extra: 9.1.0
       node-fetch: 2.6.5
