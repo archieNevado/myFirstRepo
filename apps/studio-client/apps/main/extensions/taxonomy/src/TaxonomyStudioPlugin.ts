@@ -184,10 +184,11 @@ class TaxonomyStudioPlugin extends TaxonomyStudioPluginBase {
           serviceId: TaxonomyStudioPlugin.TAXONOMY_NAME_MATCHING_KEY,
           label: TaxonomyStudioPlugin_properties.TaxonomyPreferences_value_nameMatching_text,
         }),
-        new AddTaggingStrategyPlugin({
-          serviceId: TaxonomyStudioPlugin.TAXONOMY_SEMANTIC_CALAIS_KEY,
-          label: TaxonomyStudioPlugin_properties.TaxonomyPreferences_value_semantic_opencalais_text,
-        }),
+        //Deprecated
+        // new AddTaggingStrategyPlugin({
+        //   serviceId: TaxonomyStudioPlugin.TAXONOMY_SEMANTIC_CALAIS_KEY,
+        //   label: TaxonomyStudioPlugin_properties.TaxonomyPreferences_value_semantic_opencalais_text,
+        // }),
       ],
 
     }), config));

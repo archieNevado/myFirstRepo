@@ -12,12 +12,12 @@
   "dependencies": {
     "@babel/core": "^7.14.0",
     "@babel/types": "^7.14.0",
-    "@coremedia/studio-client.tools.svg-icon-merger": "2110.1.0",
+    "@coremedia/studio-client.tools.svg-icon-merger": "2110.2.0",
     "find-up": "^5.0.0",
     "fs-extra": "^9.0.1",
     "js-yaml": "^4.1.0",
     "json5": "^2.1.3",
-    "node-fetch": "^2.6.5",
+    "node-fetch": "^2.6.7",
     "yargs": "^16.1.0"
   },
   "devDependencies": {

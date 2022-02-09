@@ -14,6 +14,7 @@ import com.coremedia.ecommerce.studio.rest.ProductResource;
 import com.coremedia.ecommerce.studio.rest.ProductVariantResource;
 import com.coremedia.ecommerce.studio.rest.SegmentResource;
 import com.coremedia.ecommerce.studio.rest.SegmentsResource;
+import com.coremedia.ecommerce.studio.rest.configuration.ECommerceStudioConfigurationProperties;
 import com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -57,6 +58,9 @@ class CommerceCacheInvalidationSourceTest {
   private CatalogAliasTranslationService catalogAliasTranslationService;
 
   @Mock
+  private ECommerceStudioConfigurationProperties eCommerceStudioConfigurationProperties;
+
+  @Mock
   private SitesService sitesService;
 
   @Mock(answer = Answers.CALLS_REAL_METHODS)
@@ -72,7 +76,7 @@ class CommerceCacheInvalidationSourceTest {
     // prepare the basic Studio REST linking infrastructure beans
     List<EntityController<?>> resourceClasses = List.of(
             new CatalogResource(catalogAliasTranslationService),
-            new CategoryResource(catalogAliasTranslationService),
+            new CategoryResource(catalogAliasTranslationService, eCommerceStudioConfigurationProperties),
             new MarketingSpotResource(catalogAliasTranslationService),
             new MarketingResource(catalogAliasTranslationService),
             new ProductResource(catalogAliasTranslationService),

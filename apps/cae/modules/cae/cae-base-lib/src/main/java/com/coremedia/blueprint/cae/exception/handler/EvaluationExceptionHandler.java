@@ -9,13 +9,16 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class CyclicDependencyExceptionHandler extends AbstractErrorAndExceptionHandler<EvaluationException, ContentError> {
+import static java.lang.invoke.MethodHandles.lookup;
 
-  private static final Logger LOG = LoggerFactory.getLogger(CyclicDependencyExceptionHandler.class);
+public class EvaluationExceptionHandler extends AbstractErrorAndExceptionHandler<EvaluationException, ContentError> {
+
+  private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
 
   @Override
   public void handleExceptionInternal(EvaluationException exception, ModelAndView modelAndView, String viewName, HttpServletRequest request) {
-    LOG.info("Caught cyclic dependency exception", resolveSelf(exception).getMessage(), exception);
+    LOG.warn("Handled exception: {} (stacktrace on DEBUG level).", exception.getMessage());
+    LOG.debug("Handled exception.", exception);
   }
 
   @Override

@@ -138,7 +138,7 @@ const TaxonomyStudioPlugin_properties: TaxonomyStudioPlugin_properties = {
   taxonomy_selection_dialog_title: "Choose a Tag",
   TaxonomyType_Location_text: "Location Tags",
   TaxonomyType_Subject_text: "Subject Tags",
-  TaxonomyChooser_selection_text: "Browse all available tags",
+  TaxonomyChooser_selection_text: "Browse All Available Tags",
   TaxonomyChooser_show_children: "Show Children",
   TaxonomyChooser_search_tag_title: "Search",
   TaxonomyChooser_search_tag_emptyText: "Search tag…",

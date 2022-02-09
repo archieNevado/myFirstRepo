@@ -42,7 +42,7 @@
     <studio.version>${project.version}</studio.version>
     <livecontext.version>${project.version}</livecontext.version>
 
-    <spring.boot.version>2.5.6</spring.boot.version>
+    <spring.boot.version>2.5.8</spring.boot.version>
 
     <!--
     | the following *.host properties are defined here for convenience, so that they can be overridden
@@ -76,19 +76,19 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.54</tomcat.embed.version>
-    <cm.headless-server.core.version>2110.1</cm.headless-server.core.version>
+    <tomcat.embed.version>9.0.58</tomcat.embed.version>
+    <cm.headless-server.core.version>2110.2</cm.headless-server.core.version>
     <cm.common.bp.version>1-SNAPSHOT</cm.common.bp.version>
     <cm.middle.bp.version>1-SNAPSHOT</cm.middle.bp.version>
-    <cm.common.core.version>2110.1</cm.common.core.version>
-    <cm.middle.core.version>2110.1</cm.middle.core.version>
+    <cm.common.core.version>2110.2</cm.common.core.version>
+    <cm.middle.core.version>2110.2</cm.middle.core.version>
 
     <!-- headless-server-base -->
-    <caffeine.version>2.9.2</caffeine.version>
+    <caffeine.version>2.9.3</caffeine.version>
     <graphql-java-spring-boot-starter.version>1.0</graphql-java-spring-boot-starter.version>
     <javassist.version>3.21.0-GA</javassist.version>
     <jboss-logging.version>3.3.2.Final</jboss-logging.version>
-    <spring.version>5.3.12</spring.version>
+    <spring.version>5.3.14</spring.version>
     <graphiql-spring-boot-starter.version>11.0.0</graphiql-spring-boot-starter.version>
     <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
 

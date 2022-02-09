@@ -39,7 +39,7 @@ x-logging:
 
 services:
   commerce-adapter-mock:
-    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-mock:${COMMERCE_ADAPTER_MOCK_VERSION:-2.0.4}
+    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-mock:${COMMERCE_ADAPTER_MOCK_VERSION:-2.0.6}
     container_name: commerce-adapter-mock
     restart: always
     logging: *default-logging

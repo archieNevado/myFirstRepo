@@ -10,6 +10,7 @@ RUN apt update -y && \
     apt-get install -y \
     curl \
     gnupg \
+    jq \
     libgbm-dev \
     zip \
     unzip && \

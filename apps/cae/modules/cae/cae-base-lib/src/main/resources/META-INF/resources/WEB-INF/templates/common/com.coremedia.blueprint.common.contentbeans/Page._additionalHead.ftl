@@ -20,8 +20,8 @@
   <@cm.include self=css view="asCSSLink"/>
 </#list>
 
-<#-- include css with custom attributes or conditional comments for IE -->
-<#list self.customCss![] as css>
+<#-- include css with conditional comments for IE -->
+<#list self.internetExplorerCss![] as css>
   <@cm.include self=css view="asCSSLink"/>
 </#list>
 
@@ -38,8 +38,8 @@
   <@cm.include self=js view="asJSLink"/>
 </#list>
 
-<#-- include javascript with custom attributes or conditional comments for IE -->
-<#list self.customJavaScript![] as js>
+<#-- include javascript with conditional comments for IE -->
+<#list self.internetExplorerJavaScript![] as js>
   <@cm.include self=js view="asJSLink"/>
 </#list>
 

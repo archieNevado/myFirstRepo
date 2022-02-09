@@ -1,4 +1,4 @@
-FROM nginx:1.15.12-alpine
+FROM nginx:1.21.5-alpine
 ENV CMS_VERSION=unknown \
     COMMERCE_MOCK_ENABLED=false \
     COMMERCE_COMMERCETOOLS_ENABLED=false \

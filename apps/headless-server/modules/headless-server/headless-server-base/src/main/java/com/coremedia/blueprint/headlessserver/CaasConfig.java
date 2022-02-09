@@ -901,9 +901,6 @@ public class CaasConfig implements WebMvcConfigurer {
   public PreparsedDocumentProvider preparsedDocumentProvider(CacheManager cacheManager) {
     return new PreparsedDocumentProvider() {
       Cache cache = cacheManager.getCache(CacheInstances.PREPARSED_DOCUMENTS);
-      Function<ExecutionInput, PreparsedDocumentEntry> computeFunction = executionInput -> new PreparsedDocumentEntry(
-              graphql.parser.Parser.parse(executionInput.getQuery())
-      );
 
       @Override
       public PreparsedDocumentEntry getDocument(ExecutionInput executionInput, Function<ExecutionInput, PreparsedDocumentEntry> computeFunction) {

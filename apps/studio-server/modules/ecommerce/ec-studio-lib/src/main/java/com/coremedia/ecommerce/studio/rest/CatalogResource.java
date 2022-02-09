@@ -8,10 +8,7 @@ import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.common.StoreContextBuilder;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +25,6 @@ import java.util.Optional;
 @RequestMapping(value = "livecontext/catalog/{" + AbstractCatalogResource.PATH_SITE_ID + "}/{" + AbstractCatalogResource.PATH_ID + "}", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CatalogResource extends AbstractCatalogResource<Catalog> {
 
-  @Autowired
   public CatalogResource(CatalogAliasTranslationService catalogAliasTranslationService) {
     super(catalogAliasTranslationService);
   }
@@ -80,27 +76,11 @@ public class CatalogResource extends AbstractCatalogResource<Catalog> {
 
   @NonNull
   private StoreContext enhanceWithCatalogAlias(@NonNull StoreContext storeContext, @NonNull Map<String, String> params) {
-    StoreContextProvider storeContextProvider = storeContext.getConnection().getStoreContextProvider();
-    StoreContextBuilder clonedContextBuilder = storeContextProvider.buildContext(storeContext);
-
     CatalogId catalogId = getCatalogId(params);
-    CatalogAlias catalogAlias = CatalogAlias.ofNullable(params.get(PATH_CATALOG_ALIAS)).orElse(null);
-
     CatalogAliasTranslationService catalogAliasTranslationService = getCatalogAliasTranslationService();
-    if (catalogAlias != null) {
-      clonedContextBuilder = clonedContextBuilder
-              .withCatalogId(catalogId)
-              .withCatalogAlias(catalogAlias);
-    } else {
-      Optional<CatalogAlias> catalogAliasForId = catalogAliasTranslationService
-              .getCatalogAliasForId(catalogId, storeContext);
-
-      clonedContextBuilder = clonedContextBuilder
-              .withCatalogId(catalogId)
-              .withCatalogAlias(catalogAliasForId.orElse(null));
-    }
-
-    return clonedContextBuilder.build();
+    return CatalogAlias.ofNullable(params.get(PATH_CATALOG_ALIAS))
+            .map(catalogAlias -> StoreContextUtils.cloneWithCatalog(storeContext, catalogAlias, catalogAliasTranslationService))
+            .orElseGet(() -> StoreContextUtils.cloneWithCatalog(storeContext, catalogId, catalogAliasTranslationService));
   }
 
   @NonNull

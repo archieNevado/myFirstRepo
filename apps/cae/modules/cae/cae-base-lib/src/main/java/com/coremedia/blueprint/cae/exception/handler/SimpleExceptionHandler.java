@@ -8,12 +8,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static java.lang.invoke.MethodHandles.lookup;
+
 /**
  * Simple exception handler implementation for plain spring configuration.
  */
 public class SimpleExceptionHandler<T extends Exception> extends AbstractErrorAndExceptionHandler<T, HttpError> {
 
-  private static final Logger LOG = LoggerFactory.getLogger(SimpleExceptionHandler.class);
+  private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
   private int statusCode;
   private Class<T> exceptionType;
 
@@ -33,7 +35,8 @@ public class SimpleExceptionHandler<T extends Exception> extends AbstractErrorAn
 
   @Override
   public void handleExceptionInternal(T exception, ModelAndView modelAndView, String viewName, HttpServletRequest request) {
-    LOG.debug("Caught Exception: {} for {} with view {}.", exception, modelAndView, viewName);
+    LOG.warn("Caught Exception '{}' for {} with view {} (stacktrace on DEBUG level).", exception.getMessage(), modelAndView, viewName);
+    LOG.debug("Caught Exception for {} with view {}.", modelAndView, viewName, exception);
   }
 
   @Override

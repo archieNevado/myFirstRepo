@@ -6,7 +6,7 @@
   "private": true,
   "dependencies": {
     "@coremedia/service-agent": "1.0.0",
-    "@coremedia/studio-client.ckeditor-constants": "2110.1.0",
+    "@coremedia/studio-client.ckeditor-constants": "2110.2.0",
     "rxjs": "^6.5.4"
   },
   "devDependencies": {

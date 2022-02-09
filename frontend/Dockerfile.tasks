@@ -25,7 +25,7 @@ WORKDIR /ws-root/frontend
 COPY . /ws-root/frontend
 
 # install
-RUN --mount=type=secret,mode=0644,id=npmrc,target=/ws-root/apps/studio-client/.npmrc pnpm install
+RUN --mount=type=secret,mode=0644,id=npmrc,target=/ws-root/frontend/.npmrc pnpm install
 # build
 RUN pnpm build
 # zip

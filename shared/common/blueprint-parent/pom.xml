@@ -37,11 +37,11 @@
 
     <customer>Blueprint</customer>
 
-    <cm.common.core.version>2110.1</cm.common.core.version>
+    <cm.common.core.version>2110.2</cm.common.core.version>
     <cm.common.bp.version>${project.version}</cm.common.bp.version>
 
-    <spring.boot.version>2.5.6</spring.boot.version>
-    <micrometer.version>1.7.5</micrometer.version>
+    <spring.boot.version>2.5.8</spring.boot.version>
+    <micrometer.version>1.7.7</micrometer.version>
     <application-plugin.version>3.0.1</application-plugin.version>
 
     <!--
@@ -76,8 +76,8 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.54</tomcat.embed.version>
-    <cm.common.core.version>2110.1</cm.common.core.version>
+    <tomcat.embed.version>9.0.58</tomcat.embed.version>
+    <cm.common.core.version>2110.2</cm.common.core.version>
     <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
 
     <showDeprecation>true</showDeprecation>

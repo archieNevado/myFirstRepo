@@ -12,10 +12,11 @@ COPY . /ws-root/apps/studio-client
 
 # extensions
 ARG EXTENSIONS_ZIP
+ARG EXTENSIONS_RELATIVE_PATH='../..'
 RUN if [ -n "${EXTENSIONS_ZIP}" ] ; then \
     mkdir -p extensions/ && \
-    sed -i 's#../../modules/extensions/#extensions/#g' /ws-root/apps/studio-client/pnpm-workspace.yaml  && \
-    sed -i 's#../../modules/extensions/#extensions/#g' /ws-root/apps/studio-client/pnpm-lock.yaml && \
+    sed -i "s#${EXTENSIONS_RELATIVE_PATH}/modules/extensions/#extensions/#g" /ws-root/apps/studio-client/pnpm-workspace.yaml  && \
+    sed -i "s#${EXTENSIONS_RELATIVE_PATH}/modules/extensions/#extensions/#g" /ws-root/apps/studio-client/pnpm-lock.yaml && \
     unzip -oqq /ws-root/apps/studio-client/${EXTENSIONS_ZIP} -d extensions/ ; \
     fi
 

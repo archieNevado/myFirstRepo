@@ -43,7 +43,7 @@ RUN mkdir /app/ && \
     rm /tmp/studio-client.studio.zip
 
 
-FROM nginx:1.21.3-alpine as final-stage
+FROM nginx:1.21.5-alpine as final-stage
 LABEL maintainer="CoreMedia GmbH <support@coremedia.com>"
 # set this empty for http/1.1
 ENV PROTOCOL=http2

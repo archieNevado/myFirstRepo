@@ -1,5 +1,6 @@
 package com.coremedia.ecommerce.studio.rest;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdBuilder;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdUtils;
@@ -57,6 +58,12 @@ public class CatalogServiceResource {
   private static final String SEARCH_TYPE_CATEGORY = "Category";
   private static final String SEARCH_TYPE_MARKETING_SPOTS = "MarketingSpot";
 
+  private final CatalogAliasTranslationService catalogAliasTranslationService;
+
+  public CatalogServiceResource(CatalogAliasTranslationService catalogAliasTranslationService) {
+    this.catalogAliasTranslationService = catalogAliasTranslationService;
+  }
+
   @GetMapping("search/{siteId}")
   @Nullable
   public CatalogSearchResultRepresentation search(
@@ -74,7 +81,10 @@ public class CatalogServiceResource {
     // should have picked it up so the `CommerceConnectionFilter`
     // provides a commerce connection based on the site ID.
 
-    var currentStoreContext = CurrentStoreContext.find(request).orElse(null);
+    var currentStoreContext = CurrentStoreContext.find(request)
+            .map(storeContext -> cloneWithCatalog(storeContext, catalogAlias))
+            .orElse(null);
+
     if (currentStoreContext == null) {
       return null;
     }
@@ -83,6 +93,12 @@ public class CatalogServiceResource {
     SearchResult<? extends CommerceBean> searchResult = search(searchQuery, currentStoreContext);
 
     return new CatalogSearchResultRepresentation(searchResult.getItems(), searchResult.getTotalCount());
+  }
+
+  private StoreContext cloneWithCatalog(StoreContext storeContext, @Nullable String catalogAlias) {
+    return CatalogAlias.ofNullable(catalogAlias)
+            .map(alias -> StoreContextUtils.cloneWithCatalog(storeContext, alias, catalogAliasTranslationService))
+            .orElse(storeContext);
   }
 
   @NonNull

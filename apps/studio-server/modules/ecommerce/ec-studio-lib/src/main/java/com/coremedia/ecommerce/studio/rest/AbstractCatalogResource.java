@@ -66,7 +66,7 @@ public abstract class AbstractCatalogResource<Entity extends CommerceObject> imp
 
   @NonNull
   protected Optional<StoreContext> getStoreContext(@NonNull Map<String, String> params) {
-    var catalogAlias = CatalogAlias.ofNullable(params.get(PATH_CATALOG_ALIAS)).orElse(null);
+    String catalogAlias = params.get(PATH_CATALOG_ALIAS);
     var requestAttributes = RequestContextHolder.getRequestAttributes();
     if (!(requestAttributes instanceof ServletRequestAttributes)) {
       throw new IllegalStateException("Request not available.");
@@ -75,23 +75,13 @@ public abstract class AbstractCatalogResource<Entity extends CommerceObject> imp
     // the CommerceConnectionFilter creates the connection (with initial store context)
     // without considering the Studio catalog alias
     return CurrentStoreContext.find(request).
-            map(storeContext -> cloneStoreContextWithCatalogId(storeContext, catalogAlias));
+            map(storeContext -> cloneWithCatalog(storeContext,catalogAlias));
   }
 
-  private StoreContext cloneStoreContextWithCatalogId(@NonNull StoreContext originalContext, @Nullable CatalogAlias catalogAlias) {
-    if (catalogAlias == null) {
-      return originalContext;
-    }
-    var catalogId = catalogAliasTranslationService.getCatalogIdForAlias(catalogAlias, originalContext).orElse(null);
-    if (catalogId == null) {
-      return originalContext;
-    }
-    // only clone the context if we got a catalog Id for the catalog alias
-    return originalContext.getConnection().getStoreContextProvider()
-            .buildContext(originalContext)
-            .withCatalogId(catalogId)
-            .withCatalogAlias(catalogAlias)
-            .build();
+  private StoreContext cloneWithCatalog(StoreContext storeContext, @Nullable String catalogAlias) {
+    return CatalogAlias.ofNullable(catalogAlias)
+            .map(alias -> StoreContextUtils.cloneWithCatalog(storeContext, alias, catalogAliasTranslationService))
+            .orElse(storeContext);
   }
 
   CatalogAliasTranslationService getCatalogAliasTranslationService() {

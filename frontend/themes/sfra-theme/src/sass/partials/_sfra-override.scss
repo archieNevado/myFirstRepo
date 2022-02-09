@@ -1,8 +1,8 @@
 // Makes sure that styling rules of SFRA do not affect our rendering.
 
 // SFRA will override the text color of all "a" with the following selector:
-// header~.container a:not(.btn-primary):not(.btn-outline-primary)
-header ~ .container {
+// header~#maincontent .container a:not(.btn-primary):not(.btn-outline-primary)
+header ~ #maincontent .container {
   // Revert color of CTA button
   .cm-cta a.cm-cta-button {
     color: #FFFFFF;

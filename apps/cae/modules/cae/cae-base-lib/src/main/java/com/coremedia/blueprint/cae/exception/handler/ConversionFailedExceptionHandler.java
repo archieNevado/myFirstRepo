@@ -11,6 +11,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static java.lang.invoke.MethodHandles.lookup;
+
 /**
  * Handles a {@link org.springframework.core.convert.ConversionFailedException} wrapped in a
  * {@link org.springframework.beans.TypeMismatchException}. This exception is thrown when the
@@ -20,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  * to the expected types.
  */
 public class ConversionFailedExceptionHandler extends AbstractErrorAndExceptionHandler<ConversionFailedException, HttpError> {
-  private static final Logger LOG = LoggerFactory.getLogger(ConversionFailedException.class);
+  private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
 
   @Override
   public ModelAndView handleException(String viewName, Exception ex, HttpServletRequest request, HttpServletResponse response) {
@@ -45,7 +47,8 @@ public class ConversionFailedExceptionHandler extends AbstractErrorAndExceptionH
 
   @Override
   public void handleExceptionInternal(ConversionFailedException exception, ModelAndView modelAndView, String viewName, HttpServletRequest request) {
-    LOG.debug("Failed to convert value '{}' to {} for {} (responding with 404, NOT_FOUND)", exception.getValue(), exception.getTargetType(), request.getRequestURI(), exception);
+    LOG.warn("Failed to convert value '{}' to {} for {}. Responding with 404/NOT_FOUND (stacktrace on DEBUG level).", exception.getValue(), exception.getTargetType(), request.getRequestURI());
+    LOG.debug("Failed to convert value '{}' to {} for {}. Responding with 404/NOT_FOUND.", exception.getValue(), exception.getTargetType(), request.getRequestURI(), exception);
   }
 
   @Override

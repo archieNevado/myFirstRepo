@@ -1,8 +1,6 @@
 import BlueprintTabs_properties from "@coremedia-blueprint/studio-client.main.blueprint-forms/BlueprintTabs_properties";
 import ContainerViewTypeSelectorForm from "@coremedia-blueprint/studio-client.main.blueprint-forms/forms/containers/ContainerViewTypeSelectorForm";
 import FixedIndexItemsForm from "@coremedia-blueprint/studio-client.main.blueprint-forms/forms/containers/FixedIndexItemsForm";
-import LocalSettingsForm
-  from "@coremedia-blueprint/studio-client.main.blueprint-forms/forms/containers/LocalSettingsForm";
 import MetaDataWithoutSearchableForm from "@coremedia-blueprint/studio-client.main.blueprint-forms/forms/containers/MetaDataWithoutSearchableForm";
 import MultiLanguageDocumentForm from "@coremedia-blueprint/studio-client.main.blueprint-forms/forms/containers/MultiLanguageDocumentForm";
 import TeaserDocumentForm from "@coremedia-blueprint/studio-client.main.blueprint-forms/forms/containers/TeaserDocumentForm";
@@ -64,8 +62,6 @@ class CMProductListForm extends CMProductListFormBase {
               structPropertyName: "localSettings",
               forceReadOnlyValueExpression: config.forceReadOnlyValueExpression,
             }),
-
-            Config(LocalSettingsForm, { collapsed: true }),
 
             Config(PropertyFieldGroup, {
               title: LivecontextStudioPlugin_properties.CMProductList_searchRefinement_text,

@@ -23,7 +23,7 @@
     <jib.skip>true</jib.skip>
     <!--set to build to use without docker being installed but then you need a registry configured in jib.repository-->
     <jib.goal>dockerBuild</jib.goal>
-    <application.image-base>coremedia/java-application-base:2.4.0-corretto-11</application.image-base>
+    <application.image-base>coremedia/java-application-base:2.4.1-corretto-11</application.image-base>
     <application.image-prefix>coremedia</application.image-prefix>
     <application.image-suffix>management-tools</application.image-suffix>
     <application.image-tag>${project.version}</application.image-tag>
@@ -34,37 +34,37 @@
       <groupId>com.coremedia.blueprint</groupId>
       <artifactId>cms-tools-application</artifactId>
       <type>coremedia-application</type>
-      <scope>runtime</scope>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
       <artifactId>mls-tools-application</artifactId>
       <type>coremedia-application</type>
-      <scope>runtime</scope>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
       <artifactId>rls-tools-application</artifactId>
       <type>coremedia-application</type>
-      <scope>runtime</scope>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
       <artifactId>wfs-tools-application</artifactId>
       <type>coremedia-application</type>
-      <scope>runtime</scope>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
       <artifactId>caefeeder-tools-application</artifactId>
       <type>coremedia-application</type>
-      <scope>runtime</scope>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
       <artifactId>theme-importer-application</artifactId>
       <type>coremedia-application</type>
-      <scope>runtime</scope>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
   <build>
@@ -101,6 +101,32 @@
         </configuration>
       </plugin>
 
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <!--
+             | This is a workaround to fix permission rights, see
+             | https://github.com/GoogleContainerTools/jib-extensions/tree/master/first-party/jib-ownership-extension-maven
+             | make sure to not use extraDirectories with from/into paths. Instead create an empty dir tree
+             -->
+            <id>create-empty-dirs</id>
+            <phase>generate-sources</phase>
+            <configuration>
+              <tasks>
+                <mkdir dir="${project.build.directory}/empty-dirs/coremedia"/>
+                <mkdir dir="${project.build.directory}/empty-dirs/coremedia/import"/>
+                <mkdir dir="${project.build.directory}/empty-dirs/coremedia/export"/>
+                <mkdir dir="${project.build.directory}/empty-dirs/coremedia/tools"/>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
       <!-- The real image build process-->
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
@@ -117,7 +143,7 @@
               <includeArtifactIds>cms-tools-application,wfs-tools-application,mls-tools-application,rls-tools-application,caefeeder-tools-application,theme-importer-application</includeArtifactIds>
               <includeTypes>coremedia-application</includeTypes>
               <excludeTransitive>true</excludeTransitive>
-              <outputDirectory>target/tools</outputDirectory>
+              <outputDirectory>target/image/coremedia/tools</outputDirectory>
               <!--this is provided by the base image -->
               <excludes>bin/pre-config.jpif,bin/groovysh.jpif,properties/corem/tools-logback.xml</excludes>
             </configuration>
@@ -146,9 +172,13 @@
             </tags>
           </to>
           <container>
-            <appRoot>/coremedia</appRoot>
+            <appRoot>/coremedia/tools</appRoot>
             <workingDirectory>/coremedia</workingDirectory>
             <entrypoint>INHERIT</entrypoint>
+            <volumes>
+              <volume>/coremedia/export</volume>
+              <volume>/coremedia/import</volume>
+            </volumes>
             <args>
               <arg>../bin/bash</arg>
             </args>
@@ -189,11 +219,9 @@
           </container>
           <extraDirectories>
             <paths>
+              <paths>target/image</paths>
               <path>src/main/image</path>
-              <path>
-                <from>target/tools</from>
-                <into>/coremedia/tools</into>
-              </path>
+              <path>target/empty-dirs</path>
             </paths>
             <permissions>
               <permission>

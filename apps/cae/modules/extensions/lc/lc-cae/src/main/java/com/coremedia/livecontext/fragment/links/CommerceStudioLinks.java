@@ -51,6 +51,7 @@ class CommerceStudioLinks {
                                                HttpServletRequest request) {
     StoreContext storeContext = CurrentStoreContext.find(request).orElse(category.getContext())
             .withDynamicReplacements();
+    storeContext = cloneContextWithCatalog(storeContext, category.getContext());
     Map<String, Object> replacements = new HashMap<>(linkParameters);
     replacements.put(CATEGORY_ID, category.getExternalId());
     replacements.put(CATEGORY_TECH_ID, category.getExternalTechId());
@@ -64,6 +65,7 @@ class CommerceStudioLinks {
     Category category = externalChannel.getCategory();
     StoreContext storeContext = CurrentStoreContext.find(request).orElse(category.getContext())
             .withDynamicReplacements();
+    storeContext = cloneContextWithCatalog(storeContext, category.getContext());
     String seoSegment = externalChannel.getSegment();
     Map<String, Object> replacements = new HashMap<>(linkParameters);
     replacements.put(SEO_SEGMENT, seoSegment);
@@ -73,9 +75,9 @@ class CommerceStudioLinks {
 
   Optional<UriComponents> buildLinkForProduct(Product product, Map<String, Object> linkParameters,
                                               HttpServletRequest request) {
-    Category category = product.getCategory();
-    StoreContext storeContext = CurrentStoreContext.find(request).orElse(category.getContext())
+    StoreContext storeContext = CurrentStoreContext.find(request).orElse(product.getContext())
             .withDynamicReplacements();
+    storeContext = cloneContextWithCatalog(storeContext, product.getContext());
     Map<String, Object> replacements = new HashMap<>(linkParameters);
     replacements.put(PRODUCT_ID, product.getExternalId());
     replacements.put(PRODUCT_TECH_ID, product.getExternalTechId());
@@ -144,5 +146,15 @@ class CommerceStudioLinks {
             .map(StorefrontRef::toLink)
             .map(UriComponentsBuilder::fromUriString)
             .map(UriComponentsBuilder::build);
+  }
+
+  private static StoreContext cloneContextWithCatalog(StoreContext originalContext, StoreContext contextWithCatalog) {
+    if (!originalContext.getCatalogId().equals(contextWithCatalog.getCatalogId())) {
+      return originalContext.getConnection().getStoreContextProvider().buildContext(originalContext)
+              .withCatalogId(contextWithCatalog.getCatalogId().orElse(null))
+              .withCatalogAlias(contextWithCatalog.getCatalogAlias())
+              .build();
+    }
+    return originalContext;
   }
 }

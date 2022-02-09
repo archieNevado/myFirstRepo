@@ -1,15 +1,14 @@
 package com.coremedia.livecontext.pagegrid;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.NoStoreContextAvailable;
 import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGridPlacement;
+import com.coremedia.blueprint.base.pagegrid.ContentBackedStyleGrid;
 import com.coremedia.blueprint.base.pagegrid.impl.ContentBackedPageGridServiceImpl;
 import com.coremedia.cap.content.Content;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
@@ -17,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -36,8 +34,8 @@ public class ContentAugmentedPageGridServiceImpl extends ContentBackedPageGridSe
   @Override
   protected Map<String, ContentBackedPageGridPlacement> getMergedPageGridPlacements(
           @NonNull Content navigation, @NonNull String pageGridName,
-          @NonNull Collection<? extends Content> layoutSections) {
-    return getMergedHierarchicalPageGridPlacements(navigation, pageGridName, layoutSections);
+          @NonNull ContentBackedStyleGrid styleGrid) {
+    return getMergedHierarchicalPageGridPlacements(navigation, pageGridName, styleGrid);
   }
 
   /**
@@ -47,8 +45,8 @@ public class ContentAugmentedPageGridServiceImpl extends ContentBackedPageGridSe
   @NonNull
   Map<String, ContentBackedPageGridPlacement> getMergedHierarchicalPageGridPlacements(
           @NonNull Content navigation, @NonNull String pageGridName,
-          @NonNull Collection<? extends Content> layoutSections) {
-    return super.getMergedPageGridPlacements(navigation, pageGridName, layoutSections);
+          @NonNull ContentBackedStyleGrid styleGrid) {
+    return super.getMergedPageGridPlacements(navigation, pageGridName, styleGrid);
   }
 
   @Nullable
@@ -93,15 +91,6 @@ public class ContentAugmentedPageGridServiceImpl extends ContentBackedPageGridSe
       LOG.warn("Could not retrieve root category for Content {}.", content, e);
       return null;
     }
-  }
-
-  @NonNull
-  private StoreContext getStoreContextForContent(@NonNull Content content,
-                                                 @NonNull CommerceConnection commerceConnection) {
-    return commerceConnection.getStoreContextProvider()
-            .findContextByContent(content)
-            .orElseThrow(() -> new NoStoreContextAvailable(
-                    "Store context could not be obtained for content with ID '" + content.getId() + "'."));
   }
 
   @Autowired

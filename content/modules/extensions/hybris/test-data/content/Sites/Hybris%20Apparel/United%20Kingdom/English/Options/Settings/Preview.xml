@@ -11,7 +11,6 @@
 </LinkListProperty>
 <LinkListProperty Name="fragmentPreviewJs" LinkType="coremedia:///cap/contenttype/CMJavaScript">
 <Link xlink:href="coremedia:///cap/resources/hybris-jquery%2Ejs.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Options/Settings/hybris-jquery%2Ejs"/>
-<Link xlink:href="coremedia:///cap/resources/hybris-bootstrap%2Ejs.xml" cmexport:path="/Sites/Hybris%20Apparel/United%20Kingdom/English/Options/Settings/hybris-bootstrap%2Ejs"/>
 </LinkListProperty>
 </Struct>
 </settings>
