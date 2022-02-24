@@ -1,7 +1,5 @@
 package com.coremedia.blueprint.caas.augmentation;
 
-import com.coremedia.blueprint.base.livecontext.augmentation.AugmentationAutoConfiguration;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceServicesAutoConfiguration;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceSiteFinder;
@@ -19,11 +17,8 @@ import com.coremedia.livecontext.pagegrid.ContentAugmentedPageGridServiceImpl;
 import com.coremedia.livecontext.pagegrid.ContentAugmentedProductPageGridServiceImpl;
 import com.coremedia.livecontext.tree.ExternalChannelContentTreeRelation;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
 
@@ -31,18 +26,11 @@ import static com.coremedia.blueprint.base.pagegrid.PageGridContentKeywords.PAGE
 import static com.coremedia.blueprint.caas.augmentation.adapter.AugmentationPageGridAdapterFactory.PDP_PAGEGRID_PROPERTY_NAME;
 
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties({
-        CaasAssetSearchServiceConfigProperties.class,
-})
-@Import({
-        AugmentationAutoConfiguration.class,
-})
 @ImportResource(value = {
         "classpath:/META-INF/coremedia/lc-services.xml",
         "classpath:com/coremedia/blueprint/base/pagegrid/impl/bpbase-pagegrid-services.xml"},
         reader = ResourceAwareXmlBeanDefinitionReader.class)
 @PropertySource("classpath:/META-INF/coremedia/headless-server-ec-augmentation-defaults.properties")
-@AutoConfigureAfter({BaseCommerceServicesAutoConfiguration.class})
 public class HeadlessAugmentationCommerceConfiguration {
 
   @Bean

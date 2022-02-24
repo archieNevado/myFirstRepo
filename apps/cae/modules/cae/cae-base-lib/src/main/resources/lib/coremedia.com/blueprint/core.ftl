@@ -16,7 +16,7 @@
 
 <#-- NAVIGATION -->
 <#function isActiveNavigation navigation navigationPathList>
-    <#return blueprintFreemarkerFacade.isActiveNavigation(navigation, navigationPathList)>
+  <#return blueprintFreemarkerFacade.isActiveNavigation(navigation, navigationPathList)>
 </#function>
 
 <#-- SETTINGS -->

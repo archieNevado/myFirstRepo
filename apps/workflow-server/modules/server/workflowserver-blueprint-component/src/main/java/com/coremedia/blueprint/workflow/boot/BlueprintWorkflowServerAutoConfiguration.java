@@ -1,18 +1,20 @@
 package com.coremedia.blueprint.workflow.boot;
 
+import com.coremedia.blueprint.workflow.boot.BlueprintWorkflowServerConfigurationProperties.CleanInTranslationProperties;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import com.coremedia.translate.TranslatablePredicate;
 import com.coremedia.translate.workflow.AllMergeablePropertiesPredicateFactory;
 import com.coremedia.translate.workflow.CleanInTranslation;
-import com.coremedia.translate.workflow.WorkflowAutoMergeConfigurationProperties;
-import com.coremedia.translate.workflow.synchronization.CopyOver;
 import com.coremedia.translate.workflow.DefaultAutoMergePredicateFactory;
 import com.coremedia.translate.workflow.DefaultAutoMergeStructListMapKey;
 import com.coremedia.translate.workflow.DefaultAutoMergeStructListMapKeyFactory;
 import com.coremedia.translate.workflow.DefaultTranslationWorkflowDerivedContentsStrategy;
 import com.coremedia.translate.workflow.TranslationWorkflowDerivedContentsStrategy;
+import com.coremedia.translate.workflow.WorkflowAutoMergeConfigurationProperties;
+import com.coremedia.translate.workflow.synchronization.CopyOver;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
@@ -22,19 +24,28 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.PostConstruct;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.ScheduledFuture;
 import java.util.stream.Collectors;
+
+import static java.time.Instant.now;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Configuration class to be loaded when no customer spring context manager is configured.
  */
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties(WorkflowAutoMergeConfigurationProperties.class)
+@EnableConfigurationProperties({
+        WorkflowAutoMergeConfigurationProperties.class,
+        BlueprintWorkflowServerConfigurationProperties.class
+})
 @Import({
         WorkflowServerElasticProcessArchiveConfiguration.class,
         WorkflowServerMemoryProcessArchiveConfiguration.class,
@@ -125,8 +136,9 @@ class BlueprintWorkflowServerAutoConfiguration {
   @Bean
   CleanInTranslation cleanInTranslation(List<TranslationWorkflowDerivedContentsStrategy> strategies,
                                         ContentRepository contentRepository,
-                                        SitesService sitesService) {
-    return new CleanInTranslation(strategies, contentRepository, sitesService);
+                                        SitesService sitesService,
+                                        @NonNull BlueprintWorkflowServerConfigurationProperties properties) {
+    return new CleanInTranslation(strategies, contentRepository, sitesService, properties.getCleanInTranslation().getConfidenceThreshold());
   }
 
   @Bean
@@ -135,6 +147,7 @@ class BlueprintWorkflowServerAutoConfiguration {
   }
 
   @Configuration(proxyBeanMethods = false)
+  @EnableConfigurationProperties(BlueprintWorkflowServerConfigurationProperties.class)
   @EnableScheduling
   static class BlueprintWorkflowServerSchedulingConfiguration {
     private final CleanInTranslation cleanInTranslation;
@@ -145,12 +158,31 @@ class BlueprintWorkflowServerAutoConfiguration {
 
     /**
      * Regularly clean up "in translation" states left over by aborted workflows.
+     * Scheduling can be configured with the following duration properties:
+     * <dl>
+     *   <dt>{@code workflow.blueprint.clean-in-translation.initial-delay} (default: 10 seconds)</dt>
+     *   <dd>The initial delay when to start {@code CleanInTranslation} task. Example value: {@code 20s}.</dd>
+     *   <dt>{@code workflow.blueprint.clean-in-translation.fixed-delay} (default: 15 minutes)</dt>
+     *   <dd>The delay when to repeat {@code CleanInTranslation} task at a fixed interval. Example value: {@code 10m}.</dd>
+     * </dl>
      */
-    @Scheduled(initialDelay = 10_000, fixedDelay = 5_000)
-    void doCleanInTranslation() {
-      cleanInTranslation.run();
-    }
+    @Bean
+    public ScheduledFuture<?> scheduleCleanInTranslation(@NonNull TaskScheduler scheduler,
+                                                         @NonNull BlueprintWorkflowServerConfigurationProperties properties) {
+      // Kudos to https://stackoverflow.com/questions/59786883/is-there-way-to-use-scheduled-together-with-duration-string-like-15s-and-5m
+      requireNonNull(scheduler, "Required TaskScheduler unavailable.");
+      requireNonNull(properties, "Required BlueprintWorkflowServerConfigurationProperties unavailable.");
 
+      CleanInTranslationProperties taskProperties = properties.getCleanInTranslation();
+
+      Duration fixedDelay = taskProperties.getFixedDelay();
+      Duration initialDelay = taskProperties.getInitialDelay();
+      Instant startTime = now().plus(initialDelay);
+
+      LOG.info("Scheduling CleanInTranslation: startTime: {}, initialDelay: {}, fixedDelay: {}", startTime, initialDelay, fixedDelay);
+
+      return scheduler.scheduleWithFixedDelay(cleanInTranslation, startTime, fixedDelay);
+    }
   }
 
 }

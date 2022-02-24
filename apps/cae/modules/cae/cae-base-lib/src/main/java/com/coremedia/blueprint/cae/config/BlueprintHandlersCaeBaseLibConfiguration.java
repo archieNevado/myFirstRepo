@@ -27,6 +27,7 @@ import com.coremedia.blueprint.cae.handlers.ThemeHandler;
 import com.coremedia.blueprint.cae.handlers.TransformedBlobHandler;
 import com.coremedia.blueprint.cae.util.DefaultSecureHashCodeGeneratorStrategy;
 import com.coremedia.blueprint.cae.util.DefaultToMd5MigrationSecureHashCodeGeneratorStrategy;
+import com.coremedia.blueprint.cae.web.CacheControlValidUntilConsumer;
 import com.coremedia.blueprint.cae.web.ContentValidityInterceptor;
 import com.coremedia.blueprint.cae.web.ExposeCurrentNavigationInterceptor;
 import com.coremedia.blueprint.cae.web.i18n.ResourceBundleInterceptor;
@@ -66,17 +67,12 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping;
 
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.coremedia.blueprint.common.datevalidation.ValidUntilConsumer.DISABLE_VALIDITY_RECORDING_ATTRIBUTE;
-import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 
 /**
  * LinkSchemes and Controllers.
@@ -675,17 +671,11 @@ public class BlueprintHandlersCaeBaseLibConfiguration {
 
   @Bean
   ValidUntilConsumer validUntilConsumer(ObjectProvider<CacheControlStrategy<Instant>> cacheControlStrategyProvider) {
-    return instant -> {
-      cacheControlStrategyProvider.ifAvailable(strategy -> {
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        if (requestAttributes == null) {
-          throw new IllegalStateException("Request attributes not available.");
-        }
-        if (requestAttributes.getAttribute(DISABLE_VALIDITY_RECORDING_ATTRIBUTE, SCOPE_REQUEST) == null) {
-          strategy.recordValidUntil(instant);
-        }
-      });
-    };
+    var cacheControlStrategy = cacheControlStrategyProvider.getIfAvailable();
+    if (cacheControlStrategy == null) {
+      return instant -> {};
+    }
+    return new CacheControlValidUntilConsumer(cacheControlStrategy);
   }
 
   @Bean

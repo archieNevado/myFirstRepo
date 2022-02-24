@@ -59,7 +59,7 @@ class CatalogAssetsLinkListWrapper extends LinkListWrapperBase {
 
       //check the content type
       const typeAccepted = this.assetContentTypes.some((assetContentType: string): boolean =>
-        UndocContentUtil.filterMatchingTypes(CatalogAssetsLinkListWrapper.#getContentType(assetContentType), [asset], true).length === 0,
+        UndocContentUtil.filterMatchingTypes(CatalogAssetsLinkListWrapper.#getContentType(assetContentType), [asset.getType()], true).length === 0,
       );
       if (!typeAccepted) {
         return false;

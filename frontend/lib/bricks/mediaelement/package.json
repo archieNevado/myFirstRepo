@@ -8,10 +8,10 @@
     "@coremedia/brick-utils": "workspace:*",
     "jquery": "^3.6.0",
     "mediaelement": "^4.2.17",
-    "promise-polyfill": "^8.2.0"
+    "promise-polyfill": "^8.2.1"
   },
   "devDependencies": {
-    "prettier": "^2.4.1"
+    "prettier": "^2.5.1"
   },
   "scripts": {
     "prettier": "prettier --write \"src/**/*.{js,json}\""

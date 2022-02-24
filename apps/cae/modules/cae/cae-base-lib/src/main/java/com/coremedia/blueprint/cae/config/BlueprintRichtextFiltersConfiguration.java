@@ -42,11 +42,14 @@ public class BlueprintRichtextFiltersConfiguration {
   @Order(10_000)
   ConfigurableRichtextToHtmlFilterFactory configurableRichtextToHtmlFilterFactory(IdProvider idProvider,
                                                                                   LinkFormatter linkFormatter,
-                                                                                  LinkValidationFilter linkValidationFilter,
-                                                                                  CMDownloadLinkValidationFilter cmDownloadLinkValidationFilter,
-                                                                                  ImgCompletionFilter imgCompletionFilter,
-                                                                                  LinkEmbedFilter linkEmbedFilter,
-                                                                                  FilterFactory imageFilter, FilterFactory p2TagFilter, FilterFactory appendClassToElementFilter, FilterFactory unsurroundFilter) {
+                                                                                  FilterFactory linkValidationFilter,
+                                                                                  FilterFactory cmDownloadLinkValidationFilter,
+                                                                                  FilterFactory imgCompletionFilter,
+                                                                                  FilterFactory linkEmbedFilter,
+                                                                                  FilterFactory imageFilter,
+                                                                                  FilterFactory p2TagFilter,
+                                                                                  FilterFactory appendClassToElementFilter,
+                                                                                  FilterFactory unsurroundFilter) {
     ConfigurableRichtextToHtmlFilterFactory factory = new ConfigurableRichtextToHtmlFilterFactory();
     factory.setIdProvider(idProvider);
     factory.setLinkFormatter(linkFormatter);

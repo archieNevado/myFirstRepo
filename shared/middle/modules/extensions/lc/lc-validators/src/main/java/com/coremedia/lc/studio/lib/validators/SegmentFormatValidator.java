@@ -1,5 +1,6 @@
 package com.coremedia.lc.studio.lib.validators;
 
+import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
@@ -12,7 +13,6 @@ import com.coremedia.rest.validation.Severity;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -22,35 +22,32 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
  */
 public class SegmentFormatValidator extends AbstractContentTypeValidator {
 
-  private static final String CODE_ISSUE_SEGMENT_RESERVED_CHARS_FOUND = "SegmentReservedCharsFound";
   private static final String CODE_ISSUE_SEGMENT_RESERVED_PREFIX = "SegmentReservedPrefix";
   private static final String CODE_ISSUE_SEGMENT_RESERVED_SUFFIX = "SegmentReservedSuffix";
 
-  private static final String CODE_ISSUE_FALLBACK_SEGMENT_RESERVED_CHARS_FOUND = "FallbackSegmentReservedCharsFound";
   private static final String CODE_ISSUE_FALLBACK_SEGMENT_RESERVED_PREFIX = "FallbackSegmentReservedPrefix";
   private static final String CODE_ISSUE_FALLBACK_SEGMENT_RESERVED_SUFFIX = "FallbackSegmentReservedSuffix";
 
   private static final String SEPARATOR = "-";
-  private static final String RESERVED_SEPARATOR = "--";
 
   private final String propertyName;
   private String fallbackPropertyName;
 
   private final CommerceConnectionSupplier commerceConnectionSupplier;
   private final SitesService sitesService;
-
-  //allow only numbers, letters and '-'
-  private static final Pattern PATTERN = Pattern.compile("[^\\p{L}\\p{N}\\-]");
+  private final UrlPathFormattingHelper urlPathFormattingHelper;
 
   public SegmentFormatValidator(@NonNull ContentType type,
                                 boolean isValidatingSubtypes,
                                 CommerceConnectionSupplier commerceConnectionSupplier,
                                 SitesService sitesService,
+                                UrlPathFormattingHelper urlPathFormattingHelper,
                                 String propertyName) {
     super(type, isValidatingSubtypes);
     this.propertyName = propertyName;
     this.commerceConnectionSupplier = commerceConnectionSupplier;
     this.sitesService = sitesService;
+    this.urlPathFormattingHelper = urlPathFormattingHelper;
   }
 
   @Override
@@ -75,24 +72,18 @@ public class SegmentFormatValidator extends AbstractContentTypeValidator {
 
     if (!isBlank(propertyValue)) {
       validateProperty(propertyValue, issues,
-              CODE_ISSUE_SEGMENT_RESERVED_CHARS_FOUND, CODE_ISSUE_SEGMENT_RESERVED_PREFIX, CODE_ISSUE_SEGMENT_RESERVED_SUFFIX);
-    } else if (fallbackPropertyName != null && content.getType().getDescriptor(fallbackPropertyName) != null ){
+              CODE_ISSUE_SEGMENT_RESERVED_PREFIX, CODE_ISSUE_SEGMENT_RESERVED_SUFFIX);
+    } else if (fallbackPropertyName != null && content.getType().getDescriptor(fallbackPropertyName) != null) {
       String fallbackPropertyValue = content.getString(fallbackPropertyName);
       if (!isBlank(fallbackPropertyValue)) {
         validateProperty(fallbackPropertyValue, issues,
-                CODE_ISSUE_FALLBACK_SEGMENT_RESERVED_CHARS_FOUND, CODE_ISSUE_FALLBACK_SEGMENT_RESERVED_PREFIX, CODE_ISSUE_FALLBACK_SEGMENT_RESERVED_SUFFIX);
+                CODE_ISSUE_FALLBACK_SEGMENT_RESERVED_PREFIX, CODE_ISSUE_FALLBACK_SEGMENT_RESERVED_SUFFIX);
       }
     }
   }
 
-  @SuppressWarnings("TypeMayBeWeakened")
-  private void validateProperty(String propertyValue, Issues issues,
-                                String codeReservedChars, String codePrefix, String codeSuffix) {
-    String replacedValue = PATTERN.matcher(propertyValue).replaceAll(SEPARATOR);
-    if (replacedValue.contains(RESERVED_SEPARATOR)) {
-      //... but two sequential special characters could then be the reserved separator  "--"
-      issues.addIssue(getCategories(), Severity.ERROR, propertyName, getContentType() + '_' + codeReservedChars, RESERVED_SEPARATOR, replacedValue);
-    }
+  private void validateProperty(String propertyValue, Issues issues, String codePrefix, String codeSuffix) {
+    String replacedValue = urlPathFormattingHelper.tidyUrlPath(propertyValue);
     if (replacedValue.startsWith(SEPARATOR)) {
       issues.addIssue(getCategories(), Severity.ERROR, propertyName, getContentType() + '_' + codePrefix, SEPARATOR, replacedValue);
     }

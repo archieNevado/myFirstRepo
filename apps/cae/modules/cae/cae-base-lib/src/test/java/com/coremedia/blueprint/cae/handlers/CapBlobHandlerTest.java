@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
@@ -33,6 +34,7 @@ import java.util.Map;
 import static com.coremedia.blueprint.cae.web.links.NavigationLinkSupport.ATTR_NAME_CMNAVIGATION;
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.from;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_CLASS;
@@ -52,7 +54,7 @@ public class CapBlobHandlerTest {
   private static final String URI_RAW = "/resource/blob/16/ad343795d54b19c1b2e3a5b44513cee1/nae-me-jpg-data.raw";
   private static final String URI_PNG = "/resource/blob/16/ad343795d54b19c1b2e3a5b44513cee1/nae-me-jpg-data.png";
 
-  private static final String FILENAME = "a-file%20?a&b n.a;m=e.xyz";
+  private static final String FILENAME = "A%20File- +?a&b n.a;m=e.xyz";
 
   @Inject
   private MockMvc mockMvc;
@@ -92,7 +94,9 @@ public class CapBlobHandlerTest {
   @Test
   public void testLinkCMDownloadWithFilename() {
     String link = formatLink(contentTestHelper.getContentBean(24));
-    assertThat(link).isEqualTo("/resource/blob/24/0e0839ed3b4062cd4e0b8c3966137751/a-file%20?a&b n.a;m=e.xyz");
+    // Ensure that link building won't fail for filenames that contain both, encoded and decoded parts.
+    assertThatNoException().isThrownBy(() -> UriComponentsBuilder.fromUriString(link).build(true));
+    assertThat(link).isEqualTo("/resource/blob/24/0e0839ed3b4062cd4e0b8c3966137751/A%2520File-%20+%3Fa&b%20n.a;m=e.xyz");
   }
 
 
@@ -102,7 +106,7 @@ public class CapBlobHandlerTest {
   @Test
   public void testLinkCMDownloadNoBlob() {
     String link = formatLink(contentTestHelper.getContentBean(26));
-    assertThat(link).isEqualTo("#");
+    assertThat(link).isEmpty();
   }
 
   /**

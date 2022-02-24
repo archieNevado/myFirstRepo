@@ -10,6 +10,7 @@ module.exports = {
     "rxjs",
     "@coremedia/service-agent",
     "@coremedia/studio-client.ckeditor-constants",
+    "@coremedia/studio-client.cap-base-models",
   ],
 
   output: {
@@ -27,7 +28,8 @@ module.exports = {
     new CKEditorWebpackPlugin( {
       // See https://ckeditor.com/docs/ckeditor5/latest/features/ui-language.html
       language: 'en',
-      additionalLanguages: 'all'
+      additionalLanguages: ['de', 'ja'],
+      translationsOutputFile: "bundled-ckeditor.js"
     } )
   ],
   resolve: {

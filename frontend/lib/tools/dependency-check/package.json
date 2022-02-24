@@ -10,7 +10,7 @@
     "semver": "^7.3.5"
   },
   "devDependencies": {
-    "prettier": "^2.4.1"
+    "prettier": "^2.5.1"
   },
   "scripts": {
     "prettier": "prettier --write \"src/**/*.{js,json}\""

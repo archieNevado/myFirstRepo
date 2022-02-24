@@ -18,7 +18,7 @@ import AugmentationUtil from "../../helper/AugmentationUtil";
 import CatalogHelper from "../../helper/CatalogHelper";
 import CatalogLinkListWrapper from "./CatalogLinkListWrapper";
 import CatalogLinkPropertyField from "./CatalogLinkPropertyField";
-import ConfirmChangeReferenceDialog from "./ConfirmChangeReferenceDialog";
+import ConfirmRemoveReferenceDialog from "./ConfirmRemoveReferenceDialog";
 
 interface CatalogLinkPropertyFieldBaseConfig extends Config<LinkListGridPanel>, Partial<Pick<CatalogLinkPropertyFieldBase,
   "bindTo" |
@@ -28,13 +28,13 @@ interface CatalogLinkPropertyFieldBaseConfig extends Config<LinkListGridPanel>, 
   "createStructFunction" |
   "linkTypeNames" |
   "forceReadOnlyValueExpression" |
-  "showChangeReferenceButton">> {
+  "showRemoveReferenceButton">> {
 }
 
 class CatalogLinkPropertyFieldBase extends LinkListGridPanel {
   declare Config: CatalogLinkPropertyFieldBaseConfig;
 
-  showChangeReferenceButton: boolean = false;
+  showRemoveReferenceButton: boolean = false;
 
   #_localWrapper: ILinkListWrapper = null;
 
@@ -52,7 +52,7 @@ class CatalogLinkPropertyFieldBase extends LinkListGridPanel {
 
   forceReadOnlyValueExpression: ValueExpression = null;
 
-  changeReferenceButtonDisabledVE: ValueExpression;
+  removeReferenceButtonDisabledVE: ValueExpression;
 
   constructor(config: Config<CatalogLinkPropertyField> = null) {
     super(config);
@@ -72,7 +72,7 @@ class CatalogLinkPropertyFieldBase extends LinkListGridPanel {
         wrapperCfg.createStructFunction = config.createStructFunction;
         wrapperCfg.linkTypeNames = config.linkTypeNames;
         wrapperCfg.readOnlyVE = this.getReadOnlyVE(config);
-        wrapperCfg.acceptAugmentedContent = !config.showChangeReferenceButton;
+        wrapperCfg.acceptAugmentedContent = !config.showRemoveReferenceButton;
         this.#_localWrapper = new CatalogLinkListWrapper(wrapperCfg);
       }
     }
@@ -93,23 +93,42 @@ class CatalogLinkPropertyFieldBase extends LinkListGridPanel {
 
   protected removeCategoryReference(): void {
 
-    const selectedPositions = this.getSelectedPositionsVE().getValue();
-    if (!selectedPositions || selectedPositions.length === 0) {
+    const referenceIndexesToRemove = this.#getRemoveCategoryIndexes();
+    if (referenceIndexesToRemove.length === 0) {
       return;
     }
 
-    const dialogConfig = Config(ConfirmChangeReferenceDialog, { changeFunction: () => this.#_localWrapper?.removeLinksAtIndexes(selectedPositions) });
-    const confirmChangeReferenceDialog = new ConfirmChangeReferenceDialog(dialogConfig);
+    const dialogConfig = Config(ConfirmRemoveReferenceDialog, { changeFunction: () => this.#_localWrapper?.removeLinksAtIndexes(referenceIndexesToRemove) });
+    const confirmChangeReferenceDialog = new ConfirmRemoveReferenceDialog(dialogConfig);
     confirmChangeReferenceDialog.show();
   }
 
-  protected isChangeReferenceDisabledVE(): ValueExpression<boolean> {
-    if (!this.changeReferenceButtonDisabledVE) {
-      this.changeReferenceButtonDisabledVE = ValueExpressionFactory.createFromFunction(() => {
-        return this.#isNothingSelected() || this.#_localWrapper.isReadOnly();
+  protected isRemoveReferenceDisabledVE(): ValueExpression<boolean> {
+    if (!this.removeReferenceButtonDisabledVE) {
+      this.removeReferenceButtonDisabledVE = ValueExpressionFactory.createFromFunction(() => {
+        if (this.#_localWrapper.isReadOnly()) {
+          return true;
+        }
+        if (this.disableSelection) {
+          return this.#_localWrapper.getLinks().length === 0;
+        }
+        return this.#isNothingSelected();
       });
     }
-    return this.changeReferenceButtonDisabledVE;
+    return this.removeReferenceButtonDisabledVE;
+  }
+
+  #getRemoveCategoryIndexes(): number[] {
+    if (this.disableSelection) {
+      return this.#_localWrapper.getLinks().map((_, index) => index);
+    }
+
+    const selectedPositions = this.getSelectedPositionsVE().getValue();
+    if (!selectedPositions || selectedPositions.length === 0) {
+      return [];
+    }
+
+    return selectedPositions;
   }
 
   #isNothingSelected(): boolean {
@@ -153,7 +172,9 @@ class CatalogLinkPropertyFieldBase extends LinkListGridPanel {
       } catch (e) {
         if (is(e, Error)) {
           //ignore
-        } else throw e;
+        } else {
+          throw e;
+        }
       }
     }
     if (!name) {

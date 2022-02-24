@@ -307,7 +307,7 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
   }
 
   /**
-   * Retrieves the preview views of an object based on its hierachry
+   * Retrieves the preview views of an object based on its hierarchy
    *
    * @param self                 the object to preview
    * @param page                 the page used to find the setting named "fragmentPreview
@@ -400,10 +400,9 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
   }
 
   /**
-   *
-   * @param size in bytes
+   * @param size   in bytes
    * @param locale for file size format
-   * @return a human readable file size
+   * @return a human-readable file size
    */
   public String getDisplayFileSize(int size, Locale locale) {
     if (locale == null) {
@@ -478,7 +477,7 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
 
     if (text != null) {
       if (text instanceof Markup) {
-        toTruncate = MarkupUtil.asPlainText((Markup) text, true);
+        toTruncate = MarkupUtil.asPlainText((Markup) text);
       } else if (text instanceof String) {
         toTruncate = (String) text;
       } else {
@@ -646,7 +645,7 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
    * The values of those keys are of type boolean.
    *
    * @param placementObject a PageGridPlacement
-   * @return a map containing informations for placement highlighting
+   * @return a map containing information for placement highlighting
    * @throws IOException
    */
   @NonNull

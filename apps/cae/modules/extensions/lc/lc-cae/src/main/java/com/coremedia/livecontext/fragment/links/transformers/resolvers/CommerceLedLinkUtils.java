@@ -91,13 +91,12 @@ class CommerceLedLinkUtils {
               );
     }
 
-    if (!Strings.isNullOrEmpty(alternativePath)) {
-      //Non-SEO
+    if (alternativePath != null) {
       replacements.put(ALTERNATIVE_PATH_KEY, alternativePath);
-    } else {
-      //SEO
-      replacements.put(SEO_SEGMENT_KEY, nullToEmpty(seoPath));
-      replacements.put(SEO_PATH_KEY, nullToEmpty(seoPath));
+    }
+    if (seoPath != null){
+      replacements.put(SEO_SEGMENT_KEY, seoPath);
+      replacements.put(SEO_PATH_KEY, seoPath);
     }
 
     return linkService.getStorefrontRef(CommerceLinkTemplateTypes.SHOP_PAGE_LINK_FRAGMENT, storeContext, Collections.unmodifiableMap(replacements))

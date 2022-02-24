@@ -29,11 +29,20 @@
       "@coremedia/studio-client.ckeditor-constants/*": [
         "../node_modules/@coremedia/studio-client.ckeditor-constants/src/*"
       ],
+      "@coremedia/studio-client.cap-base-models/*": [
+        "../node_modules/@coremedia/studio-client.cap-base-models/src/*"
+      ],
       "@coremedia/ckeditor5-studio-essentials/*": [
         "../node_modules/@coremedia/ckeditor5-studio-essentials/dist/*"
       ],
       "@coremedia/ckeditor5-symbol-on-paste-mapper/*": [
         "../node_modules/@coremedia/ckeditor5-symbol-on-paste-mapper/dist/*"
+      ],
+      "@coremedia/ckeditor5-coremedia-richtext-support/*": [
+        "../node_modules/@coremedia/ckeditor5-coremedia-richtext-support/dist/*"
+      ],
+      "@jangaroo/runtime/*": [
+        "../node_modules/@jangaroo/runtime/src/*"
       ]
     }
   }

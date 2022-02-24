@@ -54,7 +54,7 @@ class CommerceWorkAreaTabBase extends WorkAreaTab {
 
     catalogObject && catalogObject.load((): void => {
       this.#replaceTab(false);
-      catalogObject.addPropertyChangeListener(CatalogObjectPropertyNames.CONTENT, bind(this, this.#replaceTab));
+      catalogObject.addPropertyChangeListener(CatalogObjectPropertyNames.CONTENT, bind(this, this.#replaceTabShowMessage));
     });
 
     catalogObject && catalogObject.addValueChangeListener(bind(this, this.#reloadPreview));
@@ -177,7 +177,11 @@ class CommerceWorkAreaTabBase extends WorkAreaTab {
     return as(this.getEntity(), CatalogObject);
   }
 
-  #replaceTab(showMessage: boolean = true): void {
+  #replaceTabShowMessage(): void {
+    this.#replaceTab(true);
+  }
+
+  #replaceTab(showMessage: boolean): void {
     const catalogObject = this.#getCatalogObject();
     const augmentingContent = as(catalogObject.get(CatalogObjectPropertyNames.CONTENT), Content);
     if (augmentingContent) { // the commerce object has been augmented
@@ -207,7 +211,7 @@ class CommerceWorkAreaTabBase extends WorkAreaTab {
   }
 
   protected override onDestroy(): void {
-    this.#getCatalogObject().removePropertyChangeListener(CatalogObjectPropertyNames.CONTENT, bind(this, this.#replaceTab));
+    this.#getCatalogObject().removePropertyChangeListener(CatalogObjectPropertyNames.CONTENT, bind(this, this.#replaceTabShowMessage));
     this.#getCatalogObject().removeValueChangeListener(bind(this, this.#reloadPreview));
     super.onDestroy();
   }

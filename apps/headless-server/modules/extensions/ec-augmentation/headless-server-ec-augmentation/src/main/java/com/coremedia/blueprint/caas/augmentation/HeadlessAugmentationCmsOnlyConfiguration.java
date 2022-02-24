@@ -1,7 +1,6 @@
 package com.coremedia.blueprint.caas.augmentation;
 
 import com.coremedia.blueprint.base.caas.model.adapter.ByPathAdapterFactory;
-import com.coremedia.blueprint.base.livecontext.augmentation.AugmentationAutoConfiguration;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasMappingProvider;
 import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGridService;
 import com.coremedia.blueprint.base.pagegrid.internal.PageGridConfiguration;
@@ -21,7 +20,6 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.web.context.WebApplicationContext;
@@ -34,9 +32,6 @@ import static com.coremedia.blueprint.caas.augmentation.adapter.AugmentationPage
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties({
         CaasAssetSearchServiceConfigProperties.class,
-})
-@Import({
-        AugmentationAutoConfiguration.class,
 })
 public class HeadlessAugmentationCmsOnlyConfiguration {
 

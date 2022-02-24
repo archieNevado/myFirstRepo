@@ -11,10 +11,12 @@ import AutoLink from "@ckeditor/ckeditor5-link/src/autolink";
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import CoreMediaStudioEssentials from "@coremedia/ckeditor5-studio-essentials/CoreMediaStudioEssentials";
 import CoreMediaSymbolOnPasteMapper from '@coremedia/ckeditor5-symbol-on-paste-mapper/SymbolOnPasteMapper';
+import GeneralRichTextSupport from "@coremedia/ckeditor5-coremedia-richtext-support/GeneralRichTextSupport";
 
+import Autosave from '@ckeditor/ckeditor5-autosave/src/autosave';
+import { CKEditorPluginConfig } from "./ckeditor";
 
-
-export function createDefaultCKEditor (domElement:(string | HTMLElement)): Promise<ClassicEditor> {
+export function createDefaultCKEditor (domElement:(string | HTMLElement), language: string, placeholderText:string | undefined, pluginConfig: CKEditorPluginConfig): Promise<ClassicEditor> {
 
   const defaultToolbarItems = [
     'heading',
@@ -29,12 +31,10 @@ export function createDefaultCKEditor (domElement:(string | HTMLElement)): Promi
     'redo'
   ];
 
-  const defaultLanguage = 'en';
-
   return ClassicEditor.create(domElement, {
     // Add License Key retrieved via CKEditor for Premium Features Support.
     licenseKey: '',
-    placeholder: 'Type your text here...',
+    placeholder: placeholderText ? placeholderText : 'Type your text here...',
     plugins: [
       Essentials,
       Bold,
@@ -43,9 +43,12 @@ export function createDefaultCKEditor (domElement:(string | HTMLElement)): Promi
       Heading,
       AutoLink,
       Link,
+      Autosave,
       CoreMediaStudioEssentials,
       //@ts-expect-error
       CoreMediaSymbolOnPasteMapper,
+      //@ts-expect-error
+      GeneralRichTextSupport,
       List,
       Paragraph,
     ],
@@ -55,6 +58,10 @@ export function createDefaultCKEditor (domElement:(string | HTMLElement)): Promi
     link: {
       defaultProtocol: 'https://'
     },
-    language: defaultLanguage
+    language: language,
+    autosave: {
+      save: pluginConfig.autosave.save,
+      waitingTime: 50,
+    }
   });
 }

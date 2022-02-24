@@ -327,6 +327,8 @@ services:
       FORCE_REIMPORT_THEMES: "${FORCE_REIMPORT_THEMES:-false}"
       # set this to an empty value to disable using remoteblobs on import
       BLOB_STORAGE_URL: "${BLOB_STORAGE_URL:-}"
+      # set to false to import referenced remoteblobs on import; by default references to remoteblobs are preserved
+      BLOB_REFERENCES: "${BLOB_REFERENCES:-}"
       # URL TO A content-users.zip as produced by the test-data module
       CONTENT_ARCHIVE_URL: "${CONTENT_ARCHIVE_URL:-}"
       # enable entrypoint debugging i.e. set -x

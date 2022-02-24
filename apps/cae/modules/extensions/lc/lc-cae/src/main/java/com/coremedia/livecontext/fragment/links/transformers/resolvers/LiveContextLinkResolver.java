@@ -25,12 +25,10 @@ public interface LiveContextLinkResolver {
    *
    * @param source     source link
    * @param bean       current content
-   * @param variant    parameter can be provided as param via link tag. Variants are configured within a settings
-   *                   document in the repository.
    * @param navigation current navigation context
+   * @param view       view parameter passed via link tag.
    * @param request    current request
    * @return the static URL part of the LiveContext URL
    */
-  Optional<String> resolveUrl(String source, @Nullable Object bean, @Nullable String variant,
-                              @Nullable CMNavigation navigation, HttpServletRequest request);
+  Optional<String> resolveUrl(String source, @Nullable Object bean, @Nullable CMNavigation navigation, @Nullable String view, HttpServletRequest request);
 }

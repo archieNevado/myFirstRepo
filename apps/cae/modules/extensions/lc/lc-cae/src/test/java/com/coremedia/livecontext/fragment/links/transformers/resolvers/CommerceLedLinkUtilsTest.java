@@ -102,7 +102,7 @@ class CommerceLedLinkUtilsTest {
     getExternalPageLink(seoPath, alternativePath, storeContext, List.of(), linkService);
 
     verify(linkService).getStorefrontRef(CommerceLinkTemplateTypes.SHOP_PAGE_LINK_FRAGMENT, storeContext,
-            Map.of(ALTERNATIVE_PATH_KEY, alternativePath));
+            Map.of(SEO_SEGMENT_KEY, seoPath, SEO_PATH_KEY, seoPath, ALTERNATIVE_PATH_KEY, alternativePath));
   }
 
   @Test

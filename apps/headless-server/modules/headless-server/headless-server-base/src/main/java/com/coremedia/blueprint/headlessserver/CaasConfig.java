@@ -4,10 +4,13 @@ import com.coremedia.blueprint.base.caas.model.adapter.ByPathAdapterFactory;
 import com.coremedia.blueprint.base.caas.model.adapter.LocalizedVariantsAdapterFactory;
 import com.coremedia.blueprint.base.caas.model.adapter.NavigationAdapterFactory;
 import com.coremedia.blueprint.base.caas.model.adapter.PageGridAdapterFactory;
+import com.coremedia.blueprint.base.caas.model.adapter.PageGridPlacementAdapter;
 import com.coremedia.blueprint.base.caas.model.adapter.SettingsAdapterFactory;
 import com.coremedia.blueprint.base.caas.model.adapter.StructAdapterFactory;
 import com.coremedia.blueprint.base.caas.model.adapter.TaxonomyAdapterFactory;
 import com.coremedia.blueprint.base.caas.segments.CMLinkableSegmentStrategy;
+import com.coremedia.blueprint.base.caas.viewtype.CollectionViewTypePostProcessor;
+import com.coremedia.blueprint.base.caas.viewtype.PageGridPlacementViewTypePostProcessor;
 import com.coremedia.blueprint.base.links.ContentSegmentStrategy;
 import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
 import com.coremedia.blueprint.base.navigation.context.ContextStrategy;
@@ -74,8 +77,8 @@ import com.coremedia.caas.web.CaasServiceConfigurationProperties;
 import com.coremedia.caas.web.GraphiqlConfigurationProperties;
 import com.coremedia.caas.web.filter.HSTSResponseHeaderFilter;
 import com.coremedia.caas.web.link.ContentBlobLinkComposer;
-import com.coremedia.caas.web.link.FilenameBlobLinkComposer;
 import com.coremedia.caas.web.link.ContentMarkupLinkComposer;
+import com.coremedia.caas.web.link.FilenameBlobLinkComposer;
 import com.coremedia.caas.web.link.ResponsiveMediaLinkComposer;
 import com.coremedia.caas.web.metadata.MetadataConfigurationProperties;
 import com.coremedia.caas.web.metadata.MetadataProvider;
@@ -107,6 +110,7 @@ import com.coremedia.cap.content.spring.ContentConfigurationProperties;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.undoc.common.spring.CapRepositoriesConfiguration;
+import com.coremedia.function.PostProcessor;
 import com.coremedia.link.CompositeLinkComposer;
 import com.coremedia.link.LinkComposer;
 import com.coremedia.link.uri.UriLinkBuilder;
@@ -123,6 +127,9 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import graphql.ExecutionInput;
 import graphql.GraphQL;
+import graphql.GraphQLError;
+import graphql.GraphQLException;
+import graphql.GraphqlErrorBuilder;
 import graphql.analysis.MaxQueryComplexityInstrumentation;
 import graphql.analysis.MaxQueryDepthInstrumentation;
 import graphql.execution.instrumentation.ChainedInstrumentation;
@@ -152,6 +159,7 @@ import org.dataloader.impl.DefaultCacheMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -169,6 +177,7 @@ import org.springframework.context.expression.MapAccessor;
 import org.springframework.context.support.ConversionServiceFactoryBean;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.convert.converter.GenericConverter;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.expression.BeanResolver;
@@ -189,9 +198,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -352,8 +363,8 @@ public class CaasConfig implements WebMvcConfigurer {
   public LinkComposer<Object, GraphQLLink> graphQlLinkComposer(List<LinkComposer<?, ? extends GraphQLLink>> linkComposers,
                                                                @Qualifier(QUALIFIER_PLUGIN_LINK_COMPOSERS_GRAPHQL) List<GrapQLLinkComposer<?>> pluginLinkComposers) {
     List<LinkComposer<?, ? extends GraphQLLink>> mergedList = Stream.concat(linkComposers.stream(),
-            pluginLinkComposers.stream()
-                    .map(lc -> (LinkComposer<?, ? extends GraphQLLink>) lc))
+                    pluginLinkComposers.stream()
+                            .map(lc -> (LinkComposer<?, ? extends GraphQLLink>) lc))
             .collect(Collectors.toList());
 
     return new CompositeLinkComposer<>(mergedList, List.of());
@@ -432,6 +443,11 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
+  public TypeNameResolver<PageGridPlacementAdapter> pageGridPlacementTypeNameResolver() {
+    return pageGridPlacementAdapter -> Optional.of("PageGridPlacementImpl");
+  }
+
+  @Bean
   @SuppressWarnings("squid:S1067")
   public ProvidesTypeNameResolver providesContentTypeNameResolver(ContentRepository repository) {
     return typeName ->
@@ -439,12 +455,23 @@ public class CaasConfig implements WebMvcConfigurer {
                     "Detail".equals(typeName) ||
                     "CollectionItem".equals(typeName) ||
                     "HasPageGrid".equals(typeName) ||
+                    "PageGridPlacement".equals(typeName) ||
                     repository.getContentType(typeName) != null ? Optional.of(true) : Optional.empty();
   }
 
   @Bean
-  public TypeNameResolver<Object> compositeTypeNameResolver(List<TypeNameResolver<?>> typeNameResolvers) {
-    return new CompositeTypeNameResolver<>(typeNameResolvers);
+  public TypeNameResolver<Object> compositeTypeNameResolver(List<TypeNameResolver<?>> typeNameResolvers, List<PostProcessor<?, ? extends String>> postProcessors) {
+    return new CompositeTypeNameResolver<>(typeNameResolvers, postProcessors);
+  }
+
+  @Bean
+  public PostProcessor<Content, String> collectionViewViewTypePostProcessor(@Lazy GraphQLSchema schema) {
+    return new CollectionViewTypePostProcessor(schema);
+  }
+
+  @Bean
+  public PostProcessor<PageGridPlacementAdapter, String> pageGridPlacementViewTypePostProcessor(@Lazy GraphQLSchema schema) {
+    return new PageGridPlacementViewTypePostProcessor(schema);
   }
 
   @Bean
@@ -633,8 +660,8 @@ public class CaasConfig implements WebMvcConfigurer {
   public SpelEvaluationStrategy spelEvaluationStrategy(
           BeanFactory beanFactory,
           @Qualifier("propertyAccessors") List<PropertyAccessor> propertyAccessors,
-          @Qualifier(PluginSupport.QUALIFIER_PLUGIN_SCHEMA_ADAPTER_RESOLVER) BeanResolver beanResolver) {
-    return new SpelEvaluationStrategy(beanFactory, propertyAccessors, beanResolver);
+          @Qualifier(PluginSupport.QUALIFIER_PLUGIN_SCHEMA_ADAPTER_RESOLVER) BeanResolver beanResolver, @Qualifier("graphQlConversionService") ConversionService conversionService) {
+    return new SpelEvaluationStrategy(beanFactory, propertyAccessors, beanResolver, conversionService);
   }
 
   @Bean
@@ -643,6 +670,7 @@ public class CaasConfig implements WebMvcConfigurer {
     return SpelFunctions.class.getDeclaredMethod("first", List.class);
   }
 
+  // the bean name is used as directive name
   @Bean
   public SchemaDirectiveWiring fetch(SpelEvaluationStrategy spelEvaluationStrategy,
                                      @Qualifier("globalSpelVariables") Map<String, Object> globalSpelVariables) {
@@ -672,9 +700,9 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public ConversionServiceFactoryBean graphQlConversionService(Set<Converter> converters) {
+  public ConversionServiceFactoryBean graphQlConversionService(Set<Converter<?, ?>> converters, Set<GenericConverter> genericConverters, @Qualifier(PluginSupport.QUALIFIER_PLUGIN_CONVERTERS) Set<Converter<?, ?>> pluginInputTypeConverters) {
     ConversionServiceFactoryBean conversionServiceFactoryBean = new ConversionServiceFactoryBean();
-    conversionServiceFactoryBean.setConverters(converters);
+    conversionServiceFactoryBean.setConverters(Stream.of(converters, genericConverters, pluginInputTypeConverters).flatMap(Collection::stream).collect(Collectors.toSet()));
     return conversionServiceFactoryBean;
   }
 
@@ -796,8 +824,7 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public DataFetcherMappingInstrumentation dataFetchingInstrumentation(SpelEvaluationStrategy spelEvaluationStrategy,
-                                                                       @Qualifier("caasFilterPredicates") List<FilterPredicate<Object>> caasFilterPredicates,
+  public DataFetcherMappingInstrumentation dataFetchingInstrumentation(@Qualifier("caasFilterPredicates") List<FilterPredicate<Object>> caasFilterPredicates,
                                                                        @Qualifier("graphQlConversionService") ConversionService conversionService,
                                                                        @Qualifier("conversionTypeMap") Map<String, Class<?>> conversionTypeMap,
                                                                        SitesService sitesService
@@ -839,7 +866,7 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public TypeDefinitionRegistry typeDefinitionRegistry(List<Resource> pluginGraphqlSchemaResources)
+  public TypeDefinitionRegistry typeDefinitionRegistry(List<Resource> pluginGraphqlSchemaResources, @Qualifier("searchSchemaResources") ObjectProvider<List<Resource>> searchSchemaResourceProvider)
           throws IOException {
     SchemaParser schemaParser = new SchemaParser();
     PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
@@ -847,6 +874,8 @@ public class CaasConfig implements WebMvcConfigurer {
     Resource[] resources = loader.getResources("classpath*:*-schema.graphql");
 
     List<Resource> allResources = new ArrayList<>(Arrays.asList(resources));
+
+    searchSchemaResourceProvider.ifAvailable(allResources::addAll);
 
     if (metadataConfigurationProperties.isEnabled()) {
       Resource[] metadataResources = loader.getResources("classpath*:graphql/metadata/metadata-schema.graphql");
@@ -865,7 +894,7 @@ public class CaasConfig implements WebMvcConfigurer {
 
     for (Resource resource : allResources) {
       LOG.info("Merging GraphQL schema {}", resource.getURI());
-      try (InputStreamReader in = new InputStreamReader(resource.getInputStream())) {
+      try (InputStreamReader in = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8)) {
         stringBuilder.append(IOUtils.toString(in));
       } catch (IOException e) {
         throw new IOException("There was an error while reading the schema file " + resource.getFilename(), e);
@@ -891,6 +920,7 @@ public class CaasConfig implements WebMvcConfigurer {
     WiringFactory wiringFactory = new ModelMappingWiringFactory(modelMapper, wiringFactories);
     RuntimeWiring.Builder builder = RuntimeWiring.newRuntimeWiring()
             .wiringFactory(wiringFactory);
+    // register the directive implementations taking their bean name as directive name
     directiveWirings.forEach(builder::directive);
     RuntimeWiring wiring = builder.build();
     SchemaGenerator schemaGenerator = new SchemaGenerator();
@@ -904,7 +934,20 @@ public class CaasConfig implements WebMvcConfigurer {
 
       @Override
       public PreparsedDocumentEntry getDocument(ExecutionInput executionInput, Function<ExecutionInput, PreparsedDocumentEntry> computeFunction) {
-        return cache.get(executionInput.getQuery(), () -> computeFunction.apply(executionInput));
+        return cache.get(executionInput.getQuery(), () -> {
+          try {
+            return computeFunction.apply(executionInput);
+          } catch (GraphQLException e) {
+            LOG.debug("Caught exception in anonymous PreparsedDocumentProvider.", e);
+            if (e instanceof GraphQLError) {
+              return new PreparsedDocumentEntry(List.of((GraphQLError) e));
+            }
+            return new PreparsedDocumentEntry(List.of(GraphqlErrorBuilder.newError().message(e.getMessage()).build()));
+          } catch (RuntimeException e) {
+            LOG.debug("Caught exception in anonymous PreparsedDocumentProvider.", e);
+            return new PreparsedDocumentEntry(List.of(GraphqlErrorBuilder.newError().message(e.getMessage()).build()));
+          }
+        });
       }
     };
   }

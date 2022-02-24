@@ -20,23 +20,19 @@ module.exports = jangarooConfig({
   },
   appManifests: {
     en: {
+      cmKey: "cmMainApp",
       name: "CoreMedia Studio",
-      short_name: "Studio",
+      short_name: "Content",
       icons: [
         {
-          src: "appIcons/android-chrome-192x192.png",
-          sizes: "192x192",
-          type: "image/png",
-        },
-        {
-          src: "appIcons/android-chrome-512x512.png",
-          sizes: "512x512",
-          type: "image/png",
-        },
-        {
-          src: "appIcons/coremedia_24.svg",
+          src: "appIcons/type-asset-document_24.svg",
           sizes: "24x24",
           type: "image/svg",
+        },
+        {
+          src: "appIcons/type-asset-document_192.png",
+          sizes: "192x192",
+          type: "image/png",
         },
       ],
       start_url: "index.html",
@@ -97,27 +93,6 @@ module.exports = jangarooConfig({
           },
         ],
       },
-      cmKey: "cmMainApp",
-      shortcuts: [
-        {
-          cmKey: "cmContent",
-          cmCategory: "Content",
-          name: "Content",
-          url: "",
-          icons: [
-            {
-              src: "appIcons/type-asset-document_24.svg",
-              sizes: "24x24",
-              type: "image/svg",
-            },
-            {
-              src: "appIcons/type-asset-document_192.png",
-              sizes: "192x192",
-              type: "image/png",
-            },
-          ],
-        },
-      ],
       cmServiceShortcuts: [
         {
           cmKey: "cmLocalizationManager",

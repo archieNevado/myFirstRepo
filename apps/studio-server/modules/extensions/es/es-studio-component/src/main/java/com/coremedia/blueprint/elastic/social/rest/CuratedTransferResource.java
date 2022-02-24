@@ -57,7 +57,7 @@ public class CuratedTransferResource {
   static final String COMMENT_PROPERTY_CURATED_CONTENTS = "curatedContents";
 
   private static final String COMMENT_DATE_FORMAT_STRING = "dd.MM.yyyy | HH:mm";
-  private static final ThreadLocal<SimpleDateFormat> COMMENT_DATE_FORMAT = new ThreadLocal<SimpleDateFormat>() {
+  private static final ThreadLocal<SimpleDateFormat> COMMENT_DATE_FORMAT = new ThreadLocal<>() {
     @Override
     protected synchronized SimpleDateFormat initialValue() {
       return new SimpleDateFormat(COMMENT_DATE_FORMAT_STRING);

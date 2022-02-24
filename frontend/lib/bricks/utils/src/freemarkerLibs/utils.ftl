@@ -136,9 +136,10 @@
   </#if>
 -->
 <#macro renderWithLineBreaks text>
-  <#noautoesc>
-    ${text?trim?replace("\n\n", "<br>")?replace("\n", "<br>")}
-  </#noautoesc>
+    <#assign encodedMarkup>
+        ${text?trim}
+    </#assign>
+    ${encodedMarkup?markup_string?replace("\n\n", "<br>")?replace("\n", "<br>")?no_esc}
 </#macro>
 
 <#--

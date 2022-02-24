@@ -32,3 +32,24 @@ services:
       PLUGINS_DIRECTORIES_1_: /coremedia/plugins
     volumes:
       - ../plugins/content-feeder:/coremedia/plugins
+
+  content-management-server:
+    environment:
+      PLUGINS_DIRECTORIES_0_: /coremedia/bundled-plugins
+      PLUGINS_DIRECTORIES_1_: /coremedia/plugins
+    volumes:
+      - ../plugins/content-server:/coremedia/plugins
+
+  master-live-server:
+    environment:
+      PLUGINS_DIRECTORIES_0_: /coremedia/bundled-plugins
+      PLUGINS_DIRECTORIES_1_: /coremedia/plugins
+    volumes:
+      - ../plugins/content-server:/coremedia/plugins
+
+  replication-live-server:
+    environment:
+      PLUGINS_DIRECTORIES_0_: /coremedia/bundled-plugins
+      PLUGINS_DIRECTORIES_1_: /coremedia/plugins
+    volumes:
+      - ../plugins/content-server:/coremedia/plugins

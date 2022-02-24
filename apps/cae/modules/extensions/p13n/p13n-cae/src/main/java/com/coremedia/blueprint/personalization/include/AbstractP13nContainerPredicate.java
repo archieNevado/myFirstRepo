@@ -1,20 +1,15 @@
 package com.coremedia.blueprint.personalization.include;
 
+import com.coremedia.blueprint.cae.web.CacheControlValidUntilConsumer;
 import com.coremedia.objectserver.view.RenderNode;
 import com.coremedia.objectserver.view.dynamic.DynamicIncludePredicate;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
-
 import java.util.regex.Pattern;
 
 import static com.coremedia.blueprint.cae.view.DynamicIncludeHelper.isAlreadyIncludedDynamically;
-
-import static com.coremedia.blueprint.common.datevalidation.ValidUntilConsumer.DISABLE_VALIDITY_RECORDING_ATTRIBUTE;
-import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 
 @DefaultAnnotation(NonNull.class)
 public abstract class AbstractP13nContainerPredicate implements DynamicIncludePredicate {
@@ -26,12 +21,8 @@ public abstract class AbstractP13nContainerPredicate implements DynamicIncludePr
 
   @Override
   public boolean test(RenderNode input) {
-    RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-    if (requestAttributes == null) {
-      throw new IllegalStateException("Request attributes not available.");
-    }
     try {
-      requestAttributes.setAttribute(DISABLE_VALIDITY_RECORDING_ATTRIBUTE, true, SCOPE_REQUEST);
+      CacheControlValidUntilConsumer.disableRecording();
       if (isAlreadyIncludedDynamically()) {
         return false;
       }
@@ -40,7 +31,7 @@ public abstract class AbstractP13nContainerPredicate implements DynamicIncludePr
       }
       return false;
     } finally {
-      requestAttributes.removeAttribute(DISABLE_VALIDITY_RECORDING_ATTRIBUTE, SCOPE_REQUEST);
+      CacheControlValidUntilConsumer.enableRecording();
     }
   }
 

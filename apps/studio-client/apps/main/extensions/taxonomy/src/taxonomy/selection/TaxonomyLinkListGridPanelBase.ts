@@ -167,7 +167,7 @@ class TaxonomyLinkListGridPanelBase extends GridPanel {
    *
    * @return String
    */
-  protected taxonomyRenderer(value: any, metaData: any, record: BeanRecord): string {
+  protected taxonomyRenderer(value: any, metaData: any, record: BeanRecord<Content>): string {
     const taxonomyId: string = this.taxonomyIdExpression.getValue();
     TaxonomyUtil.isEditable(taxonomyId, (editable: boolean): void => {
       if (editable) {
@@ -200,7 +200,7 @@ class TaxonomyLinkListGridPanelBase extends GridPanel {
           );
         }
       }
-    }, as(record.getBean(), Content));
+    }, record.getBean());
 
     if (!record.data.html) {
       return "<div class='loading'>" + TaxonomyStudioPlugin_properties.TaxonomyLinkList_status_loading_text + "</div>";

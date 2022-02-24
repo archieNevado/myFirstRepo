@@ -10,6 +10,10 @@ directive @inherit(
   from: [String!]!
 ) on OBJECT | INTERFACE
 
+directive @viewtype(
+  name: String!
+) on OBJECT
+
 directive @deprecated(
   reason: String = "No longer supported"
 ) on FIELD_DEFINITION | ENUM_VALUE | ARGUMENT_DEFINITION
@@ -780,11 +784,21 @@ type PageGrid {
   rows: [PageGridRow!]
 
   # retrieves the page grid placements as a flat list, optionally filtered by name
-  placements(names: [String], excludeNames: [String]) :[PageGridPlacement]  @fetch(from: "getPlacements(#names, #excludeNames)")
+  placements(names: [String], excludeNames: [String]): [PageGridPlacement] @fetch(from: "getPlacements(#names, #excludeNames)")
   id: ID! @fetch(from: "@contentIdProvider.apply(#root.navigation)")
 }
 
-type PageGridPlacement {
+interface PageGridPlacement {
+  name: String!
+  column: Int!
+  colspan: Int!
+  width: Int!
+  viewtype: String
+  items: [CMLinkable!]!
+  id: ID
+}
+
+type PageGridPlacementImpl implements PageGridPlacement {
   name: String!
   column: Int!
   colspan: Int!
@@ -846,6 +860,15 @@ type TransformedHotZone {
   shape: String
   target: String
 }
+
+# viewtype specific types
+
+type ViewTypeHeroPageGridPlacement implements PageGridPlacement @inherit(from: ["PageGridPlacementImpl"]) @viewtype(name: "hero") {
+}
+
+type ViewTypeHeroCollection implements CMCollection @inherit(from: ["CMCollectionImpl"]) @viewtype(name: "hero") {
+}
+
 
 # enums alphabetically
 

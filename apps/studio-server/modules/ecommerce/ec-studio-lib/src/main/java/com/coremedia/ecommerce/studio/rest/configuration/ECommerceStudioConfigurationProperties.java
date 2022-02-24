@@ -13,15 +13,21 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 public class ECommerceStudioConfigurationProperties {
 
+  // Note, this javadoc is copied to the deployment-en manual. Please keep the manual in sync.
+
   /**
-   * All child categories are fully preloaded in Studio by default to determine if they are virtual or not.
-   * Set this property to {@link PreloadChildCategories#ALL_EXCEPT_TOP_LEVEL} if the top level
-   * categories shouldn't be preloaded when loading the root category. It can be useful if
-   * there is a huge number of top level categories and you are sure about that they cannot
-   * be virtual. In commerce systems where no physical root category exists it can't be any
-   * other way. Moreover, if you are sure that there is no virtual category at all you can
-   * use {@link PreloadChildCategories#NONE}. In case a child category is not preloaded
-   * its virtual state is always false.
+   * The default behavior of the Studio library catalog tree is to load the next level of categories
+   * no matter if they are displayed.
+   * This is done to determine if a child category is virtual or not.
+   * All occurrences of a category that are not in the primary location in the catalog tree are considered as virtual.
+   * Set this property to {@link PreloadChildCategories#ALL_EXCEPT_TOP_LEVEL} if top level
+   * categories should be excluded from pre-loading.
+   * It can be useful if there is a huge number of top level categories
+   * and if you are sure they are not virtual.
+   * In commerce systems where no physical root category exists it must be this way.
+   * Moreover, if you are sure there is no virtual category at all you can
+   * use the value {@link PreloadChildCategories#NONE}.
+   * If a child category is not pre-loaded, its state is assumed to be non-virtual.
    */
   private PreloadChildCategories preloadChildCategories = PreloadChildCategories.ALL;
 

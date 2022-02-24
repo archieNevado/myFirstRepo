@@ -1,13 +1,12 @@
 package com.coremedia.blueprint.cae.web.i18n;
 
+import com.coremedia.blueprint.common.util.ContextAttributes;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.context.HierarchicalMessageSource;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.NoSuchMessageException;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.MessageFormat;
@@ -95,13 +94,7 @@ public class RequestMessageSource implements HierarchicalMessageSource {
    */
   @Nullable
   private static MessageSource getRequestMessageSource() {
-    RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
-
-    if (attributes == null) {
-      return null;
-    }
-
-    return (MessageSource) attributes.getAttribute(MESSAGESOURCE_ATTRIBUTE, RequestAttributes.SCOPE_REQUEST);
+    return ContextAttributes.findRequestAttribute(MESSAGESOURCE_ATTRIBUTE, MessageSource.class).orElse(null);
   }
 
   @NonNull

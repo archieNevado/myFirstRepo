@@ -36,6 +36,10 @@ class ControlRoomStudioPlugin extends StudioPlugin {
 
   static readonly xtype: string = "com.coremedia.blueprint.studio.config.controlroom.controlRoomStudioPlugin";
 
+  static readonly TRANSLATION_PROCESS: string = "Translation";
+
+  static readonly SYNCHRONIZATION_PROCESS: string = "Synchronization";
+
   constructor(config: Config<ControlRoomStudioPlugin> = null) {
     super(ConfigUtils.apply(Config(ControlRoomStudioPlugin, {
 
@@ -80,7 +84,7 @@ class ControlRoomStudioPlugin extends StudioPlugin {
 
         /* configure the UI for the translation workxflow */
         new AddTranslationWorkflowPlugin({
-          processDefinitionName: "Translation",
+          processDefinitionName: ControlRoomStudioPlugin.TRANSLATION_PROCESS,
           listToolbarButtonsFunction: WorkflowUtils.getTranslationToolbarButtons(),
           inboxForm: Config(DefaultTranslationWorkflowDetailForm, {
             workflowStateTransitions: [
@@ -129,7 +133,7 @@ class ControlRoomStudioPlugin extends StudioPlugin {
           startForm: Config(DefaultStartTranslationWorkflowForm),
         }),
         new AddTranslationWorkflowPlugin({
-          processDefinitionName: "Synchronization",
+          processDefinitionName: ControlRoomStudioPlugin.SYNCHRONIZATION_PROCESS,
           listToolbarButtonsFunction: WorkflowUtils.getTranslationToolbarButtons(),
           inboxForm: Config(DefaultTranslationWorkflowDetailForm, {
             workflowStateTransitions: [

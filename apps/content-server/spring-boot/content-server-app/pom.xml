@@ -27,7 +27,7 @@
 
     <jib.skip>true</jib.skip>
     <jib.goal>dockerBuild</jib.goal>
-    <application.image-base>coremedia/java-application-base:2.4.1-corretto-11</application.image-base>
+    <application.image-base>coremedia/java-application-base:2.4.2-corretto-11</application.image-base>
     <application.image-prefix>coremedia</application.image-prefix>
     <application.image-suffix>content-server</application.image-suffix>
     <application.image-tag>${project.version}</application.image-tag>
@@ -131,6 +131,28 @@
       <build>
         <plugins>
           <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+              <execution>
+                <!--
+                 | This is a workaround to fix permission rights, see
+                 | https://github.com/GoogleContainerTools/jib-extensions/tree/master/first-party/jib-ownership-extension-maven
+                 | make sure to not use extraDirectories with from/into paths. Instead create an empty dir tree
+                 -->
+                <id>create-empty-dirs</id>
+                <phase>generate-sources</phase>
+                <configuration>
+                  <tasks>
+                    <mkdir dir="${project.build.directory}/empty-dirs/coremedia"/>
+                  </tasks>
+                </configuration>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
             <groupId>com.google.cloud.tools</groupId>
             <artifactId>jib-maven-plugin</artifactId>
             <configuration>
@@ -152,6 +174,11 @@
                   <port>8199</port>
                 </ports>
               </container>
+              <extraDirectories>
+                <paths>
+                  <path>target/empty-dirs</path>
+                </paths>
+              </extraDirectories>
               <pluginExtensions>
                 <pluginExtension>
                   <implementation>com.google.cloud.tools.jib.maven.extension.ownership.JibOwnershipExtension

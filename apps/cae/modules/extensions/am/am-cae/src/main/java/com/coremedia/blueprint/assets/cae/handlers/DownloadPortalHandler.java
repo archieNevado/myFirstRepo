@@ -655,7 +655,7 @@ public class DownloadPortalHandler {
 
     try {
       ObjectMapper mapper = new ObjectMapper();
-      downloadCollectionMap = mapper.readValue(downloadCollectionRawData, new TypeReference<Map<String, List<String>>>() {
+      downloadCollectionMap = mapper.readValue(downloadCollectionRawData, new TypeReference<>() {
       });
     } catch (Exception e) {
       LOG.error("Failed to extract download collection data", e);

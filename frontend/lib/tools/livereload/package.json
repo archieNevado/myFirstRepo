@@ -15,8 +15,8 @@
     "tiny-lr": "^2.0.0"
   },
   "devDependencies": {
-    "jest": "^27.2.3",
-    "prettier": "^2.4.1"
+    "jest": "^27.5.1",
+    "prettier": "^2.5.1"
   },
   "scripts": {
     "prettier": "prettier --write \"src/**/*.{js,json}\"",

@@ -43,7 +43,7 @@ fi
 rm -rf 'plugin-descriptors' 'plugins'
 mkdir 'plugin-descriptors' 'plugins'
 # make sure to create all folders that will be mounted as docker volumes to prevent permission issues
-mkdir -p 'plugins/studio-server' 'plugins/studio-client.main' 'plugins/studio-client.workflow' 'plugins/headless-server' 'plugins/content-feeder'
+mkdir -p 'plugins/studio-server' 'plugins/studio-client.main' 'plugins/studio-client.workflow' 'plugins/headless-server' 'plugins/content-feeder' 'plugins/content-server'
 
 function main() {
   download_descriptors
@@ -153,7 +153,7 @@ function download_github_action_artifact() {
 }
 
 function extract_bundles() {
-  bundle_zips=$(find -name *.zip)
+  bundle_zips=$(find -name '*.zip')
   if [ -n "${bundle_zips}" ]; then
     mkdir -p bundles
     for bundle_zip in ${bundle_zips}; do

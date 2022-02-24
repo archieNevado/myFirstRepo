@@ -4,7 +4,6 @@ import com.coremedia.blueprint.base.links.RuleProvider;
 import com.coremedia.blueprint.base.links.impl.AbsoluteUrlPrefixRuleProvider;
 import com.coremedia.blueprint.base.links.impl.ApplicationPropertyReplacerFormatter;
 import com.coremedia.blueprint.base.links.impl.RuleUrlPrefixResolver;
-import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.caas.augmentation.adapter.AugmentationPageGridAdapterFactory;
 import com.coremedia.blueprint.caas.augmentation.adapter.AugmentationPageGridAdapterFactoryCmsOnly;
@@ -21,12 +20,10 @@ import com.coremedia.blueprint.caas.augmentation.model.CategoryAugmentationCmsOn
 import com.coremedia.blueprint.caas.augmentation.model.CommerceRef;
 import com.coremedia.blueprint.caas.augmentation.model.ProductAugmentation;
 import com.coremedia.blueprint.caas.augmentation.model.ProductAugmentationCmsOnly;
-import com.coremedia.blueprint.caas.search.HeadlessSearchConfiguration;
 import com.coremedia.caas.config.CaasSearchConfigurationProperties;
 import com.coremedia.caas.model.adapter.ExtendedLinkListAdapterFactory;
 import com.coremedia.caas.search.solr.SolrQueryBuilder;
 import com.coremedia.caas.search.solr.SolrSearchResultFactory;
-import com.coremedia.caas.web.CaasServiceConfigurationProperties;
 import com.coremedia.caas.wiring.ProvidesTypeNameResolver;
 import com.coremedia.caas.wiring.TypeNameResolver;
 import com.coremedia.cache.Cache;
@@ -63,7 +60,6 @@ import java.util.Set;
         "com.coremedia.livecontext.asset.impl",
 })
 @Import({
-        HeadlessSearchConfiguration.class,
         HeadlessAugmentationCommerceConfiguration.class,
         HeadlessAugmentationCmsOnlyConfiguration.class,
 })
@@ -116,19 +112,13 @@ public class HeadlessAugmentationConfiguration {
   public TypeNameResolver<CommerceRef> commerceRefTypeNameResolver() {
     return commerceRef -> {
       CommerceBeanType type = commerceRef.getType();
-      if (type.equals(BaseCommerceBeanType.CATEGORY)){
+      if (type.equals(BaseCommerceBeanType.CATEGORY)) {
         return Optional.of(CATEGORY_REF);
-      } else if (type.equals(BaseCommerceBeanType.PRODUCT) || type.equals(BaseCommerceBeanType.SKU)){
+      } else if (type.equals(BaseCommerceBeanType.PRODUCT) || type.equals(BaseCommerceBeanType.SKU)) {
         return Optional.of(PRODUCT_REF);
       }
       return Optional.of(CommerceRef.class.getSimpleName());
     };
-  }
-
-  @Bean
-  public CommerceEntityHelper commerceEntityHelper(SitesService siteService,
-                                                   CommerceConnectionSupplier commerceConnectionSupplier) {
-    return new CommerceEntityHelper(siteService, commerceConnectionSupplier);
   }
 
   @Bean

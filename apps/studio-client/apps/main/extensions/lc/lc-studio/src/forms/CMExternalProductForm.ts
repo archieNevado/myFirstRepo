@@ -34,6 +34,7 @@ import DocumentTabPanel from "@coremedia/studio-client.main.editor-components/sd
 import PropertyFieldGroup from "@coremedia/studio-client.main.editor-components/sdk/premular/PropertyFieldGroup";
 import VersionHistory from "@coremedia/studio-client.main.editor-components/sdk/premular/VersionHistory";
 import ShowIssuesPlugin from "@coremedia/studio-client.main.editor-components/sdk/validation/ShowIssuesPlugin";
+import Component from "@jangaroo/ext-ts/Component";
 import VBoxLayout from "@jangaroo/ext-ts/layout/container/VBox";
 import Config from "@jangaroo/runtime/Config";
 import ConfigUtils from "@jangaroo/runtime/ConfigUtils";
@@ -45,7 +46,6 @@ import CommerceAttributesForm from "../desktop/CommerceAttributesForm";
 import CommerceAugmentedPageGridForm from "../desktop/CommerceAugmentedPageGridForm";
 import CommerceDetailsForm from "../desktop/CommerceDetailsForm";
 import CommerceProductStructureForm from "../desktop/CommerceProductStructureForm";
-import Component from "@jangaroo/ext-ts/Component";
 
 interface CMExternalProductFormConfig extends Config<DocumentTabPanel> {
 }
@@ -180,10 +180,11 @@ class CMExternalProductForm extends DocumentTabPanel {
                         Config(CatalogLinkPropertyField, {
                           itemId: CMExternalProductForm.CATALOG_LINK_ITEM_ID,
                           maxCardinality: 1,
+                          disableSelection: true,
                           propertyName: CMExternalProductForm.EXTERNAL_ID_PROPERTY,
                           linkTypeNames: [CatalogModel.TYPE_PRODUCT],
                           dropAreaText: LivecontextStudioPlugin_properties.Category_Link_empty_text,
-                          showChangeReferenceButton: true,
+                          showRemoveReferenceButton: true,
                           readOnlyValueExpression: ValueExpressionFactory.createFromValue(false),
                           ...ConfigUtils.append({
                             plugins: [
