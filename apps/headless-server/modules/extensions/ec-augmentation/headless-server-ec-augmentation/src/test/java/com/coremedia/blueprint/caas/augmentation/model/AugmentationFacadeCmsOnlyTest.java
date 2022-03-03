@@ -3,11 +3,13 @@ package com.coremedia.blueprint.caas.augmentation.model;
 import com.coremedia.blueprint.base.caas.model.adapter.ByPathAdapter;
 import com.coremedia.blueprint.base.caas.model.adapter.ByPathAdapterFactory;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
+import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.caas.augmentation.CommerceSettingsHelper;
 import com.coremedia.blueprint.caas.augmentation.tree.ExternalBreadcrumbTreeRelation;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.cap.struct.Struct;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
@@ -18,16 +20,24 @@ import graphql.execution.DataFetcherResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Answers;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.ObjectProvider;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import static java.util.Locale.US;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
@@ -83,11 +93,16 @@ class AugmentationFacadeCmsOnlyTest {
   private ObjectProvider<AugmentationContext> augmentationContextProvider;
   private AugmentationContext augmentationContext = new AugmentationContext();
 
+  @Mock
+  private SettingsService settingsService;
+
   private AugmentationFacadeCmsOnly testling;
+
 
   @BeforeEach
   void setUp() {
     when(sitesService.getSite(SITE_ID)).thenReturn(aSite);
+    lenient().when(aSite.getId()).thenReturn(SITE_ID);
     when(byPathAdapterFactory.to()).thenReturn(byPathAdapter);
     when(sitesService.getContentSiteAspect(homepage).getSite()).thenReturn(aSite);
 
@@ -95,14 +110,14 @@ class AugmentationFacadeCmsOnlyTest {
     lenient().when(externalBreadcrumbTreeRelationProvider.getObject()).thenReturn(externalBreadcrumbTreeRelation);
 
     testling = new AugmentationFacadeCmsOnly(categoryAugmentationService, productAugmentationService, sitesService,
-            externalBreadcrumbTreeRelationProvider, commerceSettingsHelper, byPathAdapterFactory, augmentationContextProvider);
+            externalBreadcrumbTreeRelationProvider, commerceSettingsHelper, byPathAdapterFactory, augmentationContextProvider, settingsService);
   }
 
   private void initCommerceSettingsHelper() {
-    when(commerceSettingsHelper.getCatalogId(aSite)).thenReturn(CATALOG.value());
-    when(commerceSettingsHelper.getStoreId(aSite)).thenReturn(STORE_ID);
+    lenient().when(commerceSettingsHelper.getCatalogId(aSite)).thenReturn(CATALOG.value());
+    lenient().when(commerceSettingsHelper.getStoreId(aSite)).thenReturn(STORE_ID);
     lenient().when(commerceSettingsHelper.getVendor(aSite)).thenReturn("vendor");
-    when(commerceSettingsHelper.getLocale(aSite)).thenReturn(US);
+    lenient().when(commerceSettingsHelper.getLocale(aSite)).thenReturn(US);
   }
 
   @Test
@@ -173,12 +188,14 @@ class AugmentationFacadeCmsOnlyTest {
 
   @Test
   void initializeBreadcrumbTreeRelation() {
-    testling.initializeBreadcrumbTreeRelation(new String[]{"a", "b", "c"}, Vendor.of("vendor"), CatalogAlias.of("aCatalog"));
+    testling.initializeBreadcrumbTreeRelation(new String[]{"a", "b", "c"}, Vendor.of("vendor"), "d", CatalogAlias.of("aCatalog"));
     List<String> breadcrumb = externalBreadcrumbTreeRelation.getBreadcrumb();
-    assertThat(breadcrumb)
-            .hasSize(3)
-            .allMatch(s -> s.startsWith("vendor:///catalog/category/"))
-            .allMatch(s -> s.contains("/catalog:aCatalog;"));
+    assertThat(breadcrumb).satisfies(bc -> {
+              assertThat(bc).hasSize(4);
+              assertThat(bc).first().isEqualTo("vendor:///catalog/category/catalog:aCatalog;a");
+              assertThat(bc).last().isEqualTo("vendor:///catalog/category/catalog:aCatalog;d");
+            }
+    );
   }
 
   @Test
@@ -195,5 +212,57 @@ class AugmentationFacadeCmsOnlyTest {
             .returns(BaseCommerceBeanType.CATEGORY, CommerceRef::getType)
             .returns("catalog", CommerceRef::getCatalogAlias);
     assertThat(commerceRef.getBreadcrumb()).containsExactly(BREADCRUMB);
+  }
+
+  @ParameterizedTest
+  @MethodSource
+  void splitBreadcrumbParameter(String[] input, String[] expected){
+    String[] output = AugmentationFacadeCmsOnly.splitBreadcrumbParameter(input);
+    assertThat(output).isEqualTo(expected);
+  }
+
+  @SuppressWarnings("unused")
+  private static Stream<Arguments> splitBreadcrumbParameter() {
+    return Stream.of(
+            Arguments.of(new String[]{"a", "b", "c"}, new String[]{"a", "b", "c"}),
+            Arguments.of(new String[]{"a/b/c"}, new String[]{"a", "b", "c"}),
+            Arguments.of(new String[]{"a/b/c", "d"}, new String[]{"a/b/c", "d"}),
+            Arguments.of(new String[]{}, new String[]{})
+    );
+  }
+
+  @Test
+  void getAugmentationWithCatalogAlias() {
+    initCommerceSettingsHelper();
+    String catalogAlias = "myCatalogAlias";
+    String catalogId = "myCatalogId";
+    when(commerceSettingsHelper.getCatalogId(aSite)).thenReturn(catalogId);
+    when(settingsService.getSetting(eq("livecontext.catalogAliases"), any(), any())).thenReturn(Optional.empty());
+
+    String commerceIdWithCatalogAlias = "acme:///catalog/product/" + "catalog:" + catalogAlias + ";" + EXTERNAL_PRODUCT_ID;
+
+    DataFetcherResult<? extends Augmentation> productAugmentation = testling.getAugmentationBySite(commerceIdWithCatalogAlias, BREADCRUMB, SITE_ID);
+
+    assertThat(productAugmentation).isNotNull();
+    assertThat(productAugmentation.getData().getCommerceRef()).satisfies(ref -> {
+              assertThat(ref.getCatalogAlias()).isEqualTo(catalogAlias);
+              assertThat(ref.getCatalogId()).isEqualTo(catalogId);
+            }
+    );
+  }
+
+  @Test
+  void getAugmentationMultiCatalogError() {
+    initCommerceSettingsHelper();
+    when(commerceSettingsHelper.getCatalogAlias(aSite)).thenReturn("defaultCatalog");
+    String catalogAlias = "myCatalogAlias";
+    when(settingsService.getSetting(eq("livecontext.catalogAliases"), any(), any())).thenReturn(Optional.of(Mockito.mock(Struct.class)));
+
+    String commerceIdWithCatalogAlias = "acme:///catalog/product/" + "catalog:" + catalogAlias + ";" + EXTERNAL_PRODUCT_ID;
+
+    DataFetcherResult<? extends Augmentation> productAugmentation = testling.getAugmentationBySite(commerceIdWithCatalogAlias, BREADCRUMB, SITE_ID);
+
+    assertThat(productAugmentation).isNotNull();
+    assertThat(productAugmentation.getErrors()).isNotNull();
   }
 }

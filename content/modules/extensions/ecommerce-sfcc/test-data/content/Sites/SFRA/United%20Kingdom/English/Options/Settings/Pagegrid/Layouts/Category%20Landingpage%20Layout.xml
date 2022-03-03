@@ -12,6 +12,7 @@
 <StructListProperty Name="items">
 <Struct>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Placements/header.xml" cmexport:path="/Sites/SFRA/United%20Kingdom/English/Options/Settings/Pagegrid/Placements/header"/>
+<BooleanProperty Name="disableInheritance">true</BooleanProperty>
 <IntProperty Name="row">1</IntProperty>
 <IntProperty Name="col">1</IntProperty>
 <IntProperty Name="height">10</IntProperty>
@@ -20,6 +21,7 @@
 </Struct>
 <Struct>
 <LinkProperty Name="section" LinkType="coremedia:///cap/contenttype/CMSymbol" xlink:href="coremedia:///cap/resources/../Placements/banner.xml" cmexport:path="/Sites/SFRA/United%20Kingdom/English/Options/Settings/Pagegrid/Placements/banner"/>
+<BooleanProperty Name="defaultInheritance">false</BooleanProperty>
 <IntProperty Name="row">2</IntProperty>
 <IntProperty Name="col">1</IntProperty>
 <IntProperty Name="height">25</IntProperty>

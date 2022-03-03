@@ -394,6 +394,7 @@ type CMGalleryImpl implements CMGallery @inherit(from: ["CMCollectionImpl"]) {
 }
 
 type CMHTMLImpl implements CMHTML @inherit(from: ["CMMediaImpl"]) {
+  data: Blob @fetch(from: "@contentMarkupAdapter.to(#root,{'data'})")
   description: String
   html: String @fetch(from: "@htmlAdapterFactory.to().toHtml(#this, 'data')")
 }

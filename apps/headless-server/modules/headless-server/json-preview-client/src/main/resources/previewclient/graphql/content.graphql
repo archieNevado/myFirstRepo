@@ -97,6 +97,13 @@ fragment ImageMap on CMImageMap {
 fragment Teasable on CMTeasable {
   teaserTitle
   teaserText
+  ...on CMProductTeaser {
+    productRef {
+      externalId
+      siteId
+      locale
+    }
+  }
   teaserTarget {
     ...Reference
   }

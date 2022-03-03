@@ -2,5 +2,6 @@
 src   = "hero.html.tmpl"
 dest  = "/usr/share/nginx/html/assets/hero.html"
 keys  = [
-         "/environment/fqdn"
+         "/environment/fqdn",
+         "/cms/version"
 ]

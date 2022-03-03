@@ -24,10 +24,10 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -35,7 +35,6 @@ import java.util.Optional;
 
 import static com.coremedia.livecontext.fragment.links.CommerceLinkUtils.isFragmentRequest;
 import static com.coremedia.livecontext.fragment.links.transformers.LiveContextLinkTransformerOrderChecker.validateOrder;
-import static com.coremedia.objectserver.request.RequestUtils.PARAMETERS;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.left;
 import static org.apache.commons.lang3.StringUtils.remove;
@@ -53,7 +52,6 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
 
   protected static final Logger LOG = LoggerFactory.getLogger(LiveContextLinkTransformer.class);
 
-  private static final String VARIANT_PARAM = "variant";
   private static final String UNSUPPORTED_LINK = "#";
 
   private List<LiveContextLinkResolver> liveContextLinkResolverList;
@@ -66,7 +64,7 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
   }
 
   @Override
-  public String transform(@NonNull String cmsLink, @Nullable Object bean, String view,
+  public String transform(@NonNull String cmsLink, @Nullable Object bean, @Nullable String view,
                           @NonNull HttpServletRequest request,
                           @NonNull HttpServletResponse response,
                           boolean forRedirect) {
@@ -89,17 +87,17 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
 
     String modifiableSource = removeBaseUri(cmsLink, request);
     modifiableSource = removeJSession(modifiableSource);
-    Object variant = RequestUtils.getParameters(request, PARAMETERS).get(VARIANT_PARAM);
 
     Object content = getContent(bean);
-    return transform(modifiableSource, content, variant, navigation, request);
+    return transform(modifiableSource, content, view, navigation, request);
   }
 
   /**
    * Check prerequisites of live context link transformers
    */
-  private boolean canHandle(@NonNull String cmsLink, @Nullable Object bean, String view, @NonNull HttpServletRequest request) {
-    if (CurrentStoreContext.find().isEmpty()) {
+  @SuppressWarnings("OverlyComplexMethod")
+  private static boolean canHandle(@NonNull String cmsLink, @Nullable Object bean, @Nullable String view, @NonNull HttpServletRequest request) {
+    if (CurrentStoreContext.find(request).isEmpty()) {
       // not a commerce request at all
       return false;
     }
@@ -128,9 +126,9 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
   }
 
   @NonNull
-  private String transform(String source, @Nullable Object content, Object variant, CMNavigation navigation,
+  private String transform(String source, @Nullable Object content, @Nullable String view, CMNavigation navigation,
                            @NonNull HttpServletRequest request) {
-    Optional<String> nonBlankLcUrl = resolveUrl(source, content, variant, navigation, request)
+    Optional<String> nonBlankLcUrl = resolveUrl(source, content, view, navigation, request)
             .filter(StringUtils::isNotBlank);
     if (nonBlankLcUrl.isPresent()) {
       return nonBlankLcUrl.get();
@@ -144,17 +142,15 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
   }
 
   @NonNull
-  private Optional<String> resolveUrl(String source, @Nullable Object content, @Nullable Object variant,
+  private Optional<String> resolveUrl(String source, @Nullable Object content, @Nullable String view,
                                       @Nullable CMNavigation navigation, @NonNull HttpServletRequest request) {
     if (source == null) {
       return Optional.empty();
     }
 
-    String variantStr = variant != null ? variant + "" : null;
-
     return liveContextLinkResolverList.stream()
             .filter(resolver -> resolver.isApplicable(content, request))
-            .map(resolver -> resolver.resolveUrl(source, content, variantStr, navigation, request))
+            .map(resolver -> resolver.resolveUrl(source, content, navigation, view, request))
             .flatMap(Optional::stream)
             .findFirst();
   }
@@ -193,37 +189,33 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
 
   @Nullable
   private CMNavigation getNavigation(@Nullable Object bean) {
-    if (bean instanceof Page) {
-      bean = ((Page) bean).getNavigation();
+    Object context = bean;
+    if (context instanceof Page) {
+      context = ((Page) context).getNavigation();
     }
 
-    if (bean instanceof CMNavigation) {
-      return (CMNavigation) bean;
+    if (context instanceof CMNavigation) {
+      return (CMNavigation) context;
     }
 
-    if (bean instanceof CMLinkable) {
-      List<? extends CMContext> contexts = ((CMLinkable) bean).getContexts();
+    if (context instanceof CMLinkable) {
+      List<? extends CMContext> contexts = ((CMLinkable) context).getContexts();
       if (!contexts.isEmpty()) {
         return contexts.get(0);
       }
     }
 
-    if (bean instanceof ContentBeanBackedPageGridPlacement) {
-      return ((ContentBeanBackedPageGridPlacement) bean).getNavigation();
+    if (context instanceof ContentBeanBackedPageGridPlacement) {
+      return ((ContentBeanBackedPageGridPlacement) context).getNavigation();
     }
 
-    CMNavigation navigation = currentContextService.getContext();
-    if (navigation != null) {
-      return navigation;
-    }
-
-    return null;
+    return currentContextService.getContext();
   }
 
   /**
    * Return true if this is content of a different site
    */
-  protected boolean isContentOfDifferentSite(@NonNull CMNavigation navigation, @NonNull HttpServletRequest request) {
+  private static boolean isContentOfDifferentSite(@NonNull Navigation navigation, @NonNull ServletRequest request) {
     try {
       CMNavigation targetRootNavigation = navigation.getRootNavigation();
       Navigation currentNavigation = FindNavigationContext.getNavigation(request);
@@ -234,7 +226,6 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
     }
   }
 
-  @Required
   public void setLiveContextLinkResolverList(List<LiveContextLinkResolver> liveContextLinkResolverList) {
     this.liveContextLinkResolverList = ImmutableList.copyOf(liveContextLinkResolverList);
   }
@@ -243,7 +234,6 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
     isRemoveJSession = removeJSession;
   }
 
-  @Required
   public void setCurrentContextService(CurrentContextService currentContextService) {
     this.currentContextService = currentContextService;
   }

@@ -108,6 +108,8 @@ type CMExternalPageImpl implements CMExternalPage @inherit(from: ["CMChannelImpl
 type CMProductTeaserImpl implements CMProductTeaser @inherit(from: ["CMTeasableImpl"]) {
   externalId: String
   productRef: ProductRef @fetch(from: "@commerceRefAdapter.getCommerceRef(#this, 'externalId')")
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
 }
 
 type CMExternalProductImpl implements CMExternalProduct @inherit(from: ["CMTeasableImpl"]) {

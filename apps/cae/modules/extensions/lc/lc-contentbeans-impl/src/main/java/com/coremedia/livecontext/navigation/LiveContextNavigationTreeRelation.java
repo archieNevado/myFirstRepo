@@ -122,11 +122,6 @@ public class LiveContextNavigationTreeRelation implements TreeRelation<Linkable>
   }
 
   @Override
-  public boolean isRoot(Linkable item) {
-    return getParentOf(item) == null;
-  }
-
-  @Override
   public boolean isApplicable(Linkable item) {
     return item instanceof CMExternalChannel;
   }

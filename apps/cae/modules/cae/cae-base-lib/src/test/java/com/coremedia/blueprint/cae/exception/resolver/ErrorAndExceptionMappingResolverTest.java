@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.cae.exception.resolver;
 
 import com.coremedia.blueprint.cae.exception.InvalidContentException;
-import com.coremedia.blueprint.cae.exception.handler.CyclicDependencyExceptionHandler;
+import com.coremedia.blueprint.cae.exception.handler.EvaluationExceptionHandler;
 import com.coremedia.blueprint.cae.exception.handler.InvalidContentExceptionHandler;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.objectserver.web.HandlerHelper;
@@ -25,7 +25,7 @@ public class ErrorAndExceptionMappingResolverTest {
   public void setUp() throws Exception {
     errorAndExceptionMappingResolver = new ErrorAndExceptionMappingResolver(
             asList(
-                    new CyclicDependencyExceptionHandler(),
+                    new EvaluationExceptionHandler(),
                     new InvalidContentExceptionHandler()
             )
     );

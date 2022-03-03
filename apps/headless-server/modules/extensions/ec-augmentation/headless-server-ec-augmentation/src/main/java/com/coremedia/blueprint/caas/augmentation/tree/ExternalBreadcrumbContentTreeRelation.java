@@ -8,6 +8,7 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
+import com.google.common.collect.Iterables;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
@@ -107,6 +108,15 @@ public class ExternalBreadcrumbContentTreeRelation implements TreeRelation<Conte
     }
 
     return null;
+  }
+
+  @Nullable
+  public Content getNearestContentForLeafCategory(Site site) {
+    String parentIdStringFromBreadcrumb = Iterables.getLast(breadcrumbTreeRelationProvider.getObject().getBreadcrumb());
+    CommerceId parentId = CommerceIdParserHelper.parseCommerceId(parentIdStringFromBreadcrumb)
+            .orElseThrow(() -> new IllegalArgumentException(String.format("Invalid breadcrumb element '%s'", parentIdStringFromBreadcrumb)));
+
+    return getNearestContentForCategory(parentId, site);
   }
 
   @Override

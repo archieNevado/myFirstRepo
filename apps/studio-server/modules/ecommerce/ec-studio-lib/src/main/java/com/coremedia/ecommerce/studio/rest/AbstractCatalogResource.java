@@ -3,24 +3,21 @@ package com.coremedia.ecommerce.studio.rest;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
-import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.CommerceObject;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
-import com.coremedia.livecontext.ecommerce.common.StoreContextBuilder;
-import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
-import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 import com.coremedia.rest.controller.EntityController;
 import com.google.common.annotations.VisibleForTesting;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Map;
 import java.util.Optional;
-
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.WORKSPACE_ID_NONE;
 
 /**
  * An abstract catalog object as a RESTful resource.
@@ -36,8 +33,6 @@ public abstract class AbstractCatalogResource<Entity extends CommerceObject> imp
   static final String PATH_CATALOG_ALIAS = "catalogAlias";
   static final String PATH_WORKSPACE_ID = "workspaceId";
   public static final String QUERY_ID = "id";
-
-  private WorkspaceId workspaceId = WORKSPACE_ID_NONE;
 
   protected AbstractCatalogResource(CatalogAliasTranslationService catalogAliasTranslationService) {
     this.catalogAliasTranslationService = catalogAliasTranslationService;
@@ -72,31 +67,22 @@ public abstract class AbstractCatalogResource<Entity extends CommerceObject> imp
 
   @NonNull
   protected Optional<StoreContext> getStoreContext(@NonNull Map<String, String> params) {
-    String siteId = params.get(PATH_SITE_ID);
-    CatalogAlias catalogAlias = CatalogAlias.ofNullable(params.get(PATH_CATALOG_ALIAS)).orElse(null);
-
-    StoreContext originalContext = CurrentStoreContext.find().orElse(null);
-    if (originalContext == null) {
-      return Optional.empty();
+    String catalogAlias = params.get(PATH_CATALOG_ALIAS);
+    var requestAttributes = RequestContextHolder.getRequestAttributes();
+    if (!(requestAttributes instanceof ServletRequestAttributes)) {
+      throw new IllegalStateException("Request not available.");
     }
+    var request = ((ServletRequestAttributes) requestAttributes).getRequest();
+    // the CommerceConnectionFilter creates the connection (with initial store context)
+    // without considering the Studio catalog alias
+    return CurrentStoreContext.find(request).
+            map(storeContext -> cloneWithCatalog(storeContext,catalogAlias));
+  }
 
-    StoreContextProvider storeContextProvider = originalContext.getConnection().getStoreContextProvider();
-
-    StoreContextBuilder clonedContextBuilder = storeContextProvider
-            .buildContext(originalContext)
-            .withSiteId(siteId)
-            .withWorkspaceId(workspaceId);
-
-    if (catalogAlias != null && catalogAliasTranslationService != null) {
-      Optional<CatalogId> catalogId = catalogAliasTranslationService
-              .getCatalogIdForAlias(catalogAlias, originalContext);
-
-      clonedContextBuilder = clonedContextBuilder
-              .withCatalogId(catalogId.orElse(null))
-              .withCatalogAlias(catalogAlias);
-    }
-
-    return Optional.of(clonedContextBuilder.build());
+  private StoreContext cloneWithCatalog(StoreContext storeContext, @Nullable String catalogAlias) {
+    return CatalogAlias.ofNullable(catalogAlias)
+            .map(alias -> StoreContextUtils.cloneWithCatalog(storeContext, alias, catalogAliasTranslationService))
+            .orElse(storeContext);
   }
 
   CatalogAliasTranslationService getCatalogAliasTranslationService() {

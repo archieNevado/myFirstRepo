@@ -75,7 +75,7 @@
   </bean>
 
   <bean id="cyclicDependencyExceptionHandler"
-        class="com.coremedia.blueprint.cae.exception.handler.CyclicDependencyExceptionHandler"/>
+        class="com.coremedia.blueprint.cae.exception.handler.EvaluationExceptionHandler"/>
 
   <bean id="illegalArgumentExceptionHandler"
         class="com.coremedia.blueprint.cae.exception.handler.SimpleExceptionHandler">

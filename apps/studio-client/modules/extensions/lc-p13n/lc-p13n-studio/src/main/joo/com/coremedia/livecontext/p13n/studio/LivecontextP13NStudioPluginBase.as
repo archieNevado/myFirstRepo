@@ -1,5 +1,6 @@
 package com.coremedia.livecontext.p13n.studio {
 import com.coremedia.blueprint.personalization.editorplugin.plugin.AddSiteSpecificPathPlugin;
+import com.coremedia.cap.content.Content;
 import com.coremedia.cms.editor.configuration.StudioPlugin;
 import com.coremedia.cms.editor.sdk.IEditorContext;
 import com.coremedia.cms.editor.sdk.editorContext;
@@ -11,6 +12,7 @@ import com.coremedia.ecommerce.studio.model.Contracts;
 import com.coremedia.ecommerce.studio.model.Segments;
 import com.coremedia.ecommerce.studio.model.Store;
 import com.coremedia.ui.data.ValueExpression;
+import com.coremedia.ui.data.ValueExpressionFactory;
 
 public class LivecontextP13NStudioPluginBase extends StudioPlugin {
 
@@ -28,14 +30,19 @@ public class LivecontextP13NStudioPluginBase extends StudioPlugin {
   }
 
   private function formatSitePathFromCatalogObject(path:String, entityExpression:ValueExpression, callback:Function):void {
-    entityExpression.loadValue(function(entity:Object):void {
+    entityExpression.loadValue(function (entity:Object):void {
       if (entity is CatalogObject) {
-        entityExpression.extendBy(CatalogObjectPropertyNames.STORE).loadValue(function(store:Store):void {
+        entityExpression.extendBy(CatalogObjectPropertyNames.STORE).loadValue(function (store:Store):void {
           //value should be the store
           var sitesService:SitesService = editorContext.getSitesService();
           var site:Site = sitesService.getSite(store.getSiteId());
-          var selectedSitePath:String = site ? site.getSiteRootFolder().getPath() + '/' + path : null;
-          callback.call(null, selectedSitePath);
+          const folder:Content = site.getSiteRootFolder();
+          ValueExpressionFactory.createFromFunction(function ():String {
+            return folder.getPath();
+          }).loadValue(function ():void {
+            const selectedSitePath:String = site ? site.getSiteRootFolder().getPath() + "/" + path : null;
+            callback.call(null, selectedSitePath, entity);
+          });
         });
       }
     });

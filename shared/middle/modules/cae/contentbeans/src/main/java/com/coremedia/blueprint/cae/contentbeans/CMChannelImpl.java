@@ -131,9 +131,18 @@ public class CMChannelImpl extends CMChannelBase {
 
     // ... but this is more convenient for developers,
     // it works also for alternative TreeRelations and thus spares overriding:
-    List<Linkable> beans = Lists.reverse(treeRelation.pathToRoot(this));
-    List<Content> contents = Lists.transform(beans, (Linkable l) -> l instanceof CMNavigation ? ((CMNavigation) l).getContent() : null);
-    return createBeanFor(themeService.directTheme(contents, developer), CMTheme.class);
+    var visited = new HashSet<Linkable>();
+    Linkable linkable = this;
+    var navigations = new ArrayList<Content>();
+    while (linkable != null && visited.add(linkable)) {
+      if (linkable instanceof CMNavigation) {
+        navigations.add(((CMNavigation)linkable).getContent());
+      }
+      // avoid CycleInTreeRelationException
+      linkable = treeRelation.getParentUnchecked(linkable);
+    }
+
+    return createBeanFor(themeService.directTheme(navigations, developer), CMTheme.class);
   }
 
 

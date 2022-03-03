@@ -11,7 +11,7 @@
        that you fully re-index after changing this setting as it can
        affect both how text is indexed and queried.
   -->
-  <luceneMatchVersion>8.8.2</luceneMatchVersion>
+  <luceneMatchVersion>8.11.1</luceneMatchVersion>
 
   <!-- Data Directory
 
@@ -685,7 +685,7 @@
        The SolrReplicationHandler supports replicating indexes from a
        "master" used for indexing and "slaves" used for queries.
 
-       https://solr.apache.org/guide/8_8/index-replication.html
+       https://solr.apache.org/guide/8_11/index-replication.html
 
     -->
   <requestHandler name="/replication" class="solr.ReplicationHandler">
@@ -1000,7 +1000,7 @@
 
   <!-- Query Parsers
 
-       https://solr.apache.org/guide/8_8/query-syntax-and-parsing.html
+       https://solr.apache.org/guide/8_11/query-syntax-and-parsing.html
 
        Multiple QParserPlugins can be registered by name, and then
        used in either the "defType" param for the QueryComponent (used

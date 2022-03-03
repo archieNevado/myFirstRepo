@@ -235,6 +235,10 @@ svg:not(:root) {
   display: none;
 }
 
+.cm-hero__version {
+  color: #ffffff;
+}
+
 /* content */
 .cm-container {
   padding: 10px;

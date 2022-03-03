@@ -1,4 +1,4 @@
-<#-- @ftlvariable name="self" type="com.coremedia.livecontext.contentbeans.CMExternalChannel" -->
+<#-- @ftlvariable name="self" type="com.coremedia.livecontext.context.LiveContextNavigation" -->
 <#-- @ftlvariable name="isRoot" type="java.lang.Boolean" -->
 <#-- @ftlvariable name="cssClass" type="java.lang.String" -->
 <#-- @ftlvariable name="isTopLevel" type="java.lang.Boolean" -->
@@ -52,7 +52,7 @@
         </#if>
 
         <#if picture?has_content>
-          <a class="cm-navigation-item__picture-link" href="${cm.getLink(self.target!cm.UNDEFINED)}">
+          <a class="cm-navigation-item__picture-link" href="${cm.getLink(self!cm.UNDEFINED)}">
             <@cm.include self=picture!cm.UNDEFINED view="media" params={
               "classBox": "cm-navigation-item__picture-box",
               "classMedia": "cm-navigation-item__picture",

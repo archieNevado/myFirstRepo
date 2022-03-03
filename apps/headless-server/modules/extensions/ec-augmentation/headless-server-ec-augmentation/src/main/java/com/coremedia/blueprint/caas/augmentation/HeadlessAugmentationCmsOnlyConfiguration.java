@@ -9,6 +9,7 @@ import com.coremedia.blueprint.caas.augmentation.adapter.AugmentationPageGridAda
 import com.coremedia.blueprint.caas.augmentation.adapter.CommerceRefAdapterCmsOnly;
 import com.coremedia.blueprint.caas.augmentation.model.AugmentationContext;
 import com.coremedia.blueprint.caas.augmentation.model.AugmentationFacadeCmsOnly;
+import com.coremedia.blueprint.caas.augmentation.pagegrid.ContentAugmentedProductPageGridServiceCmsOnly;
 import com.coremedia.blueprint.caas.augmentation.tree.ExternalBreadcrumbContentTreeRelation;
 import com.coremedia.blueprint.caas.augmentation.tree.ExternalBreadcrumbTreeRelation;
 import com.coremedia.cache.Cache;
@@ -45,8 +46,9 @@ public class HeadlessAugmentationCmsOnlyConfiguration {
                                                              ObjectProvider<ExternalBreadcrumbTreeRelation> externalBreadcrumbTreeRelationProvider,
                                                              CommerceSettingsHelper commerceSettingsHelper,
                                                              ByPathAdapterFactory byPathAdapterFactory,
-                                                             ObjectProvider<AugmentationContext> augmentationContextProvider) {
-    return new AugmentationFacadeCmsOnly(categoryAugmentationService, productAugmentationService, sitesService, externalBreadcrumbTreeRelationProvider, commerceSettingsHelper, byPathAdapterFactory, augmentationContextProvider);
+                                                             ObjectProvider<AugmentationContext> augmentationContextProvider,
+                                                             SettingsService settingsService) {
+    return new AugmentationFacadeCmsOnly(categoryAugmentationService, productAugmentationService, sitesService, externalBreadcrumbTreeRelationProvider, commerceSettingsHelper, byPathAdapterFactory, augmentationContextProvider, settingsService);
   }
 
   @Bean
@@ -56,7 +58,9 @@ public class HeadlessAugmentationCmsOnlyConfiguration {
   }
 
   @Bean
-  ExternalBreadcrumbContentTreeRelation externalBreadcrumbContentTreeRelation(AugmentationService categoryAugmentationService, ObjectProvider<ExternalBreadcrumbTreeRelation> breadcrumbTreeRelationProvider, SitesService sitesService) {
+  ExternalBreadcrumbContentTreeRelation externalBreadcrumbContentTreeRelation(AugmentationService categoryAugmentationService,
+                                                                              ObjectProvider<ExternalBreadcrumbTreeRelation> breadcrumbTreeRelationProvider,
+                                                                              SitesService sitesService) {
     return new ExternalBreadcrumbContentTreeRelation(categoryAugmentationService, breadcrumbTreeRelationProvider, sitesService);
   }
 
@@ -111,12 +115,13 @@ public class HeadlessAugmentationCmsOnlyConfiguration {
   }
 
   @Bean
-  public ContentAugmentedPageGridServiceImpl pdpContentBackedPageGridServiceCmsOnly(
+  public ContentAugmentedProductPageGridServiceCmsOnly pdpContentBackedPageGridServiceCmsOnly(
           Cache cache,
           SitesService sitesService,
           PageGridConfiguration pageGridConfiguration,
           ExternalBreadcrumbContentTreeRelation externalBreadcrumbContentTreeRelation) {
-    ContentAugmentedPageGridServiceImpl pageGridService = new ContentAugmentedPageGridServiceImpl();
+
+    ContentAugmentedProductPageGridServiceCmsOnly pageGridService = new ContentAugmentedProductPageGridServiceCmsOnly();
     pageGridService.setStructPropertyName(PDP_PAGEGRID_PROPERTY_NAME);
     pageGridService.setCache(cache);
     pageGridService.setSitesService(sitesService);

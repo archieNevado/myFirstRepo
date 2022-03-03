@@ -18,6 +18,8 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.common.StoreContextBuilder;
+import com.coremedia.livecontext.ecommerce.common.StoreContextProvider;
 import graphql.execution.DataFetcherResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +35,7 @@ import java.util.Optional;
 
 import static java.util.Locale.US;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Answers.RETURNS_DEEP_STUBS;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -70,7 +73,7 @@ class AugmentationFacadeTest {
   @Mock
   private CommerceSiteFinder commerceSiteFinder;
 
-  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
+  @Mock(answer = RETURNS_DEEP_STUBS)
   private SitesService sitesService;
 
   @Mock
@@ -94,6 +97,12 @@ class AugmentationFacadeTest {
   @Mock
   private CommerceBeanFactory commerceBeanFactory;
 
+  @Mock
+  private StoreContextProvider storeContextProvider;
+
+  @Mock(answer = Answers.RETURNS_SELF)
+  private StoreContextBuilder storeContextBuilder;
+
   @InjectMocks
   private AugmentationFacade testling;
 
@@ -108,12 +117,15 @@ class AugmentationFacadeTest {
     when(aConnection.getInitialStoreContext()).thenReturn(aStoreContext);
     when(aConnection.getIdProvider()).thenReturn(commerceIdProvider);
     when(aConnection.getCommerceBeanFactory()).thenReturn(commerceBeanFactory);
+    when(aConnection.getStoreContextProvider()).thenReturn(storeContextProvider);
     when(aStoreContext.getCatalogAlias()).thenReturn(CATALOG_ALIAS);
     when(aStoreContext.getLocale()).thenReturn(US);
     when(aStoreContext.getStoreId()).thenReturn(STORE_ID);
     when(aStoreContext.getCatalogId()).thenReturn(Optional.of(CATALOG));
     when(catalogAliasTranslationService.getCatalogIdForAlias(any(CatalogAlias.class), any(StoreContext.class)))
             .thenReturn(Optional.of(CATALOG));
+    when(storeContextProvider.buildContext(aStoreContext)).thenReturn(storeContextBuilder);
+    when(storeContextBuilder.build()).thenReturn(aStoreContext);
   }
 
   @Test
@@ -232,6 +244,7 @@ class AugmentationFacadeTest {
     Product parentProduct = mock(Product.class);
     when(productVariant.getParent()).thenReturn(parentProduct);
     when(parentProduct.getExternalId()).thenReturn(EXTERNAL_PRODUCT_ID);
+    when(parentProduct.getId()).thenReturn(PRODUCT_COMMERCE_ID);
 
     when(augmentationService.getContentByExternalId(PRODUCT_ID, aSite)).thenReturn(augmentingContent);
 
@@ -296,5 +309,32 @@ class AugmentationFacadeTest {
     CommerceBean commerceBean = testling.getCommerceBean(CATEGORY_COMMERCE_ID, "wrongSiteId");
 
     assertThat(commerceBean).isNull();
+  }
+
+  @Test
+  void getAugmentationWithMultiCatalog() {
+    String catalogAlias = "myCatalogAlias";
+    String catalogId = "myCatalogId";
+
+    StoreContext storeContext = mock(StoreContext.class);
+    when(aStoreContext.getCatalogAlias()).thenReturn(CatalogAlias.of(catalogAlias));
+    when(aStoreContext.getLocale()).thenReturn(US);
+    when(aStoreContext.getStoreId()).thenReturn(STORE_ID);
+    when(aStoreContext.getCatalogId()).thenReturn(Optional.of(CatalogId.of(catalogId)));
+
+    StoreContextBuilder builder = mock(StoreContextBuilder.class, RETURNS_DEEP_STUBS);
+    when(storeContextProvider.buildContext(storeContext)).thenReturn(builder);
+    when(builder.build()).thenReturn(storeContext);
+
+    String commerceIdWithCatalogAlias = "acme:///catalog/product/" + "catalog:" + catalogAlias + ";" + EXTERNAL_PRODUCT_ID;
+
+    DataFetcherResult<? extends Augmentation> productAugmentation = testling.getAugmentationBySite(commerceIdWithCatalogAlias, SITE_ID);
+
+    assertThat(productAugmentation).isNotNull();
+    assertThat(productAugmentation.getData().getCommerceRef()).satisfies(ref -> {
+              assertThat(ref.getCatalogAlias()).isEqualTo(catalogAlias);
+              assertThat(ref.getCatalogId()).isEqualTo(catalogId);
+            }
+    );
   }
 }

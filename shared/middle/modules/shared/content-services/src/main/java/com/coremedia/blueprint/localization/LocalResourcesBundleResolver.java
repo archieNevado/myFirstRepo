@@ -4,20 +4,17 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.struct.StructBuilder;
 import com.coremedia.cap.struct.StructService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
+
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
 /**
  * Development interceptor for the {@link ContentBundleResolver}.
@@ -32,12 +29,14 @@ public class LocalResourcesBundleResolver implements BundleResolver {
 
   private final BundleResolver defaultBundleResolver;
   private final StructService structService;
-  private final File blueprintDir;
+  private final ApplicationContext applicationContext;
 
-  public LocalResourcesBundleResolver(BundleResolver defaultBundleResolver, StructService structService, File blueprintDir) {
+  public LocalResourcesBundleResolver(BundleResolver defaultBundleResolver,
+                                      StructService structService,
+                                      ApplicationContext applicationContext) {
     this.defaultBundleResolver = defaultBundleResolver;
     this.structService = structService;
-    this.blueprintDir = blueprintDir;
+    this.applicationContext = applicationContext;
   }
 
 
@@ -46,23 +45,21 @@ public class LocalResourcesBundleResolver implements BundleResolver {
   /**
    * Try to find a local resource bundle for the given bundle.
    * <p>
-   * Pattern: content /Themes/corporate/corporate_de.properties is substituted by local file
-   * ${coremedia.blueprint.project.directory}/modules/extensions/corporate/corporate-theme/src/corporate_de.properties
+   * Pattern: content {@code /Themes/chefcorp/l10n/Chefcorp_de.properties} is substituted by local resource
+   * ${@code /themes/chefcorp/l10n/Chefcorp_de.properties} that is resolved from the application context.
    * <p>
    * Falls back to default bundle resolving if no local bundle is found.
    */
   @Nullable
   @Override
   public Struct resolveBundle(@NonNull Content bundle) {
-    File bundleFile = localFileFor(bundle);
-    if (bundleFile != null) {
-      try {
-        return fileToStruct(bundleFile);
-      } catch (IOException e) {
-        LOG.error("Cannot handle local resource bundle {} for {}", bundleFile.getAbsolutePath(), bundle, e);
-      }
-    } else {
-      LOG.info("No local resource bundle found for {}", bundle);
+    String filepath = filepath(bundle.getPathArcs());
+    Resource resource = applicationContext.getResource(filepath);
+    try {
+      return resourceToStruct(resource);
+    } catch (IOException e) {
+      LOG.warn("Falling back to regular resolution for bundle '{}', because local resource cannot be loaded: {}",
+              bundle.getPath(), e.getMessage());
     }
     return defaultBundleResolver.resolveBundle(bundle);
   }
@@ -70,36 +67,10 @@ public class LocalResourcesBundleResolver implements BundleResolver {
 
   // --- internal ---------------------------------------------------
 
-  private File localFileFor(Content bundle) {
-    Content parent = bundle.getParent();
-    if (parent == null) {
-      LOG.warn("Cannot derive a local resource bundle from {}, fallback to regular resolution", bundle.getPath());
-      return null;
-    }
-
-    List<String> pathArcs = new ArrayList<>();
-    pathArcs.addAll(Arrays.asList("modules", "frontend", "target", "resources"));
-    pathArcs.addAll(bundle.getPathArcs());
-    File fileInThemes = new File(blueprintDir, filepath(pathArcs));
-
-    if (fileInThemes.exists() && !fileInThemes.isDirectory() && fileInThemes.canRead()) {
-      return fileInThemes;
-    }
-    // Logging may be refined.  Info, because non-existence is likely
-    // if somebody works with a partial workspace.
-    LOG.info("File {} is not suitable as local resource bundle for {}, fallback to regular resolution", bundle.getName(), bundle.getPath());
-    return null;
-  }
-
-  private Struct fileToStruct(File bundleFile) throws IOException {
-    Properties bundleProperties = new Properties();
-    try (InputStream is = new FileInputStream(bundleFile)) {
-      bundleProperties.load(is);
-    }
+  private Struct resourceToStruct(Resource resource) throws IOException {
     StructBuilder structBuilder = structService.createStructBuilder();
-    for (Map.Entry<Object, Object> entry : bundleProperties.entrySet()) {
-      structBuilder.set(entry.getKey().toString(), entry.getValue());
-    }
+    PropertiesLoaderUtils.loadProperties(resource)
+            .forEach((key, value) -> structBuilder.set(key.toString(), value));
     return structBuilder.build();
   }
 

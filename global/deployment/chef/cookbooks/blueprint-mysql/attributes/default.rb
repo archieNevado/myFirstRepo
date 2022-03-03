@@ -38,7 +38,7 @@ if node['yum']['mysql57-community']
 end
 
 #<> mysql yum repo gpgkey
-default['blueprint']['mysql']['gpgkey'] = 'https://repo.mysql.com/RPM-GPG-KEY-mysql'
+default['blueprint']['mysql']['gpgkey'] = 'https://repo.mysql.com/RPM-GPG-KEY-mysql-2022'
 
 #<> mysql yum repo failovermethod
 default['blueprint']['mysql']['failovermethod'] = 'priority'

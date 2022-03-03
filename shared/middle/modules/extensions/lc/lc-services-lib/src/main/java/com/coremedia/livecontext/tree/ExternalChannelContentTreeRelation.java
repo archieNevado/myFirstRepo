@@ -156,11 +156,6 @@ public class ExternalChannelContentTreeRelation implements TreeRelation<Content>
   }
 
   @Override
-  public boolean isRoot(Content item) {
-    return getParentOf(item) == null;
-  }
-
-  @Override
   public boolean isApplicable(Content item) {
     return item != null && item.getType().isSubtypeOf(CM_EXTERNAL_CHANNEL) && isLinkedCategoryValid(item);
   }

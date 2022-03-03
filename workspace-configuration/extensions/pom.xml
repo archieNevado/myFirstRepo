@@ -29,7 +29,11 @@
           <artifactId>extensions-maven-plugin</artifactId>
           <version>${extensions-maven-plugin.version}</version>
           <configuration>
-            <projectRoot>../..</projectRoot>
+            <projectRoots>
+              <projectRoot>../..</projectRoot>
+              <!-- explicit reference to Studio Client workspace root, needed after TypeScript/npm conversion: -->
+              <projectRoot>../../apps/studio-client</projectRoot>
+            </projectRoots>
             <extensionsPath>modules/extensions</extensionsPath>
             <extensionPointsPath>modules/extension-config</extensionPointsPath>
           </configuration>

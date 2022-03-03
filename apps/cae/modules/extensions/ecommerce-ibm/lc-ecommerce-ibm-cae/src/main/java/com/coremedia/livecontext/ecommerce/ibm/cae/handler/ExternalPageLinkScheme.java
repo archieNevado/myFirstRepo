@@ -6,6 +6,7 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.livecontext.contentbeans.CMExternalPage;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.common.Vendor;
 import com.coremedia.livecontext.ecommerce.ibm.cae.WcsUrlProvider;
 import com.coremedia.objectserver.web.links.Link;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
@@ -45,7 +46,7 @@ public class ExternalPageLinkScheme {
     StoreContext storeContext = StoreContextHelper.findStoreContext(request)
             .orElseGet(() -> findCommerceStoreContext(externalPage.getContent()).orElse(null));
 
-    if (storeContext == null) {
+    if (storeContext == null || !Vendor.of("ibm").equals(storeContext.getConnection().getVendor())) {
       return null;
     }
 

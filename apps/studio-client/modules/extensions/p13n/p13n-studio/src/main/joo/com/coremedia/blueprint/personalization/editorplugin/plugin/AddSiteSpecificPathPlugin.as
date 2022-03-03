@@ -5,10 +5,10 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentPropertyNames;
 import com.coremedia.cms.editor.sdk.util.PathFormatter;
 import com.coremedia.personalization.ui.persona.selector.PersonaSelector;
+import com.coremedia.ui.data.RemoteBean;
 import com.coremedia.ui.data.ValueExpression;
 
 import ext.Component;
-import ext.Plugin;
 import ext.plugin.AbstractPlugin;
 
 import joo.debug;
@@ -73,11 +73,11 @@ public class AddSiteSpecificPathPlugin extends AbstractPlugin {
     });
   }
 
-  private function doLoadPersonas(selectedSitePath:String, currentContent:Content):void {
+  private function doLoadPersonas(selectedSitePath:String, currentBean:RemoteBean):void {
     if (selectedSitePath) {
       SESSION.getConnection().getContentRepository().getRoot().getChild(selectedSitePath, function (content:Content, cPath:String):void {
         if (content && personaSelector) {
-          if (currentContent && personaSelector.contentValueExpression && personaSelector.contentValueExpression.getValue() && currentContent.getId() === personaSelector.contentValueExpression.getValue().getId()) {
+          if (currentBean && personaSelector.contentValueExpression && personaSelector.contentValueExpression.getValue() && currentBean.getUri() === personaSelector.contentValueExpression.getValue().getUri()) {
             personaSelector.clearSiteSpecificPaths();
             personaSelector.addSiteSpecificPath(selectedSitePath, groupHeaderLabel);
             if (debug) {

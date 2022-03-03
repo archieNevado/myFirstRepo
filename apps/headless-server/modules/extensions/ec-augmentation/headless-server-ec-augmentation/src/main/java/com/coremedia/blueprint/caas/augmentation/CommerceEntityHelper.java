@@ -86,7 +86,7 @@ public class CommerceEntityHelper {
       throw new IllegalArgumentException(erroMsg + commerceRef);
     }
 
-    CatalogAlias catalogAlias = commerceConnection.getStoreContext().getCatalogAlias();
+    CatalogAlias catalogAlias = CatalogAlias.of(commerceRef.getCatalogAlias());
     CommerceIdProvider idProvider = commerceConnection.getIdProvider();
     CommerceBeanType type = commerceRef.getType();
     String externalId = commerceRef.getExternalId();
@@ -108,12 +108,12 @@ public class CommerceEntityHelper {
    * Example: <code>vendor:///summer_catalog/category/men</code> or <code>vendor:///catalog/category/men</code>
    *
    * @param categoryId the external id
+   * @param catalogAlias the catalog alias
    * @param connection the commerce connection to be used
    * @return id in the long format
    */
-  public static CommerceId getCategoryId(String categoryId, CommerceConnection connection) {
+  public static CommerceId getCategoryId(String categoryId, CatalogAlias catalogAlias, CommerceConnection connection) {
     CommerceIdProvider idProvider = connection.getIdProvider();
-    CatalogAlias catalogAlias = connection.getStoreContext().getCatalogAlias();
     Optional<CommerceId> commerceIdOptional = CommerceIdParserHelper.parseCommerceId(categoryId);
     return commerceIdOptional.orElseGet(() -> idProvider.formatCategoryId(catalogAlias, categoryId));
   }
@@ -124,12 +124,12 @@ public class CommerceEntityHelper {
    * Example: <code>vendor:///summer_catalog/product/foo-1</code> or <code>vendor:///catalog/product/foo-1</code>
    *
    * @param productId the external id
+   * @param catalogAlias the catalog alias
    * @param connection the commerce connection to be used
    * @return id in the long format
    */
-  public static CommerceId getProductId(String productId, CommerceConnection connection) {
+  public static CommerceId getProductId(String productId, CatalogAlias catalogAlias, CommerceConnection connection) {
     CommerceIdProvider idProvider = connection.getIdProvider();
-    CatalogAlias catalogAlias = connection.getStoreContext().getCatalogAlias();
     Optional<CommerceId> commerceIdOptional = CommerceIdParserHelper.parseCommerceId(productId);
     return commerceIdOptional.orElseGet(() -> idProvider.formatProductId(catalogAlias, productId));
   }

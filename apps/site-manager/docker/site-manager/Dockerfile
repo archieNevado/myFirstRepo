@@ -1,4 +1,4 @@
-FROM nginx:1.15.12-alpine
+FROM nginx:1.21.5-alpine
 ENV CMS_IOR WFS_IOR
 EXPOSE 8080
 COPY entrypoint.sh /entrypoint.sh

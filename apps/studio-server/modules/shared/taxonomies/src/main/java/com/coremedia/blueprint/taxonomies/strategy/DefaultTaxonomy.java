@@ -16,9 +16,7 @@ import com.coremedia.cap.content.publication.PublicationService;
 import com.coremedia.cap.content.query.QueryService;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.rest.cap.content.search.SearchService;
-import com.coremedia.rest.cap.content.search.SearchServiceResult;
 import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableList;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
@@ -346,7 +344,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
   @NonNull
   private List<Content> collectAllTaxonomiesBelow(@NonNull Content node, boolean recursively) {
     if (!recursively) {
-      return ImmutableList.of(node);
+      return List.of(node);
     }
 
     List<Content> taxonomies = Collections.synchronizedList(new ArrayList<>());
@@ -579,16 +577,8 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     }
 
     List<Content> allNodes = new ArrayList<>();
-    findAll(rootFolder, allNodes);
-
-    List<Content> matches = new ArrayList<>();
-    for (Content child : allNodes) {
-      if (child.getReferrerWithDescriptorFulfilling(taxonomyContentType.getName(), CHILDREN, "isInProduction") == null
-              && !rootFolder.getRepository().getPublicationService().isToBeDeleted(child)) { //NOSONAR
-        matches.add(child);
-      }
-    }
-    return matches;
+    findRootNodes(rootFolder, allNodes);
+    return allNodes;
   }
 
   private List<Content> getTopLevelNodesFromSettings() {
@@ -930,18 +920,38 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
    * @param folder  The folder to lookup keywords in.
    * @param matches The list of to fill up with matches.
    */
-  protected void findAll(@NonNull Content folder, @NonNull List<Content> matches) {
-    SearchServiceResult search = searchService.search(null, -1,
-            new ArrayList<>(),
-            folder,
-            true,
-            Collections.singletonList(taxonomyContentType),
-            true,
-            Collections.singletonList("isdeleted:false"),
-            new ArrayList<>(),
-            new ArrayList<>());
-    List<Content> hits = search.getHits();
-    matches.addAll(hits);
+  protected void findRootNodes(@NonNull Content folder, @NonNull List<Content> matches) {
+    Collection<Content> nodes = folder.getChildrenFulfilling("TYPE " + taxonomyContentType.getName());
+    for (Content taxonomyNode : nodes) {
+      if (taxonomyNode.getReferrerWithDescriptorFulfilling(taxonomyContentType.getName(), CHILDREN, "isInProduction") == null
+              && !folder.getRepository().getPublicationService().isToBeDeleted(taxonomyNode)) { //NOSONAR
+        matches.add(taxonomyNode);
+      }
+    }
+
+    Collection<Content> subFolders = folder.getSubfolders();
+    for (Content subFolder : subFolders) {
+      findRootNodes(subFolder, matches);
+    }
+  }
+
+  /**
+   * Collects all nodes
+   * @param folder  The folder to lookup keywords in.
+   * @param matches the list that contains all nodes
+   */
+  protected void findAll(@NonNull Content folder, List<Content> matches) {
+    Collection<Content> nodes = folder.getChildrenFulfilling("TYPE " + taxonomyContentType.getName());
+    for (Content taxonomyNode : nodes) {
+      if (!folder.getRepository().getPublicationService().isToBeDeleted(taxonomyNode)) { //NOSONAR
+        matches.add(taxonomyNode);
+      }
+    }
+
+    Collection<Content> subFolders = folder.getSubfolders();
+    for (Content subFolder : subFolders) {
+      findAll(subFolder, matches);
+    }
   }
 
   /**

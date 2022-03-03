@@ -31,8 +31,9 @@
 
     <customer>Blueprint</customer>
 
-    <cm.studio-client.core.version>2107.3</cm.studio-client.core.version>
-    <jangaroo.version>4.1.8</jangaroo.version>
+    <cm.studio-client.core.version>2107.4</cm.studio-client.core.version>
+    <jangaroo.version>4.1.13</jangaroo.version>
+    <jangaroo.npm.version>^1.0.0</jangaroo.npm.version>
     <jangaroo.blueprintSuffix/>
     <jangaroo.relativeNpmProjectExtensionWorkspacePath>apps/main${jangaroo.blueprintSuffix}</jangaroo.relativeNpmProjectExtensionWorkspacePath>
     <jooUnitWebDriverBrowser>chrome</jooUnitWebDriverBrowser>
@@ -74,12 +75,13 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.54</tomcat.embed.version>
+    <tomcat.embed.version>9.0.58</tomcat.embed.version>
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.studio-client.core.version>2107.3</cm.studio-client.core.version>
-    <cm.common.core.version>2107.3</cm.common.core.version>
+    <cm.studio-client.core.version>2107.4</cm.studio-client.core.version>
+    <jangaroo.studio-client.core.version>${cm.studio-client.core.version}-${jangaroo.version}</jangaroo.studio-client.core.version>
+    <cm.common.core.version>2107.4</cm.common.core.version>
     <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
 
     <showDeprecation>true</showDeprecation>
@@ -522,7 +524,11 @@
             <npmDependencyOverrides>
               <npmDependencyOverride>
                 <search>^(@jangaroo/.*):.*$</search>
-                <replace>$1:^1.0.0-alpha</replace>
+                <replace>$1:${jangaroo.npm.version}</replace>
+              </npmDependencyOverride>
+              <npmDependencyOverride>
+                <search>^(@coremedia/studio-client[.].*):.*$</search>
+                <replace>$1:${jangaroo.studio-client.core.version}</replace>
               </npmDependencyOverride>
             </npmDependencyOverrides>
             <relativeNpmProjectExtensionWorkspacePath>${jangaroo.relativeNpmProjectExtensionWorkspacePath}</relativeNpmProjectExtensionWorkspacePath>

@@ -2,6 +2,8 @@ package com.coremedia.ecommerce.studio.rest;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.AbstractCommerceBean;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
+import com.coremedia.ecommerce.studio.rest.configuration.ECommerceStudioConfigurationProperties;
+import com.coremedia.ecommerce.studio.rest.configuration.PreloadChildCategories;
 import com.coremedia.ecommerce.studio.rest.model.ChildRepresentation;
 import com.coremedia.ecommerce.studio.rest.model.Facets;
 import com.coremedia.ecommerce.studio.rest.model.SearchFacets;
@@ -27,6 +29,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.coremedia.ecommerce.studio.rest.configuration.PreloadChildCategories.ALL;
+import static com.coremedia.ecommerce.studio.rest.configuration.PreloadChildCategories.ALL_EXCEPT_TOP_LEVEL;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -40,9 +44,12 @@ public class CategoryResource extends CommerceBeanResource<Category> {
   static final String URI_PATH
           = "livecontext/" + PATH_TYPE + "/{" + PATH_SITE_ID + "}/{" + PATH_CATALOG_ALIAS + "}/{" + PATH_WORKSPACE_ID + "}/{id:.+}";
 
+  private final PreloadChildCategories preloadChildCategories;
+
   @Autowired
-  public CategoryResource(CatalogAliasTranslationService catalogAliasTranslationService) {
+  public CategoryResource(CatalogAliasTranslationService catalogAliasTranslationService, ECommerceStudioConfigurationProperties properties) {
     super(catalogAliasTranslationService);
+    preloadChildCategories = properties.getPreloadChildCategories();
   }
 
   @Override
@@ -72,12 +79,15 @@ public class CategoryResource extends CommerceBeanResource<Category> {
     representation.setThumbnailUrl(RepresentationHelper.modifyAssetImageUrl(entity.getThumbnailUrl(), getContentRepositoryResource().getContentRepository()));
     representation.setParent(entity.getParent());
 
-    // all subcategories must be loaded because later we test whether they are virtual (by reading their parent)
-    // only loadable categories should be taken
-    List<Category> subCategories = entity.getChildren().stream()
-            .map(this::ensureCategoryIsLoadable)
-            .flatMap(Optional::stream)
-            .collect(toList());
+    // All subcategories can be (pre)loaded so to be able to check whether they are virtual or not.
+    // Root category is by definition non virtual (there is no parent to check)
+    // In Commerce systems with no physical root category this also applies top level categories.
+    // Preloading can be disabled via configuration
+    boolean loadChildCategories = preloadChildCategories(entity);
+    List<Category> subCategories = loadChildCategories ?
+            entity.getChildren().stream()
+                    .filter(this::ensureCategoryIsLoadable)
+                    .collect(toList()) : entity.getChildren();
 
     representation.setSubCategories(subCategories);
     representation.setProducts(entity.getProducts());
@@ -100,7 +110,8 @@ public class CategoryResource extends CommerceBeanResource<Category> {
       ChildRepresentation childRepresentation = new ChildRepresentation();
       childRepresentation.setChild(child);
       childRepresentation.setDisplayName(child.getExternalId());
-      if (child instanceof Category) {
+      if (child instanceof Category && loadChildCategories) {
+        // Note, getting the parent leads to the load of the whole child category.
         Category childParent = ((Category)child).getParent();
         // isVirtual is true if the child means to belong to another parent than me
         childRepresentation.setIsVirtual(childParent != null && !myExternalId.equals(childParent.getExternalId()));
@@ -120,7 +131,7 @@ public class CategoryResource extends CommerceBeanResource<Category> {
   @Override
   protected Category doGetEntity(@NonNull Map<String, String> params) {
     Optional<StoreContext> storeContextOptional = getStoreContext(params);
-    if (!storeContextOptional.isPresent()) {
+    if (storeContextOptional.isEmpty()) {
       return null;
     }
 
@@ -147,13 +158,17 @@ public class CategoryResource extends CommerceBeanResource<Category> {
     super.setAugmentationService(augmentationService);
   }
 
-  private Optional<Category> ensureCategoryIsLoadable(Category category) {
+  private boolean ensureCategoryIsLoadable(Category category) {
     try {
       category.load();
     } catch (CommerceException e) {
       LOG.warn("Cannot load category with id '{}' ({})", category.getId(), e.getMessage());
-      return Optional.empty();
+      return false;
     }
-    return Optional.of(category);
+    return true;
+  }
+
+  private boolean preloadChildCategories(Category category) {
+    return preloadChildCategories == ALL || (preloadChildCategories == ALL_EXCEPT_TOP_LEVEL && !category.isRoot());
   }
 }

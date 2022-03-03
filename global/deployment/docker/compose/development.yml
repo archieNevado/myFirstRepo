@@ -432,6 +432,7 @@ services:
       backend: null
     environment:
       ENVIRONMENT_FQDN: ${ENVIRONMENT_FQDN:-docker.localhost}
+      CMS_VERSION: ${CMS_VERSION:-unknown}
     labels:
       traefik.backend: overview
       traefik.enable: "true"

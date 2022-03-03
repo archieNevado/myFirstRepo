@@ -7,7 +7,6 @@ import com.coremedia.ecommerce.studio.augmentation.augmentationService;
 import com.coremedia.ecommerce.studio.catalogHelper;
 import com.coremedia.ecommerce.studio.model.CatalogObject;
 import com.coremedia.ecommerce.studio.model.Category;
-import com.coremedia.ecommerce.studio.model.CategoryChildData;
 import com.coremedia.ui.data.RemoteBean;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
@@ -144,20 +143,22 @@ public class AugmentationUtil {
   }
 
   public static function calculateIfVirtual(catalogObject:CatalogObject, selectedNodeValueExpression:ValueExpression):Boolean {
-    var category:Category = catalogObject as Category;
-    if (category) {
-      var isVirtual:Boolean = null;
-      var parent:Category = selectedNodeValueExpression.getValue() as Category;
-      if (parent) {
-        var childrenData:Array = parent.getChildrenData();
-        childrenData && childrenData.forEach(function (childData:CategoryChildData):void {
-          if (childData.child.getId() === category.getId()) {
-            isVirtual = childData.isVirtual;
-          }
-        });
-      }
-      return isVirtual;
+    const category:Category = catalogObject as Category;
+    if (!category) {
+      return false;
     }
+
+    const categoryParent:Category = category.getParent();
+    if (!categoryParent) {
+      return false;
+    }
+
+    const selectedParent:Category = selectedNodeValueExpression.getValue() as Category;
+    if (!selectedParent) {
+      return false;
+    }
+
+    return categoryParent.getId() !== selectedParent.getId();
   }
 }
 }

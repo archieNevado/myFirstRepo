@@ -4,6 +4,7 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnect
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGrid;
 import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGridPlacement;
+import com.coremedia.blueprint.base.pagegrid.ContentBackedStyleGrid;
 import com.coremedia.blueprint.base.pagegrid.impl.ContentBackedPageGridServiceImpl;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
@@ -20,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 
@@ -31,8 +31,8 @@ public class ContentAugmentedProductPageGridServiceImpl extends ContentBackedPag
 
   private static final Logger LOG = LoggerFactory.getLogger(ContentAugmentedProductPageGridServiceImpl.class);
 
-  private static final String CM_EXTERNAL_PRODUCT = "CMExternalProduct";
-  private static final String CM_EXTERNAL_CHANNEL = "CMExternalChannel";
+  protected static final String CM_EXTERNAL_PRODUCT = "CMExternalProduct";
+  protected static final String CM_EXTERNAL_CHANNEL = "CMExternalChannel";
   private static final String EXTERNAL_ID = "externalId";
 
   private ContentAugmentedPageGridServiceImpl augmentedCategoryPageGridService;
@@ -48,22 +48,24 @@ public class ContentAugmentedProductPageGridServiceImpl extends ContentBackedPag
   @Override
   protected Map<String, ContentBackedPageGridPlacement> getMergedPageGridPlacements(
           @NonNull Content content, @NonNull String pageGridName,
-          @NonNull Collection<? extends Content> layoutSections) {
+          @NonNull ContentBackedStyleGrid styleGrid) {
     if (content.getType().isSubtypeOf(ContentAugmentedPageGridServiceImpl.CM_EXTERNAL_CHANNEL)) {
       return augmentedCategoryPageGridService.getMergedHierarchicalPageGridPlacements(content, pageGridName,
-              layoutSections);
+              styleGrid);
     }
 
     // CMExternalProduct
-    Map<String, ContentBackedPageGridPlacement> result = getPlacements(content, pageGridName, layoutSections);
+    Map<String, ContentBackedPageGridPlacement> result = getPlacements(content, pageGridName, styleGrid);
 
     // parental merge
     Content parentNavigation = getParentOf(content);
-    Map<String, ContentBackedPageGridPlacement> parentPlacements = augmentedCategoryPageGridService
-            .getMergedHierarchicalPageGridPlacements(parentNavigation, "pdpPagegrid", layoutSections);
-    result = merge(result, parentPlacements);
+    if (parentNavigation != null) {
+      Map<String, ContentBackedPageGridPlacement> parentPlacements = augmentedCategoryPageGridService
+              .getMergedHierarchicalPageGridPlacements(parentNavigation, "pdpPagegrid", styleGrid);
+      result = merge(result, parentPlacements, styleGrid);
+    }
 
-    addMissingPlacementsFromLayout(result, layoutSections);
+    addMissingPlacementsFromLayout(result, styleGrid);
     return result;
   }
 
@@ -84,7 +86,9 @@ public class ContentAugmentedProductPageGridServiceImpl extends ContentBackedPag
 
     if (style == null) {
       Content parentExternalChannelContent = getParentExternalChannelContent(content);
-      return augmentedCategoryPageGridService.getLayout(parentExternalChannelContent, pageGridName);
+      if (parentExternalChannelContent != null) {
+        return augmentedCategoryPageGridService.getLayout(parentExternalChannelContent, pageGridName);
+      }
     }
 
     return style;
@@ -92,9 +96,14 @@ public class ContentAugmentedProductPageGridServiceImpl extends ContentBackedPag
 
   @Nullable
   private Content getParentExternalChannelContent(@NonNull Content content) {
-    // return content itself if already subtype of external channel
+    // return content itself, if already subtype of external channel
     if (content.getType().isSubtypeOf(CM_EXTERNAL_CHANNEL)){
       return content;
+    }
+
+    // return null, if the content is not an external product
+    if (!content.getType().isSubtypeOf(CM_EXTERNAL_PRODUCT)) {
+      return null;
     }
 
     Site site = getSitesService().getContentSiteAspect(content).getSite();
@@ -106,7 +115,7 @@ public class ContentAugmentedProductPageGridServiceImpl extends ContentBackedPag
     String reference = content.getString(EXTERNAL_ID);
     Optional<CommerceId> commerceIdOptional = CommerceIdParserHelper.parseCommerceId(reference);
 
-    if (!commerceIdOptional.isPresent()) {
+    if (commerceIdOptional.isEmpty()) {
       LOG.warn("Content '{}' provides invalid commerce reference '{}', cannot determine parent content.",
               content.getPath(), reference);
       return null;
@@ -116,7 +125,7 @@ public class ContentAugmentedProductPageGridServiceImpl extends ContentBackedPag
 
     Optional<CommerceConnection> commerceConnectionOpt = commerceConnectionInitializer.findConnectionForSite(site);
 
-    if (!commerceConnectionOpt.isPresent()) {
+    if (commerceConnectionOpt.isEmpty()) {
       LOG.debug("Commerce connection is not available for site '{}'; not looking up parent content.", site.getName());
       return null;
     }

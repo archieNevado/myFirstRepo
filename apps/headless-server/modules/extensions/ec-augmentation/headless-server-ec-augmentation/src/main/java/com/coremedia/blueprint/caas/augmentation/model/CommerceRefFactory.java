@@ -18,6 +18,7 @@ import java.util.Optional;
 public class CommerceRefFactory {
 
   private static final String INTERNAL_LINK_DEFAULT = "#";
+  public static final String CATALOG = "catalog";
 
   private final String externalId;
   private final CommerceBeanType type;
@@ -45,7 +46,7 @@ public class CommerceRefFactory {
     return new CommerceRefFactory(
             externalId,
             commerceBeanType,
-            storeContext.getCatalogId().map(CatalogId::value).orElse("catalog"),
+            storeContext.getCatalogId().map(CatalogId::value).orElse(CATALOG),
             storeContext.getCatalogAlias().value(),
             storeContext.getStoreId(),
             storeContext.getLocale().toLanguageTag(),

@@ -26,9 +26,7 @@
     "lerna": "^4.0.0"
   },
   "resolutions": {
-    "**/ansi-regex": "^5.0.1",
-    "**/glob-parent": "^5.1.2",
-    "**/set-value": "^4.0.1"
+    "**/glob-parent": "^5.1.2"
   },
   "coremedia": {
     "type": "workspace"

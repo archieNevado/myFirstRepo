@@ -32,7 +32,7 @@
 
     <customer>Blueprint</customer>
 
-    <cm.content-feeder.core.version>2107.3</cm.content-feeder.core.version>
+    <cm.content-feeder.core.version>2107.4</cm.content-feeder.core.version>
 
     <spring.boot.version>2.3.11.RELEASE</spring.boot.version>
 
@@ -69,14 +69,14 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.54</tomcat.embed.version>
+    <tomcat.embed.version>9.0.58</tomcat.embed.version>
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.content-feeder.core.version>2107.3</cm.content-feeder.core.version>
-    <cm.common.core.version>2107.3</cm.common.core.version>
+    <cm.content-feeder.core.version>2107.4</cm.content-feeder.core.version>
+    <cm.common.core.version>2107.4</cm.common.core.version>
     <cm.common.bp.version>1-SNAPSHOT</cm.common.bp.version>
-    <cm.middle.core.version>2107.3</cm.middle.core.version>
+    <cm.middle.core.version>2107.4</cm.middle.core.version>
     <cm.middle.bp.version>1-SNAPSHOT</cm.middle.bp.version>
     <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
 

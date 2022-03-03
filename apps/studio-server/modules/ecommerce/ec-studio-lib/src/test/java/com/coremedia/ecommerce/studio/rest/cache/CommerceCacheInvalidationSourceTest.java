@@ -15,6 +15,7 @@ import com.coremedia.ecommerce.studio.rest.ProductResource;
 import com.coremedia.ecommerce.studio.rest.ProductVariantResource;
 import com.coremedia.ecommerce.studio.rest.SegmentResource;
 import com.coremedia.ecommerce.studio.rest.SegmentsResource;
+import com.coremedia.ecommerce.studio.rest.configuration.ECommerceStudioConfigurationProperties;
 import com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
@@ -64,6 +65,9 @@ class CommerceCacheInvalidationSourceTest {
   private CatalogAliasTranslationService catalogAliasTranslationService;
 
   @Mock
+  private ECommerceStudioConfigurationProperties eCommerceStudioConfigurationProperties;
+
+  @Mock
   private SitesService sitesService;
 
   @Mock
@@ -99,7 +103,7 @@ class CommerceCacheInvalidationSourceTest {
     CatalogResource catalogResource = new CatalogResource(catalogAliasTranslationService);
     when(context.getBean(CatalogResource.class)).thenReturn(catalogResource);
 
-    CategoryResource categoryResource = new CategoryResource(catalogAliasTranslationService);
+    CategoryResource categoryResource = new CategoryResource(catalogAliasTranslationService, eCommerceStudioConfigurationProperties);
     when(context.getBean(CategoryResource.class)).thenReturn(categoryResource);
 
     MarketingSpotResource marketingSpotResource = new MarketingSpotResource(catalogAliasTranslationService);

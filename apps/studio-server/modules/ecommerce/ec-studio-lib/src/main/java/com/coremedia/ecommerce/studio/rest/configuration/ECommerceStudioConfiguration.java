@@ -7,6 +7,7 @@ import com.coremedia.rest.cap.CapRestServiceConfiguration;
 import com.coremedia.rest.invalidations.SimpleInvalidationSource;
 import com.coremedia.service.previewurl.PreviewProvider;
 import com.coremedia.service.previewurl.impl.PreviewUrlServiceConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,9 @@ import org.springframework.context.annotation.Import;
         EcStudioFilters.class,
         CapRestServiceConfiguration.class,
         BaseCommerceServicesAutoConfiguration.class
+})
+@EnableConfigurationProperties({
+        ECommerceStudioConfigurationProperties.class,
 })
 @ComponentScan(basePackages = "com.coremedia.ecommerce.studio.rest")
 public class ECommerceStudioConfiguration {

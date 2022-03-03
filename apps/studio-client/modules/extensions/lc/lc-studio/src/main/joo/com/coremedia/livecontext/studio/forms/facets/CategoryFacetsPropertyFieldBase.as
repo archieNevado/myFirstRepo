@@ -76,6 +76,7 @@ public class CategoryFacetsPropertyFieldBase extends PropertyFieldGroup {
       });
 
       searchFacetsExpression.addChangeListener(searchFacetsChanged);
+      searchFacetsChanged(this.searchFacetsExpression);
     }
     return searchFacetsExpression;
   }

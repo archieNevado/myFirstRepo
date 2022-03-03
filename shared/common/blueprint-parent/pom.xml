@@ -31,11 +31,10 @@
 
     <customer>Blueprint</customer>
 
-    <cm.common.core.version>2107.3</cm.common.core.version>
+    <cm.common.core.version>2107.4</cm.common.core.version>
     <cm.common.bp.version>${project.version}</cm.common.bp.version>
 
     <spring.boot.version>2.3.11.RELEASE</spring.boot.version>
-    <micrometer.version>1.5.14</micrometer.version>
     <application-plugin.version>3.0.1</application-plugin.version>
 
     <!--
@@ -71,11 +70,11 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.54</tomcat.embed.version>
+    <tomcat.embed.version>9.0.58</tomcat.embed.version>
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.common.core.version>2107.3</cm.common.core.version>
+    <cm.common.core.version>2107.4</cm.common.core.version>
     <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
 
     <showDeprecation>true</showDeprecation>
@@ -283,7 +282,6 @@
         <scope>import</scope>
       </dependency>
 
-
       <dependency>
         <groupId>com.google.apis</groupId>
         <artifactId>google-api-services-youtube</artifactId>
@@ -339,14 +337,6 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-actuator-autoconfigure</artifactId>
         <version>${spring.boot.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>io.micrometer</groupId>
-        <artifactId>micrometer-bom</artifactId>
-        <version>${micrometer.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>

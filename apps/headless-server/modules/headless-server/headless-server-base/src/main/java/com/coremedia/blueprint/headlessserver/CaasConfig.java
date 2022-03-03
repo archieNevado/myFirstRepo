@@ -30,6 +30,8 @@ import com.coremedia.caas.model.ContentRoot;
 import com.coremedia.caas.model.adapter.CMGrammarRichTextAdapterFactory;
 import com.coremedia.caas.model.adapter.ContentBlobAdapter;
 import com.coremedia.caas.model.adapter.ContentBlobAdapterFactory;
+import com.coremedia.caas.model.adapter.ContentMarkupAdapter;
+import com.coremedia.caas.model.adapter.ContentMarkupAdapterFactory;
 import com.coremedia.caas.model.adapter.ExtendedLinkListAdapterFactory;
 import com.coremedia.caas.model.adapter.HtmlAdapterFactory;
 import com.coremedia.caas.model.adapter.LinkListAdapterFactory;
@@ -65,6 +67,7 @@ import com.coremedia.caas.web.CaasWebConfig;
 import com.coremedia.caas.web.GraphiqlConfigurationProperties;
 import com.coremedia.caas.web.filter.HSTSResponseHeaderFilter;
 import com.coremedia.caas.web.link.ContentBlobLinkComposer;
+import com.coremedia.caas.web.link.ContentMarkupLinkComposer;
 import com.coremedia.caas.web.link.FilenameBlobLinkComposer;
 import com.coremedia.caas.web.link.ResponsiveMediaLinkComposer;
 import com.coremedia.caas.web.metadata.MetadataConfigurationProperties;
@@ -96,7 +99,6 @@ import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.struct.Struct;
-import com.coremedia.cap.struct.StructService;
 import com.coremedia.link.CompositeLinkComposer;
 import com.coremedia.link.LinkComposer;
 import com.coremedia.link.uri.UriLinkBuilder;
@@ -115,6 +117,9 @@ import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import graphql.ExecutionInput;
 import graphql.GraphQL;
+import graphql.GraphQLError;
+import graphql.GraphQLException;
+import graphql.GraphqlErrorBuilder;
 import graphql.analysis.MaxQueryComplexityInstrumentation;
 import graphql.analysis.MaxQueryDepthInstrumentation;
 import graphql.execution.instrumentation.ChainedInstrumentation;
@@ -344,6 +349,11 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
+  public LinkComposer<ContentMarkupAdapter, UriLinkBuilder> contentMarkupLinkComposer() {
+    return contentMarkupAdapter -> new ContentMarkupLinkComposer().apply(contentMarkupAdapter);
+  }
+
+  @Bean
   public LinkComposer<ContentBlobAdapter, UriLinkBuilder> contentBlobLinkComposer() {
     return contentBlobAdapter -> new ContentBlobLinkComposer().apply(contentBlobAdapter);
   }
@@ -488,6 +498,11 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
+  public ContentMarkupAdapterFactory contentMarkupAdapter() {
+    return new ContentMarkupAdapterFactory();
+  }
+
+  @Bean
   public ContentBlobAdapterFactory contentBlobAdapter() {
     return new ContentBlobAdapterFactory();
   }
@@ -587,6 +602,7 @@ public class CaasConfig implements WebMvcConfigurer {
     return SpelFunctions.class.getDeclaredMethod("first", List.class);
   }
 
+  // the bean name is used as directive name
   @Bean
   public SchemaDirectiveWiring fetch(SpelEvaluationStrategy spelEvaluationStrategy,
                                      @Qualifier("globalSpelVariables") Map<String, Object> globalSpelVariables) {
@@ -795,6 +811,7 @@ public class CaasConfig implements WebMvcConfigurer {
     WiringFactory wiringFactory = new ModelMappingWiringFactory(modelMapper, wiringFactories);
     RuntimeWiring.Builder builder = RuntimeWiring.newRuntimeWiring()
             .wiringFactory(wiringFactory);
+    // register the directive implementations taking their bean name as directive name
     directiveWirings.forEach(builder::directive);
     RuntimeWiring wiring = builder.build();
     SchemaGenerator schemaGenerator = new SchemaGenerator();
@@ -805,13 +822,23 @@ public class CaasConfig implements WebMvcConfigurer {
   public PreparsedDocumentProvider preparsedDocumentProvider(CacheManager cacheManager) {
     return new PreparsedDocumentProvider() {
       Cache cache = cacheManager.getCache(CacheInstances.PREPARSED_DOCUMENTS);
-      Function<ExecutionInput, PreparsedDocumentEntry> computeFunction = executionInput -> new PreparsedDocumentEntry(
-              graphql.parser.Parser.parse(executionInput.getQuery())
-      );
 
       @Override
       public PreparsedDocumentEntry getDocument(ExecutionInput executionInput, Function<ExecutionInput, PreparsedDocumentEntry> computeFunction) {
-        return cache.get(executionInput.getQuery(), () -> computeFunction.apply(executionInput));
+        return cache.get(executionInput.getQuery(), () -> {
+          try {
+            return computeFunction.apply(executionInput);
+          } catch (GraphQLException e) {
+            LOG.debug("Caught exception in anonymous PreparsedDocumentProvider.", e);
+            if (e instanceof GraphQLError) {
+              return new PreparsedDocumentEntry(List.of((GraphQLError) e));
+            }
+            return new PreparsedDocumentEntry(List.of(GraphqlErrorBuilder.newError().message(e.getMessage()).build()));
+          } catch (RuntimeException e) {
+            LOG.debug("Caught exception in anonymous PreparsedDocumentProvider.", e);
+            return new PreparsedDocumentEntry(List.of(GraphqlErrorBuilder.newError().message(e.getMessage()).build()));
+          }
+        });
       }
     };
   }

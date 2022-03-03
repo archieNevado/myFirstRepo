@@ -47,7 +47,7 @@
                 <linkProperty name="contexts">
                   <link id="4"/>
                 </linkProperty>
-                <stringProperty name="filename" value="a-file%20?a&amp;b n.a;m=e.xyz"/>
+                <stringProperty name="filename" value="A%20File- +?a&amp;b n.a;m=e.xyz"/>
                 <markupProperty name="localSettings" url="24localSettings.xml" grammar="coremedia-struct-2008"/>
               </version>
             </document>

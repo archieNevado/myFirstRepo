@@ -1,5 +1,6 @@
 package com.coremedia.ecommerce.studio.rest;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdBuilder;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdUtils;
@@ -12,7 +13,6 @@ import com.coremedia.livecontext.ecommerce.search.SearchQuery;
 import com.coremedia.livecontext.ecommerce.search.SearchQueryBuilder;
 import com.coremedia.livecontext.ecommerce.search.SearchQueryFacet;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
-import com.coremedia.livecontext.ecommerce.workspace.WorkspaceId;
 import com.coremedia.rest.cap.common.represent.SuggestionResultRepresentation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -24,13 +24,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService.DEFAULT_CATALOG_ALIAS;
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl.WORKSPACE_ID_NONE;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CATEGORY;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.MARKETING_SPOT;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
@@ -53,12 +52,17 @@ public class CatalogServiceResource {
   private static final String SEARCH_PARAM_LIMIT = "limit";
   private static final String SEARCH_PARAM_ORDER_BY = "orderBy";
   private static final String SEARCH_FILTER_QUERY = "filterQuery";
-  private static final String SEARCH_PARAM_WORKSPACE_ID = "workspaceId";
 
   private static final String SEARCH_PARAM_SEARCH_TYPE = "searchType";
   private static final String SEARCH_TYPE_PRODUCT_VARIANT = "ProductVariant";
   private static final String SEARCH_TYPE_CATEGORY = "Category";
   private static final String SEARCH_TYPE_MARKETING_SPOTS = "MarketingSpot";
+
+  private final CatalogAliasTranslationService catalogAliasTranslationService;
+
+  public CatalogServiceResource(CatalogAliasTranslationService catalogAliasTranslationService) {
+    this.catalogAliasTranslationService = catalogAliasTranslationService;
+  }
 
   @GetMapping("search/{siteId}")
   @Nullable
@@ -71,28 +75,30 @@ public class CatalogServiceResource {
           @RequestParam(value = SEARCH_FILTER_QUERY, required = false) final List<String> filterQueries,
           @RequestParam(value = SEARCH_PARAM_CATEGORY, required = false) String category,
           @RequestParam(value = SEARCH_PARAM_CATALOG_ALIAS, required = false) String catalogAlias,
-          @RequestParam(value = SEARCH_PARAM_WORKSPACE_ID, required = false) String workspaceId
+          HttpServletRequest request
   ) {
     // The site ID in the URL is ignored here, but the `SiteFilter`
     // should have picked it up so the `CommerceConnectionFilter`
     // provides a commerce connection based on the site ID.
 
-    StoreContext currentStoreContext = CurrentStoreContext.find().orElse(null);
+    var currentStoreContext = CurrentStoreContext.find(request)
+            .map(storeContext -> cloneWithCatalog(storeContext, catalogAlias))
+            .orElse(null);
+
     if (currentStoreContext == null) {
       return null;
     }
 
-    StoreContext newStoreContextForSite = currentStoreContext
-            .getConnection()
-            .getStoreContextProvider()
-            .buildContext(currentStoreContext)
-            .withWorkspaceId(workspaceId != null ? WorkspaceId.of(workspaceId) : WORKSPACE_ID_NONE)
-            .build();
-
-    SearchQuery searchQuery = buildSearchQuery(query, searchType, category, catalogAlias, filterQueries, limit, newStoreContextForSite);
-    SearchResult<? extends CommerceBean> searchResult = search(searchQuery, newStoreContextForSite);
+    SearchQuery searchQuery = buildSearchQuery(query, searchType, category, catalogAlias, filterQueries, limit, currentStoreContext);
+    SearchResult<? extends CommerceBean> searchResult = search(searchQuery, currentStoreContext);
 
     return new CatalogSearchResultRepresentation(searchResult.getItems(), searchResult.getTotalCount());
+  }
+
+  private StoreContext cloneWithCatalog(StoreContext storeContext, @Nullable String catalogAlias) {
+    return CatalogAlias.ofNullable(catalogAlias)
+            .map(alias -> StoreContextUtils.cloneWithCatalog(storeContext, alias, catalogAliasTranslationService))
+            .orElse(storeContext);
   }
 
   @NonNull
@@ -175,8 +181,7 @@ public class CatalogServiceResource {
           @RequestParam(SEARCH_PARAM_SEARCH_TYPE) String searchType,
           @RequestParam(value = SEARCH_FILTER_QUERY, required = false) final List<String> filterQueries,
           @RequestParam(SEARCH_PARAM_SITE_ID) String siteId,
-          @RequestParam(value = SEARCH_PARAM_CATEGORY, required = false) String category,
-          @RequestParam(SEARCH_PARAM_WORKSPACE_ID) String workspaceId
+          @RequestParam(value = SEARCH_PARAM_CATEGORY, required = false) String category
   ) {
     // not supported
     return new SuggestionResultRepresentation(new ArrayList<>());

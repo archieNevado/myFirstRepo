@@ -1,7 +1,5 @@
 package com.coremedia.blueprint.cae.web.i18n;
 
-import com.coremedia.cap.util.PairCacheKey;
-import com.coremedia.cap.util.StructUtil;
 import com.coremedia.blueprint.coderesources.ThemeService;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.Page;
@@ -13,12 +11,14 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.user.User;
+import com.coremedia.cap.util.PairCacheKey;
+import com.coremedia.cap.util.StructUtil;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -93,9 +93,6 @@ public class LinklistPageResourceBundleFactory implements PageResourceBundleFact
   @Override
   public ResourceBundle resourceBundle(Navigation navigation, User developer) {
     if (useLocalresources || cache==null) {
-      if (!useLocalresources) {
-        LOG.warn("Using " + getClass().getName() + " without cache.  Ok for testing, too expensive for production.");
-      }
       return resourceBundleUncached(navigation, developer);
     } else {
       return cache.get(new NavigationCacheKey(navigation, developer));

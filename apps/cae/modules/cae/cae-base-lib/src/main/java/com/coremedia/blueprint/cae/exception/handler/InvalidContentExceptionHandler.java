@@ -13,10 +13,12 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static java.lang.invoke.MethodHandles.lookup;
+
 
 public class InvalidContentExceptionHandler extends AbstractErrorAndExceptionHandler<InvalidContentException, Object> {
 
-  private static final Logger LOG = LoggerFactory.getLogger(InvalidContentExceptionHandler.class);
+  private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
 
   @Override
   public void handleExceptionInternal(InvalidContentException exception, ModelAndView modelAndView, String viewName, HttpServletRequest request) {
@@ -30,7 +32,7 @@ public class InvalidContentExceptionHandler extends AbstractErrorAndExceptionHan
     if (!viewName.isEmpty()) {
       HandlerHelper.setViewName(modelAndView, viewName);
     }
-    LOG.info("The following content is not valid: {}", exception.getMessage());
+    LOG.info("Handled Exception: {}.", exception.getMessage());
   }
 
   @Override

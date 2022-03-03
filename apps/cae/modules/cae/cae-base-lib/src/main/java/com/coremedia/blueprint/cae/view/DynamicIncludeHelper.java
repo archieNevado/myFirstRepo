@@ -1,12 +1,9 @@
 package com.coremedia.blueprint.cae.view;
 
+import com.coremedia.blueprint.common.util.ContextAttributes;
 import com.coremedia.objectserver.view.dynamic.DynamicIncludeRenderNodeDecoratorProvider;
 import com.coremedia.objectserver.web.HandlerHelper;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
 
@@ -24,11 +21,10 @@ public class DynamicIncludeHelper {
    * Checks if the current request is a dynamic include request.
    */
   public static boolean isAlreadyIncludedDynamically() {
-    ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-    if (requestAttributes == null) {
-      throw new IllegalStateException("Servlet request attributes not available.");
+    var request = ContextAttributes.findRequest().orElse(null);
+    if (request == null) {
+      throw new IllegalStateException("Servlet request not available.");
     }
-    HttpServletRequest request = requestAttributes.getRequest();
     Object value = request.getAttribute(ATTR_NAME_DYNAMIC_INCLUDE);
     if (value instanceof Boolean) {
       return ((Boolean) value);

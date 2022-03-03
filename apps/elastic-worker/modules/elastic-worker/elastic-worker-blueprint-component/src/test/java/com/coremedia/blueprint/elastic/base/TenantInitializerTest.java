@@ -37,7 +37,7 @@ public class TenantInitializerTest {
   public void tenantsRegistered() throws InterruptedException {
     final String tenant = "tenant";
     final String testTenant = "testTenant";
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 10; i++) {
       synchronized (myTenantServiceListenerBase.monitor) {
         if (!(containsTenant(tenant) && containsTenant(testTenant))) {
           myTenantServiceListenerBase.monitor.wait(1000);
