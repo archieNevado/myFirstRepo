@@ -29,9 +29,6 @@ import java.io.IOException;
         FreeMarkerAutoConfiguration.class,
         MongoAutoConfiguration.class,
         SecurityFilterAutoConfiguration.class,
-        //Used to disable editorial comments feature.
-        //EditorialCommentsAutoConfiguration.class, //part of module com.coremedia.cms:editorial-comments-rest
-        //DataSourceAutoConfiguration.class,
 }, excludeName = {
         "net.devh.boot.grpc.client.autoconfigure.GrpcClientAutoConfiguration",
         "net.devh.boot.grpc.client.autoconfigure.GrpcClientHealthAutoConfiguration",

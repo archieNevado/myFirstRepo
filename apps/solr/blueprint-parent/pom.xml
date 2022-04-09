@@ -36,7 +36,7 @@
 
     <customer>Blueprint</customer>
 
-    <spring.boot.version>2.5.8</spring.boot.version>
+    <spring.boot.version>2.5.12</spring.boot.version>
     <application-plugin.version>3.0.1</application-plugin.version>
 
     <!--
@@ -71,8 +71,8 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.58</tomcat.embed.version>
-    <cm.solr.core.version>2110.2</cm.solr.core.version>
+    <tomcat.embed.version>9.0.60</tomcat.embed.version>
+    <cm.solr.core.version>2110.3</cm.solr.core.version>
     <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
 
     <showDeprecation>true</showDeprecation>
@@ -263,7 +263,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>3.2.0</version>
+          <version>3.2.2</version>
           <configuration>
             <archive>
               <addMavenDescriptor>true</addMavenDescriptor>

@@ -58,7 +58,8 @@ import static org.mockito.MockitoAnnotations.openMocks;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class LcStudioValidatorsXmlRepoTest {
 
-  private static final String PROPERTY_NAME = "externalId";
+  private static final String PROPERTY_EXTERNAL_ID = "externalId";
+  private static final String PROPERTY_SEGMENT = "segment";
 
   @Autowired
   private ContentRepository contentRepository;
@@ -84,6 +85,9 @@ public class LcStudioValidatorsXmlRepoTest {
 
   @Autowired
   private CatalogLinkValidator externalPageExternalIdValidator;
+
+  @Autowired
+  private SegmentFormatValidator segmentFormatValidator;
 
   @Mock
   private CommerceBeanFactory commerceBeanFactory;
@@ -124,7 +128,7 @@ public class LcStudioValidatorsXmlRepoTest {
 
   @Test
   public void testEmptyProperty() {
-    Iterable<Issue> issues = validate(12);
+    Iterable<Issue> issues = validate(12, PROPERTY_EXTERNAL_ID);
 
     assertIssueCode(issues, "CMExternalChannel_EmptyCategory");
   }
@@ -133,7 +137,7 @@ public class LcStudioValidatorsXmlRepoTest {
   public void testInvalidExternalId() {
     ReflectionTestUtils.setField(externalChannelExternalIdValidator, "commerceConnectionSupplier", commerceConnectionSupplier);
 
-    Iterable<Issue> issues = validate(14);
+    Iterable<Issue> issues = validate(14, PROPERTY_EXTERNAL_ID);
 
     assertIssueCode(issues, "CMExternalChannel_InvalidId");
   }
@@ -145,7 +149,7 @@ public class LcStudioValidatorsXmlRepoTest {
     when(commerceConnection.getCommerceBeanFactory().loadBeanFor(any(), any(StoreContext.class)))
             .then(invocationOnMock -> mock(CommerceBean.class));
 
-    Iterable<Issue> issues = validate(20);
+    Iterable<Issue> issues = validate(20, PROPERTY_EXTERNAL_ID);
 
     assertNull(issues);
   }
@@ -157,7 +161,7 @@ public class LcStudioValidatorsXmlRepoTest {
     when(commerceConnection.getCommerceBeanFactory().loadBeanFor(any(), any(StoreContext.class)))
             .then(invocationOnMock -> mock(CommerceBean.class));
 
-    Iterable<Issue> issues = validate(30);
+    Iterable<Issue> issues = validate(30, PROPERTY_EXTERNAL_ID);
 
     assertNull(issues);
   }
@@ -169,7 +173,7 @@ public class LcStudioValidatorsXmlRepoTest {
     when(commerceConnection.getCommerceBeanFactory().loadBeanFor(any(), any(StoreContext.class)))
             .then(invocationOnMock -> mock(CommerceBean.class));
 
-    Iterable<Issue> issues = validate(32);
+    Iterable<Issue> issues = validate(32, PROPERTY_EXTERNAL_ID);
 
     assertNull(issues);
   }
@@ -180,19 +184,19 @@ public class LcStudioValidatorsXmlRepoTest {
     //noinspection TypeMayBeWeakened
     CatalogLinkValidator validator =
             new CatalogLinkValidator(Objects.requireNonNull(contentRepository.getContentType("CMMarketingSpot")),
-                                     false, commerceConnectionSupplier, sitesService, PROPERTY_NAME);
+                                     false, commerceConnectionSupplier, sitesService, PROPERTY_EXTERNAL_ID);
 
     when(commerceConnectionSupplier.findConnection(site)).thenThrow(CommerceException.class);
     ReflectionTestUtils.setField(validator, "commerceConnectionSupplier", commerceConnectionSupplier);
 
-    Iterable<Issue> issues = validate(validator, 20);
+    Iterable<Issue> issues = validate(validator, 20, PROPERTY_EXTERNAL_ID);
 
     assertIssueCode(issues, "CMMarketingSpot_StoreContextNotFound");
   }
 
   @Test
   public void testExternalPageEmptyExternalId() {
-    Iterable<Issue> issues = validate(22);
+    Iterable<Issue> issues = validate(22, PROPERTY_EXTERNAL_ID);
 
     assertIssueCode(issues, "CMExternalPage_EmptyExternalPageId");
   }
@@ -201,7 +205,7 @@ public class LcStudioValidatorsXmlRepoTest {
   public void testExternalPageNonEmptyExternalId() {
     ReflectionTestUtils.setField(externalPageExternalIdValidator, "commerceConnectionSupplier", commerceConnectionSupplier);
 
-    Iterable<Issue> issues = validate(24);
+    Iterable<Issue> issues = validate(24, PROPERTY_EXTERNAL_ID);
 
     assertNull(issues);
   }
@@ -210,14 +214,14 @@ public class LcStudioValidatorsXmlRepoTest {
   public void marketingSpotEmptyExternalId() {
     ReflectionTestUtils.setField(marketingSpotExternalIdValidator, "commerceConnectionSupplier", commerceConnectionSupplier);
 
-    Iterable<Issue> issues = validate(26);
+    Iterable<Issue> issues = validate(26, PROPERTY_EXTERNAL_ID);
     assertIssueCode(issues, "CMMarketingSpot_EmptyExternalId");
   }
 
   @Test
   public void productListInvalidExternalId() {
     ReflectionTestUtils.setField(productListExternalIdValidator, "commerceConnectionSupplier", commerceConnectionSupplier);
-    Iterable<Issue> issues = validate(34);
+    Iterable<Issue> issues = validate(34, PROPERTY_EXTERNAL_ID);
     assertIssueCode(issues, "CMProductList_InvalidId");
   }
 
@@ -230,18 +234,35 @@ public class LcStudioValidatorsXmlRepoTest {
     assertIssueCode(issues, "not_in_navigation");
   }
 
-  private Iterable<Issue> validate(int contentId) {
+  @Test
+  public void segmentWithThreeSpecialChars() {
+    ReflectionTestUtils.setField(segmentFormatValidator, "commerceConnectionSupplier", commerceConnectionSupplier);
+    Iterable<Issue> issues = validate(200, PROPERTY_SEGMENT);
+    assertNull(issues);
+  }
+
+  @Test
+  public void segmentWithLeadingSpecialChars() {
+    ReflectionTestUtils.setField(segmentFormatValidator, "commerceConnectionSupplier", commerceConnectionSupplier);
+    Iterable<Issue> issues = validate(202, PROPERTY_SEGMENT);
+    assertIssueCode(issues, "CMChannel_SegmentReservedPrefix");
+  }
+
+  @Test
+  public void segmentWithTrailingSpecialChars() {
+    ReflectionTestUtils.setField(segmentFormatValidator, "commerceConnectionSupplier", commerceConnectionSupplier);
+    Iterable<Issue> issues = validate(204, PROPERTY_SEGMENT);
+    assertIssueCode(issues, "CMChannel_SegmentReservedSuffix");
+  }
+
+  private Iterable<Issue> validate(int contentId, String propertyName) {
     Content content = contentRepository.getContent(String.valueOf(contentId));
     IssuesImpl issues = new IssuesImpl<>(content, emptySet());
 
     testling.validate(content, issues);
 
     //noinspection unchecked
-    return (Iterable<Issue>) issues.getByProperty().get(PROPERTY_NAME);
-  }
-
-  private Iterable<Issue> validate(CapTypeValidator validator, int contentId) {
-    return validate(validator, contentId, PROPERTY_NAME);
+    return (Iterable<Issue>) issues.getByProperty().get(propertyName);
   }
 
   private Iterable<Issue> validate(CapTypeValidator validator, int contentId, @Nullable String propertyName) {

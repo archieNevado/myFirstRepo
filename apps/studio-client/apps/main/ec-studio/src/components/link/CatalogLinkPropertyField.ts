@@ -31,8 +31,7 @@ interface CatalogLinkPropertyFieldConfig extends Config<CatalogLinkPropertyField
   "additionalToolbarItems" |
   "hideOpenInTab" |
   "hideRemove" |
-  "hideCatalog"
-  >> {
+  "hideCatalog">> {
 }
 
 class CatalogLinkPropertyField extends CatalogLinkPropertyFieldBase {
@@ -41,8 +40,8 @@ class CatalogLinkPropertyField extends CatalogLinkPropertyFieldBase {
   static override readonly xtype: string = "com.coremedia.ecommerce.studio.config.catalogLinkPropertyField";
 
   constructor(config: Config<CatalogLinkPropertyField> = null) {
-    config.showChangeReferenceButton = config.showChangeReferenceButton === true ? true : false;
-    if (config.showChangeReferenceButton) {
+    config.showRemoveReferenceButton = config.showRemoveReferenceButton ?? false;
+    if (config.showRemoveReferenceButton) {
       config.replaceOnDrop = false;
     }
     super((() => ConfigUtils.apply(Config(CatalogLinkPropertyField, {
@@ -128,7 +127,7 @@ class CatalogLinkPropertyField extends CatalogLinkPropertyFieldBase {
         ...ConfigUtils.append({
           plugins: [
             Config(BindPropertyPlugin, {
-              bindTo: ValueExpressionFactory.createFromValue(config.showChangeReferenceButton),
+              bindTo: ValueExpressionFactory.createFromValue(config.showRemoveReferenceButton),
               ifUndefined: false,
               componentProperty: "hidden",
             }),
@@ -142,18 +141,18 @@ class CatalogLinkPropertyField extends CatalogLinkPropertyFieldBase {
           items: [
             Config(Fill),
             Config(Button, {
-              itemId: "changeCategoryReferenceButton",
+              itemId: "removeCategoryReferenceButton",
               ui: ButtonSkin.SIMPLE.getSkin(),
-              text: ECommerceStudioPlugin_properties.Catalog_replace_reference_button,
+              text: ECommerceStudioPlugin_properties.Catalog_remove_reference_button,
               handler: bind(this, this.removeCategoryReference),
               plugins: [
                 Config(BindPropertyPlugin, {
-                  bindTo: ValueExpressionFactory.createFromValue(!config.showChangeReferenceButton),
+                  bindTo: ValueExpressionFactory.createFromValue(!config.showRemoveReferenceButton),
                   ifUndefined: true,
                   componentProperty: "hidden",
                 }),
                 Config(BindPropertyPlugin, {
-                  bindTo: this.isChangeReferenceDisabledVE(),
+                  bindTo: this.isRemoveReferenceDisabledVE(),
                   componentProperty: "disabled",
                 }),
               ],
@@ -165,14 +164,14 @@ class CatalogLinkPropertyField extends CatalogLinkPropertyFieldBase {
         plugins: [
           // Workaround because dockedItems breaks bottom line boarding when IssuePlugin is used
           Config(OnlyIf, {
-            condition: () => config.showChangeReferenceButton,
+            condition: () => config.showRemoveReferenceButton,
             then: [
               // Overwrite the order-bottom-width extjs class
               Config(BEMPlugin, { block: "cm-catalog-link-property-field" }),
             ],
           }),
           Config(OnlyIf, {
-            condition: () => !config.showChangeReferenceButton,
+            condition: () => !config.showRemoveReferenceButton,
             then: [
               Config(ContextMenuPlugin, {
                 contextMenu: Config(CatalogLinkContextMenu, {

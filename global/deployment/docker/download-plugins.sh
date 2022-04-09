@@ -153,7 +153,7 @@ function download_github_action_artifact() {
 }
 
 function extract_bundles() {
-  bundle_zips=$(find -name *.zip)
+  bundle_zips=$(find -name '*.zip')
   if [ -n "${bundle_zips}" ]; then
     mkdir -p bundles
     for bundle_zip in ${bundle_zips}; do

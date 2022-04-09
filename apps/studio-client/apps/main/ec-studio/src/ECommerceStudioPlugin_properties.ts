@@ -7,7 +7,7 @@ import CoreIcons_properties from "@coremedia/studio-client.core-icons/CoreIcons_
 interface ECommerceStudioPlugin_properties {
 
   TreeView_catalog: string;
-  Categorys_Products_Link_empty_text: string;
+  Categories_Products_Link_empty_text: string;
   Products_Link_empty_text: string;
   CatalogView_invalid_store_text: string;
   CatalogView_empty_text: string;
@@ -20,11 +20,11 @@ interface ECommerceStudioPlugin_properties {
   description_header: string;
   CMAbstractCategory_text: string;
   Category_label: string;
-  Catalog_replace_reference_text: string;
-  Catalog_replace_reference_title: string;
-  Catalog_replace_reference_button: string;
-  Catalog_replace_reference_button_confirm: string;
-  Catalog_replace_reference_button_abort: string;
+  Catalog_remove_reference_text: string;
+  Catalog_remove_reference_title: string;
+  Catalog_remove_reference_button: string;
+  Catalog_remove_reference_button_confirm: string;
+  Catalog_remove_reference_button_abort: string;
   Product_label: string;
   ProductVariant_label: string;
   MarketingSpot_label: string;
@@ -122,7 +122,7 @@ interface ECommerceStudioPlugin_properties {
  */
 const ECommerceStudioPlugin_properties: ECommerceStudioPlugin_properties = {
   TreeView_catalog: "e-Commerce",
-  Categorys_Products_Link_empty_text: "Add Categories or Products by dragging them from the Library here.",
+  Categories_Products_Link_empty_text: "Add Categories or Products by dragging them from the Library here.",
   Products_Link_empty_text: "Add Products by dragging them from the Library here.",
   CatalogView_invalid_store_text: "Please select a site with valid e-Commerce catalog.",
   CatalogView_empty_text: "This category is empty.",
@@ -130,11 +130,11 @@ const ECommerceStudioPlugin_properties: ECommerceStudioPlugin_properties = {
   CatalogView_spots_selection_empty_text: "No e-Marketing spots found.",
   CatalogView_delete_button: "Delete Entry.",
   Catalog_DragDrop_multiSelect_text: "{0} selected catalog items",
-  Catalog_replace_reference_text: "The current reference to the item in the commerce <br/> catalog will be removed and you can select a new one. <br/> <br/>  Every usage of this content item will then link and refer to the new item in the commerce catalog. <br/><br/> Do you want to continue?",
-  Catalog_replace_reference_title: "Change Commerce Reference",
-  Catalog_replace_reference_button: "Change Reference",
-  Catalog_replace_reference_button_confirm: "Yes, Change Reference",
-  Catalog_replace_reference_button_abort: "Cancel",
+  Catalog_remove_reference_text: "The current reference to the item in the commerce <br/> catalog will be removed and you can select a new one. <br/> <br/>  Every usage of this content item will then link and refer to the new item in the commerce catalog. <br/><br/> Do you want to continue?",
+  Catalog_remove_reference_title: "Remove Commerce Reference",
+  Catalog_remove_reference_button: "Remove Reference",
+  Catalog_remove_reference_button_confirm: "Yes, Remove Reference",
+  Catalog_remove_reference_button_abort: "Cancel",
   id_header: "ID",
   catalog_header: "Catalog",
   description_header: "Description",

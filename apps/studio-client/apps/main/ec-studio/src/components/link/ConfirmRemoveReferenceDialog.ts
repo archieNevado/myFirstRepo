@@ -18,19 +18,19 @@ import ConfigUtils from "@jangaroo/runtime/ConfigUtils";
 import { AnyFunction } from "@jangaroo/runtime/types";
 import ECommerceStudioPlugin_properties from "../../ECommerceStudioPlugin_properties";
 
-interface ConfirmChangeReferenceDialogConfig extends Config<StudioDialog>, Partial<Pick<ConfirmChangeReferenceDialog,
+interface ConfirmRemoveReferenceDialogConfig extends Config<StudioDialog>, Partial<Pick<ConfirmRemoveReferenceDialog,
   "changeFunction" | "closeCallback">> {}
 
-class ConfirmChangeReferenceDialog extends StudioDialog {
-  declare Config: ConfirmChangeReferenceDialogConfig;
+class ConfirmRemoveReferenceDialog extends StudioDialog {
+  declare Config: ConfirmRemoveReferenceDialogConfig;
 
-  static override readonly xtype: string = "com.coremedia.ecommerce.studio.config.confirmChangeReferenceDialog";
+  static override readonly xtype: string = "com.coremedia.ecommerce.studio.config.confirmRemoveReferenceDialog";
 
-  static readonly APPLY_BUTTON_ITEM_ID: string = "confirmchangereference-apply-button";
+  static readonly APPLY_BUTTON_ITEM_ID: string = "confirmremovereference-apply-button";
 
-  static readonly CANCEL_BUTTON_ITEM_ID: string = "confirmchangereference-cancel-button";
+  static readonly CANCEL_BUTTON_ITEM_ID: string = "confirmremovereference-cancel-button";
 
-  static DIALOG_ID: string = "changeReferenceDialog";
+  static DIALOG_ID: string = "removeReferenceDialog";
 
   static DIALOG_OPTION_CONFIRM: string = "confirm";
 
@@ -40,14 +40,14 @@ class ConfirmChangeReferenceDialog extends StudioDialog {
 
   closeCallback: AnyFunction = null;
 
-  constructor(config: Config<ConfirmChangeReferenceDialog> = null) {
-    super((()=> ConfigUtils.apply(Config(ConfirmChangeReferenceDialog, {
+  constructor(config: Config<ConfirmRemoveReferenceDialog> = null) {
+    super((()=> ConfigUtils.apply(Config(ConfirmRemoveReferenceDialog, {
       modal: true,
       stateful: true,
       resizable: false,
       width: 450,
       ui: WindowSkin.GRID_200.getSkin(),
-      title: ECommerceStudioPlugin_properties.Catalog_replace_reference_title,
+      title: ECommerceStudioPlugin_properties.Catalog_remove_reference_title,
 
       items: [
         Config(Container, {
@@ -59,7 +59,7 @@ class ConfirmChangeReferenceDialog extends StudioDialog {
             }),
             Config(ExtendedDisplayField, {
               overflowBehaviour: OverflowBehaviour.BREAK_WORD,
-              value: ECommerceStudioPlugin_properties.Catalog_replace_reference_text,
+              value: ECommerceStudioPlugin_properties.Catalog_remove_reference_text,
               ui: DisplayFieldSkin.SUB_LABEL.getSkin(),
               flex: 1,
             }),
@@ -74,10 +74,10 @@ class ConfirmChangeReferenceDialog extends StudioDialog {
       fbar: Config(Toolbar, {
         items: [
           Config(Button, {
-            itemId: ConfirmChangeReferenceDialog.APPLY_BUTTON_ITEM_ID,
+            itemId: ConfirmRemoveReferenceDialog.APPLY_BUTTON_ITEM_ID,
             ui: ButtonSkin.FOOTER_PRIMARY.getSkin(),
             scale: "small",
-            text: ECommerceStudioPlugin_properties.Catalog_replace_reference_button_confirm,
+            text: ECommerceStudioPlugin_properties.Catalog_remove_reference_button_confirm,
             handler: (): void => {
               if (this.changeFunction) {
                 this.changeFunction();
@@ -86,10 +86,10 @@ class ConfirmChangeReferenceDialog extends StudioDialog {
             },
           }),
           Config(Button, {
-            itemId: ConfirmChangeReferenceDialog.CANCEL_BUTTON_ITEM_ID,
+            itemId: ConfirmRemoveReferenceDialog.CANCEL_BUTTON_ITEM_ID,
             ui: ButtonSkin.FOOTER_SECONDARY.getSkin(),
             scale: "small",
-            text: ECommerceStudioPlugin_properties.Catalog_replace_reference_button_abort,
+            text: ECommerceStudioPlugin_properties.Catalog_remove_reference_button_abort,
             handler: (): void => {
               if (this.closeCallback) {
                 this.closeCallback();
@@ -103,4 +103,4 @@ class ConfirmChangeReferenceDialog extends StudioDialog {
   }
 }
 
-export default ConfirmChangeReferenceDialog;
+export default ConfirmRemoveReferenceDialog;

@@ -9,34 +9,25 @@
   <packaging>pom</packaging>
 
   <properties>
-    <blueprint>true</blueprint>
+    <projectRoot>../..</projectRoot>
   </properties>
 
   <build>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.gmaven</groupId>
-        <artifactId>groovy-maven-plugin</artifactId>
-        <version>2.1.1</version>
-        <dependencies>
-          <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-json</artifactId>
-            <type>pom</type>
-            <version>3.0.8</version>
-          </dependency>
-        </dependencies>
-
+        <groupId>com.coremedia.maven</groupId>
+        <artifactId>coremedia-plugins-maven-plugin</artifactId>
+        <version>1.0.1</version>
+        <configuration>
+          <projectRoot>${projectRoot}</projectRoot>
+        </configuration>
         <executions>
           <execution>
-            <id>sync</id>
-            <goals>
-              <goal>execute</goal>
-            </goals>
+            <id>sync-plugins</id>
             <phase>generate-resources</phase>
-            <configuration>
-              <source>${project.basedir}/sync-plugins.groovy</source>
-            </configuration>
+            <goals>
+              <goal>sync</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>

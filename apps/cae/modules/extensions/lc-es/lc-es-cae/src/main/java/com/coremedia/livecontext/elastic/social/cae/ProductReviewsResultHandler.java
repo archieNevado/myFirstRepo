@@ -50,6 +50,7 @@ import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DY
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService.DEFAULT_CATALOG_ALIAS;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper.parseCommerceIdOrThrow;
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
 
 @RequestMapping
 @Link
@@ -168,7 +169,7 @@ public class ProductReviewsResultHandler extends AbstractReviewsResultHandler {
     return product;
   }
 
-  private Product getProduct(@NonNull HttpServletRequest request, @NonNull String productTechId, @NonNull Site site, @Nullable CatalogId catalogId) {
+  private Product getProduct(@NonNull HttpServletRequest request, @NonNull String productIdParam, @NonNull Site site, @Nullable CatalogId catalogId) {
     StoreContext storeContext = CurrentStoreContext.get(request);
     CommerceConnection connection = storeContext.getConnection();
 
@@ -176,8 +177,8 @@ public class ProductReviewsResultHandler extends AbstractReviewsResultHandler {
             .flatMap(id -> catalogAliasTranslationService.getCatalogAliasForId(id, storeContext))
             .orElse(DEFAULT_CATALOG_ALIAS);
 
-    CommerceId techId = connection.getIdProvider().formatProductTechId(catalogAlias, productTechId);
-    Product product = connection.getCatalogService().findProductById(techId, storeContext);
+    CommerceId productId = connection.getIdProvider().format(PRODUCT, catalogAlias, productIdParam);
+    Product product = connection.getCatalogService().findProductById(productId, storeContext);
 
     if (product instanceof ProductVariant) {
       // we only use products as targets for reviews, no product variants (SKUs)
@@ -186,9 +187,9 @@ public class ProductReviewsResultHandler extends AbstractReviewsResultHandler {
 
       if (parentProduct != null) {
         product = parentProduct;
-        LOG.debug("productId {} is a ProductVariant using parent product {} instead", productTechId, product);
+        LOG.debug("productId {} is a ProductVariant using parent product {} instead", productIdParam, product);
       } else {
-        LOG.debug("productId {} is a ProductVariant without parent product", productTechId);
+        LOG.debug("productId {} is a ProductVariant without parent product", productIdParam);
       }
     }
 

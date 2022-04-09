@@ -116,6 +116,24 @@
               </version>
             </document>
 
+            <document id="200" type="CMChannel" name="segmentWithThreeSpecialChars">
+              <version number="1">
+                <stringProperty name="segment" value="Support &amp; Downloads"/>
+              </version>
+            </document>
+
+            <document id="202" type="CMChannel" name="segmentWithLeadingSpecialChars">
+              <version number="1">
+                <stringProperty name="segment" value=".hidden"/>
+              </version>
+            </document>
+
+            <document id="204" type="CMChannel" name="segmentWithTrailingSpecialChars">
+              <version number="1">
+                <stringProperty name="segment" value="invalid_"/>
+              </version>
+            </document>
+
           </folder>
         </folder>
       </folder>

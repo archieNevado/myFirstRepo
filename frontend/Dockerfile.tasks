@@ -3,7 +3,7 @@
 FROM node:16 as tooling-image
 
 # pnpm 6.x
-RUN npm install -g pnpm@6.16.1
+RUN npm install -g pnpm@6.28.0
 
 
 FROM tooling-image as audit-task

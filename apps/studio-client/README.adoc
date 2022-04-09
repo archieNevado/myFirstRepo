@@ -4,8 +4,8 @@
 = Studio Client Workspace
 
 This README file describes how you get started with the CoreMedia Studio
-client workspace.This workspace is based on TypeScript and the package
-manager pnpm.The following sections describe how to build and develop
+client workspace. This workspace is based on TypeScript and the package
+manager pnpm. The following sections describe how to build and develop
 with it.
 
 toc::[]
@@ -29,22 +29,23 @@ https://pnpm.io/installation for details or install it via npm:
 npm install -g pnpm
 ----
 
+=== Sencha Cmd
+
+Sencha Cmd 7.2.0.84 is required for building the Studio client applications and JooUnit
+tests. See https://www.sencha.com/products/extjs/cmd-download/
+
+[NOTE]
+====
+Make sure that all aforementioned tools are available in your `PATH` variable.
+====
+
 == Configuration
 
-To tell pnpm from where to download CoreMedia modules, add a npm
-registry to the npm configuration:
-
-[source,shell]
-----
-pnpm config set @coremedia:registry https://npm.coremedia.io
-pnpm config set @jangaroo:registry https://npm.coremedia.io
-----
-
-To be able to download the artifacts from https://npm.coremedia.io, you need to log in first
+To be able to download the packages from https://npm.coremedia.io, you need to log in first
 
 [source,bash]
 ----
-npm login --registry=https://npm.coremedia.io
+pnpm login --registry=https://npm.coremedia.io
 > User: GITHUB_USER_NAME
 > Password: GITHUB_TOKEN
 ----
@@ -55,10 +56,19 @@ The https://docs.github.com/en/authentication/keeping-your-account-and-data-secu
 * `read:user`
 * `read:packages`
 
+To tell pnpm to download CoreMedia and Jangaroo packages from the CoreMedia NPM registry use the following
+commands:
+
+[source,shell]
+----
+pnpm config set @coremedia:registry https://npm.coremedia.io
+pnpm config set @jangaroo:registry https://npm.coremedia.io
+----
+
 == Building the Workspace
 
 Once the required tools are installed and configured, the
-`studio-client` module can be build. Invoke the following commands from
+`studio-client` packages can be build. Invoke the following commands from
 the `apps/studio-client` folder of your Blueprint workspace:
 
 [source,shell]
@@ -278,7 +288,7 @@ to build and test the Studio client.
 The `Dockerfile.tooling` contains all necessary tools required to build,
 test, package, and publish the Studio client workspace.
 
-One of the tools is Sencha Command. The default download URL is
+One of the tools is Sencha Cmd. The default download URL is
 https://cdn.sencha.com/cmd/7.2.0.84/no-jre/SenchaCmd-7.2.0.84-linux-amd64.sh.zip
 - we recommend using a proxy if possible. The path to the zip can be
 passed as `--build arg SENCHA_COMMAND_SH_ZIP_DOWNLOAD_URL_DIRECTIVE`.

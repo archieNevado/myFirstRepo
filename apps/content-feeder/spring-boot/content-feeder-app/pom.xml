@@ -23,7 +23,7 @@
   <properties>
     <jib.skip>true</jib.skip>
     <jib.goal>dockerBuild</jib.goal>
-    <application.image-base>coremedia/java-application-base:2.4.1-corretto-11</application.image-base>
+    <application.image-base>coremedia/java-application-base:2.4.3-corretto-11</application.image-base>
     <application.image-prefix>coremedia</application.image-prefix>
     <application.image-suffix>content-feeder</application.image-suffix>
     <application.image-tag>${project.version}</application.image-tag>
@@ -134,47 +134,18 @@
       <build>
         <plugins>
           <plugin>
-            <groupId>org.codehaus.gmaven</groupId>
-            <artifactId>groovy-maven-plugin</artifactId>
+            <groupId>com.coremedia.maven</groupId>
+            <artifactId>coremedia-plugins-maven-plugin</artifactId>
+            <version>1.0.1</version>
             <executions>
               <execution>
+                <id>download-plugins</id>
+                <phase>prepare-package</phase>
                 <goals>
-                  <goal>execute</goal>
+                  <goal>download</goal>
                 </goals>
-                <phase>generate-resources</phase>
-                <configuration>
-                  <source>
-                    import groovy.json.JsonSlurper
-                    import groovy.util.AntBuilder
-                    JsonSlurper jsonSlurper = new JsonSlurper()
-                    AntBuilder ant = new AntBuilder()
-                    File pluginsFile = new File(basedir, 'plugins.json')
-                    if (!pluginsFile.exists()) return
-                    File pluginsDownloadDir = new File(basedir, 'target/plugins')
-                    pluginsDownloadDir.mkdirs()
-                    List&lt;String> pluginUrls = jsonSlurper.parse(pluginsFile) as List&lt;String>
-                    pluginUrls.each {
-                      String zipName = it.split('/').last()
-                      File zipFile = new File(pluginsDownloadDir, zipName)
-                      File pluginFolder = new File(pluginsDownloadDir, zipName.replaceAll('\\.zip$', ''))
-                      if (!pluginFolder.exists()) {
-                        zipFile.bytes = new URL(it).bytes
-                        ant.unzip(src: zipFile, dest: pluginFolder, overwrite: true)
-                        zipFile.delete()
-                      }
-                    }
-                  </source>
-                </configuration>
               </execution>
             </executions>
-            <dependencies>
-              <dependency>
-                <groupId>org.codehaus.groovy</groupId>
-                <artifactId>groovy-json</artifactId>
-                <type>pom</type>
-                <version>3.0.8</version>
-              </dependency>
-            </dependencies>
           </plugin>
         </plugins>
       </build>
@@ -187,6 +158,28 @@
       </properties>
       <build>
         <plugins>
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+              <execution>
+                <!--
+                 | This is a workaround to fix permission rights, see
+                 | https://github.com/GoogleContainerTools/jib-extensions/tree/master/first-party/jib-ownership-extension-maven
+                 | make sure to not use extraDirectories with from/into paths. Instead create an empty dir tree
+                 -->
+                <id>create-empty-dirs</id>
+                <phase>generate-sources</phase>
+                <configuration>
+                  <tasks>
+                    <mkdir dir="${project.build.directory}/empty-dirs/coremedia/bundled-plugins"/>
+                  </tasks>
+                </configuration>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
           <plugin>
             <groupId>com.google.cloud.tools</groupId>
             <artifactId>jib-maven-plugin</artifactId>
@@ -215,6 +208,7 @@
                     <from>target/plugins</from>
                     <into>/coremedia/bundled-plugins</into>
                   </path>
+                  <path>target/empty-dirs</path>
                 </paths>
               </extraDirectories>
               <pluginExtensions>

@@ -5,7 +5,6 @@
   "compilerOptions": {
     "rootDir": ".",
     "outDir": "../dist/src",
-    "baseUrl": ".",
     "paths": {
       "@coremedia/studio-client.cap-rest-client/*": [
         "../node_modules/@coremedia/studio-client.cap-rest-client/src/*"
@@ -17,7 +16,7 @@
         "../node_modules/@coremedia/studio-client.client-core-impl/src/*"
       ],
       "@jangaroo/jangaroo-net/*": [
-        "../../../../node_modules/.pnpm/@jangaroo+jangaroo-net@1.0.2/node_modules/@jangaroo/jangaroo-net/src/*"
+        "../../../../node_modules/.pnpm/@jangaroo+jangaroo-net@1.1.1/node_modules/@jangaroo/jangaroo-net/src/*"
       ],
       "@jangaroo/runtime/*": [
         "../node_modules/@jangaroo/runtime/src/*"

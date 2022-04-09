@@ -74,8 +74,8 @@ import com.coremedia.caas.web.CaasServiceConfigurationProperties;
 import com.coremedia.caas.web.GraphiqlConfigurationProperties;
 import com.coremedia.caas.web.filter.HSTSResponseHeaderFilter;
 import com.coremedia.caas.web.link.ContentBlobLinkComposer;
-import com.coremedia.caas.web.link.FilenameBlobLinkComposer;
 import com.coremedia.caas.web.link.ContentMarkupLinkComposer;
+import com.coremedia.caas.web.link.FilenameBlobLinkComposer;
 import com.coremedia.caas.web.link.ResponsiveMediaLinkComposer;
 import com.coremedia.caas.web.metadata.MetadataConfigurationProperties;
 import com.coremedia.caas.web.metadata.MetadataProvider;
@@ -123,6 +123,9 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import graphql.ExecutionInput;
 import graphql.GraphQL;
+import graphql.GraphQLError;
+import graphql.GraphQLException;
+import graphql.GraphqlErrorBuilder;
 import graphql.analysis.MaxQueryComplexityInstrumentation;
 import graphql.analysis.MaxQueryDepthInstrumentation;
 import graphql.execution.instrumentation.ChainedInstrumentation;
@@ -643,6 +646,7 @@ public class CaasConfig implements WebMvcConfigurer {
     return SpelFunctions.class.getDeclaredMethod("first", List.class);
   }
 
+  // the bean name is used as directive name
   @Bean
   public SchemaDirectiveWiring fetch(SpelEvaluationStrategy spelEvaluationStrategy,
                                      @Qualifier("globalSpelVariables") Map<String, Object> globalSpelVariables) {
@@ -796,8 +800,7 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public DataFetcherMappingInstrumentation dataFetchingInstrumentation(SpelEvaluationStrategy spelEvaluationStrategy,
-                                                                       @Qualifier("caasFilterPredicates") List<FilterPredicate<Object>> caasFilterPredicates,
+  public DataFetcherMappingInstrumentation dataFetchingInstrumentation(@Qualifier("caasFilterPredicates") List<FilterPredicate<Object>> caasFilterPredicates,
                                                                        @Qualifier("graphQlConversionService") ConversionService conversionService,
                                                                        @Qualifier("conversionTypeMap") Map<String, Class<?>> conversionTypeMap,
                                                                        SitesService sitesService
@@ -891,6 +894,7 @@ public class CaasConfig implements WebMvcConfigurer {
     WiringFactory wiringFactory = new ModelMappingWiringFactory(modelMapper, wiringFactories);
     RuntimeWiring.Builder builder = RuntimeWiring.newRuntimeWiring()
             .wiringFactory(wiringFactory);
+    // register the directive implementations taking their bean name as directive name
     directiveWirings.forEach(builder::directive);
     RuntimeWiring wiring = builder.build();
     SchemaGenerator schemaGenerator = new SchemaGenerator();
@@ -904,7 +908,20 @@ public class CaasConfig implements WebMvcConfigurer {
 
       @Override
       public PreparsedDocumentEntry getDocument(ExecutionInput executionInput, Function<ExecutionInput, PreparsedDocumentEntry> computeFunction) {
-        return cache.get(executionInput.getQuery(), () -> computeFunction.apply(executionInput));
+        return cache.get(executionInput.getQuery(), () -> {
+          try {
+            return computeFunction.apply(executionInput);
+          } catch (GraphQLException e) {
+            LOG.debug("Caught exception in anonymous PreparsedDocumentProvider.", e);
+            if (e instanceof GraphQLError) {
+              return new PreparsedDocumentEntry(List.of((GraphQLError) e));
+            }
+            return new PreparsedDocumentEntry(List.of(GraphqlErrorBuilder.newError().message(e.getMessage()).build()));
+          } catch (RuntimeException e) {
+            LOG.debug("Caught exception in anonymous PreparsedDocumentProvider.", e);
+            return new PreparsedDocumentEntry(List.of(GraphqlErrorBuilder.newError().message(e.getMessage()).build()));
+          }
+        });
       }
     };
   }

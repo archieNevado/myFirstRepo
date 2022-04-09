@@ -180,10 +180,11 @@ class CMExternalProductForm extends DocumentTabPanel {
                         Config(CatalogLinkPropertyField, {
                           itemId: CMExternalProductForm.CATALOG_LINK_ITEM_ID,
                           maxCardinality: 1,
+                          disableSelection: true,
                           propertyName: CMExternalProductForm.EXTERNAL_ID_PROPERTY,
                           linkTypeNames: [CatalogModel.TYPE_PRODUCT],
                           dropAreaText: LivecontextStudioPlugin_properties.Category_Link_empty_text,
-                          showChangeReferenceButton: true,
+                          showRemoveReferenceButton: true,
                           readOnlyValueExpression: ValueExpressionFactory.createFromValue(false),
                           ...ConfigUtils.append({
                             plugins: [

@@ -37,9 +37,9 @@
 
     <customer>Blueprint</customer>
 
-    <cm.middle.core.version>2110.2</cm.middle.core.version>
+    <cm.middle.core.version>2110.3</cm.middle.core.version>
 
-    <spring.boot.version>2.5.8</spring.boot.version>
+    <spring.boot.version>2.5.12</spring.boot.version>
 
     <!--
     | the following *.host properties are defined here for convenience, so that they can be overridden
@@ -73,9 +73,9 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.58</tomcat.embed.version>
-    <cm.middle.core.version>2110.2</cm.middle.core.version>
-    <cm.common.core.version>2110.2</cm.common.core.version>
+    <tomcat.embed.version>9.0.60</tomcat.embed.version>
+    <cm.middle.core.version>2110.3</cm.middle.core.version>
+    <cm.common.core.version>2110.3</cm.common.core.version>
     <cm.common.bp.version>1-SNAPSHOT</cm.common.bp.version>
     <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
 
@@ -435,7 +435,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>3.2.0</version>
+          <version>3.2.2</version>
           <configuration>
             <archive>
               <addMavenDescriptor>true</addMavenDescriptor>

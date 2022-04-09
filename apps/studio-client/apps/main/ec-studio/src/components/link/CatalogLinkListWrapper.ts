@@ -66,7 +66,7 @@ class CatalogLinkListWrapper extends LinkListWrapperBase {
     this.model = config.model;
     this.createStructFunction = config.createStructFunction;
     this.readOnlyVE = config.readOnlyVE;
-    this.acceptAugmentedContent = config.acceptAugmentedContent === false ? false : true;
+    this.acceptAugmentedContent = config.acceptAugmentedContent ?? true;
   }
 
   override getVE(): ValueExpression {

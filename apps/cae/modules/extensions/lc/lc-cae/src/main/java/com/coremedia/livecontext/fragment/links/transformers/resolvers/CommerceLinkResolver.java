@@ -24,6 +24,7 @@ import com.coremedia.livecontext.ecommerce.link.StorefrontRef;
 import com.coremedia.livecontext.ecommerce.order.Cart;
 import com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.ExternalSeoSegmentBuilder;
 import com.coremedia.objectserver.beans.ContentBean;
+import com.coremedia.objectserver.request.RequestUtils;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -32,12 +33,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.link.UrlUtil.getQueryParamList;
+import static com.coremedia.objectserver.request.RequestUtils.PARAMETERS;
 
 @Component
 @DefaultAnnotation(NonNull.class)
@@ -54,10 +59,9 @@ public class CommerceLinkResolver implements LiveContextLinkResolver {
   }
 
   @Override
-  public Optional<String> resolveUrl(String source, Object bean, String variant, CMNavigation navigation,
-                                     HttpServletRequest request) {
+  public Optional<String> resolveUrl(String source, @Nullable Object bean, @Nullable CMNavigation navigation, @Nullable String view, HttpServletRequest request) {
     try {
-      String link = buildLink(source, bean, navigation, request);
+      String link = buildLink(source, bean, navigation, request, view);
       return Optional.ofNullable(link);
     } catch (Exception e) {
       LOG.warn("Unable to create intermediate commerce link representation for '{}'.", debug(bean), e);
@@ -66,7 +70,7 @@ public class CommerceLinkResolver implements LiveContextLinkResolver {
   }
 
   @Nullable
-  private String buildLink(String source, Object bean, CMNavigation navigation, HttpServletRequest request) {
+  private String buildLink(String source, Object bean, CMNavigation navigation, HttpServletRequest request, @Nullable String view) {
     var storeContext = CurrentStoreContext.find(request).orElse(null);
     if (storeContext == null) {
       return null;
@@ -77,16 +81,16 @@ public class CommerceLinkResolver implements LiveContextLinkResolver {
       return null;
     }
 
-    return buildLink(source, bean, navigation, linkService, storeContext, request)
+    return buildLink(source, bean, view, navigation, linkService, storeContext, request)
             .map(StorefrontRef::toLink)
             .orElse(null);
   }
 
   @SuppressWarnings({"IfStatementWithTooManyBranches", "OverlyComplexMethod"})
-  private Optional<StorefrontRef> buildLink(String source, Object bean, CMNavigation navigation,
+  private Optional<StorefrontRef> buildLink(String source, Object bean, @Nullable String view, CMNavigation navigation,
                                             LinkService linkService, StoreContext storeContext,
                                             HttpServletRequest request) {
-    List<QueryParam> linkParameters = getQueryParamList(source);
+    List<QueryParam> linkParameters = getLinkParameters(source, request, view);
 
     if (bean instanceof CMProductTeaser) {
       CMProductTeaser productTeaser = (CMProductTeaser) bean;
@@ -154,6 +158,15 @@ public class CommerceLinkResolver implements LiveContextLinkResolver {
       }
     }
     return Optional.empty();
+  }
+
+  static List<QueryParam> getLinkParameters(String source, ServletRequest request, @Nullable String view) {
+    List<QueryParam> linkParams = new ArrayList<>(getQueryParamList(source));
+    linkParams.addAll(QueryParam.of(RequestUtils.getParameters(request, PARAMETERS)));
+    if (view != null) {
+      linkParams.add(QueryParam.of("view", view));
+    }
+    return linkParams;
   }
 
   private static boolean isDynamicCaeLink(String relativeLink) {

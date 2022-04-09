@@ -6,7 +6,7 @@
   "private": true,
   "dependencies": {
     "@coremedia/service-agent": "1.0.0",
-    "@coremedia/studio-client.ckeditor-constants": "2110.2.0",
+    "@coremedia/studio-client.ckeditor-constants": "2110.3.0",
     "rxjs": "^6.5.4"
   },
   "devDependencies": {
@@ -29,8 +29,8 @@
     "@ckeditor/ckeditor5-utils": "^29.2.0",
     "@coremedia/ckeditor5-studio-essentials": "1.0.1",
     "@coremedia/ckeditor5-symbol-on-paste-mapper": "1.0.1",
-    "@jangaroo/core": "^1.0.0",
-    "@jangaroo/publish": "^1.0.0",
+    "@jangaroo/core": "^1.1.1",
+    "@jangaroo/publish": "^1.1.1",
     "@types/ckeditor__ckeditor5-basic-styles": "28.0.2",
     "@types/ckeditor__ckeditor5-block-quote": "29.0.3",
     "@types/ckeditor__ckeditor5-core": "28.0.9",

@@ -69,8 +69,7 @@ public class ContextAttributes {
   static <T> Optional<T> typed(Object value, Class<T> expectedType) {
     Class<?> actualType = value.getClass();
     if (expectedType.isAssignableFrom(actualType)) {
-      T castedValue = expectedType.cast(value);
-      return Optional.ofNullable(castedValue);
+      return Optional.of(expectedType.cast(value));
     }
 
     return Optional.empty();

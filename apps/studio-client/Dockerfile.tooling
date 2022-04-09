@@ -17,8 +17,8 @@ RUN apt update -y && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # pnpm 6.x
-RUN npm install -g pnpm@6.16.1
-LABEL PNPM_VERSION="6.16.1"
+RUN npm install -g pnpm@6.28.0
+LABEL PNPM_VERSION="6.28.0"
 
 
 FROM npm-tooling-base as sencha-layer

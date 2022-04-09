@@ -159,11 +159,13 @@ public class LcStudioValidatorsConfiguration {
   @Bean
   SegmentFormatValidator segmentFormatValidator(CapConnection connection,
                                                 CommerceConnectionSupplier commerceConnectionSupplier,
-                                                SitesService sitesService) {
+                                                SitesService sitesService,
+                                                UrlPathFormattingHelper urlPathFormattingHelper) {
     SegmentFormatValidator validator = new SegmentFormatValidator(type(connection, "CMChannel"),
             true,
             commerceConnectionSupplier,
             sitesService,
+            urlPathFormattingHelper,
             "segment");
     validator.setFallbackPropertyName("title");
     return validator;

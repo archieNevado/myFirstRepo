@@ -35,7 +35,7 @@ class CommerceReferencesForm extends CommerceReferencesFormBase {
           hideCatalog: true,
           linkTypeNames: [CatalogModel.TYPE_CATEGORY, CatalogModel.TYPE_PRODUCT],
           createStructFunction: bind(this, this.createStructs),
-          dropAreaText: ECommerceStudioPlugin_properties.Categorys_Products_Link_empty_text,
+          dropAreaText: ECommerceStudioPlugin_properties.Categories_Products_Link_empty_text,
           additionalToolbarItems: config.additionalToolbarItems,
         }),
       ],
