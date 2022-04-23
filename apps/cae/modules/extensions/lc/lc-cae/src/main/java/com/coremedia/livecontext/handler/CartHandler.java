@@ -91,6 +91,12 @@ public class CartHandler extends LiveContextPageHandlerBase {
 
   // --- Handlers ------------------------------------------------------------------------------------------------------
 
+  /**
+   * @param view the name of the view
+   *             <p>
+   *             Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is only used as
+   *             view name and must match an existing view - see {@link ModelAndView#setViewName(String)}.
+   */
   @GetMapping(value = DYNAMIC_URI_PATTERN)
   public ModelAndView handleFragmentRequest(@PathVariable(SEGMENT_ROOT) String context,
                                             @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,

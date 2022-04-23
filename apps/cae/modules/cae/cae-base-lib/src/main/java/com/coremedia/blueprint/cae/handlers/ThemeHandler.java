@@ -36,6 +36,12 @@ public class ThemeHandler extends HandlerBase {
 
   // --- Handlers ------------------------------------------------------------------------------------------------------
 
+  /**
+   * @param view the name of the view
+   *             <p>
+   *             Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is only used as
+   *             view name and must match an existing view - see {@link ModelAndView#setViewName(String)}.
+   */
   @GetMapping(value = URI_PATTERN)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ID) CMTheme theme,
                                     @RequestParam(value = VIEW_PARAMETER, required = false) String view) {

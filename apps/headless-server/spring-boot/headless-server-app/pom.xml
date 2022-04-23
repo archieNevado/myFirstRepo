@@ -27,7 +27,7 @@
   <properties>
     <jib.skip>true</jib.skip>
     <jib.goal>dockerBuild</jib.goal>
-    <application.image-base>coremedia/java-application-base:2.4.2-corretto-11</application.image-base>
+    <application.image-base>coremedia/java-application-base:2.4.3-corretto-11</application.image-base>
     <application.image-prefix>coremedia</application.image-prefix>
     <application.image-suffix>headless-server</application.image-suffix>
     <application.image-tag>${project.version}</application.image-tag>
@@ -215,7 +215,7 @@
           <plugin>
             <groupId>com.coremedia.maven</groupId>
             <artifactId>coremedia-plugins-maven-plugin</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
             <executions>
               <execution>
                 <id>download-plugins</id>

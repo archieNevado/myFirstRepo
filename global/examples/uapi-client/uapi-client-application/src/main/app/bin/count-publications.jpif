@@ -3,3 +3,10 @@ JAVA_MAIN_CLASS=com.coremedia.blueprint.example.PublicationCounter
 
 # Debugger
 #JAVA_VM_ARGS="$JAVA_VM_ARGS -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+
+# leave empty for no redirection (output will then usually be
+# sent to a console window), 'null' for no output, or
+# 'log' to send to a file $INSTALL_DIR/var/logs/$PROGNAME.out
+# OUTPUT_REDIRECT=
+
+# VERBOSE=false

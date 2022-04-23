@@ -469,6 +469,9 @@ public class TaxonomyResource {
     TaxonomyNodeList list = getChildren(node.getSiteId(), node.getTaxonomyId(), root.getRef(), null, null);
 
     int attempts = 0;
+    // Checkmarx complains about "Unchecked input for loop condition" here.
+    // That is a false positive.
+    // We create the taxonomy node object ourselves, so the user input cannot provide a malicious object here.
     while (!list.contains(node)) {
       list = getChildren(node.getSiteId(), node.getTaxonomyId(), root.getRef(), null, null);
       // These numbers are not "magic"

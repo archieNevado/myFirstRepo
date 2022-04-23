@@ -39,7 +39,7 @@ x-logging:
 
 services:
   commerce-adapter-hybris:
-    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-hybris:${COMMERCE_ADAPTER_HYBRIS_VERSION:-2.0.6}
+    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-hybris:${COMMERCE_ADAPTER_HYBRIS_VERSION:-2.0.7}
     container_name: commerce-adapter-hybris
     restart: always
     logging: *default-logging

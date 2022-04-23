@@ -17,7 +17,7 @@ function urlParams($btn) {
   if (!btnUrl) {
     return;
   }
-  $btn.attr("href", btnUrl + "&URL=" + window.location.href);
+  $btn.attr("href", btnUrl + "&URL=" + encodeURI(window.location.href));
 }
 
 /**

@@ -50,6 +50,7 @@ import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DY
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService.DEFAULT_CATALOG_ALIAS;
 import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper.parseCommerceIdOrThrow;
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
 
 @RequestMapping
 @Link
@@ -75,6 +76,17 @@ public class ProductReviewsResultHandler extends AbstractReviewsResultHandler {
 
   private CatalogAliasTranslationService catalogAliasTranslationService;
 
+  /**
+   * @param productId the ID of the reviewed product
+   *                  <p>
+   *                  Not vulnerable to <i>Spring View SPEL Injection</i>: request param is used to
+   *                  identify and load a content and its value must match a valid content ID - see
+   *                  {@link com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper#parseCommerceId(String) CommerceIdParserHelper#parseCommerceId(String)}
+   * @param view      the name of the view
+   *                  <p>
+   *                  Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is only used as
+   *                  view name and must match an existing view - see {@link ModelAndView#setViewName(String)}.
+   */
   @GetMapping(value = DYNAMIC_PATTERN_PRODUCT_REVIEWS)
   public ModelAndView getReviews(@PathVariable(CONTEXT_ID) String contextId,
                                  @RequestParam(value = PRODUCT_ID, required = true) String productId,
@@ -83,6 +95,31 @@ public class ProductReviewsResultHandler extends AbstractReviewsResultHandler {
     return handleGetReviews(contextId, productId, view, request);
   }
 
+  /**
+   * @param productId the ID of the reviewed product
+   *                  <p>
+   *                  Not vulnerable to <i>Spring View SPEL Injection</i>: request param is used to
+   *                  identify and load a content and its value must match a valid content ID - see
+   *                  {@link com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper#parseCommerceId(String) CommerceIdParserHelper#parseCommerceId(String)}
+   * @param text      the review text
+   *                  <p>
+   *                  Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is stored in the database
+   *                  using {@link com.coremedia.elastic.core.mongodb.models.MongoDbModelService MongoDbModelService} and
+   *                  {@link com.coremedia.elastic.social.api.comments.Comment#setText(String) Comment#setText(String)}.
+   *                  It's loaded and displayed by Freemarker templates using default escape/encoding of special chars.
+   * @param title     the review title
+   *                  <p>
+   *                  Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is stored in the database
+   *                  using {@link com.coremedia.elastic.core.mongodb.models.MongoDbModelService MongoDbModelService} and
+   *                  {@link com.coremedia.elastic.social.api.reviews.Review#setTitle(String) Review#setTitle(String)}.
+   *                  It's loaded and displayed by Freemarker templates using default escape/encoding of special chars.
+   * @param rating    the review rating
+   *                  <p>
+   *                  Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is converted
+   *                  to an integer by Spring default converter and stored in the database using
+   *                  {@link com.coremedia.elastic.core.mongodb.models.MongoDbModelService MongoDbModelService} and
+   *                  {@link com.coremedia.elastic.social.api.reviews.Review#setRating(int) Review#setRating(int)}.
+   */
   @PostMapping(value = DYNAMIC_PATTERN_PRODUCT_REVIEWS)
   public ModelAndView createReview(@PathVariable(CONTEXT_ID) String contextId,
                                    @RequestParam(value = PRODUCT_ID, required = true) String productId,
@@ -168,7 +205,7 @@ public class ProductReviewsResultHandler extends AbstractReviewsResultHandler {
     return product;
   }
 
-  private Product getProduct(@NonNull HttpServletRequest request, @NonNull String productTechId, @NonNull Site site, @Nullable CatalogId catalogId) {
+  private Product getProduct(@NonNull HttpServletRequest request, @NonNull String productIdParam, @NonNull Site site, @Nullable CatalogId catalogId) {
     StoreContext storeContext = CurrentStoreContext.get(request);
     CommerceConnection connection = storeContext.getConnection();
 
@@ -176,8 +213,8 @@ public class ProductReviewsResultHandler extends AbstractReviewsResultHandler {
             .flatMap(id -> catalogAliasTranslationService.getCatalogAliasForId(id, storeContext))
             .orElse(DEFAULT_CATALOG_ALIAS);
 
-    CommerceId techId = connection.getIdProvider().formatProductTechId(catalogAlias, productTechId);
-    Product product = connection.getCatalogService().findProductById(techId, storeContext);
+    CommerceId productId = connection.getIdProvider().format(PRODUCT, catalogAlias, productIdParam);
+    Product product = connection.getCatalogService().findProductById(productId, storeContext);
 
     if (product instanceof ProductVariant) {
       // we only use products as targets for reviews, no product variants (SKUs)
@@ -186,9 +223,9 @@ public class ProductReviewsResultHandler extends AbstractReviewsResultHandler {
 
       if (parentProduct != null) {
         product = parentProduct;
-        LOG.debug("productId {} is a ProductVariant using parent product {} instead", productTechId, product);
+        LOG.debug("productId {} is a ProductVariant using parent product {} instead", productIdParam, product);
       } else {
-        LOG.debug("productId {} is a ProductVariant without parent product", productTechId);
+        LOG.debug("productId {} is a ProductVariant without parent product", productIdParam);
       }
     }
 

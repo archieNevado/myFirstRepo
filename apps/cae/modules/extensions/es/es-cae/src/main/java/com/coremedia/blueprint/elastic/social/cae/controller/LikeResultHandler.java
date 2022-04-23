@@ -43,6 +43,12 @@ public class LikeResultHandler extends ElasticContentHandler<LikeResult> {
           "/{" + CONTEXT_ID + "}" +
           "/{" + ID + "}";
 
+  /**
+   * @param view the name of the view
+   *             <p>
+   *             Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is only used as
+   *             view name and must match an existing view - see {@link ModelAndView#setViewName(String)}.
+   */
   @GetMapping(value = DYNAMIC_PATTERN_LIKE)
   public ModelAndView getLikeResult(@PathVariable(CONTEXT_ID) String contextId,
                                          @PathVariable(ID) String id,

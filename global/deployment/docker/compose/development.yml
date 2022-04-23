@@ -340,6 +340,10 @@ services:
       WAIT_HOSTS: "content-management-server:${CMS_ORB_PORT:-40183},master-live-server:${MLS_ORB_PORT:-40283},workflow-server:${WFS_ORB_PORT:-40383}"
       # the maximum timeout in seconds to wait for service dependencies
       WAIT_TIMEOUT: 300
+      # set to either console|log|null
+      OUTPUT_REDIRECT: ${OUTPUT_REDIRECT:-console}
+      # increases verbosity of CoreMedia tools application runtime, not the tool itself
+      VERBOSE: "${VERBOSE:-false}"
     command: ["import-themes",
               "use-remote-content-archive",
               "import-user",

@@ -50,6 +50,7 @@ public class AlxResource {
 
   private static final String PARAM_ID = "id";
   public static final int DEFAULT_TIME_RANGE = 7;
+  public static final int MAX_TIME_RANGE = 365;
   public static final String CMLINKABLE = "CMLinkable";
   public static final String PARAM_TIME_RANGE = "timeRange";
   private static final String GOOGLE_ALX = "googleAnalytics";
@@ -75,6 +76,8 @@ public class AlxResource {
   @GetMapping("/pageviews/{id}")
   public ReportResult getAlxData(@PathVariable(PARAM_ID) String id, @RequestParam(PARAM_TIME_RANGE) Integer timeRange) {
     int realTimeRange = timeRange == null || timeRange < 1 ? DEFAULT_TIME_RANGE : timeRange;
+    realTimeRange = Math.min(MAX_TIME_RANGE, realTimeRange);
+
     Content content = contentRepository.getContent(id);
     if (content != null) {
       if (content.getType().isSubtypeOf(CMLINKABLE)) {

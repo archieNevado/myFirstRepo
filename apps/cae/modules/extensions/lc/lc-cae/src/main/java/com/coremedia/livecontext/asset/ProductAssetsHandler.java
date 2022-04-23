@@ -50,6 +50,8 @@ import java.util.Set;
 import static com.coremedia.blueprint.base.links.UriConstants.ContentTypes.CONTENT_TYPE_HTML;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.SKU;
 
 /**
  * Handle dynamic product asset requests.
@@ -353,18 +355,14 @@ public class ProductAssetsHandler extends PageHandlerBase {
   private CommerceId formatProductId(CatalogAlias catalogAlias, String externalId, @NonNull StoreContext storeContext) {
     CommerceIdProvider commerceIdProvider = storeContext.getConnection().getIdProvider();
 
-    return useStableIds
-            ? commerceIdProvider.formatProductId(catalogAlias, externalId)
-            : commerceIdProvider.formatProductTechId(catalogAlias, externalId);
+    return commerceIdProvider.format(PRODUCT, catalogAlias, externalId);
   }
 
   private CommerceId formatProductVariantId(CatalogAlias catalogAlias, String externalId,
                                             @NonNull StoreContext storeContext) {
     CommerceIdProvider commerceIdProvider = storeContext.getConnection().getIdProvider();
 
-    return useStableIds
-            ? commerceIdProvider.formatProductVariantId(catalogAlias, externalId)
-            : commerceIdProvider.formatProductVariantTechId(catalogAlias, externalId);
+    return commerceIdProvider.format(SKU, catalogAlias, externalId);
   }
 
   @Nullable

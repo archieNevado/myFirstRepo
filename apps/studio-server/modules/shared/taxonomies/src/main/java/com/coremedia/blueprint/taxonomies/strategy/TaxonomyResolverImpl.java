@@ -117,6 +117,9 @@ public class TaxonomyResolverImpl implements TaxonomyResolver {
       seenAlias.add(null);
       String mappedTaxonomy = taxonomyId;
 
+      // Checkmarx complains about "Unchecked input for loop condition" here.
+      // That is a false positive. The alias list already contains {@code null},
+      // so even invalid taxonomyId values are handled.
       while (!seenAlias.contains(aliasMapping.get(mappedTaxonomy))) {
         mappedTaxonomy = aliasMapping.get(mappedTaxonomy);
         seenAlias.add(mappedTaxonomy);

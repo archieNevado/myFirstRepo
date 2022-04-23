@@ -45,6 +45,13 @@ public class PageHandler extends DefaultPageHandler {
   public static final String URI_PATTERN_VANITY =
           "/{" + SEGMENTS_NAVIGATION + ":" + PATTERN_SEGMENTS + "}";
 
+  /**
+   * @param view the name of the view
+   *             <p>
+   *             Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is only used as
+   *             view name and must match an existing view - see {@link ModelAndView#setViewName(String)} and
+   *             {@link com.coremedia.blueprint.cae.handlers.DefaultPageHandler#setViewToBean(Map) DefaultPageHandler#setViewToBean(Map)}.
+   */
   @GetMapping(SEO_FRIENDLY_URI_PATTERN)
   public ModelAndView handleRequest(@org.springframework.lang.Nullable @PathVariable(SEGMENT_ID) CMLinkable linkable,
                                     @PathVariable(SEGMENT_ID) String segmentId,
@@ -57,6 +64,12 @@ public class PageHandler extends DefaultPageHandler {
 
   /**
    * Handles a request for a vanity URL containing a root segment and two additional segment, e.g. /sports/football/results/recent
+   *
+   * @param view the name of the view
+   *             <p>
+   *             Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is only used as
+   *             view name and must match an existing view - see {@link ModelAndView#setViewName(String)} and
+   *             {@link com.coremedia.blueprint.cae.handlers.DefaultPageHandler#setViewToBean(Map) DefaultPageHandler#setViewToBean(Map)}.
    */
   @GetMapping({URI_PATTERN_VANITY, URI_PATTERN_VANITY + '/'})
   public ModelAndView handleRequest(@PathVariable(SEGMENTS_NAVIGATION) List<String> navigationPath,

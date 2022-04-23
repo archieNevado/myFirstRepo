@@ -45,6 +45,16 @@ public class PaginationHandler extends PageHandlerBase {
 
   // --- Handler ----------------------------------------------------
 
+  /**
+   * @param view    the name of the view
+   *                <p>
+   *                Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is only used as
+   *                view name and must match an existing view - see {@link ModelAndView#setViewName(String)}.
+   * @param pagenum the name of the view
+   *                <p>
+   *                Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is converted to
+   *                an integer by Spring default converter.
+   */
   @GetMapping(value = URI_PATTERN)
   public <T> ModelAndView handlePaginationRequest(
           @PathVariable(SEGMENT_ID) CMCollection<T> container,

@@ -97,6 +97,10 @@ public class PageSearchActionHandler extends PageHandlerBase {
   /**
    * Performs site search
    *
+   * @param view the name of the view
+   *             <p>
+   *             Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is only used as
+   *             view name and must match an existing view - see {@link ModelAndView#setViewName(String)}.
    * @see "SearchActionState.ftl"
    */
   @GetMapping(value = URI_PATTERN)

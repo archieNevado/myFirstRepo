@@ -50,12 +50,6 @@ $(function() {
     setTimeout(function() { $codeBlock.removeClass("selected"); }, 100);
   });
 
-  // fix docker links, if not set by confd
-  $("a[href*=\"docker.localhost\"]").each(function() {
-    console.warn("Overview includes docker URL.", $(this).attr("href"));
-    $(this).attr("href", $(this).attr("href").replace("docker.localhost", window.location.hostname.replace("overview.", "")));
-  });
-
   // change log level
   // part a) get list of loggers for service
   var $messageBox = $("#logger-message");
@@ -63,7 +57,8 @@ $(function() {
   var availableLoggers = {};
   $("#service").on("change", function() {
     $loggers.empty();
-    var service = $(this).val();
+    // escape the value of #service input to avoid XSS
+    var service = encodeURIComponent($(this).val());
     if(service !== undefined) {
       var url = '/'.concat(service).concat('/loggers/');
       fetch(url).then(function(response) {
@@ -73,7 +68,8 @@ $(function() {
         if(availableLoggers.length > 0) {
           $messageBox.html("<b>" + availableLoggers.length + "</b> loggers found for service <b>" + service + "</b>");
           availableLoggers.forEach(function(loggerName) {
-            $loggers.append($("<option>", { value: loggerName}))
+            // escape the value of loggerName input to avoid XSS
+            $loggers.append($("<option>", { value: encodeURIComponent(loggerName)}))
           })
         } else {
           $messageBox.html("<em>Error:</em> No loggers found for service <b>" + service + "</b>");
@@ -87,8 +83,11 @@ $(function() {
   $("#log-level-change").on("submit", function(e) {
     e.preventDefault();
     var formData = new FormData(this);
-    var url = '/'.concat(formData.get('service')).concat('/loggers/').concat(formData.get('logger'));
-    $messageBox.text("Setting new log level for logger " + formData.get('logger') + "...");
+    // escape the value of the form inputs to avoid XSS
+    var service = encodeURIComponent(formData.get('service'));
+    var logger = encodeURIComponent(formData.get('logger'));
+    var url = '/'.concat(service).concat('/loggers/').concat(logger);
+    $messageBox.text("Setting new log level for logger " + logger + "...");
     fetch(url, {
       method: 'POST',
       headers: {
@@ -102,16 +101,16 @@ $(function() {
           return response.json();
         }).then(function(data) {
           if (data.effectiveLevel !== undefined) {
-            $messageBox.html("The log level for <b>" + formData.get('service') + "</b> and logger <b>" + formData.get('logger') + "</b> successfully changed to <b>" + data.effectiveLevel + "</b>");
+            $messageBox.html("The log level for <b>" + service + "</b> and logger <b>" + logger + "</b> successfully changed to <b>" + data.effectiveLevel + "</b>");
           } else {
-            $messageBox.html("<em>Error:</em> Could not set log level for <b>" + formData.get('service') + "</b> and logger <b>" + formData.get('logger') + "</b>");
+            $messageBox.html("<em>Error:</em> Could not set log level for <b>" + service + "</b> and logger <b>" + logger + "</b>");
           }
         });
       } else {
-        $messageBox.html("<em>Error:</em> Could not set log level for <b>" + formData.get('service') + "</b> and logger <b>" + formData.get('logger') + "</b>");
+        $messageBox.html("<em>Error:</em> Could not set log level for <b>" + service + "</b> and logger <b>" + logger + "</b>");
       }
     }).catch(function() {
-      $messageBox.html("<em>Error:</em> Could not set log level for <b>" + formData.get('service') + "</b> and logger <b>" + formData.get('logger') + "</b>");
+      $messageBox.html("<em>Error:</em> Could not set log level for <b>" + service + "</b> and logger <b>" + logger + "</b>");
     });
   });
 });

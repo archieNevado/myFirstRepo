@@ -22,7 +22,7 @@ WORKFLOWS_FOUND="$(./tools/bin/cm processdefinitions -u ${TOOLS_USER} -p ${TOOLS
 
 if ! `echo "$WORKFLOWS_FOUND" | grep -w $WORKFLOW_NAME > /dev/null` || [ "${FORCE_REIMPORT_CONTENT}" = "true" ]; then
   echo "[DOCKER ENTRYPOINT] - importing custom workflow $WORKFLOW_NAME from $WORKFLOW_PATH"
-  ./tools/bin/cm upload -u ${TOOLS_USER} -p ${TOOLS_PASSWORD} -f ${WORKFLOW_PATH} 2> /dev/null
+  ./tools/bin/cm upload -u ${TOOLS_USER} -p ${TOOLS_PASSWORD} -f ${WORKFLOW_PATH}
 else
   echo "[DOCKER ENTRYPOINT] - $WORKFLOW_NAME already imported, skipping."
 fi

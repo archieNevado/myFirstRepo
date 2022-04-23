@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<configuration scan="true" scanPeriod="10 seconds">
+<configuration>
 
   <!--
    | Common logger configuration for all tools. You can overwrite a logger by defining the logger below the inclusion

@@ -10,10 +10,10 @@
   },
   "devDependencies": {
     "@coremedia/download-plugins": "^1.2.0",
-    "@jangaroo/build": "^1.0.3",
-    "@jangaroo/core": "^1.0.3",
-    "@jangaroo/publish": "^1.0.3",
-    "@jangaroo/run": "^1.0.3",
+    "@jangaroo/build": "^1.1.1",
+    "@jangaroo/core": "^1.1.1",
+    "@jangaroo/publish": "^1.1.1",
+    "@jangaroo/run": "^1.1.1",
     "rimraf": "^3.0.2"
   },
   "scripts": {

@@ -615,6 +615,8 @@ public class ThemeImporterImpl implements ThemeImporter {
     int startNoMatch = 0;
     int endNoMatch;
 
+    // Checkmarx complains about "Unchecked input for loop condition" here.
+    // That is a false positive.
     while (matcher.find()) {
       // Matcher does not support access to the non-matching part during an
       // appendReplacement loop. So we have to escape the part before the match...

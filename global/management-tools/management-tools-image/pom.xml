@@ -23,7 +23,7 @@
     <jib.skip>true</jib.skip>
     <!--set to build to use without docker being installed but then you need a registry configured in jib.repository-->
     <jib.goal>dockerBuild</jib.goal>
-    <application.image-base>coremedia/java-application-base:2.4.2-corretto-11</application.image-base>
+    <application.image-base>coremedia/java-application-base:2.4.3-corretto-11</application.image-base>
     <application.image-prefix>coremedia</application.image-prefix>
     <application.image-suffix>management-tools</application.image-suffix>
     <application.image-tag>${project.version}</application.image-tag>
@@ -215,6 +215,8 @@
               <DEV_REPLICATION_SQL_STORE_URL>jdbc:mysql://mysql:3306/cm_replication</DEV_REPLICATION_SQL_STORE_URL>
               <DEV_REPLICATION_SQL_STORE_USER>cm_replication</DEV_REPLICATION_SQL_STORE_USER>
               <DEV_REPLICATION_SQL_STORE_PASSWORD>cm_replication</DEV_REPLICATION_SQL_STORE_PASSWORD>
+              <OUTPUT_REDIRECT>console</OUTPUT_REDIRECT>
+              <VERBOSE>false</VERBOSE>
             </environment>
           </container>
           <extraDirectories>
@@ -247,6 +249,10 @@
               <permission>
                 <file>/coremedia/use-remote-content-archive</file>
                 <mode>755</mode>
+              </permission>
+              <permission>
+                <file>/etc/profile.d/coremedia-bash.sh</file>
+                <mode>644</mode>
               </permission>
             </permissions>
           </extraDirectories>

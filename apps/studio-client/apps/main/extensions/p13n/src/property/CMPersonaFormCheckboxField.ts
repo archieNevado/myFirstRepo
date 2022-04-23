@@ -2,7 +2,8 @@ import ValueExpression from "@coremedia/studio-client.client-core/data/ValueExpr
 import HidableMixin from "@coremedia/studio-client.ext.ui-components/mixins/HidableMixin";
 import BindPropertyPlugin from "@coremedia/studio-client.ext.ui-components/plugins/BindPropertyPlugin";
 import PersonaContextHelper from "@coremedia/studio-client.main.cap-personalization-ui/util/PersonaContextHelper";
-import BindDisablePlugin from "@coremedia/studio-client.main.editor-components/sdk/premular/fields/plugins/BindDisablePlugin";
+import BindDisablePlugin
+  from "@coremedia/studio-client.main.editor-components/sdk/premular/fields/plugins/BindDisablePlugin";
 import Checkbox from "@jangaroo/ext-ts/form/field/Checkbox";
 import { mixin } from "@jangaroo/runtime";
 import Config from "@jangaroo/runtime/Config";
@@ -22,12 +23,22 @@ class CMPersonaFormCheckboxField extends Checkbox {
 
   static override readonly xtype: string = "com.coremedia.blueprint.personalization.editorplugin.config.cmPersonaFormCheckboxField";
 
+  static #toBoolean(value: string): boolean {
+    return value === "true";
+  }
+
+  static #toString(value: boolean): string {
+    return ""+value;
+  }
+
   constructor(config: Config<CMPersonaFormCheckboxField> = null) {
     super((()=> ConfigUtils.apply(Config(CMPersonaFormCheckboxField, {
 
       plugins: [
         Config(BindPropertyPlugin, {
           bindTo: config.bindTo.extendBy(config.propertyContext + PersonaContextHelper.CONTEXT_NAME_SEPARATOR + config.propertyName),
+          transformer: CMPersonaFormCheckboxField.#toBoolean,
+          reverseTransformer: CMPersonaFormCheckboxField.#toString,
           bidirectional: true,
         }),
         Config(BindDisablePlugin, {
