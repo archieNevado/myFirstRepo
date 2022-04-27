@@ -6,6 +6,11 @@ import { updateTarget } from "@coremedia/brick-dynamic-include";
  * Loads more search results (next page) via ajax below the search results.
  * The given button will be replaced by the search results.
  *
+ * Static Application Security Testing (SAST) tools like Checkmarx may complain
+ * about the usage of 'nextSearchResults' response, if they assume that it is
+ * untrusted data without proper sanitization or encoding.
+ * Such reports are false positives.
+ *
  * @param {string} url
  * @param {*} button
  */

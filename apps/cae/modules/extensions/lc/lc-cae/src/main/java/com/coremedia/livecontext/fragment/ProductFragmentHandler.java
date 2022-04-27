@@ -38,6 +38,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -62,7 +63,10 @@ public class ProductFragmentHandler extends FragmentHandler {
   private static final String PDP_PAGE_ID = "pdpPage";
 
   private ResolveContextStrategy contextStrategy;
-  private boolean useStableIds = false;
+
+  @Value("${livecontext.use-stable-ids:false}")
+  private boolean useStableIds;
+
   private boolean useContentPagegrid = false;
   private AugmentationService productAugmentationService;
 

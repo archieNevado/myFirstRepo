@@ -21,6 +21,7 @@ import com.coremedia.objectserver.web.UserVariantHelper;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +36,9 @@ public class CategoryFragmentHandler extends FragmentHandler {
 
   private ResolveContextStrategy contextStrategy;
   private boolean useOriginalNavigationContext = false;
-  private boolean useStableIds = false;
+
+  @Value("${livecontext.use-stable-ids:false}")
+  private boolean useStableIds;
 
   // --- FragmentHandler --------------------------------------------
 

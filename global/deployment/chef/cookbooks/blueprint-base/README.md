@@ -112,7 +112,7 @@ Use this cookbook with care and only put things in here if they don't fit anywhe
 * `node['blueprint']['apps']['commerce-adapter-sfcc']['version']` -  Defaults to `1.4.13`.
 * `node['blueprint']['apps']['commerce-adapter-wcs']['group_id']` -  Defaults to `com.coremedia.commerce.adapter.wcs`.
 * `node['blueprint']['apps']['commerce-adapter-wcs']['artifact_id']` -  Defaults to `adapter-wcs-app`.
-* `node['blueprint']['apps']['commerce-adapter-wcs']['version']` -  Defaults to `1.6.7`.
+* `node['blueprint']['apps']['commerce-adapter-wcs']['version']` -  Defaults to `1.6.8`.
 * `node['blueprint']['solr']['config_zip_version']` -  Defaults to `node['blueprint']['default_version']`.
 * `node['blueprint']['tools']['content-management-server']['group_id']` -  Defaults to `com.coremedia.blueprint`.
 * `node['blueprint']['tools']['content-management-server']['artifact_id']` -  Defaults to `cms-tools-application`.

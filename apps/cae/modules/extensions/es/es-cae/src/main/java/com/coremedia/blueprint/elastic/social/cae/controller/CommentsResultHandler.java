@@ -68,6 +68,12 @@ public class CommentsResultHandler extends ElasticContentHandler<CommentsResult>
     "/{" + ID + "}";
 
 
+  /**
+   * @param view the name of the view
+   *             <p>
+   *             Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is only used as
+   *             view name and must match an existing view - see {@link ModelAndView#setViewName(String)}.
+   */
   @GetMapping(value = DYNAMIC_PATTERN_COMMENTS)
   public ModelAndView getComments(@PathVariable("contextId") String contextId,
                                   @PathVariable("id") String targetId,
@@ -97,11 +103,25 @@ public class CommentsResultHandler extends ElasticContentHandler<CommentsResult>
 
   /**
    * Handler to create comments for the currently logged in user
-   * @param contextId     the context for a comment
-   * @param targetId    the target for a comment
-   * @param text        the text for a comment
-   * @param authorName  the author name for anonymous comments (if allowed)
-   * @param replyToId   if the comment is the reply to another comment
+   *
+   * @param contextId  the context for a comment
+   * @param targetId   the target for a comment
+   * @param text       the text for a comment
+   *                   <p>
+   *                   Not vulnerable to <i>Spring View SPEL Injection</i>: request param value
+   *                   is stored in the database using {@code MongoDbModelService} and
+   *                   {@link com.coremedia.elastic.social.api.comments.Comment#setText(String) Comment#setText(String)}.
+   *                   It's loaded and displayed by Freemarker templates using default escape/encoding of special chars.
+   * @param authorName the author name for anonymous comments (if allowed)
+   *                   <p>
+   *                   Not vulnerable to <i>Spring View SPEL Injection</i>: request param value
+   *                   is stored in the database using {@code MongoDbModelService} and
+   *                   {@link com.coremedia.elastic.social.api.comments.Comment#setAuthorName(String) Comment#setAuthorName(String)}.
+   *                   It's loaded and displayed by Freemarker templates using default escape/encoding of special chars.
+   * @param replyToId  if the comment is the reply to another comment
+   *                   <p>
+   *                   Not vulnerable to <i>Spring View SPEL Injection</i>: request param value
+   *                   is used to identify, reference and load a comment and must match a valid comment ID.
    * @return the newly created comment
    */
   @PostMapping(value= DYNAMIC_PATTERN_COMMENTS)

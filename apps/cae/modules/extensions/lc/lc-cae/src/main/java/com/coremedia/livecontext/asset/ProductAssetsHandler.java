@@ -30,6 +30,7 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -75,7 +76,8 @@ public class ProductAssetsHandler extends PageHandlerBase {
   private static final String REQUEST_PARAM_ATTRIBUTES = "attributes";
   private static final String VIEW_NAME = "asDynaAssets";
 
-  private boolean useStableIds = false;
+  @Value("${livecontext.use-stable-ids:false}")
+  private boolean useStableIds;
 
   /**
    * URI pattern, for URIs like "/dynamic/fragment/productassets/apparelhomepage/asDynaAssets/catalog/221600/111159_black/portrait/all"

@@ -50,6 +50,13 @@ public class LiveContextExternalChannelPreviewHandler extends LiveContextPageHan
   private ExternalNavigationHandler externalNavigationHandler;
   private TreeRelation<Content> treeRelation;
 
+  /**
+   * @param view the name of the view
+   *             <p>
+   *             Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is only used as
+   *             view name and must match an existing view - see {@link ModelAndView#setViewName(String)} and
+   *             {@link com.coremedia.blueprint.cae.handlers.DefaultPageHandler#setViewToBean(Map) DefaultPageHandler#setViewToBean(Map)}.
+   */
   @GetMapping({PREVIEW_URI_PATTERN})
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ID) LiveContextExternalChannelImpl liveContextExternalChannel,
                                     @PathVariable(SEGMENT_NAME) String vanityName,

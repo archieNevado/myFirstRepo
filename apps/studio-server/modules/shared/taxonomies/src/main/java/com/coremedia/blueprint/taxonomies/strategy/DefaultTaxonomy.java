@@ -718,6 +718,9 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
       String formattedName = nodeName.replace('/', '_');
       int renamingIndex = 0;
       //run duplicate check
+      // Checkmarx complains about "Unchecked input for loop condition" here.
+      // That is a false positive.
+      // The Content is checked and the loop itself is correct
       while (content.getParent() != null && content.getParent().getChildDocumentsByName().containsKey(formattedName)) {
         Content child = content.getParent().getChild(formattedName);
         //increase counter for all children that have the same name, exclude active content

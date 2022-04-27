@@ -20,6 +20,7 @@ import com.coremedia.rest.cap.intercept.ContentWriteInterceptorBase;
 import com.coremedia.rest.cap.intercept.ContentWriteRequest;
 import com.coremedia.rest.cap.intercept.impl.ContentWriteRequestImpl;
 import com.coremedia.rest.validation.impl.IssuesImpl;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.usermodel.Picture;
@@ -27,7 +28,6 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFPictureData;
 import org.apache.tika.config.TikaConfig;
 import org.apache.tika.exception.TikaException;
-import org.apache.tika.io.IOUtils;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.metadata.Office;
 import org.apache.tika.parser.AutoDetectParser;
@@ -54,8 +54,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * This is a prototype implementation of a MS Word to CMArticle converter, implemented as
@@ -87,9 +85,6 @@ public class WordUploadInterceptor extends ContentWriteInterceptorBase {
   private static final String PICTURE_CONTENT_TYPE = "CMPicture";
   private static final String PICTURE_BLOB_PROPETY_NAME = "data";
 
-  private static final String TIKA_CONFIG =
-          "<properties><service-loader initializableProblemHandler=\"ignore\"/></properties>";
-
   private final TikaConfig tikaConfig;
   private final ContentRepository repository;
   private final SitesService sitesService;
@@ -102,15 +97,7 @@ public class WordUploadInterceptor extends ContentWriteInterceptorBase {
     this.sitesService = sitesService;
     this.taxonomyResolver = taxonomyResolver;
     this.contentWriteInterceptors = contentWriteInterceptors;
-
-    TikaConfig config;
-    try (InputStream is = new ByteArrayInputStream(TIKA_CONFIG.getBytes(UTF_8))) {
-      config = new TikaConfig(is);
-    } catch (SAXException | IOException | TikaException e) {
-      LOG.warn("Error creating TikaConfig from: " + TIKA_CONFIG, e);
-      config = TikaConfig.getDefaultConfig();
-    }
-    this.tikaConfig = config;
+    this.tikaConfig = TikaConfig.getDefaultConfig();
   }
 
   @Override

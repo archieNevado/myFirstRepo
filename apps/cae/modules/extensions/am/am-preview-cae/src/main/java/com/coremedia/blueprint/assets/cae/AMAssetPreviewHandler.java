@@ -70,6 +70,12 @@ public class AMAssetPreviewHandler extends PageHandlerBase {
     return uriBuilder.buildAndExpand(asset.getContentId());
   }
 
+  /**
+   * @param view the name of the view
+   *             <p>
+   *             Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is only used as
+   *             view name and must match an existing view - see {@link ModelAndView#setViewName(String)}.
+   */
   @GetMapping(value = URI_PATTERN)
   public ModelAndView handleAssetRequest(@PathVariable(ID_VARIABLE) AMAsset asset,
                                          @RequestParam(value = RequestParameters.VIEW_PARAMETER, required = false) String view,

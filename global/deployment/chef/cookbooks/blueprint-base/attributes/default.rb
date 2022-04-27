@@ -116,7 +116,7 @@ default['blueprint']['apps']['commerce-adapter-sfcc']['version'] = '1.4.13'
 
 default['blueprint']['apps']['commerce-adapter-wcs']['group_id'] = 'com.coremedia.commerce.adapter.wcs'
 default['blueprint']['apps']['commerce-adapter-wcs']['artifact_id'] = 'adapter-wcs-app'
-default['blueprint']['apps']['commerce-adapter-wcs']['version'] = '1.6.7'
+default['blueprint']['apps']['commerce-adapter-wcs']['version'] = '1.6.8'
 
 default['blueprint']['solr']['config_zip_version'] = node['blueprint']['default_version']
 

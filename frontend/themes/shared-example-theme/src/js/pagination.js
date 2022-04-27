@@ -4,6 +4,11 @@ import { error, log } from "@coremedia/brick-utils";
 /**
  * Loads more search results (next page) via ajax below the search results.
  *
+ * Static Application Security Testing (SAST) tools like Checkmarx may complain
+ * about the usage of 'nextSearchResults' response, if they assume that it is
+ * untrusted data without proper sanitization or encoding.
+ * Such reports are false positives.
+ *
  * @param {string} url
  */
 function loadPage(url) {

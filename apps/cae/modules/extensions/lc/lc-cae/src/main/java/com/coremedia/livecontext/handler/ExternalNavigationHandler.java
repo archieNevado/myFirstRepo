@@ -83,6 +83,13 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
           + "/" + SEGMENT_CATEGORY
           + "/{" + CATEGORY_SEO_SEGMENT + "}";
 
+  /**
+   * @param view the name of the view
+   *             <p>
+   *             Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is only used as
+   *             view name and must match an existing view - see {@link ModelAndView#setViewName(String)} and
+   *             {@link com.coremedia.blueprint.cae.handlers.DefaultPageHandler#setViewToBean(Map) DefaultPageHandler#setViewToBean(Map)}.
+   */
   @GetMapping(URI_PATTERN)
   public ModelAndView handleRequest(@PathVariable(SHOP_NAME_VARIABLE) String shopSegment,
                                     @PathVariable(CATEGORY_PATH_VARIABLE) String segment,

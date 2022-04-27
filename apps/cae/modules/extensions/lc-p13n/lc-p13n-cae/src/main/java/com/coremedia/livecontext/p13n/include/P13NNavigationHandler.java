@@ -54,6 +54,13 @@ public class P13NNavigationHandler extends PageHandlerBase {
           "/{" + SEGMENT_ROOT + '}' +
           "/{" + ID_VARIABLE + ":" + PATTERN_NUMBER + "}";
 
+  /**
+   * @param view the name of the view
+   *             <p>
+   *             Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is only used as
+   *             view name and must match an existing view - see {@link ModelAndView#setViewName(String)} and
+   *             {@link com.coremedia.blueprint.cae.handlers.DefaultPageHandler#setViewToBean(Map) DefaultPageHandler#setViewToBean(Map)}.
+   */
   @GetMapping(value = DYNAMIC_NAVIGATION_URI_PATTERN)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ROOT) String context,
                                     @PathVariable(ID_VARIABLE) CMLinkable linkable,

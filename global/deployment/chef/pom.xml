@@ -11,7 +11,7 @@
     <commerce-adapter-mock.version>1.6.15</commerce-adapter-mock.version>
     <commerce-adapter-hybris.version>1.4.8</commerce-adapter-hybris.version>
     <commerce-adapter-sfcc.version>1.4.13</commerce-adapter-sfcc.version>
-    <commerce-adapter-wcs.version>1.6.7</commerce-adapter-wcs.version>
+    <commerce-adapter-wcs.version>1.6.8</commerce-adapter-wcs.version>
   </properties>
 
   <!--

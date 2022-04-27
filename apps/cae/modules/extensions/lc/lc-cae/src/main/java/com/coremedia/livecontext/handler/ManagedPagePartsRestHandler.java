@@ -65,6 +65,18 @@ public class ManagedPagePartsRestHandler {
     this.settingsService = settingsService;
   }
 
+  /**
+   * @param storeId the store ID
+   *                <p>
+   *                Not vulnerable to <i>Spring View SPEL Injection</i>: request param value
+   *                is only used as filter predicate  to identify an existing site in
+   *                {@link com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceSiteFinder#findSiteFor(String, Locale) CommerceSiteFinder#findSiteFor(String, Locale)}.
+   * @param locale  the locale
+   *                <p>
+   *                Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is converted to a {@link Locale}
+   *                by Spring default converter and used as filter predicate to identify an existing site in
+   *                {@link com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceSiteFinder#findSiteFor(String, Locale) CommerceSiteFinder#findSiteFor(String, Locale)}.
+   */
   @GetMapping(value = PATH, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ManagedPagePartsSettings> managedPagePartsHandler(@PathVariable("storeId") String storeId,
                                                                           @PathVariable("locale") Locale locale) {

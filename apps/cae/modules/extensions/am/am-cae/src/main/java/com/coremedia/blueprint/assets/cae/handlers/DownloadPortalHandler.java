@@ -194,10 +194,19 @@ public class DownloadPortalHandler {
    * Resolves links to the category overview and asset detail pages. Specific categories and assets are passed
    * as query parameters.
    *
-   * @param navigation the navigation context of the download portal
-   * @param categoryId the id of {@link AMTaxonomy} that represents the given category
-   * @param assetBean  the {@link AMAsset bean} that represents the given asset
-   * @param assetId    the id of {@link AMAsset} that represents the given asset
+   * @param navigation   the navigation context of the download portal
+   * @param categoryBean the {@link AMTaxonomy} that represents the given category
+   *                     <p>
+   *                     Not vulnerable to <i>Spring View SPEL Injection</i>: request param is converted to content
+   *                     bean by {@link com.coremedia.objectserver.web.binding.GenericIdToContentBeanConverter} and
+   *                     its value must be parsable to an integer (see {@link Integer#parseInt(String)}).
+   * @param categoryId   the id of {@link AMTaxonomy} that represents the given category
+   * @param assetBean    the {@link AMAsset bean} that represents the given asset
+   *                     <p>
+   *                     Not vulnerable to <i>Spring View SPEL Injection</i>: request param is converted to content
+   *                     bean by {@link com.coremedia.objectserver.web.binding.GenericIdToContentBeanConverter} and
+   *                     its value must be parsable to an integer (see {@link Integer#parseInt(String)}).
+   * @param assetId      the id of {@link AMAsset} that represents the given asset
    * @return the ModelAndView
    */
   @GetMapping(value = DYNAMIC_PATTERN_PORTAL)
@@ -235,6 +244,10 @@ public class DownloadPortalHandler {
    *
    * @param navigation  the navigation context of the download portal
    * @param subjectBean the {@link CMTaxonomy} that represents the subject
+   *                    <p>
+   *                    Not vulnerable to <i>Spring View SPEL Injection</i>: request param is converted to content
+   *                    bean by {@link com.coremedia.objectserver.web.binding.GenericIdToContentBeanConverter} and
+   *                    its value must be parsable to an integer (see {@link Integer#parseInt(String)}).
    * @return the ModelAndView
    */
   @GetMapping(value = DYNAMIC_PATTERN_PORTAL, params = SUBJECT_REQUEST_PARAMETER_NAME)
@@ -251,8 +264,14 @@ public class DownloadPortalHandler {
   /**
    * Resolves links to the subject taxonomy overview page. The specific taxonomy is passed as query parameter.
    *
-   * @param navigation  the navigation context of the download portal
-   * @param query the query string to use
+   * @param navigation the navigation context of the download portal
+   * @param query      the query string to use
+   *                   <p>
+   *                   Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is passed to
+   *                   {@link #handlePaginatedSearchAssetsRequest(CMChannel, String, Integer, HttpServletResponse)}
+   *                   via a frontend fragment request and there is used for Solr search via
+   *                   {@link org.apache.solr.client.solrj.SolrQuery#setQuery(String) SolrQuery#setQuery(String)} in
+   *                   {@link org.apache.solr.client.solrj.SolrClient#query(String, org.apache.solr.common.params.SolrParams) SolrClient#query(String, SolrParams)}.
    * @return the ModelAndView
    */
   @GetMapping(value = DYNAMIC_PATTERN_PORTAL, params = SEARCH_REQUEST_PARAMETER_NAME)
@@ -322,10 +341,14 @@ public class DownloadPortalHandler {
   /**
    * Resolves links to assets on a subject taxonomy overview page. The specific taxonomy is passed as query parameter.
    *
-   * @param navigation  the navigation context of the download portal
-   * @param query the query string to use
-   * @param page        the page number to render (optional, defaults to 1)
-   * @param response    the servlet response
+   * @param navigation the navigation context of the download portal
+   * @param query      the query string to use
+   *                   <p>
+   *                   Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is used for Solr search
+   *                   via {@link org.apache.solr.client.solrj.SolrQuery#setQuery(String) SolrQuery#setQuery(String)} in
+   *                   {@link org.apache.solr.client.solrj.SolrClient#query(String, org.apache.solr.common.params.SolrParams) SolrClient#query(String, SolrParams)}.
+   * @param page       the page number to render (optional, defaults to 1)
+   * @param response   the servlet response
    * @return the ModelAndView
    */
   @GetMapping(value = DYNAMIC_PATTERN_PAGINATED_ASSETS, params = SEARCH_REQUEST_PARAMETER_NAME)

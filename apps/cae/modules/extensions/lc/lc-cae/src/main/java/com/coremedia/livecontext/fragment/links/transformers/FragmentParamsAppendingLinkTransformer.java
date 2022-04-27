@@ -26,6 +26,8 @@ public class FragmentParamsAppendingLinkTransformer implements LinkTransformer {
     parameterAppender.setParameterName(FRAGMENT_CONTEXT_PARAMETER);
   }
 
+  // Checkmarx complains about insecure XML parsing wrt. XXE here.
+  // That is a false positive.  This method does no XML processing whatsoever.
   @Override
   public String transform(String source, Object bean, String view, @NonNull HttpServletRequest request,
                           @NonNull HttpServletResponse response, boolean forRedirect) {

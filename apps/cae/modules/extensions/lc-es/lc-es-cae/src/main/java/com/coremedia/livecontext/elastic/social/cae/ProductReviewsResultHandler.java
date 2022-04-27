@@ -19,6 +19,7 @@ import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
+import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.fragment.FragmentContextProvider;
@@ -29,6 +30,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -75,6 +77,20 @@ public class ProductReviewsResultHandler extends AbstractReviewsResultHandler {
 
   private CatalogAliasTranslationService catalogAliasTranslationService;
 
+  @Value("${livecontext.use-stable-ids:false}")
+  private boolean useStableIds;
+
+  /**
+   * @param productId the ID of the reviewed product
+   *                  <p>
+   *                  Not vulnerable to <i>Spring View SPEL Injection</i>: request param is used to
+   *                  identify and load a content and its value must match a valid content ID - see
+   *                  {@link com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper#parseCommerceId(String) CommerceIdParserHelper#parseCommerceId(String)}
+   * @param view      the name of the view
+   *                  <p>
+   *                  Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is only used as
+   *                  view name and must match an existing view - see {@link ModelAndView#setViewName(String)}.
+   */
   @GetMapping(value = DYNAMIC_PATTERN_PRODUCT_REVIEWS)
   public ModelAndView getReviews(@PathVariable(CONTEXT_ID) String contextId,
                                  @RequestParam(value = PRODUCT_ID, required = true) String productId,
@@ -83,6 +99,31 @@ public class ProductReviewsResultHandler extends AbstractReviewsResultHandler {
     return handleGetReviews(SiteHelper.getSiteFromRequest(request), contextId, productId, view);
   }
 
+  /**
+   * @param productId the ID of the reviewed product
+   *                  <p>
+   *                  Not vulnerable to <i>Spring View SPEL Injection</i>: request param is used to
+   *                  identify and load a content and its value must match a valid content ID - see
+   *                  {@link com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper#parseCommerceId(String) CommerceIdParserHelper#parseCommerceId(String)}
+   * @param text      the review text
+   *                  <p>
+   *                  Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is stored in the database
+   *                  using {@link com.coremedia.elastic.core.mongodb.models.MongoDbModelService MongoDbModelService} and
+   *                  {@link com.coremedia.elastic.social.api.comments.Comment#setText(String) Comment#setText(String)}.
+   *                  It's loaded and displayed by Freemarker templates using default escape/encoding of special chars.
+   * @param title     the review title
+   *                  <p>
+   *                  Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is stored in the database
+   *                  using {@link com.coremedia.elastic.core.mongodb.models.MongoDbModelService MongoDbModelService} and
+   *                  {@link com.coremedia.elastic.social.api.reviews.Review#setTitle(String) Review#setTitle(String)}.
+   *                  It's loaded and displayed by Freemarker templates using default escape/encoding of special chars.
+   * @param rating    the review rating
+   *                  <p>
+   *                  Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is converted
+   *                  to an integer by Spring default converter and stored in the database using
+   *                  {@link com.coremedia.elastic.core.mongodb.models.MongoDbModelService MongoDbModelService} and
+   *                  {@link com.coremedia.elastic.social.api.reviews.Review#setRating(int) Review#setRating(int)}.
+   */
   @PostMapping(value = DYNAMIC_PATTERN_PRODUCT_REVIEWS)
   public ModelAndView createReview(@PathVariable(CONTEXT_ID) String contextId,
                                    @RequestParam(value = PRODUCT_ID, required = true) String productId,
@@ -175,8 +216,12 @@ public class ProductReviewsResultHandler extends AbstractReviewsResultHandler {
             .flatMap(id -> catalogAliasTranslationService.getCatalogAliasForId(id, storeContext))
             .orElse(DEFAULT_CATALOG_ALIAS);
 
-    CommerceId techId = connection.getIdProvider().formatProductTechId(catalogAlias, productTechId);
-    Product product = connection.getCatalogService().findProductById(techId, storeContext);
+    CommerceIdProvider idProvider = connection.getIdProvider();
+    CommerceId productId = useStableIds
+            ? idProvider.formatProductId(catalogAlias, productTechId)
+            : idProvider.formatProductTechId(catalogAlias, productTechId);
+
+    Product product = connection.getCatalogService().findProductById(productId, storeContext);
 
     if (product instanceof ProductVariant) {
       // we only use products as targets for reviews, no product variants (SKUs)

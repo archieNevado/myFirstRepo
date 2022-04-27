@@ -51,13 +51,13 @@ function loadSearchResultPageClickHandler($target) {
   $target.on("submit", "[data-cm-search-form-submit]", function (event) {
     event.preventDefault();
     let query = $("[data-cm-search-form-input]").val();
-    // update search query input field, if suggestion is available
+    // update search query input field in header
     $("[name=query]").val(query);
-    // replace query string in search link with new qquery
+    // replace query string in search link with new query
     let link = $(this).data("cm-search-form-submit");
     let re = new RegExp("([?&])query=.*?(&|$)", "i");
     if (link.match(re)) {
-      link = link.replace(re, "$1" + "query=" + query + "$2");
+      link = link.replace(re, "$1" + "query=" + encodeURIComponent(query) + "$2");
     }
     loadSearchResultPage(
       link,

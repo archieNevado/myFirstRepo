@@ -20,21 +20,23 @@ export const FRAGMENT_IDENTIFIER = "cm-fragment";
  * Replace "$nextUrl$" in all data-href and store as href attribute.
  * Assumes that if the page contains a form with a nextUrl hidden input field, the form is already loaded.
  *
+ * Static Application Security Testing (SAST) tools like Checkmarx may complain
+ * about the usage of the 'nextUrl' parameter, if they assume that it is used
+ * without proper sanitization or encoding. Such reports are false positives.
+ * It will be encoded via encodeURIComponent(nextUrl)
+ *
  * @param {jQuery} $target
  */
 export function renderFragmentHrefs($target) {
   let nextUrl;
   if (
-    window.location.pathname.match(/^\/dynamic\//) ||
-    window.location.pathname.match(/^\/blueprint\/servlet\/dynamic\//)
+    window.location.pathname.match(/^\/dynamic\//)
   ) {
     // we are inside a web flow, try to find "nextUrl" hidden input field value, else leave nextUrl blank
     nextUrl = $('input:hidden[name="nextUrl"]').val() || "";
   } else {
     // for all other pages, take the current page as the next page after login
     nextUrl = window.location.href;
-    //remove current scheme in case the scheme is changed before the redirect
-    nextUrl = nextUrl.replace(/^(http|https):(.+)/, "$2");
   }
 
   const selector = "a[data-href]";

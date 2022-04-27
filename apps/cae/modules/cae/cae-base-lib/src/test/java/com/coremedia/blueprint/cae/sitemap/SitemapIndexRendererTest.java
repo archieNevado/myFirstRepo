@@ -172,9 +172,15 @@ public class SitemapIndexRendererTest {
     }
   }
 
+  // The Checkmarx report assumes an "Input Path Not Canonicalized" issue here.
+  // This is a false positive.
+  // 1.  It is only test code.
+  // 2.  Even if the system is hacked and java.io.tmpdir is changed, there is
+  //     no relevant file or directory "coremedia-<timestamp>-<random>"
+  //     to tamper with anywhere.
   private File getTargetDir() {
     File tmpDir = new File(System.getProperty("java.io.tmpdir"));
-    return new File(tmpDir, "coremedia-" + uniqueTmpdirPostfix);
+    return new File(tmpDir, "coremedia" + uniqueTmpdirPostfix);
   }
 
   private File getOutputDir() {

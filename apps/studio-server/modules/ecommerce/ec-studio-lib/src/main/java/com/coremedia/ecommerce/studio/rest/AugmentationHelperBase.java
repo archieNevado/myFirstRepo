@@ -144,6 +144,9 @@ abstract class AugmentationHelperBase<T> {
   protected Category getRootCategory(@NonNull CommerceBean commerceBean) {
     Category currentCategory = getCategoryForCommerceBean(commerceBean);
 
+    // Checkmarx complains about "Unchecked input for loop condition" here.
+    // That is a false positive.
+    // The CommerceBean used here is created through a REST entity mapping, therefore already checked before used.
     while (!currentCategory.isRoot()) {
       Category parent = currentCategory.getParent();
       if (parent == null) {

@@ -69,6 +69,12 @@ public class P13NPlacementHandler extends PageHandlerBase {
 
   private ValidationService validationService;
 
+  /**
+   * @param view the name of the view
+   *             <p>
+   *             Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is only used as
+   *             view name and must match an existing view - see {@link ModelAndView#setViewName(String)}.
+   */
   @GetMapping(value = DYNAMIC_PLACEMENT_URI_PATTERN)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ROOT) String context,
                                     @PathVariable(ID_VARIABLE) CMObject cmObject,

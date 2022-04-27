@@ -37,6 +37,12 @@ public class ReviewsResultHandler extends AbstractReviewsResultHandler {
           "/{" + CONTEXT_ID + "}" +
           "/{" + ID + "}";
 
+  /**
+   * @param view the name of the view
+   *             <p>
+   *             Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is only used as
+   *             view name and must match an existing view - see {@link ModelAndView#setViewName(String)}.
+   */
   @GetMapping(value = DYNAMIC_PATTERN_REVIEWS)
   public ModelAndView getReviews(@PathVariable(CONTEXT_ID) String contextId,
                                  @PathVariable(ID) String targetId,
@@ -45,6 +51,25 @@ public class ReviewsResultHandler extends AbstractReviewsResultHandler {
     return handleGetReviews(SiteHelper.getSiteFromRequest(request), contextId, targetId, view);
   }
 
+  /**
+   * @param text      the review text
+   *                  <p>
+   *                  Not vulnerable to <i>Spring View SPEL Injection</i>: request param value
+   *                  is stored in the database using {@code MongoDbModelService} and
+   *                  {@link com.coremedia.elastic.social.api.comments.Comment#setText(String) Comment#setText(String)}.
+   *                  It's loaded and displayed by Freemarker templates using default escape/encoding of special chars.
+   * @param title     the review title
+   *                  <p>
+   *                  Not vulnerable to <i>Spring View SPEL Injection</i>: request param value
+   *                  is stored in the database using {@code MongoDbModelService} and
+   *                  {@link com.coremedia.elastic.social.api.reviews.Review#setTitle(String) Review#setTitle(String)}.
+   *                  It's loaded and displayed by Freemarker templates using default escape/encoding of special chars.
+   * @param rating    the review rating
+   *                  <p>
+   *                  Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is converted to an
+   *                  integer by Spring default converter and stored in the database using {@code MongoDbModelService}
+   *                  and {@link com.coremedia.elastic.social.api.reviews.Review#setRating(int) Review#setRating(int)}.
+   */
   @PostMapping(value = DYNAMIC_PATTERN_REVIEWS)
   public ModelAndView createReview(@PathVariable(CONTEXT_ID) String contextId,
                                    @PathVariable(ID) String targetId,

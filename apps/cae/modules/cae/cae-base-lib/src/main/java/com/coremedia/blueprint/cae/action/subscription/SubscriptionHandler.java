@@ -64,6 +64,11 @@ public class SubscriptionHandler {
 
   /**
    * Handles subscription request
+   *
+   * @param redirectUri the redirect URI
+   *                    <p>
+   *                    Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is
+   *                    only used as redirect URL - see {@link RedirectView#RedirectView(String)}.
    */
   @PostMapping(value=SUBSCRIBE_URI)
   public RedirectView handleSubscription(@RequestParam(value=RETURN_PARAMETER, required=true) String redirectUri,
@@ -90,9 +95,13 @@ public class SubscriptionHandler {
   }
 
 
-
   /**
    * Handles unsubscription request
+   *
+   * @param redirectUri the redirect URI
+   *                    <p>
+   *                    Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is
+   *                    only used as redirect URL - see {@link RedirectView#RedirectView(String)}.
    */
   @PostMapping(value=UNSUBSCRIBE_URI)
   public RedirectView handleUnsubscription(@RequestParam(value=RETURN_PARAMETER, required=true) String redirectUri,
@@ -119,6 +128,10 @@ public class SubscriptionHandler {
 
   // ===================================
 
+  // Checkmarx complains about enabling "Session Fixation" here.
+  // That is a false positive.  This method does not perform
+  // user authentication, but only adds an attribute to the session
+  // provided by the Spring framework.
   /**
    * Performs subscription internally:
    * FAKE implementation: Just store the email in the current user's session

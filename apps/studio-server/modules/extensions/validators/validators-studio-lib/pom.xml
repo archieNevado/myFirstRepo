@@ -244,72 +244,17 @@
     <dependency>
       <groupId>org.apache.tika</groupId>
       <artifactId>tika-core</artifactId>
-      <exclusions>
-        <!-- exclude outdated artifact; we use com.sun.activation:jakarta.activation instead, which is declared separately -->
-        <exclusion>
-          <groupId>javax.activation</groupId>
-          <artifactId>activation</artifactId>
-        </exclusion>
-        <!-- exclude outdated artifact; we use jakarta.xml.bind:jakarta.xml.bind-api instead, which is declared separately -->
-        <exclusion>
-          <groupId>javax.xml.bind</groupId>
-          <artifactId>jaxb-api</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
       <groupId>org.apache.tika</groupId>
-      <artifactId>tika-parsers</artifactId>
-      <scope>runtime</scope>
-      <exclusions>
-        <!-- exclude outdated artifact; we use com.sun.activation:jakarta.activation instead, which is declared separately -->
-        <exclusion>
-          <groupId>javax.activation</groupId>
-          <artifactId>activation</artifactId>
-        </exclusion>
-        <!-- exclude javax.annotation-api, we use jakarta.annotation-api as defined separately -->
-        <exclusion>
-          <groupId>javax.annotation</groupId>
-          <artifactId>javax.annotation-api</artifactId>
-        </exclusion>
-        <!-- exclude outdated artifact; we use jakarta.xml.bind:jakarta.xml.bind-api instead, which is declared separately -->
-        <exclusion>
-          <groupId>javax.xml.bind</groupId>
-          <artifactId>jaxb-api</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <!-- replacement for excluded transitive dependency org.tallison:metadata-extractor of tika-parsers -->
-      <groupId>com.drewnoakes</groupId>
-      <artifactId>metadata-extractor</artifactId>
+      <artifactId>tika-parser-microsoft-module</artifactId>
       <scope>runtime</scope>
     </dependency>
 
     <dependency>
-      <!-- this is also a replacement for tika's excluded transitive activation dependencies -->
       <groupId>com.sun.activation</groupId>
       <artifactId>jakarta.activation</artifactId>
-    </dependency>
-    <dependency>
-      <!-- this a replacement for tika-parser's excluded transitive javax.annotation-api dependency -->
-      <groupId>jakarta.annotation</groupId>
-      <artifactId>jakarta.annotation-api</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <!-- this is a replacement for tika's excluded transitive jaxb-api dependency -->
-      <groupId>jakarta.xml.bind</groupId>
-      <artifactId>jakarta.xml.bind-api</artifactId>
-      <scope>runtime</scope>
-      <exclusions>
-        <!-- exclude activation-api, we use com.sun.activation:jakarta.activation instead, which also contains the API part -->
-        <exclusion>
-          <groupId>jakarta.activation</groupId>
-          <artifactId>jakarta.activation-api</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
   </dependencies>
 

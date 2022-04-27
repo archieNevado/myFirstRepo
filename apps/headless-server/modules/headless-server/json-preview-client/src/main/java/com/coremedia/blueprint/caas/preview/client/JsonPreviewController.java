@@ -96,12 +96,34 @@ public class JsonPreviewController {
     this.persistentPreviewQueries = new PersistentPreviewQueries("/previewclient/graphql/", Stream.of(QUERY_CONTENT, QUERY_COMMERCE));
   }
 
+  /**
+   * @param request     the request
+   *                    <p>
+   *                    <i>Reflected XSS</i>:
+   *                    Not vulnerable, the request parameter value is not passed from the user, but a reference to the request of spring.
+   * @param numericId   the numeric id of the item
+   *                    <p>
+   *                    <i>Reflected XSS, SSRF</i>:
+   *                    Not vulnerable:<p>
+   *                    - the numericId parameter value is checked, if is either a valid uuid or a valid
+   *                    contentId, before creating an object of it, that is used for further processing.<p>
+   *                    - the numericId parameter value is Json serialized and passed to a post request entity.
+   * @param type        the type
+   *                    <p>
+   *                    <i>Reflected XSS, SSRF</i>:
+   *                    Not vulnerable: the type parameter value is Json serialized and passed to a post request entity.
+   * @param previewDate the preview date
+   *                    <p>
+   *                    <i>Reflected XSS, SSRF</i>:
+   *                    Not vulnerable: the previewDate is transformed into a ZonedDateTime via ZonedDateTime#parse and passed to a
+   *                    post request header value.
+   */
   @GetMapping(PREVIEW_PATH + "/{" + PARAM_NUMERIC_ID + "}/{" + PARAM_TYPE + "}")
   @Timed
   public ResponseEntity<String> previewContent(HttpServletRequest request,
-                                        @ApiParam(value = "The id of the item", required = true) @PathVariable String numericId,
-                                        @ApiParam(value = "The type of the item", required = true) @PathVariable String type,
-                                        @ApiParam(value = "The preview date") @RequestParam(required = false, name = "previewDate") String previewDate) {
+                                               @ApiParam(value = "The id of the item", required = true) @PathVariable String numericId,
+                                               @ApiParam(value = "The type of the item", required = true) @PathVariable String type,
+                                               @ApiParam(value = "The preview date") @RequestParam(required = false, name = "previewDate") String previewDate) {
 
     Optional<AugmentedObject> augmentedObject = AugmentedObject.of(numericId, contentRepository, sitesService);
     if (augmentedObject.isPresent()) {
@@ -115,6 +137,25 @@ public class JsonPreviewController {
     return executePreviewRequest(request, previewDate, previewRequestParams, QUERY_CONTENT);
   }
 
+  /**
+   * @param request     the request
+   *                    <p>
+   *                    <i>Reflected XSS</i>:
+   *                    Not vulnerable, the request parameter value is not passed from the user, but a reference to the request of spring.
+   * @param commerceId  the commerce id
+   *                    <p>
+   *                    <i>Reflected XSS, SSRF</i>:
+   *                    Not vulnerable, the commerceId parameter value is Json serialized and passed to a post request entity.
+   * @param siteId      the site id
+   *                    <p>
+   *                    <i>Reflected XSS, SSRF</i>:
+   *                    Not vulnerable, the siteId parameter value is Json serialized and passed to a post request entity.
+   * @param previewDate the preview date
+   *                    <p>
+   *                    <i>Reflected XSS, SSRF</i>:
+   *                    Not vulnerable: the previewDate is transformed into a ZonedDateTime via ZonedDateTime#parse and passed to a
+   *                    post request header value.
+   */
   @GetMapping(PREVIEW_PATH)
   @Timed
   public ResponseEntity<String> previewCommerceBean(HttpServletRequest request,
@@ -170,6 +211,12 @@ public class JsonPreviewController {
     return templateEngine.process(TEMPLATE_PATH, ctx);
   }
 
+  /**
+   * <i>Reflected XSS, SSRF</i>:
+   * Not vulnerable<p>
+   * - the header value is passed to a post request header.<p>
+   * - the cookie value is passed to a post request header.
+   */
   private static HttpResponse executePostRequest(HttpServletRequest request, List<String> forwardHeaderNames,
                                                  boolean forwardCookies, String caasServerEndpoint,
                                                  Map<String, String> variables, String query, String previewDate,

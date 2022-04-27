@@ -27,6 +27,7 @@ import com.coremedia.objectserver.web.taglib.MetadataTagSupport;
 import com.google.common.collect.ImmutableMap;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Currency;
 import java.util.Locale;
@@ -58,6 +59,9 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
 
   private SitesService sitesService;
   private ContentBeanFactory contentBeanFactory;
+
+  @Value("${livecontext.use-stable-ids:false}")
+  private boolean useStableIds;
 
   public AugmentationService getCategoryAugmentationService() {
     return categoryAugmentationService;
@@ -158,24 +162,30 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
     CatalogService catalogService = connection.getCatalogService();
     CatalogAlias catalogAlias = storeContext.getCatalogAlias();
 
-    String productId = parameters.getProductId();
-    String categoryId = parameters.getCategoryId();
+    String productIdParam = parameters.getProductId();
+    String categoryIdParam = parameters.getCategoryId();
 
     CommerceBean commerceBean;
     Content content = null;
 
-    if (!isEmpty(productId)) {
-      CommerceId productTechId = idProvider.formatProductTechId(catalogAlias, productId);
-      commerceBean = catalogService.findProductById(productTechId, storeContext);
+    if (!isEmpty(productIdParam)) {
+      CommerceId productId = useStableIds
+              ? idProvider.formatProductId(catalogAlias, productIdParam)
+              : idProvider.formatProductTechId(catalogAlias, productIdParam);
+
+      commerceBean = catalogService.findProductById(productId, storeContext);
       if (commerceBean instanceof ProductVariant) {
         // variants are not augmented, we need to check its parent
         Product parent = ((ProductVariant) commerceBean).getParent();
         commerceBean = parent != null ? parent : commerceBean;
       }
       content = productAugmentationService.getContent(commerceBean);
-    } else if (!isEmpty(categoryId)) {
-      CommerceId categoryTechId = idProvider.formatCategoryTechId(catalogAlias, categoryId);
-      commerceBean = catalogService.findCategoryById(categoryTechId, storeContext);
+    } else if (!isEmpty(categoryIdParam)) {
+      CommerceId categoryId = useStableIds
+              ? idProvider.formatCategoryId(catalogAlias, categoryIdParam)
+              : idProvider.formatCategoryTechId(catalogAlias, categoryIdParam);
+
+      commerceBean = catalogService.findCategoryById(categoryId, storeContext);
       content = categoryAugmentationService.getContent(commerceBean);
     }
 
