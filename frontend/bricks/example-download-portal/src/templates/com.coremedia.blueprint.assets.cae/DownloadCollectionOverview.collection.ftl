@@ -1,3 +1,4 @@
+<@cm.responseHeader name="Content-Type" value="text/html; charset=UTF-8"/>
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.assets.cae.DownloadCollectionOverview" -->
 <#-- @ftlvariable name="_csrf" type="org.springframework.security.web.csrf.CsrfToken" -->
 

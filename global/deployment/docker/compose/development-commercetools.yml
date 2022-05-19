@@ -5,8 +5,6 @@ services:
   commerce-adapter-commercetools:
     environment:
       SPRING_APPLICATION_NAME: 'commerce-adapter-commercetools'
-    labels:
-      traefik.enable: true
 
   traefik:
     environment:

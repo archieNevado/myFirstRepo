@@ -49,30 +49,32 @@ class CatalogLinkPropertyFieldTest extends AbstractProductTeaserComponentsTest {
       this.#checkProductLinkDisplaysValue(AbstractCatalogTest.ORANGES_NAME),
       //still nothing selected
       this.#checkRemoveButtonDisabled(),
+      this.#checkRemoveButtonNotHidden(),
       this.#openContextMenu(), //this selects the link
       this.#checkContextMenuOpened(),
       this.#checkRemoveContextMenuEnabled(),
+      this.#checkRemoveContextMenuNotHidden(),
       this.#checkRemoveButtonEnabled(),
       this.setForceReadOnly(true),
-      this.#openContextMenu(), //this selects the link
-      this.#checkRemoveButtonDisabled(),
+      this.#checkRemoveButtonHidden(),
+      this.#checkRemoveContextMenuHidden(),
       //valid selected link can be always opened
-      this.#checkRemoveContextMenuDisabled(),
+      this.#openContextMenu(), //this selects the link
       this.setLink(AbstractCatalogTest.ORANGES_ID + "503"),
       this.#checkCatalogLinkDisplaysErrorValue(AbstractCatalogTest.ORANGES_EXTERNAL_ID + "503"),
       this.setLink(AbstractCatalogTest.ORANGES_ID + "404"),
       this.#checkCatalogLinkDisplaysErrorValue(AbstractCatalogTest.ORANGES_EXTERNAL_ID + "404"),
       this.#openContextMenu(), //this selects the link
       //still forceReadOnly = true
-      this.#checkRemoveButtonDisabled(),
+      this.#checkRemoveButtonHidden(),
       //invalid link --> cannot open
-      this.#checkRemoveContextMenuDisabled(),
+      this.#checkRemoveContextMenuHidden(),
       //invalid link --> cannot open
       this.setForceReadOnly(false),
       this.#openContextMenu(), //this selects the link
       this.#checkRemoveButtonEnabled(),
       //invalid link --> cannot open
-      this.#checkRemoveContextMenuEnabled(),
+      this.#checkRemoveContextMenuNotHidden(),
       //invalid link --> cannot open
       this.setLink(AbstractCatalogTest.ORANGES_SKU_ID),
       this.#checkSkuLinkDisplaysValue(AbstractCatalogTest.ORANGES_SKU_NAME),
@@ -82,13 +84,14 @@ class CatalogLinkPropertyFieldTest extends AbstractProductTeaserComponentsTest {
       this.#checkRemoveContextMenuEnabled(),
       this.setForceReadOnly(true),
       this.#openContextMenu(), //this selects the link
-      this.#checkRemoveButtonDisabled(),
+      this.#checkRemoveButtonHidden(),
       //valid selected link can be always opened
-      this.#checkRemoveContextMenuDisabled(),
+      this.#checkRemoveContextMenuHidden(),
       this.setForceReadOnly(false),
       this.setLink(null),
       this.#checkCatalogLinkIsEmpty(),
       this.#checkRemoveButtonDisabled(),
+      this.#checkRemoveContextMenuDisabled(),
     );
   }
 
@@ -161,7 +164,6 @@ class CatalogLinkPropertyFieldTest extends AbstractProductTeaserComponentsTest {
     return new Step("check remove button disabled",
       (): boolean =>
         this.#removeButton.disabled,
-
     );
   }
 
@@ -169,7 +171,20 @@ class CatalogLinkPropertyFieldTest extends AbstractProductTeaserComponentsTest {
     return new Step("check remove button enabled",
       (): boolean =>
         !this.#removeButton.disabled,
+    );
+  }
 
+  #checkRemoveButtonHidden(): Step {
+    return new Step("check remove button hidden",
+      (): boolean =>
+        this.#removeButton.hidden,
+    );
+  }
+
+  #checkRemoveButtonNotHidden(): Step {
+    return new Step("check remove button not hidden",
+      (): boolean =>
+        !this.#removeButton.hidden,
     );
   }
 
@@ -188,6 +203,20 @@ class CatalogLinkPropertyFieldTest extends AbstractProductTeaserComponentsTest {
         //TODO: make this check work again
         true,
 
+    );
+  }
+
+  #checkRemoveContextMenuHidden(): Step {
+    return new Step("check remove context menu hidden",
+      (): boolean =>
+        this.#removeMenuItem.hidden,
+    );
+  }
+
+  #checkRemoveContextMenuNotHidden(): Step {
+    return new Step("check remove context menu not hidden",
+      (): boolean =>
+        !this.#removeMenuItem.hidden,
     );
   }
 

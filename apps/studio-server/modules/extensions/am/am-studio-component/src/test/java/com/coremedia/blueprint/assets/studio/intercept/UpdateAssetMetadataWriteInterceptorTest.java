@@ -30,13 +30,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.inject.Inject;
 import java.io.File;
 import java.nio.file.Files;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertFalse;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertFalse;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = UpdateAssetMetadataWriteInterceptorTest.LocalConfig.class)
@@ -60,7 +59,10 @@ public class UpdateAssetMetadataWriteInterceptorTest {
     interceptor.setInterceptingSubtypes(true);
     interceptor.setPriority(1);
 
-    testAsset = repository.createChild("/Assets/testAsset", "AMPictureAsset", Collections.<String, Object>emptyMap());
+    testAsset = repository.createContentBuilder()
+            .name("/Assets/testAsset")
+            .type("AMPictureAsset")
+            .create();
   }
 
   @After

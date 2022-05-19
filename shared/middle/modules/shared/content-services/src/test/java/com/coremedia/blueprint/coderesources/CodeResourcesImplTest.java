@@ -11,7 +11,6 @@ import org.junit.runner.RunWith;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -158,9 +157,6 @@ public class CodeResourcesImplTest {
 
   @Configuration(proxyBeanMethods = false)
   @Import(XmlRepoConfiguration.class)
-  @ImportResource(value = {
-          "classpath:/com/coremedia/cap/common/xml/uapi-xml-services.xml"
-  }, reader = com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader.class)
   static class CodeResourcesTestConfiguration {
 
     @Bean

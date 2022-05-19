@@ -27,12 +27,11 @@ class ReadOnlyCatalogLinkPropertyField extends ReadOnlyCatalogLinkPropertyFieldB
         Config(CatalogLinkPropertyField, {
           itemId: ReadOnlyCatalogLinkPropertyFieldBase.READ_ONLY_CATALOG_LINK_ITEM_ID,
           bindTo: config.bindTo,
-          forceReadOnlyValueExpression: ValueExpressionFactory.createFromValue(true),
+          forceReadOnlyValueExpression: ValueExpressionFactory.TRUE_VALUE_EXPRESSION,
           hideDropArea: true,
           propertyName: config.propertyName,
           showThumbnails: config.showThumbnails,
           emptyText: config.emptyText,
-          hideRemove: true,
         }),
         Config(DisplayField, {
           itemId: ReadOnlyCatalogLinkPropertyFieldBase.READ_ONLY_CATALOG_LINK_EMPTY_DISPLAYFIELD_ITEM_ID,

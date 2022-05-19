@@ -21,13 +21,15 @@
   <import resource="classpath:/com/coremedia/blueprint/base/tree/bpbase-treerelation-services.xml"/>
 
   <import resource="classpath:/com/coremedia/cap/transform/transform-services.xml"/>
-  <import resource="classpath:/framework/spring/mediatransform.xml"/>
   <import resource="blueprint-contentbeans-settings.xml"/>
   <import resource="blueprint-services.xml"/>
 
-  <context:component-scan base-package="com.coremedia.blueprint.coderesources" />
-  <context:component-scan base-package="com.coremedia.blueprint.viewtype.configuration"/>
   <context:annotation-config/>
+
+  <bean class="com.coremedia.blueprint.coderesources.ThemeServiceConfiguration"/>
+  <bean class="com.coremedia.blueprint.image.transformation.ImageTransformationConfiguration"/>
+  <bean class="com.coremedia.blueprint.viewtype.configuration.ViewtypeServiceConfiguration"/>
+  <bean class="com.coremedia.cap.transform.BlobTransformerConfiguration"/>
 
   <bean id="mediaTransformer" class="com.coremedia.transform.impl.ExpressionBasedBeanBlobTransformer">
     <property name="blobTransformer" ref="blobTransformer"/>

@@ -28,6 +28,7 @@ import com.coremedia.caas.headless_server.plugin_support.extensionpoints.CaasWir
 import com.coremedia.caas.headless_server.plugin_support.extensionpoints.CopyToContextParameter;
 import com.coremedia.caas.headless_server.plugin_support.extensionpoints.FilterPredicate;
 import com.coremedia.caas.headless_server.plugin_support.extensionpoints.GrapQLLinkComposer;
+import com.coremedia.caas.headless_server.plugin_support.extensionpoints.PluginSchemaGenerator;
 import com.coremedia.caas.headless_server.plugin_support.extensionpoints.UriLinkComposer;
 import com.coremedia.caas.link.ContentLink;
 import com.coremedia.caas.link.ContentLinkComposer;
@@ -177,7 +178,6 @@ import org.springframework.context.expression.MapAccessor;
 import org.springframework.context.support.ConversionServiceFactoryBean;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.core.convert.converter.GenericConverter;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.expression.BeanResolver;
@@ -224,6 +224,7 @@ import static com.coremedia.caas.headless_server.plugin_support.PluginSupport.QU
 import static com.coremedia.caas.headless_server.plugin_support.PluginSupport.QUALIFIER_PLUGIN_FILTER_PREDICATE;
 import static com.coremedia.caas.headless_server.plugin_support.PluginSupport.QUALIFIER_PLUGIN_LINK_COMPOSERS_GRAPHQL;
 import static com.coremedia.caas.headless_server.plugin_support.PluginSupport.QUALIFIER_PLUGIN_LINK_COMPOSERS_URI;
+import static com.coremedia.caas.headless_server.plugin_support.PluginSupport.QUALIFIER_PLUGIN_SCHEMA_GENERATOR;
 import static com.coremedia.caas.headless_server.plugin_support.PluginSupport.QUALIFIER_PLUGIN_WIRING_FACTORIES;
 import static com.coremedia.caas.web.CaasWebConfig.ATTRIBUTE_NAMES_TO_GQL_CONTEXT;
 import static com.coremedia.caas.web.CaasWebConfig.FORWARD_HEADER_MAP;
@@ -700,9 +701,9 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public ConversionServiceFactoryBean graphQlConversionService(Set<Converter<?, ?>> converters, Set<GenericConverter> genericConverters, @Qualifier(PluginSupport.QUALIFIER_PLUGIN_CONVERTERS) Set<Converter<?, ?>> pluginInputTypeConverters) {
+  public ConversionServiceFactoryBean graphQlConversionService(Set<Converter<?, ?>> converters, @Qualifier(PluginSupport.QUALIFIER_PLUGIN_CONVERTERS) Set<Converter<?, ?>> pluginInputTypeConverters) {
     ConversionServiceFactoryBean conversionServiceFactoryBean = new ConversionServiceFactoryBean();
-    conversionServiceFactoryBean.setConverters(Stream.of(converters, genericConverters, pluginInputTypeConverters).flatMap(Collection::stream).collect(Collectors.toSet()));
+    conversionServiceFactoryBean.setConverters(Stream.of(converters, pluginInputTypeConverters).flatMap(Collection::stream).collect(Collectors.toSet()));
     return conversionServiceFactoryBean;
   }
 
@@ -916,15 +917,28 @@ public class CaasConfig implements WebMvcConfigurer {
   public GraphQLSchema graphQLSchema(Map<String, SchemaDirectiveWiring> directiveWirings,
                                      TypeDefinitionRegistry typeRegistry,
                                      @Qualifier("rootModelMapper") FilteringModelMapper modelMapper,
-                                     @Qualifier("caasWiringFactories") List<WiringFactory> wiringFactories) {
+                                     @Qualifier("caasWiringFactories") List<WiringFactory> wiringFactories,
+                                     @Qualifier(QUALIFIER_PLUGIN_SCHEMA_GENERATOR) List<PluginSchemaGenerator> schemaGeneratorList) {
     WiringFactory wiringFactory = new ModelMappingWiringFactory(modelMapper, wiringFactories);
     RuntimeWiring.Builder builder = RuntimeWiring.newRuntimeWiring()
             .wiringFactory(wiringFactory);
     // register the directive implementations taking their bean name as directive name
     directiveWirings.forEach(builder::directive);
     RuntimeWiring wiring = builder.build();
-    SchemaGenerator schemaGenerator = new SchemaGenerator();
-    return schemaGenerator.makeExecutableSchema(typeRegistry, wiring);
+
+    return schemaGeneratorList.stream()
+            // Only one schema generator may be active at a time. In case multiple plugins try to register its schema generator,
+            // only one of them will be used.
+            .findFirst().map(pluginSchemaGenerator -> {
+                      LOG.info("Schema Generator '{}' loaded via Plugin is used.", pluginSchemaGenerator.getClass().getName());
+                      return pluginSchemaGenerator.createGraphQLSchema(builder, typeRegistry);
+                    }
+            ).orElseGet(() -> {
+              LOG.info("Default Schema Generator is used.");
+              SchemaGenerator schemaGenerator = new SchemaGenerator();
+              return schemaGenerator.makeExecutableSchema(typeRegistry, wiring);
+            }
+    );
   }
 
   @Bean

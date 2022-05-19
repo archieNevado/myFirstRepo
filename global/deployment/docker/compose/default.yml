@@ -201,8 +201,6 @@ services:
       << : *default-boot-envs
       ENVIRONMENT_FQDN: ${ENVIRONMENT_FQDN:-docker.localhost}
       MONGODB_CLIENTURI: mongodb://coremedia:coremedia@mongodb:27017
-    labels:
-      traefik.enable: true
     healthcheck: *default-boot-healthcheck
 
   studio-client:
@@ -212,8 +210,6 @@ services:
     logging: *default-logging
     networks:
       - backend
-    labels:
-      traefik.enable: true
 
   cae-preview:
     image: ${REPOSITORY_PREFIX:-coremedia}/cae-preview:${CAE_PREVIEW_TAG:-latest}
@@ -226,8 +222,6 @@ services:
       << : *default-boot-envs
       ENVIRONMENT_FQDN: ${ENVIRONMENT_FQDN:-docker.localhost}
       MONGODB_CLIENTURI: mongodb://coremedia:coremedia@mongodb:27017
-    labels:
-      traefik.enable: true
     healthcheck: *default-boot-healthcheck
 
   cae-live:
@@ -241,8 +235,6 @@ services:
       << : *default-boot-envs
       ENVIRONMENT_FQDN: ${ENVIRONMENT_FQDN:-docker.localhost}
       MONGODB_CLIENTURI: mongodb://coremedia:coremedia@mongodb:27017
-    labels:
-      traefik.enable: true
     healthcheck: *default-boot-healthcheck
 
   site-manager:
@@ -252,8 +244,6 @@ services:
     logging: *default-logging
     networks:
       - backend
-    labels:
-      traefik.enable: true
 
   headless-server-preview:
     image: ${REPOSITORY_PREFIX:-coremedia}/headless-server:${HEADLESS_SERVER_PREVIEW_TAG:-latest}
@@ -276,8 +266,6 @@ services:
       LINK_URLPREFIXTYPE: preview
       PREVIEWCLIENT_URL: https://headless-server-preview.${ENVIRONMENT_FQDN:-docker.localhost}/preview
       COMMERCE_HUB_DATA_CUSTOMENTITYPARAMS_CATALOGVERSION: Staged
-    labels:
-      traefik.enable: true
     healthcheck: *default-boot-healthcheck
 
   headless-server-live:
@@ -296,12 +284,10 @@ services:
       CAAS_SOLR_COLLECTION: live
       CAAS_REMOTE_BASEURL: http://cae-live:8081/internal/service/url
       LINK_URLPREFIXTYPE: live
-    labels:
-      traefik.enable: true
     healthcheck: *default-boot-healthcheck
 
   traefik:
-    image: traefik:2.5.3
+    image: traefik:2.6.3
     container_name: traefik
     restart: always
     logging: *default-logging
@@ -313,7 +299,6 @@ services:
       - '443:443'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ../traefik/traefik.yml:/etc/traefik/traefik.yml
       - ../traefik/certificates/:/etc/traefik/certificates/
       - ../traefik/dynamic-configuration/ssl-redirect.yml:/etc/traefik/dynamic/ssl-redirect.yml
       - ../traefik/dynamic-configuration/tls.yml:/etc/traefik/dynamic/tls.yml
@@ -321,12 +306,16 @@ services:
       - ../traefik/dynamic-configuration/default/:/etc/traefik/dynamic/default/
     environment:
       ENVIRONMENT_FQDN: ${ENVIRONMENT_FQDN:-docker.localhost}
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.dashboard.rule=Host(`monitor.${ENVIRONMENT_FQDN:-docker.localhost}`)"
-      - "traefik.http.routers.dashboard.tls=true"
-      - "traefik.http.routers.dashboard.service=api@internal"
-
+      TRAEFIK_PROVIDERS_FILE_DIRECTORY: /etc/traefik/dynamic/
+      TRAEFIK_GLOBAL_CHECKNEWVERSION: "false"
+      TRAEFIK_GLOBAL_SENDANONYMOUSUSAGE: "false"
+      TRAEFIK_ENTRYPOINTS_WEBACCESSINSECURE_ADDRESS: ":80"
+      TRAEFIK_ENTRYPOINTS_WEBACCESSINSECURE_TRANSPORT_RESPONDINGTIMEOUTS_IDLETIMEOUT: 360
+      TRAEFIK_ENTRYPOINTS_WEBACCESSSECURE_ADDRESS: ":443"
+      TRAEFIK_ENTRYPOINTS_WEBACCESSSECURE_HTTP_TLS: "true"
+      TRAEFIK_ENTRYPOINTS_WEBACCESSSECURE_TRANSPORT_RESPONDINGTIMEOUTS_IDLETIMEOUT: 360
+      TRAEFIK_PILOT_DASHBOARD: "false"
+      TRAEFIK_LOG_FORMAT: json
 networks:
   backend:
     driver: bridge

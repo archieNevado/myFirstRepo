@@ -12,6 +12,7 @@ interface Validation_properties {
   Validator_channel_loop_text: string;
   Validator_duplicate_segment_text: string;
   Validator_duplicate_root_segment_text: string;
+  Validator_unfavorable_segment_text: string;
   Validator_no_context_text: string;
   Validator_not_in_navigation_text: string;
   Validator_LengthValidator_text: string;
@@ -44,6 +45,7 @@ const Validation_properties: Validation_properties = {
   Validator_channel_loop_text: "The page hierarchy contains a loop.",
   Validator_duplicate_segment_text: "This URL segment already exists with the same navigation parent in '{0}'.",
   Validator_duplicate_root_segment_text: "This URL root segment is already used in '{0}' of site '{1} - {2}'.",
+  Validator_unfavorable_segment_text: "This URL segment '{0}' is not recommended, it should not end with '-' followed by numbers.",
   Validator_no_context_text: "This document has no navigation context.",
   Validator_not_in_navigation_text: "This page is not part of the navigation.",
   Validator_LengthValidator_text: "The length of the text value is too large.",

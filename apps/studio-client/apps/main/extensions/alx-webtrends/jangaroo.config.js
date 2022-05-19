@@ -20,21 +20,10 @@ module.exports = jangarooConfig({
       cmServiceShortcuts: [
         {
           cmKey: "cmWebtrendsAnalytics",
+          cmOrder: 20,
           name: "Webtrends",
           url: "",
           cmCategory: "External Services",
-          icons: [
-            {
-              src: "packages/com.coremedia.blueprint__alx-webtrends-studio-plugin/appIcons/webtrends_24.svg",
-              sizes: "24x24",
-              type: "image/svg",
-            },
-            {
-              src: "packages/com.coremedia.blueprint__alx-webtrends-studio-plugin/appIcons/webtrends_192.png",
-              sizes: "192x192",
-              type: "image/png",
-            },
-          ],
           cmService: {
             name: "launchSubAppService",
             method: "launchSubApp",

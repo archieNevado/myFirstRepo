@@ -2,9 +2,11 @@
   "compilerOptions": {
     "forceConsistentCasingInFileNames": true,
     "lib": [
-      "ES6",
-      "DOM",
-      "ES2015.Promise"
+      "dom",
+      "dom.iterable",
+      "es5",
+      "es6",
+      "esnext"
     ],
     "module": "commonJS",
     "moduleResolution": "Node",
@@ -35,11 +37,17 @@
       "@coremedia/ckeditor5-studio-essentials/*": [
         "../node_modules/@coremedia/ckeditor5-studio-essentials/dist/*"
       ],
+      "@coremedia/ckeditor5-coremedia-link/*": [
+        "../node_modules/@coremedia/ckeditor5-coremedia-link/dist/*"
+      ],
+      "@coremedia/ckeditor5-coremedia-content-clipboard/*": [
+        "../node_modules/@coremedia/ckeditor5-coremedia-content-clipboard/dist/*"
+      ],
+      "@coremedia/ckeditor5-coremedia-images/*": [
+        "../node_modules/@coremedia/ckeditor5-coremedia-images/dist/*"
+      ],
       "@coremedia/ckeditor5-symbol-on-paste-mapper/*": [
         "../node_modules/@coremedia/ckeditor5-symbol-on-paste-mapper/dist/*"
-      ],
-      "@coremedia/ckeditor5-coremedia-richtext-support/*": [
-        "../node_modules/@coremedia/ckeditor5-coremedia-richtext-support/dist/*"
       ],
       "@jangaroo/runtime/*": [
         "../node_modules/@jangaroo/runtime/src/*"

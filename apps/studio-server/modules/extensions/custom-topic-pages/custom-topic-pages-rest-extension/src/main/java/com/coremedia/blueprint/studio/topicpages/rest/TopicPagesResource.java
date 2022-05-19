@@ -11,7 +11,7 @@ import com.coremedia.cap.common.CapObjectDestroyedException;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.BulkOperationFailedException;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentType;
+import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.ContentSiteAspect;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SiteDestroyedException;
@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -39,7 +38,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import static java.lang.String.format;
-import static java.util.Objects.requireNonNull;
 
 /**
  * A REST service for resolving mime types and handling
@@ -75,12 +73,12 @@ public class TopicPagesResource {
     DEFAULT_GROUPS_ADMIN_CUSTOM_TOPIC_PAGES.add("media-administrator");
   }
 
-  private CapConnection capConnection;
-  private ConfigurationService configurationService;
-  private TaxonomyResolver strategyResolver;
-  private SitesService sitesService;
-  private String siteConfigPath;
-  private String globalConfigPath;
+  private final CapConnection capConnection;
+  private final ConfigurationService configurationService;
+  private final TaxonomyResolver strategyResolver;
+  private final SitesService sitesService;
+  private final String siteConfigPath;
+  private final String globalConfigPath;
   private String ignoredTaxonomies;
 
   // --- construction -----------------------------------------------
@@ -203,12 +201,7 @@ public class TopicPagesResource {
     }
 
     //sorting the result
-    Collections.sort(result.getItems(), new Comparator<TopicRepresentation>() {
-      @Override
-      public int compare(TopicRepresentation o1, TopicRepresentation o2) {
-        return o1.getName().toLowerCase(Locale.ROOT).compareTo(o2.getName().toLowerCase(Locale.ROOT));
-      }
-    });
+    result.getItems().sort(Comparator.comparing(o -> o.getName().toLowerCase(Locale.ROOT)));
 
     return result;
   }
@@ -456,26 +449,27 @@ public class TopicPagesResource {
       }
     }
 
-    Map<String, Object> properties = new HashMap<>();
-    // segment format: id-defaultTopicpageSegment
+    ContentRepository repository = capConnection.getContentRepository();
+
     int numId = IdHelper.parseContentId(topic.getId());
-    properties.put("segment", numId + "-" + rep.getRootChannel().getString("segment"));
-    properties.put("title", topic.getName());
 
-    //apply the hidden flags since the topic pages are not part of the navigation
-    properties.put("hidden", 1);
-    properties.put("hiddenInSitemap", 1);
-    ContentType type = requireNonNull(capConnection.getContentRepository().getContentType(TOPIC_PAGE_CUSTOM_CONTENT_TYPE));
-
-    Content newTopicPage = type.createByTemplate(rep.getTopicPagesFolder(), formatTopicPageName(topic), "{3} ({1})", properties);
+    Content newTopicPage = repository.createContentBuilder()
+            .type(TOPIC_PAGE_CUSTOM_CONTENT_TYPE)
+            .parent(rep.getTopicPagesFolder())
+            .name(formatTopicPageName(topic))
+            .nameTemplate()
+            // segment format: id-defaultTopicpageSegment
+            .property("segment", numId + "-" + rep.getRootChannel().getString("segment"))
+            .property("title", topic.getName())
+            //apply the hidden flags since the topic pages are not part of the navigation
+            .property("hidden", 1)
+            .property("hiddenInSitemap", 1)
+            .create();
 
     //apply locale afterwards, since we now have a content site aspect
     ContentSiteAspect contentSiteAspect = sitesService.getContentSiteAspect(newTopicPage);
     Optional<Site> site = contentSiteAspect.findSite();
-    Locale locale = site.map(Site::getLocale).orElse(null);
-    if (locale != null) {
-      contentSiteAspect.setLocale(locale);
-    }
+    site.map(Site::getLocale).ifPresent(contentSiteAspect::setLocale);
 
     return newTopicPage;
   }

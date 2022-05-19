@@ -1,53 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:customize="http://www.coremedia.com/2007/coremedia-spring-beans-customization"
+       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd
-                           http://www.coremedia.com/2007/coremedia-spring-beans-customization
-                           http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd">
+                           http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
 
-  <import resource="classpath:/com/coremedia/cae/uapi-services.xml"/>
-  <import resource="classpath:/com/coremedia/cap/multisite/multisite-services.xml"/>
-  <import resource="classpath:/META-INF/coremedia/lc-services.xml"/>
-  <import resource="classpath:/com/coremedia/cae/contentbean-services.xml"/>
-  <import resource="classpath:/framework/spring/blueprint-services.xml"/>
-  <import resource="classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml"/>
-
-  <bean name="liveContextNavigationTreeRelation" class="com.coremedia.livecontext.navigation.LiveContextNavigationTreeRelation">
-    <property name="navigationFactory" ref="liveContextNavigationFactory"/>
-    <property name="contentBeanFactory" ref="contentBeanFactory"/>
-    <property name="sitesService" ref="sitesService"/>
-    <property name="delegate" ref="externalChannelContentTreeRelation"/>
-  </bean>
-
-  <bean id="liveContextNavigationFactory" class="com.coremedia.livecontext.navigation.LiveContextNavigationFactory">
-    <property name="treeRelation" ref="liveContextNavigationTreeRelation" />
-    <property name="sitesService" ref="sitesService"/>
-    <property name="augmentationService" ref="categoryAugmentationService"/>
-    <property name="contentBeanFactory" ref="contentBeanFactory"/>
-    <property name="validationService" ref="validationService"/>
-    <property name="commerceConnectionSupplier" ref="commerceConnectionSupplier"/>
-  </bean>
-
-  <customize:append id="liveContextNavigationSettingsFinderCustomizer" bean="contentSettingsFinderHierarchies">
-    <description>
-      Adds the externalChannelContentTreeRelation to the cmlinkable settings finder for contents of type CMExternalChannel.
-    </description>
-    <map>
-      <entry key="CMExternalChannel" value-ref="externalChannelContentTreeRelation"/>
-    </map>
-  </customize:append>
-
-  <customize:prepend id="liveContextCategorySettingsServiceConfigurer" bean="settingsFinders" order="100001">
-    <description>
-      Adds the LiveContextCategoryNavivationSettingsFinder to the SettingsService.
-    </description>
-    <map>
-      <entry key="com.coremedia.livecontext.navigation.LiveContextCategoryNavigation">
-        <bean class="com.coremedia.livecontext.navigation.LiveContextCategoryNavigationSettingsFinder"/>
-      </entry>
-    </map>
-  </customize:prepend>
-
+  <context:annotation-config/>
+  <bean class="com.coremedia.livecontext.navigation.LiveContextNavigationConfiguration"/>
 </beans>

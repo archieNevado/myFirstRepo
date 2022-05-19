@@ -1,7 +1,9 @@
 package com.coremedia.blueprint.cae.config;
 
+import com.coremedia.blueprint.base.multisite.BlueprintMultisiteConfiguration;
 import com.coremedia.blueprint.base.navigation.context.ContextStrategy;
 import com.coremedia.blueprint.base.settings.SettingsService;
+import com.coremedia.blueprint.base.settings.impl.BlueprintSettingsServiceConfiguration;
 import com.coremedia.blueprint.cae.feeds.FeedItemDataProvider;
 import com.coremedia.blueprint.cae.feeds.impl.PictureFeedItemDataProvider;
 import com.coremedia.blueprint.cae.feeds.impl.TeasableFeedItemDataProvider;
@@ -19,6 +21,7 @@ import com.coremedia.blueprint.cae.view.resolver.ThemeTemplateViewRepositoryProv
 import com.coremedia.blueprint.cae.view.viewtype.ViewTypeRenderNodeDecorator;
 import com.coremedia.blueprint.cae.view.viewtype.ViewTypeRenderNodeDecoratorProvider;
 import com.coremedia.blueprint.coderesources.ThemeService;
+import com.coremedia.blueprint.coderesources.ThemeServiceConfiguration;
 import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.cache.Cache;
 import com.coremedia.cache.config.CacheConfiguration;
@@ -69,7 +72,6 @@ import java.util.Map;
 @ComponentScan(
         basePackages = {
                 "com.coremedia.cap.util.configuration",
-                "com.coremedia.blueprint.coderesources"
         },
         lazyInit = true
 )
@@ -77,18 +79,19 @@ import java.util.Map;
         "classpath:/com/coremedia/cae/dataview-services.xml",
         "classpath:/com/coremedia/cae/view-services-lifecycle.xml",
         "classpath:/com/coremedia/cap/common/uapi-services.xml",
-        "classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml",
         "classpath:/framework/spring/blueprint-services.xml",
         "classpath:/framework/spring/blueprint-handlers.xml",
-        "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
         "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-cae-services.xml",
 }, reader = ResourceAwareXmlBeanDefinitionReader.class)
 @Import({
+        BlueprintMultisiteConfiguration.class,
         BlueprintRichtextFiltersConfiguration.class,
+        BlueprintSettingsServiceConfiguration.class,
         CacheConfiguration.class,
         CaeViewServicesConfiguration.class,
         CaeViewErrorServicesConfiguration.class,
         MultiSiteConfiguration.class,
+        ThemeServiceConfiguration.class,
 })
 public class BlueprintViewsCaeBaseLibConfiguration {
 

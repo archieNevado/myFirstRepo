@@ -4,7 +4,7 @@ import CatalogHelper from "@coremedia-blueprint/studio-client.main.ec-studio/hel
 import Content from "@coremedia/studio-client.cap-rest-client/content/Content";
 import ValueExpression from "@coremedia/studio-client.client-core/data/ValueExpression";
 import ValueExpressionFactory from "@coremedia/studio-client.client-core/data/ValueExpressionFactory";
-import ThumbnailResolver from "@coremedia/studio-client.ext.cap-base-components/thumbnails/ThumbnailResolver";
+import ThumbnailResolver from "@coremedia/studio-client.cap-base-models/thumbnails/ThumbnailResolver";
 import editorContext from "@coremedia/studio-client.main.editor-components/sdk/editorContext";
 import { as, mixin } from "@jangaroo/runtime";
 

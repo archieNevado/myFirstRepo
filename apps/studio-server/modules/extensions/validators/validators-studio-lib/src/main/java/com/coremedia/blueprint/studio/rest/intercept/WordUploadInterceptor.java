@@ -55,6 +55,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * This is a prototype implementation of a MS Word to CMArticle converter, implemented as
  * ContentWriteInterceptor to be executed during bulk uploads.
@@ -193,7 +195,10 @@ public class WordUploadInterceptor extends ContentWriteInterceptorBase {
   }
 
   private Content createPicture(Content parent, String imageName, String documentName, Blob imageData) {
-    ContentType contentType = repository.getContentType(PICTURE_CONTENT_TYPE);
+    ContentType contentType = requireNonNull(
+            repository.getContentType(PICTURE_CONTENT_TYPE),
+            () -> String.format("Required content type missing: '%s'", PICTURE_CONTENT_TYPE)
+    );
     Map<String, Object> properties = new HashMap<>();
     properties.put(PICTURE_BLOB_PROPETY_NAME, imageData);
 
@@ -210,10 +215,14 @@ public class WordUploadInterceptor extends ContentWriteInterceptorBase {
             .filter(interceptor -> interceptor.getType().isSubtypeOf(contentType))
             .forEach(interceptor -> interceptor.intercept(writeRequest));
 
-
-    Content picture = contentType.createByTemplate(parent, uniqueFileName, "{3} ({1})", properties);
-    picture.checkIn();
-    return picture;
+    return repository.createContentBuilder()
+            .type(contentType)
+            .parent(parent)
+            .name(uniqueFileName)
+            .nameTemplate()
+            .properties(properties)
+            .checkedIn()
+            .create();
   }
 
   /**

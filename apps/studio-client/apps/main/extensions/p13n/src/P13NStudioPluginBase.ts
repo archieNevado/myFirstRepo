@@ -1,5 +1,5 @@
 import Content from "@coremedia/studio-client.cap-rest-client/content/Content";
-import ThumbnailResolverFactory from "@coremedia/studio-client.ext.cap-base-components/thumbnails/ThumbnailResolverFactory";
+import ThumbnailResolverFactory from "@coremedia/studio-client.cap-base-models/thumbnails/ThumbnailResolverFactory";
 import StudioPlugin from "@coremedia/studio-client.main.editor-components/configuration/StudioPlugin";
 import IEditorContext from "@coremedia/studio-client.main.editor-components/sdk/IEditorContext";
 import editorContext from "@coremedia/studio-client.main.editor-components/sdk/editorContext";

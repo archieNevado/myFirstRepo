@@ -4,6 +4,7 @@ import StringPropertyField from "@coremedia/studio-client.main.editor-components
 import PanelTitle from "@jangaroo/ext-ts/panel/Title";
 import Config from "@jangaroo/runtime/Config";
 import ConfigUtils from "@jangaroo/runtime/ConfigUtils";
+import ComponentUtil from "@coremedia/studio-client.ext.ui-components/util/ComponentUtil";
 
 interface CollapsibleStringPropertyFormConfig extends Config<PropertyFieldGroup>, Partial<Pick<CollapsibleStringPropertyForm,
   "propertyName"
@@ -19,7 +20,7 @@ class CollapsibleStringPropertyForm extends PropertyFieldGroup {
     super(ConfigUtils.apply(Config(CollapsibleStringPropertyForm, {
       title: PropertyFieldGroupBase.formatTitle(config.bindTo, config.propertyName,
         PanelTitle.getText(config.title)),
-      itemId: PropertyFieldGroupBase.formatItemId(config.propertyName, "Form"),
+      itemId: ComponentUtil.formatItemId(config.propertyName, "Form"),
 
       items: [
         Config(StringPropertyField, {

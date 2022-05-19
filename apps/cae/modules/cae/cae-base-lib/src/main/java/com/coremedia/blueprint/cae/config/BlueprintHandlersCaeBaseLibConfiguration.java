@@ -2,8 +2,11 @@ package com.coremedia.blueprint.cae.config;
 
 import com.coremedia.blueprint.base.links.ContentLinkBuilder;
 import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
+import com.coremedia.blueprint.base.links.impl.BlueprintLinksPostprocessorsConfiguration;
+import com.coremedia.blueprint.base.multisite.BlueprintMultisiteConfiguration;
 import com.coremedia.blueprint.base.navigation.context.finder.TopicpageContextFinder;
 import com.coremedia.blueprint.base.settings.SettingsService;
+import com.coremedia.blueprint.base.settings.impl.BlueprintSettingsServiceConfiguration;
 import com.coremedia.blueprint.cae.action.search.PageSearchActionHandler;
 import com.coremedia.blueprint.cae.action.search.SearchService;
 import com.coremedia.blueprint.cae.action.webflow.BlueprintFlowUrlHandler;
@@ -32,6 +35,7 @@ import com.coremedia.blueprint.cae.web.ContentValidityInterceptor;
 import com.coremedia.blueprint.cae.web.ExposeCurrentNavigationInterceptor;
 import com.coremedia.blueprint.cae.web.i18n.ResourceBundleInterceptor;
 import com.coremedia.blueprint.coderesources.ThemeService;
+import com.coremedia.blueprint.coderesources.ThemeServiceConfiguration;
 import com.coremedia.blueprint.common.datevalidation.ValidUntilConsumer;
 import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
@@ -61,7 +65,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
@@ -80,26 +83,20 @@ import java.util.Map;
 @Configuration(proxyBeanMethods = false)
 @ImportResource(value = {
         "classpath:/com/coremedia/cae/webflow/webflow-services.xml",
-        "classpath:/com/coremedia/blueprint/base/links/bpbase-links-services.xml",
-        "classpath:/com/coremedia/blueprint/base/links/bpbase-links-postprocessors.xml",
         "classpath:/framework/spring/blueprint-services.xml",
-        "classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml",
-        "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
 }, reader = ResourceAwareXmlBeanDefinitionReader.class)
 @Import({
+        BlueprintLinksPostprocessorsConfiguration.class,
+        BlueprintMultisiteConfiguration.class,
         BlueprintSearchCaeBaseLibConfiguration.class,
+        BlueprintSettingsServiceConfiguration.class,
         CaeHandlerServicesConfiguration.class,
         CustomizerConfiguration.class,
         IdServicesConfiguration.class,
         MimeTypeServiceConfiguration.class,
+        ThemeServiceConfiguration.class,
         TransformImageServiceConfiguration.class,
 })
-@ComponentScan(
-        basePackages = {
-                "com.coremedia.blueprint.coderesources"
-        },
-        lazyInit = true
-)
 public class BlueprintHandlersCaeBaseLibConfiguration {
 
   /**

@@ -4,7 +4,7 @@ window.coremedia.blueprint.$(function () {
    * remove newPreviewSession parameter from next URL in preview to avoid login problems
    *
    * Static Application Security Testing (SAST) tools like Checkmarx may complain
-   * about this function, if they assume that it embed untrusted data without
+   * about this function, if they assume that it embeds untrusted data without
    * proper sanitization or encoding. Such reports are false positives.
    */
   function replaceLoginPreviewURL() {

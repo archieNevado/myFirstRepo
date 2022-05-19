@@ -3,7 +3,7 @@ import Content from "@coremedia/studio-client.cap-rest-client/content/Content";
 import ValueExpression from "@coremedia/studio-client.client-core/data/ValueExpression";
 import ValueExpressionFactory from "@coremedia/studio-client.client-core/data/ValueExpressionFactory";
 import Issue from "@coremedia/studio-client.client-core/data/validation/Issue";
-import ThumbnailResolverFactory from "@coremedia/studio-client.ext.cap-base-components/thumbnails/ThumbnailResolverFactory";
+import ThumbnailResolverFactory from "@coremedia/studio-client.cap-base-models/thumbnails/ThumbnailResolverFactory";
 import BindPropertyPlugin from "@coremedia/studio-client.ext.ui-components/plugins/BindPropertyPlugin";
 import ObservableUtil from "@coremedia/studio-client.ext.ui-components/util/ObservableUtil";
 import SiteAwareFeatureUtil from "@coremedia/studio-client.main.bpbase-studio-components/sites/SiteAwareFeatureUtil";

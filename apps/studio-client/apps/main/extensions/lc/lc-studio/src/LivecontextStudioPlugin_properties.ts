@@ -1,3 +1,5 @@
+import { createTypeProductTeaser } from "@coremedia-blueprint/studio-client.lc";
+import SvgIconUtil from "@coremedia/studio-client.base-models/util/SvgIconUtil";
 import CoreIcons_properties from "@coremedia/studio-client.core-icons/CoreIcons_properties";
 
 /**
@@ -634,7 +636,7 @@ const LivecontextStudioPlugin_properties: LivecontextStudioPlugin_properties = {
   Action_openManagementCenter_icon: CoreIcons_properties.wcs_management,
   Action_createProductTeaser_text: "Create Product Teaser",
   Action_createProductTeaser_tooltip: "Create a product teaser for the product or product variant",
-  Action_createProductTeaser_icon: CoreIcons_properties.create_type_product_teaser,
+  Action_createProductTeaser_icon: SvgIconUtil.getIconStyleClassForSvgIcon(createTypeProductTeaser),
   Action_augmentCategory_text: "Augment Category",
   Action_augmentCategory_tooltip: "Augment Category",
   Action_augmentCategory_icon: CoreIcons_properties.augmentation,

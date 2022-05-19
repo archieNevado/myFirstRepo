@@ -15,13 +15,11 @@
       <groupId>com.coremedia.blueprint</groupId>
       <artifactId>content-services</artifactId>
       <version>${project.version}</version>
-      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
       <artifactId>image-transformation</artifactId>
       <version>${project.version}</version>
-      <scope>runtime</scope>
     </dependency>
 
     <dependency>
@@ -68,12 +66,10 @@
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-links-impl</artifactId>
-      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-multisite</artifactId>
-      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>

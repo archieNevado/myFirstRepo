@@ -1,6 +1,7 @@
 import Content from "@coremedia/studio-client.cap-rest-client/content/Content";
-import ThumbnailResolverImpl from "@coremedia/studio-client.ext.cap-base-components/thumbnails/ThumbnailResolverImpl";
-import ImageLinkListRenderer from "@coremedia/studio-client.ext.content-link-list-components/util/ImageLinkListRenderer";
+import ThumbnailResolverImpl from "@coremedia/studio-client.cap-base-models/thumbnails/ThumbnailResolverImpl";
+import ImageLinkListRenderer
+  from "@coremedia/studio-client.ext.content-link-list-components/util/ImageLinkListRenderer";
 import { as } from "@jangaroo/runtime";
 import CatalogThumbnailResolver from "./CatalogThumbnailResolver";
 

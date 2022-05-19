@@ -20,21 +20,10 @@ module.exports = jangarooConfig({
       cmServiceShortcuts: [
         {
           cmKey: "cmGoogleAnalytics",
+          cmOrder: 10,
           name: "Google",
           url: "",
           cmCategory: "External Services",
-          icons: [
-            {
-              src: "packages/com.coremedia.blueprint__alx-google-studio-plugin/appIcons/analytics_24.svg",
-              sizes: "24x24",
-              type: "image/svg",
-            },
-            {
-              src: "packages/com.coremedia.blueprint__alx-google-studio-plugin/appIcons/analytics_192.png",
-              sizes: "192x192",
-              type: "image/png",
-            },
-          ],
           cmService: {
             name: "launchSubAppService",
             method: "launchSubApp",

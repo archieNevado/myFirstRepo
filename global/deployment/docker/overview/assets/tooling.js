@@ -1,7 +1,7 @@
 var checkStatus = function() {
   $(".health_check").each(function() {
     var $that = $(this);
-    var $status = $that.parents("tr").find("span");
+    var $status = $that.find("span");
     fetch($that.attr("href")).then(function(response) {
       if (response.status === 200) {
         return response.json();

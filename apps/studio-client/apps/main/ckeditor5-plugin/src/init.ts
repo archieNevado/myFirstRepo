@@ -3,6 +3,8 @@ import { serviceAgent } from "@coremedia/service-agent";
 import CKEditor5Wrapper from "@coremedia/studio-client.ckeditor-base/CKEditor5Wrapper";
 import CKEditorTypes from "@coremedia/studio-client.ckeditor-constants/CKEditorTypes";
 import ckEditorFactory from "@coremedia/studio-client.ckeditor-factory/util/ckEditorFactory";
+import StudioBlobDisplayService
+  from "@coremedia/studio-client.ext.ckeditor5-services-toolkit/StudioBlobDisplayService";
 import StudioContentDisplayService
   from "@coremedia/studio-client.ext.ckeditor5-services-toolkit/StudioContentDisplayService";
 import StudioRichtextConfigurationService
@@ -12,6 +14,8 @@ import richTextAreaFactory
 import CKEditor5RichTextArea from "@coremedia/studio-client.ext.ckeditor5-components/CKEditor5RichTextArea";
 import Config from "@jangaroo/runtime/Config";
 import RichTextAreaConstants from "@coremedia/studio-client.ckeditor-constants/RichTextAreaConstants";
+
+const DEFAULT_EMBEDDED_IMAGE_MAX_WIDTH: number = 240;
 
 /*
  * WARNING: This package is highly experimental and will probably change or be removed in future releases.
@@ -23,6 +27,9 @@ serviceAgent.registerService(service);
 
 const richtextConfigurationService = new StudioRichtextConfigurationService();
 serviceAgent.registerService(richtextConfigurationService);
+
+const studioBlobDisplayService = new StudioBlobDisplayService(DEFAULT_EMBEDDED_IMAGE_MAX_WIDTH);
+serviceAgent.registerService(studioBlobDisplayService);
 
 /**
  * Register a wrapper for the default editor type

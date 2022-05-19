@@ -19,8 +19,6 @@ services:
       COMMERCE_SYSTEM: wcs
       ENVIRONMENT_FQDN: ${ENVIRONMENT_FQDN:-docker.localhost}
       WCS_HOST: ${WCS_HOST}
-    labels:
-      traefik.enable: true
 
   traefik:
     environment:

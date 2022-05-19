@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.cae.config;
 
 import com.coremedia.blueprint.base.settings.SettingsService;
+import com.coremedia.blueprint.base.settings.impl.BlueprintSettingsServiceConfiguration;
 import com.coremedia.blueprint.cae.action.search.SearchService;
 import com.coremedia.blueprint.cae.action.search.TaxonomyFacetFieldLabelFunction;
 import com.coremedia.blueprint.cae.search.SearchResultFactory;
@@ -12,6 +13,7 @@ import com.coremedia.springframework.customizer.Customize;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.annotation.Order;
 
@@ -25,10 +27,12 @@ import java.util.function.Function;
 @Configuration(proxyBeanMethods = false)
 @ImportResource(value = {
         "classpath:/framework/spring/search/solr-search.xml",
-        "classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml",
         "classpath:/com/coremedia/cae/contentbean-services.xml",
         "classpath:/framework/spring/blueprint-services.xml"
 }, reader = ResourceAwareXmlBeanDefinitionReader.class)
+@Import({
+        BlueprintSettingsServiceConfiguration.class,
+})
 public class BlueprintSearchCaeBaseLibConfiguration {
 
   /**

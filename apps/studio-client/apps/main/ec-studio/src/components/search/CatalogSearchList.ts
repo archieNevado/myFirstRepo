@@ -69,6 +69,7 @@ class CatalogSearchList extends AbstractCatalogList {
                 }),
                 Config(DataField, {
                   name: "id",
+                  ifUnreadable: "",
                   mapping: "externalId",
                 }),
                 Config(DataField, {
@@ -78,6 +79,7 @@ class CatalogSearchList extends AbstractCatalogList {
                 }),
                 Config(DataField, {
                   name: "description",
+                  ifUnreadable: "",
                   mapping: "shortDescription",
                   convert: (v: string, catalogObject: CatalogObject): string =>
                     RichTextPlainTextTransformer.convertToPlainText(catalogObject.getShortDescription()),

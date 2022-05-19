@@ -7,16 +7,12 @@ import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
-import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
-import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.test.context.ActiveProfiles;
@@ -27,7 +23,6 @@ import javax.annotation.Resource;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -45,13 +40,7 @@ public class LocalizationServiceTest {
   private static final Locale OTHER_LOCALE = new Locale("lv");
 
   @Configuration(proxyBeanMethods = false)
-  @EnableConfigurationProperties({
-          DeliveryConfigurationProperties.class
-  })
   @Import({XmlRepoConfiguration.class, LocalizationServiceConfiguration.class})
-  @ImportResource(
-          value = {"classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml"},
-          reader = ResourceAwareXmlBeanDefinitionReader.class)
   @Profile(LocalConfig.PROFILE)
   public static class LocalConfig {
     static final String PROFILE = "LocalizationServiceTest";
@@ -254,6 +243,10 @@ public class LocalizationServiceTest {
   }
 
   private Content mkBundle(Content folder, String locale) {
-    return contentRepository.createChild(folder, "foo"+locale+".properties", "CMResourceBundle", Collections.emptyMap());
+    return contentRepository.createContentBuilder()
+            .parent(folder)
+            .name("foo" + locale + ".properties")
+            .type("CMResourceBundle")
+            .create();
   }
 }

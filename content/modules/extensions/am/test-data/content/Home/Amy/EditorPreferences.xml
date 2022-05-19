@@ -195,8 +195,7 @@
 <StringProperty Name="semanticSettings">nameMatching</StringProperty>
 <StructProperty Name="userMenu">
 <Struct>
-<BooleanProperty Name="disableSiteName">true</BooleanProperty>
-<BooleanProperty Name="disableSiteLocale">true</BooleanProperty>
+<BooleanProperty Name="disableSiteName">false</BooleanProperty>
 <BooleanProperty Name="disableUserName">false</BooleanProperty>
 </Struct>
 </StructProperty>

@@ -1,40 +1,36 @@
 package com.coremedia.blueprint.cae.config;
 
+import com.coremedia.blueprint.base.multisite.BlueprintMultisiteConfiguration;
 import com.coremedia.blueprint.cae.web.i18n.LinklistPageResourceBundleFactory;
 import com.coremedia.blueprint.cae.web.i18n.RequestLocaleResolver;
 import com.coremedia.blueprint.cae.web.i18n.RequestMessageSource;
 import com.coremedia.blueprint.cae.web.i18n.ResourceBundleInterceptor;
 import com.coremedia.blueprint.coderesources.ThemeService;
+import com.coremedia.blueprint.coderesources.ThemeServiceConfiguration;
 import com.coremedia.blueprint.localization.LocalizationService;
 import com.coremedia.blueprint.localization.configuration.LocalizationServiceConfiguration;
 import com.coremedia.cache.Cache;
+import com.coremedia.cache.config.CacheConfiguration;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
+import com.coremedia.objectserver.web.config.CaeHandlerServicesConfiguration;
 import com.coremedia.springframework.customizer.Customize;
-import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.annotation.Order;
 
 /**
  * Internationalization (i18n) features
  */
 @Configuration(proxyBeanMethods = false)
-@ImportResource(value = {
-        "classpath:/com/coremedia/cae/handler-services.xml",
-        "classpath:/com/coremedia/cache/cache-services.xml",
-        "classpath:/com/coremedia/cap/multisite/multisite-services.xml"
-}, reader = ResourceAwareXmlBeanDefinitionReader.class)
-@Import({LocalizationServiceConfiguration.class})
-@ComponentScan(
-        basePackages = {
-                "com.coremedia.blueprint.coderesources"
-        },
-        lazyInit = true
-)
+@Import({
+        BlueprintMultisiteConfiguration.class,
+        CacheConfiguration.class,
+        CaeHandlerServicesConfiguration.class,
+        LocalizationServiceConfiguration.class,
+        ThemeServiceConfiguration.class,
+})
 /*
  * Internationalization (i18n) features
  */

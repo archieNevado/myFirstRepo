@@ -52,8 +52,6 @@ services:
     environment:
       <<: *default-boot-envs
       <<: *development-boot-envs
-    labels:
-      traefik.enable: true
     healthcheck: *default-boot-healthcheck
 
   traefik:

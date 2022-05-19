@@ -4,8 +4,8 @@ http:
     cae-live-landing:
       priority: 50
       entrypoints:
-        - web-access-secure
-        - web-access-insecure
+        - webaccesssecure
+        - webaccessinsecure
       rule: Host(`corporate.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && Path(`/`)
       service: cae-live
       middlewares:
@@ -14,8 +14,8 @@ http:
     cae-live-landing-ca:
       priority: 50
       entrypoints:
-        - web-access-secure
-        - web-access-insecure
+        - webaccesssecure
+        - webaccessinsecure
       rule: Host(`corporate-ca.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && Path(`/`)
       service: cae-live
       middlewares:
@@ -24,8 +24,8 @@ http:
     cae-live-landing-de:
       priority: 50
       entrypoints:
-        - web-access-secure
-        - web-access-insecure
+        - webaccesssecure
+        - webaccessinsecure
       rule: Host(`corporate-de.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && Path(`/`)
       service: cae-live
       middlewares:
@@ -34,8 +34,8 @@ http:
     cae-live-landing-gb:
       priority: 50
       entrypoints:
-        - web-access-secure
-        - web-access-insecure
+        - webaccesssecure
+        - webaccessinsecure
       rule: Host(`corporate-gb.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && Path(`/`)
       service: cae-live
       middlewares:
@@ -46,8 +46,8 @@ http:
       # need a lower priority than any landing page route but higher than the servlet rule
       priority: 40
       entrypoints:
-        - web-access-secure
-        - web-access-insecure
+        - webaccesssecure
+        - webaccessinsecure
       rule: HostRegexp(`{subdomain:corporate-?[(de|gb|ca)]*}.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && PathPrefix(`/blueprint/logout`)
       service: cae-live
     # traefik v1: traefik.corporate-robots.frontend.rule: HostRegexp:{subdomain:corporate-?[(de|gb|ca)]*}.${ENVIRONMENT_FQDN:-docker.localhost};PathStrip:/robots.txt;AddPrefix:/blueprint/servlet/service/robots/corporate
@@ -55,8 +55,8 @@ http:
       # need a lower priority than any landing page route but higher than the servlet rule
       priority: 40
       entrypoints:
-        - web-access-secure
-        - web-access-insecure
+        - webaccesssecure
+        - webaccessinsecure
       rule: HostRegexp(`{subdomain:corporate-?[(de|gb|ca)]*}.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && Path(`/robots.txt`)
       service: cae-live
       middlewares:
@@ -72,8 +72,8 @@ http:
       # need a lower priority than any landing page route but higher than the servlet rule
       priority: 40
       entrypoints:
-        - web-access-secure
-        - web-access-insecure
+        - webaccesssecure
+        - webaccessinsecure
       rule: Host(`corporate.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && Path(`/sitemap_index.xml`, `/{file:sitemap(.*).xml.gz}`)
       service: cae-live
       middlewares:
@@ -83,8 +83,8 @@ http:
       # need a lower priority than any landing page route but higher than the servlet rule
       priority: 40
       entrypoints:
-        - web-access-secure
-        - web-access-insecure
+        - webaccesssecure
+        - webaccessinsecure
       rule: Host(`corporate-ca.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && Path(`/sitemap_index.xml`, `/{file:sitemap(.*).xml.gz}`)
       service: cae-live
       middlewares:
@@ -94,8 +94,8 @@ http:
       # need a lower priority than any landing page route but higher than the servlet rule
       priority: 40
       entrypoints:
-        - web-access-secure
-        - web-access-insecure
+        - webaccesssecure
+        - webaccessinsecure
       rule: Host(`corporate-de.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && Path(`/sitemap_index.xml`, `/{file:sitemap(.*).xml.gz}`)
       service: cae-live
       middlewares:
@@ -105,8 +105,8 @@ http:
       # need a lower priority than any landing page route but higher than the servlet rule
       priority: 40
       entrypoints:
-        - web-access-secure
-        - web-access-insecure
+        - webaccesssecure
+        - webaccessinsecure
       rule: Host(`corporate-gb.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && Path(`/sitemap_index.xml`, `/{file:sitemap(.*).xml.gz}`)
       service: cae-live
       middlewares:
@@ -116,8 +116,8 @@ http:
       # need a lower priority than any landing page route
       priority: 30
       entrypoints:
-        - web-access-secure
-        - web-access-insecure
+        - webaccesssecure
+        - webaccessinsecure
       rule: HostRegexp(`{subdomain:(corporate-?[(de|gb|ca)]*|apparel|calista|helios|sfra|sitegenesis)}.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && PathPrefix(`/`)
       service: cae-live
       middlewares:

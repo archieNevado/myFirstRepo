@@ -10,6 +10,7 @@ ResourceBundleUtil.override(Validation_properties, {
   Validator_channel_loop_text: "Die Seitenhierarchie enthält eine Schleife.",
   Validator_duplicate_segment_text: "Dieses URL-Segment ist unterhalb des gleichen Navigationknotens bereits vergeben in '{0}'.",
   Validator_duplicate_root_segment_text: "Dieses URL-Segment ist bereits vergeben in '{0}' der Site '{1} - {2}'.",
+  Validator_unfavorable_segment_text: "Das URL-Segment '{0}' ist nicht zu empfehlen, es sollte nicht mit '-' gefolgt von einer Zahl enden.",
   Validator_not_in_navigation_text: "Diese Seite ist nicht Bestandteil der Navigation.",
   Validator_LengthValidator_text: "Die maximale Länge des Textes wurde überschritten.",
   Validator_duplicate_referrer_text: "Die Seite wird von mehr als einer Seite verlinkt.",

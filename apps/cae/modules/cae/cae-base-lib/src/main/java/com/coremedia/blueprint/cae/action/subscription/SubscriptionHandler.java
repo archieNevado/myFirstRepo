@@ -128,6 +128,10 @@ public class SubscriptionHandler {
 
   // ===================================
 
+  // Checkmarx complains about enabling "Session Fixation" here.
+  // That is a false positive.  This method does not perform
+  // user authentication, but only adds an attribute to the session
+  // provided by the Spring framework.
   /**
    * Performs subscription internally:
    * FAKE implementation: Just store the email in the current user's session

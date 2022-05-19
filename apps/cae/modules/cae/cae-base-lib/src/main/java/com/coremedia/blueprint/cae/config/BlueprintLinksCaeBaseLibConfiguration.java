@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.cae.config;
 
+import com.coremedia.blueprint.base.links.impl.BlueprintLinksServicesConfiguration;
 import com.coremedia.blueprint.cae.web.links.ThemeResourceLinkBuilder;
 import com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator;
 import com.coremedia.blueprint.common.services.context.CurrentContextService;
@@ -13,15 +14,18 @@ import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
 /**
  * Link transformation
  */
 @Configuration(proxyBeanMethods = false)
+@Import({
+        BlueprintLinksServicesConfiguration.class,
+})
 @ImportResource(value = {
         "classpath:/com/coremedia/cap/multisite/multisite-services.xml",
-        "classpath:/com/coremedia/blueprint/base/links/bpbase-links-services.xml",
 }, reader = ResourceAwareXmlBeanDefinitionReader.class)
 @ComponentScan(
         basePackages = {

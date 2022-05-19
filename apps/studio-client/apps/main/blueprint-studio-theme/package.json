@@ -5,13 +5,13 @@
   "license": "CoreMedia Open Source License",
   "private": true,
   "dependencies": {
-    "@coremedia/studio-client.ext.studio-theme": "2201.2.0",
-    "@jangaroo/runtime": "^1.1.1"
+    "@coremedia/studio-client.ext.studio-theme": "2204.1.0",
+    "@jangaroo/runtime": "^1.1.3"
   },
   "devDependencies": {
-    "@jangaroo/build": "^1.1.1",
-    "@jangaroo/core": "^1.1.1",
-    "@jangaroo/publish": "^1.1.1",
+    "@jangaroo/build": "^1.1.3",
+    "@jangaroo/core": "^1.1.3",
+    "@jangaroo/publish": "^1.1.3",
     "rimraf": "^3.0.2"
   },
   "scripts": {

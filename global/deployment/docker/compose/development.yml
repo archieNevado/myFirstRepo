@@ -58,8 +58,6 @@ services:
       # enables the runlevel endpoint. When enabling it, the management port and actuators should be secured.
       MANAGEMENT_ENDPOINT_RUNLEVEL_ENABLED: "true"
       WAIT_HOSTS: "mysql:3306,solr:8983"
-    labels:
-      traefik.enable: true
     volumes:
       - heapdumps:/coremedia/heapdumps
     depends_on:
@@ -85,8 +83,6 @@ services:
       # enables the runlevel endpoint. When enabling it, the management port and actuators should be secured.
       MANAGEMENT_ENDPOINT_RUNLEVEL_ENABLED: "true"
       WAIT_HOSTS: "mysql:3306"
-    labels:
-      traefik.enable: true
     volumes:
       - heapdumps:/coremedia/heapdumps
     depends_on:
@@ -112,8 +108,6 @@ services:
       SQL_STORE_PASSWORD: cm_management
       HEAP_DUMP_FILENAME: workflow-server-heapdump
       WAIT_HOSTS: "content-management-server:${CMS_ORB_PORT:-40183},mysql:3306"
-    labels:
-      traefik.enable: true
     volumes:
       - heapdumps:/coremedia/heapdumps
     depends_on:
@@ -139,8 +133,6 @@ services:
       COMMERCE_HUB_DATA_CUSTOMENTITYPARAMS_CATALOGVERSION: Staged
       COMMERCE_HUB_DATA_CUSTOMENTITYPARAMS_ENVIRONMENT: preview
       WAIT_HOSTS: "content-management-server:${CMS_ORB_PORT:-40183},solr:8983"
-    labels:
-      traefik.enable: true
     depends_on:
       - content-management-server
       - solr
@@ -161,8 +153,6 @@ services:
       JDBC_PASSWORD: cm_mcaefeeder
       HEAP_DUMP_FILENAME: cae-feeder-preview-heapdump
       WAIT_HOSTS: "content-management-server:${CMS_ORB_PORT:-40183},solr:8983,mysql:3306"
-    labels:
-      traefik.enable: true
     volumes:
       - heapdumps:/coremedia/heapdumps
     depends_on:
@@ -188,8 +178,6 @@ services:
       JDBC_PASSWORD: cm_caefeeder
       HEAP_DUMP_FILENAME: cae-feeder-live-heapdump
       WAIT_HOSTS: "master-live-server:${MLS_ORB_PORT:-40283},solr:8983,mysql:3306"
-    labels:
-      traefik.enable: true
     volumes:
       - heapdumps:/coremedia/heapdumps
     depends_on:
@@ -207,8 +195,6 @@ services:
       REPOSITORY_URL: http://content-management-server:8080/ior
       HEAP_DUMP_FILENAME: user-changes-heapdump
       WAIT_HOSTS: "content-management-server:${CMS_ORB_PORT:-40183},workflow-server:${WFS_ORB_PORT:-40383},mongodb:27017"
-    labels:
-      traefik.enable: true
     volumes:
       - heapdumps:/coremedia/heapdumps
     depends_on:
@@ -228,8 +214,6 @@ services:
       TENANT_DEFAULT: helios
       HEAP_DUMP_FILENAME: elastic-worker-heapdump
       WAIT_HOSTS: "content-management-server:${CMS_ORB_PORT:-40183},solr:8983,mongodb:27017"
-    labels:
-      traefik.enable: true
     volumes:
       - heapdumps:/coremedia/heapdumps
     depends_on:
@@ -423,12 +407,11 @@ services:
     environment:
       ENVIRONMENT_FQDN: ${ENVIRONMENT_FQDN:-docker.localhost}
       CMS_VERSION: ${CMS_VERSION:-unknown}
-    labels:
-      traefik.enable: true
 
   traefik:
     environment:
       SSL_REDIRECT: 'false'
+      TRAEFIK_API: "true"
     volumes:
       - ../traefik/dynamic-configuration/development/:/etc/traefik/dynamic/development/
 

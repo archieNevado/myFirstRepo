@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.fragment;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -28,6 +29,8 @@ public class FragmentContextProvider implements Filter {
     //interface method not needed for this implementation.
   }
 
+  // Checkmarx complains about insecure XML parsing wrt. XXE here.
+  // That is a false positive.  This method does no XML processing whatsoever.
   @Override
   public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
     FragmentContext fragmentContext = new FragmentContext();

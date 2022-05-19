@@ -21,73 +21,43 @@ module.exports = jangarooConfig({
   appManifests: {
     en: {
       cmKey: "cmMainApp",
+      cmOrder: 10,
       name: "CoreMedia Studio",
       short_name: "Content",
       icons: [
         {
-          src: "appIcons/type-asset-document_24.svg",
+          src: "appIcons/content-app_24.svg",
           sizes: "24x24",
           type: "image/svg",
         },
         {
-          src: "appIcons/type-asset-document_192.png",
+          src: "appIcons/content-app_192.png",
           sizes: "192x192",
           type: "image/png",
         },
       ],
-      start_url: "index.html",
+      start_url: ".",
       theme_color: "#b3b1b1",
       background_color: "#b3b1b1",
       display: "standalone",
       categories: [
         "Content",
-        "Taxonomy Manager",
-        "Sites",
         "External Services",
       ],
       cmCategoryIcons: {
-        "Taxonomy Manager": [
-          {
-            src: "appIcons/taxonomy_manager_24.svg",
-            sizes: "24x24",
-            type: "image/svg",
-          },
-          {
-            src: "appIcons/taxonomy_manager_192.png",
-            sizes: "192x192",
-            type: "image/png",
-          },
-        ],
-        Sites: [
-          {
-            src: "packages/com.coremedia.ui.sdk__editor-components/appIcons/sites_24.svg",
-            sizes: "24x24",
-            type: "image/svg",
-          },
-          {
-            src: "packages/com.coremedia.ui.sdk__editor-components/appIcons/sites_192.png",
-            sizes: "192x192",
-            type: "image/png",
-          },
-          {
-            src: "packages/com.coremedia.ui.sdk__editor-components/appIcons/sites_512.png",
-            sizes: "512x512",
-            type: "image/png",
-          },
-        ],
         "External Services": [
           {
-            src: "appIcons/external-preview-link_24.svg",
+            src: "appIcons/external-services_24.svg",
             sizes: "24x24",
             type: "image/svg",
           },
           {
-            src: "appIcons/external-preview-link_192.png",
+            src: "appIcons/external-services_192.png",
             sizes: "192x192",
             type: "image/png",
           },
           {
-            src: "appIcons/external-preview-link_512.png",
+            src: "appIcons/external-services_512.png",
             sizes: "512x512",
             type: "image/png",
           },
@@ -96,26 +66,10 @@ module.exports = jangarooConfig({
       cmServiceShortcuts: [
         {
           cmKey: "cmLocalizationManager",
-          cmCategory: "Sites",
+          cmOrder: 60,
+          cmCategory: "Content",
           name: "Sites",
           url: "",
-          icons: [
-            {
-              src: "packages/com.coremedia.ui.sdk__editor-components/appIcons/sites_24.svg",
-              sizes: "24x24",
-              type: "image/svg",
-            },
-            {
-              src: "packages/com.coremedia.ui.sdk__editor-components/appIcons/sites_192.png",
-              sizes: "192x192",
-              type: "image/png",
-            },
-            {
-              src: "packages/com.coremedia.ui.sdk__editor-components/appIcons/sites_512.png",
-              sizes: "512x512",
-              type: "image/png",
-            },
-          ],
           cmService: {
             name: "launchSubAppService",
             method: "launchSubApp",

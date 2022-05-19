@@ -3,11 +3,13 @@ import ContentInitializer from "@coremedia-blueprint/studio-client.main.blueprin
 import Catalog from "@coremedia-blueprint/studio-client.main.ec-studio-model/model/Catalog";
 import CatalogModel from "@coremedia-blueprint/studio-client.main.ec-studio-model/model/CatalogModel";
 import CatalogObject from "@coremedia-blueprint/studio-client.main.ec-studio-model/model/CatalogObject";
-import CatalogObjectPropertyNames from "@coremedia-blueprint/studio-client.main.ec-studio-model/model/CatalogObjectPropertyNames";
+import CatalogObjectPropertyNames
+  from "@coremedia-blueprint/studio-client.main.ec-studio-model/model/CatalogObjectPropertyNames";
 import Category from "@coremedia-blueprint/studio-client.main.ec-studio-model/model/Category";
 import Product from "@coremedia-blueprint/studio-client.main.ec-studio-model/model/Product";
 import Store from "@coremedia-blueprint/studio-client.main.ec-studio-model/model/Store";
-import CatalogLinkPropertyField from "@coremedia-blueprint/studio-client.main.ec-studio/components/link/CatalogLinkPropertyField";
+import CatalogLinkPropertyField
+  from "@coremedia-blueprint/studio-client.main.ec-studio/components/link/CatalogLinkPropertyField";
 import AugmentationUtil from "@coremedia-blueprint/studio-client.main.ec-studio/helper/AugmentationUtil";
 import CatalogHelper from "@coremedia-blueprint/studio-client.main.ec-studio/helper/CatalogHelper";
 import StoreUtil from "@coremedia-blueprint/studio-client.main.ec-studio/helper/StoreUtil";
@@ -20,7 +22,7 @@ import Bean from "@coremedia/studio-client.client-core/data/Bean";
 import ValueExpression from "@coremedia/studio-client.client-core/data/ValueExpression";
 import ValueExpressionFactory from "@coremedia/studio-client.client-core/data/ValueExpressionFactory";
 import UrlUtil from "@coremedia/studio-client.client-core/util/UrlUtil";
-import ThumbnailResolverFactory from "@coremedia/studio-client.ext.cap-base-components/thumbnails/ThumbnailResolverFactory";
+import ThumbnailResolverFactory from "@coremedia/studio-client.cap-base-models/thumbnails/ThumbnailResolverFactory";
 import StudioPlugin from "@coremedia/studio-client.main.editor-components/configuration/StudioPlugin";
 import EditorContextImpl from "@coremedia/studio-client.main.editor-components/sdk/EditorContextImpl";
 import IEditorContext from "@coremedia/studio-client.main.editor-components/sdk/IEditorContext";

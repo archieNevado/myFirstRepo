@@ -1,3 +1,4 @@
+import Bean from "@coremedia/studio-client.client-core/data/Bean";
 import ValueExpression from "@coremedia/studio-client.client-core/data/ValueExpression";
 import ContextMenuPlugin from "@coremedia/studio-client.ext.ui-components/plugins/ContextMenuPlugin";
 import PanelSkin from "@coremedia/studio-client.ext.ui-components/skins/PanelSkin";
@@ -13,7 +14,8 @@ import CatalogRepositoryThumbnailsBase from "./CatalogRepositoryThumbnailsBase";
 
 interface CatalogRepositoryThumbnailsConfig extends Config<CatalogRepositoryThumbnailsBase>, Partial<Pick<CatalogRepositoryThumbnails,
   "createdContentValueExpression" |
-  "newContentDisabledValueExpression"
+  "newContentDisabledValueExpression" |
+  "catalogThumbnailItemsValueExpression"
 >> {
 }
 
@@ -39,6 +41,8 @@ class CatalogRepositoryThumbnails extends CatalogRepositoryThumbnailsBase {
    */
   newContentDisabledValueExpression: ValueExpression = null;
 
+  catalogThumbnailItemsValueExpression: ValueExpression<Array<Bean>>;
+
   constructor(config: Config<CatalogRepositoryThumbnails> = null) {
     super((()=> ConfigUtils.apply(Config(CatalogRepositoryThumbnails, {
       layout: "border",
@@ -56,7 +60,7 @@ class CatalogRepositoryThumbnails extends CatalogRepositoryThumbnailsBase {
           items: [
             Config(CatalogThumbDataView, {
               itemId: CatalogRepositoryThumbnails.THUMB_DATA_VIEW_ITEM_ID,
-              bindTo: this.getCatalogItemsValueExpression(),
+              bindTo: config.catalogThumbnailItemsValueExpression,
               emptyText: ECommerceStudioPlugin_properties.CatalogView_empty_text,
               selectedItemsValueExpression: config.selectedItemsValueExpression,
               initialViewLimit: 50,

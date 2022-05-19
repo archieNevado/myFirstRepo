@@ -65,6 +65,7 @@ class CatalogRepositoryListContainer extends CatalogRepositoryListContainerBase 
         }),
         Config(CatalogRepositoryThumbnails, {
           itemId: CollectionViewConstants.THUMBNAILS_VIEW,
+          catalogThumbnailItemsValueExpression: this.getCatalogThumbnailItemsValueExpression(config),
           newContentDisabledValueExpression: config.newContentDisabledValueExpression,
           selectedItemsValueExpression: config.selectedRepositoryItemsValueExpression,
           selectedFolderValueExpression: config.selectedFolderValueExpression,

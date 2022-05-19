@@ -2,6 +2,7 @@ version: "3.4"
 services:
   studio-client:
     volumes:
+      - ../plugins/studio-client:/coremedia/plugins/studio-client
       - ../plugins/studio-client.main:/coremedia/plugins/studio-client.main
       - ../plugins/studio-client.workflow:/coremedia/plugins/studio-client.workflow
 

@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.cae.settings;
 
 import com.coremedia.blueprint.base.settings.SettingsService;
+import com.coremedia.blueprint.base.settings.impl.BlueprintSettingsServiceConfiguration;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMSettings;
 import com.coremedia.cap.common.IdHelper;
@@ -8,8 +9,8 @@ import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
-import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
+import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.beans.ContentIdRewriter;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.objectserver.dataviews.DataViewHelper;
@@ -44,10 +45,11 @@ public class ContentBeanSettingsFinderTest {
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })
-  @Import(XmlRepoConfiguration.class)
+  @Import({
+          BlueprintSettingsServiceConfiguration.class,
+          XmlRepoConfiguration.class
+  })
   @ImportResource(value = {
-          "classpath:/com/coremedia/cap/common/xml/uapi-xml-services.xml",
-          "classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml",
           "classpath:/framework/spring/blueprint-contentbeans.xml",
           "classpath:/framework/spring/blueprint-contentbeans-settings.xml"
   },

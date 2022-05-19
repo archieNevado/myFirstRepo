@@ -76,7 +76,13 @@ public class SettingsUploadInterceptor extends ContentWriteInterceptorBase {
             throw new IllegalStateException(String.format("Cannot create settings document since there is no content type %s", settingsDocumentTypeName));
           }
 
-          Content content = type.createByTemplate(parentFolder, documentName, "{3} ({1})", Map.of(settingsStructPropertyName, struct));
+          Content content = repository.createContentBuilder()
+                  .type(type)
+                  .parent(parentFolder)
+                  .name(documentName)
+                  .nameTemplate()
+                  .property(settingsStructPropertyName, struct)
+                  .create();
           // Do not check in content as otherwise the problem described in CMS-14075 will apply.
           // Knowing how the client is implemented, this will still cause the content to be checked in.
 

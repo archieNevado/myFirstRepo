@@ -17,6 +17,7 @@ import Config from "@jangaroo/runtime/Config";
 import ConfigUtils from "@jangaroo/runtime/ConfigUtils";
 import FacetFilterFieldWrapperBase from "./FacetFilterFieldWrapperBase";
 import FacetUtil from "./FacetUtil";
+import ComponentUtil from "@coremedia/studio-client.ext.ui-components/util/ComponentUtil";
 
 interface FacetFilterFieldWrapperConfig extends Config<FacetFilterFieldWrapperBase> {
 }
@@ -34,7 +35,7 @@ class FacetFilterFieldWrapper extends FacetFilterFieldWrapperBase {
       ui: PanelSkin.FILTER.getSkin(),
       style: "margin-bottom:12px;",
       ariaLabel: FacetUtil.localizeFacetLabel(config.facet.getLabel()),
-      itemId: this.formatItemId(config.facet),
+      itemId: ComponentUtil.formatItemId(config.facet.getKey()),
 
       items: [
         /* Facet Tag or Combo will be added here  */

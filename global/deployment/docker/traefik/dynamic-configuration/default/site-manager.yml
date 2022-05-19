@@ -2,8 +2,8 @@ http:
   routers:
     site-manager:
       entrypoints:
-        - web-access-secure
-        - web-access-insecure
+        - webaccesssecure
+        - webaccessinsecure
       rule: Host(`site-manager.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`)
       service: site-manager
 

@@ -1,8 +1,10 @@
 package com.coremedia.lc.studio.lib.validators;
 
 import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
+import com.coremedia.blueprint.base.links.impl.BlueprintUrlPathFormattingConfiguration;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceServicesConfiguration;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
+import com.coremedia.blueprint.base.multisite.BlueprintMultisiteConfiguration;
 import com.coremedia.blueprint.base.rest.validators.ChannelNavigationValidator;
 import com.coremedia.blueprint.base.rest.validators.ChannelReferrerValidator;
 import com.coremedia.blueprint.base.rest.validators.ChannelSegmentValidator;
@@ -23,12 +25,12 @@ import java.util.Objects;
 @Configuration(proxyBeanMethods = false)
 @Import({
         BaseCommerceServicesConfiguration.class,
+        BlueprintMultisiteConfiguration.class,
+        BlueprintUrlPathFormattingConfiguration.class,
         CacheConfiguration.class,
 })
 @ImportResource(value = {
         "classpath:/META-INF/coremedia/lc-services.xml",
-        "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
-        "classpath:/com/coremedia/blueprint/base/links/bpbase-urlpathformatting.xml"
 }, reader = ResourceAwareXmlBeanDefinitionReader.class)
 public class LcStudioValidatorsConfiguration {
 

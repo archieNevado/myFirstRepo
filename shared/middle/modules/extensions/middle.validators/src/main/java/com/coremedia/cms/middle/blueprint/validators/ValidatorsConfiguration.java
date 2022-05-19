@@ -1,6 +1,8 @@
 package com.coremedia.cms.middle.blueprint.validators;
 
 import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
+import com.coremedia.blueprint.base.links.impl.BlueprintLinksServicesConfiguration;
+import com.coremedia.blueprint.base.multisite.BlueprintMultisiteConfiguration;
 import com.coremedia.blueprint.base.navigation.context.ContextStrategy;
 import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGridService;
 import com.coremedia.blueprint.base.rest.validators.AbstractCodeValidator;
@@ -20,6 +22,8 @@ import com.coremedia.blueprint.base.rest.validators.SelfReferringLinkListValidat
 import com.coremedia.blueprint.base.rest.validators.TimelineValidator;
 import com.coremedia.blueprint.base.rest.validators.ValidityValidator;
 import com.coremedia.blueprint.base.rest.validators.VisibilityValidator;
+import com.coremedia.blueprint.image.transformation.ImageTransformationConfiguration;
+import com.coremedia.blueprint.segments.SegmentsConfiguration;
 import com.coremedia.cap.common.CapConnection;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
@@ -80,18 +84,16 @@ import java.util.Set;
         NavigationValidatorsConfigurationProperties.class
 })
 @Import({
+        BlueprintLinksServicesConfiguration.class,
+        BlueprintMultisiteConfiguration.class,
         CapRepositoriesConfiguration.class,
-        TransformImageServiceConfiguration.class
+        ImageTransformationConfiguration.class, // provides configuration for the ImageCropSizeValidator
+        SegmentsConfiguration.class, // configures ContentSegmentStrategy instances for the ChannelSegmentValidator
+        TransformImageServiceConfiguration.class,
 })
 @ImportResource(
         value = {
-                "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
-                "classpath:/com/coremedia/blueprint/base/links/bpbase-links-services.xml",
                 "classpath:/com/coremedia/blueprint/base/pagegrid/impl/bpbase-pagegrid-services.xml",
-                // blueprint-segments.xml configures ContentSegmentStrategy instances for the ChannelSegmentValidator
-                "classpath:/com/coremedia/blueprint/segments/blueprint-segments.xml",
-                // mediatransform.xml provides configuration for the ImageCropSizeValidator
-                "classpath:/framework/spring/mediatransform.xml"
         },
         reader = ResourceAwareXmlBeanDefinitionReader.class)
 public class ValidatorsConfiguration {

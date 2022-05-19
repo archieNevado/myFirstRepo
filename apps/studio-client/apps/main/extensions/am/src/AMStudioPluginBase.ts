@@ -3,13 +3,15 @@ import Content from "@coremedia/studio-client.cap-rest-client/content/Content";
 import ContentType from "@coremedia/studio-client.cap-rest-client/content/ContentType";
 import ContentTypeNames from "@coremedia/studio-client.cap-rest-client/content/ContentTypeNames";
 import Struct from "@coremedia/studio-client.cap-rest-client/struct/Struct";
-import ThumbnailResolverFactory from "@coremedia/studio-client.ext.cap-base-components/thumbnails/ThumbnailResolverFactory";
+import ThumbnailResolverFactory from "@coremedia/studio-client.cap-base-models/thumbnails/ThumbnailResolverFactory";
 import SearchState from "@coremedia/studio-client.library-services-api/SearchState";
 import StudioPlugin from "@coremedia/studio-client.main.editor-components/configuration/StudioPlugin";
 import EditorContextImpl from "@coremedia/studio-client.main.editor-components/sdk/EditorContextImpl";
 import IEditorContext from "@coremedia/studio-client.main.editor-components/sdk/IEditorContext";
-import CollectionViewConstants from "@coremedia/studio-client.main.editor-components/sdk/collectionview/CollectionViewConstants";
-import CollectionViewManagerInternal from "@coremedia/studio-client.main.editor-components/sdk/collectionview/CollectionViewManagerInternal";
+import CollectionViewConstants
+  from "@coremedia/studio-client.main.editor-components/sdk/collectionview/CollectionViewConstants";
+import CollectionViewManagerInternal
+  from "@coremedia/studio-client.main.editor-components/sdk/collectionview/CollectionViewManagerInternal";
 import editorContext from "@coremedia/studio-client.main.editor-components/sdk/editorContext";
 import PreviewPanel from "@coremedia/studio-client.main.editor-components/sdk/preview/PreviewPanel";
 import MetaStyleService from "@coremedia/studio-client.main.editor-components/sdk/util/MetaStyleService";

@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
+import com.coremedia.blueprint.base.settings.impl.BlueprintSettingsServiceConfiguration;
 import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.blueprint.base.tree.TreeRelationServicesConfiguration;
 import com.coremedia.blueprint.common.contentbeans.CMAbstractCode;
@@ -46,12 +47,11 @@ public class PageCodeResourcesTest {
           DeliveryConfigurationProperties.class
   })
   @Import({
+          BlueprintSettingsServiceConfiguration.class,
           TreeRelationServicesConfiguration.class,
           XmlRepoConfiguration.class,
   })
   @ImportResource(value = {
-          "classpath:/com/coremedia/cap/common/xml/uapi-xml-services.xml",
-          "classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml",
           "classpath:/framework/spring/blueprint-contentbeans.xml",
           "classpath:/framework/spring/blueprint-contentbeans-settings.xml",
   }, reader = com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader.class)

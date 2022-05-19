@@ -419,9 +419,14 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     Content folder = getTargetForNewChild(parent);
 
     String defaultNameNonNull = Strings.isNullOrEmpty(defaultName) ? NEW_KEYWORD : defaultName;
-    Content content = type.createByTemplate(folder, NEW_KEYWORD, "{3} ({1})", Collections.emptyMap());
-    content.set(VALUE, defaultNameNonNull);
-    content.checkIn();
+    Content content = contentRepository.createContentBuilder()
+            .type(type)
+            .parent(folder)
+            .name(NEW_KEYWORD)
+            .nameTemplate()
+            .property(VALUE, defaultNameNonNull)
+            .checkedIn()
+            .create();
 
     updateContentName(content, defaultNameNonNull);
 

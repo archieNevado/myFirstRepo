@@ -21,5 +21,6 @@
   <context:property-placeholder ignore-unresolvable="true" properties-ref="siteModelProps"/>
 
   <import resource="classpath:/com/coremedia/blueprint/base/multisite/bpbase-sitemodel.xml"/>
+  <bean id="sitesService" class="com.coremedia.cap.multisite.impl.SitesServiceImpl"/>
 
 </beans>

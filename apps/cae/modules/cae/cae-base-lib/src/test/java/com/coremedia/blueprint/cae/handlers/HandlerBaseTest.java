@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @RunWith(MockitoJUnitRunner.class)
 public class HandlerBaseTest {
@@ -47,7 +47,7 @@ public class HandlerBaseTest {
         assertThat(mav.getViewName()).isEqualTo(ViewUtils.DEFAULT_VIEW);
       });
 
-    verifyZeroInteractions(response);
+    verifyNoMoreInteractions(response);
   }
 
   @Test
@@ -62,7 +62,7 @@ public class HandlerBaseTest {
           .containsValue(this);
         assertThat(mav.getViewName()).isEqualTo("redirect:" + ViewUtils.DEFAULT_VIEW);
       });
-    verifyZeroInteractions(response);
+    verifyNoMoreInteractions(response);
   }
 
   @Test

@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
+import com.coremedia.blueprint.base.settings.impl.BlueprintSettingsServiceConfiguration;
 import com.coremedia.blueprint.common.contentbeans.CMArticle;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.cap.common.Blob;
@@ -9,9 +10,9 @@ import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
-import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,10 +43,11 @@ public class PageImplTest {
   @EnableConfigurationProperties({
           DeliveryConfigurationProperties.class
   })
-  @Import(XmlRepoConfiguration.class)
+  @Import({
+          BlueprintSettingsServiceConfiguration.class,
+          XmlRepoConfiguration.class
+  })
   @ImportResource(value = {
-          "classpath:/com/coremedia/cap/common/xml/uapi-xml-services.xml",
-          "classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml",
           "classpath:/framework/spring/blueprint-contentbeans.xml",
           "classpath:/framework/spring/blueprint-contentbeans-settings.xml"
   },

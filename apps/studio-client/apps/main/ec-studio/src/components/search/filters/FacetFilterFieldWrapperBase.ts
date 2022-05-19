@@ -105,11 +105,6 @@ class FacetFilterFieldWrapperBase extends CollapsiblePanel {
   protected removeFilter(): void {
     this.removeHandler(this.facet);
   }
-
-  protected formatItemId(facet: Facet): string {
-    const id = facet.getKey();
-    return id.replace(/\\/g, "-").replace(/\./g, "-");
-  }
 }
 
 export default FacetFilterFieldWrapperBase;

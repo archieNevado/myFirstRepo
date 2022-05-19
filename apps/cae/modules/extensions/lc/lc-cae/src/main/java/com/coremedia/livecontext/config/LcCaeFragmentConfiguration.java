@@ -3,8 +3,10 @@ package com.coremedia.livecontext.config;
 import com.coremedia.blueprint.base.links.ContentLinkBuilder;
 import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
+import com.coremedia.blueprint.base.multisite.BlueprintMultisiteConfiguration;
 import com.coremedia.blueprint.base.navigation.context.ContextStrategy;
 import com.coremedia.blueprint.base.settings.SettingsService;
+import com.coremedia.blueprint.base.settings.impl.BlueprintSettingsServiceConfiguration;
 import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.blueprint.cae.action.search.SearchService;
 import com.coremedia.blueprint.cae.config.BlueprintHandlersCaeBaseLibConfiguration;
@@ -14,6 +16,7 @@ import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cache.Cache;
+import com.coremedia.cache.config.CacheConfiguration;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.asset.ProductAssetsHandler;
@@ -46,6 +49,7 @@ import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
 import java.util.ArrayList;
@@ -54,17 +58,18 @@ import java.util.List;
 @Configuration(proxyBeanMethods = false)
 @ImportResource(value = {
         "classpath:/com/coremedia/cae/uapi-services.xml",
-        "classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml",
         "classpath:/com/coremedia/cae/contentbean-services.xml",
         "classpath:/com/coremedia/cae/dataview-services.xml",
-        "classpath:/com/coremedia/cap/multisite/multisite-services.xml",
-        "classpath:/com/coremedia/cache/cache-services.xml",
         "classpath:META-INF/coremedia/livecontext-resolver.xml",
         "classpath:META-INF/coremedia/livecontext-handlers.xml",
         "classpath:META-INF/coremedia/context-services.xml",
         "classpath:META-INF/coremedia/livecontext-contentbeans.xml"
 }, reader = ResourceAwareXmlBeanDefinitionReader.class)
-
+@Import({
+        BlueprintSettingsServiceConfiguration.class,
+        BlueprintMultisiteConfiguration.class,
+        CacheConfiguration.class,
+})
 public class LcCaeFragmentConfiguration {
 
   @Bean

@@ -2,8 +2,8 @@ http:
   routers:
     wcs-proxy:
       entrypoints:
-        - web-access-secure
-        - web-access-insecure
+        - webaccesssecure
+        - webaccessinsecure
       # traefik v1: traefik.shop-ibm.frontend.rule: Host:shop-ibm.${ENVIRONMENT_FQDN:-docker.localhost}
       # traefik v1: traefik.shop-preview.frontend.rule: Host:shop-preview-ibm.${ENVIRONMENT_FQDN:-docker.localhost}
       # traefik v1: traefik.shop-preview-production.frontend.rule: Host:shop-preview-production-ibm.${ENVIRONMENT_FQDN:-docker.localhost}

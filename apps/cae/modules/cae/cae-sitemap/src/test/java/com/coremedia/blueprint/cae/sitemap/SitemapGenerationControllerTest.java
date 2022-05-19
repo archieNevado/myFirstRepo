@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.cae.sitemap;
 
+import com.coremedia.blueprint.base.multisite.BlueprintMultisiteConfiguration;
 import com.coremedia.blueprint.base.multisite.cae.SiteResolver;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
@@ -58,9 +59,9 @@ import static com.coremedia.cap.test.xmlrepo.XmlRepoResources.DATA_VIEW_FACTORY;
 import static com.coremedia.cap.test.xmlrepo.XmlRepoResources.ID_PROVIDER;
 import static com.coremedia.cap.test.xmlrepo.XmlRepoResources.LINK_FORMATTER;
 import static java.util.Collections.singletonList;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SINGLETON;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -84,12 +85,14 @@ public class SitemapGenerationControllerTest {
                   LINK_FORMATTER,
                   CACHE,
                   "classpath:/framework/spring/blueprint-contentbeans.xml",
-                  "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
                   "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-cae-services.xml",
           },
           reader = ResourceAwareXmlBeanDefinitionReader.class
   )
-  @Import(XmlRepoConfiguration.class)
+  @Import({
+          BlueprintMultisiteConfiguration.class,
+          XmlRepoConfiguration.class,
+  })
   @Profile(PROFILE)
   public static class LocalConfig {
     public static final String PROFILE = "SitemapGenerationControllerTest";

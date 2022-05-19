@@ -80,10 +80,6 @@ class TaxonomyExplorerColumnBase extends GridPanel {
     const ddPlugin = as(this.getView().getPlugin(TaxonomyExplorerColumnBase.DRAG_DROP_PLUGIN_ID), GridViewDragDropPlugin);
     if (ddPlugin && ddPlugin.dragZone) {
       ddPlugin.dragZone["getDragText"] = bind(this, this.#getDragText);
-      //DnD is causing focus issues, so we skip the focus handling here and simply call the parent
-      ddPlugin.dragZone["onValidDrop"] = ((target: any, e: any, id: any): void => {
-        ddPlugin.dragZone["callParent"]([target, e, id]);
-      });
       ddPlugin.dropZone.addToGroup("taxonomies");
       ddPlugin.dropZone.onNodeOver = bind(this.#taxonomyExplorerColumnDropTarget, this.#taxonomyExplorerColumnDropTarget.notifyOnNodeOver);
       ddPlugin.dropZone.onNodeDrop = bind(this.#taxonomyExplorerColumnDropTarget, this.#taxonomyExplorerColumnDropTarget.notifyOnNodeDrop);

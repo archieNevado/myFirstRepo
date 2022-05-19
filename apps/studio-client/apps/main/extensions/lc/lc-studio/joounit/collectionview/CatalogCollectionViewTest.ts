@@ -3,24 +3,32 @@ import CatalogObject from "@coremedia-blueprint/studio-client.main.ec-studio-mod
 import Store from "@coremedia-blueprint/studio-client.main.ec-studio-model/model/Store";
 import AbstractCatalogTest from "@coremedia-blueprint/studio-client.main.ec-studio-test-helper/AbstractCatalogTest";
 import ECommerceStudioPlugin from "@coremedia-blueprint/studio-client.main.ec-studio/ECommerceStudioPlugin";
-import ECommerceStudioPlugin_properties from "@coremedia-blueprint/studio-client.main.ec-studio/ECommerceStudioPlugin_properties";
-import CatalogRepositoryContextMenu from "@coremedia-blueprint/studio-client.main.ec-studio/components/repository/CatalogRepositoryContextMenu";
-import CatalogRepositoryList from "@coremedia-blueprint/studio-client.main.ec-studio/components/repository/CatalogRepositoryList";
-import CatalogRepositoryListContainer from "@coremedia-blueprint/studio-client.main.ec-studio/components/repository/CatalogRepositoryListContainer";
-import CatalogSearchContextMenu from "@coremedia-blueprint/studio-client.main.ec-studio/components/search/CatalogSearchContextMenu";
+import ECommerceStudioPlugin_properties
+  from "@coremedia-blueprint/studio-client.main.ec-studio/ECommerceStudioPlugin_properties";
+import CatalogRepositoryContextMenu
+  from "@coremedia-blueprint/studio-client.main.ec-studio/components/repository/CatalogRepositoryContextMenu";
+import CatalogRepositoryList
+  from "@coremedia-blueprint/studio-client.main.ec-studio/components/repository/CatalogRepositoryList";
+import CatalogRepositoryListContainer
+  from "@coremedia-blueprint/studio-client.main.ec-studio/components/repository/CatalogRepositoryListContainer";
+import CatalogSearchContextMenu
+  from "@coremedia-blueprint/studio-client.main.ec-studio/components/search/CatalogSearchContextMenu";
 import CatalogSearchList from "@coremedia-blueprint/studio-client.main.ec-studio/components/search/CatalogSearchList";
-import CatalogSearchListContainer from "@coremedia-blueprint/studio-client.main.ec-studio/components/search/CatalogSearchListContainer";
-import CatalogTreeDragDropModel from "@coremedia-blueprint/studio-client.main.ec-studio/components/tree/impl/CatalogTreeDragDropModel";
+import CatalogSearchListContainer
+  from "@coremedia-blueprint/studio-client.main.ec-studio/components/search/CatalogSearchListContainer";
+import CatalogTreeDragDropModel
+  from "@coremedia-blueprint/studio-client.main.ec-studio/components/tree/impl/CatalogTreeDragDropModel";
 import CatalogTreeModel from "@coremedia-blueprint/studio-client.main.ec-studio/components/tree/impl/CatalogTreeModel";
 import CatalogHelper from "@coremedia-blueprint/studio-client.main.ec-studio/helper/CatalogHelper";
-import ECommerceCollectionViewExtension from "@coremedia-blueprint/studio-client.main.ec-studio/library/ECommerceCollectionViewExtension";
+import ECommerceCollectionViewExtension
+  from "@coremedia-blueprint/studio-client.main.ec-studio/library/ECommerceCollectionViewExtension";
 import contentTreeRelationRegistry from "@coremedia/studio-client.cap-base-models/content/contentTreeRelationRegistry";
 import ActionStep from "@coremedia/studio-client.client-core-test-helper/ActionStep";
 import Step from "@coremedia/studio-client.client-core-test-helper/Step";
 import ValueExpression from "@coremedia/studio-client.client-core/data/ValueExpression";
 import ValueExpressionFactory from "@coremedia/studio-client.client-core/data/ValueExpressionFactory";
 import beanFactory from "@coremedia/studio-client.client-core/data/beanFactory";
-import ThumbnailResolverFactory from "@coremedia/studio-client.ext.cap-base-components/thumbnails/ThumbnailResolverFactory";
+import ThumbnailResolverFactory from "@coremedia/studio-client.cap-base-models/thumbnails/ThumbnailResolverFactory";
 import SwitchingContainer from "@coremedia/studio-client.ext.ui-components/components/SwitchingContainer";
 import BeanRecord from "@coremedia/studio-client.ext.ui-components/store/BeanRecord";
 import ContextMenuEventAdapter from "@coremedia/studio-client.ext.ui-components/util/ContextMenuEventAdapter";
@@ -28,14 +36,21 @@ import QtipUtil from "@coremedia/studio-client.ext.ui-components/util/QtipUtil";
 import TableUtil from "@coremedia/studio-client.ext.ui-components/util/TableUtil";
 import SearchState from "@coremedia/studio-client.library-services-api/SearchState";
 import CollectionView from "@coremedia/studio-client.main.editor-components/sdk/collectionview/CollectionView";
-import CollectionViewConstants from "@coremedia/studio-client.main.editor-components/sdk/collectionview/CollectionViewConstants";
-import CollectionViewContainer from "@coremedia/studio-client.main.editor-components/sdk/collectionview/CollectionViewContainer";
-import CollectionViewManagerInternal from "@coremedia/studio-client.main.editor-components/sdk/collectionview/CollectionViewManagerInternal";
-import CollectionViewModel from "@coremedia/studio-client.main.editor-components/sdk/collectionview/CollectionViewModel";
+import CollectionViewConstants
+  from "@coremedia/studio-client.main.editor-components/sdk/collectionview/CollectionViewConstants";
+import CollectionViewContainer
+  from "@coremedia/studio-client.main.editor-components/sdk/collectionview/CollectionViewContainer";
+import CollectionViewManagerInternal
+  from "@coremedia/studio-client.main.editor-components/sdk/collectionview/CollectionViewManagerInternal";
+import CollectionViewModel
+  from "@coremedia/studio-client.main.editor-components/sdk/collectionview/CollectionViewModel";
 import SearchArea from "@coremedia/studio-client.main.editor-components/sdk/collectionview/search/SearchArea";
-import ComponentBasedEntityWorkAreaTabType from "@coremedia/studio-client.main.editor-components/sdk/desktop/ComponentBasedEntityWorkAreaTabType";
-import SidePanelManagerImpl from "@coremedia/studio-client.main.editor-components/sdk/desktop/sidepanel/SidePanelManagerImpl";
-import SidePanelStudioPlugin from "@coremedia/studio-client.main.editor-components/sdk/desktop/sidepanel/SidePanelStudioPlugin";
+import ComponentBasedEntityWorkAreaTabType
+  from "@coremedia/studio-client.main.editor-components/sdk/desktop/ComponentBasedEntityWorkAreaTabType";
+import SidePanelManagerImpl
+  from "@coremedia/studio-client.main.editor-components/sdk/desktop/sidepanel/SidePanelManagerImpl";
+import SidePanelStudioPlugin
+  from "@coremedia/studio-client.main.editor-components/sdk/desktop/sidepanel/SidePanelStudioPlugin";
 import sidePanelManager from "@coremedia/studio-client.main.editor-components/sdk/desktop/sidepanel/sidePanelManager";
 import editorContext from "@coremedia/studio-client.main.editor-components/sdk/editorContext";
 import Ext from "@jangaroo/ext-ts";
@@ -213,7 +228,8 @@ class CatalogCollectionViewTest extends AbstractLiveContextStudioTest {
 
   #getSearchList(): CatalogSearchList {
     const catalogSearch = cast(Container, this.#getCollectionModesContainer().getComponent(CollectionViewModel.SEARCH_MODE));
-    const searchList = cast(SwitchingContainer, cast(Container, catalogSearch.getComponent("searchSwitchingContainer")));
+    const searchCenter = cast(Container, catalogSearch.getComponent("searchCenterRegion"));
+    const searchList = cast(SwitchingContainer, cast(Container, searchCenter.getComponent("searchSwitchingContainer")));
     const searchContainer = cast(CatalogSearchListContainer, searchList.getComponent(CatalogCollectionViewTest.#CATALOG_SEARCH_LIST_CONTAINER));
     //ensure type cast!!!! there are other list views too
     return as(searchContainer.getComponent(CollectionViewConstants.LIST_VIEW), CatalogSearchList);

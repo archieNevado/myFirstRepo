@@ -42,7 +42,7 @@
       These finders delegate to the UAPI layer and thus work only if additional
       according SettingsFinders are configured. (S. settings-services.xml)
     </description>
-    <map>
+    <map key-type="java.lang.Class">
       <entry key="com.coremedia.objectserver.beans.ContentBean" value-ref="contentBeanSettingsFinder"/>
       <entry key="com.coremedia.blueprint.common.contentbeans.Page" value-ref="pageSettingsFinder"/>
     </map>

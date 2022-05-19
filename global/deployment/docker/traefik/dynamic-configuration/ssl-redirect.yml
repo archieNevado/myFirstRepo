@@ -5,7 +5,7 @@ http:
       priority: 1401
       rule: HostRegexp(`{any:.+}`)
       entryPoints:
-        - web-access-insecure
+        - webaccessinsecure
       middlewares:
         - https_redirect
       service: noop

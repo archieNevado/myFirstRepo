@@ -10,4 +10,5 @@ keys  = [
         "/commerce/hybris/enabled",
         "/commerce/wcs/enabled",
         "/headless/client/enabled",
+        "/grafana/enabled"
 ]

@@ -16,8 +16,6 @@ services:
         SFCC_HOST: ${SFCC_HOST}
         SFCC_SITEID: ${SFCC_SITEID:-SiteGenesisGlobal}
         CMS_PUBLIC_HOST: ${CMS_PUBLIC_HOST}
-      labels:
-        traefik.enable: true
 
   traefik:
     environment:

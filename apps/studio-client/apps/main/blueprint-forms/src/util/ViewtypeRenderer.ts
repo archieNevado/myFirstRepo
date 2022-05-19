@@ -5,13 +5,14 @@ import BeanRecord from "@coremedia/studio-client.ext.ui-components/store/BeanRec
 import QtipUtil from "@coremedia/studio-client.ext.ui-components/util/QtipUtil";
 import ViewtypeLocalizationUtil from "@coremedia/studio-client.main.bpbase-studio-components/viewtypes/ViewtypeLocalizationUtil";
 import Base from "@jangaroo/ext-ts/Base";
+import { is } from "@jangaroo/runtime";
 
 class ViewtypeRenderer extends Base {
 
   static readonly #BLOCK: BEMBlock = new BEMBlock("cm-viewtype-thumb");
 
   static convert(value: string, content: Content): any {
-    if (content) {
+    if (content && is(content, Content)) {
       const hasProperty = ViewtypeRenderer.#hasContentProperty(content, "viewtype");
       if (hasProperty === undefined) {
         return undefined;

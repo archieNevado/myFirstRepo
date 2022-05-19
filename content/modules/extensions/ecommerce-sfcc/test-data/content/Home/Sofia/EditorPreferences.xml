@@ -1195,7 +1195,6 @@
 <StructProperty Name="userMenu">
 <Struct>
 <BooleanProperty Name="disableSiteName">false</BooleanProperty>
-<BooleanProperty Name="disableSiteLocale">false</BooleanProperty>
 <BooleanProperty Name="disableUserName">false</BooleanProperty>
 </Struct>
 </StructProperty>

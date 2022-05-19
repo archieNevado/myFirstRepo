@@ -6,8 +6,8 @@ http:
       # this needs a higher prio than the servlet rule
       priority: 50
       entrypoints:
-        - web-access-secure
-        - web-access-insecure
+        - webaccesssecure
+        - webaccessinsecure
       rule: Host(`preview.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && Path(`/`)
       service: cae-preview
       middlewares:
@@ -18,8 +18,8 @@ http:
       # need a lower priority than any landing page route but higher than the servlet rule
       priority: 40
       entrypoints:
-        - web-access-secure
-        - web-access-insecure
+        - webaccesssecure
+        - webaccessinsecure
       rule: Host(`preview.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && PathPrefix(`/static`)
       service: cae-preview
       middlewares:
@@ -30,8 +30,8 @@ http:
       # because this is the last catch-all, we also remove all incoming prefixes before adding the correct servlet paths
       priority: 30
       entrypoints:
-        - web-access-secure
-        - web-access-insecure
+        - webaccesssecure
+        - webaccessinsecure
       rule: Host(`preview.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && PathPrefix(`/`)
       service: cae-preview
       middlewares:

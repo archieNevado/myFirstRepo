@@ -80,6 +80,7 @@ class CatalogRepositoryList extends CatalogRepositoryListBase {
                 }),
                 Config(DataField, {
                   name: "id",
+                  ifUnreadable: "",
                   mapping: "externalId",
                 }),
                 Config(DataField, {
@@ -89,6 +90,7 @@ class CatalogRepositoryList extends CatalogRepositoryListBase {
                 }),
                 Config(DataField, {
                   name: "description",
+                  ifUnreadable: "",
                   mapping: "shortDescription",
                   convert: (v: string, catalogObject: CatalogObject): string =>
                     RichTextPlainTextTransformer.convertToPlainText(catalogObject.getShortDescription()),

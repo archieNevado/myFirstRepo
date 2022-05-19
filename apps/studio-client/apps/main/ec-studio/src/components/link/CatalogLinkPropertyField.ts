@@ -10,8 +10,7 @@ import ToolbarSkin from "@coremedia/studio-client.ext.ui-components/skins/Toolba
 import DataField from "@coremedia/studio-client.ext.ui-components/store/DataField";
 import Actions_properties from "@coremedia/studio-client.main.editor-components/sdk/actions/Actions_properties";
 import LinkListRemoveAction from "@coremedia/studio-client.main.editor-components/sdk/actions/LinkListRemoveAction";
-import OpenEntitiesInTabsAction
-  from "@coremedia/studio-client.main.editor-components/sdk/actions/OpenEntitiesInTabsAction";
+import OpenEntitiesInTabsAction from "@coremedia/studio-client.main.editor-components/sdk/actions/OpenEntitiesInTabsAction";
 import OnlyIf from "@coremedia/studio-client.main.editor-components/sdk/plugins/OnlyIf";
 import Button from "@jangaroo/ext-ts/button/Button";
 import Fill from "@jangaroo/ext-ts/toolbar/Fill";
@@ -60,8 +59,17 @@ class CatalogLinkPropertyField extends CatalogLinkPropertyFieldBase {
             linkListWrapper: this.getLinkListWrapper(config),
             selectedValuesExpression: this.getSelectedVE(),
             selectedPositionsExpression: this.getSelectedPositionsVE(),
+            forceHiddenExpression: ValueExpressionFactory.createFromFunction(() => {
+              const isHideActive = ValueExpressionFactory.createFromValue(config.hideRemove).getValue();
+              const isReadOnly = this.getReadOnlyVE(config).getValue();
+              return !!(isHideActive || isReadOnly);
+            }),
           }),
-          new OpenEntitiesInTabsAction({ entitiesValueExpression: this.getSelectedVE() }),
+          new OpenEntitiesInTabsAction({
+            preventHide: !config.hideOpenInTab,
+            entitiesValueExpression: this.getSelectedVE(),
+            forceHiddenExpression: ValueExpressionFactory.createFromValue(config.hideOpenInTab),
+          }),
         ],
       }),
 
@@ -79,6 +87,7 @@ class CatalogLinkPropertyField extends CatalogLinkPropertyFieldBase {
         Config(DataField, {
           name: "id",
           mapping: "",
+          ifUnreadable: "",
           convert: CatalogLinkPropertyFieldBase.convertIdLabel,
         }),
         Config(DataField, {

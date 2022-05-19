@@ -9,8 +9,6 @@ import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
-import org.junit.Assert;
-import org.junit.Assume;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -23,6 +21,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
 import java.util.Locale;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {ContextStrategyTest.LocalConfig.class, XmlRepoConfiguration.class})
@@ -56,31 +56,25 @@ public class ContextStrategyTest {
     CMChannel englishChannelOnThirdLevel = contentTestHelper.getContentBean(20030);
 
     // Assume correct Locales
-    Assume.assumeTrue("german article should have a german locale", Locale.GERMAN.equals(germanArticle.getLocale()));
-    Assume.assumeTrue("english article should have an english locale", Locale.ENGLISH.equals(englishArticle.getLocale()));
+    assertThat(germanArticle.getLocale()).isEqualTo(Locale.GERMAN);
+    assertThat(englishArticle.getLocale()).isEqualTo(Locale.ENGLISH);
 
     // Assert Master-Derived Relationship
-    Assume.assumeTrue("english article should be the language sibling of the german article",
-            englishArticle.equals(germanArticle.getVariantsByLocale().get(Locale.ENGLISH)));
-    Assume.assumeTrue("english article should have the german article as language master",
-            germanArticle.equals(englishArticle.getMaster()));
+    assertThat(englishArticle).isEqualTo(germanArticle.getVariantsByLocale().get(Locale.ENGLISH));
+    assertThat(germanArticle).isEqualTo(englishArticle.getMaster());
 
     // Assert Master-Derived Relationship of Context
-    Assume.assumeTrue("englishChannelOnThirdLevel should be the language sibling of the germanChannelOnThirdLevel",
-            englishChannelOnThirdLevel.equals(germanChannelOnThirdLevel.getVariantsByLocale().get(Locale.ENGLISH)));
-    Assume.assumeTrue("englishChannelOnThirdLevel should have the germanChannelOnThirdLevel as language master",
-            germanChannelOnThirdLevel.equals(englishChannelOnThirdLevel.getMaster()));
+    assertThat(englishChannelOnThirdLevel).isEqualTo(germanChannelOnThirdLevel.getVariantsByLocale().get(Locale.ENGLISH));
+    assertThat(germanChannelOnThirdLevel).isEqualTo(englishChannelOnThirdLevel.getMaster());
 
     // Assert that our expected target is amongst candidates
-    Assume.assumeTrue("englishChannelOnThirdLevel should be amongst context candidates of english article",
-            englishArticle.getContexts().contains(englishChannelOnThirdLevel));
-    Assume.assumeTrue("germanChannelOnThirdLevel should be amongst context candidates of german article",
-            germanArticle.getContexts().contains(germanChannelOnThirdLevel));
+    assertThat(englishArticle.getContexts()).contains(englishChannelOnThirdLevel);
+    assertThat(germanArticle.getContexts()).contains(germanChannelOnThirdLevel);
 
     // Compute target Context
     Object computedContext = contextStrategy.findAndSelectContextFor(englishArticle, germanChannelOnThirdLevel);
 
     // Final Assert
-    Assert.assertEquals(englishChannelOnThirdLevel, computedContext);
+    assertThat(computedContext).isEqualTo(englishChannelOnThirdLevel);
   }
 }

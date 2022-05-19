@@ -15,26 +15,15 @@ module.exports = jangarooConfig({
   appManifests: {
     en: {
       categories: [
-        "Taxonomy Manager",
+        "Content",
       ],
       cmServiceShortcuts: [
         {
           cmKey: "cmTopicPages",
-          cmCategory: "Taxonomy Manager",
+          cmOrder: 40,
+          cmCategory: "Content",
           name: "Topic Pages",
           url: "",
-          icons: [
-            {
-              src: "packages/com.coremedia.blueprint__custom-topic-pages-studio-plugin/appIcons/taxonomy_24.svg",
-              sizes: "24x24",
-              type: "image/svg",
-            },
-            {
-              src: "packages/com.coremedia.blueprint__custom-topic-pages-studio-plugin/appIcons/taxonomy_192.png",
-              sizes: "192x192",
-              type: "image/png",
-            },
-          ],
           cmAdministrative: true,
           cmService: {
             name: "launchSubAppService",

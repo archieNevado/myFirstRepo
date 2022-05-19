@@ -11,6 +11,7 @@
 # .
 # ├── plugin-descriptors (Containing the downloaded descriptor json files)
 # └── plugins
+#     ├── studio-client (Containing the extracted studio-client packages providing additional studio-apps)
 #     ├── studio-client.main (Containing the extracted studio-client packages for the main app)
 #     ├── studio-client.workflow (Containing the extracted studio-client packages for the workflow app)
 #     ├── studio-server (Containing the studio-server plugin zip files)
@@ -43,7 +44,7 @@ fi
 rm -rf 'plugin-descriptors' 'plugins'
 mkdir 'plugin-descriptors' 'plugins'
 # make sure to create all folders that will be mounted as docker volumes to prevent permission issues
-mkdir -p 'plugins/studio-server' 'plugins/studio-client.main' 'plugins/studio-client.workflow' 'plugins/headless-server' 'plugins/content-feeder' 'plugins/content-server'
+mkdir -p 'plugins/studio-server' 'plugins/studio-client' 'plugins/studio-client.main' 'plugins/studio-client.workflow' 'plugins/headless-server' 'plugins/content-feeder' 'plugins/content-server'
 
 function main() {
   download_descriptors

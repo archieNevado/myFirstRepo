@@ -30,7 +30,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -155,7 +155,7 @@ public class ThemeResourceLinkBuilderTest {
     String result = linkBuilder.getLinkToThemeResource("/img/picture.jpg", request, response);
     assertEquals(linkBuilder.getLocalResourcePath(request, "corporate", "/img/picture.jpg"), result);
 
-    verifyZeroInteractions(linkFormatter);
+    verifyNoMoreInteractions(linkFormatter);
   }
 
   @Test
@@ -172,7 +172,7 @@ public class ThemeResourceLinkBuilderTest {
     String result = linkBuilder.getLinkToThemeResource("ing/picture.jpg", request, response);
 
     assertEquals(StringUtils.EMPTY, result);
-    verifyZeroInteractions(linkFormatter);
+    verifyNoMoreInteractions(linkFormatter);
   }
 
   @Test

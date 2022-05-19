@@ -3,7 +3,6 @@ package com.coremedia.blueprint.common.util.pagination;
 import com.coremedia.xml.Markup;
 import com.coremedia.xml.MarkupFactory;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.xml.sax.InputSource;
 

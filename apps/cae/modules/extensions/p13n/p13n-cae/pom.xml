@@ -270,6 +270,10 @@
           <artifactId>commons-lang</artifactId>
         </exclusion>
         <exclusion>
+          <groupId>commons-io</groupId>
+          <artifactId>commons-io</artifactId>
+        </exclusion>
+        <exclusion>
           <groupId>log4j</groupId>
           <artifactId>log4j</artifactId>
         </exclusion>
@@ -286,20 +290,8 @@
           <artifactId>antisamy</artifactId>
         </exclusion>
         <exclusion>
-          <groupId>org.apache.xmlgraphics</groupId>
-          <artifactId>batik-css</artifactId>
-        </exclusion>
-        <exclusion>
           <groupId>xml-apis</groupId>
           <artifactId>xml-apis</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>xerces</groupId>
-          <artifactId>xercesImpl</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>xalan</groupId>
-          <artifactId>xalan</artifactId>
         </exclusion>
       </exclusions>
     </dependency>

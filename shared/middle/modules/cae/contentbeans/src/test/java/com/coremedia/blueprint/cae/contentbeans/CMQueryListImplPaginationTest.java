@@ -31,7 +31,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -41,14 +40,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 
+@SuppressWarnings("UseOfObsoleteDateTimeApi")
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = CMQueryListImplPaginationTest.LocalConfig.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class CMQueryListImplPaginationTest {
   @Configuration(proxyBeanMethods = false)
-  @EnableConfigurationProperties({
-          DeliveryConfigurationProperties.class
-  })
+  @EnableConfigurationProperties(DeliveryConfigurationProperties.class)
   @Import(XmlRepoConfiguration.class)
   @ImportResource(
           value = {
@@ -83,7 +81,7 @@ class CMQueryListImplPaginationTest {
     Content testFolder = createTestContent();
     try {
       CMQueryListImpl testling = new TestlingBuilder().withTestFolder(testFolder).withPageSize(3).build();
-      checkPagination(testling, 3, 0, 0, Collections.emptyList());
+      checkPagination(testling, 3, 0, 0, List.of());
       // Special case for template convenience:
       // Always serve a page #0, even if there is logically no page at all.
       checkPage(testling, 0);
@@ -99,17 +97,17 @@ class CMQueryListImplPaginationTest {
       CMQueryListImpl testling = new TestlingBuilder().withTestFolder(testFolder)
               .withPageSize(3)
               .withAvailableHits(1).build();
-      checkPagination(testling, 3, 1, 1, Collections.emptyList());
+      checkPagination(testling, 3, 1, 1, List.of());
 
       testling = new TestlingBuilder().withTestFolder(testFolder)
               .withPageSize(3)
               .withAvailableHits(9).build();
-      checkPagination(testling, 3, 3, 9, Collections.emptyList());
+      checkPagination(testling, 3, 3, 9, List.of());
 
       testling = new TestlingBuilder().withTestFolder(testFolder)
               .withPageSize(3)
               .withAvailableHits(10).build();
-      checkPagination(testling, 3, 4, 10, Collections.emptyList());
+      checkPagination(testling, 3, 4, 10, List.of());
     } finally {
       deleteAll(testFolder);
     }
@@ -243,12 +241,12 @@ class CMQueryListImplPaginationTest {
 
   // --- generic checkers -------------------------------------------
 
-  private void checkPagination(CMQueryListImpl testling, int pageSize, int numPages, int numItems, List<Integer> fixedIndices) {
+  private static void checkPagination(CMQueryListImpl testling, int pageSize, int numPages, int numItems, List<Integer> fixedIndices) {
     checkNumbers(testling, pageSize, numPages, numItems);
     checkItems(testling, pageSize, numPages, numItems, fixedIndices);
   }
 
-  private void checkNumbers(CMQueryListImpl testling, int pageSize, int numPages, int numItems) {
+  private static void checkNumbers(CMQueryListImpl testling, int pageSize, int numPages, int numItems) {
     assertTrue(testling.isPaginated());
     assertEquals(pageSize, testling.itemsPerPage());
 
@@ -262,7 +260,7 @@ class CMQueryListImplPaginationTest {
     assertTrue(testling.itemsPerPage()!=-1 || pagination.getNumberOfPages()==1);
   }
 
-  private void checkItems(CMQueryListImpl testling, int pageSize, int numPages, int numItems, List<Integer> fixedIndices) {
+  private static void checkItems(CMQueryListImpl testling, int pageSize, int numPages, int numItems, List<Integer> fixedIndices) {
     int hitCounter = 0;
     int fixCounter = 0;
     // for loop arithmetics:
@@ -276,9 +274,9 @@ class CMQueryListImplPaginationTest {
       for (int i=from; i<to; ++i) {
         String expectedName;
         if (fixedIndices.contains(i)) {
-          expectedName = "fix"+fixCounter++;
+          expectedName = "fix" + fixCounter++;
         } else {
-          expectedName = "hit"+hitCounter++;
+          expectedName = "hit" + hitCounter++;
         }
         String actualName = ((CMLinkable) items.get(i - from)).getContent().getName();
         assertEquals(expectedName, actualName, "Unexpected item on page " + page + ", position " + (i-from));
@@ -286,7 +284,7 @@ class CMQueryListImplPaginationTest {
     }
   }
 
-  private void checkPage(CMQueryListImpl testling, int pageNum, String ... itemNames) {
+  private static void checkPage(CMQueryListImpl testling, int pageNum, String... itemNames) {
     List<? extends Linkable> items = testling.asPagination(pageNum).getItems();
     assertEquals(itemNames.length, items.size());
     for (int i=items.size()-1; i>=0; --i) {
@@ -298,7 +296,7 @@ class CMQueryListImplPaginationTest {
   // --- internal ---------------------------------------------------
 
   private List<CMArticle> createSearchHits(Content testFolder, int num) {
-    return createSearchHits(testFolder, num, Collections.emptyList());
+    return createSearchHits(testFolder, num, List.of());
   }
 
   /**
@@ -312,11 +310,11 @@ class CMQueryListImplPaginationTest {
     int hitCounter = 0;
     int invalidCounter = 0;
     List<CMArticle> result = new ArrayList<>();
-    for (int i=0; i<num; ++i) {
-      result.add(contentBeanFactory.createBeanFor(testFolder.getChild("hit"+hitCounter++), CMArticle.class));
+    for (int i = 0; i < num; ++i) {
+      result.add(contentBeanFactory.createBeanFor(testFolder.getChild("hit" + hitCounter++), CMArticle.class));
     }
     for (int i : invalidItemsAt) {
-      result.add(i, contentBeanFactory.createBeanFor(testFolder.getChild("invalid"+invalidCounter++), CMArticle.class));
+      result.add(i, contentBeanFactory.createBeanFor(testFolder.getChild("invalid" + invalidCounter++), CMArticle.class));
     }
     return result;
   }
@@ -324,7 +322,7 @@ class CMQueryListImplPaginationTest {
 
   // --- manage the test content ------------------------------------
 
-  private void deleteAll(Content content) {
+  private static void deleteAll(Content content) {
     for (Content child : content.getChildren()) {
       deleteAll(child);
     }
@@ -336,14 +334,26 @@ class CMQueryListImplPaginationTest {
     Content testFolder = repository.createSubfolders("/"+getClass().getName()+"-"+(testFolderNumber++)+"-"+System.currentTimeMillis());
 
     // Create the testling content
-    repository.createChild(testFolder, "testling", "CMQueryList", Collections.emptyMap());
+    repository.createContentBuilder()
+            .parent(testFolder)
+            .name("testling")
+            .type("CMQueryList")
+            .create();
     // Create some fixed items
     for (int i=0; i<10; ++i) {
-      repository.createChild(testFolder, "fix"+i, "CMArticle", Collections.emptyMap());
+      repository.createContentBuilder()
+              .parent(testFolder)
+              .name("fix" + i)
+              .type("CMArticle")
+              .create();
     }
     // Create some "search hits"
     for (int i=0; i<10; ++i) {
-      repository.createChild(testFolder, "hit"+i, "CMArticle", Collections.emptyMap());
+      repository.createContentBuilder()
+              .parent(testFolder)
+              .name("hit" + i)
+              .type("CMArticle")
+              .create();
     }
 
     // Create some invalid search hits.
@@ -352,11 +362,16 @@ class CMQueryListImplPaginationTest {
     // validFrom/validTo.  However, the ValidationService in this test scope
     // consists only of a ValidityPeriodValidator, so this is our only chance
     // to have invalid items in the search hits.  In a real world CAE, the
-    // ValidationService has additional extension or custom validators which
+    // ValidationService has additional extension or custom validators, which
     // consider other hits as invalid.
     Map<String,?> pastFromTo = Map.of("validFrom", calendar(42), "validTo", calendar(3600000));
     for (int i=0; i<10; ++i) {
-      repository.createChild(testFolder, "invalid"+i, "CMArticle", pastFromTo);
+      repository.createContentBuilder()
+              .parent(testFolder)
+              .name("invalid" + i)
+              .type("CMArticle")
+              .properties(pastFromTo)
+              .create();
     }
 
     return testFolder;
@@ -387,8 +402,8 @@ class CMQueryListImplPaginationTest {
     List<Struct> links = new ArrayList<>();
     for (int index : indices) {
       links.add(connection.getStructService().createStructBuilder()
-              .set("target", testFolder.getChild("fix"+counter++))
-              .set("index", index+1)
+              .set("target", testFolder.getChild("fix" + counter++))
+              .set("index", index + 1)
               .build());
     }
     StructBuilder extendedItemsStructBuilder = connection.getStructService().createStructBuilder();

@@ -166,7 +166,7 @@ public class AugmentationFacade {
     StoreContext storeContext = storeContextBuilder.build();
 
     if (commerceBeanType.equals(PRODUCT)) {
-      return getProductAugmentationData(commerceId, siteId, externalId, builder, storeContext);
+      return getProductAugmentationData(commerceId, siteId, externalId, PRODUCT, builder, storeContext);
     } else if (commerceBeanType.equals(CATEGORY)) {
       Content content = categoryAugmentationService.getContentByExternalId(format(commerceId), sitesService.getSite(siteId));
       var commerceRef = CommerceRefFactory.from(externalId, CATEGORY, storeContext);
@@ -175,7 +175,7 @@ public class AugmentationFacade {
       CommerceBean commerceBean = connection.getCommerceBeanFactory().createBeanFor(commerceId, storeContext);
       Product parent = ((ProductVariant) commerceBean).getParent();
       if (parent != null){
-        return getProductAugmentationData(parent.getId(), siteId, externalId, builder, storeContext);
+        return getProductAugmentationData(parent.getId(), siteId, externalId, SKU, builder, storeContext);
       }
     }
 
@@ -191,10 +191,11 @@ public class AugmentationFacade {
   private DataFetcherResult<? extends Augmentation> getProductAugmentationData(CommerceId commerceId,
                                                                                String siteId,
                                                                                String externalId,
+                                                                               CommerceBeanType productBeanType,
                                                                                DataFetcherResult.Builder<Augmentation> builder,
                                                                                StoreContext storeContextForCommerceId) {
     Content content = productAugmentationService.getContentByExternalId(format(commerceId), sitesService.getSite(siteId));
-    var commerceRef = CommerceRefFactory.from(externalId, PRODUCT, storeContextForCommerceId);
+    var commerceRef = CommerceRefFactory.from(externalId, productBeanType, storeContextForCommerceId);
 
     return builder.data(new ProductAugmentation(commerceRef, content)).build();
   }

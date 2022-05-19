@@ -42,7 +42,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyObject;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
@@ -93,7 +92,7 @@ public class AlxResourceTest {
     MockitoAnnotations.initMocks(this);
     alxResource = new AlxResource(contentRepository, settingsService, pageViewReportModelService, publicationReportModelService, contentContextStrategy);
 
-    when(settingsService.setting(eq(RetrievalUtil.DOCUMENT_PROPERTY_ANALYTICS_PROVIDER), eq(String.class), anyObject())).thenReturn("");
+    when(settingsService.setting(eq(RetrievalUtil.DOCUMENT_PROPERTY_ANALYTICS_PROVIDER), eq(String.class), any())).thenReturn("");
 
     when(pageViewReportModelService.getPageViewResult(any(Content.class), eq(DEFAULT_SERVICE_PROVIDER))).thenReturn(pageViewResult);
     when(pageViewResult.getReportModel()).thenReturn(pageViewReportModel);

@@ -19,8 +19,6 @@ services:
       COMMERCE_SYSTEM: hybris
       ENVIRONMENT_FQDN: ${ENVIRONMENT_FQDN:-docker.localhost}
       HYBRIS_HOST: ${HYBRIS_HOST}
-    labels:
-      traefik.enable: true
 
   traefik:
     environment:

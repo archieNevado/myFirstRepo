@@ -3,6 +3,8 @@ package com.coremedia.catalog.studio.lib.validators;
 import com.coremedia.blueprint.base.ecommerce.content.CmsCatalogConfiguration;
 import com.coremedia.blueprint.base.ecommerce.content.CmsCatalogTypes;
 import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
+import com.coremedia.blueprint.base.links.impl.BlueprintUrlPathFormattingConfiguration;
+import com.coremedia.blueprint.base.multisite.BlueprintMultisiteConfiguration;
 import com.coremedia.blueprint.base.rest.validators.ChannelNavigationValidator;
 import com.coremedia.blueprint.base.rest.validators.ChannelReferrerValidator;
 import com.coremedia.blueprint.base.rest.validators.ChannelSegmentValidator;
@@ -25,11 +27,11 @@ import java.util.Objects;
 
 @Configuration(proxyBeanMethods = false)
 @Import({
+        BlueprintMultisiteConfiguration.class,
+        BlueprintUrlPathFormattingConfiguration.class,
         CmsCatalogConfiguration.class,
 })
 @ImportResource(value = {
-        "classpath:/com/coremedia/blueprint/base/links/bpbase-urlpathformatting.xml",
-        "classpath:/com/coremedia/cap/multisite/multisite-services.xml", // for "sitesService"
         "classpath:/framework/spring/bpbase-ec-cms-connection.xml",
         "classpath:/framework/spring/bpbase-ec-cms-commercebeans.xml",
         "classpath:/com/coremedia/blueprint/ecommerce/segments/ecommerce-segments.xml"

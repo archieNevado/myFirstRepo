@@ -117,6 +117,7 @@ class InheritReferencesTest extends AbstractCatalogAssetTest {
       this.#openContextMenu(),
       this.#waitContextMenuOpened(),
       this.#waitRemoveButtonEnabled(),
+      this.#waitRemoveButtonNotHidden(),
 
       this.#forceReadOnly(),
 
@@ -124,7 +125,7 @@ class InheritReferencesTest extends AbstractCatalogAssetTest {
       this.#waitForGridReadonly(),
       this.#openContextMenu(),
       this.#waitContextMenuOpened(),
-      this.#waitRemoveButtonDisabled(),
+      this.#waitRemoveButtonHidden(),
 
       this.#forceWritable(),
 
@@ -140,7 +141,7 @@ class InheritReferencesTest extends AbstractCatalogAssetTest {
       this.#waitForGridReadonly(),
       this.#openContextMenu(),
       this.#waitContextMenuOpened(),
-      this.#waitRemoveButtonDisabled(),
+      this.#waitRemoveButtonHidden(),
 
       this.#makeContentWritable(),
 
@@ -430,6 +431,20 @@ class InheritReferencesTest extends AbstractCatalogAssetTest {
     return new Step("Wait remove button disabled",
       (): boolean =>
         this.#removeButton.disabled,
+    );
+  }
+
+  #waitRemoveButtonHidden(): Step {
+    return new Step("Wait remove button hidden",
+      (): boolean =>
+        this.#removeButton.hidden,
+    );
+  }
+
+  #waitRemoveButtonNotHidden(): Step {
+    return new Step("Wait remove button disabled",
+      (): boolean =>
+        !this.#removeButton.hidden,
     );
   }
 

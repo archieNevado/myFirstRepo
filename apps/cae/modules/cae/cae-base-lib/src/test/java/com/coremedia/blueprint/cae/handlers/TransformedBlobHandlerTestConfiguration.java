@@ -2,6 +2,7 @@ package com.coremedia.blueprint.cae.handlers;
 
 import com.coremedia.blueprint.base.links.ContentLinkBuilder;
 import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
+import com.coremedia.blueprint.cae.configuration.BlueprintPageCaeContentBeansConfiguration;
 import com.coremedia.blueprint.cae.util.DefaultSecureHashCodeGeneratorStrategy;
 import com.coremedia.blueprint.testing.ContentTestConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
@@ -12,16 +13,13 @@ import com.coremedia.objectserver.dataviews.DataViewFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.ImportResource;
 
 @Configuration(proxyBeanMethods = false)
-@ImportResource(
-        value = {
-                "classpath:/framework/spring/blueprint-page.xml",
-        },
-        reader = com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader.class
-)
-@Import({XmlRepoConfiguration.class, ContentTestConfiguration.class})
+@Import({
+        BlueprintPageCaeContentBeansConfiguration.class,
+        ContentTestConfiguration.class,
+        XmlRepoConfiguration.class,
+})
 class TransformedBlobHandlerTestConfiguration extends AbstractHandlerTestConfiguration {
 
   @Bean
