@@ -2,7 +2,7 @@
   "name": "shared-example",
   "description": "This theme serves as the foundation for other themes like ChefCorp or Calista to demonstrate CoreMedia's theme inheritance functionality.",
   "thumbnail": "theme.jpg",
-
+  "enableDuplicateSassImportsFix": true,
   "scripts": [
     {
       "type": "webpack",

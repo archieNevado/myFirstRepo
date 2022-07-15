@@ -12,6 +12,7 @@ import com.coremedia.blueprint.cae.richtext.filter.P2TagFilter;
 import com.coremedia.blueprint.cae.richtext.filter.UnsurroundFilter;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cap.content.ContentRepository;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.id.IdProvider;
 import com.coremedia.id.IdServicesConfiguration;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
@@ -74,12 +75,14 @@ public class BlueprintRichtextFiltersConfiguration {
   @Bean
   LinkValidationFilter linkValidationFilter(IdProvider idProvider,
                                             DataViewFactory dataViewFactory,
-                                            ValidationService<Object> validationService) {
+                                            ValidationService<Object> validationService,
+                                            DeliveryConfigurationProperties deliveryConfigurationProperties) {
     LinkValidationFilter filter = new LinkValidationFilter();
     filter.setIdProvider(idProvider);
     filter.setDataViewFactory(dataViewFactory);
     filter.setValidationService(validationService);
     filter.setRenderLinkText(false);
+    filter.setPreviewMode(deliveryConfigurationProperties.isPreviewMode());
     return filter;
   }
 
@@ -89,11 +92,13 @@ public class BlueprintRichtextFiltersConfiguration {
   @Bean
   CMDownloadLinkValidationFilter cmDownloadLinkValidationFilter(IdProvider idProvider,
                                                                 DataViewFactory dataViewFactory,
-                                                                ValidationService validationService) {
+                                                                ValidationService validationService,
+                                                                DeliveryConfigurationProperties deliveryConfigurationProperties) {
     CMDownloadLinkValidationFilter filter = new CMDownloadLinkValidationFilter();
     filter.setIdProvider(idProvider);
     filter.setDataViewFactory(dataViewFactory);
     filter.setValidationService(validationService);
+    filter.setPreviewMode(deliveryConfigurationProperties.isPreviewMode());
     return filter;
   }
 

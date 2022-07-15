@@ -325,14 +325,16 @@ class TaxonomyExplorerPanelBase extends Panel {
    * the view is set to the root nodes.
    */
   #selectedNodeChanged(): void {
-    this.#commitTaxonomyNodeForm();
-    const selection: Array<any> = this.#selectedValueExpression.getValue();
-    this.#changeSelectedNode(selection);
+    this.#commitTaxonomyNodeForm(() => {
+      const selection: Array<any> = this.#selectedValueExpression.getValue();
+      this.#changeSelectedNode(selection);
 
-    //only remove the tabs for the root nodes, all others have a tabbed form
-    if (selection.length === 0 || selection[0].isRoot()) {
-      TaxonomyExplorerPanelBase.#clearTabs();
-    }
+      //only remove the tabs for the root nodes, all others have a tabbed form
+      if (selection.length === 0 || selection[0].isRoot()) {
+        TaxonomyExplorerPanelBase.#clearTabs();
+      }
+    });
+
   }
 
   /**
@@ -451,21 +453,25 @@ class TaxonomyExplorerPanelBase extends Panel {
   /**
    * Commits the changes on a node and refreshes the UI afterwards.
    */
-  #commitTaxonomyNodeForm(): void {
+  #commitTaxonomyNodeForm(callback:() => void): void {
     const node = as(this.getDisplayedTaxonomyNodeExpression().getValue(), TaxonomyNode);
     const content = as(this.getDisplayedTaxonomyContentExpression().getValue(), Content);
 
     if (node && !node.isRoot() && (!content.isCheckedOut() || content.isCheckedOutByCurrentSession())) {
-      const parentColumn = this.getColumnContainer(node);
+      const nodeColumn = this.getColumnContainer(node);
       node.commitNode((): void =>
         content.invalidate((): void => {
           this.#refreshNode(node);
           if (this.#getNodeNameDirtyExpression().getValue()) {
             this.#getNodeNameDirtyExpression().setValue(false);
-            parentColumn && parentColumn.parentNode.loadChildren(true, ()=>{});
+            nodeColumn && nodeColumn.parentNode.loadChildren(true, ()=>{});
           }
+          callback();
         }),
       );
+    }
+    else {
+      callback();
     }
   }
 

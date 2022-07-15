@@ -9,6 +9,7 @@ import { bind, mixin } from "@jangaroo/runtime";
 import Config from "@jangaroo/runtime/Config";
 import TaxonomyStudioPlugin from "../../TaxonomyStudioPlugin";
 import TaxonomyPreferences from "./TaxonomyPreferences";
+import PreferenceWindowBase from "@coremedia/studio-client.ext.frame-components/preferences/PreferenceWindowBase";
 
 interface TaxonomyPreferencesBaseConfig extends Config<Panel> {
 }
@@ -18,7 +19,7 @@ class TaxonomyPreferencesBase extends Panel implements PreferencePanel {
 
   static PREFERENCE_SEMANTIC_SETTINGS_KEY: string = "semanticSettings";
 
-  previewOptionValueExpression: ValueExpression = null;
+  #previewOptionValueExpression: ValueExpression<string>;
 
   static #comboStore: Array<any> = [];
 
@@ -39,20 +40,29 @@ class TaxonomyPreferencesBase extends Panel implements PreferencePanel {
   }
 
   protected getSuggestionTypesValueExpression(): ValueExpression {
-    if (!this.previewOptionValueExpression) {
-      this.previewOptionValueExpression = ValueExpressionFactory.create("taxonomyOption", editorContext._.getBeanFactory().createLocalBean());
-      this.previewOptionValueExpression.addChangeListener(bind(this, this.#persistOptionSelection));
+    if (!this.#previewOptionValueExpression) {
+      this.#previewOptionValueExpression = ValueExpressionFactory.create("taxonomyOption", editorContext._.getBeanFactory().createLocalBean());
       let valueString: string = editorContext._.getPreferences().get(TaxonomyPreferencesBase.PREFERENCE_SEMANTIC_SETTINGS_KEY);
       if (!valueString) {
         valueString = TaxonomyStudioPlugin.DEFAULT_SUGGESTION_KEY;
       }
-      this.previewOptionValueExpression.setValue(valueString);
+      this.#previewOptionValueExpression.setValue(valueString);
+      this.#previewOptionValueExpression.addChangeListener(bind(this, this.#forceReload));
     }
-    return this.previewOptionValueExpression;
+    return this.#previewOptionValueExpression;
+  }
+
+  protected override onDestroy(): void {
+    super.onDestroy();
+    this.#previewOptionValueExpression.removeChangeListener(bind(this, this.#forceReload));
   }
 
   getTaxonomyOptions(): Array<any> {
     return TaxonomyPreferencesBase.#comboStore;
+  }
+
+  #forceReload(): void {
+    PreferenceWindowBase.getForceReloadExpression().setValue(true);
   }
 
   #persistOptionSelection(ve: ValueExpression): void {
@@ -62,9 +72,10 @@ class TaxonomyPreferencesBase extends Panel implements PreferencePanel {
   }
 
   updatePreferences(): void {
-    this.#persistOptionSelection(this.previewOptionValueExpression);
+    this.#persistOptionSelection(this.#previewOptionValueExpression);
   }
 }
+
 mixin(TaxonomyPreferencesBase, PreferencePanel);
 
 export default TaxonomyPreferencesBase;

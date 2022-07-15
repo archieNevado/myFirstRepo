@@ -5,7 +5,6 @@ import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
-import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {
-        DeliveryConfigurationProperties.class,
         BlueprintViewsCaeBaseLibConfiguration.class,
         XmlRepoConfiguration.class,
 })

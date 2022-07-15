@@ -27,6 +27,8 @@ import Config from "@jangaroo/runtime/Config";
 import BlueprintFormsStudioPlugin from "./BlueprintFormsStudioPlugin";
 import CMChannelExtension from "./CMChannelExtension";
 import ContentInitializer from "./util/ContentInitializer";
+import UploadSettingsService
+  from "@coremedia/studio-client.main.editor-components/sdk/upload/UploadSettingsService";
 
 interface BlueprintFormsStudioPluginBaseConfig extends Config<StudioPlugin> {
 }
@@ -56,6 +58,9 @@ class BlueprintFormsStudioPluginBase extends StudioPlugin {
 
     //Enable advanced tabs
     TabExpandPlugin.ADVANCED_TABS_ENABLED = true;
+
+    //preload upload settings
+    UploadSettingsService.getInstance().getUploadSettings();
 
     /**
      * Globally turns off strict consistency checks for all BindPropertyPlugins where the config option

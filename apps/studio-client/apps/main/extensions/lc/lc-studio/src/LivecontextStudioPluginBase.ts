@@ -32,6 +32,7 @@ import PreviewPanel from "@coremedia/studio-client.main.editor-components/sdk/pr
 import QuickCreate from "@coremedia/studio-client.main.editor-components/sdk/quickcreate/QuickCreate";
 import ProcessingData from "@coremedia/studio-client.main.editor-components/sdk/quickcreate/processing/ProcessingData";
 import MetaStyleService from "@coremedia/studio-client.main.editor-components/sdk/util/MetaStyleService";
+import DragDropVisualFeedback from "@coremedia/studio-client.ext.interaction-components/DragDropVisualFeedback";
 import Component from "@jangaroo/ext-ts/Component";
 import ComponentManager from "@jangaroo/ext-ts/ComponentManager";
 import FieldContainer from "@jangaroo/ext-ts/form/FieldContainer";
@@ -47,6 +48,8 @@ import LivecontextCollectionViewExtension from "./library/LivecontextCollectionV
 import LivecontextContentTreeRelation from "./library/LivecontextContentTreeRelation";
 import ShowInCatalogTreeHelper from "./library/ShowInCatalogTreeHelper";
 import StoreNodeRenderer from "./pbe/StoreNodeRenderer";
+import CatalogObjectDragGhostRenderSupport from "./CatalogObjectDragGhostRenderSupport";
+
 
 interface LivecontextStudioPluginBaseConfig extends Config<StudioPlugin> {
 }
@@ -137,7 +140,9 @@ class LivecontextStudioPluginBase extends StudioPlugin {
     contentTreeRelationRegistry._.addExtension(lcContentTreeRelation, LivecontextStudioPluginBase.getIsExtensionApplicable(lcContentTreeRelation));
     const lcCollectionViewExtension = new LivecontextCollectionViewExtension();
     editorContext.getCollectionViewExtender().addExtension(lcCollectionViewExtension, LivecontextStudioPluginBase.getIsExtensionApplicable(lcContentTreeRelation));
-
+    DragDropVisualFeedback.addDragGhostRenderSupport(CatalogObjectDragGhostRenderSupport, (item): boolean =>
+      is(item, CatalogObject),
+    );
     /**
      * Apply image link list preview
      */

@@ -13,6 +13,7 @@ import java.util.Optional;
  * Provider for search URLs pointing to the commerce system.
  */
 @DefaultAnnotation(NonNull.class)
+@Deprecated(forRemoval = true, since = "2204")
 public interface CommerceSearchRedirectUrlProvider {
 
   /**

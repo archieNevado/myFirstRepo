@@ -16,6 +16,7 @@ import java.util.Optional;
  * LC Url Provider to help with formatted not encoded commerce URLs.
  */
 @DefaultAnnotation(NonNull.class)
+@Deprecated(forRemoval = true, since = "2204")
 public interface LiveContextUrlProvider {
 
   /**

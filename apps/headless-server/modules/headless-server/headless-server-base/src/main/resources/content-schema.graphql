@@ -329,7 +329,7 @@ interface CMTaxonomy @inherit(from: ["CMTeasable"]) {
 }
 
 interface CMTeasable @inherit(from: ["CMLinkable", "Detail", "Banner"]) {
-  authors: [CMTeasable]
+  authors: [CMPerson]
   authorsPaged(offset: Int, limit: Int): CMTeasablePaginationResult
   related: [CMTeasable]
   relatedPaged(offset: Int, limit: Int): CMTeasablePaginationResult
@@ -594,7 +594,7 @@ type CMTaxonomyImpl implements CMTaxonomy @inherit(from: ["CMTeasableImpl"]) {
 }
 
 type CMTeasableImpl implements CMTeasable @inherit(from: ["CMLinkableImpl"]) {
-  authors: [CMTeasable]
+  authors: [CMPerson]
   authorsPaged(offset: Int, limit:Int): CMTeasablePaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, #this.authors)")
   detailText: RichText @fetch(from: "detailText")
   detailTextLegacy(view: String): String @fetch(from: "detailText?.view(#view?:'default')") @deprecated(reason: "Replaced by new RichText type")

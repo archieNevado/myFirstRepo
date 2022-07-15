@@ -23,7 +23,7 @@
     <jib.skip>true</jib.skip>
     <!--set to build to use without docker being installed but then you need a registry configured in jib.repository-->
     <jib.goal>dockerBuild</jib.goal>
-    <application.image-base>coremedia/java-application-base:2.4.3-corretto-11</application.image-base>
+    <application.image-base>coremedia/java-application-base:2.4.4-corretto-11</application.image-base>
     <application.image-prefix>coremedia</application.image-prefix>
     <application.image-suffix>management-tools</application.image-suffix>
     <application.image-tag>${project.version}</application.image-tag>

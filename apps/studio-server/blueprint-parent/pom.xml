@@ -42,7 +42,7 @@
 
     <customer>Blueprint</customer>
 
-    <spring.boot.version>2.6.7</spring.boot.version>
+    <spring.boot.version>2.6.8</spring.boot.version>
     <application-plugin.version>3.0.1</application-plugin.version>
 
     <!--
@@ -78,13 +78,13 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.62</tomcat.embed.version>
-    <cm.studio-server.core.version>2204.1</cm.studio-server.core.version>
-    <cm.common.core.version>2204.1</cm.common.core.version>
+    <tomcat.embed.version>9.0.64</tomcat.embed.version>
+    <cm.studio-server.core.version>2204.2</cm.studio-server.core.version>
+    <cm.common.core.version>2204.2</cm.common.core.version>
     <cm.common.bp.version>1-SNAPSHOT</cm.common.bp.version>
-    <cm.middle.core.version>2204.1</cm.middle.core.version>
+    <cm.middle.core.version>2204.2</cm.middle.core.version>
     <cm.middle.bp.version>1-SNAPSHOT</cm.middle.bp.version>
-    <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
+    <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
 
     <showDeprecation>true</showDeprecation>
     <showWarnings>true</showWarnings>
@@ -263,10 +263,6 @@
       <id>localfs</id>
       <url>file://${project.basedir}/target</url>
     </snapshotRepository>
-    <repository>
-      <id>coremedia.external.releases</id>
-      <url>https://repository.coremedia.com/nexus/service/local/staging/deploy/maven2</url>
-    </repository>
     <site>
       <id>localsite</id>
       <url>file://${project.basedir}/target/site-deploy</url>

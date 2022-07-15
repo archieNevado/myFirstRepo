@@ -5,6 +5,8 @@ import com.coremedia.id.IdProvider;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.xml.Filter;
 import com.coremedia.xml.Xlink;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -12,15 +14,21 @@ import org.xml.sax.SAXException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static java.lang.invoke.MethodHandles.lookup;
+
 /**
  * A {@link Filter} that suppresses links to invalid content.
  *
  * <p>Content validity is checked with {@link ValidationService#validate}.
  */
 public class LinkValidationFilter extends Filter implements FilterFactory {
+
+  private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
+
   private IdProvider idProvider;
   private ValidationService<Object> validationService;
   private DataViewFactory dataViewFactory;
+  private boolean isPreviewMode = false;
   private boolean renderLinkText = true;
 
   private boolean omittingA;
@@ -36,6 +44,10 @@ public class LinkValidationFilter extends Filter implements FilterFactory {
   @Required
   public void setValidationService(ValidationService<Object> validationService) {
     this.validationService = validationService;
+  }
+
+  public void setPreviewMode(boolean previewMode) {
+    isPreviewMode = previewMode;
   }
 
   /**
@@ -96,10 +108,19 @@ public class LinkValidationFilter extends Filter implements FilterFactory {
   @Override
   public void startElement(String namespaceUri, String localName, String qName, Attributes atts) throws SAXException {
     if (isA(namespaceUri, localName, qName, "a")) {
-      if (isValid(atts)) {
-        super.startElement(namespaceUri, localName, qName, atts);
-      } else {
-        omittingA = true;
+      omittingA = !isValid(atts);
+      if (!omittingA) {
+        try {
+          super.startElement(namespaceUri, localName, qName, atts);
+        } catch (Exception e) {
+          if (!isPreviewMode) {
+            // do not break the whole filter chain, but consider the link 'invalid'
+            LOG.warn("Ignoring exception '{}' while rewriting 'a' tag. Dropping the tag altogether.", e.getMessage());
+            omittingA = true;
+          } else {
+            throw e;
+          }
+        }
       }
     } else {
       super.startElement(namespaceUri, localName, qName, atts);

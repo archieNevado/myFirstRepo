@@ -78,7 +78,7 @@ function calculateSmartImport(prev) {
   };
 }
 
-module.exports = function (url, prev, done) {
+function sassSmartImport(url, prev, done) {
   // take the prev of the first import to get variant information (prev is the entry point)
   this._sassSmartImport = this._sassSmartImport || calculateSmartImport(prev);
 
@@ -129,12 +129,16 @@ module.exports = function (url, prev, done) {
     done({
       contents: scssContent,
       // also rewrite filename otherwise the loop protection might abort the scss compilation
+      // we also need to pass a timestamp as otherwise the import is cached leading other import loaders to be skipped
+      // which e.g. causes scss to be included multiple times (which is avoided by sassImportOnce)
       file: path.resolve(
         path.dirname(pkgJson),
         "smart-import-" + varsOrPartials + ".scss"
-      ),
+      ) + (sassSmartImport.enableDuplicateSassImportsFix ? "?" + new Date().getTime() : ""),
     });
   } else {
     done(nodeSass.types.NULL);
   }
 };
+
+module.exports = sassSmartImport;

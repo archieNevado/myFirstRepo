@@ -10,9 +10,9 @@
     "convert": "node ./dist/bin/converter.js"
   },
   "dependencies": {
-    "@babel/core": "^7.14.0",
-    "@babel/types": "^7.14.0",
-    "@coremedia/studio-client.tools.svg-icon-merger": "2204.1.0",
+    "@babel/core": "^7.18.2",
+    "@babel/types": "^7.18.4",
+    "@coremedia/studio-client.tools.svg-icon-merger": "2204.2.0",
     "find-up": "^5.0.0",
     "fs-extra": "^9.0.1",
     "js-yaml": "^4.1.0",
@@ -21,9 +21,9 @@
     "yargs": "^16.1.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.13.16",
-    "@babel/preset-env": "^7.14.0",
-    "@babel/preset-typescript": "^7.13.0",
+    "@babel/cli": "^7.17.10",
+    "@babel/preset-env": "^7.18.2",
+    "@babel/preset-typescript": "^7.17.12",
     "@types/fs-extra": "^9.0.13",
     "@types/js-yaml": "^4.0.4",
     "@types/node": "^16.11.6",
