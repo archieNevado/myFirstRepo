@@ -1,3 +1,4 @@
+<@cm.responseHeader name="Content-Type" value="text/html; charset=UTF-8"/>
 <#-- @ftlvariable name="self" type="java.lang.Object" -->
 
 <#assign blockClass=cm.localParameters().blockClass!"cm-slick-carousel" />

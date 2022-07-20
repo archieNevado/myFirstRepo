@@ -2,6 +2,7 @@
   "name": "sitegenesis",
   "description": "The SiteGenesis Theme demonstrates the fragment-based integration approach with Salesforce Commerce Cloud and the SiteGenesis store example.",
   "thumbnail": "theme.jpg",
+  "enableDuplicateSassImportsFix": true,
   "styles": [
     {
       "type": "webpack",

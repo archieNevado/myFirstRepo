@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
@@ -18,6 +19,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
         "net.devh.boot.grpc.client.autoconfigure.GrpcClientAutoConfiguration",
         "net.devh.boot.grpc.client.autoconfigure.GrpcClientHealthAutoConfiguration",
         "net.devh.boot.grpc.client.autoconfigure.GrpcClientMetricAutoConfiguration",
+})
+@ServletComponentScan(basePackages = {
+        "com.coremedia.caas.web.filter"
 })
 @EnableScheduling
 public class HeadlessServerApp {

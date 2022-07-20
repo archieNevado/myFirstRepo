@@ -47,11 +47,10 @@
 
   &__picture-box {
     display: none;
-    @include breakpoints($cm-navigation-full-menu-breakpoints) {
-      display: block;
-    }
 
-    @include aspect-ratio-box(16, 9);
+    @include breakpoints($cm-navigation-full-menu-breakpoints) {
+      @include aspect-ratio-box(16, 9);
+    }
   }
 
   &__picture {

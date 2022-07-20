@@ -15,6 +15,8 @@ class ThemeDefinitionHelper {
     try {
       JAXBContext jaxbContext = JAXBContext.newInstance(ThemeDefinition.class);
       Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+      // Security, XXE: The incoming document is safe, see
+      // ImportData#addFileToImport for details.
       return (ThemeDefinition) jaxbUnmarshaller.unmarshal(document);
     } catch (JAXBException e) {
       throw new IllegalArgumentException("Cannot extract theme definition from DOM", e);

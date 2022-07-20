@@ -4,14 +4,14 @@
   "author": "CoreMedia GmbH",
   "license": "CoreMedia Open Source License",
   "dependencies": {
-    "@coremedia/studio-client.cap-base-models": "2201.2.0",
-    "@jangaroo/runtime": "^1.1.1"
+    "@coremedia/studio-client.cap-base-models": "2201.3.0",
+    "@jangaroo/runtime": "^1.2.1"
   },
   "devDependencies": {
-    "@jangaroo/build": "^1.1.1",
-    "@jangaroo/core": "^1.1.1",
-    "@jangaroo/eslint-config": "^1.1.1",
-    "@jangaroo/publish": "^1.1.1",
+    "@jangaroo/build": "^1.2.1",
+    "@jangaroo/core": "^1.2.1",
+    "@jangaroo/eslint-config": "^1.2.1",
+    "@jangaroo/publish": "^1.2.1",
     "eslint": "^7.27.0",
     "rimraf": "^3.0.2"
   },
@@ -22,7 +22,12 @@
     "publish": "jangaroo publish",
     "lint": "eslint --fix \"src/**/*.ts\""
   },
+  "types": "./src/index.ts",
   "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./dist/src/index.js"
+    },
     "./*": {
       "types": "./src/*.ts",
       "default": "./dist/src/*.js"
@@ -30,7 +35,12 @@
   },
   "publishConfig": {
     "directory": "dist",
+    "types": "./src/index.d.ts",
     "exports": {
+      ".": {
+        "types": "./src/index.d.ts",
+        "default": "./src/index.js"
+      },
       "./*": {
         "types": "./src/*.d.ts",
         "default": "./src/*.js"

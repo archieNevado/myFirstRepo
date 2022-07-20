@@ -35,7 +35,7 @@ module.exports = jangarooConfig({
           type: "image/png",
         },
       ],
-      start_url: "index.html",
+      start_url: ".",
       theme_color: "#b3b1b1",
       background_color: "#b3b1b1",
       display: "standalone",

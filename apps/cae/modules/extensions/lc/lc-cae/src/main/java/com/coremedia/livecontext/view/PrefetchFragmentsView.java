@@ -96,6 +96,9 @@ public class PrefetchFragmentsView implements TextView {
             "' is not a Page object.");
   }
 
+  // Checkmarx assumes a "CGI Reflected XSS" issue here.
+  // This is a false positive.
+  // The content type is JSON, which does not feature executable code.
   private void writeResponse(String view, @NonNull Writer out, @NonNull HttpServletRequest request,
                              @NonNull HttpServletResponse response, @NonNull Page page,
                              @NonNull JsonArray fragmentsJson) {

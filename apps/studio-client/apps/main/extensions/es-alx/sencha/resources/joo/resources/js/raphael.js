@@ -5959,6 +5959,11 @@
             $(o.node, {"stroke-dasharray": dashes.join(",")});
         }
     },
+    /**
+     * Static Application Security Testing (SAST) tools like Checkmarx may complain
+     * about this function, if they assume that it embeds untrusted data without
+     * proper sanitization or encoding. Such reports are false positives.
+     */
     setFillAndStroke = function (o, params) {
         var node = o.node,
             attrs = o.attrs,

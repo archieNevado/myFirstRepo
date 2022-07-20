@@ -524,8 +524,12 @@ public class ThemeImporterImpl implements ThemeImporter {
   private Map<String, Object> extractJavaScriptProperties(JavaScript code) {
     Map<String, Object> codeProperties = extractCodeProperties(code);
     codeProperties.put(IN_HEAD_PROPERTY, code.isInHead() ? 1 : 0);
-    Struct htmlAttributes = capConnection.getStructService().createStructBuilder().declareBoolean("defer", code.isDefer()).build();
-    codeProperties.put(HTML_ATTRIBUTES_PROPERTY, htmlAttributes);
+    if (code.isDefer()) {
+      Struct htmlAttributes = capConnection.getStructService().createStructBuilder().declareBoolean("defer", true).build();
+      codeProperties.put(HTML_ATTRIBUTES_PROPERTY, htmlAttributes);
+    } else {
+      codeProperties.remove(HTML_ATTRIBUTES_PROPERTY);
+    }
     return codeProperties;
   }
 

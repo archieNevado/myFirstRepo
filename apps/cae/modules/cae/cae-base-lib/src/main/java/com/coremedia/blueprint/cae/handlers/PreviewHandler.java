@@ -117,6 +117,10 @@ public class PreviewHandler extends IdRedirectHandlerBase {
     }
   }
 
+  // Checkmarx complains about enabling "Session Fixation" here.
+  // That is a false positive.  This method does not perform
+  // user authentication, but only adds an attribute to the session
+  // provided by the Spring framework.
   private static void setSessionAttribute(@NonNull HttpServletRequest request, @NonNull String name,
                                           @Nullable String value) {
     HttpSession session = request.getSession(true);

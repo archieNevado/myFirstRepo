@@ -2,7 +2,7 @@
   "name": "chefcorp",
   "description": "The ChefCorp Theme demonstrates CoreMedia's frontend capabilities with a simple brand website design.",
   "thumbnail": "theme.jpg",
-
+  "enableDuplicateSassImportsFix": true,
   "scripts": [
     {
       "type": "webpack",

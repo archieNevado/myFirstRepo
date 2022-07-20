@@ -5,20 +5,20 @@
   "license": "CoreMedia Open Source License",
   "private": true,
   "dependencies": {
-    "@coremedia/studio-client.cap-rest-client": "2201.2.0",
-    "@coremedia/studio-client.cap-rest-client-impl": "2201.2.0",
-    "@coremedia/studio-client.client-core": "2201.2.0",
-    "@coremedia/studio-client.client-core-impl": "2201.2.0",
-    "@coremedia/studio-client.client-core-test-helper": "2201.2.0",
-    "@coremedia/studio-client.main.editor-components": "2201.2.0",
-    "@coremedia/studio-client.multi-site-models": "2201.2.0",
-    "@jangaroo/runtime": "^1.1.1"
+    "@coremedia/studio-client.cap-rest-client": "2201.3.0",
+    "@coremedia/studio-client.cap-rest-client-impl": "2201.3.0",
+    "@coremedia/studio-client.client-core": "2201.3.0",
+    "@coremedia/studio-client.client-core-impl": "2201.3.0",
+    "@coremedia/studio-client.client-core-test-helper": "2201.3.0",
+    "@coremedia/studio-client.main.editor-components": "2201.3.0",
+    "@coremedia/studio-client.multi-site-models": "2201.3.0",
+    "@jangaroo/runtime": "^1.2.1"
   },
   "devDependencies": {
-    "@jangaroo/build": "^1.1.1",
-    "@jangaroo/core": "^1.1.1",
-    "@jangaroo/eslint-config": "^1.1.1",
-    "@jangaroo/publish": "^1.1.1",
+    "@jangaroo/build": "^1.2.1",
+    "@jangaroo/core": "^1.2.1",
+    "@jangaroo/eslint-config": "^1.2.1",
+    "@jangaroo/publish": "^1.2.1",
     "eslint": "^7.27.0",
     "rimraf": "^3.0.2"
   },

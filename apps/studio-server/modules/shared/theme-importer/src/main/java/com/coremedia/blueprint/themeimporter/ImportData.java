@@ -205,6 +205,8 @@ class ImportData {
     } else if (hasType(mimeTypeLC, "java-archive")) {
       putBlob(stream, path, mimeType, templateSets);
     } else if (hasType(mimeTypeLC, "xml")) {
+      // Security, XXE: XmlUtil5 uses a DocumentBuilderFactory which is
+      // configured securely to prevent XXE attacks.
       themeDescriptors.put(path, new XmlUtil5(false).parse(IOUtils.toBufferedInputStream(stream)));
     } else if (hasType(mimeTypeLC, "json")) {
       settings.put(path, IOUtils.toString(stream, StandardCharsets.UTF_8));

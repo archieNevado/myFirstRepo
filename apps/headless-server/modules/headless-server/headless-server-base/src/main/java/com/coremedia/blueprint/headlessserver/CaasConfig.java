@@ -36,6 +36,7 @@ import com.coremedia.caas.media.FilenameBlobAdapter;
 import com.coremedia.caas.media.FilenameBlobAdapterFactory;
 import com.coremedia.caas.media.ResponsiveMediaAdapter;
 import com.coremedia.caas.media.ResponsiveMediaAdapterFactory;
+import com.coremedia.caas.media.ResponsiveMediaHashCacheKeyFactory;
 import com.coremedia.caas.model.ContentRoot;
 import com.coremedia.caas.model.adapter.CMGrammarRichTextAdapterFactory;
 import com.coremedia.caas.model.adapter.ContentBlobAdapter;
@@ -75,7 +76,6 @@ import com.coremedia.caas.spel.SpelFunctions;
 import com.coremedia.caas.web.CaasPersistedQueryConfigurationProperties;
 import com.coremedia.caas.web.CaasServiceConfigurationProperties;
 import com.coremedia.caas.web.GraphiqlConfigurationProperties;
-import com.coremedia.caas.web.filter.HSTSResponseHeaderFilter;
 import com.coremedia.caas.web.link.ContentBlobLinkComposer;
 import com.coremedia.caas.web.link.ContentMarkupLinkComposer;
 import com.coremedia.caas.web.link.FilenameBlobLinkComposer;
@@ -246,7 +246,9 @@ import static java.lang.invoke.MethodHandles.lookup;
         "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
         "classpath:/com/coremedia/blueprint/base/pagegrid/impl/bpbase-pagegrid-services.xml",
         "classpath:/com/coremedia/blueprint/base/navigation/context/bpbase-default-contextstrategy.xml",
-        "classpath:/com/coremedia/blueprint/base/links/bpbase-urlpathformatting.xml"
+        "classpath:/com/coremedia/blueprint/base/links/bpbase-urlpathformatting.xml",
+        "classpath:/com/coremedia/cap/common/uapi-services.xml",
+        "classpath:/com/coremedia/cache/cache-services.xml",
 }, reader = ResourceAwareXmlBeanDefinitionReader.class)
 @Import({
         ImageTransformationConfiguration.class,
@@ -329,11 +331,6 @@ public class CaasConfig implements WebMvcConfigurer {
     filter.setIncludeQueryString(true);
     filter.setIncludePayload(false);
     return filter;
-  }
-
-  @Bean
-  public Filter hstsResponseHeaderFilter(CaasServiceConfigurationProperties caasServiceConfigurationProperties) {
-    return new HSTSResponseHeaderFilter(caasServiceConfigurationProperties);
   }
 
   @Bean("cacheManager")
@@ -530,8 +527,8 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public FilenameBlobAdapterFactory filenameBlobAdapter(MimeTypeService mimeTypeService, UrlPathFormater urlPathFormater) {
-    return new FilenameBlobAdapterFactory(mimeTypeService, urlPathFormater);
+  public FilenameBlobAdapterFactory filenameBlobAdapter(MimeTypeService mimeTypeService, UrlPathFormater urlPathFormater, ResponsiveMediaHashCacheKeyFactory responsiveMediaHashCacheKeyFactory) {
+    return new FilenameBlobAdapterFactory(mimeTypeService, urlPathFormater, responsiveMediaHashCacheKeyFactory);
   }
 
   @Bean
@@ -567,8 +564,8 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public ContentBlobAdapterFactory contentBlobAdapter() {
-    return new ContentBlobAdapterFactory();
+  public ContentBlobAdapterFactory contentBlobAdapter(ResponsiveMediaHashCacheKeyFactory responsiveMediaHashCacheKeyFactory) {
+    return new ContentBlobAdapterFactory(responsiveMediaHashCacheKeyFactory);
   }
 
   @Bean
@@ -931,6 +928,11 @@ public class CaasConfig implements WebMvcConfigurer {
   public PreparsedDocumentProvider preparsedDocumentProvider(CacheManager cacheManager) {
     return new PreparsedDocumentProvider() {
       Cache cache = cacheManager.getCache(CacheInstances.PREPARSED_DOCUMENTS);
+
+      @Override
+      public CompletableFuture<PreparsedDocumentEntry> getDocumentAsync(ExecutionInput executionInput, Function<ExecutionInput, PreparsedDocumentEntry> parseAndValidateFunction) {
+        return CompletableFuture.completedFuture(getDocument(executionInput, parseAndValidateFunction));
+      }
 
       @Override
       public PreparsedDocumentEntry getDocument(ExecutionInput executionInput, Function<ExecutionInput, PreparsedDocumentEntry> computeFunction) {

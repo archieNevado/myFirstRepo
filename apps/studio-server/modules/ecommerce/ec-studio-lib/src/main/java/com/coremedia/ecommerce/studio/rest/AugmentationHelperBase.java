@@ -141,7 +141,7 @@ abstract class AugmentationHelperBase<T> {
   @NonNull
   public static String getEscapedDisplayName(@NonNull Category category) {
     // External ids of category can contain '/'. See CMS-5075
-    return category.getDisplayName().replace('/', '_');
+    return category.getDisplayName().replace('/', '_').trim();
   }
 
   @Nullable

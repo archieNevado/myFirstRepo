@@ -14,8 +14,8 @@
     "prettier": "pnpm -r prettier"
   },
   "engines": {
-    "node": ">=16",
-    "pnpm": ">=6"
+    "node": "16",
+    "pnpm": "6"
   },
   "coremedia": {
     "type": "workspace"

@@ -41,7 +41,7 @@
 
     <customer>Blueprint</customer>
 
-    <spring.boot.version>2.5.12</spring.boot.version>
+    <spring.boot.version>2.5.14</spring.boot.version>
 
     <!--
     | the following *.host properties are defined here for convenience, so that they can be overridden
@@ -75,13 +75,13 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.60</tomcat.embed.version>
-    <cm.cae.core.version>2201.2</cm.cae.core.version>
-    <cm.common.core.version>2201.2</cm.common.core.version>
+    <tomcat.embed.version>9.0.64</tomcat.embed.version>
+    <cm.cae.core.version>2201.3</cm.cae.core.version>
+    <cm.common.core.version>2201.3</cm.common.core.version>
     <cm.common.bp.version>1-SNAPSHOT</cm.common.bp.version>
-    <cm.middle.core.version>2201.2</cm.middle.core.version>
+    <cm.middle.core.version>2201.3</cm.middle.core.version>
     <cm.middle.bp.version>1-SNAPSHOT</cm.middle.bp.version>
-    <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
+    <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
   </properties>
 
   <profiles>
@@ -258,10 +258,6 @@
       <id>localfs</id>
       <url>file://${project.basedir}/target</url>
     </snapshotRepository>
-    <repository>
-      <id>coremedia.external.releases</id>
-      <url>https://repository.coremedia.com/nexus/service/local/staging/deploy/maven2</url>
-    </repository>
     <site>
       <id>localsite</id>
       <url>file://${project.basedir}/target/site-deploy</url>
@@ -534,7 +530,7 @@
                 <X-Compile-Target-JDK>${maven.compiler.release}</X-Compile-Target-JDK>
                 <!-- Configure WebSphere to not scan ASM jars in the WAR, because they contain Java 9 module-info.class
                      files and cause exceptions in WebSphere. See CMS-12354 -->
-                <Ignore-Scanning-Archives>asm-analysis-9.2.jar,asm-9.2.jar,asm-commons-9.2.jar,asm-tree-9.2.jar</Ignore-Scanning-Archives>
+                <Ignore-Scanning-Archives>asm-analysis-9.3.jar,asm-9.3.jar,asm-commons-9.3.jar,asm-tree-9.3.jar</Ignore-Scanning-Archives>
               </manifestEntries>
             </archive>
             <failOnMissingWebXml>false</failOnMissingWebXml>

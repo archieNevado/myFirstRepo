@@ -6,14 +6,15 @@
   "private": true,
   "dependencies": {
     "@coremedia-blueprint/studio-client.main.base-app": "1.0.0-SNAPSHOT",
-    "@coremedia-blueprint/studio-client.main.extension-dependencies": "1.0.0-SNAPSHOT"
+    "@coremedia-blueprint/studio-client.main.extension-dependencies": "1.0.0-SNAPSHOT",
+    "@coremedia/studio-client.ext.cloud-studio-plugin": "2201.3.0"
   },
   "devDependencies": {
     "@coremedia/download-plugins": "^1.2.0",
-    "@jangaroo/build": "^1.1.1",
-    "@jangaroo/core": "^1.1.1",
-    "@jangaroo/publish": "^1.1.1",
-    "@jangaroo/run": "^1.1.1",
+    "@jangaroo/build": "^1.2.1",
+    "@jangaroo/core": "^1.2.1",
+    "@jangaroo/publish": "^1.2.1",
+    "@jangaroo/run": "^1.2.1",
     "rimraf": "^3.0.2"
   },
   "scripts": {
